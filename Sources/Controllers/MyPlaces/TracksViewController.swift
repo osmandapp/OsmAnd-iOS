@@ -162,10 +162,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tableView.tableHeaderView = setupHeaderView()
         filterButton.isHidden = true
         if shouldReload {
-            if let hostVCDelegate {
-                hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
-            }
-            reloadTracks(forceLoad: true)
+            updateAllFoldersVCData(forceLoad: true)
             shouldReload = false
         }
     }
@@ -222,6 +219,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateAllFoldersVCData(forceLoad: Bool = false) {
+        (smartFolderHelper.getSmartFolders() as? [SmartFolder])?.forEach { smartFolderHelper.refreshSmartFolder(smartFolder: $0) }
         reloadTracks(forceLoad: forceLoad)
 
         if let hostVCDelegate {
@@ -819,6 +817,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func onNavbarRefreshSmartFolderButtonClicked() {
         smartFolderHelper.refreshSmartFolder(smartFolder: smartFolder)
+        reloadTracks(forceLoad: true)
     }
     
     @objc private func onNavbarEditFilterSmartFolderButtonClicked() {
@@ -880,7 +879,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     OAUtilities.showToast(localizedString("smart_folder_name_present"), details: nil, duration: 4, verticalOffset: 120, in: self.view)
                 } else {
                     smartFolderHelper.saveNewSmartFolder(name: folderName, filters: nil)
-                    updateData()
+                    updateAllFoldersVCData(forceLoad: true)
                     shouldReload = true
                     showTracksViewControllerForSmartFolder(withName: folderName)
                 }
@@ -1004,7 +1003,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                         self.settings.hideGpx([track.gpxFilePath])
                     }
                     self.gpxDB.removeGpxItem(track, withLocalRemove: true)
-                    smartFolderHelper.onGpxFileDeleted(gpxFile: KFile(filePath: track.gpxFilePath))
+                    handleDeletedGpxFile(gpxFile: track.file)
                 }
                 
                 updateAllFoldersVCData(forceLoad: true)
@@ -1390,7 +1389,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     settings.hideGpx([trackItem.gpxFilePath])
                 }
                 gpxDB.removeGpxItem(dataItem, withLocalRemove: true)
-                smartFolderHelper.onGpxFileDeleted(gpxFile: KFile(filePath: trackItem.gpxFilePath))
+                if let file = trackItem.getFile() {
+                    handleDeletedGpxFile(gpxFile: file)
+                }
+
                 updateAllFoldersVCData(forceLoad: true)
             }
         })
@@ -1527,18 +1529,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func updateRenamedGpx(src: KFile, dest: KFile) {
         GpxDbHelper.shared.rename(currentFile: src, newFile: dest)
-        /*
-         GpxSelectionHelper gpxSelectionHelper = app.getSelectedGpxHelper();
-             SelectedGpxFile selectedGpxFile = gpxSelectionHelper.getSelectedFileByPath(src.getAbsolutePath());
-             if (selectedGpxFile != null) {
-                 gpxFile = selectedGpxFile.getGpxFile();
-                 gpxFile.setPath(dest.getAbsolutePath());
-                 gpxSelectionHelper.updateSelectedGpxFile(selectedGpxFile);
-                 GpxDisplayHelper gpxDisplayHelper = app.getGpxDisplayHelper();
-                 gpxDisplayHelper.updateDisplayGroupsNames(selectedGpxFile);
-             }
-             updateGpxMetadata(gpxFile, dest);
-         */
+        handleDeletedGpxFile(gpxFile: src)
+        let trackItem = TrackItem(file: dest)
+        trackItem.dataItem = OAGPXDatabase.sharedDb().getGPXItem(dest.path())
+        smartFolderHelper.addTrackItemToSmartFolder(item: trackItem)
     }
     
     private func renameFolder(newName: String, oldName: String) {
@@ -1602,6 +1596,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 if !tracksItems.isEmpty {
                     tracksItems.forEach({
                         gpxDB.removeGpxItem($0, withLocalRemove: false)
+                        handleDeletedGpxFile(gpxFile: $0.file)
                         let gpxFilePath = $0.gpxFilePath
                         let isVisible = settings.mapSettingVisibleGpx.contains(gpxFilePath)
                         if isVisible {
@@ -1764,11 +1759,15 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         updateNavigationBarTitle()
         setupSearchController()
         updateFilterButtonVisibility(filterIsActive: false)
-        updateData()
+        updateAllFoldersVCData(forceLoad: true)
         setupTableFooter()
         tabBarController?.navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.setToolbarHidden(true, animated: true)
         tabBarController?.tabBar.isHidden = false
+    }
+    
+    private func handleDeletedGpxFile(gpxFile: KFile) {
+        smartFolderHelper.onGpxFileDeleted(gpxFile: gpxFile)
     }
     
     // MARK: - TableView

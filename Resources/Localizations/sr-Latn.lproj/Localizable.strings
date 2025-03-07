@@ -3645,3 +3645,4 @@
 "download_failed" = "Preuzimanje nije uspelo";
 "sensor_data" = "Podaci senzora";
 "sensor_data_settings_description" = "pokaži glavne podatke iz senzora";
+"battery_level_settings_description" = "prikaži nivo baterije senzora kao glavnu vrednost";

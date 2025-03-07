@@ -3624,3 +3624,6 @@
 "shared_string_source" = "Zdroj";
 "shared_string_items" = "Položky";
 "download_successful" = "Obrázek stažen do složky Dokumenty/Stažené.";
+"battery_level_settings_description" = "zobrazit úroveň baterie senzoru jako hlavní hodnotu";
+"sensor_data" = "Data senzoru";
+"sensor_data_settings_description" = "zobrazit hlavní data ze senzoru";

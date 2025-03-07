@@ -3645,3 +3645,6 @@
 "mapillary_action_descr" = "Поделите свој поглед на нивоу улице преко Мапилариј-а.";
 "wikimedia" = "Викимедија";
 "shared_string_date" = "Датум";
+"battery_level_settings_description" = "прикажи ниво батерије сензора као главну вредност";
+"sensor_data_settings_description" = "прикажи главне податке са сензора";
+"sensor_data" = "Подаци сензора";

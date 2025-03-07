@@ -81,7 +81,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 
 - (void)setupDownloadingCellHelper
 {
-    __weak OAMapSettingsWikipediaScreen *weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
     _downloadingCellResourceHelper.hostViewController = weakSelf.vwController;
     [_downloadingCellResourceHelper setHostTableView:weakSelf.tblView];
@@ -94,6 +94,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];
     _mapItems = (NSArray<OARepositoryResourceItem *> *) [OAResourcesUIHelper findIndexItemsAt:coordinate type:OsmAndResourceType::WikiMapRegion includeDownloaded:NO limit:-1 skipIfOneDownloaded:YES];
     [self initData];
+    [self.tblView reloadData];
 }
 
 - (NSArray<NSArray <NSDictionary *> *> *)data

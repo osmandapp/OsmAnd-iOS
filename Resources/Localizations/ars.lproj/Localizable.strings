@@ -1811,7 +1811,7 @@
 "map_coords" = "خريطة: خط العرض%.5f خط الطول %.5f";
 "shared_string_gpx_points" = "النقاط";
 "shared_string_overview" = "نظرة عامة";
-"activity" = "نشاط";
+"shared_string_activity" = "نشاط";
 "gpx_cancel_route_q" = "هل تريد إلغاء هذا المسار؟";
 "local_indexes_cat_backup" = "معطلة";
 "gpx_trip_groups" = "مجموعات المسار";

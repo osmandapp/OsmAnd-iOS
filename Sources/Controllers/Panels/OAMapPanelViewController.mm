@@ -1220,7 +1220,7 @@ typedef enum
             sr.object = object;
             sr.priority = SEARCH_AMENITY_TYPE_PRIORITY;
             sr.priorityDistance = 0;
-            sr.objectType = POI_TYPE;
+            sr.objectType = EOAObjectTypePoiType;
             [searchUICore selectSearchResult:sr];
         }
 

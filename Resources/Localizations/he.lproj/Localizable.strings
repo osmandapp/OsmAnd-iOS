@@ -1079,7 +1079,7 @@
 "rename_track" = "שינוי שם מסלול";
 "shared_string_gpx_points" = "נקודות";
 "shared_string_overview" = "סקירה";
-"activity" = "פעילות";
+"shared_string_activity" = "פעילות";
 "local_indexes_cat_backup" = "מנוטרל";
 "shared_string_show_all" = "להציג הכול";
 "poi_filter_parking" = "חנייה";

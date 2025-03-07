@@ -2060,7 +2060,7 @@
 "analyze_on_map" = "Harita üzerinde analiz et";
 "duplicate_track" = "Yolu çoğalt";
 "shared_string_overview" = "Genel bakış";
-"activity" = "Etkinlik";
+"shared_string_activity" = "Etkinlik";
 "route_points" = "Rota noktaları";
 "connect_rp" = "Güzergah noktalarını bağla";
 "lang_an" = "Aragonca";

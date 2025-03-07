@@ -16,7 +16,6 @@
 #import "OATextInputFloatingCell.h"
 #import "OAValueTableViewCell.h"
 #import "OAShapesTableViewCell.h"
-#import "OAPoiTableViewCell.h"
 #import "OASelectFavoriteGroupViewController.h"
 #import "OAReplaceFavoriteViewController.h"
 #import "OAFolderCardsCell.h"
@@ -41,9 +40,9 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAColorsPaletteCell.h"
 #import "OAColorCollectionHandler.h"
-#import "OAColorCollectionViewController.h"
 #import "OATargetMenuViewController.h"
 #import "MaterialTextFields.h"
+#import "OAIconsPaletteCell.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
@@ -64,7 +63,7 @@
 
 #define kSubviewVerticalOffset 8.
 
-@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
+@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
 
 @end
 
@@ -83,11 +82,6 @@
     OABasePointEditingHandler *_pointHandler;
     
     NSArray<NSArray<NSDictionary *> *> *_data;
-    MutableOrderedDictionary<NSString *, NSArray<NSString *> *> *_iconCategories;
-    NSArray<NSString *> *_currentCategoryIcons;
-    
-    NSArray *_poiCategories;
-    NSArray<NSString *> *_lastUsedIcons;
     NSArray<NSString *> *_backgroundIcons;
     NSArray<NSString *> *_backgroundIconNames;
     NSArray<NSString *> *_backgroundContourIconNames;
@@ -95,7 +89,6 @@
     NSArray<NSString *> *_groupNames;
     NSArray<NSNumber *> *_groupSizes;
     NSArray<UIColor *> *_groupColors;
-    NSString *_selectedIconCategoryName;
     NSString *_selectedIconName;
     NSInteger _selectedBackgroundIndex;
     
@@ -126,6 +119,8 @@
     BOOL _isNewColorSelected;
     BOOL _needToScrollToSelectedColor;
     OAColorsPaletteCell *_colorsPaletteCell;
+    
+    PoiIconCollectionHandler *_poiIconCollectionHandler;
 
     UILabel *_subtitle;
     CGFloat _originalSubviewHeight;
@@ -206,7 +201,6 @@
         self.desc = @"";
         self.groupTitle = [self getGroupTitle];
 
-        _selectedIconCategoryName = @"special";
         _selectedIconName = DEFAULT_ICON_NAME_KEY;
         _selectedBackgroundIndex = 0;
 
@@ -232,8 +226,6 @@
     _shapeRowIndex = -1;
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
     _floatingTextFieldControllers = [NSMutableArray array];
-
-    [self initLastUsedIcons];
 }
 
 - (void)postInit
@@ -247,15 +239,8 @@
 
     [self setupGroups];
     [self setupColors];
+    [self setupIconHandler];
     [self setupIcons];
-}
-
-- (void) initLastUsedIcons
-{
-    _lastUsedIcons = @[];
-    NSArray<NSString *> *fromPref = [OAAppSettings.sharedManager.lastUsedFavIcons get];
-    if (fromPref && fromPref.count > 0)
-        _lastUsedIcons = fromPref;
 }
 
 - (void)registerNotifications
@@ -407,48 +392,19 @@
     _groupColors = [NSArray arrayWithArray:colors];
 }
 
-
 - (void)setupIcons
 {
-    [self createIconSelector];
     NSString *preselectedIconName = [_pointHandler getIcon];
     if (!preselectedIconName)
         preselectedIconName = [self getDefaultIconName];
     _selectedIconName = preselectedIconName;
     
-    NSMutableArray *categoriesData = [NSMutableArray new];
-    for (NSString *category in _iconCategories)
-    {
-        if ([category isEqualToString:kLastUsedIconsKey])
-        {
-            [categoriesData addObject: @{
-                @"title" : @"",
-                @"categoryName" : kLastUsedIconsKey,
-                @"img" : @"ic_custom_history",
-            }];
-        }
-        else
-        {
-            [categoriesData addObject: @{
-                @"title" : OALocalizedString(category),
-                @"categoryName" : category,
-                @"img" : @"",
-            }];
-        }
-    }
-
-    _poiCategories = categoriesData;
-
     OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:self.groupTitle];
     if (_isNewItemAdding && selectedGroup)
         _selectedIconName = selectedGroup.iconName;
     else if (!_selectedIconName || _selectedIconName.length == 0)
         _selectedIconName = DEFAULT_ICON_NAME_KEY;
-
-    if (_isNewItemAdding && selectedGroup)
-        _selectedIconCategoryName = [self getInitCategory:_selectedIconName];
-    else if (!_selectedIconCategoryName || _selectedIconCategoryName.length == 0)
-        _selectedIconCategoryName = @"special";
+    [_poiIconCollectionHandler setIconName:_selectedIconName];
     
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
@@ -462,6 +418,18 @@
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:_isNewItemAdding && selectedGroup ? selectedGroup.backgroundType : [_pointHandler getBackgroundIcon]];
     if (_selectedBackgroundIndex == -1 || _selectedBackgroundIndex >= _backgroundIconNames.count)
         _selectedBackgroundIndex = 0;
+}
+
+- (void) setupIconHandler
+{
+    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] init];
+    _poiIconCollectionHandler.delegate = self;
+    _poiIconCollectionHandler.hostVC = self;
+    _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
+    _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+    [_poiIconCollectionHandler setItemSizeWithSize:48];
+    [_poiIconCollectionHandler setIconSizeWithSize:30];
 }
 
 - (void)generateData
@@ -518,13 +486,9 @@
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"shared_string_appearance"),
-        @"type" : [OAPoiTableViewCell getCellIdentifier],
+        @"type" : [OAIconsPaletteCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_icon"),
-        @"value" : @"",
-        @"selectedCategoryName" : _selectedIconCategoryName,
-        @"categotyData" : _poiCategories,
-        @"selectedIconName" : _selectedIconName,
-        @"poiData" : _currentCategoryIcons,
+        @"descr" : OALocalizedString(@"shared_string_all_icons"),
         @"key" : kIconsKey
     }];
     _poiIconRowIndex = section.count - 1;
@@ -662,33 +626,29 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAIconsPaletteCell getCellIdentifier]])
     {
-        OAPoiTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPoiTableViewCell getCellIdentifier]];
+        OAIconsPaletteCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconsPaletteCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPoiTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconsPaletteCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.delegate = self;
-            cell.cellIndex = indexPath;
-            cell.state = _scrollCellsState;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsZero;
+            cell.useMultyLines = NO;
+            cell.forceScrollOnStart = YES;
+            cell.disableAnimationsOnStart = YES;
+            cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
-        if (cell)
-        {
-            cell.categoriesCollectionView.tag = kCategoryCellIndex;
-            cell.currentCategory = item[@"selectedCategoryName"];
-            cell.categoryDataArray = item[@"categotyData"];
-            cell.collectionView.tag = kPoiCellIndex;
-            cell.poiData = item[@"poiData"];
-            cell.titleLabel.text = item[@"title"];
-            cell.currentColor = _selectedColorItem.value;
-            cell.currentIcon = item[@"selectedIconName"];
-            [cell.collectionView reloadData];
-            [cell.categoriesCollectionView reloadData];
-            [cell layoutIfNeeded];
-        }
+        cell.hostVC = self;
+        _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+        [_poiIconCollectionHandler setCollectionView:cell.collectionView];
+        [cell setCollectionHandler:_poiIconCollectionHandler];
+        [_poiIconCollectionHandler updateTopButtonName];
+        cell.topLabel.text = item[@"title"];
+        [cell topButtonVisibility:YES];
+        [cell.bottomButton setTitle:item[@"descr"] forState:UIControlStateNormal];
+        [cell.collectionView reloadData];
+        [cell layoutIfNeeded];
         return cell;
     }
     else if ([cellType isEqualToString:[OAShapesTableViewCell getCellIdentifier]])
@@ -813,11 +773,6 @@
      {
          OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
          [folderCell updateContentOffset];
-     }
-     else if ([type isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
-     {
-         OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
-         [poiCell updateContentOffsetForce:NO];
      }
  }
 
@@ -976,7 +931,7 @@
         data.color = [_selectedColorItem getColor];
         data.backgroundIcon = _backgroundIconNames[_selectedBackgroundIndex];
         data.icon = _selectedIconName;
-        [self addLastUsedIcon:_selectedIconName];
+        [_poiIconCollectionHandler addIconToLastUsed:_selectedIconName];
 
         if (_editPointType == EOAEditPointTypeWaypoint)
         {
@@ -1084,20 +1039,6 @@
     [self.tableView endUpdates];
 }
 
-#pragma mark - OAPoiTableViewCellDelegate
-
-- (void)onPoiCategorySelected:(NSString *)category index:(NSInteger)index
-{
-    _selectedIconCategoryName = category;
-    [self createIconList];
-    [self applyLocalization];
-    [self generateData];
-    OAPoiTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex]];
-    [cell updateIconsList:_currentCategoryIcons];
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
-}
-
 - (void)onPoiSelected:(NSString *)poiName;
 {
     _wasChanged = YES;
@@ -1180,10 +1121,10 @@
     }
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:backgroundIconName];
+    
+    _selectedIconName = iconName;
+    [_poiIconCollectionHandler setIconName:iconName];
     [self onPoiSelected:iconName];
-    NSString *selectedIconCategoryName = [self getInitCategory:_selectedIconName];
-    if (![_selectedIconCategoryName isEqualToString:selectedIconCategoryName])
-        [self onPoiCategorySelected:selectedIconCategoryName index:0];
 
     self.groupTitle = editedGroupName;
     _needToScrollToSelectedColor = YES;
@@ -1308,11 +1249,21 @@
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
 {
-    _isNewColorSelected = YES;
-    _needToScrollToSelectedColor = YES;
-    _selectedColorItem = [_colorCollectionHandler getData][indexPath.section][indexPath.row];
+    if (collectionView == [_poiIconCollectionHandler getCollectionView])
+    {
+        NSString *iconName = [_poiIconCollectionHandler getSelectedItem];
+        if (iconName)
+            _selectedIconName = iconName;
+    }
+    else if (collectionView == [_colorCollectionHandler getCollectionView])
+    {
+        _isNewColorSelected = YES;
+        _needToScrollToSelectedColor = YES;
+        _selectedColorItem = [_colorCollectionHandler getData][indexPath.section][indexPath.row];
+    }
+    
     _wasChanged = YES;
     [self applyLocalization];
     [self generateData];
@@ -1359,45 +1310,6 @@
     [self updateSubviewHeight:subviewHeight];
 }
 
-- (NSString *)getInitCategory:(NSString *)selectedIconName
-{
-    for (int j = 0; j < [_iconCategories allKeys].count; j ++)
-    {
-        NSArray<NSString *> *iconsArray = _iconCategories[ [_iconCategories allKeys][j] ];
-        for (int i = 0; i < iconsArray.count; i ++)
-        {
-            if ([iconsArray[i] isEqualToString:selectedIconName ? selectedIconName : [_pointHandler getIcon]])
-                return [_iconCategories allKeys][j];
-        }
-    }
-    return [_iconCategories allKeys][0];
-}
-
-- (void) createIconSelector
-{
-    _iconCategories = [MutableOrderedDictionary dictionary];
-
-    // update last used icons
-    if (_lastUsedIcons && _lastUsedIcons.count > 0)
-    {
-        _iconCategories[kLastUsedIconsKey] = _lastUsedIcons;
-    }
-
-    OrderedDictionary<NSString *, NSArray<NSString *> *> *categories = [self loadOrderedJSON];
-    if (categories)
-    {
-        for (int i = 0; i < [categories allKeys].count; i++)
-        {
-            NSString *name = [categories allKeys][i];
-            NSArray *icons = categories[name];
-            NSString *translatedName = OALocalizedString([NSString stringWithFormat:@"icon_group_%@", name]);
-            _iconCategories[translatedName] = icons;
-        }
-    }
-    _selectedIconCategoryName = [self getInitCategory:nil];
-    [self createIconList];
-}
-
 - (NSString *)getPreselectedIconName
 {
     return (!_pointHandler || !_isNewItemAdding) ? nil : [_pointHandler getIcon];
@@ -1408,71 +1320,9 @@
     NSString *preselectedIconName = [self getPreselectedIconName];
     if (preselectedIconName && preselectedIconName.length > 0)
         return preselectedIconName;
-    else if (_lastUsedIcons && _lastUsedIcons.count > 0)
-        return _lastUsedIcons[0];
+    else if (_poiIconCollectionHandler.lastUsedIcons && _poiIconCollectionHandler.lastUsedIcons.count > 0)
+        return _poiIconCollectionHandler.lastUsedIcons[0];
     return DEFAULT_ICON_NAME_KEY;
-}
-
-- (void)addLastUsedIcon:(NSString *)iconName
-{
-    NSMutableArray<NSString *> *mutableLastUsedIcons = _lastUsedIcons.mutableCopy;
-    [mutableLastUsedIcons removeObject:iconName];
-    if (mutableLastUsedIcons.count >= kLastUsedIconsLimit)
-        [mutableLastUsedIcons removeLastObject];
-    [mutableLastUsedIcons insertObject:iconName atIndex:0];
-    _lastUsedIcons = mutableLastUsedIcons.copy;
-    [OAAppSettings.sharedManager.lastUsedFavIcons set:_lastUsedIcons];
-}
-
-- (void)createIconList
-{
-    NSMutableArray *iconNameList = [NSMutableArray array];
-    [iconNameList addObjectsFromArray:_iconCategories[_selectedIconCategoryName]];
-    NSString *preselectedIconName = [self getPreselectedIconName];
-    if (preselectedIconName && preselectedIconName.length > 0 && [_selectedIconCategoryName isEqualToString:kLastUsedIconsKey])
-    {
-        [iconNameList removeObject:preselectedIconName];
-        [iconNameList insertObject:preselectedIconName atIndex:0];
-    }
-    _currentCategoryIcons = [NSArray arrayWithArray:iconNameList];
-}
-
-- (OrderedDictionary<NSString *, NSArray<NSString *> *> *)loadOrderedJSON
-{
-    NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    NSString* jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSDictionary *unorderedJson = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-    if (unorderedJson)
-    {
-        NSMutableDictionary<NSString *, NSNumber *> *categoriesOrder = [NSMutableDictionary dictionary];
-        NSDictionary *unorderedCategories = unorderedJson[@"categories"];
-        NSArray *unorderedCategoryNames = unorderedCategories.allKeys;
-        if (unorderedCategories)
-        {
-            for (NSString *categoryName in unorderedCategoryNames)
-            {
-                NSNumber *indexInJsonSrting = [NSNumber numberWithInt:[jsonString indexOf:[NSString stringWithFormat:@"\"%@\"", categoryName]]];
-                categoriesOrder[categoryName] = indexInJsonSrting;
-            }
-            NSArray *orderedCategoryNames = [categoriesOrder keysSortedByValueUsingSelector:@selector(compare:)];
-            MutableOrderedDictionary *orderedJson = [MutableOrderedDictionary new];
-            for (NSString *categoryName in orderedCategoryNames)
-            {
-                NSDictionary *iconsDictionary = unorderedCategories[categoryName];
-                if (iconsDictionary)
-                {
-                    NSArray *iconsArray = iconsDictionary[@"icons"];
-                    if (iconsArray)
-                    {
-                        orderedJson[categoryName] = iconsArray;
-                    }
-                }
-            }
-            return orderedJson;
-        }
-    }
-    return nil;
 }
 
 - (void)deleteItemWithAlertView
@@ -1501,9 +1351,7 @@
         {
             _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];
             _selectedIconName = group.iconName;
-            _selectedIconCategoryName = [self getInitCategory:_selectedIconName];
             _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType];
-            [self createIconList];
         }
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)

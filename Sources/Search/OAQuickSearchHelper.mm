@@ -16,6 +16,7 @@
 #import "OAObservable.h"
 #import "OASearchSettings.h"
 #import "OASearchResultMatcher.h"
+#import "OASearchResult+cpp.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OAPOIFiltersHelper.h"
@@ -66,7 +67,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
         sr.localeName = [point getName];
         sr.favorite = point.favorite;
         sr.priority = SEARCH_FAVORITE_OBJECT_PRIORITY;
-        sr.objectType = FAVORITE;
+        sr.objectType = EOAObjectTypeFavorite;
         sr.location = [[CLLocation alloc] initWithLatitude:point.favorite->getLatLon().latitude
                                                  longitude:point.favorite->getLatLon().longitude];
         sr.preferredZoom = PREFERRED_FAVORITE_ZOOM;
@@ -110,7 +111,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
         sr.localeName = [point getName];
         sr.favorite = point.favorite;
         sr.priority = SEARCH_FAVORITE_CATEGORY_PRIORITY;
-        sr.objectType = FAVORITE;
+        sr.objectType = EOAObjectTypeFavorite;
         sr.location = [[CLLocation alloc] initWithLatitude:point.favorite->getLatLon().latitude
                                                  longitude:point.favorite->getLatLon().longitude];
         sr.preferredZoom = PREFERRED_FAVORITES_GROUP_ZOOM;
@@ -143,7 +144,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
     for (OASGpxDataItem *dataItem in OAGPXDatabase.sharedDb.getDataItems)
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.objectType = GPX_TRACK;
+        sr.objectType = EOAObjectTypeGpxTrack;
         sr.localeName = [dataItem gpxFileName];
         sr.relatedObject = dataItem;
         sr.priority = SEARCH_TRACK_OBJECT_PRIORITY;
@@ -226,7 +227,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
             sr.wpt = point;
             sr.object = sr.wpt;
             sr.priority = SEARCH_WPT_OBJECT_PRIORITY;
-            sr.objectType = WPT;
+            sr.objectType = EOAObjectTypeWpt;
             sr.location = [[CLLocation alloc] initWithLatitude:point.position.latitude longitude:point.position.longitude];
             //sr.localeRelatedObjectName = app.getRegions().getCountryName(sr.location);
             sr.localeRelatedObjectName = i < _paths.count ? [_paths[i] lastPathComponent] : OALocalizedString(@"shared_string_currently_recording_track");
@@ -293,7 +294,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
                 sr.object = pt;
                 sr.relatedObject = point;
                 sr.priorityDistance = 0;
-                sr.objectType = POI_TYPE;
+                sr.objectType = EOAObjectTypePoiType;
                 publish = YES;
             }
         }
@@ -305,7 +306,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
                 sr.localeName = filter.name;
                 sr.object = filter;
                 sr.relatedObject = point;
-                sr.objectType = POI_TYPE;
+                sr.objectType = EOAObjectTypePoiType;
                 publish = YES;
             }
         }
@@ -316,7 +317,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
             {
                 sr.localeName = [dataItem gpxFileName];
                 sr.object = point;
-                sr.objectType = GPX_TRACK;
+                sr.objectType = EOAObjectTypeGpxTrack;
                 sr.relatedObject = dataItem;
                 publish = YES;
             }
@@ -325,7 +326,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
         {
             sr.localeName = pd.name;
             sr.object = point;
-            sr.objectType = RECENT_OBJ;
+            sr.objectType = EOAObjectTypeRecentObj;
             sr.location = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
             sr.preferredZoom = PREFERRED_DEFAULT_RECENT_ZOOM;
             publish = YES;

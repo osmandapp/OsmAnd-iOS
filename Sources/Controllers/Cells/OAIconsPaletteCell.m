@@ -29,6 +29,7 @@
 {
     [super awakeFromNib];
     [self setupViews];
+    [self topButtonVisibility:NO];
 }
 
 - (void) setupViews
@@ -39,9 +40,28 @@
     self.bottomTitleOffset.constant = 8;
 }
 
+- (void) topButtonVisibility:(BOOL)show
+{
+    self.topButton.hidden = !show;
+}
+
 - (IconCollectionHandler *)getIconsCollectionHandler
 {
     return (IconCollectionHandler *)[super getCollectionHandler];
+}
+
+- (void)setCollectionHandler:(OABaseCollectionHandler *)collectionHandler
+{
+    IconCollectionHandler * handler = (IconCollectionHandler *)collectionHandler;
+    [super setCollectionHandler:handler];
+    handler.hostCell = self;
+
+    UIMenu *menu = [[self getIconsCollectionHandler] buildTopButtonContextMenu];
+    if (menu)
+    {
+        self.topButton.showsMenuAsPrimaryAction = YES;
+        self.topButton.menu = menu;
+    }
 }
 
 #pragma mark - UICollectionViewDelegate

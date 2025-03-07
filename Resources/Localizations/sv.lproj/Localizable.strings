@@ -1535,7 +1535,7 @@
 "map_coords" = "Karta: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Punkter";
 "shared_string_overview" = "Översikt";
-"activity" = "Aktivitet";
+"shared_string_activity" = "Aktivitet";
 "gpx_cancel_route_q" = "Vill du avbryta rutten?";
 "local_indexes_cat_backup" = "Inaktiverade";
 "gpx_trip_groups" = "Spårgrupper";

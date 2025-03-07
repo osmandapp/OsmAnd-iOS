@@ -1506,7 +1506,7 @@
 "shared_string_time_moving" = "Tid i bevegelse";
 "regions" = "Regioner";
 "shared_string_overview" = "Oversikt";
-"activity" = "Aktivitet";
+"shared_string_activity" = "Aktivitet";
 "change_object_posiotion" = "Endre objektets posisjon";
 "routeInfo_winter_ice_road_description" = "Fargelegg rute eller sporlinje etter vinterveiklassifisering.";
 "routeInfo_surface_description" = "Angi informasjon om fysisk overflate for veier/gangstier.";

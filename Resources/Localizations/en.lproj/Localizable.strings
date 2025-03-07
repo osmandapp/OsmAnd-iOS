@@ -914,6 +914,7 @@
 "shared_string_colors" = "Colors";
 
 "profile_icon" = "Profile icon";
+"profile_icons" = "Profile icon";
 "restart" = "Restart";
 
 "offline_maps" = "Offline Maps";
@@ -2422,7 +2423,7 @@
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Points";
 "shared_string_overview" = "Overview";
-"activity"= "Activity";
+"shared_string_activity" = "Activity";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "local_indexes_cat_backup" = "Deactivated";

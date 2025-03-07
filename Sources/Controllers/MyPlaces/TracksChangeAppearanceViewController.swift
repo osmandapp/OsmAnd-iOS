@@ -17,10 +17,12 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private static let widthModesRowKey = "widthModesRowKey"
     private static let splitModesRowKey = "splitModesRowKey"
     private static let customWidthModesRowKey = "customWidthModesRowKey"
+    private static let customSplitIntervalRowKey = "customSplitIntervalRowKey"
     private static let widthDescrRow = "widthDescrRow"
     private static let splitIntervalRow = "splitIntervalRow"
     private static let splitIntervalDescrRow = "splitIntervalDescrRow"
-    private static let customStringWidthValue = "customStringWidthValue"
+    private static let splitIntervalNoneDescrRow = "splitIntervalNoneDescrRow"
+    private static let customStringValue = "customStringValue"
     private static let widthArrayValue = "widthArrayValue"
     private static let hasTopLabels = "hasTopLabels"
     private static let hasBottomLabels = "hasBottomLabels"
@@ -32,9 +34,12 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private var selectedWidth: OAGPXTrackWidth?
     private var customWidthValues: [String] = []
     private var selectedWidthIndex: Int = 0
+    private var selectedSplit: OAGPXTrackSplitInterval?
+    private var selectedSplitIntervalIndex: Int = 0
     private var isWidthSelected = false
     private var isCustomWidthSelected = false
     private var isSplitIntervalSelected = false
+    private var isSplitIntervalNoneSelected = false
     
     init(tracks: Set<TrackItem>) {
         self.tracks = tracks
@@ -52,10 +57,16 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         super.viewDidLoad()
         self.data.delegate = self
         appearanceCollection = OAGPXAppearanceCollection.sharedInstance()
+        
         selectedWidth = appearanceCollection?.getWidthForValue(tracks.first?.width)
         let minValue = OAGPXTrackWidth.getCustomTrackWidthMin()
         let maxValue = OAGPXTrackWidth.getCustomTrackWidthMax()
         customWidthValues = (minValue...maxValue).map { "\($0)" }
+        
+        selectedSplit = appearanceCollection?.getSplitInterval(for: tracks.first?.splitType ?? EOAGpxSplitType.none)
+        if tracks.first?.splitInterval ?? 0 > 0 && tracks.first?.splitType != EOAGpxSplitType.none {
+            selectedSplit?.customValue = selectedSplit?.titles[(selectedSplit?.values.firstIndex { ($0).doubleValue == Double(tracks.first?.splitInterval ?? 0) }) ?? 0]
+        }
     }
     
     override func registerCells() {
@@ -63,6 +74,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         addCell(OAButtonTableViewCell.reuseIdentifier)
         addCell(GradientChartCell.reuseIdentifier)
         addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
+        addCell(SegmentTextWithRightLabelTableViewCell.reuseIdentifier)
         addCell(OASegmentSliderTableViewCell.reuseIdentifier)
     }
     
@@ -118,7 +130,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 let customWidthModesRow = widthSection.createNewRow()
                 customWidthModesRow.cellType = OASegmentSliderTableViewCell.reuseIdentifier
                 customWidthModesRow.key = Self.customWidthModesRowKey
-                customWidthModesRow.setObj(selectedWidth?.customValue as Any, forKey: Self.customStringWidthValue)
+                customWidthModesRow.setObj(selectedWidth?.customValue as Any, forKey: Self.customStringValue)
                 customWidthModesRow.setObj(customWidthValues, forKey: Self.widthArrayValue)
                 customWidthModesRow.setObj(false, forKey: Self.hasTopLabels)
                 customWidthModesRow.setObj(true, forKey: Self.hasBottomLabels)
@@ -135,10 +147,31 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         splitIntervalRow.cellType = OAButtonTableViewCell.reuseIdentifier
         splitIntervalRow.key = Self.splitIntervalRow
         splitIntervalRow.title = localizedString("gpx_split_interval")
-        let splitIntervalDescrRow = splitIntervalSection.createNewRow()
-        splitIntervalDescrRow.cellType = OASimpleTableViewCell.reuseIdentifier
-        splitIntervalDescrRow.key = Self.splitIntervalDescrRow
-        splitIntervalDescrRow.title = localizedString("unchanged_parameter_summary")
+        if isSplitIntervalSelected {
+            let splitModesRow = splitIntervalSection.createNewRow()
+            splitModesRow.cellType = SegmentTextWithRightLabelTableViewCell.reuseIdentifier
+            splitModesRow.key = Self.splitModesRowKey
+            if isSplitIntervalNoneSelected {
+                let splitIntervalNoneDescrRow = splitIntervalSection.createNewRow()
+                splitIntervalNoneDescrRow.cellType = OASimpleTableViewCell.reuseIdentifier
+                splitIntervalNoneDescrRow.key = Self.splitIntervalNoneDescrRow
+                splitIntervalNoneDescrRow.title = localizedString("gpx_split_interval_none_descr")
+            } else {
+                let customSplitIntervalRow = splitIntervalSection.createNewRow()
+                customSplitIntervalRow.cellType = OASegmentSliderTableViewCell.reuseIdentifier
+                customSplitIntervalRow.key = Self.customSplitIntervalRowKey
+                customSplitIntervalRow.title = localizedString("shared_string_interval")
+                customSplitIntervalRow.setObj(selectedSplit?.customValue as Any, forKey: Self.customStringValue)
+                customSplitIntervalRow.setObj(selectedSplit?.titles as Any, forKey: Self.widthArrayValue)
+                customSplitIntervalRow.setObj(true, forKey: Self.hasTopLabels)
+                customSplitIntervalRow.setObj(true, forKey: Self.hasBottomLabels)
+            }
+        } else {
+            let splitIntervalDescrRow = splitIntervalSection.createNewRow()
+            splitIntervalDescrRow.cellType = OASimpleTableViewCell.reuseIdentifier
+            splitIntervalDescrRow.key = Self.splitIntervalDescrRow
+            splitIntervalDescrRow.title = localizedString("unchanged_parameter_summary")
+        }
     }
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
@@ -149,6 +182,12 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.selectionStyle = .none
             cell.leftIconVisibility(false)
             cell.descriptionVisibility(false)
+            if (item.key == Self.widthRowKey && isWidthSelected) || (item.key == Self.splitIntervalRow && isSplitIntervalSelected) {
+                cell.setCustomLeftSeparatorInset(true)
+                cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
+            } else {
+                cell.setCustomLeftSeparatorInset(false)
+            }
             cell.titleLabel.text = item.title
             let config = UIButton.Configuration.plain()
             cell.button.configuration = config
@@ -177,20 +216,30 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 self.handleWidthSelection(index: index)
             }
             return cell
+        } else if item.cellType == SegmentTextWithRightLabelTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentTextWithRightLabelTableViewCell.reuseIdentifier) as! SegmentTextWithRightLabelTableViewCell
+            cell.selectionStyle = .none
+            cell.configureTitle(title: nil)
+            cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
+            cell.configureSegmentedControl(titles: [localizedString("shared_string_none"), localizedString("shared_string_time"), localizedString("shared_string_distance")], selectedSegmentIndex: selectedSplitIntervalIndex)
+            cell.didSelectSegmentIndex = { [weak self] index in
+                guard let self else { return }
+                self.handleSplitIntervalSelection(index: index)
+            }
+            return cell
         } else if item.cellType == OASegmentSliderTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASegmentSliderTableViewCell.reuseIdentifier) as! OASegmentSliderTableViewCell
             let hasTopLabels = item.obj(forKey: Self.hasTopLabels) as? Bool ?? false
             let hasBottomLabels = item.obj(forKey: Self.hasBottomLabels) as? Bool ?? false
             let arrayValue = item.obj(forKey: Self.widthArrayValue) as? [String] ?? []
-            cell.showLabels(hasTopLabels, topRight: hasTopLabels, bottomLeft: hasBottomLabels, bottomRight: hasBottomLabels)
             cell.topLeftLabel.text = item.title
-            cell.topRightLabel.text = item.obj(forKey: Self.customStringWidthValue) as? String ?? ""
-            cell.topRightLabel.textColor = .textColorActive
+            cell.topRightLabel.text = (item.key == Self.customSplitIntervalRowKey) ? (item.obj(forKey: Self.customStringValue) as? String ?? "") : ""
+            cell.topRightLabel.textColor = .textColorSecondary
             cell.topRightLabel.font = UIFont.scaledSystemFont(ofSize: 17, weight: .medium)
             cell.bottomLeftLabel.text = arrayValue.first
             cell.bottomRightLabel.text = arrayValue.last
             cell.sliderView.setNumberOfMarks(arrayValue.count)
-            if let customString = item.obj(forKey: Self.customStringWidthValue) as? String, let index = arrayValue.firstIndex(of: customString) {
+            if let customString = item.obj(forKey: Self.customStringValue) as? String, let index = arrayValue.firstIndex(of: customString) {
                 cell.sliderView.selectedMark = index
             }
             cell.sliderView.tag = (indexPath.section << 10) | indexPath.row
@@ -238,30 +287,38 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         }
     }
     
-    private func updateData(withSeparatorInset selected: Bool) {
+    private func updateData() {
         generateData()
         tableView.reloadData()
-        if let firstCell = tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as? OAButtonTableViewCell {
-            if selected {
-                firstCell.setCustomLeftSeparatorInset(true)
-                firstCell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
-            } else {
-                firstCell.setCustomLeftSeparatorInset(false)
-            }
-        }
     }
     
     private func handleWidthSelection(index: Int) {
-        guard let widths = appearanceCollection?.getAvailableWidth() else { return }
-        guard index >= 0 && index < widths.count else { return }
-        let trackWidth = widths[index]
-        selectedWidth = trackWidth
-        let widthString = trackWidth.isCustom() ? trackWidth.customValue : trackWidth.key
+        guard let widths = appearanceCollection?.getAvailableWidth(), index >= 0, index < widths.count else { return }
+        let width = widths[index]
+        selectedWidth = width
+        let widthString = width.isCustom() ? width.customValue : width.key
         data.setParameter(.width, value: widthString)
         isWidthSelected = true
-        isCustomWidthSelected = trackWidth.isCustom()
+        isCustomWidthSelected = width.isCustom()
         selectedWidthIndex = index
-        updateData(withSeparatorInset: true)
+        updateData()
+    }
+    
+    private func handleSplitIntervalSelection(index: Int) {
+        guard let availableSplits = appearanceCollection?.getAvailableSplitIntervals(), index >= 0, index < availableSplits.count else { return }
+        let split = availableSplits[index]
+        selectedSplit = split
+        data.setParameter(.splitType, value: Int32(split.type.rawValue))
+        if split.isCustom(), let customValue = split.customValue, let customIndex = split.titles.firstIndex(of: customValue) {
+            data.setParameter(.splitInterval, value: split.values[customIndex].doubleValue)
+        } else {
+            data.setParameter(.splitInterval, value: 0)
+        }
+        
+        isSplitIntervalSelected = true
+        isSplitIntervalNoneSelected = (split.key == "no_split")
+        selectedSplitIntervalIndex = index
+        updateData()
     }
     
     @objc private func sliderChanged(sender: UISlider) {
@@ -270,13 +327,24 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         guard let cell = tableView.cellForRow(at: indexPath) as? OASegmentSliderTableViewCell else { return }
         let selectedIndex = Int(cell.sliderView.selectedMark)
-        guard let customWidthValues = item.obj(forKey: Self.widthArrayValue) as? [String], selectedIndex >= 0, selectedIndex < customWidthValues.count else { return }
-        let selectedValue = customWidthValues[selectedIndex]
-        if let w = selectedWidth, w.isCustom() {
-            w.customValue = selectedValue
+        if item.key == Self.customWidthModesRowKey {
+            guard let customWidthValues = item.obj(forKey: Self.widthArrayValue) as? [String], selectedIndex >= 0, selectedIndex < customWidthValues.count else { return }
+            let selectedValue = customWidthValues[selectedIndex]
+            if let w = selectedWidth, w.isCustom() {
+                w.customValue = selectedValue
+            }
+            data.setParameter(.width, value: selectedValue)
+        } else if item.key == Self.customSplitIntervalRowKey {
+            guard let splitTitles = item.obj(forKey: Self.widthArrayValue) as? [String], selectedIndex >= 0, selectedIndex < splitTitles.count else { return }
+            let selectedValue = splitTitles[selectedIndex]
+            if let split = selectedSplit, split.isCustom() {
+                split.customValue = selectedValue
+                if let customIndex = split.titles.firstIndex(of: selectedValue) {
+                    data.setParameter(.splitInterval, value: split.values[customIndex].doubleValue)
+                }
+            }
         }
         
-        data.setParameter(.width, value: selectedValue)
         generateData()
         tableView.reloadRows(at: [indexPath], with: .none)
     }
@@ -368,7 +436,7 @@ extension TracksChangeAppearanceViewController {
             if self.isWidthSelected {
                 self.isWidthSelected = false
                 self.isCustomWidthSelected = false
-                self.updateData(withSeparatorInset: false)
+                self.updateData()
             }
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
@@ -377,7 +445,7 @@ extension TracksChangeAppearanceViewController {
             if self.isWidthSelected {
                 self.isWidthSelected = false
                 self.isCustomWidthSelected = false
-                self.updateData(withSeparatorInset: false)
+                self.updateData()
             }
         }
         let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
@@ -388,7 +456,7 @@ extension TracksChangeAppearanceViewController {
             self.isWidthSelected = true
             self.isCustomWidthSelected = false
             self.selectedWidthIndex = 0
-            self.updateData(withSeparatorInset: true)
+            self.updateData()
         }
         let mediumAction = UIAction(title: localizedString("rendering_value_medium_w_name"), state: !isReset && paramValue == "medium" ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
@@ -396,7 +464,7 @@ extension TracksChangeAppearanceViewController {
             self.isWidthSelected = true
             self.isCustomWidthSelected = false
             self.selectedWidthIndex = 1
-            self.updateData(withSeparatorInset: true)
+            self.updateData()
         }
         let boldAction = UIAction(title: localizedString("rendering_value_bold_name"), state: !isReset && paramValue == "bold" ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
@@ -404,7 +472,7 @@ extension TracksChangeAppearanceViewController {
             self.isWidthSelected = true
             self.isCustomWidthSelected = false
             self.selectedWidthIndex = 2
-            self.updateData(withSeparatorInset: true)
+            self.updateData()
         }
         let widthMenu = inlineMenu(withActions: [thinAction, mediumAction, boldAction])
         
@@ -414,7 +482,7 @@ extension TracksChangeAppearanceViewController {
             self.isWidthSelected = true
             self.isCustomWidthSelected = true
             self.selectedWidthIndex = 3
-            self.updateData(withSeparatorInset: true)
+            self.updateData()
         }
         let customWidthMenu = inlineMenu(withActions: [customAction])
         
@@ -423,14 +491,13 @@ extension TracksChangeAppearanceViewController {
     
     private func createSplitIntervalMenu() -> UIMenu {
         let paramSplitType: Int32? = data.getParameter(for: .splitType)
-        let paramSplitInterval: Double? = data.getParameter(for: .splitInterval)
         let isResetSplitType = data.shouldResetParameter(.splitType)
         let isResetSplitInterval = data.shouldResetParameter(.splitInterval)
-        let isUnchanged = paramSplitType == nil && paramSplitInterval == nil && !isResetSplitType && !isResetSplitInterval
+        let isUnchanged = paramSplitType == nil && !isResetSplitType && !isResetSplitInterval
         let isOriginalSelected = isResetSplitType && isResetSplitInterval
         let isNoSplit = paramSplitType != nil && paramSplitType ?? 0 == GpxSplitType.noSplit.type
-        let isTime = paramSplitType ?? 0 == GpxSplitType.time.type && paramSplitInterval == 5.0 * 60.0
-        let isDistance = paramSplitType ?? 0 == GpxSplitType.distance.type && paramSplitInterval == 1000.0
+        let isTime = paramSplitType ?? 0 == GpxSplitType.time.type
+        let isDistance = paramSplitType ?? 0 == GpxSplitType.distance.type
         
         let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: isUnchanged ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
@@ -438,7 +505,8 @@ extension TracksChangeAppearanceViewController {
             self.data.setParameter(.splitInterval, value: nil)
             if self.isSplitIntervalSelected {
                 self.isSplitIntervalSelected = false
-                self.updateData(withSeparatorInset: false)
+                self.isSplitIntervalNoneSelected = false
+                self.updateData()
             }
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isOriginalSelected ? .on : .off) { [weak self] _ in
@@ -447,7 +515,8 @@ extension TracksChangeAppearanceViewController {
             self.data.resetParameter(.splitInterval)
             if self.isSplitIntervalSelected {
                 self.isSplitIntervalSelected = false
-                self.updateData(withSeparatorInset: false)
+                self.isSplitIntervalNoneSelected = false
+                self.updateData()
             }
         }
         let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
@@ -455,23 +524,29 @@ extension TracksChangeAppearanceViewController {
         let noSplitAction = UIAction(title: localizedString("shared_string_none"), state: isNoSplit ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
             self.data.setParameter(.splitType, value: GpxSplitType.noSplit.type)
-            self.data.setParameter(.splitInterval, value: nil)
-            isSplitIntervalSelected = true
-            self.updateData(withSeparatorInset: true)
+            self.data.setParameter(.splitInterval, value: 0)
+            self.isSplitIntervalSelected = true
+            self.isSplitIntervalNoneSelected = true
+            self.selectedSplitIntervalIndex = 0
+            self.updateData()
         }
         let timeAction = UIAction(title: localizedString("shared_string_time"), state: isTime ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
             self.data.setParameter(.splitType, value: GpxSplitType.time.type)
-            self.data.setParameter(.splitInterval, value: 5.0 * 60.0)
-            isSplitIntervalSelected = true
-            self.updateData(withSeparatorInset: true)
+            self.setCustomSplitInterval(for: GpxSplitType.time)
+            self.isSplitIntervalSelected = true
+            self.isSplitIntervalNoneSelected = false
+            self.selectedSplitIntervalIndex = 1
+            self.updateData()
         }
         let distanceAction = UIAction(title: localizedString("shared_string_distance"), state: isDistance ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
             self.data.setParameter(.splitType, value: GpxSplitType.distance.type)
-            self.data.setParameter(.splitInterval, value: 1000.0)
-            isSplitIntervalSelected = true
-            self.updateData(withSeparatorInset: true)
+            self.setCustomSplitInterval(for: GpxSplitType.distance)
+            self.isSplitIntervalSelected = true
+            self.isSplitIntervalNoneSelected = false
+            self.selectedSplitIntervalIndex = 2
+            self.updateData()
         }
         let onOffMenu = inlineMenu(withActions: [noSplitAction, timeAction, distanceAction])
         
@@ -480,6 +555,12 @@ extension TracksChangeAppearanceViewController {
     
     private func inlineMenu(withActions actions: [UIAction]) -> UIMenu {
         UIMenu(title: "", options: .displayInline, children: actions)
+    }
+    
+    private func setCustomSplitInterval(for type: GpxSplitType) {
+        guard let splits = appearanceCollection?.getAvailableSplitIntervals(), let eoasplit = EOAGpxSplitType(rawValue: Int(type.type)), let split = splits.first(where: { $0.type == eoasplit }), let customValue = split.customValue, let customIndex = split.titles.firstIndex(of: customValue) else { return }
+        selectedSplit = split
+        data.setParameter(.splitInterval, value: split.values[customIndex].doubleValue)
     }
 }
 

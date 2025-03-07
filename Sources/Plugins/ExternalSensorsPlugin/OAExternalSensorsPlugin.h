@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)getDeviceIdForWidgetType:(OAWidgetType *)widgetType appMode:(OAApplicationMode *)appMode;
 - (nullable NSString *)getWidgetDataFieldTypeNameByWidgetId:(NSString *)widgetId;
 - (NSString *)getAnyConnectedDeviceId;
+- (NSString *)batteryOutlinedIconNameForWidgetType:(OAWidgetType *)widgetType;
+- (NSString *)batteryIconNameForWidgetType:(OAWidgetType *)widgetType;
 
 @end
 

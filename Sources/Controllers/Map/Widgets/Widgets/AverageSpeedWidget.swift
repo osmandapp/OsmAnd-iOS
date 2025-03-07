@@ -78,7 +78,7 @@ final class AverageSpeedWidget: OASimpleWidget {
     }
     
     override func configureContextMenu(addGroup: UIMenu, settingsGroup: UIMenu, deleteGroup: UIMenu) -> UIMenu {
-        let resetAction = UIAction(title: localizedString("reset_average_speed"), image:  UIImage(named: "ic_custom_reset")) { [weak self] _ in
+        let resetAction = UIAction(title: localizedString("reset_average_speed"), image: .icCustomReset) { [weak self] _ in
             self?.reset()
         }
         // Create a mutable copy of the children
@@ -89,7 +89,7 @@ final class AverageSpeedWidget: OASimpleWidget {
     }
     
     override func handleRowSelected(_ item: OATableRowData, viewController: WidgetConfigurationViewController) -> Bool {
-        if (item.key == "reset_avg_speed") {
+        if item.key == "reset_avg_speed" {
             reset()
             viewController.dismiss()
             return true

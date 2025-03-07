@@ -31,7 +31,7 @@ final class BLERunningSCDDevice: Device {
         if let sensor = sensors.first(where: { $0 is BLERunningSensor }) as? BLERunningSensor {
             var result = [[String: String]]()
             if let lastRunningCadenceData = sensor.lastRunningCadenceData {
-                result.append([localizedString("external_device_characteristic_cadence"): String(lastRunningCadenceData.cadence)])
+                result.append([localizedString("external_device_characteristic_cadence"): String(lastRunningCadenceData.cadence) + " " + localizedString("revolutions_per_minute_unit")])
             }
             if let lastRunningSpeedData = sensor.lastRunningSpeedData {
                 if let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastRunningSpeedData.speed.value)) {

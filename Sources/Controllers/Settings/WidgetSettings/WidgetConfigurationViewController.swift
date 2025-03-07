@@ -79,7 +79,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
                 cell = nib?.first as? OASimpleTableViewCell
             }
-            if let cell = cell {
+            if let cell {
                 let hasDescr = item.descr != nil && !item.descr!.isEmpty
                 let hasIcon = item.iconName != nil
                 cell.descriptionVisibility(hasDescr)
@@ -142,8 +142,10 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                     cell.valueVisibility(false)
                     cell.descriptionVisibility(true)
                 } else {
+                    cell.valueVisibility(true)
                     cell.descriptionVisibility(false)
                 }
+                
                 cell.valueLabel.text = item.string(forKey: "value")
                 
                 if let iconName = item.iconName, !iconName.isEmpty {
@@ -204,7 +206,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
-        if (widgetInfo.handleRowSelected(item, viewController: self)) {
+        if widgetInfo.handleRowSelected(item, viewController: self) {
             return
         }
         if item.key == "delete_widget_key" {

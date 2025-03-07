@@ -104,6 +104,38 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
              OAWidgetType.temperature];
 }
 
+- (NSString *)batteryOutlinedIconNameForWidgetType:(OAWidgetType *)widgetType {
+    if (widgetType == OAWidgetType.heartRate) {
+        return @"ic_custom_sensor_heart_rate_battery_outlined";
+    } else if (widgetType == OAWidgetType.bicycleCadence) {
+        return @"ic_custom_sensor_cadence_battery_outlined";
+    } else if (widgetType == OAWidgetType.bicycleSpeed) {
+        return @"ic_custom_sensor_speed_battery_outlined";
+    } else if (widgetType == OAWidgetType.bicycleDistance) {
+        return @"ic_custom_sensor_distance_battery_outlined";
+    } else if (widgetType == OAWidgetType.temperature) {
+        return @"ic_custom_sensor_temperature_battery_outlined";
+    } else {
+        return @"";
+    }
+}
+
+- (NSString *)batteryIconNameForWidgetType:(OAWidgetType *)widgetType {
+    if (widgetType == OAWidgetType.heartRate) {
+        return @"widget_sensor_heart_rate_battery";
+    } else if (widgetType == OAWidgetType.bicycleCadence) {
+        return @"widget_sensor_cadence_battery";
+    } else if (widgetType == OAWidgetType.bicycleSpeed) {
+        return @"widget_sensor_speed_battery";
+    } else if (widgetType == OAWidgetType.bicycleDistance) {
+        return @"widget_sensor_distance_battery";
+    } else if (widgetType == OAWidgetType.temperature) {
+        return @"widget_sensor_temperature_battery";
+    } else {
+        return @"";
+    }
+}
+
 - (NSString *)getAnyConnectedDeviceId
 {
     return OATrackRecordingAnyConnectedDevice;

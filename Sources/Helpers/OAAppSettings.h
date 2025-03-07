@@ -94,6 +94,12 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
     EOASunriseSunsetTimeLeft = 1
 };
 
+typedef NS_ENUM(NSInteger, EOAExternalSensorVisualizationMode)
+{
+    EOAExternalSensorVisualizationSensorData = 0,
+    EOAExternalSensorVisualizationBatteryLevel = 1
+};
+
 typedef NS_ENUM(NSInteger, EOARouteService)
 {
     OSMAND = 0,

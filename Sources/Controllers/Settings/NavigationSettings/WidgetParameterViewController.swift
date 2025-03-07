@@ -50,6 +50,9 @@ final class WidgetParameterViewController: OABaseNavbarViewController {
                 if let imageName = item.iconName, !imageName.isEmpty {
                     cell.leftIconVisibility(true)
                     cell.leftIconView.image = UIImage(named: imageName)
+                    if let iconTintColor = item.iconTintColor {
+                        cell.leftIconView.tintColor = iconTintColor
+                    }
                 } else {
                     cell.leftIconVisibility(false)
                 }

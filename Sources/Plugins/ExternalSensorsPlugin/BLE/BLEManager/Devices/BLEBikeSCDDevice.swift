@@ -42,7 +42,7 @@ final class BLEBikeSCDDevice: Device {
                 result.append([localizedString("external_device_characteristic_total_distance"): String(distance!)])
             }
             if let lastBikeCadenceData = sensor.lastBikeCadenceData {
-                result.append([localizedString("external_device_characteristic_cadence"): String(lastBikeCadenceData.cadence)])
+                result.append([localizedString("external_device_characteristic_cadence"): String(lastBikeCadenceData.cadence) + " " + localizedString("revolutions_per_minute_unit")])
             }
             return result.isEmpty ? nil : result
         }

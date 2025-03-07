@@ -3643,3 +3643,6 @@
 "shared_string_show_less" = "Vis mindre";
 "no_photos_available" = "Ingen fotos tilgængelige";
 "mapillary_action_descr" = "Del dit eget gadeperspektiv via Mapillary.";
+"battery_level_settings_description" = "vis sensors batteriniveau som primær værdi";
+"sensor_data_settings_description" = "vis primær data fra sensor";
+"sensor_data" = "Sensordata";

@@ -3495,3 +3495,7 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_gpx_tracks" = "Tracks";
 "navigate_point_format_DMS" = "DDD MM SS.S";
+"shared_string_show_less" = "Weniger zeigen";
+"quick_action_verb_start_pause" = "Start/Pause";
+"lang_ber" = "Berberisch";
+"shared_string_pause" = "Pause";

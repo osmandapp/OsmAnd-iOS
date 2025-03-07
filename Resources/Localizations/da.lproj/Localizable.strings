@@ -203,7 +203,7 @@
 "sett_zoom" = "Zoom-knap";
 "sett_loc_fmt" = "Placeringsformat";
 "sett_arr" = "Pile på kort";
-"sett_arr_map" = "Kortcenter";
+"sett_arr_map" = "Kortcentrum";
 // Purchases
 "prch_addons" = "Tilføjelser";
 "prch_ski_q" = "Aktiver \"Skikort\" i kort indstillingerne";

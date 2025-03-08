@@ -3653,3 +3653,6 @@
 "shared_string_items" = "Elementos";
 "download_failed" = "Descarga fallida";
 "download_successful" = "Imagen descargada en «Documentos/Descargas».";
+"sensor_data" = "Datos del sensor";
+"sensor_data_settings_description" = "Muestra los datos principales del sensor";
+"battery_level_settings_description" = "Muestra el nivel de batería del sensor como valor principal";

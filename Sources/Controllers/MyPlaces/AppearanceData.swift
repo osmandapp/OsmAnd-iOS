@@ -12,9 +12,23 @@ protocol AppearanceChangedDelegate: AnyObject {
     func onAppearanceChanged()
 }
 
-struct AppearancePair {
+struct AppearancePair: Equatable {
     let shouldReset: Bool
     let value: Any?
+    
+    static func == (lhs: AppearancePair, rhs: AppearancePair) -> Bool {
+        guard lhs.shouldReset == rhs.shouldReset else { return false }
+        if lhs.value == nil && rhs.value == nil {
+            return true
+        }
+        if (lhs.value == nil) != (rhs.value == nil) {
+            return false
+        }
+        if let leftObj = lhs.value as? NSObject, let rightObj = rhs.value as? NSObject {
+            return leftObj.isEqual(rightObj)
+        }
+        return false
+    }
 }
 
 final class AppearanceData: NSObject {
@@ -28,6 +42,11 @@ final class AppearanceData: NSObject {
     init(data: AppearanceData) {
         self.map = data.map
         super.init()
+    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? AppearanceData else { return false }
+        return self.map == other.map
     }
     
     private func notifyAppearanceModified() {

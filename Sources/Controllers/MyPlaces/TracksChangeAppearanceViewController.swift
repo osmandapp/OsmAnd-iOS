@@ -57,16 +57,8 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         super.viewDidLoad()
         self.data.delegate = self
         appearanceCollection = OAGPXAppearanceCollection.sharedInstance()
-        
-        selectedWidth = appearanceCollection?.getWidthForValue(tracks.first?.width)
-        let minValue = OAGPXTrackWidth.getCustomTrackWidthMin()
-        let maxValue = OAGPXTrackWidth.getCustomTrackWidthMax()
-        customWidthValues = (minValue...maxValue).map { "\($0)" }
-        
-        selectedSplit = appearanceCollection?.getSplitInterval(for: tracks.first?.splitType ?? EOAGpxSplitType.none)
-        if tracks.first?.splitInterval ?? 0 > 0 && tracks.first?.splitType != EOAGpxSplitType.none {
-            selectedSplit?.customValue = selectedSplit?.titles[(selectedSplit?.values.firstIndex { ($0).doubleValue == Double(tracks.first?.splitInterval ?? 0) }) ?? 0]
-        }
+        configureWidth()
+        configureSplitInterval()
     }
     
     override func registerCells() {
@@ -208,6 +200,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         } else if item.cellType == SegmentImagesWithRightLabelTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
             cell.selectionStyle = .none
+            cell.backgroundColor = .groupBg
             cell.configureTitle(title: nil)
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
             cell.configureSegmentedControl(icons: [.icCustomTrackLineThin, .icCustomTrackLineMedium, .icCustomTrackLineBold, .icCustomParameters], selectedSegmentIndex: selectedWidthIndex)
@@ -219,6 +212,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         } else if item.cellType == SegmentTextWithRightLabelTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentTextWithRightLabelTableViewCell.reuseIdentifier) as! SegmentTextWithRightLabelTableViewCell
             cell.selectionStyle = .none
+            cell.backgroundColor = .groupBg
             cell.configureTitle(title: nil)
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
             cell.configureSegmentedControl(titles: [localizedString("shared_string_none"), localizedString("shared_string_time"), localizedString("shared_string_distance")], selectedSegmentIndex: selectedSplitIntervalIndex)
@@ -229,8 +223,6 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             return cell
         } else if item.cellType == OASegmentSliderTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASegmentSliderTableViewCell.reuseIdentifier) as! OASegmentSliderTableViewCell
-            let hasTopLabels = item.obj(forKey: Self.hasTopLabels) as? Bool ?? false
-            let hasBottomLabels = item.obj(forKey: Self.hasBottomLabels) as? Bool ?? false
             let arrayValue = item.obj(forKey: Self.widthArrayValue) as? [String] ?? []
             cell.topLeftLabel.text = item.title
             cell.topRightLabel.text = (item.key == Self.customSplitIntervalRowKey) ? (item.obj(forKey: Self.customStringValue) as? String ?? "") : ""
@@ -251,6 +243,30 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         return nil
     }
     
+    override func onLeftNavbarButtonPressed() {
+        if data != initialData {
+            let alertController = UIAlertController(title: localizedString("unsaved_changes"), message: localizedString("unsaved_changes_will_be_lost"), preferredStyle: .actionSheet)
+            let discardAction = UIAlertAction(title: "Discard", style: .destructive) { [weak self] _ in
+                guard let self = self else { return }
+                self.dismiss(animated: true, completion: nil)
+            }
+            let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self] _ in
+                guard let self = self else { return }
+                self.onRightNavbarButtonPressed()
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(discardAction)
+            alertController.addAction(applyAction)
+            alertController.addAction(cancelAction)
+            let popPresenter = alertController.popoverPresentationController
+            popPresenter?.barButtonItem = navigationItem.leftBarButtonItem
+            popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any
+            present(alertController, animated: true, completion: nil)
+        } else {
+            super.onLeftNavbarButtonPressed()
+        }
+    }
+    
     override func onRightNavbarButtonPressed() {
         let task = ChangeTracksAppearanceTask(data: self.data, items: self.tracks) { [weak self] in
             guard let self = self else { return }
@@ -269,6 +285,20 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         }
         
         return data
+    }
+    
+    private func configureWidth() {
+        selectedWidth = appearanceCollection?.getWidthForValue(tracks.first?.width)
+        let minValue = OAGPXTrackWidth.getCustomTrackWidthMin()
+        let maxValue = OAGPXTrackWidth.getCustomTrackWidthMax()
+        customWidthValues = (minValue...maxValue).map { "\($0)" }
+    }
+    
+    private func configureSplitInterval() {
+        selectedSplit = appearanceCollection?.getSplitInterval(for: tracks.first?.splitType ?? EOAGpxSplitType.none)
+        if tracks.first?.splitInterval ?? 0 > 0 && tracks.first?.splitType != EOAGpxSplitType.none {
+            selectedSplit?.customValue = selectedSplit?.titles[(selectedSplit?.values.firstIndex { ($0).doubleValue == Double(tracks.first?.splitInterval ?? 0) }) ?? 0]
+        }
     }
     
     private func createStateSelectionMenu(for key: String) -> UIMenu {

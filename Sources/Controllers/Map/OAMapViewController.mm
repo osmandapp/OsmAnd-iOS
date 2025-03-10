@@ -1492,7 +1492,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     // Zoom and move to target animation
     _mapView.mapAnimator->animateZoomToAndPan(_mapView.zoomLevel + zoomDelta,
                                               destLocation,
-                                              kOneSecondAnimatonTime,
+                                              kQuickAnimationTime,
                                               OsmAnd::MapAnimator::TimingFunction::Linear);
     
     // Launch animation

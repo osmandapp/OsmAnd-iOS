@@ -3646,3 +3646,4 @@
 "battery_level_settings_description" = "vis sensors batteriniveau som primær værdi";
 "sensor_data_settings_description" = "vis primær data fra sensor";
 "sensor_data" = "Sensordata";
+"profile_icons" = "Profilikon";

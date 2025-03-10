@@ -3648,3 +3648,4 @@
 "battery_level_settings_description" = "прикажи ниво батерије сензора као главну вредност";
 "sensor_data_settings_description" = "прикажи главне податке са сензора";
 "sensor_data" = "Подаци сензора";
+"profile_icons" = "Икона профила";

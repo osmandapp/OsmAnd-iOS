@@ -1371,7 +1371,7 @@
 "map_coords" = "რუკა: გან %.5f გრძ %.5f";
 "shared_string_gpx_points" = "წერტილი";
 "shared_string_overview" = "მიმოხილვა";
-"activity" = "აქტივობა";
+"shared_string_activity" = "აქტივობა";
 "local_indexes_cat_backup" = "დეაქტივირებულია";
 "gpx_trip_groups" = "ტრეკის ჯგუფები";
 "gpx_group_select" = "ჯგუფის არჩევა";

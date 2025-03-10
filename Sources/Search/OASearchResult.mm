@@ -9,6 +9,7 @@
 //  git revision aea6f3ff8842b91fda4b471e24015e4142c52d13
 
 #import "OASearchResult.h"
+#import "OASearchResult+cpp.h"
 #import "OASearchPhrase.h"
 
 #import "OAStreet.h"
@@ -37,6 +38,8 @@
 @implementation OASearchResult
 {
     double _unknownPhraseMatchWeight;
+    std::shared_ptr<const OsmAnd::Amenity> _amenity;
+    std::shared_ptr<const OsmAnd::IFavoriteLocation> _favorite;
 }
 
 - (instancetype) initWithPhrase:(OASearchPhrase *)sp
@@ -69,7 +72,7 @@
     {
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
     }
-    else if (_objectType == POI_TYPE)
+    else if (_objectType == EOAObjectTypePoiType)
     {
         
     }
@@ -105,7 +108,7 @@
         if (completeMatchRes.allWordsEqual)
         {
             BOOL closeDistance = [OAMapUtils getDistance:([_requiredSearchPhrase getLastTokenLocation]).coordinate second:_location.coordinate] <= NEAREST_METERS_LIMIT;
-            if (_objectType == CITY || _objectType == VILLAGE || closeDistance)
+            if (_objectType == EOAObjectTypeCity || _objectType == EOAObjectTypeVillage || closeDistance)
                 res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10 + MAX_PHRASE_WEIGHT_TOTAL / 2;
         }
         return res;
@@ -266,6 +269,25 @@
     OASearchResult *prev = _parentSearchResult;
     _parentSearchResult = parentSearchResult;
     return prev;
+}
+
+- (std::shared_ptr<const OsmAnd::Amenity>) amenity
+{
+    return _amenity;
+}
+
+- (void) setAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity
+{
+    _amenity = amenity;
+}
+
+- (std::shared_ptr<const OsmAnd::IFavoriteLocation>) favorite
+{
+    return _favorite;
+}
+- (void) setFavorite:(std::shared_ptr<const OsmAnd::IFavoriteLocation>)favorite
+{
+    _favorite = favorite;
 }
 
 - (NSString *) toString

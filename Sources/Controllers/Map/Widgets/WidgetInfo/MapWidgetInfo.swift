@@ -143,7 +143,7 @@ class MapWidgetInfo: NSObject, Comparable {
         widgetsVisibility.removeAll(where: { $0 == HIDE_PREFIX + key })
         widgetsVisibility.removeAll(where: { $0 == "" })
 
-        if let enabled = enabled, (!isCustomWidget() || enabled.boolValue) {
+        if let enabled, (!isCustomWidget() || enabled.boolValue) {
             widgetsVisibility.append(enabled.boolValue ? key : HIDE_PREFIX + key)
         }
 

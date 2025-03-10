@@ -287,7 +287,7 @@
 
 - (BOOL)isSearchByWiki:(OASearchPhrase *)phrase
 {
-    if ([phrase isLastWord:POI_TYPE])
+    if ([phrase isLastWord:EOAObjectTypePoiType])
     {
         NSObject *obj = [phrase getLastSelectedWord].result.object;
         if ([obj isKindOfClass:OAPOIUIFilter.class])

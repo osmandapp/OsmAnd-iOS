@@ -7,9 +7,8 @@
 //
 
 #import "OATargetMenuViewController.h"
-#import "OACollapsableView.h"
 
-@class OARowInfo;
+@class OARowInfo, OACollapsableView;
 
 @protocol OARowInfoDelegate <NSObject>
 

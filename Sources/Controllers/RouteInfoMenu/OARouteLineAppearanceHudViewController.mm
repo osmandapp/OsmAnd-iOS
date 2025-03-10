@@ -16,7 +16,6 @@
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
-#import "OAColorCollectionViewController.h"
 #import "OAPreviewRouteLineLayer.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
@@ -194,7 +193,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 @end
 
-@interface OARouteLineAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAFoldersCellDelegate, OAColorsTableViewCellDelegate, OACollectionCellDelegate, OAColorCollectionDelegate>
+@interface OARouteLineAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAFoldersCellDelegate, OAColorsTableViewCellDelegate, OACollectionCellDelegate, ColorCollectionViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 
@@ -1336,10 +1335,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
     else if ([tableData.key isEqualToString:@"allColors"])
     {
-        OAColorCollectionViewController *colorCollectionViewController =
-            [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorizationPaletteItems
-                                                                      items:_gradientColorsCollection
-                                                               selectedItem:_selectedPaletteColorItem];
+        ItemsCollectionViewController *colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeTerrainPaletteItems items:_gradientColorsCollection selectedItem:_selectedPaletteColorItem];
+        
         colorCollectionViewController.delegate = self;
         [self.navigationController pushViewController:colorCollectionViewController animated:YES];
     }
@@ -2061,7 +2058,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
 {
     _selectedPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];
     if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
@@ -2100,11 +2097,11 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
 }
 
-#pragma mark - OAColorCollectionDelegate
+#pragma mark - ColorCollectionViewControllerDelegate
 
 - (void)selectPaletteItem:(PaletteColor *)paletteItem
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] collectionView:nil];
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] selectedItem:nil collectionView:nil];
 }
 
 @end

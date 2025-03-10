@@ -1065,7 +1065,7 @@
 "rename_track" = "Renomi spuron";
 "shared_string_gpx_points" = "Punktoj";
 "shared_string_overview" = "Sumigo";
-"activity" = "Aktiveco";
+"shared_string_activity" = "Aktiveco";
 "local_indexes_cat_backup" = "Malaktivaj";
 "shared_string_show_all" = "Montri ĉiujn";
 "poi_filter_parking" = "Parkumejo";

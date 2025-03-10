@@ -203,7 +203,7 @@
 "sett_zoom" = "Zoom-knap";
 "sett_loc_fmt" = "Placeringsformat";
 "sett_arr" = "Pile på kort";
-"sett_arr_map" = "Kortcenter";
+"sett_arr_map" = "Kortcentrum";
 // Purchases
 "prch_addons" = "Tilføjelser";
 "prch_ski_q" = "Aktiver \"Skikort\" i kort indstillingerne";
@@ -1927,7 +1927,7 @@
 "plan_route_folder" = "Mappe";
 "read_full_description" = "Læs hele beskrivelsen";
 "track_show_start_finish_icons" = "Vis start- og målikoner";
-"activity" = "Aktivitet";
+"shared_string_activity" = "Aktivitet";
 "quick_action_current_location_widget_descr" = "En omskifter til at vise eller skjule aktuel placering-modulet på kortet.";
 "gpx_saved_successfully" = "GPX-fil gemt til %@";
 "change_map_behavior" = "Ændr kortopførsel under navigation";
@@ -3629,3 +3629,20 @@
 "quick_action_verb_start_pause" = "Start / Pause";
 "new_trip_segment" = "Nyt tursegment";
 "quick_action_save_recorded_trip_and_continue" = "Optaget tur og fortsæt";
+"no_internet_descr" = "Tjek din forbindelse og prøv igen.";
+"no_photos_available_descr" = "Der er endnu ikke tilføjet nogen brugerfotos til dette sted";
+"wikimedia" = "Wikimedia";
+"open_in_browser" = "Åbn i browser";
+"shared_string_items" = "Elementer";
+"download_failed" = "Download mislykkedes";
+"download_successful" = "Billede downloadet til Dokumenter/Download.";
+"shared_string_date" = "Dato";
+"shared_string_view_all" = "Se alle";
+"online_photos" = "Online-fotos";
+"shared_string_source" = "Kilde";
+"shared_string_show_less" = "Vis mindre";
+"no_photos_available" = "Ingen fotos tilgængelige";
+"mapillary_action_descr" = "Del dit eget gadeperspektiv via Mapillary.";
+"battery_level_settings_description" = "vis sensors batteriniveau som primær værdi";
+"sensor_data_settings_description" = "vis primær data fra sensor";
+"sensor_data" = "Sensordata";

@@ -2908,7 +2908,7 @@
 "slope_grey_color_descr" = "சாய்வு வரையறுக்கப்படாதபோது சாம்பல் நிறம் பயன்படுத்தப்படுகிறது.";
 "show_alt_in_drive" = "இயக்கி பயன்முறையில் உயரத்தைக் காட்டுங்கள்";
 "public_transport_warning_descr_blog" = "எங்கள் வலைப்பதிவில் ஒச்மண்ட் ரூட்டிங் பற்றி மேலும் வாசிக்க.";
-"activity" = "செய்கைப்பாடு";
+"shared_string_activity" = "செய்கைப்பாடு";
 "weather_wind_kilimeters_per_hour" = "ஒரு மணி நேரத்திற்கு கிலோமீட்டர்";
 "rendering_attr_surface_cobblestone_name" = "கோப்ச்டோன்";
 "routing_attr_avoid_sett_name" = "இல்லை";

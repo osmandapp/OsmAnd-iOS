@@ -1107,7 +1107,10 @@ static NSOperationQueue *_favQueue;
     UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
     backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:color];
 
-    UIImage *iconImg = [OAUtilities getMxIcon:[@"mx_" stringByAppendingString:icon]];
+    NSString *iconName = icon;
+    if (![iconName hasPrefix:@"mx_"])
+        iconName = [@"mx_" stringByAppendingString:iconName];
+    UIImage *iconImg = [OAUtilities getMxIcon:iconName];
     iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];
 
     CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2.0;

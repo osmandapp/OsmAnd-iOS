@@ -680,7 +680,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         if ([sw getType] == p)
             return YES;
 
-        if ([sw getType] != UNKNOWN_NAME_FILTER)
+        if ([sw getType] != EOAObjectTypeUnknownNameFilter)
             return NO;
     }
     return NO;

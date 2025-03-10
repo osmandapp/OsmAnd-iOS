@@ -1046,7 +1046,7 @@
 "rename_track" = "Berrizendatu arrastoa";
 "shared_string_gpx_points" = "Puntuak";
 "shared_string_overview" = "Ikuspegi orokorra";
-"activity" = "Aktibitatea";
+"shared_string_activity" = "Aktibitatea";
 "local_indexes_cat_backup" = "Desaktibatuta";
 "shared_string_show_all" = "Erakutsi guztiak";
 "poi_filter_parking" = "Aparkalekua";

@@ -7,6 +7,7 @@
 //
 
 #import "OARowInfo.h"
+#import "OACollapsableView.h"
 
 @implementation OARowInfo
 

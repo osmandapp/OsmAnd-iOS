@@ -103,7 +103,16 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         tapGesture.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapGesture)
         smartFolderHelper = SmartFolderHelper.shared
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         baseFilters.addFiltersChangedListener(self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        baseFilters.removeFiltersChangedListener(self)
     }
     
     override func getTitle() -> String? {
@@ -331,8 +340,14 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func onTopButtonPressed() {
-        baseFilters.resetCurrentFilters()
-        baseFiltersResult = baseFilters.performFiltering()
+        baseFilters.removeFiltersChangedListener(self)
+        baseFilters.resetCurrentFilters { [weak self] in
+            guard let self else { return }
+            self.baseFiltersResult = self.baseFilters.performFiltering()
+            self.baseFilters.onFilterChanged()
+            self.onFilterChanged()
+            self.baseFilters.addFiltersChangedListener(self)
+        }
     }
     
     override func onBottomButtonPressed() {

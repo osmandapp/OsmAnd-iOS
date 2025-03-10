@@ -28,12 +28,12 @@ static const NSInteger DEPT_CAT_LIMIT = 1;
 static const BOOL USE_OSMAND_WIKI_API = YES;
 
 @class OARowInfo;
-@class OAAbstractCard;
+@class AbstractCard;
 
 @interface OAWikiImageHelper : NSObject
 
 + (OAWikiImageHelper *)sharedInstance;
 
-- (void)sendNearbyWikiImagesRequest:(OARowInfo *)nearbyImagesRowInfo targetObj:(id)targetObj addOtherImagesOnComplete:(void (^)(NSMutableArray <OAAbstractCard *> *cards))addOtherImagesOnComplete;
+- (void)sendNearbyWikiImagesRequest:(OARowInfo *)nearbyImagesRowInfo targetObj:(id)targetObj addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards))addOtherImagesOnComplete;
 
 @end

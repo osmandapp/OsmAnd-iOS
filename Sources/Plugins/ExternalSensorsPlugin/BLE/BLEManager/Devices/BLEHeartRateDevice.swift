@@ -27,7 +27,7 @@ final class BLEHeartRateDevice: Device {
     }
     
     override var getDataFields: [[String: String]]? {
-        if let sensor = sensors.first(where: { $0 is BLEHeartRateSensor }) as? BLEHeartRateSensor {
+        if let sensor = sensors.compactMap({ $0 as? BLEHeartRateSensor }).first {
             if let lastHeartRateData = sensor.lastHeartRateData {
                 return [[localizedString("map_widget_ant_heart_rate"):
                             lastHeartRateData.heartRate == 0

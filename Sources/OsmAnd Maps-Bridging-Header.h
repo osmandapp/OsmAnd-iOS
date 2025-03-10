@@ -73,6 +73,16 @@
 #import "OARendererRegistry.h"
 #import "OAMapObject.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAColorCollectionHandler.h"
+#import "OAConcurrentCollections.h"
+#import "OASvgHelper.h"
+#import "OAQuickSearchHelper.h"
+#import "OASearchUICore.h"
+#import "OASearchSettings.h"
+#import "OAObjectType.h"
+#import "OAResultMatcher.h"
+#import "OASearchResult.h"
+#import "OAWikiWebViewController.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -156,7 +166,6 @@
 #import "OABenefitsOsmContributorsViewController.h"
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAHistoryViewController.h"
-#import "OAColorCollectionViewController.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAPOIViewController.h"
@@ -188,11 +197,16 @@
 #import "OARouteStatisticsModeCell.h"
 #import "OADeviceScreenTableViewCell.h"
 #import "OATitleSliderRoundCell.h"
+#import "OAIconsPaletteCell.h"
+#import "OACollectionSingleLineTableViewCell.h"
+#import "OAFoldersCollectionViewCell.h"
+
 
 // Views
 #import "OASegmentedSlider.h"
 #import "OATurnDrawable.h"
 #import "OAHudButton.h"
+#import "OACollapsableView.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>
@@ -243,3 +257,4 @@
 #import "OAShowHidePrecipitationAction.h"
 #import "OAMapStyleAction.h"
 #import "OAUnsupportedAction.h"
+#import "OAMapillaryImageCardWrapper.h"

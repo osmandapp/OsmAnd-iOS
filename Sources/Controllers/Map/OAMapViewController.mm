@@ -1485,18 +1485,22 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _zoomInTargetChanged = YES;
     [self storeTargetPosition:recognizer];
     
-    // X/Y axis animation
-    const CGPoint touchPoint = [self getTouchPoint:recognizer touchIndex:0];
-    const OATouchLocation *touchLocation = [self acquireMapTouchLocation:touchPoint];
-    const OsmAnd::PointI touchLocation31 = [OANativeUtilities convertFromPoint31:touchLocation.touchLocation31];
-    [_mapView setMapTarget:OsmAnd::PointI((int)touchPoint.x, (int)touchPoint.y) location31:touchLocation31];
-    
     // Increate zoom by 1
     zoomDelta += 1.0f;
-    _mapView.mapAnimator->animateZoomBy(zoomDelta,
-                                    kQuickAnimationTime,
-                                    OsmAnd::MapAnimator::TimingFunction::Linear,
-                                    kUserInteractionAnimationKey);
+    
+    CGPoint centerPoint = [self getTouchPoint:recognizer touchIndex:0];
+    OsmAnd::PointI centerLocation;
+    [_mapView convert:centerPoint toLocation:&centerLocation];
+
+    OsmAnd::PointI destLocation(_mapView.target31.x / 2.0 + centerLocation.x / 2.0, _mapView.target31.y / 2.0 + centerLocation.y / 2.0);
+    
+    // Zoom and move to target animation
+    _mapView.mapAnimator->animateZoomToAndPan(_mapView.zoomLevel + zoomDelta,
+                                              destLocation,
+                                              kOneSecondAnimatonTime,
+                                              OsmAnd::MapAnimator::TimingFunction::Linear);
+    
+
     
     // Launch animation
     _mapView.mapAnimator->resume();

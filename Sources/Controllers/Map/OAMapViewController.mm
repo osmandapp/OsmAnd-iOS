@@ -1011,7 +1011,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (void) restorePreviousTarget
 {
-    if ([self isTargetChanged] && ([self isLastMultiGesture]))
+    if ([self isTargetChanged] && [self isLastMultiGesture])
     {
         _targetChanged = NO;
 
@@ -1495,8 +1495,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                                               kOneSecondAnimatonTime,
                                               OsmAnd::MapAnimator::TimingFunction::Linear);
     
-
-    
     // Launch animation
     _mapView.mapAnimator->resume();
 }
@@ -1838,7 +1836,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if (!self.mapViewLoaded)
         return;
-    
+
     OAZoom *zoom = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:_mapView.minZoom maxZoom:_mapView.maxZoom];
     int previousZoom = [zoom getBaseZoom];
 

@@ -3504,7 +3504,7 @@
 "product_title_plus" = "Карти+";
 "testFlight" = "ТестФлайс";
 "nm" = "BMI";
-"lock_screen" = "Екран блокування";
+"lock_screen" = "Блокування екрану";
 "screen_is_locked_by_action_button" = "Сенсорний екран заблоковано. Натисніть на кнопку, щоб розблокувати.";
 "shared_string_interface" = "Інтерфейс";
 "lock_screen_description" = "Увімкнення/вимкнення сенсорного екрана для запобігання випадковим натисканням";

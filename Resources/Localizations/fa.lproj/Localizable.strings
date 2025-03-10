@@ -1881,7 +1881,7 @@
 "shared_string_explore" = "کاوش";
 "external_device_any_connected" = "هر آنچه متصل شده";
 "specify_number_of_dir_indicators_desc" = "تعداد جهت‌نماها را مشخص کنید.";
-"activity" = "فعالیت";
+"shared_string_activity" = "فعالیت";
 "shared_string_error" = "خطا";
 "shared_string_system_default" = "پیشفرض سیستم";
 "user_points" = "نقاط کاربر";

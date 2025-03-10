@@ -20,6 +20,7 @@
 #import "OAPOIType.h"
 #import "OAResultMatcher.h"
 #import "OAPOIFilterViewController.h"
+#import "OASearchResult.h"
 #import "GeneratedAssetSymbols.h"
 
 @interface OACustomPOIViewController () <OASelectSubcategoryDelegate, UISearchBarDelegate>
@@ -477,11 +478,11 @@
         [self.tableView setEditing:YES];
         self.tableView.allowsMultipleSelectionDuringEditing = YES;
         self.tableView.tableHeaderView = nil;
-        OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:POI_TYPE]]];
+        OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:EOAObjectTypePoiType]]];
         [_core updateSettings:searchSettings];
         [_core search:searchBar.text delayedExecution:YES matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
             OASearchResult *obj = *object;
-            if (obj.objectType == SEARCH_FINISHED)
+            if (obj.objectType == EOAObjectTypeSearchFinished)
             {
                 OASearchResultCollection *currentSearchResult = [_core getCurrentSearchResult];
                 NSMutableArray<OAPOIType *> *results = [NSMutableArray new];

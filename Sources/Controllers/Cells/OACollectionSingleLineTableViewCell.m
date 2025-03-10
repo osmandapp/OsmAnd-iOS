@@ -9,6 +9,9 @@
 #import "OACollectionSingleLineTableViewCell.h"
 #import "OASizes.h"
 #import "UITableViewCell+getTableView.h"
+#import "OsmAnd_Maps-Swift.h"
+
+static const NSInteger spacing = 9;
 
 @interface OACollectionSingleLineTableViewCell () <UIGestureRecognizerDelegate>
 
@@ -75,9 +78,19 @@
         UICollectionViewScrollDirection scrollDirection = [_collectionHandler getScrollDirection];
         BOOL isHorizontal = scrollDirection == UICollectionViewScrollDirectionHorizontal;
         dispatch_async(dispatch_get_main_queue(), ^{
+            
             UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
             layout.scrollDirection = scrollDirection;
-            layout.itemSize = [_collectionHandler getItemSize];
+            CGSize itemSize = [_collectionHandler getItemSize];
+            if (itemSize.width == 0) {
+                layout.estimatedItemSize = CGSizeMake(50, itemSize.height);
+                layout.itemSize = UICollectionViewFlowLayoutAutomaticSize;
+            } else {
+                layout.itemSize = itemSize;
+            }
+            layout.minimumLineSpacing = spacing;
+            layout.minimumInteritemSpacing = spacing;
+            
             [self.collectionView setCollectionViewLayout:layout animated:!_disableAnimationsOnStart];
 
             NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
@@ -168,10 +181,10 @@
         if (_useMultyLines)
         {
             CGFloat width = self.collectionView.frame.size.width;
-            int rowsPerLine = width / (itemSize.width + self.collectionStackView.spacing);
+            int rowsPerLine = width / (itemSize.width + spacing);
             int rowsCount = ceil((double)[_collectionHandler itemsCount:0] / (double)rowsPerLine);
             if (rowsCount > 1)
-                height = rowsCount * (height + self.collectionStackView.spacing);
+                height = rowsCount * (height + spacing);
         }
     }
     return height;
@@ -180,6 +193,11 @@
 - (BOOL) needUpdateHeight
 {
     return [self calculateContentHeight] != self.collectionViewHeight.constant;
+}
+
+- (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [_collectionHandler calculateItemSizeForIndexPath:indexPath];
 }
 
 - (UIContextMenuConfiguration *)collectionView:(UICollectionView *)collectionView

@@ -2473,7 +2473,7 @@
 "osmand_cloud_deleting_account_descr" = "잠시 후 모든 데이터와 계정이 OsmAnd Cloud에서 삭제됩니다. \n \n장치의 모든 데이터는 그대로 유지됩니다.";
 "longest_distance_first" = "최장 거리 먼저";
 "default_appearance_desc" = "기본 색상, 아이콘 및 모양은 그룹에 추가된 즐겨찾기 포인트에 적용됩니다.";
-"activity" = "액티비티";
+"shared_string_activity" = "액티비티";
 "public_transport_ped_route_title" = "발의 경로는 약 %@이며 대중 교통보다 빠르게 될 수 있습니다";
 "map_widget_ant_heart_rate" = "심박수";
 "delete_folder" = "폴더 삭제";

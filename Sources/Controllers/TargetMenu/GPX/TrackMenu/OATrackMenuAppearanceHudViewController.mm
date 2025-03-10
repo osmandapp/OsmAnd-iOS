@@ -8,7 +8,6 @@
 
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OATrackColoringTypeViewController.h"
-#import "OAColorCollectionViewController.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
 #import "OASlider.h"
@@ -93,7 +92,7 @@ static const NSInteger kColorsSection = 1;
 
 @end
 
-@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, OACollectionTableViewCellDelegate>
+@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate, ColorCollectionViewControllerDelegate, OACollectionTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
@@ -2340,20 +2339,14 @@ static const NSInteger kColorsSection = 1;
     }
     else if ([tableData.key isEqualToString:@"allColors"])
     {
-        OAColorCollectionViewController *colorCollectionViewController = nil;
+        ItemsCollectionViewController *colorCollectionViewController = nil;
         if ([self isSelectedTypeSolid])
         {
-            colorCollectionViewController =
-                [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems
-                                                                          items:[_appearanceCollection getAvailableColorsSortingByKey]
-                                                                   selectedItem:_selectedColorItem];
+            colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:[_appearanceCollection getAvailableColorsSortingByKey] selectedItem:_selectedColorItem];
         }
         else if ([self isSelectedTypeGradient])
         {
-            colorCollectionViewController =
-                [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorizationPaletteItems
-                                                                          items:_gradientColorsCollection
-                                                                   selectedItem:_selectedPaletteColorItem];
+            colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorizationPaletteItems items:_gradientColorsCollection selectedItem:_selectedPaletteColorItem];
         }
 
         if (colorCollectionViewController)
@@ -2672,16 +2665,16 @@ static const NSInteger kColorsSection = 1;
         [self openColorPickerWithColor:_selectedColorItem];
 }
 
-#pragma mark - OAColorCollectionDelegate
+#pragma mark - ColorCollectionViewControllerDelegate
 
 - (void)selectColorItem:(OAColorItem *)colorItem
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0] collectionView:nil];
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0] selectedItem:nil collectionView:nil];
 }
 
 - (void)selectPaletteItem:(PaletteColor *)paletteItem
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] collectionView:nil];
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] selectedItem:nil collectionView:nil];
 }
 
 - (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
@@ -2743,7 +2736,7 @@ static const NSInteger kColorsSection = 1;
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
 {
     NSString *paletteName = @"";
     if ([self isSelectedTypeSolid])

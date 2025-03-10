@@ -2067,7 +2067,7 @@
 "upload_to_openstreetmap" = "Càrriga in OpenStreetMap";
 "edit_track" = "Modìfica sa rasta";
 "duplicate_track" = "Dùplica sa rasta";
-"activity" = "Atividade";
+"shared_string_activity" = "Atividade";
 "parked_at" = "parchegiadu in";
 "shared_string_time_span" = "Intervallu de tempus";
 "shared_string_start_time" = "Ora de tzucada";

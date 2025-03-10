@@ -179,7 +179,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [result appendString:@" • "];
         [result appendString:type];
     }
-    if (point.getGroup == POI && point.getAction != CREATE)
+    if (point.getGroup == EOAGroupPoi && point.getAction != CREATE)
     {
         [result appendString:@" • "];
         [result appendString:OALocalizedString(@"osm_poi_id_label")];
@@ -370,7 +370,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
                     OAOsmPoint *point = item[@"item"];
                     if (point)
                     {
-                        if (point.getGroup == POI)
+                        if (point.getGroup == EOAGroupPoi)
                             [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)point];
                         else
                             [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)point];
@@ -412,7 +412,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         for (NSIndexPath *indexPath in indexes)
         {
             OAOsmPoint *p = [self getItem:indexPath][@"item"];
-            if (p.getGroup == POI)
+            if (p.getGroup == EOAGroupPoi)
                 [edits addObject:p];
             else
                 [notes addObject:p];

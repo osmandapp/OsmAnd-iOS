@@ -2003,7 +2003,7 @@
 "analyze_on_map" = "Analizează pe hartă";
 "upload_to_openstreetmap" = "Încarcă pe OpenStreetMap";
 "edit_track" = "Editează traseu";
-"activity" = "Activitate";
+"shared_string_activity" = "Activitate";
 "delete_waypoints" = "Șterge puncte intermediare";
 "delete_group_confirm_short" = "Ștergeți grupul?";
 "delete_group_confirm" = "Sunteți sigur că doriți să ștergeți grupul \"%@\"?";

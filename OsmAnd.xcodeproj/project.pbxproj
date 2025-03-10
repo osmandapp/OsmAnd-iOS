@@ -213,6 +213,7 @@
 		15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
+		3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */; };
 		320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */; };
 		32048FC52A25E70200AA4B71 /* BaseOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */; };
 		32048FC72A26084000AA4B71 /* OsmOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */; };
@@ -268,6 +269,7 @@
 		32210DB3298929B0005D16CB /* ic_custom_upload_to_openstreetmap_outlined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32210DAF298929B0005D16CB /* ic_custom_upload_to_openstreetmap_outlined@2x.png */; };
 		32210DB4298929B0005D16CB /* ic_custom_map_pin_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32210DB0298929B0005D16CB /* ic_custom_map_pin_outlined@3x.png */; };
 		32210DB729893C17005D16CB /* OAOsmUploadGPXViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 32210DB629893C17005D16CB /* OAOsmUploadGPXViewConroller.m */; };
+		322122152D5F6F3200A3AC9A /* activities.json in Resources */ = {isa = PBXBuildFile; fileRef = 322122142D5F6F3200A3AC9A /* activities.json */; };
 		3226C1A72D3E66FF008F9905 /* RenderedObjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3226C1A62D3E66DB008F9905 /* RenderedObjectViewController.swift */; };
 		322AF8FC2A0CDA7D00D2FF37 /* OAPluginDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 322AF8FB2A0CD68500D2FF37 /* OAPluginDetailsViewController.xib */; };
 		322B53922C78DBF8006B48B0 /* IconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 322B53912C78DBF8006B48B0 /* IconCollectionHandler.swift */; };
@@ -425,6 +427,7 @@
 		32AB486B2C9C84B3005EF1D4 /* DownloadingListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AB486A2C9C84B3005EF1D4 /* DownloadingListViewController.swift */; };
 		32ABB64E2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32ABB64D2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm */; };
 		32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */; };
+		32AC14832D6DF0B7009BE64E /* ChipsCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AC14822D6DF0AB009BE64E /* ChipsCollectionHandler.swift */; };
 		32AD5D5A2A2F111600A51B60 /* OsmAccessTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */; };
 		32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */; };
 		32ADB42B25D2EC2900F5C634 /* ic_dialog_move@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32ADB42825D2EC2700F5C634 /* ic_dialog_move@3x.png */; };
@@ -481,6 +484,8 @@
 		32EAF9FF2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */; };
 		32EAFA012AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EAFA002AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift */; };
 		32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */; };
+		32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */; };
+		32F3A6AC2D5E1A43008AE4CA /* IconsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6AB2D5E1A41008AE4CA /* IconsCategory.swift */; };
 		32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */; };
 		32FE7AA72B65138800F82728 /* OAGPXImportUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */; };
 		32FEF47F2D071FD7005E8B55 /* OAMapObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32FEF47E2D071FD5005E8B55 /* OAMapObject.mm */; };
@@ -687,7 +692,6 @@
 		468C798D2B7F76A000DA64D0 /* SendCodeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */; };
 		468CD3832C809E3400CC3436 /* ElevationChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD3822C809E3400CC3436 /* ElevationChartCell.swift */; };
 		468CD3852C80A06500CC3436 /* ElevationChartCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 468CD3842C80A06500CC3436 /* ElevationChartCell.xib */; };
-		468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */; };
 		468D9C6C2C00FE0600ED368A /* MapButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468D9C6B2C00FE0600ED368A /* MapButtonState.swift */; };
 		468D9C6E2C01030400ED368A /* QuickActionButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */; };
 		46903D6929B5F734004459F1 /* OABaseWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6829B5F734004459F1 /* OABaseWebViewContoller.m */; };
@@ -2091,7 +2095,6 @@
 		DA5A827326C563A700F274C7 /* OAPublicTransportRouteShieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BC926C563A100F274C7 /* OAPublicTransportRouteShieldCell.xib */; };
 		DA5A827426C563A700F274C7 /* OAHorizontalCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BCA26C563A100F274C7 /* OAHorizontalCollectionViewCell.xib */; };
 		DA5A827526C563A700F274C7 /* OABottomSheetHeaderDescrButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BCB26C563A100F274C7 /* OABottomSheetHeaderDescrButtonCell.xib */; };
-		DA5A827826C563A700F274C7 /* OAPoiTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BCE26C563A100F274C7 /* OAPoiTableViewCell.xib */; };
 		DA5A827926C563A700F274C7 /* OARadiusCellEx.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BCF26C563A100F274C7 /* OARadiusCellEx.xib */; };
 		DA5A827A26C563A700F274C7 /* OAHeaderRoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BD026C563A100F274C7 /* OAHeaderRoundCell.xib */; };
 		DA5A827B26C563A700F274C7 /* OATargetInfoCollapsableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BD126C563A100F274C7 /* OATargetInfoCollapsableViewCell.xib */; };
@@ -2193,7 +2196,6 @@
 		DA5A830426C563A800F274C7 /* OADestinationCollectionViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C8926C563A200F274C7 /* OADestinationCollectionViewCell.mm */; };
 		DA5A830526C563A800F274C7 /* OAHorizontalCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C8A26C563A200F274C7 /* OAHorizontalCollectionViewCell.m */; };
 		DA5A830626C563A800F274C7 /* OAImagesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C8B26C563A200F274C7 /* OAImagesTableViewCell.m */; };
-		DA5A830726C563A800F274C7 /* OAPoiTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C8D26C563A200F274C7 /* OAPoiTableViewCell.m */; };
 		DA5A830926C563A800F274C7 /* OAIconBackgroundCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C9326C563A200F274C7 /* OAIconBackgroundCollectionViewCell.m */; };
 		DA5A830C26C563A800F274C7 /* OAEmptySearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C9A26C563A200F274C7 /* OAEmptySearchCell.m */; };
 		DA5A830D26C563A800F274C7 /* OATargetInfoCollapsableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C9B26C563A200F274C7 /* OATargetInfoCollapsableViewCell.m */; };
@@ -3501,6 +3503,7 @@
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
 		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
+		3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsCollectionViewController.swift; sourceTree = "<group>"; };
 		320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerWidgetSettingsViewController.swift; sourceTree = "<group>"; };
 		32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOAuthHelper.swift; sourceTree = "<group>"; };
 		32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthHelper.swift; sourceTree = "<group>"; };
@@ -3594,6 +3597,7 @@
 		32210DB0298929B0005D16CB /* ic_custom_map_pin_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_pin_outlined@3x.png"; path = "Resources/Icons/ic_custom_map_pin_outlined@3x.png"; sourceTree = "<group>"; };
 		32210DB529893C05005D16CB /* OAOsmUploadGPXViewConroller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmUploadGPXViewConroller.h; sourceTree = "<group>"; };
 		32210DB629893C17005D16CB /* OAOsmUploadGPXViewConroller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmUploadGPXViewConroller.m; sourceTree = "<group>"; };
+		322122142D5F6F3200A3AC9A /* activities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = activities.json; path = ../resources/poi/activities.json; sourceTree = SOURCE_ROOT; };
 		3226C1A62D3E66DB008F9905 /* RenderedObjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderedObjectViewController.swift; sourceTree = "<group>"; };
 		3226C1A82D3E67D5008F9905 /* OARenderedObject+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OARenderedObject+cpp.h"; sourceTree = "<group>"; };
 		322AF8FB2A0CD68500D2FF37 /* OAPluginDetailsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPluginDetailsViewController.xib; sourceTree = "<group>"; };
@@ -3701,6 +3705,7 @@
 		3241BC852B611D0500101894 /* OATwoButtonsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATwoButtonsTableViewCell.xib; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
+		3242F89F2D7096BC00509191 /* OASearchResult+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OASearchResult+cpp.h"; sourceTree = "<group>"; };
 		3245D96B2AF014BE000AA660 /* TravelGuidesSettingsCacheViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesSettingsCacheViewController.swift; sourceTree = "<group>"; };
 		32464B7D2A6FCC6700DA6980 /* TravelExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelExploreViewController.swift; sourceTree = "<group>"; };
 		32464B7F2A7012C300DA6980 /* OAResourcesUISwiftHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAResourcesUISwiftHelper.h; sourceTree = "<group>"; };
@@ -3820,6 +3825,7 @@
 		32ABB64C2AEBC02100491E99 /* OAWebImagesCacheHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWebImagesCacheHelper.h; sourceTree = "<group>"; };
 		32ABB64D2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWebImagesCacheHelper.mm; sourceTree = "<group>"; };
 		32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageToStringConverter.swift; sourceTree = "<group>"; };
+		32AC14822D6DF0AB009BE64E /* ChipsCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipsCollectionHandler.swift; sourceTree = "<group>"; };
 		32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmAccessTokenModel.swift; sourceTree = "<group>"; };
 		32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmUserDataModel.swift; sourceTree = "<group>"; };
 		32ADB42825D2EC2700F5C634 /* ic_dialog_move@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_move@3x.png"; path = "Resources/Icons/ic_dialog_move@3x.png"; sourceTree = "<group>"; };
@@ -3892,6 +3898,8 @@
 		32EB3DEF2AC3256B0018D9B8 /* OATravelLocalDataDbHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelLocalDataDbHelper.h; sourceTree = "<group>"; };
 		32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelLocalDataDbHelper.mm; sourceTree = "<group>"; };
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiIconCollectionHandler.swift; sourceTree = "<group>"; };
+		32F3A6AB2D5E1A41008AE4CA /* IconsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsCategory.swift; sourceTree = "<group>"; };
 		32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXImportUIHelper.h; sourceTree = "<group>"; };
 		32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXImportUIHelper.mm; sourceTree = "<group>"; };
 		32FEF47C2D071ED7005E8B55 /* OAPOIHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAPOIHelper+cpp.h"; sourceTree = "<group>"; };
@@ -4122,8 +4130,6 @@
 		468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCodeCommand.swift; sourceTree = "<group>"; };
 		468CD3822C809E3400CC3436 /* ElevationChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevationChartCell.swift; sourceTree = "<group>"; };
 		468CD3842C80A06500CC3436 /* ElevationChartCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ElevationChartCell.xib; sourceTree = "<group>"; };
-		468CE3EF29F82E6300F3C3E5 /* OAColorCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorCollectionViewController.h; sourceTree = "<group>"; };
-		468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorCollectionViewController.m; sourceTree = "<group>"; };
 		468D9C6B2C00FE0600ED368A /* MapButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapButtonState.swift; sourceTree = "<group>"; };
 		468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionButtonState.swift; sourceTree = "<group>"; };
 		46903D6729B5F715004459F1 /* OABaseWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseWebViewController.h; sourceTree = "<group>"; };
@@ -6125,7 +6131,6 @@
 		DA5A7BC926C563A100F274C7 /* OAPublicTransportRouteShieldCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPublicTransportRouteShieldCell.xib; sourceTree = "<group>"; };
 		DA5A7BCA26C563A100F274C7 /* OAHorizontalCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAHorizontalCollectionViewCell.xib; sourceTree = "<group>"; };
 		DA5A7BCB26C563A100F274C7 /* OABottomSheetHeaderDescrButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OABottomSheetHeaderDescrButtonCell.xib; sourceTree = "<group>"; };
-		DA5A7BCE26C563A100F274C7 /* OAPoiTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPoiTableViewCell.xib; sourceTree = "<group>"; };
 		DA5A7BCF26C563A100F274C7 /* OARadiusCellEx.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARadiusCellEx.xib; sourceTree = "<group>"; };
 		DA5A7BD026C563A100F274C7 /* OAHeaderRoundCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAHeaderRoundCell.xib; sourceTree = "<group>"; };
 		DA5A7BD126C563A100F274C7 /* OATargetInfoCollapsableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATargetInfoCollapsableViewCell.xib; sourceTree = "<group>"; };
@@ -6256,7 +6261,6 @@
 		DA5A7C8A26C563A200F274C7 /* OAHorizontalCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHorizontalCollectionViewCell.m; sourceTree = "<group>"; };
 		DA5A7C8B26C563A200F274C7 /* OAImagesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAImagesTableViewCell.m; sourceTree = "<group>"; };
 		DA5A7C8C26C563A200F274C7 /* OAWebViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWebViewCell.h; sourceTree = "<group>"; };
-		DA5A7C8D26C563A200F274C7 /* OAPoiTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPoiTableViewCell.m; sourceTree = "<group>"; };
 		DA5A7C8E26C563A200F274C7 /* OADestinationCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADestinationCollectionViewCell.h; sourceTree = "<group>"; };
 		DA5A7C8F26C563A200F274C7 /* OATitleDescrDraggableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATitleDescrDraggableCell.h; sourceTree = "<group>"; };
 		DA5A7C9026C563A200F274C7 /* OAWaypointHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWaypointHeaderCell.h; sourceTree = "<group>"; };
@@ -6337,7 +6341,6 @@
 		DA5A7CFF26C563A300F274C7 /* OASegmentedControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASegmentedControlCell.m; sourceTree = "<group>"; };
 		DA5A7D0026C563A300F274C7 /* OARadiusCellEx.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARadiusCellEx.m; sourceTree = "<group>"; };
 		DA5A7D0326C563A300F274C7 /* OAIconBackgroundCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAIconBackgroundCollectionViewCell.h; sourceTree = "<group>"; };
-		DA5A7D0426C563A300F274C7 /* OAPoiTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPoiTableViewCell.h; sourceTree = "<group>"; };
 		DA5A7D0526C563A300F274C7 /* OAProgressBarCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAProgressBarCell.mm; sourceTree = "<group>"; };
 		DA5A7D0626C563A300F274C7 /* OAWaypointHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAWaypointHeaderCell.m; sourceTree = "<group>"; };
 		DA5A7D0726C563A300F274C7 /* OATitleDescrDraggableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATitleDescrDraggableCell.m; sourceTree = "<group>"; };
@@ -7977,6 +7980,14 @@
 			path = cells;
 			sourceTree = "<group>";
 		};
+		32A05A3E2D663C1C003AB529 /* ItemsCollections */ = {
+			isa = PBXGroup;
+			children = (
+				3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */,
+			);
+			path = ItemsCollections;
+			sourceTree = "<group>";
+		};
 		32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -9481,8 +9492,11 @@
 				461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */,
 				461A3F0829F6E560008EE079 /* OAColorCollectionHandler.h */,
 				461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */,
+				32AC14822D6DF0AB009BE64E /* ChipsCollectionHandler.swift */,
 				322B53912C78DBF8006B48B0 /* IconCollectionHandler.swift */,
 				4656BD2D2C482D0500B69928 /* PaletteCollectionHandler.swift */,
+				32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */,
+				32F3A6AB2D5E1A41008AE4CA /* IconsCategory.swift */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -9492,8 +9506,6 @@
 			children = (
 				461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */,
 				461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */,
-				468CE3EF29F82E6300F3C3E5 /* OAColorCollectionViewController.h */,
-				468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */,
 			);
 			path = Appearance;
 			sourceTree = "<group>";
@@ -9926,6 +9938,7 @@
 				05898FAC2B4DACBD00E64B58 /* map-icons-svg */,
 				05898FAE2B4DACD900E64B58 /* map-shaders-svg */,
 				3219704A25FA0C6100C3FED6 /* poi_categories.json */,
+				322122142D5F6F3200A3AC9A /* activities.json */,
 				84630FC81A8E1947005B39F2 /* styles */,
 				BB2726FC19CB38D7007C5613 /* fonts */,
 				BB2726FD19CB38D7007C5613 /* stubs */,
@@ -10983,6 +10996,7 @@
 				DA5A7A3626C563A000F274C7 /* OASearchPhrase.h */,
 				DA5A7A4026C563A000F274C7 /* OASearchPhrase.mm */,
 				DA5A7A3726C563A000F274C7 /* OASearchResult.h */,
+				3242F89F2D7096BC00509191 /* OASearchResult+cpp.h */,
 				DA5A7A3326C563A000F274C7 /* OASearchResult.mm */,
 				DA5A7A3E26C563A000F274C7 /* OASearchResultMatcher.h */,
 				DA5A7A4326C563A000F274C7 /* OASearchResultMatcher.mm */,
@@ -11227,17 +11241,18 @@
 		DA5A7ADE26C563A100F274C7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				DAABE4E92A16481D00569F71 /* ConfigureScreen */,
 				46624E6F2993B20100F425AE /* Base */,
-				B247453027E35B1D00C18C3F /* Cloud */,
 				DA5A7F9526C563A500F274C7 /* BottomSheet */,
 				DA5A7BAA26C563A100F274C7 /* Cells */,
 				DA5A7AE326C563A100F274C7 /* ChoosePlan */,
+				B247453027E35B1D00C18C3F /* Cloud */,
+				DAABE4E92A16481D00569F71 /* ConfigureScreen */,
 				DA5A7FED26C563A500F274C7 /* DashboardOnMap */,
 				DA5A7D6526C563A300F274C7 /* Destinations */,
 				DA5A7EC026C563A400F274C7 /* Extensions */,
 				DA5A802B26C563A500F274C7 /* Help */,
 				DA5A7F9126C563A500F274C7 /* History */,
+				32A05A3E2D663C1C003AB529 /* ItemsCollections */,
 				DA5A7ADF26C563A100F274C7 /* LaunchScreen */,
 				DA5A7EC426C563A400F274C7 /* Map */,
 				DA5A7DC226C563A300F274C7 /* MyPlaces */,
@@ -11562,8 +11577,6 @@
 				DA5A7C5326C563A200F274C7 /* OAPointTableViewCell.m */,
 				B0D611A8DE4A6A8AC768693B /* OAPointWithRegionTableViewCell.h */,
 				B0D613001FA7BB4BC2D00494 /* OAPointWithRegionTableViewCell.mm */,
-				DA5A7D0426C563A300F274C7 /* OAPoiTableViewCell.h */,
-				DA5A7C8D26C563A200F274C7 /* OAPoiTableViewCell.m */,
 				DA5A7CA926C563A200F274C7 /* OAPreviewZoomLevelsCell.h */,
 				DA5A7D2926C563A300F274C7 /* OAPreviewZoomLevelsCell.m */,
 				DA5A7CEE26C563A200F274C7 /* OAProgressBarCell.h */,
@@ -11754,7 +11767,6 @@
 				DA5A7C2526C563A200F274C7 /* OAPointHeaderTableViewCell.xib */,
 				DA5A7C0F26C563A200F274C7 /* OAPointTableViewCell.xib */,
 				0AB314F2271EFC43007C34A3 /* OAPointWithRegionTableViewCell.xib */,
-				DA5A7BCE26C563A100F274C7 /* OAPoiTableViewCell.xib */,
 				DA5A7BFA26C563A200F274C7 /* OAPreviewZoomLevelsCell.xib */,
 				DA5A7BF226C563A100F274C7 /* OAProgressBarCell.xib */,
 				DA5A7C3226C563A200F274C7 /* OAProgressTitleCell.xib */,
@@ -15246,6 +15258,7 @@
 				DA1BC13C233F9B01004DAF78 /* ic_custom_marker@3x.png in Resources */,
 				46C2FD8328B38EF600771E6E /* ic_custom_user_profile@2x.png in Resources */,
 				46C2FD8728B38EF600771E6E /* ic_custom_storage@2x.png in Resources */,
+				322122152D5F6F3200A3AC9A /* activities.json in Resources */,
 				8410D068207F48200049DEB2 /* ic_tree_list_dark@3x.png in Resources */,
 				46C2FD8428B38EF600771E6E /* ic_custom_user_profile@3x.png in Resources */,
 				8A6CBCB821CE25F0004033C7 /* img_logo_38dp_contour_lines@2x.png in Resources */,
@@ -15959,7 +15972,6 @@
 				DA0D161D281BEEF500CEEF58 /* map_turn_roundabout_left@3x.png in Resources */,
 				15B4E49A24AB3FD700119365 /* list_warnings_speed_camera@2x.png in Resources */,
 				323BD9042628850400D255ED /* ic_bg_point_circle_center_small@2x.png in Resources */,
-				DA5A827826C563A700F274C7 /* OAPoiTableViewCell.xib in Resources */,
 				DA2EC79929FBBE0400ECEB37 /* warnings_pedestrian@2x.png in Resources */,
 				3AFEEE571A0E34FD00900A47 /* menu_star_icon@2x.png in Resources */,
 				DA68B3EB233B822F00F5ACCC /* ic_profile_browsemap@3x.png in Resources */,
@@ -16707,7 +16719,6 @@
 				DA5A847326C563A900F274C7 /* OATextInfoWidget.mm in Sources */,
 				DA5A843E26C563A800F274C7 /* OATargetInfoViewController.mm in Sources */,
 				DA5A831926C563A800F274C7 /* OADownloadProgressBarCell.m in Sources */,
-				DA5A830726C563A800F274C7 /* OAPoiTableViewCell.m in Sources */,
 				468D9C6C2C00FE0600ED368A /* MapButtonState.swift in Sources */,
 				DA5A84A626C563A900F274C7 /* OAPlanningPopupBaseViewController.m in Sources */,
 				DA5A843826C563A800F274C7 /* OARouteDetailsGraphViewController.mm in Sources */,
@@ -16783,6 +16794,7 @@
 				FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */,
 				464BF4A72C050189000D6908 /* CompassVisibility.swift in Sources */,
 				DA5A815B26C563A700F274C7 /* OACustomPlugin.mm in Sources */,
+				32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */,
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,
 				DA5A819F26C563A700F274C7 /* OADownloadMapProgressViewController.mm in Sources */,
@@ -17122,7 +17134,6 @@
 				DA5A84A226C563A900F274C7 /* OAMovePointCommand.mm in Sources */,
 				DA5A854026C563A900F274C7 /* SunriseSunset.m in Sources */,
 				DA5A832326C563A800F274C7 /* OATitleSliderTableViewCell.m in Sources */,
-				468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */,
 				DA5A83C726C563A800F274C7 /* OATargetMenuViewController.mm in Sources */,
 				DA5A81BF26C563A700F274C7 /* OAPOIType.m in Sources */,
 				32FF4C352C1A18ED00246B36 /* DownloadingCellCloudHelper.swift in Sources */,
@@ -17440,7 +17451,9 @@
 				46BF38DC2CA44C090056D2C2 /* TerrainColorSchemeAction.swift in Sources */,
 				DA5A845A26C563A900F274C7 /* OAGPXRecLayer.mm in Sources */,
 				DA5A837826C563A800F274C7 /* OARouteSettingsBaseViewController.mm in Sources */,
+				3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */,
 				DA5A847226C563A900F274C7 /* OATurnResource.m in Sources */,
+				32AC14832D6DF0B7009BE64E /* ChipsCollectionHandler.swift in Sources */,
 				DA5A850326C563A900F274C7 /* OARouteInfoLegendItemView.m in Sources */,
 				DA5A82EB26C563A800F274C7 /* OAPublicTransportRouteCell.mm in Sources */,
 				C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */,
@@ -17539,6 +17552,7 @@
 				CA4ED4F6BF41371BA62511BA /* OADeleteOldFilesCommand.mm in Sources */,
 				CA4ED5DCCC5120883E58A623 /* OABaseBackupTypesViewController.mm in Sources */,
 				CA4ED127365B6FCBDC4E739E /* OABackupTypesViewController.mm in Sources */,
+				32F3A6AC2D5E1A43008AE4CA /* IconsCategory.swift in Sources */,
 				CA4EDDEA04A2683B2A8447AA /* OAManageStorageViewController.mm in Sources */,
 				46BCD1922C2DCA0F008749EC /* ColorPalette.swift in Sources */,
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,

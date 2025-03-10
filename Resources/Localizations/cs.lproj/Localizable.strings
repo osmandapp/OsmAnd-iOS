@@ -2001,7 +2001,7 @@
 "upload_to_openstreetmap" = "Nahrát do OpenStreetMap";
 "edit_track" = "Editovat stopu";
 "duplicate_track" = "Duplikovat stopu";
-"activity" = "Aktivita";
+"shared_string_activity" = "Aktivita";
 "parked_at" = "zaparkováno v";
 "distance_moving" = "Vzdálenost opravená";
 "shared_string_time_span" = "Časový rozsah";

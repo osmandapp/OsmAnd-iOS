@@ -2545,7 +2545,7 @@
 "shared_string_round_up" = "Afronden";
 "show_icon" = "Icoon tonen";
 "about_osmAnd" = "Over OsmAnd";
-"activity" = "Activiteit";
+"shared_string_activity" = "Activiteit";
 "open_issue_on_gitHub" = "Open een issue op Github";
 "help_article_troubleshooting_maps_data_name" = "Kaarten & Data";
 "shared_string_setup_route" = "Route opzetten";

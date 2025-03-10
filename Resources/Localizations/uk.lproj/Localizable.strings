@@ -3650,3 +3650,4 @@
 "sensor_data" = "Дані датчика";
 "sensor_data_settings_description" = "показати основні дані з датчика";
 "battery_level_settings_description" = "показувати рівень заряду датчика як основне значення";
+"profile_icons" = "Значок профілю";

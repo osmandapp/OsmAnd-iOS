@@ -75,7 +75,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     {
         case OsmAndResourceType::MapRegion:
         case OsmAndResourceType::DepthContourRegion:
-            return OALocalizedString(@"shared_string_map");
+            return OALocalizedString(@"download_regular_maps");
         case OsmAndResourceType::DepthMapRegion:
             return OALocalizedString(@"nautical_depth");
         case OsmAndResourceType::SrtmMapRegion:
@@ -90,7 +90,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"weather_forecast");
         case OsmAndResourceType::HeightmapRegionLegacy:
         case OsmAndResourceType::GeoTiffRegion:
-            return OALocalizedString(@"download_heightmap_maps");
+            return OALocalizedString(@"terrain_map");
         case OsmAndResourceType::Travel:
             return OALocalizedString(@"shared_string_wikivoyage");
         default:

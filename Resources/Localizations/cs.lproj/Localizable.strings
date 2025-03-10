@@ -3627,3 +3627,4 @@
 "battery_level_settings_description" = "zobrazit úroveň baterie senzoru jako hlavní hodnotu";
 "sensor_data" = "Data senzoru";
 "sensor_data_settings_description" = "zobrazit hlavní data ze senzoru";
+"profile_icons" = "Ikona profilu";

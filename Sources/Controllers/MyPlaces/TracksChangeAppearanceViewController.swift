@@ -31,6 +31,8 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private var initialData: AppearanceData
     private var data: AppearanceData
     private var appearanceCollection: OAGPXAppearanceCollection?
+    private var selectedShowArrows: Bool?
+    private var selectedShowStartFinish: Bool?
     private var selectedWidth: OAGPXTrackWidth?
     private var customWidthValues: [String] = []
     private var selectedWidthIndex: Int = 0
@@ -57,8 +59,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         super.viewDidLoad()
         self.data.delegate = self
         appearanceCollection = OAGPXAppearanceCollection.sharedInstance()
+        selectedShowArrows = preselectParameter(in: tracks) { $0.showArrows }
+        selectedShowStartFinish = preselectParameter(in: tracks) { $0.showStartFinish }
         configureWidth()
         configureSplitInterval()
+        updateData()
     }
     
     override func registerCells() {
@@ -288,17 +293,70 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     }
     
     private func configureWidth() {
-        selectedWidth = appearanceCollection?.getWidthForValue(tracks.first?.width)
+        selectedWidth = preselectParameter(in: tracks) { appearanceCollection?.getWidthForValue($0.width) }
         let minValue = OAGPXTrackWidth.getCustomTrackWidthMin()
         let maxValue = OAGPXTrackWidth.getCustomTrackWidthMax()
         customWidthValues = (minValue...maxValue).map { "\($0)" }
+        if let width = selectedWidth {
+            switch width.key {
+            case "thin":
+                isWidthSelected = true
+                isCustomWidthSelected = false
+                selectedWidthIndex = 0
+            case "medium":
+                isWidthSelected = true
+                isCustomWidthSelected = false
+                selectedWidthIndex = 1
+            case "bold":
+                isWidthSelected = true
+                isCustomWidthSelected = false
+                selectedWidthIndex = 2
+            default:
+                isWidthSelected = true
+                isCustomWidthSelected = true
+                selectedWidthIndex = 3
+            }
+        }
     }
     
     private func configureSplitInterval() {
-        selectedSplit = appearanceCollection?.getSplitInterval(for: tracks.first?.splitType ?? EOAGpxSplitType.none)
+        selectedSplit = preselectParameter(in: tracks) { appearanceCollection?.getSplitInterval(for: $0.splitType) }
         if tracks.first?.splitInterval ?? 0 > 0 && tracks.first?.splitType != EOAGpxSplitType.none {
             selectedSplit?.customValue = selectedSplit?.titles[(selectedSplit?.values.firstIndex { ($0).doubleValue == Double(tracks.first?.splitInterval ?? 0) }) ?? 0]
         }
+        
+        if let split = selectedSplit {
+            switch split.type {
+            case .none:
+                isSplitIntervalSelected = true
+                isSplitIntervalNoneSelected = true
+                selectedSplitIntervalIndex = 0
+            case .time:
+                isSplitIntervalSelected = true
+                isSplitIntervalNoneSelected = false
+                selectedSplitIntervalIndex = 1
+            case .distance:
+                isSplitIntervalSelected = true
+                isSplitIntervalNoneSelected = false
+                selectedSplitIntervalIndex = 2
+            default:
+                break
+            }
+        }
+    }
+    
+    private func preselectParameter<T: Equatable>(in tracks: Set<TrackItem>, extractor: (TrackItem) -> T?) -> T? {
+        var result: T?
+        for track in tracks {
+            let value = extractor(track)
+            if result == nil {
+                result = value
+            } else if result != value {
+                return nil
+            }
+        }
+        
+        return result
     }
     
     private func createStateSelectionMenu(for key: String) -> UIMenu {
@@ -382,11 +440,12 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
 
 extension TracksChangeAppearanceViewController {
     private func createArrowsMenu() -> UIMenu {
-        let paramValue: Bool? = data.getParameter(for: .showArrows)
+        let paramValue: Bool? = selectedShowArrows
         let isReset = data.shouldResetParameter(.showArrows)
         let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && paramValue == nil ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(.showArrows, value: nil)
+            self.selectedShowArrows = nil
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
             guard let self else { return }
@@ -397,10 +456,12 @@ extension TracksChangeAppearanceViewController {
         let onAction = UIAction(title: localizedString("shared_string_on"), state: !isReset && paramValue == true ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(.showArrows, value: true)
+            self.selectedShowArrows = true
         }
         let offAction = UIAction(title: localizedString("shared_string_off"), state: !isReset && paramValue == false ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(.showArrows, value: false)
+            self.selectedShowArrows = false
         }
         let onOffMenu = inlineMenu(withActions: [onAction, offAction])
         
@@ -408,11 +469,12 @@ extension TracksChangeAppearanceViewController {
     }
     
     private func createStartFinishMenu() -> UIMenu {
-        let paramValue: Bool? = data.getParameter(for: .showStartFinish)
+        let paramValue: Bool? = selectedShowStartFinish
         let isReset = data.shouldResetParameter(.showStartFinish)
         let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && paramValue == nil ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(.showStartFinish, value: nil)
+            self.selectedShowStartFinish = nil
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
             guard let self else { return }
@@ -423,10 +485,12 @@ extension TracksChangeAppearanceViewController {
         let onAction = UIAction(title: localizedString("shared_string_on"), state: !isReset && paramValue == true ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(.showStartFinish, value: true)
+            self.selectedShowStartFinish = true
         }
         let offAction = UIAction(title: localizedString("shared_string_off"), state: !isReset && paramValue == false ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(.showStartFinish, value: false)
+            self.selectedShowStartFinish = false
         }
         let onOffMenu = inlineMenu(withActions: [onAction, offAction])
         
@@ -458,11 +522,12 @@ extension TracksChangeAppearanceViewController {
     }
     
     private func createWidthMenu() -> UIMenu {
-        let paramValue: String? = data.getParameter(for: .width)
+        let paramValue: String? = selectedWidth?.isCustom() == true ? selectedWidth?.customValue : selectedWidth?.key
         let isReset = data.shouldResetParameter(.width)
         let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && paramValue == nil ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
             self.data.setParameter(.width, value: nil)
+            self.selectedWidth = nil
             if self.isWidthSelected {
                 self.isWidthSelected = false
                 self.isCustomWidthSelected = false
@@ -482,37 +547,21 @@ extension TracksChangeAppearanceViewController {
         
         let thinAction = UIAction(title: localizedString("rendering_value_thin_name"), state: !isReset && paramValue == "thin" ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
-            self.data.setParameter(.width, value: "thin")
-            self.isWidthSelected = true
-            self.isCustomWidthSelected = false
-            self.selectedWidthIndex = 0
-            self.updateData()
+            self.handleWidthSelection(index: 0)
         }
         let mediumAction = UIAction(title: localizedString("rendering_value_medium_w_name"), state: !isReset && paramValue == "medium" ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
-            self.data.setParameter(.width, value: "medium")
-            self.isWidthSelected = true
-            self.isCustomWidthSelected = false
-            self.selectedWidthIndex = 1
-            self.updateData()
+            self.handleWidthSelection(index: 1)
         }
         let boldAction = UIAction(title: localizedString("rendering_value_bold_name"), state: !isReset && paramValue == "bold" ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
-            self.data.setParameter(.width, value: "bold")
-            self.isWidthSelected = true
-            self.isCustomWidthSelected = false
-            self.selectedWidthIndex = 2
-            self.updateData()
+            self.handleWidthSelection(index: 2)
         }
         let widthMenu = inlineMenu(withActions: [thinAction, mediumAction, boldAction])
         
         let customAction = UIAction(title: localizedString("shared_string_custom"), state: !isReset && paramValue == selectedWidth?.customValue ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
-            self.data.setParameter(.width, value: selectedWidth?.customValue)
-            self.isWidthSelected = true
-            self.isCustomWidthSelected = true
-            self.selectedWidthIndex = 3
-            self.updateData()
+            self.handleWidthSelection(index: 2)
         }
         let customWidthMenu = inlineMenu(withActions: [customAction])
         
@@ -520,7 +569,7 @@ extension TracksChangeAppearanceViewController {
     }
     
     private func createSplitIntervalMenu() -> UIMenu {
-        let paramSplitType: Int32? = data.getParameter(for: .splitType)
+        let paramSplitType: Int32? = selectedSplit.map { Int32($0.type.rawValue) } ?? data.getParameter(for: .splitType)
         let isResetSplitType = data.shouldResetParameter(.splitType)
         let isResetSplitInterval = data.shouldResetParameter(.splitInterval)
         let isUnchanged = paramSplitType == nil && !isResetSplitType && !isResetSplitInterval
@@ -533,6 +582,7 @@ extension TracksChangeAppearanceViewController {
             guard let self = self else { return }
             self.data.setParameter(.splitType, value: nil)
             self.data.setParameter(.splitInterval, value: nil)
+            self.selectedSplit = nil
             if self.isSplitIntervalSelected {
                 self.isSplitIntervalSelected = false
                 self.isSplitIntervalNoneSelected = false
@@ -553,30 +603,15 @@ extension TracksChangeAppearanceViewController {
         
         let noSplitAction = UIAction(title: localizedString("shared_string_none"), state: isNoSplit ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
-            self.data.setParameter(.splitType, value: GpxSplitType.noSplit.type)
-            self.data.setParameter(.splitInterval, value: 0)
-            self.isSplitIntervalSelected = true
-            self.isSplitIntervalNoneSelected = true
-            self.selectedSplitIntervalIndex = 0
-            self.updateData()
+            self.handleSplitIntervalSelection(index: 0)
         }
         let timeAction = UIAction(title: localizedString("shared_string_time"), state: isTime ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
-            self.data.setParameter(.splitType, value: GpxSplitType.time.type)
-            self.setCustomSplitInterval(for: GpxSplitType.time)
-            self.isSplitIntervalSelected = true
-            self.isSplitIntervalNoneSelected = false
-            self.selectedSplitIntervalIndex = 1
-            self.updateData()
+            self.handleSplitIntervalSelection(index: 1)
         }
         let distanceAction = UIAction(title: localizedString("shared_string_distance"), state: isDistance ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
-            self.data.setParameter(.splitType, value: GpxSplitType.distance.type)
-            self.setCustomSplitInterval(for: GpxSplitType.distance)
-            self.isSplitIntervalSelected = true
-            self.isSplitIntervalNoneSelected = false
-            self.selectedSplitIntervalIndex = 2
-            self.updateData()
+            self.handleSplitIntervalSelection(index: 2)
         }
         let onOffMenu = inlineMenu(withActions: [noSplitAction, timeAction, distanceAction])
         
@@ -585,12 +620,6 @@ extension TracksChangeAppearanceViewController {
     
     private func inlineMenu(withActions actions: [UIAction]) -> UIMenu {
         UIMenu(title: "", options: .displayInline, children: actions)
-    }
-    
-    private func setCustomSplitInterval(for type: GpxSplitType) {
-        guard let splits = appearanceCollection?.getAvailableSplitIntervals(), let eoasplit = EOAGpxSplitType(rawValue: Int(type.type)), let split = splits.first(where: { $0.type == eoasplit }), let customValue = split.customValue, let customIndex = split.titles.firstIndex(of: customValue) else { return }
-        selectedSplit = split
-        data.setParameter(.splitInterval, value: split.values[customIndex].doubleValue)
     }
 }
 

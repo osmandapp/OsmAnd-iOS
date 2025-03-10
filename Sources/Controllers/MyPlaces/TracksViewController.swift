@@ -993,7 +993,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             return []
         }
         
-        let trackItems = Set(allTracks.toTrackItems())
+        let trackItems = Set(allTracks.toTrackItemsWithDataItem())
         guard !trackItems.isEmpty else { return }
         let vc = TracksChangeAppearanceViewController(tracks: trackItems)
         let navigationController = UINavigationController(rootViewController: vc)

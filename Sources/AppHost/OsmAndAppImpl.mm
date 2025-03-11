@@ -71,6 +71,10 @@
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/GeoCommonTypes.h>
+#include <OsmAndCore/Map/AmenitySymbolsProvider.h>
+#include <OsmAndCore/Data/ObfPoiSectionInfo.h>
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/ObfReader.h>
 #include <openingHoursParser.h>
 
 #define k3MonthInSeconds 60 * 60 * 24 * 90
@@ -714,6 +718,7 @@
     [OAPluginsHelper initPlugins];
     [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
     [OAPOIHelper sharedInstance];
+    [self addPoiTypesFromCustomRegions];
 
     if (_terminating)
         return NO;
@@ -729,6 +734,41 @@
     _initialized = YES;
     NSLog(@"OsmAndApp initialize finish");
     return YES;
+}
+
+- (void) addPoiTypesFromCustomRegions
+{
+    const auto obfsDataInterface = _resourcesManager->obfsCollection->obtainDataInterface();
+    for (const auto& obfReader : constOf(obfsDataInterface->obfReaders))
+    {
+        const auto path = obfReader->obfFile->filePath;
+        const auto& obfInfo = obfReader->obtainInfo();
+        for (const auto& poiSection : constOf(obfInfo->poiSections))
+        {
+            OsmAnd::ObfPoiSectionReader::ensureCategoriesLoaded(*obfReader, poiSection);
+            const auto& categories = poiSection->getCategories();
+            const auto& mainCategories = categories->mainCategories;
+            const auto& subcategoriesList = categories->subCategories;
+            
+            for (int i = 0; i < mainCategories.size(); i++)
+            {
+                NSString *categoryName = mainCategories[i].toNSString();
+                OAPOICategory *poiCategory = [[OAPOIHelper sharedInstance] getPoiCategoryByName:categoryName create:YES];
+                
+                const auto subcategories = subcategoriesList[i];
+                for (int j = 0; j < subcategories.size(); j++)
+                {
+                    NSString *subcategoryName = subcategories[j].toNSString();
+                    OAPOIType *pt = [[OAPOIType alloc] initWithName:subcategoryName category:poiCategory];
+                    pt.filter = nil;
+                    pt.tag = @"";
+                    pt.value = @"";
+                    pt.nonEditableOsm = YES;
+                    [poiCategory addPoiType:pt];
+                }
+            }
+        }
+    }
 }
 
 - (NSString *) generateIndexesUrl

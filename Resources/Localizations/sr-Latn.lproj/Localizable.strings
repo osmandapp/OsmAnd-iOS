@@ -3647,3 +3647,5 @@
 "sensor_data_settings_description" = "pokaži glavne podatke iz senzora";
 "battery_level_settings_description" = "prikaži nivo baterije senzora kao glavnu vrednost";
 "profile_icons" = "Ikona profila";
+"terrain_map" = "Terenska mapa (3D)";
+"add_hidden_group_info" = "Dodata tačka može se naći u „%@“. Otkrijte sakrivenu označenu grupu da je prikažete na mapi.";

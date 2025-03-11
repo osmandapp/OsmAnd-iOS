@@ -455,7 +455,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     _okButton.hidden = YES;
     
     CGRect navbarFrame = [self navbarViewFrame];
-    [self.navbarView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+    [self.navbarView addBlurEffect:UIAccessibilityIsReduceTransparencyEnabled() ? NO : [ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
 
     self.tableView = (OATableView *)self.view;
     self.tableView.oaDelegate = self;

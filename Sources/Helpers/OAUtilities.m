@@ -27,6 +27,7 @@
 #import <CocoaSecurity.h>
 #import <sys/utsname.h>
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <CommonCrypto/CommonDigest.h>
 
@@ -800,7 +801,8 @@ static NSInteger const kMap3DModeButtonTag = -990;
     else
     {
         blurView = [[UIView alloc] init];
-        blurView.backgroundColor = UIColorFromRGB(color_dialog_transparent_bg_argb_light);
+        UIColor *color = [UIColor colorNamed:ACColorNameGroupBgColorSecondary];
+        blurView.backgroundColor = light ? color.light : color.dark;
     }
     blurView.tag = kBlurViewTag;
     blurView.userInteractionEnabled = NO;

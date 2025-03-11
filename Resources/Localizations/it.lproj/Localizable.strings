@@ -2616,7 +2616,7 @@
 "rendering_value_omit_name" = "Ometti";
 "rendering_attr_OSMMapperAssistantNote_description" = "Mostra etichette Note";
 "rendering_attr_depthContourWidth_description" = "Spessore isobate";
-"rendering_attr_natureReserves_name" = "Riserva naturale";
+"rendering_attr_natureReserves_name" = "Riserve naturali";
 "rendering_attr_weatherCloudContours_name" = "Isolinee delle nuvole";
 "routing_attr_prefer_tactile_paving_name" = "Preferisci pavimentazione tattile";
 "routing_attr_avoid_highway_description" = "Evita autostrade";

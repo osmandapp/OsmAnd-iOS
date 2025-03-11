@@ -19,7 +19,7 @@ final class TravelGpx : TravelArticle {
     static let MAX_ELEVATION = "max_ele"
     static let MIN_ELEVATION = "min_ele"
     static let AVERAGE_ELEVATION = "avg_ele"
-    static let ROUTE_RADIUS = "route_radius"
+    static let ROUTE_RADIUS = "route_bbox_radius"
     static let USER = "user"
     static let ACTIVITY_TYPE = "route_activity_type"
     

@@ -4032,3 +4032,5 @@
 "sensor_data_settings_description" = "show main data from sensor";
 "battery_level_settings_description" = "show sensor batter level as main value";
 "shared_string_date" = "Date";
+
+"add_hidden_group_info" = "The added point can be found in \"%@\". Unhide the selected group to show it on the map.";

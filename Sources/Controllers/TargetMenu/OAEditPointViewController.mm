@@ -53,6 +53,7 @@
 #define kIconsKey @"kIconsKey"
 #define kBackgroundsKey @"kBackgroundsKey"
 #define kSelectGroupKey @"kSelectGroupKey"
+#define kSelectGroupDescKey @"kSelectGroupDescKey"
 #define kReplaceKey @"kReplaceKey"
 #define kDeleteKey @"kDeleteKey"
 #define kLastUsedIconsKey @"kLastUsedIconsKey"
@@ -89,12 +90,14 @@
     NSArray<NSString *> *_groupNames;
     NSArray<NSNumber *> *_groupSizes;
     NSArray<UIColor *> *_groupColors;
+    NSArray<NSNumber *> *_groupHidden;
     NSString *_selectedIconName;
     NSInteger _selectedBackgroundIndex;
     
     NSInteger _selectCategorySectionIndex;
     NSInteger _selectCategoryLabelRowIndex;
     NSInteger _selectCategoryCardsRowIndex;
+    NSInteger _selectCategoryDescriptionRowIndex;
     NSInteger _appearenceSectionIndex;
     NSInteger _poiIconRowIndex;
     NSInteger _colorLabelRowIndex;
@@ -220,6 +223,7 @@
     _selectCategorySectionIndex = -1;
     _selectCategoryLabelRowIndex = -1;
     _selectCategoryCardsRowIndex = -1;
+    _selectCategoryDescriptionRowIndex = -1;
     _appearenceSectionIndex = -1;
     _poiIconRowIndex = -1;
     _allColorsRowIndex = -1;
@@ -360,21 +364,25 @@
     NSMutableArray *names = [NSMutableArray new];
     NSMutableArray *sizes = [NSMutableArray new];
     NSMutableArray *colors = [NSMutableArray new];
+    NSMutableArray *hidden = [NSMutableArray new];
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
-
-        if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""]) {
+        if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
+        {
             [names addObject:OALocalizedString(@"favorites_item")];
             [sizes addObject:@0];
             [colors addObject:[OADefaultFavorite getDefaultColor]];
+            [hidden addObject:@(NO)];
         }
 
-        for (OAFavoriteGroup *group in allGroups) {
+        for (OAFavoriteGroup *group in allGroups)
+        {
             [names addObject:[OAFavoriteGroup getDisplayName:group.name]];
             [sizes addObject:@(group.points.count)];
             [colors addObject:group.color];
+            [hidden addObject:@(!group.isVisible)];
         }
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
@@ -390,6 +398,7 @@
     _groupNames = [NSArray arrayWithArray:names];
     _groupSizes = [NSArray arrayWithArray:sizes];
     _groupColors = [NSArray arrayWithArray:colors];
+    _groupHidden = [NSArray arrayWithArray:hidden];
 }
 
 - (void)setupIcons
@@ -477,9 +486,26 @@
         @"values" : _groupNames,
         @"sizes" : _groupSizes,
         @"colors" : _groupColors,
+        @"hidden" : _groupHidden,
         @"addButtonTitle" : OALocalizedString(@"add_group")
     }];
     _selectCategoryCardsRowIndex = section.count - 1;
+    
+    _selectCategoryDescriptionRowIndex = -1;
+    if (_groupHidden.count > selectedGroupIndex)
+    {
+        BOOL selectedGroupHidden = _groupHidden[selectedGroupIndex].boolValue;
+        if (selectedGroupHidden)
+        {
+            [section addObject:@{
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+                @"title" : [NSString stringWithFormat:OALocalizedString(@"add_hidden_group_info"), OALocalizedString(@"shared_string_my_places")],
+                @"key" : kSelectGroupDescKey
+            }];
+            _selectCategoryDescriptionRowIndex = section.count - 1;
+        }
+    }
+
     [data addObject:[NSArray arrayWithArray:section]];
     _selectCategorySectionIndex = data.count - 1;
 
@@ -626,6 +652,28 @@
         }
         return cell;
     }
+    else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = nib[0];
+            [cell titleVisibility:NO];
+            [cell leftIconVisibility:NO];
+            [cell leftEditButtonVisibility:NO];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:YES];
+            [cell hideTopSpace];
+            cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            cell.descriptionLabel.text = item[@"title"];
+        }
+        return cell;
+    }
     else if ([cellType isEqualToString:[OAIconsPaletteCell getCellIdentifier]])
     {
         OAIconsPaletteCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconsPaletteCell getCellIdentifier]];
@@ -708,10 +756,11 @@
             cell.delegate = self;
             cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
+            cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
         }
         if (cell)
         {
-            [cell setValues:item[@"values"] sizes:item[@"sizes"] colors:item[@"colors"] addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:[item[@"selectedValue"] intValue]];
+            [cell setValues:item[@"values"] sizes:item[@"sizes"] colors:item[@"colors"] hidden:item[@"hidden"] addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:[item[@"selectedValue"] intValue]];
         }
         return cell;
     }
@@ -1343,6 +1392,7 @@
     _wasChanged = YES;
     self.groupTitle = groupName;
 
+    NSInteger prevSelectCategoryDescriptionRowIndex = _selectCategoryDescriptionRowIndex;
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
@@ -1363,13 +1413,23 @@
         self.groupTitle = OALocalizedString(@"favorites_item");
     [self applyLocalization];
     [self generateData];
+    NSInteger selectCategoryDescriptionRowIndex = _selectCategoryDescriptionRowIndex;
 
     _needToScrollToSelectedColor = YES;
+    [self.tableView beginUpdates];
+    if (prevSelectCategoryDescriptionRowIndex != selectCategoryDescriptionRowIndex)
+    {
+        if (prevSelectCategoryDescriptionRowIndex == -1)
+            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:selectCategoryDescriptionRowIndex inSection:_selectCategorySectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
+        else
+            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:prevSelectCategoryDescriptionRowIndex inSection:_selectCategorySectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
+    }
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_selectCategoryLabelRowIndex inSection:_selectCategorySectionIndex],
                                              [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex],
                                              [NSIndexPath indexPathForRow:_allColorsRowIndex inSection:_appearenceSectionIndex],
                                              [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]]
                           withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
 }
 
 - (void)showAlertNotFoundReplaceItem

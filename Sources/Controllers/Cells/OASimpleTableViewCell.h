@@ -49,4 +49,6 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
 - (void)anchorContent:(EOATableViewCellContentStyle)style;
 - (void)anchorContentTextStackView:(EOATableViewCellContentStyle)style;
 
+- (void)hideTopSpace;
+
 @end

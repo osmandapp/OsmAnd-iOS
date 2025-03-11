@@ -134,6 +134,12 @@
     }
 }
 
+- (void)hideTopSpace
+{
+    self.textCustomMarginTopStackView.hidden = YES;
+    self.topContentSpaceView.hidden = YES;
+}
+
 #pragma mark - Selectors
 
 - (void)onLeftEditButtonPressed:(UIGestureRecognizer *)recognizer

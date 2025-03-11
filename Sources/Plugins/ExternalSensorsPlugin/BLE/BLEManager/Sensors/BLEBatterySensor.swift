@@ -14,7 +14,7 @@ final class BatteryData: SensorData {
     var widgetFields: [SensorWidgetDataField]? {
         [SensorWidgetDataField(fieldType: .battery,
                                nameId: localizedString("map_widget_battery"),
-                               unitNameId: "%",
+                               unitNameId: batteryLevel != -1 ? "%" : "",
                                numberValue: nil,
                                stringValue: batteryLevel != -1 ? String(batteryLevel) : "-")]
     }

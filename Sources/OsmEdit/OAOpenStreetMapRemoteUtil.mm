@@ -382,7 +382,17 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     if (!poi)
         return nil;
     
-    BOOL isAmenity = poi.type && ![poi.type isKindOfClass:[OAPOILocationType class]];
+    BOOL isAmenity = NO;
+    if ([poi isKindOfClass:OARenderedObject.class])
+    {
+        poi.latitude = targetPoint.location.latitude;
+        poi.longitude = targetPoint.location.longitude;
+    }
+    else
+    {
+        isAmenity = poi.type && ![poi.type isKindOfClass:[OAPOILocationType class]];
+    }
+    
     unsigned long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
     
     NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";

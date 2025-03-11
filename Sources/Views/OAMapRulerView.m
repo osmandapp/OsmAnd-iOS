@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "OAShapeLayer.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kAnimationDuration .2
 #define kBlurBackgroundTag -999
@@ -92,7 +93,8 @@
     else
     {
         blurView = [[UIView alloc] init];
-        blurView.backgroundColor = UIColorFromRGB(color_dialog_transparent_bg_argb_light);
+        UIColor *color = [UIColor colorNamed:ACColorNameGroupBgColorSecondary];
+        blurView.backgroundColor = light ? color.light : color.dark;
     }
     blurView.tag = kBlurBackgroundTag;
     blurView.userInteractionEnabled = NO;

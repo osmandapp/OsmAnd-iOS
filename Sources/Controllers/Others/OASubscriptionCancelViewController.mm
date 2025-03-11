@@ -15,6 +15,7 @@
 #import "OAProducts.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kMarginH 16.0
 #define kMarginDescH 54.0
@@ -233,7 +234,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
     }
     else
     {
-        cancelSubscr.view.backgroundColor = UIColorFromARGB(color_dialog_transparent_bg_argb_light);
+        cancelSubscr.view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         cancelSubscr.modalPresentationStyle = UIModalPresentationOverFullScreen;
     }
     

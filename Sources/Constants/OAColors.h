@@ -77,7 +77,6 @@
 #define color_disabled_light 0xdadbdf
 #define color_card_divider_light 0xf0f0f0
 
-#define color_dialog_transparent_bg_argb_light 0xeaf0f0f0
 #define color_dialog_title_color_light 0x212121
 #define color_dialog_title_color_dark 0xcccccc
 #define color_dialog_description_color_light 0x212121

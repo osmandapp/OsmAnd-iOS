@@ -3656,3 +3656,6 @@
 "sensor_data" = "Datos del sensor";
 "sensor_data_settings_description" = "Muestra los datos principales del sensor";
 "battery_level_settings_description" = "Muestra el nivel de batería del sensor como valor principal";
+"terrain_map" = "Mapa topográfico (3D)";
+"add_hidden_group_info" = "El punto agregado se encuentra en «%@». Desocultá el grupo elegido para mostrarlo en el mapa.";
+"profile_icons" = "Ícono del perfil";

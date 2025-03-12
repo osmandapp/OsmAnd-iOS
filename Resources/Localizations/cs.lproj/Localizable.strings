@@ -3628,3 +3628,5 @@
 "sensor_data" = "Data senzoru";
 "sensor_data_settings_description" = "zobrazit hlavní data ze senzoru";
 "profile_icons" = "Ikona profilu";
+"terrain_map" = "Mapa terénu (3D)";
+"add_hidden_group_info" = "Přidaný bod naleznete v „%@“. Zrušte skrytí vybrané skupiny pro zobrazení na mapě.";

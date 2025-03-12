@@ -3611,3 +3611,10 @@
 "shared_string_pause" = "Pausa";
 "quick_action_verb_start_pause" = "Inizio / Pausa";
 "quick_action_save_recorded_trip_and_continue" = "Registra viaggio e continua";
+"ft_s" = "ft/s";
+"profile_icons" = "Icona profilo";
+"shared_string_show_less" = "Mostra meno";
+"shared_string_view_all" = "Mostra tutto";
+"no_internet_descr" = "Per favore controlla nuovamente la connessione a internet";
+"no_photos_available" = "Nessuna foto disponibile";
+"terrain_map" = "Mappa terreno (3D)";

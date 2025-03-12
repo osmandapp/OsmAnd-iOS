@@ -3647,3 +3647,5 @@
 "sensor_data_settings_description" = "vis primær data fra sensor";
 "sensor_data" = "Sensordata";
 "profile_icons" = "Profilikon";
+"terrain_map" = "Terrænkort (3D)";
+"add_hidden_group_info" = "Det tilføjede punkt kan findes i \"%s\". Fjern skjulning for den valgte gruppe for at vise den på kortet.";

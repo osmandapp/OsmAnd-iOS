@@ -3516,7 +3516,7 @@
 "download_wikipedia_maps" = "Wikipedia";
 "m" = "m";
 "simulate_location_movement_speed_x4" = "x4";
-"auto_zoom" = "Autozoom";
+"auto_zoom" = "Zoom automatico";
 "min_mile" = "min/m";
 "help_quiz" = "Quiz";
 "revolutions_per_minute_unit" = "RPM";
@@ -3562,7 +3562,7 @@
 "user_password" = "Password";
 "default_price_currency_format" = "%.2f %@";
 "wikipedia_offline" = "Wikipedia offline";
-"rendering_attr_piste_type_downhill_name" = "Downhill";
+"rendering_attr_piste_type_downhill_name" = "Discesa";
 "google_play" = "Google Play";
 "navigate_point_olc_short" = "OLC";
 "shared_z_a" = "Z - A";
@@ -3588,7 +3588,7 @@
 "app_mode_taxi" = "Taxi";
 "app_mode_osm" = "OSM";
 "product_title_pro" = "OsmAnd Pro";
-"map_widget_trip_recording_uphill" = "Uphill";
+"map_widget_trip_recording_uphill" = "Salita";
 "app_store" = "App Store";
 "amazon_appstore" = "Amazon Appstore";
 "login_footer_email_part" = "support@osmand.net";
@@ -3618,4 +3618,17 @@
 "no_internet_descr" = "Per favore controlla nuovamente la connessione a internet";
 "no_photos_available" = "Nessuna foto disponibile";
 "terrain_map" = "Mappa terreno (3D)";
-"no_photos_available_descr" = "Nessuna foto utente è stata ancora aggiunta per questa posizione";
+"no_photos_available_descr" = "Nessuna foto è stata ancora aggiunta per questa posizione";
+"download_successful" = "Immagine scaricata nei Documenti/Download.";
+"sensor_data" = "Dati sensore";
+"sensor_data_settings_description" = "Mostra i dati principali dal sensore";
+"battery_level_settings_description" = "Mostra come valore principale il sensore di basso livello della batteria";
+"shared_string_date" = "Data";
+"mapillary_action_descr" = "Condividi le tue immagini stradali attraverso Mapillary.";
+"online_photos" = "Fotografie online";
+"wikimedia" = "Wikimedia";
+"open_in_browser" = "Apri nel browser";
+"shared_string_source" = "Sorgente";
+"shared_string_items" = "Oggetti";
+"download_failed" = "Download fallito";
+"add_hidden_group_info" = "Il punto aggiunto può essere trovato in \"%@\". Mostra il gruppo selezionato per visualizzarlo nella mappa.";

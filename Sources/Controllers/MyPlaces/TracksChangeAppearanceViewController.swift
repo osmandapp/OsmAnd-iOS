@@ -8,11 +8,20 @@
 
 import UIKit
 
+private struct WidthKeys {
+    static let thin = "thin"
+    static let medium = "medium"
+    static let bold = "bold"
+}
+
 final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private static let directionArrowsRowKey = "directionArrowsRowKey"
     private static let startFinishIconsRowKey = "startFinishIconsRowKey"
     private static let coloringRowKey = "coloringRowKey"
     private static let coloringDescRowKey = "coloringDescRowKey"
+    private static let coloringGridRowKey = "coloringGridRowKey"
+    private static let gradientLegendRowKey = "gradientLegendRowKey"
+    private static let allColorsRowKey = "allColorsRowKey"
     private static let widthRowKey = "widthRowKey"
     private static let widthModesRowKey = "widthModesRowKey"
     private static let splitModesRowKey = "splitModesRowKey"
@@ -26,18 +35,31 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private static let widthArrayValue = "widthArrayValue"
     private static let hasTopLabels = "hasTopLabels"
     private static let hasBottomLabels = "hasBottomLabels"
+    private static let routeStatisticsAttributesStrings: [String] = ["routeInfo_roadClass", "routeInfo_surface", "routeInfo_smoothness", "routeInfo_winter_ice_road", "routeInfo_tracktype", "routeInfo_horse_scale"]
     
     private var tracks: Set<TrackItem>
     private var initialData: AppearanceData
     private var data: AppearanceData
     private var appearanceCollection: OAGPXAppearanceCollection?
+    private var gradientColorsCollection: GradientColorsCollection?
+    private var sortedColorItems: [ColorItem] = []
+    private var sortedPaletteColorItems = OAConcurrentArray<PaletteColor>()
     private var selectedShowArrows: Bool?
     private var selectedShowStartFinish: Bool?
+    private var selectedColorType: ColoringType?
+    private var selectedRouteAttributesString: String?
+    private var selectedColorItem: ColorItem?
+    private var selectedPaletteColorItem: PaletteColor?
     private var selectedWidth: OAGPXTrackWidth?
     private var customWidthValues: [String] = []
     private var selectedWidthIndex: Int = 0
     private var selectedSplit: OAGPXTrackSplitInterval?
     private var selectedSplitIntervalIndex: Int = 0
+    private var colorsCollectionIndexPath: IndexPath?
+    private var isColorSelected = false
+    private var isSolidColorSelected = false
+    private var isGradientColorSelected = false
+    private var isRouteAttributeTypeSelected = false
     private var isWidthSelected = false
     private var isCustomWidthSelected = false
     private var isSplitIntervalSelected = false
@@ -61,15 +83,23 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         appearanceCollection = OAGPXAppearanceCollection.sharedInstance()
         selectedShowArrows = preselectParameter(in: tracks) { $0.showArrows }
         selectedShowStartFinish = preselectParameter(in: tracks) { $0.showStartFinish }
+        configureColorType()
         configureWidth()
         configureSplitInterval()
         updateData()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        tableView.reloadData()
+    }
+    
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
+        addCell(OAValueTableViewCell.reuseIdentifier)
         addCell(OAButtonTableViewCell.reuseIdentifier)
         addCell(GradientChartCell.reuseIdentifier)
+        addCell(OACollectionSingleLineTableViewCell.reuseIdentifier)
         addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
         addCell(SegmentTextWithRightLabelTableViewCell.reuseIdentifier)
         addCell(OASegmentSliderTableViewCell.reuseIdentifier)
@@ -93,6 +123,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
+        colorsCollectionIndexPath = nil
         
         let directionSection = tableData.createNewSection()
         let directionArrowsRow = directionSection.createNewRow()
@@ -109,10 +140,32 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         coloringRow.cellType = OAButtonTableViewCell.reuseIdentifier
         coloringRow.key = Self.coloringRowKey
         coloringRow.title = localizedString("shared_string_coloring")
-        let coloringDescrRow = coloringSection.createNewRow()
-        coloringDescrRow.cellType = OASimpleTableViewCell.reuseIdentifier
-        coloringDescrRow.key = Self.coloringDescRowKey
-        coloringDescrRow.title = localizedString("each_favourite_point_own_icon")
+        if isColorSelected {
+            if isSolidColorSelected {
+                let coloringGridRow = coloringSection.createNewRow()
+                coloringGridRow.cellType = OACollectionSingleLineTableViewCell.reuseIdentifier
+                coloringGridRow.key = Self.coloringGridRowKey
+                colorsCollectionIndexPath = IndexPath(row: Int(tableData.rowCount(tableData.sectionCount() - 1)) - 1, section: Int(tableData.sectionCount()) - 1)
+            } else if isGradientColorSelected {
+                let gradientLegendRow = coloringSection.createNewRow()
+                gradientLegendRow.cellType = GradientChartCell.reuseIdentifier
+                gradientLegendRow.key = Self.gradientLegendRowKey
+                let coloringGridRow = coloringSection.createNewRow()
+                coloringGridRow.cellType = OACollectionSingleLineTableViewCell.reuseIdentifier
+                coloringGridRow.key = Self.coloringGridRowKey
+                colorsCollectionIndexPath = IndexPath(row: Int(tableData.rowCount(tableData.sectionCount() - 1)) - 1, section: Int(tableData.sectionCount()) - 1)
+            }
+            let allColorsRow = coloringSection.createNewRow()
+            allColorsRow.cellType = OAValueTableViewCell.reuseIdentifier
+            allColorsRow.key = Self.allColorsRowKey
+            allColorsRow.title = localizedString("shared_string_all_colors")
+            allColorsRow.iconTintColor = .iconColorActive
+        } else {
+            let coloringDescrRow = coloringSection.createNewRow()
+            coloringDescrRow.cellType = OASimpleTableViewCell.reuseIdentifier
+            coloringDescrRow.key = Self.coloringDescRowKey
+            coloringDescrRow.title = localizedString(isRouteAttributeTypeSelected ? "white_color_undefined" : "each_favourite_point_own_icon")
+        }
         
         let widthSection = tableData.createNewSection()
         let widthRow = widthSection.createNewRow()
@@ -179,11 +232,10 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.selectionStyle = .none
             cell.leftIconVisibility(false)
             cell.descriptionVisibility(false)
-            if (item.key == Self.widthRowKey && isWidthSelected) || (item.key == Self.splitIntervalRow && isSplitIntervalSelected) {
+            cell.setCustomLeftSeparatorInset(false)
+            if (item.key == Self.widthRowKey && isWidthSelected) || (item.key == Self.splitIntervalRow && isSplitIntervalSelected) || (item.key == Self.coloringRowKey && isColorSelected) {
                 cell.setCustomLeftSeparatorInset(true)
-                cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
-            } else {
-                cell.setCustomLeftSeparatorInset(false)
+                cell.separatorInset = UIEdgeInsets(top: 0, left: tableView.bounds.width, bottom: 0, right: 0)
             }
             cell.titleLabel.text = item.title
             let config = UIButton.Configuration.plain()
@@ -201,6 +253,57 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.leftIconVisibility(false)
             cell.titleVisibility(false)
             cell.descriptionLabel.text = item.title
+            return cell
+        } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
+            cell.leftIconVisibility(false)
+            cell.descriptionVisibility(false)
+            cell.valueVisibility(false)
+            cell.titleLabel.text = item.title
+            cell.titleLabel.textColor = item.iconTintColor
+            return cell
+        } else if item.cellType == GradientChartCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: GradientChartCell.reuseIdentifier) as! GradientChartCell
+            cell.selectionStyle = .none
+            cell.heightConstraint.constant = 60
+            cell.chartView.extraBottomOffset = 24
+            GpxUIHelper.setupGradientChart(chart: cell.chartView, useGesturesAndScale: false, xAxisGridColor: .chartAxisGridLine, labelsColor: .textColorSecondary)
+            var colorPalette: ColorPalette?
+            if let paletteColor = selectedPaletteColorItem as? PaletteGradientColor {
+                colorPalette = paletteColor.colorPalette
+            }
+            if let colorPalette {
+                cell.chartView.data = GpxUIHelper.buildGradientChart(chart: cell.chartView, colorPalette: colorPalette, valueFormatter: GradientUiHelper.getGradientTypeFormatter(gradientColorsCollection?.gradientType as Any, analysis: tracks.first?.dataItem?.getAnalysis()))
+                cell.chartView.notifyDataSetChanged()
+                cell.chartView.setNeedsDisplay()
+            }
+            return cell
+        } else if item.cellType == OACollectionSingleLineTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier) as! OACollectionSingleLineTableViewCell
+            cell.rightActionButtonVisibility(isSolidColorSelected)
+            cell.rightActionButton.setImage(isSolidColorSelected ? UIImage.templateImageNamed("ic_custom_add") : nil, for: .normal)
+            cell.rightActionButton.tag = isSolidColorSelected ? (indexPath.section << 10 | indexPath.row) : 0
+            cell.rightActionButton.removeTarget(nil, action: nil, for: .allEvents)
+            if isSolidColorSelected {
+                cell.rightActionButton.addTarget(self, action: #selector(onCellButtonPressed(_:)), for: .touchUpInside)
+                let colorHandler = OAColorCollectionHandler(data: [sortedColorItems], collectionView: cell.collectionView)
+                colorHandler?.delegate = self
+                let selectedIndex = sortedColorItems.firstIndex(where: { $0 == selectedColorItem }) ?? sortedColorItems.firstIndex(where: { $0 == appearanceCollection?.getDefaultLineColorItem() }) ?? 0
+                colorHandler?.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
+                cell.setCollectionHandler(colorHandler)
+            } else if isGradientColorSelected {
+                let paletteHandler = PaletteCollectionHandler(data: [sortedPaletteColorItems.asArray()], collectionView: cell.collectionView)
+                paletteHandler?.delegate = self
+                var selectedIndex = sortedPaletteColorItems.index(ofObjectSync: selectedPaletteColorItem)
+                selectedIndex = (selectedIndex != NSNotFound) ? selectedIndex : sortedPaletteColorItems.index(ofObjectSync: gradientColorsCollection?.getDefaultGradientPalette())
+                selectedIndex = (selectedIndex != NSNotFound) ? selectedIndex : 0
+                let selectedIndexPath = IndexPath(row: Int(selectedIndex), section: 0)
+                paletteHandler?.setSelectedIndexPath(selectedIndexPath)
+                cell.setCollectionHandler(paletteHandler)
+                cell.collectionView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+                cell.configureTopOffset(12)
+                cell.configureBottomOffset(12)
+            }
             return cell
         } else if item.cellType == SegmentImagesWithRightLabelTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
@@ -248,6 +351,25 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         return nil
     }
     
+    override func onRowSelected(_ indexPath: IndexPath) {
+        let item = tableData.item(for: indexPath)
+        if item.key == Self.allColorsRowKey {
+            if isSolidColorSelected {
+                if let items = appearanceCollection?.getAvailableColorsSortingByKey(), let colorItem = selectedColorItem {
+                    let colorCollectionVC = ItemsCollectionViewController(collectionType: .colorItems, items: items, selectedItem: colorItem)
+                    colorCollectionVC.delegate = self
+                    navigationController?.pushViewController(colorCollectionVC, animated: true)
+                }
+            } else if isGradientColorSelected {
+                if let gradientColors = gradientColorsCollection, let paletteColorItem = selectedPaletteColorItem {
+                    let colorCollectionVC = ItemsCollectionViewController(collectionType: .colorizationPaletteItems, items: gradientColors, selectedItem: paletteColorItem)
+                    colorCollectionVC.delegate = self
+                    navigationController?.pushViewController(colorCollectionVC, animated: true)
+                }
+            }
+        }
+    }
+    
     override func onLeftNavbarButtonPressed() {
         if data != initialData {
             let alertController = UIAlertController(title: localizedString("unsaved_changes"), message: localizedString("unsaved_changes_will_be_lost"), preferredStyle: .actionSheet)
@@ -292,6 +414,66 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         return data
     }
     
+    private func configureColorType() {
+        let selectedColorTypeString = preselectParameter(in: tracks) { $0.coloringType }
+        if let typeStr = selectedColorTypeString {
+            if TracksChangeAppearanceViewController.routeStatisticsAttributesStrings.contains(typeStr) {
+                let modifiedTypeStr = typeStr.replacingOccurrences(of: "routeInfo", with: "route_info")
+                selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: modifiedTypeStr, defaultValue: .trackSolid)
+            } else {
+                selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: typeStr, defaultValue: .trackSolid)
+            }
+        }
+        
+        if let type = selectedColorType {
+            switch type {
+            case .trackSolid:
+                configureLineColors()
+                isColorSelected = true
+                isSolidColorSelected = true
+                isGradientColorSelected = false
+                isRouteAttributeTypeSelected = false
+            case .speed, .altitude, .slope:
+                configureGradientColors()
+                isColorSelected = true
+                isSolidColorSelected = false
+                isGradientColorSelected = true
+                isRouteAttributeTypeSelected = false
+            case .attribute:
+                selectedRouteAttributesString = type.isRouteInfoAttribute() ? type.getName(routeInfoAttribute: selectedColorTypeString) : nil
+                isRouteAttributeTypeSelected = true
+                isColorSelected = false
+                isSolidColorSelected = false
+                isGradientColorSelected = false
+            default:
+                break
+            }
+        }
+    }
+    
+    private func configureLineColors() {
+        sortedColorItems = Array(appearanceCollection?.getAvailableColorsSortingByLastUsed() ?? [])
+        if let trackColor = tracks.first?.color {
+            selectedColorItem = appearanceCollection?.getColorItem(withValue: Int32(trackColor))
+        } else {
+            selectedColorItem = appearanceCollection?.getDefaultLineColorItem()
+        }
+    }
+    
+    private func configureGradientColors() {
+        if let type = selectedColorType, let rawValue = type.toColorizationType()?.ordinal, let colorizationTypeEnum = ColorizationType(rawValue: Int(rawValue)) {
+            gradientColorsCollection = GradientColorsCollection(colorizationType: colorizationTypeEnum)
+        }
+        
+        sortedPaletteColorItems.replaceAll(withObjectsSync: gradientColorsCollection?.getPaletteColors())
+        if let paletteName = tracks.first?.gradientPaletteName,
+           let palette = gradientColorsCollection?.getPaletteColor(byName: paletteName) {
+            selectedPaletteColorItem = palette
+        } else {
+            selectedPaletteColorItem = gradientColorsCollection?.getDefaultGradientPalette()
+        }
+    }
+    
     private func configureWidth() {
         selectedWidth = preselectParameter(in: tracks) { appearanceCollection?.getWidthForValue($0.width) }
         let minValue = OAGPXTrackWidth.getCustomTrackWidthMin()
@@ -299,15 +481,15 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         customWidthValues = (minValue...maxValue).map { "\($0)" }
         if let width = selectedWidth {
             switch width.key {
-            case "thin":
+            case WidthKeys.thin:
                 isWidthSelected = true
                 isCustomWidthSelected = false
                 selectedWidthIndex = 0
-            case "medium":
+            case WidthKeys.medium:
                 isWidthSelected = true
                 isCustomWidthSelected = false
                 selectedWidthIndex = 1
-            case "bold":
+            case WidthKeys.bold:
                 isWidthSelected = true
                 isCustomWidthSelected = false
                 selectedWidthIndex = 2
@@ -409,6 +591,19 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         updateData()
     }
     
+    @objc private func onCellButtonPressed(_ sender: UIButton) {
+        guard let tableData = tableData else { return }
+        let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
+        let item = tableData.item(for: indexPath)
+        if item.key == Self.coloringGridRowKey {
+            guard let colorItem = selectedColorItem else { return }
+            let colorPickerVC = UIColorPickerViewController()
+            colorPickerVC.delegate = self
+            colorPickerVC.selectedColor = colorItem.getColor()
+            self.navigationController?.present(colorPickerVC, animated: true, completion: nil)
+        }
+    }
+    
     @objc private func sliderChanged(sender: UISlider) {
         guard let tableData = tableData else { return }
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
@@ -498,24 +693,161 @@ extension TracksChangeAppearanceViewController {
     }
     
     private func createColoringMenu() -> UIMenu {
-        let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: .on) { _ in }
-        let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: .off) { _ in }
+        let paramValue = selectedColorType
+        let isReset = data.shouldResetParameter(.coloringType)
+        let isRouteInfoAttribute = selectedColorType?.isRouteInfoAttribute()
+        let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && paramValue == nil ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            self.data.setParameter(.coloringType, value: nil)
+            self.selectedColorType = nil
+            self.isRouteAttributeTypeSelected = false
+            if self.isColorSelected {
+                self.isColorSelected = false
+                self.isSolidColorSelected = false
+                self.isGradientColorSelected = false
+                self.updateData()
+            }
+        }
+        let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            self.data.resetParameter(.coloringType)
+            self.data.resetParameter(.color)
+            self.isRouteAttributeTypeSelected = false
+            if self.isColorSelected {
+                self.isColorSelected = false
+                self.isSolidColorSelected = false
+                self.isGradientColorSelected = false
+                self.updateData()
+            }
+        }
         let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
         
-        let solidColorAction = UIAction(title: localizedString("track_coloring_solid"), state: .off) { _ in }
+        let solidColorAction = UIAction(title: localizedString("track_coloring_solid"), state: !isReset && paramValue == .trackSolid ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            self.data.setParameter(.coloringType, value: ColoringType.trackSolid.id)
+            self.selectedColorType = .trackSolid
+            self.configureLineColors()
+            self.isColorSelected = true
+            self.isSolidColorSelected = true
+            self.isGradientColorSelected = false
+            self.isRouteAttributeTypeSelected = false
+            self.updateData()
+        }
         let solidColorMenu = inlineMenu(withActions: [solidColorAction])
         
-        let altitudeAction = UIAction(title: localizedString("altitude"), state: .off) { _ in }
-        let speedAction = UIAction(title: localizedString("shared_string_speed"), state: .off) { _ in }
-        let slopeAction = UIAction(title: localizedString("shared_string_slope"), state: .off) { _ in }
+        let altitudeAction = UIAction(title: localizedString("altitude"), state: !isReset && paramValue == .altitude ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            self.data.setParameter(.coloringType, value: ColoringType.altitude.id)
+            self.selectedColorType = .altitude
+            self.configureGradientColors()
+            self.isColorSelected = true
+            self.isSolidColorSelected = false
+            self.isGradientColorSelected = true
+            self.isRouteAttributeTypeSelected = false
+            self.updateData()
+        }
+        let speedAction = UIAction(title: localizedString("shared_string_speed"), state: !isReset && paramValue == .speed ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            self.data.setParameter(.coloringType, value: ColoringType.speed.id)
+            self.selectedColorType = .speed
+            self.configureGradientColors()
+            self.isColorSelected = true
+            self.isSolidColorSelected = false
+            self.isGradientColorSelected = true
+            self.isRouteAttributeTypeSelected = false
+            self.updateData()
+        }
+        let slopeAction = UIAction(title: localizedString("shared_string_slope"), state: !isReset && paramValue == .slope ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            self.data.setParameter(.coloringType, value: ColoringType.slope.id)
+            self.selectedColorType = .slope
+            self.configureGradientColors()
+            self.isColorSelected = true
+            self.isSolidColorSelected = false
+            self.isGradientColorSelected = true
+            self.isRouteAttributeTypeSelected = false
+            self.updateData()
+        }
         let gradientColorMenu = inlineMenu(withActions: [altitudeAction, speedAction, slopeAction])
         
-        let roadTypeAction = UIAction(title: localizedString("routeInfo_roadClass_name"), image: UIImage.icCustomProLogoOutlined, state: .off) { _ in }
-        let surfaceAction = UIAction(title: localizedString("routeInfo_surface_name"), image: UIImage.icCustomProLogoOutlined, state: .off) { _ in }
-        let smoothhnessAction = UIAction(title: localizedString("routeInfo_smoothness_name"), image: UIImage.icCustomProLogoOutlined, state: .off) { _ in }
-        let winterRoadsAction = UIAction(title: localizedString("routeInfo_winter_ice_road_name"), image: UIImage.icCustomProLogoOutlined, state: .off) { _ in }
-        let thicknessRoadsAction = UIAction(title: localizedString("routeInfo_tracktype_name"), image: UIImage.icCustomProLogoOutlined, state: .off) { _ in }
-        let horseRoadsAction = UIAction(title: localizedString("routeInfo_horse_scale_name"), image: UIImage.icCustomProLogoOutlined, state: .off) { _ in }
+        let roadTypeAction = UIAction(title: localizedString("routeInfo_roadClass_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_roadClass" ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            if OAIAPHelper.isOsmAndProAvailable() {
+                self.data.setParameter(.coloringType, value: "routeInfo_roadClass")
+                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_roadClass".replacingOccurrences(of: "routeInfo", with: "route_info"))
+                self.selectedRouteAttributesString = "routeInfo_roadClass"
+                self.isColorSelected = false
+                self.isSolidColorSelected = false
+                self.isGradientColorSelected = false
+                self.isRouteAttributeTypeSelected = true
+                self.updateData()
+            }
+        }
+        let surfaceAction = UIAction(title: localizedString("routeInfo_surface_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_surface" ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            if OAIAPHelper.isOsmAndProAvailable() {
+                self.data.setParameter(.coloringType, value: "routeInfo_surface")
+                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_surface".replacingOccurrences(of: "routeInfo", with: "route_info"))
+                self.selectedRouteAttributesString = "routeInfo_surface"
+                self.isColorSelected = false
+                self.isSolidColorSelected = false
+                self.isGradientColorSelected = false
+                self.isRouteAttributeTypeSelected = true
+                self.updateData()
+            }
+        }
+        let smoothhnessAction = UIAction(title: localizedString("routeInfo_smoothness_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_smoothness" ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            if OAIAPHelper.isOsmAndProAvailable() {
+                self.data.setParameter(.coloringType, value: "routeInfo_smoothness")
+                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_smoothness".replacingOccurrences(of: "routeInfo", with: "route_info"))
+                self.selectedRouteAttributesString = "routeInfo_smoothness"
+                self.isColorSelected = false
+                self.isSolidColorSelected = false
+                self.isGradientColorSelected = false
+                self.isRouteAttributeTypeSelected = true
+                self.updateData()
+            }
+        }
+        let winterRoadsAction = UIAction(title: localizedString("routeInfo_winter_ice_road_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_winter_ice_road" ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            if OAIAPHelper.isOsmAndProAvailable() {
+                self.data.setParameter(.coloringType, value: "routeInfo_winter_ice_road")
+                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_winter_ice_road".replacingOccurrences(of: "routeInfo", with: "route_info"))
+                self.selectedRouteAttributesString = "routeInfo_winter_ice_road"
+                self.isColorSelected = false
+                self.isSolidColorSelected = false
+                self.isGradientColorSelected = false
+                self.isRouteAttributeTypeSelected = true
+                self.updateData()
+            }
+        }
+        let thicknessRoadsAction = UIAction(title: localizedString("routeInfo_tracktype_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_tracktype" ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            if OAIAPHelper.isOsmAndProAvailable() {
+                self.data.setParameter(.coloringType, value: "routeInfo_tracktype")
+                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_tracktype".replacingOccurrences(of: "routeInfo", with: "route_info"))
+                self.selectedRouteAttributesString = "routeInfo_tracktype"
+                self.isColorSelected = false
+                self.isSolidColorSelected = false
+                self.isGradientColorSelected = false
+                self.isRouteAttributeTypeSelected = true
+                self.updateData()
+            }
+        }
+        let horseRoadsAction = UIAction(title: localizedString("routeInfo_horse_scale_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_horse_scale" ? .on : .off) { [weak self] _ in
+            guard let self = self else { return }
+            if OAIAPHelper.isOsmAndProAvailable() {
+                self.data.setParameter(.coloringType, value: "routeInfo_horse_scale")
+                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_horse_scale".replacingOccurrences(of: "routeInfo", with: "route_info"))
+                self.selectedRouteAttributesString = "routeInfo_horse_scale"
+                self.isColorSelected = false
+                self.isSolidColorSelected = false
+                self.isGradientColorSelected = false
+                self.isRouteAttributeTypeSelected = true
+                self.updateData()
+            }
+        }
         let proColorMenu = inlineMenu(withActions: [roadTypeAction, surfaceAction, smoothhnessAction, winterRoadsAction, thicknessRoadsAction, horseRoadsAction])
         
         return UIMenu(title: "", options: .singleSelection, children: [unchangedOriginalMenu, solidColorMenu, gradientColorMenu, proColorMenu])
@@ -561,7 +893,7 @@ extension TracksChangeAppearanceViewController {
         
         let customAction = UIAction(title: localizedString("shared_string_custom"), state: !isReset && paramValue == selectedWidth?.customValue ? .on : .off) { [weak self] _ in
             guard let self = self else { return }
-            self.handleWidthSelection(index: 2)
+            self.handleWidthSelection(index: 3)
         }
         let customWidthMenu = inlineMenu(withActions: [customAction])
         
@@ -625,5 +957,89 @@ extension TracksChangeAppearanceViewController {
 
 extension TracksChangeAppearanceViewController: AppearanceChangedDelegate {
     func onAppearanceChanged() {
+    }
+}
+
+extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
+    func onCollectionItemSelected(_ indexPath: IndexPath, selectedItem: Any?, collectionView: UICollectionView?) {
+        if isSolidColorSelected {
+            selectedColorItem = sortedColorItems[indexPath.row]
+            if let colorValue = selectedColorItem?.value {
+                data.setParameter(.color, value: KotlinInt(integerLiteral: colorValue))
+            }
+        } else if isGradientColorSelected {
+            selectedPaletteColorItem = sortedPaletteColorItems.object(atIndexSync: UInt(indexPath.row)) as? PaletteColor
+            if let paletteColor = selectedPaletteColorItem as? PaletteGradientColor {
+                data.setParameter(.colorPalette, value: paletteColor.paletteName)
+            }
+        }
+    }
+    
+    func reloadCollectionData() {
+    }
+}
+
+extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDelegate {
+    func selectColorItem(_ colorItem: ColorItem) {
+        if let row = sortedColorItems.firstIndex(where: { $0 == colorItem }) {
+            onCollectionItemSelected(IndexPath(row: row, section: 0), selectedItem: nil, collectionView: nil)
+        }
+    }
+    
+    func selectPaletteItem(_ paletteItem: PaletteColor) {
+        let index = sortedPaletteColorItems.index(ofObjectSync: paletteItem)
+        if index != NSNotFound {
+            onCollectionItemSelected(IndexPath(row: Int(index), section: 0), selectedItem: nil, collectionView: nil)
+        }
+    }
+    
+    func addAndGetNewColorItem(_ color: UIColor) -> ColorItem {
+        guard let newColorItem = appearanceCollection?.addNewSelectedColor(color) else { return ColorItem(hexColor: color.toHexString()) }
+        if let colorsIndexPath = colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
+            sortedColorItems.insert(newColorItem, at: 0)
+            colorHandler.addAndSelectColor(IndexPath(row: 0, section: 0), newItem: newColorItem)
+        }
+        
+        return newColorItem
+    }
+    
+    func changeColorItem(_ colorItem: ColorItem, withColor color: UIColor) {
+        if let colorsIndexPath = colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler, let row = sortedColorItems.firstIndex(where: { $0 == colorItem }) {
+            appearanceCollection?.changeColor(colorItem, newColor: color)
+            let indexPath = IndexPath(row: row, section: 0)
+            colorHandler.replaceOldColor(indexPath)
+        }
+    }
+    
+    func duplicateColorItem(_ colorItem: ColorItem) -> ColorItem {
+        guard let duplicatedColorItem = appearanceCollection?.duplicateColor(colorItem) else { return colorItem }
+        if let colorsIndexPath = colorsCollectionIndexPath, let index = sortedColorItems.firstIndex(where: { $0 == colorItem }) {
+            sortedColorItems.insert(duplicatedColorItem, at: index + 1)
+            if let colorCell = tableView.cellForRow(at: colorsIndexPath) as? OACollectionSingleLineTableViewCell,
+               let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
+                let newIndexPath = IndexPath(row: index + 1, section: 0)
+                colorHandler.addColor(newIndexPath, newItem: duplicatedColorItem)
+            }
+        }
+        
+        return duplicatedColorItem
+    }
+    
+    func deleteColorItem(_ colorItem: ColorItem) {
+        if let colorsIndexPath = colorsCollectionIndexPath, let row = sortedColorItems.firstIndex(where: { $0 == colorItem }) {
+            let indexPathForColor = IndexPath(row: row, section: 0)
+            appearanceCollection?.deleteColor(colorItem)
+            sortedColorItems.remove(at: row)
+            if let colorCell = tableView.cellForRow(at: colorsIndexPath) as? OACollectionSingleLineTableViewCell,
+               let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
+                colorHandler.removeColor(indexPathForColor)
+            }
+        }
+    }
+}
+
+extension TracksChangeAppearanceViewController: UIColorPickerViewControllerDelegate {
+    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
+        _ = addAndGetNewColorItem(viewController.selectedColor)
     }
 }

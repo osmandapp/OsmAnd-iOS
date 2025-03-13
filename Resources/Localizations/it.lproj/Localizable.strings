@@ -3618,7 +3618,7 @@
 "no_internet_descr" = "Per favore controlla nuovamente la connessione a internet";
 "no_photos_available" = "Nessuna foto disponibile";
 "terrain_map" = "Mappa terreno (3D)";
-"no_photos_available_descr" = "Nessuna foto è stata ancora aggiunta per questa posizione";
+"no_photos_available_descr" = "Nessuna foto è stata ancora aggiunta dagli utenti per questa posizione";
 "download_successful" = "Immagine scaricata nei Documenti/Download.";
 "sensor_data" = "Dati sensore";
 "sensor_data_settings_description" = "Mostra i dati principali dal sensore";

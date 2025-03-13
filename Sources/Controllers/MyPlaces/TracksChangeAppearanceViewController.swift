@@ -79,7 +79,6 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.data.delegate = self
         appearanceCollection = OAGPXAppearanceCollection.sharedInstance()
         selectedShowArrows = preselectParameter(in: tracks) { $0.showArrows }
         selectedShowStartFinish = preselectParameter(in: tracks) { $0.showStartFinish }
@@ -114,7 +113,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        return [createRightNavbarButton(localizedString("shared_string_done"), iconName: nil, action: #selector(onRightNavbarButtonPressed), menu: nil)]
+        [createRightNavbarButton(localizedString("shared_string_done"), iconName: nil, action: #selector(onRightNavbarButtonPressed), menu: nil)]
     }
     
     override func isNavbarSeparatorVisible() -> Bool {
@@ -415,39 +414,31 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     }
     
     private func configureColorType() {
-        let selectedColorTypeString = preselectParameter(in: tracks) { $0.coloringType }
-        if let typeStr = selectedColorTypeString {
-            if TracksChangeAppearanceViewController.routeStatisticsAttributesStrings.contains(typeStr) {
-                let modifiedTypeStr = typeStr.replacingOccurrences(of: "routeInfo", with: "route_info")
-                selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: modifiedTypeStr, defaultValue: .trackSolid)
-            } else {
-                selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: typeStr, defaultValue: .trackSolid)
-            }
-        }
-        
-        if let type = selectedColorType {
-            switch type {
-            case .trackSolid:
-                configureLineColors()
-                isColorSelected = true
-                isSolidColorSelected = true
-                isGradientColorSelected = false
-                isRouteAttributeTypeSelected = false
-            case .speed, .altitude, .slope:
-                configureGradientColors()
-                isColorSelected = true
-                isSolidColorSelected = false
-                isGradientColorSelected = true
-                isRouteAttributeTypeSelected = false
-            case .attribute:
-                selectedRouteAttributesString = type.isRouteInfoAttribute() ? type.getName(routeInfoAttribute: selectedColorTypeString) : nil
-                isRouteAttributeTypeSelected = true
-                isColorSelected = false
-                isSolidColorSelected = false
-                isGradientColorSelected = false
-            default:
-                break
-            }
+        guard let typeStr = preselectParameter(in: tracks, extractor: { $0.coloringType }) else { return }
+        let normalizedTypeStr = TracksChangeAppearanceViewController.routeStatisticsAttributesStrings.contains(typeStr) ? typeStr.replacingOccurrences(of: "routeInfo", with: "route_info") : typeStr
+        selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: normalizedTypeStr, defaultValue: .trackSolid)
+        guard let type = selectedColorType else { return }
+        switch type {
+        case .trackSolid:
+            configureLineColors()
+            isColorSelected = true
+            isSolidColorSelected = true
+            isGradientColorSelected = false
+            isRouteAttributeTypeSelected = false
+        case .speed, .altitude, .slope:
+            configureGradientColors()
+            isColorSelected = true
+            isSolidColorSelected = false
+            isGradientColorSelected = true
+            isRouteAttributeTypeSelected = false
+        case .attribute:
+            selectedRouteAttributesString = type.isRouteInfoAttribute() ? type.getName(routeInfoAttribute: typeStr) : nil
+            isRouteAttributeTypeSelected = true
+            isColorSelected = false
+            isSolidColorSelected = false
+            isGradientColorSelected = false
+        default:
+            break
         }
     }
     
@@ -461,13 +452,13 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     }
     
     private func configureGradientColors() {
-        if let type = selectedColorType, let rawValue = type.toColorizationType()?.ordinal, let colorizationTypeEnum = ColorizationType(rawValue: Int(rawValue)) {
-            gradientColorsCollection = GradientColorsCollection(colorizationType: colorizationTypeEnum)
+        guard let type = selectedColorType, let ordinal = type.toColorizationType()?.ordinal, let colorizationTypeEnum = ColorizationType(rawValue: Int(ordinal)) else { return }
+        gradientColorsCollection = GradientColorsCollection(colorizationType: colorizationTypeEnum)
+        if let paletteColors = gradientColorsCollection?.getPaletteColors() {
+            sortedPaletteColorItems.replaceAll(withObjectsSync: paletteColors)
         }
         
-        sortedPaletteColorItems.replaceAll(withObjectsSync: gradientColorsCollection?.getPaletteColors())
-        if let paletteName = tracks.first?.gradientPaletteName,
-           let palette = gradientColorsCollection?.getPaletteColor(byName: paletteName) {
+        if let paletteName = tracks.first?.gradientPaletteName, let palette = gradientColorsCollection?.getPaletteColor(byName: paletteName) {
             selectedPaletteColorItem = palette
         } else {
             selectedPaletteColorItem = gradientColorsCollection?.getDefaultGradientPalette()
@@ -479,25 +470,21 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         let minValue = OAGPXTrackWidth.getCustomTrackWidthMin()
         let maxValue = OAGPXTrackWidth.getCustomTrackWidthMax()
         customWidthValues = (minValue...maxValue).map { "\($0)" }
-        if let width = selectedWidth {
-            switch width.key {
-            case WidthKeys.thin:
-                isWidthSelected = true
-                isCustomWidthSelected = false
-                selectedWidthIndex = 0
-            case WidthKeys.medium:
-                isWidthSelected = true
-                isCustomWidthSelected = false
-                selectedWidthIndex = 1
-            case WidthKeys.bold:
-                isWidthSelected = true
-                isCustomWidthSelected = false
-                selectedWidthIndex = 2
-            default:
-                isWidthSelected = true
-                isCustomWidthSelected = true
-                selectedWidthIndex = 3
-            }
+        guard let width = selectedWidth else { return }
+        isWidthSelected = true
+        switch width.key {
+        case WidthKeys.thin:
+            isCustomWidthSelected = false
+            selectedWidthIndex = 0
+        case WidthKeys.medium:
+            isCustomWidthSelected = false
+            selectedWidthIndex = 1
+        case WidthKeys.bold:
+            isCustomWidthSelected = false
+            selectedWidthIndex = 2
+        default:
+            isCustomWidthSelected = true
+            selectedWidthIndex = 3
         }
     }
     
@@ -508,17 +495,15 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         }
         
         if let split = selectedSplit {
+            isSplitIntervalSelected = true
             switch split.type {
             case .none:
-                isSplitIntervalSelected = true
                 isSplitIntervalNoneSelected = true
                 selectedSplitIntervalIndex = 0
             case .time:
-                isSplitIntervalSelected = true
                 isSplitIntervalNoneSelected = false
                 selectedSplitIntervalIndex = 1
             case .distance:
-                isSplitIntervalSelected = true
                 isSplitIntervalNoneSelected = false
                 selectedSplitIntervalIndex = 2
             default:
@@ -528,31 +513,23 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     }
     
     private func preselectParameter<T: Equatable>(in tracks: Set<TrackItem>, extractor: (TrackItem) -> T?) -> T? {
-        var result: T?
-        for track in tracks {
-            let value = extractor(track)
-            if result == nil {
-                result = value
-            } else if result != value {
-                return nil
-            }
-        }
-        
-        return result
+        guard let firstTrack = tracks.first, let firstValue = extractor(firstTrack) else { return nil }
+        return tracks.allSatisfy { extractor($0) == firstValue } ? firstValue : nil
     }
     
     private func createStateSelectionMenu(for key: String) -> UIMenu {
-        if key == Self.directionArrowsRowKey {
+        switch key {
+        case Self.directionArrowsRowKey:
             return createArrowsMenu()
-        } else if key == Self.startFinishIconsRowKey {
+        case Self.startFinishIconsRowKey:
             return createStartFinishMenu()
-        } else if key == Self.coloringRowKey {
+        case Self.coloringRowKey:
             return createColoringMenu()
-        } else if key == Self.widthRowKey {
+        case Self.widthRowKey:
             return createWidthMenu()
-        } else if key == Self.splitIntervalRow {
+        case Self.splitIntervalRow:
             return createSplitIntervalMenu()
-        } else {
+        default:
             return UIMenu()
         }
     }
@@ -566,10 +543,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         guard let widths = appearanceCollection?.getAvailableWidth(), index >= 0, index < widths.count else { return }
         let width = widths[index]
         selectedWidth = width
-        let widthString = width.isCustom() ? width.customValue : width.key
+        let isCustom = width.isCustom()
+        let widthString = isCustom ? width.customValue : width.key
         data.setParameter(.width, value: widthString)
         isWidthSelected = true
-        isCustomWidthSelected = width.isCustom()
+        isCustomWidthSelected = isCustom
         selectedWidthIndex = index
         updateData()
     }
@@ -579,7 +557,8 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         let split = availableSplits[index]
         selectedSplit = split
         data.setParameter(.splitType, value: Int32(split.type.rawValue))
-        if split.isCustom(), let customValue = split.customValue, let customIndex = split.titles.firstIndex(of: customValue) {
+        let isCustom = split.isCustom()
+        if isCustom, let customValue = split.customValue, let customIndex = split.titles.firstIndex(of: customValue) {
             data.setParameter(.splitInterval, value: split.values[customIndex].doubleValue)
         } else {
             data.setParameter(.splitInterval, value: 0)
@@ -635,57 +614,39 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
 
 extension TracksChangeAppearanceViewController {
     private func createArrowsMenu() -> UIMenu {
-        let paramValue: Bool? = selectedShowArrows
-        let isReset = data.shouldResetParameter(.showArrows)
-        let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && paramValue == nil ? .on : .off) { [weak self] _ in
-            guard let self else { return }
-            self.data.setParameter(.showArrows, value: nil)
-            self.selectedShowArrows = nil
+        return createBooleanSelectionMenu(currentValue: selectedShowArrows, parameter: .showArrows) { [weak self] newValue in
+            self?.selectedShowArrows = newValue
         }
-        let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
-            guard let self else { return }
-            self.data.resetParameter(.showArrows)
-        }
-        let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
-        
-        let onAction = UIAction(title: localizedString("shared_string_on"), state: !isReset && paramValue == true ? .on : .off) { [weak self] _ in
-            guard let self else { return }
-            self.data.setParameter(.showArrows, value: true)
-            self.selectedShowArrows = true
-        }
-        let offAction = UIAction(title: localizedString("shared_string_off"), state: !isReset && paramValue == false ? .on : .off) { [weak self] _ in
-            guard let self else { return }
-            self.data.setParameter(.showArrows, value: false)
-            self.selectedShowArrows = false
-        }
-        let onOffMenu = inlineMenu(withActions: [onAction, offAction])
-        
-        return UIMenu(title: "", options: .singleSelection, children: [unchangedOriginalMenu, onOffMenu])
     }
     
     private func createStartFinishMenu() -> UIMenu {
-        let paramValue: Bool? = selectedShowStartFinish
-        let isReset = data.shouldResetParameter(.showStartFinish)
-        let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && paramValue == nil ? .on : .off) { [weak self] _ in
+        return createBooleanSelectionMenu(currentValue: selectedShowStartFinish, parameter: .showStartFinish) { [weak self] newValue in
+            self?.selectedShowStartFinish = newValue
+        }
+    }
+    
+    private func createBooleanSelectionMenu(currentValue: Bool?, parameter: GpxParameter, update: @escaping (Bool?) -> Void) -> UIMenu {
+        let isReset = data.shouldResetParameter(parameter)
+        let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && currentValue == nil ? .on : .off) { [weak self] _ in
             guard let self else { return }
-            self.data.setParameter(.showStartFinish, value: nil)
-            self.selectedShowStartFinish = nil
+            self.data.setParameter(parameter, value: nil)
+            update(nil)
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
             guard let self else { return }
-            self.data.resetParameter(.showStartFinish)
+            self.data.resetParameter(parameter)
         }
         let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
         
-        let onAction = UIAction(title: localizedString("shared_string_on"), state: !isReset && paramValue == true ? .on : .off) { [weak self] _ in
+        let onAction = UIAction(title: localizedString("shared_string_on"), state: !isReset && currentValue == true ? .on : .off) { [weak self] _ in
             guard let self else { return }
-            self.data.setParameter(.showStartFinish, value: true)
-            self.selectedShowStartFinish = true
+            self.data.setParameter(parameter, value: true)
+            update(true)
         }
-        let offAction = UIAction(title: localizedString("shared_string_off"), state: !isReset && paramValue == false ? .on : .off) { [weak self] _ in
+        let offAction = UIAction(title: localizedString("shared_string_off"), state: !isReset && currentValue == false ? .on : .off) { [weak self] _ in
             guard let self else { return }
-            self.data.setParameter(.showStartFinish, value: false)
-            self.selectedShowStartFinish = false
+            self.data.setParameter(parameter, value: false)
+            update(false)
         }
         let onOffMenu = inlineMenu(withActions: [onAction, offAction])
         
@@ -693,206 +654,131 @@ extension TracksChangeAppearanceViewController {
     }
     
     private func createColoringMenu() -> UIMenu {
-        let paramValue = selectedColorType
         let isReset = data.shouldResetParameter(.coloringType)
-        let isRouteInfoAttribute = selectedColorType?.isRouteInfoAttribute()
-        let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && paramValue == nil ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+        let isRouteInfoAttribute = selectedColorType?.isRouteInfoAttribute() ?? false
+        let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && selectedColorType == nil ? .on : .off) { [weak self] _ in
+            guard let self else { return }
             self.data.setParameter(.coloringType, value: nil)
+            self.data.setParameter(.color, value: nil)
             self.selectedColorType = nil
             self.isRouteAttributeTypeSelected = false
-            if self.isColorSelected {
-                self.isColorSelected = false
-                self.isSolidColorSelected = false
-                self.isGradientColorSelected = false
-                self.updateData()
-            }
+            self.resetColorSelectionFlags()
+            self.updateData()
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             self.data.resetParameter(.coloringType)
             self.data.resetParameter(.color)
+            self.selectedColorType = nil
             self.isRouteAttributeTypeSelected = false
-            if self.isColorSelected {
-                self.isColorSelected = false
-                self.isSolidColorSelected = false
-                self.isGradientColorSelected = false
-                self.updateData()
-            }
+            self.resetColorSelectionFlags()
+            self.updateData()
         }
         let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
         
-        let solidColorAction = UIAction(title: localizedString("track_coloring_solid"), state: !isReset && paramValue == .trackSolid ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+        let solidColorAction = UIAction(title: localizedString("track_coloring_solid"), state: !isReset && selectedColorType == .trackSolid ? .on : .off) { [weak self] _ in
+            guard let self else { return }
             self.data.setParameter(.coloringType, value: ColoringType.trackSolid.id)
             self.selectedColorType = .trackSolid
             self.configureLineColors()
-            self.isColorSelected = true
-            self.isSolidColorSelected = true
-            self.isGradientColorSelected = false
-            self.isRouteAttributeTypeSelected = false
+            self.resetColorSelectionFlags()
+            self.isColorSelectionEnabled(true, solid: true)
             self.updateData()
         }
         let solidColorMenu = inlineMenu(withActions: [solidColorAction])
         
-        let altitudeAction = UIAction(title: localizedString("altitude"), state: !isReset && paramValue == .altitude ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+        let altitudeAction = UIAction(title: localizedString("altitude"), state: !isReset && selectedColorType == .altitude ? .on : .off) { [weak self] _ in
+            guard let self else { return }
             self.data.setParameter(.coloringType, value: ColoringType.altitude.id)
             self.selectedColorType = .altitude
             self.configureGradientColors()
-            self.isColorSelected = true
-            self.isSolidColorSelected = false
-            self.isGradientColorSelected = true
-            self.isRouteAttributeTypeSelected = false
+            self.resetColorSelectionFlags()
+            self.isColorSelectionEnabled(true, solid: false)
             self.updateData()
         }
-        let speedAction = UIAction(title: localizedString("shared_string_speed"), state: !isReset && paramValue == .speed ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+        let speedAction = UIAction(title: localizedString("shared_string_speed"), state: !isReset && selectedColorType == .speed ? .on : .off) { [weak self] _ in
+            guard let self else { return }
             self.data.setParameter(.coloringType, value: ColoringType.speed.id)
             self.selectedColorType = .speed
             self.configureGradientColors()
-            self.isColorSelected = true
-            self.isSolidColorSelected = false
-            self.isGradientColorSelected = true
-            self.isRouteAttributeTypeSelected = false
+            self.resetColorSelectionFlags()
+            self.isColorSelectionEnabled(true, solid: false)
             self.updateData()
         }
-        let slopeAction = UIAction(title: localizedString("shared_string_slope"), state: !isReset && paramValue == .slope ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+        let slopeAction = UIAction(title: localizedString("shared_string_slope"), state: !isReset && selectedColorType == .slope ? .on : .off) { [weak self] _ in
+            guard let self else { return }
             self.data.setParameter(.coloringType, value: ColoringType.slope.id)
             self.selectedColorType = .slope
             self.configureGradientColors()
-            self.isColorSelected = true
-            self.isSolidColorSelected = false
-            self.isGradientColorSelected = true
-            self.isRouteAttributeTypeSelected = false
+            self.resetColorSelectionFlags()
+            self.isColorSelectionEnabled(true, solid: false)
             self.updateData()
         }
         let gradientColorMenu = inlineMenu(withActions: [altitudeAction, speedAction, slopeAction])
         
-        let roadTypeAction = UIAction(title: localizedString("routeInfo_roadClass_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_roadClass" ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
-            if OAIAPHelper.isOsmAndProAvailable() {
-                self.data.setParameter(.coloringType, value: "routeInfo_roadClass")
-                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_roadClass".replacingOccurrences(of: "routeInfo", with: "route_info"))
-                self.selectedRouteAttributesString = "routeInfo_roadClass"
-                self.isColorSelected = false
-                self.isSolidColorSelected = false
-                self.isGradientColorSelected = false
-                self.isRouteAttributeTypeSelected = true
-                self.updateData()
-            }
+        let proColorActions = TracksChangeAppearanceViewController.routeStatisticsAttributesStrings.map { attribute in
+            return createProColorAction(titleKey: attribute + "_name", parameterValue: attribute, selectedString: attribute, isRouteInfoAttribute: isRouteInfoAttribute)
         }
-        let surfaceAction = UIAction(title: localizedString("routeInfo_surface_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_surface" ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
-            if OAIAPHelper.isOsmAndProAvailable() {
-                self.data.setParameter(.coloringType, value: "routeInfo_surface")
-                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_surface".replacingOccurrences(of: "routeInfo", with: "route_info"))
-                self.selectedRouteAttributesString = "routeInfo_surface"
-                self.isColorSelected = false
-                self.isSolidColorSelected = false
-                self.isGradientColorSelected = false
-                self.isRouteAttributeTypeSelected = true
-                self.updateData()
-            }
-        }
-        let smoothhnessAction = UIAction(title: localizedString("routeInfo_smoothness_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_smoothness" ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
-            if OAIAPHelper.isOsmAndProAvailable() {
-                self.data.setParameter(.coloringType, value: "routeInfo_smoothness")
-                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_smoothness".replacingOccurrences(of: "routeInfo", with: "route_info"))
-                self.selectedRouteAttributesString = "routeInfo_smoothness"
-                self.isColorSelected = false
-                self.isSolidColorSelected = false
-                self.isGradientColorSelected = false
-                self.isRouteAttributeTypeSelected = true
-                self.updateData()
-            }
-        }
-        let winterRoadsAction = UIAction(title: localizedString("routeInfo_winter_ice_road_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_winter_ice_road" ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
-            if OAIAPHelper.isOsmAndProAvailable() {
-                self.data.setParameter(.coloringType, value: "routeInfo_winter_ice_road")
-                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_winter_ice_road".replacingOccurrences(of: "routeInfo", with: "route_info"))
-                self.selectedRouteAttributesString = "routeInfo_winter_ice_road"
-                self.isColorSelected = false
-                self.isSolidColorSelected = false
-                self.isGradientColorSelected = false
-                self.isRouteAttributeTypeSelected = true
-                self.updateData()
-            }
-        }
-        let thicknessRoadsAction = UIAction(title: localizedString("routeInfo_tracktype_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_tracktype" ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
-            if OAIAPHelper.isOsmAndProAvailable() {
-                self.data.setParameter(.coloringType, value: "routeInfo_tracktype")
-                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_tracktype".replacingOccurrences(of: "routeInfo", with: "route_info"))
-                self.selectedRouteAttributesString = "routeInfo_tracktype"
-                self.isColorSelected = false
-                self.isSolidColorSelected = false
-                self.isGradientColorSelected = false
-                self.isRouteAttributeTypeSelected = true
-                self.updateData()
-            }
-        }
-        let horseRoadsAction = UIAction(title: localizedString("routeInfo_horse_scale_name"), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute ?? false && selectedRouteAttributesString == "routeInfo_horse_scale" ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
-            if OAIAPHelper.isOsmAndProAvailable() {
-                self.data.setParameter(.coloringType, value: "routeInfo_horse_scale")
-                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: "routeInfo_horse_scale".replacingOccurrences(of: "routeInfo", with: "route_info"))
-                self.selectedRouteAttributesString = "routeInfo_horse_scale"
-                self.isColorSelected = false
-                self.isSolidColorSelected = false
-                self.isGradientColorSelected = false
-                self.isRouteAttributeTypeSelected = true
-                self.updateData()
-            }
-        }
-        let proColorMenu = inlineMenu(withActions: [roadTypeAction, surfaceAction, smoothhnessAction, winterRoadsAction, thicknessRoadsAction, horseRoadsAction])
+        let proColorMenu = inlineMenu(withActions: proColorActions)
         
         return UIMenu(title: "", options: .singleSelection, children: [unchangedOriginalMenu, solidColorMenu, gradientColorMenu, proColorMenu])
+    }
+    
+    private func createProColorAction(titleKey: String, parameterValue: String, selectedString: String, isRouteInfoAttribute: Bool) -> UIAction {
+        return UIAction(title: localizedString(titleKey), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute && (selectedRouteAttributesString == selectedString) ? .on : .off) { [weak self] _ in
+            guard let self, OAIAPHelper.isOsmAndProAvailable() else { return }
+            self.data.setParameter(.coloringType, value: parameterValue)
+            self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: parameterValue.replacingOccurrences(of: "routeInfo", with: "route_info"))
+            self.selectedRouteAttributesString = selectedString
+            self.resetColorSelectionFlags()
+            self.isRouteAttributeTypeSelected = true
+            self.updateData()
+        }
+    }
+    
+    private func resetColorSelectionFlags() {
+        isColorSelected = false
+        isSolidColorSelected = false
+        isGradientColorSelected = false
+    }
+    
+    private func isColorSelectionEnabled(_ enabled: Bool, solid: Bool) {
+        isColorSelected = enabled
+        isSolidColorSelected = solid
+        isGradientColorSelected = !solid
     }
     
     private func createWidthMenu() -> UIMenu {
         let paramValue: String? = selectedWidth?.isCustom() == true ? selectedWidth?.customValue : selectedWidth?.key
         let isReset = data.shouldResetParameter(.width)
-        let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && paramValue == nil ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+        let fixedWidths: [(titleKey: String, widthKey: String, index: Int)] = [("rendering_value_thin_name", "thin", 0), ("rendering_value_medium_w_name", "medium", 1), ("rendering_value_bold_name", "bold", 2)]
+        let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: (!isReset && paramValue == nil) ? .on : .off) { [weak self] _ in
+            guard let self else { return }
             self.data.setParameter(.width, value: nil)
             self.selectedWidth = nil
-            if self.isWidthSelected {
-                self.isWidthSelected = false
-                self.isCustomWidthSelected = false
-                self.updateData()
-            }
+            self.isWidthSelected = false
+            self.isCustomWidthSelected = false
+            self.updateData()
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             self.data.resetParameter(.width)
-            if self.isWidthSelected {
-                self.isWidthSelected = false
-                self.isCustomWidthSelected = false
-                self.updateData()
-            }
+            self.isWidthSelected = false
+            self.isCustomWidthSelected = false
+            self.updateData()
         }
         let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
         
-        let thinAction = UIAction(title: localizedString("rendering_value_thin_name"), state: !isReset && paramValue == "thin" ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
-            self.handleWidthSelection(index: 0)
+        let fixedWidthActions = fixedWidths.map { item in
+            return UIAction(title: localizedString(item.titleKey), state: (!isReset && paramValue == item.widthKey) ? .on : .off) { [weak self] _ in
+                guard let self else { return }
+                self.handleWidthSelection(index: item.index)
+            }
         }
-        let mediumAction = UIAction(title: localizedString("rendering_value_medium_w_name"), state: !isReset && paramValue == "medium" ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
-            self.handleWidthSelection(index: 1)
-        }
-        let boldAction = UIAction(title: localizedString("rendering_value_bold_name"), state: !isReset && paramValue == "bold" ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
-            self.handleWidthSelection(index: 2)
-        }
-        let widthMenu = inlineMenu(withActions: [thinAction, mediumAction, boldAction])
+        let widthMenu = inlineMenu(withActions: fixedWidthActions)
         
-        let customAction = UIAction(title: localizedString("shared_string_custom"), state: !isReset && paramValue == selectedWidth?.customValue ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+        let customAction = UIAction(title: localizedString("shared_string_custom"), state: (!isReset && paramValue == selectedWidth?.customValue) ? .on : .off) { [weak self] _ in
+            guard let self else { return }
             self.handleWidthSelection(index: 3)
         }
         let customWidthMenu = inlineMenu(withActions: [customAction])
@@ -906,43 +792,40 @@ extension TracksChangeAppearanceViewController {
         let isResetSplitInterval = data.shouldResetParameter(.splitInterval)
         let isUnchanged = paramSplitType == nil && !isResetSplitType && !isResetSplitInterval
         let isOriginalSelected = isResetSplitType && isResetSplitInterval
-        let isNoSplit = paramSplitType != nil && paramSplitType ?? 0 == GpxSplitType.noSplit.type
-        let isTime = paramSplitType ?? 0 == GpxSplitType.time.type
-        let isDistance = paramSplitType ?? 0 == GpxSplitType.distance.type
+        let currentType = paramSplitType ?? 0
+        let isNoSplit = paramSplitType != nil && currentType == GpxSplitType.noSplit.type
+        let isTime = currentType == GpxSplitType.time.type
+        let isDistance = currentType == GpxSplitType.distance.type
         
         let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: isUnchanged ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             self.data.setParameter(.splitType, value: nil)
             self.data.setParameter(.splitInterval, value: nil)
             self.selectedSplit = nil
-            if self.isSplitIntervalSelected {
-                self.isSplitIntervalSelected = false
-                self.isSplitIntervalNoneSelected = false
-                self.updateData()
-            }
+            self.isSplitIntervalSelected = false
+            self.isSplitIntervalNoneSelected = false
+            self.updateData()
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isOriginalSelected ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             self.data.resetParameter(.splitType)
             self.data.resetParameter(.splitInterval)
-            if self.isSplitIntervalSelected {
-                self.isSplitIntervalSelected = false
-                self.isSplitIntervalNoneSelected = false
-                self.updateData()
-            }
+            self.isSplitIntervalSelected = false
+            self.isSplitIntervalNoneSelected = false
+            self.updateData()
         }
         let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
         
         let noSplitAction = UIAction(title: localizedString("shared_string_none"), state: isNoSplit ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             self.handleSplitIntervalSelection(index: 0)
         }
         let timeAction = UIAction(title: localizedString("shared_string_time"), state: isTime ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             self.handleSplitIntervalSelection(index: 1)
         }
         let distanceAction = UIAction(title: localizedString("shared_string_distance"), state: isDistance ? .on : .off) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             self.handleSplitIntervalSelection(index: 2)
         }
         let onOffMenu = inlineMenu(withActions: [noSplitAction, timeAction, distanceAction])
@@ -952,11 +835,6 @@ extension TracksChangeAppearanceViewController {
     
     private func inlineMenu(withActions actions: [UIAction]) -> UIMenu {
         UIMenu(title: "", options: .displayInline, children: actions)
-    }
-}
-
-extension TracksChangeAppearanceViewController: AppearanceChangedDelegate {
-    func onAppearanceChanged() {
     }
 }
 

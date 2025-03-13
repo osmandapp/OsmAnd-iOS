@@ -80,8 +80,8 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         appearanceCollection = OAGPXAppearanceCollection.sharedInstance()
-        selectedShowArrows = preselectParameter(in: tracks) { $0.showArrows }
-        selectedShowStartFinish = preselectParameter(in: tracks) { $0.showStartFinish }
+        configureShowArrows()
+        configureShowStartFinish()
         configureColorType()
         configureWidth()
         configureSplitInterval()
@@ -413,10 +413,24 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         return data
     }
     
+    private func configureShowArrows() {
+        selectedShowArrows = preselectParameter(in: tracks) { $0.showArrows }
+        initialData.setParameter(.showArrows, value: selectedShowArrows)
+        data.setParameter(.showArrows, value: selectedShowArrows)
+    }
+    
+    private func configureShowStartFinish() {
+        selectedShowStartFinish = preselectParameter(in: tracks) { $0.showStartFinish }
+        initialData.setParameter(.showStartFinish, value: selectedShowStartFinish)
+        data.setParameter(.showStartFinish, value: selectedShowStartFinish)
+    }
+    
     private func configureColorType() {
         guard let typeStr = preselectParameter(in: tracks, extractor: { $0.coloringType }) else { return }
         let normalizedTypeStr = TracksChangeAppearanceViewController.routeStatisticsAttributesStrings.contains(typeStr) ? typeStr.replacingOccurrences(of: "routeInfo", with: "route_info") : typeStr
         selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: normalizedTypeStr, defaultValue: .trackSolid)
+        initialData.setParameter(.coloringType, value: selectedColorType?.id)
+        data.setParameter(.coloringType, value: selectedColorType?.id)
         guard let type = selectedColorType else { return }
         switch type {
         case .trackSolid:
@@ -449,6 +463,9 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         } else {
             selectedColorItem = appearanceCollection?.getDefaultLineColorItem()
         }
+        
+        initialData.setParameter(.color, value: KotlinInt(integerLiteral: selectedColorItem?.value ?? 0))
+        data.setParameter(.color, value: KotlinInt(integerLiteral: selectedColorItem?.value ?? 0))
     }
     
     private func configureGradientColors() {
@@ -463,6 +480,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         } else {
             selectedPaletteColorItem = gradientColorsCollection?.getDefaultGradientPalette()
         }
+        
+        if let paletteGradient = selectedPaletteColorItem as? PaletteGradientColor {
+            initialData.setParameter(.colorPalette, value: paletteGradient.paletteName)
+            data.setParameter(.colorPalette, value: paletteGradient.paletteName)
+        }
     }
     
     private func configureWidth() {
@@ -472,6 +494,9 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         customWidthValues = (minValue...maxValue).map { "\($0)" }
         guard let width = selectedWidth else { return }
         isWidthSelected = true
+        let widthString = width.isCustom() ? width.customValue : width.key
+        initialData.setParameter(.width, value: widthString)
+        data.setParameter(.width, value: widthString)
         switch width.key {
         case WidthKeys.thin:
             isCustomWidthSelected = false
@@ -508,6 +533,18 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 selectedSplitIntervalIndex = 2
             default:
                 break
+            }
+            
+            let splitTypeValue = Int32(split.type.rawValue)
+            initialData.setParameter(.splitType, value: splitTypeValue)
+            data.setParameter(.splitType, value: splitTypeValue)
+            if split.isCustom(), let customValue = split.customValue, let customIndex = split.titles.firstIndex(of: customValue) {
+                let intervalValue = split.values[customIndex].doubleValue
+                initialData.setParameter(.splitInterval, value: intervalValue)
+                data.setParameter(.splitInterval, value: intervalValue)
+            } else {
+                initialData.setParameter(.splitInterval, value: 0)
+                data.setParameter(.splitInterval, value: 0)
             }
         }
     }

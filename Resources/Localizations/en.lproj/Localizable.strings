@@ -2369,9 +2369,11 @@
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
-
+"shared_string_unchanged" = "Unchanged";
 "osm_live_active" = "Active";
 "menu_all_trips" = "All Tracks";
+"each_favourite_point_own_icon" = "Each favourite point would keep its own icon.";
+"unchanged_parameter_summary" = "Each track will retain its own parameters.";
 
 "public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than public transport";
 "calc_pedestrian_route" = "Calculate pedestrian route";

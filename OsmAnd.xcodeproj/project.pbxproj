@@ -1356,6 +1356,8 @@
 		C5693B832A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7F2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png */; };
 		C5693B882A9F5A09007EA552 /* ic_custom_terrain@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B862A9F5A08007EA552 /* ic_custom_terrain@2x.png */; };
 		C5693B892A9F5A09007EA552 /* ic_custom_terrain@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B872A9F5A08007EA552 /* ic_custom_terrain@3x.png */; };
+		C56B7D262D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C56B7D252D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.xib */; };
+		C56B7D272D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56B7D242D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.swift */; };
 		C56E3AF82B4DA0D60084080A /* MapSettingsGpxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E3AF72B4DA0D60084080A /* MapSettingsGpxViewController.swift */; };
 		C56FAB4C29B226A40096192F /* OACameraTiltWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB4A29B226A40096192F /* OACameraTiltWidget.mm */; };
 		C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB4F29B226C60096192F /* OACameraDistanceWidget.mm */; };
@@ -1365,6 +1367,9 @@
 		C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm */; };
 		C57354502AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */; };
 		C5735AF62AFE9CB500638715 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C5735AF42AFE9CB500638715 /* InfoPlist.strings */; };
+		C575798C2D64A0A30016957D /* TracksChangeAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */; };
+		C57693172D66159200E4F772 /* AppearanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57693162D66159200E4F772 /* AppearanceData.swift */; };
+		C57693192D67148400E4F772 /* ChangeTracksAppearanceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */; };
 		C57E26F32D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */; };
 		C57E26F42D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */; };
 		C5879A49299FB96300F53249 /* uk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A48299FB96300F53249 /* uk_tts.js */; };
@@ -4925,6 +4930,8 @@
 		C5693B7F2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day_big@2x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day_big@2x.png"; sourceTree = "<group>"; };
 		C5693B862A9F5A08007EA552 /* ic_custom_terrain@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain@2x.png"; path = "Resources/Icons/ic_custom_terrain@2x.png"; sourceTree = "<group>"; };
 		C5693B872A9F5A08007EA552 /* ic_custom_terrain@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain@3x.png"; path = "Resources/Icons/ic_custom_terrain@3x.png"; sourceTree = "<group>"; };
+		C56B7D242D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentTextWithRightLabelTableViewCell.swift; sourceTree = "<group>"; };
+		C56B7D252D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentTextWithRightLabelTableViewCell.xib; sourceTree = "<group>"; };
 		C56E3AF72B4DA0D60084080A /* MapSettingsGpxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsGpxViewController.swift; sourceTree = "<group>"; };
 		C56FAB4929B226A40096192F /* OACameraTiltWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACameraTiltWidget.h; sourceTree = "<group>"; };
 		C56FAB4A29B226A40096192F /* OACameraTiltWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACameraTiltWidget.mm; sourceTree = "<group>"; };
@@ -5020,6 +5027,9 @@
 		C5735B452AFE9D8700638715 /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uz-Cyrl"; path = "Resources/Localizations/uz-Cyrl.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C5735B462AFE9D8800638715 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = Resources/Localizations/vi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C5735B472AFE9D8900638715 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = Resources/Localizations/cy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksChangeAppearanceViewController.swift; sourceTree = "<group>"; };
+		C57693162D66159200E4F772 /* AppearanceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceData.swift; sourceTree = "<group>"; };
+		C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeTracksAppearanceTask.swift; sourceTree = "<group>"; };
 		C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachRoadsBannerCell.swift; sourceTree = "<group>"; };
 		C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttachRoadsBannerCell.xib; sourceTree = "<group>"; };
 		C5879A48299FB96300F53249 /* uk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = uk_tts.js; path = ../resources/voice/uk/uk_tts.js; sourceTree = "<group>"; };
@@ -11697,6 +11707,8 @@
 				469F0C212C627E2A00874CC6 /* PaletteCollectionViewCell.swift */,
 				32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */,
 				FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */,
+				C56B7D242D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.swift */,
+				C56B7D252D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.xib */,
 				32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
@@ -12028,6 +12040,9 @@
 				C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */,
 				C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */,
 				C57245D82CDF3B70004F1F19 /* TracksSortModeHelper.swift */,
+				C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */,
+				C57693162D66159200E4F772 /* AppearanceData.swift */,
+				C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */,
 			);
 			path = MyPlaces;
 			sourceTree = "<group>";
@@ -15107,6 +15122,7 @@
 				329E56B62C7BB45F00DC7B7C /* OAIconsPaletteCell.xib in Resources */,
 				3296B48627F8790800108AF7 /* ic_navbar_pencil@3x.png in Resources */,
 				DA52CDEB24AE087F00CC309D /* img_help_width_limit_day@3x.png in Resources */,
+				C56B7D262D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.xib in Resources */,
 				DA0D1633281BEEF500CEEF58 /* map_turn_roundabout_right@2x.png in Resources */,
 				8432577F1A9DADE300A7964E /* ic_gpx_distance@2x.png in Resources */,
 				323BD8F82628850400D255ED /* ic_bg_point_octagon_center_small@3x.png in Resources */,
@@ -16665,6 +16681,7 @@
 				DA842ECD2A0B998E0030866E /* WidgetInfoCreator.swift in Sources */,
 				460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */,
 				323F04C82C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift in Sources */,
+				C57693172D66159200E4F772 /* AppearanceData.swift in Sources */,
 				32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */,
 				DA5F77B628742E85000A2BFF /* OABackupStatus.m in Sources */,
 				DAABE4EE2A1657AF00569F71 /* Color+INT.swift in Sources */,
@@ -17052,6 +17069,7 @@
 				DA5A845226C563A900F274C7 /* OAMapLayers.mm in Sources */,
 				DA4ABEEB2876DA5D00B996EF /* OASettingsCategoryItems.m in Sources */,
 				FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */,
+				C57693192D67148400E4F772 /* ChangeTracksAppearanceTask.swift in Sources */,
 				DA5A81DE26C563A700F274C7 /* OAStreet.mm in Sources */,
 				325CFBEB2B5052E000090DF2 /* TracksViewController.swift in Sources */,
 				32DE2BE42B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift in Sources */,
@@ -17228,6 +17246,7 @@
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,
 				DA2EC47B29FBB90A00ECEB37 /* WidgetType.swift in Sources */,
 				4631377929AE6D8A000B0258 /* OACarPlayHistoryListController.mm in Sources */,
+				C575798C2D64A0A30016957D /* TracksChangeAppearanceViewController.swift in Sources */,
 				DA5A834026C563A800F274C7 /* OAFolderCardCollectionViewCell.m in Sources */,
 				DA5A849226C563A900F274C7 /* OAMeasurementEditingContext.mm in Sources */,
 				DA5A856226C563A900F274C7 /* OAWaypointHelper.mm in Sources */,
@@ -17499,6 +17518,7 @@
 				46E9AD9728DC8B1200CC55F9 /* OASwitchTableViewCell.m in Sources */,
 				32AFDC7E2A9500D800809EE0 /* TravelArticleDialogViewController.swift in Sources */,
 				B0D61E373B1DC253E7C0BB0C /* OAFoldersCollectionView.mm in Sources */,
+				C56B7D272D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.swift in Sources */,
 				CA4EDC45F03787B5F481123A /* OASlider.mm in Sources */,
 				CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */,
 				DA4ABED12876D71300B996EF /* OAExportBackupTask.m in Sources */,

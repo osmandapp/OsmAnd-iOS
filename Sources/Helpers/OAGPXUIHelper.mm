@@ -813,8 +813,9 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
 
 + (NSString *)buildTrackSegmentName:(OASGpxFile *)gpxFile track:(OASTrack *)track segment:(OASTrkSegment *)segment
 {
+    NSArray<OASTrkSegment *> *segments = [gpxFile getNonEmptyTrkSegmentsRoutesOnly:NO];
     NSString *trackTitle = [self getTrackTitle:gpxFile track:track];
-    NSString *segmentTitle = [self getSegmentTitle:segment segmentIdx:[track.segments indexOfObject:segment]];
+    NSString *segmentTitle = [self getSegmentTitle:segment segmentIdx:[segments indexOfObject:segment]];
 
     BOOL oneSegmentPerTrack =
             [gpxFile getNonEmptySegmentsCount] == [gpxFile getNonEmptyTracksCount];

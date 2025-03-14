@@ -947,12 +947,28 @@
             OAGPXDatabase *db = [OAGPXDatabase sharedDb];
             auto gpx = [db getGPXItem:[
                 [db getFileDir:self.gpxFileName] stringByAppendingPathComponent:self.gpxFileName.lastPathComponent]];
-            
-            auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
-            trackItem.dataItem = gpx;
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem
-                                                               trackHudMode:EOATrackMenuHudMode
-                                                                      state:state];
+            if (gpx)
+            {
+                auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+                trackItem.dataItem = gpx;
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem
+                                                                   trackHudMode:EOATrackMenuHudMode
+                                                                          state:state];
+            }
+            else
+            {
+                auto currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+                if (currentTrack)
+                {
+                    auto trackItem = [[OASTrackItem alloc] initWithGpxFile:currentTrack];
+                    if (trackItem)
+                    {
+                        [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem
+                                                                           trackHudMode:EOATrackMenuHudMode
+                                                                                  state:state];
+                    }
+                }
+            }
         }
     }];
 }

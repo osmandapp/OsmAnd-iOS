@@ -342,7 +342,7 @@
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             
-            updateSQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ <= %f", POINT_NAME, POINT_COL_DATE, [[NSDate date] timeIntervalSince1970]];
+            updateSQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ <= %f", POINT_NAME, POINT_COL_DATE, [[NSDate date] timeIntervalSince1970] * 1000];
             update_stmt = [updateSQL UTF8String];
             
             sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
@@ -524,7 +524,7 @@
                         [wpt setBackgroundTypeBackType:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)]];
                     }
 
-                    NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:wpt.time / 1000.0]];
+                    NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:wpt.time / 1000 / 1000]];
 
                     if (fillCurrentTrack) {
                         gpx = _currentTrack;
@@ -1048,7 +1048,7 @@
     
     points--;
     
-    [self doDeletePointsLat:wpt.lat lon:wpt.lon time:wpt.time];
+    [self doDeletePointsLat:wpt.lat lon:wpt.lon time:wpt.time / 1000];
 }
 
 - (void)deleteAllWpts

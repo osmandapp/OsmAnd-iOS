@@ -88,9 +88,9 @@
     [self applySafeAreaMargins];
 }
 
--(void)viewDidDisappear:(BOOL)animated
+-(void)viewWillDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self unregisterKeyboardNotifications];

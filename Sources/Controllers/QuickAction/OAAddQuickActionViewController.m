@@ -306,7 +306,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
             cell.titleLabel.text = item.title;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             
             cell.descriptionLabel.text = item.descr;
             cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];

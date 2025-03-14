@@ -763,12 +763,15 @@ extension TracksChangeAppearanceViewController {
     
     private func createProColorAction(titleKey: String, parameterValue: String, selectedString: String, isRouteInfoAttribute: Bool) -> UIAction {
         return UIAction(title: localizedString(titleKey), image: UIImage.icCustomProLogoOutlined, state: isRouteInfoAttribute && (selectedRouteAttributesString == selectedString) ? .on : .off) { [weak self] _ in
-            guard let self, OAIAPHelper.isOsmAndProAvailable() else { return }
-            self.data.setParameter(.coloringType, value: parameterValue)
-            self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: parameterValue.replacingOccurrences(of: "routeInfo", with: "route_info"))
-            self.selectedRouteAttributesString = selectedString
-            self.resetColorSelectionFlags()
-            self.isRouteAttributeTypeSelected = true
+            guard let self else { return }
+            if OAIAPHelper.isOsmAndProAvailable() {
+                self.data.setParameter(.coloringType, value: parameterValue)
+                self.selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: parameterValue.replacingOccurrences(of: "routeInfo", with: "route_info"))
+                self.selectedRouteAttributesString = selectedString
+                self.resetColorSelectionFlags()
+                self.isRouteAttributeTypeSelected = true
+            }
+            
             self.updateData()
         }
     }

@@ -3579,7 +3579,7 @@
 "auto_25_chars_route_roundabout_kl" = "Prendi la %d uscita e tieni la sinistra";
 "auto_25_chars_route_roundabout_kr" = "Prendi la %d uscita e tieni la destra";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
-"product_title_plus" = "Maps+";
+"product_title_plus" = "";
 "short_min" = "m";
 "osm_id" = "OSM ID";
 "shared_a_z" = "A - Z";

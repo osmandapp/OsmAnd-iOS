@@ -1312,7 +1312,7 @@
 "routeInfo_smoothness_name" = "Suavidad";
 "routing_attr_avoid_share_taxi_description" = "Evitar taxis compartidos";
 "rendering_value_blue_name" = "Azul";
-"rendering_value_highContrastRoads_name" = "Caminos en alto contraste";
+"rendering_value_highContrastRoads_name" = "Caminos en contraste alto";
 "rendering_attr_piste_difficulty_aerialway_name" = "Vía aérea";
 "routing_attr_short_way_name" = "Ruta de bajo consumo (corta)";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Plano (llanura)";

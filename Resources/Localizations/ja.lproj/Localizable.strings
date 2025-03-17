@@ -2927,3 +2927,4 @@
 "date_of_creation" = "作成日";
 "shared_string_visible_on_map" = "地図で表示";
 "cloud_sync_progress" = "同期…%@";
+"battery_saving_mode" = "省電力モード";

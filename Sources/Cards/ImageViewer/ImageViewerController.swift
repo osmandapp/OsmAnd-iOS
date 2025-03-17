@@ -109,7 +109,6 @@ final class ImageViewerController: UIViewController {
                             self?.layout()
                         }
                     case .failure(let error):
-                        // FIXME: 52.51440 13.39238 last 3 icons https://commons.wikimedia.org/wiki/Special:FilePath/?width=1280
                         debugPrint("download failed: url: \(url) | \(error.localizedDescription)")
                     }
                 }

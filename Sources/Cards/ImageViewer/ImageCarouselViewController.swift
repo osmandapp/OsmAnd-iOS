@@ -64,6 +64,7 @@ final class ImageCarouselViewController: UIPageViewController {
         if let imageDatasource {
             let initialVC: ImageViewerController = .init(index: initialIndex,
                                                          imageItem: imageDatasource.imageItem(at: initialIndex))
+            initialVC.placeholderImage = imageDatasource.placeholderImage
             setViewControllers([initialVC], direction: .forward, animated: true)
         }
     }
@@ -306,9 +307,12 @@ extension ImageCarouselViewController: UIPageViewControllerDataSource {
             newIndex = imageDatasource.count() - 1
         }
         
-        return ImageViewerController(
+        let controller = ImageViewerController(
             index: newIndex,
             imageItem: imageDatasource.imageItem(at: newIndex))
+        controller.placeholderImage = imageDatasource.placeholderImage
+        
+        return controller
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
@@ -322,9 +326,12 @@ extension ImageCarouselViewController: UIPageViewControllerDataSource {
             newIndex = 0
         }
         
-        return ImageViewerController(
+        let controller = ImageViewerController(
             index: newIndex,
             imageItem: imageDatasource.imageItem(at: newIndex))
+        controller.placeholderImage = imageDatasource.placeholderImage
+        
+        return controller
     }
 }
 

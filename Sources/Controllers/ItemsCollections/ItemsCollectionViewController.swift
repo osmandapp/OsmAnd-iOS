@@ -155,7 +155,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.separatorStyle = (collectionType == .colorizationPaletteItems || collectionType == .terrainPaletteItems) ? .singleLine : .none
+        tableView.separatorStyle = (collectionType == .colorizationPaletteItems || collectionType == .terrainPaletteItems || collectionType == .poiIconCategories) ? .singleLine : .none
         tableView.backgroundColor = collectionType == .colorItems ? .groupBg : .viewBg
     }
     
@@ -413,8 +413,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             poiIconHandler.selectedIconColor = selectedIconColor
             poiIconHandler.regularIconColor = regularIconColor
             poiIconHandler.setScrollDirection(.vertical)
-            poiIconHandler.setItemSize(size: 48)
-            poiIconHandler.setIconSize(size: 30)
+            poiIconHandler.setItemSize(size: 36)
+            poiIconHandler.setIconSize(size: 24)
+            poiIconHandler.strokeCornerRadius = 18
+            poiIconHandler.innerViewCornerRadius = 12
+            
             poiIconHandler.roundedSquareCells = false
             poiIconHandler.innerViewCornerRadius = -1
             if let poiCategoryKey {
@@ -795,6 +798,7 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
             if let selectedIconItem {
                 iconsDelegate?.selectIconName(selectedIconItem)
             }
+            dismiss(animated: true)
 
         } else if collectionType == .poiIconCategories {
             
@@ -809,6 +813,7 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                         poiIconsDelegate.setIconName(selectedName)
                         poiIconsDelegate.selectIconName(selectedName)
                         poiIconsDelegate.allIconsVCDelegate = nil
+                        dismiss(animated: true)
                     }
                 }
             }
@@ -819,8 +824,8 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
             if let selectedColorItem {
                 delegate?.selectColorItem(selectedColorItem)
             }
+            dismiss(animated: true)
         }
-        dismiss(animated: true)
     }
     
     func reloadCollectionData() {

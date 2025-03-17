@@ -114,8 +114,8 @@ class IconCollectionHandler: OABaseCollectionHandler {
             cell.iconView.layer.cornerRadius = innerViewCornerRadius
             cell.backView.layer.cornerRadius = strokeCornerRadius
         } else {
-            cell.iconView.layer.cornerRadius = cell.iconView.frame.size.height / 2
-            cell.backView.layer.cornerRadius = cell.backView.frame.size.height / 2
+            cell.iconView.layer.cornerRadius = iconSize / 2
+            cell.backView.layer.cornerRadius = itemSize.width / 2
         }
         return cell
     }

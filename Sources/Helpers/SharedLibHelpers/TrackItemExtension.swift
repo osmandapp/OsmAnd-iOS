@@ -40,8 +40,7 @@ extension TrackItem {
     var creationDate: Date {
         get {
             if isShowCurrentTrack {
-                let lastModifiedTime = Double(lastModified)
-                return Date(timeIntervalSince1970: lastModifiedTime)
+                return convertTimestampToDate(Double(lastModified))
             } else {
                 return dataItem?.creationDate ?? Date()
             }
@@ -306,6 +305,17 @@ extension TrackItem {
             visualization3dPositionType = OAGPXDatabase.lineVisualizationPositionType(forName: gpx.get3DLinePositionType())
         } else {
             debugPrint("resetAppearanceToOriginal -> gpx is empty")
+        }
+    }
+    
+    private func convertTimestampToDate(_ timestamp: TimeInterval) -> Date {
+        // Check if the timestamp is greater than 10 billion
+        if timestamp > 10_000_000_000 {
+            // The value is in milliseconds, convert to seconds
+            return Date(timeIntervalSince1970: timestamp / 1000)
+        } else {
+            // The value is already in seconds
+            return Date(timeIntervalSince1970: timestamp)
         }
     }
 }

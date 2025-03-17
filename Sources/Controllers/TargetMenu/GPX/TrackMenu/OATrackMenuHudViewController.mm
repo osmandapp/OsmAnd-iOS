@@ -1417,14 +1417,8 @@
     }
     if (time > 0)
     {
-        NSTimeInterval timestamp = time;
-        if (timestamp > 10000000000)
-        {
-            // to seconds
-            timestamp = timestamp / 1000.0;
-        }
         
-        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:timestamp]
+        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:time]
                                               dateStyle:NSDateFormatterMediumStyle
                                               timeStyle:NSDateFormatterNoStyle];
     }

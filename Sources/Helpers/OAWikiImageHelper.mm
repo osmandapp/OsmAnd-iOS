@@ -103,14 +103,13 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
             url = url.length == 0
                 ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"wiki=", wikiTitle]
                 : [url stringByAppendingFormat:@"&%@%@", @"wiki=", wikiTitle];
-            
-            url = [url stringByAppendingFormat:@"&addMetaData=true"];
         }
 
         if (USE_OSMAND_WIKI_API)
         {
             if (url.length > 0)
             {
+                url = [url stringByAppendingFormat:@"&addMetaData=true"];
                 url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
                 [self addOsmandAPIImageList:url cards:cards];
             }

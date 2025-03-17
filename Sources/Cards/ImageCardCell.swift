@@ -17,6 +17,7 @@ final class ImageCardCell: UICollectionViewCell {
     @IBOutlet private weak var urlTextView: UILabel!
     
     var isBigPhoto = false
+    var placeholderImage: UIImage?
     
     // swiftlint:disable all
     private var item: ImageCard!
@@ -51,7 +52,7 @@ final class ImageCardCell: UICollectionViewCell {
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
             with: url,
-            placeholder: ImageCardPlaceholder(),
+            placeholder: ImageCardPlaceholder(placeholderImage: placeholderImage),
             options: [
                 .processor(DownsamplingImageProcessor(size: .init(width: height, height: height))),
                 .scaleFactor(UIScreen.main.scale),
@@ -64,16 +65,18 @@ final class ImageCardPlaceholder: Placeholder {
     private var placeholderImageView: UIImageView?
     private var width: CGFloat
     private var height: CGFloat
+    private var placeholderImage: UIImage?
     
-    init(width: CGFloat = 40.0, height: CGFloat = 30.0) {
+    init(width: CGFloat = 40.0, height: CGFloat = 30.0, placeholderImage: UIImage?) {
         self.width = width
         self.height = height
+        self.placeholderImage = placeholderImage
     }
 
     func add(to imageView: KFCrossPlatformImageView) {
         placeholderImageView?.removeFromSuperview()
         let imageViewPlaceholder = UIImageView()
-        imageViewPlaceholder.image = .icCustomLink
+        imageViewPlaceholder.image = placeholderImage ?? .icCustomLink
         imageViewPlaceholder.contentMode = .scaleAspectFill
         imageViewPlaceholder.tintColor = .iconColorDefault
         imageViewPlaceholder.translatesAutoresizingMaskIntoConstraints = false

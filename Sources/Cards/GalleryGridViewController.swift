@@ -11,6 +11,7 @@ import Kingfisher
 final class GalleryGridViewController: OABaseNavbarViewController {
     var cards: [AbstractCard] = []
     var titleString: String = ""
+    var placeholderImage: UIImage?
     lazy var downloadImageMetadataService = DownloadImageMetadataService.shared
     // swiftlint:disable all
     private var collectionView: UICollectionView!
@@ -87,6 +88,7 @@ extension GalleryGridViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryCell.reuseIdentifier, for: indexPath) as! GalleryCell
+        cell.placeholderImage = placeholderImage
         cell.configure(with: cards[indexPath.item])
         return cell
     }
@@ -122,8 +124,8 @@ extension GalleryGridViewController: UICollectionViewDelegate {
         guard let card = cards[indexPath.row] as? WikiImageCard else { return }
         let wikiCards = cards.compactMap { $0 as? WikiImageCard }
         guard let initialIndex = wikiCards.firstIndex(where: { $0 === card }) else { return }
-        let imageDataSource = SimpleImageDatasource(imageItems: wikiCards.compactMap { ImageItem.card($0) })
-        let imageCarouselController = ImageCarouselViewController(imageDataSource: imageDataSource, initialIndex: initialIndex)
+        let imageDataSource = SimpleImageDatasource(imageItems: wikiCards.compactMap { ImageItem.card($0) }, placeholderImage: placeholderImage)
+        let imageCarouselController = ImageCarouselViewController(imageDataSource: imageDataSource, title: titleString, initialIndex: initialIndex)
         
         let navController = UINavigationController(rootViewController: imageCarouselController)
         navController.modalPresentationStyle = .custom
@@ -152,10 +154,9 @@ extension GalleryGridViewController: UICollectionViewDelegate {
             let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: .icCustomExternalLink) { _ in
                 if let item = card as? WikiImageCard {
                     guard let url = URL(string: item.urlWithCommonAttributions) else { return }
-                    let viewController = OAWikiWebViewController(url: url, title: self.titleString)
-                    let navigationController = UINavigationController(rootViewController: viewController)
-                    navigationController.modalPresentationStyle = .fullScreen
-                    self.present(navigationController, animated: true)
+                    let safariViewController = SFSafariViewController(url: url)
+                    safariViewController.preferredControlTintColor = .iconColorActive
+                    self.present(safariViewController, animated: true, completion: nil)
                 } else {
                     guard let item = card as? ImageCard else { return }
                     GalleryContextMenuProvider.openURLIfValid(urlString: item.imageUrl)
@@ -182,6 +183,8 @@ extension GalleryGridViewController: UICollectionViewDelegate {
 // MARK: - GalleryCell
 
 final private class GalleryCell: UICollectionViewCell {
+    
+    var placeholderImage: UIImage?
     
     private let imageView = UIImageView()
     
@@ -220,7 +223,7 @@ final private class GalleryCell: UICollectionViewCell {
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
             with: url,
-            placeholder: ImageCardPlaceholder(),
+            placeholder: ImageCardPlaceholder(placeholderImage: placeholderImage),
             options: [
                 .processor(DownsamplingImageProcessor(size: imageView.bounds.size)),
                 .scaleFactor(UIScreen.main.scale),

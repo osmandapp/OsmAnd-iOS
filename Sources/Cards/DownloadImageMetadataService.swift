@@ -60,7 +60,7 @@ final class DownloadImageMetadataService {
             guard let metadata = card.metadata else {
                 continue
             }
-            let isMetadataMissing = [metadata.date, metadata.author, metadata.license].contains { isEmpty($0) }
+            let isMetadataMissing = [metadata.date, metadata.author, metadata.license, metadata.description].contains { isEmpty($0) }
             
             if isMetadataMissing && !card.isMetaDataDownloaded && !card.isMetaDataDownloading {
                 card.isMetaDataDownloading = true

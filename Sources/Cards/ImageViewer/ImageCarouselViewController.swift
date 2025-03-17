@@ -1,21 +1,24 @@
 import Kingfisher
 
 protocol ImageDataSource: AnyObject {
+    var placeholderImage: UIImage? { get }
     func count() -> Int
     func imageItem(at index: Int) -> ImageItem
 }
 
-final class ImageCarouselViewController: UIPageViewController {    
+final class ImageCarouselViewController: UIPageViewController {
     // swiftlint:disable all
     private(set) var contentMetadataView: ContentMetadataView!
     // swiftlint:enable all
     
     private let imageDatasource: ImageDataSource?
-    private let gradientLayer = CAGradientLayer()
     private let metadataContainerView = TouchesPassView()
+    
+    private(set) var gradientLayer = CAGradientLayer()
     
     private var initialIndex = 0
     private var currentIndex = 0
+    private var titleString = ""
     
     private lazy var downloadImageMetadataService = DownloadImageMetadataService.shared
     
@@ -27,10 +30,12 @@ final class ImageCarouselViewController: UIPageViewController {
     
     // MARK: - Init
     init(imageDataSource: ImageDataSource?,
+         title: String,
          initialIndex: Int = 0) {
         self.initialIndex = initialIndex
         self.currentIndex = initialIndex
         self.imageDatasource = imageDataSource
+        self.titleString = title
         
         super.init(transitionStyle: .scroll,
                    navigationOrientation: .horizontal,
@@ -47,9 +52,9 @@ final class ImageCarouselViewController: UIPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        navigationItem.title = titleString
         
         configureNavigationBar()
-        updateTitle(with: initialIndex)
         configureContentMetadataView()
         downloadMetadataIfNeeded()
         prefetchAdjacentItems()
@@ -143,12 +148,9 @@ final class ImageCarouselViewController: UIPageViewController {
         let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: .icCustomExternalLink) { [weak self] _ in
             guard let self, let card = getCardForIndex(currentIndex) else { return }
             guard let url = URL(string: card.urlWithCommonAttributions) else { return }
-            
-            let viewController = OAWikiWebViewController(url: url, title: navigationItem.title ?? "")
-            let navigationController = UINavigationController(rootViewController: viewController)
-            navigationController.modalPresentationStyle = .fullScreen
-            
-            parent?.present(navigationController, animated: true, completion: nil)
+            let safariViewController = SFSafariViewController(url: url)
+            safariViewController.preferredControlTintColor = .iconColorActive
+            parent?.present(safariViewController, animated: true, completion: nil)
         }
         openInBrowserAction.accessibilityLabel = localizedString("open_in_browser")
         
@@ -168,11 +170,6 @@ final class ImageCarouselViewController: UIPageViewController {
         let detailsBarButton = createNavbarButton(title: nil, icon: .icNavbarOverflowMenuOutlined, color: .iconColorActive, action: nil, target: nil, menu: menu)
         
         navigationItem.rightBarButtonItems = [detailsBarButton, sharedBarButton]
-    }
-    
-    private func updateTitle(with pageIndex: Int) {
-        guard let card = getCardForIndex(pageIndex) else { return }
-        navigationItem.title = card.title
     }
     
     private func updateMetaData(with pageIndex: Int) {
@@ -248,7 +245,8 @@ final class ImageCarouselViewController: UIPageViewController {
             let isMetadataMissing = [
                 metadata.date,
                 metadata.author,
-                metadata.license
+                metadata.license,
+                metadata.description
             ].contains { downloadImageMetadataService.isEmpty($0) }
             
             guard isMetadataMissing && !card.isMetaDataDownloaded && !card.isMetaDataDownloading else { return nil }
@@ -341,7 +339,6 @@ extension ImageCarouselViewController: UIPageViewControllerDelegate {
     }
     
     private func updatePage(index: Int) {
-        updateTitle(with: index)
         updateMetaData(with: index)
         prefetchAdjacentItems()
         prefetchMetadata()

@@ -67,7 +67,6 @@ static const CGFloat kTopViewCornerRadius = 10.0;
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;

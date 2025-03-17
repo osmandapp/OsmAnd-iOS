@@ -1417,7 +1417,6 @@
     }
     if (time > 0)
     {
-        
         return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:time]
                                               dateStyle:NSDateFormatterMediumStyle
                                               timeStyle:NSDateFormatterNoStyle];

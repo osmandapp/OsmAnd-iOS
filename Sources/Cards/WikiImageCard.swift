@@ -36,13 +36,6 @@ final class WikiImage: NSObject {
     
     func parseMetaData(with dic: [String: Any]) {
         self.metadata = Metadata()
-        if dic["mediaId"] as? String == "71272124" {
-            print("")
-        }
-        
-        if dic["mediaId"] as? Int == 71272124 {
-            print("")
-        }
         
         if let date = dic["date"] as? String, !date.isEmpty {
             metadata?.date = date

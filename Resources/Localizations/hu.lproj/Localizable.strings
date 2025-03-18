@@ -572,7 +572,7 @@
 "map_widget_right" = "Jobb panel";
 "map_markers" = "Térképjelölők";
 "show_pedestrian_warnings" = "Gyalogosátkelők";
-"speak_poi" = "Közeli érdekes helyek (POI)";
+"speak_poi" = "Közeli érdekes helyek (POI-k)";
 "speak_pedestrian" = "Gyalogosátkelők";
 "shared_string_never" = "Soha";
 "general_settings_2" = "Általános beállítások";

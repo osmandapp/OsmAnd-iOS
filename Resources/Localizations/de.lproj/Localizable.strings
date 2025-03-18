@@ -3530,3 +3530,4 @@
 "lang_gu" = "Gujarati";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"profile_icons" = "Profilsymbol";

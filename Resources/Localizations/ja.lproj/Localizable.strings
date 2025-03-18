@@ -1679,7 +1679,7 @@
 "quick_action_mapillary_hide" = "Mapillaryを非表示";
 "avoid_road" = "避ける道の指定";
 "arrived_at_destination" = "目的地に到着しました。";
-"quick_action_remove_next_destination" = "最も近い目的地を削除";
+"quick_action_remove_next_destination" = "次の目的地";
 "shared_string_import_complete" = "インポート完了";
 "select_data_to_import" = "インポートするデータを選択してください。";
 "shared_string_preparing" = "準備";
@@ -2931,3 +2931,6 @@
 "distance_during_navigation" = "ナビゲーション中の距離表示";
 "quick_action_save_recorded_trip_and_continue" = "旅程の保存と継続";
 "quick_action_verb_start_pause" = "開始/一時停止";
+"quick_action_directions_from" = "出発地";
+"quick_action_destination" = "目的地";
+"quick_action_terrain_color_scheme" = "地形の配色";

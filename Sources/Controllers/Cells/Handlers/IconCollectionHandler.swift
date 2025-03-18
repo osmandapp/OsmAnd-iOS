@@ -26,7 +26,9 @@ class IconCollectionHandler: OABaseCollectionHandler {
     private var defaultIndexPath: IndexPath?
     private var iconNamesData = [[String]]()
     private var cellSize: Double?
+    private var iconBackgroundSize: Double?
     private var iconSize: Double?
+    private var iconSpacing: Double?
     
     func setItemSize(size: CGFloat) {
         cellSize = size
@@ -40,12 +42,28 @@ class IconCollectionHandler: OABaseCollectionHandler {
         }
     }
     
+    func setIconBackgroundSize(size: CGFloat) {
+        iconBackgroundSize = size
+    }
+    
+    func getIconBackgroundSize() -> CGFloat {
+        iconBackgroundSize ?? 36
+    }
+    
     func setIconSize(size: CGFloat) {
         iconSize = size
     }
     
     func getIconSize() -> CGFloat {
-        iconSize ?? 30
+        iconSize ?? 24
+    }
+    
+    func setSpacing(spacing: CGFloat) {
+        iconSpacing = spacing
+    }
+    
+    override func getSpacing() -> CGFloat {
+        iconSpacing ?? 9
     }
     
     override func getCellIdentifier() -> String {
@@ -82,9 +100,13 @@ class IconCollectionHandler: OABaseCollectionHandler {
         let cell: OAIconsCollectionViewCell = getCollectionView().dequeueReusableCell(withReuseIdentifier: getCellIdentifier(), for: indexPath) as! OAIconsCollectionViewCell
         
         let itemSize = getItemSize()
+        let backgroundIconSile = getIconBackgroundSize()
         let iconSize = getIconSize()
-        cell.iconWidthConstraint.constant = itemSize.width
-        cell.iconHeightConstraint.constant = itemSize.height
+        
+        cell.cellWidthConstraint.constant = itemSize.width
+        cell.cellWidthConstraint.constant = itemSize.height
+        cell.iconBackgroundWidthConstraint.constant = backgroundIconSile
+        cell.iconBackgroundHeightConstraint.constant = backgroundIconSile
         cell.iconWidthConstraint.constant = iconSize
         cell.iconHeightConstraint.constant = iconSize
         
@@ -114,8 +136,8 @@ class IconCollectionHandler: OABaseCollectionHandler {
             cell.iconView.layer.cornerRadius = innerViewCornerRadius
             cell.backView.layer.cornerRadius = strokeCornerRadius
         } else {
-            cell.iconView.layer.cornerRadius = iconSize / 2
-            cell.backView.layer.cornerRadius = itemSize.width / 2
+            cell.iconView.layer.cornerRadius = cell.iconView.frame.size.height / 2
+            cell.backView.layer.cornerRadius = cell.backView.frame.size.height / 2
         }
         return cell
     }

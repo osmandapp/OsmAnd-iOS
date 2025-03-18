@@ -425,10 +425,10 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _profileIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
     _profileIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     _profileIconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
-    _profileIconCollectionHandler.strokeCornerRadius = 18;
-    _profileIconCollectionHandler.innerViewCornerRadius = 12;
-    [_profileIconCollectionHandler setItemSizeWithSize:36];
+    [_profileIconCollectionHandler setItemSizeWithSize:48];
+    [_profileIconCollectionHandler setIconBackgroundSizeWithSize:36];
     [_profileIconCollectionHandler setIconSizeWithSize:24];
+    [_profileIconCollectionHandler setSpacingWithSpacing:6];
     [_profileIconCollectionHandler addProfileIconsCategory];
     NSString *iconName = _changedProfile.iconName;
     if (!iconName || iconName.length == 0)

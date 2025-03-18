@@ -144,6 +144,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                                forCellReuseIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier)
             tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil),
                                forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
+            
+            tableView.register(UINib(nibName: OADividerCell.reuseIdentifier, bundle: nil),
+                               forCellReuseIdentifier: OADividerCell.reuseIdentifier)
+            
         case .colorizationPaletteItems, .terrainPaletteItems:
             tableView.register(UINib(nibName: OATwoIconsButtonTableViewCell.reuseIdentifier, bundle: nil),
                                forCellReuseIdentifier: OATwoIconsButtonTableViewCell.reuseIdentifier)
@@ -231,6 +235,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         } else if collectionType == .poiIconCategories {
             
             if inSearchMode {
+                tableView.separatorStyle = .singleLine
                 let section = data.createNewSection()
                 for poiType in lastSearchResults {
                     let iconName = poiType.iconName().lowercased()
@@ -244,6 +249,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     }
                 }
             } else {
+                tableView.separatorStyle = .none
                 var selectedChipsIndex = 0
                 if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
                     selectedChipsIndex = iconCategoties.firstIndex(where: { $0.key == poiIconsDelegate.selectedCatagoryKey }) ?? 0
@@ -260,11 +266,15 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 for category in iconCategoties {
                     let section = data.createNewSection()
                     section.addRow(from: [
+                        kCellTypeKey: OADividerCell.reuseIdentifier,
+                        headerKey: category.translatedName]
+                    )
+                    section.addRow(from: [
                         kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier,
-                        headerKey: category.translatedName,
                         poiCategoryNameKey: category.key,
                         iconNamesKey: category.iconKeys
                     ])
+                    section.addRow(from: [kCellTypeKey: OADividerCell.reuseIdentifier])
                 }
             }
             
@@ -379,6 +389,13 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 cell.leftIconView.image = OAUtilities.getMxIcon(item.iconName)
                 return cell
             }
+        } else if item.cellType == OADividerCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OADividerCell.reuseIdentifier, for: indexPath) as! OADividerCell
+            cell.backgroundColor = .clear
+            cell.dividerColor = .customSeparator
+            cell.dividerInsets = UIEdgeInsets.zero
+            cell.dividerHight = 1.0 / UIScreen.main.scale
+            return cell
         }
         
         return UITableViewCell()
@@ -511,7 +528,9 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = data.item(for: indexPath)
-        if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String] {
+        if item.cellType == OADividerCell.reuseIdentifier {
+            return 1.0 / UIScreen.main.scale
+        } else if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String] {
             return ChipsCollectionHandler.folderCellHeight
         }
         return UITableView.automaticDimension

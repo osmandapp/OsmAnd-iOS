@@ -437,10 +437,10 @@
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
     _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
-    _poiIconCollectionHandler.strokeCornerRadius = 18;
-    _poiIconCollectionHandler.innerViewCornerRadius = 12;
-    [_poiIconCollectionHandler setItemSizeWithSize:36];
+    [_poiIconCollectionHandler setItemSizeWithSize:48];
+    [_poiIconCollectionHandler setIconBackgroundSizeWithSize:36];
     [_poiIconCollectionHandler setIconSizeWithSize:24];
+    [_poiIconCollectionHandler setSpacingWithSpacing:6];
 }
 
 - (void)generateData

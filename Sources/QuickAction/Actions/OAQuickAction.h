@@ -36,6 +36,7 @@ static NSString * const kDialog = @"dialog";
 - (nullable NSString *)getRawName;
 - (NSString *)getDefaultName;
 - (nullable NSString *)getName;
+- (NSString *)getExtendedName;
 - (BOOL)hasCustomName;
 - (nullable NSString *)getActionTypeId;
 

@@ -42,9 +42,9 @@ static QuickActionType *TYPE;
     TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapStyleActionId
                                            stringId:@"mapstyle.change"
                                                  cl:self.class]
-              name:OALocalizedString(@"quick_action_map_style")]
-              nameAction:OALocalizedString(@"shared_string_change")]
-             iconName:@"ic_custom_map_style"]
+                name:OALocalizedString(@"quick_action_map_style")]
+               nameAction:OALocalizedString(@"shared_string_change")]
+              iconName:@"ic_custom_map_style"]
              secondaryIconName:@"ic_custom_compound_action_change"]
             category:QuickActionTypeCategoryConfigureMap];
 }
@@ -106,22 +106,9 @@ static QuickActionType *TYPE;
             return;
         }
         // Currently using online map as a source
-        if ([_offlineMapSources.allValues indexOfObject:[OsmAndApp instance].data.lastMapSource] == NSNotFound)
-            return;
-        
-        NSInteger index = -1;
-        NSString *name = [OsmAndApp instance].data.lastMapSource.name;
-        
-        NSInteger idx = [mapStyles indexOfObject:name];
-        if (idx != NSNotFound)
-            index = idx;
-        
-        NSString *nextStyle = mapStyles[0];
-        
-        if (index >= 0 && index < mapStyles.count - 1)
-            nextStyle = mapStyles[index + 1];
-        
-        [self executeWithParamsString:nextStyle];
+        NSString *nextStyle = [self nextStyleFrom:mapStyles];
+        if (nextStyle)
+            [self executeWithParamsString:nextStyle];
     }
 }
 
@@ -157,6 +144,33 @@ static QuickActionType *TYPE;
         [list removeObject:@"Nautical"];
     }
     return [NSArray arrayWithArray:list];
+}
+
+- (NSString *)nextStyleFrom:(NSArray<NSString *> *)mapStyles
+{
+    if (mapStyles.count == 0)
+        return nil;
+    
+    if ([_offlineMapSources.allValues indexOfObject:[OsmAndApp instance].data.lastMapSource] == NSNotFound)
+        return nil;
+    
+    NSString *currentName = [OsmAndApp instance].data.lastMapSource.name;
+    NSInteger index = [mapStyles indexOfObject:currentName];
+    NSString *nextStyle = mapStyles.firstObject;
+    if (index != NSNotFound && index >= 0 && index < mapStyles.count - 1)
+        nextStyle = mapStyles[index + 1];
+    
+    return nextStyle;
+}
+
+- (NSString *)getActionStateName
+{
+    NSArray<NSString *> *mapStyles = [self getFilteredStyles];
+    NSString *nextStyle = [self nextStyleFrom:mapStyles];
+    if (nextStyle)
+        return nextStyle;
+    
+    return [self getName];
 }
 
 - (NSString *)getTranslatedItemName:(NSString *)item
@@ -230,7 +244,7 @@ static QuickActionType *TYPE;
             if ([item[@"key"] isEqualToString:kDialog])
                 [params setValue:item[@"value"] forKey:kDialog];
             else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
-                     [sources addObject:item[@"title"]];
+                [sources addObject:item[@"title"]];
         }
     }
     [params setObject:sources forKey:kStyles];

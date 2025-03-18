@@ -40,14 +40,15 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsGpxActionId
+    TYPE = [[[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsGpxActionId
                                             stringId:@"gpx.add"
                                                   cl:self.class]
-               name:OALocalizedString(@"quick_action_track_waypoint")]
-              nameAction:OALocalizedString(@"shared_string_add")]
-              iconName:@"ic_custom_favorites"]
-             secondaryIconName:@"ic_custom_compound_action_add"]
-            category:QuickActionTypeCategoryMyPlaces];
+                 name:OALocalizedString(@"quick_action_track_waypoint")]
+                nameAction:OALocalizedString(@"shared_string_add")]
+               iconName:@"ic_custom_favorites"]
+              secondaryIconName:@"ic_custom_compound_action_add"]
+             category:QuickActionTypeCategoryMyPlaces]
+            forceUseExtendedName];
 }
 
 - (void)execute

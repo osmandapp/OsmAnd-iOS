@@ -188,7 +188,7 @@
 - (MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *)generateDataAction
 {
     MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
-    NSString *actionName = [_action getName];
+    NSString *actionName = [_action getExtendedName];
     if (actionName)
     {
         [dataModel setObject:@[@{

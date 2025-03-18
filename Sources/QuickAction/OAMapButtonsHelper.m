@@ -237,7 +237,7 @@ static QuickActionType *TYPE_INTERFACE;
 {
     for (OAQuickAction *action in actions)
     {
-        if (quickAction.id != action.id && [[quickAction getName] isEqualToString:[action getName]])
+        if (quickAction.id != action.id && [[quickAction getExtendedName] isEqualToString:[action getExtendedName]])
             return NO;
     }
     return YES;

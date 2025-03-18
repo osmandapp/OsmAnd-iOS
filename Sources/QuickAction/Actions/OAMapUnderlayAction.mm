@@ -50,9 +50,9 @@ static QuickActionType *TYPE;
     TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapUnderlayActionId
                                            stringId:@"mapunderlay.change"
                                                  cl:self.class]
-              name:OALocalizedString(@"quick_action_map_underlay")]
-             nameAction:OALocalizedString(@"shared_string_change")]
-             iconName:@"ic_custom_underlay_map"]
+                name:OALocalizedString(@"quick_action_map_underlay")]
+               nameAction:OALocalizedString(@"shared_string_change")]
+              iconName:@"ic_custom_underlay_map"]
              secondaryIconName:@"ic_custom_compound_action_change"]
             category:QuickActionTypeCategoryConfigureMap];
 }
@@ -70,27 +70,9 @@ static QuickActionType *TYPE;
             return;
         }
         
-        NSInteger index = -1;
-        OAMapSource *currSource = [OsmAndApp instance].data.underlayMapSource;
-        NSString *currentSource = currSource.name ? currSource.name : kNoUnderlay;
-        BOOL noUnderlay = currSource.name == nil;
-        
-        for (NSInteger idx = 0; idx < sources.count; idx++)
-        {
-            NSArray *source = sources[idx];
-            if ([source[source.count - 1] isEqualToString:currentSource] || ([source.firstObject isEqualToString:currentSource] && noUnderlay))
-            {
-                index = idx;
-                break;
-            }
-        }
-        
-        NSArray<NSString *> *nextSource = sources[0];
-        
-        if (index >= 0 && index < sources.count - 1)
-            nextSource = sources[index + 1];
-        
-        [self executeWithParams:nextSource];
+        NSArray<NSString *> *nextSource = [self nextUnderlaySourceFrom:sources];
+        if (nextSource)
+            [self executeWithParams:nextSource];
     }
 }
 
@@ -130,6 +112,44 @@ static QuickActionType *TYPE;
         _hidePolygonsParameter.value = hide ? @"true" : @"false";
         [_styleSettings save:_hidePolygonsParameter];
     }
+}
+
+- (NSArray<NSString *> *)nextUnderlaySourceFrom:(NSArray<NSArray<NSString *> *> *)sources
+{
+    if (sources.count == 0)
+        return nil;
+    
+    OAMapSource *currSource = [OsmAndApp instance].data.underlayMapSource;
+    NSString *currentSource = currSource.name ? currSource.name : kNoUnderlay;
+    BOOL noUnderlay = (currSource.name == nil);
+    NSInteger index = -1;
+    for (NSInteger idx = 0; idx < sources.count; idx++)
+    {
+        NSArray<NSString *> *source = sources[idx];
+        BOOL matchByName = [source.lastObject isEqualToString:currentSource];
+        BOOL matchByVariantAndNoUnderlay = ([source.firstObject isEqualToString:currentSource] && noUnderlay);
+        if (matchByName || matchByVariantAndNoUnderlay)
+        {
+            index = idx;
+            break;
+        }
+    }
+    
+    NSArray<NSString *> *nextSource = sources.firstObject;
+    if (index >= 0 && index < sources.count - 1)
+        nextSource = sources[index + 1];
+    
+    return nextSource;
+}
+
+- (NSString *)getActionStateName
+{
+    NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
+    NSArray<NSString *> *nextSource = [self nextUnderlaySourceFrom:sources];
+    if (nextSource.count > 0)
+        return nextSource.lastObject;
+    
+    return [self getName];
 }
 
 - (NSString *) getTranslatedItemName:(NSString *)item

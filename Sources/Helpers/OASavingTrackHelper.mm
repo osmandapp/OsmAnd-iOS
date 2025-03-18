@@ -59,6 +59,8 @@
 
 #define recordedTrackFolder @"/rec/"
 
+static const NSInteger kDBVersion = 1;
+
 @implementation OASavingTrackHelper
 {
     OsmAndAppInstance _app;
@@ -137,17 +139,17 @@
     
     NSString *dir = [NSHomeDirectory() stringByAppendingString:@"/Library/TracksDatabase"];
     databasePath = [dir stringByAppendingString:@"/tracks.db"];
-
+    
     BOOL isDir = YES;
     if (![[NSFileManager defaultManager] fileExistsAtPath:dir isDirectory:&isDir])
         [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
     
     dispatch_sync(dbQueue, ^{
-
+        
         NSFileManager *filemgr = [NSFileManager defaultManager];
         const char *dbpath = [databasePath UTF8String];
         
-        if ([filemgr fileExistsAtPath: databasePath ] == NO)
+        if ([filemgr fileExistsAtPath: databasePath] == NO)
         {
             if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
             {
@@ -167,7 +169,7 @@
                     OALog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
-
+                
                 sqlite3_close(tracksDB);
             }
             else
@@ -188,49 +190,49 @@
                     NSLog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_COLOR, POINT_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
-
+                
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", POINT_NAME, POINT_COL_CATEGORY] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
                     NSLog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_CATEGORY, POINT_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
-
+                
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", POINT_NAME, POINT_COL_DESCRIPTION] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
                     NSLog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_DESCRIPTION, POINT_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
-
+                
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", POINT_NAME, POINT_COL_ICON] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
                     NSLog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_ICON, POINT_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
-
+                
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", POINT_NAME, POINT_COL_BACKGROUND] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
                     NSLog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_BACKGROUND, POINT_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
-
+                
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ double", TRACK_NAME, TRACK_COL_HEADING] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
                     NSLog(@"Failed to add column - %@, for table - %@ | error: %s", TRACK_COL_HEADING, TRACK_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
-
+                
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", TRACK_NAME, TRACK_COL_PLUGINS_INFO] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
                     NSLog(@"Failed to add column - %@, for table - %@ | error: %s", TRACK_COL_PLUGINS_INFO, TRACK_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
-
+                
                 sqlite3_close(tracksDB);
             }
             else
@@ -238,9 +240,83 @@
                 // Failed to upate database
             }
         }
-        
     });
+    
+    [self migrationsDB];
+}
 
+- (void)migrationsDB
+{
+    int currentVersion = [self readDBVersion];
+    if (currentVersion < 1)
+    {
+        [self migratePointTableDateIfNeeded];
+        [self writeDBVersion:1];
+    }
+}
+
+- (int)readDBVersion
+{
+    const char *dbpath = [databasePath UTF8String];
+    __block int dbVersion = -1;
+    dispatch_sync(dbQueue, ^{
+        if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
+        {
+            sqlite3_stmt *statement;
+            const char *stmt = [@"PRAGMA user_version" UTF8String];
+            if (sqlite3_prepare_v2(tracksDB, stmt, -1, &statement, NULL) == SQLITE_OK)
+            {
+                if (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    dbVersion = sqlite3_column_int(statement, 0);
+                }
+            }
+            sqlite3_finalize(statement);
+        }
+        sqlite3_close(tracksDB);
+    });
+    return dbVersion;
+}
+
+- (void)writeDBVersion:(int)versionNumber
+{
+    const char *dbpath = [databasePath UTF8String];
+    dispatch_sync(dbQueue, ^{
+        if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
+        {
+            char *errMsg;
+            const char *stmt = [[NSString stringWithFormat:@"PRAGMA user_version = %i", versionNumber] UTF8String];
+            sqlite3_exec(tracksDB, stmt, NULL, NULL, &errMsg);
+            if (errMsg != NULL) sqlite3_free(errMsg);
+            sqlite3_close(tracksDB);
+        }
+    });
+}
+
+- (void)migratePointTableDateIfNeeded {
+    dispatch_sync(dbQueue, ^{
+        sqlite3 *db = NULL;
+        const char *dbpath = [databasePath UTF8String];
+
+        if (sqlite3_open(dbpath, &db) == SQLITE_OK)
+        {
+            char *errMsg;
+            // NOTE: field "date" should store milliseconds, but seconds were mistakenly entered. We need to convert them to milliseconds.
+            const char *sql_stmt = "UPDATE point SET date = date * 1000 WHERE date < 10000000000;";
+
+            if (sqlite3_exec(db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
+            {
+                NSLog(@"Failed to update time format: %s", errMsg);
+            }
+
+            if (errMsg != NULL) sqlite3_free(errMsg);
+            sqlite3_close(db);
+        }
+        else
+        {
+            NSLog(@"Error opening database: %s", sqlite3_errmsg(db));
+        }
+    });
 }
     
 - (double)getLastTrackPointTime
@@ -498,7 +574,7 @@
                     
                     wpt.lat = lat;
                     wpt.lon = lon;
-                    wpt.time = (long)(sqlite3_column_double(statement, 2) * 1000.0);
+                    wpt.time = (long)(sqlite3_column_double(statement, 2));
 
                     if (sqlite3_column_text(statement, 3) != nil)
                     {
@@ -524,7 +600,7 @@
                         [wpt setBackgroundTypeBackType:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)]];
                     }
 
-                    NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:wpt.time / 1000 / 1000]];
+                    NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:wpt.time / 1000]];
 
                     if (fillCurrentTrack) {
                         gpx = _currentTrack;
@@ -1019,6 +1095,7 @@
     });
 }
 
+
 - (void) doDeleteAllPoints
 {
     dispatch_async(dbQueue, ^{
@@ -1048,7 +1125,7 @@
     
     points--;
     
-    [self doDeletePointsLat:wpt.lat lon:wpt.lon time:wpt.time / 1000];
+    [self doDeletePointsLat:wpt.lat lon:wpt.lon time:wpt.time];
 }
 
 - (void)deleteAllWpts

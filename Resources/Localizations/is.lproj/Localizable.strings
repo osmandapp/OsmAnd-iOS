@@ -3634,3 +3634,6 @@
 "profile_icons" = "Táknmynd notkunarsniðs";
 "terrain_map" = "Yfirborðskort (3D)";
 "sensor_data" = "Gögn skynjara";
+"sensor_data_settings_description" = "sýna aðalgögn frá skynjara";
+"battery_level_settings_description" = "sýna rafhlöðustyrk skynjara sem aðalgildi";
+"add_hidden_group_info" = "Viðbættur punktur verður tiltækur í \"%@\". Gerðu hann sýnilegan á kortinu með því að affela valda hópinn.";

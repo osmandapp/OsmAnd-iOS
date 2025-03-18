@@ -51,13 +51,14 @@
 {
     _data = [NSMutableArray new];
     _selectedItemIndex = index;
+
     for (NSInteger i = 0; i < values.count; i++)
     {
         NSString *sizeString;
-        NSNumber *size = sizes && sizes[i] ? sizes[i] : nil;
+        NSNumber *size = (i < sizes.count && sizes[i]) ? sizes[i] : nil;
         sizeString = size ? [NSString stringWithFormat:@"%i", size.intValue] : @"";
-        UIColor *color = colors && colors[i] ? colors[i] : [UIColor colorNamed:ACColorNameIconColorActive];
-        BOOL visible = hidden && hidden[i] ? !hidden[i].boolValue : YES;
+        UIColor *color = (i < colors.count && colors[i]) ? colors[i] : [UIColor colorNamed:ACColorNameIconColorActive];
+        BOOL visible = (i < hidden.count && hidden[i]) ? !hidden[i].boolValue : YES;
         NSString *img = visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden_outlined";
         if (!visible)
             color = [UIColor colorNamed:ACColorNameIconColorSecondary];

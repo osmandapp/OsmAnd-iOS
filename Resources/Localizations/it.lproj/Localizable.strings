@@ -3579,7 +3579,7 @@
 "auto_25_chars_route_roundabout_kl" = "Prendi la %d uscita e tieni la sinistra";
 "auto_25_chars_route_roundabout_kr" = "Prendi la %d uscita e tieni la destra";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
-"product_title_plus" = "";
+"product_title_plus" = "Maps+";
 "short_min" = "m";
 "osm_id" = "OSM ID";
 "shared_a_z" = "A - Z";
@@ -3615,7 +3615,7 @@
 "profile_icons" = "Icona profilo";
 "shared_string_show_less" = "Mostra meno";
 "shared_string_view_all" = "Mostra tutto";
-"no_internet_descr" = "Per favore controlla nuovamente la connessione a internet";
+"no_internet_descr" = "Per favore controlla nuovamente la connessione a internet.";
 "no_photos_available" = "Nessuna foto disponibile";
 "terrain_map" = "Mappa terreno (3D)";
 "no_photos_available_descr" = "Nessuna foto è stata ancora aggiunta dagli utenti per questa posizione";

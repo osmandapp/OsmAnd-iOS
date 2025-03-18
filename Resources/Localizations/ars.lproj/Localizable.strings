@@ -3350,3 +3350,8 @@
 "transport_stop" = "إيقاف";
 "revolutions_per_minute_unit" = ".RPM";
 "cloud_sync_progress" = "مزامنه... %@";
+"help_article_plugins_custom_name" = "حزمة مخصصة";
+"help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
+"help_article_map_tracks_track_context_menu_name" = "قائمة خيارات المسار";
+"help_article_map_tracks_appearance_name" = "مظهر المسار";
+"help_article_map_tracks_name" = "المسارات";

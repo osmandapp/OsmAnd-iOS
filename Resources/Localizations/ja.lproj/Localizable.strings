@@ -2929,3 +2929,5 @@
 "cloud_sync_progress" = "同期…%@";
 "battery_saving_mode" = "省電力モード";
 "distance_during_navigation" = "ナビゲーション中の距離表示";
+"quick_action_save_recorded_trip_and_continue" = "旅程の保存と継続";
+"quick_action_verb_start_pause" = "開始/一時停止";

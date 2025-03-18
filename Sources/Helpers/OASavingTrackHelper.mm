@@ -1095,7 +1095,6 @@ static const NSInteger kDBVersion = 1;
     });
 }
 
-
 - (void) doDeleteAllPoints
 {
     dispatch_async(dbQueue, ^{

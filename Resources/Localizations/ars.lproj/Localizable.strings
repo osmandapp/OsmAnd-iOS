@@ -3453,3 +3453,14 @@
 "shared_string_pause" = "إيقاف مؤقت";
 "shared_string_estimated_time_span" = "الفترة الزمنية المقدرة";
 "shared_string_show_less" = "إظهار أقل";
+"quick_action_track_waypoint" = "تتبع نقطة الطريق";
+"quick_action_parking_place" = "مكان وقوف السيارات";
+"quick_action_first_intermediate" = "المستوى المتوسط الأول";
+"quick_action_destination" = "الوجهة";
+"quick_action_verb_start_pause" = "بدء / إيقاف مؤقت";
+"new_trip_segment" = "جزء جديد من الرحلة";
+"quick_action_directions_from" = "نقطة البداية";
+"quick_action_verb_show_hide" = "إظهار/إخفاء";
+"quick_action_verb_turn_on_off" = "تشغيل / ايقاف";
+"quick_action_verb_pause_resume" = "توقف/تشغيل";
+"quick_action_verb_start_stop" = "بدء / توقف";

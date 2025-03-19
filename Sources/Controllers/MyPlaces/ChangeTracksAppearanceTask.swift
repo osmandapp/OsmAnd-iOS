@@ -24,11 +24,11 @@ final class ChangeTracksAppearanceTask: NSObject {
     private func doInBackground() {
         let resetAnything = data.shouldResetAnything()
         for track in items {
-            if let file = track.getFile() {
+            if track.isShowCurrentTrack {
+                updateCurrentTrackAppearance()
+            } else if let file = track.getFile() {
                 let gpxFile = resetAnything ? getGpxFile(for: file) : nil
                 updateTrackAppearance(file: file, gpxFile: gpxFile)
-            } else if track.isShowCurrentTrack {
-                updateCurrentTrackAppearance()
             }
         }
     }
@@ -46,31 +46,31 @@ final class ChangeTracksAppearanceTask: NSObject {
     }
     
     private func updateCurrentTrackAppearance() {
-        let settings = OAAppSettings.sharedManager()
+        guard let settings = OAAppSettings.sharedManager() else { return }
         if let color: Int = data.getParameter(for: GpxParameter.color) {
-            settings?.currentTrackColor.set(Int32(color))
+            settings.currentTrackColor.set(Int32(color))
         }
         if let coloringType: String = data.getParameter(for: GpxParameter.coloringType) {
             let requiredValue = ColoringType.companion.requireValueOf(purpose: ColoringPurpose.track, name: coloringType)
-            settings?.currentTrackColoringType.set(Int32(requiredValue.ordinal))
+            settings.currentTrackColoringType.set(Int32(requiredValue.ordinal))
             let routeInfoAttribute = ColoringType.companion.getRouteInfoAttribute(name: coloringType)
-            settings?.routeInfoAttribute.set(routeInfoAttribute)
+            settings.routeInfoAttribute.set(routeInfoAttribute)
         }
         if let width: String = data.getParameter(for: GpxParameter.width) {
-            settings?.currentTrackWidth.set(width)
+            settings.currentTrackWidth.set(width)
         }
         if let showArrows: Bool = data.getParameter(for: GpxParameter.showArrows) {
-            settings?.currentTrackShowArrows.set(showArrows)
+            settings.currentTrackShowArrows.set(showArrows)
         }
         if let showStartFinish: Bool = data.getParameter(for: GpxParameter.showStartFinish) {
-            settings?.currentTrackShowStartFinish.set(showStartFinish)
+            settings.currentTrackShowStartFinish.set(showStartFinish)
         }
         if let trackVisualizationType: String = data.getParameter(for: GpxParameter.trackVisualizationType),
            let intValue = Int32(trackVisualizationType) {
-            settings?.currentTrackVisualization3dByType.set(intValue)
+            settings.currentTrackVisualization3dByType.set(intValue)
         }
         if let gradientPalette: String = data.getParameter(for: GpxParameter.colorPalette) {
-            settings?.gradientPalettes.set(gradientPalette)
+            settings.gradientPalettes.set(gradientPalette)
         }
     }
     
@@ -85,10 +85,8 @@ final class ChangeTracksAppearanceTask: NSObject {
     
     private func updateTrackAppearance(item: GpxDataItem, gpxFile: GpxFile?) {
         for parameter in GpxParameter.companion.getAppearanceParameters() {
-            if data.shouldResetParameter(parameter) {
-                if let gpxFile = gpxFile {
-                    item.readGpxAppearanceParameter(gpxFile: gpxFile, parameter: parameter)
-                }
+            if data.shouldResetParameter(parameter), let gpxFile = gpxFile {
+                item.readGpxAppearanceParameter(gpxFile: gpxFile, parameter: parameter)
             } else if let value: Any = data.getParameter(for: parameter) {
                 item.setParameter(parameter: parameter, value: value)
             }

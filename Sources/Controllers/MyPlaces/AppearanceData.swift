@@ -64,10 +64,9 @@ final class AppearanceData: NSObject {
     }
     
     func setParameter(_ parameter: GpxParameter, value: Any?) {
-        if isValidValue(parameter: parameter, value: value) {
-            map[parameter] = AppearancePair(shouldReset: false, value: value)
-            notifyAppearanceModified()
-        }
+        guard isValidValue(parameter: parameter, value: value) else { return }
+        map[parameter] = AppearancePair(shouldReset: false, value: value)
+        notifyAppearanceModified()
     }
     
     func resetParameter(_ parameter: GpxParameter) {

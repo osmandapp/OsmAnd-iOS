@@ -2541,7 +2541,7 @@
 "nautical_depth_points" = "水深点(最高深度)";
 "shared_string_cache" = "キャッシュ";
 "rendering_value_caiScale_description" = "クラブ・アルピノ・イタリアーノ(イタリア山岳会)";
-"rendering_attr_alpineHiking_name" = "難易度の分類";
+"rendering_attr_alpineHiking_name" = "ハイキングコースの難易度";
 "rendering_value_sacScale_description" = "スイス・アルペン・クラブ(スイス山岳会)";
 "map_widget_current_speed" = "現在速度";
 "add_row" = "行を追加";
@@ -2945,3 +2945,8 @@
 "rendering_value_pale_name" = "淡色";
 "help_article_personal_color_palette_schemes_name" = "配色";
 "daynight_mode_app_theme_summary" = "マップの表示は､アプリ全体のテーマに合わせて､明るいテーマには昼モード､暗いテーマには夜モードで表示されます｡";
+"daynight_mode_day_summary" = "常に明るいテーマでマップを表示するので、日中の視認性に最適です。";
+"daynight_mode_night_summary" = "常に暗いテーマでマップを表示し、夜間や暗い場所での使用に適しています。";
+"daynight_mode_sunrise_sunset_summary" = "現地の日の出と日の入の時間に合わせて、昼と夜のテーマを自動的に切り替えます。";
+"rendering_attr_showDirtbikeTrails_name" = "ダートバイク用コース";
+"rendering_attr_showDirtbikeTrails_description" = "ダートバイクのコースを表示";

@@ -2950,3 +2950,6 @@
 "daynight_mode_sunrise_sunset_summary" = "現地の日の出と日の入の時間に合わせて、昼と夜のテーマを自動的に切り替えます。";
 "rendering_attr_showDirtbikeTrails_name" = "ダートバイク用コース";
 "rendering_attr_showDirtbikeTrails_description" = "ダートバイクのコースを表示";
+"ant_plus_pair_bluetooth_prompt" = "Bluetooth LEとANT+センサーをOsmAndとペアリングできます。";
+"ant_plus_pair_new_sensor" = "新しいセンサーのペアリング";
+"learn_more_about_sensors_link" = "センサーについて詳しくはこちら。";

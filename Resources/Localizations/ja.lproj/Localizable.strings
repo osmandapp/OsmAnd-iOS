@@ -723,10 +723,10 @@
 "toggle_online_notes" = "OSMメモを切替";
 "toggle_local_edits" = "ローカルOSM編集を切替";
 "quick_action_add_poi" = "POIを追加";
-"quick_action_map_style" = "マップスタイルの変更";
+"quick_action_map_style" = "マップスタイル";
 "quick_action_map_source" = "ソースマップの変更";
-"quick_action_map_overlay" = "オーバーレイマップの変更";
-"quick_action_map_underlay" = "アンダーレイマップの変更";
+"quick_action_map_overlay" = "オーバーレイ";
+"quick_action_map_underlay" = "アンダーレイ";
 "quick_action_replace_destination" = "目的地を置き換え";
 "add_destination" = "目的地を追加";
 "route_add_start_point" = "出発地点を追加";
@@ -736,7 +736,7 @@
 "favorite_home_category" = "自宅";
 "work_button" = "職場";
 "quick_action_add_first_intermediate" = "最初の中間地点を追加";
-"quick_action_auto_zoom" = "マップの自動ズームをON/OFF";
+"quick_action_auto_zoom" = "マップの自動ズーム";
 "auto_zoom_off" = "自動ズームをOFF";
 "quick_action_resume_pause_navigation" = "ナビゲーションの再開/一時停止";
 "resume_nav" = "ナビゲーションを続ける";
@@ -787,7 +787,7 @@
 "quick_action_toggle_notes_descr" = "このアクションボタンをタップすると、オンラインOSMメモの表示/非表示を切り替えます。";
 "quick_action_toggle_edits_descr" = "このアクションボタンをタップすると、オフラインOSM編集の表示/非表示を切り替えます。";
 "quick_action_edit_list" = "アクションリストの編集";
-"quick_action_hillshade_descr" = "マップ上の陰影起伏図の表示/非表示を切り替えられるボタンです。";
+"quick_action_hillshade_descr" = "マップ上の陰影起伏図の表示/非表示を切り替えるボタンです。";
 "show_hillshade" = "陰影起伏図を表示";
 "hide_hillshade" = "陰影起伏図を非表示";
 "toggle_contour_lines" = "等高線の表示/非表示";
@@ -2905,7 +2905,7 @@
 "temperature_layer" = "温度関連レイヤー";
 "pressure_layer" = "気圧関連レイヤー";
 "shared_string_show" = "表示";
-"quick_action_toggle_preference" = "設定を変更するためのトグルボタンです。";
+"quick_action_toggle_preference" = "設定を変更するためのボタンです。";
 "show_along_the_route" = "ルート案内中に表示する項目の選択";
 "shared_string_local" = "保存済み";
 "day_off_label" = "OFF";
@@ -2934,3 +2934,10 @@
 "quick_action_directions_from" = "出発地";
 "quick_action_destination" = "目的地";
 "quick_action_terrain_color_scheme" = "地形の配色";
+"quick_action_verb_show_hide" = "表示/非表示";
+"quick_action_verb_pause_resume" = "一時停止/再開";
+"quick_action_verb_turn_on_off" = "ON/OFF";
+"quick_action_first_intermediate" = "最初の中間経由地点";
+"quick_action_track_waypoint" = "経由地点の経路";
+"quick_action_parking_place" = "駐車場";
+"quick_action_verb_start_stop" = "開始/停止";

@@ -760,7 +760,7 @@
 "quick_action_add_actions_descr" = "マップ画面からすばやく実行したいアクションを追加します。";
 "quick_action_interim_dialog" = "実行時に入力画面を表示";
 "quick_action_dialog_descr" = "アクションを実行する前に選択リストや確認のダイアログを表示します";
-"quick_action_fav_name_descr" = "住所または場所の名前を利用する場合は空白のままにします";
+"quick_action_fav_name_descr" = "住所または地名を使用する場合は空白にしてください。";
 "quick_action_select_group" = "お気に入りを保存するグループを選択します。";
 "quick_action_add_category" = "カテゴリーを追加";
 "quick_action_add_category_descr" = "複数のPOIカテゴリーを選択できます。";

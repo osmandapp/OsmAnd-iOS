@@ -2944,3 +2944,4 @@
 "user_palette" = "ユーザーパレット";
 "rendering_value_pale_name" = "淡色";
 "help_article_personal_color_palette_schemes_name" = "配色";
+"daynight_mode_app_theme_summary" = "マップの表示は､アプリ全体のテーマに合わせて､明るいテーマには昼モード､暗いテーマには夜モードで表示されます｡";

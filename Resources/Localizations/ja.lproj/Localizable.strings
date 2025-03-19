@@ -1916,7 +1916,7 @@
 "hide_terrain" = "地形の非表示";
 "show_terrain" = "地形の表示";
 "unsupported_items" = "サポートされていない要素";
-"quick_action_current_location_widget_descr" = "マップ上で現在地ウィジェットを表示/非表示を切り替えるトグルボタンです。";
+"quick_action_current_location_widget_descr" = "マップ上で現在地ウィジェットを表示/非表示を切り替えるボタンです。";
 "hide_current_location" = "座標を非表示";
 "show_current_location" = "座標を表示";
 "toggle_current_location" = "座標ウィジェットの表示/非表示";
@@ -2941,3 +2941,6 @@
 "quick_action_track_waypoint" = "経由地点の経路";
 "quick_action_parking_place" = "駐車場";
 "quick_action_verb_start_stop" = "開始/停止";
+"user_palette" = "ユーザーパレット";
+"rendering_value_pale_name" = "淡色";
+"help_article_personal_color_palette_schemes_name" = "配色";

@@ -2202,7 +2202,7 @@
 "route_line_use_map_style_width" = "マップスタイル(%@)でデフォルトの幅を使用します。";
 "verify_email_address_descr" = "ワンタイムパスワードが%@に送信されました。下部へ入力してください。";
 "make_backup" = "バックアップの作成";
-"osmand_cloud_login_descr" = "登録したメールアドレスを入力してください。手続きを進めるためのワンタイムパスワードが送信されます。";
+"osmand_cloud_login_descr" = "登録したメールアドレスを入力してください。ワンタイムパスワードが送信されます。";
 "rendering_attr_showFitnessTrails_name" = "アスレチックコース";
 "routing_attr_only_permitted_ways_name" = "許可された道のみ通行";
 "upload_to_openstreetmap" = "OpenStreetMapにアップロード";
@@ -2957,3 +2957,11 @@
 "routing_attr_avoid_cobblestone_name" = "石畳を避ける";
 "routing_attr_avoid_cobblestone_description" = "石畳を避けます";
 "routing_attr_allow_via_ferrata_name" = "山岳ルート(ビアフェラータ)";
+"osmand_cloud_deletion_secondary_devices_warning" = "第二端末はOsmAnd Cloudからログオフされ、有料機能にアクセスできなくなります。";
+"detailed_track_guidance_description" = "OsmAndは、ターンバイターンの案内を強化するために、あなたの経路を近くの道路に合わせます。";
+"osmand_cloud_deletion_subscriptions_warning" = "これはOsmAnd Proのサブスクリプションをキャンセルするものではありません。";
+"ask_every_time" = "毎回尋ねる";
+"auto_zoom" = "自動ズーム";
+"auto_zoom_smooth" = "滑らか";
+"auto_zoom_discrete" = "段階";
+"osmand_cloud_deleting_account_descr" = "しばらくすると全てのデータとアカウントがOsmAnd Cloudから削除されます。\n\nデバイス上のすべてのデータはそのまま残ります。";

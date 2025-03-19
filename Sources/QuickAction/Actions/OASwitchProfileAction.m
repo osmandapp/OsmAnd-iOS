@@ -95,7 +95,7 @@ static QuickActionType *TYPE;
 {
     NSArray<NSString *> *profiles = self.getParams[[self getListKey]];
     NSString *nextProfile = [self nextProfileFrom:profiles];
-    return nextProfile ? [[self getModeForKey:nextProfile] toHumanString] :  [self getName];
+    return nextProfile ? [[self getModeForKey:nextProfile] toHumanString] : [self getName];
 }
 
 - (NSString *)getTranslatedItemName:(NSString *)item

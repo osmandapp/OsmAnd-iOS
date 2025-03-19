@@ -151,10 +151,11 @@ static QuickActionType *TYPE;
     if (mapStyles.count == 0)
         return nil;
     
-    if ([_offlineMapSources.allValues indexOfObject:[OsmAndApp instance].data.lastMapSource] == NSNotFound)
+    OAMapSource *lastMapSource = [OsmAndApp instance].data.lastMapSource;
+    if ([_offlineMapSources.allValues indexOfObject:lastMapSource] == NSNotFound)
         return nil;
     
-    NSString *currentName = [OsmAndApp instance].data.lastMapSource.name;
+    NSString *currentName = lastMapSource.name;
     NSInteger index = [mapStyles indexOfObject:currentName];
     NSString *nextStyle = mapStyles.firstObject;
     if (index != NSNotFound && index >= 0 && index < mapStyles.count - 1)

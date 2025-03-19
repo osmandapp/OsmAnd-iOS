@@ -99,7 +99,6 @@ static QuickActionType *TYPE;
         }
         app.data.lastMapSource = newMapSource;
     }
-    //     indicate change with toast?
 }
 
 - (NSArray<NSString *> *)nextMapSourceFrom:(NSArray<NSArray<NSString *> *> *)sources

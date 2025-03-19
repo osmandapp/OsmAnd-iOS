@@ -220,7 +220,7 @@
 "calculate_osmand_route_without_internet" = "インターネットを使用せずにOsmAnd経路区分を計算する";
 "routing_settings_2" = "ナビゲーション設定";
 "impassable_road" = "避ける道の指定…";
-"impassable_road_desc" = "ルート検索やナビゲーション中に避けたい道路を選択します";
+"impassable_road_desc" = "ルート検索やナビゲーション中に避けたい道路を選択します。";
 "interrupt_music_descr" = "有効にすると音声案内時に音楽を一時停止します";
 "interrupt_music" = "音楽の一時停止";
 "shared_string_do_not_use" = "使用しない";
@@ -1161,11 +1161,11 @@
 "download_depth_countours" = "海洋等深線データ";
 "average_altitude" = "平均標高";
 "edit_tilesource_elliptic_tile" = "楕円体メルカトル図法";
-"routing_attr_avoid_shuttle_train_description" = "移動手段にカートレインを使用しません";
+"routing_attr_avoid_shuttle_train_description" = "移動手段としてカートレインを避けます";
 "rendering_value_low_name" = "低";
 "rendering_value__name" = "標準";
 "routing_attr_max_num_changes_name" = "乗り換え数";
-"routing_attr_avoid_ferries_description" = "移動手段にフェリーを使用しません";
+"routing_attr_avoid_ferries_description" = "移動手段としてフェリーを避けます";
 "routing_attr_relief_smoothness_factor_plains_name" = "丘陵の少ない地形";
 "rendering_value_walkingRoutesScopeOSMC_name" = "ネットワーク系列";
 "rendering_value_brown_name" = "ブラウン";
@@ -1206,7 +1206,7 @@
 "rendering_attr_contourDensity_description" = "等高線の密度";
 "rendering_attr_highway_class_track_grade5_name" = "グレード5";
 "routing_attr_avoid_share_taxi_name" = "乗合タクシーを使わない";
-"routing_attr_avoid_motorway_description" = "移動時に高速道路を使用しません";
+"routing_attr_avoid_motorway_description" = "移動時に高速道路を避けます";
 "rendering_attr_smoothness_intermediate_name" = "シティバイク、スポーツカー、車椅子、スクーター及びオフロードバイクや車も走行可能";
 "routing_attr_height_description" = "ルート上で通行可能な車両の高さを指定します。";
 "rendering_attr_noPolygons_description" = "マップ上の土地の特徴を透明にする";
@@ -1214,7 +1214,7 @@
 "routing_attr_allow_expert_description" = "周辺に危険な障害物や環境を伴う非常に困難なルートです。";
 "routing_attr_allow_motorway_name" = "高速道路を使う";
 "routing_attr_driving_style_prefer_unpaved_description" = "ルート検索時に、舗装道路よりも未舗装道路を優先します。";
-"routing_attr_avoid_ice_roads_fords_name" = "氷の道、川の浅瀬は避ける";
+"routing_attr_avoid_ice_roads_fords_name" = "氷の道、川の浅瀬は使わない";
 "rendering_attr_piste_type_downhill_name" = "ダウンヒル";
 "rendering_value_translucent_green_name" = "半透明グリーン";
 "rendering_attr_highway_class_bridleway_name" = "馬道";
@@ -1243,7 +1243,7 @@
 "rendering_attr_surface_wood_name" = "木材";
 "routing_attr_relief_smoothness_factor_hills_name" = "丘陵可";
 "rendering_value_boldOutline_name" = "輪郭強調";
-"routing_attr_avoid_subway_description" = "移動手段に地下鉄や軽量軌道交通(LRT)などを使いません";
+"routing_attr_avoid_subway_description" = "移動手段として地下鉄や軽量軌道交通(LRT)などを避けます";
 "routing_attr_relief_smoothness_factor_name" = "ルート検索時優先する地形(平坦～丘陵)を設定します";
 "rendering_attr_surface_ground_name" = "自然の地面";
 "routing_attr_allow_skating_only_description" = "フリースタイルやスケート専用に整備されたルートで、クラシック(ノルディック)スキーのコースではありません。";
@@ -1277,7 +1277,7 @@
 "rendering_attr_buildings15zoom_name" = "ズーム15で建物表示";
 "routeInfo_piste_difficulty_name" = "ゲレンデ難易度";
 "routeInfo_surface_name" = "路面";
-"routing_attr_avoid_bus_description" = "移動手段にバスおよびトロリーバスを使いません";
+"routing_attr_avoid_bus_description" = "移動手段としてのバスおよびトロリーバスを避けます";
 "rendering_attr_smoothness_impassable_name" = "2輪4輪問わず車両は走行不可";
 "rendering_attr_streetLighting_name" = "街路照明";
 "rendering_attr_showCycleRoutes_name" = "自転車ルート";
@@ -1302,7 +1302,7 @@
 "rendering_attr_surface_metal_name" = "金属";
 "rendering_value_bicycle_name" = "自転車";
 "rendering_value_lightblue_name" = "ライトブルー";
-"routing_attr_avoid_stairs_description" = "移動時に階段を避けるようにします";
+"routing_attr_avoid_stairs_description" = "移動時として階段を避けるようにします";
 "rendering_attr_smoothness_very_bad_name" = "車高の高い車、軽装オフロード車なら走行可";
 "rendering_attr_showRoadMaps_description" = "道路のみのマップを表示するときに選択します:";
 "rendering_attr_tracktype_grade2_name" = "硬い(未舗装)";
@@ -1311,7 +1311,7 @@
 "routing_attr_allow_expert_name" = "熟練者用ルートを許可";
 "rendering_attr_highway_class_track_grade2_name" = "グレード2";
 "routing_attr_avoid_borders_name" = "国境検問所を通らない";
-"routing_attr_avoid_share_taxi_description" = "移動手段に乗り合いタクシーを使いません";
+"routing_attr_avoid_share_taxi_description" = "移動手段として乗り合いタクシーを避けます";
 "rendering_attr_surface_unpaved_name" = "未舗装";
 "rendering_attr_smoothness_bad_name" = "クロスバイク、普通車、人力車などなら走行可";
 "rendering_attr_hideOverground_name" = "地上建造物";
@@ -1364,14 +1364,14 @@
 "rendering_attr_roadStyle_description" = "道路の表示形式";
 "rendering_attr_surface_concrete_name" = "コンクリート舗装";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "平坦優先";
-"routing_attr_avoid_toll_description" = "移動時に有料道路を使用しません";
+"routing_attr_avoid_toll_description" = "移動時に有料道路を避けます";
 "rendering_attr_contourWidth_name" = "等高線の幅";
 "rendering_attr_tracktype_grade5_name" = "軟らかい";
 "routing_attr_allow_intermediate_description" = "急勾配のより難易度の高いルートです。一般的に避けた方がよい障害などをいくつか含んでいることがあります。";
 "rendering_value_defaultTranslucentCyan_name" = "デフォルト (半透明シアン)";
 "rendering_attr_pisteRoutes_name" = "スキー場";
-"routing_attr_avoid_tram_description" = "移動手段に路面電車を使いません";
-"routing_attr_piste_type_downhill_description" = "アルペンスキーまたはダウンヒルスキーに用の斜面(ゲレンデ)やスキーリフトへの道";
+"routing_attr_avoid_tram_description" = "移動手段に路面電車を避けるようにします";
+"routing_attr_piste_type_downhill_description" = "アルペンスキーまたはダウンヒルスキーに用の斜面(ゲレンデ)やスキーリフトへの道です。";
 "rendering_attr_surface_cobblestone_name" = "丸石舗装";
 "rendering_attr_tracktype_grade1_name" = "硬い(舗装済み)";
 "rendering_attr_hideUnderground_name" = "地下の建造物";
@@ -1389,8 +1389,8 @@
 "routing_attr_prefer_motorway_name" = "高速道路を優先する";
 "rendering_attr_highway_class_street_name" = "街路";
 "rendering_attr_tramRoutes_name" = "路面電車でのルート";
-"routing_attr_avoid_borders_description" = "国境を越えて別の国に入るようなルート設定を避けます。";
-"routing_attr_avoid_ferry_description" = "移動手段にフェリーを使いません";
+"routing_attr_avoid_borders_description" = "国境を越えて別の国に入るようなルート設定を避けます";
+"routing_attr_avoid_ferry_description" = "移動手段としてフェリーを避けます";
 "rendering_attr_surface_pebblestone_name" = "砂利舗装";
 "routing_attr_avoid_bus_name" = "バスを使わない";
 "routing_attr_piste_type_sled_description" = "ソリ用斜面(ゲレンデ)です。";
@@ -1431,7 +1431,7 @@
 "rendering_value_translucent_blue_name" = "半透明ブルー";
 "rendering_attr_surface_sand_name" = "砂";
 "routing_attr_avoid_ferries_name" = "フェリーを使わない";
-"routing_attr_avoid_unpaved_description" = "移動時に未舗装道路を使用しません。";
+"routing_attr_avoid_unpaved_description" = "移動時に未舗装道路を避けます";
 "rendering_attr_horseRoutes_name" = "馬用ルート";
 "rendering_value_red_name" = "レッド";
 "routing_attr_avoid_tram_name" = "路面電車を使わない";
@@ -1445,7 +1445,7 @@
 "rendering_attr_showSurfaceGrade_name" = "道路の品質を表示";
 "routeInfo_tracktype_name" = "表面硬度";
 "rendering_value_translucent_yellow_name" = "半透明イエロー";
-"routing_attr_avoid_train_description" = "移動手段に鉄道を使いません";
+"routing_attr_avoid_train_description" = "移動手段として鉄道を避けます";
 // World Regions
 "index_name_antarctica" = "南極大陸";
 "stats_select_graph_data" = "グラフデータを選択";
@@ -2416,7 +2416,7 @@
 "rendering_attr_seabedDetail_name" = "海底の詳細";
 "rendering_attr_natureReserves_name" = "自然保護区";
 "rendering_value_all_name" = "すべて";
-"routing_attr_avoid_footways_description" = "歩道を使わないようにします";
+"routing_attr_avoid_footways_description" = "歩道を避けるようにします";
 "rendering_attr_noNatureReserveBoundaries_name" = "自然保護区の境界";
 "routing_attr_allow_streams_description" = "小川と排水溝も水路とみなします";
 "routing_attr_prefer_hiking_routes_description" = "ハイキング向けのルートを選択します";
@@ -2472,7 +2472,7 @@
 "routing_attr_motor_type_gas_name" = "天然ガス";
 "transport_hazmat_no_desc" = "道路やトンネルは、危険物の輸送が制限される場合があります。";
 "shared_string_cross_buy" = "クロスバイ";
-"routing_attr_avoid_highway_description" = "高速道路を避ける";
+"routing_attr_avoid_highway_description" = "高速道路を避けます";
 "rendering_attr_showTrainRoutes_name" = "鉄道路線";
 "routing_attr_difficulty_preference_no_preference_name" = "指定なし";
 "rendering_attr_horse_scale_impossible_name" = "Impossible(命の危険あり)";
@@ -2492,7 +2492,7 @@
 "rendering_attr_showMtbScaleIMBATrails_description" = "指定されたマウンテンバイクトレイルを表示します。";
 "compass_visible_if_map_rotated" = "マップが回転している場合に表示";
 "rendering_attr_depthContourColorScheme_description" = "等深線の配色";
-"routing_attr_avoid_fords_description" = "浅瀬を避ける";
+"routing_attr_avoid_fords_description" = "浅瀬を避けます";
 "routeInfo_horse_scale_name" = "馬道(手綱さばき)の難易度";
 "rendering_attr_horse_scale_critical_name" = "Critical(経験者のみ)";
 "simulation_preview_mode_title" = "高速プレビューモード";
@@ -2531,7 +2531,7 @@
 "rendering_attr_weatherTempContours_name" = "等温線";
 "rendering_attr_showTramRoutes_name" = "路面電車路線";
 "rendering_attr_weatherPressureContours_name" = "等圧線";
-"routing_attr_avoid_4wd_only_description" = "4WD車が推奨されるような道路を避ける";
+"routing_attr_avoid_4wd_only_description" = "4WD車が推奨されるような道路を避けます";
 "routing_attr_difficulty_preference_beginner_name" = "初心者";
 "routing_attr_difficulty_preference_intermediate_name" = "中級者";
 "rendering_attr_horse_scale_demanding_name" = "Demanding(要注意)";
@@ -2953,3 +2953,7 @@
 "ant_plus_pair_bluetooth_prompt" = "Bluetooth LEとANT+センサーをOsmAndとペアリングできます。";
 "ant_plus_pair_new_sensor" = "新しいセンサーのペアリング";
 "learn_more_about_sensors_link" = "センサーについて詳しくはこちら。";
+"routing_attr_allow_via_ferrata_description" = "固定ケーブル、アイゼン、はしご、橋などを備えた山岳ルートです。";
+"routing_attr_avoid_cobblestone_name" = "石畳を避ける";
+"routing_attr_avoid_cobblestone_description" = "石畳を避けます";
+"routing_attr_allow_via_ferrata_name" = "山岳ルート(ビアフェラータ)";

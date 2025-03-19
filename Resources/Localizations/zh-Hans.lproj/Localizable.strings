@@ -795,7 +795,7 @@
 "rendering_attr_coloredBuildings_name" = "按类型着色建筑物";
 "rendering_attr_transportStops_name" = "公交站";
 "rendering_attr_surface_sand_name" = "沙地";
-"rendering_attr_highway_class_motorway_name" = "机动车道";
+"rendering_attr_highway_class_motorway_name" = "高速公路";
 "rendering_attr_smoothness_impassable_name" = "无法通行";
 "routing_attr_weight_description" = "指定路线上允许的车辆重量。";
 "rendering_value_high_name" = "高";

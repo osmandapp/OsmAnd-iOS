@@ -1679,6 +1679,8 @@ static const NSInteger _buttonsCount = 4;
         _imageView.image = _targetPoint.icon;
         _imageView.hidden = NO;
     }
+    
+    [((OATargetInfoViewController *)_customController) setTargetImage:_imageView.image];
 }
 
 - (void) updateAddressLabel

@@ -2447,10 +2447,6 @@ typedef enum
     }];
 }
 
-- (UIImage *)getTargetMenuViewImage {
-    return self.targetMenuView.imageView.image;
-}
-
 - (void) showMultiPointMenu:(NSArray<OATargetPoint *> *)points onComplete:(void (^)(void))onComplete
 {
     if (_dashboard)

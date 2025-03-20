@@ -2965,3 +2965,8 @@
 "auto_zoom_smooth" = "滑らか";
 "auto_zoom_discrete" = "段階";
 "osmand_cloud_deleting_account_descr" = "しばらくすると全てのデータとアカウントがOsmAnd Cloudから削除されます。\n\nデバイス上のすべてのデータはそのまま残ります。";
+"screen_is_unlocked" = "タッチスクリーンのロックが解除されます。";
+"custom_buttons" = "カスタムボタン";
+"default_buttons" = "デフォルトボタン";
+"screen_is_locked_by_action_button" = "タッチスクリーンがロックされています。ボタンをタップしてロックを解除してください。";
+"lock_screen_description" = "誤ってタップするのを防ぐため、タッチスクリーン機能を有効または無効にします";

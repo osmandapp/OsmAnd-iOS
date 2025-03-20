@@ -35,6 +35,4 @@
 + (UIImage *) getIcon:(NSString *)fileName;
 + (UIImage *) getIcon:(NSString *)fileName size:(CGSize)size;
 
-- (void)setTargetImage:(UIImage * _Nullable)image;
-
 @end

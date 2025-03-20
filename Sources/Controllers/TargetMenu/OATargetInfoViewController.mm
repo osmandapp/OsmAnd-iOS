@@ -106,7 +106,6 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     OARowInfo *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
-    UIImage *_targetImage;
 }
 
 - (void) setRows:(NSMutableArray<OARowInfo *> *)rows
@@ -295,11 +294,6 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         row.collapsableView = nil;
         [_rows addObject:row];
     }
-}
-
-- (void)setTargetImage:(UIImage *)image
-{
-    _targetImage = image;
 }
 
 - (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<OARenderedObject *> *)renderedObjects
@@ -754,14 +748,14 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)nearbyImagesRowInfo.collapsableView;
             collapsableView.isLoading = NO;
-            collapsableView.placeholderImage = _targetImage;
+            collapsableView.placeholderImage = [self targetImage];
             [collapsableView setCards:cards];
         }
         if (_mapillaryCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
             collapsableView.isLoading = NO;
-            collapsableView.placeholderImage = _targetImage;
+            collapsableView.placeholderImage = [self targetImage];
             [collapsableView setCards:cards];
         }
         

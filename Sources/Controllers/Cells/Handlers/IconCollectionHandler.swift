@@ -100,13 +100,13 @@ class IconCollectionHandler: OABaseCollectionHandler {
         let cell: OAIconsCollectionViewCell = getCollectionView().dequeueReusableCell(withReuseIdentifier: getCellIdentifier(), for: indexPath) as! OAIconsCollectionViewCell
         
         let itemSize = getItemSize()
-        let backgroundIconSile = getIconBackgroundSize()
+        let backgroundIconSize = getIconBackgroundSize()
         let iconSize = getIconSize()
         
         cell.cellWidthConstraint.constant = itemSize.width
         cell.cellWidthConstraint.constant = itemSize.height
-        cell.iconBackgroundWidthConstraint.constant = backgroundIconSile
-        cell.iconBackgroundHeightConstraint.constant = backgroundIconSile
+        cell.iconBackgroundWidthConstraint.constant = backgroundIconSize
+        cell.iconBackgroundHeightConstraint.constant = backgroundIconSize
         cell.iconWidthConstraint.constant = iconSize
         cell.iconHeightConstraint.constant = iconSize
         

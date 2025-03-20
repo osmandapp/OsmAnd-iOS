@@ -198,7 +198,10 @@
 #import "OATitleSliderRoundCell.h"
 #import "OAIconsPaletteCell.h"
 #import "OACollectionSingleLineTableViewCell.h"
+#import "OACollectionViewCellState.h"
 #import "OAFoldersCollectionViewCell.h"
+#import "OAFoldersCollectionView.h"
+#import "OAFoldersCell.h"
 
 
 // Views

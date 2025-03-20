@@ -268,7 +268,6 @@ NS_ASSUME_NONNULL_BEGIN
                                        segment:(OASTrkSegment *)segment
                             menuControlState:(nullable OATargetMenuViewControllerState *)menuControlState
                                        isRoute:(BOOL)isRoute;
-
 @end
  
 NS_ASSUME_NONNULL_END

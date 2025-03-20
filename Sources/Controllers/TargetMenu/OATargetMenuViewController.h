@@ -212,6 +212,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) addMapFrameLayer:(CGRect)mapFrame view:(UIView *)view;
 - (void) removeMapFrameLayer:(UIView *)view;
 - (CGFloat) mapHeightKoef;
+- (void)setTargetImage:(UIImage * _Nullable)image;
+- (UIImage *_Nullable)targetImage;
 
 @end
 

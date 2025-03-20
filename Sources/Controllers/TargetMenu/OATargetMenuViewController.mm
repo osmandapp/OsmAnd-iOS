@@ -86,11 +86,9 @@
 @implementation OATargetMenuViewController
 {
     OsmAndAppInstance _app;
-    
-    
-    
-    OAAutoObserverProxy* _downloadTaskProgressObserver;
-    OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    OAAutoObserverProxy *_downloadTaskProgressObserver;
+    OAAutoObserverProxy *_downloadTaskCompletedObserver;
+    UIImage *_targetImage;
 }
 
 + (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
@@ -687,6 +685,15 @@
 - (CGFloat) detailsButtonHeight
 {
     return 0.; //override
+}
+
+- (UIImage *)targetImage {
+    return _targetImage;
+}
+
+- (void)setTargetImage:(UIImage *)image
+{
+    _targetImage = image;
 }
 
 - (IBAction) buttonBackPressed:(id)sender

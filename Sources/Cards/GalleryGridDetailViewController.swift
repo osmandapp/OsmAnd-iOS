@@ -136,15 +136,10 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if let link = item.obj(forKey: "sourceLinkKey") as? String {
             guard let url = URL(string: link) else { return }
-            let viewController = OAWikiWebViewController(url: url, title: titleString)
-            viewController.modalPresentationStyle = .fullScreen
-            if presentingViewController != nil {
-                let navigationController = UINavigationController(rootViewController: viewController)
-                navigationController.modalPresentationStyle = .fullScreen
-                present(navigationController, animated: true)
-            } else {
-                OARootViewController.instance()?.mapPanel.navigationController?.pushViewController(viewController, animated: true)
-            }
+            
+            let safariViewController = SFSafariViewController(url: url)
+            safariViewController.preferredControlTintColor = .iconColorActive
+            present(safariViewController, animated: true, completion: nil)
         }
     }
     

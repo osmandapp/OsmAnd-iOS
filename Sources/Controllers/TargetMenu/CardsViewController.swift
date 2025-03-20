@@ -17,6 +17,8 @@ final class CardsViewController: UIView {
     }
     
     var contentType: CollapsableCardsType = .onlinePhoto
+    var title: String = ""
+    var placeholderImage: UIImage?
     var didChangeHeightAction: ((Section, Float) -> Void)?
     // swiftlint:disable all
     var сardsFilter: CardsFilter! {
@@ -194,6 +196,7 @@ final class CardsViewController: UIView {
                     withReuseIdentifier: ImageCardCell.reuseIdentifier,
                     for: indexPath) as? ImageCardCell else { fatalError("Cannot create new cell ImageCardCell") }
                 if let item = item as? ImageCard {
+                    cell.placeholderImage = placeholderImage
                     cell.configure(item: item, showLogo: section == .bigPhoto)
                 }
                 return cell
@@ -223,11 +226,12 @@ extension CardsViewController: UICollectionViewDelegate {
         if card is WikiImageCard {
             let wikiCards = dataSource.snapshot().itemIdentifiers.compactMap { $0 as? WikiImageCard }
             guard let initialIndex = wikiCards.firstIndex(where: { $0 === card }) else { return }
-            let imageDataSource = SimpleImageDatasource(imageItems: wikiCards.compactMap { ImageItem.card($0) })
-            let imageCarouselController = ImageCarouselViewController(imageDataSource: imageDataSource, initialIndex: initialIndex)
+            let imageDataSource = SimpleImageDatasource(imageItems: wikiCards.compactMap { ImageItem.card($0) }, placeholderImage: placeholderImage)
+            let imageCarouselController = ImageCarouselViewController(imageDataSource: imageDataSource, title: title, initialIndex: initialIndex)
             
             let navController = UINavigationController(rootViewController: imageCarouselController)
             navController.modalPresentationStyle = .custom
+            navController.modalTransitionStyle = .crossDissolve
             navController.modalPresentationCapturesStatusBarAppearance = true
             OARootViewController.instance().mapPanel?.navigationController?.present(navController, animated: true)
         } else {

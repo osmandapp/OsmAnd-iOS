@@ -18,13 +18,23 @@ protocol CollapsableCardViewDelegate: AnyObject {
 @objcMembers
 final class CollapsableCardsView: OACollapsableView {
     
-    var title: String = ""
+    var title: String = "" {
+        didSet {
+            cardsViewController.title = title
+        }
+    }
     
     weak var delegate: CollapsableCardViewDelegate?
     
     var contentType: CollapsableCardsType = .onlinePhoto {
         didSet {
             cardsViewController.contentType = contentType
+        }
+    }
+    
+    var placeholderImage: UIImage? {
+        didSet {
+            cardsViewController.placeholderImage = placeholderImage
         }
     }
     
@@ -46,9 +56,10 @@ final class CollapsableCardsView: OACollapsableView {
     }
     
     private let bottomContentHeight: Float = 68.0
-    
+    // swiftlint:disable all
     private var cardsViewController: CardsViewController!
     private var сardsFilter: CardsFilter!
+    // swiftlint:enable all
     private var bottomButton: UIButton?
     private var heightConstraint: NSLayoutConstraint?
     
@@ -129,6 +140,7 @@ final class CollapsableCardsView: OACollapsableView {
                       let navigationController = OARootViewController.instance()?.navigationController else { return }
                 
                 let controller = GalleryGridViewController()
+                controller.placeholderImage = placeholderImage
                 controller.cards = сardsFilter.onlinePhotosSection
                 controller.titleString = title
                 navigationController.pushViewController(controller, animated: true)

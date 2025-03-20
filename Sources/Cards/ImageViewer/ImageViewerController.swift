@@ -2,6 +2,7 @@ import Kingfisher
 
 final class ImageViewerController: UIViewController {
     var index: Int = 0
+    var placeholderImage: UIImage?
     
     private let animationDuration: TimeInterval = 0.25
     
@@ -22,6 +23,11 @@ final class ImageViewerController: UIViewController {
     private var metadataView: UIView? {
         guard let _parent = parent as? ImageCarouselViewController else { return nil }
         return _parent.contentMetadataView
+    }
+    
+    private var gradientLayer: CAGradientLayer? {
+        guard let _parent = parent as? ImageCarouselViewController else { return nil }
+        return _parent.gradientLayer
     }
     
     init(index: Int, imageItem: ImageItem) {
@@ -91,6 +97,7 @@ final class ImageViewerController: UIViewController {
             imageView.kf.indicatorType = .activity
             imageView.kf.setImage(
                 with: url,
+                placeholder: ImageCardPlaceholder(placeholderImage: placeholderImage),
                 options: [
                     .lowDataMode(.network(lowResolutionURL)),
                     .targetCache(.galleryHighResolutionDiskCache),
@@ -191,7 +198,9 @@ final class ImageViewerController: UIViewController {
         _parent.navigationController?.setNavigationBarHidden(!isHidden, animated: true)
         CATransaction.commit()
         UIView.animate(withDuration: animationDuration) {
-            self.metadataView?.alpha = isHidden ? 1 : 0
+            let alphaValue: CGFloat = isHidden ? 1 : 0
+            self.metadataView?.alpha = alphaValue
+            self.gradientLayer?.opacity = Float(alphaValue)
         }
     }
     

@@ -6,8 +6,11 @@ final class SimpleImageDatasource: ImageDataSource {
     
     private(set) var imageItems: [ImageItem]
     
-    init(imageItems: [ImageItem]) {
+    var placeholderImage: UIImage?
+    
+    init(imageItems: [ImageItem], placeholderImage: UIImage?) {
         self.imageItems = imageItems
+        self.placeholderImage = placeholderImage
     }
     
     func count() -> Int {

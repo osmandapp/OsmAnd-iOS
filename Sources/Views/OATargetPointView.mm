@@ -67,7 +67,6 @@ static const CGFloat kTopViewCornerRadius = 10.0;
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;
@@ -1680,6 +1679,8 @@ static const NSInteger _buttonsCount = 4;
         _imageView.image = _targetPoint.icon;
         _imageView.hidden = NO;
     }
+    
+    [_customController setTargetImage:_imageView.image];
 }
 
 - (void) updateAddressLabel

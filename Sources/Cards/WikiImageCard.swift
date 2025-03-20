@@ -40,10 +40,10 @@ final class WikiImage: NSObject {
         if let date = dic["date"] as? String, !date.isEmpty {
             metadata?.date = date
         }
-        if let author = dic["author"] as? String, author.isEmpty {
+        if let author = dic["author"] as? String, !author.isEmpty {
             metadata?.author = author
         }
-        if let license = dic["license"] as? String, license.isEmpty {
+        if let license = dic["license"] as? String, !license.isEmpty {
             metadata?.license = license
         }
         if let mediaId = dic["mediaId"] as? Int {
@@ -55,6 +55,7 @@ final class WikiImage: NSObject {
         if metadata == nil {
             self.metadata = Metadata()
         }
+        
         var isUpdated = false
         if let date = dic["date"] as? String, !isEmpty(date), isEmpty(metadata?.date) {
             metadata?.date = date

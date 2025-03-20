@@ -731,7 +731,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 - (void)onOtherCardsReady:(NSMutableArray<AbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
     _otherCardsReady = YES;
-    [self updateDisplayingCards:cards rowInfo:nearbyImagesRowInfo];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateDisplayingCards:cards rowInfo:nearbyImagesRowInfo];
+    });
 }
 
 - (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
@@ -740,17 +742,20 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     {
         if (cards.count > 1)
             [self reorderCards:cards];
+        
         // After forming the list of cards, fill the collection
         if (nearbyImagesRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)nearbyImagesRowInfo.collapsableView;
             collapsableView.isLoading = NO;
+            collapsableView.placeholderImage = [self targetImage];
             [collapsableView setCards:cards];
         }
         if (_mapillaryCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
             collapsableView.isLoading = NO;
+            collapsableView.placeholderImage = [self targetImage];
             [collapsableView setCards:cards];
         }
         
@@ -1219,7 +1224,8 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
     
     __weak __typeof(self) weakSelf = self;
-    if (AFNetworkReachabilityManager.sharedManager.isReachable) {
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
+    {
         onlinePhotoCardsView.isLoading = YES;
         if ([self.getTargetObj isKindOfClass:OAPOI.class])
         {
@@ -1232,7 +1238,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             weakSelf.wikiCardsReady = YES;
             [weakSelf sendNearbyOtherImagesRequest:cards];
         }];
-    } else {
+    }
+    else
+    {
         NoInternetCard *noInternetCard = [NoInternetCard new];
         noInternetCard.onTryAgainAction = ^{
             if (AFNetworkReachabilityManager.sharedManager.isReachable)

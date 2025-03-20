@@ -2970,3 +2970,4 @@
 "default_buttons" = "デフォルトボタン";
 "screen_is_locked_by_action_button" = "タッチスクリーンがロックされています。ボタンをタップしてロックを解除してください。";
 "lock_screen_description" = "誤ってタップするのを防ぐため、タッチスクリーン機能を有効または無効にします";
+"lock_screen" = "画面ロック";

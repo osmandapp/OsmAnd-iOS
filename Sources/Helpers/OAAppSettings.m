@@ -4147,7 +4147,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         // 2 = STRAIGHT
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.AIRCRAFT];
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.DEFAULT];
-        [_routerService set:2 mode:OAApplicationMode.DEFAULT];
+        [_routerService set:0 mode:OAApplicationMode.DEFAULT];
 
         [_profilePreferences setObject:_routerService forKey:@"route_service"];
         _navigationIcon = [OACommonString withKey:navigationIconKey defValue:[[OALocationIcon MOVEMENT_DEFAULT] name]];

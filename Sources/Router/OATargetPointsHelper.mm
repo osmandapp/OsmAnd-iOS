@@ -684,6 +684,13 @@
     OAApplicationMode *mode = _settings.applicationMode.get;
     if ([_settings.routerService get:mode] != EOARouteService::OSMAND)
         return false;
+    bool hhRouting = ![_settings.useOldRouting get];
+    if (hhRouting &&
+        ([[OAApplicationMode CAR] isDerivedRoutingFrom:[_routingHelper getAppMode]] ||
+        [[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]]) )
+    {
+        return false;
+    }
     
     CLLocation *current = [_routingHelper getLastProjection];
     double dist = 400000;

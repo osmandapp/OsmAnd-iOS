@@ -136,7 +136,7 @@
         [[OARootViewController instance].mapPanel showRouteInfo:NO];
 
     if ([targets hasTooLongDistanceToNavigate])
-        [_app showToastMessage:OALocalizedString(@"route_is_too_long_v2")];
+        [OAUtilities showToast:OALocalizedString(@"route_is_too_long_v2") details:nil duration:10 inView:OARootViewController.instance.view];
 
     if (![_settings.speedCamerasAlertShown get])
     {

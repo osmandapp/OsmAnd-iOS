@@ -2986,3 +2986,4 @@
 "view_angle" = "視点表示";
 "resting_navigation_position" = "停止時&ナビゲーション時位置";
 "navigation_position" = "ナビゲーション時位置";
+"help_article_navigation_routing_car_based_routing_name" = "車のルーティング(トラック、オートバイ)";

@@ -2971,3 +2971,7 @@
 "screen_is_locked_by_action_button" = "タッチスクリーンがロックされています。ボタンをタップしてロックを解除してください。";
 "lock_screen_description" = "誤ってタップするのを防ぐため、タッチスクリーン機能を有効または無効にします";
 "lock_screen" = "画面ロック";
+"shared_string_activity" = "アクティビティ";
+"location_radius_description" = "現在地の精度を表す円形のエリアを表示します。";
+"help_article_widgets_radius_ruler_name" = "半径定規と定規";
+"location_radius" = "位置の半径";

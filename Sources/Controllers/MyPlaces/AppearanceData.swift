@@ -12,27 +12,8 @@ protocol AppearanceChangedDelegate: AnyObject {
     func onAppearanceChanged()
 }
 
-struct AppearancePair: Equatable {
-    let shouldReset: Bool
-    let value: Any?
-    
-    static func == (lhs: AppearancePair, rhs: AppearancePair) -> Bool {
-        guard lhs.shouldReset == rhs.shouldReset else { return false }
-        if lhs.value == nil && rhs.value == nil {
-            return true
-        }
-        if (lhs.value == nil) != (rhs.value == nil) {
-            return false
-        }
-        if let leftObj = lhs.value as? NSObject, let rightObj = rhs.value as? NSObject {
-            return leftObj.isEqual(rightObj)
-        }
-        return false
-    }
-}
-
 final class AppearanceData: NSObject {
-    private var map: [GpxParameter: AppearancePair] = [:]
+    private var map: [GpxParameter: (Bool, Any?)] = [:]
     weak var delegate: AppearanceChangedDelegate?
     
     override init() {
@@ -45,8 +26,11 @@ final class AppearanceData: NSObject {
     }
     
     override func isEqual(_ object: Any?) -> Bool {
-        guard let other = object as? AppearanceData else { return false }
-        return self.map == other.map
+        guard let other = object as? Self else { return false }
+        return map.count == other.map.count && map.allSatisfy { (key, value) in
+            guard let otherValue = other.map[key] else { return false }
+            return compareTuples(value, otherValue)
+        }
     }
     
     private func notifyAppearanceModified() {
@@ -59,25 +43,25 @@ final class AppearanceData: NSObject {
     }
     
     func getParameter<T>(for parameter: GpxParameter) -> T? {
-        guard let pair = map[parameter] else { return nil }
-        return pair.value as? T
+        guard let tuple = map[parameter] else { return nil }
+        return tuple.1 as? T
     }
     
     func setParameter(_ parameter: GpxParameter, value: Any?) {
         guard isValidValue(parameter: parameter, value: value) else { return }
-        map[parameter] = AppearancePair(shouldReset: false, value: value)
+        map[parameter] = (false, value)
         notifyAppearanceModified()
     }
     
     func resetParameter(_ parameter: GpxParameter) {
         guard parameter.isAppearanceParameter() else { return }
-        map[parameter] = AppearancePair(shouldReset: true, value: nil)
+        map[parameter] = (true, nil)
         notifyAppearanceModified()
     }
     
     func shouldResetParameter(_ parameter: GpxParameter) -> Bool {
         guard parameter.isAppearanceParameter() else { return false }
-        return map[parameter]?.shouldReset ?? false
+        return map[parameter]?.0 ?? false
     }
     
     func shouldResetAnything() -> Bool {
@@ -89,5 +73,20 @@ final class AppearanceData: NSObject {
         }
         
         return false
+    }
+}
+
+extension AppearanceData {
+    private func compareTuples(_ lhs: (Bool, Any?), _ rhs: (Bool, Any?)) -> Bool {
+        guard lhs.0 == rhs.0 else { return false }
+        switch (lhs.1, rhs.1) {
+        case (nil, nil):
+            return true
+        case (nil, _), (_, nil):
+            return false
+        case let (lValue?, rValue?):
+            guard let lObj = lValue as? NSObject, let rObj = rValue as? NSObject else { return false }
+            return lObj.isEqual(rObj)
+        }
     }
 }

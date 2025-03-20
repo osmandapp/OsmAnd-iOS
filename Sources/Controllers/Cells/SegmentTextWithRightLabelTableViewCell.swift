@@ -10,9 +10,9 @@ import UIKit
 
 final class SegmentTextWithRightLabelTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
-    @IBOutlet weak var segmentedControlLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var segmentedControl: UISegmentedControl!
+    @IBOutlet private weak var segmentedControlLeadingConstraint: NSLayoutConstraint!
     
     var didSelectSegmentIndex: ((Int) -> Void)?
     

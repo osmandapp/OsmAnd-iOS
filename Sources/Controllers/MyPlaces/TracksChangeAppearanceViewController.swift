@@ -13,22 +13,22 @@ private enum WidthKeys: String {
 }
 
 private enum RowKey: String {
-    case directionArrows = "directionArrowsRowKey"
-    case startFinishIcons = "startFinishIconsRowKey"
-    case coloring = "coloringRowKey"
-    case coloringDesc = "coloringDescRowKey"
-    case coloringGrid = "coloringGridRowKey"
-    case gradientLegend = "gradientLegendRowKey"
-    case allColors = "allColorsRowKey"
-    case width = "widthRowKey"
-    case widthModes = "widthModesRowKey"
-    case splitModes = "splitModesRowKey"
-    case customWidthModes = "customWidthModesRowKey"
-    case customSplitInterval = "customSplitIntervalRowKey"
-    case widthDescr = "widthDescrRow"
-    case splitInterval = "splitIntervalRow"
-    case splitIntervalDescr = "splitIntervalDescrRow"
-    case splitIntervalNoneDescr = "splitIntervalNoneDescrRow"
+    case directionArrowsRowKey
+    case startFinishIconsRowKey
+    case coloringRowKey
+    case coloringDescRowKey
+    case coloringGridRowKey
+    case gradientLegendRowKey
+    case allColorsRowKey
+    case widthRowKey
+    case widthModesRowKey
+    case splitModesRowKey
+    case customWidthModesRowKey
+    case customSplitIntervalRowKey
+    case widthDescrRowKey
+    case splitIntervalRowKey
+    case splitIntervalDescrRowKey
+    case splitIntervalNoneDescrRowKey
 }
 
 final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
@@ -128,58 +128,58 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         let directionSection = tableData.createNewSection()
         let directionArrowsRow = directionSection.createNewRow()
         directionArrowsRow.cellType = OAButtonTableViewCell.reuseIdentifier
-        directionArrowsRow.key = RowKey.directionArrows.rawValue
+        directionArrowsRow.key = RowKey.directionArrowsRowKey.rawValue
         directionArrowsRow.title = localizedString("gpx_direction_arrows")
         let startFinishIconsRow = directionSection.createNewRow()
         startFinishIconsRow.cellType = OAButtonTableViewCell.reuseIdentifier
-        startFinishIconsRow.key = RowKey.startFinishIcons.rawValue
+        startFinishIconsRow.key = RowKey.startFinishIconsRowKey.rawValue
         startFinishIconsRow.title = localizedString("track_show_start_finish_icons")
         
         let coloringSection = tableData.createNewSection()
         let coloringRow = coloringSection.createNewRow()
         coloringRow.cellType = OAButtonTableViewCell.reuseIdentifier
-        coloringRow.key = RowKey.coloring.rawValue
+        coloringRow.key = RowKey.coloringRowKey.rawValue
         coloringRow.title = localizedString("shared_string_coloring")
         if isColorSelected {
             if isSolidColorSelected {
                 let coloringGridRow = coloringSection.createNewRow()
                 coloringGridRow.cellType = OACollectionSingleLineTableViewCell.reuseIdentifier
-                coloringGridRow.key = RowKey.coloringGrid.rawValue
+                coloringGridRow.key = RowKey.coloringGridRowKey.rawValue
                 colorsCollectionIndexPath = IndexPath(row: Int(tableData.rowCount(tableData.sectionCount() - 1)) - 1, section: Int(tableData.sectionCount()) - 1)
             } else if isGradientColorSelected {
                 let gradientLegendRow = coloringSection.createNewRow()
                 gradientLegendRow.cellType = GradientChartCell.reuseIdentifier
-                gradientLegendRow.key = RowKey.gradientLegend.rawValue
+                gradientLegendRow.key = RowKey.gradientLegendRowKey.rawValue
                 let coloringGridRow = coloringSection.createNewRow()
                 coloringGridRow.cellType = OACollectionSingleLineTableViewCell.reuseIdentifier
-                coloringGridRow.key = RowKey.coloringGrid.rawValue
+                coloringGridRow.key = RowKey.coloringGridRowKey.rawValue
                 colorsCollectionIndexPath = IndexPath(row: Int(tableData.rowCount(tableData.sectionCount() - 1)) - 1, section: Int(tableData.sectionCount()) - 1)
             }
             let allColorsRow = coloringSection.createNewRow()
             allColorsRow.cellType = OAValueTableViewCell.reuseIdentifier
-            allColorsRow.key = RowKey.allColors.rawValue
+            allColorsRow.key = RowKey.allColorsRowKey.rawValue
             allColorsRow.title = localizedString("shared_string_all_colors")
             allColorsRow.iconTintColor = .iconColorActive
         } else {
             let coloringDescrRow = coloringSection.createNewRow()
             coloringDescrRow.cellType = OASimpleTableViewCell.reuseIdentifier
-            coloringDescrRow.key = RowKey.coloringDesc.rawValue
+            coloringDescrRow.key = RowKey.coloringDescRowKey.rawValue
             coloringDescrRow.title = localizedString(isRouteAttributeTypeSelected ? "white_color_undefined" : "each_favourite_point_own_icon")
         }
         
         let widthSection = tableData.createNewSection()
         let widthRow = widthSection.createNewRow()
         widthRow.cellType = OAButtonTableViewCell.reuseIdentifier
-        widthRow.key = RowKey.width.rawValue
+        widthRow.key = RowKey.widthRowKey.rawValue
         widthRow.title = localizedString("routing_attr_width_name")
         if isWidthSelected {
             let widthModesRow = widthSection.createNewRow()
             widthModesRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
-            widthModesRow.key = RowKey.widthModes.rawValue
+            widthModesRow.key = RowKey.widthModesRowKey.rawValue
             if isCustomWidthSelected {
                 let customWidthModesRow = widthSection.createNewRow()
                 customWidthModesRow.cellType = OASegmentSliderTableViewCell.reuseIdentifier
-                customWidthModesRow.key = RowKey.customWidthModes.rawValue
+                customWidthModesRow.key = RowKey.customWidthModesRowKey.rawValue
                 customWidthModesRow.setObj(selectedWidth?.customValue as Any, forKey: Self.customStringValue)
                 customWidthModesRow.setObj(customWidthValues, forKey: Self.widthArrayValue)
                 customWidthModesRow.setObj(false, forKey: Self.hasTopLabels)
@@ -188,28 +188,28 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         } else {
             let widthDescrRow = widthSection.createNewRow()
             widthDescrRow.cellType = OASimpleTableViewCell.reuseIdentifier
-            widthDescrRow.key = RowKey.widthDescr.rawValue
+            widthDescrRow.key = RowKey.widthDescrRowKey.rawValue
             widthDescrRow.title = localizedString("unchanged_parameter_summary")
         }
         
         let splitIntervalSection = tableData.createNewSection()
         let splitIntervalRow = splitIntervalSection.createNewRow()
         splitIntervalRow.cellType = OAButtonTableViewCell.reuseIdentifier
-        splitIntervalRow.key = RowKey.splitInterval.rawValue
+        splitIntervalRow.key = RowKey.splitIntervalRowKey.rawValue
         splitIntervalRow.title = localizedString("gpx_split_interval")
         if isSplitIntervalSelected {
             let splitModesRow = splitIntervalSection.createNewRow()
             splitModesRow.cellType = SegmentTextWithRightLabelTableViewCell.reuseIdentifier
-            splitModesRow.key = RowKey.splitModes.rawValue
+            splitModesRow.key = RowKey.splitModesRowKey.rawValue
             if isSplitIntervalNoneSelected {
                 let splitIntervalNoneDescrRow = splitIntervalSection.createNewRow()
                 splitIntervalNoneDescrRow.cellType = OASimpleTableViewCell.reuseIdentifier
-                splitIntervalNoneDescrRow.key = RowKey.splitIntervalNoneDescr.rawValue
+                splitIntervalNoneDescrRow.key = RowKey.splitIntervalNoneDescrRowKey.rawValue
                 splitIntervalNoneDescrRow.title = localizedString("gpx_split_interval_none_descr")
             } else {
                 let customSplitIntervalRow = splitIntervalSection.createNewRow()
                 customSplitIntervalRow.cellType = OASegmentSliderTableViewCell.reuseIdentifier
-                customSplitIntervalRow.key = RowKey.customSplitInterval.rawValue
+                customSplitIntervalRow.key = RowKey.customSplitIntervalRowKey.rawValue
                 customSplitIntervalRow.title = localizedString("shared_string_interval")
                 customSplitIntervalRow.setObj(selectedSplit?.customValue as Any, forKey: Self.customStringValue)
                 customSplitIntervalRow.setObj(selectedSplit?.titles as Any, forKey: Self.widthArrayValue)
@@ -219,7 +219,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         } else {
             let splitIntervalDescrRow = splitIntervalSection.createNewRow()
             splitIntervalDescrRow.cellType = OASimpleTableViewCell.reuseIdentifier
-            splitIntervalDescrRow.key = RowKey.splitIntervalDescr.rawValue
+            splitIntervalDescrRow.key = RowKey.splitIntervalDescrRowKey.rawValue
             splitIntervalDescrRow.title = localizedString("unchanged_parameter_summary")
         }
     }
@@ -234,9 +234,9 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.descriptionVisibility(false)
             cell.setCustomLeftSeparatorInset(false)
             let selectedKeys = [
-                (key: RowKey.width.rawValue, isSelected: isWidthSelected),
-                (key: RowKey.splitInterval.rawValue, isSelected: isSplitIntervalSelected),
-                (key: RowKey.coloring.rawValue, isSelected: isColorSelected)
+                (key: RowKey.widthRowKey.rawValue, isSelected: isWidthSelected),
+                (key: RowKey.splitIntervalRowKey.rawValue, isSelected: isSplitIntervalSelected),
+                (key: RowKey.coloringRowKey.rawValue, isSelected: isColorSelected)
             ]
             if selectedKeys.contains(where: { $0.key == item.key && $0.isSelected }) {
                 cell.setCustomLeftSeparatorInset(true)
@@ -339,7 +339,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASegmentSliderTableViewCell.reuseIdentifier) as! OASegmentSliderTableViewCell
             let arrayValue = item.obj(forKey: Self.widthArrayValue) as? [String] ?? []
             cell.topLeftLabel.text = item.title
-            cell.topRightLabel.text = (item.key == RowKey.customSplitInterval.rawValue) ? (item.obj(forKey: Self.customStringValue) as? String ?? "") : ""
+            cell.topRightLabel.text = (item.key == RowKey.customSplitIntervalRowKey.rawValue) ? (item.obj(forKey: Self.customStringValue) as? String ?? "") : ""
             cell.topRightLabel.textColor = .textColorSecondary
             cell.topRightLabel.font = UIFont.scaledSystemFont(ofSize: 17, weight: .medium)
             cell.bottomLeftLabel.text = arrayValue.first
@@ -359,7 +359,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        if item.key == RowKey.allColors.rawValue {
+        if item.key == RowKey.allColorsRowKey.rawValue {
             if isSolidColorSelected {
                 if let items = appearanceCollection?.getAvailableColorsSortingByKey(), let colorItem = selectedColorItem {
                     let colorCollectionVC = ItemsCollectionViewController(collectionType: .colorItems, items: items, selectedItem: colorItem)
@@ -507,13 +507,10 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         data.setParameter(.width, value: widthString)
         switch width.key {
         case WidthKeys.thin.rawValue:
-            isCustomWidthSelected = false
             selectedWidthIndex = 0
         case WidthKeys.medium.rawValue:
-            isCustomWidthSelected = false
             selectedWidthIndex = 1
         case WidthKeys.bold.rawValue:
-            isCustomWidthSelected = false
             selectedWidthIndex = 2
         default:
             isCustomWidthSelected = true
@@ -566,15 +563,15 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     
     private func createStateSelectionMenu(for key: String) -> UIMenu {
         switch key {
-        case RowKey.directionArrows.rawValue:
+        case RowKey.directionArrowsRowKey.rawValue:
             return createArrowsMenu()
-        case RowKey.startFinishIcons.rawValue:
+        case RowKey.startFinishIconsRowKey.rawValue:
             return createStartFinishMenu()
-        case RowKey.coloring.rawValue:
+        case RowKey.coloringRowKey.rawValue:
             return createColoringMenu()
-        case RowKey.width.rawValue:
+        case RowKey.widthRowKey.rawValue:
             return createWidthMenu()
-        case RowKey.splitInterval.rawValue:
+        case RowKey.splitIntervalRowKey.rawValue:
             return createSplitIntervalMenu()
         default:
             return UIMenu()
@@ -621,7 +618,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         guard let tableData else { return }
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item = tableData.item(for: indexPath)
-        if item.key == RowKey.coloringGrid.rawValue {
+        if item.key == RowKey.coloringGridRowKey.rawValue {
             guard let colorItem = selectedColorItem else { return }
             let colorPickerVC = UIColorPickerViewController()
             colorPickerVC.delegate = self
@@ -636,14 +633,14 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         guard let cell = tableView.cellForRow(at: indexPath) as? OASegmentSliderTableViewCell else { return }
         let selectedIndex = Int(cell.sliderView.selectedMark)
-        if item.key == RowKey.customWidthModes.rawValue {
+        if item.key == RowKey.customWidthModesRowKey.rawValue {
             guard let customWidthValues = item.obj(forKey: Self.widthArrayValue) as? [String], selectedIndex >= 0, selectedIndex < customWidthValues.count else { return }
             let selectedValue = customWidthValues[selectedIndex]
             if let w = selectedWidth, w.isCustom() {
                 w.customValue = selectedValue
             }
             data.setParameter(.width, value: selectedValue)
-        } else if item.key == RowKey.customSplitInterval.rawValue {
+        } else if item.key == RowKey.customSplitIntervalRowKey.rawValue {
             guard let splitTitles = item.obj(forKey: Self.widthArrayValue) as? [String], selectedIndex >= 0, selectedIndex < splitTitles.count else { return }
             let selectedValue = splitTitles[selectedIndex]
             if let split = selectedSplit, split.isCustom() {

@@ -43,10 +43,10 @@ static QuickActionType *TYPE;
     TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsSwitchProfileActionId
                                            stringId:@"profile.change"
                                                  cl:self.class]
-              name:OALocalizedString(@"app_profile")]
-             nameAction:OALocalizedString(@"shared_string_change")]
-             iconName:@"ic_custom_manage_profiles"]
-            secondaryIconName:@"ic_custom_compound_action_change"]
+                name:OALocalizedString(@"app_profile")]
+               nameAction:OALocalizedString(@"shared_string_change")]
+              iconName:@"ic_custom_manage_profiles"]
+             secondaryIconName:@"ic_custom_compound_action_change"]
             category:QuickActionTypeCategorySettings];
 }
 
@@ -65,22 +65,9 @@ static QuickActionType *TYPE;
         return;
     }
     
-    int index = -1;
-    NSString *currentProfile = _settings.applicationMode.get.stringKey;
-    
-    for (int idx = 0; idx < profiles.count; idx++)
-    {
-        if ([currentProfile isEqualToString:profiles[idx]])
-        {
-            index = idx;
-            break;
-        }
-    }
-
-    NSMutableArray<NSString *> *nextProfile = [NSMutableArray arrayWithObject:profiles[0]];
-    if (index >= 0 && index + 1 < profiles.count)
-        nextProfile[0] = profiles[index + 1];
-    [self executeWithParams:nextProfile];
+    NSString *nextProfile = [self nextProfileFrom:profiles];
+    if (nextProfile)
+        [self executeWithParams:@[ nextProfile ]];
 }
 
 - (void)executeWithParams:(NSArray<NSString *> *)params
@@ -88,6 +75,27 @@ static QuickActionType *TYPE;
     OAApplicationMode *appMode = [self getModeForKey:params.firstObject];
     if (appMode)
         [_settings setApplicationModePref:appMode];
+}
+
+- (NSString *)nextProfileFrom:(NSArray<NSString *> *)profiles
+{
+    if (profiles.count == 0)
+        return nil;
+    
+    NSString *currentProfile = _settings.applicationMode.get.stringKey;
+    NSInteger index = [profiles indexOfObject:currentProfile];
+    NSString *nextProfile = profiles.firstObject;
+    if (index != NSNotFound && index >= 0 && index + 1 < profiles.count)
+        nextProfile = profiles[index + 1];
+    
+    return nextProfile;
+}
+
+- (NSString *)getActionStateName
+{
+    NSArray<NSString *> *profiles = self.getParams[[self getListKey]];
+    NSString *nextProfile = [self nextProfileFrom:profiles];
+    return nextProfile ? [[self getModeForKey:nextProfile] toHumanString] : [self getName];
 }
 
 - (NSString *)getTranslatedItemName:(NSString *)item

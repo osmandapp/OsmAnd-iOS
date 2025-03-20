@@ -45,10 +45,10 @@ static QuickActionType *TYPE;
     TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapOverlayActionId
                                            stringId:@"mapoverlay.change"
                                                  cl:self.class]
-              name:OALocalizedString(@"quick_action_map_overlay")]
-             nameAction:OALocalizedString(@"shared_string_change")]
-             iconName:@"ic_custom_overlay_map"]
-            secondaryIconName:@"ic_custom_compound_action_change"]
+                name:OALocalizedString(@"quick_action_map_overlay")]
+               nameAction:OALocalizedString(@"shared_string_change")]
+              iconName:@"ic_custom_overlay_map"]
+             secondaryIconName:@"ic_custom_compound_action_change"]
             category:QuickActionTypeCategoryConfigureMap];
 }
 
@@ -65,27 +65,9 @@ static QuickActionType *TYPE;
             return;
         }
         
-        NSInteger index = -1;
-        OAMapSource *currSource = [OsmAndApp instance].data.overlayMapSource;
-        NSString *currentSource = currSource.name ? currSource.name : kNoOverlay;
-        BOOL noOverlay = currSource.name == nil;
-        
-        for (NSInteger idx = 0; idx < sources.count; idx++)
-        {
-            NSArray *source = sources[idx];
-            if ([source[source.count - 1] isEqualToString:currentSource] || ([source.firstObject isEqualToString:currentSource] && noOverlay))
-            {
-                index = idx;
-                break;
-            }
-        }
-        
-        NSArray<NSString *> *nextSource = sources[0];
-        
-        if (index >= 0 && index < sources.count - 1)
-            nextSource = sources[index + 1];
-        
-        [self executeWithParams:nextSource];
+        NSArray<NSString *> *nextSource = [self nextOverlaySourceFrom:sources];
+        if (nextSource)
+            [self executeWithParams:nextSource];
     }
 }
 
@@ -113,6 +95,44 @@ static QuickActionType *TYPE;
         app.data.overlayMapSource = nil;
     }
     // indicate change with toast?
+}
+
+- (NSArray<NSString *> *)nextOverlaySourceFrom:(NSArray<NSArray<NSString *> *> *)sources
+{
+    if (sources.count == 0)
+        return nil;
+    
+    OAMapSource *currSource = [OsmAndApp instance].data.overlayMapSource;
+    NSString *currentSource = currSource.name ?: kNoOverlay;
+    BOOL noOverlay = !currSource.name;
+    NSInteger index = -1;
+    for (NSInteger idx = 0; idx < sources.count; idx++)
+    {
+        NSArray<NSString *> *source = sources[idx];
+        BOOL matchByName = [source.lastObject isEqualToString:currentSource];
+        BOOL matchByVariantAndNoOverlay = ([source.firstObject isEqualToString:currentSource] && noOverlay);
+        if (matchByName || matchByVariantAndNoOverlay)
+        {
+            index = idx;
+            break;
+        }
+    }
+    
+    NSArray<NSString *> *nextSource = sources.firstObject;
+    if (index >= 0 && index < sources.count - 1)
+        nextSource = sources[index + 1];
+    
+    return nextSource;
+}
+
+- (NSString *)getActionStateName
+{
+    NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
+    NSArray<NSString *> *nextSource = [self nextOverlaySourceFrom:sources];
+    if (nextSource.count > 0)
+        return nextSource.lastObject;
+    
+    return [self getName];
 }
 
 - (NSString *)getTranslatedItemName:(NSString *)item

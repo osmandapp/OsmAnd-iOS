@@ -296,7 +296,7 @@
     
     if (cell)
     {
-        [cell.textView setText:action.getName];
+        [cell.textView setText:action.getExtendedName];
         [cell.iconView setImage:[action getActionIcon]];
         [cell.iconView setTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
         if (cell.iconView.subviews.count > 0)

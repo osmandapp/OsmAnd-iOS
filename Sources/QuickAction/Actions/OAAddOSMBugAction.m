@@ -29,14 +29,15 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsAddOsmBugActionId
+    TYPE = [[[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsAddOsmBugActionId
                                             stringId:@"osmbug.add"
                                                   cl:self.class]
-               name:OALocalizedString(@"osn_bug_name")]
-               nameAction:OALocalizedString(@"shared_string_add")]
-              iconName:@"ic_action_osm_note"]
-             secondaryIconName:@"ic_custom_compound_action_add"]
-            category:QuickActionTypeCategoryMyPlaces];
+                 name:OALocalizedString(@"osn_bug_name")]
+                nameAction:OALocalizedString(@"shared_string_add")]
+               iconName:@"ic_action_osm_note"]
+              secondaryIconName:@"ic_custom_compound_action_add"]
+             category:QuickActionTypeCategoryMyPlaces]
+            forceUseExtendedName];
 }
 
 - (void)execute

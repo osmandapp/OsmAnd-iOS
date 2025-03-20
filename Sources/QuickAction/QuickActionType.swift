@@ -24,6 +24,7 @@ final class QuickActionType: NSObject {
     let id: Int
     let stringId: String
     private var _actionEditable = false
+    private var _forceUseExtendedName = false
     private var _name: String?
     private var _nameAction: String?
     private var _iconName: String?
@@ -73,6 +74,11 @@ final class QuickActionType: NSObject {
         _actionEditable = false
         return self
     }
+    
+    func forceUseExtendedName() -> QuickActionType {
+        _forceUseExtendedName = true
+        return self
+    }
 
     func createNew() -> OAQuickAction {
         if let cl {
@@ -92,6 +98,10 @@ final class QuickActionType: NSObject {
 
     var actionEditable: Bool {
         _actionEditable
+    }
+    
+    var shouldUseExtendedName: Bool {
+        !actionEditable || _forceUseExtendedName
     }
 
     var name: String? {

@@ -118,16 +118,36 @@ static NSInteger SEQ = 0;
 
 - (NSString *)getName
 {
-    NSString *name;
-    if (_name.length == 0 || !self.isActionEditable)
-        name = [self getDefaultName];
-    else
-        name = _name;
-    
+    return _name.length == 0 || !self.isActionEditable ?  [self getDefaultName] : _name;
+}
+
+- (NSString *)getExtendedName
+{
+    return [self getExtendedNameWithDash:YES];
+}
+
+- (NSString *)getExtendedNameWithDash:(BOOL)useDash
+{
+    NSString *combineKey = useDash ? @"ltr_or_rtl_combine_via_dash" : @"ltr_or_rtl_combine_via_space";
+    return [self getExtendedNameWithCombineKey:combineKey];
+}
+
+- (NSString *)getExtendedNameWithCombineKey:(NSString *)combineKey
+{
+    NSString *name = [self getName];
+    if ([name isEqualToString:[self getRawName]] || ![self shouldUseExtendedName])
+        return name;
+
     NSString *actionName = [self getActionName];
-    if (actionName)
-        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), actionName, name];
+    if (actionName.length > 0 && ([name rangeOfString:actionName].location == NSNotFound))
+        return [NSString stringWithFormat:OALocalizedString(combineKey), actionName, name];
+    
     return name;
+}
+
+- (BOOL)shouldUseExtendedName
+{
+    return _actionType && _actionType.shouldUseExtendedName;
 }
 
 - (BOOL) hasCustomName
@@ -170,12 +190,12 @@ static NSInteger SEQ = 0;
 
 -(NSString *) getActionText
 {
-    return [self getName];
+    return [self getExtendedNameWithDash:NO];
 }
 
 -(NSString *) getActionStateName
 {
-    return [self getName];
+    return [self getExtendedNameWithDash:NO];
 }
 
 - (CLLocation *)getMapLocation

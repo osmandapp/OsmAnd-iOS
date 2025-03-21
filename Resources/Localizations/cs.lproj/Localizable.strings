@@ -2839,7 +2839,7 @@
 "bearing_secondary_desc" = "Použitý formát dat můžete změnit v: %@ – %@ – %@.";
 "coordinates_widget_secondary_desc" = "Formát souřadnic můžete změnit v %@ – %@ – %@.";
 "widget_secondary_desc_part_of" = "Součást modulu %@.";
-"add_widget" = "Přidat nástroj";
+"add_widget" = "Přidat widget";
 "go_to_marker_location" = "Přejít na umístění značky";
 "side_marker_eta" = "Předpokládaný čas příjezdu";
 "map_marker_1st" = "První mapová značka";

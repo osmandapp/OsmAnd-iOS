@@ -11,7 +11,7 @@
 // Favorites
 "shared_string_color" = "Цвет";
 "fav_colors" = "Цвета";
-"shared_string_name" = "Имя";
+"shared_string_name" = "Название";
 "fav_group" = "Группа";
 "fav_groups" = "Группы";
 "favorite" = "Избранное";

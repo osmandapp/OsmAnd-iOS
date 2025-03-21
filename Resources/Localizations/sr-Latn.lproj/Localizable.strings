@@ -2985,7 +2985,7 @@
 "gitHub_discussion" = "Razgovor na Githubu";
 "shared_string_dark" = "Tamna";
 "shared_string_light" = "Svetla";
-"add_widget" = "Dodaj vidžet";
+"add_widget" = "Dodajte widžet";
 "map_widget_sunset_desc" = "Prikazuje vreme sledećeg zalaska sunca ili preostalo vreme do zalaska sunca.";
 "map_widget_sunrise_sunset_time_left" = "Preostalo vreme";
 "widget_panels_descr" = "Selektujte deo ekrana da bi dodali ili rasporedili vidžete.";

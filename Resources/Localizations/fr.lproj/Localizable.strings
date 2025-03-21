@@ -3501,3 +3501,4 @@
 "add_smart_folder" = "Ajouter un dossier intelligent";
 "save_as_smart_folder" = "Enregistre en tant que dossier intelligent";
 "new_smart_folder" = "Nouveau dossier intelligent";
+"no_matched_tracks" = "Aucun itinéraire correspondant";

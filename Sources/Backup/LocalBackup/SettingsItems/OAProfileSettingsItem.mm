@@ -158,7 +158,11 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
     OAAppSettings *settings = OAAppSettings.sharedManager;
     const auto& params = router->getParameters();
     [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
+        NSString *paramName = key;
+        if ([key hasPrefix:kRoutingPreferencePrefix])
+        {
+            paramName = [key substringFromIndex:kRoutingPreferencePrefix.length];
+        }
         const auto& param = params.find(std::string([paramName UTF8String]));
         if (param != params.end())
         {
@@ -377,7 +381,7 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
     {
         if ([appModeBeanPrefsIds containsObject:key])
             continue;
-
+        
         OACommonPreference *setting = [prefs objectForKey:key];
         if (setting && !setting.global)
         {
@@ -425,12 +429,12 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
             if (p.type == RoutingParameterType::BOOLEAN)
             {
                 OACommonBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
-                json[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [boolSetting toStringValue:self.appMode];
+                json[[kRoutingPreferencePrefix stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [boolSetting toStringValue:self.appMode];
             }
             else
             {
                 OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
-                json[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [stringSetting get:self.appMode];
+                json[[kRoutingPreferencePrefix stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [stringSetting get:self.appMode];
                 
             }
         }

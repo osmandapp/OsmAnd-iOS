@@ -5431,7 +5431,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         OACommonBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
         if (!value)
         {
-            value = [OACommonBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+            value = [OACommonBoolean withKey:[NSString stringWithFormat:@"%@%@", kRoutingPreferencePrefix, attrName] defValue:defaultValue];
             [_customBooleanRoutingProps setObject:value forKey:attrName];
         }
         return value;
@@ -5445,7 +5445,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         OACommonString *value = [_customRoutingProps objectForKey:attrName];
         if (!value)
         {
-            value = [OACommonString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+            value = [OACommonString withKey:[NSString stringWithFormat:@"%@%@", kRoutingPreferencePrefix, attrName] defValue:defaultValue];
             [_customRoutingProps setObject:value forKey:attrName];
         }
         return value;

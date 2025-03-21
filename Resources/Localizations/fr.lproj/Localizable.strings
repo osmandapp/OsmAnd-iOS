@@ -3487,3 +3487,17 @@
 "shared_string_cache" = "Cache";
 "shared_string_maximum" = "Maximum";
 "shared_string_open_street_map" = "OpenStreetMap";
+"lang_war" = "Waray";
+"lang_pnb" = "Punjabi";
+"lang_yo" = "Yoruba";
+"lang_tt" = "Tatar";
+"lang_tl" = "Tagalog";
+"lang_sat" = "Santali";
+"lang_sw" = "Swahili";
+"ltr_or_rtl_combine_via_space" = "%@ %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"point_num" = "Point %d";
+"add_smart_folder" = "Ajouter un dossier intelligent";
+"save_as_smart_folder" = "Enregistre en tant que dossier intelligent";
+"new_smart_folder" = "Nouveau dossier intelligent";

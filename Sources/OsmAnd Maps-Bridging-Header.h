@@ -72,6 +72,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OARendererRegistry.h"
 #import "OAMapObject.h"
+#import "OAGPXAppearanceCollection.h"
 #import "OAColorCollectionHandler.h"
 #import "OAConcurrentCollections.h"
 #import "OASvgHelper.h"

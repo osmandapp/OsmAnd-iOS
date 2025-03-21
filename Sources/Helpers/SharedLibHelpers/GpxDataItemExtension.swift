@@ -9,7 +9,13 @@
 import OsmAndShared
 
 extension Array where Element: GpxDataItem {
-    func toTrackItems() -> [TrackItem] { compactMap { TrackItem(file: $0.file) }}
+    func toTrackItems() -> [TrackItem] {
+        return compactMap {
+            let trackItem = TrackItem(file: $0.file)
+            trackItem.dataItem = $0
+            return trackItem
+        }
+    }
 }
 
 @objc(OASGpxDataItem)

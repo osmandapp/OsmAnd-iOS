@@ -3286,3 +3286,4 @@
 "help_article_map_routes_name" = "Маршруты";
 "avg_sensor_speed" = "Скорость, средняя";
 "cloud_sync_progress" = "Синхронизация… %@";
+"add_widget" = "Добавить виджет";

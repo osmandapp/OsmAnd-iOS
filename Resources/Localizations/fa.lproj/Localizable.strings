@@ -1007,7 +1007,7 @@
 "srtm_color_scheme" = "رنگ‌بندی";
 "shared_string_appearance" = "ظاهر";
 "exit_at" = "ایستگاه پیاده‌شدن";
-"public_transport_warning_title" = "ناوبری حمل‌ونقل عمومی هم‌اکنون آزمایش بتا را سپری می‌کند و بعید نیست که خطاها و نقایصی داشته باشد.";
+"public_transport_warning_title" = "ناوبری حمل‌ونقل عمومی هم‌اکنون آزمایش بتا را سپری می‌کند و شاید خطا یا ایرادهایی داشته باشد.";
 "active_markers" = "نشانه‌های فعال";
 "rendering_attr_piste_type_connection_name" = "اتصال";
 "rendering_attr_piste_difficulty_connection_name" = "اتصال";
@@ -1993,3 +1993,6 @@
 "max_sensor_temperature" = "دما، حداکثر";
 "avg_sensor_temperature" = "دما، میانگین";
 "max_sensor_bycicle_power" = "قدرت دوچرخه، حداکثر";
+"precipitation_widget_desc" = "نمایش بارش کنونی در مرکز نقشه.";
+"map_settings_weather_precip" = "بارش";
+"precipitation_layer" = "لایه بارش";

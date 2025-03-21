@@ -260,7 +260,7 @@
 "route_from" = "Kust:";
 "lat" = "Lai";
 "lon" = "Pik";
-"error_calculating_route" = "Teekonna arvutamine ebaõnnestus.";
+"error_calculating_route" = "Teekonna koostamine ei õnnestunud.";
 "internet_connection_required_for_online_route" = "Veebipõhine navigeerimine ei tööta ilma võrguühenduseta.";
 "empty_route_calculated" = "Arvutatud teekond on tühi.";
 "destination_point" = "Sihtkoht %@";
@@ -3242,3 +3242,8 @@
 "app_mode_ufo" = "UFO";
 "routing_attr_motor_type_electric_name" = "Elekter";
 "cloud_contains_newer_changes" = "OsmAnd Cloudi versioonis on uuemad muudatused.";
+"transport_hazmat_yes_desc" = "Vali sobilik kategooria.";
+"routing_attr_motor_type_name" = "Kasutatav mootorikütus";
+"routing_attr_motor_type_description" = "Vali kasutatav kütuseliik - see on vajalik süsinikdioksiidi heitmete arvutamiseks.";
+"rendering_attr_depthContourColorScheme_description" = "Sügavuste kontuurjoonte värvid";
+"compass_visible_if_map_rotated" = "Nähtav, kui kaart on pööratud";

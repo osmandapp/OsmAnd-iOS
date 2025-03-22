@@ -40,6 +40,11 @@
     return CGSizeMake(48., 48.);
 }
 
+- (CGFloat)getSpacing
+{
+    return 9;
+}
+
 - (CGSize)calculateItemSizeForIndexPath:(NSIndexPath *)indexPath
 {
     return [self getItemSize];

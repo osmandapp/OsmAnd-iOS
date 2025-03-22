@@ -11,8 +11,6 @@
 #import "UITableViewCell+getTableView.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static const NSInteger spacing = 9;
-
 @interface OACollectionSingleLineTableViewCell () <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
@@ -88,6 +86,7 @@ static const NSInteger spacing = 9;
             } else {
                 layout.itemSize = itemSize;
             }
+            CGFloat spacing = [_collectionHandler getSpacing];
             layout.minimumLineSpacing = spacing;
             layout.minimumInteritemSpacing = spacing;
             
@@ -175,6 +174,7 @@ static const NSInteger spacing = 9;
     CGFloat height = self.collectionView.contentSize.height;
     if (_collectionHandler)
     {
+        CGFloat spacing = [_collectionHandler getSpacing];
         CGSize itemSize = [_collectionHandler getItemSize];
         height = itemSize.height;
         

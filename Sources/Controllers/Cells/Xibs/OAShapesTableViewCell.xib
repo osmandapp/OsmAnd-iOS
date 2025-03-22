@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -19,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="wsy-HV-1Sf">
-                        <rect key="frame" x="16" y="50.5" width="288" height="49.5"/>
+                        <rect key="frame" x="20" y="50.5" width="280" height="49.5"/>
                         <color key="backgroundColor" name="groupBg"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="48" id="LB5-pK-a5G"/>
@@ -35,13 +35,13 @@
                         </collectionViewFlowLayout>
                     </collectionView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OF6-fQ-ieg">
-                        <rect key="frame" x="16" y="11" width="140" height="20.5"/>
+                        <rect key="frame" x="20" y="11" width="136" height="20.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <color key="textColor" name="textColorPrimary"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RwZ-P1-H2W">
-                        <rect key="frame" x="164" y="11" width="140" height="20.5"/>
+                        <rect key="frame" x="164" y="11" width="136" height="20.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
@@ -51,13 +51,13 @@
                     <constraint firstItem="OF6-fQ-ieg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="1GG-4d-Lmo"/>
                     <constraint firstItem="OF6-fQ-ieg" firstAttribute="width" secondItem="RwZ-P1-H2W" secondAttribute="width" id="1zB-BF-frR"/>
                     <constraint firstItem="wsy-HV-1Sf" firstAttribute="top" secondItem="RwZ-P1-H2W" secondAttribute="bottom" constant="19" id="4Rs-X9-oar"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="wsy-HV-1Sf" secondAttribute="trailing" id="6BN-St-5Iu"/>
-                    <constraint firstItem="wsy-HV-1Sf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="O2p-go-g4J"/>
+                    <constraint firstAttribute="trailing" secondItem="wsy-HV-1Sf" secondAttribute="trailing" constant="20" id="6BN-St-5Iu"/>
+                    <constraint firstItem="wsy-HV-1Sf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="O2p-go-g4J"/>
                     <constraint firstAttribute="bottom" secondItem="wsy-HV-1Sf" secondAttribute="bottom" constant="8" id="RDe-CT-mgO"/>
                     <constraint firstItem="wsy-HV-1Sf" firstAttribute="top" secondItem="OF6-fQ-ieg" secondAttribute="bottom" constant="19" id="UNf-am-jHf"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="RwZ-P1-H2W" secondAttribute="trailing" id="W2M-Pn-Zex"/>
+                    <constraint firstAttribute="trailing" secondItem="RwZ-P1-H2W" secondAttribute="trailing" constant="20" id="W2M-Pn-Zex"/>
                     <constraint firstItem="RwZ-P1-H2W" firstAttribute="leading" secondItem="OF6-fQ-ieg" secondAttribute="trailing" constant="8" id="a5l-qm-nRP"/>
-                    <constraint firstItem="OF6-fQ-ieg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="bLa-7J-Pxa"/>
+                    <constraint firstItem="OF6-fQ-ieg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="bLa-7J-Pxa"/>
                     <constraint firstItem="RwZ-P1-H2W" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="oTw-Lc-dNe"/>
                 </constraints>
             </tableViewCellContentView>

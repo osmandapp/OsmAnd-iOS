@@ -3645,3 +3645,5 @@
 "product_title_plus" = "Maps+";
 "rendering_attr_horse_scale_impossible_name" = "Impossible";
 "rendering_attr_smoothness_excellent_name" = "Excellent";
+"shared_string_items" = "Éléments";
+"add_hidden_group_info" = "Le point ajouté se trouve dans \"%@\". Afficher ce groupe pour rendre le point visible sur la carte.";

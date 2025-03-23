@@ -21,6 +21,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private let LAST_USED_KEY = "last_used_icons"
     private let SPECIAL_KEY = "special"
     private let SYMBOLS_KEY = "symbols"
+    private let TRAVEL_KEY = "travel"
     private let ACTIVITIES_KEY = "activities"
     private let PROFILE_ICONS_KEY = "profile_icons"
     private let SAMPLE_ICON_KEY = "ic_sample"
@@ -96,7 +97,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     private func initAssetsCategories() {
-        readCategoriesFromAssets([SPECIAL_KEY, SYMBOLS_KEY])
+        readCategoriesFromAssets([SPECIAL_KEY, SYMBOLS_KEY, TRAVEL_KEY])
     }
     
     private func initActivitiesCategory() {
@@ -115,6 +116,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private func initPoiCategories() {
         if let poiCategories = OAPOIHelper.sharedInstance().poiCategories {
             for poiCategory in poiCategories {
+                guard !["access_private", "osmwiki", "user_defined_other"].contains(poiCategory.name) else { continue }
                 if var poiTypeList = poiCategory.poiTypes {
                     poiTypeList.sort { $0.nameLocalized < $1.nameLocalized }
                     var iconKeys = [String]()

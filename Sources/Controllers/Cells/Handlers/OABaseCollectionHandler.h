@@ -22,6 +22,7 @@
 
 - (NSString *)getCellIdentifier;
 - (CGSize)getItemSize;
+- (CGFloat)getSpacing;
 - (CGSize)calculateItemSizeForIndexPath:(NSIndexPath *)indexPath;
 - (UICollectionView *)getCollectionView;
 - (void)setCollectionView:(UICollectionView *)collectionView;

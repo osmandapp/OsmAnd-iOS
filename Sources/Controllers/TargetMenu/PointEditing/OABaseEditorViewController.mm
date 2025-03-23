@@ -378,10 +378,12 @@
     _poiIconCollectionHandler.delegate = self;
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
-    _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
     [_poiIconCollectionHandler setItemSizeWithSize:48];
-    [_poiIconCollectionHandler setIconSizeWithSize:30];
+    [_poiIconCollectionHandler setIconBackgroundSizeWithSize:36];
+    [_poiIconCollectionHandler setIconSizeWithSize:24];
+    [_poiIconCollectionHandler setSpacingWithSpacing:9];
     
     _selectedIconName = [self getDefaultIconName];
     self.editIconName = _selectedIconName;

@@ -435,10 +435,12 @@
     _poiIconCollectionHandler.delegate = self;
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
-    _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
     [_poiIconCollectionHandler setItemSizeWithSize:48];
-    [_poiIconCollectionHandler setIconSizeWithSize:30];
+    [_poiIconCollectionHandler setIconBackgroundSizeWithSize:36];
+    [_poiIconCollectionHandler setIconSizeWithSize:24];
+    [_poiIconCollectionHandler setSpacingWithSpacing:6];
 }
 
 - (void)generateData
@@ -695,6 +697,7 @@
         cell.topLabel.text = item[@"title"];
         [cell topButtonVisibility:YES];
         [cell.bottomButton setTitle:item[@"descr"] forState:UIControlStateNormal];
+        cell.collectionView.contentInset = UIEdgeInsetsMake(0, 20, 0, 20);
         [cell.collectionView reloadData];
         [cell layoutIfNeeded];
         return cell;
@@ -1332,10 +1335,18 @@
     _wasChanged = YES;
     [self applyLocalization];
     [self generateData];
-    [self.tableView reloadRowsAtIndexPaths:@[
-        [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex],
-        [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]]
-                          withRowAnimation:UITableViewRowAnimationNone];
+    
+    if (collectionView == [_colorCollectionHandler getCollectionView])
+    {
+        _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+        [[_poiIconCollectionHandler getCollectionView] reloadData];
+        
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    else if (collectionView == [_poiIconCollectionHandler getCollectionView]) {
+        [[_poiIconCollectionHandler getCollectionView] reloadData];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void)reloadCollectionData

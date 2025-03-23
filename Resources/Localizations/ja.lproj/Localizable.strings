@@ -2854,7 +2854,7 @@
 "shared_string_speedometer" = "スピードメーター";
 "cloud_create_account" = "アカウントを作成";
 "get_osmand_cloud" = "OsmAnd Cloudを入手";
-"add_widget" = "ウィジェットを追加";
+"add_widget" = "ウィジェットの追加";
 "history_clear_alert_title" = "全ての履歴を削除";
 "history_clear_alert_message" = "全ての履歴を削除して本当によろしいですか？";
 "travel_guides_beta" = "旅行ガイド(ベータ)";

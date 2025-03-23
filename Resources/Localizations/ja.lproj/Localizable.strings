@@ -2988,3 +2988,4 @@
 "navigation_position" = "ナビゲーション時位置";
 "help_article_navigation_routing_car_based_routing_name" = "車のルーティング(トラック、オートバイ)";
 "rendering_attr_showClimbingRoutes_name" = "登山ルート";
+"rendering_attr_showClimbingRoutes_description" = "登山ルートを表示します";

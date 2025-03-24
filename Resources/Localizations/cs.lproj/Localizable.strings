@@ -3630,3 +3630,6 @@
 "profile_icons" = "Ikona profilu";
 "terrain_map" = "Mapa terénu (3D)";
 "add_hidden_group_info" = "Přidaný bod naleznete v „%@“. Zrušte skrytí vybrané skupiny pro zobrazení na mapě.";
+"shared_string_unchanged" = "Nezměněno";
+"each_favourite_point_own_icon" = "Každý oblíbený bod si ponechá svoji vlastní ikonu.";
+"unchanged_parameter_summary" = "Každá stopa si uchová své vlastní parametry.";

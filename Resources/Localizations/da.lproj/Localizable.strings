@@ -3649,3 +3649,6 @@
 "profile_icons" = "Profilikon";
 "terrain_map" = "Terrænkort (3D)";
 "add_hidden_group_info" = "Det tilføjede punkt kan findes i \"%s\". Fjern skjulning for den valgte gruppe for at vise den på kortet.";
+"unchanged_parameter_summary" = "Hvert spor beholder sine egne parametre.";
+"shared_string_unchanged" = "Uændret";
+"each_favourite_point_own_icon" = "Hvert favoritpunkt vil have sit eget ikon.";

@@ -129,6 +129,7 @@ extension GalleryGridViewController: UICollectionViewDelegate {
         
         let navController = UINavigationController(rootViewController: imageCarouselController)
         navController.modalPresentationStyle = .custom
+        navController.modalTransitionStyle = .crossDissolve
         navController.modalPresentationCapturesStatusBarAppearance = true
         OARootViewController.instance().mapPanel?.navigationController?.present(navController, animated: true)
     }

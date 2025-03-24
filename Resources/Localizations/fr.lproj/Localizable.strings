@@ -1767,7 +1767,7 @@
 "shared_string_resources" = "Téléchargés";
 "public_transport_warning_descr_blog" = "Pour savoir comment OsmAnd calcule les itinéraires, visitez notre blog.";
 "calc_pedestrian_route" = "Calculer l'itinéraire piéton";
-"public_transport_ped_route_title" = "L\'itinéraire piéton est approximativement de %@ et peut-être plus rapide qu\'en transport en commun";
+"public_transport_ped_route_title" = "L'itinéraire piéton est approximativement de %@ et peut être plus rapide qu'en transport en commun";
 "download_regular_maps" = "Cartes standards";
 "product_desc_antarctica" = "Téléchargement illimité de cartes pour l'Antarctique";
 "help_what_is_new" = "Nouveautés";
@@ -3647,3 +3647,6 @@
 "rendering_attr_smoothness_excellent_name" = "Excellent";
 "shared_string_items" = "Éléments";
 "add_hidden_group_info" = "Le point ajouté se trouve dans \"%@\". Afficher ce groupe pour rendre le point visible sur la carte.";
+"shared_string_unchanged" = "Inchangé";
+"each_favourite_point_own_icon" = "Les points favoris garderont leur propre icône.";
+"unchanged_parameter_summary" = "Chaque trace conservera ses propres paramètres.";

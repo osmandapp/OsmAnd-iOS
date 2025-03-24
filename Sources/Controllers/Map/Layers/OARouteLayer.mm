@@ -1007,6 +1007,8 @@ struct DrawPathData
         CLLocationCoordinate2D coord = self.mapViewController.mapLayers.myPositionLayer.getActiveMarkerLocation;
         CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude];
         int currentRoute = [route getCurrentRouteForLocation:currentLocation];
+        EOARouteService routeService = (EOARouteService)_routingHelper.getAppMode.getRouterService;
+        BOOL directToActive = (routeService == DIRECT_TO);
         if (currentRoute > 0)
         {
             CLLocation *previousRouteLocation = locations[currentRoute - 1];
@@ -1022,6 +1024,11 @@ struct DrawPathData
             }
         } else {
             lastProj = nil;
+        }
+        if (directToActive)
+        {
+            lastProj = nil;
+            currentRoute = 0;
         }
         _lastProj = lastProj;
         BOOL currentRouteChanged = _lastCurrentRoute != currentRoute;

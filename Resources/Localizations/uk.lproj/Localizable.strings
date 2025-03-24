@@ -3653,3 +3653,6 @@
 "profile_icons" = "Значок профілю";
 "add_hidden_group_info" = "Доданий пункт можна знайти в \"%@\". Відобразити вибрану групу, щоб показати її на карті.";
 "terrain_map" = "Карта рельєфу (3D)";
+"shared_string_unchanged" = "Без змін";
+"unchanged_parameter_summary" = "Кожен трек збереже власні параметри.";
+"each_favourite_point_own_icon" = "Кожна улюблена точка матиме власний значок.";

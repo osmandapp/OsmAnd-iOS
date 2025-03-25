@@ -39,8 +39,9 @@
     for (int i = 0; i < roads.size(); i++)
     {
         auto road = roads[i];
-        BOOL plus = road->getStartPointIndex() < road->getEndPointIndex();
-        for (int j = road->getStartPointIndex() + 1; j <= road->getEndPointIndex(); )
+        int startPointIndex = MIN(road->getStartPointIndex(), road->getEndPointIndex());
+        int endPointIndex = MAX(road->getEndPointIndex(), road->getStartPointIndex());
+        for (int j = startPointIndex + 1; j <= endPointIndex; j++)
         {
             auto obj = road->object;
             auto proj = getProjectionPoint(px, py, obj->pointsX[j-1], obj->pointsY[j-1], obj->pointsX[j], obj->pointsY[j]);
@@ -52,7 +53,6 @@
                 _currentSegment = j;
                 _currentPoint = proj;
             }
-            j += plus ? 1 : -1;
         }
     }
 }
@@ -106,7 +106,7 @@
         return nil;
     
     CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(0, 0) altitude:_startLocation.altitude horizontalAccuracy:-1 verticalAccuracy:0 course:0 speed:_startLocation.speed timestamp:[NSDate date]];
-    float meters = _startLocation.speed * (([[NSDate date] timeIntervalSince1970] - [_startLocation.timestamp timeIntervalSince1970]) / 1000);
+    float meters = _startLocation.speed * ([[NSDate date] timeIntervalSince1970] - [_startLocation.timestamp timeIntervalSince1970]);
     float proc = [self proceedMeters:meters l:&loc];
     if (proc < 0 || proc >= 100) {
         return nil;

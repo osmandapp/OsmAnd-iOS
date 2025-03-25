@@ -49,7 +49,6 @@
 #import "OASharedUtil.h"
 #import "OAMapSource.h"
 #import "OAObservable.h"
-#import "OsmAnd_Maps-Swift.h"
 
 #include <algorithm>
 #include <QList>
@@ -88,6 +87,8 @@
 #define kAppData @"app_data"
 #define kSubfolderPlaceholder @"_%_"
 #define kBuildVersion @"buildVersion"
+
+NSString *const kXmlColon = @"_-_";
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -1138,6 +1139,8 @@
 {
     if ([groupName containsString:@"/"])
         return [groupName stringByReplacingOccurrencesOfString:@"/" withString:kSubfolderPlaceholder];
+    if ([groupName containsString:@":"])
+        return [groupName stringByReplacingOccurrencesOfString:@":" withString:kXmlColon];
 
     return groupName;
 }
@@ -1146,6 +1149,8 @@
 {
     if ([fileName containsString:kSubfolderPlaceholder])
         return [fileName stringByReplacingOccurrencesOfString:kSubfolderPlaceholder withString:@"/"];
+    if ([fileName containsString:kXmlColon])
+        return [fileName stringByReplacingOccurrencesOfString:kXmlColon withString:@":"];
 
     return fileName;
 }

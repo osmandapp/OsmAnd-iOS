@@ -32,7 +32,6 @@
 #import "OAMapPanelViewController.h"
 #import "OAProfileAppearanceViewController.h"
 #import "OACopyProfileBottomSheetViewControler.h"
-#import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OARendererRegistry.h"
@@ -62,7 +61,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate, OASettingsImportExportDelegate>
+@interface OAConfigureProfileViewController () <OACopyProfileBottomSheetDelegate, OASettingsImportExportDelegate>
 
 @end
 
@@ -637,10 +636,33 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
     else if ([targetScreenKey isEqualToString:@"delete_profile"])
     {
-        OADeleteProfileBottomSheetViewController *bottomSheet = [[OADeleteProfileBottomSheetViewController alloc] initWithMode:_appMode];
-        bottomSheet.delegate = self;
-        [self addUnderlay];
-        [bottomSheet show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@?", OALocalizedString(@"profile_alert_delete_title")]
+                                                                       message:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:nil
+        ];
+        UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete")
+                                                              style:UIAlertActionStyleDestructive
+                                                            handler:^(UIAlertAction * _Nonnull action) {
+            [OAApplicationMode deleteCustomModes:[NSArray arrayWithObject:_appMode]];
+            [_cpyProfileViewUnderlay removeFromSuperview];
+            for (UIViewController *vc in [[OARootViewController instance].navigationController viewControllers])
+            {
+                if ([vc isKindOfClass:OAMainSettingsViewController.class])
+                {
+                    [[OARootViewController instance].navigationController popToViewController:vc animated:YES];
+                    break;
+                }
+            }
+        }];
+        
+        [alert addAction:cancelAction];
+        [alert addAction:deleteAction];
+        alert.preferredAction = deleteAction;
+        [self presentViewController:alert animated:YES completion:nil];
     }
     else
     {
@@ -678,13 +700,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 }
 
 - (void) onCopyProfileDismissed
-{
-    [_cpyProfileViewUnderlay removeFromSuperview];
-}
-
-#pragma mark - OADeleteProfileBottomSheetDelegate
-
-- (void) onDeleteProfileDismissed
 {
     [_cpyProfileViewUnderlay removeFromSuperview];
 }

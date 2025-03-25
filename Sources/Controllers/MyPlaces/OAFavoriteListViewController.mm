@@ -433,6 +433,7 @@ static UIViewController *parentController;
     _searchController.searchBar.delegate = self;
     _searchController.obscuresBackgroundDuringPresentation = NO;
     self.tabBarController.navigationItem.searchController = _searchController;
+    self.tabBarController.navigationItem.hidesSearchBarWhenScrolling = NO;
     self.definesPresentationContext = YES;
     [self setupSearchController:NO filtered:NO];
     [self addAccessibilityLabels];

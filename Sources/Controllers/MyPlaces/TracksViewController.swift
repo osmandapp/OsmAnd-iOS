@@ -773,6 +773,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
         tabBarController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController

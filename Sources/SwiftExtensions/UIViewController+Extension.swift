@@ -157,11 +157,12 @@ extension UINavigationController {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .viewBg
-        
+        // swiftlint:disable all
         appearance.titleTextAttributes = [
             .foregroundColor: UIColor.textColorPrimary,
-            .font: UIFont.preferredFont(forTextStyle: .subheadline)
+            .font: UIFont.scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)!
         ]
+        // swiftlint:enable all
         
         let blurAppearance = UINavigationBarAppearance()
         blurAppearance.shadowColor = nil

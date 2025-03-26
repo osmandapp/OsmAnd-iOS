@@ -85,7 +85,14 @@ final class ImageCarouselViewController: UIPageViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        gradientLayer.frame = metadataContainerView.bounds
+        let gradientHeight = 112 + view.safeAreaInsets.bottom
+        
+        gradientLayer.frame = CGRect(
+            x: metadataContainerView.bounds.origin.x,
+            y: view.frame.height - gradientHeight,
+            width: metadataContainerView.bounds.width,
+            height: gradientHeight
+        )
     }
     
     deinit {
@@ -121,7 +128,7 @@ final class ImageCarouselViewController: UIPageViewController {
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
         
-        metadataContainerView.layer.insertSublayer(gradientLayer, at: 0)
+        view.layer.insertSublayer(gradientLayer, below: metadataContainerView.layer)
     }
     
     private func configureNavigationBar() {
@@ -137,7 +144,7 @@ final class ImageCarouselViewController: UIPageViewController {
         navigationItem.leftBarButtonItem = closeBarButton
         
         var firstSectionItems = [UIAction]()
-        let detailsAction = UIAction(title: localizedString("shared_string_details"), image: UIImage.icCustomInfoOutlined) { [weak self] _ in
+        let detailsAction = UIAction(title: localizedString("shared_string_details"), image: .icCustomInfoOutlined) { [weak self] _ in
             guard let self,
                   let card = getCardForIndex(currentIndex),
                   let parent else { return }
@@ -158,7 +165,7 @@ final class ImageCarouselViewController: UIPageViewController {
         firstSectionItems.append(openInBrowserAction)
         
         let firstSection = UIMenu(title: "", options: .displayInline, children: firstSectionItems)
-        let downloadAction = UIAction(title: localizedString("shared_string_download"), image: UIImage.icCustomDownload) { [weak self] _ in
+        let downloadAction = UIAction(title: localizedString("shared_string_download"), image: .icCustomDownload) { [weak self] _ in
             guard let self, let card = getCardForIndex(currentIndex), !card.imageUrl.isEmpty  else { return }
             GalleryContextMenuProvider.downloadImage(urlString: card.imageUrl, view: view)
         }

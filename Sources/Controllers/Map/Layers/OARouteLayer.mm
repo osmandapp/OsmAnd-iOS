@@ -66,6 +66,9 @@ struct DrawPathData
     std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _transportRouteMarkers;
     
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _projectionPointCollection;
+    std::shared_ptr<OsmAnd::MapMarker> _projectedPointMarker;
+    
     sk_sp<SkImage> _transportTransferIcon;
     sk_sp<SkImage> _transportShieldIcon;
     
@@ -183,6 +186,8 @@ struct DrawPathData
     _actionLinesCollection->setPriority(_linesPriority);
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _transportRouteMarkers->setPriority(_linesPriority);
+    
+    [self removeProjectedPointCollection];
 
     _routeAttributes = nil;
     _walkAttributes = nil;
@@ -443,6 +448,44 @@ struct DrawPathData
             line->setStartingDistance((float) startingDistance);
         if (line->lineId < lineId)
             line->setIsHidden(true);
+    }
+}
+
+- (void)setProjectedPointMarkerLocation:(double)lat longitude:(double)lon
+{
+    if (_projectedPointMarker)
+        _projectedPointMarker->setPosition(OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(lon), OsmAnd::Utilities::get31TileNumberY(lat)));
+}
+
+- (void)setProjectedPointMarkerVisibility:(BOOL)visible
+{
+    if (_projectedPointMarker)
+        _projectedPointMarker->setIsHidden(!visible);
+}
+
+- (void)recreateProjectedPointCollection
+{
+    if (_projectionPointCollection)
+        [self.mapView removeKeyedSymbolsProvider:_projectionPointCollection];
+    
+    _projectionPointCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _projectionPointCollection->setPriority(_linesPriority);
+    OsmAnd::MapMarkerBuilder builder;
+    builder.setBaseOrder(self.pointsOrder - 2110);
+    builder.setIsAccuracyCircleSupported(NO);
+    builder.setIsHidden(YES);
+    builder.setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_pedestrian_location"]));
+    _projectedPointMarker = builder.buildAndAddToCollection(_projectionPointCollection);
+    [self.mapView addKeyedSymbolsProvider:_projectionPointCollection];
+}
+
+- (void)removeProjectedPointCollection
+{
+    if (_projectionPointCollection)
+    {
+        [self.mapView removeKeyedSymbolsProvider:_projectionPointCollection];
+        _projectionPointCollection = nullptr;
+        _projectedPointMarker = nullptr;
     }
 }
 
@@ -1034,9 +1077,24 @@ struct DrawPathData
         BOOL currentRouteChanged = _lastCurrentRoute != currentRoute;
         _lastCurrentRoute = currentRoute;
         
+        if (directToActive)
+        {
+            if (!_projectionPointCollection)
+                [self recreateProjectedPointCollection];
+            
+            NSArray<NSNumber *> *projectionOnRoute = [self calculateProjectionOnRoutePoint];
+            if (projectionOnRoute != nil)
+                [self setProjectedPointMarkerLocation:[projectionOnRoute[0] doubleValue] longitude:[projectionOnRoute[1] doubleValue]];
+            
+            [self setProjectedPointMarkerVisibility:(projectionOnRoute != nil)];
+        }
+        else
+        {
+            [self removeProjectedPointCollection];
+        }
+        
         if (routeUpdated)
         {
-            
             [self.mapView removeKeyedSymbolsProvider:_collection];
             _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
             _collection->setPriority(_linesPriority);
@@ -1217,6 +1275,24 @@ struct DrawPathData
 
         _pathsDataCache = pathsData;
     }
+}
+
+- (nullable NSArray<NSNumber *> *)calculateProjectionOnRoutePoint
+{
+    CLLocation *ll = [_routingHelper getLastFixedLocation];
+    OARouteCalculationResult *route = [_routingHelper getRoute];
+    NSArray<CLLocation *> *locs = [route getImmutableAllLocations];
+    int cr = route.currentRoute;
+    int locIndex = (int)locs.count - 1;
+    if ([route getIntermediatePointsToPass] > 0)
+        locIndex = [route getIndexOfIntermediate:[route getIntermediatePointsToPass] - 1];
+    if (ll != nil && cr > 0 && cr < locs.count && locIndex >= 0 && locIndex < locs.count)
+    {
+        CLLocation *endLocation = locs[cr];
+        return @[ @(endLocation.coordinate.latitude), @(endLocation.coordinate.longitude) ];
+    }
+    
+    return nil;
 }
 
 - (BOOL) isColoringAvailable:(OARouteCalculationResult *)route routeColoringType:(OAColoringType *)routeColoringType attributeName:(NSString *)attributeName

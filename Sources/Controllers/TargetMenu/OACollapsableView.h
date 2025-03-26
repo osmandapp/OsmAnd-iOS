@@ -11,7 +11,7 @@
 #define kMarginLeft 60.0f
 #define kMarginRight 15.0f
 #define kMarginTop 10.0f
-#define kCollapsableTitleMarginRight 35.0f
+#define kCollapsableTitleMarginRight 90.0f
 
 @interface OACollapsableView : UIView
 

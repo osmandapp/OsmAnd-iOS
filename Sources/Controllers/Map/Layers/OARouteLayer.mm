@@ -1051,7 +1051,7 @@ struct DrawPathData
         CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude];
         int currentRoute = [route getCurrentRouteForLocation:currentLocation];
         EOARouteService routeService = (EOARouteService)_routingHelper.getAppMode.getRouterService;
-        BOOL directToActive = (routeService == DIRECT_TO);
+        BOOL directToActive = routeService == DIRECT_TO;
         if (currentRoute > 0)
         {
             CLLocation *previousRouteLocation = locations[currentRoute - 1];
@@ -1083,7 +1083,7 @@ struct DrawPathData
                 [self recreateProjectedPointCollection];
             
             NSArray<NSNumber *> *projectionOnRoute = [self calculateProjectionOnRoutePoint];
-            if (projectionOnRoute != nil)
+            if (projectionOnRoute.count >= 2)
                 [self setProjectedPointMarkerLocation:[projectionOnRoute[0] doubleValue] longitude:[projectionOnRoute[1] doubleValue]];
             
             [self setProjectedPointMarkerVisibility:(projectionOnRoute != nil)];
@@ -1282,6 +1282,9 @@ struct DrawPathData
     CLLocation *ll = [_routingHelper getLastFixedLocation];
     OARouteCalculationResult *route = [_routingHelper getRoute];
     NSArray<CLLocation *> *locs = [route getImmutableAllLocations];
+    if (locs.count == 0)
+        return nil;
+    
     int cr = route.currentRoute;
     int locIndex = (int)locs.count - 1;
     if ([route getIntermediatePointsToPass] > 0)
@@ -1289,7 +1292,7 @@ struct DrawPathData
     if (ll != nil && cr > 0 && cr < locs.count && locIndex >= 0 && locIndex < locs.count)
     {
         CLLocation *endLocation = locs[cr];
-        return @[ @(endLocation.coordinate.latitude), @(endLocation.coordinate.longitude) ];
+        return @[@(endLocation.coordinate.latitude), @(endLocation.coordinate.longitude)];
     }
     
     return nil;

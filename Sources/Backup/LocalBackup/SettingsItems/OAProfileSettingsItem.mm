@@ -385,39 +385,49 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         OACommonPreference *setting = [prefs objectForKey:key];
         if (setting && !setting.global)
         {
-            NSString *stringValue = [setting toStringValue:self.appMode];
-            if (stringValue)
-            {
-                if (![self updateJSONWithPlatformCompatibilityKeys:json key:key value:stringValue]) {
-                    if (([key isEqualToString:@"voice_provider"] || [setting.key isEqualToString:@"voice_provider"]) && ![stringValue hasSuffix:@"-tts"]) {
-                        stringValue = [stringValue stringByAppendingString:@"-tts"];
+            if ([setting isSetForMode:self.appMode shouldCompareWithDefaultValue:YES]) {
+                NSString *stringValue = [setting toStringValue:self.appMode];
+//                if (stringValue)
+//                {
+                    if (![self updateJSONWithPlatformCompatibilityKeys:json key:key value:stringValue]) {
+                        if (([key isEqualToString:@"voice_provider"] || [setting.key isEqualToString:@"voice_provider"]) && ![stringValue hasSuffix:@"-tts"]) {
+                            stringValue = [stringValue stringByAppendingString:@"-tts"];
+                        }
+                        json[key] = stringValue;
                     }
-                    json[key] = stringValue;
                 }
-            }
+//            } else {
+//                NSLog(@"");
+//            }
         }
     }
     
     [OsmAndApp.instance.data addPreferenceValuesToDictionary:json mode:self.appMode];
     OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
-    NSMutableString *enabledTransport = [NSMutableString new];
     if ([styleSettings isCategoryEnabled:TRANSPORT_CATEGORY])
     {
+        NSMutableString *enabledTransport = [NSMutableString new];
         NSArray<OAMapStyleParameter *> *transportParams = [styleSettings getParameters:TRANSPORT_CATEGORY];
         for (OAMapStyleParameter *p in transportParams)
         {
-            if ([p.value isEqualToString:@"true"])
+            if ([p.value isEqualToString:@"true"] && ![p.defaultValue isEqualToString:p.value])
             {
                 [enabledTransport appendString:[@"nrenderer_" stringByAppendingString:p.name]];
                 [enabledTransport appendString:@","];
             }
         }
+        if (enabledTransport.length > 0)
+        {
+            json[@"displayed_transport_settings"] = enabledTransport;
+        }
     }
-    json[@"displayed_transport_settings"] = enabledTransport;
     
     for (OAMapStyleParameter *param in [styleSettings getAllParameters])
     {
-        json[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
+        if (param.value.length > 0 && ![param.defaultValue isEqualToString:param.value])
+        {
+            json[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
+        }
     }
     
     const auto router = [OsmAndApp.instance getRouter:self.appMode];
@@ -429,19 +439,32 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
             if (p.type == RoutingParameterType::BOOLEAN)
             {
                 OACommonBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
-                json[[kRoutingPreferencePrefix stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [boolSetting toStringValue:self.appMode];
+                
+                NSString *paramDefaultString = boolSetting.defValue ? @"true" : @"false";
+                NSString *stringValue = [boolSetting toStringValue:self.appMode];
+                if (![paramDefaultString isEqualToString:stringValue])
+                {
+                    json[[kRoutingPreferencePrefix stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = stringValue;
+                }
             }
             else
             {
                 OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
-                json[[kRoutingPreferencePrefix stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [stringSetting get:self.appMode];
-                
+                NSString *stringValue = [stringSetting toStringValue:self.appMode];
+                if (![stringSetting.defValue isEqualToString:stringValue])
+                {
+                    json[[kRoutingPreferencePrefix stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = stringValue;
+                }
             }
         }
     }
-    NSString *renderer = [[OAAppSettings sharedManager].renderer get:_appMode];
-    NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
-    json[@"renderer"] = mapStyleInfo[@"title"];
+    
+    if ([[OAAppSettings sharedManager].renderer isSetForMode:self.appMode shouldCompareWithDefaultValue:YES])
+    {
+        NSString *renderer = [[OAAppSettings sharedManager].renderer get:self.appMode];
+        NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
+        json[@"renderer"] = mapStyleInfo[@"title"];
+    }
 }
 
 - (OASettingsItemReader *) getReader

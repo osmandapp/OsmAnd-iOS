@@ -1435,9 +1435,45 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
 }
 
-- (BOOL) isSetForMode:(OAApplicationMode *)mode
+- (BOOL)isSetForMode:(OAApplicationMode *)mode
 {
     return [self getValue:mode] != nil;
+}
+
+- (BOOL)isSetForMode:(nonnull OAApplicationMode *)mode shouldCompareWithDefaultValue:(BOOL)shouldCompareWithDefaultValue
+{
+    NSLog(@"key: %@", _key);
+    if ([@"textSize" isEqualToString:_key]) {
+        NSLog(@"");
+    }
+    id value = [self getValue:mode];
+    BOOL isSetForMode = value != nil;
+    if (!shouldCompareWithDefaultValue)
+    {
+        return isSetForMode;
+    }
+    
+    if (isSetForMode)
+    {
+        NSObject *defValue = [self getProfileDefaultValue:mode];
+        if (!defValue)
+        {
+            return NO;
+        }
+        
+        NSString *valueAsString = [value description];
+        NSLog(@"valueAsString: %@", valueAsString);
+        NSString *defaultValueAsString = [defValue description];
+        NSLog(@"defaultValueAsString: %@", defaultValueAsString);
+        NSLog(@"key: %@", _key);
+        NSLog(@"isEqualToString: %@", [valueAsString isEqualToString:defaultValueAsString] ? @"YES" : @"NO");
+
+        NSLog(@"===============================================");
+        
+        
+        return ![valueAsString isEqualToString:defaultValueAsString];
+    }
+    return NO;
 }
 
 - (long)lastModifiedTime
@@ -1598,6 +1634,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         self.cachedValue = appMode;
     else
         [self.cachedValues setObject:appMode forKey:mode];
+    NSString *keyTest = [self getKey:mode];
+    if ([@"textSize" isEqualToString:keyTest]) {
+        NSLog(@"");
+    }
+
 
     [[NSUserDefaults standardUserDefaults] setObject:appMode.stringKey forKey:[self getKey:mode]];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
@@ -5062,6 +5103,10 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     for (OACommonPreference *pref in profilePreferences)
     {
         if ([self prefCanBeCopiedOrReset:pref])
+            if ([@"textSize" isEqualToString:pref.key]) {
+                NSLog(@"");
+            }
+
             [pref resetModeToDefault:mode];
     }
 }

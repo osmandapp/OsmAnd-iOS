@@ -299,6 +299,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     override func openAllIconsScreen() {
         guard let hostVC else { return }
         let vc = ItemsCollectionViewController(collectionType: .poiIconCategories, items: categories, selectedItem: getSelectedItem())
+        vc.modalPresentationStyle = .fullScreen
         vc.customTitle = customTitle
         vc.iconsDelegate = self
         allIconsVCDelegate = vc
@@ -308,7 +309,10 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         if let regularIconColor {
             vc.regularIconColor = regularIconColor
         }
-        hostVC.showModalViewController(vc)
+        
+        let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .fullScreen
+        hostVC.present(navController, animated: true)
     }
 }
 

@@ -304,9 +304,13 @@
     {
         ItemsCollectionViewController *colorCollectionViewController =
         [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:_data[0] selectedItem:[self getSelectedItem]];
+        colorCollectionViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         colorCollectionViewController.delegate = self;
         colorCollectionViewController.hostColorHandler = self;
-        [_hostVC showModalViewController:colorCollectionViewController];
+        
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:colorCollectionViewController];
+        navController.modalPresentationStyle = UIModalPresentationFullScreen;
+        [_hostVC presentViewController:navController animated:NO completion:nil];
     }
 }
 

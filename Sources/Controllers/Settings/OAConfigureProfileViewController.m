@@ -741,7 +741,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) showDeleteProfileAlert
+- (void)showDeleteProfileAlert
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@?", OALocalizedString(@"profile_alert_delete_title")]
                                                                    message:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString]
@@ -755,7 +755,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
                                                           style:UIAlertActionStyleDestructive
                                                         handler:^(UIAlertAction * _Nonnull action) {
         [OAApplicationMode deleteCustomModes:@[_appMode]];
-        [[OARootViewController instance].navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }];
     
     [alert addAction:cancelAction];

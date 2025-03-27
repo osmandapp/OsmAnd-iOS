@@ -3659,3 +3659,6 @@
 "terrain_map" = "Mapa topográfico (3D)";
 "add_hidden_group_info" = "El punto agregado se encuentra en «%@». Desocultá el grupo elegido para mostrarlo en el mapa.";
 "profile_icons" = "Ícono del perfil";
+"unchanged_parameter_summary" = "Cada traza conservará sus propios parámetros.";
+"each_favourite_point_own_icon" = "Cada punto favorito conservaría su propio ícono.";
+"shared_string_unchanged" = "Sin cambios";

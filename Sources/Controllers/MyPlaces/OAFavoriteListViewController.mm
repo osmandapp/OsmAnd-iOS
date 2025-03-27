@@ -965,9 +965,6 @@ static UIViewController *parentController;
     [OAFavoritesHelper saveFile:[OAFavoritesHelper getFavoriteGroups] file:fullFilename];
 
     NSURL *favoritesUrl = [NSURL fileURLWithPath:fullFilename];
-    UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl]
-                                      applicationActivities:nil];
     
     //export button is on last section, last row
     NSIndexPath *exportButtonIndex = [NSIndexPath indexPathForRow:_exportButtonIndex inSection:_data.count - 1];

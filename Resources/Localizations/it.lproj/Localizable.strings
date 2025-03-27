@@ -3632,3 +3632,6 @@
 "shared_string_items" = "Oggetti";
 "download_failed" = "Download fallito";
 "add_hidden_group_info" = "Il punto aggiunto può essere trovato in \"%@\". Mostra il gruppo selezionato per visualizzarlo nella mappa.";
+"shared_string_unchanged" = "Invariato";
+"each_favourite_point_own_icon" = "Oggi punto preferito manterrà la sua icona.";
+"unchanged_parameter_summary" = "Oggi traccia manterrà i suoi parametri.";

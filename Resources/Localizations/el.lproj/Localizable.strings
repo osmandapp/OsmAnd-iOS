@@ -2613,3 +2613,14 @@
 "with_offline_maps" = "Με χάρτες εκτός σύνδεσης";
 "routing_attr_avoid_highway_description" = "Αποφυγή αυτοκινητόδρομων";
 "routing_attr_avoid_highway_name" = "Αποφυγή αυτοκινητόδρομων";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"help_article_navigation_guidance_name" = "Καθοδήγηση πλοήγησης";
+"help_article_navigation_routing_brouter_name" = "BRouter";
+"help_article_map_raster_maps_name" = "Χάρτες Raster (Online / Offline)";
+"help_article_navigation_car_play_name" = "CarPlay";
+"help_article_navigation_guidance_map_during_navigation_name" = "Οθόνη χάρτη κατά τη διάρκεια της πλοήγησης";
+"help_article_navigation_guidance_voice_navigation_name" = "Φωνητικές υποδείξεις / Ειδοποιήσεις";
+"help_article_navigation_setup_markers_navigation_name" = "Πλοήγηση μέσω δεικτών";
+"simulation_constant_mode_desc" = "Η προσομοίωση θα πραγματοποιηθεί με σταθερή επιλεγμένη ταχύτητα.";
+"simulation_preview_mode_desc" = "Η ταχύτητα της προσομοίωσης θα είναι μέγιστη σε ευθείες και θα επιβραδύνεται μόνο σε διασταυρώσεις.";
+"simulation_real_mode_desc" = "Στα ευθύγραμμα τμήματα του δρόμου, η ταχύτητα θα είναι κατά προσέγγιση η μέγιστη επιτρεπόμενη ταχύτητα.\nΣτις διασταυρώσεις, η προσομοίωση θα επιβραδύνει.\nΕπιπλέον κυρώσεις θα εφαρμόζονται σε σήματα κυκλοφορίας, πινακίδες στοπ κ.λπ.";

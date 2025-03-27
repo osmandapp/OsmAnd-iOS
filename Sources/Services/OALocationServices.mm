@@ -588,7 +588,7 @@
 
 - (void) startLocationSimulation:(CLLocation *)location
 {
-    const auto& tunnel = [_routingHelper getUpcomingTunnel:1000];
+    const auto& tunnel = [_routingHelper getUpcomingTunnel:250];
     if (!tunnel.empty())
     {
         _simulatePosition = [[OASimulationProvider alloc] init];
@@ -610,7 +610,7 @@
         CLLocation *loc = [_simulatePosition getSimulatedLocation];
         if (loc)
         {
-            [self setLocation:loc];
+            [self setLocation:loc simulated:YES];
             [self simulatePosition];
         }
         else
@@ -626,9 +626,11 @@
     {
         if ([_routingHelper isFollowingMode] && [_routingHelper getLeftDistance] > 0 && !_simulatePosition)
         {
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startLocationSimulation:) object:_locationStartSim];
-            _locationStartSim = [location copy];
-            [self performSelector:@selector(startLocationSimulation:) withObject:_locationStartSim afterDelay:START_LOCATION_SIMULATION_DELAY];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startLocationSimulation:) object:_locationStartSim];
+                _locationStartSim = [location copy];
+                [self performSelector:@selector(startLocationSimulation:) withObject:_locationStartSim afterDelay:START_LOCATION_SIMULATION_DELAY];
+            });
         }
     }
 }
@@ -647,11 +649,16 @@
 
 - (void) setLocation:(CLLocation *)location
 {
+    [self setLocation:location simulated:NO];
+}
+
+- (void) setLocation:(CLLocation *)location simulated:(BOOL)simulated
+{
     if (location)
     {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onLocationLost) object:nil];
-
-        _simulatePosition = nil;
+        if (!simulated)
+            _simulatePosition = nil;
+        
         if (_gpsSignalLost)
         {
             _gpsSignalLost = NO;

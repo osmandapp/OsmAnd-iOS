@@ -70,7 +70,6 @@
 #import "OAGPXWptViewController.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
-#import "OAFavoriteListViewController.h"
 #import "OADestinationsHelper.h"
 #import "OAHistoryItem.h"
 #import "OAGPXEditWptViewController.h"

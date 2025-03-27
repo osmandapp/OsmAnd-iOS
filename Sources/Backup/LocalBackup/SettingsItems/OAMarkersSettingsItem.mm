@@ -100,7 +100,7 @@
         }
         
         for (OADestination *marker in self.appliedItems)
-            [_destinationsHelper addDestination:marker];
+            [_destinationsHelper addDestinationWithNewColor:marker];
     }
     
 }

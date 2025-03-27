@@ -1612,10 +1612,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     else
         [self.cachedValues setObject:appMode forKey:mode];
     NSString *keyTest = [self getKey:mode];
-    if ([@"textSize" isEqualToString:keyTest]) {
-        NSLog(@"");
-    }
-
 
     [[NSUserDefaults standardUserDefaults] setObject:appMode.stringKey forKey:[self getKey:mode]];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
@@ -5080,10 +5076,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     for (OACommonPreference *pref in profilePreferences)
     {
         if ([self prefCanBeCopiedOrReset:pref])
-            if ([@"textSize" isEqualToString:pref.key]) {
-                NSLog(@"");
-            }
-
             [pref resetModeToDefault:mode];
     }
 }

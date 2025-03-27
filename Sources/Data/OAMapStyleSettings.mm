@@ -256,12 +256,6 @@
 
     self.parameters = params;
     self.categories = categories;
-    
-    for (OAMapStyleParameter *item in self.parameters) {
-        if ([item.name isEqualToString:@"noPolygons"] && [item.mapStyleName isEqualToString:@"default"]) {
-            NSLog(@"");
-        }
-    }
 }
 
 - (NSString *)getTransportName:(NSString *)name
@@ -436,10 +430,7 @@
                 {
                     p.value = p.defaultValue;
                     p.storedValue = p.defaultValue;
-                    if ([p.name isEqualToString:@"noPolygons"] && [p.mapStyleName isEqualToString:@"default"])
-                    {
-                        NSLog(@"");
-                    }
+
                     NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
                     [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
                 }

@@ -362,7 +362,6 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
 
 - (BOOL)isSetForMode:(OAApplicationMode *)mode;
-- (BOOL)isSetForMode:(nonnull OAApplicationMode *)mode shouldCompareWithDefaultValue:(BOOL)shouldCompareWithDefaultValue;
 
 @end
 

@@ -1437,40 +1437,17 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 - (BOOL)isSetForMode:(OAApplicationMode *)mode
 {
-    return [self getValue:mode] != nil;
-}
-
-- (BOOL)isSetForMode:(nonnull OAApplicationMode *)mode shouldCompareWithDefaultValue:(BOOL)shouldCompareWithDefaultValue
-{
-    NSLog(@"key: %@", _key);
-    if ([@"textSize" isEqualToString:_key]) {
-        NSLog(@"");
-    }
     id value = [self getValue:mode];
-    BOOL isSetForMode = value != nil;
-    if (!shouldCompareWithDefaultValue)
-    {
-        return isSetForMode;
-    }
+    BOOL hasValue = value != nil;
     
-    if (isSetForMode)
+    if (hasValue)
     {
         NSObject *defValue = [self getProfileDefaultValue:mode];
         if (!defValue)
-        {
-            return NO;
-        }
+            return YES;
         
         NSString *valueAsString = [value description];
-        NSLog(@"valueAsString: %@", valueAsString);
         NSString *defaultValueAsString = [defValue description];
-        NSLog(@"defaultValueAsString: %@", defaultValueAsString);
-        NSLog(@"key: %@", _key);
-        NSLog(@"isEqualToString: %@", [valueAsString isEqualToString:defaultValueAsString] ? @"YES" : @"NO");
-
-        NSLog(@"===============================================");
-        
-        
         return ![valueAsString isEqualToString:defaultValueAsString];
     }
     return NO;

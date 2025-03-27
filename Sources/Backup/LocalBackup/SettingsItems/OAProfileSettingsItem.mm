@@ -383,27 +383,22 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
             continue;
         
         OACommonPreference *setting = [prefs objectForKey:key];
-        if (setting && !setting.global)
+        if (setting && !setting.global && [setting isSetForMode:self.appMode])
         {
-            if ([setting isSetForMode:self.appMode shouldCompareWithDefaultValue:YES]) {
-                NSString *stringValue = [setting toStringValue:self.appMode];
-//                if (stringValue)
-//                {
-                    if (![self updateJSONWithPlatformCompatibilityKeys:json key:key value:stringValue]) {
-                        if (([key isEqualToString:@"voice_provider"] || [setting.key isEqualToString:@"voice_provider"]) && ![stringValue hasSuffix:@"-tts"]) {
-                            stringValue = [stringValue stringByAppendingString:@"-tts"];
-                        }
-                        json[key] = stringValue;
-                    }
+            NSString *stringValue = [setting toStringValue:self.appMode];
+            if (![self updateJSONWithPlatformCompatibilityKeys:json key:key value:stringValue])
+            {
+                if (([key isEqualToString:@"voice_provider"] || [setting.key isEqualToString:@"voice_provider"]) && ![stringValue hasSuffix:@"-tts"])
+                {
+                    stringValue = [stringValue stringByAppendingString:@"-tts"];
                 }
-//            } else {
-//                NSLog(@"");
-//            }
+                json[key] = stringValue;
+            }
         }
     }
     
     [OsmAndApp.instance.data addPreferenceValuesToDictionary:json mode:self.appMode];
-    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+    OAMapStyleSettings *styleSettings = [self getMapStyleSettingsForMode:self.appMode];
     if ([styleSettings isCategoryEnabled:TRANSPORT_CATEGORY])
     {
         NSMutableString *enabledTransport = [NSMutableString new];
@@ -459,12 +454,19 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         }
     }
     
-    if ([[OAAppSettings sharedManager].renderer isSetForMode:self.appMode shouldCompareWithDefaultValue:YES])
+    if ([[OAAppSettings sharedManager].renderer isSetForMode:self.appMode])
     {
         NSString *renderer = [[OAAppSettings sharedManager].renderer get:self.appMode];
         NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
         json[@"renderer"] = mapStyleInfo[@"title"];
     }
+}
+
+- (OAMapStyleSettings *)getMapStyleSettingsForMode:(OAApplicationMode *)mode
+{
+    NSString *renderer = [OAAppSettings.sharedManager.renderer get:mode];
+    NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
+    return [[OAMapStyleSettings alloc] initWithStyleName:mapStyleInfo[@"id"] mapPresetName:mode.variantKey];
 }
 
 - (OASettingsItemReader *) getReader

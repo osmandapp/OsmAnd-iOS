@@ -386,13 +386,16 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         if (setting && !setting.global && [setting isSetForMode:self.appMode])
         {
             NSString *stringValue = [setting toStringValue:self.appMode];
-            if (![self updateJSONWithPlatformCompatibilityKeys:json key:key value:stringValue])
+            if (stringValue)
             {
-                if (([key isEqualToString:@"voice_provider"] || [setting.key isEqualToString:@"voice_provider"]) && ![stringValue hasSuffix:@"-tts"])
+                if (![self updateJSONWithPlatformCompatibilityKeys:json key:key value:stringValue])
                 {
-                    stringValue = [stringValue stringByAppendingString:@"-tts"];
+                    if (([key isEqualToString:@"voice_provider"] || [setting.key isEqualToString:@"voice_provider"]) && ![stringValue hasSuffix:@"-tts"])
+                    {
+                        stringValue = [stringValue stringByAppendingString:@"-tts"];
+                    }
+                    json[key] = stringValue;
                 }
-                json[key] = stringValue;
             }
         }
     }

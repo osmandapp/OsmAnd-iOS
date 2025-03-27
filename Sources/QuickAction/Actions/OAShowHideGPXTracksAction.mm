@@ -65,7 +65,9 @@ static QuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return [self isActionWithSlash] ? OALocalizedString(@"hide_gpx") : OALocalizedString(@"show_gpx");
+    NSString *nameRes = OALocalizedString(@"show_gpx");
+    NSString *actionName = [self isActionWithSlash] ? OALocalizedString(@"shared_string_hide") : OALocalizedString(@"shared_string_show");
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), actionName, nameRes];
 }
 
 + (QuickActionType *) TYPE

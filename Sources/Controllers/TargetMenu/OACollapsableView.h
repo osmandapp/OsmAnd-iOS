@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-#define kMarginLeft 60.0f
-#define kMarginRight 15.0f
-#define kMarginTop 10.0f
-#define kCollapsableTitleMarginRight 90.0f
+FOUNDATION_EXPORT CGFloat const kMarginLeft;
+FOUNDATION_EXPORT CGFloat const kMarginRight;
+FOUNDATION_EXPORT CGFloat const kMarginTop;
+FOUNDATION_EXPORT CGFloat const kCollapsableTitleMarginRight;
 
 @interface OACollapsableView : UIView
 

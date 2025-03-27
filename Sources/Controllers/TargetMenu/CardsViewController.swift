@@ -92,6 +92,7 @@ final class CardsViewController: UIView {
     
     private func configureCollectionView() {
         collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
+        collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false

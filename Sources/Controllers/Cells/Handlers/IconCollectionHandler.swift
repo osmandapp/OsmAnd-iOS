@@ -63,7 +63,7 @@ class IconCollectionHandler: OABaseCollectionHandler {
     }
     
     override func getSpacing() -> CGFloat {
-        iconSpacing ?? 9
+        iconSpacing ?? 10
     }
     
     override func getCellIdentifier() -> String {
@@ -148,6 +148,7 @@ class IconCollectionHandler: OABaseCollectionHandler {
         if !iconImagesData.isEmpty {
             vc.iconImages = iconImagesData[0]
         }
+        vc.modalPresentationStyle = .fullScreen
         vc.customTitle = customTitle
         vc.iconsDelegate = self
         if let selectedIconColor {
@@ -156,7 +157,9 @@ class IconCollectionHandler: OABaseCollectionHandler {
         if let regularIconColor {
             vc.regularIconColor = regularIconColor
         }
-        hostVC.showModalViewController(vc)
+        let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .fullScreen
+        hostVC.present(navController, animated: true)
     }
     
     override func getSelectedItem() -> Any {

@@ -430,7 +430,6 @@
                 {
                     p.value = p.defaultValue;
                     p.storedValue = p.defaultValue;
-
                     NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
                     [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
                 }

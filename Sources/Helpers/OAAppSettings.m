@@ -1611,7 +1611,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         self.cachedValue = appMode;
     else
         [self.cachedValues setObject:appMode forKey:mode];
-    NSString *keyTest = [self getKey:mode];
 
     [[NSUserDefaults standardUserDefaults] setObject:appMode.stringKey forKey:[self getKey:mode]];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];

@@ -1248,13 +1248,11 @@ NSString *const kXmlColon = @"_-_";
     
     [targetPointsHelper removeAllWayPoints:NO clearBackup:OsmAndApp.instance.data.pointToStart && OsmAndApp.instance.data.pointToNavigate];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        OAApplicationMode *carPlayMode = [settings.isCarPlayModeDefault get] ? OAApplicationMode.getFirstAvailableNavigationMode : [OAAppSettings.sharedManager.carPlayMode get];
-        OAApplicationMode *defaultAppMode = [settings.useLastApplicationModeByDefault get] ?
-            [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
-            settings.defaultApplicationMode.get;
-        [settings setApplicationModePref:_carPlayActive ? carPlayMode : defaultAppMode markAsLastUsed:NO];
-    });
+    OAApplicationMode *carPlayMode = [settings.isCarPlayModeDefault get] ? OAApplicationMode.getFirstAvailableNavigationMode : [OAAppSettings.sharedManager.carPlayMode get];
+    OAApplicationMode *defaultAppMode = [settings.useLastApplicationModeByDefault get] ?
+        [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
+        settings.defaultApplicationMode.get;
+    [settings setApplicationModePref:_carPlayActive ? carPlayMode : defaultAppMode markAsLastUsed:NO];
 }
 
 - (void) setupDrivingRegion:(OAWorldRegion *)reg

@@ -86,7 +86,7 @@ static const NSInteger kNearbyPoiMinRadius = 250;
 static const NSInteger kNearbyPoiMaxRadius = 1000;
 static const NSInteger kNearbyPoiSearchFactory = 2;
 
-static const CGFloat kTextMaxHeight = 190.0;
+static const CGFloat kTextMaxHeight = 205.0;
 
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 

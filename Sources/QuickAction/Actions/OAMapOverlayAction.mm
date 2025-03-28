@@ -32,12 +32,12 @@ static QuickActionType *TYPE;
 
 - (instancetype) init
 {
-    self = [super initWithActionType:self.class.TYPE];
-    if (self)
-    {
-        _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
-    }
-    return self;
+    return [super initWithActionType:self.class.TYPE];
+}
+
+- (void)commonInit
+{
+    _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
 }
 
 + (void)initialize
@@ -103,6 +103,9 @@ static QuickActionType *TYPE;
         return nil;
     
     OAMapSource *currSource = [OsmAndApp instance].data.overlayMapSource;
+    if (sources.count == 1)
+        return !currSource ? sources.firstObject : @[kNoOverlay, OALocalizedString(@"no_overlay")];
+    
     NSString *currentSource = currSource.name ?: kNoOverlay;
     BOOL noOverlay = !currSource.name;
     NSInteger index = -1;

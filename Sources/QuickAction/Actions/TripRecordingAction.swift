@@ -36,7 +36,9 @@ final class TripRecordingAction: BaseMonitoringAction {
         isRecordingTrack() ? "ic_custom_trip_rec_pause" : "ic_custom_trip_rec_start"
     }
     
-    override func getText() -> String? {
-        isRecordingTrack() ? localizedString("shared_string_pause") : localizedString("shared_string_control_start")
+    override func getStateName() -> String? {
+        let baseName = localizedString("record_plugin_name")
+        let actionName = isRecordingTrack() ? localizedString("shared_string_pause") : localizedString("shared_string_control_start")
+        return String(format: localizedString("ltr_or_rtl_combine_via_dash"), actionName, baseName)
     }
 }

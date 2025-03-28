@@ -1435,9 +1435,22 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
 }
 
-- (BOOL) isSetForMode:(OAApplicationMode *)mode
+- (BOOL)isSetForMode:(OAApplicationMode *)mode
 {
-    return [self getValue:mode] != nil;
+    id value = [self getValue:mode];
+    BOOL hasValue = value != nil;
+    
+    if (hasValue)
+    {
+        NSObject *defValue = [self getProfileDefaultValue:mode];
+        if (!defValue)
+            return YES;
+        
+        NSString *valueAsString = [value description];
+        NSString *defaultValueAsString = [defValue description];
+        return ![valueAsString isEqualToString:defaultValueAsString];
+    }
+    return NO;
 }
 
 - (long)lastModifiedTime

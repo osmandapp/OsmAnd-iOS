@@ -527,13 +527,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             }
             auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
             BOOL amenityFound = obfsDataInterface->findAmenityByObfMapObject(obfMapObject, &amenity, &bbox31);
-
+            
+            
             bool isRoute = !OsmAnd::NetworkRouteKey::getRouteKeys(tags).isEmpty();
-
-            if (!isRoute && OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags(tags)) {
-                return;
-            }
-
             if (isRoute)
                 [self addRoute:found touchPoint:touchPoint mapObj:mapObject];
             

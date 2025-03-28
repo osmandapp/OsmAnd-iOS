@@ -120,6 +120,9 @@ static QuickActionType *TYPE;
         return nil;
     
     OAMapSource *currSource = [OsmAndApp instance].data.underlayMapSource;
+    if (sources.count == 1)
+        return !currSource ? sources.firstObject : @[kNoUnderlay, OALocalizedString(@"no_underlay")];
+
     NSString *currentSource = currSource.name ?: kNoUnderlay;
     BOOL noUnderlay = !currSource.name;
     NSInteger index = -1;

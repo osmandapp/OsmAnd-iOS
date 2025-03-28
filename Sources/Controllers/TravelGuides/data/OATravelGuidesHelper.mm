@@ -66,7 +66,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     OsmAnd::PointI locI;
     if (radius != -1)
     {
-        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+        locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
         bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, locI);
     }
     else
@@ -461,7 +461,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
     OsmAnd::AreaI bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
     
-    obfsDataInterface->loadMapObjects(&loadedBinaryMapObjects, &loadedRoads, &tileSurfaceType, OsmAnd::ZoomLevel15, &bbox31);
+    obfsDataInterface->loadMapObjects(&loadedBinaryMapObjects, &loadedRoads, &tileSurfaceType, nullptr, OsmAnd::ZoomLevel15, &bbox31);
     
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > segmentList;
     

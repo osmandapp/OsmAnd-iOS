@@ -426,7 +426,7 @@
 "error_avoid_specific_road" = "没有发现支路";
 "will_open_at" = "开始营业于";
 "shared_string_target_points" = "目的地";
-"search_radius_proximity" = "之间";
+"search_radius_proximity" = "在此之内";
 "add_as_first_destination_point" = "添加为第一个中转点";
 "auto_split_recording_title" = "自动拆分录制之后的间隔";
 "map_widget_ruler_control" = "半径量尺";
@@ -569,7 +569,7 @@
 "snap_to_road_descr" = "当前位置图标将与当前导航路径对齐";
 "choose_audio_stream_descr" = "为语音指引选择扬声器。";
 "driving_region_descr" = "选择驾驶地区：美国、欧洲、英国、亚洲等。";
-"transport_nearby_routes" = "之间";
+"transport_nearby_routes" = "在此之内";
 "tunnel_warning" = "前方隧道";
 "save_track_interval" = "日志记录时间间隔";
 "use_osm_live_routing" = "OsmAnd 实时导航";
@@ -1084,7 +1084,7 @@
 "shared_string_legend" = "图例";
 "select_data_to_import" = "选择要导入的数据。";
 "shared_string_tones" = "色调";
-"shared_string_total" = "一共";
+"shared_string_total" = "共计";
 "shared_string_importing" = "正在导入";
 "shared_string_meters" = "米";
 "shared_string_terrain" = "地形";
@@ -1799,7 +1799,7 @@
 "select_folder_descr" = "选择文件夹或添加新文件夹";
 "not_available_with" = "不适用于 %@";
 "login_open_street_map_org" = "登录 OpenStreetMap.org";
-"interrupt_music_descr" = "语音提示暂停音乐播放。";
+"interrupt_music_descr" = "语音提示时暂停音乐播放。";
 "quick_action_contour_lines_descr" = "用以显示或隐藏地图等高线的按钮。";
 "tracks_on_map" = "已显示轨迹";
 "quick_action_showhide_mapillary_descr" = "用以在地图上显示或隐藏 Mapillary 图层的开关。";
@@ -2371,7 +2371,7 @@
 "av_notes_audio_widget_desc" = "点击小工具可让您留下一条音频注释。";
 "setup" = "设定";
 "map_widget_target_distance_desc" = "显示摄像机与目标位置间的距离。";
-"shared_string_read" = "读取";
+"shared_string_read" = "阅读";
 "learn_more_about_sensors_link" = "了解更多传感器信息。";
 "help_article_map_track_context_menu_name" = "轨迹上下文菜单";
 "shared_string_system_default" = "系统默认值";
@@ -2430,7 +2430,7 @@
 "shared_string_limit" = "限制";
 "auto_zoom_smooth" = "平滑";
 "auto_zoom_discrete" = "不连续";
-"vertical_exaggeration_description" = "通过改变比例值，可以突出三维地形的效果。";
+"vertical_exaggeration_description" = "通过改变比例值，您可以加强三维地形的显示效果。";
 "vertical_exaggeration" = "垂直夸大";
 "help_article_navigation_routing_straight_line_routing_name" = "直线路径规划（航空器）";
 "shared_string_scale" = "比例";
@@ -2476,7 +2476,7 @@
 "shared_string_all_colors" = "所有颜色";
 "edit_tilesource_minzoom" = "最小显示级别";
 "shared_string_class" = "分级";
-"display_position_automatic_descr" = "取决于地图方向：底部表示移动方向，中间表示所有其他方向。";
+"display_position_automatic_descr" = "取决于地图方向：底部为移动方向，中心为所有其他方向。";
 "empty_name" = "空名称";
 "shared_string_activity" = "活动";
 "add_button" = "新增按钮";
@@ -2615,3 +2615,11 @@
 "routing_attr_avoid_cobblestone_description" = "避免鹅卵石";
 "tomorrow" = "明天";
 "required_maps" = "需要的地图";
+"add_widget" = "添加小工具";
+"missing_maps_ignore_details" = "下载的地图是否涵盖您的路线？如果您熟悉该地区，可以使用它们导航。";
+"map_settings_weather_wind_animation" = "风动画";
+"daynight_mode_day_summary" = "始终以浅色主题显示地图，是白天需要高辨识度时的理想选择。";
+"daynight_mode_app_theme_summary" = "地图显示与应用程序的整体主题一致——浅色主题为 “日间模式”，深色主题为 “夜间模式”";
+"daynight_mode_night_summary" = "始终以暗色主题显示地图，适合夜间或弱光环境。";
+"rendering_attr_showClimbingRoutes_name" = "攀岩路线";
+"help_article_personal_color_palette_schemes_name" = "颜色方案";

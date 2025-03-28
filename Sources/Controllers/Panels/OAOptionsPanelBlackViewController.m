@@ -9,7 +9,6 @@
 #import "OAOptionsPanelBlackViewController.h"
 #import "OAMapSettingsViewController.h"
 #import "OAMainSettingsViewController.h"
-#import "OAFavoriteListViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAObservable.h"

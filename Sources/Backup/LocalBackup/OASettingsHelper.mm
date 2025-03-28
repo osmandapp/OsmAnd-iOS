@@ -70,7 +70,6 @@
 #import "OASearchHistorySettingsItem.h"
 #import "OATileSource.h"
 #import "OAPluginsHelper.h"
-#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>

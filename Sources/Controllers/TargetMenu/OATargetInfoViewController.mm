@@ -86,6 +86,8 @@ static const NSInteger kNearbyPoiMinRadius = 250;
 static const NSInteger kNearbyPoiMaxRadius = 1000;
 static const NSInteger kNearbyPoiSearchFactory = 2;
 
+static const CGFloat kTextMaxHeight = 190.0;
+
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
 @property (nonatomic) BOOL wikiCardsReady;
@@ -432,7 +434,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         {
             NSString *text = row.textPrefix.length == 0 ? row.text : [NSString stringWithFormat:@"%@: %@", row.textPrefix, row.text];
             CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[row getFont]];
-            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[row getFont]];
+            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:kTextMaxHeight font:[row getFont]];
             
             rowHeight = MAX(bounds.height, 28.0) + 11.0 + 11.0;
             row.height = rowHeight;

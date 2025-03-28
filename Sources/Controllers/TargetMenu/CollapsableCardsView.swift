@@ -73,8 +73,8 @@ final class CollapsableCardsView: OACollapsableView {
         
         NSLayoutConstraint.activate([
             cardsViewController.topAnchor.constraint(equalTo: topAnchor),
-            cardsViewController.leadingAnchor.constraint(equalTo: leadingAnchor),
-            cardsViewController.trailingAnchor.constraint(equalTo: trailingAnchor)
+            cardsViewController.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            cardsViewController.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor)
         ])
         
         heightConstraint = cardsViewController.heightAnchor.constraint(equalToConstant: 170)
@@ -187,7 +187,7 @@ final class CollapsableCardsView: OACollapsableView {
         
         NSLayoutConstraint.activate([
             button.heightAnchor.constraint(equalToConstant: 44),
-            button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            button.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
             button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
         ])
     }

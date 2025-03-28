@@ -757,7 +757,6 @@ static NSOperationQueue *_favQueue;
     [dateComponents setSecond:0];
     NSDate *startDayTime = [cal dateFromComponents:dateComponents];
 
-    NSDateComponents *startDay = [[NSDateComponents alloc] init];
     for (NSDictionary *file in files)
     {
         NSDate *lastModifiedDate = file[@"lastDate"];
@@ -781,7 +780,6 @@ static NSOperationQueue *_favQueue;
             NSString* filePath = [backupPath stringByAppendingPathComponent:file];
             NSError *err = nil;
             NSDictionary<NSFileAttributeKey, id> *attrs = [manager attributesOfItemAtPath:filePath error:&err];
-            NSDate *modifiedDate = !err ? attrs.fileModificationDate : [NSDate dateWithTimeIntervalSince1970:0];
             [result addObject:@{ @"path": filePath, @"lastDate" : attrs.fileModificationDate}];
         }
 

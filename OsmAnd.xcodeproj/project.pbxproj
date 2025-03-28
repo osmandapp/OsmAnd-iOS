@@ -2556,7 +2556,6 @@
 		DA5A84C126C563A900F274C7 /* OAProfileSelectionBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FC026C563A500F274C7 /* OAProfileSelectionBottomSheetViewController.m */; };
 		DA5A84C226C563A900F274C7 /* OABaseBottomSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7FC226C563A500F274C7 /* OABaseBottomSheetViewController.xib */; };
 		DA5A84C726C563A900F274C7 /* OAOsmEditActionsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FCD26C563A500F274C7 /* OAOsmEditActionsViewController.mm */; };
-		DA5A84CA26C563A900F274C7 /* OADeleteProfileBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FD426C563A500F274C7 /* OADeleteProfileBottomSheetViewController.m */; };
 		DA5A84CB26C563A900F274C7 /* OACopyProfileBottomSheetViewControler.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FD826C563A500F274C7 /* OACopyProfileBottomSheetViewControler.mm */; };
 		DA5A84CC26C563A900F274C7 /* OAWhatsNewBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FDB26C563A500F274C7 /* OAWhatsNewBottomSheetViewController.m */; };
 		DA5A84CE26C563A900F274C7 /* OAQuickActionSelectionBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FE126C563A500F274C7 /* OAQuickActionSelectionBottomSheetViewController.mm */; };
@@ -6917,10 +6916,8 @@
 		DA5A7FC226C563A500F274C7 /* OABaseBottomSheetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OABaseBottomSheetViewController.xib; sourceTree = "<group>"; };
 		DA5A7FC926C563A500F274C7 /* OAOsmEditActionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmEditActionsViewController.h; sourceTree = "<group>"; };
 		DA5A7FCD26C563A500F274C7 /* OAOsmEditActionsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmEditActionsViewController.mm; sourceTree = "<group>"; };
-		DA5A7FD426C563A500F274C7 /* OADeleteProfileBottomSheetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADeleteProfileBottomSheetViewController.m; sourceTree = "<group>"; };
 		DA5A7FD526C563A500F274C7 /* OACopyProfileBottomSheetViewControler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACopyProfileBottomSheetViewControler.h; sourceTree = "<group>"; };
 		DA5A7FD626C563A500F274C7 /* OACopyProfileBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACopyProfileBottomSheetViewController.h; sourceTree = "<group>"; };
-		DA5A7FD726C563A500F274C7 /* OADeleteProfileBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADeleteProfileBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA5A7FD826C563A500F274C7 /* OACopyProfileBottomSheetViewControler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACopyProfileBottomSheetViewControler.mm; sourceTree = "<group>"; };
 		DA5A7FDA26C563A500F274C7 /* OAWhatsNewBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWhatsNewBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA5A7FDB26C563A500F274C7 /* OAWhatsNewBottomSheetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAWhatsNewBottomSheetViewController.m; sourceTree = "<group>"; };
@@ -12879,10 +12876,8 @@
 		DA5A7FD326C563A500F274C7 /* SettingsActionBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A7FD426C563A500F274C7 /* OADeleteProfileBottomSheetViewController.m */,
 				DA5A7FD526C563A500F274C7 /* OACopyProfileBottomSheetViewControler.h */,
 				DA5A7FD626C563A500F274C7 /* OACopyProfileBottomSheetViewController.h */,
-				DA5A7FD726C563A500F274C7 /* OADeleteProfileBottomSheetViewController.h */,
 				DA5A7FD826C563A500F274C7 /* OACopyProfileBottomSheetViewControler.mm */,
 			);
 			path = SettingsActionBottomSheet;
@@ -17409,7 +17404,6 @@
 				FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */,
 				32725F3E2B7E7B1500995806 /* OAZoom.m in Sources */,
 				DA5A850026C563A900F274C7 /* OARangeSlider.m in Sources */,
-				DA5A84CA26C563A900F274C7 /* OADeleteProfileBottomSheetViewController.m in Sources */,
 				DAB9AECD28E192D300AD01CE /* OAURLSessionProgress.m in Sources */,
 				DA5A833326C563A800F274C7 /* OABottomSheetHeaderIconCell.m in Sources */,
 				DA4E72B328784768007A894D /* OANetworkWriter.mm in Sources */,

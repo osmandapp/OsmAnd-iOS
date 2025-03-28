@@ -3637,3 +3637,6 @@
 "sensor_data_settings_description" = "sýna aðalgögn frá skynjara";
 "battery_level_settings_description" = "sýna rafhlöðustyrk skynjara sem aðalgildi";
 "add_hidden_group_info" = "Viðbættur punktur verður tiltækur í \"%@\". Gerðu hann sýnilegan á kortinu með því að affela valda hópinn.";
+"shared_string_unchanged" = "Óbreytt";
+"each_favourite_point_own_icon" = "Hver eftirlætispunktur myndi halda sínu eigin tákni.";
+"unchanged_parameter_summary" = "Hver ferill mun halda sínum færibreytum.";

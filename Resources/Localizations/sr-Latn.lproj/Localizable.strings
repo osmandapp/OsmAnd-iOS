@@ -3612,7 +3612,7 @@
 "auto_25_chars_route_tr_kl" = "Skreni desno i drži levo";
 "auto_25_chars_route_tr_kr" = "Skreni desno i drži desno";
 "auto_25_chars_route_tu_kl" = "Uradi polukružno i drži levo";
-"auto_25_chars_route_tu_kr" = "Uradi polukružno i drži desno";
+"auto_25_chars_route_tu_kr" = "Uradi polukružno okretanje i drži desno";
 "auto_25_chars_route_roundabout_kr" = "Izađi na %d izlaz i drži desno";
 "auto_25_chars_route_tshl" = "Skreni oštro levo";
 "auto_25_chars_route_roundabout_kl" = "Izađi na %d izlaz i drži levo";

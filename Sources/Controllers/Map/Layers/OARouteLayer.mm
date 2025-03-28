@@ -1082,11 +1082,16 @@ struct DrawPathData
             if (!_projectionPointCollection)
                 [self recreateProjectedPointCollection];
             
-            NSArray<NSNumber *> *projectionOnRoute = [self calculateProjectionOnRoutePoint];
-            if (projectionOnRoute.count >= 2)
-                [self setProjectedPointMarkerLocation:[projectionOnRoute[0] doubleValue] longitude:[projectionOnRoute[1] doubleValue]];
-            
-            [self setProjectedPointMarkerVisibility:(projectionOnRoute != nil)];
+            CLLocationCoordinate2D coord = [self calculateProjectionOnRoutePoint];
+            if (CLLocationCoordinate2DIsValid(coord))
+            {
+                [self setProjectedPointMarkerLocation:coord.latitude longitude:coord.longitude];
+                [self setProjectedPointMarkerVisibility:YES];
+            }
+            else
+            {
+                [self setProjectedPointMarkerVisibility:NO];
+            }
         }
         else
         {
@@ -1277,13 +1282,13 @@ struct DrawPathData
     }
 }
 
-- (nullable NSArray<NSNumber *> *)calculateProjectionOnRoutePoint
+- (CLLocationCoordinate2D)calculateProjectionOnRoutePoint
 {
     CLLocation *ll = [_routingHelper getLastFixedLocation];
     OARouteCalculationResult *route = [_routingHelper getRoute];
     NSArray<CLLocation *> *locs = [route getImmutableAllLocations];
     if (locs.count == 0)
-        return nil;
+        return kCLLocationCoordinate2DInvalid;
     
     int cr = route.currentRoute;
     int locIndex = (int)locs.count - 1;
@@ -1292,10 +1297,10 @@ struct DrawPathData
     if (ll != nil && cr > 0 && cr < locs.count && locIndex >= 0 && locIndex < locs.count)
     {
         CLLocation *endLocation = locs[cr];
-        return @[@(endLocation.coordinate.latitude), @(endLocation.coordinate.longitude)];
+        return endLocation.coordinate;
     }
     
-    return nil;
+    return kCLLocationCoordinate2DInvalid;
 }
 
 - (BOOL) isColoringAvailable:(OARouteCalculationResult *)route routeColoringType:(OAColoringType *)routeColoringType attributeName:(NSString *)attributeName

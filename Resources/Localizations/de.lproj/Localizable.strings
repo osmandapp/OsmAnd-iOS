@@ -627,7 +627,7 @@
 "day_night_info" = "Tag-/Nacht-Information";
 "daynight_mode_auto" = "Sonnenaufgang/-untergang";
 "route_simulation" = "Routensimulation";
-"unknown_location" = "Position noch nicht bekannt";
+"unknown_location" = "Position noch nicht bekannt.";
 "animate_routing_route_not_calculated" = "Zuerst die Route berechnen";
 "settings_preset" = "Standardprofil";
 "settings_preset_descr" = "Kartenansicht und Navigationseinstellungen werden je Profil gespeichert. Hier Standardprofil vorauswählen.";
@@ -1798,7 +1798,7 @@
 "unsupported_action" = "Nicht unterstützte Aktion";
 "unsupported_items" = "Nicht unterstützte Elemente";
 "quick_action_mapillary_hide" = "Mapillary ausblenden";
-"quick_action_remove_next_destination_descr" = "Löscht das nächste Ziel auf Ihrer Route. Wenn dies das endgültige Ziel ist, wird die Navigation gestoppt.";
+"quick_action_remove_next_destination_descr" = "Löscht das nächste Ziel auf Ihrer Route. Wenn dies das letzte Ziel ist, wird die Navigation angehalten.";
 "reverse_route" = "Route umkehren";
 "profile_type_osmand_string" = "OsmAnd-Profil";
 "shared_string_add_profile" = "Profil hinzufügen";

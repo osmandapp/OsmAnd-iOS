@@ -68,9 +68,9 @@ static QuickActionType *TYPE;
 
 - (NSString *)getSecondaryIconName
 {
-    if (_helper.isRoutePlanningMode)
-        return @"ic_custom_compound_action_pause";
-    return @"ic_custom_compound_action_play";
+    if (_helper.isRoutePlanningMode || !_helper.isRouteCalculated)
+        return @"ic_custom_compound_action_play";
+    return @"ic_custom_compound_action_pause";
 }
 
 - (NSString *)getActionText

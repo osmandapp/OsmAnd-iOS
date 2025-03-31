@@ -250,7 +250,7 @@
 "sort_by_name" = "Ordigi laŭ nomo";
 "sort_by" = "Ordigi laŭ";
 "map_markers_other" = "Aliaj markoj";
-"shared_string_turn" = "Turno";
+"shared_string_turn" = "Kurbiĝo";
 "stop_routing_confirm" = "Ĉu ĉesigi navigadon\?";
 "cancel_route" = "Ĉu rezigni kurson\?";
 "route_is_too_long_v2" = "Por longaj distancoj: bonvolu aldoni intercelojn, se neniu rezulto estos trovita post 10 minutoj.";
@@ -919,7 +919,7 @@
 "quick_action_remove_next_destination_descr" = "La markita celo de la kurso estos forigita. Se tio ĉi estos la fina celo, la navigado ĉesos.";
 "change_application_profile" = "Ŝanĝi aplikaĵan profilon";
 "shared_string_add_profile" = "Aldoni profilon";
-"quick_action_switch_profile_descr" = "Butono por baskuli inter elektitaj profiloj.";
+"quick_action_switch_profile_descr" = "Butono por baskuligi inter elektitaj profiloj.";
 "profile_type_user_string" = "Profilo de uzanto";
 "profile_type_osmand_string" = "OsmAnd‑profilo";
 "add_waypoint" = "Aldoni navigadpunkton";
@@ -1016,7 +1016,7 @@
 "download_wikipedia_maps" = "Vikipedio";
 "purchases_feature_desc_wikipedia" = "Malkonekta aliro al ĉiuj artikoloj de Vikipedio pri lokoj por ke vi povu sciiĝi pri la vizitataj ejoj per simple frapi la mapon. Ne forgesu elŝuti Vikipediajn mapojn de la dezirataj lokoj antaŭ komenci vojaĝon.";
 "shared_string_all_languages" = "Ĉiuj lingvoj";
-"select_wikipedia_article_langs" = "Elektu lingvojn por artikoloj de Vikipedio montrataj sur la mapo. Eblos baskuli inter ĉiuj disponeblaj lingvoj dum legi artikolon.";
+"select_wikipedia_article_langs" = "Elektu lingvojn por artikoloj de Vikipedio montrataj sur la mapo. Eblos elekti ĉiun disponeblan lingvon dum legi artikolon.";
 "wiki_menu_download_descr" = "Kromaj mapoj estas necesaj por vidigi punktojn de Vikipedio sur la mapo.";
 "some_articles_may_not_available_in_lang" = "Iuj artikoloj de Vikipedio povas ne esti disponeblaj en via lingvo.";
 "srtm_plugin_name" = "Topografio";
@@ -2010,7 +2010,7 @@
 "true_bearing_wdiget_desc" = "Angulo inter la vera nordo, via pozicio kaj la alcela loko.";
 "shared_string_chest" = "Brusto";
 "map_markers_bar_widget_desc" = "Fenestraĵo montranta distancon kaj direkton al la sekva map-marko el via nuna pozicio. Eblas alĝustigi la fenestraĵon por vidigi 1 aŭ 2 map-markojn.";
-"shared_string_switch_mode" = "Baskuli reĝimon";
+"shared_string_switch_mode" = "Baskuligi reĝimon";
 "shared_string_duplicate" = "Duobligi";
 "map_widget_ant_bicycle_power_desc" = "Montras povumon generatan de biciklisto por movi la biciklon";
 "parking_widget_desc" = "Fenestraĵo montranta distancon de la ekrana centro al la parkumeja pozicio.";
@@ -2337,7 +2337,7 @@
 "mapillary_widget_descr" = "Ebligas rapide kontribui al Mapillary.";
 "bluetooth_found_title" = "Trovis: %d";
 "change_appearance" = "Ŝanĝi aspekton";
-"verify_account_deletion_descr" = "Ni devas verigi vian konton antaŭ forigi ĝin. \n \nEnigu la retpoŝtan adreson, per kiu ĝi registriĝis. Sekve unufoja pasvorto estos sendita al ĝi.";
+"verify_account_deletion_descr" = "Ni devas verigi vian konton antaŭ ol forigi ĝin. \n \nEnigu la retpoŝtan adreson, per kiu ĝi registriĝis. Sekve unufoja pasvorto estos sendita al ĝi.";
 "offline_wikivoyage" = "Vikivojaĝo malkonekte";
 "image_cache" = "Bilda kaŝmemoro";
 "default_appearance_desc" = "La implicita koloro, bildsimbolo kaj formo, kiuj aplikiĝos al la punktoj aldonotaj al la grupo.";
@@ -2400,7 +2400,7 @@
 "calculate_online" = "Kalkuli enrete";
 "dangerous_goods_description" = "Sur kelkaj vojoj kaj tuneloj transporto de danĝeraj materialoj estas malpermesata.";
 "shared_string_item" = "Elemento";
-"step_by_step" = "Turno-post-turno";
+"step_by_step" = "Kurbiĝo-post-kurbiĝo";
 "shared_string_bottom" = "malsupro";
 "display_position_automatic_descr" = "Dependas de map-orientiĝo: sube por “Direkto de movado” kaj centre por ĉiuj aliaj.";
 "visualization_3d_track_line" = "Linio de spuro";
@@ -2549,3 +2549,5 @@
 "help_article_map_routes_name" = "Kursoj";
 "reset_average_speed" = "Nuligi mezuman rapidon";
 "cloud_sync_progress" = "Samtempigado…%@";
+"add_widget" = "Aldoni fenestraĵon";
+"detailed_track_guidance_description" = "OsmAnd alproksimigos vian spuron al proksimaj vojoj por liveri avertojn pri ĉiu kurbiĝo.";

@@ -24,12 +24,13 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kIllegalFileNameCharacters [NSCharacterSet characterSetWithCharactersInString:@"\\?%*|\"<>:;.,"]
+// NOTE: If the file name contains "\" macOS and iOS interpret it as a folder/subfolder. Additionally, ArchiveReader replaces "\" with "/". We do not allow the user to use this symbol in the file name.
+static NSCharacterSet * const kIllegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"\\"];
 
-#define kInputNameKey @"kInputNameKey"
-#define kLastUsedIconsKey @"kLastUsedIconsKey"
-#define kIconsKey @"kIconsKey"
-#define kBackgroundsKey @"kBackgroundsKey"
+static NSString * const kInputNameKey = @"kInputNameKey";
+static NSString * const kLastUsedIconsKey = @"kLastUsedIconsKey";
+static NSString * const kIconsKey = @"kIconsKey";
+static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 @interface OABaseEditorViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAShapesTableViewCellDelegate, OACollectionCellDelegate>
 
@@ -40,6 +41,8 @@
 @property(nonatomic) NSString *editBackgroundIconName;
 @property(nonatomic) BOOL isNewItem;
 @property(nonatomic) BOOL wasChanged;
+@property(nonatomic) BOOL isTextViewNameValid;
+
 @property(nonatomic) OAGPXAppearanceCollection *appearanceCollection;
 
 @end
@@ -516,10 +519,10 @@
 
     OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
     [self changeButtonAvailability:_saveBarButton
-                         isEnabled:!groupExist
+                         isEnabled:_isTextViewNameValid && (!groupExist
         || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
         || ![self.editIconName isEqual:groupExist.iconName]
-        || ![self.editColor isEqual:groupExist.color]];
+        || ![self.editColor isEqual:groupExist.color])];
 }
 
 #pragma mark - OACollectionCellDelegate
@@ -548,10 +551,10 @@
 
     OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
     [self changeButtonAvailability:_saveBarButton
-                         isEnabled:!groupExist
+                         isEnabled:_isTextViewNameValid && (!groupExist
      || ![self.editColor isEqual:groupExist.color]
      || ![self.editIconName isEqual:groupExist.iconName]
-     || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]];
+     || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType])];
 }
 
 - (void)reloadCollectionData
@@ -563,22 +566,22 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    BOOL isEnabled = YES;
+    _isTextViewNameValid = YES;
     _wasChanged = YES;
     NSIndexPath *indexPath = [self indexPathForCellContainingView:textView inTableView:self.tableView];
     OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
     if ([item.key isEqualToString:kInputNameKey])
     {
         OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:textView.text];
-        isEnabled = textView.text.length > 0
+        _isTextViewNameValid = textView.text.length > 0
             && [textView.text rangeOfCharacterFromSet:kIllegalFileNameCharacters].length == 0
             && ![textView.text isEqualToString:OALocalizedString(@"favorites_item")]
             && ![textView.text isEqualToString:OALocalizedString(@"personal_category_name")]
             && ![textView.text isEqualToString:kPersonalCategory]
             && !groupExist;
-        if (!isEnabled && groupExist)
+        if (!_isTextViewNameValid && groupExist)
         {
-            isEnabled = textView.text.length > 0
+            _isTextViewNameValid = textView.text.length > 0
                 && (![groupExist.iconName isEqualToString:self.editIconName]
                 || ![groupExist.backgroundType isEqualToString:self.editBackgroundIconName]
                 || ![groupExist.color isEqual:self.editColor]);
@@ -587,7 +590,7 @@
     }
 
     [self applyLocalization];
-    [self changeButtonAvailability:_saveBarButton isEnabled:isEnabled];
+    [self changeButtonAvailability:_saveBarButton isEnabled:_isTextViewNameValid];
 }
 
 #pragma mark - MDCMultilineTextInputLayoutDelegate

@@ -192,17 +192,9 @@
             {
                 if (_addToTrack)
                 {
-                    NSArray<OASTrack *> *gpxTracks = gpx.tracks;
-                    NSArray<OASRoute *> *gpxRoutes = gpx.routes;
-                    NSArray<OASWptPt *> *gpxPoints = gpx.getPointsList;
-
-                    [newGpx.tracks addObjectsFromArray:gpxTracks];
-                    [newGpx.routes addObjectsFromArray:gpxRoutes];
-                    if (gpxPoints.count > 0) {
-                        for (OASWptPt *point in gpxPoints) {
-                            [newGpx addPointPoint:point];
-                        }
-                    }
+                    [newGpx.tracks addObjectsFromArray:gpx.tracks];
+                    [newGpx.routes addObjectsFromArray:gpx.routes];
+                    [newGpx addPointsCollection:gpx.getPointsList];
                 }
                 gpx = newGpx;
             }

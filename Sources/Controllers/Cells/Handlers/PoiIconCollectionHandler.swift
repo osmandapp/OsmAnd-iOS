@@ -83,7 +83,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         
         if let category = categoriesByKeyName[categoryKey] {
             generateData([category.iconKeys])
-            hostCell?.topButton.setTitle(category.translatedName, for: .normal)
+            updateTopButtonName()
             getCollectionView()?.reloadData()
             return
         }

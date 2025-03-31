@@ -190,26 +190,21 @@
             OASGpxFile *newGpx = [_editingCtx exportGpx:trackName];
             if (newGpx)
             {
-                NSArray<OASTrack *> *gpxTracks = gpx.tracks;
-                NSArray<OASWptPt *> *gpxPoints = gpx.getPointsList;
-                NSArray<OASRoute *> *gpxRoutes = gpx.routes;
-                gpx = newGpx;
-                NSArray<NSArray<OASWptPt *> *> *routePoints = [_editingCtx getRoutePoints];
-                for (NSArray<OASWptPt *> *points in routePoints)
-                {
-                    [gpx addRoutePointsPoints:points addRoute:YES];
-                }
-                if (gpxPoints.count > 0) {
-                    for (OASWptPt *point in gpxPoints) {
-                        [gpx addPointPoint:point];
-                    }
-                }
-                    
                 if (_addToTrack)
                 {
-                    [gpx.tracks addObjectsFromArray:gpxTracks];
-                    [gpx.routes addObjectsFromArray:gpxRoutes];
+                    NSArray<OASTrack *> *gpxTracks = gpx.tracks;
+                    NSArray<OASRoute *> *gpxRoutes = gpx.routes;
+                    NSArray<OASWptPt *> *gpxPoints = gpx.getPointsList;
+
+                    [newGpx.tracks addObjectsFromArray:gpxTracks];
+                    [newGpx.routes addObjectsFromArray:gpxRoutes];
+                    if (gpxPoints.count > 0) {
+                        for (OASWptPt *point in gpxPoints) {
+                            [newGpx addPointPoint:point];
+                        }
+                    }
                 }
+                gpx = newGpx;
             }
         }
     }

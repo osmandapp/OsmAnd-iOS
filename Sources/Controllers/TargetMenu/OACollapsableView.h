@@ -12,6 +12,7 @@ FOUNDATION_EXPORT CGFloat const kMarginLeft;
 FOUNDATION_EXPORT CGFloat const kMarginRight;
 FOUNDATION_EXPORT CGFloat const kMarginTop;
 FOUNDATION_EXPORT CGFloat const kCollapsableTitleMarginRight;
+FOUNDATION_EXPORT CGFloat const kLandscapeCollapsableTitleMarginRight;
 
 @interface OACollapsableView : UIView
 

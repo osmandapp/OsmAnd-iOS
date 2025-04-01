@@ -1343,10 +1343,6 @@
         
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
     }
-    else if (collectionView == [_poiIconCollectionHandler getCollectionView]) {
-        [[_poiIconCollectionHandler getCollectionView] reloadData];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
-    }
 }
 
 - (void)reloadCollectionData

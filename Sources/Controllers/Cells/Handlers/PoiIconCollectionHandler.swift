@@ -83,7 +83,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         
         if let category = categoriesByKeyName[categoryKey] {
             generateData([category.iconKeys])
-            hostCell?.topButton.setTitle(category.translatedName, for: .normal)
+            updateTopButtonName()
             getCollectionView()?.reloadData()
             return
         }
@@ -308,7 +308,10 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         if let regularIconColor {
             vc.regularIconColor = regularIconColor
         }
-        hostVC.showModalViewController(vc)
+        
+        let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .fullScreen
+        hostVC.present(navController, animated: true)
     }
 }
 

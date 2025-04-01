@@ -285,12 +285,13 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         NSMutableDictionary *entryDict = [NSMutableDictionary dictionary];
         NSDictionary *localizations = localizationsDict[baseKey];
         
-        NSString *nameValue = originalDict[baseKey];
-        if (!nameValue) {
-            NSString *nameKey = [NSString stringWithFormat:@"%@:%@", baseKey, currentLocalization];
-            nameValue = localizations[baseKey][nameKey] ?: [localizations allValues].firstObject;
+        NSString *nameLocalizedKey = [NSString stringWithFormat:@"%@:%@", baseKey, currentLocalization];
+        NSString *nameValue = localizations[nameLocalizedKey];
+        if (!nameValue)
+        {
+            nameValue = originalDict[baseKey] ?: [localizations allValues].firstObject;
         }
-        
+
         entryDict[@"name"] = nameValue;
         entryDict[@"localization"] = localizations;
         [finalDict setObject:[entryDict copy] forKey:baseKey];
@@ -327,9 +328,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     CGSize iconSize = {20, 20};
     if (self.poi.localizedNames.count > 0)
         [self addLocalizedNamesTagsToInfo:additionalInfo];
-    NSString *languageCode = NSLocale.currentLocale.languageCode;
     
-    NSDictionary *dic = [self groupAdditionalInfo:additionalInfo withCurrentLocalization:languageCode];
+    NSDictionary *dic = [self groupAdditionalInfo:additionalInfo withCurrentLocalization:preferredLang];
 
     for (NSString *key in dic.allKeys)
     {

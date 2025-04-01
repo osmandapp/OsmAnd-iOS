@@ -304,7 +304,6 @@
     {
         ItemsCollectionViewController *colorCollectionViewController =
         [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:_data[0] selectedItem:[self getSelectedItem]];
-        colorCollectionViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         colorCollectionViewController.delegate = self;
         colorCollectionViewController.hostColorHandler = self;
         

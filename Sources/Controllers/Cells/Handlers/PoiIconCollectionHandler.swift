@@ -299,7 +299,6 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     override func openAllIconsScreen() {
         guard let hostVC else { return }
         let vc = ItemsCollectionViewController(collectionType: .poiIconCategories, items: categories, selectedItem: getSelectedItem())
-        vc.modalPresentationStyle = .fullScreen
         vc.customTitle = customTitle
         vc.iconsDelegate = self
         allIconsVCDelegate = vc

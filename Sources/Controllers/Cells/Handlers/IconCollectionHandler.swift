@@ -148,7 +148,6 @@ class IconCollectionHandler: OABaseCollectionHandler {
         if !iconImagesData.isEmpty {
             vc.iconImages = iconImagesData[0]
         }
-        vc.modalPresentationStyle = .fullScreen
         vc.customTitle = customTitle
         vc.iconsDelegate = self
         if let selectedIconColor {

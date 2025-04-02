@@ -229,12 +229,30 @@
 {
     @synchronized (_lock)
     {
-        prefs[@"vertical_exaggeration_scale"] = [NSString stringWithFormat:@"%f", ([_verticalExaggerationScaleProfile get:mode])];
-        prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
-        prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
-        prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
-        prefs[@"wikipedia_images_download_mode"] = [_wikipediaImagesDownloadModeProfile toStringValue:mode];
-        prefs[@"travelGuidesImagesDownloadMode"] = [_travelGuidesImagesDownloadModeProfile toStringValue:mode];
+        if ([_verticalExaggerationScaleProfile isSetForMode:mode])
+        {
+            prefs[@"vertical_exaggeration_scale"] = [NSString stringWithFormat:@"%f", ([_verticalExaggerationScaleProfile get:mode])];
+        }
+        if ([_mapillaryProfile isSetForMode:mode])
+        {
+            prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
+        }
+        if ([_wikipediaGlobalProfile isSetForMode:mode])
+        {
+            prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
+        }
+        if ([_wikipediaLanguagesProfile isSetForMode:mode])
+        {
+            prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
+        }
+        if ([_wikipediaImagesDownloadModeProfile isSetForMode:mode])
+        {
+            prefs[@"wikipedia_images_download_mode"] = [_wikipediaImagesDownloadModeProfile toStringValue:mode];
+        }
+        if ([_travelGuidesImagesDownloadModeProfile isSetForMode:mode])
+        {
+            prefs[@"travelGuidesImagesDownloadMode"] = [_travelGuidesImagesDownloadModeProfile toStringValue:mode];
+        }
     }
 }
 

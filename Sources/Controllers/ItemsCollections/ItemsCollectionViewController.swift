@@ -39,7 +39,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     private let iconNamesKey = "iconNamesKey"
     private let poiCategoryNameKey = "poiCategoryNameKey"
-    private let headerKey = "headerKey"
     private let chipsTitlesKey = "chipsTitlesKey"
     private let chipsSelectedIndexKey = "chipsSelectedIndexKey"
     
@@ -280,9 +279,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 
                 for category in iconCategories {
                     let section = data.createNewSection()
+                    section.headerText = category.translatedName
                     section.addRow(from: [
-                        kCellTypeKey: OADividerCell.reuseIdentifier,
-                        headerKey: category.translatedName]
+                        kCellTypeKey: OADividerCell.reuseIdentifier
+                        ]
                     )
                     section.addRow(from: [
                         kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier,
@@ -304,10 +304,14 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     override func getTitleForHeader(_ section: Int) -> String {
-        if let header = data.sectionData(for: UInt(section)).getRow(0).obj(forKey: headerKey) as? String {
-            return header
+        data.sectionData(for: UInt(section)).headerText
+    }
+    
+    override func getCustomHeight(forHeader section: Int) -> CGFloat {
+        if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler, section == 0 {
+            return 14
         }
-        return ""
+        return super.getCustomHeight(forHeader: section)
     }
     
     private func generateRowData(for paletteColor: PaletteColor) -> OATableRowData {
@@ -423,6 +427,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 let values = item.obj(forKey: chipsTitlesKey) as? [[String: String]] {
                 cell.collectionView.setValues(values, withSelectedIndex: selectedIndex)
             }
+            cell.collectionView.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 20)
             cell.collectionView.reloadData()
             
             return cell
@@ -460,10 +465,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             poiIconHandler.selectedIconColor = selectedIconColor
             poiIconHandler.regularIconColor = regularIconColor
             poiIconHandler.setScrollDirection(.vertical)
-            poiIconHandler.setItemSize(size: 36)
+            poiIconHandler.setItemSize(size: 48)
+            poiIconHandler.setIconBackgroundSize(size: 36)
             poiIconHandler.setIconSize(size: 24)
-            poiIconHandler.strokeCornerRadius = 18
-            poiIconHandler.innerViewCornerRadius = 12
+            poiIconHandler.setSpacing(spacing: 10)
             
             poiIconHandler.roundedSquareCells = false
             poiIconHandler.innerViewCornerRadius = -1

@@ -510,7 +510,7 @@
 "select_street" = "Utca kijelölése";
 "shared_string_in_name" = "itt: %@";
 "select_city" = "Település kijelölése";
-"type_city_town" = "Település beírása";
+"type_city_town" = "Adja meg a településnevet";
 "select_postcode" = "Irányítószám keresése";
 "type_postcode" = "Adja meg az irányítószámot";
 "coords_search" = "Koordináta keresése";
@@ -2162,7 +2162,7 @@
 "sign_in_with_open_street_map" = "Bejelentkezés OpenStreetMap-fiókkal";
 "osm_live_payment_desc" = "Az előfizetési díj a kiválasztott időnként lesz felszámítva. Az előfizetést bármikor lemondhatja a Google Play-en.";
 "no_purchases" = "Ön nem vásárolt semmit";
-"map_widget_rendering_fps" = "Térképrajzolás (képkocka/mp)";
+"map_widget_rendering_fps" = "Térképkirajzolás (képkocka/mp)";
 "backup_complete" = "A biztonsági mentés kész";
 "create_custom_categories_list_promo" = "Lista sorrendjének módosítása és kategóriák elrejtése. Minden módosítás profilként importálható és exportálható.";
 "shared_string_progress" = "Haladás";
@@ -2622,7 +2622,7 @@
 "ant_plus_searching_text" = "Érzékelők keresése";
 "ask_question_propose_features" = "Tegyen fel kérdést, javasoljon funkciókat";
 "enter_new_name" = "Új név megadása";
-"map_widget_sun_position" = "Nap állása";
+"map_widget_sun_position" = "Napszak";
 "map_3d_mode_hint" = "A gomb hosszú érintése lehetővé teszi a gomb pozíciójának megváltoztatását.";
 "first_marker_widget_desc" = "Beállíthatja a modult úgy, hogy az első térképjelölőig hátralévő távolságot vagy becsült érkezési időt mutassa.";
 "external_sensors_source_of_data" = "Az adat forrása";
@@ -2676,7 +2676,7 @@
 "terrain_3D_maps" = "Domborzati térképek";
 "help_article_map_interact_with_map_name" = "Műveletek a térképpel";
 "help_article_start_with_first_steps_name" = "Az első lépések";
-"parking_widget_desc" = "Megjeleníti a képernyő középpontjától a parkolóhelyig tartó távolságot.";
+"parking_widget_desc" = "Megjeleníti a képernyő középpontja és parkolóhelye közti távolságot.";
 "map_widget_glide_target_desc" = "Mutatja a célpont eléréséhez szükséges siklószámot.";
 "ble_search_again" = "Keresés újra";
 "complex_widget_alert" = "%@ modul csak a saját sorában helyezhető el.";
@@ -2730,7 +2730,7 @@
 "osmand_cloud_deletion_all_data_warning" = "Minden adat %@ lesz az OsmAnd Cloud-ból. Az eszközön lévő adatok érintetlenek maradnak.";
 "distance_to_destination_widget_desc" = "A modul az utolsó célpontig hátralévő távolságot mutatja.";
 "external_device_any_connected" = "Bármelyik összekapcsolt";
-"time_to_destination_widget_desc" = "A modul megjeleníti az érkezési időt vagy az utolsó célpontig hátralévő időt. A navigáció során az idő folyamatosan frissül, és megegyezik a jelenlegi helytől számított útvonal idejével.";
+"time_to_destination_widget_desc" = "A modul megjeleníti az érkezési időt vagy az utolsó célpontig hátralévő időt. A navigáció során az idő folyamatosan frissül az aktuális pozíciónak megfelelően.";
 "shared_string_setup_route" = "Útvonal beállítása";
 "announcement_time_intervals" = "Idő- és távolságintervallumok";
 "shared_string_relief_3d" = "3D domborzat";

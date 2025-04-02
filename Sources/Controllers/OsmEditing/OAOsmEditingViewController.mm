@@ -419,7 +419,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
             if (category)
                 [entity putTagNoLC:category.tag value:poiTypeTag];
         }
-        if (offlineEdit && poiTypeTag.length > 0)
+        if (poiTypeTag.length > 0)
             [entity putTagNoLC:POI_TYPE_TAG value:poiTypeTag];
         
         comment = comment ? comment : @"";

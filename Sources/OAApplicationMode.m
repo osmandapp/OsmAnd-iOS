@@ -628,7 +628,7 @@ static int PROFILE_TRUCK = 1000;
 + (void) initModesParents
 {
     // We can't set parent profiles directly in initialize() method. Because it creates infinity loop on app initialisation:
-    // OAAppSetttings.init() -> OAApplicationMode.init() -> OAAppSetttings.init() -> OAApplicationMode...
+    // OAAppSettings.init() -> OAApplicationMode.init() -> OAAppSettings.init() -> OAApplicationMode...
     [_TRUCK setParent:_CAR];
     [_MOTORCYCLE setParent:_CAR];
     [_MOPED setParent:_BICYCLE];
@@ -637,19 +637,26 @@ static int PROFILE_TRUCK = 1000;
 + (void) initModesParams
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    if ([settings.appModeOrder isSetForMode:_PUBLIC_TRANSPORT] && ![settings.appModeOrder isSetForMode:_TRAIN])
+    
+    if ([self hasValueForMode:_PUBLIC_TRANSPORT setting:settings.appModeOrder] && ![self hasValueForMode:_TRAIN setting:settings.appModeOrder])
         [_TRAIN setOrder:_PUBLIC_TRANSPORT.getOrder + 1];
-    if ([settings.appModeOrder isSetForMode:_PEDESTRIAN])
+    if ([self hasValueForMode:_PEDESTRIAN setting:settings.appModeOrder])
     {
-        if (![settings.appModeOrder isSetForMode:_TRUCK])
+        if (![self hasValueForMode:_TRUCK setting:settings.appModeOrder])
             [_TRUCK setOrder:_PEDESTRIAN.getOrder + 1];
-        if (![settings.appModeOrder isSetForMode:_MOTORCYCLE])
+        if (![self hasValueForMode:_MOTORCYCLE setting:settings.appModeOrder])
             [_MOTORCYCLE setOrder:_PEDESTRIAN.getOrder + 1];
-        if (![settings.appModeOrder isSetForMode:_MOPED])
+        if (![self hasValueForMode:_MOPED setting:settings.appModeOrder])
             [_MOPED setOrder:_MOTORCYCLE.getOrder + 1];
     }
-    if ([settings.appModeOrder isSetForMode:_SKI] && ![settings.appModeOrder isSetForMode:_HORSE])
+    if ([self hasValueForMode:_SKI setting:settings.appModeOrder] && ![self hasValueForMode:_HORSE setting:settings.appModeOrder])
         [_HORSE setOrder:_SKI.getOrder + 1];
+}
+
++ (BOOL)hasValueForMode:(OAApplicationMode *)mode
+               setting:(OACommonPreference *)setting
+{
+    return [setting getPrefValue:mode] != nil;
 }
 
 + (void) initCustomModes

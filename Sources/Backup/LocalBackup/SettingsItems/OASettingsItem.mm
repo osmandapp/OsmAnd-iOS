@@ -352,37 +352,30 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 @implementation OASettingsItemJsonWriter
 
-- (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
+- (BOOL)writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
     MutableOrderedDictionary *json = [MutableOrderedDictionary dictionary];
     [self.item writeItemsToJson:json];
-    if (json.count > 0)
+
+    NSError *writeJsonError;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&writeJsonError];
+    if (writeJsonError)
     {
-        
-        NSError *writeJsonError;
-        NSData *data = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&writeJsonError];
-        if (writeJsonError)
-        {
-            if (error)
-                *error = writeJsonError;
-            return NO;
-        }
-        
-        NSError *writeError;
-        [data writeToFile:filePath options:NSDataWritingAtomic error:&writeError];
-        if (writeError)
-        {
-            if (error)
-                *error = writeError;
-            return NO;
-        }
-        
-        return YES;
+        if (error)
+            *error = writeJsonError;
+        return NO;
     }
-    if (error)
-        *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeEmptyJson userInfo:nil];
     
-    return NO;
+    NSError *writeError;
+    BOOL success = [data writeToFile:filePath options:NSDataWritingAtomic error:&writeError];
+    if (!success)
+    {
+        if (error)
+            *error = writeError;
+        return NO;
+    }
+    
+    return YES;
 }
 
 @end

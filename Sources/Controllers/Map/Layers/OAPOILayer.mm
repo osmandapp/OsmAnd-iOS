@@ -378,7 +378,12 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     for (auto it = routes.begin(); it != routes.end(); ++it)
     {
         OARouteKey *routeKey = [[OARouteKey alloc] initWithKey:it.key()];
-        if (![routeKeys containsObject:routeKey])
+        OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+        OAMapStyleParameter *routesParameter = [styleSettings getParameter:HIKING_ROUTES_OSMC_ATTR];
+        BOOL routesEnabled = YES;
+        if ([routeKey.routeKey.getTag().toNSString() isEqual: @"hiking"])
+            routesEnabled = routesParameter.storedValue.length > 0 && ![routesParameter.storedValue isEqualToString:@"disabled"];
+        if (![routeKeys containsObject:routeKey] && routesEnabled)
         {
             [routeKeys addObject:routeKey];
             [self putRouteToSelected:routeKey location:coord mapObj:mapObj points:points area:area31];

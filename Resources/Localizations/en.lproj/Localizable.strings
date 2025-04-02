@@ -3586,6 +3586,24 @@
 • Improved UI for selection of location icon, added options to disable location radius and view angle\n
 • Add quick action to change \"Location position on screen\"\n";
 
+"ios_release_5_0" = "• Introduced Smart Folders for automatic track organization.\n
+• Added a full-screen gallery viewer for Wikimedia images.\n
+• Added support for Vietnamese and Hebrew Text-to-Speech (TTS) for navigation.\n
+• Added Quick Actions for controlling trip recording.\n
+• Added a \"Detailed track guidance\" option and an \"Attach to the roads\" suggestion dialog.\n
+• Made prominent peaks discoverable via map and search.\n
+• Added border highlighting for buildings and areas with detailed information.\n
+• Added an option to toggle visibility for separate favorite groups on the map.\n
+• Expanded icon options for Favorites by adding icons from all POI categories.\n
+• Added battery level display for external sensors.\n
+• Added an option to change the appearance of multiple tracks simultaneously.\n
+• Added a \"Reset\" action for the Average Speed widget.\n
+• CarPlay Search: Added the ability to select buildings.\n
+• Fixed the UTM coordinate input sequence.\n
+• Fixed an issue with track waypoint colors.\n
+• Fixed the missing \"Download all\" button for Terrain maps.\n
+• Fixed an issue where popular articles were sometimes missing in Travel Guides.\n";
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";

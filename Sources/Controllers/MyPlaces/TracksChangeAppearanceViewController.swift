@@ -789,7 +789,7 @@ extension TracksChangeAppearanceViewController {
     }
     
     private func createProColorAction(titleKey: String, parameterValue: String, selectedString: String, isRouteInfoAttribute: Bool) -> UIAction {
-        return UIAction(title: localizedString(titleKey), image: .icCustomProLogoOutlined, state: isRouteInfoAttribute && (selectedRouteAttributesString == selectedString) ? .on : .off) { [weak self] _ in
+        return UIAction(title: localizedString(titleKey), image: OAIAPHelper.isOsmAndProAvailable() ? nil : .icCustomProLogoOutlined, state: isRouteInfoAttribute && (selectedRouteAttributesString == selectedString) ? .on : .off) { [weak self] _ in
             guard let self else { return }
             if OAIAPHelper.isOsmAndProAvailable() {
                 self.data.setParameter(.coloringType, value: parameterValue)

@@ -100,8 +100,8 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         addCell(OAButtonTableViewCell.reuseIdentifier)
         addCell(GradientChartCell.reuseIdentifier)
         addCell(OACollectionSingleLineTableViewCell.reuseIdentifier)
-        addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
-        addCell(SegmentTextWithRightLabelTableViewCell.reuseIdentifier)
+        addCell(SegmentImagesTableViewCell.reuseIdentifier)
+        addCell(SegmentTextTableViewCell.reuseIdentifier)
         addCell(OASegmentSliderTableViewCell.reuseIdentifier)
     }
     
@@ -174,7 +174,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         widthRow.title = localizedString("routing_attr_width_name")
         if isWidthSelected {
             let widthModesRow = widthSection.createNewRow()
-            widthModesRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
+            widthModesRow.cellType = SegmentImagesTableViewCell.reuseIdentifier
             widthModesRow.key = RowKey.widthModesRowKey.rawValue
             if isCustomWidthSelected {
                 let customWidthModesRow = widthSection.createNewRow()
@@ -199,7 +199,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         splitIntervalRow.title = localizedString("gpx_split_interval")
         if isSplitIntervalSelected {
             let splitModesRow = splitIntervalSection.createNewRow()
-            splitModesRow.cellType = SegmentTextWithRightLabelTableViewCell.reuseIdentifier
+            splitModesRow.cellType = SegmentTextTableViewCell.reuseIdentifier
             splitModesRow.key = RowKey.splitModesRowKey.rawValue
             if isSplitIntervalNoneSelected {
                 let splitIntervalNoneDescrRow = splitIntervalSection.createNewRow()
@@ -245,6 +245,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.titleLabel.text = item.title
             var config = UIButton.Configuration.plain()
             config.baseForegroundColor = .textColorActive
+            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
             cell.button.configuration = config
             if let key = item.key {
                 cell.button.menu = createStateSelectionMenu(for: key)
@@ -311,24 +312,24 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 cell.configureBottomOffset(12)
             }
             return cell
-        } else if item.cellType == SegmentImagesWithRightLabelTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
+        } else if item.cellType == SegmentImagesTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesTableViewCell.reuseIdentifier) as! SegmentImagesTableViewCell
             cell.selectionStyle = .none
             cell.backgroundColor = .groupBg
-            cell.configureTitle(title: nil)
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
+            cell.setSegmentedControlBottomSpacing(isCustomWidthSelected ? 0 : 20)
             cell.configureSegmentedControl(icons: [.icCustomTrackLineThin, .icCustomTrackLineMedium, .icCustomTrackLineBold, .icCustomParameters], selectedSegmentIndex: selectedWidthIndex)
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }
                 self.handleWidthSelection(index: index)
             }
             return cell
-        } else if item.cellType == SegmentTextWithRightLabelTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentTextWithRightLabelTableViewCell.reuseIdentifier) as! SegmentTextWithRightLabelTableViewCell
+        } else if item.cellType == SegmentTextTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentTextTableViewCell.reuseIdentifier) as! SegmentTextTableViewCell
             cell.selectionStyle = .none
             cell.backgroundColor = .groupBg
-            cell.configureTitle(title: nil)
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
+            cell.setSegmentedControlBottomSpacing(0)
             cell.configureSegmentedControl(titles: [localizedString("shared_string_none"), localizedString("shared_string_time"), localizedString("shared_string_distance")], selectedSegmentIndex: selectedSplitIntervalIndex)
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }
@@ -441,17 +442,37 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         guard let type = selectedColorType else { return }
         switch type {
         case .trackSolid:
-            configureLineColors()
-            isColorSelected = true
-            isSolidColorSelected = true
-            isGradientColorSelected = false
-            isRouteAttributeTypeSelected = false
+            if preselectParameter(in: tracks, extractor: { $0.color }) != nil {
+                configureLineColors()
+                isColorSelected = true
+                isSolidColorSelected = true
+                isGradientColorSelected = false
+                isRouteAttributeTypeSelected = false
+            } else {
+                selectedColorType = nil
+                initialData.setParameter(.coloringType, value: nil)
+                data.setParameter(.coloringType, value: nil)
+                isColorSelected = false
+                isSolidColorSelected = false
+                isGradientColorSelected = false
+                isRouteAttributeTypeSelected = false
+            }
         case .speed, .altitude, .slope:
-            configureGradientColors()
-            isColorSelected = true
-            isSolidColorSelected = false
-            isGradientColorSelected = true
-            isRouteAttributeTypeSelected = false
+            if preselectParameter(in: tracks, extractor: { $0.gradientPaletteName }) != nil {
+                configureGradientColors()
+                isColorSelected = true
+                isSolidColorSelected = false
+                isGradientColorSelected = true
+                isRouteAttributeTypeSelected = false
+            } else {
+                selectedColorType = nil
+                initialData.setParameter(.coloringType, value: nil)
+                data.setParameter(.coloringType, value: nil)
+                isColorSelected = false
+                isSolidColorSelected = false
+                isGradientColorSelected = false
+                isRouteAttributeTypeSelected = false
+            }
         case .attribute:
             selectedRouteAttributesString = type.isRouteInfoAttribute() ? type.getName(routeInfoAttribute: typeStr) : nil
             isRouteAttributeTypeSelected = true
@@ -703,7 +724,6 @@ extension TracksChangeAppearanceViewController {
         let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && selectedColorType == nil ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(.coloringType, value: nil)
-            self.data.setParameter(.color, value: nil)
             self.selectedColorType = nil
             self.isRouteAttributeTypeSelected = false
             self.resetColorSelectionFlags()

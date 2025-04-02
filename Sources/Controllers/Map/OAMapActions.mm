@@ -116,6 +116,7 @@
     if (!mode)
         mode = appMode ? appMode : [self getRouteMode];
     
+    [_settings setCurrentMode:mode];
     [_routingHelper setAppMode:mode];
     [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
     // save application mode controls

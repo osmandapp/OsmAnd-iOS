@@ -872,7 +872,7 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
             if let selectedColorItem {
                 delegate?.selectColorItem(selectedColorItem)
             }
-            dismiss(animated: true)
+            super.onLeftNavbarButtonPressed()
         }
     }
     

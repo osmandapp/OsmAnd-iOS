@@ -86,11 +86,7 @@ static const NSInteger kNearbyPoiMinRadius = 250;
 static const NSInteger kNearbyPoiMaxRadius = 1000;
 static const NSInteger kNearbyPoiSearchFactory = 2;
 
-static const CGFloat kTextMaxHeight = 170.0;
-static const CGFloat kLandscapeTextMaxHeight = 210.0;
-static const CGFloat kPadLandscapeTextMaxHeight = 150.0;
-static const CGFloat kHeightForSmallWidth = 200.0;
-static const CGFloat kSmallWidth = 375.0;
+static const CGFloat kTextMaxHeight = 150.0;
 
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
@@ -421,7 +417,7 @@ static const CGFloat kSmallWidth = 375.0;
 - (void) calculateRowsHeight:(CGFloat)width
 {
     CGFloat regularTextWidth = width - kMarginLeft - kMarginRight;
-    CGFloat collapsableTitleWidth = width - kMarginLeft - (OAUtilities.isLandscape && !OAUtilities.isIPad ? kLandscapeCollapsableTitleMarginRight : kCollapsableTitleMarginRight);
+    CGFloat collapsableTitleWidth = width - kMarginLeft - kCollapsableTitleMarginRight;
     for (OARowInfo *row in _rows)
     {
         CGFloat textWidth = row.collapsable ? collapsableTitleWidth : regularTextWidth;
@@ -438,10 +434,7 @@ static const CGFloat kSmallWidth = 375.0;
         {
             NSString *text = row.textPrefix.length == 0 ? row.text : [NSString stringWithFormat:@"%@: %@", row.textPrefix, row.text];
             CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[row getFont]];
-            CGFloat landscapeHeightForDevice = OAUtilities.isIPad ? kPadLandscapeTextMaxHeight : kLandscapeTextMaxHeight;
-            CGFloat heightForOrientation = OAUtilities.isLandscape ? landscapeHeightForDevice : kTextMaxHeight;
-            CGFloat heightForWidth = width <= kSmallWidth ? kHeightForSmallWidth : heightForOrientation;
-            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:heightForWidth font:[row getFont]];
+            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:kTextMaxHeight font:[row getFont]];
             
             rowHeight = MAX(bounds.height, 28.0) + 11.0 + 11.0;
             row.height = rowHeight;
@@ -498,6 +491,14 @@ static const CGFloat kSmallWidth = 375.0;
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak OATargetInfoViewController *weakSelf = self;
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [weakSelf.tableView reloadData];
+    } completion:nil];
 }
 
 - (void) setContentBackgroundColor:(UIColor *)color
@@ -987,6 +988,13 @@ static const CGFloat kSmallWidth = 375.0;
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
             [cell setDescription:nil];
 
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                info.height = cell.textView.frame.size.height + 33.0;
+                [cell updateCollapsableHeight:[info getRawHeight]];
+                [tableView beginUpdates];
+                [tableView endUpdates];
+            });
+            
             cell.collapsableView = info.collapsableView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
 

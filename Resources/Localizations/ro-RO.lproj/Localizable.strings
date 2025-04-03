@@ -1351,7 +1351,7 @@
 "nothing_found_descr" = "Schimbați căutarea sau măriți raza acesteia.";
 "nothing_found" = "Nimic găsit";
 "units_nm_h" = "nmi/h ( nautic miles/oră)";
-"si_nm_h" = "Mile marine pe oră (noduri)";
+"si_nm_h" = "Mile nautice pe oră (noduri)";
 "right_side_navigation" = "Trafic pe dreapta";
 "left_side_navigation" = "Trafic pe stânga";
 "driving_region_europe_asia" = "Europa, Asia, America Latină și similare";
@@ -3454,7 +3454,7 @@
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "shared_string_ok" = "OK";
-"shared_string_interval" = "Interval";
+"shared_string_interval" = "Intervalul";
 "mapillary" = "Mapilar";
 "map_settings_weather_temp_water" = "Temperatura apei";
 "shared_string_min" = "Min";

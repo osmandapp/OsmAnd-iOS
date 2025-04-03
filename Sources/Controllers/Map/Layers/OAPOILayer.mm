@@ -386,7 +386,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     }
 }
 
-- (BOOL)isRouteEnabledForKey:(OARouteKey *)routeKey  {
+- (BOOL)isRouteEnabledForKey:(OARouteKey *)routeKey
+{
     if ([routeKey.routeKey.getTag().toNSString() isEqualToString:@"hiking"])
     {
         OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];

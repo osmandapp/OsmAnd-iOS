@@ -3630,3 +3630,6 @@
 "rendering_value_sacScale_name" = "SAC";
 "routing_attr_motor_type_gas_name" = "CNG";
 "shared_string_pause" = "Pauză";
+"battery_level_settings_description" = "afișează nivelul bateriei senzorului ca valoare principală";
+"shared_string_date" = "Dată";
+"add_hidden_group_info" = "Punctul adăugat poate fi găsit în „%@”. Dezacoperiți grupul selectat pentru a-l afișa pe hartă.";

@@ -495,7 +495,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    __weak OATargetInfoViewController *weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [weakSelf.tableView reloadData];
     } completion:nil];
@@ -987,13 +987,9 @@ static const CGFloat kTextMaxHeight = 150.0;
             cell.textView.textColor = info.textColor;
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
             [cell setDescription:nil];
-
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                info.height = cell.textView.frame.size.height + 33.0;
-                [cell updateCollapsableHeight:[info getRawHeight]];
-                [tableView beginUpdates];
-                [tableView endUpdates];
-            });
+            
+            [cell.textView sizeToFit];
+            info.height = cell.textView.frame.size.height + 33.0;
             
             cell.collapsableView = info.collapsableView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
@@ -1101,7 +1097,12 @@ static const CGFloat kTextMaxHeight = 150.0;
     else if (info.collapsable)
     {
         info.collapsed = !info.collapsed;
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [UIView transitionWithView:tableView
+                          duration:0.3
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+            [tableView reloadData];
+        } completion:nil];
         [self calculateContentHeight];
         if (self.delegate)
             [self.delegate contentHeightChanged:0];

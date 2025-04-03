@@ -653,7 +653,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (!self.favorite->getPickupTime().isNull())
     {
         NSString *timeString = self.favorite->getPickupTime().toNSString();
-        _pickupTime =  [[OAFavoriteItem ISO8601DateFormatter] dateFromString:timeString];
+        _pickupTime = [[OAFavoriteItem ISO8601DateFormatter] dateFromString:timeString];
         return _pickupTime;
     }
     else

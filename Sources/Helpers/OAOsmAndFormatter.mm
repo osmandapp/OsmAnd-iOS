@@ -301,9 +301,19 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
       decimalPlacesNumber:(NSInteger)decimalPlacesNumber
            valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    
+    static NSNumberFormatter *numberFormatter = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        numberFormatter = [NSNumberFormatter new];
+        [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        numberFormatter.groupingSeparator = @" ";
+        NSString *preferredLocale = OAUtilities.currentLang;
+        NSLocale *locale = [NSLocale localeWithLocaleIdentifier:preferredLocale];
+        numberFormatter.locale = locale;
+    });
 
     NSMutableString *pattern = [NSMutableString string];
     [pattern appendString:@"0"];
@@ -317,12 +327,6 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         }
     }
     numberFormatter.positiveFormat = pattern;
-
-    NSString *preferredLocale = OAUtilities.currentLang;
-    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:preferredLocale];
-
-    numberFormatter.locale = locale;
-    numberFormatter.groupingSeparator = @" ";
 
     BOOL fiveOrMoreDigits = ABS(value) >= 10000;
     numberFormatter.usesGroupingSeparator = fiveOrMoreDigits;

@@ -625,10 +625,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (!self.favorite->getTime().isNull())
     {
         NSString *timeString = self.favorite->getTime().toNSString();
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        _timestamp = [dateFormat dateFromString:timeString];
+        _timestamp = [[OAFavoriteItem ISO8601DateFormatter] dateFromString:timeString];
         return _timestamp;
     }
     else
@@ -656,10 +653,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (!self.favorite->getPickupTime().isNull())
     {
         NSString *timeString = self.favorite->getPickupTime().toNSString();
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        _pickupTime = [dateFormat dateFromString:timeString];
+        _pickupTime =  [[OAFavoriteItem ISO8601DateFormatter] dateFromString:timeString];
         return _pickupTime;
     }
     else
@@ -767,12 +761,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     NSString *creationDateExt = [pt getExtensionsToRead][CREATION_TIME_EXTENSION];
     if (creationDateExt)
     {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-
-        NSString *time = creationDateExt;
-        [fp setPickupTime:[dateFormatter dateFromString:time]];
+        [fp setPickupTime:[[OAFavoriteItem ISO8601DateFormatter] dateFromString:creationDateExt]];
     }
 
     NSString *calendarExt = [pt getExtensionsToRead][CALENDAR_EXTENSION];
@@ -790,16 +779,21 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     return fp;
 }
 
-+ (NSString *) toStringDate:(NSDate *)date
++ (NSISO8601DateFormatter *)ISO8601DateFormatter {
+    static NSISO8601DateFormatter *isoFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        isoFormatter = [NSISO8601DateFormatter new];
+        isoFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    });
+    return isoFormatter;
+}
+
++ (NSString *)toStringDate:(NSDate *)date
 {
     if (!date || [date timeIntervalSince1970] <= 0)
         return nil;
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd_HH:mm:ss"];
-    NSString *dateString = [dateFormatter stringFromDate:date];
-    dateString = [dateString stringByReplacingOccurrencesOfString:@"_" withString:@"T"];
-    return  [dateString stringByAppendingString:@"Z"];
+    return [[self ISO8601DateFormatter] stringFromDate:date];
 }
 
 - (UIImage *) getCompositeIcon

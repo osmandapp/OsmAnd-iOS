@@ -76,6 +76,7 @@ static const NSInteger _exportButtonIndex = 1;
 @property (strong, nonatomic) NSArray *menuItems;
 @property (strong, nonatomic) NSMutableArray *sortedFavoriteItems;
 @property NSUInteger sortingType;
+@property CFTimeInterval lastUpdate;
 
 @end
 
@@ -294,114 +295,131 @@ static UIViewController *parentController;
 
 - (void)updateDistanceAndDirection
 {
-    [self updateDistanceAndDirection:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateDistanceAndDirection:NO];
+    });
 }
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.favoriteTableView isEditing])
+    if ([self.favoriteTableView isEditing])
+        return;
+    
+    CFTimeInterval currentTime = CACurrentMediaTime();
+    if (currentTime - self.lastUpdate < 0.3 && !forceUpdate)
+        return;
+    self.lastUpdate = currentTime;
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    // Obtain fresh location and heading
+    CLLocation *newLocation = app.locationServices.lastKnownLocation;
+    if (!newLocation)
+        return;
+    
+    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+    CLLocationDirection newDirection =
+    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+    ? newLocation.course
+    : newHeading;
+    
+    __weak __typeof(self) weakSelf = self;
+    dispatch_barrier_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        __strong __typeof(self) strongSelf = weakSelf;
+        if (!strongSelf) {
             return;
-
-        if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !forceUpdate)
-            return;
-        self.lastUpdate = [[NSDate date] timeIntervalSince1970];
-
-        OsmAndAppInstance app = [OsmAndApp instance];
-        // Obtain fresh location and heading
-        CLLocation* newLocation = app.locationServices.lastKnownLocation;
-        if (!newLocation)
-            return;
-
-        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-        CLLocationDirection newDirection =
-        (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-        ? newLocation.course
-        : newHeading;
-
-        [_isFiltered ? _filteredItems : self.sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
+        }
+        NSMutableArray *itemsToProcess = strongSelf->_isFiltered
+        ? strongSelf->_filteredItems
+        : strongSelf.sortedFavoriteItems;
+        
+        [itemsToProcess enumerateObjectsUsingBlock:^(OAFavoriteItem *itemData, NSUInteger idx, BOOL *stop) {
             const auto& favoritePosition31 = itemData.favorite->getPosition31();
             const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
             const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
             const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                                newLocation.coordinate.latitude,
-                                                                favoriteLon, favoriteLat);
-
+                                                              newLocation.coordinate.latitude,
+                                                              favoriteLon, favoriteLat);
+            
             itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
             itemData.distanceMeters = distance;
             CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
             itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-         }];
-
-        if (self.sortingType == 1 && [_isFiltered ? _filteredItems : self.sortedFavoriteItems count] > 0)
+        }];
+        
+        if (strongSelf.sortingType == 1 && [itemsToProcess count] > 0)
         {
-            NSArray *sortedArray = [_isFiltered ? _filteredItems : self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2){
-                return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
-            }];
-            [_isFiltered ? _filteredItems : self.sortedFavoriteItems setArray:sortedArray];
+            [strongSelf sortItemsByDistance:itemsToProcess];
         }
-
-        if (_decelerating || _contextMenuVisible)
-            return;
-
-        [self refreshVisibleRows];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(self) strongSelf = weakSelf;
+            if (!strongSelf) {
+                return;
+            }
+            if (strongSelf->_decelerating || strongSelf->_contextMenuVisible)
+                return;
+            [strongSelf refreshVisibleRows];
+        });
     });
+}
+
+- (void)sortItemsByDistance:(NSMutableArray<OAFavoriteItem *> *)items
+{
+    NSArray *sortedArray = [items sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem *obj1, OAFavoriteItem *obj2) {
+        return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending :
+               (obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame);
+    }];
+    [items setArray:sortedArray];
 }
 
 - (void)refreshVisibleRows
 {
     if ([self.favoriteTableView isEditing])
         return;
-
-    __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong __typeof(self) strongSelf = weakSelf;
-        if (!strongSelf) return;
-
-        NSArray *visibleIndexPaths = [strongSelf.favoriteTableView indexPathsForVisibleRows];
-        for (NSIndexPath *i in visibleIndexPaths)
+    
+    NSArray *visibleIndexPaths = [self.favoriteTableView indexPathsForVisibleRows];
+    for (NSIndexPath *i in visibleIndexPaths)
+    {
+        UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:i];
+        if ([cell isKindOfClass:[OAPointTableViewCell class]])
         {
-            UITableViewCell *cell = [strongSelf.favoriteTableView cellForRowAtIndexPath:i];
-            if ([cell isKindOfClass:[OAPointTableViewCell class]])
+            OAFavoriteItem* item;
+            if (_directionButton.tag == 1)
             {
-                OAFavoriteItem* item;
-                if (_directionButton.tag == 1)
+                if (i.section == 0)
+                    item = [_isFiltered ? _filteredItems : self.sortedFavoriteItems objectAtIndex:i.row];
+            }
+            else
+            {
+                NSDictionary *groupData = _data[i.section][0];
+                NSString *cellType = groupData[@"type"];
+                if ([cellType isEqualToString:@"group"])
                 {
-                    if (i.section == 0)
-                        item = [_isFiltered ? _filteredItems : strongSelf.sortedFavoriteItems objectAtIndex:i.row];
-                }
-                else
-                {
-                    NSDictionary *groupData = _data[i.section][0];
-                    NSString *cellType = groupData[@"type"];
-                    if ([cellType isEqualToString:@"group"])
-                    {
-                        FavoriteTableGroup *group = groupData[@"group"];
-                        item = [group.favoriteGroup.points objectAtIndex:i.row - 1];
-                    }
-                }
-
-                if (item)
-                {
-                    OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
-
-                    [c.titleView setText:[item getDisplayName]];
-                    c = [strongSelf setupPoiIconForCell:c withFavaoriteItem:item];
-
-                    [c.distanceView setText:item.distance];
-                    c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+                    FavoriteTableGroup *group = groupData[@"group"];
+                    item = [group.favoriteGroup.points objectAtIndex:i.row - 1];
                 }
             }
+            
+            if (item)
+            {
+                OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
+                
+                [c.titleView setText:[item getDisplayName]];
+                c = [self setupPoiIconForCell:c withFavoriteItem:item];
+                
+                [c.distanceView setText:item.distance];
+                c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+            }
         }
-        
-        [strongSelf.favoriteTableView beginUpdates];
-        NSArray<NSIndexPath *> *freshIndexPathsForVisibleRows = [strongSelf.favoriteTableView indexPathsForVisibleRows];
-        if (freshIndexPathsForVisibleRows.count > 0)
-        {
-            [strongSelf.favoriteTableView reloadRowsAtIndexPaths:freshIndexPathsForVisibleRows withRowAnimation:UITableViewRowAnimationNone];
-        }
-        [strongSelf.favoriteTableView endUpdates];
-    });
+    }
+    
+    [self.favoriteTableView beginUpdates];
+    NSArray<NSIndexPath *> *freshIndexPathsForVisibleRows = [self.favoriteTableView indexPathsForVisibleRows];
+    if (freshIndexPathsForVisibleRows.count > 0)
+    {
+        [self.favoriteTableView reloadRowsAtIndexPaths:freshIndexPathsForVisibleRows withRowAnimation:UITableViewRowAnimationNone];
+    }
+    [self.favoriteTableView endUpdates];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -1206,7 +1224,7 @@ static UIViewController *parentController;
         {
             OAFavoriteItem* item = _isFiltered ? [_filteredItems objectAtIndex:indexPath.row] : [self.sortedFavoriteItems objectAtIndex:indexPath.row];
             [cell.titleView setText:[item getDisplayName]];
-            cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];
+            cell = [self setupPoiIconForCell:cell withFavoriteItem:item];
 
             [cell.distanceView setText:item.distance];
             cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
@@ -1335,7 +1353,7 @@ static UIViewController *parentController;
         }
         OAFavoriteItem* item = [groupData.favoriteGroup.points objectAtIndex:dataIndex];
         [cell.titleView setText:[item getDisplayName]];
-        cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];
+        cell = [self setupPoiIconForCell:cell withFavoriteItem:item];
 
         [cell.distanceView setText:item.distance];
 
@@ -1345,7 +1363,7 @@ static UIViewController *parentController;
     return cell;
 }
 
-- (OAPointTableViewCell *) setupPoiIconForCell:(OAPointTableViewCell *)cell withFavaoriteItem:(OAFavoriteItem*)item
+- (OAPointTableViewCell *) setupPoiIconForCell:(OAPointTableViewCell *)cell withFavoriteItem:(OAFavoriteItem*)item
 {
     cell.titleIcon.image = [item getCompositeIcon];
     return cell;

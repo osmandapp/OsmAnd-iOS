@@ -2989,3 +2989,5 @@
 "help_article_navigation_routing_car_based_routing_name" = "車のルーティング(トラック、オートバイ)";
 "rendering_attr_showClimbingRoutes_name" = "登山ルート";
 "rendering_attr_showClimbingRoutes_description" = "登山ルートを表示します";
+"reset_average_speed" = "平均速度をリセット";
+"new_trip_segment" = "新しい旅程区分";

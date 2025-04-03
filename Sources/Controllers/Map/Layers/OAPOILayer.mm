@@ -378,17 +378,22 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     for (auto it = routes.begin(); it != routes.end(); ++it)
     {
         OARouteKey *routeKey = [[OARouteKey alloc] initWithKey:it.key()];
-        OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
-        OAMapStyleParameter *routesParameter = [styleSettings getParameter:HIKING_ROUTES_OSMC_ATTR];
-        BOOL routesEnabled = YES;
-        if ([routeKey.routeKey.getTag().toNSString() isEqual: @"hiking"])
-            routesEnabled = routesParameter.storedValue.length > 0 && ![routesParameter.storedValue isEqualToString:@"disabled"];
-        if (![routeKeys containsObject:routeKey] && routesEnabled)
+        if (![routeKeys containsObject:routeKey] && [self isRouteEnabledForKey:routeKey withParameter:HIKING_ROUTES_OSMC_ATTR isEqualTo:@"hiking"])
         {
             [routeKeys addObject:routeKey];
             [self putRouteToSelected:routeKey location:coord mapObj:mapObj points:points area:area31];
         }
     }
+}
+
+- (BOOL)isRouteEnabledForKey:(OARouteKey *)routeKey withParameter:(NSString *)parameter isEqualTo:(NSString *)string  {
+    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+    OAMapStyleParameter *routesParameter = [styleSettings getParameter:parameter];
+    
+    if ([routeKey.routeKey.getTag().toNSString() isEqualToString:string])
+        return routesParameter.storedValue.length > 0 && ![routesParameter.storedValue isEqualToString:@"disabled"];
+    
+    return YES;
 }
 
 - (void) putRouteToSelected:(OARouteKey *)key location:(CLLocationCoordinate2D)location mapObj:(const std::shared_ptr<const OsmAnd::MapObject> &)mapObj points:(NSMutableArray<OATargetPoint *> *)points area:(OsmAnd::AreaI)area

@@ -446,33 +446,29 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 configureLineColors()
                 isColorSelected = true
                 isSolidColorSelected = true
-                isGradientColorSelected = false
-                isRouteAttributeTypeSelected = false
             } else {
                 selectedColorType = nil
                 initialData.setParameter(.coloringType, value: nil)
                 data.setParameter(.coloringType, value: nil)
                 isColorSelected = false
                 isSolidColorSelected = false
-                isGradientColorSelected = false
-                isRouteAttributeTypeSelected = false
             }
+            isGradientColorSelected = false
+            isRouteAttributeTypeSelected = false
         case .speed, .altitude, .slope:
             if preselectParameter(in: tracks, extractor: { $0.gradientPaletteName }) != nil {
                 configureGradientColors()
                 isColorSelected = true
-                isSolidColorSelected = false
                 isGradientColorSelected = true
-                isRouteAttributeTypeSelected = false
             } else {
                 selectedColorType = nil
                 initialData.setParameter(.coloringType, value: nil)
                 data.setParameter(.coloringType, value: nil)
                 isColorSelected = false
-                isSolidColorSelected = false
                 isGradientColorSelected = false
-                isRouteAttributeTypeSelected = false
             }
+            isSolidColorSelected = false
+            isRouteAttributeTypeSelected = false
         case .attribute:
             selectedRouteAttributesString = type.isRouteInfoAttribute() ? type.getName(routeInfoAttribute: typeStr) : nil
             isRouteAttributeTypeSelected = true

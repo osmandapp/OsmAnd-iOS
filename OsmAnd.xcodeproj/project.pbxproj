@@ -1360,8 +1360,6 @@
 		C5693B832A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7F2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png */; };
 		C5693B882A9F5A09007EA552 /* ic_custom_terrain@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B862A9F5A08007EA552 /* ic_custom_terrain@2x.png */; };
 		C5693B892A9F5A09007EA552 /* ic_custom_terrain@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B872A9F5A08007EA552 /* ic_custom_terrain@3x.png */; };
-		C56B7D262D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C56B7D252D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.xib */; };
-		C56B7D272D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56B7D242D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.swift */; };
 		C56E3AF82B4DA0D60084080A /* MapSettingsGpxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E3AF72B4DA0D60084080A /* MapSettingsGpxViewController.swift */; };
 		C56FAB4C29B226A40096192F /* OACameraTiltWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB4A29B226A40096192F /* OACameraTiltWidget.mm */; };
 		C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB4F29B226C60096192F /* OACameraDistanceWidget.mm */; };
@@ -4937,8 +4935,6 @@
 		C5693B7F2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day_big@2x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day_big@2x.png"; sourceTree = "<group>"; };
 		C5693B862A9F5A08007EA552 /* ic_custom_terrain@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain@2x.png"; path = "Resources/Icons/ic_custom_terrain@2x.png"; sourceTree = "<group>"; };
 		C5693B872A9F5A08007EA552 /* ic_custom_terrain@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain@3x.png"; path = "Resources/Icons/ic_custom_terrain@3x.png"; sourceTree = "<group>"; };
-		C56B7D242D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentTextWithRightLabelTableViewCell.swift; sourceTree = "<group>"; };
-		C56B7D252D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentTextWithRightLabelTableViewCell.xib; sourceTree = "<group>"; };
 		C56E3AF72B4DA0D60084080A /* MapSettingsGpxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsGpxViewController.swift; sourceTree = "<group>"; };
 		C56FAB4929B226A40096192F /* OACameraTiltWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACameraTiltWidget.h; sourceTree = "<group>"; };
 		C56FAB4A29B226A40096192F /* OACameraTiltWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACameraTiltWidget.mm; sourceTree = "<group>"; };
@@ -11712,7 +11708,6 @@
 				469F0C212C627E2A00874CC6 /* PaletteCollectionViewCell.swift */,
 				32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */,
 				FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */,
-				C56B7D242D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.swift */,
 				C50867862D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift */,
 				C508678A2D9D5E32000B7219 /* SegmentTextTableViewCell.swift */,
 				32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */,
@@ -11846,7 +11841,6 @@
 				469F0C232C627F9000874CC6 /* PaletteCollectionViewCell.xib */,
 				32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */,
 				FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */,
-				C56B7D252D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.xib */,
 				C50867872D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib */,
 				C508678B2D9D5E32000B7219 /* SegmentTextTableViewCell.xib */,
 				32FF4C252C183A6400246B36 /* SegmentTableHeaderView.xib */,
@@ -15130,7 +15124,6 @@
 				329E56B62C7BB45F00DC7B7C /* OAIconsPaletteCell.xib in Resources */,
 				3296B48627F8790800108AF7 /* ic_navbar_pencil@3x.png in Resources */,
 				DA52CDEB24AE087F00CC309D /* img_help_width_limit_day@3x.png in Resources */,
-				C56B7D262D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.xib in Resources */,
 				DA0D1633281BEEF500CEEF58 /* map_turn_roundabout_right@2x.png in Resources */,
 				8432577F1A9DADE300A7964E /* ic_gpx_distance@2x.png in Resources */,
 				323BD8F82628850400D255ED /* ic_bg_point_octagon_center_small@3x.png in Resources */,
@@ -17528,7 +17521,6 @@
 				46E9AD9728DC8B1200CC55F9 /* OASwitchTableViewCell.m in Sources */,
 				32AFDC7E2A9500D800809EE0 /* TravelArticleDialogViewController.swift in Sources */,
 				B0D61E373B1DC253E7C0BB0C /* OAFoldersCollectionView.mm in Sources */,
-				C56B7D272D7A335D0096271B /* SegmentTextWithRightLabelTableViewCell.swift in Sources */,
 				CA4EDC45F03787B5F481123A /* OASlider.mm in Sources */,
 				CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */,
 				DA4ABED12876D71300B996EF /* OAExportBackupTask.m in Sources */,

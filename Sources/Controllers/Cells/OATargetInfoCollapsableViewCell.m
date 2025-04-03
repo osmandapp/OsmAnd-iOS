@@ -77,15 +77,9 @@
         {
             [self addSubview:_collapsableView];
         }
-        [self updateCollapsableHeight:rawHeight];
+        _collapsableView.frame = CGRectMake(0, rawHeight, self.frame.size.width, _collapsableView.frame.size.height);
         _collapsableView.collapsed = collapsed;
     }
-}
-
--(void) updateCollapsableHeight:(int)height
-{
-    if (_collapsableView)
-        _collapsableView.frame = CGRectMake(0, height, self.frame.size.width, _collapsableView.frame.size.height);
 }
 
 -(void) updateCollapsedState:(BOOL)collapsed

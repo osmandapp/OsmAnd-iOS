@@ -110,6 +110,7 @@ static const NSInteger _exportButtonIndex = 1;
     
     UIFont *_originalGroupFont;
     UIFont *_italicGroupFont;
+    dispatch_queue_t _favoritesQueue;
 }
 
 static UIViewController *parentController;
@@ -127,6 +128,7 @@ static UIViewController *parentController;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _favoritesQueue = dispatch_queue_create("com.osmand.favorites", DISPATCH_QUEUE_SERIAL);
 
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     _decelerating = NO;
@@ -323,7 +325,7 @@ static UIViewController *parentController;
     : newHeading;
     
     __weak __typeof(self) weakSelf = self;
-    dispatch_barrier_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(_favoritesQueue, ^{
         __strong __typeof(self) strongSelf = weakSelf;
         if (!strongSelf) {
             return;

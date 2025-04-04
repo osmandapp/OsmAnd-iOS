@@ -1284,20 +1284,26 @@ struct DrawPathData
 
 - (CLLocationCoordinate2D)calculateProjectionOnRoutePoint
 {
-    CLLocation *ll = [_routingHelper getLastFixedLocation];
+    CLLocation *lastLocation = [_routingHelper getLastFixedLocation];
     OARouteCalculationResult *route = [_routingHelper getRoute];
-    NSArray<CLLocation *> *locs = [route getImmutableAllLocations];
-    if (locs.count == 0)
+    NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
+    if (locations.count == 0)
         return kCLLocationCoordinate2DInvalid;
     
-    int cr = route.currentRoute;
-    int locIndex = (int)locs.count - 1;
+    int currentRoute = route.currentRoute;
+    int locIndex = (int)locations.count - 1;
     if ([route getIntermediatePointsToPass] > 0)
         locIndex = [route getIndexOfIntermediate:[route getIntermediatePointsToPass] - 1];
-    if (ll != nil && cr > 0 && cr < locs.count && locIndex >= 0 && locIndex < locs.count)
+    
+    if (lastLocation != nil && currentRoute > 0 && currentRoute < locations.count && locIndex >= 0 && locIndex < locations.count)
     {
-        CLLocation *endLocation = locs[cr];
-        return endLocation.coordinate;
+        CLLocation *target = locations[locIndex];
+        double targetDistance = [lastLocation distanceFromLocation:target];
+        CLLocationCoordinate2D latLon = [GpxUtils calculateProjectionOnSegmentFrom:locations target:target startIndex:currentRoute - 1 targetDistance:targetDistance];
+        if (!CLLocationCoordinate2DIsValid(latLon))
+            latLon = [GpxUtils calculateProjectionOnSegmentFrom:locations target:target startIndex:currentRoute targetDistance:targetDistance];
+        if (CLLocationCoordinate2DIsValid(latLon))
+            return latLon;
     }
     
     return kCLLocationCoordinate2DInvalid;

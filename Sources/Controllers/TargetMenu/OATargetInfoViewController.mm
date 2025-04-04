@@ -86,7 +86,7 @@ static const NSInteger kNearbyPoiMinRadius = 250;
 static const NSInteger kNearbyPoiMaxRadius = 1000;
 static const NSInteger kNearbyPoiSearchFactory = 2;
 
-static const CGFloat kTextMaxHeight = 190.0;
+static const CGFloat kTextMaxHeight = 150.0;
 
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
@@ -491,6 +491,14 @@ static const CGFloat kTextMaxHeight = 190.0;
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak __typeof(self) weakSelf = self;
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [weakSelf.tableView reloadData];
+    } completion:nil];
 }
 
 - (void) setContentBackgroundColor:(UIColor *)color
@@ -979,7 +987,10 @@ static const CGFloat kTextMaxHeight = 190.0;
             cell.textView.textColor = info.textColor;
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
             [cell setDescription:nil];
-
+            
+            [cell.textView sizeToFit];
+            info.height = cell.textView.frame.size.height + 33.0;
+            
             cell.collapsableView = info.collapsableView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
 
@@ -1086,7 +1097,12 @@ static const CGFloat kTextMaxHeight = 190.0;
     else if (info.collapsable)
     {
         info.collapsed = !info.collapsed;
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [UIView transitionWithView:tableView
+                          duration:0.3
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+            [tableView reloadData];
+        } completion:nil];
         [self calculateContentHeight];
         if (self.delegate)
             [self.delegate contentHeightChanged:0];

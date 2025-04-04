@@ -35,7 +35,7 @@
         _imminent = NO;
         _scaleCoefficient = scaleCoefficient;
         _miniCoeff = 2.f;
-        _leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
+        _leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get:[[OARoutingHelper sharedInstance] getAppMode]]];
         _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
         _secondTurnColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
         

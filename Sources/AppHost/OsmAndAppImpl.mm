@@ -1274,7 +1274,10 @@ NSString *const kXmlColon = @"_-_";
     }
     
     if (drg)
+    {
         [[OAAppSettings sharedManager].drivingRegion set:drg.region];
+        [[OAAppSettings sharedManager].drivingRegion set:drg.region mode:[[OARoutingHelper sharedInstance] getAppMode]];
+    }
 }
 
 - (NSString *) getUserIosId

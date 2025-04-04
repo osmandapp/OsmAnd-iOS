@@ -117,8 +117,6 @@
         mode = appMode ? appMode : [self getRouteMode];
     
     [_routingHelper setAppMode:mode];
-    [_settings setApplicationModePref:mode markAsLastUsed:NO];
-    
     [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
     // save application mode controls
     [_settings.followTheRoute set:NO];

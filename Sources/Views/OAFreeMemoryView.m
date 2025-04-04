@@ -147,6 +147,7 @@
     }
     NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
     _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
+    [_freeMemLabel sizeToFit];
 }
 
 - (void) drawRect:(CGRect)rect

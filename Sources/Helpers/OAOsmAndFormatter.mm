@@ -70,11 +70,12 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         intervalInUnits = interval / 60.0;
     }
     
-    NSString *formattedInterval = [NSString stringWithFormat:@"%d", (int)intervalInUnits];
+    NSString *formattedInterval = floor(intervalInUnits) == intervalInUnits
+        ? [NSString stringWithFormat:@"%ld", (long)intervalInUnits]
+        : [NSString stringWithFormat:@"%@", @(intervalInUnits)];
     return withUnit
-    	? [NSString stringWithFormat:@"%@ %@", formattedInterval, unitsStr]
-    	: formattedInterval;
-
+        ? [NSString stringWithFormat:@"%@ %@", formattedInterval, unitsStr]
+        : formattedInterval;
 }
 
 + (NSString *) getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def

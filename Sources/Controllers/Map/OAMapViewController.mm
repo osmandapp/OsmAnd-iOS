@@ -1089,6 +1089,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (!CGPointEqualToPoint(firstPoint, CGPointZero) && _moveTouchLocations.count > 0 && !_rotatingByGesture && !_zoomingByGesture)
         {
             _app.mapMode = OAMapModeFree;
+            [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
             OATouchLocation *firstTouch = _moveTouchLocations[0];
             OsmAnd::PointI touchLocation31 = [OANativeUtilities convertFromPoint31:firstTouch.touchLocation31];
             [_mapView setMapTarget:OsmAnd::PointI((int)firstPoint.x, (int)firstPoint.y) location31:touchLocation31];
@@ -1181,6 +1182,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     if (state == UIGestureRecognizerStateChanged && _carPlayMapTouchLocation)
     {
+        _app.mapMode = OAMapModeFree;
+        [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
         _carPlayScreenPoint = OsmAnd::PointI(_carPlayScreenPoint.x + translation.x * _mapView.contentScaleFactor, _carPlayScreenPoint.y + translation.y * _mapView.contentScaleFactor);
         auto touchLocation31 = [OANativeUtilities convertFromPoint31:_carPlayMapTouchLocation.touchLocation31];
         [_mapView setMapTarget:_carPlayScreenPoint location31:touchLocation31];
@@ -1767,6 +1770,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
+    
+    _app.mapMode = OAMapModeFree;
+    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
 
     // Animate zoom-in by +1
     zoomDelta += 1.0f;
@@ -1803,6 +1809,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
+    
+    _app.mapMode = OAMapModeFree;
+    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
 
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;
@@ -1853,7 +1862,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         [OAUtilities showToast:nil details:OALocalizedString(@"edit_tilesource_minzoom") duration:4 inView:self.view];
         return;
     }
-    
+    _app.mapMode = OAMapModeFree;
+    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
     float nextZoomStep = [zoom getValidZoomStep:newZoomStep];
     [zoom changeZoom:nextZoomStep];
 

@@ -71,7 +71,7 @@
     
     [self update];
 
-    NSString *dataPath = [[OsmAndApp instance] documentsPath];
+    NSString *dataPath = [[[OsmAndApp instance] documentsPath] stringByAppendingPathComponent:RESOURCES_DIR];
     _directoryObserver = [[DirectoryObserver alloc] init:dataPath notificationName:@"DiskUsageChangedNotification"];
     [[NSNotificationCenter defaultCenter]
      addObserver:self

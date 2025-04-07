@@ -1413,87 +1413,96 @@ static OASubscriptionState *EXPIRED;
             return;
         }
 
-        if ([product isKindOfClass:[OASubscription class]])
+        NSData *receipt = [self getLocalReceipt];
+        if (!receipt || !transactionId)
         {
-            NSData *receipt = [self getLocalReceipt];
-            if (!receipt || !transactionId)
-            {
-                NSLog(@"Error: No local receipt or transaction");
-                NSMutableString *errorText = [NSMutableString string];
-                if (!receipt)
-                    [errorText appendString:@" (no receipt)"];
-                if (!transactionId)
-                    [errorText appendString:@" (no transaction)"];
+            NSLog(@"Error: No local receipt or transaction");
+            NSMutableString *errorText = [NSMutableString string];
+            if (!receipt)
+                [errorText appendString:@" (no receipt)"];
+            if (!transactionId)
+                [errorText appendString:@" (no transaction)"];
 
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"provideContent:%@ -%@", productIdentifier, errorText]}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"provideContent:%@ -%@", productIdentifier, errorText]}];
+        }
+        else
+        {
+            NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+            [params setObject:@"ios" forKey:@"os"];
+            NSString *userId = _settings.billingUserId.get;
+            if (userId)
+                [params setObject:userId forKey:@"userid"];
+            
+            NSString *token = _settings.billingUserToken.get;
+            if (token)
+                [params setObject:token forKey:@"token"];
+
+            NSString *deviceId = _settings.backupDeviceId.get;
+            NSString *accessToken = _settings.backupAccessToken.get;
+            if (deviceId.length > 0 && accessToken.length > 0)
+            {
+                [params setObject:deviceId forKey:@"deviceid"];
+                [params setObject:accessToken forKey:@"accessToken"];
             }
-            else
-            {
-                NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
-                [params setObject:@"ios" forKey:@"os"];
-                NSString *userId = _settings.billingUserId.get;
-                if (userId)
-                    [params setObject:userId forKey:@"userid"];
-                
-                NSString *token = _settings.billingUserToken.get;
-                if (token)
-                    [params setObject:token forKey:@"token"];
+            [params setObject:@"apple" forKey:@"platform"];
 
-                NSString *sku = productIdentifier;
-                if (sku)
-                    [params setObject:sku forKey:@"sku"];
-                
-                if (transactionId)
-                    [params setObject:transactionId forKey:@"purchaseToken"];
-                [self updateTransactionId:product transactionId:transactionId];
+            NSString *purchaseType = [product isKindOfClass:OASubscription.class] ? @"subscription" : @"inapp";
+            [params setObject:purchaseType forKey:@"purchaseType"];
 
-                NSString *receiptStr = [receipt base64EncodedStringWithOptions:0];
-                if (receiptStr)
-                    [params setObject:receiptStr forKey:@"payload"];
+            NSString *sku = productIdentifier;
+            if (sku)
+                [params setObject:sku forKey:@"sku"];
 
-                NSString *email = _settings.billingUserEmail.get;
-                if (email)
-                    [params setObject:email forKey:@"email"];
-                
-                [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/purchased" params:params post:YES async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+            if (transactionId)
+                [params setObject:transactionId forKey:@"purchaseToken"];
+            [self updateTransactionId:product transactionId:transactionId];
+
+            NSString *receiptStr = [receipt base64EncodedStringWithOptions:0];
+            if (receiptStr)
+                [params setObject:receiptStr forKey:@"payload"];
+
+            NSString *email = _settings.billingUserEmail.get;
+            if (email)
+                [params setObject:email forKey:@"email"];
+            
+            [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/purchased" params:params post:YES async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+             {
+                 NSString *errorStr = error ? error.localizedDescription : nil;
+                 if (!error && response && data)
                  {
-                     NSString *errorStr = error ? error.localizedDescription : nil;
-                     if (!error && response && data)
+                     @try
                      {
-                         @try
+                         NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                         NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                         if (map)
                          {
-                             NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-                             NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                             if (map)
+                             if (![map objectForKey:@"error"])
                              {
-                                 if (![map objectForKey:@"error"])
-                                 {
-                                     if ([map objectForKey:@"userid"])
-                                         [self applyUserPreferences:map];
-                                     
-                                     _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
-                                 }
-                                 else
-                                 {
-                                     errorStr = [NSString stringWithFormat:@"Purchase subscription failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId.get, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-                                     NSLog(errorStr);
-                                 }
+                                 if ([map objectForKey:@"userid"])
+                                     [self applyUserPreferences:map];
+                                 
+                                 _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
+                             }
+                             else
+                             {
+                                 errorStr = [NSString stringWithFormat:@"Purchase subscription failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId.get, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+                                 NSLog(errorStr);
                              }
                          }
-                         @catch (NSException *e)
-                         {
-                             errorStr = [NSString stringWithFormat:@"%@: %@", e.name, e.reason];
-                         }
                      }
-                     else
+                     @catch (NSException *e)
                      {
-                         if (!errorStr || [errorStr length] == 0)
-                             errorStr = @"unknown error";
+                         errorStr = [NSString stringWithFormat:@"%@: %@", e.name, e.reason];
                      }
-                     if (errorStr)
-                         [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:product.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"/purchased %@", errorStr]}];
-                 }];
-            }
+                 }
+                 else
+                 {
+                     if (!errorStr || [errorStr length] == 0)
+                         errorStr = @"unknown error";
+                 }
+                 if (errorStr)
+                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:product.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"/purchased %@", errorStr]}];
+             }];
         }
     }
 }
@@ -1610,6 +1619,7 @@ static OASubscriptionState *EXPIRED;
                                      [self applyUserPreferences:userData];
                                  
                                  NSArray *inApps = [map objectForKey:@"in_apps"];
+                                 NSArray *inAppsDetailed = [map objectForKey:@"in_apps_detailed"];
                                  for (NSString *inAppId in inApps)
                                  {
                                      OAProduct *product = [self product:inAppId];

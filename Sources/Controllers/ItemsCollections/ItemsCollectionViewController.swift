@@ -539,7 +539,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 selectedPaletteItem = palette
                 delegate?.selectPaletteItem(palette)
             }
-            dismiss(animated: true)
+            dismissWith(animated: true)
         } else if collectionType == .poiIconCategories && inSearchMode {
             if let searchIconName = item.iconName,
                 let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {

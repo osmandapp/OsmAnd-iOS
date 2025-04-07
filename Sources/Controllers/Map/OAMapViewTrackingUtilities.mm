@@ -815,8 +815,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 - (void) setZoomTime:(NSTimeInterval)time
 {
     _lastTimeManualZooming = time;
-    _app.mapMode = OAMapModeFree;
-    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
     if (_autoZoomBySpeedHelper)
         [_autoZoomBySpeedHelper onManualZoomChange];
 }

@@ -1350,6 +1350,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                     auto angle = zoomAndRotation.y;
                     if (!isnan(zoom) && !isnan(angle))
                     {
+                        _app.mapMode = OAMapModeFree;
+                        [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
+
                         OAZoom *zoomObject = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:_mapView.minZoom maxZoom:_mapView.maxZoom];
                         float nextZoomStep = [zoomObject getValidZoomStep:zoom];
                         zoom = nextZoomStep;
@@ -1388,6 +1391,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
         else if (panRecognizer)
         {
+            _app.mapMode = OAMapModeFree;
+            [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
             // Change zoom
             CGFloat gestureScale = ([panRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
             CGFloat scale = 1 - gestureScale;
@@ -1485,6 +1490,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
        
     // Increate zoom by 1
     zoomDelta += 1.0f;
+    
+    _app.mapMode = OAMapModeFree;
+    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
     
     CGPoint centerPoint = [self getTouchPoint:recognizer touchIndex:0];
     OsmAnd::PointI centerLocation;

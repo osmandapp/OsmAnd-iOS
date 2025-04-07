@@ -41,6 +41,7 @@ final class ShowHideMtbRoutesAction: BaseRouteQuickAction {
     
     override func execute() {
         let newValue = isEnabled() ? "false" : "true"
+        let routesEnabled = !isEnabled()
         
         let styleSettings = OAMapStyleSettings.sharedInstance()
         let routesParameter = styleSettings?.getParameter(SHOW_MTB_ROUTES)
@@ -50,7 +51,7 @@ final class ShowHideMtbRoutesAction: BaseRouteQuickAction {
         
         let mtbScale = styleSettings?.getParameter(SHOW_MTB_SCALE)
         if let mtbScale {
-            mtbScale.value = (isEnabled() && mountainBikeRoutesParameter == mtbScale.name) ? "true" : "false"
+            mtbScale.value = (routesEnabled && mountainBikeRoutesParameter == mtbScale.name) ? "true" : "false"
             styleSettings?.save(mtbScale)
         }
         if let mtbScaleUphill = styleSettings?.getParameter(SHOW_MTB_SCALE_UPHILL) {
@@ -58,7 +59,7 @@ final class ShowHideMtbRoutesAction: BaseRouteQuickAction {
             styleSettings?.save(mtbScaleUphill)
         }
         if let imbaTrails = styleSettings?.getParameter(SHOW_MTB_SCALE_IMBA_TRAILS) {
-            imbaTrails.value = (isEnabled() && mountainBikeRoutesParameter == imbaTrails.name) ? "true" : "false"
+            imbaTrails.value = (routesEnabled && mountainBikeRoutesParameter == imbaTrails.name) ? "true" : "false"
             styleSettings?.save(imbaTrails)
         }
         styleSettings?.save(routesParameter)

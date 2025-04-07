@@ -589,11 +589,20 @@
 - (void) startLocationSimulation:(CLLocation *)location
 {
     const auto& tunnel = [_routingHelper getUpcomingTunnel:250];
+//    const auto& tunnel = [_routingHelper getUpcomingTunnel:1000];
+    
+    NSLog(@"ISSUE123: !!! startLocationSimulation tunnel.empty()  %d  %f %f", tunnel.empty(), location.coordinate.latitude, location.coordinate.longitude);
+    
     if (!tunnel.empty())
     {
+        // NSLog(@"ISSUE123: !!! startLocationSimulation tunnel.size()  %d", tunnel.size());
         _simulatePosition = [[OASimulationProvider alloc] init];
         [_simulatePosition startSimulation:tunnel currentLocation:location];
         [self simulatePositionImpl];
+    }
+    else
+    {
+        // NSLog(@"ISSUE123: !!! startLocationSimulation tunnel is empty");
     }
 }
 
@@ -610,11 +619,14 @@
         CLLocation *loc = [_simulatePosition getSimulatedLocation];
         if (loc)
         {
+            NSLog(@"ISSUE123: simulatePositionImpl loc  %f %f", loc.coordinate.latitude, loc.coordinate.longitude);
             [self setLocation:loc simulated:YES];
             [self simulatePosition];
         }
         else
         {
+            NSLog(@"ISSUE123: !!! simulatePositionImpl loc == nil");
+            
             _simulatePosition = nil;
         }
     }
@@ -622,13 +634,19 @@
 
 - (void) scheduleLocationLostCheck:(CLLocation *)location
 {
+    NSLog(@"ISSUE123: scheduleLocationLostCheck %f %f", location.coordinate.latitude, location.coordinate.longitude);
+    NSLog(@"ISSUE123: scheduleLocationLostCheck  isFollowingMode %d  getLeftDistance %d simulatePosition %d", [_routingHelper isFollowingMode], [_routingHelper getLeftDistance], _simulatePosition != nil);
+    
     if (location)
     {
         if ([_routingHelper isFollowingMode] && [_routingHelper getLeftDistance] > 0 && !_simulatePosition)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"ISSUE123: !!! scheduleLocationLostCheck cancel startLocationSimulation() locationStartSim %f %f", location.coordinate.latitude, location.coordinate.longitude);
                 [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startLocationSimulation:) object:_locationStartSim];
                 _locationStartSim = [location copy];
+                
+                NSLog(@"ISSUE123: scheduleLocationLostCheck start startLocationSimulation() locationStartSim %f %f", location.coordinate.latitude, location.coordinate.longitude);
                 [self performSelector:@selector(startLocationSimulation:) withObject:_locationStartSim afterDelay:START_LOCATION_SIMULATION_DELAY];
             });
         }
@@ -637,9 +655,14 @@
 
 - (void) setLocationFromSimulation:(CLLocation *)location
 {
+    NSLog(@"ISSUE123: setLocationFromSimulation %f %f", location.coordinate.latitude, location.coordinate.longitude);
+    
     _lastHeading = location.course;
     _lastMagneticHeading = location.course;
-    [self setLocation:location];
+    
+    // TODO: test this
+//    [self setLocation:location];
+    [self setLocation:location simulated:YES];
 }
 
 - (BOOL) isInLocationSimulation
@@ -654,6 +677,15 @@
 
 - (void) setLocation:(CLLocation *)location simulated:(BOOL)simulated
 {
+    NSLog(@"ISSUE123: setLocation simulated: %d  %f %f", simulated, location.coordinate.latitude, location.coordinate.longitude);
+    
+    // TODO: delete
+    if (!simulated)
+    {
+        NSLog(@"ISSUE123: !!! setLocation simulated SKIP - updated from real laptop location");
+        return;
+    }
+    
     if (location)
     {
         if (!simulated)
@@ -744,6 +776,8 @@
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
+//    return;
+    
     // If was waiting for authorization, now it's granted
     if (_waitingForAuthorization)
     {

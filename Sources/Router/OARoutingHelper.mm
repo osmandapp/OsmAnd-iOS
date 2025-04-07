@@ -437,6 +437,8 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (int) calculateCurrentRoute:(CLLocation *)currentLocation posTolerance:(float)posTolerance routeNodes:(NSArray<CLLocation *> *)routeNodes currentRoute:(int)currentRoute updateAndNotify:(BOOL)updateAndNotify
 {
+    NSLog(@"ISSUE123: calculateCurrentRoute %f %f", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude);
+    
     // 1. Try to proceed to next point using orthogonal distance (finding minimum orthogonal dist)
     while (currentRoute + 1 < routeNodes.count)
     {
@@ -454,6 +456,8 @@ static BOOL _isDeviatedFromRoute = false;
         {
             if (newDist < dist)
             {
+                NSLog(@"ISSUE123: calculateCurrentRoute Processed by distance : (new) %f (old) %f", newDist, dist);
+                
                 NSLog(@"Processed by distance : (new) %f (old) %f", newDist, dist);
                 processed = true;
             }
@@ -464,6 +468,8 @@ static BOOL _isDeviatedFromRoute = false;
             if (dist > posTolerance)
             {
                 processed = true;
+                NSLog(@"ISSUE123: calculateCurrentRoute Processed by distance : %f %f", newDist, dist);
+                
                 NSLog(@"Processed by distance : %f %f", newDist, dist);
             }
             else

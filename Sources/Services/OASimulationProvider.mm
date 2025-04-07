@@ -24,6 +24,8 @@
 
 - (void) startSimulation:(std::vector<std::shared_ptr<RouteSegmentResult>>)roads currentLocation:(CLLocation *)currentLocation
 {
+    NSLog(@"ISSUE123: !!! startSimulation  %f %f", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude);
+    
     _roads = roads;
     _startLocation = [currentLocation copy];
     NSDate *d = [NSDate date];

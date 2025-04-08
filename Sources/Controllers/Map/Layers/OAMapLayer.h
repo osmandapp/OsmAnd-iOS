@@ -42,9 +42,6 @@
 - (void) onMapFrameRendered;
 - (void) didReceiveMemoryWarning;
 
-- (void) showProgressHUD;
-- (void) hideProgressHUD;
-
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint;
 
 - (BOOL) isVisible;

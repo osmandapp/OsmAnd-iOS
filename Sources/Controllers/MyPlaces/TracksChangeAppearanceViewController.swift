@@ -100,8 +100,8 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         addCell(OAButtonTableViewCell.reuseIdentifier)
         addCell(GradientChartCell.reuseIdentifier)
         addCell(OACollectionSingleLineTableViewCell.reuseIdentifier)
-        addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
-        addCell(SegmentTextWithRightLabelTableViewCell.reuseIdentifier)
+        addCell(SegmentImagesTableViewCell.reuseIdentifier)
+        addCell(SegmentTextTableViewCell.reuseIdentifier)
         addCell(OASegmentSliderTableViewCell.reuseIdentifier)
     }
     
@@ -174,7 +174,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         widthRow.title = localizedString("routing_attr_width_name")
         if isWidthSelected {
             let widthModesRow = widthSection.createNewRow()
-            widthModesRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
+            widthModesRow.cellType = SegmentImagesTableViewCell.reuseIdentifier
             widthModesRow.key = RowKey.widthModesRowKey.rawValue
             if isCustomWidthSelected {
                 let customWidthModesRow = widthSection.createNewRow()
@@ -199,7 +199,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         splitIntervalRow.title = localizedString("gpx_split_interval")
         if isSplitIntervalSelected {
             let splitModesRow = splitIntervalSection.createNewRow()
-            splitModesRow.cellType = SegmentTextWithRightLabelTableViewCell.reuseIdentifier
+            splitModesRow.cellType = SegmentTextTableViewCell.reuseIdentifier
             splitModesRow.key = RowKey.splitModesRowKey.rawValue
             if isSplitIntervalNoneSelected {
                 let splitIntervalNoneDescrRow = splitIntervalSection.createNewRow()
@@ -245,6 +245,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.titleLabel.text = item.title
             var config = UIButton.Configuration.plain()
             config.baseForegroundColor = .textColorActive
+            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
             cell.button.configuration = config
             if let key = item.key {
                 cell.button.menu = createStateSelectionMenu(for: key)
@@ -311,24 +312,24 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 cell.configureBottomOffset(12)
             }
             return cell
-        } else if item.cellType == SegmentImagesWithRightLabelTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
+        } else if item.cellType == SegmentImagesTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesTableViewCell.reuseIdentifier) as! SegmentImagesTableViewCell
             cell.selectionStyle = .none
             cell.backgroundColor = .groupBg
-            cell.configureTitle(title: nil)
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
+            cell.setSegmentedControlBottomSpacing(isCustomWidthSelected ? 0 : 20)
             cell.configureSegmentedControl(icons: [.icCustomTrackLineThin, .icCustomTrackLineMedium, .icCustomTrackLineBold, .icCustomParameters], selectedSegmentIndex: selectedWidthIndex)
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }
                 self.handleWidthSelection(index: index)
             }
             return cell
-        } else if item.cellType == SegmentTextWithRightLabelTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentTextWithRightLabelTableViewCell.reuseIdentifier) as! SegmentTextWithRightLabelTableViewCell
+        } else if item.cellType == SegmentTextTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentTextTableViewCell.reuseIdentifier) as! SegmentTextTableViewCell
             cell.selectionStyle = .none
             cell.backgroundColor = .groupBg
-            cell.configureTitle(title: nil)
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
+            cell.setSegmentedControlBottomSpacing(0)
             cell.configureSegmentedControl(titles: [localizedString("shared_string_none"), localizedString("shared_string_time"), localizedString("shared_string_distance")], selectedSegmentIndex: selectedSplitIntervalIndex)
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }
@@ -441,16 +442,32 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         guard let type = selectedColorType else { return }
         switch type {
         case .trackSolid:
-            configureLineColors()
-            isColorSelected = true
-            isSolidColorSelected = true
+            if preselectParameter(in: tracks, extractor: { $0.color }) != nil {
+                configureLineColors()
+                isColorSelected = true
+                isSolidColorSelected = true
+            } else {
+                selectedColorType = nil
+                initialData.setParameter(.coloringType, value: nil)
+                data.setParameter(.coloringType, value: nil)
+                isColorSelected = false
+                isSolidColorSelected = false
+            }
             isGradientColorSelected = false
             isRouteAttributeTypeSelected = false
         case .speed, .altitude, .slope:
-            configureGradientColors()
-            isColorSelected = true
+            if preselectParameter(in: tracks, extractor: { $0.gradientPaletteName }) != nil {
+                configureGradientColors()
+                isColorSelected = true
+                isGradientColorSelected = true
+            } else {
+                selectedColorType = nil
+                initialData.setParameter(.coloringType, value: nil)
+                data.setParameter(.coloringType, value: nil)
+                isColorSelected = false
+                isGradientColorSelected = false
+            }
             isSolidColorSelected = false
-            isGradientColorSelected = true
             isRouteAttributeTypeSelected = false
         case .attribute:
             selectedRouteAttributesString = type.isRouteInfoAttribute() ? type.getName(routeInfoAttribute: typeStr) : nil
@@ -583,6 +600,15 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         tableView.reloadData()
     }
     
+    private func updateSection(containingRowKey key: RowKey) {
+        generateData()
+        guard let matchingSection = (0..<tableData.sectionCount()).first(where: {
+            let sectionData = tableData.sectionData(for: $0)
+            return (0..<sectionData.rowCount()).contains { sectionData.getRow($0).key == key.rawValue }
+        }) else { return }
+        tableView.reloadSections(IndexSet(integer: Int(matchingSection)), with: .automatic)
+    }
+    
     private func handleWidthSelection(index: Int) {
         guard let widths = appearanceCollection?.getAvailableWidth(), index >= 0, index < widths.count else { return }
         let width = widths[index]
@@ -593,7 +619,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         isWidthSelected = true
         isCustomWidthSelected = isCustom
         selectedWidthIndex = index
-        updateData()
+        updateSection(containingRowKey: .widthRowKey)
     }
     
     private func handleSplitIntervalSelection(index: Int) {
@@ -611,7 +637,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         isSplitIntervalSelected = true
         isSplitIntervalNoneSelected = split.key == "no_split"
         selectedSplitIntervalIndex = index
-        updateData()
+        updateSection(containingRowKey: .splitIntervalRowKey)
     }
     
     @objc private func onCellButtonPressed(_ sender: UIButton) {
@@ -703,11 +729,10 @@ extension TracksChangeAppearanceViewController {
         let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && selectedColorType == nil ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(.coloringType, value: nil)
-            self.data.setParameter(.color, value: nil)
             self.selectedColorType = nil
             self.isRouteAttributeTypeSelected = false
             self.resetColorSelectionFlags()
-            self.updateData()
+            self.updateSection(containingRowKey: .coloringRowKey)
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
             guard let self else { return }
@@ -716,7 +741,7 @@ extension TracksChangeAppearanceViewController {
             self.selectedColorType = nil
             self.isRouteAttributeTypeSelected = false
             self.resetColorSelectionFlags()
-            self.updateData()
+            self.updateSection(containingRowKey: .coloringRowKey)
         }
         let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
         
@@ -727,7 +752,7 @@ extension TracksChangeAppearanceViewController {
             self.configureLineColors()
             self.resetColorSelectionFlags()
             self.isColorSelectionEnabled(true, solid: true)
-            self.updateData()
+            self.updateSection(containingRowKey: .coloringRowKey)
         }
         let solidColorMenu = inlineMenu(withActions: [solidColorAction])
         
@@ -738,7 +763,7 @@ extension TracksChangeAppearanceViewController {
             self.configureGradientColors()
             self.resetColorSelectionFlags()
             self.isColorSelectionEnabled(true, solid: false)
-            self.updateData()
+            self.updateSection(containingRowKey: .coloringRowKey)
         }
         let speedAction = UIAction(title: localizedString("shared_string_speed"), state: !isReset && selectedColorType == .speed ? .on : .off) { [weak self] _ in
             guard let self else { return }
@@ -747,7 +772,7 @@ extension TracksChangeAppearanceViewController {
             self.configureGradientColors()
             self.resetColorSelectionFlags()
             self.isColorSelectionEnabled(true, solid: false)
-            self.updateData()
+            self.updateSection(containingRowKey: .coloringRowKey)
         }
         let slopeAction = UIAction(title: localizedString("shared_string_slope"), state: !isReset && selectedColorType == .slope ? .on : .off) { [weak self] _ in
             guard let self else { return }
@@ -756,7 +781,7 @@ extension TracksChangeAppearanceViewController {
             self.configureGradientColors()
             self.resetColorSelectionFlags()
             self.isColorSelectionEnabled(true, solid: false)
-            self.updateData()
+            self.updateSection(containingRowKey: .coloringRowKey)
         }
         let gradientColorMenu = inlineMenu(withActions: [altitudeAction, speedAction, slopeAction])
         
@@ -769,7 +794,7 @@ extension TracksChangeAppearanceViewController {
     }
     
     private func createProColorAction(titleKey: String, parameterValue: String, selectedString: String, isRouteInfoAttribute: Bool) -> UIAction {
-        return UIAction(title: localizedString(titleKey), image: .icCustomProLogoOutlined, state: isRouteInfoAttribute && (selectedRouteAttributesString == selectedString) ? .on : .off) { [weak self] _ in
+        return UIAction(title: localizedString(titleKey), image: OAIAPHelper.isOsmAndProAvailable() ? nil : .icCustomProLogoOutlined, state: isRouteInfoAttribute && (selectedRouteAttributesString == selectedString) ? .on : .off) { [weak self] _ in
             guard let self else { return }
             if OAIAPHelper.isOsmAndProAvailable() {
                 self.data.setParameter(.coloringType, value: parameterValue)
@@ -779,7 +804,7 @@ extension TracksChangeAppearanceViewController {
                 self.isRouteAttributeTypeSelected = true
             }
             
-            self.updateData()
+            self.updateSection(containingRowKey: .coloringRowKey)
         }
     }
     
@@ -805,14 +830,14 @@ extension TracksChangeAppearanceViewController {
             self.selectedWidth = nil
             self.isWidthSelected = false
             self.isCustomWidthSelected = false
-            self.updateData()
+            self.updateSection(containingRowKey: .widthRowKey)
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.resetParameter(.width)
             self.isWidthSelected = false
             self.isCustomWidthSelected = false
-            self.updateData()
+            self.updateSection(containingRowKey: .widthRowKey)
         }
         let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
         
@@ -851,7 +876,7 @@ extension TracksChangeAppearanceViewController {
             self.selectedSplit = nil
             self.isSplitIntervalSelected = false
             self.isSplitIntervalNoneSelected = false
-            self.updateData()
+            self.updateSection(containingRowKey: .splitIntervalRowKey)
         }
         let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isOriginalSelected ? .on : .off) { [weak self] _ in
             guard let self else { return }
@@ -859,7 +884,7 @@ extension TracksChangeAppearanceViewController {
             self.data.resetParameter(.splitInterval)
             self.isSplitIntervalSelected = false
             self.isSplitIntervalNoneSelected = false
-            self.updateData()
+            self.updateSection(containingRowKey: .splitIntervalRowKey)
         }
         let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
         

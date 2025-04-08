@@ -378,12 +378,23 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     for (auto it = routes.begin(); it != routes.end(); ++it)
     {
         OARouteKey *routeKey = [[OARouteKey alloc] initWithKey:it.key()];
-        if (![routeKeys containsObject:routeKey])
+        if (![routeKeys containsObject:routeKey] && [self isRouteEnabledForKey:routeKey])
         {
             [routeKeys addObject:routeKey];
             [self putRouteToSelected:routeKey location:coord mapObj:mapObj points:points area:area31];
         }
     }
+}
+
+- (BOOL)isRouteEnabledForKey:(OARouteKey *)routeKey
+{
+    if ([routeKey.routeKey.getTag().toNSString() isEqualToString:@"hiking"])
+    {
+        OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+        OAMapStyleParameter *routesParameter = [styleSettings getParameter:HIKING_ROUTES_OSMC_ATTR];
+        return routesParameter.storedValue.length > 0 && ![routesParameter.storedValue isEqualToString:@"disabled"];
+    }
+    return YES;
 }
 
 - (void) putRouteToSelected:(OARouteKey *)key location:(CLLocationCoordinate2D)location mapObj:(const std::shared_ptr<const OsmAnd::MapObject> &)mapObj points:(NSMutableArray<OATargetPoint *> *)points area:(OsmAnd::AreaI)area

@@ -158,6 +158,28 @@ final class GpxUtils: NSObject {
     static func getRect(from bbox: OABBox) -> KQuadRect {
         KQuadRect(left: bbox.left, top: bbox.top, right: bbox.right, bottom: bbox.bottom)
     }
+    
+    static func calculateProjectionOnSegment(from locations: [CLLocation], target: CLLocation, startIndex index: Int, targetDistance: Double) -> CLLocationCoordinate2D {
+        guard index >= 0, index + 1 < locations.count else { return kCLLocationCoordinate2DInvalid }
+        let loc1 = locations[index]
+        let loc2 = locations[index + 1]
+        if loc1.distance(from: loc2) == 0 {
+            return kCLLocationCoordinate2DInvalid
+        }
+        
+        let distance1 = loc1.distance(from: target)
+        let distance2 = loc2.distance(from: target)
+        let deltaDistance = distance1 - distance2
+        if deltaDistance != 0 {
+            let coeff = (distance1 - targetDistance) / deltaDistance
+            if coeff >= 0.0 && coeff <= 1.0 {
+                let projectionResult = KMapUtils.shared.calculateIntermediatePoint(fromLat: loc1.coordinate.latitude, fromLon: loc1.coordinate.longitude, toLat: loc2.coordinate.latitude, toLon: loc2.coordinate.longitude, coeff: coeff)
+                return CLLocationCoordinate2D(latitude: projectionResult.latitude, longitude: projectionResult.longitude)
+            }
+        }
+        
+        return kCLLocationCoordinate2DInvalid
+    }
 
     private static func getSegmentPointByTime(_ segment: TrkSegment,
                                               timeToPoint: Float,

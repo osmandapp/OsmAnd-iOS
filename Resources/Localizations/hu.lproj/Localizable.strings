@@ -2622,7 +2622,7 @@
 "ant_plus_searching_text" = "Érzékelők keresése";
 "ask_question_propose_features" = "Tegyen fel kérdést, javasoljon funkciókat";
 "enter_new_name" = "Új név megadása";
-"map_widget_sun_position" = "Napszak";
+"map_widget_sun_position" = "Napszak váltás";
 "map_3d_mode_hint" = "A gomb hosszú érintése lehetővé teszi a gomb pozíciójának megváltoztatását.";
 "first_marker_widget_desc" = "Beállíthatja a modult úgy, hogy az első térképjelölőig hátralévő távolságot vagy becsült érkezési időt mutassa.";
 "external_sensors_source_of_data" = "Az adat forrása";

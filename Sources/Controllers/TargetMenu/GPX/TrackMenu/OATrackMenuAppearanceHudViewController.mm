@@ -291,6 +291,7 @@ static const NSInteger kColorsSection = 1;
 
         OASInt *color = [[OASInt alloc] initWithInt:(int)_backupGpxItem.color];
         [self.doc setColorColor:color];
+        [self.doc setJoinSegmentIsJoinSegment:_backupGpxItem.joinSegments];
     }
     else
     {
@@ -402,7 +403,7 @@ static const NSInteger kColorsSection = 1;
 - (BOOL)getGPXShowJoinSegments
 {
     return self.isCurrentTrack
-    ? [OAAppSettings.sharedManager.currentTrackIsJoinSegments get]
+    ? [self.doc isJoinSegments]
     : self.gpx.joinSegments;
 }
 
@@ -1480,6 +1481,7 @@ static const NSInteger kColorsSection = 1;
     
     [gpxFile setSplitIntervalSplitInterval:self.gpx.splitInterval];
     [gpxFile setSplitTypeGpxSplitType:[OAGPXDatabase splitTypeNameByValue:self.gpx.splitType]];
+    [gpxFile setJoinSegmentIsJoinSegment:self.gpx.joinSegments];
 }
 
 #pragma mark - UITableViewDataSource
@@ -2040,7 +2042,9 @@ static const NSInteger kColorsSection = 1;
 
         if (self.isCurrentTrack)
         {
-            [OAAppSettings.sharedManager.currentTrackIsJoinSegments set:toggle];
+            [self.doc setJoinSegmentIsJoinSegment:toggle];
+            // FIXME:
+            //[OAAppSettings.sharedManager.currentTrackIsJoinSegments set:toggle];
             [[_app updateRecTrackOnMapObservable] notifyEvent];
         }
         else
@@ -2438,6 +2442,7 @@ static const NSInteger kColorsSection = 1;
 
             OASInt *color = [[OASInt alloc] initWithInt:[self.settings.currentTrackColor get]];
             [self.doc setColorColor:color];
+            [self.doc setJoinSegmentIsJoinSegment:[self.settings.currentTrackIsJoinSegments get]];
         }
         [self.gpx resetAppearanceToOriginal];
 

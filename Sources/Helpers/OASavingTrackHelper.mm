@@ -107,6 +107,7 @@ static const NSInteger kDBVersion = 1;
     OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
     [_currentTrack setColorColor:color];
     [_currentTrack setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
+    [_currentTrack setJoinSegmentIsJoinSegment:[settings.currentTrackIsJoinSegments get]];
 }
 
 - (instancetype)init
@@ -478,6 +479,7 @@ static const NSInteger kDBVersion = 1;
             OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
             [gpxFile setColorColor:color];
             [gpxFile setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
+            [gpxFile setJoinSegmentIsJoinSegment:[settings.currentTrackIsJoinSegments get]];
             
             OASKFile *file = [[OASKFile alloc] initWithFilePath:fout];
             

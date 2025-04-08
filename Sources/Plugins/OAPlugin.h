@@ -49,13 +49,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (OACommonBoolean *)registerBooleanPreference:(NSString *)prefId defValue:(BOOL)defValue;
 - (OACommonString *)registerStringPreference:(NSString *)prefId defValue:(nullable NSString *)defValue;
 
-- (BOOL) initPlugin;
-- (void) setEnabled:(BOOL)enabled;
-- (BOOL) isEnabled;
-- (BOOL) isVisible;
-- (BOOL) isEnableByDefault;
-- (void) disable;
-- (void) install:(nullable id<OAPluginInstallListener>)callback;
+- (BOOL)initPlugin;
+- (void)setEnabled:(BOOL)enabled;
+- (BOOL)isEnabled;
+- (BOOL)isVisible;
+- (BOOL)isEnableByDefault;
+- (void)disable;
+- (void)install:(nullable id<OAPluginInstallListener>)callback;
+- (void)handleActivation;
 
 - (nullable NSString *) getHelpFileName;
 - (NSArray<QuickActionType *> *) getQuickActionTypes;

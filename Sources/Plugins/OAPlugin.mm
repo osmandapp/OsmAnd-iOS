@@ -71,6 +71,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
         BOOL active = [value boolValue];
         dispatch_async(dispatch_get_main_queue(), ^{
             [OAPluginsHelper enablePlugin:self enable:active];
+            [self handleActivation];
         });
     }
 }
@@ -227,6 +228,13 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     {
         [OAApplicationMode changeProfileAvailability:appMode isSelected:NO];
     }
+}
+
+/**
+ * Overrided in derived classes
+ */
+- (void)handleActivation
+{
 }
 
 - (NSArray<OAApplicationMode *> *) getAddedAppModes

@@ -1540,7 +1540,7 @@
         if (index > 0)
         {
             gpxDirections = [self calcDirections:[NSNumber numberWithInteger:index] endI:[NSNumber numberWithInteger:gpxRoute.count] inputDirections:gpxDirections];
-            gpxRoute = [NSMutableArray arrayWithArray:[gpxRoute subarrayWithRange:NSMakeRange(index, gpxRoute.count)]];
+            gpxRoute = [NSMutableArray arrayWithArray:[gpxRoute subarrayWithRange:NSMakeRange(index, gpxRoute.count - index)]];
         }
     }
     

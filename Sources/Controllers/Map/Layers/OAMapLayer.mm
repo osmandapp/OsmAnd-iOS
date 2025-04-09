@@ -9,7 +9,6 @@
 #import "OAMapLayer.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
-#import <MBProgressHUD.h>
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -22,9 +21,6 @@
 @end
 
 @implementation OAMapLayer
-{
-    MBProgressHUD *_progressHUD;
-}
 
 @synthesize pointsOrder = _pointsOrder;
 
@@ -111,36 +107,6 @@
 - (BOOL)isVisible
 {
     return YES;
-}
-
-- (void) showProgressHUD
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        BOOL wasVisible = NO;
-        if (_progressHUD)
-        {
-            wasVisible = YES;
-            [_progressHUD hide:NO];
-        }
-        UIView *topView = [UIApplication sharedApplication].mainWindow;
-        _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
-        _progressHUD.minShowTime = .5f;
-        _progressHUD.removeFromSuperViewOnHide = YES;
-        [topView addSubview:_progressHUD];
-        
-        [_progressHUD show:!wasVisible];
-    });
-}
-
-- (void) hideProgressHUD
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_progressHUD)
-        {
-            [_progressHUD hide:YES];
-            _progressHUD = nil;
-        }
-    });
 }
 
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint

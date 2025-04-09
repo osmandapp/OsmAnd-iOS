@@ -136,7 +136,7 @@
     NSIndexPath *prevSelectedColorIndex = [self getSelectedIndexPath];
     [self setSelectedIndexPath:indexPath];
     id selectedItem = [self getSelectedItem];
-    [collectionView reloadItemsAtIndexPaths:prevSelectedColorIndex ? @[prevSelectedColorIndex, indexPath] : @[indexPath]];
+    [collectionView reloadData];
     if (self.delegate)
         [self.delegate onCollectionItemSelected:indexPath selectedItem:selectedItem collectionView:collectionView];
 }

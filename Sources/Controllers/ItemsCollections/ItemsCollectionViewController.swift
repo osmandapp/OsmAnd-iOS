@@ -863,7 +863,8 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                let selectedName = selectedItem as? String {
                 
                 for handler in poiIconHandlers.values {
-                    if let selectedIndex = handler.iconNamesData[0].firstIndex(of: selectedName) {
+                    if !handler.iconNamesData.isEmpty,
+                       let selectedIndex = handler.iconNamesData[0].firstIndex(of: selectedName) {
                         let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
                         handler.setSelectedIndexPath(selectedIndexPath)
                     } else {

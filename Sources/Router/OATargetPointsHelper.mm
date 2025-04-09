@@ -654,9 +654,9 @@
 
 - (NSString *)getLocationName:(CLLocation *)location
 {
-    NSString *formattedTargetName = nil;
-
-   // dispatch_sync(_locationQueue, ^{
+    __block NSString *formattedTargetName = nil;
+    
+    dispatch_sync(_locationQueue, ^{
         NSString *addressString = nil;
         BOOL isAddressFound = NO;
         NSString *roadTitle = nil;
@@ -680,7 +680,7 @@
         {
             formattedTargetName = [OAPointDescription getLocationName:location.coordinate.latitude lon:location.coordinate.longitude sh:NO];
         }
-   // });
+    });
     return formattedTargetName;
 }
 

@@ -11,6 +11,8 @@ import Foundation
 @objcMembers
 class IconCollectionHandler: OABaseCollectionHandler {
     
+    static var cachedIcons = [String: UIImage]()
+    
     var iconImagesData = [[UIImage]]()
     var roundedSquareCells = false
     var customTitle = ""
@@ -85,6 +87,7 @@ class IconCollectionHandler: OABaseCollectionHandler {
     override func generateData(_ data: [[Any]]) {
         if let iconNames = data as? [[String]] {
             iconNamesData = iconNames
+            loadAllImages()
         }
     }
     
@@ -114,14 +117,20 @@ class IconCollectionHandler: OABaseCollectionHandler {
             cell.iconImageView.image = iconImagesData[indexPath.section][indexPath.row]
         } else if !iconNamesData.isEmpty && !iconNamesData[indexPath.section].isEmpty {
             let iconName = iconNamesData[indexPath.section][indexPath.row]
-            var icon = UIImage.templateImageNamed(iconName)
-            if icon == nil {
-                icon = OAUtilities.getMxIcon(iconName.lowercased())
+            if let icon = Self.cachedIcons[iconName] {
+                cell.iconImageView.image = icon
+            } else {
+                var icon = UIImage.templateImageNamed(iconName)
+                if icon == nil {
+                    icon = OAUtilities.getMxIcon(iconName.lowercased())
+                }
+                if icon == nil {
+                    icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
+                }
+                cell.iconImageView.image = icon
+                Self.cachedIcons[iconName] = icon
             }
-            if icon == nil {
-                icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
-            }
-            cell.iconImageView.image = icon
+            
         }
         if indexPath == selectedIndexPath {
             cell.iconImageView.tintColor = selectedIconColor
@@ -140,6 +149,23 @@ class IconCollectionHandler: OABaseCollectionHandler {
             cell.backView.layer.cornerRadius = cell.backView.frame.size.height / 2
         }
         return cell
+    }
+    
+    func loadAllImages() {
+        for iconsSection in iconNamesData {
+            for iconName in iconsSection {
+                if Self.cachedIcons[iconName] == nil {
+                    var icon = UIImage.templateImageNamed(iconName)
+                    if icon == nil {
+                        icon = OAUtilities.getMxIcon(iconName.lowercased())
+                    }
+                    if icon == nil {
+                        icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
+                    }
+                    Self.cachedIcons[iconName] = icon
+                }
+            }
+        }
     }
     
     func openAllIconsScreen() {

@@ -9,6 +9,9 @@
 @objcMembers
 final class PoiIconCollectionHandler: IconCollectionHandler {
     
+    static var cachedCategories = [IconsCategory]()
+    static var cachedCategoriesByKeyName = [String: IconsCategory]()
+    
     var categories = [IconsCategory]()
     var categoriesByKeyName = [String: IconsCategory]()
     var selectedCatagoryKey = ""
@@ -34,14 +37,24 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     func initIconCategories() {
-        initLastUsedCategory()
-        initAssetsCategories()
-        initActivitiesCategory()
-        initPoiCategories()
-        sortCategories()
-        
-        for category in categories {
-            categoriesByKeyName[category.key] = category
+        if Self.cachedCategories.isEmpty {
+            initLastUsedCategory()
+            initAssetsCategories()
+            initActivitiesCategory()
+            initPoiCategories()
+            sortCategories()
+            
+            for category in categories {
+                categoriesByKeyName[category.key] = category
+            }
+            
+            Self.cachedCategories = categories
+            Self.cachedCategoriesByKeyName = categoriesByKeyName
+            
+            
+        } else {
+            categories = Self.cachedCategories
+            categoriesByKeyName = Self.cachedCategoriesByKeyName
         }
     }
     

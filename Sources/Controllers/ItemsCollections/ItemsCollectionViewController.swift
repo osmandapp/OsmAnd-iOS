@@ -81,7 +81,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     private var colorCollectionHandler: OAColorCollectionHandler?
     
-    
     init(collectionType: ColorCollectionType, items: Any, selectedItem: Any) {
         
         self.collectionType = collectionType
@@ -245,7 +244,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 iconNamesKey: iconItems
             ])
             colorCollectionIndexPath = IndexPath(row: Int(section.rowCount()) - 1, section: Int(data.sectionCount()) - 1)
-            
         } else if collectionType == .poiIconCategories {
             
             if inSearchMode {
@@ -292,7 +290,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     section.addRow(from: [kCellTypeKey: OADividerCell.reuseIdentifier])
                 }
             }
-            
         } else {
             let palettesSection = data.createNewSection()
             paletteItems?.asArray().forEach { paletteColor in
@@ -357,7 +354,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             if let cell = tableView.dequeueReusableCell(withIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier, for: indexPath) as? OACollectionSingleLineTableViewCell {
                 if collectionType == .colorItems {
                     setupColorCollectionCell(cell)
-                    
                 } else if collectionType == .iconItems || collectionType == .bigIconItems || collectionType == .poiIconCategories {
                     
                     if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String],
@@ -437,18 +433,20 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     private func setupColorCollectionCell(_ cell: OACollectionSingleLineTableViewCell) {
-        if let colorCollectionHandler = OAColorCollectionHandler(data: [colorItems], collectionView: cell.collectionView) {
-            colorCollectionHandler.isOpenedFromAllColorsScreen = true
-            colorCollectionHandler.hostColorHandler = hostColorHandler
-            colorCollectionHandler.delegate = self
-            colorCollectionHandler.hostVC = self
-            colorCollectionHandler.hostCell = cell
-            colorCollectionHandler.hostVCOpenColorPickerButton = navigationItem.rightBarButtonItem?.customView
-            colorCollectionHandler.setScrollDirection(.vertical)
+        if let handler = OAColorCollectionHandler(data: [colorItems], collectionView: cell.collectionView) {
+            handler.isOpenedFromAllColorsScreen = true
+            handler.hostColorHandler = hostColorHandler
+            handler.delegate = self
+            handler.hostVC = self
+            handler.hostCell = cell
+            handler.hostVCOpenColorPickerButton = navigationItem.rightBarButtonItem?.customView
+            handler.setScrollDirection(.vertical)
             
             if let selectedColorItem, let selectedIndex = colorItems.firstIndex(of: selectedColorItem) {
-                colorCollectionHandler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
+                handler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
             }
+
+            colorCollectionHandler = handler
             cell.backgroundColor = .systemBackground
             cell.setCollectionHandler(colorCollectionHandler)
             cell.collectionView.isScrollEnabled = false
@@ -853,9 +851,7 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                 iconsDelegate?.selectIconName(selectedIconItem)
             }
             dismiss(animated: true)
-
         } else if collectionType == .poiIconCategories {
-            
             let chipsTitles = iconCategories.map { $0.translatedName }
             if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler,
                let selectedName = selectedItem as? String {
@@ -865,9 +861,7 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                 poiIconsDelegate.allIconsVCDelegate = nil
                 dismiss(animated: true)
             }
-            
         } else {
-            
             selectedColorItem = colorCollectionHandler?.getSelectedItem()
             if let selectedColorItem {
                 delegate?.selectColorItem(selectedColorItem)

@@ -245,7 +245,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.titleLabel.text = item.title
             var config = UIButton.Configuration.plain()
             config.baseForegroundColor = .textColorActive
-            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            config.contentInsets = NSDirectionalEdgeInsets(top: 3, leading: 16, bottom: 3, trailing: 0)
             cell.button.configuration = config
             if let key = item.key {
                 cell.button.menu = createStateSelectionMenu(for: key)
@@ -253,6 +253,8 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.button.showsMenuAsPrimaryAction = true
             cell.button.changesSelectionAsPrimaryAction = true
             cell.button.contentHorizontalAlignment = .right
+            cell.button.setContentHuggingPriority(.required, for: .horizontal)
+            cell.button.setContentCompressionResistancePriority(.required, for: .horizontal)
             return cell
         } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
@@ -317,7 +319,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.selectionStyle = .none
             cell.backgroundColor = .groupBg
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
-            cell.setSegmentedControlBottomSpacing(isCustomWidthSelected ? 0 : 20)
+            cell.setSegmentedControlBottomSpacing(isCustomWidthSelected ? 8 : 20)
             cell.configureSegmentedControl(icons: [.icCustomTrackLineThin, .icCustomTrackLineMedium, .icCustomTrackLineBold, .icCustomParameters], selectedSegmentIndex: selectedWidthIndex)
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }
@@ -329,7 +331,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.selectionStyle = .none
             cell.backgroundColor = .groupBg
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
-            cell.setSegmentedControlBottomSpacing(0)
+            cell.setSegmentedControlBottomSpacing(8)
             cell.configureSegmentedControl(titles: [localizedString("shared_string_none"), localizedString("shared_string_time"), localizedString("shared_string_distance")], selectedSegmentIndex: selectedSplitIntervalIndex)
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }
@@ -923,6 +925,8 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
                 data.setParameter(.colorPalette, value: paletteColor.paletteName)
             }
         }
+        
+        updateSection(containingRowKey: .coloringRowKey)
     }
     
     func reloadCollectionData() {

@@ -3009,3 +3009,11 @@
 "shared_string_replace" = "置き換え";
 "shared_string_set" = "調整";
 "data_source" = "データ情報源";
+"missing_maps_ignore" = "ダウンロードしたマップを使用";
+"wall_height" = "壁面の高さ";
+"shared_string_colors" = "色彩";
+"rendering_value_dark_orange_name" = "ダークオレンジ";
+"required_maps" = "必要なマップ";
+"missing_maps_ignore_details" = "ダウンロードしたマップはルートをカバーしていますか？その地域に詳しいなら、ナビゲートしてください。";
+"obd_plugin_name" = "車両データ";
+"tomorrow" = "明日";

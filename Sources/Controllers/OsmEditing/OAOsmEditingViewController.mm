@@ -299,10 +299,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void) trySaving
 {
+    BOOL offlineEdit = [_editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
     NSString *tagWithExceedingValue = [self isTextLengthInRange];
     if (tagWithExceedingValue.length > 0)
     {
-        [self showAlert:nil message:[NSString stringWithFormat:OALocalizedString(@"osm_tag_too_long_message"), tagWithExceedingValue] cancelButtonTitle:OALocalizedString(@"shared_string_ok") hasPositiveButton:NO];
+        [self showAlert:nil message:[NSString stringWithFormat:OALocalizedString(@"osm_tag_too_long_message"), tagWithExceedingValue] cancelButtonTitle:OALocalizedString(@"shared_string_ok") hasPositiveButton:NO isOfflineEdit:offlineEdit];
     }
     else if (_editPoiData.getPoiTypeString.length == 0)
     {
@@ -310,21 +311,23 @@ typedef NS_ENUM(NSInteger, EditingTab)
 //        NSArray<NSString *> *tagsCopy = [NSArray arrayWithArray:_editPoiData.getTagValues.allKeys];
         if ([_editPoiData getTag:[OAOSMSettings getOSMKey:ADDR_HOUSE_NUMBER]].length == 0)
         {
-            [self showAlert:nil message:OALocalizedString(@"save_poi_without_poi_type_message") cancelButtonTitle:OALocalizedString(@"shared_string_cancel") hasPositiveButton:YES];
+            [self showAlert:nil message:OALocalizedString(@"save_poi_without_poi_type_message") cancelButtonTitle:OALocalizedString(@"shared_string_cancel") hasPositiveButton:YES isOfflineEdit:offlineEdit];
         }
         else
         {
-            [self.navigationController popViewControllerAnimated:YES];
+            if (offlineEdit)
+                [self.navigationController popViewControllerAnimated:YES];
             [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
         }
     }
     else if ([self testTooManyCapitalLetters:[_editPoiData getTag:[OAOSMSettings getOSMKey:NAME]]])
     {
-        [self showAlert:nil message:OALocalizedString(@"save_poi_too_many_uppercase") cancelButtonTitle:OALocalizedString(@"shared_string_cancel") hasPositiveButton:YES];
+        [self showAlert:nil message:OALocalizedString(@"save_poi_too_many_uppercase") cancelButtonTitle:OALocalizedString(@"shared_string_cancel") hasPositiveButton:YES isOfflineEdit:offlineEdit];
     }
     else
     {
-        [self.navigationController popViewControllerAnimated:YES];
+        if (offlineEdit)
+            [self.navigationController popViewControllerAnimated:YES];
         [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
     }
 }
@@ -363,14 +366,15 @@ typedef NS_ENUM(NSInteger, EditingTab)
     return @"";
 }
 
-- (void) showAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle hasPositiveButton:(BOOL)hasPositiveButton {
+- (void)showAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle hasPositiveButton:(BOOL)hasPositiveButton isOfflineEdit:(BOOL)isOfflineEdit {
     dispatch_async(dispatch_get_main_queue(), ^{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
         if (hasPositiveButton)
         {
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
+                if (isOfflineEdit)
+                    [self.navigationController popViewControllerAnimated:YES];
                 [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
             }]];
         }

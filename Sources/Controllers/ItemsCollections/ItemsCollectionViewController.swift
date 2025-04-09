@@ -56,6 +56,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     var iconCategories = [IconsCategory]()
     private var iconItems = [String]()
     private var selectedIconItem: String?
+    private var poiIconHandlers = [IndexPath : PoiIconCollectionHandler]()
     
     private var chipsCell: OAFoldersCell?
     private var chipsCellScrollState: OACollectionViewCellState?
@@ -365,7 +366,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                         setupChipsCollectionCell(cell, chipsTitles: chipsTitles, selectedIndex: selectedIndex)
                     } else if let iconNames = item.obj(forKey: iconNamesKey) as? [String] {
                         let poiCategory = item.obj(forKey: poiCategoryNameKey) as? String
-                        setupIconCollectionCell(cell, iconNames: iconNames, poiCategoryKey: poiCategory)
+                        setupIconCollectionCell(cell, indexPath: indexPath, iconNames: iconNames, poiCategoryKey: poiCategory)
                     }
                 }
                 
@@ -457,11 +458,12 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         }
     }
     
-    private func setupIconCollectionCell(_ cell: OACollectionSingleLineTableViewCell, iconNames: [String], poiCategoryKey: String?) {
+    private func setupIconCollectionCell(_ cell: OACollectionSingleLineTableViewCell, indexPath: IndexPath, iconNames: [String], poiCategoryKey: String?) {
         if self.collectionType == .poiIconCategories {
             let poiIconHandler = PoiIconCollectionHandler()
             poiIconHandler.delegate = self
             poiIconHandler.hostVC = self
+            poiIconHandlers[indexPath] = poiIconHandler
             poiIconHandler.selectedIconColor = selectedIconColor
             poiIconHandler.regularIconColor = regularIconColor
             poiIconHandler.setScrollDirection(.vertical)
@@ -859,11 +861,25 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
             let chipsTitles = iconCategories.map { $0.translatedName }
             if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler,
                let selectedName = selectedItem as? String {
+                
+                for handler in poiIconHandlers.values {
+                    if let selectedIndex = handler.iconNamesData[0].firstIndex(of: selectedName) {
+                        let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
+                        handler.setSelectedIndexPath(selectedIndexPath)
+                    } else {
+                        handler.setSelectedIndexPath(IndexPath(row: -1, section: 0))
+                    }
+                    handler.getCollectionView().reloadData()
+                }
+                
                 selectedIconItem = selectedName
                 poiIconsDelegate.setIconName(selectedName)
                 poiIconsDelegate.selectIconName(selectedName)
                 poiIconsDelegate.allIconsVCDelegate = nil
-                dismiss(animated: true)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.dismiss(animated: true)
+                }
             }
             
         } else {

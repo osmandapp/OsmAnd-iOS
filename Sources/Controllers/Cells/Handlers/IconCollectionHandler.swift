@@ -24,7 +24,7 @@ class IconCollectionHandler: OABaseCollectionHandler {
     
     private var selectedIndexPath: IndexPath?
     private var defaultIndexPath: IndexPath?
-    private var iconNamesData = [[String]]()
+    var iconNamesData = [[String]]()
     private var cellSize: Double?
     private var iconBackgroundSize: Double?
     private var iconSize: Double?

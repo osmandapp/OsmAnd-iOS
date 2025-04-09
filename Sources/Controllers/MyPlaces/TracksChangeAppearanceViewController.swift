@@ -923,6 +923,8 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
                 data.setParameter(.colorPalette, value: paletteColor.paletteName)
             }
         }
+        
+        updateSection(containingRowKey: .coloringRowKey)
     }
     
     func reloadCollectionData() {

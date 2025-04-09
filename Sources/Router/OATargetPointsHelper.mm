@@ -44,6 +44,7 @@
     BOOL _isSearchingStart;
     BOOL _isSearchingDestination;
     BOOL _isSearchingMyLocation;
+    dispatch_queue_t _locationQueue;
 }
 
 + (OATargetPointsHelper *) sharedInstance
@@ -66,6 +67,7 @@
         _settings = [OAAppSettings sharedManager];
         _listeners = [NSMutableArray array];
         _routingHelper = [OARoutingHelper sharedInstance];
+        _locationQueue = dispatch_queue_create("com.osmand.targetpoints.location", DISPATCH_QUEUE_SERIAL);
         [self readFromSettings];
     }
     return self;
@@ -650,32 +652,35 @@
     }
 }
 
-- (NSString *) getLocationName:(CLLocation *)location
+- (NSString *)getLocationName:(CLLocation *)location
 {
-    NSString *addressString = nil;
-    BOOL isAddressFound = NO;
     NSString *formattedTargetName = nil;
-    NSString *roadTitle = nil;
-    if (location && CLLocationCoordinate2DIsValid(location.coordinate))
-        roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
-    if (!roadTitle || roadTitle.length == 0)
-    {
-        addressString = OALocalizedString(@"map_no_address");
-    }
-    else
-    {
-        addressString = roadTitle;
-        isAddressFound = YES;
-    }
-    
-    if (isAddressFound || addressString)
-    {
-        formattedTargetName = addressString;
-    }
-    else
-    {
-        formattedTargetName = [OAPointDescription getLocationName:location.coordinate.latitude lon:location.coordinate.longitude sh:NO];
-    }
+
+   // dispatch_sync(_locationQueue, ^{
+        NSString *addressString = nil;
+        BOOL isAddressFound = NO;
+        NSString *roadTitle = nil;
+        if (location && CLLocationCoordinate2DIsValid(location.coordinate))
+            roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
+        if (!roadTitle || roadTitle.length == 0)
+        {
+            addressString = OALocalizedString(@"map_no_address");
+        }
+        else
+        {
+            addressString = roadTitle;
+            isAddressFound = YES;
+        }
+        
+        if (isAddressFound || addressString)
+        {
+            formattedTargetName = addressString;
+        }
+        else
+        {
+            formattedTargetName = [OAPointDescription getLocationName:location.coordinate.latitude lon:location.coordinate.longitude sh:NO];
+        }
+   // });
     return formattedTargetName;
 }
 

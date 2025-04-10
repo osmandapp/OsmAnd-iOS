@@ -370,7 +370,6 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.OSMAND_CLOUD,
                 OAFeature.ADVANCED_WIDGETS,
                 OAFeature.WEATHER,
-                OAFeature.SENSORS,
                 OAFeature.HOURLY_MAP_UPDATES,
                 OAFeature.CROSS_BUY,
                 OAFeature.RELIEF_3D,
@@ -380,6 +379,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.WIKIPEDIA,
                 OAFeature.WIKIVOYAGE,
+                OAFeature.SENSORS,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL,
         ];
@@ -398,6 +398,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.HOURLY_MAP_UPDATES,
                 OAFeature.UNLIMITED_MAP_DOWNLOADS,
                 OAFeature.CARPLAY,
+                OAFeature.SENSORS,
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL
@@ -417,6 +418,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.WIKIPEDIA,
                 OAFeature.WIKIVOYAGE,
+                OAFeature.SENSORS,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL
         ];
@@ -432,6 +434,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.MONTHLY_MAP_UPDATES,
                 OAFeature.UNLIMITED_MAP_DOWNLOADS,
                 OAFeature.CARPLAY,
+                OAFeature.SENSORS,
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL

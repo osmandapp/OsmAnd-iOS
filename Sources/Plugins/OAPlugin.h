@@ -56,7 +56,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isEnableByDefault;
 - (void)disable;
 - (void)install:(nullable id<OAPluginInstallListener>)callback;
-- (void)handleActivation;
 
 - (nullable NSString *) getHelpFileName;
 - (NSArray<QuickActionType *> *) getQuickActionTypes;

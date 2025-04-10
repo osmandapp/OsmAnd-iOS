@@ -274,7 +274,7 @@
         else
         {
             NSString *backupStatusDescr = _backup == nil ? OALocalizedString(@"checking_progress")
-                : [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
+            : [OABackupUiUtils getLastBackupTimeDescription:OALocalizedString(@"shared_string_never")];
             OATableCollapsableRowData *collapsableRow = [[OATableCollapsableRowData alloc] initWithData:@{
                 kCellTypeKey: OAButtonTableViewCell.getCellIdentifier,
                 kCellKeyKey: @"lastBackup",

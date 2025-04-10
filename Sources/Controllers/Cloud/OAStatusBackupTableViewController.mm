@@ -235,7 +235,7 @@
     OATableSectionData *statusSection = [OATableSectionData sectionData];
     NSString *backupTime = _backupHelper.isBackupPreparing ?
         OALocalizedString(@"checking_progress")
-        : [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")]; [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
+    : [OABackupUiUtils getLastBackupTimeDescription:OALocalizedString(@"shared_string_never")];
     [_data addSection:statusSection];
     if ([_settingsHelper isBackupSyncing])
     {
@@ -615,15 +615,9 @@
 - (NSString *)generateTimeString:(long)timeMs summary:(NSString *)summary
 {
     if (timeMs != -1)
-    {
-        NSString *time = [OAOsmAndFormatter getFormattedPassedTime:(timeMs / 1000)
-                                                               def:OALocalizedString(@"shared_string_never")];
-        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), summary, time];
-    }
+        return [OABackupUiUtils generateTimeStringWithSummary:summary time:timeMs / 1000];
     else
-    {
         return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), summary, OALocalizedString(@"shared_string_never")];
-    }
 }
 
 - (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary

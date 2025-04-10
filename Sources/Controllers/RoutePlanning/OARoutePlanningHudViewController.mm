@@ -1530,9 +1530,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)onRightButtonPressed
 {
-    OASWptPt *newPoint = [_layer getMovedPointToApply];
     if (_hudMode == EOAHudModeMovePoint)
     {
+        OASWptPt *newPoint = [_layer getMovedPointToApply];
         [_editingContext.commandManager execute:[[OAMovePointCommand alloc] initWithLayer:_layer
                                                                                  oldPoint:_editingContext.originalPointToMove
                                                                                  newPoint:newPoint

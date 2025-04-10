@@ -52,7 +52,7 @@ final class BackupUiUtils: NSObject {
         guard time > 0 else {
             return def
         }
-        let duration = Int((Date().timeIntervalSince1970 - Double(time)) / 1000)
+        let duration = Int(Date().timeIntervalSince1970 - Double(time))
         if duration > minDurationForDateFormat {
             return showTime ? OAOsmAndFormatter.getFormattedDateTime(TimeInterval(time)) : OAOsmAndFormatter.getFormattedDate(TimeInterval(time))
         } else {

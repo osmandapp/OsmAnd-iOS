@@ -102,6 +102,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return button
     }()
+    
     private lazy var sortButton: UIButton = {
         var config = UIButton.Configuration.plain()
         config.imagePadding = 16
@@ -1498,11 +1499,16 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     @objc func onObservedRecordedTrackChanged() {
-        if isRootFolder {
-            DispatchQueue.main.async { [weak self] in
-                self?.generateData()
+        guard isRootFolder else { return }
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            generateData()
+            let numberOfRows = tableView.numberOfRows(inSection: 0)
+            if numberOfRows > 0 {
                 let recordingTrackRowIndexPath = IndexPath(row: 0, section: 0)
-                self?.tableView.reloadRows(at: [recordingTrackRowIndexPath], with: .none)
+                tableView.reloadRows(at: [recordingTrackRowIndexPath], with: .none)
+            } else {
+                tableView.reloadData()
             }
         }
     }

@@ -638,7 +638,7 @@ static NSOperationQueue *_favQueue;
                                        [NSString stringWithFormat:@"%@%@%@%@",
                                         app.favoritesFilePrefix,
                                         fileGroup.name.length > 0 ? app.favoritesGroupNameSeparator : @"",
-                                        fileGroup.name,
+                                        [OsmAndApp.instance getGroupFileName:fileGroup.name],
                                         GPX_FILE_EXT]];
             [[NSFileManager defaultManager] removeItemAtPath:fileGroupPath error:nil];
         }
@@ -678,8 +678,9 @@ static NSOperationQueue *_favQueue;
                                        [NSString stringWithFormat:@"%@%@%@%@",
                                         app.favoritesFilePrefix,
                                         localGroup.name.length > 0 ? app.favoritesGroupNameSeparator : @"",
-                                        localGroup.name,
+                                        [OsmAndApp.instance getGroupFileName:localGroup.name],
                                         GPX_FILE_EXT]];
+           
             [self saveFile:@[localGroup] file:fileGroupPath];
         }
     }

@@ -2093,15 +2093,6 @@ static const NSInteger _buttonsCount = 4;
 
     OAShareMenuActivity *shareGeo = [[OAShareMenuActivity alloc] initWithType:OAShareMenuActivityGeo];
     shareGeo.delegate = self;
-
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:items
-                                                                                         applicationActivities:@[
-                                                                                                 shareClipboard,
-                                                                                                 shareAddress,
-                                                                                                 sharePOIName,
-                                                                                                 shareCoordinates,
-                                                                                                 shareGeo]
-    ];
     
     UIButton *button = (UIButton *)sender;
     

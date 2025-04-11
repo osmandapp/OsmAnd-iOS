@@ -133,6 +133,7 @@
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name;
 + (NSString *) getDisplayName:(NSString *)name;
 + (NSString *) convertDisplayNameToGroupIdName:(NSString *)name;
+- (NSString *) defaultGroupFileName;
 - (OASGpxUtilitiesPointsGroup *)toPointsGroup;
 + (OAFavoriteGroup *)fromPointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup;
 - (BOOL)isEqual:(id)object;

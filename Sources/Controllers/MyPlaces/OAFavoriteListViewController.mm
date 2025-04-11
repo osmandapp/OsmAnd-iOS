@@ -943,7 +943,9 @@ static UIViewController *parentController;
     NSString *filename = app.favoritesFilePrefix;
     if (groups.count == 1)
     {
-        NSString *groupName = groups.allKeys.firstObject;
+        OAFavoriteGroup *group = [groups.allValues firstObject];
+        NSString *groupName = [group defaultGroupFileName];
+        
         filename = [NSString stringWithFormat:@"%@%@%@",
                     filename,
                     groupName.length > 0 ? app.favoritesGroupNameSeparator : @"",

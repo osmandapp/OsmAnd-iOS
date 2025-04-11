@@ -1261,6 +1261,16 @@ static NSOperationQueue *_favQueue;
         return name;
 }
 
+- (NSString *) defaultGroupFileName
+{
+    return [OsmAndApp.instance getGroupFileName:self.name];
+}
+
+- (NSString *) defaultFileExtension
+{
+    return GPX_FILE_EXT;
+}
+
 + (NSString *) convertDisplayNameToGroupIdName:(NSString *)name
 {
     if ([self isPersonalCategoryDisplayName:name])

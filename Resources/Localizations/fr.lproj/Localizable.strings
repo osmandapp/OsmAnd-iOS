@@ -109,7 +109,7 @@
 "shared_string_download" = "Télécharger";
 "shared_string_no_thanks" = "Pas nécessaire";
 "download_now" = "Télécharger la carte maintenant";
-"download_tab_local" = "Stockage";
+"download_tab_local" = "Gérer";
 "res_search_world" = "Rechercher dans le monde entier";
 "res_world_map" = "Carte du monde";
 "download_tab_updates" = "Mises à jour";
@@ -247,7 +247,7 @@
 "plugin_popup_wiki_title" = "Télécharger Wikipédia";
 "gpx_no_tracks" = "Il n'y a aucune trace";
 "gpx_elev_range" = "Gamme d'élévation";
-"device_memory" = "Mémoire de l\'appareil";
+"device_memory" = "Stockage de l'appareil";
 "free" = "%@ libre";
 "fav_import_desc" = "Vous pouvez importer vos favoris en tant que points de passage au format GPX (format de données GPS usuel)\n\nPour partager le fichier favorites.gpx, vous pouvez l'ouvrir à partir de Dropbox, d'un courriel ou d'une autre source – utilisez la fonction « ouvrir ».";
 "shared_string_waypoint" = "Point de passage";

@@ -145,7 +145,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 @synthesize menuHudMode;
 
-- (instancetype) init
+- (instancetype)init
 {
     self = [super initWithNibName:@"OARoutePlanningHudViewController"
                            bundle:nil];
@@ -157,7 +157,19 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return self;
 }
 
-- (instancetype) initWithFileName:(NSString *)fileName
+- (instancetype)initWithEditingContext:(OAMeasurementEditingContext *)editingCtx
+{
+    self = [super initWithNibName:@"OARoutePlanningHudViewController"
+                           bundle:nil];
+    if (self)
+    {
+        [self commonInit:editingCtx];
+        [self setMode:PLAN_ROUTE_MODE on:YES];
+    }
+    return self;
+}
+
+- (instancetype)initWithFileName:(NSString *)fileName
 {
     self = [super initWithNibName:@"OARoutePlanningHudViewController"
                            bundle:nil];
@@ -172,7 +184,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return self;
 }
 
-- (instancetype) initWithInitialPoint:(CLLocation *)latLon
+- (instancetype)initWithInitialPoint:(CLLocation *)latLon
 {
     self = [super initWithNibName:@"OARoutePlanningHudViewController"
                            bundle:nil];
@@ -186,7 +198,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return self;
 }
 
-- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning
+- (instancetype)initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning
 {
     self = [super initWithNibName:@"OARoutePlanningHudViewController"
                            bundle:nil];
@@ -199,9 +211,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return self;
 }
 
-- (instancetype) initWithFileName:(NSString *)fileName
-                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
-                adjustMapPosition:(BOOL)adjustMapPosition
+- (instancetype)initWithFileName:(NSString *)fileName
+                 targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
+               adjustMapPosition:(BOOL)adjustMapPosition
 {
     self = [self initWithFileName:fileName];
     if (self)
@@ -534,7 +546,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_modeButton updateColorsForPressedState:NO];
 }
 
-- (void) cancelModes
+- (void)cancelModes
 {
     _editingContext.selectedPointPosition = -1;
     _editingContext.originalPointToMove = nil;

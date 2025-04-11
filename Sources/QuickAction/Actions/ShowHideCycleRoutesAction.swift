@@ -40,17 +40,18 @@ final class ShowHideCycleRoutesAction: BaseRouteQuickAction {
     }
     
     override func execute() {
-        let newValue = isEnabled() ? "false" : "true"
+        let isEnabled = isEnabled()
         let styleSettings = OAMapStyleSettings.sharedInstance()
         let routesParameter = styleSettings?.getParameter(SHOW_CYCLE_ROUTES_ATTR)
         let nodeParameter = styleSettings?.getParameter(CYCLE_NODE_NETWORK_ROUTES_ATTR)
+        let cycleRoutesParameter = OAAppSettings.sharedManager().cycleRoutesParameter.get()
         
         if let nodeParameter {
-            nodeParameter.value = newValue
+            nodeParameter.value = isEnabled ? "false" : cycleRoutesParameter
             styleSettings?.save(nodeParameter)
         }
         if let routesParameter {
-            routesParameter.value = newValue
+            routesParameter.value = isEnabled ? "false" : "true"
             styleSettings?.save(routesParameter)
         }
     }

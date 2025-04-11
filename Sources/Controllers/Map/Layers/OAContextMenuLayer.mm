@@ -412,6 +412,9 @@
 
     for (const auto symbolInfo : symbolInfos)
     {
+        if (symbolInfo.mapSymbol->ignoreClick) {
+            continue;
+        }
         if (!showUnknownLocation)
         {
             if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))

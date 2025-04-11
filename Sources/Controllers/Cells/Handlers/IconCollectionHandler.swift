@@ -11,6 +11,8 @@ import Foundation
 @objcMembers
 class IconCollectionHandler: OABaseCollectionHandler {
     
+    static var cachedIcons = NSCache<NSString, UIImage>()
+    
     var iconImagesData = [[UIImage]]()
     var roundedSquareCells = false
     var customTitle = ""
@@ -114,14 +116,22 @@ class IconCollectionHandler: OABaseCollectionHandler {
             cell.iconImageView.image = iconImagesData[indexPath.section][indexPath.row]
         } else if !iconNamesData.isEmpty && !iconNamesData[indexPath.section].isEmpty {
             let iconName = iconNamesData[indexPath.section][indexPath.row]
-            var icon = UIImage.templateImageNamed(iconName)
-            if icon == nil {
-                icon = OAUtilities.getMxIcon(iconName.lowercased())
+            if let icon = Self.cachedIcons.object(forKey: iconName as NSString) {
+                cell.iconImageView.image = icon
+            } else {
+                var icon = UIImage.templateImageNamed(iconName)
+                if icon == nil {
+                    icon = OAUtilities.getMxIcon(iconName.lowercased())
+                }
+                if icon == nil {
+                    icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
+                }
+                cell.iconImageView.image = icon
+                if let icon {
+                    Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
+                }
             }
-            if icon == nil {
-                icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
-            }
-            cell.iconImageView.image = icon
+            
         }
         if indexPath == selectedIndexPath {
             cell.iconImageView.tintColor = selectedIconColor
@@ -156,9 +166,7 @@ class IconCollectionHandler: OABaseCollectionHandler {
         if let regularIconColor {
             vc.regularIconColor = regularIconColor
         }
-        let navController = UINavigationController(rootViewController: vc)
-        navController.modalPresentationStyle = .fullScreen
-        hostVC.present(navController, animated: true)
+        hostVC.showModalViewController(vc)
     }
     
     override func getSelectedItem() -> Any {

@@ -206,7 +206,7 @@
                 ? waypoint.point.name
                 : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"plugin_distance_point"),
                         [waypoints indexOfObject:waypoint] + 1];
-        name = name?:@"";
+        name = name ?: @"";
         NSString *description = worldRegion != nil
         ? (worldRegion.localizedName ?: worldRegion.nativeName)
         : @"";

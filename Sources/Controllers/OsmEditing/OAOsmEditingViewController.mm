@@ -299,11 +299,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void) trySaving
 {
-    BOOL offlineEdit = [_editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
+    BOOL offlineEdit = [self.class isOfflineEditing:_editingUtil];
     NSString *tagWithExceedingValue = [self isTextLengthInRange];
     if (tagWithExceedingValue.length > 0)
     {
-        [self showAlert:nil message:[NSString stringWithFormat:OALocalizedString(@"osm_tag_too_long_message"), tagWithExceedingValue] cancelButtonTitle:OALocalizedString(@"shared_string_ok") hasPositiveButton:NO isOfflineEdit:offlineEdit];
+        [self showAlert:nil message:[NSString stringWithFormat:OALocalizedString(@"osm_tag_too_long_message"), tagWithExceedingValue] cancelButtonTitle:OALocalizedString(@"shared_string_ok") hasPositiveButton:NO];
     }
     else if (_editPoiData.getPoiTypeString.length == 0)
     {
@@ -311,7 +311,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 //        NSArray<NSString *> *tagsCopy = [NSArray arrayWithArray:_editPoiData.getTagValues.allKeys];
         if ([_editPoiData getTag:[OAOSMSettings getOSMKey:ADDR_HOUSE_NUMBER]].length == 0)
         {
-            [self showAlert:nil message:OALocalizedString(@"save_poi_without_poi_type_message") cancelButtonTitle:OALocalizedString(@"shared_string_cancel") hasPositiveButton:YES isOfflineEdit:offlineEdit];
+            [self showAlert:nil message:OALocalizedString(@"save_poi_without_poi_type_message") cancelButtonTitle:OALocalizedString(@"shared_string_cancel") hasPositiveButton:YES];
         }
         else
         {
@@ -322,7 +322,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     }
     else if ([self testTooManyCapitalLetters:[_editPoiData getTag:[OAOSMSettings getOSMKey:NAME]]])
     {
-        [self showAlert:nil message:OALocalizedString(@"save_poi_too_many_uppercase") cancelButtonTitle:OALocalizedString(@"shared_string_cancel") hasPositiveButton:YES isOfflineEdit:offlineEdit];
+        [self showAlert:nil message:OALocalizedString(@"save_poi_too_many_uppercase") cancelButtonTitle:OALocalizedString(@"shared_string_cancel") hasPositiveButton:YES];
     }
     else
     {
@@ -366,14 +366,15 @@ typedef NS_ENUM(NSInteger, EditingTab)
     return @"";
 }
 
-- (void)showAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle hasPositiveButton:(BOOL)hasPositiveButton isOfflineEdit:(BOOL)isOfflineEdit {
+- (void)showAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle hasPositiveButton:(BOOL)hasPositiveButton
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
         if (hasPositiveButton)
         {
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                if (isOfflineEdit)
+                if ([self.class isOfflineEditing:_editingUtil])
                     [self.navigationController popViewControllerAnimated:YES];
                 [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
             }]];
@@ -383,11 +384,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
     });
 }
 
-+ (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset editingDelegate:(id<OAOsmEditingBottomSheetDelegate>)editingDelegate
++ (void)savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset editingDelegate:(id<OAOsmEditingBottomSheetDelegate>)editingDelegate
 {
     OAEntity *original = poiData.getEntity;
     
-    BOOL offlineEdit = [editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
+    BOOL offlineEdit = [self.class isOfflineEditing:editingUtil];
     OAEntity *entity;
     if ([original isKindOfClass:OANode.class])
         entity = [[OANode alloc] initWithId:original.getId latitude:original.getLatitude longitude:original.getLongitude];
@@ -469,6 +470,10 @@ typedef NS_ENUM(NSInteger, EditingTab)
     [self savePoi:comment poiData:poiData editingUtil:editingUtil closeChangeSet:closeChangeset editingDelegate:nil];
 }
 
++ (BOOL)isOfflineEditing:(id<OAOpenStreetMapUtilsProtocol>)editingUtil
+{
+    return [editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
+}
 
 #pragma mark - UIPageViewControllerDataSource
 

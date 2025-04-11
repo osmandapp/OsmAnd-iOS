@@ -4,17 +4,17 @@
 
 static NSString *const kArabicDigits = @"٠١٢٣٤٥٦٧٨٩";
 static NSString *const kDigitsReplacement = @"0123456789";
-static NSArray *DIACRITIC_REGEX;
+static NSMutableCharacterSet * DIACRITIC_REGEX;
 static NSDictionary *DIACRITIC_REPLACE;
 
 + (void)initialize {
-    DIACRITIC_REGEX = @[
-                @"[\u064B-\u065F]",
-                @"[\u0610-\u061A]",
-                @"[\u06D6-\u06ED]",
-                @"\u0640",
-                @"\u0670"
-    ];
+   
+    DIACRITIC_REGEX = [NSMutableCharacterSet new];
+    [DIACRITIC_REGEX addCharactersInRange:NSMakeRange(0x064B, 0x065F - 0x064B + 1)]; // \u064B-\u065F
+    [DIACRITIC_REGEX addCharactersInRange:NSMakeRange(0x0610, 0x061A - 0x0610 + 1)]; // \u0610-\u061A
+    [DIACRITIC_REGEX addCharactersInRange:NSMakeRange(0x06D6, 0x06ED - 0x06D6 + 1)]; // \u06D6-\u06ED
+    [DIACRITIC_REGEX addCharactersInString:@"\u0640"];
+    [DIACRITIC_REGEX addCharactersInString:@"\u0670"];
     
     DIACRITIC_REPLACE = @{
                 @"\u0624": @"\u0648", // Replace Waw Hamza Above by Waw
@@ -50,16 +50,21 @@ static NSDictionary *DIACRITIC_REPLACE;
         return text;
     }
     
-    // Remove diacritics
-    NSString *result = text;
-    for (NSString *regex in DIACRITIC_REGEX) {
-        NSRegularExpression *regExp = [NSRegularExpression regularExpressionWithPattern:regex options:0 error:nil];
-        result = [regExp stringByReplacingMatchesInString:result options:0 range:NSMakeRange(0, result.length) withTemplate:@""];
+    // Filter out characters in the diacritic set
+    NSMutableString *result = [NSMutableString stringWithCapacity:text.length];
+    for (NSUInteger i = 0; i < text.length; i++) {
+        unichar character = [text characterAtIndex:i];
+        if (![DIACRITIC_REGEX characterIsMember:character]) {
+            [result appendFormat:@"%C", character];
+        }
     }
         
     // Replace characters
     for (NSString *key in DIACRITIC_REPLACE) {
-        result = [result stringByReplacingOccurrencesOfString:key withString:DIACRITIC_REPLACE[key]];
+        [result replaceOccurrencesOfString:key
+                               withString:DIACRITIC_REPLACE[key]
+                                  options:0
+                                    range:NSMakeRange(0, result.length)];
     }
         
     return [self replaceDigits:result];

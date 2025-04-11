@@ -316,7 +316,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             for category in self.categories {
                 for iconName in category.iconKeys {
                     
-                    if Self.cachedIcons[iconName] == nil {
+                    if Self.cachedIcons.object(forKey: iconName as NSString) == nil {
                         var icon = UIImage.templateImageNamed(iconName)
                         if icon == nil {
                             icon = OAUtilities.getMxIcon(iconName.lowercased())
@@ -324,7 +324,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                         if icon == nil {
                             icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
                         }
-                        Self.cachedIcons[iconName] = icon
+                        if let icon {
+                            Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
+                        }
                     }
                 }
             }

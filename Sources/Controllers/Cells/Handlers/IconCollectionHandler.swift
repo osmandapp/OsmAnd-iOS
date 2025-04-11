@@ -11,7 +11,7 @@ import Foundation
 @objcMembers
 class IconCollectionHandler: OABaseCollectionHandler {
     
-    static var cachedIcons = [String: UIImage]()
+    static var cachedIcons = NSCache<NSString, UIImage>()
     
     var iconImagesData = [[UIImage]]()
     var roundedSquareCells = false
@@ -116,7 +116,7 @@ class IconCollectionHandler: OABaseCollectionHandler {
             cell.iconImageView.image = iconImagesData[indexPath.section][indexPath.row]
         } else if !iconNamesData.isEmpty && !iconNamesData[indexPath.section].isEmpty {
             let iconName = iconNamesData[indexPath.section][indexPath.row]
-            if let icon = Self.cachedIcons[iconName] {
+            if let icon = Self.cachedIcons.object(forKey: iconName as NSString) {
                 cell.iconImageView.image = icon
             } else {
                 var icon = UIImage.templateImageNamed(iconName)
@@ -127,7 +127,9 @@ class IconCollectionHandler: OABaseCollectionHandler {
                     icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
                 }
                 cell.iconImageView.image = icon
-                Self.cachedIcons[iconName] = icon
+                if let icon {
+                    Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
+                }
             }
             
         }

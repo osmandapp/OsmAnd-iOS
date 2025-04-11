@@ -182,9 +182,7 @@ class IconCollectionHandler: OABaseCollectionHandler {
         if let regularIconColor {
             vc.regularIconColor = regularIconColor
         }
-        let navController = UINavigationController(rootViewController: vc)
-        navController.modalPresentationStyle = .fullScreen
-        hostVC.present(navController, animated: true)
+        hostVC.showModalViewController(vc)
     }
     
     override func getSelectedItem() -> Any {

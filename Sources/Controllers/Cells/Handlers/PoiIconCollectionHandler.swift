@@ -51,7 +51,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             Self.cachedCategories = categories
             Self.cachedCategoriesByKeyName = categoriesByKeyName
             
-            
+            loadAllIconsData()
         } else {
             categories = Self.cachedCategories
             categoriesByKeyName = Self.cachedCategoriesByKeyName
@@ -307,6 +307,28 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         }
         categories[0].iconKeys = lastUsedIcons
         OAAppSettings.sharedManager().lastUsedFavIcons.set(lastUsedIcons)
+    }
+    
+    func loadAllIconsData() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            
+            for category in self.categories {
+                for iconName in category.iconKeys {
+                    
+                    if Self.cachedIcons[iconName] == nil {
+                        var icon = UIImage.templateImageNamed(iconName)
+                        if icon == nil {
+                            icon = OAUtilities.getMxIcon(iconName.lowercased())
+                        }
+                        if icon == nil {
+                            icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
+                        }
+                        Self.cachedIcons[iconName] = icon
+                    }
+                }
+            }
+        }
     }
     
     override func openAllIconsScreen() {

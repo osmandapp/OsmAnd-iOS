@@ -87,7 +87,6 @@ class IconCollectionHandler: OABaseCollectionHandler {
     override func generateData(_ data: [[Any]]) {
         if let iconNames = data as? [[String]] {
             iconNamesData = iconNames
-            loadAllImages()
         }
     }
     
@@ -149,23 +148,6 @@ class IconCollectionHandler: OABaseCollectionHandler {
             cell.backView.layer.cornerRadius = cell.backView.frame.size.height / 2
         }
         return cell
-    }
-    
-    func loadAllImages() {
-        for iconsSection in iconNamesData {
-            for iconName in iconsSection {
-                if Self.cachedIcons[iconName] == nil {
-                    var icon = UIImage.templateImageNamed(iconName)
-                    if icon == nil {
-                        icon = OAUtilities.getMxIcon(iconName.lowercased())
-                    }
-                    if icon == nil {
-                        icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
-                    }
-                    Self.cachedIcons[iconName] = icon
-                }
-            }
-        }
     }
     
     func openAllIconsScreen() {

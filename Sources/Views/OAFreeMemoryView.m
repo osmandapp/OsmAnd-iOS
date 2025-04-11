@@ -21,6 +21,7 @@
     double _freeVal;
 
     unsigned long long _localResourcesSize;
+    DirectoryObserver *_directoryObserver;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame localResourcesSize:(unsigned long long)localResourcesSize
@@ -69,8 +70,14 @@
     [self addSubview:_freeMemLabel];
     
     [self update];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(memInfoDidChange:) name:@"DiskUsageChangedNotification" object:nil];
+
+    NSString *dataPath = [[[OsmAndApp instance] documentsPath] stringByAppendingPathComponent:RESOURCES_DIR];
+    _directoryObserver = [[DirectoryObserver alloc] init:dataPath notificationName:@"DiskUsageChangedNotification"];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(memInfoDidChange:)
+     name:@"DiskUsageChangedNotification" object:nil];
+    [_directoryObserver startObserving];
 }
 
 - (void) dealloc
@@ -147,6 +154,7 @@
     }
     NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
     _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
+    [_freeMemLabel sizeToFit];
 }
 
 - (void) drawRect:(CGRect)rect

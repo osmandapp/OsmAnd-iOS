@@ -21,6 +21,7 @@
 #import "OAPOICategory.h"
 #import "OAMapUtils.h"
 #import "OASearchCoreFactory.h"
+#import "OAArabicNormalizer.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -119,7 +120,12 @@
     NSMutableArray<NSString *> *searchPhraseNamesArray = [self getSearchPhraseNames];
     QStringList searchPhraseNames;
     for (NSString *searchPhraseName : searchPhraseNamesArray)
+    {
+        if ([OAArabicNormalizer isSpecialArabic:searchPhraseName]) {
+            searchPhraseName = [OAArabicNormalizer normalize:searchPhraseName] ?: searchPhraseName;
+        }
         searchPhraseNames.append(QString::fromNSString(searchPhraseName));
+    }
 
     NSMutableArray<NSString *> *localResultNamesArray;
     if (![[_requiredSearchPhrase getFullSearchPhrase] containsString:@HYPHEN])
@@ -144,7 +150,13 @@
         wordMatched = NO;
         for (int i = idxMatchedWord + 1; i < localResultNames.size(); i++)
         {
-            int r = OsmAnd::ICU::ccompare(searchPhraseName, localResultNames.at(i));
+            QString localQString = localResultNames.at(i);
+            NSString * localString = localQString.toNSString();
+            if ([OAArabicNormalizer isSpecialArabic:localString]) {
+                localString = [OAArabicNormalizer normalize:localString] ?: localString;
+                localQString = QString::fromNSString(localString);
+            }
+            int r = OsmAnd::ICU::ccompare(searchPhraseName, localQString);
             if (r == 0)
             {
                 wordMatched = YES;

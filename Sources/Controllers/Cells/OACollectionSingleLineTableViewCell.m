@@ -67,45 +67,40 @@
               forCellWithReuseIdentifier:cellIdentifier];
     }
 
-    [self.collectionView performBatchUpdates:^{
-        for (NSInteger i = 0; i < self.collectionView.numberOfSections; i ++)
-        {
-            [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:i]];
+    [self.collectionView reloadData];
+    UICollectionViewScrollDirection scrollDirection = [_collectionHandler getScrollDirection];
+    BOOL isHorizontal = scrollDirection == UICollectionViewScrollDirectionHorizontal;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.scrollDirection = scrollDirection;
+        CGSize itemSize = [_collectionHandler getItemSize];
+        if (itemSize.width == 0) {
+            layout.estimatedItemSize = CGSizeMake(50, itemSize.height);
+            layout.itemSize = UICollectionViewFlowLayoutAutomaticSize;
+        } else {
+            layout.itemSize = itemSize;
         }
-    } completion:^(BOOL finished) {
-        UICollectionViewScrollDirection scrollDirection = [_collectionHandler getScrollDirection];
-        BOOL isHorizontal = scrollDirection == UICollectionViewScrollDirectionHorizontal;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-            layout.scrollDirection = scrollDirection;
-            CGSize itemSize = [_collectionHandler getItemSize];
-            if (itemSize.width == 0) {
-                layout.estimatedItemSize = CGSizeMake(50, itemSize.height);
-                layout.itemSize = UICollectionViewFlowLayoutAutomaticSize;
-            } else {
-                layout.itemSize = itemSize;
-            }
-            CGFloat spacing = [_collectionHandler getSpacing];
-            layout.minimumLineSpacing = spacing;
-            layout.minimumInteritemSpacing = spacing;
-            
-            [self.collectionView setCollectionViewLayout:layout animated:!_disableAnimationsOnStart];
+        CGFloat spacing = [_collectionHandler getSpacing];
+        layout.minimumLineSpacing = spacing;
+        layout.minimumInteritemSpacing = spacing;
+        
+        [self.collectionView setCollectionViewLayout:layout animated:!_disableAnimationsOnStart];
 
-            NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
-            if (selectedIndexPath.row != NSNotFound
-                && (_forceScrollOnStart || ![self.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
-                && selectedIndexPath.section < [collectionHandler sectionsCount]
-                && selectedIndexPath.row < [collectionHandler itemsCount:selectedIndexPath.section])
-            {
-                [self.collectionView scrollToItemAtIndexPath:selectedIndexPath
-                                            atScrollPosition:isHorizontal
-                    ? UICollectionViewScrollPositionCenteredHorizontally
-                    : UICollectionViewScrollPositionCenteredVertically
-                                                    animated:!_disableAnimationsOnStart];
-            }
-        });
-    }];
+        NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
+        if (selectedIndexPath.row != NSNotFound
+            && (_forceScrollOnStart || ![self.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+            && selectedIndexPath.section < [collectionHandler sectionsCount]
+            && selectedIndexPath.row < [collectionHandler itemsCount:selectedIndexPath.section])
+        {
+            [self.collectionView scrollToItemAtIndexPath:selectedIndexPath
+                                        atScrollPosition:isHorizontal
+                ? UICollectionViewScrollPositionCenteredHorizontally
+                : UICollectionViewScrollPositionCenteredVertically
+                                                animated:!_disableAnimationsOnStart];
+        }
+    });
 }
 
 - (CGFloat)getLeftInsetToView:(UIView *)view

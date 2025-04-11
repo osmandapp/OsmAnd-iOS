@@ -518,7 +518,7 @@
 
 - (void)uploadDidCompleteWithSuccess:(BOOL)success
 {
-    [self dismissViewController];
+    [self.navigationController popToRootViewControllerAnimated:YES];
     if ([self.delegate respondsToSelector:@selector(uploadFinished:)])
         [self.delegate uploadFinished:!success];
 }

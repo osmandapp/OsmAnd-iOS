@@ -38,6 +38,11 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 #define CARPLAY_START_DATE_SEC (10L * 60L * 60L * 24L) // 10 days
 #define PURCHASE_VALIDATION_PERIOD_SEC 60 * 60 * 24 // daily
 
+static NSString *kPlatformGoogle = @"google";
+static NSString *kPlatformApple = @"apple";
+static NSString *kPlatformAmazon = @"amazon";
+static NSString *kPlatformHuawei = @"huawei";
+
 typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success);
 
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
@@ -146,6 +151,10 @@ static OASubscriptionState *EXPIRED;
 
 @end
 
+@implementation OAInAppStateHolder
+
+@end
+
 @implementation OAIAPHelper
 {
     OAAppSettings *_settings;
@@ -156,6 +165,7 @@ static OASubscriptionState *EXPIRED;
     SKReceiptRefreshRequest *_receiptRequest;
     
     OAProducts *_products;
+    NSDictionary<NSString *, OAInAppStateHolder *> *_inAppStateMap;
 
     BOOL _restoringPurchases;
     NSInteger _transactionErrors;
@@ -334,6 +344,17 @@ static OASubscriptionState *EXPIRED;
     if (fullVersion && fullVersion.isPurchased)
         [products addObject:fullVersion];
     return products.allObjects;
+}
+
+- (NSMapTable<OAProduct *, NSNumber *> *) getExternalInApps
+{
+    NSMapTable<OAProduct *, NSNumber *> *res = [NSMapTable strongToStrongObjectsMapTable];
+    for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
+    {
+        if (holder.linkedProduct && ![kPlatformApple isEqualToString:holder.platform])
+            [res setObject:@(holder.origin) forKey:holder.linkedProduct];
+    }
+    return res;
 }
 
 + (OAIAPHelper *) sharedInstance
@@ -655,10 +676,43 @@ static OASubscriptionState *EXPIRED;
                     }
                 }
                 
-                _completionHandler = [onComplete copy];
-                _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
-                _productsRequest.delegate = self;
-                [_productsRequest start];
+                NSString *userId = _settings.billingUserId.get;
+                NSString *userToken = _settings.billingUserToken.get;
+                if (userId.length > 0 && userToken.length > 0)
+                {
+                    NSMutableDictionary<NSString *, NSString *> *params = @{ @"os" : @"ios", @"version" : ver }.mutableCopy;
+                    params[@"userId"] = userId;
+                    params[@"userToken"] = userToken;
+                    NSString *deviceId = _settings.backupDeviceId.get;
+                    NSString *accessToken = _settings.backupAccessToken.get;
+                    if (deviceId.length > 0 && accessToken.length > 0)
+                    {
+                        params[@"deviceId"] = deviceId;
+                        params[@"accessToken"] = accessToken;
+                    }
+                    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/inapps/get" params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+                     {
+                        if (response && data)
+                        {
+                            @try
+                            {
+                                NSError *jsonParsingError = nil;
+                                NSArray *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
+                                if (!jsonParsingError)
+                                    _inAppStateMap = [self parseInAppStates:resultJson];
+                            }
+                            @catch (NSException *e)
+                            {
+                                // Ignore
+                            }
+                        }
+
+                        _completionHandler = [onComplete copy];
+                        _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
+                        _productsRequest.delegate = self;
+                        [_productsRequest start];
+                    }];
+                }
             }
             @catch (NSException *e)
             {
@@ -958,8 +1012,18 @@ static OASubscriptionState *EXPIRED;
                 if (!wasPurchased)
                     [purchased addObject:product];
             }
-            NSArray<OASubscription *> *subs = [self.subscriptionList getPurchasedSubscriptions];
             
+            if (!full)
+            {
+                for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
+                    if (holder.linkedProduct == self.mapsFull)
+                    {
+                        full = YES;
+                        break;
+                    }
+            }
+            
+            NSArray<OASubscription *> *subs = [self.subscriptionList getPurchasedSubscriptions];
             for (OASubscription *s in subs)
             {
                 if ([purchasedSubs containsObject:s])
@@ -1365,6 +1429,11 @@ static OASubscriptionState *EXPIRED;
 
 - (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transactionId:(NSString *)transactionId
 {
+    [self provideContentForProductIdentifier:productIdentifier transactionId:transactionId applyProduct:YES];
+}
+
+- (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transactionId:(NSString *)transactionId applyProduct:(BOOL)applyProduct
+{
     OAProduct *product = [self product:productIdentifier];
     if (product)
     {
@@ -1474,7 +1543,7 @@ static OASubscriptionState *EXPIRED;
                      {
                          NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                          NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                         if (map)
+                         if (map && applyProduct)
                          {
                              if (![map objectForKey:@"error"])
                              {
@@ -1485,7 +1554,7 @@ static OASubscriptionState *EXPIRED;
                              }
                              else
                              {
-                                 errorStr = [NSString stringWithFormat:@"Purchase subscription failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId.get, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+                                 errorStr = [NSString stringWithFormat:@"Purchase failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId.get, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
                                  NSLog(errorStr);
                              }
                          }
@@ -1520,14 +1589,29 @@ static OASubscriptionState *EXPIRED;
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
         if (!error)
         {
-            [result enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL * _Nonnull stop) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                [result enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL * _Nonnull stop) {
                     [self provideContentForProductIdentifier:key transactionId:obj];
-                });
-            }];
+                }];
+            });
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:[NSNumber numberWithInteger:_transactionErrors] userInfo:nil];
     }];
+}
+
+- (void) uploadPurchases
+{
+    NSData *data = [_settings.purchasedIdentifiers.get dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error = nil;
+    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    if (!error)
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [result enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL * _Nonnull stop) {
+                [self provideContentForProductIdentifier:key transactionId:obj];
+            }];
+        });
+    }
 }
 
 - (BOOL) needValidateReceipt
@@ -1611,25 +1695,48 @@ static OASubscriptionState *EXPIRED;
                                      _settings.eligibleForIntroductoryPrice = [[map objectForKey:@"eligible_for_introductory_price"] boolValue];
                                  if ([map objectForKey:@"eligible_for_subscription_offer"])
                                      _settings.eligibleForSubscriptionOffer = [[map objectForKey:@"eligible_for_subscription_offer"] boolValue];
-
+                                 
                                  products = [NSMutableArray array];
                                  expirationDates = [NSMutableDictionary dictionary];
                                  NSDictionary *userData = [map objectForKey:@"user"];
                                  if (userData)
                                      [self applyUserPreferences:userData];
                                  
+                                 NSMutableDictionary *res = [NSMutableDictionary dictionary];
+
                                  NSArray *inApps = [map objectForKey:@"in_apps"];
                                  NSArray *inAppsDetailed = [map objectForKey:@"in_apps_detailed"];
-                                 for (NSString *inAppId in inApps)
+                                 if (inAppsDetailed.count > 0)
                                  {
-                                     OAProduct *product = [self product:inAppId];
-                                     if (product)
-                                         [products addObject:product];
+                                     for (NSDictionary *inapp in inAppsDetailed)
+                                     {
+                                         NSString *productId = inapp[@"product_id"];
+                                         if (productId)
+                                         {
+                                             OAProduct *product = [self product:productId];
+                                             if (product)
+                                                 [products addObject:product];
+
+                                             NSString *transactionId = inapp[@"original_transaction_id"];
+                                             if (!transactionId)
+                                                 transactionId = inapp[@"transaction_id"];
+
+                                             if (transactionId && product)
+                                                 res[product.productIdentifier] = transactionId;
+                                         }
+                                     }
+                                 }
+                                 else
+                                 {
+                                     for (NSString *inAppId in inApps)
+                                     {
+                                         OAProduct *product = [self product:inAppId];
+                                         if (product)
+                                             [products addObject:product];
+                                     }
                                  }
                                  
                                  NSArray *subscriptions = [map objectForKey:@"subscriptions"];
-                                 NSMutableDictionary *res = [NSMutableDictionary dictionary];
-                                 
                                  for (NSDictionary *subscription in subscriptions)
                                  {
                                      NSString *subscriptionId = subscription[@"product_id"];
@@ -1663,6 +1770,12 @@ static OASubscriptionState *EXPIRED;
                                                                                                                      error:&error] encoding:NSUTF8StringEncoding];
                                  resStr = error ? @"{}" : resStr;
                                  [_settings.purchasedIdentifiers set:resStr];
+
+                                 if (_settings.requireUploadPurchases)
+                                 {
+                                     _settings.requireUploadPurchases = NO;
+                                     [self uploadPurchases];
+                                 }
                              }
                              else if (status == kUserNotFoundStatus || status == kNoSubscriptionsFoundStatus)
                              {
@@ -1848,7 +1961,7 @@ static OASubscriptionState *EXPIRED;
             stateHolder.state = [OASubscriptionState getByStateStr:state];
             stateHolder.startTime = [subObj[@"start_time"] integerValue] / 1000;
             stateHolder.expireTime = [subObj[@"expire_time"] integerValue] / 1000;
-            stateHolder.origin = [self getSubscriptionOriginBySku:sku];
+            stateHolder.origin = [self getPurchaseOriginBySku:sku];
             stateHolder.duration = [self getSubscriptionDurationBySku:sku origin:stateHolder.origin startTime:stateHolder.startTime expireTime:stateHolder.expireTime];
             subscriptionStateMap[sku] = stateHolder;
         }
@@ -1856,27 +1969,31 @@ static OASubscriptionState *EXPIRED;
     return subscriptionStateMap;
 }
 
-- (EOASubscriptionOrigin) getSubscriptionOriginBySku:(NSString *)sku
+- (EOAPurchaseOrigin) getPurchaseOriginBySku:(NSString *)sku
 {
     if ([sku isEqualToString:@"promo_website"])
-        return EOASubscriptionOriginPromo;
+        return EOAPurchaseOriginPromo;
     else if ([sku.lowerCase hasPrefix:@"promo_"])
-        return EOASubscriptionOriginPromo;
-    else if ([sku.lowerCase hasPrefix:@"osmand_pro_"])
-        return EOASubscriptionOriginAndroid;
-    else if ([sku.lowerCase hasPrefix:@"net.osmand.maps.subscription.pro"])
-        return EOASubscriptionOriginIOS;
-    else if ([sku.lowerCase containsString:@".huawei.annual.pro"] || [sku.lowerCase containsString:@".huawei.monthly.pro"])
-        return EOASubscriptionOriginHuawei;
-    else if ([sku.lowerCase containsString:@".amazon.pro"])
-        return EOASubscriptionOriginAmazon;
-    return EOASubscriptionOriginUndefined;
+        return EOAPurchaseOriginPromo;
+    else if ([sku.lowerCase hasPrefix:@"osmand_pro_"]
+             || [sku.lowerCase hasPrefix:@"net.osmand.seadepth"]
+             || [sku.lowerCase hasPrefix:@"net.osmand.contourlines"]
+             || [sku.lowerCase isEqualToString:@"osmand_full_version_price"])
+        return EOAPurchaseOriginAndroid;
+    else if ([sku.lowerCase hasPrefix:@"net.osmand.maps.subscription.pro"]
+             || [sku.lowerCase hasPrefix:@"net.osmand.maps.inapp"])
+        return EOAPurchaseOriginIOS;
+    else if ([sku.lowerCase containsString:@".huawei."])
+        return EOAPurchaseOriginHuawei;
+    else if ([sku.lowerCase containsString:@".amazon."])
+        return EOAPurchaseOriginAmazon;
+    return EOAPurchaseOriginUndefined;
 }
 
-- (EOASubscriptionDuration) getSubscriptionDurationBySku:(NSString *)sku origin:(EOASubscriptionOrigin)origin startTime:(long)startTime expireTime:(long)expireTime
+- (EOASubscriptionDuration) getSubscriptionDurationBySku:(NSString *)sku origin:(EOAPurchaseOrigin)origin startTime:(long)startTime expireTime:(long)expireTime
 {
     EOASubscriptionDuration periodUnit = EOASubscriptionDurationUndefined;
-    if (origin == EOASubscriptionOriginPromo)
+    if (origin == EOAPurchaseOriginPromo)
     {
         double duration = ((double)expireTime - startTime) / (60.0 * 60.0 * 24.0);
 		if (duration > 360)
@@ -2022,6 +2139,73 @@ static OASubscriptionState *EXPIRED;
         if ([self.class isOsmAndProSubscription:subscription] && subscription.isPurchased)
             return subscription;
     }
+    return nil;
+}
+
+- (nonnull NSDictionary<NSString *, OAInAppStateHolder *> *)parseInAppStates:(nonnull NSArray *)inAppsStateJson
+{
+    NSMutableDictionary<NSString *, OAInAppStateHolder *> *inAppsStateMap = [NSMutableDictionary dictionary];
+    for (NSInteger i = 0; i < inAppsStateJson.count; i++)
+    {
+        NSDictionary *obj = inAppsStateJson[i];
+        NSString *sku = obj[@"sku"];
+        NSString *platform = obj[@"platform"];
+        if (sku.length > 0)
+        {
+            OAInAppStateHolder *stateHolder = [[OAInAppStateHolder alloc] init];
+            stateHolder.origin = [self getPurchaseOriginBySku:sku];
+            stateHolder.platform = platform;
+            stateHolder.linkedProduct = [self getLinkedPurchaseBySku:sku];
+            inAppsStateMap[sku] = stateHolder;
+        }
+    }
+    return inAppsStateMap;
+}
+
+- (nullable OAProduct *)getLinkedPurchaseBySku:(nonnull NSString *)sku
+{
+    OAProduct *fullVersion = self.mapsFull;
+    OAProduct *depthContours = self.nautical;
+    OAProduct *contourLines = self.srtm;
+    
+    // Google
+    if ([sku isEqualToString:@"osmand_full_version_price"])
+        return fullVersion;
+    
+    if ([sku isEqualToString:@"net.osmand.seadepth"] || [sku isEqualToString:@"net.osmand.seadepth_plus"])
+        return depthContours;
+    
+    if ([sku isEqualToString:@"net.osmand.contourlines"] || [sku isEqualToString:@"net.osmand.contourlines_plus"])
+        return contourLines;
+    
+    // iOS
+    if ([sku isEqualToString:@"net.osmand.maps.inapp.maps.plus"])
+        return fullVersion;
+    
+    if ([sku isEqualToString:@"net.osmand.maps.inapp.addon.nautical"])
+        return depthContours;
+    
+    if ([sku isEqualToString:@"net.osmand.maps.inapp.addon.srtm"])
+        return contourLines;
+    
+    // Amazon
+    if ([sku isEqualToString:@"net.osmand.amazon.maps.inapp"])
+        return fullVersion;
+    
+    // Huawei
+    if ([sku isEqualToString:@"net.osmand.huawei.full"])
+        return fullVersion;
+    
+    if ([sku isEqualToString:@"net.osmand.huawei.seadepth"])
+        return depthContours;
+    
+    if ([sku isEqualToString:@"net.osmand.huawei.contourlines"])
+        return contourLines;
+    
+    // FastSpring
+    if ([sku isEqualToString:@"net.osmand.fastspring.inapp.maps.plus"])
+        return fullVersion;
+    
     return nil;
 }
 

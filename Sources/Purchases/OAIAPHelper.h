@@ -42,13 +42,13 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 @end
 
-typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
-    EOASubscriptionOriginUndefined = -1,
-    EOASubscriptionOriginAndroid,
-    EOASubscriptionOriginPromo,
-    EOASubscriptionOriginIOS,
-    EOASubscriptionOriginAmazon,
-    EOASubscriptionOriginHuawei
+typedef NS_ENUM(NSInteger, EOAPurchaseOrigin) {
+    EOAPurchaseOriginUndefined = -1,
+    EOAPurchaseOriginAndroid,
+    EOAPurchaseOriginPromo,
+    EOAPurchaseOriginIOS,
+    EOAPurchaseOriginAmazon,
+    EOAPurchaseOriginHuawei
 };
 
 typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
@@ -64,8 +64,16 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 @property (nonatomic) OASubscriptionState *state;
 @property (nonatomic, assign) long startTime;
 @property (nonatomic, assign) long expireTime;
-@property (nonatomic, assign) EOASubscriptionOrigin origin;
+@property (nonatomic, assign) EOAPurchaseOrigin origin;
 @property (nonatomic, assign) EOASubscriptionDuration duration;
+
+@end
+
+@interface OAInAppStateHolder : NSObject
+
+@property (nonatomic, assign) EOAPurchaseOrigin origin;
+@property (nonatomic) NSString *platform;
+@property (nonatomic) OAProduct *linkedProduct;
 
 @end
 
@@ -131,6 +139,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 - (OASubscription *) getCheapestMonthlySubscription;
 - (NSArray<OASubscription *> *) getEverMadeSubscriptions;
 - (NSArray<OAProduct *> *) getEverMadeMainPurchases;
+- (NSMapTable<OAProduct *, NSNumber *> *) getExternalInApps;
 
 - (BOOL) productsLoaded;
 

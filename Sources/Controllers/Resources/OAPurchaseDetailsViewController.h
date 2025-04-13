@@ -10,9 +10,12 @@
 
 @class OAProduct;
 
+typedef NS_ENUM(NSInteger, EOAPurchaseOrigin);
+
 @interface OAPurchaseDetailsViewController : OABaseNavbarViewController
 
 - (instancetype)initWithProduct:(OAProduct *)product;
+- (instancetype)initWithProduct:(OAProduct *)product origin:(EOAPurchaseOrigin)origin;
 - (instancetype)initForCrossplatformSubscription;
 - (instancetype)initForFreeStartSubscription;
 

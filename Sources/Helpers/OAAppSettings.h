@@ -809,6 +809,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) NSDate* lastReceiptValidationDate; //global ?
 @property (nonatomic, assign) BOOL eligibleForIntroductoryPrice; //global ?
 @property (nonatomic, assign) BOOL eligibleForSubscriptionOffer; //global ?
+@property (nonatomic, assign) BOOL requireUploadPurchases;
 
 // Track recording settings
 @property (nonatomic) OACommonBoolean *saveTrackToGPX;

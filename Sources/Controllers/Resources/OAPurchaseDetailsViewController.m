@@ -34,6 +34,7 @@
     OAProduct *_product;
     OATableDataModel *_data;
     OAAppSettings *_settings;
+    EOAPurchaseOrigin _origin;
     
     BOOL _isCrossplatform;
     BOOL _isFreeStart;
@@ -48,7 +49,8 @@
     if (self)
     {
         _isCrossplatform = YES;
-        _isPromo = ((EOASubscriptionOrigin) [_settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
+        _origin = (EOAPurchaseOrigin) [_settings.proSubscriptionOrigin get];
+        _isPromo = _origin == EOAPurchaseOriginPromo;
     }
     return self;
 }
@@ -69,6 +71,18 @@
     if (self)
     {
         _product = product;
+        _origin = EOAPurchaseOriginIOS;
+    }
+    return self;
+}
+
+- (instancetype)initWithProduct:(OAProduct *)product origin:(EOAPurchaseOrigin)origin
+{
+    self = [super init];
+    if (self)
+    {
+        _product = product;
+        _origin = origin;
     }
     return self;
 }
@@ -201,7 +215,7 @@
     [productSection addRowFromDictionary:@{
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"purchase_origin"),
-        kCellDescrKey : OALocalizedString(@"app_store")
+        kCellDescrKey : [self purchaseOriginToString:_origin]
     }];
 
     if (isSubscription)
@@ -245,23 +259,23 @@
     [productSection addRowFromDictionary:@{
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"purchase_origin"),
-        kCellDescrKey : [self subscripitonOriginToString:(EOASubscriptionOrigin)_settings.proSubscriptionOrigin.get]
+        kCellDescrKey : [self purchaseOriginToString:_origin]
     }];
 }
 
-- (NSString *)subscripitonOriginToString:(EOASubscriptionOrigin)origin
+- (NSString *)purchaseOriginToString:(EOAPurchaseOrigin)origin
 {
     switch (origin)
     {
-        case EOASubscriptionOriginPromo:
+        case EOAPurchaseOriginPromo:
             return OALocalizedString(@"promo");
-        case EOASubscriptionOriginAndroid:
+        case EOAPurchaseOriginAndroid:
             return OALocalizedString(@"google_play");
-        case EOASubscriptionOriginAmazon:
+        case EOAPurchaseOriginAmazon:
             return OALocalizedString(@"amazon_appstore");
-        case EOASubscriptionOriginHuawei:
+        case EOAPurchaseOriginHuawei:
             return OALocalizedString(@"huawei_appgallery");
-        case EOASubscriptionOriginIOS:
+        case EOAPurchaseOriginIOS:
             return OALocalizedString(@"app_store");
 
         default:

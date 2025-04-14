@@ -357,7 +357,6 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (void)resetModeToDefault:(OAApplicationMode *)mode;
 - (void)resetToDefault;
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
-- (void)setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
 - (NSString *)toStringValue:(OAApplicationMode *)mode;
 - (NSString *)toStringFromValue:(id)value;
 - (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
@@ -481,12 +480,13 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @interface OACommonMapSource : OACommonPreference
 
-+ (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue;
++ (instancetype)withKey:(NSString *)key defValue:(OAMapSource *)defValue;
 
-- (OAMapSource *) get;
-- (OAMapSource *) get:(OAApplicationMode *)mode;
-- (void) set:(OAMapSource *)mapSource;
-- (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
+- (OAMapSource *)get;
+- (OAMapSource *)get:(OAApplicationMode *)mode;
+- (void)set:(OAMapSource *)mapSource;
+- (void)set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
+- (void)setModeDefaultValue:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
 
 @end
 

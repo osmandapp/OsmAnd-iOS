@@ -1315,6 +1315,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (NSObject *) getValue:(OAApplicationMode *)mode;
 - (void) setValue:(NSObject *)value;
 - (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode;
+- (void)setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -2245,6 +2246,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode
 {
     [self setValue:[mapSource toDictionary] mode:mode];
+}
+
+- (void)setModeDefaultValue:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode
+{
+    [super setModeDefaultValue:[mapSource toDictionary] mode:mode];
 }
 
 - (void) resetToDefault

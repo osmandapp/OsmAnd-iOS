@@ -1071,9 +1071,9 @@ static const NSInteger kColorsSection = 1;
     
     NSMutableArray *track3DSectionItems = [NSMutableArray array];
     
-    BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
+    BOOL isMapsPlusAvailable = [OAIAPHelper isMapsPlusAvailable];
     BOOL isOsmAndProAvailable = [OAIAPHelper isOsmAndProAvailable];
-    BOOL isAvailable3DVisualization = mapsPlusPurchased || isOsmAndProAvailable;
+    BOOL isAvailable3DVisualization = isMapsPlusAvailable || isOsmAndProAvailable;
     if (isAvailable3DVisualization)
     {
         // 3d Section

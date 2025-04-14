@@ -78,29 +78,6 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         : formattedInterval;
 }
 
-+ (NSString *) getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def
-{
-    if (time > 0)
-    {
-        NSTimeInterval duration = (NSDate.date.timeIntervalSince1970 - time);
-        if (duration > MIN_DURATION_FOR_DATE_FORMAT)
-        {
-            return [self getFormattedDate:time];
-        }
-        else
-        {
-            NSString *formattedDuration;
-            if (duration < 60)
-                formattedDuration = [NSString stringWithFormat:@"< 1 %@", OALocalizedString(@"int_min")];
-            else
-                formattedDuration = [self getFormattedTimeInterval:duration];
-            
-            return [NSString stringWithFormat:OALocalizedString(@"duration_ago"), formattedDuration];
-        }
-    }
-    return def;
-}
-
 + (NSString *) getFormattedDate:(NSTimeInterval)time
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];

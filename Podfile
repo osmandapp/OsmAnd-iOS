@@ -21,7 +21,7 @@ def defaultPods
     pod 'MCBinaryHeap', '~> 0.1'
     pod 'TTRangeSlider', '~> 1.0.6'
     pod 'SwiftLint', '~> 0.52.4'
-    pod 'Kingfisher', '~> 8.0'
+    pod 'Kingfisher', '8.3.1'
 end
 
 target 'OsmAnd Maps' do

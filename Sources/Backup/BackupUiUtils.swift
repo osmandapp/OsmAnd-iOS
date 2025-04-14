@@ -45,16 +45,16 @@ final class BackupUiUtils: NSObject {
 
     static func getLastBackupTimeDescription(_ def: String) -> String {
         let lastUploadedTime = OAAppSettings.sharedManager().backupLastUploadedTime.get()
-        return getFormattedPassedTime(time: lastUploadedTime, def: def, showTime: false)
+        return getFormattedPassedTime(timeInSeconds: lastUploadedTime, def: def, showTime: false)
     }
 
-    static func getFormattedPassedTime(time: Int, def: String, showTime: Bool) -> String {
-        guard time > 0 else {
+    private static func getFormattedPassedTime(timeInSeconds: Int, def: String, showTime: Bool) -> String {
+        guard timeInSeconds > 0 else {
             return def
         }
-        let duration = Int((Date().timeIntervalSince1970 - Double(time)) / 1000)
+        let duration = Int(Date().timeIntervalSince1970 - Double(timeInSeconds))
         if duration > minDurationForDateFormat {
-            return showTime ? OAOsmAndFormatter.getFormattedDateTime(TimeInterval(time)) : OAOsmAndFormatter.getFormattedDate(TimeInterval(time))
+            return showTime ? OAOsmAndFormatter.getFormattedDateTime(TimeInterval(timeInSeconds)) : OAOsmAndFormatter.getFormattedDate(TimeInterval(timeInSeconds))
         } else {
             let formattedDuration: String = OAOsmAndFormatter.getFormattedDuration(TimeInterval(duration))
             return formattedDuration.isEmpty ? localizedString("duration_moment_ago") : String(format: localizedString("duration_ago"), formattedDuration)

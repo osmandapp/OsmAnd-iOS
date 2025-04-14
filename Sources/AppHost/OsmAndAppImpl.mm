@@ -1135,24 +1135,17 @@ NSString *const kXmlColon = @"_-_";
     return [_favoritesPath stringByAppendingPathComponent:fileName];
 }
 
-- (NSString *) getGroupFileName:(NSString *)groupName
+- (NSString *)getGroupFileName:(NSString *)groupName
 {
-    if ([groupName containsString:@"/"])
-        return [groupName stringByReplacingOccurrencesOfString:@"/" withString:kSubfolderPlaceholder];
-    if ([groupName containsString:@":"])
-        return [groupName stringByReplacingOccurrencesOfString:@":" withString:kXmlColon];
-
-    return groupName;
+    NSString *result = [groupName stringByReplacingOccurrencesOfString:@"/" withString:kSubfolderPlaceholder];
+    result = [result stringByReplacingOccurrencesOfString:@":" withString:kXmlColon];
+    return result;
 }
 
-- (NSString *) getGroupName:(NSString *)fileName
-{
-    if ([fileName containsString:kSubfolderPlaceholder])
-        return [fileName stringByReplacingOccurrencesOfString:kSubfolderPlaceholder withString:@"/"];
-    if ([fileName containsString:kXmlColon])
-        return [fileName stringByReplacingOccurrencesOfString:kXmlColon withString:@":"];
-
-    return fileName;
+- (NSString *)getGroupName:(NSString *)fileName {
+    NSString *result = [fileName stringByReplacingOccurrencesOfString:kSubfolderPlaceholder withString:@"/"];
+    result = [result stringByReplacingOccurrencesOfString:kXmlColon withString:@":"];
+    return result;
 }
 
 - (unsigned long long) freeSpaceAvailableOnDevice

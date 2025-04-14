@@ -906,6 +906,7 @@ static NSOperationQueue *_favQueue;
 
 + (void)removeFavoritePoints:(NSArray<OAFavoriteItem *> *)favorites favoriteLocations:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > &)favoriteLocations
 {
+    // RemoveObjectIdenticalTo to remove only exact instances and prevent accidental removal of duplicates.
     for (OAFavoriteItem *favoriteToRemove in favorites)
     {
         [_cachedFavoritePoints removeObjectIdenticalTo:favoriteToRemove];

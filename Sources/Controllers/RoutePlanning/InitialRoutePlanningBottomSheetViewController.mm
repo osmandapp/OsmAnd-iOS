@@ -153,7 +153,7 @@
 
 - (BOOL)isTransportMode:(OAApplicationMode *)mode
 {
-    return [mode.getRoutingProfile isEqualToString:@"public_transport"];
+    return [mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
 }
 
 #pragma mark - UITableViewDataSource

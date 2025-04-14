@@ -79,8 +79,6 @@
     
     if (self.app.data.underlayMapSource)
     {
-        [self showProgressHUD];
-
         NSString *mapCreatorFilePath = [OAMapCreatorHelper sharedInstance].files[self.app.data.underlayMapSource.resourceId];
         if (mapCreatorFilePath)
         {
@@ -113,8 +111,6 @@
                 }
             }
         }
-        
-        [self hideProgressHUD];
 
         return YES;
     }

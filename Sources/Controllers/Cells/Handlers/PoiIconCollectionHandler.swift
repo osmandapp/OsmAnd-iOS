@@ -9,6 +9,9 @@
 @objcMembers
 final class PoiIconCollectionHandler: IconCollectionHandler {
     
+    static var cachedCategories = [IconsCategory]()
+    static var cachedCategoriesByKeyName = [String: IconsCategory]()
+    
     var categories = [IconsCategory]()
     var categoriesByKeyName = [String: IconsCategory]()
     var selectedCatagoryKey = ""
@@ -34,14 +37,24 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     func initIconCategories() {
-        initLastUsedCategory()
-        initAssetsCategories()
-        initActivitiesCategory()
-        initPoiCategories()
-        sortCategories()
-        
-        for category in categories {
-            categoriesByKeyName[category.key] = category
+        if Self.cachedCategories.isEmpty {
+            initLastUsedCategory()
+            initAssetsCategories()
+            initActivitiesCategory()
+            initPoiCategories()
+            sortCategories()
+            
+            for category in categories {
+                categoriesByKeyName[category.key] = category
+            }
+            
+            Self.cachedCategories = categories
+            Self.cachedCategoriesByKeyName = categoriesByKeyName
+            
+            loadAllIconsData()
+        } else {
+            categories = Self.cachedCategories
+            categoriesByKeyName = Self.cachedCategoriesByKeyName
         }
     }
     
@@ -294,6 +307,30 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         }
         categories[0].iconKeys = lastUsedIcons
         OAAppSettings.sharedManager().lastUsedFavIcons.set(lastUsedIcons)
+    }
+    
+    func loadAllIconsData() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            
+            for category in self.categories {
+                for iconName in category.iconKeys {
+                    
+                    if Self.cachedIcons.object(forKey: iconName as NSString) == nil {
+                        var icon = UIImage.templateImageNamed(iconName)
+                        if icon == nil {
+                            icon = OAUtilities.getMxIcon(iconName.lowercased())
+                        }
+                        if icon == nil {
+                            icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
+                        }
+                        if let icon {
+                            Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     override func openAllIconsScreen() {

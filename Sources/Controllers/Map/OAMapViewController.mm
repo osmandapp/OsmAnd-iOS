@@ -3805,24 +3805,26 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName
 {
-    if (_mapPresentationEnvironment)
-    {
-        NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
-        QHash<QString, int> renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
-        QHashIterator<QString, int> it(renderingAttrs);
-        while (it.hasNext()) {
-            it.next();
-            NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
-            NSNumber *value = @(it.value());
-            if (value.intValue == -1)
-                continue;
-            
-            [result setObject:value forKey:key];
+    @synchronized(self) {
+        if (_mapPresentationEnvironment)
+        {
+            NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
+            QHash<QString, int> renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
+            QHashIterator<QString, int> it(renderingAttrs);
+            while (it.hasNext()) {
+                it.next();
+                NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
+                NSNumber *value = @(it.value());
+                if (value.intValue == -1)
+                    continue;
+                
+                [result setObject:value forKey:key];
+            }
+            return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];
         }
-        return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];
+        else
+            return nil;
     }
-    else
-        return nil;
 }
 
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings
@@ -3886,9 +3888,16 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (!helper.isPublicTransportMode)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error preferredStyle:UIAlertControllerStyleAlert];
-                [alertController addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-                [self presentViewController:alertController animated:YES completion:nil];
+                if (_isCarPlayActive)
+                {
+                    [[UIApplication sharedApplication].carPlaySceneDelegate showAlertWithTitle:error];
+                }
+                else
+                {
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error preferredStyle:UIAlertControllerStyleAlert];
+                    [alertController addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+                    [self presentViewController:alertController animated:YES completion:nil];
+                }
             });
         }
     }

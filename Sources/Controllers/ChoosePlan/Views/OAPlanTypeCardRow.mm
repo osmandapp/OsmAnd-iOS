@@ -174,7 +174,7 @@
         case EOAPlanTypeChoosePlan:
         {
             BOOL isMaps = [OAIAPHelper isFullVersion:subscription] || ([subscription isKindOfClass:OASubscription.class] && [OAIAPHelper isMapsSubscription:(OASubscription *) subscription]);
-            BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
+            BOOL mapsPlusPurchased = [OAIAPHelper isMapsPlusAvailable];
             BOOL osmAndProPurchased = [OAIAPHelper isOsmAndProAvailable];
             BOOL isPurchased = (isMaps && mapsPlusPurchased) || osmAndProPurchased;
             BOOL available = ((isMaps && [selectedFeature isAvailableInMapsPlus]) || !isMaps) && !isPurchased;

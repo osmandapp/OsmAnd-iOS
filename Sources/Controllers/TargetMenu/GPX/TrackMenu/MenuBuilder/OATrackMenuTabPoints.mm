@@ -202,18 +202,20 @@
                 ? [self.trackMenuDelegate getCenterGpxLocation] : kCLLocationCoordinate2DInvalid;
         OAWorldRegion *worldRegion = gpxLocation.latitude != DBL_MAX
                 ? [app.worldRegion findAtLat:gpxLocation.latitude lon:gpxLocation.longitude] : nil;
-
         NSString *name = !isRte
                 ? waypoint.point.name
                 : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"plugin_distance_point"),
                         [waypoints indexOfObject:waypoint] + 1];
+        name = name ?: @"";
+        NSString *description = worldRegion != nil
+        ? (worldRegion.localizedName ?: worldRegion.nativeName)
+        : @"";
+        description = description ?: @"";
         OAGPXTableCellData *waypointCellData = [OAGPXTableCellData withData:@{
                 kTableKey: [NSString stringWithFormat:@"waypoint_%@", name],
                 kCellType: [OAPointWithRegionTableViewCell getCellIdentifier],
                 kCellTitle: name,
-                kCellDesc: worldRegion != nil
-                        ? (worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName)
-                        : @"",
+                kCellDesc: description,
                 kCellLeftIcon: !isRte ? [waypoint getCompositeIcon]
                         : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
                                                     color:[UIColor colorNamed:ACColorNameIconColorDisabled]],

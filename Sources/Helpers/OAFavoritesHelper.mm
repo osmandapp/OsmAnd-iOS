@@ -897,7 +897,7 @@ static NSOperationQueue *_favQueue;
         favoriteLocations.append(favorite.favorite);
         OAFavoriteGroup *group = _flatGroups[[favorite getCategory]];
         if (group)
-            [group.points removeObject:favorite];
+            [group.points removeObjectIdenticalTo:favorite];
     }
     [self removeFavoritePoints:favorites favoriteLocations:favoriteLocations];
     if (saveImmediately)
@@ -906,7 +906,10 @@ static NSOperationQueue *_favQueue;
 
 + (void)removeFavoritePoints:(NSArray<OAFavoriteItem *> *)favorites favoriteLocations:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > &)favoriteLocations
 {
-    [_cachedFavoritePoints removeObjectsInArray:favorites];
+    for (OAFavoriteItem *favoriteToRemove in favorites)
+    {
+        [_cachedFavoritePoints removeObjectIdenticalTo:favoriteToRemove];
+    }
     _favoritesCollection->removeFavoriteLocations(favoriteLocations);
 }
 

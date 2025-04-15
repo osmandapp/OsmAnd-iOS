@@ -709,7 +709,8 @@
         return @"ic_custom_transport_bus";
     else if([paramName isEqualToString:DIRTBIKE_ROUTES_ATTR])
         return @"ic_action_dirt_motorcycle";
-
+    else if ([paramName isEqualToString:CLIMBING_ROUTES])
+        return @"ic_action_hill_climbing";
     return @"";
 }
 

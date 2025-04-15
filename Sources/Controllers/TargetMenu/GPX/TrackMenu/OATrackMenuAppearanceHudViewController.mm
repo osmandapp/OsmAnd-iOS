@@ -453,7 +453,18 @@ static const NSInteger kColorsSection = 1;
 
     _selectedSplit = [_appearanceCollection getSplitIntervalForType:[self getGPXSplitType]];
     if ([self getGPXSplitInterval] > 0 && [self getGPXSplitType] != EOAGpxSplitTypeNone)
-        _selectedSplit.customValue = _selectedSplit.titles[[_selectedSplit.values indexOfObject:@([self getGPXSplitInterval])]];
+    {
+        float splitInterval = [self getGPXSplitInterval];
+        NSInteger indexOfValue = [_selectedSplit.values indexOfObject:@(splitInterval)];
+        if (indexOfValue != NSNotFound && _selectedSplit.titles.count > indexOfValue)
+        {
+            _selectedSplit.customValue = _selectedSplit.titles[indexOfValue];
+        } else {
+            NSLog(@"splitInterval indexOfValue is wrong: %ld | _selectedSplit.values: %lu",
+                  (long)indexOfValue,
+                  (unsigned long)[_selectedSplit.values count]);
+        }
+    }
 
     OAColoringType *currentType = [OAColoringType getNonNullTrackColoringTypeByName:[self getGPXColoringType]];
 
@@ -1426,7 +1437,6 @@ static const NSInteger kColorsSection = 1;
             [weakSelf.settings.currentTrackElevationMeters set:[weakSelf getGPXElevationMeters]];
             [weakSelf.settings.currentTrackVisualization3dByType set:(int)[weakSelf getGPXVisualization3dByType]];
             [weakSelf.settings.currentTrackVisualization3dWallColorType set:(int)[weakSelf getGPXVisualization3dWallColorType]];
-            [weakSelf.settings.currentTrackVisualization3dPositionType set:(int)[weakSelf getGPXVisualizationPositionType]];
             [weakSelf.settings.currentTrackVisualization3dPositionType set:(int)[weakSelf getGPXVisualizationPositionType]];
             
             [weakSelf.settings.currentTrackColoringType set:[weakSelf getGPXColoringType].length > 0

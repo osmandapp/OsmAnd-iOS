@@ -36,7 +36,7 @@
 
             [weakSelf setIcon:@"widget_track_recording_duration"];
             OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
-            BOOL withoutGaps = ! [[OAAppSettings sharedManager].currentTrackIsJoinSegments get] &&
+            BOOL withoutGaps = ![[OAAppSettings sharedManager].currentTrackIsJoinSegments get] &&
             ((!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
 
             OASGpxTrackAnalysis *analysis = [currentTrack getAnalysisFileTimestamp:0];

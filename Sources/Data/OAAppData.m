@@ -61,33 +61,25 @@
 #define kWeatherPressureKey @"weatherPressure"
 #define kWeatherPressureToolbarKey @"weatherPressureToolbar"
 #define kWeatherPressureUnitKey @"weatherPressureUnit"
-#define kWeatherPressureToolbarUnitKey @"weatherPressureToolbarUnit"
 #define kWeatherPressureUnitAutoKey @"weatherPressureUnitAuto"
-#define kWeatherPressureToolbarUnitAutoKey @"weatherPressureToolbarUnitAuto"
 #define kWeatherPressureAlphaKey @"weatherPressureAlpha"
 #define kWeatherPressureToolbarAlphaKey @"weatherPressureToolbarAlpha"
 #define kWeatherWindKey @"weatherWind"
 #define kWeatherWindToolbarKey @"weatherWindToolbar"
 #define kWeatherWindUnitKey @"weatherWindUnit"
-#define kWeatherWindToolbarUnitKey @"weatherWindToolbarUnit"
 #define kWeatherWindUnitAutoKey @"weatherWindUnitAuto"
-#define kWeatherWindToolbarUnitAutoKey @"weatherWindToolbarUnitAuto"
 #define kWeatherWindAlphaKey @"weatherWindAlpha"
 #define kWeatherWindToolbarAlphaKey @"weatherWindToolbarAlpha"
 #define kWeatherCloudKey @"weatherCloud"
 #define kWeatherCloudToolbarKey @"weatherCloudToolbar"
 #define kWeatherCloudUnitKey @"weatherCloudUnit"
-#define kWeatherCloudToolbarUnitKey @"weatherCloudToolbarUnit"
 #define kWeatherCloudUnitAutoKey @"weatherCloudUnitAuto"
-#define kWeatherCloudToolbarUnitAutoKey @"weatherCloudToolbarUnitAuto"
 #define kWeatherCloudAlphaKey @"weatherCloudAlpha"
 #define kWeatherCloudToolbarAlphaKey @"weatherCloudToolbarAlpha"
 #define kWeatherPrecipKey @"weatherPrecip"
 #define kWeatherPrecipToolbarKey @"weatherPrecipToolbar"
 #define kWeatherPrecipUnitKey @"weatherPrecipUnit"
-#define kWeatherPrecipToolbarUnitKey @"weatherPrecipToolbarUnit"
 #define kWeatherPrecipUnitAutoKey @"weatherPrecipUnitAuto"
-#define kWeatherPrecipToolbarUnitAutoKey @"weatherPrecipToolbarUnitAuto"
 #define kWeatherPrecipAlphaKey @"weatherPrecipAlpha"
 #define kWeatherPrecipToolbarAlphaKey @"weatherPrecipToolbarAlpha"
 #define kWeatherSourceKey @"weatherSource"
@@ -134,33 +126,25 @@
     OACommonBoolean *_weatherPressureProfile;
     OACommonBoolean *_weatherPressureToolbarProfile;
     OACommonUnit *_weatherPressureUnitProfile;
-    OACommonUnit *_weatherPressureToolbarUnitProfile;
     OACommonBoolean *_weatherPressureUnitAutoProfile;
-    OACommonBoolean *_weatherPressureToolbarUnitAutoProfile;
     OACommonDouble *_weatherPressureAlphaProfile;
     OACommonDouble *_weatherPressureToolbarAlphaProfile;
     OACommonBoolean *_weatherWindProfile;
     OACommonBoolean *_weatherWindToolbarProfile;
     OACommonUnit *_weatherWindUnitProfile;
-    OACommonUnit *_weatherWindToolbarUnitProfile;
     OACommonBoolean *_weatherWindUnitAutoProfile;
-    OACommonBoolean *_weatherWindToolbarUnitAutoProfile;
     OACommonDouble *_weatherWindAlphaProfile;
     OACommonDouble *_weatherWindToolbarAlphaProfile;
     OACommonBoolean *_weatherCloudProfile;
     OACommonBoolean *_weatherCloudToolbarProfile;
     OACommonUnit *_weatherCloudUnitProfile;
-    OACommonUnit *_weatherCloudToolbarUnitProfile;
     OACommonBoolean *_weatherCloudUnitAutoProfile;
-    OACommonBoolean *_weatherCloudToolbarUnitAutoProfile;
     OACommonDouble *_weatherCloudAlphaProfile;
     OACommonDouble *_weatherCloudToolbarAlphaProfile;
     OACommonBoolean *_weatherPrecipProfile;
     OACommonBoolean *_weatherPrecipToolbarProfile;
     OACommonUnit *_weatherPrecipUnitProfile;
-    OACommonUnit *_weatherPrecipToolbarUnitProfile;
     OACommonBoolean *_weatherPrecipUnitAutoProfile;
-    OACommonBoolean *_weatherPrecipToolbarUnitAutoProfile;
     OACommonDouble *_weatherPrecipAlphaProfile;
     OACommonDouble *_weatherPrecipToolbarAlphaProfile;
     
@@ -328,23 +312,18 @@
     _weatherPressureProfile = [OACommonBoolean withKey:kWeatherPressureKey defValue:NO];
     _weatherPressureToolbarProfile = [OACommonBoolean withKey:kWeatherPressureToolbarKey defValue:NO];
     _weatherPressureUnitProfile = [OACommonUnit withKey:kWeatherPressureUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_PRESSURE]];
-    _weatherPressureToolbarUnitProfile = [OACommonUnit withKey:kWeatherPressureToolbarUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_PRESSURE]];
     _weatherPressureUnitAutoProfile = [OACommonBoolean withKey:kWeatherPressureUnitAutoKey defValue:YES];
-    _weatherPressureToolbarUnitAutoProfile = [OACommonBoolean withKey:kWeatherPressureToolbarUnitAutoKey defValue:YES];
     _weatherPressureAlphaProfile = [OACommonDouble withKey:kWeatherPressureAlphaKey defValue:0.6];
     _weatherPressureToolbarAlphaProfile = [OACommonDouble withKey:kWeatherPressureToolbarAlphaKey defValue:0.6];
     _weatherWindProfile = [OACommonBoolean withKey:kWeatherWindKey defValue:NO];
     _weatherWindToolbarProfile = [OACommonBoolean withKey:kWeatherWindToolbarKey defValue:NO];
     _weatherWindUnitProfile = [OACommonUnit withKey:kWeatherWindUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_SPEED]];
-    _weatherWindToolbarUnitProfile = [OACommonUnit withKey:kWeatherWindToolbarUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_SPEED]];
     _weatherWindUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindUnitAutoKey defValue:YES];
-    _weatherWindToolbarUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindToolbarUnitAutoKey defValue:YES];
     _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
     _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
     _weatherCloudProfile = [OACommonBoolean withKey:kWeatherCloudKey defValue:NO];
     _weatherCloudToolbarProfile = [OACommonBoolean withKey:kWeatherCloudToolbarKey defValue:NO];
     _weatherCloudUnitProfile = [OACommonUnit withKey:kWeatherCloudUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_CLOUD]];
-    _weatherCloudToolbarUnitProfile = [OACommonUnit withKey:kWeatherCloudToolbarUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_CLOUD]];
     _weatherCloudUnitAutoProfile = [OACommonBoolean withKey:kWeatherCloudUnitAutoKey defValue:YES];
     
     WeatherSource getDefaultSource = WeatherSourceObjWrapper.getDefaultSource;
@@ -357,15 +336,12 @@
     
     _weatherWindAnimationUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindAnimationUnitAutoKey defValue:YES];
     
-    _weatherCloudToolbarUnitAutoProfile = [OACommonBoolean withKey:kWeatherCloudToolbarUnitAutoKey defValue:YES];
     _weatherCloudAlphaProfile = [OACommonDouble withKey:kWeatherCloudAlphaKey defValue:0.5];
     _weatherCloudToolbarAlphaProfile = [OACommonDouble withKey:kWeatherCloudToolbarAlphaKey defValue:0.5];
     _weatherPrecipProfile = [OACommonBoolean withKey:kWeatherPrecipKey defValue:NO];
     _weatherPrecipToolbarProfile = [OACommonBoolean withKey:kWeatherPrecipToolbarKey defValue:NO];
     _weatherPrecipUnitProfile = [OACommonUnit withKey:kWeatherPrecipUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_PRECIPITATION]];
-    _weatherPrecipToolbarUnitProfile = [OACommonUnit withKey:kWeatherPrecipToolbarUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_PRECIPITATION]];
     _weatherPrecipUnitAutoProfile = [OACommonBoolean withKey:kWeatherPrecipUnitAutoKey defValue:YES];
-    _weatherPrecipToolbarUnitAutoProfile = [OACommonBoolean withKey:kWeatherPrecipToolbarUnitAutoKey defValue:YES];
     _weatherPrecipAlphaProfile = [OACommonDouble withKey:kWeatherPrecipAlphaKey defValue:0.7];
     _weatherPrecipToolbarAlphaProfile = [OACommonDouble withKey:kWeatherPrecipToolbarAlphaKey defValue:0.7];
 
@@ -416,33 +392,25 @@
     [_registeredPreferences setObject:_weatherPressureProfile forKey:@"show_weather_pressure"];
     [_registeredPreferences setObject:_weatherPressureToolbarProfile forKey:@"show_weather_pressure_toolbar"];
     [_registeredPreferences setObject:_weatherPressureUnitProfile forKey:@"show_weather_pressure_unit"];
-    [_registeredPreferences setObject:_weatherPressureToolbarUnitProfile forKey:@"show_weather_pressure_unit_toolbar"];
     [_registeredPreferences setObject:_weatherPressureUnitAutoProfile forKey:@"show_weather_pressure_unit_auto"];
-    [_registeredPreferences setObject:_weatherPressureToolbarUnitAutoProfile forKey:@"show_weather_pressure_unit_auto_toolbar"];
     [_registeredPreferences setObject:_weatherPressureAlphaProfile forKey:@"weather_pressure_transparency"];
     [_registeredPreferences setObject:_weatherPressureToolbarAlphaProfile forKey:@"weather_pressure_transparency_toolbar"];
     [_registeredPreferences setObject:_weatherWindProfile forKey:@"show_weather_wind"];
     [_registeredPreferences setObject:_weatherWindToolbarProfile forKey:@"show_weather_wind_toolbar"];
     [_registeredPreferences setObject:_weatherWindUnitProfile forKey:@"show_weather_wind_unit"];
-    [_registeredPreferences setObject:_weatherWindToolbarUnitProfile forKey:@"show_weather_wind_unit_toolbar"];
     [_registeredPreferences setObject:_weatherWindUnitAutoProfile forKey:@"show_weather_wind_unit_auto"];
-    [_registeredPreferences setObject:_weatherWindToolbarUnitAutoProfile forKey:@"show_weather_wind_unit_auto_toolbar"];
     [_registeredPreferences setObject:_weatherWindAlphaProfile forKey:@"weather_wind_transparency"];
     [_registeredPreferences setObject:_weatherWindToolbarAlphaProfile forKey:@"weather_wind_transparency_toolbar"];
     [_registeredPreferences setObject:_weatherCloudProfile forKey:@"show_weather_cloud"];
     [_registeredPreferences setObject:_weatherCloudToolbarProfile forKey:@"show_weather_cloud_toolbar"];
     [_registeredPreferences setObject:_weatherCloudUnitProfile forKey:@"show_weather_cloud_unit"];
-    [_registeredPreferences setObject:_weatherCloudToolbarUnitProfile forKey:@"show_weather_cloud_unit_toolbar"];
     [_registeredPreferences setObject:_weatherCloudUnitAutoProfile forKey:@"show_weather_cloud_unit_auto"];
-    [_registeredPreferences setObject:_weatherCloudToolbarUnitAutoProfile forKey:@"show_weather_cloud_unit_auto_toolbar"];
     [_registeredPreferences setObject:_weatherCloudAlphaProfile forKey:@"weather_cloud_transparency"];
     [_registeredPreferences setObject:_weatherCloudToolbarAlphaProfile forKey:@"weather_cloud_transparency_toolbar"];
     [_registeredPreferences setObject:_weatherPrecipProfile forKey:@"show_weather_precip"];
     [_registeredPreferences setObject:_weatherPrecipToolbarProfile forKey:@"show_weather_precip_toolbar"];
     [_registeredPreferences setObject:_weatherPrecipUnitProfile forKey:@"show_weather_precip_unit"];
-    [_registeredPreferences setObject:_weatherPrecipToolbarUnitProfile forKey:@"show_weather_precip_unit_toolbar"];
     [_registeredPreferences setObject:_weatherPrecipUnitAutoProfile forKey:@"show_weather_precip_unit_auto"];
-    [_registeredPreferences setObject:_weatherPrecipToolbarUnitAutoProfile forKey:@"show_weather_precip_unit_auto_toolbar"];
     [_registeredPreferences setObject:_weatherPrecipAlphaProfile forKey:@"weather_precip_transparency"];
     [_registeredPreferences setObject:_weatherPrecipToolbarAlphaProfile forKey:@"weather_precip_transparency_toolbar"];
 
@@ -1213,27 +1181,21 @@
         [_weatherPressureProfile resetToDefault];
         [_weatherPressureToolbarProfile resetToDefault];
         [_weatherPressureUnitProfile resetToDefault];
-        [_weatherPressureToolbarUnitProfile resetToDefault];
         [_weatherPressureUnitAutoProfile resetToDefault];
-        [_weatherPressureToolbarUnitAutoProfile resetToDefault];
         [_weatherPressureAlphaProfile resetToDefault];
         [_weatherPressureToolbarAlphaProfile resetToDefault];
         
         [_weatherWindProfile resetToDefault];
         [_weatherWindToolbarProfile resetToDefault];
         [_weatherWindUnitProfile resetToDefault];
-        [_weatherWindToolbarUnitProfile resetToDefault];
         [_weatherWindUnitAutoProfile resetToDefault];
-        [_weatherWindToolbarUnitAutoProfile resetToDefault];
         [_weatherWindAlphaProfile resetToDefault];
         [_weatherWindToolbarAlphaProfile resetToDefault];
         
         [_weatherCloudProfile resetToDefault];
         [_weatherCloudToolbarProfile resetToDefault];
         [_weatherCloudUnitProfile resetToDefault];
-        [_weatherCloudToolbarUnitProfile resetToDefault];
         [_weatherCloudUnitAutoProfile resetToDefault];
-        [_weatherCloudToolbarUnitAutoProfile resetToDefault];
         [_weatherCloudAlphaProfile resetToDefault];
         [_weatherCloudToolbarAlphaProfile resetToDefault];
         
@@ -1247,9 +1209,7 @@
         [_weatherPrecipProfile resetToDefault];
         [_weatherPrecipToolbarProfile resetToDefault];
         [_weatherPrecipUnitProfile resetToDefault];
-        [_weatherPrecipToolbarUnitProfile resetToDefault];
         [_weatherPrecipUnitAutoProfile resetToDefault];
-        [_weatherPrecipToolbarUnitAutoProfile resetToDefault];
         [_weatherPrecipAlphaProfile resetToDefault];
         [_weatherPrecipToolbarAlphaProfile resetToDefault];
     }
@@ -1845,33 +1805,25 @@
     [_weatherPressureProfile set:[_weatherPressureProfile get:sourceMode] mode:targetMode];
     [_weatherPressureToolbarProfile set:[_weatherPressureToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherPressureUnitProfile set:[_weatherPressureUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherPressureToolbarUnitProfile set:[_weatherPressureToolbarUnitProfile get:sourceMode] mode:targetMode];
     [_weatherPressureUnitAutoProfile set:[_weatherPressureUnitAutoProfile get:sourceMode] mode:targetMode];
-    [_weatherPressureToolbarUnitAutoProfile set:[_weatherPressureToolbarUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherPressureAlphaProfile set:[_weatherPressureAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherPressureToolbarAlphaProfile set:[_weatherPressureToolbarAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherWindProfile set:[_weatherWindProfile get:sourceMode] mode:targetMode];
     [_weatherWindToolbarProfile set:[_weatherWindToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherWindUnitProfile set:[_weatherWindUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherWindToolbarUnitProfile set:[_weatherWindToolbarUnitProfile get:sourceMode] mode:targetMode];
     [_weatherWindUnitAutoProfile set:[_weatherWindUnitAutoProfile get:sourceMode] mode:targetMode];
-    [_weatherWindToolbarUnitAutoProfile set:[_weatherWindToolbarUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherWindAlphaProfile set:[_weatherWindAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherWindToolbarAlphaProfile set:[_weatherWindToolbarAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherCloudProfile set:[_weatherCloudProfile get:sourceMode] mode:targetMode];
     [_weatherCloudToolbarProfile set:[_weatherCloudToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherCloudUnitProfile set:[_weatherCloudUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherCloudToolbarUnitProfile set:[_weatherCloudToolbarUnitProfile get:sourceMode] mode:targetMode];
     [_weatherCloudUnitAutoProfile set:[_weatherCloudUnitAutoProfile get:sourceMode] mode:targetMode];
-    [_weatherCloudToolbarUnitAutoProfile set:[_weatherCloudToolbarUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherCloudAlphaProfile set:[_weatherCloudAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherCloudToolbarAlphaProfile set:[_weatherCloudToolbarAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipProfile set:[_weatherPrecipProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipToolbarProfile set:[_weatherPrecipToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipUnitProfile set:[_weatherPrecipUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherPrecipToolbarUnitProfile set:[_weatherPrecipToolbarUnitProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipUnitAutoProfile set:[_weatherPrecipUnitAutoProfile get:sourceMode] mode:targetMode];
-    [_weatherPrecipToolbarUnitAutoProfile set:[_weatherPrecipToolbarUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipAlphaProfile set:[_weatherPrecipAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipToolbarAlphaProfile set:[_weatherPrecipToolbarAlphaProfile get:sourceMode] mode:targetMode];
     

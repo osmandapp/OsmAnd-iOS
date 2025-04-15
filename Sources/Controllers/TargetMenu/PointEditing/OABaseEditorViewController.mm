@@ -135,6 +135,12 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     return @[_saveBarButton];
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+}
+
 #pragma mark - Table data
 
 - (void)generateData

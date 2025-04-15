@@ -163,6 +163,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         super.viewDidLoad()
         
         tableView.backgroundColor = collectionType == .colorItems ? .groupBg : .viewBg
+        tableView.keyboardDismissMode = .onDrag
         
         switch collectionType {
         case .colorizationPaletteItems,

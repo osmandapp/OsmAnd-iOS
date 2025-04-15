@@ -181,6 +181,22 @@
             break;
     }
     
+    NSString* volumeSystemValue;
+    switch ([_settings.volumeUnits get:self.appMode]) {
+        case LITRES:
+            volumeSystemValue = OALocalizedString(@"litres");
+            break;
+        case IMPERIAL_GALLONS:
+            volumeSystemValue = OALocalizedString(@"imperial_gallons");
+            break;
+        case US_GALLONS:
+            volumeSystemValue = OALocalizedString(@"us_gallons");
+            break;
+        default:
+            volumeSystemValue = OALocalizedString(@"litres");
+            break;
+    }
+    
     NSString* geoFormatValue;
     switch ([_settings.settingGeoFormat get:self.appMode]) {
         case MAP_GEO_FORMAT_DEGREES:
@@ -238,7 +254,9 @@
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *appearanceArr = [NSMutableArray array];
-    NSMutableArray *unitsAndFormatsArr = [NSMutableArray array];
+    NSMutableArray *regionsArr = [NSMutableArray array];
+    NSMutableArray *unitsArr = [NSMutableArray array];
+    NSMutableArray *formatsArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [appearanceArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
@@ -265,42 +283,49 @@
             @"key" : @"screenOrientation",
         }];
     }
-    [unitsAndFormatsArr addObject:@{
+    [regionsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"driving_region"),
         @"value" : drivingRegionValue,
         @"icon" : @"ic_profile_car",
         @"key" : @"drivingRegion",
     }];
-    [unitsAndFormatsArr addObject:@{
+    [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"unit_of_length"),
         @"value" : metricSystemValue,
         @"icon" : @"ic_custom_ruler",
         @"key" : @"lengthUnits",
     }];
-    [unitsAndFormatsArr addObject:@{
+    [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"units_of_speed"),
         @"value" : speedSystemValue,
         @"icon" : @"ic_action_speed",
         @"key" : @"speedUnits",
     }];
-    [unitsAndFormatsArr addObject:@{
+    [unitsArr addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"units_of_volume"),
+        @"value" : volumeSystemValue,
+        @"icon" : @"ic_custom_volume_unit",
+        @"key" : @"volumeUnits",
+    }];
+    [formatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"coords_format"),
         @"value" : geoFormatValue,
         @"icon" : @"ic_custom_coordinates",
         @"key" : @"coordsFormat",
     }];
-    [unitsAndFormatsArr addObject:@{
+    [formatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"angular_measurment_units"),
         @"value" : angularUnitsValue,
         @"icon" : @"ic_custom_angular_unit",
         @"key" : @"angulerMeasurmentUnits",
     }];
-    [unitsAndFormatsArr addObject:@{
+    [formatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"distance_during_navigation"),
         @"value" : OALocalizedString([_settings.preciseDistanceNumbers get:self.appMode] ? @"shared_string_precise" : @"shared_string_round_up"),
@@ -315,8 +340,11 @@
     }];
     [tableData addObject:appearanceArr];
     _sectionAppearance = (int) tableData.count - 1;
-    [tableData addObject:unitsAndFormatsArr];
+    [tableData addObject:regionsArr];
     _sectionUnitsAndFormats = (int) tableData.count - 1;
+    [tableData addObject:unitsArr];
+    [tableData addObject:formatsArr];
+    
     [tableData addObject:otherArr];
     _sectionOther = (int) tableData.count - 1;
     [tableData addObject:@[@{
@@ -434,6 +462,8 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfLenght applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"speedUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfSpeed applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"volumeUnits"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfVolume applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
         settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
@@ -445,7 +475,7 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"])
+        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else
             [self showModalViewController:settingsViewController];

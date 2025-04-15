@@ -211,6 +211,8 @@
 		15CD7EA725B1C1A700BCB36A /* ic_small_time_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EA425B1C1A700BCB36A /* ic_small_time_start@2x.png */; };
 		15CD7EAD25B1C1B900BCB36A /* ic_small_waypoints@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */; };
 		15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */; };
+		278E37692DAD692100A67CFE /* ic_custom_volume_unit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 278E37682DAD692100A67CFE /* ic_custom_volume_unit@3x.png */; };
+		278E376A2DAD692100A67CFE /* ic_custom_volume_unit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 278E37672DAD692100A67CFE /* ic_custom_volume_unit@2x.png */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
 		3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */; };
@@ -3507,6 +3509,8 @@
 		15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@3x.png"; path = "Resources/Icons/ic_small_waypoints@3x.png"; sourceTree = "<group>"; };
 		15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@2x.png"; path = "Resources/Icons/ic_small_waypoints@2x.png"; sourceTree = "<group>"; };
 		2503BB823D105783DC4982C8 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
+		278E37672DAD692100A67CFE /* ic_custom_volume_unit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_volume_unit@2x.png"; sourceTree = "<group>"; };
+		278E37682DAD692100A67CFE /* ic_custom_volume_unit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_volume_unit@3x.png"; sourceTree = "<group>"; };
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
 		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
@@ -8132,6 +8136,8 @@
 				C5693B862A9F5A08007EA552 /* ic_custom_terrain@2x.png */,
 				C5693B872A9F5A08007EA552 /* ic_custom_terrain@3x.png */,
 				C5693B7F2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png */,
+				278E37672DAD692100A67CFE /* ic_custom_volume_unit@2x.png */,
+				278E37682DAD692100A67CFE /* ic_custom_volume_unit@3x.png */,
 				C5693B7C2A9DD1F5007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png */,
 				C5693B7E2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@2x.png */,
 				C5693B7D2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@3x.png */,
@@ -14317,6 +14323,8 @@
 				DA5A851226C563A900F274C7 /* OARouteInfoView.xib in Resources */,
 				DA2EC7A429FBBE0400ECEB37 /* warnings_speed_camera@2x.png in Resources */,
 				DA134128243DC5A80039D214 /* map_world_globe_dark@2x.png in Resources */,
+				278E37692DAD692100A67CFE /* ic_custom_volume_unit@3x.png in Resources */,
+				278E376A2DAD692100A67CFE /* ic_custom_volume_unit@2x.png in Resources */,
 				DA5A828726C563A700F274C7 /* OARouteProgressBarCell.xib in Resources */,
 				DA2EC76029FBBE0400ECEB37 /* ic_action_speed@2x.png in Resources */,
 				C588D1E0298BAB81001FEDBD /* ca_tts.js in Resources */,

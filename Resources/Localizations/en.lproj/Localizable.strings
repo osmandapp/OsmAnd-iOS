@@ -722,6 +722,11 @@
 "si_nm_h" = "Nautical miles per hour (knots)";
 "shared_string_tones" = "tones";
 
+"unit_of_volume_description" = "Selected units will be applied to all volume-related data in the current profile.";
+"litres" = "Litres";
+"imperial_gallons" = "Imperial gallons";
+"us_gallons" = "US gallons";
+
 "nothing_found" = "Nothing found";
 "nothing_found_descr" = "Change the search or increase its radius.";
 "select_street" = "Select street";
@@ -1177,6 +1182,7 @@
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
+"units_of_volume" = "Units of volume";
 "angular_measurment_units" = "Angular measurment units";
 "distance_during_navigation" = "Distance during navigation";
 "shared_string_precise" = "Precise";

@@ -16,6 +16,7 @@ typedef enum
     EOAProfileGeneralSettingsDrivingRegion,
     EOAProfileGeneralSettingsUnitsOfLenght,
     EOAProfileGeneralSettingsUnitsOfSpeed,
+    EOAProfileGeneralSettingsUnitsOfVolume,
     EOAProfileGeneralSettingsAngularMeasurmentUnits,
     EOAProfileGeneralSettingsDistanceDuringNavigation,
     EOAProfileGeneralSettingsExternalInputDevices,

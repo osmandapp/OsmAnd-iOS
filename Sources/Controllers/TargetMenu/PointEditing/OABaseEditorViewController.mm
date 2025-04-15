@@ -535,12 +535,14 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
 {
+    _wasChanged = YES;
     if (collectionView == [_poiIconCollectionHandler getCollectionView])
     {
         NSString *iconName = [_poiIconCollectionHandler getSelectedItem];
         if (iconName)
             _selectedIconName = iconName;
         self.editIconName = _selectedIconName;
+        
     }
     else if (collectionView == [_colorCollectionHandler getCollectionView])
     {
@@ -548,13 +550,11 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         self.editColor = [_selectedColorItem getColor];
         
         _needToScrollToSelectedColor = YES;
+            [self.tableView reloadRowsAtIndexPaths:@[_iconIndexPath, _shapeIndexPath]
+                                  withRowAnimation:UITableViewRowAnimationNone];
     }
     
-    _wasChanged = YES;
     [self applyLocalization];
-    [self.tableView reloadRowsAtIndexPaths:@[_iconIndexPath, _shapeIndexPath]
-                          withRowAnimation:UITableViewRowAnimationNone];
-
     OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
     [self changeButtonAvailability:_saveBarButton
                          isEnabled:_isTextViewNameValid && (!groupExist

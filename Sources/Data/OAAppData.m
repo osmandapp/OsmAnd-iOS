@@ -292,6 +292,10 @@
     // Profile settings
     _lastMapSourceProfile = [OACommonMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
                                                                                                              andVariant:@"LAYER_OSM_VECTOR"]];
+    OAMapSource *boatDefaultMapSource = [[OAMapSource alloc] initWithResource:[[NAUTICAL_RENDER lowercaseString] stringByAppendingString:RENDERER_INDEX_EXT]
+                                                                   andVariant:OAApplicationMode.BOAT.variantKey
+                                                                         name:NAUTICAL_RENDER];
+    [_lastMapSourceProfile setModeDefaultValue:boatDefaultMapSource mode:OAApplicationMode.BOAT];
     _overlayMapSourceProfile = [OACommonMapSource withKey:kOverlaySourceKey defValue:nil];
     _underlayMapSourceProfile = [OACommonMapSource withKey:kUnderlaySourceKey defValue:nil];
     _lastOverlayMapSourceProfile = [OACommonMapSource withKey:kLastOverlayKey defValue:nil];

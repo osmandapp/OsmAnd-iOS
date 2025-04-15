@@ -791,7 +791,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitPressure *unit = (NSUnitPressure *) (_weatherToolbarActive ? [_weatherPressureToolbarUnitProfile get] : [_weatherPressureUnitProfile get]);
+        NSUnitPressure *unit = (NSUnitPressure *)[_weatherPressureUnitProfile get];
         if (self.weatherPressureUnitAuto)
         {
             NSUnitPressure *current = [NSUnitPressure current];
@@ -809,7 +809,7 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherPressureToolbarUnitProfile set:weatherPressureUnit] : [_weatherPressureUnitProfile set:weatherPressureUnit];
+        [_weatherPressureUnitProfile set:weatherPressureUnit];
         [_weatherPressureUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRESSURE) andValue:self.weatherPressureUnit];
     }
 }
@@ -818,7 +818,7 @@
 {
     @synchronized(_lock)
     {
-        return _weatherToolbarActive ? [_weatherPressureToolbarUnitAutoProfile get] : [_weatherPressureUnitAutoProfile get];
+        return [_weatherPressureUnitAutoProfile get];
     }
 }
 
@@ -826,11 +826,11 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherPressureToolbarUnitAutoProfile set:weatherPressureUnitAuto] : [_weatherPressureUnitAutoProfile set:weatherPressureUnitAuto];
+        [_weatherPressureUnitAutoProfile set:weatherPressureUnitAuto];
         if (weatherPressureUnitAuto)
         {
             NSUnitPressure *current = [NSUnitPressure current];
-            if ((_weatherToolbarActive ? [_weatherPressureToolbarUnitProfile get] : [_weatherPressureUnitProfile get]) != current)
+            if ([_weatherPressureUnitProfile get] != current)
                 [self setWeatherPressureUnit:current];
         }
     }
@@ -874,7 +874,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitSpeed *unit = (NSUnitSpeed *) (_weatherToolbarActive ? [_weatherWindToolbarUnitProfile get] : [_weatherWindUnitProfile get]);
+        NSUnitSpeed *unit = (NSUnitSpeed *)[_weatherWindUnitProfile get];
         if (self.weatherWindUnitAuto)
         {
             NSUnitSpeed *current = [NSUnitSpeed current];
@@ -892,7 +892,7 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherWindToolbarUnitProfile set:weatherWindUnit] : [_weatherWindUnitProfile set:weatherWindUnit];
+        [_weatherWindUnitProfile set:weatherWindUnit];
         [_weatherWindUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_SPEED) andValue:self.weatherWindUnit];
     }
 }
@@ -901,7 +901,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitSpeed *unit = (NSUnitSpeed *) [_weatherWindAnimationUnitProfile get];
+        NSUnitSpeed *unit = (NSUnitSpeed *)[_weatherWindAnimationUnitProfile get];
         if (self.weatherWindUnitAuto)
         {
             NSUnitSpeed *current = [NSUnitSpeed current];
@@ -928,7 +928,7 @@
 {
     @synchronized(_lock)
     {
-        return _weatherToolbarActive ? [_weatherWindToolbarUnitAutoProfile get] : [_weatherWindUnitAutoProfile get];
+        return [_weatherWindUnitAutoProfile get];
     }
 }
 
@@ -936,11 +936,11 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherWindToolbarUnitAutoProfile set:weatherWindUnitAuto] : [_weatherWindUnitAutoProfile set:weatherWindUnitAuto];
+        [_weatherWindUnitAutoProfile set:weatherWindUnitAuto];
         if (weatherWindUnitAuto)
         {
             NSUnitSpeed *current = [NSUnitSpeed current];
-            if ((_weatherToolbarActive ? [_weatherWindToolbarUnitProfile get] : [_weatherWindUnitProfile get]) != current)
+            if ([_weatherWindUnitProfile get] != current)
                 [self setWeatherWindUnit:current];
         }
     }
@@ -1001,7 +1001,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitCloud *unit = (NSUnitCloud *) (_weatherToolbarActive ? [_weatherCloudToolbarUnitProfile get] : [_weatherCloudUnitProfile get]);
+        NSUnitCloud *unit = (NSUnitCloud *)[_weatherCloudUnitProfile get];
         if (self.weatherCloudUnitAuto)
         {
             NSUnitCloud *current = [NSUnitCloud current];
@@ -1019,7 +1019,7 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherCloudToolbarUnitProfile set:weatherCloudUnit] : [_weatherCloudUnitProfile set:weatherCloudUnit];
+        [_weatherCloudUnitProfile set:weatherCloudUnit];
         [_weatherCloudUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_CLOUD) andValue:self.weatherCloudUnit];
     }
 }
@@ -1028,7 +1028,7 @@
 {
     @synchronized(_lock)
     {
-        return _weatherToolbarActive ? [_weatherCloudToolbarUnitAutoProfile get] : [_weatherCloudUnitAutoProfile get];
+        return [_weatherCloudUnitAutoProfile get];
     }
 }
 
@@ -1036,11 +1036,11 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherCloudToolbarUnitAutoProfile set:weatherCloudUnitAuto] : [_weatherCloudUnitAutoProfile set:weatherCloudUnitAuto];
+        [_weatherCloudUnitAutoProfile set:weatherCloudUnitAuto];
         if (weatherCloudUnitAuto)
         {
             NSUnitCloud *current = [NSUnitCloud current];
-            if ((_weatherToolbarActive ? [_weatherCloudToolbarUnitProfile get] : [_weatherCloudUnitProfile get]) != current)
+            if ([_weatherCloudUnitProfile get] != current)
                 [self setWeatherCloudUnit:current];
         }
     }
@@ -1135,7 +1135,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitLength *unit = (NSUnitLength *) (_weatherToolbarActive ? [_weatherPrecipToolbarUnitProfile get] : [_weatherPrecipUnitProfile get]);
+        NSUnitLength *unit = (NSUnitLength *)[_weatherPrecipUnitProfile get];
         if (self.weatherPrecipUnitAuto)
         {
             NSUnitLength *current = [NSUnitLength current];
@@ -1153,7 +1153,7 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherPrecipToolbarUnitProfile set:weatherPrecipUnit] : [_weatherPrecipUnitProfile set:weatherPrecipUnit];
+        [_weatherPrecipUnitProfile set:weatherPrecipUnit];
         [_weatherPrecipUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRECIPITATION) andValue:self.weatherPrecipUnit];
     }
 }
@@ -1162,7 +1162,7 @@
 {
     @synchronized(_lock)
     {
-        return _weatherToolbarActive ? [_weatherPrecipToolbarUnitAutoProfile get] : [_weatherPrecipUnitAutoProfile get];
+        return [_weatherPrecipUnitAutoProfile get];
     }
 }
 
@@ -1170,11 +1170,11 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherPrecipToolbarUnitAutoProfile set:weatherPrecipUnitAuto] : [_weatherPrecipUnitAutoProfile set:weatherPrecipUnitAuto];
+        [_weatherPrecipUnitAutoProfile set:weatherPrecipUnitAuto];
         if (weatherPrecipUnitAuto)
         {
             NSUnitLength *current = [NSUnitLength current];
-            if ((_weatherToolbarActive ? [_weatherPrecipToolbarUnitProfile get] : [_weatherPrecipUnitProfile get]) != current)
+            if ([_weatherPrecipUnitProfile get] != current)
                 [self setWeatherPrecipUnit:current];
         }
     }

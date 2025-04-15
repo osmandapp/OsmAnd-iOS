@@ -168,7 +168,7 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
             icon = [OAUtilities getMxIcon:iconName];
         }
         if (!icon)
-            icon = [OAUtilities getMxIcon:@"user_defined"];
+            icon = [OAUtilities getMxIcon:@"mx_special_custom_category"];
         OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:@"" icon:icon];
         [self prepareCell:cell uiFilter:filter];
         cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];

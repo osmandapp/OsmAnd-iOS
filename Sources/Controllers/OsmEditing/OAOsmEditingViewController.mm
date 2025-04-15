@@ -299,6 +299,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void) trySaving
 {
+    BOOL offlineEdit = [self.class isOfflineEditing:_editingUtil];
     NSString *tagWithExceedingValue = [self isTextLengthInRange];
     if (tagWithExceedingValue.length > 0)
     {
@@ -314,7 +315,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
         }
         else
         {
-            [self.navigationController popViewControllerAnimated:YES];
+            if (offlineEdit)
+                [self.navigationController popViewControllerAnimated:YES];
             [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
         }
     }
@@ -324,7 +326,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
     }
     else
     {
-        [self.navigationController popViewControllerAnimated:YES];
+        if (offlineEdit)
+            [self.navigationController popViewControllerAnimated:YES];
         [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
     }
 }
@@ -363,14 +366,16 @@ typedef NS_ENUM(NSInteger, EditingTab)
     return @"";
 }
 
-- (void) showAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle hasPositiveButton:(BOOL)hasPositiveButton {
+- (void)showAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle hasPositiveButton:(BOOL)hasPositiveButton
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
         if (hasPositiveButton)
         {
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
+                if ([self.class isOfflineEditing:_editingUtil])
+                    [self.navigationController popViewControllerAnimated:YES];
                 [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
             }]];
         }
@@ -379,11 +384,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
     });
 }
 
-+ (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset editingDelegate:(id<OAOsmEditingBottomSheetDelegate>)editingDelegate
++ (void)savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset editingDelegate:(id<OAOsmEditingBottomSheetDelegate>)editingDelegate
 {
     OAEntity *original = poiData.getEntity;
     
-    BOOL offlineEdit = [editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
+    BOOL offlineEdit = [self.class isOfflineEditing:editingUtil];
     OAEntity *entity;
     if ([original isKindOfClass:OANode.class])
         entity = [[OANode alloc] initWithId:original.getId latitude:original.getLatitude longitude:original.getLongitude];
@@ -465,6 +470,10 @@ typedef NS_ENUM(NSInteger, EditingTab)
     [self savePoi:comment poiData:poiData editingUtil:editingUtil closeChangeSet:closeChangeset editingDelegate:nil];
 }
 
++ (BOOL)isOfflineEditing:(id<OAOpenStreetMapUtilsProtocol>)editingUtil
+{
+    return [editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
+}
 
 #pragma mark - UIPageViewControllerDataSource
 

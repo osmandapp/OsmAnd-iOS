@@ -138,6 +138,7 @@
     BOOL hasWiki = [_iapHelper.wiki isPurchased];
     BOOL hasSRTM = [_iapHelper.srtm isPurchased];
     BOOL hasWeather = [_iapHelper.weather isPurchased];
+    BOOL hasCoordinatesGrid = [_settings.mapSettingShowCoordinatesGrid get];
 
     [data addObject:@{
             @"group_name": @"",
@@ -204,6 +205,14 @@
             @"image": @"ic_custom_download_map",
             @"type": [OASwitchTableViewCell getCellIdentifier],
             @"key": @"show_borders_of_downloaded_maps"
+    }];
+    
+    [showSectionData addObject:@{
+        @"name": OALocalizedString(@"layer_coordinates_grid"),
+        @"image": hasCoordinatesGrid ? @"ic_custom_coordinates_grid" : @"ic_custom_coordinates_grid_disabled",
+        @"value": OALocalizedString(hasCoordinatesGrid ? @"shared_string_on" : @"shared_string_off"),
+        @"type": [OAValueTableViewCell getCellIdentifier],
+        @"key": @"coordinates_grid"
     }];
 
     [data addObject:@{
@@ -733,6 +742,8 @@
         return _app.data.mapillary;
     else if ([key isEqualToString:@"tracks"])
         return _settings.mapSettingVisibleGpx.get.count > 0;
+    else if ([key isEqualToString:@"coordinates_grid"])
+        return [_settings.mapSettingShowCoordinatesGrid get];
     else if ([key isEqualToString:@"category_transport"])
         return ![_styleSettings isCategoryDisabled:TRANSPORT_CATEGORY];
     else if ([key isEqualToString:@"contour_lines_layer"])
@@ -1188,6 +1199,8 @@
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWeather];
     else if ([item[@"key"] isEqualToString:@"nautical_depth"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenNauticalDepth];
+    else if ([item[@"key"] isEqualToString:@"coordinates_grid"])
+        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCoordinatesGrid];
 
     if ([item[@"key"] hasPrefix:@"routes_"])
     {

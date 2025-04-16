@@ -36,6 +36,7 @@
 #import "OAMapStyleSettings.h"
 #import "OAMapSettingsWeatherScreen.h"
 #import "OAMapSettingsNauticalDepthScreen.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <QtMath>
 #include <QStandardPaths>
@@ -177,6 +178,10 @@
         case EMapSettingsScreenNauticalDepth:
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsNauticalDepthScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
+        case EMapSettingsScreenCoordinatesGrid:
+            if (!self.screenObj)
+                self.screenObj = [[MapSettingsCoordinatesGridScreen alloc] initWithTable:self.tableView viewController:self];
             break;
         default:
             break;

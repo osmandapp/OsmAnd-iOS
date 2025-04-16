@@ -245,6 +245,8 @@
 #import "OABackupDbHelper.h"
 #import "OACollectionSettingsItem.h"
 #import "OAPoiUiFilterSettingsItem.h"
+#import "OAMapSettingsScreen.h"
+#import "OADashboardViewController.h"
 
 // Quick actions
 #import "OAQuickAction.h"

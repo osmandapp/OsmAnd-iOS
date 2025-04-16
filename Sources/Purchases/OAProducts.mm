@@ -700,7 +700,7 @@
                 }
                 if (!purchased && [OAIAPHelper isOsmAndProAvailable])
                     purchased = [self.feature isAvailableInOsmAndPro];
-                if (!purchased && ([OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased]))
+                if (!purchased && ([OAIAPHelper isMapsPlusAvailable]))
                     purchased = [self.feature isAvailableInMapsPlus];
             }
         }

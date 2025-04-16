@@ -248,6 +248,11 @@ static OASubscriptionState *EXPIRED;
     return [[OAAppSettings sharedManager].mapperLiveUpdatesExpireTime get] > [NSDate date].timeIntervalSince1970;
 }
 
++ (BOOL)isMapsPlusAvailable
+{
+    return [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];;
+}
+
 + (BOOL) isOsmAndProAvailable
 {
 //#if defined(DEBUG)
@@ -298,9 +303,9 @@ static OASubscriptionState *EXPIRED;
             || [[OAAppSettings sharedManager].wikipediaPurchased get];
 }
 
-+ (BOOL) isSensorPurchased
++ (BOOL)isSensorPurchased
 {
-    return [self isOsmAndProAvailable];
+    return [self isOsmAndProAvailable] || [self isMapsPlusAvailable];
 }
 
 + (BOOL)isLiveUpdatesSubscription:(OASubscription *)subscription

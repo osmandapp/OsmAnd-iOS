@@ -2986,8 +2986,8 @@ typedef enum
             _targetLatitude = targetPoint.location.latitude;
             _targetLongitude = targetPoint.location.longitude;
 
-            [_mapViewController showContextPinMarker:targetPoint.location.latitude
-                                           longitude:targetPoint.location.longitude
+            [_mapViewController showContextPinMarker:state.openedFromMap ? state.pinLocation.latitude : targetPoint.location.latitude
+                                           longitude:state.openedFromMap ? state.pinLocation.longitude : targetPoint.location.longitude
                                             animated:pinAnimation];
             break;
         }

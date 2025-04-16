@@ -3410,7 +3410,7 @@
 "sort_subfolders_tracks" = "Sortér undermapper";
 "shared_string_subfolders_in" = "Undermapper i";
 "shared_string_sorted_by" = "er sorteret efter:";
-"help_article_personal_tracks_smart_folder_name" = "Smartmappe (filter)";
+"help_article_personal_tracks_smart_folder_name" = "Smart-mappe (filter)";
 "add_widget_to_the_right" = "Tilføj modul til højre";
 "delete_widget" = "Slet modul?";
 "add_widget_below" = "Tilføj modul nedenfor";
@@ -3652,3 +3652,4 @@
 "unchanged_parameter_summary" = "Hvert spor beholder sine egne parametre.";
 "shared_string_unchanged" = "Uændret";
 "each_favourite_point_own_icon" = "Hvert favoritpunkt vil have sit eget ikon.";
+"ios_release_5_0" = "• Introduceret smart-mapper til automatisk organisering af spor.\n• Tilføjet en galleriviser i fuld skærm til Wikimedia-billeder.\n• Tilføjet understøttelse af vietnamesisk og hebraisk tekst-til-tale (TTS) til navigation.\n• Tilføjet Hurtige handlinger til styring af turoptagelse.\n• Tilføjet en mulighed for \"Detaljeret sporvejledning\" og en dialog med forslag til \"Fastgør til vejene\".\n• Gør fremtrædende toppe synlige via kort og søgning.\n• Tilføjet kantfremhævning for bygninger og områder med detaljeret information.\n• Tilføjet en mulighed for at skifte synlighed for separate favoritgrupper på kortet.\n• Udvidede ikonmuligheder for favoritter ved at tilføje ikoner fra alle IP-kategorier.\n• Tilføjet visning af batteriniveau for eksterne sensorer.\n• Tilføjet en mulighed for at ændre udseendet på flere spor samtidigt.\n• Tilføjet en »Nulstil«-handling til modulet Gennemsnitshastighed.\n• CarPlay-søgning: Tilføjet muligheden for at vælge bygninger.\n• Rettelse af inputsekvensen for UTM-koordinater.\n• Rettet et problem med farverne på sporets rutepunkt.\n• Rettet den manglende \"Download alle\"-knap til terrænkort.\n• Rettet et problem, hvor populære artikler nogle gange manglede i rejseguiderne.\n";

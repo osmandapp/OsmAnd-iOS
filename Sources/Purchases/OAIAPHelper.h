@@ -132,56 +132,57 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 @property (nonatomic, readonly) NSArray<OAFunctionalAddon *> *functionalAddons;
 @property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
 
-- (void) resetTestPurchases;
-- (void) requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
-- (void) buyProduct:(OAProduct *)product;
-- (void) restoreCompletedTransactions;
+- (void)resetTestPurchases;
+- (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
+- (void)buyProduct:(OAProduct *)product;
+- (void)restoreCompletedTransactions;
 
-- (void) enableProduct:(NSString *)productIdentifier;
-- (void) disableProduct:(NSString *)productIdentifier;
-- (OAProduct *) product:(NSString *)productIdentifier;
-- (OASubscription *) getCheapestMonthlySubscription;
-- (NSArray<OASubscription *> *) getEverMadeSubscriptions;
-- (NSArray<OAProduct *> *) getEverMadeMainPurchases;
-- (NSMapTable<OAProduct *, OAInAppStateHolder *> *) getExternalInApps;
+- (void)enableProduct:(NSString *)productIdentifier;
+- (void)disableProduct:(NSString *)productIdentifier;
+- (OAProduct *)product:(NSString *)productIdentifier;
+- (OASubscription *)getCheapestMonthlySubscription;
+- (NSArray<OASubscription *> *)getEverMadeSubscriptions;
+- (NSArray<OAProduct *> *)getEverMadeMainPurchases;
+- (NSMapTable<OAProduct *, OAInAppStateHolder *> *)getExternalInApps;
 
-- (BOOL) productsLoaded;
+- (BOOL)productsLoaded;
 
-- (NSArray *) getSubscriptionStateByOrderId:(NSString *)orderId;
-- (NSString *) getOrderIdByDeviceIdAndToken;
-- (OASubscription *) getAnyPurchasedOsmAndProSubscription;
-- (BOOL) checkBackupSubscriptions;
+- (NSArray *)getSubscriptionStateByOrderId:(NSString *)orderId;
+- (NSString *)getOrderIdByDeviceIdAndToken;
+- (OASubscription *)getAnyPurchasedOsmAndProSubscription;
+- (BOOL)checkBackupSubscriptions;
 
-- (void) onBackupPurchaseRequested;
-- (void) checkBackupPurchase:(void(^)(BOOL))onComplete;
-- (void) checkBackupPurchase;
+- (void)onBackupPurchaseRequested;
+- (void)checkBackupPurchase:(void(^)(BOOL))onComplete;
+- (void)checkBackupPurchase;
 
-- (BOOL) isCarPlayAvailable;
+- (BOOL)isCarPlayAvailable;
 
-+ (int) freeMapsAvailable;
-+ (void) increaseFreeMapsCount:(int)count;
-+ (void) decreaseFreeMapsCount;
++ (int)freeMapsAvailable;
++ (void)increaseFreeMapsCount:(int)count;
++ (void)decreaseFreeMapsCount;
 
-+ (BOOL) isPaidVersion;
++ (BOOL)isPaidVersion;
 
-+ (BOOL) isSubscribedToMaps;
-+ (BOOL) isSubscribedToLiveUpdates;
-+ (BOOL) isSubscribedToOsmAndPro;
-+ (BOOL) isSubscribedCrossPlatform;
-+ (BOOL) isSubscribedToMapperUpdates;
-+ (BOOL) isOsmAndProAvailable;
-+ (BOOL) isExportTypeAvailable:(OAExportSettingsType *)exportType;
-+ (BOOL) isBackupAvailable;
++ (BOOL)isSubscribedToMaps;
++ (BOOL)isSubscribedToLiveUpdates;
++ (BOOL)isSubscribedToOsmAndPro;
++ (BOOL)isSubscribedCrossPlatform;
++ (BOOL)isSubscribedToMapperUpdates;
++ (BOOL)isOsmAndProAvailable;
++ (BOOL)isMapsPlusAvailable;
++ (BOOL)isExportTypeAvailable:(OAExportSettingsType *)exportType;
++ (BOOL)isBackupAvailable;
 
-+ (BOOL) isFullVersionPurchased;
-+ (BOOL) isDepthContoursPurchased;
-+ (BOOL) isContourLinesPurchased;
-+ (BOOL) isWikipediaPurchased;
-+ (BOOL) isSensorPurchased;
++ (BOOL)isFullVersionPurchased;
++ (BOOL)isDepthContoursPurchased;
++ (BOOL)isContourLinesPurchased;
++ (BOOL)isWikipediaPurchased;
++ (BOOL)isSensorPurchased;
 
-+ (BOOL) isLiveUpdatesSubscription:(OASubscription *)subscription;
-+ (BOOL) isOsmAndProSubscription:(OASubscription *)subscription;
-+ (BOOL) isMapsSubscription:(OASubscription *)subscription;
-+ (BOOL) isFullVersion:(OAProduct *)product;
++ (BOOL)isLiveUpdatesSubscription:(OASubscription *)subscription;
++ (BOOL)isOsmAndProSubscription:(OASubscription *)subscription;
++ (BOOL)isMapsSubscription:(OASubscription *)subscription;
++ (BOOL)isFullVersion:(OAProduct *)product;
 
 @end

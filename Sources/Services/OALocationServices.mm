@@ -656,6 +656,9 @@
 {
     if (location)
     {
+        if (!simulated && _simulatePosition && location.speed <= 0)
+            return;
+
         if (!simulated)
             _simulatePosition = nil;
         

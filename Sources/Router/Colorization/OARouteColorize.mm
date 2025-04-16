@@ -81,16 +81,22 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
             {
                 if (seg.generalSegment || seg.points.count < 2)
                     continue;
-                
                 for (OASWptPt *pt in seg.points)
                 {
                     [latList addObject:@(pt.getLatitude)];
                     [lonList addObject:@(pt.getLongitude)];
                     
-                    if (colorizaionType == ColorizationTypeSpeed) {
-                        [values addObject:@(analysis.pointAttributes[wptIdx].speed)];
-                    } else {
-                        [values addObject:@(analysis.pointAttributes[wptIdx].elevation)];
+                    if (wptIdx < analysis.pointAttributes.count)
+                    {
+                        if (colorizaionType == ColorizationTypeSpeed) {
+                            [values addObject:@(analysis.pointAttributes[wptIdx].speed)];
+                        } else {
+                            [values addObject:@(analysis.pointAttributes[wptIdx].elevation)];
+                        }
+                    }
+                    else
+                    {
+                        NSLog(@"Error: Index wptIdx (%d) is out of bounds for pointAttributes array (number of elements: %d)", (int)wptIdx, (int)analysis.pointAttributes.count);
                     }
                     wptIdx++;
                 }

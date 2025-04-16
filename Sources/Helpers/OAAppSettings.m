@@ -1315,7 +1315,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (NSObject *) getValue:(OAApplicationMode *)mode;
 - (void) setValue:(NSObject *)value;
 - (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode;
-- (void) setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
+- (void)setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -2246,6 +2246,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode
 {
     [self setValue:[mapSource toDictionary] mode:mode];
+}
+
+- (void)setModeDefaultValue:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode
+{
+    [super setModeDefaultValue:[mapSource toDictionary] mode:mode];
 }
 
 - (void) resetToDefault
@@ -4279,6 +4284,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [_profilePreferences setObject:_textSize forKey:@"text_scale"];
 
         _renderer = [OACommonString withKey:rendererKey defValue:@"OsmAnd"];
+        [_renderer setModeDefaultValue:NAUTICAL_RENDER mode:OAApplicationMode.BOAT];
         [_profilePreferences setObject:_renderer forKey:@"renderer"];
 
         _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;

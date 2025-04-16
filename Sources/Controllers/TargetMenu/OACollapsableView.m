@@ -11,7 +11,7 @@
 CGFloat const kMarginLeft = 60.0;
 CGFloat const kMarginRight = 15.0;
 CGFloat const kMarginTop = 10.0;
-CGFloat const kCollapsableTitleMarginRight = 90.0;
+CGFloat const kCollapsableTitleMarginRight = 95.0;
 
 @implementation OACollapsableView
 

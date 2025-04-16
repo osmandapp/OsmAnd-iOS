@@ -130,12 +130,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                                                            withHandler:@selector(onHeadingUpdate)
                                                             andObserve:_app.locationServices.updateHeadingObserver];
 
-        //addTargetPointListener(app);
-        //addMapMarkersListener(app);
-        //[[OARoutingHelper sharedInstance] addListener:self];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     }
     return self;
@@ -168,7 +162,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
             case OAMapModeFree:
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self setMapLinkedToLocation:NO];
+                    [self checkMapLinkedToLocation];
                 });
                 break;
             }
@@ -913,7 +907,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     {
         if (![self isMapLinkedToLocation])
         {
-            [self setMapLinkedToLocation:YES];
+            [self checkMapLinkedToLocation];
             
             /*
             CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
@@ -970,7 +964,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     return _app.mapMode != OAMapModeFree;
 }
 
-- (void) setMapLinkedToLocation:(BOOL)isMapLinkedToLocation
+- (void)checkMapLinkedToLocation
 {
     if (![self isMapLinkedToLocation])
     {
@@ -978,10 +972,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         if (autoFollow > 0 && [[OARoutingHelper sharedInstance] isFollowingMode] && !_routePlanningMode)
             [self backToLocationWithDelay:autoFollow];
     }
-}
-
-- (void) onMapGestureAction:(NSNotification *)notification
-{
 }
 
 - (void) setMapViewController:(OAMapViewController *)mapViewController

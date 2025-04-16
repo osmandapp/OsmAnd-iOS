@@ -1,5 +1,10 @@
 import CarPlay
 
+@objc
+protocol CarPlayActionDelegate: NSObjectProtocol {
+    func showAlertWith(title: String)
+}
+
 final class CarPlaySceneDelegate: UIResponder {
     
     private var carPlayMapController: OACarPlayMapViewController?
@@ -174,4 +179,20 @@ extension CarPlaySceneDelegate: OAWidgetListener {
     func widgetVisibilityChanged(_ widget: OABaseWidgetView, visible: Bool) { }
     
     func widgetClicked(_ widget: OABaseWidgetView) { }
+}
+
+extension CarPlaySceneDelegate: CarPlayActionDelegate {
+    func showAlertWith(title: String) {
+        guard let carPlayInterfaceController else {
+            return
+        }
+        let okAction = CPAlertAction(title: localizedString("shared_string_ok"), style: .default) { _ in
+            carPlayInterfaceController.dismissTemplate(animated: true, completion: nil)
+        }
+        let alertTemplate = CPAlertTemplate(titleVariants: [title], actions: [okAction])
+        
+        Task { @MainActor in
+            try await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
+        }
+    }
 }

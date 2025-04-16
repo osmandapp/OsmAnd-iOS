@@ -1089,6 +1089,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (!CGPointEqualToPoint(firstPoint, CGPointZero) && _moveTouchLocations.count > 0 && !_rotatingByGesture && !_zoomingByGesture)
         {
             _app.mapMode = OAMapModeFree;
+            [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
             OATouchLocation *firstTouch = _moveTouchLocations[0];
             OsmAnd::PointI touchLocation31 = [OANativeUtilities convertFromPoint31:firstTouch.touchLocation31];
             [_mapView setMapTarget:OsmAnd::PointI((int)firstPoint.x, (int)firstPoint.y) location31:touchLocation31];
@@ -1181,6 +1182,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     if (state == UIGestureRecognizerStateChanged && _carPlayMapTouchLocation)
     {
+        _app.mapMode = OAMapModeFree;
+        [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
         _carPlayScreenPoint = OsmAnd::PointI(_carPlayScreenPoint.x + translation.x * _mapView.contentScaleFactor, _carPlayScreenPoint.y + translation.y * _mapView.contentScaleFactor);
         auto touchLocation31 = [OANativeUtilities convertFromPoint31:_carPlayMapTouchLocation.touchLocation31];
         [_mapView setMapTarget:_carPlayScreenPoint location31:touchLocation31];
@@ -1347,6 +1350,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                     auto angle = zoomAndRotation.y;
                     if (!isnan(zoom) && !isnan(angle))
                     {
+                        _app.mapMode = OAMapModeFree;
+                        [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
+
                         OAZoom *zoomObject = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:_mapView.minZoom maxZoom:_mapView.maxZoom];
                         float nextZoomStep = [zoomObject getValidZoomStep:zoom];
                         zoom = nextZoomStep;
@@ -1385,6 +1391,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
         else if (panRecognizer)
         {
+            _app.mapMode = OAMapModeFree;
+            [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
             // Change zoom
             CGFloat gestureScale = ([panRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
             CGFloat scale = 1 - gestureScale;
@@ -1482,6 +1490,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
        
     // Increate zoom by 1
     zoomDelta += 1.0f;
+    
+    _app.mapMode = OAMapModeFree;
+    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
     
     CGPoint centerPoint = [self getTouchPoint:recognizer touchIndex:0];
     OsmAnd::PointI centerLocation;
@@ -1767,6 +1778,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
+    
+    _app.mapMode = OAMapModeFree;
+    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
 
     // Animate zoom-in by +1
     zoomDelta += 1.0f;
@@ -1803,6 +1817,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
+    
+    _app.mapMode = OAMapModeFree;
+    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
 
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;
@@ -1853,7 +1870,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         [OAUtilities showToast:nil details:OALocalizedString(@"edit_tilesource_minzoom") duration:4 inView:self.view];
         return;
     }
-    
+    _app.mapMode = OAMapModeFree;
+    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
     float nextZoomStep = [zoom getValidZoomStep:newZoomStep];
     [zoom changeZoom:nextZoomStep];
 
@@ -3787,24 +3805,26 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName
 {
-    if (_mapPresentationEnvironment)
-    {
-        NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
-        QHash<QString, int> renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
-        QHashIterator<QString, int> it(renderingAttrs);
-        while (it.hasNext()) {
-            it.next();
-            NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
-            NSNumber *value = @(it.value());
-            if (value.intValue == -1)
-                continue;
-            
-            [result setObject:value forKey:key];
+    @synchronized(self) {
+        if (_mapPresentationEnvironment)
+        {
+            NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
+            QHash<QString, int> renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
+            QHashIterator<QString, int> it(renderingAttrs);
+            while (it.hasNext()) {
+                it.next();
+                NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
+                NSNumber *value = @(it.value());
+                if (value.intValue == -1)
+                    continue;
+                
+                [result setObject:value forKey:key];
+            }
+            return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];
         }
-        return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];
+        else
+            return nil;
     }
-    else
-        return nil;
 }
 
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings
@@ -3868,9 +3888,16 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (!helper.isPublicTransportMode)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error preferredStyle:UIAlertControllerStyleAlert];
-                [alertController addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-                [self presentViewController:alertController animated:YES completion:nil];
+                if (_isCarPlayActive)
+                {
+                    [[UIApplication sharedApplication].carPlaySceneDelegate showAlertWithTitle:error];
+                }
+                else
+                {
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error preferredStyle:UIAlertControllerStyleAlert];
+                    [alertController addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+                    [self presentViewController:alertController animated:YES completion:nil];
+                }
             });
         }
     }

@@ -44,7 +44,7 @@
         self.appNameImageView.image = [UIImage imageNamed:@"img_text_osmand_maps_pro"];
         [self animateImageView];
     }
-    else if ([OAIAPHelper isFullVersionPurchased] || [OAIAPHelper isSubscribedToMaps])
+    else if ([OAIAPHelper isMapsPlusAvailable])
     {
         self.appNameImageView.image = [UIImage imageNamed:@"img_text_osmand_maps_plus"];
         [self animateImageView];

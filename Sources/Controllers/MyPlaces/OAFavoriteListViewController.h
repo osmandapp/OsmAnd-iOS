@@ -21,8 +21,6 @@
 
 @property CGFloat azimuthDirection;
 
-@property NSTimeInterval lastUpdate;
-
 + (BOOL)popToParent;
 
 @end

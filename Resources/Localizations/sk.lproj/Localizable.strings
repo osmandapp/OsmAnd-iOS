@@ -1668,7 +1668,7 @@
 "app_restart_required" = "Niektoré nastavenia vyžadujú reštart aplikácie.";
 "shared_string_navigation" = "Navigácia";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Vyfarbiť trasy podľa ich typu siete (medzinárodná, regionálna, lokálna).";
-"plugin_mapillary_descr" = "Fotografie z úrovne ulice. Môžete prispieť aj vy. Pre zobrazenie existujúcich údajov ako vrstvu na mape zapnite \"Snímky z úrovne ulice\" v menu \"Nastaviť mapu\".";
+"plugin_mapillary_descr" = "Fotografie z úrovne ulice. Môžete prispieť aj vy. Pre zobrazenie existujúcich údajov ako vrstvy na mape zapnite \"Snímky z úrovne ulice\" v menu \"Nastaviť mapu\".";
 "added_profiles" = "Pridané profily";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Farba podľa príslušnosti k sieti.";
 "navigate_point_northing" = "Vertikálna súradnica";
@@ -2117,7 +2117,7 @@
 "pro_features" = "Pokročilé (Pro) funkcie";
 "recalc_angle_dialog_descr" = "Samostatný rovný úsek medzi mojou polohou a vypočítanou trasou bude zobrazený kým nebude trasa prepočítaná";
 "osmand_cloud_create_account_descr" = "Prosím zadajte vašu emailovú adresu, na ktorú bude zaslaný overovací kód \na budú na ňu naviazané všetky údaje.";
-"srtm_download_single_help_message" = "Prosím zvoľte variant. Budete musieť znovu stiahnuť súbor pre zmenu formátu.";
+"srtm_download_single_help_message" = "Prosím zvoľte variant. Pre následnú zmenu formátu budete musieť znovu stiahnuť tento súbor.";
 "weather_temperature_fahrenheit" = "Stupne Fahrenheita";
 "routing_attr_motor_type_hybrid_name" = "Hybridný";
 "parked_at" = "zaparkované o";

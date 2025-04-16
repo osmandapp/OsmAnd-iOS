@@ -2935,7 +2935,19 @@ static BOOL _repositoryUpdated = NO;
 
     if ([item isKindOfClass:[OALocalResourceItem class]])
     {
-        [self offerDeleteResourceOf:item];
+        __weak __typeof(self) weakSelf = self;
+        [self offerDeleteResourceOf:item executeAfterSuccess:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (strongSelf) {
+                    if (strongSelf->_downloadingCellResourceHelper)
+                        [strongSelf->_downloadingCellResourceHelper cleanCellCache];
+                    if (strongSelf->_downloadingCellMultipleResourceHelper)
+                        [strongSelf->_downloadingCellMultipleResourceHelper cleanCellCache];
+                    [tableView reloadData];
+                }
+            });
+        }];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }

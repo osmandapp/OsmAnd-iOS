@@ -638,7 +638,7 @@ static NSOperationQueue *_favQueue;
                                        [NSString stringWithFormat:@"%@%@%@%@",
                                         app.favoritesFilePrefix,
                                         fileGroup.name.length > 0 ? app.favoritesGroupNameSeparator : @"",
-                                        fileGroup.name,
+                                        [OsmAndApp.instance getGroupFileName:fileGroup.name],
                                         GPX_FILE_EXT]];
             [[NSFileManager defaultManager] removeItemAtPath:fileGroupPath error:nil];
         }
@@ -678,8 +678,9 @@ static NSOperationQueue *_favQueue;
                                        [NSString stringWithFormat:@"%@%@%@%@",
                                         app.favoritesFilePrefix,
                                         localGroup.name.length > 0 ? app.favoritesGroupNameSeparator : @"",
-                                        localGroup.name,
+                                        [OsmAndApp.instance getGroupFileName:localGroup.name],
                                         GPX_FILE_EXT]];
+           
             [self saveFile:@[localGroup] file:fileGroupPath];
         }
     }
@@ -896,7 +897,7 @@ static NSOperationQueue *_favQueue;
         favoriteLocations.append(favorite.favorite);
         OAFavoriteGroup *group = _flatGroups[[favorite getCategory]];
         if (group)
-            [group.points removeObject:favorite];
+            [group.points removeObjectIdenticalTo:favorite];
     }
     [self removeFavoritePoints:favorites favoriteLocations:favoriteLocations];
     if (saveImmediately)
@@ -905,7 +906,11 @@ static NSOperationQueue *_favQueue;
 
 + (void)removeFavoritePoints:(NSArray<OAFavoriteItem *> *)favorites favoriteLocations:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > &)favoriteLocations
 {
-    [_cachedFavoritePoints removeObjectsInArray:favorites];
+    // RemoveObjectIdenticalTo to remove only exact instances and prevent accidental removal of duplicates.
+    for (OAFavoriteItem *favoriteToRemove in favorites)
+    {
+        [_cachedFavoritePoints removeObjectIdenticalTo:favoriteToRemove];
+    }
     _favoritesCollection->removeFavoriteLocations(favoriteLocations);
 }
 

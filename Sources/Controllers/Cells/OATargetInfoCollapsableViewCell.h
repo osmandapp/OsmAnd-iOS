@@ -24,5 +24,6 @@
 - (void) setCollapsed:(BOOL)collapsed rawHeight:(int)rawHeight;
 - (void) setImage:(UIImage *)image;
 - (void) setDescription:(NSString *)description;
+- (void) updateCollapsableHeight:(int)height;
 
 @end

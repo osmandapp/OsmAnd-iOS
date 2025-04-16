@@ -108,7 +108,11 @@
         [collectionView insertItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
         [weakSelf insertItem:newItem atIndexPath:indexPath];
     } completion:^(BOOL finished) {
-        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
+        NSIndexPath *prevIndex = [weakSelf getSelectedIndexPath];
+        if (!prevIndex)
+            prevIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, prevIndex]];
+        
         if (weakSelf.delegate)
         {
             [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:nil collectionView:collectionView];

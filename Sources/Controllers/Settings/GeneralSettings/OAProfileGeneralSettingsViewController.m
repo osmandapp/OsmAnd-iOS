@@ -308,7 +308,7 @@
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"units_of_volume"),
         @"value" : volumeSystemValue,
-        @"icon" : @"ic_custom_volume_unit",
+        @"icon" : @"ic_custom_obd_fuel_tank",
         @"key" : @"volumeUnits",
     }];
     [formatsArr addObject:@{

@@ -17,6 +17,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAQuickSearchTableController.h"
+#import "OAPOIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -160,15 +161,17 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
     {
         OAPOIUIFilter *filter = item.filter;
         NSString *name = item.title;
-        UIImage *icon;
         NSObject *res = [filter getIconResource];
-        if ([res isKindOfClass:[NSString class]])
-        {
-            NSString *iconName = (NSString *)res;
-            icon = [OAUtilities getMxIcon:iconName];
-        }
+        UIImage *icon;
+        
+        NSString *baseIconName = [filter.baseType iconName];
+        if (baseIconName)
+            icon = [OAUtilities getMxIcon:baseIconName];
+        if (!icon && [res isKindOfClass:[NSString class]])
+            icon = [OAUtilities getMxIcon:(NSString *)res];
         if (!icon)
             icon = [OAUtilities getMxIcon:@"mx_special_custom_category"];
+        
         OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:@"" icon:icon];
         [self prepareCell:cell uiFilter:filter];
         cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];

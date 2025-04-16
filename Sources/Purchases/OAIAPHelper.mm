@@ -346,13 +346,13 @@ static OASubscriptionState *EXPIRED;
     return products.allObjects;
 }
 
-- (NSMapTable<OAProduct *, NSNumber *> *) getExternalInApps
+- (NSMapTable<OAProduct *, OAInAppStateHolder *> *) getExternalInApps
 {
-    NSMapTable<OAProduct *, NSNumber *> *res = [NSMapTable strongToStrongObjectsMapTable];
+    NSMapTable<OAProduct *, OAInAppStateHolder *> *res = [NSMapTable strongToStrongObjectsMapTable];
     for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
     {
         if (holder.linkedProduct && ![kPlatformApple isEqualToString:holder.platform])
-            [res setObject:@(holder.origin) forKey:holder.linkedProduct];
+            [res setObject:holder forKey:holder.linkedProduct];
     }
     return res;
 }
@@ -676,20 +676,26 @@ static OASubscriptionState *EXPIRED;
                     }
                 }
                 
+                NSMutableDictionary<NSString *, NSString *> *params = @{ @"os" : @"ios", @"version" : ver }.mutableCopy;
+                BOOL hasToken = NO;
                 NSString *userId = _settings.billingUserId.get;
                 NSString *userToken = _settings.billingUserToken.get;
                 if (userId.length > 0 && userToken.length > 0)
                 {
-                    NSMutableDictionary<NSString *, NSString *> *params = @{ @"os" : @"ios", @"version" : ver }.mutableCopy;
                     params[@"userId"] = userId;
                     params[@"userToken"] = userToken;
-                    NSString *deviceId = _settings.backupDeviceId.get;
-                    NSString *accessToken = _settings.backupAccessToken.get;
-                    if (deviceId.length > 0 && accessToken.length > 0)
-                    {
-                        params[@"deviceId"] = deviceId;
-                        params[@"accessToken"] = accessToken;
-                    }
+                    hasToken = YES;
+                }
+                NSString *deviceId = _settings.backupDeviceId.get;
+                NSString *accessToken = _settings.backupAccessToken.get;
+                if (deviceId.length > 0 && accessToken.length > 0)
+                {
+                    params[@"deviceId"] = deviceId;
+                    params[@"accessToken"] = accessToken;
+                    hasToken = YES;
+                }
+                if (hasToken)
+                {
                     [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/inapps/get" params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
                      {
                         if (response && data)
@@ -1958,6 +1964,7 @@ static OASubscriptionState *EXPIRED;
         if (sku.length > 0 && state.length > 0)
         {
             OASubscriptionStateHolder *stateHolder = [[OASubscriptionStateHolder alloc] init];
+            stateHolder.sku = sku;
             stateHolder.state = [OASubscriptionState getByStateStr:state];
             stateHolder.startTime = [subObj[@"start_time"] integerValue] / 1000;
             stateHolder.expireTime = [subObj[@"expire_time"] integerValue] / 1000;
@@ -1987,6 +1994,9 @@ static OASubscriptionState *EXPIRED;
         return EOAPurchaseOriginHuawei;
     else if ([sku.lowerCase containsString:@".amazon."])
         return EOAPurchaseOriginAmazon;
+    else if ([sku.lowerCase containsString:@".fastspring."])
+        return EOAPurchaseOriginFastSpring;
+    
     return EOAPurchaseOriginUndefined;
 }
 
@@ -2150,11 +2160,18 @@ static OASubscriptionState *EXPIRED;
         NSDictionary *obj = inAppsStateJson[i];
         NSString *sku = obj[@"sku"];
         NSString *platform = obj[@"platform"];
+        NSString *purchaseTimeStr = obj[@"purchaseTime"];
+        long purchaseTime = 0;
+        if (purchaseTimeStr.length > 0)
+            purchaseTime = (long) purchaseTimeStr.longLongValue;
+        
         if (sku.length > 0)
         {
             OAInAppStateHolder *stateHolder = [[OAInAppStateHolder alloc] init];
+            stateHolder.sku = sku;
             stateHolder.origin = [self getPurchaseOriginBySku:sku];
             stateHolder.platform = platform;
+            stateHolder.purchaseTime = purchaseTime;
             stateHolder.linkedProduct = [self getLinkedPurchaseBySku:sku];
             inAppsStateMap[sku] = stateHolder;
         }

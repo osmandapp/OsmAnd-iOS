@@ -125,7 +125,7 @@ static BOOL _purchasesUpdated;
         NSArray<OAProduct *> *mainPurchases = [_iapHelper getEverMadeMainPurchases];
         NSMutableArray<OAProduct *> *activeProducts = [NSMutableArray array];
         NSMutableArray<OAProduct *> *externalActiveProducts = [NSMutableArray array];
-        NSMutableArray<NSNumber *> *externalActiveProductsOrigin = [NSMutableArray array];
+        NSMutableArray<OAInAppStateHolder *> *externalActiveProductHolders = [NSMutableArray array];
         NSMutableArray<OAProduct *> *expiredProducts = [NSMutableArray array];
         for (OAProduct *product in mainPurchases)
         {
@@ -143,11 +143,11 @@ static BOOL _purchasesUpdated;
             else if (product.purchaseState == PSTATE_NOT_PURCHASED)
                 [expiredProducts addObject:product];
         }
-        NSMapTable<OAProduct *, NSNumber *> *externalInApps = _iapHelper.getExternalInApps;
+        NSMapTable<OAProduct *, OAInAppStateHolder *> *externalInApps = _iapHelper.getExternalInApps;
         for (OAProduct *product in externalInApps.keyEnumerator)
         {
             [externalActiveProducts addObject:product];
-            [externalActiveProductsOrigin addObject:[externalInApps objectForKey:product]];
+            [externalActiveProductHolders addObject:[externalInApps objectForKey:product]];
         }
         
         OAAppSettings *settings = OAAppSettings.sharedManager;
@@ -227,7 +227,7 @@ static BOOL _purchasesUpdated;
                 for (NSInteger i = 0; i < externalActiveProducts.count; i++)
                 {
                     OAProduct *product = externalActiveProducts[i];
-                    NSNumber *origin = externalActiveProductsOrigin[i];
+                    NSNumber *origin = @(externalActiveProductHolders[i].origin);
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],

@@ -48,7 +48,8 @@ typedef NS_ENUM(NSInteger, EOAPurchaseOrigin) {
     EOAPurchaseOriginPromo,
     EOAPurchaseOriginIOS,
     EOAPurchaseOriginAmazon,
-    EOAPurchaseOriginHuawei
+    EOAPurchaseOriginHuawei,
+    EOAPurchaseOriginFastSpring
 };
 
 typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
@@ -61,6 +62,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 
 @interface OASubscriptionStateHolder : NSObject
 
+@property (nonatomic) NSString *sku;
 @property (nonatomic) OASubscriptionState *state;
 @property (nonatomic, assign) long startTime;
 @property (nonatomic, assign) long expireTime;
@@ -71,8 +73,10 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 
 @interface OAInAppStateHolder : NSObject
 
+@property (nonatomic) NSString *sku;
 @property (nonatomic, assign) EOAPurchaseOrigin origin;
 @property (nonatomic) NSString *platform;
+@property (nonatomic, assign) long purchaseTime;
 @property (nonatomic) OAProduct *linkedProduct;
 
 @end
@@ -139,7 +143,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 - (OASubscription *) getCheapestMonthlySubscription;
 - (NSArray<OASubscription *> *) getEverMadeSubscriptions;
 - (NSArray<OAProduct *> *) getEverMadeMainPurchases;
-- (NSMapTable<OAProduct *, NSNumber *> *) getExternalInApps;
+- (NSMapTable<OAProduct *, OAInAppStateHolder *> *) getExternalInApps;
 
 - (BOOL) productsLoaded;
 

@@ -4689,6 +4689,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [_globalPreferences setObject:_backupFreePlanRegistrationTime forKey:backupFreePlanRegistrationTime];
         
         _backupPromocode = [[OACommonString withKey:backupPromocodeKey defValue:@""] makeGlobal];
+        _backupPurchaseSku = [[OACommonString withKey:backupPromocodeKey defValue:nil] makeGlobal];
         _backupPurchaseActive = [[OACommonBoolean withKey:backupPurchaseActiveKey defValue:NO] makeGlobal];
         _backupPurchaseStartTime = [[OACommonLong withKey:backupPurchaseStartTimeKey defValue:0] makeGlobal];
         _backupPurchaseExpireTime = [[OACommonLong withKey:backupPurchaseExpireTimeKey defValue:0] makeGlobal];

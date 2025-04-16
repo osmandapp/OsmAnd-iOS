@@ -1157,6 +1157,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonLong *backupFreePlanRegistrationTime;
 
 @property (nonatomic) OACommonString *backupPromocode;
+@property (nonatomic) OACommonString *backupPurchaseSku;
 @property (nonatomic) OACommonBoolean *backupPurchaseActive;
 @property (nonatomic) OACommonLong *backupPurchaseStartTime;
 @property (nonatomic) OACommonLong *backupPurchaseExpireTime;

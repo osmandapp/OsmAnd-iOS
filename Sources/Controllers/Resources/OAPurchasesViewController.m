@@ -124,6 +124,8 @@ static BOOL _purchasesUpdated;
     {
         NSArray<OAProduct *> *mainPurchases = [_iapHelper getEverMadeMainPurchases];
         NSMutableArray<OAProduct *> *activeProducts = [NSMutableArray array];
+        NSMutableArray<OAProduct *> *externalActiveProducts = [NSMutableArray array];
+        NSMutableArray<OAInAppStateHolder *> *externalActiveProductHolders = [NSMutableArray array];
         NSMutableArray<OAProduct *> *expiredProducts = [NSMutableArray array];
         for (OAProduct *product in mainPurchases)
         {
@@ -141,10 +143,16 @@ static BOOL _purchasesUpdated;
             else if (product.purchaseState == PSTATE_NOT_PURCHASED)
                 [expiredProducts addObject:product];
         }
-
+        NSMapTable<OAProduct *, OAInAppStateHolder *> *externalInApps = _iapHelper.getExternalInApps;
+        for (OAProduct *product in externalInApps.keyEnumerator)
+        {
+            [externalActiveProducts addObject:product];
+            [externalActiveProductHolders addObject:[externalInApps objectForKey:product]];
+        }
+        
         OAAppSettings *settings = OAAppSettings.sharedManager;
         BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
-        if (activeProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
+        if (activeProducts.count == 0 && externalActiveProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
         {
             if (OABackupHelper.sharedInstance.isRegistered)
             {
@@ -160,7 +168,7 @@ static BOOL _purchasesUpdated;
                     kCellTitleKey : OALocalizedString(@"no_purchases"),
                     kCellDescrKey : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
                 }];
-
+                
                 OATableSectionData *osmAndProSection = [_data createNewSection];
                 [osmAndProSection addRowFromDictionary:@{
                     kCellKeyKey : @"get_osmand_pro",
@@ -176,7 +184,7 @@ static BOOL _purchasesUpdated;
         }
         else
         {
-            if (activeProducts.count > 0 || isProSubscriptionAvailable)
+            if (activeProducts.count > 0 || externalActiveProducts.count > 0 || isProSubscriptionAvailable)
             {
                 OATableSectionData *activeSection = [_data createNewSection];
                 activeSection.headerText = OALocalizedString(@"osm_live_active");
@@ -187,7 +195,7 @@ static BOOL _purchasesUpdated;
                     NSString *dateString = @"";
                     NSString *datePattern = @"";
                     OASubscriptionState *state = [settings.backupPurchaseState get];
-                    BOOL isPromo = ((EOASubscriptionOrigin) [settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
+                    BOOL isPromo = ((EOAPurchaseOrigin) [settings.proSubscriptionOrigin get]) == EOAPurchaseOriginPromo;
                     if (state != OASubscriptionState.EXPIRED)
                         datePattern = OALocalizedString(@"shared_string_expires");
                     else
@@ -214,6 +222,17 @@ static BOOL _purchasesUpdated;
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                         @"product" : product
+                    }];
+                }
+                for (NSInteger i = 0; i < externalActiveProducts.count; i++)
+                {
+                    OAProduct *product = externalActiveProducts[i];
+                    NSNumber *origin = @(externalActiveProductHolders[i].origin);
+                    [activeSection addRowFromDictionary:@{
+                        kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
+                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+                        @"product" : product,
+                        @"origin" : origin
                     }];
                 }
             }
@@ -460,7 +479,17 @@ static BOOL _purchasesUpdated;
     else if ([key isEqualToString:@"product_osmand_start"])
         [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initForFreeStartSubscription]];
     else if ([key hasPrefix:@"product_"])
-        [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"]]];
+    {
+        EOAPurchaseOrigin origin = EOAPurchaseOriginUndefined;
+        id originObj = [item objForKey:@"origin"];
+        if (originObj && [originObj isKindOfClass:NSNumber.class])
+            origin = (EOAPurchaseOrigin) ((NSNumber *)originObj).intValue;
+
+        if (origin != EOAPurchaseOriginUndefined)
+            [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"] origin:origin]];
+        else
+            [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"]]];
+    }
 }
 
 #pragma mark - UITableViewDelegate

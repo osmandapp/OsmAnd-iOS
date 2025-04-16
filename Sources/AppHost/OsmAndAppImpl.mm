@@ -81,6 +81,7 @@
 #define VERSION_4_2 4.2
 #define VERSION_4_4_1 4.41
 #define VERSION_4_7_4 4.74
+#define VERSION_4_7_5 4.75
 
 #define kMaxLogFiles 3
 
@@ -561,6 +562,10 @@ NSString *const kXmlColon = @"_-_";
                 else if (value == 1)
                     [settings.activeMarkers set:TWO_ACTIVE_MARKERS mode:appMode];
             }
+        }
+        if (prevVersion < VERSION_4_7_5)
+        {
+            [OAAppSettings sharedManager].requireUploadPurchases = YES;
         }
 
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];

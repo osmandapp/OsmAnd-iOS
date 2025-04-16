@@ -541,18 +541,16 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
             bool isRoute = !OsmAnd::NetworkRouteKey::getRouteKeys(tags).isEmpty();
 
-            if (!isRoute && OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags(tags)) {
-                return;
-            }
-
             if (isRoute)
                 [self addRoute:found touchPoint:touchPoint mapObj:mapObject];
-            
+
+            bool allowRenderedObjects = !isRoute && !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags(tags);
+
             if (amenityFound)
             {
                 [self processAmenity:amenity mapObject:objSymbolGroup->mapObject poi:poi];
             }
-            else if (!isRoute)
+            else if (allowRenderedObjects)
             {
                 renderedObject = [OARenderedObject parse:mapObject symbolInfo:symbolInfo];
                 if (renderedObject.name && renderedObject.name.length > 0)

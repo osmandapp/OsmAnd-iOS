@@ -61,6 +61,7 @@
     {
         OASubscriptionStateHolder *stateHolder = entry.lastObject;
         
+        [_settings.backupPurchaseSku set:stateHolder.sku];
         [_settings.proSubscriptionOrigin set:(int) stateHolder.origin];
         [_settings.backupPurchaseState set:stateHolder.state];
         [_settings.backupPurchaseStartTime set:stateHolder.startTime];

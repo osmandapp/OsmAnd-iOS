@@ -810,6 +810,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) NSDate* lastReceiptValidationDate; //global ?
 @property (nonatomic, assign) BOOL eligibleForIntroductoryPrice; //global ?
 @property (nonatomic, assign) BOOL eligibleForSubscriptionOffer; //global ?
+@property (nonatomic, assign) BOOL requireUploadPurchases;
 
 // Track recording settings
 @property (nonatomic) OACommonBoolean *saveTrackToGPX;
@@ -1157,6 +1158,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonLong *backupFreePlanRegistrationTime;
 
 @property (nonatomic) OACommonString *backupPromocode;
+@property (nonatomic) OACommonString *backupPurchaseSku;
 @property (nonatomic) OACommonBoolean *backupPurchaseActive;
 @property (nonatomic) OACommonLong *backupPurchaseStartTime;
 @property (nonatomic) OACommonLong *backupPurchaseExpireTime;

@@ -163,6 +163,8 @@ final class RenderedObjectHelper: NSObject {
                 return icon
             } else if let icon = UIImage.mapSvgImageNamed(iconRes) {
                 return icon
+            } else if let icon = UIImage.mapSvgImageNamed("c_" + iconRes) {
+                return icon
             }
         }
         return UIImage.templateImageNamed("ic_action_street_name")

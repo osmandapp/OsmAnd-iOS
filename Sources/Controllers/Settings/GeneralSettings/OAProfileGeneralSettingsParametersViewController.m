@@ -83,7 +83,7 @@
             _title = OALocalizedString(@"units_of_speed");
             break;
         case EOAProfileGeneralSettingsUnitsOfVolume:
-            _title = OALocalizedString(@"units_of_volume");
+            _title = OALocalizedString(@"unit_of_volume");
             break;
         case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             _title = OALocalizedString(@"angular_measurment_units");

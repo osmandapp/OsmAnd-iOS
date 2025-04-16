@@ -1182,7 +1182,7 @@
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
-"units_of_volume" = "Units of volume";
+"unit_of_volume" = "Unit of volume";
 "angular_measurment_units" = "Angular measurment units";
 "distance_during_navigation" = "Distance during navigation";
 "shared_string_precise" = "Precise";

@@ -72,7 +72,7 @@
 "will_open_at" = "Abre a las";
 "will_open_on" = "Abre a las";
 "will_open_tomorrow_at" = "Abre mañana a las";
-"error_avoid_specific_road" = "No se ha encontrado un desvío";
+"error_avoid_specific_road" = "No se encontró un desvío";
 "road_blocked" = "Camino bloqueado";
 "starting_point" = "Punto de partida";
 "shared_string_select_avoid_road_on_map" = "Elige un camino a evitar durante la navegación";
@@ -925,7 +925,7 @@
 "profile_sett_descr" = "Afecta al perfil de la aplicación elegido";
 "import_profile_descr" = "Para importar un perfil, pulsa en el archivo necesario (*.osf) en cualquier aplicación y marca «Copiar a mapas de OsmAnd»";
 "export_profile_descr" = "Puedes exportar todos los ajustes del perfil, copiar todos los ajustes de otro perfil o restablecer todos los ajustes del perfil al estado predefinido.";
-"new_plugin_added" = "Nuevo complemento añadido";
+"new_plugin_added" = "Nuevo complemento agregado";
 "reset_to_default" = "Restaurar a valores predefinidos";
 "reset_profile_action_descr" = "Restablecer todos los ajustes del perfil a los valores predefinidos de la instalación. Al pulsar en «Restablecer» serán descartados todos los cambios. Esta acción no se puede deshacer.";
 "checking_for_duplicates" = "Comprobando duplicados…";
@@ -1009,7 +1009,7 @@
 "plan_route_folder" = "Carpeta";
 "change_folder" = "Cambiar de carpeta";
 "select_folder" = "Elegir carpeta";
-"select_folder_descr" = "Elegir carpeta o añadir una nueva";
+"select_folder_descr" = "Elegir carpeta o agregar una nueva";
 "add_folder" = "Añadir carpeta";
 "select_segment" = "Marca un segmento";
 "track_multiple_segments_select" = "%@ tiene más de un segmento. Marca la parte de la ruta que quieres utilizar para la navegación.";
@@ -1320,7 +1320,7 @@
 "quick_action_poi_add_descr" = "Este botón de acción, añade rápidamente un PDI al mapa con tipos y etiquetas predefinidos.";
 "quick_action_day_night_descr" = "Este botón de acción, cambia entre el modo de mapa Diurno y Nocturno.";
 "quick_action_parking_descr" = "Este botón de acción, añade una ubicación de estacionamiento en el punto central del mapa.";
-"quick_action_add_marker_descr" = "Un botón que añade un marcador en el centro de la pantalla.";
+"quick_action_add_marker_descr" = "Un botón que agrega un marcador en el centro de la pantalla.";
 "quick_action_show_gpx_descr" = "Este botón de acción, muestra u oculta las trazas GPX elegidas en el mapa.";
 "quick_action_voice_descr" = "Este botón de acción, des/activa las indicaciones por voz durante la navegación.";
 "quick_action_add_dest_descr" = "Este botón de acción, añade un destino en el centro de la pantalla. Cualquier destino previamente elegido, se mueve como último destino intermedio.";
@@ -1685,8 +1685,8 @@
 "first_usage_wizard_desc" = "Dejá que OsmAnd determine tu ubicación y sugiera mapas a descargar para esa región.";
 "suggested_maps" = "Mapas sugeridos";
 "suggested_maps_descr" = "Estos mapas deben usarse con el complemento.";
-"added_profiles" = "Perfiles añadidos";
-"added_profiles_descr" = "Perfiles añadidos por el complemento";
+"added_profiles" = "Perfiles agregados";
+"added_profiles_descr" = "Perfiles agregados por el complemento";
 "location_not_found" = "Ubicación no encontrada";
 "search_my_location" = "Encontrar mi ubicación";
 "no_inet_connection" = "Sin conexión a Internet";
@@ -1718,7 +1718,7 @@
 "shared_string_select_all" = "Marcar todo";
 "create_custom_poi" = "Crear filtro personalizado";
 "selected_categories" = "Categorías elegidas";
-"new_filter_desc" = "Ingresá el nombre del nuevo filtro, que se añadirá en la pestaña de «Categorías».";
+"new_filter_desc" = "Ingresá el nombre del nuevo filtro, que se agregará en la pestaña de «Categorías».";
 "rearrange_categories" = "Reordenar categorías";
 "visible_categories" = "Categorías visibles";
 "hidden_categories" = "Categorías ocultas";
@@ -2832,7 +2832,7 @@
 "next_turn_widget_desc" = "Muestra información sobre el próximo giro con una imagen de la maniobra y la distancia hasta ella.";
 "average_speed_widget_desc" = "Muestra la velocidad media del viaje actual.";
 "parking_widget_desc" = "Muestra la distancia desde el centro de la pantalla hasta el lugar del estacionamiento.";
-"mapillary_widget_desc" = "Proporciona un acceso rápido a la aplicación Mapillary para añadir imágenes a nivel de calle.";
+"mapillary_widget_desc" = "Proporciona un acceso rápido a la aplicación Mapillary para agregar imágenes a nivel de calle.";
 "av_notes_choose_action_widget_desc" = "Elegir acción.";
 "radius_rules_widget_desc" = "La herramienta «Regla radial» muestra círculos de distancia alrededor del punto marcado en el mapa.";
 "current_time_widget_desc" = "Muestra la hora actual tomada del dispositivo.";
@@ -2865,7 +2865,7 @@
 "coordinates_widget_secondary_desc" = "El formato de las coordenadas puede cambiarse en %@ → %@ → %@.";
 "widget_secondary_desc_part_of" = "Parte del complemento «%@».";
 "weather_widgets_secondary_desc" = "Las unidades de medida pueden cambiarse dentro del complemento «Meteorología».";
-"add_widget" = "Añadir widget";
+"add_widget" = "Agregar widget";
 "add_page" = "Agregar página";
 "shared_string_switch_mode" = "Cambiar modo";
 "go_to_marker_location" = "Ir a la ubicación del marcador";
@@ -3231,7 +3231,7 @@
 "deleting_complete" = "Borrado completo";
 "osmand_cloud_deletion_secondary_devices_warning" = "Los dispositivos secundarios se desvincularán de OsmAnd Cloud y se perderá el acceso a las funciones de pago.";
 "osmand_cloud_deleting_account_descr" = "En un momento será borrada tu cuenta con todos los datos de OsmAnd Cloud. \n \nTodos los datos en el dispositivo permanecen intactos.";
-"osmand_cloud_deleted_account_descr" = "Se ha borrado la cuenta con todos los datos de OsmAnd Cloud.";
+"osmand_cloud_deleted_account_descr" = "Se borró la cuenta con todos los datos de OsmAnd Cloud.";
 "shared_string_deleting" = "Borrando";
 "shared_string_deleting_complete" = "Borrado completo";
 "shared_string_precise" = "Preciso";
@@ -3639,7 +3639,7 @@
 "shared_string_pause" = "Pausar";
 "quick_action_verb_start_pause" = "Iniciar / Pausar";
 "new_trip_segment" = "Nuevo segmento del viaje";
-"no_photos_available_descr" = "Aún no se añadieron fotos de usuarios a esta ubicación";
+"no_photos_available_descr" = "Aún no se agregaron fotos de usuarios a esta ubicación";
 "shared_string_source" = "Origen";
 "shared_string_date" = "Fecha";
 "no_internet_descr" = "Comprobá tu conexión e intentá de nuevo.";
@@ -3662,3 +3662,4 @@
 "unchanged_parameter_summary" = "Cada traza conservará sus propios parámetros.";
 "each_favourite_point_own_icon" = "Cada punto favorito conservaría su propio ícono.";
 "shared_string_unchanged" = "Sin cambios";
+"ios_release_5_0" = "• Se introdujeron carpetas inteligentes para la organización automática de trazas.\n• Se añadió un visor de galerías a pantalla completa para las imágenes de Wikimedia.\n• Se añadió compatibilidad con la conversión de texto a voz (TTS) en idioma vietnamita y hebreo para la navegación.\n• Se añadieron acciones rápidas para controlar la grabación del viaje.\n• Se añadió una opción de «Guía detallada de la ruta» y un cuadro de diálogo de sugerencia de «Adjuntar a las rutas».\n• Posibilidad de descubrir picos destacados a través del mapa y la búsqueda.\n• Se resaltaron los bordes de los edificios y las zonas con información detallada.\n• Se añadió una opción para alternar la visibilidad de los distintos grupos de favoritos en el mapa.\n• Se ampliaron las opciones de íconos para Favoritos añadiendo íconos para todas las categorías de PDI.\n• Se añadió la visualización del nivel de batería para los sensores externos.\n• Se añadió una opción para cambiar el aspecto de múltiples trazas simultáneamente.\n• Se añadió una acción «Restablecer» para el widget de velocidad media.\n• Búsqueda CarPlay: se añadió la posibilidad de marcar edificios.\n• Se corrigió la secuencia de ingreso de coordenadas UTM.\n• Se corrigió un problema con los colores de los puntos de ruta de las trazas.\n• Se corrigió la falta del botón «Descargar todo» en los mapas topográficos.\n• Se corrigió un problema por el que a veces faltaban artículos populares en las guías de viaje.\n";

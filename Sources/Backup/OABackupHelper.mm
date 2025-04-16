@@ -275,7 +275,7 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
     NSString *error = @"";
     try
     {
-        subscriptionActive = [OAIAPHelper.sharedInstance checkBackupSubscriptions];;
+        subscriptionActive = [OAIAPHelper.sharedInstance checkBackupSubscriptions];
     }
     catch (NSException *e)
     {

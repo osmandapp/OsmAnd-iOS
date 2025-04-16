@@ -2931,7 +2931,7 @@
 "widget_secondary_desc_part_of" = "جزء من المكون الإضافي %@.";
 "angular_measeurement_descr" = "تغيير قياس زاوية السمت.";
 "coordinates_widget_secondary_desc" = "يمكن تغيير تنسيق الإحداثيات في %@ – %@ – %@.";
-"add_widget" = "إضافة ودجت";
+"add_widget" = "إضافة أداة (Widget)";
 "add_page" = "إضافة صفحة";
 "map_widget_time_to_intermediate" = "متوسط وقت الوصول";
 "weather_widgets_secondary_desc" = "يمكن تغيير وحدات القياس في إعدادات الاداة الخاصة بالطقس.";

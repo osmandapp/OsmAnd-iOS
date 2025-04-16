@@ -521,7 +521,7 @@ static const NSInteger kDBVersion = 1;
     item.width = [settings.currentTrackWidth get];
     item.showArrows = [settings.currentTrackShowArrows get];
     item.showStartFinish = [settings.currentTrackShowStartFinish get];
-   // item.joinSegments = [settings.currentTrackIsJoinSegments get];
+    item.joinSegments = [settings.currentTrackIsJoinSegments get];
     item.verticalExaggerationScale = [settings.currentTrackVerticalExaggerationScale get];
     item.elevationMeters = [settings.currentTrackElevationMeters get];
     

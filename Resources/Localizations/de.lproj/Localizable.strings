@@ -468,7 +468,7 @@
 "si_nm_h" = "Seemeilen pro Stunde (Knoten)";
 "min_mile" = "min/mile";
 "looking_up_address" = "Adresse wird gesucht";
-"traffic_warning_hazard" = "Gefährdung";
+"traffic_warning_hazard" = "Gefahr";
 "traffic_warning_railways" = "Bahnübergang";
 "traffic_warning_pedestrian" = "Fußgängerübergang";
 "nm" = "sm";

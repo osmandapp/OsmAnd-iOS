@@ -351,15 +351,15 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (instancetype) makeShared;
 - (instancetype) storeLastModifiedTime;
 
-- (NSObject *) getPrefValue;
-- (NSObject *) getPrefValue:(OAApplicationMode *)mode;
-- (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
-- (void) resetModeToDefault:(OAApplicationMode *)mode;
-- (void) resetToDefault;
-- (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
-- (NSString *) toStringValue:(OAApplicationMode *)mode;
+- (NSObject *)getPrefValue;
+- (NSObject *)getPrefValue:(OAApplicationMode *)mode;
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode;
+- (void)resetModeToDefault:(OAApplicationMode *)mode;
+- (void)resetToDefault;
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
+- (NSString *)toStringValue:(OAApplicationMode *)mode;
 - (NSString *)toStringFromValue:(id)value;
-- (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
+- (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
 
 - (BOOL)isSetForMode:(OAApplicationMode *)mode;
 
@@ -480,12 +480,13 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @interface OACommonMapSource : OACommonPreference
 
-+ (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue;
++ (instancetype)withKey:(NSString *)key defValue:(OAMapSource *)defValue;
 
-- (OAMapSource *) get;
-- (OAMapSource *) get:(OAApplicationMode *)mode;
-- (void) set:(OAMapSource *)mapSource;
-- (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
+- (OAMapSource *)get;
+- (OAMapSource *)get:(OAApplicationMode *)mode;
+- (void)set:(OAMapSource *)mapSource;
+- (void)set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
+- (void)setModeDefaultValue:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -809,6 +810,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) NSDate* lastReceiptValidationDate; //global ?
 @property (nonatomic, assign) BOOL eligibleForIntroductoryPrice; //global ?
 @property (nonatomic, assign) BOOL eligibleForSubscriptionOffer; //global ?
+@property (nonatomic, assign) BOOL requireUploadPurchases;
 
 // Track recording settings
 @property (nonatomic) OACommonBoolean *saveTrackToGPX;
@@ -1156,6 +1158,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonLong *backupFreePlanRegistrationTime;
 
 @property (nonatomic) OACommonString *backupPromocode;
+@property (nonatomic) OACommonString *backupPurchaseSku;
 @property (nonatomic) OACommonBoolean *backupPurchaseActive;
 @property (nonatomic) OACommonLong *backupPurchaseStartTime;
 @property (nonatomic) OACommonLong *backupPurchaseExpireTime;

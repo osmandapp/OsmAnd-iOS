@@ -2053,8 +2053,6 @@ static const NSInteger kColorsSection = 1;
         if (self.isCurrentTrack)
         {
             [self.doc setJoinSegmentIsJoinSegment:toggle];
-            // FIXME:
-            //[OAAppSettings.sharedManager.currentTrackIsJoinSegments set:toggle];
             [[_app updateRecTrackOnMapObservable] notifyEvent];
         }
         else

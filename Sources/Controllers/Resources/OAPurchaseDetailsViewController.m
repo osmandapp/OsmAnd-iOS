@@ -277,6 +277,8 @@
             return OALocalizedString(@"huawei_appgallery");
         case EOAPurchaseOriginIOS:
             return OALocalizedString(@"app_store");
+        case EOAPurchaseOriginFastSpring:
+            return OALocalizedString(@"osmand_web");
 
         default:
             return @"";

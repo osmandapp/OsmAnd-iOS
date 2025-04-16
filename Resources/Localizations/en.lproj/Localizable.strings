@@ -3315,6 +3315,7 @@
 "app_store" = "App Store";
 "amazon_appstore" = "Amazon Appstore";
 "huawei_appgallery" = "Huawei AppGallery";
+"osmand_web" = "OsmAnd Web";
 "promo" = "Promo";
 "purchase_origin" = "Purchase origin";
 "contact_support" = "Contact support";

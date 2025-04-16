@@ -258,6 +258,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
 
     self.navigationController.presentationController.delegate = self;
 }

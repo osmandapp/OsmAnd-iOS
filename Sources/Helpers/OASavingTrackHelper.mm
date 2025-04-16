@@ -27,6 +27,7 @@
 #import "OAAppVersion.h"
 
 #import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -470,14 +471,22 @@ static const NSInteger kDBVersion = 1;
             [gpxFile setAdditionalExaggerationAdditionalExaggeration:[settings.currentTrackVerticalExaggerationScale get]];
             [gpxFile setElevationMetersElevation:[settings.currentTrackElevationMeters get]];
             [gpxFile set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]]];
-            
             [gpxFile set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]]];
-            
-            [gpxFile set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]]];
+            [gpxFile set3DLinePositionTypeTrackLinePositionType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]]];
             
             OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
             [gpxFile setColorColor:color];
             [gpxFile setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
+            // TODO: #4341
+            // [gpxFile setJoinSegmentIsJoinSegment:[settings.currentTrackIsJoinSegments get]];
+           
+            // TODO: - not implemented
+            /*
+            auto getSplitType = [OAGPXDatabase splitTypeByName:[gpxFile getSplitType]];
+            auto getSplitInterval = [gpxFile getSplitInterval];
+            current_track_gradient_palette
+             */
+            
             
             OASKFile *file = [[OASKFile alloc] initWithFilePath:fout];
             
@@ -487,9 +496,11 @@ static const NSInteger kDBVersion = 1;
             {
                 if (![[OAGPXDatabase sharedDb] containsGPXItem:file.absolutePath])
                 {
-                    [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:file.absolutePath];
+                    OASGpxDataItem *dataItem = [[OASGpxDataItem alloc] initWithFile:file];
+                    [dataItem setAnalysisAnalysis:[gpxFile getAnalysisFileTimestamp:file.lastModified]];
+                    [[OASGpxDbHelper shared] addItem:dataItem];
+                    [self saveTrackAppearance:dataItem settings:settings];
                 }
-                
             } else {
                 NSLog(@"[ERROR] -> OASavingTrackHelper | save gpx");
             }
@@ -502,7 +513,30 @@ static const NSInteger kDBVersion = 1;
     });
 }
 
-- (BOOL) saveCurrentTrack:(NSString *)fileName
+- (void)saveTrackAppearance:(OASGpxDataItem *)item
+                   settings:(OAAppSettings *)settings
+{
+    item.color = [settings.currentTrackColor get];
+    item.coloringType = [settings.currentTrackColoringType get].name;
+    item.width = [settings.currentTrackWidth get];
+    item.showArrows = [settings.currentTrackShowArrows get];
+    item.showStartFinish = [settings.currentTrackShowStartFinish get];
+   // item.joinSegments = [settings.currentTrackIsJoinSegments get];
+    item.verticalExaggerationScale = [settings.currentTrackVerticalExaggerationScale get];
+    item.elevationMeters = [settings.currentTrackElevationMeters get];
+    
+    item.visualization3dByType = (EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get];
+    item.visualization3dWallColorType = (EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get];
+    item.visualization3dPositionType = (EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get];
+    /* TODO: Track visualization settings are missing
+    item.splitType = //[OAGPXDatabase splitTypeByName:[gpxFile getSplitType]];
+    item.splitInterval = [settings.currentTrackSplitInterval get]; // [gpxFile getSplitInterval];
+    item.gradientPaletteName = [settings.currentTrackGradientPaletteName get];
+     */
+    [[OASGpxDbHelper shared] updateDataItemItem:item];
+}
+
+- (BOOL)saveCurrentTrack:(NSString *)fileName
 {
     BOOL __block res = NO;
     dispatch_sync(syncQueue, ^{

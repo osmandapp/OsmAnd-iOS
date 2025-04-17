@@ -1400,6 +1400,7 @@
 		C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */; };
 		C5AF907B2A25E8C400989A86 /* OAKeyboardHintBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */; };
 		C5B2AA5F2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2AA5E2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift */; };
+		C5B2AA612DB00700007FB854 /* GridFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2AA602DB00700007FB854 /* GridFormat.swift */; };
 		C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */; };
 		C5B4AE5E2B1F51740019F357 /* MenuHelpDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */; };
 		C5CD4CF029EFE6AC00B35C3D /* ic_navbar_trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */; };
@@ -5066,6 +5067,7 @@
 		C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAKeyboardHintBar.m; sourceTree = "<group>"; };
 		C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAKeyboardHintBar.xib; sourceTree = "<group>"; };
 		C5B2AA5E2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsCoordinatesGridScreen.swift; sourceTree = "<group>"; };
+		C5B2AA602DB00700007FB854 /* GridFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridFormat.swift; sourceTree = "<group>"; };
 		C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpDetailsViewController.swift; sourceTree = "<group>"; };
 		C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHelpDataService.swift; sourceTree = "<group>"; };
 		C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@2x.png"; path = "Resources/Icons/ic_navbar_trash@2x.png"; sourceTree = "<group>"; };
@@ -13288,6 +13290,7 @@
 				05AB445E2C9062F500BF4F05 /* OAOsmAndContextImpl.h */,
 				05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.mm */,
 				466114012C9DB6E00013095B /* DayNightMode.swift */,
+				C5B2AA602DB00700007FB854 /* GridFormat.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -16635,6 +16638,7 @@
 				DA5A846426C563A900F274C7 /* OATerrainMapLayer.mm in Sources */,
 				DA5A830D26C563A800F274C7 /* OATargetInfoCollapsableViewCell.m in Sources */,
 				C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */,
+				C5B2AA612DB00700007FB854 /* GridFormat.swift in Sources */,
 				32E6C7C82AB9BE1A00821F1E /* TravelSearchHelper.swift in Sources */,
 				DA5A840E26C563A800F274C7 /* OAGpxWptEditingHandler.mm in Sources */,
 				46132FB02C904D1A00C9F364 /* DisplayPositionAction.swift in Sources */,

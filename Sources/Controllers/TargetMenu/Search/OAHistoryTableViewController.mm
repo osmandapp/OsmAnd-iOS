@@ -92,11 +92,27 @@
                 return;
         }
         
-        OASearchHistoryTableGroup *groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
-        OASearchHistoryTableItem *dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
-        BOOL isFromNavigation = dataItem.item.fromNavigation;
-        OAHistorySettingsViewController *historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:isFromNavigation ? EOAHistorySettingsTypeNavigation : EOAHistorySettingsTypeSearch editing:YES];
-        [self.navigationController pushViewController:historyViewController animated:YES];
+        if (self.groupsAndItems != nil && indexPath.section < self.groupsAndItems.count)
+        {
+            OASearchHistoryTableGroup *groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
+            
+            if (groupData.groupItems != nil && indexPath.row < groupData.groupItems.count)
+            {
+                OASearchHistoryTableItem *dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
+                BOOL isFromNavigation = dataItem.item.fromNavigation;
+                
+                OAHistorySettingsViewController *historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:isFromNavigation ? EOAHistorySettingsTypeNavigation : EOAHistorySettingsTypeSearch editing:YES];
+                [self.navigationController pushViewController:historyViewController animated:YES];
+            }
+            else
+            {
+                NSLog(@"History search -> Invalid row index: %ld for section: %ld", (long)indexPath.row, (long)indexPath.section);
+            }
+        }
+        else
+        {
+            NSLog(@"History search -> Invalid section index: %ld", (long)indexPath.section);
+        }
         
         // TODO: Remove the commented-out code below and any associated obsolete logic related to the table view's editing mode. https://github.com/osmandapp/OsmAnd-Issues/issues/2431
         

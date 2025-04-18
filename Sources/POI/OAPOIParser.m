@@ -436,6 +436,17 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 
                 excludedPoiAdditionalCategories = [value componentsSeparatedByString:@","];
             }
+            else if (0 == strncmp((const char*)attributes[i].localname, kIconAttributeName,
+                                  kIconAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                NSString * icon = [[NSString alloc] initWithBytes:attributes[i].value
+                                                length:length
+                                              encoding:NSUTF8StringEncoding];
+                
+                if (icon)
+                    [_poiAdditionalCategoryIcons setObject:icon forKey:name];
+            }
         }
 
         if (![[OAAppSettings sharedManager] isTypeDisabled:name])

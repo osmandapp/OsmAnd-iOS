@@ -55,12 +55,13 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
 
 - (UIImage *)icon
 {
-    return [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", self.name]];
+    return [UIImage mapSvgImageNamed:[self iconName]];
 }
 
 - (NSString *)iconName
 {
-    return [NSString stringWithFormat:@"mx_%@", self.name];
+    NSString *additionalCategoryIcon = [OAPOIHelper.sharedInstance getPoiAdditionalCategoryIcon:self.name];
+    return [NSString stringWithFormat:@"mx_%@", additionalCategoryIcon ? additionalCategoryIcon : self.name];
 }
 
 -(BOOL)isEqual:(id)object

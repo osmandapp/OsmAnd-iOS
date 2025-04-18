@@ -452,6 +452,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             cell.backgroundColor = .systemBackground
             cell.setCollectionHandler(colorCollectionHandler)
             cell.collectionView.isScrollEnabled = false
+            cell.disableAnimationsOnStart = true
             cell.useMultyLines = true
             cell.anchorContent(.centerStyle)
         }
@@ -986,7 +987,7 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
             }
         }
         tableView.reloadData()
-        viewController.dismiss(animated: true)
+//        viewController.dismiss(animated: true)
     }
 }
 

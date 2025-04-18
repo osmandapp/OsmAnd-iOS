@@ -3414,3 +3414,8 @@
 "no_bt_permission" = "Puuduvad õigused Bluetoothi kasutamiseks";
 "external_device_blood_pressure" = "Vererõhuandur";
 "external_sensors_not_found" = "Andureid ei leidu";
+"external_device_details_information" = "Lisateave";
+"external_device_details_battery" = "Aku";
+"external_device_details_received_data" = "Vastuvõetud andmed";
+"external_device_unpair_description" = "Andmete kuvamiseks seo andur oma nutiseadmega.";
+"paired_sensors" = "Paardunud andurid";

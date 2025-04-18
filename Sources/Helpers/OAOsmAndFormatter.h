@@ -17,6 +17,9 @@ static const CGFloat METERS_IN_ONE_NAUTICALMILE = 1852.f;
 static const CGFloat YARDS_IN_ONE_METER = 1.0936f;
 static const CGFloat FEET_IN_ONE_METER = YARDS_IN_ONE_METER * 3;
 
+static const CGFloat IMPERIAL_GALLONS_IN_LITER = 4.54609f;
+static const CGFloat US_GALLONS_IN_LITER = 3.78541f;
+
 @interface OAOsmAndFormatter : NSObject
 
 #define MILS_IN_DEGREE 17.777778f
@@ -62,6 +65,9 @@ static const CGFloat FEET_IN_ONE_METER = YARDS_IN_ONE_METER * 3;
 + (NSString *)getFormattedOsmTagValue:(NSString *)tagValue;
 + (NSString *)getFormattedDurationShort:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
 + (NSString *)getFormattedDuration:(NSTimeInterval)seconds;
++ (NSString *)getFormattedFuelCapacity:(EOAVolumeConstant)volumeUnit mode:(OAApplicationMode *)mode value:(double)value;
++ (double)readSavedFuelTankCapacity:(EOAVolumeConstant)volumeUnit mode:(OAApplicationMode *)mode value:(double)value;
++ (double)prepareFuelTankCapacityToSave:(EOAVolumeConstant)volumeUnit value:(double)value;
 + (NSTimeInterval)getStartOfDayForTime:(NSTimeInterval)timestamp;
 + (NSTimeInterval)getStartOfToday;
 + (NSString *)formatValue:(float)value

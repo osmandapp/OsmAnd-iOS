@@ -212,6 +212,7 @@
 		15CD7EAD25B1C1B900BCB36A /* ic_small_waypoints@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */; };
 		15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
+		312196032DAFE0C000360973 /* OAQuickSearchResourceItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 312196022DAFE0C000360973 /* OAQuickSearchResourceItem.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
 		3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */; };
 		320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */; };
@@ -3509,6 +3510,8 @@
 		2503BB823D105783DC4982C8 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
+		312196012DAFE0C000360973 /* OAQuickSearchResourceItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchResourceItem.h; sourceTree = "<group>"; };
+		312196022DAFE0C000360973 /* OAQuickSearchResourceItem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchResourceItem.mm; sourceTree = "<group>"; };
 		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
 		3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsCollectionViewController.swift; sourceTree = "<group>"; };
 		320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerWidgetSettingsViewController.swift; sourceTree = "<group>"; };
@@ -12244,6 +12247,8 @@
 				DA5A7E4826C563A400F274C7 /* OAQuickSearchListItem.mm */,
 				DA5A7E3E26C563A400F274C7 /* OAQuickSearchMoreListItem.h */,
 				DA5A7E4B26C563A400F274C7 /* OAQuickSearchMoreListItem.mm */,
+				312196012DAFE0C000360973 /* OAQuickSearchResourceItem.h */,
+				312196022DAFE0C000360973 /* OAQuickSearchResourceItem.mm */,
 				DA5A7E4926C563A400F274C7 /* OAQuickSearchTableController.h */,
 				DA5A7E2C26C563A400F274C7 /* OAQuickSearchTableController.mm */,
 				DA5A7E4126C563A400F274C7 /* OAQuickSearchViewController.h */,
@@ -17164,6 +17169,7 @@
 				32FF4C352C1A18ED00246B36 /* DownloadingCellCloudHelper.swift in Sources */,
 				46D38AA229C39D7C000AAE0C /* OARoutingFile.m in Sources */,
 				C546C0042AC242D600377EDE /* OAOsmUploadPOIViewController.m in Sources */,
+				312196032DAFE0C000360973 /* OAQuickSearchResourceItem.mm in Sources */,
 				DA5A81CE26C563A700F274C7 /* OATileSource.mm in Sources */,
 				32210DB729893C17005D16CB /* OAOsmUploadGPXViewConroller.m in Sources */,
 				C50867892D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift in Sources */,

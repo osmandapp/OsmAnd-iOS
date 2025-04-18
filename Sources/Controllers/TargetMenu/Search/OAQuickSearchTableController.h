@@ -18,6 +18,7 @@
 @required
 - (void) didSelectResult:(OASearchResult *)result;
 - (void) didShowOnMap:(OASearchResult *)result;
+- (void) didStartDownload;
 
 @end
 

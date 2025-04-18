@@ -53,6 +53,7 @@
 #import "OARightIconTableViewCell.h"
 #import "GeneratedAssetSymbols.h"
 #import "OATopIndexFilter.h"
+#import "OAQuickSearchResourceItem.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -885,9 +886,60 @@
                 [cell.titleLabel setText:[item getName]];
             }
             return cell;
+        } else if ([item getType] == RESOURCE_ITEM)
+        {
+            OASimpleTableViewCell *cell;
+            cell = (DownloadingCell *)[tableView dequeueReusableCellWithIdentifier:[DownloadingCell reuseIdentifier]];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[DownloadingCell reuseIdentifier] owner:self options:nil];
+                cell = (DownloadingCell *)[nib objectAtIndex:0];
+            }
+            if (cell)
+            {
+                OAQuickSearchResourceItem *resourceItem = (OAQuickSearchResourceItem *) item;
+
+                UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
+                UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
+                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc setImage:iconImage forState:UIControlStateNormal];
+                btnAcc.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
+                [cell setAccessoryView:btnAcc];
+
+                [cell leftIconVisibility:YES];
+                cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_map"];
+                [cell.leftIconView setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+                cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                [cell.titleLabel setText:resourceItem.title];
+                [cell.descriptionLabel setText:resourceItem.message];
+            }
+            return cell;
         }
     }
     return nil;
+}
+
+- (void) accessoryButtonPressed:(UIControl *)button withEvent:(UIEvent *)event
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:self.tableView]];
+    if (!indexPath)
+        return;
+
+    NSInteger row = indexPath.row;
+    NSArray<OAQuickSearchListItem *> *dataArray = nil;
+    if (indexPath.section < _dataGroups.count)
+        dataArray = _dataGroups[indexPath.section];
+
+    if (dataArray && row < dataArray.count)
+    {
+        OAQuickSearchResourceItem *item = (OAQuickSearchResourceItem *) dataArray[row];
+        OARepositoryResourceItem *resourceItem = (OARepositoryResourceItem *)item.resourceItem;
+
+        [OAResourcesUIHelper offerDownloadAndInstallOf:resourceItem onTaskCreated:nil onTaskResumed:nil];
+
+        [self.delegate didStartDownload];
+    }
 }
 
 + (NSString *) applySynonyms:(OASearchResult *)res
@@ -953,6 +1005,10 @@
             else if ([item getType] == BUTTON || [item getType] == ACTION_BUTTON)
             {
                 ((OAQuickSearchButtonListItem *) item).onClickFunction(item);
+            }
+            else if ([item getType] == RESOURCE_ITEM)
+            {
+                [self.tableView deselectRowAtIndexPath:indexPath animated:true];
             }
             else
             {

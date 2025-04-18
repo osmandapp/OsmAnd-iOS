@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "OASearchCoreFactory.h"
 
+@class OAResourceItem;
+
 @class OASearchUICore, OASearchResultCollection, OASearchResult, QuadRect;
 @class OASGpxFile;
 
@@ -42,6 +44,8 @@
 - (OASearchUICore *) getCore;
 - (OASearchResultCollection *) getResultCollection;
 - (void) setResultCollection:(OASearchResultCollection *)resultCollection;
+- (NSArray<OAResourceItem *> *) getResourceItems;
+- (void) setResourceItems:(NSArray<OAResourceItem *> *)resourceItems;
 - (void) refreshCustomPoiFilters;
 - (void) cancelSearch:(BOOL)sync;
 

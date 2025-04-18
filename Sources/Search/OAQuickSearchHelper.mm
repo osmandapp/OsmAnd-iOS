@@ -358,6 +358,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
 {
     OASearchUICore *_core;
     OASearchResultCollection *_resultCollection;
+    NSArray<OAResourceItem *> *_resourceItems;
     OAAutoObserverProxy* _localResourcesChangedObserver;
 
     dispatch_queue_t _searchCitiesSerialQueue;
@@ -430,6 +431,16 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
 - (void) setResultCollection:(OASearchResultCollection *)resultCollection
 {
     _resultCollection = resultCollection;
+}
+
+- (NSArray<OAResourceItem *> *) getResourceItems
+{
+    return _resourceItems;
+}
+
+- (void) setResourceItems:(NSArray<OAResourceItem *> *)resourceItems
+{
+    _resourceItems = resourceItems;
 }
 
 - (void) initSearchUICore

@@ -62,6 +62,8 @@
 #import "GeneratedAssetSymbols.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAResourcesUIHelper.h"
+#import "OAQuickSearchResourceItem.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -294,7 +296,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     if ([self getResultCollection])
     {
-        [self updateSearchResult:[self getResultCollection] append:false];
+        [self updateSearchResult:[self getResultCollection] resourceItems:[self getResourceItems] append:false];
         if (self.interruptedSearch || [self.searchUICore isSearchMoreAvailable:[self.searchUICore getPhrase]])
             [self addMoreButton];
     }
@@ -336,6 +338,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     [self stopAddressSearch];
     [self setResultCollection:nil];
+    [self setResourceItems:nil];
     if (self.searchQuery.length == 0)
         [self.searchUICore resetPhrase];
 
@@ -1527,6 +1530,16 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     return [self.searchHelper getResultCollection];
 }
 
+- (void) setResourceItems:(NSArray<OAResourceItem *> *)resourceItems
+{
+    [self.searchHelper setResourceItems:resourceItems];
+}
+
+- (NSArray<OAResourceItem *> *) getResourceItems
+{
+    return [self.searchHelper getResourceItems];
+}
+
 -(void) runSearch
 {
     [self runSearch:self.searchQuery];
@@ -1546,7 +1559,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     [self showWaitingIndicator];
     [self runCoreSearch:text updateResult:updateResult searchMore:searchMore onSearchStarted:nil onPublish:^(OASearchResultCollection *res, BOOL append) {
-        [self updateSearchResult:res append:append];
+        NSArray<OAResourceItem *> *resourceItems = [self getResourceItems:text];
+        [self setResourceItems:resourceItems];
+        [self updateSearchResult:res resourceItems:resourceItems append:append];
     } onSearchFinished:nil];
 }
 
@@ -1586,7 +1601,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             case EOAObjectTypeFilterFinished:
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateSearchResult:[self.searchUICore getCurrentSearchResult] append:NO];
+                    [self updateSearchResult:[self.searchUICore getCurrentSearchResult] resourceItems:nil append:NO];
                 });
                 break;
             }
@@ -1665,9 +1680,35 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if (!searchMore)
     {
         [self setResultCollection:nil];
+        [self setResourceItems:nil];
         if (!updateResult)
-            [self updateSearchResult:nil append:NO];
+            [self updateSearchResult:nil resourceItems:nil append:NO];
     }
+}
+
+- (NSArray<OAResourceItem *> *) getResourceItems:(NSString *)searchString
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSArray<OAWorldRegion *> *searchableContent = [app.worldRegion.flattenedSubregions arrayByAddingObject:app.worldRegion];
+
+    NSComparator regionComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
+        return [region1.name localizedCaseInsensitiveCompare:region2.name];
+    };
+
+    NSString *arg = [NSString stringWithFormat:@".*\\b%@\\b.*", searchString];
+    NSPredicate *startsWith = [NSPredicate predicateWithFormat:@"name MATCHES[cd] %@", arg];
+    NSMutableArray *regions = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
+    if ([regions count] == 0)
+    {
+        NSPredicate *anyStartsWith = [NSPredicate predicateWithFormat:@"ANY allNames MATCHES[cd] %@", arg];
+        [regions addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyStartsWith]];
+    }
+    [regions sortUsingComparator:regionComparator];
+
+    NSArray<OAResourceItem *> *mapsResources = [OAResourcesUIHelper getMapRegionResourcesToDownloadForRegions:regions];
+    return [mapsResources filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAResourceItem *_Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return evaluatedObject.downloadTask == nil;
+    }]];
 }
 
 - (void) showApiResults:(NSArray<OASearchResult *> *)apiResults phrase:(OASearchPhrase *)phrase hasRegionCollection:(BOOL)hasRegionCollection onPublish:(OAPublishCallback)onPublish
@@ -1837,11 +1878,15 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
 }
 
-- (void)updateSearchResult:(OASearchResultCollection *)res append:(BOOL)append
+- (void)updateSearchResult:(OASearchResultCollection *)res resourceItems:(NSArray<OAResourceItem *> *)items append:(BOOL)append
 {
     if (!_paused)
     {
         NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
+        if (items && items.count > 0)
+            for (OAResourceItem *item in items)
+                [rows addObject:[[OAQuickSearchResourceItem alloc] initWithResourceItem:item]];
+
         if (res && [res getCurrentSearchResults].count > 0)
             for (OASearchResult *sr in [res getCurrentSearchResults])
                 [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
@@ -1936,6 +1981,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self hideToolbar];
     [self addHistoryItem:searchResult];
 
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) didStartDownload
+{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

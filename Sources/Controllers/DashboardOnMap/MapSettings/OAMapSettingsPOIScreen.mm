@@ -17,7 +17,6 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAQuickSearchTableController.h"
-#import "OAPOIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 

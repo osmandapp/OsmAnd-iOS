@@ -200,6 +200,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     ref.top = poiAdditional.top;
     ref.isText = poiAdditional.isText;
     ref.order = poiAdditional.order;
+    ref.isHidden = poiAdditional.isHidden;
     ref.tag = poiAdditional.tag;
     ref.nonEditableOsm = poiAdditional.nonEditableOsm;
     ref.value = poiAdditional.value;
@@ -294,6 +295,8 @@ static const char *kIconAttributeName = "icon";
 static NSUInteger kIconAttributeNameLength = 5;
 static const char *kDeprecatedOfAttributeName = "deprecated_of";
 static NSUInteger kDeprecatedOfAttributeNameLength = 14;
+static const char *kHiddenAttributeName = "hidden";
+static NSUInteger kHiddenAttributeNameLength = 7;
 
 
 - (void)elementFound:(const xmlChar *)localname prefix:(const xmlChar *)prefix
@@ -616,6 +619,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     NSString *editValue = nil;
     BOOL nonEditable = NO;
     BOOL top = NO;
+    BOOL isHidden = NO;
     int order = 90;
     BOOL mapOnly = NO;
     BOOL reference = NO;
@@ -757,6 +761,16 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             
             top = [[value lowercaseString] isEqualToString:@"true"];
         }
+        else if (0 == strncmp((const char*)attributes[i].localname, kHiddenAttributeName,
+                              kHiddenAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+            
+            isHidden = [[value lowercaseString] isEqualToString:@"true"];
+        }
     }
     
     if (deprecatedOf)
@@ -769,7 +783,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
         poiType.filter = _currentPOIFilter;
-        poiType.tag = tag ? tag : _currentPOICategory.tag;
+        poiType.tag = tag ? : _currentPOICategory.tag;
         poiType.value = value;
         poiType.tag2 = tag2;
         poiType.value2 = value2;
@@ -779,6 +793,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         poiType.editValue = editValue;
         poiType.reference = reference;
         poiType.mapOnly = mapOnly;
+        poiType.isHidden = isHidden;
         poiType.order = order;
         poiType.isText = isText;
         
@@ -833,6 +848,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     BOOL isText = NO;
     BOOL filterOnly = NO;
     BOOL top = NO;
+    BOOL isHidden = NO;
     
     for(int i = 0; i < attributeCount; i++)
     {
@@ -949,6 +965,16 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             
             top = [[value lowercaseString] isEqualToString:@"true"];
         }
+        else if (0 == strncmp((const char*)attributes[i].localname, kHiddenAttributeName,
+                              kHiddenAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+            
+            isHidden = [[value lowercaseString] isEqualToString:@"true"];
+        }
     }
     
     if (lang)
@@ -977,6 +1003,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         poiType.reference = reference;
         poiType.mapOnly = mapOnly;
         poiType.order = order;
+        poiType.isHidden = isHidden;
         poiType.isText = isText;
         poiType.filterOnly = filterOnly;
         poiType.top = top;

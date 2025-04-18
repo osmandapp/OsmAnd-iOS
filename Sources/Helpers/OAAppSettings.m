@@ -620,6 +620,52 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @end
 
+@interface OAVolumeConstant ()
+
+@property (nonatomic) EOAVolumeConstant vc;
+@property (nonatomic) NSString *key;
+@property (nonatomic) NSString *descr;
+
+@end
+
+@implementation OAVolumeConstant
+
++ (instancetype)withVolumeConstant:(EOAVolumeConstant)vc
+{
+    OAVolumeConstant *obj = [[OAVolumeConstant alloc] init];
+    if (obj)
+    {
+        obj.vc = vc;
+        obj.key = [self.class toShortString:vc];
+        obj.descr = [self.class getUnitSymbol:vc];
+    }
+    return obj;
+}
+
++ (NSString *)toHumanString:(EOAVolumeConstant)vc
+{
+    switch (vc) {
+        case LITRES:
+            return OALocalizedString(@"litres");
+        case IMPERIAL_GALLONS:
+            return OALocalizedString(@"imperial_gallons");
+        case US_GALLONS:
+            return OALocalizedString(@"us_gallons");
+        default:
+            return OALocalizedString(@"litres");
+    }
+}
+
++ (NSString *)getUnitSymbol:(EOAVolumeConstant)vc
+{
+    if (vc == IMPERIAL_GALLONS || vc == US_GALLONS)
+        return OALocalizedString(@"us_gallons_unit");
+    else
+        return OALocalizedString(@"liter");;
+}
+
+@end
+
 @interface OAAngularConstant ()
 
 @property (nonatomic) EOAAngularConstant ac;

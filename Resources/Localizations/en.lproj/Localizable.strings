@@ -726,6 +726,8 @@
 "litres" = "Litres";
 "imperial_gallons" = "Imperial gallons";
 "us_gallons" = "US gallons";
+"liter" = "l";
+"us_gallons_unit" = "gal";
 
 "nothing_found" = "Nothing found";
 "nothing_found_descr" = "Change the search or increase its radius.";
@@ -1698,6 +1700,7 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour line data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
+"shared_string_litres" = "litres";
 
 "test_heightmap" = "Test heightmap";
 "disable_vertex_hillshade_3d" = "Disable vertex hillshade in 3D";
@@ -3086,6 +3089,10 @@
 "routing_attr_motor_type_electric_name" = "Electric";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
 "transport" = "Transport";
+"shared_strings_dimensions" = "Dimensions";
+"fuel_tank_capacity" = "Fuel tank capacity";
+"fuel_tank_capacity_description" = "Enter your tank capacity to accurately track fuel levels and consumption";
+"poi_filter_fuel" = "Fuel";
 
 //Icon categories
 "icon_group_amenity" = "Amenity";

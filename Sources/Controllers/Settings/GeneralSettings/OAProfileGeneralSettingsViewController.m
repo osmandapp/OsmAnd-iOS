@@ -181,21 +181,7 @@
             break;
     }
     
-    NSString* volumeSystemValue;
-    switch ([_settings.volumeUnits get:self.appMode]) {
-        case LITRES:
-            volumeSystemValue = OALocalizedString(@"litres");
-            break;
-        case IMPERIAL_GALLONS:
-            volumeSystemValue = OALocalizedString(@"imperial_gallons");
-            break;
-        case US_GALLONS:
-            volumeSystemValue = OALocalizedString(@"us_gallons");
-            break;
-        default:
-            volumeSystemValue = OALocalizedString(@"litres");
-            break;
-    }
+    NSString* volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     
     NSString* geoFormatValue;
     switch ([_settings.settingGeoFormat get:self.appMode]) {

@@ -439,11 +439,6 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             else if (0 == strncmp((const char*)attributes[i].localname, kIconAttributeName,
                                   kIconAttributeNameLength))
             {
-                if ([name isEqualToString:@"water_filter"])
-                {
-                    BOOL stop = YES;
-                }
-                
                 int length = (int) (attributes[i].end - attributes[i].value);
                 NSString * icon = [[NSString alloc] initWithBytes:attributes[i].value
                                                 length:length

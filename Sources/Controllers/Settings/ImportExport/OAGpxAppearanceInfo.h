@@ -21,6 +21,7 @@
 @property (nonatomic) CGFloat splitInterval;
 @property (nonatomic) BOOL showArrows;
 @property (nonatomic) BOOL showStartFinish;
+@property (nonatomic) BOOL isJoinSegments;
 @property (nonatomic) CGFloat verticalExaggerationScale;
 @property (nonatomic) NSInteger elevationMeters;
 @property (nonatomic) EOAGPX3DLineVisualizationByType visualization3dByType;

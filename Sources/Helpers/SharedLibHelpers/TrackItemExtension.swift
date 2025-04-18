@@ -301,8 +301,8 @@ extension TrackItem {
             elevationMeters = Double(gpx.getElevationMeters())
             visualization3dByType = OAGPXDatabase.lineVisualizationByType(forName: gpx.get3DVisualizationType())
             visualization3dWallColorType = OAGPXDatabase.lineVisualizationWallColorType(forName: gpx.get3DWallColoringType())
-            
             visualization3dPositionType = OAGPXDatabase.lineVisualizationPositionType(forName: gpx.get3DLinePositionType())
+            joinSegments = gpx.isJoinSegments()
         } else {
             debugPrint("resetAppearanceToOriginal -> gpx is empty")
         }

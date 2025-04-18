@@ -187,6 +187,7 @@
         gpx.width = _appearanceInfo.width;
         gpx.showArrows = _appearanceInfo.showArrows;
         gpx.showStartFinish = _appearanceInfo.showStartFinish;
+        gpx.joinSegments = _appearanceInfo.isJoinSegments;
         gpx.verticalExaggerationScale = _appearanceInfo.verticalExaggerationScale;
         gpx.elevationMeters = _appearanceInfo.elevationMeters;
         gpx.visualization3dByType = _appearanceInfo.visualization3dByType;

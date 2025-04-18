@@ -18,7 +18,6 @@ static NSString* const STD_PREFIX = @"std_";
 static NSString* const USER_PREFIX = @"user_";
 static NSString* const CUSTOM_FILTER_ID = @"user_custom_id";
 static NSString* const BY_NAME_FILTER_ID = @"user_by_name";
-static NSString* const MX_PREFIX = @"mx_";
 
 @class OAPOI, OAPOIBaseType, OAPOIType, OAPOICategory, OAAmenityExtendedNameFilter;
 

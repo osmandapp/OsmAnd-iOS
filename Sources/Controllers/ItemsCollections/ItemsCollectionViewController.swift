@@ -987,7 +987,6 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
             }
         }
         tableView.reloadData()
-//        viewController.dismiss(animated: true)
     }
 }
 

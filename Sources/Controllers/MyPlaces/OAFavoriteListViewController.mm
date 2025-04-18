@@ -1120,7 +1120,7 @@ static UIViewController *parentController;
             OAFavoriteGroupEditorViewController *viewController =
                 [[OAFavoriteGroupEditorViewController alloc] initWithGroup:[groupData.favoriteGroup toPointsGroup]];
             viewController.delegate = self;
-            [self showModalViewController:viewController];
+            [self.navigationController pushViewController:viewController animated:YES];
         }];
         appearanceAction.accessibilityLabel = OALocalizedString(@"change_appearance");
         [menuElements addObject:appearanceAction];

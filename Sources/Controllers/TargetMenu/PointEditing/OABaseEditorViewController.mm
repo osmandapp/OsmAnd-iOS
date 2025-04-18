@@ -127,7 +127,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    _saveBarButton = [self createRightNavbarButton:OALocalizedString(@"shared_string_save")
+    _saveBarButton = [self createRightNavbarButton:OALocalizedString(@"shared_string_done")
                                           iconName:nil
                                             action:@selector(onRightNavbarButtonPressed)
                                               menu:nil];
@@ -164,8 +164,6 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 - (void)generateIconSection
 {
     OATableSectionData *iconSection = [self.tableData createNewSection];
-    iconSection.headerText = OALocalizedString(@"shared_string_appearance");
-
     OATableRowData *iconRow = [iconSection createNewRow];
     iconRow.key = kIconsKey;
     iconRow.cellType = [OAIconsPaletteCell getCellIdentifier];
@@ -192,8 +190,6 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 - (void)generateShapeSection
 {
     OATableSectionData *shapeSection = [self.tableData createNewSection];
-    shapeSection.headerText = OALocalizedString(@"shared_string_appearance");
-
     OATableRowData *shapeRow = [shapeSection createNewRow];
     shapeRow.key = kBackgroundsKey;
     shapeRow.cellType = [OAShapesTableViewCell getCellIdentifier];

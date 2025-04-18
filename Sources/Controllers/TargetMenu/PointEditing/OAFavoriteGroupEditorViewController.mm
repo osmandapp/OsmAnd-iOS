@@ -37,6 +37,11 @@
     }
 }
 
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return self.isNewItem ? [super getNavbarColorScheme] : EOABaseNavbarColorSchemeOrange;
+}
+
 #pragma mark - Selectors
 
 - (void)onRightNavbarButtonPressed

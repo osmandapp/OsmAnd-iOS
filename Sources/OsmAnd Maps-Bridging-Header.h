@@ -140,6 +140,7 @@
 #import "OATrackMenuHudViewController.h"
 #import "OABaseTrackMenuHudViewController.h"
 #import "OABaseScrollableHudViewController.h"
+#import "OAMapSettingsTerrainParametersViewController.h"
 #import "OATrackMenuHeaderView.h"
 #import "OACarPlayMapViewController.h"
 #import "OACarPlayDashboardInterfaceController.h"

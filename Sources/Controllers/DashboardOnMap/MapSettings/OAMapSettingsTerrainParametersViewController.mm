@@ -60,6 +60,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     OATableDataModel *_data;
     TerrainMode *_terrainMode;
     OASRTMPlugin *_plugin;
+    OAAppSettings *_settings;
 
     NSArray<NSString *> *_possibleZoomValues;
     
@@ -108,9 +109,10 @@ static const NSInteger kElevationMaxMeters = 2000;
     _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
     _terrainMode = [_plugin getTerrainMode];
     _mapPanel = OARootViewController.instance.mapPanel;
+    _settings = [OAAppSettings sharedManager];
 
-    _baseMinZoom = [_plugin getTerrainMinZoom];
-    _baseMaxZoom = [_plugin getTerrainMaxZoom];
+    _baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_settings.coordinateGridMinZoom get] : [_plugin getTerrainMinZoom];
+    _baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_settings.coordinateGridMaxZoom get] : [_plugin getTerrainMaxZoom];
     _baseAlpha = [_terrainMode getTransparency] * 0.01;
 
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
@@ -197,7 +199,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     [super viewDidAppear:animated];
     
     [_mapPanel targetUpdateControlsLayout:YES
-                     customStatusBarStyle:[OAAppSettings sharedManager].nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+                     customStatusBarStyle:_settings.nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -251,6 +253,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             result = [_terrainMode getDescription];
             break;
         case EOATerrainSettingsTypeZoomLevels:
+        case EOATerrainSettingsTypeCoordinatesGridZoomLevels:
             result = OALocalizedString(@"shared_string_zoom_levels");
             break;
         case EOATerrainSettingsTypeVerticalExaggeration:
@@ -273,6 +276,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         case EOATerrainSettingsTypePalette:
             break;
         case EOATerrainSettingsTypeZoomLevels:
+        case EOATerrainSettingsTypeCoordinatesGridZoomLevels:
             result = OALocalizedString(@"map_settings_zoom_level_description");
             break;
         case EOAGPXSettingsTypeVerticalExaggeration:
@@ -319,7 +323,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             kCellTitleKey : OALocalizedString(@"visibility")
         }];
     }
-    else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
+    else if (_terrainType == EOATerrainSettingsTypeZoomLevels || _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
     {
         [topSection addRowFromDictionary:@{
             kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
@@ -453,6 +457,8 @@ static const NSInteger kElevationMaxMeters = 2000;
         [self applyGPXVerticalExaggerationForScale:_baseGPXVerticalExaggerationScale];
     else if (_terrainType == EOAGPXSettingsTypeWallHeight && _baseGPXElevationMeters != _currentGPXElevationMeters)
         [self applyGPXElevationMeters:_baseGPXElevationMeters];
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels && (_baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom))
+        [self setCoordinatesGridZoomValuesWithMinZoom:_baseMinZoom maxZoom:_baseMaxZoom];
 
     __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
@@ -491,11 +497,17 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (BOOL)resetZoomLevels
 {
-    if (_minZoom != terrainMinSupportedZoom || _maxZoom != terrainMaxSupportedZoom)
+    NSInteger defaultMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? _settings.coordinateGridMinZoom.defValue : terrainMinSupportedZoom;
+    NSInteger defaultMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? _settings.coordinateGridMaxZoom.defValue : terrainMaxSupportedZoom;
+    if (_minZoom != defaultMinZoom || _maxZoom != defaultMaxZoom)
     {
-        _minZoom = terrainMinSupportedZoom;
-        _maxZoom = terrainMaxSupportedZoom;
-        [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+        _minZoom = defaultMinZoom;
+        _maxZoom = defaultMaxZoom;
+        if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
+            [self setCoordinatesGridZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+        else
+            [_terrainMode setZoomValuesWithMinZoom:(int32_t)_minZoom maxZoom:(int32_t)_maxZoom];
+        
         _isValueChange = _baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom;
         [self updateApplyButton];
         return YES;
@@ -581,7 +593,10 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)applyCurrentZoomLevels
 {
-    [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+    if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
+        [self setCoordinatesGridZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+    else
+        [_terrainMode setZoomValuesWithMinZoom:(int32_t)_minZoom maxZoom:(int32_t)_maxZoom];
 }
 
 - (void)applyVerticalExaggerationScale
@@ -596,10 +611,13 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (NSArray<NSString *> *)getPossibleZoomValues
 {
+    NSInteger minZoom = (self.terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels) ? _settings.coordinateGridMinZoom.defValue : terrainMinSupportedZoom;
+    NSInteger maxZoom = (self.terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels) ? _settings.coordinateGridMaxZoom.defValue : terrainMaxSupportedZoom;
+    
     NSMutableArray *res = [NSMutableArray new];
-    for (NSInteger i = terrainMinSupportedZoom; i <= terrainMaxSupportedZoom; i++)
+    for (NSInteger z = minZoom; z <= maxZoom; z++)
     {
-        [res addObject:[NSString stringWithFormat:@"%ld", i]];
+        [res addObject:[NSString stringWithFormat:@"%ld", z]];
     }
     return res;
 }
@@ -620,6 +638,12 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
 }
 
+- (void)setCoordinatesGridZoomValuesWithMinZoom:(NSInteger)baseMinZoom maxZoom:(NSInteger)baseMaxZoom
+{
+    [_settings.coordinateGridMinZoom set:(int)baseMinZoom];
+    [_settings.coordinateGridMaxZoom set:(int)baseMaxZoom];
+}
+
 #pragma mark - Selectors
 
 - (IBAction)backButtonPressed:(UIButton *)sender
@@ -632,7 +656,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     BOOL wasReset = NO;
     if (_terrainType == EOATerrainSettingsTypeVisibility)
         wasReset = [self resetVisibilityValues];
-    else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
+    else if (_terrainType == EOATerrainSettingsTypeZoomLevels || _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
         wasReset = [self resetZoomLevels];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
         wasReset = [self resetVerticalExaggerationValues];
@@ -655,6 +679,8 @@ static const NSInteger kElevationMaxMeters = 2000;
     if (_terrainType == EOATerrainSettingsTypeVisibility && _currentAlpha != [_terrainMode getTransparency] * 0.01)
         [self applyCurrentVisibility];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_minZoom != [_terrainMode getMinZoom] || _maxZoom != [_terrainMode getMaxZoom]))
+        [self applyCurrentZoomLevels];
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels && (_minZoom != [_settings.coordinateGridMinZoom get] || _maxZoom != [_settings.coordinateGridMaxZoom get]))
         [self applyCurrentZoomLevels];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration && _currentVerticalExaggerationScale != _app.data.verticalExaggerationScale)
         [self applyVerticalExaggerationScale];
@@ -953,8 +979,10 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         OACustomPickerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell reuseIdentifier]];
         cell.dataArray = _possibleZoomValues;
-        NSInteger minZoom = _minZoom >= terrainMinSupportedZoom && _minZoom <= terrainMaxSupportedZoom ? (_minZoom - terrainMinSupportedZoom) : 1;
-        NSInteger maxZoom = _maxZoom >= terrainMinSupportedZoom && _maxZoom <= terrainMaxSupportedZoom ? (_maxZoom - terrainMinSupportedZoom) : 1;
+        NSInteger baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? _settings.coordinateGridMinZoom.defValue : terrainMinSupportedZoom;
+        NSInteger baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? _settings.coordinateGridMaxZoom.defValue : terrainMaxSupportedZoom;
+        NSInteger minZoom = _minZoom >= baseMinZoom && _minZoom <= baseMaxZoom ? (_minZoom - baseMinZoom) : 1;
+        NSInteger maxZoom = _maxZoom >= baseMinZoom && _maxZoom <= baseMaxZoom ? (_maxZoom - baseMinZoom) : 1;
         [cell.picker selectRow:indexPath.row == 1 ? minZoom : maxZoom inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
@@ -1098,7 +1126,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         if (intValue <= _maxZoom)
         {
             _minZoom = intValue;
-            [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+            [self applyCurrentZoomLevels];
         }
         else
         {
@@ -1112,7 +1140,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         if (intValue >= _minZoom)
         {
             _maxZoom = intValue;
-            [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+            [self applyCurrentZoomLevels];
         }
         else
         {

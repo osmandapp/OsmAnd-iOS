@@ -80,11 +80,11 @@
         renderedObject.localizedNames = names;
         
         MutableOrderedDictionary<NSString *, NSString *> *parsedTags = [MutableOrderedDictionary new];
-        const auto tags = obfMapObject->getResolvedAttributes();
+        const auto tags = obfMapObject->getResolvedAttributesListPairs();
         for (auto i = tags.begin(); i != tags.end(); ++i)
         {
-            NSString *key = i.key().toNSString();
-            NSString *value = i.value().toNSString();
+            NSString *key = i->first.toNSString();
+            NSString *value = i->second.toNSString();
             parsedTags[key] = value;
         }
         renderedObject.tags = parsedTags;

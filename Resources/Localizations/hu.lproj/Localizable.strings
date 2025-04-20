@@ -1634,7 +1634,7 @@
 "shared_string_time_moving" = "Mozgásban töltött idő";
 "lang_br" = "breton";
 "lang_hsb" = "szorb (felső)";
-"track_coloring_solid" = "Tömör";
+"track_coloring_solid" = "Egyszínű";
 "lang_da" = "dán";
 "lang_sl" = "szlovén";
 "lang_pt" = "portugál";
@@ -1747,7 +1747,7 @@
 "user_login" = "Bejelentkezés";
 "lang_hu_formal" = "magyar (magázó)";
 "lang_af" = "afrikaans";
-"track_show_start_finish_icons" = "Kiindulás és érkezés ikonjainak megjelenítése";
+"track_show_start_finish_icons" = "Kezdőpont és célpont ikonjainak megjelenítése";
 "lang_no" = "norvég bokmål";
 "rendering_attr_showFunicularRoutes_name" = "Siklóvonalak";
 "lang_os" = "oszét";

@@ -4517,7 +4517,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_profilePreferences setObject:_speedSystem forKey:@"default_speed_system"];
-        [_profilePreferences setObject:_volumeUnits forKey:@"default_volume_units"];
+        [_profilePreferences setObject:_volumeUnits forKey:@"unit_of_volume"];
         
         _preciseDistanceNumbers = [OACommonBoolean withKey:preciseDistanceNumbersKey defValue:YES];
         [_preciseDistanceNumbers setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];

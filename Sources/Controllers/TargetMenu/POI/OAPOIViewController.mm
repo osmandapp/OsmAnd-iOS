@@ -354,6 +354,12 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             || [convertedKey hasPrefix:@"lang_yes"]
             || [convertedKey hasPrefix:@"top_index_"])
             continue;
+        
+        OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:convertedKey];
+        if (poiType.isHidden)
+        {
+            continue;
+        }
 
         NSString *textPrefix = @"";
         OACollapsableView *collapsableView;
@@ -370,7 +376,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         NSString *categoryIconId;
         UIImage *categoryIcon;
 
-        OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:convertedKey];
         OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
 
         if (!pt && vl && vl.length > 0 && vl.length < 50)
@@ -385,7 +390,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         if (pt)
         {
             pType = (OAPOIType *) pt;
-            if (pType.filterOnly)
+            if (pType.filterOnly || pType.isHidden)
                 continue;
 
             poiTypeOrder = pType.order;

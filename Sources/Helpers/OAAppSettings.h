@@ -158,6 +158,24 @@ typedef NS_ENUM(NSInteger, EOASpeedConstant)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOAVolumeConstant)
+{
+    LITRES = 0,
+    IMPERIAL_GALLONS,
+    US_GALLONS
+};
+
+@interface OAVolumeConstant : NSObject
+
+@property (nonatomic, readonly) EOAVolumeConstant volume;
+
++ (instancetype) withVolumeConstant:(EOAVolumeConstant)volume;
+
++ (NSString *) toHumanString:(EOAVolumeConstant)volume;
++ (NSString *) getUnitSymbol:(EOAVolumeConstant)volume;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOAAngularConstant)
 {
     DEGREES = 0,
@@ -201,6 +219,7 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 + (BOOL) isLeftHandDriving:(EOADrivingRegion)region;
 + (BOOL) isAmericanSigns:(EOADrivingRegion)region;
 + (EOAMetricsConstant) getDefMetrics:(EOADrivingRegion)region;
++ (EOAVolumeConstant) getDefVolume:(EOADrivingRegion)region;
 + (NSString *) getName:(EOADrivingRegion)region;
 + (NSString *) getDescription:(EOADrivingRegion)region;
 
@@ -543,6 +562,17 @@ typedef NS_ENUM(NSInteger, EOASpeedLimitWarningState)
 
 @end
 
+@interface OACommonVolumeConstant : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAVolumeConstant)defValue;
+
+- (EOAVolumeConstant) get;
+- (EOAVolumeConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAVolumeConstant)volumeConstant;
+- (void) set:(EOAVolumeConstant)volumeConstant mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonAngularConstant : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue;
@@ -769,6 +799,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
+@property (nonatomic) OACommonBoolean *volumeUnitsChangedManually;
 @property (nonatomic) OACommonInteger *mapScreenOrientation;
 @property (nonatomic) OACommonInteger *detailedTrackGuidance;
 @property (nonatomic) OACommonInteger *gpxApproximationDistance;
@@ -928,6 +959,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonAutoZoomMap *autoZoomMapScale;
 @property (nonatomic) OACommonInteger *keepInforming;
 @property (nonatomic) OACommonSpeedConstant *speedSystem;
+@property (nonatomic) OACommonVolumeConstant *volumeUnits;
 @property (nonatomic) OACommonAngularConstant *angularUnits;
 @property (nonatomic) OACommonDouble *speedLimitExceedKmh;
 @property (nonatomic) OACommonDouble *routeRecalculationDistance;

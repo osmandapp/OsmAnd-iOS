@@ -18,6 +18,7 @@
 #import "OASizes.h"
 #import "OAUtilities.h"
 #import "OAApplicationMode.h"
+#import "OAOsmAndFormatter.h"
 
 #define kDot @"."
 #define kComma @","
@@ -32,6 +33,7 @@
     NSDictionary *_vehicleParameter;
     OAAppSettings *_settings;
     BOOL _isMotorType;
+    BOOL _isFuelTankCapacity;
     
     NSArray<NSString *> *_measurementRangeStringArr;
     NSArray<NSNumber *> *_measurementRangeValuesArr;
@@ -62,6 +64,7 @@
     if (_vehicleParameter)
     {
         _isMotorType = [_vehicleParameter[@"name"] isEqualToString:@"motor_type"];
+        _isFuelTankCapacity = [_vehicleParameter[@"name"] isEqualToString:@"fuel_tank_capacity"];
 
         _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
         NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
@@ -70,6 +73,7 @@
         _measurementRangeStringArr = [NSArray arrayWithArray:arr];
         _selectedParameter = _vehicleParameter[@"selectedItem"];
         NSString *valueString = _vehicleParameter[@"value"];
+        
         if ([_selectedParameter intValue] != -1)
         {
             double vl = floorf(_measurementRangeValuesArr[_selectedParameter.intValue].doubleValue * 100 + 0.5) / 100;
@@ -80,6 +84,11 @@
             formatter.maximumFractionDigits = 1;
             formatter.decimalSeparator = kDot;
             _measurementValue = [formatter stringFromNumber:@(vl)];
+        }
+        else if (_isFuelTankCapacity)
+        {
+            NSString *textUnit = [OAVolumeConstant getUnitSymbol:[_settings.volumeUnits get:self.appMode]];
+            _measurementValue = [valueString substringToIndex:valueString.length - textUnit.length];
         }
         else
         {
@@ -104,6 +113,11 @@
     return _vehicleParameter[@"title"];
 }
 
+- (NSString *)getSubtitle
+{
+    return _isFuelTankCapacity ? nil : [super getSubtitle];
+}
+
 - (NSString *)getLeftNavbarButtonTitle
 {
     return OALocalizedString(@"shared_string_cancel");
@@ -111,7 +125,7 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    return _isMotorType ? nil : @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+    return _isMotorType ? nil : @[[self createRightNavbarButton:OALocalizedString(@"shared_string_apply")
                                                        iconName:nil
                                                          action:@selector(onRightNavbarButtonPressed)
                                                            menu:nil]];
@@ -229,12 +243,14 @@
     _data = tableData;
 }
 
-- (NSString *) getMeasurementUnit:(NSString *)parameter
+- (NSString *)getMeasurementUnit:(NSString *)parameter
 {
     if ([parameter isEqualToString:@"weight"])
         return OALocalizedString(@"shared_string_tones");
     else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
         return OALocalizedString(@"shared_string_meters");
+    else if ([parameter isEqualToString:@"fuel_tank_capacity"])
+        return [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     return @"";
 }
 
@@ -366,6 +382,8 @@
         return OALocalizedString(@"lenght_limit_description");
     else if ([parameter isEqualToString:@"motor_type"])
         return OALocalizedString(@"routing_attr_motor_type_description");
+    else if ([parameter isEqualToString:@"fuel_tank_capacity"])
+        return OALocalizedString(@"fuel_tank_capacity_description");
     return @"";
 }
 
@@ -416,6 +434,8 @@
     }
     if (_selectedParameter.intValue != -1)
         _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].doubleValue];
+    if (_isFuelTankCapacity)
+        _measurementValue = [NSString stringWithFormat:@"%f", [OAOsmAndFormatter prepareFuelTankCapacityToSave:[_settings.volumeUnits get:self.appMode] value:[_measurementValue doubleValue]]];
     OACommonString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
     [property set:_measurementValue mode:self.appMode];
     [self dismissViewController];

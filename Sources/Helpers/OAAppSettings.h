@@ -740,6 +740,14 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 @end
 
+@interface OACommonGridFormat : OACommonInteger
+
+@end
+
+@interface OACommonGridLabelsPosition : OACommonInteger
+
+@end
+
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
@@ -780,6 +788,13 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonBoolean *mapSettingShowBordersOfDownloadedMaps;
 @property (nonatomic) OACommonBoolean *mapSettingShowOfflineEdits;
 @property (nonatomic) OACommonBoolean *mapSettingShowOnlineNotes;
+@property (nonatomic) OACommonBoolean *mapSettingShowCoordinatesGrid;
+@property (nonatomic) OACommonGridFormat *coordinateGridFormat;
+@property (nonatomic) OACommonInteger *coordinateGridMinZoom;
+@property (nonatomic) OACommonInteger *coordinateGridMaxZoom;
+@property (nonatomic) OACommonGridLabelsPosition *coordinatesGridLabelsPosition;
+@property (nonatomic) OACommonInteger *coordinatesGridColorDay;
+@property (nonatomic) OACommonInteger *coordinatesGridColorNight;
 @property (nonatomic) OACommonStringList *mapSettingVisibleGpx;
 @property (nonatomic) OACommonInteger *layerTransparencySeekbarMode; // 0 - overlay, 1 - underlay, 2 - off, 3 - undefined, 4 - overlay&underlay
 - (BOOL) getOverlayOpacitySliderVisibility;

@@ -622,7 +622,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OAVolumeConstant ()
 
-@property (nonatomic) EOAVolumeConstant vc;
+@property (nonatomic) EOAVolumeConstant volume;
 @property (nonatomic) NSString *key;
 @property (nonatomic) NSString *descr;
 
@@ -630,21 +630,22 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @implementation OAVolumeConstant
 
-+ (instancetype)withVolumeConstant:(EOAVolumeConstant)vc
++ (instancetype)withVolumeConstant:(EOAVolumeConstant)volume
 {
     OAVolumeConstant *obj = [[OAVolumeConstant alloc] init];
     if (obj)
     {
-        obj.vc = vc;
-        obj.key = [self.class toShortString:vc];
-        obj.descr = [self.class getUnitSymbol:vc];
+        obj.volume = volume;
+        obj.key = [self.class toHumanString:volume];
+        obj.descr = [self.class getUnitSymbol:volume];
     }
     return obj;
 }
 
-+ (NSString *)toHumanString:(EOAVolumeConstant)vc
++ (NSString *)toHumanString:(EOAVolumeConstant)volume
 {
-    switch (vc) {
+    switch (volume)
+    {
         case LITRES:
             return OALocalizedString(@"litres");
         case IMPERIAL_GALLONS:
@@ -656,12 +657,12 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     }
 }
 
-+ (NSString *)getUnitSymbol:(EOAVolumeConstant)vc
++ (NSString *)getUnitSymbol:(EOAVolumeConstant)volume
 {
-    if (vc == IMPERIAL_GALLONS || vc == US_GALLONS)
+    if (volume == IMPERIAL_GALLONS || volume == US_GALLONS)
         return OALocalizedString(@"us_gallons_unit");
     else
-        return OALocalizedString(@"liter");;
+        return OALocalizedString(@"liter");
 }
 
 @end
@@ -682,6 +683,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     if (obj)
     {
         obj.ac = ac;
+        // FIXME: - Check this part of code
         obj.key = [self.class toShortString:ac];
         obj.descr = [self.class getUnitSymbol:ac];
     }
@@ -792,20 +794,10 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 {
     switch (region)
     {
-        case DR_EUROPE_ASIA:
-            return LITRES;
         case DR_US:
             return US_GALLONS;
-        case DR_CANADA:
-            return LITRES;
         case DR_UK_AND_OTHERS:
             return IMPERIAL_GALLONS;
-        case DR_JAPAN:
-            return LITRES;
-        case DR_INDIA:
-            return LITRES;
-        case DR_AUSTRALIA:
-            return LITRES;
         default:
             return LITRES;
     }

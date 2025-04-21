@@ -749,11 +749,12 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 + (NSString *)getFormattedFuelCapacity:(EOAVolumeConstant)volumeUnit mode:(OAApplicationMode *)mode value:(double)value
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    NSString *textValue;
-    if (value == 0.0f) {
-        textValue = OALocalizedString(@"shared_string_none");
-        return [NSString stringWithFormat:@"%@", textValue];
-    } else {
+    
+    if (value == 0.0f)
+        return OALocalizedString(@"shared_string_none");
+    else
+    {
+        NSString *textValue;
         NSString *textUnit;
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
@@ -771,15 +772,19 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 
 + (double)readSavedFuelTankCapacity:(EOAVolumeConstant)volumeUnit mode:(OAApplicationMode *)mode value:(double)value
 {
-    if (value == 0.0f) {
+    if (value == 0.0f)
         return value;
-    }
     
-    if (volumeUnit == US_GALLONS) {
+    if (volumeUnit == US_GALLONS)
+    {
         return value / US_GALLONS_IN_LITER;
-    } else if (volumeUnit == IMPERIAL_GALLONS) {
+    }
+    else if (volumeUnit == IMPERIAL_GALLONS)
+    {
         return value / IMPERIAL_GALLONS_IN_LITER;
-    } else {
+    }
+    else
+    {
         return value;
     }
 }
@@ -787,12 +792,18 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 + (double)prepareFuelTankCapacityToSave:(EOAVolumeConstant)volumeUnit value:(double)value
 {
     double preparedValueToSave = 0;
-    if (value != 0.0f) {
-        if (volumeUnit == US_GALLONS) {
+    if (value != 0.0f)
+    {
+        if (volumeUnit == US_GALLONS)
+        {
             preparedValueToSave = value * US_GALLONS_IN_LITER;
-        } else if (volumeUnit == IMPERIAL_GALLONS) {
+        }
+        else if (volumeUnit == IMPERIAL_GALLONS)
+        {
             preparedValueToSave = value * IMPERIAL_GALLONS_IN_LITER;
-        } else {
+        }
+        else
+        {
             preparedValueToSave = value;
         }
     }

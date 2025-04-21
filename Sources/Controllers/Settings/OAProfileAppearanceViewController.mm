@@ -931,7 +931,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss
 {
     if (collectionView == [_colorCollectionHandler getCollectionView])
     {

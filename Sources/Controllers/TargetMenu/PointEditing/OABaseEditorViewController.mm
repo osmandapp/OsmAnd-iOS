@@ -533,7 +533,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss
 {
     _wasChanged = YES;
     if (collectionView == [_poiIconCollectionHandler getCollectionView])

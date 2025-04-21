@@ -103,25 +103,33 @@
     NSIndexPath *prevSelectedIndexPath = indexPath.row <= _selectedIndexPath.row
         ? [NSIndexPath indexPathForRow:_selectedIndexPath.row + 1 inSection:_selectedIndexPath.section]
         : _selectedIndexPath;
-    _selectedIndexPath = indexPath;
+    [self setSelectedIndexPath:indexPath];
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
-        [weakSelf insertItem:newItem atIndexPath:indexPath];
-    } completion:^(BOOL finished) {
-        NSIndexPath *prevIndex = [weakSelf getSelectedIndexPath];
-        if (!prevIndex)
-            prevIndex = [NSIndexPath indexPathForRow:0 inSection:0];
-        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, prevIndex]];
+        [weakSelf insertItem:newItem atIndexPath:weakSelf.selectedIndexPath];
         
-        if (weakSelf.delegate)
-        {
-            [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:nil collectionView:collectionView];
+        if (weakSelf.isOpenedFromAllColorsScreen) {
+            dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC));
+            dispatch_after(delay, dispatch_get_main_queue(), ^{
+                [collectionView reloadData];
+            });
         }
         
-        [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
+    } completion:^(BOOL finished) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+           if (!strongSelf) return;
         
-        if (weakSelf.hostCell && [weakSelf.hostCell needUpdateHeight])
-            [weakSelf.delegate reloadCollectionData];
+        NSIndexPath *prevIndex = [strongSelf getSelectedIndexPath];
+        if (!prevIndex)
+            prevIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+        
+        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, prevIndex]];
+        [strongSelf scrollToIndexPathIfNeeded:strongSelf.selectedIndexPath];
+        
+        [strongSelf.delegate onCollectionItemSelected:prevIndex selectedItem:newItem collectionView:collectionView shouldDismiss:NO];
+        
+        if (strongSelf.hostCell && [strongSelf.hostCell needUpdateHeight])
+            [strongSelf.delegate reloadCollectionData];
     }];
 }
 
@@ -150,7 +158,7 @@
     if (self.delegate)
     {
         if (indexPath == _selectedIndexPath)
-            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView];
+            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView shouldDismiss:YES];
         else
             [self.delegate reloadCollectionData];
     }
@@ -189,14 +197,17 @@
     } completion:^(BOOL finished) {
         if (indexPath == weakSelf.selectedIndexPath)
         {
-            weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
             [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
             [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
         }
         else if (indexPath.row < weakSelf.selectedIndexPath.row)
         {
-            weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section];
+            [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section]];
         }
+        
+        if (weakSelf.delegate)
+            [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:[weakSelf getSelectedItem] collectionView:[self getCollectionView] shouldDismiss:NO];
     }];
 }
 
@@ -357,7 +368,7 @@
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath {
     if (self.delegate)
-        [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:[self getCollectionView]];
+        [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:[self getCollectionView] shouldDismiss:YES];
 }
 
 - (void)selectColorItem:(OAColorItem *)colorItem
@@ -370,7 +381,7 @@
     
     if (self.delegate)
     {
-        [self.delegate onCollectionItemSelected:selectedIndex selectedItem:nil collectionView:[self getCollectionView]];
+        [self.delegate onCollectionItemSelected:selectedIndex selectedItem:nil collectionView:[self getCollectionView] shouldDismiss:YES];
     }
 }
 

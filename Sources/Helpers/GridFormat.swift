@@ -51,9 +51,41 @@ enum GridFormat: Int32, CaseIterable {
     }
 }
 
+@objc
+enum GridLabelsPosition: Int32, CaseIterable {
+    case edges
+    case center
+    
+    var iconName: String {
+        switch self {
+        case .edges:
+            return "ic_custom_grid_label_edges"
+        case .center:
+            return "ic_custom_grid_label_center"
+        }
+    }
+    
+    var titleKey: String {
+        switch self {
+        case .edges:
+            return "shared_string_edges"
+        case .center:
+            return "position_on_map_center"
+        }
+    }
+    
+    var icon: UIImage? {
+        UIImage(named: iconName)
+    }
+    
+    var title: String {
+        localizedString(titleKey)
+    }
+}
+
 @objcMembers
 final class GridFormatWrapper: NSObject {
-    @objc static func gridFormatRaw(forGeoFormat geoFormatId: Int32) -> NSNumber {
+    static func gridFormatRaw(forGeoFormat geoFormatId: Int32) -> NSNumber {
         let format = GridFormat.valueOf(geoFormatId)
         return NSNumber(value: format.rawValue)
     }

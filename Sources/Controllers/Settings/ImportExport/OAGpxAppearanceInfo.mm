@@ -25,6 +25,7 @@
         _width = dataItem.width;
         _showArrows = dataItem.showArrows;
         _showStartFinish = dataItem.showStartFinish;
+        _isJoinSegments = dataItem.joinSegments;
         _verticalExaggerationScale = dataItem.verticalExaggerationScale;
         _elevationMeters = dataItem.elevationMeters;
         _visualization3dByType = dataItem.visualization3dByType;
@@ -51,6 +52,7 @@
     json[@"width"] = _width;
     json[@"show_arrows"] = _showArrows ? @"true" : @"false";
     json[@"show_start_finish"] = _showStartFinish ? @"true" : @"false";
+    json[@"is_join_segments"] = _isJoinSegments ? @"true" : @"false";
     json[@"vertical_exaggeration_scale"] = [NSString stringWithFormat:@"%f", _verticalExaggerationScale];
     json[@"elevation_meters"] = [NSString stringWithFormat:@"%ld", _elevationMeters];
     
@@ -83,6 +85,7 @@
     gpxAppearanceInfo.width = json[@"width"];
     gpxAppearanceInfo.showArrows = [json[@"show_arrows"] boolValue];
     gpxAppearanceInfo.showStartFinish = [json[@"show_start_finish"] boolValue];
+    gpxAppearanceInfo.isJoinSegments = [json[@"is_join_segments"] boolValue];
     gpxAppearanceInfo.verticalExaggerationScale = [json[@"vertical_exaggeration_scale"] floatValue];
     gpxAppearanceInfo.elevationMeters = [json[@"elevation_meters"] integerValue];
     

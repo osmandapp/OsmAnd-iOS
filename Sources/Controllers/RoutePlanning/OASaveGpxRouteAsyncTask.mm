@@ -144,6 +144,7 @@
     {
         gpx.showArrows = oldGpx.showArrows;
         gpx.showStartFinish = oldGpx.showStartFinish;
+        gpx.joinSegments = oldGpx.joinSegments;
         gpx.verticalExaggerationScale = oldGpx.verticalExaggerationScale;
         gpx.elevationMeters = oldGpx.elevationMeters;
         gpx.visualization3dByType = oldGpx.visualization3dByType;

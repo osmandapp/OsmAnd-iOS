@@ -1634,7 +1634,7 @@
 "shared_string_time_moving" = "Mozgásban töltött idő";
 "lang_br" = "breton";
 "lang_hsb" = "szorb (felső)";
-"track_coloring_solid" = "Tömör";
+"track_coloring_solid" = "Egyszínű";
 "lang_da" = "dán";
 "lang_sl" = "szlovén";
 "lang_pt" = "portugál";
@@ -1747,7 +1747,7 @@
 "user_login" = "Bejelentkezés";
 "lang_hu_formal" = "magyar (magázó)";
 "lang_af" = "afrikaans";
-"track_show_start_finish_icons" = "Kiindulás és érkezés ikonjainak megjelenítése";
+"track_show_start_finish_icons" = "Kezdőpont és célpont ikonjainak megjelenítése";
 "lang_no" = "norvég bokmål";
 "rendering_attr_showFunicularRoutes_name" = "Siklóvonalak";
 "lang_os" = "oszét";
@@ -1816,7 +1816,7 @@
 "unlimited_map_downloads" = "Korlátlan térképletöltés";
 "transport_hazmat_no_desc" = "Egyes utakon és alagutakban korlátozott lehet a veszélyes anyagok szállítása.";
 "purchases_feature_desc_osmand_cloud" = "Szerezzen OsmAnd Cloud felhőtárhelyet az összes OsmAnd-adat online tárolásához. Nincs többé adatvesztés az újratelepítés után. Az összes információ biztonsági mentése és visszaállítása egyszerű lesz.";
-"complete_purchase" = "Vásárlás befejezése";
+"complete_purchase" = "Vásárlás véglegesítése";
 "routing_attr_allow_private_for_truck_description" = "Tehergépjárművek számára a magánterületre való behajtás engedélyezése.";
 "routing_attr_hazmat_category_no_restrictions_name" = "„A” (nincs korlátozás)";
 "on_hold" = "Várakoztatva";
@@ -2967,3 +2967,4 @@
 "avg_sensor_cadence" = "Pedálfordulat, átlag";
 "cloud_sync_progress" = "Szinkronizálás...%@";
 "no_photos_available_descr" = "Ehhez a helyhez még nem adtak hozzá felhasználói fényképeket";
+"detailed_track_guidance" = "Nyomvonal korrekció";

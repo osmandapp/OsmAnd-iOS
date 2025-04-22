@@ -37,6 +37,7 @@ static NSString * const settingMapShowAltInDriveModeKey = @"settingMapShowAltInD
 static NSString * const settingDoNotShowPromotionsKey = @"settingDoNotShowPromotionsKey";
 static NSString * const settingUseFirebaseKey = @"settingUseFirebaseKey";
 static NSString * const metricSystemChangedManuallyKey = @"metricSystemChangedManuallyKey";
+static NSString * const volumeUnitsChangedManuallyKey = @"volumeUnitsChangedManuallyKey";
 static NSString * const liveUpdatesPurchasedKey = @"liveUpdatesPurchasedKey";
 static NSString * const settingOsmAndLiveEnabledKey = @"settingOsmAndLiveEnabledKey";
 static NSString * const liveUpdatesRetriesKey = @"liveUpdatesRetriesKey";
@@ -164,6 +165,7 @@ static NSString * const useV1AutoZoomKey = @"useV1AutoZoom";
 static NSString * const autoZoomMapScaleKey = @"autoZoomMapScale";
 static NSString * const keepInformingKey = @"keepInforming";
 static NSString * const speedSystemKey = @"speedSystem";
+static NSString * const volumeSystemKey = @"volumeSystem";
 static NSString * const angularUnitsKey = @"angularUnits";
 static NSString * const speedLimitExceedKey = @"speedLimitExceed";
 static NSString * const showArrivalTimeKey = @"showArrivalTime";
@@ -618,6 +620,53 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @end
 
+@interface OAVolumeConstant ()
+
+@property (nonatomic) EOAVolumeConstant volume;
+@property (nonatomic) NSString *key;
+@property (nonatomic) NSString *descr;
+
+@end
+
+@implementation OAVolumeConstant
+
++ (instancetype)withVolumeConstant:(EOAVolumeConstant)volume
+{
+    OAVolumeConstant *obj = [[OAVolumeConstant alloc] init];
+    if (obj)
+    {
+        obj.volume = volume;
+        obj.key = [self.class toHumanString:volume];
+        obj.descr = [self.class getUnitSymbol:volume];
+    }
+    return obj;
+}
+
++ (NSString *)toHumanString:(EOAVolumeConstant)volume
+{
+    switch (volume)
+    {
+        case LITRES:
+            return OALocalizedString(@"litres");
+        case IMPERIAL_GALLONS:
+            return OALocalizedString(@"imperial_gallons");
+        case US_GALLONS:
+            return OALocalizedString(@"us_gallons");
+        default:
+            return OALocalizedString(@"litres");
+    }
+}
+
++ (NSString *)getUnitSymbol:(EOAVolumeConstant)volume
+{
+    if (volume == IMPERIAL_GALLONS || volume == US_GALLONS)
+        return OALocalizedString(@"us_gallons_unit");
+    else
+        return OALocalizedString(@"liter");
+}
+
+@end
+
 @interface OAAngularConstant ()
 
 @property (nonatomic) EOAAngularConstant ac;
@@ -634,6 +683,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     if (obj)
     {
         obj.ac = ac;
+        // FIXME: - Check this part of code
         obj.key = [self.class toShortString:ac];
         obj.descr = [self.class getUnitSymbol:ac];
     }
@@ -737,6 +787,19 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
         default:
             return KILOMETERS_AND_METERS;
+    }
+}
+
++ (EOAVolumeConstant)getDefVolume:(EOADrivingRegion)region
+{
+    switch (region)
+    {
+        case DR_US:
+            return US_GALLONS;
+        case DR_UK_AND_OTHERS:
+            return IMPERIAL_GALLONS;
+        default:
+            return LITRES;
     }
 }
 
@@ -2536,6 +2599,77 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
+@implementation OACommonVolumeConstant
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAVolumeConstant)defValue {
+    OACommonVolumeConstant *obj = [[OACommonVolumeConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAVolumeConstant)get
+{
+    return [super get];
+}
+
+- (EOAVolumeConstant)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOAVolumeConstant)volumeConstant
+{
+    [super set:volumeConstant];
+}
+
+- (void)set:(EOAVolumeConstant)volumeConstant mode:(OAApplicationMode *)mode
+{
+    [super set:volumeConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOAVolumeConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAVolumeConstant)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"LITRES"])
+        return [self set:LITRES mode:mode];
+    else if ([strValue isEqualToString:@"IMPERIAL_GALLONS"])
+        return [self set:IMPERIAL_GALLONS mode:mode];
+    else if ([strValue isEqualToString:@"US_GALLONS"])
+        return [self set:US_GALLONS mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case LITRES:
+            return @"LITRES";
+        case IMPERIAL_GALLONS:
+            return @"IMPERIAL_GALLONS";
+        case US_GALLONS:
+            return @"US_GALLONS";
+        default:
+            return @"LITRES";
+    }
+}
+
+@end
+
 @implementation OACommonAngularConstant
 
 @dynamic defValue;
@@ -2727,6 +2861,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     [super set:drivingRegionConstant mode:mode];
     if (![[OAAppSettings sharedManager].metricSystemChangedManually get:mode])
         [[OAAppSettings sharedManager].metricSystem set:[OADrivingRegion getDefMetrics:drivingRegionConstant] mode:mode];
+    if (![[OAAppSettings sharedManager].volumeUnitsChangedManually get:mode])
+        [[OAAppSettings sharedManager].volumeUnits set:[OADrivingRegion getDefVolume:drivingRegionConstant] mode:mode];
 }
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
@@ -4366,6 +4502,8 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         _drivingRegion = [OACommonDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
         _metricSystem = [OACommonMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
         _metricSystemChangedManually = [OACommonBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
+        _volumeUnitsChangedManually = [OACommonBoolean withKey:volumeUnitsChangedManuallyKey defValue:NO];
+        
         _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:GENERIC_EXTERNAL_DEVICE];
 
@@ -4373,16 +4511,19 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
         [_profilePreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
+        [_profilePreferences setObject:_volumeUnitsChangedManually forKey:@"volume_units_changed_manually"];
         [_profilePreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_profilePreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
 
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
+        _volumeUnits = [OACommonVolumeConstant withKey:volumeSystemKey defValue:LITRES];
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
 
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_profilePreferences setObject:_speedSystem forKey:@"default_speed_system"];
+        [_profilePreferences setObject:_volumeUnits forKey:@"unit_of_volume"];
         
         _preciseDistanceNumbers = [OACommonBoolean withKey:preciseDistanceNumbersKey defValue:YES];
         [_preciseDistanceNumbers setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];

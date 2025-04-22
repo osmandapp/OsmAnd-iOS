@@ -330,14 +330,17 @@
 
         __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray<NSIndexPath *> *visibleRows = [weakSelf.tableView indexPathsForVisibleRows];
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+            NSArray<NSIndexPath *> *visibleRows = [strongSelf.tableView indexPathsForVisibleRows];
             for (NSIndexPath *visibleRow in visibleRows)
             {
-                OAGPXTableCellData *cellData = weakSelf.data.subjects[visibleRow.section].subjects[visibleRow.row];
-                if (weakSelf.trackMenuDelegate)
-                    [weakSelf.trackMenuDelegate updateProperty:@"update_distance_and_direction" tableData:cellData];
+                OAGPXTableCellData *cellData = strongSelf.data.subjects[visibleRow.section].subjects[visibleRow.row];
+                if (strongSelf.trackMenuDelegate)
+                    [strongSelf.trackMenuDelegate updateProperty:@"update_distance_and_direction" tableData:cellData];
             }
-            [weakSelf.tableView reloadRowsAtIndexPaths:visibleRows
+            [strongSelf.tableView reloadRowsAtIndexPaths:visibleRows
                                   withRowAnimation:UITableViewRowAnimationNone];
         });
     }

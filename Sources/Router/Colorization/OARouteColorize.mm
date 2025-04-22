@@ -255,7 +255,15 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
 - (NSArray<OARouteColorizationPoint *> *)getResult
 {
     NSMutableArray<OARouteColorizationPoint *> *result = [NSMutableArray array];
-    for (int i = 0; i < _latitudes.count; i++)
+    if (_latitudes.count != _longitudes.count || _latitudes.count != _values.count)
+    {
+        NSLog(@"[Error] Mismatch in array sizes: latitudes=%lu, longitudes=%lu, values=%lu",
+              (unsigned long)_latitudes.count,
+              (unsigned long)_longitudes.count,
+              (unsigned long)_values.count);
+    }
+    NSUInteger count = MIN(MIN(_latitudes.count, _longitudes.count), _values.count);
+    for (int i = 0; i < count; i++)
     {
         [result addObject:[[OARouteColorizationPoint alloc] initWithIdentifier:i lat:_latitudes[i].doubleValue lon:_longitudes[i].doubleValue val:_values[i].doubleValue]];
     }

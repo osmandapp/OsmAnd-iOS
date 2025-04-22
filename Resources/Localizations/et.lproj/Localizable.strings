@@ -622,8 +622,8 @@
 "unsaved_changes_will_be_lost" = "Kõik salvestamata muudatused lähevad kaduma. Jätkata\?";
 "osm_upload_no_internet" = "Palun kontrolli oma interneti-ühendust ja proovi uuesti.";
 "osm_delete_confirmation_descr" = "Oled kindel, et soovid selle HP kustutada?";
-"osm_succsessful_uploads" = "Edukas";
-"osm_failed_uploads" = "Ebaõnnestus";
+"osm_succsessful_uploads" = "Õnnestus";
+"osm_failed_uploads" = "Ei õnnestunud";
 "osn_bug_name" = "OSM märge";
 "osm_created" = "Loodud";
 "poi_remove_success" = "Kustutatud";
@@ -1618,7 +1618,7 @@
 "hide_terrain" = "Peida maastik";
 "show_terrain" = "Kuva maastik";
 "map_look_descr" = "Kaardi välimus";
-"osm_editing_settings_descr" = "Selle lisaprogrammi seaded kehtivad kogu rakenduses ja rakenduvad kõikidele profiilidele.";
+"osm_editing_settings_descr" = "Selle lisaprogrammi seadistused kehtivad kogu rakenduses ja rakenduvad kõikidele profiilidele.";
 // Menu
 "shared_string_menu" = "Menüü";
 "res_edit_map_source" = "Muuda kaardi allikat";
@@ -3419,3 +3419,26 @@
 "external_device_details_received_data" = "Vastuvõetud andmed";
 "external_device_unpair_description" = "Andmete kuvamiseks seo andur oma nutiseadmega.";
 "paired_sensors" = "Paardunud andurid";
+"backup_empty_data_from_category" = "Teenuses OsmAnd Cloud pole selle kategooria andmeid.";
+"osm_live_payment_year_cost_descr" = "%@ / aastas";
+"local_changes" = "Kohalikud muudatused";
+"product_desc_development" = "Arendajatele ja kogemustega kasutajatele";
+"cloud_conflict" = "Versioonikonflikt";
+"local_file_will_be_restored" = "Kohalik fail kuulub taastamisele";
+"backup_remove_old_versions_finished" = "Vanad versioonid on teenusest OsmAnd Cloud kustutatud.";
+"last_synchronization" = "Viimane sünkroniseerimine";
+"backup_delete_all_data_or_versions_descr" = "Kustuta kõik andmed teenusest OsmAnd Cloud või ainult versioonide ajalugu. Nutiseadmes olevad andmed jäävad alles.";
+"restore_purchase" = "Taasta ost";
+"upload_change" = "Laadi muudatus üles";
+"cloud_changes_will_be_dismissed" = "Pilves olevad muudatused lähevad kaotsi";
+"cloud_version_will_be_removed" = "Pilves olev versioon kuulub eemaldamisele";
+"backup_delete_all_data_in_progress" = "Palun oota, kuni OsmAnd kustutab pilvest kõik sinu andmed. Nutiseadmes olevad andmed jäävad alles.";
+"local_changes_will_be_dismissed" = "Kohalikus nutiseadmes olevad muudatused lähevad kaotsi";
+"last_sync" = "Viimane sünkroonimine";
+"backup_delete_all_data_finished" = "Kõik sinu andmed on teenusest OsmAnd Cloud kustutatud.";
+"backup_delete_data_type_description" = "Sa oled kustutamas kõik %@ andmed teenuses OsmAnd Cloud. Seda tegevust pole võimalik tagasi pöörata.";
+"restore_backup_descr" = "Taasta võrguvarundusest andmed nutiseadmes";
+"map_download_privacy_descr" = "Kaartide allalaadimisel sa nõustud <a href='https://osmand.net/docs/legal/terms-of-use'>Kasutustingimustega</a> ja <a href='https://osmand.net/docs/legal/privacy-policy'>Privaatsusreeglitega</a>.";
+"sync_now" = "Sünkroniseeri nüüd";
+"local_backup_empty_file" = "Varukoopia failis pole mitte midagi, mida saaks taastada.";
+"cloud_conflict_descr" = "Kohalikus ja pilveversioonis on peale viimast sünkroniseerimist toimunud muudatusi.";

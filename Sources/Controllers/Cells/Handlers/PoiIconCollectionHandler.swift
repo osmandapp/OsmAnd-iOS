@@ -55,6 +55,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         } else {
             categories = Self.cachedCategories
             categoriesByKeyName = Self.cachedCategoriesByKeyName
+            initLastUsedCategory()
         }
     }
     
@@ -105,7 +106,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private func initLastUsedCategory() {
         if let icons = OAAppSettings.sharedManager().lastUsedFavIcons.get(), !icons.isEmpty {
             lastUsedIcons = icons
-            categories.append(IconsCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true))
+            let category = IconsCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
+            categories.append(category)
+            categoriesByKeyName[LAST_USED_KEY] = category
         }
     }
     

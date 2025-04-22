@@ -1137,7 +1137,7 @@
 "rendering_attr_trainLightrailRoutes_name" = "Vlakové linky";
 "rendering_value_translucent_purple_name" = "Priehľadná fialová";
 "rendering_value_highContrastRoads_name" = "Vysoko kontrastné cesty";
-"rendering_attr_showLez_description" = "Zobraziť Zóny s nízkymi emisiami na mape. Neovplyvňuje navigáciu.";
+"rendering_attr_showLez_description" = "Zobraziť zóny s nízkymi emisiami na mape. Neovplyvňuje navigáciu.";
 "routing_attr_driving_style_name" = "Štýl jazdy";
 "rendering_attr_roadColors_description" = "Vyberte farebnú schému pre cesty:";
 "rendering_attr_smoothness_excellent_name" = "Vynikajúca";
@@ -1286,7 +1286,7 @@
 "rendering_attr_hikingRoutesOSMC_description" = "Kresliť chodníky podľa značenia OSMC.";
 "rendering_attr_highway_class_road_name" = "Cesta";
 "rendering_attr_smoothness_intermediate_name" = "Stredná";
-"rendering_attr_showLez_name" = "Zobraziť Zóny s nízkymi emisiami";
+"rendering_attr_showLez_name" = "Zobraziť zóny s nízkymi emisiami";
 "routing_attr_max_num_changes_description" = "Zadajte hornú hranicu zmien";
 "rendering_attr_alpineHiking_description" = "Typy klasifikácií obtiažnosti pre trasy.";
 "routing_attr_relief_smoothness_factor_hills_name" = "Pahorkatý";

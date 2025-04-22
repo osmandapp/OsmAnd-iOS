@@ -3646,7 +3646,7 @@
 "rendering_attr_horse_scale_impossible_name" = "Impossible";
 "rendering_attr_smoothness_excellent_name" = "Excellent";
 "shared_string_items" = "Éléments";
-"add_hidden_group_info" = "Le point ajouté se trouve dans \"%@\". Afficher ce groupe pour rendre le point visible sur la carte.";
+"add_hidden_group_info" = "Le point ajouté peut ếtre consulté dans \"%@\". Montrer de nouveau le groupe sélectionné pour l'afficher sur la carte.";
 "shared_string_unchanged" = "Inchangé";
 "each_favourite_point_own_icon" = "Les points favoris garderont leur propre icône.";
 "unchanged_parameter_summary" = "Chaque trace conservera ses propres paramètres.";

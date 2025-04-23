@@ -100,37 +100,20 @@
         return;
 
     __weak __typeof(self) weakSelf = self;
-    NSIndexPath *prevSelectedIndexPath = indexPath.row <= _selectedIndexPath.row
-        ? [NSIndexPath indexPathForRow:_selectedIndexPath.row + 1 inSection:_selectedIndexPath.section]
-        : _selectedIndexPath;
+    NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
     [self setSelectedIndexPath:indexPath];
     [collectionView performBatchUpdates:^{
-        [collectionView insertItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
         [weakSelf insertItem:newItem atIndexPath:weakSelf.selectedIndexPath];
+        [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:_data.count - 1 inSection:0]]];
+
+        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
+        [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
         
-        if (weakSelf.isOpenedFromAllColorsScreen) {
-            dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC));
-            dispatch_after(delay, dispatch_get_main_queue(), ^{
-                [collectionView reloadData];
-            });
-        }
+        [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:newItem collectionView:collectionView shouldDismiss:NO];
         
-    } completion:^(BOOL finished) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-           if (!strongSelf) return;
-        
-        NSIndexPath *prevIndex = [strongSelf getSelectedIndexPath];
-        if (!prevIndex)
-            prevIndex = [NSIndexPath indexPathForRow:0 inSection:0];
-        
-        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, prevIndex]];
-        [strongSelf scrollToIndexPathIfNeeded:strongSelf.selectedIndexPath];
-        
-        [strongSelf.delegate onCollectionItemSelected:prevIndex selectedItem:newItem collectionView:collectionView shouldDismiss:NO];
-        
-        if (strongSelf.hostCell && [strongSelf.hostCell needUpdateHeight])
-            [strongSelf.delegate reloadCollectionData];
-    }];
+        if (weakSelf.hostCell && [weakSelf.hostCell needUpdateHeight])
+            [weakSelf.delegate reloadCollectionData];
+    } completion:nil];
 }
 
 - (void) scrollToIndexPathIfNeeded:(NSIndexPath *)indexPath

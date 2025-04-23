@@ -3664,3 +3664,15 @@
 "shared_string_unchanged" = "Sin cambios";
 "ios_release_5_0" = "• Se introdujeron carpetas inteligentes para la organización automática de trazas.\n• Se añadió un visor de galerías a pantalla completa para las imágenes de Wikimedia.\n• Se añadió compatibilidad con la conversión de texto a voz (TTS) en idioma vietnamita y hebreo para la navegación.\n• Se añadieron acciones rápidas para controlar la grabación del viaje.\n• Se añadió una opción de «Guía detallada de la ruta» y un cuadro de diálogo de sugerencia de «Adjuntar a las rutas».\n• Posibilidad de descubrir picos destacados a través del mapa y la búsqueda.\n• Se resaltaron los bordes de los edificios y las zonas con información detallada.\n• Se añadió una opción para alternar la visibilidad de los distintos grupos de favoritos en el mapa.\n• Se ampliaron las opciones de íconos para Favoritos añadiendo íconos para todas las categorías de PDI.\n• Se añadió la visualización del nivel de batería para los sensores externos.\n• Se añadió una opción para cambiar el aspecto de múltiples trazas simultáneamente.\n• Se añadió una acción «Restablecer» para el widget de velocidad media.\n• Búsqueda CarPlay: se añadió la posibilidad de marcar edificios.\n• Se corrigió la secuencia de ingreso de coordenadas UTM.\n• Se corrigió un problema con los colores de los puntos de ruta de las trazas.\n• Se corrigió la falta del botón «Descargar todo» en los mapas topográficos.\n• Se corrigió un problema por el que a veces faltaban artículos populares en las guías de viaje.\n";
 "osmand_web" = "OsmAnd Web";
+"litres" = "Litros";
+"imperial_gallons" = "Galones imperiales";
+"us_gallons" = "Galones (EEUU)";
+"us_gallons_unit" = "gal";
+"unit_of_volume" = "Unidad de volumen";
+"shared_strings_dimensions" = "Dimensiones";
+"fuel_tank_capacity" = "Capacidad del tanque de combustible";
+"poi_filter_fuel" = "Combustible";
+"unit_of_volume_description" = "Las unidades elegidas se aplicarán a todos los datos relacionados con el volumen en el perfil actual.";
+"shared_string_litres" = "litros";
+"liter" = "l";
+"fuel_tank_capacity_description" = "Ingresá la capacidad del tanque para controlar con precisión los niveles de combustible y su consumo";

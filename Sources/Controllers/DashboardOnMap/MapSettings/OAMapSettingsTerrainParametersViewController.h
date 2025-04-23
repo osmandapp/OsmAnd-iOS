@@ -18,7 +18,8 @@ typedef NS_ENUM(NSInteger, EOATerrainSettingsType)
     EOATerrainSettingsTypePalette,
     EOAGPXSettingsTypeVerticalExaggeration,
     EOAGPXSettingsTypeWallHeight,
-    EOATerrainSettingsTypeCoordinatesGridZoomLevels
+    EOATerrainSettingsTypeCoordinatesGridZoomLevels,
+    EOATerrainSettingsTypeCoordinatesGridColor
 };
 
 @protocol OATerrainParametersDelegate

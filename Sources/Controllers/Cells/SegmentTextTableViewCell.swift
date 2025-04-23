@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 final class SegmentTextTableViewCell: UITableViewCell {
     
     @IBOutlet private weak var segmentedControl: UISegmentedControl!

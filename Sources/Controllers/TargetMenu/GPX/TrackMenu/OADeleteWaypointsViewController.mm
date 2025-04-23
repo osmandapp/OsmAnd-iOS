@@ -334,9 +334,19 @@
             if (!strongSelf)
                 return;
             NSArray<NSIndexPath *> *visibleRows = [strongSelf.tableView indexPathsForVisibleRows];
+            if (!visibleRows || visibleRows.count == 0 || strongSelf.data.subjects.count == 0)
+                return;
+
             for (NSIndexPath *visibleRow in visibleRows)
             {
-                OAGPXTableCellData *cellData = strongSelf.data.subjects[visibleRow.section].subjects[visibleRow.row];
+                if (visibleRow.section >= strongSelf.data.subjects.count)
+                    continue;
+
+                NSArray *rows = strongSelf.data.subjects[visibleRow.section].subjects;
+                if (visibleRow.row >= rows.count)
+                    continue;
+
+                OAGPXTableCellData *cellData = rows[visibleRow.row];
                 if (strongSelf.trackMenuDelegate)
                     [strongSelf.trackMenuDelegate updateProperty:@"update_distance_and_direction" tableData:cellData];
             }

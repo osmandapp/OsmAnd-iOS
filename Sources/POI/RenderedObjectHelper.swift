@@ -29,7 +29,7 @@ final class RenderedObjectHelper: NSObject {
         var pt: OAPOIType?
         var otherPt: OAPOIType?
         var subtype: String?
-        var additionalInfo = [String: String]()
+        let additionalInfo = MutableOrderedDictionary<NSString, NSString>()
         var localizedNames = [String: String]()
         
         for e in renderedObject.tags {
@@ -68,9 +68,9 @@ final class RenderedObjectHelper: NSObject {
                 let translate = OAPOIHelper.sharedInstance().getTranslation(tag + "_" + value)
                 let translate2 = OAPOIHelper.sharedInstance().getTranslation(value)
                 if let translate, let translate2 {
-                    additionalInfo[translate] = translate2
+                    additionalInfo.setObject(translate2 as NSString, forKey: translate as NSString)
                 } else {
-                    additionalInfo[tag] = value
+                    additionalInfo.setObject(value as NSString, forKey: tag as NSString)
                 }
             }
         }
@@ -91,7 +91,7 @@ final class RenderedObjectHelper: NSObject {
         poi.longitude = renderedObject.labelLatLon.longitude
         poi.setXYPoints(renderedObject)
         poi.name = poi.name != nil && poi.name.length > 0 ? poi.name : renderedObject.name
-        
+
         return poi
     }
     

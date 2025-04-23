@@ -329,9 +329,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (void) processAmenityFields:(OAPOI *)poi decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues
 {
-    NSMutableDictionary *content = [NSMutableDictionary dictionary];
-    NSMutableDictionary *values = [NSMutableDictionary dictionary];
-    
+    MutableOrderedDictionary *content = [MutableOrderedDictionary new];
+    MutableOrderedDictionary *values = [MutableOrderedDictionary new];
+
     for (const auto& entry : decodedValues)
     {
         if (entry.declaration->tagName.startsWith(QString("content")))

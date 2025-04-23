@@ -85,7 +85,7 @@ final class TravelObfHelper : NSObject {
                     if let file = fileAmenity.file {
                         let amenity = fileAmenity.amenity!
                         if let name = amenity.getName(lang, transliterate: false), name.length > 0 {
-                            let routeId = amenity.getAdditionalInfo()[ROUTE_ID] ?? ""
+                            let routeId = amenity.getAdditionalInfo(ROUTE_ID) ?? ""
                             if !popularArticles.containsByRouteId(routeId: routeId) {
                                 if let article = cacheTravelArticles(file: file, amenity: amenity, lang: lang!, readPoints: false, callback: nil) {
                                     if !popularArticles.contains(article: article) {
@@ -331,7 +331,7 @@ final class TravelObfHelper : NSObject {
         var langs: Set<String> = []
         let descrStart = DESCRIPTION_TAG + ":"
         let partStart = IS_PART + ":"
-        for infoTag in amenity.getAdditionalInfo().keys {
+        for case let infoTag as String in amenity.getAdditionalInfo().allKeys {
             if infoTag.hasPrefix(descrStart) {
                 if infoTag.length > descrStart.length {
                     langs.insert( infoTag.substring(from: descrStart.length) )

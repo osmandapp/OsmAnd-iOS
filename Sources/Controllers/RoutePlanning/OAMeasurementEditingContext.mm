@@ -9,6 +9,7 @@
 #import "OAMeasurementEditingContext.h"
 #import "OAApplicationMode.h"
 #import "OAMeasurementCommandManager.h"
+#import "OAMapUtils.h"
 #import "OAGpxData.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OARoadSegmentData.h"
@@ -29,6 +30,7 @@
 #include <gpxRouteApproximation.h>
 
 static OAApplicationMode *DEFAULT_APP_MODE;
+static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 @interface OAMeasurementEditingContext() <OARouteCalculationProgressCallback, OARouteCalculationResultListener>
 
@@ -48,6 +50,8 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     
     OARouteCalculationParams *_params;
     NSArray<OASWptPt *> *_currentPair;
+    
+    BOOL _insertIntermediates;
     
     std::shared_ptr<RouteCalculationProgress> _calculationProgress;
 }
@@ -76,6 +80,8 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         _afterSegments = [NSMutableArray new];
         
         _roadSegmentData = [NSMutableDictionary new];
+        
+        [self setInsertIntermediates:YES];
     }
     return self;
 }
@@ -594,22 +600,33 @@ static OAApplicationMode *DEFAULT_APP_MODE;
             OASWptPt *startPoint = points[i];
             OASWptPt *endPoint = points[i + 1];
             NSArray<OASWptPt *> *pair = @[startPoint, endPoint];
+            
+            NSString *startProfileType = startPoint.getProfileType;
+            NSString *endProfileType = endPoint.getProfileType;
+            
+            BOOL shouldAdd = _roadSegmentData[pair] == nil && (startPoint.hasProfile || self.hasRoute);
+            BOOL isNil = _roadSegmentData[pair] == nil;
+            BOOL hasProfile = startPoint.hasProfile;
+            
             if (_roadSegmentData[pair] == nil && (startPoint.hasProfile || self.hasRoute))
                 [res addObject:pair];
         }
     }
     return res;
 }
-//
-//private List<Pair<WptPt, WptPt>> getOrderedRoadSegmentDataKeys() {
-//    List<Pair<WptPt, WptPt>> keys = new ArrayList<>();
-//    for (List<WptPt> points : Arrays.asList(before.points, after.points)) {
-//        for (int i = 0; i < points.size() - 1; i++) {
-//            keys.add(new Pair<>(points.get(i), points.get(i + 1)));
-//        }
-//    }
-//    return keys;
-//}
+
+- (NSArray<NSArray<OASWptPt *> *> *) getOrderedRoadSegmentDataKeys
+{
+    NSMutableArray<NSArray<OASWptPt *> *> *keys = [NSMutableArray new];
+    for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
+    {
+        for (NSInteger i = 0; i < ((NSInteger)points.count) - 1; i++)
+        {
+            [keys addObject:@[points[i], points[i + 1]]];
+        }
+    }
+    return keys;
+}
 
 - (void) scheduleRouteCalculateIfNotEmpty
 {
@@ -634,7 +651,6 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 {
     NSMutableArray<NSNumber *> *roadSegmentIndexes = [NSMutableArray new];
     OASTrkSegment *s = [[OASTrkSegment alloc] init];
-    NSMutableArray<OASWptPt *> *sPnts = [NSMutableArray array];
     [segments addObject:s];
     BOOL defaultMode = YES;
     if (points.count > 1)
@@ -642,24 +658,26 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         for (NSInteger i = 0; i < points.count; i++)
         {
             OASWptPt *point = points[i];
-            [sPnts addObject:point];
+            OASWptPt *nextPoint = i + 1 < points.count ? points[i+1] : nil;
+            
+            [s.points addObject:point];
             NSString *profileType = point.getProfileType;
-            if (profileType != nil)
+            BOOL addIntermediates = nextPoint && [self shouldAddIntermediatesFrom:point to:nextPoint];
+            
+            if (profileType || addIntermediates)
             {
-                BOOL isDefault = [profileType isEqualToString:OAApplicationMode.DEFAULT.stringKey];
+                BOOL isDefault = !profileType || [profileType isEqualToString:OAApplicationMode.DEFAULT.stringKey];
                 BOOL isGap = point.isGap;
-                if (defaultMode && !isDefault && !isGap)
+                if (defaultMode && (!isDefault ||addIntermediates) && !isGap)
                 {
                     [roadSegmentIndexes addObject:@(segments.count - 1)];
                     defaultMode = NO;
                 }
                 if (isGap)
                 {
-                    if (sPnts.count > 0)
+                    if (s.points && s.points.count > 0)
                     {
-                        s.points = sPnts;
                         s = [[OASTrkSegment alloc] init];
-                        sPnts = [NSMutableArray array];
                         [segments addObject:s];
                         defaultMode = YES;
                     }
@@ -669,9 +687,8 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     }
     else
     {
-        [sPnts addObjectsFromArray:points];
+        [s.points addObjectsFromArray:points];
     }
-    s.points = sPnts;
     if (s.points.count == 0)
         [segments removeObject:s];
     
@@ -680,27 +697,33 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         for (OASTrkSegment *segment in segments)
         {
             OASTrkSegment *segmentForSnap = [[OASTrkSegment alloc] init];
-            NSMutableArray<OASWptPt *> *pnts = [NSMutableArray new];
-            for (NSInteger i = 0; i < (NSInteger) segment.points.count - 1; i++)
+            NSMutableArray<OASWptPt *> *segmentPoints = segment.points;
+            NSMutableArray<OASWptPt *> *segmentForSnapPoints = segmentForSnap.points;
+            
+            for (NSInteger i = 0; i < (NSInteger) segmentPoints.count - 1; i++)
             {
-                NSArray<OASWptPt *> *pair = @[segment.points[i], segment.points[i + 1]];
+                OASWptPt *point = segmentPoints[i];
+                OASWptPt *nextpPoint = segmentPoints[i + 1];
+                NSArray<OASWptPt *> *pair = @[point, nextpPoint];
+                
                 OARoadSegmentData *data = _roadSegmentData[pair];
                 NSArray<OASWptPt *> *pts = data != nil ? data.gpxPoints : nil;
+                
                 if (pts != nil)
                 {
-                    [pnts addObjectsFromArray:pts];
+                    [segmentForSnapPoints addObjectsFromArray:pts];
                 }
                 else
                 {
                     if (calculateIfNeeded && [roadSegmentIndexes containsObject:@(segmentsForSnap.count)])
                         [self scheduleRouteCalculateIfNotEmpty];
-                    
-                    [pnts addObjectsFromArray:pair];
+                    if (segmentForSnapPoints.count == 0)
+                        [segmentForSnapPoints addObject:point];
+                    [segmentForSnapPoints addObject:nextpPoint];
                 }
             }
-            if (pnts.count == 0)
-                [pnts addObjectsFromArray:segment.points];
-            segmentForSnap.points = pnts;
+            if (segmentForSnapPoints.count == 0)
+                [segmentForSnapPoints addObjectsFromArray:segmentPoints];
             [segmentsForSnap addObject:segmentForSnap];
         }
     }
@@ -709,6 +732,66 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         OASTrkSegment *segmentForSnap = [[OASTrkSegment alloc] init];
         segmentForSnap.points = [points mutableCopy];
         [segmentsForSnap addObject:segmentForSnap];
+    }
+}
+
+- (BOOL) shouldAddIntermediatesFrom:(OASWptPt *)start to:(OASWptPt *)end
+{
+    return _insertIntermediates &&
+        (![start getProfileType] || [[start getProfileType] isEqualToString:DEFAULT_APP_MODE.stringKey]) &&
+        ![end isGap] &&
+        ((int) [OAMapUtils getDistance:start.lat lon1:start.lon lat2:end.lat lon2:end.lon] / MIN_METERS_BETWEEN_INTERMEDIATES) >= 2;
+}
+
+- (void) setInsertIntermediates:(BOOL)insertIntermediates
+{
+    if (_insertIntermediates != insertIntermediates)
+    {
+        _insertIntermediates = insertIntermediates;
+        [self recalculateRouteSegmentsWithMode:DEFAULT_APP_MODE];
+    }
+}
+
+- (void) recalculateRouteSegmentsWithMode:(OAApplicationMode *) mode
+{
+    BOOL changed = NO;
+
+    if (!mode)
+    {
+        [_roadSegmentData removeAllObjects];
+        changed = YES;
+    } else
+    {
+        NSString *modeKey = mode.stringKey;
+        BOOL isDefaultMode = [modeKey isEqualToString:DEFAULT_APP_MODE.stringKey];
+
+        for (NSArray<OASWptPt *> *pair in [self getOrderedRoadSegmentDataKeys])
+        {
+            OASWptPt *first = pair[0];
+            OASWptPt *second = pair[1];
+            NSString *pointModeKey = [first getProfileType];
+
+            BOOL recalculateStraightSegment = isDefaultMode &&
+                                              (pointModeKey == nil || [modeKey isEqualToString:pointModeKey]) &&
+                                              [self shouldAddIntermediatesFrom:first to:second];
+
+            if (recalculateStraightSegment)
+            {
+                [self.roadSegmentData removeObjectForKey:pair];
+                changed = YES;
+            } else if ([modeKey isEqualToString:pointModeKey])
+            {
+                if (_roadSegmentData[pair])
+                {
+                    [_roadSegmentData removeObjectForKey:pair];
+                    changed = YES;
+                }
+            }
+        }
+    }
+
+    if (changed) {
+        [self updateSegmentsForSnap:NO];
     }
 }
 

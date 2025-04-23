@@ -99,10 +99,11 @@
 
 - (void)editPointsGroup:(BOOL)updatePoints
 {
-    [OAFavoritesHelper updateGroup:_favoriteGroup
-                          iconName:self.editIconName
-                      updatePoints:updatePoints
-                   saveImmediately:NO];
+    if (![self.editIconName isEqual:_favoriteGroup.iconName])
+        [OAFavoritesHelper updateGroup:_favoriteGroup
+                              iconName:self.editIconName
+                          updatePoints:updatePoints
+                       saveImmediately:NO];
 
     [OAFavoritesHelper updateGroup:_favoriteGroup
                              color:self.editColor

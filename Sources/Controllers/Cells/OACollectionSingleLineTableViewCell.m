@@ -128,6 +128,11 @@
     }
 }
 
+- (void)collectionStackViewVisibility:(BOOL)show
+{
+    self.collectionStackView.hidden = !show;
+}
+
 - (void)anchorContent:(EOATableViewCellContentStyle)style
 {
     if (style == EOATableViewCellContentCenterStyle)

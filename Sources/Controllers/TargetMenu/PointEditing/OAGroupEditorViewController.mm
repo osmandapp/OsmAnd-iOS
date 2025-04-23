@@ -77,9 +77,6 @@
 
 - (void)generateDescriptionSection
 {
-    if (!self.isNewItem)
-        return;
-    
     OATableSectionData *descriptionSection = [self.tableData createNewSection];
     descriptionSection.headerText = OALocalizedString(@"favorite_group_name");
     descriptionSection.footerText = OALocalizedString(@"default_appearance_desc");

@@ -23,6 +23,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAFavoriteItem.h"
 
 // NOTE: If the file name contains "\" macOS and iOS interpret it as a folder/subfolder. Additionally, ArchiveReader replaces "\" with "/". We do not allow the user to use this symbol in the file name.
 static NSCharacterSet * const kIllegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"\\"];
@@ -32,7 +33,7 @@ static NSString * const kLastUsedIconsKey = @"kLastUsedIconsKey";
 static NSString * const kIconsKey = @"kIconsKey";
 static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
-@interface OABaseEditorViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAShapesTableViewCellDelegate, OACollectionCellDelegate>
+@interface OABaseEditorViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAShapesTableViewCellDelegate, OACollectionCellDelegate, PoiIconCollectionHandlerDelegate>
 
 @property(nonatomic) NSString *originalName;
 @property(nonatomic) NSString *editName;
@@ -145,10 +146,11 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void)generateData
 {
-    [self generateDescriptionSection];
+    if (self.isNewItem)
+        [self generateDescriptionSection];
     [self generateGroupSection];
-    [self generateIconSection];
     [self generateColorSection];
+    [self generateIconSection];
     [self generateShapeSection];
     [self generateActionSection];
 }
@@ -297,8 +299,9 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
         [_poiIconCollectionHandler setCollectionView:cell.collectionView];
         [cell setCollectionHandler:_poiIconCollectionHandler];
-        [_poiIconCollectionHandler updateTopButtonName];
+        [_poiIconCollectionHandler updateHostCellIfNeeded];
         cell.topLabel.text = item.title;
+        cell.descriptionLabel.text = OALocalizedString(@"original_icon_description");
         [cell topButtonVisibility:YES];
         [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
         [cell.collectionView reloadData];
@@ -379,19 +382,37 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void) setupIconHandler
 {
-    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] init];
+    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] initWithIsFavoriteList:self.isNewItem != YES];
     _poiIconCollectionHandler.delegate = self;
+    _poiIconCollectionHandler.handlerDelegate = self;
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
     _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+    
+    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:self.editName];
+    if (group)
+    {
+        NSMutableArray *iconNames = [NSMutableArray array];
+        for (OAFavoriteItem *item in group.points)
+        {
+            [iconNames addObject:[item getIcon]];
+        }
+        _poiIconCollectionHandler.groupIcons = iconNames;
+    }
+    
     [_poiIconCollectionHandler setItemSizeWithSize:48];
     [_poiIconCollectionHandler setIconBackgroundSizeWithSize:36];
     [_poiIconCollectionHandler setIconSizeWithSize:24];
     [_poiIconCollectionHandler setSpacingWithSpacing:9];
     
-    _selectedIconName = [self getDefaultIconName];
-    self.editIconName = _selectedIconName;
+    if (!_isNewItem)
+        _selectedIconName = self.editIconName;
+    else
+    {
+        _selectedIconName = [self getDefaultIconName];
+        self.editIconName = _selectedIconName;
+    }
     [_poiIconCollectionHandler setIconName:_selectedIconName];
 }
 
@@ -503,6 +524,21 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     return resultCell;
 }
 
+- (BOOL)isValidText
+{
+    return !_isNewItem || _isTextViewNameValid;
+}
+
+- (void)changeSaveButtonAvailabilityWithGroup
+{
+    OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
+    [self changeButtonAvailability:_saveBarButton
+                         isEnabled:[self isValidText] && (!groupExist
+        || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
+        || ![self.editIconName isEqual:groupExist.iconName]
+        || ![self.editColor isEqual:groupExist.color])];
+}
+
 #pragma mark - OAShapesTableViewCellDelegate
 
 - (void)iconChanged:(NSInteger)tag
@@ -519,12 +555,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     [self.tableView reloadRowsAtIndexPaths:@[_shapeIndexPath]
                           withRowAnimation:UITableViewRowAnimationNone];
 
-    OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
-    [self changeButtonAvailability:_saveBarButton
-                         isEnabled:_isTextViewNameValid && (!groupExist
-        || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
-        || ![self.editIconName isEqual:groupExist.iconName]
-        || ![self.editColor isEqual:groupExist.color])];
+    [self changeSaveButtonAvailabilityWithGroup];
 }
 
 #pragma mark - OACollectionCellDelegate
@@ -538,7 +569,6 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         if (iconName)
             _selectedIconName = iconName;
         self.editIconName = _selectedIconName;
-        
     }
     else if (collectionView == [_colorCollectionHandler getCollectionView])
     {
@@ -551,17 +581,31 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     }
     
     [self applyLocalization];
-    OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
-    [self changeButtonAvailability:_saveBarButton
-                         isEnabled:_isTextViewNameValid && (!groupExist
-     || ![self.editColor isEqual:groupExist.color]
-     || ![self.editIconName isEqual:groupExist.iconName]
-     || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType])];
+    [self changeSaveButtonAvailabilityWithGroup];
 }
 
 - (void)reloadCollectionData
 {
     [self.tableView reloadRowsAtIndexPaths:@[_colorGridIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark - PoiIconCollectionHandlerDelegate
+
+- (void)onCategorySelected:(NSString *)category with:(OAIconsPaletteCell *)cell
+{
+    if (_isNewItem)
+        return;
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath)
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    if ([category isEqualToString: @"original"])
+    {
+        OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
+        _selectedIconName = groupExist.iconName;
+        self.editIconName = _selectedIconName;
+    }
+    [self changeSaveButtonAvailabilityWithGroup];
 }
 
 #pragma mark - UITextViewDelegate

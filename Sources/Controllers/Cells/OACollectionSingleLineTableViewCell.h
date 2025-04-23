@@ -30,6 +30,7 @@
 - (OABaseCollectionHandler *)getCollectionHandler;
 
 - (void)rightActionButtonVisibility:(BOOL)show;
+- (void)collectionStackViewVisibility:(BOOL)show;
 
 - (void)anchorContent:(EOATableViewCellContentStyle)style;
 

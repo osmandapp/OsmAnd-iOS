@@ -18,6 +18,10 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topTitleOffset;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomTitleOffset;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorOffsetViewWidth;
+@property (weak, nonatomic) IBOutlet UIStackView *bottomButtonStackView;
+@property (weak, nonatomic) IBOutlet UIStackView *descriptionLabelStackView;
+@property (weak, nonatomic) IBOutlet UIView *underTitleView;
 
 @end
 
@@ -40,9 +44,29 @@
     self.bottomTitleOffset.constant = 8;
 }
 
-- (void) topButtonVisibility:(BOOL)show
+- (void)topButtonVisibility:(BOOL)show
 {
     self.topButton.hidden = !show;
+}
+
+- (void)descriptionLabelStackViewVisibility:(BOOL)show
+{
+    self.descriptionLabelStackView.hidden = !show;
+}
+
+- (void)bottomButtonVisibility:(BOOL)show
+{
+    self.bottomButtonStackView.hidden = !show;
+}
+
+- (void)underTitleViewVisibility:(BOOL)show
+{
+    self.underTitleView.hidden = !show;
+}
+
+- (void)separatorLeftOffset:(CGFloat)value
+{
+    self.separatorOffsetViewWidth.constant = value;
 }
 
 - (IconCollectionHandler *)getIconsCollectionHandler

@@ -170,6 +170,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAPOIViewController.h"
+#import "OACoordinatesGridSettings.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

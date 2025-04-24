@@ -69,6 +69,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     TerrainMode *_terrainMode;
     OASRTMPlugin *_plugin;
     OAAppSettings *_settings;
+    OACoordinatesGridSettings *_coordinatesGridSettings;
 
     NSArray<NSString *> *_possibleZoomValues;
     
@@ -118,9 +119,10 @@ static const NSInteger kElevationMaxMeters = 2000;
     _terrainMode = [_plugin getTerrainMode];
     _mapPanel = OARootViewController.instance.mapPanel;
     _settings = [OAAppSettings sharedManager];
+    _coordinatesGridSettings = [[OACoordinatesGridSettings alloc] init];
 
-    _baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_settings.coordinateGridMinZoom get] : [_plugin getTerrainMinZoom];
-    _baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_settings.coordinateGridMaxZoom get] : [_plugin getTerrainMaxZoom];
+    _baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getZoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].min : [_plugin getTerrainMinZoom];
+    _baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getZoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].max : [_plugin getTerrainMaxZoom];
     _baseAlpha = [_terrainMode getTransparency] * 0.01;
 
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
@@ -156,9 +158,9 @@ static const NSInteger kElevationMaxMeters = 2000;
         _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
         _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
         _isNightCoordinatesGridColorMode = _settings.nightMode;
-        _baseDayColorItem = [_appearanceCollection getColorItemWithValue:[_settings.coordinatesGridColorDay get]] ?: [_appearanceCollection getDefaultLineColorItem];
+        _baseDayColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getDayGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
         _currentDayColorItem  = _baseDayColorItem;
-        _baseNightColorItem = [_appearanceCollection getColorItemWithValue:[_settings.coordinatesGridColorNight get]] ?: [_appearanceCollection getDefaultLineColorItem];
+        _baseNightColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getNightGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
         _currentNightColorItem = _baseNightColorItem;
     }
 
@@ -548,8 +550,8 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (BOOL)resetZoomLevels
 {
-    NSInteger defaultMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? _settings.coordinateGridMinZoom.defValue : terrainMinSupportedZoom;
-    NSInteger defaultMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? _settings.coordinateGridMaxZoom.defValue : terrainMaxSupportedZoom;
+    NSInteger defaultMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].min : terrainMinSupportedZoom;
+    NSInteger defaultMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].max : terrainMaxSupportedZoom;
     if (_minZoom != defaultMinZoom || _maxZoom != defaultMaxZoom)
     {
         _minZoom = defaultMinZoom;
@@ -608,9 +610,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             [handler onItemSelected:path collectionView:colorCell.collectionView];
         }
     }
-    
-    BOOL dayChanged   = (_baseDayColorItem.value   != _currentDayColorItem.value);
-    BOOL nightChanged = (_baseNightColorItem.value != _currentNightColorItem.value);
+
     _isValueChange = (_baseDayColorItem != _currentDayColorItem || _baseNightColorItem != _currentNightColorItem);
     [self updateApplyButton];
     return YES;
@@ -676,7 +676,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)applyCurrentZoomLevels
 {
     if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
-        [self setCoordinatesGridZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+        [_coordinatesGridSettings setZoomLevels:{ .min = _minZoom, .max = _maxZoom } forAppMode:[_settings.applicationMode get]];
     else
         [_terrainMode setZoomValuesWithMinZoom:(int32_t)_minZoom maxZoom:(int32_t)_maxZoom];
 }
@@ -693,14 +693,14 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)applyCoordinatesGridColor
 {
-    [_settings.coordinatesGridColorDay set:(int)_currentDayColorItem.value];
-    [_settings.coordinatesGridColorNight set:(int)_currentNightColorItem.value];
+    [_coordinatesGridSettings setGridColor:(int)_currentDayColorItem.value forAppMode:[_settings.applicationMode get] nightMode:NO];
+    [_coordinatesGridSettings setGridColor:(int)_currentNightColorItem.value forAppMode:[_settings.applicationMode get] nightMode:YES];
 }
 
 - (NSArray<NSString *> *)getPossibleZoomValues
 {
-    NSInteger minZoom = (self.terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels) ? _settings.coordinateGridMinZoom.defValue : terrainMinSupportedZoom;
-    NSInteger maxZoom = (self.terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels) ? _settings.coordinateGridMaxZoom.defValue : terrainMaxSupportedZoom;
+    NSInteger minZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].min : terrainMinSupportedZoom;
+    NSInteger maxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].max : terrainMaxSupportedZoom;
     
     NSMutableArray *res = [NSMutableArray new];
     for (NSInteger z = minZoom; z <= maxZoom; z++)
@@ -728,14 +728,13 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)setCoordinatesGridBaseColorItem
 {
-    [_settings.coordinatesGridColorDay set:(int)_baseDayColorItem.value];
-    [_settings.coordinatesGridColorNight set:(int)_baseNightColorItem.value];
+    [_coordinatesGridSettings setGridColor:(int)_baseDayColorItem.value forAppMode:[_settings.applicationMode get] nightMode:NO];
+    [_coordinatesGridSettings setGridColor:(int)_baseNightColorItem.value forAppMode:[_settings.applicationMode get] nightMode:YES];
 }
 
 - (void)setCoordinatesGridZoomValuesWithMinZoom:(NSInteger)baseMinZoom maxZoom:(NSInteger)baseMaxZoom
 {
-    [_settings.coordinateGridMinZoom set:(int)baseMinZoom];
-    [_settings.coordinateGridMaxZoom set:(int)baseMaxZoom];
+    [_coordinatesGridSettings setZoomLevels:{ .min = baseMinZoom, .max = baseMaxZoom } forAppMode:[_settings.applicationMode get]];
 }
 
 #pragma mark - Selectors
@@ -776,7 +775,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         [self applyCurrentVisibility];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_minZoom != [_terrainMode getMinZoom] || _maxZoom != [_terrainMode getMaxZoom]))
         [self applyCurrentZoomLevels];
-    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels && (_minZoom != [_settings.coordinateGridMinZoom get] || _maxZoom != [_settings.coordinateGridMaxZoom get]))
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels && (_minZoom != [_coordinatesGridSettings getZoomLevels].min || _maxZoom != [_coordinatesGridSettings getZoomLevels].max))
         [self applyCurrentZoomLevels];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration && _currentVerticalExaggerationScale != _app.data.verticalExaggerationScale)
         [self applyVerticalExaggerationScale];
@@ -1093,8 +1092,8 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         OACustomPickerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell reuseIdentifier]];
         cell.dataArray = _possibleZoomValues;
-        NSInteger baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? _settings.coordinateGridMinZoom.defValue : terrainMinSupportedZoom;
-        NSInteger baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? _settings.coordinateGridMaxZoom.defValue : terrainMaxSupportedZoom;
+        NSInteger baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].min : terrainMinSupportedZoom;
+        NSInteger baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].max : terrainMaxSupportedZoom;
         NSInteger minZoom = _minZoom >= baseMinZoom && _minZoom <= baseMaxZoom ? (_minZoom - baseMinZoom) : 1;
         NSInteger maxZoom = _maxZoom >= baseMinZoom && _maxZoom <= baseMaxZoom ? (_maxZoom - baseMinZoom) : 1;
         [cell.picker selectRow:indexPath.row == 1 ? minZoom : maxZoom inComponent:0 animated:NO];

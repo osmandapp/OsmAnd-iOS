@@ -67,6 +67,7 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAIAPHelper *_iapHelper;
+    OACoordinatesGridSettings *_coordinatesGridSettings;
 
     OAMapStyleSettings *_styleSettings;
     NSArray<OAMapStyleParameter *> *_filteredTopLevelParams;
@@ -94,6 +95,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
+        _coordinatesGridSettings = [[OACoordinatesGridSettings alloc] init];
         _styleSettings = [OAMapStyleSettings sharedInstance];
 
         title = OALocalizedString(@"configure_map");
@@ -138,7 +140,7 @@
     BOOL hasWiki = [_iapHelper.wiki isPurchased];
     BOOL hasSRTM = [_iapHelper.srtm isPurchased];
     BOOL hasWeather = [_iapHelper.weather isPurchased];
-    BOOL hasCoordinatesGrid = [_settings.mapSettingShowCoordinatesGrid get];
+    BOOL hasCoordinatesGrid = [_coordinatesGridSettings isEnabled];
 
     [data addObject:@{
             @"group_name": @"",
@@ -743,7 +745,7 @@
     else if ([key isEqualToString:@"tracks"])
         return _settings.mapSettingVisibleGpx.get.count > 0;
     else if ([key isEqualToString:@"coordinates_grid"])
-        return [_settings.mapSettingShowCoordinatesGrid get];
+        return [_coordinatesGridSettings isEnabled];
     else if ([key isEqualToString:@"category_transport"])
         return ![_styleSettings isCategoryDisabled:TRANSPORT_CATEGORY];
     else if ([key isEqualToString:@"contour_lines_layer"])

@@ -25,6 +25,8 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
     var isOnlineMapSource = false
     var tableData: [Any]?
     
+    private let coordinatesGridSettings = OACoordinatesGridSettings()
+    
     private var isCoordinatesGridEnabled: Bool
     private var data: OATableDataModel
     private var settings: OAAppSettings
@@ -32,7 +34,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
     init(table tableView: UITableView, viewController: OADashboardViewController) {
         data = OATableDataModel()
         settings = OAAppSettings.sharedManager()
-        isCoordinatesGridEnabled = settings.mapSettingShowCoordinatesGrid.get()
+        isCoordinatesGridEnabled = coordinatesGridSettings.isEnabled()
         super.init()
         self.tblView = tableView
         self.vwController = viewController
@@ -70,7 +72,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             zoomRow.cellType = OAValueTableViewCell.reuseIdentifier
             zoomRow.key = Self.zoomRowKey
             zoomRow.title = localizedString("shared_string_zoom_levels")
-            zoomRow.descr = "\(settings.coordinateGridMinZoom.get()) – \(settings.coordinateGridMaxZoom.get())"
+            zoomRow.descr = "\(coordinatesGridSettings.getZoomLevelsWithRestrictions(forAppMode: settings.applicationMode.get()).min) – \(coordinatesGridSettings.getZoomLevelsWithRestrictions(forAppMode: settings.applicationMode.get()).max)"
             zoomRow.icon = .icCustomOverlayMap
             zoomRow.iconTintColor = .iconColorDefault
             
@@ -79,7 +81,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             labelsPositionRow.cellType = OAButtonTableViewCell.reuseIdentifier
             labelsPositionRow.key = Self.labelsPositionRowKey
             labelsPositionRow.title = localizedString("labels_position")
-            let pos = GridLabelsPosition(rawValue: settings.coordinatesGridLabelsPosition.get()) ?? .edges
+            let pos = GridLabelsPosition(rawValue: coordinatesGridSettings.getGridLabelsPosition(forAppMode: settings.applicationMode.get())) ?? .edges
             labelsPositionRow.icon = pos.icon
             labelsPositionRow.iconTintColor = .iconColorDefault
             let colorRow = positionColorSection.createNewRow()
@@ -89,7 +91,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             colorRow.descr = localizedString("customize_grid_color")
             colorRow.icon = isMapsPlusProAvailable() ? UIImage.templateImageNamed("ic_custom_appearance") : .icCustomGridColored
             colorRow.iconTintColor = .iconColorDefault
-            colorRow.secondaryIconTintColor = UIColor(argb: Int(Int32(settings.nightMode ? settings.coordinatesGridColorNight.get() : settings.coordinatesGridColorDay.get())))
+            colorRow.secondaryIconTintColor = UIColor(argb: Int(Int32(settings.nightMode ? coordinatesGridSettings.getNightGridColor() : coordinatesGridSettings.getDayGridColor())))
             colorRow.setObj(localizedString("shared_string_get"), forKey: Self.buttonTitleKey)
             colorRow.setObj("ic_custom_arrow_forward", forKey: Self.buttonIconKey)
         }
@@ -219,18 +221,18 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
     private func createStateSelectionMenu(for key: String) -> UIMenu {
         if key == Self.formatRowKey {
             let actions = GridFormat.allCases.map { format in
-                UIAction(title: format.title, state: format.id == settings.coordinateGridFormat.get() ? .on : .off) { [weak self] _ in
+                UIAction(title: format.title, state: format.id == coordinatesGridSettings.getGridFormat(forAppMode: settings.applicationMode.get()) ? .on : .off) { [weak self] _ in
                     guard let self = self else { return }
-                    self.settings.coordinateGridFormat.set(format.id)
+                    self.coordinatesGridSettings.setGridFormat(format.id, forAppMode: settings.applicationMode.get())
                     self.updateData()
                 }
             }
             return UIMenu(options: .singleSelection, children: actions)
         } else if key == Self.labelsPositionRowKey {
             let actions = GridLabelsPosition.allCases.map { pos in
-                UIAction(title: pos.title, state: pos.rawValue == settings.coordinatesGridLabelsPosition.get() ? .on : .off) { [weak self] _ in
+                UIAction(title: pos.title, state: pos.rawValue == coordinatesGridSettings.getGridLabelsPosition(forAppMode: settings.applicationMode.get()) ? .on : .off) { [weak self] _ in
                     guard let self = self else { return }
-                    self.settings.coordinatesGridLabelsPosition.set(pos.rawValue)
+                    self.coordinatesGridSettings.setGridLabelsPosition(pos.rawValue, forAppMode: settings.applicationMode.get())
                     self.updateData()
                 }
             }
@@ -257,7 +259,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
         let data = data.item(for: indexPath)
         if data.key == Self.showHideCoordinatesGridRowKey {
             isCoordinatesGridEnabled = sw.isOn
-            settings.mapSettingShowCoordinatesGrid.set(isCoordinatesGridEnabled)
+            coordinatesGridSettings.setEnabled(isCoordinatesGridEnabled)
             updateData()
         }
         

@@ -46,6 +46,34 @@ enum GridFormat: Int32, CaseIterable {
         }
     }
     
+    func projection() -> OAProjection {
+        switch self {
+        case .dms, .dm, .digital:
+            return .wgs84
+        case .utm:
+            return .utm
+        case .mgrs:
+            return .mgrs
+        default:
+            fatalError("Unknown GridFormat: \(self)")
+        }
+    }
+    
+    func getFormat() -> OAFormat {
+        switch self {
+        case .dms:
+            return .dms
+        case .dm:
+            return .dm
+        case .digital:
+            return .decimal
+        case .utm, .mgrs:
+            return .decimal
+        default:
+            fatalError("Unknown GridFormat \(self)")
+        }
+    }
+    
     static func valueOf(_ formatId: Int32) -> GridFormat {
         return Self.allCases.first(where: { $0.id == formatId }) ?? .dms
     }
@@ -83,10 +111,33 @@ enum GridLabelsPosition: Int32, CaseIterable {
     }
 }
 
+@objc
+enum OAProjection: Int32 {
+    case wgs84 = 0
+    case utm = 1
+    case mgrs = 2
+    case mercator = 3
+}
+
+@objc
+enum OAFormat: Int32 {
+    case decimal = 0
+    case dms = 1
+    case dm = 2
+}
+
 @objcMembers
 final class GridFormatWrapper: NSObject {
     static func gridFormatRaw(forGeoFormat geoFormatId: Int32) -> NSNumber {
         let format = GridFormat.valueOf(geoFormatId)
         return NSNumber(value: format.rawValue)
+    }
+    
+    static func projection(for format: GridFormat) -> OAProjection {
+        return format.projection()
+    }
+    
+    static func getFormat(for format: GridFormat) -> OAFormat {
+        return format.getFormat()
     }
 }

@@ -546,6 +546,149 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
     _searchRequestsCount = 0;
 }
 
+//- (void)searchCities:(NSString *)text
+//      searchLocation:(CLLocation *)searchLocation
+//        allowedTypes:(NSArray<NSString *> *)allowedTypes
+//           cityLimit:(NSInteger)cityLimit
+//          onComplete:(void (^)(NSMutableArray *amenities))onComplete
+//{
+//    NSInteger currentRequestId = ++_searchRequestsCount;
+//    NSSet<NSString *> *allowedTypesSet = [NSSet setWithArray:allowedTypes];
+//
+//    dispatch_async(_searchCitiesSerialQueue, ^{
+//        OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
+//        NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get] ?: @"";
+//        BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
+//        NSMutableArray *resultAmenities = [NSMutableArray array];
+//
+//        OAQuickSearchHelper *searchHelper = [OAQuickSearchHelper instance];
+//        OASearchUICore *searchCore = [searchHelper getCore];
+//        OASearchSettings *settings = [[[searchCore getSearchSettings] setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation]
+//                                       setLang:lang transliterateIfMissing:transliterate];
+//        settings = [[[[settings setSortByName:NO]
+//                            setAddressSearch:YES]
+//                            setEmptyQueryAllowed:YES]
+//                            setOriginalLocation:searchLocation];
+//        settings = [settings setSearchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]];
+//
+//        [searchCore updateSettings:settings];
+//
+//        __block NSInteger matchedCount = 0;
+//
+//        [searchCore shallowSearch:OASearchAmenityByNameAPI.class
+//                             text:text
+//                          matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+//            if (_searchRequestsCount != currentRequestId || matchedCount >= cityLimit) return NO;
+//
+//            OASearchResult *searchResult = *object;
+//            std::shared_ptr<const OsmAnd::Amenity> amenity = searchResult.amenity;
+//            if (!amenity) return NO;
+//
+//            NSString *localeName = amenity->getName(QString(lang.UTF8String), transliterate).toNSString();
+//            NSString *subType = amenity->subType.toNSString();
+//            if (![allowedTypesSet containsObject:subType]) return NO;
+//
+//            NSArray<NSString *> *otherNames = searchResult.otherNames;
+//            if (![matcher matches:localeName] && ![matcher matchesMap:otherNames]) return NO;
+//
+//            [resultAmenities addObject:searchResult];
+//            matchedCount++;
+//            return matchedCount >= cityLimit;
+//        } cancelledFunc:^BOOL {
+//            return (_searchRequestsCount != currentRequestId || matchedCount >= cityLimit);
+//        }] resortAll:YES removeDuplicates:YES];
+//
+//        if (_searchRequestsCount == currentRequestId) {
+//            _searchRequestsCount = 0;
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                if (onComplete) {
+//                    onComplete(resultAmenities);
+//                }
+//            });
+//        }
+//    });
+//}
+
+
+//- (void)searchCities:(NSString *)text
+//      searchLocation:(CLLocation *)searchLocation
+//        allowedTypes:(NSArray<NSString *> *)allowedTypes
+//           cityLimit:(NSInteger)cityLimit
+//          onComplete:(void (^)(NSMutableArray *amenities))onComplete
+//{
+//    NSInteger currentRequestId = ++_searchRequestsCount;
+//
+//    NSSet<NSString *> *allowedTypesSet = [NSSet setWithArray:allowedTypes];
+//
+//    dispatch_async(_searchCitiesSerialQueue, ^{
+//        dispatch_group_enter(_searchCitiesGroup);
+//
+//        OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
+//        NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get] ?: @"";
+//        BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
+//        NSMutableArray *resultAmenities = [NSMutableArray array];
+//
+//        OAQuickSearchHelper *searchHelper = [OAQuickSearchHelper instance];
+//        OASearchUICore *searchCore = [searchHelper getCore];
+//        OASearchSettings *settings = [[searchCore getSearchSettings] setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation];
+//
+//        settings = [[[[settings setLang:lang transliterateIfMissing:transliterate]
+//                              setSortByName:NO]
+//                              setAddressSearch:YES]
+//                              setEmptyQueryAllowed:YES];
+//        settings = [settings setOriginalLocation:searchLocation];
+//        settings = [settings setSearchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]];
+//
+//        [searchCore updateSettings:settings];
+//
+//        __block NSInteger matchedCount = 0;
+//
+//        [searchCore shallowSearch:OASearchAmenityByNameAPI.class
+//                             text:text
+//                          matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+//            if (_searchRequestsCount != currentRequestId || matchedCount >= cityLimit) {
+//                return NO;
+//            }
+//
+//            OASearchResult *searchResult = *object;
+//            std::shared_ptr<const OsmAnd::Amenity> amenity = searchResult.amenity;
+//            if (!amenity) {
+//                return NO;
+//            }
+//
+//            NSString *localeName = amenity->getName(QString(lang.UTF8String), transliterate).toNSString();
+//            NSString *subType = amenity->subType.toNSString();
+//
+//            if (![allowedTypesSet containsObject:subType]) {
+//                return NO;
+//            }
+//
+//            NSArray<NSString *> *otherNames = searchResult.otherNames;
+//            if (![matcher matches:localeName] && ![matcher matchesMap:otherNames]) {
+//                return NO;
+//            }
+//
+//            [resultAmenities addObject:searchResult];
+//            matchedCount++;
+//            return matchedCount >= cityLimit;
+//        } cancelledFunc:^BOOL{
+//            return (_searchRequestsCount != currentRequestId || matchedCount >= cityLimit);
+//        }] resortAll:YES removeDuplicates:YES];
+//
+//        if (_searchRequestsCount == currentRequestId) {
+//            _searchRequestsCount = 0;
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                if (onComplete) {
+//                    onComplete(resultAmenities);
+//                }
+//            });
+//        }
+//
+//        dispatch_group_leave(_searchCitiesGroup);
+//    });
+//}
+
+
 - (void)searchCities:(NSString *)text
       searchLocation:(CLLocation *)searchLocation
         allowedTypes:(NSArray<NSString *> *)allowedTypes
@@ -569,6 +712,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
         settings = [settings setAddressSearch:YES];
         settings = [settings setEmptyQueryAllowed:YES];
         settings = [settings setOriginalLocation:searchLocation];
+        settings = [settings setSearchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]];
         [searchUICore updateSettings:settings];
 
         int __block count = 0;

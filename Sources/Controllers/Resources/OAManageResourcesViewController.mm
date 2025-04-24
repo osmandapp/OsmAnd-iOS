@@ -278,6 +278,7 @@ static BOOL _repositoryUpdated = NO;
         self.navigationItem.title = OALocalizedString(@"download_tab_local");
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 52.;
+    self.tableView.prefetchingEnabled = NO;
 
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_refreshRepositoryProgressHUD];
@@ -441,7 +442,6 @@ static BOOL _repositoryUpdated = NO;
     {
         [_subscribeEmailView updateColorForCALayer];
         _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
-        
         [self.tableView reloadData];
     }
 }
@@ -1588,6 +1588,13 @@ static BOOL _repositoryUpdated = NO;
         [_tableView reloadData];
 
         [self.view addSpinner];
+        
+//        [OAQuickSearchHelper.instance searchCities:searchString
+//                                    searchLocation:_app.locationServices.lastKnownLocation
+//                                      allowedTypes:@[@"city", @"town"]
+//                                         cityLimit:kSearchCityLimit
+//                                        onComplete:^(NSMutableArray *searchResults) {
+            
         [OAQuickSearchHelper.instance searchCityLocations:searchString
                                        searchLocation:_app.locationServices.lastKnownLocation
                                          searchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]
@@ -2670,8 +2677,6 @@ static BOOL _repositoryUpdated = NO;
     if ([item_ isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || ((OAResourceItem *) item_).resourceType == OsmAndResourceType::SrtmMapRegion))
     {
         OAMultipleResourceItem *item = (OAMultipleResourceItem *) item_;
-        UIColor *color = [UIColor colorNamed:ACColorNameIconColorDisabled];
-        NSArray<OAResourceItem *> *items = [self.region hasGroupItems] ? [self.region.groupItem getItems:item.resourceType] : item.items;
         NSString *resourceId = [item getResourceId];
         OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:item];
         DownloadingCell *downloadingCell = [_downloadingCellMultipleResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem];

@@ -36,6 +36,8 @@
 #import "OAPOIType.h"
 #import "OAResultMatcher.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAResourcesUIHelper.h"
+#import "OAManageResourcesViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -50,6 +52,118 @@ static const int SEARCH_HISTORY_API_PRIORITY = 150;
 static const int SEARCH_HISTORY_OBJECT_PRIORITY = 154;
 static const int SEARCH_TRACK_API_PRIORITY = 150;
 static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
+static const int SEARCH_INDEX_ITEM_API_PRIORITY = 150;
+static const int SEARCH_INDEX_ITEM_PRIORITY = 150;
+
+
+@implementation SearchIndexItemAPI
+
+- (BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher {
+    OAWorldRegion *worldRegion = [[OsmAndApp instance] worldRegion];
+    [self processGroups:worldRegion search:phrase resultMatcher:resultMatcher];
+    return YES;
+}
+
+- (void)processGroups:(OAWorldRegion *)group
+               search:(OASearchPhrase *)phrase
+        resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    OARepositoryResourceItem *indexItem = nil;
+    NSString *name = nil;
+    OAWorldRegion *region = group;
+    if (region)
+    {
+        name = [region.allNames componentsJoinedByString:@" "] ?: group.name;
+    }
+  
+    // TODO:
+    // group.getType().isScreen() && group.getParentGroup().getParentGroup().getType() != DownloadResourceGroupType.WORLD
+    if (group.superregion && group.superregion.superregion && group.superregion.superregion.resourceTypes && [self isMatch:phrase text:name]) {
+        if ([group.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
+        {
+            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:group];
+            if (ids.count > 0)
+            {
+                for (NSString *resourceId in ids)
+                {
+                    const auto& resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                    if (resource && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                    {
+                     //   const auto resource1 = [OsmAndApp instance].resourcesManager->getResource(QString::fromNSString(resourceId));
+                        // resource1 && resource1->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed
+                        BOOL isInstalled = [OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId));
+                       // ([OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId))
+                        if (!isInstalled)
+                        {
+                            NSLog(@"%@", resourceId);
+                            OARepositoryResourceItem *item = [[OARepositoryResourceItem alloc] init];
+                            item.resourceId = resource->id;
+                            item.resourceType = resource->type;
+                            item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                                     inRegion:region
+                                                               withRegionName:YES
+                                                             withResourceType:NO];
+                            item.resource = resource;
+                            item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+                            item.size = resource->size;
+                            item.sizePkg = resource->packageSize;
+                            item.worldRegion = region;
+                            item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+                            indexItem = item;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    if (indexItem)
+    {
+        OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+        sr.localeName = name;
+        sr.priority = SEARCH_INDEX_ITEM_PRIORITY;
+        sr.objectType = EOAObjectTypeIndexItem;
+        sr.relatedObject = indexItem;
+        sr.preferredZoom = 17;
+        
+        [resultMatcher publish:sr];
+        return;
+    }
+    
+    if (group.subregions)
+    {
+        for (OAWorldRegion *subregion in group.subregions)
+        {
+            [self processGroups:subregion search:phrase resultMatcher:resultMatcher];
+        }
+    }
+}
+
+- (BOOL)isMatch:(OASearchPhrase *)phrase text:(NSString *)text {
+    if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
+    {
+        return YES;
+    }
+    OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_EQUALS_FROM_SPACE];
+    return [matcher matches:text];
+}
+
+- (int)getSearchPriority:(OASearchPhrase *)phrase
+{
+    if (![phrase isNoSelectedType])
+    {
+        return -1;
+    }
+    return SEARCH_INDEX_ITEM_API_PRIORITY;
+}
+
+- (BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return NO;
+}
+
+@end
 
 
 @implementation OASearchFavoritesAPI
@@ -436,6 +550,8 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
 {
     [self setResourcesForSearchUICore];
     [_core initApi];
+    
+    [_core registerAPI:[[SearchIndexItemAPI alloc] init]];
     
     // Register favorites search api
     [_core registerAPI:[[OASearchFavoritesAPI alloc] init]];

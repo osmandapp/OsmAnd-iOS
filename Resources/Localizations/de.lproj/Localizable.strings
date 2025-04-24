@@ -1274,7 +1274,7 @@
 "rendering_attr_piste_type_sled_name" = "Schlitten";
 "routing_attr_allow_skating_only_name" = "Nur Skating-Routen zulassen";
 "routing_attr_weight_description" = "Gewicht des Fahrzeugs für Routenberechnung angeben.";
-"rendering_attr_highway_class_footway_name" = "Gehweg";
+"rendering_attr_highway_class_footway_name" = "Fußweg";
 "rendering_value_disabled_name" = "Deaktiviert";
 "routing_attr_avoid_stairs_name" = "Keine Treppen";
 "rendering_attr_surface_paved_name" = "Befestigt";
@@ -3669,3 +3669,14 @@
 "auto_25_chars_route_tl_kl" = "Links abbiegen und auf der linken Seite bleiben";
 "auto_25_chars_route_tslr" = "Leicht rechts abbiegen";
 "battery_level_settings_description" = "Den Batteriestand des Sensors als Hauptwert anzeigen";
+"litres" = "Liter";
+"imperial_gallons" = "Imperiale Gallonen";
+"us_gallons" = "US-Gallonen";
+"liter" = "l";
+"us_gallons_unit" = "gal";
+"unit_of_volume" = "Volumeneinheit";
+"shared_string_litres" = "Liter";
+"fuel_tank_capacity" = "Fassungsvermögen des Kraftstofftanks";
+"fuel_tank_capacity_description" = "Geben Sie das Fassungsvermögen Ihres Tanks ein, um Kraftstoffstand und -verbrauch genau zu verfolgen";
+"poi_filter_fuel" = "Kraftstoff";
+"osmand_web" = "OsmAnd Web";

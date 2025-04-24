@@ -3108,6 +3108,9 @@
 "icon_group_education" = "Education";
 "shared_string_original" = "Original";
 
+//Color categories
+"track_coloring_solid" = "Solid color";
+
 "settings_item_read_error" = "Could not read from \'%@\'.";
 "app_mode_default" = "Browse map";
 "app_mode_car" = "Driving";
@@ -3819,6 +3822,7 @@
 "apply_only_to_new_points" = "Apply only to new points";
 "apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";
 "original_icon_description" = "Each point would keep its own icon.";
+"original_color_description" = "Each point would keep its own color.";
 
 "my_places_no_tracks_title_root" = "You don’t have track files";
 "my_places_no_tracks_descr_root" = "You can import, create or record track files using OsmAnd.";

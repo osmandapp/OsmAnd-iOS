@@ -34,6 +34,7 @@
 - (NSIndexPath *)getDefaultIndexPath;
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath;
 - (id)getSelectedItem;
+- (UIMenu *)buildTopButtonContextMenu;
 - (void)generateData:(NSArray<NSArray *> *)data;
 - (void)insertItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath;
 - (void)replaceItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath;

@@ -105,10 +105,11 @@
                           updatePoints:updatePoints
                        saveImmediately:NO];
 
-    [OAFavoritesHelper updateGroup:_favoriteGroup
-                             color:self.editColor
-                      updatePoints:updatePoints
-                   saveImmediately:NO];
+    if (![self.editColor isEqual:_favoriteGroup.color])
+        [OAFavoritesHelper updateGroup:_favoriteGroup
+                                 color:self.editColor
+                          updatePoints:updatePoints
+                       saveImmediately:NO];
 
     [OAFavoritesHelper updateGroup:_favoriteGroup
                 backgroundIconName:self.editBackgroundIconName

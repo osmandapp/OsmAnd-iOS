@@ -18,6 +18,10 @@
 #import "GeneratedAssetSymbols.h"
 
 #define kWhiteColor 0x44FFFFFF
+
+static NSString * const kOriginalKey = @"original";
+static NSString * const kSolidColorKey = @"solid_color";
+
 @interface OAColorCollectionHandler () <ColorCollectionViewControllerDelegate, OACollectionCellDelegate, OAColorPickerViewControllerDelegate, UIColorPickerViewControllerDelegate>
 
 @property(nonatomic) NSIndexPath *selectedIndexPath;
@@ -27,8 +31,12 @@
 @implementation OAColorCollectionHandler
 {
     NSMutableArray<NSMutableArray<OAColorItem *> *> *_data;
+    NSMutableArray<OAColorsCategory *> *_categories;
+    NSMutableDictionary<NSString *, OAColorsCategory *> *_categoriesByKeyName;
+    NSString *_selectedCategoryKey;
     NSIndexPath *_editColorIndexPath;
     BOOL _isStartedNewColorAdding;
+    BOOL _isFavoriteList;
 }
 
 @synthesize delegate;
@@ -36,6 +44,51 @@
 - (NSMutableArray<NSMutableArray<OAColorItem *> *> *) getData
 {
     return _data;
+}
+
+#pragma mark - Initialization
+
+- (instancetype)initWithData:(NSArray<NSArray *> *)data isFavoriteList:(BOOL)isFavoriteList
+{
+    self = [super initWithData:data collectionView:nil];
+    if (self)
+    {
+        _categories = [NSMutableArray array];
+        _categoriesByKeyName = [NSMutableDictionary dictionary];
+        _selectedCategoryKey = @"";
+        _isFavoriteList = isFavoriteList;
+        [self setup];
+    }
+    return self;
+}
+
+- (void)setup
+{
+    [self initColorCategories];
+    [self selectCategoryWithName:kSolidColorKey];
+}
+
+- (void)setupDefaultCategory
+{
+    if (!_groupColors)
+        return;
+    
+    BOOL allEqual = YES;
+    UIColor *first = _groupColors.firstObject;
+
+    for (UIColor *icon in _groupColors)
+    {
+        if (![icon isEqual:first])
+        {
+            allEqual = NO;
+            break;
+        }
+    }
+    
+    if (_isFavoriteList && !allEqual)
+        [self selectCategoryWithName:kOriginalKey];
+    else
+        [self selectCategoryWithName:kSolidColorKey];
 }
 
 #pragma mark - Base UI
@@ -91,7 +144,151 @@
     return isDefaultColor ? [UIMenu menuWithTitle:OALocalizedString(@"access_default_color") children:menuElements] : [UIMenu menuWithChildren:menuElements];
 }
 
+- (UIMenu *)buildTopButtonContextMenu
+{
+    NSMutableArray<UIMenuElement *> *topMenuElements = [NSMutableArray array];
+    NSMutableArray<UIMenuElement *> *bottomMenuElements = [NSMutableArray array];
+    OAColorsCategory *previousCategory = nil;
+
+    for (OAColorsCategory *category in _categories)
+    {
+        if ([category.key isEqualToString:kOriginalKey])
+            [self updateMenuElements:topMenuElements withCategory:category andPreviousCategory:previousCategory];
+        else
+            [self updateMenuElements:bottomMenuElements withCategory:category andPreviousCategory:previousCategory];
+        previousCategory = category;
+    }
+
+    UIMenu *topMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:topMenuElements];
+    UIMenu *bottomMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:bottomMenuElements];
+
+    return [UIMenu menuWithTitle:@"" children:@[topMenu, bottomMenu]];
+}
+
+- (void)updateMenuElements:(NSMutableArray<UIMenuElement *> *)menuElements
+              withCategory:(OAColorsCategory *)category
+       andPreviousCategory:(OAColorsCategory *)previousCategory
+{
+    
+    if (previousCategory)
+    {
+        UIMenu *separator = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[]];
+        [menuElements addObject:separator];
+    }
+
+    UIAction *action = [UIAction actionWithTitle:category.translatedName
+                                           image:nil
+                                      identifier:nil
+                                         handler:^(__kindof UIAction * _Nonnull action) {
+        [self onMenuItemSelectedWithName:category.key];
+    }];
+    
+    [menuElements addObject:action];
+}
+
+- (void)onMenuItemSelectedWithName:(NSString *)name
+{
+    OAColorsCategory *category = _categoriesByKeyName[name];
+    if (category)
+    {
+        [self selectCategoryWithName:name];
+    }
+}
+
+- (void)selectCategoryWithName:(NSString *)categoryKey
+{
+    _selectedCategoryKey = categoryKey;
+
+    OAColorsCategory *category = _categoriesByKeyName[categoryKey];
+    if (category)
+    {
+        [self updateHostCellIfNeeded];
+
+        if (self.hostCell)
+            [self.handlerDelegate onColorCategorySelected:categoryKey with:(OAColorsPaletteCell *)self.hostCell];
+    }
+}
+
+- (void)updateHostCellIfNeeded
+{
+    [self updateTopButtonName];
+    [self updateCollectionVisibility];
+    [self updateDescriptionVisibility];
+    [self updateBottomButtonVisibility];
+    [self updateSeparatorLeftOffset];
+}
+
+- (void)updateTopButtonName
+{
+    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
+
+    OAColorsCategory *category = _categoriesByKeyName[_selectedCategoryKey];
+    if (category)
+    {
+        UIImage *iconImage = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
+        if (iconImage)
+        {
+            iconImage = [iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+
+            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+            attachment.image = iconImage;
+
+            NSAttributedString *imageString = [NSAttributedString attributedStringWithAttachment:attachment];
+
+            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", category.translatedName]];
+            [attributedString appendAttributedString:imageString];
+
+            OAColorsPaletteCell *cell = (OAColorsPaletteCell *)self.hostCell;
+            [cell.topButton setAttributedTitle:attributedString forState:UIControlStateNormal];
+        }
+    }
+}
+
+- (void)updateCollectionVisibility
+{
+    [self.hostCell collectionStackViewVisibility:_selectedCategoryKey != kOriginalKey];
+}
+
+- (void)updateDescriptionVisibility
+{
+    OAColorsPaletteCell *cell = (OAColorsPaletteCell *)self.hostCell;
+    [cell descriptionLabelStackViewVisibility:_selectedCategoryKey == kOriginalKey];
+}
+
+- (void)updateBottomButtonVisibility
+{
+    OAColorsPaletteCell *cell = (OAColorsPaletteCell *)self.hostCell;
+    [cell bottomButtonVisibility:_selectedCategoryKey != kOriginalKey];
+}
+
+- (void)updateSeparatorLeftOffset
+{
+    OAColorsPaletteCell *cell = (OAColorsPaletteCell *)self.hostCell;
+    [cell separatorLeftOffset:_selectedCategoryKey != kOriginalKey ? 20 : 0];
+}
+
 #pragma mark - Data
+
+- (void)initColorCategories
+{
+    [self initOriginalCategory];
+    [self initSolidColorCategory];
+    
+    for (OAColorsCategory *category in _categories)
+        _categoriesByKeyName[category.key] = category;
+}
+
+- (void)initOriginalCategory
+{
+    OAColorsCategory *category = [[OAColorsCategory alloc] initWithKey:kOriginalKey translatedName:OALocalizedString(@"shared_string_original")];
+    [_categories addObject:category];
+}
+
+- (void)initSolidColorCategory
+{
+    OAColorsCategory *category = [[OAColorsCategory alloc] initWithKey:kSolidColorKey translatedName:OALocalizedString(@"track_coloring_solid")];
+    [_categories addObject:category];
+}
 
 - (void)addAndSelectColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem
 {

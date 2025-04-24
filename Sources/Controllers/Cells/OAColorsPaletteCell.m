@@ -17,6 +17,9 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topTitleOffset;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomTitleOffset;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorOffsetViewWidth;
+@property (weak, nonatomic) IBOutlet UIStackView *bottomButtonStackView;
+@property (weak, nonatomic) IBOutlet UIStackView *descriptionLabelStackView;
 
 @end
 
@@ -28,6 +31,7 @@
 {
     [super awakeFromNib];
     [self setupViews];
+    [self topButtonVisibility:NO];
 }
 
 - (void) setupViews
@@ -49,6 +53,39 @@
     return (OAColorCollectionHandler *)[super getCollectionHandler];
 }
 
+- (void)setCollectionHandler:(OABaseCollectionHandler *)collectionHandler
+{
+    OAColorCollectionHandler * handler = (OAColorCollectionHandler *)collectionHandler;
+    [super setCollectionHandler:handler];
+    handler.hostCell = self;
+
+    UIMenu *menu = [[self getColorCollectionHandler] buildTopButtonContextMenu];
+    if (menu)
+    {
+        self.topButton.showsMenuAsPrimaryAction = YES;
+        self.topButton.menu = menu;
+    }
+}
+
+- (void)topButtonVisibility:(BOOL)show
+{
+    self.topButton.hidden = !show;
+}
+
+- (void)descriptionLabelStackViewVisibility:(BOOL)show
+{
+    self.descriptionLabelStackView.hidden = !show;
+}
+
+- (void)bottomButtonVisibility:(BOOL)show
+{
+    self.bottomButtonStackView.hidden = !show;
+}
+
+- (void)separatorLeftOffset:(CGFloat)value
+{
+    self.separatorOffsetViewWidth.constant = value;
+}
 
 #pragma mark - UICollectionViewDelegate
 

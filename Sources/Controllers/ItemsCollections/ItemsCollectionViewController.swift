@@ -452,6 +452,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             cell.backgroundColor = .systemBackground
             cell.setCollectionHandler(colorCollectionHandler)
             cell.collectionView.isScrollEnabled = false
+            cell.disableAnimationsOnStart = true
             cell.useMultyLines = true
             cell.anchorContent(.centerStyle)
         }
@@ -847,13 +848,12 @@ extension ItemsCollectionViewController: UISearchBarDelegate {
     
 extension ItemsCollectionViewController: OACollectionCellDelegate {
     
-    func onCollectionItemSelected(_ indexPath: IndexPath, selectedItem: Any?, collectionView: UICollectionView) {
+    func onCollectionItemSelected(_ indexPath: IndexPath, selectedItem: Any?, collectionView: UICollectionView, shouldDismiss: Bool) {
         if collectionType == .iconItems || collectionType == .bigIconItems {
             selectedIconItem = iconItems[indexPath.row]
             if let selectedIconItem {
                 iconsDelegate?.selectIconName(selectedIconItem)
             }
-            dismiss(animated: true)
         } else if collectionType == .poiIconCategories {
             let chipsTitles = iconCategories.map { $0.translatedName }
             if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler,
@@ -874,17 +874,18 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                 poiIconsDelegate.setIconName(selectedName)
                 poiIconsDelegate.selectIconName(selectedName)
                 poiIconsDelegate.allIconsVCDelegate = nil
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.dismiss(animated: true)
-                }
             }
         } else {
             selectedColorItem = colorCollectionHandler?.getSelectedItem()
             if let selectedColorItem {
                 delegate?.selectColorItem(selectedColorItem)
             }
-            super.onLeftNavbarButtonPressed()
+        }
+        
+        if shouldDismiss {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                super.onLeftNavbarButtonPressed()
+            }
         }
     }
     
@@ -968,7 +969,9 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
             isStartedNewColorAdding = false
             let newColorItem = delegate.addAndGetNewColorItem(viewController.selectedColor)
             colorItems.insert(newColorItem, at: 0)
+            selectedColorItem = newColorItem
             colorCollectionHandler?.addAndSelectColor(IndexPath(row: 0, section: 0), newItem: newColorItem)
+            delegate.selectColorItem(newColorItem)
         } else {
             var editingColor = colorItems[0]
             if let editColorIndexPath {
@@ -980,13 +983,11 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
                 delegate.changeColorItem(editingColor, withColor: viewController.selectedColor)
                 if let editColorIndexPath {
                     colorCollectionHandler?.replaceOldColor(editColorIndexPath)
-                } else {
-                    colorCollectionHandler?.replaceOldColor(IndexPath(row: 0, section: 0))
-                }
+                } 
             }
+            delegate.selectColorItem(editingColor)
         }
         tableView.reloadData()
-        viewController.dismiss(animated: true)
     }
 }
 

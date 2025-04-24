@@ -2342,7 +2342,12 @@ static const NSInteger kColorsSection = 1;
         ItemsCollectionViewController *colorCollectionViewController = nil;
         if ([self isSelectedTypeSolid])
         {
-            colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:[_appearanceCollection getAvailableColorsSortingByKey] selectedItem:_selectedColorItem];
+            colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:[_appearanceCollection getAvailableColorsSortingByLastUsed] selectedItem:_selectedColorItem];
+            colorCollectionViewController.delegate = self;
+            
+            OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+            OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+            colorCollectionViewController.hostColorHandler = colorHandler;
         }
         else if ([self isSelectedTypeGradient])
         {
@@ -2669,12 +2674,12 @@ static const NSInteger kColorsSection = 1;
 
 - (void)selectColorItem:(OAColorItem *)colorItem
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0] selectedItem:nil collectionView:nil];
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
 }
 
 - (void)selectPaletteItem:(PaletteColor *)paletteItem
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] selectedItem:nil collectionView:nil];
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
 }
 
 - (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
@@ -2736,7 +2741,7 @@ static const NSInteger kColorsSection = 1;
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss
 {
     NSString *paletteName = @"";
     if ([self isSelectedTypeSolid])
@@ -2825,6 +2830,12 @@ static const NSInteger kColorsSection = 1;
 }
 
 #pragma mark - UIColorPickerViewControllerDelegate
+
+- (void)colorPickerViewController:(UIColorPickerViewController *)viewController didSelectColor:(UIColor *)color continuously:(BOOL)continuously
+{
+    if ([OAUtilities isiOSAppOnMac])
+        [self addAndGetNewColorItem:color];
+}
 
 - (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
 {

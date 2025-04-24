@@ -913,7 +913,7 @@ extension TracksChangeAppearanceViewController {
 }
 
 extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
-    func onCollectionItemSelected(_ indexPath: IndexPath, selectedItem: Any?, collectionView: UICollectionView?) {
+    func onCollectionItemSelected(_ indexPath: IndexPath, selectedItem: Any?, collectionView: UICollectionView?, shouldDismiss: Bool) {
         if isSolidColorSelected {
             selectedColorItem = sortedColorItems[indexPath.row]
             if let colorValue = selectedColorItem?.value {
@@ -936,14 +936,14 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
 extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDelegate {
     func selectColorItem(_ colorItem: ColorItem) {
         if let row = sortedColorItems.firstIndex(where: { $0 == colorItem }) {
-            onCollectionItemSelected(IndexPath(row: row, section: 0), selectedItem: nil, collectionView: nil)
+            onCollectionItemSelected(IndexPath(row: row, section: 0), selectedItem: nil, collectionView: nil, shouldDismiss: true)
         }
     }
     
     func selectPaletteItem(_ paletteItem: PaletteColor) {
         let index = sortedPaletteColorItems.index(ofObjectSync: paletteItem)
         if index != NSNotFound {
-            onCollectionItemSelected(IndexPath(row: Int(index), section: 0), selectedItem: nil, collectionView: nil)
+            onCollectionItemSelected(IndexPath(row: Int(index), section: 0), selectedItem: nil, collectionView: nil, shouldDismiss: true)
         }
     }
     

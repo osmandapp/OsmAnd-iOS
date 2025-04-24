@@ -391,7 +391,7 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
         
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.location = mapObject.worldRegion.regionCenter;
-        targetPoint.title = mapObject.worldRegion.localizedName ? mapObject.worldRegion.localizedName : mapObject.worldRegion.nativeName;
+        targetPoint.title = mapObject.worldRegion.localizedName ?: mapObject.worldRegion.nativeName;
    
         targetPoint.icon = [OAResourceType getIcon:mapObject.indexItem.resourceType templated:NO];
         targetPoint.type = OATargetMapDownload;

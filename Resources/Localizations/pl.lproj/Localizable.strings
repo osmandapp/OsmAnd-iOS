@@ -3041,7 +3041,7 @@
 "shared_string_setup_route" = "Ustaw trasę";
 "add_widget" = "Dodaj widżet";
 "widget_panels_descr" = "Wybierz część ekranu do dodania lub przesunięcia widżetów";
-"poi_operator" = "Zarządca";
+"poi_operator" = "Operator";
 "add_row" = "Dodaj rząd";
 "required_maps" = "Wymagane mapy";
 "osmand_depelopment_use_old_routing" = "Użyj starego znajdowania trasy (A*)";
@@ -3243,3 +3243,6 @@
 "power_watts_unit" = "Waty";
 "cloud_sync_progress" = "Synchronizacja…%@";
 "shared_string_all_icons" = "Wszystkie ikony";
+"smart_folder_name_present" = "Taki inteligentny folder już istnieje";
+"us_gallons" = "Galony amerykańskie";
+"us_gallons_unit" = "galon";

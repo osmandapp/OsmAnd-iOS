@@ -601,13 +601,6 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
             OASWptPt *endPoint = points[i + 1];
             NSArray<OASWptPt *> *pair = @[startPoint, endPoint];
             
-            NSString *startProfileType = startPoint.getProfileType;
-            NSString *endProfileType = endPoint.getProfileType;
-            
-            BOOL shouldAdd = _roadSegmentData[pair] == nil && (startPoint.hasProfile || self.hasRoute);
-            BOOL isNil = _roadSegmentData[pair] == nil;
-            BOOL hasProfile = startPoint.hasProfile;
-            
             if (_roadSegmentData[pair] == nil && (startPoint.hasProfile || self.hasRoute))
                 [res addObject:pair];
         }

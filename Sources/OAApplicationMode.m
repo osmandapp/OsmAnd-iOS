@@ -488,6 +488,8 @@ static int PROFILE_TRUCK = 1000;
 
 - (NSInteger) getRouterService
 {
+    if (self == _DEFAULT)
+        return STRAIGHT;
     return [OAAppSettings.sharedManager.routerService get:self];
 }
 

@@ -75,7 +75,7 @@
 - (NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes
 {
     [acceptedTypes setObject:[OAPOIBaseType nullSet] forKey:self];
-    [self.class addReferenceTypes:self.poiTypes acceptedTypes:acceptedTypes];//
+    [self.class addReferenceTypes:self.poiTypes acceptedTypes:acceptedTypes];
     return acceptedTypes;
 }
 

@@ -229,7 +229,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if item.cellType == OAButtonTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.reuseIdentifier) as! OAButtonTableViewCell
-            cell.contentView.heightAnchor .constraint(greaterThanOrEqualToConstant: 48) .isActive = true
+            if cell.contentHeightConstraint == nil {
+                let constraint = cell.contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
+                constraint.isActive = true
+                cell.contentHeightConstraint = constraint
+            }
             cell.selectionStyle = .none
             cell.leftIconVisibility(false)
             cell.descriptionVisibility(false)

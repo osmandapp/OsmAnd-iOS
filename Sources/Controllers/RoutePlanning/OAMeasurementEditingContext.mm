@@ -651,7 +651,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         for (NSInteger i = 0; i < points.count; i++)
         {
             OASWptPt *point = points[i];
-            OASWptPt *nextPoint = i + 1 < points.count ? points[i+1] : nil;
+            OASWptPt *nextPoint = i + 1 < points.count ? points[i + 1] : nil;
             
             [s.points addObject:point];
             NSString *profileType = point.getProfileType;
@@ -661,7 +661,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
             {
                 BOOL isDefault = !profileType || [profileType isEqualToString:OAApplicationMode.DEFAULT.stringKey];
                 BOOL isGap = point.isGap;
-                if (defaultMode && (!isDefault ||addIntermediates) && !isGap)
+                if (defaultMode && (!isDefault || addIntermediates) && !isGap)
                 {
                     [roadSegmentIndexes addObject:@(segments.count - 1)];
                     defaultMode = NO;

@@ -62,8 +62,8 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
 {
     NSString *optionalTypeIcon = [OAPOIHelper.sharedInstance getPoiTypeOptionalIcon:self.name];
     NSString *additionalCategoryIcon = [OAPOIHelper.sharedInstance getPoiAdditionalCategoryIcon:self.name];
-    NSString *optionalIcon = optionalTypeIcon ? optionalTypeIcon : additionalCategoryIcon;
-    return [NSString stringWithFormat:@"mx_%@", optionalIcon ? optionalIcon : self.name];
+    NSString *optionalIcon = optionalTypeIcon ? : additionalCategoryIcon;
+    return [NSString stringWithFormat:@"mx_%@", optionalIcon ? : self.name];
 }
 
 -(BOOL)isEqual:(id)object

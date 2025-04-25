@@ -391,6 +391,10 @@
     if (_isOpenedFromAllColorsScreen && _hostColorHandler)
     {
         [_hostColorHandler addColor:newIndexPath newItem:duplicatedColorItem];
+        if (_hostColorHandler.delegate)
+            [_hostColorHandler.delegate reloadCollectionData];
+    } else if (self.delegate) {
+        [self.delegate reloadCollectionData];
     }
     return duplicatedColorItem;
 }

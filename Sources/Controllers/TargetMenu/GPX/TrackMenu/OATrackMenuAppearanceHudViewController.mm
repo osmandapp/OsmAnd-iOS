@@ -2809,6 +2809,7 @@ static const NSInteger kColorsSection = 1;
 
 - (void)reloadCollectionData
 {
+    [self updateAllValues];
 }
 
 #pragma mark - OAColorsCollectionCellDelegate

@@ -6,40 +6,6 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-@objcMembers
-final class SearchDownloadingCellResourceHelper: DownloadingCellResourceHelper {
-    override func setupCell(_ resourceId: String) -> DownloadingCell? {
-        if let resourceItem = getResource(resourceId) {
-            resourceItem.refreshDownloadTask()
-            var subtitle = ""
-            if resourceItem.sizePkg() > 0 {
-                subtitle = String(format: "%@  •  %@", resourceItem.formatedSizePkg(), resourceItem.type())
-                if let dateString = resourceItem.getDate() {
-                    subtitle += "  •  \(dateString)"
-                }
-            }
-            var title = resourceItem.title() ?? ""
-            if title.isEmpty {
-                title = OAResourcesUISwiftHelper.title(ofResourceType: resourceItem.resourceType(),
-                                                       in: resourceItem.worldRegion(),
-                                                       withRegionName: true,
-                                                       withResourceType: true)
-            }
-            let isDownloading = isDownloading(resourceId)
-            
-            // get cell with default settings
-            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: getLeftIconName(resourceId), rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
-            
-            if isDisabled(resourceId) {
-                cell?.titleLabel.textColor = .textColorSecondary
-                cell?.rightIconVisibility(false)
-            }
-            return cell
-        }
-        return nil
-    }
-}
-
 @objc protocol DownloadingCellResourceHelperDelegate: AnyObject {
     func onDownloadingCellResourceNeedUpdate(_ task: OADownloadTask?)
     func onStopDownload(_ resourceItem: OAResourceSwiftItem)
@@ -194,7 +160,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             let isDownloading = isDownloading(resourceId)
             
             // get cell with default settings
-            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: getLeftIconName(resourceId), rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
+            let cell = setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: getLeftIconName(resourceId), rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
             
             if isDisabled(resourceId) {
                 cell?.titleLabel.textColor = .textColorSecondary
@@ -203,6 +169,44 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             return cell
         }
         return nil
+    }
+    
+    override func setupCell(resourceId: String, title: String?, isTitleBold: Bool, desc: String?, leftIconName: String?, rightIconName: String?, isDownloading: Bool) -> DownloadingCell? {
+        var cell = cells[resourceId] as! DownloadingCell
+        
+        cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        cell.leftIconView.tintColor = .iconColorDefault
+        cell.rightIconView.tintColor = getRightIconColor()
+        cell.rightIconView.image = UIImage.templateImageNamed(getRightIconName(resourceId))
+        
+        setupLeftIcon(cell: cell, leftIconName: leftIconName, resourceId: resourceId)
+        
+        cell.titleLabel.text = title != nil ? title : ""
+        if isTitleBold || isBoldTitleStyle {
+            cell.titleLabel.font = UIFont.scaledSystemFont(ofSize: 17, weight: .medium)
+            cell.titleLabel.textColor = .textColorActive
+        } else {
+            cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
+            cell.titleLabel.textColor = .textColorPrimary
+        }
+        
+        if let desc, !desc.isEmpty {
+            cell.descriptionVisibility(true)
+            cell.descriptionLabel.text = desc
+            cell.descriptionLabel.font = UIFont.monospacedFont(at: 12, withTextStyle: .body)
+            cell.descriptionLabel.textColor = .textColorSecondary
+        } else {
+            cell.descriptionVisibility(false)
+        }
+        
+        if isDownloading {
+            cell.rightIconVisibility(false)
+            cells[resourceId] = cell
+            refreshCellProgress(resourceId)
+        } else {
+            setupRightIconForIdleCell(cell: cell, rightIconName: rightIconName, resourceId: resourceId)
+        }
+        return cell
     }
     
     override func getLeftIconName(_ resourceId: String) -> String? {
@@ -223,6 +227,28 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             } else {
                 stopDownload(resourceId)
             }
+        }
+    }
+    
+    func configureWith(_ resourceId: String,
+                       swiftResourceItem: OAResourceSwiftItem?,
+                       cell: DownloadingCell) {
+        if let swiftResourceItem, swiftResourceItem.objcResourceItem != nil {
+            if getResource(resourceId) == nil {
+                saveResource(resource: swiftResourceItem, resourceId: resourceId)
+            }
+            if swiftResourceItem.downloadTask() != nil {
+                saveStatus(resourceId: resourceId, status: .inProgress)
+            }
+            if statuses[resourceId] == nil {
+                statuses[resourceId] = .idle
+            }
+            if progresses[resourceId] == nil {
+                progresses[resourceId] = 0
+            }
+            
+            cells[resourceId] = cell
+            setupCell(resourceId)
         }
     }
     

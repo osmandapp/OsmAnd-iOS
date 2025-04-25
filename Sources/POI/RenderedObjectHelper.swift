@@ -107,7 +107,9 @@ final class RenderedObjectHelper: NSObject {
         for item in amenity.getAdditionalInfo() {
             let key = item.key as! String
             let value = item.value as! String
-            let translationKey = key.replacingOccurrences(of: ":", with: "_")
+            let translationKey = key
+                .replacingOccurrences(of: "osmand_", with: "")
+                .replacingOccurrences(of: ":", with: "_")
 
             if let translation, !translation.isEmpty {
                 break
@@ -138,7 +140,9 @@ final class RenderedObjectHelper: NSObject {
         
         for item in renderedObject.tags {
             guard let key = item.key as? String, let value = item.value as? String else { continue }
-            let translationKey = key.replacingOccurrences(of: ":", with: "_")
+            let translationKey = key
+                .replacingOccurrences(of: "osmand_", with: "")
+                .replacingOccurrences(of: ":", with: "_")
 
             if key.hasPrefix("name") {
                 continue

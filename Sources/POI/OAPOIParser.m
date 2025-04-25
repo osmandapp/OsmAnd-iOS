@@ -38,6 +38,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     NSMutableArray<OAPOICategory *> *_pCategories;
     NSMutableArray<OAPOIFilter *> *_pFilters;
     NSMutableArray<OAPOIType *> *_textPoiAdditionals;
+    NSMutableDictionary<NSString *, NSString *> *_poiTypeOptionalIcons;
     NSMutableDictionary<NSString *, NSString *> *_poiAdditionalCategoryIcons;
 
     xmlParserCtxtPtr _xmlParserContext;
@@ -76,6 +77,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     _pCategories = [NSMutableArray array];
     _pFilters = [NSMutableArray array];
     _textPoiAdditionals = [NSMutableArray array];
+    _poiTypeOptionalIcons = [NSMutableDictionary dictionary];
     _poiAdditionalCategoryIcons = [NSMutableDictionary dictionary];
     _otherMapCategory = [[OAPOICategory alloc] initWithName:@"Other"];
     [_pCategories addObject:_otherMapCategory];
@@ -150,6 +152,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
         self.poiCategories = _pCategories;
         self.poiFilters = _pFilters;
         self.textPoiAdditionals = _textPoiAdditionals;
+        self.poiTypeOptionalIcons = _poiTypeOptionalIcons;
         self.poiAdditionalCategoryIcons = _poiAdditionalCategoryIcons;
         self.deprecatedTags = _deprecatedTags;
         
@@ -782,6 +785,17 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             
             isHidden = [[value lowercaseString] isEqualToString:@"true"];
         }
+        else if (0 == strncmp((const char*)attributes[i].localname, kIconAttributeName,
+                              kIconAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString * icon = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+
+            if (icon)
+                [_poiTypeOptionalIcons setObject:icon forKey:name];
+        }
     }
     
     if (deprecatedOf)
@@ -985,6 +999,17 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                      encoding:NSUTF8StringEncoding];
             
             isHidden = [[value lowercaseString] isEqualToString:@"true"];
+        }
+        else if (0 == strncmp((const char*)attributes[i].localname, kIconAttributeName,
+                              kIconAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString * icon = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+
+            if (icon)
+                [_poiTypeOptionalIcons setObject:icon forKey:name];
         }
     }
     

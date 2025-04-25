@@ -66,6 +66,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     NSString *_prefLang;
     
     NSArray<OAPOIType *> *_textPoiAdditionals;
+    NSDictionary<NSString *, NSString *> *_poiTypeOptionalIcons;
     NSDictionary<NSString *, NSString *> *_poiAdditionalCategoryIcons;
     NSMapTable<NSString *, NSString *> *_deprecatedTags;
     
@@ -125,6 +126,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     _poiTypesByName = parser.poiTypesByName;
     _poiCategories = parser.poiCategories;
     _textPoiAdditionals = parser.textPoiAdditionals;
+    _poiTypeOptionalIcons = parser.poiTypeOptionalIcons;
     _poiAdditionalCategoryIcons = parser.poiAdditionalCategoryIcons;
     _otherMapCategory = parser.otherMapCategory;
     _deprecatedTags = parser.deprecatedTags;
@@ -671,6 +673,11 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         return lastCategory;
     }
     return self.otherPoiCategory;
+}
+
+- (NSString *) getPoiTypeOptionalIcon:(NSString *)type
+{
+    return [_poiTypeOptionalIcons objectForKey:type];
 }
 
 - (NSString *) getPoiAdditionalCategoryIcon:(NSString *)category

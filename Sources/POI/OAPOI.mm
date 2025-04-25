@@ -74,7 +74,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return _values[@"gpx_icon"];
 }
 
--(void)setValues:(NSDictionary *)values
+-(void)setValues:(MutableOrderedDictionary *)values
 {
     _values = values;
     [self processValues];
@@ -85,7 +85,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     if (self.values)
     {
         NSString __block *_prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
-        NSMutableDictionary __block *content = [NSMutableDictionary dictionary];
+        MutableOrderedDictionary __block *content = [MutableOrderedDictionary new];
         NSString __block *descFieldLoc;
         if (_prefLang)
             descFieldLoc = [@"description:" stringByAppendingString:_prefLang];
@@ -317,9 +317,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return [self getTagContent:@"content" lang:lang];
 }
 
-- (NSDictionary<NSString *, NSString *> *) getAdditionalInfo
+- (MutableOrderedDictionary<NSString *, NSString *> *) getAdditionalInfo
 {
-    NSMutableDictionary<NSString *, NSString *> *res = [NSMutableDictionary new];
+    MutableOrderedDictionary<NSString *, NSString *> *res = [MutableOrderedDictionary new];
     if (!_values)
         return res;
     
@@ -422,7 +422,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         result[savingKey] = self.openingHours;
     }
     
-    NSDictionary<NSString *, NSString *> *additionalInfo = [self getAdditionalInfo];
+    MutableOrderedDictionary<NSString *, NSString *> *additionalInfo = [self getAdditionalInfo];
     if (additionalInfo.count > 0)
     {
         OAPOIHelper *poiHelper = OAPOIHelper.sharedInstance;
@@ -496,7 +496,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         NSString *typeStr = nil;
         NSString *subType = nil;
         NSString *openingHours = nil;
-        NSMutableDictionary<NSString *, NSString *> *additionalInfo = [NSMutableDictionary dictionary];
+        MutableOrderedDictionary<NSString *, NSString *> *additionalInfo = [MutableOrderedDictionary new];
 
         for (NSString *key in map.allKeys)
         {

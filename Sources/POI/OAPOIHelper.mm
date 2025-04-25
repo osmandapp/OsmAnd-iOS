@@ -1555,8 +1555,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     if (nameLocalized.length > 0)
         poi.nameLocalized = nameLocalized;
     
-    NSMutableDictionary *content = [NSMutableDictionary dictionary];
-    NSMutableDictionary *values = [NSMutableDictionary dictionary];
+    MutableOrderedDictionary *content = [MutableOrderedDictionary new];
+    MutableOrderedDictionary *values = [MutableOrderedDictionary new];
     [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:(withContent ? content : nil) values:(withValues ? values : nil)];
     poi.values = values;
     poi.localizedContent = content;
@@ -1587,8 +1587,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 
 + (void) fetchValuesContentPOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity poi:(OAPOI *)poi
 {
-    NSMutableDictionary *content = [NSMutableDictionary dictionary];
-    NSMutableDictionary *values = [NSMutableDictionary dictionary];
+    MutableOrderedDictionary *content = [MutableOrderedDictionary new];
+    MutableOrderedDictionary *values = [MutableOrderedDictionary new];
     [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:content values:values];
     poi.values = values;
     poi.localizedContent = content;
@@ -1740,7 +1740,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     return nameLocalized.isNull() ? @"" : nameLocalized.toNSString();
 }
 
-+ (void) processDecodedValues:(const QList<OsmAnd::Amenity::DecodedValue> &)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values
++ (void) processDecodedValues:(const QList<OsmAnd::Amenity::DecodedValue> &)decodedValues content:(MutableOrderedDictionary *)content values:(MutableOrderedDictionary *)values
 {
     for (const auto& entry : OsmAnd::constOf(decodedValues))
     {

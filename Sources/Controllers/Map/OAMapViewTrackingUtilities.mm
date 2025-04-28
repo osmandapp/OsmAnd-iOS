@@ -340,7 +340,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 double rotation = NAN;
                 BOOL pendingRotation = NO;
                 int currentMapRotation = [_settings.rotateMap get];
-                BOOL smallSpeedForCompass = [self isSmallSpeedForCompass:location];
                 
                 showViewAngle = [OANativeUtilities containsLatLon:location];
                 if (currentMapRotation == ROTATE_MAP_BEARING)

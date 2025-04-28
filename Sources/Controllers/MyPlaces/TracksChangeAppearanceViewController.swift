@@ -164,7 +164,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             let coloringDescrRow = coloringSection.createNewRow()
             coloringDescrRow.cellType = OASimpleTableViewCell.reuseIdentifier
             coloringDescrRow.key = RowKey.coloringDescRowKey.rawValue
-            coloringDescrRow.title = localizedString(isRouteAttributeTypeSelected ? "white_color_undefined" : "unchanged_parameter_summary")
+            coloringDescrRow.title = localizedString(isRouteAttributeTypeSelected ? "white_color_undefined" : "each_favourite_point_own_icon")
         }
         
         let widthSection = tableData.createNewSection()
@@ -804,10 +804,6 @@ extension TracksChangeAppearanceViewController {
                 self.selectedRouteAttributesString = selectedString
                 self.resetColorSelectionFlags()
                 self.isRouteAttributeTypeSelected = true
-            } else {
-                if let navigationController {
-                    OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
-                }
             }
             
             self.updateSection(containingRowKey: .coloringRowKey)
@@ -929,6 +925,8 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
                 data.setParameter(.colorPalette, value: paletteColor.paletteName)
             }
         }
+        
+        updateSection(containingRowKey: .coloringRowKey)
     }
     
     func reloadCollectionData() {
@@ -939,7 +937,6 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
     func selectColorItem(_ colorItem: ColorItem) {
         if let row = sortedColorItems.firstIndex(where: { $0 == colorItem }) {
             onCollectionItemSelected(IndexPath(row: row, section: 0), selectedItem: nil, collectionView: nil)
-            updateSection(containingRowKey: .coloringRowKey)
         }
     }
     
@@ -947,7 +944,6 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
         let index = sortedPaletteColorItems.index(ofObjectSync: paletteItem)
         if index != NSNotFound {
             onCollectionItemSelected(IndexPath(row: Int(index), section: 0), selectedItem: nil, collectionView: nil)
-            updateSection(containingRowKey: .coloringRowKey)
         }
     }
     

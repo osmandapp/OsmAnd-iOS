@@ -346,8 +346,6 @@ class DownloadingCellBaseHelper: NSObject {
     
     func cleanCellCache() {
         cells.removeAll()
-        statuses.removeAll()
-        progresses.removeAll()
     }
     
     @objc func refreshDownloadingContent() {

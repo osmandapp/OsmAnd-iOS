@@ -1709,10 +1709,3 @@
 "shared_string_uninstall" = "Gỡ cài đặt";
 "speed_cameras_alert" = "Việc cảnh báo camera tốc độ ở một số quốc gia bị cấm bởi luật pháp.";
 "vessel_width_limit_description" = "Đặt chiều rộng của tàu để tránh những cây cầu hẹp";
-"shared_string_always" = "Luôn luôn";
-"uninstall_speed_cameras" = "Gỡ cài đặt camera tốc độ";
-"pseudo_mercator_projection" = "Phép chiếu Pseudo-Mercator";
-"one_image_per_tile" = "Một tệp ảnh cho mỗi mảng";
-"sqlite_db_file" = "Tệp SQLiteDB";
-"add_widget" = "Thêm widget";
-"speed_camera_pois" = "POI camera tốc độ";

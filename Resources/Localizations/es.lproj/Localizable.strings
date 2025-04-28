@@ -2859,7 +2859,7 @@
 "coordinates_widget_secondary_desc" = "El formato de las coordenadas puede cambiarse en %@ → %@ → %@.";
 "widget_secondary_desc_part_of" = "Parte del complemento «%@».";
 "coordinates_format" = "Formato de las coordenadas";
-"add_widget" = "Añadir widget";
+"add_widget" = "Añadir un widget";
 "add_page" = "Añadir una página";
 "shared_string_switch_mode" = "Cambiar de modo";
 "weather_widgets_secondary_desc" = "Las unidades de medida pueden cambiarse en los ajustes del plugin de Meteorología.";
@@ -3531,10 +3531,3 @@
 "auto_25_chars_route_tr_kl" = "Gire a la derecha y manténgase a la izquierda";
 "auto_25_chars_route_tr_kr" = "Gire a la derecha y manténgase a la derecha";
 "shared_string_pause" = "Pausar";
-"shared_string_estimated_time_span" = "Duración estimada";
-"ask_every_time" = "Preguntar cada vez";
-"detailed_track_guidance" = "Guía detallada de la vía";
-"battery_widget_level_privacy_ios_desc" = "Por motivos de privacidad de iOS, el widget sólo puede mostrar el nivel de batería en pasos del 5%, como 35%, 60% u 85%";
-"detailed_track_guidance_description" = "OsmAnd hará coincidir tu ruta con las carreteras cercanas para mejorar la guía giro a giro.";
-"profile_icons" = "Icono de perfil";
-"download_tab_conflicts" = "No resuelto";

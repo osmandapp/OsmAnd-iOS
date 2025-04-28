@@ -334,7 +334,6 @@
 {
     [gpxFile setShowArrowsShowArrows:gpxItem.showArrows];
     [gpxFile setShowStartFinishShowStartFinish:gpxItem.showStartFinish];
-    [gpxFile setJoinSegmentIsJoinSegment:gpxItem.joinSegments];
     if (gpxItem.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone)
     {
         [gpxFile setAdditionalExaggerationAdditionalExaggeration:gpxItem.verticalExaggerationScale];

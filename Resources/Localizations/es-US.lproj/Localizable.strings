@@ -50,13 +50,13 @@
 "new_destination_point_dialog" = "Ya se definió un destino:";
 "replace_destination_point" = "Reemplazar destino";
 "shared_string_current" = "Actual";
-"make_as_start_point" = "Agregar como punto de partida";
-"keep_and_add_destination_point" = "Agregar como último destino";
+"make_as_start_point" = "Añadir como punto de partida";
+"keep_and_add_destination_point" = "Añadir como último destino";
 "subsequent_dest_description" = "Mueve el destino hacia arriba y crea uno nuevo";
-"add_as_first_destination_point" = "Agregar como primer destino intermedio";
-"first_intermediate_dest_description" = "Agrega un destino intermedio inicial";
-"add_as_last_destination_point" = "Agregar como último destino intermedio";
-"last_intermediate_dest_description" = "Agrega un destino intermedio";
+"add_as_first_destination_point" = "Añadir como primer destino intermedio";
+"first_intermediate_dest_description" = "Añade un destino intermedio inicial";
+"add_as_last_destination_point" = "Añadir como último destino intermedio";
+"last_intermediate_dest_description" = "Añade un destino intermedio";
 "show_poi_over_map" = "Mostrar superposición de PDI";
 "shared_string_search" = "Buscar";
 "address_search_desc" = "Buscar dirección";
@@ -320,7 +320,7 @@
 "shared_string_turn" = "Giros";
 "stop_routing_confirm" = "¿Parar la navegación\?";
 "cancel_route" = "¿Descartar ruta\?";
-"route_is_too_long_v2" = "Para largas distancias: Agrega destinos intermedios si no se encuentra ninguna ruta en 10 minutos.";
+"route_is_too_long_v2" = "Para largas distancias: Añade destinos intermedios si no se encuentra ninguna ruta en 10 minutos.";
 "navigation_over_track" = "¿Iniciar la navegación a lo largo de la traza?";
 "use_displayed_track_for_navigation" = "¿Usar la traza mostrada para la navegación?";
 "previous_route" = "Ruta anterior";
@@ -428,7 +428,7 @@
 "shared_string_upload" = "Subir";
 "shared_string_remove" = "Quitar";
 "shared_string_dismiss" = "Descartar";
-"shared_string_add" = "Agregar";
+"shared_string_add" = "Añadir";
 "buy" = "Comprar";
 "shared_string_buy_for" = "por";
 "shared_string_or" = "o";
@@ -525,7 +525,7 @@
 "fav_select" = "Elige los favoritos";
 "select_favorite" = "Elegir favorito";
 "group_properties" = "Propiedades del grupo";
-"add_group" = "Agregar un grupo";
+"add_group" = "Añadir un grupo";
 "add_favorite" = "Añadir favorito";
 "name_and_descr" = "Nombre y descripción";
 "select_group" = "Elige el grupo";
@@ -664,7 +664,7 @@
 "map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las pendientes en el mapa.";
 "shared_string_legend" = "Leyenda";
 "map_settings_show_slider_map" = "Mostrar deslizador en el mapa";
-"add_online_source" = "Agregar repositorio en línea";
+"add_online_source" = "Añadir repositorio en línea";
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_hide_polygons_desc" = "Esta opción sólo afecta a los mapas vectoriales sin conexión de OsmAnd";
 "map_settings_add_maps_desc" = "Puedes añadir nuevos mapas a través de un enlace o importando archivos SQLite.";
@@ -948,17 +948,17 @@
 
 // Route planning
 "plan_route" = "Planificar ruta";
-"coord_input_add_point" = "Agregar punto";
+"coord_input_add_point" = "Añadir punto";
 "point_num" = "Punto %d";
 "points_count" = "Puntos:";
 "route_between_points" = "Ruta entre puntos";
 "profile_alert_need_save_title" = "Guardar cambios";
 "save_as_new_track" = "Guardar como nueva traza";
-"add_to_a_track" = "Agregar a una traza";
+"add_to_a_track" = "Añadir a una traza";
 "move_point" = "Mover punto";
 "move_point_descr" = "Mueve el mapa para cambiar la ubicación de este punto.";
-"add_point_before" = "Agregar punto anterior";
-"add_point_after" = "Agregar punto posterior";
+"add_point_before" = "Añadir punto anterior";
+"add_point_after" = "Añadir punto posterior";
 "trim_before" = "Recortar antes de este punto";
 "trim_after" = "Recortar después de este punto";
 "change_route_type_before" = "Cambiar el tipo de ruta antes de este punto";
@@ -986,11 +986,11 @@
 "track_is_saved" = "¡Se ha guardado \n«%s»!";
 "plan_route_open_existing_track" = "Abrir traza existente";
 "sort_last_modified" = "Último modificado";
-"route_between_points_add_track_desc" = "Elige un archivo de traza al que agregar el segmento nuevo.";
+"route_between_points_add_track_desc" = "Elige un archivo de traza al que añadir el segmento nuevo.";
 "route_between_points_warning_desc" = "A continuación, ajusta la traza al camino permitido más cercano con un perfil de navegación.";
 "plan_route_exit_message" = "¿Cerrar el plan de ruta sin guardar? Se perderán todos los cambios.";
 "gpx_saved_successfully" = "Archivo GPX guardado en %@";
-"none_point_error" = "Agrega al menos un punto.";
+"none_point_error" = "Añadir al menos un punto.";
 "empty_filename" = "Nombre de archivo vacío";
 "incorrect_symbols" = "Se han ingresado caracteres inválidos";
 "invalid_format" = "Formato inválido";
@@ -1202,7 +1202,7 @@
 "mapil_no_inet_descr" = "Necesitas conexión a Internet para ver las fotos de Mapillary.";
 "mapil_images_nearby" = "Imágenes cercanas";
 "mapil_no_images" = "No se encontraron fotos en esta ubicación.";
-"shared_string_add_photos" = "Agregar fotos";
+"shared_string_add_photos" = "Añadir fotos";
 "improve_coverage_mapillary" = "Mejorar cobertura de fotos con Mapillary";
 "mapillary_get_descr" = "Obtén Mapillary para añadir fotos a esta ubicación";
 "mapil_contribute" = "Contribuye con tus propias imágenes a nivel de calle";
@@ -1226,9 +1226,9 @@
 "copied_to_clipboard" = "Copiado al portapapeles";
 // Quick action
 "no_overlay" = "Sin superposición";
-"quick_action_map_overlay_action" = "Agregar superposición";
+"quick_action_map_overlay_action" = "Añadir superposición";
 "no_underlay" = "Sin subyacencia";
-"quick_action_map_underlay_action" = "Agregar subyacencia";
+"quick_action_map_underlay_action" = "Añadir subyacencia";
 "quick_action_list_descr" = "Pulsando las páginas de este botón de acción a través de la siguiente lista";
 "toggle_current_location" = "Mostrar/ocultar control de coordenadas";
 "show_current_location" = "Mostrar coordenadas";
@@ -1237,10 +1237,10 @@
 "quick_action_map_overlay_title" = "Mapas superpuestos";
 "quick_action_map_underlay_title" = "Mapas subyacentes";
 "vector_data" = "Mapas vectoriales sin conexión";
-"quick_action_map_source_action" = "Agregar repositorio del mapa";
-"quick_action_map_style_action" = "Agregar un estilo de mapa";
+"quick_action_map_source_action" = "Añadir repositorio del mapa";
+"quick_action_map_style_action" = "Añadir un estilo de mapa";
 "quick_action_map_styles" = "Estilos de mapa";
-"quick_action_new_action" = "Agregar acción";
+"quick_action_new_action" = "Añadir acción";
 "unsupported_items" = "Elementos no admitidos";
 "quick_action_add_create_items" = "Crear elementos";
 "configure_map" = "Configurar mapa";
@@ -1267,10 +1267,10 @@
 "quick_action_map_underlay" = "Capa subyacente";
 "quick_action_replace_destination" = "Reemplazar destino";
 "add_destination" = "Añadir destino";
-"route_add_start_point" = "Agregar punto de partida";
-"add_intermediate" = "Agregar punto intermedio";
-"add_home" = "Agregar como «Casa»";
-"add_work" = "Agregar como «Trabajo»";
+"route_add_start_point" = "Añadir punto de partida";
+"add_intermediate" = "Añadir punto intermedio";
+"add_home" = "Añadir como «Casa»";
+"add_work" = "Añadir como «Trabajo»";
 "favorite_home_category" = "Casa";
 "work_button" = "Trabajo";
 "map_widget_parking" = "Estacionamiento";
@@ -1305,7 +1305,7 @@
 "quick_action_template_name" = "Nombre de la plantilla";
 "quick_action_fav_name_descr" = "Dejar el campo vacío para usar la dirección o el nombre del lugar.";
 "quick_action_select_group" = "Marca el grupo en el que deseas guardar el favorito.";
-"quick_action_add_category" = "Agregar una categoría";
+"quick_action_add_category" = "Añadir una categoría";
 "quick_action_add_category_descr" = "Puedes marcar varias categorías de PDI.";
 "quick_action_show_poi_descr" = "Añade una o más categorías de PDI para mostrar en el mapa.";
 "quick_action_fill_params_alert" = "Rellena primero los parámetros";
@@ -1356,7 +1356,7 @@
 "quick_action_remove_next_destination_descr" = "Quita el siguiente destino de la ruta. Si es el destino final, la navegación se detendrá.";
 "change_application_profile" = "Cambiar perfil de la aplicación";
 "select_application_profile" = "Elegir perfil de la aplicación";
-"shared_string_add_profile" = "Agregar perfil";
+"shared_string_add_profile" = "Añadir perfil";
 "quick_action_switch_profile_descr" = "El botón de acción alterna entre los perfiles elegidos.";
 "profile_type_user_string" = "Perfil de usuario";
 "profile_type_osmand_string" = "Perfil de OsmAnd";
@@ -1366,7 +1366,7 @@
 "other_options" = "Otras opciones";
 "add_parking" = "Añadir como ubicación de estacionamiento";
 "add_parking_short" = "Añadir estacionamiento";
-"add_waypoint" = "Agregar punto de referencia";
+"add_waypoint" = "Añadir punto de referencia";
 "add_waypoint_short" = "Añadir punto de ruta";
 "delete_waypoints" = "Borrar puntos de referencia";
 "delete_group_confirm_short" = "¿Borrar grupo(s)?";
@@ -1488,7 +1488,7 @@
 "plugin_nautical_descr" = "Enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, áreas marinas peligrosas, zonas restringidas para navegar o atracar, etc. Para usarlo, descarga los respectivos mapas náuticos y activa el estilo «Mapa náutico» en «Configurar mapa». \n \nSigue leyendo en %@.";
 "osmand_parking_plugin_name" = "Estacionamiento";
 "product_desc_parking" = "Rastrea el tiempo de estacionamiento y la ubicación de su vehículo";
-"osmand_parking_plugin_description" = "Registra dónde estacionaste el vehículo y crea un recordatorio sobre la expiración del mismo. Para colocar el marcador, elige un lugar en el mapa, luego en «Acciones» pulsa en «Agregar estacionamiento».";
+"osmand_parking_plugin_description" = "Registra dónde estacionó el vehículo y crea un recordatorio sobre la expiración del mismo. Para colocar el marcador, elige un lugar en el mapa, luego en «Acciones» pulsa «Añadir estacionamiento».";
 "plugin_ski_name" = "Vista invernal";
 "product_desc_skimap" = "Mapa actualizado de las pistas de esquí con remontes y pendientes";
 "plugin_ski_descr" = "Diseñado para navegar en áreas deportivas de invierno. Ve las pistas de esquí, los remontes, etc. con líneas coloreadas que indican el nivel de complejidad. Para usarlo: \n1. Activa este complemento\n2. Pulsa en «Configurar mapa»\n3. Elige el estilo de mapa «Invierno y esquí».";
@@ -1707,7 +1707,7 @@
 "explore_wikipedia_offline" = "Explorar Wikipedia sin conexión.";
 "online_webpage_warning" = "La página solo está disponible en línea. ¿Abrirla en el navegador web?";
 "custom_search" = "Búsqueda personalizada";
-"add_custom_category" = "Agregar categoría personalizada";
+"add_custom_category" = "Añadir categoría personalizada";
 "poi_filter_custom_filter" = "Filtro personal";
 "delete_custom_categories" = "Borrar categorías personalizadas";
 "poi_filter_closest_poi" = "PDI más cercanos";
@@ -2210,7 +2210,7 @@
 "altitude" = "Altitud";
 "route_preferred_terrain_less_hilly" = "Rutas más cortas y menos montañosas.";
 "context_menu_edit_descr" = "Editar descripción";
-"add_description" = "Agregar descripción";
+"add_description" = "Añadir descripción";
 "select_tracks" = "Marcar trazas";
 "selected_tracks_count" = "Trazas - %d";
 "map_settings_weather" = "Clima";
@@ -2578,7 +2578,7 @@
 "recalc_angle_dialog_descr" = "Se muestra un segmento recto adicional entre la ubicación y la ruta calculada, hasta que la ruta sea recalculada";
 "local_backup_empty_file" = "No existen elementos a restaurar desde la copia de seguridad.";
 "show_borders_of_downloaded_maps" = "Colorear mapas descargados";
-"shared_string_added" = "Agregado";
+"shared_string_added" = "Añadido";
 "rendering_attr_showMtbScale_name" = "Mostrar escala de MTB";
 "remote_item" = "Elemento remoto";
 "local_item" = "Elemento local";
@@ -2860,7 +2860,7 @@
 "widget_secondary_desc_part_of" = "Parte del complemento «%@».";
 "weather_widgets_secondary_desc" = "Las unidades de medida pueden cambiarse dentro del complemento «Meteorología».";
 "add_widget" = "Añadir widget";
-"add_page" = "Agregar página";
+"add_page" = "Añadir página";
 "go_to_marker_location" = "Ir a la ubicación del marcador";
 "map_widget_distance_to_intermediate" = "Distancia al punto intermedio";
 "side_marker_eta" = "Hora estimada de llegada";
@@ -2910,7 +2910,7 @@
 "visible_in_3d_mode" = "Visible en el modo 3D";
 "map_3d_mode_description" = "Pulsa en el mapa con 2 dedos y desliza hacia arriba o abajo para ajustar la inclinación del mapa.";
 "map_3d_mode_hint" = "Mantén pulsado para cambiar la ubicación del botón.";
-"add_row" = "Agregar fila";
+"add_row" = "Añadir fila";
 "free_account" = "Cuenta gratuita";
 "free_favorites_backup_description" = "Regístrate en OsmAnd Cloud para obtener una copia de seguridad gratuita de los favoritos y ajustes.";
 "banner_payment_free_backup_settings_title" = "Copia de seguridad gratuita de los ajustes";
@@ -2918,7 +2918,7 @@
 "get_osmand_cloud" = "Obtener OsmAnd Cloud";
 "reset_all_settings_desc" = "¿Restablecer todos los ajustes a los predefinidos\?";
 "no_widgets_here_yet" = "Todavía sin widgets aquí";
-"no_widgets_descr" = "Agrega uno o más widgets desde la lista de widgets disponibles.";
+"no_widgets_descr" = "Añade uno o más widgets desde la lista de widgets disponibles.";
 "map_widget_rendering_fps_desc" = "Muestra que tan rápido se ven y actualizan el mapa y sus elementos , expresada en fotogramas por segundo (FPS).";
 
 // Widget descriptions
@@ -3298,7 +3298,7 @@
 "shared_string_analysis" = "Análisis";
 "shared_string_limit" = "Límite";
 "default_buttons" = "Botones predefinidos";
-"add_button" = "Agregar botón";
+"add_button" = "Añadir botón";
 "empty_name" = "Nombre vacío";
 "custom_map_button_name_present" = "Ese botón ya existe";
 "track_vertical_exaggeration_description" = "Cambiando el valor de la escala, puedes cambiar la altura de la traza 3D.";
@@ -3426,7 +3426,7 @@
 "tracker_item" = "OsmAnd Tracker";
 "quick_action_terrain_color_scheme" = "Esquema de color del terreno";
 "map_settings_weather_temp_water" = "Temperatura del agua";
-"quick_action_need_to_add_item_to_list" = "Agregar al menos un elemento a la lista en los ajustes de «Acción rápida»";
+"quick_action_need_to_add_item_to_list" = "Añadir al menos un elemento a la lista en los ajustes de «Acción rápida»";
 "map_widget_map_scale" = "Escala del mapa";
 "max_sensor_speed" = "Sensor de velocidad, max";
 "avg_sensor_speed" = "Sensor de velocidad, promedio";
@@ -3460,19 +3460,19 @@
 "screen_is_unlocked" = "Pantalla táctil desbloqueada.";
 "help_article_map_routes_name" = "Rutas";
 "sort_subfolders_tracks" = "Ordenar subcarpetas";
-"add_widget_to_the_left" = "Agregar widget a la izquierda";
+"add_widget_to_the_left" = "Añadir widget a la izquierda";
 "obd_plugin_name" = "Estadísticas del vehículo";
 "screen_is_locked_by_action_button" = "Pantalla táctil bloqueada. Pulsa el botón para desbloquearla.";
 "delete_widget_description" = "Este widget se borrará. Puedes restaurarlo luego en «Configurar pantalla».";
 "lock_screen_description" = "Activa o desactiva la funcionalidad de la pantalla táctil para evitar toques accidentales";
 "help_article_map_tracks_name" = "Trazas";
 "shared_string_interface" = "Interfaz";
-"add_widget_to_the_right" = "Agregar widget a la derecha";
+"add_widget_to_the_right" = "Añadir widget a la derecha";
 "reset_average_speed" = "Reiniciar la velocidad promedio";
 "delete_widget" = "¿Borrar widget?";
-"add_widget_below" = "Agregar widget debajo";
+"add_widget_below" = "Añadir widget debajo";
 "lock_screen" = "Bloquear pantalla";
-"add_widget_above" = "Agregar widget encima";
+"add_widget_above" = "Añadir widget encima";
 "cloud_sync_progress" = "Sincronizando... %@";
 "auto_25_chars_route_tl" = "Gira a la izquierda";
 "auto_25_chars_route_tu" = "Da la vuelta";
@@ -3625,4 +3625,3 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "lang_war" = "Waray";
 "lang_yo" = "Yoruba";
-"add_smart_folder" = "Agregar carpeta inteligente";

@@ -18,14 +18,13 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *addButtonLandscapeWidthConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsStackLandscapeRightConstraint;
 
-- (instancetype)initWithFileName:(NSString *)fileName;
-- (instancetype)initWithFileName:(NSString *)fileName
-                 targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
-               adjustMapPosition:(BOOL)adjustMapPosition;
-- (instancetype)initWithInitialPoint:(CLLocation *)latLon;
-- (instancetype)initWithEditingContext:(OAMeasurementEditingContext *)editingCtx;
-- (instancetype)initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning;
+- (instancetype) initWithFileName:(NSString *)fileName;
+- (instancetype) initWithFileName:(NSString *)fileName
+                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
+                adjustMapPosition:(BOOL)adjustMapPosition;
+- (instancetype) initWithInitialPoint:(CLLocation *)latLon;
+- (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning;
 
-- (void)cancelModes;
+- (void) cancelModes;
 
 @end

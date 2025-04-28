@@ -128,6 +128,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
         if ([mapStyleInfo[@"title"] isEqualToString:WINTER_SKI_RENDER] && ![iapHelper.skiMap isActive])
             continue;
+        if ([mapStyleInfo[@"title"] isEqualToString:NAUTICAL_RENDER] && ![iapHelper.nautical isActive])
+            continue;
         if ([item.mapSource.resourceId isEqualToString:@"mapnik.render.xml"] && ![_app.data.lastMapSource isEqual:item.mapSource])
             continue;
         if ([item.mapSource.resourceId hasSuffix:RENDER_ADDON])

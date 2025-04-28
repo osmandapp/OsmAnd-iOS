@@ -288,7 +288,7 @@ extension GpxDataItem {
             getParameter(parameter: .joinSegments) as? Bool ?? false
         }
         set {
-            setParameter(parameter: .joinSegments, value: newValue)
+            setParameter(parameter: .joinSegments, value: KotlinBoolean(bool: newValue))
         }
     }
     

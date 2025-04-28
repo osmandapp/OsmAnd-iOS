@@ -722,13 +722,6 @@
 "si_nm_h" = "Nautical miles per hour (knots)";
 "shared_string_tones" = "tones";
 
-"unit_of_volume_description" = "Selected units will be applied to all volume-related data in the current profile.";
-"litres" = "Litres";
-"imperial_gallons" = "Imperial gallons";
-"us_gallons" = "US gallons";
-"liter" = "l";
-"us_gallons_unit" = "gal";
-
 "nothing_found" = "Nothing found";
 "nothing_found_descr" = "Change the search or increase its radius.";
 "select_street" = "Select street";
@@ -1184,7 +1177,6 @@
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
-"unit_of_volume" = "Unit of volume";
 "angular_measurment_units" = "Angular measurment units";
 "distance_during_navigation" = "Distance during navigation";
 "shared_string_precise" = "Precise";
@@ -1700,7 +1692,6 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour line data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
-"shared_string_litres" = "litres";
 
 "test_heightmap" = "Test heightmap";
 "disable_vertex_hillshade_3d" = "Disable vertex hillshade in 3D";
@@ -3089,10 +3080,6 @@
 "routing_attr_motor_type_electric_name" = "Electric";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
 "transport" = "Transport";
-"shared_strings_dimensions" = "Dimensions";
-"fuel_tank_capacity" = "Fuel tank capacity";
-"fuel_tank_capacity_description" = "Enter your tank capacity to accurately track fuel levels and consumption";
-"poi_filter_fuel" = "Fuel";
 
 //Icon categories
 "icon_group_amenity" = "Amenity";

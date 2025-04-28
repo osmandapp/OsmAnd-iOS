@@ -80,7 +80,7 @@ final class GPXDataItemGPXFileWrapper: NSObject {
             return gpxDataItem.joinSegments
         }
         if gpxFile != nil {
-            return gpxFile?.isJoinSegments() ?? false
+            return OAAppSettings.sharedManager().currentTrackIsJoinSegments.get()
         }
         return false
     }

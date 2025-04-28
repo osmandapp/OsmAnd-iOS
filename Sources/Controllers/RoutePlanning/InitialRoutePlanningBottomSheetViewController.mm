@@ -21,7 +21,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
 #import "GeneratedAssetSymbols.h"
-#import "OAMeasurementEditingContext.h"
 
 #define kVerticalMargin 18.
 #define kHorizontalMargin 20.
@@ -151,11 +150,6 @@
     [super onRightButtonPressed];
 }
 
-- (BOOL)isTransportMode:(OAApplicationMode *)mode
-{
-    return [mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
-}
-
 #pragma mark - UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -261,10 +255,7 @@
     if ([key isEqualToString:@"create_new_route"])
     {
         [self hide:YES];
-        OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
-        OAApplicationMode *mode = [[OAAppSettings sharedManager].applicationMode get];
-        editingContext.appMode = [self isTransportMode:mode] ? OAApplicationMode.DEFAULT : mode;
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext]];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
         return;
     }
     else if ([key isEqualToString:@"open_track"])

@@ -968,10 +968,15 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 {
     if (![self isMapLinkedToLocation])
     {
-        int autoFollow = [_settings.autoFollowRoute get];
-        if (autoFollow > 0 && [[OARoutingHelper sharedInstance] isFollowingMode] && !_routePlanningMode)
-            [self backToLocationWithDelay:autoFollow];
+        [self backToLocationWithConditions];
     }
+}
+
+- (void)backToLocationWithConditions
+{
+    int autoFollow = [_settings.autoFollowRoute get];
+    if (autoFollow > 0 && [[OARoutingHelper sharedInstance] isFollowingMode] && !_routePlanningMode)
+        [self backToLocationWithDelay:autoFollow];
 }
 
 - (void) setMapViewController:(OAMapViewController *)mapViewController

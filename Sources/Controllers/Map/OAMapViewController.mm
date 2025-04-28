@@ -1779,8 +1779,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
     
-    _app.mapMode = OAMapModeFree;
-    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
+    [[OAMapViewTrackingUtilities instance] backToLocationWithConditions];
 
     // Animate zoom-in by +1
     zoomDelta += 1.0f;
@@ -1818,8 +1817,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
     
-    _app.mapMode = OAMapModeFree;
-    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
+    [[OAMapViewTrackingUtilities instance] backToLocationWithConditions];
 
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;
@@ -1870,8 +1868,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         [OAUtilities showToast:nil details:OALocalizedString(@"edit_tilesource_minzoom") duration:4 inView:self.view];
         return;
     }
-    _app.mapMode = OAMapModeFree;
-    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
+    [[OAMapViewTrackingUtilities instance] backToLocationWithConditions];
+
     float nextZoomStep = [zoom getValidZoomStep:newZoomStep];
     [zoom changeZoom:nextZoomStep];
 

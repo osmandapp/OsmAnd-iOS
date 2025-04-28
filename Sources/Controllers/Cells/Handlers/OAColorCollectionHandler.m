@@ -406,6 +406,10 @@
     if (_isOpenedFromAllColorsScreen && _hostColorHandler)
     {
         [_hostColorHandler deleteColorItem:colorItem];
+        if (_hostColorHandler.delegate)
+            [_hostColorHandler.delegate reloadCollectionData];
+    } else if (self.delegate) {
+        [self.delegate reloadCollectionData];
     }
     if (!_isOpenedFromAllColorsScreen)
         [[OAGPXAppearanceCollection sharedInstance] deleteColor:colorItem];

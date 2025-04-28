@@ -3655,7 +3655,7 @@
 "imperial_gallons" = "Gallons impériaux";
 "us_gallons" = "Gallons US";
 "us_gallons_unit" = "gal";
-"fuel_tank_capacity" = "Capacité du réservoir d'essence";
+"fuel_tank_capacity" = "Capacité du réservoir de carburant";
 "poi_filter_fuel" = "Essence";
 "unit_of_volume" = "Unité de volume";
 "unit_of_volume_description" = "Les unités sélectionnées seront appliquées à toutes les données relatives au volume dans le profil actuel.";

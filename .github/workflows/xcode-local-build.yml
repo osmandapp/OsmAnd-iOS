@@ -10,11 +10,11 @@ on:
       buildversion:
         description: 'Consequent Build Number (Testflight)'
         required: true
-        default: '50xx'
+        default: '51xx'
       releaseversion:
         description: 'Release Version'
         required: true
-        default: '5.0.0'
+        default: '5.1.0'
 jobs:
   build:
     runs-on: self-hosted
@@ -58,42 +58,42 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-iOS
         path: ios
         clean: true
     - name: Checkout android
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd
         path: android
         clean: false
     - name: Checkout build
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-build
         path: build
         clean: false
     - name: Checkout core legacy
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
         clean: false
     - name: Checkout core
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-core
         path: core
         clean: false
     - name: Checkout resources
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-resources
         path: resources
         clean: false

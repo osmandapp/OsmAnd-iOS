@@ -10,11 +10,11 @@ on:
       buildversion:
         description: 'Consequent Build Number (Testflight)'
         required: true
-        default: 'x'
+        default: '51xx'
       releaseversion:
         description: 'Release Version'
         required: true
-        default: '5.0.0'
+        default: '5.1.0'
       download_qt_ios_library:
         description: 'Download prebuilt qt library (true) or build locally (false) - extra 2 h'
         required: true
@@ -45,37 +45,37 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-iOS
         path: ios
     - name: Checkout android
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd
         path: android
     - name: Checkout build
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-build
         path: build
     - name: Checkout core legacy
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
     - name: Checkout core
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-core
         path: core
     - name: Checkout resources
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.0
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-resources
         path: resources
     - name: Select XCode 15.0.1

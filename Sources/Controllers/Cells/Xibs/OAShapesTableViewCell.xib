@@ -115,47 +115,42 @@
                                     </view>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="elx-cQ-m1T">
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="vyA-TO-9MY" userLabel="Bottom Margin Stack View">
                                 <rect key="frame" x="0.0" y="117" width="443" height="19"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="Yz1-W6-QX0" userLabel="Bottom Margin Stack View">
-                                        <rect key="frame" x="0.0" y="0.0" width="443" height="19"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Rc-Kh-0cy">
+                                        <rect key="frame" x="0.0" y="0.0" width="443" height="0.0"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" id="5tq-8f-5Lh"/>
+                                        </constraints>
+                                    </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M09-AB-kER">
+                                        <rect key="frame" x="0.0" y="9" width="443" height="1"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ryu-Do-HCC">
-                                                <rect key="frame" x="0.0" y="0.0" width="443" height="0.0"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nYT-aT-WyF">
+                                                <rect key="frame" x="0.0" y="0.0" width="20" height="1"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" id="yzI-3J-OVV"/>
+                                                    <constraint firstAttribute="width" constant="20" id="u5U-zk-FUZ"/>
                                                 </constraints>
                                             </view>
-                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pes-Nq-zg8">
-                                                <rect key="frame" x="0.0" y="9" width="443" height="1"/>
-                                                <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZkM-l2-07Y">
-                                                        <rect key="frame" x="0.0" y="0.0" width="20" height="1"/>
-                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="20" id="qLw-xi-TNd"/>
-                                                        </constraints>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vn7-Ig-Q9A">
-                                                        <rect key="frame" x="20" y="0.0" width="423" height="1"/>
-                                                        <color key="backgroundColor" systemColor="separatorColor"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="1" id="Fyg-Wz-LzQ"/>
-                                                        </constraints>
-                                                    </view>
-                                                </subviews>
-                                            </stackView>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y7u-cT-LP6">
-                                                <rect key="frame" x="0.0" y="19" width="443" height="0.0"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g9J-AD-3W2">
+                                                <rect key="frame" x="20" y="0.0" width="423" height="1"/>
+                                                <color key="backgroundColor" systemColor="separatorColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" id="H9B-Ja-4g3"/>
+                                                    <constraint firstAttribute="height" constant="1" id="ybK-sK-vMB"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
                                     </stackView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7t7-RZ-QTh">
+                                        <rect key="frame" x="0.0" y="19" width="443" height="0.0"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" id="HMw-zg-X2y"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k6m-HB-daF">
@@ -218,7 +213,8 @@
                 <outlet property="contentOutsideStackViewVertical" destination="QAR-y1-6vz" id="gvR-VQ-U77"/>
                 <outlet property="descriptionLabel" destination="lwg-FO-oiI" id="s5G-gg-tOy"/>
                 <outlet property="descriptionLabelStackView" destination="k6m-HB-daF" id="LGd-Gt-NqJ"/>
-                <outlet property="separatorStackView" destination="elx-cQ-m1T" id="5aP-L7-vwJ"/>
+                <outlet property="separatorHeight" destination="ybK-sK-vMB" id="Nun-85-JaY"/>
+                <outlet property="separatorStackView" destination="vyA-TO-9MY" id="QDI-D1-EMy"/>
                 <outlet property="titleLabel" destination="cbH-35-lQk" id="hjc-2A-hDT"/>
                 <outlet property="topButton" destination="ubq-5C-6iS" id="B6H-jd-VB1"/>
                 <outlet property="topMarginStackView" destination="o8v-Or-s2e" id="B6g-mh-udN"/>

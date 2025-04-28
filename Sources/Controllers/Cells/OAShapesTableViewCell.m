@@ -16,6 +16,7 @@ static NSString * const kOriginalKey = @"original";
 
 @interface OAShapesTableViewCell () <UIGestureRecognizerDelegate>
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeight;
 @property (weak, nonatomic) IBOutlet UIStackView *separatorStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *descriptionLabelStackView;
 
@@ -28,6 +29,7 @@ static NSString * const kOriginalKey = @"original";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.separatorHeight.constant = 1.0 / [UIScreen mainScreen].scale;
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerNib:[UINib nibWithNibName:[OAShapesCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAShapesCollectionViewCell getCellIdentifier]];

@@ -320,6 +320,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAShapesTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.delegate = self;
+            cell.disableAnimationsOnStart = YES;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
             cell.valueLabel.hidden = NO;

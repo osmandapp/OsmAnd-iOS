@@ -53,7 +53,7 @@
     else
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_save")
-                                                                       message:OALocalizedString(@"apply_to_existing_favorites_descr")
+                                                                       message:OALocalizedString(@"save_favorite_default_appearance")
                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
         NSString *titleApplyExisting = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"),
                                         OALocalizedString(@"apply_to_existing"),
@@ -62,13 +62,19 @@
         [alert addAction:[UIAlertAction actionWithTitle:titleApplyExisting
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
-            [self editPointsGroup:YES];
+            [self editPointsGroup:YES shouldUpdateGroup:NO];
         }]];
 
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"apply_only_to_new_points")
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
-            [self editPointsGroup:NO];
+            [self editPointsGroup:NO shouldUpdateGroup:YES];
+        }]];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"apply_to_all_points")
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
+            [self editPointsGroup:YES shouldUpdateGroup:YES];
         }]];
 
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
@@ -79,6 +85,24 @@
         popover.barButtonItem = self.navigationItem.rightBarButtonItem;
         popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
 
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+- (void)onLeftNavbarButtonPressed
+{
+    if (self.isNewItem || ![self isChangesExist])
+    {
+        [super onLeftNavbarButtonPressed];
+    }
+    else
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"exit_without_saving") message:OALocalizedString(@"unsaved_changes_will_be_lost") preferredStyle:UIAlertControllerStyleActionSheet];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [super onLeftNavbarButtonPressed];
+        }]];
+        
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
@@ -97,25 +121,28 @@
     }
 }
 
-- (void)editPointsGroup:(BOOL)updatePoints
+- (void)editPointsGroup:(BOOL)updatePoints shouldUpdateGroup:(BOOL)shouldUpdateGroup
 {
     if (![self.editIconName isEqual:_favoriteGroup.iconName])
         [OAFavoritesHelper updateGroup:_favoriteGroup
                               iconName:self.editIconName
                           updatePoints:updatePoints
+                     shouldUpdateGroup:shouldUpdateGroup
                        saveImmediately:NO];
 
     if (![self.editColor isEqual:_favoriteGroup.color])
         [OAFavoritesHelper updateGroup:_favoriteGroup
                                  color:self.editColor
                           updatePoints:updatePoints
+                     shouldUpdateGroup:shouldUpdateGroup
                        saveImmediately:NO];
 
     if (![self.editBackgroundIconName isEqualToString:_favoriteGroup.backgroundType])
         [OAFavoritesHelper updateGroup:_favoriteGroup
                     backgroundIconName:self.editBackgroundIconName
                         updatePoints:updatePoints
-                    saveImmediately:NO];
+                     shouldUpdateGroup:shouldUpdateGroup
+                       saveImmediately:NO];
 
     [OAFavoritesHelper updateGroup:_favoriteGroup
                            newName:self.editName

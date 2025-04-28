@@ -58,16 +58,19 @@
 + (void)updateGroup:(OAFavoriteGroup *)group
            iconName:(NSString *)iconName
        updatePoints:(BOOL)updatePoints
+  shouldUpdateGroup:(BOOL)shouldUpdateGroup
     saveImmediately:(BOOL)saveImmediately;
 
 + (void)updateGroup:(OAFavoriteGroup *)group
               color:(UIColor *)color
        updatePoints:(BOOL)updatePoints
+  shouldUpdateGroup:(BOOL)shouldUpdateGroup
     saveImmediately:(BOOL)saveImmediately;
 
 + (void)updateGroup:(OAFavoriteGroup *)group
  backgroundIconName:(NSString *)backgroundIconName
        updatePoints:(BOOL)updatePoints
+  shouldUpdateGroup:(BOOL)shouldUpdateGroup
     saveImmediately:(BOOL)saveImmediately;
 
 + (void)updateGroup:(OAFavoriteGroup *)group

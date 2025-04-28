@@ -3820,7 +3820,8 @@
 "default_appearance_desc" = "Default color, icon and shape will apply to the added favorite points into the group.";
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
-"apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";
+"apply_to_all_points" = "Apply to all points ";
+"save_favorite_default_appearance" = "Apply changes to the existing points in the folder or only to new ones?";
 "original_icon_description" = "Each point would keep its own icon.";
 "original_color_description" = "Each point would keep its own color.";
 "original_shape_description" = "Each point would keep its own shape.";

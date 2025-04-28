@@ -91,7 +91,7 @@
                                         </constraints>
                                     </view>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="wsy-HV-1Sf">
-                                        <rect key="frame" x="0.0" y="0.0" width="423" height="73"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="443" height="73"/>
                                         <color key="backgroundColor" name="groupBg"/>
                                         <constraints>
                                             <constraint firstAttribute="height" priority="999" constant="48" id="LB5-pK-a5G"/>
@@ -107,10 +107,10 @@
                                         </collectionViewFlowLayout>
                                     </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sCp-mP-gZh">
-                                        <rect key="frame" x="423" y="0.0" width="20" height="73"/>
+                                        <rect key="frame" x="443" y="0.0" width="0.0" height="73"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="20" id="Bea-KH-mgn"/>
+                                            <constraint firstAttribute="width" id="Bea-KH-mgn"/>
                                         </constraints>
                                     </view>
                                 </subviews>

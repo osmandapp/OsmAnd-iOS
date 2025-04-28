@@ -567,14 +567,19 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     return !_isNewItem || _isTextViewNameValid;
 }
 
-- (void)changeSaveButtonAvailabilityWithGroup
+- (BOOL)isChangesExist
 {
     OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
+    return !groupExist
+            || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
+            || ![self.editIconName isEqual:groupExist.iconName]
+            || ![self.editColor isEqual:groupExist.color];
+}
+
+- (void)changeSaveButtonAvailabilityWithGroup
+{
     [self changeButtonAvailability:_saveBarButton
-                         isEnabled:[self isValidText] && (!groupExist
-        || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
-        || ![self.editIconName isEqual:groupExist.iconName]
-        || ![self.editColor isEqual:groupExist.color])];
+                         isEnabled:[self isValidText] && [self isChangesExist]];
 }
 
 #pragma mark - OAShapesTableViewCellDelegate

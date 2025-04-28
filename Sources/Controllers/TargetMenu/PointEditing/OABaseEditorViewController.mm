@@ -619,8 +619,8 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         self.editColor = [_selectedColorItem getColor];
         
         _needToScrollToSelectedColor = YES;
-            [self.tableView reloadRowsAtIndexPaths:@[_iconIndexPath, _shapeIndexPath]
-                                  withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:@[_iconIndexPath, _shapeIndexPath]
+                              withRowAnimation:UITableViewRowAnimationNone];
     }
     
     [self applyLocalization];
@@ -641,7 +641,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     if (indexPath)
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     if ([category isEqualToString: @"original"])
     {
         OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
@@ -672,7 +672,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     if (indexPath)
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [self changeSaveButtonAvailabilityWithGroup];
 }
 

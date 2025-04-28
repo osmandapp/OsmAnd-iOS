@@ -86,6 +86,12 @@
         layout.minimumLineSpacing = spacing;
         layout.minimumInteritemSpacing = spacing;
         
+        if ([self isDirectionRTL])
+        {
+            self.collectionView.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
+            self.collectionView.transform = CGAffineTransformMakeScale(-1, 1);
+        }
+        
         [self.collectionView setCollectionViewLayout:layout animated:!_disableAnimationsOnStart];
 
         NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];

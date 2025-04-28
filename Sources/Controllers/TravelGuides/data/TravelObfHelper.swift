@@ -24,9 +24,12 @@ final class TravelObfHelper : NSObject {
     let TRAVEL_GPX_CONVERT_MULT_1 = 2
     let TRAVEL_GPX_CONVERT_MULT_2 = 5
     
-    private var popularArticles = PopularArticles()
-    private let cachedArticles = ConcurrentDictionary<Int, [String:TravelArticle]>()
+    private let MAX_ALLOWED_RADIUS = Int(Int32.max)
+    
+    private let cachedArticles = ConcurrentDictionary<Int, [String: TravelArticle]>()
     private let localDataHelper: TravelLocalDataHelper
+    
+    private var popularArticles = PopularArticles()
     private var searchRadius: Int
     private var foundAmenitiesIndex: Int = 0
     private var foundAmenities: [OAFoundAmenity] = []
@@ -79,7 +82,7 @@ final class TravelObfHelper : NSObject {
                         }
                     }
                 }
-                searchRadius *= 2
+                searchRadius = min(searchRadius * 2, MAX_ALLOWED_RADIUS)
                 while foundAmenitiesIndex < foundAmenities.count - 1 {
                     let fileAmenity = foundAmenities[foundAmenitiesIndex]
                     if let file = fileAmenity.file {
@@ -125,7 +128,7 @@ final class TravelObfHelper : NSObject {
                         if amenity.getRouteId() == filter ||
                             amenity.name == filter ||
                             amenity.getRef() == ref {
-                            travelGpx = getTravelGpx(file:foundGpx.file!, amenity: amenity)
+                            travelGpx = getTravelGpx(file: foundGpx.file!, amenity: amenity)
                             break
                         }
                     }
@@ -137,6 +140,10 @@ final class TravelObfHelper : NSObject {
     }
     
     func searchAmenity(lat: Double, lon: Double, reader: String, searchRadius: Int, zoom: Int, searchFilter: String, lang: String?) -> [OAFoundAmenity] {
+        guard let safeRadius = Int32(exactly: searchRadius) else {
+            NSLog("Invalid radius: \(searchRadius)")
+            return []
+        }
         
         var results: [OAFoundAmenity] = []
         func publish(poi: OAPOI?) -> Bool {
@@ -151,7 +158,7 @@ final class TravelObfHelper : NSObject {
             return false
         }
         
-        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(searchRadius), searchFilters: [searchFilter], publish:publish)
+        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: safeRadius, searchFilters: [searchFilter], publish: publish)
         return results
     }
     
@@ -205,7 +212,6 @@ final class TravelObfHelper : NSObject {
         
         if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_RADIUS) {
             OAUtilities.convertChar(toDist: String(radius[0]), firstLetter: String(TRAVEL_GPX_CONVERT_FIRST_LETTER), firstDist: Int32(TRAVEL_GPX_CONVERT_MULT_1), mult1: 0, mult2: Int32(TRAVEL_GPX_CONVERT_MULT_2))
-            
         }
         return travelGpx
     }

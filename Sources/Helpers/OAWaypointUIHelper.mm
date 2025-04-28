@@ -39,6 +39,9 @@
 
 + (void) showOnMap:(OALocationPointWrapper *)p
 {
+    if (![p.point isKindOfClass:[OASWptPt class]])
+        return;
+    
     id<OALocationPoint> point = p.point;
     
     double latitude = [point getLatitude];
@@ -46,7 +49,9 @@
 
     OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
-    targetPoint.title = [point getPointDescription].name;
+    
+    OASWptPt *wptPt = (OASWptPt *)p.point;
+    targetPoint.title = wptPt.name;
     targetPoint.centerMap = YES;
     targetPoint.minimized = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];

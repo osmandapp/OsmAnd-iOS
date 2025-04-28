@@ -80,8 +80,6 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         _afterSegments = [NSMutableArray new];
         
         _roadSegmentData = [NSMutableDictionary new];
-        
-        [self setInsertIntermediates:YES];
     }
     return self;
 }

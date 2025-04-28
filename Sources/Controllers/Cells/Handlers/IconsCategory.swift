@@ -6,18 +6,15 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-final class IconsCategory {
+final class IconsCategory: BaseCategory {
     
-    var key: String
-    var translatedName: String
     var iconKeys: [String]
     var isTopCategory: Bool
     
     init(key: String, translatedName: String, iconKeys: [String], isTopCategory: Bool = false) {
-        self.key = key
-        self.translatedName = translatedName
         self.iconKeys = iconKeys
         self.isTopCategory = isTopCategory
+        super.init(key: key, translatedName: translatedName)
     }
     
     func containsIcon(key: String) -> Bool {

@@ -12,7 +12,18 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+static NSString * const kOriginalKey = @"original";
+
+@interface OAShapesTableViewCell () <UIGestureRecognizerDelegate>
+
+@property (weak, nonatomic) IBOutlet UIStackView *separatorStackView;
+@property (weak, nonatomic) IBOutlet UIStackView *descriptionLabelStackView;
+
+@end
+
 @implementation OAShapesTableViewCell
+
+@dynamic delegate;
 
 - (void)awakeFromNib
 {
@@ -31,6 +42,63 @@
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
         self.valueLabel.textAlignment = NSTextAlignmentRight;
     }
+    
+    [self topButtonVisibility:NO];
+    [self separatorVisibility:NO];
+    [self descriptionLabelStackViewVisibility:NO];
+    [self topRightOffset:20];
+}
+
+- (ShapesCollectionHandler *)getColorCollectionHandler
+{
+    return (ShapesCollectionHandler *)[super getCollectionHandler];
+}
+
+- (void)setCollectionHandler:(OABaseCollectionHandler *)collectionHandler
+{
+    ShapesCollectionHandler * handler = (ShapesCollectionHandler *)collectionHandler;
+    [super setCollectionHandler:handler];
+    handler.hostCell = self;
+
+    UIMenu *menu = [[self getColorCollectionHandler] buildTopButtonContextMenu];
+    if (menu)
+    {
+        self.topButton.showsMenuAsPrimaryAction = YES;
+        self.topButton.menu = menu;
+    }
+}
+
+- (void)topButtonVisibility:(BOOL)show
+{
+    self.topButton.hidden = !show;
+}
+
+- (void)valueLabelVisibility:(BOOL)show
+{
+    self.valueLabel.hidden = !show;
+}
+
+- (void)descriptionLabelStackViewVisibility:(BOOL)show
+{
+    self.descriptionLabelStackView.hidden = !show;
+}
+
+- (void)separatorVisibility:(BOOL)show
+{
+    self.separatorStackView.hidden = !show;
+}
+
+- (void)topRightOffset:(CGFloat)value
+{
+    self.topTrailingWidth.constant = value;
+}
+
+- (void)updateIconWith:(NSInteger)tag
+{
+    _currentIcon = tag;
+    [self.collectionView reloadData];
+    if (self.delegate)
+        [self.delegate iconChanged:tag];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
@@ -92,10 +160,10 @@
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    _currentIcon = indexPath.row;
-    [self.collectionView reloadData];
-    if (self.delegate)
-        [self.delegate iconChanged:indexPath.row];
+    [self updateIconWith:indexPath.row];
+    ShapesCollectionHandler * handler = (ShapesCollectionHandler *)[self getCollectionHandler];
+    if (handler)
+        [handler selectCategory:handler.backgroundIconNames[indexPath.row] shouldPerformOnCategorySelected:false];
 }
 
 @end

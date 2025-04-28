@@ -6,20 +6,22 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OACollectionSingleLineTableViewCell.h"
 
-@protocol OAShapesTableViewCellDelegate <NSObject>
+@protocol OAShapesTableViewCellDelegate <OACollectionTableViewCellDelegate>
 
 - (void)iconChanged:(NSInteger)tag;
 
 @end
 
-@interface OAShapesTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface OAShapesTableViewCell : OACollectionSingleLineTableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+@property (weak, nonatomic) IBOutlet UIButton *topButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topTrailingWidth;
 
 @property (nonatomic) NSArray *iconNames;
 @property (nonatomic) NSArray *contourIconNames;
@@ -28,5 +30,12 @@
 @property (nonatomic) NSString *backgroundShapeName;
 
 @property (nonatomic, weak) id<OAShapesTableViewCellDelegate> delegate;
+
+- (void)topButtonVisibility:(BOOL)show;
+- (void)valueLabelVisibility:(BOOL)show;
+- (void)descriptionLabelStackViewVisibility:(BOOL)show;
+- (void)separatorVisibility:(BOOL)show;
+- (void)topRightOffset:(CGFloat)value;
+- (void)updateIconWith:(NSInteger)tag;
 
 @end

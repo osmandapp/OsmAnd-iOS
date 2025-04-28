@@ -10,13 +10,4 @@ import Foundation
 
 @objc(OAColorsCategory)
 @objcMembers
-final class ColorsCategory: NSObject {
-    
-    var key: String
-    var translatedName: String
-    
-    init(key: String, translatedName: String) {
-        self.key = key
-        self.translatedName = translatedName
-    }
-}
+final class ColorsCategory: BaseCategory {}

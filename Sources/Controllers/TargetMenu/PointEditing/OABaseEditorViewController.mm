@@ -33,7 +33,7 @@ static NSString * const kLastUsedIconsKey = @"kLastUsedIconsKey";
 static NSString * const kIconsKey = @"kIconsKey";
 static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
-@interface OABaseEditorViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAShapesTableViewCellDelegate, OACollectionCellDelegate, PoiIconCollectionHandlerDelegate, OAColorCollectionHandlerDelegate>
+@interface OABaseEditorViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAShapesTableViewCellDelegate, OACollectionCellDelegate, PoiIconCollectionHandlerDelegate, OAColorCollectionHandlerDelegate, ShapesCollectionHandlerDelegate>
 
 @property(nonatomic) NSString *originalName;
 @property(nonatomic) NSString *editName;
@@ -60,6 +60,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     OAColorItem *_selectedColorItem;
     BOOL _needToScrollToSelectedColor;
 
+    ShapesCollectionHandler *_shapesCollectionHandler;
     NSArray<NSString *> *_backgroundIcons;
     NSArray<NSString *> *_backgroundIconNames;
     NSArray<NSString *> *_backgroundContourIconNames;
@@ -325,9 +326,13 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         }
         if (cell)
         {
+            [_shapesCollectionHandler setCollectionView:cell.collectionView];
+            [cell setCollectionHandler:_shapesCollectionHandler];
+            [_shapesCollectionHandler updateHostCellIfNeeded];
             cell.iconNames = [item objForKey:@"icons"];
             cell.contourIconNames = [item objForKey:@"contourIcons"];
             cell.titleLabel.text = item.title;
+            cell.descriptionLabel.text = OALocalizedString(@"original_shape_description");
             cell.valueLabel.text = [item objForKey:@"value"];
             cell.currentColor = _selectedColorItem.value;
             cell.currentIcon = [item integerForKey:@"index"];
@@ -449,6 +454,23 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         _selectedBackgroundIndex = 0;
         self.editBackgroundIconName = _backgroundIconNames.firstObject;
     }
+    _shapesCollectionHandler = [[ShapesCollectionHandler alloc] initWithBackgroundIconNames:_backgroundIconNames isFavoriteList:self.isNewItem != YES];
+    _shapesCollectionHandler.handlerDelegate = self;
+    _shapesCollectionHandler.hostVC = self;
+    
+    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:self.editName];
+    if (group)
+    {
+        NSMutableArray *backgroundIconNames = [NSMutableArray array];
+        for (OAFavoriteItem *item in group.points)
+        {
+            [backgroundIconNames addObject:[item getBackgroundIcon]];
+        }
+        _shapesCollectionHandler.groupShapes = backgroundIconNames;
+    }
+    
+    _shapesCollectionHandler.selectedCatagoryKey = _backgroundIconNames[_selectedBackgroundIndex];
+    [_shapesCollectionHandler setupDefaultCategory];
 }
 
 - (NSString *)getPreselectedIconName
@@ -627,6 +649,18 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 #pragma mark - OAColorCollectionHandlerDelegate
 
 - (void)onColorCategorySelected:(NSString *)categoryKey with:(OAColorsPaletteCell *)cell
+{
+    [self onCategorySelectedWith:cell];
+}
+
+#pragma mark - ShapesCollectionHandlerDelegate
+
+- (void)onShapeCategorySelectedWithCell:(OAShapesTableViewCell *)cell
+{
+    [self onCategorySelectedWith:cell];
+}
+
+- (void)onCategorySelectedWith:(OACollectionSingleLineTableViewCell *)cell
 {
     if (_isNewItem)
         return;

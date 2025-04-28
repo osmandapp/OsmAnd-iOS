@@ -111,10 +111,11 @@
                           updatePoints:updatePoints
                        saveImmediately:NO];
 
-    [OAFavoritesHelper updateGroup:_favoriteGroup
-                backgroundIconName:self.editBackgroundIconName
-                      updatePoints:updatePoints
-                   saveImmediately:NO];
+    if (![self.editBackgroundIconName isEqualToString:_favoriteGroup.backgroundType])
+        [OAFavoritesHelper updateGroup:_favoriteGroup
+                    backgroundIconName:self.editBackgroundIconName
+                        updatePoints:updatePoints
+                    saveImmediately:NO];
 
     [OAFavoritesHelper updateGroup:_favoriteGroup
                            newName:self.editName

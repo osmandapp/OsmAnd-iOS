@@ -723,19 +723,18 @@ static OASubscriptionState *EXPIRED;
                         _productsRequest.delegate = self;
                         [_productsRequest start];
                     }];
+                    return;
                 }
             }
             @catch (NSException *e)
             {
-                if (onComplete)
-                    onComplete(NO);
             }
         }
-        else
-        {
-            if (onComplete)
-                onComplete(NO);
-        }
+        
+        _completionHandler = [onComplete copy];
+        _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
+        _productsRequest.delegate = self;
+        [_productsRequest start];
     }];
 }
 

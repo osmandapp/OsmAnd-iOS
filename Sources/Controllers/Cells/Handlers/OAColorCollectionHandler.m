@@ -264,7 +264,7 @@ static NSString * const kSolidColorKey = @"solid_color";
 - (void)updateSeparatorLeftOffset
 {
     OAColorsPaletteCell *cell = (OAColorsPaletteCell *)self.hostCell;
-    [cell separatorLeftOffset:_selectedCategoryKey != kOriginalKey ? 20 : 0];
+    [cell separatorLeftOffset:_selectedCategoryKey == kOriginalKey ? 20 : 0];
 }
 
 #pragma mark - Data

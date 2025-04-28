@@ -25,6 +25,7 @@
 
 - (BOOL)isMapLinkedToLocation;
 - (void)checkMapLinkedToLocation;
+- (void)backToLocationWithConditions;
 - (void)backToLocationImpl;
 - (void)backToLocationImpl:(int)zoom forceZoom:(BOOL)forceZoom;
 

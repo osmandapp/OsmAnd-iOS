@@ -67,8 +67,8 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             for j in 0 ..< category.iconKeys.count {
                 if iconName == category.iconKeys[j] ||
                     "mx_" + iconName == category.iconKeys[j] {
-                    setSelectedIndexPath(IndexPath(row: j, section: 0))
                     selectCategory(category.key)
+                    setSelectedIndexPath(IndexPath(row: j, section: 0))
                     return
                 }
             }

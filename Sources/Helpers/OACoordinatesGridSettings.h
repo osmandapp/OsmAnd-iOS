@@ -30,5 +30,6 @@ typedef struct ZoomRange {
 - (ZoomRange)getZoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode;
 - (ZoomRange)getZoomLevels;
 - (void)setZoomLevels:(ZoomRange)levels forAppMode:(OAApplicationMode *)appMode;
+- (float)getTextScaleForAppMode:(OAApplicationMode *)appMode;
 
 @end

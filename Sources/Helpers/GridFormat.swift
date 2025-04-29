@@ -140,4 +140,8 @@ final class GridFormatWrapper: NSObject {
     static func getFormat(for format: GridFormat) -> OAFormat {
         return format.getFormat()
     }
+    
+    static func needSuffixesForFormat(_ format: GridFormat) -> Bool {
+        return format != .utm && format != .mgrs
+    }
 }

@@ -317,8 +317,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             guard let self else { return }
             
             for category in self.categories {
+                var brokenIcons = [String]()
+                
                 for iconName in category.iconKeys {
-                    
                     if Self.cachedIcons.object(forKey: iconName as NSString) == nil {
                         var icon = UIImage.templateImageNamed(iconName)
                         if icon == nil {
@@ -329,8 +330,20 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                         }
                         if let icon {
                             Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
+                        } else {
+                            brokenIcons.append(iconName)
                         }
                     }
+                }
+                
+                if !brokenIcons.isEmpty {
+                    let filteredIcons = category.iconKeys.filter { !brokenIcons.contains($0) }
+                    self.categoriesByKeyName[category.key]?.iconKeys = filteredIcons
+                    if category.key == LAST_USED_KEY {
+                        lastUsedIcons = category.iconKeys
+                        OAAppSettings.sharedManager().lastUsedFavIcons.set(lastUsedIcons)
+                    }
+                    getCollectionView()?.reloadData()
                 }
             }
         }

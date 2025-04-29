@@ -3246,3 +3246,15 @@
 "smart_folder_name_present" = "Taki inteligentny folder już istnieje";
 "us_gallons" = "Galony amerykańskie";
 "us_gallons_unit" = "galon";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"help_article_navigation_car_play_name" = "CarPlay";
+"help_article_navigation_routing_brouter_name" = "BRouter";
+"OsmAnd Maps" = "Mapy OsmAnd";
+"start_point" = "Start";
+"help_article_troubleshooting_android_auto_name" = "Android Auto";
+"quick_action_save_recorded_trip_and_continue" = "Nagrana podróż i kontynuacja";
+"new_trip_segment" = "Nowy odcinek podróży";
+"reset_average_speed" = "Zresetuj średnią prędkość";
+"help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
+"rendering_attr_showClimbingRoutes_name" = "Trasy wspinaczkowe";
+"rendering_attr_showClimbingRoutes_description" = "Pokaż trasy wspinaczkowe";

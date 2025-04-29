@@ -247,7 +247,7 @@
 "si_m_s" = "م/ث";
 "si_min_km" = "دقيقة/كم";
 "si_min_m" = "دقيقة/ميل";
-"si_nm_h" = "ميل بحري في الساعة (عقدة)";
+"si_nm_h" = "الأميال البحرية في الساعة (العقدة)";
 "nm" = "ميل بحري";
 "units_nm_h" = "ميل بحري/في الساعة";
 "min_mile" = "د/م";
@@ -2931,7 +2931,7 @@
 "widget_secondary_desc_part_of" = "جزء من المكون الإضافي %@.";
 "angular_measeurement_descr" = "تغيير قياس زاوية السمت.";
 "coordinates_widget_secondary_desc" = "يمكن تغيير تنسيق الإحداثيات في %@ – %@ – %@.";
-"add_widget" = "إضافة أداة (Widget)";
+"add_widget" = "إضافة أداة (عنصر واجهة مستخدم)";
 "add_page" = "إضافة صفحة";
 "map_widget_time_to_intermediate" = "متوسط وقت الوصول";
 "weather_widgets_secondary_desc" = "يمكن تغيير وحدات القياس في إعدادات الاداة الخاصة بالطقس.";
@@ -3206,7 +3206,7 @@
 "help_article_start_with_main_menu_name" = "القائمة الرئيسية";
 "help_article_troubleshooting_crash_logs_name" = "سجلات الأعطال";
 "help_article_troubleshooting_general_name" = "عام";
-"help_article_troubleshooting_maps_data_name" = "بيانات الخرائط";
+"help_article_troubleshooting_maps_data_name" = "الخرائط والبيانات";
 "help_article_troubleshooting_track_recording_issues_name" = "تسجيل المسار";
 "help_article_widgets_name" = "ودجت الخريطة";
 "help_article_widgets_info_widgets_name" = "ودجت المعلومات";
@@ -3565,13 +3565,13 @@
 "shared_string_ellipsis" = "…";
 "navigate_point_format_UTM" = "UTM";
 "battery_widget_level_privacy_ios_desc" = "نظرًا لأسباب تتعلق بخصوصية نظام التشغيل iOS، لا يمكن للأداة سوى عرض مستوى البطارية بخطوات مقدارها 5%، مثل 35% أو 60% أو 85%";
-"metric_ton" = "t";
+"metric_ton" = "طُن";
 "detailed_track_guidance" = "إرشادات تفصيلية للمسار";
 "detailed_track_guidance_description" = "سيقوم تطبيق أوسماند بمطابقة مسارك مع الطرق القريبة لتحسين التوجيه خطوة بخطوة.";
 "ask_every_time" = "إسأل كل مرة";
 "navigate_point_olc_short" = "OLC";
 "ft_s" = "ft/s";
-"int_hour" = "h";
+"int_hour" = "س";
 "navigate_point_format_D" = "DDD.DDDDD";
 "email_example_hint" = "user@example.com";
 "navigate_point_format_DM" = "DDD MM.MMM";

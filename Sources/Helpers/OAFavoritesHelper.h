@@ -51,7 +51,7 @@
 + (void) saveCurrentPointsIntoFile;
 + (void) saveCurrentPointsIntoFile:(BOOL)async;
 
-+ (BOOL)isGroupNameValidWithText:(NSString *)text group:(OAFavoriteGroup *)group;
++ (BOOL)isGroupNameValidWithText:(NSString *)text;
 
 + (void)updateGroup:(OAFavoriteGroup *)group
             newName:(NSString *)newName

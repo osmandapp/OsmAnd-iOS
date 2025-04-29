@@ -8,8 +8,6 @@
 
 #import "OABaseNavbarSubviewViewController.h"
 
-FOUNDATION_EXPORT NSCharacterSet * const kIllegalFileNameCharacters;
-
 @class OAGPXAppearanceCollection, OATextInputFloatingCell, OAColorItem;
 
 @protocol OAEditorDelegate <NSObject>

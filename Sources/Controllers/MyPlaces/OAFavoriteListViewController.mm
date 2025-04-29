@@ -616,6 +616,14 @@ static UIViewController *parentController;
     // Dispose of any resources that can be recreated.
 }
 
+- (void)alertTextFieldDidChange:(UITextField *)textField {
+    UIAlertController *alert = (UIAlertController *)self.presentedViewController;
+    if (alert) {
+        UIAlertAction *applyAction = alert.actions.firstObject;
+        applyAction.enabled = [OAFavoritesHelper isGroupNameValidWithText:[textField.text trim]];
+    }
+}
+
 #pragma mark - Actions
 
 - (IBAction)sortByDistance:(id)sender
@@ -1227,7 +1235,7 @@ static UIViewController *parentController;
     UIAlertAction *applyAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_apply")
                                                          style:UIAlertActionStyleDefault
                                                         handler:^(UIAlertAction * _Nonnull action) {
-        NSString *name = alert.textFields.firstObject.text;
+        NSString *name = [alert.textFields.firstObject.text trim];
         if (name.length > 0)
         {
             [OAFavoritesHelper updateGroup:favoriteGroup
@@ -1246,12 +1254,9 @@ static UIViewController *parentController;
         textField.text = favoriteGroup.name;
         
         applyAction.enabled = textField.text.length > 0;
-        [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification
-                                                          object:textField
-                                                           queue:[NSOperationQueue mainQueue]
-                                                      usingBlock:^(NSNotification * _Nonnull note) {
-            applyAction.enabled = [OAFavoritesHelper isGroupNameValidWithText:textField.text group:favoriteGroup];
-        }];
+        [textField addTarget:self
+                      action:@selector(alertTextFieldDidChange:)
+            forControlEvents:UIControlEventEditingChanged];
     }];
 
     [alert setPreferredAction:applyAction];

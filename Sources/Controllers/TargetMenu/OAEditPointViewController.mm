@@ -409,7 +409,8 @@
         preselectedIconName = [self getDefaultIconName];
     _selectedIconName = preselectedIconName;
     
-    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:self.groupTitle];
+    NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
+    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:groupName];
     if (_isNewItemAdding && selectedGroup)
         _selectedIconName = selectedGroup.iconName;
     else if (!_selectedIconName || _selectedIconName.length == 0)

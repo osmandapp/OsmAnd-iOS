@@ -1105,12 +1105,20 @@ static UIViewController *parentController;
             [self generateData];
         }];
         showHideAction.accessibilityLabel = showHideCaption;
+        
+        __weak __typeof(self) weakSelf = self;
+        UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
+                                                       image:[UIImage imageNamed:@"ic_custom_edit"]
+                                                  identifier:nil
+                                                     handler:^(__kindof UIAction * _Nonnull action) {
+            [weakSelf openRenameAlertWith:groupData.favoriteGroup];
+        }];
+        renameAction.accessibilityLabel = OALocalizedString(@"shared_string_rename");
         [menuElements addObject:[UIMenu menuWithTitle:@""
                                            image:nil
                                       identifier:nil
                                          options:UIMenuOptionsDisplayInline
-                                        children:@[showHideAction]]];
-
+                                        children:@[showHideAction, renameAction]]];
         
         UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance")
                                                          image:[UIImage systemImageNamed:@"paintpalette"]
@@ -1208,6 +1216,37 @@ static UIViewController *parentController;
     if (_directionButton.tag == 1)
         return [self getSortedcellForRowAtIndexPath:indexPath];
     return [self getUnsortedcellForRowAtIndexPath:indexPath];
+}
+
+- (void)openRenameAlertWith:(OAFavoriteGroup *)favoriteGroup
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_rename")
+                                                                   message:OALocalizedString(@"enter_new_name")
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = OALocalizedString(@"enter_new_name");
+        textField.text = favoriteGroup.name;
+    }];
+
+    UIAlertAction *applyAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_apply")
+                                                         style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * _Nonnull action) {
+        NSString *name = alert.textFields.firstObject.text;
+        if (name.length > 0)
+        {
+            [OAFavoritesHelper updateGroup:favoriteGroup
+                                   newName:name
+                           saveImmediately:YES];
+            [self generateData];
+        }
+    }];
+    [alert addAction:applyAction];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                              style:UIAlertActionStyleCancel
+                                            handler:nil]];
+
+    [alert setPreferredAction:applyAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(UITableViewCell*)getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath

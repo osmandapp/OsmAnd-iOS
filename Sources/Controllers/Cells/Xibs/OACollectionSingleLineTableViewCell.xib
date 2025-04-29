@@ -81,7 +81,7 @@
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sJ8-Pd-b5X">
                                         <rect key="frame" x="387" y="0.0" width="6" height="45"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="6" id="FEF-jE-va0"/>
                                         </constraints>

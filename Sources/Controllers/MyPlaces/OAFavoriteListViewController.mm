@@ -1223,11 +1223,7 @@ static UIViewController *parentController;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_rename")
                                                                    message:OALocalizedString(@"enter_new_name")
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = OALocalizedString(@"enter_new_name");
-        textField.text = favoriteGroup.name;
-    }];
-
+    
     UIAlertAction *applyAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_apply")
                                                          style:UIAlertActionStyleDefault
                                                         handler:^(UIAlertAction * _Nonnull action) {
@@ -1244,6 +1240,19 @@ static UIViewController *parentController;
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
                                               style:UIAlertActionStyleCancel
                                             handler:nil]];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = OALocalizedString(@"enter_new_name");
+        textField.text = favoriteGroup.name;
+        
+        applyAction.enabled = textField.text.length > 0;
+        [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification
+                                                          object:textField
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification * _Nonnull note) {
+            applyAction.enabled = [OAFavoritesHelper isGroupNameValidWithText:textField.text group:favoriteGroup];
+        }];
+    }];
 
     [alert setPreferredAction:applyAction];
     [self presentViewController:alert animated:YES completion:nil];

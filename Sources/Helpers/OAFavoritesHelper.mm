@@ -455,6 +455,15 @@ static NSOperationQueue *_favQueue;
     return YES;
 }
 
++ (BOOL)isGroupNameValidWithText:(NSString *)text group:(OAFavoriteGroup *)group
+{
+    return text.length > 0
+    && [text rangeOfCharacterFromSet:kIllegalFileNameCharacters].length == 0
+    && ![text isEqualToString:OALocalizedString(@"favorites_item")]
+    && ![text isEqualToString:OALocalizedString(@"personal_category_name")]
+    && ![text isEqualToString:kPersonalCategory];
+}
+
 + (void)updateGroup:(OAFavoriteGroup *)group
             newName:(NSString *)newName
     saveImmediately:(BOOL)saveImmediately

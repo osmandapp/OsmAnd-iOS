@@ -298,10 +298,12 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.rightActionButton.setImage(isSolidColorSelected ? UIImage.templateImageNamed("ic_custom_add") : nil, for: .normal)
             cell.rightActionButton.tag = isSolidColorSelected ? (indexPath.section << 10 | indexPath.row) : 0
             cell.rightActionButton.removeTarget(nil, action: nil, for: .allEvents)
+            cell.disableAnimationsOnStart = true
             if isSolidColorSelected {
                 cell.rightActionButton.addTarget(self, action: #selector(onCellButtonPressed(_:)), for: .touchUpInside)
                 let colorHandler = OAColorCollectionHandler(data: [sortedColorItems], collectionView: cell.collectionView)
                 colorHandler?.delegate = self
+                colorHandler?.hostVC = self
                 let selectedIndex = sortedColorItems.firstIndex(where: { $0 == selectedColorItem }) ?? sortedColorItems.firstIndex(where: { $0 == appearanceCollection?.getDefaultLineColorItem() }) ?? 0
                 colorHandler?.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
                 cell.setCollectionHandler(colorHandler)
@@ -369,9 +371,14 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if item.key == RowKey.allColorsRowKey.rawValue {
             if isSolidColorSelected {
-                if let items = appearanceCollection?.getAvailableColorsSortingByKey(), let colorItem = selectedColorItem {
+                if let items = appearanceCollection?.getAvailableColorsSortingByLastUsed(), let colorItem = selectedColorItem {
                     let colorCollectionVC = ItemsCollectionViewController(collectionType: .colorItems, items: items, selectedItem: colorItem)
                     colorCollectionVC.delegate = self
+    
+                    if let colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
+                        colorCollectionVC.hostColorHandler = colorHandler
+                    }
+                    
                     navigationController?.pushViewController(colorCollectionVC, animated: true)
                 }
             } else if isGradientColorSelected {

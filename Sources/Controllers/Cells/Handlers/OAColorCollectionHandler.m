@@ -145,6 +145,10 @@
         else
             [self.delegate reloadCollectionData];
     }
+    if (_isOpenedFromAllColorsScreen && _hostColorHandler && _hostColorHandler.delegate)
+    {
+        [_hostColorHandler.delegate reloadCollectionData];
+    }
 }
 
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem
@@ -406,6 +410,10 @@
     if (_isOpenedFromAllColorsScreen && _hostColorHandler)
     {
         [_hostColorHandler deleteColorItem:colorItem];
+        if (_hostColorHandler.delegate)
+            [_hostColorHandler.delegate reloadCollectionData];
+    } else if (self.delegate) {
+        [self.delegate reloadCollectionData];
     }
     if (!_isOpenedFromAllColorsScreen)
         [[OAGPXAppearanceCollection sharedInstance] deleteColor:colorItem];

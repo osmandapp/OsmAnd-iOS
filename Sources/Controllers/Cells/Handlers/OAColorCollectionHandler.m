@@ -145,6 +145,10 @@
         else
             [self.delegate reloadCollectionData];
     }
+    if (_isOpenedFromAllColorsScreen && _hostColorHandler && _hostColorHandler.delegate)
+    {
+        [_hostColorHandler.delegate reloadCollectionData];
+    }
 }
 
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem

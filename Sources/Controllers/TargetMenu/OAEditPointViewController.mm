@@ -410,10 +410,12 @@
     _selectedIconName = preselectedIconName;
     
     OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:self.groupTitle];
-    if (_isNewItemAdding && selectedGroup)
-        _selectedIconName = selectedGroup.iconName;
-    else if (!_selectedIconName || _selectedIconName.length == 0)
-        _selectedIconName = DEFAULT_ICON_NAME_KEY;
+    if (!_selectedIconName) {
+        if (_isNewItemAdding && selectedGroup)
+            _selectedIconName = selectedGroup.iconName;
+        else if (!_selectedIconName || _selectedIconName.length == 0)
+            _selectedIconName = DEFAULT_ICON_NAME_KEY;
+    }
     [_poiIconCollectionHandler setIconName:_selectedIconName];
     
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];

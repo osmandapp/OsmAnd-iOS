@@ -4077,6 +4077,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         defaultValue = (GridFormat)((NSNumber *)pDefault).intValue;
     
     [self set:defaultValue];
+    [[OsmAndApp instance].coordinatesGridSettingsObservable notifyEvent];
 }
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
@@ -4151,6 +4152,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         defaultValue = (GridLabelsPosition) ((NSNumber *) pDefault).intValue;
     
     [self set:defaultValue];
+    [[OsmAndApp instance].coordinatesGridSettingsObservable notifyEvent];
 }
 
 @end

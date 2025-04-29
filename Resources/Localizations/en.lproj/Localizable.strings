@@ -942,6 +942,9 @@
 "without_permission_my_position_value" = "OsmAnd doesn't have location permission";
 "with_permission_my_position_value" = "Move map to current location";
 "shared_string_location_unknown" = "Location unknown";
+"equator" = "Equator";
+"prime_meridian" = "Prime meridian";
+"meridian_180" = "180th meridian";
 
 // HUD
 "hud_heading" = "Heading";

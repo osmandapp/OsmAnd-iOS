@@ -17,7 +17,7 @@
 #import "OALocationConvert.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAOsmAndFormatter.h"
-
+#import "OAObservable.h"
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -217,6 +217,8 @@
         [_settings.settingGeoFormat set:MAP_GEO_OLC_FORMAT mode:self.appMode];
     else if ([name isEqualToString:@"mgrs_format"])
         [_settings.settingGeoFormat set:MAP_GEO_MGRS_FORMAT mode:self.appMode];
+    
+    [[OsmAndApp instance].coordinatesGridSettingsObservable notifyEvent];
 }
 
 @end

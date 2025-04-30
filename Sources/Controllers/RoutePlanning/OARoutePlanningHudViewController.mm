@@ -492,8 +492,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     else
     {
-        _centerImageView.center = CGPointMake(self.view.frame.size.width * 0.5,
-                                        self.view.frame.size.height * 0.5 - contentHeight / 2);
+        const OsmAnd::PointI centerPixel = _mapPanel.mapViewController.mapView.getCenterPixel;
+        _centerImageView.center = CGPointMake(centerPixel.x / UIScreen.mainScreen.scale, centerPixel.y / UIScreen.mainScreen.scale);
     }
 }
 

@@ -24,6 +24,7 @@ import UIKit
     func changeColorItem(_ colorItem: ColorItem, withColor color: UIColor)
     func duplicateColorItem(_ colorItem: ColorItem) -> ColorItem
     func deleteColorItem(_ colorItem: ColorItem)
+    func reloadData()
 }
 
 @objc protocol IconsCollectionViewControllerDelegate: AnyObject {
@@ -925,6 +926,7 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
                !fileName.isEmpty {
                 do {
                     try ColorPaletteHelper.shared.duplicateGradient(fileName)
+                    delegate.reloadData()
                 } catch {
                     print("Failed to duplicate color palette: \(fileName)")
                 }
@@ -950,6 +952,7 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
                !fileName.isEmpty {
                 do {
                     try ColorPaletteHelper.shared.deleteGradient(fileName)
+                    delegate.reloadData()
                 } catch {
                     print("Failed to delete color palette: \(fileName)")
                 }

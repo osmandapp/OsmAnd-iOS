@@ -86,8 +86,12 @@ static const NSInteger kNearbyPoiMinRadius = 250;
 static const NSInteger kNearbyPoiMaxRadius = 1000;
 static const NSInteger kNearbyPoiSearchFactory = 2;
 
+static const CGFloat kCancelButtonLandscapeOffset = 6.0;
+static const CGFloat kCancelButtonPortraitOffset = 16.0;
+static const CGFloat kTitleLandscapeOffset = 40.0;
+static const CGFloat kTitlePortraitOffset = 50.0;
+
 static const CGFloat kTextMaxHeight = 150.0;
-static const CGFloat kNavBarTopSpace = 20.0;
 
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
@@ -473,7 +477,7 @@ static const CGFloat kNavBarTopSpace = 20.0;
 
 - (CGFloat)getNavBarHeight
 {
-    return [super getNavbarHeight] + kNavBarTopSpace;
+    return defaultNavBarHeight + [OAUtilities getLeftMargin] / 3;
 }
 
 - (void)cancelPressed
@@ -510,6 +514,26 @@ static const CGFloat kNavBarTopSpace = 20.0;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [weakSelf.tableView reloadData];
     } completion:nil];
+}
+
+- (void)adjustNavBarSubviewsPosition
+{
+    [self adjustCancelButtonPosition];
+    [self adjustTitleViewPosition];
+}
+
+- (void)adjustCancelButtonPosition
+{
+    CGRect buttonFrame = self.buttonCancel.frame;
+    buttonFrame.origin.x = [OAUtilities isLandscape] ? kCancelButtonLandscapeOffset + [OAUtilities getLeftMargin] : kCancelButtonPortraitOffset;
+    self.buttonCancel.frame = buttonFrame;
+}
+
+- (void)adjustTitleViewPosition
+{
+    CGRect frame = self.titleView.frame;
+    frame.origin.x = [OAUtilities isLandscape] ? kTitleLandscapeOffset + [OAUtilities getLeftMargin] : kTitlePortraitOffset;
+    self.titleView.frame = frame;
 }
 
 - (void) setContentBackgroundColor:(UIColor *)color

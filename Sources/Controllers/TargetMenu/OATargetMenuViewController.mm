@@ -542,6 +542,7 @@
     }
     [self applySafeAreaMargins];
     [self adjustBackButtonPosition];
+    [self adjustNavBarSubviewsPosition];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -549,6 +550,7 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applySafeAreaMargins];
         [self adjustBackButtonPosition];
+        [self adjustNavBarSubviewsPosition];
         // Refresh the offset on iPads to avoid broken animations
         if (self.delegate && OAUtilities.isIPad)
             [self.delegate contentChanged];
@@ -561,6 +563,11 @@
     buttonFrame.origin.x = 16.0 + [OAUtilities getLeftMargin];
     buttonFrame.origin.y = [[OARootViewController instance].mapPanel.hudViewController getHudMinTopOffset];
     self.buttonBack.frame = buttonFrame;
+}
+
+- (void)adjustNavBarSubviewsPosition
+{
+    // overried
 }
 
 - (void) didReceiveMemoryWarning

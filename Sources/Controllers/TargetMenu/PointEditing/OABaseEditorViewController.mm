@@ -119,7 +119,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (NSString *)getTitle
 {
-    return _isNewItem ? OALocalizedString(@"fav_add_new_group") : OALocalizedString(@"change_appearance");
+    return _isNewItem ? OALocalizedString(@"fav_add_new_group") : OALocalizedString(@"default_appearance");
 }
 
 - (NSString *)getLeftNavbarButtonTitle

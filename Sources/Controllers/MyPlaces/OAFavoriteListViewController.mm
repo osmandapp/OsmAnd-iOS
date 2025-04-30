@@ -1110,9 +1110,9 @@ static UIViewController *parentController;
                                       identifier:nil
                                          options:UIMenuOptionsDisplayInline
                                         children:@[showHideAction]]];
-
         
-        UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance")
+        NSString *appearanceName = OALocalizedString(@"default_appearance");
+        UIAction *appearanceAction = [UIAction actionWithTitle:appearanceName
                                                          image:[UIImage systemImageNamed:@"paintpalette"]
                                                     identifier:nil
                                                        handler:^(__kindof UIAction * _Nonnull action) {
@@ -1122,7 +1122,7 @@ static UIViewController *parentController;
             viewController.delegate = self;
             [self.navigationController pushViewController:viewController animated:YES];
         }];
-        appearanceAction.accessibilityLabel = OALocalizedString(@"change_appearance");
+        appearanceAction.accessibilityLabel = appearanceName;
         [menuElements addObject:appearanceAction];
 
         UIAction *shareAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_share")

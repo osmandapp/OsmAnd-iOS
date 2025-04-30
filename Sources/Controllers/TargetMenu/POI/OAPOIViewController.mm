@@ -342,10 +342,12 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         id value = dic[key];
         if ([value isKindOfClass:[NSDictionary class]]) {
             vl = value[@"name"] ?: @"";
+            if (vl.length > 0 && ((NSDictionary *)value[@"localization"]).count == 1)
+                continue; // do not display lonesome collapsible name
         } else {
             vl = value;
         }
-        
+
         NSString *convertedKey = [self convertKey:key];
         
         if ([convertedKey isEqualToString:@"image"]
@@ -604,6 +606,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 NSString *translatedKey = [_poiHelper getTranslation:convertedKey];
                 if (translatedKey.length > 0)
                     textPrefix = translatedKey;
+                else if (!pt && !pType && !poiType)
+                    continue; // do not display internal and/or non-translatable tags
                 else
                     textPrefix = [OAUtilities capitalizeFirstLetter:convertedKey];
                 

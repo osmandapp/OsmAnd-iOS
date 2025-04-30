@@ -159,10 +159,11 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     OAColorCollectionHandler *_colorCollectionHandler;
     BOOL _needToScrollToSelectedColor;
     
-    PoiIconCollectionHandler *_profileIconCollectionHandler;
+    IconCollectionHandler *_profileIconCollectionHandler;
     IconCollectionHandler *_positionIconCollectionHandler;
     IconCollectionHandler *_locationIconCollectionHandler;
     
+    NSArray<NSString *> *_profileIconNames;
     NSArray<NSString *> *_customModelNames;
     NSArray<OALocationIcon *> *_locationIcons;
     NSArray<OALocationIcon *> *_navigationIcons;
@@ -419,7 +420,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         selectedIndexPath = [NSIndexPath indexPathForRow:[[_colorCollectionHandler getData][0] indexOfObject:[appearanceCollection getDefaultPointColorItem]] inSection:0];
     [_colorCollectionHandler setSelectedIndexPath:selectedIndexPath];
     
-    _profileIconCollectionHandler = [[PoiIconCollectionHandler alloc] init];
+    _profileIconNames = [PoiIconCollectionHandler getProfileIconsList];
+    _profileIconCollectionHandler = [[IconCollectionHandler alloc] initWithData:@[_profileIconNames] collectionView:nil];
     _profileIconCollectionHandler.delegate = self;
     _profileIconCollectionHandler.hostVC = self;
     _profileIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
@@ -429,13 +431,13 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [_profileIconCollectionHandler setIconBackgroundSizeWithSize:36];
     [_profileIconCollectionHandler setIconSizeWithSize:24];
     [_profileIconCollectionHandler setSpacingWithSpacing:6];
-    [_profileIconCollectionHandler addProfileIconsCategory];
     NSString *iconName = _changedProfile.iconName;
     if (!iconName || iconName.length == 0)
         iconName = _profile.iconName;
-    
-    [_profileIconCollectionHandler setIconName:_changedProfile.iconName];
-    NSInteger selectedIconIndex = [_profileIconCollectionHandler getSelectedIndexPath].row;
+    NSInteger selectedIconIndex = [_profileIconNames indexOfObject:iconName];
+    if (selectedIconIndex == NSNotFound)
+        selectedIconIndex = 0;
+    [_profileIconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
     
     _customModelNames = [Model3dHelper getCustomModelNames];
     _locationIcons = [self getlocationIcons];

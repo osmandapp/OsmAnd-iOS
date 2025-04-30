@@ -616,7 +616,8 @@ static UIViewController *parentController;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)alertTextFieldDidChange:(UITextField *)textField {
+- (void)alertTextFieldDidChange:(UITextField *)textField
+{
     UIAlertController *alert = (UIAlertController *)self.presentedViewController;
     if (alert) {
         UIAlertAction *applyAction = alert.actions.firstObject;
@@ -1114,12 +1115,11 @@ static UIViewController *parentController;
         }];
         showHideAction.accessibilityLabel = showHideCaption;
         
-        __weak __typeof(self) weakSelf = self;
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
                                                        image:[UIImage imageNamed:@"ic_custom_edit"]
                                                   identifier:nil
                                                      handler:^(__kindof UIAction * _Nonnull action) {
-            [weakSelf openRenameAlertWith:groupData.favoriteGroup];
+            [self openRenameAlertWith:groupData.favoriteGroup];
         }];
         renameAction.accessibilityLabel = OALocalizedString(@"shared_string_rename");
         [menuElements addObject:[UIMenu menuWithTitle:@""

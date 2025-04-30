@@ -599,6 +599,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     
     _currentDayColorItem = [_appearanceCollection getColorItemWithValue:(int)defDay] ?: [_appearanceCollection getDefaultLineColorItem];
     _currentNightColorItem = [_appearanceCollection getColorItemWithValue:(int)defNight] ?: [_appearanceCollection getDefaultLineColorItem];
+    [self applyCoordinatesGridColor];
     OACollectionSingleLineTableViewCell *colorCell = (OACollectionSingleLineTableViewCell *)[self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
     if (colorCell)
     {
@@ -1339,9 +1340,15 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         OAColorItem *picked = _sortedColorItems[indexPath.row];
         if (_isNightCoordinatesGridColorMode)
+        {
             _currentNightColorItem = picked;
+            [_coordinatesGridSettings setGridColor:(int)_currentNightColorItem.value forAppMode:[_settings.applicationMode get] nightMode:YES];
+        }
         else
+        {
             _currentDayColorItem = picked;
+            [_coordinatesGridSettings setGridColor:(int)_currentDayColorItem.value forAppMode:[_settings.applicationMode get] nightMode:NO];
+        }
         
         OACollectionSingleLineTableViewCell *cell = (OACollectionSingleLineTableViewCell *)[self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
         OAColorCollectionHandler *handler = (OAColorCollectionHandler *)[cell getCollectionHandler];

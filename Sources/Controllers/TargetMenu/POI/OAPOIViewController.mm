@@ -342,10 +342,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         id value = dic[key];
         if ([value isKindOfClass:[NSDictionary class]]) {
             vl = value[@"name"] ?: @"";
-            id localization = value[@"localization"];
-            if (vl.length > 0 && [localization isKindOfClass:[NSDictionary class]])
-                if (((NSDictionary *)localization).count == 1)
-                    continue; // lonesome collapsible name
+            if (vl.length > 0 && ((NSDictionary *)value[@"localization"]).count == 1)
+                continue; // do not display lonesome collapsible name
         } else {
             vl = value;
         }

@@ -87,6 +87,7 @@ static const NSInteger kNearbyPoiMaxRadius = 1000;
 static const NSInteger kNearbyPoiSearchFactory = 2;
 
 static const CGFloat kTextMaxHeight = 150.0;
+static const CGFloat kNavBarTopSpace = 20.0;
 
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
@@ -468,6 +469,16 @@ static const CGFloat kTextMaxHeight = 150.0;
         h += row.height;
 
     _contentHeight = h;
+}
+
+- (CGFloat)getNavBarHeight
+{
+    return [super getNavbarHeight] + kNavBarTopSpace;
+}
+
+- (void)cancelPressed
+{
+    [self.delegate btnCancelPressed];
 }
 
 - (void) viewDidLoad

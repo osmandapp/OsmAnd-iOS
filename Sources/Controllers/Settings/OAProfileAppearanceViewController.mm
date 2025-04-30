@@ -435,6 +435,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     if (!iconName || iconName.length == 0)
         iconName = _profile.iconName;
     NSInteger selectedIconIndex = [_profileIconNames indexOfObject:iconName];
+    if (selectedIconIndex == NSNotFound)
+        selectedIconIndex = 0;
     [_profileIconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
     
     _customModelNames = [Model3dHelper getCustomModelNames];

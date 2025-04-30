@@ -619,7 +619,8 @@ static UIViewController *parentController;
 - (void)alertTextFieldDidChange:(UITextField *)textField
 {
     UIAlertController *alert = (UIAlertController *)self.presentedViewController;
-    if (alert) {
+    if (alert)
+    {
         UIAlertAction *applyAction = alert.actions.firstObject;
         applyAction.enabled = [OAFavoritesHelper isGroupNameValidWithText:[textField.text trim]];
     }

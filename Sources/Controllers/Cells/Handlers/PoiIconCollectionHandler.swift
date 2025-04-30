@@ -160,8 +160,8 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         }
     }
     
-    func addProfileIconsCategory() {
-        profileIcons = [
+    static func getProfileIconsList() -> [String] {
+        [
             "ic_world_globe_dark",
             "ic_action_car_dark",
             "ic_action_taxi",
@@ -208,6 +208,10 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             "ic_action_motorboat",
             "ic_action_light_aircraft"
         ]
+    }
+    
+    func addProfileIconsCategory() {
+        profileIcons = Self.getProfileIconsList()
 
         let profileIconsCategory = IconsCategory(key: PROFILE_ICONS_KEY, translatedName: localizedString("profile_icons"), iconKeys: profileIcons, isTopCategory: true)
         categories.append(profileIconsCategory)

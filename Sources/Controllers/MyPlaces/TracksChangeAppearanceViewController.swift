@@ -694,6 +694,13 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         generateData()
         tableView.reloadRows(at: [indexPath], with: .none)
     }
+    
+    private func getColorHandler() -> OAColorCollectionHandler? {
+        if let colorsIndexPath = colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
+            return colorHandler
+        }
+        return nil
+    }
 }
 
 extension TracksChangeAppearanceViewController {
@@ -946,11 +953,18 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
     func reloadCollectionData() {
         guard let appearanceCollection else { return }
         sortedColorItems = Array(appearanceCollection.getAvailableColorsSortingByLastUsed() ?? [])
-        if let trackColor = tracks.first?.color {
-            selectedColorItem = appearanceCollection.getColorItem(withValue: Int32(trackColor))
-        } else {
-            selectedColorItem = appearanceCollection.getDefaultLineColorItem()
+        var selectedItem: ColorItem?
+        if let colorHandler = getColorHandler(), let selectedColor = colorHandler.getSelectedItem() {
+            selectedItem = selectedColor
         }
+        if selectedItem == nil {
+            if let trackColor = tracks.first?.color {
+                selectedItem = appearanceCollection.getColorItem(withValue: Int32(trackColor))
+            } else {
+                selectedItem = appearanceCollection.getDefaultLineColorItem()
+            }
+        }
+        selectedColorItem = selectedItem
     }
 }
 
@@ -1015,10 +1029,11 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
     }
     
     func reloadData() {
-        DispatchQueue.main.async {
-            self.reloadCollectionData()
-            self.configureLineColors()
-            self.configureGradientColors()
+        // called from All Pallets screen
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            if let paletteColors = self.gradientColorsCollection?.getPaletteColors() {
+                self.sortedPaletteColorItems.replaceAll(withObjectsSync: paletteColors)
+            }
             self.updateData()
         }
     }

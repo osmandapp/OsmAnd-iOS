@@ -161,13 +161,14 @@
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
         [weakSelf insertItem:newItem atIndexPath:indexPath];
-    } completion:^(BOOL finished) {
-        if (indexPath.row <= weakSelf.selectedIndexPath.row)
-        {
-            NSIndexPath *prevSelectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
-            [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
+        if (indexPath.row <= weakSelf.selectedIndexPath.row) {
+            NSIndexPath *insertedIndex = indexPath;
+            NSIndexPath *updatedPrevSelectedIndex = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
+            [weakSelf setSelectedIndexPath:updatedPrevSelectedIndex];
+            [collectionView reloadItemsAtIndexPaths:@[insertedIndex, updatedPrevSelectedIndex]];
         }
         [weakSelf scrollToIndexPathIfNeeded:indexPath];
+    } completion:^(BOOL finished) {
     }];
 }
 
@@ -181,7 +182,6 @@
     [collectionView performBatchUpdates:^{
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
         [weakSelf removeItem:indexPath];
-    } completion:^(BOOL finished) {
         if (indexPath == weakSelf.selectedIndexPath)
         {
             [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
@@ -192,9 +192,7 @@
         {
             [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section]];
         }
-        
-        if (weakSelf.delegate)
-            [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:[weakSelf getSelectedItem] collectionView:[self getCollectionView] shouldDismiss:NO];
+    } completion:^(BOOL finished) {
     }];
 }
 
@@ -211,6 +209,22 @@
 - (OAColorItem *)getSelectedItem
 {
     return _data[_selectedIndexPath.section][_selectedIndexPath.row];
+}
+
+- (void)setSelectionItem:(OAColorItem *)item
+{
+    for (int i = 0; i < _data.count; i++)
+    {
+        NSMutableArray<OAColorItem *> *section = _data[i];
+        for (int j = 0; j < section.count; j++)
+        {
+            if (item == section[j])
+            {
+                _selectedIndexPath = [NSIndexPath indexPathForRow:j inSection:i];
+                return;
+            }
+        }
+    }
 }
 
 - (void)generateData:(NSArray<NSArray<OAColorItem *> *> *)data

@@ -944,11 +944,12 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
     }
     
     func reloadCollectionData() {
-        sortedColorItems = Array(appearanceCollection?.getAvailableColorsSortingByLastUsed() ?? [])
+        guard let appearanceCollection else { return }
+        sortedColorItems = Array(appearanceCollection.getAvailableColorsSortingByLastUsed() ?? [])
         if let trackColor = tracks.first?.color {
-            selectedColorItem = appearanceCollection?.getColorItem(withValue: Int32(trackColor))
+            selectedColorItem = appearanceCollection.getColorItem(withValue: Int32(trackColor))
         } else {
-            selectedColorItem = appearanceCollection?.getDefaultLineColorItem()
+            selectedColorItem = appearanceCollection.getDefaultLineColorItem()
         }
     }
 }
@@ -1014,7 +1015,7 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
     }
     
     func reloadData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.async {
             self.reloadCollectionData()
             self.configureLineColors()
             self.configureGradientColors()

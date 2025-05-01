@@ -36,6 +36,9 @@
 #define BACKUP_MAX_COUNT 10
 #define BACKUP_MAX_PER_DAY 3
 
+// NOTE: If the file name contains "\" macOS and iOS interpret it as a folder/subfolder. Additionally, ArchiveReader replaces "\" with "/". We do not allow the user to use this symbol in the file name.
+static NSCharacterSet * const kIllegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"\\"];
+
 @implementation OAFavoritesHelper
 
 static OAObservable *_favoritesCollectionChangedObservable;
@@ -453,6 +456,15 @@ static NSOperationQueue *_favQueue;
     
     [self saveCurrentPointsIntoFile];
     return YES;
+}
+
++ (BOOL)isGroupNameValidWithText:(NSString *)text
+{
+    return text.length > 0
+    && [text rangeOfCharacterFromSet:kIllegalFileNameCharacters].length == 0
+    && ![text isEqualToString:OALocalizedString(@"favorites_item")]
+    && ![text isEqualToString:OALocalizedString(@"personal_category_name")]
+    && ![text isEqualToString:kPersonalCategory];
 }
 
 + (void)updateGroup:(OAFavoriteGroup *)group

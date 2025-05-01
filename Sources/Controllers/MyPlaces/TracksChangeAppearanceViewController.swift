@@ -509,7 +509,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private func configureGradientColors() {
         guard let type = selectedColorType, let ordinal = type.toColorizationType()?.ordinal, let colorizationTypeEnum = ColorizationType(rawValue: Int(ordinal)) else { return }
         gradientColorsCollection = GradientColorsCollection(colorizationType: colorizationTypeEnum)
-        if let paletteColors = gradientColorsCollection?.getPaletteColors() {
+        if let paletteColors = gradientColorsCollection?.getColors(.original) {
             sortedPaletteColorItems.replaceAll(withObjectsSync: paletteColors)
         }
         
@@ -1030,8 +1030,12 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
     
     func reloadData() {
         // called from All Pallets screen
+        
+        // TODO: remove asyncAfter.
+        // there is bug with deleting several color paletes from AllColor screen. Last 2 paletes not removable from host screen without this.
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            if let paletteColors = self.gradientColorsCollection?.getPaletteColors() {
+            if let paletteColors = self.gradientColorsCollection?.getColors(.original) {
                 self.sortedPaletteColorItems.replaceAll(withObjectsSync: paletteColors)
             }
             self.updateData()

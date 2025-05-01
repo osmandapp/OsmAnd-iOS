@@ -215,7 +215,7 @@
 {
     for (int i = 0; i < _data.count; i++)
     {
-        NSMutableArray<OAColorItem *> *section = _data[i];
+        NSArray<OAColorItem *> *section = _data[i];
         for (int j = 0; j < section.count; j++)
         {
             if (item == section[j])

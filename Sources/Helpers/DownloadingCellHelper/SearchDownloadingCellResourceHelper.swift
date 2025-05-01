@@ -18,7 +18,17 @@ final class SearchDownloadingCellResourceHelper: DownloadingCellResourceHelper {
                     subtitle += "  •  \(dateString)"
                 }
             }
+            
             var title = resourceItem.title() ?? ""
+
+            if let superregionName = resourceItem.worldRegion()?.superregion?.name {
+                if title.isEmpty {
+                    title = superregionName
+                } else {
+                    title += ", \(superregionName)"
+                }
+            }
+            
             if title.isEmpty {
                 title = OAResourcesUISwiftHelper.title(ofResourceType: resourceItem.resourceType(),
                                                        in: resourceItem.worldRegion(),

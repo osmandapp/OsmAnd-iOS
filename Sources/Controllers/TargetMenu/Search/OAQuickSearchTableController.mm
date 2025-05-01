@@ -135,12 +135,14 @@
             }
         }
         
-        if (shouldReloadTable) {
+        if (shouldReloadTable)
+        {
             break;
         }
     }
     
-    if (shouldReloadTable) {
+    if (shouldReloadTable)
+    {
         [_downloadingCellResourceHelper cleanCellCache];
         [self.tableView reloadData];
     }

@@ -696,10 +696,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     }
     
     private func getColorHandler() -> OAColorCollectionHandler? {
-        if let colorsIndexPath = colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
-            return colorHandler
-        }
-        return nil
+        guard let colorsCollectionIndexPath,
+              let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell,
+              let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler else { return nil }
+        
+        return colorHandler
     }
 }
 

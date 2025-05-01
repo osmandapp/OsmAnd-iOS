@@ -509,7 +509,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private func configureGradientColors() {
         guard let type = selectedColorType, let ordinal = type.toColorizationType()?.ordinal, let colorizationTypeEnum = ColorizationType(rawValue: Int(ordinal)) else { return }
         gradientColorsCollection = GradientColorsCollection(colorizationType: colorizationTypeEnum)
-        if let paletteColors = gradientColorsCollection?.getPaletteColors() {
+        if let paletteColors = gradientColorsCollection?.getColors(.original) {
             sortedPaletteColorItems.replaceAll(withObjectsSync: paletteColors)
         }
         
@@ -693,6 +693,14 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         
         generateData()
         tableView.reloadRows(at: [indexPath], with: .none)
+    }
+    
+    private func getColorHandler() -> OAColorCollectionHandler? {
+        guard let colorsCollectionIndexPath,
+              let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell,
+              let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler else { return nil }
+        
+        return colorHandler
     }
 }
 
@@ -946,11 +954,18 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
     func reloadCollectionData() {
         guard let appearanceCollection else { return }
         sortedColorItems = Array(appearanceCollection.getAvailableColorsSortingByLastUsed() ?? [])
-        if let trackColor = tracks.first?.color {
-            selectedColorItem = appearanceCollection.getColorItem(withValue: Int32(trackColor))
-        } else {
-            selectedColorItem = appearanceCollection.getDefaultLineColorItem()
+        var selectedItem: ColorItem?
+        if let colorHandler = getColorHandler(), let selectedColor = colorHandler.getSelectedItem() {
+            selectedItem = selectedColor
         }
+        if selectedItem == nil {
+            if let trackColor = tracks.first?.color {
+                selectedItem = appearanceCollection.getColorItem(withValue: Int32(trackColor))
+            } else {
+                selectedItem = appearanceCollection.getDefaultLineColorItem()
+            }
+        }
+        selectedColorItem = selectedItem
     }
 }
 
@@ -1015,10 +1030,15 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
     }
     
     func reloadData() {
-        DispatchQueue.main.async {
-            self.reloadCollectionData()
-            self.configureLineColors()
-            self.configureGradientColors()
+        // called from All Pallets screen
+        
+        // TODO: remove asyncAfter.
+        // there is bug with deleting several color paletes from AllColor screen. Last 2 paletes not removable from host screen without this.
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            if let paletteColors = self.gradientColorsCollection?.getColors(.original) {
+                self.sortedPaletteColorItems.replaceAll(withObjectsSync: paletteColors)
+            }
             self.updateData()
         }
     }

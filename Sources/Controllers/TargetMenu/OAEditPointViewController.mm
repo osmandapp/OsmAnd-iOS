@@ -790,10 +790,7 @@
             [cell.bottomButton setTitle:item[@"descr"] forState:UIControlStateNormal];
             [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
-            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
-            if (selectedIndexPath.row == NSNotFound)
-                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultPointColorItem]] inSection:0];
-            [_colorCollectionHandler setSelectedIndexPath:selectedIndexPath];
+            [_colorCollectionHandler setSelectionItem:_selectedColorItem];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
             

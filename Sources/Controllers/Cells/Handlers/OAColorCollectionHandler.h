@@ -37,6 +37,7 @@
 
 - (NSMutableArray<NSMutableArray<OAColorItem *> *> *) getData;
 - (OAColorItem *)getSelectedItem;
+- (void)setSelectionItem:(OAColorItem *)item;
 
 - (void)openColorPickerWithColor:(OAColorItem *)colorItem sourceView:(UIView *)sourceView newColorAdding:(BOOL)newColorAdding;
 - (void)openAllColorsScreen;

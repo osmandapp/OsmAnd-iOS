@@ -1153,4 +1153,8 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
 }
 
+- (void) reloadData
+{
+}
+
 @end

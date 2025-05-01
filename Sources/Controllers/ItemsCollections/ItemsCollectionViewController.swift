@@ -24,7 +24,7 @@ import UIKit
     func changeColorItem(_ colorItem: ColorItem, withColor color: UIColor)
     func duplicateColorItem(_ colorItem: ColorItem) -> ColorItem
     func deleteColorItem(_ colorItem: ColorItem)
-    func reloadData()
+    @objc optional func reloadData()
 }
 
 @objc protocol IconsCollectionViewControllerDelegate: AnyObject {
@@ -686,6 +686,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                    let currentIndex = self.paletteItems?.index(ofObjectSync: newCurrentSelected) {
                     self.tableView.reloadRows(at: [IndexPath(row: Int(currentIndex), section: 0)], with: .automatic)
                 }
+                self.delegate?.reloadData?()
             }
         }
     }
@@ -715,6 +716,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             tableView.performBatchUpdates { [weak self] in
                 guard let self else { return }
                 self.tableView.insertRows(at: indexPathsToInsert, with: .automatic)
+            } completion: { finished in
+                self.delegate?.reloadData?()
             }
         }
     }
@@ -739,6 +742,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             tableView.performBatchUpdates { [weak self] in
                 guard let self else { return }
                 self.tableView.reloadRows(at: indexPathsToUpdate, with: .automatic)
+            } completion: { finished in
+                self.delegate?.reloadData?()
             }
         }
     }
@@ -926,7 +931,6 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
                !fileName.isEmpty {
                 do {
                     try ColorPaletteHelper.shared.duplicateGradient(fileName)
-                    delegate.reloadData()
                 } catch {
                     print("Failed to duplicate color palette: \(fileName)")
                 }
@@ -952,7 +956,7 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
                !fileName.isEmpty {
                 do {
                     try ColorPaletteHelper.shared.deleteGradient(fileName)
-                    delegate.reloadData()
+                    delegate.reloadData?()
                 } catch {
                     print("Failed to delete color palette: \(fileName)")
                 }

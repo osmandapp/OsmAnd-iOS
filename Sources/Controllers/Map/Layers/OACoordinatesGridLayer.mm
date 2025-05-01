@@ -21,6 +21,10 @@
 static const CGFloat kDefaultMarginFactor = 8.0f;
 static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = static_cast<OsmAnd::TextRasterizer::Style::TextAlignment>(-1);
 
+@interface OACoordinatesGridLayer () <OAMapInfoControllerProtocol>
+
+@end
+
 @implementation OACoordinatesGridLayer
 {
     OsmAndAppInstance _app;
@@ -40,6 +44,9 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     BOOL _cachedGridEnabled;
     BOOL _cachedNightMode;
     
+    OAMapInfoController *_mapInfoController;
+    BOOL _marginFactorUpdateNeeded;
+    
     OAAutoObserverProxy *_coordinatesGridSettingsObservable;
     OAAutoObserverProxy *_mapSettingsChangeObserver;
     OAAutoObserverProxy *_dayNightModeObserver;
@@ -57,7 +64,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
     _gridSettings = [[OACoordinatesGridSettings alloc] init];
-    _mapView = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     
     _coordinatesGridSettingsObservable = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:[OsmAndApp instance].coordinatesGridSettingsObservable];
     _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:_app.mapSettingsChangeObservable];
@@ -69,7 +76,16 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     if (![super updateLayer])
         return NO;
     
-    [self updateGridSettings];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!_mapInfoController)
+        {
+            _mapInfoController = [OARootViewController instance].mapPanel.hudViewController.mapInfoController;
+            _mapInfoController.delegate = self;
+        }
+        
+        [self updateGridSettings];
+    });
+    
     return YES;
 }
 
@@ -126,6 +142,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
         {
             updateAppearance = [self updateVariablesWithAppMode:appMode];
             zoomLevelsUpdated = [self updateZoomLevelsWithAppMode:appMode];
+            marginFactorUpdated = [self updateLabelsMarginFactor];
         }
         if (updateAppearance)
         {
@@ -262,6 +279,46 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     return NO;
 }
 
+- (BOOL)updateLabelsMarginFactor
+{
+    if (_marginFactorUpdateNeeded)
+    {
+        if (_mapInfoController && _mapInfoController.topPanelController && _mapInfoController.bottomPanelController)
+        {
+            CGFloat topFactor = kDefaultMarginFactor;
+            CGFloat bottomFactor = kDefaultMarginFactor;
+            CGFloat screenHeight = [OAUtilities calculateScreenHeight];
+            if ([_mapInfoController.topPanelController hasWidgets])
+            {
+                CGFloat topWidgetsHeight = [_mapInfoController.topPanelController calculateContentSize].height;
+                if (topWidgetsHeight > 0)
+                {
+                    CGFloat calculated = (screenHeight * 0.8f) / topWidgetsHeight;
+                    topFactor = MIN(calculated, kDefaultMarginFactor);
+                }
+            }
+            if ([_mapInfoController.bottomPanelController hasWidgets])
+            {
+                CGFloat bottomWidgetsHeight = [_mapInfoController.bottomPanelController calculateContentSize].height;
+                if (bottomWidgetsHeight > 0)
+                {
+                    CGFloat calculated = (screenHeight * 0.8f) / bottomWidgetsHeight;
+                    bottomFactor = MIN(calculated, kDefaultMarginFactor);
+                }
+            }
+            
+            _gridConfiguration->setPrimaryTopMarginFactor(topFactor);
+            _gridConfiguration->setSecondaryTopMarginFactor(topFactor);
+            _gridConfiguration->setPrimaryBottomMarginFactor(bottomFactor);
+            _gridConfiguration->setSecondaryBottomMarginFactor(bottomFactor);
+            _marginFactorUpdateNeeded = NO;
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 - (OsmAnd::TextRasterizer::Style)createMarksStyleWithColor:(const OsmAnd::FColorARGB &)color haloColor:(const OsmAnd::FColorARGB &)haloColor textAlignment:(OsmAnd::TextRasterizer::Style::TextAlignment)textAlignment
 {
     OsmAnd::TextRasterizer::Style style;
@@ -294,6 +351,14 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
         [self.mapView removeKeyedSymbolsProvider:_marksProvider];
         _marksProvider = nullptr;
     }
+}
+
+#pragma mark - OAMapInfoControllerProtocol
+
+- (void)widgetsLayoutDidChange:(BOOL)animated
+{
+    _marginFactorUpdateNeeded = YES;
+    [self updateGridSettings];
 }
 
 @end

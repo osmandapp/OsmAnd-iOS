@@ -245,6 +245,11 @@ static BOOL _repositoryUpdated = NO;
     return self;
 }
 
+- (void)registerCels
+{
+    [self.tableView registerNib:[UINib nibWithNibName:DownloadingCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:DownloadingCell.reuseIdentifier];
+}
+
 - (void)setupWithRegion:(OAWorldRegion *)region
     andWorldRegionItems:(NSArray *)worldRegionItems
                andScope:(NSInteger)scope
@@ -267,7 +272,6 @@ static BOOL _repositoryUpdated = NO;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    [self setupDownloadingCellHelper];
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
@@ -279,6 +283,8 @@ static BOOL _repositoryUpdated = NO;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 52.;
     self.tableView.prefetchingEnabled = NO;
+    [self registerCels];
+    [self setupDownloadingCellHelper];
 
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_refreshRepositoryProgressHUD];
@@ -915,7 +921,6 @@ static BOOL _repositoryUpdated = NO;
     NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
 
-    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPluginsHelper getPlugin:OAOsmandDevelopmentPlugin.class];
     for (const auto& resource_ : regionResources.allResources)
     {
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
@@ -1589,34 +1594,14 @@ static BOOL _repositoryUpdated = NO;
 
         [self.view addSpinner];
         
+        if (searchString.length < 3)
+            return;
+        
         [OAQuickSearchHelper.instance searchCities:searchString
                                     searchLocation:_app.locationServices.lastKnownLocation
                                       allowedTypes:@[@"city", @"town"]
                                          cityLimit:kSearchCityLimit
                                         onComplete:^(NSMutableArray *searchResults) {
-//            NSArray<OASearchResult *> *uniqueResults;
-//            NSMutableDictionary<NSString *, OASearchResult *> *uniqueDictionary = [NSMutableDictionary dictionary];
-//
-//            for (OASearchResult *result in searchResults) {
-//                NSLog(@"resourceId: %@", result.resourceId);
-////                resourceId: ukraine_dnipro_europe.obf
-////                resourceId: albania_europe.obf
-////                resourceId: gabon_africa.obf
-////                resourceId: worldminibasemap.obf
-//                if (!uniqueDictionary[result.resourceId]) {
-//                    uniqueDictionary[result.resourceId] = result;
-//                }
-//            }
-//
-//            uniqueResults = [uniqueDictionary allValues];
-            
- //       [OAQuickSearchHelper.instance searchCityLocations:searchString
-//                                       searchLocation:_app.locationServices.lastKnownLocation
-//                                         searchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]
-//                                         allowedTypes:@[@"city", @"town"]
-//                                                limit:kSearchCityLimit
-//                                           onComplete:^(NSArray<OASearchResult *> *searchResults)
-//         {
             NSMutableArray *regionsByCity = [NSMutableArray array];
             for (OASearchResult *amenity in searchResults)
             {
@@ -1641,6 +1626,11 @@ static BOOL _repositoryUpdated = NO;
                 [_tableView reloadData];
             }
             [self.view removeSpinner];
+ // TODO:
+//            let savedOffset = collectionView.contentOffset
+//            collectionView.reloadData()
+//            collectionView.layoutIfNeeded()
+//            collectionView.setContentOffset(savedOffset, animated: false)
         }];
     }
 }
@@ -2088,7 +2078,6 @@ static BOOL _repositoryUpdated = NO;
     static NSString * const outdatedResourcesSubmenuCell = @"outdatedResourcesSubmenuCell";
     static NSString * const installedResourcesSubmenuCell = @"installedResourcesSubmenuCell";
     static NSString * const allDownloadingsCell = @"allDownloadingsCell";
-    static NSString * const downloadingCell = [DownloadingCell reuseIdentifier];
 
     NSString *cellTypeId = nil;
     NSString *title = nil;
@@ -2702,43 +2691,15 @@ static BOOL _repositoryUpdated = NO;
     }
     else if ([item_ isKindOfClass:OAResourceItem.class] || [item_ isKindOfClass:OASearchResult.class])
     {
-        DownloadingCell *cell = [tableView dequeueReusableCellWithIdentifier:downloadingCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[DownloadingCell reuseIdentifier] owner:self options:nil];
-            cell = (DownloadingCell *)[nib objectAtIndex:0];
-        }
-        
+        DownloadingCell *downloadingCell = [tableView dequeueReusableCellWithIdentifier:DownloadingCell.reuseIdentifier];
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
-        
-        [_downloadingCellResourceHelper configureWith:mapItem.resourceId
-                                    swiftResourceItem:mapItem cell:cell];
-        
-//        DownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
-        
-        cell.titleLabel.text = title;
-        cell.descriptionLabel.text = subtitle;
-        
-        return cell;
-        
-//            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:test];
-//        
-//        OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
-//        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
-//            
-//        // Fill cell content
-//        cell.textLabel.text = title;
-//        cell.detailTextLabel.text = subtitle;
-//        return cell;
-        
-        
-//        OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
-      //  OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
-//        DownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
-//        downloadingCell.titleLabel.text = title;
-//        downloadingCell.descriptionLabel.text = subtitle;
-//        return downloadingCell;
+     
+        [_downloadingCellResourceHelper configureWithResourceItem:mapItem cell:downloadingCell];
+
+        downloadingCell.titleLabel.text = title;
+        downloadingCell.descriptionLabel.text = subtitle;
+        return downloadingCell;
     }
     else
     {

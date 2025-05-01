@@ -408,7 +408,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     BOOL isSameType = r1.objectType == r2.objectType;
     if (isSameType)
     {
-        if (r1.objectType == EOAObjectTypeGpxTrack)
+        if (r1.objectType == EOAObjectTypeIndexItem || r1.objectType == EOAObjectTypeGpxTrack)
             return [r1.localeName isEqualToString:r2.localeName];
     }
     if (r1.location && r2.location && ![OAObjectType isTopVisible:r1.objectType] && ![OAObjectType isTopVisible:r2.objectType])

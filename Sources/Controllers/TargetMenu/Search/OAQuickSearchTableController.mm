@@ -92,9 +92,15 @@
         _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
         _tableView.estimatedRowHeight = 48.0;
         _tableView.rowHeight = UITableViewAutomaticDimension;
+        [self registerCels];
         [self setupDownloadingCellHelper];
     }
     return self;
+}
+
+- (void)registerCels
+{
+    [self.tableView registerNib:[UINib nibWithNibName:DownloadingCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:DownloadingCell.reuseIdentifier];
 }
 
 - (void)setupDownloadingCellHelper
@@ -660,9 +666,12 @@
                 }
             }
             case EOAObjectTypeIndexItem: {
+                DownloadingCell *downloadingCell = [tableView dequeueReusableCellWithIdentifier:DownloadingCell.reuseIdentifier];
                 OAResourceItem *obj = (OAResourceItem *)res.relatedObject;
                 OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:obj];
-                return [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
+                [_downloadingCellResourceHelper configureWithResourceItem:mapItem cell:downloadingCell];
+
+                return downloadingCell;
             }
             case EOAObjectTypePartialLocation:
             {

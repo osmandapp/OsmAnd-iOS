@@ -126,6 +126,6 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
     }
     
     func onDownloadTaskFinished(resourceId: String) {
-        hostDelegate?.onDownloadTaskFinished(resourceId: resourceId)
+        hostDelegate?.onDownloadTaskFinished?(resourceId: resourceId)
     }
 }

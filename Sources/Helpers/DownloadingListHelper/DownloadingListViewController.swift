@@ -110,6 +110,6 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
     }
     
     func onDownloadTaskFinished(resourceId: String) {
-        delegate?.onDownloadTaskFinished(resourceId: resourceId)
+        delegate?.onDownloadTaskFinished?(resourceId: resourceId)
     }
 }

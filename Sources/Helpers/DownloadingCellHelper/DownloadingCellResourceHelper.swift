@@ -9,7 +9,7 @@
 @objc protocol DownloadingCellResourceHelperDelegate: AnyObject {
     func onDownloadingCellResourceNeedUpdate(_ task: OADownloadTask?)
     func onStopDownload(_ resourceItem: OAResourceSwiftItem)
-    func onDownloadTaskFinished(resourceId: String)
+    @objc optional func onDownloadTaskFinished(resourceId: String)
 }
 
 @objcMembers
@@ -160,7 +160,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             let isDownloading = isDownloading(resourceId)
             
             // get cell with default settings
-            let cell = setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: getLeftIconName(resourceId), rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
+            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: getLeftIconName(resourceId), rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
             
             if isDisabled(resourceId) {
                 cell?.titleLabel.textColor = .textColorSecondary
@@ -169,44 +169,6 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             return cell
         }
         return nil
-    }
-    
-    override func setupCell(resourceId: String, title: String?, isTitleBold: Bool, desc: String?, leftIconName: String?, rightIconName: String?, isDownloading: Bool) -> DownloadingCell? {
-        var cell = cells[resourceId] as! DownloadingCell
-        
-        cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        cell.leftIconView.tintColor = .iconColorDefault
-        cell.rightIconView.tintColor = getRightIconColor()
-        cell.rightIconView.image = UIImage.templateImageNamed(getRightIconName(resourceId))
-        
-        setupLeftIcon(cell: cell, leftIconName: leftIconName, resourceId: resourceId)
-        
-        cell.titleLabel.text = title != nil ? title : ""
-        if isTitleBold || isBoldTitleStyle {
-            cell.titleLabel.font = UIFont.scaledSystemFont(ofSize: 17, weight: .medium)
-            cell.titleLabel.textColor = .textColorActive
-        } else {
-            cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-            cell.titleLabel.textColor = .textColorPrimary
-        }
-        
-        if let desc, !desc.isEmpty {
-            cell.descriptionVisibility(true)
-            cell.descriptionLabel.text = desc
-            cell.descriptionLabel.font = UIFont.monospacedFont(at: 12, withTextStyle: .body)
-            cell.descriptionLabel.textColor = .textColorSecondary
-        } else {
-            cell.descriptionVisibility(false)
-        }
-        
-        if isDownloading {
-            cell.rightIconVisibility(false)
-            cells[resourceId] = cell
-            refreshCellProgress(resourceId)
-        } else {
-            setupRightIconForIdleCell(cell: cell, rightIconName: rightIconName, resourceId: resourceId)
-        }
-        return cell
     }
     
     override func getLeftIconName(_ resourceId: String) -> String? {
@@ -230,14 +192,15 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         }
     }
     
-    func configureWith(_ resourceId: String,
-                       swiftResourceItem: OAResourceSwiftItem?,
+    func configureWith(resourceItem: OAResourceSwiftItem?,
                        cell: DownloadingCell) {
-        if let swiftResourceItem, swiftResourceItem.objcResourceItem != nil {
+        if let resourceItem,
+           resourceItem.objcResourceItem != nil,
+           let resourceId = resourceItem.resourceId() {
             if getResource(resourceId) == nil {
-                saveResource(resource: swiftResourceItem, resourceId: resourceId)
+                saveResource(resource: resourceItem, resourceId: resourceId)
             }
-            if swiftResourceItem.downloadTask() != nil {
+            if resourceItem.downloadTask() != nil {
                 saveStatus(resourceId: resourceId, status: .inProgress)
             }
             if statuses[resourceId] == nil {
@@ -316,7 +279,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
 
                 self.setCellProgress(resourceId: resourceId, progress: progress, status: .finished)
                 if self.isInstalled(resourceId) {
-                    self.delegate?.onDownloadTaskFinished(resourceId: resourceId)
+                    self.delegate?.onDownloadTaskFinished?(resourceId: resourceId)
                 }
               
                 // Start next downloading if needed

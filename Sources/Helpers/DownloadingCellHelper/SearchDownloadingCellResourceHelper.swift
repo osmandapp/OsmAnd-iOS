@@ -6,7 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-
 @objcMembers
 final class SearchDownloadingCellResourceHelper: DownloadingCellResourceHelper {
     override func setupCell(_ resourceId: String) -> DownloadingCell? {

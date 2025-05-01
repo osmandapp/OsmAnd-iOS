@@ -24,9 +24,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-// NOTE: If the file name contains "\" macOS and iOS interpret it as a folder/subfolder. Additionally, ArchiveReader replaces "\" with "/". We do not allow the user to use this symbol in the file name.
-static NSCharacterSet * const kIllegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"\\"];
-
 static NSString * const kInputNameKey = @"kInputNameKey";
 static NSString * const kLastUsedIconsKey = @"kLastUsedIconsKey";
 static NSString * const kIconsKey = @"kIconsKey";
@@ -579,12 +576,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     if ([item.key isEqualToString:kInputNameKey])
     {
         OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:textView.text];
-        _isTextViewNameValid = textView.text.length > 0
-            && [textView.text rangeOfCharacterFromSet:kIllegalFileNameCharacters].length == 0
-            && ![textView.text isEqualToString:OALocalizedString(@"favorites_item")]
-            && ![textView.text isEqualToString:OALocalizedString(@"personal_category_name")]
-            && ![textView.text isEqualToString:kPersonalCategory]
-            && !groupExist;
+        _isTextViewNameValid = [OAFavoritesHelper isGroupNameValidWithText:textView.text] && !groupExist;
         if (!_isTextViewNameValid && groupExist)
         {
             _isTextViewNameValid = textView.text.length > 0

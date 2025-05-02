@@ -472,11 +472,6 @@ static const CGFloat kTextMaxHeight = 150.0;
     _contentHeight = h;
 }
 
-- (CGFloat)getNavBarHeight
-{
-    return defaultNavBarHeight + [OAUtilities getLeftMargin] / 3;
-}
-
 - (void)cancelPressed
 {
     [self.delegate btnCancelPressed];

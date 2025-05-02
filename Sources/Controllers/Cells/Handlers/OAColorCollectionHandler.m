@@ -163,7 +163,6 @@
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
         [weakSelf insertItem:newItem atIndexPath:indexPath];
-        
         if (indexPath.row <= weakSelf.selectedIndexPath.row) {
             NSIndexPath *insertedIndex = indexPath;
             NSIndexPath *updatedPrevSelectedIndex = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];

@@ -17,6 +17,7 @@ typedef struct ZoomRange {
 
 @interface OACoordinatesGridSettings : NSObject
 
+- (void)toggleEnable;
 - (BOOL)isEnabled;
 - (void)setEnabled:(BOOL)enabled;
 - (int32_t)getGridFormatForAppMode:(OAApplicationMode *)appMode;

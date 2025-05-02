@@ -193,6 +193,7 @@
 - (void)notifyChange
 {
     [_app.coordinatesGridSettingsObservable notifyEvent];
+    [[OAMapButtonsHelper sharedInstance].quickActionButtonsChangedObservable notifyEvent];
 }
 
 @end

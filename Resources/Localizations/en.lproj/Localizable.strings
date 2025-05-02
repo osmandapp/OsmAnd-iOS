@@ -945,6 +945,7 @@
 "equator" = "Equator";
 "prime_meridian" = "Prime meridian";
 "meridian_180" = "180th meridian";
+"quick_action_showhide_coordinates_grid_descr" = "Action to control the visibility of the Coordinates grid on the map.";
 
 // HUD
 "hud_heading" = "Heading";

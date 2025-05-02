@@ -86,10 +86,7 @@ static const NSInteger kNearbyPoiMinRadius = 250;
 static const NSInteger kNearbyPoiMaxRadius = 1000;
 static const NSInteger kNearbyPoiSearchFactory = 2;
 
-static const CGFloat kCancelButtonLandscapeOffset = 6.0;
-static const CGFloat kCancelButtonPortraitOffset = 16.0;
-static const CGFloat kTitleLandscapeOffset = 40.0;
-static const CGFloat kTitlePortraitOffset = 50.0;
+static const CGFloat kBackButtonOffsetLeftFromFrame = 6.0;
 
 static const CGFloat kTextMaxHeight = 150.0;
 
@@ -525,14 +522,14 @@ static const CGFloat kTextMaxHeight = 150.0;
 - (void)adjustCancelButtonPosition
 {
     CGRect buttonFrame = self.buttonCancel.frame;
-    buttonFrame.origin.x = [OAUtilities isLandscape] ? kCancelButtonLandscapeOffset + [OAUtilities getLeftMargin] : kCancelButtonPortraitOffset;
+    buttonFrame.origin.x = [OAUtilities isLandscape] ? kBackButtonOffsetLeftFromFrame + [OAUtilities getLeftMargin] : 0.0;
     self.buttonCancel.frame = buttonFrame;
 }
 
 - (void)adjustTitleViewPosition
 {
     CGRect frame = self.titleView.frame;
-    frame.origin.x = [OAUtilities isLandscape] ? kTitleLandscapeOffset + [OAUtilities getLeftMargin] : kTitlePortraitOffset;
+    frame.origin.x = self.buttonCancel.frame.origin.x + self.buttonCancel.frame.size.width;
     self.titleView.frame = frame;
 }
 

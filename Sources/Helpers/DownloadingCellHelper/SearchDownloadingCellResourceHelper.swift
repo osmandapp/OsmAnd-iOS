@@ -20,20 +20,12 @@ final class SearchDownloadingCellResourceHelper: DownloadingCellResourceHelper {
             }
             
             var title = resourceItem.title() ?? ""
-
-            if let superregionName = resourceItem.worldRegion()?.superregion?.name {
-                if title.isEmpty {
-                    title = superregionName
-                } else {
-                    title += ", \(superregionName)"
-                }
-            }
             
             if title.isEmpty {
                 title = OAResourcesUISwiftHelper.title(ofResourceType: resourceItem.resourceType(),
                                                        in: resourceItem.worldRegion(),
                                                        withRegionName: true,
-                                                       withResourceType: true)
+                                                       withResourceType: false)
             }
             let isDownloading = isDownloading(resourceId)
             
@@ -44,6 +36,7 @@ final class SearchDownloadingCellResourceHelper: DownloadingCellResourceHelper {
                 cell?.titleLabel.textColor = .textColorSecondary
                 cell?.rightIconVisibility(false)
             }
+            cell?.selectionStyle = .none
             return cell
         }
         return nil

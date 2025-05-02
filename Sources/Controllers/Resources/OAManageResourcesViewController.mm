@@ -282,7 +282,7 @@ static BOOL _repositoryUpdated = NO;
         self.navigationItem.title = OALocalizedString(@"download_tab_local");
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 52.;
-    self.tableView.prefetchingEnabled = NO;
+
     [self registerCels];
     [self setupDownloadingCellHelper];
 

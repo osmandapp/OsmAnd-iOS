@@ -1046,7 +1046,8 @@
                 else if (sr.objectType == EOAObjectTypePartialLocation)
                 {
                     // nothing
-                } else if (sr.objectType == EOAObjectTypeIndexItem)
+                }
+                else if (sr.objectType == EOAObjectTypeIndexItem)
                 {
                     OAResourceItem *resourceItem = (OAResourceItem *)sr.relatedObject;
                     [_downloadingCellResourceHelper onCellClicked:resourceItem.resourceId.toNSString()];

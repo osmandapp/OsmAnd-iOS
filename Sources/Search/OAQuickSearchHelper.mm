@@ -139,7 +139,7 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 150;
     }
 }
 
-- (OARepositoryResourceItem *)getUninstalledMapRegionResourceFromIds:(NSArray<NSString *> *)ids
+- (nullable OARepositoryResourceItem *)getUninstalledMapRegionResourceFromIds:(NSArray<NSString *> *)ids
                                                               region:(OAWorldRegion *)region
                                                                title:(nullable NSString *)title {
     for (NSString *resourceId in ids)
@@ -150,23 +150,52 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 150;
             BOOL isInstalled = [OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId));
             if (!isInstalled)
             {
-                return [self createRepositoryResourceItemWithResource:resource region:region title:title];
+                NSString *composeTitle;
+                if (!title) {
+                    NSString *regionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                  inRegion:region
+                                                            withRegionName:YES
+                                                          withResourceType:NO];
+                    
+                    NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                  inRegion:region.superregion
+                                                            withRegionName:YES
+                                                          withResourceType:NO];
+                    composeTitle = [self composeTitleWithPart:regionTitle andPart:superregionTitle];
+                }
+                else
+                {
+                    // for city/town
+                    
+                    NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                  inRegion:region
+                                                            withRegionName:YES
+                                                          withResourceType:NO];
+                    
+                    composeTitle = [self composeTitleWithPart:title andPart:superregionTitle];
+                }
+                return [self createRepositoryResourceItemWithResource:resource region:region title:composeTitle];
             }
         }
     }
     return nil;
 }
 
+- (NSString *)composeTitleWithPart:(nullable NSString *)part1 andPart:(nullable NSString *)part2 {
+    if (part1.length > 0 && part2.length > 0)
+    {
+        return [NSString stringWithFormat:@"%@, %@", part1, part2];
+    }
+    return part1.length > 0 ? part1 : part2;
+}
+
 - (OARepositoryResourceItem *)createRepositoryResourceItemWithResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource
                                                                 region:(OAWorldRegion *)region
-                                                                 title:(nullable NSString *)title {
+                                                                 title:(NSString *)title {
     OARepositoryResourceItem *item = [OARepositoryResourceItem new];
     item.resourceId = resource->id;
     item.resourceType = resource->type;
-    item.title = title ?: [OAResourcesUIHelper titleOfResource:resource
-                                                      inRegion:region
-                                                withRegionName:YES
-                                              withResourceType:NO];
+    item.title = title;
     item.resource = resource;
     NSString *downloadKey = [@"resource:" stringByAppendingString:resource->id.toNSString()];
     item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:downloadKey] firstObject];
@@ -599,7 +628,7 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 150;
 {
     [self setResourcesForSearchUICore];
     [_core initApi];
-    
+    // Register map search api
     [_core registerAPI:[[SearchIndexItemAPI alloc] init]];
     
     // Register favorites search api

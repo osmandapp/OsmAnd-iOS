@@ -3637,3 +3637,15 @@
 "unchanged_parameter_summary" = "Oggi traccia manterrà i suoi parametri.";
 "testFlight" = "TestFlight";
 "ios_release_5_0" = "• Introdotte le Cartelle Intelligenti per l'organizzazione automatica dei percorsi.\n• Aggiunto un visualizzatore di galleria a schermo intero per le immagini Wikimedia.\n• Aggiunto il supporto per la sintesi vocale (TTS) in vietnamita ed ebraico per la navigazione.\n• Aggiunte Azioni Rapide per il controllo della registrazione del viaggio.\n• Aggiunta l'opzione \"Guida dettagliata al percorso\" e una finestra di dialogo di suggerimento \"Collega alle strade\".\n• Resa individuabile tramite mappa e ricerca le vette più importanti.\n• Aggiunta l'evidenziazione dei bordi per edifici e aree con informazioni dettagliate.\n• Aggiunta un'opzione per attivare/disattivare la visibilità di singoli gruppi di preferiti sulla mappa.\n• Ampliate le opzioni delle icone per i Preferiti aggiungendo icone da tutte le categorie di PDI.\n• Aggiunta la visualizzazione del livello della batteria per i sensori esterni.\n• Aggiunta un'opzione per modificare l'aspetto di più percorsi contemporaneamente.\n• Aggiunta un'azione \"Reimposta\" per il widget Velocità Media.\n• Ricerca CarPlay: aggiunta la possibilità di selezionare gli edifici.\n• Corretta la sequenza di inserimento delle coordinate UTM.\n• Risolto un problema con i colori dei waypoint della traccia.\n• Corretto il pulsante \"Scarica tutto\" mancante per le mappe del terreno.\n• Risolto un problema per cui gli articoli più popolari a volte risultavano mancanti nelle guide turistiche.\n";
+"osmand_web" = "OsmAnd Web";
+"shared_string_litres" = "Litri";
+"litres" = "Litri";
+"imperial_gallons" = "Galloni imperiali";
+"us_gallons" = "Galloni USA";
+"liter" = "l";
+"us_gallons_unit" = "gal";
+"unit_of_volume" = "Unità di volume";
+"shared_strings_dimensions" = "Dimensioni";
+"fuel_tank_capacity" = "Capacità del serbatoio di carburante";
+"fuel_tank_capacity_description" = "Inserisci la capacità del tuo serbatoio per monitorare con precisione i livelli e i consumi di carburante";
+"poi_filter_fuel" = "Carburante";

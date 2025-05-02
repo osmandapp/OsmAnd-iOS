@@ -403,6 +403,22 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     [lst removeObjectsInArray:remove];
 }
 
++ (long) getOsmId:(std::shared_ptr<const OsmAnd::Amenity>)amenity
+{
+    OsmAnd::ObfObjectId initAmenityId = amenity->id;
+    uint64_t amenityId;
+    if (initAmenityId.isShiftedID())
+        return initAmenityId.getOsmId();
+    else
+        return initAmenityId.makeAmenityRightShift();
+}
+
++ (QString)getAdditionalInfo:(std::shared_ptr<const OsmAnd::Amenity>)amenity key:(QString)key
+{
+    QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
+    return decodedValues.value(key); // Returns empty QString if not found
+}
+
 - (BOOL) sameSearchResult:(OASearchResult *)r1 r2:(OASearchResult *)r2
 {
     BOOL isSameType = r1.objectType == r2.objectType;
@@ -434,7 +450,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             if (a1 && a2)
             {
                 // here 2 points are amenity
-                BOOL isEqualId = a1->id.id == a2->id.id;
+                BOOL isEqualId = [OASearchResultCollection getOsmId:a1] == [OASearchResultCollection getOsmId:a2];
                 if (isEqualId && ([FILTER_DUPLICATE_POI_SUBTYPE containsObject:a1->subType.toNSString()] || [FILTER_DUPLICATE_POI_SUBTYPE containsObject:a2->subType.toNSString()]))
                     return true;
                 else if (a1->type != a2->type)
@@ -450,6 +466,10 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
                         || (a1->subType.startsWith(QStringLiteral("route_hiking_")) && a1->subType.endsWith(QStringLiteral("n_poi"))))
                     {
                         similarityRadius = 50000;
+                    }
+                    QString routeId = [OASearchResultCollection getAdditionalInfo:a1 key:"route_id"];
+                    if (!routeId.isEmpty() && routeId == [OASearchResultCollection getAdditionalInfo:a2 key:"route_id"]) {
+                        similarityRadius = 1000000;
                     }
                 }
             }

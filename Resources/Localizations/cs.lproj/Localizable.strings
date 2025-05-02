@@ -3635,3 +3635,15 @@
 "unchanged_parameter_summary" = "Každá stopa si uchová své vlastní parametry.";
 "ios_release_5_0" = "• Přidány Chytré složky pro automatickou organizaci tras.\n• Přidán prohlížeč obrázků z Wikimedia na celou obrazovku.\n• Přidána podpora pro čtení textu (TTS) ve vietnamštině a hebrejštině pro navigaci.\n• Přidány Rychlé akce pro ovládání záznamu trasy.\n• Přidána možnost „Podrobné vedení trasy“ a dialogové okno s návrhem „Přichytit k silnicím“.\n• Výrazné vrcholy lze nyní vyhledat na mapě i pomocí vyhledávání.\n• Zvýrazněné hranice budov a oblastí s podrobnými informacemi.\n• Přidána možnost zapnout/vypnout viditelnost jednotlivých skupin oblíbených míst na mapě.\n• Rozšířeny možnosti ikon pro Oblíbené přidáním ikon ze všech kategorií POI (bodů zájmu).\n• Přidán ukazatel úrovně nabití baterie pro externí senzory.\n• Přidána možnost změnit vzhled více tras najednou.\n• Přidána akce „Resetovat“ pro widget Průměrná rychlost.\n• CarPlay Vyhledávání: Přidána možnost výběru budov.\n• Opraveno zadávání souřadnic v UTM formátu.\n• Opraven problém s barvami bodů na trase.\n• Opraveno chybějící tlačítko „Stáhnout vše“ u map s terénem.\n• Opraven problém, kdy někdy chyběly populární články v Cestovních průvodcích.\n";
 "osmand_web" = "OsmAnd Web";
+"imperial_gallons" = "Imperiální galony";
+"us_gallons" = "Americké galony";
+"shared_string_litres" = "litry";
+"fuel_tank_capacity" = "Kapacita palivové nádrže";
+"poi_filter_fuel" = "Palivo";
+"unit_of_volume_description" = "Zvolené jednotky budou použity na všechna data týkající se objemu v aktuálním profilu.";
+"fuel_tank_capacity_description" = "Zadejte kapacitu vaší palivové nádrže pro přesnější sledování úrovně a spotřeby paliva";
+"liter" = "l";
+"shared_strings_dimensions" = "Rozměry";
+"unit_of_volume" = "Jednotka objemu";
+"litres" = "Litry";
+"us_gallons_unit" = "gal";

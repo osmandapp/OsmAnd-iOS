@@ -1827,7 +1827,7 @@
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Skiza montrado de bildsimboloj je malaltaj skal-niveloj";
 "routing_attr_difficulty_preference_expert_name" = "malfacilegaj";
 "rendering_attr_showTramRoutes_name" = "Tramaj kursoj";
-"rendering_attr_hideMilitaryAreas_description" = "Ne montri transversajn ruĝajn liniojn sur armeaj areoj";
+"rendering_attr_hideMilitaryAreas_description" = "Kaŝi armeajn terenojn";
 "rendering_attr_seabedDetail_description" = "Pliaj tekstaj informoj pri mara fundo: kvalifo, margrundo, kategorio kaj taksono de algoj kaj akvoplantoj";
 "rendering_attr_showMtbScaleIMBATrails_description" = "Montri dediĉitajn montbiciklajn kursojn laŭ la skalo de IMBA.";
 "rendering_attr_horseScale_name" = "Facilo de ĉevalvojoj";

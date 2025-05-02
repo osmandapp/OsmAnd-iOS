@@ -2565,7 +2565,7 @@
 "rendering_attr_weatherTempContours_name" = "Lignes isothermes";
 "rendering_attr_noNatureReserveBoundaries_name" = "Limites naturelles";
 "rendering_attr_showTrolleybusRoutes_name" = "Lignes de trolleybus";
-"rendering_attr_hideMilitaryAreas_description" = "Zones militaires";
+"rendering_attr_hideMilitaryAreas_description" = "Masquer les zones militaires";
 "routing_attr_avoid_highway_description" = "Éviter les autoroutes";
 "routing_attr_prefer_tactile_paving_description" = "Privilégier les chemins avec pavés tactiles";
 "routing_attr_allow_intermittent_name" = "Autoriser les voies navigables intermittentes";
@@ -3655,7 +3655,7 @@
 "imperial_gallons" = "Gallons impériaux";
 "us_gallons" = "Gallons US";
 "us_gallons_unit" = "gal";
-"fuel_tank_capacity" = "Capacité du réservoir d'essence";
+"fuel_tank_capacity" = "Capacité du réservoir de carburant";
 "poi_filter_fuel" = "Essence";
 "unit_of_volume" = "Unité de volume";
 "unit_of_volume_description" = "Les unités sélectionnées seront appliquées à toutes les données relatives au volume dans le profil actuel.";

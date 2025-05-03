@@ -1255,6 +1255,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             NSArray<OAColorItem *> *allColors = [_appearanceCollection getAvailableColorsSortingByKey];
             OAColorItem *selected = _isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem;
             colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:allColors selectedItem:selected];
+            // TODO: Verify and correct the functionality of ItemsCollectionViewController
         }
         
         colorCollectionViewController.delegate = self;

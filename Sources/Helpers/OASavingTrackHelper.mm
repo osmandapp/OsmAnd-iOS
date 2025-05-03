@@ -679,7 +679,10 @@ static const NSInteger kDBVersion = 1;
                         if (pluginsInfo && pluginsInfo.length > 0)
                         {
                             NSDictionary<NSString *, NSString *> *extensions = [self getPluginsExtensions:pluginsInfo];
-                            [OASGpxUtilities.shared assignExtensionWriterWptPt:pt extensions:extensions regularExtensionsKey:@"plugins"];
+                            if (extensions.count > 0)
+                            {
+                                [OASGpxUtilities.shared assignExtensionWriterWptPt:pt extensions:extensions regularExtensionsKey:@"plugins"];
+                            }
                         }
                     }
                     
@@ -842,11 +845,26 @@ static const NSInteger kDBVersion = 1;
 
 - (NSDictionary<NSString *, NSString *> *)getPluginsExtensions:(NSString *)pluginsInfo
 {
-    if (pluginsInfo && pluginsInfo.length > 0)
+    if (pluginsInfo.length > 0)
     {
-        NSError *error;
-        NSDictionary<NSString *, NSString *> *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[pluginsInfo dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
-        return jsonDictionary;
+        NSError *error = nil;
+        NSData *jsonData = [pluginsInfo dataUsingEncoding:NSUTF8StringEncoding];
+        id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+        
+        if (error)
+        {
+            NSLog(@"[getPluginsExtensions] JSON parsing error: %@\nInput: %@", error.localizedDescription, pluginsInfo);
+            return @{};
+        }
+        
+        if ([jsonObject isKindOfClass:[NSDictionary class]])
+        {
+            return (NSDictionary<NSString *, NSString *> *)jsonObject;
+        }
+        else
+        {
+            NSLog(@"[getPluginsExtensions] Parsed JSON is not a dictionary. Input: %@", pluginsInfo);
+        }
     }
     return @{};
 }

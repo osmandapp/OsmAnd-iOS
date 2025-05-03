@@ -415,13 +415,7 @@ static UIViewController *parentController;
         }
     }
     
-    [self.favoriteTableView beginUpdates];
-    NSArray<NSIndexPath *> *freshIndexPathsForVisibleRows = [self.favoriteTableView indexPathsForVisibleRows];
-    if (freshIndexPathsForVisibleRows.count > 0)
-    {
-        [self.favoriteTableView reloadRowsAtIndexPaths:freshIndexPathsForVisibleRows withRowAnimation:UITableViewRowAnimationNone];
-    }
-    [self.favoriteTableView endUpdates];
+    [self.favoriteTableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated

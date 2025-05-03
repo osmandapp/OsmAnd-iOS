@@ -330,14 +330,27 @@
 
         __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray<NSIndexPath *> *visibleRows = [weakSelf.tableView indexPathsForVisibleRows];
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+            NSArray<NSIndexPath *> *visibleRows = [strongSelf.tableView indexPathsForVisibleRows];
+            if (!visibleRows || visibleRows.count == 0 || strongSelf.data.subjects.count == 0)
+                return;
+
             for (NSIndexPath *visibleRow in visibleRows)
             {
-                OAGPXTableCellData *cellData = weakSelf.data.subjects[visibleRow.section].subjects[visibleRow.row];
-                if (weakSelf.trackMenuDelegate)
-                    [weakSelf.trackMenuDelegate updateProperty:@"update_distance_and_direction" tableData:cellData];
+                if (visibleRow.section >= strongSelf.data.subjects.count)
+                    continue;
+
+                NSArray *rows = strongSelf.data.subjects[visibleRow.section].subjects;
+                if (visibleRow.row >= rows.count)
+                    continue;
+
+                OAGPXTableCellData *cellData = rows[visibleRow.row];
+                if (strongSelf.trackMenuDelegate)
+                    [strongSelf.trackMenuDelegate updateProperty:@"update_distance_and_direction" tableData:cellData];
             }
-            [weakSelf.tableView reloadRowsAtIndexPaths:visibleRows
+            [strongSelf.tableView reloadRowsAtIndexPaths:visibleRows
                                   withRowAnimation:UITableViewRowAnimationNone];
         });
     }

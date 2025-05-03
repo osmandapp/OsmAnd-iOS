@@ -640,7 +640,7 @@
         return @"";
     
     NSMutableString *nameFilter = [NSMutableString string];
-    NSMutableDictionary *additionalInfo = [NSMutableDictionary dictionary];
+    MutableOrderedDictionary *additionalInfo = [MutableOrderedDictionary dictionary];
     [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:nil values:additionalInfo];
     for (NSString *filter in unknownFilters)
     {

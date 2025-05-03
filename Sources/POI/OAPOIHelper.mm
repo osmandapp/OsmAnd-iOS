@@ -66,6 +66,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     NSString *_prefLang;
     
     NSArray<OAPOIType *> *_textPoiAdditionals;
+    NSDictionary<NSString *, NSString *> *_poiTypeOptionalIcons;
     NSDictionary<NSString *, NSString *> *_poiAdditionalCategoryIcons;
     NSMapTable<NSString *, NSString *> *_deprecatedTags;
     
@@ -125,6 +126,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     _poiTypesByName = parser.poiTypesByName;
     _poiCategories = parser.poiCategories;
     _textPoiAdditionals = parser.textPoiAdditionals;
+    _poiTypeOptionalIcons = parser.poiTypeOptionalIcons;
     _poiAdditionalCategoryIcons = parser.poiAdditionalCategoryIcons;
     _otherMapCategory = parser.otherMapCategory;
     _deprecatedTags = parser.deprecatedTags;
@@ -671,6 +673,11 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         return lastCategory;
     }
     return self.otherPoiCategory;
+}
+
+- (NSString *) getPoiTypeOptionalIcon:(NSString *)type
+{
+    return [_poiTypeOptionalIcons objectForKey:type];
 }
 
 - (NSString *) getPoiAdditionalCategoryIcon:(NSString *)category
@@ -1555,8 +1562,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     if (nameLocalized.length > 0)
         poi.nameLocalized = nameLocalized;
     
-    NSMutableDictionary *content = [NSMutableDictionary dictionary];
-    NSMutableDictionary *values = [NSMutableDictionary dictionary];
+    MutableOrderedDictionary *content = [MutableOrderedDictionary new];
+    MutableOrderedDictionary *values = [MutableOrderedDictionary new];
     [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:(withContent ? content : nil) values:(withValues ? values : nil)];
     poi.values = values;
     poi.localizedContent = content;
@@ -1587,8 +1594,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 
 + (void) fetchValuesContentPOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity poi:(OAPOI *)poi
 {
-    NSMutableDictionary *content = [NSMutableDictionary dictionary];
-    NSMutableDictionary *values = [NSMutableDictionary dictionary];
+    MutableOrderedDictionary *content = [MutableOrderedDictionary new];
+    MutableOrderedDictionary *values = [MutableOrderedDictionary new];
     [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:content values:values];
     poi.values = values;
     poi.localizedContent = content;
@@ -1740,7 +1747,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     return nameLocalized.isNull() ? @"" : nameLocalized.toNSString();
 }
 
-+ (void) processDecodedValues:(const QList<OsmAnd::Amenity::DecodedValue> &)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values
++ (void) processDecodedValues:(const QList<OsmAnd::Amenity::DecodedValue> &)decodedValues content:(MutableOrderedDictionary *)content values:(MutableOrderedDictionary *)values
 {
     for (const auto& entry : OsmAnd::constOf(decodedValues))
     {

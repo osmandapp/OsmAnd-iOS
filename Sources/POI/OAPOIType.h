@@ -27,8 +27,8 @@
 @property (nonatomic, assign) BOOL reference;
 @property (nonatomic, assign) BOOL mapOnly;
 @property (nonatomic, assign) BOOL filterOnly;
-
 @property (nonatomic, assign) int order;
+@property (nonatomic, assign) BOOL isHidden;
 
 @property (nonatomic) OAPOIBaseType *parentType;
 @property (nonatomic) OAPOIType *referenceType;

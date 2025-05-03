@@ -100,29 +100,20 @@
         return;
 
     __weak __typeof(self) weakSelf = self;
-    NSIndexPath *prevSelectedIndexPath = indexPath.row <= _selectedIndexPath.row
-        ? [NSIndexPath indexPathForRow:_selectedIndexPath.row + 1 inSection:_selectedIndexPath.section]
-        : _selectedIndexPath;
-    _selectedIndexPath = indexPath;
+    NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
+    [self setSelectedIndexPath:indexPath];
     [collectionView performBatchUpdates:^{
-        [collectionView insertItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
-        [weakSelf insertItem:newItem atIndexPath:indexPath];
-    } completion:^(BOOL finished) {
-        NSIndexPath *prevIndex = [weakSelf getSelectedIndexPath];
-        if (!prevIndex)
-            prevIndex = [NSIndexPath indexPathForRow:0 inSection:0];
-        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, prevIndex]];
-        
-        if (weakSelf.delegate)
-        {
-            [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:nil collectionView:collectionView];
-        }
-        
+        [weakSelf insertItem:newItem atIndexPath:weakSelf.selectedIndexPath];
+        [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:_data.count - 1 inSection:0]]];
+
+        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
         [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
+        
+        [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:newItem collectionView:collectionView shouldDismiss:NO];
         
         if (weakSelf.hostCell && [weakSelf.hostCell needUpdateHeight])
             [weakSelf.delegate reloadCollectionData];
-    }];
+    } completion:nil];
 }
 
 - (void) scrollToIndexPathIfNeeded:(NSIndexPath *)indexPath
@@ -150,9 +141,13 @@
     if (self.delegate)
     {
         if (indexPath == _selectedIndexPath)
-            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView];
+            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView shouldDismiss:YES];
         else
             [self.delegate reloadCollectionData];
+    }
+    if (_isOpenedFromAllColorsScreen && _hostColorHandler && _hostColorHandler.delegate)
+    {
+        [_hostColorHandler.delegate reloadCollectionData];
     }
 }
 
@@ -166,13 +161,14 @@
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
         [weakSelf insertItem:newItem atIndexPath:indexPath];
-    } completion:^(BOOL finished) {
-        if (indexPath.row <= weakSelf.selectedIndexPath.row)
-        {
-            NSIndexPath *prevSelectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
-            [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
+        if (indexPath.row <= weakSelf.selectedIndexPath.row) {
+            NSIndexPath *insertedIndex = indexPath;
+            NSIndexPath *updatedPrevSelectedIndex = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
+            [weakSelf setSelectedIndexPath:updatedPrevSelectedIndex];
+            [collectionView reloadItemsAtIndexPaths:@[insertedIndex, updatedPrevSelectedIndex]];
         }
         [weakSelf scrollToIndexPathIfNeeded:indexPath];
+    } completion:^(BOOL finished) {
     }];
 }
 
@@ -186,17 +182,17 @@
     [collectionView performBatchUpdates:^{
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
         [weakSelf removeItem:indexPath];
-    } completion:^(BOOL finished) {
         if (indexPath == weakSelf.selectedIndexPath)
         {
-            weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
             [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
             [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
         }
         else if (indexPath.row < weakSelf.selectedIndexPath.row)
         {
-            weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section];
+            [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section]];
         }
+    } completion:^(BOOL finished) {
     }];
 }
 
@@ -213,6 +209,22 @@
 - (OAColorItem *)getSelectedItem
 {
     return _data[_selectedIndexPath.section][_selectedIndexPath.row];
+}
+
+- (void)setSelectionItem:(OAColorItem *)item
+{
+    for (int i = 0; i < _data.count; i++)
+    {
+        NSArray<OAColorItem *> *section = _data[i];
+        for (int j = 0; j < section.count; j++)
+        {
+            if (item == section[j])
+            {
+                _selectedIndexPath = [NSIndexPath indexPathForRow:j inSection:i];
+                return;
+            }
+        }
+    }
 }
 
 - (void)generateData:(NSArray<NSArray<OAColorItem *> *> *)data
@@ -357,7 +369,7 @@
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath {
     if (self.delegate)
-        [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:[self getCollectionView]];
+        [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:[self getCollectionView] shouldDismiss:YES];
 }
 
 - (void)selectColorItem:(OAColorItem *)colorItem
@@ -370,7 +382,7 @@
     
     if (self.delegate)
     {
-        [self.delegate onCollectionItemSelected:selectedIndex selectedItem:nil collectionView:[self getCollectionView]];
+        [self.delegate onCollectionItemSelected:selectedIndex selectedItem:nil collectionView:[self getCollectionView] shouldDismiss:YES];
     }
 }
 
@@ -397,6 +409,10 @@
     if (_isOpenedFromAllColorsScreen && _hostColorHandler)
     {
         [_hostColorHandler addColor:newIndexPath newItem:duplicatedColorItem];
+        if (_hostColorHandler.delegate)
+            [_hostColorHandler.delegate reloadCollectionData];
+    } else if (self.delegate) {
+        [self.delegate reloadCollectionData];
     }
     return duplicatedColorItem;
 }
@@ -408,6 +424,10 @@
     if (_isOpenedFromAllColorsScreen && _hostColorHandler)
     {
         [_hostColorHandler deleteColorItem:colorItem];
+        if (_hostColorHandler.delegate)
+            [_hostColorHandler.delegate reloadCollectionData];
+    } else if (self.delegate) {
+        [self.delegate reloadCollectionData];
     }
     if (!_isOpenedFromAllColorsScreen)
         [[OAGPXAppearanceCollection sharedInstance] deleteColor:colorItem];

@@ -19,6 +19,7 @@ static NSString * const CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkR
 static NSString * const TRAVEL_ROUTES = @"travel_routes";
 static NSString * const SHOW_FITNESS_TRAILS_ATTR = @"showFitnessTrails";
 static NSString * const SHOW_RUNNING_ROUTES_ATTR = @"showRunningRoutes";
+static NSString * const CLIMBING_ROUTES = @"showClimbingRoutes";
 
 static NSString * const SHOW_MTB_ROUTES = @"showMtbRoutes";
 static NSString * const SHOW_MTB_SCALE = @"showMtbScale";

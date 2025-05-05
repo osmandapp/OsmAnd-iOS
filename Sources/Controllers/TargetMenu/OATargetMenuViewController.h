@@ -183,7 +183,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (CGFloat)additionalContentOffset;
 - (void)setContentBackgroundColor:(UIColor *)color;
 - (void)refreshContent;
-- (void)adjustNavBarSubviewsPosition;
+- (void)updateNavBarSubviewsLayout;
 
 - (BOOL) hasInfoView;
 - (BOOL) hasInfoButton;

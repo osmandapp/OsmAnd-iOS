@@ -541,33 +541,26 @@
         [self.navBar.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     }
     [self applySafeAreaMargins];
-    [self adjustBackButtonPosition];
-    [self adjustNavBarSubviewsPosition];
+    [self updateNavBarSubviewsLayout];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applySafeAreaMargins];
-        [self adjustBackButtonPosition];
-        [self adjustNavBarSubviewsPosition];
+        [self updateNavBarSubviewsLayout];
         // Refresh the offset on iPads to avoid broken animations
         if (self.delegate && OAUtilities.isIPad)
             [self.delegate contentChanged];
     } completion:nil];
 }
 
--(void) adjustBackButtonPosition
+-(void) updateNavBarSubviewsLayout
 {
     CGRect buttonFrame = self.buttonBack.frame;
     buttonFrame.origin.x = 16.0 + [OAUtilities getLeftMargin];
     buttonFrame.origin.y = [[OARootViewController instance].mapPanel.hudViewController getHudMinTopOffset];
     self.buttonBack.frame = buttonFrame;
-}
-
-- (void)adjustNavBarSubviewsPosition
-{
-    // overried
 }
 
 - (void) didReceiveMemoryWarning

@@ -508,8 +508,9 @@ static const CGFloat kTextMaxHeight = 150.0;
     } completion:nil];
 }
 
-- (void)adjustNavBarSubviewsPosition
+- (void)updateNavBarSubviewsLayout
 {
+    [super updateNavBarSubviewsLayout];
     [self adjustCancelButtonPosition];
     [self adjustTitleViewPosition];
 }

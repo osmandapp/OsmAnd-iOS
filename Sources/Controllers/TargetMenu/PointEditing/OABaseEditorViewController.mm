@@ -425,6 +425,8 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     NSString *preselectedIconName = [self getPreselectedIconName];
     if (preselectedIconName && preselectedIconName.length > 0)
         return preselectedIconName;
+    else if (self.editIconName && self.editIconName.length > 0)
+        return self.editIconName;
     else if (_poiIconCollectionHandler.lastUsedIcons && _poiIconCollectionHandler.lastUsedIcons.count > 0)
         return _poiIconCollectionHandler.lastUsedIcons[0];
     return DEFAULT_ICON_NAME_KEY;
@@ -530,7 +532,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss
 {
     _wasChanged = YES;
     if (collectionView == [_poiIconCollectionHandler getCollectionView])

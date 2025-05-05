@@ -10,7 +10,7 @@ import UIKit
 
 @objc(OADestinationsListViewController)
 @objcMembers
-class DestinationsListViewController: OABaseButtonsViewController {
+final class DestinationsListViewController: OABaseButtonsViewController {
     
     private let kDestinationItemKey = "destinationItem"
     
@@ -30,7 +30,7 @@ class DestinationsListViewController: OABaseButtonsViewController {
         }
     }
     
-    //MARK: - Initialization
+    // MARK: - Initialization
     
     override func registerObservers() {
         let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
@@ -39,7 +39,7 @@ class DestinationsListViewController: OABaseButtonsViewController {
         addObserver(OAAutoObserverProxy(self, withHandler: updateDistanceAndDirectionSelector, andObserve: app.locationServices.updateHeadingObserver))
     }
     
-    //MARK: - UIViewController
+    // MARK: - UIViewController
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -149,7 +149,7 @@ class DestinationsListViewController: OABaseButtonsViewController {
             if destinationItem.destination.hidden {
                 destinationsHelper?.show(onMap: destinationItem.destination)
             }
-            destinationsHelper?.moveDestination(onTop:destinationItem.destination, wasSelected:true)
+            destinationsHelper?.moveDestination(onTop: destinationItem.destination, wasSelected: true)
             let mapPanel = OARootViewController.instance().mapPanel
             mapPanel?.openTargetView(with: destinationItem.destination)
             dismiss()
@@ -157,11 +157,11 @@ class DestinationsListViewController: OABaseButtonsViewController {
     }
 
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return editMode
+        editMode
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return editMode
+        editMode
     }
 
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -176,10 +176,28 @@ class DestinationsListViewController: OABaseButtonsViewController {
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
+    
+    override func tableView(_ tableView: UITableView,
+                            targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
+                            toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        guard sourceIndexPath.section == proposedDestinationIndexPath.section else {
+            NSLog("Error: Moving between sections is not supported")
+            return sourceIndexPath
+        }
+        
+        let rowCountInSection = tableData.rowCount(UInt(proposedDestinationIndexPath.section))
+        
+        if proposedDestinationIndexPath.row >= rowCountInSection {
+            NSLog("Error: Destination row does not exist")
+            return IndexPath(row: Int(rowCountInSection) - 1, section: proposedDestinationIndexPath.section)
+        }
+        
+        return proposedDestinationIndexPath
+    }
 
-    //MARK: - UIGestureRecognizer
+    // MARK: - UIGestureRecognizer
     override func onGestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer!) -> Bool {
-        if (gestureRecognizer == navigationController?.interactivePopGestureRecognizer) {
+        if gestureRecognizer == navigationController?.interactivePopGestureRecognizer {
             if editMode, tableData.hasChanged {
                 showUnsavedChangesAlert(shouldDismiss: true)
                 return false
@@ -188,7 +206,7 @@ class DestinationsListViewController: OABaseButtonsViewController {
         return true
     }
 
-    //MARK: - Selectors
+    // MARK: - Selectors
 
     override func onLeftNavbarButtonPressed() {
         if editMode {
@@ -219,7 +237,7 @@ class DestinationsListViewController: OABaseButtonsViewController {
         show(vc)
     }
 
-    //MARK: - Additions
+    // MARK: - Additions
 
     private func reorderDestinations() {
         var order = [OADestinationItem]()
@@ -243,7 +261,7 @@ class DestinationsListViewController: OABaseButtonsViewController {
         alert.addAction(UIAlertAction(title: localizedString("shared_string_discard"), style: .destructive) { [weak self] _ in
             guard let self = self else { return }
             self.editMode = false
-            if (shouldDismiss) {
+            if shouldDismiss {
                 self.dismiss()
             }
         })
@@ -286,7 +304,7 @@ class DestinationsListViewController: OABaseButtonsViewController {
         }
     }
 
-    //MARK: - UIScrollViewDelegate
+    // MARK: - UIScrollViewDelegate
 
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isDecelerating = true
@@ -301,5 +319,4 @@ class DestinationsListViewController: OABaseButtonsViewController {
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         isDecelerating = false
     }
-
 }

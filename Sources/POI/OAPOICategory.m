@@ -95,7 +95,7 @@
                 [acceptedTypes setObject:[NSMutableSet set] forKey:refCat];
 
             NSMutableSet<NSString *> *ls = [acceptedTypes objectForKey:refCat];
-            if (ls)
+            if (ls && ls != [OAPOIBaseType nullSet])
                 [ls addObject:pt.name];
         }
     }

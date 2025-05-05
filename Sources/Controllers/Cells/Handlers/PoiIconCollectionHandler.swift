@@ -55,6 +55,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         } else {
             categories = Self.cachedCategories
             categoriesByKeyName = Self.cachedCategoriesByKeyName
+            initLastUsedCategory()
         }
     }
     
@@ -66,8 +67,8 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             for j in 0 ..< category.iconKeys.count {
                 if iconName == category.iconKeys[j] ||
                     "mx_" + iconName == category.iconKeys[j] {
-                    setSelectedIndexPath(IndexPath(row: j, section: 0))
                     selectCategory(category.key)
+                    setSelectedIndexPath(IndexPath(row: j, section: 0))
                     return
                 }
             }
@@ -105,7 +106,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private func initLastUsedCategory() {
         if let icons = OAAppSettings.sharedManager().lastUsedFavIcons.get(), !icons.isEmpty {
             lastUsedIcons = icons
-            categories.append(IconsCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true))
+            let category = IconsCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
+            categories.append(category)
+            categoriesByKeyName[LAST_USED_KEY] = category
         }
     }
     
@@ -157,8 +160,8 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         }
     }
     
-    func addProfileIconsCategory() {
-        profileIcons = [
+    static func getProfileIconsList() -> [String] {
+        [
             "ic_world_globe_dark",
             "ic_action_car_dark",
             "ic_action_taxi",
@@ -205,6 +208,10 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             "ic_action_motorboat",
             "ic_action_light_aircraft"
         ]
+    }
+    
+    func addProfileIconsCategory() {
+        profileIcons = Self.getProfileIconsList()
 
         let profileIconsCategory = IconsCategory(key: PROFILE_ICONS_KEY, translatedName: localizedString("profile_icons"), iconKeys: profileIcons, isTopCategory: true)
         categories.append(profileIconsCategory)
@@ -314,8 +321,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             guard let self else { return }
             
             for category in self.categories {
+                var brokenIcons = [String]()
+                
                 for iconName in category.iconKeys {
-                    
                     if Self.cachedIcons.object(forKey: iconName as NSString) == nil {
                         var icon = UIImage.templateImageNamed(iconName)
                         if icon == nil {
@@ -326,8 +334,20 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                         }
                         if let icon {
                             Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
+                        } else {
+                            brokenIcons.append(iconName)
                         }
                     }
+                }
+                
+                if !brokenIcons.isEmpty {
+                    let filteredIcons = category.iconKeys.filter { !brokenIcons.contains($0) }
+                    self.categoriesByKeyName[category.key]?.iconKeys = filteredIcons
+                    if category.key == LAST_USED_KEY {
+                        lastUsedIcons = category.iconKeys
+                        OAAppSettings.sharedManager().lastUsedFavIcons.set(lastUsedIcons)
+                    }
+                    getCollectionView()?.reloadData()
                 }
             }
         }

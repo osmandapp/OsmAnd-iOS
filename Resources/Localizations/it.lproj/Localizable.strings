@@ -1013,7 +1013,7 @@
 "rendering_attr_smoothness_bad_name" = "Cattiva";
 "routing_attr_avoid_bus_description" = "Evita gli autobus e i filobus";
 "routing_attr_avoid_unpaved_description" = "Evita le strade non pavimentate";
-"routing_attr_height_obstacles_description" = "Il tempo di percorrenza previsto terrà conto dell\'impatto dell\'elevazione. La preferenza di percorso può aiutare a evitare salite ripide:";
+"routing_attr_height_obstacles_description" = "Il tempo di percorrenza previsto terrà conto dell'impatto dell'elevazione. La scelta può aiutare a evitare salite ripide:";
 "routing_attr_allow_private_description" = "Permetti l\'accesso alle aree private.";
 "rendering_value_translucent_lightgreen_name" = "Verde chiaro traslucido";
 "routing_attr_avoid_borders_description" = "Evita l’attraversamento delle frontiere";

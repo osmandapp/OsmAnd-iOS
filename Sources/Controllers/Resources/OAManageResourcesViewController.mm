@@ -1626,11 +1626,6 @@ static BOOL _repositoryUpdated = NO;
                 [_tableView reloadData];
             }
             [self.view removeSpinner];
- // TODO:
-//            let savedOffset = collectionView.contentOffset
-//            collectionView.reloadData()
-//            collectionView.layoutIfNeeded()
-//            collectionView.setContentOffset(savedOffset, animated: false)
         }];
     }
 }

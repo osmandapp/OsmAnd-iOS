@@ -53,7 +53,8 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 154;
 static const int SEARCH_TRACK_API_PRIORITY = 150;
 static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
 static const int SEARCH_INDEX_ITEM_API_PRIORITY = 150;
-static const int SEARCH_INDEX_ITEM_PRIORITY = 150;
+// NOTE: Android uses 150, but sometimes the values of ITEM_PRIORITY are mixed. (search: "den")
+static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
 
 @implementation SearchIndexItemAPI
 
@@ -84,13 +85,13 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 150;
                 NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
                 if (ids.count > 0)
                 {
-                    OARepositoryResourceItem *item = [self getUninstalledMapRegionResourceFromIds:ids
+                    OARepositoryResourceItem *item = [strongSelf getUninstalledMapRegionResourceFromIds:ids
                                                                                            region:region
                                                                                             title:amenity.localeName];
                     if (item)
                     {
                         NSString *name = [[region.allNames componentsJoinedByString:@" "] ?: region.name lowerCase];
-                        [resultMatcher publish:[self createSearchResultWithPhrase:phrase item:item localeName:name]];
+                        [resultMatcher publish:[strongSelf createSearchResultWithPhrase:phrase item:item localeName:name]];
                     }
                 }
             }

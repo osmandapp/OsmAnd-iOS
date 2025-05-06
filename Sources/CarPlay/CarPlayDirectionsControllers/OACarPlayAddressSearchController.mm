@@ -26,6 +26,12 @@
 #import "OASearchPhrase.h"
 #import "OASearchWord.h"
 #import <CarPlay/CarPlay.h>
+#import "OAResourcesUIHelper.h"
+#import "OAObservableProtocol.h"
+#import "OADownloadTask.h"
+#import "OADownloadsManager.h"
+#import "OAAutoObserverProxy.h"
+#import "OAObservable.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -49,6 +55,23 @@
     NSString *_currentSearchPhrase;
     BOOL _cancelPrev;
     BOOL _searching;
+    OAAutoObserverProxy *_downloadTaskProgressObserver;
+    OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    NSMutableDictionary<NSString *, CPListItem *> *_activeMapDownloads;
+    OsmAndAppInstance _app;
+    NSNumberFormatter *_percentFormatter;
+}
+
+- (NSNumberFormatter *)percentFormatter
+{
+    if (!_percentFormatter)
+    {
+        _percentFormatter = [[NSNumberFormatter alloc] init];
+        _percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
+        _percentFormatter.maximumFractionDigits = 0;
+        _percentFormatter.multiplier = @100; // 0.45 → "45%"
+    }
+    return _percentFormatter;
 }
 
 - (void)onStreetSelected:(OASearchResult *)street completionHandler:(void (^)(NSArray<CPListItem *> *searchResults))completionHandler {
@@ -65,6 +88,7 @@
     _emptyItem = [[CPListItem alloc] initWithText:OALocalizedString(@"nothing_found") detailText:nil];
     _searchItems = @[];
     _cpItems = @[];
+    _app = [OsmAndApp instance];
 
     _resultsListTemplate = [[CPListTemplate alloc] initWithTitle:OALocalizedString(@"shared_string_search")
                                                         sections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
@@ -114,6 +138,19 @@
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     settings = [settings setLang:locale ? locale : @"" transliterateIfMissing:transliterate];
     [_searchUICore updateSettings:settings];
+    
+    _activeMapDownloads = [NSMutableDictionary dictionary];
+    [self registerObservers];
+}
+
+- (void)registerObservers
+{
+    _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
+                                                               andObserve:_app.downloadsManager.progressCompletedObservable];
+    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                                andObserve:_app.downloadsManager.completedObservable];
 }
 
 - (void)present
@@ -125,16 +162,62 @@
 
 - (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(void (^)(NSArray<CPListItem *> *searchResults))completionHandler
 {
-    NSNumber *indexNum = item.userInfo;
+
+    NSNumber *indexNum = item.userInfo[@"index"];
+    
     if (!indexNum || _searchItems.count == 0 || indexNum.integerValue >= _searchItems.count)
         return;
     
     NSInteger index = indexNum.integerValue;
     OAQuickSearchListItem *searchItem = _searchItems[index];
-    if (searchItem.getSearchResult.objectType == EOAObjectTypeStreet && completionHandler) {
-        // OAStreet *str = (OAStreet *)searchItem.getSearchResult.object;
+    if (searchItem.getSearchResult.objectType == EOAObjectTypeStreet && completionHandler)
+    {
         [self onStreetSelected:searchItem.getSearchResult completionHandler:completionHandler];
-    } else {
+    }
+    else if (searchItem.getSearchResult.objectType == EOAObjectTypeIndexItem && completionHandler)
+    {
+        OARepositoryResourceItem *resourceItem = (OARepositoryResourceItem *)searchItem.getSearchResult.relatedObject;
+        if (resourceItem)
+        {
+            NSString *resourceId = resourceItem.resourceId.toNSString();
+            
+            if (_app.downloadsManager.hasActiveDownloadTasks)
+            {
+                id<OADownloadTask> task = [_app.downloadsManager firstDownloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]];
+                if (task) {
+                    [task cancel];
+                    if (_activeMapDownloads[resourceId])
+                        _activeMapDownloads[resourceId] = nil;
+                    item.playbackProgress = 0;
+                    OAQuickSearchListItem *searchListItem = item.userInfo[@"searchListItem"];
+                    if (searchListItem)
+                    {
+                        [item setDetailText:[self generateDescription:searchListItem]];
+                    }
+                    
+                    [item setAccessoryImage:[UIImage imageNamed:@"ic_custom_download"]];
+                    return;
+                }
+            }
+            
+            __weak __typeof(self) weakSelf = self;
+            [OAResourcesUIHelper offerDownloadAndInstallOf:resourceItem onTaskCreated:^(id<OADownloadTask> task) {
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+                if (![task.key hasPrefix:@"resource:"])
+                    return;
+                NSString *dicKey = [task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
+                if (!strongSelf->_activeMapDownloads[dicKey])
+                {
+                    strongSelf->_activeMapDownloads[dicKey] = item;
+                    [item setAccessoryImage:nil];
+                }
+            } onTaskResumed:nil];
+        }
+    }
+    else
+    {
         CLLocation *loc = searchItem.getSearchResult.location;
         [self startNavigationGivenLocation:loc historyName:nil];
         [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
@@ -167,12 +250,17 @@
                 break;
 
             OASearchResult *sr = searchResultItems[i];
+            NSString *imageName = [OAQuickSearchListItem getIconName:sr] ?: @"";
+            UIImage *image = [UIImage mapSvgImageNamed:imageName] ?: [UIImage imageNamed:imageName];
             OAQuickSearchListItem *qsItem = [[OAQuickSearchListItem alloc] initWithSearchResult:sr];
             CPListItem *cpItem = [[CPListItem alloc] initWithText:qsItem.getName
-                    detailText:[self generateDescription:qsItem]
-                    image:[UIImage mapSvgImageNamed:[OAQuickSearchListItem getIconName:sr]]
-                    accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
-            cpItem.userInfo = @(i);
+                                                       detailText:[self generateDescription:qsItem]
+                                                            image:image
+                                                   accessoryImage:[self getAccessoryImageFor:sr.objectType] accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
+            cpItem.userInfo = @{
+                @"index": @(i),
+                @"searchListItem": qsItem
+            };
             cpItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
                 [weakSelf onItemSelected:item completionHandler:completionHandler];
                 if (completionBlock)
@@ -196,6 +284,17 @@
         if (completionHandler)
             completionHandler(@[]);
     });
+}
+
+- (nullable UIImage *)getAccessoryImageFor:(EOAObjectType)objectType
+{
+    switch (objectType)
+    {
+        case EOAObjectTypeIndexItem:
+            return [UIImage imageNamed:@"ic_custom_download"];
+        default: break;
+    }
+    return nil;
 }
 
 - (NSString *) generateDescription:(OAQuickSearchListItem *)item
@@ -374,6 +473,93 @@
 {
     [_resultsListTemplate updateSections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
     [self.interfaceController pushTemplate:_resultsListTemplate animated:YES completion:nil];
+}
+
+
+- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"] || task.state != OADownloadTaskStateRunning)
+        return;
+    
+    if (!task.silentInstall)
+        task.silentInstall = YES;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CPListItem *item = _activeMapDownloads[[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]];
+        if (task)
+        {
+            NSArray<NSString *> *components = [item.detailText componentsSeparatedByString:@"•"];
+            if (components.count >= 2)
+            {
+                NSMutableArray<NSString *> *trimmedComponents = [NSMutableArray array];
+                
+                NSString *replacement = [self.percentFormatter stringFromNumber:@([value floatValue])];
+                [trimmedComponents addObject:[replacement stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+                
+                for (NSUInteger i = 1; i < components.count; i++)
+                {
+                    NSString *part = [components[i] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    [trimmedComponents addObject:part];
+                }
+
+                NSString *result = [trimmedComponents componentsJoinedByString:@" • "];
+                [item setDetailText:result];
+            }
+            item.playbackProgress = [value floatValue];
+        }
+    });
+}
+
+- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"])
+        return;
+    
+    NSString *dicKey = [task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
+    CPListItem *item = _activeMapDownloads[dicKey];
+    if (item)
+    {
+        _activeMapDownloads[dicKey] = nil;
+        if ([_cpItems containsObject:item])
+        {
+            NSMutableArray<CPListItem *> *mutableItems = [_cpItems mutableCopy];
+            [mutableItems removeObject:item];
+            _cpItems = [mutableItems copy];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_resultsListTemplate updateSections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
+            });
+        }
+    }
+    if (task.progressCompleted < 1.0)
+    {
+        if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
+        {
+            id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]];
+            [item setAccessoryImage:nil];
+            [nextTask resume];
+        }
+    }
+}
+
+- (void)dealloc
+{
+    if (_downloadTaskProgressObserver)
+    {
+        [_downloadTaskProgressObserver detach];
+        _downloadTaskProgressObserver = nil;
+    }
+    if (_downloadTaskCompletedObserver)
+    {
+        [_downloadTaskCompletedObserver detach];
+        _downloadTaskCompletedObserver = nil;
+    }
 }
 
 @end

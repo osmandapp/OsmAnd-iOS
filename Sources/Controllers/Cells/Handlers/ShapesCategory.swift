@@ -6,4 +6,4 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-final class ShapesCategory: BaseCategory {}
+final class ShapesCategory: BaseAppearanceCategory {}

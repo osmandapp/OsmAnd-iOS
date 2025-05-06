@@ -1,5 +1,5 @@
 //
-//  BaseCategory.swift
+//  BaseAppearanceCategory.swift
 //  OsmAnd
 //
 //  Created by Vladyslav Lysenko on 25.04.2025.
@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-class BaseCategory: NSObject {
+class BaseAppearanceCategory: NSObject {
     
     var key: String
     var translatedName: String

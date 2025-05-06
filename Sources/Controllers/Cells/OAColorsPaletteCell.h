@@ -15,12 +15,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *bottomButton;
 @property (weak, nonatomic) IBOutlet UIButton *topButton;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorOffsetViewWidth;
+@property (weak, nonatomic) IBOutlet UIStackView *bottomButtonStackView;
+@property (weak, nonatomic) IBOutlet UIStackView *descriptionLabelStackView;
 
 @property (weak, nonatomic) OASuperViewController *hostVC;
 
 - (void)topButtonVisibility:(BOOL)show;
-- (void)descriptionLabelStackViewVisibility:(BOOL)show;
-- (void)bottomButtonVisibility:(BOOL)show;
-- (void)separatorLeftOffset:(CGFloat)value;
 
 @end

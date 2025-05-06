@@ -63,9 +63,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             initPoiCategories()
             sortCategories()
             
-            for category in categories {
-                categoriesByKeyName[category.key] = category
-            }
+            categories.forEach { categoriesByKeyName[$0.key] = $0 }
             
             Self.cachedCategories = categories
             Self.cachedCategoriesByKeyName = categoriesByKeyName
@@ -144,9 +142,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     
     private func initActivitiesCategory() {
         var iconKeys = [String]()
-        for activity in RouteActivityHelper().getActivities() {
-            if shouldAppend(iconName: activity.iconName, toIconsList: iconKeys) {
-                iconKeys.append(activity.iconName)
+        RouteActivityHelper().getActivities().forEach {
+            if shouldAppend(iconName: $0.iconName, toIconsList: iconKeys) {
+                iconKeys.append($0.iconName)
             }
         }
         if !iconKeys.isEmpty {
@@ -282,11 +280,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         return nil
     }
     
-    private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: IconsCategory, and previosCategory: IconsCategory?) {
-        if let previosCategory, previosCategory.isTopCategory != category.isTopCategory {
-            let separator = UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [])
-            menuElements.append(separator)
-        }
+    private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: IconsCategory) {
         menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { _ in
             self.onMenuItemSelected(name: category.key)
         }))
@@ -295,15 +289,13 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     override func buildTopButtonContextMenu() -> UIMenu? {
         var topMenuElements = [UIMenuElement]()
         var bottomMenuElements = [UIMenuElement]()
-        var previosCategory: IconsCategory?
         
         for category in categories {
             if category.key == ORIGINAL_KEY || category.key == LAST_USED_KEY || (!isFavoriteList && category.key == SPECIAL_KEY) {
-                updateMenuElements(&topMenuElements, with: category, and: previosCategory)
+                updateMenuElements(&topMenuElements, with: category)
             } else {
-                updateMenuElements(&bottomMenuElements, with: category, and: previosCategory)
+                updateMenuElements(&bottomMenuElements, with: category)
             }
-            previosCategory = category
         }
   
         let topMenu = UIMenu(title: "", options: .displayInline, children: topMenuElements)
@@ -326,10 +318,15 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     
     func updateHostCellIfNeeded() {
         updateTopButtonName()
-        updateCollectionVisibility()
-        updateDescriptionVisibility()
-        updateBottomButtonVisibility()
-        updateSeparatorLeftOffset()
+        updateHostCellIfOriginalCategory(selectedCatagoryKey == ORIGINAL_KEY)
+    }
+    
+    private func updateHostCellIfOriginalCategory(_ isOriginal: Bool) {
+        hostCell?.collectionStackViewVisibility(!isOriginal)
+        hostCell?.descriptionLabelStackView.isHidden = !isOriginal
+        hostCell?.bottomButtonStackView.isHidden = isOriginal
+        hostCell?.underTitleView.isHidden = isOriginal
+        hostCell?.separatorOffsetViewWidth.constant = isOriginal ? 20 : .zero
     }
     
     func updateTopButtonName() {
@@ -345,23 +342,6 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             attributedString.append(imageString)
             hostCell?.topButton.setAttributedTitle(attributedString, for: .normal)
         }
-    }
-    
-    private func updateCollectionVisibility() {
-        hostCell?.collectionStackViewVisibility(selectedCatagoryKey != ORIGINAL_KEY)
-        hostCell?.underTitleViewVisibility(selectedCatagoryKey != ORIGINAL_KEY)
-    }
-    
-    private func updateDescriptionVisibility() {
-        hostCell?.descriptionLabelStackViewVisibility(selectedCatagoryKey == ORIGINAL_KEY)
-    }
-    
-    private func updateBottomButtonVisibility() {
-        hostCell?.bottomButtonVisibility(selectedCatagoryKey != ORIGINAL_KEY)
-    }
-    
-    private func updateSeparatorLeftOffset() {
-        hostCell?.separatorLeftOffset(selectedCatagoryKey == ORIGINAL_KEY ? 20 : .zero)
     }
     
     func addIconToLastUsed(_ iconKey: String) {

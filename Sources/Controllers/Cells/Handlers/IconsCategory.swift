@@ -6,7 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-final class IconsCategory: BaseCategory {
+final class IconsCategory: BaseAppearanceCategory {
     
     var iconKeys: [String]
     var isTopCategory: Bool

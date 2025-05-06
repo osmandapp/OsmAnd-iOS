@@ -10,4 +10,4 @@ import Foundation
 
 @objc(OAColorsCategory)
 @objcMembers
-final class ColorsCategory: BaseCategory {}
+final class ColorsCategory: BaseAppearanceCategory {}

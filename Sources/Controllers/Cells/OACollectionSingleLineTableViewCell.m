@@ -15,7 +15,6 @@
 
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *topMarginStackView;
-@property (weak, nonatomic) IBOutlet UIStackView *collectionStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *bottomMarginStackView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
@@ -85,12 +84,6 @@
         CGFloat spacing = [_collectionHandler getSpacing];
         layout.minimumLineSpacing = spacing;
         layout.minimumInteritemSpacing = spacing;
-        
-        if ([self isDirectionRTL])
-        {
-            self.collectionView.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
-            self.collectionView.transform = CGAffineTransformMakeScale(-1, 1);
-        }
         
         [self.collectionView setCollectionViewLayout:layout animated:!_disableAnimationsOnStart];
 

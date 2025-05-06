@@ -19,6 +19,7 @@
 @interface OACollectionSingleLineTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIStackView *collectionStackView;
 @property (weak, nonatomic) IBOutlet UIButton *rightActionButton;
 
 @property (weak, nonatomic) id<OACollectionTableViewCellDelegate> delegate;

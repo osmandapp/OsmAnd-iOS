@@ -147,8 +147,16 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     if (self.isNewItem)
         [self generateDescriptionSection];
     [self generateGroupSection];
-    [self generateColorSection];
-    [self generateIconSection];
+    if (self.isNewItem)
+    {
+        [self generateIconSection];
+        [self generateColorSection];
+    }
+    else
+    {
+        [self generateColorSection];
+        [self generateIconSection];
+    }
     [self generateShapeSection];
     [self generateActionSection];
 }
@@ -401,7 +409,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void) setupIconHandler
 {
-    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] initWithIsFavoriteList:self.isNewItem != YES];
+    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] initWithIsFavoriteList:!self.isNewItem];
     _poiIconCollectionHandler.delegate = self;
     _poiIconCollectionHandler.handlerDelegate = self;
     _poiIconCollectionHandler.hostVC = self;
@@ -452,7 +460,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         _selectedBackgroundIndex = 0;
         self.editBackgroundIconName = _backgroundIconNames.firstObject;
     }
-    _shapesCollectionHandler = [[ShapesCollectionHandler alloc] initWithBackgroundIconNames:_backgroundIconNames isFavoriteList:self.isNewItem != YES];
+    _shapesCollectionHandler = [[ShapesCollectionHandler alloc] initWithBackgroundIconNames:_backgroundIconNames isFavoriteList:!self.isNewItem];
     _shapesCollectionHandler.handlerDelegate = self;
     _shapesCollectionHandler.hostVC = self;
     

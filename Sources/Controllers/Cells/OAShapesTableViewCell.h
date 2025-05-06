@@ -21,7 +21,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *topButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topTrailingWidth;
 
 @property (nonatomic) NSArray *iconNames;
 @property (nonatomic) NSArray *contourIconNames;
@@ -32,7 +31,6 @@
 @property (nonatomic, weak) id<OAShapesTableViewCellDelegate> delegate;
 
 - (void)topButtonVisibility:(BOOL)show;
-- (void)valueLabelVisibility:(BOOL)show;
 - (void)descriptionLabelStackViewVisibility:(BOOL)show;
 - (void)separatorVisibility:(BOOL)show;
 - (void)topRightOffset:(CGFloat)value;

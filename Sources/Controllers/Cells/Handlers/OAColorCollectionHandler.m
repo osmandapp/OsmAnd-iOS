@@ -148,15 +148,13 @@ static NSString * const kSolidColorKey = @"solid_color";
 {
     NSMutableArray<UIMenuElement *> *topMenuElements = [NSMutableArray array];
     NSMutableArray<UIMenuElement *> *bottomMenuElements = [NSMutableArray array];
-    OAColorsCategory *previousCategory = nil;
 
     for (OAColorsCategory *category in _categories)
     {
         if ([category.key isEqualToString:kOriginalKey])
-            [self updateMenuElements:topMenuElements withCategory:category andPreviousCategory:previousCategory];
+            [self updateMenuElements:topMenuElements withCategory:category];
         else
-            [self updateMenuElements:bottomMenuElements withCategory:category andPreviousCategory:previousCategory];
-        previousCategory = category;
+            [self updateMenuElements:bottomMenuElements withCategory:category];
     }
 
     UIMenu *topMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:topMenuElements];
@@ -167,15 +165,7 @@ static NSString * const kSolidColorKey = @"solid_color";
 
 - (void)updateMenuElements:(NSMutableArray<UIMenuElement *> *)menuElements
               withCategory:(OAColorsCategory *)category
-       andPreviousCategory:(OAColorsCategory *)previousCategory
 {
-    
-    if (previousCategory)
-    {
-        UIMenu *separator = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[]];
-        [menuElements addObject:separator];
-    }
-
     UIAction *action = [UIAction actionWithTitle:category.translatedName
                                            image:nil
                                       identifier:nil
@@ -212,10 +202,7 @@ static NSString * const kSolidColorKey = @"solid_color";
 - (void)updateHostCellIfNeeded
 {
     [self updateTopButtonName];
-    [self updateCollectionVisibility];
-    [self updateDescriptionVisibility];
-    [self updateBottomButtonVisibility];
-    [self updateSeparatorLeftOffset];
+    [self updateHostCellIfOriginalCategory: _selectedCategoryKey == kOriginalKey];
 }
 
 - (void)updateTopButtonName
@@ -244,27 +231,13 @@ static NSString * const kSolidColorKey = @"solid_color";
     }
 }
 
-- (void)updateCollectionVisibility
-{
-    [self.hostCell collectionStackViewVisibility:_selectedCategoryKey != kOriginalKey];
-}
-
-- (void)updateDescriptionVisibility
+- (void)updateHostCellIfOriginalCategory:(BOOL)isOriginal
 {
     OAColorsPaletteCell *cell = (OAColorsPaletteCell *)self.hostCell;
-    [cell descriptionLabelStackViewVisibility:_selectedCategoryKey == kOriginalKey];
-}
-
-- (void)updateBottomButtonVisibility
-{
-    OAColorsPaletteCell *cell = (OAColorsPaletteCell *)self.hostCell;
-    [cell bottomButtonVisibility:_selectedCategoryKey != kOriginalKey];
-}
-
-- (void)updateSeparatorLeftOffset
-{
-    OAColorsPaletteCell *cell = (OAColorsPaletteCell *)self.hostCell;
-    [cell separatorLeftOffset:_selectedCategoryKey == kOriginalKey ? 20 : 0];
+    [self.hostCell collectionStackViewVisibility:!isOriginal];
+    cell.descriptionLabelStackView.hidden = !isOriginal;
+    cell.bottomButtonStackView.hidden = isOriginal;
+    cell.separatorOffsetViewWidth.constant = isOriginal ? 20 : 0;
 }
 
 #pragma mark - Data

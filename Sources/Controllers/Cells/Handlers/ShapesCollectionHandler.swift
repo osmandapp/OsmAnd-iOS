@@ -26,28 +26,21 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
     
     override init() {
         super.init()
-        setup()
+        initShapesCategories()
     }
     
     init(backgroundIconNames: [String], isFavoriteList: Bool) {
         super.init()
         self.backgroundIconNames = backgroundIconNames
         self.isFavoriteList = isFavoriteList
-        setup()
-    }
-    
-    private func setup() {
         initShapesCategories()
-        setScrollDirection(.horizontal)
     }
     
     func initShapesCategories() {
         initOriginalCategory()
         initBackgroundCategories()
         
-        for category in categories {
-            categoriesByKeyName[category.key] = category
-        }
+        categories.forEach { categoriesByKeyName[$0.key] = $0 }
     }
     
     override func getCellIdentifier() -> String {
@@ -79,16 +72,12 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
     }
     
     private func initBackgroundCategories() {
-        for backgroundIconName in backgroundIconNames {
-            categories.append(ShapesCategory(key: backgroundIconName, translatedName: localizedString("shared_string_\(backgroundIconName)")))
+        backgroundIconNames.forEach {
+            categories.append(ShapesCategory(key: $0, translatedName: localizedString("shared_string_\($0)")))
         }
     }
     
-    private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: ShapesCategory, and previosCategory: ShapesCategory?) {
-        if let previosCategory {
-            let separator = UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [])
-            menuElements.append(separator)
-        }
+    private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: ShapesCategory) {
         menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { _ in
             self.onMenuItemSelected(name: category.key)
         }))
@@ -97,25 +86,20 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
     override func buildTopButtonContextMenu() -> UIMenu? {
         var topMenuElements = [UIMenuElement]()
         var bottomMenuElements = [UIMenuElement]()
-        var previosCategory: ShapesCategory?
         
         for category in categories {
             if category.key == ORIGINAL_KEY {
-                updateMenuElements(&topMenuElements, with: category, and: previosCategory)
+                updateMenuElements(&topMenuElements, with: category)
             } else {
-                updateMenuElements(&bottomMenuElements, with: category, and: previosCategory)
+                updateMenuElements(&bottomMenuElements, with: category)
             }
-            previosCategory = category
         }
-  
         let topMenu = UIMenu(title: "", options: .displayInline, children: topMenuElements)
         let bottomMenu = UIMenu(title: "", options: .displayInline, children: bottomMenuElements)
         return UIMenu(title: "", children: [topMenu, bottomMenu])
     }
     
     func onMenuItemSelected(name: String) {
-        guard let category = categoriesByKeyName[name] else { return }
-        
         selectCategory(name)
         if let tag = backgroundIconNames.firstIndex(of: selectedCatagoryKey) {
             hostCell?.updateIcon(with: tag)
@@ -124,12 +108,8 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
     
     func updateHostCellIfNeeded() {
         updateTopButtonName()
-        updateTopButtonVisibility()
-        updateValueLabelVisibility()
-        updateCollectionVisibility()
-        updateDescriptionVisibility()
-        updateSeparatorVisibility()
-        updateTopRightOffset()
+        updateHostCellIfFavoriteList()
+        updateHostCellIfOriginalCategory(selectedCatagoryKey == ORIGINAL_KEY)
     }
     
     func updateTopButtonName() {
@@ -147,27 +127,15 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
         }
     }
     
-    private func updateTopButtonVisibility() {
+    private func updateHostCellIfFavoriteList() {
         hostCell?.topButtonVisibility(isFavoriteList)
-    }
-    
-    private func updateValueLabelVisibility() {
-        hostCell?.valueLabelVisibility(!isFavoriteList)
-    }
-    
-    private func updateCollectionVisibility() {
-        hostCell?.collectionStackViewVisibility(selectedCatagoryKey != ORIGINAL_KEY)
-    }
-    
-    private func updateDescriptionVisibility() {
-        hostCell?.descriptionLabelStackViewVisibility(selectedCatagoryKey == ORIGINAL_KEY)
-    }
-    
-    private func updateSeparatorVisibility() {
-        hostCell?.separatorVisibility(selectedCatagoryKey == ORIGINAL_KEY)
-    }
-    
-    private func updateTopRightOffset() {
+        hostCell?.valueLabel.isHidden = isFavoriteList
         hostCell?.topRightOffset(isFavoriteList ? 4 : 20)
+    }
+    
+    private func updateHostCellIfOriginalCategory(_ isOriginal: Bool) {
+        hostCell?.collectionStackViewVisibility(!isOriginal)
+        hostCell?.descriptionLabelStackViewVisibility(isOriginal)
+        hostCell?.separatorVisibility(isOriginal)
     }
 }

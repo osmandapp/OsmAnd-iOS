@@ -309,11 +309,12 @@ static const CGFloat kTextMaxHeight = 150.0;
     {
         OARenderedObject *renderedObject = renderedObjects[i];
         OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:renderedObject];
+
         NSString *key;
-        NSString *value;
-        
         NSString *translatedType = [RenderedObjectHelper getTranslatedTypeWithRenderedObject:renderedObject];
-        if ([translatedType containsString:@":"])
+        NSString *value = [RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:renderedObject];
+
+        if ([translatedType containsString:@":"] && (value.length == 0 || [translatedType isEqualToString:value]))
         {
             int firstCommaIndex = [translatedType indexOf:@":"];
             key = [translatedType substringToIndex:firstCommaIndex];
@@ -322,7 +323,6 @@ static const CGFloat kTextMaxHeight = 150.0;
         else
         {
             key = translatedType.length > 0 ? translatedType : syntheticAmenity.type.nameLocalized;
-            value = [RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:renderedObject];
             if (value.length == 0)
             {
                 value = key;

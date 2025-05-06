@@ -2820,7 +2820,7 @@
 "true_bearing_wdiget_desc" = "Угао између правог Севера и циљане тачке гледано са Вашег положаја.";
 "coordinates_widget_secondary_desc" = "Облик координата се можете променити у %@ – %@ – %@.";
 "weather_widgets_secondary_desc" = "Мерне јединице могу бити промењене у поставкама прикључка временских прилика.";
-"add_widget" = "Додај виџет";
+"add_widget" = "Додај справицу";
 "add_page" = "Додај страницу";
 "shared_string_switch_mode" = "Начин рада промене";
 "map_widget_distance_to_destination" = "Удаљеност до одредишта";

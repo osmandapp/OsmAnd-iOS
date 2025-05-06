@@ -415,13 +415,7 @@ static UIViewController *parentController;
         }
     }
     
-    [self.favoriteTableView beginUpdates];
-    NSArray<NSIndexPath *> *freshIndexPathsForVisibleRows = [self.favoriteTableView indexPathsForVisibleRows];
-    if (freshIndexPathsForVisibleRows.count > 0)
-    {
-        [self.favoriteTableView reloadRowsAtIndexPaths:freshIndexPathsForVisibleRows withRowAnimation:UITableViewRowAnimationNone];
-    }
-    [self.favoriteTableView endUpdates];
+    [self.favoriteTableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -614,6 +608,16 @@ static UIViewController *parentController;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)alertTextFieldDidChange:(UITextField *)textField
+{
+    UIAlertController *alert = (UIAlertController *)self.presentedViewController;
+    if (alert)
+    {
+        UIAlertAction *applyAction = alert.actions.firstObject;
+        applyAction.enabled = [OAFavoritesHelper isGroupNameValidWithText:[textField.text trim]];
+    }
 }
 
 #pragma mark - Actions
@@ -1105,12 +1109,19 @@ static UIViewController *parentController;
             [self generateData];
         }];
         showHideAction.accessibilityLabel = showHideCaption;
+        
+        UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
+                                                       image:[UIImage imageNamed:@"ic_custom_edit"]
+                                                  identifier:nil
+                                                     handler:^(__kindof UIAction * _Nonnull action) {
+            [self openRenameAlertWith:groupData.favoriteGroup];
+        }];
+        renameAction.accessibilityLabel = OALocalizedString(@"shared_string_rename");
         [menuElements addObject:[UIMenu menuWithTitle:@""
                                            image:nil
                                       identifier:nil
                                          options:UIMenuOptionsDisplayInline
-                                        children:@[showHideAction]]];
-
+                                        children:@[showHideAction, renameAction]]];
         
         UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance")
                                                          image:[UIImage systemImageNamed:@"paintpalette"]
@@ -1208,6 +1219,43 @@ static UIViewController *parentController;
     if (_directionButton.tag == 1)
         return [self getSortedcellForRowAtIndexPath:indexPath];
     return [self getUnsortedcellForRowAtIndexPath:indexPath];
+}
+
+- (void)openRenameAlertWith:(OAFavoriteGroup *)favoriteGroup
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_rename")
+                                                                   message:OALocalizedString(@"enter_new_name")
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *applyAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_apply")
+                                                         style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * _Nonnull action) {
+        NSString *name = [alert.textFields.firstObject.text trim];
+        if (name.length > 0)
+        {
+            [OAFavoritesHelper updateGroup:favoriteGroup
+                                   newName:name
+                           saveImmediately:YES];
+            [self generateData];
+        }
+    }];
+    [alert addAction:applyAction];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                              style:UIAlertActionStyleCancel
+                                            handler:nil]];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = OALocalizedString(@"enter_new_name");
+        textField.text = favoriteGroup.name;
+        
+        applyAction.enabled = textField.text.length > 0;
+        [textField addTarget:self
+                      action:@selector(alertTextFieldDidChange:)
+            forControlEvents:UIControlEventEditingChanged];
+    }];
+
+    [alert setPreferredAction:applyAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(UITableViewCell*)getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -518,29 +518,34 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
 + (NSString *)prepareLatLonWithDecimalCommas:(NSString *)ll
 {
     static const int DIGITS_BEFORE_COMMA = 1, DIGITS_AFTER_COMMA = 3;
-    int length = (int)ll.length;
-    for (int i = DIGITS_BEFORE_COMMA, first = -1; i < length - DIGITS_AFTER_COMMA; i++) {
-        if (length > i && [ll characterAtIndex:i] == ',') {
+    if (ll.length < DIGITS_BEFORE_COMMA + DIGITS_AFTER_COMMA + 1)
+      return ll;
+
+    for (int i = DIGITS_BEFORE_COMMA, first = -1; i < (int) ll.length - DIGITS_AFTER_COMMA; i++)
+    {
+        int length = (int) ll.length;
+        if (length > i && [ll characterAtIndex:i] == ',')
+        {
             int before = 0, after = 0;
-            for (int j = i - 1; j >= i - DIGITS_BEFORE_COMMA && j >= 0; j--) {
-                if (j >= 0 && j < length && [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[ll characterAtIndex:j]]) {
+            for (int j = i - 1; j >= i - DIGITS_BEFORE_COMMA && j >= 0; j--)
+            {
+                if (j >= 0 && j < length && [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[ll characterAtIndex:j]])
                     before++;
-                }
             }
-            for (int j = i + 1; j <= i + DIGITS_AFTER_COMMA && j < length && before >= DIGITS_BEFORE_COMMA; j++) {
-                if (j >= 0 && j < length && [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[ll characterAtIndex:j]]) {
+            for (int j = i + 1; j <= i + DIGITS_AFTER_COMMA && j < length && before >= DIGITS_BEFORE_COMMA; j++)
+            {
+                if (j >= 0 && j < length && [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[ll characterAtIndex:j]])
                     after++;
-                }
             }
-            if (before >= DIGITS_BEFORE_COMMA && after >= DIGITS_AFTER_COMMA) {
-                if (first != -1) {
+            if (before >= DIGITS_BEFORE_COMMA && after >= DIGITS_AFTER_COMMA)
+            {
+                if (first != -1)
                     return [NSString stringWithFormat:@"%@.%@.%@",
                             [ll substringToIndex:first],
                             [ll substringWithRange:NSMakeRange(first + 1, i - first - 1)],
                             [ll substringFromIndex:i + 1]];
-                } else {
+                else
                     first = i;
-                }
             }
         }
     }

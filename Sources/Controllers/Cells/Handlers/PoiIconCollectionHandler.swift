@@ -6,25 +6,20 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-@objc protocol PoiIconCollectionHandlerDelegate: AnyObject {
-    func onCategorySelected(_ category: String, with cell: OAIconsPaletteCell)
-}
-
 @objcMembers
 final class PoiIconCollectionHandler: IconCollectionHandler {
     
-    static var cachedCategories = [IconsCategory]()
-    static var cachedCategoriesByKeyName = [String: IconsCategory]()
+    static var cachedCategories = [IconsAppearanceCategory]()
+    static var cachedCategoriesByKeyName = [String: IconsAppearanceCategory]()
     
-    var categories = [IconsCategory]()
-    var categoriesByKeyName = [String: IconsCategory]()
+    var categories = [IconsAppearanceCategory]()
+    var categoriesByKeyName = [String: IconsAppearanceCategory]()
     var selectedCatagoryKey = ""
     var lastUsedIcons = [String]()
     var groupIcons = [String]()
     var profileIcons = [String]()
     var isFavoriteList = false
     weak var allIconsVCDelegate: PoiIconsCollectionViewControllerDelegate?
-    weak var handlerDelegate: PoiIconCollectionHandlerDelegate?
     
     private let LAST_USED_ICONS_LIMIT = 12
     private let POI_CATEGORIES_FILE = "poi_categories.json"
@@ -69,7 +64,15 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             Self.cachedCategoriesByKeyName = categoriesByKeyName
             
             loadAllIconsData()
+        } else {
+            categories = Self.cachedCategories
+            categoriesByKeyName = Self.cachedCategoriesByKeyName
+            initLastUsedCategory()
         }
+        initFilteredCategories()
+    }
+    
+    private func initFilteredCategories() {
         categories = Self.cachedCategories.filter { isFavoriteList || $0.key != ORIGINAL_KEY }
         categoriesByKeyName = Self.cachedCategoriesByKeyName.filter { isFavoriteList || $0.key != ORIGINAL_KEY }
     }
@@ -85,8 +88,8 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                 for j in 0 ..< category.iconKeys.count {
                     if iconName == category.iconKeys[j] ||
                         "mx_" + iconName == category.iconKeys[j] {
-                        setSelectedIndexPath(IndexPath(row: j, section: 0))
                         selectCategory(category.key)
+                        setSelectedIndexPath(IndexPath(row: j, section: 0))
                         return
                     }
                 }
@@ -126,13 +129,15 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     private func initOriginalCategory() {
-        categories.append(IconsCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original"), iconKeys: [], isTopCategory: true))
+        categories.append(IconsAppearanceCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original"), iconKeys: [], isTopCategory: true))
     }
     
     private func initLastUsedCategory() {
         if let icons = OAAppSettings.sharedManager().lastUsedFavIcons.get(), !icons.isEmpty {
             lastUsedIcons = icons
-            categories.append(IconsCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true))
+            let category = IconsAppearanceCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
+            categories.append(category)
+            categoriesByKeyName[LAST_USED_KEY] = category
         }
     }
     
@@ -149,7 +154,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         }
         if !iconKeys.isEmpty {
             let translatedName = localizedString("shared_string_activity")
-            categories.append(IconsCategory(key: ACTIVITIES_KEY, translatedName: translatedName, iconKeys: iconKeys))
+            categories.append(IconsAppearanceCategory(key: ACTIVITIES_KEY, translatedName: translatedName, iconKeys: iconKeys))
         }
     }
     
@@ -167,7 +172,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                         }
                     }
                     if !iconKeys.isEmpty {
-                        categories.append(IconsCategory(key: poiCategory.name, translatedName: poiCategory.nameLocalized, iconKeys: iconKeys))
+                        categories.append(IconsAppearanceCategory(key: poiCategory.name, translatedName: poiCategory.nameLocalized, iconKeys: iconKeys))
                     }
                 }
             }
@@ -184,8 +189,8 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         }
     }
     
-    func addProfileIconsCategory() {
-        profileIcons = [
+    static func getProfileIconsList() -> [String] {
+        [
             "ic_world_globe_dark",
             "ic_action_car_dark",
             "ic_action_taxi",
@@ -232,8 +237,12 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             "ic_action_motorboat",
             "ic_action_light_aircraft"
         ]
+    }
+    
+    func addProfileIconsCategory() {
+        profileIcons = Self.getProfileIconsList()
 
-        let profileIconsCategory = IconsCategory(key: PROFILE_ICONS_KEY, translatedName: localizedString("profile_icons"), iconKeys: profileIcons, isTopCategory: true)
+        let profileIconsCategory = IconsAppearanceCategory(key: PROFILE_ICONS_KEY, translatedName: localizedString("profile_icons"), iconKeys: profileIcons, isTopCategory: true)
         categories.append(profileIconsCategory)
         categoriesByKeyName[PROFILE_ICONS_KEY] = profileIconsCategory
         sortCategories()
@@ -260,7 +269,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             for categoryKey in categoriesKeys {
                 if let iconsKeys = json.categories[categoryKey], !iconsKeys.icons.isEmpty {
                     let translatedName = localizedString("icon_group_" + categoryKey)
-                    categories.append(IconsCategory(key: categoryKey, translatedName: translatedName, iconKeys: iconsKeys.icons, isTopCategory: categoryKey == SPECIAL_KEY))
+                    categories.append(IconsAppearanceCategory(key: categoryKey, translatedName: translatedName, iconKeys: iconsKeys.icons, isTopCategory: categoryKey == SPECIAL_KEY))
                 }
             }
         }
@@ -280,7 +289,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         return nil
     }
     
-    private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: IconsCategory) {
+    private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: IconsAppearanceCategory) {
         menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { _ in
             self.onMenuItemSelected(name: category.key)
         }))
@@ -363,8 +372,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             guard let self else { return }
             
             for category in self.categories {
+                var brokenIcons = [String]()
+                
                 for iconName in category.iconKeys {
-                    
                     if Self.cachedIcons.object(forKey: iconName as NSString) == nil {
                         var icon = UIImage.templateImageNamed(iconName)
                         if icon == nil {
@@ -375,8 +385,20 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                         }
                         if let icon {
                             Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
+                        } else {
+                            brokenIcons.append(iconName)
                         }
                     }
+                }
+                
+                if !brokenIcons.isEmpty {
+                    let filteredIcons = category.iconKeys.filter { !brokenIcons.contains($0) }
+                    self.categoriesByKeyName[category.key]?.iconKeys = filteredIcons
+                    if category.key == LAST_USED_KEY {
+                        lastUsedIcons = category.iconKeys
+                        OAAppSettings.sharedManager().lastUsedFavIcons.set(lastUsedIcons)
+                    }
+                    getCollectionView()?.reloadData()
                 }
             }
         }

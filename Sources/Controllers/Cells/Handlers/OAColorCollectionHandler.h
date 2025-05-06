@@ -8,7 +8,6 @@
 
 #import "OABaseCollectionHandler.h"
 #import "OASuperViewController.h"
-#import "OAColorsPaletteCell.h"
 
 @class OAColorItem, OACollectionSingleLineTableViewCell;
 
@@ -20,16 +19,9 @@
 
 @end
 
-@protocol OAColorCollectionHandlerDelegate
-
-- (void)onColorCategorySelected:(NSString *)categoryKey with:(OAColorsPaletteCell *)cell;
-
-@end
-
 @interface OAColorCollectionHandler : OABaseCollectionHandler <OAColorsCollectionCellDelegate>
 
 @property (nonatomic, weak) id<OACollectionCellDelegate> delegate;
-@property (nonatomic, weak) id<OAColorCollectionHandlerDelegate> handlerDelegate;
 @property (weak, nonatomic) OASuperViewController *hostVC;
 @property (weak, nonatomic) OACollectionSingleLineTableViewCell *hostCell;
 @property (weak, nonatomic) UIView *hostVCOpenColorPickerButton;
@@ -50,6 +42,7 @@
 
 - (NSMutableArray<NSMutableArray<OAColorItem *> *> *) getData;
 - (OAColorItem *)getSelectedItem;
+- (void)setSelectionItem:(OAColorItem *)item;
 
 - (void)openColorPickerWithColor:(OAColorItem *)colorItem sourceView:(UIView *)sourceView newColorAdding:(BOOL)newColorAdding;
 - (void)openAllColorsScreen;

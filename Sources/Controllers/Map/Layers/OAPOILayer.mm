@@ -45,7 +45,8 @@
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/Map/IOnPathMapSymbol.h>
 
-#define kPoiSearchRadius 50
+#define kPoiSearchRadius 50 // AMENITY_SEARCH_RADIUS
+#define kPoiSearchRadiusForRelation 500 // AMENITY_SEARCH_RADIUS_FOR_RELATION
 #define kTrackSearchDelta 40
 
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
@@ -329,9 +330,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (void) processAmenityFields:(OAPOI *)poi decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues
 {
-    NSMutableDictionary *content = [NSMutableDictionary dictionary];
-    NSMutableDictionary *values = [NSMutableDictionary dictionary];
-    
+    MutableOrderedDictionary *content = [MutableOrderedDictionary new];
+    MutableOrderedDictionary *values = [MutableOrderedDictionary new];
+
     for (const auto& entry : decodedValues)
     {
         if (entry.declaration->tagName.startsWith(QString("content")))
@@ -536,7 +537,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                 const LatLon l = [self parsePoiLatLon:tags[TAG_POI_LAT_LON]];
                 point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(l.lat, l.lon));
             }
-            auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
+            int searchRadius = obfMapObject->id.isIdFromRelation() ? kPoiSearchRadiusForRelation : kPoiSearchRadius;
+            auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(searchRadius, point31);
             BOOL amenityFound = obfsDataInterface->findAmenityByObfMapObject(obfMapObject, &amenity, &bbox31);
 
             bool isRoute = !OsmAnd::NetworkRouteKey::getRouteKeys(tags).isEmpty();

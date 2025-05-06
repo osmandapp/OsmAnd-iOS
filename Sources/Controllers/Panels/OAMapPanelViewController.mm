@@ -3393,7 +3393,7 @@ typedef enum
     if (!segment)
         segment = [TrackChartHelper getTrackSegment:analysis gpxItem:gpx];
     
-    if (gpx && analysis)
+    if (gpx && analysis && segment)
         targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis, @"segment" : segment};
     else
         targetPoint.targetObj = nil;

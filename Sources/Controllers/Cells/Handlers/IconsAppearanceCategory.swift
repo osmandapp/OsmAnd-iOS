@@ -1,12 +1,12 @@
 //
-//  IconsCategory.swift
+//  IconsAppearanceCategory.swift
 //  OsmAnd
 //
 //  Created by Max Kojin on 13/02/25.
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-final class IconsCategory: BaseAppearanceCategory {
+final class IconsAppearanceCategory: BaseAppearanceCategory {
     
     var iconKeys: [String]
     var isTopCategory: Bool

@@ -1,5 +1,5 @@
 //
-//  ColorsCategory.swift
+//  ColorsAppearanceCategory.swift
 //  OsmAnd
 //
 //  Created by Vladyslav Lysenko on 23.04.2025.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-@objc(OAColorsCategory)
+@objc(OAColorsAppearanceCategory)
 @objcMembers
-final class ColorsCategory: BaseAppearanceCategory {}
+final class ColorsAppearanceCategory: BaseAppearanceCategory {}

@@ -211,10 +211,10 @@
 		15CD7EA725B1C1A700BCB36A /* ic_small_time_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EA425B1C1A700BCB36A /* ic_small_time_start@2x.png */; };
 		15CD7EAD25B1C1B900BCB36A /* ic_small_waypoints@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */; };
 		15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */; };
-		2717D3B52DBBA2F800B7BD22 /* ShapesCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B42DBBA2F100B7BD22 /* ShapesCategory.swift */; };
+		2717D3B52DBBA2F800B7BD22 /* ShapesAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */; };
 		2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */; };
 		2717D3D22DC8D8A600B7BD22 /* BaseAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */; };
-		274781F62DB92E3800EAE008 /* ColorsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsCategory.swift */; };
+		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
 		3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */; };
@@ -489,7 +489,7 @@
 		32EAFA012AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EAFA002AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift */; };
 		32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */; };
 		32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */; };
-		32F3A6AC2D5E1A43008AE4CA /* IconsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6AB2D5E1A41008AE4CA /* IconsCategory.swift */; };
+		32F3A6AC2D5E1A43008AE4CA /* IconsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */; };
 		32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */; };
 		32FE7AA72B65138800F82728 /* OAGPXImportUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */; };
 		32FEF47F2D071FD7005E8B55 /* OAMapObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32FEF47E2D071FD5005E8B55 /* OAMapObject.mm */; };
@@ -3511,10 +3511,10 @@
 		15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@3x.png"; path = "Resources/Icons/ic_small_waypoints@3x.png"; sourceTree = "<group>"; };
 		15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@2x.png"; path = "Resources/Icons/ic_small_waypoints@2x.png"; sourceTree = "<group>"; };
 		2503BB823D105783DC4982C8 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
-		2717D3B42DBBA2F100B7BD22 /* ShapesCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesCategory.swift; sourceTree = "<group>"; };
+		2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesAppearanceCategory.swift; sourceTree = "<group>"; };
 		2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesCollectionHandler.swift; sourceTree = "<group>"; };
 		2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceCategory.swift; sourceTree = "<group>"; };
-		274781F52DB92E3100EAE008 /* ColorsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsCategory.swift; sourceTree = "<group>"; };
+		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
 		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
@@ -3914,7 +3914,7 @@
 		32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelLocalDataDbHelper.mm; sourceTree = "<group>"; };
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiIconCollectionHandler.swift; sourceTree = "<group>"; };
-		32F3A6AB2D5E1A41008AE4CA /* IconsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsCategory.swift; sourceTree = "<group>"; };
+		32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsAppearanceCategory.swift; sourceTree = "<group>"; };
 		32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXImportUIHelper.h; sourceTree = "<group>"; };
 		32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXImportUIHelper.mm; sourceTree = "<group>"; };
 		32FEF47C2D071ED7005E8B55 /* OAPOIHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAPOIHelper+cpp.h"; sourceTree = "<group>"; };
@@ -9518,10 +9518,10 @@
 				4656BD2D2C482D0500B69928 /* PaletteCollectionHandler.swift */,
 				32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */,
 				2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */,
-				32F3A6AB2D5E1A41008AE4CA /* IconsCategory.swift */,
-				274781F52DB92E3100EAE008 /* ColorsCategory.swift */,
+				32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */,
+				274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */,
 				2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */,
-				2717D3B42DBBA2F100B7BD22 /* ShapesCategory.swift */,
+				2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -16246,7 +16246,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Download the new version only if the remote file is newer\ncurl -z ${SRCROOT}/Resources/Shipped/regions.ocbf -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
+			shellScript = "#!/usr/bin/env bash\nset -euo pipefail\n\nREMOTE_URL=\"https://creator.osmand.net/basemap/regions.ocbf\"\nLOCAL_FILE=\"${SRCROOT}/Resources/Shipped/regions.ocbf\"\nTMP_FILE=\"$(mktemp \"${LOCAL_FILE}.download.XXXXXX\")\"\n\n# Ensure temp file is cleaned up no matter what\ntrap 'rm -f \"$TMP_FILE\"' EXIT\n\n# 1. If local missing → download unconditionally\nif [[ ! -f \"$LOCAL_FILE\" ]]; then\n  echo \"🔄 regions.ocbf missing → downloading fresh copy\"\n  curl --fail -R -S -o \"$TMP_FILE\" \"$REMOTE_URL\"\n  mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n  exit 0\nfi\n\n# 2. Fetch remote headers once\nread -r REMOTE_SIZE REMOTE_DATE <<< $(\n  curl -sI \"$REMOTE_URL\" \\\n    | awk '\n        /^Content-Length:/   { size=$2 }\n        /^Last-Modified:/    { $1=\"\"; sub(/^ +/, \"\"); date=$0 }\n        END                  { print size, date }\n      ' \\\n    | tr -d '\\r'\n)\n\n# 3. Compare size\nLOCAL_SIZE=$(stat -f %z \"$LOCAL_FILE\")\nif [[ \"$LOCAL_SIZE\" -ne \"$REMOTE_SIZE\" ]]; then\n  echo \"🔄 Size changed: local=$LOCAL_SIZE remote=$REMOTE_SIZE → redownloading\"\n  curl --fail -R -S -o \"$TMP_FILE\" \"$REMOTE_URL\"\n  mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n  exit 0\nfi\n\n# 4. Compare Last-Modified via conditional GET\nHTTP_CODE=$(\n  curl --silent --show-error --fail \\\n       -z \"$LOCAL_FILE\" \\\n       -w \"%{http_code}\" \\\n       -o \"$TMP_FILE\" \\\n       \"$REMOTE_URL\"\n)\n\ncase \"$HTTP_CODE\" in\n  200)\n    echo \"🔄 Server is newer (HTTP 200) → updated regions.ocbf\"\n    mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n    ;;\n  304)\n    echo \"✅ regions.ocbf is already up to date (HTTP 304)\"\n    ;;\n  *)\n    echo \"⚠️ Unexpected HTTP $HTTP_CODE\" >&2\n    exit 1\n    ;;\nesac\n\n# Clean up the trap now that we're done\ntrap - EXIT\n";
 		};
 		FA45668A2AFB839000B07165 /* Run Script: SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16673,7 +16673,7 @@
 				DA5A844D26C563A900F274C7 /* OAMapViewController.mm in Sources */,
 				DA5A844326C563A900F274C7 /* OAMapillaryImageViewController.mm in Sources */,
 				DA5A844B26C563A900F274C7 /* OADestinationsHelper.mm in Sources */,
-				274781F62DB92E3800EAE008 /* ColorsCategory.swift in Sources */,
+				274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */,
 				DAD2203E2913AF010052B967 /* OATableCollapsableRowData.m in Sources */,
 				DA12757E28631154007E2A0D /* OAImportBackupItemsTask.m in Sources */,
 				DA5A840026C563A800F274C7 /* OAQuickSearchMoreListItem.mm in Sources */,
@@ -17552,7 +17552,7 @@
 				FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */,
 				323BFE6E2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift in Sources */,
 				CA4EDC32B17473A9290AE863 /* OALabel.m in Sources */,
-				2717D3B52DBBA2F800B7BD22 /* ShapesCategory.swift in Sources */,
+				2717D3B52DBBA2F800B7BD22 /* ShapesAppearanceCategory.swift in Sources */,
 				FA64087D2D3E8B96005FD12D /* MapillaryContributeCell.swift in Sources */,
 				DA4ABF202876DA6800B996EF /* OAAvoidRoadsSettingsItem.mm in Sources */,
 				CA4EDBD4106D179CB0D70834 /* OAShareMenuActivity.mm in Sources */,
@@ -17594,7 +17594,7 @@
 				CA4ED4F6BF41371BA62511BA /* OADeleteOldFilesCommand.mm in Sources */,
 				CA4ED5DCCC5120883E58A623 /* OABaseBackupTypesViewController.mm in Sources */,
 				CA4ED127365B6FCBDC4E739E /* OABackupTypesViewController.mm in Sources */,
-				32F3A6AC2D5E1A43008AE4CA /* IconsCategory.swift in Sources */,
+				32F3A6AC2D5E1A43008AE4CA /* IconsAppearanceCategory.swift in Sources */,
 				CA4EDDEA04A2683B2A8447AA /* OAManageStorageViewController.mm in Sources */,
 				46BCD1922C2DCA0F008749EC /* ColorPalette.swift in Sources */,
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,

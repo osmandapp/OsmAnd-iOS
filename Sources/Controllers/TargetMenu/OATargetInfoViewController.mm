@@ -86,6 +86,8 @@ static const NSInteger kNearbyPoiMinRadius = 250;
 static const NSInteger kNearbyPoiMaxRadius = 1000;
 static const NSInteger kNearbyPoiSearchFactory = 2;
 
+static const CGFloat kBackButtonOffsetLeftFromFrame = 6.0;
+
 static const CGFloat kTextMaxHeight = 150.0;
 
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
@@ -307,11 +309,12 @@ static const CGFloat kTextMaxHeight = 150.0;
     {
         OARenderedObject *renderedObject = renderedObjects[i];
         OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:renderedObject];
+
         NSString *key;
-        NSString *value;
-        
         NSString *translatedType = [RenderedObjectHelper getTranslatedTypeWithRenderedObject:renderedObject];
-        if ([translatedType containsString:@":"])
+        NSString *value = [RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:renderedObject];
+
+        if ([translatedType containsString:@":"] && (value.length == 0 || [translatedType isEqualToString:value]))
         {
             int firstCommaIndex = [translatedType indexOf:@":"];
             key = [translatedType substringToIndex:firstCommaIndex];
@@ -320,7 +323,6 @@ static const CGFloat kTextMaxHeight = 150.0;
         else
         {
             key = translatedType.length > 0 ? translatedType : syntheticAmenity.type.nameLocalized;
-            value = [RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:renderedObject];
             if (value.length == 0)
             {
                 value = key;
@@ -470,6 +472,11 @@ static const CGFloat kTextMaxHeight = 150.0;
     _contentHeight = h;
 }
 
+- (void)cancelPressed
+{
+    [self.delegate btnCancelPressed];
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -499,6 +506,27 @@ static const CGFloat kTextMaxHeight = 150.0;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [weakSelf.tableView reloadData];
     } completion:nil];
+}
+
+- (void)updateNavBarSubviewsLayout
+{
+    [super updateNavBarSubviewsLayout];
+    [self adjustCancelButtonPosition];
+    [self adjustTitleViewPosition];
+}
+
+- (void)adjustCancelButtonPosition
+{
+    CGRect buttonFrame = self.buttonCancel.frame;
+    buttonFrame.origin.x = [OAUtilities isLandscape] ? kBackButtonOffsetLeftFromFrame + [OAUtilities getLeftMargin] : 0.0;
+    self.buttonCancel.frame = buttonFrame;
+}
+
+- (void)adjustTitleViewPosition
+{
+    CGRect frame = self.titleView.frame;
+    frame.origin.x = self.buttonCancel.frame.origin.x + self.buttonCancel.frame.size.width;
+    self.titleView.frame = frame;
 }
 
 - (void) setContentBackgroundColor:(UIColor *)color

@@ -411,10 +411,12 @@
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
     OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:groupName];
-    if (_isNewItemAdding && selectedGroup)
-        _selectedIconName = selectedGroup.iconName;
-    else if (!_selectedIconName || _selectedIconName.length == 0)
-        _selectedIconName = DEFAULT_ICON_NAME_KEY;
+    if (!_selectedIconName) {
+        if (_isNewItemAdding && selectedGroup)
+            _selectedIconName = selectedGroup.iconName;
+        else if (!_selectedIconName || _selectedIconName.length == 0)
+            _selectedIconName = DEFAULT_ICON_NAME_KEY;
+    }
     [_poiIconCollectionHandler setIconName:_selectedIconName];
     
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
@@ -789,10 +791,7 @@
             [cell.bottomButton setTitle:item[@"descr"] forState:UIControlStateNormal];
             [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
-            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
-            if (selectedIndexPath.row == NSNotFound)
-                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultPointColorItem]] inSection:0];
-            [_colorCollectionHandler setSelectedIndexPath:selectedIndexPath];
+            [_colorCollectionHandler setSelectionItem:_selectedColorItem];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
             
@@ -1319,7 +1318,7 @@
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss
 {
     if (collectionView == [_poiIconCollectionHandler getCollectionView])
     {

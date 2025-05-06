@@ -30,7 +30,7 @@ static NSString * const kLastUsedIconsKey = @"kLastUsedIconsKey";
 static NSString * const kIconsKey = @"kIconsKey";
 static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
-@interface OABaseEditorViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAShapesTableViewCellDelegate, OACollectionCellDelegate, PoiIconCollectionHandlerDelegate, OAColorCollectionHandlerDelegate, ShapesCollectionHandlerDelegate>
+@interface OABaseEditorViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAShapesTableViewCellDelegate, OACollectionCellDelegate, OABaseCollectionHandlerDelegate>
 
 @property(nonatomic) NSString *originalName;
 @property(nonatomic) NSString *editName;
@@ -489,6 +489,8 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     NSString *preselectedIconName = [self getPreselectedIconName];
     if (preselectedIconName && preselectedIconName.length > 0)
         return preselectedIconName;
+    else if (self.editIconName && self.editIconName.length > 0)
+        return self.editIconName;
     else if (_poiIconCollectionHandler.lastUsedIcons && _poiIconCollectionHandler.lastUsedIcons.count > 0)
         return _poiIconCollectionHandler.lastUsedIcons[0];
     return DEFAULT_ICON_NAME_KEY;
@@ -609,7 +611,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss
 {
     _wasChanged = YES;
     if (collectionView == [_poiIconCollectionHandler getCollectionView])
@@ -638,7 +640,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     [self.tableView reloadRowsAtIndexPaths:@[_colorGridIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark - PoiIconCollectionHandlerDelegate
+#pragma mark - OABaseCollectionHandlerDelegate
 
 - (void)onCategorySelected:(NSString *)category with:(OAIconsPaletteCell *)cell
 {
@@ -655,20 +657,6 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         self.editIconName = _selectedIconName;
     }
     [self changeSaveButtonAvailabilityWithGroup];
-}
-
-#pragma mark - OAColorCollectionHandlerDelegate
-
-- (void)onColorCategorySelected:(NSString *)categoryKey with:(OAColorsPaletteCell *)cell
-{
-    [self onCategorySelectedWith:cell];
-}
-
-#pragma mark - ShapesCollectionHandlerDelegate
-
-- (void)onShapeCategorySelectedWithCell:(OAShapesTableViewCell *)cell
-{
-    [self onCategorySelectedWith:cell];
 }
 
 - (void)onCategorySelectedWith:(OACollectionSingleLineTableViewCell *)cell

@@ -344,7 +344,7 @@
 "shared_string_or" = "または";
 "shared_string_and" = "と";
 "shared_string_edit" = "編集";
-"shared_string_modify" = "変更する";
+"shared_string_modify" = "変更";
 "first_time_continue" = "続ける";
 "shared_string_all" = "全て";
 "shared_string_from" = "コピー元";
@@ -3031,3 +3031,15 @@
 "help_article_map_tracks_name" = "経路";
 "help_article_map_routes_name" = "ルート";
 "driving_region_uk" = "イギリスおよび類似国";
+"downward_gradient" = "下り勾配";
+"auto_25_chars_route_tr" = "右方向";
+"vertical_exaggeration_description" = "スケール値を変更することで、3D表示の強調具合を調整することができます。";
+"auto_25_chars_route_tslr" = "右へ進む";
+"auto_25_chars_route_tshr" = "右後方";
+"shared_string_scale" = "スケール";
+"vertical_exaggeration" = "垂直倍率";
+"upward_gradient" = "上り勾配";
+"fixed_height" = "固定高";
+"auto_25_chars_route_tl" = "左方向";
+"track_vertical_exaggeration_description" = "スケール値を変更することで、3D経路の高さを変更することができます。";
+"height_legend_description" = "標高カラーマップは、凹凸を表現するために使用されます。";

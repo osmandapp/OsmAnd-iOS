@@ -6,21 +6,16 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-@objc protocol ShapesCollectionHandlerDelegate: AnyObject {
-    func onShapeCategorySelectedWithCell(_ cell: OAShapesTableViewCell)
-}
-
 @objcMembers
 final class ShapesCollectionHandler: OABaseCollectionHandler {
-    var categories = [ShapesCategory]()
-    var categoriesByKeyName = [String: ShapesCategory]()
+    var categories = [ShapesAppearanceCategory]()
+    var categoriesByKeyName = [String: ShapesAppearanceCategory]()
     var selectedCatagoryKey = ""
     var groupShapes = [String]()
     var backgroundIconNames = [String]()
     var isFavoriteList = false
     weak var hostVC: OASuperViewController?
     weak var hostCell: OAShapesTableViewCell?
-    weak var handlerDelegate: ShapesCollectionHandlerDelegate?
     
     private let ORIGINAL_KEY = "original"
     
@@ -53,7 +48,7 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
         selectedCatagoryKey = categoryKey
         updateHostCellIfNeeded()
         if let hostCell, shouldPerformOnCategorySelected {
-            handlerDelegate?.onShapeCategorySelectedWithCell(hostCell)
+            handlerDelegate?.onCategorySelected(with: hostCell)
         }
     }
     
@@ -68,16 +63,16 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
     }
     
     private func initOriginalCategory() {
-        categories.append(ShapesCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original")))
+        categories.append(ShapesAppearanceCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original")))
     }
     
     private func initBackgroundCategories() {
         backgroundIconNames.forEach {
-            categories.append(ShapesCategory(key: $0, translatedName: localizedString("shared_string_\($0)")))
+            categories.append(ShapesAppearanceCategory(key: $0, translatedName: localizedString("shared_string_\($0)")))
         }
     }
     
-    private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: ShapesCategory) {
+    private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: ShapesAppearanceCategory) {
         menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { _ in
             self.onMenuItemSelected(name: category.key)
         }))

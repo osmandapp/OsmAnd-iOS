@@ -16,20 +16,7 @@ enum GridFormat: Int32, CaseIterable {
     case utm
     case mgrs
     
-    var id: Int32 {
-        switch self {
-        case .dms:
-            return 0
-        case .dm:
-            return 1
-        case .digital:
-            return 2
-        case .utm:
-            return 3
-        case .mgrs:
-            return 4
-        }
-    }
+    var id: Int32 { rawValue }
     
     var title: String {
         switch self {
@@ -54,8 +41,6 @@ enum GridFormat: Int32, CaseIterable {
             return .utm
         case .mgrs:
             return .mgrs
-        default:
-            fatalError("Unknown GridFormat: \(self)")
         }
     }
     
@@ -69,13 +54,11 @@ enum GridFormat: Int32, CaseIterable {
             return .decimal
         case .utm, .mgrs:
             return .decimal
-        default:
-            fatalError("Unknown GridFormat \(self)")
         }
     }
     
     static func valueOf(_ formatId: Int32) -> GridFormat {
-        return Self.allCases.first(where: { $0.id == formatId }) ?? .dms
+        return GridFormat(rawValue: formatId) ?? .dms
     }
 }
 
@@ -114,16 +97,16 @@ enum GridLabelsPosition: Int32, CaseIterable {
 @objc
 enum OAProjection: Int32 {
     case wgs84 = 0
-    case utm = 1
-    case mgrs = 2
-    case mercator = 3
+    case utm
+    case mgrs
+    case mercator
 }
 
 @objc
 enum OAFormat: Int32 {
     case decimal = 0
-    case dms = 1
-    case dm = 2
+    case dms
+    case dm
 }
 
 @objcMembers
@@ -134,14 +117,14 @@ final class GridFormatWrapper: NSObject {
     }
     
     static func projection(for format: GridFormat) -> OAProjection {
-        return format.projection()
+        format.projection()
     }
     
     static func getFormat(for format: GridFormat) -> OAFormat {
-        return format.getFormat()
+        format.getFormat()
     }
     
     static func needSuffixesForFormat(_ format: GridFormat) -> Bool {
-        return format != .utm && format != .mgrs
+        format != .utm && format != .mgrs
     }
 }

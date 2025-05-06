@@ -845,7 +845,10 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     _isNightCoordinatesGridColorMode = index == 1;
     [[OADayNightHelper instance] setTempMode:_isNightCoordinatesGridColorMode ? DayNightModeNight : DayNightModeDay];
-    [self.tableView reloadRowsAtIndexPaths:@[_colorsCollectionIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    if (_colorsCollectionIndexPath && _colorsCollectionIndexPath.section < [self.tableView numberOfSections] && _colorsCollectionIndexPath.row < [self.tableView numberOfRowsInSection:_colorsCollectionIndexPath.section])
+    {
+        [self.tableView reloadRowsAtIndexPaths:@[_colorsCollectionIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void)onCellButtonPressed:(UIButton *)sender
@@ -1197,8 +1200,9 @@ static const NSInteger kElevationMaxMeters = 2000;
         cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
         [cell setSegmentedControlBottomSpacing:8.0];
         [cell configureSegmentedControlWithTitles:@[OALocalizedString(@"day"), OALocalizedString(@"daynight_mode_night")] selectedSegmentIndex:_settings.nightMode ? 1 : 0 selectedTitles:nil];
+        __weak __typeof(self) weakSelf = self;
         cell.didSelectSegmentIndex = ^(NSInteger idx) {
-            [self segmentChanged:idx];
+            [weakSelf segmentChanged:idx];
         };
         return cell;
     }

@@ -174,7 +174,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 - (BOOL)updateVariablesWithAppMode:(OAApplicationMode *)appMode
 {
     BOOL updated = NO;
-    GridFormat newGridFormat =(GridFormat)[_gridSettings getGridFormatForAppMode:appMode];
+    GridFormat newGridFormat = (GridFormat)[_gridSettings getGridFormatForAppMode:appMode];
     if (_cachedGridFormat != newGridFormat)
     {
         _cachedGridFormat = newGridFormat;
@@ -246,11 +246,11 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     _marksProvider = std::make_shared<OsmAnd::GridMarksProvider>();
     auto primaryStyle = [self createMarksStyleWithColor:color haloColor:haloColor textAlignment:OsmAnd::TextRasterizer::Style::TextAlignment::Under];
     auto secondaryStyle = [self createMarksStyleWithColor:color haloColor:haloColor textAlignment:kNoTextAlignment];
-    _marksProvider->setPrimaryStyle(primaryStyle,   2.0f * _cachedTextScale, true);
+    _marksProvider->setPrimaryStyle(primaryStyle, 2.0f * _cachedTextScale, true);
     NSString *equator = OALocalizedString(@"equator");
     NSString *primeMeridian = OALocalizedString(@"prime_meridian");
     NSString *meridian180 = OALocalizedString(@"meridian_180");
-    _marksProvider->setPrimary(false, equator.UTF8String,  "", primeMeridian.UTF8String, meridian180.UTF8String);
+    _marksProvider->setPrimary(false, equator.UTF8String, "", primeMeridian.UTF8String, meridian180.UTF8String);
     _marksProvider->setSecondaryStyle(secondaryStyle, 2.0f * _cachedTextScale, _cachedLabelsPosition == GridLabelsPositionCenter);
     if ([GridFormatWrapper needSuffixesForFormat:_cachedGridFormat])
         _marksProvider->setSecondary(true, "N", "S", "E", "W");

@@ -177,12 +177,13 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) okPressed;
 - (void) cancelPressed;
 
-- (BOOL) hasContent;
-- (CGFloat) contentHeight;
-- (CGFloat) contentHeight:(CGFloat)width;
-- (CGFloat) additionalContentOffset;
-- (void) setContentBackgroundColor:(UIColor *)color;
-- (void) refreshContent;
+- (BOOL)hasContent;
+- (CGFloat)contentHeight;
+- (CGFloat)contentHeight:(CGFloat)width;
+- (CGFloat)additionalContentOffset;
+- (void)setContentBackgroundColor:(UIColor *)color;
+- (void)refreshContent;
+- (void)updateNavBarSubviewsLayout;
 
 - (BOOL) hasInfoView;
 - (BOOL) hasInfoButton;

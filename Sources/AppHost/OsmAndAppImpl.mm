@@ -613,39 +613,28 @@ NSString *const kXmlColon = @"_-_";
             NSLog(@"Error copying file: %@ to %@ - %@", projDbPathBundle, projDbPathLib, [error localizedDescription]);
 
     }
-
-    NSLog(@">>>> applyExcludedFromBackup START");
     [self applyExcludedFromBackup:projDbPathLib];
-    NSLog(@">>>> applyExcludedFromBackup END");
 
     if (_terminating)
         return NO;
 
-    NSLog(@">>>> initFavorites START");
     [OAFavoritesHelper initFavorites];
-    NSLog(@">>>> initFavorites END");
 
     // Load resources list
     
     // If there's no repository available and there's internet connection, just update it
     if (!self.resourcesManager->isRepositoryAvailable() && AFNetworkReachabilityManager.sharedManager.isReachable)
     {
-        NSLog(@">>>> startRepositoryUpdateAsync START");
         [self startRepositoryUpdateAsync:YES];
-        NSLog(@">>>> startRepositoryUpdateAsync END");
     }
 
     if (_terminating)
         return NO;
 
     // Load world regions
-    NSLog(@">>>> loadWorldRegions 1");
     [self loadWorldRegions];
-    NSLog(@">>>> loadWorldRegions 2");
     [OAManageResourcesViewController prepareData];
-    NSLog(@">>>> loadWorldRegions 3");
     [_worldRegion buildResourceGroupItem];
-    NSLog(@">>>> loadWorldRegions 4");
 
     if (_terminating)
         return NO;

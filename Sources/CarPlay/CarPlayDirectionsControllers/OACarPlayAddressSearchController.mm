@@ -528,6 +528,7 @@
         _activeMapDownloads[dicKey] = nil;
         if ([_cpItems containsObject:item])
         {
+            // remove from search list 
             NSMutableArray<CPListItem *> *mutableItems = [_cpItems mutableCopy];
             [mutableItems removeObject:item];
             _cpItems = [mutableItems copy];

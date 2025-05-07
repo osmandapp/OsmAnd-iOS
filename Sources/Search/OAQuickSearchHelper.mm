@@ -152,7 +152,8 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
             if (!isInstalled)
             {
                 NSString *composeTitle;
-                if (!title) {
+                if (!title)
+                {
                     NSString *regionTitle = [OAResourcesUIHelper titleOfResource:resource
                                                                   inRegion:region
                                                             withRegionName:YES

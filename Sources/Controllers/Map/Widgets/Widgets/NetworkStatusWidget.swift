@@ -53,7 +53,7 @@ final class NetworkStatusWidget: OASimpleWidget {
 
     override func updateInfo() -> Bool {
         let currentTime = Date().timeIntervalSince1970
-        guard currentTime - lastPingTimestamp >= Constants.updateInterval else { return false }
+        guard isUpdateNeeded() || currentTime - lastPingTimestamp >= Constants.updateInterval else { return false }
 
         lastPingTimestamp = currentTime
         Task {

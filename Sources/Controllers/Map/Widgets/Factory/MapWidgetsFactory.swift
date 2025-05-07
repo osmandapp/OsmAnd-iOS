@@ -88,6 +88,8 @@ final class MapWidgetsFactory: NSObject {
             return CurrentTimeWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .battery:
             return BatteryWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
+        case .networkStatus:
+            return NetworkStatusWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .radiusRuler:
             return RulerDistanceWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .sunrise:

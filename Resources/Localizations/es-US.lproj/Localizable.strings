@@ -1724,7 +1724,7 @@
 "hidden_categories" = "Categorías ocultas";
 "create_custom_categories_list_promo" = "Cambia el orden de la lista y oculta las categorías. Importa o exporta todos los cambios como perfiles.";
 "reset_to_default_category_button_promo" = "«Restablecer al valor predefinido», restablecerá el orden de clasificación al valor predefinido de la instalación.";
-"search_poi_types_descr" = "Combina tipos de PDI de diferentes categorías. Pulsa «Alternar» para marcar todo y el lado izquierdo para elegir una categoría.";
+"search_poi_types_descr" = "Combina tipos de PDI de diferentes categorías. Pulsa en «Alternar» para marcar todo y el lado izquierdo para elegir una categoría.";
 "email_example_hint" = "usuario@ejemplo.com";
 "shared_string_required" = "Obligatorio";
 "login_account" = "Cuenta";

@@ -99,7 +99,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
                 row.iconName = widgetType.iconName
             }
             row.title = widgetGroup != nil ? widgetGroup!.title : widgetType.title
-            row.descr = String(widgetGroup?.getWidgets().count ?? 1)
+            row.descr = String(widgetGroup?.getWidgets(withPanel: widgetPanel).count ?? 1)
             row.cellType = OAValueTableViewCell.getIdentifier()
         }
     }
@@ -186,7 +186,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
                     filteredSection.addRow(row)
                 }
                 
-                widgetGroup.getWidgets().forEach {
+                widgetGroup.getWidgets(withPanel: widgetPanel).forEach {
                     if containsCaseInsensitive(text: $0.title, substring: searchText) {
                         filteredSection.addRow(createSearchRowData(for: $0))
                     }

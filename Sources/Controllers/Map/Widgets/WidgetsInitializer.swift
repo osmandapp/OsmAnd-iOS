@@ -52,6 +52,7 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     
     private func createBottomWidgets() {
         addWidgetInfo(.elevationProfile)
+        addWidgetInfo(.routeInfo)
     }
     
     private func createLeftWidgets() {

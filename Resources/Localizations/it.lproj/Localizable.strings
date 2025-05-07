@@ -3649,3 +3649,4 @@
 "fuel_tank_capacity" = "Capacità del serbatoio di carburante";
 "fuel_tank_capacity_description" = "Inserisci la capacità del tuo serbatoio per monitorare con precisione i livelli e i consumi di carburante";
 "poi_filter_fuel" = "Carburante";
+"unit_of_volume_description" = "Le unità selezionate verranno applicate a tutti i dati relativi al volume nel profilo corrente.";

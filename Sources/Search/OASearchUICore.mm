@@ -86,7 +86,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         __weak OASearchResultComparator *weakSelf = self;
         _comparator = ^NSComparisonResult(OASearchResult * _Nonnull o1, OASearchResult * _Nonnull o2)
         {
-            for(NSNumber *stepN in compareStepValues)
+            for (NSNumber *stepN in compareStepValues)
             {
                 EOAResultCompareStep step = (EOAResultCompareStep) stepN.integerValue;
                 NSComparisonResult r = [weakSelf compare:o1 o2:o2 comparator:weakSelf step:step];
@@ -100,7 +100,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 }
 
 // -1 - means 1st is less (higher) than 2nd
--(NSComparisonResult) compare:(OASearchResult *)o1 o2:(OASearchResult *)o2 comparator:(OASearchResultComparator *)c step:(EOAResultCompareStep)step
+- (NSComparisonResult) compare:(OASearchResult *)o1 o2:(OASearchResult *)o2 comparator:(OASearchResultComparator *)c step:(EOAResultCompareStep)step
 {
     switch(step)
     {
@@ -192,14 +192,21 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         }
         case EOACompareByName:
         {
-            NSString *localeName1 = o1.localeName == nil ? @"" : o1.localeName;
-            NSString *localeName2 = o2.localeName == nil ? @"" : o2.localeName;
+            if (o1.customNameCmptr != nil && o2.customNameCmptr != nil)
+            {
+                return o1.customNameCmptr(o1, o2);;
+            }
+            else
+            {
+                NSString *localeName1 = o1.localeName == nil ? @"" : o1.localeName;
+                NSString *localeName2 = o2.localeName == nil ? @"" : o2.localeName;
 
-            int cmp = OsmAnd::ICU::ccompare(QString::fromNSString(localeName1), QString::fromNSString(localeName2));
-            if (cmp != 0)
-                return (NSComparisonResult)cmp;
-
-            break;
+                int cmp = OsmAnd::ICU::ccompare(QString::fromNSString(localeName1), QString::fromNSString(localeName2));
+                if (cmp != 0)
+                    return (NSComparisonResult)cmp;
+                
+                break;
+            }
         }
         case EOACompareByDistance:
         {
@@ -281,7 +288,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 - (OASearchResultCollection *) combineWithCollection:(OASearchResultCollection *)collection resort:(BOOL)resort removeDuplicates:(BOOL)removeDuplicates
 {
     OASearchResultCollection *src = [[OASearchResultCollection alloc] initWithPhrase:_phrase];
-    [src addSearchResults:_searchResults resortAll:false removeDuplicates:false];
+    [src addSearchResults:_searchResults resortAll:NO removeDuplicates:NO];
     [src addSearchResults:[collection getSearchResults] resortAll:resort removeDuplicates:removeDuplicates];
     return src;
 }

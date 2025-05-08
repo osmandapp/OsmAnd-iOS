@@ -58,7 +58,8 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
 
 @implementation SearchIndexItemAPI
 
-- (BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher {
+- (BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
     OAWorldRegion *worldRegion = [[OsmAndApp instance] worldRegion];
     [self processGroups:worldRegion search:phrase resultMatcher:resultMatcher];
     NSString *fullSearchPhrase = [phrase getFullSearchPhrase];
@@ -75,30 +76,59 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf)
                 return;
-            
+
             for (OASearchResult *amenity in searchResults)
             {
-                OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
+                OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:amenity.location.coordinate.latitude
+                                                                                lon:amenity.location.coordinate.longitude];
                 if (!region || ![region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
                     continue;
-                
+
                 NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
                 if (ids.count > 0)
                 {
                     OARepositoryResourceItem *item = [strongSelf getUninstalledMapRegionResourceFromIds:ids
-                                                                                           region:region
-                                                                                            title:amenity.localeName];
+                                                                                                   region:region
+                                                                                                    title:amenity.localeName];
                     if (item)
                     {
-                        NSString *name = [[region.allNames componentsJoinedByString:@" "] ?: region.name lowerCase];
-                        [resultMatcher publish:[strongSelf createSearchResultWithPhrase:phrase item:item localeName:name]];
+                        OASearchResult *result = [strongSelf createSearchResultWithPhrase:phrase item:item localeName:item.title];
+                        
+                        [self addResultIfNotExists:result
+                                   existingResults:[resultMatcher getRequestResults]
+                                     resultMatcher:resultMatcher];
                     }
                 }
             }
         }];
     }
-    
+
     return YES;
+}
+
+- (void)addResultIfNotExists:(OASearchResult *)result
+             existingResults:(NSArray<OASearchResult *> *)existingResults
+               resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    if (!result || !result.resourceId)
+    {
+        return;
+    }
+    
+    for (OASearchResult *existing in existingResults)
+    {
+        if (existing.resourceId && [existing.resourceId isEqualToString:result.resourceId])
+        {
+            return;
+        }
+    }
+    
+    [resultMatcher publish:result];
+}
+
+- (NSString *)titleForObject:(OASearchResult *)obj
+{
+    return ((OARepositoryResourceItem *)obj.relatedObject).title ?: @"";;
 }
 
 - (void)processGroups:(OAWorldRegion *)group
@@ -128,7 +158,7 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
     
     if (indexItem)
     {
-        [resultMatcher publish:[self createSearchResultWithPhrase:phrase item:indexItem localeName:name]];
+        [resultMatcher publish:[self createSearchResultWithPhrase:phrase item:indexItem localeName:indexItem.title]];
     }
     
     if (group.subregions)
@@ -213,10 +243,36 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
                                       localeName:(NSString *)localeName {
     OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
     sr.localeName = localeName;
+    // NOTE: for duplicate detection, if regions/subregions and city search return the same results
+    sr.resourceId = item.resourceId.toNSString();
+    // NOTE: skip the EOAUnknownPhraseMatchWeight search stage
+     sr.unknownPhraseMatchWeight = -1;
     sr.priority = SEARCH_INDEX_ITEM_PRIORITY;
     sr.objectType = EOAObjectTypeIndexItem;
     sr.relatedObject = item;
     sr.preferredZoom = 17;
+    __weak __typeof(self) weakSelf = self;
+    sr.customNameCmptr = ^NSComparisonResult(OASearchResult *a, OASearchResult *b) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf)
+        {
+            NSArray<NSString *> *partsA = [[strongSelf titleForObject:a] componentsSeparatedByString:@","];
+            NSArray<NSString *> *partsB = [[strongSelf titleForObject:b] componentsSeparatedByString:@","];
+            
+            NSString *firstPartA = partsA.count > 0 ? partsA[0] : @"";
+            NSString *firstPartB = partsB.count > 0 ? partsB[0] : @"";
+            
+            NSComparisonResult compareFirst = [firstPartA localizedCaseInsensitiveCompare:firstPartB];
+            if (compareFirst != NSOrderedSame)
+                return compareFirst;
+            
+            NSString *secondPartA = partsA.count > 1 ? partsA[1] : @"";
+            NSString *secondPartB = partsB.count > 1 ? partsB[1] : @"";
+            return [secondPartA localizedCaseInsensitiveCompare:secondPartB];
+        }
+        return NSOrderedAscending;
+
+    };
     return sr;
 }
 

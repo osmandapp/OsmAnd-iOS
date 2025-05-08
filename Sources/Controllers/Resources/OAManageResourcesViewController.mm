@@ -1622,12 +1622,49 @@ static BOOL _repositoryUpdated = NO;
             }
             if (regionsByCity.count > 0)
             {
+                [regionsByCity sortUsingComparator:^NSComparisonResult(id a, id b) {
+                    NSString *titleA = [self titleForObject:a];
+                    NSString *titleB = [self titleForObject:b];
+                    
+                    NSComparisonResult titleCompare = [titleA localizedCaseInsensitiveCompare:titleB];
+                    if (titleCompare == NSOrderedSame)
+                        return [[self subtitleForObject:a] localizedCaseInsensitiveCompare:[self subtitleForObject:b]];
+                    
+                    return titleCompare;
+                }];
                 _searchResults = [resultByContains arrayByAddingObjectsFromArray:regionsByCity];
                 [_tableView reloadData];
             }
             [self.view removeSpinner];
         }];
     }
+}
+
+- (NSString *)titleForObject:(id)obj
+{
+    if ([obj isKindOfClass:[OAResourceItem class]])
+    {
+        return ((OAResourceItem *)obj).title ?: @"";
+    }
+    else if ([obj isKindOfClass:[OAWorldRegion class]])
+    {
+        return ((OAWorldRegion *)obj).localizedName ?: @"";
+    }
+    else if ([obj isKindOfClass:[OASearchResult class]])
+    {
+        return ((OASearchResult *)obj).localeName;
+    }
+    return @"";
+}
+
+- (NSString *)subtitleForObject:(id)obj
+{
+    if ([obj isKindOfClass:[OASearchResult class]])
+    {
+        id relatedObject = ((OASearchResult *)obj).relatedObject;
+        return ((OARepositoryResourceItem *)relatedObject).title ?: @"";
+    }
+    return @"";
 }
 
 - (OAResourceItem *)createResourceItemResult:(std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource_

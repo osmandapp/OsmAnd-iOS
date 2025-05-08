@@ -60,6 +60,7 @@
 @property (nonatomic) NSString *relatedResourceId;
 @property (nonatomic, assign) OASGpxFile *relatedGpx;
 @property (nonatomic) double distRelatedObjectName;
+@property (nonatomic, copy, nullable) NSComparator customNameCmptr;
 
 
 - (instancetype)initWithPhrase:(OASearchPhrase *)sp;

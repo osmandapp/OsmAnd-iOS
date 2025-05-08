@@ -174,53 +174,60 @@
     {
         [self onStreetSelected:searchItem.getSearchResult completionHandler:completionHandler];
     }
-    else if (searchItem.getSearchResult.objectType == EOAObjectTypeIndexItem && completionHandler)
+    else if (searchItem.getSearchResult.objectType == EOAObjectTypeIndexItem)
     {
-        OARepositoryResourceItem *resourceItem = (OARepositoryResourceItem *)searchItem.getSearchResult.relatedObject;
-        if (resourceItem)
-        {
-            NSString *resourceId = resourceItem.resourceId.toNSString();
-            
-            if (_app.downloadsManager.hasActiveDownloadTasks)
-            {
-                id<OADownloadTask> task = [_app.downloadsManager firstDownloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]];
-                if (task) {
-                    [task cancel];
-                    if (_activeMapDownloads[resourceId])
-                        _activeMapDownloads[resourceId] = nil;
-                    item.playbackProgress = 0;
-                    OAQuickSearchListItem *searchListItem = item.userInfo[@"searchListItem"];
-                    if (searchListItem)
-                    {
-                        [item setDetailText:[self generateDescription:searchListItem]];
-                    }
-                    
-                    [item setAccessoryImage:[UIImage imageNamed:@"ic_custom_download"]];
-                    return;
-                }
-            }
-            
-            __weak __typeof(self) weakSelf = self;
-            [OAResourcesUIHelper offerDownloadAndInstallOf:resourceItem onTaskCreated:^(id<OADownloadTask> task) {
-                __strong __typeof(weakSelf) strongSelf = weakSelf;
-                if (!strongSelf)
-                    return;
-                if (![task.key hasPrefix:@"resource:"])
-                    return;
-                NSString *dicKey = [task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
-                if (!strongSelf->_activeMapDownloads[dicKey])
-                {
-                    strongSelf->_activeMapDownloads[dicKey] = item;
-                    [item setAccessoryImage:nil];
-                }
-            } onTaskResumed:nil];
-        }
+        [self handleIndexItemSelectionWithSearchListItem:searchItem item:item];
     }
     else
     {
         CLLocation *loc = searchItem.getSearchResult.location;
         [self startNavigationGivenLocation:loc historyName:nil];
         [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+    }
+}
+
+- (void)handleIndexItemSelectionWithSearchListItem:(OAQuickSearchListItem *)searchItem
+                                              item:(CPListItem *)item
+{
+    OARepositoryResourceItem *resourceItem = (OARepositoryResourceItem *)searchItem.getSearchResult.relatedObject;
+    if (resourceItem)
+    {
+        NSString *resourceId = resourceItem.resourceId.toNSString();
+        
+        if (_app.downloadsManager.hasActiveDownloadTasks)
+        {
+            id<OADownloadTask> task = [_app.downloadsManager firstDownloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]];
+            if (task)
+            {
+                [task cancel];
+                if (_activeMapDownloads[resourceId])
+                    _activeMapDownloads[resourceId] = nil;
+                item.playbackProgress = 0;
+                OAQuickSearchListItem *searchListItem = item.userInfo[@"searchListItem"];
+                if (searchListItem)
+                {
+                    [item setDetailText:[self generateDescription:searchListItem]];
+                }
+                
+                [item setAccessoryImage:[UIImage imageNamed:@"ic_custom_download"]];
+                return;
+            }
+        }
+        
+        __weak __typeof(self) weakSelf = self;
+        [OAResourcesUIHelper offerDownloadAndInstallOf:resourceItem onTaskCreated:^(id<OADownloadTask> task) {
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+            if (![task.key hasPrefix:@"resource:"])
+                return;
+            NSString *dicKey = [task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
+            if (!strongSelf->_activeMapDownloads[dicKey])
+            {
+                strongSelf->_activeMapDownloads[dicKey] = item;
+                [item setAccessoryImage:nil];
+            }
+        } onTaskResumed:nil];
     }
 }
 
@@ -489,7 +496,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         CPListItem *item = _activeMapDownloads[[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]];
-        if (task)
+        if (task && item)
         {
             NSArray<NSString *> *components = [item.detailText componentsSeparatedByString:@"•"];
             if (components.count >= 2)

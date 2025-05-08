@@ -172,7 +172,8 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
 
 - (nullable OARepositoryResourceItem *)getUninstalledMapRegionResourceFromIds:(NSArray<NSString *> *)ids
                                                               region:(OAWorldRegion *)region
-                                                               title:(nullable NSString *)title {
+                                                               title:(nullable NSString *)title
+{
     for (NSString *resourceId in ids)
     {
         const auto& resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
@@ -213,7 +214,8 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
     return nil;
 }
 
-- (NSString *)composeTitleWithPart:(nullable NSString *)part1 andPart:(nullable NSString *)part2 {
+- (NSString *)composeTitleWithPart:(nullable NSString *)part1 andPart:(nullable NSString *)part2
+{
     if (part1.length > 0 && part2.length > 0)
     {
         return [NSString stringWithFormat:@"%@, %@", part1, part2];
@@ -223,7 +225,8 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
 
 - (OARepositoryResourceItem *)createRepositoryResourceItemWithResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource
                                                                 region:(OAWorldRegion *)region
-                                                                 title:(NSString *)title {
+                                                                 title:(NSString *)title
+{
     OARepositoryResourceItem *item = [OARepositoryResourceItem new];
     item.resourceId = resource->id;
     item.resourceType = resource->type;
@@ -240,7 +243,8 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
 
 - (OASearchResult *)createSearchResultWithPhrase:(OASearchPhrase *)phrase
                                             item:(OARepositoryResourceItem *)item
-                                      localeName:(NSString *)localeName {
+                                      localeName:(NSString *)localeName
+{
     OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
     sr.localeName = localeName;
     // NOTE: for duplicate detection, if regions/subregions and city search return the same results
@@ -276,7 +280,8 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
     return sr;
 }
 
-- (BOOL)isMatch:(OASearchPhrase *)phrase text:(NSString *)text {
+- (BOOL)isMatch:(OASearchPhrase *)phrase text:(NSString *)text
+{
     if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
     {
         return YES;

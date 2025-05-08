@@ -28,7 +28,7 @@
 @property (nonatomic) NSInteger currentIcon;
 @property (nonatomic) NSString *backgroundShapeName;
 
-@property (nonatomic, weak) id<OAShapesTableViewCellDelegate> shapesTVCdelegate;
+@property (nonatomic, weak) id<OAShapesTableViewCellDelegate> shapesDelegate;
 
 - (void)topButtonVisibility:(BOOL)show;
 - (void)descriptionLabelStackViewVisibility:(BOOL)show;

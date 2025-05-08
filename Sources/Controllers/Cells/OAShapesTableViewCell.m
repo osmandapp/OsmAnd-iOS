@@ -93,8 +93,8 @@ static NSString * const kOriginalKey = @"original";
 {
     _currentIcon = tag;
     [self.collectionView reloadData];
-    if (self.shapesTVCdelegate)
-        [self.shapesTVCdelegate iconChanged:tag];
+    if (self.shapesDelegate)
+        [self.shapesDelegate iconChanged:tag];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {

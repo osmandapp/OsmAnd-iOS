@@ -324,7 +324,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAShapesTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.shapesTVCdelegate = self;
+            cell.shapesDelegate = self;
             cell.disableAnimationsOnStart = YES;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
@@ -402,7 +402,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         {
             [colors addObject:[item getColor]];
         }
-        _colorCollectionHandler.groupColors = colors.mutableCopy;
+        _colorCollectionHandler.groupColors = [colors mutableCopy];
     }
     [_colorCollectionHandler setupDefaultCategory];
 }
@@ -425,7 +425,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         {
             [iconNames addObject:[item getIcon]];
         }
-        _poiIconCollectionHandler.groupIcons = iconNames.mutableCopy;
+        _poiIconCollectionHandler.groupIcons = [iconNames mutableCopy];
     }
     
     [_poiIconCollectionHandler setItemSizeWithSize:48];
@@ -472,7 +472,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         {
             [backgroundIconNames addObject:[item getBackgroundIcon]];
         }
-        _shapesCollectionHandler.groupShapes = backgroundIconNames.mutableCopy;
+        _shapesCollectionHandler.groupShapes = [backgroundIconNames mutableCopy];
     }
     
     _shapesCollectionHandler.selectedCatagoryKey = _backgroundIconNames[_selectedBackgroundIndex];

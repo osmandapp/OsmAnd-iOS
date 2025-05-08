@@ -408,7 +408,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             kCellKeyKey: @"coordinatesGridColors",
             kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier
         }];
-        _colorsCollectionIndexPath= [NSIndexPath indexPathForRow:[topSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+        _colorsCollectionIndexPath = [NSIndexPath indexPathForRow:[topSection rowCount] - 1 inSection:[_data sectionCount] - 1];
         [topSection addRowFromDictionary:@{
             kCellKeyKey: @"allColors",
             kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
@@ -704,9 +704,9 @@ static const NSInteger kElevationMaxMeters = 2000;
     NSInteger maxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].max : terrainMaxSupportedZoom;
     
     NSMutableArray *res = [NSMutableArray new];
-    for (NSInteger z = minZoom; z <= maxZoom; z++)
+    for (NSInteger zoomLevel = minZoom; zoomLevel <= maxZoom; zoomLevel++)
     {
-        [res addObject:[NSString stringWithFormat:@"%ld", z]];
+        [res addObject:[NSString stringWithFormat:@"%ld", zoomLevel]];
     }
     return res;
 }
@@ -1120,10 +1120,9 @@ static const NSInteger kElevationMaxMeters = 2000;
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:isPaletteName ? UIFontTextStyleFootnote : UIFontTextStyleBody];
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OACollectionSingleLineTableViewCell reuseIdentifier]])
+    else if ([item.cellType isEqualToString:OACollectionSingleLineTableViewCell.reuseIdentifier])
     {
-        OACollectionSingleLineTableViewCell *cell =
-        [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:OACollectionSingleLineTableViewCell.reuseIdentifier];
         BOOL isCoordinatesGridColors = [item.key isEqualToString:@"coordinatesGridColors"];
         [cell rightActionButtonVisibility:isCoordinatesGridColors];
         [cell.rightActionButton setImage:isCoordinatesGridColors ? [UIImage templateImageNamed:@"ic_custom_add"] : nil forState:UIControlStateNormal];
@@ -1443,12 +1442,12 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)colorPickerViewController:(UIColorPickerViewController *)viewController didSelectColor:(UIColor *)color continuously:(BOOL)continuously
 {
     if ([OAUtilities isiOSAppOnMac])
-        (void)[self addAndGetNewColorItem:color];
+        [self addAndGetNewColorItem:color];
 }
 
 - (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
 {
-    (void)[self addAndGetNewColorItem:viewController.selectedColor];
+    [self addAndGetNewColorItem:viewController.selectedColor];
 }
 
 @end

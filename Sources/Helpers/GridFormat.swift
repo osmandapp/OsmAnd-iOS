@@ -67,7 +67,7 @@ enum GridLabelsPosition: Int32, CaseIterable {
     case edges
     case center
     
-    var iconName: String {
+    private var iconName: String {
         switch self {
         case .edges:
             return "ic_custom_grid_label_edges"
@@ -76,7 +76,7 @@ enum GridLabelsPosition: Int32, CaseIterable {
         }
     }
     
-    var titleKey: String {
+    private var titleKey: String {
         switch self {
         case .edges:
             return "shared_string_edges"

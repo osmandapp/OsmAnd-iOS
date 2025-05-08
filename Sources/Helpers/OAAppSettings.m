@@ -4003,8 +4003,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 @implementation OACommonGridFormat
 
-@dynamic defValue;
-
 + (instancetype)withKey:(NSString *)key defValue:(int)defValue
 {
     OACommonGridFormat *obj = [[OACommonGridFormat alloc] init];
@@ -4072,9 +4070,9 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 - (void)resetToDefault
 {
     GridFormat defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (GridFormat)((NSNumber *)pDefault).intValue;
+    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    if ([pDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (GridFormat)pDefault.intValue;
     
     [self set:defaultValue];
     [[OsmAndApp instance].coordinatesGridSettingsObservable notifyEvent];
@@ -4089,8 +4087,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 @end
 
 @implementation OACommonGridLabelsPosition
-
-@dynamic defValue;
 
 + (instancetype)withKey:(NSString *)key defValue:(int)defValue
 {
@@ -4147,9 +4143,9 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 - (void)resetToDefault
 {
     GridLabelsPosition defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (GridLabelsPosition) ((NSNumber *) pDefault).intValue;
+    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    if ([pDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (GridLabelsPosition)pDefault.intValue;
     
     [self set:defaultValue];
     [[OsmAndApp instance].coordinatesGridSettingsObservable notifyEvent];

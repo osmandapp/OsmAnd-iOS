@@ -16,11 +16,13 @@ private enum RowKey: String {
     case colorRowKey
 }
 
+private enum Constants {
+    static let buttonTitleKey = "buttonTitleKey"
+    static let buttonIconKey  = "buttonIconKey"
+}
+
 @objcMembers
 final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
-    private static let buttonTitleKey = "buttonTitleKey"
-    private static let buttonIconKey = "buttonIconKey"
-    
     var settingsScreen: EMapSettingsScreen = .coordinatesGrid
     var vwController: OADashboardViewController?
     var tblView: UITableView?
@@ -95,8 +97,8 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             colorRow.icon = isMapsPlusProAvailable() ? UIImage.templateImageNamed("ic_custom_appearance") : .icCustomGridColored
             colorRow.iconTintColor = .iconColorDefault
             colorRow.secondaryIconTintColor = UIColor(argb: Int(Int32(settings.nightMode ? coordinatesGridSettings.getNightGridColor() : coordinatesGridSettings.getDayGridColor())))
-            colorRow.setObj(localizedString("shared_string_get"), forKey: Self.buttonTitleKey)
-            colorRow.setObj("ic_custom_arrow_forward", forKey: Self.buttonIconKey)
+            colorRow.setObj(localizedString("shared_string_get"), forKey: Constants.buttonTitleKey)
+            colorRow.setObj("ic_custom_arrow_forward", forKey: Constants.buttonIconKey)
         }
     }
     
@@ -179,11 +181,11 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             cell.rightButton.configuration = config
             cell.rightButton.setContentHuggingPriority(.required, for: .horizontal)
             cell.rightButton.setContentCompressionResistancePriority(.required, for: .horizontal)
-            if let buttonTitle = item.string(forKey: Self.buttonTitleKey) {
+            if let buttonTitle = item.string(forKey: Constants.buttonTitleKey) {
                 cell.rightButton.setTitle(buttonTitle, for: .normal)
                 cell.rightButton.accessibilityLabel = buttonTitle
             }
-            if let buttonIconName = item.string(forKey: Self.buttonIconKey) {
+            if let buttonIconName = item.string(forKey: Constants.buttonIconKey) {
                 cell.rightButton.setImage(UIImage.templateImageNamed(buttonIconName).imageFlippedForRightToLeftLayoutDirection(), for: .normal)
                 cell.rightButton.tintColor = UIColor.iconColorActive
             }

@@ -290,8 +290,8 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: IconsAppearanceCategory) {
-        menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { _ in
-            self.onMenuItemSelected(name: category.key)
+        menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { [weak self] _ in
+            self?.onMenuItemSelected(name: category.key)
         }))
     }
     
@@ -331,11 +331,12 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     private func updateHostCellIfOriginalCategory(_ isOriginal: Bool) {
-        hostCell?.collectionStackViewVisibility(!isOriginal)
-        hostCell?.descriptionLabelStackView.isHidden = !isOriginal
-        hostCell?.bottomButtonStackView.isHidden = isOriginal
-        hostCell?.underTitleView.isHidden = isOriginal
-        hostCell?.separatorOffsetViewWidth.constant = isOriginal ? 20 : .zero
+        guard let hostCell else { return }
+        hostCell.collectionStackViewVisibility(!isOriginal)
+        hostCell.descriptionLabelStackView.isHidden = !isOriginal
+        hostCell.bottomButtonStackView.isHidden = isOriginal
+        hostCell.underTitleView.isHidden = isOriginal
+        hostCell.separatorOffsetViewWidth.constant = isOriginal ? 20 : .zero
     }
     
     func updateTopButtonName() {

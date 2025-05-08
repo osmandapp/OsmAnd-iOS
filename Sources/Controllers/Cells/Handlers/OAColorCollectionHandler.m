@@ -86,10 +86,7 @@ static NSString * const kSolidColorKey = @"solid_color";
         }
     }
     
-    if (_isFavoriteList && !allEqual)
-        [self selectCategoryWithName:kOriginalKey];
-    else
-        [self selectCategoryWithName:kSolidColorKey];
+    [self selectCategoryWithName:_isFavoriteList && !allEqual ? kOriginalKey : kSolidColorKey];
 }
 
 #pragma mark - Base UI
@@ -151,12 +148,7 @@ static NSString * const kSolidColorKey = @"solid_color";
     NSMutableArray<UIMenuElement *> *bottomMenuElements = [NSMutableArray array];
 
     for (OAColorsAppearanceCategory *category in _categories)
-    {
-        if ([category.key isEqualToString:kOriginalKey])
-            [self updateMenuElements:topMenuElements withCategory:category];
-        else
-            [self updateMenuElements:bottomMenuElements withCategory:category];
-    }
+        [self updateMenuElements: [category.key isEqualToString:kOriginalKey] ? topMenuElements : bottomMenuElements withCategory:category];
 
     UIMenu *topMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:topMenuElements];
     UIMenu *bottomMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:bottomMenuElements];

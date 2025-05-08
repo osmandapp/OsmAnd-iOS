@@ -55,11 +55,7 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
     func setupDefaultCategory() {
         guard !groupShapes.isEmpty else { return }
         
-        if isFavoriteList && !groupShapes.allSatisfy({ $0 == groupShapes.first }) {
-            selectCategory(ORIGINAL_KEY)
-        } else {
-            selectCategory(selectedCatagoryKey)
-        }
+        selectCategory(isFavoriteList && !groupShapes.allSatisfy({ $0 == groupShapes.first }) ? ORIGINAL_KEY : selectedCatagoryKey)
     }
     
     private func initOriginalCategory() {
@@ -73,8 +69,8 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
     }
     
     private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: ShapesAppearanceCategory) {
-        menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { _ in
-            self.onMenuItemSelected(name: category.key)
+        menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { [weak self] _ in
+            self?.onMenuItemSelected(name: category.key)
         }))
     }
     
@@ -123,14 +119,16 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
     }
     
     private func updateHostCellIfFavoriteList() {
-        hostCell?.topButtonVisibility(isFavoriteList)
-        hostCell?.valueLabel.isHidden = isFavoriteList
-        hostCell?.topRightOffset(isFavoriteList ? 4 : 20)
+        guard let hostCell else { return }
+        hostCell.topButtonVisibility(isFavoriteList)
+        hostCell.valueLabel.isHidden = isFavoriteList
+        hostCell.topRightOffset(isFavoriteList ? 4 : 20)
     }
     
     private func updateHostCellIfOriginalCategory(_ isOriginal: Bool) {
-        hostCell?.collectionStackViewVisibility(!isOriginal)
-        hostCell?.descriptionLabelStackViewVisibility(isOriginal)
-        hostCell?.separatorVisibility(isOriginal)
+        guard let hostCell else { return }
+        hostCell.collectionStackViewVisibility(!isOriginal)
+        hostCell.descriptionLabelStackViewVisibility(isOriginal)
+        hostCell.separatorVisibility(isOriginal)
     }
 }

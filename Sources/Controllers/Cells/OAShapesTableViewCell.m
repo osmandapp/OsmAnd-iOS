@@ -25,15 +25,12 @@ static NSString * const kOriginalKey = @"original";
 
 @implementation OAShapesTableViewCell
 
-@dynamic delegate;
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];
     self.separatorHeight.constant = 1.0 / [UIScreen mainScreen].scale;
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    self.collectionView.contentInset = UIEdgeInsetsMake(0., kPaddingOnSideOfContent, 0., kPaddingOnSideOfContent);
     [self.collectionView registerNib:[UINib nibWithNibName:[OAShapesCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAShapesCollectionViewCell getCellIdentifier]];
     
     if ([self isDirectionRTL])
@@ -96,8 +93,8 @@ static NSString * const kOriginalKey = @"original";
 {
     _currentIcon = tag;
     [self.collectionView reloadData];
-    if (self.delegate)
-        [self.delegate iconChanged:tag];
+    if (self.shapesTVCdelegate)
+        [self.shapesTVCdelegate iconChanged:tag];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {

@@ -8,7 +8,7 @@
 
 #import "OACollectionSingleLineTableViewCell.h"
 
-@protocol OAShapesTableViewCellDelegate <OACollectionTableViewCellDelegate>
+@protocol OAShapesTableViewCellDelegate <NSObject>
 
 - (void)iconChanged:(NSInteger)tag;
 
@@ -28,7 +28,7 @@
 @property (nonatomic) NSInteger currentIcon;
 @property (nonatomic) NSString *backgroundShapeName;
 
-@property (nonatomic, weak) id<OAShapesTableViewCellDelegate> delegate;
+@property (nonatomic, weak) id<OAShapesTableViewCellDelegate> shapesTVCdelegate;
 
 - (void)topButtonVisibility:(BOOL)show;
 - (void)descriptionLabelStackViewVisibility:(BOOL)show;

@@ -3649,3 +3649,15 @@
 "navigate_point_mgrs" = "MGRS";
 "app_mode_osm" = "OSM";
 "amazon_appstore" = "Amazon Appstore";
+"liter" = "l";
+"poi_filter_fuel" = "Combustível";
+"us_gallons_unit" = "gal";
+"unit_of_volume_description" = "As unidades selecionadas serão aplicadas a todos os dados relacionados ao volume no perfil atual.";
+"sensor_data" = "Dados do sensor";
+"litres" = "Litros";
+"imperial_gallons" = "Galões imperiais";
+"us_gallons" = "Galões americanos";
+"unit_of_volume" = "Unidade de volume";
+"shared_string_litres" = "Litros";
+"shared_strings_dimensions" = "Dimensões";
+"fuel_tank_capacity" = "Capacidade do tanque de combustível";

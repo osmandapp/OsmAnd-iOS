@@ -1724,7 +1724,7 @@
 "hidden_categories" = "Categorías ocultas";
 "create_custom_categories_list_promo" = "Cambiá el orden de la lista y ocultá las categorías. Importá o exportá todos los cambios como perfiles.";
 "reset_to_default_category_button_promo" = "«Restablecer al valor predefinido», restablecerá el orden de clasificación al valor predefinido de la instalación.";
-"search_poi_types_descr" = "Combiná tipos de PDI de diferentes categorías. Pulsá «Alternar» para marcar todo y el lado izquierdo para elegir una categoría.";
+"search_poi_types_descr" = "Combiná tipos de PDI de diferentes categorías. Pulsá en «Alternar» para marcar todo y el lado izquierdo para elegir una categoría.";
 "email_example_hint" = "usuario@ejemplo.com";
 "shared_string_required" = "Obligatorio";
 "login_account" = "Cuenta";
@@ -2506,7 +2506,7 @@
 "cloud_storage_used" = "Utilizado: %@ de %@";
 "recording_delete_confirm" = "¿Borrar este elemento?";
 "shared_string_unavailable" = "No disponible";
-"offline_edition_descr" = "Si activás la edición sin conexión, los cambios se guardarán localmente primero y se cargarán a pedido. de lo contrario, los cambios se cargarán de inmediato.";
+"offline_edition_descr" = "Si activás la edición sin conexión, los cambios se guardarán localmente primero y se cargarán a pedido, de lo contrario los cambios se cargarán de inmediato.";
 "shared_string_contributions" = "Contribuciones";
 "benefits_for_contributors_primary_descr" = "Los colaboradores activos de OpenStreetMap.org pueden beneficiarse de actualizaciones ilimitadas de los mapas cada hora.";
 "benefits_for_contributors_secondary_descr" = "Accedé a OpenStreetMap para comprobar si tenés derecho a actualizaciones mensuales y horarias ilimitadas de los mapas.";

@@ -111,6 +111,9 @@
     _weatherContourLayer = [[OAWeatherContourLayer alloc] initWithMapViewController:_mapViewController layerIndex:30 date:_weatherDate];
     [self addLayer:_weatherContourLayer];
     
+    _coordinatesGridLayer = [[OACoordinatesGridLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
+    [self addLayer:_coordinatesGridLayer];
+    
     [OAPluginsHelper createLayers];
 
     _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self

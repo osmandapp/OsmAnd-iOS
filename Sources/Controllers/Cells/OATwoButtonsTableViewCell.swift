@@ -19,8 +19,17 @@ final class OATwoButtonsTableViewCell: OASimpleTableViewCell {
         updateMargins()
     }
     
+    func setLeftButtonVisible(_ visible: Bool) {
+        leftButton.isHidden = !visible
+        updateMargins()
+    }
+    
+    func setRightButtonVisible(_ visible: Bool) {
+        rightButton.isHidden = !visible
+        updateMargins()
+    }
+    
     func shouldUpdateMarginsForVisibleButtons() -> Bool {
         !leftButton.isHidden && !rightButton.isHidden
     }
-    
 }

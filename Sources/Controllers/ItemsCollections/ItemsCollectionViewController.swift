@@ -20,9 +20,9 @@ import UIKit
 @objc protocol ColorCollectionViewControllerDelegate: AnyObject {
     func selectColorItem(_ colorItem: ColorItem)
     func selectPaletteItem(_ paletteItem: PaletteColor)
-    func addAndGetNewColorItem(_ color: UIColor) -> ColorItem
+    @discardableResult func addAndGetNewColorItem(_ color: UIColor) -> ColorItem
     func changeColorItem(_ colorItem: ColorItem, withColor color: UIColor)
-    func duplicateColorItem(_ colorItem: ColorItem) -> ColorItem
+    @discardableResult func duplicateColorItem(_ colorItem: ColorItem) -> ColorItem
     func deleteColorItem(_ colorItem: ColorItem)
     @objc optional func reloadData()
 }

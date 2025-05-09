@@ -293,6 +293,7 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:[ShowHideWhitewaterSportsAction getQuickActionType]];
     [allTypes addObject:[ShowHideFitnessTrailsAction getQuickActionType]];
     [allTypes addObject:[ShowHideRunningRoutesAction getQuickActionType]];
+    [allTypes addObject:ShowHideCoordinatesGridAction.type];
     
     // interface
     [allTypes addObject:LockScreenAction.type];

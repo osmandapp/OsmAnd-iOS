@@ -32,6 +32,7 @@
 #define kRoutePlanningLayerId @"route_planning_map"
 #define kDownloadedRegionsLayerId @"downloaded_regions"
 #define kRulerByTapControlLayerId @"ruler_by_tap"
+#define kCoordinatesGridLayerId @"coordinates_grid"
 
 @interface OAMapLayersConfiguration : NSObject
 

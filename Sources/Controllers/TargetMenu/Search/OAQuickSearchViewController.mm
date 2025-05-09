@@ -1014,7 +1014,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         NSDictionary *userInfo = [notification userInfo];
         CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
         keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
-        CGFloat keyboardHeight = keyboardRect.size.height;
         CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
         NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
 

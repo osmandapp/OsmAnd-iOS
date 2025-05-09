@@ -61,6 +61,7 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 - (void) refreshDownloadTask;
 - (BOOL) isOutdatedItem;
 - (OAWorldRegion *) worldRegion;
+- (NSString *)getDate;
 
 @end
 

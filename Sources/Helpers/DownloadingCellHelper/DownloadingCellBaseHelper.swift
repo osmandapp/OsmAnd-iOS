@@ -26,10 +26,11 @@ class DownloadingCellBaseHelper: NSObject {
     var isAlwaysClickable = false
     var isDownloadedLeftIconRecolored = false
     var rightIconStyle: DownloadingCellRightIconType = .hideIconAfterDownloading
+    var statuses = [String: ItemStatusType]()
+    var progresses = [String: Float]()
     
-    private var cells = [String: DownloadingCell]()
-    private var statuses = [String: ItemStatusType]()
-    private var progresses = [String: Float]()
+    var cells = [String: DownloadingCell]()
+    
     private weak var hostTableView: UITableView?
     
     private var backgroundStateObserver: OAAutoObserverProxy?
@@ -164,7 +165,7 @@ class DownloadingCellBaseHelper: NSObject {
         return cell
     }
     
-    private func setupLeftIcon(cell: DownloadingCell, leftIconName: String?, resourceId: String) {
+    func setupLeftIcon(cell: DownloadingCell, leftIconName: String?, resourceId: String) {
         if let leftIconName, !leftIconName.isEmpty {
             cell.leftIconVisibility(true)
             cell.leftIconView.image = UIImage.templateImageNamed(leftIconName)
@@ -178,7 +179,7 @@ class DownloadingCellBaseHelper: NSObject {
         }
     }
     
-    private func setupRightIconForIdleCell(cell: DownloadingCell, rightIconName: String?, resourceId: String) {
+    func setupRightIconForIdleCell(cell: DownloadingCell, rightIconName: String?, resourceId: String) {
         
         var showIcon = false
         cell.accessoryView = nil

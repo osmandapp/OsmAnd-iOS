@@ -124,4 +124,8 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
     func onStopDownload(_ resourceItem: OAResourceSwiftItem) {
         hostDelegate?.onStopDownload(resourceItem)
     }
+    
+    func onDownloadTaskFinished(resourceId: String) {
+        hostDelegate?.onDownloadTaskFinished?(resourceId: resourceId)
+    }
 }

@@ -3191,6 +3191,7 @@
 		FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */; };
 		FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */; };
 		FAB2B14B2C787E3900B59B7A /* DGCharts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FA6116182C787B7C005C3ABD /* DGCharts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FAB302A92DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
 		FAC166212B21BEF900D63755 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166162B21BEF700D63755 /* Util.swift */; };
 		FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166172B21BEF800D63755 /* PeripheralProxy.swift */; };
@@ -7748,6 +7749,7 @@
 		FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DescriptionDeviceHeader.xib; sourceTree = "<group>"; };
 		FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEInitHeader.swift; sourceTree = "<group>"; };
 		FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackItemExtension.swift; sourceTree = "<group>"; };
+		FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDownloadingCellResourceHelper.swift; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		FAC166162B21BEF700D63755 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		FAC166172B21BEF800D63755 /* PeripheralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralProxy.swift; sourceTree = "<group>"; };
@@ -8083,6 +8085,7 @@
 		32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */ = {
 			isa = PBXGroup;
 			children = (
+				FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */,
 				323BFE6C2C0B6FA400A4E7B1 /* DownloadingCell.xib */,
 				323BFE6A2C0B6F6F00A4E7B1 /* DownloadingCell.swift */,
 				323BFE6D2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift */,
@@ -16588,6 +16591,7 @@
 				05DACD762C1B0E9A0023FAD9 /* OAXmlStreamReader.mm in Sources */,
 				B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.mm in Sources */,
 				FAA6505F2ADD42C50020DCEA /* DescriptionDeviceHeader.swift in Sources */,
+				FAB302A92DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift in Sources */,
 				46B159D12C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift in Sources */,
 				05AB44602C9062F500BF4F05 /* OAOsmAndContextImpl.mm in Sources */,
 				DA5A839C26C563A800F274C7 /* OADirectionAppearanceViewController.m in Sources */,

@@ -103,8 +103,13 @@ final class CarPlaySceneDelegate: UIResponder {
         }
         
         if let appMode = appModeToSet {
+            let oldMode = settings.applicationMode.get()
             settings.setApplicationModePref(appMode)
             routingHelper.setAppMode(appMode)
+            if appMode != oldMode && isRoutingActive() {
+                routingHelper.recalculateRouteDueToSettingsChange()
+                OATargetPointsHelper.sharedInstance().updateRouteAndRefresh(true)
+            }
         }
     }
     

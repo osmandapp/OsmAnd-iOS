@@ -9,18 +9,21 @@
 @objcMembers
 final class PoiIconCollectionHandler: IconCollectionHandler {
     
-    static var cachedCategories = [IconsCategory]()
-    static var cachedCategoriesByKeyName = [String: IconsCategory]()
+    static var cachedCategories = [IconsAppearanceCategory]()
+    static var cachedCategoriesByKeyName = [String: IconsAppearanceCategory]()
     
-    var categories = [IconsCategory]()
-    var categoriesByKeyName = [String: IconsCategory]()
+    var categories = [IconsAppearanceCategory]()
+    var categoriesByKeyName = [String: IconsAppearanceCategory]()
     var selectedCatagoryKey = ""
     var lastUsedIcons = [String]()
+    var groupIcons = [String]()
     var profileIcons = [String]()
+    var isFavoriteList = false
     weak var allIconsVCDelegate: PoiIconsCollectionViewControllerDelegate?
     
     private let LAST_USED_ICONS_LIMIT = 12
     private let POI_CATEGORIES_FILE = "poi_categories.json"
+    private let ORIGINAL_KEY = "original"
     private let LAST_USED_KEY = "last_used_icons"
     private let SPECIAL_KEY = "special"
     private let SYMBOLS_KEY = "symbols"
@@ -31,6 +34,16 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     
     override init() {
         super.init()
+        setup()
+    }
+    
+    init(isFavoriteList: Bool) {
+        super.init()
+        self.isFavoriteList = isFavoriteList
+        setup()
+    }
+    
+    private func setup() {
         initIconCategories()
         setScrollDirection(.horizontal)
         selectCategory(LAST_USED_KEY)
@@ -38,15 +51,14 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     
     func initIconCategories() {
         if Self.cachedCategories.isEmpty {
+            initOriginalCategory()
             initLastUsedCategory()
             initAssetsCategories()
             initActivitiesCategory()
             initPoiCategories()
             sortCategories()
             
-            for category in categories {
-                categoriesByKeyName[category.key] = category
-            }
+            categories.forEach { categoriesByKeyName[$0.key] = $0 }
             
             Self.cachedCategories = categories
             Self.cachedCategoriesByKeyName = categoriesByKeyName
@@ -57,19 +69,29 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             categoriesByKeyName = Self.cachedCategoriesByKeyName
             initLastUsedCategory()
         }
+        initFilteredCategories()
+    }
+    
+    private func initFilteredCategories() {
+        categories = Self.cachedCategories.filter { isFavoriteList || $0.key != ORIGINAL_KEY }
+        categoriesByKeyName = Self.cachedCategoriesByKeyName.filter { isFavoriteList || $0.key != ORIGINAL_KEY }
     }
     
     func setIconName(_ iconName: String) {
         guard !iconName.isEmpty else { return }
-        
-        for i in 0 ..< categories.count {
-            let category = categories[i]
-            for j in 0 ..< category.iconKeys.count {
-                if iconName == category.iconKeys[j] ||
-                    "mx_" + iconName == category.iconKeys[j] {
-                    selectCategory(category.key)
-                    setSelectedIndexPath(IndexPath(row: j, section: 0))
-                    return
+        for category in categories {
+            if isFavoriteList && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
+                setSelectedIndexPath(IndexPath(row: 0, section: 0))
+                selectCategory(category.key)
+                return
+            } else {
+                for j in 0 ..< category.iconKeys.count {
+                    if iconName == category.iconKeys[j] ||
+                        "mx_" + iconName == category.iconKeys[j] {
+                        selectCategory(category.key)
+                        setSelectedIndexPath(IndexPath(row: j, section: 0))
+                        return
+                    }
                 }
             }
         }
@@ -97,16 +119,23 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         
         if let category = categoriesByKeyName[categoryKey] {
             generateData([category.iconKeys])
-            updateTopButtonName()
+            updateHostCellIfNeeded()
+            if let hostCell {
+                handlerDelegate?.onCategorySelected(categoryKey, with: hostCell)
+            }
             getCollectionView()?.reloadData()
             return
         }
     }
     
+    private func initOriginalCategory() {
+        categories.append(IconsAppearanceCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original"), iconKeys: [], isTopCategory: true))
+    }
+    
     private func initLastUsedCategory() {
         if let icons = OAAppSettings.sharedManager().lastUsedFavIcons.get(), !icons.isEmpty {
             lastUsedIcons = icons
-            let category = IconsCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
+            let category = IconsAppearanceCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
             categories.append(category)
             categoriesByKeyName[LAST_USED_KEY] = category
         }
@@ -118,14 +147,14 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     
     private func initActivitiesCategory() {
         var iconKeys = [String]()
-        for activity in RouteActivityHelper().getActivities() {
-            if shouldAppend(iconName: activity.iconName, toIconsList: iconKeys) {
-                iconKeys.append(activity.iconName)
+        RouteActivityHelper().getActivities().forEach {
+            if shouldAppend(iconName: $0.iconName, toIconsList: iconKeys) {
+                iconKeys.append($0.iconName)
             }
         }
         if !iconKeys.isEmpty {
             let translatedName = localizedString("shared_string_activity")
-            categories.append(IconsCategory(key: ACTIVITIES_KEY, translatedName: translatedName, iconKeys: iconKeys))
+            categories.append(IconsAppearanceCategory(key: ACTIVITIES_KEY, translatedName: translatedName, iconKeys: iconKeys))
         }
     }
     
@@ -143,7 +172,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                         }
                     }
                     if !iconKeys.isEmpty {
-                        categories.append(IconsCategory(key: poiCategory.name, translatedName: poiCategory.nameLocalized, iconKeys: iconKeys))
+                        categories.append(IconsAppearanceCategory(key: poiCategory.name, translatedName: poiCategory.nameLocalized, iconKeys: iconKeys))
                     }
                 }
             }
@@ -213,7 +242,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     func addProfileIconsCategory() {
         profileIcons = Self.getProfileIconsList()
 
-        let profileIconsCategory = IconsCategory(key: PROFILE_ICONS_KEY, translatedName: localizedString("profile_icons"), iconKeys: profileIcons, isTopCategory: true)
+        let profileIconsCategory = IconsAppearanceCategory(key: PROFILE_ICONS_KEY, translatedName: localizedString("profile_icons"), iconKeys: profileIcons, isTopCategory: true)
         categories.append(profileIconsCategory)
         categoriesByKeyName[PROFILE_ICONS_KEY] = profileIconsCategory
         sortCategories()
@@ -228,6 +257,11 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             }
             return a.translatedName < b.translatedName
         }
+        
+        if let index = categories.firstIndex(where: { $0.key == ORIGINAL_KEY }) {
+            let original = categories.remove(at: index)
+            categories.insert(original, at: 0)
+        }
     }
     
     private func readCategoriesFromAssets(_ categoriesKeys: [String]) {
@@ -235,7 +269,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             for categoryKey in categoriesKeys {
                 if let iconsKeys = json.categories[categoryKey], !iconsKeys.icons.isEmpty {
                     let translatedName = localizedString("icon_group_" + categoryKey)
-                    categories.append(IconsCategory(key: categoryKey, translatedName: translatedName, iconKeys: iconsKeys.icons, isTopCategory: categoryKey == SPECIAL_KEY))
+                    categories.append(IconsAppearanceCategory(key: categoryKey, translatedName: translatedName, iconKeys: iconsKeys.icons, isTopCategory: categoryKey == SPECIAL_KEY))
                 }
             }
         }
@@ -255,23 +289,27 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         return nil
     }
     
+    private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: IconsAppearanceCategory) {
+        menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { [weak self] _ in
+            self?.onMenuItemSelected(name: category.key)
+        }))
+    }
+    
     override func buildTopButtonContextMenu() -> UIMenu? {
-        var menuElements = [UIMenuElement]()
-        var previosCategory: IconsCategory?
+        var topMenuElements = [UIMenuElement]()
+        var bottomMenuElements = [UIMenuElement]()
         
-        for i in 0..<categories.count {
-            let category = categories[i]
-            if let previosCategory, previosCategory.isTopCategory != category.isTopCategory {
-                let separator = UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [])
-                menuElements.append(separator)
+        for category in categories {
+            if category.key == ORIGINAL_KEY || category.key == LAST_USED_KEY || (!isFavoriteList && category.key == SPECIAL_KEY) {
+                updateMenuElements(&topMenuElements, with: category)
+            } else {
+                updateMenuElements(&bottomMenuElements, with: category)
             }
-            menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { _ in
-                self.onMenuItemSelected(name: category.key)
-            }))
-            previosCategory = category
         }
   
-        return UIMenu(title: "", children: menuElements)
+        let topMenu = UIMenu(title: "", options: .displayInline, children: topMenuElements)
+        let bottomMenu = UIMenu(title: "", options: .displayInline, children: bottomMenuElements)
+        return UIMenu(title: "", children: [topMenu, bottomMenu])
     }
     
     func onMenuItemSelected(name: String) {
@@ -282,9 +320,23 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         } else {
             if let category = categoriesByKeyName[name] {
                 selectCategory(name)
-                selectIconName(category.iconKeys[0])
+                category.iconKeys.first.flatMap { selectIconName($0) }
             }
         }
+    }
+    
+    func updateHostCellIfNeeded() {
+        updateTopButtonName()
+        updateHostCellIfOriginalCategory(selectedCatagoryKey == ORIGINAL_KEY)
+    }
+    
+    private func updateHostCellIfOriginalCategory(_ isOriginal: Bool) {
+        guard let hostCell else { return }
+        hostCell.collectionStackViewVisibility(!isOriginal)
+        hostCell.descriptionLabelStackView.isHidden = !isOriginal
+        hostCell.bottomButtonStackView.isHidden = isOriginal
+        hostCell.underTitleView.isHidden = isOriginal
+        hostCell.separatorOffsetViewWidth.constant = isOriginal ? 20 : .zero
     }
     
     func updateTopButtonName() {

@@ -175,10 +175,6 @@ class IconCollectionHandler: OABaseCollectionHandler {
         }
         return iconNamesData[0][0]
     }
-    
-    func buildTopButtonContextMenu() -> UIMenu? {
-        nil
-    }
 }
 
 extension IconCollectionHandler: IconsCollectionViewControllerDelegate {

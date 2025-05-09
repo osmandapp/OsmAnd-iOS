@@ -15,7 +15,6 @@
 
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *topMarginStackView;
-@property (weak, nonatomic) IBOutlet UIStackView *collectionStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *bottomMarginStackView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
@@ -127,6 +126,11 @@
         [self removeGestureRecognizer:_tapRecognizer];
         _tapRecognizer = nil;
     }
+}
+
+- (void)collectionStackViewVisibility:(BOOL)show
+{
+    self.collectionStackView.hidden = !show;
 }
 
 - (void)anchorContent:(EOATableViewCellContentStyle)style

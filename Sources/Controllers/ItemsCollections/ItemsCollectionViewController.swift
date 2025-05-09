@@ -54,7 +54,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     var regularIconColor: UIColor?
     
     var iconImages = [UIImage]()
-    var iconCategories = [IconsCategory]()
+    var iconCategories = [IconsAppearanceCategory]()
     private var iconItems = [String]()
     private var selectedIconItem: String?
     private var poiIconHandlers = [IndexPath : PoiIconCollectionHandler]()
@@ -110,7 +110,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 self.selectedIconItem = selectedItem as? String
             }
         case .poiIconCategories:
-            if let categories = items as? [IconsCategory] {
+            if let categories = items as? [IconsAppearanceCategory] {
                 self.iconCategories = categories
                 self.selectedIconItem = selectedItem as? String
             }

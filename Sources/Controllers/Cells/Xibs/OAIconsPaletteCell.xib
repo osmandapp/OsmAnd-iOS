@@ -111,6 +111,13 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HeO-Dq-xW7">
                                         <rect key="frame" x="0.0" y="14" width="393" height="1"/>
                                         <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dPz-FR-pOJ">
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="1"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" id="S8O-9z-rpL"/>
+                                                </constraints>
+                                            </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fki-YG-97m" userLabel="Separator View">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="1"/>
                                                 <color key="backgroundColor" systemColor="separatorColor"/>
@@ -127,6 +134,27 @@
                                             <constraint firstAttribute="height" constant="9" id="fDS-fO-Avj"/>
                                         </constraints>
                                     </view>
+                                </subviews>
+                            </stackView>
+                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qcG-On-Sc6">
+                                <rect key="frame" x="0.0" y="117" width="393" height="30"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GgV-3E-48u">
+                                        <rect key="frame" x="0.0" y="0.0" width="20" height="30"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="Guc-AF-bMo"/>
+                                        </constraints>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="COd-ZI-clw">
+                                        <rect key="frame" x="20" y="0.0" width="373" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="SLg-tZ-Qfd"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" name="textColorSecondary"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C7z-M2-QQN">
@@ -186,17 +214,22 @@
             <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="bottomButton" destination="Oc5-lr-XlE" id="mlh-aC-ytu"/>
+                <outlet property="bottomButtonStackView" destination="C7z-M2-QQN" id="ITQ-bi-k0l"/>
                 <outlet property="bottomMarginStackView" destination="ao7-vZ-qL2" id="UiJ-Hz-Brs"/>
                 <outlet property="bottomTitleOffset" destination="7gQ-MS-W3n" id="27o-jm-z6b"/>
                 <outlet property="collectionStackView" destination="NS9-5f-FoA" id="fzo-0U-cx9"/>
                 <outlet property="collectionView" destination="DOd-wT-r3R" id="vOQ-He-2Ra"/>
                 <outlet property="collectionViewHeight" destination="Ft8-45-Pf1" id="u9e-mm-AHH"/>
                 <outlet property="contentOutsideStackViewVertical" destination="Pde-Gp-UrD" id="xiC-Ve-Sf5"/>
+                <outlet property="descriptionLabel" destination="COd-ZI-clw" id="iXF-RG-h50"/>
+                <outlet property="descriptionLabelStackView" destination="qcG-On-Sc6" id="qhq-Rr-ScY"/>
                 <outlet property="separatorHeight" destination="Ezj-p8-v0I" id="Qla-HS-OjB"/>
+                <outlet property="separatorOffsetViewWidth" destination="S8O-9z-rpL" id="a0u-Ia-8P6"/>
                 <outlet property="topButton" destination="6Na-Pk-W0m" id="Elh-4F-GaI"/>
                 <outlet property="topLabel" destination="64G-5F-WnM" id="gCI-qs-SCW"/>
                 <outlet property="topMarginStackView" destination="AxO-VI-ivf" id="BE5-Ss-SJY"/>
                 <outlet property="topTitleOffset" destination="uTJ-YG-ThI" id="3PP-dv-rKz"/>
+                <outlet property="underTitleView" destination="srt-yt-shI" id="x9Q-T8-30R"/>
             </connections>
             <point key="canvasLocation" x="67.938931297709928" y="-2.8169014084507045"/>
         </tableViewCell>
@@ -210,6 +243,9 @@
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="separatorColor">
             <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>

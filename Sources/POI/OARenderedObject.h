@@ -11,7 +11,7 @@
 
 @interface OARenderedObject : OAMapObject
 
-@property (nonatomic) OrderedDictionary<NSString *, NSString *> *tags;
+@property (nonatomic) MutableOrderedDictionary<NSString *, NSString *> *tags;
 
 @property (nonatomic) NSInteger bboxLeft;
 @property (nonatomic) NSInteger bboxTop;

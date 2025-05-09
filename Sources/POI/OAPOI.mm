@@ -14,6 +14,8 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/ICU.h>
 
@@ -39,6 +41,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 @end
 
 @implementation OAPOI
+{
+    NSMutableSet<NSString *> *_contentLocales;
+    int _travelElo;
+}
 
 -(void)setType:(OAPOIType *)type
 {
@@ -74,7 +80,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return _values[@"gpx_icon"];
 }
 
--(void)setValues:(NSDictionary *)values
+-(void)setValues:(NSMutableDictionary *)values
 {
     _values = values;
     [self processValues];
@@ -139,11 +145,34 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return val && [val isEqualToString:OSM_DELETE_VALUE];
 }
 
+//TODO: orig code - test new one not broken
+//- (NSSet<NSString *> *)getSupportedContentLocales
+//{
+//    NSMutableSet<NSString *> *supported = [NSMutableSet new];
+//    [supported addObjectsFromArray:[self getNames:@"wiki_lang" defTag:@"en"]];
+//    return supported;
+//}
+
 - (NSSet<NSString *> *)getSupportedContentLocales
 {
-    NSMutableSet<NSString *> *supported = [NSMutableSet new];
-    [supported addObjectsFromArray:[self getNames:@"wiki_lang" defTag:@"en"]];
-    return supported;
+    if (_contentLocales)
+    {
+        return _contentLocales;
+    }
+    else
+    {
+        NSMutableSet<NSString *> *supported = [NSMutableSet new];
+        [supported addObjectsFromArray:[self getNames:CONTENT_TAG defTag:@"en"]];
+        [supported addObjectsFromArray:[self getNames:DESCRIPTION_TAG defTag:@"en"]];
+        return supported;
+    }
+}
+
+- (void) updateContentLocales:(NSSet<NSString *> *)locales
+{
+    if (!_contentLocales)
+        _contentLocales = [NSMutableSet new];
+    [_contentLocales addObjectsFromArray:[locales allObjects]];
 }
 
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag
@@ -339,6 +368,69 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return [_values objectForKey:key];
 }
 
+- (NSMutableDictionary<NSString *, NSString *> *)getInternalAdditionalInfoMap
+{
+    return _values ? _values : [NSMutableDictionary new];
+}
+
+
+- (void)setAdditionalInfo:(NSDictionary<NSString *, NSString *> *)additionalInfo
+{
+    _values = nil;
+    _openingHours = nil;
+    if (additionalInfo)
+    {
+        for (NSString *key in additionalInfo.allKeys)
+        {
+            [self setAdditionalInfo:key value:additionalInfo[key]];
+        }
+    }
+}
+
+- (void)setAdditionalInfo:(NSString *)tag value:(NSString *)value
+{
+    if ([tag isEqualToString:@"name:"])
+    {
+        self.name = value;
+    }
+    else if ([self.class isNameLangTag:tag])
+    {
+        [self setName:[tag substringFromIndex:@"name:".length] name:value];
+    }
+    else
+    {
+        //TODO: android uses additionalInfo instead of values. is this correct?
+        if (!_values)
+            _values = [NSMutableDictionary new];
+        
+        _values[tag] = value;
+        
+        if ([tag isEqualToString:OPENING_HOURS_TAG])
+            self.openingHours = value;
+    }
+}
+
+- (void) copyAdditionalInfo:(OAPOI *)amenity overwrite:(BOOL)overwrite
+{
+    NSMutableDictionary<NSString *,NSString *> *map = [self getInternalAdditionalInfoMap];
+    if (overwrite || !_values)
+    {
+        [self setAdditionalInfo:map];
+    }
+    else
+    {
+        for (NSString *key in map.allKeys)
+        {
+            NSString *value = map[key];
+            NSString *additionalInfoValue = _values[key];
+            if (!additionalInfoValue)
+            {
+                [self setAdditionalInfo:key value:value];
+            }
+        }
+    }
+}
+
 - (NSString *)getSite
 {
     return [self getAdditionalInfo][@"website"];
@@ -357,6 +449,38 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (NSString *)getRouteId
 {
     return [self getAdditionalInfo][@"route_id"];
+}
+
+- (NSString *)getWikidata
+{
+    //TODO: test which one is correct?
+    //return [self getAdditionalInfo][WIKIDATA_TAG];
+    
+    return _values[WIKIDATA_TAG];
+}
+
+- (NSString *)getTravelElo
+{
+    return [self getAdditionalInfo][TRAVEL_EVO_TAG];
+}
+
+- (int)getTravelEloNumber
+{
+    if (_travelElo > 0)
+    {
+        return _travelElo;
+    }
+    else
+    {
+        NSString *travelEloStr = [self getTravelElo];
+        _travelElo = [OASKAlgorithms.shared parseIntSilentlyInput:travelEloStr def:DEFAULT_ELO];
+        return _travelElo;
+    }
+}
+
+- (void)setTravelEloNumber:(int)elo
+{
+    _travelElo = elo;
 }
 
 - (NSString *)getSubTypeStr

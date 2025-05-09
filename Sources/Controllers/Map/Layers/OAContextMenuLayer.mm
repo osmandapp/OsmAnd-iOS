@@ -35,6 +35,7 @@
 #import "OAMapRendererEnvironment.h"
 #import "OAColors.h"
 #import "OAMapUtils+cpp.h"
+#import "OAMapSelectionHelper.h"
 #import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -75,6 +76,8 @@
     NSArray<OAMapLayer *> *_pointLayers;
     
     CGPoint _cachedTargetPoint;
+    
+    OAMapSelectionHelper *_mapSelectionHelper;
 }
 
 - (NSString *) layerId
@@ -98,6 +101,8 @@
     _outlineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
 
     _initDone = YES;
+    
+    _mapSelectionHelper = [[OAMapSelectionHelper alloc] init];
 
     // Add context pin markers
     [self.mapViewController runWithRenderSync:^{
@@ -373,12 +378,31 @@
     return nil;
 }
 
+//- (void) collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
+//{
+//    //TODO: implement
+//}
+//
+//- (void) collectObjectsFromLayers
+//{
+//    //TODO: implement
+//}
+//
+//- (void) collectObjectsFromMap2
+//{
+//    //TODO: implement
+//}
+
 - (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
 {
+    OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
+    
+    
     OAMapRendererView *mapView = self.mapView;
     OAMapViewController *mapViewController = self.mapViewController;
     NSMutableArray<OATargetPoint *> *found = [NSMutableArray array];
     
+    CGFloat delta = 20.0;
     CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
     double lat = coord.latitude;
     double lon = coord.longitude;
@@ -387,10 +411,16 @@
     NSString *mapIconName = nil;
     
     CLLocationCoordinate2D objectCoord = kCLLocationCoordinate2DInvalid;
-    CGFloat delta = 10.0;
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
+    
+    
+    
+    
 
-    const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
+    BOOL osmRoutesAlreadyAdded = NO;
+    const auto& symbols = [mapView getSymbolsIn:area strict:NO];
+    
+    // <??
     NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
 
     if (!_pointLayers)
@@ -409,12 +439,15 @@
     [layers removeObjectsInArray:@[self.mapViewController.mapLayers.myPositionLayer,
                                    self.mapViewController.mapLayers.mapillaryLayer,
                                    self.mapViewController.mapLayers.downloadedRegionsLayer]];
+    
+    // ??>
 
-    for (const auto symbolInfo : symbolInfos)
+    for (const auto symbolInfo : symbols)
     {
         if (symbolInfo.mapSymbol->ignoreClick) {
             continue;
         }
+        
         if (!showUnknownLocation)
         {
             if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))

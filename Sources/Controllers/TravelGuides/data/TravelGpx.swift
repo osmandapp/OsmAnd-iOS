@@ -21,7 +21,9 @@ final class TravelGpx : TravelArticle {
     static let AVERAGE_ELEVATION = "avg_ele"
     static let ROUTE_RADIUS = "route_bbox_radius"
     static let USER = "user"
+    static let ROUTE_TYPE = "route_type"
     static let ACTIVITY_TYPE = "route_activity_type"
+    static let TRAVEL_MAP_TO_POI_TAG = "route_id"
     
     var user: String?
     var activityType: String?

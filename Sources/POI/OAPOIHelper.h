@@ -14,7 +14,6 @@
 #define SPEED_CAMERA @"speed_camera"
 #define WIKI_LANG @"wiki_lang"
 #define WIKI_PLACE @"wiki_place"
-#define ROUTE_ARTICLE @"route_article"
 #define ROUTE_ARTICLE_POINT @"route_article_point"
 
 #define kSearchLimit 200

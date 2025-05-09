@@ -9,42 +9,50 @@
 #import <Foundation/Foundation.h>
 #import "OAMapObject.h"
 
-#define URL_TAG @"url"
-#define WEBSITE_TAG @"website"
-#define PHONE_TAG @"phone"
-#define MOBILE_TAG @"mobile"
-#define DESCRIPTION_TAG @"description"
-#define ROUTE_TAG @"route"
-#define OPENING_HOURS_TAG @"opening_hours"
-#define SERVICE_TIMES_TAG @"service_times"
-#define COLLECTION_TIMES_TAG @"collection_times"
-#define CONTENT_TAG @"content"
-#define CUISINE_TAG @"cuisine"
-#define WIKIDATA_TAG @"wikidata"
-#define WIKIMEDIA_COMMONS_TAG @"wikimedia_commons"
-#define WIKIPEDIA_TAG @"wikipedia"
-#define MAPILLARY_TAG @"mapillary"
-#define DISH_TAG @"dish"
-#define POI_REF @"ref"
-#define OSM_DELETE_VALUE @"delete"
-#define OSM_DELETE_TAG @"osmand_change"
-#define IMAGE_TITLE @"image_title"
-#define IS_PART @"is_part"
-#define IS_PARENT_OF @"is_parent_of"
-#define IS_AGGR_PART @"is_aggr_part"
-#define CONTENT_JSON @"json"
-#define ROUTE_ID @"route_id"
-#define ROUTE_SOURCE @"route_source"
-#define ROUTE_NAME @"route_name"
-#define COLOR_TAG @"color"
-#define LANG_YES @"lang_yes"
-#define GPX_ICON @"gpx_icon"
-#define POITYPE @"type"
-#define SUBTYPE @"subtype"
-#define AMENITY_NAME @"name"
-#define ROUTE_ARTICLE @"route_article"
-#define ROUTE_TRACK @"route_track"
-#define ROUTE_TRACK_POINT @"route_track_point"
+static NSString *URL_TAG = @"url";
+static NSString *WEBSITE_TAG = @"website";
+static NSString *PHONE_TAG = @"phone";
+static NSString *MOBILE_TAG = @"mobile";
+static NSString *DESCRIPTION_TAG = @"description";
+static NSString *ROUTE_TAG = @"route";
+static NSString *OPENING_HOURS_TAG = @"opening_hours";
+static NSString *SERVICE_TIMES_TAG = @"service_times";
+static NSString *COLLECTION_TIMES_TAG = @"collection_times";
+static NSString *CONTENT_TAG = @"content";
+static NSString *CUISINE_TAG = @"cuisine";
+static NSString *WIKIDATA_TAG = @"wikidata";
+static NSString *WIKIMEDIA_COMMONS_TAG = @"wikimedia_commons";
+static NSString *WIKIPEDIA_TAG = @"wikipedia";
+static NSString *MAPILLARY_TAG = @"mapillary";
+static NSString *DISH_TAG = @"dish";
+static NSString *POI_REF = @"ref";
+static NSString *OSM_DELETE_VALUE = @"delete";
+static NSString *OSM_DELETE_TAG = @"osmand_change";
+static NSString *IMAGE_TITLE = @"image_title";
+static NSString *IS_PART = @"is_part";
+static NSString *IS_PARENT_OF = @"is_parent_of";
+static NSString *IS_AGGR_PART = @"is_aggr_part";
+static NSString *CONTENT_JSON = @"json";
+
+// TODO: test it?
+//static NSString *ROUTE = @"route";
+
+static NSString *ROUTE_ID = @"route_id";
+static NSString *ROUTE_SOURCE = @"route_source";
+static NSString *ROUTE_NAME = @"route_name";
+static NSString *COLOR_TAG = @"color";
+static NSString *LANG_YES = @"lang_yes";
+static NSString *GPX_ICON = @"gpx_icon";
+static NSString *POITYPE = @"type";
+static NSString *SUBTYPE = @"subtype";
+static NSString *AMENITY_NAME = @"name";
+static NSString *ROUTE_ARTICLE = @"route_article";
+static NSString *ROUTE_TRACK = @"route_track";
+static NSString *ROUTE_TRACK_POINT = @"route_track_point";
+static NSString *TRAVEL_EVO_TAG = @"travel_elo";
+
+static int DEFAULT_ELO = 900;
+
 
 @class OAPOIType, OARenderedObject;
 
@@ -71,12 +79,13 @@
 @property (nonatomic) NSString *distance;
 @property (nonatomic, assign) double direction;
 
-@property (nonatomic) NSDictionary *values;
+@property (nonatomic) NSMutableDictionary *values;
 @property (nonatomic) NSDictionary *localizedContent;
 
 @property (nonatomic) OAPOIRoutePoint *routePoint;
 @property (nonatomic) NSString *mapIconName;
 @property (nonatomic) NSString *cityName;
+@property (nonatomic) NSString *regionName;
 
 - (UIImage *)icon;
 - (NSString *)iconName;
@@ -84,12 +93,18 @@
 
 - (BOOL) isClosed;
 - (NSSet<NSString *> *)getSupportedContentLocales;
+- (void) updateContentLocales:(NSSet<NSString *> *)locales;
+
 - (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate;
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 
 - (NSDictionary<NSString *, NSString *> *) getAdditionalInfo;
 - (NSString *) getAdditionalInfo:(NSString *)key;
+
+- (void)setAdditionalInfo:(NSDictionary<NSString *, NSString *> *)additionalInfo;
+- (void)setAdditionalInfo:(NSString *)tag value:(NSString *)value;
+- (void) copyAdditionalInfo:(OAPOI *)amenity overwrite:(BOOL)overwrite;
 
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang;
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;
@@ -102,6 +117,11 @@
 - (NSString *)getColor;
 - (NSString *)getRef;
 - (NSString *)getRouteId;
+- (NSString *)getWikidata;
+
+- (NSString *)getTravelElo;
+- (int)getTravelEloNumber;
+- (void)setTravelEloNumber:(int)elo;
 
 - (NSString *) toStringEn;
 

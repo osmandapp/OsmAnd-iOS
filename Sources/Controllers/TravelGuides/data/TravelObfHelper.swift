@@ -106,6 +106,26 @@ final class TravelObfHelper : NSObject {
         return popularArticles
     }
     
+    
+    
+    
+    
+    func isTravelGpxTags(_ tags: [String: String]) -> Bool {
+        return tags[ROUTE_ID] != nil &&
+            (tags[ROUTE_TAG] == "segment" || tags[TravelGpx.ROUTE_TYPE] != nil)
+    }
+    
+    func searchTravelGpx(latLon: CLLocationCoordinate2D, routeId: String) -> TravelGpx? {
+       
+        
+        
+        //TODO: Implement
+        
+        
+        return nil
+    }
+    
+    
     func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {
         var foundAmenities = [OAFoundAmenity]()
         var searchRadius = ARTICLE_SEARCH_RADIUS

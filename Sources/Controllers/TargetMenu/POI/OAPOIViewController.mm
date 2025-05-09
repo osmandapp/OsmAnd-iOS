@@ -40,8 +40,8 @@
 #define WIKI_LINK @".wikipedia.org/w"
 #define US_MAPS_RECREATION_AREA @"us_maps_recreation_area"
 
-static const NSInteger AMENITY_ID_RIGHT_SHIFT = 1;
-static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
+//static const NSInteger AMENITY_ID_RIGHT_SHIFT = 1;
+//static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
 static const NSInteger WAY_MODULO_REMAINDER = 1;
 
 @interface OAPOIViewController ()

@@ -102,8 +102,9 @@ static const int BOTTOM_CONSTANT = 1;
 @property (nonatomic, assign) BOOL isCarPlayDashboardActive;
 
 - (CLLocation *) getMapLocation;
+
 - (float) getMapZoom;
-- (float)getMap3DModeElevationAngle;
+- (float) getMap3DModeElevationAngle;
 - (void) refreshMap;
 
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;
@@ -210,6 +211,8 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (void)getAltitudeForMapCenter:(void (^)(float height))callback;
 - (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^)(float height))callback;
+
+- (CLLocation *) getLatLonFromElevatedPixel:(CGFloat)x y:(CGFloat)y;
 
 - (void)fitTrackOnMap:(LineChartView *)lineChartView
              startPos:(double)startPos

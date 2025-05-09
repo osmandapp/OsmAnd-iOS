@@ -1,0 +1,113 @@
+//
+//  OAClickableWayHelper.mm
+//  OsmAnd
+//
+//  Created by Max Kojin on 07/05/25.
+//  Copyright © 2025 OsmAnd. All rights reserved.
+//
+
+#import "OAClickableWayHelper.h"
+#import "OAClickableWayHelper+cpp.h"
+#import "OARenderedObject.h"
+#import "OAClickableWay.h"
+
+#include <OsmAndCore/Data/ObfMapObject.h>
+
+@implementation OAClickableWayHelper
+{
+    NSSet<NSString *> *_clickableTags;
+    NSDictionary<NSString *, NSString *> *_forbiddenTags;
+    NSSet<NSString *> *_requiredTagsAny;
+    NSDictionary<NSString *, NSString *> *_gpxColors;
+}
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void) commonInit
+{
+    _clickableTags = [NSSet setWithObjects:@"piste:type", @"piste:difficulty", @"mtb:scale", @"dirtbike:scale", nil];
+    _requiredTagsAny = [NSSet setWithObjects:@"name", @"ref", @"piste:name", @"mtb:name", nil];
+    _forbiddenTags = @{
+        @"area": @"yes",
+        @"access": @"no",
+        @"aerialway": @"*"
+    };
+    _gpxColors = @{
+        @"0": @"brown",
+        @"1": @"green",
+        @"2": @"blue",
+        @"3": @"red",
+        @"4": @"black",
+        @"5": @"black",
+        @"6": @"black",
+        @"novice": @"green",
+        @"easy": @"blue",
+        @"intermediate": @"red",
+        @"advanced": @"black",
+        @"expert": @"black",
+        @"freeride": @"yellow"
+        // others are default (red)
+    };
+}
+
+- (BOOL) isClickableWay:(OARenderedObject *)renderedObject
+{
+    return renderedObject.x.count > 1 && [self isClickableWayTags:renderedObject.tags]; // v1
+}
+
+- (BOOL) isClickableWay:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
+{
+    return obfMapObject->points31.size() > 1 && [self isClickableWayTags:tags]; // v2 with prefetched tags
+}
+
+//- (OAClickableWay *) loadClickableWay:(CLLocationCoordinate2D)selectedLatLon renderedObject:(OARenderedObject *)renderedObject
+//{
+//    // TODO: Implement
+//    
+//    return nil;
+//}
+
+- (OAClickableWay *) loadClickableWay:(CLLocationCoordinate2D)selectedLatLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
+{
+    // TODO: Implement
+    
+    return nil;
+}
+
+
+
+- (BOOL) isClickableWayTags:(NSDictionary<NSString *, NSString *> *)tags
+{
+    for (NSString *forbiddenKey in _forbiddenTags.allKeys)
+    {
+        NSString *forbiddenValue = _forbiddenTags[forbiddenKey];
+        if ([forbiddenValue isEqualToString:tags[forbiddenKey]] ||
+            ([@"*" isEqualToString:forbiddenValue] && tags[forbiddenKey]))
+        {
+            return  NO;
+        }
+    }
+    
+    for (NSString *required in _requiredTagsAny)
+    {
+        if (tags[required])
+        {
+            for (NSString *key in tags.allKeys)
+            {
+                if ([_clickableTags containsObject:key])
+                    return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+@end

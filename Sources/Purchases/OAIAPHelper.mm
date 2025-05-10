@@ -374,6 +374,12 @@ static OASubscriptionState *EXPIRED;
     return res;
 }
 
+- (NSNumber *) getInAppPurchaseTime:(NSString *)sku
+{
+    OAInAppStateHolder *holder = _inAppStateMap[sku];
+    return holder ? @(holder.purchaseTime) : nil;
+}
+
 + (OAIAPHelper *) sharedInstance
 {
     static dispatch_once_t once;
@@ -2208,7 +2214,7 @@ static OASubscriptionState *EXPIRED;
         NSString *purchaseTimeStr = obj[@"purchaseTime"];
         long purchaseTime = 0;
         if (purchaseTimeStr.length > 0)
-            purchaseTime = (long) purchaseTimeStr.longLongValue;
+            purchaseTime = (long) purchaseTimeStr.longLongValue / 1000;
         
         if (sku.length > 0)
         {

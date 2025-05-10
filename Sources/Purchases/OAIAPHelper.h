@@ -146,6 +146,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 - (NSArray<OAProduct *> *)getEverMadeMainPurchases;
 - (NSMapTable<OASubscription *, OASubscriptionStateHolder *> *) getExternalSubscriptions;
 - (NSMapTable<OAProduct *, OAInAppStateHolder *> *)getExternalInApps;
+- (NSNumber *)getInAppPurchaseTime:(NSString *)sku;
 
 - (BOOL)productsLoaded;
 

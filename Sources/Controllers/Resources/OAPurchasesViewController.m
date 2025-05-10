@@ -226,10 +226,12 @@ static BOOL _purchasesUpdated;
                 for (NSInteger i = 0; i < activeProducts.count; i++)
                 {
                     OAProduct *product = activeProducts[i];
+                    NSNumber *purchaseTime = [_iapHelper getInAppPurchaseTime:product.productIdentifier];
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-                        @"product" : product
+                        @"product" : product,
+                        @"purchaseTime" : purchaseTime
                     }];
                 }
                 for (NSInteger i = 0; i < externalActiveSubscriptions.count; i++)
@@ -249,11 +251,13 @@ static BOOL _purchasesUpdated;
                 {
                     OAProduct *product = externalActiveProducts[i];
                     NSNumber *origin = @(externalActiveProductHolders[i].origin);
+                    NSNumber *purchaseTime = @(externalActiveProductHolders[i].purchaseTime);
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                         @"product" : product,
-                        @"origin" : origin
+                        @"origin" : origin,
+                        @"purchaseTime" : purchaseTime
                     }];
                 }
             }
@@ -505,15 +509,18 @@ static BOOL _purchasesUpdated;
         id originObj = [item objForKey:@"origin"];
         if (originObj && [originObj isKindOfClass:NSNumber.class])
             origin = (EOAPurchaseOrigin) ((NSNumber *)originObj).intValue;
+        NSDate *purchaseDate = nil;
+        id purchaseTimeObj = [item objForKey:@"purchaseTime"];
+        if (purchaseTimeObj && [purchaseTimeObj isKindOfClass:NSNumber.class])
+            purchaseDate = [NSDate dateWithTimeIntervalSince1970:((NSNumber *)purchaseTimeObj).doubleValue];
         NSDate *expireDate = nil;
         id expireTimeObj = [item objForKey:@"expireTime"];
         if (expireTimeObj && [expireTimeObj isKindOfClass:NSNumber.class])
             expireDate = [NSDate dateWithTimeIntervalSince1970:((NSNumber *)expireTimeObj).doubleValue];
-
         if (origin == EOAPurchaseOriginUndefined)
             origin = EOAPurchaseOriginIOS;
         
-        [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"] origin:origin expireDate:expireDate]];
+        [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"] origin:origin purchaseDate:purchaseDate expireDate:expireDate]];
     }
 }
 

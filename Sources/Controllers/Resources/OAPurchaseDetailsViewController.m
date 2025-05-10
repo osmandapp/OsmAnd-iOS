@@ -35,8 +35,9 @@
     OATableDataModel *_data;
     OAAppSettings *_settings;
     EOAPurchaseOrigin _origin;
+    NSDate *_purchaseDate;
     NSDate *_expireDate;
-    
+
     BOOL _isCrossplatform;
     BOOL _isFreeStart;
     BOOL _isPromo;
@@ -66,13 +67,14 @@
     return self;
 }
 
-- (instancetype)initWithProduct:(OAProduct *)product origin:(EOAPurchaseOrigin)origin expireDate:(NSDate *)expireDate
+- (instancetype)initWithProduct:(OAProduct *)product origin:(EOAPurchaseOrigin)origin purchaseDate:(NSDate *)purchaseDate expireDate:(NSDate *)expireDate
 {
     self = [super init];
     if (self)
     {
         _product = product;
         _origin = origin;
+        _purchaseDate = purchaseDate;
         _expireDate = expireDate;
     }
     return self;
@@ -177,19 +179,24 @@
     }];
 
     NSString *purchasedType = OALocalizedString(@"shared_string_purchased");
+    NSDate *date = nil;
     if ([_product isKindOfClass:OASubscription.class])
     {
         if (_product.purchaseState == PSTATE_NOT_PURCHASED)
             purchasedType = OALocalizedString(@"expired");
         else if (isSubscription)
             purchasedType = OALocalizedString(@"shared_string_expires");
+        date = !_expireDate ? _product.expirationDate : _expireDate;
+    }
+    else
+    {
+        date = _purchaseDate;
     }
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterMediumStyle;
     
-    NSDate *expireDate = !_expireDate ? _product.expirationDate : _expireDate;
-    NSString *descr = expireDate ? [formatter stringFromDate:expireDate] : @"";
+    NSString *descr = date ? [formatter stringFromDate:date] : @"";
     if (_product.purchaseState == PSTATE_NOT_PURCHASED && [_product isKindOfClass:OASubscription.class])
     {
         if (_product.expirationDate)

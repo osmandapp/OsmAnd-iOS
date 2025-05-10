@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger, EOAPurchaseOrigin);
 
 @interface OAPurchaseDetailsViewController : OABaseNavbarViewController
 
-- (instancetype)initWithProduct:(OAProduct *)product origin:(EOAPurchaseOrigin)origin expireDate:(NSDate *)expireDate;
+- (instancetype)initWithProduct:(OAProduct *)product origin:(EOAPurchaseOrigin)origin purchaseDate:(NSDate *)purchaseDate expireDate:(NSDate *)expireDate;
 - (instancetype)initForCrossplatformSubscription;
 - (instancetype)initForFreeStartSubscription;
 

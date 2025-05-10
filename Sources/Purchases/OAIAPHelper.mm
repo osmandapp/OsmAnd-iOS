@@ -2317,7 +2317,7 @@ static OASubscriptionState *EXPIRED;
         return mapsAnnually;
 
     // FastSpring
-    if ([sku hasPrefix:@"net.osmand.fastspring.subscription.pro.annual"])
+    if ([sku hasPrefix:@"net.osmand.fastspring.subscription.pro.monthly"])
         return proMonthly;
     if ([sku hasPrefix:@"net.osmand.fastspring.subscription.pro.annual"])
         return proAnnually;

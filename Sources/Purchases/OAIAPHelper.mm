@@ -165,6 +165,7 @@ static OASubscriptionState *EXPIRED;
     SKReceiptRefreshRequest *_receiptRequest;
     
     OAProducts *_products;
+    NSDictionary<NSString *, OASubscriptionStateHolder *> *_subscriptionStateMap;
     NSDictionary<NSString *, OAInAppStateHolder *> *_inAppStateMap;
 
     BOOL _restoringPurchases;
@@ -349,6 +350,17 @@ static OASubscriptionState *EXPIRED;
     if (fullVersion && fullVersion.isPurchased)
         [products addObject:fullVersion];
     return products.allObjects;
+}
+
+- (NSMapTable<OASubscription *, OASubscriptionStateHolder *> *) getExternalSubscriptions
+{
+    NSMapTable<OASubscription *, OASubscriptionStateHolder *> *res = [NSMapTable strongToStrongObjectsMapTable];
+    for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
+    {
+        if (holder.linkedSubscription && holder.origin != EOAPurchaseOriginIOS)
+            [res setObject:holder forKey:holder.linkedSubscription];
+    }
+    return res;
 }
 
 - (NSMapTable<OAProduct *, OAInAppStateHolder *> *) getExternalInApps
@@ -701,28 +713,47 @@ static OASubscriptionState *EXPIRED;
                 }
                 if (hasToken)
                 {
-                    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/inapps/get" params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
-                     {
-                        if (response && data)
-                        {
-                            @try
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/subscriptions/getAll" params:params post:NO async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                            if (response && ((NSHTTPURLResponse *)response).statusCode == 200 && data)
                             {
-                                NSError *jsonParsingError = nil;
-                                NSArray *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
-                                if (!jsonParsingError)
-                                    _inAppStateMap = [self parseInAppStates:resultJson];
+                                @try
+                                {
+                                    NSError *jsonParsingError = nil;
+                                    NSArray *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
+                                    if (!jsonParsingError)
+                                        _subscriptionStateMap = [self parseSubscriptionStates:resultJson];
+                                }
+                                @catch (NSException *e)
+                                {
+                                    // Ignore
+                                }
                             }
-                            @catch (NSException *e)
+                        }];
+                        
+                        [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/inapps/get" params:params post:NO async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+                         {
+                            if (response && ((NSHTTPURLResponse *)response).statusCode == 200 && data)
                             {
-                                // Ignore
+                                @try
+                                {
+                                    NSError *jsonParsingError = nil;
+                                    NSArray *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
+                                    if (!jsonParsingError)
+                                        _inAppStateMap = [self parseInAppStates:resultJson];
+                                }
+                                @catch (NSException *e)
+                                {
+                                    // Ignore
+                                }
                             }
-                        }
-
+                        }];
+                        
                         _completionHandler = [onComplete copy];
                         _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
                         _productsRequest.delegate = self;
                         [_productsRequest start];
-                    }];
+                    });
                     return;
                 }
             }
@@ -1029,6 +1060,15 @@ static OASubscriptionState *EXPIRED;
                     if (holder.linkedProduct == self.mapsFull)
                     {
                         full = YES;
+                        break;
+                    }
+            }
+            if (!maps)
+            {
+                for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
+                    if (holder.linkedSubscription == self.mapsAnnually)
+                    {
+                        maps = YES;
                         break;
                     }
             }
@@ -1974,6 +2014,7 @@ static OASubscriptionState *EXPIRED;
             stateHolder.expireTime = [subObj[@"expire_time"] integerValue] / 1000;
             stateHolder.origin = [self getPurchaseOriginBySku:sku];
             stateHolder.duration = [self getSubscriptionDurationBySku:sku origin:stateHolder.origin startTime:stateHolder.startTime expireTime:stateHolder.expireTime];
+            stateHolder.linkedSubscription = [self getLinkedSubscriptionBySku:sku];
             subscriptionStateMap[sku] = stateHolder;
         }
     }
@@ -2192,34 +2233,28 @@ static OASubscriptionState *EXPIRED;
     // Google
     if ([sku isEqualToString:@"osmand_full_version_price"])
         return fullVersion;
-    
     if ([sku isEqualToString:@"net.osmand.seadepth"] || [sku isEqualToString:@"net.osmand.seadepth_plus"])
         return depthContours;
-    
     if ([sku isEqualToString:@"net.osmand.contourlines"] || [sku isEqualToString:@"net.osmand.contourlines_plus"])
         return contourLines;
     
     // iOS
     if ([sku isEqualToString:@"net.osmand.maps.inapp.maps.plus"])
         return fullVersion;
-    
     if ([sku isEqualToString:@"net.osmand.maps.inapp.addon.nautical"])
         return depthContours;
-    
     if ([sku isEqualToString:@"net.osmand.maps.inapp.addon.srtm"])
         return contourLines;
     
     // Amazon
     if ([sku isEqualToString:@"net.osmand.amazon.maps.inapp"])
         return fullVersion;
-    
+
     // Huawei
     if ([sku isEqualToString:@"net.osmand.huawei.full"])
         return fullVersion;
-    
     if ([sku isEqualToString:@"net.osmand.huawei.seadepth"])
         return depthContours;
-    
     if ([sku isEqualToString:@"net.osmand.huawei.contourlines"])
         return contourLines;
     
@@ -2227,6 +2262,62 @@ static OASubscriptionState *EXPIRED;
     if ([sku isEqualToString:@"net.osmand.fastspring.inapp.maps.plus"])
         return fullVersion;
     
+    return nil;
+}
+
+- (nullable OASubscription *)getLinkedSubscriptionBySku:(nonnull NSString *)sku
+{
+    OASubscription *monthlyLiveUpdates = self.monthlyLiveUpdates;
+    OASubscription *proMonthly = self.proMonthly;
+    OASubscription *proAnnually = self.proAnnually;
+    OASubscription *mapsAnnually = self.mapsAnnually;
+    
+    // Google
+    if ([sku hasPrefix:@"osm_live_subscription_monthly_"])
+        return monthlyLiveUpdates;
+    if ([sku hasPrefix:@"osmand_pro_monthly_"])
+        return proMonthly;
+    if ([sku hasPrefix:@"osmand_pro_annual_"])
+        return proAnnually;
+    if ([sku hasPrefix:@"osmand_maps_annual_"])
+        return mapsAnnually;
+
+    // iOS
+    if ([sku isEqualToString:@"net.osmand.maps.subscription.monthly"])
+        return monthlyLiveUpdates;
+    if ([sku hasPrefix:@"net.osmand.maps.subscription.pro.monthly"])
+        return proMonthly;
+    if ([sku hasPrefix:@"net.osmand.maps.subscription.pro.annual"])
+        return proAnnually;
+    if ([sku hasPrefix:@"net.osmand.maps.subscription.plus.annual"])
+        return mapsAnnually;
+
+    // Amazon
+    if ([sku containsString:@".amazon.pro.monthly"])
+        return proMonthly;
+    if ([sku containsString:@".amazon.pro.annual"])
+        return proAnnually;
+    if ([sku containsString:@".amazon.maps.annual"])
+        return mapsAnnually;
+
+    // Huawei
+    if ([sku hasPrefix:@"net.osmand.huawei.monthly"])
+        return monthlyLiveUpdates;
+    if ([sku hasPrefix:@"net.osmand.huawei.monthly.pro"])
+        return proMonthly;
+    if ([sku hasPrefix:@"net.osmand.huawei.annual.pro"])
+        return proAnnually;
+    if ([sku hasPrefix:@"net.osmand.huawei.annual.maps"])
+        return mapsAnnually;
+
+    // FastSpring
+    if ([sku hasPrefix:@"net.osmand.fastspring.subscription.pro.annual"])
+        return proMonthly;
+    if ([sku hasPrefix:@"net.osmand.fastspring.subscription.pro.annual"])
+        return proAnnually;
+    if ([sku hasPrefix:@"net.osmand.fastspring.subscription.maps.annual"])
+        return mapsAnnually;
+
     return nil;
 }
 

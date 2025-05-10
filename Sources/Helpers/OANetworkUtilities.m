@@ -81,7 +81,7 @@
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                       timeoutInterval:30.0];
+                                                       timeoutInterval:100.0];
     
     [request addValue:@"UTF-8" forHTTPHeaderField:@"Accept-Charset"];
     [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
@@ -98,7 +98,6 @@
     {
         [request setHTTPMethod:@"GET"];
     }
-    [request setTimeoutInterval:100];
     __block BOOL hasFinished = NO;
     NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         hasFinished = YES;

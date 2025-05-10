@@ -126,6 +126,8 @@ static BOOL _purchasesUpdated;
         NSMutableArray<OAProduct *> *activeProducts = [NSMutableArray array];
         NSMutableArray<OAProduct *> *externalActiveProducts = [NSMutableArray array];
         NSMutableArray<OAInAppStateHolder *> *externalActiveProductHolders = [NSMutableArray array];
+        NSMutableArray<OASubscription *> *externalActiveSubscriptions = [NSMutableArray array];
+        NSMutableArray<OASubscriptionStateHolder *> *externalActiveSubscriptionHolders = [NSMutableArray array];
         NSMutableArray<OAProduct *> *expiredProducts = [NSMutableArray array];
         for (OAProduct *product in mainPurchases)
         {
@@ -149,10 +151,16 @@ static BOOL _purchasesUpdated;
             [externalActiveProducts addObject:product];
             [externalActiveProductHolders addObject:[externalInApps objectForKey:product]];
         }
-        
+        NSMapTable<OASubscription *, OASubscriptionStateHolder *> *externalSubscriptions = _iapHelper.getExternalSubscriptions;
+        for (OASubscription *subscription in externalSubscriptions.keyEnumerator)
+        {
+            [externalActiveSubscriptions addObject:subscription];
+            [externalActiveSubscriptionHolders addObject:[externalSubscriptions objectForKey:subscription]];
+        }
+
         OAAppSettings *settings = OAAppSettings.sharedManager;
         BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
-        if (activeProducts.count == 0 && externalActiveProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
+        if (activeProducts.count == 0 && externalActiveProducts.count == 0 && externalActiveSubscriptions.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
         {
             if (OABackupHelper.sharedInstance.isRegistered)
             {
@@ -184,7 +192,7 @@ static BOOL _purchasesUpdated;
         }
         else
         {
-            if (activeProducts.count > 0 || externalActiveProducts.count > 0 || isProSubscriptionAvailable)
+            if (activeProducts.count > 0 || externalActiveProducts.count > 0 || externalActiveSubscriptions.count > 0 || isProSubscriptionAvailable)
             {
                 OATableSectionData *activeSection = [_data createNewSection];
                 activeSection.headerText = OALocalizedString(@"osm_live_active");
@@ -222,6 +230,19 @@ static BOOL _purchasesUpdated;
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                         @"product" : product
+                    }];
+                }
+                for (NSInteger i = 0; i < externalActiveSubscriptions.count; i++)
+                {
+                    OASubscription *subscription = externalActiveSubscriptions[i];
+                    NSNumber *origin = @(externalActiveSubscriptionHolders[i].origin);
+                    NSNumber *expireTime = @(externalActiveSubscriptionHolders[i].expireTime);
+                    [activeSection addRowFromDictionary:@{
+                        kCellKeyKey : [@"product_" stringByAppendingString:subscription.productIdentifier],
+                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+                        @"product" : subscription,
+                        @"origin" : origin,
+                        @"expireTime" : expireTime
                     }];
                 }
                 for (NSInteger i = 0; i < externalActiveProducts.count; i++)
@@ -484,11 +505,15 @@ static BOOL _purchasesUpdated;
         id originObj = [item objForKey:@"origin"];
         if (originObj && [originObj isKindOfClass:NSNumber.class])
             origin = (EOAPurchaseOrigin) ((NSNumber *)originObj).intValue;
+        NSDate *expireDate = nil;
+        id expireTimeObj = [item objForKey:@"expireTime"];
+        if (expireTimeObj && [expireTimeObj isKindOfClass:NSNumber.class])
+            expireDate = [NSDate dateWithTimeIntervalSince1970:((NSNumber *)expireTimeObj).doubleValue];
 
-        if (origin != EOAPurchaseOriginUndefined)
-            [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"] origin:origin]];
-        else
-            [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"]]];
+        if (origin == EOAPurchaseOriginUndefined)
+            origin = EOAPurchaseOriginIOS;
+        
+        [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"] origin:origin expireDate:expireDate]];
     }
 }
 

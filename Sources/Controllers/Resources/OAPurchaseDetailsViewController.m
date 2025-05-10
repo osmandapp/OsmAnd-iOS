@@ -35,6 +35,7 @@
     OATableDataModel *_data;
     OAAppSettings *_settings;
     EOAPurchaseOrigin _origin;
+    NSDate *_expireDate;
     
     BOOL _isCrossplatform;
     BOOL _isFreeStart;
@@ -65,24 +66,14 @@
     return self;
 }
 
-- (instancetype)initWithProduct:(OAProduct *)product
-{
-    self = [super init];
-    if (self)
-    {
-        _product = product;
-        _origin = EOAPurchaseOriginIOS;
-    }
-    return self;
-}
-
-- (instancetype)initWithProduct:(OAProduct *)product origin:(EOAPurchaseOrigin)origin
+- (instancetype)initWithProduct:(OAProduct *)product origin:(EOAPurchaseOrigin)origin expireDate:(NSDate *)expireDate
 {
     self = [super init];
     if (self)
     {
         _product = product;
         _origin = origin;
+        _expireDate = expireDate;
     }
     return self;
 }
@@ -197,7 +188,8 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterMediumStyle;
     
-    NSString *descr = _product.expirationDate ? [formatter stringFromDate:_product.expirationDate] : @"";
+    NSDate *expireDate = !_expireDate ? _product.expirationDate : _expireDate;
+    NSString *descr = expireDate ? [formatter stringFromDate:expireDate] : @"";
     if (_product.purchaseState == PSTATE_NOT_PURCHASED && [_product isKindOfClass:OASubscription.class])
     {
         if (_product.expirationDate)
@@ -218,7 +210,7 @@
         kCellDescrKey : [self purchaseOriginToString:_origin]
     }];
 
-    if (isSubscription)
+    if (isSubscription && _origin == EOAPurchaseOriginIOS)
     {
         [productSection addRowFromDictionary:@{
             kCellKeyKey: @"manage_subscription",

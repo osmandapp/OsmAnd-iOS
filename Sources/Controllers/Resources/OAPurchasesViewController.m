@@ -145,17 +145,25 @@ static BOOL _purchasesUpdated;
             else if (product.purchaseState == PSTATE_NOT_PURCHASED)
                 [expiredProducts addObject:product];
         }
-        NSMapTable<OAProduct *, OAInAppStateHolder *> *externalInApps = _iapHelper.getExternalInApps;
-        for (OAProduct *product in externalInApps.keyEnumerator)
+        NSArray<OAInAppStateHolder *> *externalInApps = _iapHelper.getExternalInApps;
+        for (OAInAppStateHolder *holder in externalInApps)
         {
-            [externalActiveProducts addObject:product];
-            [externalActiveProductHolders addObject:[externalInApps objectForKey:product]];
+            OAProduct *product = holder.linkedProduct;
+            if (product)
+            {
+                [externalActiveProducts addObject:product];
+                [externalActiveProductHolders addObject:holder];
+            }
         }
-        NSMapTable<OASubscription *, OASubscriptionStateHolder *> *externalSubscriptions = _iapHelper.getExternalSubscriptions;
-        for (OASubscription *subscription in externalSubscriptions.keyEnumerator)
+        NSArray<OASubscriptionStateHolder *> *externalSubscriptions = _iapHelper.getExternalSubscriptions;
+        for (OASubscriptionStateHolder *holder in externalSubscriptions)
         {
-            [externalActiveSubscriptions addObject:subscription];
-            [externalActiveSubscriptionHolders addObject:[externalSubscriptions objectForKey:subscription]];
+            OASubscription *subscription = holder.linkedSubscription;
+            if (subscription)
+            {
+                [externalActiveSubscriptions addObject:subscription];
+                [externalActiveSubscriptionHolders addObject:holder];
+            }
         }
 
         OAAppSettings *settings = OAAppSettings.sharedManager;
@@ -236,6 +244,10 @@ static BOOL _purchasesUpdated;
                 }
                 for (NSInteger i = 0; i < externalActiveSubscriptions.count; i++)
                 {
+                    NSString *sku = externalActiveSubscriptionHolders[i].sku;
+                    if (isProSubscriptionAvailable && [sku isEqualToString:[settings.backupPurchaseSku get]])
+                        continue;
+                    
                     OASubscription *subscription = externalActiveSubscriptions[i];
                     NSNumber *origin = @(externalActiveSubscriptionHolders[i].origin);
                     NSNumber *expireTime = @(externalActiveSubscriptionHolders[i].expireTime);

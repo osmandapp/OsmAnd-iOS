@@ -352,24 +352,24 @@ static OASubscriptionState *EXPIRED;
     return products.allObjects;
 }
 
-- (NSMapTable<OASubscription *, OASubscriptionStateHolder *> *) getExternalSubscriptions
+- (NSArray<OASubscriptionStateHolder *> *) getExternalSubscriptions
 {
-    NSMapTable<OASubscription *, OASubscriptionStateHolder *> *res = [NSMapTable strongToStrongObjectsMapTable];
+    NSMutableArray<OASubscriptionStateHolder *> *res = [NSMutableArray array];
     for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
     {
         if (holder.linkedSubscription && holder.origin != EOAPurchaseOriginIOS)
-            [res setObject:holder forKey:holder.linkedSubscription];
+            [res addObject:holder];
     }
     return res;
 }
 
-- (NSMapTable<OAProduct *, OAInAppStateHolder *> *) getExternalInApps
+- (NSArray<OAInAppStateHolder *> *) getExternalInApps
 {
-    NSMapTable<OAProduct *, OAInAppStateHolder *> *res = [NSMapTable strongToStrongObjectsMapTable];
+    NSMutableArray<OAInAppStateHolder *> *res = [NSMutableArray array];
     for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
     {
         if (holder.linkedProduct && ![kPlatformApple isEqualToString:holder.platform])
-            [res setObject:holder forKey:holder.linkedProduct];
+            [res addObject:holder];
     }
     return res;
 }
@@ -1072,7 +1072,7 @@ static OASubscriptionState *EXPIRED;
             if (!maps)
             {
                 for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
-                    if (holder.linkedSubscription == self.mapsAnnually)
+                    if (holder.linkedSubscription == self.mapsAnnually && holder.state == OASubscriptionState.ACTIVE)
                     {
                         maps = YES;
                         break;

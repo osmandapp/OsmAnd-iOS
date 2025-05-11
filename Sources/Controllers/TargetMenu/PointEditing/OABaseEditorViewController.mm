@@ -506,6 +506,11 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     return resultCell;
 }
 
+- (PoiIconCollectionHandler *) getPoiIconCollectionHandler
+{
+    return _poiIconCollectionHandler;
+}
+
 #pragma mark - OAShapesTableViewCellDelegate
 
 - (void)iconChanged:(NSInteger)tag

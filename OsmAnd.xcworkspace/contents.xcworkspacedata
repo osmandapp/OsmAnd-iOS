@@ -157,6 +157,19 @@
                         </FileRef>
                      </Group>
                      <Group
+                        location = "group:wiki"
+                        name = "wiki">
+                        <FileRef
+                           location = "group:WikiImage.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:WikiHelper.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:WikiMetadata.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
                         location = "group:xml"
                         name = "xml">
                         <FileRef
@@ -300,6 +313,9 @@
                         <FileRef
                            location = "group:GpxDirItem.kt">
                         </FileRef>
+                        <FileRef
+                           location = "group:GpxFormatter.kt">
+                        </FileRef>
                         <Group
                            location = "group:enums"
                            name = "enums">
@@ -339,6 +355,9 @@
                            </FileRef>
                            <FileRef
                               location = "group:WptPt.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Link.kt">
                            </FileRef>
                            <FileRef
                               location = "group:TrkSegment.kt">
@@ -521,6 +540,13 @@
                         </FileRef>
                         <FileRef
                            location = "group:ByteArrayExtensions.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:gpx"
+                        name = "gpx">
+                        <FileRef
+                           location = "group:GpxFormatter.kt">
                         </FileRef>
                      </Group>
                      <Group

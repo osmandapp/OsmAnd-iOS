@@ -172,7 +172,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         if let key = item.key {
             if let item = ExternalSensorsCellData(rawValue: key) {
                 if case .learnMore = item {
-                    guard let settingsURL = URL(string: docs_external_sensors),
+                    guard let settingsURL = URL(string: docsExternalSensorsURL),
                           UIApplication.shared.canOpenURL(settingsURL) else {
                         return
                     }

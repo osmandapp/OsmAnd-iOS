@@ -58,7 +58,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     _gridSettings = [[OACoordinatesGridSettings alloc] init];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPreferenceChange) name:kNotificationSetProfileSetting object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWidgetsLayoutDidChange) name:kNotificationWidgetPanelsDidLayout object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWidgetsLayoutDidChange) name:kWidgetsPanelsDidLayoutNotification object:nil];
     _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:self.app.mapSettingsChangeObservable];
     _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:OsmAndApp.instance.dayNightModeObservable];
 }
@@ -91,7 +91,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     [super deinitLayer];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationSetProfileSetting object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationWidgetPanelsDidLayout object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kWidgetsPanelsDidLayoutNotification object:nil];
     if (_mapSettingsChangeObserver)
     {
         [_mapSettingsChangeObserver detach];

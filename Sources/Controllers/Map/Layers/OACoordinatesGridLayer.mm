@@ -21,16 +21,10 @@
 static const CGFloat kDefaultMarginFactor = 8.0f;
 static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = static_cast<OsmAnd::TextRasterizer::Style::TextAlignment>(-1);
 
-@interface OACoordinatesGridLayer () <OAMapInfoControllerProtocol>
-
-@end
-
 @implementation OACoordinatesGridLayer
 {
-    OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OACoordinatesGridSettings *_gridSettings;
-    OAMapRendererView *_mapView;
     
     std::shared_ptr<OsmAnd::GridMarksProvider> _marksProvider;
     std::shared_ptr<OsmAnd::GridConfiguration> _gridConfiguration;
@@ -47,12 +41,11 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     OAMapInfoController *_mapInfoController;
     BOOL _marginFactorUpdateNeeded;
     
-    OAAutoObserverProxy *_coordinatesGridSettingsObservable;
     OAAutoObserverProxy *_mapSettingsChangeObserver;
     OAAutoObserverProxy *_dayNightModeObserver;
 }
 
-- (NSString *) layerId
+- (NSString *)layerId
 {
     return kCoordinatesGridLayerId;
 }
@@ -61,13 +54,12 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 {
     [super initLayer];
     
-    _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
     _gridSettings = [[OACoordinatesGridSettings alloc] init];
-    _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     
-    _coordinatesGridSettingsObservable = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:[OsmAndApp instance].coordinatesGridSettingsObservable];
-    _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:_app.mapSettingsChangeObservable];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPreferenceChange) name:kNotificationSetProfileSetting object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWidgetsLayoutDidChange) name:kNotificationWidgetPanelsDidLayout object:nil];
+    _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:self.app.mapSettingsChangeObservable];
     _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:OsmAndApp.instance.dayNightModeObservable];
 }
 
@@ -78,10 +70,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_mapInfoController)
-        {
             _mapInfoController = [OARootViewController instance].mapPanel.hudViewController.mapInfoController;
-            _mapInfoController.delegate = self;
-        }
         
         [self updateGridSettings];
     });
@@ -93,7 +82,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 {
     [super resetLayer];
     
-    [_mapView removeKeyedSymbolsProvider:_marksProvider];
+    [self.mapView removeKeyedSymbolsProvider:_marksProvider];
     _marksProvider.reset();
 }
 
@@ -101,11 +90,8 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 {
     [super deinitLayer];
     
-    if (_coordinatesGridSettingsObservable)
-    {
-        [_coordinatesGridSettingsObservable detach];
-        _coordinatesGridSettingsObservable = nil;
-    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationSetProfileSetting object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationWidgetPanelsDidLayout object:nil];
     if (_mapSettingsChangeObserver)
     {
         [_mapSettingsChangeObserver detach];
@@ -120,6 +106,12 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 
 - (void)onPreferenceChange
 {
+    [self updateGridSettings];
+}
+
+- (void)onWidgetsLayoutDidChange
+{
+    _marginFactorUpdateNeeded = YES;
     [self updateGridSettings];
 }
 
@@ -337,11 +329,11 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 {
     _gridConfiguration->setPrimaryGrid(visible);
     _gridConfiguration->setSecondaryGrid(visible);
-    _mapView.renderer->setGridConfiguration(*_gridConfiguration);
+    self.mapView.renderer->setGridConfiguration(*_gridConfiguration);
     if (visible)
-        _mapView.renderer->addSymbolsProvider(_marksProvider);
+        self.mapView.renderer->addSymbolsProvider(_marksProvider);
     else
-        _mapView.renderer->removeSymbolsProvider(_marksProvider);
+        self.mapView.renderer->removeSymbolsProvider(_marksProvider);
 }
 
 - (void)cleanupMarksProvider
@@ -351,14 +343,6 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
         [self.mapView removeKeyedSymbolsProvider:_marksProvider];
         _marksProvider = nullptr;
     }
-}
-
-#pragma mark - OAMapInfoControllerProtocol
-
-- (void)widgetsLayoutDidChange:(BOOL)animated
-{
-    _marginFactorUpdateNeeded = YES;
-    [self updateGridSettings];
 }
 
 @end

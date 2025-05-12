@@ -586,6 +586,8 @@
         [self updateWeatherToolbarVisible];
 
     [self.delegate widgetsLayoutDidChange:YES];
+    NSNotification *notif = [NSNotification notificationWithName:kNotificationWidgetPanelsDidLayout object:self userInfo:nil];
+    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
 }
 
 - (void)updateWeatherToolbarVisible

@@ -1502,7 +1502,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
        [self setLastModifiedTime:NSDate.date.timeIntervalSince1970];
     
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getKey:mode]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
+    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
 }
 
 - (BOOL)isSetForMode:(OAApplicationMode *)mode
@@ -1683,7 +1684,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         [self.cachedValues setObject:appMode forKey:mode];
 
     [[NSUserDefaults standardUserDefaults] setObject:appMode.stringKey forKey:[self getKey:mode]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
+    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
 }
 
 - (void)resetToDefault
@@ -3751,7 +3753,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit requiringSecureCoding:NO error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:[self getKey:mode]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
+    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
 }
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
@@ -4075,7 +4078,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         defaultValue = (GridFormat)pDefault.intValue;
     
     [self set:defaultValue];
-    [[OsmAndApp instance].coordinatesGridSettingsObservable notifyEvent];
 }
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
@@ -4148,7 +4150,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         defaultValue = (GridLabelsPosition)pDefault.intValue;
     
     [self set:defaultValue];
-    [[OsmAndApp instance].coordinatesGridSettingsObservable notifyEvent];
 }
 
 @end
@@ -5555,7 +5556,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     _mapSettingTrackRecording = mapSettingTrackRecording;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingTrackRecording forKey:mapSettingTrackRecordingKey];
     [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
-    [[OAMapButtonsHelper sharedInstance].quickActionButtonsChangedObservable notifyEvent];
+    [[OAMapButtonsHelper sharedInstance] refreshQuickActionButtons];
 }
 
 - (NSSet<NSString *> *) getEnabledPlugins

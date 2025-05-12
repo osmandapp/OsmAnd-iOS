@@ -54,7 +54,7 @@
 - (void)setEnabled:(BOOL)enabled forAppMode:(OAApplicationMode *)appMode
 {
     [_settings.mapSettingShowCoordinatesGrid set:enabled mode:appMode];
-    [self notifyChange];
+    [[OAMapButtonsHelper sharedInstance] refreshQuickActionButtons];
 }
 
 - (int32_t)getGridFormatForAppMode:(OAApplicationMode *)appMode
@@ -65,7 +65,6 @@
 - (void)setGridFormat:(int32_t)format forAppMode:(OAApplicationMode *)appMode
 {
     [_settings.coordinateGridFormat set:format mode:appMode];
-    [self notifyChange];
 }
 
 - (int)getDayGridColor
@@ -94,15 +93,12 @@
         [_settings.coordinatesGridColorNight set:(int32_t)color mode:appMode];
     else
         [_settings.coordinatesGridColorDay set:(int32_t)color mode:appMode];
-    
-    [self notifyChange];
 }
 
 - (void)resetColorsForAppMode:(OAApplicationMode *)appMode
 {
     [_settings.coordinatesGridColorDay resetModeToDefault:appMode];
     [_settings.coordinatesGridColorNight resetModeToDefault:appMode];
-    [self notifyChange];
 }
 
 - (int32_t)getGridLabelsPositionForAppMode:(OAApplicationMode *)appMode
@@ -113,7 +109,6 @@
 - (void)setGridLabelsPosition:(int32_t)position forAppMode:(OAApplicationMode *)appMode
 {
     [_settings.coordinatesGridLabelsPosition set:position mode:appMode];
-    [self notifyChange];
 }
 
 - (ZoomRange)getZoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode
@@ -146,14 +141,12 @@
 {
     [_settings.coordinateGridMinZoom set:(int32_t)levels.min mode:appMode];
     [_settings.coordinateGridMaxZoom set:(int32_t)levels.max mode:appMode];
-    [self notifyChange];
 }
 
 - (void)resetZoomLevelsForAppMode:(OAApplicationMode *)appMode
 {
     [_settings.coordinateGridMinZoom resetModeToDefault:appMode];
     [_settings.coordinateGridMaxZoom resetModeToDefault:appMode];
-    [self notifyChange];
 }
 
 - (ZoomRange)getSupportedZoomLevels
@@ -188,12 +181,6 @@
 - (float)getTextScaleForAppMode:(OAApplicationMode *)appMode
 {
     return [_settings.textSize get:appMode] * [OARootViewController.instance.mapPanel.mapViewController displayDensityFactor];
-}
-
-- (void)notifyChange
-{
-    [_app.coordinatesGridSettingsObservable notifyEvent];
-    [[OAMapButtonsHelper sharedInstance].quickActionButtonsChangedObservable notifyEvent];
 }
 
 @end

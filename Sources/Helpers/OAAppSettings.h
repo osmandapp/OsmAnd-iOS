@@ -13,7 +13,7 @@
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
 static NSString * const VOICE_PROVIDER_NOT_USE = @"VOICE_PROVIDER_NOT_USE";
-
+static NSString * const kNotificationWidgetPanelsDidLayout = @"kNotificationWidgetPanelsDidLayout";
 static NSString * const appearanceProfileThemeKey = @"appearanceProfileThemeKey";
 
 static NSString * const mapDensityKey = @"mapDensity";

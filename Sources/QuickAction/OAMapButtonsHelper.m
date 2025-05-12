@@ -233,6 +233,11 @@ static QuickActionType *TYPE_INTERFACE;
     [_quickActionsChangedObservable notifyEventWithKey:buttonState];
 }
 
+- (void)refreshQuickActionButtons
+{
+    [_quickActionButtonsChangedObservable notifyEvent];
+}
+
 - (BOOL)isActionNameUnique:(NSArray<OAQuickAction *> *)actions quickAction:(OAQuickAction *)quickAction
 {
     for (OAQuickAction *action in actions)

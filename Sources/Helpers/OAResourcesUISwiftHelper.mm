@@ -126,6 +126,14 @@
     return [OAResourceType getIcon:res.resourceType templated:YES];
 }
 
+- (NSString *)getDate
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    if (res.date)
+        return [res getDate];
+    return nil;
+}
+
 - (NSString *) iconName
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;

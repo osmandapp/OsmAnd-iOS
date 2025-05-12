@@ -36,6 +36,8 @@
 #import "OAPOIType.h"
 #import "OAResultMatcher.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAResourcesUIHelper.h"
+#import "OAManageResourcesViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -50,6 +52,238 @@ static const int SEARCH_HISTORY_API_PRIORITY = 150;
 static const int SEARCH_HISTORY_OBJECT_PRIORITY = 154;
 static const int SEARCH_TRACK_API_PRIORITY = 150;
 static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
+static const int SEARCH_INDEX_ITEM_API_PRIORITY = 150;
+// NOTE: Android uses 150, but sometimes the values of ITEM_PRIORITY are mixed. (search: "den")
+static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
+
+@implementation SearchIndexItemAPI
+
+- (BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    OAWorldRegion *worldRegion = [[OsmAndApp instance] worldRegion];
+    [self processGroups:worldRegion search:phrase resultMatcher:resultMatcher];
+    NSString *fullSearchPhrase = [phrase getFullSearchPhrase];
+    
+    if (fullSearchPhrase.length > 3)
+    {
+        [OAQuickSearchHelper.instance cancelSearchCities];
+        __weak __typeof(self) weakSelf = self;
+        [OAQuickSearchHelper.instance searchCities:fullSearchPhrase
+                                    searchLocation:[OsmAndApp instance].locationServices.lastKnownLocation
+                                      allowedTypes:@[@"city", @"town"]
+                                         cityLimit:10000
+                                        onComplete:^(NSMutableArray *searchResults) {
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+
+            for (OASearchResult *amenity in searchResults)
+            {
+                OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:amenity.location.coordinate.latitude
+                                                                                lon:amenity.location.coordinate.longitude];
+                if (!region || ![region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
+                    continue;
+
+                NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
+                if (ids.count > 0)
+                {
+                    OARepositoryResourceItem *item = [strongSelf getUninstalledMapRegionResourceFromIds:ids
+                                                                                                   region:region
+                                                                                                    title:amenity.localeName];
+                    if (item)
+                    {
+                        OASearchResult *result = [strongSelf createSearchResultWithPhrase:phrase item:item localeName:item.title];
+                        
+                        [self addResultIfNotExists:result
+                                   existingResults:[resultMatcher getRequestResults]
+                                     resultMatcher:resultMatcher];
+                    }
+                }
+            }
+        }];
+    }
+
+    return YES;
+}
+
+- (void)addResultIfNotExists:(OASearchResult *)result
+             existingResults:(NSArray<OASearchResult *> *)existingResults
+               resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    if (!result || !result.resourceId)
+    {
+        return;
+    }
+    
+    for (OASearchResult *existing in existingResults)
+    {
+        if (existing.resourceId && [existing.resourceId isEqualToString:result.resourceId])
+        {
+            return;
+        }
+    }
+    
+    [resultMatcher publish:result];
+}
+
+- (NSString *)titleForObject:(OASearchResult *)obj
+{
+    return ((OARepositoryResourceItem *)obj.relatedObject).title ?: @"";;
+}
+
+- (void)processGroups:(OAWorldRegion *)group
+               search:(OASearchPhrase *)phrase
+        resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    OARepositoryResourceItem *indexItem = nil;
+    NSString *name = nil;
+    OAWorldRegion *region = group;
+    if (region)
+    {
+        name = [[region.allNames componentsJoinedByString:@" "] ?: group.name lowerCase];
+    }
+    
+    if (group.superregion
+        && group.superregion.superregion
+        && group.superregion.superregion.resourceTypes
+        && [self isMatch:phrase text:name]
+        && [group.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
+    {
+        NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:group];
+        if (ids.count > 0)
+        {
+            indexItem = [self getUninstalledMapRegionResourceFromIds:ids region:region title:nil];
+        }
+    }
+    
+    if (indexItem)
+    {
+        [resultMatcher publish:[self createSearchResultWithPhrase:phrase item:indexItem localeName:indexItem.title]];
+    }
+    
+    if (group.subregions)
+    {
+        for (OAWorldRegion *subregion in group.subregions)
+        {
+            [self processGroups:subregion search:phrase resultMatcher:resultMatcher];
+        }
+    }
+}
+
+- (nullable OARepositoryResourceItem *)getUninstalledMapRegionResourceFromIds:(NSArray<NSString *> *)ids
+                                                              region:(OAWorldRegion *)region
+                                                               title:(nullable NSString *)title
+{
+    for (NSString *resourceId in ids)
+    {
+        const auto& resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+        if (resource && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        {
+            BOOL isInstalled = [OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId));
+            if (!isInstalled)
+            {
+                NSString *composeTitle;
+                if (!title)
+                {
+                    NSString *regionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                  inRegion:region
+                                                            withRegionName:YES
+                                                          withResourceType:NO];
+                    
+                    NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                  inRegion:region.superregion
+                                                            withRegionName:YES
+                                                          withResourceType:NO];
+                    composeTitle = [self composeTitleWithPart:regionTitle andPart:superregionTitle];
+                }
+                else
+                {
+                    // for city/town
+                    
+                    NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                  inRegion:region
+                                                            withRegionName:YES
+                                                          withResourceType:NO];
+                    
+                    composeTitle = [self composeTitleWithPart:title andPart:superregionTitle];
+                }
+                return [self createRepositoryResourceItemWithResource:resource region:region title:composeTitle];
+            }
+        }
+    }
+    return nil;
+}
+
+- (NSString *)composeTitleWithPart:(nullable NSString *)part1 andPart:(nullable NSString *)part2
+{
+    if (part1.length > 0 && part2.length > 0)
+    {
+        return [NSString stringWithFormat:@"%@, %@", part1, part2];
+    }
+    return part1.length > 0 ? part1 : part2;
+}
+
+- (OARepositoryResourceItem *)createRepositoryResourceItemWithResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource
+                                                                region:(OAWorldRegion *)region
+                                                                 title:(NSString *)title
+{
+    OARepositoryResourceItem *item = [OARepositoryResourceItem new];
+    item.resourceId = resource->id;
+    item.resourceType = resource->type;
+    item.title = title;
+    item.resource = resource;
+    NSString *downloadKey = [@"resource:" stringByAppendingString:resource->id.toNSString()];
+    item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:downloadKey] firstObject];
+    item.size = resource->size;
+    item.sizePkg = resource->packageSize;
+    item.worldRegion = region;
+    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+    return item;
+}
+
+- (OASearchResult *)createSearchResultWithPhrase:(OASearchPhrase *)phrase
+                                            item:(OARepositoryResourceItem *)item
+                                      localeName:(NSString *)localeName
+{
+    OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+    sr.localeName = localeName;
+    // NOTE: for duplicate detection, if regions/subregions and city search return the same results
+    sr.resourceId = item.resourceId.toNSString();
+    // NOTE: skip the EOAUnknownPhraseMatchWeight search stage
+     sr.unknownPhraseMatchWeight = -1;
+    sr.priority = SEARCH_INDEX_ITEM_PRIORITY;
+    sr.objectType = EOAObjectTypeIndexItem;
+    sr.relatedObject = item;
+    sr.preferredZoom = 17;
+
+    return sr;
+}
+
+- (BOOL)isMatch:(OASearchPhrase *)phrase text:(NSString *)text
+{
+    if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
+    {
+        return YES;
+    }
+    OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_EQUALS_FROM_SPACE];
+    return [matcher matches:text];
+}
+
+- (int)getSearchPriority:(OASearchPhrase *)phrase
+{
+    if (![phrase isNoSelectedType])
+    {
+        return -1;
+    }
+    return SEARCH_INDEX_ITEM_API_PRIORITY;
+}
+
+- (BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return NO;
+}
+
+@end
 
 
 @implementation OASearchFavoritesAPI
@@ -436,6 +670,8 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
 {
     [self setResourcesForSearchUICore];
     [_core initApi];
+    // Register map search api
+    [_core registerAPI:[[SearchIndexItemAPI alloc] init]];
     
     // Register favorites search api
     [_core registerAPI:[[OASearchFavoritesAPI alloc] init]];
@@ -555,20 +791,37 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
     NSInteger searchRequestsCount = ++_searchRequestsCount;
     dispatch_block_t searchCitiesFunc = ^{
         dispatch_group_enter(_searchCitiesGroup);
-
+        
         OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
         NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
         BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
         NSMutableArray *amenities = [NSMutableArray array];
-
+        
         OAQuickSearchHelper *searchHelper = [OAQuickSearchHelper instance];
         OASearchUICore *searchUICore = [searchHelper getCore];
-        OASearchSettings *settings = [[searchUICore getSearchSettings] setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation];
-        settings = [settings setLang:lang ? lang : @"" transliterateIfMissing:transliterate];
+        OASearchSettings *settings = [[OASearchSettings alloc] initWithSettings:[searchUICore getSearchSettings]];
+        NSMutableArray<NSString *> *resIds = [NSMutableArray array];
+        
+        for (const auto& resource : OsmAndApp.instance.resourcesManager->getLocalResources())
+        {
+            if (resource->id.compare(QString(kWorldBasemapKey)) == 0)
+            {
+                [resIds addObject:resource->id.toNSString()];
+                break;
+            }
+        }
+        
+        if (resIds.count == 0)
+            [resIds addObject:[kWorldMiniBasemapKey lowerCase]];
+        
+        [settings setOfflineIndexes:[resIds copy]];
+        settings = [settings setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation];
+        settings = [settings setLang:lang ?: @"" transliterateIfMissing:transliterate];
         settings = [settings setSortByName:NO];
         settings = [settings setAddressSearch:YES];
         settings = [settings setEmptyQueryAllowed:YES];
         settings = [settings setOriginalLocation:searchLocation];
+        settings = [settings setSearchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]];
         [searchUICore updateSettings:settings];
 
         int __block count = 0;

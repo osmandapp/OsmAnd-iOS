@@ -12,6 +12,10 @@
 @class OASearchUICore, OASearchResultCollection, OASearchResult, QuadRect;
 @class OASGpxFile;
 
+@interface SearchIndexItemAPI : OASearchBaseAPI
+
+@end
+
 @interface OASearchFavoritesAPI : OASearchBaseAPI
 
 @end

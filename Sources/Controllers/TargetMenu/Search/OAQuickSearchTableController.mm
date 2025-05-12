@@ -53,6 +53,7 @@
 #import "OARightIconTableViewCell.h"
 #import "GeneratedAssetSymbols.h"
 #import "OATopIndexFilter.h"
+#import "OAResourcesUIHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -66,9 +67,14 @@
 
 #define kDefaultZoomOnShow 16.0f
 
+@interface OAQuickSearchTableController() <DownloadingCellResourceHelperDelegate>
+
+@end
+
 @implementation OAQuickSearchTableController
 {
     NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *_dataGroups;
+    SearchDownloadingCellResourceHelper *_downloadingCellResourceHelper;
     BOOL _decelerating;
     
     BOOL _showResult;
@@ -86,8 +92,68 @@
         _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
         _tableView.estimatedRowHeight = 48.0;
         _tableView.rowHeight = UITableViewAutomaticDimension;
+        [self registerCels];
+        [self setupDownloadingCellHelper];
     }
     return self;
+}
+
+- (void)registerCels
+{
+    [self.tableView registerNib:[UINib nibWithNibName:DownloadingCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:DownloadingCell.reuseIdentifier];
+}
+
+- (void)setupDownloadingCellHelper
+{
+    __weak OAQuickSearchTableController *weakSelf = self;
+    _downloadingCellResourceHelper = [SearchDownloadingCellResourceHelper new];
+    _downloadingCellResourceHelper.hostViewController = OARootViewController.instance.navigationController;
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
+}
+
+#pragma mark - DownloadingCellResourceHelperDelegate
+
+- (void)onDownloadTaskFinishedWithResourceId:(NSString *)resourceId
+{
+    BOOL shouldReloadTable = NO;
+    for (NSMutableArray<OAQuickSearchListItem *> *items in _dataGroups)
+    {
+        for (OAQuickSearchListItem *it in items)
+        {
+            if ([it isKindOfClass:[OAQuickSearchMoreListItem class]])
+                continue;
+            
+            OASearchResult *res = [it getSearchResult];
+            if (res.objectType == EOAObjectTypeIndexItem)
+            {
+                [items removeObject:it];
+                
+                shouldReloadTable = YES;
+                break;
+            }
+        }
+        
+        if (shouldReloadTable)
+        {
+            break;
+        }
+    }
+    
+    if (shouldReloadTable)
+    {
+        [_downloadingCellResourceHelper cleanCellCache];
+        [self.tableView reloadData];
+    }
+}
+
+- (void)onDownloadingCellResourceNeedUpdate:(id<OADownloadTask>)task
+{
+}
+
+- (void)onStopDownload:(OAResourceSwiftItem *)resourceItem
+{
 }
 
 - (void) updateDistanceAndDirection
@@ -601,6 +667,14 @@
                     return cell;
                 }
             }
+            case EOAObjectTypeIndexItem: {
+                DownloadingCell *downloadingCell = [tableView dequeueReusableCellWithIdentifier:DownloadingCell.reuseIdentifier];
+                OAResourceItem *obj = (OAResourceItem *)res.relatedObject;
+                OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:obj];
+                [_downloadingCellResourceHelper configureWithResourceItem:mapItem cell:downloadingCell];
+
+                return downloadingCell;
+            }
             case EOAObjectTypePartialLocation:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
@@ -972,6 +1046,11 @@
                 else if (sr.objectType == EOAObjectTypePartialLocation)
                 {
                     // nothing
+                }
+                else if (sr.objectType == EOAObjectTypeIndexItem)
+                {
+                    OAResourceItem *resourceItem = (OAResourceItem *)sr.relatedObject;
+                    [_downloadingCellResourceHelper onCellClicked:resourceItem.resourceId.toNSString()];
                 }
                 else
                 {

@@ -255,28 +255,7 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
     sr.objectType = EOAObjectTypeIndexItem;
     sr.relatedObject = item;
     sr.preferredZoom = 17;
-    __weak __typeof(self) weakSelf = self;
-    sr.customNameCmptr = ^NSComparisonResult(OASearchResult *a, OASearchResult *b) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf)
-        {
-            NSArray<NSString *> *partsA = [[strongSelf titleForObject:a] componentsSeparatedByString:@","];
-            NSArray<NSString *> *partsB = [[strongSelf titleForObject:b] componentsSeparatedByString:@","];
-            
-            NSString *firstPartA = partsA.count > 0 ? partsA[0] : @"";
-            NSString *firstPartB = partsB.count > 0 ? partsB[0] : @"";
-            
-            NSComparisonResult compareFirst = [firstPartA localizedCaseInsensitiveCompare:firstPartB];
-            if (compareFirst != NSOrderedSame)
-                return compareFirst;
-            
-            NSString *secondPartA = partsA.count > 1 ? partsA[1] : @"";
-            NSString *secondPartB = partsB.count > 1 ? partsB[1] : @"";
-            return [secondPartA localizedCaseInsensitiveCompare:secondPartB];
-        }
-        return NSOrderedAscending;
 
-    };
     return sr;
 }
 

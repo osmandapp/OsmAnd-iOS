@@ -245,7 +245,7 @@ static BOOL _repositoryUpdated = NO;
     return self;
 }
 
-- (void)registerCels
+- (void)registerCells
 {
     [self.tableView registerNib:[UINib nibWithNibName:DownloadingCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:DownloadingCell.reuseIdentifier];
 }
@@ -283,7 +283,7 @@ static BOOL _repositoryUpdated = NO;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 52.;
 
-    [self registerCels];
+    [self registerCells];
     [self setupDownloadingCellHelper];
 
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];

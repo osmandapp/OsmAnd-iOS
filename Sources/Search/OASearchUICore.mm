@@ -192,21 +192,14 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         }
         case EOACompareByName:
         {
-            if (o1.customNameCmptr != nil && o2.customNameCmptr != nil)
-            {
-                return o1.customNameCmptr(o1, o2);;
-            }
-            else
-            {
-                NSString *localeName1 = o1.localeName == nil ? @"" : o1.localeName;
-                NSString *localeName2 = o2.localeName == nil ? @"" : o2.localeName;
-
-                int cmp = OsmAnd::ICU::ccompare(QString::fromNSString(localeName1), QString::fromNSString(localeName2));
-                if (cmp != 0)
-                    return (NSComparisonResult)cmp;
-                
-                break;
-            }
+            NSString *localeName1 = o1.localeName == nil ? @"" : o1.localeName;
+            NSString *localeName2 = o2.localeName == nil ? @"" : o2.localeName;
+            
+            int cmp = OsmAnd::ICU::ccompare(QString::fromNSString(localeName1), QString::fromNSString(localeName2));
+            if (cmp != 0)
+                return (NSComparisonResult)cmp;
+            
+            break;
         }
         case EOACompareByDistance:
         {

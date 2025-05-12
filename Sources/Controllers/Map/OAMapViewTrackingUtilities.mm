@@ -546,7 +546,9 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         const auto targetAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
         auto zoomAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
         
-        animator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
+        auto userZoomAnimation = animator->getCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
+        if (userZoomAnimation)
+            animateZoom = NO;
         
         if (!animateZoom)
             zoomAnimation = nullptr;

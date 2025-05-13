@@ -9,6 +9,8 @@
 #import "OAFavoriteGroupEditorViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OsmAnd_Maps-Swift.h"
+
 #import "Localization.h"
 
 @implementation OAFavoriteGroupEditorViewController
@@ -129,6 +131,8 @@
                           updatePoints:updatePoints
                      shouldUpdateGroup:shouldUpdateGroup
                        saveImmediately:NO];
+    
+    [[self getPoiIconCollectionHandler] addIconToLastUsed:self.editIconName];
 
     if (![self.editColor isEqual:_favoriteGroup.color])
         [OAFavoritesHelper updateGroup:_favoriteGroup

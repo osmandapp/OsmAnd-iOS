@@ -887,7 +887,7 @@
 "rendering_attr_hikingRoutesOSMC_description" = "Disegna i percorsi in base alle tracce OSMC.";
 "rendering_value_red_name" = "Rosso";
 "rendering_attr_surface_mud_name" = "Fango";
-"rendering_attr_highway_class_street_name" = "Strada";
+"rendering_attr_highway_class_street_name" = "Strada urbana";
 "routing_attr_avoid_unpaved_name" = "No strade non pavimentate";
 "rendering_value_pink_name" = "Rosa";
 "rendering_value_defaultTranslucentCyan_name" = "Predefinito (ciano traslucido)";
@@ -904,7 +904,7 @@
 "rendering_attr_piste_difficulty_aerialway_name" = "Impianto a fune";
 "rendering_attr_roadColors_description" = "Seleziona una combinazione di colori per le strade:";
 "rendering_attr_hideProposed_name" = "Oggetti proposti";
-"rendering_attr_highway_class_road_name" = "Strada";
+"rendering_attr_highway_class_road_name" = "Strada extraurbana";
 "rendering_attr_tracktype_grade5_name" = "Morbido";
 "rendering_attr_noAdminboundaries_description" = "Non visualizzare i confini regionali (livelli amministrativi 5-9).";
 "routing_attr_allow_classic_only_description" = "Percorsi preparati solo per lo stile classico senza piste di pattinaggio. Include i percorsi preparati da una motoslitta più piccola con piste sciolte e piste fatte manualmente dagli sciatori.";
@@ -3649,3 +3649,4 @@
 "fuel_tank_capacity" = "Capacità del serbatoio di carburante";
 "fuel_tank_capacity_description" = "Inserisci la capacità del tuo serbatoio per monitorare con precisione i livelli e i consumi di carburante";
 "poi_filter_fuel" = "Carburante";
+"unit_of_volume_description" = "Le unità selezionate verranno applicate a tutti i dati relativi al volume nel profilo corrente.";

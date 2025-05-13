@@ -35,7 +35,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
-    
+    // TODO: Keys to enums
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
     private let tracksSmartFolderKey = "tracksSmartFolderKey"
@@ -73,6 +73,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var isSearchTextFilterChanged = false
     private var isSelectionModeInSearch = false
     private var isEditFilterActive = false
+    private var shouldReloadTableViewOnAppear = false
     
     private var selectedTrack: GpxDataItem?
     private var selectedFolderPath: String?
@@ -189,6 +190,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setupSearchController()
+        reloadTableViewOnAppearIfNeeded()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -198,6 +200,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tabBarController?.navigationItem.searchController = nil
         navigationItem.searchController = nil
         super.viewWillDisappear(animated)
+    }
+    
+    private func reloadTableViewOnAppearIfNeeded() {
+        guard shouldReloadTableViewOnAppear else { return }
+        generateData()
+        tableView.reloadData()
+        shouldReloadTableViewOnAppear = false
     }
     
     private func reloadTracks(forceLoad: Bool = false) {
@@ -752,8 +761,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         
         lastUpdate = Date.now.timeIntervalSince1970
-        DispatchQueue.main.async {
-            self.updateData()
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            guard view.window != nil else {
+                shouldReloadTableViewOnAppear = true
+                return
+            }
+            updateData()
         }
     }
     
@@ -1498,10 +1512,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     }
     
-    @objc func onObservedRecordedTrackChanged() {
+    @objc private func onObservedRecordedTrackChanged() {
         guard isRootFolder else { return }
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            guard view.window != nil else {
+                shouldReloadTableViewOnAppear = true
+                return
+            }
             generateData()
             let numberOfRows = tableView.numberOfRows(inSection: 0)
             if numberOfRows > 0 {

@@ -140,6 +140,7 @@
 #import "OATrackMenuHudViewController.h"
 #import "OABaseTrackMenuHudViewController.h"
 #import "OABaseScrollableHudViewController.h"
+#import "OAMapSettingsTerrainParametersViewController.h"
 #import "OATrackMenuHeaderView.h"
 #import "OACarPlayMapViewController.h"
 #import "OACarPlayDashboardInterfaceController.h"
@@ -169,6 +170,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAPOIViewController.h"
+#import "OACoordinatesGridSettings.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -246,6 +248,8 @@
 #import "OABackupDbHelper.h"
 #import "OACollectionSettingsItem.h"
 #import "OAPoiUiFilterSettingsItem.h"
+#import "OAMapSettingsScreen.h"
+#import "OADashboardViewController.h"
 
 // Quick actions
 #import "OAQuickAction.h"

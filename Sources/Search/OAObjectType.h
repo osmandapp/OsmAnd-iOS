@@ -39,7 +39,8 @@ typedef NS_ENUM(NSInteger, EOAObjectType)
     EOAObjectTypeFilterFinished,            // Represents a filter finished message
     EOAObjectTypeSearchApiFinished,         // Represents a search api finished message
     EOAObjectTypeSearchApiRegionFinished,   // Represents a search api region finished message
-    EOAObjectTypeUnknownNameFilter          // Represents an unknown name filter
+    EOAObjectTypeUnknownNameFilter,         // Represents an unknown name filter
+    EOAObjectTypeIndexItem                  // Represents a resource item (region, city, etc.)
 };
 
 @interface OAObjectType : NSObject

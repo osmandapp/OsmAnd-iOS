@@ -270,13 +270,14 @@ static NSString * const kSolidColorKey = @"solid_color";
         [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:_data.count - 1 inSection:0]]];
 
         [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
-        [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
         
         [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:newItem collectionView:collectionView shouldDismiss:NO];
         
         if (weakSelf.hostCell && [weakSelf.hostCell needUpdateHeight])
             [weakSelf.delegate reloadCollectionData];
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
+    }];
 }
 
 - (void) scrollToIndexPathIfNeeded:(NSIndexPath *)indexPath
@@ -285,7 +286,8 @@ static NSString * const kSolidColorKey = @"solid_color";
     if (!collectionView)
         return;
     
-    if (![collectionView.indexPathsForVisibleItems containsObject:indexPath])
+    NSInteger rowsCount = [collectionView numberOfItemsInSection:indexPath.section];
+    if (![collectionView.indexPathsForVisibleItems containsObject:indexPath] && indexPath.row < (rowsCount - 1))
     {
         [collectionView scrollToItemAtIndexPath:indexPath
                                atScrollPosition:[self getScrollDirection] == UICollectionViewScrollDirectionHorizontal
@@ -330,8 +332,8 @@ static NSString * const kSolidColorKey = @"solid_color";
             [weakSelf setSelectedIndexPath:updatedPrevSelectedIndex];
             [collectionView reloadItemsAtIndexPaths:@[insertedIndex, updatedPrevSelectedIndex]];
         }
-        [weakSelf scrollToIndexPathIfNeeded:indexPath];
     } completion:^(BOOL finished) {
+        [weakSelf scrollToIndexPathIfNeeded:indexPath];
     }];
 }
 
@@ -349,13 +351,14 @@ static NSString * const kSolidColorKey = @"solid_color";
         {
             [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
             [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
-            [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
         }
         else if (indexPath.row < weakSelf.selectedIndexPath.row)
         {
             [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section]];
         }
     } completion:^(BOOL finished) {
+        if (indexPath == weakSelf.selectedIndexPath)
+            [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
     }];
 }
 

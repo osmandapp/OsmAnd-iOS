@@ -500,14 +500,14 @@ static NSOperationQueue *_favQueue;
 + (void)updateGroup:(OAFavoriteGroup *)group
            iconName:(NSString *)iconName
        updatePoints:(BOOL)updatePoints
-  shouldUpdateGroup:(BOOL)shouldUpdateGroup
+    updateGroupIcon:(BOOL)updateGroupIcon
     saveImmediately:(BOOL)saveImmediately
 {
     if (updatePoints)
         for (OAFavoriteItem *point in group.points)
             [point setIcon:iconName];
 
-    if (shouldUpdateGroup)
+    if (updateGroupIcon)
         group.iconName = iconName;
     if (saveImmediately)
         [self saveCurrentPointsIntoFile];
@@ -516,14 +516,14 @@ static NSOperationQueue *_favQueue;
 + (void)updateGroup:(OAFavoriteGroup *)group
               color:(UIColor *)color
        updatePoints:(BOOL)updatePoints
-  shouldUpdateGroup:(BOOL)shouldUpdateGroup
+   updateGroupColor:(BOOL)updateGroupColor
     saveImmediately:(BOOL)saveImmediately
 {
     if (updatePoints)
         for (OAFavoriteItem *point in group.points)
             [point setColor:color];
 
-    if (shouldUpdateGroup)
+    if (updateGroupColor)
         group.color = color;
     if (saveImmediately)
         [self saveCurrentPointsIntoFile];
@@ -532,14 +532,14 @@ static NSOperationQueue *_favQueue;
 + (void)updateGroup:(OAFavoriteGroup *)group
  backgroundIconName:(NSString *)backgroundIconName
        updatePoints:(BOOL)updatePoints
-  shouldUpdateGroup:(BOOL)shouldUpdateGroup
+   updateGroupShape:(BOOL)updateGroupShape
     saveImmediately:(BOOL)saveImmediately
 {
     if (updatePoints)
         for (OAFavoriteItem *point in group.points)
             [point setBackgroundIcon:backgroundIconName];
 
-    if (shouldUpdateGroup)
+    if (updateGroupShape)
         group.backgroundType = backgroundIconName;
     if (saveImmediately)
         [self saveCurrentPointsIntoFile];

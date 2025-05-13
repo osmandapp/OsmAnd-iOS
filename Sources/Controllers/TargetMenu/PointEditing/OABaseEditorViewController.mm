@@ -575,7 +575,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     return !_isNewItem || _isTextViewNameValid;
 }
 
-- (BOOL)isChangesExist
+- (BOOL)isAppearanceChanged
 {
     OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
     return !groupExist
@@ -587,7 +587,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 - (void)changeSaveButtonAvailabilityWithGroup
 {
     [self changeButtonAvailability:_saveBarButton
-                         isEnabled:[self isValidText] && [self isChangesExist]];
+                         isEnabled:[self isValidText] && [self isAppearanceChanged]];
 }
 
 - (PoiIconCollectionHandler *) getPoiIconCollectionHandler
@@ -658,8 +658,11 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     if ([category isEqualToString: @"original"])
     {
         OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
-        _selectedIconName = groupExist.iconName;
-        self.editIconName = _selectedIconName;
+        if (groupExist)
+        {
+            _selectedIconName = groupExist.iconName;
+            self.editIconName = _selectedIconName;
+        }
     }
     [self changeSaveButtonAvailabilityWithGroup];
 }

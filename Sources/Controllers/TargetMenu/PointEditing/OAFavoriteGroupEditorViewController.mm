@@ -64,19 +64,19 @@
         [alert addAction:[UIAlertAction actionWithTitle:titleApplyExisting
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
-            [self editPointsGroup:YES shouldUpdateGroup:NO];
+            [self editPointsGroup:YES updateGroupValues:NO];
         }]];
 
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"apply_only_to_new_points")
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
-            [self editPointsGroup:NO shouldUpdateGroup:YES];
+            [self editPointsGroup:NO updateGroupValues:YES];
         }]];
         
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"apply_to_all_points")
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
-            [self editPointsGroup:YES shouldUpdateGroup:YES];
+            [self editPointsGroup:YES updateGroupValues:YES];
         }]];
 
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
@@ -93,7 +93,7 @@
 
 - (void)onLeftNavbarButtonPressed
 {
-    if (self.isNewItem || ![self isChangesExist])
+    if (self.isNewItem || ![self isAppearanceChanged])
     {
         [super onLeftNavbarButtonPressed];
     }
@@ -123,13 +123,13 @@
     }
 }
 
-- (void)editPointsGroup:(BOOL)updatePoints shouldUpdateGroup:(BOOL)shouldUpdateGroup
+- (void)editPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
     if (![self.editIconName isEqual:_favoriteGroup.iconName])
         [OAFavoritesHelper updateGroup:_favoriteGroup
                               iconName:self.editIconName
                           updatePoints:updatePoints
-                     shouldUpdateGroup:shouldUpdateGroup
+                       updateGroupIcon:updateGroupValues
                        saveImmediately:NO];
     
     [[self getPoiIconCollectionHandler] addIconToLastUsed:self.editIconName];
@@ -138,14 +138,14 @@
         [OAFavoritesHelper updateGroup:_favoriteGroup
                                  color:self.editColor
                           updatePoints:updatePoints
-                     shouldUpdateGroup:shouldUpdateGroup
+                      updateGroupColor:updateGroupValues
                        saveImmediately:NO];
 
     if (![self.editBackgroundIconName isEqualToString:_favoriteGroup.backgroundType])
         [OAFavoritesHelper updateGroup:_favoriteGroup
                     backgroundIconName:self.editBackgroundIconName
-                        updatePoints:updatePoints
-                     shouldUpdateGroup:shouldUpdateGroup
+                          updatePoints:updatePoints
+                      updateGroupShape:updateGroupValues
                        saveImmediately:NO];
 
     [OAFavoritesHelper updateGroup:_favoriteGroup

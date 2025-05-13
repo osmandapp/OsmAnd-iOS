@@ -947,6 +947,13 @@ typedef enum
     [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
 }
 
+- (void) showCoordinatesGridScreen
+{
+    [self showMapSettingsScreen:EMapSettingsScreenMain logEvent:nil];
+    OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCoordinatesGrid];
+    [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
+}
+
 - (void)showMapSettingsScreen:(EMapSettingsScreen)screen logEvent:(nullable NSString *)event
 {
     if (event)
@@ -3393,7 +3400,7 @@ typedef enum
     if (!segment)
         segment = [TrackChartHelper getTrackSegment:analysis gpxItem:gpx];
     
-    if (gpx && analysis)
+    if (gpx && analysis && segment)
         targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis, @"segment" : segment};
     else
         targetPoint.targetObj = nil;

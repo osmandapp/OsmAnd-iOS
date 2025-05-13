@@ -150,7 +150,6 @@ NSString *const kXmlColon = @"_-_";
 @synthesize osmEditsChangeObservable = _osmEditsChangeObservable;
 @synthesize mapillaryImageChangedObservable = _mapillaryImageChangedObservable;
 @synthesize simulateRoutingObservable = _simulateRoutingObservable;
-
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
 
@@ -665,7 +664,6 @@ NSString *const kXmlColon = @"_-_";
     _mapillaryImageChangedObservable = [[OAObservable alloc] init];
     _simulateRoutingObservable = [[OAObservable alloc] init];
     _backgroundStateObservable = [[OAObservable alloc] init];
-
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];
 

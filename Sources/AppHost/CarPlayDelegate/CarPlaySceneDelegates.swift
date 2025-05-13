@@ -103,13 +103,13 @@ final class CarPlaySceneDelegate: UIResponder {
         }
         
         if let appMode = appModeToSet {
-            settings.setApplicationModePref(appMode, markAsLastUsed: false)
+            let oldMode = settings.applicationMode.get()
+            settings.setApplicationModePref(appMode)
             routingHelper.setAppMode(appMode)
-        }
-        
-        if defaultAppMode != settings.applicationMode.get() && isRoutingActive() {
-            routingHelper.recalculateRouteDueToSettingsChange()
-            OATargetPointsHelper.sharedInstance().updateRouteAndRefresh(true)
+            if appMode != oldMode && isRoutingActive() {
+                routingHelper.recalculateRouteDueToSettingsChange()
+                OATargetPointsHelper.sharedInstance().updateRouteAndRefresh(true)
+            }
         }
     }
     
@@ -144,7 +144,7 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         
         OsmAndApp.swiftInstance().carPlayActive = false
         if defaultAppMode != nil && !isRoutingActive() {
-            OAAppSettings.sharedManager().setApplicationModePref(defaultAppMode, markAsLastUsed: false)
+            OAAppSettings.sharedManager().setApplicationModePref(defaultAppMode)
         }
         
         defaultAppMode = nil

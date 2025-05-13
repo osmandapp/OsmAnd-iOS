@@ -415,13 +415,7 @@ static UIViewController *parentController;
         }
     }
     
-    [self.favoriteTableView beginUpdates];
-    NSArray<NSIndexPath *> *freshIndexPathsForVisibleRows = [self.favoriteTableView indexPathsForVisibleRows];
-    if (freshIndexPathsForVisibleRows.count > 0)
-    {
-        [self.favoriteTableView reloadRowsAtIndexPaths:freshIndexPathsForVisibleRows withRowAnimation:UITableViewRowAnimationNone];
-    }
-    [self.favoriteTableView endUpdates];
+    [self.favoriteTableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -1129,7 +1123,8 @@ static UIViewController *parentController;
                                          options:UIMenuOptionsDisplayInline
                                         children:@[showHideAction, renameAction]]];
         
-        UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance")
+        NSString *appearanceName = OALocalizedString(@"default_appearance");
+        UIAction *appearanceAction = [UIAction actionWithTitle:appearanceName
                                                          image:[UIImage systemImageNamed:@"paintpalette"]
                                                     identifier:nil
                                                        handler:^(__kindof UIAction * _Nonnull action) {
@@ -1137,9 +1132,9 @@ static UIViewController *parentController;
             OAFavoriteGroupEditorViewController *viewController =
                 [[OAFavoriteGroupEditorViewController alloc] initWithGroup:[groupData.favoriteGroup toPointsGroup]];
             viewController.delegate = self;
-            [self showModalViewController:viewController];
+            [self.navigationController pushViewController:viewController animated:YES];
         }];
-        appearanceAction.accessibilityLabel = OALocalizedString(@"change_appearance");
+        appearanceAction.accessibilityLabel = appearanceName;
         [menuElements addObject:appearanceAction];
 
         UIAction *shareAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_share")

@@ -78,9 +78,22 @@
     return objecType == EOAObjectTypeCity || objecType == EOAObjectTypeVillage || objecType == EOAObjectTypePostcode || objecType == EOAObjectTypeStreet || objecType == EOAObjectTypeHouse || objecType == EOAObjectTypeStreetIntersection;
 }
 
-+ (BOOL) isTopVisible:(EOAObjectType)objecType
-{
-    return objecType == EOAObjectTypePoiType || objecType == EOAObjectTypeFavorite || objecType == EOAObjectTypeFavoriteGroup || objecType == EOAObjectTypeWpt || objecType == EOAObjectTypeGpxTrack || objecType == EOAObjectTypeLocation || objecType == EOAObjectTypePartialLocation;
++ (BOOL)isTopVisible:(EOAObjectType)objecType {
+    static NSSet<NSNumber *> *topVisibleTypes;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        topVisibleTypes = [NSSet setWithArray:@[
+            @(EOAObjectTypePoiType),
+            @(EOAObjectTypeFavorite),
+            @(EOAObjectTypeFavoriteGroup),
+            @(EOAObjectTypeWpt),
+            @(EOAObjectTypeGpxTrack),
+            @(EOAObjectTypeLocation),
+            @(EOAObjectTypePartialLocation),
+            @(EOAObjectTypeIndexItem)
+        ]];
+    });
+    return [topVisibleTypes containsObject:@(objecType)];
 }
 
 + (NSString *) toString:(EOAObjectType)objecType
@@ -131,7 +144,8 @@
             return @"UNKNOWN_NAME_FILTER";
         case EOAObjectTypeGpxTrack:
             return @"GPX_TRACK";
-            
+        case EOAObjectTypeIndexItem:
+            return @"INDEX_ITEM";
         default:
             return [NSString stringWithFormat:@"%d", (int)objecType];
     }

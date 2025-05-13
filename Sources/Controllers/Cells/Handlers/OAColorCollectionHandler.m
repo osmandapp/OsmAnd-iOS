@@ -8,6 +8,7 @@
 
 #import "OAColorCollectionHandler.h"
 #import "OAColorsCollectionViewCell.h"
+#import "OAColorsPaletteCell.h"
 #import "OACollectionSingleLineTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
@@ -18,6 +19,10 @@
 #import "GeneratedAssetSymbols.h"
 
 #define kWhiteColor 0x44FFFFFF
+
+static NSString * const kOriginalKey = @"original";
+static NSString * const kSolidColorKey = @"solid_color";
+
 @interface OAColorCollectionHandler () <ColorCollectionViewControllerDelegate, OACollectionCellDelegate, OAColorPickerViewControllerDelegate, UIColorPickerViewControllerDelegate>
 
 @property(nonatomic) NSIndexPath *selectedIndexPath;
@@ -27,8 +32,12 @@
 @implementation OAColorCollectionHandler
 {
     NSMutableArray<NSMutableArray<OAColorItem *> *> *_data;
+    NSMutableArray<OAColorsAppearanceCategory *> *_categories;
+    NSMutableDictionary<NSString *, OAColorsAppearanceCategory *> *_categoriesByKeyName;
+    NSString *_selectedCategoryKey;
     NSIndexPath *_editColorIndexPath;
     BOOL _isStartedNewColorAdding;
+    BOOL _isFavoriteList;
 }
 
 @synthesize delegate;
@@ -36,6 +45,48 @@
 - (NSMutableArray<NSMutableArray<OAColorItem *> *> *) getData
 {
     return _data;
+}
+
+#pragma mark - Initialization
+
+- (instancetype)initWithData:(NSArray<NSArray *> *)data isFavoriteList:(BOOL)isFavoriteList
+{
+    self = [super initWithData:data collectionView:nil];
+    if (self)
+    {
+        _categories = [NSMutableArray array];
+        _categoriesByKeyName = [NSMutableDictionary dictionary];
+        _selectedCategoryKey = @"";
+        _isFavoriteList = isFavoriteList;
+        [self setup];
+    }
+    return self;
+}
+
+- (void)setup
+{
+    [self initColorCategories];
+    [self selectCategoryWithName:kSolidColorKey];
+}
+
+- (void)setupDefaultCategory
+{
+    if (!_groupColors)
+        return;
+    
+    BOOL allEqual = YES;
+    UIColor *first = _groupColors.firstObject;
+
+    for (UIColor *icon in _groupColors)
+    {
+        if (![icon isEqual:first])
+        {
+            allEqual = NO;
+            break;
+        }
+    }
+    
+    [self selectCategoryWithName:_isFavoriteList && !allEqual ? kOriginalKey : kSolidColorKey];
 }
 
 #pragma mark - Base UI
@@ -91,7 +142,119 @@
     return isDefaultColor ? [UIMenu menuWithTitle:OALocalizedString(@"access_default_color") children:menuElements] : [UIMenu menuWithChildren:menuElements];
 }
 
+- (UIMenu *)buildTopButtonContextMenu
+{
+    NSMutableArray<UIMenuElement *> *topMenuElements = [NSMutableArray array];
+    NSMutableArray<UIMenuElement *> *bottomMenuElements = [NSMutableArray array];
+
+    for (OAColorsAppearanceCategory *category in _categories)
+        [self updateMenuElements: [category.key isEqualToString:kOriginalKey] ? topMenuElements : bottomMenuElements withCategory:category];
+
+    UIMenu *topMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:topMenuElements];
+    UIMenu *bottomMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:bottomMenuElements];
+
+    return [UIMenu menuWithTitle:@"" children:@[topMenu, bottomMenu]];
+}
+
+- (void)updateMenuElements:(NSMutableArray<UIMenuElement *> *)menuElements
+              withCategory:(OAColorsAppearanceCategory *)category
+{
+    UIAction *action = [UIAction actionWithTitle:category.translatedName
+                                           image:nil
+                                      identifier:nil
+                                         handler:^(__kindof UIAction * _Nonnull action) {
+        [self onMenuItemSelectedWithName:category.key];
+    }];
+    
+    [menuElements addObject:action];
+}
+
+- (void)onMenuItemSelectedWithName:(NSString *)name
+{
+    OAColorsAppearanceCategory *category = _categoriesByKeyName[name];
+    if (category)
+    {
+        [self selectCategoryWithName:name];
+    }
+}
+
+- (void)selectCategoryWithName:(NSString *)categoryKey
+{
+    _selectedCategoryKey = categoryKey;
+
+    OAColorsAppearanceCategory *category = _categoriesByKeyName[categoryKey];
+    if (category)
+    {
+        [self updateHostCellIfNeeded];
+
+        if (self.hostCell)
+            [self.handlerDelegate onCategorySelectedWith:self.hostCell];
+    }
+}
+
+- (void)updateHostCellIfNeeded
+{
+    [self updateTopButtonName];
+    [self updateHostCellIfOriginalCategory: _selectedCategoryKey == kOriginalKey];
+}
+
+- (void)updateTopButtonName
+{
+    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
+
+    OAColorsAppearanceCategory *category = _categoriesByKeyName[_selectedCategoryKey];
+    if (category)
+    {
+        UIImage *iconImage = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
+        if (iconImage)
+        {
+            iconImage = [iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+
+            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+            attachment.image = iconImage;
+
+            NSAttributedString *imageString = [NSAttributedString attributedStringWithAttachment:attachment];
+
+            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", category.translatedName]];
+            [attributedString appendAttributedString:imageString];
+
+            OAColorsPaletteCell *cell = (OAColorsPaletteCell *)self.hostCell;
+            [cell.topButton setAttributedTitle:attributedString forState:UIControlStateNormal];
+        }
+    }
+}
+
+- (void)updateHostCellIfOriginalCategory:(BOOL)isOriginal
+{
+    OAColorsPaletteCell *cell = (OAColorsPaletteCell *)self.hostCell;
+    [self.hostCell collectionStackViewVisibility:!isOriginal];
+    cell.descriptionLabelStackView.hidden = !isOriginal;
+    cell.bottomButtonStackView.hidden = isOriginal;
+    cell.separatorOffsetViewWidth.constant = isOriginal ? 20 : 0;
+}
+
 #pragma mark - Data
+
+- (void)initColorCategories
+{
+    [self initOriginalCategory];
+    [self initSolidColorCategory];
+    
+    for (OAColorsAppearanceCategory *category in _categories)
+        _categoriesByKeyName[category.key] = category;
+}
+
+- (void)initOriginalCategory
+{
+    OAColorsAppearanceCategory *category = [[OAColorsAppearanceCategory alloc] initWithKey:kOriginalKey translatedName:OALocalizedString(@"shared_string_original")];
+    [_categories addObject:category];
+}
+
+- (void)initSolidColorCategory
+{
+    OAColorsAppearanceCategory *category = [[OAColorsAppearanceCategory alloc] initWithKey:kSolidColorKey translatedName:OALocalizedString(@"track_coloring_solid")];
+    [_categories addObject:category];
+}
 
 - (void)addAndSelectColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem
 {
@@ -100,28 +263,20 @@
         return;
 
     __weak __typeof(self) weakSelf = self;
-    NSIndexPath *prevSelectedIndexPath = indexPath.row <= _selectedIndexPath.row
-        ? [NSIndexPath indexPathForRow:_selectedIndexPath.row + 1 inSection:_selectedIndexPath.section]
-        : _selectedIndexPath;
-    _selectedIndexPath = indexPath;
+    NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
+    [self setSelectedIndexPath:indexPath];
     [collectionView performBatchUpdates:^{
-        [collectionView insertItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
-        [weakSelf insertItem:newItem atIndexPath:indexPath];
-    } completion:^(BOOL finished) {
-        NSIndexPath *prevIndex = [weakSelf getSelectedIndexPath];
-        if (!prevIndex)
-            prevIndex = [NSIndexPath indexPathForRow:0 inSection:0];
-        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, prevIndex]];
+        [weakSelf insertItem:newItem atIndexPath:weakSelf.selectedIndexPath];
+        [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:_data.count - 1 inSection:0]]];
+
+        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
         
-        if (weakSelf.delegate)
-        {
-            [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:nil collectionView:collectionView];
-        }
-        
-        [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
+        [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:newItem collectionView:collectionView shouldDismiss:NO];
         
         if (weakSelf.hostCell && [weakSelf.hostCell needUpdateHeight])
             [weakSelf.delegate reloadCollectionData];
+    } completion:^(BOOL finished) {
+        [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
     }];
 }
 
@@ -131,7 +286,8 @@
     if (!collectionView)
         return;
     
-    if (![collectionView.indexPathsForVisibleItems containsObject:indexPath])
+    NSInteger rowsCount = [collectionView numberOfItemsInSection:indexPath.section];
+    if (![collectionView.indexPathsForVisibleItems containsObject:indexPath] && indexPath.row < (rowsCount - 1))
     {
         [collectionView scrollToItemAtIndexPath:indexPath
                                atScrollPosition:[self getScrollDirection] == UICollectionViewScrollDirectionHorizontal
@@ -150,9 +306,13 @@
     if (self.delegate)
     {
         if (indexPath == _selectedIndexPath)
-            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView];
+            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView shouldDismiss:YES];
         else
             [self.delegate reloadCollectionData];
+    }
+    if (_isOpenedFromAllColorsScreen && _hostColorHandler && _hostColorHandler.delegate)
+    {
+        [_hostColorHandler.delegate reloadCollectionData];
     }
 }
 
@@ -166,12 +326,13 @@
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
         [weakSelf insertItem:newItem atIndexPath:indexPath];
-    } completion:^(BOOL finished) {
-        if (indexPath.row <= weakSelf.selectedIndexPath.row)
-        {
-            NSIndexPath *prevSelectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
-            [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
+        if (indexPath.row <= weakSelf.selectedIndexPath.row) {
+            NSIndexPath *insertedIndex = indexPath;
+            NSIndexPath *updatedPrevSelectedIndex = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
+            [weakSelf setSelectedIndexPath:updatedPrevSelectedIndex];
+            [collectionView reloadItemsAtIndexPaths:@[insertedIndex, updatedPrevSelectedIndex]];
         }
+    } completion:^(BOOL finished) {
         [weakSelf scrollToIndexPathIfNeeded:indexPath];
     }];
 }
@@ -186,17 +347,18 @@
     [collectionView performBatchUpdates:^{
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
         [weakSelf removeItem:indexPath];
-    } completion:^(BOOL finished) {
         if (indexPath == weakSelf.selectedIndexPath)
         {
-            weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
             [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
-            [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
         }
         else if (indexPath.row < weakSelf.selectedIndexPath.row)
         {
-            weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section];
+            [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section]];
         }
+    } completion:^(BOOL finished) {
+        if (indexPath == weakSelf.selectedIndexPath)
+            [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
     }];
 }
 
@@ -213,6 +375,22 @@
 - (OAColorItem *)getSelectedItem
 {
     return _data[_selectedIndexPath.section][_selectedIndexPath.row];
+}
+
+- (void)setSelectionItem:(OAColorItem *)item
+{
+    for (int i = 0; i < _data.count; i++)
+    {
+        NSArray<OAColorItem *> *section = _data[i];
+        for (int j = 0; j < section.count; j++)
+        {
+            if (item == section[j])
+            {
+                _selectedIndexPath = [NSIndexPath indexPathForRow:j inSection:i];
+                return;
+            }
+        }
+    }
 }
 
 - (void)generateData:(NSArray<NSArray<OAColorItem *> *> *)data
@@ -357,7 +535,7 @@
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath {
     if (self.delegate)
-        [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:[self getCollectionView]];
+        [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:[self getCollectionView] shouldDismiss:YES];
 }
 
 - (void)selectColorItem:(OAColorItem *)colorItem
@@ -370,7 +548,7 @@
     
     if (self.delegate)
     {
-        [self.delegate onCollectionItemSelected:selectedIndex selectedItem:nil collectionView:[self getCollectionView]];
+        [self.delegate onCollectionItemSelected:selectedIndex selectedItem:nil collectionView:[self getCollectionView] shouldDismiss:YES];
     }
 }
 
@@ -397,6 +575,10 @@
     if (_isOpenedFromAllColorsScreen && _hostColorHandler)
     {
         [_hostColorHandler addColor:newIndexPath newItem:duplicatedColorItem];
+        if (_hostColorHandler.delegate)
+            [_hostColorHandler.delegate reloadCollectionData];
+    } else if (self.delegate) {
+        [self.delegate reloadCollectionData];
     }
     return duplicatedColorItem;
 }
@@ -408,6 +590,10 @@
     if (_isOpenedFromAllColorsScreen && _hostColorHandler)
     {
         [_hostColorHandler deleteColorItem:colorItem];
+        if (_hostColorHandler.delegate)
+            [_hostColorHandler.delegate reloadCollectionData];
+    } else if (self.delegate) {
+        [self.delegate reloadCollectionData];
     }
     if (!_isOpenedFromAllColorsScreen)
         [[OAGPXAppearanceCollection sharedInstance] deleteColor:colorItem];

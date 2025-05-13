@@ -586,6 +586,7 @@
         [self updateWeatherToolbarVisible];
 
     [self.delegate widgetsLayoutDidChange:YES];
+    [_mapWidgetRegistry notifyWidgetsPanelsDidLayout];   
 }
 
 - (void)updateWeatherToolbarVisible

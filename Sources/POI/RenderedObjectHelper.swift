@@ -29,7 +29,7 @@ final class RenderedObjectHelper: NSObject {
         var pt: OAPOIType?
         var otherPt: OAPOIType?
         var subtype: String?
-        var additionalInfo = [String: String]()
+        let additionalInfo = MutableOrderedDictionary<NSString, NSString>()
         var localizedNames = [String: String]()
         
         for e in renderedObject.tags {
@@ -68,9 +68,9 @@ final class RenderedObjectHelper: NSObject {
                 let translate = OAPOIHelper.sharedInstance().getTranslation(tag + "_" + value)
                 let translate2 = OAPOIHelper.sharedInstance().getTranslation(value)
                 if let translate, let translate2 {
-                    additionalInfo[translate] = translate2
+                    additionalInfo.setObject(translate2 as NSString, forKey: translate as NSString)
                 } else {
-                    additionalInfo[tag] = value
+                    additionalInfo.setObject(value as NSString, forKey: tag as NSString)
                 }
             }
         }
@@ -91,10 +91,45 @@ final class RenderedObjectHelper: NSObject {
         poi.longitude = renderedObject.labelLatLon.longitude
         poi.setXYPoints(renderedObject)
         poi.name = poi.name != nil && poi.name.length > 0 ? poi.name : renderedObject.name
-        
+
+        if poi.name == nil || poi.name.isEmpty {
+            poi.name = searchObjectNameByAmenityTags(for: poi)
+        }
+
         return poi
     }
-    
+
+    static func searchObjectNameByAmenityTags(for amenity: OAPOI) -> String? {
+        guard let translator = OAPOIHelper.sharedInstance() else { return nil }
+
+        var translation = translator.getTranslation(amenity.subType)
+
+        for item in amenity.getAdditionalInfo() {
+            let key = item.key as! String
+            let value = item.value as! String
+            let translationKey = key
+                .replacingOccurrences(of: "osmand_", with: "")
+                .replacingOccurrences(of: ":", with: "_")
+
+            if let translation, !translation.isEmpty {
+                break
+            }
+
+            // nameStr uses (key_value - value - key) sequence
+            if translation?.isEmpty ?? true {
+                translation = translator.getTranslation(translationKey + "_" + value)
+            }
+            if translation?.isEmpty ?? true {
+                translation = translator.getTranslation(value)
+            }
+            if translation?.isEmpty ?? true {
+                translation = translator.getTranslation(translationKey)
+            }
+        }
+
+        return translation
+    }
+
     static func getTranslatedType(renderedObject: OARenderedObject) -> String? {
         var pt: OAPOIType?
         var otherPt: OAPOIType?
@@ -105,7 +140,10 @@ final class RenderedObjectHelper: NSObject {
         
         for item in renderedObject.tags {
             guard let key = item.key as? String, let value = item.value as? String else { continue }
-            
+            let translationKey = key
+                .replacingOccurrences(of: "osmand_", with: "")
+                .replacingOccurrences(of: ":", with: "_")
+
             if key.hasPrefix("name") {
                 continue
             }
@@ -122,10 +160,18 @@ final class RenderedObjectHelper: NSObject {
             }
             firstTag = (firstTag == nil || firstTag!.isEmpty) ? key + ": " + value : firstTag
             if !value.isEmpty {
-                let t = OAPOIHelper.sharedInstance().getTranslation(key + "_" + value)
+                // typeStr uses (key - key_value - value) sequence
+                var t = OAPOIHelper.sharedInstance().getTranslation(translationKey)
+                if t == nil {
+                    t = OAPOIHelper.sharedInstance().getTranslation(translationKey + "_" + value)
+                }
+                if t == nil {
+                    t = OAPOIHelper.sharedInstance().getTranslation(value)
+                }
                 if let t, translated == nil && !t.isEmpty {
                     translated = t
                 }
+
                 let t1 = OAPOIHelper.sharedInstance().getTranslation(key)
                 let t2 = OAPOIHelper.sharedInstance().getTranslation(value)
                 if let t1, let t2, separate == nil {

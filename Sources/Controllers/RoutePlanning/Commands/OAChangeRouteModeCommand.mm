@@ -156,7 +156,10 @@
     else
     {
         OASWptPt *lastPoint = _newPoints[_newPoints.count - 1];
-        editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
+        if (lastPoint.isGap)
+            editingCtx.appMode = _newMode;
+        else
+            editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     }
     if (_newRoadSegmentData != nil)
         editingCtx.roadSegmentData = _newRoadSegmentData;

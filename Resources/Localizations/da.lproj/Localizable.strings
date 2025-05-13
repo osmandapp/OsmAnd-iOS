@@ -1758,7 +1758,7 @@
 "shared_string_gpx_track" = "Spor";
 "street_level_imagery" = "Billeder på gadeniveau";
 "show_compass_ruler" = "Vis kompaslineal";
-"download_regular_maps" = "Standard kort";
+"download_regular_maps" = "Standardkort";
 "sort_last_modified" = "Sidst ændret";
 "searching_gps" = "Søger efter GPS";
 "select_folder" = "Valg mappe";

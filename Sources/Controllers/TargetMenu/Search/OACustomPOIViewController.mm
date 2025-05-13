@@ -204,7 +204,7 @@
 
 - (UIImage *)getPoiIcon:(OAPOIType *)poiType
 {
-    UIImage *img = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", poiType.name]];
+    UIImage *img = [UIImage mapSvgImageNamed:poiType.iconName];
     if (!img)
         img = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@_%@", [poiType getOsmTag], [poiType getOsmValue]]];
     if (img)

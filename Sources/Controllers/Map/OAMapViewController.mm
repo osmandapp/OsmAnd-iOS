@@ -1779,13 +1779,15 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
     
-    _app.mapMode = OAMapModeFree;
-    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
+    [[OAMapViewTrackingUtilities instance] backToLocationWithConditions];
 
     // Animate zoom-in by +1
     zoomDelta += 1.0f;
     _mapView.mapAnimator->pause();
-    _mapView.mapAnimator->cancelAllAnimations();
+    
+    for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
+        if (animation->getAnimatedValue() == OsmAnd::Animator::AnimatedValue::Zoom)
+            _mapView.mapAnimator->cancelAnimation(animation);
     
     _mapView.mapAnimator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
@@ -1818,14 +1820,16 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
     
-    _app.mapMode = OAMapModeFree;
-    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
+    [[OAMapViewTrackingUtilities instance] backToLocationWithConditions];
 
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;
     _mapView.mapAnimator->pause();
-    _mapView.mapAnimator->cancelAllAnimations();
-    
+
+    for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
+        if (animation->getAnimatedValue() == OsmAnd::Animator::AnimatedValue::Zoom)
+            _mapView.mapAnimator->cancelAnimation(animation);
+
     _mapView.mapAnimator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
@@ -1870,14 +1874,17 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         [OAUtilities showToast:nil details:OALocalizedString(@"edit_tilesource_minzoom") duration:4 inView:self.view];
         return;
     }
-    _app.mapMode = OAMapModeFree;
-    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
+    [[OAMapViewTrackingUtilities instance] backToLocationWithConditions];
+
     float nextZoomStep = [zoom getValidZoomStep:newZoomStep];
     [zoom changeZoom:nextZoomStep];
 
     _mapView.mapAnimator->pause();
-    _mapView.mapAnimator->cancelAllAnimations();
-    
+
+    for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
+        if (animation->getAnimatedValue() == OsmAnd::Animator::AnimatedValue::Zoom)
+            _mapView.mapAnimator->cancelAnimation(animation);
+
     _mapView.mapAnimator->animateZoomBy(nextZoomStep,
                                         kQuickAnimationTime,
                                         OsmAnd::MapAnimator::TimingFunction::Linear,
@@ -2998,9 +3005,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     NSMutableArray *paths = [NSMutableArray array];
     NSMutableArray *gpxDocs = [NSMutableArray array];
 
-    for (NSString *key in _selectedGpxHelper.activeGpx.allKeys) {
+    for (NSString *key in _selectedGpxHelper.activeGpx.allKeys)
+    {
         id value = _selectedGpxHelper.activeGpx[key];
-        if (value == nil) {
+        if (value == nil)
+        {
             continue;
         }
         
@@ -3009,13 +3018,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         [gpxDocs addObject:value];
     }
     
-    if (_gpxFilesRec) {
-        [gpxDocs addObject:_gpxFilesRec];
+    if (_gpxFilesRec && _gpxFilesRec.count > 0)
+    {
+        [gpxDocs addObjectsFromArray:_gpxFilesRec];
     }
     
-    [wptApi setWptData:gpxDocs paths:paths];
+    [wptApi setWptData:[gpxDocs copy] paths:paths];
 }
-
 
 - (BOOL)hasWptAt:(CLLocationCoordinate2D)location
 {

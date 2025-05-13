@@ -72,7 +72,7 @@
             icon = [OAUtilities getMxIcon:iconName];
         }
         if (!icon)
-            icon = [OAUtilities getMxIcon:@"user_defined"];
+            icon = [OAUtilities getMxIcon:@"mx_special_custom_category"];
         
         listItem = [[CPListItem alloc] initWithText:name detailText:nil image:icon accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
     }

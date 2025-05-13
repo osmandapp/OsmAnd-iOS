@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OrderedDictionary.h"
 #import "OAMapObject.h"
 
 #define URL_TAG @"url"
@@ -71,8 +72,8 @@
 @property (nonatomic) NSString *distance;
 @property (nonatomic, assign) double direction;
 
-@property (nonatomic) NSDictionary *values;
-@property (nonatomic) NSDictionary *localizedContent;
+@property (nonatomic) MutableOrderedDictionary<NSString *, NSString *> *values;
+@property (nonatomic) MutableOrderedDictionary<NSString *, NSString *> *localizedContent;
 
 @property (nonatomic) OAPOIRoutePoint *routePoint;
 @property (nonatomic) NSString *mapIconName;
@@ -88,7 +89,7 @@
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 
-- (NSDictionary<NSString *, NSString *> *) getAdditionalInfo;
+- (MutableOrderedDictionary<NSString *, NSString *> *) getAdditionalInfo;
 - (NSString *) getAdditionalInfo:(NSString *)key;
 
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang;

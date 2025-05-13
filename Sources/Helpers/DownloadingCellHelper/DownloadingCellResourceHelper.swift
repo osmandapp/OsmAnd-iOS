@@ -9,6 +9,7 @@
 @objc protocol DownloadingCellResourceHelperDelegate: AnyObject {
     func onDownloadingCellResourceNeedUpdate(_ task: OADownloadTask?)
     func onStopDownload(_ resourceItem: OAResourceSwiftItem)
+    @objc optional func onDownloadTaskFinished(resourceId: String)
 }
 
 @objcMembers
@@ -122,7 +123,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         resourceItems[resourceId] = resource
     }
     
-    private func isDisabled(_ resourceId: String) -> Bool {
+    func isDisabled(_ resourceId: String) -> Bool {
         guard let resourceItem = getResource(resourceId), let iapHelper = OAIAPHelper.sharedInstance() else { return false }
         let type = resourceItem.resourceType()
         if !iapHelper.wiki.isActive() && type == .wikiMapRegion {
@@ -191,6 +192,29 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         }
     }
     
+    func configureWith(resourceItem: OAResourceSwiftItem?,
+                       cell: DownloadingCell) {
+        if let resourceItem,
+           resourceItem.objcResourceItem != nil,
+           let resourceId = resourceItem.resourceId() {
+            if getResource(resourceId) == nil {
+                saveResource(resource: resourceItem, resourceId: resourceId)
+            }
+            if resourceItem.downloadTask() != nil {
+                saveStatus(resourceId: resourceId, status: .inProgress)
+            }
+            if statuses[resourceId] == nil {
+                statuses[resourceId] = .idle
+            }
+            if progresses[resourceId] == nil {
+                progresses[resourceId] = 0
+            }
+            
+            cells[resourceId] = cell
+            setupCell(resourceId)
+        }
+    }
+    
     func getOrCreateCell(_ resourceId: String, swiftResourceItem: OAResourceSwiftItem?) -> DownloadingCell? {
         if let swiftResourceItem, swiftResourceItem.objcResourceItem != nil {
             if getResource(resourceId) == nil {
@@ -251,9 +275,13 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         
         if helperHasItemFor(resourceId) {
             DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
 
-                self?.setCellProgress(resourceId: resourceId, progress: progress, status: .finished)
-                
+                self.setCellProgress(resourceId: resourceId, progress: progress, status: .finished)
+                if self.isInstalled(resourceId) {
+                    self.delegate?.onDownloadTaskFinished?(resourceId: resourceId)
+                }
+              
                 // Start next downloading if needed
                 if let tasks = OsmAndApp.swiftInstance().downloadsManager.keysOfDownloadTasks(), !tasks.isEmpty {
                     if let nextTask = OsmAndApp.swiftInstance().downloadsManager.firstDownloadTasks(withKey: tasks[0] as? String) {

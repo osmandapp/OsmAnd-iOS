@@ -19,7 +19,9 @@
 @interface OACollectionSingleLineTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIStackView *collectionStackView;
 @property (weak, nonatomic) IBOutlet UIButton *rightActionButton;
+@property (weak, nonatomic) IBOutlet UIView *rightActionButtonRigthPaddingView;
 
 @property (weak, nonatomic) id<OACollectionTableViewCellDelegate> delegate;
 @property (nonatomic) BOOL disableAnimationsOnStart;
@@ -30,6 +32,7 @@
 - (OABaseCollectionHandler *)getCollectionHandler;
 
 - (void)rightActionButtonVisibility:(BOOL)show;
+- (void)collectionStackViewVisibility:(BOOL)show;
 
 - (void)anchorContent:(EOATableViewCellContentStyle)style;
 

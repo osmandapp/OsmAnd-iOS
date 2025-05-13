@@ -143,7 +143,7 @@
     if (self.delegate)
     {
         if (indexPath == _selectedIndexPath)
-            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView shouldDismiss:YES];
+            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView shouldDismiss:NO];
         else
             [self.delegate reloadCollectionData];
     }

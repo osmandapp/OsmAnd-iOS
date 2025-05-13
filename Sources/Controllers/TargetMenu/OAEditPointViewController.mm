@@ -409,7 +409,8 @@
         preselectedIconName = [self getDefaultIconName];
     _selectedIconName = preselectedIconName;
     
-    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:self.groupTitle];
+    NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
+    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:groupName];
     if (!_selectedIconName) {
         if (_isNewItemAdding && selectedGroup)
             _selectedIconName = selectedGroup.iconName;
@@ -712,7 +713,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAShapesTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.delegate = self;
+            cell.shapesDelegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
         }

@@ -96,6 +96,11 @@
     return nil;
 }
 
+- (UIMenu *)buildTopButtonContextMenu
+{
+    return nil;
+}
+
 - (void)generateData:(NSArray<NSArray *> *)data
 {
 }

@@ -9,10 +9,19 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+@class OACollectionSingleLineTableViewCell;
+
 @protocol OACollectionCellDelegate <NSObject>
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss;
 - (void)reloadCollectionData;
+
+@end
+
+@protocol OABaseCollectionHandlerDelegate
+
+- (void)onCategorySelectedWith:(OACollectionSingleLineTableViewCell *)cell;
+- (void)onCategorySelected:(NSString *)category with:(OACollectionSingleLineTableViewCell *)cell;
 
 @end
 
@@ -34,6 +43,7 @@
 - (NSIndexPath *)getDefaultIndexPath;
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath;
 - (id)getSelectedItem;
+- (UIMenu *)buildTopButtonContextMenu;
 - (void)generateData:(NSArray<NSArray *> *)data;
 - (void)insertItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath;
 - (void)replaceItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath;
@@ -45,5 +55,6 @@
 - (void)onItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 
 @property (nonatomic, weak) id<OACollectionCellDelegate> delegate;
+@property (nonatomic, weak) id<OABaseCollectionHandlerDelegate> handlerDelegate;
 
 @end

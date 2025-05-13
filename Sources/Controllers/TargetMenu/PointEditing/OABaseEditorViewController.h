@@ -44,6 +44,7 @@
 - (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint
                                              text:(NSString *)text
                                               tag:(NSInteger)tag;
+- (BOOL)isAppearanceChanged;
 
 - (PoiIconCollectionHandler *) getPoiIconCollectionHandler;
 

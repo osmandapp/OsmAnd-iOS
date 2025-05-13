@@ -15,7 +15,7 @@
 
 - (void)onContextMenuItemEdit:(NSIndexPath *)indexPath;
 - (void)duplicateItemFromContextMenu:(NSIndexPath *)indexPath;
-- (void)deleteItemFromContextMenu:(NSIndexPath *)indexPath;
+- (void)deleteItemFromContextMenu:(UITableViewCell *)cell;
 
 @end
 

@@ -233,6 +233,11 @@ static QuickActionType *TYPE_INTERFACE;
     [_quickActionsChangedObservable notifyEventWithKey:buttonState];
 }
 
+- (void)refreshQuickActionButtons
+{
+    [_quickActionButtonsChangedObservable notifyEvent];
+}
+
 - (BOOL)isActionNameUnique:(NSArray<OAQuickAction *> *)actions quickAction:(OAQuickAction *)quickAction
 {
     for (OAQuickAction *action in actions)
@@ -293,6 +298,7 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:[ShowHideWhitewaterSportsAction getQuickActionType]];
     [allTypes addObject:[ShowHideFitnessTrailsAction getQuickActionType]];
     [allTypes addObject:[ShowHideRunningRoutesAction getQuickActionType]];
+    [allTypes addObject:ShowHideCoordinatesGridAction.type];
     
     // interface
     [allTypes addObject:LockScreenAction.type];

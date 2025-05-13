@@ -942,6 +942,10 @@
 "without_permission_my_position_value" = "OsmAnd doesn't have location permission";
 "with_permission_my_position_value" = "Move map to current location";
 "shared_string_location_unknown" = "Location unknown";
+"equator" = "Equator";
+"prime_meridian" = "Prime meridian";
+"meridian_180" = "180th meridian";
+"quick_action_showhide_coordinates_grid_descr" = "Action to control the visibility of the Coordinates grid on the map.";
 
 // HUD
 "hud_heading" = "Heading";
@@ -3395,6 +3399,11 @@
 "use_login_and_password" = "Use username and password";
 "perform_oauth_authorization" = "Log in via OAuth";
 "use_login_and_password_description" = "Use your email/login and password to log in to OpenStreetMap.org.";
+"layer_coordinates_grid" = "Coordinates grid";
+"shared_string_edges" = "Edges";
+"labels_position" = "Labels position";
+"grid_color" = "Grid color";
+"customize_grid_color" = "Customize grid color";
 "benefits_for_contributors" = "Benefits for active OSM contributors";
 "benefits_for_contributors_primary_descr" = "Active contributors to OpenStreetMap.org may be entitled to unlimited hourly map updates.";
 "benefits_for_contributors_secondary_descr" = "Sign in to OpenStreetMap to check if you are eligible for unlimited monthly and hourly map updates.";

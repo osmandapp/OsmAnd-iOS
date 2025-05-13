@@ -26,7 +26,7 @@
 #import "OAPreviewRouteLineLayer.h"
 #import "OADownloadedRegionsLayer.h"
 #import "OARulerByTapControlLayer.h"
-
+#import "OACoordinatesGridLayer.h"
 #import "OATerrainMapLayer.h"
 #import "OAOverlayMapLayer.h"
 #import "OAUnderlayMapLayer.h"
@@ -46,6 +46,7 @@
 @property (nonatomic, readonly) OARoutePointsLayer *routePointsLayer;
 @property (nonatomic, readonly) OAImpassableRoadsLayer *impassableRoadsLayer;
 @property (nonatomic, readonly) OATransportStopsLayer *transportStopsLayer;
+@property (nonatomic, readonly) OACoordinatesGridLayer *coordinatesGridLayer;
 @property (nonatomic, readonly) OAOsmEditsLayer *osmEditsLayer;
 @property (nonatomic, readonly) OAOsmBugsLayer *osmBugsLayer;
 @property (nonatomic, readonly) OAMapillaryLayer *mapillaryLayer;

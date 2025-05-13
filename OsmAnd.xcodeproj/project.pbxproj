@@ -3081,6 +3081,8 @@
 		FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */; };
 		FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */; };
 		FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */; };
+		FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA24317F2DD202E700B52998 /* VehicleMetricsSensorsController.swift */; };
+		FA2431822DD203AA00B52998 /* VehicleMetricsSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA2431812DD203AA00B52998 /* VehicleMetricsSensors.storyboard */; };
 		FA2778272B67B5F200D65926 /* TextInfoWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2778262B67B5F200D65926 /* TextInfoWidget+Extension.swift */; };
 		FA282AEF2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA282AEE2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift */; };
 		FA282AF62C2C456700CC7AC1 /* WeatherNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA282AF32C2C456700CC7AC1 /* WeatherNavigationBarView.swift */; };
@@ -7635,6 +7637,8 @@
 		FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSensor.swift; sourceTree = "<group>"; };
 		FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSCDDevice.swift; sourceTree = "<group>"; };
 		FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCharacteristic.swift; sourceTree = "<group>"; };
+		FA24317F2DD202E700B52998 /* VehicleMetricsSensorsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsSensorsController.swift; sourceTree = "<group>"; };
+		FA2431812DD203AA00B52998 /* VehicleMetricsSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VehicleMetricsSensors.storyboard; sourceTree = "<group>"; };
 		FA2778262B67B5F200D65926 /* TextInfoWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInfoWidget+Extension.swift"; sourceTree = "<group>"; };
 		FA282AEE2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataSourceViewController.swift; sourceTree = "<group>"; };
 		FA282AF32C2C456700CC7AC1 /* WeatherNavigationBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherNavigationBarView.swift; sourceTree = "<group>"; };
@@ -13678,9 +13682,19 @@
 		FA1D6DAC2DCE04640080E374 /* VehicleMetricsPlugin */ = {
 			isa = PBXGroup;
 			children = (
+				FA24317E2DD202A600B52998 /* VehicleMetricsSensors */,
 				FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */,
 			);
 			path = VehicleMetricsPlugin;
+			sourceTree = "<group>";
+		};
+		FA24317E2DD202A600B52998 /* VehicleMetricsSensors */ = {
+			isa = PBXGroup;
+			children = (
+				FA2431812DD203AA00B52998 /* VehicleMetricsSensors.storyboard */,
+				FA24317F2DD202E700B52998 /* VehicleMetricsSensorsController.swift */,
+			);
+			path = VehicleMetricsSensors;
 			sourceTree = "<group>";
 		};
 		FA282AF52C2C456700CC7AC1 /* WeatherNavigationBarView */ = {
@@ -14822,6 +14836,7 @@
 				DA0D1630281BEEF500CEEF58 /* map_turn_slight_left@3x.png in Resources */,
 				32BBDC9C2C049B0C0090D37E /* RouteInfoListItemCell.xib in Resources */,
 				DA5A82C626C563A800F274C7 /* OAWaypointCell.xib in Resources */,
+				FA2431822DD203AA00B52998 /* VehicleMetricsSensors.storyboard in Resources */,
 				84EE2DE21AFD149F007C9A94 /* map_banner@3x.png in Resources */,
 				FAD258A82D7856EE001C875F /* vi_tts.js in Resources */,
 				DA04D777284F86060097CAED /* ic_custom_zero_downloads_big@3x.png in Resources */,
@@ -17596,6 +17611,7 @@
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,
 				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
+				FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */,
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,
 				CA4ED87EDFA076F9F7F63A4C /* OABenefitsOsmContributorsViewController.m in Sources */,
 				CA4EDCD265973B276DCF2FE8 /* OAMappersViewController.m in Sources */,

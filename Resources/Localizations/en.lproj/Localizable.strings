@@ -4072,14 +4072,16 @@
 "obd_plugin_name" = "Vehicle Metrics";
 "purchase_feature_desc_vehicle_metrics_obd_ii" = "Track vital vehicle data using the OBD-II protocol. Monitor key metrics like speed, engine RPM, fuel consumption, and more.";
 
-
-"connect_obd_instructions_step" = "1. Connect the scanner to your vehicle\'s OBD-II port.\n\n
-2. Turn on your vehicle\'s engine\n\n
-3. Enable Bluetooth on your device\n\n
-4. Tap \'%1$s\' and select your scanner from the list.";
-
 "obd_plugin_description" = "Monitor key vehicle metrics using the OBD-II protocol. Access data including:\n
 • Engine speed, Engine Runtime, Calculated Engine Load \n
 • Fuel consumption, Fuel pressure, Remaining fuel\n
 • Intake temperature, Ambient temperature, Coolant temperature, Engine Oil Temperature\n
 • Vehicle speed, Throttle Position, Battery voltage";
+
+"vehicle_metrics_obd_ii" = "Vehicle Metrics (OBD-II)";
+"connect_obd_instructions_title" = "OsmAnd supports Bluetooth connections to OBD-II scanners.";
+"obd_how_to_connect" = "How to connect:";
+"connect_obd_instructions_step" = "1. Connect the scanner to your vehicle\'s OBD-II port.\n\n
+2. Turn on your vehicle\'s engine\n\n
+3. Enable Bluetooth on your device\n\n
+4. Tap \'%@\' and select your scanner from the list.";

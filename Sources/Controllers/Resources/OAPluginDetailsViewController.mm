@@ -433,8 +433,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     }
     else if ([_product isKindOfClass:OAVehicleMetricsProduct.class])
     {
-        // TODO: OAVehicleMetrics
-        return [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
+        return [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
     }
     
     return nil;

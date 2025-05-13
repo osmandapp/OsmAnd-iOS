@@ -1,32 +1,32 @@
 //
-//  BLEExternalSensorsViewController.swift
-//  OsmAnd Maps
+//  VehicleMetricsSensorsController.swift
+//  OsmAnd
 //
-//  Created by Oleksandr Panchenko on 13.10.2023.
+//  Created by Oleksandr Panchenko on 12.05.2025.
+//  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import UIKit
 import CoreBluetooth
 
-final class BLEExternalSensorsViewController: OABaseNavbarViewController {
+final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
-    private enum ExternalSensorsCellData: String {
+    private enum CellData: String {
         case title, learnMore
     }
     
-    private enum ExternalSensorsConnectState: String {
+    private enum ConnectState: String {
         case connected, disconnected
     }
     
     @IBOutlet private weak var pairNewSensorButton: UIButton! {
         didSet {
-            pairNewSensorButton.setTitle(localizedString("ant_plus_pair_new_sensor"), for: .normal)
+            pairNewSensorButton.setTitle(localizedString("external_device_status_connect"), for: .normal)
         }
     }
     
     private let headerEmptyView: UIView = UIView(frame: .zero)
     
-    private var sectionsDevicesData = [ExternalSensorsConnectState: [Device]]()
+    private var sectionsDevicesData = [ConnectState: [Device]]()
     
     private lazy var bluetoothDisableViewHeader: BluetoothDisableView = .fromNib()
     
@@ -66,19 +66,23 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
+    override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
+    }
+    
     override func useCustomTableViewHeader() -> Bool {
         true
     }
     
     override func getTitle() -> String {
-        localizedString("external_sensors_plugin_name")
+        localizedString("vehicle_metrics_obd_ii")
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
         let add = UIBarButtonItem(barButtonSystemItem: .add,
                                   target: self,
                                   action: #selector(onRightNavbarButtonPressed))
-        add.tintColor = UIColor.iconColorActive
+        add.tintColor = .iconColorActive
         return [add]
     }
     
@@ -116,36 +120,32 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
-        var outCell: UITableViewCell?
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OASimpleTableViewCell
-                cell?.descriptionVisibility(false)
-                cell?.leftIconVisibility(false)
-            }
-            if let cell {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell {
+                cell.descriptionVisibility(false)
+                cell.leftIconVisibility(false)
                 cell.setCustomLeftSeparatorInset(true)
                 cell.separatorInset = .zero
+                cell.titleLabel.attributedText = nil
                 cell.titleLabel.text = item.title
-                if let key = item.key, let item = ExternalSensorsCellData(rawValue: key) {
-                    switch item {
+                if let key = item.key, let cellDataItem = CellData(rawValue: key) {
+                    switch cellDataItem {
                     case .title:
-                        cell.titleLabel.textColor = UIColor.textColorPrimary
+                        cell.titleLabel.attributedText = getEmptyDescriptionAttributedString()
+                        cell.titleLabel.textColor = .textColorPrimary
                         cell.selectionStyle = .none
                     case .learnMore:
-                        cell.titleLabel.textColor = UIColor.textColorActive
+                        cell.titleLabel.textColor = .textColorActive
                         cell.selectionStyle = .default
                     }
                 }
+                return cell
             }
-            outCell = cell
         } else if item.cellType == SearchDeviceTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: SearchDeviceTableViewCell.reuseIdentifier) as! SearchDeviceTableViewCell
             configureSeparator(cell: cell)
 
-            if let key = item.key, let item = ExternalSensorsConnectState(rawValue: key) {
+            if let key = item.key, let item = ConnectState(rawValue: key) {
                 if let items = sectionsDevicesData[item], items.count > indexPath.row {
                     cell.configure(item: items[indexPath.row])
                 }
@@ -153,7 +153,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
             return cell
         }
         
-        return outCell
+        return nil
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
@@ -170,15 +170,15 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if let key = item.key {
-            if let item = ExternalSensorsCellData(rawValue: key) {
+            if let item = CellData(rawValue: key) {
                 if case .learnMore = item {
-                    guard let settingsURL = URL(string: docsExternalSensorsURL),
+                    guard let settingsURL = URL(string: docsVehicleMetricsURL),
                           UIApplication.shared.canOpenURL(settingsURL) else {
                         return
                     }
                     UIApplication.shared.open(settingsURL)
                 }
-            } else if let item = ExternalSensorsConnectState(rawValue: key) {
+            } else if let item = ConnectState(rawValue: key) {
                 if let items = sectionsDevicesData[item], items.count > indexPath.row {
                     let controller = BLEDescriptionViewController()
                     controller.device = items[indexPath.row]
@@ -243,7 +243,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     private func configureEmptyHeader() {
         view.layoutIfNeeded()
         headerEmptyView.subviews.forEach { $0.removeFromSuperview() }
-        let imageView = UIImageView(image: UIImage(named: "img_help_sensors_day"))
+        let imageView = UIImageView(image: UIImage(named: "img_help_vehicle_metrics"))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         
@@ -274,13 +274,35 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         let section = tableData.createNewSection()
         let titleBLE = section.createNewRow()
         titleBLE.cellType = OASimpleTableViewCell.getIdentifier()
-        titleBLE.key = ExternalSensorsCellData.title.rawValue
-        titleBLE.title = localizedString("ant_plus_pair_bluetooth_prompt")
-        
+        titleBLE.key = CellData.title.rawValue
+
         let learnMoreBLE = section.createNewRow()
         learnMoreBLE.cellType = OASimpleTableViewCell.getIdentifier()
-        learnMoreBLE.key = ExternalSensorsCellData.learnMore.rawValue
+        learnMoreBLE.key = CellData.learnMore.rawValue
         learnMoreBLE.title = localizedString("learn_more_about_sensors_link")
+    }
+    
+    private func getEmptyDescriptionAttributedString() -> NSAttributedString {
+        let title = localizedString("connect_obd_instructions_title")
+        let howTo = localizedString("obd_how_to_connect")
+        let steps = String(format: localizedString("connect_obd_instructions_step"),  localizedString("external_device_status_connect")).replacingOccurrences(of: "\n\n", with: "\n")
+        
+        let fullText = "\(title)\n\n\(howTo)\n\(steps)"
+        let fullAttributedText = NSMutableAttributedString(string: fullText)
+        
+        if let boldFont = UIFont.scaledBoldSystemFont(ofSize: 17) {
+            let howToRange = (fullText as NSString).range(of: howTo)
+            
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.paragraphSpacing = 12
+            
+            fullAttributedText.addAttributes([
+                .font: boldFont,
+                .paragraphStyle: paragraphStyle
+            ], range: howToRange)
+        }
+        
+        return fullAttributedText
     }
     
     private func configurePairedDevices() {
@@ -293,7 +315,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 connectedDevices.forEach { _ in
                     let row = connectedSection.createNewRow()
                     row.cellType = SearchDeviceTableViewCell.reuseIdentifier
-                    row.key = ExternalSensorsConnectState.connected.rawValue
+                    row.key = ConnectState.connected.rawValue
                 }
                 sectionsDevicesData[.connected] = connectedDevices
             }
@@ -310,7 +332,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         disconnectedDevices.forEach { _ in
             let row = disconnectedSection.createNewRow()
             row.cellType = SearchDeviceTableViewCell.reuseIdentifier
-            row.key = ExternalSensorsConnectState.disconnected.rawValue
+            row.key = ConnectState.disconnected.rawValue
         }
         sectionsDevicesData[.disconnected] = disconnectedDevices
     }
@@ -335,7 +357,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
 }
 
 // MARK: - UIContextMenuConfiguration
-extension BLEExternalSensorsViewController {
+extension VehicleMetricsSensorsController {
 
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         guard let device = getDeviceFor(indexPath: indexPath) else { return nil }
@@ -358,7 +380,7 @@ extension BLEExternalSensorsViewController {
     
     private func getDeviceFor(indexPath: IndexPath) -> Device? {
         let item = tableData.item(for: indexPath)
-        if let key = item.key, let item = ExternalSensorsConnectState(rawValue: key) {
+        if let key = item.key, let item = ConnectState(rawValue: key) {
             if let items = sectionsDevicesData[item], items.count > indexPath.row {
                 return items[indexPath.row]
             }
@@ -393,3 +415,4 @@ extension BLEExternalSensorsViewController {
         navigationController?.pushViewController(controller, animated: true)
     }
 }
+

@@ -436,7 +436,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     private func setupColorCollectionCell(_ cell: OACollectionSingleLineTableViewCell) {
-        if let handler = OAColorCollectionHandler(data: [colorItems], collectionView: cell.collectionView) {
+        guard let data = hostColorHandler?.getData() as? [[ColorItem]] else { return }
+        if let handler = OAColorCollectionHandler(data: data, collectionView: cell.collectionView) {
             handler.isOpenedFromAllColorsScreen = true
             handler.hostColorHandler = hostColorHandler
             handler.delegate = self

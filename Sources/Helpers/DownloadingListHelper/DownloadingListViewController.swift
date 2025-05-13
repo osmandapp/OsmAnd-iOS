@@ -9,7 +9,7 @@
 import UIKit
 
 final class DownloadingListViewController: OABaseNavbarViewController, DownloadingCellResourceHelperDelegate {
-    
+        
     weak var delegate: DownloadingCellResourceHelperDelegate?
 
     private var downloadingListHelper: DownloadingListHelper?
@@ -107,5 +107,9 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
 
     func onStopDownload(_ resourceItem: OAResourceSwiftItem) {
         delegate?.onStopDownload(resourceItem)
+    }
+    
+    func onDownloadTaskFinished(resourceId: String) {
+        delegate?.onDownloadTaskFinished?(resourceId: resourceId)
     }
 }

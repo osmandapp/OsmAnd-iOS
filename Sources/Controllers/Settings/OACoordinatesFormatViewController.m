@@ -17,7 +17,7 @@
 #import "OALocationConvert.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAOsmAndFormatter.h"
-
+#import "OAObservable.h"
 #import "Localization.h"
 #import "OAColors.h"
 

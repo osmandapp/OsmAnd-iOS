@@ -72,8 +72,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 - (OAMapSelectionResult *) collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
 {
     OAMapSelectionResult *result = [[OAMapSelectionResult alloc] initWithPoint:point];
-    [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO];
-    [self collectObjectsFromMap:result point:point];
+    [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO]; //TODO: implement later
+    [self collectObjectsFromMap:result point:point]; //start from this
     
     [self processTransportStops:[result getAllObjects]];
     if ([result isEmpty])
@@ -151,8 +151,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             
             if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
             {
-                double lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
                 double lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
+                double lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
                 result.objectLatLon = CLLocationCoordinate2DMake(lat, lon);
 
                 if (const auto billboardAdditionalParams = std::dynamic_pointer_cast<const OsmAnd::MapSymbolsGroup::AdditionalBillboardSymbolInstanceParameters>(symbolInfo.instanceParameters))
@@ -231,8 +231,9 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                     BOOL allowAmenityObjects = !isTravelGpx;
                     
                     if (allowAmenityObjects)
-                    {
-                        if (auto onPathMapSymbol = std::dynamic_pointer_cast<const  OsmAnd::IOnPathMapSymbol>(symbolInfo.mapSymbol))
+                    {   
+                        auto onPathMapSymbol = std::dynamic_pointer_cast<const  OsmAnd::IOnPathMapSymbol>(symbolInfo.mapSymbol);
+                        if (onPathMapSymbol == nullptr)
                         {
                             CLLocationCoordinate2D latLon = result.objectLatLon;
                             NSString *latLonTag = tags[TAG_POI_LAT_LON];
@@ -356,9 +357,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     uint64_t obfId = -1;
     if (const auto& mapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(obfMapObject))
     {
-        //TODO: test which one is correct?
-        obfId = mapObject->id;
-        //obfId = mapObject->id.id;
+        obfId = mapObject->id.id;
     }
     
     OAPOI *amenity = [self findAmenity:latLon names:names obfId:obfId];
@@ -528,14 +527,26 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
 - (OAPOI *) findAmenity:(CLLocationCoordinate2D)latLon names:(NSMutableArray<NSString *> *)names obfId:(uint64_t)obfId
 {
     int searchRadius = [ObfConstants isIdFromRelation:obfId >> AMENITY_ID_RIGHT_SHIFT] ?
-        AMENITY_SEARCH_RADIUS :
-        AMENITY_SEARCH_RADIUS_FOR_RELATION;
+        AMENITY_SEARCH_RADIUS_FOR_RELATION :
+        AMENITY_SEARCH_RADIUS;;
     
     return [self findAmenity:latLon names:names obfId:obfId radius:searchRadius];
 }
 
 - (OAPOI *) findAmenity:(CLLocationCoordinate2D)latLon names:(NSMutableArray<NSString *> *)names obfId:(uint64_t)obfId radius:(int)radius
 {
+    uint64_t osmId = [ObfConstants getOsmId:obfId];
+    
+    auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    auto rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, point31);
+    
+    
+    
+//    BOOL amenityFound = obfsDataInterface->findAmenityByObfMapObject(obfMapObject, &amenity, &bbox31);
+    
+    
+    
+    
     
     //TODO: implement
     

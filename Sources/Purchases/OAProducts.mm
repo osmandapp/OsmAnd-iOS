@@ -2074,7 +2074,7 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_action_car_info";
+    return @"ic_custom_car_info";
 }
 
 - (NSString *) localizedTitle

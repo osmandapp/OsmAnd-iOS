@@ -9,7 +9,7 @@
 import UIKit
 import CoreBluetooth
 
-final class BLESearchViewController: OABaseNavbarViewController {
+final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     
     // MARK: - @IBOutlets
     
@@ -30,12 +30,12 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     @IBOutlet private weak var nothingFoundTitle: UILabel! {
         didSet {
-            nothingFoundTitle.text = localizedString("ant_plus_nothing_found_text")
+            nothingFoundTitle.text = localizedString("obd_nothing_found_text")
         }
     }
     @IBOutlet private weak var nothingFoundDescription: UILabel! {
         didSet {
-            nothingFoundDescription.text = localizedString("ant_plus_nothing_found_description")
+            nothingFoundDescription.text = localizedString("obd_nothing_found_description")
         }
     }
     @IBOutlet private weak var searchAgainButton: UIButton! {
@@ -45,12 +45,12 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     @IBOutlet private weak var searchingTitle: UILabel! {
         didSet {
-            searchingTitle.text = localizedString("ant_plus_searching_text")
+            searchingTitle.text = localizedString("obd_searching_text")
         }
     }
     @IBOutlet private weak var searchingDescription: UILabel! {
         didSet {
-            searchingDescription.text = localizedString("ant_plus_searching_text_description")
+            searchingDescription.text = localizedString("obd_searching_text_description")
         }
     }
     @IBOutlet private weak var openSettingButton: UIButton! {
@@ -65,7 +65,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     @IBOutlet private weak var bluetoothOffDescription: UILabel! {
         didSet {
-            bluetoothOffDescription.text = localizedString("ant_plus_bluetooth_off_description")
+            bluetoothOffDescription.text = localizedString("obd_bluetooth_off_description")
         }
     }
     
@@ -206,7 +206,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     private func scanForPeripherals() {
         showSearchingView()
         needRescan = false
-        BLEManager.shared.scanForPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation }) { [weak self] in
+        BLEManager.shared.scanForPeripherals(withServiceUUIDs: GattAttributes.OBD_SERVICES.map { $0.CBUUIDRepresentation }) { [weak self] in
             guard let self else { return }
             hasFirstResult = true
             showDiscoveredDevices()

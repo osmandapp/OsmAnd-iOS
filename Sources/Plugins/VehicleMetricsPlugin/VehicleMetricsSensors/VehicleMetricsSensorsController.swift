@@ -118,7 +118,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         return nil
     }
     
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell {
         let item = tableData.item(for: indexPath)
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
             if let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell {
@@ -153,7 +153,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
             return cell
         }
         
-        return nil
+        return UITableViewCell()
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
@@ -285,7 +285,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     private func getEmptyDescriptionAttributedString() -> NSAttributedString {
         let title = localizedString("connect_obd_instructions_title")
         let howTo = localizedString("obd_how_to_connect")
-        let steps = String(format: localizedString("connect_obd_instructions_step"),  localizedString("external_device_status_connect")).replacingOccurrences(of: "\n\n", with: "\n")
+        let steps = String(format: localizedString("connect_obd_instructions_step"), localizedString("external_device_status_connect")).replacingOccurrences(of: "\n\n", with: "\n")
         
         let fullText = "\(title)\n\n\(howTo)\n\(steps)"
         let fullAttributedText = NSMutableAttributedString(string: fullText)
@@ -339,8 +339,8 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     @objc private func pairNewSensor() {
         detectBluetoothState()
-        let storyboard = UIStoryboard(name: "BLESearchViewController", bundle: nil)
-        if let vc = storyboard.instantiateViewController(withIdentifier: "BLESearchViewController") as? BLESearchViewController {
+        let storyboard = UIStoryboard(name: "VehicleMetricsSearchViewController", bundle: nil)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "VehicleMetricsSearchViewController") as? VehicleMetricsSearchViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -361,7 +361,7 @@ extension VehicleMetricsSensorsController {
 
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         guard let device = getDeviceFor(indexPath: indexPath) else { return nil }
-        
+        // TODO: check
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
             guard let self else { return nil }
             
@@ -415,4 +415,3 @@ extension VehicleMetricsSensorsController {
         navigationController?.pushViewController(controller, animated: true)
     }
 }
-

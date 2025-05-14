@@ -4094,3 +4094,13 @@
 2. Turn on your vehicle\'s engine\n\n
 3. Enable Bluetooth on your device\n\n
 4. Tap \'%@\' and select your scanner from the list.";
+"obd_bluetooth_off_description" = "Turn on Bluetooth to find and connect scanners.";
+"obd_searching_text_description" = "Please keep your device close to the scanner. Ensure the vehicle\'s engine is running.";
+"obd_searching_text" = "Searching for scanners";
+"obd_nothing_found_text" = "No scanners found";
+
+"obd_nothing_found_description" = "Please check the following:\n
+– Ensure Bluetooth is turned on\n
+– Vehicle engine is running\n
+– Make sure your device is within range of the scanner.";
+    

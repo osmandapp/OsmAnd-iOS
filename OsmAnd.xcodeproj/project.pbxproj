@@ -3169,6 +3169,10 @@
 		FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */; };
 		FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */; };
 		FA882EF22CDCFE98001F3814 /* LockScreenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */; };
+		FA899F1E2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA899F1D2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift */; };
+		FA899F1F2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA899F1C2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard */; };
+		FA899F262DD4CC690022F736 /* OBDVehicleMetricsDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA899F252DD4CC690022F736 /* OBDVehicleMetricsDevice.swift */; };
+		FA899F282DD4D22B0022F736 /* OBDVehicleMetricsSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA899F272DD4D22B0022F736 /* OBDVehicleMetricsSensor.swift */; };
 		FA9217072D50C9640074E958 /* GalleryGridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9217062D50C9640074E958 /* GalleryGridViewController.swift */; };
 		FA92170E2D52544F0074E958 /* GalleryGridDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA92170D2D5254420074E958 /* GalleryGridDetailViewController.swift */; };
 		FA9217102D525D600074E958 /* GalleryContextMenuProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA92170F2D525D600074E958 /* GalleryContextMenuProvider.swift */; };
@@ -7738,6 +7742,10 @@
 		FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSCDDevice.swift; sourceTree = "<group>"; };
 		FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSensor.swift; sourceTree = "<group>"; };
 		FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenAction.swift; sourceTree = "<group>"; };
+		FA899F1C2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VehicleMetricsSearchViewController.storyboard; sourceTree = "<group>"; };
+		FA899F1D2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsSearchViewController.swift; sourceTree = "<group>"; };
+		FA899F252DD4CC690022F736 /* OBDVehicleMetricsDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDVehicleMetricsDevice.swift; sourceTree = "<group>"; };
+		FA899F272DD4D22B0022F736 /* OBDVehicleMetricsSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDVehicleMetricsSensor.swift; sourceTree = "<group>"; };
 		FA9217062D50C9640074E958 /* GalleryGridViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryGridViewController.swift; sourceTree = "<group>"; };
 		FA92170D2D5254420074E958 /* GalleryGridDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryGridDetailViewController.swift; sourceTree = "<group>"; };
 		FA92170F2D525D600074E958 /* GalleryContextMenuProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryContextMenuProvider.swift; sourceTree = "<group>"; };
@@ -13704,6 +13712,7 @@
 		FA1D6DAC2DCE04640080E374 /* VehicleMetricsPlugin */ = {
 			isa = PBXGroup;
 			children = (
+				FA899F202DD344AA0022F736 /* VehicleMetricsSearchViewController */,
 				FA24317E2DD202A600B52998 /* VehicleMetricsSensors */,
 				FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */,
 			);
@@ -13926,6 +13935,15 @@
 			path = UserDefaultsKey;
 			sourceTree = "<group>";
 		};
+		FA899F202DD344AA0022F736 /* VehicleMetricsSearchViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FA899F1C2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard */,
+				FA899F1D2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift */,
+			);
+			path = VehicleMetricsSearchViewController;
+			sourceTree = "<group>";
+		};
 		FAA650332ADD42990020DCEA /* BLE */ = {
 			isa = PBXGroup;
 			children = (
@@ -13979,6 +13997,7 @@
 		FAA6503A2ADD42C40020DCEA /* Sensors */ = {
 			isa = PBXGroup;
 			children = (
+				FA899F272DD4D22B0022F736 /* OBDVehicleMetricsSensor.swift */,
 				FAA6503C2ADD42C40020DCEA /* Sensor.swift */,
 				FAA6503B2ADD42C40020DCEA /* BLEBatterySensor.swift */,
 				FAA6503D2ADD42C40020DCEA /* BLEHeartRateSensor.swift */,
@@ -13992,6 +14011,7 @@
 		FAA650402ADD42C40020DCEA /* Devices */ = {
 			isa = PBXGroup;
 			children = (
+				FA899F252DD4CC690022F736 /* OBDVehicleMetricsDevice.swift */,
 				FAA650452ADD42C40020DCEA /* Device.swift */,
 				FA359EE42ADF026D0001C11D /* DeviceType.swift */,
 				FAA650442ADD42C40020DCEA /* DeviceFactory.swift */,
@@ -15622,6 +15642,7 @@
 				843E5D891AB341E000BE14BE /* menu_direction_icon@3x.png in Resources */,
 				158DE48E25AEF31B007C1B57 /* ic_destination_pin_6@2x.png in Resources */,
 				323BD9112628850400D255ED /* ic_bg_point_octagon_top@2x.png in Resources */,
+				FA899F1F2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard in Resources */,
 				DA23425423477F33003911B8 /* ic_custom_clear_list@2x.png in Resources */,
 				8476E27C1F6C1EEC00EC274F /* map_car_location_lost_night@3x.png in Resources */,
 				323BD9082628850400D255ED /* ic_bg_point_square_bottom@2x.png in Resources */,
@@ -16902,6 +16923,7 @@
 				DA5A850726C563A900F274C7 /* OATableViewCellWithButton.m in Sources */,
 				46E9ADA128DC9FD000CC55F9 /* OAButtonTableViewCell.m in Sources */,
 				3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */,
+				FA899F282DD4D22B0022F736 /* OBDVehicleMetricsSensor.swift in Sources */,
 				46E10A372BB7400000B9D5C9 /* GlideAverageWidgetState.swift in Sources */,
 				DA4ABEE72876DA5D00B996EF /* OASettingsItemWriter.m in Sources */,
 				DA5A830626C563A800F274C7 /* OAImagesTableViewCell.m in Sources */,
@@ -16916,6 +16938,7 @@
 				DA5A812C26C563A700F274C7 /* OAWaypointsMapLayerProvider.mm in Sources */,
 				DA5A823E26C563A700F274C7 /* OAProfileDataObject.m in Sources */,
 				46DB0A7E2C5D1602001356D5 /* GradientUiHelper.swift in Sources */,
+				FA899F1E2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift in Sources */,
 				DAA9F44E27EC9EB8002BB1A8 /* OARegisterUserCommand.m in Sources */,
 				DA5A836126C563A800F274C7 /* OASliderWithValuesCell.m in Sources */,
 				DA5A84BE26C563A900F274C7 /* OASegmentOptionsBottomSheetViewController.mm in Sources */,
@@ -17373,6 +17396,7 @@
 				FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */,
 				464BF4A52C04F7D6000D6908 /* CompassButtonState.swift in Sources */,
 				DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */,
+				FA899F262DD4CC690022F736 /* OBDVehicleMetricsDevice.swift in Sources */,
 				DA5A84B026C563A900F274C7 /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				DA5A848726C563A900F274C7 /* OANavigationController.m in Sources */,
 				DA5A82EC26C563A800F274C7 /* OAIconsCollectionViewCell.m in Sources */,

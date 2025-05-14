@@ -528,25 +528,45 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
 {
     int searchRadius = [ObfConstants isIdFromRelation:obfId >> AMENITY_ID_RIGHT_SHIFT] ?
         AMENITY_SEARCH_RADIUS_FOR_RELATION :
-        AMENITY_SEARCH_RADIUS;;
+        AMENITY_SEARCH_RADIUS;
     
     return [self findAmenity:latLon names:names obfId:obfId radius:searchRadius];
 }
 
-- (OAPOI *) findAmenity:(CLLocationCoordinate2D)latLon names:(NSMutableArray<NSString *> *)names obfId:(uint64_t)obfId radius:(int)radius
+- (OAPOI *) findAmenity:(CLLocationCoordinate2D)latLon names:(NSArray<NSString *> *)names obfId:(uint64_t)obfId radius:(int)radius
 {
-    uint64_t osmId = [ObfConstants getOsmId:obfId];
-    
-    auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
-    auto rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, point31);
-    
-    
-    
-//    BOOL amenityFound = obfsDataInterface->findAmenityByObfMapObject(obfMapObject, &amenity, &bbox31);
+    uint64_t osmId = [ObfConstants getOsmId:obfId >> AMENITY_ID_RIGHT_SHIFT];
+    OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    OsmAnd::AreaI rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, point31);
     
     
     
+    //TODO: fix this!!!
+//    List<Amenity> amenities = app.getResourceManager().searchAmenities(ACCEPT_ALL_POI_TYPE_FILTER, rect, true);
     
+    NSArray<OAPOI *> *amenities = [OAPOIHelper findPOIsByFilter:nil topLatitude:latLon.latitude + radius/111000.0
+                                            leftLongitude:latLon.longitude - radius/111000.0/cos(latLon.latitude*M_PI/180)
+                                           bottomLatitude:latLon.latitude - radius/111000.0
+                                          rightLongitude:latLon.longitude + radius/111000.0/cos(latLon.latitude*M_PI/180)
+                                                 matcher:nil];
+    
+    
+    
+    OAPOI *amenity = [self findAmenityByOsmId:amenities obfId:obfId point:latLon];
+    if (!amenity && names.count > 0)
+    {
+        amenity = [self findAmenityByName:amenities names:names];
+    }
+    return amenity;
+}
+
+
+//public static List<Amenity> findAmenities(@NonNull OsmandApplication app, @NonNull LatLon latLon) {
+
+- (NSArray<OAPOI *> *) findAmenities:(CLLocationCoordinate2D)latLon
+{
+//        QuadRect rect = MapUtils.calculateLatLonBbox(latLon.getLatitude(), latLon.getLongitude(), AMENITY_SEARCH_RADIUS);
+//        return app.getResourceManager().searchAmenities(ACCEPT_ALL_POI_TYPE_FILTER, rect, true);
     
     //TODO: implement
     
@@ -554,14 +574,65 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
 }
 
 
+- (OAPOI *) findAmenityByOsmId:(CLLocationCoordinate2D)latLon obfId:(uint64_t)obfId
+{
+    NSArray<OAPOI *> *amenities = [self findAmenities:latLon];
+    return [self findAmenityByOsmId:amenities obfId:obfId point:latLon];
+}
 
-//public static List<Amenity> findAmenities(
+- (OAPOI *) findAmenityByOsmId:(NSArray<OAPOI *> *)amenities obfId:(uint64_t)obfId point:(CLLocationCoordinate2D)point
+{
+    OAPOI *result = nil;
+    double minDist = AMENITY_SEARCH_RADIUS_FOR_RELATION * 2;
+    
+    for (OAPOI *amenity in amenities)
+    {
+        uint64_t initAmenityId = amenity.obfId;
+        if (initAmenityId != 0)
+        {
+            uint64_t amenityId;
+            if ([ObfConstants isShiftedID:initAmenityId])
+                amenityId = [ObfConstants getOsmId:initAmenityId];
+            else
+                amenityId = initAmenityId >> AMENITY_ID_RIGHT_SHIFT;
+            
+            if (amenityId == obfId && !amenity.isClosed)
+            {
+                double dist = [OAMapUtils getDistance:[amenity getLocation] second:point];
+                if (result == nil || dist < minDist)
+                {
+                    result = amenity;
+                    minDist = dist;
+                }
+            }
+        }
+    }
+    return result;
+}
 
-//public static Amenity findAmenityByOsmId(
+- (OAPOI *) findAmenityByName:(NSArray<OAPOI *> *)amenities names:(NSArray<NSString *> *)names
+{
+    if (names.count > 0)
+    {
+        for (OAPOI *amenity in amenities)
+        {
+            if (!amenity.isClosed)
+            {
+                if ([names containsObject:amenity.name])
+                    return amenity;
+                
+                if ([amenity isRoutePoint] && amenity.name.length == 0)
+                {
+                    NSString *travelRouteId = [amenity.values objectForKey:OATravelGpx.TRAVEL_MAP_TO_POI_TAG];
+                    if (travelRouteId && [names containsObject:travelRouteId])
+                        return amenity;
+                }
+            }
+        }
+    }
+    return nil;
+}
 
-//public static Amenity findAmenityByOsmId(
-
-//public static Amenity findAmenityByName(
 
 //public static PlaceDetailsObject fetchOtherData(
 

@@ -145,6 +145,37 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return val && [val isEqualToString:OSM_DELETE_VALUE];
 }
 
+- (BOOL)isPrivateAccess
+{
+    NSString *val = _values[OSM_ACCESS_PRIVATE_TAG];
+    return val && [val isEqualToString:OSM_ACCESS_PRIVATE_VALUE];
+}
+
+- (BOOL)isRouteTrack
+{
+    if (!_subType)
+    {
+        return NO;
+    }
+    else
+    {
+        BOOL hasRouteTrackSubtype = [_subType hasPrefix:ROUTE_PREFIX] || [_subType isEqualToString:ROUTE_TRACK];
+        BOOL hasGeometry = _values && _values[ROUTE_BBOX_RADIUS];
+        return hasRouteTrackSubtype && hasGeometry && ![[self getRouteId] isEmpty];
+    }
+    return NO;
+}
+
+- (BOOL)isRoutePoint
+{
+    return _subType && ([_subType isEqualToString:ROUTE_TRACK_POINT] || [_subType isEqualToString:ROUTE_ARTICLE_POINT]);
+}
+
+- (BOOL)isSuperRoute
+{
+    return _values[ROUTE_MEMGERS_IDS];
+}
+
 //TODO: orig code - test new one not broken
 //- (NSSet<NSString *> *)getSupportedContentLocales
 //{

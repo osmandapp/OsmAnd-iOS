@@ -28,6 +28,8 @@ static NSString *DISH_TAG = @"dish";
 static NSString *POI_REF = @"ref";
 static NSString *OSM_DELETE_VALUE = @"delete";
 static NSString *OSM_DELETE_TAG = @"osmand_change";
+static NSString *OSM_ACCESS_PRIVATE_VALUE = @"private";
+static NSString *OSM_ACCESS_PRIVATE_TAG = @"access_private";
 static NSString *IMAGE_TITLE = @"image_title";
 static NSString *IS_PART = @"is_part";
 static NSString *IS_PARENT_OF = @"is_parent_of";
@@ -47,8 +49,11 @@ static NSString *POITYPE = @"type";
 static NSString *SUBTYPE = @"subtype";
 static NSString *AMENITY_NAME = @"name";
 static NSString *ROUTE_ARTICLE = @"route_article";
+static NSString *ROUTE_PREFIX = @"routes_";
 static NSString *ROUTE_TRACK = @"route_track";
 static NSString *ROUTE_TRACK_POINT = @"route_track_point";
+static NSString *ROUTE_BBOX_RADIUS = @"route_bbox_radius";
+static NSString *ROUTE_MEMGERS_IDS = @"route_members_ids";
 static NSString *TRAVEL_EVO_TAG = @"travel_elo";
 
 static int DEFAULT_ELO = 900;
@@ -92,6 +97,11 @@ static int DEFAULT_ELO = 900;
 - (NSString *)gpxIcon;
 
 - (BOOL) isClosed;
+- (BOOL) isPrivateAccess;
+- (BOOL) isRouteTrack;
+- (BOOL) isRoutePoint;
+- (BOOL) isSuperRoute;
+
 - (NSSet<NSString *> *)getSupportedContentLocales;
 - (void) updateContentLocales:(NSSet<NSString *> *)locales;
 

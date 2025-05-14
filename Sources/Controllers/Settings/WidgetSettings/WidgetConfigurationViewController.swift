@@ -42,6 +42,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     
     override func registerCells() {
         addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
+        addCell(OAButtonTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -200,8 +201,49 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 }
             }
             outCell = cell
+        } else if item.cellType == OAButtonTableViewCell.getIdentifier() {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.getIdentifier()) as! OAButtonTableViewCell
+            let value = item.obj(forKey: "value") as? String
+            cell.selectionStyle = .none
+            cell.descriptionVisibility(false)
+            cell.titleLabel.text = item.title
+            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.leftIconView.tintColor = selectedAppMode.getProfileColor()
+            var config = UIButton.Configuration.plain()
+            config.baseForegroundColor = .textColorActive
+            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0)
+            cell.button.configuration = config
+            if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = DisplayPriority(rawValue: pref.defValue)?.key {
+                cell.button.menu = createDisplayPriorityMenuWith(value: value ?? defValue, pref: pref, indexPath: indexPath)
+            }
+            cell.button.showsMenuAsPrimaryAction = true
+            cell.button.changesSelectionAsPrimaryAction = true
+            cell.button.contentHorizontalAlignment = .right
+            cell.button.setContentHuggingPriority(.required, for: .horizontal)
+            cell.button.setContentCompressionResistancePriority(.required, for: .horizontal)
+            outCell = cell
         }
         return outCell
+    }
+    
+    private func createDisplayPriorityMenuWith(value: String, pref: OACommonWidgetDisplayPriority, indexPath: IndexPath) -> UIMenu {
+        let actions = DisplayPriority.allCases.map { displayPriority in
+            UIAction(title: displayPriority.title,
+                     image: UIImage.templateImageNamed(displayPriority.iconName),
+                     state: displayPriority.key == value ? .on : .off) { [weak self] _ in
+                guard let self else { return }
+                
+                if createNew {
+                    widgetConfigurationParams?[pref.key] = displayPriority.key
+                } else {
+                    pref.setValueFrom(displayPriority.key, appMode: selectedAppMode)
+                }
+                generateData()
+                onWidgetStateChangedAction?()
+                tableView.reloadData()
+            }
+        }
+        return UIMenu(options: .singleSelection, children: actions)
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {

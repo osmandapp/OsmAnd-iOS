@@ -4046,8 +4046,13 @@
 "delete_widget_description" = "This widget will be deleted. You can restore it later in Configure Screen.";
 "reset_average_speed" = "Reset average speed";
 
+"intermediate_first" = "Intermediate first";
+"destination_first" = "Destination first";
+"display_priority" = "Display priority";
+"shared_string_default_view" = "Default view";
 "map_widget_route_information" = "Route information";
 "map_widget_route_information_desc" = "Displays the estimated arrival time, remaining travel time, and distance for the current navigation route.";
+"map_widget_distance" = "Distance";
 
 "rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
 "rendering_attr_showClimbingRoutes_name" = "Climbing routes";

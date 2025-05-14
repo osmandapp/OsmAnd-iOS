@@ -215,7 +215,10 @@
 		2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */; };
 		2717D3D22DC8D8A600B7BD22 /* BaseAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */; };
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
-		27F0508B2DD38D430058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508A2DD38D430058075F /* RouteInfoWidget.swift */; };
+		27F050912DD38E310058075F /* DisplayPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508D2DD38E310058075F /* DisplayPriority.swift */; };
+		27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508F2DD38E310058075F /* RouteInfoWidget.swift */; };
+		27F050932DD38E310058075F /* DisplayValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508E2DD38E310058075F /* DisplayValue.swift */; };
+		27F050952DD38E400058075F /* RouteInfoWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050942DD38E400058075F /* RouteInfoWidgetState.swift */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
 		3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */; };
@@ -3522,7 +3525,10 @@
 		2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesCollectionHandler.swift; sourceTree = "<group>"; };
 		2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceCategory.swift; sourceTree = "<group>"; };
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
-		27F0508A2DD38D430058075F /* RouteInfoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidget.swift; sourceTree = "<group>"; };
+		27F0508D2DD38E310058075F /* DisplayPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPriority.swift; sourceTree = "<group>"; };
+		27F0508E2DD38E310058075F /* DisplayValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayValue.swift; sourceTree = "<group>"; };
+		27F0508F2DD38E310058075F /* RouteInfoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidget.swift; sourceTree = "<group>"; };
+		27F050942DD38E400058075F /* RouteInfoWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidgetState.swift; sourceTree = "<group>"; };
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
 		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
@@ -7930,6 +7936,16 @@
 				3233B36B29EEBA060056793F /* OATrackMenuHudViewControllerConstants.h */,
 			);
 			path = TrackMenu;
+			sourceTree = "<group>";
+		};
+		27F050902DD38E310058075F /* RouteInfo */ = {
+			isa = PBXGroup;
+			children = (
+				27F0508D2DD38E310058075F /* DisplayPriority.swift */,
+				27F0508E2DD38E310058075F /* DisplayValue.swift */,
+				27F0508F2DD38E310058075F /* RouteInfoWidget.swift */,
+			);
+			path = RouteInfo;
 			sourceTree = "<group>";
 		};
 		320F71252A823F980071C0E7 /* data */ = {
@@ -12670,6 +12686,7 @@
 				DA5A7F1D26C563A400F274C7 /* OACompassRulerWidgetState.h */,
 				DA5A7F1A26C563A400F274C7 /* OACompassRulerWidgetState.m */,
 				C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */,
+				27F050942DD38E400058075F /* RouteInfoWidgetState.swift */,
 				C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */,
 				DA5A7F1826C563A400F274C7 /* OATimeWidgetState.h */,
 				DA5A7F1B26C563A400F274C7 /* OATimeWidgetState.m */,
@@ -13474,6 +13491,7 @@
 				46CBC9732B962707005CC244 /* GlideAverageWidget.swift */,
 				46CBC9712B96126C005CC244 /* GlideBaseWidget.swift */,
 				4641A4642B98B4A5000D8B32 /* GlideTargetWidget.swift */,
+				27F050902DD38E310058075F /* RouteInfo */,
 				DA8DC3972A0CF47D006C116B /* MapMarkerSideWidget.swift */,
 				DA8DC3A12A0E4EBB006C116B /* OABearingWidget.h */,
 				DA8DC3A22A0E4EBB006C116B /* OABearingWidget.m */,
@@ -13483,7 +13501,6 @@
 				DA7B18E22A12392E0029967F /* OAMaxSpeedWidget.mm */,
 				DA14DC902A31D76A002A91BC /* OAWeatherWidget.h */,
 				DA14DC912A31D76A002A91BC /* OAWeatherWidget.mm */,
-				27F0508A2DD38D430058075F /* RouteInfoWidget.swift */,
 				DA08A1492A41DA7400205D7E /* RulerDistanceWidget.swift */,
 				DA8DC3952A0CE32E006C116B /* TimeToNavigationPointWidget.swift */,
 			);
@@ -16597,6 +16614,7 @@
 				DA5A835826C563A800F274C7 /* OABottomSheetHeaderDescrButtonCell.m in Sources */,
 				DA5A830526C563A800F274C7 /* OAHorizontalCollectionViewCell.m in Sources */,
 				DA5A824726C563A700F274C7 /* OARepeatNavigationInstructionsViewController.m in Sources */,
+				27F050952DD38E400058075F /* RouteInfoWidgetState.swift in Sources */,
 				DA5A81A826C563A700F274C7 /* OASearchResult.mm in Sources */,
 				DA5A855526C563A900F274C7 /* OASimulationProvider.mm in Sources */,
 				460C1E702BFC9B490090D67B /* QuickActionIds.swift in Sources */,
@@ -17166,7 +17184,6 @@
 				32AB486B2C9C84B3005EF1D4 /* DownloadingListViewController.swift in Sources */,
 				461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */,
 				DA5A84FD26C563A900F274C7 /* OATableViewCell.m in Sources */,
-				27F0508B2DD38D430058075F /* RouteInfoWidget.swift in Sources */,
 				C52E750F2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift in Sources */,
 				DA5A83DB26C563A800F274C7 /* OASelectFavoriteGroupViewController.mm in Sources */,
 				DA5A854726C563A900F274C7 /* OANetworkUtilities.m in Sources */,
@@ -17581,6 +17598,9 @@
 				46CBC9782B9633FB005CC244 /* AverageGlideComputer.swift in Sources */,
 				CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */,
 				3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */,
+				27F050912DD38E310058075F /* DisplayPriority.swift in Sources */,
+				27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */,
+				27F050932DD38E310058075F /* DisplayValue.swift in Sources */,
 				FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */,
 				323BFE6E2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift in Sources */,
 				CA4EDC32B17473A9290AE863 /* OALabel.m in Sources */,

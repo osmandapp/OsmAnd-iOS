@@ -22,6 +22,7 @@ final class RouteInfoWidget: OASimpleWidget {
         defaultViewPref = widgetState.defaultViewPref
         displayPriorityPref = widgetState.displayPriorityPref
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
+        updateVisibility(false)
     }
     
     override init(frame: CGRect) {

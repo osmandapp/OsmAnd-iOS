@@ -211,7 +211,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             cell.leftIconView.tintColor = selectedAppMode.getProfileColor()
             var config = UIButton.Configuration.plain()
             config.baseForegroundColor = .textColorActive
-            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0)
+            config.contentInsets = .zero
             cell.button.configuration = config
             if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = DisplayPriority(rawValue: pref.defValue)?.key {
                 cell.button.menu = createDisplayPriorityMenuWith(value: value ?? defValue, pref: pref, indexPath: indexPath)

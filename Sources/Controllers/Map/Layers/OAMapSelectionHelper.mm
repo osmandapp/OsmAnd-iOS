@@ -17,11 +17,18 @@ static int TILE_SIZE = 256;
 
 static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
-
-
-- (void) collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
+- (OAMapSelectionResult *) collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
 {
-    //TODO: implement
+    OAMapSelectionResult *result = [[OAMapSelectionResult alloc] initWithPoint:point];
+    [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO];
+    [self collectObjectsFromMap:result point:point];
+    
+    [self processTransportStops:[result getAllObjects]];
+    if ([result isEmpty])
+        [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:YES];
+    
+    [result groupByOsmIdAndWikidataId];
+    return result;
 }
 
 - (void) collectObjectsFromMap:(OAMapSelectionResult *)result point:(CGPoint)point

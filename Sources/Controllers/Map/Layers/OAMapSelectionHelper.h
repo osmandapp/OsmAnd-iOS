@@ -8,6 +8,6 @@
 
 @interface OAMapSelectionHelper : NSObject
 
-- (void) collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation;
+- (OAMapSelectionResult *) collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation;
 
 @end

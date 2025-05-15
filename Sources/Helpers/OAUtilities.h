@@ -400,6 +400,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor;
 
 + (NSString *) createNewFileName:(NSString *)oldName;
++ (NSString *) simplifyFileName:(NSString *)filename;
 
 + (natural_t) get_free_memory;
 

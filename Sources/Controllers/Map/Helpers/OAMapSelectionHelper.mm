@@ -24,6 +24,8 @@
 #import "OAClickableWay.h"
 #import "OAClickableWayHelper.h"
 #import "OAClickableWayHelper+cpp.h"
+#import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OsmAnd_Maps-Swift.h"
 
 
@@ -539,20 +541,9 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
     OsmAnd::AreaI rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, point31);
     
+    NSArray<OAPOI *> *amenities = [OAPOIHelper findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nil];
+    OAPOI *amenity = [self findAmenityByOsmId:amenities obfId:osmId point:latLon];
     
-    
-    //TODO: fix this!!!
-//    List<Amenity> amenities = app.getResourceManager().searchAmenities(ACCEPT_ALL_POI_TYPE_FILTER, rect, true);
-    
-    NSArray<OAPOI *> *amenities = [OAPOIHelper findPOIsByFilter:nil topLatitude:latLon.latitude + radius/111000.0
-                                            leftLongitude:latLon.longitude - radius/111000.0/cos(latLon.latitude*M_PI/180)
-                                           bottomLatitude:latLon.latitude - radius/111000.0
-                                          rightLongitude:latLon.longitude + radius/111000.0/cos(latLon.latitude*M_PI/180)
-                                                 matcher:nil];
-    
-    
-    
-    OAPOI *amenity = [self findAmenityByOsmId:amenities obfId:obfId point:latLon];
     if (!amenity && names.count > 0)
     {
         amenity = [self findAmenityByName:amenities names:names];

@@ -391,7 +391,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     cell.leftIconView.image = palette == selectedPaletteItem ? UIImage(named: "ic_checkmark_default") : nil
                     cell.button.setTitle(nil, for: .normal)
                     cell.button.setImage(UIImage(named: "ic_navbar_overflow_menu_outlined")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    cell.button.menu = createPaletteMenu(for: indexPath)
+                    cell.button.menu = createPaletteMenu(for: indexPath, cell: cell)
                     cell.button.showsMenuAsPrimaryAction = true
                     
                     return cell
@@ -436,7 +436,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     private func setupColorCollectionCell(_ cell: OACollectionSingleLineTableViewCell) {
-        if let handler = OAColorCollectionHandler(data: [colorItems], collectionView: cell.collectionView) {
+        guard let data = hostColorHandler?.getData() as? [[ColorItem]] else { return }
+        if let handler = OAColorCollectionHandler(data: data, collectionView: cell.collectionView) {
             handler.isOpenedFromAllColorsScreen = true
             handler.hostColorHandler = hostColorHandler
             handler.delegate = self
@@ -599,7 +600,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         navigationController?.present(colorPicker, animated: true)
     }
     
-    private func createPaletteMenu(for indexPath: IndexPath) -> UIMenu {
+    private func createPaletteMenu(for indexPath: IndexPath, cell: UITableViewCell) -> UIMenu {
         let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
             guard let self else { return }
             self.duplicateItem(fromContextMenu: indexPath)
@@ -617,7 +618,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             if !isDefault {
                 let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
-                    self.deleteItem(fromContextMenu: indexPath)
+                    self.deleteItem(fromContextMenu: cell)
                 }
                 
                 let deleteMenu = UIMenu(options: .displayInline, children: [deleteAction])
@@ -940,19 +941,21 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
         }
     }
     
-    func deleteItem(fromContextMenu indexPath: IndexPath!) {
+    func deleteItem(fromContextMenu cell: UITableViewCell) {
         guard let delegate else { return }
+        guard let currentIndexPath = self.tableView.indexPath(for: cell) else { return }
         
         switch collectionType {
         case .colorItems:
             if let colorCollectionIndexPath {
-                let colorItem = colorItems[indexPath.row]
-                colorItems.remove(at: indexPath.row)
+                let colorItem = colorItems[currentIndexPath.row]
+                colorItems.remove(at: currentIndexPath.row)
                 delegate.deleteColorItem(colorItem)
-                colorCollectionHandler?.removeColor(indexPath)
+                colorCollectionHandler?.removeColor(currentIndexPath)
             }
         case .colorizationPaletteItems, .terrainPaletteItems:
-            if let fileName = data.item(for: indexPath).string(forKey: "fileName"),
+            guard let currentIndexPath = self.tableView.indexPath(for: cell) else { return }
+            if let fileName = data.item(for: currentIndexPath).string(forKey: "fileName"),
                !fileName.isEmpty {
                 do {
                     try ColorPaletteHelper.shared.deleteGradient(fileName)

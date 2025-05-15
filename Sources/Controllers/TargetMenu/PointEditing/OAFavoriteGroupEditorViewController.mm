@@ -113,6 +113,7 @@
 
 - (void)addPointsGroup
 {
+    [[self getPoiIconCollectionHandler] addIconToLastUsed:self.editIconName];
     [self dismissViewController];
     if (self.delegate)
     {

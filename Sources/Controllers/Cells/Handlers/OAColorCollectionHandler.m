@@ -306,7 +306,7 @@ static NSString * const kSolidColorKey = @"solid_color";
     if (self.delegate)
     {
         if (indexPath == _selectedIndexPath)
-            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView shouldDismiss:YES];
+            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView shouldDismiss:NO];
         else
             [self.delegate reloadCollectionData];
     }
@@ -577,6 +577,10 @@ static NSString * const kSolidColorKey = @"solid_color";
         [_hostColorHandler addColor:newIndexPath newItem:duplicatedColorItem];
         if (_hostColorHandler.delegate)
             [_hostColorHandler.delegate reloadCollectionData];
+        
+        if (_hostCell && [_hostCell needUpdateHeight])
+           [self.delegate reloadCollectionData];
+            
     } else if (self.delegate) {
         [self.delegate reloadCollectionData];
     }

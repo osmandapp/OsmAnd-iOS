@@ -630,7 +630,7 @@
 "shared_string_modified" = "Muudetud";
 "osm_edit_reopened_note" = "Uuesti avatud OSM märge";
 "osm_name" = "OpenStreetMap kasutajanimi";
-"osm_pass" = "OpenStreetMap salasõna";
+"osm_pass" = "OpenStreetMapi salasõna";
 "osm_offline_editing" = "Kasuta alati võrguühenduseta muutmist";
 "osm_editing_login_and_pass" = "Kasutajanimi ja salasõna";
 "offline_edition" = "Võrguühenduseta muutmine";
@@ -3442,3 +3442,7 @@
 "sync_now" = "Sünkroniseeri nüüd";
 "local_backup_empty_file" = "Varukoopia failis pole mitte midagi, mida saaks taastada.";
 "cloud_conflict_descr" = "Kohalikus ja pilveversioonis on peale viimast sünkroniseerimist toimunud muudatusi.";
+"equator" = "Ekvaator";
+"prime_meridian" = "Algmeridiaan";
+"meridian_180" = "180° meridiaan";
+"simulate_location_unselected_track_footer" = "Sa pead valima rajafaili";

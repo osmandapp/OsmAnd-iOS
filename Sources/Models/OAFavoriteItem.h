@@ -76,6 +76,7 @@
 
 - (OAPOI *) getAmenity;
 - (void) setAmenity:(OAPOI *)amenity;
+- (void) setExtensions:(NSDictionary<NSString *, NSString *> *)extensions;
 
 - (BOOL) isVisible;
 - (void) setVisible:(BOOL)isVisible;

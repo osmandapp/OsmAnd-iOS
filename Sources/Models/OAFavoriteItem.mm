@@ -546,6 +546,14 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     _amenity = nil;
 }
 
+- (void) setExtensions:(NSDictionary<NSString *, NSString *> *)extensions
+{
+    [extensions enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+        self.favorite->setExtension(QString::fromNSString(key), QString::fromNSString(value));
+    }];
+    _amenity = nil;
+}
+
 - (BOOL) isVisible
 {
     return !self.favorite->isHidden();
@@ -742,10 +750,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     [fp setAmenityOriginName:pt.getAmenityOriginName];
     NSDictionary<NSString *, NSString *> *extensions = [pt getExtensionsToRead];
     if (extensions.count > 0)
-    {
-        OAPOI *amenity = [OAPOI fromTagValue:extensions privatePrefix:@"amenity_" osmPrefix:@"osm_tag_"];
-        [fp setAmenity:amenity];
-    }
+        [fp setExtensions:extensions];
     
     // TODO: sync with Android
 
@@ -758,18 +763,18 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 //        [fp setVisitedTime:[dateFormatter dateFromString:visitedDateExt]];
 //    }
 
-    NSString *creationDateExt = [pt getExtensionsToRead][CREATION_TIME_EXTENSION];
+    NSString *creationDateExt = extensions[CREATION_TIME_EXTENSION];
     if (creationDateExt)
     {
         [fp setPickupTime:[[OAFavoriteItem ISO8601DateFormatter] dateFromString:creationDateExt]];
     }
 
-    NSString *calendarExt = [pt getExtensionsToRead][CALENDAR_EXTENSION];
+    NSString *calendarExt = extensions[CALENDAR_EXTENSION];
     if (calendarExt)
         [fp setCalendarEvent:[calendarExt isEqualToString:@"true"]];
 
     [fp setColor:UIColorFromARGB([pt getColor])];
-    NSString *hiddenExt = [pt getExtensionsToRead][EXTENSION_HIDDEN];
+    NSString *hiddenExt = extensions[EXTENSION_HIDDEN];
     [fp setVisible:hiddenExt ? ![hiddenExt isEqualToString:@"true"] : YES];
 
     [fp setAddress:[pt getAddress]];

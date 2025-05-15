@@ -2027,7 +2027,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (float) currentZoomOutDelta
 {
-    if (!self.mapViewLoaded)
+    if (!self.mapViewLoaded || !_mapView || !_mapView.mapAnimator)
         return 0.0f;
 
     const auto currentZoomAnimation = _mapView.mapAnimator->getCurrentAnimation(kUserInteractionAnimationKey,

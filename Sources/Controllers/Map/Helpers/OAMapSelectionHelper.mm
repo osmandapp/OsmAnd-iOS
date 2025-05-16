@@ -172,17 +172,10 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                     }
                 }
                 
-                
-                //test
-//                const auto a = symbolInfo.mapSymbol->groupPtr;
-                
                 if (const auto amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
                 {
                     cppAmenity = amenitySymbolGroup->amenity;                                     //TODO: not tested yet
                 }
-                
-//                OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup* amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
-//                cppAmenity = amenitySymbolGroup->amenity;
             }
             else
             {
@@ -313,9 +306,9 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         OARenderedObject *renderedObject = [[OARenderedObject alloc] init];
         if (const auto& mapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(obfMapObject))
         {
-            //TODO: test which one is correct?
-            renderedObject.obfId = mapObject->id;
-            //renderedObject.obfId = mapObject->id.id;
+            //TODO: test which one is correct? (id.id)
+//            renderedObject.obfId = mapObject->id;
+            renderedObject.obfId = mapObject->id.id;
         }
         const auto points31 = obfMapObject->points31;
         for (int k = 0; k < points31.size(); k++)
@@ -323,9 +316,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             const auto pointI = points31[k];
             [renderedObject addLocation:pointI.x y:pointI.y];
         }
-        
-//        renderedObject.labelX = obfMapObject->getLabelCoordinateX();
-//        renderedObject.labelY = obfMapObject->getLabelCoordinateY();
         
         double lat = OsmAnd::Utilities::get31LatitudeY(obfMapObject->getLabelCoordinateY());
         double lon = OsmAnd::Utilities::get31LongitudeX(obfMapObject->getLabelCoordinateX());

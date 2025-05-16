@@ -28,6 +28,7 @@
 {
     [super awakeFromNib];
     [self setupViews];
+    [self topButtonVisibility:NO];
 }
 
 - (void) setupViews
@@ -49,6 +50,24 @@
     return (OAColorCollectionHandler *)[super getCollectionHandler];
 }
 
+- (void)setCollectionHandler:(OABaseCollectionHandler *)collectionHandler
+{
+    OAColorCollectionHandler * handler = (OAColorCollectionHandler *)collectionHandler;
+    [super setCollectionHandler:handler];
+    handler.hostCell = self;
+
+    UIMenu *menu = [[self getColorCollectionHandler] buildTopButtonContextMenu];
+    if (menu)
+    {
+        self.topButton.showsMenuAsPrimaryAction = YES;
+        self.topButton.menu = menu;
+    }
+}
+
+- (void)topButtonVisibility:(BOOL)show
+{
+    self.topButton.hidden = !show;
+}
 
 #pragma mark - UICollectionViewDelegate
 

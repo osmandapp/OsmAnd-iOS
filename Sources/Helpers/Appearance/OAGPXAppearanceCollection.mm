@@ -509,13 +509,17 @@
     else
         [customTrackColors insertObject:hexColor atIndex:indexOfColorItem - _defaultColorValues.count + 1];
     [_settings.customTrackColors set:customTrackColors];
-
+    
+    NSInteger insertingIndex = colorItem.sortedPosition + 1;
     NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
-    [customTrackColorsLastUsed insertObject:hexColor atIndex:colorItem.sortedPosition + 1];
+    if (customTrackColorsLastUsed.count >= insertingIndex)
+        [customTrackColorsLastUsed insertObject:hexColor atIndex:insertingIndex];
+    else
+        [customTrackColorsLastUsed addObject:hexColor];
     [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
 
     OAColorItem *duplicatedColorItem = [[OAColorItem alloc] initWithHexColor:hexColor];
-    duplicatedColorItem.sortedPosition = colorItem.sortedPosition + 1;
+    duplicatedColorItem.sortedPosition = insertingIndex;
     [self regenerateSortedPositionAfter:colorItem.sortedPosition increment:YES];
     if (colorItem.isDefault)
         [_availableColors addObject:duplicatedColorItem];
@@ -528,11 +532,30 @@
 - (void)deleteColor:(OAColorItem *)colorItem
 {
     NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
-    [customTrackColorsLastUsed removeObjectAtIndex:colorItem.sortedPosition];
+    if (customTrackColorsLastUsed.count > colorItem.sortedPosition)
+    {
+        [customTrackColorsLastUsed removeObjectAtIndex:colorItem.sortedPosition];
+    }
+    else
+    {
+        NSUInteger index = [customTrackColorsLastUsed indexOfObject:[colorItem getHexColor]];
+        if (index != NSNotFound)
+            [customTrackColorsLastUsed removeObjectAtIndex:index];
+    }
     [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
 
     NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
-    [customTrackColors removeObjectAtIndex:[_availableColors indexOfObject:colorItem] - _defaultColorValues.count];
+    NSUInteger relativeIndex = [_availableColors indexOfObject:colorItem] - _defaultColorValues.count;
+    if (customTrackColors.count > relativeIndex)
+    {
+        [customTrackColors removeObjectAtIndex:relativeIndex];
+    }
+    else
+    {
+        NSUInteger index = [customTrackColors indexOfObject:[colorItem getHexColor]];
+        if (index != NSNotFound)
+            [customTrackColors removeObjectAtIndex:[customTrackColors indexOfObject:[colorItem getHexColor]]];
+    }
     [_settings.customTrackColors set:customTrackColors];
 
     [_availableColors removeObject:colorItem];

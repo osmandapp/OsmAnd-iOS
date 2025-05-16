@@ -16,6 +16,8 @@
 
 @interface OAClickableWayHelper : NSObject
 
+- (id) getContextMenuProvider;
+
 - (BOOL) isClickableWay:(OARenderedObject *)renderedObject;
 
 //- (OAClickableWay *) loadClickableWay:(CLLocationCoordinate2D)selectedLatLon renderedObject:(OARenderedObject *)renderedObject;

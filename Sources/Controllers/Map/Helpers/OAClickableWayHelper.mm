@@ -19,6 +19,8 @@
     NSDictionary<NSString *, NSString *> *_forbiddenTags;
     NSSet<NSString *> *_requiredTagsAny;
     NSDictionary<NSString *, NSString *> *_gpxColors;
+    
+    id _activator;
 }
 
 - (instancetype) init
@@ -56,6 +58,15 @@
         @"freeride": @"yellow"
         // others are default (red)
     };
+    
+    //TODO: implement
+    //this.activator = new ClickableWayMenuProvider(view, this::readHeightData, this::openAsGpxFile);
+    _activator = nil;
+}
+
+- (id) getContextMenuProvider
+{
+    return _activator;
 }
 
 - (BOOL) isClickableWay:(OARenderedObject *)renderedObject

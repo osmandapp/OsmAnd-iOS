@@ -29,12 +29,12 @@
     return self;
 }
 
-- (instancetype) initWithObject:(id)object
+- (instancetype) initWithObject:(id)object provider:(id)provider
 {
     self = [self init];
     if (self)
     {
-        [self addObject:object];
+        [self addObject:object provider:provider];
         [self combineData];
     }
     return self;
@@ -56,12 +56,12 @@
     return _selectedObjects;
 }
 
-- (void) addObject:(id)object
+- (void) addObject:(id)object provider:(id)provider
 {
     if ([self.class shouldSkip:object])
         return;
     
-    OASelectedMapObject *selectedObject = [[OASelectedMapObject alloc] initWithMapObject:object];
+    OASelectedMapObject *selectedObject = [[OASelectedMapObject alloc] initWithMapObject:object provider:provider];
     [_selectedObjects addObject:selectedObject];
     
     if ([object isKindOfClass:OAMapObject.class])

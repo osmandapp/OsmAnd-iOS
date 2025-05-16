@@ -736,6 +736,31 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return YES;
 }
 
+- (BOOL) strictEquals:(id)object
+{
+    OAPOI *o = (OAPOI *)object;
+    
+    if (![self isEqual:object])
+    {
+        return NO;
+    }
+    else if (self.x && o.x && self.x.count == o.x.count)
+    {
+        for (int i = 0; i < self.x.count; i++)
+        {
+            if (self.x[i] != o.x[i] || self.y[i] != o.y[i])
+            {
+                return NO;
+            }
+        }
+        return YES;
+    }
+    else
+    {
+        return !self.x && !o.x;
+    }
+}
+
 - (NSUInteger) hash
 {
     NSUInteger result = self.obfId;

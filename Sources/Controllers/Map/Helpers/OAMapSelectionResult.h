@@ -8,10 +8,9 @@
 
 @interface OASelectedMapObject  : NSObject
 
-//- (instancetype) initWithMapObject:(id)object provider:(id)provider;
-- (instancetype) initWithMapObject:(id)object;
+- (instancetype) initWithMapObject:(id)object provider:(id)provider;
 - (id) object;
-//- (id) provider;
+- (id) provider;
 
 @end
 
@@ -30,7 +29,7 @@
 - (CLLocationCoordinate2D) getPointLatLon;
 - (NSMutableArray<OASelectedMapObject *> *) getAllObjects;
 - (NSMutableArray<OASelectedMapObject *> *) getProcessedObjects;
-- (void) collect:(id)object;
+- (void) collect:(id)object provider:(id)provider;
 - (void) groupByOsmIdAndWikidataId;
 - (BOOL) isEmpty;
 

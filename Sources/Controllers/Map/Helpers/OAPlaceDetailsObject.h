@@ -19,7 +19,7 @@
 - (OAPOI *) getSyntheticAmenity;
 - (CLLocationCoordinate2D) getLocation;
 - (NSMutableArray<OASelectedMapObject *> *) getSelectedObjects;
-- (void) addObject:(id)object;
+- (void) addObject:(id)object provider:(id)provider;
 - (BOOL) overlapsWith:(id)object;
 - (void) merge:(OAPlaceDetailsObject*)other;
 - (void) combineData;

@@ -10,22 +10,22 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapLayers.h"
 #import "OAPlaceDetailsObject.h"
 
 @implementation OASelectedMapObject
 {
     id _object;
-//    id _provider; // ???
+    id _provider;
 }
 
-//- (instancetype) initWithMapObject:(id)object provider:(id)provider
-- (instancetype) initWithMapObject:(id)object
+- (instancetype) initWithMapObject:(id)object provider:(id)provider
 {
     self = [super init];
     if (self)
     {
         _object = object;
-//        _provider = provider;
+        _provider = provider;
     }
     return self;
 }
@@ -35,10 +35,10 @@
     return _object;
 }
 
-//- (id) provider
-//{
-//    return _provider;
-//}
+- (id) provider
+{
+    return _provider;
+}
 
 @end
 
@@ -56,6 +56,8 @@
     CGPoint _point;
     CLLocationCoordinate2D _pointLatLon;
     
+    id _provider;
+    
     NSMutableArray<OASelectedMapObject *> *_allObjects;
     NSMutableArray<OASelectedMapObject *> *_processedObjects;
 }
@@ -72,6 +74,8 @@
         OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
         CLLocation *loc = [mapVc getLatLonFromElevatedPixel:point.x y:point.y];
         _pointLatLon = loc.coordinate;
+        
+        _provider = mapVc.mapLayers.poiLayer;
     }
     return self;
 }
@@ -96,9 +100,9 @@
     return _processedObjects;
 }
 
-- (void) collect:(id)object
+- (void) collect:(id)object provider:(id)provider
 {
-    [_allObjects addObject:[[OASelectedMapObject alloc] initWithMapObject:object]];
+    [_allObjects addObject:[[OASelectedMapObject alloc] initWithMapObject:object provider:provider]];
 }
 
 - (void) groupByOsmIdAndWikidataId
@@ -134,13 +138,13 @@
             // TODO: Test this line detailsObjects.removeAll(overlapped);
             [detailsObjects removeObjectsInArray:overlapped];
         }
-        [detailsObject addObject:object];
+        [detailsObject addObject:object provider:selectedObject.provider];
         [detailsObjects addObject:detailsObject];
     }
     for (OAPlaceDetailsObject *object in detailsObjects)
     {
         [object combineData];
-        OASelectedMapObject *selectedObject = [[OASelectedMapObject alloc] initWithMapObject:object];
+        OASelectedMapObject *selectedObject = [[OASelectedMapObject alloc] initWithMapObject:object provider:_provider];
         [_processedObjects addObject:selectedObject];
     }
 }

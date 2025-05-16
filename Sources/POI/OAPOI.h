@@ -143,4 +143,6 @@ static int DEFAULT_ELO = 900;
 
 - (void) setXYPoints:(OARenderedObject *)renderedObject;
 
+- (BOOL) strictEquals:(id)object;
+
 @end

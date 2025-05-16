@@ -21,6 +21,8 @@
 #import "OAContextMenuProvider.h"
 #import "OAMapObject.h"
 #import "OAPOI.h"
+#import "OATransportStop.h"
+#import "OAPOIFilter.h"
 #import "OAClickableWay.h"
 #import "OAClickableWayHelper.h"
 #import "OAClickableWayHelper+cpp.h"
@@ -53,6 +55,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     NSArray<OAMapLayer *> *_pointLayers;
     OAClickableWayHelper *_clickableWayHelper;
+    NSArray<NSString *> *_publicTransportTypes;
+    id _provider;
 }
 
 - (instancetype) init
@@ -61,6 +65,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     if (self)
     {
         _clickableWayHelper = [[OAClickableWayHelper alloc] init];
+        _provider = OARootViewController.instance.mapPanel.mapViewController.mapLayers.poiLayer;
     }
     return self;
 }
@@ -161,7 +166,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 {
                     if (billboardAdditionalParams->overridesPosition31)
                     {
-                        lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x);
+                        lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x); //TODO: not tested yet
                         lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
                         result.objectLatLon = CLLocationCoordinate2DMake(lat, lon);
                     }
@@ -173,7 +178,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 
                 if (const auto amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
                 {
-                    cppAmenity = amenitySymbolGroup->amenity;
+                    cppAmenity = amenitySymbolGroup->amenity;                                     //TODO: not tested yet
                 }
                 
 //                OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup* amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
@@ -181,13 +186,13 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             }
             else
             {
-                result.objectLatLon = [mapVc getLatLonFromElevatedPixel:point.x y:point.y].coordinate;
+                result.objectLatLon = [mapVc getLatLonFromElevatedPixel:point.x y:point.y].coordinate; //TODO: not tested yet
             }
             
             if (cppAmenity != nullptr)
             {
-                NSMutableArray<NSString *> *names = [NSMutableArray new];
-                for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(cppAmenity->localizedNames)))
+                NSMutableArray<NSString *> *names = [NSMutableArray new];                       //TODO: not tested yet
+                for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(cppAmenity->localizedNames)))
                 {
                     NSString *name = entry.value().toNSString();
                     if (name)
@@ -214,19 +219,19 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                     
                     if (isOsmRoute && !osmRoutesAlreadyAdded)
                     {
-                        osmRoutesAlreadyAdded = [self addOsmRoutesAround:result point:point selectorFilter:[self createRouteFilter]];
+                        osmRoutesAlreadyAdded = [self addOsmRoutesAround:result point:point selectorFilter:[self createRouteFilter]];    //TODO: not tested yet
                     }
                     
                     if (!isOsmRoute || !osmRoutesAlreadyAdded)
                     {
                         if (isTravelGpx)
                         {
-                            [self addTravelGpx:result routeId: tags[ROUTE_ID]];
+                            [self addTravelGpx:result routeId: tags[ROUTE_ID]];                           //TODO: not tested yet
                         }
                         else if (isClickableWay)
                         {
                             OAClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:[result getPointLatLon] obfMapObject:obfMapObject tags:tags];
-                            [self addClickableWay:result clickableWay:clickableWay];
+                            [self addClickableWay:result clickableWay:clickableWay];                      //TODO: not tested yet
                         }
                     }
                     
@@ -257,17 +262,16 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                             }
                             else if (allowRenderedObjects)
                             {
-                                [self addRenderedObject:result symbolInfo:symbolInfo obfMapObject:obfMapObject tags:tags];
+                                [self addRenderedObject:result symbolInfo:symbolInfo obfMapObject:obfMapObject tags:tags];   //TODO: not tested yet
                             }
                         }
                     }
                 }
             }
             
-            if (amenity && [self isUniqueAmenity:[result getAllObjects] amenity:amenity])
+            if (amenity && [self isUniqueAmenity:[result getAllObjects] amenity:amenity])                            //TODO: not tested
             {
-                [result collect:amenity];
-                //result.collect(amenity, mapLayers.getPoiMapLayer());
+                [result collect:amenity provider:_provider];
             }
         }
     }
@@ -287,7 +291,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     const auto rasterMapSymbol = [self getRasterMapSymbol:symbolInfo];
     if (rasterMapSymbol != nullptr && rasterMapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Icon)
     {
-        rasterMapSymbol->content.toNSString();
+        return rasterMapSymbol->content.toNSString();
     }
     return nil;
 }
@@ -340,7 +344,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             renderedObject.tags[key] = tags[key];
             
         }
-        [result collect:renderedObject];
+        [result collect:renderedObject provider:nil];
     }
 }
 
@@ -391,8 +395,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     if (clickableWay && [self isUniqueClickableWay:[result getAllObjects] clickableWay:clickableWay])
     {
-        [result collect:clickableWay];
-        //result.collect(clickableWay, clickableWayHelper.getContextMenuProvider());
+        [result collect:clickableWay provider:[_clickableWayHelper getContextMenuProvider]];
         return YES;
     }
     return NO;
@@ -481,23 +484,94 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
 
 //private boolean addAmenity(
 
-//private boolean isUniqueAmenity(
-
 - (BOOL) isUniqueAmenity:(NSMutableArray<OASelectedMapObject *> *)selectedObjects amenity:(OAPOI *)amenity
 {
-    
-    
-    //TODO: implement
-    
-    return NO;
+    for (OASelectedMapObject *selectedObject in selectedObjects)
+    {
+        id object = selectedObject.object;
+        if ([object isKindOfClass:OAPOI.class] && [((OAPOI *)object) strictEquals:amenity])
+        {
+            OAPOI *poi = ((OAPOI *)object);
+            if ([poi strictEquals:amenity])
+                return NO;
+        }
+        else if ([object isKindOfClass:OATransportStop.class])
+        {
+            OATransportStop *transportSpop = ((OATransportStop *)object);
+            if ([transportSpop.name hasPrefix:amenity.name])
+                return NO;
+        }
+    }
+    return YES;
 }
 
-//private List<String> getPublicTransportTypes()
+- (NSArray<NSString *> *) getPublicTransportTypes
+{
+    OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+    if (!_publicTransportTypes)
+    {
+        OAPOICategory *category = [poiHelper getPoiCategoryByName:@"transportation"];
+        if (category)
+        {
+            
+            NSMutableArray *publicTransportTypes = [NSMutableArray array];
+            NSArray<OAPOIFilter *> *filters = category.poiFilters;
+            for (OAPOIFilter *poiFilter in filters)
+            {
+                if ([poiFilter.name isEqualToString:@"public_transport"] || [poiFilter.name isEqualToString:@"water_transport"])
+                {
+                    for (OAPOIType *poiType in poiFilter.poiTypes)
+                    {
+                        [publicTransportTypes addObject:poiType.name];
+                        for (OAPOIType *poiAdditionalType in poiType.poiAdditionals)
+                            [publicTransportTypes addObject:poiAdditionalType.name];
+                    }
+                }
+            }
+            _publicTransportTypes = [NSArray arrayWithArray:publicTransportTypes];
+        }
+    }
+    return _publicTransportTypes;
+}
 
-
+//TODO: test that selectedObjects shanges outside
 - (void) processTransportStops:(NSMutableArray<OASelectedMapObject *> *)selectedObjects
 {
-    //TODO: implement
+    NSArray<NSString *> *publicTransportTypes = [self getPublicTransportTypes];
+    if (publicTransportTypes)
+    {
+        NSMutableArray<OAPOI *> *transportStopAmenities = [NSMutableArray array];
+        
+        for (OASelectedMapObject *selectedObject in selectedObjects)
+        {
+            id object = selectedObject.object;
+            if ([object isKindOfClass:[OAPOI class]])
+            {
+                OAPOI *amenity = (OAPOI *)object;
+                if (![amenity.type.name isEmpty] && [publicTransportTypes containsObject:amenity.type.name])
+                    [transportStopAmenities addObject:amenity];
+            }
+        }
+        
+        if (![transportStopAmenities isEmpty])
+        {
+            for (OAPOI *amenity in transportStopAmenities)
+            {
+                OATransportStopsLayer *transportStopsLayer = [OARootViewController instance].mapPanel.mapViewController.mapLayers.transportStopsLayer;
+                OATransportStop *transportStop = [OATransportStopsBaseController findNearestTransportStopForAmenity:amenity];
+                if (transportStop && transportStopsLayer)
+                {
+                    OASelectedMapObject *newTransportStop = [[OASelectedMapObject alloc] initWithMapObject:transportStop provider:transportStopsLayer];
+                    [selectedObjects addObject:newTransportStop];
+                    
+                    [selectedObjects filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OASelectedMapObject *selectedObject, NSDictionary *bindings) {
+                        return (!selectedObject && !amenity) || [amenity isEqual:selectedObject.object];
+                    }]];
+
+                }
+            }
+        }
+    }
 }
 
 - (NSMutableArray<NSString *> *) getValues:(QHash<QString, QString>)set
@@ -551,19 +625,12 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     return amenity;
 }
 
-
-//public static List<Amenity> findAmenities(@NonNull OsmandApplication app, @NonNull LatLon latLon) {
-
 - (NSArray<OAPOI *> *) findAmenities:(CLLocationCoordinate2D)latLon
 {
-//        QuadRect rect = MapUtils.calculateLatLonBbox(latLon.getLatitude(), latLon.getLongitude(), AMENITY_SEARCH_RADIUS);
-//        return app.getResourceManager().searchAmenities(ACCEPT_ALL_POI_TYPE_FILTER, rect, true);
-    
-    //TODO: implement
-    
-    return nil;
+    OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    OsmAnd::AreaI rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(AMENITY_SEARCH_RADIUS, point31);
+    return [OAPOIHelper findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nil];
 }
-
 
 - (OAPOI *) findAmenityByOsmId:(CLLocationCoordinate2D)latLon obfId:(uint64_t)obfId
 {

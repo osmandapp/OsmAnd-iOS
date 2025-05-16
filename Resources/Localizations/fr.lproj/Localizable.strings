@@ -869,7 +869,7 @@
 "shared_string_commit" = "Soumettre";
 "osn_add_dialog_title" = "Créer une note";
 "modify_poi" = "Modifier le point d'intérêt OSM";
-"map_viewing_item" = "Affichage de la carte";
+"map_viewing_item" = "Visualisation de la carte";
 "help_search" = "Recherche sur la carte";
 "planning_trip_item" = "Préparer un itinéraire";
 "instalation_troubleshooting_item" = "Installation et débogage";

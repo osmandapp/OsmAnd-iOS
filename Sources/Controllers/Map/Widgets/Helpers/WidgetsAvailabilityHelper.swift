@@ -49,6 +49,7 @@ class WidgetsAvailabilityHelper: NSObject {
         // right
         regWidgetVisibility(widgetType: .intermediateDestination)
         regWidgetVisibility(widgetType: .distanceToDestination)
+        regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault + [.train()])
         regWidgetVisibility(widgetType: .timeToIntermediate)
         regWidgetVisibility(widgetType: .timeToDestination)
         regWidgetVisibility(widgetType: .currentSpeed, appModes: [.bicycle(), .boat(), .ski(), .public_TRANSPORT(), .aircraft(), .horse(), .train()])
@@ -58,6 +59,7 @@ class WidgetsAvailabilityHelper: NSObject {
         
         regWidgetAvailability(widgetType: .intermediateDestination)
         regWidgetAvailability(widgetType: .distanceToDestination)
+        regWidgetAvailability(widgetType: .routeInfo)
         regWidgetAvailability(widgetType: .timeToIntermediate)
         regWidgetAvailability(widgetType: .timeToDestination)
         regWidgetAvailability(widgetType: .currentSpeed)

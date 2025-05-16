@@ -67,15 +67,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isVisible;
 - (void) addAccessibilityLabelsWithValue:(NSString *)value;
 
-- (BOOL) isUpdateNeeded;
-- (BOOL) isMetricSystemDepended;
-- (BOOL) isAngularUnitsDepended;
-- (void) setMetricSystemDepended:(BOOL)newValue;
-- (void) setAngularUnitsDepended:(BOOL)newValue;
-- (BOOL) isExplicitlyVisible;
-- (void) setExplicitlyVisible:(BOOL)explicitlyVisible;
-- (void) updateIcon;
-- (void) setNightMode:(BOOL)night;
+- (BOOL)isUpdateNeeded;
+- (BOOL)isMetricSystemDepended;
+- (BOOL)isAngularUnitsDepended;
+- (BOOL)isEnabledShowIcon;
+- (void)setMetricSystemDepended:(BOOL)newValue;
+- (void)setAngularUnitsDepended:(BOOL)newValue;
+- (BOOL)isExplicitlyVisible;
+- (void)setExplicitlyVisible:(BOOL)explicitlyVisible;
+- (void)updateIcon;
+- (void)setNightMode:(BOOL)night;
 
 - (void)updateTextWitState:(OATextState *)state;
 

@@ -3930,6 +3930,175 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 @end
 
+@implementation OACommonWidgetDefaultView
+
+static NSString *kArrivalTimeKey = @"ARRIVAL_TIME";
+static NSString *kTimeToGoKey = @"TIME_TO_GO";
+static NSString *kDistanceKey = @"DISTANCE";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonWidgetDefaultView *obj = [[OACommonWidgetDefaultView alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)type
+{
+    [super set:type];
+}
+
+- (void)set:(int)type mode:(OAApplicationMode *)mode
+{
+    [super set:type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    DisplayValue defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (DisplayValue)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:kArrivalTimeKey])
+        return [self set:DisplayValueArrivalTime mode:mode];
+    else if ([strValue isEqualToString:kTimeToGoKey])
+        return [self set:DisplayValueTimeToGo mode:mode];
+    else if ([strValue isEqualToString:kDistanceKey])
+        return [self set:DisplayValueDistance mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    DisplayValue type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    DisplayValue type = (DisplayValue)[value intValue];
+    
+    switch (type)
+    {
+        case DisplayValueArrivalTime:
+            return kArrivalTimeKey;
+        case DisplayValueTimeToGo:
+            return kTimeToGoKey;
+        case DisplayValueDistance:
+            return kDistanceKey;
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@implementation OACommonWidgetDisplayPriority
+
+static NSString *kIntermediateFirstKey = @"INTERMEDIATE_FIRST";
+static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonWidgetDisplayPriority *obj = [[OACommonWidgetDisplayPriority alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)type
+{
+    [super set:type];
+}
+
+- (void)set:(int)type mode:(OAApplicationMode *)mode
+{
+    [super set:type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    DisplayPriority defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (DisplayPriority)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:kIntermediateFirstKey])
+        return [self set:DisplayPriorityIntermediateFirst mode:mode];
+    else if ([strValue isEqualToString:kDestinationFirstKey])
+        return [self set:DisplayPriorityDestinationFirst mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    DisplayPriority type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    DisplayPriority type = (DisplayPriority)[value intValue];
+    
+    switch (type)
+    {
+        case DisplayPriorityIntermediateFirst:
+            return kIntermediateFirstKey;
+        case DisplayPriorityDestinationFirst:
+            return kDestinationFirstKey;
+        default:
+            return @"";
+    }
+}
+
+@end
+
 @implementation OACommonDayNightMode
 
 @dynamic defValue;
@@ -5362,6 +5531,26 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         return (OACommonWidgetZoomLevelType *) [_registeredPreferences objectForKey:key];
     
     OACommonWidgetZoomLevelType *p = [OACommonWidgetZoomLevelType withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetDefaultView *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetDefaultView *p = [OACommonWidgetDefaultView withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetDisplayPriority *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetDisplayPriority *p = [OACommonWidgetDisplayPriority withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
 }

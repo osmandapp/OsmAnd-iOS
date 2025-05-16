@@ -926,12 +926,20 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
                              [UIImage imageNamed:ACImageNameIcCustom20HeightL]]
                     forKey:@"values"];
     
-    OATableRowData *showIconRow = section.createNewRow;
-    showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
-    showIconRow.title = OALocalizedString(@"show_icon");
-    [showIconRow setObj:_showIconPref forKey:@"pref"];
+    if ([self isEnabledShowIcon])
+    {
+        OATableRowData *showIconRow = section.createNewRow;
+        showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
+        showIconRow.title = OALocalizedString(@"show_icon");
+        [showIconRow setObj:_showIconPref forKey:@"pref"];
+    }
 
     return data;
+}
+
+- (BOOL)isEnabledShowIcon
+{
+    return true;
 }
 
 - (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams

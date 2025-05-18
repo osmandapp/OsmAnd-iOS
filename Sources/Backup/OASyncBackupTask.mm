@@ -39,7 +39,7 @@
     
     EOABackupSyncOperationType _operation;
     BOOL _cancelled;
-    BOOL _singleOperation;
+    BOOL _syncOperation;
     BOOL _startSyncPending;
 }
 
@@ -50,7 +50,7 @@
     {
         _key = key;
         _operation = operation;
-        _singleOperation = operation != EOABackupSyncOperationSync;
+        _syncOperation = operation == EOABackupSyncOperationSync;
         _startSyncPending = YES;
         _importProgress = 0;
         _exportProgress = 0;
@@ -190,7 +190,8 @@
 
 - (void)onBackupPrepared:(nonnull OAPrepareBackupResult *)backupResult
 {
-    [self startSync];
+    if (_syncOperation)
+        [self startSync];
 }
 
 - (void)onBackupPreparing
@@ -205,9 +206,10 @@
         return;
     if (succeed)
         [BackupUtils updateCacheForItems:items];
-    if (_singleOperation)
+    if (!_syncOperation)
         return [self onSyncFinished:nil];
-    [self uploadNewItems];
+    else
+        [self uploadNewItems];
 }
 
 - (void)onImportItemFinished:(NSString *)type fileName:(NSString *)fileName

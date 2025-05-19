@@ -45,7 +45,7 @@
     return _syntheticAmenity;
 }
 
-- (CLLocationCoordinate2D) getLocation
+- (CLLocation *) getLocation
 {
     
     return [_syntheticAmenity getLocation];

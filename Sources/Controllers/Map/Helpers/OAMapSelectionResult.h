@@ -24,11 +24,11 @@
 
 @interface OAMapSelectionResult : NSObject
 
-@property CLLocationCoordinate2D objectLatLon;
+@property CLLocation *objectLatLon;
 
 - (instancetype) initWithPoint:(CGPoint)point;
 - (CGPoint) getPoint;
-- (CLLocationCoordinate2D) getPointLatLon;
+- (CLLocation *) getPointLatLon;
 - (NSMutableArray<OASelectedMapObject *> *) getAllObjects;
 - (NSMutableArray<OASelectedMapObject *> *) getProcessedObjects;
 - (void) collect:(id)object provider:(id)provider;

@@ -25,7 +25,7 @@ static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
 @property (nonatomic) NSMutableArray<NSNumber *> *x;
 @property (nonatomic) NSMutableArray<NSNumber *> *y;
 
-- (CLLocationCoordinate2D) getLocation;
+- (CLLocation *) getLocation;
 
 - (void) addLocation:(int)x y:(int)y;
 - (void) setName:(NSString * _Nullable)lang name:(NSString * _Nonnull)name;

@@ -177,7 +177,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             {
                 double lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
                 double lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
-                result.objectLatLon = CLLocationCoordinate2DMake(lat, lon);
+                result.objectLatLon = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
 
                 if (const auto billboardAdditionalParams = std::dynamic_pointer_cast<const OsmAnd::MapSymbolsGroup::AdditionalBillboardSymbolInstanceParameters>(symbolInfo.instanceParameters))
                 {
@@ -185,7 +185,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                     {
                         lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x); //TODO: not tested yet
                         lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
-                        result.objectLatLon = CLLocationCoordinate2DMake(lat, lon);
+                        result.objectLatLon = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
                     }
                 }
                 
@@ -196,7 +196,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             }
             else
             {
-                result.objectLatLon = [mapVc getLatLonFromElevatedPixel:point.x y:point.y].coordinate; //TODO: not tested yet
+                result.objectLatLon = [mapVc getLatLonFromElevatedPixel:point.x y:point.y]; //TODO: not tested yet
             }
             
             if (cppAmenity != nullptr)
@@ -253,13 +253,13 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                             auto onPathMapSymbol = std::dynamic_pointer_cast<const  OsmAnd::IOnPathMapSymbol>(symbolInfo.mapSymbol);
                             if (onPathMapSymbol == nullptr)
                             {
-                                CLLocationCoordinate2D latLon = result.objectLatLon;
+                                CLLocation *latLon = result.objectLatLon;
                                 NSString *latLonTag = tags[TAG_POI_LAT_LON];
                                 if (latLonTag)
                                 {
                                     CLLocation *l = [self parsePoiLatLon:latLonTag];
                                     if (l)
-                                        latLon = l.coordinate;
+                                        latLon = l;
                                     [tags removeObjectForKey:TAG_POI_LAT_LON];
                                 }
                                 
@@ -338,7 +338,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         
         double lat = OsmAnd::Utilities::get31LatitudeY(obfMapObject->getLabelCoordinateY());
         double lon = OsmAnd::Utilities::get31LongitudeX(obfMapObject->getLabelCoordinateX());
-        [renderedObject setLabelLatLon:CLLocationCoordinate2DMake(lat, lon)];
+        [renderedObject setLabelLatLon:[[CLLocation alloc] initWithLatitude:lat longitude:lon]];
         
         if (rasterMapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Caption)
         {
@@ -357,7 +357,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     }
 }
 
-- (OAPOI *) getAmenity:(CLLocationCoordinate2D)latLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
+- (OAPOI *) getAmenity:(CLLocation *)latLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
 {
     NSMutableArray<NSString *> *names = [self getValues:obfMapObject->getCaptionsInAllLanguages()];
     NSString *caption = obfMapObject->getCaptionInNativeLanguage().toNSString();
@@ -389,7 +389,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (void) addTravelGpx:(OAMapSelectionResult *)result routeId:(NSString *)routeId
 {
-    OATravelGpx *travelGpx = [OATravelObfHelper.shared searchTravelGpxWithLatLon:result.objectLatLon routeId:routeId];
+    OATravelGpx *travelGpx = [OATravelObfHelper.shared searchTravelGpxWithLatLon:result.objectLatLon.coordinate routeId:routeId];
     
     if (travelGpx && [self isUniqueTravelGpx:[result getAllObjects] travelGpx:travelGpx])
     {
@@ -609,7 +609,7 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     return tagsMap;
 }
 
-- (OAPOI *) findAmenity:(CLLocationCoordinate2D)latLon names:(NSMutableArray<NSString *> *)names obfId:(uint64_t)obfId
+- (OAPOI *) findAmenity:(CLLocation *)latLon names:(NSMutableArray<NSString *> *)names obfId:(uint64_t)obfId
 {
     int searchRadius = [ObfConstants isIdFromRelation:obfId >> AMENITY_ID_RIGHT_SHIFT] ?
         AMENITY_SEARCH_RADIUS_FOR_RELATION :
@@ -618,10 +618,10 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     return [self findAmenity:latLon names:names obfId:obfId radius:searchRadius];
 }
 
-- (OAPOI *) findAmenity:(CLLocationCoordinate2D)latLon names:(NSArray<NSString *> *)names obfId:(uint64_t)obfId radius:(int)radius
+- (OAPOI *) findAmenity:(CLLocation *)latLon names:(NSArray<NSString *> *)names obfId:(uint64_t)obfId radius:(int)radius
 {
     uint64_t osmId = [ObfConstants getOsmId:obfId >> AMENITY_ID_RIGHT_SHIFT];
-    OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude));
     OsmAnd::AreaI rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, point31);
     
     NSArray<OAPOI *> *amenities = [OAPOIHelper findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nil];
@@ -634,20 +634,20 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     return amenity;
 }
 
-- (NSArray<OAPOI *> *) findAmenities:(CLLocationCoordinate2D)latLon
+- (NSArray<OAPOI *> *) findAmenities:(CLLocation *)latLon
 {
-    OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude));
     OsmAnd::AreaI rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(AMENITY_SEARCH_RADIUS, point31);
     return [OAPOIHelper findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nil];
 }
 
-- (OAPOI *) findAmenityByOsmId:(CLLocationCoordinate2D)latLon obfId:(uint64_t)obfId
+- (OAPOI *) findAmenityByOsmId:(CLLocation *)latLon obfId:(uint64_t)obfId
 {
     NSArray<OAPOI *> *amenities = [self findAmenities:latLon];
     return [self findAmenityByOsmId:amenities obfId:obfId point:latLon];
 }
 
-- (OAPOI *) findAmenityByOsmId:(NSArray<OAPOI *> *)amenities obfId:(uint64_t)obfId point:(CLLocationCoordinate2D)point
+- (OAPOI *) findAmenityByOsmId:(NSArray<OAPOI *> *)amenities obfId:(uint64_t)obfId point:(CLLocation *)point
 {
     OAPOI *result = nil;
     double minDist = AMENITY_SEARCH_RADIUS_FOR_RELATION * 2;
@@ -665,7 +665,7 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
             
             if (amenityId == obfId && !amenity.isClosed)
             {
-                double dist = [OAMapUtils getDistance:[amenity getLocation] second:point];
+                double dist = [OAMapUtils getDistance:[amenity getLocation].coordinate second:point.coordinate];
                 if (result == nil || dist < minDist)
                 {
                     result = amenity;

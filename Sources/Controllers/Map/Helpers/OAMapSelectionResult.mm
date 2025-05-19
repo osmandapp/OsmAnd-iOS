@@ -55,7 +55,7 @@
 @implementation OAMapSelectionResult
 {
     CGPoint _point;
-    CLLocationCoordinate2D _pointLatLon;
+    CLLocation *_pointLatLon;
     
     id _provider;
     
@@ -74,7 +74,7 @@
         
         OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
         CLLocation *loc = [mapVc getLatLonFromElevatedPixel:point.x y:point.y];
-        _pointLatLon = loc.coordinate;
+        _pointLatLon = loc;
         
         _provider = mapVc.mapLayers.poiLayer;
     }
@@ -86,7 +86,7 @@
     return _point;
 }
 
-- (CLLocationCoordinate2D) getPointLatLon
+- (CLLocation *) getPointLatLon
 {
     return _pointLatLon;
 }

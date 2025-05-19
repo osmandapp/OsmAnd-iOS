@@ -26,9 +26,9 @@
     return self;
 }
 
-- (CLLocationCoordinate2D) getLocation
+- (CLLocation *) getLocation
 {
-    return CLLocationCoordinate2DMake(self.latitude, self.longitude);
+    return [[CLLocation alloc] initWithLatitude:self.latitude longitude:self.longitude];
 }
 
 - (void) addLocation:(int)x y:(int)y

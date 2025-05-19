@@ -20,6 +20,6 @@
 
 - (BOOL) isClickableWay:(OARenderedObject *)renderedObject;
 
-//- (OAClickableWay *) loadClickableWay:(CLLocationCoordinate2D)selectedLatLon renderedObject:(OARenderedObject *)renderedObject;
+//- (OAClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon renderedObject:(OARenderedObject *)renderedObject;
 
 @end

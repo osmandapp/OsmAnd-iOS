@@ -19,7 +19,7 @@
 - (instancetype) initWithObject:(id<OAContextMenuProvider>)object provider:(id<OAContextMenuProvider>)provider;
 
 - (OAPOI *) getSyntheticAmenity;
-- (CLLocationCoordinate2D) getLocation;
+- (CLLocation *) getLocation;
 - (NSMutableArray<OASelectedMapObject *> *) getSelectedObjects;
 - (void) addObject:(id)object provider:(id<OAContextMenuProvider>)provider;
 - (BOOL) overlapsWith:(id)object;

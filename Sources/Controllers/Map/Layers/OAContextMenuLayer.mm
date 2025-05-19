@@ -700,7 +700,7 @@
 - (BOOL) showContextMenuNEW:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
     OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
-    CLLocationCoordinate2D pointLatLon = [result getPointLatLon];
+    CLLocation *pointLatLon = [result getPointLatLon];
     NSMutableArray<OASelectedMapObject *> *selectedObjects = [result getProcessedObjects];
     
     for (OASelectedMapObject *selectedObject in selectedObjects)
@@ -721,15 +721,14 @@
     {
         OASelectedMapObject *selectedObject = selectedObjects[0];
         id selectedObj = selectedObject.object;
-        CLLocationCoordinate2D latLon = [result objectLatLon];
+        CLLocation *latLon = [result objectLatLon];
         OAPointDescription *pointDescription;
         
         // ???
         id<OAContextMenuProvider> provider = selectedObject.provider;
         if (provider)
         {
-            // TODO: latlon != nil
-            if (latLon.latitude == 0 && latLon.longitude == 0)
+            if (!latLon)
             {
                 //latLon = provider.getObjectLocation(selectedObj);
                 
@@ -1009,7 +1008,7 @@
     renderedObject.labelY = mapObject->getLabelCoordinateY();
     double lat = OsmAnd::Utilities::get31LatitudeY(renderedObject.labelY);
     double lon = OsmAnd::Utilities::get31LongitudeX(renderedObject.labelX);
-    [renderedObject setLabelLatLon:CLLocationCoordinate2DMake(lat, lon)];
+    [renderedObject setLabelLatLon:[[CLLocation alloc] initWithLatitude:lat longitude:lon]];
     
     if (!renderedObject.name || renderedObject.name.length == 0)
     {

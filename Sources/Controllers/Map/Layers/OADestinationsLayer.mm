@@ -26,6 +26,7 @@
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
 #import "OAAppData.h"
+#import "OAPOI.h"
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -537,6 +538,21 @@
 - (BOOL)isSecondaryProvider
 {
     return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OADestination.class])
+    {
+        OADestination *point = (OADestination *)o;
+        return [[CLLocation alloc] initWithLatitude:[point latitude] longitude:[point longitude]];
+    }
+    else if ([o isKindOfClass:OAPOI.class])
+    {
+        OAPOI *amenity = (OAPOI *)o;
+        return [amenity getLocation];
+    }
+    return  nil;
 }
 
 #pragma mark - OAMoveObjectProvider

@@ -346,6 +346,16 @@
     return NO;
 }
 
+- (CLLocation *) getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OAOsmPoint.class])
+    {
+        OAOsmPoint *point = (OAOsmPoint *)o;
+        return  [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
+    }
+    return  nil;
+}
+
 #pragma mark - OAMoveObjectProvider
 
 - (BOOL)isObjectMovable:(id)object

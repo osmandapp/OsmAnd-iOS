@@ -34,6 +34,7 @@
 #import "OAObservable.h"
 #import "OAColoringType.h"
 #import "OAConcurrentCollections.h"
+#import "OAMapSelectionResult.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
@@ -1856,6 +1857,38 @@ colorizationScheme:(int)colorizationScheme
 {
     return NO;
 }
+
+
+
+//public LatLon getObjectLocation(Object o) {
+//    if (o instanceof WptPt) {
+//        return new LatLon(((WptPt) o).getLat(), ((WptPt) o).getLon());
+//    } else if (o instanceof SelectedGpxPoint) {
+//        WptPt point = ((SelectedGpxPoint) o).getSelectedPoint();
+//        return new LatLon(point.getLat(), point.getLon());
+//    }
+//    return null;
+//}
+
+- (CLLocation *) getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OASWptPt.class])
+    {
+        // TODO: is OASWptPt correct?
+        OASWptPt *wpt = (OASWptPt *)o;
+        return [[CLLocation alloc] initWithLatitude:[wpt getLatitude] longitude:[wpt getLongitude]];
+    }
+    else if ([o isKindOfClass:OASelectedGpxPoint.class])
+    {
+        OASelectedGpxPoint *selectedGpxPoint = (OASelectedGpxPoint *)o;
+        
+        
+        // TODO: implement
+    }
+    return  nil;
+}
+
+
 
 #pragma mark - OAMoveObjectProvider
 

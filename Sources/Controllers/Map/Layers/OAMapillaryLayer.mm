@@ -298,4 +298,14 @@
     return NO;
 }
 
+- (CLLocation *) getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OAMapillaryImage.class])
+    {
+        OAMapillaryImage * image = (OAMapillaryImage *)o;
+        return [[CLLocation alloc] initWithLatitude:image.latitude longitude:image.longitude];
+    }
+    return  nil;;
+}
+
 @end

@@ -47,6 +47,9 @@
 @implementation OASelectedGpxPoint
 {
     
+    
+    //TODO: implement
+    
 }
 @end
 

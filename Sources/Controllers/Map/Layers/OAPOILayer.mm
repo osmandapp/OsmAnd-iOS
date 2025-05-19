@@ -31,6 +31,7 @@
 #import "OsmAndSharedWrapper.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
+#import "OAPlaceDetailsObject.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
@@ -415,6 +416,19 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         [points addObject:point];
 }
 
+- (OAPOI *) getAmenity:(id)object
+{
+    if ([object isKindOfClass:OAPOI.class])
+    {
+        return (OAPOI *)object;
+    }
+    else if ([object isKindOfClass:OAPlaceDetailsObject.class])
+    {
+        return [(OAPlaceDetailsObject *)object getSyntheticAmenity];
+    }
+    return nil;
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -615,6 +629,12 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 - (BOOL)isSecondaryProvider
 {
     return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)o
+{
+    OAPOI *amenity = [self getAmenity:o];
+    return amenity ? [amenity getLocation] : nil;
 }
 
 @end

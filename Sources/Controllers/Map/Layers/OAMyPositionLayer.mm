@@ -929,4 +929,18 @@ typedef enum {
     return NO;
 }
 
+- (CLLocation *) getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OATargetPoint.class])
+    {
+        OATargetPoint *targetPoint = (OATargetPoint *)o;
+        return  [[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude];
+    }
+    else
+    {
+        return _lastLocation;
+    }
+    return  nil;
+}
+
 @end

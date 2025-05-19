@@ -187,6 +187,15 @@
     return NO;
 }
 
+- (CLLocation *) getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OAAvoidRoadInfo.class])
+    {
+        return ((OAAvoidRoadInfo *)o).location;
+    }
+    return  nil;
+}
+
 #pragma mark - OAMoveObjectProvider
 
 - (BOOL)isObjectMovable:(id)object

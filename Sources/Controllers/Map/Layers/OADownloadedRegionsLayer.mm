@@ -424,4 +424,15 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
     return YES;
 }
 
+- (CLLocation *) getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OADownloadMapObject.class])
+    {
+        OADownloadMapObject *mapObject = (OADownloadMapObject *)o;
+        CLLocationCoordinate2D center = [mapObject.worldRegion regionCenter];
+        return [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
+    }
+    return  nil;
+}
+
 @end

@@ -505,4 +505,9 @@
     }
 }
 
+- (CLLocation *) getObjectLocation:(id)o
+{
+    return  nil;;
+}
+
 @end

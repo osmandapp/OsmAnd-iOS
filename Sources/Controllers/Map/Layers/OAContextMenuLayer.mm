@@ -697,6 +697,8 @@
     return targetPoint;
 }
 
+// MARK: showContextMenuNEW
+
 - (BOOL) showContextMenuNEW:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
     OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
@@ -708,6 +710,7 @@
         if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
             id<OAContextMenuProvider> provider = selectedObject.provider;
+            
             
             //if (provider != null && provider.runExclusiveAction(selectedObject.object(), showUnknownLocation)) {
             //    return true;
@@ -724,15 +727,12 @@
         CLLocation *latLon = [result objectLatLon];
         OAPointDescription *pointDescription;
         
-        // ???
         id<OAContextMenuProvider> provider = selectedObject.provider;
         if (provider)
         {
             if (!latLon)
             {
-                //latLon = provider.getObjectLocation(selectedObj);
-                
-                //TODO: implement?
+                latLon = [provider getObjectLocation:selectedObject];
             }
             
             //pointDescription = provider.getObjectName(selectedObj);

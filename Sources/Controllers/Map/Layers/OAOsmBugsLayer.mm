@@ -174,4 +174,14 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     return NO;
 }
 
+- (CLLocation *) getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OAOnlineOsmNoteWrapper.class])
+    {
+        OAOnlineOsmNoteWrapper *note = (OAOnlineOsmNoteWrapper *)o;
+        return  [[CLLocation alloc] initWithLatitude:note.latitude longitude:note.longitude];
+    }
+    return  nil;
+}
+
 @end

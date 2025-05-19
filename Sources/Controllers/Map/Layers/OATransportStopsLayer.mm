@@ -211,4 +211,14 @@
     return NO;
 }
 
+- (CLLocation *) getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OATransportStop.class])
+    {
+        OATransportStop *transportStop = (OATransportStop *)o;
+        return [[CLLocation alloc] initWithLatitude:transportStop.location.latitude longitude:transportStop.location.longitude];
+    }
+    return  nil;
+}
+
 @end

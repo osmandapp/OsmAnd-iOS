@@ -260,6 +260,16 @@
     return NO;
 }
 
+- (CLLocation *) getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OAFavoriteItem.class])
+    {
+        OAFavoriteItem *favorite = (OAFavoriteItem *)o;
+        return [[CLLocation alloc] initWithLatitude:[favorite getLatitude] longitude:favorite.getLongitude];
+    }
+    return  nil;
+}
+
 #pragma mark - OAMoveObjectProvider
 
 - (BOOL) isObjectMovable:(id)object

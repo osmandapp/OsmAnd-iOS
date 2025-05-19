@@ -182,6 +182,11 @@
     }
 }
 
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
 #pragma mark - OAMoveObjectProvider
 
 - (BOOL)isObjectMovable:(id)object

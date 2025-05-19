@@ -612,4 +612,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return LatLon(p.getLatitude, p.getLongitude);
 }
 
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
 @end

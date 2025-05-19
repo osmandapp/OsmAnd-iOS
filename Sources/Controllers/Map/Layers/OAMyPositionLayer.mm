@@ -924,4 +924,9 @@ typedef enum {
     }
 }
 
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
 @end

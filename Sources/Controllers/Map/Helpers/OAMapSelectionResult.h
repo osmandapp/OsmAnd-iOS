@@ -6,6 +6,8 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+//@class OAContextMenuProvider;
+
 @interface OASelectedMapObject  : NSObject
 
 - (instancetype) initWithMapObject:(id)object provider:(id)provider;

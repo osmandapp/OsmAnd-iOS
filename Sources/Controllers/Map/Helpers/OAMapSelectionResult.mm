@@ -12,6 +12,7 @@
 #import "OAMapViewController.h"
 #import "OAMapLayers.h"
 #import "OAPlaceDetailsObject.h"
+#import "OAContextMenuProvider.h"
 
 @implementation OASelectedMapObject
 {

@@ -18,7 +18,6 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapRendererEnvironment.h"
-#import "OAContextMenuProvider.h"
 #import "OAMapObject.h"
 #import "OAPOI.h"
 #import "OATransportStop.h"
@@ -95,34 +94,52 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     [self selectObjectsFromOpenGl:result point:point];
 }
 
+
+/*
+ Android uses next layers
+ 
+ FavouritesLayer
+ GPXLayer
+ ImpassableRoadsLayer
+ MapMarkersLayer
+ MeasurementToolLayer
+ NetworkRouteSelectionLayer
+ PointLocationLayer
+ PointNavigationLayer
+ POlMapLayer
+ RouteLayer
+ TransportStopsLayer
+ TravelSelectionLayer
+ 
+ ios used before:
+ 
+ myPositionLayer
+ mapillaryLayer
+ downloadedRegionsLayer
+ gpxMapLayer
+ */
+
 - (void) collectObjectsFromLayers:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation secondaryObjects:(BOOL)secondaryObjects
 {
-//    //TODO: delete after test?
-//    NSMutableArray<OATargetPoint *> *found = [NSMutableArray array];
-//    
-//    
-//    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
-//    
-//    //TODO: is it correct? maybe we chould iterate over all layers?
-//    if (!_pointLayers)
-//    {
-//        _pointLayers = @[mapViewController.mapLayers.myPositionLayer,
-//                         mapViewController.mapLayers.mapillaryLayer,
-//                         mapViewController.mapLayers.downloadedRegionsLayer,
-//                         mapViewController.mapLayers.gpxMapLayer];
-//    }
-//    for (OAMapLayer *layer in _pointLayers)
-//    {
-//        if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
-//        {
-//            id<OAContextMenuProvider> provider = ((id<OAContextMenuProvider>)layer);
-//            
-////            [provider collectObjectsFromPoint:<#(CLLocationCoordinate2D)#> touchPoint:<#(CGPoint)#> symbolInfo:<#(const OsmAnd::IMapRenderer::MapSymbolInformation *)#> found:<#(NSMutableArray<OATargetPoint *> *)#> unknownLocation:<#(BOOL)#>];
-////            
-////            [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
-//        }
-//    }
-//    
+    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+
+    
+    NSArray<OAMapLayer *> *layers = [OARootViewController.instance.mapPanel.mapViewController.mapLayers getLayers];
+    
+    for (OAMapLayer *layer in layers)
+    {
+        if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
+        {
+            id<OAContextMenuProvider> provider = ((id<OAContextMenuProvider>)layer);
+            
+            if ([provider isSecondaryProvider] || secondaryObjects)
+            {
+                // [provider collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
+                
+                // provider.collectObjectsFromPoint(result, unknownLocation, false);
+            }
+        }
+    }
     
     //TODO: implement
 }
@@ -201,61 +218,63 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             }
             else
             {
-                OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* mapObjectSymbolsGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
-                if (const auto obfMapObject = mapObjectSymbolsGroup->mapObject)
+                if (const auto mapObjectSymbolsGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
                 {
-                    MutableOrderedDictionary<NSString *,NSString *> *tags = [self getOrderedTags:obfMapObject->getResolvedAttributesListPairs()];
-                    
-                    BOOL isTravelGpx = [OATravelObfHelper.shared isTravelGpxTags:tags];
-                    BOOL isOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
-                    BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
-                    
-                    if (isOsmRoute && !osmRoutesAlreadyAdded)
+                    if (const auto obfMapObject = mapObjectSymbolsGroup->mapObject)
                     {
-                        osmRoutesAlreadyAdded = [self addOsmRoutesAround:result point:point selectorFilter:[self createRouteFilter]];    //TODO: not tested yet
-                    }
-                    
-                    if (!isOsmRoute || !osmRoutesAlreadyAdded)
-                    {
-                        if (isTravelGpx)
+                        MutableOrderedDictionary<NSString *,NSString *> *tags = [self getOrderedTags:obfMapObject->getResolvedAttributesListPairs()];
+                        
+                        BOOL isTravelGpx = [OATravelObfHelper.shared isTravelGpxTags:tags];
+                        BOOL isOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
+                        BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
+                        
+                        if (isOsmRoute && !osmRoutesAlreadyAdded)
                         {
-                            [self addTravelGpx:result routeId: tags[ROUTE_ID]];                           //TODO: not tested yet
+                            osmRoutesAlreadyAdded = [self addOsmRoutesAround:result point:point selectorFilter:[self createRouteFilter]];    //TODO: not tested yet
                         }
-                        else if (isClickableWay)
+                        
+                        if (!isOsmRoute || !osmRoutesAlreadyAdded)
                         {
-                            OAClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:[result getPointLatLon] obfMapObject:obfMapObject tags:tags];
-                            [self addClickableWay:result clickableWay:clickableWay];                      //TODO: not tested yet
+                            if (isTravelGpx)
+                            {
+                                [self addTravelGpx:result routeId: tags[ROUTE_ID]];                           //TODO: not tested yet
+                            }
+                            else if (isClickableWay)
+                            {
+                                OAClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:[result getPointLatLon] obfMapObject:obfMapObject tags:tags];
+                                [self addClickableWay:result clickableWay:clickableWay];                      //TODO: not tested yet
+                            }
                         }
-                    }
-                    
-                    BOOL allowAmenityObjects = !isTravelGpx;
-                    
-                    if (allowAmenityObjects)
-                    {   
-                        auto onPathMapSymbol = std::dynamic_pointer_cast<const  OsmAnd::IOnPathMapSymbol>(symbolInfo.mapSymbol);
-                        if (onPathMapSymbol == nullptr)
-                        {
-                            CLLocationCoordinate2D latLon = result.objectLatLon;
-                            NSString *latLonTag = tags[TAG_POI_LAT_LON];
-                            if (latLonTag)
+                        
+                        BOOL allowAmenityObjects = !isTravelGpx;
+                        
+                        if (allowAmenityObjects)
+                        {   
+                            auto onPathMapSymbol = std::dynamic_pointer_cast<const  OsmAnd::IOnPathMapSymbol>(symbolInfo.mapSymbol);
+                            if (onPathMapSymbol == nullptr)
                             {
-                                CLLocation *l = [self parsePoiLatLon:latLonTag];
-                                if (l)
-                                    latLon = l.coordinate;
-                                [tags removeObjectForKey:TAG_POI_LAT_LON];
-                            }
-                            
-                            BOOL allowRenderedObjects = !isOsmRoute && !isClickableWay &&  !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags([self toQHash:tags]);
-                           
-                            amenity = [self getAmenity:latLon obfMapObject:obfMapObject tags:tags];
-                            
-                            if (amenity)
-                            {
-                                [amenity setMapIconName:[self getMapIconName:symbolInfo]];
-                            }
-                            else if (allowRenderedObjects)
-                            {
-                                [self addRenderedObject:result symbolInfo:symbolInfo obfMapObject:obfMapObject tags:tags];   //TODO: not tested yet
+                                CLLocationCoordinate2D latLon = result.objectLatLon;
+                                NSString *latLonTag = tags[TAG_POI_LAT_LON];
+                                if (latLonTag)
+                                {
+                                    CLLocation *l = [self parsePoiLatLon:latLonTag];
+                                    if (l)
+                                        latLon = l.coordinate;
+                                    [tags removeObjectForKey:TAG_POI_LAT_LON];
+                                }
+                                
+                                BOOL allowRenderedObjects = !isOsmRoute && !isClickableWay &&  !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags([self toQHash:tags]);
+                                
+                                amenity = [self getAmenity:latLon obfMapObject:obfMapObject tags:tags];
+                                
+                                if (amenity)
+                                {
+                                    [amenity setMapIconName:[self getMapIconName:symbolInfo]];
+                                }
+                                else if (allowRenderedObjects)
+                                {
+                                    [self addRenderedObject:result symbolInfo:symbolInfo obfMapObject:obfMapObject tags:tags];   //TODO: not tested yet
+                                }
                             }
                         }
                     }
@@ -524,7 +543,7 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     return _publicTransportTypes;
 }
 
-//TODO: test that selectedObjects shanges outside
+//TODO: test that selectedObjects changes outside
 - (void) processTransportStops:(NSMutableArray<OASelectedMapObject *> *)selectedObjects
 {
     NSArray<NSString *> *publicTransportTypes = [self getPublicTransportTypes];

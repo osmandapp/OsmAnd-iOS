@@ -419,4 +419,9 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
     }
 }
 
+- (BOOL)isSecondaryProvider
+{
+    return YES;
+}
+
 @end

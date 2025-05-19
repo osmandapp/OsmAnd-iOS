@@ -293,4 +293,9 @@
     }
 }
 
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
 @end

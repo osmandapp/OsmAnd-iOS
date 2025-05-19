@@ -36,6 +36,7 @@
 #import "OAColors.h"
 #import "OAMapUtils+cpp.h"
 #import "OAMapSelectionHelper.h"
+#import "OAMapSelectionResult.h"
 #import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -393,6 +394,11 @@
 //    //TODO: implement
 //}
 
+- (BOOL) isSecondaryProvider
+{
+    return NO;
+}
+
 - (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
 {
     OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
@@ -432,8 +438,14 @@
     }
     for (OAMapLayer *layer in _pointLayers)
     {
+        BOOL a = ((id<OAContextMenuProvider>)layer).isSecondaryProvider;
+        
         if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
-           [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
+        {
+            [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
+            
+            
+        }
     }
     NSMutableArray<OAMapLayer *> *layers = [[mapViewController.mapLayers getLayers] mutableCopy];
     [layers removeObjectsInArray:@[self.mapViewController.mapLayers.myPositionLayer,
@@ -684,6 +696,55 @@
 
     return targetPoint;
 }
+
+- (BOOL) showContextMenuNEW:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
+{
+    OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
+    CLLocationCoordinate2D pointLatLon = [result getPointLatLon];
+    NSMutableArray<OASelectedMapObject *> *selectedObjects = [result getProcessedObjects];
+    
+    for (OASelectedMapObject *selectedObject in selectedObjects)
+    {
+        if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
+        {
+            id<OAContextMenuProvider> provider = selectedObject.provider;
+            
+            //if (provider != null && provider.runExclusiveAction(selectedObject.object(), showUnknownLocation)) {
+            //    return true;
+            //}
+        }
+    }
+    
+    if (selectedObjects.count == 1)
+    {
+        OASelectedMapObject *selectedObject = selectedObjects[0];
+        id selectedObj = selectedObject.object;
+        CLLocationCoordinate2D latLon = [result objectLatLon];
+        OAPointDescription *pointDescription;
+        
+        // ???
+        id provider = selectedObject.provider;
+        if (selectedObject.provider)
+        {
+            
+        }
+        
+        
+    }
+    else if (selectedObjects.count > 1)
+    {
+        
+    }
+    else if (showUnknownLocation)
+    {
+        
+    }
+    
+    
+    
+   // TODO: implement
+}
+
 
 - (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {

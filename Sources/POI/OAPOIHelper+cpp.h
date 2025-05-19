@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<OAPOI *> *) findTravelGuides:(NSArray<NSString *> *)categoryNames currentLocation:(OsmAnd::PointI)currentLocation bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish;
 
-+ (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter *)additionalFilter bbox31:(OsmAnd::AreaI )bbox31 currentLocation:(OsmAnd::PointI)currentLocation includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> *)matcher publish:(BOOL(^)(OAPOI *poi))publish;
++ (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter * _Nullable)additionalFilter bbox31:(OsmAnd::AreaI )bbox31 currentLocation:(OsmAnd::PointI)currentLocation includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> * _Nullable)matcher publish:(BOOL(^)(OAPOI *poi) _Nullable)publish;
 
 + (OAPOI *) parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
 + (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;

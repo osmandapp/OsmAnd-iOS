@@ -169,4 +169,9 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     }
 }
 
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
 @end

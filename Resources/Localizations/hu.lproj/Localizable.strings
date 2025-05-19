@@ -2969,3 +2969,8 @@
 "no_photos_available_descr" = "Ehhez a helyhez még nem adtak hozzá felhasználói fényképeket";
 "detailed_track_guidance" = "Nyomvonal korrekció";
 "shared_string_show_less" = "Kevesebb megjelenítése";
+"prime_meridian" = "Kezdő délkör (0°)";
+"labels_position" = "Feliratok elhelyezkedése";
+"customize_grid_color" = "Rácsszín testreszabása";
+"grid_color" = "Rács színe";
+"meridian_180" = "180° délkör";

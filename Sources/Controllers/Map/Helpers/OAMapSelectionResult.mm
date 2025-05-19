@@ -17,10 +17,10 @@
 @implementation OASelectedMapObject
 {
     id _object;
-    id _provider;
+    id<OAContextMenuProvider> _provider;
 }
 
-- (instancetype) initWithMapObject:(id)object provider:(id)provider
+- (instancetype) initWithMapObject:(id)object provider:(id<OAContextMenuProvider>)provider
 {
     self = [super init];
     if (self)
@@ -36,7 +36,7 @@
     return _object;
 }
 
-- (id) provider
+- (id<OAContextMenuProvider>) provider
 {
     return _provider;
 }

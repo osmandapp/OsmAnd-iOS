@@ -712,6 +712,8 @@
             //if (provider != null && provider.runExclusiveAction(selectedObject.object(), showUnknownLocation)) {
             //    return true;
             //}
+            
+            //TODO: implement?
         }
     }
     
@@ -723,10 +725,18 @@
         OAPointDescription *pointDescription;
         
         // ???
-        id provider = selectedObject.provider;
-        if (selectedObject.provider)
+        id<OAContextMenuProvider> provider = selectedObject.provider;
+        if (provider)
         {
+            // TODO: latlon != nil
+            if (latLon.latitude == 0 && latLon.longitude == 0)
+            {
+                //latLon = provider.getObjectLocation(selectedObj);
+                
+                //TODO: implement?
+            }
             
+            //pointDescription = provider.getObjectName(selectedObj);
         }
         
         

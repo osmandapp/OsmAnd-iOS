@@ -6,13 +6,13 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-//@class OAContextMenuProvider;
+#import "OAContextMenuProvider.h"
 
 @interface OASelectedMapObject  : NSObject
 
-- (instancetype) initWithMapObject:(id)object provider:(id)provider;
-- (id) object;
-- (id) provider;
+- (instancetype) initWithMapObject:(id)object provider:(id<OAContextMenuProvider>)provider;
+- (id<OAContextMenuProvider>) object;
+- (id<OAContextMenuProvider>) provider;
 
 @end
 

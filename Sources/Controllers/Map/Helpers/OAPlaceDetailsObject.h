@@ -6,6 +6,8 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+#import "OAContextMenuProvider.h"
+
 @class OAPOI, OASelectedMapObject, OAPlaceDetailsObject;
 
 @interface OAPlaceDetailsObject : NSObject
@@ -14,12 +16,12 @@
 @property (nonatomic, readonly) NSMutableSet<NSString *> *wikidataIds;
 @property (nonatomic, readonly) NSMutableArray<OASelectedMapObject *> *selectedObjects;
 
-- (instancetype) initWithObject:(id)object;
+- (instancetype) initWithObject:(id<OAContextMenuProvider>)object provider:(id<OAContextMenuProvider>)provider;
 
 - (OAPOI *) getSyntheticAmenity;
 - (CLLocationCoordinate2D) getLocation;
 - (NSMutableArray<OASelectedMapObject *> *) getSelectedObjects;
-- (void) addObject:(id)object provider:(id)provider;
+- (void) addObject:(id)object provider:(id<OAContextMenuProvider>)provider;
 - (BOOL) overlapsWith:(id)object;
 - (void) merge:(OAPlaceDetailsObject*)other;
 - (void) combineData;

@@ -29,7 +29,7 @@
     return self;
 }
 
-- (instancetype) initWithObject:(id)object provider:(id)provider
+- (instancetype) initWithObject:(id<OAContextMenuProvider>)object provider:(id<OAContextMenuProvider>)provider
 {
     self = [self init];
     if (self)
@@ -56,7 +56,7 @@
     return _selectedObjects;
 }
 
-- (void) addObject:(id)object provider:(id)provider
+- (void) addObject:(id)object provider:(id<OAContextMenuProvider>)provider
 {
     if ([self.class shouldSkip:object])
         return;

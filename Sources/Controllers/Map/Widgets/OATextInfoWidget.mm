@@ -910,7 +910,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     [self refreshLabel];
 }
 
-- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode * _Nonnull)appMode
+- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel
 {
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];
@@ -919,6 +919,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     OATableRowData *widgetStyleRow = section.createNewRow;
     widgetStyleRow.cellType = SegmentImagesWithRightLabelTableViewCell.getCellIdentifier;
     widgetStyleRow.title = OALocalizedString(@"shared_string_height");
+    [widgetStyleRow setObj:widgetsPanel forKey:@"widgetsPanel"];
     [widgetStyleRow setObj:self.widgetSizePref forKey:@"prefSegment"];
     [widgetStyleRow setObj:@"simpleWidget" forKey:@"behaviour"];
     [widgetStyleRow setObj:@[[UIImage imageNamed:ACImageNameIcCustom20HeightS],
@@ -926,10 +927,13 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
                              [UIImage imageNamed:ACImageNameIcCustom20HeightL]]
                     forKey:@"values"];
     
-    OATableRowData *showIconRow = section.createNewRow;
-    showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
-    showIconRow.title = OALocalizedString(@"show_icon");
-    [showIconRow setObj:_showIconPref forKey:@"pref"];
+    if ([widgetsPanel isPanelVertical])
+    {
+        OATableRowData *showIconRow = section.createNewRow;
+        showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
+        showIconRow.title = OALocalizedString(@"show_icon");
+        [showIconRow setObj:_showIconPref forKey:@"pref"];
+    }
 
     return data;
 }
@@ -976,7 +980,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     NSString *prefId = [kSizeStylePref stringByAppendingString:self.widgetType.id];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
-    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:EOAWidgetSizeStyleMedium];
+    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:[[self getWidgetPanel] isPanelVertical] ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
 }
 
 - (OACommonBoolean *)registerShowIconPref:(NSString *)customId

@@ -54,10 +54,18 @@ final class WidgetPageViewController: UIViewController {
             }
         } else {
             for widgetView in widgetViews {
-                widgetView.isSimpleLayout = false
-                widgetView.adjustSize()
-                widgetView.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widgetView.frame.size.height, priority: .defaultHigh)
-                stackView.addArrangedSubview(widgetView)
+                let textInfo = widgetView as? OATextInfoWidget
+                let style: EOAWidgetSizeStyle = textInfo?.widgetSizeStyle ?? .small
+                let isSimple = style != .small
+                widgetView.isSimpleLayout = isSimple
+                if isSimple {
+                    configureSimple(widget: widgetView)
+                    stackView.addArrangedSubview(widgetView)
+                } else {
+                    widgetView.adjustSize()
+                    widgetView.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widgetView.frame.size.height, priority: .defaultHigh)
+                    stackView.addArrangedSubview(widgetView)
+                }
             }
         }
         
@@ -88,24 +96,36 @@ final class WidgetPageViewController: UIViewController {
         } else {
             let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
             for widget in widgetViews {
-                widget.showBottomSeparator(widget != lastVisibleWidget)
-                widget.translatesAutoresizingMaskIntoConstraints = false
-                widget.adjustSize()
-                width = max(width, widget.frame.size.width)
-                if widget.frame.size.width < width {
-                    var rect = widget.frame
-                    rect.size.width = width
-                    widget.frame = rect
-                }
-                if !widget.isHidden {
-                    height += widget.frame.size.height
+                if widget.isSimpleLayout {
+                    if let textInfoWidget = widget as? OATextInfoWidget {
+                        textInfoWidget.configureSimpleLayout()
+                        textInfoWidget.unitLabel?.textColor = .widgetUnits
+                        textInfoWidget.updatesSeparatorsColor(OAAppSettings.sharedManager().nightMode ? .widgetSeparator.dark : .widgetSeparator.light)
+                    }
+                    let fittingSize = widget.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                    height += fittingSize.height
+                    width = max(width, min(fittingSize.width, UIScreen.main.bounds.width * 0.45))
+                } else {
+                    widget.translatesAutoresizingMaskIntoConstraints = false
+                    widget.adjustSize()
+                    width = max(width, widget.frame.size.width)
+                    if widget.frame.size.width < width {
+                        var rect = widget.frame
+                        rect.size.width = width
+                        widget.frame = rect
+                    }
+                    if !widget.isHidden {
+                        height += widget.frame.size.height
+                    }
+                    
+                    if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
+                        widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: widget.frame.size.height, priority: .defaultHigh)
+                    } else {
+                        widget.updateHeightConstraint(with: .equal, constant: widget.frame.size.height, priority: .defaultHigh)
+                    }
                 }
                 
-                if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
-                    widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: widget.frame.size.height, priority: .defaultHigh)
-                } else {
-                    widget.updateHeightConstraint(with: .equal, constant: widget.frame.size.height, priority: .defaultHigh)
-                }
+                widget.showBottomSeparator(widget != lastVisibleWidget)
             }
         }
         return (width, height)

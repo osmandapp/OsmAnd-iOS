@@ -25,6 +25,8 @@
 - (void) enterChangePositionMode:(id)targetObject;
 - (void) exitChangePositionMode:(id)targetObject applyNewPosition:(BOOL)applyNewPosition;
 - (BOOL) isObjectMovable:(id)object;
+- (void) enterAddGpxPointMode;
+- (void) quitAddGpxPoint;
 
 - (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker;
 

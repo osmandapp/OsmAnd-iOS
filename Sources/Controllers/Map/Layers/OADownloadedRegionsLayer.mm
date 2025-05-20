@@ -435,4 +435,10 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
     return  nil;
 }
 
+- (OAPointDescription *) getObjectName:(id)o
+{
+    // TODO: implement
+    return nil;
+}
+
 @end

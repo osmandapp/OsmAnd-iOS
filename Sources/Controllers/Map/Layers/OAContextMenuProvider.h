@@ -12,7 +12,7 @@
 
 const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 
-@class OATargetPoint, OAMapSelectionResult, OASelectedMapObject;
+@class OATargetPoint, OAPointDescription, OAMapSelectionResult, OASelectedMapObject;
 
 typedef NS_ENUM(NSInteger, EOAPinVerticalAlignment)
 {
@@ -42,9 +42,9 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 // TODO: delete this old func?
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation;
 
-
 - (CLLocation *) getObjectLocation:(id)o;
-//- (OAPointDescription *) getObjectName:(OATargetPoint *)o;
+- (OAPointDescription *) getObjectName:(id)o;
+
 //- (BOOL) disableSingleTap;
 //- (BOOL) disableLongPressOnMap;
 //- (BOOL) isObjectClickable:(OATargetPoint *)o;

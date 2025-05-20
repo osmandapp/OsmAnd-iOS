@@ -14,6 +14,7 @@
 #import "OANativeUtilities.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAAppSettings.h"
+#import "OAPointDescription.h"
 #import "CLLocation+Extension.h"
 #import "OsmAndSharedWrapper.h"
 
@@ -508,6 +509,12 @@
 - (CLLocation *) getObjectLocation:(id)o
 {
     return  nil;;
+}
+
+- (OAPointDescription *) getObjectName:(id)o
+{
+    // TODO: implement
+    return nil;
 }
 
 @end

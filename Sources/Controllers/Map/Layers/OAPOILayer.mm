@@ -32,6 +32,7 @@
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
 #import "OAPlaceDetailsObject.h"
+#import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
@@ -429,6 +430,20 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return nil;
 }
 
+- (NSString *) getAmenityName:(OAPOI *)amemity
+{
+    NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    if ([amemity.type.category isWiki])
+    {
+        if (!locale || [locale isEmpty])
+            locale = @"";
+        
+        locale = [OAPluginsHelper onGetMapObjectsLocale:amemity preferredLocale:locale];
+    }
+    
+    return [amemity getName:locale transliterate:[OAAppSettings sharedManager].settingMapLanguageTranslit.get];
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -635,6 +650,14 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 {
     OAPOI *amenity = [self getAmenity:o];
     return amenity ? [amenity getLocation] : nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)o
+{
+    OAPOI *amenity = [self getAmenity:o];
+    if (amenity)
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_POI name:[self getAmenityName:amenity]];
+    return nil;
 }
 
 @end

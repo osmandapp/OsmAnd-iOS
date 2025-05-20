@@ -70,6 +70,8 @@
     BOOL _isInChangePositionMode;
     UIImageView *_changePositionPin;
     
+    BOOL _isInAddGpxPointMode;
+    
     NSArray<NSString *> *_publicTransportTypes;
     
     id<OAMoveObjectProvider> _selectedObjectContextMenuProvider;
@@ -222,6 +224,16 @@
     _selectedObjectContextMenuProvider = nil;
     _isInChangePositionMode = NO;
     _cachedTargetPoint = CGPointZero;
+}
+
+- (void) enterAddGpxPointMode
+{
+    _isInAddGpxPointMode = YES;
+}
+
+- (void) quitAddGpxPoint
+{
+    _isInAddGpxPointMode = NO;
 }
 
 - (void) onMapFrameRendered
@@ -401,7 +413,16 @@
 
 - (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
 {
-    OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
+    // TODO: testing code
+    
+    [self showContextMenuNEW:touchPoint showUnknownLocation:showUnknownLocation forceHide:NO];
+    return @[];
+    
+    
+    // TODO: delete old code?
+    
+    
+    //    OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
     
     
     OAMapRendererView *mapView = self.mapView;
@@ -734,30 +755,111 @@
             {
                 latLon = [provider getObjectLocation:selectedObject];
             }
-            
-            //pointDescription = provider.getObjectName(selectedObj);
+            pointDescription = [provider getObjectName:selectedObj];
+        }
+        if (!latLon)
+        {
+            latLon = pointLatLon;
         }
         
-        
+        if (_isInAddGpxPointMode)
+        {
+//            // TODO: implement
+        }
+        else
+        {
+            [self showContextMenuNEW:latLon pointDescription:pointDescription object:selectedObj provider:provider];
+        }
+        return YES;
     }
     else if (selectedObjects.count > 1)
     {
+        [self showContextMenuForSelectedObjectsNEW:pointLatLon selectedObjects:selectedObjects];
+        return YES;
         
     }
     else if (showUnknownLocation)
     {
         
+        [OsmAndApp instance].mapMode = OAMapModeFree;
+        CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
+        OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
+        [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];
+        return YES;
+        
     }
-    
-    
-    
-   // TODO: implement
+    CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
+    [[OARootViewController instance].mapPanel processNoSymbolFound:coord forceHide:forceHide];
+    return NO;
 }
+
+- (void) showContextMenuForSelectedObjectsNEW:(CLLocation *)latLon selectedObjects:(NSArray<OASelectedMapObject *> *)selectedObjects
+{
+    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+    [mapPanel hideContextMenu];
+    
+    
+    // TODO: run without OATargetPoint
+    // just for testing
+    
+    NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray new];
+    for (OASelectedMapObject *selectedObject in selectedObjects)
+    {
+        id<OAContextMenuProvider> provider = selectedObject.provider;
+        
+        if (provider)
+        {
+            OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object];
+            if (targetPoint)
+                [targetPoints addObject:targetPoint];
+            
+            [mapPanel showContextMenuWithPoints:targetPoints];
+        }
+    }
+}
+
+- (void) showContextMenuNEW:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(OASelectedMapObject *)object provider:(id<OAContextMenuProvider>)provider
+{
+    if (_isInAddGpxPointMode)
+    {
+        
+        // TODO: implement
+        
+        
+    }
+//    else if (!provider || [provider showMenuAction:object])
+    else if (!provider || YES)
+    {
+        OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+        [mapPanel hideContextMenu];
+        
+        
+        // TODO: run without OATargetPoint
+        // just for testing
+        if (provider)
+        {
+            OATargetPoint *targetPoint = [provider getTargetPoint:object];
+            [mapPanel showContextMenuWithPoints:@[targetPoint]];
+        }
+    }
+}
+
+
 
 
 - (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
+    
+    // TODO: testing code
+    
     NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
+    return;
+    
+    
+    
+    // TODO: delete old code?
+    
+    
     if (selectedObjects.count > 0)
     {
         [OsmAndApp instance].mapMode = OAMapModeFree;

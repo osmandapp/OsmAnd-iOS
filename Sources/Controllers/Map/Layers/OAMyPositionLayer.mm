@@ -943,4 +943,10 @@ typedef enum {
     return  nil;
 }
 
+- (OAPointDescription *) getObjectName:(id)o
+{
+    // TODO: implement
+    return nil;
+}
+
 @end

@@ -184,4 +184,10 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     return  nil;
 }
 
+- (OAPointDescription *) getObjectName:(id)o
+{
+    // TODO: implement
+    return nil;
+}
+
 @end

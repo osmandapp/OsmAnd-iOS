@@ -356,6 +356,12 @@
     return  nil;
 }
 
+- (OAPointDescription *) getObjectName:(id)o
+{
+    // TODO: implement
+    return nil;
+}
+
 #pragma mark - OAMoveObjectProvider
 
 - (BOOL)isObjectMovable:(id)object

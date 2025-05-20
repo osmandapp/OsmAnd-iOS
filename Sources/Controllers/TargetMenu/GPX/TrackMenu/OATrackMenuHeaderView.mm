@@ -90,10 +90,14 @@
     BOOL hasStatistics = !self.statisticsCollectionView.hidden;
     BOOL hasLocation = !self.locationContainerView.hidden;
     BOOL hasDirection = !self.directionContainerView.hidden;
+    BOOL hasGpxActivity = !self.gpxActivityContainerView.hidden;
 
     self.locationWithStatisticsTopConstraint.active = hasLocation && hasStatistics;
-    self.regionDirectionConstraint.active = hasDirection;
-    self.regionNoDirectionConstraint.active = !hasDirection;
+    self.regionActivityConstraint.active = hasGpxActivity;
+    self.activityDirectionConstraint.active = hasDirection;
+    self.activityNoDirectionConstraint.active = !hasDirection;
+    self.regionNoActivityConstraint.active = !hasGpxActivity;
+    self.regionNoDirectionNoActivityConstraint.active = !hasDirection && !hasGpxActivity;
 
     [super updateConstraints];
 }
@@ -106,10 +110,14 @@
         BOOL hasStatistics = !self.statisticsCollectionView.hidden;
         BOOL hasLocation = !self.locationContainerView.hidden;
         BOOL hasDirection = !self.directionContainerView.hidden;
+        BOOL hasGpxActivity = !self.gpxActivityContainerView.hidden;
 
         res = res || self.locationWithStatisticsTopConstraint.active != (hasLocation && hasStatistics);
-        res = res || self.regionDirectionConstraint.active != hasDirection;
-        res = res || self.regionNoDirectionConstraint.active != !hasDirection;
+        res = res || self.regionActivityConstraint.active != hasGpxActivity;
+        res = res || self.activityDirectionConstraint.active != hasDirection;
+        res = res || self.activityNoDirectionConstraint.active != !hasDirection;
+        res = res || self.regionNoActivityConstraint.active != !hasGpxActivity;
+        res = res || self.regionNoDirectionNoActivityConstraint.active != (!hasDirection && !hasGpxActivity);
     }
     return res;
 }
@@ -464,6 +472,14 @@
     [self.directionTextView setText:direction];
     self.directionContainerView.hidden = !hasDirection;
     self.locationSeparatorView.hidden = !hasDirection;
+}
+
+- (void)setGpxActivity:(NSString *)activityType
+{
+    BOOL hasActivity = activityType && activityType.length > 0;
+    [self.gpxActivityTextView setText:activityType];
+    self.gpxActivityContainerView.hidden = !hasActivity;
+    self.gpxActivitySeparatorView.hidden = !hasActivity;
 }
 
 - (void)setDescription

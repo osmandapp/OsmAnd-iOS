@@ -31,6 +31,10 @@
 @property (weak, nonatomic) IBOutlet UIImageView *directionIconView;
 @property (weak, nonatomic) IBOutlet UILabel *directionTextView;
 @property (weak, nonatomic) IBOutlet UIView *locationSeparatorView;
+@property (weak, nonatomic) IBOutlet UIView *gpxActivityContainerView;
+@property (weak, nonatomic) IBOutlet UIImageView *gpxActivityIconView;
+@property (weak, nonatomic) IBOutlet UILabel *gpxActivityTextView;
+@property (weak, nonatomic) IBOutlet UIView *gpxActivitySeparatorView;
 @property (weak, nonatomic) IBOutlet UIView *regionContainerView;
 @property (weak, nonatomic) IBOutlet UIImageView *regionIconView;
 @property (weak, nonatomic) IBOutlet UILabel *regionTextView;
@@ -44,8 +48,11 @@
 @property (weak, nonatomic) IBOutlet UIView *bottomDividerView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *locationWithStatisticsTopConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionActivityConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoActivityConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *activityDirectionConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *activityNoDirectionConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionNoActivityConstraint;
 
 @property (nonatomic, weak) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 

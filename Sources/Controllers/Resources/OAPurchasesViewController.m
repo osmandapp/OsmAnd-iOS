@@ -235,6 +235,8 @@ static BOOL _purchasesUpdated;
                 {
                     OAProduct *product = activeProducts[i];
                     NSNumber *purchaseTime = [_iapHelper getInAppPurchaseTime:product.productIdentifier];
+                    if (!purchaseTime)
+                        purchaseTime = @(0);
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
@@ -264,6 +266,8 @@ static BOOL _purchasesUpdated;
                     OAProduct *product = externalActiveProducts[i];
                     NSNumber *origin = @(externalActiveProductHolders[i].origin);
                     NSNumber *purchaseTime = @(externalActiveProductHolders[i].purchaseTime);
+                    if (!purchaseTime)
+                        purchaseTime = @(0);
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
@@ -523,7 +527,7 @@ static BOOL _purchasesUpdated;
             origin = (EOAPurchaseOrigin) ((NSNumber *)originObj).intValue;
         NSDate *purchaseDate = nil;
         id purchaseTimeObj = [item objForKey:@"purchaseTime"];
-        if (purchaseTimeObj && [purchaseTimeObj isKindOfClass:NSNumber.class])
+        if (purchaseTimeObj && [purchaseTimeObj isKindOfClass:NSNumber.class] && ((NSNumber *)purchaseTimeObj).longValue > 0)
             purchaseDate = [NSDate dateWithTimeIntervalSince1970:((NSNumber *)purchaseTimeObj).doubleValue];
         NSDate *expireDate = nil;
         id expireTimeObj = [item objForKey:@"expireTime"];

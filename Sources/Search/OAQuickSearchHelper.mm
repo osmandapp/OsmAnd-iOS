@@ -822,7 +822,6 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
         settings = [settings setEmptyQueryAllowed:YES];
         settings = [settings setOriginalLocation:searchLocation];
         settings = [settings setSearchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]];
-        [searchUICore updateSettings:settings];
 
         int __block count = 0;
 
@@ -848,7 +847,7 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
             return NO;
         } cancelledFunc:^BOOL{
             return count > cityLimit || _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0;
-        }] resortAll:YES removeDuplicates:YES];
+        }] resortAll:YES removeDuplicates:YES searchSettings:settings];
 
         if (_searchRequestsCount == searchRequestsCount)
         {
@@ -890,7 +889,6 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
         settings = [settings setEmptyQueryAllowed:YES];
         settings = [settings setOriginalLocation:searchLocation];
         settings = [settings setSearchBBox31:searchBBox31];
-        [searchUICore updateSettings:settings];
 
         int __block count = 0;
         [searchUICore shallowSearch:OASearchLocationAndUrlAPI.class
@@ -908,7 +906,7 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
             return NO;
         } cancelledFunc:^BOOL{
             return count > limit || _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0;
-        }] resortAll:YES removeDuplicates:YES];
+        }] resortAll:YES removeDuplicates:YES searchSettings:settings];
 
         if (_searchRequestsCount == searchRequestsCount)
         {

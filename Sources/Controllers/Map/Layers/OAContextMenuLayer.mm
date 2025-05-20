@@ -836,11 +836,12 @@
         
         // TODO: run without OATargetPoint
         // just for testing
-        if (provider)
-        {
-            OATargetPoint *targetPoint = [provider getTargetPoint:object];
+//        if (provider)
+//        {
+            //OATargetPoint *targetPoint = [provider getTargetPoint:object];
+            OATargetPoint *targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object];
             [mapPanel showContextMenuWithPoints:@[targetPoint]];
-        }
+//        }
     }
 }
 

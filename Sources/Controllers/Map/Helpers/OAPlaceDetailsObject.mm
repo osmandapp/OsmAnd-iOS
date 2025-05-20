@@ -196,7 +196,7 @@
 
 + (BOOL) shouldSkip:(id) object
 {
-    return [object isKindOfClass:OAPOI.class];
+    return ![object isKindOfClass:OAPOI.class];
 }
 
 @end

@@ -3672,11 +3672,11 @@
 "customize_grid_color" = "Personnaliser la couleur de la grille";
 "default_appearance" = "Apparence par défaut";
 "apply_to_all_points" = "Appliquer à tous les points ";
-"original_icon_description" = "Chaque point conserverait sa propre icône.";
-"original_color_description" = "Chaque point conserverait sa propre couleur.";
-"original_shape_description" = "Chaque point conserverait sa propre forme.";
+"original_icon_description" = "Chaque point conservera sa propre icône.";
+"original_color_description" = "Chaque point conservera sa propre couleur.";
+"original_shape_description" = "Chaque point conservera sa propre forme.";
 "layer_coordinates_grid" = "Grille de coordonnées";
 "shared_string_edges" = "Bords";
 "labels_position" = "Position des étiquettes";
 "grid_color" = "Couleur de la grille";
-"save_favorite_default_appearance" = "Appliquer les modifications aux points existants dans le dossier ou uniquement aux nouveaux ?";
+"save_favorite_default_appearance" = "Appliquer les modifications aux points existants dans le dossier ou uniquement aux nouveaux points ?";

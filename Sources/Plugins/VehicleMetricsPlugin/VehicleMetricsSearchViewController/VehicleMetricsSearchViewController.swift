@@ -73,8 +73,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     private var needRescan = false
     
     private var discoveredDevices: [Device] {
-        let sortedDevices = BLEManager.shared.discoveredDevices.sorted { $0.isConnected && !$1.isConnected }
-        return sortedDevices
+        BLEManager.shared.discoveredDevices.sorted { $0.isConnected && !$1.isConnected }
     }
     
     // MARK: - Init
@@ -155,7 +154,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {
-        let controller = BLEDescriptionViewController()
+        let controller = VehicleMetricsDescriptionViewController()
         controller.device = discoveredDevices[indexPath.row]
         navigationController?.pushViewController(controller, animated: true)
     }
@@ -195,8 +194,8 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     
     private func startScan() {
         guard !BLEManager.shared.isScaning else {
-            print("startScan: isScaning")
             BLEManager.shared.stopScan()
+            NSLog("startScan: isScaning")
             scanForPeripherals()
             return
         }
@@ -206,7 +205,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     private func scanForPeripherals() {
         showSearchingView()
         needRescan = false
-        BLEManager.shared.scanForPeripherals(withServiceUUIDs: GattAttributes.OBD_SERVICES.map { $0.CBUUIDRepresentation }) { [weak self] in
+        BLEManager.shared.scanForPeripherals(withServiceUUIDs: GattAttributes.OBD_SERVICES) { [weak self] in
             guard let self else { return }
             hasFirstResult = true
             showDiscoveredDevices()

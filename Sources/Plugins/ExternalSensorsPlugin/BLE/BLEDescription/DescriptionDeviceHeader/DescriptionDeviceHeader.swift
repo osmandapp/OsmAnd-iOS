@@ -18,7 +18,8 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectButton: UIButton!
     
     var onUpdateConnectStateAction: ((DeviceState) -> Void)?
-    var didPaireDeviceAction: (() -> Void)?
+    var didPairedDeviceAction: (() -> Void)?
+    var onUpdateOBDInfoAction: ((OBDInfo) -> Void)?
     
     private var device: Device?
     
@@ -93,12 +94,12 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success:
-                debugPrint("connect success | \(device.deviceServiceName) | \(device.deviceName)")
+                NSLog("connect success | \(device.deviceServiceName) | \(device.deviceName)")
                 let isPairedDevice = DeviceHelper.shared.isPairedDevice(id: device.id)
                 DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
                 DeviceHelper.shared.addConnected(device: device)
                 if !isPairedDevice {
-                    didPaireDeviceAction?()
+                    didPairedDeviceAction?()
                 }
                 configureConnectButtonTitle(with: .disconnected)
                 discoverServices(serviceUUIDs: nil)
@@ -124,10 +125,10 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success(let services):
-                debugPrint("discoverCharacteristics: success")
+                NSLog("discoverCharacteristics: success")
                 discoverCharacteristics(services: services)
             case .failure(let error):
-                debugPrint("discoverCharacteristics: \(error)")
+                NSLog("discoverCharacteristics: \(error)")
                 showErrorAlertWith(message: error.localizedDescription)
             }
         }
@@ -146,24 +147,53 @@ final class DescriptionDeviceHeader: UIView {
                             device.update(with: characteristic) { _ in }
                         }
                         if characteristic.properties.contains(.notify) {
-                            debugPrint("\(characteristic.uuid): properties contains .notify")
+                            NSLog("\(characteristic.uuid): properties contains .notify")
                             device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { notifyResult in
                                 switch notifyResult {
                                 case .success(let isNotifying):
-                                    debugPrint("success: this peripheral was registered for change notifications to the characteristic [\(characteristic.uuid)]: \(isNotifying)")
+                                    NSLog("success: this peripheral was registered for change notifications to the characteristic [\(characteristic.uuid)]: \(isNotifying)")
                                 case .failure(let error):
-                                    debugPrint("failure: this peripheral was not registered for change notifications to the characteristic [\(characteristic.uuid)]:  \(error.localizedDescription)")
+                                    NSLog("failure: this peripheral was not registered for change notifications to the characteristic [\(characteristic.uuid)]:  \(error.localizedDescription)")
                                 }
                             }
                         }
                     }
+                    if device.deviceType == .OBD_VEHICLE_METRICS {
+                        adapterInitializationIfNeeded { [weak self] info in
+                            guard let self, let info else { return }
+                            onUpdateOBDInfoAction?(info)
+                        }
+                    }
                 case .failure(let error):
-                    debugPrint("discoverCharacteristics: \(error)")
+                    NSLog("discoverCharacteristics: \(error)")
                     showErrorAlertWith(message: error.localizedDescription)
                 }
             }
         }
     }
+    
+    private func adapterInitializationIfNeeded(completion: @escaping (OBDInfo?) -> Void) {
+        Task {
+            do {
+                let info = try await DeviceHelper.shared.adapterInitialization()
+                completion(info)
+            } catch {
+                NSLog(error.localizedDescription)
+                completion(nil)
+            }
+        }
+    }
+    
+//    private func adapterInitializationIfNeeded() -> OBDInfo {
+//        Task {
+//            do {
+//              let info = try await DeviceHelper.shared.adapterInitialization()
+//              return info
+//            } catch {
+//                NSLog(error.localizedDescription)
+//            }
+//        }
+//    }
     
     private func disconnect() {
         guard let device else { return }

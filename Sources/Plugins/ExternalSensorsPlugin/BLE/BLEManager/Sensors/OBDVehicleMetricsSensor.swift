@@ -7,158 +7,136 @@
 //
 
 final class OBDVehicleMetricsSensor: Sensor {
-    private(set) var lastRunningCadenceData: RunningCadenceData?
-    private(set) var lastRunningSpeedData: RunningSpeedData?
-    private(set) var lastRunningDistanceData: RunningDistanceData?
-    private(set) var lastRunningStrideLengthData: RunningStrideLengthData?
+    private var buffer = Data()
     
-    override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
-        if widgetType == .bicycleCadence {
-            return [lastRunningCadenceData].compactMap { $0 }
-        } else if widgetType == .bicycleSpeed {
-            return [lastRunningSpeedData].compactMap { $0 }
-        } else if widgetType == .bicycleDistance {
-            return [lastRunningDistanceData].compactMap { $0 }
-        }
-        return nil
-    }
+//    private(set) var lastRunningCadenceData: RunningCadenceData?
+//    private(set) var lastRunningSpeedData: RunningSpeedData?
+//    private(set) var lastRunningDistanceData: RunningDistanceData?
+//    private(set) var lastRunningStrideLengthData: RunningStrideLengthData?
+    
+//    override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
+//        if widgetType == .bicycleCadence {
+//            return [lastRunningCadenceData].compactMap { $0 }
+//        } else if widgetType == .bicycleSpeed {
+//            return [lastRunningSpeedData].compactMap { $0 }
+//        } else if widgetType == .bicycleDistance {
+//            return [lastRunningDistanceData].compactMap { $0 }
+//        }
+//        return nil
+//    }
     
     override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
         [.bicycleCadence, .bicycleSpeed, .bicycleDistance]
     }
+    
+//    func didDiscoverCharacteristics(_ peripheral: CBPeripheral, service: CBService, error _: Error?) {
+//        guard let characteristics = service.characteristics, !characteristics.isEmpty else {
+//            return
+//        }
+//
+//        for characteristic in characteristics {
+//            if characteristic.properties.contains(.notify) {
+//                peripheral.setNotifyValue(true, for: characteristic)
+//            }
+//            switch characteristic.uuid.uuidString {
+//            case "FFE1": // for servcice FFE0
+//                ecuWriteCharacteristic = characteristic
+//                ecuReadCharacteristic = characteristic
+//            case "FFF1": // for servcice FFF0
+//                ecuReadCharacteristic = characteristic
+//            case "FFF2": // for servcice FFF0
+//                ecuWriteCharacteristic = characteristic
+//            case "2AF0": // for servcice 18F0
+//                ecuReadCharacteristic = characteristic
+//            case "2AF1": // for servcice 18F0
+//                ecuWriteCharacteristic = characteristic
+//            default:
+//                break
+//            }
+//        }
+//
+//        if connectionCompletion != nil, ecuWriteCharacteristic != nil, ecuReadCharacteristic != nil {
+//            connectionCompletion?(peripheral, nil)
+//        }
+//    }
     
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
             return
         }
         
+        // FIXME:
         switch characteristic.uuid {
         case "2AF0".CBUUIDRepresentation:
             print("")
-        case "AF1".CBUUIDRepresentation:
+            processReceivedData(data)
+        case "2AF1".CBUUIDRepresentation:
+//            if let device = device as? OBDVehicleMetricsDevice {
+//                device.ecuWriteCharacteristic = characteristic
+//            }
+            print("")
+            processReceivedData(data)
+        case "FFE1".CBUUIDRepresentation:
+            processReceivedData(data)
+//            if let device = device as? OBDVehicleMetricsDevice {
+//                device.ecuWriteCharacteristic = characteristic
+//            }
+           
+            print("")
+        case "FFF1".CBUUIDRepresentation:
             print("")
         default:
             debugPrint("Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
+       // FFF2 ?
+        
+//        switch characteristic.uuid.uuidString {
+//        case "FFE1": // for servcice FFE0
+//            ecuWriteCharacteristic = characteristic
+//            ecuReadCharacteristic = characteristic
+//        case "FFF1": // for servcice FFF0
+//            ecuReadCharacteristic = characteristic
+//        case "FFF2": // for servcice FFF0
+//            ecuWriteCharacteristic = characteristic
+//        case "2AF0": // for servcice 18F0
+//            ecuReadCharacteristic = characteristic
+//        case "2AF1": // for servcice 18F0
+//            ecuWriteCharacteristic = characteristic
+//        default:
+//            break
+//        }
+        
+        
     }
     
-    private func decodeRunningCharacteristic(data: Data, result: (Result<Void, Error>) -> Void) throws {
-        let characteristic = try RunningCharacteristic(data: data)
-        let timestamp = Date.now.timeIntervalSince1970
-        lastRunningCadenceData = RunningCadenceData(timestamp: timestamp, cadence: characteristic.cadence)
-        lastRunningSpeedData = RunningSpeedData(timestamp: timestamp, speed: characteristic.speed)
-        if let totalDistance = characteristic.totalDistance {
-            lastRunningDistanceData = RunningDistanceData(timestamp: timestamp, totalDistance: totalDistance)
+    func processReceivedData(_ data: Data) {
+        buffer.append(data)
+
+        guard let string = String(data: buffer, encoding: .utf8) else {
+            buffer.removeAll()
+            return
         }
-        if let strideLength = characteristic.strideLength {
-            lastRunningStrideLengthData = RunningStrideLengthData(timestamp: timestamp, strideLength: strideLength)
-        }
-        result(.success)
-    }
-    
-    final class RunningCadenceData: SensorData {
-        let timestamp: TimeInterval
-        let cadence: Int
-        
-        init(timestamp: TimeInterval, cadence: Int) {
-            self.timestamp = timestamp
-            self.cadence = cadence
-        }
-        
-        var widgetFields: [SensorWidgetDataField]? {
-            [SensorWidgetDataField(fieldType: .bicycleCadence,
-                                   nameId: localizedString("external_device_characteristic_cadence"),
-                                   unitNameId: localizedString("revolutions_per_minute_unit"),
-                                   numberValue: nil,
-                                   stringValue: String(cadence))]
-        }
-        
-        var description: String {
-            "RunningCadenceData { timestamp=\(timestamp), cadence=\(cadence) }"
-        }
-        
-        func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
-            widgetFields?.first
+
+        if string.contains(">") {
+            var lines = string
+                .components(separatedBy: .newlines)
+                .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+
+            // remove the last line
+            lines.removeLast()
+            #if DEBUG
+                logger.debug("Response: \(lines)")
+            #endif
+
+            if BLEManager.shared.sendMessageCompletion != nil {
+                if lines[0].uppercased().contains("NO DATA") {
+                    BLEManager.shared.sendMessageCompletion?(nil, BLEManagerError.noData)
+                } else {
+                    BLEManager.shared.sendMessageCompletion?(lines, nil)
+                }
+            }
+            buffer.removeAll()
         }
     }
-    
-    final class RunningSpeedData: SensorData {
-        let timestamp: TimeInterval
-        private(set) var speed = Measurement<UnitSpeed>(value: 0, unit: .metersPerSecond)
-        
-        init(timestamp: TimeInterval, speed: Measurement<UnitSpeed>) {
-            self.timestamp = timestamp
-            self.speed = speed
-        }
-        
-        var widgetFields: [SensorWidgetDataField]? {
-            [SensorSpeedWidgetDataField(fieldType: .bicycleSpeed,
-                                        nameId: localizedString("external_device_characteristic_speed"),
-                                        unitNameId: "",
-                                        numberValue: NSNumber(value: speed.value),
-                                        stringValue: nil)]
-        }
-        
-        var description: String {
-            "RunningSpeedData { timestamp=\(timestamp), speed=\(speed.value) }"
-        }
-        
-        func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
-            widgetFields?.first
-        }
-    }
-    
-    final class RunningDistanceData: SensorData {
-        let timestamp: TimeInterval
-        private(set) var totalDistance = Measurement<UnitLength>(value: 0, unit: .meters)
-        
-        init(timestamp: TimeInterval, totalDistance: Measurement<UnitLength>) {
-            self.timestamp = timestamp
-            self.totalDistance = totalDistance
-        }
-        
-        var widgetFields: [SensorWidgetDataField]? {
-            [SensorDistanceWidgetDataField(fieldType: .bicycleDistance,
-                                           nameId: localizedString("external_device_characteristic_distance"),
-                                           unitNameId: "",
-                                           numberValue: NSNumber(value: totalDistance.value / 10),
-                                           stringValue: nil)
-            ]
-        }
-        
-        var description: String {
-            "RunningDistanceData { timestamp=\(timestamp), totalDistance=\(totalDistance.value / 10) }"
-        }
-        
-        func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
-            widgetFields?.first
-        }
-    }
-    
-    final class RunningStrideLengthData: SensorData {
-        let timestamp: TimeInterval
-        let strideLength: Measurement<UnitLength>
-        
-        init(timestamp: TimeInterval, strideLength: Measurement<UnitLength>) {
-            self.timestamp = timestamp
-            self.strideLength = strideLength
-        }
-        
-        var widgetFields: [SensorWidgetDataField]? {
-            [SensorDistanceWidgetDataField(fieldType: .bicycleDistance,
-                                           nameId: localizedString("external_device_characteristic_stride_length"),
-                                           unitNameId: "",
-                                           numberValue: NSNumber(value: strideLength.value / 100),
-                                           stringValue: nil)
-            ]
-        }
-        
-        var description: String {
-            "RunningStrideLengthData { timestamp=\(timestamp), strideLength=\(strideLength.value / 100) }"
-        }
-        
-        func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
-            widgetFields?.first
-        }
-    }
+
 }

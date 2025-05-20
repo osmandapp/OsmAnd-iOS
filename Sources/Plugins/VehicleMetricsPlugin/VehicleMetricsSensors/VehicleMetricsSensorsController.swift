@@ -41,7 +41,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        view.backgroundColor = UIColor.viewBg
+        view.backgroundColor = .viewBg
         tableView.contentInset.bottom = 64
     }
     
@@ -157,10 +157,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        if DeviceHelper.shared.hasPairedDevices {
-            return 30
-        }
-        return .leastNonzeroMagnitude
+        DeviceHelper.shared.hasPairedDevices ? 30 : .leastNonzeroMagnitude
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -169,21 +166,22 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        if let key = item.key {
-            if let item = CellData(rawValue: key) {
-                if case .learnMore = item {
-                    guard let settingsURL = URL(string: docsVehicleMetricsURL),
-                          UIApplication.shared.canOpenURL(settingsURL) else {
-                        return
-                    }
-                    UIApplication.shared.open(settingsURL)
+        guard let key = item.key else {
+            return
+        }
+        if let item = CellData(rawValue: key) {
+            if case .learnMore = item {
+                guard let settingsURL = URL(string: docsVehicleMetricsURL),
+                      UIApplication.shared.canOpenURL(settingsURL) else {
+                    return
                 }
-            } else if let item = ConnectState(rawValue: key) {
-                if let items = sectionsDevicesData[item], items.count > indexPath.row {
-                    let controller = BLEDescriptionViewController()
-                    controller.device = items[indexPath.row]
-                    navigationController?.pushViewController(controller, animated: true)
-                }
+                UIApplication.shared.open(settingsURL)
+            }
+        } else if let item = ConnectState(rawValue: key) {
+            if let items = sectionsDevicesData[item], items.count > indexPath.row {
+                let controller = VehicleMetricsDescriptionViewController()
+                controller.device = items[indexPath.row]
+                navigationController?.pushViewController(controller, animated: true)
             }
         }
     }
@@ -410,7 +408,7 @@ extension VehicleMetricsSensorsController {
     }
     
     private func showDescriptionViewController(device: Device) {
-        let controller = BLEDescriptionViewController()
+        let controller = VehicleMetricsDescriptionViewController()
         controller.device = device
         navigationController?.pushViewController(controller, animated: true)
     }

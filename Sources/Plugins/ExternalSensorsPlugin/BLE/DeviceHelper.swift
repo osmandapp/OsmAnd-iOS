@@ -17,6 +17,8 @@ final class DeviceHelper: NSObject {
     
     let devicesSettingsCollection = DevicesSettingsCollection()
     
+    lazy var elm327Adapter: ELM327Adapter = ELM327Adapter(service: BLEManager.shared)
+    
     var hasPairedDevices: Bool {
         devicesSettingsCollection.hasPairedDevices
     }
@@ -184,6 +186,8 @@ final class DeviceHelper: NSObject {
             return BLEBikeSCDDevice()
         case .BLE_RUNNING_SCDS:
             return BLERunningSCDDevice()
+        case .OBD_VEHICLE_METRICS:
+            return OBDVehicleMetricsDevice()
         default:
             fatalError("not impl")
         }
@@ -310,3 +314,36 @@ extension DeviceHelper {
         // add test func
     }
 }
+
+
+// MARK: - OBD
+extension DeviceHelper {
+    
+     enum OBDServiceError: Error {
+        case failAdapterInitialization
+//        case notConnectedToVehicle
+//        case adapterConnectionFailed(underlyingError: Error)
+//        case scanFailed(underlyingError: Error)
+//        case clearFailed(underlyingError: Error)
+//        case commandFailed(command: String, error: Error)
+    }
+    
+    func adapterInitialization() async throws -> OBDInfo {
+        do {
+            try await elm327Adapter.adapterInitialization()
+            // TODO: save preferredProtocol to OBD Device (.protocol6) for old cars
+            let obdInfo = try await elm327Adapter.setupVehicle(preferredProtocol: .protocol6)
+            return obdInfo
+        } catch {
+            throw OBDServiceError.failAdapterInitialization
+        }
+    }
+}
+
+struct OBDInfo: Codable, Hashable {
+    var vin: String?
+//    public var supportedPIDs: [OBDCommand]?
+//    public var obdProtocol: PROTOCOL?
+//    public var ecuMap: [UInt8: ECUID]?
+}
+

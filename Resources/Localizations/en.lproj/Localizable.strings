@@ -4112,4 +4112,8 @@
 – Ensure Bluetooth is turned on\n
 – Vehicle engine is running\n
 – Make sure your device is within range of the scanner.";
+
+"obd_vin"= "VIN";
+"obd_vin_desc" = "VIN code over OBD";
+"obd_vehicle_info" = "Vehicle info";
     

@@ -32,7 +32,6 @@ class Sensor {
 
     func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
     }
-
 }
 
 protocol SensorData {

@@ -7,6 +7,9 @@
 //
 
 final class OBDVehicleMetricsDevice: Device {
+    
+    var ecuWriteCharacteristic: CBCharacteristic?
+    
     override var deviceServiceName: String {
         "OBD Sensor"
     }
@@ -26,6 +29,54 @@ final class OBDVehicleMetricsDevice: Device {
     init() {
         super.init(deviceType: .OBD_VEHICLE_METRICS)
         sensors.append(OBDVehicleMetricsSensor(device: self, sensorId: "vehicle_sensor"))
+    }
+    
+    override func deviceInitializationIfNeeded() async {
+        do {
+            try await DeviceHelper.shared.adapterInitialization()
+//                        let obdInfo = try await initializeVehicle(preferedProtocol)
+//                        return obdInfo
+        } catch {
+            NSLog("");
+           // throw OBDServiceError.adapterConnectionFailed(underlyingError: error) // Propagate
+        }
+    }
+    
+    override func discoverCharacteristics(withUUIDs characteristicUUIDs: [CBUUIDConvertible]? = nil,
+                                 ofServiceWithUUID serviceUUID: CBUUIDConvertible,
+                                 completion: @escaping CharacteristicRequestCallback) {
+        peripheral.discoverCharacteristics(withUUIDs: characteristicUUIDs,
+                                           ofServiceWithUUID: serviceUUID,
+                                           completion: { [weak self] result in
+            if case .success(let characteristics) = result {
+                for characteristic in characteristics {
+                    switch characteristic.uuid.uuidString {
+                    case "FFE1": // for servcice FFE0
+                        self?.ecuWriteCharacteristic = characteristic
+                    case "FFF1": // for servcice FFF0
+                        print("")
+                    case "FFF2": // for servcice FFF0
+                        self?.ecuWriteCharacteristic = characteristic
+                    case "2AF0": // for servcice 18F0
+                        print("")
+                    case "2AF1": // for servcice 18F0
+                        self?.ecuWriteCharacteristic = characteristic
+                    default:
+                        break
+                    }
+                }
+            }
+            completion(result)
+        })
+    }
+    
+    override func disconnect(completion: @escaping DisconnectPeripheralCallback) {
+        peripheral.disconnect(completion: { [weak self] result in
+            if case let .success(value) = result {
+                self?.ecuWriteCharacteristic = nil
+            }
+            completion(result)
+        })
     }
     
 //    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {

@@ -99,7 +99,10 @@ class Device: NSObject {
         return nil
     }
     
-    func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) { }
+    func deviceInitializationIfNeeded() async {
+    }
+    
+    func update(with characterisxtic: CBCharacteristic, result: (Result<Void, Error>) -> Void) { }
     
     func configure() {}
     
@@ -177,7 +180,18 @@ class Device: NSObject {
             }
         }
     }
-
+    
+    func discoverCharacteristics(withUUIDs characteristicUUIDs: [CBUUIDConvertible]? = nil,
+                                 ofServiceWithUUID serviceUUID: CBUUIDConvertible,
+                                 completion: @escaping CharacteristicRequestCallback) {
+        peripheral.discoverCharacteristics(withUUIDs: characteristicUUIDs,
+                                           ofServiceWithUUID: serviceUUID,
+                                           completion: completion)
+    }
+    
+    func disconnect(completion: @escaping DisconnectPeripheralCallback) {
+        peripheral.disconnect(completion: completion)
+    }
 }
 
 extension Device {
@@ -194,22 +208,10 @@ extension Device {
         peripheral.connect(withTimeout: timeout, completion: completion)
     }
     
-    func disconnect(completion: @escaping DisconnectPeripheralCallback) {
-        peripheral.disconnect(completion: completion)
-    }
-    
     func discoverServices(withUUIDs serviceUUIDs: [CBUUIDConvertible]? = nil,
                           completion: @escaping ServiceRequestCallback) {
         peripheral.discoverServices(withUUIDs: serviceUUIDs,
                                     completion: completion)
-    }
-    
-    func discoverCharacteristics(withUUIDs characteristicUUIDs: [CBUUIDConvertible]? = nil,
-                                 ofServiceWithUUID serviceUUID: CBUUIDConvertible,
-                                 completion: @escaping CharacteristicRequestCallback) {
-        peripheral.discoverCharacteristics(withUUIDs: characteristicUUIDs,
-                                           ofServiceWithUUID: serviceUUID,
-                                           completion: completion)
     }
     
     func setNotifyValue(toEnabled enabled: Bool,
@@ -219,6 +221,17 @@ extension Device {
                                   forCharacWithUUID: charac,
                                   ofServiceWithUUID: charac.service!,
                                   completion: completion)
+    }
+    
+    func writeValue(ofDescriptorWithUUID descriptorUUID: CBUUIDConvertible,
+                           fromCharacWithUUID characUUID: CBUUIDConvertible,
+                           ofServiceWithUUID serviceUUID: CBUUIDConvertible,
+                           value: Data,
+                           completion: @escaping WriteRequestCallback) {
+        peripheral.writeValue(ofCharacWithUUID: characUUID,
+                              fromServiceWithUUID: serviceUUID,
+                              value: value,
+                              completion: completion)
     }
 }
 

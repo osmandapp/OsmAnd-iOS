@@ -80,9 +80,29 @@
 
         OsmAnd::LatLon latLonTopLeft = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.topLeft);
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
-        _bboxTopLeft = CLLocationCoordinate2DMake(latLonTopLeft.latitude, latLonTopLeft.longitude);
-        _bboxBottomRight = CLLocationCoordinate2DMake(latLonBottomRight.latitude, latLonBottomRight.longitude);
-        _regionCenter = CLLocationCoordinate2DMake(region->regionCenter.latitude, region->regionCenter.longitude);
+
+        double minLat = latLonBottomRight.latitude;
+        double maxLat = latLonTopLeft.latitude;
+        double minLon = latLonTopLeft.longitude;
+        double maxLon = latLonBottomRight.longitude;
+
+        for (const auto& additionalObject : region->additionalMapObjects)
+        {
+            OsmAnd::LatLon addTopLeft = OsmAnd::Utilities::convert31ToLatLon(additionalObject->bbox31.topLeft);
+            OsmAnd::LatLon addBottomRight = OsmAnd::Utilities::convert31ToLatLon(additionalObject->bbox31.bottomRight);
+            
+            minLat = MIN(minLat, addTopLeft.latitude);
+            maxLat = MAX(maxLat, addBottomRight.latitude);
+            minLon = MIN(minLon, addTopLeft.longitude);
+            maxLon = MAX(maxLon, addBottomRight.longitude);
+        }
+
+        _bboxTopLeft = CLLocationCoordinate2DMake(maxLat, minLon);
+        _bboxBottomRight = CLLocationCoordinate2DMake(minLat, maxLon);
+        
+        double centerLat = (maxLat + minLat) / 2.0;
+        double centerLon = (maxLon + minLon) / 2.0;
+        _regionCenter = CLLocationCoordinate2DMake(centerLat, centerLon);
 
         [self setLocalizedNamesFrom:region->localizedNames];
         

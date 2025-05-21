@@ -141,8 +141,8 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
                 }
                 return cell
             }
-        } else if item.cellType == SearchDeviceTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SearchDeviceTableViewCell.reuseIdentifier) as! SearchDeviceTableViewCell
+        } else if item.cellType == SearchOBDDeviceTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SearchOBDDeviceTableViewCell.reuseIdentifier) as! SearchOBDDeviceTableViewCell
             configureSeparator(cell: cell)
 
             if let key = item.key, let item = ConnectState(rawValue: key) {
@@ -312,7 +312,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
                 let connectedSection = tableData.createNewSection()
                 connectedDevices.forEach { _ in
                     let row = connectedSection.createNewRow()
-                    row.cellType = SearchDeviceTableViewCell.reuseIdentifier
+                    row.cellType = SearchOBDDeviceTableViewCell.reuseIdentifier
                     row.key = ConnectState.connected.rawValue
                 }
                 sectionsDevicesData[.connected] = connectedDevices
@@ -329,7 +329,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         let disconnectedSection = tableData.createNewSection()
         disconnectedDevices.forEach { _ in
             let row = disconnectedSection.createNewRow()
-            row.cellType = SearchDeviceTableViewCell.reuseIdentifier
+            row.cellType = SearchOBDDeviceTableViewCell.reuseIdentifier
             row.key = ConnectState.disconnected.rawValue
         }
         sectionsDevicesData[.disconnected] = disconnectedDevices

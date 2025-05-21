@@ -99,9 +99,6 @@ class Device: NSObject {
         return nil
     }
     
-    func deviceInitializationIfNeeded() async {
-    }
-    
     func update(with characterisxtic: CBCharacteristic, result: (Result<Void, Error>) -> Void) { }
     
     func configure() {}

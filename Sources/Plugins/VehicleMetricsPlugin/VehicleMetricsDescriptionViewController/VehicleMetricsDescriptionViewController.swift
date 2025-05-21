@@ -6,6 +6,17 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+import Combine
+
+public enum OBDServiceError: Error {
+    //case noAdapterFound
+ //   case notConnectedToVehicle
+//    case adapterConnectionFailed(underlyingError: Error)
+//    case scanFailed(underlyingError: Error)
+ //   case clearFailed(underlyingError: Error)
+    case commandFailed(command: String, error: Error)
+}
+
 final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController {
     
     private enum Section: Int {
@@ -33,6 +44,69 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
     }()
     
+        
+    private var timer: Timer?
+    private var isUpdating = false
+    
+    func startContinuousUpdates(pids: [OBDCommand],
+                                unit: MeasurementUnit = .metric,
+                                interval: TimeInterval = 0.3) {
+        guard !isUpdating else { return }
+        isUpdating = true
+        
+        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+            Task {
+                await self?.updatePIDs(pids, unit: unit)
+            }
+        }
+    }
+    
+    private func updatePIDs(_ pids: [OBDCommand], unit: MeasurementUnit) async {
+        do {
+            let results = try await requestPIDs(pids, unit: unit)
+            updateResults(measurements: results)
+        } catch {
+            print("Ошибка при получении PID: \(error)")
+        }
+    }
+    
+    func updateResults(measurements: [OBDCommand: MeasurementResult]) {
+        for (pid, measurement) in measurements {
+            print("command: \(pid.properties.command) | description: \(pid.properties.description) ) | value:  \(measurement.value)")
+        }
+    }
+    
+    func stopContinuousUpdates() {
+        guard isUpdating else { return }
+
+        timer?.invalidate()
+        timer = nil
+        isUpdating = false
+    }
+    
+    func requestPIDs(_ commands: [OBDCommand], unit: MeasurementUnit) async throws -> [OBDCommand: MeasurementResult] {
+        let response = try await sendCommandInternal("01" + commands.compactMap { $0.properties.command.dropFirst(2) }.joined(), retries: 10)
+
+        guard let responseData = try DeviceHelper.shared.elm327Adapter.canProtocol?.parse(response).first?.data else { return [:] }
+
+        var batchedResponse = BatchedResponse(response: responseData, unit)
+
+        let results: [OBDCommand: MeasurementResult] = commands.reduce(into: [:]) { result, command in
+            let measurement = batchedResponse.extractValue(command)
+            result[command] = measurement
+        }
+
+        return results
+    }
+    
+    func sendCommandInternal(_ message: String, retries: Int) async throws -> [String] {
+        do {
+            return try await DeviceHelper.shared.elm327Adapter.sendCommand(message, retries: retries)
+        } catch {
+            throw OBDServiceError.commandFailed(command: message, error: error)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -49,6 +123,64 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         headerView.onUpdateOBDInfoAction = { [weak self] result in
             guard let self else { return }
             info = result
+            // Engine speed - RPM (Revolutions Per Minute)
+            //   case .rpm
+            
+            // Intake temperature
+            //  case .intakeTemp: return """
+            
+            // Vehicle speed
+            // case .speed: return CommandProperties("010D", "Vehicle Speed", 2, .uas(0x09), true, maxValue: 280)
+            
+            // Ambient temperature
+            // ambientAirTemp
+            
+            // Coolant temperature
+            // case .coolantTemp:
+            
+            //Engine Oil Temperature
+            // .engineOilTemp
+            
+           // Calculated Engine Load
+           // case .engineLoad: return CommandProperties("0104", "Calculated Engine Load", 2, .percent, true)
+            
+           // Fuel Pressure
+           // case .fuelPressure: return CommandProperties("010A", "Fuel Pressure", 2, .fuelPressure, true, maxValue: 765)
+            
+          // Throttle Position
+          // case .throttlePos: return CommandProperties("0111", "Throttle Position", 2, .percent, true)
+            
+          // Battery voltage
+          // case .controlModuleVoltage: return CommandProperties("0142", "Control module voltage", 4, .uas(0x0B), true)
+            
+          // Fuel type
+          // case .fuelType: return CommandProperties("0151", "Fuel Type", 2, .fuelType)
+            
+          // Fuel consumption
+          // case .fuelRate: return CommandProperties("015E", "Engine fuel rate", 4, .fuelRate, true
+          // OBD_FUEL_CONSUMPTION_RATE_COMMAND(0x01, 0x5E, 2, OBDUtils::parseFuelConsumptionRateResponse, "vm_fcons"),
+            
+         // Remaining fuel
+         // case .fuelLevel: return CommandProperties("012F", "Fuel Tank Level Input", 4, .percent, true)
+         // OBD_FUEL_LEVEL_COMMAND(0x01, 0x2F, 1, OBDUtils::parsePercentResponse, "vm_fuel");
+   
+        // NOTE: limit 6 commands after receive response:  ["NO DATA"]
+            // TODO: use supported pids
+            startContinuousUpdates(pids: [.mode1(.rpm),
+                                          .mode1(.speed),
+                                          .mode1(.intakeTemp),
+                                          .mode1(.ambientAirTemp),
+                                          .mode1(.coolantTemp),
+                                          .mode1(.engineOilTemp),
+// >>>>>>>
+//                                          .mode1(.engineLoad),
+//                                          .mode1(.fuelPressure),
+//                                          .mode1(.throttlePos),
+//                                          .mode1(.controlModuleVoltage),
+//                                          .mode1(.fuelType),
+//                                          .mode1(.fuelRate),
+//                                          .mode1(.fuelLevel)
+                                          ])
             generateData()
             tableView.reloadData()
         }
@@ -114,16 +246,16 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             nameRow.title = localizedString("shared_string_name")
             nameRow.descr = device?.deviceName ?? ""
             
-            if let settingsDataDict = device.getSettingsFields, !settingsDataDict.isEmpty {
-                for (key, value) in settingsDataDict {
-                    let settingRow = settingsSection.createNewRow()
-                    settingRow.cellType = OAValueTableViewCell.reuseIdentifier
-                    settingRow.key = key
-                    if let floatValue = value as? Float {
-                        settingRow.descr = String(format: "%.0f", floatValue) + " " + localizedString("shared_string_millimeters_short")
-                    }
-                }
-            }
+//            if let settingsDataDict = device.getSettingsFields, !settingsDataDict.isEmpty {
+//                for (key, value) in settingsDataDict {
+//                    let settingRow = settingsSection.createNewRow()
+//                    settingRow.cellType = OAValueTableViewCell.reuseIdentifier
+//                    settingRow.key = key
+////                    if let floatValue = value as? Float {
+////                        settingRow.descr = String(format: "%.0f", floatValue) + " " + localizedString("shared_string_millimeters_short")
+////                    }
+//                }
+//            }
             
             let forgetSensorSection = tableData.createNewSection()
             forgetSensorSection.key = "forgetSensor"
@@ -199,6 +331,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         }
     }
     
+    // TODO: deviceRSSIUpdated ?
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceRSSIUpdated),

@@ -136,6 +136,8 @@ final class DescriptionDeviceHeader: UIView {
     
     private func discoverCharacteristics(services: [CBService]) {
         guard let device else { return }
+        var completedCount = 0
+        let totalServices = services.count
         for service in services {
             device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
                 guard let self else { return }
@@ -158,10 +160,13 @@ final class DescriptionDeviceHeader: UIView {
                             }
                         }
                     }
-                    if device.deviceType == .OBD_VEHICLE_METRICS {
-                        adapterInitializationIfNeeded { [weak self] info in
-                            guard let self, let info else { return }
-                            onUpdateOBDInfoAction?(info)
+                    completedCount += 1
+                    if completedCount == totalServices {
+                        if device.deviceType == .OBD_VEHICLE_METRICS {
+                            adapterInitializationIfNeeded { [weak self] info in
+                                guard let self, let info else { return }
+                                onUpdateOBDInfoAction?(info)
+                            }
                         }
                     }
                 case .failure(let error):

@@ -62,6 +62,7 @@ final class OBDVehicleMetricsSensor: Sensor {
     
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
+          //  BLEManager.shared.sendMessageCompletion?(nil, BLEManagerError.noData)
             return
         }
         
@@ -124,9 +125,11 @@ final class OBDVehicleMetricsSensor: Sensor {
 
             // remove the last line
             lines.removeLast()
-            #if DEBUG
-                logger.debug("Response: \(lines)")
-            #endif
+          //  #if DEBUG
+            NSLog("processReceivedData OBD -> Response: \(lines)")
+           // processReceivedData OBD -> Response: ["SEARCHING...", "7E906410098188013", "7E8064100BE3EB81B"]
+           // processReceivedData OBD -> Response: ["SEARCHING...", "UNABLE TO CONNECT"]
+           //  #endif
 
             if BLEManager.shared.sendMessageCompletion != nil {
                 if lines[0].uppercased().contains("NO DATA") {
@@ -138,5 +141,4 @@ final class OBDVehicleMetricsSensor: Sensor {
             buffer.removeAll()
         }
     }
-
 }

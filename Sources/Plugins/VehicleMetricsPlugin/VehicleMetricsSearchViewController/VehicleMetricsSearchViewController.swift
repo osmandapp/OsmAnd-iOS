@@ -136,7 +136,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SearchDeviceTableViewCell.reuseIdentifier) as! SearchDeviceTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchOBDDeviceTableViewCell.reuseIdentifier) as! SearchOBDDeviceTableViewCell
         // separators go edge to edge
         cell.separatorInset = .zero
         cell.layoutMargins = .zero

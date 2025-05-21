@@ -31,17 +31,6 @@ final class OBDVehicleMetricsDevice: Device {
         sensors.append(OBDVehicleMetricsSensor(device: self, sensorId: "vehicle_sensor"))
     }
     
-    override func deviceInitializationIfNeeded() async {
-        do {
-            try await DeviceHelper.shared.adapterInitialization()
-//                        let obdInfo = try await initializeVehicle(preferedProtocol)
-//                        return obdInfo
-        } catch {
-            NSLog("");
-           // throw OBDServiceError.adapterConnectionFailed(underlyingError: error) // Propagate
-        }
-    }
-    
     override func discoverCharacteristics(withUUIDs characteristicUUIDs: [CBUUIDConvertible]? = nil,
                                  ofServiceWithUUID serviceUUID: CBUUIDConvertible,
                                  completion: @escaping CharacteristicRequestCallback) {

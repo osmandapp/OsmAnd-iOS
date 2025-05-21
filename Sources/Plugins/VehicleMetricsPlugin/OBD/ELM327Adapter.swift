@@ -1,5 +1,5 @@
 //
-//  ELM327Error.swift
+//  ELM327Adapter.swift
 //  OsmAnd
 //
 //  Created by Oleksandr Panchenko on 19.05.2025.
@@ -11,6 +11,36 @@ import Combine
 import CoreBluetooth
 import Foundation
 import OSLog
+
+struct BatchedResponse {
+    private var response: Data
+    private var unit: MeasurementUnit
+    init(response: Data, _ unit: MeasurementUnit) {
+        self.response = response
+        self.unit = unit
+    }
+
+    mutating func extractValue(_ cmd: OBDCommand) -> MeasurementResult? {
+        let properties = cmd.properties
+        let size = properties.bytes
+        guard response.count >= size else { return nil }
+        let valueData = response.prefix(size)
+
+        response.removeFirst(size)
+        //        print("Buffer: \(buffer.compactMap { String(format: "%02X ", $0) }.joined())")
+        let result = cmd.properties.decode(data: valueData, unit: unit)
+
+        
+
+        switch result {
+        case let .success(measurementResult):
+            return measurementResult.measurementResult
+        case let .failure(error):
+            print("Failed to decode \(cmd.properties.command): \(error.localizedDescription)")
+            return nil
+        }
+    }
+}
 
 enum ELM327Error: Error, LocalizedError {
     case noProtocolFound
@@ -48,7 +78,7 @@ enum ELM327Error: Error, LocalizedError {
 final class ELM327Adapter {
     private let service: CommProtocol
     
-    private var canProtocol: CANProtocol?
+    var canProtocol: CANProtocol?
     private var r100: [String] = []
     
     init(service: CommProtocol) {

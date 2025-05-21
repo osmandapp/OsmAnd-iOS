@@ -186,9 +186,10 @@ extension BLEManager: CommProtocol {
                     }
                     self?.sendMessageCompletion = nil
                 }
-                if let device = self?.discoveredDevices.first(where: { $0.deviceType == .OBD_VEHICLE_METRICS }) as? OBDVehicleMetricsDevice {
+                if let device = DeviceHelper.shared.connectedDevices.first(where: { $0.deviceType == .OBD_VEHICLE_METRICS }) as? OBDVehicleMetricsDevice {
                     guard device.peripheral.state == .connected else {
-                        NSLog("[BLEManager] -> Error: data is empty ")
+                        NSLog("[BLEManager] -> Error: state != .connected ")
+                        BLEManager.shared.sendMessageCompletion?(nil, BLEManagerError.noData)
                         return
                     }
                     guard let characteristic = device.ecuWriteCharacteristic else {
@@ -197,7 +198,7 @@ extension BLEManager: CommProtocol {
                     }
                     device.peripheral.writeValue(ofCharac: characteristic, value: data) { result in
                         switch result {
-                        case .success:
+                        case .success(let result):
                             break // The write was succesful.
                         case .failure(let error):
                             break // An error happened while writting the data.

@@ -3096,6 +3096,7 @@
 		FA282AEF2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA282AEE2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift */; };
 		FA282AF62C2C456700CC7AC1 /* WeatherNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA282AF32C2C456700CC7AC1 /* WeatherNavigationBarView.swift */; };
 		FA282AF72C2C456700CC7AC1 /* WeatherNavigationBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA282AF42C2C456700CC7AC1 /* WeatherNavigationBarView.xib */; };
+		FA2E95C12DDDD97600B0ACA0 /* SearchOBDDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E95C02DDDD97500B0ACA0 /* SearchOBDDeviceTableViewCell.swift */; };
 		FA327BFE2BB418F900CFADCF /* MissingMapsCalculator.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */; };
 		FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */; };
 		FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE42ADF026D0001C11D /* DeviceType.swift */; };
@@ -3227,7 +3228,7 @@
 		FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */; };
 		FACDC6382DD73FCB00CB0C55 /* CommProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6372DD73FCB00CB0C55 /* CommProtocol.swift */; };
 		FACDC63D2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */; };
-		FACDC63F2DDB516A00CB0C55 /* ELM327.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC63E2DDB516A00CB0C55 /* ELM327.swift */; };
+		FACDC63F2DDB516A00CB0C55 /* ELM327Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC63E2DDB516A00CB0C55 /* ELM327Adapter.swift */; };
 		FACDC64A2DDB7BFF00CB0C55 /* protocol_legacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6442DDB7BFF00CB0C55 /* protocol_legacy.swift */; };
 		FACDC64B2DDB7BFF00CB0C55 /* commands.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6462DDB7BFF00CB0C55 /* commands.swift */; };
 		FACDC64C2DDB7BFF00CB0C55 /* codes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6452DDB7BFF00CB0C55 /* codes.swift */; };
@@ -7678,6 +7679,7 @@
 		FA282AEE2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataSourceViewController.swift; sourceTree = "<group>"; };
 		FA282AF32C2C456700CC7AC1 /* WeatherNavigationBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherNavigationBarView.swift; sourceTree = "<group>"; };
 		FA282AF42C2C456700CC7AC1 /* WeatherNavigationBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WeatherNavigationBarView.xib; sourceTree = "<group>"; };
+		FA2E95C02DDDD97500B0ACA0 /* SearchOBDDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOBDDeviceTableViewCell.swift; sourceTree = "<group>"; };
 		FA327BFC2BB418F900CFADCF /* MissingMapsCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingMapsCalculator.h; sourceTree = "<group>"; };
 		FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MissingMapsCalculator.mm; sourceTree = "<group>"; };
 		FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEChangeDeviceNameViewController.swift; sourceTree = "<group>"; };
@@ -7813,7 +7815,7 @@
 		FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
 		FACDC6372DD73FCB00CB0C55 /* CommProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommProtocol.swift; sourceTree = "<group>"; };
 		FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsDescriptionViewController.swift; sourceTree = "<group>"; };
-		FACDC63E2DDB516A00CB0C55 /* ELM327.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ELM327.swift; sourceTree = "<group>"; };
+		FACDC63E2DDB516A00CB0C55 /* ELM327Adapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ELM327Adapter.swift; sourceTree = "<group>"; };
 		FACDC6432DDB7BFF00CB0C55 /* protocol_can.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = protocol_can.swift; sourceTree = "<group>"; };
 		FACDC6442DDB7BFF00CB0C55 /* protocol_legacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = protocol_legacy.swift; sourceTree = "<group>"; };
 		FACDC6452DDB7BFF00CB0C55 /* codes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = codes.swift; sourceTree = "<group>"; };
@@ -13744,6 +13746,7 @@
 		FA1D6DAC2DCE04640080E374 /* VehicleMetricsPlugin */ = {
 			isa = PBXGroup;
 			children = (
+				FA2E95BF2DDDD96000B0ACA0 /* SearchOBDDeviceTableViewCell */,
 				FACDC6422DDB7BCA00CB0C55 /* OBD */,
 				FACDC63B2DDB315F00CB0C55 /* VehicleMetricsDescriptionViewController */,
 				FA899F202DD344AA0022F736 /* VehicleMetricsSearchViewController */,
@@ -13769,6 +13772,14 @@
 				FA282AF42C2C456700CC7AC1 /* WeatherNavigationBarView.xib */,
 			);
 			path = WeatherNavigationBarView;
+			sourceTree = "<group>";
+		};
+		FA2E95BF2DDDD96000B0ACA0 /* SearchOBDDeviceTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				FA2E95C02DDDD97500B0ACA0 /* SearchOBDDeviceTableViewCell.swift */,
+			);
+			path = SearchOBDDeviceTableViewCell;
 			sourceTree = "<group>";
 		};
 		FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */ = {
@@ -14138,7 +14149,7 @@
 				FACDC6472DDB7BFF00CB0C55 /* decoders.swift */,
 				FACDC6482DDB7BFF00CB0C55 /* parser.swift */,
 				FACDC6492DDB7BFF00CB0C55 /* Utils.swift */,
-				FACDC63E2DDB516A00CB0C55 /* ELM327.swift */,
+				FACDC63E2DDB516A00CB0C55 /* ELM327Adapter.swift */,
 			);
 			path = OBD;
 			sourceTree = "<group>";
@@ -17370,7 +17381,7 @@
 				05CC795B2BB9A1C400BAC638 /* PluginsHelper+Extension.swift in Sources */,
 				DAA61CC62A039BC700AFF65D /* SideWidgetInfo.swift in Sources */,
 				DA5A824F26C563A700F274C7 /* OAVoicePromptsViewController.mm in Sources */,
-				FACDC63F2DDB516A00CB0C55 /* ELM327.swift in Sources */,
+				FACDC63F2DDB516A00CB0C55 /* ELM327Adapter.swift in Sources */,
 				DA5A844826C563A900F274C7 /* OAMultiDestinationCell.mm in Sources */,
 				DA5A850526C563A900F274C7 /* OAMapRulerView.m in Sources */,
 				DA5A84BB26C563A900F274C7 /* OAPublicTransportOptionsBottomSheet.mm in Sources */,
@@ -17558,6 +17569,7 @@
 				DABC7F1F27B65C36005C76E2 /* OACurrentStreetName.mm in Sources */,
 				DA775B8D27E618070081B9C1 /* OABackupInfo.mm in Sources */,
 				DA5A83A926C563A800F274C7 /* OABasicEditingViewController.mm in Sources */,
+				FA2E95C12DDDD97600B0ACA0 /* SearchOBDDeviceTableViewCell.swift in Sources */,
 				DA35963529B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm in Sources */,
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,
 				FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */,

@@ -177,9 +177,9 @@ static NSInteger const kMap3DModeButtonTag = -990;
 
 @implementation NSArray (util)
 
-- (BOOL) isEmpty
++ (BOOL) isEmpty:(NSArray *)array;
 {
-    return !self || self.count == 0;
+    return !array || array.count == 0;
 }
 
 @end
@@ -200,9 +200,9 @@ static NSInteger const kMap3DModeButtonTag = -990;
 
 @implementation NSDictionary (util)
 
-- (BOOL) isEmpty
++ (BOOL) isEmpty:(NSDictionary *)dictionary;
 {
-    return !self || self.count == 0;
+    return !dictionary || dictionary.count == 0;
 }
 
 @end
@@ -513,9 +513,9 @@ static NSInteger const kMap3DModeButtonTag = -990;
 
 @implementation NSString (util)
 
-- (BOOL) isEmpty
++ (BOOL) isEmpty:(NSString *)string
 {
-    return !self || self.length == 0;
+    return !string || string.length == 0;
 }
 
 - (int) indexOf:(NSString *)text

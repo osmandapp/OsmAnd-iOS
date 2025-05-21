@@ -161,7 +161,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     {
         BOOL hasRouteTrackSubtype = [_subType hasPrefix:ROUTE_PREFIX] || [_subType isEqualToString:ROUTE_TRACK];
         BOOL hasGeometry = _values && _values[ROUTE_BBOX_RADIUS];
-        return hasRouteTrackSubtype && hasGeometry && ![[self getRouteId] isEmpty];
+        return hasRouteTrackSubtype && hasGeometry && ![NSString isEmpty:[self getRouteId]];
     }
     return NO;
 }

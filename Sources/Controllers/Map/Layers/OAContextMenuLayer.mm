@@ -411,11 +411,11 @@
     return NO;
 }
 
-- (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
+- (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
     // TODO: testing code
     
-    [self showContextMenuNEW:touchPoint showUnknownLocation:showUnknownLocation forceHide:NO];
+    [self showContextMenuNEW:touchPoint showUnknownLocation:showUnknownLocation forceHide:forceHide];
     return @[];
     
     
@@ -768,7 +768,7 @@
         }
         else
         {
-            [self showContextMenuNEW:latLon pointDescription:pointDescription object:selectedObj provider:provider];
+            [self showContextMenuNEW:latLon pointDescription:pointDescription object:selectedObject provider:provider];
         }
         return YES;
     }
@@ -796,7 +796,9 @@
 - (void) showContextMenuForSelectedObjectsNEW:(CLLocation *)latLon selectedObjects:(NSArray<OASelectedMapObject *> *)selectedObjects
 {
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
-    [mapPanel hideContextMenu];
+    
+    // TODO: does it needed in ios here?
+    //[mapPanel hideContextMenu];
     
     
     // TODO: run without OATargetPoint
@@ -806,6 +808,8 @@
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
         id<OAContextMenuProvider> provider = selectedObject.provider;
+        if (!provider)
+            provider = self.mapViewController.mapLayers.poiLayer;
         
         if (provider)
         {
@@ -813,9 +817,11 @@
             if (targetPoint)
                 [targetPoints addObject:targetPoint];
             
-            [mapPanel showContextMenuWithPoints:targetPoints];
+           
         }
     }
+    if (![NSArray isEmpty:targetPoints])
+        [mapPanel showContextMenuWithPoints:targetPoints];
 }
 
 - (void) showContextMenuNEW:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(OASelectedMapObject *)object provider:(id<OAContextMenuProvider>)provider
@@ -831,7 +837,9 @@
     else if (!provider || YES)
     {
         OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
-        [mapPanel hideContextMenu];
+        
+        // TODO: does it needed in ios here?
+        //[mapPanel hideContextMenu];
         
         
         // TODO: run without OATargetPoint
@@ -839,8 +847,16 @@
 //        if (provider)
 //        {
             //OATargetPoint *targetPoint = [provider getTargetPoint:object];
-            OATargetPoint *targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object];
+            //OATargetPoint *targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object];
+            OATargetPoint *targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object.object];
+        if (targetPoint)
+        {
             [mapPanel showContextMenuWithPoints:@[targetPoint]];
+        }
+        else
+        {
+            BOOL stop = YES;
+        }
 //        }
     }
 }
@@ -853,7 +869,7 @@
     
     // TODO: testing code
     
-    NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
+    NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation forceHide:forceHide];
     return;
     
     

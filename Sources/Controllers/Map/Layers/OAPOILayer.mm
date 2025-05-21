@@ -435,7 +435,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     if ([amemity.type.category isWiki])
     {
-        if (!locale || [locale isEmpty])
+        if (!locale || [NSString isEmpty:locale])
             locale = @"";
         
         locale = [OAPluginsHelper onGetMapObjectsLocale:amemity preferredLocale:locale];
@@ -449,14 +449,20 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
     if ([obj isKindOfClass:OAPOI.class])
-        return [self getTargetPoint:obj renderedObject:nil];
-    else
-        return [self getTargetPoint:nil renderedObject:obj];
+        return [self getTargetPoint:obj renderedObject:nil placeDetailsObject:nil];
+    else if ([obj isKindOfClass:OARenderedObject.class])
+        return [self getTargetPoint:nil renderedObject:obj placeDetailsObject:nil];
+    else if ([obj isKindOfClass:OAPlaceDetailsObject.class])
+        return [self getTargetPoint:nil renderedObject:nil placeDetailsObject:obj];
+    return nil;
 }
 
-- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject
+- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject placeDetailsObject:(OAPlaceDetailsObject *)placeDetailsObject
 {
-    if (!renderedObject)
+    if (placeDetailsObject)
+        poi = [placeDetailsObject getSyntheticAmenity];
+    
+    if (poi)
     {
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         if (poi.type)
@@ -485,7 +491,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         }
         
         targetPoint.location = CLLocationCoordinate2DMake(poi.latitude, poi.longitude);
-        targetPoint.title = poi.nameLocalized;
+        targetPoint.title = poi.nameLocalized ? poi.nameLocalized : poi.name;
         targetPoint.icon = [poi.type icon];
         
         targetPoint.values = poi.values;
@@ -498,7 +504,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
-    else
+    else if (renderedObject)
     {
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetLocation;
@@ -522,6 +528,15 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         }
         return targetPoint;
     }
+//    else if (placeDetailsObject) {
+//        
+//        BOOL stop = YES;
+//        
+//        if (!poi)
+//            poi = [placeDetailsObject getSyntheticAmenity];
+//        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+//        
+//    }
     return nil;
 }
 
@@ -630,7 +645,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         }
     }
 
-    OATargetPoint *targetPoint = [self getTargetPoint:poi renderedObject:renderedObject];
+    OATargetPoint *targetPoint = [self getTargetPoint:poi renderedObject:renderedObject placeDetailsObject:nil];
     if (![found containsObject:targetPoint])
         [found addObject:targetPoint];
 }

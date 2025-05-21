@@ -55,7 +55,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 @interface NSArray (util)
 
-- (BOOL) isEmpty;
++ (BOOL) isEmpty:(NSArray *)array;
 
 @end
 
@@ -67,13 +67,13 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 @interface NSDictionary (util)
 
-- (BOOL) isEmpty;
++ (BOOL) isEmpty:(NSDictionary *)dictionary;
 
 @end
 
 @interface NSString (util)
 
-- (BOOL) isEmpty;
++ (BOOL) isEmpty:(NSString *)string;
 - (int) indexOf:(NSString *)text;
 - (int) indexOf:(NSString *)text start:(NSInteger)start;
 - (NSString *) add:(NSString *)str;

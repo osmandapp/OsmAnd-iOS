@@ -14,13 +14,21 @@ final class RouteInfoWidgetState: OAWidgetState {
     let displayPriorityPref: OACommonWidgetDisplayPriority
     
     init(customId: String?, widgetParams: ([String: Any])?) {
-        defaultViewPref = RouteInfoWidgetState.registerDefaultViewPreference(customId: customId, widgetParams: widgetParams)
-        displayPriorityPref = RouteInfoWidgetState.registerDisplayPriorityPreference(customId: customId, widgetParams: widgetParams)
+        defaultViewPref = RouteInfoWidgetState.registerDefaultViewPreferenceWith(customId: customId, widgetParams: widgetParams)
+        displayPriorityPref = RouteInfoWidgetState.registerDisplayPriorityPreferenceWith(customId: customId, widgetParams: widgetParams)
     }
     
-    func getDefaultView(_ appMode: OAApplicationMode,
+    func getDefaultView() -> DisplayValue {
+        getDefaultView(with: OAAppSettings.sharedManager().applicationMode.get())
+    }
+    
+    func getDefaultView(with appMode: OAApplicationMode) -> DisplayValue {
+        getDefaultView(with: appMode, widgetConfigurationParams: nil, isCreate: false)
+    }
+    
+    func getDefaultView(with appMode: OAApplicationMode,
                         widgetConfigurationParams: [String: Any]?,
-                        isCreate: Bool) -> DisplayValue? {
+                        isCreate: Bool) -> DisplayValue {
         var currentValue = defaultViewPref.defValue
         if let widgetConfigurationParams,
            let value = widgetConfigurationParams[Self.defaultViewId] as? String {
@@ -33,12 +41,20 @@ final class RouteInfoWidgetState: OAWidgetState {
         } else if !isCreate {
             currentValue = defaultViewPref.get(appMode)
         }
-        return DisplayValue(rawValue: currentValue)
+        return DisplayValue(rawValue: currentValue)!
     }
     
-    func getDisplayPriority(_ appMode: OAApplicationMode,
+    func getDisplayPriority() -> DisplayPriority {
+        getDisplayPriority(with: OAAppSettings.sharedManager().applicationMode.get())
+    }
+    
+    func getDisplayPriority(with appMode: OAApplicationMode) -> DisplayPriority {
+        getDisplayPriority(with: appMode, widgetConfigurationParams: nil, isCreate: false)
+    }
+    
+    func getDisplayPriority(with appMode: OAApplicationMode,
                             widgetConfigurationParams: [String: Any]?,
-                            isCreate: Bool) -> DisplayPriority? {
+                            isCreate: Bool) -> DisplayPriority {
         var currentValue = displayPriorityPref.defValue
         if let widgetConfigurationParams,
            let value = widgetConfigurationParams[Self.displayPriorityId] as? String {
@@ -50,15 +66,15 @@ final class RouteInfoWidgetState: OAWidgetState {
         } else if !isCreate {
             currentValue = displayPriorityPref.get(appMode)
         }
-        return DisplayPriority(rawValue: currentValue)
+        return DisplayPriority(rawValue: currentValue)!
     }
     
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
-        Self.registerDefaultViewPreference(customId: customId).set(defaultViewPref.get(appMode), mode: appMode)
-        Self.registerDisplayPriorityPreference(customId: customId).set(displayPriorityPref.get(appMode), mode: appMode)
+        Self.registerDefaultViewPreferenceWith(customId: customId).set(defaultViewPref.get(appMode), mode: appMode)
+        Self.registerDisplayPriorityPreferenceWith(customId: customId).set(displayPriorityPref.get(appMode), mode: appMode)
     }
     
-    private static func registerDefaultViewPreference(customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonWidgetDefaultView {
+    private static func registerDefaultViewPreferenceWith(customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonWidgetDefaultView {
         var prefId = Self.defaultViewId
         if let customId, !customId.isEmpty {
             prefId += "_" + customId
@@ -75,7 +91,7 @@ final class RouteInfoWidgetState: OAWidgetState {
         return preference
     }
 
-    private static func registerDisplayPriorityPreference(customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonWidgetDisplayPriority {
+    private static func registerDisplayPriorityPreferenceWith(customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonWidgetDisplayPriority {
         var prefId = Self.displayPriorityId
         if let customId, !customId.isEmpty {
             prefId += "_" + customId

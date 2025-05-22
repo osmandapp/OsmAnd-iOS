@@ -11,6 +11,8 @@ import Foundation
 @objc(OAWidgetsAvailabilityHelper)
 @objcMembers
 class WidgetsAvailabilityHelper: NSObject {
+    private static let routeWidgetsV2IntroTimeInSeconds: TimeInterval = 1704096000
+    
     private static var widgetsVisibilityMap = [String: Set<OAApplicationMode>]()
     private static var widgetsAvailabilityMap = [String: Set<OAApplicationMode>]()
     
@@ -49,9 +51,13 @@ class WidgetsAvailabilityHelper: NSObject {
         // right
         regWidgetVisibility(widgetType: .intermediateDestination)
         regWidgetVisibility(widgetType: .distanceToDestination)
-        regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault + [.train()])
         regWidgetVisibility(widgetType: .timeToIntermediate)
         regWidgetVisibility(widgetType: .timeToDestination)
+        
+        if let installDate = getAppInstallDate(), installDate >= Self.routeWidgetsV2IntroTimeInSeconds {
+            regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault + [.train()])
+        }
+        
         regWidgetVisibility(widgetType: .currentSpeed, appModes: [.bicycle(), .boat(), .ski(), .public_TRANSPORT(), .aircraft(), .horse(), .train()])
         regWidgetVisibility(widgetType: .maxSpeed, appModes: [])
         regWidgetVisibility(widgetType: .altitudeMapCenter, appModes: [.pedestrian(), .bicycle()])
@@ -122,5 +128,15 @@ class WidgetsAvailabilityHelper: NSObject {
             }
         }
         map[widgetId] = set
+    }
+    
+    private static func getAppInstallDate() -> TimeInterval? {
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
+        if let path = documentDirectoryPath,
+           let attributes = try? FileManager.default.attributesOfItem(atPath: path),
+           let creationDate = attributes[.creationDate] as? Date {
+            return creationDate.timeIntervalSince1970
+        }
+        return nil
     }
 }

@@ -18,6 +18,8 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     private var routeActivityHelper: RouteActivityHelper?
     private var selectedActivity: RouteActivity?
     private var gpxFile: GpxFile
+    private var searchText: String?
+    private var isSearchActive = false
     
     weak var delegate: SelectRouteActivityViewControllerDelegate?
     
@@ -38,7 +40,6 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
         
         searchController = UISearchController(searchResultsController: nil)
         searchController?.searchBar.delegate = self
-        searchController?.delegate = self
         searchController?.obscuresBackgroundDuringPresentation = false
         searchController?.searchBar.placeholder = localizedString("shared_string_search")
         searchController?.searchBar.returnKeyType = .go
@@ -62,26 +63,48 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     override func generateData() {
         tableData.clearAllData()
         
-        let noneSection = tableData.createNewSection()
-        let noneRow = noneSection.createNewRow()
-        noneRow.cellType = OASimpleTableViewCell.reuseIdentifier
-        noneRow.key = "none"
-        noneRow.title = localizedString("shared_string_none")
-        noneRow.setObj(selectedActivity == nil, forKey: "isSelected")
+        if !isSearchActive {
+            let noneSection = tableData.createNewSection()
+            let noneRow = noneSection.createNewRow()
+            noneRow.cellType = OASimpleTableViewCell.reuseIdentifier
+            noneRow.key = "none"
+            noneRow.title = localizedString("shared_string_none")
+            noneRow.setObj(selectedActivity == nil, forKey: "isSelected")
+        }
         
         guard let groups = routeActivityHelper?.getActivityGroups() else { return }
-        for group in groups {
-            let section = tableData.createNewSection()
-            section.headerText = group.label
-            for activity in group.activities {
-                let row = section.createNewRow()
+        if isSearchActive {
+            let flatSection = tableData.createNewSection()
+            let allActivities = groups.flatMap { $0.activities }
+            let matches = allActivities.filter { activity in
+                guard let txt = searchText, !txt.isEmpty else { return true }
+                return activity.label.range(of: txt, options: .caseInsensitive) != nil
+            }
+            
+            for activity in matches {
+                let row = flatSection.createNewRow()
                 row.cellType = OASimpleTableViewCell.reuseIdentifier
                 row.key = activity.id
                 row.title = activity.label
                 row.icon = UIImage.mapSvgImageNamed("mx_\(activity.iconName)") ?? .icCustomInfoOutlined
-                row.iconTintColor = activity.id == selectedActivity?.id ? .iconColorActive : .iconColorDefault
+                row.iconTintColor = (activity.id == selectedActivity?.id) ? .iconColorActive : .iconColorDefault
                 row.setObj(activity.id == selectedActivity?.id, forKey: "isSelected")
                 row.setObj(activity, forKey: "routeActivity")
+            }
+        } else {
+            for group in groups {
+                let section = tableData.createNewSection()
+                section.headerText = group.label
+                for activity in group.activities {
+                    let row = section.createNewRow()
+                    row.cellType = OASimpleTableViewCell.reuseIdentifier
+                    row.key = activity.id
+                    row.title = activity.label
+                    row.icon = UIImage.mapSvgImageNamed("mx_\(activity.iconName)") ?? .icCustomInfoOutlined
+                    row.iconTintColor = (activity.id == selectedActivity?.id) ? .iconColorActive : .iconColorDefault
+                    row.setObj(activity.id == selectedActivity?.id, forKey: "isSelected")
+                    row.setObj(activity, forKey: "routeActivity")
+                }
             }
         }
     }
@@ -106,8 +129,7 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         selectedActivity = item.obj(forKey: "routeActivity") as? RouteActivity
-        generateData()
-        tableView.reloadData()
+        updateData()
     }
     
     override func onRightNavbarButtonPressed() {
@@ -120,7 +142,35 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
         guard let routeActivityHelper, let rawId = gpxFile.metadata.extensions?["osmand:activity"] as? String, !rawId.isEmpty else { return nil }
         return routeActivityHelper.findRouteActivity(id: rawId)
     }
+    
+    private func updateData() {
+        generateData()
+        tableView.reloadData()
+    }
 }
 
-extension SelectRouteActivityViewController: UISearchBarDelegate, UISearchControllerDelegate {
+extension SelectRouteActivityViewController: UISearchBarDelegate {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        isSearchActive = true
+        updateData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.searchText = searchText
+        updateData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchController?.isActive = false
+        isSearchActive = false
+        searchText = nil
+        updateData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        isSearchActive = false
+        self.searchText = nil
+        updateData()
+    }
 }

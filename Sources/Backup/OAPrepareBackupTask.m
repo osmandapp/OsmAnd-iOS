@@ -88,8 +88,11 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
 {
     if (_pendingTasks.count > 0)
         return NO;
-    if (_listener)
-        [_listener onBackupPreparing];
+
+    __strong id<OAOnPrepareBackupListener> listener = _listener;
+    if (listener)
+        [listener onBackupPreparing];
+
     [self initTasks];
     return [self runTasks];
 }
@@ -202,8 +205,9 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
 - (void) onTasksDone
 {
     _backupHelper.backup = _backup;
-    if (_listener)
-        [_listener onBackupPrepared:_backup];
+    __strong id<OAOnPrepareBackupListener> listener = _listener;
+    if (listener)
+        [listener onBackupPrepared:_backup];
 }
 
 // MARK: OAOnCollectLocalFilesListener

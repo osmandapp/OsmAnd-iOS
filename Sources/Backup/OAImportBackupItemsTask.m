@@ -68,8 +68,9 @@
 
 - (void) onPostExecute:(BOOL)success
 {
-    if (_listener)
-        [_listener onImportFinished:success];
+    __strong id<OAImportItemsListener> listener = _listener;
+    if (listener)
+        [listener onImportFinished:success];
 }
 
 

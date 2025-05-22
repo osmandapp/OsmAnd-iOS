@@ -57,15 +57,14 @@ final class WidgetPageViewController: UIViewController {
                 let textInfo = widgetView as? OATextInfoWidget
                 let style: EOAWidgetSizeStyle = textInfo?.widgetSizeStyle ?? .small
                 let isSimple = style != .small
-                widgetView.isSimpleLayout = isSimple
                 if isSimple {
                     configureSimple(widget: widgetView)
-                    stackView.addArrangedSubview(widgetView)
                 } else {
                     widgetView.adjustSize()
                     widgetView.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widgetView.frame.size.height, priority: .defaultHigh)
-                    stackView.addArrangedSubview(widgetView)
                 }
+
+                stackView.addArrangedSubview(widgetView)
             }
         }
         
@@ -99,8 +98,6 @@ final class WidgetPageViewController: UIViewController {
                 if widget.isSimpleLayout {
                     if let textInfoWidget = widget as? OATextInfoWidget {
                         textInfoWidget.configureSimpleLayout()
-                        textInfoWidget.unitLabel?.textColor = .widgetUnits
-                        textInfoWidget.updatesSeparatorsColor(OAAppSettings.sharedManager().nightMode ? .widgetSeparator.dark : .widgetSeparator.light)
                     }
                     let fittingSize = widget.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                     height += fittingSize.height

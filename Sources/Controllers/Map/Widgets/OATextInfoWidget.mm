@@ -678,6 +678,12 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         _contentStackViewSimpleWidget.spacing = paddingBetweenIconAndValue;
         self.valueLabel.textAlignment = NSTextAlignmentNatural;
     }
+    
+    if (![[self getWidgetPanel] isPanelVertical])
+    {
+        self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
+        [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameWidgetSeparatorColor].currentMapThemeColor];
+    }
 }
 
 - (void)refreshLabel

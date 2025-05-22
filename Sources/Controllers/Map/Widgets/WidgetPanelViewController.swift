@@ -334,7 +334,7 @@ extension WidgetPanelViewController: UIPageViewControllerDelegate {
         guard completed, let currentVC = pageViewController.viewControllers?.first, pages.contains(currentVC) else { return }
         isInTransition = false
         pageControl.currentPage = currentIndex
-        pageViewController.transitionCoordinator?.animate(alongsideTransition: nil) { _ in
+        DispatchQueue.main.async {
             self.updateContainerSize()
         }
     }

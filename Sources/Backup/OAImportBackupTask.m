@@ -252,7 +252,10 @@
         case EOAImportTypeCollectAndRead:
         {
             [_helper.importAsyncTasks removeObjectForKey:_key];
-            [_collectListener onBackupCollectFinished:items != nil empty:NO items:_items remoteFiles:_remoteFiles];
+            __strong id<OABackupCollectListener> listener = _collectListener;
+            if (listener)
+                [listener onBackupCollectFinished:items != nil empty:NO items:_items remoteFiles:_remoteFiles];
+            
             break;
         }
         case EOAImportTypeCheckDuplicates:

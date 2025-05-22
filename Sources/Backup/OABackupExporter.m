@@ -201,8 +201,9 @@
     [self deleteLocalFiles:_itemsProgress dataProgress:_dataProgress];
     if (!self.isCancelled)
         [_backupHelper updateBackupUploadTime];
-    if (_listener != nil)
-        [_listener networkExportDone:_errors.asDictionary];
+    __strong id<OANetworkExportProgressListener> listener = _listener;
+    if (listener)
+        [listener networkExportDone:_errors.asDictionary];
 }
 
 - (void) deleteFiles:(id<OAOnDeleteFilesListener>)listener
@@ -252,12 +253,13 @@
     {
         [item remove];
         [itemsProgress addObjectSync:item];
-        if (_listener)
+        __strong id<OANetworkExportProgressListener> listener = _listener;
+        if (listener)
         {
             int p = [dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
             NSString *fileName = [BackupUtils getItemFileName:item];
-            [_listener itemExportDone:[OASettingsItemType typeName:item.type] fileName:fileName];
-            [_listener updateGeneralProgress:itemsProgress.countSync uploadedKb:(NSInteger)p];
+            [listener itemExportDone:[OASettingsItemType typeName:item.type] fileName:fileName];
+            [listener updateGeneralProgress:itemsProgress.countSync uploadedKb:(NSInteger)p];
         }
     }
 }
@@ -291,8 +293,9 @@
     else
         [self markOldFileForDeletion:item fileName:fileName];
     int p = [_dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
-    if (_listener != nil)
-        [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:(NSInteger)p];
+    __strong id<OANetworkExportProgressListener> listener = _listener;
+    if (listener)
+        [listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:(NSInteger)p];
 }
 
 - (void)onItemUploadDone:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName error:(nonnull NSString *)error
@@ -301,27 +304,30 @@
     if (error.length > 0)
         [_errors setObjectSync:error forKey:[NSString stringWithFormat:@"%@/%@", type, fileName]];
     [_itemsProgress addObjectSync:item];
-    if (_listener)
+    __strong id<OANetworkExportProgressListener> listener = _listener;
+    if (listener)
     {
-        [_listener itemExportDone:type fileName:fileName];
-        [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:(NSInteger)_dataProgress.get];
+        [listener itemExportDone:type fileName:fileName];
+        [listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:(NSInteger)_dataProgress.get];
     }
 }
 
 - (void)onItemUploadProgress:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork
 {
     NSInteger p = [_dataProgress addAndGet:(int) deltaWork];
-    if (_listener)
+    __strong id<OANetworkExportProgressListener> listener = _listener;
+    if (listener)
     {
-        [_listener updateItemProgress:[OASettingsItemType typeName:item.type] fileName:fileName progress:progress];
-        [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:p];
+        [listener updateItemProgress:[OASettingsItemType typeName:item.type] fileName:fileName progress:progress];
+        [listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:p];
     }
 }
 
 - (void)onItemUploadStarted:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName work:(NSInteger)work
 {
-    if (_listener)
-        [_listener itemExportStarted:[OASettingsItemType typeName:item.type] fileName:fileName work:work];
+    __strong id<OANetworkExportProgressListener> listener = _listener;
+    if (listener)
+        [listener itemExportStarted:[OASettingsItemType typeName:item.type] fileName:fileName work:work];
 }
 
 
@@ -331,10 +337,11 @@
 {
     int p = [_dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
     [_itemsProgress addObjectSync:file];
-    if (_listener != nil)
+    __strong id<OANetworkExportProgressListener> listener = _listener;
+    if (listener)
     {
-        [_listener itemExportDone:file.type fileName:file.name];
-        [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:(NSInteger)p];
+        [listener itemExportDone:file.type fileName:file.name];
+        [listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:(NSInteger)p];
     }
 }
 

@@ -93,7 +93,8 @@
 
 - (void)main
 {
-    _error = [OABackupHelper.sharedInstance downloadFile:_filePath remoteFile:_remoteFile listener:_onDownloadFileListener];
+    __strong id<OAOnDownloadFileListener> listener = _onDownloadFileListener;
+    _error = [OABackupHelper.sharedInstance downloadFile:_filePath remoteFile:_remoteFile listener:listener];
 }
 
 @end
@@ -695,10 +696,11 @@
     [_itemsProgress addAndGet:1];
     [_downloadedDataProgress addAndGet:estSize];
     [_dataProgress set:0];
-    if (_listener)
+    __strong id<OANetworkImportProgressListener> listener = _listener;
+    if (listener)
     {
-        [_listener itemExportDone:type fileName:fileName];
-        [_listener updateGeneralProgress:_itemsProgress.get uploadedKb:
+        [listener itemExportDone:type fileName:fileName];
+        [listener updateGeneralProgress:_itemsProgress.get uploadedKb:
          _downloadedDataProgress.get];
     }
 }
@@ -706,17 +708,19 @@
 - (void)onFileDownloadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork itemFileName:(NSString *)itemFileName
 {
     NSInteger p = [_dataProgress addAndGet:(int) deltaWork] + [_downloadedDataProgress get];
-    if (_listener)
+    __strong id<OANetworkImportProgressListener> listener = _listener;
+    if (listener)
     {
-        [_listener updateItemProgress:type fileName:fileName progress:(int)progress];
-        [_listener updateGeneralProgress:_itemsProgress.get uploadedKb:p];
+        [listener updateItemProgress:type fileName:fileName progress:(int)progress];
+        [listener updateGeneralProgress:_itemsProgress.get uploadedKb:p];
     }
 }
 
 - (void)onFileDownloadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work itemFileName:(NSString *)itemFileName
 {
-    if (_listener)
-        [_listener itemExportStarted:type fileName:fileName work:work];
+    __strong id<OANetworkImportProgressListener> listener = _listener;
+    if (listener)
+        [listener itemExportStarted:type fileName:fileName work:work];
 }
 
 @end

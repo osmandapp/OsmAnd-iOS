@@ -2633,3 +2633,4 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "tts_title" = "TTS";
+"travel_routes" = "Διαδρομές ταξιδιών";

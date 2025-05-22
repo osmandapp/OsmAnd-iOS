@@ -139,12 +139,9 @@ static NSOperationQueue *_favQueue;
     NSMutableDictionary<NSString *, OAFavoriteGroup *> *groups = [NSMutableDictionary dictionary];
     NSArray<NSString *> *files = [self getGroupFiles];
     if (files.count > 0)
-    {
         for (NSString *file in files)
-        {
             [self loadFileGroups:file groups:groups];
-        }
-    }
+
     return groups;
 }
 

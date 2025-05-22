@@ -78,8 +78,10 @@
     {
         error = [self uploadItemInfo:item fileName:[fileName stringByAppendingPathExtension:OABackupHelper.INFO_EXT]];
     }
-    if (_listener != nil)
-        [_listener onItemUploadDone:item fileName:fileName error:error];
+    __strong id<OAOnUploadItemListener> listener = _listener;
+    if (listener)
+        [listener onItemUploadDone:item fileName:fileName error:error];
+    
     if (error != nil)
     {
         NSLog(@"OANetworkWriter error: %@", error);
@@ -242,28 +244,31 @@
         if (fileItem.needMd5Digest && fileItem.md5Digest.length > 0)
             [_backupHelper updateFileMd5Digest:[OASettingsItemType typeName:_item.type] fileName:itemFileName md5Hex:fileItem.md5Digest];
     }
-    if (_listener != nil)
-        [_listener onItemFileUploadDone:_item fileName:fileName uploadTime:uploadTime error:error];
+    __strong id<OAOnUploadItemListener> listener = _listener;
+    if (listener)
+        [listener onItemFileUploadDone:_item fileName:fileName uploadTime:uploadTime error:error];
 }
 
 - (void)onFileUploadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork
 {
-    if (_listener != nil)
-        [_listener onItemUploadProgress:_item fileName:fileName progress:progress deltaWork:deltaWork];
+    __strong id<OAOnUploadItemListener> listener = _listener;
+    if (listener)
+        [listener onItemUploadProgress:_item fileName:fileName progress:progress deltaWork:deltaWork];
 }
 
 - (void)onFileUploadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work
 {
+    __strong id<OAOnUploadItemListener> listener = _listener;
     if (_isDirListener)
     {
         _uploadStarted = YES;
-        if (_listener != nil)
-            [_listener onItemUploadStarted:_item fileName:fileName work:work];
+        if (listener)
+            [listener onItemUploadStarted:_item fileName:fileName work:work];
     }
     else
     {
-        if (_listener != nil)
-            [_listener onItemUploadStarted:_item fileName:fileName work:work];
+        if (listener)
+            [listener onItemUploadStarted:_item fileName:fileName work:work];
     }
 }
 

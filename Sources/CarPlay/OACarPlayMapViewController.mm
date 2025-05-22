@@ -258,7 +258,8 @@
         [mapPanel.view insertSubview:_mapVc.view atIndex:0];
         _mapVc.view.frame = mapPanel.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [_mapVc.mapView resumeRendering];
+        if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground)
+            [_mapVc.mapView resumeRendering];
         [mapPanel.hudViewController.mapInfoController updateLayout];
         OAAppSettings * settings = [OAAppSettings sharedManager];
         if (![settings.batterySavingMode get])

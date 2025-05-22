@@ -83,6 +83,7 @@
 #import "OAResultMatcher.h"
 #import "OASearchResult.h"
 #import "OAWikiWebViewController.h"
+#import "OA-Prefix.pch"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

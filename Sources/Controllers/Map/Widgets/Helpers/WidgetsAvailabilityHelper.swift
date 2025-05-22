@@ -34,6 +34,7 @@ class WidgetsAvailabilityHelper: NSObject {
     }
     
     static func initRegVisibility() {
+        let installDate = UserDefaults.standard.double(forKey: kAppInstalledDate)
         let exceptDefault: [OAApplicationMode] = [.car(), .bicycle(), .pedestrian(), .public_TRANSPORT(), .boat(), .aircraft(), .ski(), .truck(), .motorcycle(), .horse(), .moped()]
         
         // left
@@ -54,7 +55,7 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetVisibility(widgetType: .timeToIntermediate)
         regWidgetVisibility(widgetType: .timeToDestination)
         
-        if let installDate = getAppInstallDate(), installDate >= Self.routeWidgetsV2IntroTimeInSeconds {
+        if installDate >= Self.routeWidgetsV2IntroTimeInSeconds {
             regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault + [.train()])
         }
         
@@ -128,15 +129,5 @@ class WidgetsAvailabilityHelper: NSObject {
             }
         }
         map[widgetId] = set
-    }
-    
-    private static func getAppInstallDate() -> TimeInterval? {
-        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
-        if let path = documentDirectoryPath,
-           let attributes = try? FileManager.default.attributesOfItem(atPath: path),
-           let creationDate = attributes[.creationDate] as? Date {
-            return creationDate.timeIntervalSince1970
-        }
-        return nil
     }
 }

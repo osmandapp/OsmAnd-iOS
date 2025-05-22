@@ -92,7 +92,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, ChartHelperDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, ChartHelperDelegate, SelectRouteActivityViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -1390,6 +1390,12 @@
     return self.doc.metadata;
 }
 
+- (OASRouteActivity *)getGpxActivity
+{
+    OASRouteActivity *activity = [[OASRouteActivityHelper shared] findRouteActivityId:self.doc.metadata.extensions[@"osmand:activity"]];
+    return activity;
+}
+
 - (NSString *)getKeywords
 {
     return self.doc.metadata.keywords;
@@ -1683,6 +1689,14 @@
     tagsDetailsController.tagTitle = OALocalizedString(@"shared_string_name");
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)openSelectRouteActivityScreen
+{
+    _pushedNewScreen = YES;
+    SelectRouteActivityViewController *routeActivityController = [[SelectRouteActivityViewController alloc] initWithGpxFile:self.doc];
+    routeActivityController.delegate = self;
+    [self.navigationController pushViewController:routeActivityController animated:YES];
 }
 
 - (void)openDuplicateTrack
@@ -2191,7 +2205,7 @@
             else
             {
                 cell.accessoryView = nil;
-                cell.accessoryType = [cellData.key hasPrefix:@"description"] || [cellData.key isEqualToString:@"name"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+                cell.accessoryType = [cellData.key hasPrefix:@"description"] || [cellData.key isEqualToString:@"name"] || [cellData.key isEqualToString:@"gpxActivity"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
             }
         }
         outCell = cell;
@@ -2905,6 +2919,19 @@
 
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:[_tableData.subjects indexOfObject:sectionData]]
                       withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
+#pragma mark - OAEditDescriptionViewControllerDelegate
+
+- (void)didApplyRouteActivitySelection
+{
+    [_headerView updateGpxActivityContainerView];
+    OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_info"];
+    if (sectionData)
+    {
+        [_uiBuilder updateData:sectionData];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:[_tableData.subjects indexOfObject:sectionData]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

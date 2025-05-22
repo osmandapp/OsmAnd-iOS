@@ -170,6 +170,8 @@
             self.directionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             self.directionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
+        
+        [self updateGpxActivityContainerView];
 
         if (nearestCity.length > 0)
         {
@@ -254,6 +256,21 @@
 
     [self updateFrame:self.frame.size.width];
 
+    if ([self needsUpdateConstraints])
+        [self updateConstraints];
+}
+
+- (void)updateGpxActivityContainerView
+{
+    OASRouteActivity *activity = [self.trackMenuDelegate getGpxActivity];
+    [self setGpxActivity:activity.label];
+    if (!self.gpxActivityContainerView.hidden)
+    {
+        self.gpxActivityIconView.image = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", activity.iconName]] ?: [UIImage templateImageNamed:@"ic_custom_info_outlined"];
+        self.gpxActivityIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+        self.gpxActivityTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    }
+    
     if ([self needsUpdateConstraints])
         [self updateConstraints];
 }

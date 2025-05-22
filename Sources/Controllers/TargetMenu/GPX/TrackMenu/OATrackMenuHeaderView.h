@@ -63,6 +63,7 @@
            routeIcon:(UIImage *)icon
                title:(NSString *)title
          nearestCity:(NSString *)nearestCity;
+- (void)updateGpxActivityContainerView;
 
 + (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OASGpxTrackAnalysis *)analysis withoutGaps:(BOOL)withoutGaps;
 - (void)generateGpxBlockStatistics:(OASGpxTrackAnalysis *)analysis

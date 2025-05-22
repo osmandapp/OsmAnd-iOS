@@ -725,16 +725,11 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 
 + (NSString *)getFormattedDuration:(NSTimeInterval)seconds
 {
-    return [self getFormattedDuration:seconds isLowerCase:false];
-}
-
-+ (NSString *)getFormattedDuration:(NSTimeInterval)seconds isLowerCase:(BOOL)isLowerCase
-{
     NSInteger secondsInt = (NSInteger) seconds;
     NSInteger hours = secondsInt / (60 * 60);
     NSInteger minutes = (secondsInt / 60) % 60;
     
-    NSString *minFormat = OALocalizedString(isLowerCase ? @"shared_string_minute_lowercase" : @"int_min");
+    NSString *minFormat = OALocalizedString(@"int_min");
     if (hours > 0)
     {
         NSString *durationString = [NSString stringWithFormat:@"%ld %@", hours, OALocalizedString(@"int_hour")];

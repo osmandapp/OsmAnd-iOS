@@ -34,7 +34,7 @@ class WidgetsAvailabilityHelper: NSObject {
     }
     
     static func initRegVisibility() {
-        let installDate = UserDefaults.standard.double(forKey: kAppInstalledDate)
+        let installDate = UserDefaults.standard.double(forKey: "kAppInstalledDate")
         let exceptDefault: [OAApplicationMode] = [.car(), .bicycle(), .pedestrian(), .public_TRANSPORT(), .boat(), .aircraft(), .ski(), .truck(), .motorcycle(), .horse(), .moped()]
         
         // left

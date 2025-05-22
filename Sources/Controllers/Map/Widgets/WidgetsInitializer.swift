@@ -47,12 +47,12 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         addWidgetInfo(.coordinatesMapCenter)
         addWidgetInfo(.streetName)
         addWidgetInfo(.lanes)
+        addWidgetInfo(.routeInfo)
         addWidgetInfo(.markersTopBar)
     }
     
     private func createBottomWidgets() {
         addWidgetInfo(.elevationProfile)
-        addWidgetInfo(.routeInfo)
     }
     
     private func createLeftWidgets() {

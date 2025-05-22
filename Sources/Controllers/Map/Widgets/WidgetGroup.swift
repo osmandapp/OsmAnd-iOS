@@ -49,11 +49,8 @@ class WidgetGroup: NSObject {
     
     @objc func getWidgets(withPanel panel: WidgetsPanel?) -> [WidgetType] {
         var widgets = [WidgetType]()
-        WidgetType.values.forEach {
-            if isRelatedWidget($0, panel: panel) {
-                widgets.append($0)
-            }
-        }
+        WidgetType.values.filter { isRelatedWidget($0, panel: panel) }
+            .forEach { widgets.append($0) }
         return widgets
     }
     
@@ -115,7 +112,7 @@ class WidgetGroup: NSObject {
     }
     
     @objc func getOrder(withPanel panel: WidgetsPanel) -> Int {
-        getWidgets(withPanel: panel).first!.ordinal;
+        getWidgets(withPanel: panel).first?.ordinal ?? 0
     }
     
     override func isEqual(_ object: Any?) -> Bool {

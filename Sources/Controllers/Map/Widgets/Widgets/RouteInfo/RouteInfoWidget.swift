@@ -6,7 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-@objc(OARouteInfoWidget)
 @objcMembers
 final class RouteInfoWidget: OASimpleWidget {
     @IBOutlet private var firstLineLeftLabel: UILabel!
@@ -27,6 +26,13 @@ final class RouteInfoWidget: OASimpleWidget {
     
     private static let oneHundredKmInMeters: Int32 = 100_000
     private static let hourInSeconds: TimeInterval = 60 * 60
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = .current
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter
+    }()
     
     private var customId: String?
     private var widgetState: RouteInfoWidgetState
@@ -34,8 +40,8 @@ final class RouteInfoWidget: OASimpleWidget {
     private var displayPriorityPref: OACommonWidgetDisplayPriority
     private var isForceUpdate: Bool
     private var cachedRouteInfo: [DestinationInfo] = []
-    private var cachedDefaultView: DisplayValue?
-    private var cachedDisplayPriority: DisplayPriority?
+    private var cachedDefaultView: RouteInfoDisplayValue?
+    private var cachedDisplayPriority: RouteInfoDisplayPriority?
     private var hasSecondaryData: Bool
     private var cachedMetricSystem: Int?
     private var textState: OATextState?
@@ -43,7 +49,7 @@ final class RouteInfoWidget: OASimpleWidget {
     private let maxFontSize: CGFloat = 50
     // swiftlint:disable force_unwrapping
     private let settings = OAAppSettings.sharedManager()!
-    private lazy var widgetView = Bundle.main.loadNibNamed("OARouteInfoWidget", owner: self, options: nil)![0] as! UIView
+    private lazy var widgetView = Bundle.main.loadNibNamed("RouteInfoWidget", owner: self, options: nil)![0] as! UIView
     // swiftlint:enable force_unwrapping
     
     private var hasSecondaryDataValue: Bool {
@@ -59,11 +65,15 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private var minValueFontSize: CGFloat {
-        !hasEnoughWidth && widgetSizeStyle == .small ? 14 : 16
+        !hasEnoughWidth && isSmallSize ? 14 : 16
     }
     
     private var valueTextColor: UIColor {
         isNightMode() ? .white : .black
+    }
+    
+    private var isSmallSize: Bool {
+        widgetSizeStyle == .small
     }
     
     convenience init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
@@ -95,6 +105,7 @@ final class RouteInfoWidget: OASimpleWidget {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        let leftViewButtonVerticalSpace = leftViewButtonVerticalSpace
         leftViewButtonWidthConstraint.constant = leftViewButtonWidth
         leftViewButtonTopConstraint.constant = leftViewButtonVerticalSpace
         leftViewButtonBottomConstraint.constant = leftViewButtonVerticalSpace
@@ -148,6 +159,7 @@ final class RouteInfoWidget: OASimpleWidget {
     override func updateColors(_ textState: OATextState) {
         super.updateColors(textState)
         
+        let valueTextColor = valueTextColor
         self.textState = textState
         firstLineRightLabel.textColor = valueTextColor
         secondLineRightLabel.textColor = valueTextColor
@@ -194,13 +206,13 @@ final class RouteInfoWidget: OASimpleWidget {
         }
         
         let defaultView = widgetState.getDefaultView(with: appMode)
-        let orderedDisplayValues = DisplayValue.getValues(with: defaultView)
+        let orderedDisplayValues = RouteInfoDisplayValue.getValues(with: defaultView)
         
         applySuitableTextFont()
         
         updateHeightConstraint(with: .equal, constant: widgetHeight, priority: .defaultHigh)
-        updatePrimaryBlock(destinationInfo: cachedRouteInfo.first, displayValues: orderedDisplayValues)
-        updateSecondaryBlock(destinationInfo: cachedRouteInfo.count > 1 ? cachedRouteInfo[1] : nil, displayValues: orderedDisplayValues)
+        updatePrimaryBlockWith(destinationInfo: cachedRouteInfo.first, displayValues: orderedDisplayValues)
+        updateSecondaryBlockWith(destinationInfo: cachedRouteInfo.count > 1 ? cachedRouteInfo[1] : nil, displayValues: orderedDisplayValues)
         isForceUpdate = false
         updateVisibility(true)
         refreshLayout()
@@ -211,33 +223,37 @@ final class RouteInfoWidget: OASimpleWidget {
         updateRouteInformation()
     }
     
-    private func updatePrimaryBlock(destinationInfo: DestinationInfo?, displayValues: [DisplayValue]) {
-        guard let destinationInfo else { return }
+    private func updatePrimaryBlockWith(destinationInfo: DestinationInfo?, displayValues: [RouteInfoDisplayValue]) {
+        guard let destinationInfo, displayValues.count >= 2 else { return }
         let size = widgetSizeStyle
         let data = prepareDisplayData(info: destinationInfo)
         let textColorSecondary: UIColor = isNightMode() ? .textColorSecondary.dark : .textColorSecondary.light
+        let hasEnoughWidth = hasEnoughWidth
+        let valueTextColor = valueTextColor
+        let isSmallSize = isSmallSize
         let firstAttributes: [NSAttributedString.Key: Any] = [
             .font: firstLineLeftLabel.font as Any,
             .foregroundColor: valueTextColor
         ]
         let secondAttributes: [NSAttributedString.Key: Any] = [
-            .font: (hasEnoughWidth || !hasEnoughWidth && widgetSizeStyle == .small ? firstLineLeftLabel.font : secondLineLeftLabel.font) as Any,
+            .font: (hasEnoughWidth || isSmallSize ? firstLineLeftLabel.font : secondLineLeftLabel.font) as Any,
             .foregroundColor: valueTextColor
         ]
         let thirdAttributes: [NSAttributedString.Key: Any] = [
-            .font: (hasEnoughWidth && !hasSecondaryData || widgetSizeStyle == .small ? firstLineLeftLabel.font : secondLineLeftLabel.font) as Any,
+            .font: (hasEnoughWidth && !hasSecondaryData || isSmallSize ? firstLineLeftLabel.font : secondLineLeftLabel.font) as Any,
             .foregroundColor: textColorSecondary
         ]
         let bulletAttributes: [NSAttributedString.Key: Any] = [
-            .font: (hasEnoughWidth || !hasEnoughWidth && widgetSizeStyle == .small ? firstLineLeftLabel.font : secondLineLeftLabel.font) as Any,
+            .font: (hasEnoughWidth || isSmallSize ? firstLineLeftLabel.font : secondLineLeftLabel.font) as Any,
             .foregroundColor: textColorSecondary
         ]
+        
         let value1 = NSAttributedString(string: data[displayValues[0]] ?? "", attributes: firstAttributes)
         let value2 = NSAttributedString(string: data[displayValues[1]] ?? "", attributes: secondAttributes)
         let value3 = NSAttributedString(string: data[displayValues[2]] ?? "", attributes: thirdAttributes)
         let bullet = NSAttributedString(string: " • ", attributes: bulletAttributes)
-        var firstLineLeftString = NSMutableAttributedString()
-        var secondLineLeftString = NSMutableAttributedString()
+        let firstLineLeftString = NSMutableAttributedString()
+        let secondLineLeftString = NSMutableAttributedString()
         
         var firstLineText: [NSAttributedString] = []
         var secondLineText: [NSAttributedString] = []
@@ -282,7 +298,8 @@ final class RouteInfoWidget: OASimpleWidget {
         }
     }
     
-    private func updateSecondaryBlock(destinationInfo: DestinationInfo?, displayValues: [DisplayValue]) {
+    private func updateSecondaryBlockWith(destinationInfo: DestinationInfo?, displayValues: [RouteInfoDisplayValue]) {
+        guard displayValues.count >= 1 else { return }
         let data = destinationInfo.flatMap { prepareDisplayData(info: $0) }
         firstLineRightLabel.text = data?[displayValues[0]] ?? ""
         secondLineRightLabel.text = data?[displayValues[1]] ?? ""
@@ -323,6 +340,10 @@ final class RouteInfoWidget: OASimpleWidget {
     
     private func applySuitableTextFont() {
         let typefaceStyle: UIFont.Weight = textState?.textBold == true ? .bold : .semibold
+        let hasEnoughWidth = hasEnoughWidth
+        let minValueFontSize = minValueFontSize
+        let isSmallSize = isSmallSize
+        let secondLineMinValueFontSize = secondLineMinValueFontSize
         firstLineLeftLabel.font = .scaledSystemFont(ofSize: hasEnoughWidth && !hasSecondaryData ? WidgetSizeStyleObjWrapper.getValueFontSizeFor(type: widgetSizeStyle) : firstLineValueFontSize, weight: typefaceStyle, maximumSize: maxFontSize)
         firstLineLeftLabel.adjustsFontSizeToFitWidth = true
         firstLineLeftLabel.minimumScaleFactor = minValueFontSize / firstLineLeftLabel.font.pointSize
@@ -330,20 +351,20 @@ final class RouteInfoWidget: OASimpleWidget {
         secondLineLeftLabel.font = .scaledSystemFont(ofSize: secondLineValueFontSize, weight: .semibold, maximumSize: maxFontSize)
         secondLineLeftLabel.adjustsFontSizeToFitWidth = true
         secondLineLeftLabel.minimumScaleFactor = secondLineMinValueFontSize / secondLineLeftLabel.font.pointSize
-        secondLineLeftLabel.isHidden = widgetSizeStyle == .small || (hasEnoughWidth && !hasSecondaryData)
+        secondLineLeftLabel.isHidden = isSmallSize || (hasEnoughWidth && !hasSecondaryData)
         
-        firstLineRightLabel.font = widgetSizeStyle == .small ? .scaledSystemFont(ofSize: minValueFontSize, weight: typefaceStyle) : firstLineLeftLabel.font
+        firstLineRightLabel.font = isSmallSize ? .scaledSystemFont(ofSize: minValueFontSize, weight: typefaceStyle) : firstLineLeftLabel.font
         firstLineRightLabel.adjustsFontSizeToFitWidth = firstLineLeftLabel.adjustsFontSizeToFitWidth
         firstLineRightLabel.minimumScaleFactor = minValueFontSize / firstLineRightLabel.font.pointSize
         
-        secondLineRightLabel.font = widgetSizeStyle == .small ? .scaledSystemFont(ofSize: minValueFontSize, weight: typefaceStyle) : secondLineLeftLabel.font
+        secondLineRightLabel.font = isSmallSize ? .scaledSystemFont(ofSize: minValueFontSize, weight: typefaceStyle) : secondLineLeftLabel.font
         secondLineRightLabel.adjustsFontSizeToFitWidth = secondLineLeftLabel.adjustsFontSizeToFitWidth
-        secondLineRightLabel.minimumScaleFactor = (widgetSizeStyle == .small ? minValueFontSize : secondLineMinValueFontSize) / secondLineRightLabel.font.pointSize
+        secondLineRightLabel.minimumScaleFactor = (isSmallSize ? minValueFontSize : secondLineMinValueFontSize) / secondLineRightLabel.font.pointSize
     }
     
     private func getPossibleDefaultPrefValues(with appMode: OAApplicationMode) -> [OATableRowData] {
         var rows = [OATableRowData]()
-        for mode in DisplayValue.allCases {
+        for mode in RouteInfoDisplayValue.allCases {
             let row = OATableRowData()
             row.cellType = OASimpleTableViewCell.getIdentifier()
             row.setObj(mode.key, forKey: "value")
@@ -354,26 +375,26 @@ final class RouteInfoWidget: OASimpleWidget {
         return rows
     }
     
-    private func getDescriptionWith(displayValue: DisplayValue) -> String {
-        var previewData: [DisplayValue: String] = [:]
+    private func getDescriptionWith(displayValue: RouteInfoDisplayValue) -> String {
+        var previewData: [RouteInfoDisplayValue: String] = [:]
         previewData[.arrivalTime] = getFormattedPreviewArrivalTime()
         previewData[.timeToGo] = formatDuration(timeLeft: Self.hourInSeconds)
         previewData[.distance] = formatDistanceWith(meters: Self.oneHundredKmInMeters)
         return getDefaultViewSummary(defaultView: displayValue, previewData: previewData)
     }
     
-    private func prepareDisplayData(info: DestinationInfo) -> [DisplayValue: String] {
-        var displayData: [DisplayValue: String] = [:]
+    private func prepareDisplayData(info: DestinationInfo) -> [RouteInfoDisplayValue: String] {
+        var displayData: [RouteInfoDisplayValue: String] = [:]
         displayData[.arrivalTime] = formatArrivalTime(time: info.arrivalTime)
         displayData[.timeToGo] = formatDuration(timeLeft: info.timeToGo)
         displayData[.distance] = formatDistanceWith(meters: info.distance)
         return displayData
     }
     
-    private func getDefaultViewSummary(defaultView: DisplayValue, previewData: [DisplayValue: String]) -> String {
+    private func getDefaultViewSummary(defaultView: RouteInfoDisplayValue, previewData: [RouteInfoDisplayValue: String]) -> String {
         var fullText = ""
 
-        for displayValue in DisplayValue.getValues(with: defaultView) {
+        for displayValue in RouteInfoDisplayValue.getValues(with: defaultView) {
             guard let value = previewData[displayValue] else { continue }
             fullText = fullText.isEmpty ? value : String(format: "%@ • %@", fullText, value)
         }
@@ -393,23 +414,12 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private func formatArrivalTime(time: TimeInterval) -> String {
-        let toFindTime = TimeInterval(time)
-        let dateFormatter = DateFormatter()
-        let toFindDate = Date(timeIntervalSince1970: toFindTime)
-        if !OAUtilities.is12HourTimeFormat() {
-            dateFormatter.dateFormat = "HH:mm"
-            return dateFormatter.string(from: toFindDate)
-        } else {
-            dateFormatter.dateFormat = "h:mm"
-            let timeStr = dateFormatter.string(from: toFindDate)
-            dateFormatter.dateFormat = "a"
-            let aStr = dateFormatter.string(from: toFindDate)
-            return String(format: localizedString("ltr_or_rtl_combine_via_space"), timeStr, aStr)
-        }
+        let date = Date(timeIntervalSince1970: time)
+        return Self.dateFormatter.string(from: date)
     }
     
     private func formatDuration(timeLeft: TimeInterval) -> String {
-        OAOsmAndFormatter.getFormattedDuration(timeLeft, isLowerCase: true)
+        OAOsmAndFormatter.getFormattedDuration(timeLeft)
     }
     
     private func formatDistanceWith(meters: Int32) -> String {

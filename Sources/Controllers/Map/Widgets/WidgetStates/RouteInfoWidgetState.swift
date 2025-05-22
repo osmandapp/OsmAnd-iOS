@@ -18,55 +18,62 @@ final class RouteInfoWidgetState: OAWidgetState {
         displayPriorityPref = RouteInfoWidgetState.registerDisplayPriorityPreferenceWith(customId: customId, widgetParams: widgetParams)
     }
     
-    func getDefaultView() -> DisplayValue {
+    func getDefaultView() -> RouteInfoDisplayValue {
         getDefaultView(with: OAAppSettings.sharedManager().applicationMode.get())
     }
     
-    func getDefaultView(with appMode: OAApplicationMode) -> DisplayValue {
+    func getDefaultView(with appMode: OAApplicationMode) -> RouteInfoDisplayValue {
         getDefaultView(with: appMode, widgetConfigurationParams: nil, isCreate: false)
     }
     
     func getDefaultView(with appMode: OAApplicationMode,
                         widgetConfigurationParams: [String: Any]?,
-                        isCreate: Bool) -> DisplayValue {
+                        isCreate: Bool) -> RouteInfoDisplayValue {
         var currentValue = defaultViewPref.defValue
         if let widgetConfigurationParams,
            let value = widgetConfigurationParams[Self.defaultViewId] as? String {
             switch value {
-            case DisplayValue.arrivalTime.key: currentValue = DisplayValue.arrivalTime.rawValue
-            case DisplayValue.timeToGo.key: currentValue = DisplayValue.timeToGo.rawValue
-            case DisplayValue.distance.key: currentValue = DisplayValue.distance.rawValue
-            default: break
+            case RouteInfoDisplayValue.arrivalTime.key:
+                currentValue = RouteInfoDisplayValue.arrivalTime.rawValue
+            case RouteInfoDisplayValue.timeToGo.key:
+                currentValue = RouteInfoDisplayValue.timeToGo.rawValue
+            case RouteInfoDisplayValue.distance.key:
+                currentValue = RouteInfoDisplayValue.distance.rawValue
+            default:
+                break
             }
         } else if !isCreate {
             currentValue = defaultViewPref.get(appMode)
         }
-        return DisplayValue(rawValue: currentValue)!
+        return RouteInfoDisplayValue(rawValue: currentValue)!
     }
     
-    func getDisplayPriority() -> DisplayPriority {
+    func getDisplayPriority() -> RouteInfoDisplayPriority {
         getDisplayPriority(with: OAAppSettings.sharedManager().applicationMode.get())
     }
     
-    func getDisplayPriority(with appMode: OAApplicationMode) -> DisplayPriority {
+    func getDisplayPriority(with appMode: OAApplicationMode) -> RouteInfoDisplayPriority {
         getDisplayPriority(with: appMode, widgetConfigurationParams: nil, isCreate: false)
     }
     
     func getDisplayPriority(with appMode: OAApplicationMode,
                             widgetConfigurationParams: [String: Any]?,
-                            isCreate: Bool) -> DisplayPriority {
+                            isCreate: Bool) -> RouteInfoDisplayPriority {
         var currentValue = displayPriorityPref.defValue
         if let widgetConfigurationParams,
            let value = widgetConfigurationParams[Self.displayPriorityId] as? String {
             switch value {
-            case DisplayPriority.intermediateFirst.key: currentValue = DisplayPriority.intermediateFirst.rawValue
-            case DisplayPriority.destinationFirst.key: currentValue = DisplayPriority.destinationFirst.rawValue
-            default: break
+            case RouteInfoDisplayPriority.intermediateFirst.key:
+                currentValue = RouteInfoDisplayPriority.intermediateFirst.rawValue
+            case RouteInfoDisplayPriority.destinationFirst.key:
+                currentValue = RouteInfoDisplayPriority.destinationFirst.rawValue
+            default:
+                break
             }
         } else if !isCreate {
             currentValue = displayPriorityPref.get(appMode)
         }
-        return DisplayPriority(rawValue: currentValue)!
+        return RouteInfoDisplayPriority(rawValue: currentValue)!
     }
     
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
@@ -79,13 +86,17 @@ final class RouteInfoWidgetState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += "_" + customId
         }
-        let preference = OAAppSettings.sharedManager().registerWidgetDefaultViewPreference(prefId, defValue: DisplayValue.arrivalTime.rawValue)!
+        let preference = OAAppSettings.sharedManager().registerWidgetDefaultViewPreference(prefId, defValue: RouteInfoDisplayValue.arrivalTime.rawValue)!
         if let widgetValue = widgetParams?[Self.defaultViewId] as? String {
             switch widgetValue {
-            case DisplayValue.arrivalTime.key: preference.set(DisplayValue.arrivalTime.rawValue)
-            case DisplayValue.timeToGo.key: preference.set(DisplayValue.timeToGo.rawValue)
-            case DisplayValue.distance.key: preference.set(DisplayValue.distance.rawValue)
-            default: break
+            case RouteInfoDisplayValue.arrivalTime.key:
+                preference.set(RouteInfoDisplayValue.arrivalTime.rawValue)
+            case RouteInfoDisplayValue.timeToGo.key:
+                preference.set(RouteInfoDisplayValue.timeToGo.rawValue)
+            case RouteInfoDisplayValue.distance.key:
+                preference.set(RouteInfoDisplayValue.distance.rawValue)
+            default:
+                break
             }
         }
         return preference
@@ -96,12 +107,15 @@ final class RouteInfoWidgetState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += "_" + customId
         }
-        let preference = OAAppSettings.sharedManager().registerWidgetDisplayPriorityPreference(prefId, defValue: DisplayPriority.destinationFirst.rawValue)!
+        let preference = OAAppSettings.sharedManager().registerWidgetDisplayPriorityPreference(prefId, defValue: RouteInfoDisplayPriority.destinationFirst.rawValue)!
         if let widgetValue = widgetParams?[Self.displayPriorityId] as? String {
             switch widgetValue {
-            case DisplayPriority.intermediateFirst.key: preference.set(DisplayPriority.intermediateFirst.rawValue)
-            case DisplayPriority.destinationFirst.key: preference.set(DisplayPriority.destinationFirst.rawValue)
-            default: break
+            case RouteInfoDisplayPriority.intermediateFirst.key:
+                preference.set(RouteInfoDisplayPriority.intermediateFirst.rawValue)
+            case RouteInfoDisplayPriority.destinationFirst.key:
+                preference.set(RouteInfoDisplayPriority.destinationFirst.rawValue)
+            default:
+                break
             }
         }
         return preference

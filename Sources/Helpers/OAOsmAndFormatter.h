@@ -65,7 +65,6 @@ static const CGFloat US_GALLONS_IN_LITER = 3.78541f;
 + (NSString *)getFormattedOsmTagValue:(NSString *)tagValue;
 + (NSString *)getFormattedDurationShort:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
 + (NSString *)getFormattedDuration:(NSTimeInterval)seconds;
-+ (NSString *)getFormattedDuration:(NSTimeInterval)seconds isLowerCase:(BOOL)isLowerCase;
 + (NSString *)getFormattedFuelCapacity:(EOAVolumeConstant)volumeUnit mode:(OAApplicationMode *)mode value:(double)value;
 + (double)readSavedFuelTankCapacity:(EOAVolumeConstant)volumeUnit mode:(OAApplicationMode *)mode value:(double)value;
 + (double)prepareFuelTankCapacityToSave:(EOAVolumeConstant)volumeUnit value:(double)value;

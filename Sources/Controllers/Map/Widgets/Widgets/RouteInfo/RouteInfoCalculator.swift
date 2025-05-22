@@ -23,7 +23,7 @@ final class RouteInfoCalculator {
         targetPointsHelper = OATargetPointsHelper.sharedInstance()
     }
     
-    func calculateRouteInformationWith(_ priority: DisplayPriority) -> [DestinationInfo] {
+    func calculateRouteInformationWith(_ priority: RouteInfoDisplayPriority) -> [DestinationInfo] {
         let finalDestination = getFinalDestinationInfo()
         
         if let currentIntermediate = getCurrentIntermediateInfo(), let finalDestination {

@@ -213,12 +213,11 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             config.baseForegroundColor = .textColorActive
             config.contentInsets = .zero
             cell.button.configuration = config
-            if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = DisplayPriority(rawValue: pref.defValue)?.key {
+            if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = RouteInfoDisplayPriority(rawValue: pref.defValue)?.key {
                 cell.button.menu = createDisplayPriorityMenuWith(value: value ?? defValue, pref: pref, indexPath: indexPath)
             }
             cell.button.showsMenuAsPrimaryAction = true
             cell.button.changesSelectionAsPrimaryAction = true
-            cell.button.contentHorizontalAlignment = .right
             cell.button.setContentHuggingPriority(.required, for: .horizontal)
             cell.button.setContentCompressionResistancePriority(.required, for: .horizontal)
             outCell = cell
@@ -227,7 +226,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     }
     
     private func createDisplayPriorityMenuWith(value: String, pref: OACommonWidgetDisplayPriority, indexPath: IndexPath) -> UIMenu {
-        let actions = DisplayPriority.allCases.map { displayPriority in
+        let actions = RouteInfoDisplayPriority.allCases.map { displayPriority in
             UIAction(title: displayPriority.title,
                      image: UIImage.templateImageNamed(displayPriority.iconName),
                      state: displayPriority.key == value ? .on : .off) { [weak self] _ in

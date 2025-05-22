@@ -1,5 +1,5 @@
 //
-//  DisplayPriority.swift
+//  RouteInfoDisplayPriority.swift
 //  OsmAnd
 //
 //  Created by Vladyslav Lysenko on 08.05.2025.
@@ -7,7 +7,7 @@
 //
 
 @objc
-enum DisplayPriority: Int32, CaseIterable {
+enum RouteInfoDisplayPriority: Int32, CaseIterable {
     case intermediateFirst
     case destinationFirst
     

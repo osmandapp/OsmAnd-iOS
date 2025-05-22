@@ -3971,10 +3971,10 @@ static NSString *kDistanceKey = @"DISTANCE";
 
 - (void)resetToDefault
 {
-    DisplayValue defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    RouteInfoDisplayValue defaultValue = self.defValue;
+    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
     if (pDefault)
-        defaultValue = (DisplayValue)((NSNumber *)pDefault).intValue;
+        defaultValue = (RouteInfoDisplayValue)((NSNumber *)pDefault).intValue;
 
     [self set:defaultValue];
 }
@@ -3982,16 +3982,16 @@ static NSString *kDistanceKey = @"DISTANCE";
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
     if ([strValue isEqualToString:kArrivalTimeKey])
-        return [self set:DisplayValueArrivalTime mode:mode];
+        return [self set:RouteInfoDisplayValueArrivalTime mode:mode];
     else if ([strValue isEqualToString:kTimeToGoKey])
-        return [self set:DisplayValueTimeToGo mode:mode];
+        return [self set:RouteInfoDisplayValueTimeToGo mode:mode];
     else if ([strValue isEqualToString:kDistanceKey])
-        return [self set:DisplayValueDistance mode:mode];
+        return [self set:RouteInfoDisplayValueDistance mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    DisplayValue type = [self get:mode];
+    RouteInfoDisplayValue type = [self get:mode];
     return [self toStringFromValue:@(type)];
 }
 
@@ -4000,15 +4000,15 @@ static NSString *kDistanceKey = @"DISTANCE";
     if (![value isKindOfClass:[NSNumber class]])
         return @"";
     
-    DisplayValue type = (DisplayValue)[value intValue];
+    RouteInfoDisplayValue type = (RouteInfoDisplayValue)[value intValue];
     
     switch (type)
     {
-        case DisplayValueArrivalTime:
+        case RouteInfoDisplayValueArrivalTime:
             return kArrivalTimeKey;
-        case DisplayValueTimeToGo:
+        case RouteInfoDisplayValueTimeToGo:
             return kTimeToGoKey;
-        case DisplayValueDistance:
+        case RouteInfoDisplayValueDistance:
             return kDistanceKey;
         default:
             return @"";
@@ -4057,10 +4057,10 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (void)resetToDefault
 {
-    DisplayPriority defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    RouteInfoDisplayPriority defaultValue = self.defValue;
+    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
     if (pDefault)
-        defaultValue = (DisplayPriority)((NSNumber *)pDefault).intValue;
+        defaultValue = (RouteInfoDisplayPriority)((NSNumber *)pDefault).intValue;
 
     [self set:defaultValue];
 }
@@ -4068,14 +4068,14 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
     if ([strValue isEqualToString:kIntermediateFirstKey])
-        return [self set:DisplayPriorityIntermediateFirst mode:mode];
+        return [self set:RouteInfoDisplayPriorityIntermediateFirst mode:mode];
     else if ([strValue isEqualToString:kDestinationFirstKey])
-        return [self set:DisplayPriorityDestinationFirst mode:mode];
+        return [self set:RouteInfoDisplayPriorityDestinationFirst mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    DisplayPriority type = [self get:mode];
+    RouteInfoDisplayPriority type = [self get:mode];
     return [self toStringFromValue:@(type)];
 }
 
@@ -4084,13 +4084,13 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     if (![value isKindOfClass:[NSNumber class]])
         return @"";
     
-    DisplayPriority type = (DisplayPriority)[value intValue];
+    RouteInfoDisplayPriority type = (RouteInfoDisplayPriority)[value intValue];
     
     switch (type)
     {
-        case DisplayPriorityIntermediateFirst:
+        case RouteInfoDisplayPriorityIntermediateFirst:
             return kIntermediateFirstKey;
-        case DisplayPriorityDestinationFirst:
+        case RouteInfoDisplayPriorityDestinationFirst:
             return kDestinationFirstKey;
         default:
             return @"";

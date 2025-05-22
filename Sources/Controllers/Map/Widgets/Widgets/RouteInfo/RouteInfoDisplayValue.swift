@@ -1,5 +1,5 @@
 //
-//  DisplayValue.swift
+//  RouteInfoDisplayValue.swift
 //  OsmAnd
 //
 //  Created by Vladyslav Lysenko on 08.05.2025.
@@ -7,7 +7,7 @@
 //
 
 @objc
-enum DisplayValue: Int32, CaseIterable {
+enum RouteInfoDisplayValue: Int32, CaseIterable {
     case arrivalTime
     case timeToGo
     case distance
@@ -36,7 +36,7 @@ enum DisplayValue: Int32, CaseIterable {
         }
     }
     
-    static func getValues(with displayValue: DisplayValue) -> [DisplayValue] {
+    static func getValues(with displayValue: RouteInfoDisplayValue) -> [RouteInfoDisplayValue] {
         switch displayValue {
         case .arrivalTime: [.arrivalTime, .distance, .timeToGo]
         case .timeToGo: [.timeToGo, .distance, .arrivalTime]

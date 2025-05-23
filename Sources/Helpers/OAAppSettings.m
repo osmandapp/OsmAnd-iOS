@@ -23,6 +23,7 @@
 #import "OAApplicationMode.h"
 #import "OAMapLayersConfiguration.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 static NSString * const settingAppModeKey = @"settingAppModeKey";
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
@@ -173,6 +174,7 @@ static NSString * const autoZoomMapScaleKey = @"autoZoomMapScale";
 static NSString * const keepInformingKey = @"keepInforming";
 static NSString * const speedSystemKey = @"speedSystem";
 static NSString * const volumeSystemKey = @"volumeSystem";
+static NSString * const fuelTankCapacityKey = @"fuelTankCapacity";
 static NSString * const angularUnitsKey = @"angularUnits";
 static NSString * const speedLimitExceedKey = @"speedLimitExceed";
 static NSString * const showArrivalTimeKey = @"showArrivalTime";
@@ -4688,9 +4690,9 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [_profilePreferences setObject:_volumeUnitsChangedManually forKey:@"volume_units_changed_manually"];
         [_profilePreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_profilePreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
-
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _volumeUnits = [OACommonVolumeConstant withKey:volumeSystemKey defValue:LITRES];
+        _fuelTankCapacity = [OACommonDouble withKey:fuelTankCapacityKey defValue:OASOBDDataComputer.shared.DEFAULT_FUEL_TANK_CAPACITY];
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
 
@@ -4698,6 +4700,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_profilePreferences setObject:_speedSystem forKey:@"default_speed_system"];
         [_profilePreferences setObject:_volumeUnits forKey:@"unit_of_volume"];
+        [_profilePreferences setObject:_fuelTankCapacity forKey:@"fuel_tank_capacity"];
         
         _preciseDistanceNumbers = [OACommonBoolean withKey:preciseDistanceNumbersKey defValue:YES];
         [_preciseDistanceNumbers setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];

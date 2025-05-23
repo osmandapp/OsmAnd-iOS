@@ -196,34 +196,11 @@ extension BLEManager: CommProtocol {
                         NSLog("[BLEManager] -> Error: ecuWriteCharacteristic is empty ")
                         return
                     }
-                    device.peripheral.writeValue(ofCharac: characteristic, value: data) { result in
-                        switch result {
-                        case .success(let result):
-                            break // The write was succesful.
-                        case .failure(let error):
-                            break // An error happened while writting the data.
-                        }
-                    }
-                   // connectedPeripheral.writeValue(data, for: characteristic, type: .withResponse)
-                    
+                    device.peripheral.writeValue(ofCharac: characteristic, value: data, completion: { _ in })
                 }
             }
         }
     }
-    
-//    enum BLEManagerError: Error, CustomStringConvertible {
-//        case missingPeripheralOrCharacteristic
-//        case unknownCharacteristic
-//        case scanTimeout
-//        case sendMessageTimeout
-//        case stringConversionFailed
-//        case noData
-//        case incorrectDataConversion
-//        case peripheralNotConnected
-//        case sendingMessagesInProgress
-//        case timeout
-//        case peripheralNotFound
-//    }
     
     func Timeout<R>(
         seconds: TimeInterval,

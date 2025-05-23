@@ -6,41 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-
-import Combine
 import CoreBluetooth
-import Foundation
-import OSLog
-
-struct BatchedResponse {
-    private var response: Data
-    private var unit: MeasurementUnit
-    init(response: Data, _ unit: MeasurementUnit) {
-        self.response = response
-        self.unit = unit
-    }
-
-    mutating func extractValue(_ cmd: OBDCommand) -> MeasurementResult? {
-        let properties = cmd.properties
-        let size = properties.bytes
-        guard response.count >= size else { return nil }
-        let valueData = response.prefix(size)
-
-        response.removeFirst(size)
-        //        print("Buffer: \(buffer.compactMap { String(format: "%02X ", $0) }.joined())")
-        let result = cmd.properties.decode(data: valueData, unit: unit)
-
-        
-
-        switch result {
-        case let .success(measurementResult):
-            return measurementResult.measurementResult
-        case let .failure(error):
-            print("Failed to decode \(cmd.properties.command): \(error.localizedDescription)")
-            return nil
-        }
-    }
-}
 
 enum ELM327Error: Error, LocalizedError {
     case noProtocolFound
@@ -74,7 +40,6 @@ enum ELM327Error: Error, LocalizedError {
     }
 }
 
-
 final class ELM327Adapter {
     private let service: CommProtocol
     
@@ -86,7 +51,7 @@ final class ELM327Adapter {
     }
     
     func adapterInitialization() async throws {
-        print("Initializing ELM327 adapter...")
+        NSLog("[ELM327Adapter] -> Initializing ELM327 adapter...")
         do {
             _ = try await sendCommand("ATZ") // Reset adapter
             _ = try await okResponse("ATE0") // Echo off
@@ -94,9 +59,9 @@ final class ELM327Adapter {
             _ = try await okResponse("ATS0") // Spaces off
             _ = try await okResponse("ATH1") // Headers off
             _ = try await okResponse("ATSP0") // Set protocol to automatic
-            print("ELM327 adapter initialized successfully.")
+            NSLog("[ELM327Adapter] -> ELM327 adapter initialized successfully.")
         } catch {
-            print("Adapter initialization failed: \(error.localizedDescription)")
+            NSLog("[ELM327Adapter] -> Adapter initialization failed: \(error.localizedDescription)")
             throw ELM327Error.adapterInitializationFailed
         }
     }
@@ -145,14 +110,14 @@ final class ELM327Adapter {
     }
     
     private func detectProtocol(preferredProtocol: PROTOCOL? = nil) async throws -> PROTOCOL {
-        print("Starting protocol detection...")
+        NSLog("[ELM327Adapter] -> Starting protocol detection...")
 
         if let preferredProtocol {
-            print("Attempting preferred protocol: \(preferredProtocol.description)")
+            NSLog("[ELM327Adapter] -> Attempting preferred protocol: \(preferredProtocol.description)")
             if await testProtocol(preferredProtocol) {
                 return preferredProtocol
             } else {
-                print("Preferred protocol \(preferredProtocol.description) failed. Falling back to automatic detection.")
+                NSLog("[ELM327Adapter] -> Preferred protocol \(preferredProtocol.description) failed. Falling back to automatic detection.")
             }
         } else {
 //            do {
@@ -162,7 +127,7 @@ final class ELM327Adapter {
 //            }
         }
 
-        print("Failed to detect a compatible OBD protocol.")
+        NSLog("[ELM327Adapter] -> Failed to detect a compatible OBD protocol.")
         throw ELM327Error.noProtocolFound
     }
     
@@ -172,11 +137,11 @@ final class ELM327Adapter {
 
         if let response,
            response.contains(where: { $0.range(of: #"41\s*00"#, options: .regularExpression) != nil }) {
-            print("Protocol \(obdProtocol.description) is valid.")
+            NSLog("[ELM327Adapter] -> Protocol \(obdProtocol.description) is valid.")
             r100 = response
             return true
         } else {
-            print("Protocol \(obdProtocol.rawValue) did not return valid 0100 response.")
+            NSLog("[ELM327Adapter] -> Protocol \(obdProtocol.rawValue) did not return valid 0100 response.")
             return false
         }
     }
@@ -186,8 +151,36 @@ final class ELM327Adapter {
         if response.contains("OK") {
             return response
         } else {
-            print("Invalid response: \(response)")
+            NSLog("[ELM327Adapter] -> Invalid response: \(response)")
             throw ELM327Error.invalidResponse(message: "message: \(message), \(String(describing: response.first))")
+        }
+    }
+}
+
+struct BatchedResponse {
+    private var response: Data
+    private var unit: MeasurementUnit
+    init(response: Data, _ unit: MeasurementUnit) {
+        self.response = response
+        self.unit = unit
+    }
+
+    mutating func extractValue(_ cmd: OBDCommand) -> MeasurementResult? {
+        let properties = cmd.properties
+        let size = properties.bytes
+        guard response.count >= size else { return nil }
+        let valueData = response.prefix(size)
+
+        response.removeFirst(size)
+        //        print("Buffer: \(buffer.compactMap { String(format: "%02X ", $0) }.joined())")
+        let result = cmd.properties.decode(data: valueData, unit: unit)
+
+        switch result {
+        case let .success(measurementResult):
+            return measurementResult.measurementResult
+        case let .failure(error):
+            NSLog("[BatchedResponse] -> Failed to decode \(cmd.properties.command): \(error.localizedDescription)")
+            return nil
         }
     }
 }

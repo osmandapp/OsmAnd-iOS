@@ -61,7 +61,7 @@ final class OBDVehicleMetricsDevice: Device {
     
     override func disconnect(completion: @escaping DisconnectPeripheralCallback) {
         peripheral.disconnect(completion: { [weak self] result in
-            if case let .success(value) = result {
+            if case .success(_) = result {
                 self?.ecuWriteCharacteristic = nil
             }
             completion(result)

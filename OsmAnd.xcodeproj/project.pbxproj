@@ -3097,6 +3097,7 @@
 		FA282AF62C2C456700CC7AC1 /* WeatherNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA282AF32C2C456700CC7AC1 /* WeatherNavigationBarView.swift */; };
 		FA282AF72C2C456700CC7AC1 /* WeatherNavigationBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA282AF42C2C456700CC7AC1 /* WeatherNavigationBarView.xib */; };
 		FA2E95C12DDDD97600B0ACA0 /* SearchOBDDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E95C02DDDD97500B0ACA0 /* SearchOBDDeviceTableViewCell.swift */; };
+		FA2E95C32DDE0A6C00B0ACA0 /* OBDService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */; };
 		FA327BFE2BB418F900CFADCF /* MissingMapsCalculator.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */; };
 		FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */; };
 		FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE42ADF026D0001C11D /* DeviceType.swift */; };
@@ -7680,6 +7681,7 @@
 		FA282AF32C2C456700CC7AC1 /* WeatherNavigationBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherNavigationBarView.swift; sourceTree = "<group>"; };
 		FA282AF42C2C456700CC7AC1 /* WeatherNavigationBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WeatherNavigationBarView.xib; sourceTree = "<group>"; };
 		FA2E95C02DDDD97500B0ACA0 /* SearchOBDDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOBDDeviceTableViewCell.swift; sourceTree = "<group>"; };
+		FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDService.swift; sourceTree = "<group>"; };
 		FA327BFC2BB418F900CFADCF /* MissingMapsCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingMapsCalculator.h; sourceTree = "<group>"; };
 		FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MissingMapsCalculator.mm; sourceTree = "<group>"; };
 		FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEChangeDeviceNameViewController.swift; sourceTree = "<group>"; };
@@ -14142,6 +14144,7 @@
 		FACDC6422DDB7BCA00CB0C55 /* OBD */ = {
 			isa = PBXGroup;
 			children = (
+				FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */,
 				FACDC6432DDB7BFF00CB0C55 /* protocol_can.swift */,
 				FACDC6442DDB7BFF00CB0C55 /* protocol_legacy.swift */,
 				FACDC6452DDB7BFF00CB0C55 /* codes.swift */,
@@ -16609,6 +16612,7 @@
 				DA5A814F26C563A700F274C7 /* OACarPlayFavoritesListController.mm in Sources */,
 				DA5A813826C563A700F274C7 /* OAOsmBugResult.m in Sources */,
 				B247455727E6470A00C18C3F /* OATwoFilledButtonsTableViewCell.m in Sources */,
+				FA2E95C32DDE0A6C00B0ACA0 /* OBDService.swift in Sources */,
 				DA5A812326C563A700F274C7 /* OATransportStop.mm in Sources */,
 				DA5A84BF26C563A900F274C7 /* OAPointOptionsBottomSheetViewController.mm in Sources */,
 				DA5A852D26C563A900F274C7 /* OASaveGpxToTripsActivity.mm in Sources */,

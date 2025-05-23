@@ -82,7 +82,6 @@ final class OBDVehicleMetricsSensor: Sensor {
 //            if let device = device as? OBDVehicleMetricsDevice {
 //                device.ecuWriteCharacteristic = characteristic
 //            }
-           
             print("")
         case "FFF1".CBUUIDRepresentation:
             print("")

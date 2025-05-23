@@ -43,6 +43,12 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         tableView.dataSource = self
         view.backgroundColor = .viewBg
         tableView.contentInset.bottom = 64
+        
+     //   startDispatcher()
+        //FUEL_TYPE(OBDTypeWidget.FUEL_TYPE, R.drawable.ic_action_fuel_tank),
+        //-------------///
+        
+        //-------------//
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -352,28 +358,61 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     @IBAction private func onPairNewSensorButtonPressed(_ sender: Any) {
         pairNewSensor()
     }
+    
+    deinit {
+        print("deinit")
+    }
 }
 
 // MARK: - UIContextMenuConfiguration
-extension VehicleMetricsSensorsController {
 
-    override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        guard let device = getDeviceFor(indexPath: indexPath) else { return nil }
-        // TODO: check
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
-            guard let self else { return nil }
-            
-            let info = UIAction(title: localizedString("info_button"), image: UIImage(systemName: "info.circle")) { _ in
-                self.showDescriptionViewController(device: device)
+extension VehicleMetricsSensorsController {
+    private func getConnectionStateAction(for device: Device) -> UIAction {
+        let isConnected = device.isConnected
+
+        let titleKey = isConnected ? "external_device_status_disconnect" : "external_device_status_connect"
+        let image: UIImage = isConnected ? .icCustomObd2ConnectorDisable : .icCustomObd2Connector
+        let actionTitle = localizedString(titleKey)
+
+        let action = UIAction(title: actionTitle, image: image) { _ in
+            if isConnected {
+                device.disconnect(completion: { _ in })
+            } else {
+                DeviceHelper.shared.updateConnected(devices: [device])
             }
-            let rename = UIAction(title: localizedString("shared_string_rename"), image: UIImage(systemName: "square.and.pencil")) { _ in
-                self.showRenameViewController(device: device)
-            }
-            let forget = UIAction(title: localizedString("external_device_menu_forget"), image: UIImage(systemName: "xmark.circle")) { _ in
-                self.showForgetSensorActionSheet(device: device)
-            }
-            return UIMenu(title: "", options: .displayInline, children: [info, rename, forget])
         }
+        return action
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            contextMenuConfigurationForRowAt indexPath: IndexPath,
+                            point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let device = getDeviceFor(indexPath: indexPath) else { return nil }
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            self?.buildContextMenu(for: device)
+        }
+    }
+
+    private func buildContextMenu(for device: Device) -> UIMenu {
+        let connectionAction = getConnectionStateAction(for: device)
+        let settings = UIAction(title: localizedString("shared_string_settings"), image: .icCustomSettingsOutlined) { [weak self] _ in
+            self?.showDescriptionViewController(device: device, startBehavior: .scrollToSearch)
+        }
+        let rename = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { [weak self] _ in
+            self?.showRenameViewController(device: device)
+        }
+        let forget = UIAction(title: localizedString("external_device_menu_forget"),
+                              image: .icCustomObd2ConnectorDisconnect,
+                              attributes: .destructive) { [weak self] _ in
+            self?.showForgetSensorActionSheet(device: device)
+        }
+        
+        return UIMenu.composedMenu(from: [
+            [connectionAction],
+            [settings, rename],
+            [forget]
+        ])
     }
     
     private func getDeviceFor(indexPath: IndexPath) -> Device? {
@@ -411,5 +450,23 @@ extension VehicleMetricsSensorsController {
         let controller = VehicleMetricsDescriptionViewController()
         controller.device = device
         navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    private func showDescriptionViewController(device: Device, startBehavior: VehicleMetricsDescriptionViewController.TableViewStartBehavior) {
+        let controller = VehicleMetricsDescriptionViewController()
+        controller.device = device
+        controller.startBehavior = .scrollToSearch
+        navigationController?.pushViewController(controller, animated: true)
+    }
+}
+
+extension UIMenu {
+    
+    static func composedMenu(from sections: [[UIMenuElement]]) -> UIMenu {
+        UIMenu(title: "", children: sections.map(UIMenu.inlineSection))
+    }
+    
+    private static func inlineSection(with elements: [UIMenuElement]) -> UIMenu {
+        UIMenu(title: "", options: .displayInline, children: elements)
     }
 }

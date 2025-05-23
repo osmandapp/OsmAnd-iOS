@@ -19,7 +19,7 @@ final class DescriptionDeviceHeader: UIView {
     
     var onUpdateConnectStateAction: ((DeviceState) -> Void)?
     var didPairedDeviceAction: (() -> Void)?
-    var onUpdateOBDInfoAction: ((OBDInfo) -> Void)?
+    var onAdapterInitialized: ((OBDInfo) -> Void)?
     
     private var device: Device?
     
@@ -163,43 +163,21 @@ final class DescriptionDeviceHeader: UIView {
                     completedCount += 1
                     if completedCount == totalServices {
                         if device.deviceType == .OBD_VEHICLE_METRICS {
-                            adapterInitializationIfNeeded { [weak self] info in
+                            DeviceHelper.shared.adapterInitializationIfNeeded { [weak self] info in
                                 guard let self, let info else { return }
-                                onUpdateOBDInfoAction?(info)
+                                onAdapterInitialized?(info)
                             }
                         }
                     }
                 case .failure(let error):
                     NSLog("discoverCharacteristics: \(error)")
                     showErrorAlertWith(message: error.localizedDescription)
+                    completedCount += 1
                 }
             }
         }
     }
-    
-    private func adapterInitializationIfNeeded(completion: @escaping (OBDInfo?) -> Void) {
-        Task {
-            do {
-                let info = try await DeviceHelper.shared.adapterInitialization()
-                completion(info)
-            } catch {
-                NSLog(error.localizedDescription)
-                completion(nil)
-            }
-        }
-    }
-    
-//    private func adapterInitializationIfNeeded() -> OBDInfo {
-//        Task {
-//            do {
-//              let info = try await DeviceHelper.shared.adapterInitialization()
-//              return info
-//            } catch {
-//                NSLog(error.localizedDescription)
-//            }
-//        }
-//    }
-    
+        
     private func disconnect() {
         guard let device else { return }
         configureConnectButtonTitle(with: .disconnecting)

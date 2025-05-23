@@ -6,24 +6,17 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import Combine
-
-public enum OBDServiceError: Error {
-    //case noAdapterFound
- //   case notConnectedToVehicle
-//    case adapterConnectionFailed(underlyingError: Error)
-//    case scanFailed(underlyingError: Error)
- //   case clearFailed(underlyingError: Error)
-    case commandFailed(command: String, error: Error)
-}
-
 final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController {
+    
+    enum TableViewStartBehavior {
+        case normal, scrollToSearch
+    }
     
     private enum Section: Int {
         case information, receivedData, settings, forgetSensor
     }
     
-    private var info: OBDInfo?
+    var startBehavior: TableViewStartBehavior = .normal
     
     var device: Device! {
         didSet {
@@ -39,74 +32,11 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             }
         }
     }
-    
+        
     private lazy var headerView: DescriptionDeviceHeader = {
         Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
     }()
-    
         
-    private var timer: Timer?
-    private var isUpdating = false
-    
-    func startContinuousUpdates(pids: [OBDCommand],
-                                unit: MeasurementUnit = .metric,
-                                interval: TimeInterval = 0.3) {
-        guard !isUpdating else { return }
-        isUpdating = true
-        
-        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
-            Task {
-                await self?.updatePIDs(pids, unit: unit)
-            }
-        }
-    }
-    
-    private func updatePIDs(_ pids: [OBDCommand], unit: MeasurementUnit) async {
-        do {
-            let results = try await requestPIDs(pids, unit: unit)
-            updateResults(measurements: results)
-        } catch {
-            print("Ошибка при получении PID: \(error)")
-        }
-    }
-    
-    func updateResults(measurements: [OBDCommand: MeasurementResult]) {
-        for (pid, measurement) in measurements {
-            print("command: \(pid.properties.command) | description: \(pid.properties.description) ) | value:  \(measurement.value)")
-        }
-    }
-    
-    func stopContinuousUpdates() {
-        guard isUpdating else { return }
-
-        timer?.invalidate()
-        timer = nil
-        isUpdating = false
-    }
-    
-    func requestPIDs(_ commands: [OBDCommand], unit: MeasurementUnit) async throws -> [OBDCommand: MeasurementResult] {
-        let response = try await sendCommandInternal("01" + commands.compactMap { $0.properties.command.dropFirst(2) }.joined(), retries: 10)
-
-        guard let responseData = try DeviceHelper.shared.elm327Adapter.canProtocol?.parse(response).first?.data else { return [:] }
-
-        var batchedResponse = BatchedResponse(response: responseData, unit)
-
-        let results: [OBDCommand: MeasurementResult] = commands.reduce(into: [:]) { result, command in
-            let measurement = batchedResponse.extractValue(command)
-            result[command] = measurement
-        }
-
-        return results
-    }
-    
-    func sendCommandInternal(_ message: String, retries: Int) async throws -> [String] {
-        do {
-            return try await DeviceHelper.shared.elm327Adapter.sendCommand(message, retries: retries)
-        } catch {
-            throw OBDServiceError.commandFailed(command: message, error: error)
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -120,72 +50,24 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             generateData()
             tableView.reloadData()
         }
-        headerView.onUpdateOBDInfoAction = { [weak self] result in
+        headerView.onAdapterInitialized = { [weak self] _ in
             guard let self else { return }
-            info = result
-            // Engine speed - RPM (Revolutions Per Minute)
-            //   case .rpm
-            
-            // Intake temperature
-            //  case .intakeTemp: return """
-            
-            // Vehicle speed
-            // case .speed: return CommandProperties("010D", "Vehicle Speed", 2, .uas(0x09), true, maxValue: 280)
-            
-            // Ambient temperature
-            // ambientAirTemp
-            
-            // Coolant temperature
-            // case .coolantTemp:
-            
-            //Engine Oil Temperature
-            // .engineOilTemp
-            
-           // Calculated Engine Load
-           // case .engineLoad: return CommandProperties("0104", "Calculated Engine Load", 2, .percent, true)
-            
-           // Fuel Pressure
-           // case .fuelPressure: return CommandProperties("010A", "Fuel Pressure", 2, .fuelPressure, true, maxValue: 765)
-            
-          // Throttle Position
-          // case .throttlePos: return CommandProperties("0111", "Throttle Position", 2, .percent, true)
-            
-          // Battery voltage
-          // case .controlModuleVoltage: return CommandProperties("0142", "Control module voltage", 4, .uas(0x0B), true)
-            
-          // Fuel type
-          // case .fuelType: return CommandProperties("0151", "Fuel Type", 2, .fuelType)
-            
-          // Fuel consumption
-          // case .fuelRate: return CommandProperties("015E", "Engine fuel rate", 4, .fuelRate, true
-          // OBD_FUEL_CONSUMPTION_RATE_COMMAND(0x01, 0x5E, 2, OBDUtils::parseFuelConsumptionRateResponse, "vm_fcons"),
-            
-         // Remaining fuel
-         // case .fuelLevel: return CommandProperties("012F", "Fuel Tank Level Input", 4, .percent, true)
-         // OBD_FUEL_LEVEL_COMMAND(0x01, 0x2F, 1, OBDUtils::parsePercentResponse, "vm_fuel");
-   
-        // NOTE: limit 6 commands after receive response:  ["NO DATA"]
-            // TODO: use supported pids
-            startContinuousUpdates(pids: [.mode1(.rpm),
-                                          .mode1(.speed),
-                                          .mode1(.intakeTemp),
-                                          .mode1(.ambientAirTemp),
-                                          .mode1(.coolantTemp),
-                                          .mode1(.engineOilTemp),
-// >>>>>>>
-//                                          .mode1(.engineLoad),
-//                                          .mode1(.fuelPressure),
-//                                          .mode1(.throttlePos),
-//                                          .mode1(.controlModuleVoltage),
-//                                          .mode1(.fuelType),
-//                                          .mode1(.fuelRate),
-//                                          .mode1(.fuelLevel)
-                                          ])
+
             generateData()
             tableView.reloadData()
         }
         tableView.tableHeaderView = headerView
         registerObservers()
+        
+        OBDService.shared.startDispatcher()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if case .scrollToSearch = startBehavior {
+            startBehavior = .normal
+            scrollToSearchSection()
+        }
     }
     
     override func setupTableHeaderView() {
@@ -196,17 +78,13 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         addCell(OAValueTableViewCell.reuseIdentifier)
     }
     
-    private func configureHeader() {
-        headerView.frame.size.height = 156
-        headerView.frame.size.width = view.frame.width
-        tableView.tableHeaderView = headerView
-    }
-    
     override func generateData() {
         tableData.clearAllData()
         
+       
+        
         if DeviceHelper.shared.isPairedDevice(id: device.id) {
-            if let info, let vin = info.vin, !vin.isEmpty {
+            if let vin = OBDDataComputer.OBDTypeWidget.vin.getTitle(), !vin.isEmpty {
                 // Vehicle info
                 let vehicleInfoSection = tableData.createNewSection()
                 vehicleInfoSection.headerText = localizedString("obd_vehicle_info").uppercased()
@@ -221,20 +99,62 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             }
             
             // Received Data
-            if let receivedData = device.getDataFields, !receivedData.isEmpty {
-                let receivedDataSection = tableData.createNewSection()
-                receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
-                receivedDataSection.key = "receivedData"
-                for array in receivedData {
-                    if let dic = array.first {
-                        let row = receivedDataSection.createNewRow()
-                        row.cellType = OAValueTableViewCell.reuseIdentifier
-                        row.key = "row"
-                        row.title = dic.key
-                        row.descr = dic.value != "0" ? dic.value : "-"
-                    }
+            let receivedDataSection = tableData.createNewSection()
+            receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
+            receivedDataSection.key = "receivedData"
+            
+          //  DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            OBDDataComputer.shared.widgets.forEach { widget in
+                let row = receivedDataSection.createNewRow()
+                row.cellType = OAValueTableViewCell.reuseIdentifier
+                row.key = "row"
+                row.title = widget.type.getTitle() //command.localizedTitle
+                if let stringValue = widget.computeValue() as? String, !stringValue.isEmpty {
+                    print(stringValue)
+                    row.descr = stringValue
+                } else {
+                    row.descr = "N/A"
                 }
-            }
+                
+                    
+                    
+                  //  let localizeTitle = widget.type.getTitle()
+                //   let localizeTitle = OBDDataComputer.OBDTypeWidget.rpm.getTitle()
+                   // icons
+                  // let localizeTitle = OBDDataComputer.OBDTypeWidget.rpm.g
+                   // widget.type == OBDDataComputer.OBDTypeWidget.rpm
+                  // let value = widget.computeValue()
+                }
+           // }
+            
+            
+            
+//            for command in OBDService.shared.vehicleMetricsCommandsFullList {
+//                let row = receivedDataSection.createNewRow()
+//                row.cellType = OAValueTableViewCell.reuseIdentifier
+//                row.key = "row"
+//                row.title = command.localizedTitle
+//                row.descr = "N/A"//dic.value != "0" ? dic.value : "-"
+//            }
+            
+         //   fullListCommands
+            
+            
+            
+//            if let receivedData = device.getDataFields, !receivedData.isEmpty {
+//                let receivedDataSection = tableData.createNewSection()
+//                receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
+//                receivedDataSection.key = "receivedData"
+//                for array in receivedData {
+//                    if let dic = array.first {
+//                        let row = receivedDataSection.createNewRow()
+//                        row.cellType = OAValueTableViewCell.reuseIdentifier
+//                        row.key = "row"
+//                        row.title = dic.key
+//                        row.descr = dic.value != "0" ? dic.value : "-"
+//                    }
+//                }
+//            }
             // Settings
             let settingsSection = tableData.createNewSection()
             settingsSection.headerText = localizedString("shared_string_settings").uppercased()
@@ -339,6 +259,24 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                                                object: nil)
     }
     
+        
+    private func scrollToSearchSection() {
+        for index in 0..<tableData.sectionCount() {
+            let section = tableData.sectionData(for: index)
+            if section.key == "settings" {
+                let indexPath = IndexPath(row: 0, section: Int(index))
+                tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                break
+            }
+        }
+    }
+     
+    private func configureHeader() {
+        headerView.frame.size.height = 156
+        headerView.frame.size.width = view.frame.width
+        tableView.tableHeaderView = headerView
+    }
+    
     @objc private func deviceRSSIUpdated() {
         headerView.updateRSSI(with: device.rssi)
     }
@@ -355,5 +293,32 @@ extension VehicleMetricsDescriptionViewController {
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         alert.popoverPresentationController?.sourceView = view
         present(alert, animated: true)
+    }
+}
+
+extension OBDCommand {
+    var localizedTitle: String {
+        switch self {
+        case .mode1(let pid):
+            switch pid {
+            case .rpm: return "Обороты двигателя"
+            case .speed: return "Скорость"
+            case .intakeTemp: return "Температура на впуске"
+            case .ambientAirTemp: return "Температура окружающей среды"
+            case .coolantTemp: return "Температура охлаждающей жидкости"
+            case .engineOilTemp: return "Температура масла"
+            case .engineLoad: return "Нагрузка двигателя"
+            case .fuelPressure: return "Давление топлива"
+            case .throttlePos: return "Положение дросселя"
+            case .controlModuleVoltage: return "Напряжение ЭБУ"
+            case .fuelType: return "Тип топлива"
+            case .fuelRate: return "Расход топлива"
+            case .fuelLevel: return "Уровень топлива"
+            default:
+                return ""
+            }
+        default:
+            return ""
+        }
     }
 }

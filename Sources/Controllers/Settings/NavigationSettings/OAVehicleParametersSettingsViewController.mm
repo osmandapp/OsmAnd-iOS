@@ -435,9 +435,17 @@
     if (_selectedParameter.intValue != -1)
         _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].doubleValue];
     if (_isFuelTankCapacity)
-        _measurementValue = [NSString stringWithFormat:@"%f", [OAOsmAndFormatter prepareFuelTankCapacityToSave:[_settings.volumeUnits get:self.appMode] value:[_measurementValue doubleValue]]];
-    OACommonString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
-    [property set:_measurementValue mode:self.appMode];
+    {
+        double value = [OAOsmAndFormatter prepareFuelTankCapacityToSave:[_settings.volumeUnits get:self.appMode] value:[_measurementValue doubleValue]];
+        OACommonDouble *property = [[OAAppSettings sharedManager] fuelTankCapacity];
+        [property set:value mode:self.appMode];
+    }
+    else
+    {
+        OACommonString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
+        [property set:_measurementValue mode:self.appMode];
+    }
+        
     [self dismissViewController];
     if (self.delegate)
         [self.delegate onSettingsChanged];

@@ -170,16 +170,16 @@
 
 - (void) setupFuelTankCapacity:(NSMutableArray *)exraParametersArr
 {
-    OACommonString *stringParam = [_settings getCustomRoutingProperty:@"fuel_tank_capacity" defaultValue:@"0"];
-    NSString *value = [stringParam get:self.appMode];
-    double convertedValue = [OAOsmAndFormatter readSavedFuelTankCapacity:[_settings.volumeUnits get:self.appMode] mode:self.appMode value:[value doubleValue]];
-    value = [OAOsmAndFormatter getFormattedFuelCapacity:[_settings.volumeUnits get:self.appMode] mode:self.appMode value:convertedValue];
+    OACommonDouble *doubleParam = [_settings fuelTankCapacity];
+    double value = [doubleParam get:self.appMode];
+    double convertedValue = [OAOsmAndFormatter readSavedFuelTankCapacity:[_settings.volumeUnits get:self.appMode] mode:self.appMode value:value];
+    NSString *stringValue = [OAOsmAndFormatter getFormattedFuelCapacity:[_settings.volumeUnits get:self.appMode] mode:self.appMode value:convertedValue];
     int index = -1;
     
     NSMutableArray<NSNumber *> *possibleValues = [NSMutableArray new];
     NSMutableArray<NSString *> *valueDescriptions = [NSMutableArray new];
     
-    double d = value ? floorf(value.doubleValue * 100 + 0.5) / 100 : DBL_MAX;
+    double d = stringValue ? floorf(stringValue.doubleValue * 100 + 0.5) / 100 : DBL_MAX;
     
     for (int i = 0; i <= 11; i++)
     {
@@ -196,12 +196,12 @@
          @{
         @"name" : @"fuel_tank_capacity",
         @"title" : OALocalizedString(@"fuel_tank_capacity"),
-        @"value" : value,
+        @"value" : stringValue,
         @"selectedItem" : @(index),
         @"icon" : @"ic_custom_obd_fuel_tank",
         @"possibleValues" : possibleValues,
         @"possibleValuesDescr" : valueDescriptions,
-        @"setting" : stringParam,
+        @"setting" : doubleParam,
         @"type" : [OAValueTableViewCell getCellIdentifier] }
     ];
 }

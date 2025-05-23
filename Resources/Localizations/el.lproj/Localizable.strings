@@ -2634,3 +2634,14 @@
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "tts_title" = "TTS";
 "travel_routes" = "Διαδρομές ταξιδιών";
+"meridian_180" = "180ός μεσημβρινός";
+"equator" = "Ισημερινός";
+"unit_of_volume" = "Μονάδα όγκου";
+"layer_coordinates_grid" = "Πλέγμα συντεταγμένων";
+"rendering_attr_showClimbingRoutes_name" = "Αναρριχητικές διαδρομές";
+"liter" = "λ";
+"rendering_attr_showClimbingRoutes_description" = "Εμφάνιση αναρριχητικών διαδρομών";
+"obd_plugin_name" = "Μετρικές οχήματος";
+"prime_meridian" = "Πρώτος μεσημβρινός";
+"shared_strings_dimensions" = "Διαστάσεις";
+"litres" = "Λίτρα";

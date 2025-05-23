@@ -14,6 +14,7 @@ private enum RowKey: String {
     case zoomRowKey
     case labelsPositionRowKey
     case colorRowKey
+    case getColorRowKey
 }
 
 private enum Constants {
@@ -53,6 +54,11 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
     func setupView() {
         registerCells()
         initData()
+        registerNotifications()
+    }
+    
+    func deinitView() {
+        NotificationCenter.default.removeObserver(self)
     }
     
     func initData() {
@@ -91,7 +97,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             labelsPositionRow.iconTintColor = .iconColorDefault
             let colorRow = positionColorSection.createNewRow()
             colorRow.cellType = isMapsPlusProAvailable() ? OARightIconTableViewCell.reuseIdentifier : OATwoButtonsTableViewCell.reuseIdentifier
-            colorRow.key = RowKey.colorRowKey.rawValue
+            colorRow.key = isMapsPlusProAvailable() ? RowKey.colorRowKey.rawValue : RowKey.getColorRowKey.rawValue
             colorRow.title = localizedString("grid_color")
             colorRow.descr = localizedString("customize_grid_color")
             colorRow.icon = isMapsPlusProAvailable() ? UIImage.templateImageNamed("ic_custom_appearance") : .icCustomGridColored
@@ -218,6 +224,11 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
         tblView?.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
     }
     
+    private func registerNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(productPurchased(_:)), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(productsRestored(_:)), name: Notification.Name(NSNotification.Name.OAIAPProductsRestored.rawValue), object: nil)
+    }
+    
     private func updateData() {
         initData()
         tblView?.reloadData()
@@ -274,6 +285,20 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
     @objc private func onCellButtonClicked(sender: UIButton) {
         if let navigationController = vwController?.navigationController {
             OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
+        }
+    }
+    
+    @objc private func productPurchased(_ notification: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.updateData()
+        }
+    }
+    
+    @objc private func productsRestored(_ notification: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.updateData()
         }
     }
 }

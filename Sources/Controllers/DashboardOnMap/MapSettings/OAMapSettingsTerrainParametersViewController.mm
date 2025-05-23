@@ -214,6 +214,12 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self setupBottomButton];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self refreshColorsCollection];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -617,6 +623,18 @@ static const NSInteger kElevationMaxMeters = 2000;
     return YES;
 }
 
+- (void)refreshColorsCollection
+{
+    if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor && (_colorsCollectionIndexPath && _colorsCollectionIndexPath.section < [self.tableView numberOfSections] && _colorsCollectionIndexPath.row < [self.tableView numberOfRowsInSection:_colorsCollectionIndexPath.section]))
+    {
+        [self.tableView reloadRowsAtIndexPaths:@[_colorsCollectionIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        OACollectionSingleLineTableViewCell *colorCell = (OACollectionSingleLineTableViewCell *) [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+        NSIndexPath *selectedIndexPath = [[colorCell getCollectionHandler] getSelectedIndexPath];
+        if (selectedIndexPath.row != NSNotFound && ![colorCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+            [colorCell.collectionView scrollToItemAtIndexPath:selectedIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    }
+}
+
 - (BOOL)resetGPXVerticalExaggerationValues
 {
     double scale = 0.25;
@@ -845,10 +863,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     _isNightCoordinatesGridColorMode = index == 1;
     [[OADayNightHelper instance] setTempMode:_isNightCoordinatesGridColorMode ? DayNightModeNight : DayNightModeDay];
-    if (_colorsCollectionIndexPath && _colorsCollectionIndexPath.section < [self.tableView numberOfSections] && _colorsCollectionIndexPath.row < [self.tableView numberOfRowsInSection:_colorsCollectionIndexPath.section])
-    {
-        [self.tableView reloadRowsAtIndexPaths:@[_colorsCollectionIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-    }
+    [self refreshColorsCollection];
 }
 
 - (void)onCellButtonPressed:(UIButton *)sender
@@ -1255,7 +1270,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         }
         else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
         {
-            NSArray<OAColorItem *> *allColors = [_appearanceCollection getAvailableColorsSortingByKey];
+            NSArray<OAColorItem *> *allColors = [_appearanceCollection getAvailableColorsSortingByLastUsed];
             OAColorItem *selected = _isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem;
             colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:allColors selectedItem:selected];
             OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];

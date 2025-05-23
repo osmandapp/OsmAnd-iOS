@@ -21,11 +21,11 @@ enum GridFormat: Int32, CaseIterable {
     var title: String {
         switch self {
         case .dms:
-            return localizedString("navigate_point_format_DMS")
+            return localizedString("dd_mm_ss_format")
         case .dm:
-            return localizedString("navigate_point_format_DM")
+            return localizedString("dd_mm_mmm_format")
         case .digital:
-            return localizedString("navigate_point_format_D")
+            return localizedString("dd_ddddd_format")
         case .utm:
             return localizedString("navigate_point_format_UTM")
         case .mgrs:

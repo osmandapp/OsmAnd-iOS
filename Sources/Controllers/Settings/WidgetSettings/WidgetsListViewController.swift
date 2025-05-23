@@ -719,6 +719,7 @@ extension WidgetsListViewController {
     }
     
     private func applyRowStyle() {
+        guard widgetPanel.isPanelVertical else { return }
         for widgets in getPagesWithMapWidgetInfo() {
             var widgetsInfoInRow = [OATextInfoWidget]()
             for widget in widgets {
@@ -753,8 +754,8 @@ extension WidgetsListViewController {
     
     private func updateWidgetStyleForRowsInLastPage(_ newWidget: MapWidgetInfo,
                                                     _ sectionData: OATableSectionData) -> EOAWidgetSizeStyle? {
+        guard widgetPanel.isPanelVertical else { return nil }
         let addWidgetSizeStyle = (newWidget.widget as? OATextInfoWidget)?.widgetSizeStyle ?? .medium
-        
         let lastWidgetInRow = sectionData.getRow(sectionData.rowCount() - 1)
         guard let simpleWidget = (lastWidgetInRow.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget else {
             return nil

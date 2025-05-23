@@ -128,8 +128,8 @@ class MapWidgetInfo: NSObject, Comparable {
         widget.getSettingsData(appMode, widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate)
     }
     
-    func getSettingsDataForSimpleWidget(_ appMode: OAApplicationMode) -> OATableDataModel? {
-        widget.getSettingsData(forSimpleWidget: appMode)
+    func getSettingsDataForSimpleWidget(_ appMode: OAApplicationMode, widgetsPanel: WidgetsPanel) -> OATableDataModel? {
+        widget.getSettingsData(forSimpleWidget: appMode, widgetsPanel: widgetsPanel)
     }
     
     func handleRowSelected(_ item: OATableRowData, viewController: WidgetConfigurationViewController) -> Bool {

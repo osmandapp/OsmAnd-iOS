@@ -851,6 +851,11 @@ static BOOL _isDeviatedFromRoute = false;
     return [_route getDistanceToNextIntermediate:_lastFixedLocation];
 }
 
+- (int) getLeftDistanceNextIntermediateWith:(int)intermediateIndexOffset
+{
+    return [_route getDistanceToNextIntermediate:_lastFixedLocation intermediateIndexOffset:intermediateIndexOffset];
+}
+
 - (long) getLeftTime
 {
     return [_route getLeftTime:_lastFixedLocation];
@@ -863,7 +868,12 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (long) getLeftTimeNextIntermediate
 {
-    return [_route getLeftTimeToNextIntermediate:_lastFixedLocation];
+    return [self getLeftTimeNextIntermediateWith:0];
+}
+
+- (long) getLeftTimeNextIntermediateWith:(int)intermediateIndexOffset
+{
+    return [_route getLeftTimeToNextIntermediate:_lastFixedLocation intermediateIndexOffset:intermediateIndexOffset];
 }
 
 - (NSArray<OARouteDirectionInfo *> *) getRouteDirections

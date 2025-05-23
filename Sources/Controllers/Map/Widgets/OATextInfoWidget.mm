@@ -190,6 +190,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void)updateSimpleLayout
 {
+    if (![self isEnabledTextInfoComponents])
+        return;
+    
     NSArray *viewsToRemove = [self subviews];
     for (UIView *v in viewsToRemove)
     {
@@ -680,8 +683,16 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     }
 }
 
+- (BOOL)isEnabledTextInfoComponents
+{
+    return true;
+}
+
 - (void)refreshLabel
 {
+    if (![self isEnabledTextInfoComponents])
+        return;
+    
     if (self.isSimpleLayout)
     {
         [self configureSimpleLayout];
@@ -881,6 +892,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void)updateIcon
 {
+    if (![self isEnabledTextInfoComponents])
+        return;
+    
     _imageView.overrideUserInterfaceStyle = _isNight ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
     if (_icon)
         [self setImage:[UIImage imageNamed:_icon]];
@@ -926,12 +940,20 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
                              [UIImage imageNamed:ACImageNameIcCustom20HeightL]]
                     forKey:@"values"];
     
-    OATableRowData *showIconRow = section.createNewRow;
-    showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
-    showIconRow.title = OALocalizedString(@"show_icon");
-    [showIconRow setObj:_showIconPref forKey:@"pref"];
+    if ([self isEnabledShowIcon])
+    {
+        OATableRowData *showIconRow = section.createNewRow;
+        showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
+        showIconRow.title = OALocalizedString(@"show_icon");
+        [showIconRow setObj:_showIconPref forKey:@"pref"];
+    }
 
     return data;
+}
+
+- (BOOL)isEnabledShowIcon
+{
+    return true;
 }
 
 - (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams

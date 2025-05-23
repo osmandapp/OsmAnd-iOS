@@ -65,7 +65,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         var result: [WidgetType] = []
         
         for widget in widgets {
-            let group = widget.getGroup()
+            let group = widget.getGroup(withPanel: widgetPanel)
             if group != nil, !visitedGroups.contains(group!) {
                 visitedGroups.append(group!)
                 result.append(widget)
@@ -80,8 +80,8 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
 
     private func inflateAvailableDefaultWidgets(_ widgets: [WidgetType], section: OATableSectionData, hasExternalWidgets: Bool) {
         let sortedWidgets = widgets.sorted( by: { w0, w1 in
-            let group0 = w0.getGroup()
-            let group1 = w1.getGroup()
+            let group0 = w0.getGroup(withPanel: widgetPanel)
+            let group1 = w1.getGroup(withPanel: widgetPanel)
             let title0 = group0 != nil ? group0!.title : w0.title
             let title1 = group1 != nil ? group1!.title : w1.title
             return title0 < title1
@@ -89,7 +89,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         let nightMode = OAAppSettings.sharedManager().nightMode
         for i in 0..<sortedWidgets.count {
             let widgetType = sortedWidgets[i]
-            let widgetGroup = widgetType.getGroup()
+            let widgetGroup = widgetType.getGroup(withPanel: widgetPanel)
             let row = section.createNewRow()
             row.setObj(widgetType, forKey: "widget_type")
             if let widgetGroup {
@@ -99,7 +99,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
                 row.iconName = widgetType.iconName
             }
             row.title = widgetGroup != nil ? widgetGroup!.title : widgetType.title
-            row.descr = String(widgetGroup?.getWidgets().count ?? 1)
+            row.descr = String(widgetGroup?.getWidgets(withPanel: widgetPanel).count ?? 1)
             row.cellType = OAValueTableViewCell.getIdentifier()
         }
     }
@@ -186,7 +186,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
                     filteredSection.addRow(row)
                 }
                 
-                widgetGroup.getWidgets().forEach {
+                widgetGroup.getWidgets(withPanel: widgetPanel).forEach {
                     if containsCaseInsensitive(text: $0.title, substring: searchText) {
                         filteredSection.addRow(createSearchRowData(for: $0))
                     }

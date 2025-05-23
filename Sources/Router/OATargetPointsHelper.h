@@ -30,6 +30,7 @@
 - (NSArray<OARTargetPoint *> *) getAllPoints;
 - (NSArray<OARTargetPoint *> *) getIntermediatePointsWithTarget;
 - (OARTargetPoint *) getFirstIntermediatePoint;
+- (OARTargetPoint *)getIntermediatePoint:(int)intermediatePointIndex;
 
 - (void) lookupAllAddresses;
 

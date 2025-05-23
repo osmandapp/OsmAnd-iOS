@@ -210,12 +210,14 @@
     return res;
 }
 
-- (OARTargetPoint *) getFirstIntermediatePoint
+- (OARTargetPoint *)getFirstIntermediatePoint
 {
-    if (_intermediatePoints.count > 0)
-        return _intermediatePoints[0];
-    
-    return nil;
+    return [self getIntermediatePoint:0];
+}
+
+- (OARTargetPoint *)getIntermediatePoint:(int)intermediatePointIndex
+{
+    return intermediatePointIndex < _intermediatePoints.count ? _intermediatePoints[intermediatePointIndex] : nil;
 }
 
 - (void) restoreTargetPoints:(BOOL)updateRoute

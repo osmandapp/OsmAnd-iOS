@@ -44,13 +44,21 @@ class WidgetGroup: NSObject {
     }
     
     @objc func getWidgets() -> [WidgetType] {
+        getWidgets(withPanel: nil)
+    }
+    
+    @objc func getWidgets(withPanel panel: WidgetsPanel?) -> [WidgetType] {
         var widgets = [WidgetType]()
-        for widget in WidgetType.values {
-            if self == widget.group {
-                widgets.append(widget)
-            }
-        }
+        WidgetType.values.filter { isRelatedWidget($0, panel: panel) }
+            .forEach { widgets.append($0) }
         return widgets
+    }
+    
+    private func isRelatedWidget(_ widget: WidgetType, panel: WidgetsPanel?) -> Bool {
+        if let panel {
+            return self == widget.getGroup(withPanel: panel)
+        }
+        return self == widget.getGroup() || self == widget.getVerticalGroup()
     }
     
     @objc func getWidgetsIds() -> [String] {
@@ -103,8 +111,8 @@ class WidgetGroup: NSObject {
         return ""
     }
     
-    @objc func getOrder() -> Int {
-        getWidgets().first!.ordinal;
+    @objc func getOrder(withPanel panel: WidgetsPanel) -> Int {
+        getWidgets(withPanel: panel).first?.ordinal ?? 0
     }
     
     override func isEqual(_ object: Any?) -> Bool {

@@ -47,6 +47,7 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         addWidgetInfo(.coordinatesMapCenter)
         addWidgetInfo(.streetName)
         addWidgetInfo(.lanes)
+        addWidgetInfo(.routeInfo)
         addWidgetInfo(.markersTopBar)
     }
     

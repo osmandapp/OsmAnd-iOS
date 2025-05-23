@@ -549,16 +549,22 @@
 
 - (int) getDistanceToNextIntermediate:(CLLocation *)fromLoc
 {
+    return [self getDistanceToNextIntermediate:fromLoc intermediateIndexOffset:0];
+}
+
+- (int) getDistanceToNextIntermediate:(CLLocation *)fromLoc intermediateIndexOffset:(int)intermediateIndexOffset
+{
+    int targetIntermediateIndex = _nextIntermediate + intermediateIndexOffset;
     int dist = [self getDistanceToFinish:fromLoc];
     if (_listDistance && _currentRoute < _listDistance.count)
     {
-        if (_nextIntermediate >= _intermediatePoints.count)
+        if (targetIntermediateIndex >= _intermediatePoints.count)
         {
             return 0;
         }
         else
         {
-            int directionInd = _intermediatePoints[_nextIntermediate].intValue;
+            int directionInd = _intermediatePoints[targetIntermediateIndex].intValue;
             return dist - [self getListDistance:_directions[directionInd].routePointOffset];
         }
     }
@@ -638,12 +644,13 @@
     return 0;
 }
 
-- (long) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc
+- (long) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc intermediateIndexOffset:(int)intermediateIndexOffset
 {
-    if (_nextIntermediate >= _intermediatePoints.count)
+    int targetIntermediateIndex = _nextIntermediate + intermediateIndexOffset;
+    if (targetIntermediateIndex >= _intermediatePoints.count)
         return 0;
     
-    return [self getLeftTime:fromLoc] - _directions[_intermediatePoints[_nextIntermediate].intValue].afterLeftTime;
+    return [self getLeftTime:fromLoc] - _directions[_intermediatePoints[targetIntermediateIndex].intValue].afterLeftTime;
 }
 
 - (NSArray<CLLocation *> *) getImmutableAllLocations

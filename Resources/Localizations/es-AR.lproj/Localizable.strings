@@ -3672,7 +3672,7 @@
 "shared_strings_dimensions" = "Dimensiones";
 "fuel_tank_capacity" = "Capacidad del tanque de combustible";
 "poi_filter_fuel" = "Combustible";
-"unit_of_volume_description" = "Las unidades elegidas se aplicarán a todos los datos relacionados con el volumen en el perfil actual.";
+"unit_of_volume_description" = "Las unidades elegidas se aplicarán a todos los datos relacionados con el volumen del perfil actual.";
 "shared_string_litres" = "litros";
 "liter" = "l";
 "fuel_tank_capacity_description" = "Ingresá la capacidad del tanque para controlar con precisión los niveles de combustible y su consumo";

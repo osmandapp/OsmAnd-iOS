@@ -202,7 +202,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             }
             outCell = cell
         } else if item.cellType == OAButtonTableViewCell.getIdentifier() {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.getIdentifier()) as! OAButtonTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.reuseIdentifier) as! OAButtonTableViewCell
             let value = item.obj(forKey: "value") as? String
             cell.selectionStyle = .none
             cell.descriptionVisibility(false)

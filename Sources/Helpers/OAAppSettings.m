@@ -3973,8 +3973,8 @@ static NSString *kDistanceKey = @"DISTANCE";
 {
     RouteInfoDisplayValue defaultValue = self.defValue;
     NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (RouteInfoDisplayValue)((NSNumber *)pDefault).intValue;
+    if ([pDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (RouteInfoDisplayValue)pDefault.intValue;
 
     [self set:defaultValue];
 }
@@ -4059,8 +4059,8 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 {
     RouteInfoDisplayPriority defaultValue = self.defValue;
     NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (RouteInfoDisplayPriority)((NSNumber *)pDefault).intValue;
+    if ([pDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (RouteInfoDisplayPriority)pDefault.intValue;
 
     [self set:defaultValue];
 }

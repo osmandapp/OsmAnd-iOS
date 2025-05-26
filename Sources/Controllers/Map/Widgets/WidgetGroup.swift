@@ -48,10 +48,7 @@ class WidgetGroup: NSObject {
     }
     
     @objc func getWidgets(withPanel panel: WidgetsPanel?) -> [WidgetType] {
-        var widgets = [WidgetType]()
         WidgetType.values.filter { isRelatedWidget($0, panel: panel) }
-            .forEach { widgets.append($0) }
-        return widgets
     }
     
     private func isRelatedWidget(_ widget: WidgetType, panel: WidgetsPanel?) -> Bool {

@@ -24,14 +24,15 @@ final class RouteInfoCalculator {
     }
     
     func calculateRouteInformationWith(_ priority: RouteInfoDisplayPriority) -> [DestinationInfo] {
-        let finalDestination = getFinalDestinationInfo()
+        guard let finalDestination = getFinalDestinationInfo() else {
+            return []
+        }
         
-        if let currentIntermediate = getCurrentIntermediateInfo(), let finalDestination {
+        if let currentIntermediate = getCurrentIntermediateInfo() {
             return priority == .intermediateFirst ? [currentIntermediate, finalDestination] : [finalDestination, currentIntermediate]
-        } else if let finalDestination {
+        } else {
             return [finalDestination]
         }
-        return []
     }
     
     private func getCurrentIntermediateInfo() -> DestinationInfo? {
@@ -59,7 +60,7 @@ final class RouteInfoCalculator {
     }
     
     private func getFinalDestinationInfo() -> DestinationInfo? {
-        if let destination = OATargetPointsHelper.sharedInstance()!.getPointToNavigate() {
+        if let destination = OATargetPointsHelper.sharedInstance()?.getPointToNavigate() {
             let distance = getDistanceToDestinationWith(location: CLLocation(latitude: destination.getLatitude(), longitude: destination.getLongitude()))
             let leftTime = getEstimatedTimeToDestination()
             if isPointNotPassedWith(distance: distance, leftSeconds: leftTime) {

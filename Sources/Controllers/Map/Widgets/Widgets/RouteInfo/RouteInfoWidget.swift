@@ -26,13 +26,6 @@ final class RouteInfoWidget: OASimpleWidget {
     
     private static let oneHundredKmInMeters: Int32 = 100_000
     private static let hourInSeconds: TimeInterval = 60 * 60
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = .current
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
-        return formatter
-    }()
     
     private var customId: String?
     private var widgetState: RouteInfoWidgetState
@@ -224,7 +217,7 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private func updatePrimaryBlockWith(destinationInfo: DestinationInfo?, displayValues: [RouteInfoDisplayValue]) {
-        guard let destinationInfo, displayValues.count >= 2 else { return }
+        guard let destinationInfo, displayValues.count > 2 else { return }
         let size = widgetSizeStyle
         let data = prepareDisplayData(info: destinationInfo)
         let textColorSecondary: UIColor = isNightMode() ? .textColorSecondary.dark : .textColorSecondary.light
@@ -392,14 +385,9 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private func getDefaultViewSummary(defaultView: RouteInfoDisplayValue, previewData: [RouteInfoDisplayValue: String]) -> String {
-        var fullText = ""
-
-        for displayValue in RouteInfoDisplayValue.getValues(with: defaultView) {
-            guard let value = previewData[displayValue] else { continue }
-            fullText = fullText.isEmpty ? value : String(format: "%@ • %@", fullText, value)
-        }
-
-        return fullText
+        RouteInfoDisplayValue.getValues(with: defaultView)
+            .compactMap { previewData[$0] }
+            .joined(separator: " • ")
     }
     
     private func getFormattedPreviewArrivalTime() -> String {
@@ -408,14 +396,13 @@ final class RouteInfoWidget: OASimpleWidget {
         components.hour = 13
         components.minute = 0
         components.second = 0
-        components.nanosecond = 0
         let date = calendar.date(from: components)
         return date.flatMap { formatArrivalTime(time: $0.timeIntervalSince1970) } ?? ""
     }
     
     private func formatArrivalTime(time: TimeInterval) -> String {
         let date = Date(timeIntervalSince1970: time)
-        return Self.dateFormatter.string(from: date)
+        return DateFormatter.shortTimeFormatter.string(from: date)
     }
     
     private func formatDuration(timeLeft: TimeInterval) -> String {

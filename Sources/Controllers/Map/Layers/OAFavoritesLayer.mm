@@ -266,9 +266,7 @@
     
     CGPoint point = [result getPoint];
     int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-    
-//    int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi] * 10];
-    
+ 
     OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
     if (touchPolygon31 == OsmAnd::AreaI())
     {
@@ -291,9 +289,7 @@
         BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
         
         if (shouldAdd)
-        {
             [result collect:favouritePoint provider:self];
-        }
     }
     
     //TODO: delete ater test

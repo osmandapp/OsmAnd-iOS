@@ -35,6 +35,7 @@
 #import "OAColoringType.h"
 #import "OAConcurrentCollections.h"
 #import "OAMapSelectionResult.h"
+#import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
@@ -1802,6 +1803,18 @@ colorizationScheme:(int)colorizationScheme
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
+    else if ([obj isKindOfClass:[OASWptPt class]])
+    {
+        OASWptPt *item = (OASWptPt *)obj;
+        NSArray *foundWptGroups = self.mapViewController.foundWptGroups;
+        NSString *foundWptDocPath = self.mapViewController.foundWptDocPath;
+        
+        OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
+        wptItem.point = item;
+        wptItem.groups = foundWptGroups;
+        wptItem.docPath = foundWptDocPath;
+        return [self getTargetPoint:wptItem];
+    }
     return nil;
 }
 
@@ -1812,7 +1825,9 @@ colorizationScheme:(int)colorizationScheme
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    
+    [self collectWptFromPoint:result unknownLocation:unknownLocation excludeUntouchableObjects:excludeUntouchableObjects];
+    if (!excludeUntouchableObjects)
+        [self collectTracksFromPoint:result showTrackPointMenu:NO];
 }
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
@@ -1848,6 +1863,52 @@ colorizationScheme:(int)colorizationScheme
 }
 
 
+- (void) collectWptFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    CGPoint point = [result getPoint];
+    int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+    
+    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+    if (touchPolygon31 == OsmAnd::AreaI())
+    {
+        return;
+    }
+    
+    NSMutableDictionary<NSString *,OASGpxFile *> *visibleGpxFiles = [[OASelectedGPXHelper instance] getSelectedGPXFiles];
+    for (OASGpxFile *g in [visibleGpxFiles allValues])
+    {
+        NSArray<OASWptPt *> *pts = [self getSelectedFilePoints:g];
+        for (OASWptPt *waypoint in pts)
+        {
+            if ([self isPointHidden:g point:waypoint])
+                continue;
+            
+            double lat = [waypoint lat];
+            double lon = [waypoint lon];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+            if (shouldAdd)
+                [result collect:waypoint provider:self];
+        }
+    }
+}
+
+- (void) collectTracksFromPoint:(OAMapSelectionResult *)result showTrackPointMenu:(BOOL)showTrackPointMenu
+{
+    //TODO: implement
+}
+
+- (NSArray<OASWptPt *> *) getSelectedFilePoints:(OASGpxFile *)g
+{
+    return [g getPointsList];
+}
+
+- (BOOL) isPointHidden:(OASGpxFile *)selectedGpxFile point:(OASWptPt *)point
+{
+    NSString *name = point.category;
+    OASGpxUtilitiesPointsGroup *pointsGroup = [selectedGpxFile pointsGroups][name ? name : @""];
+    return pointsGroup && pointsGroup.isHidden;
+}
+
 
 //public LatLon getObjectLocation(Object o) {
 //    if (o instanceof WptPt) {
@@ -1879,14 +1940,24 @@ colorizationScheme:(int)colorizationScheme
 
 - (OAPointDescription *) getObjectName:(id)o
 {
-    // TODO: implement
+    if ([o isKindOfClass:OASWptPt.class])
+    {
+        OASWptPt *wpt = o;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:[wpt name]];
+    }
+    else if ([o isKindOfClass:OASWptPt.class])
+    {
+        // TODO: implement
+    }
     return nil;
 }
 
 - (BOOL) showMenuAction:(id)object
 {
-    // TODO: implement
-    
+    if ([object isKindOfClass:OASelectedGpxPoint.class])
+    {
+        // TODO: implement
+    }
     return NO;
 }
 

@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)clearAllGpxFilesToShow:(BOOL) backupSelection;
 - (void)restoreSelectedGpxFiles;
 - (nullable NSString *) getSelectedGPXFilePath:(NSString *)fileName;
+- (NSMutableDictionary<NSString *,OASGpxFile *> *) getSelectedGPXFiles;
 
 + (void)renameVisibleTrack:(NSString *)oldPath newPath:(NSString *) newPath;
 

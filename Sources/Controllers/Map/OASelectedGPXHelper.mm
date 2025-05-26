@@ -247,6 +247,11 @@
     return nil;
 }
 
+- (NSMutableDictionary<NSString *,OASGpxFile *> *) getSelectedGPXFiles
+{
+    return _activeGpx;
+}
+
 - (void)didReceiveMemoryWarning:(NSNotification *)notification
 {
     // cancel all operations download GPX

@@ -3134,6 +3134,8 @@
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
 		FA5D19E12CC00B1100E01A27 /* GPXDataItemGPXFileWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */; };
 		FA5D71E12CE24C570062BC4D /* LockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */; };
+		FA5FB63F2DE06AF800ABECCF /* OAOBDConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */; };
+		FA5FB6422DE0757700ABECCF /* OBDComputerWidgetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */; };
 		FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */; };
 		FA63F24E2AF3DC550040A0CE /* SensorWidgetDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */; };
 		FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */; };
@@ -3229,14 +3231,6 @@
 		FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */; };
 		FACDC6382DD73FCB00CB0C55 /* CommProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6372DD73FCB00CB0C55 /* CommProtocol.swift */; };
 		FACDC63D2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */; };
-		FACDC63F2DDB516A00CB0C55 /* ELM327Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC63E2DDB516A00CB0C55 /* ELM327Adapter.swift */; };
-		FACDC64A2DDB7BFF00CB0C55 /* protocol_legacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6442DDB7BFF00CB0C55 /* protocol_legacy.swift */; };
-		FACDC64B2DDB7BFF00CB0C55 /* commands.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6462DDB7BFF00CB0C55 /* commands.swift */; };
-		FACDC64C2DDB7BFF00CB0C55 /* codes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6452DDB7BFF00CB0C55 /* codes.swift */; };
-		FACDC64D2DDB7BFF00CB0C55 /* parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6482DDB7BFF00CB0C55 /* parser.swift */; };
-		FACDC64E2DDB7BFF00CB0C55 /* decoders.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6472DDB7BFF00CB0C55 /* decoders.swift */; };
-		FACDC64F2DDB7BFF00CB0C55 /* protocol_can.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6432DDB7BFF00CB0C55 /* protocol_can.swift */; };
-		FACDC6502DDB7BFF00CB0C55 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6492DDB7BFF00CB0C55 /* Utils.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAD258A82D7856EE001C875F /* vi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = FAD258A72D7856EE001C875F /* vi_tts.js */; };
 		FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD848992CAD6F950018AF92 /* WptPtExtension.swift */; };
@@ -7720,6 +7714,9 @@
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXDataItemGPXFileWrapper.swift; sourceTree = "<group>"; };
 		FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockHelper.swift; sourceTree = "<group>"; };
+		FA5FB63D2DE06AD500ABECCF /* OAOBDConnector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOBDConnector.h; sourceTree = "<group>"; };
+		FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOBDConnector.m; sourceTree = "<group>"; };
+		FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDComputerWidgetExtension.swift; sourceTree = "<group>"; };
 		FA6116102C787B7C005C3ABD /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
 		FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDataField.swift; sourceTree = "<group>"; };
 		FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataField.swift; sourceTree = "<group>"; };
@@ -7817,14 +7814,6 @@
 		FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
 		FACDC6372DD73FCB00CB0C55 /* CommProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommProtocol.swift; sourceTree = "<group>"; };
 		FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsDescriptionViewController.swift; sourceTree = "<group>"; };
-		FACDC63E2DDB516A00CB0C55 /* ELM327Adapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ELM327Adapter.swift; sourceTree = "<group>"; };
-		FACDC6432DDB7BFF00CB0C55 /* protocol_can.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = protocol_can.swift; sourceTree = "<group>"; };
-		FACDC6442DDB7BFF00CB0C55 /* protocol_legacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = protocol_legacy.swift; sourceTree = "<group>"; };
-		FACDC6452DDB7BFF00CB0C55 /* codes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = codes.swift; sourceTree = "<group>"; };
-		FACDC6462DDB7BFF00CB0C55 /* commands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = commands.swift; sourceTree = "<group>"; };
-		FACDC6472DDB7BFF00CB0C55 /* decoders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = decoders.swift; sourceTree = "<group>"; };
-		FACDC6482DDB7BFF00CB0C55 /* parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parser.swift; sourceTree = "<group>"; };
-		FACDC6492DDB7BFF00CB0C55 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
 		FAD258A72D7856EE001C875F /* vi_tts.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = vi_tts.js; path = ../resources/voice/vi/vi_tts.js; sourceTree = SOURCE_ROOT; };
@@ -13881,6 +13870,15 @@
 			path = OAFloatingButtonsHudViewController;
 			sourceTree = "<group>";
 		};
+		FA5FB6402DE06E1600ABECCF /* OBDConnector */ = {
+			isa = PBXGroup;
+			children = (
+				FA5FB63D2DE06AD500ABECCF /* OAOBDConnector.h */,
+				FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */,
+			);
+			path = OBDConnector;
+			sourceTree = "<group>";
+		};
 		FA6116122C787B7C005C3ABD /* Charts */ = {
 			isa = PBXGroup;
 			children = (
@@ -14144,15 +14142,9 @@
 		FACDC6422DDB7BCA00CB0C55 /* OBD */ = {
 			isa = PBXGroup;
 			children = (
+				FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */,
+				FA5FB6402DE06E1600ABECCF /* OBDConnector */,
 				FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */,
-				FACDC6432DDB7BFF00CB0C55 /* protocol_can.swift */,
-				FACDC6442DDB7BFF00CB0C55 /* protocol_legacy.swift */,
-				FACDC6452DDB7BFF00CB0C55 /* codes.swift */,
-				FACDC6462DDB7BFF00CB0C55 /* commands.swift */,
-				FACDC6472DDB7BFF00CB0C55 /* decoders.swift */,
-				FACDC6482DDB7BFF00CB0C55 /* parser.swift */,
-				FACDC6492DDB7BFF00CB0C55 /* Utils.swift */,
-				FACDC63E2DDB516A00CB0C55 /* ELM327Adapter.swift */,
 			);
 			path = OBD;
 			sourceTree = "<group>";
@@ -16636,13 +16628,6 @@
 				DA7B18E52A1259160029967F /* BatteryWidget.swift in Sources */,
 				0AD1F3BA26CC0D6F00EE4DFD /* OAMapSettingsRoutesScreen.mm in Sources */,
 				DA5A846726C563A900F274C7 /* OAMapViewTrackingUtilities.mm in Sources */,
-				FACDC64A2DDB7BFF00CB0C55 /* protocol_legacy.swift in Sources */,
-				FACDC64B2DDB7BFF00CB0C55 /* commands.swift in Sources */,
-				FACDC64C2DDB7BFF00CB0C55 /* codes.swift in Sources */,
-				FACDC64D2DDB7BFF00CB0C55 /* parser.swift in Sources */,
-				FACDC64E2DDB7BFF00CB0C55 /* decoders.swift in Sources */,
-				FACDC64F2DDB7BFF00CB0C55 /* protocol_can.swift in Sources */,
-				FACDC6502DDB7BFF00CB0C55 /* Utils.swift in Sources */,
 				323B501B2C88565C002BDF31 /* MarkerDisplayOption.swift in Sources */,
 				DA5A815926C563A700F274C7 /* OASkiMapsPlugin.m in Sources */,
 				DA5A812026C563A700F274C7 /* OAProducts.mm in Sources */,
@@ -17139,6 +17124,7 @@
 				DA5A837426C563A800F274C7 /* OARouteSegmentShieldView.mm in Sources */,
 				DA4ABF142876DA6800B996EF /* OAPluginSettingsItem.mm in Sources */,
 				327D68A52A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift in Sources */,
+				FA5FB63F2DE06AF800ABECCF /* OAOBDConnector.m in Sources */,
 				DA8DC3982A0CF47D006C116B /* MapMarkerSideWidget.swift in Sources */,
 				FA6408752D3E8047005FD12D /* WikiImageCard.swift in Sources */,
 				DA8DC39D2A0E2247006C116B /* OAMapViewHelper.mm in Sources */,
@@ -17299,6 +17285,7 @@
 				DA5A846026C563A900F274C7 /* OARasterMapLayer.mm in Sources */,
 				DA5A812A26C563A700F274C7 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
 				DA5A84F726C563A900F274C7 /* OAAppData.m in Sources */,
+				FA5FB6422DE0757700ABECCF /* OBDComputerWidgetExtension.swift in Sources */,
 				DA5A846326C563A900F274C7 /* OAMapLayer.mm in Sources */,
 				DA5A849B26C563A900F274C7 /* OAClearPointsCommand.mm in Sources */,
 				323084D926E933FE00D6FC67 /* OAOsmAndFormatter.mm in Sources */,
@@ -17385,7 +17372,6 @@
 				05CC795B2BB9A1C400BAC638 /* PluginsHelper+Extension.swift in Sources */,
 				DAA61CC62A039BC700AFF65D /* SideWidgetInfo.swift in Sources */,
 				DA5A824F26C563A700F274C7 /* OAVoicePromptsViewController.mm in Sources */,
-				FACDC63F2DDB516A00CB0C55 /* ELM327Adapter.swift in Sources */,
 				DA5A844826C563A900F274C7 /* OAMultiDestinationCell.mm in Sources */,
 				DA5A850526C563A900F274C7 /* OAMapRulerView.m in Sources */,
 				DA5A84BB26C563A900F274C7 /* OAPublicTransportOptionsBottomSheet.mm in Sources */,

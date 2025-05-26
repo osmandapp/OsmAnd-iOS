@@ -13,10 +13,29 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     }
     
     private enum Section: Int {
-        case information, receivedData, settings, forgetSensor
+        case vehicleInfo, receivedData, settings, forgetSensor
+        
+        var key: String {
+            String(describing: self)
+        }
     }
     
     var startBehavior: TableViewStartBehavior = .normal
+    
+    static let widgets: [OBDDataComputer.OBDTypeWidget] = [.fuelType,
+                                                           .temperatureIntake,
+                                                           .temperatureAmbient,
+                                                           .temperatureCoolant,
+                                                           .engineOilTemperature,
+                                                           .rpm,
+                                                           .speed,
+                                                           .fuelConsumptionRateLiterHour,
+                                                           .fuelConsumptionRateLiterKm,
+                                                           .fuelLeftLiter,
+                                                           .calculatedEngineLoad,
+                                                           .fuelPressure,
+                                                           .throttlePosition,
+                                                           .batteryVoltage]
     
     var device: Device! {
         didSet {
@@ -32,11 +51,11 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             }
         }
     }
-        
+    
     private lazy var headerView: DescriptionDeviceHeader = {
         Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
     }()
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -50,16 +69,16 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             generateData()
             tableView.reloadData()
         }
-        headerView.onAdapterInitialized = { [weak self] _ in
-            guard let self else { return }
-
-            generateData()
-            tableView.reloadData()
-        }
         tableView.tableHeaderView = headerView
         registerObservers()
         
         OBDService.shared.startDispatcher()
+        
+     // FIXME: to debug obd simulator
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            self?.generateData()
+            self?.tableView.reloadData()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -81,84 +100,66 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     override func generateData() {
         tableData.clearAllData()
         
-       
-        
         if DeviceHelper.shared.isPairedDevice(id: device.id) {
-            if let vin = OBDDataComputer.OBDTypeWidget.vin.getTitle(), !vin.isEmpty {
-                // Vehicle info
-                let vehicleInfoSection = tableData.createNewSection()
-                vehicleInfoSection.headerText = localizedString("obd_vehicle_info").uppercased()
-                vehicleInfoSection.footerText = localizedString("obd_vin_desc")
-                vehicleInfoSection.key = "vehicle_info"
-                
-                let vinRow = vehicleInfoSection.createNewRow()
-                vinRow.cellType = OAValueTableViewCell.reuseIdentifier
-                vinRow.key = "vin"
-                vinRow.title = localizedString("obd_vin")
-                vinRow.descr = vin
+            if let vin = OBDDataComputer.shared.widgets.first(where: { $0.type == .vin }) {
+                if let result = vin.computeValue() {
+                    let stringValue = String(describing: result)
+                    if !stringValue.isEmpty {
+                        // Vehicle info
+                        let vehicleInfoSection = tableData.createNewSection()
+                        vehicleInfoSection.headerText = localizedString("obd_vehicle_info").uppercased()
+                        vehicleInfoSection.footerText = localizedString("obd_vin_desc")
+                        vehicleInfoSection.key = Section.vehicleInfo.key
+                        
+                        let vinRow = vehicleInfoSection.createNewRow()
+                        vinRow.cellType = OAValueTableViewCell.reuseIdentifier
+                        vinRow.key = "vin"
+                        vinRow.title = localizedString("obd_vin")
+                        vinRow.descr = stringValue
+                    }
+                }
             }
             
             // Received Data
             let receivedDataSection = tableData.createNewSection()
             receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
-            receivedDataSection.key = "receivedData"
+            receivedDataSection.key = Section.receivedData.key
             
-          //  DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            OBDDataComputer.shared.widgets.forEach { widget in
+            for widget in Self.widgets {
+                guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }) else { continue }
+                
                 let row = receivedDataSection.createNewRow()
                 row.cellType = OAValueTableViewCell.reuseIdentifier
+                row.icon = widget.image
                 row.key = "row"
-                row.title = widget.type.getTitle() //command.localizedTitle
-                if let stringValue = widget.computeValue() as? String, !stringValue.isEmpty {
-                    print(stringValue)
-                    row.descr = stringValue
-                } else {
+                row.title = widget.getTitle()
+                
+                guard let result = dataItem.computeValue() else {
                     row.descr = "N/A"
+                    continue
                 }
                 
-                    
-                    
-                  //  let localizeTitle = widget.type.getTitle()
-                //   let localizeTitle = OBDDataComputer.OBDTypeWidget.rpm.getTitle()
-                   // icons
-                  // let localizeTitle = OBDDataComputer.OBDTypeWidget.rpm.g
-                   // widget.type == OBDDataComputer.OBDTypeWidget.rpm
-                  // let value = widget.computeValue()
+                let stringValue = String(describing: result)
+                
+                guard !stringValue.isEmpty else {
+                    row.descr = "N/A"
+                    continue
                 }
-           // }
+                
+                if stringValue == "N/A" || stringValue == "-" {
+                    row.descr = stringValue
+                } else {
+                    let unit = (OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin)?
+                        .getWidgetUnit(widget) ?? ""
+                    
+                    row.descr = unit.isEmpty ? stringValue : "\(stringValue) \(unit)"
+                }
+            }
             
-            
-            
-//            for command in OBDService.shared.vehicleMetricsCommandsFullList {
-//                let row = receivedDataSection.createNewRow()
-//                row.cellType = OAValueTableViewCell.reuseIdentifier
-//                row.key = "row"
-//                row.title = command.localizedTitle
-//                row.descr = "N/A"//dic.value != "0" ? dic.value : "-"
-//            }
-            
-         //   fullListCommands
-            
-            
-            
-//            if let receivedData = device.getDataFields, !receivedData.isEmpty {
-//                let receivedDataSection = tableData.createNewSection()
-//                receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
-//                receivedDataSection.key = "receivedData"
-//                for array in receivedData {
-//                    if let dic = array.first {
-//                        let row = receivedDataSection.createNewRow()
-//                        row.cellType = OAValueTableViewCell.reuseIdentifier
-//                        row.key = "row"
-//                        row.title = dic.key
-//                        row.descr = dic.value != "0" ? dic.value : "-"
-//                    }
-//                }
-//            }
             // Settings
             let settingsSection = tableData.createNewSection()
             settingsSection.headerText = localizedString("shared_string_settings").uppercased()
-            settingsSection.key = "settings"
+            settingsSection.key = Section.settings.key
             
             let nameRow = settingsSection.createNewRow()
             nameRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -166,19 +167,8 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             nameRow.title = localizedString("shared_string_name")
             nameRow.descr = device?.deviceName ?? ""
             
-//            if let settingsDataDict = device.getSettingsFields, !settingsDataDict.isEmpty {
-//                for (key, value) in settingsDataDict {
-//                    let settingRow = settingsSection.createNewRow()
-//                    settingRow.cellType = OAValueTableViewCell.reuseIdentifier
-//                    settingRow.key = key
-////                    if let floatValue = value as? Float {
-////                        settingRow.descr = String(format: "%.0f", floatValue) + " " + localizedString("shared_string_millimeters_short")
-////                    }
-//                }
-//            }
-            
             let forgetSensorSection = tableData.createNewSection()
-            forgetSensorSection.key = "forgetSensor"
+            forgetSensorSection.key = Section.forgetSensor.key
             let forgetSensorRow = forgetSensorSection.createNewRow()
             forgetSensorRow.cellType = OAValueTableViewCell.reuseIdentifier
             forgetSensorRow.key = "forget_sensor_row"
@@ -188,7 +178,6 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             let footerSection = tableData.createNewSection()
             footerSection.footerText = localizedString("external_device_unpair_description")
         }
-        tableData.resetChanges()
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
@@ -211,20 +200,25 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                 return nil
             }
             cell.descriptionVisibility(false)
-            cell.leftIconVisibility(false)
             cell.separatorInset = .zero
             cell.valueLabel.text = item.descr
             cell.titleLabel.text = item.title
             let sectionKey = tableData.sectionData(for: UInt(indexPath.section)).key
-            if sectionKey == "information" || sectionKey == "receivedData" {
+            if sectionKey == Section.receivedData.key || sectionKey == Section.vehicleInfo.key {
+                cell.leftIconVisibility(sectionKey == Section.receivedData.key)
+                cell.imageView?.image = item.icon
                 cell.selectionStyle = .none
                 cell.accessoryType = .none
                 cell.titleLabel.textColor = .textColorPrimary
-            } else if sectionKey == "settings" {
+            } else if sectionKey == Section.settings.key {
+                cell.leftIconVisibility(false)
+                cell.imageView?.image = nil
                 cell.selectionStyle = .gray
                 cell.accessoryType = .disclosureIndicator
                 cell.titleLabel.textColor = .textColorPrimary
-            } else if sectionKey == "forgetSensor" {
+            } else if sectionKey == Section.forgetSensor.key {
+                cell.leftIconVisibility(false)
+                cell.imageView?.image = nil
                 cell.selectionStyle = .gray
                 cell.accessoryType = .none
                 cell.titleLabel.textColor = .buttonBgColorDisruptive
@@ -259,18 +253,17 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                                                object: nil)
     }
     
-        
     private func scrollToSearchSection() {
         for index in 0..<tableData.sectionCount() {
             let section = tableData.sectionData(for: index)
-            if section.key == "settings" {
+            if section.key == Section.settings.key {
                 let indexPath = IndexPath(row: 0, section: Int(index))
                 tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 break
             }
         }
     }
-     
+    
     private func configureHeader() {
         headerView.frame.size.height = 156
         headerView.frame.size.width = view.frame.width
@@ -293,32 +286,5 @@ extension VehicleMetricsDescriptionViewController {
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         alert.popoverPresentationController?.sourceView = view
         present(alert, animated: true)
-    }
-}
-
-extension OBDCommand {
-    var localizedTitle: String {
-        switch self {
-        case .mode1(let pid):
-            switch pid {
-            case .rpm: return "Обороты двигателя"
-            case .speed: return "Скорость"
-            case .intakeTemp: return "Температура на впуске"
-            case .ambientAirTemp: return "Температура окружающей среды"
-            case .coolantTemp: return "Температура охлаждающей жидкости"
-            case .engineOilTemp: return "Температура масла"
-            case .engineLoad: return "Нагрузка двигателя"
-            case .fuelPressure: return "Давление топлива"
-            case .throttlePos: return "Положение дросселя"
-            case .controlModuleVoltage: return "Напряжение ЭБУ"
-            case .fuelType: return "Тип топлива"
-            case .fuelRate: return "Расход топлива"
-            case .fuelLevel: return "Уровень топлива"
-            default:
-                return ""
-            }
-        default:
-            return ""
-        }
     }
 }

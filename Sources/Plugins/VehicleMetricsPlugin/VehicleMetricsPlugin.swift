@@ -31,18 +31,70 @@ final class VehicleMetricsPlugin: OAPlugin {
         // TODO:
     }
     
+    private func getSpeedUnit() -> String {
+        OASpeedConstant.toShortString(OAAppSettings.sharedManager().speedSystem.get())
+    }
     
-//
-//    override func getName(): String {
-//        return app.getString(R.string.obd_plugin_name)
-//    }
-//
-//    override fun getDescription(linksEnabled: Boolean): CharSequence {
-//        return app.getString(R.string.obd_plugin_description)
-//    }
-//
-//    override fun getLogoResourceId(): Int {
-//        return R.drawable.ic_action_car_info
-//    }
+    private func getDistanceUnit() -> String {
+        switch OAAppSettings.sharedManager().metricSystem.get() {
+        case .KILOMETERS_AND_METERS:
+            return localizedString("km")
+        case .NAUTICAL_MILES_AND_METERS, .NAUTICAL_MILES_AND_FEET:
+            return localizedString("nm")
+        default:
+            return localizedString("mile")
+        }
+    }
     
+    private func getTemperatureUnit() -> String {
+        let formatter = MeasurementFormatter()
+        formatter.locale = .autoupdatingCurrent
+        return formatter.string(from: UnitTemperature.current())
+    }
+    
+    private func getFormatVolumePerHourUnit() -> String? {
+        guard let volumeUnit = OAVolumeConstant.getUnitSymbol(OAAppSettings.sharedManager().volumeUnits.get()) else {
+            return nil
+        }
+        
+        return String(format: localizedString("ltr_or_rtl_combine_via_slash"),
+                      volumeUnit,
+                      localizedString("int_hour"))
+    }
+    
+    func getWidgetUnit(_ computerWidget: OBDDataComputer.OBDTypeWidget) -> String? {
+        switch computerWidget {
+        case .speed:
+            return getSpeedUnit()
+        case .rpm:
+            return localizedString("rpm_unit")
+        case .fuelPressure:
+            return localizedString("kpa_unit")
+        case .fuelLeftKm:
+            return getDistanceUnit()
+        case .calculatedEngineLoad,
+                .throttlePosition,
+                .fuelLeftPercent:
+            return localizedString("percent_unit")
+        case .fuelLeftLiter:
+            return OAVolumeConstant.getUnitSymbol(OAAppSettings.sharedManager().volumeUnits.get())
+        case .fuelConsumptionRatePercentHour:
+            return localizedString("percent_hour")
+        case .fuelConsumptionRateLiterHour:
+            return getFormatVolumePerHourUnit()
+        case .fuelConsumptionRateSensor:
+            return localizedString("liter_per_hour")
+        case .temperatureCoolant,
+                .temperatureIntake,
+                .engineOilTemperature,
+                .temperatureAmbient:
+            return getTemperatureUnit()
+        case .batteryVoltage:
+            return localizedString("unit_volt")
+        case .fuelType, .engineRuntime, .vin:
+            return nil
+        default:
+            return nil
+        }
+    }
 }

@@ -19,7 +19,6 @@ final class DescriptionDeviceHeader: UIView {
     
     var onUpdateConnectStateAction: ((DeviceState) -> Void)?
     var didPairedDeviceAction: (() -> Void)?
-    var onAdapterInitialized: ((OBDInfo) -> Void)?
     
     private var device: Device?
     
@@ -163,10 +162,7 @@ final class DescriptionDeviceHeader: UIView {
                     completedCount += 1
                     if completedCount == totalServices {
                         if device.deviceType == .OBD_VEHICLE_METRICS {
-                            DeviceHelper.shared.adapterInitializationIfNeeded { [weak self] info in
-                                guard let self, let info else { return }
-                                onAdapterInitialized?(info)
-                            }
+                            OBDService.shared.startDispatcher()
                         }
                     }
                 case .failure(let error):

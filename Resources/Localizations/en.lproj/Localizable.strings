@@ -4153,3 +4153,28 @@
 "obd_fuel_consumption_rate_desc" = "Shows vehicle fuel consumption rate based on OBD an location";
 "obd_fuel_left_liters" = "Fuel left (liters)";
 "obd_fuel_type" = "Fuel type";
+
+"obd_fuel_pressure" = "Fuel pressure";
+
+"obd_fuel_consumption_rate_l_h" = "Fuel consumption rate (L/h)";
+"obd_fuel_consumption_rate_sensor" = "Fuel consumption rate (sensor)";
+"obd_fuel_consumption_rate_l_h_desc" = "Shows vehicle fuel consumption rate based on calculations (L/h)";
+"obd_fuel_consumption_rate_sensor_desc" = "Shows vehicle fuel consumption rate based on sensor (L/h)";
+
+"obd_fuel_level_liter" = "Fuel level (l)";
+"obd_fuel_level_percent" = "Fuel level (%)";
+"obd_fuel_left_km" = "Fuel left (km)";
+"obd_fuel_consumption_rate_scanner" = "Fuel consumption rate (obd)";
+"obd_fuel_consumption_rate_liter_hour" = "Fuel consumption rate";
+"obd_fuel_consumption_rate_percent_hour" = "Fuel consumption rate %/h";
+
+"obd_fuel_consumption_rate_l_km" = "Fuel consumption rate (L/100 km)";
+"obd_fuel_consumption_rate_l_km_desc" = "Shows vehicle fuel consumption rate based on calculations (L/100 km)";
+"simulate_obd" = "Simulate obd data";
+
+"kpa_unit" = "kPa";
+"percent_unit" = "%";
+"percent_hour" = "%/h";
+"liter_per_hour" = "L/h";
+
+"unit_volt" = "V";

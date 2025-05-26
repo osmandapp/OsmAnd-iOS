@@ -274,91 +274,6 @@ extension DeviceHelper {
         }
     }
     
-    func adapterInitializationIfNeeded(completion: @escaping (OBDInfo?) -> Void) {
-        Task {
-            do {
-                let info = try await OBDService.shared.adapterInitialization()
-                completion(info)
-                
-//                //-------------///
-//                let dispatch = OBDDispatcher(debug: false)
-//                OBDDataComputer.shared.obdDispatcher = dispatch
-//                OBDDataComputer.OBDTypeWidget.entries.forEach { widget in
-//                    OBDDataComputer.shared.registerWidget(type: widget, averageTimeSeconds: 0)
-//                }
-//
-//                dispatch.connect(connector: OATestOBDConnector())
-//                
-//                //-------------//
-                
-                
-            
-                
-                // Engine speed - RPM (Revolutions Per Minute)
-                //   case .rpm
-                
-                // Intake temperature
-                //  case .intakeTemp: return """
-                
-                // Vehicle speed
-                // case .speed: return CommandProperties("010D", "Vehicle Speed", 2, .uas(0x09), true, maxValue: 280)
-                
-                // Ambient temperature
-                // ambientAirTemp
-                
-                // Coolant temperature
-                // case .coolantTemp:
-                
-                // Engine Oil Temperature
-                // .engineOilTemp
-                
-                // Calculated Engine Load
-                // case .engineLoad: return CommandProperties("0104", "Calculated Engine Load", 2, .percent, true)
-                
-               // Fuel Pressure
-               // case .fuelPressure: return CommandProperties("010A", "Fuel Pressure", 2, .fuelPressure, true, maxValue: 765)
-                
-              // Throttle Position
-              // case .throttlePos: return CommandProperties("0111", "Throttle Position", 2, .percent, true)
-                
-              // Battery voltage
-              // case .controlModuleVoltage: return CommandProperties("0142", "Control module voltage", 4, .uas(0x0B), true)
-                
-              // Fuel type
-              // case .fuelType: return CommandProperties("0151", "Fuel Type", 2, .fuelType)
-                
-              // Fuel consumption
-              // case .fuelRate: return CommandProperties("015E", "Engine fuel rate", 4, .fuelRate, true
-              // OBD_FUEL_CONSUMPTION_RATE_COMMAND(0x01, 0x5E, 2, OBDUtils::parseFuelConsumptionRateResponse, "vm_fcons"),
-                
-             // Remaining fuel
-             // case .fuelLevel: return CommandProperties("012F", "Fuel Tank Level Input", 4, .percent, true)
-             // OBD_FUEL_LEVEL_COMMAND(0x01, 0x2F, 1, OBDUtils::parsePercentResponse, "vm_fuel");
-       
-            // NOTE: limit 6 commands after receive response:  ["NO DATA"]
-                // TODO: use supported pids
-                OBDService.shared.startContinuousUpdates(pids: [.mode1(.rpm),
-                                              .mode1(.speed),
-                                              .mode1(.intakeTemp),
-                                              .mode1(.ambientAirTemp),
-                                              .mode1(.coolantTemp),
-                                              .mode1(.engineOilTemp),
-    // >>>>>>>
-    //                                          .mode1(.engineLoad),
-    //                                          .mode1(.fuelPressure),
-    //                                          .mode1(.throttlePos),
-    //                                          .mode1(.controlModuleVoltage),
-    //                                          .mode1(.fuelType),
-    //                                          .mode1(.fuelRate),
-    //                                          .mode1(.fuelLevel)
-                                              ])
-            } catch {
-                NSLog(error.localizedDescription)
-                completion(nil)
-            }
-        }
-    }
-    
     private func discoverServices(device: Device, serviceUUIDs: [CBUUID]? = nil) {
         device.discoverServices(withUUIDs: nil) { [weak self] result in
             guard let self else { return }
@@ -375,7 +290,7 @@ extension DeviceHelper {
         var completedCount = 0
         let totalServices = services.count
         for service in services {
-            device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
+            device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { result in
                 switch result {
                 case .success(let characteristics):
                     for characteristic in characteristics {
@@ -389,7 +304,7 @@ extension DeviceHelper {
                     completedCount += 1
                     if completedCount == totalServices {
                         if device.deviceType == .OBD_VEHICLE_METRICS {
-                            self?.adapterInitializationIfNeeded { _ in }
+                            OBDService.shared.startDispatcher()
                         }
                     }
                 case .failure(let error):
@@ -397,7 +312,7 @@ extension DeviceHelper {
                     completedCount += 1
                     if completedCount == totalServices {
                         if device.deviceType == .OBD_VEHICLE_METRICS {
-                            self?.adapterInitializationIfNeeded { _ in }
+                            OBDService.shared.startDispatcher()
                         }
                     }
                 }
@@ -410,10 +325,4 @@ extension DeviceHelper {
     func clearPairedDevices() {
         // add test func
     }
-}
-
-
-// MARK: - OBD
-extension DeviceHelper {
-        
 }

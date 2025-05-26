@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "OACommonTypes.h"
-#import "OsmAndSharedWrapper.h"
 
 typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 {
@@ -61,13 +60,4 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 - (void) setLocationFromSimulation:(CLLocation *)location;
 - (BOOL) isInLocationSimulation;
 
-@end
-
-@interface OATestOBDConnector : NSObject<OASOBDConnector>
-@end
-
-@interface OATestOkioSource : NSObject<OASOkioSource>
-@end
-
-@interface OATestOkioSink : NSObject<OASOkioSink>
 @end

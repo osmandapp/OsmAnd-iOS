@@ -225,8 +225,8 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
     }
     
     private func registerNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(productPurchased), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(productsRestored), name: Notification.Name(NSNotification.Name.OAIAPProductsRestored.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleIAPNotifications), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleIAPNotifications), name: Notification.Name(NSNotification.Name.OAIAPProductsRestored.rawValue), object: nil)
     }
     
     private func updateData() {
@@ -288,17 +288,9 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
         }
     }
     
-    @objc private func productPurchased() {
+    @objc private func handleIAPNotifications() {
         DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            self.updateData()
-        }
-    }
-    
-    @objc private func productsRestored() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            self.updateData()
+            self?.updateData()
         }
     }
 }

@@ -166,7 +166,11 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         if pages.isEmpty {
             pages.append(UIViewController())
         }
-        pageViewController.setViewControllers([pages[currentIndex]], direction: .forward, animated: false)
+        pageViewController.setViewControllers([pages[currentIndex]], direction: .forward, animated: false) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.updateWidgetSizes()
+            }
+        }
         if !isHorizontal {
             pageViewController.dataSource = self
         }

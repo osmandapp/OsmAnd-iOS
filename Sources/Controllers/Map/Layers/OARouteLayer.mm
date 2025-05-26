@@ -1368,4 +1368,9 @@ struct DrawPathData
     return nil;
 }
 
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
 @end

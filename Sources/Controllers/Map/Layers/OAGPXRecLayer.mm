@@ -34,6 +34,11 @@
 
 #pragma mark - OAContextMenuProvider
 
+- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    
+}
+
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     // collected by parent layer
@@ -41,6 +46,13 @@
 
 - (BOOL)isSecondaryProvider
 {
+    return NO;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    // TODO: implement
+    
     return NO;
 }
 

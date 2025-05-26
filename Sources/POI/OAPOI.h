@@ -48,12 +48,13 @@ static NSString *GPX_ICON = @"gpx_icon";
 static NSString *POITYPE = @"type";
 static NSString *SUBTYPE = @"subtype";
 static NSString *AMENITY_NAME = @"name";
+static NSString *ROUTES = @"routes";
 static NSString *ROUTE_ARTICLE = @"route_article";
 static NSString *ROUTE_PREFIX = @"routes_";
 static NSString *ROUTE_TRACK = @"route_track";
 static NSString *ROUTE_TRACK_POINT = @"route_track_point";
 static NSString *ROUTE_BBOX_RADIUS = @"route_bbox_radius";
-static NSString *ROUTE_MEMGERS_IDS = @"route_members_ids";
+static NSString *ROUTE_MEMBERS_IDS = @"route_members_ids";
 static NSString *TRAVEL_EVO_TAG = @"travel_elo";
 
 static int DEFAULT_ELO = 900;
@@ -105,12 +106,18 @@ static int DEFAULT_ELO = 900;
 - (NSSet<NSString *> *)getSupportedContentLocales;
 - (void) updateContentLocales:(NSSet<NSString *> *)locales;
 
+- (NSString *)getName:(NSString *)lang;
 - (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate;
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 
+- (NSString *)getEnName:(BOOL)transliterate;
+
+- (NSString *)getGpxFileName:(NSString *)lang;
+
 - (NSDictionary<NSString *, NSString *> *) getAdditionalInfo;
 - (NSString *) getAdditionalInfo:(NSString *)key;
+- (NSArray<NSString *> *) getAdditionalInfoKeys;
 
 - (void)setAdditionalInfo:(NSDictionary<NSString *, NSString *> *)additionalInfo;
 - (void)setAdditionalInfo:(NSString *)tag value:(NSString *)value;

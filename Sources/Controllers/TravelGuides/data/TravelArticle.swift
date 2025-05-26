@@ -26,7 +26,6 @@ class TravelArticle: NSObject {
     var imageTitle: String?
     var gpxFile: OAGPXDocumentAdapter?;
     var routeId: String?
-    var routeRadius = -1
     var ref: String?
     var routeSource: String?
     var originalId: UInt64 = 0 //long
@@ -38,6 +37,24 @@ class TravelArticle: NSObject {
     var lastModified: TimeInterval = 0 //long
     var gpxFileReading: Bool = false
     var gpxFileRead: Bool = false
+    
+    var routeRadius = -1
+    var bbox31: KQuadRect?
+    
+    func initShortLinkTiles(shortLinkTiles: String) {
+        bbox31 = KQuadRect()
+        let mapUtils = KMapUtils.shared
+        let compoinents = shortLinkTiles.components(separatedBy: ",")
+        
+        for shortLink in compoinents {
+            let bbox = mapUtils.decodeShortLinkToQuadRect(shortLink: shortLink)
+            let left = Double(mapUtils.get31TileNumberX(longitude: bbox.left))
+            let top = Double(mapUtils.get31TileNumberX(longitude: bbox.top))
+            let right = Double(mapUtils.get31TileNumberX(longitude: bbox.right))
+            let bottom = Double(mapUtils.get31TileNumberX(longitude: bbox.bottom))
+            bbox31?.expand(left: left, top: top, right: right, bottom: bottom)
+        }
+    }
     
     func generateIdentifier() -> TravelArticleIdentifier {
         TravelArticleIdentifier(article: self)

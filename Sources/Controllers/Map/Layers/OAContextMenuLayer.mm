@@ -833,35 +833,29 @@
         
         
     }
-//    else if (!provider || [provider showMenuAction:object])
-    else if (!provider || YES)
+    else if (!provider || ![provider showMenuAction:object])
     {
-        OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
-        
+
         // TODO: does it needed in ios here?
         //[mapPanel hideContextMenu];
         
-        
-        // TODO: run without OATargetPoint
-        // just for testing
-//        if (provider)
-//        {
-            //OATargetPoint *targetPoint = [provider getTargetPoint:object];
-            //OATargetPoint *targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object];
-            OATargetPoint *targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object.object];
+        OATargetPoint *targetPoint;
+        if (provider)
+            targetPoint = [provider getTargetPoint:object.object];
+        else
+            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object.object];
+            
         if (targetPoint)
         {
-            [mapPanel showContextMenuWithPoints:@[targetPoint]];
+            [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint]];
         }
-        else
-        {
-            BOOL stop = YES;
-        }
-//        }
     }
 }
 
-
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
 
 
 - (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide

@@ -127,7 +127,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
 
     
-    NSArray<OAMapLayer *> *layers = [OARootViewController.instance.mapPanel.mapViewController.mapLayers getLayers];
+    NSArray<OAMapLayer *> *layers = [mapViewController.mapLayers getLayers];
     
     for (OAMapLayer *layer in layers)
     {
@@ -137,14 +137,15 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             
             if ([provider isSecondaryProvider] || secondaryObjects)
             {
-                // [provider collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
+                 //TODO: delete this old func
+                 //[provider collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
                 
+                //TODO: test this new func
                 // provider.collectObjectsFromPoint(result, unknownLocation, false);
+                [provider collectObjectsFromPoint:result unknownLocation:unknownLocation excludeUntouchableObjects:NO];
             }
         }
     }
-    
-    //TODO: implement
 }
 
 

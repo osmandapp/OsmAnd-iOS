@@ -173,7 +173,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 
 - (BOOL)isSuperRoute
 {
-    return _values[ROUTE_MEMGERS_IDS];
+    return _values[ROUTE_MEMBERS_IDS];
 }
 
 //TODO: orig code - test new one not broken
@@ -219,6 +219,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return l;
 }
 
+- (NSString *)getName:(NSString *)lang
+{
+    return [self getName:lang transliterate:NO];
+}
+
 - (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate
 {
     if (lang != nil && lang.length > 0)
@@ -259,6 +264,15 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         
         return mp;
     }
+}
+
+- (NSString *)getEnName:(BOOL)transliterate
+{
+    if (![NSString isEmpty:self.enName])
+        return self.enName;
+    else if (![NSString isEmpty:self.name] && transliterate)
+        return OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
+    return @"";
 }
 
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang
@@ -391,6 +405,12 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return res;
 }
 
+- (NSArray<NSString *> *) getAdditionalInfoKeys
+{
+    NSDictionary<NSString *, NSString *> *info = [self getAdditionalInfo];
+    return info == nil ? @[] : [info allKeys];
+}
+
 - (NSString *)getAdditionalInfo:(NSString *)key
 {
     if (!_values)
@@ -512,6 +532,24 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (void)setTravelEloNumber:(int)elo
 {
     _travelElo = elo;
+}
+
+- (NSString *)getGpxFileName:(NSString *)lang
+{
+    NSString *gpxFileName = lang ? [self getName:lang] : [self getEnName:YES];
+    if (![NSString isEmpty:gpxFileName])
+    {
+        return [gpxFileName sanitizeFileName];
+    }
+    else if (![NSString isEmpty:[self getRouteId]])
+    {
+        return [self getRouteId];
+    }
+    else if (![NSString isEmpty:self.subType])
+    {
+        return [NSString stringWithFormat:@"%@ %@", [self.type name], self.subType];
+    }
+    return [self.type name];
 }
 
 - (NSString *)getSubTypeStr

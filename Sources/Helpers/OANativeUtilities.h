@@ -83,6 +83,12 @@
 + (CGPoint) getScreenPointFromLatLon:(double)lat lon:(double)lon;
 + (OsmAnd::PointI) calculateTarget31:(double)latitude longitude:(double)longitude applyNewTarget:(BOOL)applyNewTarget;
 
++ (OsmAnd::PointI) getPoint31From:(CGPoint)screenPoint;
++ (OsmAnd::AreaI) getPolygon31FromPixelAndRadius:(CGPoint)pixel radius:(float)radiusPixels;
++ (OsmAnd::AreaI) getPolygon31FromScreenArea:(CGPoint)topLeft bottomRight:(CGPoint)bottomRight;
++ (BOOL) isPointInsidePolygon:(double)lat lon:(double)lon polygon31:(OsmAnd::AreaI)polygon31;
++ (BOOL) isPointInsidePolygon:(OsmAnd::PointI)point31 polygon31:(OsmAnd::AreaI)polygon31;
+
 + (BOOL) containsLatLon:(CLLocation *)location;
 + (BOOL) containsLatLon:(double)lat lon:(double)lon;
 

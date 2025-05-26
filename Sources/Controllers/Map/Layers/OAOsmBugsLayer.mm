@@ -153,6 +153,11 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     return nil;
 }
 
+- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    
+}
+
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     OAOsmNotesMapLayerProvider::NotesSymbolsGroup* notesSymbolGroup = dynamic_cast<OAOsmNotesMapLayerProvider::NotesSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
@@ -188,6 +193,11 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 {
     // TODO: implement
     return nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
 }
 
 @end

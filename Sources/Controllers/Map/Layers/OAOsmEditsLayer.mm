@@ -316,6 +316,11 @@
     return [NSArray arrayWithArray:data];
 }
 
+- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    
+}
+
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     if (![[OAAppSettings sharedManager].mapSettingShowOfflineEdits get])
@@ -360,6 +365,11 @@
 {
     // TODO: implement
     return nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
 }
 
 #pragma mark - OAMoveObjectProvider

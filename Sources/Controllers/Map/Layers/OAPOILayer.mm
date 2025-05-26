@@ -528,6 +528,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         }
         return targetPoint;
     }
+    
+    //TODO: delete?
 //    else if (placeDetailsObject) {
 //        
 //        BOOL stop = YES;
@@ -537,6 +539,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 //        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
 //        
 //    }
+    
     return nil;
 }
 
@@ -544,6 +547,46 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 {
     return nil;
 }
+
+- (BOOL) showMenuAction:(id)object
+{
+    OAPOI *amenity = [self getAmenity:object];
+    if (amenity && [amenity.type.name isEqualToString:ROUTES])
+    {
+        if ([amenity.subType isEqualToString:ROUTE_ARTICLE])
+        {
+            NSString *lang = [OAPluginsHelper onGetMapObjectsLocale:amenity preferredLocale:[OAUtilities preferredLang]];
+            lang = [amenity getContentLanguage:DESCRIPTION_TAG lang:lang defLang:@"en"];
+            NSString *name = [amenity getGpxFileName:lang];
+            OATravelArticle *article = [OATravelObfHelper.shared getArticleByTitleWithTitle:name lang:lang readGpx:YES callback:nil];
+            if (!article)
+                return YES;
+            [OATravelObfHelper.shared openTrackMenuWithArticle:article gpxFileName:name latLon:[amenity getLocation] adjustMapPosition:NO];
+            return YES;
+        }
+        else if ([amenity isRouteTrack])
+        {
+            OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:amenity];
+            [OATravelObfHelper.shared openTrackMenuWithArticle:travelGpx gpxFileName:[amenity getGpxFileName:nil] latLon:[amenity getLocation] adjustMapPosition:NO];
+            return YES;
+        }
+    }
+    return NO;
+}
+
+//collectAmenitiesFromPoint
+
+- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    
+    //collectAmenitiesFromPoint()
+
+    
+    // TODO: implement
+    
+    BOOL stop = YES;
+}
+
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {

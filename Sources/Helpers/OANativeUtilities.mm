@@ -382,6 +382,40 @@
     return OsmAnd::PointI(x31, y31);
 }
 
++ (OsmAnd::PointI) getPoint31From:(CGPoint)screenPoint
+{
+    OsmAnd::PointI point31;
+    [OARootViewController.instance.mapPanel.mapViewController.mapView convert:screenPoint toLocation:&point31];
+    return point31;
+}
+
++ (OsmAnd::AreaI) getPolygon31FromPixelAndRadius:(CGPoint)pixel radius:(float)radiusPixels
+{
+    CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - radiusPixels);
+    CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + radiusPixels);
+    return [self.class getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+}
+
++ (OsmAnd::AreaI) getPolygon31FromScreenArea:(CGPoint)topLeft bottomRight:(CGPoint)bottomRight;
+{
+    OsmAnd::PointI topLeft31 = [self.class getPoint31From:topLeft];
+    OsmAnd::PointI bottomRight31 = [self.class getPoint31From:bottomRight];
+    return OsmAnd::AreaI(topLeft31, bottomRight31);
+}
+
++ (BOOL) isPointInsidePolygon:(double)lat lon:(double)lon polygon31:(OsmAnd::AreaI)polygon31
+{
+    OsmAnd::PointI point31 = [self.class getPoint31FromLatLon:lat lon:lon];
+    return [self.class isPointInsidePolygon:point31 polygon31:polygon31];
+}
+
++ (BOOL) isPointInsidePolygon:(OsmAnd::PointI)point31 polygon31:(OsmAnd::AreaI)polygon31
+{
+    //Androdoid: MapAlgorithms.ray_intersect_x()
+    
+    return polygon31.contains(point31);
+}
+
 + (BOOL) containsLatLon:(CLLocation *)location
 {
     return [self.class containsLatLon:location.coordinate.latitude lon:location.coordinate.longitude];

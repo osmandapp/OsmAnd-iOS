@@ -1553,22 +1553,6 @@ colorizationScheme:(int)colorizationScheme
         cachedTrack[@"gpx"] = [self getGpxItem:QString::fromNSString(filePath)];
 }
 
-- (int) getDefaultRadiusPoi
-{
-    int r;
-    double zoom = self.mapView.zoom;
-    if (zoom <= 15) {
-        r = 10;
-    } else if (zoom <= 16) {
-        r = 14;
-    } else if (zoom <= 17) {
-        r = 16;
-    } else {
-        r = 18;
-    }
-    return (int) (r * self.mapView.displayDensityFactor);
-}
-
 - (void) getTracksFromPoint:(CLLocationCoordinate2D)point res:(NSMutableArray<OATargetPoint *> *)res
 {
     double textSize = [OAAppSettings.sharedManager.textSize get];
@@ -1826,6 +1810,11 @@ colorizationScheme:(int)colorizationScheme
     return nil;
 }
 
+- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    
+}
+
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     OAMapViewController *mapViewController = self.mapViewController;
@@ -1892,6 +1881,13 @@ colorizationScheme:(int)colorizationScheme
 {
     // TODO: implement
     return nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    // TODO: implement
+    
+    return NO;
 }
 
 

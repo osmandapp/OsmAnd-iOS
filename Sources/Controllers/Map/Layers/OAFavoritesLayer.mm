@@ -22,6 +22,11 @@
 #import "OAPlugin.h"
 #import "OAAppSettings.h"
 #import "OAAppData.h"
+#import "OAMapSelectionResult.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -196,7 +201,25 @@
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
-    return nil;
+    if (obj && [obj isKindOfClass:OAFavoriteItem.class])
+    {
+        OAFavoriteItem *favorite = (OAFavoriteItem *) obj;
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.type = favorite.specialPointType == [OASpecialPointType PARKING] ? OATargetParking : OATargetFavorite;
+        targetPoint.location = CLLocationCoordinate2DMake([favorite getLatitude], [favorite getLongitude]);
+        targetPoint.title = [favorite getDisplayName];
+        targetPoint.titleAddress = [favorite getAddress];
+        
+        targetPoint.symbolGroupId = [favorite getCategory];
+        targetPoint.icon = [favorite getCompositeIcon];
+        targetPoint.targetObj = favorite;
+        
+        return targetPoint;
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj
@@ -233,6 +256,48 @@
     {
         return nil;
     }
+}
+
+- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    NSArray<OAFavoriteItem *> *favouritePoints = [OAFavoritesHelper getFavoriteItems];
+    if ([NSArray isEmpty:favouritePoints])
+        return;
+    
+    CGPoint point = [result getPoint];
+    int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+    
+//    int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi] * 10];
+    
+    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+    if (touchPolygon31 == OsmAnd::AreaI())
+    {
+        return;
+    }
+    
+    for (OAFavoriteItem *favouritePoint in favouritePoints)
+    {
+        if (!favouritePoint.isVisible)
+            continue;
+        
+        //TODO: delete ater test
+        if ([[favouritePoint getName] isEqualToString:@"My Test Point"])
+        {
+            BOOL stop;
+        }
+        
+        double lat = [favouritePoint getLatitude];
+        double lon = [favouritePoint getLongitude];
+        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+        
+        if (shouldAdd)
+        {
+            [result collect:favouritePoint provider:self];
+        }
+    }
+    
+    //TODO: delete ater test
+    BOOL stop;
 }
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
@@ -272,8 +337,17 @@
 
 - (OAPointDescription *) getObjectName:(id)o
 {
-    // TODO: implement
-    return nil;
+    if ([o isKindOfClass:OAFavoriteItem.class])
+    {
+        OAFavoriteItem *favorite = (OAFavoriteItem *)o;
+        return [favorite getPointDescription];
+    }
+    return  nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
 }
 
 #pragma mark - OAMoveObjectProvider

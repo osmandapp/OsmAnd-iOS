@@ -1666,9 +1666,11 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     poi.subType = amenity->subType.toNSString();
 
     if (poi.name.length == 0)
-        poi.name = type.name;
+        poi.name = type.nameLocalized;
     if (poi.nameLocalized.length == 0)
         poi.nameLocalized = type.nameLocalized;
+    if (poi.enName.length == 0)
+        poi.enName = type.nameLocalizedEN;
 
     if (names.count == 0)
     {

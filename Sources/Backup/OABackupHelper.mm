@@ -506,7 +506,8 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
     [progress setOnProgress:^(int progress, int64_t deltaWork) {
         work += deltaWork;
         int prog = ((double)work / (double)sz) * 100;
-        [listener onFileDownloadProgress:type fileName:fileName progress:prog deltaWork:deltaWork itemFileName:nil];
+        if (listener)
+            [listener onFileDownloadProgress:type fileName:fileName progress:prog deltaWork:deltaWork itemFileName:nil];
     }];
     
     bool sucseess = [OANetworkUtilities downloadFile:filePath url:builder progress:progress];

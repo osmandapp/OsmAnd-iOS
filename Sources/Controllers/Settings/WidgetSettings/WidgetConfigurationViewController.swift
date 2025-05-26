@@ -306,14 +306,12 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         }
         
         guard widgetPanel.isPanelVertical else {
-            if let samePage = pagedWidgets
-                .compactMap({ $0.array as? [MapWidgetInfo] })
-                .first(where: { $0.contains { $0.key == mapWidgetInfo.key } }),
-               let changed = samePage
-                .first(where: { $0.key == mapWidgetInfo.key })?
-                .widget as? OATextInfoWidget {
-                changed.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
-            }
+            (pagedWidgets
+                .compactMap { $0.array as? [MapWidgetInfo] }
+                .first { $0.contains { $0.key == mapWidgetInfo.key } }?
+                .first { $0.key == mapWidgetInfo.key }?
+                .widget as? OATextInfoWidget)?
+                .updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
             return
         }
         

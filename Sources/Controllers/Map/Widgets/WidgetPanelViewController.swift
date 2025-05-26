@@ -106,7 +106,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     func calculateContentSize() -> CGSize {
         var width: CGFloat = 0
         var height: CGFloat = pages.isEmpty ? 0 : Self.contentHeight
-        if hasWidgets(), pages.indices.contains(pageControl.currentPage) {
+        if hasWidgets() {
             let widgetSize = (pages[pageControl.currentPage] as? WidgetPageViewController)?.layoutWidgets() ?? (0, 0)
             width = widgetSize.0
             height = max(widgetSize.1, Self.contentHeight)

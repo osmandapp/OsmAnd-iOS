@@ -54,10 +54,7 @@ final class WidgetPageViewController: UIViewController {
             }
         } else {
             for widgetView in widgetViews {
-                let textInfo = widgetView as? OATextInfoWidget
-                let style: EOAWidgetSizeStyle = textInfo?.widgetSizeStyle ?? .small
-                let isSimple = style != .small
-                if isSimple {
+                if let textWidget = widgetView as? OATextInfoWidget, textWidget.isSidePanelSimpleLayoutMode {
                     configureSimple(widget: widgetView)
                 } else {
                     widgetView.adjustSize()

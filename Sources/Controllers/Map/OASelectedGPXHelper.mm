@@ -252,6 +252,21 @@
     return _activeGpx;
 }
 
+- (OASWptPt *) getVisibleWayPointByLat:(double)lat lon:(double)lon
+{
+    CLLocationCoordinate2D markerLatLon = CLLocationCoordinate2DMake(lat, lon);
+    for (OASGpxFile *selectedGpx in _activeGpx)
+    {
+        for (OASWptPt *point in [selectedGpx getPointsList])
+        {
+            CLLocationCoordinate2D pointLatLon = CLLocationCoordinate2DMake(point.lat, point.lon);
+            if ([OAUtilities isCoordEqual:markerLatLon destLat:pointLatLon])
+                return point;
+        }
+    }
+    return nil;
+}
+
 - (void)didReceiveMemoryWarning:(NSNotification *)notification
 {
     // cancel all operations download GPX

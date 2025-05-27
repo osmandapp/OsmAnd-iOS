@@ -218,7 +218,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                     [names addObject:nativeName];
                 
                 uint64_t obfId = cppAmenity->id.id;
-                amenity = [self findAmenity:result.objectLatLon names:names obfId:obfId];
+                amenity = [self.class findAmenity:result.objectLatLon names:names obfId:obfId];
             }
             else
             {
@@ -379,7 +379,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         obfId = mapObject->id.id;
     }
     
-    OAPOI *amenity = [self findAmenity:latLon names:names obfId:obfId];
+    OAPOI *amenity = [self.class findAmenity:latLon names:names obfId:obfId];
     if (amenity && obfMapObject->points31.size() > 1)
     {
         const auto points31 = obfMapObject->points31;
@@ -613,7 +613,7 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     return tagsMap;
 }
 
-- (OAPOI *) findAmenity:(CLLocation *)latLon names:(NSMutableArray<NSString *> *)names obfId:(uint64_t)obfId
++ (OAPOI *) findAmenity:(CLLocation *)latLon names:(NSMutableArray<NSString *> *)names obfId:(uint64_t)obfId
 {
     int searchRadius = [ObfConstants isIdFromRelation:obfId >> AMENITY_ID_RIGHT_SHIFT] ?
         AMENITY_SEARCH_RADIUS_FOR_RELATION :
@@ -622,7 +622,7 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     return [self findAmenity:latLon names:names obfId:obfId radius:searchRadius];
 }
 
-- (OAPOI *) findAmenity:(CLLocation *)latLon names:(NSArray<NSString *> *)names obfId:(uint64_t)obfId radius:(int)radius
++ (OAPOI *) findAmenity:(CLLocation *)latLon names:(NSArray<NSString *> *)names obfId:(uint64_t)obfId radius:(int)radius
 {
     uint64_t osmId = [ObfConstants getOsmId:obfId >> AMENITY_ID_RIGHT_SHIFT];
     OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude));
@@ -638,20 +638,20 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     return amenity;
 }
 
-- (NSArray<OAPOI *> *) findAmenities:(CLLocation *)latLon
++ (NSArray<OAPOI *> *) findAmenities:(CLLocation *)latLon
 {
     OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude));
     OsmAnd::AreaI rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(AMENITY_SEARCH_RADIUS, point31);
     return [OAPOIHelper findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nil];
 }
 
-- (OAPOI *) findAmenityByOsmId:(CLLocation *)latLon obfId:(uint64_t)obfId
++ (OAPOI *) findAmenityByOsmId:(CLLocation *)latLon obfId:(uint64_t)obfId
 {
     NSArray<OAPOI *> *amenities = [self findAmenities:latLon];
     return [self findAmenityByOsmId:amenities obfId:obfId point:latLon];
 }
 
-- (OAPOI *) findAmenityByOsmId:(NSArray<OAPOI *> *)amenities obfId:(uint64_t)obfId point:(CLLocation *)point
++ (OAPOI *) findAmenityByOsmId:(NSArray<OAPOI *> *)amenities obfId:(uint64_t)obfId point:(CLLocation *)point
 {
     OAPOI *result = nil;
     double minDist = AMENITY_SEARCH_RADIUS_FOR_RELATION * 2;
@@ -681,7 +681,7 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     return result;
 }
 
-- (OAPOI *) findAmenityByName:(NSArray<OAPOI *> *)amenities names:(NSArray<NSString *> *)names
++ (OAPOI *) findAmenityByName:(NSArray<OAPOI *> *)amenities names:(NSArray<NSString *> *)names
 {
     if (names.count > 0)
     {

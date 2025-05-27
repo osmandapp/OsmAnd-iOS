@@ -1143,6 +1143,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonBoolean *wikiArticleShowImagesAsked;
 @property (nonatomic) OACommonWikiArticleShowImages *wikivoyageShowImgs;
 
+@property (nonatomic) OACommonBoolean *selectMarkerOnSingleTap;
+
 @property (nonatomic) OACommonBoolean *coordsInputUseRightSide;
 @property (nonatomic) OACommonCoordinateInputFormats *coordsInputFormat;
 @property (nonatomic) OACommonBoolean *coordsInputUseOsmandKeyboard;

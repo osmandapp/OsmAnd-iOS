@@ -280,6 +280,8 @@ static NSString * const customPluginsJsonKey = @"customPluginsJson";
 static NSString * const wikiArticleShowImagesAskedKey = @"wikivoyageShowImagesAsked";
 static NSString * const wikivoyageShowImgsKey = @"wikivoyageShowImgs";
 
+static NSString * const selectMarkerOnSingleTapKey = @"select_marker_on_single_tap";
+
 static NSString * const coordsInputUseRightSideKey = @"coordsInputUseRightSide";
 static NSString * const coordsInputFormatKey = @"coordsInputFormat";
 static NSString * const coordsInputUseOsmandKeyboardKey = @"coordsInputUseOsmandKeyboard";
@@ -4743,6 +4745,9 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
         [_globalPreferences setObject:_wikiArticleShowImagesAsked forKey:@"wikivoyage_show_images_asked"];
         [_globalPreferences setObject:_wikivoyageShowImgs forKey:@"wikivoyage_show_imgs"];
+        
+        _selectMarkerOnSingleTap = [[OACommonBoolean withKey:selectMarkerOnSingleTapKey defValue:NO] makeProfile];
+        [_globalPreferences setObject:_selectMarkerOnSingleTap forKey:@"select_marker_on_single_tap"];
 
         _coordsInputUseRightSide = [[[OACommonBoolean withKey:coordsInputUseRightSideKey defValue:YES] makeGlobal] makeShared];
         _coordsInputFormat = [[[OACommonCoordinateInputFormats withKey:coordsInputFormatKey defValue:EOACoordinateInputFormatsDdMmMmm] makeGlobal] makeShared];

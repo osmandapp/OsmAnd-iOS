@@ -27,6 +27,10 @@
 #import "OAAppSettings.h"
 #import "OAAppData.h"
 #import "OAPOI.h"
+#import "OAMapSelectionResult.h"
+#import "OAFavoritesHelper.h"
+#import "OASelectedGPXHelper.h"
+#import "OAMapSelectionHelper.h"
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -450,6 +454,34 @@
     return nullptr;
 }
 
+- (BOOL) isMarkerOnWaypoint:(OADestination *)marker
+{
+    return marker && [OASelectedGPXHelper.instance getVisibleWayPointByLat:marker.latitude lon:marker.longitude];
+}
+
+- (BOOL) isMarkerOnFavorite:(OADestination *)marker
+{
+    return marker && [OAFavoritesHelper getVisibleFavByLat:marker.latitude lon:marker.longitude];
+}
+
+- (OAPOI *)getMapObjectByMarker:(OADestination *)marker
+{
+    if (marker.mapObjectName && marker.latitude != 0 && marker.longitude != 0)
+    {
+        NSString *mapObjName = [marker.mapObjectName componentsSeparatedByString:@"_"][0];
+        
+       
+        
+        //[OAMapSelectionHelper findAmenity:nil names:@[mapObjName] obfId:-1 radius:15];
+        
+        
+    }
+    
+    // TODO: implement
+    
+    return nil;
+}
+
 #pragma mark - OAStateChangedListener
 
 - (void) stateChanged:(id)change
@@ -512,6 +544,60 @@
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
+    NSMutableArray<OADestination *> *mapMarkers = self.app.data.destinations;
+    if (excludeUntouchableObjects || [NSArray isEmpty:mapMarkers])
+        return;
+    
+    CGPoint pixel = [result getPoint];
+    int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+ 
+    CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 2));
+    CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 4));
+    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+    
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    BOOL selectMarkerOnSingleTap = OAAppSettings.sharedManager.selectMarkerOnSingleTap;
+    
+    for (OADestination *marker in mapMarkers)
+    {
+        if (!unknownLocation && selectMarkerOnSingleTap)
+        {
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:marker.latitude lon:marker.longitude polygon31:touchPolygon31];
+            if (shouldAdd)
+            {
+                if (!unknownLocation && selectMarkerOnSingleTap)
+                {
+                    [result collect:marker provider:self];
+                }
+                else
+                {
+                    if (([self isMarkerOnFavorite:marker] && settings.mapSettingShowFavorites) ||
+                        ([self isMarkerOnWaypoint:marker] && settings.showGpxWpt))
+                    {
+                        continue;
+                    }
+                    
+                    
+                    //TODO: implement
+                    
+//                    Amenity mapObj = getMapObjectByMarker(marker);
+//                    if (mapObj != null) {
+//                        amenities.add(mapObj);
+//                        result.collect(mapObj, this);
+//                    } else {
+//                        result.collect(marker, this);
+//                    }
+                    
+                }
+            }
+        
+        }
+    }
+    
+    
+    
+    //TODO: implement
+    
     
 }
 
@@ -567,7 +653,11 @@
 
 - (OAPointDescription *) getObjectName:(id)o
 {
-    // TODO: implement
+    if ([o isKindOfClass:OADestination.class])
+    {
+        OADestination *point = (OADestination *)o;
+        return [point getPointDescription];
+    }
     return nil;
 }
 

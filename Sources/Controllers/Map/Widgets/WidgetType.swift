@@ -272,6 +272,8 @@ extension WidgetType {
         
     static let glideTarget = WidgetType(ordinal: 52, id: "glide_ratio_to_target", title: localizedString("glide_ratio_to_target"), descr: localizedString("map_widget_glide_target_desc"), iconName: "widget_glide_ratio_to_target", group: .glide, defaultPanel: .rightPanel)
     static let glideAverage = WidgetType(ordinal: 53, id: "average_glide_ratio", title: localizedString("average_glide_ratio"), descr: localizedString("map_widget_glide_average_desc"), iconName: "widget_glide_ratio_average", group: .glide, defaultPanel: .rightPanel)
+    
+    static let networkStatus = WidgetType(ordinal: 54, id: "network_status", title: localizedString("map_widget_network_status"), descr: localizedString("network_status_widget_desc"), iconName: "widget_network_status", defaultPanel: .rightPanel)
 
     static let values = [nextTurn,
                          smallNextTurn,
@@ -340,6 +342,7 @@ extension WidgetType {
                          bicycleSpeed,
                          temperature,
                          glideTarget,
-                         glideAverage
+                         glideAverage,
+                         networkStatus
     ]
 }

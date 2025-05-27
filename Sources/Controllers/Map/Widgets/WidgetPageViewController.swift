@@ -98,7 +98,7 @@ final class WidgetPageViewController: UIViewController {
                     }
                     let fittingSize = widget.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                     height += fittingSize.height
-                    width = max(width, min(fittingSize.width, UIScreen.main.bounds.width * 0.45))
+                    width = max(width, min(fittingSize.width, OARootViewController.instance().mapPanel.hasTopWidget() && OAUtilities.isLandscapeIpadAware() ? 120 : UIScreen.main.bounds.width * 0.45))
                 } else {
                     widget.translatesAutoresizingMaskIntoConstraints = false
                     widget.adjustSize()

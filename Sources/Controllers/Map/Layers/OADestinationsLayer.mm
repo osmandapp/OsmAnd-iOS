@@ -63,6 +63,8 @@
     BOOL _showCaptionsCache;
     double _textSize;
     int _myPositionLayerBaseOrder;
+    
+    NSMutableArray<OAPOI *> *_amenities;
 }
 
 - (NSString *) layerId
@@ -114,6 +116,8 @@
     [self.mapView addSubview:_destinationLayerWidget];
 
     [self refreshDestinationsMarkersCollection];
+    
+    _amenities = [NSMutableArray new];
 }
 
 - (void) onMapFrameRendered
@@ -469,16 +473,9 @@
     if (marker.mapObjectName && marker.latitude != 0 && marker.longitude != 0)
     {
         NSString *mapObjName = [marker.mapObjectName componentsSeparatedByString:@"_"][0];
-        
-       
-        
-        //[OAMapSelectionHelper findAmenity:nil names:@[mapObjName] obfId:-1 radius:15];
-        
-        
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:marker.latitude longitude:marker.longitude];
+        return [OAMapSelectionHelper findAmenity:location names:@[mapObjName] obfId:-1 radius:15];
     }
-    
-    // TODO: implement
-    
     return nil;
 }
 
@@ -548,6 +545,7 @@
     if (excludeUntouchableObjects || [NSArray isEmpty:mapMarkers])
         return;
     
+    [_amenities removeAllObjects];
     CGPoint pixel = [result getPoint];
     int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
  
@@ -577,28 +575,21 @@
                         continue;
                     }
                     
-                    
-                    //TODO: implement
-                    
-//                    Amenity mapObj = getMapObjectByMarker(marker);
-//                    if (mapObj != null) {
-//                        amenities.add(mapObj);
-//                        result.collect(mapObj, this);
-//                    } else {
-//                        result.collect(marker, this);
-//                    }
-                    
+                    OAPOI *mapObj = [self getMapObjectByMarker:marker];
+                    if (mapObj)
+                    {
+                        [_amenities addObject:mapObj];
+                        [result collect:marker provider:self];
+                    }
+                    else
+                    {
+                        [result collect:marker provider:self];
+                    }
                 }
             }
         
         }
     }
-    
-    
-    
-    //TODO: implement
-    
-    
 }
 
 - (BOOL) showMenuAction:(id)object
@@ -643,7 +634,7 @@
         OADestination *point = (OADestination *)o;
         return [[CLLocation alloc] initWithLatitude:[point latitude] longitude:[point longitude]];
     }
-    else if ([o isKindOfClass:OAPOI.class])
+    else if ([o isKindOfClass:OAPOI.class] && [_amenities containsObject:o])
     {
         OAPOI *amenity = (OAPOI *)o;
         return [amenity getLocation];

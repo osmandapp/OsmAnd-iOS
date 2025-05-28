@@ -25,7 +25,7 @@
 @property (weak, nonatomic) OASuperViewController *hostVC;
 @property (weak, nonatomic) OACollectionSingleLineTableViewCell *hostCell;
 @property (weak, nonatomic) UIView *hostVCOpenColorPickerButton;
-@property (weak, nonatomic) NSArray<UIColor *> *groupColors;
+@property (strong, nonatomic) NSArray<UIColor *> *groupColors;
 
 @property (nonatomic) BOOL isOpenedFromAllColorsScreen;
 @property (weak, nonatomic) OAColorCollectionHandler *hostColorHandler NS_SWIFT_NAME(hostColorHandler);

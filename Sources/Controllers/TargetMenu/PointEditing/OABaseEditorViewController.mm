@@ -404,7 +404,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         {
             [colors addObject:[item getColor]];
         }
-        _colorCollectionHandler.groupColors = [colors mutableCopy];
+        _colorCollectionHandler.groupColors = [colors copy];
     }
     [_colorCollectionHandler setupDefaultCategory];
 }
@@ -427,7 +427,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         {
             [iconNames addObject:[item getIcon]];
         }
-        _poiIconCollectionHandler.groupIcons = [iconNames mutableCopy];
+        _poiIconCollectionHandler.groupIcons = [iconNames copy];
     }
     
     [_poiIconCollectionHandler setItemSizeWithSize:48];
@@ -474,7 +474,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         {
             [backgroundIconNames addObject:[item getBackgroundIcon]];
         }
-        _shapesCollectionHandler.groupShapes = [backgroundIconNames mutableCopy];
+        _shapesCollectionHandler.groupShapes = [backgroundIconNames copy];
     }
     
     _shapesCollectionHandler.selectedCatagoryKey = _backgroundIconNames[_selectedBackgroundIndex];

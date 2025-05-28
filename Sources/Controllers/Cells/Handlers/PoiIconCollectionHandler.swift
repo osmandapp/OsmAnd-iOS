@@ -363,7 +363,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         if lastUsedIcons.count > LAST_USED_ICONS_LIMIT {
             lastUsedIcons = Array(lastUsedIcons[0..<LAST_USED_ICONS_LIMIT])
         }
-        categories[0].iconKeys = lastUsedIcons
+        if let lastUsedIconsIndex = categories.firstIndex(where: { $0.key == LAST_USED_KEY }) {
+            categories[lastUsedIconsIndex].iconKeys = lastUsedIcons
+        }
         OAAppSettings.sharedManager().lastUsedFavIcons.set(lastUsedIcons)
     }
     

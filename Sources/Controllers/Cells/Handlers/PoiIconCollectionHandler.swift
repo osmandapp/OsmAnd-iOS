@@ -27,7 +27,6 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private let LAST_USED_KEY = "last_used_icons"
     private let SPECIAL_KEY = "special"
     private let SYMBOLS_KEY = "symbols"
-    private let TRAVEL_KEY = "travel"
     private let ACTIVITIES_KEY = "activities"
     private let PROFILE_ICONS_KEY = "profile_icons"
     private let SAMPLE_ICON_KEY = "ic_sample"
@@ -142,7 +141,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     private func initAssetsCategories() {
-        readCategoriesFromAssets([SPECIAL_KEY, SYMBOLS_KEY, TRAVEL_KEY])
+        readCategoriesFromAssets([SPECIAL_KEY, SYMBOLS_KEY])
     }
     
     private func initActivitiesCategory() {

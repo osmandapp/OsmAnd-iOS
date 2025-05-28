@@ -271,12 +271,14 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
             
             if (_needToScrollToSelectedColor)
             {
                 NSIndexPath *selectedIndexPath = [[cell getCollectionHandler] getSelectedIndexPath];
-                if (selectedIndexPath.row != NSNotFound && ![cell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+                if (selectedIndexPath.row != NSNotFound
+                    && indexPath.section < [cell.collectionView numberOfSections]
+                    && selectedIndexPath.row < [cell.collectionView numberOfItemsInSection:indexPath.section]
+                    && ![cell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
                 {
                     [cell.collectionView scrollToItemAtIndexPath:selectedIndexPath
                                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally

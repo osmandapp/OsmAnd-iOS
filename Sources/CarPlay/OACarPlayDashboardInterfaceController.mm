@@ -683,11 +683,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
             if (!deviatedFromRoute)
             {
-                NSString *streetName = [strongSelf defineStreetName];
-                if (streetName.length > 0)
-                    strongSelf.navigationSession.currentRoadNameVariants = @[streetName];
-                else
-                    strongSelf.navigationSession.currentRoadNameVariants = @[];
+                if (@available(iOS 17.4, *))
+                {
+                    NSString *streetName = [strongSelf defineStreetName];
+                    if (streetName.length > 0)
+                        strongSelf.navigationSession.currentRoadNameVariants = @[streetName];
+                    else
+                        strongSelf.navigationSession.currentRoadNameVariants = @[];
+                }
             }
 
             NSMeasurement<NSUnitLength *> *dist = [strongSelf getFormattedDistance:nextTurnDistance];

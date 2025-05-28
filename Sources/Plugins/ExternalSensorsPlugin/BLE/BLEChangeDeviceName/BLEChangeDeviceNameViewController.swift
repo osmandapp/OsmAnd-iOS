@@ -121,7 +121,7 @@ extension BLEChangeDeviceNameViewController: UITextViewDelegate {
         navigationItem.setRightBarButtonItems(isEnabled: false, with: UIColor.buttonBgColorDisabled)
         if !text.isEmpty {
             newDeviceName = text
-            navigationItem.setRightBarButtonItems(isEnabled: true, with: UIColor.buttonBgColorPrimary)
+            navigationItem.setRightBarButtonItems(isEnabled: true, with: UIColor.iconColorActive)
         }
     }
 }

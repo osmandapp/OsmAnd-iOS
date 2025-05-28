@@ -20,8 +20,6 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         }
     }
     
-    var startBehavior: TableViewStartBehavior = .normal
-    
     static let widgets: [OBDDataComputer.OBDTypeWidget] = [.fuelType,
                                                            .temperatureIntake,
                                                            .temperatureAmbient,
@@ -36,6 +34,8 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                                                            .fuelPressure,
                                                            .throttlePosition,
                                                            .batteryVoltage]
+    
+    var startBehavior: TableViewStartBehavior = .normal
     
     var device: Device! {
         didSet {
@@ -70,7 +70,6 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             tableView.reloadData()
         }
         tableView.tableHeaderView = headerView
-        registerObservers()
         
      // FIXME: to debug obd simulator
        // OBDService.shared.startDispatcher()
@@ -164,7 +163,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             nameRow.cellType = OAValueTableViewCell.reuseIdentifier
             nameRow.key = "name_row"
             nameRow.title = localizedString("shared_string_name")
-            nameRow.descr = device?.deviceName ?? ""
+            nameRow.descr = device.deviceName
             
             let forgetSensorSection = tableData.createNewSection()
             forgetSensorSection.key = Section.forgetSensor.key
@@ -244,14 +243,6 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         }
     }
     
-    // TODO: deviceRSSIUpdated ?
-    override func registerObservers() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(deviceRSSIUpdated),
-                                               name: .DeviceRSSIUpdated,
-                                               object: nil)
-    }
-    
     private func scrollToSearchSection() {
         for index in 0..<tableData.sectionCount() {
             let section = tableData.sectionData(for: index)
@@ -267,10 +258,6 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         headerView.frame.size.height = 156
         headerView.frame.size.width = view.frame.width
         tableView.tableHeaderView = headerView
-    }
-    
-    @objc private func deviceRSSIUpdated() {
-        headerView.updateRSSI(with: device.rssi)
     }
 }
 

@@ -10,14 +10,6 @@
 final class OBDService: NSObject {
     static let shared = OBDService()
     
-    var bufferResponse: Data? {
-        DeviceHelper.shared.getOBDDevice()?.sensors.compactMap({ $0 as? OBDVehicleMetricsSensor }).first?.buffer
-    }
-    
-    var isReadyBufferResponse: Bool {
-        DeviceHelper.shared.getOBDDevice()?.sensors.compactMap({ $0 as? OBDVehicleMetricsSensor }).first?.isReadyBufferResponse ?? false
-    }
-    
     private override init() {
         super.init()
         NotificationCenter.default.addObserver(self,
@@ -35,8 +27,18 @@ final class OBDService: NSObject {
             OBDDataComputer.shared.registerWidget(type: $0, averageTimeSeconds: 0)
         }
         
-        if let connector = OAOBDConnector() as? OBDConnector {
-            dispatch.connect(connector: connector)
+        let connector = OAOBDConnector()
+        connector.disconnectHandler = {
+            DeviceHelper.shared.getOBDDevice()?.disconnect(completion: { _ in })
+        }
+        connector.failureHandler = {
+            DeviceHelper.shared.getOBDDevice()?.disconnect(completion: { _ in })
+        }
+        
+        if let obdConnector = connector as? OBDConnector {
+            dispatch.connect(connector: obdConnector)
+        } else {
+            NSLog("[OBDService] -> Failed to cast OAOBDConnector to OBDConnector")
         }
     }
     
@@ -77,11 +79,30 @@ final class OBDService: NSObject {
         return true
     }
     
-    func clearBuffer() {
-        DeviceHelper.shared.getOBDDevice()?.sensors.compactMap({ $0 as? OBDVehicleMetricsSensor }).first?.clearBuffer()
-    }
-    
     @objc private func handleDeviceDisconnected() {
         stopDispatcher()
+    }
+}
+
+// Response Sensor
+extension OBDService {
+    var obdSensor: OBDVehicleMetricsSensor? {
+        DeviceHelper.shared.getOBDDevice()?.sensors.compactMap({ $0 as? OBDVehicleMetricsSensor }).first
+    }
+    
+    var readObdBuffer: String? {
+        obdSensor?.readObdBuffer()
+    }
+
+    var isReadyBufferResponse: Bool {
+        obdSensor?.isReadyBufferResponse ?? false
+    }
+    
+    func writeObdBuffer(_ value: String) {
+        obdSensor?.writeObdBuffer(string: value)
+    }
+    
+    func clearBuffer() {
+        obdSensor?.clearBuffer()
     }
 }

@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface OAOBDConnector : NSObject
+@property (nonatomic, copy, nullable) void (^disconnectHandler)(void);
+@property (nonatomic, copy, nullable) void (^failureHandler)(void);
+
 @end
 
 @interface OAOkioSource : NSObject

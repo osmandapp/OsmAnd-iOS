@@ -8,6 +8,7 @@
 
 final class OBDVehicleMetricsSensor: Sensor {
     private(set) var buffer = Data()
+    private(set) var stringResponse: String = ""
     var isReadyBufferResponse = false
     
 //    private(set) var lastRunningCadenceData: RunningCadenceData?
@@ -30,121 +31,67 @@ final class OBDVehicleMetricsSensor: Sensor {
         [.bicycleCadence, .bicycleSpeed, .bicycleDistance]
     }
     
-//    func didDiscoverCharacteristics(_ peripheral: CBPeripheral, service: CBService, error _: Error?) {
-//        guard let characteristics = service.characteristics, !characteristics.isEmpty else {
-//            return
-//        }
-//
-//        for characteristic in characteristics {
-//            if characteristic.properties.contains(.notify) {
-//                peripheral.setNotifyValue(true, for: characteristic)
-//            }
-//            switch characteristic.uuid.uuidString {
-//            case "FFE1": // for servcice FFE0
-//                ecuWriteCharacteristic = characteristic
-//                ecuReadCharacteristic = characteristic
-//            case "FFF1": // for servcice FFF0
-//                ecuReadCharacteristic = characteristic
-//            case "FFF2": // for servcice FFF0
-//                ecuWriteCharacteristic = characteristic
-//            case "2AF0": // for servcice 18F0
-//                ecuReadCharacteristic = characteristic
-//            case "2AF1": // for servcice 18F0
-//                ecuWriteCharacteristic = characteristic
-//            default:
-//                break
-//            }
-//        }
-//
-//        if connectionCompletion != nil, ecuWriteCharacteristic != nil, ecuReadCharacteristic != nil {
-//            connectionCompletion?(peripheral, nil)
-//        }
-//    }
-    
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
-          //  BLEManager.shared.sendMessageCompletion?(nil, BLEManagerError.noData)
             return
         }
-        
-        // FIXME:
+
         switch characteristic.uuid {
         case "2AF0".CBUUIDRepresentation:
-            print("")
-            processReceivedData(data)
+            processReceivedData(data, result: result)
         case "2AF1".CBUUIDRepresentation:
-//            if let device = device as? OBDVehicleMetricsDevice {
-//                device.ecuWriteCharacteristic = characteristic
-//            }
-            print("")
-            processReceivedData(data)
+            processReceivedData(data, result: result)
         case "FFE1".CBUUIDRepresentation:
-            processReceivedData(data)
-//            if let device = device as? OBDVehicleMetricsDevice {
-//                device.ecuWriteCharacteristic = characteristic
-//            }
-            print("")
+            processReceivedData(data, result: result)
         case "FFF1".CBUUIDRepresentation:
-            print("")
+            print("for reading")
         default:
             debugPrint("Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
-       // FFF2 ?
-        
-//        switch characteristic.uuid.uuidString {
-//        case "FFE1": // for servcice FFE0
-//            ecuWriteCharacteristic = characteristic
-//            ecuReadCharacteristic = characteristic
-//        case "FFF1": // for servcice FFF0
-//            ecuReadCharacteristic = characteristic
-//        case "FFF2": // for servcice FFF0
-//            ecuWriteCharacteristic = characteristic
-//        case "2AF0": // for servcice 18F0
-//            ecuReadCharacteristic = characteristic
-//        case "2AF1": // for servcice 18F0
-//            ecuWriteCharacteristic = characteristic
-//        default:
-//            break
-//        }
     }
     
     func clearBuffer() {
         isReadyBufferResponse = false
         buffer.removeAll()
+        stringResponse = ""
     }
     
-    func processReceivedData(_ data: Data) {
+    func processReceivedData(_ data: Data, result: (Result<Void, Error>) -> Void) {
         buffer.append(data)
 
         guard let string = String(data: buffer, encoding: .utf8) else {
             clearBuffer()
             return
         }
-        
-       // arrayOf("ATD", "ATZ", "AT E0", "AT L0", "AT S0", "AT H0", "AT SP 0")
 
         if string.contains(">") {
             var lines = string
                 .components(separatedBy: .newlines)
                 .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
-
-            // remove the last line
             lines.removeLast()
+            // FIXME:
+           // let normalized = string.replacingOccurrences(of: "\r", with: "")
+            appendObdResponse(string)
             isReadyBufferResponse = true
-          //  #if DEBUG
+
+            result(.success)
+            #if DEBUG
             NSLog("processReceivedData OBD -> Response: \(lines)")
            // processReceivedData OBD -> Response: ["SEARCHING...", "7E906410098188013", "7E8064100BE3EB81B"]
            // processReceivedData OBD -> Response: ["SEARCHING...", "UNABLE TO CONNECT"]
-           //  #endif
-
-            if BLEManager.shared.sendMessageCompletion != nil {
-                if lines[0].uppercased().contains("NO DATA") {
-                    BLEManager.shared.sendMessageCompletion?(nil, BLEManagerError.noData)
-                } else {
-                    BLEManager.shared.sendMessageCompletion?(lines, nil)
-                }
-            }
-           // clearBuffer()
+            #endif
         }
+    }
+    
+    @objc func readObdBuffer() -> String? {
+        stringResponse.isEmpty ? nil : stringResponse
+    }
+    
+    @objc func writeObdBuffer(string: String) {
+        stringResponse = string
+    }
+    
+    private func appendObdResponse(_ response: String) {
+        stringResponse += response
     }
 }

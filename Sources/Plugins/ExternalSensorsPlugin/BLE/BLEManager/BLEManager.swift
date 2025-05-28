@@ -34,8 +34,6 @@ final class BLEManager {
         SwiftyBluetooth.isScanning
     }
     
-    var sendMessageCompletion: (([String]?, Error?) -> Void)?
-    
     private(set) var discoveredDevices = [Device]()
     
     private init() {

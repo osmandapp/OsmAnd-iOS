@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isUpdateNeeded;
 - (BOOL)isMetricSystemDepended;
 - (BOOL)isAngularUnitsDepended;
-- (BOOL)isEnabledShowIcon:(OAWidgetsPanel *)widgetsPanel;
+- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel;
 - (BOOL)isEnabledTextInfoComponents;
 - (void)setMetricSystemDepended:(BOOL)newValue;
 - (void)setAngularUnitsDepended:(BOOL)newValue;

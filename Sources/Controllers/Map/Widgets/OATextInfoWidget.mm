@@ -950,7 +950,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
                              [UIImage imageNamed:ACImageNameIcCustom20HeightL]]
                     forKey:@"values"];
     
-    if ([self isEnabledShowIcon:widgetsPanel])
+    if ([self isEnabledShowIconSwitchWith:widgetsPanel])
     {
         OATableRowData *showIconRow = section.createNewRow;
         showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
@@ -961,7 +961,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     return data;
 }
 
-- (BOOL)isEnabledShowIcon:(OAWidgetsPanel *)widgetsPanel
+- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel
 {
     return [widgetsPanel isPanelVertical];
 }

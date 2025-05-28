@@ -11,6 +11,7 @@ import Foundation
 @objc(OAWidgetsAvailabilityHelper)
 @objcMembers
 class WidgetsAvailabilityHelper: NSObject {
+    // Mon Jan 01 2024
     private static let routeWidgetsV2IntroTimeInSeconds: TimeInterval = 1704096000
     
     private static var widgetsVisibilityMap = [String: Set<OAApplicationMode>]()
@@ -35,7 +36,7 @@ class WidgetsAvailabilityHelper: NSObject {
     
     static func initRegVisibility() {
         let installDate = UserDefaults.standard.double(forKey: "kAppInstalledDate")
-        let exceptDefault: [OAApplicationMode] = [.car(), .bicycle(), .pedestrian(), .public_TRANSPORT(), .boat(), .aircraft(), .ski(), .truck(), .motorcycle(), .horse(), .moped()]
+        let exceptDefault: [OAApplicationMode] = [.car(), .bicycle(), .pedestrian(), .public_TRANSPORT(), .boat(), .aircraft(), .ski(), .truck(), .motorcycle(), .horse(), .moped(), .train()]
         
         // left
         let navigationSet1: [OAApplicationMode] = [.car(), .bicycle(), .boat(), .ski(), .truck(), .motorcycle(), .horse(), .moped()]
@@ -56,7 +57,7 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetVisibility(widgetType: .timeToDestination)
         
         if installDate >= Self.routeWidgetsV2IntroTimeInSeconds {
-            regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault + [.train()])
+            regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault)
         }
         
         regWidgetVisibility(widgetType: .currentSpeed, appModes: [.bicycle(), .boat(), .ski(), .public_TRANSPORT(), .aircraft(), .horse(), .train()])

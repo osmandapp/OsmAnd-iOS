@@ -34,6 +34,8 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
+static const int START_ZOOM = 6;
+
 @implementation OAFavoritesLayer
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _favoritesMarkersCollection;
@@ -260,6 +262,9 @@
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
+    if ([self.mapViewController getMapZoom] < START_ZOOM)
+        return;
+    
     NSArray<OAFavoriteItem *> *favouritePoints = [OAFavoritesHelper getFavoriteItems];
     if ([NSArray isEmpty:favouritePoints])
         return;

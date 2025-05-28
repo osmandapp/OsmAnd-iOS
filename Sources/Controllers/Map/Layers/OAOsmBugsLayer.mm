@@ -22,12 +22,18 @@
 #import "OAPluginsHelper.h"
 #import "OAAppSettings.h"
 #import "OAAppData.h"
+#import "OAMapSelectionResult.h"
+#import "OAOsmEditsDBHelper.h"
+#import "OAOsmNotePoint.h"
+#import "OAOsmEditsLayer.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 
 #define kMaxZoom 11
+
+static const int START_ZOOM = 8;
 
 static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
@@ -130,7 +136,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
-    return nil;
+    return [OAOsmEditsLayer getTargetPointFromPoint:obj];
 }
 
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj
@@ -155,7 +161,36 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
+    float zoom = [self.mapViewController getMapZoom];
+    NSArray<OAOpenStreetMapPoint *> *objects = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
     
+    if (zoom >= START_ZOOM && ![NSArray isEmpty:objects])
+    {
+        CGPoint pixel = [result getPoint];
+        int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+        
+        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));
+        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
+        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+        
+        
+        
+        for (OAOsmNotePoint *note in objects)
+        {
+            // Android has extra settings check here. 
+            //boolean showClosed = plugin.SHOW_CLOSED_OSM_BUGS.get();
+            //if (!note.isOpened() && !showClosed) {
+            //    continue;
+            //}
+            
+            double lat = [note getLatitude];
+            double lon = [note getLongitude];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+            
+            if (shouldAdd)
+                [result collect:note provider:self];
+        }
+    }
 }
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation

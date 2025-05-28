@@ -50,6 +50,8 @@
 #define kPoiSearchRadius 50
 #define kTrackSearchDelta 40
 
+static const int START_ZOOM = 5;
+
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 @implementation OAPOILayer
@@ -578,6 +580,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
+    if ([self.mapViewController getMapZoom] < START_ZOOM)
+        return;
+    
     
     //collectAmenitiesFromPoint()
 

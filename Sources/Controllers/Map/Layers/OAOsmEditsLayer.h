@@ -12,12 +12,14 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
-@class OAMapViewController;
+@class OAMapViewController, OAOsmPoint;
 
 @interface OAOsmEditsLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 -(id) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder;
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getOsmEditsCollection;
+
++ (OATargetPoint *)getTargetPointFromPoint:(OAOsmPoint *)point;
 
 @end

@@ -48,6 +48,7 @@
 
 static const CGFloat kSpeedToHeightScale = 10.0;
 static const CGFloat kTemperatureToHeightOffset = 100.0;
+static const int START_ZOOM = 7;
 
 @interface OAGPXLayer ()
 
@@ -1825,6 +1826,9 @@ colorizationScheme:(int)colorizationScheme
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
+    if ([self.mapViewController getMapZoom] < START_ZOOM)
+        return;
+    
     [self collectWptFromPoint:result unknownLocation:unknownLocation excludeUntouchableObjects:excludeUntouchableObjects];
     if (!excludeUntouchableObjects)
         [self collectTracksFromPoint:result showTrackPointMenu:NO];

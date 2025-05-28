@@ -1246,6 +1246,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dByType;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dWallColorType;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;
+@property (nonatomic) OACommonString *currentTrackRouteActivity;
 
 @property (nonatomic) OACommonStringList *customTrackColors;
 @property (nonatomic) OACommonStringList *customTrackColorsLastUsed;

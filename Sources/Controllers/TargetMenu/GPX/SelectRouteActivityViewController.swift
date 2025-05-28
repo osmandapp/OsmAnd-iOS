@@ -14,16 +14,28 @@ import UIKit
 
 @objcMembers
 final class SelectRouteActivityViewController: OABaseNavbarViewController {
+    private var settings: OAAppSettings?
+    private var appMode: OAApplicationMode?
     private var searchController: UISearchController?
     private var routeActivityHelper: RouteActivityHelper?
     private var selectedActivity: RouteActivity?
     private var gpxFile: GpxFile?
     private var tracks: Set<TrackItem>?
     private var searchText: String?
+    private var isTripRecordingSettings = false
     private var isSearchActive = false
     private var isCheckmarkAllowed = true
     
     weak var delegate: SelectRouteActivityViewControllerDelegate?
+    
+    init(appMode: OAApplicationMode) {
+        self.appMode = appMode
+        self.isTripRecordingSettings = true
+        self.gpxFile = nil
+        self.tracks = nil
+        super.init(nibName: "OABaseNavbarViewController", bundle: nil)
+        commonInit()
+    }
     
     init(gpxFile: GpxFile) {
         self.gpxFile = gpxFile
@@ -44,6 +56,7 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     }
     
     override func commonInit() {
+        settings = OAAppSettings.sharedManager()
         routeActivityHelper = RouteActivityHelper.shared
         selectedActivity = determineInitialActivity()
         initTableData()
@@ -152,7 +165,9 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     }
     
     override func onRightNavbarButtonPressed() {
-        if let tracks {
+        if isTripRecordingSettings {
+            settings?.currentTrackRouteActivity.set(selectedActivity?.id, mode: appMode)
+        } else if let tracks {
             routeActivityHelper?.saveRouteActivity(trackItems: tracks, routeActivity: selectedActivity)
         } else if let gpxFile {
             routeActivityHelper?.saveRouteActivity(gpxFile: gpxFile, routeActivity: selectedActivity)
@@ -164,6 +179,11 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     
     private func determineInitialActivity() -> RouteActivity? {
         guard let routeActivityHelper else { return nil }
+        if isTripRecordingSettings {
+            isCheckmarkAllowed = true
+            return routeActivityHelper.findRouteActivity(id: settings?.currentTrackRouteActivity.get(appMode))
+        }
+        
         if let tracks, !tracks.isEmpty {
             let activities: [String?] = tracks.map { let raw = $0.dataItem?.getParameter(parameter: .activityType) as? String
                 return raw?.isEmpty == false ? raw : nil

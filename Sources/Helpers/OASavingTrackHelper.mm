@@ -479,6 +479,7 @@ static const NSInteger kDBVersion = 1;
             [gpxFile setColorColor:color];
             [gpxFile setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
             [gpxFile setJoinSegmentIsJoinSegment:[settings.currentTrackIsJoinSegments get]];
+            [self savePreselectedRouteActivity:gpxFile];
            
             // TODO: - not implemented
             /*
@@ -511,6 +512,17 @@ static const NSInteger kDBVersion = 1;
         if (completionHandler)
             completionHandler();
     });
+}
+
+- (void)savePreselectedRouteActivity:(OASGpxFile *)gpxFile
+{
+    OASRouteActivityHelper *activityHelper = [OASRouteActivityHelper shared];
+    OASRouteActivity *activity = [gpxFile.metadata getRouteActivityActivities:[activityHelper getActivities]];
+    if (!activity)
+    {
+        NSString *selectedId = [[OAAppSettings sharedManager].currentTrackRouteActivity get];
+        [gpxFile.metadata setRouteActivityActivity:[activityHelper findRouteActivityId:selectedId]];
+    }
 }
 
 - (void)saveTrackAppearance:(OASGpxDataItem *)item

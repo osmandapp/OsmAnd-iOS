@@ -277,12 +277,20 @@ static NSArray<NSString *> *minTrackSpeedNames;
                         }
                     }
                 }
-                [dataArr addObject:
-                 @[@{
-                     @"name" : @"externalSensors",
-                     @"title" : OALocalizedString(@"external_sensors_plugin_name"),
-                     @"value" : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @(devices).stringValue, @(devicesAll).stringValue],
-                     @"type" : [OAValueTableViewCell getCellIdentifier] }]];
+                [dataArr addObject:@[
+                    @{
+                        @"header" : OALocalizedString(@"data_settings"),
+                        @"name" : @"routeActivity",
+                        @"title" : OALocalizedString(@"shared_string_activity"),
+                        @"value" : [[OASRouteActivityHelper shared] findRouteActivityId:[_settings.currentTrackRouteActivity get:self.appMode]].label ?: OALocalizedString(@"shared_string_none"),
+                        @"type" : [OAValueTableViewCell getCellIdentifier]
+                    },
+                    @{
+                        @"name" : @"externalSensors",
+                        @"title" : OALocalizedString(@"external_sensors_plugin_name"),
+                        @"value" : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @(devices).stringValue, @(devicesAll).stringValue],
+                        @"type" : [OAValueTableViewCell getCellIdentifier]
+                    }]];
             }
 
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
@@ -756,6 +764,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
         [_settings.saveTrackToGPX resetModeToDefault:self.appMode];
         [_settings.autoSplitRecording resetModeToDefault:self.appMode];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.numberOfSections)] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    else if ([name isEqualToString:@"routeActivity"])
+    {
+        SelectRouteActivityViewController *routeActivityController = [[SelectRouteActivityViewController alloc] initWithAppMode:self.appMode];
+        [self showViewController:routeActivityController];
     }
     else if ([name isEqualToString:@"externalSensors"])
     {

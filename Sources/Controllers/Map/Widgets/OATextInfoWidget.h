@@ -47,7 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 
-- (void)commonInit;
 - (void)setImage:(nullable UIImage *)image;
 - (void)setImage:(nullable UIImage *)image withColor:(UIColor *)color;
 - (void)setImage:(UIImage *)image withColor:(UIColor *)color iconName:(NSString *)iconName;
@@ -71,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isUpdateNeeded;
 - (BOOL)isMetricSystemDepended;
 - (BOOL)isAngularUnitsDepended;
-- (BOOL)isEnabledShowIcon;
+- (BOOL)isEnabledShowIcon:(OAWidgetsPanel *)widgetsPanel;
 - (BOOL)isEnabledTextInfoComponents;
 - (void)setMetricSystemDepended:(BOOL)newValue;
 - (void)setAngularUnitsDepended:(BOOL)newValue;

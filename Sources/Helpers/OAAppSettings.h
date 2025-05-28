@@ -996,6 +996,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *keepInforming;
 @property (nonatomic) OACommonSpeedConstant *speedSystem;
 @property (nonatomic) OACommonVolumeConstant *volumeUnits;
+@property (nonatomic) OACommonDouble *fuelTankCapacity;
 @property (nonatomic) OACommonAngularConstant *angularUnits;
 @property (nonatomic) OACommonDouble *speedLimitExceedKmh;
 @property (nonatomic) OACommonDouble *routeRecalculationDistance;

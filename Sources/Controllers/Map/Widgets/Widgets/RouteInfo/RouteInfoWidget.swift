@@ -89,7 +89,9 @@ final class RouteInfoWidget: OASimpleWidget {
         hasSecondaryData = false
         super.init(frame: frame)
         widgetType = .routeInfo
-        commonInit()
+        layoutWidget()
+        showButton.menu = configureContextWidgetMenu()
+        updateHeightConstraint(widgetHeightConstraint)
     }
     
     required init?(coder: NSCoder) {
@@ -106,12 +108,6 @@ final class RouteInfoWidget: OASimpleWidget {
         secondLineBottomConstraint.constant = secondLineBottomSpace
         secondaryBlockStackView.isHidden = !hasEnoughWidth || cachedRouteInfo.count < 2
         forceUpdateView()
-    }
-    
-    override func commonInit() {
-        layoutWidget()
-        showButton.menu = configureContextWidgetMenu()
-        updateHeightConstraint(widgetHeightConstraint)
     }
     
     override func getSettingsData(_ appMode: OAApplicationMode,
@@ -413,7 +409,7 @@ final class RouteInfoWidget: OASimpleWidget {
         OAOsmAndFormatter.getFormattedDistance(Float(meters))
     }
 
-    override func isEnabledShowIcon() -> Bool {
+    override func isEnabledShowIcon(_ widgetsPanel: WidgetsPanel) -> Bool {
         false
     }
     

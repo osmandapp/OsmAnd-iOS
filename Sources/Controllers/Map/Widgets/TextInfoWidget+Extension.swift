@@ -123,6 +123,15 @@ extension OATextInfoWidget {
         return widgetSizePref?.get(OAAppSettings.sharedManager().applicationMode.get()!) ?? .medium
     }
     
+    @objc var isSidePanelSimpleLayoutMode: Bool {
+        switch widgetSizeStyle {
+        case .medium, .large:
+            return true
+        default:
+            return false
+        }
+    }
+    
     func updateWith(style: EOAWidgetSizeStyle, appMode: OAApplicationMode) {
         refreshLayout()
         guard widgetSizeStyle != style else {

@@ -107,14 +107,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         var width: CGFloat = 0
         var height: CGFloat = pages.isEmpty ? 0 : Self.contentHeight
         if hasWidgets() {
-            for (idx, page) in pages.enumerated() {
-                let widgetSize = (page as? WidgetPageViewController)?.layoutWidgets() ?? (0, 0)
-                if idx == pageControl.currentPage {
-                    height = widgetSize.1
-                }
-                width = max(width, widgetSize.0)
-            }
-            height = max(height, Self.contentHeight)
+            let widgetSize = (pages[pageControl.currentPage] as? WidgetPageViewController)?.layoutWidgets() ?? (0, 0)
+            width = widgetSize.0
+            height = max(widgetSize.1, Self.contentHeight)
         }
         
         return CGSize(width: width, height: height)
@@ -171,7 +166,11 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         if pages.isEmpty {
             pages.append(UIViewController())
         }
-        pageViewController.setViewControllers([pages[currentIndex]], direction: .forward, animated: false)
+        pageViewController.setViewControllers([pages[currentIndex]], direction: .forward, animated: false) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.updateWidgetSizes()
+            }
+        }
         if !isHorizontal {
             pageViewController.dataSource = self
         }
@@ -336,12 +335,12 @@ extension WidgetPanelViewController: UIPageViewControllerDelegate {
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        guard completed,
-              let currentVC = pageViewController.viewControllers?.first,
-              let _ = pages.firstIndex(of: currentVC) else { return }
+        guard completed, let currentVC = pageViewController.viewControllers?.first, pages.contains(currentVC) else { return }
         isInTransition = false
         pageControl.currentPage = currentIndex
-        updateContainerSize()
+        DispatchQueue.main.async {
+            self.updateContainerSize()
+        }
     }
 }
 

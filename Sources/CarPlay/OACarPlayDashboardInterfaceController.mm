@@ -684,12 +684,19 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             if (!deviatedFromRoute)
             {
                 NSString *streetName = [strongSelf defineStreetName];
-                if (streetName.length > 0)
-                    strongSelf.navigationSession.currentRoadNameVariants = @[streetName];
-                else
-                    strongSelf.navigationSession.currentRoadNameVariants = @[];
+                if (strongSelf.navigationSession)
+                {
+                    if (streetName.length > 0)
+                        strongSelf.navigationSession.currentRoadNameVariants = @[streetName];
+                    else
+                        strongSelf.navigationSession.currentRoadNameVariants = @[];
+                }
             }
-
+            if (!strongSelf.navigationSession)
+            {
+                NSLog(@"[CarPlay] DashboardInterface -> onLocationUpdate strongSelf.navigationSession is empty");
+                return;
+            }
             NSMeasurement<NSUnitLength *> *dist = [strongSelf getFormattedDistance:nextTurnDistance];
             long leftTurnTimeSec = [strongSelf.routingHelper getLeftTimeNextTurn];
             CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:leftTurnTimeSec];

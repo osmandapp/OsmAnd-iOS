@@ -322,6 +322,12 @@ extension DeviceHelper {
 }
 
 extension DeviceHelper {
+    func getOBDDevice() -> OBDVehicleMetricsDevice? {
+        connectedDevices.first(where: { $0.deviceType == .OBD_VEHICLE_METRICS }) as? OBDVehicleMetricsDevice
+    }
+}
+
+extension DeviceHelper {
     func clearPairedDevices() {
         // add test func
     }

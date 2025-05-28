@@ -31,6 +31,10 @@ final class VehicleMetricsPlugin: OAPlugin {
         // TODO:
     }
     
+    override func update(_ location: CLLocation) {
+        OBDDataComputer.shared.registerLocation(l: OBDDataComputer.OBDLocation(time: Int64(location.timestamp.timeIntervalSince1970), latLon: KLatLon.init(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)))
+    }
+    
     private func getSpeedUnit() -> String {
         OASpeedConstant.toShortString(OAAppSettings.sharedManager().speedSystem.get())
     }

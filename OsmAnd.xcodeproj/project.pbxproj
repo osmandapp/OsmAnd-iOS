@@ -3229,7 +3229,6 @@
 		FACB02AA2D54C52000EBE87F /* ImageCache+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */; };
 		FACB02AC2D54F71C00EBE87F /* DownloadImageMetadataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */; };
 		FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */; };
-		FACDC6382DD73FCB00CB0C55 /* CommProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC6372DD73FCB00CB0C55 /* CommProtocol.swift */; };
 		FACDC63D2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAD258A82D7856EE001C875F /* vi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = FAD258A72D7856EE001C875F /* vi_tts.js */; };
@@ -7812,7 +7811,6 @@
 		FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCache+Extension.swift"; sourceTree = "<group>"; };
 		FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageMetadataService.swift; sourceTree = "<group>"; };
 		FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
-		FACDC6372DD73FCB00CB0C55 /* CommProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommProtocol.swift; sourceTree = "<group>"; };
 		FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsDescriptionViewController.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
@@ -14026,7 +14024,6 @@
 		FAA650392ADD42C40020DCEA /* BLEManager */ = {
 			isa = PBXGroup;
 			children = (
-				FACDC6372DD73FCB00CB0C55 /* CommProtocol.swift */,
 				FA6439E52B04D6EE00331006 /* Characteristics */,
 				FAA6503E2ADD42C40020DCEA /* BLEManager.swift */,
 				FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */,
@@ -17552,7 +17549,6 @@
 				DA5A854F26C563A900F274C7 /* OpenLocationCodeObjCBridge.swift in Sources */,
 				FA282AEF2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift in Sources */,
 				4635DDE82A02A7DE00D36203 /* ColorItem.swift in Sources */,
-				FACDC6382DD73FCB00CB0C55 /* CommProtocol.swift in Sources */,
 				DA346374287C157300C18214 /* OAConcurrentCollections.m in Sources */,
 				466A01802BFBA9B7008CC50E /* QuickActionType.swift in Sources */,
 				DA377DE027BBBB19004B4EBD /* OAMapPresentationEnvironment.mm in Sources */,

@@ -72,13 +72,12 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         tableView.tableHeaderView = headerView
         registerObservers()
         
-        OBDService.shared.startDispatcher()
-        
      // FIXME: to debug obd simulator
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            self?.generateData()
-            self?.tableView.reloadData()
-        }
+       // OBDService.shared.startDispatcher()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+//            self?.generateData()
+//            self?.tableView.reloadData()
+//        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

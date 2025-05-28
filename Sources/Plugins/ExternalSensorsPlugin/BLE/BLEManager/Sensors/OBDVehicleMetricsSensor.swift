@@ -7,7 +7,8 @@
 //
 
 final class OBDVehicleMetricsSensor: Sensor {
-    private var buffer = Data()
+    private(set) var buffer = Data()
+    var isReadyBufferResponse = false
     
 //    private(set) var lastRunningCadenceData: RunningCadenceData?
 //    private(set) var lastRunningSpeedData: RunningSpeedData?
@@ -105,17 +106,22 @@ final class OBDVehicleMetricsSensor: Sensor {
 //        default:
 //            break
 //        }
-        
-        
+    }
+    
+    func clearBuffer() {
+        isReadyBufferResponse = false
+        buffer.removeAll()
     }
     
     func processReceivedData(_ data: Data) {
         buffer.append(data)
 
         guard let string = String(data: buffer, encoding: .utf8) else {
-            buffer.removeAll()
+            clearBuffer()
             return
         }
+        
+       // arrayOf("ATD", "ATZ", "AT E0", "AT L0", "AT S0", "AT H0", "AT SP 0")
 
         if string.contains(">") {
             var lines = string
@@ -124,6 +130,7 @@ final class OBDVehicleMetricsSensor: Sensor {
 
             // remove the last line
             lines.removeLast()
+            isReadyBufferResponse = true
           //  #if DEBUG
             NSLog("processReceivedData OBD -> Response: \(lines)")
            // processReceivedData OBD -> Response: ["SEARCHING...", "7E906410098188013", "7E8064100BE3EB81B"]
@@ -137,7 +144,7 @@ final class OBDVehicleMetricsSensor: Sensor {
                     BLEManager.shared.sendMessageCompletion?(lines, nil)
                 }
             }
-            buffer.removeAll()
+           // clearBuffer()
         }
     }
 }

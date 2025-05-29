@@ -1031,9 +1031,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             return []
         }
         
-        let trackItems = Set(allTracks.toTrackItems())
-        guard !trackItems.isEmpty else { return }
-        let vc = SelectRouteActivityViewController(tracks: trackItems)
+        guard !allTracks.toTrackItems().isEmpty else { return }
+        let vc = SelectRouteActivityViewController(tracks: Set(allTracks.toTrackItems()))
         let navigationController = UINavigationController(rootViewController: vc)
         navigationController.modalPresentationStyle = .custom
         present(navigationController, animated: true) { [weak self] in

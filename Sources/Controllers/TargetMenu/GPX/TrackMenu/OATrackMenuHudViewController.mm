@@ -2930,8 +2930,14 @@
     OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_info"];
     if (sectionData)
     {
-        [_uiBuilder updateData:sectionData];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:[_tableData.subjects indexOfObject:sectionData]] withRowAnimation:UITableViewRowAnimationNone];
+        NSUInteger idx = [_tableData.subjects indexOfObject:sectionData];
+        if (idx < self.tableView.numberOfSections)
+        {
+            [_uiBuilder updateData:sectionData];
+            [self.tableView performBatchUpdates:^{
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:idx] withRowAnimation:UITableViewRowAnimationNone];
+            } completion:nil];
+        }
     }
 }
 

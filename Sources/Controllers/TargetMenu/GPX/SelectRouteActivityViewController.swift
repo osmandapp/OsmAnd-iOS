@@ -21,7 +21,7 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     private var selectedActivity: RouteActivity?
     private var gpxFile: GpxFile?
     private var tracks: Set<TrackItem>?
-    private var searchText: String?
+    private var searchFilterText: String?
     private var isTripRecordingSettings = false
     private var isSearchActive = false
     private var isCheckmarkAllowed = true
@@ -106,7 +106,7 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
             let flatSection = tableData.createNewSection()
             let allActivities = groups.flatMap { $0.activities }
             let matches = allActivities.filter { activity in
-                guard let txt = searchText, !txt.isEmpty else { return true }
+                guard let txt = searchFilterText, !txt.isEmpty else { return true }
                 return activity.label.range(of: txt, options: .caseInsensitive) != nil
             }
             
@@ -185,16 +185,17 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
         }
         
         if let tracks, !tracks.isEmpty {
-            let activities: [String?] = tracks.map { let raw = $0.dataItem?.getParameter(parameter: .activityType) as? String
-                return raw?.isEmpty == false ? raw : nil
+            let activities: [String] = tracks.compactMap { track in
+                guard let activity = track.dataItem?.getParameter(parameter: .activityType) as? String, !activity.isEmpty else { return nil }
+                return activity
             }
             
-            let nonNilSet = Set(activities.compactMap { $0 })
-            let hasNone = activities.contains(nil)
-            switch (nonNilSet.count, hasNone) {
+            let uniqueActivities = Set(activities)
+            let hasNone = activities.count != tracks.count
+            switch (uniqueActivities.count, hasNone) {
             case (1, false):
                 isCheckmarkAllowed = true
-                return routeActivityHelper.findRouteActivity(id: nonNilSet.first)
+                return routeActivityHelper.findRouteActivity(id: uniqueActivities.first)
             case (0, true):
                 isCheckmarkAllowed = true
                 return nil
@@ -221,7 +222,7 @@ extension SelectRouteActivityViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.searchText = searchText
+        searchFilterText = searchText
         updateData()
     }
     
@@ -229,13 +230,13 @@ extension SelectRouteActivityViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
         searchController?.isActive = false
         isSearchActive = false
-        searchText = nil
+        searchFilterText = nil
         updateData()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
-        self.searchText = nil
+        searchFilterText = nil
         updateData()
     }
 }

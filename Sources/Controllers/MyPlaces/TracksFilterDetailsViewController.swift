@@ -335,7 +335,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             let section = tableData.createNewSection()
             let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
             for itemName in itemsToDisplay {
-                configureRowListTrackFilterForSection(section: section, itemName: itemName)
+                configureTrackFilterList(for: section, with: itemName)
             }
         case .folder:
             let foldersToDisplay = isSearchActive ? filteredFoldersListItems : allFoldersListItems
@@ -556,7 +556,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         }
     }
     
-    private func configureRowListTrackFilterForSection(section: OATableSectionData, itemName: String) {
+    private func configureTrackFilterList(for section: OATableSectionData, with itemName: String) {
         let row = section.createNewRow()
         row.cellType = OAValueTableViewCell.reuseIdentifier
         row.key = itemName
@@ -576,11 +576,12 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 row.icon = .icCustomAppearanceDisabledOutlined
                 row.iconTintColor = .iconColorDisabled
             } else {
+                row.icon =
                 switch itemName {
-                case Self.thinLine: row.icon = .icCustomTrackLineThin
-                case Self.mediumLine: row.icon = .icCustomTrackLineMedium
-                case Self.boldLine: row.icon = .icCustomTrackLineBold
-                default: row.icon = .icCustomTrackLineMedium
+                case Self.thinLine: .icCustomTrackLineThin
+                case Self.mediumLine: .icCustomTrackLineMedium
+                case Self.boldLine: .icCustomTrackLineBold
+                default: .icCustomTrackLineMedium
                 }
                 row.iconTintColor = .iconColorDisruptive
             }

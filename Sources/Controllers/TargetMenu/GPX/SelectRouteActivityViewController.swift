@@ -143,18 +143,14 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
         guard let indexPath else { return nil }
         let item = tableData.item(for: indexPath)
-        if item.cellType == OASimpleTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
-            cell.descriptionVisibility(false)
-            cell.leftIconVisibility(item.key != "none")
-            cell.titleLabel.text = item.title
-            cell.leftIconView.image = item.icon
-            cell.leftIconView.tintColor = item.iconTintColor
-            cell.accessoryType = item.bool(forKey: "isSelected") ? .checkmark : .none
-            return cell
-        }
-        
-        return nil
+        guard item.cellType == OASimpleTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as? OASimpleTableViewCell else { return nil }
+        cell.descriptionVisibility(false)
+        cell.leftIconVisibility(item.key != "none")
+        cell.titleLabel.text = item.title
+        cell.leftIconView.image = item.icon
+        cell.leftIconView.tintColor = item.iconTintColor
+        cell.accessoryType = item.bool(forKey: "isSelected") ? .checkmark : .none
+        return cell
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {

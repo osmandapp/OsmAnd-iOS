@@ -77,6 +77,7 @@
 + (float)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint;
 + (OsmAnd::PointI)get31FromElevatedPixel:(OsmAnd::PointI)screenPoint;
 + (float) getLocationHeightOrZero:(OsmAnd::PointI)location31;
++ (OsmAnd::LatLon) getLanlonFromPoint31:(OsmAnd::PointI)point31;
 + (OsmAnd::PointI) getPoint31FromLatLon:(OsmAnd::LatLon)latLon;
 + (OsmAnd::PointI) getPoint31FromLatLon:(double)lat lon:(double)lon;
 + (OsmAnd::PointF) getPixelFromLatLon:(double)lat lon:(double)lon;

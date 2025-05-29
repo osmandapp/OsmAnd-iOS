@@ -370,6 +370,13 @@
     return height > kMinAltitudeValue ? height : 0;
 }
 
++ (OsmAnd::LatLon) getLanlonFromPoint31:(OsmAnd::PointI)point31
+{
+    double lat = OsmAnd::Utilities::get31LatitudeY(point31.y);
+    double lon = OsmAnd::Utilities::get31LongitudeX(point31.x);
+    return OsmAnd::LatLon(lat, lon);
+}
+
 + (OsmAnd::PointI) getPoint31FromLatLon:(OsmAnd::LatLon)latLon
 {
     return [self.class getPoint31FromLatLon:latLon.latitude lon:latLon.longitude];

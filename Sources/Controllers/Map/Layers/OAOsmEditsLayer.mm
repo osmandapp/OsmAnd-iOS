@@ -35,6 +35,8 @@
 #import "OAObservable.h"
 #import "OAMapSelectionResult.h"
 #import "OAOsmNotePoint.h"
+#import "Localization.h"
+#import "OAPointDescription.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -419,8 +421,25 @@ static const int START_ZOOM = 10;
 
 - (OAPointDescription *) getObjectName:(id)o
 {
-    // TODO: implement
-    return nil;
+    if ([o isKindOfClass:OAOsmPoint.class])
+    {
+        OAOsmPoint *point = (OAOsmPoint *)o;
+        NSString *name = @"";
+        NSString *type = @"";
+        
+        if ([point getGroup] == EOAGroupPoi)
+        {
+            name = [point getName];
+            type = POINT_TYPE_OSM_NOTE;
+        }
+        else if ([point getGroup] == EOAGroupBug)
+        {
+            name = [((OAOsmNotePoint *) point) getText];
+            type = POINT_TYPE_OSM_BUG;
+        }
+        return [[OAPointDescription alloc] initWithType:type name:name];
+    }
+    return  nil;
 }
 
 - (BOOL) showMenuAction:(id)object

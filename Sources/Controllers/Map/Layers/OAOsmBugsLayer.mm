@@ -26,6 +26,8 @@
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmNotePoint.h"
 #import "OAOsmEditsLayer.h"
+#import "Localization.h"
+#import "OAPointDescription.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -226,8 +228,14 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 - (OAPointDescription *) getObjectName:(id)o
 {
-    // TODO: implement
-    return nil;
+    if ([o isKindOfClass:OAOnlineOsmNoteWrapper.class])
+    {
+        OAOnlineOsmNoteWrapper *note = (OAOnlineOsmNoteWrapper *)o;
+        NSString *name = note.description ? note.description : @"";
+        NSString *typeName = note.typeName ? note.typeName : OALocalizedString(@"osn_bug_name");
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_OSM_NOTE typeName:typeName name:name];
+    }
+    return  nil;
 }
 
 - (BOOL) showMenuAction:(id)object

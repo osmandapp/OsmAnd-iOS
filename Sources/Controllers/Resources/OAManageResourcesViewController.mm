@@ -2713,10 +2713,13 @@ static BOOL _repositoryUpdated = NO;
 
     if ([item_ isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || ((OAResourceItem *) item_).resourceType == OsmAndResourceType::SrtmMapRegion))
     {
+        DownloadingCell *downloadingCell = [tableView dequeueReusableCellWithIdentifier:DownloadingCell.reuseIdentifier];
         OAMultipleResourceItem *item = (OAMultipleResourceItem *) item_;
         NSString *resourceId = [item getResourceId];
         OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:item];
-        DownloadingCell *downloadingCell = [_downloadingCellMultipleResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem];
+        
+        [_downloadingCellMultipleResourceHelper configureWithResourceItem:mapItem cell:downloadingCell];
+        
         downloadingCell.titleLabel.text = title;
         downloadingCell.descriptionLabel.text = subtitle;
         return downloadingCell;

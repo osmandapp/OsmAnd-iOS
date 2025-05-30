@@ -93,9 +93,11 @@ final class WidgetPageViewController: UIViewController {
             let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
             for widget in widgetViews {
                 if widget.isSimpleLayout {
+                    guard !widget.isHidden else { continue }
                     if let textInfoWidget = widget as? OATextInfoWidget {
                         textInfoWidget.configureSimpleLayout()
                     }
+                    widget.layoutIfNeeded()
                     let fittingSize = widget.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                     height += fittingSize.height
                     width = max(width, min(fittingSize.width, OARootViewController.instance().mapPanel.hasTopWidget() && OAUtilities.isLandscapeIpadAware() ? 120 : UIScreen.main.bounds.width * 0.45))

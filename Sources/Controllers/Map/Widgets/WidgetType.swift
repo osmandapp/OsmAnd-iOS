@@ -27,6 +27,7 @@ class WidgetType: NSObject {
     let disabledIconName: String?
     let docsUrl: String?
     let group: WidgetGroup?
+    let verticalGroup: WidgetGroup?
     let defaultPanel: WidgetsPanel
     let special: Bool
 
@@ -39,7 +40,7 @@ class WidgetType: NSObject {
         return true
     }
 
-    private init(ordinal: Int, id: String, title: String, descr: String, iconName: String, disabledIconName: String? = nil, docsUrl: String? = nil, group: WidgetGroup? = nil, defaultPanel: WidgetsPanel, special: Bool = false) {
+    private init(ordinal: Int, id: String, title: String, descr: String, iconName: String, disabledIconName: String? = nil, docsUrl: String? = nil, group: WidgetGroup? = nil, verticalGroup: WidgetGroup? = nil, defaultPanel: WidgetsPanel, special: Bool = false) {
         self.ordinal = ordinal
         self.id = id
         self.title = title
@@ -48,6 +49,7 @@ class WidgetType: NSObject {
         self.disabledIconName = disabledIconName
         self.docsUrl = docsUrl
         self.group = group
+        self.verticalGroup = verticalGroup
         self.defaultPanel = defaultPanel
         self.special = special
     }
@@ -57,7 +59,18 @@ class WidgetType: NSObject {
     }
 
     func getGroup() -> WidgetGroup? {
-        return group
+        group
+    }
+    
+    func getGroup(withPanel panel: WidgetsPanel) -> WidgetGroup? {
+        if let verticalGroup, panel.isPanelVertical {
+            return verticalGroup
+        }
+        return getGroup()
+    }
+    
+    func getVerticalGroup() -> WidgetGroup? {
+        verticalGroup
     }
 
     func getGroupDescription() -> String {
@@ -123,6 +136,10 @@ class WidgetType: NSObject {
             return widgetsPanel
         }
         return defaultPanel
+    }
+    
+    func isPanelsAllowed(_ panels: [WidgetsPanel]) -> Bool {
+        self == .routeInfo ? !panels.contains(.leftPanel) && !panels.contains(.rightPanel) : true
     }
 
     static func findWidgetPanel(widgetId: String, mode: OAApplicationMode? = nil) -> WidgetsPanel? {
@@ -203,49 +220,50 @@ extension WidgetType {
     // Right panel
     static let distanceToDestination = WidgetType(ordinal: 9, id: "distance", title: localizedString("map_widget_distance_to_destination"), descr: localizedString("distance_to_destination_widget_desc"), iconName: "widget_target", group: .navigationPoints, defaultPanel: .rightPanel)
     static let intermediateDestination = WidgetType(ordinal: 10, id: "intermediate_distance", title: localizedString("map_widget_distance_to_intermediate"), descr: localizedString("distance_to_intermediate_widget_desc"), iconName: "widget_intermediate", group: .navigationPoints, defaultPanel: .rightPanel)
-    static let timeToIntermediate = WidgetType(ordinal: 11, id: "time_to_intermediate", title: localizedString("map_widget_time_to_intermediate"), descr: localizedString("time_to_intermediate_widget_desc"), iconName: "widget_intermediate_time", group: .navigationPoints, defaultPanel: .rightPanel)
-    static let timeToDestination = WidgetType(ordinal: 12, id: "time_to_destination", title: localizedString("map_widget_time_to_destination"), descr: localizedString("time_to_destination_widget_desc"), iconName: "widget_time_to_distance", group: .navigationPoints, defaultPanel: .rightPanel)
+    static let routeInfo = WidgetType(ordinal: 11, id: "route_info", title: localizedString("map_widget_route_information"), descr: localizedString("map_widget_route_information_desc"), iconName: "widget_route_info", verticalGroup: .navigationPoints, defaultPanel: .bottomPanel)
+    static let timeToIntermediate = WidgetType(ordinal: 12, id: "time_to_intermediate", title: localizedString("map_widget_time_to_intermediate"), descr: localizedString("time_to_intermediate_widget_desc"), iconName: "widget_intermediate_time", group: .navigationPoints, defaultPanel: .rightPanel)
+    static let timeToDestination = WidgetType(ordinal: 13, id: "time_to_destination", title: localizedString("map_widget_time_to_destination"), descr: localizedString("time_to_destination_widget_desc"), iconName: "widget_time_to_distance", group: .navigationPoints, defaultPanel: .rightPanel)
 
-    static let sideMarker1 = WidgetType(ordinal: 13, id: "map_marker_1st", title: localizedString("map_marker_1st"), descr: localizedString("first_marker_widget_desc"), iconName: "widget_marker", group: .mapMarkers, defaultPanel: .rightPanel)
-    static let sideMarker2 = WidgetType(ordinal: 14, id: "map_marker_2nd", title: localizedString("map_marker_2nd"), descr: localizedString("second_marker_widget_desc"), iconName: "widget_marker", group: .mapMarkers, defaultPanel: .rightPanel)
+    static let sideMarker1 = WidgetType(ordinal: 14, id: "map_marker_1st", title: localizedString("map_marker_1st"), descr: localizedString("first_marker_widget_desc"), iconName: "widget_marker", group: .mapMarkers, defaultPanel: .rightPanel)
+    static let sideMarker2 = WidgetType(ordinal: 15, id: "map_marker_2nd", title: localizedString("map_marker_2nd"), descr: localizedString("second_marker_widget_desc"), iconName: "widget_marker", group: .mapMarkers, defaultPanel: .rightPanel)
 
-    static let relativeBearing = WidgetType(ordinal: 15, id: "relative_bearing", title: localizedString("map_widget_bearing"), descr: localizedString("relative_bearing_widget_desc"), iconName: "widget_relative_bearing", group: .bearing, defaultPanel: .rightPanel)
-    static let magneticBearing = WidgetType(ordinal: 16, id: "magnetic_bearing", title: localizedString("map_widget_magnetic_bearing"), descr: localizedString("magnetic_bearing_widget_desc"), iconName: "widget_bearing", group: .bearing, defaultPanel: .rightPanel)
-    static let trueBearing = WidgetType(ordinal: 17, id: "true_bearing", title: localizedString("map_widget_true_bearing"), descr: localizedString("true_bearing_wdiget_desc"), iconName: "widget_true_bearing", group: .bearing, defaultPanel: .rightPanel)
-    static let currentSpeed = WidgetType(ordinal: 18, id: "speed", title: localizedString("map_widget_current_speed"), descr: localizedString("current_speed_widget_desc"), iconName: "widget_speed", docsUrl: docs_widget_current_speed, defaultPanel: .rightPanel)
-    static let averageSpeed = WidgetType(ordinal: 19, id: "average_speed", title: localizedString("map_widget_average_speed"), descr: localizedString("average_speed_widget_desc"), iconName: "widget_average_speed", defaultPanel: .rightPanel)
-    static let maxSpeed = WidgetType(ordinal: 20, id: "max_speed", title: localizedString("map_widget_max_speed"), descr: localizedString("max_speed_widget_desc"), iconName: "widget_max_speed", docsUrl: docs_widget_max_speed, defaultPanel: .rightPanel)
-    static let altitudeMyLocation = WidgetType(ordinal: 21, id: "altitude", title: localizedString("map_widget_altitude_current_location"), descr: localizedString("altitude_widget_desc"), iconName: "widget_altitude_location", docsUrl: docs_widget_altitude, group: .altitude, defaultPanel: .rightPanel)
-    static let altitudeMapCenter = WidgetType(ordinal: 22, id: "altitude_map_center", title: localizedString("map_widget_altitude_map_center"), descr: localizedString("map_widget_altitude_map_center_desc"), iconName: "widget_altitude_map_center", group: .altitude, defaultPanel: .rightPanel)
-    static let gpsInfo = WidgetType(ordinal: 23, id: "gps_info", title: localizedString("map_widget_gps_info"), descr: localizedString("gps_info_widget_desc"), iconName: "widget_gps_info", docsUrl: docs_widget_gps_info, defaultPanel: .rightPanel)
+    static let relativeBearing = WidgetType(ordinal: 16, id: "relative_bearing", title: localizedString("map_widget_bearing"), descr: localizedString("relative_bearing_widget_desc"), iconName: "widget_relative_bearing", group: .bearing, defaultPanel: .rightPanel)
+    static let magneticBearing = WidgetType(ordinal: 17, id: "magnetic_bearing", title: localizedString("map_widget_magnetic_bearing"), descr: localizedString("magnetic_bearing_widget_desc"), iconName: "widget_bearing", group: .bearing, defaultPanel: .rightPanel)
+    static let trueBearing = WidgetType(ordinal: 18, id: "true_bearing", title: localizedString("map_widget_true_bearing"), descr: localizedString("true_bearing_wdiget_desc"), iconName: "widget_true_bearing", group: .bearing, defaultPanel: .rightPanel)
+    static let currentSpeed = WidgetType(ordinal: 19, id: "speed", title: localizedString("map_widget_current_speed"), descr: localizedString("current_speed_widget_desc"), iconName: "widget_speed", docsUrl: docs_widget_current_speed, defaultPanel: .rightPanel)
+    static let averageSpeed = WidgetType(ordinal: 20, id: "average_speed", title: localizedString("map_widget_average_speed"), descr: localizedString("average_speed_widget_desc"), iconName: "widget_average_speed", defaultPanel: .rightPanel)
+    static let maxSpeed = WidgetType(ordinal: 21, id: "max_speed", title: localizedString("map_widget_max_speed"), descr: localizedString("max_speed_widget_desc"), iconName: "widget_max_speed", docsUrl: docs_widget_max_speed, defaultPanel: .rightPanel)
+    static let altitudeMyLocation = WidgetType(ordinal: 22, id: "altitude", title: localizedString("map_widget_altitude_current_location"), descr: localizedString("altitude_widget_desc"), iconName: "widget_altitude_location", docsUrl: docs_widget_altitude, group: .altitude, defaultPanel: .rightPanel)
+    static let altitudeMapCenter = WidgetType(ordinal: 23, id: "altitude_map_center", title: localizedString("map_widget_altitude_map_center"), descr: localizedString("map_widget_altitude_map_center_desc"), iconName: "widget_altitude_map_center", group: .altitude, defaultPanel: .rightPanel)
+    static let gpsInfo = WidgetType(ordinal: 24, id: "gps_info", title: localizedString("map_widget_gps_info"), descr: localizedString("gps_info_widget_desc"), iconName: "widget_gps_info", docsUrl: docs_widget_gps_info, defaultPanel: .rightPanel)
 
-    static let tripRecordingDistance = WidgetType(ordinal: 24, id: "monitoring", title: localizedString("map_widget_trip_recording_distance"), descr: localizedString("trip_recording_distance_widget_desc"), iconName: "widget_trip_recording", group: .tripRecording, defaultPanel: .rightPanel)
-    static let tripRecordingTime = WidgetType(ordinal: 25, id: "trip_recording_time", title: localizedString("map_widget_trip_recording_duration"), descr: localizedString("trip_recording_duration_widget_desc"), iconName: "widget_track_recording_duration", group: .tripRecording, defaultPanel: .rightPanel)
-    static let tripRecordingUphill = WidgetType(ordinal: 26, id: "trip_recording_uphill", title: localizedString("map_widget_trip_recording_uphill"), descr: localizedString("trip_recording_uphill_widget_desc"), iconName: "widget_track_recording_uphill", group: .tripRecording, defaultPanel: .rightPanel)
-    static let tripRecordingDownhill = WidgetType(ordinal: 27, id: "trip_recording_downhill", title: localizedString("map_widget_trip_recording_downhill"), descr: localizedString("trip_recording_downhill_widget_desc"), iconName: "widget_track_recording_downhill", group: .tripRecording, defaultPanel: .rightPanel)
+    static let tripRecordingDistance = WidgetType(ordinal: 25, id: "monitoring", title: localizedString("map_widget_trip_recording_distance"), descr: localizedString("trip_recording_distance_widget_desc"), iconName: "widget_trip_recording", group: .tripRecording, defaultPanel: .rightPanel)
+    static let tripRecordingTime = WidgetType(ordinal: 26, id: "trip_recording_time", title: localizedString("map_widget_trip_recording_duration"), descr: localizedString("trip_recording_duration_widget_desc"), iconName: "widget_track_recording_duration", group: .tripRecording, defaultPanel: .rightPanel)
+    static let tripRecordingUphill = WidgetType(ordinal: 27, id: "trip_recording_uphill", title: localizedString("map_widget_trip_recording_uphill"), descr: localizedString("trip_recording_uphill_widget_desc"), iconName: "widget_track_recording_uphill", group: .tripRecording, defaultPanel: .rightPanel)
+    static let tripRecordingDownhill = WidgetType(ordinal: 28, id: "trip_recording_downhill", title: localizedString("map_widget_trip_recording_downhill"), descr: localizedString("trip_recording_downhill_widget_desc"), iconName: "widget_track_recording_downhill", group: .tripRecording, defaultPanel: .rightPanel)
 
-    static let currentTime = WidgetType(ordinal: 28, id: "plain_time", title: localizedString("map_widget_plain_time"), descr: localizedString("current_time_widget_desc"), iconName: "widget_time", docsUrl: docs_widget_current_time, defaultPanel: .rightPanel)
-    static let battery = WidgetType(ordinal: 29, id: "battery", title: localizedString("map_widget_battery"), descr: localizedString("battery_widget_desc") + " " + localizedString("battery_widget_level_privacy_ios_desc"), iconName: "widget_battery", docsUrl: docs_widget_battery, defaultPanel: .rightPanel)
+    static let currentTime = WidgetType(ordinal: 29, id: "plain_time", title: localizedString("map_widget_plain_time"), descr: localizedString("current_time_widget_desc"), iconName: "widget_time", docsUrl: docs_widget_current_time, defaultPanel: .rightPanel)
+    static let battery = WidgetType(ordinal: 30, id: "battery", title: localizedString("map_widget_battery"), descr: localizedString("battery_widget_desc") + " " + localizedString("battery_widget_level_privacy_ios_desc"), iconName: "widget_battery", docsUrl: docs_widget_battery, defaultPanel: .rightPanel)
 
-    static let radiusRuler = WidgetType(ordinal: 30, id: "ruler", title: localizedString("map_widget_ruler_control"), descr: localizedString("radius_rules_widget_desc"), iconName: "widget_ruler_circle", docsUrl: docs_widget_radius_ruler, defaultPanel: .rightPanel)
+    static let radiusRuler = WidgetType(ordinal: 31, id: "ruler", title: localizedString("map_widget_ruler_control"), descr: localizedString("radius_rules_widget_desc"), iconName: "widget_ruler_circle", docsUrl: docs_widget_radius_ruler, defaultPanel: .rightPanel)
 
-    static let devFps = WidgetType(ordinal: 31, id: "fps", title: localizedString("map_widget_rendering_fps"), descr: localizedString("map_widget_rendering_fps_desc"), iconName: "widget_fps", docsUrl: docs_widget_fps, group: .developerOptions, defaultPanel: .rightPanel)
-    static let devCameraTilt = WidgetType(ordinal: 32, id: "dev_camera_tilt", title: localizedString("map_widget_camera_tilt"), descr: localizedString("map_widget_camera_tilt_desc"), iconName: "widget_developer_camera_tilt", group: .developerOptions, defaultPanel: .rightPanel)
-    static let devCameraDistance = WidgetType(ordinal: 33, id: "dev_camera_distance", title: localizedString("map_widget_camera_distance"), descr: localizedString("map_widget_camera_distance_desc"), iconName: "widget_developer_camera_distance", group: .developerOptions, defaultPanel: .rightPanel)
-    static let devZoomLevel = WidgetType(ordinal: 34, id: "dev_zoom_level", title: localizedString("map_widget_zoom_level"), descr: localizedString("map_widget_zoom_level_desc"), iconName: "widget_developer_map_zoom", group: .developerOptions, defaultPanel: .rightPanel)
-    static let devTargetDistance = WidgetType(ordinal: 35, id: "dev_target_distance", title: localizedString("map_widget_target_distance"), descr: localizedString("map_widget_target_distance_desc"), iconName: "widget_developer_target_distance", group: .developerOptions, defaultPanel: .rightPanel)
+    static let devFps = WidgetType(ordinal: 32, id: "fps", title: localizedString("map_widget_rendering_fps"), descr: localizedString("map_widget_rendering_fps_desc"), iconName: "widget_fps", docsUrl: docs_widget_fps, group: .developerOptions, defaultPanel: .rightPanel)
+    static let devCameraTilt = WidgetType(ordinal: 33, id: "dev_camera_tilt", title: localizedString("map_widget_camera_tilt"), descr: localizedString("map_widget_camera_tilt_desc"), iconName: "widget_developer_camera_tilt", group: .developerOptions, defaultPanel: .rightPanel)
+    static let devCameraDistance = WidgetType(ordinal: 34, id: "dev_camera_distance", title: localizedString("map_widget_camera_distance"), descr: localizedString("map_widget_camera_distance_desc"), iconName: "widget_developer_camera_distance", group: .developerOptions, defaultPanel: .rightPanel)
+    static let devZoomLevel = WidgetType(ordinal: 35, id: "dev_zoom_level", title: localizedString("map_widget_zoom_level"), descr: localizedString("map_widget_zoom_level_desc"), iconName: "widget_developer_map_zoom", group: .developerOptions, defaultPanel: .rightPanel)
+    static let devTargetDistance = WidgetType(ordinal: 36, id: "dev_target_distance", title: localizedString("map_widget_target_distance"), descr: localizedString("map_widget_target_distance_desc"), iconName: "widget_developer_target_distance", group: .developerOptions, defaultPanel: .rightPanel)
 
-    static let mapillary = WidgetType(ordinal: 36, id: "mapillary", title: localizedString("mapillary"), descr: localizedString("mapillary_widget_desc"), iconName: "widget_mapillary", docsUrl: docs_widget_mapillary, defaultPanel: .rightPanel)
+    static let mapillary = WidgetType(ordinal: 37, id: "mapillary", title: localizedString("mapillary"), descr: localizedString("mapillary_widget_desc"), iconName: "widget_mapillary", docsUrl: docs_widget_mapillary, defaultPanel: .rightPanel)
 
-    static let parking = WidgetType(ordinal: 37, id: "parking", title: localizedString("map_widget_parking"), descr: localizedString("parking_widget_desc"), iconName: "widget_parking", docsUrl: docs_widget_parking, defaultPanel: .rightPanel)
+    static let parking = WidgetType(ordinal: 38, id: "parking", title: localizedString("map_widget_parking"), descr: localizedString("parking_widget_desc"), iconName: "widget_parking", docsUrl: docs_widget_parking, defaultPanel: .rightPanel)
     
-    static let weatherTemperatureWidget = WidgetType(ordinal: 38, id: "weather_temp", title: localizedString("map_settings_weather_temp"), descr: localizedString("temperature_widget_desc"), iconName: "widget_weather_temperature", group: .weather, defaultPanel: .rightPanel)
-    static let weatherPrecipitationWidget = WidgetType(ordinal: 39, id: "weather_precip", title: localizedString("map_settings_weather_precip"), descr: localizedString("precipitation_widget_desc"), iconName: "widget_weather_precipitation", group: .weather, defaultPanel: .rightPanel)
-    static let weatherWindWidget = WidgetType(ordinal: 40, id: "weather_wind", title: localizedString("map_settings_weather_wind"), descr: localizedString("wind_widget_desc"), iconName: "widget_weather_wind", group: .weather, defaultPanel: .rightPanel)
-    static let weatherCloudsWidget = WidgetType(ordinal: 41, id: "weather_cloud", title: localizedString("map_settings_weather_cloud"), descr: localizedString("clouds_widget_desc"), iconName: "widget_weather_clouds", group: .weather, defaultPanel: .rightPanel)
-    static let weatherAirPressureWidget = WidgetType(ordinal: 42, id: "weather_pressure", title: localizedString("map_settings_weather_pressure"), descr: localizedString("air_pressure_widget_desc"), iconName: "widget_weather_air_pressure", group: .weather, defaultPanel: .rightPanel)
+    static let weatherTemperatureWidget = WidgetType(ordinal: 39, id: "weather_temp", title: localizedString("map_settings_weather_temp"), descr: localizedString("temperature_widget_desc"), iconName: "widget_weather_temperature", group: .weather, defaultPanel: .rightPanel)
+    static let weatherPrecipitationWidget = WidgetType(ordinal: 40, id: "weather_precip", title: localizedString("map_settings_weather_precip"), descr: localizedString("precipitation_widget_desc"), iconName: "widget_weather_precipitation", group: .weather, defaultPanel: .rightPanel)
+    static let weatherWindWidget = WidgetType(ordinal: 41, id: "weather_wind", title: localizedString("map_settings_weather_wind"), descr: localizedString("wind_widget_desc"), iconName: "widget_weather_wind", group: .weather, defaultPanel: .rightPanel)
+    static let weatherCloudsWidget = WidgetType(ordinal: 42, id: "weather_cloud", title: localizedString("map_settings_weather_cloud"), descr: localizedString("clouds_widget_desc"), iconName: "widget_weather_clouds", group: .weather, defaultPanel: .rightPanel)
+    static let weatherAirPressureWidget = WidgetType(ordinal: 43, id: "weather_pressure", title: localizedString("map_settings_weather_pressure"), descr: localizedString("air_pressure_widget_desc"), iconName: "widget_weather_air_pressure", group: .weather, defaultPanel: .rightPanel)
     
-    static let sunPosition = WidgetType(ordinal: 43,
+    static let sunPosition = WidgetType(ordinal: 44,
                                         id: "day_night_mode_sun_position",
                                         title: localizedString("map_widget_sun_position"),
                                         descr: localizedString("map_widget_sun_position_desc"),
@@ -253,26 +271,26 @@ extension WidgetType {
                                         group: .sunriseSunset,
                                         defaultPanel: .rightPanel)
 
-    static let sunrise = WidgetType(ordinal: 44, id: "day_night_mode_sunrise", title: localizedString("map_widget_sunrise"), descr: localizedString("map_widget_sunrise_desc"), iconName: "widget_sunrise", group: .sunriseSunset, defaultPanel: .rightPanel)
-    static let sunset = WidgetType(ordinal: 45, id: "day_night_mode_sunset", title: localizedString("map_widget_sunset"), descr: localizedString("map_widget_sunset_desc"), iconName: "widget_sunset", group: .sunriseSunset, defaultPanel: .rightPanel)
+    static let sunrise = WidgetType(ordinal: 45, id: "day_night_mode_sunrise", title: localizedString("map_widget_sunrise"), descr: localizedString("map_widget_sunrise_desc"), iconName: "widget_sunrise", group: .sunriseSunset, defaultPanel: .rightPanel)
+    static let sunset = WidgetType(ordinal: 46, id: "day_night_mode_sunset", title: localizedString("map_widget_sunset"), descr: localizedString("map_widget_sunset_desc"), iconName: "widget_sunset", group: .sunriseSunset, defaultPanel: .rightPanel)
 
     // Bottom panel
-    static let elevationProfile = WidgetType(ordinal: 46, id: "elevation_profile", title: localizedString("elevation_profile"), descr: localizedString("elevation_profile_widget_desc"), iconName: "widget_route_elevation", defaultPanel: .bottomPanel)
+    static let elevationProfile = WidgetType(ordinal: 47, id: "elevation_profile", title: localizedString("elevation_profile"), descr: localizedString("elevation_profile_widget_desc"), iconName: "widget_route_elevation", defaultPanel: .bottomPanel)
     
     // External sensors
-    static let heartRate = WidgetType(ordinal: 47, id: "ant_heart_rate", title: localizedString("map_widget_ant_heart_rate"), descr: localizedString("map_widget_ant_heart_rate_desc"), iconName: "widget_sensor_heart_rate", disabledIconName: "ic_custom_sensor_heart_rate_outlined", group: .externalSensors, defaultPanel: .rightPanel)
+    static let heartRate = WidgetType(ordinal: 48, id: "ant_heart_rate", title: localizedString("map_widget_ant_heart_rate"), descr: localizedString("map_widget_ant_heart_rate_desc"), iconName: "widget_sensor_heart_rate", disabledIconName: "ic_custom_sensor_heart_rate_outlined", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let bicycleCadence = WidgetType(ordinal: 48, id: "ant_bicycle_cadence", title: localizedString("map_widget_ant_bicycle_cadence"), descr: localizedString("map_widget_ant_bicycle_cadence_desc"), iconName: "widget_sensor_cadence", disabledIconName: "ic_custom_sensor_cadence_outlined", group: .externalSensors, defaultPanel: .rightPanel)
+    static let bicycleCadence = WidgetType(ordinal: 49, id: "ant_bicycle_cadence", title: localizedString("map_widget_ant_bicycle_cadence"), descr: localizedString("map_widget_ant_bicycle_cadence_desc"), iconName: "widget_sensor_cadence", disabledIconName: "ic_custom_sensor_cadence_outlined", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let bicycleDistance = WidgetType(ordinal: 49, id: "ant_bicycle_distance", title: localizedString("map_widget_ant_bicycle_dist"), descr: localizedString("map_widget_ant_bicycle_dist_desc"), iconName: "widget_sensor_distance", disabledIconName: "ic_custom_sensor_distance_outlined", group: .externalSensors, defaultPanel: .rightPanel)
+    static let bicycleDistance = WidgetType(ordinal: 50, id: "ant_bicycle_distance", title: localizedString("map_widget_ant_bicycle_dist"), descr: localizedString("map_widget_ant_bicycle_dist_desc"), iconName: "widget_sensor_distance", disabledIconName: "ic_custom_sensor_distance_outlined", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let bicycleSpeed = WidgetType(ordinal: 50, id: "ant_bicycle_speed", title: localizedString("map_widget_ant_bicycle_speed"), descr: localizedString("map_widget_ant_bicycle_speed_desc"), iconName: "widget_sensor_speed", disabledIconName: "ic_custom_sensor_speed_outlined", group: .externalSensors, defaultPanel: .rightPanel)
+    static let bicycleSpeed = WidgetType(ordinal: 51, id: "ant_bicycle_speed", title: localizedString("map_widget_ant_bicycle_speed"), descr: localizedString("map_widget_ant_bicycle_speed_desc"), iconName: "widget_sensor_speed", disabledIconName: "ic_custom_sensor_speed_outlined", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let temperature = WidgetType(ordinal: 51, id: "temperature_sensor", title: localizedString("shared_string_temperature"), descr: localizedString("sensor_temperature_desc"), iconName: "widget_sensor_temperature", disabledIconName: "ic_custom_sensor_thermometer", group: .externalSensors, defaultPanel: .rightPanel)
+    static let temperature = WidgetType(ordinal: 52, id: "temperature_sensor", title: localizedString("shared_string_temperature"), descr: localizedString("sensor_temperature_desc"), iconName: "widget_sensor_temperature", disabledIconName: "ic_custom_sensor_thermometer", group: .externalSensors, defaultPanel: .rightPanel)
         
-    static let glideTarget = WidgetType(ordinal: 52, id: "glide_ratio_to_target", title: localizedString("glide_ratio_to_target"), descr: localizedString("map_widget_glide_target_desc"), iconName: "widget_glide_ratio_to_target", group: .glide, defaultPanel: .rightPanel)
-    static let glideAverage = WidgetType(ordinal: 53, id: "average_glide_ratio", title: localizedString("average_glide_ratio"), descr: localizedString("map_widget_glide_average_desc"), iconName: "widget_glide_ratio_average", group: .glide, defaultPanel: .rightPanel)
-
+    static let glideTarget = WidgetType(ordinal: 53, id: "glide_ratio_to_target", title: localizedString("glide_ratio_to_target"), descr: localizedString("map_widget_glide_target_desc"), iconName: "widget_glide_ratio_to_target", group: .glide, defaultPanel: .rightPanel)
+    static let glideAverage = WidgetType(ordinal: 54, id: "average_glide_ratio", title: localizedString("average_glide_ratio"), descr: localizedString("map_widget_glide_average_desc"), iconName: "widget_glide_ratio_average", group: .glide, defaultPanel: .rightPanel)
+    
     static let values = [nextTurn,
                          smallNextTurn,
                          secondNextTurn,
@@ -283,6 +301,7 @@ extension WidgetType {
                          lanes,
                          distanceToDestination,
                          intermediateDestination,
+                         routeInfo,
                          timeToIntermediate,
                          timeToDestination,
                          sideMarker1,

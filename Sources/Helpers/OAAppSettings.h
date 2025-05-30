@@ -765,6 +765,27 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 @end
 
+@interface OACommonWidgetDefaultView : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue;
+
+- (int)get;
+- (int)get:(OAApplicationMode *)mode;
+- (void)set:(int)type;
+- (void)set:(int)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonWidgetDisplayPriority : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue;
+
+- (int)get;
+- (int)get:(OAApplicationMode *)mode;
+- (void)set:(int)type;
+- (void)set:(int)type mode:(OAApplicationMode *)mode;
+
+@end
 
 @interface OACommonDayNightMode : OACommonInteger
 
@@ -1147,6 +1168,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 - (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
+
+- (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue;
+- (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue;
 
 // Direction Appearance
 

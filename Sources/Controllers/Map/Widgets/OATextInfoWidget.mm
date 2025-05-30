@@ -190,6 +190,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void)updateSimpleLayout
 {
+    if (![self isEnabledTextInfoComponents])
+        return;
+    
     NSArray *viewsToRemove = [self subviews];
     for (UIView *v in viewsToRemove)
     {
@@ -438,6 +441,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void)commonInit
 {
+    if (![self isEnabledTextInfoComponents])
+        return;
+    
     _textView = [[OutlineLabel alloc] init];
     _textView.adjustsFontForContentSizeCategory = YES;
     _textView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -686,8 +692,16 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     }
 }
 
+- (BOOL)isEnabledTextInfoComponents
+{
+    return true;
+}
+
 - (void)refreshLabel
 {
+    if (![self isEnabledTextInfoComponents])
+        return;
+    
     if (self.isSimpleLayout)
     {
         [self configureSimpleLayout];
@@ -887,6 +901,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void)updateIcon
 {
+    if (![self isEnabledTextInfoComponents])
+        return;
+    
     _imageView.overrideUserInterfaceStyle = _isNight ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
     if (_icon)
         [self setImage:[UIImage imageNamed:_icon]];
@@ -933,7 +950,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
                              [UIImage imageNamed:ACImageNameIcCustom20HeightL]]
                     forKey:@"values"];
     
-    if ([widgetsPanel isPanelVertical])
+    if ([self isEnabledShowIconSwitchWith:widgetsPanel])
     {
         OATableRowData *showIconRow = section.createNewRow;
         showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
@@ -942,6 +959,11 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     }
 
     return data;
+}
+
+- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel
+{
+    return [widgetsPanel isPanelVertical];
 }
 
 - (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams
@@ -986,7 +1008,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     NSString *prefId = [kSizeStylePref stringByAppendingString:self.widgetType.id];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
-    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:[[self getWidgetPanel] isPanelVertical] ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
+    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:[[self getWidgetPanel] isPanelVertical] || self.widgetType.getPanel.isPanelVertical ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
 }
 
 - (OACommonBoolean *)registerShowIconPref:(NSString *)customId

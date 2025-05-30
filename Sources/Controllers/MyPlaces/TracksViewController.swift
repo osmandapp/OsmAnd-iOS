@@ -570,13 +570,16 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
                 self?.onNavbarChangeAppearanceButtonClicked()
             }
+            let changeActivityAction = UIAction(title: localizedString("change_activity"), image: .icCustomActivityOutlined) { [weak self] _ in
+                self?.onNavbarChangeActivityButtonClicked()
+            }
             let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
                 self?.onNavbarDeleteButtonClicked()
             }
             
             let mapTrackOptionsActions = UIMenu(title: "", options: .displayInline, children: [showOnMapAction, exportAction, uploadToOsmAction])
             let moveItemsActions = UIMenu(title: "", options: .displayInline, children: [moveAction])
-            let changeAppearanceItemsActions = UIMenu(title: "", options: .displayInline, children: [changeAppearanceAction])
+            let changeAppearanceItemsActions = UIMenu(title: "", options: .displayInline, children: [changeAppearanceAction, changeActivityAction])
             let deleteItemsActions = UIMenu(title: "", options: .displayInline, children: [deleteAction])
             menuActions.append(contentsOf: [mapTrackOptionsActions, moveItemsActions, changeAppearanceItemsActions, deleteItemsActions])
         }
@@ -1010,6 +1013,26 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         let trackItems = Set(allTracks.toTrackItems())
         guard !trackItems.isEmpty else { return }
         let vc = TracksChangeAppearanceViewController(tracks: trackItems)
+        let navigationController = UINavigationController(rootViewController: vc)
+        navigationController.modalPresentationStyle = .custom
+        present(navigationController, animated: true) { [weak self] in
+            guard let self else { return }
+            self.onNavbarCancelButtonClicked()
+        }
+    }
+    
+    @objc private func onNavbarChangeActivityButtonClicked() {
+        let allTracks: [GpxDataItem] = selectedTracks + selectedFolders.flatMap { folderName in
+            if let folder = currentFolder.getSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == folderName }) {
+                return folder.getFlattenedTrackItems().compactMap { $0.dataItem }
+            } else if let smartFolder = smartFolderHelper.getSmartFolder(name: folderName) {
+                return smartFolder.getTrackItems().compactMap { $0.dataItem }
+            }
+            return []
+        }
+        
+        guard !allTracks.toTrackItems().isEmpty else { return }
+        let vc = SelectRouteActivityViewController(tracks: Set(allTracks.toTrackItems()))
         let navigationController = UINavigationController(rootViewController: vc)
         navigationController.modalPresentationStyle = .custom
         present(navigationController, animated: true) { [weak self] in

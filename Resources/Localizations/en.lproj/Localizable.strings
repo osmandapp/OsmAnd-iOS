@@ -2442,6 +2442,8 @@
 "shared_string_gpx_points" = "Points";
 "shared_string_overview" = "Overview";
 "shared_string_activity" = "Activity";
+"change_activity" = "Change activity";
+"type_of_activity" = "Type of activity";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "local_indexes_cat_backup" = "Deactivated";

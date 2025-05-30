@@ -62,6 +62,7 @@
 - (OASAuthor *)getAuthor;
 - (OASCopyright *)getCopyright;
 - (OASMetadata *)getMetadata;
+- (OASRouteActivity *)getGpxActivity;
 - (NSString *)getKeywords;
 - (NSArray<OALink *> *)getLinks;
 - (NSString *)getCreatedOn;
@@ -81,6 +82,7 @@
 - (void)openDescriptionEditor;
 - (void)openDescriptionReadOnly:(NSString *)description;
 - (void)openNameTagsScreenWith:(NSArray<NSDictionary *> *)tagsArray;
+- (void)openSelectRouteActivityScreen;
 - (void)openDuplicateTrack;
 - (void)openMoveTrack;
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem;

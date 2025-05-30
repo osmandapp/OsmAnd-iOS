@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -96,8 +96,50 @@
                                 <constraint firstItem="snd-9X-hbz" firstAttribute="top" secondItem="Iio-8u-at5" secondAttribute="top" constant="3.5" id="oHA-US-QLm"/>
                             </constraints>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="•" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jqG-9D-3Mp" userLabel="Separator">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="•" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AFM-Pb-6zf" userLabel="First Separator">
                             <rect key="frame" x="70" y="2" width="20" height="20"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="20" id="Nc2-aP-rV0"/>
+                                <constraint firstAttribute="height" constant="20" id="bO7-9A-DCL"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                            <color key="textColor" name="customSeparator"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hg9-IY-pWs" userLabel="GPX Activity Container">
+                            <rect key="frame" x="90" y="0.0" width="68.5" height="24"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_map_point.png" translatesAutoresizingMaskIntoConstraints="NO" id="jWM-lc-ITM" userLabel="Gpx Activity Icon View">
+                                    <rect key="frame" x="0.0" y="2" width="20" height="20"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="20" id="AzW-9a-WMq"/>
+                                        <constraint firstAttribute="width" constant="20" id="GLI-cL-3cE"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Activity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bj1-gU-XfX" userLabel="Activity Text View">
+                                    <rect key="frame" x="23" y="3.5" width="45.5" height="17"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="17" id="HkT-4L-1Mv"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                    <color key="textColor" name="textColorPrimary"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" name="groupBg"/>
+                            <constraints>
+                                <constraint firstItem="bj1-gU-XfX" firstAttribute="leading" secondItem="jWM-lc-ITM" secondAttribute="trailing" constant="3" id="20B-iu-iFT"/>
+                                <constraint firstItem="jWM-lc-ITM" firstAttribute="leading" secondItem="Hg9-IY-pWs" secondAttribute="leading" id="D6m-EA-Swi"/>
+                                <constraint firstAttribute="bottom" secondItem="bj1-gU-XfX" secondAttribute="bottom" constant="3.5" id="N2V-f4-7mK"/>
+                                <constraint firstItem="bj1-gU-XfX" firstAttribute="top" secondItem="Hg9-IY-pWs" secondAttribute="top" constant="3.5" id="NsK-rr-5SQ"/>
+                                <constraint firstAttribute="height" constant="24" id="Z3g-8C-gX2"/>
+                                <constraint firstAttribute="bottom" secondItem="jWM-lc-ITM" secondAttribute="bottom" constant="2" id="di8-GK-VVD"/>
+                                <constraint firstAttribute="trailing" secondItem="bj1-gU-XfX" secondAttribute="trailing" id="pXj-Tx-NnO"/>
+                                <constraint firstItem="jWM-lc-ITM" firstAttribute="top" secondItem="Hg9-IY-pWs" secondAttribute="top" constant="2" id="zgq-C5-95O"/>
+                            </constraints>
+                        </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="•" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jqG-9D-3Mp" userLabel="Separator">
+                            <rect key="frame" x="158.5" y="2" width="20" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="20" id="6IZ-Gh-ntG"/>
                                 <constraint firstAttribute="height" constant="20" id="Pqb-b5-3Sh"/>
@@ -107,7 +149,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WEo-uC-2EY" userLabel="Region Container">
-                            <rect key="frame" x="90" y="0.0" width="123.5" height="24"/>
+                            <rect key="frame" x="178.5" y="0.0" width="123.5" height="24"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_map_point.png" translatesAutoresizingMaskIntoConstraints="NO" id="XVR-ZX-2dk">
                                     <rect key="frame" x="0.0" y="2" width="20" height="20"/>
@@ -143,15 +185,23 @@
                     <constraints>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="WEo-uC-2EY" secondAttribute="trailing" id="3vB-s8-MLK"/>
                         <constraint firstItem="Iio-8u-at5" firstAttribute="leading" secondItem="VTD-C4-FFB" secondAttribute="leading" id="DZ9-XE-uD7"/>
-                        <constraint firstItem="jqG-9D-3Mp" firstAttribute="leading" secondItem="Iio-8u-at5" secondAttribute="trailing" id="JDr-CT-Yca"/>
+                        <constraint firstItem="AFM-Pb-6zf" firstAttribute="leading" secondItem="Iio-8u-at5" secondAttribute="trailing" id="F1P-nb-6mH"/>
+                        <constraint firstItem="jqG-9D-3Mp" firstAttribute="leading" secondItem="Hg9-IY-pWs" secondAttribute="trailing" id="JWz-Aq-1N0"/>
                         <constraint firstAttribute="bottom" secondItem="jqG-9D-3Mp" secondAttribute="bottom" constant="2" id="QwM-Ry-WRD"/>
                         <constraint firstItem="WEo-uC-2EY" firstAttribute="leading" secondItem="VTD-C4-FFB" secondAttribute="leading" priority="749" id="T8R-rV-fJU"/>
+                        <constraint firstAttribute="bottom" secondItem="AFM-Pb-6zf" secondAttribute="bottom" constant="2" id="Wze-9w-uJy"/>
+                        <constraint firstItem="AFM-Pb-6zf" firstAttribute="top" secondItem="VTD-C4-FFB" secondAttribute="top" constant="2" id="Zcd-XM-atI"/>
                         <constraint firstItem="WEo-uC-2EY" firstAttribute="leading" secondItem="jqG-9D-3Mp" secondAttribute="trailing" id="aLt-O4-RaB"/>
                         <constraint firstItem="Iio-8u-at5" firstAttribute="top" secondItem="VTD-C4-FFB" secondAttribute="top" id="bQ2-nX-3xN"/>
+                        <constraint firstItem="Hg9-IY-pWs" firstAttribute="leading" secondItem="AFM-Pb-6zf" secondAttribute="trailing" id="d1T-n9-2kM"/>
                         <constraint firstItem="WEo-uC-2EY" firstAttribute="top" secondItem="VTD-C4-FFB" secondAttribute="top" id="dVK-Nx-yDr"/>
                         <constraint firstItem="jqG-9D-3Mp" firstAttribute="top" secondItem="VTD-C4-FFB" secondAttribute="top" constant="2" id="f89-FS-5jG"/>
+                        <constraint firstAttribute="bottom" secondItem="Hg9-IY-pWs" secondAttribute="bottom" id="ipQ-zR-5td"/>
                         <constraint firstAttribute="bottom" secondItem="WEo-uC-2EY" secondAttribute="bottom" id="k3h-BX-VDV"/>
+                        <constraint firstItem="WEo-uC-2EY" firstAttribute="leading" secondItem="AFM-Pb-6zf" secondAttribute="trailing" priority="749" id="l0B-BJ-I4V"/>
+                        <constraint firstItem="Hg9-IY-pWs" firstAttribute="top" secondItem="VTD-C4-FFB" secondAttribute="top" id="nbX-uc-RjI"/>
                         <constraint firstAttribute="bottom" secondItem="Iio-8u-at5" secondAttribute="bottom" id="tAE-2b-0Ya"/>
+                        <constraint firstItem="Hg9-IY-pWs" firstAttribute="leading" secondItem="VTD-C4-FFB" secondAttribute="leading" priority="749" id="tmw-4c-tMg"/>
                     </constraints>
                 </view>
                 <stackView contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="6" id="dzH-uG-dio" userLabel="Action Buttons Container">
@@ -274,6 +324,8 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="actionButtonsContainerView" destination="dzH-uG-dio" id="td5-Lm-ioT"/>
+                <outlet property="activityDirectionConstraint" destination="d1T-n9-2kM" id="bOP-Tt-j3J"/>
+                <outlet property="activityNoDirectionConstraint" destination="tmw-4c-tMg" id="uZd-QO-Pb4"/>
                 <outlet property="appearanceButton" destination="vDF-Mt-jg2" id="mF1-rx-VgB"/>
                 <outlet property="bottomDividerView" destination="77c-3b-9tk" id="pFU-kg-NwT"/>
                 <outlet property="descriptionView" destination="WmA-ig-XeZ" id="ALT-Le-c3n"/>
@@ -281,14 +333,19 @@
                 <outlet property="directionIconView" destination="zXJ-Kc-6n6" id="zpr-me-xi2"/>
                 <outlet property="directionTextView" destination="snd-9X-hbz" id="8VC-Gr-ztq"/>
                 <outlet property="exportButton" destination="41j-Jh-0aW" id="AOj-im-orj"/>
+                <outlet property="gpxActivityContainerView" destination="Hg9-IY-pWs" id="lMo-dO-Cw3"/>
+                <outlet property="gpxActivityIconView" destination="jWM-lc-ITM" id="6uF-Mr-eUy"/>
+                <outlet property="gpxActivitySeparatorView" destination="jqG-9D-3Mp" id="Rfz-kf-yTu"/>
+                <outlet property="gpxActivityTextView" destination="bj1-gU-XfX" id="a1F-ni-L37"/>
                 <outlet property="groupsCollectionView" destination="8XG-hO-pN3" id="3Y7-M3-L5Y"/>
                 <outlet property="locationContainerView" destination="VTD-C4-FFB" id="l9C-sA-78j"/>
-                <outlet property="locationSeparatorView" destination="jqG-9D-3Mp" id="ljT-4l-rva"/>
+                <outlet property="locationSeparatorView" destination="AFM-Pb-6zf" id="7Tu-B4-Zhb"/>
                 <outlet property="navigationButton" destination="pbl-cu-esO" id="GNS-Td-eSJ"/>
+                <outlet property="regionActivityConstraint" destination="aLt-O4-RaB" id="1TP-kx-Wox"/>
                 <outlet property="regionContainerView" destination="WEo-uC-2EY" id="zrC-rh-ELX"/>
-                <outlet property="regionDirectionConstraint" destination="aLt-O4-RaB" id="bze-pL-bUl"/>
                 <outlet property="regionIconView" destination="XVR-ZX-2dk" id="ZiF-bq-zPy"/>
-                <outlet property="regionNoDirectionConstraint" destination="T8R-rV-fJU" id="HQu-iG-pqf"/>
+                <outlet property="regionNoActivityConstraint" destination="l0B-BJ-I4V" id="4kW-tf-dyr"/>
+                <outlet property="regionNoDirectionNoActivityConstraint" destination="T8R-rV-fJU" id="K27-Kf-Cjr"/>
                 <outlet property="regionTextView" destination="wVj-5r-123" id="R6P-Aa-cbU"/>
                 <outlet property="showHideButton" destination="3Ev-Ap-uIN" id="ncK-Wh-dip"/>
                 <outlet property="sliderView" destination="19G-L5-8Rc" id="pLK-Bo-MiB"/>

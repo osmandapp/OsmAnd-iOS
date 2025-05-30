@@ -124,7 +124,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     private static let fromDateRowKey = "fromDateRowKey"
     private static let toDateRowKey = "toDateRowKey"
     private static let allFoldersRowKey = "allFoldersRowKey"
-    private static let folderPath = "folderPath"
+    private static let descriptionKey = "descriptionKey"
     private static let thinLine = "thin"
     private static let mediumLine = "medium"
     private static let boldLine = "bold"
@@ -203,6 +203,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             .dateCreation: DateTrackFilterConfigurator(),
             .color: ListTrackFilterConfigurator(),
             .width: ListTrackFilterConfigurator(),
+            .activity: ListTrackFilterConfigurator(),
             .city: ListTrackFilterConfigurator(),
             .folder: FolderTrackFilterConfigurator()
         ]
@@ -264,6 +265,8 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             return localizedString("shared_string_color")
         case .width:
             return localizedString("routing_attr_width_name")
+        case .activity:
+            return localizedString("type_of_activity")
         case .city:
             return localizedString("nearest_cities")
         case .folder:
@@ -328,11 +331,11 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             toDateRow.key = Self.toDateRowKey
             toDateRow.title = localizedString("shared_string_to")
             toDateRow.setObj(dateCreationToValue ?? 0, forKey: "date")
-        case .color, .width, .city:
+        case .color, .width, .activity, .city:
             let section = tableData.createNewSection()
             let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
             for itemName in itemsToDisplay {
-                configureRowForSection(section: section, itemName: itemName, isWidth: filterType == .width)
+                configureTrackFilterList(for: section, with: itemName)
             }
         case .folder:
             let foldersToDisplay = isSearchActive ? filteredFoldersListItems : allFoldersListItems
@@ -371,7 +374,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 }
                 
                 if !isRootFolder {
-                    row.setObj(folderItem.path, forKey: Self.folderPath)
+                    row.setObj(folderItem.path, forKey: Self.descriptionKey)
                 }
                 
                 for subfolder in folderItem.subfolders {
@@ -433,13 +436,13 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             return cell
         } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
-            cell.descriptionVisibility(item.obj(forKey: Self.folderPath) != nil)
+            cell.descriptionVisibility(item.obj(forKey: Self.descriptionKey) != nil)
             cell.leftIconVisibility(item.icon != nil || filterType == .color)
             cell.selectedBackgroundView = UIView()
             cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
             cell.accessoryType = .none
             cell.titleLabel.text = item.title
-            cell.descriptionLabel.text = item.obj(forKey: Self.folderPath) as? String
+            cell.descriptionLabel.text = item.obj(forKey: Self.descriptionKey) as? String
             cell.valueLabel.text = item.descr
             cell.leftIconView.image = item.icon
             cell.leftIconView.tintColor = item.iconTintColor
@@ -474,6 +477,11 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             checkIfAllFoldersSelected()
         }
         
+        if filterType == .activity {
+            generateData()
+            tableView.reloadRows(at: [indexPath], with: .none)
+        }
+        
         if previousSelectAllStatus != (listFilterType?.isSelectAllItemsSelected == true) {
             tableView.reloadData()
         }
@@ -492,6 +500,11 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         
         if !isSearchActive {
             checkIfAllFoldersSelected()
+        }
+        
+        if filterType == .activity {
+            generateData()
+            tableView.reloadRows(at: [indexPath], with: .none)
         }
         
         if previousSelectAllStatus != (listFilterType?.isSelectAllItemsSelected == true) {
@@ -515,7 +528,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 dateCreationFilterType?.valueFrom = dateFrom
                 dateCreationFilterType?.valueTo = dateTo
             }
-        case .color, .width, .city, .folder:
+        case .color, .width, .activity, .city, .folder:
             listFilterType?.setSelectedItems(selectedItems: selectedItems)
         default:
             break
@@ -543,37 +556,47 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         }
     }
     
-    private func configureRowForSection(section: OATableSectionData, itemName: String, isWidth: Bool) {
+    private func configureTrackFilterList(for section: OATableSectionData, with itemName: String) {
         let row = section.createNewRow()
         row.cellType = OAValueTableViewCell.reuseIdentifier
         row.key = itemName
-        if itemName.isEmpty {
-            row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName) ?? ""
-        } else {
-            row.title = isWidth ? listFilterType?.collectionFilterParams.getItemText(itemName: itemName).capitalized : listFilterType?.collectionFilterParams.getItemText(itemName: itemName)
-        }
-        
-        if let tracksCount = listFilterType?.getTracksCountForItem(itemName: itemName) {
-            row.descr = String(describing: tracksCount)
-        }
-        
-        if itemName.isEmpty {
-            row.icon = .icCustomAppearanceDisabledOutlined
-            row.iconTintColor = .iconColorDisabled
-        } else if isWidth {
-            switch itemName {
-            case Self.thinLine:
-                row.icon = .icCustomTrackLineThin
-            case Self.mediumLine:
-                row.icon = .icCustomTrackLineMedium
-            case Self.boldLine:
-                row.icon = .icCustomTrackLineBold
-            default:
-                row.icon = .icCustomTrackLineMedium
+        row.descr = "\(listFilterType?.getTracksCountForItem(itemName: itemName) ?? 0)"
+        switch filterType {
+        case .activity:
+            let activity = RouteActivityHelper.shared.findRouteActivity(id: itemName)
+            row.title = activity?.label ?? localizedString("shared_string_none")
+            row.icon = activity != nil ? (activity.flatMap { UIImage.mapSvgImageNamed("mx_\($0.iconName)") } ?? .icCustomInfoOutlined) : .icCustomActivityOutlined
+            row.iconTintColor = selectedItems.contains(itemName) ? .iconColorActive : .iconColorDefault
+            if let groupLabel = activity?.group.label {
+                row.setObj(groupLabel, forKey: Self.descriptionKey)
             }
-            row.iconTintColor = .iconColorDisruptive
-        } else if let rgbValue = GpxUtilities.shared.parseColor(colorString: itemName)?.intValue {
-            row.iconTintColor = colorFromRGB(rgbValue)
+        case .width:
+            row.title = itemName.isEmpty ? listFilterType?.collectionFilterParams.getItemText(itemName: itemName) : listFilterType?.collectionFilterParams.getItemText(itemName: itemName).capitalized
+            if itemName.isEmpty {
+                row.icon = .icCustomAppearanceDisabledOutlined
+                row.iconTintColor = .iconColorDisabled
+            } else {
+                row.icon =
+                switch itemName {
+                case Self.thinLine: .icCustomTrackLineThin
+                case Self.mediumLine: .icCustomTrackLineMedium
+                case Self.boldLine: .icCustomTrackLineBold
+                default: .icCustomTrackLineMedium
+                }
+                row.iconTintColor = .iconColorDisruptive
+            }
+        case .color:
+            row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName)
+            if let rgb = GpxUtilities.shared.parseColor(colorString: itemName)?.intValue {
+                row.iconTintColor = colorFromRGB(rgb)
+            } else {
+                row.icon = .icCustomAppearanceDisabledOutlined
+                row.iconTintColor = .iconColorDisabled
+            }
+        case .city:
+            row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName)
+        default:
+            return
         }
     }
     
@@ -634,7 +657,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     }
     
     private func isListFilterTypeSupported(filterType: TrackFilterType) -> Bool {
-        let supportedFilterTypes: Set<TrackFilterType> = [.color, .width, .city, .folder]
+        let supportedFilterTypes: Set<TrackFilterType> = [.color, .width, .activity, .city, .folder]
         return supportedFilterTypes.contains(filterType)
     }
     
@@ -646,6 +669,8 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     private func applySearchFilter(with searchText: String) {
         if filterType == .folder {
             filteredFoldersListItems = filterFolders(allFoldersListItems, searchText: searchText)
+        } else if filterType == .activity {
+            filteredListItems = allListItems.filter { (RouteActivityHelper.shared.findRouteActivity(id: $0)?.label ?? localizedString("shared_string_none")).localizedCaseInsensitiveContains(searchText) }
         } else {
             filteredListItems = allListItems.filter { itemName in
                 listFilterType?.collectionFilterParams.getItemText(itemName: itemName).localizedCaseInsensitiveContains(searchText) ?? false

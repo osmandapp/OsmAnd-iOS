@@ -1534,6 +1534,10 @@ typedef enum
             gpxFile.path = path;
             gpxFile.metadata.name = targetPoint.title;
             
+            OASRouteActivity *activity = [[OASRouteActivityHelper shared] findActivityByTagTag:key.routeKey.getTag().toNSString()];
+            if (activity)
+                [gpxFile.metadata setRouteActivityActivity:activity];
+            
             OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFile.path];
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             [weakSelf.mapViewController showTempGpxTrackFromGpxFile:gpxFile];

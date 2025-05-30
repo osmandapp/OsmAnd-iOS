@@ -271,12 +271,14 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
             
             if (_needToScrollToSelectedColor)
             {
                 NSIndexPath *selectedIndexPath = [[cell getCollectionHandler] getSelectedIndexPath];
-                if (selectedIndexPath.row != NSNotFound && ![cell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+                if (selectedIndexPath.row != NSNotFound
+                    && indexPath.section < [cell.collectionView numberOfSections]
+                    && selectedIndexPath.row < [cell.collectionView numberOfItemsInSection:indexPath.section]
+                    && ![cell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
                 {
                     [cell.collectionView scrollToItemAtIndexPath:selectedIndexPath
                                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
@@ -402,7 +404,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         {
             [colors addObject:[item getColor]];
         }
-        _colorCollectionHandler.groupColors = [colors mutableCopy];
+        _colorCollectionHandler.groupColors = [colors copy];
     }
     [_colorCollectionHandler setupDefaultCategory];
 }
@@ -425,7 +427,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         {
             [iconNames addObject:[item getIcon]];
         }
-        _poiIconCollectionHandler.groupIcons = [iconNames mutableCopy];
+        _poiIconCollectionHandler.groupIcons = [iconNames copy];
     }
     
     [_poiIconCollectionHandler setItemSizeWithSize:48];
@@ -472,7 +474,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         {
             [backgroundIconNames addObject:[item getBackgroundIcon]];
         }
-        _shapesCollectionHandler.groupShapes = [backgroundIconNames mutableCopy];
+        _shapesCollectionHandler.groupShapes = [backgroundIconNames copy];
     }
     
     _shapesCollectionHandler.selectedCatagoryKey = _backgroundIconNames[_selectedBackgroundIndex];

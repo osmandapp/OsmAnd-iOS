@@ -271,12 +271,9 @@ static const int START_ZOOM = 6;
     
     CGPoint point = [result getPoint];
     int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
- 
     OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
     if (touchPolygon31 == OsmAnd::AreaI())
-    {
         return;
-    }
     
     for (OAFavoriteItem *favouritePoint in favouritePoints)
     {

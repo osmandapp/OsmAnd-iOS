@@ -238,7 +238,7 @@ static int MIN_POINTS_ZOOM = 17;
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    if ([self.mapViewController getMapZoom] < MIN_POINTS_ZOOM)
+    if (!_mapillaryMapProvider || [self.mapViewController getMapZoom] < MIN_POINTS_ZOOM)
         return;
     
     CGPoint pixel = [result getPoint];

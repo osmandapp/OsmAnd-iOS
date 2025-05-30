@@ -1555,6 +1555,8 @@ colorizationScheme:(int)colorizationScheme
         cachedTrack[@"gpx"] = [self getGpxItem:QString::fromNSString(filePath)];
 }
 
+//TODO: delete ?
+
 - (void) getTracksFromPoint:(CLLocationCoordinate2D)point res:(NSMutableArray<OATargetPoint *> *)res
 {
     double textSize = [OAAppSettings.sharedManager.textSize get];
@@ -1627,6 +1629,75 @@ colorizationScheme:(int)colorizationScheme
         }
     }
 }
+
+- (void) getTracksFromPoint:(CLLocationCoordinate2D)point result:(OAMapSelectionResult *)result
+{
+    double textSize = [OAAppSettings.sharedManager.textSize get];
+    textSize = textSize < 1. ? 1. : textSize;
+    int r = [self getDefaultRadiusPoi] * textSize;
+    NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
+    OASGpxFile *currentTrackGpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
+    if (currentTrackGpxFile)
+        activeGpx[kCurrentTrack] = currentTrackGpxFile;
+    
+    for (NSString *key in activeGpx.allKeys) {
+        OASGpxFile *gpxFile = activeGpx[key];
+
+        BOOL isCurrentTrack = currentTrackGpxFile && gpxFile == currentTrackGpxFile;
+
+        OASGpxFile *document = nil;
+        NSString *filePath = isCurrentTrack ? kCurrentTrack : key;
+        if ([_cachedTracks.allKeys containsObject:filePath])
+        {
+            document = _cachedTracks[filePath][@"gpxFile"];
+        }
+        else if (gpxFile)
+        {
+            document = isCurrentTrack
+                    ? currentTrackGpxFile
+                    : gpxFile;
+        }
+
+        if (!document)
+            continue;
+
+        BOOL isJointSegments = NO;
+        OASGpxDataItem *gpxDataItem;
+        if (isCurrentTrack)
+        {
+            isJointSegments = [[OAAppSettings sharedManager].currentTrackIsJoinSegments get];
+        }
+        else
+        {
+            if ([_cachedTracks.allKeys containsObject:filePath]) {
+                gpxDataItem = _cachedTracks[filePath][@"gpx"];
+            }
+            else
+            {
+                gpxDataItem = [self getGpxItem:QString::fromNSString(key)];
+            }
+            if (gpxDataItem)
+            {
+                isJointSegments = gpxDataItem.joinSegments;
+            }
+        }
+        // NOTE: The old logic called processPoints during each initialization of the document (OAGPXDocument -> OASGpxFile). This was necessary for the correct recalculation for getPointsToDisplay. Now this is handled by recalculateProcessPoint. If recalculation is needed, call [document recalculateProcessPoint
+        [document recalculateProcessPoint];
+        NSArray<OASWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplayWithIsJoinSegments:isJointSegments] radius:r point:point];
+        if (points != nil)
+        {
+            CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
+                                                                                                longitude:point.longitude]
+                                                        fromLocation:[[CLLocation alloc] initWithLatitude:points.firstObject.position.latitude
+                                                                                                longitude:points.firstObject.position.longitude]
+                                                          toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
+                                                                                                longitude:points.lastObject.position.longitude]];
+            
+            [result collect:gpxDataItem ? gpxDataItem : [OASavingTrackHelper sharedInstance].currentTrack provider:self];
+        }
+    }
+}
+
 
 - (NSArray<OASWptPt *> *)findPointsNearSegments:(NSArray<OASTrkSegment *> *)segments radius:(int)radius point:(CLLocationCoordinate2D)point
 {
@@ -1898,8 +1969,60 @@ colorizationScheme:(int)colorizationScheme
 
 - (void) collectTracksFromPoint:(OAMapSelectionResult *)result showTrackPointMenu:(BOOL)showTrackPointMenu
 {
-    //TODO: implement
+    CGPoint point = [result getPoint];
+    OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:point];
+    const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
+    [self getTracksFromPoint:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude) result:result];
+    
+    
+    
+    
+    
+    //TODO: delete? or refator?
+    
+    return;
+    
+    
+    
+    
+    
+//    
+//    
+//    NSMutableDictionary<NSString *,OASGpxFile *> *selectedGpxFiles = [OASelectedGPXHelper.instance getSelectedGPXFiles];
+//    if ([NSDictionary isEmpty:selectedGpxFiles])
+//        return;
+//    
+//    CGPoint point = [result getPoint];
+//    int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+//    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+//    if (touchPolygon31 == OsmAnd::AreaI())
+//        return;
+//    
+////    LatLon latLonFromPixel = null;
+//    
+//    for (OASGpxFile *selectedGpxFile in selectedGpxFiles.allValues)
+//    {
+//        if (![self isGpxFileVisible:selectedGpxFile])
+//            continue;
+//  
+//        [selectedGpxFile getPointsToDisplayWithIsJoinSegments:<#(BOOL)#>]
+//    }
+//    
+//    
+//    //TODO: implement
 }
+
+
+//TODO: test this
+- (BOOL) isGpxFileVisible:(OASGpxFile *)selectedGpxFile
+{
+    OASKQuadRect *gpxFileBounds = [selectedGpxFile getRect];
+    OsmAnd::AreaI gpxFileBbox = OsmAnd::AreaI(gpxFileBounds.top, gpxFileBounds.left, gpxFileBounds.bottom, gpxFileBounds.right);
+    
+    OsmAnd::AreaI screenBbox = self.mapView.getVisibleBBox31;
+    return screenBbox.contains(gpxFileBbox);
+}
+
 
 - (NSArray<OASWptPt *> *) getSelectedFilePoints:(OASGpxFile *)g
 {

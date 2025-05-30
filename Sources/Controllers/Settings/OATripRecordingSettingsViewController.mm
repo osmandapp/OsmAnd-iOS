@@ -464,8 +464,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     if ([type isEqualToString:OASwitchTableViewCell.reuseIdentifier])
     {
         OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OASwitchTableViewCell.reuseIdentifier];
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASwitchTableViewCell *) nib[0];
         [cell descriptionVisibility:NO];
         id v = item[@"value"];
         if ([v isKindOfClass:[OACommonBoolean class]])
@@ -521,8 +519,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     else if ([type isEqualToString:OASimpleTableViewCell.reuseIdentifier])
     {
         OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OASimpleTableViewCell.reuseIdentifier];
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
         [cell leftIconVisibility:NO];
         [cell descriptionVisibility:NO];
         [cell setCustomLeftSeparatorInset:YES];
@@ -535,8 +531,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     else if ([type isEqualToString:OARightIconTableViewCell.reuseIdentifier])
     {
         OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OARightIconTableViewCell.reuseIdentifier];
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
         [cell leftIconVisibility:NO];
         [cell descriptionVisibility:NO];
         cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
@@ -550,8 +544,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     {
         OASimpleTableViewCell* cell = nil;
         cell = [self.tableView dequeueReusableCellWithIdentifier:OASimpleTableViewCell.reuseIdentifier];
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
         [cell leftIconVisibility:NO];
         [cell descriptionVisibility:NO];
         [cell.titleLabel setText: item[@"title"]];

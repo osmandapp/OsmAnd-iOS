@@ -2931,7 +2931,7 @@
     if (sectionData)
     {
         NSUInteger idx = [_tableData.subjects indexOfObject:sectionData];
-        if (idx < self.tableView.numberOfSections)
+        if (idx != NSNotFound)
         {
             [_uiBuilder updateData:sectionData];
             [self.tableView performBatchUpdates:^{

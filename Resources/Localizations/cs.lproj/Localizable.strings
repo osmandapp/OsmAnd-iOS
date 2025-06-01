@@ -3663,3 +3663,15 @@
 "quick_action_showhide_coordinates_grid_descr" = "Akce pro ovládání viditelnosti souřadnicové sítě na mapě.";
 "save_favorite_default_appearance" = "Použít změny na stávající body ve složce, nebo pouze na nové?";
 "original_icon_description" = "Každý bod by si ponechal vlastní ikonu.";
+"dd_ddddd_format" = "DD.DDDDD°";
+"dd_mm_mmm_format" = "DD°MM.MMM′";
+"display_priority" = "Priorita zobrazení";
+"map_widget_distance" = "Vzdálenost";
+"destination_first" = "Nejprve cíl";
+"map_widget_route_information_desc" = "Zobrazí předpokládaný čas příjezdu, zbývající čas cesty a vzdálenost aktuální cesty navigace.";
+"map_widget_route_information" = "Informace o trase";
+"type_of_activity" = "Typ aktivity";
+"change_activity" = "Změnit aktivitu";
+"dd_mm_ss_format" = "DD°MM′SS″";
+"intermediate_first" = "Nejprve mezicíle";
+"shared_string_default_view" = "Výchozí zobrazení";

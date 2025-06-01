@@ -2508,3 +2508,7 @@
 "shared_string_interface" = "Interfazea";
 "max_sensor_heartrate" = "Bihotz-taupadak, altuena";
 "cloud_sync_progress" = "Sinkronizatzen…%@";
+"customize_grid_color" = "Pertsonalizatu saretaren kolorea";
+"labels_position" = "Etiketen kokapena";
+"grid_color" = "Saretaren kolorea";
+"shared_string_edges" = "Ertzak";

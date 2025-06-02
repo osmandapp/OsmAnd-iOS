@@ -15,8 +15,6 @@
 @end
 
 @interface OAOkioSource : NSObject
-@property (nonatomic, assign) BOOL isProcessingReading;
-
 @end
 
 @interface OAOkioSink : NSObject

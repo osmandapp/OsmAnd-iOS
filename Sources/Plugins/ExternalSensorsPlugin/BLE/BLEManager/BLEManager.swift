@@ -16,12 +16,6 @@ enum BLEManagerUnavailbleFailureReason: String {
     case scanningEndedUnexpectedly
 }
 
-enum BLEManagerError: Error {
-    case isEmptyData
-    case noData
-    case timeout
-}
-
 final class BLEManager {
     static let shared = BLEManager()
     

@@ -43,11 +43,11 @@ final class OBDVehicleMetricsDevice: Device {
                     case "FFE1": // for servcice FFE0
                         self?.ecuWriteCharacteristic = characteristic
                     case "FFF1": // for servcice FFF0
-                        print("")
+                        print("FFF1 reading characteristic")
+                    case "2AF0": // for servcice 18F0
+                        print("2AF0 reading characteristic")
                     case "FFF2": // for servcice FFF0
                         self?.ecuWriteCharacteristic = characteristic
-                    case "2AF0": // for servcice 18F0
-                        print("")
                     case "2AF1": // for servcice 18F0
                         self?.ecuWriteCharacteristic = characteristic
                     default:

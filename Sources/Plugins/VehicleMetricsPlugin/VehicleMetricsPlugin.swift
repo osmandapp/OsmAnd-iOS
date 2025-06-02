@@ -8,11 +8,6 @@
 
 final class VehicleMetricsPlugin: OAPlugin {
     
-//    static let shared = VehicleMetricsPlugin()
-//    
-//    private override init() {
-//    }
-    
     override func getId() -> String? {
         "net.osmand.maps.inapp.addon.vehicle_metrics"
     }
@@ -32,7 +27,7 @@ final class VehicleMetricsPlugin: OAPlugin {
     }
     
     override func update(_ location: CLLocation) {
-        OBDDataComputer.shared.registerLocation(l: OBDDataComputer.OBDLocation(time: Int64(location.timestamp.timeIntervalSince1970), latLon: KLatLon.init(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)))
+        OBDDataComputer.shared.registerLocation(l: OBDDataComputer.OBDLocation(time: Int64(location.timestamp.timeIntervalSince1970), latLon: KLatLon(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)))
     }
     
     private func getSpeedUnit() -> String {

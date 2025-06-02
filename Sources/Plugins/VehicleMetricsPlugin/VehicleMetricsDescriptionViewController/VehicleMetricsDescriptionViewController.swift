@@ -35,7 +35,11 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                                                            .throttlePosition,
                                                            .batteryVoltage]
     
+    static let placeholderTextNA: String = "N/A"
+    
     var startBehavior: TableViewStartBehavior = .normal
+    
+    var hasWidgetItem = false
     
     // swiftlint:disable all
     var device: Device! {
@@ -43,19 +47,26 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             device.didChangeCharacteristic = { [weak self] in
                 guard let self else { return }
                 headerView.updateActiveServiceImage()
-                generateData()
-                tableView.reloadData()
+                if hasWidgetItem {
+                    updateVisibleReceivedDataCells()
+                } else {
+                    generateData()
+                    tableView.reloadData()
+                }
             }
             device.didDisconnect = { [weak self, weak device] in
                 guard let self, let device else { return }
                 headerView.configure(device: device)
+                hasWidgetItem = false
+                // fill row N/A description
+                tableView.reloadData()
             }
         }
     }
     // swiftlint:enable all
     
     private lazy var headerView: DescriptionDeviceHeader = {
-       let header = Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
+        let header = Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
         header.showSignalIndicator(show: false)
         return header
     }()
@@ -75,14 +86,14 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         }
         tableView.tableHeaderView = headerView
         
-     // NOTE: to debug obd simulator
+        // NOTE: to debug obd simulator
         /*
-        OBDService.shared.startDispatcher()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            self?.generateData()
-            self?.tableView.reloadData()
-        }
-        */
+         OBDService.shared.startDispatcher()
+         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+         self?.generateData()
+         self?.tableView.reloadData()
+         }
+         */
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -100,34 +111,6 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     override func registerCells() {
         addCell(OAValueTableViewCell.reuseIdentifier)
     }
-    
-    func updateDataIfNeeded() {
-        for (index, widget) in Self.widgets.enumerated() {
-            guard let sectionIndex = tableData.index(ofSectionWithKey: Section.receivedData.key),
-                  let row = tableData.row(at: IndexPath(row: index, section: sectionIndex)) else {
-                continue
-            }
-
-            let oldDescr = row.descr
-
-            let newDescr: String
-            if let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }),
-               let result = dataItem.computeValue(), !String(describing: result).isEmpty {
-                let value = String(describing: result)
-                let unit = (OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin)?
-                    .getWidgetUnit(widget) ?? ""
-                newDescr = unit.isEmpty ? value : "\(value) \(unit)"
-            } else {
-                newDescr = "N/A"
-            }
-
-            if row.descr != newDescr {
-                row.descr = newDescr
-                tableView.reloadRows(at: [IndexPath(row: index, section: sectionIndex)], with: .none)
-            }
-        }
-    }
-
     
     override func generateData() {
         tableData.clearAllData()
@@ -164,31 +147,12 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                 row.key = "row"
                 row.title = widget.getTitle()
                 
-                guard device.isConnected else {
-                    row.descr = "N/A"
-                    continue
-                }
-                
                 guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }), let result = dataItem.computeValue() else {
-                    row.descr = "N/A"
+                    row.descr = Self.placeholderTextNA
                     continue
                 }
-                
-                let stringValue = String(describing: result)
-                
-                guard !stringValue.isEmpty else {
-                    row.descr = "N/A"
-                    continue
-                }
-                
-                if stringValue == "N/A" || stringValue == "-" {
-                    row.descr = stringValue
-                } else {
-                    let unit = (OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin)?
-                        .getWidgetUnit(widget) ?? ""
-                    
-                    row.descr = unit.isEmpty ? stringValue : "\(stringValue) \(unit)"
-                }
+                hasWidgetItem = true
+                row.setObj(dataItem, forKey: "widgetItem")
             }
             
             // Settings
@@ -236,9 +200,17 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             }
             cell.descriptionVisibility(false)
             cell.separatorInset = .zero
-            cell.valueLabel.text = item.descr
             cell.titleLabel.text = item.title
             let sectionKey = tableData.sectionData(for: UInt(indexPath.section)).key
+            if sectionKey == Section.receivedData.key {
+                if let widgetItem = item.obj(forKey: "widgetItem") as? OBDDataComputer.OBDComputerWidget {
+                    cell.valueLabel.text = getDescription(for: widgetItem)
+                } else {
+                    cell.valueLabel.text = item.descr
+                }
+            } else {
+                cell.valueLabel.text = item.descr
+            }
             if sectionKey == Section.receivedData.key || sectionKey == Section.vehicleInfo.key {
                 cell.leftIconVisibility(sectionKey == Section.receivedData.key)
                 cell.imageView?.image = item.icon
@@ -277,6 +249,50 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                 tableView.reloadData()
             }
             navigationController?.present(UINavigationController(rootViewController: nameVC), animated: true)
+        }
+    }
+    
+    private func getDescription(for widget: OBDDataComputer.OBDComputerWidget) -> String {
+        guard device.isConnected else {
+            return Self.placeholderTextNA
+        }
+        
+        guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget.type }),
+              let result = dataItem.computeValue() else {
+            return Self.placeholderTextNA
+        }
+        
+        let stringValue = String(describing: result)
+        
+        guard !stringValue.isEmpty else {
+            return Self.placeholderTextNA
+        }
+        
+        if stringValue == Self.placeholderTextNA || stringValue == "-" {
+            return stringValue
+        } else {
+            let unit = (OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin)?
+                .getWidgetUnit(widget.type) ?? ""
+            return unit.isEmpty ? stringValue : "\(stringValue) \(unit)"
+        }
+    }
+    
+    private func updateVisibleReceivedDataCells() {
+        guard let visibleIndexPaths = tableView.indexPathsForVisibleRows else { return }
+        
+        for indexPath in visibleIndexPaths {
+            let sectionData = tableData.sectionData(for: UInt(indexPath.section))
+            
+            guard sectionData.key == Section.receivedData.key else { continue }
+            guard let cell = tableView.cellForRow(at: indexPath) as? OAValueTableViewCell else { continue }
+            
+            let item = tableData.item(for: indexPath)
+            
+            if let widgetItem = item.obj(forKey: "widgetItem") as? OBDDataComputer.OBDComputerWidget {
+                cell.valueLabel.text = getDescription(for: widgetItem)
+            } else {
+                cell.valueLabel.text = item.descr
+            }
         }
     }
     

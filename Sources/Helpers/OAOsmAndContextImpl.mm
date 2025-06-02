@@ -73,8 +73,14 @@ static NSString * const kGpxImportDir = @"import";
 
 
 - (OASFloat *)getFloatPreferenceName:(NSString *)name {
-    // TODO:
-    return [[OASFloat alloc] initWithFloat:101];
+    double value = 0;
+     
+     OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:name];
+     if ([pref isKindOfClass:[OACommonDouble class]]) {
+         value = [(OACommonDouble *)pref get];
+     }
+
+     return [[OASFloat alloc] initWithFloat:value];
 }
 
 - (void)setStringPreferenceName:(NSString *)name value:(NSString *)value __attribute__((swift_name("setStringPreference(name:value:)")))

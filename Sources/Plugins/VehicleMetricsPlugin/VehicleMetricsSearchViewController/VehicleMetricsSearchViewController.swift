@@ -109,10 +109,6 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     override func registerObservers() {
         detectBluetoothState()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(deviceRSSIUpdated),
-                                               name: .DeviceRSSIUpdated,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
                                                name: .DeviceDisconnected,
                                                object: nil)
@@ -272,11 +268,6 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
         let alert = UIAlertController(title: localizedString("osm_failed_uploads"), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .cancel))
         present(alert, animated: true)
-    }
-    
-    @objc private func deviceRSSIUpdated() {
-        guard view.window != nil else { return }
-        tableView.reloadData()
     }
     
     @objc private func deviceDisconnected() {

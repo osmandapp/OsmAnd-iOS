@@ -1,11 +1,10 @@
 //
-//  File.swift
+//  UIMenu+Extension.swift
 //  OsmAnd
 //
 //  Created by Oleksandr Panchenko on 30.05.2025.
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
-
 
 extension UIMenu {
     /* Example:

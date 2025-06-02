@@ -34,7 +34,6 @@ final class OBDService: NSObject {
         }
 
         let dispatcher = OBDDispatcher(debug: false)
-       // dispatcher.setReadStatusListener(self)
         self.obdDispatcher = dispatcher
         OBDDataComputer.shared.obdDispatcher = dispatcher
         
@@ -42,7 +41,6 @@ final class OBDService: NSObject {
 
         connector.disconnectHandler = {
             NSLog("[OBDService] -> disconnectHandler")
-         //   DeviceHelper.shared.getOBDDevice()?.disconnect(completion: { _ in })
         }
         connector.failureHandler = {
             NSLog("[OBDService] -> failureHandler")
@@ -59,8 +57,6 @@ final class OBDService: NSObject {
     func stopDispatcher() {
         NSLog("[OBDService] -> stopDispatcher")
         self.obdDispatcher?.stopReading()
-      //  OBDDataComputer.shared.obdDispatcher?.stopReading()
-      //  OBDDataComputer.shared.obdDispatcher = nil
     }
     
     func sendCommand(_ command: String?) -> Bool {
@@ -103,7 +99,7 @@ final class OBDService: NSObject {
     }
 }
 
-// Response Sensor
+// MARK: - Response Sensor
 extension OBDService {
     var obdSensor: OBDVehicleMetricsSensor? {
         DeviceHelper.shared.getOBDDevice()?.sensors.compactMap({ $0 as? OBDVehicleMetricsSensor }).first

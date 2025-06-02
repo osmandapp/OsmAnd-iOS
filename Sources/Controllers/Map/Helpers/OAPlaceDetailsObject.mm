@@ -189,10 +189,10 @@
     [_syntheticAmenity copyAdditionalInfo:amenity overwrite:NO];
     
     if (!_syntheticAmenity.localizedContent)
-        _syntheticAmenity.localizedContent = [NSMutableDictionary dictionaryWithDictionary:_syntheticAmenity.localizedContent];
+        _syntheticAmenity.localizedContent = [MutableOrderedDictionary dictionaryWithDictionary:_syntheticAmenity.localizedContent];
     if (amenity.localizedContent.count > 0)
     {
-        NSMutableDictionary *localizedContent = [NSMutableDictionary dictionaryWithDictionary:_syntheticAmenity.localizedContent];
+        MutableOrderedDictionary *localizedContent = [MutableOrderedDictionary dictionaryWithDictionary:_syntheticAmenity.localizedContent];
         [localizedContent addEntriesFromDictionary:amenity.localizedContent];
         _syntheticAmenity.localizedContent = localizedContent;
     }

@@ -85,7 +85,7 @@ final class RenderedObjectHelper: NSObject {
         }
         
         poi.obfId = renderedObject.obfId
-        poi.values = additionalInfo as? NSMutableDictionary
+        poi.values = additionalInfo as? MutableOrderedDictionary
         poi.localizedNames = localizedNames as? NSMutableDictionary
         poi.latitude = renderedObject.labelLatLon.coordinate.latitude
         poi.longitude = renderedObject.labelLatLon.coordinate.longitude

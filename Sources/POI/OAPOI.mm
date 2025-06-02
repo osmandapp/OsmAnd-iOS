@@ -443,7 +443,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     else
     {
         if (!_values)
-            _values = [NSMutableDictionary new];
+            _values = [MutableOrderedDictionary new];
         
         _values[tag] = value;
         

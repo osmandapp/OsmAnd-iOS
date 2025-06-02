@@ -176,14 +176,6 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return _values[ROUTE_MEMBERS_IDS];
 }
 
-//TODO: orig code - test new one not broken
-//- (NSSet<NSString *> *)getSupportedContentLocales
-//{
-//    NSMutableSet<NSString *> *supported = [NSMutableSet new];
-//    [supported addObjectsFromArray:[self getNames:@"wiki_lang" defTag:@"en"]];
-//    return supported;
-//}
-
 - (NSSet<NSString *> *)getSupportedContentLocales
 {
     if (_contentLocales)

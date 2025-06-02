@@ -25,6 +25,7 @@
 #import "OAApplicationMode.h"
 #import "OAModel3dHelper+cpp.h"
 #import "OAPointDescription.h"
+#import "OAMapSelectionResult.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -906,27 +907,21 @@ typedef enum {
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    
-}
-
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
-{
-    OAMapRendererView *mapView = self.mapView;
     CLLocation* myLocation = _lastLocation;
-    if (myLocation)
+    if (!myLocation)
+        return;
+    
+    if ([self.mapViewController getMapZoom] >= 3 && !excludeUntouchableObjects)
     {
-        CGPoint myLocationScreen;
-        OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude));
-        [mapView convert:&myLocationI toScreen:&myLocationScreen];
-        myLocationScreen.x *= mapView.contentScaleFactor;
-        myLocationScreen.y *= mapView.contentScaleFactor;
+        CGPoint point = [result getPoint];
+        int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+        if (touchPolygon31 == OsmAnd::AreaI())
+            return;
         
-        if (fabs(myLocationScreen.x - touchPoint.x) < kDefaultSearchRadiusOnMap && fabs(myLocationScreen.y - touchPoint.y) < kDefaultSearchRadiusOnMap)
-        {
-            OATargetPoint *targetPoint = [self getTargetPoint:myLocation];
-            if (![found containsObject:targetPoint])
-                [found addObject:targetPoint];
-        }
+        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:myLocation.coordinate.latitude lon:myLocation.coordinate.longitude polygon31:touchPolygon31];
+        if (shouldAdd)
+            [result collect:myLocation provider:self];
     }
 }
 

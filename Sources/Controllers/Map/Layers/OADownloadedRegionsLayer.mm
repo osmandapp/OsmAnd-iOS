@@ -428,18 +428,6 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
     
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
-{
-    NSMutableArray<OADownloadMapObject *> *downloadObjects = [NSMutableArray array];
-    [self getWorldRegionFromPoint:point dataObjects:downloadObjects];
-    for (OADownloadMapObject *obj in downloadObjects)
-    {
-        OATargetPoint *pnt = [self getTargetPoint:obj];
-        if (pnt)
-            [found addObject:pnt];
-    }
-}
-
 - (BOOL)isSecondaryProvider
 {
     return YES;

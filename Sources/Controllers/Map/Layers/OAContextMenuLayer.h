@@ -33,7 +33,7 @@
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;
 
-- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide;
+- (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide;
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
 

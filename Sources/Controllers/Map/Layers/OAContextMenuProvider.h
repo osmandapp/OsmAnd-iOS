@@ -36,11 +36,7 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 
 - (BOOL) isSecondaryProvider;
 
-// TODO: test this new func
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
-
-// TODO: delete this old func?
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation;
 
 - (CLLocation *) getObjectLocation:(id)o;
 - (OAPointDescription *) getObjectName:(id)o;

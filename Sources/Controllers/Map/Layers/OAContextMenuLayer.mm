@@ -392,279 +392,9 @@
     return nil;
 }
 
-//- (void) collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
-//{
-//    //TODO: implement
-//}
-//
-//- (void) collectObjectsFromLayers
-//{
-//    //TODO: implement
-//}
-//
-//- (void) collectObjectsFromMap2
-//{
-//    //TODO: implement
-//}
-
 - (BOOL) isSecondaryProvider
 {
     return NO;
-}
-
-- (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
-{
-    // TODO: testing code
-    
-    [self showContextMenuNEW:touchPoint showUnknownLocation:showUnknownLocation forceHide:forceHide];
-    return @[];
-    
-    
-    // TODO: delete old code?
-    
-    
-    //    OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
-    
-    
-    OAMapRendererView *mapView = self.mapView;
-    OAMapViewController *mapViewController = self.mapViewController;
-    NSMutableArray<OATargetPoint *> *found = [NSMutableArray array];
-    
-    CGFloat delta = 20.0;
-    CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
-    double lat = coord.latitude;
-    double lon = coord.longitude;
-    double latTap = lat;
-    double lonTap = lon;
-    NSString *mapIconName = nil;
-    
-    CLLocationCoordinate2D objectCoord = kCLLocationCoordinate2DInvalid;
-    OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
-    
-    
-    
-    
-
-    BOOL osmRoutesAlreadyAdded = NO;
-    const auto& symbols = [mapView getSymbolsIn:area strict:NO];
-    
-    // <??
-    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
-
-    if (!_pointLayers)
-    {
-        _pointLayers = @[self.mapViewController.mapLayers.myPositionLayer,
-                         self.mapViewController.mapLayers.mapillaryLayer,
-                         self.mapViewController.mapLayers.downloadedRegionsLayer,
-                         self.mapViewController.mapLayers.gpxMapLayer];
-    }
-    for (OAMapLayer *layer in _pointLayers)
-    {
-        BOOL a = ((id<OAContextMenuProvider>)layer).isSecondaryProvider;
-        
-        if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
-        {
-            [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
-            
-            
-        }
-    }
-    NSMutableArray<OAMapLayer *> *layers = [[mapViewController.mapLayers getLayers] mutableCopy];
-    [layers removeObjectsInArray:@[self.mapViewController.mapLayers.myPositionLayer,
-                                   self.mapViewController.mapLayers.mapillaryLayer,
-                                   self.mapViewController.mapLayers.downloadedRegionsLayer]];
-    
-    // ??>
-
-    for (const auto symbolInfo : symbols)
-    {
-        if (symbolInfo.mapSymbol->ignoreClick) {
-            continue;
-        }
-        
-        if (!showUnknownLocation)
-        {
-            if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
-            {
-                lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
-                lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
-                
-                if (const auto billboardAdditionalParams = std::dynamic_pointer_cast<const OsmAnd::MapSymbolsGroup::AdditionalBillboardSymbolInstanceParameters>(symbolInfo.instanceParameters))
-                {
-                    if (billboardAdditionalParams->overridesPosition31)
-                    {
-                        lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x);
-                        lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
-                    }
-                }
-                objectCoord = CLLocationCoordinate2DMake(lat, lon);
-            }
-        }
-        if (symbolInfo.mapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Icon)
-        {
-            if (const auto billboardRasterMapSymbol = std::static_pointer_cast<const OsmAnd::BillboardRasterMapSymbol>(symbolInfo.mapSymbol))
-            {
-                mapIconName = billboardRasterMapSymbol->content.toNSString();
-            }
-        }
-        if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
-        {
-            if (markerGroup->getMapMarker() == _contextPinMarker.get())
-            {
-                OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-                targetPoint.type = OATargetContext;
-                return @[targetPoint];
-            }
-        }
-        
-        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(lat, lon);
-        for (OAMapLayer *layer in layers)
-        {
-            if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
-            {
-                NSMutableArray<OATargetPoint *> *currentFound = [NSMutableArray array];
-                [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:&symbolInfo found:currentFound unknownLocation:showUnknownLocation];
-               
-                for (OATargetPoint *point in currentFound)
-                {
-                    if ([point.targetObj isKindOfClass:OAPOI.class])
-                        ((OAPOI *)point.targetObj).mapIconName = mapIconName;
-                }
-                [found addObjectsFromArray:currentFound];
-            }
-        }
-    }
-    
-    if (found.count > 0)
-    {
-        if (found.count > 1)
-        {
-            // Sometimes there appears two copy of one point. We decided to filter it right here (in UI).
-            // https://github.com/osmandapp/OsmAnd-Issues/issues/533
-            
-            NSMutableSet<OATargetPoint *> *filtredPointsSet = [NSMutableSet new];
-            for (OATargetPoint *point in found)
-                [filtredPointsSet addObject:point];
-            found = [NSMutableArray arrayWithArray:filtredPointsSet.allObjects];
-        }
-        
-        NSMutableArray *existingPoints = [NSMutableArray array];
-        for (OATargetPoint *targetPoint in found)
-        {
-            NSString *formattedTargetName = nil;
-            NSString *addressString = nil;
-            OAPOI *poi = [targetPoint.targetObj isKindOfClass:[OAPOI class]] ? (OAPOI *)targetPoint.targetObj : nil;
-            if (poi)
-            {
-                for (OATargetPoint *targetPoint in found)
-                {
-                    OATransportStop *transportStop = [targetPoint.targetObj isKindOfClass:[OATransportStop class]] ? (OATransportStop *)targetPoint.targetObj : nil;
-                    if (transportStop && [poi.name isEqualToString:transportStop.name])
-                    {
-                        transportStop.poi = poi;
-                        [existingPoints addObject:targetPoint];
-                        break;
-                    }
-                }
-            }
-            
-            OAPOIType *poiType = poi ? poi.type : nil;
-            NSString *buildingNumber = poi ? poi.buildingNumber : nil;
-            BOOL needAddress = YES;
-            BOOL isAddressFound = NO;
-            if (poiType)
-                needAddress = ![@"place" isEqualToString:poiType.tag];
-
-            NSString *caption = targetPoint.title;
-            if (caption.length == 0 && (targetPoint.type == OATargetLocation || targetPoint.type == OATargetPOI))
-            {
-                if (!roadTitle || roadTitle.length == 0)
-                {
-                    if (buildingNumber.length > 0)
-                    {
-                        addressString = buildingNumber;
-                        isAddressFound = YES;
-                    }
-                    else
-                    {
-                        addressString = OALocalizedString(@"map_no_address");
-                    }
-                }
-                else
-                {
-                    addressString = roadTitle;
-                    isAddressFound = YES;
-                }
-            }
-            else if (caption.length > 0)
-            {
-                isAddressFound = YES;
-                addressString = caption;
-            }
-            
-            if (isAddressFound || addressString)
-            {
-                formattedTargetName = addressString;
-            }
-            else if (poiType)
-            {
-                isAddressFound = YES;
-                formattedTargetName = poiType.nameLocalized;
-            }
-            else if (buildingNumber.length > 0)
-            {
-                isAddressFound = YES;
-                formattedTargetName = buildingNumber;
-            }
-            else
-            {
-                formattedTargetName = [OAPointDescription getLocationName:targetPoint.location.latitude lon:targetPoint.location.longitude sh:NO];
-            }
-
-            if (poi && poi.nameLocalized.length == 0)
-                poi.nameLocalized = formattedTargetName;
-            
-            targetPoint.title = formattedTargetName;
-            targetPoint.addressFound = isAddressFound;
-            targetPoint.titleAddress = needAddress ? roadTitle : nil;
-        }
-        if (existingPoints.count > 0)
-            [found removeObjectsInArray:existingPoints];
-        
-        [self processTransportStops:found coord:coord];
-
-        BOOL gpxModeActive = [[OARootViewController instance].mapPanel gpxModeActive];
-        [found sortUsingComparator:^NSComparisonResult(OATargetPoint *obj1, OATargetPoint *obj2) {
-            
-            double dist1 = OsmAnd::Utilities::distance(lonTap, latTap, obj1.location.longitude, obj1.location.latitude);
-            double dist2 = OsmAnd::Utilities::distance(lonTap, latTap, obj2.location.longitude, obj2.location.latitude);
-            
-            NSInteger index1 = obj1.sortIndex;
-            if (gpxModeActive && obj1.type == OATargetWpt)
-                index1 = 0;
-            
-            NSInteger index2 = obj2.sortIndex;
-            if (gpxModeActive && obj2.type == OATargetWpt)
-                index2 = 0;
-            
-            if (index1 == index2)
-            {
-                if (dist1 == dist2)
-                    return NSOrderedSame;
-                else
-                    return dist1 < dist2 ? NSOrderedAscending : NSOrderedDescending;
-            }
-            else
-            {
-                return index1 < index2 ? NSOrderedAscending : NSOrderedDescending;
-            }
-        }];
-    }
-    
-    if (found.count == 1 && CLLocationCoordinate2DIsValid(objectCoord) && found.firstObject.type != OATargetGPX)
-        found[0].location = objectCoord;
-    
-    return found;
 }
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude
@@ -719,9 +449,9 @@
     return targetPoint;
 }
 
-// MARK: showContextMenuNEW
+// MARK: showContextMenu
 
-- (BOOL) showContextMenuNEW:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
+- (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
     OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
     CLLocation *pointLatLon = [result getPointLatLon];
@@ -769,13 +499,13 @@
         }
         else
         {
-            [self showContextMenuNEW:latLon pointDescription:pointDescription object:selectedObject provider:provider];
+            [self showContextMenu:latLon pointDescription:pointDescription object:selectedObject provider:provider];
         }
         return YES;
     }
     else if (selectedObjects.count > 1)
     {
-        [self showContextMenuForSelectedObjectsNEW:pointLatLon selectedObjects:selectedObjects];
+        [self showContextMenuForSelectedObjects:pointLatLon selectedObjects:selectedObjects];
         return YES;
         
     }
@@ -794,17 +524,11 @@
     return NO;
 }
 
-- (void) showContextMenuForSelectedObjectsNEW:(CLLocation *)latLon selectedObjects:(NSArray<OASelectedMapObject *> *)selectedObjects
+- (void) showContextMenuForSelectedObjects:(CLLocation *)latLon selectedObjects:(NSArray<OASelectedMapObject *> *)selectedObjects
 {
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
     
-    // TODO: does it needed in ios here?
-    //[mapPanel hideContextMenu];
-    
-    
-    // TODO: run without OATargetPoint
-    // just for testing
-    
+    // Android calls context menu without TargetPoint, but with SelectedMapObject directly
     NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray new];
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
@@ -825,7 +549,7 @@
         [mapPanel showContextMenuWithPoints:targetPoints];
 }
 
-- (void) showContextMenuNEW:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(OASelectedMapObject *)object provider:(id<OAContextMenuProvider>)provider
+- (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(OASelectedMapObject *)object provider:(id<OAContextMenuProvider>)provider
 {
     if (_isInAddGpxPointMode)
     {
@@ -836,10 +560,6 @@
     }
     else if (!provider || ![provider showMenuAction:object])
     {
-
-        // TODO: does it needed in ios here?
-        //[mapPanel hideContextMenu];
-        
         OATargetPoint *targetPoint;
         if (provider)
             targetPoint = [provider getTargetPoint:object.object];
@@ -856,135 +576,6 @@
 - (BOOL) showMenuAction:(id)object
 {
     return NO;
-}
-
-
-- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
-{
-    
-    // TODO: testing code
-    
-    NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation forceHide:forceHide];
-    return;
-    
-    
-    
-    // TODO: delete old code?
-    
-    
-    if (selectedObjects.count > 0)
-    {
-        [OsmAndApp instance].mapMode = OAMapModeFree;
-        if (selectedObjects[0].type == OATargetContext)
-            [[OARootViewController instance].mapPanel reopenContextMenu];
-        else
-            [[OARootViewController instance].mapPanel showContextMenuWithPoints:selectedObjects];
-    }
-    else if (showUnknownLocation)
-    {
-        [OsmAndApp instance].mapMode = OAMapModeFree;
-        CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
-        OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
-        [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];
-    }
-    else
-    {
-        CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
-        [[OARootViewController instance].mapPanel processNoSymbolFound:coord forceHide:forceHide];
-    }
-}
-
-- (NSArray<NSString *> *) getPublicTransportTypes
-{
-    OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
-    if (!_publicTransportTypes)
-    {
-        OAPOICategory *category = [poiHelper getPoiCategoryByName:@"transportation"];
-        if (category)
-        {
-            NSArray<OAPOIFilter *> *filters = category.poiFilters;
-            NSMutableArray *publicTransportTypes = [NSMutableArray array];
-            for (OAPOIFilter *poiFilter in filters)
-            {
-                if ([poiFilter.name isEqualToString:@"public_transport"])
-                {
-                    for (OAPOIType *poiType in poiFilter.poiTypes)
-                    {
-                        [publicTransportTypes addObject:poiType.name];
-                        for (OAPOIType *poiAdditionalType in poiType.poiAdditionals)
-                            [publicTransportTypes addObject:poiAdditionalType.name];
-                    }
-                }
-            }
-            _publicTransportTypes = [NSArray arrayWithArray:publicTransportTypes];
-        }
-    }
-    return _publicTransportTypes;
-}
-
-- (NSArray<OATransportStop *> *) findTransportStopsAt:(CLLocationCoordinate2D)coord
-{
-    NSMutableArray<OATransportStop *> *transportStops = [NSMutableArray array];
-    
-    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
-    const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(coord.latitude, coord.longitude));
-    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kShowStopsRadiusMeters, point31);
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
-    const auto& obfsCollection = app.resourcesManager->obfsCollection;
-    const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
-    search->performSearch(*searchCriteria,
-                          [self, transportStops]
-                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
-                          {
-                              const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
-                              [transportStops addObject:[[OATransportStop alloc] initWithStop:transportStop]];
-                          });
-    
-    return transportStops;
-}
-
-- (void) sortTransportStops:(CLLocationCoordinate2D)coord transportStops:(NSMutableArray<OATransportStop *> *)transportStops
-{
-    for (OATransportStop *transportStop in transportStops)
-        transportStop.distance = OsmAnd::Utilities::distance(coord.longitude, coord.latitude, transportStop.location.longitude, transportStop.location.latitude);
-
-    [transportStops sortUsingComparator:^NSComparisonResult(OATransportStop * _Nonnull s1, OATransportStop * _Nonnull s2) {
-        return [OAUtilities compareInt:s1.distance y:s2.distance];
-    }];
-}
-
-- (void) processTransportStops:(NSMutableArray<OATargetPoint *> *)selectedObjects coord:(CLLocationCoordinate2D)coord
-{
-    NSArray<NSString *> *publicTransportTypes = [self getPublicTransportTypes];
-    if (publicTransportTypes)
-    {
-        NSMutableArray<OATargetPoint *> *transportStopAmenities = [NSMutableArray array];
-        for (OATargetPoint *point in selectedObjects)
-        {
-            id object = point.targetObj;
-            if ([object isKindOfClass:[OAPOI class]])
-            {
-                OAPOI *amenity = (OAPOI *)object;
-                if (amenity.type.name.length > 0 && [publicTransportTypes containsObject:amenity.type.name])
-                    [transportStopAmenities addObject:point];
-            }
-        }
-        if (transportStopAmenities.count > 0)
-        {
-            for (OATargetPoint *point in transportStopAmenities)
-            {
-                OAPOI *amenity = (OAPOI *)point.targetObj;
-                OATransportStop *transportStop = [OATransportStopsBaseController findNearestTransportStopForAmenity:amenity];
-                if (transportStop && self.mapViewController.mapLayers.transportStopsLayer)
-                {
-                    [selectedObjects removeObject:point];
-                    transportStop.poi = point.targetObj;
-                    [selectedObjects addObject:[self.mapViewController.mapLayers.transportStopsLayer getTargetPoint:transportStop]];
-                }
-            }
-        }
-    }
 }
 
 - (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;

@@ -17,6 +17,7 @@
 #import "OAPointDescription.h"
 #import "OACompoundIconUtils.h"
 #import "OAAppSettings.h"
+#import "OAMapSelectionResult.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapPrimitiviser.h>
@@ -26,6 +27,8 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/SingleSkImage.h>
 #include <binaryRead.h>
+
+static const int START_ZOOM = 10;
 
 @interface OAImpassableRoadsLayer () <OAStateChangedListener>
 
@@ -157,32 +160,24 @@
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    // TODO: implement?
-}
-
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
-{
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    NSArray<OAAvoidRoadInfo *> *impassableRoads = [[OAAvoidSpecificRoads instance] getImpassableRoads];
+    
+    if ([self.mapViewController getMapZoom] >= START_ZOOM && !excludeUntouchableObjects && ![NSArray isEmpty:impassableRoads])
     {
-        for (const auto& r : _markersCollection->getMarkers())
+        int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+        CGPoint pixel = [result getPoint];
+        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 2));
+        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 3));
+        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+        if (touchPolygon31 == OsmAnd::AreaI())
+            return;
+        
+        for (OAAvoidRoadInfo *road in impassableRoads)
         {
-            if (markerGroup->getMapMarker() == r.get())
-            {
-                double lat = OsmAnd::Utilities::get31LatitudeY(r->getPosition().y);
-                double lon = OsmAnd::Utilities::get31LongitudeX(r->getPosition().x);
-                OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
-                NSArray<OAAvoidRoadInfo *> *roads = [avoidRoads getImpassableRoads];
-                for (OAAvoidRoadInfo *roadInfo in roads)
-                {
-                    CLLocation *location = [avoidRoads getLocation:roadInfo.roadId];
-                    if (location && [OAUtilities isCoordEqual:location.coordinate.latitude srcLon:location.coordinate.longitude destLat:lat destLon:lon])
-                    {
-                        OATargetPoint *targetPoint = [self getTargetPoint:roadInfo];
-                        if (![found containsObject:targetPoint])
-                            [found addObject:targetPoint];
-                    }
-                }
-            }
+            CLLocation *latLon = [[OAAvoidSpecificRoads instance] getLocation:road.roadId];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:latLon.coordinate.latitude lon:latLon.coordinate.longitude polygon31:touchPolygon31];
+            if (shouldAdd)
+                [result collect:road provider:self];
         }
     }
 }

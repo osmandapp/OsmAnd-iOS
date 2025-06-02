@@ -201,18 +201,6 @@
     
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
-{
-    OsmAnd::TransportStopSymbolsProvider::TransportStopSymbolsGroup* transportStopSymbolGroup = dynamic_cast<OsmAnd::TransportStopSymbolsProvider::TransportStopSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
-    if (transportStopSymbolGroup != nullptr)
-    {
-        const auto transportStop = transportStopSymbolGroup->transportStop;
-        OATargetPoint *targetPoint = [self getTargetPoint:[[OATransportStop alloc] initWithStop:transportStop]];
-        if (![found containsObject:targetPoint])
-            [found addObject:targetPoint];
-    }
-}
-
 - (BOOL)isSecondaryProvider
 {
     return NO;

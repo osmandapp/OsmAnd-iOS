@@ -379,31 +379,6 @@ static const int START_ZOOM = 10;
     return (int) (r * self.mapView.displayDensityFactor);
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
-{
-    if (![[OAAppSettings sharedManager].mapSettingShowOfflineEdits get])
-        return;
-    for (const auto& edit : _osmEditsCollection->getMarkers())
-    {
-        double lat = OsmAnd::Utilities::get31LatitudeY(edit->getPosition().y);
-        double lon = OsmAnd::Utilities::get31LongitudeX(edit->getPosition().x);
-        NSArray * data = [self getAllPoints];
-        for (OAOsmPoint *osmPoint in data)
-        {
-            double pointLat = osmPoint.getLatitude;
-            double pointLon = osmPoint.getLongitude;
-            if ([OAUtilities isCoordEqual:pointLat srcLon:pointLon destLat:lat destLon:lon])
-            {
-                if (OsmAnd::Utilities::distance(pointLon, pointLat, point.longitude, point.latitude) < 15) {
-                    OATargetPoint *targetPoint = [self getTargetPoint:osmPoint];
-                    if (![found containsObject:targetPoint])
-                        [found addObject:targetPoint];
-                }
-            }
-        }
-    }
-}
-
 - (BOOL)isSecondaryProvider
 {
     return NO;

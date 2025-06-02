@@ -289,26 +289,6 @@ static const int START_ZOOM = 6;
     }
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
-{
-    if (self.isVisible)
-    {
-        if (const auto mapSymbol = dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo->mapSymbol))
-        {
-            const auto symbolPos31 = mapSymbol->getPosition31();
-            for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
-            {
-                if (point.favorite->getPosition31() == symbolPos31)
-                {
-                    OATargetPoint *targetPoint = [self getTargetPointCpp:point.favorite.get()];
-                    if (![found containsObject:targetPoint])
-                        [found addObject:targetPoint];
-                }
-            }
-        }
-    }
-}
-
 - (BOOL)isSecondaryProvider
 {
     return NO;

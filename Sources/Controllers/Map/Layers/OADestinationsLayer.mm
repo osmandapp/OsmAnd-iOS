@@ -597,31 +597,6 @@
     return NO;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
-{
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
-    {
-        for (const auto& dest : _destinationsMarkersCollection->getMarkers())
-        {
-            if (markerGroup->getMapMarker() == dest.get())
-            {
-                double lat = OsmAnd::Utilities::get31LatitudeY(dest->getPosition().y);
-                double lon = OsmAnd::Utilities::get31LongitudeX(dest->getPosition().x);
-                
-                for (OADestination *destination in self.app.data.destinations)
-                {
-                    if ([OAUtilities isCoordEqual:destination.latitude srcLon:destination.longitude destLat:lat destLon:lon])
-                    {
-                        OATargetPoint *targetPoint = [self getTargetPoint:destination];                        
-                        if (![found containsObject:targetPoint])
-                            [found addObject:targetPoint];
-                    }
-                }
-            }
-        }
-    }
-}
-
 - (BOOL)isSecondaryProvider
 {
     return NO;

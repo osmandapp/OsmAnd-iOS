@@ -195,22 +195,6 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     }
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
-{
-    OAOsmNotesMapLayerProvider::NotesSymbolsGroup* notesSymbolGroup = dynamic_cast<OAOsmNotesMapLayerProvider::NotesSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
-    if (notesSymbolGroup != nullptr)
-    {
-        std::shared_ptr<const OAOnlineOsmNote> note = notesSymbolGroup->note;
-        if (note != nullptr)
-        {
-            OATargetPoint *targetPoint = [self getTargetPointCpp:note.get()];
-            targetPoint.targetObj = [[OAOnlineOsmNoteWrapper alloc] initWithNote:note];
-            if (![found containsObject:targetPoint])
-                [found addObject:targetPoint];
-        }
-    }
-}
-
 - (BOOL)isSecondaryProvider
 {
     return NO;

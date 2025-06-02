@@ -17,6 +17,8 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
+#import "OAMapSelectionResult.h"
+#import "Localization.h"
 
 #include <SkCGUtils.h>
 #include <SkImage.h>
@@ -189,92 +191,158 @@
 
 #pragma mark - OAContextMenuProvider
 
+- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    if ([self.mapViewController getMapZoom] >= 3 && !excludeUntouchableObjects)
+    {
+        CGPoint point = [result getPoint];
+        int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+        if (touchPolygon31 == OsmAnd::AreaI())
+            return;
+        
+        for (const auto& routePoint : _markersCollection->getMarkers())
+        {
+            double lat = OsmAnd::Utilities::get31LatitudeY(routePoint->getPosition().y);
+            double lon = OsmAnd::Utilities::get31LongitudeX(routePoint->getPosition().x);
+            
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+            if (shouldAdd)
+            {
+                OAMapMarkerWrapper *wrapper = [[OAMapMarkerWrapper alloc] init];
+                wrapper.marker = routePoint;
+                [result collect:wrapper provider:self];
+            }
+        }
+    }
+}
+
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
+    if ([obj isKindOfClass:OAMapMarkerWrapper.class])
+    {
+        OAMapMarkerWrapper *wrapper = obj;
+        if (const auto routePoint = reinterpret_cast<const OsmAnd::MapMarker *>(wrapper.marker.get()))
+        {
+            OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+            double lat = OsmAnd::Utilities::get31LatitudeY(routePoint->getPosition().y);
+            double lon = OsmAnd::Utilities::get31LongitudeX(routePoint->getPosition().x);
+            targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+            
+            OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
+            OARTargetPoint *startPoint = [targetPointsHelper getPointToStart];
+            OARTargetPoint *finishPoint = [targetPointsHelper getPointToNavigate];
+            NSArray<OARTargetPoint *> *intermediates = [targetPointsHelper getIntermediatePoints];
+            
+            if (startPoint)
+            {
+                if ([OAUtilities isCoordEqual:startPoint.point.coordinate.latitude srcLon:startPoint.point.coordinate.longitude destLat:lat destLon:lon])
+                {
+                    targetPoint.title = [startPoint getPointDescription].name;
+                    targetPoint.icon = [UIImage imageNamed:@"ic_list_startpoint"];
+                    targetPoint.type = OATargetRouteStart;
+                    targetPoint.targetObj = startPoint;
+                }
+            }
+            if (!targetPoint.targetObj && finishPoint)
+            {
+                if ([OAUtilities isCoordEqual:finishPoint.point.coordinate.latitude srcLon:finishPoint.point.coordinate.longitude destLat:lat destLon:lon])
+                {
+                    targetPoint.title = [finishPoint getPointDescription].name;
+                    targetPoint.icon = [UIImage imageNamed:@"ic_list_destination"];
+                    targetPoint.type = OATargetRouteFinish;
+                    targetPoint.targetObj = finishPoint;
+                }
+            }
+            if (!targetPoint.targetObj)
+            {
+                for (OARTargetPoint *p in intermediates)
+                {
+                    if ([OAUtilities isCoordEqual:p.point.coordinate.latitude srcLon:p.point.coordinate.longitude destLat:lat destLon:lon])
+                    {
+                        targetPoint.title = [p getPointDescription].name;
+                        targetPoint.icon = [UIImage imageNamed:@"list_intermediate"];
+                        targetPoint.type = OATargetRouteIntermediate;
+                        targetPoint.targetObj = p;
+                    }
+                }
+            }
+            
+            targetPoint.sortIndex = (NSInteger)targetPoint.type;
+            return targetPoint;
+        }
+        else
+        {
+            return nil;
+        }
+    }
     return nil;
 }
 
-- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+- (OAPointDescription *)getObjectName:(id)o
 {
-    if (const auto routePoint = reinterpret_cast<const OsmAnd::MapMarker *>(obj))
+    if ([o isKindOfClass:OAMapMarkerWrapper.class])
     {
-        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-        double lat = OsmAnd::Utilities::get31LatitudeY(routePoint->getPosition().y);
-        double lon = OsmAnd::Utilities::get31LongitudeX(routePoint->getPosition().x);
-        targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
-        
-        OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
-        OARTargetPoint *startPoint = [targetPointsHelper getPointToStart];
-        OARTargetPoint *finishPoint = [targetPointsHelper getPointToNavigate];
-        NSArray<OARTargetPoint *> *intermediates = [targetPointsHelper getIntermediatePoints];
-        
-        if (startPoint)
+        OAMapMarkerWrapper *wrapper = o;
+        if (const auto routePoint = reinterpret_cast<const OsmAnd::MapMarker *>(wrapper.marker.get()))
         {
-            if ([OAUtilities isCoordEqual:startPoint.point.coordinate.latitude srcLon:startPoint.point.coordinate.longitude destLat:lat destLon:lon])
+            NSString *name;
+            NSString *type;
+            double lat = OsmAnd::Utilities::get31LatitudeY(routePoint->getPosition().y);
+            double lon = OsmAnd::Utilities::get31LongitudeX(routePoint->getPosition().x);
+            
+            OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
+            OARTargetPoint *startPoint = [targetPointsHelper getPointToStart];
+            OARTargetPoint *finishPoint = [targetPointsHelper getPointToNavigate];
+            NSArray<OARTargetPoint *> *intermediates = [targetPointsHelper getIntermediatePoints];
+            
+            if (startPoint && [OAUtilities isCoordEqual:startPoint.point.coordinate.latitude srcLon:startPoint.point.coordinate.longitude destLat:lat destLon:lon])
             {
-                targetPoint.title = [startPoint getPointDescription].name;
-                targetPoint.icon = [UIImage imageNamed:@"ic_list_startpoint"];
-                targetPoint.type = OATargetRouteStart;
-                targetPoint.targetObj = startPoint;
+                name = [startPoint getPointDescription].name;
+                type = OALocalizedString(@"starting_point");
             }
-        }
-        if (!targetPoint.targetObj && finishPoint)
-        {
-            if ([OAUtilities isCoordEqual:finishPoint.point.coordinate.latitude srcLon:finishPoint.point.coordinate.longitude destLat:lat destLon:lon])
+            else if (finishPoint && [OAUtilities isCoordEqual:finishPoint.point.coordinate.latitude srcLon:finishPoint.point.coordinate.longitude destLat:lat destLon:lon])
             {
-                targetPoint.title = [finishPoint getPointDescription].name;
-                targetPoint.icon = [UIImage imageNamed:@"ic_list_destination"];
-                targetPoint.type = OATargetRouteFinish;
-                targetPoint.targetObj = finishPoint;
+                name = [finishPoint getPointDescription].name;
+                type = OALocalizedString(@"destination_point");
             }
-        }
-        if (!targetPoint.targetObj)
-        {
-            for (OARTargetPoint *p in intermediates)
+            else
             {
-                if ([OAUtilities isCoordEqual:p.point.coordinate.latitude srcLon:p.point.coordinate.longitude destLat:lat destLon:lon])
+                for (int i = 0; i < intermediates.count; i ++)
                 {
-                    targetPoint.title = [p getPointDescription].name;
-                    targetPoint.icon = [UIImage imageNamed:@"list_intermediate"];
-                    targetPoint.type = OATargetRouteIntermediate;
-                    targetPoint.targetObj = p;
+                    OARTargetPoint *p = intermediates[i];
+                    if ([OAUtilities isCoordEqual:p.point.coordinate.latitude srcLon:p.point.coordinate.longitude destLat:lat destLon:lon])
+                    {
+                        name = [p getPointDescription].name;
+                        type = OALocalizedString(@"destination_point", @(i+1));
+                    }
                 }
             }
+            
+            return [[OAPointDescription alloc] initWithType:POINT_TYPE_TARGET typeName:type name:name];
         }
-        
-        targetPoint.sortIndex = (NSInteger)targetPoint.type;
-        return targetPoint;
     }
-    else
+    return nil;
+}
+
+- (CLLocation *)getObjectLocation:(id)o
+{
+    if ([o isKindOfClass:OAMapMarkerWrapper.class])
     {
-        return nil;
+        OAMapMarkerWrapper *wrapper = o;
+        if (const auto routePoint = reinterpret_cast<const OsmAnd::MapMarker *>(wrapper.marker.get()))
+        {
+            double lat = OsmAnd::Utilities::get31LatitudeY(routePoint->getPosition().y);
+            double lon = OsmAnd::Utilities::get31LongitudeX(routePoint->getPosition().x);
+            return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+        }
     }
+    return nil;
 }
 
 - (BOOL) showMenuAction:(id)object
 {
     return NO;
-}
-
-- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
-{
-    
-}
-
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
-{
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
-    {
-        for (const auto& routePoint : _markersCollection->getMarkers())
-        {
-            if (markerGroup->getMapMarker() == routePoint.get())
-            {
-                OATargetPoint *targetPoint = [self getTargetPointCpp:routePoint.get()];
-                if (![found containsObject:targetPoint])
-                    [found addObject:targetPoint];
-            }
-        }
-    }
 }
 
 - (BOOL)isSecondaryProvider
@@ -352,5 +420,10 @@
 {
     return EOAPinAlignmentCenterHorizontal;
 }
+
+@end
+
+
+@implementation OAMapMarkerWrapper
 
 @end

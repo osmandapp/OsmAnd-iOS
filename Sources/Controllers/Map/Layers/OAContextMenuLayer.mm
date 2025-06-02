@@ -71,8 +71,6 @@
     BOOL _isInChangePositionMode;
     UIImageView *_changePositionPin;
     
-    BOOL _isInAddGpxPointMode;
-    
     NSArray<NSString *> *_publicTransportTypes;
     
     id<OAMoveObjectProvider> _selectedObjectContextMenuProvider;
@@ -225,16 +223,6 @@
     _selectedObjectContextMenuProvider = nil;
     _isInChangePositionMode = NO;
     _cachedTargetPoint = CGPointZero;
-}
-
-- (void) enterAddGpxPointMode
-{
-    _isInAddGpxPointMode = YES;
-}
-
-- (void) quitAddGpxPoint
-{
-    _isInAddGpxPointMode = NO;
 }
 
 - (void) onMapFrameRendered
@@ -462,13 +450,8 @@
         if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
             id<OAContextMenuProvider> provider = selectedObject.provider;
-            
-            
-            //if (provider != null && provider.runExclusiveAction(selectedObject.object(), showUnknownLocation)) {
-            //    return true;
-            //}
-            
-            //TODO: implement?
+            if (provider && [provider runExclusiveAction:selectedObject.object unknownLocation:showUnknownLocation])
+                return YES;
         }
     }
     
@@ -493,14 +476,7 @@
             latLon = pointLatLon;
         }
         
-        if (_isInAddGpxPointMode)
-        {
-//            // TODO: implement
-        }
-        else
-        {
-            [self showContextMenu:latLon pointDescription:pointDescription object:selectedObject provider:provider];
-        }
+        [self showContextMenu:latLon pointDescription:pointDescription object:selectedObject provider:provider];
         return YES;
     }
     else if (selectedObjects.count > 1)
@@ -511,7 +487,6 @@
     }
     else if (showUnknownLocation)
     {
-        
         [OsmAndApp instance].mapMode = OAMapModeFree;
         CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
         OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
@@ -551,14 +526,7 @@
 
 - (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(OASelectedMapObject *)object provider:(id<OAContextMenuProvider>)provider
 {
-    if (_isInAddGpxPointMode)
-    {
-        
-        // TODO: implement
-        
-        
-    }
-    else if (!provider || ![provider showMenuAction:object])
+    if (!provider || ![provider showMenuAction:object])
     {
         OATargetPoint *targetPoint;
         if (provider)
@@ -574,6 +542,11 @@
 }
 
 - (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

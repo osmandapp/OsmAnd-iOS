@@ -1556,8 +1556,6 @@ colorizationScheme:(int)colorizationScheme
         cachedTrack[@"gpx"] = [self getGpxItem:QString::fromNSString(filePath)];
 }
 
-//TODO: delete ?
-
 - (void) getTracksFromPoint:(CLLocationCoordinate2D)point res:(NSMutableArray<OATargetPoint *> *)res
 {
     double textSize = [OAAppSettings.sharedManager.textSize get];
@@ -1918,9 +1916,7 @@ colorizationScheme:(int)colorizationScheme
     
     OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
     if (touchPolygon31 == OsmAnd::AreaI())
-    {
         return;
-    }
     
     NSMutableDictionary<NSString *,OASGpxFile *> *visibleGpxFiles = [[OASelectedGPXHelper instance] getSelectedGPXFiles];
     for (OASGpxFile *g in [visibleGpxFiles allValues])
@@ -1956,7 +1952,6 @@ colorizationScheme:(int)colorizationScheme
     OsmAnd::AreaI screenBbox = self.mapView.getVisibleBBox31;
     return screenBbox.contains(gpxFileBbox);
 }
-
 
 - (NSArray<OASWptPt *> *) getSelectedFilePoints:(OASGpxFile *)g
 {
@@ -2016,10 +2011,11 @@ colorizationScheme:(int)colorizationScheme
 
 - (BOOL) showMenuAction:(id)object
 {
-    if ([object isKindOfClass:OASelectedGpxPoint.class])
-    {
-        // TODO: implement
-    }
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+{
     return NO;
 }
 

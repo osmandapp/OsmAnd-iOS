@@ -227,4 +227,9 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     return NO;
 }
 
+- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
 @end

@@ -597,6 +597,11 @@
     return NO;
 }
 
+- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
 - (BOOL)isSecondaryProvider
 {
     return NO;

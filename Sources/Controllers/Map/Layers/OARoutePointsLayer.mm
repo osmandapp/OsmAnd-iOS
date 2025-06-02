@@ -350,6 +350,11 @@
     return NO;
 }
 
+- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
 #pragma mark - OAMoveObjectProvider
 
 - (BOOL)isObjectMovable:(id)object

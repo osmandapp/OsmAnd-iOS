@@ -305,9 +305,7 @@ static int MIN_POINTS_ZOOM = 17;
 {
     OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:pixel radius:radius];
     if (touchPolygon31 == OsmAnd::AreaI())
-    {
         return OsmAnd::AreaI();
-    }
     
     int32_t minX31 = INT32_MAX;
     int32_t minY31 = INT32_MAX;
@@ -351,6 +349,11 @@ static int MIN_POINTS_ZOOM = 17;
 }
 
 - (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

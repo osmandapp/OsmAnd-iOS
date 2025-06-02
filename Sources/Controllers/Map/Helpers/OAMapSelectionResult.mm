@@ -99,7 +99,6 @@
                 [detailsObject merge:overlapped[i]];
             }
             
-            // TODO: Test this line detailsObjects.removeAll(overlapped);
             [detailsObjects removeObjectsInArray:overlapped];
         }
         [detailsObject addObject:object provider:selectedObject.provider];

@@ -163,15 +163,11 @@
         [_syntheticAmenity setRegionName:regionName];
     }
     
-    
-    //TODO: implement?
-    
-//    Map<Integer, List<TagValuePair>> groups = amenity.getTagGroups();
-//    if (syntheticAmenity.getTagGroups() == null && groups != null) {
-//        syntheticAmenity.setTagGroups(new HashMap<>(groups));
-//    }
-    
-    
+    // Android also reads here tagGroups.
+    //Map<Integer, List<TagValuePair>> groups = amenity.getTagGroups();
+    //if (syntheticAmenity.getTagGroups() == null && groups != null) {
+    //    syntheticAmenity.setTagGroups(new HashMap<>(groups));
+    //}
     
     int travelElo = [amenity getTravelEloNumber];
     if ([_syntheticAmenity getTravelEloNumber] == DEFAULT_ELO && travelElo != DEFAULT_ELO)

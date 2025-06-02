@@ -60,13 +60,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return self;
 }
 
-//TODO: implement later if needed
-//public Map<LatLon, BackgroundType> getTouchedFullMapObjects()
-//public Map<LatLon, BackgroundType> getTouchedSmallMapObjects()
-//public boolean hasTouchedMapObjects()
-//public void clearTouchedMapObjects()
-
-
 - (OAMapSelectionResult *) collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
 {
     if (!_provider)
@@ -113,8 +106,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         }
     }
 }
-
-// public void acquireTouchedMapObjects(@NonNull RotatedTileBox tileBox, @NonNull PointF point, boolean unknownLocation)
 
 - (void) selectObjectsFromOpenGl:(OAMapSelectionResult *)result point:(CGPoint)point
 {
@@ -449,17 +440,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return routeSelectorFilter;
 }
 
-
-
-
-//private boolean putRouteGpxToSelected(
-
-//private boolean isUniqueOsmRoute(
-
-//private boolean addAmenity(
-
-
-
 - (BOOL) isUniqueAmenity:(NSMutableArray<OASelectedMapObject *> *)selectedObjects amenity:(OAPOI *)amenity
 {
     for (OASelectedMapObject *selectedObject in selectedObjects)
@@ -665,16 +645,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     }
     return nil;
 }
-
-
-
-//public static PlaceDetailsObject fetchOtherData(
-
-//public static PlaceDetailsObject fetchOtherData(
-
-//private static boolean copyCoordinates(
-
-
 
 - (QHash<QString, QString>) toQHash:(NSDictionary<NSString *, NSString *> *) dict
 {

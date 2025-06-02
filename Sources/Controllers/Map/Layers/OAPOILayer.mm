@@ -565,6 +565,11 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return NO;
 }
 
+- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     

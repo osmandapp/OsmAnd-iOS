@@ -42,11 +42,11 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 - (OAPointDescription *) getObjectName:(id)o;
 
 - (BOOL) showMenuAction:(id)object;
+- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation;
 
 //- (BOOL) disableSingleTap;
 //- (BOOL) disableLongPressOnMap;
 //- (BOOL) isObjectClickable:(OATargetPoint *)o;
-//- (BOOL) runExclusiveAction:(OATargetPoint *)o unknownLocation:(BOOL)unknownLocation;
 
 @end
 

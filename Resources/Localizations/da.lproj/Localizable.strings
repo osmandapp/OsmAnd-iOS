@@ -3691,3 +3691,6 @@
 "map_widget_route_information_desc" = "Viser den forventede ankomsttid, resterende rejsetid og afstand for den aktuelle navigationsrute.";
 "intermediate_first" = "Mellemliggende først";
 "display_priority" = "Visningsprioritet";
+"dd_mm_mmm_format" = "DD°MM.MMM′";
+"dd_ddddd_format" = "DD.DDDDD°";
+"dd_mm_ss_format" = "DD°MM′SS″";

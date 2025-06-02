@@ -33,6 +33,7 @@
 #import "OAFavoritesHelper.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAResourcesUIHelper.h"
 
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
@@ -97,6 +98,11 @@
         {
             CLLocation *location = searchResult.location;
             return [OAPointDescription getLocationNamePlain:location.coordinate.latitude lon:location.coordinate.longitude];
+        }
+        case EOAObjectTypeIndexItem:
+        {
+            OARepositoryResourceItem *resourceItem = (OARepositoryResourceItem *)searchResult.relatedObject;
+            return resourceItem.title;
         }
         default:
         {
@@ -202,7 +208,10 @@
             OASWptPt *wpt = (OASWptPt *) searchResult.object;
             return [wpt getIconName];
         }
-
+        case EOAObjectTypeIndexItem:
+        {
+            return @"ic_custom_map";
+        }
         default:
             return nil;
     }
@@ -385,6 +394,24 @@
                 return [OAGPXUIHelper getGPXStatisticStringForGpxDataItem:dataItem showLastModifiedTime:YES];
             }
             return @"";
+        }
+        case EOAObjectTypeIndexItem:
+        {
+            NSString *name = @"";
+            OARepositoryResourceItem *resourceItem = (OARepositoryResourceItem *)searchResult.relatedObject;
+            if (resourceItem && resourceItem.sizePkg > 0)
+            {
+                OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:resourceItem];
+                
+                name = [NSString stringWithFormat:@"%@  •  %@", [mapItem formatedSizePkg], [mapItem type]];
+                
+                NSString *dateString = [resourceItem getDate];
+                if (dateString != nil)
+                {
+                    name = [name stringByAppendingFormat:@"  •  %@", dateString];
+                }
+            }
+            return name;
         }
         case EOAObjectTypeUnknownNameFilter:
         {

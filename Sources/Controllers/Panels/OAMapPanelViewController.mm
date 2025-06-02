@@ -947,6 +947,13 @@ typedef enum
     [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
 }
 
+- (void) showCoordinatesGridScreen
+{
+    [self showMapSettingsScreen:EMapSettingsScreenMain logEvent:nil];
+    OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCoordinatesGrid];
+    [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
+}
+
 - (void)showMapSettingsScreen:(EMapSettingsScreen)screen logEvent:(nullable NSString *)event
 {
     if (event)
@@ -1526,6 +1533,10 @@ typedef enum
             NSString *path = [[folderPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
             gpxFile.path = path;
             gpxFile.metadata.name = targetPoint.title;
+            
+            OASRouteActivity *activity = [[OASRouteActivityHelper shared] findActivityByTagTag:key.routeKey.getTag().toNSString()];
+            if (activity)
+                [gpxFile.metadata setRouteActivityActivity:activity];
             
             OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFile.path];
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
@@ -3393,7 +3404,7 @@ typedef enum
     if (!segment)
         segment = [TrackChartHelper getTrackSegment:analysis gpxItem:gpx];
     
-    if (gpx && analysis)
+    if (gpx && analysis && segment)
         targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis, @"segment" : segment};
     else
         targetPoint.targetObj = nil;
@@ -4257,7 +4268,8 @@ typedef enum
         [mapPanel.view insertSubview:_mapViewController.view atIndex:0];
         _mapViewController.view.frame = mapPanel.view.frame;
         _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [_mapViewController.mapView resumeRendering];
+        if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground)
+            [_mapViewController.mapView resumeRendering];
     }
 }
 

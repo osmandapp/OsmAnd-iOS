@@ -150,7 +150,6 @@ NSString *const kXmlColon = @"_-_";
 @synthesize osmEditsChangeObservable = _osmEditsChangeObservable;
 @synthesize mapillaryImageChangedObservable = _mapillaryImageChangedObservable;
 @synthesize simulateRoutingObservable = _simulateRoutingObservable;
-
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
 
@@ -199,6 +198,8 @@ NSString *const kXmlColon = @"_-_";
 
         _firstLaunch = [[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter] == 1;
         
+        [OASharedUtil initSharedLib:_documentsPath gpxPath:_gpxPath];
+        
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@"NO" forKey:@"hide_all_gpx"];
         [defaults registerDefaults:defHideAllGPX];
@@ -206,8 +207,6 @@ NSString *const kXmlColon = @"_-_";
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
-
-        [OASharedUtil initSharedLib:_documentsPath gpxPath:_gpxPath];
 
         _applicationModeChangedObservable = [[OAObservable alloc] init];
     }
@@ -665,7 +664,6 @@ NSString *const kXmlColon = @"_-_";
     _mapillaryImageChangedObservable = [[OAObservable alloc] init];
     _simulateRoutingObservable = [[OAObservable alloc] init];
     _backgroundStateObservable = [[OAObservable alloc] init];
-
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];
 

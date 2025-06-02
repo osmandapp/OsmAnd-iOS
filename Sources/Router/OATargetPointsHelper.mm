@@ -210,12 +210,14 @@
     return res;
 }
 
-- (OARTargetPoint *) getFirstIntermediatePoint
+- (OARTargetPoint *)getFirstIntermediatePoint
 {
-    if (_intermediatePoints.count > 0)
-        return _intermediatePoints[0];
-    
-    return nil;
+    return [self getIntermediatePoint:0];
+}
+
+- (OARTargetPoint *)getIntermediatePoint:(int)intermediatePointIndex
+{
+    return intermediatePointIndex < _intermediatePoints.count ? _intermediatePoints[intermediatePointIndex] : nil;
 }
 
 - (void) restoreTargetPoints:(BOOL)updateRoute
@@ -691,12 +693,13 @@
         return false;
     bool hhRouting = ![_settings.useOldRouting get];
     if (hhRouting &&
-        ([[OAApplicationMode CAR] isDerivedRoutingFrom:[_routingHelper getAppMode]] ||
-        [[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]]) )
+        ([[OAApplicationMode DEFAULT] isDerivedRoutingFrom:[_routingHelper getAppMode]]
+         || [[OAApplicationMode CAR] isDerivedRoutingFrom:[_routingHelper getAppMode]]
+         || [[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]]))
     {
         return false;
     }
-    
+
     CLLocation *current = [_routingHelper getLastProjection];
     double dist = 400000;
     if ([[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]] && [[_settings getCustomRoutingBooleanProperty:kRouteParamHeightObstacles defaultValue:false] get:[_routingHelper getAppMode]])

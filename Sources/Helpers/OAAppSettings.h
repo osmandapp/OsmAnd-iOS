@@ -765,8 +765,37 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 @end
 
+@interface OACommonWidgetDefaultView : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue;
+
+- (int)get;
+- (int)get:(OAApplicationMode *)mode;
+- (void)set:(int)type;
+- (void)set:(int)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonWidgetDisplayPriority : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue;
+
+- (int)get;
+- (int)get:(OAApplicationMode *)mode;
+- (void)set:(int)type;
+- (void)set:(int)type mode:(OAApplicationMode *)mode;
+
+@end
 
 @interface OACommonDayNightMode : OACommonInteger
+
+@end
+
+@interface OACommonGridFormat : OACommonInteger
+
+@end
+
+@interface OACommonGridLabelsPosition : OACommonInteger
 
 @end
 
@@ -811,6 +840,13 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonBoolean *mapSettingShowBordersOfDownloadedMaps;
 @property (nonatomic) OACommonBoolean *mapSettingShowOfflineEdits;
 @property (nonatomic) OACommonBoolean *mapSettingShowOnlineNotes;
+@property (nonatomic) OACommonBoolean *mapSettingShowCoordinatesGrid;
+@property (nonatomic) OACommonGridFormat *coordinateGridFormat;
+@property (nonatomic) OACommonInteger *coordinateGridMinZoom;
+@property (nonatomic) OACommonInteger *coordinateGridMaxZoom;
+@property (nonatomic) OACommonGridLabelsPosition *coordinatesGridLabelsPosition;
+@property (nonatomic) OACommonInteger *coordinatesGridColorDay;
+@property (nonatomic) OACommonInteger *coordinatesGridColorNight;
 @property (nonatomic) OACommonStringList *mapSettingVisibleGpx;
 @property (nonatomic) OACommonInteger *layerTransparencySeekbarMode; // 0 - overlay, 1 - underlay, 2 - off, 3 - undefined, 4 - overlay&underlay
 - (BOOL) getOverlayOpacitySliderVisibility;
@@ -960,6 +996,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *keepInforming;
 @property (nonatomic) OACommonSpeedConstant *speedSystem;
 @property (nonatomic) OACommonVolumeConstant *volumeUnits;
+@property (nonatomic) OACommonDouble *fuelTankCapacity;
 @property (nonatomic) OACommonAngularConstant *angularUnits;
 @property (nonatomic) OACommonDouble *speedLimitExceedKmh;
 @property (nonatomic) OACommonDouble *routeRecalculationDistance;
@@ -1132,6 +1169,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 - (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
 
+- (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue;
+- (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue;
+
 // Direction Appearance
 
 @property (nonatomic) OACommonActiveMarkerConstant* activeMarkers;
@@ -1233,6 +1273,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dByType;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dWallColorType;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;
+@property (nonatomic) OACommonString *currentTrackRouteActivity;
 
 @property (nonatomic) OACommonStringList *customTrackColors;
 @property (nonatomic) OACommonStringList *customTrackColorsLastUsed;

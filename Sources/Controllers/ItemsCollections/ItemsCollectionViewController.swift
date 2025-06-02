@@ -20,10 +20,11 @@ import UIKit
 @objc protocol ColorCollectionViewControllerDelegate: AnyObject {
     func selectColorItem(_ colorItem: ColorItem)
     func selectPaletteItem(_ paletteItem: PaletteColor)
-    func addAndGetNewColorItem(_ color: UIColor) -> ColorItem
+    @discardableResult func addAndGetNewColorItem(_ color: UIColor) -> ColorItem
     func changeColorItem(_ colorItem: ColorItem, withColor color: UIColor)
-    func duplicateColorItem(_ colorItem: ColorItem) -> ColorItem
+    @discardableResult func duplicateColorItem(_ colorItem: ColorItem) -> ColorItem
     func deleteColorItem(_ colorItem: ColorItem)
+    @objc optional func reloadData()
 }
 
 @objc protocol IconsCollectionViewControllerDelegate: AnyObject {
@@ -53,7 +54,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     var regularIconColor: UIColor?
     
     var iconImages = [UIImage]()
-    var iconCategories = [IconsCategory]()
+    var iconCategories = [IconsAppearanceCategory]()
     private var iconItems = [String]()
     private var selectedIconItem: String?
     private var poiIconHandlers = [IndexPath : PoiIconCollectionHandler]()
@@ -109,7 +110,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 self.selectedIconItem = selectedItem as? String
             }
         case .poiIconCategories:
-            if let categories = items as? [IconsCategory] {
+            if let categories = items as? [IconsAppearanceCategory] {
                 self.iconCategories = categories
                 self.selectedIconItem = selectedItem as? String
             }
@@ -390,7 +391,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     cell.leftIconView.image = palette == selectedPaletteItem ? UIImage(named: "ic_checkmark_default") : nil
                     cell.button.setTitle(nil, for: .normal)
                     cell.button.setImage(UIImage(named: "ic_navbar_overflow_menu_outlined")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    cell.button.menu = createPaletteMenu(for: indexPath)
+                    cell.button.menu = createPaletteMenu(for: indexPath, cell: cell)
                     cell.button.showsMenuAsPrimaryAction = true
                     
                     return cell
@@ -435,7 +436,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     private func setupColorCollectionCell(_ cell: OACollectionSingleLineTableViewCell) {
-        if let handler = OAColorCollectionHandler(data: [colorItems], collectionView: cell.collectionView) {
+        guard let data = hostColorHandler?.getData() as? [[ColorItem]] else { return }
+        if let handler = OAColorCollectionHandler(data: data, collectionView: cell.collectionView) {
             handler.isOpenedFromAllColorsScreen = true
             handler.hostColorHandler = hostColorHandler
             handler.delegate = self
@@ -452,6 +454,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             cell.backgroundColor = .systemBackground
             cell.setCollectionHandler(colorCollectionHandler)
             cell.collectionView.isScrollEnabled = false
+            cell.disableAnimationsOnStart = true
             cell.useMultyLines = true
             cell.anchorContent(.centerStyle)
         }
@@ -597,7 +600,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         navigationController?.present(colorPicker, animated: true)
     }
     
-    private func createPaletteMenu(for indexPath: IndexPath) -> UIMenu {
+    private func createPaletteMenu(for indexPath: IndexPath, cell: UITableViewCell) -> UIMenu {
         let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
             guard let self else { return }
             self.duplicateItem(fromContextMenu: indexPath)
@@ -615,7 +618,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             if !isDefault {
                 let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
-                    self.deleteItem(fromContextMenu: indexPath)
+                    self.deleteItem(fromContextMenu: cell)
                 }
                 
                 let deleteMenu = UIMenu(options: .displayInline, children: [deleteAction])
@@ -684,6 +687,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                    let currentIndex = self.paletteItems?.index(ofObjectSync: newCurrentSelected) {
                     self.tableView.reloadRows(at: [IndexPath(row: Int(currentIndex), section: 0)], with: .automatic)
                 }
+                self.delegate?.reloadData?()
             }
         }
     }
@@ -713,6 +717,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             tableView.performBatchUpdates { [weak self] in
                 guard let self else { return }
                 self.tableView.insertRows(at: indexPathsToInsert, with: .automatic)
+            } completion: { finished in
+                self.delegate?.reloadData?()
             }
         }
     }
@@ -737,6 +743,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             tableView.performBatchUpdates { [weak self] in
                 guard let self else { return }
                 self.tableView.reloadRows(at: indexPathsToUpdate, with: .automatic)
+            } completion: { finished in
+                self.delegate?.reloadData?()
             }
         }
     }
@@ -847,13 +855,12 @@ extension ItemsCollectionViewController: UISearchBarDelegate {
     
 extension ItemsCollectionViewController: OACollectionCellDelegate {
     
-    func onCollectionItemSelected(_ indexPath: IndexPath, selectedItem: Any?, collectionView: UICollectionView) {
+    func onCollectionItemSelected(_ indexPath: IndexPath, selectedItem: Any?, collectionView: UICollectionView, shouldDismiss: Bool) {
         if collectionType == .iconItems || collectionType == .bigIconItems {
             selectedIconItem = iconItems[indexPath.row]
             if let selectedIconItem {
                 iconsDelegate?.selectIconName(selectedIconItem)
             }
-            dismiss(animated: true)
         } else if collectionType == .poiIconCategories {
             let chipsTitles = iconCategories.map { $0.translatedName }
             if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler,
@@ -874,17 +881,18 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                 poiIconsDelegate.setIconName(selectedName)
                 poiIconsDelegate.selectIconName(selectedName)
                 poiIconsDelegate.allIconsVCDelegate = nil
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.dismiss(animated: true)
-                }
             }
         } else {
             selectedColorItem = colorCollectionHandler?.getSelectedItem()
             if let selectedColorItem {
                 delegate?.selectColorItem(selectedColorItem)
             }
-            super.onLeftNavbarButtonPressed()
+        }
+        
+        if shouldDismiss {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                super.onLeftNavbarButtonPressed()
+            }
         }
     }
     
@@ -933,22 +941,25 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
         }
     }
     
-    func deleteItem(fromContextMenu indexPath: IndexPath!) {
+    func deleteItem(fromContextMenu cell: UITableViewCell) {
         guard let delegate else { return }
+        guard let currentIndexPath = self.tableView.indexPath(for: cell) else { return }
         
         switch collectionType {
         case .colorItems:
             if let colorCollectionIndexPath {
-                let colorItem = colorItems[indexPath.row]
-                colorItems.remove(at: indexPath.row)
+                let colorItem = colorItems[currentIndexPath.row]
+                colorItems.remove(at: currentIndexPath.row)
                 delegate.deleteColorItem(colorItem)
-                colorCollectionHandler?.removeColor(indexPath)
+                colorCollectionHandler?.removeColor(currentIndexPath)
             }
         case .colorizationPaletteItems, .terrainPaletteItems:
-            if let fileName = data.item(for: indexPath).string(forKey: "fileName"),
+            guard let currentIndexPath = self.tableView.indexPath(for: cell) else { return }
+            if let fileName = data.item(for: currentIndexPath).string(forKey: "fileName"),
                !fileName.isEmpty {
                 do {
                     try ColorPaletteHelper.shared.deleteGradient(fileName)
+                    delegate.reloadData?()
                 } catch {
                     print("Failed to delete color palette: \(fileName)")
                 }
@@ -968,7 +979,9 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
             isStartedNewColorAdding = false
             let newColorItem = delegate.addAndGetNewColorItem(viewController.selectedColor)
             colorItems.insert(newColorItem, at: 0)
+            selectedColorItem = newColorItem
             colorCollectionHandler?.addAndSelectColor(IndexPath(row: 0, section: 0), newItem: newColorItem)
+            delegate.selectColorItem(newColorItem)
         } else {
             var editingColor = colorItems[0]
             if let editColorIndexPath {
@@ -980,13 +993,11 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
                 delegate.changeColorItem(editingColor, withColor: viewController.selectedColor)
                 if let editColorIndexPath {
                     colorCollectionHandler?.replaceOldColor(editColorIndexPath)
-                } else {
-                    colorCollectionHandler?.replaceOldColor(IndexPath(row: 0, section: 0))
-                }
+                } 
             }
+            delegate.selectColorItem(editingColor)
         }
         tableView.reloadData()
-        viewController.dismiss(animated: true)
     }
 }
 

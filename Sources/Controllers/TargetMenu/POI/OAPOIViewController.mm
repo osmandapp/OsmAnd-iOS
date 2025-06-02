@@ -39,6 +39,7 @@
 
 #define WIKI_LINK @".wikipedia.org/w"
 #define US_MAPS_RECREATION_AREA @"us_maps_recreation_area"
+#define OTHER_MAP_CATEGORY @"Other"
 
 static const NSInteger WAY_MODULO_REMAINDER = 1;
 
@@ -339,10 +340,12 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         id value = dic[key];
         if ([value isKindOfClass:[NSDictionary class]]) {
             vl = value[@"name"] ?: @"";
+            if (vl.length > 0 && ((NSDictionary *)value[@"localization"]).count == 1)
+                continue; // do not display lonesome collapsible name
         } else {
             vl = value;
         }
-        
+
         NSString *convertedKey = [self convertKey:key];
         
         if ([convertedKey isEqualToString:@"image"]
@@ -352,6 +355,12 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             || [convertedKey hasPrefix:@"lang_yes"]
             || [convertedKey hasPrefix:@"top_index_"])
             continue;
+        
+        OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:convertedKey];
+        if (poiType.isHidden)
+        {
+            continue;
+        }
 
         NSString *textPrefix = @"";
         OACollapsableView *collapsableView;
@@ -368,7 +377,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         NSString *categoryIconId;
         UIImage *categoryIcon;
 
-        OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:convertedKey];
         OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
 
         if (!pt && vl && vl.length > 0 && vl.length < 50)
@@ -383,7 +391,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         if (pt)
         {
             pType = (OAPOIType *) pt;
-            if (pType.filterOnly)
+            if (pType.filterOnly || pType.isHidden)
                 continue;
 
             poiTypeOrder = pType.order;
@@ -579,7 +587,10 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             }
             else if (poiType)
             {
-                NSString * catKey = poiType.category.name;
+                NSString *catKey = poiType.category.name;
+                if ([catKey isEqualToString:OTHER_MAP_CATEGORY]) {
+                    continue; // the "Others" value is already displayed as a title
+                }
                 NSMutableArray<OAPOIType *> *list = collectedPoiTypes[catKey];
                 if (!list)
                 {
@@ -593,6 +604,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 NSString *translatedKey = [_poiHelper getTranslation:convertedKey];
                 if (translatedKey.length > 0)
                     textPrefix = translatedKey;
+                else if (!pt && !pType && !poiType)
+                    continue; // do not display internal and/or non-translatable tags
                 else
                     textPrefix = [OAUtilities capitalizeFirstLetter:convertedKey];
                 

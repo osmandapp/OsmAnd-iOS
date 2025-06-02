@@ -33,12 +33,12 @@
 #include <OsmAndCore/SingleSkImage.h>
 
 #define DRAW_TIME 2
-#define LABEL_OFFSET 15
+#define LABEL_OFFSET 4
 #define kDefaultLineWidth 5.0
 
 @protocol OALineDrawingDelegate <NSObject>
 
-- (void) onDrawNewLine:(OsmAnd::PointI)from to:(OsmAnd::PointI)to color:(OsmAnd::ColorARGB)color;
+- (void) onDrawNewLine:(OsmAnd::PointI)from to:(OsmAnd::PointI)to color:(OsmAnd::ColorARGB)color distance:(NSString *)distance;
 - (void) onHideLine;
 
 @end
@@ -63,6 +63,8 @@
     
     sk_sp<SkImage> _centerIconDay;
     sk_sp<SkImage> _centerIconNight;
+    
+    std::shared_ptr<OsmAnd::VectorLine> _rullerLine;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
@@ -126,7 +128,7 @@
 
 // MARK: OALineDrawingDelegate
 
-- (void)onDrawNewLine:(OsmAnd::PointI)from to:(OsmAnd::PointI)to color:(OsmAnd::ColorARGB)color
+- (void)onDrawNewLine:(OsmAnd::PointI)from to:(OsmAnd::PointI)to color:(OsmAnd::ColorARGB)color distance:(NSString *)distance
 {
     if (!_showingLine)
     {
@@ -137,6 +139,7 @@
         
         _lineEndsMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
         [self drawLineEnds:{from, to}];
+        [self drawDistanceMarker:distance];
         
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
         [self.mapView addKeyedSymbolsProvider:_lineEndsMarkersCollection];
@@ -175,7 +178,8 @@
     .setLineDash(inlinePattern)
     .setPoints(points)
     .setFillColor(color);
-    inlineBuilder.buildAndAddToCollection(_linesCollection);
+    
+    _rullerLine = inlineBuilder.buildAndAddToCollection(_linesCollection);
 }
 
 - (void) drawLineEnds:(QVector<OsmAnd::PointI>)points
@@ -197,6 +201,19 @@
         
         builder.buildAndAddToCollection(_lineEndsMarkersCollection);
     }
+}
+
+- (void) drawDistanceMarker:(NSString *)distance
+{
+    OsmAnd::MapMarkerBuilder distanceMarkerBuilder;
+    distanceMarkerBuilder.setIsHidden(false);
+    distanceMarkerBuilder.setBaseOrder(self.baseOrder - 1);
+    distanceMarkerBuilder.setCaption([distance UTF8String]);
+    distanceMarkerBuilder.setCaptionStyle(self.captionStyle);
+    
+    std::shared_ptr<OsmAnd::MapMarker> marker = distanceMarkerBuilder.buildAndAddToCollection(_lineEndsMarkersCollection);
+    marker->setOffsetFromLine(LABEL_OFFSET);
+    _rullerLine->attachMarker(marker);
 }
 
 @end
@@ -332,14 +349,10 @@
                 NSArray<NSValue *> *linePoints = [_mapViewController.mapView getVisibleLineFromLat:currLoc.coordinate.latitude fromLon:currLoc.coordinate.longitude toLat:_tapPointOne.latitude toLon:_tapPointOne.longitude];
                 if (linePoints.count == 2)
                 {
-                    CGPoint a = linePoints[0].CGPointValue;
-                    CGPoint b = linePoints[1].CGPointValue;
-                    double angle = [OAMapUtils getAngleBetween:a end:b];
                     NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
                     _rulerDistance = distance;
                     if (self.lineDrawingDelegate)
-                        [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue)];
-                    [self drawDistance:ctx distance:distance angle:angle start:a end:b];
+                        [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue) distance:distance];
                 }
             }
         }
@@ -352,61 +365,15 @@
             NSArray<NSValue *> *linePoints = [_mapViewController.mapView getVisibleLineFromLat:_tapPointOne.latitude fromLon:_tapPointOne.longitude toLat:_tapPointTwo.latitude toLon:_tapPointTwo.longitude];
             if (linePoints.count == 2)
             {
-                CGPoint a = linePoints[0].CGPointValue;
-                CGPoint b = linePoints[1].CGPointValue;
-                double angle = [OAMapUtils getAngleBetween:a end:b];
                 const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude, _tapPointTwo.longitude, _tapPointTwo.latitude);
                 NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
                 _rulerDistance = distance;
                 if (self.lineDrawingDelegate)
-                    [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue)];
-                [self drawDistance:ctx distance:distance angle:angle start:a end:b];
+                    [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue) distance:distance];
             }
         }
     }
     UIGraphicsPopContext();
-}
-
-- (void) drawDistance:(CGContextRef)ctx distance:(NSString *)distance angle:(double)angle start:(CGPoint)start end:(CGPoint)end
-{
-    CGPoint middlePoint = CGPointMake((start.x + end.x) / 2, (start.y + end.y) / 2);
-    UIFont *font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightMedium];
-    
-    BOOL useDefaults = !_rulerLineFontAttrs || [_rulerLineFontAttrs count] == 0;
-    NSNumber *strokeColorAttr = useDefaults ? nil : [_rulerLineFontAttrs objectForKey:@"color_2"];
-    UIColor *strokeColor = strokeColorAttr ? UIColorFromARGB(strokeColorAttr.intValue) : [UIColor whiteColor];
-    NSNumber *colorAttr = useDefaults ? nil : [_rulerLineFontAttrs objectForKey:@"color"];
-    UIColor *color = colorAttr ? UIColorFromARGB(colorAttr.intValue) : [UIColor blackColor];
-    NSNumber *strokeWidthAttr = useDefaults ? nil : [_rulerLineFontAttrs valueForKey:@"strokeWidth_2"];
-    float strokeWidth = (strokeWidthAttr ? strokeWidthAttr.floatValue / [[UIScreen mainScreen] scale] : 4.0) * 4.0;
-    
-    NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    attributes[NSParagraphStyleAttributeName] = paragraphStyle;
-
-    NSAttributedString *string = [OAUtilities createAttributedString:distance font:font color:color strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter];
-    NSAttributedString *shadowString = [OAUtilities createAttributedString:distance font:font color:color strokeColor:strokeColor strokeWidth:strokeWidth alignment:NSTextAlignmentCenter];
-
-    CGSize titleSize = [string size];
-    CGRect rect = CGRectMake(middlePoint.x - (titleSize.width / 2), middlePoint.y - (titleSize.height / 2), titleSize.width, titleSize.height);
-    
-    CGFloat xMid = CGRectGetMidX(rect);
-    CGFloat yMid = CGRectGetMidY(rect);
-    CGContextSaveGState(ctx);
-    {
-        CGContextTranslateCTM(ctx, xMid, yMid);
-        CGContextRotateCTM(ctx, angle);
-        
-        CGRect newRect = rect;
-        newRect.origin.x = -newRect.size.width / 2;
-        newRect.origin.y = -newRect.size.height / 2 + LABEL_OFFSET;
-        
-        [shadowString drawWithRect:newRect options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-        [string drawWithRect:newRect options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-        CGContextStrokePath(ctx);
-    }
-    CGContextRestoreGState(ctx);
 }
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch

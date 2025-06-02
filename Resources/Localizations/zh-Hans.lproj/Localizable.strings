@@ -1813,7 +1813,7 @@
 "recording_delete_confirm" = "删除这个项目？";
 "backup_complete" = "备份完毕";
 "srtm_unit_format" = "等高线单位变体";
-"routing_attr_motor_type_name" = "车辆发动机";
+"routing_attr_motor_type_name" = "发动机使用的燃料";
 "shared_string_cross_buy" = "跨平台购买";
 "select_backup_data_descr" = "选择要备份的数据和文件夹。";
 "fav_point_emoticons_message" = "收藏已重命名为\"%@\"，以将包含表情符号的字符串保存到文件中。";
@@ -1860,7 +1860,7 @@
 "routing_attr_allow_intermittent_name" = "允许间歇性水路";
 "rendering_attr_showWaterwayTunnels_description" = "提高水路隧道的能见度";
 "routing_attr_allow_intermittent_description" = "允许间歇性水路";
-"routing_attr_allow_streams_description" = "允许溪流和水渠";
+"routing_attr_allow_streams_description" = "允许溪流和水沟";
 "rendering_attr_OSMMapperAssistantNote_name" = "注记标签";
 "routing_attr_prefer_hiking_routes_name" = "偏好徒步路线";
 "routing_attr_difficulty_preference_no_preference_name" = "无偏好";
@@ -1891,7 +1891,7 @@
 "routing_attr_carriage_restrictions_description" = "考虑针对马车的访问许可";
 "routing_attr_prefer_hiking_routes_description" = "偏好徒步路线";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "不要离开越野滑雪道";
-"rendering_attr_showWaterwayTunnels_name" = "水路隧道";
+"rendering_attr_showWaterwayTunnels_name" = "提高水路隧道的能见度";
 "routing_attr_avoid_fords_description" = "避免涉水";
 "routing_attr_difficulty_preference_expert_name" = "专家";
 "rendering_attr_horse_scale_difficult_name" = "艰难";
@@ -2197,7 +2197,7 @@
 "running_scds_device_name" = "运行中的设备";
 "map_widget_gps_info" = "GPS信息";
 "backup_error_invalid_token" = "Token无效";
-"mapillary_widget_desc" = "提供快速访问Mapillary应用程序的小工具，以添加街道级影像。";
+"mapillary_widget_desc" = "提供快速访问 Mapillary 应用以添加街道级图像。";
 "delete_history_items" = "删除 %@ 条历史项目吗？";
 "simulate_in_progress" = "进行中";
 "shared_string_bearing" = "方向";
@@ -2272,7 +2272,7 @@
 "help_article_navigation_routing_pedestrian_routing_name" = "步行路线规划";
 "simulate_location_movement_speed_original" = "原始";
 "banner_payment_free_backup_settings_title" = "免费备份设置";
-"parking_widget_desc" = "显示从屏幕中心到停车位的距离的小部件。";
+"parking_widget_desc" = "显示从屏幕中心到停车位的距离。";
 "longest_duration_first" = "最长时间优先";
 "announcement_time_prepare" = "准备";
 "shared_string_open_track" = "打开轨迹";
@@ -2347,7 +2347,7 @@
 "help_article_navigation_routing_horse_routing_name" = "骑马路线规划";
 "shared_string_error" = "错误";
 "map_widget_trip_recording_downhill" = "下坡";
-"current_speed_widget_desc" = "向您显示由GPS 传感器检测到的当前速度。";
+"current_speed_widget_desc" = "显示您通过 GPS 报告的当前速度。";
 "shared_string_wrist" = "手腕";
 "map_widget_sunset_desc" = "显示下一次日落的时间或距离日落的剩余时间。";
 "deleting_complete" = "删除完成";
@@ -2367,7 +2367,7 @@
 "map_widget_ant_heart_rate" = "心率";
 "tracker_item" = "OsmAnd 追踪器";
 "press_again_to_change_the_map_orientation" = "再次点击可更改地图方向";
-"gps_info_widget_desc" = "显示设备在那一刻检测到并使用的卫星数量。";
+"gps_info_widget_desc" = "显示当前可见和使用的卫星数量。";
 "av_notes_audio_widget_desc" = "点击小工具可让您留下一条音频注释。";
 "setup" = "设定";
 "map_widget_target_distance_desc" = "显示摄像机与目标位置间的距离。";
@@ -2492,7 +2492,7 @@
 "shared_string_is_deleted" = "%@ 已删除。";
 "dangerous_goods_description" = "某些道路和隧道禁止运输危险品。";
 "shared_string_setup_route" = "设置路线";
-"missing_maps_ignore" = "使用现有地图";
+"missing_maps_ignore" = "使用下载的地图";
 "transport_hazmat_title" = "危险品运输";
 "pressure_layer" = "压力图层";
 "shared_string_favorites" = "收藏";
@@ -2623,3 +2623,7 @@
 "daynight_mode_night_summary" = "始终以暗色主题显示地图，适合夜间或弱光环境。";
 "rendering_attr_showClimbingRoutes_name" = "攀岩路线";
 "help_article_personal_color_palette_schemes_name" = "颜色方案";
+"quick_action_verb_start_pause" = "开始/暂停";
+"wikimedia" = "维基媒体";
+"open_in_browser" = "在浏览器中打开";
+"help_article_navigation_routing_brouter_name" = "网桥路由器";

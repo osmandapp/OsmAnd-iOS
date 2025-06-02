@@ -942,6 +942,10 @@
 "without_permission_my_position_value" = "OsmAnd doesn't have location permission";
 "with_permission_my_position_value" = "Move map to current location";
 "shared_string_location_unknown" = "Location unknown";
+"equator" = "Equator";
+"prime_meridian" = "Prime meridian";
+"meridian_180" = "180th meridian";
+"quick_action_showhide_coordinates_grid_descr" = "Action to control the visibility of the Coordinates grid on the map.";
 
 // HUD
 "hud_heading" = "Heading";
@@ -1221,8 +1225,11 @@
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@\nLon %@";
 "navigate_point_format_D" = "DDD.DDDDD";
+"dd_ddddd_format" = "DD.DDDDD°";
 "navigate_point_format_DM" = "DDD MM.MMM";
+"dd_mm_mmm_format" = "DD°MM.MMM′";
 "navigate_point_format_DMS" = "DDD MM SS.S";
+"dd_mm_ss_format" = "DD°MM′SS″";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_mgrs" = "MGRS";
@@ -2435,6 +2442,8 @@
 "shared_string_gpx_points" = "Points";
 "shared_string_overview" = "Overview";
 "shared_string_activity" = "Activity";
+"change_activity" = "Change activity";
+"type_of_activity" = "Type of activity";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "local_indexes_cat_backup" = "Deactivated";
@@ -3106,6 +3115,10 @@
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
 "icon_group_education" = "Education";
+"shared_string_original" = "Original";
+
+//Color categories
+"track_coloring_solid" = "Solid color";
 
 "settings_item_read_error" = "Could not read from \'%@\'.";
 "app_mode_default" = "Browse map";
@@ -3395,6 +3408,11 @@
 "use_login_and_password" = "Use username and password";
 "perform_oauth_authorization" = "Log in via OAuth";
 "use_login_and_password_description" = "Use your email/login and password to log in to OpenStreetMap.org.";
+"layer_coordinates_grid" = "Coordinates grid";
+"shared_string_edges" = "Edges";
+"labels_position" = "Labels position";
+"grid_color" = "Grid color";
+"customize_grid_color" = "Customize grid color";
 "benefits_for_contributors" = "Benefits for active OSM contributors";
 "benefits_for_contributors_primary_descr" = "Active contributors to OpenStreetMap.org may be entitled to unlimited hourly map updates.";
 "benefits_for_contributors_secondary_descr" = "Sign in to OpenStreetMap to check if you are eligible for unlimited monthly and hourly map updates.";
@@ -3813,10 +3831,15 @@
 "map_screen_orientation" = "Screen orientation";
 
 "change_appearance" = "Change appearance";
+"default_appearance" = "Default appearance";
 "default_appearance_desc" = "Default color, icon and shape will apply to the added favorite points into the group.";
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
-"apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";
+"apply_to_all_points" = "Apply to all points ";
+"save_favorite_default_appearance" = "Apply changes to the existing points in the folder or only to new ones?";
+"original_icon_description" = "Each point would keep its own icon.";
+"original_color_description" = "Each point would keep its own color.";
+"original_shape_description" = "Each point would keep its own shape.";
 
 "my_places_no_tracks_title_root" = "You don’t have track files";
 "my_places_no_tracks_descr_root" = "You can import, create or record track files using OsmAnd.";
@@ -4027,6 +4050,14 @@
 "delete_widget" = "Delete widget?";
 "delete_widget_description" = "This widget will be deleted. You can restore it later in Configure Screen.";
 "reset_average_speed" = "Reset average speed";
+
+"intermediate_first" = "Intermediate first";
+"destination_first" = "Destination first";
+"display_priority" = "Display priority";
+"shared_string_default_view" = "Default view";
+"map_widget_route_information" = "Route information";
+"map_widget_route_information_desc" = "Displays the estimated arrival time, remaining travel time, and distance for the current navigation route.";
+"map_widget_distance" = "Distance";
 
 "rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
 "rendering_attr_showClimbingRoutes_name" = "Climbing routes";

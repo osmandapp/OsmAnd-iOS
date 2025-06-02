@@ -22,6 +22,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     private static let downhillFilterRowKey = "downhillFilter"
     private static let colorFilterRowKey = "colorFilter"
     private static let widthFilterRowKey = "widthFilter"
+    private static let activityTypeFilterRowKey = "activityTypeFilter"
     private static let nearestCitiesFilterRowKey = "nearestCitiesFilter"
     private static let folderFilterRowKey = "folderFilter"
     private static let sensorSpeedMaxFilterRowKey = "sensorSpeedMaxFilter"
@@ -65,6 +66,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         Self.downhillFilterRowKey: (.downhill, false),
         Self.colorFilterRowKey: (.color, true),
         Self.widthFilterRowKey: (.width, true),
+        Self.activityTypeFilterRowKey: (.activity, true),
         Self.nearestCitiesFilterRowKey: (.city, true),
         Self.folderFilterRowKey: (.folder, true),
         Self.sensorSpeedMaxFilterRowKey: (.maxSensorSpeed, false),
@@ -190,6 +192,11 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         
         let infoFilterSection = tableData.createNewSection()
         infoFilterSection.headerText = localizedString("info_button")
+        let activityRow = infoFilterSection.createNewRow()
+        activityRow.cellType = OAValueTableViewCell.reuseIdentifier
+        activityRow.key = Self.activityTypeFilterRowKey
+        activityRow.title = localizedString("type_of_activity")
+        updateListFilterRowDescription(forFilterType: .activity, inRow: activityRow)
         let nearestCitiesRow = infoFilterSection.createNewRow()
         nearestCitiesRow.cellType = OAValueTableViewCell.reuseIdentifier
         nearestCitiesRow.key = Self.nearestCitiesFilterRowKey
@@ -416,7 +423,11 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
                         let folderName = itemName.components(separatedBy: "/").last ?? itemName
                         return filter.collectionFilterParams.getItemText(itemName: folderName)
                     } else {
-                        return filter.collectionFilterParams.getItemText(itemName: itemName)
+                        if filterType == .activity {
+                            return RouteActivityHelper.shared.findRouteActivity(id: itemName)?.label ?? localizedString("shared_string_none")
+                        } else {
+                            return filter.collectionFilterParams.getItemText(itemName: itemName)
+                        }
                     }
                 }
                 .joined(separator: ", ")

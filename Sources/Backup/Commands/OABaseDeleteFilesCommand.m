@@ -174,8 +174,9 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 
 - (void) onPreExecute
 {
-    if (_listener)
-        [_backupHelper.backupListeners addDeleteFilesListener:_listener];
+    __strong id<OAOnDeleteFilesListener> listener = _listener;
+    if (listener)
+        [_backupHelper.backupListeners addDeleteFilesListener:listener];
 }
 
 - (NSArray<id<OAOnDeleteFilesListener>> *)getListeners
@@ -242,8 +243,9 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
             [listener onFilesDeleteDone:errors];
         }
     }
-    if (_listener != nil)
-        [_backupHelper.backupListeners removeDeleteFilesListener:_listener];
+    __strong id<OAOnDeleteFilesListener> listener = _listener;
+    if (listener)
+        [_backupHelper.backupListeners removeDeleteFilesListener:listener];
 }
 
 @end

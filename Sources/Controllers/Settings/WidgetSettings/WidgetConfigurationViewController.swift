@@ -8,6 +8,8 @@
 
 final class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
     
+    private static let excludedUISettingsWidgetKeys: Set<String> = [WidgetType.nextTurn.id, WidgetType.secondNextTurn.id, WidgetType.smallNextTurn.id]
+    
     var widgetInfo: MapWidgetInfo!
     var widgetPanel: WidgetsPanel!
     var selectedAppMode: OAApplicationMode!
@@ -42,13 +44,14 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     
     override func registerCells() {
         addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
+        addCell(OAButtonTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
         tableData.clearAllData()
         // Add section for simple widgets
-        if !WidgetType.isComplexWidget(widgetInfo.key), widgetPanel == .topPanel || widgetPanel == .bottomPanel {
-            if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode) {
+        if !WidgetType.isComplexWidget(widgetInfo.key) && !Self.excludedUISettingsWidgetKeys.contains(widgetInfo.key) {
+            if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode, widgetsPanel: widgetPanel) {
                 for i in 0 ..< settingsData.sectionCount() {
                     tableData.addSection(settingsData.sectionData(for: i))
                 }
@@ -166,12 +169,15 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 if !createNew {
                     widgetSizeStyle = pref.get(selectedAppMode)
                 } else {
-                    if let prefKey = pref.key,
-                       let rawValue = widgetConfigurationParams?["widgetSizeStyle"] as? Int,
+                    if let rawValue = widgetConfigurationParams?["widgetSizeStyle"] as? Int,
                        let style = EOAWidgetSizeStyle(rawValue: rawValue) {
                         widgetSizeStyle = style
                     } else {
-                        widgetSizeStyle = EOAWidgetSizeStyle(rawValue: Int(pref.defValue)) ?? .medium
+                        if let widgetsPanel = item.obj(forKey: "widgetsPanel") as? WidgetsPanel, !widgetsPanel.isPanelVertical {
+                            widgetSizeStyle = .small
+                        } else {
+                            widgetSizeStyle = .medium
+                        }
                     }
                 }
                 
@@ -185,12 +191,10 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 cell.configureTitle(title: title)
             }
             cell.didSelectSegmentIndex = { [weak self] index in
-                guard let self,
-                      let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle else { return }
+                guard let self, let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle else { return }
                 if !createNew {
                     pref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: selectedAppMode)
                 }
-              
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = index
                 }
@@ -200,8 +204,48 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 }
             }
             outCell = cell
+        } else if item.cellType == OAButtonTableViewCell.getIdentifier() {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.reuseIdentifier) as! OAButtonTableViewCell
+            let value = item.obj(forKey: "value") as? String
+            cell.selectionStyle = .none
+            cell.descriptionVisibility(false)
+            cell.titleLabel.text = item.title
+            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.leftIconView.tintColor = selectedAppMode.getProfileColor()
+            var config = UIButton.Configuration.plain()
+            config.baseForegroundColor = .textColorActive
+            config.contentInsets = .zero
+            cell.button.configuration = config
+            if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = RouteInfoDisplayPriority(rawValue: pref.defValue)?.key {
+                cell.button.menu = createDisplayPriorityMenuWith(value: value ?? defValue, pref: pref, indexPath: indexPath)
+            }
+            cell.button.showsMenuAsPrimaryAction = true
+            cell.button.changesSelectionAsPrimaryAction = true
+            cell.button.setContentHuggingPriority(.required, for: .horizontal)
+            cell.button.setContentCompressionResistancePriority(.required, for: .horizontal)
+            outCell = cell
         }
         return outCell
+    }
+    
+    private func createDisplayPriorityMenuWith(value: String, pref: OACommonWidgetDisplayPriority, indexPath: IndexPath) -> UIMenu {
+        let actions = RouteInfoDisplayPriority.allCases.map { displayPriority in
+            UIAction(title: displayPriority.title,
+                     image: UIImage.templateImageNamed(displayPriority.iconName),
+                     state: displayPriority.key == value ? .on : .off) { [weak self] _ in
+                guard let self else { return }
+                
+                if createNew {
+                    widgetConfigurationParams?[pref.key] = displayPriority.key
+                } else {
+                    pref.setValueFrom(displayPriority.key, appMode: selectedAppMode)
+                }
+                generateData()
+                onWidgetStateChangedAction?()
+                tableView.reloadData()
+            }
+        }
+        return UIMenu(options: .singleSelection, children: actions)
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
@@ -302,6 +346,17 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
               let widget = widgetInfo.widget as? OATextInfoWidget else {
             return
         }
+        
+        guard widgetPanel.isPanelVertical else {
+            (pagedWidgets
+                .compactMap { $0.array as? [MapWidgetInfo] }
+                .first { $0.contains { $0.key == mapWidgetInfo.key } }?
+                .first { $0.key == mapWidgetInfo.key }?
+                .widget as? OATextInfoWidget)?
+                .updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
+            return
+        }
+        
         pagedWidgets
             .compactMap { $0.array as? [MapWidgetInfo] }
             .first { $0.contains { $0.key == mapWidgetInfo.key } }?

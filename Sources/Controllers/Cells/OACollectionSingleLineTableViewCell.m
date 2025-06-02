@@ -15,7 +15,6 @@
 
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *topMarginStackView;
-@property (weak, nonatomic) IBOutlet UIStackView *collectionStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *bottomMarginStackView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
@@ -36,7 +35,7 @@
 
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    self.collectionView.contentInset = UIEdgeInsetsMake(0., kPaddingOnSideOfContent , 0., 0.);
+    self.collectionView.contentInset = UIEdgeInsetsMake(0., kPaddingOnSideOfContent , 0., kPaddingOnSideOfContent);
 
     _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onRightActionButtonPressed:)];
     [self addGestureRecognizer:_tapRecognizer];
@@ -114,6 +113,7 @@
 - (void)rightActionButtonVisibility:(BOOL)show
 {
     self.rightActionButton.hidden = !show;
+    self.rightActionButtonRigthPaddingView.hidden = !show;
 
     if (show)
     {
@@ -126,6 +126,11 @@
         [self removeGestureRecognizer:_tapRecognizer];
         _tapRecognizer = nil;
     }
+}
+
+- (void)collectionStackViewVisibility:(BOOL)show
+{
+    self.collectionStackView.hidden = !show;
 }
 
 - (void)anchorContent:(EOATableViewCellContentStyle)style
@@ -179,7 +184,7 @@
             int rowsPerLine = width / (itemSize.width + spacing);
             int rowsCount = ceil((double)[_collectionHandler itemsCount:0] / (double)rowsPerLine);
             if (rowsCount > 1)
-                height = rowsCount * (height + spacing);
+                height = rowsCount * (height + spacing) - spacing;
         }
     }
     return height;

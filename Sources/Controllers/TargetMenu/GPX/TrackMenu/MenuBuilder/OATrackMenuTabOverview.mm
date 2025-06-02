@@ -419,49 +419,56 @@
 
 - (OAGPXTableSectionData *)generateInfoSectionData
 {
+    NSString *gpxActivity = self.trackMenuDelegate ? [self.trackMenuDelegate getGpxActivity].label ?: OALocalizedString(@"shared_string_none") : nil;
     NSString *keywords = self.trackMenuDelegate ? [self.trackMenuDelegate getKeywords] : nil;
     NSArray<OALink *> *links = self.trackMenuDelegate ? [self.trackMenuDelegate getLinks] : nil;
     BOOL hasKeywords = keywords && keywords.length > 0;
     BOOL hasLinks = links && links.count > 0;
-    if (hasKeywords || hasLinks)
+    
+    OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
+        kTableKey: @"section_info",
+        kSectionHeader: OALocalizedString(@"info_button"),
+        kSectionHeaderHeight: @56.
+    }];
+    
+    OAGPXTableCellData *gpxActivityCellData = [OAGPXTableCellData withData:@{
+        kTableKey: @"gpxActivity",
+        kCellType: [OAValueTableViewCell getCellIdentifier],
+        kCellTitle: OALocalizedString(@"shared_string_activity"),
+        kCellDesc: gpxActivity,
+        kCellToggle: @YES
+    }];
+    [infoSectionData.subjects addObject:gpxActivityCellData];
+    if (hasKeywords)
     {
-        OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: @"section_info",
-            kSectionHeader: OALocalizedString(@"info_button"),
-            kSectionHeaderHeight: @56.
+        OAGPXTableCellData *keywordsCellData = [OAGPXTableCellData withData:@{
+            kTableKey: @"keywords",
+            kCellType: [OAValueTableViewCell getCellIdentifier],
+            kCellTitle: OALocalizedString(@"shared_string_keywords"),
+            kCellDesc: keywords
         }];
-
-        if (hasKeywords)
-        {
-            OAGPXTableCellData *keywordsCellData = [OAGPXTableCellData withData:@{
-                kTableKey: @"keywords",
-                kCellType: [OAValueTableViewCell getCellIdentifier],
-                kCellTitle: OALocalizedString(@"shared_string_keywords"),
-                kCellDesc: keywords
-            }];
-            [infoSectionData.subjects addObject:keywordsCellData];
-        }
-        if (hasLinks)
-        {
-            for (NSInteger i = 0; i < links.count; i++)
-            {
-                OALink *link = links[i];
-                BOOL hasText = link.text && link.text.length > 0;
-                OAGPXTableCellData *linkCellData = [OAGPXTableCellData withData:@{
-                    kTableKey: [NSString stringWithFormat:@"link_%ld", i],
-                    kCellType: [OAValueTableViewCell getCellIdentifier],
-                    kCellTitle: OALocalizedString(@"shared_string_link"),
-                    kCellDesc: hasText ? link.text : link.url.absoluteString
-                }];
-                if (hasText)
-                    linkCellData.values[@"url"] = link.url.absoluteString;
-                
-                [infoSectionData.subjects addObject:linkCellData];
-            }
-        }
-        return infoSectionData;
+        [infoSectionData.subjects addObject:keywordsCellData];
     }
-    return nil;
+    if (hasLinks)
+    {
+        for (NSInteger i = 0; i < links.count; i++)
+        {
+            OALink *link = links[i];
+            BOOL hasText = link.text && link.text.length > 0;
+            OAGPXTableCellData *linkCellData = [OAGPXTableCellData withData:@{
+                kTableKey: [NSString stringWithFormat:@"link_%ld", i],
+                kCellType: [OAValueTableViewCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"shared_string_link"),
+                kCellDesc: hasText ? link.text : link.url.absoluteString
+            }];
+            if (hasText)
+                linkCellData.values[@"url"] = link.url.absoluteString;
+            
+            [infoSectionData.subjects addObject:linkCellData];
+        }
+    }
+    
+    return infoSectionData;
 }
 
 - (OAGPXTableSectionData *)generateAuthorSectionData
@@ -591,6 +598,12 @@
     else if ([tableData.key isEqualToString:@"location"])
     {
         [tableData setData:@{ kCellDesc: [self generateDirName] }];
+    }
+    else if ([tableData.key isEqualToString:@"section_info"])
+    {
+        OAGPXTableCellData *activityCell = [(OAGPXTableSectionData *)tableData getSubject:@"gpxActivity"];
+        if (activityCell && self.trackMenuDelegate)
+            [activityCell setData:@{ kCellDesc: [self.trackMenuDelegate getGpxActivity].label ?: OALocalizedString(@"shared_string_none") }];
     }
     else if ([tableData.key isEqualToString:@"section_description"])
     {
@@ -753,6 +766,10 @@
             else if ([cellData.key isEqualToString:@"name"])
             {
                 [self.trackMenuDelegate openNameTagsScreenWith:_nameTags];
+            }
+            else if ([cellData.key isEqualToString:@"gpxActivity"])
+            {
+                [self.trackMenuDelegate openSelectRouteActivityScreen];
             }
         }
     }

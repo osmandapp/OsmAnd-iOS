@@ -35,7 +35,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
-    
+    // TODO: Keys to enums
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
     private let tracksSmartFolderKey = "tracksSmartFolderKey"
@@ -73,6 +73,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var isSearchTextFilterChanged = false
     private var isSelectionModeInSearch = false
     private var isEditFilterActive = false
+    private var shouldReloadTableViewOnAppear = false
     
     private var selectedTrack: GpxDataItem?
     private var selectedFolderPath: String?
@@ -189,6 +190,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setupSearchController()
+        reloadTableViewOnAppearIfNeeded()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -198,6 +200,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tabBarController?.navigationItem.searchController = nil
         navigationItem.searchController = nil
         super.viewWillDisappear(animated)
+    }
+    
+    private func reloadTableViewOnAppearIfNeeded() {
+        guard shouldReloadTableViewOnAppear else { return }
+        generateData()
+        tableView.reloadData()
+        shouldReloadTableViewOnAppear = false
     }
     
     private func reloadTracks(forceLoad: Bool = false) {
@@ -561,13 +570,16 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
                 self?.onNavbarChangeAppearanceButtonClicked()
             }
+            let changeActivityAction = UIAction(title: localizedString("change_activity"), image: .icCustomActivityOutlined) { [weak self] _ in
+                self?.onNavbarChangeActivityButtonClicked()
+            }
             let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
                 self?.onNavbarDeleteButtonClicked()
             }
             
             let mapTrackOptionsActions = UIMenu(title: "", options: .displayInline, children: [showOnMapAction, exportAction, uploadToOsmAction])
             let moveItemsActions = UIMenu(title: "", options: .displayInline, children: [moveAction])
-            let changeAppearanceItemsActions = UIMenu(title: "", options: .displayInline, children: [changeAppearanceAction])
+            let changeAppearanceItemsActions = UIMenu(title: "", options: .displayInline, children: [changeAppearanceAction, changeActivityAction])
             let deleteItemsActions = UIMenu(title: "", options: .displayInline, children: [deleteAction])
             menuActions.append(contentsOf: [mapTrackOptionsActions, moveItemsActions, changeAppearanceItemsActions, deleteItemsActions])
         }
@@ -752,8 +764,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         
         lastUpdate = Date.now.timeIntervalSince1970
-        DispatchQueue.main.async {
-            self.updateData()
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            guard view.window != nil else {
+                shouldReloadTableViewOnAppear = true
+                return
+            }
+            updateData()
         }
     }
     
@@ -996,6 +1013,26 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         let trackItems = Set(allTracks.toTrackItems())
         guard !trackItems.isEmpty else { return }
         let vc = TracksChangeAppearanceViewController(tracks: trackItems)
+        let navigationController = UINavigationController(rootViewController: vc)
+        navigationController.modalPresentationStyle = .custom
+        present(navigationController, animated: true) { [weak self] in
+            guard let self else { return }
+            self.onNavbarCancelButtonClicked()
+        }
+    }
+    
+    @objc private func onNavbarChangeActivityButtonClicked() {
+        let allTracks: [GpxDataItem] = selectedTracks + selectedFolders.flatMap { folderName in
+            if let folder = currentFolder.getSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == folderName }) {
+                return folder.getFlattenedTrackItems().compactMap { $0.dataItem }
+            } else if let smartFolder = smartFolderHelper.getSmartFolder(name: folderName) {
+                return smartFolder.getTrackItems().compactMap { $0.dataItem }
+            }
+            return []
+        }
+        
+        guard !allTracks.toTrackItems().isEmpty else { return }
+        let vc = SelectRouteActivityViewController(tracks: Set(allTracks.toTrackItems()))
         let navigationController = UINavigationController(rootViewController: vc)
         navigationController.modalPresentationStyle = .custom
         present(navigationController, animated: true) { [weak self] in
@@ -1498,10 +1535,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     }
     
-    @objc func onObservedRecordedTrackChanged() {
+    @objc private func onObservedRecordedTrackChanged() {
         guard isRootFolder else { return }
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            guard view.window != nil else {
+                shouldReloadTableViewOnAppear = true
+                return
+            }
             generateData()
             let numberOfRows = tableView.numberOfRows(inSection: 0)
             if numberOfRows > 0 {

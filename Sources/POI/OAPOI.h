@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OrderedDictionary.h"
 #import "OAMapObject.h"
 
 static NSString *URL_TAG = @"url";
@@ -81,8 +82,8 @@ static int DEFAULT_ELO = 900;
 @property (nonatomic) NSString *distance;
 @property (nonatomic, assign) double direction;
 
-@property (nonatomic) NSMutableDictionary *values;
-@property (nonatomic) NSDictionary *localizedContent;
+@property (nonatomic) MutableOrderedDictionary<NSString *, NSString *> *values;
+@property (nonatomic) MutableOrderedDictionary<NSString *, NSString *> *localizedContent;
 
 @property (nonatomic) OAPOIRoutePoint *routePoint;
 @property (nonatomic) NSString *mapIconName;
@@ -111,7 +112,8 @@ static int DEFAULT_ELO = 900;
 
 - (NSString *)getGpxFileName:(NSString *)lang;
 
-- (NSDictionary<NSString *, NSString *> *) getAdditionalInfo;
+- (MutableOrderedDictionary<NSString *, NSString *> *) getAdditionalInfo;
+
 - (NSString *) getAdditionalInfo:(NSString *)key;
 - (NSArray<NSString *> *) getAdditionalInfoKeys;
 

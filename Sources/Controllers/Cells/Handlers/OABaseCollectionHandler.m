@@ -96,6 +96,11 @@
     return nil;
 }
 
+- (UIMenu *)buildTopButtonContextMenu
+{
+    return nil;
+}
+
 - (void)generateData:(NSArray<NSArray *> *)data
 {
 }
@@ -138,7 +143,7 @@
     id selectedItem = [self getSelectedItem];
     [collectionView reloadData];
     if (self.delegate)
-        [self.delegate onCollectionItemSelected:indexPath selectedItem:selectedItem collectionView:collectionView];
+        [self.delegate onCollectionItemSelected:indexPath selectedItem:selectedItem collectionView:collectionView shouldDismiss:YES];
 }
 
 @end

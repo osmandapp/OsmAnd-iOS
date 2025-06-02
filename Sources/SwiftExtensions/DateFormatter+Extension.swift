@@ -13,4 +13,13 @@ extension DateFormatter {
         formatter.locale = Locale.current
         return formatter
     }()
+    
+    // 13:00 or 1 PM
+    static let shortTimeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = .current
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter
+    }()
 }

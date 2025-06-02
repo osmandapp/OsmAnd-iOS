@@ -205,6 +205,12 @@
     [NSNotificationCenter.defaultCenter postNotificationName:kWidgetVisibilityChangedMotification object:widgetInfo];
 }
 
+- (void) notifyWidgetsPanelsDidLayout
+{
+    NSNotification *notif = [NSNotification notificationWithName:kWidgetsPanelsDidLayoutNotification object:self userInfo:nil];
+    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
+}
+
 - (BOOL) isWidgetVisibleForInfo:(OAMapWidgetInfo *)widgetInfo
 {
     return [self isWidgetVisible:widgetInfo.key];
@@ -352,8 +358,9 @@
             BOOL defaultAvailable = !defaultMode || !widget.isCustomWidget;
             BOOL passMatchedPanels = !matchingPanelsMode || [panels containsObject:widget.widgetPanel];
             BOOL passTypeAllowed = [widget getWidgetType] == nil || [[widget getWidgetType] isAllowed];
-
-            if (passDisabled && passEnabled && passAvailable && defaultAvailable && passMatchedPanels && passTypeAllowed)
+            BOOL passPanelAllowed = [widget getWidgetType] == nil || [[widget getWidgetType] isPanelsAllowed:panels];
+            
+            if (passDisabled && passEnabled && passAvailable && defaultAvailable && passMatchedPanels && passTypeAllowed && passPanelAllowed)
                 [filteredWidgets addObject:widget];
         }
     }

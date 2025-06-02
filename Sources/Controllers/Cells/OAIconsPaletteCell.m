@@ -40,7 +40,7 @@
     self.bottomTitleOffset.constant = 8;
 }
 
-- (void) topButtonVisibility:(BOOL)show
+- (void)topButtonVisibility:(BOOL)show
 {
     self.topButton.hidden = !show;
 }

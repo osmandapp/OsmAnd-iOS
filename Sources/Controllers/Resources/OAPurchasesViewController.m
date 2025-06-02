@@ -126,6 +126,8 @@ static BOOL _purchasesUpdated;
         NSMutableArray<OAProduct *> *activeProducts = [NSMutableArray array];
         NSMutableArray<OAProduct *> *externalActiveProducts = [NSMutableArray array];
         NSMutableArray<OAInAppStateHolder *> *externalActiveProductHolders = [NSMutableArray array];
+        NSMutableArray<OASubscription *> *externalActiveSubscriptions = [NSMutableArray array];
+        NSMutableArray<OASubscriptionStateHolder *> *externalActiveSubscriptionHolders = [NSMutableArray array];
         NSMutableArray<OAProduct *> *expiredProducts = [NSMutableArray array];
         for (OAProduct *product in mainPurchases)
         {
@@ -143,16 +145,30 @@ static BOOL _purchasesUpdated;
             else if (product.purchaseState == PSTATE_NOT_PURCHASED)
                 [expiredProducts addObject:product];
         }
-        NSMapTable<OAProduct *, OAInAppStateHolder *> *externalInApps = _iapHelper.getExternalInApps;
-        for (OAProduct *product in externalInApps.keyEnumerator)
+        NSArray<OAInAppStateHolder *> *externalInApps = _iapHelper.getExternalInApps;
+        for (OAInAppStateHolder *holder in externalInApps)
         {
-            [externalActiveProducts addObject:product];
-            [externalActiveProductHolders addObject:[externalInApps objectForKey:product]];
+            OAProduct *product = holder.linkedProduct;
+            if (product)
+            {
+                [externalActiveProducts addObject:product];
+                [externalActiveProductHolders addObject:holder];
+            }
         }
-        
+        NSArray<OASubscriptionStateHolder *> *externalSubscriptions = _iapHelper.getExternalSubscriptions;
+        for (OASubscriptionStateHolder *holder in externalSubscriptions)
+        {
+            OASubscription *subscription = holder.linkedSubscription;
+            if (subscription)
+            {
+                [externalActiveSubscriptions addObject:subscription];
+                [externalActiveSubscriptionHolders addObject:holder];
+            }
+        }
+
         OAAppSettings *settings = OAAppSettings.sharedManager;
         BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
-        if (activeProducts.count == 0 && externalActiveProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
+        if (activeProducts.count == 0 && externalActiveProducts.count == 0 && externalActiveSubscriptions.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
         {
             if (OABackupHelper.sharedInstance.isRegistered)
             {
@@ -184,7 +200,7 @@ static BOOL _purchasesUpdated;
         }
         else
         {
-            if (activeProducts.count > 0 || externalActiveProducts.count > 0 || isProSubscriptionAvailable)
+            if (activeProducts.count > 0 || externalActiveProducts.count > 0 || externalActiveSubscriptions.count > 0 || isProSubscriptionAvailable)
             {
                 OATableSectionData *activeSection = [_data createNewSection];
                 activeSection.headerText = OALocalizedString(@"osm_live_active");
@@ -218,21 +234,46 @@ static BOOL _purchasesUpdated;
                 for (NSInteger i = 0; i < activeProducts.count; i++)
                 {
                     OAProduct *product = activeProducts[i];
+                    NSNumber *purchaseTime = [_iapHelper getInAppPurchaseTime:product.productIdentifier];
+                    if (!purchaseTime)
+                        purchaseTime = @(0);
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-                        @"product" : product
+                        @"product" : product,
+                        @"purchaseTime" : purchaseTime
+                    }];
+                }
+                for (NSInteger i = 0; i < externalActiveSubscriptions.count; i++)
+                {
+                    NSString *sku = externalActiveSubscriptionHolders[i].sku;
+                    if (isProSubscriptionAvailable && [sku isEqualToString:[settings.backupPurchaseSku get]])
+                        continue;
+                    
+                    OASubscription *subscription = externalActiveSubscriptions[i];
+                    NSNumber *origin = @(externalActiveSubscriptionHolders[i].origin);
+                    NSNumber *expireTime = @(externalActiveSubscriptionHolders[i].expireTime);
+                    [activeSection addRowFromDictionary:@{
+                        kCellKeyKey : [@"product_" stringByAppendingString:subscription.productIdentifier],
+                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+                        @"product" : subscription,
+                        @"origin" : origin,
+                        @"expireTime" : expireTime
                     }];
                 }
                 for (NSInteger i = 0; i < externalActiveProducts.count; i++)
                 {
                     OAProduct *product = externalActiveProducts[i];
                     NSNumber *origin = @(externalActiveProductHolders[i].origin);
+                    NSNumber *purchaseTime = @(externalActiveProductHolders[i].purchaseTime);
+                    if (!purchaseTime)
+                        purchaseTime = @(0);
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                         @"product" : product,
-                        @"origin" : origin
+                        @"origin" : origin,
+                        @"purchaseTime" : purchaseTime
                     }];
                 }
             }
@@ -484,11 +525,18 @@ static BOOL _purchasesUpdated;
         id originObj = [item objForKey:@"origin"];
         if (originObj && [originObj isKindOfClass:NSNumber.class])
             origin = (EOAPurchaseOrigin) ((NSNumber *)originObj).intValue;
-
-        if (origin != EOAPurchaseOriginUndefined)
-            [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"] origin:origin]];
-        else
-            [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"]]];
+        NSDate *purchaseDate = nil;
+        id purchaseTimeObj = [item objForKey:@"purchaseTime"];
+        if (purchaseTimeObj && [purchaseTimeObj isKindOfClass:NSNumber.class] && ((NSNumber *)purchaseTimeObj).longValue > 0)
+            purchaseDate = [NSDate dateWithTimeIntervalSince1970:((NSNumber *)purchaseTimeObj).doubleValue];
+        NSDate *expireDate = nil;
+        id expireTimeObj = [item objForKey:@"expireTime"];
+        if (expireTimeObj && [expireTimeObj isKindOfClass:NSNumber.class])
+            expireDate = [NSDate dateWithTimeIntervalSince1970:((NSNumber *)expireTimeObj).doubleValue];
+        if (origin == EOAPurchaseOriginUndefined)
+            origin = EOAPurchaseOriginIOS;
+        
+        [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"] origin:origin purchaseDate:purchaseDate expireDate:expireDate]];
     }
 }
 

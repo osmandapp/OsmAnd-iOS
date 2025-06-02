@@ -2065,7 +2065,7 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
-- (UIImage *) getPointIcon:(id)object
+- (UIImage *)getPointIcon:(id)object
 {
     if (object && [self isObjectMovable:object])
     {
@@ -2073,10 +2073,17 @@ colorizationScheme:(int)colorizationScheme
             return [UIImage imageNamed:@"ic_map_pin"];
 
         OAGpxWptItem *point = (OAGpxWptItem *)object;
-        return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundType icon:[@"mx_" stringByAppendingString:point.point.getIconName]];
+        NSString *backgroundType = point.point.getBackgroundType ?: DEFAULT_ICON_SHAPE_KEY;
+        NSString *iconName = point.point.getIconName ?: DEFAULT_ICON_NAME_KEY;
+
+        return [OAFavoritesLayer getImageWithColor:point.color
+                                        background:backgroundType
+                                              icon:[@"mx_" stringByAppendingString:iconName]];
     }
     OAFavoriteColor *def = [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject];
-    return [OAFavoritesLayer getImageWithColor:def.color background:DEFAULT_ICON_SHAPE_KEY icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME_KEY]];
+    return [OAFavoritesLayer getImageWithColor:def.color
+                                    background:DEFAULT_ICON_SHAPE_KEY
+                                          icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME_KEY]];
 }
 
 - (void) setPointVisibility:(id)object hidden:(BOOL)hidden

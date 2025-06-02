@@ -340,7 +340,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 double rotation = NAN;
                 BOOL pendingRotation = NO;
                 int currentMapRotation = [_settings.rotateMap get];
-                BOOL smallSpeedForCompass = [self isSmallSpeedForCompass:location];
                 
                 showViewAngle = [OANativeUtilities containsLatLon:location];
                 if (currentMapRotation == ROTATE_MAP_BEARING)
@@ -547,7 +546,9 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         const auto targetAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
         auto zoomAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
         
-        animator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
+        auto userZoomAnimation = animator->getCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
+        if (userZoomAnimation)
+            animateZoom = NO;
         
         if (!animateZoom)
             zoomAnimation = nullptr;
@@ -968,10 +969,15 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 {
     if (![self isMapLinkedToLocation])
     {
-        int autoFollow = [_settings.autoFollowRoute get];
-        if (autoFollow > 0 && [[OARoutingHelper sharedInstance] isFollowingMode] && !_routePlanningMode)
-            [self backToLocationWithDelay:autoFollow];
+        [self backToLocationWithConditions];
     }
+}
+
+- (void)backToLocationWithConditions
+{
+    int autoFollow = [_settings.autoFollowRoute get];
+    if (autoFollow > 0 && [[OARoutingHelper sharedInstance] isFollowingMode] && !_routePlanningMode)
+        [self backToLocationWithDelay:autoFollow];
 }
 
 - (void) setMapViewController:(OAMapViewController *)mapViewController

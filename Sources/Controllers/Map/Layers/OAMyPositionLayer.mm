@@ -771,7 +771,7 @@ typedef enum {
     BOOL showBearing = [self shouldShowBearing:newLocation];
     
     double pointCourse = [self getPointCourse];
-    double bearing = (isnan(pointCourse) ? newHeading : pointCourse) - 90;
+    double bearing = (pointCourse < 0 ? newHeading : pointCourse) - 90;
     
     [c setCurrentMarkerState:showBearing ? EOAMarkerStateMove : EOAMarkerStateStay showHeading:showHeading];
     [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading visible:visible];
@@ -783,7 +783,8 @@ typedef enum {
     _prevLocation = _lastLocation;
     _lastLocation = newLocation;
     _lastHeading = newHeading;
-    _lastCourse = newLocation.course;
+    if (newLocation.course >= 0)
+        _lastCourse = newLocation.course;
 
     if (!_initDone)
         return;
@@ -851,8 +852,8 @@ typedef enum {
     if (location)
     {
         BOOL hasCourse = location.course > 0.0;
-        BOOL courseValid = hasCourse || (self.isUseRouting && _lastCourse != -1.0);
-        BOOL speedValid = location.speed > BEARING_SPEED_THRESHOLD;
+        BOOL courseValid = hasCourse || (self.isUseRouting && _lastCourse >= 0.0);
+        BOOL speedValid = location.speed < 0 || location.speed > BEARING_SPEED_THRESHOLD;
         if (courseValid && (speedValid || self.isLocationSnappedToRoad))
             return hasCourse ? location.course : _lastCourse;
     }
@@ -868,16 +869,8 @@ typedef enum {
 
 - (double) getPointCourse
 {
-    double result = NAN;
-    CLLocation *location = nil;
-    if (OARoutingHelper.sharedInstance.isFollowingMode && OAAppSettings.sharedManager.snapToRoad.get)
-    {
-        OARouteLayer *routeLayer = self.mapViewController.mapLayers.routeMapLayer;
-        location = routeLayer.lastProj;
-        if (location)
-            result = location.course;
-    }
-    return result;
+    CLLocation *location = [self getPointLocation];
+    return location && location.course >= 0 ? location.course : _lastCourse;
 }
 
 #pragma mark - OAContextMenuProvider

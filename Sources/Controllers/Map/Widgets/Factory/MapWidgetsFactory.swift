@@ -52,6 +52,8 @@ final class MapWidgetsFactory: NSObject {
             return DistanceToDestinationWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .intermediateDestination:
             return DistanceToIntermediateDestinationWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
+        case .routeInfo:
+            return RouteInfoWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .timeToIntermediate:
             let state = TimeToNavigationPointWidgetState(customId: customId, intermediate: true, widgetParams: widgetParams)
             return TimeToNavigationPointWidget(widgetState: state, appMode: appMode, widgetParams: widgetParams)

@@ -33,7 +33,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
 static const NSInteger kElevationMinMeters = 0;
 static const NSInteger kElevationMaxMeters = 2000;
 
-@interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate, OACollectionCellDelegate, ColorCollectionViewControllerDelegate>
+@interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate, OACollectionCellDelegate, ColorCollectionViewControllerDelegate, UIColorPickerViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -45,12 +45,20 @@ static const NSInteger kElevationMaxMeters = 2000;
 @property (nonatomic) OAMapPanelViewController *mapPanel;
 @property (nonatomic) OAConcurrentArray<PaletteColor *> *sortedPaletteColorItems;
 @property (nonatomic) GradientColorsCollection *gradientColorsCollection;
+@property (nonatomic) NSMutableArray<OAColorItem *> *sortedColorItems;
+@property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
 @property (nonatomic) NSIndexPath *paletteGridIndexPath;
 @property (nonatomic) NSIndexPath *paletteNameIndexPath;
 @property (nonatomic) NSIndexPath *paletteLegendIndexPath;
+@property (nonatomic) NSIndexPath *colorsCollectionIndexPath;
 @property (nonatomic) PaletteColor *basePaletteColorItem;
 @property (nonatomic) PaletteColor *currentPaletteColorItem;
+@property (nonatomic) OAColorItem *baseDayColorItem;
+@property (nonatomic) OAColorItem *currentDayColorItem;
+@property (nonatomic) OAColorItem *baseNightColorItem;
+@property (nonatomic) OAColorItem *currentNightColorItem;
 @property (nonatomic) BOOL isDefaultColorRestored;
+@property (nonatomic) BOOL isNightCoordinatesGridColorMode;
 
 @end
 
@@ -60,6 +68,8 @@ static const NSInteger kElevationMaxMeters = 2000;
     OATableDataModel *_data;
     TerrainMode *_terrainMode;
     OASRTMPlugin *_plugin;
+    OAAppSettings *_settings;
+    OACoordinatesGridSettings *_coordinatesGridSettings;
 
     NSArray<NSString *> *_possibleZoomValues;
     
@@ -108,9 +118,11 @@ static const NSInteger kElevationMaxMeters = 2000;
     _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
     _terrainMode = [_plugin getTerrainMode];
     _mapPanel = OARootViewController.instance.mapPanel;
+    _settings = [OAAppSettings sharedManager];
+    _coordinatesGridSettings = [[OACoordinatesGridSettings alloc] init];
 
-    _baseMinZoom = [_plugin getTerrainMinZoom];
-    _baseMaxZoom = [_plugin getTerrainMaxZoom];
+    _baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getZoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].min : [_plugin getTerrainMinZoom];
+    _baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getZoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].max : [_plugin getTerrainMaxZoom];
     _baseAlpha = [_terrainMode getTransparency] * 0.01;
 
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
@@ -140,6 +152,16 @@ static const NSInteger kElevationMaxMeters = 2000;
                                                  selector:@selector(onCollectionUpdated:)
                                                      name:ColorsCollection.collectionUpdatedNotification
                                                    object:nil];
+    }
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
+    {
+        _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+        _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
+        _isNightCoordinatesGridColorMode = _settings.nightMode;
+        _baseDayColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getDayGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
+        _currentDayColorItem  = _baseDayColorItem;
+        _baseNightColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getNightGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
+        _currentNightColorItem = _baseNightColorItem;
     }
 
     _minZoom = _baseMinZoom;
@@ -192,12 +214,18 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self setupBottomButton];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self refreshColorsCollection];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
     [_mapPanel targetUpdateControlsLayout:YES
-                     customStatusBarStyle:[OAAppSettings sharedManager].nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+                     customStatusBarStyle:_settings.nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -230,6 +258,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self.tableView registerNib:[UINib nibWithNibName:[OASimpleTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OASimpleTableViewCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:GradientChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:GradientChartCell.reuseIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:SegmentTextTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:SegmentTextTableViewCell.reuseIdentifier];
 }
 
 #pragma mark - Base setup UI
@@ -251,6 +280,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             result = [_terrainMode getDescription];
             break;
         case EOATerrainSettingsTypeZoomLevels:
+        case EOATerrainSettingsTypeCoordinatesGridZoomLevels:
             result = OALocalizedString(@"shared_string_zoom_levels");
             break;
         case EOATerrainSettingsTypeVerticalExaggeration:
@@ -259,6 +289,9 @@ static const NSInteger kElevationMaxMeters = 2000;
             break;
         case EOAGPXSettingsTypeWallHeight:
             result = OALocalizedString(@"wall_height");
+            break;
+        case EOATerrainSettingsTypeCoordinatesGridColor:
+            result = OALocalizedString(@"grid_color");
             break;
     }
     return result;
@@ -271,8 +304,10 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         case EOATerrainSettingsTypeVisibility:
         case EOATerrainSettingsTypePalette:
+        case EOATerrainSettingsTypeCoordinatesGridColor:
             break;
         case EOATerrainSettingsTypeZoomLevels:
+        case EOATerrainSettingsTypeCoordinatesGridZoomLevels:
             result = OALocalizedString(@"map_settings_zoom_level_description");
             break;
         case EOAGPXSettingsTypeVerticalExaggeration:
@@ -319,7 +354,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             kCellTitleKey : OALocalizedString(@"visibility")
         }];
     }
-    else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
+    else if (_terrainType == EOATerrainSettingsTypeZoomLevels || _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
     {
         [topSection addRowFromDictionary:@{
             kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
@@ -360,7 +395,31 @@ static const NSInteger kElevationMaxMeters = 2000;
             kCellKeyKey: @"allColors",
             kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
             kCellTitleKey: OALocalizedString(@"shared_string_all_colors"),
-            @"tintTitle": [UIColor colorNamed:ACColorNameIconColorActive]
+            @"tintTitle": [UIColor colorNamed:ACColorNameTextColorActive]
+        }];
+    }
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
+    {
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey: @"coordinatesGridColor",
+            kCellTypeKey: OASimpleTableViewCell.reuseIdentifier,
+            kCellTitleKey: OALocalizedString(@"shared_string_color"),
+            @"tintTitle": [UIColor colorNamed:ACColorNameTextColorPrimary]
+        }];
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey: @"color_day_night",
+            kCellTypeKey: SegmentTextTableViewCell.reuseIdentifier,
+        }];
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey: @"coordinatesGridColors",
+            kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier
+        }];
+        _colorsCollectionIndexPath = [NSIndexPath indexPathForRow:[topSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey: @"allColors",
+            kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
+            kCellTitleKey: OALocalizedString(@"shared_string_all_colors"),
+            @"tintTitle": [UIColor colorNamed:ACColorNameTextColorActive]
         }];
     }
 }
@@ -449,10 +508,14 @@ static const NSInteger kElevationMaxMeters = 2000;
         _app.data.verticalExaggerationScale = _baseVerticalExaggerationScale;
     else if (_terrainType == EOATerrainSettingsTypePalette && (_basePaletteColorItem != _currentPaletteColorItem || _isDefaultColorRestored))
         [self setPaletteColorItem:_basePaletteColorItem];
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor && (_baseDayColorItem != _currentDayColorItem || _baseNightColorItem != _currentNightColorItem))
+        [self setCoordinatesGridBaseColorItem];
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration && _baseGPXVerticalExaggerationScale != _currentGPXVerticalExaggerationScale)
         [self applyGPXVerticalExaggerationForScale:_baseGPXVerticalExaggerationScale];
     else if (_terrainType == EOAGPXSettingsTypeWallHeight && _baseGPXElevationMeters != _currentGPXElevationMeters)
         [self applyGPXElevationMeters:_baseGPXElevationMeters];
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels && (_baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom))
+        [self setCoordinatesGridZoomValuesWithMinZoom:_baseMinZoom maxZoom:_baseMaxZoom];
 
     __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
@@ -467,6 +530,8 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     __weak __typeof(self) weakSelf = self;
     [super hide:YES duration:duration onComplete:^{
+        if (weakSelf.terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
+            [[OADayNightHelper instance] resetTempMode];
         [weakSelf.mapPanel hideScrollableHudViewController];
         if (onComplete)
             onComplete();
@@ -491,11 +556,17 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (BOOL)resetZoomLevels
 {
-    if (_minZoom != terrainMinSupportedZoom || _maxZoom != terrainMaxSupportedZoom)
+    NSInteger defaultMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].min : terrainMinSupportedZoom;
+    NSInteger defaultMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].max : terrainMaxSupportedZoom;
+    if (_minZoom != defaultMinZoom || _maxZoom != defaultMaxZoom)
     {
-        _minZoom = terrainMinSupportedZoom;
-        _maxZoom = terrainMaxSupportedZoom;
-        [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+        _minZoom = defaultMinZoom;
+        _maxZoom = defaultMaxZoom;
+        if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
+            [self setCoordinatesGridZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+        else
+            [_terrainMode setZoomValuesWithMinZoom:(int32_t)_minZoom maxZoom:(int32_t)_maxZoom];
+        
         _isValueChange = _baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom;
         [self updateApplyButton];
         return YES;
@@ -520,6 +591,48 @@ static const NSInteger kElevationMaxMeters = 2000;
         }
     }
     return NO;
+}
+
+- (BOOL)resetCoordinatesGridColor
+{
+    if (!_colorsCollectionIndexPath)
+        return NO;
+    
+    NSInteger defDay = _settings.coordinatesGridColorDay.defValue;
+    NSInteger defNight = _settings.coordinatesGridColorNight.defValue;
+    if (_currentDayColorItem.value == defDay && _currentNightColorItem.value == defNight)
+        return NO;
+    
+    _currentDayColorItem = [_appearanceCollection getColorItemWithValue:(int)defDay] ?: [_appearanceCollection getDefaultLineColorItem];
+    _currentNightColorItem = [_appearanceCollection getColorItemWithValue:(int)defNight] ?: [_appearanceCollection getDefaultLineColorItem];
+    [self applyCoordinatesGridColor];
+    OACollectionSingleLineTableViewCell *colorCell = (OACollectionSingleLineTableViewCell *)[self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+    if (colorCell)
+    {
+        OAColorCollectionHandler *handler = (OAColorCollectionHandler *)[colorCell getCollectionHandler];
+        NSUInteger idx = [_sortedColorItems indexOfObject:_isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem];
+        if (idx != NSNotFound)
+        {
+            NSIndexPath *path = [NSIndexPath indexPathForRow:(NSInteger)idx inSection:0];
+            [handler onItemSelected:path collectionView:colorCell.collectionView];
+        }
+    }
+
+    _isValueChange = (_baseDayColorItem != _currentDayColorItem || _baseNightColorItem != _currentNightColorItem);
+    [self updateApplyButton];
+    return YES;
+}
+
+- (void)refreshColorsCollection
+{
+    if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor && (_colorsCollectionIndexPath && _colorsCollectionIndexPath.section < [self.tableView numberOfSections] && _colorsCollectionIndexPath.row < [self.tableView numberOfRowsInSection:_colorsCollectionIndexPath.section]))
+    {
+        [self.tableView reloadRowsAtIndexPaths:@[_colorsCollectionIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        OACollectionSingleLineTableViewCell *colorCell = (OACollectionSingleLineTableViewCell *) [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+        NSIndexPath *selectedIndexPath = [[colorCell getCollectionHandler] getSelectedIndexPath];
+        if (selectedIndexPath.row != NSNotFound && ![colorCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+            [colorCell.collectionView scrollToItemAtIndexPath:selectedIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    }
 }
 
 - (BOOL)resetGPXVerticalExaggerationValues
@@ -581,7 +694,10 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)applyCurrentZoomLevels
 {
-    [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+    if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
+        [_coordinatesGridSettings setZoomLevels:{ .min = _minZoom, .max = _maxZoom } forAppMode:[_settings.applicationMode get]];
+    else
+        [_terrainMode setZoomValuesWithMinZoom:(int32_t)_minZoom maxZoom:(int32_t)_maxZoom];
 }
 
 - (void)applyVerticalExaggerationScale
@@ -594,12 +710,21 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self setPaletteColorItem:_currentPaletteColorItem];
 }
 
+- (void)applyCoordinatesGridColor
+{
+    [_coordinatesGridSettings setGridColor:(int)_currentDayColorItem.value forAppMode:[_settings.applicationMode get] nightMode:NO];
+    [_coordinatesGridSettings setGridColor:(int)_currentNightColorItem.value forAppMode:[_settings.applicationMode get] nightMode:YES];
+}
+
 - (NSArray<NSString *> *)getPossibleZoomValues
 {
+    NSInteger minZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].min : terrainMinSupportedZoom;
+    NSInteger maxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].max : terrainMaxSupportedZoom;
+    
     NSMutableArray *res = [NSMutableArray new];
-    for (NSInteger i = terrainMinSupportedZoom; i <= terrainMaxSupportedZoom; i++)
+    for (NSInteger zoomLevel = minZoom; zoomLevel <= maxZoom; zoomLevel++)
     {
-        [res addObject:[NSString stringWithFormat:@"%ld", i]];
+        [res addObject:[NSString stringWithFormat:@"%ld", zoomLevel]];
     }
     return res;
 }
@@ -620,6 +745,17 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
 }
 
+- (void)setCoordinatesGridBaseColorItem
+{
+    [_coordinatesGridSettings setGridColor:(int)_baseDayColorItem.value forAppMode:[_settings.applicationMode get] nightMode:NO];
+    [_coordinatesGridSettings setGridColor:(int)_baseNightColorItem.value forAppMode:[_settings.applicationMode get] nightMode:YES];
+}
+
+- (void)setCoordinatesGridZoomValuesWithMinZoom:(NSInteger)baseMinZoom maxZoom:(NSInteger)baseMaxZoom
+{
+    [_coordinatesGridSettings setZoomLevels:{ .min = baseMinZoom, .max = baseMaxZoom } forAppMode:[_settings.applicationMode get]];
+}
+
 #pragma mark - Selectors
 
 - (IBAction)backButtonPressed:(UIButton *)sender
@@ -632,12 +768,14 @@ static const NSInteger kElevationMaxMeters = 2000;
     BOOL wasReset = NO;
     if (_terrainType == EOATerrainSettingsTypeVisibility)
         wasReset = [self resetVisibilityValues];
-    else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
+    else if (_terrainType == EOATerrainSettingsTypeZoomLevels || _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
         wasReset = [self resetZoomLevels];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
         wasReset = [self resetVerticalExaggerationValues];
     else if (_terrainType == EOATerrainSettingsTypePalette)
         wasReset = [self resetPalette];
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
+        wasReset = [self resetCoordinatesGridColor];
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
         wasReset = [self resetGPXVerticalExaggerationValues];
     else if (_terrainType == EOAGPXSettingsTypeWallHeight)
@@ -656,10 +794,14 @@ static const NSInteger kElevationMaxMeters = 2000;
         [self applyCurrentVisibility];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_minZoom != [_terrainMode getMinZoom] || _maxZoom != [_terrainMode getMaxZoom]))
         [self applyCurrentZoomLevels];
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels && (_minZoom != [_coordinatesGridSettings getZoomLevels].min || _maxZoom != [_coordinatesGridSettings getZoomLevels].max))
+        [self applyCurrentZoomLevels];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration && _currentVerticalExaggerationScale != _app.data.verticalExaggerationScale)
         [self applyVerticalExaggerationScale];
     else if (_terrainType == EOATerrainSettingsTypePalette && ![((PaletteGradientColor *) _currentPaletteColorItem).paletteName isEqualToString:[[_plugin getTerrainMode] getKeyName]])
         [self applyPalette];
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
+        [self applyCoordinatesGridColor];
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration && _baseGPXVerticalExaggerationScale != _currentGPXVerticalExaggerationScale)
         [self applyGPXVerticalExaggerationForScale:_currentGPXVerticalExaggerationScale];
     else if (_terrainType == EOAGPXSettingsTypeWallHeight && _baseGPXElevationMeters != _currentGPXElevationMeters)
@@ -715,6 +857,22 @@ static const NSInteger kElevationMaxMeters = 2000;
     
     _isValueChange = _baseAlpha != _currentAlpha;
     [self updateApplyButton];
+}
+
+- (void)segmentChanged:(NSInteger)index
+{
+    _isNightCoordinatesGridColorMode = index == 1;
+    [[OADayNightHelper instance] setTempMode:_isNightCoordinatesGridColorMode ? DayNightModeNight : DayNightModeDay];
+    [self refreshColorsCollection];
+}
+
+- (void)onCellButtonPressed:(UIButton *)sender
+{
+    UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
+    colorViewController.delegate = self;
+    OAColorItem *activeItem = _isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem;
+    colorViewController.selectedColor = [activeItem getColor];
+    [self.navigationController presentViewController:colorViewController animated:YES completion:nil];
 }
 
 - (NSString *)sliderValueString:(float)value
@@ -953,8 +1111,10 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         OACustomPickerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell reuseIdentifier]];
         cell.dataArray = _possibleZoomValues;
-        NSInteger minZoom = _minZoom >= terrainMinSupportedZoom && _minZoom <= terrainMaxSupportedZoom ? (_minZoom - terrainMinSupportedZoom) : 1;
-        NSInteger maxZoom = _maxZoom >= terrainMinSupportedZoom && _maxZoom <= terrainMaxSupportedZoom ? (_maxZoom - terrainMinSupportedZoom) : 1;
+        NSInteger baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].min : terrainMinSupportedZoom;
+        NSInteger baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getSupportedZoomLevels].max : terrainMaxSupportedZoom;
+        NSInteger minZoom = _minZoom >= baseMinZoom && _minZoom <= baseMaxZoom ? (_minZoom - baseMinZoom) : 1;
+        NSInteger maxZoom = _maxZoom >= baseMinZoom && _maxZoom <= baseMaxZoom ? (_maxZoom - baseMinZoom) : 1;
         [cell.picker selectRow:indexPath.row == 1 ? minZoom : maxZoom inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
@@ -966,29 +1126,51 @@ static const NSInteger kElevationMaxMeters = 2000;
         [cell leftIconVisibility:NO];
         [cell descriptionVisibility:NO];
         BOOL isPaletteName = [item.key isEqualToString:@"paletteName"];
-        cell.selectionStyle = isPaletteName ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+        BOOL isCoordinatesGridColor = [item.key isEqualToString:@"coordinatesGridColor"];
+        [cell setCustomLeftSeparatorInset:isCoordinatesGridColor];
+        cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+        cell.selectionStyle = isPaletteName || isCoordinatesGridColor ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
         cell.titleLabel.text = isPaletteName ? [_currentPaletteColorItem toHumanString] : item.title;
         cell.titleLabel.textColor = [item objForKey:@"tintTitle"] ?: UIColorFromRGB(color_extra_text_gray);
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:isPaletteName ? UIFontTextStyleFootnote : UIFontTextStyleBody];
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OACollectionSingleLineTableViewCell reuseIdentifier]])
+    else if ([item.cellType isEqualToString:OACollectionSingleLineTableViewCell.reuseIdentifier])
     {
-        OACollectionSingleLineTableViewCell *cell =
-            [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-        [cell rightActionButtonVisibility:NO];
-        [cell.collectionView registerNib:[UINib nibWithNibName:PaletteCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:PaletteCollectionViewCell.reuseIdentifier];
-
-        PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
-        paletteHandler.delegate = self;
-        NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:_currentPaletteColorItem] inSection:0];
-        if (selectedIndexPath.row == NSNotFound)
-            selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getPaletteColorByName:[_terrainMode getKeyName]]] inSection:0];
-        [paletteHandler setSelectedIndexPath:selectedIndexPath];
-        [cell setCollectionHandler:paletteHandler];
-        cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
-        [cell configureTopOffset:12];
-        [cell configureBottomOffset:12];
+        OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:OACollectionSingleLineTableViewCell.reuseIdentifier];
+        BOOL isCoordinatesGridColors = [item.key isEqualToString:@"coordinatesGridColors"];
+        [cell rightActionButtonVisibility:isCoordinatesGridColors];
+        [cell.rightActionButton setImage:isCoordinatesGridColors ? [UIImage templateImageNamed:@"ic_custom_add"] : nil forState:UIControlStateNormal];
+        cell.rightActionButton.tag = isCoordinatesGridColors ? (indexPath.section << 10 | indexPath.row) : 0;
+        cell.rightActionButton.accessibilityLabel = isCoordinatesGridColors ? OALocalizedString(@"shared_string_add_color") : nil;
+        [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+        if (isCoordinatesGridColors)
+        {
+            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
+            colorHandler.delegate = self;
+            OAColorItem *activeItem = _isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem;
+            NSInteger selectedIndex = [_sortedColorItems indexOfObject:activeItem];
+            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [_sortedColorItems indexOfObject:[_appearanceCollection getDefaultLineColorItem]];
+            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
+            [colorHandler setSelectedIndexPath:selectedIndexPath];
+            [cell setCollectionHandler:colorHandler];
+            [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else
+        {
+            [cell.collectionView registerNib:[UINib nibWithNibName:PaletteCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:PaletteCollectionViewCell.reuseIdentifier];
+            PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
+            paletteHandler.delegate = self;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:_currentPaletteColorItem] inSection:0];
+            if (selectedIndexPath.row == NSNotFound)
+                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getPaletteColorByName:[_terrainMode getKeyName]]] inSection:0];
+            [paletteHandler setSelectedIndexPath:selectedIndexPath];
+            [cell setCollectionHandler:paletteHandler];
+            cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
+            [cell configureTopOffset:12];
+            [cell configureBottomOffset:12];
+        }
         return cell;
     }
     else if ([item.cellType isEqualToString:GradientChartCell.reuseIdentifier])
@@ -1022,6 +1204,20 @@ static const NSInteger kElevationMaxMeters = 2000;
                                                                                        analysis:nil]];
         [cell.chartView notifyDataSetChanged];
         [cell.chartView setNeedsDisplay];
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:SegmentTextTableViewCell.reuseIdentifier])
+    {
+        SegmentTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SegmentTextTableViewCell.reuseIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+        [cell setSegmentedControlBottomSpacing:8.0];
+        [cell configureSegmentedControlWithTitles:@[OALocalizedString(@"day"), OALocalizedString(@"daynight_mode_night")] selectedSegmentIndex:_settings.nightMode ? 1 : 0 selectedTitles:nil];
+        __weak __typeof(self) weakSelf = self;
+        cell.didSelectSegmentIndex = ^(NSInteger idx) {
+            [weakSelf segmentChanged:idx];
+        };
         return cell;
     }
     return nil;
@@ -1067,7 +1263,21 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
     else if ([item.key isEqualToString:@"allColors"])
     {
-        ItemsCollectionViewController *colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeTerrainPaletteItems items:_gradientColorsCollection selectedItem:_currentPaletteColorItem];
+        ItemsCollectionViewController *colorCollectionViewController;
+        if (_terrainType == EOATerrainSettingsTypePalette)
+        {
+            colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeTerrainPaletteItems items:_gradientColorsCollection selectedItem:_currentPaletteColorItem];
+        }
+        else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
+        {
+            NSArray<OAColorItem *> *allColors = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+            OAColorItem *selected = _isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem;
+            colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:allColors selectedItem:selected];
+            OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+            OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+            colorCollectionViewController.hostColorHandler = colorHandler;
+        }
+        
         colorCollectionViewController.delegate = self;
         [self.navigationController pushViewController:colorCollectionViewController animated:YES];
     }
@@ -1098,7 +1308,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         if (intValue <= _maxZoom)
         {
             _minZoom = intValue;
-            [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+            [self applyCurrentZoomLevels];
         }
         else
         {
@@ -1112,7 +1322,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         if (intValue >= _minZoom)
         {
             _maxZoom = intValue;
-            [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+            [self applyCurrentZoomLevels];
         }
         else
         {
@@ -1132,25 +1342,127 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss
 {
-    _currentPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];;
-    _isValueChange = _basePaletteColorItem != _currentPaletteColorItem;
-    [self setPaletteColorItem:_currentPaletteColorItem];
-    NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
-    if (_paletteNameIndexPath)
-        [indexPaths addObject:_paletteNameIndexPath];
-    if (_paletteLegendIndexPath)
-        [indexPaths addObject:_paletteLegendIndexPath];
-    if (indexPaths.count > 0)
-        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+    if (_terrainType == EOATerrainSettingsTypePalette)
+    {
+        _currentPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];;
+        _isValueChange = _basePaletteColorItem != _currentPaletteColorItem;
+        [self setPaletteColorItem:_currentPaletteColorItem];
+        NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+        if (_paletteNameIndexPath)
+            [indexPaths addObject:_paletteNameIndexPath];
+        if (_paletteLegendIndexPath)
+            [indexPaths addObject:_paletteLegendIndexPath];
+        if (indexPaths.count > 0)
+            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+    }
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
+    {
+        OAColorItem *picked = _sortedColorItems[indexPath.row];
+        if (_isNightCoordinatesGridColorMode)
+        {
+            _currentNightColorItem = picked;
+            [_coordinatesGridSettings setGridColor:(int)_currentNightColorItem.value forAppMode:[_settings.applicationMode get] nightMode:YES];
+        }
+        else
+        {
+            _currentDayColorItem = picked;
+            [_coordinatesGridSettings setGridColor:(int)_currentDayColorItem.value forAppMode:[_settings.applicationMode get] nightMode:NO];
+        }
+        
+        OACollectionSingleLineTableViewCell *cell = (OACollectionSingleLineTableViewCell *)[self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+        OAColorCollectionHandler *handler = (OAColorCollectionHandler *)[cell getCollectionHandler];
+        [handler setSelectedIndexPath:indexPath];
+        _isValueChange = _currentDayColorItem != _baseDayColorItem || _currentNightColorItem != _baseNightColorItem;
+        [self updateApplyButton];
+    }
+}
+
+- (void)reloadCollectionData
+{
+    _currentDayColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getDayGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
+    _currentNightColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getNightGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
+    _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
 }
 
 #pragma mark - ColorCollectionViewControllerDelegate
 
 - (void)selectPaletteItem:(PaletteColor *)paletteItem
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] selectedItem:nil collectionView:nil];
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
+}
+
+- (void)selectColorItem:(OAColorItem *)colorItem
+{
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
+}
+
+- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
+{
+    OAColorItem *newColorItem = [_appearanceCollection addNewSelectedColor:color];
+    if (_colorsCollectionIndexPath)
+    {
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        [_sortedColorItems insertObject:newColorItem atIndex:0];
+        [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0] newItem:newColorItem];
+    }
+    return newColorItem;
+}
+
+- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
+{
+    if (_colorsCollectionIndexPath)
+    {
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
+        [_appearanceCollection changeColor:colorItem newColor:color];
+        [colorHandler replaceOldColor:indexPath];
+    }
+}
+
+- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
+{
+    OAColorItem *duplicatedColorItem = [_appearanceCollection duplicateColor:colorItem];
+    if (_colorsCollectionIndexPath)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
+        [_sortedColorItems insertObject:duplicatedColorItem atIndex:indexPath.row + 1];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+        [colorHandler addColor:newIndexPath newItem:duplicatedColorItem];
+    }
+
+    return duplicatedColorItem;
+}
+
+- (void)deleteColorItem:(OAColorItem *)colorItem
+{
+    if (_colorsCollectionIndexPath)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
+        [_appearanceCollection deleteColor:colorItem];
+        [_sortedColorItems removeObjectAtIndex:indexPath.row];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        [colorHandler removeColor:indexPath];
+    }
+}
+
+#pragma mark - UIColorPickerViewControllerDelegate
+
+- (void)colorPickerViewController:(UIColorPickerViewController *)viewController didSelectColor:(UIColor *)color continuously:(BOOL)continuously
+{
+    if ([OAUtilities isiOSAppOnMac])
+        [self addAndGetNewColorItem:color];
+}
+
+- (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
+{
+    [self addAndGetNewColorItem:viewController.selectedColor];
 }
 
 @end

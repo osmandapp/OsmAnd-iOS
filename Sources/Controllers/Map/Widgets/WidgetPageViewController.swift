@@ -54,9 +54,13 @@ final class WidgetPageViewController: UIViewController {
             }
         } else {
             for widgetView in widgetViews {
-                widgetView.isSimpleLayout = false
-                widgetView.adjustSize()
-                widgetView.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widgetView.frame.size.height, priority: .defaultHigh)
+                if let textWidget = widgetView as? OATextInfoWidget, textWidget.isSidePanelSimpleLayoutMode {
+                    configureSimple(widget: widgetView)
+                } else {
+                    widgetView.adjustSize()
+                    widgetView.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widgetView.frame.size.height, priority: .defaultHigh)
+                }
+
                 stackView.addArrangedSubview(widgetView)
             }
         }
@@ -88,24 +92,37 @@ final class WidgetPageViewController: UIViewController {
         } else {
             let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
             for widget in widgetViews {
-                widget.showBottomSeparator(widget != lastVisibleWidget)
-                widget.translatesAutoresizingMaskIntoConstraints = false
-                widget.adjustSize()
-                width = max(width, widget.frame.size.width)
-                if widget.frame.size.width < width {
-                    var rect = widget.frame
-                    rect.size.width = width
-                    widget.frame = rect
-                }
-                if !widget.isHidden {
-                    height += widget.frame.size.height
+                if widget.isSimpleLayout {
+                    // This block calculates sizes for side-panel medium and large layout widgets
+                    guard !widget.isHidden else { continue }
+                    if let textInfoWidget = widget as? OATextInfoWidget {
+                        textInfoWidget.configureSimpleLayout()
+                    }
+                    let fittingSize = widget.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                    height += fittingSize.height
+                    width = max(width, min(fittingSize.width, OARootViewController.instance().mapPanel.hasTopWidget() && OAUtilities.isLandscapeIpadAware() ? 120 : UIScreen.main.bounds.width * 0.45))
+                } else {
+                    // This block calculates sizes for side-panel small/default layout widgets
+                    widget.translatesAutoresizingMaskIntoConstraints = false
+                    widget.adjustSize()
+                    width = max(width, widget.frame.size.width)
+                    if widget.frame.size.width < width {
+                        var rect = widget.frame
+                        rect.size.width = width
+                        widget.frame = rect
+                    }
+                    if !widget.isHidden {
+                        height += widget.frame.size.height
+                    }
+                    
+                    if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
+                        widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: widget.frame.size.height, priority: .defaultHigh)
+                    } else {
+                        widget.updateHeightConstraint(with: .equal, constant: widget.frame.size.height, priority: .defaultHigh)
+                    }
                 }
                 
-                if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
-                    widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: widget.frame.size.height, priority: .defaultHigh)
-                } else {
-                    widget.updateHeightConstraint(with: .equal, constant: widget.frame.size.height, priority: .defaultHigh)
-                }
+                widget.showBottomSeparator(widget != lastVisibleWidget)
             }
         }
         return (width, height)

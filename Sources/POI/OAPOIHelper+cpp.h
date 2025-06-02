@@ -10,6 +10,8 @@
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/MapObject.h>
 
+#import "OrderedDictionary.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @class OASearchPoiTypeFilter, OATopIndexFilter;
@@ -32,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
 
 + (NSString *) processLocalizedNames:(const QHash<QString, QString> &)localizedNames nativeName:(const QString &)nativeName names:(NSMutableDictionary *)names;
-+ (void) processDecodedValues:(const QList<OsmAnd::Amenity::DecodedValue> &)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values;
++ (void) processDecodedValues:(const QList<OsmAnd::Amenity::DecodedValue> &)decodedValues content:(nullable MutableOrderedDictionary *)content values:(nullable MutableOrderedDictionary *)values;
 
 @end
 

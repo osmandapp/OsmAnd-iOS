@@ -84,7 +84,8 @@ final class WidgetUtils {
         let newWidgetsList = NSMutableArray()
         let widgetsFactory = MapWidgetsFactory()
         if !enabledWidgets.isEmpty {
-            let currentWidgetIds = NSMutableArray(array: widgetRegistry.getWidgetsFor(panel).compactMap { ($0 as! MapWidgetInfo).key })
+            let visibleInfos = widgetRegistry.getWidgetsForPanel(appMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [panel])?.array as? [MapWidgetInfo] ?? []
+            let currentWidgetIds = NSMutableArray(array: visibleInfos.map(\.key))
             var widgetParamsArrayLocal = widgetParamsArray
             for widgetInfoId in enabledWidgets {
                 if !currentWidgetIds.contains(widgetInfoId) {

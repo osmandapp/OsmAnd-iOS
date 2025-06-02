@@ -139,7 +139,13 @@ class WidgetType: NSObject {
     }
     
     func isPanelsAllowed(_ panels: [WidgetsPanel]) -> Bool {
-        self == .routeInfo ? !panels.contains(.leftPanel) && !panels.contains(.rightPanel) : true
+        if self == .smallNextTurn {
+            return !panels.contains(.topPanel) && !panels.contains(.bottomPanel)
+        }
+        if self == .routeInfo {
+            return !panels.contains(.leftPanel) && !panels.contains(.rightPanel)
+        }
+        return true
     }
 
     static func findWidgetPanel(widgetId: String, mode: OAApplicationMode? = nil) -> WidgetsPanel? {
@@ -205,17 +211,17 @@ class WidgetType: NSObject {
 
 extension WidgetType {
     // Left panel
-    static let nextTurn = WidgetType(ordinal: 1, id: "next_turn", title: localizedString("map_widget_next_turn"), descr: localizedString("next_turn_widget_desc"), iconName: "widget_next_turn", group: WidgetGroup.routeManeuvers, defaultPanel: WidgetsPanel.leftPanel)
+    static let nextTurn = WidgetType(ordinal: 1, id: "next_turn", title: localizedString("map_widget_next_turn"), descr: localizedString("next_turn_widget_desc"), iconName: "widget_next_turn", group: .routeManeuvers, verticalGroup: .routeGuidance, defaultPanel: .leftPanel)
     
-    static let smallNextTurn = WidgetType(ordinal: 2, id: "next_turn_small", title: localizedString("map_widget_next_turn_small"), descr: localizedString("next_turn_widget_desc"), iconName: "widget_next_turn_small", group: WidgetGroup.routeManeuvers, defaultPanel: WidgetsPanel.leftPanel)
-    static let secondNextTurn = WidgetType(ordinal: 3, id: "next_next_turn", title: localizedString("map_widget_next_next_turn"), descr: localizedString("second_next_turn_widget_desc"), iconName: "widget_second_next_turn", group: WidgetGroup.routeManeuvers, defaultPanel: WidgetsPanel.leftPanel)
+    static let smallNextTurn = WidgetType(ordinal: 2, id: "next_turn_small", title: localizedString("map_widget_next_turn_small"), descr: localizedString("next_turn_widget_desc"), iconName: "widget_next_turn_small", group: .routeManeuvers, defaultPanel: .leftPanel)
+    static let secondNextTurn = WidgetType(ordinal: 3, id: "next_next_turn", title: localizedString("map_widget_next_next_turn"), descr: localizedString("second_next_turn_widget_desc"), iconName: "widget_second_next_turn", group: .routeManeuvers, verticalGroup: .routeGuidance, defaultPanel: .leftPanel)
 
     // Top panel
     static let coordinatesMapCenter = WidgetType(ordinal: 4, id: "coordinates_map_center", title: localizedString("coordinates_widget_map_center"), descr: localizedString("coordinates_widget_map_center_desc"), iconName: "widget_coordinates_map_center", docsUrl: docs_widget_coordinates, group: .coordinatesWidget, defaultPanel: .topPanel)
     static let coordinatesCurrentLocation = WidgetType(ordinal: 5, id: "coordinates_current_location", title: localizedString("coordinates_widget_current_location"), descr: localizedString("coordinates_widget_current_location_desc"), iconName: "widget_coordinates_location", docsUrl: docs_widget_coordinates, group: .coordinatesWidget, defaultPanel: .topPanel)
     static let streetName = WidgetType(ordinal: 6, id: "street_name", title: localizedString("map_widget_top_text"), descr: localizedString("street_name_widget_desc"), iconName: "widget_street_name", docsUrl: docs_widget_street_name, defaultPanel: .topPanel)
     static let markersTopBar = WidgetType(ordinal: 7, id: "map_markers_top", title: localizedString("map_markers_bar"), descr: localizedString("map_markers_bar_widget_desc"), iconName: "widget_markers_topbar", docsUrl: docs_widget_markers, defaultPanel: .topPanel)
-    static let lanes = WidgetType(ordinal: 8, id: "lanes", title: localizedString("show_lanes"), descr: localizedString("lanes_widgets_desc"), iconName: "widget_lanes", docsUrl: docs_widget_lanes, defaultPanel: .topPanel, special: true)
+    static let lanes = WidgetType(ordinal: 8, id: "lanes", title: localizedString("show_lanes"), descr: localizedString("lanes_widgets_desc"), iconName: "widget_lanes", docsUrl: docs_widget_lanes, verticalGroup: .routeGuidance, defaultPanel: .topPanel, special: true)
 
     // Right panel
     static let distanceToDestination = WidgetType(ordinal: 9, id: "distance", title: localizedString("map_widget_distance_to_destination"), descr: localizedString("distance_to_destination_widget_desc"), iconName: "widget_target", group: .navigationPoints, defaultPanel: .rightPanel)

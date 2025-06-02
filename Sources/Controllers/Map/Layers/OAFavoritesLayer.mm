@@ -280,12 +280,6 @@ static const int START_ZOOM = 6;
         if (!favouritePoint.isVisible)
             continue;
         
-        //TODO: delete ater test
-        if ([[favouritePoint getName] isEqualToString:@"My Test Point"])
-        {
-            BOOL stop;
-        }
-        
         double lat = [favouritePoint getLatitude];
         double lon = [favouritePoint getLongitude];
         BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
@@ -293,9 +287,6 @@ static const int START_ZOOM = 6;
         if (shouldAdd)
             [result collect:favouritePoint provider:self];
     }
-    
-    //TODO: delete ater test
-    BOOL stop;
 }
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation

@@ -10,4 +10,6 @@
 
 @property (nonatomic) long long osmId;
 
+- (NSString *) getGpxFileName;
+
 @end

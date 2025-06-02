@@ -8,6 +8,7 @@
 
 #import "OAPlaceDetailsObject.h"
 #import "OAMapSelectionResult.h"
+#import "OASelectedMapObject.h"
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
 

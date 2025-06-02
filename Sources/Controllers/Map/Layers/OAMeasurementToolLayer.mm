@@ -508,12 +508,11 @@
 
 - (CLLocation *) getObjectLocation:(id)o
 {
-    return  nil;;
+    return  nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)o
 {
-    // TODO: implement
     return nil;
 }
 

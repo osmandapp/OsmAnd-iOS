@@ -17,6 +17,8 @@
 #import "OATransportStopRoute.h"
 #import "OATransportStopAggregated.h"
 #import "OAPOI.h"
+#import "OAPointDescription.h"
+#import "Localization.h"
 #import "OAAppSettings.h"
 
 #include "OACoreResourcesTransportRouteIconProvider.h"
@@ -228,7 +230,11 @@
 
 - (OAPointDescription *) getObjectName:(id)o
 {
-    // TODO: implement
+    if ([o isKindOfClass:OATransportStop.class])
+    {
+        OATransportStop *transportStop = (OATransportStop *)o;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_TRANSPORT_STOP typeName:OALocalizedString(@"transport_Stop") name:[transportStop name]];
+    }
     return nil;
 }
 

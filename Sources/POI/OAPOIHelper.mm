@@ -1454,13 +1454,6 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         searchCriteria->bbox31 = bbox31;
     }
     
-    
-    
-    //searchAmenitiesInProgress = true; ??
-    
-    // TODO: use filter and matcher or delete it
-    
-    
     BOOL isEmpty = !filter || [filter isEmpty];
     
     if (isEmpty && additionalFilter)
@@ -1473,18 +1466,20 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         {
             if (matcher && matcher.isCancelled)
             {
-                //searchAmenitiesInProgress = false;
                 break;
             }
             
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
             
             search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
-                                              [&foundAmenities, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                              [&filter, &foundAmenities, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
                 
-                                        if (![processedPoi containsObject:@(am->id.id)])
+                                        OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:am];
+                                        BOOL accept = [filter accept:type.category subcategory:type.name];
+                
+                                        if (![processedPoi containsObject:@(am->id.id)] && accept)
                                         {
                                             [processedPoi addObject:@(am->id.id)];
                                             OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
@@ -1795,9 +1790,6 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         
         [translation setObject:pt forKey:[[pt.name stringByReplacingOccurrencesOfString:@"_" withString:@" "] lowerCase]];
         [translation setObject:pt forKey:[pt.nameLocalized lowerCase]];
-//        
-//        translation.put(pt.getKeyName().replace('_', ' ').toLowerCase(), pt);
-//        translation.put(pt.getTranslation().toLowerCase(), pt);
     }
 }
 

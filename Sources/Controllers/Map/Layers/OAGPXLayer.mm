@@ -35,6 +35,7 @@
 #import "OAColoringType.h"
 #import "OAConcurrentCollections.h"
 #import "OAMapSelectionResult.h"
+#import "OASelectedGpxPoint.h"
 #import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
@@ -1937,7 +1938,6 @@ colorizationScheme:(int)colorizationScheme
     return NO;
 }
 
-
 - (void) collectWptFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     CGPoint point = [result getPoint];
@@ -1973,47 +1973,8 @@ colorizationScheme:(int)colorizationScheme
     OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:point];
     const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
     [self getTracksFromPoint:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude) result:result];
-    
-    
-    
-    
-    
-    //TODO: delete? or refator?
-    
-    return;
-    
-    
-    
-    
-    
-//    
-//    
-//    NSMutableDictionary<NSString *,OASGpxFile *> *selectedGpxFiles = [OASelectedGPXHelper.instance getSelectedGPXFiles];
-//    if ([NSDictionary isEmpty:selectedGpxFiles])
-//        return;
-//    
-//    CGPoint point = [result getPoint];
-//    int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-//    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
-//    if (touchPolygon31 == OsmAnd::AreaI())
-//        return;
-//    
-////    LatLon latLonFromPixel = null;
-//    
-//    for (OASGpxFile *selectedGpxFile in selectedGpxFiles.allValues)
-//    {
-//        if (![self isGpxFileVisible:selectedGpxFile])
-//            continue;
-//  
-//        [selectedGpxFile getPointsToDisplayWithIsJoinSegments:<#(BOOL)#>]
-//    }
-//    
-//    
-//    //TODO: implement
 }
 
-
-//TODO: test this
 - (BOOL) isGpxFileVisible:(OASGpxFile *)selectedGpxFile
 {
     OASKQuadRect *gpxFileBounds = [selectedGpxFile getRect];
@@ -2036,31 +1997,18 @@ colorizationScheme:(int)colorizationScheme
     return pointsGroup && pointsGroup.isHidden;
 }
 
-
-//public LatLon getObjectLocation(Object o) {
-//    if (o instanceof WptPt) {
-//        return new LatLon(((WptPt) o).getLat(), ((WptPt) o).getLon());
-//    } else if (o instanceof SelectedGpxPoint) {
-//        WptPt point = ((SelectedGpxPoint) o).getSelectedPoint();
-//        return new LatLon(point.getLat(), point.getLon());
-//    }
-//    return null;
-//}
-
 - (CLLocation *) getObjectLocation:(id)o
 {
     if ([o isKindOfClass:OASWptPt.class])
     {
-        // TODO: is OASWptPt correct?
         OASWptPt *wpt = (OASWptPt *)o;
         return [[CLLocation alloc] initWithLatitude:[wpt getLatitude] longitude:[wpt getLongitude]];
     }
     else if ([o isKindOfClass:OASelectedGpxPoint.class])
     {
         OASelectedGpxPoint *selectedGpxPoint = (OASelectedGpxPoint *)o;
-        
-        
-        // TODO: implement
+        OASWptPt *point = [selectedGpxPoint getSelectedPoint];
+        return [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
     }
     return  nil;
 }
@@ -2072,9 +2020,23 @@ colorizationScheme:(int)colorizationScheme
         OASWptPt *wpt = o;
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:[wpt name]];
     }
-    else if ([o isKindOfClass:OASWptPt.class])
+    else if ([o isKindOfClass:OASelectedGpxPoint.class])
     {
-        // TODO: implement
+        OASGpxFile *selectedGpxFile = [((OASelectedGpxPoint *)o) getSelectedGpxFile];
+        NSString *name;
+        if ([selectedGpxFile showCurrentTrack])
+        {
+            name = OALocalizedString(@"shared_string_currently_recording_track");
+        }
+        else if ([NSString isEmpty:[selectedGpxFile getArticleTitle]])
+        {
+            name = [selectedGpxFile getArticleTitle];
+        }
+        else
+        {
+            name = [[selectedGpxFile.path lastPathComponent] stringByDeletingPathExtension];
+        }
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX name:name];
     }
     return nil;
 }
@@ -2087,7 +2049,6 @@ colorizationScheme:(int)colorizationScheme
     }
     return NO;
 }
-
 
 
 #pragma mark - OAMoveObjectProvider

@@ -424,7 +424,6 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return _values ? _values : [NSMutableDictionary new];
 }
 
-
 - (void)setAdditionalInfo:(NSDictionary<NSString *, NSString *> *)additionalInfo
 {
     _values = nil;
@@ -450,7 +449,6 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     }
     else
     {
-        //TODO: android uses additionalInfo instead of values. is this correct?
         if (!_values)
             _values = [NSMutableDictionary new];
         
@@ -463,7 +461,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 
 - (void) copyAdditionalInfo:(OAPOI *)amenity overwrite:(BOOL)overwrite
 {
-    NSMutableDictionary<NSString *,NSString *> *map = [self getInternalAdditionalInfoMap];
+    NSMutableDictionary<NSString *,NSString *> *map = [amenity getInternalAdditionalInfoMap];
     if (overwrite || !_values)
     {
         [self setAdditionalInfo:map];
@@ -504,9 +502,6 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 
 - (NSString *)getWikidata
 {
-    //TODO: test which one is correct?
-    //return [self getAdditionalInfo][WIKIDATA_TAG];
-    
     return _values[WIKIDATA_TAG];
 }
 

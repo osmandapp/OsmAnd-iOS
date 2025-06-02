@@ -157,7 +157,7 @@
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    
+    // TODO: implement?
 }
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
@@ -187,7 +187,7 @@
     }
 }
 
-- (BOOL)isSecondaryProvider
+- (BOOL) isSecondaryProvider
 {
     return NO;
 }
@@ -203,8 +203,12 @@
 
 - (OAPointDescription *) getObjectName:(id)o
 {
-    // TODO: implement
-    return nil;
+    if ([o isKindOfClass:OAAvoidRoadInfo.class])
+    {
+        OAAvoidRoadInfo *route = o;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_BLOCKED_ROAD name:[route name]];
+    }
+    return  nil;
 }
 
 - (BOOL) showMenuAction:(id)object

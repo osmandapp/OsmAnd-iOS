@@ -35,8 +35,6 @@
 #include <OsmAndCore/ArchiveWriter.h>
 
 #define WAY_MODULO_REMAINDER 1;
-//static const int AMENITY_ID_RIGHT_SHIFT = 1;
-//static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
 
 static const long NO_CHANGESET_ID = -1;
 static const NSString* BASE_URL = @"https://api.openstreetmap.org/";

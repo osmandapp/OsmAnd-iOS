@@ -10,5 +10,11 @@
 
 @implementation OAClickableWay
 
+- (NSString *) getGpxFileName
+{
+    //TODO: implement later
+    return @"";
+}
+
 
 @end

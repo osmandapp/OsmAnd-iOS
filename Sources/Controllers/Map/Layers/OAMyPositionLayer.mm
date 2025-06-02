@@ -24,6 +24,7 @@
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 #import "OAModel3dHelper+cpp.h"
+#import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -950,8 +951,7 @@ typedef enum {
 
 - (OAPointDescription *) getObjectName:(id)o
 {
-    // TODO: implement
-    return nil;
+    return [[OAPointDescription alloc] initWithType:POINT_TYPE_MY_LOCATION name:OALocalizedString(@"my_location")];
 }
 
 - (BOOL) showMenuAction:(id)object

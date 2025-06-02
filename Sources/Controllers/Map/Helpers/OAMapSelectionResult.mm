@@ -13,47 +13,7 @@
 #import "OAMapLayers.h"
 #import "OAPlaceDetailsObject.h"
 #import "OAContextMenuProvider.h"
-
-@implementation OASelectedMapObject
-{
-    id _object;
-    id<OAContextMenuProvider> _provider;
-}
-
-- (instancetype) initWithMapObject:(id)object provider:(id<OAContextMenuProvider>)provider
-{
-    self = [super init];
-    if (self)
-    {
-        _object = object;
-        _provider = provider;
-    }
-    return self;
-}
-
-- (id) object
-{
-    return _object;
-}
-
-- (id<OAContextMenuProvider>) provider
-{
-    return _provider;
-}
-
-@end
-
-
-@implementation OASelectedGpxPoint
-{
-    
-    
-    //TODO: implement
-    
-}
-@end
-
-
+#import "OASelectedMapObject.h"
 
 @implementation OAMapSelectionResult
 {

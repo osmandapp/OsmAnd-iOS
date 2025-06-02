@@ -35,10 +35,6 @@ static NSString *IS_PART = @"is_part";
 static NSString *IS_PARENT_OF = @"is_parent_of";
 static NSString *IS_AGGR_PART = @"is_aggr_part";
 static NSString *CONTENT_JSON = @"json";
-
-// TODO: test it?
-//static NSString *ROUTE = @"route";
-
 static NSString *ROUTE_ID = @"route_id";
 static NSString *ROUTE_SOURCE = @"route_source";
 static NSString *ROUTE_NAME = @"route_name";

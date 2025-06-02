@@ -23,7 +23,10 @@
 #import "OADownloadsManager.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWeatherToolbar.h"
+#import "OAMapSelectionResult.h"
+#import "OAPointDescription.h"
 #import "OAAppSettings.h"
+#import "Localization.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -409,6 +412,19 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
+    if (excludeUntouchableObjects)
+        return;
+    
+    OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:[result getPoint]];
+    const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
+    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    
+    NSMutableArray<OADownloadMapObject *> *downloadObjects = [NSMutableArray array];
+    [self getWorldRegionFromPoint:location dataObjects:downloadObjects];
+    for (OADownloadMapObject *obj in downloadObjects)
+    {
+        [result collect:obj provider:self];
+    }
     
 }
 
@@ -442,8 +458,12 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
 
 - (OAPointDescription *) getObjectName:(id)o
 {
-    // TODO: implement
-    return nil;
+    if ([o isKindOfClass:OADownloadMapObject.class])
+    {
+        OADownloadMapObject *mapObject = o;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_WORLD_REGION typeName:OALocalizedString(@"shared_string_map") name:[mapObject.worldRegion localizedName]];
+    }
+    return [[OAPointDescription alloc] initWithType:POINT_TYPE_WORLD_REGION typeName:OALocalizedString(@"shared_string_map") name:@""];
 }
 
 - (BOOL) showMenuAction:(id)object

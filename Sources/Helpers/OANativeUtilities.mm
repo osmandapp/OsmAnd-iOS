@@ -418,8 +418,7 @@
 
 + (BOOL) isPointInsidePolygon:(OsmAnd::PointI)point31 polygon31:(OsmAnd::AreaI)polygon31
 {
-    //Androdoid: MapAlgorithms.ray_intersect_x()
-    
+    //Android: MapAlgorithms.ray_intersect_x()
     return polygon31.contains(point31);
 }
 

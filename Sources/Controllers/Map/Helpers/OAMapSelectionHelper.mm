@@ -25,24 +25,15 @@
 #import "OAClickableWay.h"
 #import "OAClickableWayHelper.h"
 #import "OAClickableWayHelper+cpp.h"
+#import "OASelectedMapObject.h"
+#import "OASelectedGpxPoint.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
 #import "OsmAnd_Maps-Swift.h"
 
-
-//TODO: delete unnecessary imports
-#include "OACoreResourcesAmenityIconProvider.h"
-#include <OsmAndCore/Data/Amenity.h>
-#include <OsmAndCore/Data/ObfPoiSectionInfo.h>
-#include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
-#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
-#include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
-#include <OsmAndCore/Map/IOnPathMapSymbol.h>
-#include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
-
 
 static int AMENITY_SEARCH_RADIUS = 50;
 static int AMENITY_SEARCH_RADIUS_FOR_RELATION = 500;
@@ -69,6 +60,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return self;
 }
 
+//TODO: implement later if needed
 //public Map<LatLon, BackgroundType> getTouchedFullMapObjects()
 //public Map<LatLon, BackgroundType> getTouchedSmallMapObjects()
 //public boolean hasTouchedMapObjects()
@@ -81,7 +73,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         _provider = _provider = OARootViewController.instance.mapPanel.mapViewController.mapLayers.poiLayer;
     
     OAMapSelectionResult *result = [[OAMapSelectionResult alloc] initWithPoint:point];
-    [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO]; //TODO: implement later
+    [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO];
     [self collectObjectsFromMap:result point:point]; //start from this
     
     [self processTransportStops:[result getAllObjects]];
@@ -96,31 +88,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     [self selectObjectsFromOpenGl:result point:point];
 }
-
-
-/*
- Android uses next layers
- 
- FavouritesLayer
- GPXLayer
- ImpassableRoadsLayer
- MapMarkersLayer
- MeasurementToolLayer
- NetworkRouteSelectionLayer
- PointLocationLayer
- PointNavigationLayer
- POlMapLayer
- RouteLayer
- TransportStopsLayer
- TravelSelectionLayer
- 
- ios used before:
- 
- myPositionLayer
- mapillaryLayer
- downloadedRegionsLayer
- gpxMapLayer
- */
 
 - (void) collectObjectsFromLayers:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation secondaryObjects:(BOOL)secondaryObjects
 {
@@ -141,22 +108,13 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             
             if ([provider isSecondaryProvider] || secondaryObjects)
             {
-                 //TODO: delete this old func
-                 //[provider collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
-                
-                //TODO: test this new func
-                // provider.collectObjectsFromPoint(result, unknownLocation, false);
                 [provider collectObjectsFromPoint:result unknownLocation:unknownLocation excludeUntouchableObjects:NO];
             }
         }
     }
 }
 
-
-
 // public void acquireTouchedMapObjects(@NonNull RotatedTileBox tileBox, @NonNull PointF point, boolean unknownLocation)
-
-
 
 - (void) selectObjectsFromOpenGl:(OAMapSelectionResult *)result point:(CGPoint)point
 {
@@ -333,8 +291,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         OARenderedObject *renderedObject = [[OARenderedObject alloc] init];
         if (const auto& mapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(obfMapObject))
         {
-            //TODO: test which one is correct? (id.id)
-//            renderedObject.obfId = mapObject->id;
             renderedObject.obfId = mapObject->id.id;
         }
         const auto points31 = obfMapObject->points31;
@@ -401,11 +357,11 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     
     if (travelGpx && [self isUniqueTravelGpx:[result getAllObjects] travelGpx:travelGpx])
     {
-//        OAWpt
+
     }
     
     
-    //TODO: implement
+    //TODO: implement later
 }
 
 - (BOOL) addClickableWay:(OAMapSelectionResult *)result clickableWay:(OAClickableWay *)clickableWay
@@ -423,34 +379,17 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
         id object = selectedObject.object;
-        
-//        if ([object isKindOfClass:SelectedGpxPoint.class])
-//        {
-//            
-//        }
-    }
-    
-    //TODO: implement
-    
-    return YES;
-}
-
-
-/*
-private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObjects,
-        @NonNull String gpxFileName) {
-    for (SelectedMapObject selectedObject : selectedObjects) {
-        Object object = selectedObject.object();
-        if (object instanceof SelectedGpxPoint gpxPoint && selectedObject.provider() instanceof GPXLayer) {
-            if (gpxPoint.getSelectedGpxFile().getGpxFile().getPath().endsWith(gpxFileName)) {
-                return false;
+        if ([object isKindOfClass:OASelectedGpxPoint.class] && [selectedObject.provider isKindOfClass:OAGPXLayer.class])
+        {
+            OASelectedGpxPoint *gpxPoint = (OASelectedGpxPoint *)object;
+            if ([[[gpxPoint getSelectedGpxFile] path] hasSuffix:gpxFileName])
+            {
+                return NO;
             }
         }
     }
-    return true;
+    return YES;
 }
-*/
-
 
 - (BOOL) isUniqueClickableWay:(NSMutableArray<OASelectedMapObject *> *)selectedObjects clickableWay:(OAClickableWay *)clickableWay
 {
@@ -462,20 +401,35 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
             return NO;
         }
     }
-//    return [Self isUn]
-    
-    
-    //TODO: implement
-    
-    
+ 
+    NSString *gpxFileName = [[clickableWay getGpxFileName] stringByAppendingPathExtension:GPX_FILE_EXT];
+    return [self isUniqueGpxFileName:selectedObjects gpxFileName:gpxFileName];
 }
 
 - (BOOL) isUniqueTravelGpx:(NSMutableArray<OASelectedMapObject *> *)selectedObjects travelGpx:(OATravelGpx *)travelGpx
 {
-    //TODO: implement
-    return NO;
+    for (OASelectedMapObject *selectedObject in selectedObjects)
+    {
+        if ([selectedObject.object isKindOfClass:NSArray.class] &&
+            [selectedObject.provider isKindOfClass:OAGPXLayer.class])
+        {
+            NSArray *pair = (NSArray *)selectedObject.object;
+            if ([pair[0] isKindOfClass:OATravelGpx.class])
+            {
+                OATravelGpx *gpx = pair[0];
+                
+                // TODO: test this isEqual method
+                if (travelGpx == gpx)
+                {
+                    return NO;
+                }
+            }
+        }
+    }
+    
+    NSString *gpxFileName = [travelGpx.file lastPathComponent];
+    return [self isUniqueGpxFileName:selectedObjects gpxFileName:gpxFileName];
 }
-
 
 - (BOOL) addOsmRoutesAround:(OAMapSelectionResult *)result point:(CGPoint)point selectorFilter:(OsmAnd::NetworkRouteSelectorFilter)selectorFilter
 {
@@ -487,12 +441,15 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
 {
     OsmAnd::NetworkRouteSelectorFilter routeSelectorFilter;
     
-    //TODO: implement
     
+    
+    //TODO: implement
     
     
     return routeSelectorFilter;
 }
+
+
 
 
 //private boolean putRouteGpxToSelected(
@@ -500,6 +457,8 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
 //private boolean isUniqueOsmRoute(
 
 //private boolean addAmenity(
+
+
 
 - (BOOL) isUniqueAmenity:(NSMutableArray<OASelectedMapObject *> *)selectedObjects amenity:(OAPOI *)amenity
 {
@@ -551,7 +510,6 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
     return _publicTransportTypes;
 }
 
-//TODO: test that selectedObjects changes outside
 - (void) processTransportStops:(NSMutableArray<OASelectedMapObject *> *)selectedObjects
 {
     NSArray<NSString *> *publicTransportTypes = [self getPublicTransportTypes];
@@ -709,11 +667,14 @@ private boolean isUniqueGpxFileName(@NonNull List<SelectedMapObject> selectedObj
 }
 
 
+
 //public static PlaceDetailsObject fetchOtherData(
 
 //public static PlaceDetailsObject fetchOtherData(
 
 //private static boolean copyCoordinates(
+
+
 
 - (QHash<QString, QString>) toQHash:(NSDictionary<NSString *, NSString *> *) dict
 {

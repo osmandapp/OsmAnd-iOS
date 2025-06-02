@@ -531,17 +531,6 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return targetPoint;
     }
     
-    //TODO: delete?
-//    else if (placeDetailsObject) {
-//        
-//        BOOL stop = YES;
-//        
-//        if (!poi)
-//            poi = [placeDetailsObject getSyntheticAmenity];
-//        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-//        
-//    }
-    
     return nil;
 }
 
@@ -576,22 +565,10 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return NO;
 }
 
-//collectAmenitiesFromPoint
-
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    if ([self.mapViewController getMapZoom] < START_ZOOM)
-        return;
     
-    
-    //collectAmenitiesFromPoint()
-
-    
-    // TODO: implement
-    
-    BOOL stop = YES;
 }
-
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {

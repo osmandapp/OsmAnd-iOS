@@ -37,6 +37,7 @@
 #import "OAMapUtils+cpp.h"
 #import "OAMapSelectionHelper.h"
 #import "OAMapSelectionResult.h"
+#import "OASelectedMapObject.h"
 #import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>

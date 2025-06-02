@@ -8,20 +8,6 @@
 
 #import "OAContextMenuProvider.h"
 
-@interface OASelectedMapObject  : NSObject
-
-- (instancetype) initWithMapObject:(id)object provider:(id<OAContextMenuProvider>)provider;
-- (id<OAContextMenuProvider>) object;
-- (id<OAContextMenuProvider>) provider;
-
-@end
-
-@interface OASelectedGpxPoint: NSObject
-{
-    
-}
-@end
-
 @interface OAMapSelectionResult : NSObject
 
 @property CLLocation *objectLatLon;

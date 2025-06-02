@@ -61,6 +61,7 @@
     
     //TODO: implement
     //this.activator = new ClickableWayMenuProvider(view, this::readHeightData, this::openAsGpxFile);
+    
     _activator = nil;
 }
 
@@ -79,21 +80,12 @@
     return obfMapObject->points31.size() > 1 && [self isClickableWayTags:tags]; // v2 with prefetched tags
 }
 
-//- (OAClickableWay *) loadClickableWay:(CLLocationCoordinate2D)selectedLatLon renderedObject:(OARenderedObject *)renderedObject
-//{
-//    // TODO: Implement
-//    
-//    return nil;
-//}
-
 - (OAClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
 {
     // TODO: Implement
     
     return nil;
 }
-
-
 
 - (BOOL) isClickableWayTags:(NSDictionary<NSString *, NSString *> *)tags
 {

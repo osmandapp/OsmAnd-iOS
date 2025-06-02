@@ -195,8 +195,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         NSMutableSet<NSString *> *supported = [NSMutableSet new];
         [supported addObjectsFromArray:[self getNames:CONTENT_TAG defTag:@"en"]];
         [supported addObjectsFromArray:[self getNames:DESCRIPTION_TAG defTag:@"en"]];
-        
-        //[supported addObjectsFromArray:[self getNames:@"wiki_lang" defTag:@"en"]];
+        [supported addObjectsFromArray:[self getNames:@"wiki_lang" defTag:@"en"]];
         return supported;
     }
 }

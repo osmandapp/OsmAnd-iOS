@@ -40,6 +40,10 @@ final class DescriptionDeviceHeader: UIView {
         deviceImageView.image = device.getServiceConnectedImage
     }
     
+    func showSignalIndicator(show: Bool) {
+        signalIndicatorImageView.isHidden = !show
+    }
+    
     private func changeDisconnectedState(device: Device) {
         configureConnectButtonTitle(with: .connected)
         deviceImageView.image = device.getServiceDisconnectedImage

@@ -57,6 +57,7 @@ final class PeripheralProxy: NSObject {
                                                queue: nil)
         { [weak self] (notification) in
             if let identifier = notification.userInfo?["identifier"] as? UUID, identifier == self?.cbPeripheral.identifier {
+                self?.writeCharacteristicValueRequests.removeAll()
                 self?.postPeripheralEvent(Peripheral.PeripheralDisconnected, userInfo: notification.userInfo)
             }
         }
@@ -714,9 +715,12 @@ extension PeripheralProxy {
             let writePath = characteristic.uuidPath
             
             if var currentPathRequests = self.writeCharacteristicValueRequests[writePath] {
+                print("1) currentPathRequests: \(currentPathRequests.count)")
                 currentPathRequests.append(request)
                 self.writeCharacteristicValueRequests[writePath] = currentPathRequests
+              //  self.runWriteCharacteristicValueRequest(writePath)
             } else {
+                print("2) currentPathRequests: \(self.writeCharacteristicValueRequests.count)")
                 self.writeCharacteristicValueRequests[writePath] = [request]
                 
                 self.runWriteCharacteristicValueRequest(writePath)
@@ -728,10 +732,11 @@ extension PeripheralProxy {
         guard let request = self.writeCharacteristicValueRequests[writePath]?.first else {
             return
         }
-        
+        NSLog("runWriteCharacteristicValueRequest writeValue 0")
         self.cbPeripheral.writeValue(request.value, for: request.characteristic, type: request.type)
         
         if request.type == CBCharacteristicWriteType.withResponse {
+            NSLog("runWriteCharacteristicValueRequest 1")
             Timer.scheduledTimer(
                 timeInterval: PeripheralProxy.defaultTimeoutInS,
                 target: self,
@@ -739,21 +744,26 @@ extension PeripheralProxy {
                 userInfo: Weak(value: request),
                 repeats: false)
         } else {
+            NSLog("runWriteCharacteristicValueRequest 2")
             // If no response is expected, we execute the callback and clear the request right away
             self.writeCharacteristicValueRequests[writePath]?.removeFirst()
             if self.writeCharacteristicValueRequests[writePath]?.count == 0 {
                 self.writeCharacteristicValueRequests[writePath] = nil
+                NSLog("runWriteCharacteristicValueRequest 3")
             }
             
             request.callback(.success(()))
             
             self.runWriteCharacteristicValueRequest(writePath)
+            NSLog("runWriteCharacteristicValueRequest 4")
         }
     }
     
     @objc fileprivate func onWriteCharacteristicValueRequestTimerTick(_ timer: Timer) {
+        NSLog("onWriteCharacteristicValueRequestTimerTick")
         defer {
             if timer.isValid { timer.invalidate() }
+            NSLog("onWriteCharacteristicValueRequestTimerTick defer")
         }
         
         let weakRequest = timer.userInfo as! Weak<WriteCharacteristicValueRequest>
@@ -771,6 +781,7 @@ extension PeripheralProxy {
         
         request.callback(.failure(SBError.operationTimedOut(operation: .writeCharacteristic)))
         
+        NSLog("onWriteCharacteristicValueRequestTimerTick runWriteCharacteristicValueRequest")
         self.runWriteCharacteristicValueRequest(writePath)
     }
 }

@@ -61,7 +61,7 @@ final class OBDVehicleMetricsDevice: Device {
     
     override func disconnect(completion: @escaping DisconnectPeripheralCallback) {
         peripheral.disconnect(completion: { [weak self] result in
-            if case .success(_) = result {
+            if case .success = result {
                 self?.ecuWriteCharacteristic = nil
             }
             completion(result)
@@ -72,7 +72,7 @@ final class OBDVehicleMetricsDevice: Device {
 //        [.bicycleSpeed, .bicycleCadence, .bicycleDistance]
 //    }
     
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+    override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }
 }

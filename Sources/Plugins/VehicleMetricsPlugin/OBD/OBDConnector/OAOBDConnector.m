@@ -11,6 +11,7 @@
 #import "OsmAnd_Maps-Swift.h"
 
 @interface OAOBDConnector() <OASOBDConnector>
+@property (nonatomic, strong) OASOBDSimulationSource *simulator;
 @end
 
 @interface OAOkioSource() <OASOkioSource>
@@ -20,17 +21,12 @@
 @end
 
 @implementation OAOBDConnector
-{
-    OASOBDSimulationSource *_simulator;
-}
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
+- (OASOBDSimulationSource *)simulator {
+    if (!_simulator) {
         _simulator = [[OASOBDSimulationSource alloc] init];
     }
-    return self;
+    return _simulator;
 }
 
 - (OASKotlinPair<id<OASOkioSource>,id<OASOkioSink>> * _Nullable)connect
@@ -42,7 +38,7 @@
     OAOkioSink *itemSink = [OAOkioSink new];
     OASKotlinPair *pair = [[OASKotlinPair alloc] initWithFirst:itemSource second:itemSink];
     
-    // NOTE: Simulator
+    // NOTE: obd Simulator
     // OASKotlinPair *pair = [[OASKotlinPair alloc] initWithFirst:_simulator.reader second:_simulator.writer];
     
     return pair;
@@ -67,18 +63,6 @@
     NSLog(@"[OAOBDConnector] -> onConnectionSuccess");
 }
 
-#pragma mark - Public Setters
-
-- (void)setDisconnectHandler:(void (^)(void))handler
-{
-    self.disconnectHandler = handler;
-}
-
-- (void)setFailureHandler:(void (^)(void))handler
-{
-    self.failureHandler = handler;
-}
-
 @end
 
 @implementation OAOkioSource
@@ -91,22 +75,82 @@
     return NO;
 }
 
-- (int64_t)readSink:(OASOkioBuffer *)sink byteCount:(int64_t)byteCount error:(NSError * _Nullable __autoreleasing *)error {
-    NSString *buffer = [[OBDService shared] readObdBuffer];
-    if ([[OBDService shared] isReadyBufferResponse] && buffer && buffer.length > 0)
+//- (int64_t)readSink:(OASOkioBuffer *)sink
+//          byteCount:(int64_t)byteCount
+//              error:(NSError * _Nullable __autoreleasing *)error
+//{
+//    OBDService *service = [OBDService shared];
+//    NSString *buffer = [service readObdBuffer];
+//
+//    if (!service.isReadyBufferResponse) {
+//        if (error) {
+//            *error = [NSError errorWithDomain:@"OBDConnectorErrorDomain"
+//                                         code:1001
+//                                     userInfo:@{NSLocalizedDescriptionKey: @"Buffer not ready for reading."}];
+//        }
+//        return -1;
+//    }
+//
+//    if (buffer.length == 0) {
+//        if (error) {
+//            *error = [NSError errorWithDomain:@"OBDConnectorErrorDomain"
+//                                         code:1002
+//                                     userInfo:@{NSLocalizedDescriptionKey: @"No data available in buffer."}];
+//        }
+//        return -1;
+//    }
+//
+//    NSInteger readCount = MIN(byteCount, buffer.length);
+//    if (readCount <= 0) {
+//        if (error) {
+//            *error = [NSError errorWithDomain:@"OBDConnectorErrorDomain"
+//                                         code:1003
+//                                     userInfo:@{NSLocalizedDescriptionKey: @"Invalid read count."}];
+//        }
+//        return -1;
+//    }
+//
+//    NSString *chunkToWrite = [buffer substringToIndex:readCount];
+//    NSString *remainingBuffer = [buffer substringFromIndex:readCount];
+//
+//    if (remainingBuffer.length > 0) {
+//        [service writeObdBuffer:remainingBuffer];
+//    } else {
+//        [service clearBuffer];
+//    }
+//
+//    [sink writeUtf8String:chunkToWrite];
+//    return readCount;
+//}
+
+
+- (int64_t)readSink:(OASOkioBuffer *)sink
+          byteCount:(int64_t)byteCount
+              error:(NSError * _Nullable __autoreleasing *)error {
+    OBDService *service = [OBDService shared];
+    
+    NSString *buffer = [service readObdBuffer];
+    if (![service isProcessingReading] && [service isReadyBufferResponse] && buffer && buffer.length > 0)
     {
+        [service isProcessingReadingWithIsReading:YES];
+       // service.isP = YES
+        NSLog(@"readSink: %@", buffer);
         NSInteger readCount = MIN(byteCount, buffer.length);
         if (readCount > 0)
         {
             NSString *firstChar = [buffer substringToIndex:readCount];
+            NSLog(@"firstChar: %@", firstChar);
             NSString *bufferToWrite = [buffer substringFromIndex:readCount];
+            NSLog(@"bufferToWrite: %@", bufferToWrite);
+            
             if (bufferToWrite.length > 0)
-            {
-                [[OBDService shared] writeObdBuffer:bufferToWrite];
-            } else {
-                [[OBDService shared] clearBuffer];
-            }
+                [service writeObdBuffer:bufferToWrite];
+            else
+                [service clearBuffer];
+            
             [sink writeUtf8String:firstChar];
+            
+            [service isProcessingReadingWithIsReading:NO];
             
             return readCount;
         }
@@ -140,7 +184,7 @@
 
     NSString *command = [raw stringByReplacingOccurrencesOfString:@"[text=" withString:@""];
     command = [command stringByReplacingOccurrencesOfString:@"\\r]" withString:@"\r"];
-    NSLog(@"Extracted value: %@", command);
+   // NSLog(@"Extracted value: %@", command);
     return [[OBDService shared] sendCommand:command];
 }
 

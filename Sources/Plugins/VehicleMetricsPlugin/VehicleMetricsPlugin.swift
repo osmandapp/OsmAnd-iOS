@@ -53,7 +53,8 @@ final class VehicleMetricsPlugin: OAPlugin {
     private func getTemperatureUnit() -> String {
         let formatter = MeasurementFormatter()
         formatter.locale = .autoupdatingCurrent
-        return formatter.string(from: UnitTemperature.current())
+        // FIXME: "°C" or "°F" - Convert  UnitTemperature.current() ?
+        return formatter.string(from: UnitTemperature.celsius)
     }
     
     private func getFormatVolumePerHourUnit() -> String? {

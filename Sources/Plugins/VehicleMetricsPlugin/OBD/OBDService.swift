@@ -10,6 +10,9 @@
 final class OBDService: NSObject {
     static let shared = OBDService()
     
+    private var obdDispatcher: OBDDispatcher?
+    
+    
     private override init() {
         super.init()
         NotificationCenter.default.addObserver(self,
@@ -20,30 +23,44 @@ final class OBDService: NSObject {
     
     func startDispatcher() {
         NSLog("[OBDService] -> startDispatcher")
-        let dispatch = OBDDispatcher(debug: false)
-        OBDDataComputer.shared.obdDispatcher = dispatch
         
-        OBDDataComputer.OBDTypeWidget.entries.forEach {
-            OBDDataComputer.shared.registerWidget(type: $0, averageTimeSeconds: 0)
+        if let obdDispatcher {
+            obdDispatcher.setReadStatusListener(listener: nil)
+            obdDispatcher.stopReading()
+        } else {
+            OBDDataComputer.OBDTypeWidget.entries.forEach {
+                OBDDataComputer.shared.registerWidget(type: $0, averageTimeSeconds: 0)
+            }
         }
+
+        let dispatcher = OBDDispatcher(debug: false)
+       // dispatcher.setReadStatusListener(self)
+        self.obdDispatcher = dispatcher
+        OBDDataComputer.shared.obdDispatcher = dispatcher
         
         let connector = OAOBDConnector()
+
         connector.disconnectHandler = {
-            DeviceHelper.shared.getOBDDevice()?.disconnect(completion: { _ in })
+            NSLog("[OBDService] -> disconnectHandler")
+         //   DeviceHelper.shared.getOBDDevice()?.disconnect(completion: { _ in })
         }
         connector.failureHandler = {
+            NSLog("[OBDService] -> failureHandler")
             DeviceHelper.shared.getOBDDevice()?.disconnect(completion: { _ in })
         }
         
         if let obdConnector = connector as? OBDConnector {
-            dispatch.connect(connector: obdConnector)
+            dispatcher.connect(connector: obdConnector)
         } else {
             NSLog("[OBDService] -> Failed to cast OAOBDConnector to OBDConnector")
         }
     }
     
     func stopDispatcher() {
-        OBDDataComputer.shared.obdDispatcher?.stopReading()
+        NSLog("[OBDService] -> stopDispatcher")
+        self.obdDispatcher?.stopReading()
+      //  OBDDataComputer.shared.obdDispatcher?.stopReading()
+      //  OBDDataComputer.shared.obdDispatcher = nil
     }
     
     func sendCommand(_ command: String?) -> Bool {
@@ -66,7 +83,7 @@ final class OBDService: NSObject {
             NSLog("[OBDService] -> ecuWriteCharacteristic is nil")
             return false
         }
-        
+        NSLog("[OBDService] -> send command: \(command)")
         device.peripheral.writeValue(ofCharac: ecuWriteCharacteristic, value: data, completion: { result in
             switch result {
             case .success:
@@ -80,7 +97,9 @@ final class OBDService: NSObject {
     }
     
     @objc private func handleDeviceDisconnected() {
+        NSLog("[OBDService] -> handleDeviceDisconnected")
         stopDispatcher()
+        clearBuffer()
     }
 }
 
@@ -98,11 +117,20 @@ extension OBDService {
         obdSensor?.isReadyBufferResponse ?? false
     }
     
+    var isProcessingReading: Bool {
+        obdSensor?.isProcessingReading ?? false
+    }
+    
+    func isProcessingReading(isReading: Bool) {
+        obdSensor?.isProcessingReading = isReading
+    }
+    
     func writeObdBuffer(_ value: String) {
         obdSensor?.writeObdBuffer(string: value)
     }
     
     func clearBuffer() {
+        NSLog("[OBDService] -> clearBuffer")
         obdSensor?.clearBuffer()
     }
 }

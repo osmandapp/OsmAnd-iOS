@@ -37,6 +37,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     
     var startBehavior: TableViewStartBehavior = .normal
     
+    // swiftlint:disable all
     var device: Device! {
         didSet {
             device.didChangeCharacteristic = { [weak self] in
@@ -51,9 +52,12 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             }
         }
     }
+    // swiftlint:enable all
     
     private lazy var headerView: DescriptionDeviceHeader = {
-        Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
+       let header = Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
+        header.showSignalIndicator(show: false)
+        return header
     }()
     
     override func viewDidLoad() {
@@ -71,12 +75,14 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         }
         tableView.tableHeaderView = headerView
         
-     // FIXME: to debug obd simulator
-       // OBDService.shared.startDispatcher()
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-//            self?.generateData()
-//            self?.tableView.reloadData()
-//        }
+     // NOTE: to debug obd simulator
+        /*
+        OBDService.shared.startDispatcher()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            self?.generateData()
+            self?.tableView.reloadData()
+        }
+        */
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -94,6 +100,34 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     override func registerCells() {
         addCell(OAValueTableViewCell.reuseIdentifier)
     }
+    
+    func updateDataIfNeeded() {
+        for (index, widget) in Self.widgets.enumerated() {
+            guard let sectionIndex = tableData.index(ofSectionWithKey: Section.receivedData.key),
+                  let row = tableData.row(at: IndexPath(row: index, section: sectionIndex)) else {
+                continue
+            }
+
+            let oldDescr = row.descr
+
+            let newDescr: String
+            if let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }),
+               let result = dataItem.computeValue(), !String(describing: result).isEmpty {
+                let value = String(describing: result)
+                let unit = (OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin)?
+                    .getWidgetUnit(widget) ?? ""
+                newDescr = unit.isEmpty ? value : "\(value) \(unit)"
+            } else {
+                newDescr = "N/A"
+            }
+
+            if row.descr != newDescr {
+                row.descr = newDescr
+                tableView.reloadRows(at: [IndexPath(row: index, section: sectionIndex)], with: .none)
+            }
+        }
+    }
+
     
     override func generateData() {
         tableData.clearAllData()
@@ -113,7 +147,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                         vinRow.cellType = OAValueTableViewCell.reuseIdentifier
                         vinRow.key = "vin"
                         vinRow.title = localizedString("obd_vin")
-                        vinRow.descr = stringValue
+                        vinRow.descr = device.isConnected ? stringValue : ""
                     }
                 }
             }
@@ -124,15 +158,18 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             receivedDataSection.key = Section.receivedData.key
             
             for widget in Self.widgets {
-                guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }) else { continue }
-                
                 let row = receivedDataSection.createNewRow()
                 row.cellType = OAValueTableViewCell.reuseIdentifier
                 row.icon = widget.image
                 row.key = "row"
                 row.title = widget.getTitle()
                 
-                guard let result = dataItem.computeValue() else {
+                guard device.isConnected else {
+                    row.descr = "N/A"
+                    continue
+                }
+                
+                guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }), let result = dataItem.computeValue() else {
                     row.descr = "N/A"
                     continue
                 }

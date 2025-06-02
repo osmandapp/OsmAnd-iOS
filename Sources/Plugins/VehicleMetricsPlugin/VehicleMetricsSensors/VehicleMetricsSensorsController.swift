@@ -460,13 +460,4 @@ extension VehicleMetricsSensorsController {
     }
 }
 
-extension UIMenu {
-    
-    static func composedMenu(from sections: [[UIMenuElement]]) -> UIMenu {
-        UIMenu(title: "", children: sections.map(UIMenu.inlineSection))
-    }
-    
-    private static func inlineSection(with elements: [UIMenuElement]) -> UIMenu {
-        UIMenu(title: "", options: .displayInline, children: elements)
-    }
-}
+

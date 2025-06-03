@@ -282,7 +282,6 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
               UIApplication.shared.canOpenURL(settingsURL) else {
             return
         }
-        // FIXME: design for iPad crash
         UIApplication.shared.open(settingsURL)
     }
     

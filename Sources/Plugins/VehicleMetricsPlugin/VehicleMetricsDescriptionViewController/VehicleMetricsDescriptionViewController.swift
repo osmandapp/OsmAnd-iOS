@@ -65,6 +65,8 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     }
     // swiftlint:enable all
     
+    let plugin = OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin
+    
     private lazy var headerView: DescriptionDeviceHeader = {
         let header = Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
         header.showSignalIndicator(show: false)
@@ -147,7 +149,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                 row.key = "row"
                 row.title = widget.getTitle()
                 
-                guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }), let result = dataItem.computeValue() else {
+                guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }), dataItem.computeValue() != nil else {
                     row.descr = Self.placeholderTextNA
                     continue
                 }
@@ -257,24 +259,19 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             return Self.placeholderTextNA
         }
         
-        guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget.type }),
-              let result = dataItem.computeValue() else {
+        guard let widgetItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget.type }), let plugin else {
             return Self.placeholderTextNA
         }
         
-        let stringValue = String(describing: result)
+        let value = plugin.getWidgetValue(computerWidget: widgetItem)
         
-        guard !stringValue.isEmpty else {
-            return Self.placeholderTextNA
-        }
+        guard value != Self.placeholderTextNA && value != "-" else {
+             return value
+         }
         
-        if stringValue == Self.placeholderTextNA || stringValue == "-" {
-            return stringValue
-        } else {
-            let unit = (OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin)?
-                .getWidgetUnit(widget.type) ?? ""
-            return unit.isEmpty ? stringValue : "\(stringValue) \(unit)"
-        }
+        let unit = plugin.getWidgetUnit(widgetItem.type)
+        
+        return (unit?.isEmpty ?? true) ? value : "\(value) \(unit ?? "")"
     }
     
     private func updateVisibleReceivedDataCells() {

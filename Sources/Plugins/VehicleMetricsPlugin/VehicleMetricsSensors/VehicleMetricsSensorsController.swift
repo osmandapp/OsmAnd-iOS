@@ -43,12 +43,6 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         tableView.dataSource = self
         view.backgroundColor = .viewBg
         tableView.contentInset.bottom = 64
-        
-     //   startDispatcher()
-        //FUEL_TYPE(OBDTypeWidget.FUEL_TYPE, R.drawable.ic_action_fuel_tank),
-        //-------------///
-        
-        //-------------//
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +57,10 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     override func registerObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(deviceConnected),
+                                               name: .DeviceConnected,
+                                               object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
                                                name: .DeviceDisconnected,
@@ -349,6 +347,13 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         }
     }
     
+    @objc private func deviceConnected() {
+        guard view.window != nil else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.reloadData()
+        }
+    }
+    
     @objc private func deviceDisconnected() {
         guard view.window != nil else { return }
         reloadData()
@@ -357,10 +362,6 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     // MARK: - IBAction
     @IBAction private func onPairNewSensorButtonPressed(_ sender: Any) {
         pairNewSensor()
-    }
-    
-    deinit {
-        print("deinit")
     }
 }
 

@@ -353,6 +353,10 @@ extension CentralProxy: CBCentralManagerDelegate {
             return
         }
         
+        var userInfo: [AnyHashable: Any] = ["identifier": uuid]
+        
+        postCentralEvent(Central.CentralCBPeripheralConnected, userInfo: userInfo)
+        
         connectRequests[uuid] = nil
         
         request.invokeCallbacks(error: nil)

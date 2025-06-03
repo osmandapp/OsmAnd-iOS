@@ -76,6 +76,8 @@ public final class Central {
     /// Unwrap with `notification.userInfo?["state"] as? CBCentralManagerState`
     public static let CentralStateChange = Notification.Name("SwiftyBluetooth_CentralStateChange")
     
+    static let CentralCBPeripheralConnected = Notification.Name("SwiftyBluetooth_CentralCBPeripheralConnected")
+    
     static let CentralCBPeripheralDisconnected = Notification.Name("SwiftyBluetooth_CentralCBPeripheralDisconnected")
     
     /// The sharedInstance Singleton, you can instantiate it yourself by
@@ -187,7 +189,7 @@ extension Central {
     /// - Parameter serviceUUIDs: The service UUIDs to search peripherals for or nil if looking for all peripherals.
     /// - Parameter completion: The closures, called multiple times throughout a scan.
     public func scanForPeripherals(withServiceUUIDs serviceUUIDs: [CBUUIDConvertible]? = nil,
-                                   options: [String : Any]? = nil,
+                                   options: [String: Any]? = nil,
                                    timeoutAfter timeout: TimeInterval,
                                    completion: @escaping PeripheralScanCallback) {
         // Passing in an empty array will act the same as if you passed nil and discover all peripherals but

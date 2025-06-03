@@ -10,6 +10,7 @@ import UIKit
 
 extension Notification.Name {
     static let DeviceRSSIUpdated = NSNotification.Name("DeviceRSSIUpdated")
+    static let DeviceConnected = NSNotification.Name("DeviceConnected")
     static let DeviceDisconnected = NSNotification.Name("DeviceDisconnected")
 }
 
@@ -36,6 +37,7 @@ class Device: NSObject {
     var deviceName: String = ""
     var didChangeCharacteristic: (() -> Void)?
     var didDisconnect: (() -> Void)?
+    var didConnect: (() -> Void)?
     var isSelected = false
     
     private(set) var peripheral: Peripheral!
@@ -105,6 +107,17 @@ class Device: NSObject {
     
     func addObservers() {
         NotificationCenter.default.removeObserver(self)
+        
+        NotificationCenter.default.addObserver(forName: Peripheral.PeripheralConnected,
+                                               object: peripheral,
+                                               queue: nil) { [weak self] notification in
+            guard let self else { return }
+            if let identifier = notification.userInfo?["identifier"] as? UUID, identifier.uuidString == self.id {
+                didConnectDevice()
+            }
+        }
+        
+        
         NotificationCenter.default.addObserver(forName: Peripheral.PeripheralCharacteristicValueUpdate,
                                                object: peripheral,
                                                queue: nil) { [weak self] notification in
@@ -118,29 +131,6 @@ class Device: NSObject {
             if let identifier = notification.userInfo?["identifier"] as? UUID, identifier.uuidString == self.id {
                 DeviceHelper.shared.removeDisconnected(device: self)
                 didDisconnectDevice()
-            }
-        }
-    }
-    
-    func didDisconnectDevice() {
-        debugPrint("didDisconnectDevice | \(deviceServiceName) | \(deviceName)")
-        NotificationCenter.default.post(name: .DeviceDisconnected,
-                                        object: nil,
-                                        userInfo: [Self.identifier: self.id])
-        didDisconnect?()
-    }
-    
-    func peripheralCharacteristicValueUpdate(notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              notification.userInfo?["error"] as? SBError == nil else {
-            return
-        }
-        guard let characteristic = userInfo["characteristic"] as? CBCharacteristic else {
-            return
-        }
-        update(with: characteristic) { [weak self] result in
-            if case .success = result {
-                self?.didChangeCharacteristic?()
             }
         }
     }
@@ -188,6 +178,37 @@ class Device: NSObject {
     
     func disconnect(completion: @escaping DisconnectPeripheralCallback) {
         peripheral.disconnect(completion: completion)
+    }
+    
+    func didDisconnectDevice() {
+        debugPrint("didDisconnectDevice | \(deviceServiceName) | \(deviceName)")
+        NotificationCenter.default.post(name: .DeviceDisconnected,
+                                        object: nil,
+                                        userInfo: [Self.identifier: self.id])
+        didDisconnect?()
+    }
+        
+    private func didConnectDevice() {
+        debugPrint("didConnectDevice | \(deviceServiceName) | \(deviceName)")
+        NotificationCenter.default.post(name: .DeviceConnected,
+                                        object: nil,
+                                        userInfo: [Self.identifier: self.id])
+        didConnect?()
+    }
+    
+    private func peripheralCharacteristicValueUpdate(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+              notification.userInfo?["error"] as? SBError == nil else {
+            return
+        }
+        guard let characteristic = userInfo["characteristic"] as? CBCharacteristic else {
+            return
+        }
+        update(with: characteristic) { [weak self] result in
+            if case .success = result {
+                self?.didChangeCharacteristic?()
+            }
+        }
     }
 }
 

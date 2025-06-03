@@ -52,6 +52,7 @@ static const CGFloat US_GALLONS_IN_LITER = 3.78541f;
 + (NSString *)getFormattedTimeHM:(NSTimeInterval)timeInterval;
 + (NSString *)getFormattedTimeInterval:(NSTimeInterval)interval;
 + (NSString *)getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
++ (NSString *)getFormattedTimeRuntime:(NSInteger)seconds;
 + (NSString *)getFormattedDateTime:(NSTimeInterval)time;
 + (NSString *)getFormattedDate:(NSTimeInterval)time;
 + (NSString *)getFormattedSpeed:(float)metersperseconds;
@@ -75,5 +76,6 @@ static const CGFloat US_GALLONS_IN_LITER = 3.78541f;
       forceTrailingZeroes:(BOOL)forceTrailingZeroes
       decimalPlacesNumber:(NSInteger)decimalPlacesNumber
            valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
++ (float)convertLiterToVolumeUnitWithVolumeUnit:(EOAVolumeConstant)volumeUnit value:(float)value;
 
 @end

@@ -898,8 +898,11 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (void) removeSelectedPoiFilter:(OAPOIUIFilter *)filter
 {
-    [_selectedPoiFilters removeObject:filter];
-    [self saveSelectedPoiFilters];
+    if ([_selectedPoiFilters containsObject:filter])
+    {
+        [_selectedPoiFilters removeObject:filter];
+        [self saveSelectedPoiFilters];
+    }
 }
 
 - (BOOL) isShowingAnyPoi

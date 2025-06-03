@@ -3684,3 +3684,15 @@
 "quick_action_showhide_coordinates_grid_descr" = "Радња за управљање видљивошћу мреже координата на карти.";
 "layer_coordinates_grid" = "Координатна мрежа";
 "shared_string_edges" = "Ивице";
+"dd_mm_mmm_format" = "DD°MM.MMM′";
+"change_activity" = "Промени активност";
+"intermediate_first" = "Међуодредиште прво";
+"destination_first" = "Одредиште прво";
+"map_widget_route_information" = "Информације о рути";
+"map_widget_distance" = "Растојање";
+"dd_mm_ss_format" = "DD°MM′SS″";
+"shared_string_default_view" = "Подразумевани приказ";
+"dd_ddddd_format" = "DD.DDDDD°";
+"type_of_activity" = "Тип активности";
+"display_priority" = "Приоритет приказа";
+"map_widget_route_information_desc" = "Приказује процењено време доласка, преостало време путовања и удаљеност за тренутну навигациону руту.";

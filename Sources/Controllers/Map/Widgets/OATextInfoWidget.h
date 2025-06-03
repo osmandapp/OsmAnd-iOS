@@ -47,8 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 
-- (void) setImage:(nullable UIImage *)image;
-- (void) setImage:(nullable UIImage *)image withColor:(UIColor *)color;
+- (void)setImage:(nullable UIImage *)image;
+- (void)setImage:(nullable UIImage *)image withColor:(UIColor *)color;
 - (void)setImage:(UIImage *)image withColor:(UIColor *)color iconName:(NSString *)iconName;
 
 - (void) setImageHidden:(BOOL)visible;
@@ -67,15 +67,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isVisible;
 - (void) addAccessibilityLabelsWithValue:(NSString *)value;
 
-- (BOOL) isUpdateNeeded;
-- (BOOL) isMetricSystemDepended;
-- (BOOL) isAngularUnitsDepended;
-- (void) setMetricSystemDepended:(BOOL)newValue;
-- (void) setAngularUnitsDepended:(BOOL)newValue;
-- (BOOL) isExplicitlyVisible;
-- (void) setExplicitlyVisible:(BOOL)explicitlyVisible;
-- (void) updateIcon;
-- (void) setNightMode:(BOOL)night;
+- (BOOL)isUpdateNeeded;
+- (BOOL)isMetricSystemDepended;
+- (BOOL)isAngularUnitsDepended;
+- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel;
+- (BOOL)isEnabledTextInfoComponents;
+- (void)setMetricSystemDepended:(BOOL)newValue;
+- (void)setAngularUnitsDepended:(BOOL)newValue;
+- (BOOL)isExplicitlyVisible;
+- (void)setExplicitlyVisible:(BOOL)explicitlyVisible;
+- (void)updateIcon;
+- (void)setNightMode:(BOOL)night;
 
 - (void)updateTextWitState:(OATextState *)state;
 

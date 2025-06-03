@@ -265,10 +265,9 @@ static NSString * const kSolidColorKey = @"solid_color";
     __weak __typeof(self) weakSelf = self;
     NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
     [self setSelectedIndexPath:indexPath];
+    [self insertItem:newItem atIndexPath:self.selectedIndexPath];
     [collectionView performBatchUpdates:^{
-        [weakSelf insertItem:newItem atIndexPath:weakSelf.selectedIndexPath];
         [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:_data.count - 1 inSection:0]]];
-
         [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
         
         [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:newItem collectionView:collectionView shouldDismiss:NO];
@@ -307,12 +306,6 @@ static NSString * const kSolidColorKey = @"solid_color";
     {
         if (indexPath == _selectedIndexPath)
             [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView shouldDismiss:NO];
-        else
-            [self.delegate reloadCollectionData];
-    }
-    if (_isOpenedFromAllColorsScreen && _hostColorHandler && _hostColorHandler.delegate)
-    {
-        [_hostColorHandler.delegate reloadCollectionData];
     }
 }
 
@@ -322,10 +315,11 @@ static NSString * const kSolidColorKey = @"solid_color";
     if (!collectionView)
         return;
 
+    [self insertItem:newItem atIndexPath:indexPath];
     __weak __typeof(self) weakSelf = self;
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
-        [weakSelf insertItem:newItem atIndexPath:indexPath];
+        
         if (indexPath.row <= weakSelf.selectedIndexPath.row) {
             NSIndexPath *insertedIndex = indexPath;
             NSIndexPath *updatedPrevSelectedIndex = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
@@ -343,10 +337,11 @@ static NSString * const kSolidColorKey = @"solid_color";
     if (!collectionView)
         return;
 
+    [self removeItem:indexPath];
     __weak __typeof(self) weakSelf = self;
     [collectionView performBatchUpdates:^{
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
-        [weakSelf removeItem:indexPath];
+        
         if (indexPath == weakSelf.selectedIndexPath)
         {
             [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
@@ -575,14 +570,9 @@ static NSString * const kSolidColorKey = @"solid_color";
     if (_isOpenedFromAllColorsScreen && _hostColorHandler)
     {
         [_hostColorHandler addColor:newIndexPath newItem:duplicatedColorItem];
-        if (_hostColorHandler.delegate)
-            [_hostColorHandler.delegate reloadCollectionData];
         
         if (_hostCell && [_hostCell needUpdateHeight])
            [self.delegate reloadCollectionData];
-            
-    } else if (self.delegate) {
-        [self.delegate reloadCollectionData];
     }
     return duplicatedColorItem;
 }
@@ -594,10 +584,6 @@ static NSString * const kSolidColorKey = @"solid_color";
     if (_isOpenedFromAllColorsScreen && _hostColorHandler)
     {
         [_hostColorHandler deleteColorItem:colorItem];
-        if (_hostColorHandler.delegate)
-            [_hostColorHandler.delegate reloadCollectionData];
-    } else if (self.delegate) {
-        [self.delegate reloadCollectionData];
     }
     if (!_isOpenedFromAllColorsScreen)
         [[OAGPXAppearanceCollection sharedInstance] deleteColor:colorItem];

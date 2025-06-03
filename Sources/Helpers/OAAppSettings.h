@@ -765,6 +765,27 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 @end
 
+@interface OACommonWidgetDefaultView : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue;
+
+- (int)get;
+- (int)get:(OAApplicationMode *)mode;
+- (void)set:(int)type;
+- (void)set:(int)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonWidgetDisplayPriority : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue;
+
+- (int)get;
+- (int)get:(OAApplicationMode *)mode;
+- (void)set:(int)type;
+- (void)set:(int)type mode:(OAApplicationMode *)mode;
+
+@end
 
 @interface OACommonDayNightMode : OACommonInteger
 
@@ -1148,6 +1169,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 - (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
 
+- (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue;
+- (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue;
+
 // Direction Appearance
 
 @property (nonatomic) OACommonActiveMarkerConstant* activeMarkers;
@@ -1247,6 +1271,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dByType;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dWallColorType;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;
+@property (nonatomic) OACommonString *currentTrackRouteActivity;
 
 @property (nonatomic) OACommonStringList *customTrackColors;
 @property (nonatomic) OACommonStringList *customTrackColorsLastUsed;

@@ -3682,3 +3682,15 @@
 "quick_action_showhide_coordinates_grid_descr" = "Akcija za kontrolu vidljivosti mreže koordinata na mapi.";
 "apply_to_all_points" = "Primeni na sve tačke ";
 "original_color_description" = "Svaka bi tačka zadržala svoju boju.";
+"change_activity" = "Promenite aktivnost";
+"dd_mm_mmm_format" = "DD°MM.MMM′";
+"destination_first" = "Prva destinacija";
+"display_priority" = "Prioritet prikaza";
+"shared_string_default_view" = "Podrazumevani prikaz";
+"map_widget_route_information" = "Informacije o ruti";
+"map_widget_distance" = "Udaljenost";
+"intermediate_first" = "Prvo međuodredište";
+"dd_ddddd_format" = "DD.DDDDD°";
+"map_widget_route_information_desc" = "Prikazuje procenjeno vreme dolaska, preostalo vreme putovanja i udaljenost za trenutnu rutu.";
+"dd_mm_ss_format" = "DD°MM′SS″";
+"type_of_activity" = "Tip aktivnosti";

@@ -3682,3 +3682,15 @@
 "default_appearance" = "Standard-udseende";
 "equator" = "Ækvator";
 "labels_position" = "Etiketters position";
+"change_activity" = "Skift aktivitet";
+"type_of_activity" = "Aktivitetstype";
+"destination_first" = "Destination først";
+"shared_string_default_view" = "Standardvisning";
+"map_widget_route_information" = "Ruteinformation";
+"map_widget_distance" = "Afstand";
+"map_widget_route_information_desc" = "Viser den forventede ankomsttid, resterende rejsetid og afstand for den aktuelle navigationsrute.";
+"intermediate_first" = "Mellemliggende først";
+"display_priority" = "Visningsprioritet";
+"dd_mm_mmm_format" = "DD°MM.MMM′";
+"dd_ddddd_format" = "DD.DDDDD°";
+"dd_mm_ss_format" = "DD°MM′SS″";

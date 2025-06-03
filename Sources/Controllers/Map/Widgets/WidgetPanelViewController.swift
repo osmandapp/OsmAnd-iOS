@@ -306,6 +306,12 @@ extension WidgetPanelViewController {
     }
     
     func widgetVisibilityChanged(_ widget: OABaseWidgetView, visible: Bool) {
+        // For side-panel medium and large simple-layout widgets, force an immediate layout pass so updateWidgetSizes() uses correct dimensions
+        if !isHorizontal, let textWidget = widget as? OATextInfoWidget, textWidget.isSidePanelSimpleLayoutMode {
+            widget.setNeedsLayout()
+            widget.layoutIfNeeded()
+        }
+        
         updateWidgetSizes()
     }
     

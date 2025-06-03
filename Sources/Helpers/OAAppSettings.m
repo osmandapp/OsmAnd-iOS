@@ -377,6 +377,7 @@ static NSString * const currentTrackElevationMetersKey = @"currentTrackElevation
 static NSString * const currentTrackVisualization3dByTypeKey = @"currentTrackVisualization3dByType";
 static NSString * const currentTrackVisualization3dWallColorTypeKey = @"currentTrackVisualization3dWallColorType";
 static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTrackVisualization3dPositionType";
+static NSString * const currentTrackRouteActivityKey = @"currentTrackRouteActivityKey";
 
 static NSString * const customTrackColorsKey = @"customTrackColors";
 static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
@@ -3932,6 +3933,175 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 @end
 
+@implementation OACommonWidgetDefaultView
+
+static NSString *kArrivalTimeKey = @"ARRIVAL_TIME";
+static NSString *kTimeToGoKey = @"TIME_TO_GO";
+static NSString *kDistanceKey = @"DISTANCE";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonWidgetDefaultView *obj = [[OACommonWidgetDefaultView alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)type
+{
+    [super set:type];
+}
+
+- (void)set:(int)type mode:(OAApplicationMode *)mode
+{
+    [super set:type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    RouteInfoDisplayValue defaultValue = self.defValue;
+    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    if ([pDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (RouteInfoDisplayValue)pDefault.intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:kArrivalTimeKey])
+        return [self set:RouteInfoDisplayValueArrivalTime mode:mode];
+    else if ([strValue isEqualToString:kTimeToGoKey])
+        return [self set:RouteInfoDisplayValueTimeToGo mode:mode];
+    else if ([strValue isEqualToString:kDistanceKey])
+        return [self set:RouteInfoDisplayValueDistance mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    RouteInfoDisplayValue type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    RouteInfoDisplayValue type = (RouteInfoDisplayValue)[value intValue];
+    
+    switch (type)
+    {
+        case RouteInfoDisplayValueArrivalTime:
+            return kArrivalTimeKey;
+        case RouteInfoDisplayValueTimeToGo:
+            return kTimeToGoKey;
+        case RouteInfoDisplayValueDistance:
+            return kDistanceKey;
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@implementation OACommonWidgetDisplayPriority
+
+static NSString *kIntermediateFirstKey = @"INTERMEDIATE_FIRST";
+static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonWidgetDisplayPriority *obj = [[OACommonWidgetDisplayPriority alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)type
+{
+    [super set:type];
+}
+
+- (void)set:(int)type mode:(OAApplicationMode *)mode
+{
+    [super set:type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    RouteInfoDisplayPriority defaultValue = self.defValue;
+    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    if ([pDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (RouteInfoDisplayPriority)pDefault.intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:kIntermediateFirstKey])
+        return [self set:RouteInfoDisplayPriorityIntermediateFirst mode:mode];
+    else if ([strValue isEqualToString:kDestinationFirstKey])
+        return [self set:RouteInfoDisplayPriorityDestinationFirst mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    RouteInfoDisplayPriority type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    RouteInfoDisplayPriority type = (RouteInfoDisplayPriority)[value intValue];
+    
+    switch (type)
+    {
+        case RouteInfoDisplayPriorityIntermediateFirst:
+            return kIntermediateFirstKey;
+        case RouteInfoDisplayPriorityDestinationFirst:
+            return kDestinationFirstKey;
+        default:
+            return @"";
+    }
+}
+
+@end
+
 @implementation OACommonDayNightMode
 
 @dynamic defValue;
@@ -5078,6 +5248,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         
         _currentTrackVisualization3dWallColorType = [[[OACommonInteger withKey:currentTrackVisualization3dWallColorTypeKey defValue:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient] makeGlobal] makeShared];
         _currentTrackVisualization3dPositionType = [[[OACommonInteger withKey:currentTrackVisualization3dPositionTypeKey defValue:EOAGPX3DLineVisualizationPositionTypeTop] makeGlobal] makeShared];
+        _currentTrackRouteActivity = [[OACommonString withKey:currentTrackRouteActivityKey defValue:@""] makeProfile];
         
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
         _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
@@ -5100,6 +5271,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [_globalPreferences setObject:_currentTrackVisualization3dByType forKey:@"current_track_visualization_3d_by_type"];
         [_globalPreferences setObject:_currentTrackVisualization3dWallColorType forKey:@"current_track_visualization_3d_wall_color_type"];
         [_globalPreferences setObject:_currentTrackVisualization3dPositionType forKey:@"current_track_visualization_3d_position_type"];
+        [_profilePreferences setObject:_currentTrackRouteActivity forKey:@"current_track_route_activity"];
         
         [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
         [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
@@ -5365,6 +5537,26 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         return (OACommonWidgetZoomLevelType *) [_registeredPreferences objectForKey:key];
     
     OACommonWidgetZoomLevelType *p = [OACommonWidgetZoomLevelType withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetDefaultView *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetDefaultView *p = [OACommonWidgetDefaultView withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetDisplayPriority *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetDisplayPriority *p = [OACommonWidgetDisplayPriority withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
 }

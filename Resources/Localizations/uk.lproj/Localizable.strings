@@ -3686,3 +3686,15 @@
 "shared_string_edges" = "Краї";
 "apply_to_all_points" = "Застосувати до всіх пунктів ";
 "default_appearance" = "Зовнішній вигляд за замовчуванням";
+"dd_mm_mmm_format" = "DD°MM.MMM′";
+"dd_mm_ss_format" = "DD°MM′SS″";
+"intermediate_first" = "Середній рівень перший";
+"destination_first" = "Пункт призначення перший";
+"display_priority" = "Пріоритет дисплея";
+"map_widget_route_information" = "Інформація про маршрут";
+"map_widget_distance" = "Відстань";
+"change_activity" = "Зміна активності";
+"dd_ddddd_format" = "DD.DDDDD°";
+"type_of_activity" = "Вид діяльності";
+"shared_string_default_view" = "Вигляд за замовчуванням";
+"map_widget_route_information_desc" = "Відображає приблизний час прибуття, час, що залишився в дорозі, та відстань для поточного навігаційного маршруту.";

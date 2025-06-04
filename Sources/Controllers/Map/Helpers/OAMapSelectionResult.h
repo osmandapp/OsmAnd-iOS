@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (CLLocation *)getPointLatLon;
 - (NSMutableArray<OASelectedMapObject *> *)getAllObjects;
 - (NSMutableArray<OASelectedMapObject *> *)getProcessedObjects;
-- (void)collect:(id)object provider:(id)provider;
+- (void)collect:(id)object provider:(id _Nullable)provider;
 - (void)groupByOsmIdAndWikidataId;
 - (BOOL)isEmpty;
 

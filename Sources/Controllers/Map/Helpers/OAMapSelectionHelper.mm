@@ -570,7 +570,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude));
     OsmAnd::AreaI rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, point31);
     
-    NSArray<OAPOI *> *amenities = [OAPOIHelper findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nil];
+    BOOL (^nilBlock)(OAPOI *poi) = nil;
+    NSArray<OAPOI *> *amenities = [OAPOIHelper findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nilBlock];
     OAPOI *amenity = [self findAmenityByOsmId:amenities obfId:osmId point:latLon];
     
     if (!amenity && names.count > 0)
@@ -584,7 +585,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude));
     OsmAnd::AreaI rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(AMENITY_SEARCH_RADIUS, point31);
-    return [OAPOIHelper findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nil];
+    BOOL (^nilBlock)(OAPOI *poi) = nil;
+    return [OAPOIHelper findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nilBlock];
 }
 
 + (OAPOI *) findAmenityByOsmId:(CLLocation *)latLon obfId:(uint64_t)obfId

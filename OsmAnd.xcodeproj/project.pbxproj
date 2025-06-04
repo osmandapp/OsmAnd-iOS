@@ -12584,6 +12584,8 @@
 				DA5A7EE326C563A400F274C7 /* OAContextMenuLayer.h */,
 				DA5A7EEF26C563A400F274C7 /* OAContextMenuLayer.mm */,
 				DA5A7EF426C563A400F274C7 /* OAContextMenuProvider.h */,
+				C5DF39B32DBB6CA800332496 /* OACoordinatesGridLayer.h */,
+				C5DF39B42DBB6CA800332496 /* OACoordinatesGridLayer.mm */,
 				DA5A7EEA26C563A400F274C7 /* OADestinationsLayer.h */,
 				DA5A7EE626C563A400F274C7 /* OADestinationsLayer.mm */,
 				DA5A7EF626C563A400F274C7 /* OADownloadedRegionsLayer.h */,
@@ -12637,8 +12639,6 @@
 				8A3BE84E27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm */,
 				8AE943B127A28BE900961319 /* OAWeatherRasterLayer.h */,
 				8AE943B227A28BE900961319 /* OAWeatherRasterLayer.mm */,
-				C5DF39B32DBB6CA800332496 /* OACoordinatesGridLayer.h */,
-				C5DF39B42DBB6CA800332496 /* OACoordinatesGridLayer.mm */,
 			);
 			path = Layers;
 			sourceTree = "<group>";

@@ -35,8 +35,20 @@
 
 - (void) commonInit
 {
-    _clickableTags = [NSSet setWithObjects:@"piste:type", @"piste:difficulty", @"mtb:scale", @"dirtbike:scale", nil];
-    _requiredTagsAny = [NSSet setWithObjects:@"name", @"ref", @"piste:name", @"mtb:name", nil];
+    _clickableTags = [NSSet setWithArray:@[
+        @"piste:type",
+        @"piste:difficulty",
+        @"mtb:scale",
+        @"dirtbike:scale"
+    ]];
+    
+    _requiredTagsAny = [NSSet setWithArray:@[
+        @"name",
+        @"ref",
+        @"piste:name",
+        @"mtb:name"
+    ]];
+    
     _forbiddenTags = @{
         @"area": @"yes",
         @"access": @"no",

@@ -8,12 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @class OAClickableWay, OARenderedObject;
 
 @interface OAClickableWayHelper : NSObject
 
-- (id) getContextMenuProvider;
+- (id)getContextMenuProvider;
 
-- (BOOL) isClickableWay:(OARenderedObject *)renderedObject;
+- (BOOL)isClickableWay:(OARenderedObject *)renderedObject;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

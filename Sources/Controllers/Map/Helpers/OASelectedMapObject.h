@@ -8,12 +8,18 @@
 
 #import "OAContextMenuProvider.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @class OASGpxFile;
 
 @interface OASelectedMapObject  : NSObject
 
-- (instancetype) initWithMapObject:(id)object provider:(id<OAContextMenuProvider>)provider;
-- (id<OAContextMenuProvider>) object;
-- (id<OAContextMenuProvider>) provider;
+- (instancetype)initWithMapObject:(id)object provider:(id<OAContextMenuProvider>)provider;
+- (id<OAContextMenuProvider>)object;
+- (id<OAContextMenuProvider>)provider;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

@@ -8,17 +8,23 @@
 
 #import "OAContextMenuProvider.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @interface OAMapSelectionResult : NSObject
 
 @property CLLocation *objectLatLon;
 
-- (instancetype) initWithPoint:(CGPoint)point;
-- (CGPoint) getPoint;
-- (CLLocation *) getPointLatLon;
-- (NSMutableArray<OASelectedMapObject *> *) getAllObjects;
-- (NSMutableArray<OASelectedMapObject *> *) getProcessedObjects;
-- (void) collect:(id)object provider:(id)provider;
-- (void) groupByOsmIdAndWikidataId;
-- (BOOL) isEmpty;
+- (instancetype)initWithPoint:(CGPoint)point;
+- (CGPoint)getPoint;
+- (CLLocation *)getPointLatLon;
+- (NSMutableArray<OASelectedMapObject *> *)getAllObjects;
+- (NSMutableArray<OASelectedMapObject *> *)getProcessedObjects;
+- (void)collect:(id)object provider:(id)provider;
+- (void)groupByOsmIdAndWikidataId;
+- (BOOL)isEmpty;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

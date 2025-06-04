@@ -8,6 +8,9 @@
 
 #import "OAContextMenuProvider.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @class OAPOI, OASelectedMapObject, OAPlaceDetailsObject;
 
 @interface OAPlaceDetailsObject : NSObject
@@ -16,17 +19,20 @@
 @property (nonatomic, readonly) NSMutableSet<NSString *> *wikidataIds;
 @property (nonatomic, readonly) NSMutableArray<OASelectedMapObject *> *selectedObjects;
 
-- (instancetype) initWithObject:(id<OAContextMenuProvider>)object provider:(id<OAContextMenuProvider>)provider;
+- (instancetype)initWithObject:(id<OAContextMenuProvider>)object provider:(id<OAContextMenuProvider>)provider;
 
-- (OAPOI *) getSyntheticAmenity;
-- (CLLocation *) getLocation;
-- (NSMutableArray<OASelectedMapObject *> *) getSelectedObjects;
-- (void) addObject:(id)object provider:(id<OAContextMenuProvider>)provider;
-- (BOOL) overlapsWith:(id)object;
-- (void) merge:(OAPlaceDetailsObject*)other;
-- (void) combineData;
-- (void) processAmenity:(OAPOI *)amenity contentLocales:(NSMutableSet<NSString *> *)contentLocales;
+- (OAPOI *)getSyntheticAmenity;
+- (CLLocation *)getLocation;
+- (NSMutableArray<OASelectedMapObject *> *)getSelectedObjects;
+- (void)addObject:(id)object provider:(id<OAContextMenuProvider>)provider;
+- (BOOL)overlapsWith:(id)object;
+- (void)merge:(OAPlaceDetailsObject*)other;
+- (void)combineData;
+- (void)processAmenity:(OAPOI *)amenity contentLocales:(NSMutableSet<NSString *> *)contentLocales;
 
-+ (BOOL) shouldSkip:(id) object;
++ (BOOL)shouldSkip:(id) object;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

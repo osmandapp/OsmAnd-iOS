@@ -470,7 +470,7 @@
 
 - (OAPOI *)getMapObjectByMarker:(OADestination *)marker
 {
-    if (marker.mapObjectName && marker.latitude != 0 && marker.longitude != 0)
+    if (![NSString isEmpty:marker.mapObjectName] && marker.latitude != 0 && marker.longitude != 0)
     {
         NSString *mapObjName = [marker.mapObjectName componentsSeparatedByString:@"_"][0];
         CLLocation *location = [[CLLocation alloc] initWithLatitude:marker.latitude longitude:marker.longitude];

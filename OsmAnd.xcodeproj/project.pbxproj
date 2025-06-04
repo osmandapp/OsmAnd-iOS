@@ -8135,6 +8135,8 @@
 				32C1C4E92DD4C4F200A053D4 /* OAMapSelectionResult.mm */,
 				32C1C4EA2DD4C4F200A053D4 /* OAPlaceDetailsObject.h */,
 				32C1C4EB2DD4C4F200A053D4 /* OAPlaceDetailsObject.mm */,
+				DA5A7F0C26C563A400F274C7 /* OASelectedGPXHelper.h */,
+				DA5A7F1426C563A400F274C7 /* OASelectedGPXHelper.mm */,
 				32F6B4292DEDD703002DBCEE /* OASelectedGpxPoint.h */,
 				32F6B42A2DEDD709002DBCEE /* OASelectedGpxPoint.mm */,
 				32F6B4262DEDD637002DBCEE /* OASelectedMapObject.h */,
@@ -12529,8 +12531,6 @@
 			children = (
 				32C1C4EC2DD4C4F200A053D4 /* Helpers */,
 				DA5A7ECE26C563A400F274C7 /* Layers */,
-				46E32494284A6AC800F95084 /* Toolbars */,
-				DA5A7F1526C563A400F274C7 /* Widgets */,
 				DA5A7F0226C563A400F274C7 /* OADestination.h */,
 				DA5A7F1026C563A400F274C7 /* OADestination.mm */,
 				DA5A857426C5680700F274C7 /* OADestinationBarWidget.xib */,
@@ -12567,11 +12567,11 @@
 				DA21F1BA29BA101E004985BA /* OANetworkRouteDrawable.mm */,
 				DA35963029B0A00A009DF4D6 /* OARouteKey.h */,
 				DA35963129B0A00A009DF4D6 /* OARouteKey.mm */,
-				DA5A7F0C26C563A400F274C7 /* OASelectedGPXHelper.h */,
-				DA5A7F1426C563A400F274C7 /* OASelectedGPXHelper.mm */,
 				DA5A7F0F26C563A400F274C7 /* OAToolbarViewController.h */,
 				DA5A7F1126C563A400F274C7 /* OAToolbarViewController.mm */,
 				DA5A7F0026C563A400F274C7 /* OAToolbarViewController.xib */,
+				46E32494284A6AC800F95084 /* Toolbars */,
+				DA5A7F1526C563A400F274C7 /* Widgets */,
 			);
 			path = Map;
 			sourceTree = "<group>";

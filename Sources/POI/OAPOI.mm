@@ -180,7 +180,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 {
     if (_contentLocales)
     {
-        return _contentLocales;
+        return [_contentLocales copy];
     }
     else
     {
@@ -188,7 +188,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         [supported addObjectsFromArray:[self getNames:CONTENT_TAG defTag:@"en"]];
         [supported addObjectsFromArray:[self getNames:DESCRIPTION_TAG defTag:@"en"]];
         [supported addObjectsFromArray:[self getNames:@"wiki_lang" defTag:@"en"]];
-        return supported;
+        return [supported copy];
     }
 }
 
@@ -401,7 +401,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (NSArray<NSString *> *) getAdditionalInfoKeys
 {
     NSDictionary<NSString *, NSString *> *info = [self getAdditionalInfo];
-    return info == nil ? @[] : [info allKeys];
+    return info ? info.allKeys : @[];
 }
 
 - (NSString *)getAdditionalInfo:(NSString *)key
@@ -412,9 +412,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return [_values objectForKey:key];
 }
 
-- (NSMutableDictionary<NSString *, NSString *> *)getInternalAdditionalInfoMap
+- (MutableOrderedDictionary<NSString *, NSString *> *)getInternalAdditionalInfoMap
 {
-    return _values ? _values : [NSMutableDictionary new];
+    return _values ?: [MutableOrderedDictionary new];
 }
 
 - (void)setAdditionalInfo:(NSDictionary<NSString *, NSString *> *)additionalInfo
@@ -454,7 +454,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 
 - (void) copyAdditionalInfo:(OAPOI *)amenity overwrite:(BOOL)overwrite
 {
-    NSMutableDictionary<NSString *,NSString *> *map = [amenity getInternalAdditionalInfoMap];
+    MutableOrderedDictionary<NSString *,NSString *> *map = [amenity getInternalAdditionalInfoMap];
     if (overwrite || !_values)
     {
         [self setAdditionalInfo:map];

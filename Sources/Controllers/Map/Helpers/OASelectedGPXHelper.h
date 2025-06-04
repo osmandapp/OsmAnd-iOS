@@ -12,6 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @class OASGpxFile, OASWptPt;
 
 @interface OASelectedGPXHelper : NSObject
@@ -37,5 +38,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addGpxFile:(OASGpxFile *)file for:(NSString *)path;
 
 @end
+
 
 NS_ASSUME_NONNULL_END

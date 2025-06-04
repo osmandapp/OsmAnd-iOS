@@ -2794,6 +2794,7 @@ static const double d180PI = 180.0 / M_PI_2;
     return newName;
 }
 
+// Example: "Asia_wikivoyage_2.travel.obf" -> "asia_wikivoyage_00_00_00"
 + (NSString *) simplifyFileName:(NSString *)filename
 {
     NSString *lc = [filename lowercaseString];

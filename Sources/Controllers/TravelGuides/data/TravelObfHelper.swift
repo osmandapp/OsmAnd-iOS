@@ -210,10 +210,8 @@ final class TravelObfHelper : NSObject {
     }
     
     func getTravelGpx(file: String?, amenity: OAPOI) -> TravelGpx {
-        var travelGpx = TravelGpx(amenity: amenity)
+        let travelGpx = TravelGpx(amenity: amenity)
         travelGpx.file = file
-        
-        //TODO: delete
         let title = amenity.name
         
         travelGpx.lat = amenity.latitude

@@ -251,7 +251,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     if (!value)
         return nil;
     
-    OASKGeoParsedPoint * p = [OASKMapUtils.shared decodeShortLinkStringS:value];
+    OASKGeoParsedPoint *p = [OASKMapUtils.shared decodeShortLinkStringS:value];
     return [[CLLocation alloc] initWithLatitude:p.getLatitude longitude:p.getLongitude];
 }
 
@@ -405,9 +405,9 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             [selectedObject.provider isKindOfClass:OAGPXLayer.class])
         {
             NSArray *pair = (NSArray *)selectedObject.object;
-            if ([pair[0] isKindOfClass:OATravelGpx.class])
+            if ([pair firstObject] && [[pair firstObject] isKindOfClass:OATravelGpx.class])
             {
-                OATravelGpx *gpx = pair[0];
+                OATravelGpx *gpx = [pair firstObject];
                 
                 // TODO: test this isEqual method
                 if (travelGpx == gpx)

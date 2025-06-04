@@ -73,7 +73,7 @@
     }
     if ([object isKindOfClass:OAPOI.class])
     {
-        OAPOI *amenity = (OAPOI*) object;
+        OAPOI *amenity = (OAPOI *) object;
         NSString *wikidata = [amenity getWikidata];
         if (![NSString isEmpty:wikidata])
         {
@@ -93,7 +93,7 @@
     NSString *wikidata = nil;
     if ([object isKindOfClass:OAPOI.class])
     {
-        OAPOI *amenity = (OAPOI*) object;
+        OAPOI *amenity = (OAPOI *) object;
         wikidata = [amenity getWikidata];
         if (![NSString isEmpty:wikidata])
         {
@@ -120,7 +120,7 @@
         id object = selectedObject.object;
         if ([object isKindOfClass:OAPOI.class])
         {
-            OAPOI *amenity = (OAPOI*) object;
+            OAPOI *amenity = (OAPOI *) object;
             [self processAmenity:amenity contentLocales:contentLocales];
         }
     }

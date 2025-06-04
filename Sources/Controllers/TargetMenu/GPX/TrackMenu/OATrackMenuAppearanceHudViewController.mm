@@ -108,6 +108,7 @@ static const NSInteger kColorsSection = 1;
 @property (nonatomic) BOOL forceHiding;
 @property (nonatomic) OsmAndAppInstance app;
 @property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
+@property (nonatomic) OAColorItem *baseColorItem;
 @property (nonatomic) OAColorItem *selectedColorItem;
 @property (nonatomic) BOOL isNewColorSelected;
 @property (nonatomic) BOOL isDefaultColorRestored;
@@ -441,6 +442,7 @@ static const NSInteger kColorsSection = 1;
     if (!_selectedColorItem)
         _selectedColorItem = [_appearanceCollection getDefaultLineColorItem];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
+    _baseColorItem = _selectedColorItem;
 
     [_sortedPaletteColorItems replaceAllWithObjectsSync:[_gradientColorsCollection getPaletteColors]];
     _selectedPaletteColorItem = [_gradientColorsCollection getPaletteColorByName:[self getGPXGradientPaletteName]];
@@ -1357,6 +1359,59 @@ static const NSInteger kColorsSection = 1;
     return [_selectedItem.coloringType isRouteInfoAttribute];
 }
 
+- (BOOL)hasChanges
+{
+    if ([self getGPXShowArrows] != _backupGpxItem.showArrows)
+        return YES;
+    
+    if ([self getGPXShowStartFinish] != _backupGpxItem.showStartFinish)
+        return YES;
+    
+    NSString *currentColoringType = [self getGPXColoringType].length > 0 ? [self getGPXColoringType] : OAColoringType.TRACK_SOLID.name;
+    NSString *backupColoringType = _backupGpxItem.coloringType.length > 0 ? _backupGpxItem.coloringType : OAColoringType.TRACK_SOLID.name;
+    if (![currentColoringType isEqualToString:backupColoringType])
+        return YES;
+    
+    if (_baseColorItem.value != _selectedColorItem.value)
+        return YES;
+    
+    NSString *currentGradientName = ([self getGPXGradientPaletteName].length > 0) ? [self getGPXGradientPaletteName] : ((([[_gradientColorsCollection getDefaultGradientPalette] paletteName].length > 0) ? [[_gradientColorsCollection getDefaultGradientPalette] paletteName] : @""));
+    NSString *backupGradientName = (_backupGpxItem.gradientPaletteName.length > 0) ? _backupGpxItem.gradientPaletteName : ((([[_gradientColorsCollection getDefaultGradientPalette] paletteName].length > 0) ? [[_gradientColorsCollection getDefaultGradientPalette] paletteName] : @""));
+    if (![currentGradientName isEqualToString:backupGradientName])
+        return YES;
+    
+    NSString *currentWidth = [self getGPXWidth].length > 0 ? [self getGPXWidth] : [OAGPXTrackWidth getDefault].key ?: @"";
+    NSString *backupWidth = (_backupGpxItem.width.length > 0 ? _backupGpxItem.width : [OAGPXTrackWidth getDefault].key ?: @"");
+    if (![currentWidth isEqualToString:backupWidth])
+        return YES;
+    
+    if ([self getGPXVisualization3dByType] != _backupGpxItem.visualization3dByType)
+        return YES;
+    
+    if ([self getGPXVisualizationPositionType] != _backupGpxItem.visualization3dPositionType)
+        return YES;
+    
+    if ([self getGPXVisualization3dWallColorType] != _backupGpxItem.visualization3dWallColorType)
+        return YES;
+    
+    if ([self getGPXVerticalExaggerationScale] != _backupGpxItem.verticalExaggerationScale)
+        return YES;
+    
+    if ([self getGPXElevationMeters] != _backupGpxItem.elevationMeters)
+        return YES;
+    
+    if ([self getGPXSplitType] != _backupGpxItem.splitType)
+        return YES;
+    
+    if ([self getGPXSplitInterval] != _backupGpxItem.splitInterval)
+        return YES;
+    
+    if ([self getGPXShowJoinSegments] != _backupGpxItem.joinSegments)
+        return YES;
+    
+    return NO;
+}
+
 - (void)checkColoringAvailability
 {
     BOOL isAvailable = [_selectedItem.coloringType isAvailableInSubscription];
@@ -1417,7 +1472,34 @@ static const NSInteger kColorsSection = 1;
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
-    [self hide];
+    if ([self hasChanges])
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"unsaved_changes") message:OALocalizedString(@"unsaved_changes_will_be_lost_discard") preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        UIAlertAction *discardAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_discard") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [self hide];
+        }];
+        [alert addAction:discardAction];
+        
+        UIAlertAction *saveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self onDoneButtonPressed:nil];
+        }];
+        [alert addAction:saveAction];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:cancelAction];
+        
+        UIButton *sourceButton = (UIButton *)sender;
+        alert.popoverPresentationController.sourceView = sourceButton;
+        alert.popoverPresentationController.sourceRect = sourceButton.frame;
+        alert.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        [self hide];
+    }
 }
 
 - (IBAction)onDoneButtonPressed:(id)sender

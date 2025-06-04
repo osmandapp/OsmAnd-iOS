@@ -923,11 +923,11 @@ typedef enum {
     return NO;
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OATargetPoint.class])
+    if ([obj isKindOfClass:OATargetPoint.class])
     {
-        OATargetPoint *targetPoint = (OATargetPoint *)o;
+        OATargetPoint *targetPoint = (OATargetPoint *)obj;
         return  [[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude];
     }
     else
@@ -937,7 +937,7 @@ typedef enum {
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
     return [[OAPointDescription alloc] initWithType:POINT_TYPE_MY_LOCATION name:OALocalizedString(@"my_location")];
 }
@@ -947,7 +947,7 @@ typedef enum {
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

@@ -200,21 +200,21 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     return NO;
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OAOnlineOsmNoteWrapper.class])
+    if ([obj isKindOfClass:OAOnlineOsmNoteWrapper.class])
     {
-        OAOnlineOsmNoteWrapper *note = (OAOnlineOsmNoteWrapper *)o;
+        OAOnlineOsmNoteWrapper *note = (OAOnlineOsmNoteWrapper *)obj;
         return  [[CLLocation alloc] initWithLatitude:note.latitude longitude:note.longitude];
     }
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
-    if ([o isKindOfClass:OAOnlineOsmNoteWrapper.class])
+    if ([obj isKindOfClass:OAOnlineOsmNoteWrapper.class])
     {
-        OAOnlineOsmNoteWrapper *note = (OAOnlineOsmNoteWrapper *)o;
+        OAOnlineOsmNoteWrapper *note = (OAOnlineOsmNoteWrapper *)obj;
         NSString *name = note.description ? note.description : @"";
         NSString *typeName = note.typeName ? note.typeName : OALocalizedString(@"osn_bug_name");
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_OSM_NOTE typeName:typeName name:name];
@@ -227,7 +227,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

@@ -506,12 +506,12 @@
     }
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
     return nil;
 }

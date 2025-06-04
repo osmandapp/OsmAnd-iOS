@@ -546,7 +546,7 @@
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

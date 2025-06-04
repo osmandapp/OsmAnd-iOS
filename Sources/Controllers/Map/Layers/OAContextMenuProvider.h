@@ -38,11 +38,11 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
 
-- (CLLocation *) getObjectLocation:(id)o;
-- (OAPointDescription *) getObjectName:(id)o;
+- (CLLocation *) getObjectLocation:(id)obj;
+- (OAPointDescription *) getObjectName:(id)obj;
 
 - (BOOL) showMenuAction:(id)object;
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation;
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation;
 
 //- (BOOL) disableSingleTap;
 //- (BOOL) disableLongPressOnMap;

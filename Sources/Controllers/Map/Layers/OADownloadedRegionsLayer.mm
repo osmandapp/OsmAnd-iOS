@@ -433,22 +433,22 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
     return YES;
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OADownloadMapObject.class])
+    if ([obj isKindOfClass:OADownloadMapObject.class])
     {
-        OADownloadMapObject *mapObject = (OADownloadMapObject *)o;
+        OADownloadMapObject *mapObject = (OADownloadMapObject *)obj;
         CLLocationCoordinate2D center = [mapObject.worldRegion regionCenter];
         return [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
     }
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
-    if ([o isKindOfClass:OADownloadMapObject.class])
+    if ([obj isKindOfClass:OADownloadMapObject.class])
     {
-        OADownloadMapObject *mapObject = o;
+        OADownloadMapObject *mapObject = obj;
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_WORLD_REGION typeName:OALocalizedString(@"shared_string_map") name:[mapObject.worldRegion localizedName]];
     }
     return [[OAPointDescription alloc] initWithType:POINT_TYPE_WORLD_REGION typeName:OALocalizedString(@"shared_string_map") name:@""];
@@ -459,7 +459,7 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

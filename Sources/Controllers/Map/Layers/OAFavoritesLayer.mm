@@ -294,21 +294,21 @@ static const int START_ZOOM = 6;
     return NO;
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OAFavoriteItem.class])
+    if ([obj isKindOfClass:OAFavoriteItem.class])
     {
-        OAFavoriteItem *favorite = (OAFavoriteItem *)o;
+        OAFavoriteItem *favorite = (OAFavoriteItem *)obj;
         return [[CLLocation alloc] initWithLatitude:[favorite getLatitude] longitude:favorite.getLongitude];
     }
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
-    if ([o isKindOfClass:OAFavoriteItem.class])
+    if ([obj isKindOfClass:OAFavoriteItem.class])
     {
-        OAFavoriteItem *favorite = (OAFavoriteItem *)o;
+        OAFavoriteItem *favorite = (OAFavoriteItem *)obj;
         return [favorite getPointDescription];
     }
     return  nil;
@@ -319,7 +319,7 @@ static const int START_ZOOM = 6;
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

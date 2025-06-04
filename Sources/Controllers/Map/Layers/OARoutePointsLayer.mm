@@ -279,11 +279,11 @@
     return nil;
 }
 
-- (OAPointDescription *)getObjectName:(id)o
+- (OAPointDescription *)getObjectName:(id)obj
 {
-    if ([o isKindOfClass:OAMapMarkerWrapper.class])
+    if ([obj isKindOfClass:OAMapMarkerWrapper.class])
     {
-        OAMapMarkerWrapper *wrapper = o;
+        OAMapMarkerWrapper *wrapper = obj;
         if (const auto routePoint = reinterpret_cast<const OsmAnd::MapMarker *>(wrapper.marker.get()))
         {
             NSString *name;
@@ -325,11 +325,11 @@
     return nil;
 }
 
-- (CLLocation *)getObjectLocation:(id)o
+- (CLLocation *)getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OAMapMarkerWrapper.class])
+    if ([obj isKindOfClass:OAMapMarkerWrapper.class])
     {
-        OAMapMarkerWrapper *wrapper = o;
+        OAMapMarkerWrapper *wrapper = obj;
         if (const auto routePoint = reinterpret_cast<const OsmAnd::MapMarker *>(wrapper.marker.get()))
         {
             double lat = OsmAnd::Utilities::get31LatitudeY(routePoint->getPosition().y);
@@ -350,7 +350,7 @@
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

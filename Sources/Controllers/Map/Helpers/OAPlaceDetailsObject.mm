@@ -174,12 +174,12 @@
     {
         [_syntheticAmenity setTravelEloNumber:travelElo];
     }
-    NSMutableArray<NSNumber *> * x= amenity.x;
+    NSMutableArray<NSNumber *> *x = amenity.x;
     if ([NSArray isEmpty:_syntheticAmenity.x] && ![NSArray isEmpty:x])
     {
         [_syntheticAmenity.x addObjectsFromArray:x];
     }
-    NSMutableArray<NSNumber *> * y= amenity.y;
+    NSMutableArray<NSNumber *> *y = amenity.y;
     if ([NSArray isEmpty:_syntheticAmenity.y] && ![NSArray isEmpty:y])
     {
         [_syntheticAmenity.y addObjectsFromArray:y];

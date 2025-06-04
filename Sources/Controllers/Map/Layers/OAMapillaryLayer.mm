@@ -329,19 +329,19 @@ static int MIN_POINTS_ZOOM = 17;
     return NO;
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OAMapillaryImage.class])
+    if ([obj isKindOfClass:OAMapillaryImage.class])
     {
-        OAMapillaryImage * image = (OAMapillaryImage *)o;
+        OAMapillaryImage * image = (OAMapillaryImage *)obj;
         return [[CLLocation alloc] initWithLatitude:image.latitude longitude:image.longitude];
     }
     return  nil;;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
-    if ([o isKindOfClass:OAMapillaryImage.class])
+    if ([obj isKindOfClass:OAMapillaryImage.class])
     {
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_MAPILLARY_IMAGE name:OALocalizedString(@"mapillary_image")];
     }
@@ -353,7 +353,7 @@ static int MIN_POINTS_ZOOM = 17;
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

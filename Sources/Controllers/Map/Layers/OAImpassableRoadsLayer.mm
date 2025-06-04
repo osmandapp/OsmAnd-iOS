@@ -187,20 +187,20 @@ static const int START_ZOOM = 10;
     return NO;
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OAAvoidRoadInfo.class])
+    if ([obj isKindOfClass:OAAvoidRoadInfo.class])
     {
-        return ((OAAvoidRoadInfo *)o).location;
+        return ((OAAvoidRoadInfo *)obj).location;
     }
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
-    if ([o isKindOfClass:OAAvoidRoadInfo.class])
+    if ([obj isKindOfClass:OAAvoidRoadInfo.class])
     {
-        OAAvoidRoadInfo *route = o;
+        OAAvoidRoadInfo *route = obj;
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_BLOCKED_ROAD name:[route name]];
     }
     return  nil;
@@ -211,7 +211,7 @@ static const int START_ZOOM = 10;
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

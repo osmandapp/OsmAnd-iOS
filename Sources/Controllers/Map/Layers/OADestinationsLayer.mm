@@ -597,7 +597,7 @@
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }
@@ -607,26 +607,26 @@
     return NO;
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OADestination.class])
+    if ([obj isKindOfClass:OADestination.class])
     {
-        OADestination *point = (OADestination *)o;
+        OADestination *point = (OADestination *)obj;
         return [[CLLocation alloc] initWithLatitude:[point latitude] longitude:[point longitude]];
     }
-    else if ([o isKindOfClass:OAPOI.class] && [_amenities containsObject:o])
+    else if ([obj isKindOfClass:OAPOI.class] && [_amenities containsObject:obj])
     {
-        OAPOI *amenity = (OAPOI *)o;
+        OAPOI *amenity = (OAPOI *)obj;
         return [amenity getLocation];
     }
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
-    if ([o isKindOfClass:OADestination.class])
+    if ([obj isKindOfClass:OADestination.class])
     {
-        OADestination *point = (OADestination *)o;
+        OADestination *point = (OADestination *)obj;
         return [point getPointDescription];
     }
     return nil;

@@ -1353,21 +1353,21 @@ struct DrawPathData
         [self drawRouteWithSync:NO forceRedraw:NO];
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OATransportStop.class])
+    if ([obj isKindOfClass:OATransportStop.class])
     {
-        OATransportStop *transportStop = (OATransportStop *)o;
+        OATransportStop *transportStop = (OATransportStop *)obj;
         return [[CLLocation alloc] initWithLatitude:transportStop.location.latitude longitude:transportStop.location.longitude];
     }
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
-    if ([o isKindOfClass:OATransportStop.class])
+    if ([obj isKindOfClass:OATransportStop.class])
     {
-        OATransportStop *transportStop = (OATransportStop *)o;
+        OATransportStop *transportStop = (OATransportStop *)obj;
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_TRANSPORT_STOP typeName:OALocalizedString(@"transport_Stop") name:[transportStop name]];
     }
     return nil;
@@ -1378,7 +1378,7 @@ struct DrawPathData
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

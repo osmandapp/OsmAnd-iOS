@@ -384,21 +384,21 @@ static const int START_ZOOM = 10;
     return NO;
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OAOsmPoint.class])
+    if ([obj isKindOfClass:OAOsmPoint.class])
     {
-        OAOsmPoint *point = (OAOsmPoint *)o;
+        OAOsmPoint *point = (OAOsmPoint *)obj;
         return  [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
     }
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
-    if ([o isKindOfClass:OAOsmPoint.class])
+    if ([obj isKindOfClass:OAOsmPoint.class])
     {
-        OAOsmPoint *point = (OAOsmPoint *)o;
+        OAOsmPoint *point = (OAOsmPoint *)obj;
         NSString *name = @"";
         NSString *type = @"";
         
@@ -422,7 +422,7 @@ static const int START_ZOOM = 10;
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

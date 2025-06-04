@@ -1965,32 +1965,32 @@ colorizationScheme:(int)colorizationScheme
     return pointsGroup && pointsGroup.isHidden;
 }
 
-- (CLLocation *) getObjectLocation:(id)o
+- (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([o isKindOfClass:OASWptPt.class])
+    if ([obj isKindOfClass:OASWptPt.class])
     {
-        OASWptPt *wpt = (OASWptPt *)o;
+        OASWptPt *wpt = (OASWptPt *)obj;
         return [[CLLocation alloc] initWithLatitude:[wpt getLatitude] longitude:[wpt getLongitude]];
     }
-    else if ([o isKindOfClass:OASelectedGpxPoint.class])
+    else if ([obj isKindOfClass:OASelectedGpxPoint.class])
     {
-        OASelectedGpxPoint *selectedGpxPoint = (OASelectedGpxPoint *)o;
+        OASelectedGpxPoint *selectedGpxPoint = (OASelectedGpxPoint *)obj;
         OASWptPt *point = [selectedGpxPoint getSelectedPoint];
         return [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
     }
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)o
+- (OAPointDescription *) getObjectName:(id)obj
 {
-    if ([o isKindOfClass:OASWptPt.class])
+    if ([obj isKindOfClass:OASWptPt.class])
     {
-        OASWptPt *wpt = o;
+        OASWptPt *wpt = obj;
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:[wpt name]];
     }
-    else if ([o isKindOfClass:OASelectedGpxPoint.class])
+    else if ([obj isKindOfClass:OASelectedGpxPoint.class])
     {
-        OASGpxFile *selectedGpxFile = [((OASelectedGpxPoint *)o) getSelectedGpxFile];
+        OASGpxFile *selectedGpxFile = [((OASelectedGpxPoint *)obj) getSelectedGpxFile];
         NSString *name;
         if ([selectedGpxFile showCurrentTrack])
         {
@@ -2014,7 +2014,7 @@ colorizationScheme:(int)colorizationScheme
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)o unknownLocation:(BOOL)unknownLocation
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }

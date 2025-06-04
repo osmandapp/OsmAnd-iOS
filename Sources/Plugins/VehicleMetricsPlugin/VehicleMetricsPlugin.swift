@@ -9,7 +9,11 @@
 final class VehicleMetricsPlugin: OAPlugin {
     
     override func getId() -> String? {
-        "net.osmand.maps.inapp.addon.vehicle_metrics"
+        kInAppId_Addon_Vehicle_Metrics
+    }
+    
+    override func getName() -> String {
+        localizedString("vehicle_metrics_obd_ii")
     }
     
     override func getDescription() -> String {
@@ -23,8 +27,23 @@ final class VehicleMetricsPlugin: OAPlugin {
     
     override func disable() {
         super.disable()
-        // TODO:
+        DeviceHelper.shared.disconnectAllOBDDevices(reason: .pluginOff)
+
     }
+    
+    override func isEnabled() -> Bool {
+        super.isEnabled() && OAIAPHelper.isVehicleMetricsPurchased()
+    }
+//
+//    - (void)setEnabled:(BOOL)enabled
+//    {
+//        [super setEnabled:enabled];
+//        if (OsmAndApp.instance.initialized)
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [[OARootViewController instance] updateLeftPanelMenu];
+//            });
+//    }
+//
     
     override func update(_ location: CLLocation) {
         OBDDataComputer.shared.registerLocation(l: OBDDataComputer.OBDLocation(time: Int64(location.timestamp.timeIntervalSince1970), latLon: KLatLon(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)))

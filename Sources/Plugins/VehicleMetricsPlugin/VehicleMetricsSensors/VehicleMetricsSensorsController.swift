@@ -79,7 +79,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     override func getTitle() -> String {
-        localizedString("vehicle_metrics_obd_ii")
+        localizedString("obd_plugin_name")
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {

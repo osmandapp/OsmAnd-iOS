@@ -4100,7 +4100,6 @@
 
 "add_hidden_group_info" = "The added point can be found in \"%@\". Unhide the selected group to show it on the map.";
 
-"obd_plugin_name" = "Vehicle Metrics";
 "purchase_feature_desc_vehicle_metrics_obd_ii" = "Track vital vehicle data using the OBD-II protocol. Monitor key metrics like speed, engine RPM, fuel consumption, and more.";
 
 "obd_plugin_description" = "Monitor key vehicle metrics using the OBD-II protocol. Access data including:\n
@@ -4191,3 +4190,4 @@
 "liter_per_hour" = "L/h";
 
 "unit_volt" = "V";
+"obd_widget_group" = "Vehicle Metrics";

@@ -204,19 +204,12 @@ extension DeviceHelper {
         }
     }
     
-    func disconnectAllDevices(reason: DisconnectDeviceReason) {
-        guard !connectedDevices.isEmpty else { return }
-        switch reason {
-        case .pluginOff:
-            connectedDevices.forEach {
-                $0.disableRSSI()
-                disconnectIfNeeded(device: $0)
-            }
-            BLEManager.shared.removeAndDisconnectDiscoveredDevices()
-        case .bluetoothPoweredOff:
-            connectedDevices.forEach { $0.didDisconnectDevice() }
-        }
-        connectedDevices.removeAll()
+    func disconnectAllOBDDevices(reason: DisconnectDeviceReason) {
+        disconnectAllDevices(reason: reason, deviceType: .OBD_VEHICLE_METRICS)
+    }
+    
+    func disconnectAllSensorsDevices(reason: DisconnectDeviceReason) {
+        disconnectAllDevices(reason: reason)
     }
     
     func restoreConnectedDevices(with peripherals: [Peripheral]) {
@@ -274,6 +267,32 @@ extension DeviceHelper {
         }
     }
     
+    func disconnectAllDevices(reason: DisconnectDeviceReason, deviceType: DeviceType? = nil) {
+        guard !connectedDevices.isEmpty else { return }
+        switch reason {
+        case .pluginOff:
+            if deviceType == .OBD_VEHICLE_METRICS {
+                connectedDevices
+                    .filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+                    .forEach { disconnectIfNeeded(device: $0) }
+                BLEManager.shared.removeAndDisconnectDiscoveredDevices()
+                connectedDevices.removeAll { $0.deviceType == .OBD_VEHICLE_METRICS }
+            } else {
+                connectedDevices
+                    .filter { $0.deviceType != .OBD_VEHICLE_METRICS }
+                    .forEach {
+                    $0.disableRSSI()
+                    disconnectIfNeeded(device: $0)
+                }
+                BLEManager.shared.removeAndDisconnectDiscoveredDevices()
+                connectedDevices.removeAll { $0.deviceType != .OBD_VEHICLE_METRICS }
+            }
+        case .bluetoothPoweredOff:
+            connectedDevices.forEach { $0.didDisconnectDevice() }
+            connectedDevices.removeAll()
+        }
+    }
+    
     private func discoverServices(device: Device, serviceUUIDs: [CBUUID]? = nil) {
         device.discoverServices(withUUIDs: nil) { [weak self] result in
             guard let self else { return }
@@ -291,31 +310,26 @@ extension DeviceHelper {
         let totalServices = services.count
         for service in services {
             device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { result in
-                switch result {
-                case .success(let characteristics):
-                    for characteristic in characteristics {
-                        if characteristic.properties.contains(.read) {
-                            device.update(with: characteristic) { _ in }
-                        }
-                        if characteristic.properties.contains(.notify) {
-                            device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { _ in }
-                        }
-                    }
-                    completedCount += 1
-                    if completedCount == totalServices {
-                        if device.deviceType == .OBD_VEHICLE_METRICS {
-                            OBDService.shared.startDispatcher()
-                        }
-                    }
-                case .failure(let error):
-                    Self.logger.error("discoverCharacteristics: \(String(describing: error.localizedDescription))")
-                    completedCount += 1
-                    if completedCount == totalServices {
-                        if device.deviceType == .OBD_VEHICLE_METRICS {
-                            OBDService.shared.startDispatcher()
-                        }
-                    }
-                }
+                defer {
+                     completedCount += 1
+                     if completedCount == totalServices, device.deviceType == .OBD_VEHICLE_METRICS {
+                         OBDService.shared.startDispatcher()
+                     }
+                 }
+                 
+                 switch result {
+                 case .success(let characteristics):
+                     for characteristic in characteristics {
+                         if characteristic.properties.contains(.read) {
+                             device.update(with: characteristic) { _ in }
+                         }
+                         if characteristic.properties.contains(.notify) {
+                             device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { _ in }
+                         }
+                     }
+                 case .failure(let error):
+                     Self.logger.error("discoverCharacteristics: \(error.localizedDescription)")
+                 }
             }
         }
     }

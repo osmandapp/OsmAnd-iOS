@@ -139,44 +139,51 @@ final class DescriptionDeviceHeader: UIView {
     
     private func discoverCharacteristics(services: [CBService]) {
         guard let device else { return }
+        
         var completedCount = 0
         let totalServices = services.count
+
         for service in services {
             device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
                 guard let self else { return }
+                
+                defer {
+                    completedCount += 1
+                    if completedCount == totalServices, device.deviceType == .OBD_VEHICLE_METRICS {
+                        OBDService.shared.startDispatcher()
+                    }
+                }
+                
                 switch result {
                 case .success(let characteristics):
                     for characteristic in characteristics {
                         debugPrint(characteristic)
+                        
                         if characteristic.properties.contains(.read) {
                             device.update(with: characteristic) { _ in }
                         }
+                        
                         if characteristic.properties.contains(.notify) {
-                            NSLog("\(characteristic.uuid): properties contains .notify")
+                            NSLog("[\(characteristic.uuid)] supports .notify, enabling...")
                             device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { notifyResult in
                                 switch notifyResult {
                                 case .success(let isNotifying):
-                                    NSLog("success: this peripheral was registered for change notifications to the characteristic [\(characteristic.uuid)]: \(isNotifying)")
+                                    NSLog("Notifications enabled for [\(characteristic.uuid)]: \(isNotifying)")
                                 case .failure(let error):
-                                    NSLog("failure: this peripheral was not registered for change notifications to the characteristic [\(characteristic.uuid)]:  \(error.localizedDescription)")
+                                    NSLog("Failed to enable notifications for [\(characteristic.uuid)]: \(error.localizedDescription)")
                                 }
                             }
                         }
                     }
-                    completedCount += 1
-                    if completedCount == totalServices {
-                        if device.deviceType == .OBD_VEHICLE_METRICS {
-                            OBDService.shared.startDispatcher()
-                        }
-                    }
+                    
                 case .failure(let error):
-                    NSLog("discoverCharacteristics: \(error)")
+                    NSLog("Failed to discover characteristics for service [\(service.uuid)]: \(error.localizedDescription)")
                     showErrorAlertWith(message: error.localizedDescription)
-                    completedCount += 1
                 }
             }
         }
     }
+
         
     private func disconnect() {
         guard let device else { return }

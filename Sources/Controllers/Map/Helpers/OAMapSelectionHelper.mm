@@ -91,7 +91,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     
     for (OAMapLayer *layer in layers)
     {
-        //Android doesn't have that layer here
+        // Android doesn't have that layer here
         if ([layer isKindOfClass:OAOsmBugsLayer.class])
             continue;
         
@@ -303,7 +303,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         {
             [renderedObject setIconRes:rasterMapSymbol->content.toNSString()];
         }
-        for (NSString *key in tags.allKeys)
+        for (NSString *key in tags)
         {
             renderedObject.tags[key] = tags[key];
             
@@ -555,7 +555,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return tagsMap;
 }
 
-+ (OAPOI *) findAmenity:(CLLocation *)latLon names:(NSMutableArray<NSString *> *)names obfId:(uint64_t)obfId
++ (OAPOI *) findAmenity:(CLLocation *)latLon names:(NSArray<NSString *> *)names obfId:(uint64_t)obfId
 {
     int searchRadius = [ObfConstants isIdFromRelation:obfId >> AMENITY_ID_RIGHT_SHIFT] ?
         AMENITY_SEARCH_RADIUS_FOR_RELATION :

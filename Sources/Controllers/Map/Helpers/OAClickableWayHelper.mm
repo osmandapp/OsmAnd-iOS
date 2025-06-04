@@ -101,11 +101,12 @@
 
 - (BOOL) isClickableWayTags:(NSDictionary<NSString *, NSString *> *)tags
 {
-    for (NSString *forbiddenKey in _forbiddenTags.allKeys)
+    for (NSString *forbiddenKey in _forbiddenTags)
     {
         NSString *forbiddenValue = _forbiddenTags[forbiddenKey];
-        if ([forbiddenValue isEqualToString:tags[forbiddenKey]] ||
-            ([@"*" isEqualToString:forbiddenValue] && tags[forbiddenKey]))
+        NSString *tagValue = tags[forbiddenKey];
+        if ([forbiddenValue isEqualToString:tagValue] ||
+            ([@"*" isEqualToString:forbiddenValue] && tagValue))
         {
             return  NO;
         }
@@ -115,7 +116,7 @@
     {
         if (tags[required])
         {
-            for (NSString *key in tags.allKeys)
+            for (NSString *key in tags)
             {
                 if ([_clickableTags containsObject:key])
                     return YES;

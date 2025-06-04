@@ -579,7 +579,7 @@
 "shared_string_road" = "Дорога";
 "arrival_distance_descr" = "Как скоро следует сообщать о прибытии?";
 "app_mode_aircraft" = "Воздушное судно";
-"stop_routing_confirm" = "Завершение навигации";
+"stop_routing_confirm" = "Завершить навигацию?";
 "clear_all_intermediates" = "Очистить все промежуточные точки";
 "shared_string_current" = "Текущий";
 "make_as_start_point" = "Сделать пунктом отправления";
@@ -620,7 +620,7 @@
 "rotate_map_to" = "Ориентация карты";
 "rotate_map_compass_opt" = "по направлению компаса";
 "rotate_map_bearing_opt" = "по направлению движения";
-"day_night_info_description" = "Восход: %@  \nЗакат: %@";
+"day_night_info_description" = "Восход: %@\nЗакат: %@";
 "daynight_mode_auto" = "Восход/закат";
 "transport_nearby_routes_within" = "Ближайшие маршруты в пределах";
 "tunnel_warning" = "Впереди туннель";
@@ -967,7 +967,7 @@
 "auto_zoom_farthest" = "К дальнему плану";
 "keep_informing_never" = "При нажатии на стрелку (вручную)";
 "map_widget_next_next_turn" = "Второй след. поворот";
-"unknown_location" = "Позиция пока не известна";
+"unknown_location" = "Позиция пока не известна.";
 "logging_interval_navigation_descr" = "Выберите интервал регистрации местоположения для записи трека во время навигации";
 "monitoring_min_distance" = "Минимальное смещение";
 "logging_min_distance_descr" = "Фильтр: минимальное расстояние, необходимое для регистрации новой точки";
@@ -1020,7 +1020,7 @@
 "route_tsll" = "Плавно налево";
 "route_tu" = "Развернитесь";
 "intermediate_point_too_far" = "Промежуточный пункт %@ слишком далеко от ближайшей дороги.";
-"empty_route_calculated" = "Данные маршрута потеряны";
+"empty_route_calculated" = "Невозможно проложить маршрут.";
 "avoid_roads_msg" = "Запуск альтернативного маршрута путём исключения указанных дорог";
 "poi_overlay" = "Наложение POI";
 "save_track_to_gpx" = "Автозапись трека при навигации";
@@ -1156,7 +1156,7 @@
 "snap_to_road" = "Привязка к дороге";
 "choose_audio_stream" = "Аудиоканал голосовой навигации";
 "settings_preset_descr" = "Вид карты и настройки навигации сохраняются для каждого отдельного профиля. Установите ваш профиль по умолчанию.";
-"auto_follow_location_enabled" = "Переход к текущей позиции…";
+"auto_follow_location_enabled" = "Переход к текущей позиции.";
 "commiting_node" = "Сохранение объекта…";
 "select_avoid_descr" = "Выберите дороги, которые хотите избегать во время навигации. Вы можете выбрать дорогу на карте или выбрать тип из списка ниже.";
 "left_side_navigation" = "Левостороннее движение";
@@ -1861,7 +1861,7 @@
 "layer_amenity_label" = "Названия точек";
 "quick_action_mapillary_hide" = "Скрыть Mapillary";
 "shared_string_add_profile" = "Добавить профиль";
-"arrived_at_destination" = "Вы на месте";
+"arrived_at_destination" = "Вы на месте.";
 "profile_type_user_string" = "Профиль пользователя";
 "quick_action_switch_profile_descr" = "Кнопка действия переключает между выбранными профилями.";
 "reverse_route" = "Обратный маршрут";
@@ -1880,7 +1880,7 @@
 "open_saved_track" = "Открыть сохранённый трек";
 "nearest_point" = "Ближайшая точка";
 "simplified_track" = "Упрощённый трек";
-"follow_track" = "Ведение по треку";
+"follow_track" = "Ведение по треку";
 "replace_favorite_confirmation" = "Заменить избранные %@?";
 "favorite_group_name" = "Имя группы";
 "available_groups" = "Доступные группы";
@@ -2437,7 +2437,7 @@
 "cloud_version_will_be_removed" = "Облачная версия будет удалена";
 "upload_change" = "Выгрузить изменение";
 "cloud_all_changes_downloaded" = "Все изменения загружены";
-"cloud_no_conflicts" = "Конфликтов нет";
+"cloud_no_conflicts" = "Конфликтов нет.";
 "cloud_all_changes_uploaded" = "Все изменения выгружены";
 "last_sync" = "Последняя синхронизация";
 "upload_all" = "Выгрузить все";
@@ -2495,7 +2495,7 @@
 "backup_pause_all" = "Приостановить все";
 "animate_my_location" = "Анимация моего положения";
 "routing_attr_motor_type_lpg_name" = "СУГ (LPG)";
-"recalc_angle_dialog_descr" = "Между текущей позицией и рассчитанным маршрутом будет отображаться прямой отрезок, пока маршрут не будет пересчитан.";
+"recalc_angle_dialog_descr" = "Между текущей позицией и рассчитанным маршрутом будет отображаться прямой отрезок, пока маршрут не будет пересчитан";
 "shared_string_status" = "Статус";
 "shared_string_layers" = "Слои";
 "rendering_attr_depthContourColorScheme_name" = "Цветовая схема линий";
@@ -2582,7 +2582,7 @@
 "routing_attr_length_description" = "Укажите длину транспортного средства, разрешённую для движения по маршрутам.";
 "routing_attr_allow_streams_name" = "Разрешить ручьи и канавы";
 "rendering_attr_showWaterwayTunnels_description" = "Отображение водных туннелей на меньших уровнях масштабирования";
-"routing_attr_driving_style_description" = "Задайте предпочтения, чтобы выбрать между скоростью, временем и безопасностью на маршруте.";
+"routing_attr_driving_style_description" = "Задайте предпочтения, чтобы выбрать между скоростью, временем и безопасностью на маршруте";
 "rendering_attr_horse_scale_impossible_name" = "Непроходимый";
 "rendering_attr_hideMilitaryAreas_description" = "Скрыть военные зоны";
 "routing_attr_prefer_hiking_routes_description" = "Предпочитать пешеходные маршруты";
@@ -3247,7 +3247,7 @@
 "avg_sensor_cadence" = "Каденс, средний";
 "avg_sensor_temperature" = "Температура, средняя";
 "discard_filter_changes_prompt" = "Сбросить все фильтры?";
-"max_sensor_bycicle_power" = "Мощность, макс.";
+"max_sensor_bycicle_power" = "Вело мощность, макс.";
 "shared_string_minute_lowercase" = "мин";
 "shared_string_visible_on_map" = "Видно на карте";
 "delete_widget_description" = "Этот виджет будет удален. Вы сможете восстановить его позже в настройках экрана.";
@@ -3259,7 +3259,7 @@
 "avg_sensor_bycicle_power" = "Мощность, средняя";
 "sort_subfolders_tracks" = "Сортировать подпапки";
 "help_article_personal_color_palette_schemes_name" = "Цветовые схемы";
-"max_sensor_cadence" = "Каденс, макс.";
+"max_sensor_cadence" = "Вело каденс, макс.";
 "root_folder" = "Корневая папка";
 "add_widget_to_the_left" = "Добавить виджет слева";
 "screen_is_unlocked" = "Сенсорный экран разблокирован.";
@@ -3287,3 +3287,7 @@
 "avg_sensor_speed" = "Скорость, средняя";
 "cloud_sync_progress" = "Синхронизация… %@";
 "add_widget" = "Добавить виджет";
+"help_article_navigation_routing_brouter_name" = "BRouter";
+"traffic_warning_calming" = "Замедление движения";
+"map_widget_ant_bicycle_power" = "Мощность велосипеда";
+"planning_trip_item" = "Планирование пути";

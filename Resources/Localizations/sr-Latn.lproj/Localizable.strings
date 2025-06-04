@@ -587,7 +587,7 @@
 "layer_route" = "Ruta";
 "gpx_analyze" = "Analiziraj";
 "gpx_route_time" = "Vreme rute";
-"gpx_uphldownhl" = "Uzbrdo/nizbrdo";
+"gpx_uphldownhl" = "Uzbrdo / Nizbrdo";
 "map_widget_average_speed" = "Prosečna brzina";
 "shared_string_control_start" = "Kreni";
 "gpx_avg_elev" = "Prosečna nadmorska visina";

@@ -3680,3 +3680,15 @@
 "labels_position" = "Position des étiquettes";
 "grid_color" = "Couleur de la grille";
 "save_favorite_default_appearance" = "Appliquer les modifications aux points existants dans le dossier ou uniquement aux nouveaux points ?";
+"dd_ddddd_format" = "DD.DDDDD°";
+"dd_mm_ss_format" = "DD°MM′SS″";
+"change_activity" = "Changer d'activité";
+"type_of_activity" = "Type d'activité";
+"intermediate_first" = "Intermédiaire d'abord";
+"destination_first" = "Destination d'abord";
+"display_priority" = "Priorité d'affichage";
+"shared_string_default_view" = "Vue par défaut";
+"map_widget_route_information" = "Informations sur l'itinéraire";
+"map_widget_distance" = "Distance";
+"dd_mm_mmm_format" = "DD°MM.MMM′";
+"map_widget_route_information_desc" = "Affiche l'heure d'arrivée estimée, le temps de trajet restant et la distance pour l'itinéraire de navigation actuel.";

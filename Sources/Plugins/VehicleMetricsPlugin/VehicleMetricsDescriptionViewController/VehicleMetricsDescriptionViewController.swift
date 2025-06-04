@@ -59,13 +59,14 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                 headerView.configure(device: device)
                 hasWidgetItem = false
                 // fill row N/A description
+                generateData()
                 tableView.reloadData()
             }
         }
     }
     // swiftlint:enable all
     
-    let plugin = OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin
+    private var plugin: VehicleMetricsPlugin?
     
     private lazy var headerView: DescriptionDeviceHeader = {
         let header = Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
@@ -87,6 +88,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             tableView.reloadData()
         }
         tableView.tableHeaderView = headerView
+        plugin = OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin
         
         // NOTE: to debug obd simulator
         /*
@@ -118,23 +120,23 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         tableData.clearAllData()
         
         if DeviceHelper.shared.isPairedDevice(id: device.id) {
+            // Vehicle info
+            let vehicleInfoSection = tableData.createNewSection()
+            vehicleInfoSection.headerText = localizedString("obd_vehicle_info").uppercased()
+            vehicleInfoSection.footerText = localizedString("obd_vin_desc")
+            vehicleInfoSection.key = Section.vehicleInfo.key
+            
+            let vinRow = vehicleInfoSection.createNewRow()
+            vinRow.cellType = OAValueTableViewCell.reuseIdentifier
+            vinRow.key = "vin"
+            vinRow.title = localizedString("obd_vin")
+            
             if let vin = OBDDataComputer.shared.widgets.first(where: { $0.type == .vin }) {
-                if let result = vin.computeValue() {
-                    let stringValue = String(describing: result)
-                    if !stringValue.isEmpty {
-                        // Vehicle info
-                        let vehicleInfoSection = tableData.createNewSection()
-                        vehicleInfoSection.headerText = localizedString("obd_vehicle_info").uppercased()
-                        vehicleInfoSection.footerText = localizedString("obd_vin_desc")
-                        vehicleInfoSection.key = Section.vehicleInfo.key
-                        
-                        let vinRow = vehicleInfoSection.createNewRow()
-                        vinRow.cellType = OAValueTableViewCell.reuseIdentifier
-                        vinRow.key = "vin"
-                        vinRow.title = localizedString("obd_vin")
-                        vinRow.descr = device.isConnected ? stringValue : ""
-                    }
-                }
+                let vinString = getDescription(for: vin)
+                let trimmedVin = vinString.trimmingCharacters(in: .whitespacesAndNewlines)
+                vinRow.descr = trimmedVin.isEmpty == false ? trimmedVin : Self.placeholderTextNA
+            } else {
+                vinRow.descr = Self.placeholderTextNA
             }
             
             // Received Data
@@ -149,7 +151,8 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                 row.key = "row"
                 row.title = widget.getTitle()
                 
-                guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }), dataItem.computeValue() != nil else {
+                guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }) else {
+                    NSLog("widget is empty")
                     row.descr = Self.placeholderTextNA
                     continue
                 }
@@ -259,17 +262,17 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             return Self.placeholderTextNA
         }
         
-        guard let widgetItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget.type }), let plugin else {
+        guard let widgetItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget.type }) else {
             return Self.placeholderTextNA
         }
         
-        let value = plugin.getWidgetValue(computerWidget: widgetItem)
+        let value = plugin?.getWidgetValue(computerWidget: widgetItem) ?? Self.placeholderTextNA
         
         guard value != Self.placeholderTextNA && value != "-" else {
-             return value
-         }
+            return value
+        }
         
-        let unit = plugin.getWidgetUnit(widgetItem.type)
+        let unit = plugin?.getWidgetUnit(widgetItem.type)
         
         return (unit?.isEmpty ?? true) ? value : "\(value) \(unit ?? "")"
     }
@@ -280,7 +283,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         for indexPath in visibleIndexPaths {
             let sectionData = tableData.sectionData(for: UInt(indexPath.section))
             
-            guard sectionData.key == Section.receivedData.key else { continue }
+            guard sectionData.key == Section.receivedData.key || sectionData.key == Section.vehicleInfo.key else { continue }
             guard let cell = tableView.cellForRow(at: indexPath) as? OAValueTableViewCell else { continue }
             
             let item = tableData.item(for: indexPath)

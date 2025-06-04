@@ -87,7 +87,6 @@ final class BLEManager {
                 } else {
                     let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
                     if let device = DeviceFactory.createDevice(with: uuids) {
-                        // TODO: check BLE peripheral.name
                         var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? peripheral.name ?? device.deviceServiceName
                         if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
                             deviceName = savedDevice.deviceName

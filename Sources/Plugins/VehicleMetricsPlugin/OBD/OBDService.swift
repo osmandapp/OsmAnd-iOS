@@ -11,7 +11,7 @@ final class OBDService: NSObject {
     static let shared = OBDService()
     
     private var obdDispatcher: OBDDispatcher?
-    
+    private var cachedObdSensor: OBDVehicleMetricsSensor?
     
     private override init() {
         super.init()
@@ -96,13 +96,19 @@ final class OBDService: NSObject {
         NSLog("[OBDService] -> handleDeviceDisconnected")
         stopDispatcher()
         clearBuffer()
+        cachedObdSensor = nil
     }
 }
 
 // MARK: - Response Sensor
 extension OBDService {
     var obdSensor: OBDVehicleMetricsSensor? {
-        DeviceHelper.shared.getOBDDevice()?.sensors.compactMap({ $0 as? OBDVehicleMetricsSensor }).first
+        if let cachedObdSensor {
+            return cachedObdSensor
+        }
+        let sensor = DeviceHelper.shared.getOBDDevice()?.sensors.compactMap({ $0 as? OBDVehicleMetricsSensor }).first
+        cachedObdSensor = sensor
+        return sensor
     }
     
     var readObdBuffer: String? {

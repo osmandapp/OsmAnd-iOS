@@ -58,7 +58,22 @@ enum GridFormat: Int32, CaseIterable {
     }
     
     static func valueOf(_ formatId: Int32) -> GridFormat {
-        return GridFormat(rawValue: formatId) ?? .dms
+        switch formatId {
+        case 0:
+            return .digital
+        case 1:
+            return .dm
+        case 2:
+            return .dms
+        case 3:
+            return .utm
+        case 4:
+            return .dms
+        case 5:
+            return .mgrs
+        default:
+            return .dms
+        }
     }
 }
 

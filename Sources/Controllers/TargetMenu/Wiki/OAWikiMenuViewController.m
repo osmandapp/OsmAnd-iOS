@@ -28,7 +28,6 @@
         OARowInfo* contentRow = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:nil text:content textColor:nil isText:YES needLinks:NO order:1 typeName:@"" isPhoneNumber:NO isUrl:NO];
         contentRow.isHtml = YES;
         contentRow.delegate = self;
-        NSStringIsEmpty(contentRow.text);
         if (contentRow.isText && !NSStringIsEmpty(contentRow.text))
             self.additionalRows = @[contentRow];
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];

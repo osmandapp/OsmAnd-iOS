@@ -14,36 +14,44 @@
 #pragma GCC diagnostic ignored "-Wformat-security"
 
 #define OALocalizedString(defaultValue, ...) \
-    _OALocalizedString(false, defaultValue, ##__VA_ARGS__)
+_OALocalizedString(false, nil, defaultValue, ##__VA_ARGS__)
 
 #define OALocalizedStringUp(defaultValue, ...) \
-    _OALocalizedString(true, defaultValue, ##__VA_ARGS__)
+_OALocalizedString(true, nil, defaultValue, ##__VA_ARGS__)
 
 static NSBundle * _Nullable enBundle = nil;
 
-static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValue, ...)
+static inline NSString * _Nullable _OALocalizedString(BOOL upperCase, NSString * _Nullable languageCode, NSString * _Nonnull defaultValue, ...)
 {
-    
     if (!enBundle)
     {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"en" ofType:@"lproj"];
         enBundle = [NSBundle bundleWithPath:path];
     }
     
-    
     NSArray *arr = [defaultValue componentsSeparatedByString:@" "];
     NSString *key;
     for (NSString *s in arr)
+    {
         if (s.length > 0 && [[NSCharacterSet letterCharacterSet] characterIsMember:[s characterAtIndex:0]])
         {
             key = s;
             break;
         }
+    }
+
+    NSBundle *bundleToUse = [NSBundle mainBundle];
+    if (languageCode && languageCode.length > 0)
+    {
+        NSString *customPath = [[NSBundle mainBundle] pathForResource:languageCode ofType:@"lproj"];
+        if (customPath)
+            bundleToUse = [NSBundle bundleWithPath:customPath];
+    }
 
     NSString *res;
     if (key)
     {
-        NSString *loc = [[NSBundle mainBundle] localizedStringForKey:key value:@"!!!" table:nil];
+        NSString *loc = [bundleToUse localizedStringForKey:key value:@"!!!" table:nil];
         if ([loc isEqualToString:@"!!!"] || loc.length == 0)
             loc = [enBundle localizedStringForKey:key value:@"" table:nil];
 
@@ -82,9 +90,19 @@ static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValu
     return res;
 }
 
-static inline NSString * _Nonnull localizedString(NSString* defaultValue)
+static inline NSString * _Nonnull localizedString(NSString * _Nonnull defaultValue)
 {
-    return _OALocalizedString(false, defaultValue);
+    return _OALocalizedString(false, nil, defaultValue);
+}
+
+static inline NSString * _Nonnull OALocalizedStringWithLocale(NSString * _Nullable languageCode, NSString * _Nonnull defaultValue)
+{
+    return _OALocalizedString(false, languageCode, defaultValue);
+}
+
+static inline NSString * _Nonnull OALocalizedStringUpWithLocale(NSString * _Nullable languageCode, NSString * _Nonnull defaultValue)
+{
+    return _OALocalizedString(true, languageCode, defaultValue);
 }
 
 /*

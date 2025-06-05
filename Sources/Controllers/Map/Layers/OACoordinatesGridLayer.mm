@@ -239,9 +239,10 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     auto primaryStyle = [self createMarksStyleWithColor:color haloColor:haloColor textAlignment:OsmAnd::TextRasterizer::Style::TextAlignment::Under];
     auto secondaryStyle = [self createMarksStyleWithColor:color haloColor:haloColor textAlignment:kNoTextAlignment];
     _marksProvider->setPrimaryStyle(primaryStyle, 2.0f * _cachedTextScale, true);
-    NSString *equator = OALocalizedString(@"equator");
-    NSString *primeMeridian = OALocalizedString(@"prime_meridian");
-    NSString *meridian180 = OALocalizedString(@"meridian_180");
+    NSString *mapLangCode = _settings.settingPrefMapLanguage.get;
+    NSString *equator = OALocalizedStringWithLocale(mapLangCode, @"equator");
+    NSString *primeMeridian = OALocalizedStringWithLocale(mapLangCode, @"prime_meridian");
+    NSString *meridian180 = OALocalizedStringWithLocale(mapLangCode, @"meridian_180");
     _marksProvider->setPrimary(false, equator.UTF8String, "", primeMeridian.UTF8String, meridian180.UTF8String);
     _marksProvider->setSecondaryStyle(secondaryStyle, 2.0f * _cachedTextScale, _cachedLabelsPosition == GridLabelsPositionCenter);
     if ([GridFormatWrapper needSuffixesForFormat:_cachedGridFormat])

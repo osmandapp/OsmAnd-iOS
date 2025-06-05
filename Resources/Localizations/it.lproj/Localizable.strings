@@ -3666,3 +3666,12 @@
 "original_icon_description" = "Ogni punto manterrà la sua icona.";
 "original_color_description" = "Ogni punto manterrà il suo colore.";
 "original_shape_description" = "Ogni punto manterrà la sua forma.";
+"type_of_activity" = "Tipo di attività";
+"dd_ddddd_format" = "DD.DDDDD°";
+"dd_mm_mmm_format" = "DD°MM.MMM′";
+"dd_mm_ss_format" = "DD°MM′SS″";
+"shared_string_default_view" = "Vista di default";
+"map_widget_route_information" = "Informazioni sul percorso";
+"change_activity" = "Cambia attività";
+"map_widget_route_information_desc" = "Visualizza l'orario di arrivo stimato, il tempo di percorrenza rimanente e la distanza per l'attuale percorso di navigazione.";
+"map_widget_distance" = "Distanza";

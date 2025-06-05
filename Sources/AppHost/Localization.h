@@ -21,7 +21,7 @@ _OALocalizedString(true, nil, defaultValue, ##__VA_ARGS__)
 
 static NSBundle * _Nullable enBundle = nil;
 
-static inline NSString * _Nullable _OALocalizedString(BOOL upperCase, NSString * _Nullable languageCode, NSString * _Nonnull defaultValue, ...)
+static inline NSString * _Nonnull _OALocalizedString(BOOL upperCase, NSString * _Nullable languageCode, NSString * _Nullable defaultValue, ...)
 {
     if (!enBundle)
     {
@@ -90,17 +90,17 @@ static inline NSString * _Nullable _OALocalizedString(BOOL upperCase, NSString *
     return res;
 }
 
-static inline NSString * _Nonnull localizedString(NSString * _Nonnull defaultValue)
+static inline NSString * _Nonnull localizedString(NSString * _Nullable defaultValue)
 {
     return _OALocalizedString(false, nil, defaultValue);
 }
 
-static inline NSString * _Nonnull OALocalizedStringWithLocale(NSString * _Nullable languageCode, NSString * _Nonnull defaultValue)
+static inline NSString * _Nonnull localizedStringWithLocale(NSString * _Nullable languageCode, NSString * _Nullable defaultValue)
 {
     return _OALocalizedString(false, languageCode, defaultValue);
 }
 
-static inline NSString * _Nonnull OALocalizedStringUpWithLocale(NSString * _Nullable languageCode, NSString * _Nonnull defaultValue)
+static inline NSString * _Nonnull localizedStringUpWithLocale(NSString * _Nullable languageCode, NSString * _Nullable defaultValue)
 {
     return _OALocalizedString(true, languageCode, defaultValue);
 }

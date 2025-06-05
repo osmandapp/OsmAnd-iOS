@@ -266,7 +266,7 @@ static const int START_ZOOM = 6;
         return;
     
     NSArray<OAFavoriteItem *> *favouritePoints = [OAFavoritesHelper getFavoriteItems];
-    if ([NSArray isEmpty:favouritePoints])
+    if (NSArrayIsEmpty(favouritePoints))
         return;
     
     CGPoint point = [result getPoint];

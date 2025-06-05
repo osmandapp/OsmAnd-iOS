@@ -65,15 +65,15 @@
 
 - (void)copyNames:(NSString *)otherName otherEnName:(NSString *)otherEnName otherNames:(NSDictionary<NSString *, NSString *> *)otherNames overwrite:(BOOL)overwrite
 {
-    if (![NSString isEmpty:otherName] && (overwrite || [NSString isEmpty:self.name]))
+    if (!NSStringIsEmpty(otherName) && (overwrite || NSStringIsEmpty(self.name)))
     {
         self.name = otherName;
     }
-    if (![NSString isEmpty:otherEnName] && (overwrite || [NSString isEmpty:self.enName]))
+    if (!NSStringIsEmpty(otherEnName) && (overwrite || NSStringIsEmpty(self.enName)))
     {
         self.enName = otherEnName;
     }
-    if (![NSDictionary isEmpty:otherNames])
+    if (!NSDictionaryIsEmpty(otherNames))
     {
         if ([otherNames.allKeys containsObject:@"name:en"])
             self.enName = otherNames[@"name:en"];
@@ -89,7 +89,7 @@
                 key = [key substringFromIndex:@"name:".length];
             if (!self.localizedNames)
                 self.localizedNames = [NSMutableDictionary new];
-            if (overwrite || [NSString isEmpty:self.localizedNames[key]])
+            if (overwrite || NSStringIsEmpty(self.localizedNames[key]))
                 self.localizedNames[key] = value;
         }
     }

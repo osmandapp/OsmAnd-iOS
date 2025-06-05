@@ -162,7 +162,7 @@ static const int START_ZOOM = 10;
 {
     NSArray<OAAvoidRoadInfo *> *impassableRoads = [[OAAvoidSpecificRoads instance] getImpassableRoads];
     
-    if ([self.mapViewController getMapZoom] >= START_ZOOM && !excludeUntouchableObjects && ![NSArray isEmpty:impassableRoads])
+    if ([self.mapViewController getMapZoom] >= START_ZOOM && !excludeUntouchableObjects && !NSArrayIsEmpty(impassableRoads))
     {
         int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
         CGPoint pixel = [result getPoint];

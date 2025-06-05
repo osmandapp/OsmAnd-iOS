@@ -1996,7 +1996,7 @@ colorizationScheme:(int)colorizationScheme
         {
             name = OALocalizedString(@"shared_string_currently_recording_track");
         }
-        else if ([NSString isEmpty:[selectedGpxFile getArticleTitle]])
+        else if (NSStringIsEmpty([selectedGpxFile getArticleTitle]))
         {
             name = [selectedGpxFile getArticleTitle];
         }

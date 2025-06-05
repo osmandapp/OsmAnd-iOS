@@ -316,10 +316,10 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     NSMutableArray<NSString *> *names = [self getValues:obfMapObject->getCaptionsInAllLanguages()];
     NSString *caption = obfMapObject->getCaptionInNativeLanguage().toNSString();
-    if (![NSString isEmpty:caption])
+    if (!NSStringIsEmpty(caption))
         [names addObject:caption];
     
-    if (![NSDictionary isEmpty:tags] && tags[OATravelGpx.TRAVEL_MAP_TO_POI_TAG] && [tags[ROUTE_TAG] isEqualToString:@"point"])
+    if (!NSDictionaryIsEmpty(tags) && tags[OATravelGpx.TRAVEL_MAP_TO_POI_TAG] && [tags[ROUTE_TAG] isEqualToString:@"point"])
     {
         [names addObject:tags[OATravelGpx.TRAVEL_MAP_TO_POI_TAG]]; // additional attribute for TravelGpx points (route_id)
     }
@@ -504,12 +504,12 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             if ([object isKindOfClass:[OAPOI class]])
             {
                 OAPOI *amenity = (OAPOI *)object;
-                if (![NSString isEmpty:amenity.type.name] && [publicTransportTypes containsObject:amenity.type.name])
+                if (!NSStringIsEmpty(amenity.type.name) && [publicTransportTypes containsObject:amenity.type.name])
                     [transportStopAmenities addObject:amenity];
             }
         }
         
-        if (![NSArray isEmpty:transportStopAmenities])
+        if (!NSArrayIsEmpty(transportStopAmenities))
         {
             for (OAPOI *amenity in transportStopAmenities)
             {

@@ -660,7 +660,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             else
                 rowIcon = [OATargetInfoViewController getIcon:iconId size:iconSize];
 
-            if (!rowIcon && [NSString isEmpty:textPrefix] && [NSString isEmpty:vl])
+            if (!rowIcon && NSStringIsEmpty(textPrefix) && NSStringIsEmpty(vl))
                 continue;
             
             row = [[OARowInfo alloc] initWithKey:convertedKey

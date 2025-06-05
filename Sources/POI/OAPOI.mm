@@ -161,7 +161,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     {
         BOOL hasRouteTrackSubtype = [_subType hasPrefix:ROUTE_PREFIX] || [_subType isEqualToString:ROUTE_TRACK];
         BOOL hasGeometry = _values && _values[ROUTE_BBOX_RADIUS];
-        return hasRouteTrackSubtype && hasGeometry && ![NSString isEmpty:[self getRouteId]];
+        return hasRouteTrackSubtype && hasGeometry && !NSStringIsEmpty([self getRouteId]);
     }
     return NO;
 }
@@ -261,9 +261,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 
 - (NSString *)getEnName:(BOOL)transliterate
 {
-    if (![NSString isEmpty:self.enName])
+    if (!NSStringIsEmpty(self.enName))
         return self.enName;
-    else if (![NSString isEmpty:self.name] && transliterate)
+    else if (!NSStringIsEmpty(self.name) && transliterate)
         return OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
     return @"";
 }
@@ -525,15 +525,15 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (NSString *)getGpxFileName:(NSString *)lang
 {
     NSString *gpxFileName = lang ? [self getName:lang] : [self getEnName:YES];
-    if (![NSString isEmpty:gpxFileName])
+    if (!NSStringIsEmpty(gpxFileName))
     {
         return [gpxFileName sanitizeFileName];
     }
-    else if (![NSString isEmpty:[self getRouteId]])
+    else if (!NSStringIsEmpty([self getRouteId]))
     {
         return [self getRouteId];
     }
-    else if (![NSString isEmpty:self.subType])
+    else if (!NSStringIsEmpty(self.subType))
     {
         return [NSString stringWithFormat:@"%@ %@", [self.type name], self.subType];
     }

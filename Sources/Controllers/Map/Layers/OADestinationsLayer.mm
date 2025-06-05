@@ -470,7 +470,7 @@
 
 - (OAPOI *)getMapObjectByMarker:(OADestination *)marker
 {
-    if (![NSString isEmpty:marker.mapObjectName] && marker.latitude != 0 && marker.longitude != 0)
+    if (!NSStringIsEmpty(marker.mapObjectName) && marker.latitude != 0 && marker.longitude != 0)
     {
         NSString *mapObjName = [marker.mapObjectName componentsSeparatedByString:@"_"][0];
         CLLocation *location = [[CLLocation alloc] initWithLatitude:marker.latitude longitude:marker.longitude];
@@ -542,7 +542,7 @@
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     NSMutableArray<OADestination *> *mapMarkers = self.app.data.destinations;
-    if (excludeUntouchableObjects || [NSArray isEmpty:mapMarkers])
+    if (excludeUntouchableObjects || NSArrayIsEmpty(mapMarkers))
         return;
     
     [_amenities removeAllObjects];

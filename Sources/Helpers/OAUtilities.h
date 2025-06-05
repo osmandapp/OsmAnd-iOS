@@ -42,6 +42,18 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
     return UIColorFromARGB(rgbValue);
 }
 
+static inline BOOL NSStringIsEmpty(NSString * _Nullable string) {
+    return !string || string.length == 0;
+}
+
+static inline BOOL NSArrayIsEmpty(NSArray * _Nullable array) {
+    return !array || array.count == 0;
+}
+
+static inline BOOL NSDictionaryIsEmpty(NSDictionary * _Nullable dictionary) {
+    return !dictionary || dictionary.count == 0;
+}
+
 @interface UIBezierPath (util)
 
 - (void) cubicToX:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 x3:(float)x3 y3:(float)y3;
@@ -53,27 +65,14 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 @end
 
-@interface NSArray (util)
-
-+ (BOOL) isEmpty:(NSArray *)array;
-
-@end
-
 @interface NSMutableArray (util)
 
 + (instancetype)arrayWithObject:(NSObject *)object count:(NSUInteger)cnt;
 
 @end
 
-@interface NSDictionary (util)
-
-+ (BOOL) isEmpty:(NSDictionary *)dictionary;
-
-@end
-
 @interface NSString (util)
 
-+ (BOOL) isEmpty:(NSString *)string;
 - (int) indexOf:(NSString *)text;
 - (int) indexOf:(NSString *)text start:(NSInteger)start;
 - (NSString *) add:(NSString *)str;

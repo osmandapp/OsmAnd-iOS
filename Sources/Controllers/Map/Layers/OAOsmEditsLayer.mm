@@ -337,7 +337,7 @@ static const int START_ZOOM = 10;
     int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
     
     NSArray<OAOsmNotePoint *> *osmBugs = [[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints];
-    if (![NSArray isEmpty:osmBugs])
+    if (!NSArrayIsEmpty(osmBugs))
     {
         CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));
         CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
@@ -346,7 +346,7 @@ static const int START_ZOOM = 10;
     }
     
     NSArray<OAOpenStreetMapPoint *> *osmEdits = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
-    if (![NSArray isEmpty:osmEdits])
+    if (!NSArrayIsEmpty(osmEdits))
     {
         CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));
         CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));

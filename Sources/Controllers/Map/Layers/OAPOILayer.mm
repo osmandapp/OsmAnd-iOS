@@ -438,7 +438,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     if ([amemity.type.category isWiki])
     {
-        if (!locale || [NSString isEmpty:locale])
+        if (!locale || NSStringIsEmpty(locale))
             locale = @"";
         
         locale = [OAPluginsHelper onGetMapObjectsLocale:amemity preferredLocale:locale];

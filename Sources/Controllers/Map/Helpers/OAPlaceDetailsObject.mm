@@ -75,7 +75,7 @@
     {
         OAPOI *amenity = (OAPOI *) object;
         NSString *wikidata = [amenity getWikidata];
-        if (![NSString isEmpty:wikidata])
+        if (!NSStringIsEmpty(wikidata))
         {
             [_wikidataIds addObject:wikidata];
         }
@@ -95,14 +95,14 @@
     {
         OAPOI *amenity = (OAPOI *) object;
         wikidata = [amenity getWikidata];
-        if (![NSString isEmpty:wikidata])
+        if (!NSStringIsEmpty(wikidata))
         {
             [_wikidataIds addObject:wikidata];
         }
     }
     
     return (osmObfId != -1 && [_osmIds containsObject:@(osmObfId)]) ||
-        (![NSString isEmpty:wikidata] && [_wikidataIds containsObject:wikidata]);
+        (!NSStringIsEmpty(wikidata) && [_wikidataIds containsObject:wikidata]);
 }
 
 - (void) merge:(OAPlaceDetailsObject*)other
@@ -175,12 +175,12 @@
         [_syntheticAmenity setTravelEloNumber:travelElo];
     }
     NSMutableArray<NSNumber *> *x = amenity.x;
-    if ([NSArray isEmpty:_syntheticAmenity.x] && ![NSArray isEmpty:x])
+    if (NSArrayIsEmpty(_syntheticAmenity.x) && !NSArrayIsEmpty(x))
     {
         [_syntheticAmenity.x addObjectsFromArray:x];
     }
     NSMutableArray<NSNumber *> *y = amenity.y;
-    if ([NSArray isEmpty:_syntheticAmenity.y] && ![NSArray isEmpty:y])
+    if (NSArrayIsEmpty(_syntheticAmenity.y) && !NSArrayIsEmpty(y))
     {
         [_syntheticAmenity.y addObjectsFromArray:y];
     }

@@ -520,7 +520,7 @@
            
         }
     }
-    if (![NSArray isEmpty:targetPoints])
+    if (!NSArrayIsEmpty(targetPoints))
         [mapPanel showContextMenuWithPoints:targetPoints];
 }
 

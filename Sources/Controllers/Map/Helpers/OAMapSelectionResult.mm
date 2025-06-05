@@ -87,7 +87,7 @@
                 [overlapped addObject:detailsObject];
         }
         OAPlaceDetailsObject *detailsObject;
-        if ([NSArray isEmpty:overlapped])
+        if (NSArrayIsEmpty(overlapped))
         {
             detailsObject = [[OAPlaceDetailsObject alloc] init];
         }
@@ -114,7 +114,7 @@
 
 - (BOOL) isEmpty
 {
-    return [NSArray isEmpty:_allObjects];
+    return NSArrayIsEmpty(_allObjects);
 }
 
 @end

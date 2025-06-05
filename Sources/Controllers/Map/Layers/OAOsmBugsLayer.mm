@@ -166,7 +166,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     float zoom = [self.mapViewController getMapZoom];
     NSArray<OAOpenStreetMapPoint *> *objects = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
     
-    if (zoom >= START_ZOOM && ![NSArray isEmpty:objects])
+    if (zoom >= START_ZOOM && !NSArrayIsEmpty(objects))
     {
         CGPoint pixel = [result getPoint];
         int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;

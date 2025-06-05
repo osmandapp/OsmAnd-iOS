@@ -79,16 +79,13 @@ final class TravelGpx : TravelArticle {
             routeRadius = helper.ARTICLE_SEARCH_RADIUS
         }
         
-        let shortLinkTiles = amenity.getTagContent(TravelGpx.ROUTE_SHORTLINK_TILES)
-        if let shortLinkTiles {
+        if let shortLinkTiles = amenity.getTagContent(TravelGpx.ROUTE_SHORTLINK_TILES) {
             initShortLinkTiles(shortLinkTiles: shortLinkTiles)
         }
     
         if activityType == nil || activityType!.isEmpty {
-            for key in amenity.getAdditionalInfoKeys() {
-                if key.hasPrefix(Self.ROUTE_ACTIVITY_TYPE) {
-                    activityType = amenity.getTagContent(key)
-                }
+            if let key = amenity.getAdditionalInfoKeys().first(where: { $0.hasPrefix(Self.ROUTE_ACTIVITY_TYPE) }) {
+                activityType = amenity.getTagContent(key)
             }
         }
         

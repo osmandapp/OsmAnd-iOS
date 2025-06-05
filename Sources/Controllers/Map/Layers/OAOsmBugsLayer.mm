@@ -215,8 +215,8 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     if ([obj isKindOfClass:OAOnlineOsmNoteWrapper.class])
     {
         OAOnlineOsmNoteWrapper *note = (OAOnlineOsmNoteWrapper *)obj;
-        NSString *name = note.description ? note.description : @"";
-        NSString *typeName = note.typeName ? note.typeName : OALocalizedString(@"osn_bug_name");
+        NSString *name = note.description ?: @"";
+        NSString *typeName = note.typeName ?: OALocalizedString(@"osn_bug_name");
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_OSM_NOTE typeName:typeName name:name];
     }
     return  nil;

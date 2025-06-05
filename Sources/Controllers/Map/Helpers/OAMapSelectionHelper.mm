@@ -405,9 +405,10 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             [selectedObject.provider isKindOfClass:OAGPXLayer.class])
         {
             NSArray *pair = (NSArray *)selectedObject.object;
-            if ([pair firstObject] && [[pair firstObject] isKindOfClass:OATravelGpx.class])
+            id firstOblect = [pair firstObject];
+            if (firstOblect && [firstOblect isKindOfClass:OATravelGpx.class])
             {
-                OATravelGpx *gpx = [pair firstObject];
+                OATravelGpx *gpx = firstOblect;
                 
                 // TODO: test this isEqual method
                 if (travelGpx == gpx)

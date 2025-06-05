@@ -66,6 +66,18 @@
 @end
 
 @implementation OAOkioSource
+{
+    OBDService *_OBDservice;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _OBDservice = [OBDService shared];
+    }
+    return self;
+}
 
 
 - (BOOL)closeAndReturnError:(NSError * _Nullable __autoreleasing * _Nullable)error
@@ -78,31 +90,32 @@
 - (int64_t)readSink:(OASOkioBuffer *)sink
           byteCount:(int64_t)byteCount
               error:(NSError * _Nullable __autoreleasing *)error {
-    OBDService *service = [OBDService shared];
     
-    NSString *buffer = [service readObdBuffer];
-    if (![service isProcessingReading] && [service isReadyBufferResponse] && buffer && buffer.length > 0)
-    {
-        [service isProcessingReadingWithIsReading:YES];
-        NSLog(@"readSink: %@", buffer);
-        NSInteger readCount = MIN(byteCount, buffer.length);
-        if (readCount > 0)
+    if ([_OBDservice isBufferReadyForRead]) {
+        NSString *buffer = [_OBDservice readObdBuffer];
+        if (buffer.length > 0)
         {
-            NSString *firstChar = [buffer substringToIndex:readCount];
-            NSLog(@"firstChar: %@", firstChar);
-            NSString *bufferToWrite = [buffer substringFromIndex:readCount];
-            NSLog(@"bufferToWrite: %@", bufferToWrite);
-            
-            if (bufferToWrite.length > 0)
-                [service writeObdBuffer:bufferToWrite];
-            else
-                [service clearBuffer];
-            
-            [sink writeUtf8String:firstChar];
-            
-            [service isProcessingReadingWithIsReading:NO];
-            
-            return readCount;
+            [_OBDservice isProcessingReadingWithIsReading:YES];
+            NSLog(@"readSink: %@", buffer);
+            NSInteger readCount = MIN(byteCount, buffer.length);
+            if (readCount > 0)
+            {
+                NSString *firstChar = [buffer substringToIndex:readCount];
+                NSLog(@"firstChar: %@", firstChar);
+                NSString *bufferToWrite = [buffer substringFromIndex:readCount];
+                NSLog(@"bufferToWrite: %@", bufferToWrite);
+                
+                if (bufferToWrite.length > 0)
+                    [_OBDservice writeObdBuffer:bufferToWrite];
+                else
+                    [_OBDservice clearBuffer];
+                
+                [sink writeUtf8String:firstChar];
+                
+                [_OBDservice isProcessingReadingWithIsReading:NO];
+                
+                return readCount;
+            }
         }
     }
     return 0;

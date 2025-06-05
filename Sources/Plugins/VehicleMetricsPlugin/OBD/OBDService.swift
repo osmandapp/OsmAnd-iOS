@@ -24,9 +24,8 @@ final class OBDService: NSObject {
     func startDispatcher() {
         NSLog("[OBDService] -> startDispatcher")
         
-        if let obdDispatcher {
-            obdDispatcher.setReadStatusListener(listener: nil)
-            obdDispatcher.stopReading()
+        if obdDispatcher != nil {
+            stopDispatcher()
         } else {
             OBDDataComputer.OBDTypeWidget.entries.forEach {
                 OBDDataComputer.shared.registerWidget(type: $0, averageTimeSeconds: 0)
@@ -56,7 +55,13 @@ final class OBDService: NSObject {
     
     func stopDispatcher() {
         NSLog("[OBDService] -> stopDispatcher")
+        self.obdDispatcher?.setReadStatusListener(listener: nil)
         self.obdDispatcher?.stopReading()
+        self.obdDispatcher = nil
+        
+        OBDDataComputer.shared.obdDispatcher?.setReadStatusListener(listener: nil)
+        OBDDataComputer.shared.obdDispatcher?.stopReading()
+        OBDDataComputer.shared.obdDispatcher = nil
     }
     
     func sendCommand(_ command: String?) -> Bool {
@@ -115,12 +120,9 @@ extension OBDService {
         obdSensor?.readObdBuffer()
     }
 
-    var isReadyBufferResponse: Bool {
-        obdSensor?.isReadyBufferResponse ?? false
-    }
-    
-    var isProcessingReading: Bool {
-        obdSensor?.isProcessingReading ?? false
+    var isBufferReadyForRead: Bool {
+        guard let obdSensor else { return false }
+        return !obdSensor.isProcessingReading && obdSensor.isReadyBufferResponse
     }
     
     func isProcessingReading(isReading: Bool) {

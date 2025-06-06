@@ -1375,13 +1375,13 @@ static const NSInteger kColorsSection = 1;
     if (_baseColorItem.value != _selectedColorItem.value)
         return YES;
     
-    NSString *currentGradientName = ([self getGPXGradientPaletteName].length > 0) ? [self getGPXGradientPaletteName] : ((([[_gradientColorsCollection getDefaultGradientPalette] paletteName].length > 0) ? [[_gradientColorsCollection getDefaultGradientPalette] paletteName] : @""));
-    NSString *backupGradientName = (_backupGpxItem.gradientPaletteName.length > 0) ? _backupGpxItem.gradientPaletteName : ((([[_gradientColorsCollection getDefaultGradientPalette] paletteName].length > 0) ? [[_gradientColorsCollection getDefaultGradientPalette] paletteName] : @""));
+    NSString *currentGradientName = [self getGPXGradientPaletteName].length > 0 ? [self getGPXGradientPaletteName] : [[_gradientColorsCollection getDefaultGradientPalette] paletteName].length > 0 ? [[_gradientColorsCollection getDefaultGradientPalette] paletteName] : @"";
+    NSString *backupGradientName = _backupGpxItem.gradientPaletteName.length > 0 ? _backupGpxItem.gradientPaletteName : [[_gradientColorsCollection getDefaultGradientPalette] paletteName].length > 0 ? [[_gradientColorsCollection getDefaultGradientPalette] paletteName] : @"";
     if (![currentGradientName isEqualToString:backupGradientName])
         return YES;
     
     NSString *currentWidth = [self getGPXWidth].length > 0 ? [self getGPXWidth] : [OAGPXTrackWidth getDefault].key ?: @"";
-    NSString *backupWidth = (_backupGpxItem.width.length > 0 ? _backupGpxItem.width : [OAGPXTrackWidth getDefault].key ?: @"");
+    NSString *backupWidth = _backupGpxItem.width.length > 0 ? _backupGpxItem.width : [OAGPXTrackWidth getDefault].key ?: @"";
     if (![currentWidth isEqualToString:backupWidth])
         return YES;
     

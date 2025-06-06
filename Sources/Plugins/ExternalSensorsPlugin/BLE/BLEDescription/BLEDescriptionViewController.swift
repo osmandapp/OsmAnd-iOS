@@ -208,7 +208,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceRSSIUpdated),
-                                               name: .DeviceRSSIUpdated,
+                                               name: .deviceRSSIUpdated,
                                                object: nil)
     }
     

@@ -9,9 +9,8 @@ import CoreBluetooth
 import UIKit
 
 extension Notification.Name {
-    static let DeviceRSSIUpdated = NSNotification.Name("DeviceRSSIUpdated")
-    static let DeviceConnected = NSNotification.Name("DeviceConnected")
-    static let DeviceDisconnected = NSNotification.Name("DeviceDisconnected")
+    static let deviceRSSIUpdated = Notification.Name("DeviceRSSIUpdated")
+    static let deviceDisconnected = Notification.Name("DeviceDisconnected")
 }
 
 enum DeviceState: Int {
@@ -37,7 +36,6 @@ class Device: NSObject {
     var deviceName: String = ""
     var didChangeCharacteristic: (() -> Void)?
     var didDisconnect: (() -> Void)?
-    var didConnect: (() -> Void)?
     var isSelected = false
     
     private(set) var peripheral: Peripheral!
@@ -108,16 +106,6 @@ class Device: NSObject {
     func addObservers() {
         NotificationCenter.default.removeObserver(self)
         
-        NotificationCenter.default.addObserver(forName: Peripheral.PeripheralConnected,
-                                               object: peripheral,
-                                               queue: nil) { [weak self] notification in
-            guard let self else { return }
-            if let identifier = notification.userInfo?["identifier"] as? UUID, identifier.uuidString == self.id {
-                didConnectDevice()
-            }
-        }
-        
-        
         NotificationCenter.default.addObserver(forName: Peripheral.PeripheralCharacteristicValueUpdate,
                                                object: peripheral,
                                                queue: nil) { [weak self] notification in
@@ -182,18 +170,10 @@ class Device: NSObject {
     
     func didDisconnectDevice() {
         debugPrint("didDisconnectDevice | \(deviceServiceName) | \(deviceName)")
-        NotificationCenter.default.post(name: .DeviceDisconnected,
+        NotificationCenter.default.post(name: .deviceDisconnected,
                                         object: nil,
                                         userInfo: [Self.identifier: self.id])
         didDisconnect?()
-    }
-        
-    private func didConnectDevice() {
-        debugPrint("didConnectDevice | \(deviceServiceName) | \(deviceName)")
-        NotificationCenter.default.post(name: .DeviceConnected,
-                                        object: nil,
-                                        userInfo: [Self.identifier: self.id])
-        didConnect?()
     }
     
     private func peripheralCharacteristicValueUpdate(notification: NSNotification) {
@@ -277,7 +257,7 @@ extension Device {
             if case .success(let RSSI) = result {
                 if rssi != RSSI {
                     rssi = RSSI
-                    NotificationCenter.default.post(name: .DeviceRSSIUpdated, object: nil)
+                    NotificationCenter.default.post(name: .deviceRSSIUpdated, object: nil)
                 }
                 debugPrint(self.rssi)
             }

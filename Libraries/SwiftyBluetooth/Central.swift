@@ -76,8 +76,6 @@ public final class Central {
     /// Unwrap with `notification.userInfo?["state"] as? CBCentralManagerState`
     public static let CentralStateChange = Notification.Name("SwiftyBluetooth_CentralStateChange")
     
-    static let CentralCBPeripheralConnected = Notification.Name("SwiftyBluetooth_CentralCBPeripheralConnected")
-    
     static let CentralCBPeripheralDisconnected = Notification.Name("SwiftyBluetooth_CentralCBPeripheralDisconnected")
     
     /// The sharedInstance Singleton, you can instantiate it yourself by
@@ -165,7 +163,7 @@ extension Central {
     
     /// Attempts to return the periperals from a list of identifier "UUID"s
     public func retrievePeripherals(withUUIDs uuids: [CBUUIDConvertible]) -> [Peripheral] {
-        let uuids = uuids.compactMap { UUID(uuidString: $0.CBUUIDRepresentation.uuidString)  }
+        let uuids = uuids.compactMap { UUID(uuidString: $0.CBUUIDRepresentation.uuidString) }
         let cbPeripherals = self.centralProxy.centralManager.retrievePeripherals(withIdentifiers: uuids)
         let peripherals = cbPeripherals.map { cbPeripheral -> Peripheral in
             return Peripheral(peripheral: cbPeripheral)

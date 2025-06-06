@@ -110,7 +110,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
         detectBluetoothState()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
-                                               name: .DeviceDisconnected,
+                                               name: .deviceDisconnected,
                                                object: nil)
     }
     

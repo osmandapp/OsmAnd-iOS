@@ -74,8 +74,6 @@ extension Peripheral {
     /// Unwrap the error if any with `notification.userInfo?["error"] as? SBError`
     public static let PeripheralDisconnected = Notification.Name(rawValue: "SwiftyBluetooth_PeripheralDisconnected")
     
-    public static let PeripheralConnected = Notification.Name(rawValue: "SwiftyBluetooth_PeripheralConnected")
-    
     /// The underlying CBPeripheral identifier
     public var identifier: UUID {
         return self.peripheralProxy.cbPeripheral.identifier

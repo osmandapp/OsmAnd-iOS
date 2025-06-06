@@ -52,15 +52,6 @@ final class PeripheralProxy: NSObject {
         
         cbPeripheral.delegate = self
         
-        NotificationCenter.default.addObserver(forName: Central.CentralCBPeripheralConnected,
-                                               object: Central.sharedInstance,
-                                               queue: nil)
-        { [weak self] (notification) in
-            if let identifier = notification.userInfo?["identifier"] as? UUID, identifier == self?.cbPeripheral.identifier {
-                self?.postPeripheralEvent(Peripheral.PeripheralConnected, userInfo: notification.userInfo)
-            }
-        }
-        
         NotificationCenter.default.addObserver(forName: Central.CentralCBPeripheralDisconnected,
                                                object: Central.sharedInstance,
                                                queue: nil)

@@ -58,12 +58,12 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(deviceConnected),
-                                               name: .DeviceConnected,
+                                               selector: #selector(handleDispatcherStart),
+                                               name: .dispatcherStarted,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
-                                               name: .DeviceDisconnected,
+                                               name: .deviceDisconnected,
                                                object: nil)
         if UserDefaults.standard.bool(for: .wasAuthorizationRequestBluetooth) {
             detectBluetoothState()
@@ -96,7 +96,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-        if DeviceHelper.shared.hasPairedDevices {
+        if DeviceHelper.shared.hasPairedDevicesOnlyOBD {
             configurePairedDevices()
         } else {
             configureNoPairedDevices()
@@ -104,7 +104,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     override func getTitleForHeader(_ section: Int) -> String? {
-        if DeviceHelper.shared.hasPairedDevices {
+        if DeviceHelper.shared.hasPairedDevicesOnlyOBD {
             switch section {
             case 0:
                 if let connected = sectionsDevicesData[.connected], !connected.isEmpty {
@@ -161,7 +161,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        DeviceHelper.shared.hasPairedDevices ? 30 : .leastNonzeroMagnitude
+        DeviceHelper.shared.hasPairedDevicesOnlyOBD ? 30 : .leastNonzeroMagnitude
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -203,8 +203,9 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     private func configureStartState() {
-        pairNewSensorButton.isHidden = DeviceHelper.shared.hasPairedDevices
-        if !DeviceHelper.shared.hasPairedDevices {
+        let hasPairedDevicesOnlyOBD = DeviceHelper.shared.hasPairedDevicesOnlyOBD
+        pairNewSensorButton.isHidden = hasPairedDevicesOnlyOBD
+        if !hasPairedDevicesOnlyOBD {
             tableView.sectionHeaderTopPadding = 0
             tableView.contentInset.top = 0
             tableView.contentInset.bottom = 64
@@ -231,7 +232,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
                                                queue: nil) { [weak self] _ in
             guard let self else { return }
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
-            guard DeviceHelper.shared.hasPairedDevices else { return }
+            guard DeviceHelper.shared.hasPairedDevicesOnlyOBD else { return }
             configureStartState()
             reloadData()
         }
@@ -309,8 +310,8 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     private func configurePairedDevices() {
         sectionsDevicesData.removeAll()
-        if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
-            let connectedDevices = DeviceHelper.shared.connectedDevices
+        if let pairedDevices = DeviceHelper.shared.getSettingsForPairedOnlyOBDDevices() {
+            let connectedDevices = DeviceHelper.shared.connectedOnlyOBDDevices
             
             if !connectedDevices.isEmpty {
                 let connectedSection = tableData.createNewSection()
@@ -321,7 +322,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
                 }
                 sectionsDevicesData[.connected] = connectedDevices
             }
-            let disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices)
+            let disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices).filter { $0.deviceType == .OBD_VEHICLE_METRICS }
             if !disconnectedDevices.isEmpty {
                 createDisconnectedDevicesSection(disconnectedDevices: disconnectedDevices)
             }
@@ -347,11 +348,9 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         }
     }
     
-    @objc private func deviceConnected() {
+    @objc private func handleDispatcherStart() {
         guard view.window != nil else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.reloadData()
-        }
+        self.reloadData()
     }
     
     @objc private func deviceDisconnected() {

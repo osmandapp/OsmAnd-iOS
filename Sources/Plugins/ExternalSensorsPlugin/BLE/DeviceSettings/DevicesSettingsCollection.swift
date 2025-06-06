@@ -12,9 +12,18 @@ final class DevicesSettingsCollection {
     
     private let storage = UserDefaults.standard
     
-    var hasPairedDevices: Bool {
-        if let deviceSettingsArray: [DeviceSettings] = storage[.deviceSettings], !deviceSettingsArray.isEmpty {
-           return true
+    var hasPairedDevicesExcludingOBD: Bool {
+        if let deviceSettingsArray: [DeviceSettings] = storage[.deviceSettings] {
+            let filteredDevices = deviceSettingsArray.filter { $0.deviceType != .OBD_VEHICLE_METRICS }
+            return !filteredDevices.isEmpty
+        }
+        return false
+    }
+    
+    var hasPairedDevicesOnlyOBD: Bool {
+        if let deviceSettingsArray: [DeviceSettings] = storage[.deviceSettings] {
+            let obdDevices = deviceSettingsArray.filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+            return !obdDevices.isEmpty
         }
         return false
     }

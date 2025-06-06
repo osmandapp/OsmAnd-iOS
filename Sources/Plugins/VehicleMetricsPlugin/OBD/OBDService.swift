@@ -6,6 +6,10 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+extension Notification.Name {
+    static let dispatcherStarted = Notification.Name("dispatcherStarted")
+}
+
 @objcMembers
 final class OBDService: NSObject {
     static let shared = OBDService()
@@ -17,7 +21,7 @@ final class OBDService: NSObject {
         super.init()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(handleDeviceDisconnected),
-                                               name: .DeviceDisconnected,
+                                               name: .deviceDisconnected,
                                                object: nil)
     }
     
@@ -31,7 +35,8 @@ final class OBDService: NSObject {
                 OBDDataComputer.shared.registerWidget(type: $0, averageTimeSeconds: 0)
             }
         }
-
+        
+        NotificationCenter.default.post(name: .dispatcherStarted, object: nil)
         let dispatcher = OBDDispatcher(debug: false)
         self.obdDispatcher = dispatcher
         OBDDataComputer.shared.obdDispatcher = dispatcher

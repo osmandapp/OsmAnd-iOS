@@ -111,11 +111,11 @@ final class BLESearchViewController: OABaseNavbarViewController {
         detectBluetoothState()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceRSSIUpdated),
-                                               name: .DeviceRSSIUpdated,
+                                               name: .deviceRSSIUpdated,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
-                                               name: .DeviceDisconnected,
+                                               name: .deviceDisconnected,
                                                object: nil)
     }
     

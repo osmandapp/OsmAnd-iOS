@@ -523,6 +523,8 @@
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Auto zoom map";
 "auto_zoom_map_descr" = "Zoom level according to your speed (while map is synchronized with current position).";
+"preview_next_turn" = "Preview next turn";
+"preview_next_turn_descr" = "Automatically rotates the map to preview the next turn or maneuver";
 "snap_to_road" = "Snap to road";
 "snap_to_road_descr" = "Current position icon will snap to the current navigation route";
 "show_warnings_title" = "Show alerts…";

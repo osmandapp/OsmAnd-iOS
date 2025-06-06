@@ -13,6 +13,7 @@
 #import "OASearchCoreAPI.h"
 #import "OAPOI.h"
 #import "OAResultMatcher.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OASearchResultMatcher
 {
@@ -133,20 +134,30 @@
 
 -(BOOL)publish:(OASearchResult *)object
 {
-    if (_phrase && object.otherNames && ![[_phrase getFirstUnknownNameStringMatcher] matches:object.localeName])
+    if (_phrase && object.otherNames && ![[_phrase getFirstUnknownNameStringMatcher] matches:object.localeName]
+        && object.alternateName.length == 0)
     {
-        for (NSString *s in object.otherNames)
+        bool updateName = false;
+        if (object.otherNames)
         {
-            if ([[_phrase getFirstUnknownNameStringMatcher] matches:s])
+            for (NSString *s in object.otherNames)
             {
-                object.alternateName = s;
-                break;
+                if ([[_phrase getFirstUnknownNameStringMatcher] matches:s])
+                {
+                    object.localeName = s;
+                    updateName = true;
+                    break;
+                }
             }
         }
-        if (object.alternateName.length == 0 && [object.object isKindOfClass:[OAPOI class]])
+        if (!updateName && [object.object isKindOfClass:[OAPOI class]])
         {
             [((OAPOI *) object.object).values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop)
             {
+                if (![ObfConstants isTagIndexedForSearchAsId:key] && ![ObfConstants isTagIndexedForSearchAsName:key])
+                {
+                    return;
+                }
                 if ([[_phrase getFirstUnknownNameStringMatcher] matches:value])
                 {
                     object.alternateName = value;
@@ -158,6 +169,9 @@
     if (object.localeName.length == 0 && object.alternateName.length > 0) {
         object.localeName = object.alternateName;
         object.alternateName = nil;
+    }
+    if (object.alternateName.length == 0 && [object.object isKindOfClass:[OAPOI class]]) {
+        object.alternateName = object.cityName;
     }
     object.parentSearchResult = _parentSearchResult;
     if (!_matcher || [_matcher publish:object])

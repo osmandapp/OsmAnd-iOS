@@ -40,6 +40,7 @@
 #import "OATopIndexFilter.h"
 #import "OACollatorStringMatcher.h"
 #import "OAArabicNormalizer.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -797,9 +798,20 @@
                                   sr.localeName = amenity->getName(lang, false).toNSString();
                                   if (transliterate && ![nm matches:sr.localeName])
                                       sr.localeName = amenity->getName(lang, transliterate).toNSString();
-                                  if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames]
-                                      && ![nm matchesMap:object.getAdditionalInfo.allValues]) {
-                                      return false;
+                                  if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames]) {
+                                      [object.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop)
+                                       {
+                                          if (([ObfConstants isTagIndexedForSearchAsId:key] || [ObfConstants isTagIndexedForSearchAsName:key])
+                                              && [nm matches:value])
+                                          {
+                                              sr.alternateName = value;
+                                              *stop = YES;
+                                          }
+                                      }];
+                                      if (sr.alternateName.length == 0)
+                                      {
+                                        return false;
+                                      }
                                   }
                                   sr.amenity = amenity;
                                   sr.preferredZoom = PREFERRED_POI_ZOOM;
@@ -822,7 +834,7 @@
                                   }
                                   sr.priority = SEARCH_AMENITY_BY_NAME_PRIORITY;
                                   [phrase countUnknownWordsMatchMainResult:sr];
-                                  
+                                  sr.cityName = amenity->getCityFromTagGroups(lang).toNSString();
                                   sr.objectType = EOAObjectTypePoi;
                                   [resultMatcher publish:sr];
                                   [ids addObject:poiID];
@@ -1677,6 +1689,7 @@
             }
             else
             {
+                // Use ref https://github.com/osmandapp/OsmAnd/issues/8319
                 NSString *ref = [*poi getContentLanguage:POI_REF lang:nil defLang:@"en"];
                 if (!ref || ![ns matches:ref])
                 {
@@ -1702,6 +1715,8 @@
         res.priorityDistance = 1;
         res.objectType = EOAObjectTypePoi;
         res.amenity = qMove(_currentAmenity);
+        QString lang = QString::fromNSString([[phrase getSettings] getLang]);
+        res.cityName = res.amenity->getCityFromTagGroups(lang).toNSString();
         
         [resultMatcher publish:res];
         return false;

@@ -103,4 +103,14 @@ final class ObfConstants: NSObject {
     static func isIdFromSplit(_ obfId: Int64) -> Bool {
         obfId > 0 && (obfId & Self.SPLIT_BIT) == Self.SPLIT_BIT
     }
+    
+    static func isTagIndexedForSearchAsName(_ tag: String?) -> Bool {
+        guard let tag = tag else { return false }
+        return tag.contains("name") || tag.contains("brand")
+    }
+        
+    static func isTagIndexedForSearchAsId(_ tag: String?) -> Bool {
+        guard let tag = tag else { return false }
+        return tag == "wikidata" || tag == "route_id"
+    }
 }

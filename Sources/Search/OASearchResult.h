@@ -52,6 +52,7 @@
 @property (nonatomic) int preferredZoom;
 @property (nonatomic) NSString *localeName;
 @property (nonatomic) NSString *alternateName;
+@property (nonatomic) NSString *cityName;
 
 @property (nonatomic) NSMutableArray<NSString *> *otherNames;
 

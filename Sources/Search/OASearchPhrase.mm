@@ -954,7 +954,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
             else
             {
                 OANameStringMatcher *ms = [self getUnknownNameStringMatcher:i];
-                if ([ms matches:localeName] || [ms matchesMap:otherNames])
+                if ([ms matches:localeName] || [ms matchesMap:otherNames] || [ms matches:sr.alternateName])
                 {
                     match = YES;
                 }
@@ -977,7 +977,8 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     {
         BOOL match = [localeName isEqualToString:_firstUnknownSearchWord]
             || [[self getFirstUnknownNameStringMatcher] matches:localeName]
-            || [[self getFirstUnknownNameStringMatcher] matchesMap:otherNames];
+            || [[self getFirstUnknownNameStringMatcher] matchesMap:otherNames]
+            || [[self getFirstUnknownNameStringMatcher] matches:sr.alternateName];
         if (match)
             r++;
         sr.firstUnknownWordMatches = match || sr.firstUnknownWordMatches;

@@ -17,7 +17,7 @@
 #define POINT_TYPE_RTE @"rte"
 #define POINT_TYPE_POI @"poi"
 #define POINT_TYPE_ADDRESS @"address"
-#define POINT_TYPE_OSM_NOTE "osm_note"
+#define POINT_TYPE_OSM_NOTE @"osm_note"
 #define POINT_TYPE_MARKER @"marker"
 #define POINT_TYPE_PARKING_MARKER @"parking_marker"
 #define POINT_TYPE_AUDIO_NOTE @"audionote"

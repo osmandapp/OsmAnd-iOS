@@ -14,6 +14,8 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/ICU.h>
 
@@ -39,6 +41,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 @end
 
 @implementation OAPOI
+{
+    NSMutableSet<NSString *> *_contentLocales;
+    int _travelElo;
+}
 
 -(void)setType:(OAPOIType *)type
 {
@@ -139,11 +145,58 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return val && [val isEqualToString:OSM_DELETE_VALUE];
 }
 
+- (BOOL)isPrivateAccess
+{
+    NSString *val = _values[OSM_ACCESS_PRIVATE_TAG];
+    return val && [val isEqualToString:OSM_ACCESS_PRIVATE_VALUE];
+}
+
+- (BOOL)isRouteTrack
+{
+    if (!_subType)
+    {
+        return NO;
+    }
+    else
+    {
+        BOOL hasRouteTrackSubtype = [_subType hasPrefix:ROUTE_PREFIX] || [_subType isEqualToString:ROUTE_TRACK];
+        BOOL hasGeometry = _values && _values[ROUTE_BBOX_RADIUS];
+        return hasRouteTrackSubtype && hasGeometry && !NSStringIsEmpty([self getRouteId]);
+    }
+    return NO;
+}
+
+- (BOOL)isRoutePoint
+{
+    return _subType && ([_subType isEqualToString:ROUTE_TRACK_POINT] || [_subType isEqualToString:ROUTE_ARTICLE_POINT]);
+}
+
+- (BOOL)isSuperRoute
+{
+    return _values[ROUTE_MEMBERS_IDS];
+}
+
 - (NSSet<NSString *> *)getSupportedContentLocales
 {
-    NSMutableSet<NSString *> *supported = [NSMutableSet new];
-    [supported addObjectsFromArray:[self getNames:@"wiki_lang" defTag:@"en"]];
-    return supported;
+    if (_contentLocales)
+    {
+        return [_contentLocales copy];
+    }
+    else
+    {
+        NSMutableSet<NSString *> *supported = [NSMutableSet new];
+        [supported addObjectsFromArray:[self getNames:CONTENT_TAG defTag:@"en"]];
+        [supported addObjectsFromArray:[self getNames:DESCRIPTION_TAG defTag:@"en"]];
+        [supported addObjectsFromArray:[self getNames:@"wiki_lang" defTag:@"en"]];
+        return [supported copy];
+    }
+}
+
+- (void) updateContentLocales:(NSSet<NSString *> *)locales
+{
+    if (!_contentLocales)
+        _contentLocales = [NSMutableSet new];
+    [_contentLocales addObjectsFromArray:[locales allObjects]];
 }
 
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag
@@ -157,6 +210,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             [l addObject:defTag];
     }
     return l;
+}
+
+- (NSString *)getName:(NSString *)lang
+{
+    return [self getName:lang transliterate:NO];
 }
 
 - (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate
@@ -199,6 +257,15 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         
         return mp;
     }
+}
+
+- (NSString *)getEnName:(BOOL)transliterate
+{
+    if (!NSStringIsEmpty(self.enName))
+        return self.enName;
+    else if (!NSStringIsEmpty(self.name) && transliterate)
+        return OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
+    return @"";
 }
 
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang
@@ -331,12 +398,79 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return res;
 }
 
+- (NSArray<NSString *> *) getAdditionalInfoKeys
+{
+    NSDictionary<NSString *, NSString *> *info = [self getAdditionalInfo];
+    return info ? info.allKeys : @[];
+}
+
 - (NSString *)getAdditionalInfo:(NSString *)key
 {
     if (!_values)
         return nil;
     
     return [_values objectForKey:key];
+}
+
+- (MutableOrderedDictionary<NSString *, NSString *> *)getInternalAdditionalInfoMap
+{
+    return _values ?: [MutableOrderedDictionary new];
+}
+
+- (void)setAdditionalInfo:(NSDictionary<NSString *, NSString *> *)additionalInfo
+{
+    _values = nil;
+    _openingHours = nil;
+    if (additionalInfo)
+    {
+        for (NSString *key in additionalInfo.allKeys)
+        {
+            [self setAdditionalInfo:key value:additionalInfo[key]];
+        }
+    }
+}
+
+- (void)setAdditionalInfo:(NSString *)tag value:(NSString *)value
+{
+    if ([tag isEqualToString:@"name:"])
+    {
+        self.name = value;
+    }
+    else if ([self.class isNameLangTag:tag])
+    {
+        [self setName:[tag substringFromIndex:@"name:".length] name:value];
+    }
+    else
+    {
+        if (!_values)
+            _values = [MutableOrderedDictionary new];
+        
+        _values[tag] = value;
+        
+        if ([tag isEqualToString:OPENING_HOURS_TAG])
+            self.openingHours = value;
+    }
+}
+
+- (void) copyAdditionalInfo:(OAPOI *)amenity overwrite:(BOOL)overwrite
+{
+    MutableOrderedDictionary<NSString *,NSString *> *map = [amenity getInternalAdditionalInfoMap];
+    if (overwrite || !_values)
+    {
+        [self setAdditionalInfo:map];
+    }
+    else
+    {
+        for (NSString *key in map.allKeys)
+        {
+            NSString *value = map[key];
+            NSString *additionalInfoValue = _values[key];
+            if (!additionalInfoValue)
+            {
+                [self setAdditionalInfo:key value:value];
+            }
+        }
+    }
 }
 
 - (NSString *)getSite
@@ -357,6 +491,53 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (NSString *)getRouteId
 {
     return [self getAdditionalInfo][@"route_id"];
+}
+
+- (NSString *)getWikidata
+{
+    return _values[WIKIDATA_TAG];
+}
+
+- (NSString *)getTravelElo
+{
+    return [self getAdditionalInfo][TRAVEL_EVO_TAG];
+}
+
+- (int)getTravelEloNumber
+{
+    if (_travelElo > 0)
+    {
+        return _travelElo;
+    }
+    else
+    {
+        NSString *travelEloStr = [self getTravelElo];
+        _travelElo = [OASKAlgorithms.shared parseIntSilentlyInput:travelEloStr def:DEFAULT_ELO];
+        return _travelElo;
+    }
+}
+
+- (void)setTravelEloNumber:(int)elo
+{
+    _travelElo = elo;
+}
+
+- (NSString *)getGpxFileName:(NSString *)lang
+{
+    NSString *gpxFileName = lang ? [self getName:lang] : [self getEnName:YES];
+    if (!NSStringIsEmpty(gpxFileName))
+    {
+        return [gpxFileName sanitizeFileName];
+    }
+    else if (!NSStringIsEmpty([self getRouteId]))
+    {
+        return [self getRouteId];
+    }
+    else if (!NSStringIsEmpty(self.subType))
+    {
+        return [NSString stringWithFormat:@"%@ %@", [self.type name], self.subType];
+    }
+    return [self.type name];
 }
 
 - (NSString *)getSubTypeStr
@@ -579,6 +760,31 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         return NO;
     
     return YES;
+}
+
+- (BOOL) strictEquals:(id)object
+{
+    OAPOI *o = (OAPOI *)object;
+    
+    if (![self isEqual:object])
+    {
+        return NO;
+    }
+    else if (self.x && o.x && self.x.count == o.x.count)
+    {
+        for (int i = 0; i < self.x.count; i++)
+        {
+            if (self.x[i] != o.x[i] || self.y[i] != o.y[i])
+            {
+                return NO;
+            }
+        }
+        return YES;
+    }
+    else
+    {
+        return !self.x && !o.x;
+    }
 }
 
 - (NSUInteger) hash

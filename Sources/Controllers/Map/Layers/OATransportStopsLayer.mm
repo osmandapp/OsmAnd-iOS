@@ -17,6 +17,8 @@
 #import "OATransportStopRoute.h"
 #import "OATransportStopAggregated.h"
 #import "OAPOI.h"
+#import "OAPointDescription.h"
+#import "Localization.h"
 #import "OAAppSettings.h"
 
 #include "OACoreResourcesTransportRouteIconProvider.h"
@@ -194,16 +196,34 @@
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    OsmAnd::TransportStopSymbolsProvider::TransportStopSymbolsGroup* transportStopSymbolGroup = dynamic_cast<OsmAnd::TransportStopSymbolsProvider::TransportStopSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
-    if (transportStopSymbolGroup != nullptr)
+    
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OATransportStop.class])
     {
-        const auto transportStop = transportStopSymbolGroup->transportStop;
-        OATargetPoint *targetPoint = [self getTargetPoint:[[OATransportStop alloc] initWithStop:transportStop]];
-        if (![found containsObject:targetPoint])
-            [found addObject:targetPoint];
+        OATransportStop *transportStop = (OATransportStop *)obj;
+        return [[CLLocation alloc] initWithLatitude:transportStop.location.latitude longitude:transportStop.location.longitude];
     }
+    return  nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OATransportStop.class])
+    {
+        OATransportStop *transportStop = (OATransportStop *)obj;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_TRANSPORT_STOP typeName:OALocalizedString(@"transport_Stop") name:[transportStop name]];
+    }
+    return nil;
 }
 
 @end

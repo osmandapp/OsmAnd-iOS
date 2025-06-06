@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAPointDescription;
+
 @interface OADestination : NSObject <NSCoding>
 
 @property (nonatomic) NSString *desc;
@@ -15,6 +17,7 @@
 @property (nonatomic) double latitude;
 @property (nonatomic) double longitude;
 @property (nonatomic) NSString *markerResourceName;
+@property (nonatomic) NSString *mapObjectName;
 
 @property (nonatomic) NSInteger index;
 
@@ -26,5 +29,7 @@
 - (instancetype)initWithDesc:(NSString *)desc latitude:(double)latitude longitude:(double)longitude;
 - (double) distance:(double)latitude longitude:(double)longitude;
 - (NSString *) distanceStr:(double)latitude longitude:(double)longitude;
+
+- (OAPointDescription *) getPointDescription;
 
 @end

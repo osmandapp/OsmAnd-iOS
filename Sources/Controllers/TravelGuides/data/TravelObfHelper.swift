@@ -109,6 +109,26 @@ final class TravelObfHelper : NSObject {
         return popularArticles
     }
     
+    
+    
+    
+    
+    func isTravelGpxTags(_ tags: [String: String]) -> Bool {
+        tags[ROUTE_ID] != nil &&
+            (tags[ROUTE_TAG] == "segment" || tags[TravelGpx.ROUTE_TYPE] != nil)
+    }
+    
+    func searchTravelGpx(latLon: CLLocationCoordinate2D, routeId: String) -> TravelGpx? {
+       
+        
+        
+        //TODO: Implement
+        
+        
+        return nil
+    }
+    
+    
     func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {
         var foundAmenities = [OAFoundAmenity]()
         var searchRadius = ARTICLE_SEARCH_RADIUS
@@ -190,7 +210,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func getTravelGpx(file: String?, amenity: OAPOI) -> TravelGpx {
-        var travelGpx = TravelGpx()
+        let travelGpx = TravelGpx(amenity: amenity)
         travelGpx.file = file
         let title = amenity.name
         
@@ -200,7 +220,7 @@ final class TravelObfHelper : NSObject {
 
         travelGpx.routeId = amenity.getTagContent(ROUTE_ID)
         travelGpx.user = amenity.getTagContent(TravelGpx.USER)
-        travelGpx.activityType = amenity.getTagContent(TravelGpx.ACTIVITY_TYPE)
+        travelGpx.activityType = amenity.getTagContent(TravelGpx.ROUTE_ACTIVITY_TYPE)
         travelGpx.ref = amenity.getRef()
         
         travelGpx.totalDistance = Float(amenity.getTagContent(TravelGpx.DISTANCE)) ?? 0
@@ -210,7 +230,7 @@ final class TravelObfHelper : NSObject {
         travelGpx.minElevation = Double(amenity.getTagContent(TravelGpx.MIN_ELEVATION)) ?? 0
         travelGpx.avgElevation = Double(amenity.getTagContent(TravelGpx.AVERAGE_ELEVATION)) ?? 0
         
-        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_RADIUS) {
+        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_BBOX_RADIUS) {
             OAUtilities.convertChar(toDist: String(radius[0]), firstLetter: String(TRAVEL_GPX_CONVERT_FIRST_LETTER), firstDist: Int32(TRAVEL_GPX_CONVERT_MULT_1), mult1: 0, mult2: Int32(TRAVEL_GPX_CONVERT_MULT_2))
         }
         return travelGpx
@@ -854,6 +874,13 @@ final class TravelObfHelper : NSObject {
     func createTitle(name: String) -> String {
         OAUtilities.capitalizeFirstLetter(name)
     }
+    
+    func openTrackMenu(article: TravelArticle, gpxFileName: String, latLon: CLLocation, adjustMapPosition: Bool) {
+        
+        //TODO: implement
+        
+    }
+    
 }
 
 final class GpxFileReader {

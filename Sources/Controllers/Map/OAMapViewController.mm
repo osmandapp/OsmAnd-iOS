@@ -751,6 +751,18 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
 }
 
+- (CLLocation *) getLatLonFromElevatedPixel:(CGFloat)x y:(CGFloat)y
+{
+    return [self getLatLonFromElevatedPixel: OsmAnd::PointI(x, y)];
+}
+
+- (CLLocation *) getLatLonFromElevatedPixel:(OsmAnd::PointI)pixel
+{
+    OsmAnd::PointI elevated31 = [OANativeUtilities get31FromElevatedPixel:pixel];
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(elevated31);
+    return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+}
+
 - (float) getMapZoom
 {
     return _mapView.zoom;

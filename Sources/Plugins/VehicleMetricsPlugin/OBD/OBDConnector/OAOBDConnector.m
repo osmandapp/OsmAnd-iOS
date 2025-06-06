@@ -11,7 +11,7 @@
 #import "OsmAnd_Maps-Swift.h"
 
 @interface OAOBDConnector() <OASOBDConnector>
-@property (nonatomic, strong) OASOBDSimulationSource *simulator;
+@property (nonatomic, strong, nullable) OASOBDSimulationSource *simulator;
 @end
 
 @interface OAOkioSource() <OASOkioSource>

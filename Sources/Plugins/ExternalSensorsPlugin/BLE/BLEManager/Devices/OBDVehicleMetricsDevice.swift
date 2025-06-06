@@ -67,9 +67,9 @@ final class OBDVehicleMetricsDevice: Device {
             completion(result)
         })
     }
-    
+    // TODO: https://github.com/osmandapp/OsmAnd-Issues/issues/2814
 //    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
-//        [.bicycleSpeed, .bicycleCadence, .bicycleDistance]
+//        []
 //    }
     
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {

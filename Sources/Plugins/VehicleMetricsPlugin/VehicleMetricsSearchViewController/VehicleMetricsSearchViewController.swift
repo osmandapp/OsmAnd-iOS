@@ -71,6 +71,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     
     private var hasFirstResult = false
     private var needRescan = false
+    private var centralStateObserver: NSObjectProtocol?
     
     private var discoveredDevices: [Device] {
         BLEManager.shared.discoveredDevices.sorted { $0.isConnected && !$1.isConnected }
@@ -158,6 +159,9 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     deinit {
         BLEManager.shared.stopScan()
         BLEManager.shared.removeAllDiscoveredDevices()
+        if let observer = centralStateObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
     
     private func showSearchingView() {
@@ -221,9 +225,9 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     }
     
     private func detectBluetoothState() {
-        NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
-                                               object: Central.sharedInstance,
-                                               queue: nil) { [weak self] notification in
+        centralStateObserver = NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
+                                                                      object: Central.sharedInstance,
+                                                                      queue: nil) { [weak self] notification in
             guard let self else { return }
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
             guard let state = notification.userInfo?["state"] as? CBManagerState else {
@@ -240,7 +244,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
                 if !discoveredDevices.isEmpty {
                     needRescan = true
                 }
-               showBluetoothTurnedOffView()
+                showBluetoothTurnedOffView()
             }
         }
     }

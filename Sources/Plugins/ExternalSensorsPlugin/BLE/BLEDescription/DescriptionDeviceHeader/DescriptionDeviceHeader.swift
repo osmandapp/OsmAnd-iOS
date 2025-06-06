@@ -184,7 +184,6 @@ final class DescriptionDeviceHeader: UIView {
         }
     }
 
-        
     private func disconnect() {
         guard let device else { return }
         configureConnectButtonTitle(with: .disconnecting)

@@ -27,6 +27,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     private let headerEmptyView: UIView = UIView(frame: .zero)
     
     private var sectionsDevicesData = [ConnectState: [Device]]()
+    private var centralStateObserver: NSObjectProtocol?
     
     private lazy var bluetoothDisableViewHeader: BluetoothDisableView = .fromNib()
     
@@ -124,8 +125,8 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell {
         let item = tableData.item(for: indexPath)
-        if item.cellType == OASimpleTableViewCell.getIdentifier() {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell {
+        if item.cellType == OASimpleTableViewCell.reuseIdentifier {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as? OASimpleTableViewCell {
                 cell.descriptionVisibility(false)
                 cell.leftIconVisibility(false)
                 cell.setCustomLeftSeparatorInset(true)
@@ -226,8 +227,11 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     private func detectBluetoothState() {
-        NotificationCenter.default.removeObserver(self, name: Central.CentralStateChange, object: Central.sharedInstance)
-        NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
+        if let centralStateObserver {
+            NotificationCenter.default.removeObserver(centralStateObserver, name: Central.CentralStateChange, object: Central.sharedInstance)
+        }
+
+        centralStateObserver = NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
                                                object: Central.sharedInstance,
                                                queue: nil) { [weak self] _ in
             guard let self else { return }
@@ -276,11 +280,11 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     private func configureNoPairedDevices() {
         let section = tableData.createNewSection()
         let titleBLE = section.createNewRow()
-        titleBLE.cellType = OASimpleTableViewCell.getIdentifier()
+        titleBLE.cellType = OASimpleTableViewCell.reuseIdentifier
         titleBLE.key = CellData.title.rawValue
 
         let learnMoreBLE = section.createNewRow()
-        learnMoreBLE.cellType = OASimpleTableViewCell.getIdentifier()
+        learnMoreBLE.cellType = OASimpleTableViewCell.reuseIdentifier
         learnMoreBLE.key = CellData.learnMore.rawValue
         learnMoreBLE.title = localizedString("learn_more_about_sensors_link")
     }
@@ -361,6 +365,13 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     // MARK: - IBAction
     @IBAction private func onPairNewSensorButtonPressed(_ sender: Any) {
         pairNewSensor()
+    }
+    
+    deinit {
+        if let observer = centralStateObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+
     }
 }
 
@@ -459,5 +470,3 @@ extension VehicleMetricsSensorsController {
         navigationController?.pushViewController(controller, animated: true)
     }
 }
-
-

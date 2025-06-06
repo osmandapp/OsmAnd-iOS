@@ -1,5 +1,5 @@
 //
-//  values.swift
+//  OBDComputerWidgetExtension.swift
 //  OsmAnd
 //
 //  Created by Oleksandr Panchenko on 23.05.2025.
@@ -14,8 +14,6 @@ extension OBDDataComputer.OBDTypeWidget {
             return .icCustomObdSpeed
         case .rpm:
             return .icCustomObdEngineSpeed
-        case .engineRuntime:
-            return nil
         case .fuelPressure:
             return .icCustomObdFuelPressure
         case .fuelLeftKm, .fuelLeftPercent, .fuelLeftLiter:
@@ -36,7 +34,7 @@ extension OBDDataComputer.OBDTypeWidget {
             return .icCustomObdBatteryVoltage
         case .fuelType:
             return .icCustomObdFuelTank
-        case .vin:
+        case .vin, .engineRuntime:
             return nil
         case .temperatureCoolant:
             return .icCustomObdTemperatureCoolant

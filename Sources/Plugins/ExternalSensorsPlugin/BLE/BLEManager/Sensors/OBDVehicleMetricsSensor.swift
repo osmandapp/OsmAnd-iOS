@@ -13,6 +13,7 @@ final class OBDVehicleMetricsSensor: Sensor {
     private(set) var stringResponse = ""
     private(set) var isReadyBufferResponse = false
   
+    // TODO: https://github.com/osmandapp/OsmAnd-Issues/issues/2814
 //    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
 //        []
 //    }

@@ -715,12 +715,11 @@ extension PeripheralProxy {
             let writePath = characteristic.uuidPath
             
             if var currentPathRequests = self.writeCharacteristicValueRequests[writePath] {
-                print("1) currentPathRequests: \(currentPathRequests.count)")
+                NSLog("1) currentPathRequests: \(currentPathRequests.count)")
                 currentPathRequests.append(request)
                 self.writeCharacteristicValueRequests[writePath] = currentPathRequests
-              //  self.runWriteCharacteristicValueRequest(writePath)
             } else {
-                print("2) currentPathRequests: \(self.writeCharacteristicValueRequests.count)")
+                NSLog("2) currentPathRequests: \(self.writeCharacteristicValueRequests.count)")
                 self.writeCharacteristicValueRequests[writePath] = [request]
                 
                 self.runWriteCharacteristicValueRequest(writePath)

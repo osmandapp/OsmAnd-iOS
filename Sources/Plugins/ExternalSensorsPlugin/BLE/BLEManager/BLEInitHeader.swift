@@ -10,8 +10,8 @@
 final class BLEInitHeader: NSObject {
     static func configure() {
         if UserDefaults.standard.bool(for: .wasAuthorizationRequestBluetooth) {
-//            SwiftyBluetooth.setSharedCentralInstanceWith(restoreIdentifier: Bundle.main.bundleIdentifier ?? "restoreIdentifier")
-//            let _ = BLEManager.shared
+            SwiftyBluetooth.setSharedCentralInstanceWith(restoreIdentifier: Bundle.main.bundleIdentifier ?? "restoreIdentifier")
+            let _ = BLEManager.shared
         }
     }
 }

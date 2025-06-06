@@ -476,7 +476,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func onTrackShareClicked(track: TrackItem, touchPointArea: CGRect) {
-        gpxHelper?.openExport(forTrack: track.dataItem, gpxDoc: nil, isCurrentTrack: false, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
+        guard let file = track.getFile() else { return }
+        gpxHelper?.openExport(forTrack: track.dataItem, gpxDoc: GpxUtilities.shared.loadGpxFile(file: file), isCurrentTrack: false, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
     }
     
     private func onTrackUploadToOsmClicked(track: TrackItem) {

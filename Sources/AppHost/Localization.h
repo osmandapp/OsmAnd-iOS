@@ -19,6 +19,12 @@ _OALocalizedString(false, nil, defaultValue, ##__VA_ARGS__)
 #define OALocalizedStringUp(defaultValue, ...) \
 _OALocalizedString(true, nil, defaultValue, ##__VA_ARGS__)
 
+#define OALocalizedStringForLocaleCode(languageCode, defaultValue, ...) \
+_OALocalizedString(false, languageCode, defaultValue, ##__VA_ARGS__)
+
+#define OALocalizedStringUpForLocaleCode(languageCode, defaultValue, ...) \
+_OALocalizedString(true, languageCode, defaultValue, ##__VA_ARGS__)
+
 static NSBundle * _Nullable enBundle = nil;
 
 static inline NSString * _Nonnull _OALocalizedString(BOOL upperCase, NSString * _Nullable languageCode, NSString * _Nullable defaultValue, ...)
@@ -40,17 +46,17 @@ static inline NSString * _Nonnull _OALocalizedString(BOOL upperCase, NSString * 
         }
     }
 
-    NSBundle *bundleToUse = [NSBundle mainBundle];
-    if (languageCode && languageCode.length > 0)
-    {
-        NSString *customPath = [[NSBundle mainBundle] pathForResource:languageCode ofType:@"lproj"];
-        if (customPath)
-            bundleToUse = [NSBundle bundleWithPath:customPath];
-    }
-
     NSString *res;
     if (key)
     {
+        NSBundle *bundleToUse = [NSBundle mainBundle];
+        if (languageCode.length > 0)
+        {
+            NSString *customPath = [bundleToUse pathForResource:languageCode ofType:@"lproj"];
+            if (customPath)
+                bundleToUse = [NSBundle bundleWithPath:customPath];
+        }
+        
         NSString *loc = [bundleToUse localizedStringForKey:key value:@"!!!" table:nil];
         if ([loc isEqualToString:@"!!!"] || loc.length == 0)
             loc = [enBundle localizedStringForKey:key value:@"" table:nil];

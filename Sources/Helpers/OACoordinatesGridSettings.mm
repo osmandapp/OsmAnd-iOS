@@ -84,6 +84,10 @@
 
 - (int)getGridColorForAppMode:(OAApplicationMode *)appMode nightMode:(BOOL)nightMode
 {
+    BOOL isMapsPlusProAvailable = [OAIAPHelper isMapsPlusAvailable] || [OAIAPHelper isOsmAndProAvailable];
+    if (!isMapsPlusProAvailable)
+        return nightMode ? _settings.coordinatesGridColorNight.defValue : _settings.coordinatesGridColorDay.defValue;
+    
     return nightMode ? [_settings.coordinatesGridColorNight get:appMode] : [_settings.coordinatesGridColorDay get:appMode];
 }
 

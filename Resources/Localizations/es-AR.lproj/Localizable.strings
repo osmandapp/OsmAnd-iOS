@@ -2376,7 +2376,7 @@
 "empty_purchases_description" = "Si tus compras no aparecen aquí, pulsá sobre «%@», o contactá con nuestro equipo de asistencia.";
 "explore_osmnad_plans_to_find_suitable" = "Explorá los planes de OsmAnd para encontrar uno adecuado para vos.";
 "osm_live_banner_desc" = "Obtené descargas ilimitadas de mapas, con actualizaciones semanales, diarias o incluso cada hora.";
-"redeem_promo_code" = "Canjear código promocional";
+"redeem_promo_code" = "Canjear código de oferta";
 "new_device_account" = "Nuevo dispositivo / nueva cuenta";
 "expired" = "Expirado";
 "shared_string_expires" = "Expira";
@@ -3692,3 +3692,15 @@
 "meridian_180" = "Meridiano 180";
 "apply_to_all_points" = "Aplicar a todos los puntos ";
 "grid_color" = "Color de la cuadrícula";
+"dd_ddddd_format" = "GG.GGGGG°";
+"dd_mm_mmm_format" = "GG°MM.MMM′";
+"dd_mm_ss_format" = "GG°MM′SS″";
+"change_activity" = "Cambiar actividad";
+"type_of_activity" = "Tipo de actividad";
+"intermediate_first" = "Primer intermedio";
+"map_widget_distance" = "Distancia";
+"destination_first" = "Primer destino";
+"shared_string_default_view" = "Vista predefinida";
+"map_widget_route_information" = "Información de la ruta";
+"map_widget_route_information_desc" = "Muestra la hora estimada de llegada, el tiempo de viaje restante y la distancia para la ruta de navegación actual.";
+"display_priority" = "Prioridad de vista";

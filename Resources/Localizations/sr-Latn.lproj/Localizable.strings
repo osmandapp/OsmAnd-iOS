@@ -3694,3 +3694,5 @@
 "map_widget_route_information_desc" = "Prikazuje procenjeno vreme dolaska, preostalo vreme putovanja i udaljenost za trenutnu rutu.";
 "dd_mm_ss_format" = "DD°MM′SS″";
 "type_of_activity" = "Tip aktivnosti";
+"preview_next_turn" = "Pregled sledećeg skretanja";
+"preview_next_turn_descr" = "Automatski rotira mapu radi pregleda sledećeg skretanja ili manevra";

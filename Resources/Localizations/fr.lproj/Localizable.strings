@@ -26,7 +26,7 @@
 "shared_string_add" = "Ajouter";
 "shared_string_and" = "et";
 "shared_string_edit" = "Modifier";
-"shared_string_dismiss" = "Arrêter";
+"shared_string_dismiss" = "Fermer";
 "shared_string_update" = "Mettre à jour";
 "shared_string_install" = "Installer";
 "shared_string_uninstall" = "Désinstaller";
@@ -330,7 +330,7 @@
 "wpt_select" = "Veuillez sélectionner des points de passage";
 "gpx_remove_wpts_q" = "Supprimer les points de passage sélectionnés ?";
 "editing_waypoints" = "Modifier les points de passage";
-"map_settings_over" = "Sur-couche";
+"map_settings_over" = "Surcouche";
 "map_settings_under" = "Sous-couche";
 "map_settings_avail_lay" = "Couches disponibles";
 "intro_promo" = "Cartes globales hors connexion";
@@ -369,7 +369,7 @@
 "shared_string_is_open" = "Ouvert";
 "shared_string_all" = "Tout";
 "poi_filter_by_name" = "Rechercher par nom";
-"poi_filter_closest_poi" = "Points d\'intérêt à proximité";
+"poi_filter_closest_poi" = "POI les plus proches";
 "poi_filter_custom_filter" = "Filtre personnalisé";
 "edit_filter_delete_dialog_title" = "Supprimer ce filtre \?";
 "try_again" = "Essayer à nouveau";
@@ -399,7 +399,7 @@
 "shared_string_of" = "de";
 // HUD
 "hud_heading" = "Cap";
-"map_settings_overunder" = "Sur-couche / Sous-couche";
+"map_settings_overunder" = "Surcouche / Sous-couche";
 "cannot_add_marker_desc" = "Veuillez retirer au moins une direction et réessayer";
 "record_plugin_description" = "Enregistrez vos trajets ou entraînements et analysez les données : vitesse, dénivelés, altitude, etc. Les traces enregistrées peuvent être archivées, partagées avec des amis, modifiées et retravaillées. \n \nPlus d\'informations sur %@.";
 "right_side_navigation" = "Conduite à droite";
@@ -517,8 +517,8 @@
 "arrival_distance_factor_early" = "Tôt";
 "arrival_distance_factor_late" = "Tard";
 "arrival_distance_factor_at_last" = "Très tard";
-"snap_to_road" = "Déplacer sur la route";
-"snap_to_road_descr" = "L’icône de position sera déplacé sur l’itinéraire en cours";
+"snap_to_road" = "Aligner sur la route";
+"snap_to_road_descr" = "L’icône de position actuelle s’alignera sur l’itinéraire de navigation en cours";
 "show_warnings_title" = "Alertes visuelles…";
 "show_warnings_descr" = "Paramétrer les avertissements de circulation (limites de vitesse, stops, ralentisseurs, tunnels), les radars et les informations sur les voies de circulation.";
 "speak_title" = "Annoncer…";
@@ -554,7 +554,7 @@
 "intermediate_point_too_far" = "Étape %@ trop éloignée de la route la plus proche.";
 "route_roundabout" = "Giratoire : prenez la sortie %d puis continuez";
 "route_roundabout_short" = "Prenez la sortie %d";
-"driving_region_europe_asia" = "Europe, Asie, Amérique latine et équivalent";
+"driving_region_europe_asia" = "Europe, Asie, Amérique latine et équivalents";
 "shared_string_history" = "Historique";
 "search_map" = "Recherche des cartes …";
 "skip_map_downloading_desc_ios" = "Aucune carte hors-ligne n'est installée. Vous pouvez sélectionner une carte dans la liste ou télécharger ultérieurement une carte depuis le menu « Gérer les fichiers de cartes »";
@@ -610,8 +610,8 @@
 "save_global_track_interval_descr" = "Définit la fréquence d’enregistrement des points du parcours (activable depuis le widget \"Enregistrement\" sur la carte).";
 "rotate_map_to" = "Orientation de la carte";
 "rotate_map_to_bearing_descr" = "Orientation de la carte.";
-"rotate_map_compass_opt" = "D\'après la boussole";
-"rotate_map_bearing_opt" = "Dans la direction du déplacement";
+"rotate_map_compass_opt" = "Orientation de la boussole";
+"rotate_map_bearing_opt" = "Orientation du déplacement";
 "rotate_map_north_opt" = "Nord en haut";
 "shared_string_automatic" = "Automatique";
 "map_widget_magnetic_bearing" = "Cap magnétique";
@@ -675,7 +675,7 @@
 "transport_nearby_routes_within" = "Lignes à moins de";
 "transport_nearby_routes" = "Situé à moins de";
 "shared_string_previous" = "Précédent";
-"show_poi_over_map" = "Afficher la sur-couche points d\'intérêt";
+"show_poi_over_map" = "Afficher la surcouche des POI";
 "search_radius" = "Recherche dans un rayon";
 "shared_string_clear" = "Effacer";
 "shared_string_close" = "Fermer";
@@ -786,7 +786,7 @@
 "exit_without_saving" = "Quitter sans enregistrer ?";
 "unsaved_changes_will_be_lost" = "Vos modifications non enregistrées seront perdues. Souhaitez-vous continuer ?";
 "osm_upload_no_internet" = "Veuillez vérifier votre connexion internet et réessayer.";
-"osm_delete_confirmation_descr" = "Êtes vous sûr de vouloir supprimer ce point ?";
+"osm_delete_confirmation_descr" = "Êtes vous sûr de vouloir supprimer ce POI ?";
 "osn_bug_name" = "Note OSM";
 "poi_remove_success" = "Supprimé";
 "shared_string_modified" = "Modifié";
@@ -803,7 +803,7 @@
 "website" = "Site web";
 "osm_add_place" = "Ajouter un lieu";
 "osm_modify_place" = "Modifier le lieu";
-"poi_remove_title" = "Supprimer le point d\'intérêt";
+"poi_remove_title" = "Supprimer le POI";
 "icon_group_amenity" = "Loisir";
 "user_password" = "Mot de passe";
 "rendering_value_category_name" = "Catégorie";
@@ -811,15 +811,15 @@
 "poi_select_category" = "Sélectionner une catégorie";
 "map_widget_ruler_control" = "Règle de mesure par rayon";
 "shared_string_upload" = "Téléverser";
-"poi_overlay" = "Superposition POI";
-"poi_dialog_poi_type" = "Type de point d\'intérêt";
+"poi_overlay" = "Surcouche POI";
+"poi_dialog_poi_type" = "Type de POI";
 "import_from_docs" = "Importation à partir de documents";
 "osmand_live_donation_switch_descr" = "Une partie de votre don est répartie entre les utilisateurs d'OSM qui soumettent des changements à OpenStreetMap. Le coût de l'abonnement reste le même";
 // OSM Editing actions
 "opening_changeset" = "Ouverture des modifications…";
 "closing_changeset" = "Fermeture des modifications…";
 "commiting_node" = "Envoi des nœuds…";
-"loading_poi_obj" = "Chargement des points d\'intérêt…";
+"loading_poi_obj" = "Chargement des POI…";
 "osm_upload_failed_descr" = "Veuillez vérifier vos informations de connexion et votre connexion internet et réessayer.";
 "osm_created" = "Créé le";
 "osm_add_timespan" = "Ajouter une période de temps";
@@ -828,9 +828,9 @@
 "osm_opens_at" = "Ouvre à :";
 "osm_closes_at" = "Ferme à :";
 "osm_building_num" = "Numéro de bâtiment";
-"osm_edit_modified_poi" = "Point d\'intérêt OSM modifié";
-"osm_edit_deleted_poi" = "Point d\'intérêt OSM supprimé";
-"osm_edit_created_poi" = "Point d\'intérêt créé sur OSM";
+"osm_edit_modified_poi" = "POI OSM modifié";
+"osm_edit_deleted_poi" = "POI OSM supprimé";
+"osm_edit_created_poi" = "POI OSM créé";
 "osm_edit_created_note" = "Note OSM créée";
 "osm_note_create" = "Note OSM créée";
 "upload_osm_note" = "Téléverser la note OSM";
@@ -838,7 +838,7 @@
 "osm_edit_comment_note" = "Commenter la note OSM";
 "osm_note_reopen_title" = "Ré-ouvrir la note";
 "osm_confirm_bulk_delete" = "Supprimer %d modifications ?";
-"osm_confirm_delete" = "Supprimer le point d'intérêt ?";
+"osm_confirm_delete" = "Supprimer le POI ?";
 "osm_confirm_upload" = "Téléverser les modifications ?";
 "close_changeset" = "Clôturer les modifications";
 "osm_tag" = "Étiquette";
@@ -861,14 +861,14 @@
 "upload_to_osm" = "Téléverser les modifications sur OSM";
 "osm_edit_show_on_map" = "Afficher la modification sur la carte";
 "osm_edit_show_on_map_descr" = "Ouvrez la carte centrée sur ce point";
-"poi_context_menu_modify" = "Modifier le point d\'intérêt";
-"context_menu_item_create_poi" = "Créer un point d\'intérêt";
+"poi_context_menu_modify" = "Modifier le POI";
+"context_menu_item_create_poi" = "Créer un POI";
 "poi_context_menu_modify_osm_change" = "Modifier la contribution OSM";
 "context_menu_item_open_note" = "Signaler une anomalie OSM";
 "edit_osm_note" = "Modifier la note OSM";
 "shared_string_commit" = "Soumettre";
 "osn_add_dialog_title" = "Créer une note";
-"modify_poi" = "Modifier le point d'intérêt OSM";
+"modify_poi" = "Modifier les informations du POI";
 "map_viewing_item" = "Visualisation de la carte";
 "help_search" = "Recherche sur la carte";
 "planning_trip_item" = "Préparer un itinéraire";
@@ -953,7 +953,7 @@
 "average_altitude" = "Altitude moyenne";
 "vector_data" = "Cartes vectorielles OSM";
 "quick_action_interim_dialog" = "Afficher une fenêtre intermédiaire";
-"toggle_poi" = "Afficher / Masquer les points d'intérêt";
+"toggle_poi" = "Afficher / Masquer les POI";
 "map_magnifier" = "Zoom de la carte";
 "quick_action_map_style" = "Style de carte";
 "add_gpx_waypoint" = "Ajouter un point GPX";
@@ -974,15 +974,15 @@
 "gpx_ascent" = "Montée";
 "gpx_tags_txt" = "Libellés";
 "quick_action_switch_day_mode" = "Mode Jour";
-"no_overlay" = "Aucune sur-couche";
+"no_overlay" = "Aucune surcouche";
 "quick_action_bug_descr" = "Ce message est ajouté en commentaire.";
-"quick_action_add_poi" = "Ajouter un point d\'intérêt";
+"quick_action_add_poi" = "Ajouter un POI";
 "shared_string_action_name" = "Nom de l\'action";
 "download_depth_countours" = "Lignes de sondes marines";
-"quick_action_map_overlay" = "Sur-couche";
+"quick_action_map_overlay" = "Surcouche";
 "show_more" = "Afficher plus";
 "mapillary_menu_title_pano" = "Afficher uniquement les images à 360°";
-"quick_action_poi_list" = "Liste des points d\'intérêt";
+"quick_action_poi_list" = "Liste des POI";
 "quick_action_start_stop_navigation" = "Démarrer / Arrêter le guidage";
 "quick_action_map_styles" = "Styles de carte";
 "improve_coverage_mapillary" = "Améliorez la couverture photo avec Mapillary";
@@ -993,11 +993,11 @@
 "previous_route" = "Itinéraire précédent";
 "quick_action_add_parking" = "Ajouter un emplacement de stationnement";
 "external_input_device" = "Périphériques externes d\'entrée";
-"quick_action_map_overlay_action" = "Ajouter une sur-couche";
+"quick_action_map_overlay_action" = "Ajouter une surcouche";
 "text_size" = "Taille du texte";
 "quick_action_map_underlay_action" = "Ajouter une sous-couche";
 "quick_action_new_action" = "Ajouter une action";
-"quick_action_map_overlay_title" = "Sur-couches de carte";
+"quick_action_map_overlay_title" = "Surcouches de carte";
 "quick_action_map_source" = "Modifier la source de la carte";
 "filter_current_poiButton" = "Filtre";
 "no_underlay" = "Sans sous-couche";
@@ -1063,7 +1063,7 @@
 "rendering_attr_depthContours_description" = "Afficher les lignes et points de sonde.";
 "rendering_attr_surface_gravel_name" = "Gravier";
 "rendering_attr_highway_class_road_name" = "Route";
-"rendering_attr_showMtbRoutes_name" = "Itinéraires pour VTT";
+"rendering_attr_showMtbRoutes_name" = "Itinéraires de VTT";
 "routing_attr_allow_expert_description" = "Itinéraires extrêmement difficiles, avec des obstacles et des environnements dangereux.";
 "routeInfo_piste_type_name" = "Type de piste";
 "rendering_attr_showLez_name" = "Afficher les zones à faibles émissions";
@@ -1085,14 +1085,14 @@
 "rendering_attr_piste_type_hike_name" = "Randonnée";
 "rendering_attr_hikingRoutesOSMC_name" = "Itinéraires de randonnée";
 "rendering_attr_hideUnderground_name" = "Objets souterrains";
-"rendering_attr_hidePOILabels_name" = "Libellés des points d\'intérêt";
+"rendering_attr_hidePOILabels_name" = "Libellés des POI";
 "rendering_attr_trolleybusRoutes_name" = "Lignes de trolleybus";
 "routing_attr_allow_skating_only_description" = "Pistes damées pour le skating, sans traces parallèles.";
 "rendering_attr_surface_asphalt_name" = "Asphalte";
-"rendering_attr_hideIcons_name" = "Icônes des points d\'intérêt";
+"rendering_attr_hideIcons_name" = "Icônes des POI";
 "rendering_attr_smoothness_intermediate_name" = "Intermédiaire";
 "rendering_attr_winter_road_name" = "Route sur neige";
-"rendering_attr_horseRoutes_name" = "Itinéraires à cheval";
+"rendering_attr_horseRoutes_name" = "Itinéraires équestres";
 "routing_attr_short_way_name" = "Trajet économe en carburant";
 "rendering_attr_contourWidth_description" = "Épaisseur des traits pour les courbes de niveau";
 "routing_attr_avoid_stairs_name" = "Éviter les escaliers";
@@ -1108,7 +1108,7 @@
 "rendering_value_fine_name" = "Très fin";
 "rendering_attr_surface_mud_name" = "Boue";
 "routing_attr_avoid_ice_roads_fords_name" = "Éviter les routes sur glace, les fjords";
-"rendering_attr_alpineHiking_name" = "Classification des sentiers de randonnée selon leur difficulté";
+"rendering_attr_alpineHiking_name" = "Niveau de difficulté des sentiers de randonnée";
 "rendering_attr_hideOverground_name" = "Objets au sol";
 "rendering_attr_hmRendered_description" = "Augmenter le niveau de détail affiché.";
 "routing_attr_height_obstacles_name" = "Utiliser les données d\'altitude";
@@ -1332,7 +1332,7 @@
 "year_short" = "an.";
 "months_short" = "Mois";
 "month_short" = "Mois";
-"import_raster_map_success" = "La carte raster a été importée. Ouvrez les paramètres de carte et activez la comme sur-couche/sous-couche";
+"import_raster_map_success" = "La carte raster a été importée. Ouvrez les paramètres de carte et activez la comme surcouche/sous-couche";
 "import_raster_map_failed" = "Échec de l'import de la carte raster";
 "how_to_open_wiki_title" = "Comment ouvrir les articles Wikipédia \?";
 "download_wiki_data" = "Télécharger les données Wikipédia pour %@";
@@ -1421,7 +1421,7 @@
 "toggle_online_notes" = "Activer les notes OSM";
 // Mapillary
 "mapil_no_inet_descr" = "Vous avez besoin d'une connexion internet pour voir les images Mapillary.";
-"osm_editing_loading_poi" = "Chargement des informations du point d'intérêt";
+"osm_editing_loading_poi" = "Chargement des informations du POI";
 "res_zoom_invalid_value" = "Le niveau de zoom doit être dans l'intervalle 1 - 22";
 "res_url_warning" = "L'URL ne peut pas être vide";
 "res_source_format" = "Format de la source";
@@ -1504,7 +1504,7 @@
 "avoid_by_type" = "Éviter par type";
 "select_manually" = "Sélectionnez manuellement";
 "select_underlay" = "Sélectionnez la sous-couche";
-"select_overlay" = "Sélectionnez la sur-couche";
+"select_overlay" = "Sélectionnez la surcouche";
 "select_map_source" = "Sélectionnez la source de la carte";
 "plugin_settings_descr" = "Paramètres du greffon pour le profil sélectionné.";
 "global_settings_descr" = "Affectent toute l'application.";
@@ -1528,7 +1528,7 @@
 "group_properties" = "Propriétés du groupe";
 "select_favorite" = "Sélectionnez votre favori";
 "map_update_warning" = "Voulez-vous recharger les données des tuiles depuis Internet ?";
-"use_of_downloaded_map" = "Vous pouvez maintenant utiliser cette carte hors-ligne comme source de la carte principale ou en tant que sur-couche/sous-couche";
+"use_of_downloaded_map" = "Vous pouvez maintenant utiliser cette carte hors-ligne comme source de la carte principale ou en tant que surcouche/sous-couche";
 "zoom_levels_difference_description" = "Un niveau de zoom élevé peut augmenter significativement la taille des données téléchargées.";
 "online_sources" = "Sources en ligne";
 "select_online_source" = "Sélectionnez la source";
@@ -1554,7 +1554,7 @@
 "res_zoom_warning" = "La valeur du zoom minimal ne peut être égale ou supérieure à celle du zoom maximal";
 "res_name_warning" = "Le nom du fichier ne peut être vide";
 "res_expire_time_desc" = "Temps d'expiration en minutes. Après la durée définie, les tuiles dans le cache seront rechargées. Laissez ce champ vide si vous n'avez pas besoin de recharger des tuiles depuis cette source.\nUn jour équivaut à 1440 minutes.\nUne semaine équivaut à 10 080 minutes.\n30 jours équivalent à 43 200 minutes.";
-"res_zoom_levels_desc" = "Ces paramètres vont affecter l'affichage de la carte lorsque celle-ci est utilisée en tant que sur-couche ou sous-couche.\n\nType de carte : la carte sera limitée aux zooms sélectionnés.\n\nSur-couche ou sous-couche : les niveaux de zoom auxquels les tuiles seront visibles. L'agrandissement ou le rétrécissement auront lieu au-dessus ou en-dessous des valeurs choisies.";
+"res_zoom_levels_desc" = "Ces paramètres vont affecter l'affichage de la carte lorsque celle-ci est utilisée en tant que sur-couche ou sous-couche.\n\nType de carte : la carte sera limitée aux zooms sélectionnés.\n\nSurcouche ou sous-couche : les niveaux de zoom auxquels les tuiles seront visibles. L'agrandissement ou le rétrécissement auront lieu au-dessus ou en-dessous des valeurs choisies.";
 "one_image_per_tile" = "Un fichier image par tuile";
 "res_online_url_descr" = "Entrez ou copiez et collez l'URL de la source en ligne";
 "res_online_name_descr" = "Fournissez un nom pour la source en ligne";
@@ -1605,7 +1605,7 @@
 "shared_string_profiles" = "Profils";
 "shared_string_quick_actions" = "Actions rapides";
 "shared_string_nothing_selected" = "Aucun élément sélectionné";
-"shared_string_poi_types" = "Types de PI";
+"shared_string_poi_types" = "Types de POI";
 "shared_string_preparing" = "Préparation en cours";
 "shared_string_import_complete" = "Import terminé";
 "shared_string_importing" = "Import en cours";
@@ -1622,7 +1622,7 @@
 "road_speeds_descr" = "Ces paramètres peuvent modifer le calcul d'itinéraire.";
 "ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "road_speeds" = "Vitesses routières";
-"layer_amenity_label" = "Libellés des Points d\'Intérêt et Favoris";
+"layer_amenity_label" = "Libellés des points (POI, Favoris)";
 "osm_notes" = "Notes OSM";
 "personal_category_name" = "Personnel";
 "whole_track" = "Trace entière";
@@ -1757,7 +1757,7 @@
 // Shared Strings
 "shared_string_enable" = "Activer";
 "shared_string_search_history" = "Historique de recherche";
-"poi_categories" = "Catégories de PI";
+"poi_categories" = "Catégories de POI";
 "carplay_active_message" = "La carte est affichée via CarPlay";
 "tracks_empty" = "Votre liste de trace est vide";
 "street_level_imagery" = "Photos des rues";
@@ -1822,7 +1822,7 @@
 "mapillary_get_descr" = "Téléchargez Mapillary pour ajouter des photos à cet endroit";
 "mapil_no_images" = "Il n'y a pas de photos pour cet endroit.";
 "osm_editing_access_descr" = "Vous pouvez consulter toutes vos modifications et notes locales dans %@. Les points déjà téléchargés ne sont pas répertoriés dans OsmAnd.";
-"save_poi_without_poi_type_message" = "Enregistrer ce point d\'intérêt sans définir son type \?";
+"save_poi_without_poi_type_message" = "Enregistrer ce POI sans type ?";
 "osm_tag_too_long_message" = "La longueur maximale du tag %@ est de 255 caractères.\nVeuillez la raccourcir pour continuer.";
 "osm_editing_settings_descr" = "Les paramètres de ce greffon sont globaux et s'appliquent à tous les profils.";
 "shared_string_loading" = "Chargement";
@@ -1868,7 +1868,7 @@
 "map_coords" = "Carte : Lat %.5f Lon %.5f";
 "sett_ext_input_desc" = "Sélectionnez un périphérique externe comme un clavier générique ou un WunderLINQ pour utiliser l'application.";
 "shared_string_required" = "Obligatoire";
-"search_poi_types_descr" = "Combinez des PI de différentes catégories. Appuyez sur \"basculer\" pour tout sélectionner, le côté gauche sélectionne une catégorie.";
+"search_poi_types_descr" = "Combinez des POI de différentes catégories. Appuyez sur \"basculer\" pour tout sélectionner, le côté gauche sélectionne une catégorie.";
 "reset_to_default_category_button_promo" = "Restaurer les valeurs par défaut réinitialisera l\'ordre de tri.";
 "create_custom_categories_list_promo" = "Modifiez l\'ordre de tri dans la liste, masquez des catégories. Vous pouvez importer et exporter toutes vos modifications via les profils.";
 "hidden_categories" = "Catégories masquées";
@@ -1896,7 +1896,7 @@
 "vessel_height_limit_description" = "Définit la hauteur du navire afin d\'éviter les ponts bas. Souvenez-vous que si le pont est mobile, nous utiliserons sa hauteur en position ouverte.";
 "route_between_points_add_track_desc" = "Sélectionnez le fichier de trace auquel vous souhaitez ajouter un nouveau segment.";
 "track_is_saved" = "%@\nenregistré !";
-"ios_release_3_90" = "- Introduction d'une fonction \"Planifier un itinéraire\" pour planifier de futurs voyages avec la possibilité de créer des segments de parcours en utilisant différents types de navigation\n- Ajout d'une option permettant d'activer une boussole sur l'outil \"Règle de rayon\"\n- Ajout de l'option \"Superposition des étiquettes de PI\" qui permet d'afficher les noms des favoris, des points de repère et des marqueurs sur la carte\n- Ajout de nouvelles actions rapides pour la visibilité des courbes de niveau et du relief sur la carte, la modification d'un profil d'application, la suppression d'un point intermédiaire le plus proche\n- Correction des problèmes liés à la catégorie de recherche Wikipédia manquante\n- Importation de paramètres : correction de bugs, ajout du support pour tous les types de données disponibles dans OsmAnd\n- Edition d'OpenStreetMap : correction du sélecteur de temps et de l'impossibilité de modifier le commentaire de l'ensemble des modifications\n";
+"ios_release_3_90" = "- Introduction d'une fonction \"Planifier un itinéraire\" pour planifier de futurs voyages avec la possibilité de créer des segments de parcours en utilisant différents types de navigation\n- Ajout d'une option permettant d'activer une boussole sur l'outil \"Règle de rayon\"\n- Ajout de l'option \"Superposition des étiquettes de POI\" qui permet d'afficher les noms des favoris, des points de repère et des marqueurs sur la carte\n- Ajout de nouvelles actions rapides pour la visibilité des courbes de niveau et du relief sur la carte, la modification d'un profil d'application, la suppression d'un point intermédiaire le plus proche\n- Correction des problèmes liés à la catégorie de recherche Wikipédia manquante\n- Importation de paramètres : correction de bugs, ajout du support pour tous les types de données disponibles dans OsmAnd\n- Edition d'OpenStreetMap : correction du sélecteur de temps et de l'impossibilité de modifier le commentaire de l'ensemble des modifications\n";
 "ios_release_3_80" = "- Introduction de \"profils d'application\" avec des paramètres indépendants\n- Nouvelle disposition des paramètres par profils et types : navigation, général, carte et écran\n- Possibilité d'importer ou d'exporter les paramètres des profils\n- Ajout de sources de données pour les photos en ligne\n- Ajout de la possibilité de télécharger des cartes en ligne dans la mémoire cache\n- Algorithmes de \"recherche\" améliorés\n";
 "approximate_file_size" = "Taille approximative du fichier";
 "gpxup_private" = "Privée";
@@ -2244,7 +2244,7 @@
 "plugin_popup_weather_title" = "Activer la météo";
 "plugin_popup_weather_ask" = "Veuillez activer le greffon Météo";
 "product_desc_weather" = "Prévisions horaires 24h/24 et sur 7 jours sur la carte";
-"weather_plugin_description" = "Fournit : \n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 sur-couches \n- Des widgets basés sur la position \n- Les cartes d\'isobares et d\'isothermes \n \nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, %@).";
+"weather_plugin_description" = "Fournit : \n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 couches \n- Des widgets basés sur la position \n- Les cartes d'isobares et d'isothermes \n \nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, %@).";
 "measurement_units" = "Unités de mesure";
 "weather_pressure_millimeters_of_mercury" = "Millimètres de mercure";
 "weather_pressure_inches_of_mercury" = "Pouces de mercure";
@@ -2268,7 +2268,7 @@
 "cloud_create_account" = "Créer un compte";
 "cloud_backup" = "Sauvegarde";
 "copy_address" = "Copier l\'adresse";
-"copy_poi_name" = "Copier le nom du PI";
+"copy_poi_name" = "Copier le nom du POI";
 "copy_coordinates" = "Copier les coordonnées";
 "share_geo" = "géo :";
 "toast_empty_name_error" = "Emplacement sans nom";
@@ -2493,10 +2493,10 @@
 "dowload_cloud_version" = "Télécharger la version cloud";
 "shared_string_cross_buy" = "Achat multi-plateformes";
 "recalc_angle_dialog_descr" = "Un segment supplémentaire sera affiché entre ma position et l\'itinéraire initial jusqu\'à ce que l\'itinéraire soit recalculé";
-"ios_release_4_3" = "• Animations lisses pour les textes et les points pendant les mouvements de la carte\n• CarPlay : ajouts des voies, de la vue 2.5D, correction de problèmes de son lorsque connecté au Bluetooth\n• Nouvelles possibilités d'achat : Abonnements \"OsmAnd Pro\" pour un accès à toutes les fonctionnalités et l'achat \"Maps+\" pour un téléchargement illimité de cartes ainsi qu'un accès aux extensions payantes.\n• Ajout de la sauvegarde Cloud et de la prévision météo hors-ligne pour les utilisateurs OsmAnd Pro\n• Nouvel écran \"Achats\" avec la liste de tous les achats\n• Avantages pour les contributeurs actifs à OpenStreetMap\n• Les traces peuvent maintenant être colorisées suivant l'altitude, la vitesse ou la pente\n• Les cartes hors-ligne sont désormais accessibles via l'application Fichiers\n• Favoris : ajout de fichiers de restauration locaux générés à chaque modification et accessibles depuis l'application Fichiers\n• Les points d'intérêts sauvegardés en tant que favoris seront désormais affichés même sans carte hors-ligne\n• Ajout du support des tags \"link\", \"cmt\" et \"desc\" ainsi que toutes les extensions customisées\n• Ajout du mode pour le bouton Boussole\n• Correction d'un bug avec le format de coordonnées UTM\n• Correction d'un bug avec les points intermédiaires en navigation\n";
+"ios_release_4_3" = "• Animations lisses pour les textes et les points pendant les mouvements de la carte\n• CarPlay : ajouts des voies, de la vue 2.5D, correction de problèmes de son lorsque connecté au Bluetooth\n• Nouvelles possibilités d'achat : Abonnements \"OsmAnd Pro\" pour un accès à toutes les fonctionnalités et l'achat \"Maps+\" pour un téléchargement illimité de cartes ainsi qu'un accès aux extensions payantes.\n• Ajout de la sauvegarde Cloud et de la prévision météo hors-ligne pour les utilisateurs OsmAnd Pro\n• Nouvel écran \"Achats\" avec la liste de tous les achats\n• Avantages pour les contributeurs actifs à OpenStreetMap\n• Les traces peuvent maintenant être colorisées suivant l'altitude, la vitesse ou la pente\n• Les cartes hors-ligne sont désormais accessibles via l'application Fichiers\n• Favoris : ajout de fichiers de restauration locaux générés à chaque modification et accessibles depuis l'application Fichiers\n• Les POI sauvegardés en tant que favoris seront désormais affichés même sans carte hors-ligne\n• Ajout du support des tags \"link\", \"cmt\" et \"desc\" ainsi que toutes les extensions customisées\n• Ajout du mode pour le bouton Boussole\n• Correction d'un bug avec le format de coordonnées UTM\n• Correction d'un bug avec les points intermédiaires en navigation\n";
 "backup_conflicts_action_descr" = "Une autre version de ce fichier est stockée sur le serveur. Vous devez sélectionner une action";
 "cloud_contains_newer_changes" = "La version d'OsmAnd Cloud contient des modifications plus récentes.";
-"rendering_attr_showMtbScaleIMBATrails_name" = "Afficher la difficulté des chemins VTT IMBA";
+"rendering_attr_showMtbScaleIMBATrails_name" = "Afficher les sentiers VTT homologués IMBA";
 "shared_string_added" = "Ajouté";
 "cloud_conflict" = "Conflit";
 "cloud_recent_changes" = "Modifications";
@@ -2593,7 +2593,7 @@
 "routing_attr_avoid_4wd_only_name" = "Éviter les routes pour 4 x 4";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Privilégier le hors-piste";
 "rendering_attr_weatherWindSpeedContours_name" = "Isolignes de vitesse de vent";
-"rendering_attr_showMtbScaleIMBATrails_description" = "Afficher les chemins tracés pour les VTT.";
+"rendering_attr_showMtbScaleIMBATrails_description" = "Afficher les sentiers dédiés au VTT.";
 "routing_attr_avoid_fords_name" = "Éviter les gués";
 "routing_attr_avoid_highway_name" = "Éviter les autoroutes";
 "rendering_attr_horse_scale_dangerous_name" = "Dangereux";
@@ -2616,8 +2616,8 @@
 "routing_attr_avoid_footways_description" = "Éviter les trottoirs";
 "shared_string_does_not_exist" = "N'existe pas";
 "download_wikipedia_data" = "Télécharger les données Wikipédia";
-"speed_camera_pois" = "PI radars";
-"speed_cameras_legal_descr" = "Dans certains pays ou régions, l\'utilisation d\'avertisseurs de radars est interdit par la loi. \n \nVous devez faire un choix en fonction de la loi de votre pays. \n \nSélectionnez %@ pour recevoir des alertes et des avertissements sur les radars. \n \nSélectionnez %@. Toutes les données relatives aux radars (alertes, notifications, PI) seront supprimées pour cette installation de l’application.";
+"speed_camera_pois" = "POI radars";
+"speed_cameras_legal_descr" = "Dans certains pays ou régions, l'utilisation d'avertisseurs de radars est interdit par la loi. \n \nVous devez faire un choix en fonction de la loi de votre pays. \n \nSélectionnez %@ pour recevoir des alertes et des avertissements sur les radars. \n \nSélectionnez %@. Toutes les données relatives aux radars (alertes, notifications, POI) seront supprimées pour cette installation de l’application.";
 "lang_zh-Hant" = "Chinois (traditionnel)";
 "shared_string_legal" = "Légal";
 "uninstall_speed_cameras" = "Désinstaller les radars";
@@ -2872,9 +2872,9 @@
 "specify_number_of_dir_indicators_desc" = "Définir le nombre d\'indications de direction à afficher.";
 "map_marker_interval_dialog_desc" = "Spécifiez la durée sur laquelle mesurer la vitesse moyenne afin d\'estimer l\'heure d\'arrivée.";
 "shared_string_system_default" = "Par défaut";
-"upload_poi" = "Téléverser les points d\'intérêt";
+"upload_poi" = "Téléverser les POI";
 "shared_string_ear_lobe" = "Lobe d\'oreille";
-"ios_release_4_6" = "• Enregistrez et suivez vos mesures grâce à des capteurs externes, notamment la vitesse, la cadence et la distance du vélo, la fréquence cardiaque et la température.\n• Vous pouvez désormais afficher la carte directement sur votre tableau de bord CarPlay.\n• Ajout d'un thème nocturne pour une expérience visuelle confortable dans des conditions de faible luminosité\n• Découvrez les guides de voyage de \"Wikivoyage\"\n• Amélioration des boîtes de dialogue pour l'ajout de notes et le téléchargement de notes et de PI sur OpenStreetMap\n• Restauration facile des paramètres de l'extension aux valeurs par défaut de l'installation grâce à une nouvelle option\n• Ajout d'une option \"Orientation de l'écran\" pour définir votre orientation préférée sans commutation automatique\n• Ajout d'un bouton séparé pour basculer en mode 3D directement sur l'écran CarPlay\n• Des informations sur l'altitude minimale et maximale ont été ajoutées aux itinéraires de navigation, en plus des informations sur les montées et les descentes.\n• Amélioration de la coloration des pistes en mode Pente avec un nouveau gradient symétrique\n• Les dossiers favoris stockent désormais l'apparence par défaut qui est appliquée automatiquement à chaque point ajouté.\n• Correction de la non-concordance du point central de la \"Règle du rayon\" avec le centre de la carte\n• Ajout d'un bouton \"Lire l'article\" dans le menu contextuel des PI de Wikipédia\n• Correction d'un problème avec l'importation d'un fichier GPX dans les favoris\n• Correction d'un problème avec l'événement du calendrier pour la position de parking\n• Correction d'un problème lors de la suppression d'une couleur de la palette\n";
+"ios_release_4_6" = "• Enregistrez et suivez vos mesures grâce à des capteurs externes, notamment la vitesse, la cadence et la distance du vélo, la fréquence cardiaque et la température.\n• Vous pouvez désormais afficher la carte directement sur votre tableau de bord CarPlay.\n• Ajout d'un thème nocturne pour une expérience visuelle confortable dans des conditions de faible luminosité\n• Découvrez les guides de voyage de \"Wikivoyage\"\n• Amélioration des boîtes de dialogue pour l'ajout de notes et le téléchargement de notes et de POI sur OpenStreetMap\n• Restauration facile des paramètres de l'extension aux valeurs par défaut de l'installation grâce à une nouvelle option\n• Ajout d'une option \"Orientation de l'écran\" pour définir votre orientation préférée sans commutation automatique\n• Ajout d'un bouton séparé pour basculer en mode 3D directement sur l'écran CarPlay\n• Des informations sur l'altitude minimale et maximale ont été ajoutées aux itinéraires de navigation, en plus des informations sur les montées et les descentes.\n• Amélioration de la coloration des pistes en mode Pente avec un nouveau gradient symétrique\n• Les dossiers favoris stockent désormais l'apparence par défaut qui est appliquée automatiquement à chaque point ajouté.\n• Correction de la non-concordance du point central de la \"Règle du rayon\" avec le centre de la carte\n• Ajout d'un bouton \"Lire l'article\" dans le menu contextuel des PI de Wikipédia\n• Correction d'un problème avec l'importation d'un fichier GPX dans les favoris\n• Correction d'un problème avec l'événement du calendrier pour la position de parking\n• Correction d'un problème lors de la suppression d'une couleur de la palette\n";
 "wheel_circumference" = "Circonférence de la roue";
 "article_has_no_points" = "L'article n'a aucun point";
 "apply_to_existing_favorites_descr" = "Appliquer les modifications à tous les points favoris ou seulement aux nouveaux \?";
@@ -3022,7 +3022,7 @@
 "help_article_widgets_markers_name" = "Gadgets de marqueur";
 "help_article_purchases_giveaway_name" = "Concours";
 "help_article_start_with_first_steps_name" = "Premiers pas";
-"help_article_search_search_poi_name" = "Rechercher des points d\'intérêt";
+"help_article_search_search_poi_name" = "Rechercher des POI";
 "help_article_troubleshooting_general_name" = "Général";
 "help_article_navigation_guidance_voice_navigation_name" = "Annonces vocales / Notifications";
 "audionotes_plugin_name" = "Notes audio/vidéo";
@@ -3319,8 +3319,8 @@
 "shared_string_local" = "Stockage";
 "map_settings_weather_temp_water" = "Température de l'eau";
 "map_settings_weather_temp_air" = "Température de l'air";
-"rendering_attr_showDirtbikeTrails_name" = "Sentiers en terre pour vélos";
-"rendering_attr_showDirtbikeTrails_description" = "Afficher les sentiers de terre pour vélos";
+"rendering_attr_showDirtbikeTrails_name" = "Sentiers de motocross";
+"rendering_attr_showDirtbikeTrails_description" = "Afficher les sentiers de motocross";
 "navigation_position" = "Position de guidage";
 "resting_position_icon" = "Icône de votre position lorsque vous êtes immobile";
 "navigation_position_icon" = "Icône de votre position lors du guidage";
@@ -3345,7 +3345,7 @@
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "quick_action_terrain_color_scheme" = "Palette de couleurs du relief";
 "quick_action_need_to_add_item_to_list" = "Ajoutez au moins une action à la barre d\'Actions rapides";
-"poi" = "PI";
+"poi" = "POI";
 "shared_string_milliradians" = "Milliradiens";
 "tracker_item" = "Suivi de position par OsmAnd";
 "shared_string_terrain" = "Relief";
@@ -3650,7 +3650,7 @@
 "shared_string_unchanged" = "Inchangé";
 "each_favourite_point_own_icon" = "Les points favoris garderont leur propre icône.";
 "unchanged_parameter_summary" = "Chaque trace conservera ses propres paramètres.";
-"ios_release_5_0" = "• Introduction des dossiers intelligents pour l'organisation automatique des tracés.\n• Ajout d'une galerie d'images plein écran pour les images Wikimedia.\n• Prise en charge de la synthèse vocale (TTS) en vietnamien et en hébreu pour la navigation.\n• Ajout d'actions rapides pour contrôler l'enregistrement des trajets.\n• Ajout d'une option « Guide détaillé du tracé » et d'une boîte de dialogue de suggestion « Attacher aux routes ».\n• Découverte des sommets importants via la carte et la recherche.\n• Mise en surbrillance des bordures des bâtiments et des zones avec des informations détaillées.\n• Ajout d'une option permettant d'activer ou de désactiver la visibilité de groupes de favoris distincts sur la carte.\n• Extension des options d'icônes pour les favoris grâce à l'ajout d'icônes de toutes les catégories de points d'intérêt.\n• Affichage du niveau de batterie des capteurs externes.\n• Ajout d'une option permettant de modifier l'apparence de plusieurs tracés simultanément.\n• Ajout d'une action « Réinitialiser » pour le widget Vitesse moyenne.\n• Recherche CarPlay : Ajout de la possibilité de sélectionner des bâtiments.\n• Correction de la séquence de saisie des coordonnées UTM.\n• Correction d'un problème de couleurs des points de cheminement.  • Correction du bouton « Télécharger tout » manquant pour les cartes de terrain.\n• Correction d'un problème où des articles populaires manquaient parfois dans les guides de voyage.\n";
+"ios_release_5_0" = "• Introduction des dossiers intelligents pour l'organisation automatique des tracés.\n• Ajout d'une galerie d'images plein écran pour les images Wikimedia.\n• Prise en charge de la synthèse vocale (TTS) en vietnamien et en hébreu pour la navigation.\n• Ajout d'actions rapides pour contrôler l'enregistrement des trajets.\n• Ajout d'une option « Guide détaillé du tracé » et d'une boîte de dialogue de suggestion « Attacher aux routes ».\n• Découverte des sommets importants via la carte et la recherche.\n• Mise en surbrillance des bordures des bâtiments et des zones avec des informations détaillées.\n• Ajout d'une option permettant d'activer ou de désactiver la visibilité de groupes de favoris distincts sur la carte.\n• Extension des options d'icônes pour les favoris grâce à l'ajout d'icônes de toutes les catégories de POI.\n• Affichage du niveau de batterie des capteurs externes.\n• Ajout d'une option permettant de modifier l'apparence de plusieurs tracés simultanément.\n• Ajout d'une action « Réinitialiser » pour le widget Vitesse moyenne.\n• Recherche CarPlay : Ajout de la possibilité de sélectionner des bâtiments.\n• Correction de la séquence de saisie des coordonnées UTM.\n• Correction d'un problème de couleurs des points de cheminement.  • Correction du bouton « Télécharger tout » manquant pour les cartes de terrain.\n• Correction d'un problème où des articles populaires manquaient parfois dans les guides de voyage.\n";
 "osmand_web" = "OsmAnd Web";
 "imperial_gallons" = "Gallons impériaux";
 "us_gallons" = "Gallons US";

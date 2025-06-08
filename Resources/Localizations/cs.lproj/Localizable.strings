@@ -3675,3 +3675,5 @@
 "dd_mm_ss_format" = "DD°MM′SS″";
 "intermediate_first" = "Nejprve mezicíle";
 "shared_string_default_view" = "Výchozí zobrazení";
+"preview_next_turn_descr" = "Automaticky otočí mapu pro náhled další odbočky nebo manévru";
+"preview_next_turn" = "Náhled další odbočky";

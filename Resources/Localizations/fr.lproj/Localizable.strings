@@ -1495,7 +1495,7 @@
 "direction_lines" = "Indications de direction";
 // Dirrection appearance
 "shared_string_one" = "Une";
-"edit_profile_screen_options_subtitle" = "Sélectionner les options d’écran du profil";
+"edit_profile_screen_options_subtitle" = "Sélectionnez les paramètres d'affichage écran pour ce profil";
 "save_track_logging_accuracy" = "Précision de l\'enregistrement";
 "get_discount_first_few_parts" = "%@ pour premier %@";
 "show_direction" = "Indication de distance";

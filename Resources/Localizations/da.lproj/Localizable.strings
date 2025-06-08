@@ -3694,3 +3694,5 @@
 "dd_mm_mmm_format" = "DD°MM.MMM′";
 "dd_ddddd_format" = "DD.DDDDD°";
 "dd_mm_ss_format" = "DD°MM′SS″";
+"preview_next_turn_descr" = "Roterer automatisk kortet for at forhåndsvise næste sving eller manøvre";
+"preview_next_turn" = "Forhåndsvis næste sving";

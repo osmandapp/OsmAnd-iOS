@@ -3692,3 +3692,5 @@
 "map_widget_distance" = "Distance";
 "dd_mm_mmm_format" = "DD°MM.MMM′";
 "map_widget_route_information_desc" = "Affiche l'heure d'arrivée estimée, le temps de trajet restant et la distance pour l'itinéraire de navigation actuel.";
+"preview_next_turn" = "Aperçu de la prochaine bifurcation";
+"preview_next_turn_descr" = "Tourne automatiquement la carte pour voir la prochaine bifurcation ou manœuvre";

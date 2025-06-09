@@ -30,7 +30,6 @@ static OAFeature * SENSORS;
 static OAFeature * VEHICLEMETRICS;
 
 static NSArray<OAFeature *> * OSMAND_PRO_FEATURES;
-static NSArray<OAFeature *> * OSMAND_PRO_PREVIEW_FEATURES;
 static NSArray<OAFeature *> * MAPS_PLUS_FEATURES;
 static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 
@@ -401,26 +400,6 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         ];
     }
     return OSMAND_PRO_FEATURES;
-}
-
-+ (NSArray<OAFeature *> *)OSMAND_PRO_PREVIEW_FEATURES
-{
-    if (!OSMAND_PRO_PREVIEW_FEATURES)
-    {
-        OSMAND_PRO_PREVIEW_FEATURES = @[
-                OAFeature.OSMAND_CLOUD,
-//                OAFeature.ADVANCED_WIDGETS,
-                OAFeature.WEATHER,
-                OAFeature.HOURLY_MAP_UPDATES,
-                OAFeature.UNLIMITED_MAP_DOWNLOADS,
-                OAFeature.CARPLAY,
-                OAFeature.SENSORS,
-//                OAFeature.COMBINED_WIKI,
-                OAFeature.TERRAIN,
-                OAFeature.NAUTICAL
-        ];
-    }
-    return OSMAND_PRO_PREVIEW_FEATURES;
 }
 
 + (NSArray<OAFeature *> *)MAPS_PLUS_FEATURES

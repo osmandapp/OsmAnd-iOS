@@ -73,7 +73,6 @@ typedef NS_ENUM(NSUInteger, EOAFeature)
 + (OAFeature *)VEHICLEMETRICS;
 
 + (NSArray<OAFeature *> *)OSMAND_PRO_FEATURES;
-+ (NSArray<OAFeature *> *)OSMAND_PRO_PREVIEW_FEATURES;
 + (NSArray<OAFeature *> *)MAPS_PLUS_FEATURES;
 + (NSArray<OAFeature *> *)MAPS_PLUS_PREVIEW_FEATURES;
 

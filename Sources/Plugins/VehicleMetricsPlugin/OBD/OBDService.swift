@@ -31,6 +31,7 @@ final class OBDService: NSObject {
         if obdDispatcher != nil {
             stopDispatcher()
         } else {
+            // FIXME:
             OBDDataComputer.OBDTypeWidget.entries.forEach {
                 OBDDataComputer.shared.registerWidget(type: $0, averageTimeSeconds: 0)
             }

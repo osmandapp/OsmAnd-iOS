@@ -2056,6 +2056,7 @@
 
 - (instancetype)init
 {
+    self.free = YES;
     self = [super initWithIdentifier:kInAppId_Addon_Vehicle_Metrics];
     return self;
 }

@@ -2767,7 +2767,7 @@
 "current_speed_widget_desc" = "Viser din aktuelle hastighed registreret via GPS.";
 "time_to_go_desc" = "Tid i minutter eller timer for at nå din destination.";
 "arrival_time_widget_desc" = "Tidspunkt for ankomst til destinationsstedet.";
-"lanes_widgets_desc" = "Viser det aktuelle vejbane-layout og fremhæver de vejbaner, der skal benyttes under vejvisning.";
+"lanes_widgets_desc" = "Viser det aktuelle vejbane-layout og fremhæver de vejbaner, der skal benyttes under navigation.";
 "map_markers_bar_widget_desc" = "Det øverste bjælkemodul viser afstanden og retningen til den næste kortmarkør fra din aktuelle placering. Modulet kan konfigureres til at vise 1 eller 2 markører.";
 "street_name_widget_desc" = "Gadenavn-modulet viser det aktuelle gadenavn med en lige placeringspil eller det næste gadenavn med en pil, der angiver et kommende sving.";
 "coordinates_widget_desc" = "Viser de geografiske koordinater for den aktuelle geografiske placering.";

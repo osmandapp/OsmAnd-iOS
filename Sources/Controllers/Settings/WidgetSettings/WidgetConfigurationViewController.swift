@@ -51,7 +51,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         tableData.clearAllData()
         // Add section for simple widgets
         if !WidgetType.isComplexWidget(widgetInfo.key) && !Self.excludedUISettingsWidgetKeys.contains(widgetInfo.key) {
-            if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode, widgetsPanel: widgetPanel) {
+            if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode, widgetsPanel: widgetPanel, createNew ? widgetConfigurationParams : nil) {
                 for i in 0 ..< settingsData.sectionCount() {
                     tableData.addSection(settingsData.sectionData(for: i))
                 }
@@ -201,6 +201,10 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 if item.string(forKey: "behaviour") == "simpleWidget", !createNew {
                     updateWidgetStyleForRow(with: widgetInfo)
                     OARootViewController.instance().mapPanel.recreateControls()
+                }
+                if !widgetPanel.isPanelVertical {
+                    generateData()
+                    tableView.reloadData()
                 }
             }
             outCell = cell
@@ -381,6 +385,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? ""), pref.key.hasPrefix("simple_widget_show_icon") {
             widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
         }
+        
+        widgetInfo.widget.updateSimpleLayout()
         if let cell = tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
                 cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))

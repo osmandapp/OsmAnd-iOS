@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode *)appMode
                      widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams
                                       isCreate:(BOOL)isCreate;
-- (nullable OATableDataModel *)getSettingsDataForSimpleWidget:(OAApplicationMode *)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel;
+- (nullable OATableDataModel *)getSettingsDataForSimpleWidget:(OAApplicationMode *)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams;
 - (BOOL)handleRowSelected:(OATableRowData *)item viewController:(WidgetConfigurationViewController *)viewController;
 
 - (void)showBottomSeparator:(BOOL)show;

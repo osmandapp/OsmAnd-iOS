@@ -933,7 +933,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     [self refreshLabel];
 }
 
-- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel
+- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
 {
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];
@@ -950,7 +950,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
                              [UIImage imageNamed:ACImageNameIcCustom20HeightL]]
                     forKey:@"values"];
     
-    if ([self isEnabledShowIconSwitchWith:widgetsPanel])
+    if ([self isEnabledShowIconSwitchWith:widgetsPanel widgetConfigurationParams:widgetConfigurationParams])
     {
         OATableRowData *showIconRow = section.createNewRow;
         showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
@@ -961,9 +961,14 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     return data;
 }
 
-- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel
+- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
 {
-    return [widgetsPanel isPanelVertical];
+    if ([widgetsPanel isPanelVertical])
+        return YES;
+    
+    NSNumber *styleNum = widgetConfigurationParams[@"widgetSizeStyle"];
+    EOAWidgetSizeStyle style = styleNum ? (EOAWidgetSizeStyle)styleNum.integerValue : [self.widgetSizePref get:[self getAppMode]];
+    return style == EOAWidgetSizeStyleMedium || style == EOAWidgetSizeStyleLarge;
 }
 
 - (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams

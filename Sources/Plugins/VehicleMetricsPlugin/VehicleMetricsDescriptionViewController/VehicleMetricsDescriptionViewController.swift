@@ -152,7 +152,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                 row.title = widget.getTitle()
                 
                 guard let dataItem = OBDDataComputer.shared.widgets.first(where: { $0.type == widget }) else {
-                    NSLog("widget is empty")
+                    debugPrint("widget is empty")
                     row.descr = Self.placeholderTextNA
                     continue
                 }

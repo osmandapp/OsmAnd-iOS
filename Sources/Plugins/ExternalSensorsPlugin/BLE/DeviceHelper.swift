@@ -277,7 +277,7 @@ extension DeviceHelper {
                         if device.deviceType != .OBD_VEHICLE_METRICS {
                             device.notifyRSSI()
                         }
-                        DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
+                        setDevicePaired(device: device, isPaired: true)
                         connectedDevices.append(device)
                         discoverServices(device: device)
                     case .failure(let error):
@@ -293,13 +293,12 @@ extension DeviceHelper {
         switch reason {
         case .pluginOff:
             if deviceType == .OBD_VEHICLE_METRICS {
-                connectedDevices
-                    .filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+                connectedOnlyOBDDevices
                     .forEach { disconnectIfNeeded(device: $0) }
                 BLEManager.shared.removeAndDisconnectDiscoveredDevices()
                 connectedDevices.removeAll { $0.deviceType == .OBD_VEHICLE_METRICS }
             } else {
-                DeviceHelper.shared.connectedExcludingOBDDevices
+                connectedExcludingOBDDevices
                     .forEach {
                         $0.disableRSSI()
                         disconnectIfNeeded(device: $0)
@@ -348,7 +347,6 @@ extension DeviceHelper {
                         }
                     }
                 case .failure(let error):
-                    completedCount += 1
                     Self.logger.error("discoverCharacteristics: \(error.localizedDescription)")
                 }
             }

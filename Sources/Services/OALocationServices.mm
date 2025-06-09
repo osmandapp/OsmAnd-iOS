@@ -25,7 +25,6 @@
 #import "OASavingTrackHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAverageSpeedComputer.h"
-#import "OsmAndSharedWrapper.h"
 
 #import <FormatterKit/TTTLocationFormatter.h>
 

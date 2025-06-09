@@ -33,15 +33,15 @@ final class OBDVehicleMetricsSensor: Sensor {
 
     func clearBuffer() {
         NSLog("[OBDVehicleMetricsSensor] -> clearBuffer start")
-        self.isReadyBufferResponse = false
-        self.isProcessingReading = false
-        self.buffer.removeAll()
-        self.stringResponse = ""
+        isReadyBufferResponse = false
+        isProcessingReading = false
+        buffer.removeAll()
+        stringResponse = ""
         NSLog("[OBDVehicleMetricsSensor] -> clearBuffer end")
     }
 
     func processReceivedData(_ data: Data, result: @escaping (Result<Void, Error>) -> Void) {
-        print("processReceivedData 1")
+        NSLog("processReceivedData 1")
         buffer.append(data)
         
         guard var string = String(data: buffer, encoding: .utf8) else {
@@ -51,9 +51,9 @@ final class OBDVehicleMetricsSensor: Sensor {
         string = string.replacingOccurrences(of: "\r", with: "")
         
         if string.contains(">") {
-            print("processReceivedData 2")
+            NSLog("processReceivedData 2")
             appendObdResponse(string)
-            print("processReceivedData 3")
+            NSLog("processReceivedData 3")
             result(.success(()))
             NSLog("processReceivedData OBD -> Response: \(string)")
             isReadyBufferResponse = true

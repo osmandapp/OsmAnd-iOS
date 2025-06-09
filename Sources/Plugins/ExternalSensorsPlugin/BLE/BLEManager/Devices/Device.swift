@@ -99,7 +99,7 @@ class Device: NSObject {
         return nil
     }
     
-    func update(with characterisxtic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) { }
+    func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) { }
     
     func configure() {}
     

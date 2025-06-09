@@ -250,7 +250,9 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     private func configureEmptyHeader() {
         view.layoutIfNeeded()
         headerEmptyView.subviews.forEach { $0.removeFromSuperview() }
-        let imageView = UIImageView(image: UIImage(named: "img_help_vehicle_metrics"))
+
+        let imageView = UIImageView(image: .imgHelpVehicleMetrics)
+
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         

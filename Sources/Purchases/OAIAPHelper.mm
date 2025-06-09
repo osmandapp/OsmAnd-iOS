@@ -19,6 +19,8 @@
 #import "OAProducts.h"
 #import "OAExportSettingsType.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OsmAnd_Maps-Swift.h"
+
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
 NSString *const OAIAPProductsRequestFailedNotification = @"OAIAPProductsRequestFailedNotification";
@@ -309,6 +311,11 @@ static OASubscriptionState *EXPIRED;
     return [self isOsmAndProAvailable] || [self isMapsPlusAvailable];
 }
 
++ (BOOL)isVehicleMetricsPurchased
+{
+    return [self isOsmAndProAvailable];
+}
+
 + (BOOL)isLiveUpdatesSubscription:(OASubscription *)subscription
 {
     return [subscription.identifierNoVersion isEqualToString:kSubscriptionId_Osm_Live_Subscription_Monthly]
@@ -330,6 +337,21 @@ static OASubscriptionState *EXPIRED;
 + (BOOL) isFullVersion:(OAProduct *)product
 {
     return [product.productIdentifier isEqualToString:kInAppId_Maps_Full];
+}
+
++ (BOOL)isWidgetPurchased:(OAWidgetType *)widgetType {
+    if ([widgetType isProWidget]) {
+        return [widgetType isOBDWidget] ? [self isVehicleMetricsAvailable] : [self isProWidgetsAvailable];
+    }
+    return YES;
+}
+
++ (BOOL)isVehicleMetricsAvailable {
+    return [[self class] isOsmAndProAvailable];
+}
+
++ (BOOL)isProWidgetsAvailable {
+    return [[self class] isOsmAndProAvailable];
 }
 
 - (NSArray<OASubscription *> *) getEverMadeSubscriptions
@@ -458,6 +480,11 @@ static OASubscriptionState *EXPIRED;
 - (OAProduct *) sensors
 {
     return _products.sensors;
+}
+
+- (OAProduct *)vehicleMetrics
+{
+    return _products.vehicleMetrics;
 }
 
 - (OAProduct *) carplay
@@ -1015,6 +1042,7 @@ static OASubscriptionState *EXPIRED;
             BOOL contour = NO;
             BOOL wiki = NO;
             BOOL sensors = NO;
+            BOOL vehicleMetrics = NO;
             NSMutableArray<OASubscription *> *purchasedSubs = [NSMutableArray array];
             for (OAProduct *product in products)
             {
@@ -1053,7 +1081,11 @@ static OASubscriptionState *EXPIRED;
                 {
                     sensors = YES;
                 }
-
+                else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Vehicle_Metrics])
+                {
+                    vehicleMetrics = YES;
+                }
+                
                 BOOL wasPurchased = [product isPurchased];
                 [_products setPurchased:product.productIdentifier];
                 if (!wasPurchased)

@@ -690,7 +690,7 @@
             else if ([self.productIdentifier isEqualToString:kInAppId_Addon_External_Sensors])
                 purchased = [OAIAPHelper isSensorPurchased];
             else if ([self.productIdentifier isEqualToString:kInAppId_Addon_Vehicle_Metrics])
-                purchased = YES; //[OAIAPHelper isVehicleMetricsPurchased]; // FIXME:
+                purchased = [OAIAPHelper isVehicleMetricsPurchased];
 
             if (!purchased && self.feature)
             {
@@ -2052,42 +2052,40 @@
 
 @end
 
-// FIXME:
 @implementation OAVehicleMetricsProduct
 
-- (instancetype) init
+- (instancetype)init
 {
     self = [super initWithIdentifier:kInAppId_Addon_Vehicle_Metrics];
     return self;
 }
 
-- (OAFeature *) feature
+- (OAFeature *)feature
 {
-    // FIXME:
-    return OAFeature.SENSORS;
+    return OAFeature.VEHICLEMETRICS;
 }
 
-- (NSString *) productScreenshotName
+- (NSString *)productScreenshotName
 {
     return @"img_help_vehicle_metrics";
 }
 
-- (NSString *) productIconName
+- (NSString *)productIconName
 {
     return @"ic_custom_car_info";
 }
 
-- (NSString *) localizedTitle
+- (NSString *)localizedTitle
 {
     return OALocalizedString(@"obd_plugin_name");
 }
 
-- (NSString *) localizedDescription
+- (NSString *)localizedDescription
 {
     return OALocalizedString(@"obd_plugin_description");
 }
 
-- (NSString *) localizedDescriptionExt
+- (NSString *)localizedDescriptionExt
 {
     return OALocalizedString(@"obd_plugin_description");
 }

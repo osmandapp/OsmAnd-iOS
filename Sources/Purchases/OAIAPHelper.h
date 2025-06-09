@@ -11,6 +11,7 @@
 #define kFreeMapsAvailableTotal 7
 
 @class OAProduct, OASubscription, OASubscriptionList, OAFunctionalAddon, OAExportSettingsType;
+@class OAWidgetType;
 
 UIKIT_EXTERN NSString *const OAIAPProductsRequestSucceedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductsRequestFailedNotification;
@@ -94,6 +95,8 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 @property (nonatomic, readonly) OAProduct *mapillary;
 @property (nonatomic, readonly) OAProduct *weather;
 @property (nonatomic, readonly) OAProduct *sensors;
+@property (nonatomic, readonly) OAProduct *vehicleMetrics;
+
 @property (nonatomic, readonly) OAProduct *carplay;
 @property (nonatomic, readonly) OAProduct *osmandDevelopment;
 
@@ -147,6 +150,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 - (NSArray<OASubscriptionStateHolder *> *)getExternalSubscriptions;
 - (NSArray<OAInAppStateHolder *> *)getExternalInApps;
 - (NSNumber *)getInAppPurchaseTime:(NSString *)sku;
++ (BOOL)isWidgetPurchased:(OAWidgetType *)widgetType;
 
 - (BOOL)productsLoaded;
 
@@ -187,5 +191,6 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 + (BOOL)isOsmAndProSubscription:(OASubscription *)subscription;
 + (BOOL)isMapsSubscription:(OASubscription *)subscription;
 + (BOOL)isFullVersion:(OAProduct *)product;
++ (BOOL)isVehicleMetricsPurchased;
 
 @end

@@ -188,10 +188,16 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     [self updateSettingsButtonState];
 }
 
-- (void)updateSettingsButtonState
-{
-    if ([_product.productIdentifier isEqualToString:kInAppId_Addon_External_Sensors])
-    [self.navigationItem setRightBarButtonItemsisEnabled:(_product.isPurchased && !_product.disabled) tintColor:NULL];
+- (void)updateSettingsButtonState {
+    NSArray *supportedIdentifiers = @[
+        kInAppId_Addon_External_Sensors,
+        kInAppId_Addon_Vehicle_Metrics
+    ];
+
+    if ([supportedIdentifiers containsObject:_product.productIdentifier]) {
+        BOOL isEnabled = _product.isPurchased && !_product.disabled;
+        [self.navigationItem setRightBarButtonItemsIsEnabled:isEnabled tintColor:nil];
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated

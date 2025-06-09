@@ -57,7 +57,7 @@ class WidgetType: NSObject {
     static func isComplexWidget(_ widgetId: String) -> Bool {
         Self.complexWidgetIds.contains(widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId.substring(to: widgetId.find(MapWidgetInfo.DELIMITER)) : widgetId)
     }
-
+    
     func getGroup() -> WidgetGroup? {
         group
     }
@@ -81,6 +81,10 @@ class WidgetType: NSObject {
 //            return R.string.av_notes_choose_action_widget_desc;
 //        }
         return ""
+    }
+    
+    func isOBDWidget() -> Bool {
+        getGroup() == .vehicleMetrics;
     }
 
     func getSecondaryDescription() -> String? {
@@ -115,12 +119,16 @@ class WidgetType: NSObject {
         }
         return nil
     }
-
+    
     func isPurchased() -> Bool {
-        if WidgetType.getProWidgets().contains(where: { $0.id == self.id }) {
-            return OAIAPHelper.isOsmAndProAvailable()
-        }
-        return true
+        OAIAPHelper.isWidgetPurchased(self)
+    }
+    
+    func isProWidget() -> Bool {
+        return false
+        // FIXME: https://github.com/osmandapp/OsmAnd-Issues/issues/2816
+//        return self == .elevationProfile || self == .altitudeMapCenter
+//        || (isOBDWidget() && self != obdSpeed && this != obdRPM);
     }
 
     func getDefaultOrder() -> Int {

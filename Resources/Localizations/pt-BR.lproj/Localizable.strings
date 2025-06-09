@@ -3661,7 +3661,7 @@
 "shared_string_litres" = "Litros";
 "shared_strings_dimensions" = "Dimensões";
 "fuel_tank_capacity" = "Capacidade do tanque de combustível";
-"unchanged_parameter_summary" = "";
+"unchanged_parameter_summary" = "Cada trilha manterá seus próprios parâmetros.";
 "dd_ddddd_format" = "GG.GGGGG°";
 "change_activity" = "Alterar atividade";
 "type_of_activity" = "Tipo de atividade";
@@ -3688,3 +3688,9 @@
 "quick_action_showhide_coordinates_grid_descr" = "Ação para controlar a visibilidade da grade de Coordenadas no mapa.";
 "customize_grid_color" = "Personalizar a cor da grade";
 "map_widget_distance" = "Distância";
+"each_favourite_point_own_icon" = "Cada ponto favorito manteria seu próprio ícone.";
+"preview_next_turn" = "Prévia da próxima curva";
+"preview_next_turn_descr" = "Gira automaticamente o mapa para visualizar a próxima curva ou manobra";
+"original_icon_description" = "Cada ponto manteria seu próprio ícone.";
+"original_color_description" = "Cada ponto manteria sua própria cor.";
+"original_shape_description" = "Cada ponto manteria sua própria forma.";

@@ -3119,9 +3119,6 @@
 "icon_group_education" = "Education";
 "shared_string_original" = "Original";
 
-//Color categories
-"track_coloring_solid" = "Solid color";
-
 "settings_item_read_error" = "Could not read from \'%@\'.";
 "app_mode_default" = "Browse map";
 "app_mode_car" = "Driving";

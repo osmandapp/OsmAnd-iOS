@@ -26,9 +26,15 @@ _OALocalizedString(false, languageCode, defaultValue, ##__VA_ARGS__)
 _OALocalizedString(true, languageCode, defaultValue, ##__VA_ARGS__)
 
 static NSBundle * _Nullable enBundle = nil;
+static NSMutableDictionary<NSString *, NSBundle *> * _Nullable localeBundleCache = nil;
 
 static inline NSString * _Nonnull _OALocalizedString(BOOL upperCase, NSString * _Nullable languageCode, NSString * _Nullable defaultValue, ...)
 {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        localeBundleCache = [NSMutableDictionary dictionary];
+    });
+
     if (!enBundle)
     {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"en" ofType:@"lproj"];
@@ -52,9 +58,24 @@ static inline NSString * _Nonnull _OALocalizedString(BOOL upperCase, NSString * 
         NSBundle *bundleToUse = [NSBundle mainBundle];
         if (languageCode.length > 0)
         {
-            NSString *customPath = [bundleToUse pathForResource:languageCode ofType:@"lproj"];
-            if (customPath)
-                bundleToUse = [NSBundle bundleWithPath:customPath];
+            NSBundle *langBundle = localeBundleCache[languageCode];
+            if (!langBundle)
+            {
+                NSString *customPath = [[NSBundle mainBundle] pathForResource:languageCode ofType:@"lproj"];
+                if (customPath)
+                {
+                    langBundle = [NSBundle bundleWithPath:customPath];
+                    if (langBundle)
+                    {
+                        @synchronized (localeBundleCache) {
+                            localeBundleCache[languageCode] = langBundle;
+                        }
+                    }
+                }
+            }
+            
+            if (langBundle)
+                bundleToUse = langBundle;
         }
         
         NSString *loc = [bundleToUse localizedStringForKey:key value:@"!!!" table:nil];

@@ -30,11 +30,6 @@ static NSMutableDictionary<NSString *, NSBundle *> * _Nullable localeBundleCache
 
 static inline NSString * _Nonnull _OALocalizedString(BOOL upperCase, NSString * _Nullable languageCode, NSString * _Nullable defaultValue, ...)
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        localeBundleCache = [NSMutableDictionary dictionary];
-    });
-
     if (!enBundle)
     {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"en" ofType:@"lproj"];
@@ -58,7 +53,16 @@ static inline NSString * _Nonnull _OALocalizedString(BOOL upperCase, NSString * 
         NSBundle *bundleToUse = [NSBundle mainBundle];
         if (languageCode.length > 0)
         {
-            NSBundle *langBundle = localeBundleCache[languageCode];
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                localeBundleCache = [NSMutableDictionary dictionary];
+            });
+            
+            NSBundle *langBundle;
+            @synchronized (localeBundleCache) {
+                langBundle = localeBundleCache[languageCode];
+            }
+            
             if (!langBundle)
             {
                 NSString *customPath = [[NSBundle mainBundle] pathForResource:languageCode ofType:@"lproj"];

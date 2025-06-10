@@ -379,6 +379,7 @@
 "map_widget_next_turn" = "Next turn";
 "map_widget_next_turn_small" = "Next turn (small)";
 "map_widget_next_next_turn" = "Second next turn";
+"shared_string_road_exit" = "Exit";
 "always_center_position_on_map" = "Position placement always in center";
 "position_on_map" = "Location position on screen";
 "position_on_map_center" = "Center";

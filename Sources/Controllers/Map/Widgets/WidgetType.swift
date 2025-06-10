@@ -125,7 +125,7 @@ class WidgetType: NSObject {
     }
     
     func isProWidget() -> Bool {
-        return false
+        return self == .elevationProfile || self == .altitudeMapCenter
         // FIXME: https://github.com/osmandapp/OsmAnd-Issues/issues/2816
 //        return self == .elevationProfile || self == .altitudeMapCenter
 //        || (isOBDWidget() && self != obdSpeed && this != obdRPM);

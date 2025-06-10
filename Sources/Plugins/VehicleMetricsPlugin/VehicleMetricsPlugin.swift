@@ -25,12 +25,6 @@ final class VehicleMetricsPlugin: OAPlugin {
         DeviceHelper.shared.disconnectAllOBDDevices(reason: .pluginOff)
     }
     
-//    override func isEnabled() -> Bool {
-//        super.isEnabled()
-//        // FIXME: https://github.com/osmandapp/OsmAnd-Issues/issues/2814
-//       // super.isEnabled() && OAIAPHelper.isVehicleMetricsPurchased()
-//    }
-    
     override func update(_ location: CLLocation) {
         OBDDataComputer.shared.registerLocation(l: OBDDataComputer.OBDLocation(time: Int64(location.timestamp.timeIntervalSince1970), latLon: KLatLon(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)))
     }

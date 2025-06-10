@@ -3647,7 +3647,7 @@
 "shared_string_source" = "Джерело";
 "no_internet_descr" = "Перевірте підключення та повторіть спробу.";
 "no_photos_available_descr" = "До цього місця ще не додано жодної фотографії користувача";
-"sensor_data" = "Дані датчика";
+"sensor_data" = "Дані датчиків";
 "sensor_data_settings_description" = "показати основні дані з датчика";
 "battery_level_settings_description" = "показувати рівень заряду датчика як основне значення";
 "profile_icons" = "Значок профілю";

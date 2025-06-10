@@ -3575,3 +3575,4 @@
 "app_mode_ufo" = "UFO";
 "app_mode_osm" = "OSM";
 "cloud_sync_progress" = "同步……%@";
+"sensor_data" = "感應器資料";

@@ -152,17 +152,23 @@
 }
 
 + (CLLocation *) approximateBearingIfNeeded:(OARoutingHelper *)helper projection:(CLLocation *)projection location:(CLLocation *)location previousRouteLocation:(CLLocation *)previousRouteLocation currentRouteLocation:(CLLocation *)currentRouteLocation nextRouteLocation:(CLLocation *)nextRouteLocation
+    previewNextTurn:(BOOL)previewNextTurn
 {
     double dist = [location distanceFromLocation:projection];
     double maxDist = [helper getMaxAllowedProjectDist:currentRouteLocation];
     if (dist >= maxDist)
         return projection;
     
+    
     double projectionOffsetN = [OAMapUtils getProjectionCoeff:location fromLocation:previousRouteLocation toLocation:currentRouteLocation];
     double currentSegmentBearing = [OAMapUtils normalizeDegrees360:[previousRouteLocation bearingTo:currentRouteLocation]];
-    double nextSegmentBearing = [OAMapUtils normalizeDegrees360:[currentRouteLocation bearingTo:nextRouteLocation]];
-    double segmentsBearingDelta = [OAMapUtils unifyRotationDiff:currentSegmentBearing targetRotate:nextSegmentBearing] * projectionOffsetN;
-    double approximatedBearing = [OAMapUtils normalizeDegrees360:currentSegmentBearing + segmentsBearingDelta];
+    double approximatedBearing = currentSegmentBearing;
+    if (previewNextTurn)
+    {
+        double nextSegmentBearing = [OAMapUtils normalizeDegrees360:[currentRouteLocation bearingTo:nextRouteLocation]];
+        double segmentsBearingDelta = [OAMapUtils unifyRotationDiff:currentSegmentBearing targetRotate:nextSegmentBearing] * projectionOffsetN * projectionOffsetN;
+        approximatedBearing = [OAMapUtils normalizeDegrees360:currentSegmentBearing + segmentsBearingDelta];
+    }
     
     BOOL setApproximated = YES;
     if ([location hasBearing] && dist >= maxDist / 2.0)

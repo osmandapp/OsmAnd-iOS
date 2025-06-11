@@ -1110,6 +1110,15 @@ static OASubscriptionState *EXPIRED;
                         break;
                     }
             }
+            if (!pro)
+            {
+                for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
+                    if ((holder.linkedSubscription == self.proMonthly || holder.linkedSubscription == self.proAnnually) && holder.state == OASubscriptionState.ACTIVE)
+                    {
+                        pro = YES;
+                        break;
+                    }
+            }
             
             NSArray<OASubscription *> *subs = [self.subscriptionList getPurchasedSubscriptions];
             for (OASubscription *s in subs)

@@ -80,15 +80,19 @@
     else
     {
         CheckWordsMatchCount *completeMatchRes = [[CheckWordsMatchCount alloc] init];
-        if ([self allWordsMatched:_localeName cnt:completeMatchRes])
+        bool matched = [self allWordsMatched:_localeName cnt:completeMatchRes];
+        if (!matched && _alternateName != nil && [_alternateName isEqualToString:_cityName])
         {
-            // ignore other names
+            bool matched = [self allWordsMatched:_alternateName cnt:completeMatchRes];
         }
-        else if (_otherNames != nil)
+        if (!matched && _otherNames != nil)
         {
             for (NSString *otherName : _otherNames) {
                 if ([self allWordsMatched:otherName cnt:completeMatchRes])
+                {
+                    matched = true;
                     break;
+                }
             }
         }
         // if all words from search phrase match (<) the search result words - we prioritize it higher

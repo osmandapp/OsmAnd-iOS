@@ -201,11 +201,11 @@ NSString *const kXmlColon = @"_-_";
         [OASharedUtil initSharedLib:_documentsPath gpxPath:_gpxPath];
         
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
-        NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@"NO" forKey:@"hide_all_gpx"];
+        NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@(NO) forKey:@"hide_all_gpx"];
         [defaults registerDefaults:defHideAllGPX];
-        NSDictionary *defResetSettings = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_settings"];
+        NSDictionary *defResetSettings = [NSDictionary dictionaryWithObject:@(NO) forKey:@"reset_settings"];
         [defaults registerDefaults:defResetSettings];
-        NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
+        NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@(NO) forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
 
         _applicationModeChangedObservable = [[OAObservable alloc] init];
@@ -390,11 +390,11 @@ NSString *const kXmlColon = @"_-_";
         }
         
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
-        NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@"NO" forKey:@"hide_all_gpx"];
+        NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@(NO) forKey:@"hide_all_gpx"];
         [defaults registerDefaults:defHideAllGPX];
-        NSDictionary *defResetSettings = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_settings"];
+        NSDictionary *defResetSettings = [NSDictionary dictionaryWithObject:@(NO) forKey:@"reset_settings"];
         [defaults registerDefaults:defResetSettings];
-        NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
+        NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@(NO) forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
 
         _data = [OAAppData defaults];

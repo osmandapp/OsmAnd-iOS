@@ -3625,7 +3625,7 @@
 "shared_string_items" = "Položky";
 "download_successful" = "Obrázek stažen do složky Dokumenty/Stažené.";
 "battery_level_settings_description" = "zobrazit úroveň baterie senzoru jako hlavní hodnotu";
-"sensor_data" = "Data senzoru";
+"sensor_data" = "Data ze senzorů";
 "sensor_data_settings_description" = "zobrazit hlavní data ze senzoru";
 "profile_icons" = "Ikona profilu";
 "terrain_map" = "Mapa terénu (3D)";
@@ -3675,3 +3675,5 @@
 "dd_mm_ss_format" = "DD°MM′SS″";
 "intermediate_first" = "Nejprve mezicíle";
 "shared_string_default_view" = "Výchozí zobrazení";
+"preview_next_turn_descr" = "Automaticky otočí mapu pro náhled další odbočky nebo manévru";
+"preview_next_turn" = "Náhled další odbočky";

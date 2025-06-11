@@ -166,6 +166,7 @@ static NSString * const disableOffrouteRecalcKey = @"disableOffrouteRecalc";
 static NSString * const disableWrongDirectionRecalcKey = @"disableWrongDirectionRecalc";
 static NSString * const hazmatTransportingEnabledKey = @"hazmatTransportingEnabled";
 static NSString * const routerServiceKey = @"routerService";
+static NSString * const previewNextTurnKey = @"previewNextTurn";
 static NSString * const snapToRoadKey = @"snapToRoad";
 static NSString * const autoFollowRouteKey = @"autoFollowRoute";
 static NSString * const autoZoomMapKey = @"autoZoomMap";
@@ -4978,6 +4979,10 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
         _interruptMusic = [OACommonBoolean withKey:interruptMusicKey defValue:NO];
         [_profilePreferences setObject:_interruptMusic forKey:@"interrupt_music"];
+
+        _previewNextTurn = [OACommonBoolean withKey:previewNextTurnKey defValue:YES];
+        [_profilePreferences setObject:_snapToRoad forKey:@"preview_next_turn"];
+
         _snapToRoad = [OACommonBoolean withKey:snapToRoadKey defValue:NO];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];

@@ -17,12 +17,24 @@ final class DeviceHelper: NSObject {
     
     let devicesSettingsCollection = DevicesSettingsCollection()
     
-    var hasPairedDevices: Bool {
-        devicesSettingsCollection.hasPairedDevices
+    var hasPairedDevicesExcludingOBD: Bool {
+        devicesSettingsCollection.hasPairedDevicesExcludingOBD
+    }
+    
+    var hasPairedDevicesOnlyOBD: Bool {
+        devicesSettingsCollection.hasPairedDevicesOnlyOBD
+    }
+    
+    var connectedExcludingOBDDevices: [Device] {
+        connectedDevices.filter { $0.deviceType != .OBD_VEHICLE_METRICS }
+    }
+    
+    var connectedOnlyOBDDevices: [Device] {
+        connectedDevices.filter { $0.deviceType == .OBD_VEHICLE_METRICS }
     }
     
     private static let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier!,
+        subsystem: Bundle.main.bundleIdentifier ?? "OsmAnd",
         category: String(describing: DeviceHelper.self)
     )
     
@@ -45,7 +57,7 @@ final class DeviceHelper: NSObject {
     func getPairedDevicesFor(type: WidgetType, deviceId: String) -> Device? {
         getPairedDevicesFor(type: type)?.first { $0.id == deviceId }
     }
-
+    
     func getPairedDevicesFor(type: WidgetType) -> [Device]? {
         if let pairedDevices = getSettingsForPairedDevices() {
             let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)! })
@@ -53,10 +65,10 @@ final class DeviceHelper: NSObject {
             updatePeripheralsForConnectedDevices(peripherals: connectedPeripherals)
             
             let disconnectedPeripherals = peripherals.filter { $0.state != .connected }
-            let diconnectedDevices = getDevicesFrom(peripherals: disconnectedPeripherals,
-                                                    pairedDevices: pairedDevices)
+            let disconnectedDevices = getDevicesFrom(peripherals: disconnectedPeripherals,
+                                                     pairedDevices: pairedDevices)
             
-            let devices = connectedDevices + diconnectedDevices
+            let devices = connectedDevices + disconnectedDevices
             return devices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
         }
         return nil
@@ -64,6 +76,14 @@ final class DeviceHelper: NSObject {
     
     func getConnectedAndDisconnectedDevicesForWidget(type: WidgetType) -> [Device]? {
         connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
+    }
+    
+    func getSettingsForPairedExcludingOBDDevices() -> [DeviceSettings]? {
+        getSettingsForPairedDevices()?.filter { $0.deviceType != .OBD_VEHICLE_METRICS }
+    }
+    
+    func getSettingsForPairedOnlyOBDDevices() -> [DeviceSettings]? {
+        getSettingsForPairedDevices()?.filter { $0.deviceType == .OBD_VEHICLE_METRICS }
     }
     
     func getSettingsForPairedDevices() -> [DeviceSettings]? {
@@ -83,7 +103,7 @@ final class DeviceHelper: NSObject {
             } else {
                 return nil
             }
-        } 
+        }
     }
     
     func isDeviceEnabled(for id: String) -> Bool {
@@ -126,18 +146,18 @@ final class DeviceHelper: NSObject {
     }
     
     private func updatePeripheralsForConnectedDevices(peripherals: [Peripheral]) {
-         for peripheral in peripherals {
-             if let index = connectedDevices.firstIndex(where: { $0.id == peripheral.identifier.uuidString }) {
-                 connectedDevices[index].setPeripheral(peripheral: peripheral)
-                 connectedDevices[index].addObservers()
-             }
-         }
-     }
+        for peripheral in peripherals {
+            if let index = connectedDevices.firstIndex(where: { $0.id == peripheral.identifier.uuidString }) {
+                connectedDevices[index].setPeripheral(peripheral: peripheral)
+                connectedDevices[index].addObservers()
+            }
+        }
+    }
     
     private func unpairWidgetsForDevice(id: String) {
         let widgets = getWidgetsForExternalDevice(id: id)
         if !widgets.isEmpty {
-            widgets.forEach { 
+            widgets.forEach {
                 // reset to default state
                 $0.configureDevice(id: "")
                 $0.setAnyDevice(use: true)
@@ -184,6 +204,8 @@ final class DeviceHelper: NSObject {
             return BLEBikeSCDDevice()
         case .BLE_RUNNING_SCDS:
             return BLERunningSCDDevice()
+        case .OBD_VEHICLE_METRICS:
+            return OBDVehicleMetricsDevice()
         default:
             fatalError("not impl")
         }
@@ -198,43 +220,35 @@ extension DeviceHelper {
     
     func disconnectIfNeeded(device: Device) {
         if device.isConnected || device.isConnecting {
-            device.peripheral.disconnect { _ in }
-        }
-    }
-    
-    func disconnectAllDevices(reason: DisconnectDeviceReason) {
-        guard !connectedDevices.isEmpty else { return }
-        switch reason {
-        case .pluginOff:
-            connectedDevices.forEach {
-                $0.disableRSSI()
-                disconnectIfNeeded(device: $0)
+            device.peripheral.disconnect { result in
+                switch result {
+                case .success:
+                    NSLog("[DeviceHelper] - success | disconnectIfNeeded | id: \(device.id) | name: \(device.deviceName)")
+                case .failure(let error):
+                    NSLog("[DeviceHelper] - failure | disconnectIfNeeded | id: \(device.id) | name: \(device.deviceName) | error: \(error.localizedDescription)")
+                }
             }
-            BLEManager.shared.removeAndDisconnectDiscoveredDevices()
-        case .bluetoothPoweredOff:
-            connectedDevices.forEach { $0.didDisconnectDevice() }
         }
-        connectedDevices.removeAll()
     }
     
-    func restoreConnectedDevices(with peripherals: [Peripheral]) {
-        if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
-            let devices = DeviceHelper.shared.getDevicesFrom(peripherals: peripherals, pairedDevices: pairedDevices)
-            updateConnected(devices: devices)
-        } else {
-            Self.logger.warning("restoreConnectedDevices peripherals is empty")
-        }
+    func disconnectAllOBDDevices(reason: DisconnectDeviceReason) {
+        disconnectAllDevices(reason: reason, deviceType: .OBD_VEHICLE_METRICS)
+    }
+    
+    func disconnectAllSensorsDevices(reason: DisconnectDeviceReason) {
+        disconnectAllDevices(reason: reason)
     }
     
     func addConnected(device: Device) {
         guard !connectedDevices.contains(where: { $0.id == device.id }) else {
+            NSLog("addConnected device is already exists")
             return
         }
         connectedDevices.append(device)
-        if let discoveredDevice = BLEManager.shared.discoveredDevices.first(where: { $0.id == device.id }) {
+        if let discoveredDevice = BLEManager.shared.discoveredDevices.first(where: { $0.id == device.id && $0.deviceType != .OBD_VEHICLE_METRICS }) {
             discoveredDevice.notifyRSSI()
         }
-        if let connectedDevice = connectedDevices.first(where: { $0.id == device.id }) {
+        if let connectedDevice = connectedDevices.first(where: { $0.id == device.id && $0.deviceType != .OBD_VEHICLE_METRICS }) {
             connectedDevice.notifyRSSI()
         }
     }
@@ -251,7 +265,7 @@ extension DeviceHelper {
         connectedDevices = connectedDevices.filter { $0.id != device.id }
     }
     
-    private func updateConnected(devices: [Device]) {
+    func updateConnected(devices: [Device]) {
         devices.forEach { device in
             if !connectedDevices.contains(where: { $0.id == device.id }) {
                 device.connect(withTimeout: 10) { [weak self] result in
@@ -260,8 +274,10 @@ extension DeviceHelper {
                     case .success:
                         debugPrint("updateConnected success | \(device.deviceServiceName) | \(device.deviceName)")
                         device.addObservers()
-                        device.notifyRSSI()
-                        DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
+                        if device.deviceType != .OBD_VEHICLE_METRICS {
+                            device.notifyRSSI()
+                        }
+                        setDevicePaired(device: device, isPaired: true)
                         connectedDevices.append(device)
                         discoverServices(device: device)
                     case .failure(let error):
@@ -269,6 +285,30 @@ extension DeviceHelper {
                     }
                 }
             }
+        }
+    }
+    
+    func disconnectAllDevices(reason: DisconnectDeviceReason, deviceType: DeviceType? = nil) {
+        guard !connectedDevices.isEmpty else { return }
+        switch reason {
+        case .pluginOff:
+            if deviceType == .OBD_VEHICLE_METRICS {
+                connectedOnlyOBDDevices
+                    .forEach { disconnectIfNeeded(device: $0) }
+                BLEManager.shared.removeAndDisconnectDiscoveredDevices()
+                connectedDevices.removeAll { $0.deviceType == .OBD_VEHICLE_METRICS }
+            } else {
+                connectedExcludingOBDDevices
+                    .forEach {
+                        $0.disableRSSI()
+                        disconnectIfNeeded(device: $0)
+                    }
+                BLEManager.shared.removeAndDisconnectDiscoveredDevices()
+                connectedDevices.removeAll { $0.deviceType != .OBD_VEHICLE_METRICS }
+            }
+        case .bluetoothPoweredOff:
+            connectedDevices.forEach { $0.didDisconnectDevice() }
+            connectedDevices.removeAll()
         }
     }
     
@@ -285,8 +325,17 @@ extension DeviceHelper {
     }
     
     private func discoverCharacteristics(device: Device, services: [CBService]) {
+        var completedCount = 0
+        let totalServices = services.count
         for service in services {
             device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { result in
+                defer {
+                    completedCount += 1
+                    if completedCount == totalServices, device.deviceType == .OBD_VEHICLE_METRICS {
+                        OBDService.shared.startDispatcher()
+                    }
+                }
+                
                 switch result {
                 case .success(let characteristics):
                     for characteristic in characteristics {
@@ -298,10 +347,16 @@ extension DeviceHelper {
                         }
                     }
                 case .failure(let error):
-                    Self.logger.error("discoverCharacteristics: \(String(describing: error.localizedDescription))")
+                    Self.logger.error("discoverCharacteristics: \(error.localizedDescription)")
                 }
             }
         }
+    }
+}
+
+extension DeviceHelper {
+    func getOBDDevice() -> OBDVehicleMetricsDevice? {
+        connectedDevices.first(where: { $0.deviceType == .OBD_VEHICLE_METRICS }) as? OBDVehicleMetricsDevice
     }
 }
 

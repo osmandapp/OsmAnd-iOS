@@ -49,6 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_Advanced_Widgets @"net.osmand.maps.inapp.addon.advanced_widgets"
 #define kInAppId_Addon_OsmandDevelopment @"net.osmand.maps.inapp.addon.development"
 #define kInAppId_Addon_External_Sensors @"net.osmand.maps.inapp.addon.external_sensors"
+#define kInAppId_Addon_Vehicle_Metrics @"net.osmand.maps.inapp.addon.vehicle_metrics"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0
@@ -328,6 +329,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @end
 
 @interface OAExternalSensorsProduct : OAProduct
+@end
+
+@interface OAVehicleMetricsProduct : OAProduct
 @end
 
 @interface OACarPlayProduct : OAProduct

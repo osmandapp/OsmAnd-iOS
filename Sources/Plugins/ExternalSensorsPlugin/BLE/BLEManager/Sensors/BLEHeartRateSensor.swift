@@ -57,7 +57,7 @@ final class BLEHeartRateSensor: Sensor {
     
     private(set) var lastHeartRateData: HeartRateData?
     
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+    override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         switch characteristic.uuid {
         case GattAttributes.CHARACTERISTIC_HEART_RATE_MEASUREMENT.CBUUIDRepresentation:
             let heartRate = heartRate(from: characteristic)

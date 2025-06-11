@@ -64,7 +64,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
-                                               name: .DeviceDisconnected,
+                                               name: .deviceDisconnected,
                                                object: nil)
     }
     

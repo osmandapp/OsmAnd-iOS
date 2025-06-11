@@ -163,7 +163,7 @@ extension Central {
     
     /// Attempts to return the periperals from a list of identifier "UUID"s
     public func retrievePeripherals(withUUIDs uuids: [CBUUIDConvertible]) -> [Peripheral] {
-        let uuids = uuids.compactMap { UUID(uuidString: $0.CBUUIDRepresentation.uuidString)  }
+        let uuids = uuids.compactMap { UUID(uuidString: $0.CBUUIDRepresentation.uuidString) }
         let cbPeripherals = self.centralProxy.centralManager.retrievePeripherals(withIdentifiers: uuids)
         let peripherals = cbPeripherals.map { cbPeripheral -> Peripheral in
             return Peripheral(peripheral: cbPeripheral)
@@ -187,7 +187,7 @@ extension Central {
     /// - Parameter serviceUUIDs: The service UUIDs to search peripherals for or nil if looking for all peripherals.
     /// - Parameter completion: The closures, called multiple times throughout a scan.
     public func scanForPeripherals(withServiceUUIDs serviceUUIDs: [CBUUIDConvertible]? = nil,
-                                   options: [String : Any]? = nil,
+                                   options: [String: Any]? = nil,
                                    timeoutAfter timeout: TimeInterval,
                                    completion: @escaping PeripheralScanCallback) {
         // Passing in an empty array will act the same as if you passed nil and discover all peripherals but

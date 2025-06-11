@@ -27,7 +27,7 @@ final class BatteryData: SensorData {
 final class BLEBatterySensor: Sensor {
     private(set) var lastBatteryData = BatteryData()
     
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+    override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         switch characteristic.uuid {
         case GattAttributes.CHARACTERISTIC_BATTERY.CBUUIDRepresentation:
             if let value = characteristic.value, !value.isEmpty {

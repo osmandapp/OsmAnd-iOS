@@ -431,6 +431,11 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     {
         return [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
     }
+    else if ([_product isKindOfClass:OAVehicleMetricsProduct.class])
+    {
+        return [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
+    }
+    
     return nil;
 }
 

@@ -319,4 +319,24 @@ extension GpxDataItem {
     var gpxFileNameWithoutExtension: String {
         gpxFileName.deletingPathExtension()
     }
+    
+    func updateAppearance() {
+        let gpx = GpxUtilities.shared.loadGpxFile(file: file)
+        guard gpx.error == nil else { return }
+        
+        splitType = OAGPXDatabase.splitType(byName: gpx.getSplitType())
+        splitInterval = gpx.getSplitInterval()
+        color = gpx.getColor(defColor: 0)?.intValue ?? 0
+        coloringType = gpx.getColoringType() ?? ""
+        gradientPaletteName = gpx.getGradientColorPalette()
+        width = gpx.getWidth(defaultWidth: nil) ?? ""
+        showArrows = gpx.isShowArrows()
+        showStartFinish = gpx.isShowStartFinish()
+        verticalExaggerationScale = Double(gpx.getAdditionalExaggeration())
+        elevationMeters = Double(gpx.getElevationMeters())
+        visualization3dByType = OAGPXDatabase.lineVisualizationByType(forName: gpx.get3DVisualizationType())
+        visualization3dWallColorType = OAGPXDatabase.lineVisualizationWallColorType(forName: gpx.get3DWallColoringType())
+        visualization3dPositionType = OAGPXDatabase.lineVisualizationPositionType(forName: gpx.get3DLinePositionType())
+        joinSegments = gpx.isJoinSegments()
+    }
 }

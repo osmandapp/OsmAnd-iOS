@@ -109,6 +109,8 @@ final class MapWidgetsFactory: NSObject {
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
         case .heartRate, .bicycleCadence, .bicycleDistance, .bicycleSpeed, .temperature:
             return SensorTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: widgetParams)
+        case .OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption:
+            return OBDTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: widgetParams)
         default:
             return OAPluginsHelper.createMapWidget(widgetType, customId: customId, appMode: appMode, widgetParams: widgetParams)
         }

@@ -125,6 +125,25 @@ final class VehicleMetricsPlugin: OAPlugin {
         
         return computerWidget.type.formatter.format(v: convertedData)
     }
+
+    override func createWidgets(_ delegate: any WidgetRegistrationDelegate, appMode: OAApplicationMode, widgetParams: [AnyHashable: Any]?) {
+        let creator = WidgetInfoCreator(appMode: appMode)
+        let widgetTypeArray: [WidgetType] = [.OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption]
+        for widgetType in widgetTypeArray {
+            guard let base = createMapWidget(forParams: widgetType, customId: nil, appMode: appMode, widgetParams: widgetParams) as? OBDTextWidget, let info = creator.createWidgetInfo(widget: base) else { continue }
+            delegate.addWidget(info)
+        }
+    }
+    
+    override func createMapWidget(forParams widgetType: WidgetType, customId: String?, appMode: OAApplicationMode, widgetParams: [AnyHashable: Any]?) -> OABaseWidgetView? {
+        let params = widgetParams as? [String: Any]
+        switch widgetType {
+        case .OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption:
+            return OBDTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: params)
+        default:
+            return nil
+        }
+    }
 }
 
 // MARK: - Formatters

@@ -2716,3 +2716,4 @@
 "daynight_mode_night_summary" = "Viser alltid kartet i et mørkt tema, egnet for nattlige forhold eller forhold med lite lys.";
 "daynight_mode_sunrise_sunset_summary" = "Bytter automatisk mellom dag- og natt-temaer basert på lokale soloppgangs- og solnedgangstider.";
 "screen_is_locked_by_action_button" = "Berøringsskjermen er låst. Trykk på knappen for å låse opp.";
+"sensor_data" = "Sensordata";

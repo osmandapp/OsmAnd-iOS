@@ -2303,7 +2303,7 @@
 "annual_subscription" = "Abonnement annuel";
 "continue_with" = "Continuer avec %@";
 "redeem_promo_code" = "Utiliser le code promo";
-"purchases_feature_desc_hourly_map_updates" = "Obtenez des mises à jour de cartes plus fréquentes : horaire, quotidienne ou hebdomadaires. Pour les zones déjà téléchargées, les mises à jour sont de taille réduite grâce à une diffusion incrémentielle.";
+"purchases_feature_desc_hourly_map_updates" = "Obtenez des mises à jour de cartes plus fréquentes : horaires, quotidiennes ou hebdomadaires. Pour les zones déjà téléchargées, les mises à jour sont de taille réduite grâce à une diffusion incrémentielle.";
 "transport_hazmat_no_desc" = "Certaines routes et certains tunnels peuvent interdire le transport de matières dangereuses.";
 "restore_purchases" = "Restaurer vos achats";
 "monthly_subscription" = "Abonnement mensuel";
@@ -3595,7 +3595,7 @@
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
 "shared_string_interface" = "Interface";
 "app_mode_taxi" = "Taxi";
-"sensor_data" = "Données des capteurs";
+"sensor_data" = "Données du capteur";
 "beats_per_minute_short" = "bpm";
 "map_orientation_portrait" = "Portrait";
 "app_mode_osm" = "OSM";

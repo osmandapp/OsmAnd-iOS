@@ -125,6 +125,10 @@ final class VehicleMetricsPlugin: OAPlugin {
         
         return computerWidget.type.formatter.format(v: convertedData)
     }
+    
+    override func getWidgetIds() -> [String] {
+        [WidgetType.OBDSpeed.id, WidgetType.OBDRpm.id, WidgetType.OBDEngineRuntime.id, WidgetType.OBDFuelPressure.id, WidgetType.OBDAirIntakeTemp.id, WidgetType.engineOilTemperature.id, WidgetType.OBDAmbientAirTemp.id, WidgetType.OBDBatteryVoltage.id, WidgetType.OBDEngineCoolantTemp.id, WidgetType.OBDRemainingFuel.id, WidgetType.OBDCalculatedEngineLoad.id, WidgetType.OBDThrottlePosition.id, WidgetType.OBDFuelConsumption.id]
+    }
 
     override func createWidgets(_ delegate: any WidgetRegistrationDelegate, appMode: OAApplicationMode, widgetParams: [AnyHashable: Any]?) {
         let creator = WidgetInfoCreator(appMode: appMode)

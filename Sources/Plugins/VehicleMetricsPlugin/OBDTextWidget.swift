@@ -16,6 +16,8 @@ final class OBDTextWidget: OASimpleWidget {
         self.init(frame: .zero)
         self.widgetType = widgetType
         plugin = OAPluginsHelper.getPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
+        updateInfo()
     }
     
     override init(frame: CGRect) {

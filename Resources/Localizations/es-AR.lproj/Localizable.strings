@@ -3369,7 +3369,7 @@
 "voices" = "Indicaciones por voz";
 "precipitation_layer" = "Capa de precipitación";
 "quick_action_first_intermediate" = "Primer destino intermedio";
-"shared_string_change" = "Cambiar";
+"shared_string_change" = "Cambio";
 "shared_string_favorite" = "Favorito";
 "shared_string_set" = "Definir";
 "shared_string_favorites" = "Favoritos";
@@ -3704,3 +3704,5 @@
 "map_widget_route_information" = "Información de la ruta";
 "map_widget_route_information_desc" = "Muestra la hora estimada de llegada, el tiempo de viaje restante y la distancia para la ruta de navegación actual.";
 "display_priority" = "Prioridad de vista";
+"preview_next_turn" = "Previsualizar próximo giro";
+"preview_next_turn_descr" = "Rota automáticamente el mapa para prever el siguiente giro o maniobra";

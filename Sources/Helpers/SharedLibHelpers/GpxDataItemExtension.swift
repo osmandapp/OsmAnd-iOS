@@ -321,8 +321,8 @@ extension GpxDataItem {
     }
     
     func updateAppearance() {
-        let gpx = GpxUtilities.shared.loadGpxFile(file: file)
-        guard gpx.error == nil else { return }
+        let gpx: GpxFile? = GpxUtilities.shared.loadGpxFile(file: file)
+        guard let gpx, gpx.error == nil else { return }
         
         splitType = OAGPXDatabase.splitType(byName: gpx.getSplitType())
         splitInterval = gpx.getSplitInterval()

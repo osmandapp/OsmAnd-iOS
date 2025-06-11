@@ -216,6 +216,7 @@
 		2717D3D22DC8D8A600B7BD22 /* BaseAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */; };
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
 		274C43F12DEDBA7100585952 /* OANextTurnWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */; };
+		27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */; };
 		27E3C2032DF1ADD40053958E /* OAStreetNameWidgetParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = 27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */; };
 		27F050912DD38E310058075F /* RouteInfoDisplayPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */; };
 		27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508F2DD38E310058075F /* RouteInfoWidget.swift */; };
@@ -3531,6 +3532,7 @@
 		2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceCategory.swift; sourceTree = "<group>"; };
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
 		274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OANextTurnWidget.xib; sourceTree = "<group>"; };
+		27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NextTurnWidget+Extension.swift"; sourceTree = "<group>"; };
 		27E3C1FF2DF1AD340053958E /* OAStreetNameWidgetParams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStreetNameWidgetParams.h; sourceTree = "<group>"; };
 		27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreetNameWidgetParams.mm; sourceTree = "<group>"; };
 		27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayPriority.swift; sourceTree = "<group>"; };
@@ -12660,6 +12662,7 @@
 				DA5A7F2326C563A400F274C7 /* OAMapWidgetRegistry.mm */,
 				DA5A7F3126C563A400F274C7 /* OANextTurnWidget.h */,
 				DA5A7F3526C563A400F274C7 /* OANextTurnWidget.mm */,
+				27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */,
 				DA5A7F2826C563A400F274C7 /* OARulerWidget.h */,
 				DA5A7F2B26C563A400F274C7 /* OARulerWidget.mm */,
 				464CE4252B56C8D9001F4DAE /* OASimpleWidget.h */,
@@ -17321,6 +17324,7 @@
 				DA5A84BB26C563A900F274C7 /* OAPublicTransportOptionsBottomSheet.mm in Sources */,
 				DA5A832726C563A800F274C7 /* OARouteInfoAltitudeCell.m in Sources */,
 				DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */,
+				27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */,
 				DA2483E72927916700189AF2 /* OAStatusBackupTableViewController.mm in Sources */,
 				FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */,
 				FAA650512ADD42C50020DCEA /* BLESearchViewController.swift in Sources */,

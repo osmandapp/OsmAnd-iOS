@@ -62,14 +62,6 @@ class WidgetGroup: NSObject {
         return self == widget.getGroup() || self == widget.getVerticalGroup()
     }
     
-    func getWidgetsIds() -> [String] {
-        var widgetsIds = [String]()
-        for widget in getWidgets() {
-            widgetsIds.append(widget.id)
-        }
-        return widgetsIds
-    }
-    
     func getSecondaryDescription() -> String? {
         switch self {
         case .bearing:

@@ -115,7 +115,7 @@
         _turnDrawable = [[OATurnDrawable alloc] initWithMini:horisontalMini themeColor:EOATurnDrawableThemeColorMap];
         _textRasterizer = OsmAnd::TextRasterizer::getDefault();
         
-        if (self.isPanelVertical)
+        if ([self isPanelVertical])
         {
             [self layoutWidget];
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
@@ -214,10 +214,11 @@
     
     if (shields.count != 0)
     {
-        if (![shields isEqualToArray:_cachedRoadShields])
+        const BOOL isShieldsEqual = [shields isEqualToArray:_cachedRoadShields];
+        if (!isShieldsEqual)
             [self setRoadShield:_shieldImage shields:shields];
         else
-            [_shieldStackView setHidden:![shields isEqualToArray:_cachedRoadShields]];
+            [_shieldStackView setHidden:!isShieldsEqual];
         _cachedRoadShields = shields;
     }
     else
@@ -239,13 +240,14 @@
 - (void)setExit:(OACurrentStreetName *)streetName
 {
     NSString *exitNumber = nil;
+    const auto& turnType = [self getTurnType];
     
-    if ([self getTurnType] && [self getTurnType]->getExitOut() > 0)
-        exitNumber = [NSString stringWithFormat:@"%d", [self getTurnType]->getExitOut()];
+    if (turnType && turnType->getExitOut() > 0)
+        exitNumber = [NSString stringWithFormat:@"%d", turnType->getExitOut()];
     else if (streetName.exitRef.length > 0)
         exitNumber = streetName.exitRef;
     
-    if (streetName.exitRef.length > 0)
+    if (exitNumber.length > 0)
     {
         NSString *exit = OALocalizedString(@"shared_string_road_exit");
         NSString *exitViewText = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), exit, exitNumber];
@@ -253,7 +255,9 @@
         [_exitView setHidden:NO];
     }
     else
+    {
         [_exitView setHidden:YES];
+    }
 }
 
 - (void)setRoadShield:(UIImageView *)view shields:(NSArray<RoadShield *> *)shields
@@ -264,17 +268,19 @@
         NSInteger maxShields = MIN(shields.count, MAX_SHIELDS_QUANTITY);
         
         if (_shieldStackView.subviews.count > 1)
+        {
             for (NSInteger i = 1; i < maxShields; i++)
                 [_shieldStackView.subviews[i] removeFromSuperview];
+        }
         
         for (NSInteger i = 0; i < maxShields; i++)
         {
-            RoadShield * shield = shields[i];
+            RoadShield *shield = shields[i];
             
             if (i > 0)
             {
                 UIImageView *shieldImageView = [[UIImageView alloc] init];
-                UIView *shieldView = [[UIView alloc] init];
+                UIView *shieldView = [[UIView alloc] initWithFrame:CGRectZero];
                 [shieldView addSubview:shieldImageView];
                 [_shieldStackView addArrangedSubview:shieldView];
                 shieldImageView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -284,14 +290,16 @@
                 [shieldView setContentHuggingPriority:[_shieldView contentHuggingPriorityForAxis:UILayoutConstraintAxisHorizontal] forAxis:UILayoutConstraintAxisHorizontal];
                 [NSLayoutConstraint activateConstraints:@[
                     [shieldImageView.heightAnchor constraintEqualToConstant:_shieldHeightConstraint.constant],
-                    [shieldImageView.leadingAnchor constraintEqualToAnchor:shieldView.leadingAnchor constant:0],
-                    [shieldImageView.trailingAnchor constraintEqualToAnchor:shieldView.trailingAnchor constant:0],
+                    [shieldImageView.leadingAnchor constraintEqualToAnchor:shieldView.leadingAnchor],
+                    [shieldImageView.trailingAnchor constraintEqualToAnchor:shieldView.trailingAnchor],
                     [shieldImageView.centerYAnchor constraintEqualToAnchor:shieldView.centerYAnchor]
                 ]];
                 isShieldSet |= [self setRoadShield:shieldImageView shield:shield];
             }
             else
+            {
                 isShieldSet |= [self setRoadShield:view shield:shield];
+            }
         }
     }
     [_shieldStackView setHidden:isShieldSet];
@@ -301,9 +309,9 @@
 {
     const auto& object = shield.rdo;
     const auto& tps = object->types;
-    NSString* nameTag = shield.tag;
-    NSString* name = shield.value;
-    NSMutableString * additional = [shield.additional mutableCopy];
+    NSString *nameTag = shield.tag;
+    NSString *name = shield.value;
+    NSMutableString *additional = [shield.additional mutableCopy];
     OAMapPresentationEnvironment *mapPres = OARootViewController.instance.mapPanel.mapViewController.mapPresentationEnv;
     const auto& env = mapPres.mapPresentationEnvironment;
     if (!env)
@@ -388,7 +396,9 @@
         self.leftView.hidden = NO;
     }
     else
+    {
         self.leftView.hidden = gone;
+    }
 }
 
 - (void) setTurnDrawable:(OATurnDrawable *)turnDrawable gone:(BOOL)gone
@@ -414,7 +424,9 @@
         self.topView.hidden = NO;
     }
     else
+    {
         self.topView.hidden = YES;
+    }
 }
 
 - (void) setSubview:(UIView *)view subview:(UIView *)subview
@@ -445,11 +457,11 @@
 {
     BOOL vis = [self updateVisibility:turnType != nullptr];
     if ([_turnDrawable setTurnType:turnType]
-        || (self.isPanelVertical && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
+        || ([self isPanelVertical] && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
         || vis)
     {
         _turnDrawable.textFont = self.primaryFont;
-        if (self.isPanelVertical)
+        if ([self isPanelVertical])
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
         else
             if (_horisontalMini)
@@ -499,7 +511,7 @@
 
 - (BOOL)isEnabledTextInfoComponents
 {
-    return !self.isPanelVertical;
+    return ![self isPanelVertical];
 }
 
 - (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel
@@ -509,7 +521,7 @@
 
 - (void) setTextNoUpdateVisibility:(NSString *)text subtext:(NSString *)subtext
 {
-    if (self.isPanelVertical)
+    if ([self isPanelVertical])
     {
         if (text.length == 0 && subtext.length == 0)
             _distanceLabel.text = self.isSimpleLayout ? nil : @"";
@@ -580,7 +592,7 @@
     int nextTurnDistance = 0;
     OACurrentStreetName *streetName = nil;
     
-    if (self.isPanelVertical)
+    if ([self isPanelVertical])
     {
         OAStreetNameWidgetParams *params = [[OAStreetNameWidgetParams alloc] initWithTurnDrawable:_turnDrawable calc1:_calc1];
         streetName = params.streetName;
@@ -605,7 +617,7 @@
                 {
                     streetName = [[OACurrentStreetName alloc] initWithStreetName:info useDestination:true];
                     streetName.shields = shields;
-                    if (self.isPanelVertical && streetName.text.length == 0)
+                    if ([self isPanelVertical] && streetName.text.length == 0)
                         streetName.text = [info.directionInfo getDescriptionRoutePart];
                     turnType = info.directionInfo.turnType;
                     nextTurnDistance = info.distanceTo;
@@ -625,7 +637,7 @@
             {
                 streetName = [[OACurrentStreetName alloc] initWithStreetName:info useDestination:true];
                 streetName.shields = shields;
-                if (self.isPanelVertical && streetName.text.length == 0)
+                if ([self isPanelVertical] && streetName.text.length == 0)
                     streetName.text = [info.directionInfo getDescriptionRoutePart];
                 turnType = info.directionInfo.turnType;
                 nextTurnDistance = info.distanceTo;
@@ -634,7 +646,7 @@
         }
     }
     
-    if (self.isPanelVertical)
+    if ([self isPanelVertical])
     {
         [self setStreetName:streetName];
         [self applySuitableTextFont];
@@ -652,9 +664,9 @@
 - (void)applySuitableTextFont
 {
     UIFontWeight typefaceStyle = _textState.textBold ? UIFontWeightBold : UIFontWeightSemibold;
-    _distanceLabel.font = [UIFont scaledSystemFontOfSize:self.getDistanceFont weight:typefaceStyle];
-    _exitLabel.font = [UIFont scaledSystemFontOfSize:self.getExitFont weight:typefaceStyle];
-    _streetLabel.font = [UIFont scaledSystemFontOfSize:self.getStreetFont weight:typefaceStyle];
+    _distanceLabel.font = [UIFont scaledSystemFontOfSize:self.distanceFont weight:typefaceStyle];
+    _exitLabel.font = [UIFont scaledSystemFontOfSize:self.exitFont weight:typefaceStyle];
+    _streetLabel.font = [UIFont scaledSystemFontOfSize:self.streetFont weight:typefaceStyle];
 }
 
 - (void)applySuitableLayout
@@ -663,11 +675,11 @@
     [_mainStackView setSpacing:!self.hasEnoughWidth ? 6 : 12];
     [_exitLabelViewRightGreaterConstraint setActive:self.widgetSizeStyle == EOAWidgetSizeStyleSmall];
     [_exitLabelViewRightEqualConstraint setActive:self.widgetSizeStyle != EOAWidgetSizeStyleSmall];
-    _arrowSizeConstraint.constant = !self.hasEnoughWidth ? self.getHalfScreenArrowSize : self.getArrowSize;
-    _exitLabelViewHeightConstraint.constant = !self.hasEnoughWidth ? self.getHalfScreenExitLabelViewHeight : self.getExitLabelViewHeight;
+    _arrowSizeConstraint.constant = !self.hasEnoughWidth ? self.halfScreenArrowSize : self.arrowSize;
+    _exitLabelViewHeightConstraint.constant = !self.hasEnoughWidth ? self.halfScreenExitLabelViewHeight : self.exitLabelViewHeight;
     _topArrowSpaceConstraint.constant = _bottomArrowSpaceConstraint.constant = self.hasEnoughWidth && self.widgetSizeStyle != EOAWidgetSizeStyleSmall ? 6 : 0;
-    _firstLineHeightConstraint.constant = self.getFirstLineHeight;
-    _secondLineHeightConstraint.constant = self.getSecondLineHeight;
+    _firstLineHeightConstraint.constant = self.firstLineHeight;
+    _secondLineHeightConstraint.constant = self.secondLineHeight;
 }
 
 - (void)replaceComponentsIfNeeded
@@ -698,7 +710,6 @@
     if ([stackView.subviews containsObject:view])
         return;
     
-    [view removeFromSuperview];
     [stackView addArrangedSubview:view];
 }
 
@@ -710,7 +721,7 @@
         return;
     
     NSInteger currentIndex = [views indexOfObject:view];
-    if (newIndex == currentIndex || newIndex < 0 || newIndex >= views.count)
+    if (currentIndex == NSNotFound || newIndex == currentIndex || newIndex < 0 || newIndex >= views.count)
         return;
     
     [views removeObjectAtIndex:currentIndex];
@@ -728,144 +739,6 @@
 
     for (UIView *v in views)
         [stackView addArrangedSubview:v];
-}
-
-- (CGFloat)getDistanceFont
-{
-    switch (self.widgetSizeStyle)
-    {
-        case EOAWidgetSizeStyleSmall:
-            return 22;
-        case EOAWidgetSizeStyleMedium:
-            return 30;
-        case EOAWidgetSizeStyleLarge:
-            return 37;
-        default:
-            NSAssert(NO, @"Unknown EOAWidgetSizeStyle enum value");
-            return 0;
-    }
-}
-
-- (CGFloat)getExitFont
-{
-    switch (self.widgetSizeStyle)
-    {
-        case EOAWidgetSizeStyleSmall:
-        case EOAWidgetSizeStyleMedium:
-            return 18;
-        case EOAWidgetSizeStyleLarge:
-            return 22;
-        default:
-            NSAssert(NO, @"Unknown EOAWidgetSizeStyle enum value");
-            return 0;
-    }
-}
-
-- (CGFloat)getStreetFont
-{
-    switch (self.widgetSizeStyle)
-    {
-        case EOAWidgetSizeStyleSmall:
-            return 22;
-        case EOAWidgetSizeStyleMedium:
-            return 24;
-        case EOAWidgetSizeStyleLarge:
-            return 30;
-        default:
-            NSAssert(NO, @"Unknown EOAWidgetSizeStyle enum value");
-            return 0;
-    }
-}
-
-- (CGFloat)getArrowSize
-{
-    switch (self.widgetSizeStyle)
-    {
-        case EOAWidgetSizeStyleSmall:
-            return 36;
-        case EOAWidgetSizeStyleMedium:
-            return 48;
-        case EOAWidgetSizeStyleLarge:
-            return 72;
-        default:
-            NSAssert(NO, @"Unknown EOAWidgetSizeStyle enum value");
-            return 0;
-    }
-}
-
-- (CGFloat)getHalfScreenArrowSize
-{
-    switch (self.widgetSizeStyle)
-    {
-        case EOAWidgetSizeStyleSmall:
-        case EOAWidgetSizeStyleMedium:
-            return 36;
-        case EOAWidgetSizeStyleLarge:
-            return 48;
-        default:
-            NSAssert(NO, @"Unknown EOAWidgetSizeStyle enum value");
-            return 0;
-    }
-}
-
-- (CGFloat)getFirstLineHeight
-{
-    switch (self.widgetSizeStyle)
-    {
-        case EOAWidgetSizeStyleSmall:
-        case EOAWidgetSizeStyleMedium:
-            return 36;
-        case EOAWidgetSizeStyleLarge:
-            return 45;
-        default:
-            NSAssert(NO, @"Unknown EOAWidgetSizeStyle enum value");
-            return 0;
-    }
-}
-
-- (CGFloat)getSecondLineHeight
-{
-    switch (self.widgetSizeStyle)
-    {
-        case EOAWidgetSizeStyleSmall:
-        case EOAWidgetSizeStyleMedium:
-            return 32;
-        case EOAWidgetSizeStyleLarge:
-            return 36;
-        default:
-            NSAssert(NO, @"Unknown EOAWidgetSizeStyle enum value");
-            return 0;
-    }
-}
-
-- (CGFloat)getExitLabelViewHeight
-{
-    switch (self.widgetSizeStyle)
-    {
-        case EOAWidgetSizeStyleSmall:
-        case EOAWidgetSizeStyleMedium:
-            return 30;
-        case EOAWidgetSizeStyleLarge:
-            return 36;
-        default:
-            NSAssert(NO, @"Unknown EOAWidgetSizeStyle enum value");
-            return 0;
-    }
-}
-
-- (CGFloat)getHalfScreenExitLabelViewHeight
-{
-    switch (self.widgetSizeStyle)
-    {
-        case EOAWidgetSizeStyleSmall:
-        case EOAWidgetSizeStyleLarge:
-            return 30;
-        case EOAWidgetSizeStyleMedium:
-            return 26;
-        default:
-            NSAssert(NO, @"Unknown EOAWidgetSizeStyle enum value");
-            return 0;
-    }
 }
 
 @end

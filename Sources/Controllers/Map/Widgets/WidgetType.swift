@@ -139,13 +139,11 @@ class WidgetType: NSObject {
     }
     
     func isPanelsAllowed(_ panels: [WidgetsPanel]) -> Bool {
-        if self == .smallNextTurn {
-            return !panels.contains(.topPanel) && !panels.contains(.bottomPanel)
+        switch self {
+        case .smallNextTurn: !panels.contains(.topPanel) && !panels.contains(.bottomPanel)
+        case .routeInfo: !panels.contains(.leftPanel) && !panels.contains(.rightPanel)
+        default: true
         }
-        if self == .routeInfo {
-            return !panels.contains(.leftPanel) && !panels.contains(.rightPanel)
-        }
-        return true
     }
 
     static func findWidgetPanel(widgetId: String, mode: OAApplicationMode? = nil) -> WidgetsPanel? {

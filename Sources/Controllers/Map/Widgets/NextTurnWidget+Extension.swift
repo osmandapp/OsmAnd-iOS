@@ -8,77 +8,50 @@
 
 extension OANextTurnWidget {
     @objc var distanceFont: CGFloat {
-        switch self.widgetSizeStyle {
-        case .small: 22
-        case .medium: 30
-        case .large: 37
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
+        sizeValue(small: 22, medium: 30, large: 37)
     }
     
     @objc var exitFont: CGFloat {
-        switch self.widgetSizeStyle {
-        case .small, .medium: 18
-        case .large: 22
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
+        sizeValue(small: 18, medium: 18, large: 22)
     }
     
     @objc var streetFont: CGFloat {
-        switch self.widgetSizeStyle {
-        case .small: 22
-        case .medium: 24
-        case .large: 30
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
+        sizeValue(small: 22, medium: 24, large: 30)
     }
     
     @objc var arrowSize: CGFloat {
-        switch self.widgetSizeStyle {
-        case .small:  36
-        case .medium: 48
-        case .large: 72
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
+        sizeValue(small: 36, medium: 48, large: 72)
     }
     
     @objc var halfScreenArrowSize: CGFloat {
-        switch self.widgetSizeStyle {
-        case .small, .medium: 36
-        case .large: 48
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
+        sizeValue(small: 36, medium: 36, large: 48)
     }
     
     @objc var firstLineHeight: CGFloat {
-        switch self.widgetSizeStyle {
-        case .small, .medium: 36
-        case .large: 45
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
+        sizeValue(small: 36, medium: 36, large: 45)
     }
     
     @objc var secondLineHeight: CGFloat {
-        switch self.widgetSizeStyle {
-        case .small, .medium: 32
-        case .large: 36
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
+        sizeValue(small: 32, medium: 32, large: 36)
     }
     
     @objc var exitLabelViewHeight: CGFloat {
-        switch self.widgetSizeStyle {
-        case .small, .medium: 30
-        case .large: 36
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
+        sizeValue(small: 30, medium: 30, large: 36)
     }
 
     @objc var halfScreenExitLabelViewHeight: CGFloat {
-        switch self.widgetSizeStyle {
-        case .small, .large: 30
-        case .medium: 26
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
+        sizeValue(small: 30, medium: 30, large: 26)
+    }
+    
+    private func sizeValue(small: CGFloat,
+                           medium: CGFloat,
+                           large: CGFloat) -> CGFloat {
+        switch widgetSizeStyle {
+        case .small: small
+        case .medium: medium
+        case .large: large
+        @unknown default:
+            fatalError("Unknown EOAWidgetSizeStyle enum value: \(widgetSizeStyle)")
         }
     }
 }

@@ -1548,9 +1548,7 @@ static BOOL _repositoryUpdated = NO;
             return;
         }
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.view addSpinner];
-        });
+        [self.view addSpinner];
 
         // Select where to look
         NSArray<OAWorldRegion *> *searchableContent = _searchableWorldwideRegionItems;
@@ -1591,11 +1589,12 @@ static BOOL _repositoryUpdated = NO;
         NSArray *resultByContains = [self createSearchResult:regions byMapRegion:NO];
         _searchResults = resultByContains;
         [_tableView reloadData];
-
-        [self.view addSpinner];
         
         if (searchString.length < 3)
+        {
+            [self.view removeSpinner];
             return;
+        }
         
         [OAQuickSearchHelper.instance searchCities:searchString
                                     searchLocation:_app.locationServices.lastKnownLocation
@@ -2715,7 +2714,7 @@ static BOOL _repositoryUpdated = NO;
     {
         DownloadingCell *downloadingCell = [tableView dequeueReusableCellWithIdentifier:DownloadingCell.reuseIdentifier];
         OAMultipleResourceItem *item = (OAMultipleResourceItem *) item_;
-        NSString *resourceId = [item getResourceId];
+
         OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:item];
         
         [_downloadingCellMultipleResourceHelper configureWithResourceItem:mapItem cell:downloadingCell];
@@ -3024,6 +3023,8 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
+    // TODO: Called twice after clearing the last result
+    NSLog(@"textDidChange: %@", searchText);
     _lastSearchString = searchText;
     _lastSearchScope = searchBar.selectedScopeButtonIndex;
     [self performSearchForSearchString:_lastSearchString

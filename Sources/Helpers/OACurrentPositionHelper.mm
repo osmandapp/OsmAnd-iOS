@@ -191,6 +191,48 @@
     return nullptr;
 }
 
+- (NSString *)getRoadName:(CLLocation *)lastKnownLocation
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    std::shared_ptr<RouteDataObject> road = [self getLastKnownRouteSegment:lastKnownLocation];
+    if (road)
+    {
+        string lang = settings.settingPrefMapLanguage.get ? settings.settingPrefMapLanguage.get.UTF8String : "";
+        bool transliterate = settings.settingMapLanguageTranslit.get;
+        string rStreetName = road->getName(lang, transliterate);
+        return [NSString stringWithUTF8String:rStreetName.c_str()];
+    }
+    return @"";
+}
+
+- (NSString *)getRoadRef:(CLLocation *)lastKnownLocation
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    std::shared_ptr<RouteDataObject> road = [self getLastKnownRouteSegment:lastKnownLocation];
+    if (road)
+    {
+        string lang = settings.settingPrefMapLanguage.get ? settings.settingPrefMapLanguage.get.UTF8String : "";
+        bool transliterate = settings.settingMapLanguageTranslit.get;
+        string rRefName = road->getRef(lang, transliterate, road->bearingVsRouteDirection(lastKnownLocation.course));
+        return [NSString stringWithUTF8String:rRefName.c_str()];
+    }
+    return @"";
+}
+
+- (NSString *)getDestinationName:(CLLocation *)lastKnownLocation
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    std::shared_ptr<RouteDataObject> road = [self getLastKnownRouteSegment:lastKnownLocation];
+    if (road)
+    {
+        string lang = settings.settingPrefMapLanguage.get ? settings.settingPrefMapLanguage.get.UTF8String : "";
+        bool transliterate = settings.settingMapLanguageTranslit.get;
+        string rDestinationName = road->getDestinationName(lang, transliterate, true);
+        return [NSString stringWithUTF8String:rDestinationName.c_str()];
+    }
+    return @"";
+}
+
 - (void) scheduleRouteSegmentFind:(CLLocation *)loc
 {
     const OsmAnd::PointI position31(OsmAnd::Utilities::get31TileNumberX(loc.coordinate.longitude),

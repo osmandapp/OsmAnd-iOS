@@ -326,8 +326,9 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
         return NO;
     }
 
-    NSDictionary<NSString *, NSString *> *settings;
-    settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
+    NSMutableDictionary<NSString *, NSString *> *settings;
+    settings = [[[OAMigrationManager shared] changeJsonMigrationToV2:json] mutableCopy];
+    [self readVolumeUnitsChangedManuallyFrom:settings];
 
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
@@ -344,6 +345,19 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
     self.item.read = YES;
     return YES;
+}
+
+//the method reads volumeUnitsChangedManually value from dictionary separetly and remove it
+- (void)readVolumeUnitsChangedManuallyFrom:(NSMutableDictionary<NSString *, NSString *> *)settings
+{
+    NSString *key = @"volume_units_changed_manually";
+    NSString *value = [settings objectForKey:key];
+    
+    if (!value)
+        return;
+    
+    [self.item readPreferenceFromJson:key value:value];
+    [settings removeObjectForKey:key];
 }
 
 @end

@@ -608,7 +608,7 @@ static const NSInteger _buttonsCount = 4;
     
     if ([self.customController hasTopToolbar] && ([self.customController shouldShowToolbar] || self.targetPoint.toolbarNeeded))
     {
-        [self showTopToolbar:YES];
+        [self showTopToolbar:YES forceToShowIfTypeFloating:NO];
     }
 }
 
@@ -629,7 +629,7 @@ static const NSInteger _buttonsCount = 4;
 {
     if ([self isLandscapeSupported] && [OAUtilities isLandscape:toInterfaceOrientation])
     {
-        [self showTopToolbar:NO];
+        [self showTopToolbar:NO forceToShowIfTypeFloating:NO];
         [self showBottomToolbar:NO];
     }
 }

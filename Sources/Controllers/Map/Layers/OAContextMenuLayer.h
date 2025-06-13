@@ -25,13 +25,15 @@
 - (void) enterChangePositionMode:(id)targetObject;
 - (void) exitChangePositionMode:(id)targetObject applyNewPosition:(BOOL)applyNewPosition;
 - (BOOL) isObjectMovable:(id)object;
+- (void) enterAddGpxPointMode;
+- (void) quitAddGpxPoint;
 
 - (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker;
 
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;
 
-- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide;
+- (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide;
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
 

@@ -3291,3 +3291,4 @@
 "traffic_warning_calming" = "Замедление движения";
 "map_widget_ant_bicycle_power" = "Мощность велосипеда";
 "planning_trip_item" = "Планирование пути";
+"sensor_data" = "Данные датчика";

@@ -168,12 +168,7 @@ static UIViewController *parentController;
 
                 OASGpxDataItem *gpx = [self doImport];
                 if (gpx && openGpxView)
-                {
-                    [self doPush];
-                    auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
-                    trackItem.dataItem = gpx;
-                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
-                }
+                    [self applyTrackItemWith:gpx];
             });
         };
         
@@ -184,12 +179,7 @@ static UIViewController *parentController;
 
                 OASGpxDataItem *gpx = [self doImport];
                 if (openGpxView && gpx)
-                {
-                    [self doPush];
-                    auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
-                    trackItem.dataItem = gpx;
-                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
-                }
+                    [self applyTrackItemWith:gpx];
             });
         };
         
@@ -331,13 +321,17 @@ static UIViewController *parentController;
     if (item && openGpxView)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self doPush];
-            file = item.file;
-            auto trackItem = [[OASTrackItem alloc] initWithFile:file];
-            trackItem.dataItem = item;
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
+            [self applyTrackItemWith:item];
         });
     }
+}
+
+- (void)applyTrackItemWith:(OASGpxDataItem *)dataItem
+{
+    [self doPush];
+    auto trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
+    trackItem.dataItem = dataItem;
+    [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
 }
 
 - (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView completion:(void (^)(BOOL success))completion {
@@ -379,6 +373,7 @@ static UIViewController *parentController;
     }
     
     OASGpxDataItem *item = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:gpxPath];
+    [item updateAppearance];
     
     if (item.color != 0)
         [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:item.color];

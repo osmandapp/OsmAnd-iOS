@@ -2705,3 +2705,13 @@
 "map_widget_route_information_desc" = "Εμφανίζει τον εκτιμέμενο χρόνο άφιξης, τον εναπομείναντα χρόνο ταξιδιού και την απόσταση για την τρέχουσα διαδρομή πλοήγησης.";
 "routing_attr_difficulty_preference_expert_name" = "Εξειδικευμένη";
 "routing_attr_carriage_restrictions_description" = "Να ληφθούν υπόψιν περιορισμοί πρόσβασης για ιππήλατα οχήματα";
+"no_photos_available_descr" = "Δεν έχουν προστεθεί φωτογραφίες χρήστη γι' αυτή την τοποθεσία ακόμη";
+"by_name" = "Κατά όνομα";
+"announcement_time_approach" = "Προσέγγιση";
+"announcement_time_title" = "Χρόνος ανακοίνωσης";
+"start_recording" = "Έναρξη καταγραφής";
+"backup_error_gzip_only_supported_upload" = "Το αρχείο πρέπει να σταλεί σε μορφή .gzip";
+"announcement_time_off_route" = "Εκτός πορείας";
+"duration_moment_ago" = "πριν από λίγο";
+"open_in_browser" = "Άνοιγμα στον περιηγητή";
+"no_photos_available" = "Δεν υπάρχουν διαθέσιμες φωτογραφίες";

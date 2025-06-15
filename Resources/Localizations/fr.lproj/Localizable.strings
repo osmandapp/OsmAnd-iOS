@@ -1695,7 +1695,7 @@
 "points_count" = "Points :";
 
 // Route planning
-"plan_route" = "Itinéraire planifié";
+"plan_route" = "Planifier un itinéraire";
 "quick_action_poi_add_descr" = "Appuyer sur ce bouton d’action vous permet d’ajouter rapidement des POI sur la carte avec un type et des étiquettes prédéfinis.";
 "quick_action_contour_lines_descr" = "Bouton affichant ou masquant les courbes de niveau sur la carte.";
 "quick_action_day_night_descr" = "Ce bouton permet de basculer entre les modes Jour et Nuit de la carte.";

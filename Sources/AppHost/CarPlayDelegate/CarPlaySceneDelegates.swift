@@ -13,6 +13,8 @@ final class CarPlaySceneDelegate: UIResponder {
     private var carPlayInterfaceController: CPInterfaceController?
     private var defaultAppMode: OAApplicationMode?
     private var isForegroundScene = false
+    /// Starting with iOS 18.5 (CarPlay simulator), a change in behavior was observed: sceneWillEnterForeground is now called before didConnect, whereas previously it was the other way around. To handle this, a variable isWaitingForConfiguration was introduced.
+    private var isWaitingForConfiguration = false
     
     func sceneWillEnterForeground(_ scene: UIScene) {
         NSLog("[CarPlay] CarPlaySceneDelegate sceneWillEnterForeground")
@@ -37,7 +39,10 @@ final class CarPlaySceneDelegate: UIResponder {
     
     private func configureScene() {
         NotificationCenter.default.removeObserver(self)
-        guard let carPlayInterfaceController, let windowToAttach else { return }
+        guard let carPlayInterfaceController, let windowToAttach else {
+            isWaitingForConfiguration = true
+            return
+        }
         guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
         appDelegate.initialize()
         
@@ -137,6 +142,10 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         OsmAndApp.swiftInstance().carPlayActive = true
         windowToAttach = window
         carPlayInterfaceController = interfaceController
+        if isWaitingForConfiguration, isForegroundScene {
+            isWaitingForConfiguration = false
+            configureScene()
+        }
     }
     
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnect interfaceController: CPInterfaceController, from window: CPWindow) {

@@ -64,7 +64,7 @@
 "shared_string_waypoints" = "Points de passage";
 "shared_string_export" = "Exporter";
 "poi_search_near_center" = "La recherche est effectuée à proximité du centre de la carte";
-"import_export" = "Importer / exporter";
+"import_export" = "Importer/exporter";
 "gpx_add_new" = "Ajouter un nouveau fichier";
 "gpx_overwrite" = "Écraser";
 "gpx_cannot_import" = "Impossible d'importer le fichier GPX spécifié";
@@ -403,15 +403,15 @@
 "cannot_add_marker_desc" = "Veuillez retirer au moins une direction et réessayer";
 "record_plugin_description" = "Enregistrez vos trajets ou entraînements et analysez les données : vitesse, dénivelés, altitude, etc. Les traces enregistrées peuvent être archivées, partagées avec des amis, modifiées et retravaillées. \n \nPlus d\'informations sur %@.";
 "right_side_navigation" = "Conduite à droite";
-"si_mi_meters" = "Miles / mètres";
+"si_mi_meters" = "Milles/mètres";
 "nm" = "mn";
-"si_nm" = "Miles nautiques";
+"si_nm" = "Milles nautiques";
 "si_kmh" = "Kilomètres par heure";
-"si_mph" = "Miles par heure";
+"si_mph" = "Milles par heure";
 "si_m_s" = "Mètres par seconde";
 "si_min_km" = "Minutes par kilomètre";
 "si_min_m" = "Minutes par mile";
-"si_nm_h" = "Miles nautiques par heure (nœuds)";
+"si_nm_h" = "Milles nautiques par heure (nœuds)";
 "units_nm_h" = "nœuds";
 "driving_region" = "Région de conduite";
 "driving_region_japan" = "Japon";
@@ -419,9 +419,9 @@
 "driving_region_uk" = "Royaume-Uni et équivalents";
 "driving_region_australia" = "Australie";
 "left_side_navigation" = "Conduite à gauche";
-"si_mi_feet" = "Miles / pieds";
-"si_mi_yard" = "Miles / yards";
-"si_km_m" = "Kilomètres / mètres";
+"si_mi_feet" = "Milles/pieds";
+"si_mi_yard" = "Milles/yards";
+"si_km_m" = "Kilomètres/mètres";
 "no_address_found" = "Impossible de déterminer l\'adresse";
 "looking_up_address" = "Recherche de l\'adresse";
 "traffic_warning_hazard" = "Danger";
@@ -686,12 +686,12 @@
 "route_stops_before" = "%@ arrêts avant";
 "shared_string_control_stop" = "Terminer";
 "logging_interval_navigation_descr" = "Choisissez l'intervalle d'enregistrement de votre trace durant la navigation";
-"monitoring_min_distance" = "Déplacement minimum";
+"monitoring_min_distance" = "Déplacement minimal";
 "logging_min_distance_descr" = "Filtre : distance minimale entre deux points d'enregistrement";
 "monitoring_min_accuracy" = "Précision minimale";
 "logging_min_accuracy_descr" = "Filtre : pas d'enregistrement tant que la précision n'est pas atteinte";
 "monitoring_min_speed" = "Vitesse minimale";
-"auto_split_recording_title" = "Découper automatiquement les enregistrements";
+"auto_split_recording_title" = "Découpage auto après pause";
 "auto_split_gap_descr" = "Débute un nouveau segment après 6 minutes de pause, une nouvelle trace après 2 heures de pause ou un nouveau fichier après une pause plus longue";
 "confirm_every_run" = "Toujours demander";
 "osm_live_routing_descr" = "Utiliser les mises à jour d'OsmAnd Live pour la navigation";
@@ -771,7 +771,7 @@
 "osm_live_payment_renews_quarterly" = "Tous les trimestres";
 "osm_live_payment_renews_annually" = "Tous les ans";
 "osm_live_payment_header" = "Fréquence de règlement :";
-"osm_live_payment_contribute_descr" = "Les dons financent la cartographie OSM / OpenStreetMap.";
+"osm_live_payment_contribute_descr" = "Les dons financent la cartographie OSM.";
 "purchase_dialog_title" = "Sélectionnez un abonnement";
 "get_osmand_live" = "Souscrivez à OsmAnd Live et vous pourrez utiliser toutes les fonctionnalités : Mise à jour quotidienne des cartes (avec un nombre illimité de téléchargements), Extensions, Wikipédia, Guides de voyage et bien plus encore ...";
 "purchase_unlim_title" = "Acheter - %@";
@@ -957,7 +957,7 @@
 "map_magnifier" = "Zoom de carte";
 "quick_action_map_style" = "Style de carte";
 "add_gpx_waypoint" = "Ajouter un point GPX";
-"quick_action_resume_pause_navigation" = "Suspendre / Reprendre le guidage";
+"quick_action_resume_pause_navigation" = "Suspendre/Reprendre le guidage";
 "quick_action_map_underlay" = "Sous-couche";
 "quick_action_add_first_intermediate" = "Ajouter une première étape";
 "mapillary_menu_title_tile_cache" = "Cache des tuiles";
@@ -983,7 +983,7 @@
 "show_more" = "Afficher plus";
 "mapillary_menu_title_pano" = "Afficher uniquement les images à 360°";
 "quick_action_poi_list" = "Liste des POI";
-"quick_action_start_stop_navigation" = "Démarrer / Arrêter le guidage";
+"quick_action_start_stop_navigation" = "Démarrer/Arrêter le guidage";
 "quick_action_map_styles" = "Styles de carte";
 "improve_coverage_mapillary" = "Améliorez la couverture photo avec Mapillary";
 "work_button" = "Travail";
@@ -1695,12 +1695,12 @@
 "points_count" = "Points :";
 
 // Route planning
-"plan_route" = "Ajouter une trace";
+"plan_route" = "Planifier un itinéraire";
 "quick_action_poi_add_descr" = "Appuyer sur ce bouton d’action vous permet d’ajouter rapidement des POI sur la carte avec un type et des étiquettes prédéfinis.";
 "quick_action_contour_lines_descr" = "Bouton affichant ou masquant les courbes de niveau sur la carte.";
 "quick_action_day_night_descr" = "Ce bouton permet de basculer entre les modes Jour et Nuit de la carte.";
-"plan_route_split_after" = "Couper après";
-"plan_route_split_before" = "Couper avant";
+"plan_route_split_after" = "Séparer après";
+"plan_route_split_before" = "Séparer avant";
 "sort_last_modified" = "Récents";
 "hide_compass_ruler" = "Masquer la boussole";
 "show_compass_ruler" = "Afficher la boussole";
@@ -1993,7 +1993,7 @@
 "delete_group_confirm" = "Êtes-vous sûr de vouloir supprimer le groupe «%@» ?";
 "parked_at" = "stationné à";
 "distance_moving" = "Distance corrigée";
-"shared_string_time_span" = "Amplitude horaire";
+"shared_string_time_span" = "Durée";
 "shared_string_start_time" = "Heure de départ";
 "shared_string_end_time" = "Heure d\'arrivée";
 "shared_string_time_moving" = "Durée de déplacement";
@@ -2129,7 +2129,7 @@
 "map_settings_weather_pressure" = "Pression";
 "map_settings_weather_wind" = "Vent";
 "mgrs_format_descr" = "OsmAnd utilise le système de référence MDRS de l\'OTAN dérivé des formats UTM et UPS.";
-"routeInfo_surface_description" = "Fournit des informations sur la surface des routes / chemins.";
+"routeInfo_surface_description" = "Fournit des informations sur la surface des routes/chemins.";
 "routeInfo_smoothness_description" = "Classification des caractéristiques physiques des voies pour les véhicules à roues, notamment la nature et la régularité de leurs surfaces.";
 "route_line_use_map_style_width" = "Utiliser la largeur par défaut du style de carte (%@).";
 "routing_attr_allow_gate_name" = "Autoriser l\'utilisation des portes";
@@ -2489,7 +2489,7 @@
 "track_has_no_needed_data" = "La trace ne contient pas ces données.";
 "select_another_colorization" = "Veuillez sélectionner un autre type de coloration.";
 "backup_conflicts_descr" = "La version la plus récente de ces fichiers est stockée sur le serveur. Vous devez sélectionner une action";
-"recalc_angle_dialog_title" = "Angle minimum entre ma position et mon itinéraire";
+"recalc_angle_dialog_title" = "Angle minimal entre ma position et mon itinéraire";
 "dowload_cloud_version" = "Télécharger la version cloud";
 "shared_string_cross_buy" = "Achat multi-plateformes";
 "recalc_angle_dialog_descr" = "Un segment supplémentaire sera affiché entre ma position et l\'itinéraire initial jusqu\'à ce que l\'itinéraire soit recalculé";
@@ -2544,8 +2544,8 @@
 "co2_mission" = "Émissions de CO₂";
 "position_on_map_bottom" = "En bas";
 "position_on_map" = "Position sur l'écran";
-"si_nm_ft" = "Milles nautiques / pieds";
-"si_nm_mt" = "Milles nautiques / mètres";
+"si_nm_ft" = "Milles nautiques/pieds";
+"si_nm_mt" = "Milles nautiques/mètres";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Seulement si nécessaire";
 "rendering_attr_horse_scale_common_name" = "Commun";
 "routing_attr_prefer_hiking_routes_name" = "Privilégier les itinéraires de randonnée";
@@ -3694,3 +3694,6 @@
 "map_widget_route_information_desc" = "Affiche l'heure d'arrivée estimée, le temps de trajet restant et la distance pour l'itinéraire de navigation actuel.";
 "preview_next_turn" = "Aperçu de la prochaine bifurcation";
 "preview_next_turn_descr" = "Tourne automatiquement la carte pour voir la prochaine bifurcation ou manœuvre";
+"three_years_subscription" = "Abonnement de trois ans";
+"osm_live_payment_renews_3_years" = "Renouvellement tous les trois ans";
+"years_3" = "Trois ans";

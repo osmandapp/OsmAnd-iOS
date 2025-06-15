@@ -3696,3 +3696,7 @@
 "type_of_activity" = "Tip aktivnosti";
 "preview_next_turn" = "Pregled sledećeg skretanja";
 "preview_next_turn_descr" = "Automatski rotira mapu radi pregleda sledećeg skretanja ili manevra";
+"years_3" = "Tri godine";
+"osm_live_payment_renews_3_years" = "Obnavlja se svake tri godine";
+"three_years_subscription" = "Trogodišnja pretplata";
+"three_months_subscription" = "Tromesečna pretplata";

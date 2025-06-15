@@ -2563,3 +2563,6 @@
 "auto_25_chars_route_tr_kr" = "Dekstren kaj veturu ĉe dekstra flanko";
 "unit_of_volume_description" = "Elektata mezurunuo estos aplikita al ĉiuj volumen-rilataj datumoj en la nuna profilo.";
 "sensor_data" = "Datumoj de sentilo";
+"years_3" = "tri jaroj";
+"three_years_subscription" = "Trijara abono";
+"osm_live_payment_renews_3_years" = "Reaboni ĉiutrijare";

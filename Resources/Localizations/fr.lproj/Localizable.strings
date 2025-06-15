@@ -771,7 +771,7 @@
 "osm_live_payment_renews_quarterly" = "Tous les trimestres";
 "osm_live_payment_renews_annually" = "Tous les ans";
 "osm_live_payment_header" = "Fréquence de règlement :";
-"osm_live_payment_contribute_descr" = "Les dons financent la cartographie OSM.";
+"osm_live_payment_contribute_descr" = "Les dons financent la cartographie OpenStreetMap.";
 "purchase_dialog_title" = "Sélectionnez un abonnement";
 "get_osmand_live" = "Souscrivez à OsmAnd Live et vous pourrez utiliser toutes les fonctionnalités : Mise à jour quotidienne des cartes (avec un nombre illimité de téléchargements), Extensions, Wikipédia, Guides de voyage et bien plus encore ...";
 "purchase_unlim_title" = "Acheter - %@";
@@ -810,7 +810,7 @@
 "opening_hours" = "Heures d\'ouverture";
 "poi_select_category" = "Sélectionner une catégorie";
 "map_widget_ruler_control" = "Règle de rayon";
-"shared_string_upload" = "Téléverser";
+"shared_string_upload" = "Envoyer";
 "poi_overlay" = "Surcouche POI";
 "poi_dialog_poi_type" = "Type de POI";
 "import_from_docs" = "Importation à partir de documents";
@@ -833,7 +833,7 @@
 "osm_edit_created_poi" = "POI OSM créé";
 "osm_edit_created_note" = "Note OSM créée";
 "osm_note_create" = "Note OSM créée";
-"upload_osm_note" = "Téléverser la note OSM";
+"upload_osm_note" = "Envoyer la note OSM";
 "osm_edit_close_note" = "Fermer la note OSM";
 "osm_edit_comment_note" = "Commenter la note OSM";
 "osm_note_reopen_title" = "Ré-ouvrir la note";
@@ -845,7 +845,7 @@
 "osm_value" = "Valeur";
 "osm_note_upload_info" = "Vous pouvez téléverser la note de manière anonyme ou en utilisant votre profil OpenStreetMap.";
 "osm_note_upload_immediately" = "Téléverser immédiatement";
-"upload_anonymously" = "Téléverser anonymement";
+"upload_anonymously" = "Envoyer anonymement";
 "osm_note_empty_message" = "Veuillez préciser le message pour cette note.";
 "poi_dialog_comment" = "Commentaire";
 "poi_dialog_reopen" = "Ré-ouvrir";
@@ -1393,7 +1393,7 @@
 "quick_action_map_style_action" = "Ajouter un style de carte";
 "mapil_images_nearby" = "Images à proximité";
 "osm_upload_complete" = "Téléversement terminé";
-"local_openstreetmap_uploading" = "Téléversement…";
+"local_openstreetmap_uploading" = "Envoi en cours…";
 "osm_succsessful_uploads" = "Réussi";
 "osm_failed_uploads" = "Échec";
 "sqlite_db_file" = "Fichier SQLiteDB";
@@ -2872,7 +2872,7 @@
 "specify_number_of_dir_indicators_desc" = "Définir le nombre d\'indications de direction à afficher.";
 "map_marker_interval_dialog_desc" = "Spécifiez la durée sur laquelle mesurer la vitesse moyenne afin d\'estimer l\'heure d\'arrivée.";
 "shared_string_system_default" = "Par défaut";
-"upload_poi" = "Téléverser les POI";
+"upload_poi" = "Envoyer les POI";
 "shared_string_ear_lobe" = "Lobe d\'oreille";
 "ios_release_4_6" = "• Enregistrez et suivez vos mesures grâce à des capteurs externes, notamment la vitesse, la cadence et la distance du vélo, la fréquence cardiaque et la température.\n• Vous pouvez désormais afficher la carte directement sur votre tableau de bord CarPlay.\n• Ajout d'un thème nocturne pour une expérience visuelle confortable dans des conditions de faible luminosité\n• Découvrez les guides de voyage de « Wikivoyage »\n• Amélioration des boîtes de dialogue pour l'ajout de notes et le téléchargement de notes et de POI sur OpenStreetMap\n• Restauration facile des paramètres de l'extension aux valeurs par défaut de l'installation grâce à une nouvelle option\n• Ajout d'une option « Orientation de l'écran » pour définir votre orientation préférée sans commutation automatique\n• Ajout d'un bouton séparé pour basculer en mode 3D directement sur l'écran CarPlay\n• Des informations sur l'altitude minimale et maximale ont été ajoutées aux itinéraires de navigation, en plus des informations sur les montées et les descentes.\n• Amélioration de la coloration des pistes en mode Pente avec un nouveau gradient symétrique\n• Les dossiers favoris stockent désormais l'apparence par défaut qui est appliquée automatiquement à chaque point ajouté.\n• Correction de la non-concordance du point central de la « Règle de rayon » avec le centre de la carte\n• Ajout d'un bouton « Lire l'article » dans le menu contextuel des POI de Wikipédia\n• Correction d'un problème avec l'importation d'un fichier GPX dans les favoris\n• Correction d'un problème avec l'événement du calendrier pour la position de parking\n• Correction d'un problème lors de la suppression d'une couleur de la palette\n";
 "wheel_circumference" = "Circonférence de la roue";

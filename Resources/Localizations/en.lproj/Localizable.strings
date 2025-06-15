@@ -22,6 +22,7 @@
 "years_2_4" = "Years";
 "years_5" = "Years";
 "months_3" = "Three months";
+"years_3" = "Three years";
 
 "price_free" = "Free";
 
@@ -2681,6 +2682,7 @@
 "osm_live_payment_renews_monthly" = "Renews monthly";
 "osm_live_payment_renews_quarterly" = "Renews quarterly";
 "osm_live_payment_renews_annually" = "Renews annually";
+"osm_live_payment_renews_3_years" = "Renews every three years";
 "default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Payment interval:";
 "osm_live_payment_contribute_descr" = "Donations help fund OSM cartography.";
@@ -3310,6 +3312,8 @@
 "monthly_subscription" = "Monthly subscription";
 "annual_subscription" = "Annual subscription";
 "quarterly_subscription" = "Quarterly subscription";
+"three_months_subscription" = "Three months subscription";
+"three_years_subscription" = "Three years subscription";
 
 "option_available_only_by_subscription" = "Available in subscription plans";
 "osm_live_subscriptions" = "Subscriptions";

@@ -72,6 +72,7 @@ final class OBDTextWidget: OASimpleWidget {
             cacheSubTextData = subtext
         }
         
+        updateWidgetName()
         return false
     }
     
@@ -192,8 +193,6 @@ final class OBDTextWidget: OASimpleWidget {
         } else {
             widgetComputer?.averageTimeSeconds = Int32(newTimeSeconds)
         }
-        
-        updateWidgetName()
     }
     
     func supportsAverageMode() -> Bool {

@@ -10,8 +10,13 @@
 #import "OAClickableWayHelper+cpp.h"
 #import "OARenderedObject.h"
 #import "OAClickableWay.h"
+#import "QuadRect.h"
+#import "OAAppVersion.h"
+#import "OAClickableWayMenuProvider.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Data/ObfMapObject.h>
+#include <OsmAndCore/Data/BinaryMapObject.h>
 
 @implementation OAClickableWayHelper
 {
@@ -19,8 +24,7 @@
     NSDictionary<NSString *, NSString *> *_forbiddenTags;
     NSSet<NSString *> *_requiredTagsAny;
     NSDictionary<NSString *, NSString *> *_gpxColors;
-    
-    id _activator;
+    OAClickableWayMenuProvider *_activator;
 }
 
 - (instancetype) init
@@ -71,13 +75,16 @@
         // others are default (red)
     };
     
+    
+    
+    _activator = [[OAClickableWayMenuProvider alloc] init:nil openAsGpxFile:nil];
+    
     //TODO: implement
     //this.activator = new ClickableWayMenuProvider(view, this::readHeightData, this::openAsGpxFile);
-    
-    _activator = nil;
+
 }
 
-- (id) getContextMenuProvider
+- (OAClickableWayMenuProvider *) getContextMenuProvider
 {
     return _activator;
 }
@@ -92,11 +99,114 @@
     return obfMapObject->points31.size() > 1 && [self isClickableWayTags:tags]; // v2 with prefetched tags
 }
 
+- (OAClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon renderedObject:(OARenderedObject *)renderedObject
+{
+    uint64_t osmId = [ObfConstants getOsmId:renderedObject.obfId >> AMENITY_ID_RIGHT_SHIFT];
+    MutableOrderedDictionary<NSString *,NSString *> *tags = renderedObject.tags;
+    NSString *name = renderedObject.name;
+    NSMutableArray<NSNumber *> *xPoints = renderedObject.x;
+    NSMutableArray<NSNumber *> *yPoints = renderedObject.y;
+    OASKQuadRect *bbox = [self calcSearchQuadRect:xPoints yPoints:yPoints];
+    return [self loadClickableWay:selectedLatLon bbox:bbox xPoints:xPoints yPoints:yPoints osmId:osmId name:name tags:tags];
+}
+
 - (OAClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
 {
-    // TODO: Implement
-    
+    if (const auto binaryMapObject = std::dynamic_pointer_cast<const OsmAnd::BinaryMapObject>(obfMapObject))
+    {
+        uint64_t obfId = binaryMapObject->id.id;
+        uint64_t osmId = [ObfConstants getOsmId:obfId >> AMENITY_ID_RIGHT_SHIFT];
+        NSString *name = obfMapObject->getCaptionInNativeLanguage().toNSString();
+        const auto points31 = obfMapObject->points31;
+        NSMutableArray<NSNumber *> *xPoints = [NSMutableArray new];
+        NSMutableArray<NSNumber *> *yPoints = [NSMutableArray new];
+        
+        for (int i = 0; i < points31.size(); i++)
+        {
+            [xPoints addObject:@(points31[i].x)];
+            [yPoints addObject:@(points31[i].y)];
+        }
+        OASKQuadRect *bbox = [self calcSearchQuadRect:xPoints yPoints:yPoints];
+        return [self loadClickableWay:selectedLatLon bbox:bbox xPoints:xPoints yPoints:yPoints osmId:osmId name:name tags:tags];
+    }
     return nil;
+}
+
+- (OAClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon bbox:(OASKQuadRect *)bbox xPoints:(NSMutableArray<NSNumber *> *)xPoints yPoints:(NSMutableArray<NSNumber *> *)yPoints osmId:(uint64_t)osmId name:(NSString *)name tags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
+{
+    
+    OASGpxFile *gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    OASRouteActivityHelper *helper = OASRouteActivityHelper.shared;
+    
+    for (NSString *clickableTag in _clickableTags)
+    {
+        if (tags[clickableTag])
+        {
+            OASRouteActivity *activity = [helper findActivityByTagTag:clickableTag];
+            if (activity)
+            {
+                NSString *activityType = activity.id;
+                [gpxFile.metadata getExtensionsToWrite][[OASGpxUtilities.shared ACTIVITY_TYPE], activityType];
+                break;
+            }
+        }
+    }
+    
+    [[gpxFile.metadata getExtensionsToWrite] addEntriesFromDictionary:tags];
+    [gpxFile.metadata getExtensionsToWrite][@"way_id"] = [NSString stringWithFormat:@"%d", osmId];
+    
+    OASTrkSegment *trkSegment = [[OASTrkSegment alloc] init];
+    for (int i = 0; i < min(xPoints.count, yPoints.count); i++)
+    {
+        OASWptPt *wpt = [[OASWptPt alloc] init];
+        [wpt setLat:[OASKMapUtils.shared get31LatitudeYTileY:[yPoints[i] doubleValue]]];
+        [wpt setLon:[OASKMapUtils.shared get31LongitudeXTileX:[xPoints[i] doubleValue]]];
+        [trkSegment.points addObject:wpt];
+    }
+    
+    OASTrack *track = [[OASTrack alloc] init];
+    [track.segments addObject:trkSegment];
+    NSMutableArray<OASTrack *> *tracks = [NSMutableArray arrayWithObject:track];
+    [gpxFile setTracks:tracks]; // immutable
+    
+    NSString *color = [self getGpxColorByTags:tags];
+    if (color)
+    {
+        [gpxFile setColorColor_:color];
+    }
+   
+    return [[OAClickableWay alloc] initWithGpxFile:gpxFile osmId:osmId name:name selectedLatLon:selectedLatLon bbox:bbox];
+}
+
+- (NSString *) getGpxColorByTags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
+{
+    for (NSString *key in _clickableTags)
+    {
+        NSString *value = tags[key];
+        if (value)
+        {
+            for (NSString *matchColorKey in _gpxColors)
+            {
+                if ([value containsString:matchColorKey])
+                {
+                    return _gpxColors[matchColorKey];
+                }
+            }
+        }
+    }
+    return nil;
+}
+
+- (OASKQuadRect *) calcSearchQuadRect:(NSMutableArray<NSNumber *> *)xPoints yPoints:(NSMutableArray<NSNumber *> *)yPoints
+{
+    OASKQuadRect *bbox = [[OASKQuadRect alloc] init];
+    for (int i = 0; i < min(xPoints.count, yPoints.count); i++)
+    {
+        double x = [xPoints[i] doubleValue];
+        double y = [yPoints[i] doubleValue];
+        [bbox expandLeft:x top:y right:x bottom:y];
+    }
+    return bbox;
 }
 
 - (BOOL) isClickableWayTags:(NSDictionary<NSString *, NSString *> *)tags

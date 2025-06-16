@@ -8,12 +8,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OASKQuadRect, OASGpxFile, OASelectedGpxPoint;
 
 @interface OAClickableWay : NSObject
 
-@property (nonatomic) long long osmId;
+- (instancetype)initWithGpxFile:(OASGpxFile * _Nonnull)gpxFile osmId:(uint64_t)osmId name:(NSString * _Nullable)name selectedLatLon:(CLLocation * _Nonnull)selectedLatLon bbox:(OASKQuadRect * _Nonnull)bbox;
 
-- (NSString *)getGpxFileName;
+- (uint64_t) getOsmId;
+- (OASKQuadRect *) getBbox;
+- (OASGpxFile *) getGpxFile;
+- (OASelectedGpxPoint *) getSelectedGpxPoint;
+- (NSString *) getGpxFileName;
+- (NSString *) getWayName;
+- (NSString *) toString;
 
 @end
 

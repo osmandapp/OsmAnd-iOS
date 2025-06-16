@@ -224,6 +224,7 @@
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
 		3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */; };
+		320379142DF736E900B1780C /* OASelectedGpxFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320379132DF736E700B1780C /* OASelectedGpxFile.mm */; };
 		320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */; };
 		32048FC52A25E70200AA4B71 /* BaseOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */; };
 		32048FC72A26084000AA4B71 /* OsmOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */; };
@@ -385,6 +386,8 @@
 		325D713D2A1B71EB00F81ECE /* ic_custom_arrow_direction@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325D71392A1B71EA00F81ECE /* ic_custom_arrow_direction@3x.png */; };
 		325D713E2A1B71EB00F81ECE /* ic_custom_marker_remove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325D713A2A1B71EA00F81ECE /* ic_custom_marker_remove@2x.png */; };
 		325D713F2A1B71EB00F81ECE /* ic_custom_arrow_direction@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325D713B2A1B71EA00F81ECE /* ic_custom_arrow_direction@2x.png */; };
+		325DAE6A2DFFF17F002CB022 /* OABaseLoadAsyncTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325DAE692DFFF17F002CB022 /* OABaseLoadAsyncTask.mm */; };
+		325DAE6B2DFFF17F002CB022 /* OAAsyncTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325DAE672DFFF17F002CB022 /* OAAsyncTask.mm */; };
 		3266C96326B150D6007A9187 /* ic_custom_openplacereview_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3266C95F26B150D5007A9187 /* ic_custom_openplacereview_logo@3x.png */; };
 		3266C96426B150D6007A9187 /* ic_custom_openplacereview_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3266C96026B150D5007A9187 /* ic_custom_openplacereview_logo@2x.png */; };
 		32672A0A2AAF3D0200D46608 /* GpxTravelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32672A092AAF3D0100D46608 /* GpxTravelCell.swift */; };
@@ -395,6 +398,7 @@
 		32725F3B2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32725F3A2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm */; };
 		32725F3E2B7E7B1500995806 /* OAZoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 32725F3D2B7E7B1500995806 /* OAZoom.m */; };
 		3274BDAD2AB486FD00AC5E34 /* OAMapAlgorithms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */; };
+		3279D5132DF99EAA007A5F6E /* OAClickableWayMenuProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3279D5122DF99EA9007A5F6E /* OAClickableWayMenuProvider.mm */; };
 		327A19862A98D57800F4A027 /* TravelJsonParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327A19852A98D57800F4A027 /* TravelJsonParser.swift */; };
 		327B4AB0288F310700AF71AF /* OAFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 327B4AAF288F310700AF71AF /* OAFavoriteViewController.mm */; };
 		327B4AB4288F50CC00AF71AF /* OAFavoriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 327B4AB3288F508E00AF71AF /* OAFavoriteViewController.xib */; };
@@ -454,6 +458,7 @@
 		32B50ADE26BBE3C7002E6C92 /* ic_custom_map_location_follow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50AD626BBE3C6002E6C92 /* ic_custom_map_location_follow@2x.png */; };
 		32B50ADF26BBE3C7002E6C92 /* ic_custom_map_location_follow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50AD726BBE3C6002E6C92 /* ic_custom_map_location_follow@3x.png */; };
 		32B50AE026BBE3C7002E6C92 /* ic_custom_map_location_free@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50AD826BBE3C7002E6C92 /* ic_custom_map_location_free@3x.png */; };
+		32B7BF6B2DFC2FDB006A4002 /* OAClickableWayAsyncTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32B7BF6A2DFC2FD9006A4002 /* OAClickableWayAsyncTask.mm */; };
 		32B7DC372C761D7400E5E8BD /* OAColorsPaletteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32B7DC362C761D7300E5E8BD /* OAColorsPaletteCell.m */; };
 		32B7DC382C762BCC00E5E8BD /* OAColorsPaletteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32B7DC342C761D1000E5E8BD /* OAColorsPaletteCell.xib */; };
 		32BBDC9B2C0497CF0090D37E /* RouteInfoListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */; };
@@ -3545,6 +3550,8 @@
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
 		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
 		3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsCollectionViewController.swift; sourceTree = "<group>"; };
+		320379122DF736D100B1780C /* OASelectedGpxFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASelectedGpxFile.h; sourceTree = "<group>"; };
+		320379132DF736E700B1780C /* OASelectedGpxFile.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASelectedGpxFile.mm; sourceTree = "<group>"; };
 		320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerWidgetSettingsViewController.swift; sourceTree = "<group>"; };
 		32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOAuthHelper.swift; sourceTree = "<group>"; };
 		32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthHelper.swift; sourceTree = "<group>"; };
@@ -3763,6 +3770,10 @@
 		325D71392A1B71EA00F81ECE /* ic_custom_arrow_direction@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_direction@3x.png"; path = "Resources/Icons/ic_custom_arrow_direction@3x.png"; sourceTree = "<group>"; };
 		325D713A2A1B71EA00F81ECE /* ic_custom_marker_remove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_marker_remove@2x.png"; path = "Resources/Icons/ic_custom_marker_remove@2x.png"; sourceTree = "<group>"; };
 		325D713B2A1B71EA00F81ECE /* ic_custom_arrow_direction@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_direction@2x.png"; path = "Resources/Icons/ic_custom_arrow_direction@2x.png"; sourceTree = "<group>"; };
+		325DAE662DFFF17F002CB022 /* OAAsyncTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAsyncTask.h; sourceTree = "<group>"; };
+		325DAE672DFFF17F002CB022 /* OAAsyncTask.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAsyncTask.mm; sourceTree = "<group>"; };
+		325DAE682DFFF17F002CB022 /* OABaseLoadAsyncTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseLoadAsyncTask.h; sourceTree = "<group>"; };
+		325DAE692DFFF17F002CB022 /* OABaseLoadAsyncTask.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseLoadAsyncTask.mm; sourceTree = "<group>"; };
 		3266C95F26B150D5007A9187 /* ic_custom_openplacereview_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_openplacereview_logo@3x.png"; path = "Resources/Icons/ic_custom_openplacereview_logo@3x.png"; sourceTree = "<group>"; };
 		3266C96026B150D5007A9187 /* ic_custom_openplacereview_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_openplacereview_logo@2x.png"; path = "Resources/Icons/ic_custom_openplacereview_logo@2x.png"; sourceTree = "<group>"; };
 		32672A082AAF374600D46608 /* GpxTravelCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GpxTravelCell.xib; sourceTree = "<group>"; };
@@ -3799,6 +3810,8 @@
 		327555322976F16E0049BC84 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Localizable.strings; sourceTree = "<group>"; };
 		327555332976F3170049BC84 /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uz-Cyrl"; path = "uz-Cyrl.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		327555342976F4E00049BC84 /* ars */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ars; path = ars.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3279D5112DF99EA3007A5F6E /* OAClickableWayMenuProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAClickableWayMenuProvider.h; sourceTree = "<group>"; };
+		3279D5122DF99EA9007A5F6E /* OAClickableWayMenuProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAClickableWayMenuProvider.mm; sourceTree = "<group>"; };
 		327A19852A98D57800F4A027 /* TravelJsonParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelJsonParser.swift; sourceTree = "<group>"; };
 		327B4AAE288F30EC00AF71AF /* OAFavoriteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoriteViewController.h; sourceTree = "<group>"; };
 		327B4AAF288F310700AF71AF /* OAFavoriteViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteViewController.mm; sourceTree = "<group>"; };
@@ -3884,6 +3897,8 @@
 		32B50AD626BBE3C6002E6C92 /* ic_custom_map_location_follow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_location_follow@2x.png"; path = "Resources/Icons/ic_custom_map_location_follow@2x.png"; sourceTree = "<group>"; };
 		32B50AD726BBE3C6002E6C92 /* ic_custom_map_location_follow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_location_follow@3x.png"; path = "Resources/Icons/ic_custom_map_location_follow@3x.png"; sourceTree = "<group>"; };
 		32B50AD826BBE3C7002E6C92 /* ic_custom_map_location_free@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_location_free@3x.png"; path = "Resources/Icons/ic_custom_map_location_free@3x.png"; sourceTree = "<group>"; };
+		32B7BF692DFC2FD0006A4002 /* OAClickableWayAsyncTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAClickableWayAsyncTask.h; sourceTree = "<group>"; };
+		32B7BF6A2DFC2FD9006A4002 /* OAClickableWayAsyncTask.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAClickableWayAsyncTask.mm; sourceTree = "<group>"; };
 		32B7DC342C761D1000E5E8BD /* OAColorsPaletteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAColorsPaletteCell.xib; sourceTree = "<group>"; };
 		32B7DC352C761D6B00E5E8BD /* OAColorsPaletteCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorsPaletteCell.h; sourceTree = "<group>"; };
 		32B7DC362C761D7300E5E8BD /* OAColorsPaletteCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorsPaletteCell.m; sourceTree = "<group>"; };
@@ -8042,6 +8057,17 @@
 			path = TravelGuides;
 			sourceTree = "<group>";
 		};
+		325DAE652DFFF07E002CB022 /* AsyncTask */ = {
+			isa = PBXGroup;
+			children = (
+				325DAE662DFFF17F002CB022 /* OAAsyncTask.h */,
+				325DAE672DFFF17F002CB022 /* OAAsyncTask.mm */,
+				325DAE682DFFF17F002CB022 /* OABaseLoadAsyncTask.h */,
+				325DAE692DFFF17F002CB022 /* OABaseLoadAsyncTask.mm */,
+			);
+			path = AsyncTask;
+			sourceTree = "<group>";
+		};
 		327D68A62A8F9BD30076D1E0 /* explore */ = {
 			isa = PBXGroup;
 			children = (
@@ -8126,15 +8152,21 @@
 			children = (
 				32C1C4E12DD4C4F200A053D4 /* OAClickableWay.h */,
 				32C1C4E22DD4C4F200A053D4 /* OAClickableWay.mm */,
+				32B7BF692DFC2FD0006A4002 /* OAClickableWayAsyncTask.h */,
+				32B7BF6A2DFC2FD9006A4002 /* OAClickableWayAsyncTask.mm */,
 				32C1C4E32DD4C4F200A053D4 /* OAClickableWayHelper.h */,
 				32C1C4E42DD4C4F200A053D4 /* OAClickableWayHelper.mm */,
 				32C1C4E52DD4C4F200A053D4 /* OAClickableWayHelper+cpp.h */,
+				3279D5112DF99EA3007A5F6E /* OAClickableWayMenuProvider.h */,
+				3279D5122DF99EA9007A5F6E /* OAClickableWayMenuProvider.mm */,
 				32C1C4E62DD4C4F200A053D4 /* OAMapSelectionHelper.h */,
 				32C1C4E72DD4C4F200A053D4 /* OAMapSelectionHelper.mm */,
 				32C1C4E82DD4C4F200A053D4 /* OAMapSelectionResult.h */,
 				32C1C4E92DD4C4F200A053D4 /* OAMapSelectionResult.mm */,
 				32C1C4EA2DD4C4F200A053D4 /* OAPlaceDetailsObject.h */,
 				32C1C4EB2DD4C4F200A053D4 /* OAPlaceDetailsObject.mm */,
+				320379122DF736D100B1780C /* OASelectedGpxFile.h */,
+				320379132DF736E700B1780C /* OASelectedGpxFile.mm */,
 				DA5A7F0C26C563A400F274C7 /* OASelectedGPXHelper.h */,
 				DA5A7F1426C563A400F274C7 /* OASelectedGPXHelper.mm */,
 				32F6B4292DEDD703002DBCEE /* OASelectedGpxPoint.h */,
@@ -13256,36 +13288,50 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */,
-				2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */,
-				FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */,
-				FA45851C2C946046003A5AD7 /* SharedLibHelpers */,
-				32AB48672C9C50A1005EF1D4 /* DownloadingListHelper */,
-				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
-				FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */,
-				46ED6C3C2B333A4600A5555F /* Extensions */,
-				FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */,
+				325DAE652DFFF07E002CB022 /* AsyncTask */,
+				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
+				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
+				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
+				46DB0A622C5CEA8F001356D5 /* ConcurrentArray.swift */,
+				0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */,
+				466114012C9DB6E00013095B /* DayNightMode.swift */,
+				46A35EF42C53F9510089B21C /* DirectoryObserver.swift */,
+				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
+				32AB48672C9C50A1005EF1D4 /* DownloadingListHelper */,
 				46DC808329B8884F00C477C3 /* Enums */,
+				46ED6C3C2B333A4600A5555F /* Extensions */,
+				C5484DC62CD21F03004C5F27 /* FormattedValue.swift */,
+				C5B2AA602DB00700007FB854 /* GridFormat.swift */,
+				32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */,
 				DA5A80AC26C563A600F274C7 /* kml2gpx.xslt */,
+				FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */,
+				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
+				FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */,
+				32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */,
 				DA5A80B326C563A600F274C7 /* NSData+CRC32.h */,
 				DA5A80DD26C563A600F274C7 /* NSData+CRC32.m */,
 				DA5A80E026C563A600F274C7 /* OAAppSettings.h */,
 				DA5A80B226C563A600F274C7 /* OAAppSettings.m */,
+				2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */,
+				2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */,
+				32725F392B7E6B1300995806 /* OAAutoZoomBySpeedHelper.h */,
+				32725F3A2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm */,
 				DA5A80C126C563A600F274C7 /* OAAvoidRoadInfo.h */,
 				DA5A809126C563A500F274C7 /* OAAvoidRoadInfo.m */,
 				DA5A80D726C563A600F274C7 /* OAAvoidSpecificRoads.h */,
 				DA5A80B426C563A600F274C7 /* OAAvoidSpecificRoads.mm */,
+				322C59782C90836C0087AB2F /* OAColorPickerViewController.swift */,
 				DA346372287C157300C18214 /* OAConcurrentCollections.h */,
 				DA346373287C157300C18214 /* OAConcurrentCollections.m */,
+				C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */,
+				C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */,
 				DA5A80BC26C563A600F274C7 /* OACurrentPositionHelper.h */,
 				DA5A80BA26C563A600F274C7 /* OACurrentPositionHelper.mm */,
 				DA5A809326C563A500F274C7 /* OACustomRegion.h */,
 				DA5A80AE26C563A600F274C7 /* OACustomRegion.mm */,
 				DA5A809726C563A500F274C7 /* OADayNightHelper.h */,
 				DA5A80BE26C563A600F274C7 /* OADayNightHelper.m */,
-				C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */,
-				C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */,
 				DA5A80BB26C563A600F274C7 /* OADebugSettings.h */,
 				DA5A80CC26C563A600F274C7 /* OADebugSettings.mm */,
 				DA5A80D326C563A600F274C7 /* OADefaultFavorite.h */,
@@ -13300,6 +13346,8 @@
 				DA5A80B026C563A600F274C7 /* OAFavoritesHelper.mm */,
 				DA5A80DC26C563A600F274C7 /* OAFileNameTranslationHelper.h */,
 				DA5A80B526C563A600F274C7 /* OAFileNameTranslationHelper.m */,
+				32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */,
+				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
 				DA5A809626C563A500F274C7 /* OAGPXUIHelper.h */,
 				DA5A80D926C563A600F274C7 /* OAGPXUIHelper.mm */,
 				DA5A80A126C563A500F274C7 /* OAJsonHelper.h */,
@@ -13308,13 +13356,13 @@
 				DA5A80E326C563A600F274C7 /* OAKml2Gpx.m */,
 				DA5A80B726C563A600F274C7 /* OALocationParser.h */,
 				DA5A809826C563A500F274C7 /* OALocationParser.mm */,
-				DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */,
-				DA5A80D826C563A600F274C7 /* OAMapTileDownloader.mm */,
 				3274BDAB2AB486EF00AC5E34 /* OAMapAlgorithms.h */,
 				3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */,
+				DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */,
+				DA5A80D826C563A600F274C7 /* OAMapTileDownloader.mm */,
 				DA5A80AB26C563A600F274C7 /* OAMapUtils.h */,
-				32190FD92D490B460006E91C /* OAMapUtils+cpp.h */,
 				DA5A80E126C563A600F274C7 /* OAMapUtils.mm */,
+				32190FD92D490B460006E91C /* OAMapUtils+cpp.h */,
 				DA5A80D526C563A600F274C7 /* OANativeUtilities.h */,
 				DA5A80C626C563A600F274C7 /* OANativeUtilities.mm */,
 				DA5A80A426C563A500F274C7 /* OANetworkUtilities.h */,
@@ -13323,10 +13371,10 @@
 				DA5A809B26C563A500F274C7 /* OAOcbfHelper.m */,
 				DAD5B4CD288E80EC009CF611 /* OAOperationLog.h */,
 				DAD5B4CE288E80EC009CF611 /* OAOperationLog.m */,
+				05AB445E2C9062F500BF4F05 /* OAOsmAndContextImpl.h */,
+				05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.mm */,
 				323084D726E933EE00D6FC67 /* OAOsmAndFormatter.h */,
 				323084D826E933FE00D6FC67 /* OAOsmAndFormatter.mm */,
-				C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */,
-				C5484DC62CD21F03004C5F27 /* FormattedValue.swift */,
 				DA5A80AD26C563A600F274C7 /* OAOsmAndLiveHelper.h */,
 				DA5A80A326C563A500F274C7 /* OAOsmAndLiveHelper.mm */,
 				DA5A80B926C563A600F274C7 /* OAResourcesInstaller.h */,
@@ -13345,6 +13393,8 @@
 				CA4ED342B2A4E423D65F9592 /* OAShareMenuActivity.mm */,
 				DA5A809426C563A500F274C7 /* OASuggestedDownloadsItem.h */,
 				DA5A80C026C563A600F274C7 /* OASuggestedDownloadsItem.m */,
+				05898FB02B511E0500E64B58 /* OASvgHelper.h */,
+				05898FB12B511E0500E64B58 /* OASvgHelper.mm */,
 				DAB9AECB28E192D300AD01CE /* OAURLSessionProgress.h */,
 				DAB9AECC28E192D300AD01CE /* OAURLSessionProgress.m */,
 				32AD5D582A2F10EA00A51B60 /* OAuthHelper */,
@@ -13352,46 +13402,29 @@
 				DA5A809226C563A500F274C7 /* OAUtilities.m */,
 				DA5A809A26C563A500F274C7 /* OAWaypointUIHelper.h */,
 				DA5A809926C563A500F274C7 /* OAWaypointUIHelper.mm */,
+				32ABB64C2AEBC02100491E99 /* OAWebImagesCacheHelper.h */,
+				32ABB64D2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm */,
 				DA5A809F26C563A500F274C7 /* OAWikiArticleHelper.h */,
-				326B1B5F2AA5E7DF007954BB /* OAWikiArticleHelper+cpp.h */,
 				DA5A80D626C563A600F274C7 /* OAWikiArticleHelper.mm */,
+				326B1B5F2AA5E7DF007954BB /* OAWikiArticleHelper+cpp.h */,
 				DA5A80A726C563A600F274C7 /* OAWikiImageHelper.h */,
 				DA5A80C426C563A600F274C7 /* OAWikiImageHelper.mm */,
 				DA5A80DF26C563A600F274C7 /* OAXmlImportHandler.h */,
 				DA5A80C826C563A600F274C7 /* OAXmlImportHandler.mm */,
+				32725F3C2B7E7B0300995806 /* OAZoom.h */,
+				32725F3D2B7E7B1500995806 /* OAZoom.m */,
 				DA5A80A226C563A500F274C7 /* OpenLocationCode.swift */,
 				DA5A80DA26C563A600F274C7 /* OpenLocationCodeObjCBridge.swift */,
 				DA5A80CF26C563A600F274C7 /* OrderedDictionary.h */,
 				DA5A809E26C563A500F274C7 /* OrderedDictionary.m */,
+				C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */,
+				46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */,
+				FA45851C2C946046003A5AD7 /* SharedLibHelpers */,
 				DA5A809026C563A500F274C7 /* SunriseSunset.h */,
 				DA5A80C326C563A600F274C7 /* SunriseSunset.m */,
 				DA5A80C526C563A600F274C7 /* UIColor+RGB.swift */,
+				FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */,
 				460767112A49F86400AF63F2 /* WikiAlgorithms.swift */,
-				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
-				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
-				32ABB64C2AEBC02100491E99 /* OAWebImagesCacheHelper.h */,
-				32ABB64D2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm */,
-				32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */,
-				46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */,
-				05898FB02B511E0500E64B58 /* OASvgHelper.h */,
-				05898FB12B511E0500E64B58 /* OASvgHelper.mm */,
-				32725F392B7E6B1300995806 /* OAAutoZoomBySpeedHelper.h */,
-				32725F3A2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm */,
-				32725F3C2B7E7B0300995806 /* OAZoom.h */,
-				32725F3D2B7E7B1500995806 /* OAZoom.m */,
-				32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */,
-				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
-				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
-				0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */,
-				32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */,
-				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
-				46A35EF42C53F9510089B21C /* DirectoryObserver.swift */,
-				46DB0A622C5CEA8F001356D5 /* ConcurrentArray.swift */,
-				322C59782C90836C0087AB2F /* OAColorPickerViewController.swift */,
-				05AB445E2C9062F500BF4F05 /* OAOsmAndContextImpl.h */,
-				05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.mm */,
-				466114012C9DB6E00013095B /* DayNightMode.swift */,
-				C5B2AA602DB00700007FB854 /* GridFormat.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -16725,6 +16758,7 @@
 				46B0CC5A299CEB99003D9F40 /* OABaseButtonsViewController.m in Sources */,
 				DA5A839826C563A800F274C7 /* OAResourcesBaseViewController.mm in Sources */,
 				DA5A823826C563A700F274C7 /* OAGlobalSettingsViewController.mm in Sources */,
+				32B7BF6B2DFC2FDB006A4002 /* OAClickableWayAsyncTask.mm in Sources */,
 				46C841452C32F3F400E284B0 /* OAParkingAction.m in Sources */,
 				DA5A81B726C563A700F274C7 /* OAPhrasesParser.m in Sources */,
 				DA5A814526C563A700F274C7 /* OAOsmEditsDBHelper.m in Sources */,
@@ -16795,6 +16829,8 @@
 				DA5A843B26C563A800F274C7 /* OAParkingViewController.mm in Sources */,
 				0AD1F3A626CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm in Sources */,
 				46D38A9429C38E10000AAE0C /* OARoutingProfilesHolder.m in Sources */,
+				325DAE6A2DFFF17F002CB022 /* OABaseLoadAsyncTask.mm in Sources */,
+				325DAE6B2DFFF17F002CB022 /* OAAsyncTask.mm in Sources */,
 				325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */,
 				DA5A844726C563A900F274C7 /* OAMapHudViewController.mm in Sources */,
 				DA5A816126C563A700F274C7 /* OAMapillaryPlugin.mm in Sources */,
@@ -17151,6 +17187,7 @@
 				DA5A849926C563A900F274C7 /* OAInfoBottomView.mm in Sources */,
 				DA5A83BC26C563A800F274C7 /* OAQuickActionListViewController.m in Sources */,
 				DA8DC3A32A0E4EBB006C116B /* OABearingWidget.m in Sources */,
+				3279D5132DF99EAA007A5F6E /* OAClickableWayMenuProvider.mm in Sources */,
 				DA5A836426C563A800F274C7 /* OACompoundViewController.m in Sources */,
 				3271171D2B9B27340082C2EA /* OATransportStopAggregated.m in Sources */,
 				46F0746F294C8F3400E641E9 /* OAEmissionHelper.mm in Sources */,
@@ -17199,6 +17236,7 @@
 				C57693192D67148400E4F772 /* ChangeTracksAppearanceTask.swift in Sources */,
 				DA5A81DE26C563A700F274C7 /* OAStreet.mm in Sources */,
 				325CFBEB2B5052E000090DF2 /* TracksViewController.swift in Sources */,
+				320379142DF736E900B1780C /* OASelectedGpxFile.mm in Sources */,
 				32DE2BE42B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift in Sources */,
 				FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */,
 				DA5A814426C563A700F274C7 /* OAOsmNotePoint.m in Sources */,

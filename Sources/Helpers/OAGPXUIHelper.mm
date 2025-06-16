@@ -739,6 +739,35 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     [viewController presentViewController:alert animated:YES completion:nil];
 }
 
++ (void) saveAndOpenGpx
+{
+    
+}
+
+//public static void saveAndOpenGpx(@NonNull MapActivity mapActivity,
+//                                  @NonNull File file,
+//                                  @NonNull GpxFile gpxFile,
+//                                  @NonNull WptPt selectedPoint,
+//                                  @Nullable GpxTrackAnalysis analyses,
+//                                  @Nullable RouteKey routeKey,
+//                                  boolean adjustMapPosition) {
+//    SaveGpxHelper.saveGpx(file, gpxFile, errorMessage -> {
+//        if (errorMessage == null) {
+//            OsmandApplication app = mapActivity.getMyApplication();
+//            GpxSelectionParams params = GpxSelectionParams.getDefaultSelectionParams();
+//            SelectedGpxFile selectedGpxFile = app.getSelectedGpxHelper().selectGpxFile(gpxFile, params);
+//            GpxTrackAnalysis trackAnalysis = analyses != null ? analyses : selectedGpxFile.getTrackAnalysis(app);
+//            SelectedGpxPoint selectedGpxPoint = new SelectedGpxPoint(selectedGpxFile, selectedPoint);
+//            Bundle bundle = new Bundle();
+//            bundle.putBoolean(TrackMenuFragment.ADJUST_MAP_POSITION, adjustMapPosition);
+//            TrackMenuFragment.showInstance(mapActivity, selectedGpxFile, selectedGpxPoint,
+//                    trackAnalysis, routeKey, bundle);
+//        } else {
+//            LOG.error(errorMessage);
+//        }
+//    });
+//}
+
 
 #pragma mark - UIDocumentInteractionControllerDelegate
 

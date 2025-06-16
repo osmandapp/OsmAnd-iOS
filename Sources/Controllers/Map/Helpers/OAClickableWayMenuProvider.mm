@@ -1,0 +1,144 @@
+//
+//  OAClickableWayMenuProvider.mm
+//  OsmAnd
+//
+//  Created by Max Kojin on 11/06/25.
+//  Copyright © 2025 OsmAnd. All rights reserved.
+//
+
+#import "OAClickableWayMenuProvider.h"
+#import "OAClickableWay.h"
+#import "OASelectedGpxPoint.h"
+#import "OASelectedMapObject.h"
+#import "OAPointDescription.h"
+#import "OsmAnd_Maps-Swift.h"
+
+@implementation OAClickableWayMenuProvider
+{
+    id _readHeightData;
+    id _openAsGpxFile;
+}
+
+- (instancetype)init:(id)readHeightData openAsGpxFile:(id)openAsGpxFile
+{
+    self = [super init];
+    if (self) {
+        _readHeightData = readHeightData;
+        _openAsGpxFile = openAsGpxFile;
+        
+        //TODO: implement correct datatypes
+    }
+    return self;
+}
+
+
+#pragma mark - OAContextMenuProvider
+
+- (BOOL) showMenuAction:(id)object
+{
+    /*
+    OASelectedMapObject *selectedMapObject = (OASelectedMapObject *)object;
+    if ([[selectedMapObject object] isKindOfClass:OAClickableWay.class])
+    {
+        OAClickableWay *clickableWay = (OAClickableWay *)[selectedMapObject object];
+        
+        //TODO: implement
+        
+        //(new ClickableWayAsyncTask(mapActivity, that, readHeightData, openAsGpxFile))
+        //    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        
+        return YES;
+    }
+     */
+    
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OAClickableWay.class])
+    {
+        OAClickableWay *clickableWay = (OAClickableWay *)obj;
+        OASWptPt *wpt = [[clickableWay getSelectedGpxPoint] getSelectedPoint];
+        return [[CLLocation alloc] initWithLatitude:[wpt getLatitude] longitude:[wpt getLongitude]];
+    }
+    return  nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OAClickableWay.class])
+    {
+        OAClickableWay *clickableWay = (OAClickableWay *)obj;
+        NSString *name = [clickableWay getWayName];
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX name:name];
+    }
+    return nil;
+}
+
+- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    
+    //TODO: delete
+    BOOL stop = YES;
+}
+
+- (OATargetPoint *) getTargetPoint:(id)obj
+{
+    if ([obj isKindOfClass:[OAClickableWay class]])
+    {
+        OAClickableWay *clickableWay = (OAClickableWay *)obj;
+        OASGpxFile *gpxFile = [clickableWay getGpxFile];
+//        OASGpxTrackAnalysis *analysis [gpxFile getAnalysisFileTimestamp:0];
+//        NSString *safeFileName = [clickableWay getGpxFile];
+        
+        
+        
+        //[gpxFile recalculateProcessPoint]; // ??
+        
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.type = OATargetGPX;
+        
+//        targetPoint.type = OATargetNetworkGPX; // ???
+        
+        targetPoint.targetObj = gpxFile;
+
+        targetPoint.icon = [UIImage imageNamed:@"ic_custom_trip"];
+        targetPoint.title = [clickableWay getWayName];
+
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
+        targetPoint.values = @{ @"opened_from_map": @YES };
+
+        return targetPoint;
+//
+//        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+//        targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
+//        targetPoint.title = destination.desc;
+//        
+//        targetPoint.icon = [UIImage imageNamed:destination.markerResourceName];
+//        targetPoint.type = OATargetDestination;
+//        
+//        targetPoint.targetObj = destination;
+//        
+//        targetPoint.sortIndex = (NSInteger)targetPoint.type;
+//        return targetPoint;
+    }
+    return nil;
+}
+
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+{
+    return nil;
+}
+
+@end

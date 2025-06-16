@@ -387,7 +387,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
         if ([selectedObject.object isKindOfClass:OAClickableWay.class] &&
-            clickableWay.osmId == ((OAClickableWay *) selectedObject.object).osmId)
+            [clickableWay getOsmId] == [((OAClickableWay *) selectedObject.object) getOsmId])
         {
             return NO;
         }

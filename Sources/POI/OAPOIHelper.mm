@@ -1122,6 +1122,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         for (NSString *categoryName in categoryNames)
             categories.append(QString::fromNSString(categoryName));
         
+        categoriesFilter.insert(QString::fromNSString(@"travel"), categories);
         categoriesFilter.insert(QString::fromNSString(@"routes"), categories);
         searchCriteria->categoriesFilter = categoriesFilter;
     }
@@ -1194,6 +1195,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         for (NSString *categoryName in categoryNames)
             categories.append(QString::fromNSString(categoryName));
         
+        categoriesFilter.insert(QString::fromNSString(@"travel"), categories);
         categoriesFilter.insert(QString::fromNSString(@"routes"), categories);
         searchCriteria->categoriesFilter = categoriesFilter;
     }

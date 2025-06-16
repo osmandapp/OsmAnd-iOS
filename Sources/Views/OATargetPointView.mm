@@ -413,7 +413,7 @@ static const NSInteger _buttonsCount = 4;
     }
 }
 
-- (void) showTopToolbar:(BOOL)animated forceToShowIfTypeFloating:(BOOL)forceToShowIfTypeFloating
+- (void) showTopToolbarWithAnimation:(BOOL)animated forceToShowIfTypeFloating:(BOOL)forceToShowIfTypeFloating
 {
     if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden || (self.customController.topToolbarType == ETopToolbarTypeFloating && [self isLandscape] && !forceToShowIfTypeFloating))
         return;
@@ -608,7 +608,7 @@ static const NSInteger _buttonsCount = 4;
     
     if ([self.customController hasTopToolbar] && ([self.customController shouldShowToolbar] || self.targetPoint.toolbarNeeded))
     {
-        [self showTopToolbar:YES forceToShowIfTypeFloating:NO];
+        [self showTopToolbarWithAnimation:YES forceToShowIfTypeFloating:NO];
     }
 }
 
@@ -629,7 +629,7 @@ static const NSInteger _buttonsCount = 4;
 {
     if ([self isLandscapeSupported] && [OAUtilities isLandscape:toInterfaceOrientation])
     {
-        [self showTopToolbar:NO forceToShowIfTypeFloating:NO];
+        [self showTopToolbarWithAnimation:NO forceToShowIfTypeFloating:NO];
         [self showBottomToolbar:NO];
     }
 }
@@ -850,7 +850,7 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController && [self.customController hasTopToolbar])
     {
         if ([self.customController shouldShowToolbar] || self.targetPoint.toolbarNeeded)
-            [self showTopToolbar:YES forceToShowIfTypeFloating:[self isLandscape]];
+            [self showTopToolbarWithAnimation:YES forceToShowIfTypeFloating:[self isLandscape]];
     }
     if (self.customController && [self.customController hasBottomToolbar])
     {

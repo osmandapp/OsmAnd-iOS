@@ -363,7 +363,7 @@ static NSArray<NSString *> *const kPrirityKeys = @[@"volume_units_changed_manual
         [mutableSettings removeObjectForKey:key];
     }
     
-    return mutableSettings;
+    return [mutableSettings copy];
 }
 
 @end

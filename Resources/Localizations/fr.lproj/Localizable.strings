@@ -916,7 +916,7 @@
 "shared_string_reload" = "Actualiser";
 "sett_generic_ext_input" = "Clavier";
 "save_poi_too_many_uppercase" = "Le nom contient beaucoup de lettres majuscules. Voulez-vous continuer \?";
-"shared_string_read_more" = "En savoir plus";
+"shared_string_read_more" = "Lire la suite";
 "days_2_4" = "Jours";
 "days_5" = "Jours";
 "weeks_5" = "Semaines";
@@ -1111,7 +1111,7 @@
 "rendering_attr_alpineHiking_name" = "Niveau de difficulté des sentiers de randonnée";
 "rendering_attr_hideOverground_name" = "Objets au sol";
 "rendering_attr_hmRendered_description" = "Augmenter le niveau de détail affiché.";
-"routing_attr_height_obstacles_name" = "Utiliser les données d\'altitude";
+"routing_attr_height_obstacles_name" = "Altitude prise en compte";
 "routing_attr_driving_style_safety_name" = "Privilégier les routes secondaires";
 "rendering_value_lightblue_name" = "Bleu clair";
 "rendering_attr_highway_class_street_name" = "Rue";
@@ -1467,7 +1467,7 @@
 "arrows_on_map" = "Flèches sur la carte";
 "shared_string_two" = "Deux";
 "max_speed" = "Vitesse maximale";
-"shared_string_min_speed" = "Vitesse minimale";
+"shared_string_min_speed" = "Vitesse min.";
 "default_speed_setting_title" = "Vitesse par défaut";
 "routing_attr_length_name" = "Longueur";
 "send_anonymous_data_desc" = "Envoyez à OsmAnd des statistiques de téléchargement des cartes. Nous ne collectons aucune donnée de localisation, ni aucune information personnelle.";
@@ -1495,7 +1495,7 @@
 "direction_lines" = "Indications de direction";
 // Dirrection appearance
 "shared_string_one" = "Une";
-"edit_profile_screen_options_subtitle" = "Sélectionnez les paramètres d'affichage écran pour ce profil";
+"edit_profile_screen_options_subtitle" = "Sélectionnez les options d’affichage pour ce profil";
 "save_track_logging_accuracy" = "Précision de l\'enregistrement";
 "get_discount_first_few_parts" = "%@ pour premier %@";
 "show_direction" = "Indication de distance";
@@ -2778,7 +2778,7 @@
 "map_widget_true_bearing" = "Relèvement vrai";
 "developer_widgets" = "Gadgets pour les développeurs";
 "shared_string_bearing" = "Direction";
-"map_widget_current_speed" = "Vitesse instantanée";
+"map_widget_current_speed" = "Vitesse actuelle";
 "map_widget_gps_info" = "Informations GPS";
 "map_markers_desc" = "Le widget affiche la Distance ou l\'Heure d\'arrivée estimée (ETA) pour les deux premiers marqueurs de la liste des marqueurs de la carte.";
 "route_maneuvers_desc" = "Les widgets de navigation sont activés pendant la navigation et affichent des informations telles que la distance, l\'heure d\'arrivée ou de départ, les prochaines bifurcations, l\'orientation, le nom de la rue actuelle, les informations sur les voies, la vitesse maximale, les alertes, les POI et les points de passage.";
@@ -3346,7 +3346,7 @@
 "quick_action_terrain_color_scheme" = "Palette de couleurs du relief";
 "quick_action_need_to_add_item_to_list" = "Ajoutez au moins une action à la barre d'« Actions rapides »";
 "poi" = "POI";
-"shared_string_milliradians" = "Milliradiens";
+"shared_string_milliradians" = "Milliradians";
 "tracker_item" = "Suivi de position par OsmAnd";
 "shared_string_terrain" = "Relief";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";

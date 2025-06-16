@@ -534,9 +534,9 @@
 "wake_on_voice" = "Allumage de l\'écran";
 "wake_on_voice_descr" = "Allumer l\'écran (si éteint) à l\'approche d\'une bifurcation.";
 "voice_pref_title" = "Voix";
-"voice_provider_descr" = "Sélectionnez la langue de guidage vocal.";
+"voice_provider_descr" = "Sélectionner la langue de guidage vocal.";
 "choose_audio_stream" = "Sortie audio pour le guidage";
-"choose_audio_stream_descr" = "Sélectionnez la sortie audio à utiliser pour le guidage vocal.";
+"choose_audio_stream_descr" = "Sélectionner la sortie audio à utiliser pour le guidage vocal.";
 "layer_map_appearance" = "Configurer l\'écran";
 "map_markers" = "Marques";
 "select_gpx" = "Sélectionner GPX…";
@@ -630,7 +630,7 @@
 "avoid_roads_msg" = "Générez un itinéraire alternatif en sélectionnant les routes à éviter";
 "shared_string_select_avoid_road_on_map" = "Sélectionner une route à éviter pendant la navigation";
 "shared_string_road" = "Route";
-"simulate_your_location" = "Simulez votre position";
+"simulate_your_location" = "Simuler votre position";
 "day_night_info_description" = "Lever : %@ \nCoucher : %@";
 "do_not_show_discount_desc" = "Retire les messages promotionnels et les annonces locales.";
 "do_not_send_anonymous_data_desc" = "Nous ne collectons pas de données de localisation. Seulement des statistiques d'utilisation de l'application et de téléchargement des cartes.";
@@ -1041,7 +1041,7 @@
 "rendering_attr_shareTaxiRoutes_name" = "Voies partagées pour les taxis";
 "rendering_attr_showRoadMaps_name" = "Cartes routières uniquement";
 "rendering_value_thick_name" = "Épais";
-"rendering_attr_roadColors_description" = "Sélectionnez un thème de couleurs pour les routes :";
+"rendering_attr_roadColors_description" = "Sélectionner un thème de couleurs pour les routes :";
 "routing_attr_avoid_stairs_description" = "Éviter les escaliers";
 "rendering_value_translucent_red_name" = "Rouge translucide";
 "routing_attr_difficulty_preference_name" = "Difficulté préférée";
@@ -1080,7 +1080,7 @@
 "routing_attr_difficulty_preference_description" = "Privilégier les itinéraires avec ce niveau de difficulté (le calcul d’un itinéraire plus difficile ou pus facile est toujours possible s\'il est plus court).";
 "rendering_attr_piste_type_connection_name" = "Liaison";
 "rendering_attr_surface_sett_name" = "Pavés taillés";
-"rendering_attr_showRoadMaps_description" = "Choisissez quand afficher les cartes routières :";
+"rendering_attr_showRoadMaps_description" = "Choisir quand afficher les cartes routières :";
 "rendering_value_bicycle_name" = "Vélo";
 "rendering_attr_piste_type_hike_name" = "Randonnée";
 "rendering_attr_hikingRoutesOSMC_name" = "Itinéraires de randonnée";
@@ -1262,7 +1262,7 @@
 "rendering_attr_roadStyle_name" = "Style des routes";
 "rendering_attr_highway_class_track_grade1_name" = "Niveau 1";
 "rendering_attr_surface_metal_name" = "Métal";
-"routing_attr_max_num_changes_description" = "Indiquez le nombre maximum de correspondances";
+"routing_attr_max_num_changes_description" = "Indiquer le nombre maximum de correspondances";
 "rendering_attr_showSurfaceGrade_name" = "Afficher la qualité des routes";
 "rendering_value_red_name" = "Rouge";
 "routing_attr_piste_type_sled_name" = "Traîneau";
@@ -1830,7 +1830,7 @@
 "track_multiple_segments_select" = "%@ a plus d'un segment. Veuillez sélectionner une partie de l'itinéraire que vous souhaitez utiliser pour la navigation.";
 "select_segment" = "Sélectionner le segment";
 "add_folder" = "Ajouter un dossier";
-"select_folder_descr" = "Sélectionnez un dossier ou créez-en un nouveau";
+"select_folder_descr" = "Sélectionner un dossier ou en créer un nouveau";
 "select_folder" = "Sélectionnez le dossier";
 "change_folder" = "Modifier le dossier";
 "plan_route_folder" = "Dossier";
@@ -2740,7 +2740,7 @@
 "average_speed_widget_desc" = "Affiche la vitesse moyenne du trajet en cours.";
 "elevation_profile_widget_desc" = "Affiche le profil d’altitude et de pente pour l’itinéraire actuel.";
 "parking_widget_desc" = "Indique la distance séparant le centre de l\'écran de votre lieu de stationnement.";
-"av_notes_choose_action_widget_desc" = "Choisissez l'action.";
+"av_notes_choose_action_widget_desc" = "Choisir l'action.";
 "current_time_widget_desc" = "Affiche l\'heure actuelle de votre appareil.";
 "battery_widget_desc" = "Affiche le niveau de batterie de votre appareil.";
 "gps_info_widget_desc" = "Indique le nombre de satellites que l\'appareil détecte et utilise actuellement.";
@@ -3572,7 +3572,7 @@
 "google_play" = "Google Play";
 "degree_celsius" = "°C";
 "external_device_characteristic_distance" = "Distance";
-"mapillary_action_descr" = "Partagez votre vue de la rue via Mapillary.";
+"mapillary_action_descr" = "Partager votre vue de la rue via Mapillary.";
 "auto_25_chars_route_kl" = "Continuez à gauche";
 "auto_25_chars_route_kr" = "Continuez à droite";
 "auto_25_chars_route_roundabout_kr" = "Prenez la %ème sortie et restez à droite";

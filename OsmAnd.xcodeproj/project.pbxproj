@@ -388,6 +388,7 @@
 		325D713F2A1B71EB00F81ECE /* ic_custom_arrow_direction@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325D713B2A1B71EA00F81ECE /* ic_custom_arrow_direction@2x.png */; };
 		325DAE6A2DFFF17F002CB022 /* OABaseLoadAsyncTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325DAE692DFFF17F002CB022 /* OABaseLoadAsyncTask.mm */; };
 		325DAE6B2DFFF17F002CB022 /* OAAsyncTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325DAE672DFFF17F002CB022 /* OAAsyncTask.mm */; };
+		325DAE6E2DFFF941002CB022 /* OANetworkRouteSelectionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325DAE6D2DFFF93F002CB022 /* OANetworkRouteSelectionLayer.mm */; };
 		3266C96326B150D6007A9187 /* ic_custom_openplacereview_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3266C95F26B150D5007A9187 /* ic_custom_openplacereview_logo@3x.png */; };
 		3266C96426B150D6007A9187 /* ic_custom_openplacereview_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3266C96026B150D5007A9187 /* ic_custom_openplacereview_logo@2x.png */; };
 		32672A0A2AAF3D0200D46608 /* GpxTravelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32672A092AAF3D0100D46608 /* GpxTravelCell.swift */; };
@@ -3774,6 +3775,8 @@
 		325DAE672DFFF17F002CB022 /* OAAsyncTask.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAsyncTask.mm; sourceTree = "<group>"; };
 		325DAE682DFFF17F002CB022 /* OABaseLoadAsyncTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseLoadAsyncTask.h; sourceTree = "<group>"; };
 		325DAE692DFFF17F002CB022 /* OABaseLoadAsyncTask.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseLoadAsyncTask.mm; sourceTree = "<group>"; };
+		325DAE6C2DFFF936002CB022 /* OANetworkRouteSelectionLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANetworkRouteSelectionLayer.h; sourceTree = "<group>"; };
+		325DAE6D2DFFF93F002CB022 /* OANetworkRouteSelectionLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANetworkRouteSelectionLayer.mm; sourceTree = "<group>"; };
 		3266C95F26B150D5007A9187 /* ic_custom_openplacereview_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_openplacereview_logo@3x.png"; path = "Resources/Icons/ic_custom_openplacereview_logo@3x.png"; sourceTree = "<group>"; };
 		3266C96026B150D5007A9187 /* ic_custom_openplacereview_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_openplacereview_logo@2x.png"; path = "Resources/Icons/ic_custom_openplacereview_logo@2x.png"; sourceTree = "<group>"; };
 		32672A082AAF374600D46608 /* GpxTravelCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GpxTravelCell.xib; sourceTree = "<group>"; };
@@ -12641,6 +12644,8 @@
 				DA5A7EF326C563A400F274C7 /* OAMyPositionLayer.h */,
 				DA5A7ED326C563A400F274C7 /* OAMyPositionLayer.mm */,
 				323B501E2C8DDF14002BDF31 /* OAMyPositionLayerState.h */,
+				325DAE6C2DFFF936002CB022 /* OANetworkRouteSelectionLayer.h */,
+				325DAE6D2DFFF93F002CB022 /* OANetworkRouteSelectionLayer.mm */,
 				DA5A7EE526C563A400F274C7 /* OAOsmBugsLayer.h */,
 				DA5A7EE026C563A400F274C7 /* OAOsmBugsLayer.mm */,
 				DA5A7ED526C563A400F274C7 /* OAOsmEditsLayer.h */,
@@ -17033,6 +17038,7 @@
 				DA4ABEE82876DA5D00B996EF /* OAQuickActionsSettingsItemReader.m in Sources */,
 				DA5A81ED26C563A700F274C7 /* OAProfileIcon.m in Sources */,
 				DA5A84E026C563A900F274C7 /* OAMapSettingsMapillaryScreen.mm in Sources */,
+				325DAE6E2DFFF941002CB022 /* OANetworkRouteSelectionLayer.mm in Sources */,
 				DA5A825A26C563A700F274C7 /* OABaseSettingsViewController.m in Sources */,
 				DA5A854626C563A900F274C7 /* OASavingTrackHelper.mm in Sources */,
 				FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */,

@@ -29,6 +29,7 @@
 #import "OASelectedGpxPoint.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
+#import "OARouteKey.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
@@ -423,22 +424,56 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return [self isUniqueGpxFileName:selectedObjects gpxFileName:gpxFileName];
 }
 
-- (BOOL) addOsmRoutesAround:(OAMapSelectionResult *)result point:(CGPoint)point selectorFilter:(OsmAnd::NetworkRouteSelectorFilter)selectorFilter
+- (BOOL) addOsmRoutesAround:(OAMapSelectionResult *)result point:(CGPoint)point
 {
-    //TODO: implement
-    return NO;
+    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+    OANetworkRouteSelectionLayer *networkRouteSelectionLayer = mapVc.mapLayers.networkRouteSelectionLayer;
+    int searchRadius = [networkRouteSelectionLayer getScaledTouchRadius:[networkRouteSelectionLayer getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+    CLLocation *minLatLon = [mapVc getLatLonFromElevatedPixel:point.x - searchRadius y:point.y - searchRadius];
+    CLLocation *maxLatLon = [mapVc getLatLonFromElevatedPixel:point.x + searchRadius y:point.y + searchRadius];
+    OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:minLatLon.coordinate.longitude top:minLatLon.coordinate.latitude right:maxLatLon.coordinate.longitude bottom:maxLatLon.coordinate.latitude];
+    
+    return [self putRouteGpxToSelected:result provider:networkRouteSelectionLayer rect:rect selectorFilter:selectorFilter];
 }
 
-- (OsmAnd::NetworkRouteSelectorFilter) createRouteFilter
+- (BOOL) putRouteGpxToSelected:(OAMapSelectionResult *)result provider:(id<OAContextMenuProvider>)provider rect:(OASKQuadRect *)rect
 {
-    OsmAnd::NetworkRouteSelectorFilter routeSelectorFilter;
+    OsmAnd::PointI topLeft31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.top, rect.left)];
+    OsmAnd::PointI bottomRight31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.bottom, rect.right)];
+    OsmAnd::AreaI area31(topLeft31, bottomRight31);
     
+    int added = 0;
+    auto networkRouteSelector = std::make_shared<OsmAnd::NetworkRouteSelector>([OsmAndApp instance].resourcesManager->obfsCollection);
+    auto routes = networkRouteSelector->getRoutes(area31, false, nullptr);
     
-    
-    //TODO: implement
-    
-    
-    return routeSelectorFilter;
+    for (auto it = routes.begin(); it != routes.end(); ++it)
+    {
+        OARouteKey *routeKey = [[OARouteKey alloc] initWithKey:it.key()];
+        if ([self isUniqueOsmRoute:result tmpKey:routeKey])
+        {
+            NSArray *pair = @[routeKey, rect];
+            [result collect:pair provider:provider];
+            added++;
+        }
+    }
+    return added > 0;
+}
+
+- (BOOL) isUniqueOsmRoute:(OAMapSelectionResult *)result tmpKey:(OARouteKey *)tmpKey
+{
+    for (OASelectedMapObject *selectedObject in [result getAllObjects])
+    {
+        id object = selectedObject.object;
+        if ([object isKindOfClass:NSArray.class])
+        {
+            id firstObject = [((NSArray *) object) firstObject];
+            if (firstObject && [firstObject isKindOfClass:OARouteKey.class] && [firstObject isEqual:tmpKey])
+            {
+                return NO;
+            }
+        }
+    }
+    return YES;
 }
 
 - (BOOL) isUniqueAmenity:(NSMutableArray<OASelectedMapObject *> *)selectedObjects amenity:(OAPOI *)amenity

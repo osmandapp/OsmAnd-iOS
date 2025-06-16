@@ -8,13 +8,96 @@
 
 #import "OANetworkRouteSelectionLayer.h"
 #import "OANetworkRouteDrawable.h"
+#import "OANetworkRouteSelectionTask.h"
 #import "OAMapSelectionResult.h"
 #import "OARouteKey.h"
 #import "OAPointDescription.h"
 #import "OANativeUtilities.h"
+#import "OAGPXUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OANetworkRouteSelectionLayer
+{
+    NSMutableDictionary<OARouteKey *, OASGpxFile *> *_routesCache;
+    OANetworkRouteSelectionTask *_selectionTask;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _routesCache = [NSMutableDictionary new];
+    }
+    return self;
+}
+
+- (void) loadNetworkGpx:(NSArray *)pair lat:(double)lat lon:(double)lon
+{
+    __weak OANetworkRouteSelectionLayer *weakSelf = self;
+    
+    if (pair.count > 1 && [pair[0] isKindOfClass:OARouteKey.class] && [pair[1] isKindOfClass:OASKQuadRect.class])
+    {
+        OARouteKey *routeKey = pair[0];
+        OASKQuadRect *rect = pair[1];
+        OsmAnd::PointI topLeft31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.top, rect.left)];
+        OsmAnd::PointI bottomRight31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.bottom, rect.right)];
+        NSArray *areaPoints = @[@(topLeft31.x), @(topLeft31.y), @(bottomRight31.x), @(bottomRight31.y)];
+        
+        [OARootViewController.instance.mapPanel showProgress];
+        
+        _selectionTask = [[OANetworkRouteSelectionTask alloc] initWithRouteKey:routeKey area:areaPoints];
+        [_selectionTask execute:^(OASGpxFile *gpxFile) {
+            
+            [OARootViewController.instance.mapPanel hideProgress];
+            if (!gpxFile)
+                return;
+            
+            [weakSelf saveToCache:gpxFile routeKey:routeKey];
+            [weakSelf saveAndOpenGpx:gpxFile pair:pair lat:lat lon:lon];
+        }];
+    }
+}
+
+- (void) saveAndOpenGpx:(OASGpxFile *)gpxFile pair:(NSArray *)pair lat:(double)lat lon:(double)lon
+{
+    if (pair.count > 1 && [pair[0] isKindOfClass:OARouteKey.class] && [pair[1] isKindOfClass:OASKQuadRect.class])
+    {
+        OARouteKey *routeKey = pair[0];
+        
+        OASWptPt *wptPt = [[OASWptPt alloc] initWithLat:lat lon:lon];
+        NSString *name = [self getObjectName:pair].name;
+        name = name.length > 0 ? name : OALocalizedString(@"layer_route");
+        name = [name hasSuffix:GPX_FILE_EXT] ? name : [name stringByAppendingString:GPX_FILE_EXT];
+        NSString *fileName = [OAUtilities convertToPermittedFileName:name];
+        
+        [OAGPXUIHelper saveAndOpenGpx:name filepath:fileName gpxFile:gpxFile selectedPoint:wptPt analysis:nil routeKey:routeKey];
+    }
+}
+
+- (BOOL) isSelectingRoute
+{
+    return _selectionTask;
+}
+
+- (void) cancelRouteSelection
+{
+    [_selectionTask setCancelled:YES];
+    _selectionTask = nil;
+}
+
+- (void) onCancelNetworkGPX
+{
+    [self cancelRouteSelection];
+    [OARootViewController.instance.mapPanel hideProgress];
+}
+
+
+
+- (void) saveToCache:(OASGpxFile *)gpxFile routeKey:(OARouteKey *)routeKey
+{
+    //TODO: fix
+//    _routesCache[routeKey] = gpxFile;
+}
 
 
 #pragma mark - OAContextMenuProvider
@@ -50,6 +133,28 @@
 
 - (BOOL) showMenuAction:(id)object
 {
+    if (object && [object isKindOfClass:NSArray.class])
+    {
+        NSArray *pair = object;
+        if (pair.count > 1 && [pair[0] isKindOfClass:OARouteKey.class] && [pair[1] isKindOfClass:OASKQuadRect.class])
+        {
+            CLLocation *latLon = [self getObjectLocation:object];
+            OASGpxFile *gpxFile = _routesCache[pair[0]];
+            
+            if (!gpxFile)
+            {
+                if ([self isSelectingRoute])
+                    [self cancelRouteSelection];
+                
+                [self loadNetworkGpx:object lat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
+            }
+            else
+            {
+                [self saveAndOpenGpx:gpxFile pair:object lat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
+            }
+            return YES;
+        }
+    }
     return NO;
 }
 

@@ -400,6 +400,7 @@ static inline BOOL NSDictionaryIsEmpty(NSDictionary * _Nullable dictionary) {
 
 + (NSString *) createNewFileName:(NSString *)oldName;
 + (NSString *) simplifyFileName:(NSString *)filename;
++ (NSString *)convertToPermittedFileName:(NSString *)filename;
 
 + (natural_t) get_free_memory;
 

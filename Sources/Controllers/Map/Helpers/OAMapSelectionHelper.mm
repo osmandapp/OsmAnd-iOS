@@ -186,6 +186,11 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                         BOOL isOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
                         BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
                         
+                        if (isOsmRoute && !osmRoutesAlreadyAdded)
+                        {
+                            osmRoutesAlreadyAdded = [self addOsmRoutesAround:result point:point];
+                        }
+                        
                         if (!isOsmRoute || !osmRoutesAlreadyAdded)
                         {
                             if (isTravelGpx)

@@ -199,7 +199,6 @@ typedef enum
     BOOL _isNewContextMenuStillEnabled;
 
     MBProgressHUD *_gpxProgress;
-    OANetworkRouteSelectionTask *_gpxNetworkTask;
 }
 
 - (instancetype) init
@@ -1472,6 +1471,14 @@ typedef enum
     [_gpxProgress addGestureRecognizer:tap];
 }
 
+- (void) showProgress
+{
+    if (!_gpxProgress)
+        [self setupNetworkGpxProgress];
+    
+    [_gpxProgress show:YES];
+}
+
 - (void)hideProgress
 {
     [_gpxProgress hide:YES];
@@ -1481,9 +1488,8 @@ typedef enum
 
 - (void) onCancelNetworkGPX
 {
-    [_gpxNetworkTask setCancelled:YES];
-    _gpxNetworkTask = nil;
-    [self hideProgress];
+    OANetworkRouteSelectionLayer *networkRouteSelectionLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.networkRouteSelectionLayer;
+    [networkRouteSelectionLayer onCancelNetworkGPX];
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint
@@ -1514,50 +1520,13 @@ typedef enum
     }
     else if (targetPoint.type == OATargetNetworkGPX)
     {
-        [self setupNetworkGpxProgress];
-        [_gpxProgress show:YES];
-        __weak OAMapPanelViewController *weakSelf = self;
-        _gpxNetworkTask = [[OANetworkRouteSelectionTask alloc] initWithRouteKey:targetPoint.targetObj area:targetPoint.values[@"area"]];
-        [_gpxNetworkTask execute:^(OASGpxFile *gpxFile) {
-            [weakSelf hideProgress];
-            if (!gpxFile)
-                return;
-
-            OARouteKey *key = (OARouteKey *)targetPoint.targetObj;
-            NSString *name = key.routeKey.getRouteName().toNSString();
-            name = name.length == 0 ? OALocalizedString(@"layer_route") : name;
-            NSString *folderPath = [_app.gpxPath stringByAppendingPathComponent:@"Temp"];
-            NSFileManager *manager = NSFileManager.defaultManager;
-            if (![manager fileExistsAtPath:folderPath])
-                [manager createDirectoryAtPath:folderPath withIntermediateDirectories:NO attributes:nil error:nil];
-            NSString *path = [[folderPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
-            gpxFile.path = path;
-            gpxFile.metadata.name = targetPoint.title;
-            
-            OASRouteActivity *activity = [[OASRouteActivityHelper shared] findActivityByTagTag:key.routeKey.getTag().toNSString()];
-            if (activity)
-                [gpxFile.metadata setRouteActivityActivity:activity];
-            
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFile.path];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-            [weakSelf.mapViewController showTempGpxTrackFromGpxFile:gpxFile];
-            OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-            OASGpxDataItem *gpx = [gpxDb getGPXItem:path];
-            if (!gpx)
-                gpx = [gpxDb addGPXFileToDBIfNeeded:path];
-            OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:file];
-            trackItem.dataItem = gpx;
-
-            OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:targetPoint.location
-                                                                                      openedFromMap:YES];
-            state.trackIcon = targetPoint.icon;
-            [weakSelf openTargetViewWithGPX:trackItem
-                                      items:nil
-                               routeKey:targetPoint.targetObj
-                           trackHudMode:EOATrackMenuHudMode
-                                      state:state
-                                   analysis:nil];
-        }];
+        OANetworkRouteSelectionLayer *networkRouteSelectionLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.networkRouteSelectionLayer;
+        
+        NSArray<NSNumber *> *area31 = targetPoint.values[@"area"];
+        OsmAnd::LatLon topLeft = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[0].integerValue, area31[1].integerValue)];
+        OsmAnd::LatLon bottomRight = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[2].integerValue, area31[3].integerValue)];
+        OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
+        [networkRouteSelectionLayer showMenuAction:@[targetPoint.targetObj, rect]];
     }
     else
     {

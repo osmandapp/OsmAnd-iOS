@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OARouteCalculationResult, OAPOI, OASTrkSegment, OASGpxFile, OASTrack, OASGpxDataItem, OASTrackItem;
+@class OARouteCalculationResult, OAPOI, OASTrkSegment, OASGpxFile, OASTrack, OASGpxDataItem, OASTrackItem, OASWptPt, OASGpxTrackAnalysis, OARouteKey;
 
 @protocol OATrackSavingHelperUpdatableDelegate <NSObject>
 
@@ -86,6 +86,8 @@ NS_ASSUME_NONNULL_BEGIN
                          totalDistance:(float)totalDistance
                               timeSpan:(NSInteger)timeSpan
                              wptPoints:(int)wptPoints;
+
++ (void) saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(OARouteKey *)routeKey;
 
 
 @end

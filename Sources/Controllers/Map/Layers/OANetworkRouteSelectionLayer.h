@@ -11,4 +11,7 @@
 
 @interface OANetworkRouteSelectionLayer : OASymbolMapLayer<OAContextMenuProvider>
 
+
+- (void) onCancelNetworkGPX;
+
 @end

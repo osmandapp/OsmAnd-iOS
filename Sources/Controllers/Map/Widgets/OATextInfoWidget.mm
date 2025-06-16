@@ -385,7 +385,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     _shadowButton = [[UIButton alloc] initWithFrame:CGRectZero];
     _shadowButton.translatesAutoresizingMaskIntoConstraints = NO;
     [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
-    _shadowButton.menu = [self configureContextWidgetMenu];
+    [self configureShadowButtonMenu];
     [self addSubview:_shadowButton];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -758,7 +758,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         
         if (!_shadowButton.menu)
         {
-            _shadowButton.menu = [self configureContextWidgetMenu];
+            [self configureShadowButtonMenu];
         }
     }
     [self refreshLayout];
@@ -768,6 +768,11 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 {
     if (self.delegate)
         [self.delegate widgetChanged:self];
+}
+
+- (void)configureShadowButtonMenu
+{
+    _shadowButton.menu = [self configureContextWidgetMenu];
 }
 
 - (void) addAccessibilityLabelsWithValue:(NSString *)value

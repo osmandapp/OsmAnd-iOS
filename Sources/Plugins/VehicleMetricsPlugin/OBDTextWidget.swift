@@ -76,20 +76,18 @@ final class OBDTextWidget: OASimpleWidget {
         return false
     }
     
-    override func configureContextWidgetMenu() -> UIMenu? {
-        guard let baseMenu = super.configureContextWidgetMenu() else { return nil }
-        let newChildren: [UIMenuElement] = baseMenu.children.map { element in
-            guard let submenu = element as? UIMenu, let first = submenu.children.first as? UIAction, first.title == localizedString("shared_string_settings"), supportsAverageMode(), averageModePref?.get() == true else { return element }
+    override func configureContextMenu(addGroup: UIMenu, settingsGroup: UIMenu, deleteGroup: UIMenu) -> UIMenu {
+        let updatedSettingsGroup: UIMenu = {
+            guard supportsAverageMode(), averageModePref?.get() == true else { return settingsGroup }
             let resetAction = UIAction(title: localizedString("reset_average_value"), image: .icCustomReset) { [weak self] _ in
                 guard let self else { return }
                 self.resetAverageValue()
             }
             
-            let reorderedChildren = [resetAction] + submenu.children
-            return UIMenu(title: submenu.title, image: submenu.image, identifier: submenu.identifier, options: submenu.options, children: reorderedChildren)
-        }
+            return settingsGroup.replacingChildren([resetAction] + settingsGroup.children)
+        }()
         
-        return UIMenu(title: baseMenu.title, image: baseMenu.image, identifier: baseMenu.identifier, options: baseMenu.options, children: newChildren)
+        return UIMenu(title: "", children: [addGroup, updatedSettingsGroup, deleteGroup])
     }
     
     override func isMetricSystemDepended() -> Bool {
@@ -173,7 +171,7 @@ final class OBDTextWidget: OASimpleWidget {
     
     private func resetAverageValue() {
         widgetComputer?.resetLocations()
-        setText("-", subtext: nil)
+        setText("—", subtext: nil)
     }
     
     func updatePrefs(prefsChanged: Bool) {
@@ -193,6 +191,8 @@ final class OBDTextWidget: OASimpleWidget {
         } else {
             widgetComputer?.averageTimeSeconds = Int32(newTimeSeconds)
         }
+        
+        configureShadowButtonMenu()
     }
     
     func supportsAverageMode() -> Bool {

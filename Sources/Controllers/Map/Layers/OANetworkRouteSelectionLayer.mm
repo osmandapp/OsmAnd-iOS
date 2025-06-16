@@ -22,15 +22,6 @@
     OANetworkRouteSelectionTask *_selectionTask;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _routesCache = [NSMutableDictionary new];
-    }
-    return self;
-}
-
 - (void) loadNetworkGpx:(NSArray *)pair lat:(double)lat lon:(double)lon
 {
     __weak OANetworkRouteSelectionLayer *weakSelf = self;
@@ -91,14 +82,31 @@
     [OARootViewController.instance.mapPanel hideProgress];
 }
 
+#pragma mark - Cache
 
+- (OASGpxFile *) getFromCacheBy:(OARouteKey *)routeKey
+{
+    if (!_routesCache)
+        _routesCache = [NSMutableDictionary new];
+    return _routesCache[routeKey];
+}
 
 - (void) saveToCache:(OASGpxFile *)gpxFile routeKey:(OARouteKey *)routeKey
 {
-    //TODO: fix
-//    _routesCache[routeKey] = gpxFile;
+    if (!_routesCache)
+        _routesCache = [NSMutableDictionary new];
+    _routesCache[routeKey] = gpxFile;
 }
 
+- (void) removeFromCacheBy:(OARouteKey *)routeKey
+{
+    [_routesCache removeObjectForKey:routeKey];
+}
+
+- (void) clearCache
+{
+    [_routesCache removeAllObjects];
+}
 
 #pragma mark - OAContextMenuProvider
 
@@ -139,7 +147,7 @@
         if (pair.count > 1 && [pair[0] isKindOfClass:OARouteKey.class] && [pair[1] isKindOfClass:OASKQuadRect.class])
         {
             CLLocation *latLon = [self getObjectLocation:object];
-            OASGpxFile *gpxFile = _routesCache[pair[0]];
+            OASGpxFile *gpxFile = [self getFromCacheBy:pair[0]];
             
             if (!gpxFile)
             {
@@ -157,30 +165,6 @@
     }
     return NO;
 }
-
-//TODO: implement or delete?
-
-//public boolean showMenuAction(@Nullable Object object) {
-//    if (object instanceof Pair) {
-//        Pair<?, ?> pair = (Pair<?, ?>) object;
-//        if (pair.first instanceof RouteKey && pair.second instanceof QuadRect) {
-//            Pair<RouteKey, QuadRect> routePair = (Pair<RouteKey, QuadRect>) pair;
-//
-//            LatLon latLon = getObjectLocation(object);
-//            GpxFile gpxFile = routesCache.get(pair.first);
-//            if (gpxFile == null) {
-//                if (isSelectingRoute()) {
-//                    cancelRouteSelection();
-//                }
-//                loadNetworkGpx(routePair, latLon);
-//            } else {
-//                saveAndOpenGpx(gpxFile, routePair, latLon);
-//            }
-//            return true;
-//        }
-//    }
-//    return false;
-//}
 
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {

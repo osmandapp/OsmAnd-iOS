@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <OsmAndCore/NetworkRouteContext.h>
 
-@interface OARouteKey : NSObject
+@interface OARouteKey : NSObject <NSCopying>
 
 @property (nonatomic, readonly) OsmAnd::NetworkRouteKey routeKey;
 @property (nonatomic, readonly) NSString *localizedTitle;

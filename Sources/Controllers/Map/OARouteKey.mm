@@ -74,4 +74,10 @@
     return result;
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    OARouteKey *copy = [[OARouteKey allocWithZone:zone] initWithKey:_routeKey];
+    return copy;
+}
+
 @end

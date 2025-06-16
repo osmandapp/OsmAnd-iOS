@@ -9,9 +9,13 @@
 #import "OASymbolMapLayer.h"
 #import "OAContextMenuProvider.h"
 
+@class OARouteKey;
+
 @interface OANetworkRouteSelectionLayer : OASymbolMapLayer<OAContextMenuProvider>
 
-
 - (void) onCancelNetworkGPX;
+
+- (void) removeFromCacheBy:(OARouteKey *)routeKey;
+- (void) clearCache;
 
 @end

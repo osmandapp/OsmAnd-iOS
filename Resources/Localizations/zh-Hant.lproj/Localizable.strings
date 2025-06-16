@@ -3576,3 +3576,6 @@
 "app_mode_osm" = "OSM";
 "cloud_sync_progress" = "同步……%@";
 "sensor_data" = "感應器資料";
+"osm_live_payment_renews_3_years" = "每三年續訂";
+"years_3" = "三年";
+"three_years_subscription" = "三年訂閱";

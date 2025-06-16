@@ -186,11 +186,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                         BOOL isOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
                         BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
                         
-                        if (isOsmRoute && !osmRoutesAlreadyAdded)
-                        {
-                            osmRoutesAlreadyAdded = [self addOsmRoutesAround:result point:point selectorFilter:[self createRouteFilter]];    //TODO: not tested yet
-                        }
-                        
                         if (!isOsmRoute || !osmRoutesAlreadyAdded)
                         {
                             if (isTravelGpx)
@@ -433,7 +428,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     CLLocation *maxLatLon = [mapVc getLatLonFromElevatedPixel:point.x + searchRadius y:point.y + searchRadius];
     OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:minLatLon.coordinate.longitude top:minLatLon.coordinate.latitude right:maxLatLon.coordinate.longitude bottom:maxLatLon.coordinate.latitude];
     
-    return [self putRouteGpxToSelected:result provider:networkRouteSelectionLayer rect:rect selectorFilter:selectorFilter];
+    return [self putRouteGpxToSelected:result provider:networkRouteSelectionLayer rect:rect];
 }
 
 - (BOOL) putRouteGpxToSelected:(OAMapSelectionResult *)result provider:(id<OAContextMenuProvider>)provider rect:(OASKQuadRect *)rect

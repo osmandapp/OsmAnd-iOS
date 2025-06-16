@@ -530,7 +530,7 @@
 "default_speed_system" = "Unité de vitesse";
 "default_speed_system_descr" = "Définir l\'unité de vitesse.";
 "speed_limit_exceed" = "Marge de tolérance aux limites de vitesse";
-"speed_limit_exceed_message" = "Choisissez la marge de tolérance au-dessus de la limite de vitesse à partir de laquelle vous recevrez une alerte vocale.";
+"speed_limit_exceed_message" = "Choisissez la marge de tolérance à ajouter à la limitation de vitesse pour recevoir une alerte vocale.";
 "wake_on_voice" = "Allumage de l\'écran";
 "wake_on_voice_descr" = "Allumer l\'écran (si éteint) à l\'approche d\'une bifurcation.";
 "voice_pref_title" = "Voix";
@@ -2870,7 +2870,7 @@
 // Shared Strings
 "shared_string_discard" = "Abandonner";
 "specify_number_of_dir_indicators_desc" = "Définir le nombre d\'indications de direction à afficher.";
-"map_marker_interval_dialog_desc" = "Indiquez la durée sur laquelle mesurer la vitesse moyenne afin d'estimer l'heure d'arrivée.";
+"map_marker_interval_dialog_desc" = "Indiquez la durée sur laquelle calculer la vitesse moyenne afin d'estimer l'heure d'arrivée.";
 "shared_string_system_default" = "Par défaut";
 "upload_poi" = "Envoyer les POI";
 "shared_string_ear_lobe" = "Lobe d\'oreille";

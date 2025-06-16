@@ -16,6 +16,8 @@ NSString *const kRoutingPreferencePrefix = @"prouting_";
 NSString *const kSettingsItemErrorDomain = @"SettingsItem";
 NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
+static NSArray<NSString *> *const kPrirityKeys = @[@"volume_units_changed_manually"];
+
 @interface OASettingsItem()
 
 @property (nonatomic) NSString *pluginId;
@@ -326,9 +328,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
         return NO;
     }
 
-    NSMutableDictionary<NSString *, NSString *> *settings;
-    settings = [[[OAMigrationManager shared] changeJsonMigrationToV2:json] mutableCopy];
-    [self readVolumeUnitsChangedManuallyFrom:settings];
+    NSDictionary<NSString *, NSString *> *settings = [self readPriorityKeysFrom:[[OAMigrationManager shared] changeJsonMigrationToV2:json]];
 
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
@@ -347,17 +347,23 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     return YES;
 }
 
-//the method reads volumeUnitsChangedManually value from dictionary separetly and remove it
-- (void)readVolumeUnitsChangedManuallyFrom:(NSMutableDictionary<NSString *, NSString *> *)settings
+//the method reads priority keys from dictionary separetly and remove it
+- (NSDictionary *)readPriorityKeysFrom:(NSDictionary<NSString *, NSString *> *)settings
 {
-    NSString *key = @"volume_units_changed_manually";
-    NSString *value = [settings objectForKey:key];
+    NSMutableDictionary *mutableSettings = [settings mutableCopy];
     
-    if (!value)
-        return;
+    for (NSString *key in kPrirityKeys)
+    {
+        NSString *value = [mutableSettings objectForKey:key];
+        
+        if (!value)
+            continue;
+        
+        [self.item readPreferenceFromJson:key value:value];
+        [mutableSettings removeObjectForKey:key];
+    }
     
-    [self.item readPreferenceFromJson:key value:value];
-    [settings removeObjectForKey:key];
+    return mutableSettings;
 }
 
 @end

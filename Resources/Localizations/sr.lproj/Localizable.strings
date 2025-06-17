@@ -3647,7 +3647,7 @@
 "shared_string_date" = "Датум";
 "battery_level_settings_description" = "прикажи ниво батерије сензора као главну вредност";
 "sensor_data_settings_description" = "прикажи главне податке са сензора";
-"sensor_data" = "Подаци сензора";
+"sensor_data" = "Подаци пријемника";
 "profile_icons" = "Икона профила";
 "add_hidden_group_info" = "Додата тачка може се наћи у \"%@\". Откријте сакривену означену групу да је прикажете на карти.";
 "terrain_map" = "Теренска мапа (3Д)";

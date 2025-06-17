@@ -3639,17 +3639,17 @@
 • Fixed the missing \"Download all\" button for Terrain maps.\n
 • Fixed an issue where popular articles were sometimes missing in Travel Guides.\n";
 
-"ios_release_5_1" = "• Added support for web and cross-platform purchases\n
-• New navigation widget combines turn arrow and navigation instructions\n
-• Added a rename action for Favorite groups\n
-• Added "Unit of Volume" and "Fuel Tank Capacity" options\n
-• Added a "Coordinates Grid" overlay\n
-• Widgets on the Left & Right panels now include a height option\n
-• Added the ability to assign activities to tracks\n
-• Fixed a crash on CarPlay with iOS 15\n
-• Automatic resizing issues with widgets on the left and right panels have been resolved\n
-• Incompatibility of travel guides has been fixed\n
-• The issue with cross-platform purchases has been resolved\n
+"ios_release_5_1" = "• Added support for web and cross-platform purchases\n\
+• New navigation widget combines turn arrow and navigation instructions\n\
+• Added a rename action for Favorite groups\n\
+• Added \"Unit of Volume\" and \"Fuel Tank Capacity\" options\n\
+• Added a \"Coordinates Grid\" overlay\n\
+• Widgets on the Left & Right panels now include a height option\n\
+• Added the ability to assign activities to tracks\n\
+• Fixed a crash on CarPlay with iOS 15\n\
+• Automatic resizing issues with widgets on the left and right panels have been resolved\n\
+• Incompatibility of travel guides has been fixed\n\
+• The issue with cross-platform purchases has been resolved\n\
 • Fixed the issue of a black screen on CarPlay after startup\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";

@@ -78,6 +78,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 @property (nonatomic, assign) EOAPurchaseOrigin origin;
 @property (nonatomic) NSString *platform;
 @property (nonatomic, assign) long purchaseTime;
+@property (nonatomic, assign) long expireTime;
 @property (nonatomic) OAExternalProduct *linkedProduct;
 
 @end
@@ -147,6 +148,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 - (NSArray<OASubscriptionStateHolder *> *)getExternalSubscriptions;
 - (NSArray<OAInAppStateHolder *> *)getExternalInApps;
 - (NSNumber *)getInAppPurchaseTime:(NSString *)sku;
+- (NSNumber *)getInAppExpireTime:(NSString *)sku;
 
 - (BOOL)productsLoaded;
 

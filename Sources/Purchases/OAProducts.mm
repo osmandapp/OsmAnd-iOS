@@ -1829,21 +1829,28 @@
     NSString *_name;
     EOAPurchaseOrigin _origin;
     OAFeature *_feature;
+    BOOL _featurePro;
     BOOL _featureMaps;
     BOOL _featureContours;
     BOOL _featureNautical;
 }
 
-- (instancetype) initWithSku:(NSString *)sku name:(NSString *)name feature:(OAFeature *)feature origin:(EOAPurchaseOrigin)origin featureMaps:(BOOL)featureMaps featureContours:(BOOL)featureContours featureNautical:(BOOL)featureNautical
+- (instancetype) initWithSku:(NSString *)sku name:(NSString *)name feature:(OAFeature *)feature origin:(EOAPurchaseOrigin)origin featurePro:(BOOL)featurePro featureMaps:(BOOL)featureMaps featureContours:(BOOL)featureContours featureNautical:(BOOL)featureNautical
 {
     self = [super initWithIdentifier:sku];
     _name = name;
     _feature = feature;
     _origin = origin;
+    _featurePro = featurePro;
     _featureMaps = featureMaps;
     _featureContours = featureContours;
     _featureNautical = featureNautical;
     return self;
+}
+
+- (BOOL) isOsmAndPro
+{
+    return _featurePro;
 }
 
 - (BOOL) isFullVersion
@@ -1873,7 +1880,9 @@
 
 - (NSString *) productIconName
 {
-    if (_featureContours)
+    if (_featurePro)
+        return @"ic_custom_osmand_pro_logo_colored";
+    else if (_featureContours)
         return @"ic_plugin_contourlines";
     else if (_featureNautical)
         return @"ic_plugin_nautical";
@@ -1933,12 +1942,13 @@
     }
     EOAPurchaseOrigin origin = [OAIAPHelper getPurchaseOriginByPlatform:platform];
         
+    BOOL featurePro = [json[@"feature_pro"] boolValue];
     BOOL featureMaps = [json[@"feature_maps"] boolValue];
     BOOL featureContours = [json[@"feature_contours"] boolValue];
     BOOL featureNautical = [json[@"feature_nautical"] boolValue];
     
     OAFeature *feature;
-    if (featureMaps)
+    if (featurePro || featureMaps)
     {
         feature = OAFeature.MONTHLY_MAP_UPDATES;
     }
@@ -1956,7 +1966,7 @@
         return nil;
     }
     
-    return [[OAExternalProduct alloc] initWithSku:sku name:name feature:feature origin:origin featureMaps:featureMaps featureContours:featureContours featureNautical:featureNautical];
+    return [[OAExternalProduct alloc] initWithSku:sku name:name feature:feature origin:origin featurePro:featurePro featureMaps:featureMaps featureContours:featureContours featureNautical:featureNautical];
 }
 
 @end

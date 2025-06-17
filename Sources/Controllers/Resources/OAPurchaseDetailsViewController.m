@@ -188,6 +188,13 @@
             purchasedType = OALocalizedString(@"shared_string_expires");
         date = !_expireDate ? _product.expirationDate : _expireDate;
     }
+    else if (_expireDate)
+    {
+        purchasedType = [[NSDate date] earlierDate:_expireDate]
+            ? OALocalizedString(@"shared_string_expires")
+            : OALocalizedString(@"expired");
+        date = _expireDate;
+    }
     else
     {
         date = _purchaseDate;

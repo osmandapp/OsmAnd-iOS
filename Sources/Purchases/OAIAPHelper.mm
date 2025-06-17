@@ -381,6 +381,12 @@ static OASubscriptionState *EXPIRED;
     return holder ? @(holder.purchaseTime) : nil;
 }
 
+- (NSNumber *) getInAppExpireTime:(NSString *)sku
+{
+    OAInAppStateHolder *holder = _inAppStateMap[sku];
+    return holder.expireTime ? @(holder.expireTime) : nil;
+}
+
 + (OAIAPHelper *) sharedInstance
 {
     static dispatch_once_t once;
@@ -1083,6 +1089,12 @@ static OASubscriptionState *EXPIRED;
             {
                 for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
                     if (holder.linkedSubscription && holder.linkedSubscription.isOsmAndPro && holder.state == OASubscriptionState.ACTIVE)
+                    {
+                        pro = YES;
+                        break;
+                    }
+                for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
+                    if (holder.linkedProduct && holder.linkedProduct.isOsmAndPro)
                     {
                         pro = YES;
                         break;
@@ -2238,10 +2250,14 @@ static OASubscriptionState *EXPIRED;
         NSString *sku = obj[@"sku"];
         NSString *platform = obj[@"platform"];
         NSString *purchaseTimeStr = obj[@"purchaseTime"];
+        NSString *expireTimeStr = obj[@"expireTime"];
         long purchaseTime = 0;
         if (purchaseTimeStr.length > 0)
             purchaseTime = (long) purchaseTimeStr.longLongValue / 1000;
-        
+        long expireTime = 0;
+        if (expireTimeStr.length > 0)
+            expireTime = (long) expireTimeStr.longLongValue / 1000;
+
         if (sku.length > 0)
         {
             OAInAppStateHolder *stateHolder = [[OAInAppStateHolder alloc] init];
@@ -2249,6 +2265,7 @@ static OASubscriptionState *EXPIRED;
             stateHolder.origin = [self getPurchaseOriginBySku:sku];
             stateHolder.platform = platform;
             stateHolder.purchaseTime = purchaseTime;
+            stateHolder.expireTime = expireTime;
             stateHolder.linkedProduct = [OAExternalProduct buildFromJson:obj];
             inAppsStateMap[sku] = stateHolder;
         }

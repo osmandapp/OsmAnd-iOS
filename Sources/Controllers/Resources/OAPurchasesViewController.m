@@ -235,13 +235,17 @@ static BOOL _purchasesUpdated;
                 {
                     OAProduct *product = activeProducts[i];
                     NSNumber *purchaseTime = [_iapHelper getInAppPurchaseTime:product.productIdentifier];
+                    NSNumber *expireTime = [_iapHelper getInAppExpireTime:product.productIdentifier];
                     if (!purchaseTime)
                         purchaseTime = @(0);
+                    if (!expireTime)
+                        expireTime = @(0);
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                         @"product" : product,
-                        @"purchaseTime" : purchaseTime
+                        @"purchaseTime" : purchaseTime,
+                        @"expireTime" : expireTime
                     }];
                 }
                 for (NSInteger i = 0; i < externalActiveSubscriptions.count; i++)
@@ -266,14 +270,14 @@ static BOOL _purchasesUpdated;
                     OAProduct *product = externalActiveProducts[i];
                     NSNumber *origin = @(externalActiveProductHolders[i].origin);
                     NSNumber *purchaseTime = @(externalActiveProductHolders[i].purchaseTime);
-                    if (!purchaseTime)
-                        purchaseTime = @(0);
+                    NSNumber *expireTime = @(externalActiveProductHolders[i].expireTime);
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                         @"product" : product,
                         @"origin" : origin,
-                        @"purchaseTime" : purchaseTime
+                        @"purchaseTime" : purchaseTime,
+                        @"expireTime" : expireTime
                     }];
                 }
             }
@@ -531,7 +535,7 @@ static BOOL _purchasesUpdated;
             purchaseDate = [NSDate dateWithTimeIntervalSince1970:((NSNumber *)purchaseTimeObj).doubleValue];
         NSDate *expireDate = nil;
         id expireTimeObj = [item objForKey:@"expireTime"];
-        if (expireTimeObj && [expireTimeObj isKindOfClass:NSNumber.class])
+        if (expireTimeObj && [expireTimeObj isKindOfClass:NSNumber.class] && ((NSNumber *)expireTimeObj).longValue > 0)
             expireDate = [NSDate dateWithTimeIntervalSince1970:((NSNumber *)expireTimeObj).doubleValue];
         if (origin == EOAPurchaseOriginUndefined)
             origin = EOAPurchaseOriginIOS;

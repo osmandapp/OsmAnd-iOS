@@ -299,9 +299,27 @@ static NSArray<NSString *> *minTrackSpeedNames;
                         @"title" : OALocalizedString(@"external_sensors_plugin_name"),
                         @"value" : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @(devices).stringValue, @(devicesAll).stringValue],
                         @"type" : OAValueTableViewCell.reuseIdentifier
+                    },
+                    @{
+                        @"name" : @"vehicleMetrics",
+                        @"title" : OALocalizedString(@"obd_plugin_name"),
+                        @"isProButtonVisible" : @(YES),
+                        @"actionSelector": NSStringFromSelector(@selector(onProButtonTapped)),
+                        @"type" : OAValueTableViewCell.reuseIdentifier
                     }]];
+                
+                
+//                if ([OAPluginsHelper isEnabled:VehicleMetricsPlugin.class])
+//                {
+//                    @{
+//                        @"name" : @"vehicleMetrics",
+//                        @"title" : OALocalizedString(@"obd_plugin_name"),
+//                        @"value" : @"",
+//                        @"type" : OAValueTableViewCell.reuseIdentifier
+//                    }
+//                }
             }
-
+            
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
             NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]}];
@@ -404,6 +422,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
     
     _data = [NSArray arrayWithArray:dataArr];
 }
+
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
@@ -509,6 +528,15 @@ static NSArray<NSString *> *minTrackSpeedNames;
             cell.leftIconView.tintColor = self.appMode.getProfileColor;
         }
         
+        NSNumber *isProButtonVisible = item[@"isProButtonVisible"];
+        if (isProButtonVisible && isProButtonVisible.boolValue) {
+            [cell showProButton:YES];
+            [cell.proButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.proButton addTarget:self action:NSSelectorFromString(item[@"actionSelector"]) forControlEvents:UIControlEventTouchUpInside];
+        } else {
+            [cell showProButton:NO];
+        }
+        
         NSString *img = item[@"img"];
         if (img)
             cell.leftIconView.image = [UIImage templateImageNamed:img];
@@ -597,6 +625,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
 }
 
 #pragma mark - Selectors
+
+- (void)onProButtonTapped
+{
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.VEHICLEMETRICS navController:self.navigationController];
+}
 
 - (void) applyParameter:(id)sender
 {
@@ -739,8 +772,19 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     else if ([name isEqualToString:@"externalSensors"])
     {
-        OAExternalSettingsWriteToTrackSettingsViewController *contoller = [[OAExternalSettingsWriteToTrackSettingsViewController alloc] initWithApplicationMode:self.appMode];
-        [self showViewController:contoller];
+        OAExternalSettingsWriteToTrackSettingsViewController *controller = [[OAExternalSettingsWriteToTrackSettingsViewController alloc] initWithApplicationMode:self.appMode];
+        [self showViewController:controller];
+    }
+    else if ([name isEqualToString:@"vehicleMetrics"])
+    {
+        if (OAIAPHelper.isVehicleMetricsAvailable)
+        {
+            
+        }
+        else
+        {
+            [self onProButtonTapped];
+        }
     }
 }
 

@@ -8,6 +8,9 @@
 
 final class VehicleMetricsPlugin: OAPlugin {
     
+    // FIXME: delimiter ";"
+    let TRIP_RECORDING_VEHICLE_METRICS: OACommonStringList =  OAAppSettings.sharedManager().registerStringListPreference("trip_recording_vehicle_metrics", defValue: nil).makeProfile().makeShared()
+    
     override func getId() -> String? {
         kInAppId_Addon_Vehicle_Metrics
     }
@@ -224,3 +227,77 @@ extension VehicleMetricsPlugin {
         return floatValue
     }
 }
+
+// MARK: - Trip recording
+
+extension VehicleMetricsPlugin {
+    override func attachAdditionalInfo(toRecordedTrack location: CLLocation, json: NSMutableData) {
+        super.attachAdditionalInfo(toRecordedTrack: location, json: json)
+        guard OAIAPHelper.isVehicleMetricsAvailable() else {
+            return
+        }
+        
+        let mode = OAAppSettings.sharedManager().applicationMode.get()
+        let commandNames: [String]? = TRIP_RECORDING_VEHICLE_METRICS.get(mode)
+        let selectedCommands: [OBDCommand] = commandNames?.compactMap { OBDCommand.companion.getCommand(name: $0) } ?? []
+        
+        guard !selectedCommands.isEmpty,
+              let rawData = OBDService.shared.obdDispatcher?.getRawData() as? [OBDCommand: Any] else {
+            return
+        }
+
+        for (command, dataField) in rawData {
+            guard selectedCommands.contains(command),
+                  let tag = command.gpxTag,
+                  // FIXME:
+                  let value = dataField as? OBDDataField<AnyObject> else {
+                continue
+            }
+            
+            let key = GpxUtilities().OSMAND_EXTENSIONS_PREFIX + tag
+            if let jsonObject = try? JSONSerialization.jsonObject(with: json as Data) as? NSMutableDictionary {
+                jsonObject[key] = value.value
+                if let updatedData = try? JSONSerialization.data(withJSONObject: jsonObject, options: []) {
+                    json.setData(updatedData)
+                }
+            }
+        }
+    }
+}
+
+//
+//override func attachAdditionalInfoToRecordedTrack(location: Location, json: JSONObject) {
+//    super.attachAdditionalInfoToRecordedTrack(location, json)
+//
+//    let mode = appInstance.settings.applicationMode
+//    let commandNames: [String]? = TRIP_RECORDING_VEHICLE_METRICS.getStringsListForProfile(mode)
+//
+//    // Используем compactMap для фильтрации nil и ?? для предоставления пустого массива
+//    let selectedCommands: [OBDCommand] = commandNames?.compactMap {
+//        OBDCommand.getCommand($0)
+//    } ?? []
+//
+//    // Проверяем, что selectedCommands не пуст и метрики доступны
+//    if !selectedCommands.isEmpty && InAppPurchaseUtils.isVehicleMetricsAvailable(appInstance) {
+//        let rawData = obdDispatcherInstance.getRawData()
+//
+//        // Используем 'if let' для безопасной распаковки rawData
+//        if let data = rawData {
+//            // Перебираем ключи (команды) в rawData
+//            for command in data.keys {
+//                // Пропускаем команды, которые не выбраны
+//                guard selectedCommands.contains(command) else {
+//                    continue
+//                }
+//
+//                let dataField = data[command] // dataField будет иметь тип DataField?
+//
+//                // Проверяем, существует ли gpxTag у команды
+//                if let gpxTag = command.gpxTag {
+//                    let combinedTag = GpxUtilities.OSMAND_EXTENSIONS_PREFIX + gpxTag
+//                    json.put(combinedTag, dataField?.value) // Добавляем в JSON
+//                }
+//            }
+//        }
+//    }
+//}

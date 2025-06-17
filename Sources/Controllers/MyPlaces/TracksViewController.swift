@@ -458,8 +458,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     func configureNavigationBarAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.navBarBgColorPrimary
-        appearance.shadowColor = UIColor.navBarBgColorPrimary
+        appearance.backgroundColor = .navBarBgColorPrimary
+        appearance.shadowColor = .navBarBgColorPrimary
         appearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline), NSAttributedString.Key.foregroundColor: UIColor.navBarTextColorPrimary]
         
         let blurAppearance = UINavigationBarAppearance()
@@ -470,7 +470,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         
         navigationController?.navigationBar.standardAppearance = blurAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.tintColor = UIColor.navBarTextColorPrimary
+        navigationController?.navigationBar.tintColor = .navBarTextColorPrimary
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
@@ -1036,8 +1036,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         let navigationController = UINavigationController(rootViewController: vc)
         navigationController.modalPresentationStyle = .custom
         present(navigationController, animated: true) { [weak self] in
-            guard let self else { return }
-            self.onNavbarCancelButtonClicked()
+            self?.onNavbarCancelButtonClicked()
         }
     }
     

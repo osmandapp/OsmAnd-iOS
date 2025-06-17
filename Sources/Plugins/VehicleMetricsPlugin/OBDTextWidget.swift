@@ -13,6 +13,7 @@ final class OBDTextWidget: OASimpleWidget {
     private static let measuredIntervalPrefKey = "average_obd_measured_interval_millis"
     private static let averageModePrefKey = "average_obd_mode"
     private static let defaultIntervalMillis: Int = 30 * 60 * 1000
+    private static var availableIntervals: [Int: String] = getAvailableIntervals()
     
     private var plugin: VehicleMetricsPlugin?
     private var widgetComputer: OBDDataComputer.OBDComputerWidget?
@@ -30,8 +31,8 @@ final class OBDTextWidget: OASimpleWidget {
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         var averageTimeSeconds = 0
         if supportsAverageMode() {
-            measuredIntervalPref = registerMeasuredIntervalPref(customId)
-            averageModePref = registerAverageModePref(customId)
+            measuredIntervalPref = registerMeasuredIntervalPref(customId, widgetParams: widgetParams, appMode: appMode)
+            averageModePref = registerAverageModePref(customId, widgetParams: widgetParams, appMode: appMode)
             if averageModePref?.get() == true {
                 averageTimeSeconds = (measuredIntervalPref?.get() ?? 0) / 1000
             }
@@ -73,6 +74,7 @@ final class OBDTextWidget: OASimpleWidget {
         }
         
         updateWidgetName()
+        configureShadowButtonMenu()
         return false
     }
     
@@ -88,6 +90,60 @@ final class OBDTextWidget: OASimpleWidget {
         }()
         
         return UIMenu(title: "", children: [addGroup, updatedSettingsGroup, deleteGroup])
+    }
+    
+    override func getSettingsData(_ appMode: OAApplicationMode, widgetConfigurationParams: [String: Any]?, isCreate: Bool) -> OATableDataModel? {
+        let data = OATableDataModel()
+        let section = data.createNewSection()
+        section.headerText = localizedString("shared_string_settings")
+        if isTemperatureWidget(), let avgPref = averageModePref {
+            let isAvg: Bool
+            if isCreate, let params = widgetConfigurationParams, let override = params[avgPref.key] as? Bool {
+                isAvg = override
+            } else {
+                isAvg = avgPref.get()
+            }
+            
+            let modeRow = section.createNewRow()
+            modeRow.cellType = OAButtonTableViewCell.reuseIdentifier
+            modeRow.key = "average_obd_mode_key"
+            modeRow.title = localizedString("shared_string_mode")
+            modeRow.setObj(avgPref, forKey: "pref")
+            let titleKey = isAvg ? "average_temperature" : "current_temperature"
+            modeRow.setObj(localizedString(titleKey), forKey: "value")
+            let titles = ["current_temperature", "average_temperature"]
+            let possibleValues = titles.enumerated().map { idx, key in
+                let row = OATableRowData()
+                row.cellType = OASimpleTableViewCell.reuseIdentifier
+                row.setObj(idx, forKey: "value")
+                row.title = localizedString(key)
+                return row
+            }
+            modeRow.setObj(possibleValues, forKey: "possible_values")
+            
+            if isAvg, let intervalPref = measuredIntervalPref {
+                let intervalRow = section.createNewRow()
+                intervalRow.cellType = OAValueTableViewCell.reuseIdentifier
+                intervalRow.key = "value_pref"
+                intervalRow.title = localizedString("shared_string_interval")
+                intervalRow.setObj(intervalPref, forKey: "pref")
+                var currentValue = Self.defaultIntervalMillis
+                if let params = widgetConfigurationParams, let key = params.keys.first(where: { $0.hasPrefix(Self.measuredIntervalPrefKey) }), let str = params[key] as? String, let v = Int(str) {
+                    currentValue = v
+                } else if !isCreate {
+                    currentValue = Int(intervalPref.get(appMode))
+                }
+                intervalRow.setObj(OBDTextWidget.formatIntervals(interval: currentValue), forKey: "value")
+                let sliderRow = OATableRowData()
+                sliderRow.key = "values"
+                sliderRow.cellType = OASegmentSliderTableViewCell.reuseIdentifier
+                sliderRow.title = localizedString("shared_string_interval")
+                sliderRow.setObj(Self.availableIntervals, forKey: "values")
+                intervalRow.setObj([sliderRow], forKey: "possible_values")
+            }
+        }
+        
+        return data
     }
     
     override func isMetricSystemDepended() -> Bool {
@@ -147,7 +203,7 @@ final class OBDTextWidget: OASimpleWidget {
         setContentTitle(finalName)
     }
     
-    private func registerAverageModePref(_ customId: String?) -> OACommonBoolean {
+    private func registerAverageModePref(_ customId: String?, widgetParams: [String: Any]?, appMode: OAApplicationMode) -> OACommonBoolean {
         let prefId: String
         if let id = customId, !id.isEmpty {
             prefId = Self.averageModePrefKey + id
@@ -155,10 +211,19 @@ final class OBDTextWidget: OASimpleWidget {
             prefId = Self.averageModePrefKey
         }
         
-        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false).makeProfile()
+        guard let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false).makeProfile() else { fatalError("Failed to register preference \(prefId)") }
+        if let params = widgetParams {
+            if let rawBool = params[prefId] as? Bool {
+                preference.set(rawBool, mode: appMode)
+            } else if let rawBase = params[Self.averageModePrefKey] as? Bool {
+                preference.set(rawBase, mode: appMode)
+            }
+        }
+        
+        return preference
     }
     
-    private func registerMeasuredIntervalPref(_ customId: String?) -> OACommonLong {
+    private func registerMeasuredIntervalPref(_ customId: String?, widgetParams: [String: Any]?, appMode: OAApplicationMode) -> OACommonLong {
         let prefId: String
         if let id = customId, !id.isEmpty {
             prefId = Self.measuredIntervalPrefKey + id
@@ -166,7 +231,16 @@ final class OBDTextWidget: OASimpleWidget {
             prefId = Self.measuredIntervalPrefKey
         }
         
-        return OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: Self.defaultIntervalMillis).makeProfile()
+        guard let preference = OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: Self.defaultIntervalMillis)?.makeProfile() else { fatalError("Failed to register preference \(prefId)") }
+        if let params = widgetParams {
+            if let rawString = params[prefId] as? String, let rawValue = Int(rawString) {
+                preference.set(rawValue, mode: appMode)
+            } else if let rawString = params[Self.measuredIntervalPrefKey] as? String, let rawValue = Int(rawString) {
+                preference.set(rawValue, mode: appMode)
+            }
+        }
+        
+        return preference
     }
     
     private func resetAverageValue() {
@@ -219,6 +293,20 @@ final class OBDTextWidget: OASimpleWidget {
 }
 
 extension OBDTextWidget {
+    private static func getAvailableIntervals() -> [Int: String] {
+        var intervals = [Int: String]()
+        for intervalNum in OAAverageSpeedComputer.measured_INTERVALS() {
+            let interval = intervalNum.intValue
+            let seconds = interval < 60 * 1000
+            let timeInterval = seconds ? String(interval / 1000) : String(interval / 1000 / 60)
+            let timeUnit = interval < 60 * 1000 ? localizedString("shared_string_sec") : localizedString("int_min")
+            let formattedInterval = String(format: localizedString("ltr_or_rtl_combine_via_space"), arguments: [timeInterval, timeUnit])
+            intervals[interval] = formattedInterval
+        }
+
+        return intervals
+    }
+
     static func formatIntervals(interval: Int) -> String {
         let isSeconds = interval < 60 * 1000
         let count = isSeconds ? interval / 1000 : interval / (60 * 1000)

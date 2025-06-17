@@ -4177,6 +4177,8 @@
 "obd_fuel_consumption_desc" = "Shows the rate of fuel usage by the engine, calculated based on remaining fuel, tank size, and distance covered as determined by GPS.";
 "obd_fuel_consumption" = "Fuel consumption";
 "reset_average_value" = "Reset average value";
+"current_temperature" = "Current temperature";
+"average_temperature" = "Average temperature";
 
 "rpm_unit" = "rpm";
 "obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";

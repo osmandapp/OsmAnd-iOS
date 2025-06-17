@@ -193,7 +193,13 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         } else if item.cellType == OAButtonTableViewCell.getIdentifier() {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.reuseIdentifier) as! OAButtonTableViewCell
             let value = item.obj(forKey: "value") as? String
+            if cell.contentHeightConstraint == nil {
+                let constraint = cell.contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
+                constraint.isActive = true
+                cell.contentHeightConstraint = constraint
+            }
             cell.selectionStyle = .none
+            cell.leftIconVisibility(item.key != "average_obd_mode_key")
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
@@ -204,6 +210,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             cell.button.configuration = config
             if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = RouteInfoDisplayPriority(rawValue: pref.defValue)?.key {
                 cell.button.menu = createDisplayPriorityMenuWith(value: value ?? defValue, pref: pref, indexPath: indexPath)
+            } else if let boolPref = item.obj(forKey: "pref") as? OACommonBoolean, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let current = value {
+                cell.button.menu = createBooleanMenuWith(currentValue: current, pref: boolPref, options: options, indexPath: indexPath)
             }
             cell.button.showsMenuAsPrimaryAction = true
             cell.button.changesSelectionAsPrimaryAction = true
@@ -231,6 +239,29 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 tableView.reloadData()
             }
         }
+        return UIMenu(options: .singleSelection, children: actions)
+    }
+    
+    private func createBooleanMenuWith(currentValue: String, pref: OACommonBoolean, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
+        let actions = options.map { row -> UIAction in
+            let title = row.title
+            let state: UIMenuElement.State = (title == currentValue) ? .on : .off
+            return UIAction(title: title ?? "", image: UIImage.templateImageNamed(row.iconName), state: state) { [weak self] _ in
+                guard let self else { return }
+                let newBool = ((row.obj(forKey: "value") as? Int) ?? 0) == 1
+                if self.createNew {
+                    self.widgetConfigurationParams?[pref.key] = newBool
+                } else {
+                    pref.set(newBool)
+                }
+                
+                self.onWidgetStateChanged()
+                if let textInfoWidget = self.widgetInfo.widget as? OATextInfoWidget {
+                    textInfoWidget.configureSimpleLayout()
+                }
+            }
+        }
+        
         return UIMenu(options: .singleSelection, children: actions)
     }
     

@@ -1111,7 +1111,7 @@
 "rendering_attr_alpineHiking_name" = "Niveau de difficulté des sentiers de randonnée";
 "rendering_attr_hideOverground_name" = "Objets au sol";
 "rendering_attr_hmRendered_description" = "Augmenter le niveau de détail affiché.";
-"routing_attr_height_obstacles_name" = "Altitude prise en compte";
+"routing_attr_height_obstacles_name" = "Utiliser les données d'altitude";
 "routing_attr_driving_style_safety_name" = "Privilégier les routes secondaires";
 "rendering_value_lightblue_name" = "Bleu clair";
 "rendering_attr_highway_class_street_name" = "Rue";
@@ -1119,7 +1119,7 @@
 "rendering_attr_noPolygons_description" = "Rendre transparents tous les éléments de surface sur la carte.";
 "routing_attr_avoid_shuttle_train_name" = "Éviter les trains-navettes";
 "rendering_attr_surface_paved_name" = "Pavés";
-"routing_attr_height_obstacles_description" = "La durée estimée prendra en compte l\'altitude. Ce paramètre peut aider à éviter les fortes ascensions :";
+"routing_attr_height_obstacles_description" = "Le temps de trajet estimé tiendra compte de l’impact de l’altitude. La préférence d’itinéraire peut aider à éviter les fortes montées :";
 "routing_attr_avoid_borders_description" = "Éviter de franchir les frontières";
 "routing_attr_short_way_description" = "Itinéraire court optimisé (plus économe en énergie)";
 "rendering_attr_tracktype_grade5_name" = "Non-compact";

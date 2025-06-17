@@ -608,6 +608,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     }
     
     auto parser = OpeningHoursParser::parseOpenedHours([poi.openingHours UTF8String]);
+    if (!parser)
+        return @"";
     BOOL isOpenedNow = parser->isOpened();
     NSDate *newTime = [NSDate dateWithTimeIntervalSince1970:[NSDate date].timeIntervalSince1970 + intervalMinutes * 60];
     BOOL isOpened = parser->isOpenedForTime([newTime toTm]);

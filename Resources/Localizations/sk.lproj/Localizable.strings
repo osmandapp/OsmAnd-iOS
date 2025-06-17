@@ -2924,3 +2924,7 @@
 "obd_plugin_name" = "Merania vozidla";
 "cloud_sync_progress" = "Synchronizuje sa…%@";
 "info_button" = "Info";
+"years_3" = "Tri roky";
+"osm_live_payment_renews_3_years" = "Obnovuje sa každé tri roky";
+"three_years_subscription" = "Trojročné predplatné";
+"sensor_data" = "Údaje zo senzorov";

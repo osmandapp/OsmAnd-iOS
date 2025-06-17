@@ -743,6 +743,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
 + (void) saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(OARouteKey *)routeKey
 {
     NSString *folderPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:@"Temp"];
+    filepath = [folderPath stringByAppendingPathComponent:filepath];
     NSFileManager *manager = NSFileManager.defaultManager;
     if (![manager fileExistsAtPath:folderPath])
         [manager createDirectoryAtPath:folderPath withIntermediateDirectories:NO attributes:nil error:nil];

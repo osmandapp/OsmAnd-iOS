@@ -2654,7 +2654,7 @@
 "search_history_disabled" = "L'historique de recherche est désactivé";
 "last_seven_days" = "Ces 7 derniers jours";
 "delete_history_items" = "Supprimer %@ éléments d’historique \?";
-"restart_is_required" = "Un redémarrage est nécessaire pour appliquer le changement.";
+"restart_is_required" = "Un redémarrage de l’application est nécessaire pour appliquer la modification.";
 "rotate_map_manual_opt" = "Orientation manuelle";
 "history_clear_alert_message" = "Êtes-vous sûr de vouloir supprimer tous les éléments de l'historique ?";
 "enable_search_history" = "Vous pouvez activer l'historique des recherches dans les Paramètres";

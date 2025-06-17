@@ -1681,7 +1681,7 @@
 "shared_string_email" = "Correo electrónico";
 "shared_string_account_add" = "Añadir cuenta";
 "settings_item_read_error" = "No se pudo leer desde «%@».";
-"settings_app_theme" = "Tema";
+"settings_app_theme" = "Aspecto de la aplicación";
 "send_anonymous_data" = "Enviar datos anónimos";
 "only_selected_segment_recalc" = "Sólo el segmento marcado será recalculado usando el perfil elegido.";
 "select_application_profile" = "Elegir perfil de la aplicación";

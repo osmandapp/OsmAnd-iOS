@@ -288,7 +288,7 @@
 {
     NSString *iconName = _product.productIconName;
     UIImage *icon;
-    if ([_product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:_product])
+    if ([_product isKindOfClass:OASubscription.class] || [_product isFullVersion] || [_product isKindOfClass:OAExternalProduct.class])
     {
         icon = [UIImage imageNamed:[iconName stringByAppendingString:@"_big"]];
         if (!icon)

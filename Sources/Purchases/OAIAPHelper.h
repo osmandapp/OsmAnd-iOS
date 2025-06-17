@@ -10,7 +10,7 @@
 
 #define kFreeMapsAvailableTotal 7
 
-@class OAProduct, OASubscription, OASubscriptionList, OAFunctionalAddon, OAExportSettingsType;
+@class OAProduct, OASubscription, OASubscriptionList, OAFunctionalAddon, OAExportSettingsType, OAExternalSubscription, OAExternalProduct;
 
 UIKIT_EXTERN NSString *const OAIAPProductsRequestSucceedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductsRequestFailedNotification;
@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 @property (nonatomic, assign) long expireTime;
 @property (nonatomic, assign) EOAPurchaseOrigin origin;
 @property (nonatomic, assign) EOASubscriptionDuration duration;
-@property (nonatomic) OASubscription *linkedSubscription;
+@property (nonatomic) OAExternalSubscription *linkedSubscription;
 
 @end
 
@@ -78,7 +78,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 @property (nonatomic, assign) EOAPurchaseOrigin origin;
 @property (nonatomic) NSString *platform;
 @property (nonatomic, assign) long purchaseTime;
-@property (nonatomic) OAProduct *linkedProduct;
+@property (nonatomic) OAExternalProduct *linkedProduct;
 
 @end
 
@@ -187,5 +187,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 + (BOOL)isOsmAndProSubscription:(OASubscription *)subscription;
 + (BOOL)isMapsSubscription:(OASubscription *)subscription;
 + (BOOL)isFullVersion:(OAProduct *)product;
+
++ (EOAPurchaseOrigin)getPurchaseOriginByPlatform:(NSString *)platform;
 
 @end

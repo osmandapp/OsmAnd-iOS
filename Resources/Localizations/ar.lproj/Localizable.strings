@@ -3648,3 +3648,6 @@
 "cubic_m" = "m³";
 "shared_string_pause" = "إيقاف مؤقت";
 "routing_algorithm_a" = "A*";
+"osm_live_payment_renews_3_years" = "يتجدد كل ثلاث سنوات";
+"three_years_subscription" = "الاشتراك لمدة ثلاث سنوات";
+"years_3" = "ثلاث سنوات";

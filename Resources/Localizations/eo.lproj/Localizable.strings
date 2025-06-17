@@ -508,7 +508,7 @@
 "settings_app_theme" = "Etoso de aplikaĵo";
 "light_theme" = "Hela";
 "units_and_formats" = "Mezurunuoj kaj formoj";
-"osmand_settings" = "Ĝeneralaj agordoj";
+"osmand_settings" = "Aplikaĵaj agordoj";
 
 // Intro
 "shared_string_skip" = "Transsalti";
@@ -1003,7 +1003,7 @@
 //inapps
 "plugin_nautical_name" = "Mara map-vido";
 "plugin_nautical_descr" = "Pliriĉigas la mapon per naŭtikaj kursoj, navigadaj lumoj, danĝerejoj, zonoj (mal)permesataj por navigi, alligi akvoveturilon, ktp. Por uzi la kromprogramon, elŝutu marajn mapojn kaj aktivigu la map-aspekton “Marnavigada” per la menuo “Agordi mapon”. \n \nPliaj informoj: %@";
-"osmand_parking_plugin_name" = "Parkumeja pozicio";
+"osmand_parking_plugin_name" = "Pozicio de parkumo";
 "osmand_parking_plugin_description" = "Ebligas marki kie vi parkumis vian aŭtomobilon kaj aldoni sciigon al via kalendaro pri parkumada templimo. Por aldoni markon, frapetadu lokon sur la mapo kaj elektu “Marki kiel pozicion de parkumado” el la menuo “Agoj”.";
 "plugin_ski_name" = "Skiada map-vido";
 "plugin_ski_descr" = "Projektita por navigi en vintraj sportejoj. Vidigas descendejojn, skiliftojn kaj skikuradajn kursojn kiel kolorajn liniojn, kiuj indikas malfacilecon. Por uzi la kromprogramon, aktivigu la map-aspekton “Vintro kaj skiado” en la menuo “Agordi mapon”.";
@@ -2013,7 +2013,7 @@
 "shared_string_switch_mode" = "Baskuligi reĝimon";
 "shared_string_duplicate" = "Duobligi";
 "map_widget_ant_bicycle_power_desc" = "Montras povumon generatan de biciklisto por movi la biciklon";
-"parking_widget_desc" = "Fenestraĵo montranta distancon de la ekrana centro al la parkumeja pozicio.";
+"parking_widget_desc" = "Fenestraĵo montranta distancon de la ekrana centro al la pozicio de parkumo.";
 "map_orientation_portrait" = "Vertikala";
 "true_bearing_widget_desc" = "Angulo inter la vera nordo, via pozicio kaj la alcela loko.";
 "angular_measeurement" = "Unuo de anguloj";
@@ -2472,7 +2472,7 @@
 "height_legend_description" = "Kolorigitaj altmapoj taŭgas por vidigi map-reliefon.";
 "shared_string_favorites" = "Ŝatataj";
 "quick_action_track_waypoint" = "Navigadpunkto al spuro";
-"quick_action_parking_place" = "Parkumeja pozicio";
+"quick_action_parking_place" = "Pozicio de parkumo";
 "map_source" = "Map-fonto";
 "driving_region_uk" = "Britujo kaj similaj";
 "shared_string_show" = "Montri";
@@ -2562,3 +2562,7 @@
 "auto_25_chars_route_tr_kl" = "Dekstren kaj veturu ĉe maldekstra flanko";
 "auto_25_chars_route_tr_kr" = "Dekstren kaj veturu ĉe dekstra flanko";
 "unit_of_volume_description" = "Elektata mezurunuo estos aplikita al ĉiuj volumen-rilataj datumoj en la nuna profilo.";
+"sensor_data" = "Datumoj de sentilo";
+"years_3" = "tri jaroj";
+"three_years_subscription" = "Trijara abono";
+"osm_live_payment_renews_3_years" = "Reaboni ĉiutrijare";

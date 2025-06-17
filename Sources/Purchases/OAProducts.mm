@@ -773,6 +773,36 @@
     return nil; // non implemented
 }
 
+- (BOOL) isFullVersion
+{
+    return NO;
+}
+
+- (BOOL) isNautical
+{
+    return NO;
+}
+
+- (BOOL) isContourLines
+{
+    return NO;
+}
+
+- (BOOL) isLiveUpdates
+{
+    return NO;
+}
+
+- (BOOL) isOsmAndPro
+{
+    return NO;
+}
+
+- (BOOL) isMaps
+{
+    return NO;
+}
+
 - (BOOL) isEqual:(id)obj
 {
     if (self == obj)
@@ -1131,6 +1161,11 @@
     return self;
 }
 
+- (BOOL) isLiveUpdates
+{
+    return YES;
+}
+
 - (OAFeature *) feature
 {
     return OAFeature.HOURLY_MAP_UPDATES;
@@ -1208,6 +1243,11 @@
     return self;
 }
 
+- (BOOL) isLiveUpdates
+{
+    return YES;
+}
+
 - (OAFeature *) feature
 {
     return OAFeature.HOURLY_MAP_UPDATES;
@@ -1272,6 +1312,11 @@
 {
     self = [super initWithIdentifierNoVersion:kSubscriptionId_Osm_Live_Subscription_Annual version:version];
     return self;
+}
+
+- (BOOL) isLiveUpdates
+{
+    return YES;
 }
 
 - (OAFeature *) feature
@@ -1360,6 +1405,11 @@
     return self;
 }
 
+- (BOOL) isOsmAndPro
+{
+    return YES;
+}
+
 - (OAFeature *) feature
 {
     return OAFeature.HOURLY_MAP_UPDATES;
@@ -1429,6 +1479,11 @@
 {
     self = [super initWithIdentifierNoVersion:kSubscriptionId_Pro_Subscription_Annual version:version];
     return self;
+}
+
+- (BOOL) isOsmAndPro
+{
+    return YES;
 }
 
 - (OAFeature *) feature
@@ -1502,6 +1557,11 @@
     return self;
 }
 
+- (BOOL) isMaps
+{
+    return YES;
+}
+
 - (OAFeature *) feature
 {
     return OAFeature.MONTHLY_MAP_UPDATES;
@@ -1554,12 +1614,364 @@
 
 @end
 
+@implementation OAExternalSubscription
+{
+    NSString *_name;
+    EOAPurchaseOrigin _origin;
+    OAFeature *_feature;
+    double _defaultPrice;
+    double _defaultMonthlyPrice;
+    int _monthlyDuration;
+    BOOL _featurePro;
+    BOOL _featureMaps;
+    BOOL _featureLive;
+}
+
+- (instancetype) initWithSku:(NSString *)sku name:(NSString *)name feature:(OAFeature *)feature origin:(EOAPurchaseOrigin)origin defaultPrice:(double)defaultPrice monthlyDuration:(int)monthlyDuration featurePro:(BOOL)featurePro featureMaps:(BOOL)featureMaps featureLive:(BOOL)featureLive
+{
+    self = [super initWithIdentifierNoVersion:sku version:1];
+    _name = name;
+    _feature = feature;
+    _origin = origin;
+    _defaultPrice = defaultPrice;
+    _monthlyDuration = monthlyDuration;
+    _featurePro = featurePro;
+    _featureMaps = featureMaps;
+    _featureLive = featureLive;
+    return self;
+}
+
+- (BOOL) isOsmAndPro
+{
+    return _featurePro;
+}
+
+- (BOOL) isLiveUpdates
+{
+    return _featureLive;
+}
+
+- (BOOL) isMaps
+{
+    return _featureMaps;
+}
+
+- (OAFeature *) feature
+{
+    return _feature;
+}
+
+- (NSString *) productIconName
+{
+    if (_featurePro)
+        return @"ic_custom_osmand_pro_logo_colored";
+    else if (_featureLive)
+        return @"ic_action_osmand_logo_banner";
+    else if (_featureMaps)
+        return @"ic_custom_osmand_maps_plus";
+    
+    return @"ic_custom_osmand_maps_plus";
+}
+
+- (NSString *)localizedTitle
+{
+    return _name;
+}
+
+- (NSString *)localizedDescription
+{
+    return @"";
+}
+
+- (void) setPrice:(NSDecimalNumber *)price
+{
+    [super setPrice:price];
+    self.monthlyPrice = [[NSDecimalNumber alloc] initWithDouble:price.doubleValue / _monthlyDuration];
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:_defaultPrice];
+}
+
+- (NSDecimalNumber *) getDefaultMonthlyPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:_defaultPrice / _monthlyDuration];
+}
+
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+    if (price.length == 0)
+        return nil;
+
+    if (_monthlyDuration == 1)
+        return [NSString stringWithFormat:@"%@ / %@", price, [OALocalizedString(@"month") lowerCase]];
+    else if (_monthlyDuration == 3)
+        return [NSString stringWithFormat:@"%@ / %@", price, [OALocalizedString(@"months_3") lowerCase]];
+    else if (_monthlyDuration == 12)
+        return [NSString stringWithFormat:@"%@ / %@", price, [OALocalizedString(@"year") lowerCase]];
+    else if (_monthlyDuration == 36)
+        return [NSString stringWithFormat:@"%@ / %@", price, [OALocalizedString(@"years_3") lowerCase]];
+
+    NSString *periodStr;
+    if (_monthlyDuration == 1)
+        periodStr = OALocalizedString(@"month");
+    else if (_monthlyDuration < 5)
+        periodStr = OALocalizedString(@"months_2_4");
+    else
+        periodStr = OALocalizedString(@"months_5");
+    
+    return [NSString stringWithFormat:@"%@ / %d %@", price, _monthlyDuration, [periodStr lowerCase]];
+}
+
+- (NSAttributedString *) getTitle:(CGFloat)fontSize
+{
+    if (_monthlyDuration == 1)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"monthly_subscription")];
+    else if (_monthlyDuration == 3)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"three_months_subscription")];
+    else if (_monthlyDuration == 12)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"annual_subscription")];
+    else if (_monthlyDuration == 36)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"three_years_subscription")];
+    else
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"monthly_subscription")];
+}
+
+- (NSAttributedString *) getRenewDescription:(CGFloat)fontSize
+{
+    if (_monthlyDuration == 1)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_monthly")];
+    else if (_monthlyDuration == 3)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_quarterly")];
+    else if (_monthlyDuration == 12)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_annually")];
+    else if (_monthlyDuration == 36)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_3_years")];
+    else
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_monthly")];
+}
+
++ (OAExternalSubscription *) buildFromJson:(NSDictionary *)json
+{
+    BOOL crossPlatform = [json[@"cross-platform"] boolValue];
+    if (!crossPlatform)
+    {
+        NSLog(@"Subscription is not cross-platform");
+        return nil;
+    }
+    int monthlyDuration;
+    NSString *durationUnit = json[@"duration_unit"];
+    if ([durationUnit isEqualToString:@"month"])
+    {
+        monthlyDuration = [json[@"duration"] intValue];
+    }
+    else if ([durationUnit isEqualToString:@"year"])
+    {
+        monthlyDuration = [json[@"duration"] intValue] * 12;
+    }
+    else
+    {
+        NSLog(@"Unknown duration unit: %@", durationUnit);
+        return nil;
+    }
+    
+    NSString *sku = json[@"sku"];
+    if (sku.length == 0)
+    {
+        NSLog(@"SKU is empty");
+        return nil;
+    }
+    NSString *name = json[@"name"];
+    if (!name)
+        name = OALocalizedString(@"subscription");
+
+    NSString *platform = json[@"platform"];
+    if (platform.length == 0)
+    {
+        NSLog(@"Platform is empty");
+        return nil;
+    }
+    EOAPurchaseOrigin origin = [OAIAPHelper getPurchaseOriginByPlatform:platform];
+    
+    int defaultPriceMillis = [json[@"defPriceEurMillis"] intValue];
+    BOOL featurePro = [json[@"feature_pro"] boolValue] || [json[@"feature_pro_no_cloud"] boolValue];
+    BOOL featureMaps = [json[@"feature_maps"] boolValue];
+    BOOL featureLive = [json[@"feature_live_maps"] boolValue];
+    
+    OAFeature *feature;
+    if (featurePro)
+    {
+        feature = OAFeature.HOURLY_MAP_UPDATES;
+    }
+    else if (featureMaps)
+    {
+        feature = OAFeature.MONTHLY_MAP_UPDATES;
+    }
+    else if (featureLive)
+    {
+        feature = OAFeature.HOURLY_MAP_UPDATES;
+    }
+    else
+    {
+        NSLog(@"Subscription is not supported");
+        return nil;
+    }
+    
+    return [[OAExternalSubscription alloc] initWithSku:sku name:name feature:feature origin:origin defaultPrice:defaultPriceMillis / 1000.0 monthlyDuration:monthlyDuration featurePro:featurePro featureMaps:featureMaps featureLive:featureLive];
+}
+
+@end
+
+@implementation OAExternalProduct
+{
+    NSString *_name;
+    EOAPurchaseOrigin _origin;
+    OAFeature *_feature;
+    BOOL _featureMaps;
+    BOOL _featureContours;
+    BOOL _featureNautical;
+}
+
+- (instancetype) initWithSku:(NSString *)sku name:(NSString *)name feature:(OAFeature *)feature origin:(EOAPurchaseOrigin)origin featureMaps:(BOOL)featureMaps featureContours:(BOOL)featureContours featureNautical:(BOOL)featureNautical
+{
+    self = [super initWithIdentifier:sku];
+    _name = name;
+    _feature = feature;
+    _origin = origin;
+    _featureMaps = featureMaps;
+    _featureContours = featureContours;
+    _featureNautical = featureNautical;
+    return self;
+}
+
+- (BOOL) isFullVersion
+{
+    return _featureMaps;
+}
+
+- (BOOL) isContourLines
+{
+    return _featureContours;
+}
+
+- (BOOL) isNautical
+{
+    return _featureNautical;
+}
+
+- (OAFeature *) feature
+{
+    return _feature;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return nil;
+}
+
+- (NSString *) productIconName
+{
+    if (_featureContours)
+        return @"ic_plugin_contourlines";
+    else if (_featureNautical)
+        return @"ic_plugin_nautical";
+    else
+        return @"ic_custom_osmand_maps_plus";
+}
+
+- (NSString *)localizedTitle
+{
+    return _name;
+}
+
+- (NSString *)localizedDescription
+{
+    return @"";
+}
+
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+
+    if (price && price.length > 0)
+        return price;
+
+    return nil;
+}
+
+- (NSAttributedString *) getTitle:(CGFloat)fontSize
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"in_app_purchase_desc")];
+}
+
++ (OAExternalProduct *) buildFromJson:(NSDictionary *)json
+{
+    BOOL crossPlatform = [json[@"cross-platform"] boolValue];
+    if (!crossPlatform)
+    {
+        NSLog(@"InApp is not cross-platform");
+        return nil;
+    }
+    
+    NSString *sku = json[@"sku"];
+    if (sku.length == 0)
+    {
+        NSLog(@"SKU is empty");
+        return nil;
+    }
+    NSString *name = json[@"name"];
+    if (!name)
+        name = OALocalizedString(@"in_app_purchase");
+    
+    NSString *platform = json[@"platform"];
+    if (platform.length == 0)
+    {
+        NSLog(@"Platform is empty");
+        return nil;
+    }
+    EOAPurchaseOrigin origin = [OAIAPHelper getPurchaseOriginByPlatform:platform];
+        
+    BOOL featureMaps = [json[@"feature_maps"] boolValue];
+    BOOL featureContours = [json[@"feature_contours"] boolValue];
+    BOOL featureNautical = [json[@"feature_nautical"] boolValue];
+    
+    OAFeature *feature;
+    if (featureMaps)
+    {
+        feature = OAFeature.MONTHLY_MAP_UPDATES;
+    }
+    else if (featureContours)
+    {
+        feature = OAFeature.TERRAIN;
+    }
+    else if (featureNautical)
+    {
+        feature = OAFeature.NAUTICAL;
+    }
+    else
+    {
+        NSLog(@"InApp is not supported");
+        return nil;
+    }
+    
+    return [[OAExternalProduct alloc] initWithSku:sku name:name feature:feature origin:origin featureMaps:featureMaps featureContours:featureContours featureNautical:featureNautical];
+}
+
+@end
+
 @implementation OAMapsFullProduct
 
 - (instancetype) init
 {
     self = [super initWithIdentifier:kInAppId_Maps_Full];
     return self;
+}
+
+- (BOOL) isFullVersion
+{
+    return YES;
 }
 
 - (OAFeature *) feature
@@ -1660,6 +2072,11 @@
         [self commonInit];
     }
     return self;
+}
+
+- (BOOL) isNautical
+{
+    return YES;
 }
 
 - (OAFeature *) feature
@@ -1840,6 +2257,11 @@
 {
     self = [super initWithIdentifier:kInAppId_Addon_Srtm];
     return self;
+}
+
+- (BOOL) isContourLines
+{
+    return YES;
 }
 
 - (OAFeature *) feature

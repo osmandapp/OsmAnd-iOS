@@ -3696,3 +3696,7 @@
 "dd_mm_ss_format" = "DD°MM′SS″";
 "preview_next_turn_descr" = "Roterer automatisk kortet for at forhåndsvise næste sving eller manøvre";
 "preview_next_turn" = "Forhåndsvis næste sving";
+"three_months_subscription" = "Tre måneders abonnement";
+"osm_live_payment_renews_3_years" = "Fornyes hvert tredje år";
+"years_3" = "Tre år";
+"three_years_subscription" = "Tre års abonnement";

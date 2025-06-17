@@ -224,6 +224,13 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 - (NSString *) productIconName;
 - (NSString *) productScreenshotName;
 
+- (BOOL) isFullVersion;
+- (BOOL) isNautical;
+- (BOOL) isContourLines;
+- (BOOL) isLiveUpdates;
+- (BOOL) isOsmAndPro;
+- (BOOL) isMaps;
+
 @end
 
 @interface OASubscription : OAProduct
@@ -292,6 +299,18 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @interface OAMapsSubscriptionAnnual : OASubscription
 
 - (instancetype) initWithVersion:(int)version;
+
+@end
+
+@interface OAExternalSubscription : OASubscription
+
++ (OAExternalSubscription *) buildFromJson:(NSDictionary *)json;
+
+@end
+
+@interface OAExternalProduct : OAProduct
+
++ (OAExternalProduct *) buildFromJson:(NSDictionary *)json;
 
 @end
 

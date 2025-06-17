@@ -3677,3 +3677,6 @@
 "map_widget_distance" = "Distanza";
 "preview_next_turn" = "Anteprima della prossima svolta";
 "preview_next_turn_descr" = "Ruota automaticamente la mappa per visualizzare in anteprima la svolta o la manovra successiva";
+"osm_live_payment_renews_3_years" = "Si rinnova ogni tre anni";
+"three_years_subscription" = "Abbonamento di tre anni";
+"years_3" = "Tre anni";

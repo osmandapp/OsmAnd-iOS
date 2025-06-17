@@ -468,9 +468,9 @@ static BOOL _purchasesUpdated;
                 cell.titleLabel.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
                         ? OALocalizedString(@"rendering_attr_depthContours_name")
                         : product.localizedTitle;
-                cell.leftIconView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
+                cell.leftIconView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product] || [product isKindOfClass:OAExternalProduct.class]
                         ? [UIImage imageNamed:product.productIconName]
-                        : [product.feature getIcon];
+                        : (product.feature ? [product.feature getIcon] : nil);
 
                 NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[self getStatus:product]];
                 NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];

@@ -204,9 +204,13 @@
     }
     if (poi.hasOpeningHours)
     {
-        if (needsSeparator)
-            [res appendString:@" • "];
-        [res appendString:[[OAPOIHelper sharedInstance] getFormattedOpeningHours:poi]];
+        NSString *formattedOpeningHours = [[OAPOIHelper sharedInstance] getFormattedOpeningHours:poi];
+        if (formattedOpeningHours.length > 0)
+        {
+            if (needsSeparator)
+                [res appendString:@" • "];
+            [res appendString:formattedOpeningHours];
+        }
     }
     
     return res;

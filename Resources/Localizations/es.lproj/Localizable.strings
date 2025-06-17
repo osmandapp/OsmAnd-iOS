@@ -3065,7 +3065,7 @@
 "telegram_chats" = "Chats de Telegram";
 "about_osmAnd" = "Acerca de OsmAnd";
 "travel_guides_no_file_error" = "Error: No hay datos del archivo de región";
-"user_guide" = "Manual del usuario";
+"user_guide" = "Guía de usuario";
 "send_log" = "Enviar registro del problema";
 "calendar_new_event_message" = "Se ha añadido un nuevo evento al calendario: Recoger el coche en %@";
 "map_widgets" = "Widgets de los mapas";
@@ -3076,7 +3076,7 @@
 "popular_articles_not_found_title" = "Artículos populares no encontrados";
 "popular_articles_not_found_descr" = "No hay artículos cerca del centro del mapa actual. Utilice la búsqueda para encontrar artículos.";
 "copy_build_version" = "Copiar la versión de la compilación";
-"gitHub_discussion" = "Debates en GitHub";
+"gitHub_discussion" = "Discusión en GitHub";
 "open_issue_on_gitHub" = "Abre un problema en github";
 "download_install_beta_version" = "Descargar e instalar la versión beta de OsmAnd";
 "detailed_log_file" = "Archivo de registro detallado";

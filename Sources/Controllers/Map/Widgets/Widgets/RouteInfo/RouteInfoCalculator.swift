@@ -7,9 +7,9 @@
 //
 
 struct DestinationInfo {
-    let distance: Int32
-    let arrivalTime: TimeInterval
-    let timeToGo: TimeInterval
+    var distance: Int32
+    var arrivalTime: TimeInterval
+    var timeToGo: TimeInterval
 }
 
 final class RouteInfoCalculator {
@@ -50,7 +50,7 @@ final class RouteInfoCalculator {
 
             if isPointNotPassedWith(distance: distance, leftSeconds: estimatedTime) {
                 result.append(createDestinationInfoWith(distance: distance, leftSeconds: estimatedTime))
-                if result.count == pointsLimit {
+                if result.count >= pointsLimit {
                     break
                 }
             }

@@ -7,7 +7,7 @@
 //
 
 final class TimeToNavigationPointWidget: OASimpleWidget {
-    private static let UPDATE_INTERVAL_SECONDS: Int64 = 30
+    static let UPDATE_INTERVAL_SECONDS: Int64 = 30
     
     private let routingHelper: OARoutingHelper = OARoutingHelper.sharedInstance()!
     private var widgetState: TimeToNavigationPointWidgetState?

@@ -52,7 +52,7 @@
 - (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation;
 - (void) updateColors;
 
-- (void) showTopToolbar:(BOOL)animated;
+- (void) showTopToolbarWithAnimation:(BOOL)animated forceToShowIfTypeFloating:(BOOL)forceToShowIfTypeFloating;
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;

@@ -3023,16 +3023,14 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    // TODO: Called twice after clearing the last result
-    NSLog(@"textDidChange: %@", searchText);
-    _lastSearchString = searchText;
-    _lastSearchScope = searchBar.selectedScopeButtonIndex;
-    [self performSearchForSearchString:_lastSearchString
-                        andSearchScope:_lastSearchScope];
-    if (searchText.length > 0)
-        [self setupSearchControllerWithFilter:YES];
-    else
-        [self setupSearchControllerWithFilter:NO];
+    if (![searchText isEqualToString:_lastSearchString])
+    {
+        _lastSearchString = searchText;
+        _lastSearchScope = searchBar.selectedScopeButtonIndex;
+        [self performSearchForSearchString:_lastSearchString
+                            andSearchScope:_lastSearchScope];
+        [self setupSearchControllerWithFilter:searchText.length > 0];
+    }
 }
 
 #pragma mark - Navigation

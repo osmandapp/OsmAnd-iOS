@@ -3427,7 +3427,7 @@
 "int_min" = "min.";
 "units_sec_short" = "seg.";
 "shared_a_z" = "A-Z";
-"twitter" = "X";
+"twitter" = "X (Twitter)";
 "short_min" = "min";
 "quick_action_terrain_color_scheme" = "Esquema de color del terreno";
 "quick_action_need_to_add_item_to_list" = "Añadir al menos un elemento a la lista en los ajustes de «Acción rápida»";
@@ -3609,3 +3609,4 @@
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "mile_per_hour" = "mph";
 "min_km" = "min/km";
+"ios_release_5_1" = "• Se ha añadido compatibilidad al comprar por Internet y entre plataformas\n• El nuevo widget de navegación combina la flecha de giro y las indicaciones de navegación\n• Se ha añadido una acción de renombrado para los grupos de favoritos\n• Se añadieron las opciones «Unidad de volumen» y «Capacidad del tanque»\n• Se ha añadido una superposición de «Cuadrícula de coordenadas»\n• Los widgets de los paneles izquierdo y derecho incluyen ahora una opción de altura\n• Se ha añadido la capacidad de asignar actividades a las trazas\n• Se ha corregido un problema de bloqueo en CarPlay con iOS 15\n• Se resolvieron los problemas de redimensionamiento automático de los widgets en los paneles izquierdo y derecho\n• Se ha corregido la incompatibilidad en las guías turísticas\n• Se ha corregido el problema con las compras entre plataformas\n• Se ha corregido el problema de una pantalla negra en CarPlay después del inicio\n";

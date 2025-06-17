@@ -11,6 +11,4 @@
 
 @interface OAClickableWayMenuProvider : OASymbolMapLayer <OAContextMenuProvider>
 
-- (instancetype)init:(id)readHeightData openAsGpxFile:(id)openAsGpxFile;
-
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "OAClickableWayMenuProvider.h"
+#import "OAClickableWayAsyncTask.h"
 #import "OAClickableWay.h"
 #import "OASelectedGpxPoint.h"
 #import "OASelectedMapObject.h"
@@ -14,43 +15,19 @@
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OAClickableWayMenuProvider
-{
-    id _readHeightData;
-    id _openAsGpxFile;
-}
-
-- (instancetype)init:(id)readHeightData openAsGpxFile:(id)openAsGpxFile
-{
-    self = [super init];
-    if (self) {
-        _readHeightData = readHeightData;
-        _openAsGpxFile = openAsGpxFile;
-        
-        //TODO: implement correct datatypes
-    }
-    return self;
-}
-
 
 #pragma mark - OAContextMenuProvider
 
 - (BOOL) showMenuAction:(id)object
 {
-    /*
     OASelectedMapObject *selectedMapObject = (OASelectedMapObject *)object;
     if ([[selectedMapObject object] isKindOfClass:OAClickableWay.class])
     {
         OAClickableWay *clickableWay = (OAClickableWay *)[selectedMapObject object];
-        
-        //TODO: implement
-        
-        //(new ClickableWayAsyncTask(mapActivity, that, readHeightData, openAsGpxFile))
-        //    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        
+        OAClickableWayAsyncTask *task = [[OAClickableWayAsyncTask alloc] initWithClickableWay:clickableWay];
+        [task execute];
         return YES;
     }
-     */
-    
     return NO;
 }
 
@@ -89,12 +66,12 @@
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     
-    //TODO: delete
-    BOOL stop = YES;
 }
 
+//TODO: delete?
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
+    /*
     if ([obj isKindOfClass:[OAClickableWay class]])
     {
         OAClickableWay *clickableWay = (OAClickableWay *)obj;
@@ -133,6 +110,7 @@
 //        targetPoint.sortIndex = (NSInteger)targetPoint.type;
 //        return targetPoint;
     }
+     */
     return nil;
 }
 

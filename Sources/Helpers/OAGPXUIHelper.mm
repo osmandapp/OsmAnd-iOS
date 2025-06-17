@@ -763,8 +763,12 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     OASGpxTrackAnalysis *trackAnalysis = analysis?: [gpx getAnalysis];
     
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:CLLocationCoordinate2DMake(selectedPoint.lat, selectedPoint.lon) openedFromMap:YES];
-    OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:routeKey];
-    state.trackIcon = drawable.getIcon;
+    
+    if (routeKey)
+    {
+        OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:routeKey];
+        state.trackIcon = drawable.getIcon;
+    }
     
     [OARootViewController.instance.mapPanel openTargetViewWithGPX:trackItem
                               items:nil

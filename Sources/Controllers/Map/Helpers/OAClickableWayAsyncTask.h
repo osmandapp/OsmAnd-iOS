@@ -8,6 +8,10 @@
 
 #import "OABaseLoadAsyncTask.h"
 
+@class OAClickableWay;
+
 @interface OAClickableWayAsyncTask: OABaseLoadAsyncTask
+
+- (instancetype)initWithClickableWay:(OAClickableWay *)clickableWay;
 
 @end

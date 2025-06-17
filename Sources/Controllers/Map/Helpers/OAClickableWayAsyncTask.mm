@@ -9,6 +9,7 @@
 #import "OAClickableWayAsyncTask.h"
 #import "OAClickableWay.h"
 #import "OASelectedGpxPoint.h"
+#import "OAGPXUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OAClickableWayAsyncTask
@@ -27,8 +28,12 @@
 
 - (id)doInBackground
 {
-    BOOL result = [self readHeightData:_clickableWay];
-    return result ? _clickableWay : nil;
+    //TODO: implement
+//    BOOL result = [self readHeightData:_clickableWay];
+//    return result ? _clickableWay : nil;
+    
+    //TODO: delete after readHeightData implementation
+    return _clickableWay;
 }
 
 - (void)onPostExecute:(id)result
@@ -41,6 +46,8 @@
 {
     return NO;
 }
+
+//TODO: delete
 
 //private boolean readHeightData(@Nullable ClickableWay clickableWay, @Nullable Cancellable canceller) {
 //    if (clickableWay != null) {
@@ -64,16 +71,16 @@
     {
         OASGpxFile *gpxFile = [clickableWay getGpxFile];
         OASGpxTrackAnalysis *analysis = [gpxFile getAnalysisFileTimestamp:0];
+        NSString *name = [clickableWay getGpxFileName];
         NSString *safeFileName = [[clickableWay getGpxFileName] stringByAppendingString:GPX_FILE_EXT];
-        NSString *tempFileName = [NSTemporaryDirectory() stringByAppendingPathComponent:safeFileName];
         OASWptPt *selectedPoint = [[clickableWay getSelectedGpxPoint] getSelectedPoint];
-        
+        [OAGPXUIHelper saveAndOpenGpx:name filepath:safeFileName gpxFile:gpxFile selectedPoint:selectedPoint analysis:analysis routeKey:nil];
         return YES;
     }
-    
-    
     return NO;
 }
+
+//TODO: delete
 
 //private boolean openAsGpxFile(@Nullable ClickableWay clickableWay) {
 //    MapActivity mapActivity = view.getMapActivity();

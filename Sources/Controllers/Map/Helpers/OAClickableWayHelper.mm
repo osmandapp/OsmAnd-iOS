@@ -75,13 +75,7 @@
         // others are default (red)
     };
     
-    
-    
-    _activator = [[OAClickableWayMenuProvider alloc] init:nil openAsGpxFile:nil];
-    
-    //TODO: implement
-    //this.activator = new ClickableWayMenuProvider(view, this::readHeightData, this::openAsGpxFile);
-
+    _activator = [[OAClickableWayMenuProvider alloc] init];
 }
 
 - (OAClickableWayMenuProvider *) getContextMenuProvider

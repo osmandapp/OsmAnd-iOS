@@ -1116,7 +1116,7 @@
 "rendering_value_lightblue_name" = "Bleu clair";
 "rendering_attr_highway_class_street_name" = "Rue";
 "rendering_attr_contourLines_name" = "Afficher les courbes de niveau";
-"rendering_attr_noPolygons_description" = "Rendre invisibles les surfaces représentant des éléments de terrain.";
+"rendering_attr_noPolygons_description" = "Rendre transparents tous les éléments de surface sur la carte.";
 "routing_attr_avoid_shuttle_train_name" = "Éviter les trains-navettes";
 "rendering_attr_surface_paved_name" = "Pavés";
 "routing_attr_height_obstacles_description" = "La durée estimée prendra en compte l\'altitude. Ce paramètre peut aider à éviter les fortes ascensions :";
@@ -1125,7 +1125,7 @@
 "rendering_attr_tracktype_grade5_name" = "Non-compact";
 "rendering_value_translucent_lightgreen_name" = "Vert clair translucide";
 "routeInfo_tracktype_name" = "Dureté de la surface";
-"rendering_attr_showLez_description" = "Afficher les zones à faible émission sur la carte (n\'influe pas sur le calcul d\'itinéraire).";
+"rendering_attr_showLez_description" = "Afficher les zones à faibles émissions sur la carte. N’affecte pas le calcul d’itinéraire.";
 "rendering_attr_noPolygons_name" = "Polygones";
 "rendering_attr_hideWaterPolygons_name" = "Eau";
 "rendering_attr_contourColorScheme_description" = "Couleur des courbes de niveau";
@@ -1171,7 +1171,7 @@
 "rendering_value_americanRoadAtlas_name" = "Atlas des routes américaines";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Affiliation au réseau";
 "rendering_attr_surface_fine_gravel_name" = "Gravier fin";
-"rendering_attr_hmRendered_name" = "Afficher plus de détail";
+"rendering_attr_hmRendered_name" = "Afficher plus de détails";
 "rendering_value_medium_name" = "Moyen";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Afficher les itinéraires cyclables balisés";
 "rendering_attr_highway_class_track_name" = "Piste";
@@ -1445,7 +1445,7 @@
 "shared_string_start_date" = "Date de début";
 "selected_roads" = "Routes sélectionnées";
 "select_work_point" = "Sélectionnez votre lieu de travail";
-"temporary_conditional_routing" = "Prendre en compte les limitations temporaires";
+"temporary_conditional_routing" = "Tenir compte des limitations temporaires";
 "allow_3d_descr" = "Activez cette option pour visualiser la carte dans une perspective 2.5D";
 "active_markers" = "Marques actives";
 "shared_string_exit" = "Quitter";
@@ -1838,7 +1838,7 @@
 "select_track_to_follow" = "Sélectionnez l'itinéraire à suivre";
 "folder_already_exsists" = "Un dossier portant ce nom existe déjà";
 "incorrect_symbols" = "Caractères non valides saisis";
-"none_point_error" = "Merci d\'ajouter au moins un point.";
+"none_point_error" = "Veuillez ajouter au moins un point.";
 "gpx_saved_successfully" = "Fichier GPX enregistré dans %@";
 "simplified_track_description" = "Seul l\'itinéraire sera enregistré, les étapes seront supprimées.";
 "whole_track_descr" = "Toute la trace sera recalculée en utilisant le profil sélectionné.";
@@ -2176,7 +2176,7 @@
 "backup_now" = "Sauvegarder maintenant";
 "backup_error_size_is_exceeded" = "Taille maximale du Cloud OsmAnd dépassée %@";
 "rendering_attr_showMonorailRoutes_name" = "Voies pour monorail";
-"make_backup_descr" = "Il y a eu beaucoup de modifications sur cet appareil, merci de sauvegarder vos données et ainsi ne pas risquer de les perdre.";
+"make_backup_descr" = "De nombreuses modifications ont été détectées sur cet appareil. Veuillez sauvegarder vos données pour éviter toute perte.";
 "backup_error_subscription_was_expired_descr" = "Votre abonnement OsmAnd Pro a expiré, renouvelez-le pour utiliser la sauvegarde. Vous pouvez toujours restaurer des données à partir du Cloud.";
 "backup_error_token_is_not_valid" = "Une erreur s\'est produite avec l\'ID d\'appareil ou le jeton fournit";
 "rendering_attr_showFunicularRoutes_name" = "Voies pour funiculaire";
@@ -2459,7 +2459,7 @@
 "cloud_confirm_delete_type" = "Voulez-vous supprimer \"%@\" depuis OsmAnd Cloud ?";
 "purchases_feature_desc_cross_buy" = "Utilisez votre abonnement sur toutes les plateformes (Android, iOS, web) sans frais supplémentaire.";
 "shared_string_profile" = "Profil";
-"map_widget_rendering_fps" = "Rendu FPS de la carte";
+"map_widget_rendering_fps" = "IPS du rendu de carte";
 "activity_type_mountainbike_name" = "VTT";
 "show_borders_of_downloaded_maps" = "Afficher les bordures des cartes téléchargées";
 "rendering_attr_showMtbScale_name" = "Afficher la difficulté VTT";
@@ -2551,7 +2551,7 @@
 "routing_attr_prefer_hiking_routes_name" = "Privilégier les itinéraires de randonnée";
 "rendering_attr_natureReserves_name" = "Réserve naturelle";
 "rendering_attr_depthContourColorScheme_description" = "Jeu de couleurs des courbes de profondeur";
-"rendering_attr_OSMMapperAssistantFixme_name" = "Étiquettes fixme";
+"rendering_attr_OSMMapperAssistantFixme_name" = "Attributs fixme";
 "routing_attr_difficulty_preference_intermediate_name" = "Intermédiaire";
 "rendering_attr_showShareTaxiRoutes_name" = "Lignes de navette";
 "rendering_attr_natureReserves_description" = "Afficher les réserves naturelles, les zones protégées et les parcs nationaux.";
@@ -2577,14 +2577,14 @@
 "rendering_attr_showTramRoutes_name" = "Lignes de tramway";
 "routing_attr_allow_streams_name" = "Autoriser les cours d’eau et les drains";
 "rendering_attr_seabedDetail_description" = "Informations textuelles supplémentaires sur la qualification du fond marin, les types de surface combinés, la catégorie et le taxon des algues ou des herbiers marins";
-"rendering_attr_OSMMapperAssistantNote_description" = "Afficher les étiquettes note";
+"rendering_attr_OSMMapperAssistantNote_description" = "Afficher les attributs note";
 "routing_attr_hazmat_category_description" = "Catégorie matières dangereuses / Prenez en compte les interdictions d\'accès";
 "routing_attr_allow_intermittent_description" = "Autoriser les voies navigables intermittentes";
 "rendering_attr_horseScale_name" = "Difficulté des sentiers équestres";
 "rendering_attr_seabedDetail_name" = "Détails des fonds marins";
 "routing_attr_difficulty_preference_advanced_name" = "Confirmé";
 "rendering_attr_depthContourWidth_description" = "Largeur des courbes de profondeur";
-"rendering_attr_OSMMapperAssistantFixme_description" = "Afficher les étiquettes fixme";
+"rendering_attr_OSMMapperAssistantFixme_description" = "Afficher les attributs fixme";
 "routing_attr_difficulty_preference_beginner_name" = "Débutant";
 "rendering_attr_horse_scale_demanding_name" = "Exigeant";
 "rendering_attr_horse_scale_difficult_name" = "Difficile";
@@ -2597,15 +2597,15 @@
 "routing_attr_avoid_fords_name" = "Éviter les gués";
 "routing_attr_avoid_highway_name" = "Éviter les autoroutes";
 "rendering_attr_horse_scale_dangerous_name" = "Dangereux";
-"routing_attr_carriage_restrictions_description" = "Prendre en compte les autorisations d\'accès pour les véhicules hippomobiles";
-"routing_attr_goods_restrictions_description" = "Prendre en compte les autorisations d\'accès pour les véhicules légers de transport de marchandises";
+"routing_attr_carriage_restrictions_description" = "Tenir compte des autorisations d'accès pour les véhicules hippomobiles";
+"routing_attr_goods_restrictions_description" = "Tenir compte des autorisations d'accès pour les véhicules légers de transport de marchandises";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Icônes à zoom faible";
 "routing_attr_freeride_policy_allow_name" = "Autoriser";
 "rendering_attr_weatherPressureContours_name" = "Lignes isobares";
 "routing_attr_avoid_fords_description" = "Éviter les gués";
 "routing_attr_allow_streams_description" = "Autoriser les cours d’eau et les drains";
 "routing_attr_avoid_4wd_only_description" = "Éviter les routes adaptées uniquement aux 4 x 4";
-"rendering_attr_OSMMapperAssistantNote_name" = "Étiquettes note";
+"rendering_attr_OSMMapperAssistantNote_name" = "Attributs note";
 "rendering_attr_noNatureReserveBoundaries_description" = "Masquer les limites des réserves naturelles, des zones protégées et des parcs nationaux.";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Ne pas faire de hors-piste";
 "rendering_value_all_name" = "Tout";
@@ -2650,11 +2650,11 @@
 "announcement_time_prepare" = "Préparation";
 "announcement_time_approach" = "Approche";
 "announcement_time_passing" = "Durée";
-"compass_click_desc" = "Appuyer deux fois sur la boussole bascule entre les modes d'orientation de la carte.";
+"compass_click_desc" = "Appuyez deux fois sur le bouton boussole pour basculer entre les modes d'orientation de la carte.";
 "search_history_disabled" = "L'historique de recherche est désactivé";
 "last_seven_days" = "Ces 7 derniers jours";
 "delete_history_items" = "Supprimer %@ éléments d’historique \?";
-"restart_is_required" = "Il est nécessaire de redémarrer l\'application pour prendre en compte la modification.";
+"restart_is_required" = "Un redémarrage est nécessaire pour appliquer le changement.";
 "rotate_map_manual_opt" = "Orientation manuelle";
 "history_clear_alert_message" = "Êtes-vous sûr de vouloir supprimer tous les éléments de l'historique ?";
 "enable_search_history" = "Vous pouvez activer l'historique des recherches dans les Paramètres";
@@ -2846,7 +2846,7 @@
 "coordinates_widget_map_center_desc" = "Affiche les coordonnées du centre de la carte";
 "map_widget_camera_tilt_desc" = "Indique l\'angle de l\'appareil photo en mode perspective. La valeur par défaut est 90° (aucune inclinaison).";
 "map_widget_camera_distance_desc" = "Indique l\'altitude de l\'appareil photo au-dessus de la surface.";
-"map_widget_rendering_fps_desc" = "Affiche la vitesse d\'affichage et d’actualisation de la carte et de ses éléments, exprimé en images par seconde (FPS).";
+"map_widget_rendering_fps_desc" = "Indique la vitesse d’affichage et de rafraîchissement de la carte et de ses éléments, exprimée en images par seconde (IPS).";
 "map_widget_zoom_level_desc" = "Indique le niveau de zoom actuel.";
 "map_widget_target_distance_desc" = "Indique la distance entre l\'appareil photo et la destination.";
 "weather_updates_manual" = "Les prévisions météo doivent être mises à jour manuellement.";
@@ -2862,7 +2862,7 @@
 "click_on_widget" = "Cliquer sur le widget";
 "unsaved_changes_will_be_lost_discard" = "Toutes les modifications non enregistrées seront perdues. Abandonner les modifications ?";
 "terrain_3D_maps" = "Cartes de terrain";
-"average_speed_skip_stops" = "Prendre en compte les arrêts";
+"average_speed_skip_stops" = "Tenir compte des arrêts";
 "average_speed_time_interval_desc" = "Indiquer la durée sur laquelle calculer la moyenne.";
 "unsaved_changes" = "Modifications non sauvegardées";
 

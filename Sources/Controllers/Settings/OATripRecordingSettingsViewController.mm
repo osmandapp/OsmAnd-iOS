@@ -303,7 +303,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                     @{
                         @"name" : @"vehicleMetrics",
                         @"title" : OALocalizedString(@"obd_plugin_name"),
-                        @"isProButtonVisible" : @(YES),
+                        @"isProButtonVisible" : @(!OAIAPHelper.isVehicleMetricsAvailable),
                         @"actionSelector": NSStringFromSelector(@selector(onProButtonTapped)),
                         @"type" : OAValueTableViewCell.reuseIdentifier
                     }]];
@@ -777,13 +777,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     else if ([name isEqualToString:@"vehicleMetrics"])
     {
-        if (OAIAPHelper.isVehicleMetricsAvailable)
-        {
-            
-        }
-        else
-        {
+        NSNumber *isProButtonVisible = item[@"isProButtonVisible"];
+        if (isProButtonVisible && isProButtonVisible.boolValue) {
             [self onProButtonTapped];
+        } else {
+            // TODO:
         }
     }
 }

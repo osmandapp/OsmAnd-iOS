@@ -3370,3 +3370,4 @@
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
 "info_button" = "Info";
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
+"preview_next_turn_descr" = "Roterar automatiskt kartan för att förhandsgranska nästa sväng eller manöver";

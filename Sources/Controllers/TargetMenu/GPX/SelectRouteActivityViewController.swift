@@ -83,10 +83,6 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
         localizedString("shared_string_activity")
     }
     
-    override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        [createRightNavbarButton(localizedString("shared_string_apply"), iconName: nil, action: #selector(onRightNavbarButtonPressed), menu: nil)]
-    }
-    
     override func generateData() {
         tableData.clearAllData()
         
@@ -156,11 +152,6 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         selectedActivity = item.obj(forKey: "routeActivity") as? RouteActivity
-        isCheckmarkAllowed = true
-        updateData()
-    }
-    
-    override func onRightNavbarButtonPressed() {
         if isTripRecordingSettings {
             settings?.currentTrackRouteActivity.set(selectedActivity?.id, mode: appMode)
         } else if let tracks {
@@ -170,7 +161,14 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
             delegate?.didApplyRouteActivitySelection()
         }
         
-        super.onLeftNavbarButtonPressed()
+        if isSearchActive {
+            searchController?.dismiss(animated: true) { [weak self] in
+                guard let self else { return }
+                self.onLeftNavbarButtonPressed()
+            }
+        } else {
+            onLeftNavbarButtonPressed()
+        }
     }
     
     private func determineInitialActivity() -> RouteActivity? {

@@ -64,7 +64,7 @@
 "shared_string_apply" = "Áp dụng";
 "shared_string_select" = "Chọn";
 "shared_string_cancel" = "Hủy";
-"shared_string_exit" = "Thoát";
+"shared_string_exit" = "Lối ra";
 "shared_string_close" = "Đóng";
 "shared_string_no" = "Không";
 "shared_string_yes" = "Có";
@@ -127,7 +127,7 @@
 "shared_string_no_thanks" = "Không, cảm ơn";
 
 // Route planning
-"profile_alert_need_save_title" = "Lưu thay đổi";
+"profile_alert_need_save_title" = "Lưu các thay đổi";
 
 // Resources
 "shared_string_type" = "Loại";
@@ -1453,7 +1453,7 @@
 "route_line_use_map_style_width" = "Dùng độ dày mặc định theo kiểu bản đồ (%@).";
 "map_locale" = "Ngôn ngữ bản đồ";
 "altitude_descent" = "Xuống dốc";
-"shared_string_options" = "Những lựa chọn";
+"shared_string_options" = "Tùy chọn";
 "quick_action_map_styles" = "Kiểu bản đồ";
 "about_osmAnd" = "Về OsmAnd";
 "map_magnifier" = "Kính phóng đại bản đồ";
@@ -1917,3 +1917,55 @@
 "rendering_attr_winter_road_name" = "Đường mùa đông";
 "app_mode_horse" = "Ngựa";
 "app_mode_helicopter" = "Trực thăng";
+"shared_string_current" = "Hiện tại";
+"replace_destination_point" = "Thay thế điểm đến";
+"send_log" = "Gửi nhật kí";
+"add_home" = "Thêm nhà";
+"rendering_value_thick_name" = "Dày";
+"angular_measeurement_descr" = "Thay đổi đơn vị đo phương vị.";
+"osmand_default_routing" = "Dẫn đường OsmAnd";
+"routing_attr_avoid_subway_description" = "Tránh tàu điện ngầm và phương tiện vận tải đường sắt nhẹ";
+"tracker_item" = "Công cụ theo dõi OsmAnd";
+"routing_attr_avoid_tram_name" = "Không dùng tàu điện";
+"app_mode_camper" = "Xe cắm trại";
+"base_profile_descr_aircraft" = "Máy bay, tàu lượn";
+"add_as_last_destination_point" = "Thêm thành điểm đến trung gian cuối cùng";
+"last_intermediate_dest_description" = "Thêm điểm dừng trung gian";
+"app_mode_offroad" = "Xe địa hình";
+"routing_attr_avoid_subway_name" = "Không dùng tàu điện ngầm";
+"rendering_attr_currentTrackColor_description" = "Màu GPX";
+"routing_attr_avoid_bus_name" = "Không dùng xe buýt";
+"routing_attr_avoid_share_taxi_name" = "Không dùng taxi ghép";
+"routing_attr_avoid_train_name" = "Không dùng tàu hỏa";
+"shared_string_edges" = "Cạnh";
+"profile_alert_delete_title" = "Xóa hồ sơ";
+"base_profile_descr_public_transport" = "Phương tiện công cộng";
+"profile_type_base_string" = "Hồ sơ cơ bản";
+"rendering_attr_currentTrackWidth_name" = "Độ rộng GPX";
+"profile_alert_need_profile_name_title" = "Nhập tên hồ sơ";
+"routing_attr_avoid_train_description" = "Tránh tàu hỏa";
+"public_transport_try_change_settings" = "Thử thay đổi cài đặt.";
+"rendering_attr_currentTrackColor_name" = "Màu GPX";
+"routing_attr_avoid_share_taxi_description" = "Tránh taxi ghép";
+"rendering_attr_currentTrackWidth_description" = "Độ rộng GPX";
+"routing_attr_avoid_tram_description" = "Tránh tàu điện";
+"searching_gps" = "Đang tìm GPS";
+"osm_live_payment_current_subscription" = "Gói đăng kí hiện tại";
+"base_profile_descr_boat" = "Tàu, chèo thuyền, thuyền buồm";
+"add_as_first_destination_point" = "Thêm thành điểm đến trung gian đầu tiên";
+"first_intermediate_dest_description" = "Thêm điểm dừng đầu tiên";
+"keep_and_add_destination_point" = "Thêm thành điểm đến sau cùng";
+"subsequent_dest_description" = "Chuyển điểm đến lên, và tạo nó";
+"app_mode_scooter" = "Xe tay ga";
+"app_mode_wagon" = "Xe wagon";
+"base_profile_descr_pedestrian" = "Đi bộ, leo núi, chạy bộ";
+"routing_attr_avoid_bus_description" = "Tránh xe buýt và xe buýt điện bánh hơi";
+"make_as_start_point" = "Chọn làm điểm xuất phát";
+"special_routing_type" = "Dẫn đường đặc biệt";
+"shared_string_walk" = "Đi bộ";
+"routing_profile_ski" = "Trượt tuyết";
+"routing_profile_geocoding" = "Mã hóa địa lí";
+"routing_profile_straightline" = "Đường thẳng";
+"avoid_pt_types_descr" = "Chọn loại hình giao thông công cộng cần tránh khi điều hướng:";
+"avoid_pt_types" = "Tránh các loại phương tiện giao thông…";
+"current_track" = "Cung đường hiện tại";

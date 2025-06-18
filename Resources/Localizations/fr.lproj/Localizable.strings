@@ -1870,7 +1870,7 @@
 "shared_string_required" = "Obligatoire";
 "search_poi_types_descr" = "Combiner des POI de différentes catégories à l'aide des interrupteurs et des cases à cocher.";
 "reset_to_default_category_button_promo" = "« Restaurer les valeurs par défaut » réinitialisera l'ordre de tri.";
-"create_custom_categories_list_promo" = "Modifier l’ordre de la liste et masquer des catégories. Importer ou exporter toutes les modifications sous forme de profils.";
+"create_custom_categories_list_promo" = "Ordonner la liste et masquer des catégories. Importer ou exporter toutes vos modifications grâce aux profils.";
 "hidden_categories" = "Catégories masquées";
 "visible_categories" = "Catégories visibles";
 "rearrange_categories" = "Réorganiser les catégories";

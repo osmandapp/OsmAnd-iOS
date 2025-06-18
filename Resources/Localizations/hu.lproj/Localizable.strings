@@ -2974,3 +2974,8 @@
 "customize_grid_color" = "Rácsszín testreszabása";
 "grid_color" = "Rács színe";
 "meridian_180" = "180° délkör";
+"sensor_data" = "Érzékelőadatok";
+"years_3" = "3 év";
+"three_years_subscription" = "3 éves előfizetés";
+"osm_live_payment_renews_3_years" = "Megújul 3 évente";
+"map_widget_distance" = "Távolság";

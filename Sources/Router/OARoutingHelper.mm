@@ -761,7 +761,8 @@ static BOOL _isDeviatedFromRoute = false;
                 if ([_settings.snapToRoad get] && currentRoute + 1 < routeNodes.count)
                 {
                     CLLocation *nextRouteLocation = routeNodes[currentRoute + 1];
-                    locationProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:locationProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
+                    BOOL previewNextTurn = _settings.previewNextTurn.get;
+                    locationProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:locationProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation previewNextTurn:previewNextTurn];
                 }
                 else if ([_settings.snapToRoad get])
                 {

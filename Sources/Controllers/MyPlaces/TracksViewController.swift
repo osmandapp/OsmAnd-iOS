@@ -1350,8 +1350,15 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             trackItem = TrackItem(gpxFile: gpxFile)
         }
         guard let trackItem else { return }
+        let gpxDoc: GpxFile?
+        if isCurrentTrack {
+            gpxDoc = nil
+        } else {
+            guard let file = trackItem.getFile() else { return }
+            gpxDoc = GpxUtilities.shared.loadGpxFile(file: file)
+        }
         
-        gpxHelper.openExport(forTrack: trackItem.dataItem, gpxDoc: nil, isCurrentTrack: isCurrentTrack, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
+        gpxHelper.openExport(forTrack: trackItem.dataItem, gpxDoc: gpxDoc, isCurrentTrack: isCurrentTrack, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
     }
     
     private func onTrackUploadToOsmClicked(_ track: TrackItem?) {

@@ -87,3 +87,7 @@
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
 "shared_string_markers" = "চিহ্নসমুহ";
 "coordinates_format" = "অক্ষাংশ-দ্রাঘিমাংশ বিন্যাস";
+"option_available_only_by_subscription" = "চাদাঁ পদ্ধতিতেও উপলব্ধ রয়েছে";
+"three_years_subscription" = "তিন বছরের জন্য চাঁদা";
+"osm_live_subscriptions" = "চাঁদাসমূহ";
+"osmand_pro_tagline" = "সবরকমের বেশিষ্ট নিন";

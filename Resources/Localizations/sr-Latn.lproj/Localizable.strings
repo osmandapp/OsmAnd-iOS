@@ -587,7 +587,7 @@
 "layer_route" = "Ruta";
 "gpx_analyze" = "Analiziraj";
 "gpx_route_time" = "Vreme rute";
-"gpx_uphldownhl" = "Uzbrdo/nizbrdo";
+"gpx_uphldownhl" = "Uzbrdo / Nizbrdo";
 "map_widget_average_speed" = "Prosečna brzina";
 "shared_string_control_start" = "Kreni";
 "gpx_avg_elev" = "Prosečna nadmorska visina";
@@ -3694,3 +3694,9 @@
 "map_widget_route_information_desc" = "Prikazuje procenjeno vreme dolaska, preostalo vreme putovanja i udaljenost za trenutnu rutu.";
 "dd_mm_ss_format" = "DD°MM′SS″";
 "type_of_activity" = "Tip aktivnosti";
+"preview_next_turn" = "Pregled sledećeg skretanja";
+"preview_next_turn_descr" = "Automatski rotira mapu radi pregleda sledećeg skretanja ili manevra";
+"years_3" = "Tri godine";
+"osm_live_payment_renews_3_years" = "Obnavlja se svake tri godine";
+"three_years_subscription" = "Trogodišnja pretplata";
+"three_months_subscription" = "Tromesečna pretplata";

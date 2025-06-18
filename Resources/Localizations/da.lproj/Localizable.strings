@@ -3700,3 +3700,4 @@
 "osm_live_payment_renews_3_years" = "Fornyes hvert tredje år";
 "years_3" = "Tre år";
 "three_years_subscription" = "Tre års abonnement";
+"ios_release_5_1" = "• Tilføjet understøttelse af køb på web og på tværs af platforme\n• Nyt navigationsmodul kombinerer svingpil og navigationsinstruktioner\n• Tilføjet mulighed for at omdøbe favoritgrupper\n• Tilføjet indstillingerne »Volumenenhed« og »Brændstoftankens kapacitet«\n• Tilføjet en \"Koordinatnet\" overlejring\n• Moduler på venstre og højre panel indeholder nu en højdeindstilling\n• Tilføjet muligheden for at tildele aktiviteter til spor\n• Rettet et nedbrud på CarPlay med iOS 15\n• Problemer med automatisk størrelsesændring af moduler på venstre og højre panel er blevet løst\n• Inkompatibilitet med rejseguider er blevet rettet\n• Problemet med køb på tværs af platforme er blevet løst\n• Rettet problemet med en sort skærm på CarPlay efter opstart\n";

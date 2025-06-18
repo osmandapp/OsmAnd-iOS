@@ -1629,7 +1629,7 @@
 "coord_input_add_point" = "Ajouter un point";
 "next_segment" = "Segment suivant";
 "application_profiles" = "Profils de l\'application";
-"select_base_profile_dialog_message" = "Basez votre profil personnel sur l\'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l\'application ainsi que des exemples de profils personnalisés :";
+"select_base_profile_dialog_message" = "Basez votre profil personnalisé sur l'un des profils d'application par défaut. Cela définit la configuration de base, comme la visibilité par défaut des widgets et les unités de vitesse et de distance. Voici les profils d'application par défaut, ainsi que des exemples de profils personnalisés qui peuvent en être dérivés :";
 "listed_exist" = "Les %@ listés existent déjà dans OsmAnd.";
 "quick_action_mapillary_show" = "Afficher Mapillary";
 "public_transport_hide" = "Masquer les transports publics";

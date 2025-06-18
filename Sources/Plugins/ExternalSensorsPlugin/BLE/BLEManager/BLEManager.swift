@@ -56,8 +56,7 @@ final class BLEManager {
             let obdDevices = devices.filter { $0.deviceType == .OBD_VEHICLE_METRICS }
             
             handleRestoredDevices(devices: nonOBDDevices, isAllowed: OAIAPHelper.isSensorPurchased())
-            // TODO: refactor isOsmAndProAvailable -> OAIAPHelper.isOBDPurchased() https://github.com/osmandapp/OsmAnd-Issues/issues/2814
-            handleRestoredDevices(devices: obdDevices, isAllowed: OAIAPHelper.isOsmAndProAvailable())
+            handleRestoredDevices(devices: obdDevices, isAllowed: OAIAPHelper.isVehicleMetricsPurchased())
         }
         
         centralStateObserver = NotificationCenter.default.addObserver(forName: Central.CentralStateChange,

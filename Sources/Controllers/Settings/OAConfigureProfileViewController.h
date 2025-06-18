@@ -8,16 +8,7 @@
 
 #import "OABaseNavbarViewController.h"
 
-#define kGeneralSettings @"general_settings"
-#define kNavigationSettings @"nav_settings"
-#define kProfileAppearanceSettings @"profile_appearance"
-#define kExportProfileSettings @"export_profile"
-#define kTrackRecordingSettings @"trip_rec"
-#define kOsmEditsSettings @"osm_edits"
-#define kOsmandDevelopmentSettings @"osmand_development"
-#define kWeatherSettings @"weather"
-#define kWikipediaSettings @"wikipedia"
-#define kExternalSensors @"externalSensors"
+extern NSString * const kNavigationSettings;
 
 @class OAApplicationMode;
 

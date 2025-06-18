@@ -404,6 +404,18 @@ static NSMutableArray *activePopups;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if ([kInAppId_Addon_Vehicle_Metrics isEqualToString:productIdentifier])
+    {
+        needShow = YES;
+        title = OALocalizedString(@"vehicle_metrics_obd_ii");
+        descText = OALocalizedString(@"purchase_feature_desc_vehicle_metrics_obd_ii");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        iconName = @"ic_custom_vehicle_metrics_colored";
+        popup.okButton.tag = EOAFeatureVehicleMetrics;
+
+        [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     if (needShow)
     {

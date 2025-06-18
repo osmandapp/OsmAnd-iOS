@@ -38,7 +38,6 @@ static NSString * const settingMapShowAltInDriveModeKey = @"settingMapShowAltInD
 static NSString * const settingDoNotShowPromotionsKey = @"settingDoNotShowPromotionsKey";
 static NSString * const settingUseFirebaseKey = @"settingUseFirebaseKey";
 static NSString * const metricSystemChangedManuallyKey = @"metricSystemChangedManuallyKey";
-static NSString * const volumeUnitsChangedManuallyKey = @"volumeUnitsChangedManuallyKey";
 static NSString * const liveUpdatesPurchasedKey = @"liveUpdatesPurchasedKey";
 static NSString * const settingOsmAndLiveEnabledKey = @"settingOsmAndLiveEnabledKey";
 static NSString * const liveUpdatesRetriesKey = @"liveUpdatesRetriesKey";
@@ -2633,7 +2632,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (EOAVolumeConstant)get:(OAApplicationMode *)mode
 {
-    return [super get:mode];
+    EOADrivingRegion drivingRegion = [[OAAppSettings sharedManager].drivingRegion get:mode];
+    return [self getValue:mode] ? [super get:mode] : [OADrivingRegion getDefVolume:drivingRegion];
 }
 
 - (void)set:(EOAVolumeConstant)volumeConstant
@@ -2874,8 +2874,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     [super set:drivingRegionConstant mode:mode];
     if (![[OAAppSettings sharedManager].metricSystemChangedManually get:mode])
         [[OAAppSettings sharedManager].metricSystem set:[OADrivingRegion getDefMetrics:drivingRegionConstant] mode:mode];
-    if (![[OAAppSettings sharedManager].volumeUnitsChangedManually get:mode])
-        [[OAAppSettings sharedManager].volumeUnits set:[OADrivingRegion getDefVolume:drivingRegionConstant] mode:mode];
 }
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
@@ -4849,16 +4847,14 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _drivingRegion = [OACommonDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
         _metricSystem = [OACommonMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
         _metricSystemChangedManually = [OACommonBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
-        _volumeUnitsChangedManually = [OACommonBoolean withKey:volumeUnitsChangedManuallyKey defValue:NO];
         
         _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:GENERIC_EXTERNAL_DEVICE];
-
-        [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"shared_string_automatic"];
+        
+        [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
         [_profilePreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
-        [_profilePreferences setObject:_volumeUnitsChangedManually forKey:@"volume_units_changed_manually"];
         [_profilePreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_profilePreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];

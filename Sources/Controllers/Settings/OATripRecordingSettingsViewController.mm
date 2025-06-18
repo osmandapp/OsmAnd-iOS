@@ -299,25 +299,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                         @"title" : OALocalizedString(@"external_sensors_plugin_name"),
                         @"value" : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @(devices).stringValue, @(devicesAll).stringValue],
                         @"type" : OAValueTableViewCell.reuseIdentifier
-                    },
-                    @{
-                        @"name" : @"vehicleMetrics",
-                        @"title" : OALocalizedString(@"obd_plugin_name"),
-                        @"isProButtonVisible" : @(!OAIAPHelper.isVehicleMetricsAvailable),
-                        @"actionSelector": NSStringFromSelector(@selector(onProButtonTapped)),
-                        @"type" : OAValueTableViewCell.reuseIdentifier
                     }]];
-                
-                
-//                if ([OAPluginsHelper isEnabled:VehicleMetricsPlugin.class])
-//                {
-//                    @{
-//                        @"name" : @"vehicleMetrics",
-//                        @"title" : OALocalizedString(@"obd_plugin_name"),
-//                        @"value" : @"",
-//                        @"type" : OAValueTableViewCell.reuseIdentifier
-//                    }
-//                }
             }
             
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];

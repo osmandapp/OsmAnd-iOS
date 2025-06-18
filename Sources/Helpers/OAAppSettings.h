@@ -988,6 +988,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonBoolean *voiceMute;
 @property (nonatomic) OACommonString *voiceProvider;
 @property (nonatomic) OACommonBoolean *interruptMusic;
+@property (nonatomic) OACommonBoolean *previewNextTurn;
 @property (nonatomic) OACommonBoolean *snapToRoad;
 @property (nonatomic) OACommonInteger *autoFollowRoute;
 @property (nonatomic) OACommonBoolean *autoZoomMap;

@@ -22,6 +22,7 @@
 "years_2_4" = "Years";
 "years_5" = "Years";
 "months_3" = "Three months";
+"years_3" = "Three years";
 
 "price_free" = "Free";
 
@@ -523,6 +524,8 @@
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Auto zoom map";
 "auto_zoom_map_descr" = "Zoom level according to your speed (while map is synchronized with current position).";
+"preview_next_turn" = "Preview next turn";
+"preview_next_turn_descr" = "Automatically rotates the map to preview the next turn or maneuver";
 "snap_to_road" = "Snap to road";
 "snap_to_road_descr" = "Current position icon will snap to the current navigation route";
 "show_warnings_title" = "Show alerts…";
@@ -2679,6 +2682,7 @@
 "osm_live_payment_renews_monthly" = "Renews monthly";
 "osm_live_payment_renews_quarterly" = "Renews quarterly";
 "osm_live_payment_renews_annually" = "Renews annually";
+"osm_live_payment_renews_3_years" = "Renews every three years";
 "default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Payment interval:";
 "osm_live_payment_contribute_descr" = "Donations help fund OSM cartography.";
@@ -3117,9 +3121,6 @@
 "icon_group_education" = "Education";
 "shared_string_original" = "Original";
 
-//Color categories
-"track_coloring_solid" = "Solid color";
-
 "settings_item_read_error" = "Could not read from \'%@\'.";
 "app_mode_default" = "Browse map";
 "app_mode_car" = "Driving";
@@ -3311,6 +3312,8 @@
 "monthly_subscription" = "Monthly subscription";
 "annual_subscription" = "Annual subscription";
 "quarterly_subscription" = "Quarterly subscription";
+"three_months_subscription" = "Three months subscription";
+"three_years_subscription" = "Three years subscription";
 
 "option_available_only_by_subscription" = "Available in subscription plans";
 "osm_live_subscriptions" = "Subscriptions";
@@ -3635,6 +3638,19 @@
 • Fixed an issue with track waypoint colors.\n
 • Fixed the missing \"Download all\" button for Terrain maps.\n
 • Fixed an issue where popular articles were sometimes missing in Travel Guides.\n";
+
+"ios_release_5_1" = "• Added support for web and cross-platform purchases\n\
+• New navigation widget combines turn arrow and navigation instructions\n\
+• Added a rename action for Favorite groups\n\
+• Added \"Unit of Volume\" and \"Fuel Tank Capacity\" options\n\
+• Added a \"Coordinates Grid\" overlay\n\
+• Widgets on the Left & Right panels now include a height option\n\
+• Added the ability to assign activities to tracks\n\
+• Fixed a crash on CarPlay with iOS 15\n\
+• Automatic resizing issues with widgets on the left and right panels have been resolved\n\
+• Incompatibility of travel guides has been fixed\n\
+• The issue with cross-platform purchases has been resolved\n\
+• Fixed the issue of a black screen on CarPlay after startup\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";

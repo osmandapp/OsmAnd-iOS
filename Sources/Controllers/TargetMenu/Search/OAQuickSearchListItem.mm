@@ -349,8 +349,12 @@
         {
             OAPOI *poi = (OAPOI *) searchResult.object;
             NSString * subType = [poi getSubTypeStr];
+            NSString * alternateName = searchResult.alternateName;
             NSString * city = poi.cityName;
-            if ([city length] > 0)
+            if ([alternateName length] > 0)
+            {
+                subType = [subType stringByAppendingFormat:@" • %@", alternateName];
+            } else if ([city length] > 0)
             {
                 subType = [subType stringByAppendingFormat:@" • %@", city];
             }

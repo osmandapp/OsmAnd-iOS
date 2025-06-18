@@ -68,12 +68,14 @@
         autoZoomValue = [OAAutoZoomMap getName:autoZoomMap];
     }
 
-    NSMutableArray *dataArr = [NSMutableArray arrayWithObjects:@{
+    NSMutableArray *dataArr = [NSMutableArray arrayWithObjects:
+                               @{
                                     @"type" : [OAValueTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"choose_auto_follow_route"),
                                     @"value" : autoCenterValue,
-                                    @"key" : @"autoCenter"},
-                                @{
+                                    @"key" : @"autoCenter"
+                               },
+                               @{
                                     @"type" : [OAValueTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"auto_zoom_map"),
                                     @"value" : autoZoomValue,
@@ -81,8 +83,15 @@
                                },
                                @{
                                     @"type" : [OASwitchTableViewCell getCellIdentifier],
+                                    @"title" : OALocalizedString(@"preview_next_turn"),
+                                    @"value" : _settings.previewNextTurn,
+                                    @"key" : @"previewNextTurn"
+                               },
+                               @{
+                                    @"type" : [OASwitchTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"snap_to_road"),
-                                    @"value" : _settings.snapToRoad
+                                    @"value" : _settings.snapToRoad,
+                                    @"key" : @"snapToRoad"
                                }, nil];
     _data = [NSArray arrayWithArray:dataArr];
 }
@@ -94,6 +103,8 @@
     else if (section == 1)
         return OALocalizedString(@"auto_zoom_map_descr");
     else if (section == 2)
+        return OALocalizedString(@"preview_next_turn_descr");
+    else if (section == 3)
         return OALocalizedString(@"snap_to_road_descr");
     else
         return @"";

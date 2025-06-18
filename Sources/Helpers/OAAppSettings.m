@@ -28,7 +28,7 @@
 static NSString * const settingAppModeKey = @"settingAppModeKey";
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
 static NSString * const metricSystemKey = @"settingMetricSystemKey";
-static NSString * const drivingRegionAutomaticKey = @"newDrivingRegionAutomatic";
+static NSString * const drivingRegionAutomaticKey = @"drivingRegionAutomatic";
 static NSString * const preciseDistanceNumbersKey = @"precise_distance_numbers";
 static NSString * const drivingRegionKey = @"settingDrivingRegion";
 static NSString * const settingZoomButtonKey = @"settingZoomButtonKey";

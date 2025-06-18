@@ -3700,3 +3700,4 @@
 "osm_live_payment_renews_3_years" = "Obnavlja se svake tri godine";
 "three_years_subscription" = "Trogodišnja pretplata";
 "three_months_subscription" = "Tromesečna pretplata";
+"ios_release_5_1" = "• Dodata je podrška za kupovinu na vebu i preko platformi\n• Novi vidžet za navigaciju kombinuje strelicu za skretanje i uputstva za navigaciju\n• Dodata je akcija preimenovanja za grupe omiljenih\n• Dodate su opcije „Jedinica zapremine“ i „Kapacitet rezervoara za gorivo“\n• Dodat je preklapajući sloj „Mreža koordinata“\n• Vidžeti na levom i desnom panelu sada uključuju opciju visine\n• Dodata je mogućnost dodeljivanja aktivnosti stazama\n• Ispravljen je pad sistema CarPlay sa iOS 15\n• Rešeni su problemi sa automatskim menjanjem veličine vidžeta na levom i desnom panelu\n• Rešena je nekompatibilnost turističkih vodiča\n• Rešen je problem sa kupovinom preko različitih platformi\n• Rešen je problem crnog ekrana na CarPlay-u nakon pokretanja\n";

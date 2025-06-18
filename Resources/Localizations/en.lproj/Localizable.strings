@@ -4179,6 +4179,8 @@
 "reset_average_value" = "Reset average value";
 "current_temperature" = "Current temperature";
 "average_temperature" = "Average temperature";
+"shared_string_instant" = "Instant";
+"average" = "Average";
 
 "rpm_unit" = "rpm";
 "obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";

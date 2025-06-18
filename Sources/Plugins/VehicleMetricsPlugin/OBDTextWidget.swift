@@ -94,25 +94,25 @@ final class OBDTextWidget: OASimpleWidget {
     
     override func getSettingsData(_ appMode: OAApplicationMode, widgetConfigurationParams: [String: Any]?, isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
-        let section = data.createNewSection()
-        section.headerText = localizedString("shared_string_settings")
-        if isTemperatureWidget(), let avgPref = averageModePref {
-            let isAvg: Bool
-            if isCreate, let params = widgetConfigurationParams, let override = params[avgPref.key] as? Bool {
-                isAvg = override
-            } else {
-                isAvg = avgPref.get()
-            }
+        if supportsAverageMode(), let avgPref = averageModePref {
+            let section = data.createNewSection()
+            section.headerText = localizedString("shared_string_settings")
             
             let modeRow = section.createNewRow()
             modeRow.cellType = OAButtonTableViewCell.reuseIdentifier
             modeRow.key = "average_obd_mode_key"
             modeRow.title = localizedString("shared_string_mode")
             modeRow.setObj(avgPref, forKey: "pref")
-            let titleKey = isAvg ? "average_temperature" : "current_temperature"
+            let isAvg: Bool
+            if isCreate, let params = widgetConfigurationParams, let override = params[avgPref.key] as? Bool {
+                isAvg = override
+            } else {
+                isAvg = avgPref.get()
+            }
+            let valueKeys = isTemperatureWidget() ? ["current_temperature", "average_temperature"] : ["shared_string_instant", "average"]
+            let titleKey = valueKeys[ isAvg ? 1 : 0 ]
             modeRow.setObj(localizedString(titleKey), forKey: "value")
-            let titles = ["current_temperature", "average_temperature"]
-            let possibleValues = titles.enumerated().map { idx, key in
+            let possibleValues = valueKeys.enumerated().map { idx, key in
                 let row = OATableRowData()
                 row.cellType = OASimpleTableViewCell.reuseIdentifier
                 row.setObj(idx, forKey: "value")
@@ -271,7 +271,7 @@ final class OBDTextWidget: OASimpleWidget {
     
     func supportsAverageMode() -> Bool {
         switch widgetType {
-        case .OBDSpeed, .OBDCalculatedEngineLoad, .OBDFuelPressure, .OBDThrottlePosition, .OBDBatteryVoltage, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDEngineCoolantTemp:
+        case .OBDRpm, .OBDSpeed, .OBDCalculatedEngineLoad, .OBDFuelPressure, .OBDThrottlePosition, .OBDBatteryVoltage, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDEngineCoolantTemp:
             return true
         default:
             return false

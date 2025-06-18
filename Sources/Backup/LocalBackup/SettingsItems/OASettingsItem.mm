@@ -16,8 +16,6 @@ NSString *const kRoutingPreferencePrefix = @"prouting_";
 NSString *const kSettingsItemErrorDomain = @"SettingsItem";
 NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
-static NSArray<NSString *> *const kPrirityKeys = @[@"volume_units_changed_manually"];
-
 @interface OASettingsItem()
 
 @property (nonatomic) NSString *pluginId;
@@ -328,7 +326,8 @@ static NSArray<NSString *> *const kPrirityKeys = @[@"volume_units_changed_manual
         return NO;
     }
 
-    NSDictionary<NSString *, NSString *> *settings = [self readPriorityKeysFrom:[[OAMigrationManager shared] changeJsonMigrationToV2:json]];
+    NSDictionary<NSString *, NSString *> *settings;
+    settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
 
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
@@ -345,25 +344,6 @@ static NSArray<NSString *> *const kPrirityKeys = @[@"volume_units_changed_manual
 
     self.item.read = YES;
     return YES;
-}
-
-//the method reads priority keys from dictionary separetly and remove it
-- (NSDictionary *)readPriorityKeysFrom:(NSDictionary<NSString *, NSString *> *)settings
-{
-    NSMutableDictionary *mutableSettings = [settings mutableCopy];
-    
-    for (NSString *key in kPrirityKeys)
-    {
-        NSString *value = [mutableSettings objectForKey:key];
-        
-        if (!value)
-            continue;
-        
-        [self.item readPreferenceFromJson:key value:value];
-        [mutableSettings removeObjectForKey:key];
-    }
-    
-    return [mutableSettings copy];
 }
 
 @end

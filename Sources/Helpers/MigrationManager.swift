@@ -21,6 +21,7 @@ final class MigrationManager: NSObject {
         case migrationLocationNavigationIconsKey
         case migrationChangeTerrainIds1Key
         case migrationTerrainModeDefaultPreferences
+        case migrationDrivingRegionAutomaticPreferance
     }
 
     static let shared = MigrationManager()
@@ -54,6 +55,10 @@ final class MigrationManager: NSObject {
                 OATrackRecordingNone -> ""
                 OATrackRecordingAnyConnected -> any_connected_device_write_sensor_data_to_track_key */
 
+            if !defaults.bool(forKey: MigrationKey.migrationDrivingRegionAutomaticPreferance.rawValue) {
+                migrateDrivingRegionAutomaticPreferance()
+                defaults.set(true, forKey: MigrationKey.migrationDrivingRegionAutomaticPreferance.rawValue)
+            }
             if !defaults.bool(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue) {
                 changeWidgetIdsMigration1()
                 defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
@@ -496,6 +501,19 @@ final class MigrationManager: NSObject {
             }
         }
     }
+    
+    private func migrateDrivingRegionAutomaticPreferance() {
+        guard let settings = OAAppSettings.sharedManager(),
+              let oldDrivingRegionAutomaticPref = OACommonBoolean.withKey("drivingRegionAutomatic", defValue: true),
+              let newDrivingRegionAutomaticPref = settings.drivingRegionAutomatic else {
+            return
+        }
+        
+        for mode in OAApplicationMode.allPossibleValues() where oldDrivingRegionAutomaticPref.getPrefValue(mode) != nil {
+            let oldDrivingRegionAutomatic = oldDrivingRegionAutomaticPref.get(mode)
+            newDrivingRegionAutomaticPref.set(oldDrivingRegionAutomatic, mode: mode)
+        }
+    }
 
     // MARK: - Import old versions
 
@@ -505,7 +523,8 @@ final class MigrationManager: NSObject {
 
         let changeSettingKeys = [
             "top_widget_panel_order": "widget_top_panel_order",
-            "bottom_widget_panel_order": "widget_bottom_panel_order"
+            "bottom_widget_panel_order": "widget_bottom_panel_order",
+            "shared_string_automatic": "driving_region_automatic"
         ]
 
         let changeWidgetIds = [

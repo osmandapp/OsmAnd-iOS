@@ -395,7 +395,7 @@
 "coords_search" = "Recherche par coordonnées";
 "nearest_cities" = "Villes les plus proches";
 "type_address" = "Saisir une adresse";
-"search_poi_category_hint" = "Rechercher dans tout";
+"search_poi_category_hint" = "Rechercher partout";
 "shared_string_of" = "de";
 // HUD
 "hud_heading" = "Cap";
@@ -478,7 +478,7 @@
 "avoid_in_routing_title" = "Éviter…";
 "avoid_in_routing_descr_" = "Éviter certains types de route";
 "prefer_in_routing_title" = "Privilégier les routes…";
-"prefer_in_routing_descr" = "Privilégier les itinéraires sur Autoroutes.";
+"prefer_in_routing_descr" = "Privilégier les itinéraires sur autoroutes.";
 "relief_smoothness_factor_descr" = "Terrain préféré : plat ou vallonné.";
 "choose_auto_follow_route" = "Centrer automatiquement la carte";
 "auto_zoom_map" = "Zoom automatique de la carte";
@@ -698,7 +698,7 @@
 "tunnel_warning" = "En approche d\'un tunnel";
 "save_current_track_descr" = "Enregistrer la trace en cours comme fichier GPX.";
 "save_track_to_gpx" = "Enregistrer automatiquement la trace pendant la navigation";
-"save_track_to_gpx_descrp" = "Enregistrer automatiquement la trace pendant la navigation et la sauvegarder à la fin.";
+"save_track_to_gpx_descrp" = "Démarrer automatiquement l’enregistrement de la trace pendant la navigation et l’enregistrer automatiquement ensuite.";
 "live_updates" = "Mises à jour en temps réel";
 "available_maps" = "Cartes disponibles";
 "osmand_live_last_changed" = "Dernière modification de la carte : %@";
@@ -897,7 +897,7 @@
 "osm_live_payment_desc" = "Abonnement facturé périodiquement. Annulation possible à tout moment depuis Google Play.";
 "osm_live_unlock_updates" = "Déverrouiller les mises à jour des cartes toutes les heures";
 "osm_live_banner_descr" = "Abonnez-vous à OsmAnd Live et obtenez un nombre illimité de mises à jour de cartes <b>toutes les heures</b> et <b>toutes les fonctionnalités</b> incluses de %@";
-"osm_live_ask_for_purchase" = "Au préalable veuillez acheter un abonnement OsmAnd Live";
+"osm_live_ask_for_purchase" = "Veuillez d'abord acheter un abonnement OsmAnd Live";
 "subscriptions_public_info" = "Le paiement sera débité de votre compte iTunes lors de la confirmation d'achat. L'abonnement sera automatiquement renouvelé à moins que le renouvellement automatique ne soit désactivé au moins 24 heures avant la fin de la période en cours. Votre compte sera débité selon votre plan de renouvellement dans les 24 heures précédant la fin de la période en cours. Vous pouvez gérer ou désactiver le renouvellement automatique dans les paramètres de votre compte après l'achat. Si vous souscrivez un abonnement pendant une période d'essai gratuite, la partie inutilisée de cette période sera perdue.";
 "already_has_subscription" = "Vous êtes déjà abonné à OsmAnd Live et vous avez toutes les fonctionnalités débloquées.";
 "inapp_not_found" = "Le %@ ne se trouve pas dans OsmAnd. Il a probablement été annulé.";
@@ -954,7 +954,7 @@
 "vector_data" = "Cartes vectorielles hors ligne";
 "quick_action_interim_dialog" = "Afficher une fenêtre intermédiaire";
 "toggle_poi" = "Afficher / Masquer les POI";
-"map_magnifier" = "Zoom de carte";
+"map_magnifier" = "Loupe de carte";
 "quick_action_map_style" = "Style de carte";
 "add_gpx_waypoint" = "Ajouter un point GPX";
 "quick_action_resume_pause_navigation" = "Suspendre/Reprendre le guidage";
@@ -1840,12 +1840,12 @@
 "incorrect_symbols" = "Caractères non valides saisis";
 "none_point_error" = "Veuillez ajouter au moins un point.";
 "gpx_saved_successfully" = "Fichier GPX enregistré dans %@";
-"simplified_track_description" = "Seul l\'itinéraire sera enregistré, les étapes seront supprimées.";
+"simplified_track_description" = "Seul l'itinéraire sera enregistré, les points de passage seront supprimés.";
 "whole_track_descr" = "Toute la trace sera recalculée en utilisant le profil sélectionné.";
 "next_seg_descr" = "Le segment suivant sera recalculé avec le profil sélectionné.";
 "route_betw_points_descr" = "Choisissez comment relier les points : avec une ligne droite ou en calculant un itinéraire à l'aide de l'un des profils énumérés ci-dessous.";
 "add_one_more_pnt" = "Ajouter un point supplémentaire";
-"delete_point" = "Supprimer le point de mesure";
+"delete_point" = "Supprimer le point";
 "change_route_type_after" = "Modifier le type d’itinéraire après ce point";
 "change_route_type_before" = "Modifier le type d’itinéraire avant ce point";
 "trim_after" = "Couper après ce point";
@@ -1870,7 +1870,7 @@
 "shared_string_required" = "Obligatoire";
 "search_poi_types_descr" = "Combiner des POI de différentes catégories à l'aide des interrupteurs et des cases à cocher.";
 "reset_to_default_category_button_promo" = "« Restaurer les valeurs par défaut » réinitialisera l'ordre de tri.";
-"create_custom_categories_list_promo" = "Modifiez l\'ordre de tri dans la liste, masquez des catégories. Vous pouvez importer et exporter toutes vos modifications via les profils.";
+"create_custom_categories_list_promo" = "Modifier l’ordre de la liste et masquer des catégories. Importer ou exporter toutes les modifications sous forme de profils.";
 "hidden_categories" = "Catégories masquées";
 "visible_categories" = "Catégories visibles";
 "rearrange_categories" = "Réorganiser les catégories";
@@ -1943,9 +1943,9 @@
 "suggested_maps" = "Cartes suggérées";
 "plugin_mapillary_descr" = "Photos de rues. Vous pouvez aussi contribuer vous-même. Pour voir les données existantes sous forme de surcouche, activez l'option correspondante dans le menu « Configurer la carte ».";
 "product_desc_mapillary" = "Des photos des rues pour vérifier les alentours";
-"no_waypoints_found" = "Aucun waypoint trouvé";
+"no_waypoints_found" = "Aucun point de passage trouvé";
 "replace_waypoint_confirmation" = "Remplacer le Waypoint %@ ?";
-"context_menu_item_edit_waypoint" = "Modifier le waypoint GPX";
+"context_menu_item_edit_waypoint" = "Modifier le point de passage GPX";
 "mapil_contribute" = "Apportez vos propres images des rues";
 "shared_string_feet" = "Pieds";
 "srtm_download_list_help_message" = "OsmAnd fournit des données de courbes de niveau en mètres et en pieds. Vous devrez télécharger à nouveau le fichier pour modifier l\'unité.";
@@ -2532,7 +2532,7 @@
 "depth_contours" = "Courbes de profondeur";
 "amazon_appstore" = "Boutique Amazon";
 "huawei_appgallery" = "Galerie d'applications Huawei";
-"position_on_map_center" = "Centré";
+"position_on_map_center" = "Au centre de l'écran";
 "routing_attr_motor_type_name" = "Carburant utilisé";
 "routing_attr_motor_type_description" = "Sélectionner le carburant utilisé par le moteur de votre véhicule pour calculer les émissions de CO₂.";
 "routing_attr_motor_type_diesel_name" = "Gazole";
@@ -2542,7 +2542,7 @@
 "routing_attr_motor_type_hybrid_name" = "Hybride";
 "routing_attr_motor_type_gas_name" = "GNV";
 "co2_mission" = "Émissions de CO₂";
-"position_on_map_bottom" = "En bas";
+"position_on_map_bottom" = "En bas de l'écran";
 "position_on_map" = "Position sur l'écran";
 "si_nm_ft" = "Milles nautiques/pieds";
 "si_nm_mt" = "Milles nautiques/mètres";
@@ -2776,7 +2776,7 @@
 "map_widget_time_to_intermediate" = "Temps restant jusqu\'au point intermédiaire";
 "map_marker_2nd" = "Seconde marque";
 "map_widget_true_bearing" = "Relèvement vrai";
-"developer_widgets" = "Gadgets pour les développeurs";
+"developer_widgets" = "Widgets de développeur";
 "shared_string_bearing" = "Direction";
 "map_widget_current_speed" = "Vitesse actuelle";
 "map_widget_gps_info" = "Informations GPS";
@@ -3233,7 +3233,7 @@
 "add_button" = "Ajouter un bouton";
 "empty_name" = "Sans nom";
 "custom_map_button_name_present" = "Ce bouton est déjà présent";
-"display_position_automatic_descr" = "Dépend de l\'orientation de la carte : en bas si l\'orientation suit le déplacement, centré dans tous les autres cas.";
+"display_position_automatic_descr" = "Dépend de l'orientation de la carte : en bas si l'orientation suit le déplacement, au centre dans tous les autres cas.";
 "auto_zoom" = "Zoom automatique";
 "shared_string_development" = "Développement";
 "osmand_depelopment_use_discrete_autozoom" = "Zoom automatique arrondi (ancienne version)";
@@ -3395,12 +3395,12 @@
 "root_folder" = "Dossier racine";
 "screen_is_unlocked" = "L\'écran tactile est déverrouillé.";
 "transport_stop" = "Terminer";
-"add_widget_below" = "Ajouter le widget en dessous";
-"add_widget_above" = "Ajouter le widget au dessus";
-"add_widget_to_the_right" = "Ajouter le widget à droite";
-"add_widget_to_the_left" = "Ajouter le widget à gauche";
+"add_widget_below" = "Ajouter un widget en dessous";
+"add_widget_above" = "Ajouter un widget au-dessus";
+"add_widget_to_the_right" = "Ajouter un widget à droite";
+"add_widget_to_the_left" = "Ajouter un widget à gauche";
 "delete_widget" = "Supprimer le widget ?";
-"delete_widget_description" = "Ce widget va être supprimé. Plus tard, vous pourrez le restaurer depuis 'Configurer l'écran'.";
+"delete_widget_description" = "Ce widget sera supprimé. Vous pourrez le restaurer plus tard dans Configurer l’écran.";
 "screen_is_locked_by_action_button" = "L\'écran tactile est verrouillé. Appuyez sur le bouton pour déverrouiller.";
 "lock_screen" = "Verrouiller l’écran";
 "lock_screen_description" = "Active ou désactive l\'écran tactile pour éviter les appuis involontaires";
@@ -3431,7 +3431,7 @@
 "help_article_navigation_car_play_name" = "CarPlay";
 "help_article_personal_import_export_name" = "Import / Export";
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
-"detailed_track_guidance" = "Guide détaillé du parcours";
+"detailed_track_guidance" = "Guidage détaillé de la trace";
 "detailed_track_guidance_description" = "OsmAnd associe votre itinéraire aux routes voisines pour un meilleur guidage virage par virage.";
 "ask_every_time" = "Demander à chaque fois";
 "shared_string_navigation" = "Navigation";

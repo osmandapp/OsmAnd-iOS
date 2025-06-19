@@ -477,7 +477,7 @@
 "fast_route_mode_descr" = "Activer pour calculer l\'itinéraire le plus rapide ou désactiver pour calculer l\'itinéraire le plus économe en carburant.";
 "avoid_in_routing_title" = "Éviter…";
 "avoid_in_routing_descr_" = "Éviter certains types de route";
-"prefer_in_routing_title" = "Privilégier les routes…";
+"prefer_in_routing_title" = "Privilégier…";
 "prefer_in_routing_descr" = "Privilégier les itinéraires sur autoroutes.";
 "relief_smoothness_factor_descr" = "Terrain préféré : plat ou vallonné.";
 "choose_auto_follow_route" = "Centrer automatiquement la carte";

@@ -60,6 +60,8 @@ final class VehicleMetricsPlugin: OAPlugin {
             return localizedString("unit_volt")
         case .fuelType, .engineRuntime, .vin:
             return nil
+        case .fuelConsumptionRateLiterKm:
+            return getFormatVolumePerDistanceUnit()
         default:
             return nil
         }
@@ -134,7 +136,7 @@ final class VehicleMetricsPlugin: OAPlugin {
         let creator = WidgetInfoCreator(appMode: appMode)
         let widgetTypeArray: [WidgetType] = [.OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption]
         for widgetType in widgetTypeArray {
-            guard let base = createMapWidget(forParams: widgetType, customId: nil, appMode: appMode, widgetParams: widgetParams) as? OBDTextWidget, let info = creator.createWidgetInfo(widget: base) else { continue }
+            guard let widget = createMapWidget(forParams: widgetType, customId: nil, appMode: appMode, widgetParams: widgetParams), let info = creator.createWidgetInfo(widget: widget) else { continue }
             delegate.addWidget(info)
         }
     }
@@ -142,7 +144,9 @@ final class VehicleMetricsPlugin: OAPlugin {
     override func createMapWidget(forParams widgetType: WidgetType, customId: String?, appMode: OAApplicationMode, widgetParams: [AnyHashable: Any]?) -> OABaseWidgetView? {
         let params = widgetParams as? [String: Any]
         switch widgetType {
-        case .OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption:
+        case .OBDFuelConsumption:
+            return OBDFuelConsumptionWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: params)
+        case .OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition:
             return OBDTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: params)
         default:
             return nil
@@ -182,6 +186,11 @@ extension VehicleMetricsPlugin {
         return String(format: localizedString("ltr_or_rtl_combine_via_slash"),
                       volumeUnit,
                       localizedString("int_hour"))
+    }
+    
+    private func getFormatVolumePerDistanceUnit() -> String {
+        let volumeUnit = OAVolumeConstant.getUnitSymbol(OAAppSettings.sharedManager().volumeUnits.get()) ?? ""
+        return String(format: localizedString("ltr_or_rtl_combine_via_slash"), volumeUnit, "100\(getDistanceUnit())")
     }
     
     private func getFormatVolumePerDistance(litersPer100km: Float) -> Float {

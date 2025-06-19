@@ -199,7 +199,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 cell.contentHeightConstraint = constraint
             }
             cell.selectionStyle = .none
-            cell.leftIconVisibility(item.key != "average_obd_mode_key")
+            cell.leftIconVisibility(item.key != "average_obd_mode_key" && item.key != "fuel_consumption_mode_key")
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
@@ -212,6 +212,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 cell.button.menu = createDisplayPriorityMenuWith(value: value ?? defValue, pref: pref, indexPath: indexPath)
             } else if let boolPref = item.obj(forKey: "pref") as? OACommonBoolean, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let current = value {
                 cell.button.menu = createBooleanMenuWith(currentValue: current, pref: boolPref, options: options, indexPath: indexPath)
+            } else if item.key == "fuel_consumption_mode_key", let pref = item.obj(forKey: "pref") as? OACommonString, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let current = value {
+                cell.button.menu = createStringMenuWith(currentValue: current, pref: pref, options: options, indexPath: indexPath)
             }
             cell.button.showsMenuAsPrimaryAction = true
             cell.button.changesSelectionAsPrimaryAction = true
@@ -253,6 +255,29 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                     self.widgetConfigurationParams?[pref.key] = newBool
                 } else {
                     pref.set(newBool)
+                }
+                
+                self.onWidgetStateChanged()
+                if let textInfoWidget = self.widgetInfo.widget as? OATextInfoWidget {
+                    textInfoWidget.configureSimpleLayout()
+                }
+            }
+        }
+        
+        return UIMenu(options: .singleSelection, children: actions)
+    }
+        
+    private func createStringMenuWith(currentValue: String, pref: OACommonString, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
+        let actions = options.map { row -> UIAction in
+            let raw = row.obj(forKey: "value") as? String ?? ""
+            let title = row.title
+            let state: UIMenuElement.State = (raw == currentValue) ? .on : .off
+            return UIAction(title: title ?? "", state: state) { [weak self] _ in
+                guard let self else { return }
+                if self.createNew {
+                    self.widgetConfigurationParams?[pref.key] = raw
+                } else {
+                    pref.set(raw)
                 }
                 
                 self.onWidgetStateChanged()

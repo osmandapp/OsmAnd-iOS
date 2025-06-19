@@ -9,19 +9,20 @@
 import Foundation
 
 @objcMembers
-final class OBDTextWidget: OASimpleWidget {
+class OBDTextWidget: OASimpleWidget {
     private static let measuredIntervalPrefKey = "average_obd_measured_interval_millis"
     private static let averageModePrefKey = "average_obd_mode"
     private static let defaultIntervalMillis: Int = 30 * 60 * 1000
     private static var availableIntervals: [Int: String] = getAvailableIntervals()
     
-    private var plugin: VehicleMetricsPlugin?
-    private var widgetComputer: OBDDataComputer.OBDComputerWidget?
     private var cacheTextData: String?
     private var cacheSubTextData: String?
     private var measuredIntervalPref: OACommonLong?
     private var averageModePref: OACommonBoolean?
     private var fieldType: OBDDataComputer.OBDTypeWidget?
+    
+    var plugin: VehicleMetricsPlugin?
+    var widgetComputer: OBDDataComputer.OBDComputerWidget?
     
     convenience init(customId: String?, widgetType: WidgetType, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         self.init(frame: .zero)
@@ -64,8 +65,8 @@ final class OBDTextWidget: OASimpleWidget {
     }
     
     override func updateInfo() -> Bool {
-        guard let wt = widgetType, wt.isPurchased(), let plug = plugin, let ft = fieldType, let comp = widgetComputer else { return false }
-        let subtext = plug.getWidgetUnit(ft)
+        guard let wt = widgetType, wt.isPurchased(), let plug = plugin, let comp = widgetComputer else { return false }
+        let subtext = plug.getWidgetUnit(comp.type)
         let textData = plug.getWidgetValue(computerWidget: comp)
         if textData != cacheTextData || subtext != cacheSubTextData {
             setText(textData, subtext: subtext)
@@ -176,8 +177,6 @@ final class OBDTextWidget: OASimpleWidget {
             return .calculatedEngineLoad
         case .OBDThrottlePosition:
             return .throttlePosition
-        case .OBDFuelConsumption:
-            return .fuelConsumptionRateLiterHour
         default:
             return .speed
         }
@@ -248,6 +247,24 @@ final class OBDTextWidget: OASimpleWidget {
         setText("—", subtext: nil)
     }
     
+    private func supportsAverageMode() -> Bool {
+        switch widgetType {
+        case .OBDRpm, .OBDSpeed, .OBDCalculatedEngineLoad, .OBDFuelPressure, .OBDThrottlePosition, .OBDBatteryVoltage, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDEngineCoolantTemp:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    private func isTemperatureWidget() -> Bool {
+        switch widgetType {
+        case .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDEngineCoolantTemp:
+            return true
+        default:
+            return false
+        }
+    }
+    
     func updatePrefs(prefsChanged: Bool) {
         guard supportsAverageMode() else { return }
         let newTimeSeconds: Int = {
@@ -267,24 +284,6 @@ final class OBDTextWidget: OASimpleWidget {
         }
         
         configureShadowButtonMenu()
-    }
-    
-    func supportsAverageMode() -> Bool {
-        switch widgetType {
-        case .OBDRpm, .OBDSpeed, .OBDCalculatedEngineLoad, .OBDFuelPressure, .OBDThrottlePosition, .OBDBatteryVoltage, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDEngineCoolantTemp:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    func isTemperatureWidget() -> Bool {
-        switch widgetType {
-        case .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDEngineCoolantTemp:
-            return true
-        default:
-            return false
-        }
     }
     
     func getWidgetOBDCommand() -> OBDCommand? {

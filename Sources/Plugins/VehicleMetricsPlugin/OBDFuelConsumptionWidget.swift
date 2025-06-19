@@ -1,0 +1,172 @@
+//
+//  OBDFuelConsumptionWidget.swift
+//  OsmAnd Maps
+//
+//  Created by Dmitry Svetlichny on 18.06.2025.
+//  Copyright © 2025 OsmAnd. All rights reserved.
+//
+
+import Foundation
+
+private enum FuelConsumptionMode: String, CaseIterable {
+    case volumePer100Units = "VOLUME_PER_100_UNITS"
+    case volumePerHour = "VOLUME_PER_HOUR"
+    
+    var fieldType: OBDDataComputer.OBDTypeWidget {
+        switch self {
+        case .volumePer100Units:
+            return .fuelConsumptionRateLiterKm
+        case .volumePerHour:
+            return .fuelConsumptionRateLiterHour
+        }
+    }
+    
+    func getTitle(appMode: OAApplicationMode) -> String {
+        let volumeCase: EOAVolumeConstant = OAAppSettings.sharedManager().volumeUnits.get(appMode)
+        let metricCase: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get(appMode)
+        let leftText: String = {
+            switch volumeCase {
+            case .LITRES:
+                return localizedString("litres")
+            case .IMPERIAL_GALLONS:
+                return localizedString("imperial_gallons")
+            case .US_GALLONS:
+                return localizedString("us_gallons")
+            default:
+                return localizedString("litres")
+            }
+        }()
+        
+        let rightText: String = {
+            if self == .volumePer100Units {
+                let unitKey: String
+                switch metricCase {
+                case .KILOMETERS_AND_METERS:
+                    unitKey = "km"
+                case .NAUTICAL_MILES_AND_METERS, .NAUTICAL_MILES_AND_FEET:
+                    unitKey = "nm"
+                default:
+                    unitKey = "mile"
+                }
+                return String(format: localizedString("ltr_or_rtl_combine_via_space"), "100", localizedString(unitKey))
+            } else {
+                return localizedString("shared_string_hour").lowercased()
+            }
+        }()
+        
+        return String(format: localizedString("ltr_or_rtl_combine_via_per"), leftText, rightText)
+    }
+}
+
+@objcMembers
+final class OBDFuelConsumptionWidget: OBDTextWidget {
+    private static let obdFuelConsumptionModeKey = "obd_fuel_consumption_mode"
+    private var fuelConsumptionModePref: OACommonString?
+    
+    convenience init(customId: String?, widgetType: WidgetType, appMode: OAApplicationMode, widgetParams: [String: Any]? = nil) {
+        self.init(frame: .zero)
+        self.widgetType = widgetType
+        self.plugin = OAPluginsHelper.getPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin
+        super.configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
+        self.fuelConsumptionModePref = registerFuelConsumptionPref(customId, widgetParams: widgetParams, appMode: appMode)
+        let typeWidget = getFieldType()
+        self.widgetComputer = OBDDataComputer.shared.registerWidget(type: typeWidget, averageTimeSeconds: getAverageTime(for: typeWidget))
+        _ = updateInfo()
+        setIconFor(widgetType)
+        onClickFunction = { [weak self] _ in
+            guard let self else { return }
+            self.nextMode()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func getSettingsData(_ appMode: OAApplicationMode, widgetConfigurationParams: [String: Any]?, isCreate: Bool) -> OATableDataModel? {
+        let data = OATableDataModel()
+        let section = data.createNewSection()
+        section.headerText = localizedString("shared_string_settings")
+        let modeRow = section.createNewRow()
+        modeRow.cellType = OAButtonTableViewCell.reuseIdentifier
+        modeRow.key = "fuel_consumption_mode_key"
+        modeRow.title = localizedString("shared_string_mode")
+        modeRow.setObj(fuelConsumptionModePref as Any, forKey: "pref")
+        let currentRaw: String
+        if isCreate, let params = widgetConfigurationParams, let overrideRaw = params[fuelConsumptionModePref!.key] as? String, FuelConsumptionMode(rawValue: overrideRaw) != nil {
+            currentRaw = overrideRaw
+        } else {
+            currentRaw = fuelConsumptionModePref?.get(appMode) ?? FuelConsumptionMode.volumePer100Units.rawValue
+        }
+        modeRow.setObj(currentRaw, forKey: "value")
+        let options: [OATableRowData] = FuelConsumptionMode.allCases.map { mode in
+            let row = OATableRowData()
+            row.cellType = OASimpleTableViewCell.reuseIdentifier
+            row.setObj(mode.rawValue, forKey: "value")
+            row.title = mode.getTitle(appMode: appMode)
+            return row
+        }
+        modeRow.setObj(options, forKey: "possible_values")
+        return data
+    }
+    
+    override func updatePrefs(prefsChanged: Bool) {
+        super.updatePrefs(prefsChanged: prefsChanged)
+        let typeWidget = getFieldType()
+        if prefsChanged {
+            if let wc = widgetComputer, wc.type != typeWidget, wc.averageTimeSeconds != 0, wc.averageTimeSeconds != typeWidget.defaultAverageTime, typeWidget != .fuelConsumptionRatePercentHour, typeWidget != .fuelConsumptionRateLiterHour, typeWidget != .fuelConsumptionRateLiterKm {
+                OBDDataComputer.shared.removeWidget(w: wc)
+            }
+            
+            widgetComputer = OBDDataComputer.shared.registerWidget(type: typeWidget, averageTimeSeconds: getAverageTime(for: typeWidget))
+        }
+        
+        _ = updateInfo()
+    }
+    
+    private func getFieldType() -> OBDDataComputer.OBDTypeWidget {
+        FuelConsumptionMode(rawValue: fuelConsumptionModePref?.get() ?? FuelConsumptionMode.volumePer100Units.rawValue)?.fieldType ?? FuelConsumptionMode.volumePer100Units.fieldType
+    }
+    
+    private func nextMode() {
+        guard let pref = fuelConsumptionModePref else { return }
+        let all = FuelConsumptionMode.allCases
+        let current = FuelConsumptionMode(rawValue: pref.get()) ?? all[0]
+        let next = all[(all.firstIndex(of: current)! + 1) % all.count]
+        pref.set(next.rawValue)
+        updatePrefs(prefsChanged: true)
+    }
+    
+    private func getAverageTime(for type: OBDDataComputer.OBDTypeWidget) -> Int32 {
+        switch type {
+        case .fuelConsumptionRatePercentHour, .fuelConsumptionRateLiterHour, .fuelConsumptionRateLiterKm:
+            return 5 * 60
+        default:
+            return 0
+        }
+    }
+    
+    private func registerFuelConsumptionPref(_ customId: String?, widgetParams: [String: Any]?, appMode: OAApplicationMode) -> OACommonString {
+        let prefId: String
+        if let id = customId, !id.isEmpty {
+            prefId = Self.obdFuelConsumptionModeKey + id
+        } else {
+            prefId = Self.obdFuelConsumptionModeKey
+        }
+        
+        guard let pref = OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: FuelConsumptionMode.volumePer100Units.rawValue).makeProfile() else { fatalError("Failed to register preference \(prefId)") }
+        if let params = widgetParams {
+            if let raw = params[prefId] as? String, FuelConsumptionMode(rawValue: raw) != nil {
+                pref.set(raw, mode: appMode)
+            } else if let base = params[Self.obdFuelConsumptionModeKey] as? String, FuelConsumptionMode(rawValue: base) != nil {
+                pref.set(base, mode: appMode)
+            }
+        }
+        
+        return pref
+    }
+}

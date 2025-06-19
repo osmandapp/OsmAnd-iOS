@@ -193,13 +193,16 @@
     [data.subjects addObject:infoSectionData];
 
     NSString *tag = routeKey.routeKey.getTag().toNSString();
-    OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
+    if (![tag isEqualToString:@"unknown"])
+    {
+        OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"route",
             kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"layer_route"),
             kCellDesc: routeKey.getActivityTypeTitle
-    }];
-    [infoSectionData.subjects addObject:routeCellData];
+        }];
+        [infoSectionData.subjects addObject:routeCellData];
+    }
 
     NSMutableArray<OAGPXTableCellData *> *subjects = [NSMutableArray array];
     QMap<QString, QString> tagsToGpx = routeKey.routeKey.tagsToGpx();
@@ -208,19 +211,21 @@
     for (auto i = tagsToGpx.cbegin(), end = tagsToGpx.cend(); i != end; ++i)
     {
         NSString *routeTagKey = i.key().toNSString();
+        NSString *routeTagValue = i.value().toNSString();
         if ([routeTagKey hasPrefix:@"osmc"]
             || [routeTagKey isEqualToString:@"name"]
-            || ([routeTagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class]))
+            || ([routeTagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
+            || [routeTagKey isEqualToString:@"color"]
+            || [routeTagKey hasPrefix:@"osmand"]
+            || [routeTagKey isEqualToString:@"type"])
             continue;
+        
         OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
-        if (!poiType && ![routeTagKey isEqualToString:@"symbol"]
-            && ![routeTagKey isEqualToString:@"colour"]
-            && ![routeTagKey isEqualToString:@"relation_id"])
-            continue;
-        NSString *routeTagTitle = poiType ? poiType.nameLocalized : @"";
+        NSString *routeTagTitle = poiType ? poiType.nameLocalized : [OAPOIHelper.sharedInstance getPhraseByName:routeTagKey];
+        routeTagTitle = routeTagTitle ?: @"";
+        
         NSNumber *routeTagOrder = poiType && [poiType isKindOfClass:OAPOIType.class] ? @(((OAPOIType *) poiType).order) : @(90);
 
-        NSString *routeTagValue = i.value().toNSString();
         if ([routeTagKey isEqualToString:@"ascent"] || [routeTagKey isEqualToString:@"descent"])
             routeTagValue = [NSString stringWithFormat:@"%@ %@", routeTagValue, OALocalizedString(@"m")];
         else if ([routeTagKey isEqualToString:@"distance"])

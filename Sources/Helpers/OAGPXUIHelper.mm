@@ -25,6 +25,7 @@
 #import "OAMapViewController.h"
 #import "OASavingTrackHelper.h"
 #import "OANetworkRouteDrawable.h"
+#import "OARouteKey.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppVersion.h"
 
@@ -763,6 +764,9 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     OASGpxTrackAnalysis *trackAnalysis = analysis?: [gpx getAnalysis];
     
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:CLLocationCoordinate2DMake(selectedPoint.lat, selectedPoint.lon) openedFromMap:YES];
+    
+    if (!routeKey)
+        routeKey = [OARouteKey fromGpx:gpxFile];
     
     if (routeKey)
     {

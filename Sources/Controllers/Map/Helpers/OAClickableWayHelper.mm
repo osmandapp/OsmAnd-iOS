@@ -140,7 +140,7 @@
             if (activity)
             {
                 NSString *activityType = activity.id;
-                [gpxFile.metadata getExtensionsToWrite][[OASGpxUtilities.shared ACTIVITY_TYPE], activityType];
+                [gpxFile.metadata getExtensionsToWrite][[OASGpxUtilities.shared ACTIVITY_TYPE]] = activityType;
                 break;
             }
         }

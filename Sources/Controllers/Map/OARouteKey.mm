@@ -9,6 +9,16 @@
 #import "OARouteKey.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
+
+static NSDictionary<NSString *, NSString *> *SHIELD_TO_OSMC = @{
+    @"shield_bg": @"osmc_background",
+    @"shield_fg": @"osmc_foreground",
+    @"shield_fg_2": @"osmc_foreground2",
+    @"shield_textcolor": @"osmc_textcolor",
+    @"shield_text": @"osmc_text"
+};
+
 
 @implementation OARouteKey
 
@@ -43,11 +53,12 @@
     return self.routeKey.operator int();
 }
 
-+ (OARouteKey *) fromGpx:(NSDictionary<NSString *, NSString *> *)gpx
++ (OARouteKey *) fromGpx:(OASGpxFile *)gpx
 {
+    OASMutableDictionary<NSString *,NSString *> * networkRouteKeyTags = gpx.networkRouteKeyTags;
     QMap<QString, QString> tags;
-    for (NSString *key in gpx)
-        tags.insert(QString::fromNSString(key), QString::fromNSString(gpx[key]));
+    for (NSString *key in networkRouteKeyTags)
+        tags.insert(QString::fromNSString(key), QString::fromNSString(networkRouteKeyTags[key]));
     
     auto rk = OsmAnd::NetworkRouteKey::fromGpx(tags);
     if (rk)
@@ -55,6 +66,52 @@
         auto key = *rk;
         return [[OARouteKey alloc] initWithKey:key];
     }
+    
+    OASMetadata * metadata = gpx.metadata;
+    NSMutableDictionary<NSString *, NSString *> *combinedExtensionsTags = [NSMutableDictionary new];
+    [combinedExtensionsTags addEntriesFromDictionary:[metadata getExtensionsToRead]];
+    [combinedExtensionsTags addEntriesFromDictionary:[gpx getExtensionsToRead]];
+    return [self.class fromShieldTags:combinedExtensionsTags];
+}
+
++ (OARouteKey *) fromShieldTags:(NSMutableDictionary<NSString *, NSString *> *)shieldTags
+{
+    if (!NSDictionaryIsEmpty(shieldTags))
+    {
+        for (NSString *shield in SHIELD_TO_OSMC)
+        {
+            NSString *osmc = SHIELD_TO_OSMC[shield];
+            NSString *value = shieldTags[shield];
+            if (value)
+            {
+                value = [value stringByReplacingOccurrencesOfString:@"^osmc_"
+                                                         withString:@""
+                                                            options:NSRegularExpressionSearch
+                                                              range:NSMakeRange(0, value.length)];
+                
+                value = [value stringByReplacingOccurrencesOfString:@"_bg$"
+                                                         withString:@""
+                                                            options:NSRegularExpressionSearch
+                                                              range:NSMakeRange(0, value.length)];
+                
+                shieldTags[osmc] = value;
+            }
+        }
+            
+        QMap<QString, QString> tags;
+        tags.insert("type", OsmAnd::OsmRouteType::UNKNOWN->name);
+        
+        for (NSString *key in shieldTags)
+            tags.insert(QString::fromNSString(key), QString::fromNSString(shieldTags[key]));
+        
+        auto rk = OsmAnd::NetworkRouteKey::fromGpx(tags);
+        if (rk)
+        {
+            auto key = *rk;
+            return [[OARouteKey alloc] initWithKey:key];
+        }
+    }
+    
     return nil;
 }
 

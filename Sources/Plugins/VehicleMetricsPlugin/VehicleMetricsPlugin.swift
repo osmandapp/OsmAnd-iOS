@@ -6,10 +6,11 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+@objcMembers
 final class VehicleMetricsPlugin: OAPlugin {
     
     // FIXME: delimiter ";"
-    let TRIP_RECORDING_VEHICLE_METRICS: OACommonStringList =  OAAppSettings.sharedManager().registerStringListPreference("trip_recording_vehicle_metrics", defValue: nil).makeProfile().makeShared()
+    let TRIP_RECORDING_VEHICLE_METRICS: OACommonStringList = OAAppSettings.sharedManager().registerStringListPreference("trip_recording_vehicle_metrics", defValue: nil).makeProfile().makeShared()
     
     override func getId() -> String? {
         kInAppId_Addon_Vehicle_Metrics

@@ -4207,3 +4207,6 @@
 
 "unit_volt" = "V";
 "obd_widget_group" = "Vehicle Metrics";
+"vehicle_metrics_recording_description" = "Select the parameters to be recorded in the GPX file.";
+"shared_string_other" = "Other";
+"shared_string_engine" = "Engine";

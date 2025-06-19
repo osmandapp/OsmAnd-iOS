@@ -307,6 +307,19 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 [dataSettingsSection addObject:externalSensorsDict];
             }
             
+            if ([OAPluginsHelper isEnabled:[VehicleMetricsPlugin class]])
+            {
+                BOOL isVehicleMetricsAvailable = [OAIAPHelper isVehicleMetricsAvailable];
+                [dataSettingsSection addObject:@{
+                    @"name" : @"vehicleMetrics",
+                    @"title" : OALocalizedString(@"obd_plugin_name"),
+                    @"value" : isVehicleMetricsAvailable ? [self getActiveCommandsVehicleMetricsDescription] : @"",
+                    @"isProButtonVisible" : @(!isVehicleMetricsAvailable),
+                    @"actionSelector": NSStringFromSelector(@selector(onProButtonTapped)),
+                    @"type" : OAValueTableViewCell.reuseIdentifier
+                }];
+            }
+            
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
             NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]}];
@@ -410,6 +423,25 @@ static NSArray<NSString *> *minTrackSpeedNames;
     _data = [NSArray arrayWithArray:dataArr];
 }
 
+- (NSString *)getActiveCommandsVehicleMetricsDescription
+{
+    NSString *description = OALocalizedString(@"shared_string_none");
+    
+    VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
+    if (plugin)
+    {
+        auto commands = [plugin.TRIP_RECORDING_VEHICLE_METRICS get];
+        if ([commands count] > 0)
+        {
+            // FIXME: 13
+            description = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @([commands count]).stringValue, @"13"];
+        
+        }
+    }
+
+    return description;
+}
+
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
@@ -497,7 +529,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     {
         OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OAValueTableViewCell.reuseIdentifier];
         [cell descriptionVisibility:NO];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.titleLabel.text = item[@"title"];
         cell.valueLabel.text = item[@"value"];
         if ([item[@"key"] isEqualToString:@"nav_interval"] && ![_settings.saveTrackToGPX get:self.appMode])
@@ -520,8 +551,10 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [cell showProButton:YES];
             [cell.proButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.proButton addTarget:self action:NSSelectorFromString(item[@"actionSelector"]) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryType = UITableViewCellAccessoryNone;
         } else {
             [cell showProButton:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
         NSString *img = item[@"img"];
@@ -768,7 +801,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
         if (isProButtonVisible && isProButtonVisible.boolValue) {
             [self onProButtonTapped];
         } else {
-            // TODO:
+            VehicleMetricsTripRecordingCommandsViewController *controller = [VehicleMetricsTripRecordingCommandsViewController new];
+            [self showModalViewController:controller];
+            //[self showViewController:controller];
         }
     }
 }

@@ -1023,7 +1023,7 @@
 
 // Resources
 "shared_string_resources" = "Сировине";
-"res_mapsres" = "Мапе & Ресурси";
+"res_mapsres" = "Карте и извори";
 "download_tab_local" = "Местно";
 "osmand_live" = "ОсмАнд уживо";
 "live_updates" = "Надградње уживо";
@@ -1601,7 +1601,7 @@
 "map_coords" = "Мапа: Шир %.5f Дуж %.5f";
 "shared_string_gpx_points" = "Тачке";
 "shared_string_overview" = "Сажетак";
-"shared_string_activity" = "Активност";
+"shared_string_activity" = "Дејство";
 "gpx_cancel_route_q" = "Желите ли да откажете ову руту?";
 "local_indexes_cat_backup" = "Искључено";
 "gpx_trip_groups" = "Групе путања";

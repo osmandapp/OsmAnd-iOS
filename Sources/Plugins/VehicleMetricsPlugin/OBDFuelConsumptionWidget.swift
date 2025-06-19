@@ -96,12 +96,14 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
         modeRow.key = "fuel_consumption_mode_key"
         modeRow.title = localizedString("shared_string_mode")
         modeRow.setObj(fuelConsumptionModePref as Any, forKey: "pref")
-        let currentRaw: String
-        if isCreate, let params = widgetConfigurationParams, let overrideRaw = params[fuelConsumptionModePref!.key] as? String, FuelConsumptionMode(rawValue: overrideRaw) != nil {
-            currentRaw = overrideRaw
-        } else {
-            currentRaw = fuelConsumptionModePref?.get(appMode) ?? FuelConsumptionMode.volumePer100Units.rawValue
-        }
+        let currentRaw: String = {
+            guard let pref = fuelConsumptionModePref else { return FuelConsumptionMode.volumePer100Units.rawValue }
+            if isCreate, let params = widgetConfigurationParams, let overrideRaw = params[pref.key] as? String, FuelConsumptionMode(rawValue: overrideRaw) != nil {
+                return overrideRaw
+            }
+            
+            return pref.get(appMode) ?? FuelConsumptionMode.volumePer100Units.rawValue
+        }()
         modeRow.setObj(currentRaw, forKey: "value")
         let options: [OATableRowData] = FuelConsumptionMode.allCases.map { mode in
             let row = OATableRowData()
@@ -134,10 +136,13 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
     
     private func nextMode() {
         guard let pref = fuelConsumptionModePref else { return }
-        let all = FuelConsumptionMode.allCases
-        let current = FuelConsumptionMode(rawValue: pref.get()) ?? all[0]
-        let next = all[(all.firstIndex(of: current)! + 1) % all.count]
-        pref.set(next.rawValue)
+        let modes = FuelConsumptionMode.allCases
+        guard !modes.isEmpty else { return }
+        let rawValue = pref.get() ?? modes[0].rawValue
+        let currentMode = FuelConsumptionMode(rawValue: rawValue) ?? modes[0]
+        guard let currentIndex = modes.firstIndex(of: currentMode) else { return }
+        let nextMode = modes[(currentIndex + 1) % modes.count]
+        pref.set(nextMode.rawValue)
         updatePrefs(prefsChanged: true)
     }
     

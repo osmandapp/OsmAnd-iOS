@@ -1443,6 +1443,7 @@
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "ltr_or_rtl_combine_via_of" = "%ld of %ld";
 "ltr_or_rtl_combine_via_per" = "%@ per %@";
+"ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 
 "of" = "%d of %d";
 "downloaded_bytes" = "%@ of %@";
@@ -4183,6 +4184,7 @@
 "shared_string_instant" = "Instant";
 "average" = "Average";
 "shared_string_hour" = "Hour";
+"shared_string_volume" = "Volume";
 
 "rpm_unit" = "rpm";
 "obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";

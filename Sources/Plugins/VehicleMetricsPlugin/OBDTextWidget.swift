@@ -171,8 +171,6 @@ class OBDTextWidget: OASimpleWidget {
             return .batteryVoltage
         case .OBDEngineCoolantTemp:
             return .temperatureCoolant
-        case .OBDRemainingFuel:
-            return .fuelLeftLiter
         case .OBDCalculatedEngineLoad:
             return .calculatedEngineLoad
         case .OBDThrottlePosition:

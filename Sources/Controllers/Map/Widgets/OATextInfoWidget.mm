@@ -562,7 +562,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void) setTextNoUpdateVisibility:(NSString *)text subtext:(NSString *)subtext
 {
-    if ([_text isEqualToString:text] && [subtext isEqualToString:subtext])
+    if ([_text isEqualToString:text] && [_subtext isEqualToString:subtext])
         return;
     if (text.length == 0 && subtext.length == 0)
     {

@@ -52,7 +52,6 @@ class OBDTextWidget: OASimpleWidget {
             let newValue = !avgPref.get()
             avgPref.set(newValue)
             self.updatePrefs(prefsChanged: true)
-            _ = self.updateInfo()
         }
     }
     
@@ -198,6 +197,7 @@ class OBDTextWidget: OASimpleWidget {
         }
         
         setContentTitle(finalName)
+        configureSimpleLayout()
     }
     
     private func registerAverageModePref(_ customId: String?, widgetParams: [String: Any]?, appMode: OAApplicationMode) -> OACommonBoolean {
@@ -281,6 +281,7 @@ class OBDTextWidget: OASimpleWidget {
             widgetComputer?.averageTimeSeconds = Int32(newTimeSeconds)
         }
         
+        _ = self.updateInfo()
         configureShadowButtonMenu()
     }
     

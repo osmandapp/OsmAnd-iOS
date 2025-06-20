@@ -258,9 +258,6 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 }
                 
                 self.onWidgetStateChanged()
-                if let textInfoWidget = self.widgetInfo.widget as? OATextInfoWidget {
-                    textInfoWidget.configureSimpleLayout()
-                }
             }
         }
         
@@ -281,9 +278,6 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 }
                 
                 self.onWidgetStateChanged()
-                if let textInfoWidget = self.widgetInfo.widget as? OATextInfoWidget {
-                    textInfoWidget.configureSimpleLayout()
-                }
             }
         }
         
@@ -356,6 +350,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             OsmAndApp.swiftInstance().data.destinationsChangeObservable.notifyEvent()
         } else if widgetInfo.key == WidgetType.radiusRuler.id || widgetInfo.key.hasPrefix(WidgetType.radiusRuler.id + MapWidgetInfo.DELIMITER) {
             (widgetInfo.widget as? RulerDistanceWidget)?.updateRulerObservable.notifyEvent()
+        } else if let textWidget = self.widgetInfo.widget as? OBDTextWidget {
+            textWidget.updatePrefs(prefsChanged: true)
         }
         generateData()
         onWidgetStateChangedAction?()

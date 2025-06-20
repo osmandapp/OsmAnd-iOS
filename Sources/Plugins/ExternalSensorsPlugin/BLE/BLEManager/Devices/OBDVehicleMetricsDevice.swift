@@ -67,12 +67,13 @@ final class OBDVehicleMetricsDevice: Device {
             completion(result)
         })
     }
-    // TODO: https://github.com/osmandapp/OsmAnd-Issues/issues/2814
-//    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
-//        []
-//    }
     
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }
+    
+    override func notifyRSSI() { }
+    
+    override func disableRSSI() { }
+    
 }

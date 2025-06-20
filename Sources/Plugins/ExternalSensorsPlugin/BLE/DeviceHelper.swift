@@ -6,7 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
 import CoreBluetooth
 import OSLog
 
@@ -17,20 +16,20 @@ final class DeviceHelper: NSObject {
     
     let devicesSettingsCollection = DevicesSettingsCollection()
     
-    var hasPairedDevicesExcludingOBD: Bool {
-        devicesSettingsCollection.hasPairedDevicesExcludingOBD
+    func hasPairedDevices(ofType deviceType: DeviceType) -> Bool {
+        devicesSettingsCollection.hasPairedDevices(ofType: deviceType)
     }
     
-    var hasPairedDevicesOnlyOBD: Bool {
-        devicesSettingsCollection.hasPairedDevicesOnlyOBD
+    func hasPairedDevices(excludingType deviceType: DeviceType) -> Bool {
+        devicesSettingsCollection.hasPairedDevices(excludingType: deviceType)
     }
     
-    var connectedExcludingOBDDevices: [Device] {
-        connectedDevices.filter { $0.deviceType != .OBD_VEHICLE_METRICS }
+    func connectedDevices(ofType deviceType: DeviceType) -> [Device] {
+        connectedDevices.filter { $0.deviceType == deviceType }
     }
     
-    var connectedOnlyOBDDevices: [Device] {
-        connectedDevices.filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+    func connectedDevices(excludingType deviceType: DeviceType) -> [Device] {
+        connectedDevices.filter { $0.deviceType != deviceType }
     }
     
     private static let logger = Logger(
@@ -78,12 +77,12 @@ final class DeviceHelper: NSObject {
         connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
     }
     
-    func getSettingsForPairedExcludingOBDDevices() -> [DeviceSettings]? {
-        getSettingsForPairedDevices()?.filter { $0.deviceType != .OBD_VEHICLE_METRICS }
+    func getSettingsForPairedDevices(matching type: DeviceType) -> [DeviceSettings]? {
+        getSettingsForPairedDevices()?.filter { $0.deviceType == type }
     }
     
-    func getSettingsForPairedOnlyOBDDevices() -> [DeviceSettings]? {
-        getSettingsForPairedDevices()?.filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+    func getSettingsForPairedDevices(excluding type: DeviceType) -> [DeviceSettings]? {
+        getSettingsForPairedDevices()?.filter { $0.deviceType != type }
     }
     
     func getSettingsForPairedDevices() -> [DeviceSettings]? {
@@ -231,12 +230,21 @@ extension DeviceHelper {
         }
     }
     
-    func disconnectAllOBDDevices(reason: DisconnectDeviceReason) {
-        disconnectAllDevices(reason: reason, deviceType: .OBD_VEHICLE_METRICS)
+    // objc compatibility
+    func disconnectAllSensorDevices(reason: DisconnectDeviceReason) {
+        disconnectDevices(excluding: .OBD_VEHICLE_METRICS, reason: reason)
     }
     
-    func disconnectAllSensorsDevices(reason: DisconnectDeviceReason) {
-        disconnectAllDevices(reason: reason)
+    func disconnectDevices(reason: DisconnectDeviceReason) {
+        disconnectFilteredDevices(reason: reason) { _ in true }
+    }
+    
+    func disconnectDevices(only deviceType: DeviceType, reason: DisconnectDeviceReason) {
+        disconnectFilteredDevices(reason: reason) { $0.deviceType == deviceType }
+    }
+    
+    func disconnectDevices(excluding deviceType: DeviceType, reason: DisconnectDeviceReason) {
+        disconnectFilteredDevices(reason: reason) { $0.deviceType != deviceType }
     }
     
     func addConnected(device: Device) {
@@ -245,10 +253,10 @@ extension DeviceHelper {
             return
         }
         connectedDevices.append(device)
-        if let discoveredDevice = BLEManager.shared.discoveredDevices.first(where: { $0.id == device.id && $0.deviceType != .OBD_VEHICLE_METRICS }) {
+        if let discoveredDevice = BLEManager.shared.discoveredDevices.first(where: { $0.id == device.id }) {
             discoveredDevice.notifyRSSI()
         }
-        if let connectedDevice = connectedDevices.first(where: { $0.id == device.id && $0.deviceType != .OBD_VEHICLE_METRICS }) {
+        if let connectedDevice = connectedDevices.first(where: { $0.id == device.id }) {
             connectedDevice.notifyRSSI()
         }
     }
@@ -274,9 +282,7 @@ extension DeviceHelper {
                     case .success:
                         debugPrint("updateConnected success | \(device.deviceServiceName) | \(device.deviceName)")
                         device.addObservers()
-                        if device.deviceType != .OBD_VEHICLE_METRICS {
-                            device.notifyRSSI()
-                        }
+                        device.notifyRSSI()
                         setDevicePaired(device: device, isPaired: true)
                         connectedDevices.append(device)
                         discoverServices(device: device)
@@ -288,28 +294,24 @@ extension DeviceHelper {
         }
     }
     
-    func disconnectAllDevices(reason: DisconnectDeviceReason, deviceType: DeviceType? = nil) {
-        guard !connectedDevices.isEmpty else { return }
+    private func disconnectFilteredDevices(reason: DisconnectDeviceReason, filter: (Device) -> Bool) {
+        let devicesToDisconnect: [Device]
+        
         switch reason {
         case .pluginOff:
-            if deviceType == .OBD_VEHICLE_METRICS {
-                connectedOnlyOBDDevices
-                    .forEach { disconnectIfNeeded(device: $0) }
-                BLEManager.shared.removeAndDisconnectDiscoveredDevices()
-                connectedDevices.removeAll { $0.deviceType == .OBD_VEHICLE_METRICS }
-            } else {
-                connectedExcludingOBDDevices
-                    .forEach {
-                        $0.disableRSSI()
-                        disconnectIfNeeded(device: $0)
-                    }
-                BLEManager.shared.removeAndDisconnectDiscoveredDevices()
-                connectedDevices.removeAll { $0.deviceType != .OBD_VEHICLE_METRICS }
-            }
+            devicesToDisconnect = connectedDevices.filter(filter)
+            BLEManager.shared.removeAndDisconnectDiscoveredDevices()
         case .bluetoothPoweredOff:
-            connectedDevices.forEach { $0.didDisconnectDevice() }
-            connectedDevices.removeAll()
+            devicesToDisconnect = connectedDevices
         }
+        
+        for device in devicesToDisconnect {
+            device.disableRSSI()
+            disconnectIfNeeded(device: device)
+        }
+        
+        let idsToRemove = Set(devicesToDisconnect.map { $0.id })
+        connectedDevices.removeAll { idsToRemove.contains($0.id) }
     }
     
     private func discoverServices(device: Device, serviceUUIDs: [CBUUID]? = nil) {
@@ -357,11 +359,5 @@ extension DeviceHelper {
 extension DeviceHelper {
     func getOBDDevice() -> OBDVehicleMetricsDevice? {
         connectedDevices.first(where: { $0.deviceType == .OBD_VEHICLE_METRICS }) as? OBDVehicleMetricsDevice
-    }
-}
-
-extension DeviceHelper {
-    func clearPairedDevices() {
-        // add test func
     }
 }

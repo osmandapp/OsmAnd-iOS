@@ -937,15 +937,21 @@ static UIViewController *parentController;
         OAFavoriteGroup *group = groups[[point getCategory]];
         if (!group)
         {
+            group = [[OAFavoriteGroup alloc] initWithPoint:point];
             for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper getFavoriteGroups])
             {
-                if ([favoriteGroup.name isEqualToString:[point getCategory]])
+                if ([favoriteGroup.name isEqualToString:group.name])
                 {
-                    groups[[point getCategory]] = favoriteGroup;
+                    group.color = favoriteGroup.color;
+                    group.isVisible = favoriteGroup.isVisible;
+                    group.iconName = favoriteGroup.iconName;
+                    group.backgroundType = favoriteGroup.backgroundType;
                     break;
                 }
             }
+            groups[[point getCategory]] = group;
         }
+        [group.points addObject:point];
     }
 
     OsmAndAppInstance app = [OsmAndApp instance];

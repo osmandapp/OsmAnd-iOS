@@ -147,6 +147,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
         [_settings.mapSettingSaveTrackIntervalGlobal resetModeToDefault:self.appMode];
         [_settings.mapSettingSaveTrackInterval resetModeToDefault:self.appMode];
         [_settings.currentTrackRouteActivity resetModeToDefault:self.appMode];
+        [self resetTripRecordingVehicleMetricsModeToDefault:self.appMode];
+        
         [self generateData];
         [self.tableView reloadData];
     }];
@@ -156,6 +158,15 @@ static NSArray<NSString *> *minTrackSpeedNames;
     alert.preferredAction = resetAction;
 
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)resetTripRecordingVehicleMetricsModeToDefault:(OAApplicationMode *)mode
+{
+    VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
+    if (plugin)
+    {
+        [plugin.TRIP_RECORDING_VEHICLE_METRICS resetModeToDefault:self.appMode];
+    }
 }
 
 #pragma mark - Table data
@@ -430,12 +441,10 @@ static NSArray<NSString *> *minTrackSpeedNames;
     VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
     if (plugin)
     {
-        auto commands = [plugin.TRIP_RECORDING_VEHICLE_METRICS get];
+        auto commands = [plugin.TRIP_RECORDING_VEHICLE_METRICS get:self.appMode];
         if ([commands count] > 0)
         {
-            // FIXME: 13
-            description = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @([commands count]).stringValue, @"13"];
-        
+            description = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @([commands count]).stringValue, @([VehicleMetricsItemObjcWrapper allCommands].count).stringValue];
         }
     }
 
@@ -782,6 +791,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
         [_settings.saveTrackToGPX resetModeToDefault:self.appMode];
         [_settings.autoSplitRecording resetModeToDefault:self.appMode];
         [_settings.currentTrackRouteActivity resetModeToDefault:self.appMode];
+        [self resetTripRecordingVehicleMetricsModeToDefault:self.appMode];
+        
         [self generateData];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.numberOfSections)] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
@@ -801,9 +812,12 @@ static NSArray<NSString *> *minTrackSpeedNames;
         if (isProButtonVisible && isProButtonVisible.boolValue) {
             [self onProButtonTapped];
         } else {
-            VehicleMetricsTripRecordingCommandsViewController *controller = [VehicleMetricsTripRecordingCommandsViewController new];
+            __weak __typeof(self) weakSelf = self;
+            VehicleMetricsTripRecordingCommandsViewController *controller = [[VehicleMetricsTripRecordingCommandsViewController alloc] initWithAppMode:self.appMode onApplyAction:^{
+                [weakSelf generateData];
+                [weakSelf.tableView reloadData];
+            }];
             [self showModalViewController:controller];
-            //[self showViewController:controller];
         }
     }
 }

@@ -1,8 +1,8 @@
 //
-//  VehicleMetricsTripRecordingCommandsViewController+Model.swift
+//  VehicleMetricsItem.swift
 //  OsmAnd
 //
-//  Created by Oleksandr Panchenko on 18.06.2025.
+//  Created by Oleksandr Panchenko on 20.06.2025.
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
@@ -78,23 +78,6 @@ enum VehicleMetricsItem: CaseIterable {
     static var allCommands: [String] {
         Self.allCases.map { $0.command }
     }
-    
-    //        var category: RecordingCategory {
-    //            switch self {
-    //            case .engineOilTemp, .engineCoolantTemp, .airTemp, .airIntakeTemp:
-    //                return .temperature
-    //            case .fuelLevel, .fuelPressure, .fuelConsumption:
-    //                return .fuel
-    //            case .engineLoad, .engineRuntime, .engineRPM:
-    //                return .engine
-    //            case .batteryVoltage, .throttlePosition, .speed:
-    //                return .other
-    //            }
-    //        }
-
-    //        static func items(for category: RecordingCategory) -> [VehicleMetricsItem] {
-    //            Self.allCases.filter { $0.category == category }
-    //        }
 }
 
 enum RecordingCategory: Int, CaseIterable {
@@ -119,5 +102,12 @@ enum RecordingCategory: Int, CaseIterable {
         case .engine: [.engineLoad, .engineRuntime, .engineRPM]
         case .other: [.batteryVoltage, .throttlePosition, .speed]
         }
+    }
+}
+
+@objcMembers
+final class VehicleMetricsItemObjcWrapper: NSObject {
+    static var allCommands: [String] {
+        VehicleMetricsItem.allCommands
     }
 }

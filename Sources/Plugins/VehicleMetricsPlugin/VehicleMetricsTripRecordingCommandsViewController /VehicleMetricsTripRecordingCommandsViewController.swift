@@ -8,15 +8,46 @@
 
 final class VehicleMetricsTripRecordingCommandsViewController: OABaseNavbarViewController {
     
-    private lazy var commandsSelectionManager = CommandsSelectionManager(allCommands: VehicleMetricsItem.allCommands)
+    private let appMode: OAApplicationMode
+    private let onApplyAction: (() -> Void)?
+    private let initialSelectedCommands: [String]
+    private let selectionManager: SelectionManager<String>
+    
+    private lazy var vehicleMetricsPlugin: VehicleMetricsPlugin? = {
+        OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin
+    }()
+    
+    private var hasChanges: Bool {
+        Set(initialSelectedCommands) != selectionManager.selectedItems
+    }
+    
+    // MARK: - Init
+    
+    @objc init(appMode: OAApplicationMode, onApplyAction: (() -> Void)? = nil) {
+        self.appMode = appMode
+        self.onApplyAction = onApplyAction
+        
+        let commands = (OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin)?
+            .TRIP_RECORDING_VEHICLE_METRICS
+            .get(appMode) ?? []
+        self.initialSelectedCommands = commands
+        self.selectionManager = SelectionManager(allItems: VehicleMetricsItem.allCommands, initiallySelected: commands)
+        super.init()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isToolbarHidden = false
+        navigationController?.presentationController?.delegate = self
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.isEditing = true
+        
         configureToolbar()
         configureRightBarButtonState()
     }
@@ -47,21 +78,18 @@ extension VehicleMetricsTripRecordingCommandsViewController {
     }
     
     override func onRightNavbarButtonPressed() {
-        guard !commandsSelectionManager.isEmpty,
-              let plugin = OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin else {
+        guard let plugin = vehicleMetricsPlugin else {
             dismiss()
             return
         }
         
-        let mode = OAAppSettings.sharedManager().applicationMode.get()
-        let commandNames: [String]? = plugin.TRIP_RECORDING_VEHICLE_METRICS.get(mode)
-        
-        plugin.TRIP_RECORDING_VEHICLE_METRICS.set([String](commandsSelectionManager.selectedCommands), mode: mode)
+        plugin.TRIP_RECORDING_VEHICLE_METRICS.set(Array(selectionManager.selectedItems), mode: appMode)
+        onApplyAction?()
         dismiss()
     }
     
     override func onLeftNavbarButtonPressed() {
-        if commandsSelectionManager.isEmpty {
+        if !hasChanges {
             dismiss()
         } else {
             presentExitWithoutSavingAlert()
@@ -89,7 +117,7 @@ extension VehicleMetricsTripRecordingCommandsViewController {
     }
     
     private func configureRightBarButtonState() {
-        setRightBarButtonEnabled(!commandsSelectionManager.isEmpty)
+        setRightBarButtonEnabled(hasChanges)
     }
     
     private func setRightBarButtonEnabled(_ isEnabled: Bool) {
@@ -135,30 +163,36 @@ extension VehicleMetricsTripRecordingCommandsViewController {
         cell.titleLabel.text = item.title
         cell.leftIconView.image = item.icon
         
-        if commandsSelectionManager.selectedCommands.contains(item.key ?? "") {
+        let isSelected = selectionManager.selectedItems.contains(item.key ?? "")
+        cell.configureAccessibility(withTitle: item.title, selected: isSelected)
+        if isSelected {
             cell.leftIconView.tintColor = .iconColorActive
             tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
         } else {
             tableView.deselectRow(at: indexPath, animated: false)
             cell.leftIconView.tintColor = .iconColorDisabled
         }
-        cell.accessibilityLabel = item.title
         
         return cell
     }
     
     override func onRowSelected(_ indexPath: IndexPath?) {
-        guard let indexPath else { return }
-        let item = tableData.item(for: indexPath)
-        guard let command = item.key else { return }
-        
-        commandsSelectionManager.toggleCommand(command)
-        updateUIAfterSelectionChange()
-        tableView.reloadRows(at: [indexPath], with: .none)
+        toggleSelection(at: indexPath)
     }
     
     override func onRowDeselected(_ indexPath: IndexPath?) {
-        onRowSelected(indexPath)
+        toggleSelection(at: indexPath)
+    }
+    
+    private func toggleSelection(at indexPath: IndexPath?) {
+        guard let indexPath else { return }
+        
+        let item = tableData.item(for: indexPath)
+        guard let command = item.key else { return }
+        
+        selectionManager.toggle(command)
+        updateUIAfterSelectionChange()
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 }
 
@@ -166,7 +200,7 @@ extension VehicleMetricsTripRecordingCommandsViewController {
 extension VehicleMetricsTripRecordingCommandsViewController {
     
     private func configureToolbar() {
-        let buttonTitle = commandsSelectionManager.areAllSelected
+        let buttonTitle = selectionManager.areAllSelected
         ? localizedString("shared_string_deselect_all")
         : localizedString("shared_string_select_all")
         
@@ -187,14 +221,27 @@ extension VehicleMetricsTripRecordingCommandsViewController {
     }
     
     @objc private func toggleSelectAllCommands() {
-        if commandsSelectionManager.areAllSelected {
-            commandsSelectionManager.deselectAll()
-            setRightBarButtonEnabled(false)
+        if selectionManager.areAllSelected {
+            selectionManager.deselectAll()
         } else {
-            commandsSelectionManager.selectAll()
-            setRightBarButtonEnabled(true)
+            selectionManager.selectAll()
         }
+        configureRightBarButtonState()
         tableView.reloadData()
         configureToolbar()
+    }
+}
+
+// MARK: - UIAdaptivePresentationControllerDelegate
+extension VehicleMetricsTripRecordingCommandsViewController: UIAdaptivePresentationControllerDelegate {
+    
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        if hasChanges {
+            presentExitWithoutSavingAlert()
+        }
+    }
+    
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        !hasChanges
     }
 }

@@ -3197,8 +3197,7 @@
 		FA9628E42AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */; };
 		FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */; };
 		FAA055762E02C51400F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055752E02C51200F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift */; };
-		FAA055782E02F21500F84EDF /* VehicleMetricsTripRecordingCommandsViewController+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055772E02F20E00F84EDF /* VehicleMetricsTripRecordingCommandsViewController+Model.swift */; };
-		FAA0557A2E0301AA00F84EDF /* CommandsSelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055792E0301AA00F84EDF /* CommandsSelectionManager.swift */; };
+		FAA0557A2E0301AA00F84EDF /* SelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055792E0301AA00F84EDF /* SelectionManager.swift */; };
 		FAA1CEAF2B174F9F00760545 /* OptionDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA1CEAE2B174F9F00760545 /* OptionDeviceTableViewCell.swift */; };
 		FAA1CEB12B17509400760545 /* OptionDeviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAA1CEB02B17509400760545 /* OptionDeviceTableViewCell.xib */; };
 		FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650362ADD42C40020DCEA /* SearchDeviceTableViewCell.swift */; };
@@ -3235,6 +3234,7 @@
 		FAC166292B21BEF900D63755 /* CBUUIDPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661E2B21BEF900D63755 /* CBUUIDPath.swift */; };
 		FAC1662A2B21BEF900D63755 /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661F2B21BEF900D63755 /* Peripheral.swift */; };
 		FAC1662B2B21BEF900D63755 /* CentralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166202B21BEF900D63755 /* CentralProxy.swift */; };
+		FAC346F52E052D3D002653CA /* VehicleMetricsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC346F42E052D3D002653CA /* VehicleMetricsItem.swift */; };
 		FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */; };
 		FAC5D4312BFC7F5200E9E658 /* SpeedLimitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */; };
 		FACB02AA2D54C52000EBE87F /* ImageCache+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */; };
@@ -7792,8 +7792,7 @@
 		FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderFooterButton.swift; sourceTree = "<group>"; };
 		FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLETemperatureSensor.swift; sourceTree = "<group>"; };
 		FAA055752E02C51200F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsTripRecordingCommandsViewController.swift; sourceTree = "<group>"; };
-		FAA055772E02F20E00F84EDF /* VehicleMetricsTripRecordingCommandsViewController+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VehicleMetricsTripRecordingCommandsViewController+Model.swift"; sourceTree = "<group>"; };
-		FAA055792E0301AA00F84EDF /* CommandsSelectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandsSelectionManager.swift; sourceTree = "<group>"; };
+		FAA055792E0301AA00F84EDF /* SelectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionManager.swift; sourceTree = "<group>"; };
 		FAA1CEAE2B174F9F00760545 /* OptionDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionDeviceTableViewCell.swift; sourceTree = "<group>"; };
 		FAA1CEB02B17509400760545 /* OptionDeviceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OptionDeviceTableViewCell.xib; sourceTree = "<group>"; };
 		FAA650362ADD42C40020DCEA /* SearchDeviceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDeviceTableViewCell.swift; sourceTree = "<group>"; };
@@ -7829,6 +7828,7 @@
 		FAC1661E2B21BEF900D63755 /* CBUUIDPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBUUIDPath.swift; sourceTree = "<group>"; };
 		FAC1661F2B21BEF900D63755 /* Peripheral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Peripheral.swift; sourceTree = "<group>"; };
 		FAC166202B21BEF900D63755 /* CentralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CentralProxy.swift; sourceTree = "<group>"; };
+		FAC346F42E052D3D002653CA /* VehicleMetricsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsItem.swift; sourceTree = "<group>"; };
 		FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerSpeedView.swift; sourceTree = "<group>"; };
 		FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitView.swift; sourceTree = "<group>"; };
 		FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCache+Extension.swift"; sourceTree = "<group>"; };
@@ -14032,8 +14032,8 @@
 		FAA055742E02C4E100F84EDF /* VehicleMetricsTripRecordingCommandsViewController  */ = {
 			isa = PBXGroup;
 			children = (
-				FAA055792E0301AA00F84EDF /* CommandsSelectionManager.swift */,
-				FAA055772E02F20E00F84EDF /* VehicleMetricsTripRecordingCommandsViewController+Model.swift */,
+				FAC346F42E052D3D002653CA /* VehicleMetricsItem.swift */,
+				FAA055792E0301AA00F84EDF /* SelectionManager.swift */,
 				FAA055752E02C51200F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift */,
 			);
 			path = "VehicleMetricsTripRecordingCommandsViewController ";
@@ -16784,7 +16784,6 @@
 				DA5A839C26C563A800F274C7 /* OADirectionAppearanceViewController.m in Sources */,
 				DA5A844626C563A900F274C7 /* OABaseScrollableHudViewController.mm in Sources */,
 				DA5A841826C563A800F274C7 /* OAGPXEditWptListViewController.mm in Sources */,
-				FAA055782E02F21500F84EDF /* VehicleMetricsTripRecordingCommandsViewController+Model.swift in Sources */,
 				4609FAA22C5158F100B57F06 /* UIImageView+Extension.swift in Sources */,
 				DA5A852E26C563A900F274C7 /* OrderedDictionary.m in Sources */,
 				DA5A833A26C563A800F274C7 /* OAHomeWorkCell.mm in Sources */,
@@ -16977,6 +16976,7 @@
 				DA5A839B26C563A800F274C7 /* OAOptionsPanelBlackViewController.m in Sources */,
 				46207CF72B9A7EDE000D337D /* String+Extension.swift in Sources */,
 				DA5A83AA26C563A800F274C7 /* OAAdvancedEditingViewController.mm in Sources */,
+				FAC346F52E052D3D002653CA /* VehicleMetricsItem.swift in Sources */,
 				464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */,
 				DA5A812526C563A700F274C7 /* OATransportStopType.m in Sources */,
 				DA5A84F826C563A900F274C7 /* OAMapStyleSettings.mm in Sources */,
@@ -17547,7 +17547,7 @@
 				DA5A813026C563A700F274C7 /* OAOnlineOsmNote.mm in Sources */,
 				DA5A820B26C563A700F274C7 /* OAProfileGeneralSettingsViewController.m in Sources */,
 				DA5A831A26C563A800F274C7 /* OATextInputFloatingCellWithIcon.mm in Sources */,
-				FAA0557A2E0301AA00F84EDF /* CommandsSelectionManager.swift in Sources */,
+				FAA0557A2E0301AA00F84EDF /* SelectionManager.swift in Sources */,
 				FA069C692B9F13160007E4DE /* ShadowPathView.swift in Sources */,
 				4663EC7A2BA1FEEF006B0EBB /* MigrationManager.swift in Sources */,
 				46D38A9F29C39B0F000AAE0C /* OAProfilesGroup.m in Sources */,

@@ -828,7 +828,6 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
-@property (nonatomic) OACommonBoolean *volumeUnitsChangedManually;
 @property (nonatomic) OACommonInteger *mapScreenOrientation;
 @property (nonatomic) OACommonInteger *detailedTrackGuidance;
 @property (nonatomic) OACommonInteger *gpxApproximationDistance;
@@ -988,6 +987,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonBoolean *voiceMute;
 @property (nonatomic) OACommonString *voiceProvider;
 @property (nonatomic) OACommonBoolean *interruptMusic;
+@property (nonatomic) OACommonBoolean *previewNextTurn;
 @property (nonatomic) OACommonBoolean *snapToRoad;
 @property (nonatomic) OACommonInteger *autoFollowRoute;
 @property (nonatomic) OACommonBoolean *autoZoomMap;

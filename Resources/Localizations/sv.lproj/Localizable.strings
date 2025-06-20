@@ -3370,3 +3370,12 @@
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
 "info_button" = "Info";
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
+"preview_next_turn_descr" = "Roterar automatiskt kartan för att förhandsgranska nästa sväng eller manöver";
+"years_3" = "Tre år";
+"osm_live_payment_renews_3_years" = "Förnyas var tredje år";
+"three_years_subscription" = "Treårig prenumeration";
+"equator" = "Ekvator";
+"grid_color" = "Rutnätsfärg";
+"customize_grid_color" = "Anpassa rutnätsfärg";
+"save_favorite_default_appearance" = "Tillämpa ändringar på de existerande punkterna i mappen eller bara på nya?";
+"sensor_data" = "Sensordata";

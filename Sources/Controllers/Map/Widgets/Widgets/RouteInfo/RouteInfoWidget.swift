@@ -409,7 +409,7 @@ final class RouteInfoWidget: OASimpleWidget {
         OAOsmAndFormatter.getFormattedDistance(Float(meters))
     }
 
-    override func isEnabledShowIconSwitch(with widgetsPanel: WidgetsPanel) -> Bool {
+    override func isEnabledShowIconSwitch(with widgetsPanel: WidgetsPanel, widgetConfigurationParams: [String: Any]?) -> Bool {
         false
     }
     

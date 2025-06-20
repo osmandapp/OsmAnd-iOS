@@ -57,8 +57,23 @@ enum GridFormat: Int32, CaseIterable {
         }
     }
     
-    static func valueOf(_ formatId: Int32) -> GridFormat {
-        return GridFormat(rawValue: formatId) ?? .dms
+    static func valueOf(_ formatId: Int) -> GridFormat {
+        switch formatId {
+        case MAP_GEO_FORMAT_DEGREES:
+            return .digital
+        case MAP_GEO_FORMAT_MINUTES:
+            return .dm
+        case MAP_GEO_FORMAT_SECONDS:
+            return .dms
+        case MAP_GEO_UTM_FORMAT:
+            return .utm
+        case MAP_GEO_OLC_FORMAT:
+            return .dms
+        case MAP_GEO_MGRS_FORMAT:
+            return .mgrs
+        default:
+            return .dms
+        }
     }
 }
 
@@ -112,7 +127,7 @@ enum OAFormat: Int32 {
 @objcMembers
 final class GridFormatWrapper: NSObject {
     static func gridFormatRaw(forGeoFormat geoFormatId: Int32) -> NSNumber {
-        let format = GridFormat.valueOf(geoFormatId)
+        let format = GridFormat.valueOf(Int(geoFormatId))
         return NSNumber(value: format.rawValue)
     }
     

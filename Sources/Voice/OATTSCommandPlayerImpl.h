@@ -9,11 +9,9 @@
 #import "OAAbstractCommandPlayer.h"
 #import "OAVoiceRouter.h"
 
-@interface OATTSCommandPlayerImpl : OAAbstractCommandPlayer<AVSpeechSynthesizerDelegate>
+@interface OATTSCommandPlayerImpl : OAAbstractCommandPlayer
 
 - (instancetype) initWithVoiceRouter:(OAVoiceRouter *) voiceRouter voiceProvider:(NSString *)provider;
 - (void)playCommands:(OACommandBuilder *)builder;
-
-- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance;
 
 @end

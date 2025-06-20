@@ -3062,3 +3062,4 @@
 "rendering_value_managerName_name" = "管理者名";
 "rendering_attr_padusDisplayMode_description" = "アクセス種別または管理者名によります";
 "add_button" = "ボタンを追加";
+"help_article_navigation_routing_brouter_name" = "ブルーター";

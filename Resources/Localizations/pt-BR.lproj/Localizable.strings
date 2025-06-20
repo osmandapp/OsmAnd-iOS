@@ -3694,3 +3694,7 @@
 "original_icon_description" = "Cada ponto manteria seu próprio ícone.";
 "original_color_description" = "Cada ponto manteria sua própria cor.";
 "original_shape_description" = "Cada ponto manteria sua própria forma.";
+"years_3" = "Três anos";
+"osm_live_payment_renews_3_years" = "Renovação a cada três anos";
+"three_months_subscription" = "Assinatura de três meses";
+"three_years_subscription" = "Três anos de assinatura";

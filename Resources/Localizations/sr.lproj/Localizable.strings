@@ -3647,7 +3647,7 @@
 "shared_string_date" = "Датум";
 "battery_level_settings_description" = "прикажи ниво батерије сензора као главну вредност";
 "sensor_data_settings_description" = "прикажи главне податке са сензора";
-"sensor_data" = "Подаци сензора";
+"sensor_data" = "Подаци пријемника";
 "profile_icons" = "Икона профила";
 "add_hidden_group_info" = "Додата тачка може се наћи у \"%@\". Откријте сакривену означену групу да је прикажете на карти.";
 "terrain_map" = "Теренска мапа (3Д)";
@@ -3698,3 +3698,7 @@
 "map_widget_route_information_desc" = "Приказује процењено време доласка, преостало време путовања и удаљеност за тренутну навигациону руту.";
 "preview_next_turn" = "Преглед следећег скретања";
 "preview_next_turn_descr" = "Аутоматски ротира мапу ради прегледа следећег скретања или маневра";
+"osm_live_payment_renews_3_years" = "Обнавља се сваке три године";
+"years_3" = "Три године";
+"three_years_subscription" = "Трогодишња претплата";
+"three_months_subscription" = "Тромесечна претплата";

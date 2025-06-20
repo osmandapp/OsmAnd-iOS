@@ -188,6 +188,13 @@
             purchasedType = OALocalizedString(@"shared_string_expires");
         date = !_expireDate ? _product.expirationDate : _expireDate;
     }
+    else if (_expireDate)
+    {
+        purchasedType = [[NSDate date] earlierDate:_expireDate]
+            ? OALocalizedString(@"shared_string_expires")
+            : OALocalizedString(@"expired");
+        date = _expireDate;
+    }
     else
     {
         date = _purchaseDate;
@@ -288,7 +295,7 @@
 {
     NSString *iconName = _product.productIconName;
     UIImage *icon;
-    if ([_product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:_product])
+    if ([_product isKindOfClass:OASubscription.class] || [_product isFullVersion] || [_product isKindOfClass:OAExternalProduct.class])
     {
         icon = [UIImage imageNamed:[iconName stringByAppendingString:@"_big"]];
         if (!icon)

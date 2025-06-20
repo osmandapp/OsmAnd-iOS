@@ -3293,6 +3293,7 @@
 "terrain_map" = "Terrain map (3D)";
 "shared_string_cross_buy" = "Cross-buy";
 "shared_string_relief_3d" = "3D Relief";
+"route_roundabout_exit" = "Take %d exit";
 
 "track_has_no_needed_data" = "The track is missing the respective data.";
 "select_another_colorization" = "Please select another type of coloring.";

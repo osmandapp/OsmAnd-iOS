@@ -669,7 +669,8 @@ typedef enum {
 
 - (void) invalidateMarkersCollection
 {
-    for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
+    NSArray *modesCopy = [_modeMarkers.keyEnumerator allObjects];
+    for (OAApplicationMode *mode in modesCopy)
     {
         [self invalidateMarkersCollectionForMode:mode];
     }
@@ -687,7 +688,9 @@ typedef enum {
     if (!_initDone)
         return;
     
-    for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
+    NSArray *modesCopy = [_modeMarkers.keyEnumerator allObjects];
+    
+    for (OAApplicationMode *mode in modesCopy)
     {
         [self updateMarkersCollectionProviderForMode:mode];
     }

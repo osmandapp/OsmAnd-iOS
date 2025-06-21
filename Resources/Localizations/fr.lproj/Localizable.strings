@@ -2303,7 +2303,7 @@
 "annual_subscription" = "Abonnement annuel";
 "continue_with" = "Continuer avec %@";
 "redeem_promo_code" = "Utiliser le code promo";
-"purchases_feature_desc_hourly_map_updates" = "Accédez à des mises à jour cartographiques plus fréquentes : horaires, quotidiennes ou hebdomadaires. Les mises à jour sont téléchargées progressivement, uniquement pour la zone de modification.";
+"purchases_feature_desc_hourly_map_updates" = "Obtenez des mises à jour des cartes plus fréquentes : horaires, quotidiennes ou hebdomadaires. Le téléchargement ne s'effectue que pour les zones ayant des nouveautés et seuls les éléments ayant reçu des mises à jour sont téléchargés.";
 "transport_hazmat_no_desc" = "Certaines routes et certains tunnels peuvent interdire le transport de matières dangereuses.";
 "restore_purchases" = "Restaurer vos achats";
 "monthly_subscription" = "Abonnement mensuel";

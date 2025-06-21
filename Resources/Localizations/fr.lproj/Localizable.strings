@@ -1034,7 +1034,7 @@
 "routing_attr_avoid_train_description" = "Éviter le train";
 "rendering_value_translucent_purple_name" = "Violet translucide";
 "routing_attr_avoid_sett_description" = "Éviter les pavés";
-"rendering_attr_currentTrackWidth_name" = "Largeur GPX";
+"rendering_attr_currentTrackWidth_name" = "Largeur de la trace GPX";
 "routing_attr_avoid_shuttle_train_description" = "Éviter les trains-navettes";
 "rendering_attr_surface_grass_name" = "Herbe";
 "rendering_value_darkyellow_name" = "Jaune foncé";
@@ -1130,7 +1130,7 @@
 "rendering_attr_hideWaterPolygons_name" = "Eau";
 "rendering_attr_contourColorScheme_description" = "Couleur des courbes de niveau";
 "rendering_attr_highway_class_footway_name" = "Voie piétonne";
-"rendering_attr_currentTrackWidth_description" = "Largeur GPX";
+"rendering_attr_currentTrackWidth_description" = "Largeur de la trace GPX sur la carte";
 "routing_attr_width_description" = "Indiquer la largeur maximale du véhicule autorisée sur les routes.";
 "rendering_attr_hideAccess_name" = "Accès restreints";
 "rendering_attr_busRoutes_name" = "Lignes de bus";
@@ -1141,7 +1141,7 @@
 "rendering_attr_transportStops_name" = "Arrêts de transports en commun";
 "rendering_attr_surface_snow_name" = "Neige";
 "routing_attr_allow_advanced_name" = "Autoriser les itinéraires avancés";
-"rendering_attr_currentTrackColor_description" = "Couleur GPX";
+"rendering_attr_currentTrackColor_description" = "Couleur de la trace GPX sur la carte";
 "rendering_attr_showSurfaces_name" = "Afficher la surface des routes";
 "rendering_value_translucent_pink_name" = "Rose translucide";
 "rendering_attr_buildings15zoom_name" = "Bâtiments en zoom 15";
@@ -1278,7 +1278,7 @@
 "rendering_attr_piste_type_sleigh_name" = "Traîneau";
 "rendering_value_blue_name" = "Bleu";
 "routing_attr_avoid_toll_name" = "Éviter les routes à péage";
-"rendering_attr_currentTrackColor_name" = "Couleur GPX";
+"rendering_attr_currentTrackColor_name" = "Couleur de la trace GPX";
 "rendering_attr_contourDensity_name" = "Densité des courbes de niveau";
 "rendering_attr_appMode_description" = "Optimisation de la carte selon le profil d\'utilisation";
 "rendering_attr_roadColors_name" = "Thème de couleurs pour les routes";

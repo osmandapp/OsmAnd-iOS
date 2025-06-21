@@ -29,7 +29,7 @@ final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarView
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
-                                               name: .DeviceDisconnected,
+                                               name: .deviceDisconnected,
                                                object: nil)
     }
     
@@ -88,7 +88,7 @@ final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarView
         }
     }
 
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
         var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
         if cell == nil {

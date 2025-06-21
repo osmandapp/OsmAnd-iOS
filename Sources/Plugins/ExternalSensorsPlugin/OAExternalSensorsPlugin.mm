@@ -65,7 +65,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 - (void)disable
 {
     [super disable];
-    [[OADeviceHelper shared] disconnectAllDevicesWithReason:DisconnectDeviceReasonPluginOff];
+    [[OADeviceHelper shared] disconnectAllSensorDevicesWithReason:DisconnectDeviceReasonPluginOff];
 }
 
 - (void)setEnabled:(BOOL)enabled

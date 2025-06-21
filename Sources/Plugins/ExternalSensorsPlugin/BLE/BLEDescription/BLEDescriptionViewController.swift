@@ -42,7 +42,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
 
         configureHeader()
         headerView.configure(device: device)
-        headerView.didPaireDeviceAction = { [weak self] in
+        headerView.didPairedDeviceAction = { [weak self] in
             guard let self else { return }
             generateData()
             tableView.reloadData()
@@ -208,7 +208,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceRSSIUpdated),
-                                               name: .DeviceRSSIUpdated,
+                                               name: .deviceRSSIUpdated,
                                                object: nil)
     }
     

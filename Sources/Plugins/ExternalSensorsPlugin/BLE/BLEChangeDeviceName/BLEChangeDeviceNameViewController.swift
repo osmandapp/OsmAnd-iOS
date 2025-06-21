@@ -118,10 +118,10 @@ extension BLEChangeDeviceNameViewController: UITextViewDelegate {
     
     private func updateFileNameFromEditText(name: String) {
         let text = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        navigationItem.setRightBarButtonItems(isEnabled: false, with: UIColor.buttonBgColorDisabled)
+        navigationItem.setRightBarButtonItems(isEnabled: false, with: .buttonBgColorDisabled)
         if !text.isEmpty {
             newDeviceName = text
-            navigationItem.setRightBarButtonItems(isEnabled: true, with: UIColor.buttonBgColorPrimary)
+            navigationItem.setRightBarButtonItems(isEnabled: true, with: .iconColorActive)
         }
     }
 }

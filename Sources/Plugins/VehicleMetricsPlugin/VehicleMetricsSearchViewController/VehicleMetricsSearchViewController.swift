@@ -9,7 +9,7 @@
 import UIKit
 import CoreBluetooth
 
-final class BLESearchViewController: OABaseNavbarViewController {
+final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     
     // MARK: - @IBOutlets
     
@@ -30,12 +30,12 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     @IBOutlet private weak var nothingFoundTitle: UILabel! {
         didSet {
-            nothingFoundTitle.text = localizedString("ant_plus_nothing_found_text")
+            nothingFoundTitle.text = localizedString("obd_nothing_found_text")
         }
     }
     @IBOutlet private weak var nothingFoundDescription: UILabel! {
         didSet {
-            nothingFoundDescription.text = localizedString("ant_plus_nothing_found_description")
+            nothingFoundDescription.text = localizedString("obd_nothing_found_description")
         }
     }
     @IBOutlet private weak var searchAgainButton: UIButton! {
@@ -45,12 +45,12 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     @IBOutlet private weak var searchingTitle: UILabel! {
         didSet {
-            searchingTitle.text = localizedString("ant_plus_searching_text")
+            searchingTitle.text = localizedString("obd_searching_text")
         }
     }
     @IBOutlet private weak var searchingDescription: UILabel! {
         didSet {
-            searchingDescription.text = localizedString("ant_plus_searching_text_description")
+            searchingDescription.text = localizedString("obd_searching_text_description")
         }
     }
     @IBOutlet private weak var openSettingButton: UIButton! {
@@ -65,16 +65,16 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     @IBOutlet private weak var bluetoothOffDescription: UILabel! {
         didSet {
-            bluetoothOffDescription.text = localizedString("ant_plus_bluetooth_off_description")
+            bluetoothOffDescription.text = localizedString("obd_bluetooth_off_description")
         }
     }
     
     private var hasFirstResult = false
     private var needRescan = false
+    private var centralStateObserver: NSObjectProtocol?
     
     private var discoveredDevices: [Device] {
-        let sortedDevices = BLEManager.shared.discoveredDevices.sorted { $0.isConnected && !$1.isConnected }
-        return sortedDevices
+        BLEManager.shared.discoveredDevices.sorted { $0.isConnected && !$1.isConnected }
     }
     
     // MARK: - Init
@@ -110,10 +110,6 @@ final class BLESearchViewController: OABaseNavbarViewController {
     override func registerObservers() {
         detectBluetoothState()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(deviceRSSIUpdated),
-                                               name: .deviceRSSIUpdated,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
                                                name: .deviceDisconnected,
                                                object: nil)
@@ -137,7 +133,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SearchDeviceTableViewCell.reuseIdentifier) as! SearchDeviceTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchOBDDeviceTableViewCell.reuseIdentifier) as! SearchOBDDeviceTableViewCell
         // separators go edge to edge
         cell.separatorInset = .zero
         cell.layoutMargins = .zero
@@ -155,7 +151,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {
-        let controller = BLEDescriptionViewController()
+        let controller = VehicleMetricsDescriptionViewController()
         controller.device = discoveredDevices[indexPath.row]
         navigationController?.pushViewController(controller, animated: true)
     }
@@ -163,6 +159,9 @@ final class BLESearchViewController: OABaseNavbarViewController {
     deinit {
         BLEManager.shared.stopScan()
         BLEManager.shared.removeAllDiscoveredDevices()
+        if let observer = centralStateObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
     
     private func showSearchingView() {
@@ -195,8 +194,8 @@ final class BLESearchViewController: OABaseNavbarViewController {
     
     private func startScan() {
         guard !BLEManager.shared.isScaning else {
-            print("startScan: isScaning")
             BLEManager.shared.stopScan()
+            NSLog("startScan: isScaning")
             scanForPeripherals()
             return
         }
@@ -206,7 +205,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     private func scanForPeripherals() {
         showSearchingView()
         needRescan = false
-        BLEManager.shared.scanForPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation }) { [weak self] in
+        BLEManager.shared.scanForPeripherals(withServiceUUIDs: GattAttributes.OBD_SERVICES) { [weak self] in
             guard let self else { return }
             hasFirstResult = true
             showDiscoveredDevices()
@@ -226,9 +225,9 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     private func detectBluetoothState() {
-        NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
-                                               object: Central.sharedInstance,
-                                               queue: nil) { [weak self] notification in
+        centralStateObserver = NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
+                                                                      object: Central.sharedInstance,
+                                                                      queue: nil) { [weak self] notification in
             guard let self else { return }
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
             guard let state = notification.userInfo?["state"] as? CBManagerState else {
@@ -245,7 +244,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
                 if !discoveredDevices.isEmpty {
                     needRescan = true
                 }
-               showBluetoothTurnedOffView()
+                showBluetoothTurnedOffView()
             }
         }
     }
@@ -273,11 +272,6 @@ final class BLESearchViewController: OABaseNavbarViewController {
         let alert = UIAlertController(title: localizedString("osm_failed_uploads"), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .cancel))
         present(alert, animated: true)
-    }
-    
-    @objc private func deviceRSSIUpdated() {
-        guard view.window != nil else { return }
-        tableView.reloadData()
     }
     
     @objc private func deviceDisconnected() {

@@ -1034,7 +1034,7 @@
 "routing_attr_avoid_train_description" = "Éviter le train";
 "rendering_value_translucent_purple_name" = "Violet translucide";
 "routing_attr_avoid_sett_description" = "Éviter les pavés";
-"rendering_attr_currentTrackWidth_name" = "Largeur des traces GPX";
+"rendering_attr_currentTrackWidth_name" = "Largeur GPX";
 "routing_attr_avoid_shuttle_train_description" = "Éviter les trains-navettes";
 "rendering_attr_surface_grass_name" = "Herbe";
 "rendering_value_darkyellow_name" = "Jaune foncé";
@@ -1278,7 +1278,7 @@
 "rendering_attr_piste_type_sleigh_name" = "Traîneau";
 "rendering_value_blue_name" = "Bleu";
 "routing_attr_avoid_toll_name" = "Éviter les routes à péage";
-"rendering_attr_currentTrackColor_name" = "Couleur des traces GPX";
+"rendering_attr_currentTrackColor_name" = "Couleur GPX";
 "rendering_attr_contourDensity_name" = "Densité des courbes de niveau";
 "rendering_attr_appMode_description" = "Optimisation de la carte selon le profil d\'utilisation";
 "rendering_attr_roadColors_name" = "Thème de couleurs pour les routes";
@@ -1467,7 +1467,7 @@
 "arrows_on_map" = "Flèches sur la carte";
 "shared_string_two" = "Deux";
 "max_speed" = "Vitesse maximale";
-"shared_string_min_speed" = "Vitesse min.";
+"shared_string_min_speed" = "Vitesse minimale";
 "default_speed_setting_title" = "Vitesse par défaut";
 "routing_attr_length_name" = "Longueur";
 "send_anonymous_data_desc" = "Envoyez à OsmAnd des statistiques de téléchargement des cartes. Nous ne collectons aucune donnée de localisation, ni aucune information personnelle.";
@@ -2296,14 +2296,14 @@
 "shared_string_includes" = "Inclus";
 "terrain_maps" = "Cartes de terrain";
 "osm_live_banner_desc" = "Téléchargez un nombre illimité de cartes et obtenez des mises à jour plus fréquentes (hebdomadaires ou quotidiennes voire horaires).";
-"debugging_and_development" = "Débogage et développement OsmAnd";
+"debugging_and_development" = "Développement d'OsmAnd";
 "purchases_feature_desc_unlimited_map_download" = "Téléchargez en illimité des cartes hors ligne pour tous les continents et toutes les régions.";
 "purchases_feature_desc_monthly_map_updates" = "Obtenez les mises à jour mensuelles pour les cartes hors ligne.";
 "shared_string_purchased" = "Acheté";
 "annual_subscription" = "Abonnement annuel";
 "continue_with" = "Continuer avec %@";
 "redeem_promo_code" = "Utiliser le code promo";
-"purchases_feature_desc_hourly_map_updates" = "Obtenez des mises à jour de cartes plus fréquentes : horaires, quotidiennes ou hebdomadaires. Pour les zones déjà téléchargées, les mises à jour sont de taille réduite grâce à une diffusion incrémentielle.";
+"purchases_feature_desc_hourly_map_updates" = "Obtenez des mises à jour des cartes plus fréquentes : horaires, quotidiennes ou hebdomadaires. Le téléchargement ne s'effectue que pour les zones ayant des nouveautés et seuls les éléments ayant reçu des mises à jour sont téléchargés.";
 "transport_hazmat_no_desc" = "Certaines routes et certains tunnels peuvent interdire le transport de matières dangereuses.";
 "restore_purchases" = "Restaurer vos achats";
 "monthly_subscription" = "Abonnement mensuel";
@@ -2448,7 +2448,7 @@
 "contributions_may_calculate_with_delay" = "Le calcul des contributions peut durer plusieurs heures.";
 "enough_contributions_descr" = "Félicitations, vous avez suffisamment contribué à OpenStreetMap pour profiter de mises à jour illimitées des cartes OsmAnd !";
 "last_two_month_total" = "Total des deux derniers mois";
-"auth_failed" = "Échec de l\\\'autorisation";
+"auth_failed" = "Autorisation refusée";
 "shared_string_unavailable" = "Indisponible";
 "shared_string_refresh" = "Recharger";
 "offline_edition_descr" = "Si le mode d'édition hors ligne est activé, les modifications seront enregistrées localement puis envoyées à la demande. Sinon, les modifications seront envoyées immédiatement.";

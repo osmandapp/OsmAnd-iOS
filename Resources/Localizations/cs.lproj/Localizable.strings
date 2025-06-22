@@ -3682,3 +3682,4 @@
 "osm_live_payment_renews_3_years" = "Obnovuje se každé tři roky";
 "three_years_subscription" = "Tříleté předplatné";
 "ios_release_5_1" = "• Přidána podpora pro webové a multiplatformní nákupy\n• Nový navigační widget kombinuje směrovou šipku a navigační pokyny\n• Přidána akce pro přejmenování skupin Oblíbených\n• Přidány možnosti „Jednotka objemu“ a „Kapacita palivové nádrže“\n• Přidána překryvná vrstva „Mřížka souřadnic“\n• Widgety na levém a pravém panelu nyní obsahují možnost nastavení výšky\n• Přidána možnost přiřadit aktivity ke stopám\n• Opraven pád na CarPlay s iOS 15\n• Byly vyřešeny problémy s automatickou změnou velikosti widgetů na levém a pravém panelu\n• Byla opravena nekompatibilita cestovních průvodců\n• Problém s multiplatformními nákupy byl vyřešen\n• Opraven problém s černou obrazovkou na CarPlay po spuštění\n";
+"route_roundabout_exit" = "Vyjeďte %d výjezdem";

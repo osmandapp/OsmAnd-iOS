@@ -1034,7 +1034,7 @@
 "routing_attr_avoid_train_description" = "Éviter le train";
 "rendering_value_translucent_purple_name" = "Violet translucide";
 "routing_attr_avoid_sett_description" = "Éviter les pavés";
-"rendering_attr_currentTrackWidth_name" = "Largeur GPX";
+"rendering_attr_currentTrackWidth_name" = "Largeur de la trace GPX";
 "routing_attr_avoid_shuttle_train_description" = "Éviter les trains-navettes";
 "rendering_attr_surface_grass_name" = "Herbe";
 "rendering_value_darkyellow_name" = "Jaune foncé";
@@ -1130,7 +1130,7 @@
 "rendering_attr_hideWaterPolygons_name" = "Eau";
 "rendering_attr_contourColorScheme_description" = "Couleur des courbes de niveau";
 "rendering_attr_highway_class_footway_name" = "Voie piétonne";
-"rendering_attr_currentTrackWidth_description" = "Largeur GPX";
+"rendering_attr_currentTrackWidth_description" = "Largeur de la trace GPX sur la carte";
 "routing_attr_width_description" = "Indiquer la largeur maximale du véhicule autorisée sur les routes.";
 "rendering_attr_hideAccess_name" = "Accès restreints";
 "rendering_attr_busRoutes_name" = "Lignes de bus";
@@ -1141,7 +1141,7 @@
 "rendering_attr_transportStops_name" = "Arrêts de transports en commun";
 "rendering_attr_surface_snow_name" = "Neige";
 "routing_attr_allow_advanced_name" = "Autoriser les itinéraires avancés";
-"rendering_attr_currentTrackColor_description" = "Couleur GPX";
+"rendering_attr_currentTrackColor_description" = "Couleur de la trace GPX sur la carte";
 "rendering_attr_showSurfaces_name" = "Afficher la surface des routes";
 "rendering_value_translucent_pink_name" = "Rose translucide";
 "rendering_attr_buildings15zoom_name" = "Bâtiments en zoom 15";
@@ -1278,7 +1278,7 @@
 "rendering_attr_piste_type_sleigh_name" = "Traîneau";
 "rendering_value_blue_name" = "Bleu";
 "routing_attr_avoid_toll_name" = "Éviter les routes à péage";
-"rendering_attr_currentTrackColor_name" = "Couleur GPX";
+"rendering_attr_currentTrackColor_name" = "Couleur de la trace GPX";
 "rendering_attr_contourDensity_name" = "Densité des courbes de niveau";
 "rendering_attr_appMode_description" = "Optimisation de la carte selon le profil d\'utilisation";
 "rendering_attr_roadColors_name" = "Thème de couleurs pour les routes";
@@ -3699,3 +3699,4 @@
 "years_3" = "Trois ans";
 "three_months_subscription" = "Abonnement de trois mois";
 "ios_release_5_1" = "• Ajout de la prise en charge des achats web et multiplateformes\n• Nouveau widget de navigation combinant flèche de direction et instructions de navigation\n• Ajout d'une fonction de renommage pour les groupes de favoris\n• Ajout des options « Unité de volume » et « Capacité du réservoir »\n• Ajout d'une superposition « Grille de coordonnées »\n• Les widgets des panneaux gauche et droit incluent désormais une option de hauteur\n• Ajout de la possibilité d'attribuer des activités aux circuits\n• Correction d'un plantage sur CarPlay avec iOS 15\n• Correction des problèmes de redimensionnement automatique des widgets des panneaux gauche et droit\n• Correction de l'incompatibilité des guides de voyage\n• Correction du problème d'achats multiplateformes\n• Correction de l'écran noir sur CarPlay après le démarrage\n";
+"route_roundabout_exit" = "Prenez la %dᵉ sortie";

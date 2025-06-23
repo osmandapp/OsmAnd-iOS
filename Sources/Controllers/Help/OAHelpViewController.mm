@@ -271,7 +271,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 - (NSInteger)sectionsCount
 {
-    return _data.sectionCount;;
+    return _data.sectionCount;
 }
 
 - (NSString *)getTitleForHeader:(NSInteger)section;

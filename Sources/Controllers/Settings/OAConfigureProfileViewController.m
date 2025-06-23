@@ -328,7 +328,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"obd_plugin_name"),
-            @"img" : @"ic_custom_vehicle_metrics_colored",
+            @"img" : @"ic_custom_car_info",
             @"key" : kVehicleMetrics
         }];
     }

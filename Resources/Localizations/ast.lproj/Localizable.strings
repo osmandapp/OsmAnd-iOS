@@ -838,3 +838,10 @@
 "of" = "%d de %d";
 "downloaded_bytes" = "%@ de %@";
 "transport_stop" = "Parar";
+"shared_string_view_all" = "Ver too";
+"shared_string_date" = "Data";
+"three_months_subscription" = "Soscripción de trés meses";
+"shared_string_pause" = "Posar";
+"poi_filter_fuel" = "Combustible";
+"shared_string_items" = "Elementos";
+"online_photos" = "Semeyes en llinia";

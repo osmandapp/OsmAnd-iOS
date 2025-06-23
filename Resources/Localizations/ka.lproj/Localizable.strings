@@ -1432,7 +1432,7 @@
 "search_map" = "რუკების ძებნა…";
 "search_another_country" = "აირჩიეთ სხვა რეგიონი";
 "skip_map_downloading" = "რუკების გადმოწერის გამოტოვება";
-"wiki_around" = "უახლოესი სტატიები Wikipedia-ზე";
+"wiki_around" = "უახლოესი პოპულარული ადგილები";
 "search_categories" = "კატეგორიები";
 "items_selected" = "%d მონიშნულია";
 "how_to_open_wiki_title" = "როგორ გავხსნათ Wikipedia-ს სტატიები\?";
@@ -2201,3 +2201,13 @@
 "routing_attr_motor_type_lpg_name" = "LPG";
 "help_article_navigation_car_play_name" = "CarPlay";
 "help_article_navigation_routing_brouter_name" = "BRouter";
+"shared_string_view_all" = "ყველას ნახვა";
+"shared_string_items" = "ნივთები";
+"shared_string_pause" = "პაუზა";
+"poi_filter_fuel" = "საწვავი";
+"online_photos" = "ონლაინ სურათები";
+"shared_string_unchanged" = "შეუცვლელი";
+"default_appearance" = "ნაგულისხმევი გარეგნობა";
+"map_widget_distance" = "მანძილი";
+"shared_string_original" = "ორიგინალი";
+"shared_string_date" = "თარიღი";

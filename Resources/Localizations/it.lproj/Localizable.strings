@@ -349,7 +349,7 @@
 "plugin_popup_ski_title" = "Attiva lo stile mappa Ski";
 "new_filter_desc" = "Inserisci il nome del nuovo filtro, verrà aggiunto nella tua scheda delle \'Categorie\'.";
 "first_usage_greeting" = "Ottieni indicazioni e scopri nuovi luoghi senza una connessione a Internet";
-"wiki_around" = "Articoli Wikipedia vicini";
+"wiki_around" = "Luoghi popolari nelle vicinanze";
 "edit_filter" = "Modifica i filtri";
 "subcategories" = "Modifica le categorie";
 "shared_string_select_all" = "Seleziona tutto";
@@ -454,7 +454,7 @@
 "city_type_village" = "Paese";
 "city_type_town" = "Cittadina";
 "city_type_district" = "Distretto";
-"city_type_neighbourhood" = "Quartiere";
+"city_type_neighbourhood" = "Quartiere minore";
 "postcode" = "Codice postale";
 "today" = "Oggi";
 "yesterday" = "Ieri";
@@ -933,7 +933,7 @@
 "rendering_value_medium_w_name" = "Medio";
 "routing_attr_allow_private_name" = "Permetti l\'accesso alle proprietà private";
 "rendering_attr_piste_difficulty_intermediate_name" = "Intermedia";
-"rendering_attr_hideWaterPolygons_name" = "Nascondi l\'acqua";
+"rendering_attr_hideWaterPolygons_name" = "Acqua";
 "rendering_value_translucent_purple_name" = "Viola traslucido";
 "rendering_attr_currentTrackWidth_description" = "Larghezza del GPX";
 "routing_attr_short_way_name" = "Percorso più efficiente rispetto ai consumi";
@@ -963,7 +963,7 @@
 "rendering_attr_piste_type_nordic_name" = "Sci nordico";
 "routing_attr_avoid_bus_name" = "No autobus";
 "rendering_attr_hideNonVehicleHighways_name" = "Strade non carrabili";
-"rendering_attr_hideWaterPolygons_description" = "Acqua";
+"rendering_attr_hideWaterPolygons_description" = "Nascondi acqua";
 "routing_attr_freeride_policy_description" = "Freeride e fuoripista sono percorsi e passaggi non ufficiali. Tipicamente non curati, non mantenuti e non controllati la sera. Entrare a proprio rischio e pericolo.";
 "rendering_attr_hmRendered_name" = "Visualizza più dettagli della mappa";
 "rendering_attr_hideHouseNumbers_name" = "Numeri civici";
@@ -1012,7 +1012,7 @@
 "rendering_attr_smoothness_bad_name" = "Cattiva";
 "routing_attr_avoid_bus_description" = "Evita gli autobus e i filobus";
 "routing_attr_avoid_unpaved_description" = "Evita le strade non pavimentate";
-"routing_attr_height_obstacles_description" = "Il tempo di percorrenza previsto terrà conto dell'impatto dell'elevazione. La scelta può aiutare a evitare salite ripide:";
+"routing_attr_height_obstacles_description" = "Il tempo di percorrenza previsto terrà conto dell\'impatto dell\'elevazione. La scelta può aiutare a evitare salite ripide:";
 "routing_attr_allow_private_description" = "Permetti l\'accesso alle aree private.";
 "rendering_value_translucent_lightgreen_name" = "Verde chiaro traslucido";
 "routing_attr_avoid_borders_description" = "Evita l’attraversamento delle frontiere";
@@ -2625,7 +2625,7 @@
 "routing_attr_freeride_policy_only_if_necessary_name" = "Solo se necessario";
 "routing_attr_length_description" = "Specifica la lunghezza del veicolo permessa nei percorsi.";
 "routing_attr_prefer_tactile_paving_description" = "Preferisci la pavimentazione tattile";
-"rendering_attr_hideMilitaryAreas_name" = "Nascondi le aree militari";
+"rendering_attr_hideMilitaryAreas_name" = "Aree militari";
 "rendering_attr_noNatureReserveBoundaries_name" = "Confini naturali";
 "rendering_attr_OSMMapperAssistantNote_name" = "Etichette Note";
 "rendering_attr_noNatureReserveBoundaries_description" = "Nascondi i confini delle riserve naturali, delle aree protette e dei parchi naturali.";
@@ -3448,7 +3448,7 @@
 "detailed_track_guidance" = "Guida dettagliata della traccia";
 "detailed_track_guidance_description" = "OsmAnd abbinerà il tuo percorso alle strade vicine per una guida dettagliata passo dopo passo.";
 "ask_every_time" = "Chiedi ogni volta";
-"attach_roads_descr" = "Collega la tua traccia alle strade per ricevere informazioni dettagliate sul percorso con istruzioni di svolta e proprietà della strada.";
+"attach_roads_descr" = "Collega la tua traccia alle strade per ricevere informazioni dettagliate sul percorso, incluse istruzioni di svolta e proprietà della strada.";
 "lat" = "Lat";
 "driving_region_australia" = "Australia";
 "shared_string_min" = "Min";
@@ -3630,7 +3630,7 @@
 "shared_string_source" = "Sorgente";
 "shared_string_items" = "Oggetti";
 "download_failed" = "Download fallito";
-"add_hidden_group_info" = "Il punto aggiunto può essere trovato in \"%@\". Mostra il gruppo selezionato per visualizzarlo nella mappa.";
+"add_hidden_group_info" = "Il punto aggiunto si trova in \"%@\". Mostra il gruppo selezionato per mostrarlo sulla mappa.";
 "shared_string_unchanged" = "Invariato";
 "each_favourite_point_own_icon" = "Oggi punto preferito manterrà la sua icona.";
 "unchanged_parameter_summary" = "Oggi traccia manterrà i suoi parametri.";
@@ -3660,7 +3660,7 @@
 "grid_color" = "Colore griglia";
 "customize_grid_color" = "Personalizza colore griglia";
 "default_appearance" = "Aspetto predefinito";
-"apply_to_all_points" = "Applica a tutti i punti ";
+"apply_to_all_points" = "Applica a tutti i punti";
 "save_favorite_default_appearance" = "Applica modifiche ai punti esistenti nella cartella o solo a quelli nuovi?";
 "original_icon_description" = "Ogni punto manterrà la sua icona.";
 "original_color_description" = "Ogni punto manterrà il suo colore.";
@@ -3669,13 +3669,20 @@
 "dd_ddddd_format" = "DD.DDDDD°";
 "dd_mm_mmm_format" = "DD°MM.MMM′";
 "dd_mm_ss_format" = "DD°MM′SS″";
-"shared_string_default_view" = "Vista di default";
+"shared_string_default_view" = "Vista predefinita";
 "map_widget_route_information" = "Informazioni sul percorso";
 "change_activity" = "Cambia attività";
-"map_widget_route_information_desc" = "Visualizza l'orario di arrivo stimato, il tempo di percorrenza rimanente e la distanza per l'attuale percorso di navigazione.";
+"map_widget_route_information_desc" = "Mostra il tempo di arrivo stimato, il tempo di viaggio rimanente e la distanza per il percorso di navigazione corrente.";
 "map_widget_distance" = "Distanza";
-"preview_next_turn" = "Anteprima della prossima svolta";
+"preview_next_turn" = "Anteprima della svolta successiva";
 "preview_next_turn_descr" = "Ruota automaticamente la mappa per visualizzare in anteprima la svolta o la manovra successiva";
 "osm_live_payment_renews_3_years" = "Si rinnova ogni tre anni";
 "three_years_subscription" = "Abbonamento di tre anni";
 "years_3" = "Tre anni";
+"route_roundabout_exit" = "Prendi l\'uscita %d";
+"intermediate_first" = "Intermedio prima";
+"routing_attr_allow_ferries_name" = "Traghetti consentiti";
+"routing_attr_allow_ferries_description" = "Routing tramite le rotte di traghetto consentito";
+"display_priority" = "Priorità del display";
+"three_months_subscription" = "Sottoscrizione trimestrale";
+"destination_first" = "Destinazione prima";

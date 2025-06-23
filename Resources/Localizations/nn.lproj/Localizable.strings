@@ -460,3 +460,5 @@
 "download_srtm_maps" = "Høgdekurver";
 "map_widget_gps_info" = "GPS-info";
 "transport_stop" = "Stopp";
+"poi_filter_fuel" = "Drivstoff";
+"map_widget_distance" = "Avstand";

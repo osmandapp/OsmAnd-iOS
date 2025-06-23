@@ -502,7 +502,7 @@
 "detailed_track_guidance" = "Detailed track guidance";
 "detailed_track_guidance_description" = "OsmAnd will match your track to nearby roads for enhanced turn-by-turn guidance.";
 "ask_every_time" = "Ask every time";
-"attach_roads_descr" = "Attach your track to roads to get detailed route information with turn instructions and road attributes.";
+"attach_roads_descr" = "Attach your track to roads to get detailed route information, including turn-by-turn instructions and road attributes.";
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
@@ -2580,7 +2580,7 @@
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 
-"wiki_around" = "Nearby Wikipedia articles";
+"wiki_around" = "Nearby popular places";
 "search_categories" = "Categories";
 "items_selected" = "%d selected";
 
@@ -2906,7 +2906,7 @@
 "rendering_attr_surface_snow_name" = "Snow";
 "rendering_attr_highway_class_cycleway_name" = "Cycleway";
 "routing_attr_piste_type_downhill_description" = "Slopes for alpine or downhill skiing and access to ski lifts.";
-"rendering_attr_hideWaterPolygons_name" = "Hide water";
+"rendering_attr_hideWaterPolygons_name" = "Water";
 "routing_attr_avoid_stairs_name" = "No stairs";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_skitour_name" = "Skitour";
@@ -2982,7 +2982,7 @@
 "rendering_attr_smoothness_very_horrible_name" = "Very horrible";
 "routing_attr_allow_intermediate_name" = "Allow intermediate routes";
 "rendering_attr_trolleybusRoutes_name" = "Trolleybus routes";
-"rendering_attr_hideWaterPolygons_description" = "Water";
+"rendering_attr_hideWaterPolygons_description" = "Hide water";
 "rendering_attr_piste_difficulty_extreme_name" = "Extreme";
 "rendering_value_low_name" = "Low";
 "rendering_value_lightgreen_name" = "Light green";
@@ -3015,7 +3015,7 @@
 "rendering_attr_alpineHiking_description" = "Difficulty classification types for the routes.";
 "rendering_attr_highway_class_bridleway_name" = "Bridleway";
 "routing_attr_avoid_share_taxi_name" = "No share taxi";
-"rendering_attr_pisteRoutes_name" = "Ski slopes";
+"rendering_attr_pisteRoutes_name" = "Ski routes";
 "rendering_attr_piste_type_sled_name" = "Sled";
 "rendering_attr_noPolygons_description" = "Make all areal land features on map transparent.";
 "routing_attr_allow_classic_only_description" = "Routes groomed for classic style only without skating trails. This includes routes groomed by a smaller snowmobile with looser piste and tracks made manually by skiers.";
@@ -3658,7 +3658,7 @@
 "routing_attr_avoid_highway_description" = "Avoid highways";
 "routing_attr_prefer_hiking_routes_description" = "Prefer hiking routes";
 "rendering_attr_weatherWindSpeedContours_name" = "Wind speed isolines";
-"rendering_attr_hideMilitaryAreas_name" = "Hide military areas";
+"rendering_attr_hideMilitaryAreas_name" = "Military areas";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Show fixme tags";
 "rendering_attr_horse_scale_dangerous_name" = "Dangerous";
 "rendering_attr_seabedDetail_description" = "Additional text info on seabed surface_qualification, combined surface types, category and taxon of weed or seagrass";
@@ -3851,7 +3851,7 @@
 "default_appearance_desc" = "Default color, icon and shape will apply to the added favorite points into the group.";
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
-"apply_to_all_points" = "Apply to all points ";
+"apply_to_all_points" = "Apply to all points";
 "save_favorite_default_appearance" = "Apply changes to the existing points in the folder or only to new ones?";
 "original_icon_description" = "Each point would keep its own icon.";
 "original_color_description" = "Each point would keep its own color.";
@@ -4115,3 +4115,5 @@
 "shared_string_date" = "Date";
 
 "add_hidden_group_info" = "The added point can be found in \"%@\". Unhide the selected group to show it on the map.";
+"routing_attr_allow_ferries_description" = "Allow routing by ferry routes";
+"routing_attr_allow_ferries_name" = "Allow ferries";

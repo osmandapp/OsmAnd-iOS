@@ -341,8 +341,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             return nil
         }
         
-        taskKey = taskKey.replacingOccurrences(of: "resource:", with: "")
-        taskKey = taskKey.replacingOccurrences(of: "srtmf:", with: "srtm")
+        taskKey = taskKey.replacingOccurrences(of: "resource:", with: "").replacingOccurrences(of: ".srtmf.obf", with: ".srtm.obf")
         return taskKey
     }
 }

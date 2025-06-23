@@ -981,7 +981,6 @@
 "years_5" = "Rokov";
 "price_free" = "Zdarma";
 "get_discount_title" = "Získajte %d %@ pri zľave %@.";
-"get_free_trial_title" = "Začnite skúšobnú prevádzku %d %@ zdarma.";
 "get_discount_short_descr" = "%@ za %d %@, potom %@";
 "osm_succsessful_uploads" = "Úspešné";
 "osm_failed_uploads" = "Zlyhalo";

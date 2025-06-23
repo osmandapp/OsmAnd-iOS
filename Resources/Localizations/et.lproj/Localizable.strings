@@ -22,7 +22,6 @@
 "months_3" = "Kolm kuud";
 "price_free" = "Tasuta";
 "get_discount_title" = "Hangi %d %@ soodustusega %@.";
-"get_free_trial_title" = "Alusta %d %@ tasuta prooviperioodi.";
 "get_discount_short_descr" = "%@ %d %@ eest, seejärel %@";
 "get_discount_first_part" = "%@ esimese %@ eest";
 "get_discount_first_few_parts" = "%@ esimese %@ eest";

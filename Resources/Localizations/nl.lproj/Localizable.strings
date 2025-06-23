@@ -1071,7 +1071,6 @@
 "get_discount_first_few_parts" = "%@ voor de eerste %@";
 "get_discount_first_part" = "%@ voor de eerste %@";
 "get_discount_short_descr" = "%@ voor %d %@, daarna %@";
-"get_free_trial_title" = "Begin je %d %@ gratis proefperiode.";
 "get_discount_title" = "Nu %d %@ met %@ korting.";
 "years_short" = "Jrn";
 "year_short" = "J";

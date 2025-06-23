@@ -22,7 +22,6 @@
 "months_3" = "Tiga bulan";
 "price_free" = "Gratis";
 "get_discount_title" = "Dapatkan %d %@ dengan diskon %@.";
-"get_free_trial_title" = "Mulai trial gratis %d %@ Anda.";
 "get_discount_short_descr" = "%@ untuk %d %@, lalu %@";
 "get_discount_first_part" = "%@ untuk %@ pertama";
 "get_discount_first_few_parts" = "%@ untuk %@ pertama";

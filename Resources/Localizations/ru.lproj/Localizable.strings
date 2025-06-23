@@ -677,7 +677,6 @@
 "years_5" = "Лет";
 "price_free" = "Бесплатно";
 "get_discount_title" = "Получите %d %@ со скидкой %@.";
-"get_free_trial_title" = "Начать бесплатный период в %d %@.";
 "get_discount_short_descr" = "%@ за %d %@, затем %@";
 "months_3" = "Три месяца";
 "get_discount_first_part" = "%@ за первый %@";

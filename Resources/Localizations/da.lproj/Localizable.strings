@@ -971,7 +971,6 @@
 "years_5" = "År";
 "price_free" = "Gratis";
 "get_discount_title" = "Få %d %@ med %@ rabat.";
-"get_free_trial_title" = "Start %d %@ gratis prøveversion.";
 "get_discount_short_descr" = "%@ for %d %@, og derefter %@";
 "osm_succsessful_uploads" = "Vellykket";
 "osm_failed_uploads" = "Mislykkedes";

@@ -21,7 +21,6 @@
 "months_3" = "Trimèstre";
 "price_free" = "A gratis";
 "get_discount_title" = "Acquistar %d %@ amb un %d%% de descòmpte.";
-"get_free_trial_title" = "Començatz vòstre assai a gratis de %d %@.";
 "get_discount_short_descr" = "%@ pendent %d %@, %@ puei";
 "get_discount_first_part" = "%@ per lei premiers %@";
 "get_discount_first_few_parts" = "%@ tot d'una %@";

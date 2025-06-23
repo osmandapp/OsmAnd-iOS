@@ -842,7 +842,6 @@
 "month" = "மாதம்";
 "months_3" = "மூன்று மாதங்கள்";
 "price_free" = "இலவசம்";
-"get_free_trial_title" = "உங்கள் %d %@ இலவச சோதனையைத் தொடங்கவும்.";
 "get_discount_short_descr" = "%d %@ க்கு %d, பின்னர் %@";
 "get_discount_first_few_parts" = "%@ முதல் %@ க்கு";
 "get_discount_second_part" = "பின்னர் %@";

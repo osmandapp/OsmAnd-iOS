@@ -1003,7 +1003,6 @@
 "configure_map" = "Skonfiguruj mapę";
 // Rendering attributes
 "get_discount_title" = "Uzyskaj %d %@ taniej o %@.";
-"get_free_trial_title" = "Rozpocznij okres próbny na %d %@.";
 "get_discount_short_descr" = "%@ na %d %@, potem %@";
 "cancel_subscription" = "Anuluj subskrypcję";
 "get_discount_first_part" = "%@ dla pierwszych %@";

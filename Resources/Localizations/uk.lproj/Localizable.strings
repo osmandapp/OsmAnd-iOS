@@ -947,7 +947,6 @@
 "years_5" = "Років";
 "price_free" = "Безплатно";
 "get_discount_title" = "Отримайте %d %@ зі знижкою %@.";
-"get_free_trial_title" = "Розпочніть ваш випробувальний період %d %@.";
 "get_discount_short_descr" = "%@ за %d %@, потім %@";
 "osm_succsessful_uploads" = "Успішно";
 "osm_failed_uploads" = "Помилка";

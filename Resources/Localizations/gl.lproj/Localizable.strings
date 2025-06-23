@@ -996,7 +996,6 @@
 "app_mode_pedestrian" = "Peón";
 "get_discount_first_part" = "%@ para o primeiro %@";
 "get_discount_short_descr" = "%@ para %d %@, despois %@";
-"get_free_trial_title" = "Comezar proba de balde de %d %@.";
 "get_discount_title" = "Obter %d %@ cun %@ de desconto.";
 "years_short" = "anos";
 "year_short" = "ano";

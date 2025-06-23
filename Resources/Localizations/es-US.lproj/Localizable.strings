@@ -21,7 +21,6 @@
 "months_3" = "Tres meses";
 "price_free" = "Gratis";
 "get_discount_title" = "Obtén %d %@ a %@ de descuento.";
-"get_free_trial_title" = "Iniciar prueba gratuita de %d %@.";
 "get_discount_short_descr" = "%@ por %d %@, luego %@";
 "get_discount_first_part" = "%@ durante el primer %@";
 "get_discount_first_few_parts" = "%@ durante los primeros %@";

@@ -1341,7 +1341,6 @@
 "key_hint_zoom_out" = "Zoom arrière";
 "select_avoid_descr" = "Sélectionnez les routes que vous souhaitez éviter au cours de la navigation. Vous pouvez sélectionnez une route sur la carte ou choisir une catégorie depuis la liste ci-dessous.";
 "get_discount_short_descr" = "%@ pour %d %@, puis %@";
-"get_free_trial_title" = "Débuter votre essai gratuit de %d %@.";
 "calculating_progress" = "Calcul...";
 "online_raster_maps" = "Cartes raster en ligne";
 "offline_raster_maps" = "Cartes raster hors-ligne";

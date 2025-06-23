@@ -986,7 +986,6 @@
 "mapil_select_user" = "Ischerta s'impreadore";
 // Rendering attributes
 "get_discount_title" = "Otene %d %@ a su %@ de iscontu.";
-"get_free_trial_title" = "Incumintza sa proa de badas de %d %@ tua.";
 "get_discount_short_descr" = "%@ pro %d %@, a pustis %@";
 "osm_succsessful_uploads" = "Resèssidos";
 "osm_failed_uploads" = "Fallidos";

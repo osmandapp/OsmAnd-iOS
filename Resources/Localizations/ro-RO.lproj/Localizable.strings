@@ -1041,7 +1041,6 @@
 "get_discount_first_few_parts" = "%@ pentru primul %@";
 "get_discount_first_part" = "%@ pentru primul %@";
 "get_discount_short_descr" = "%@ pentru %d %@, apoi %@";
-"get_free_trial_title" = "Începeți perioada de probă gratuită %d %@.";
 "get_discount_title" = "Obțineți %d %@ la %@ discount.";
 "years_short" = "Ani";
 "months_short" = "Lun";

@@ -20,7 +20,6 @@
 "years_5" = "წელი";
 "months_3" = "3 თვე";
 "price_free" = "უფასო";
-"get_free_trial_title" = "დაიწყეთ თქვენი %d %@-ის სატესტო ვერისა.";
 "get_discount_short_descr" = "%@ %d-სთვის %@, შემდეგ %@";
 "get_discount_first_part" = "%@ პირველი %@-დან";
 "get_discount_first_few_parts" = "%@ პირველი %@-სთვის";

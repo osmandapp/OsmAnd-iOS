@@ -980,7 +980,6 @@
 "years_5" = "Años";
 "price_free" = "Gratis";
 "get_discount_title" = "Obtén %d %@ a %@ de descuento.";
-"get_free_trial_title" = "Iniciar prueba gratuita de %d %@.";
 "get_discount_short_descr" = "%@ por %d %@, luego %@";
 "shared_string_without_name" = "Sin nombre";
 "osm_upload_complete" = "Subida completa";

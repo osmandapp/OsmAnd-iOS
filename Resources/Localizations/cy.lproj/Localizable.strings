@@ -21,7 +21,6 @@
 "months_3" = "Tri mis";
 "price_free" = "Am ddim";
 "get_discount_title" = "Cael %d %@ am %@ i ffwrdd.";
-"get_free_trial_title" = "Dechreuwch eich cyfnod am ddim %d %@.";
 "get_discount_short_descr" = "%@ am %d %@, wedyn %@";
 "get_discount_first_part" = "%@ am y %@ cyntaf";
 "get_discount_second_part" = "Yna %@";

@@ -1287,7 +1287,6 @@
 "get_discount_first_few_parts" = "%@ az első %@";
 "get_discount_first_part" = "%@ az első %@";
 "get_discount_short_descr" = "%@ %d %@, utána %@";
-"get_free_trial_title" = "%d %@ szóló próbaidőszak elkezdése.";
 "get_discount_title" = "Szerezze meg %d %@ %@ kedvezménnyel.";
 "vessel_width_limit_description" = "Adja meg a hajószélességet a keskeny hidak elkerüléséhez";
 "profile_type_osmand_string" = "OsmAnd profil";

@@ -995,7 +995,6 @@
 "years_5" = "ár";
 "price_free" = "ókeypis";
 "get_discount_title" = "Fáðu %d %@ með %@ afslætti.";
-"get_free_trial_title" = "Byrjaðu að nota %d %@ ókeypis prufuáskriftina.";
 "get_discount_short_descr" = "%@ fyrir %d %@, síðan %@";
 "osm_succsessful_uploads" = "Tókst";
 "osm_failed_uploads" = "Mistókst";

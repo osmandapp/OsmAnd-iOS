@@ -912,7 +912,6 @@
 "get_discount_first_few_parts" = "%@ για τα πρώτα %@";
 "get_discount_first_part" = "%@ για τους πρώτους %@";
 "get_discount_short_descr" = "%@ για %d %@, έπειτα %@";
-"get_free_trial_title" = "Αρχίστε την δωρεάν δοκιμή για %d %@.";
 "get_discount_title" = "Αποκτήστε το %d %@ με έκπτωση %@.";
 "year_short" = "Χρ";
 "month_short" = "Μήν";

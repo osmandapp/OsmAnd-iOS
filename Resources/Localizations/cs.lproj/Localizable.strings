@@ -1286,7 +1286,6 @@
 "get_discount_first_few_parts" = "%@ za první %@";
 "get_discount_first_part" = "%@ za první %@";
 "get_discount_short_descr" = "%@ za %d %@, potom %@";
-"get_free_trial_title" = "Začněte svou zkušební dobu na %d %@ zdarma.";
 "get_discount_title" = "Získejte %d %@ při slevě %@.";
 "years_short" = "R";
 "year_short" = "R";

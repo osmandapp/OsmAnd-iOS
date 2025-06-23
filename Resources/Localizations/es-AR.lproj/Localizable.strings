@@ -21,7 +21,6 @@
 "months_3" = "Tres meses";
 "price_free" = "Gratis";
 "get_discount_title" = "Obtené %d %@ a %@ de descuento.";
-"get_free_trial_title" = "Iniciar prueba gratuita de %d %@.";
 "get_discount_short_descr" = "%@ por %d %@, luego %@";
 "get_discount_first_part" = "%@ durante el primer %@";
 "get_discount_first_few_parts" = "%@ durante los primeros %@";
@@ -3054,7 +3053,6 @@
 "external_device_forget_sensor_description" = "El sensor se quitará de la lista. Podés volver a vincular este sensor en cualquier momento.";
 
 
-//"device_disconnected" = "%1$s desconectado"
 "no_bt_permission" = "El permiso de Bluetooth está bloqueado";
 "shared_string_wrist" = "Muñeca";
 "ant_plus_searching_text_description" = "Acercá el dispositivo al sensor. Debés activar el sensor para que OsmAnd pueda encontrarlo.";

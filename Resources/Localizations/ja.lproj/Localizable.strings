@@ -20,7 +20,6 @@
 "months_3" = "3ヶ月";
 "price_free" = "無料";
 "get_discount_title" = "%dを%@で入手 、今なら%@割引です。";
-"get_free_trial_title" = "%d %@ の無料トライアルを始める。";
 "get_discount_first_part" = "初%@度 %@";
 "get_discount_first_few_parts" = "%@ 初%@度";
 "get_discount_second_part" = "次年度以降 %@";

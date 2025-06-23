@@ -109,7 +109,6 @@
 "angular_units_descr" = "방위각 측정 단위를 변경합니다.";
 "shared_string_search" = "검색";
 "search_more" = "더 검색…";
-"get_free_trial_title" = "지금 바로 %d %@ 평가를 시작하세요.";
 "angular_units" = "각도 측정 단위";
 "access_intermediate_arrival_time" = "중간 도착 시간";
 "map_widget_intermediate_time" = "중간 시간";

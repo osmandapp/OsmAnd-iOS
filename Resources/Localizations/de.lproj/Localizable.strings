@@ -975,7 +975,6 @@
 "years_5" = "Jahre";
 "price_free" = "Kostenlos";
 "get_discount_title" = "Bekommen Sie %d %@ mit %@ Rabatt.";
-"get_free_trial_title" = "Beginnen Sie Ihre %d %@ Probezeit.";
 "get_discount_short_descr" = "%@ für %d %@, danach %@";
 "osm_succsessful_uploads" = "Erfolgreich";
 "osm_failed_uploads" = "Fehlgeschlagen";

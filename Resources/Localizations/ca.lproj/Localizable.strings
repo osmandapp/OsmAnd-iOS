@@ -972,7 +972,6 @@
 "years_5" = "Anys";
 "price_free" = "Gratuït";
 "get_discount_title" = "\"Aconseguiu %d %@ amb un %@ de descompte.\"";
-"get_free_trial_title" = "Comenceu la vostra prova gratuïta de %d %@.";
 "osm_succsessful_uploads" = "Correcte";
 "osm_failed_uploads" = "Ha fallat";
 "shared_string_without_name" = "Sense nom";

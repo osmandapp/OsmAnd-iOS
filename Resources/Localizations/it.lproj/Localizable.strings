@@ -711,7 +711,6 @@
 "years_5" = "Anni";
 "price_free" = "Gratuito";
 "get_discount_title" = "Ottieni %d %@ al %@ di sconto.";
-"get_free_trial_title" = "Inizia la tua %d %@ prova gratuita.";
 "get_discount_short_descr" = "%@ per %d %@, poi %@";
 "months_3" = "Tre mesi";
 "get_discount_first_part" = "%@ per il primo %@";

@@ -21,7 +21,6 @@
 "months_3" = "Три месеца";
 "price_free" = "Бесплатно";
 "get_discount_title" = "Набавите %d %@ за %@ ниже.";
-"get_free_trial_title" = "Започните %d %@ бесплатну пробу.";
 "get_discount_short_descr" = "%@ за %d %@, онда %@";
 "get_discount_first_part" = "%@ првих %@";
 "get_discount_first_few_parts" = "%@ за прве %@";

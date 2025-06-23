@@ -725,7 +725,6 @@
 "months_short" = "Ay";
 "year_short" = "Yıl";
 "years_short" = "Yıl";
-"get_free_trial_title" = "%d %@ ücretsiz denemenizi başlatın.";
 "shared_string_clear_all" = "Hepsini temizle";
 "rotate_map_to_bearing_descr" = "Harita ekranı hizalamasını seçin.";
 "unit_of_length_descr" = "Mesafe ölçüm birimini değiştir.";

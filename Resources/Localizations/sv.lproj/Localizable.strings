@@ -18,7 +18,6 @@
 "months_3" = "Tre månader";
 "price_free" = "Gratis";
 "get_discount_title" = "Få %d %@ på %@ av.";
-"get_free_trial_title" = "Starta din %d %@ gratis provperiod.";
 "get_discount_short_descr" = "%@ för %d %@, sen %@";
 "get_discount_first_part" = "%@ för de första %@";
 "get_discount_first_few_parts" = "%@ för första %@";

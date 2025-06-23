@@ -3222,6 +3222,8 @@
 		FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */; };
 		FAB2B14B2C787E3900B59B7A /* DGCharts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FA6116182C787B7C005C3ABD /* DGCharts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAB302A92DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */; };
+		FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6243E2E0953830048965E /* SelectionManagerTests.swift */; };
+		FAB624412E0954F90048965E /* SelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055792E0301AA00F84EDF /* SelectionManager.swift */; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
 		FAC166212B21BEF900D63755 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166162B21BEF700D63755 /* Util.swift */; };
 		FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166172B21BEF800D63755 /* PeripheralProxy.swift */; };
@@ -7816,6 +7818,8 @@
 		FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEInitHeader.swift; sourceTree = "<group>"; };
 		FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackItemExtension.swift; sourceTree = "<group>"; };
 		FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDownloadingCellResourceHelper.swift; sourceTree = "<group>"; };
+		FAB6243E2E0953830048965E /* SelectionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionManagerTests.swift; sourceTree = "<group>"; };
+		FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OsmAnd MapsTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		FAC166162B21BEF700D63755 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		FAC166172B21BEF800D63755 /* PeripheralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralProxy.swift; sourceTree = "<group>"; };
@@ -13339,6 +13343,7 @@
 				DA5A80C026C563A600F274C7 /* OASuggestedDownloadsItem.m */,
 				DAB9AECB28E192D300AD01CE /* OAURLSessionProgress.h */,
 				DAB9AECC28E192D300AD01CE /* OAURLSessionProgress.m */,
+				FAA055792E0301AA00F84EDF /* SelectionManager.swift */,
 				32AD5D582A2F10EA00A51B60 /* OAuthHelper */,
 				DA5A80C226C563A600F274C7 /* OAUtilities.h */,
 				DA5A809226C563A500F274C7 /* OAUtilities.m */,
@@ -13493,6 +13498,8 @@
 		DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXGroup;
 			children = (
+				FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */,
+				FAB6243D2E0953580048965E /* Managers */,
 				DA80DAA8251E0C0C008E6267 /* Router */,
 				8A1CF862250D145C003D3829 /* test-resources */,
 				DA72AB932508F44900851313 /* Search */,
@@ -14033,7 +14040,6 @@
 			isa = PBXGroup;
 			children = (
 				FAC346F42E052D3D002653CA /* VehicleMetricsItem.swift */,
-				FAA055792E0301AA00F84EDF /* SelectionManager.swift */,
 				FAA055752E02C51200F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift */,
 			);
 			path = "VehicleMetricsTripRecordingCommandsViewController ";
@@ -14144,6 +14150,14 @@
 				FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */,
 			);
 			path = DescriptionDeviceHeader;
+			sourceTree = "<group>";
+		};
+		FAB6243D2E0953580048965E /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				FAB6243E2E0953830048965E /* SelectionManagerTests.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		FAC166152B21BECE00D63755 /* SwiftyBluetooth */ = {
@@ -14325,6 +14339,7 @@
 					};
 					DA72AB882508F40F00851313 = {
 						CreatedOnToolsVersion = 11.7;
+						LastSwiftMigration = 1620;
 						TestTargetID = BBA3AF30197FC4BB0039D991;
 					};
 				};
@@ -17808,7 +17823,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
+				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -18385,6 +18402,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "OsmAnd MapsTests/OsmAnd MapsTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OsmAnd Maps.app/OsmAnd Maps";
 			};
@@ -18442,6 +18462,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "OsmAnd MapsTests/OsmAnd MapsTests-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OsmAnd Maps.app/OsmAnd Maps";
 			};

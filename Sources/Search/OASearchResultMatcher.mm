@@ -64,7 +64,7 @@
 
 - (NSArray<OASearchResult *> *) getRequestResults
 {
-    return _requestResults;
+    return [_requestResults copy];
 }
 
 - (int) getCount

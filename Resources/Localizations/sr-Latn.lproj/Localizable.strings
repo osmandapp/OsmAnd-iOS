@@ -1374,7 +1374,7 @@
 "other_options" = "Druge opcije";
 "add_parking" = "Dodaj kao Parking poziciju";
 "add_parking_short" = "Dodaj parking";
-"add_waypoint" = "Dodaj međuodredište";
+"add_waypoint" = "Dodaj prolaznu tačku";
 "add_waypoint_short" = "Dodaj prolaznu tačku";
 "delete_waypoints" = "Obriši međuodredište";
 "delete_group_confirm_short" = "Izbrisati grupu?";

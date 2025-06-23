@@ -1034,7 +1034,7 @@
 "routing_attr_avoid_train_description" = "Éviter le train";
 "rendering_value_translucent_purple_name" = "Violet translucide";
 "routing_attr_avoid_sett_description" = "Éviter les pavés";
-"rendering_attr_currentTrackWidth_name" = "Largeur des traces GPX";
+"rendering_attr_currentTrackWidth_name" = "Largeur de la trace GPX";
 "routing_attr_avoid_shuttle_train_description" = "Éviter les trains-navettes";
 "rendering_attr_surface_grass_name" = "Herbe";
 "rendering_value_darkyellow_name" = "Jaune foncé";
@@ -1130,8 +1130,8 @@
 "rendering_attr_hideWaterPolygons_name" = "Eau";
 "rendering_attr_contourColorScheme_description" = "Couleurs des courbes de niveau";
 "rendering_attr_highway_class_footway_name" = "Voie piétonne";
-"rendering_attr_currentTrackWidth_description" = "Largeur GPX";
-"routing_attr_width_description" = "Indique la limite de largeur autorisée sur les itinéraires.";
+"rendering_attr_currentTrackWidth_description" = "Largeur de la trace GPX sur la carte";
+"routing_attr_width_description" = "Indiquer la largeur maximale du véhicule autorisée sur les routes.";
 "rendering_attr_hideAccess_name" = "Accès restreints";
 "rendering_attr_busRoutes_name" = "Lignes de bus";
 "routing_attr_piste_type_skitour_name" = "Ski de randonnée";
@@ -1141,7 +1141,7 @@
 "rendering_attr_transportStops_name" = "Arrêts de transports en commun";
 "rendering_attr_surface_snow_name" = "Neige";
 "routing_attr_allow_advanced_name" = "Autoriser les itinéraires avancés";
-"rendering_attr_currentTrackColor_description" = "Couleur GPX";
+"rendering_attr_currentTrackColor_description" = "Couleur de la trace GPX sur la carte";
 "rendering_attr_showSurfaces_name" = "Afficher la surface des routes";
 "rendering_value_translucent_pink_name" = "Rose translucide";
 "rendering_attr_buildings15zoom_name" = "Bâtiments en zoom 15";
@@ -1278,7 +1278,7 @@
 "rendering_attr_piste_type_sleigh_name" = "Traîneau";
 "rendering_value_blue_name" = "Bleu";
 "routing_attr_avoid_toll_name" = "Éviter les routes à péage";
-"rendering_attr_currentTrackColor_name" = "Couleur des traces GPX";
+"rendering_attr_currentTrackColor_name" = "Couleur de la trace GPX";
 "rendering_attr_contourDensity_name" = "Densité des courbes de niveau";
 "rendering_attr_appMode_description" = "Optimisation de la carte selon le profil d\'utilisation";
 "rendering_attr_roadColors_name" = "Thème de couleurs pour les routes";
@@ -2295,14 +2295,14 @@
 "shared_string_includes" = "Inclus";
 "terrain_maps" = "Cartes de terrain";
 "osm_live_banner_desc" = "Téléchargez un nombre illimité de cartes et obtenez des mises à jour plus fréquentes (hebdomadaires ou quotidiennes voire horaires).";
-"debugging_and_development" = "Débogage et développement OsmAnd";
+"debugging_and_development" = "Développement d'OsmAnd";
 "purchases_feature_desc_unlimited_map_download" = "Téléchargez en illimité des cartes hors ligne pour tous les continents et toutes les régions.";
-"purchases_feature_desc_monthly_map_updates" = "Obtenez les mises à jour mensuelles pour les cartes hors ligne.";
+"purchases_feature_desc_monthly_map_updates" = "Bénéficiez des mises à jour mensuelles pour les cartes hors ligne.";
 "shared_string_purchased" = "Acheté";
 "annual_subscription" = "Abonnement annuel";
 "continue_with" = "Continuer avec %@";
 "redeem_promo_code" = "Utiliser le code promo";
-"purchases_feature_desc_hourly_map_updates" = "Obtenez des mises à jour de cartes plus fréquentes : horaire, quotidienne ou hebdomadaires. Pour les zones déjà téléchargées, les mises à jour sont de taille réduite grâce à une diffusion incrémentielle.";
+"purchases_feature_desc_hourly_map_updates" = "Bénéficiez de mises à jour des cartes plus régulières : horaires, quotidiennes ou hebdomadaires. Seules les nouveautés seront téléchargées.";
 "transport_hazmat_no_desc" = "Certaines routes et certains tunnels peuvent interdire le transport de matières dangereuses.";
 "restore_purchases" = "Restaurer vos achats";
 "monthly_subscription" = "Abonnement mensuel";
@@ -2447,7 +2447,7 @@
 "contributions_may_calculate_with_delay" = "Le calcul des contributions peut durer plusieurs heures.";
 "enough_contributions_descr" = "Félicitations, vous avez suffisamment contribué à OpenStreetMap pour profiter de mises à jour illimitées des cartes OsmAnd !";
 "last_two_month_total" = "Total des deux derniers mois";
-"auth_failed" = "Échec de l\\\'autorisation";
+"auth_failed" = "Autorisation refusée";
 "shared_string_unavailable" = "Indisponible";
 "shared_string_refresh" = "Recharger";
 "offline_edition_descr" = "Si le mode d\'édition hors-ligne est activé, les modifications seront enregistrées localement puis envoyées à la demande. Sinon, les modifications seront envoyées immédiatement.";
@@ -3699,5 +3699,5 @@
 "three_months_subscription" = "Abonnement pour 3 mois";
 "ios_release_5_1" = "• Ajout de la prise en charge des achats web et multiplateformes\n• Nouveau widget de navigation combinant flèche de direction et instructions de navigation\n• Ajout d'une fonction de renommage pour les groupes de favoris\n• Ajout des options « Unité de volume » et « Capacité du réservoir »\n• Ajout d'une superposition « Grille de coordonnées »\n• Les widgets des panneaux gauche et droit incluent désormais une option de hauteur\n• Ajout de la possibilité d'attribuer des activités aux circuits\n• Correction d'un plantage sur CarPlay avec iOS 15\n• Correction des problèmes de redimensionnement automatique des widgets des panneaux gauche et droit\n• Correction de l'incompatibilité des guides de voyage\n• Correction du problème d'achats multiplateformes\n• Correction de l'écran noir sur CarPlay après le démarrage\n";
 "routing_attr_allow_ferries_name" = "Autoriser les ferries";
-"route_roundabout_exit" = "Prendre la sortie %d";
 "routing_attr_allow_ferries_description" = "Autoriser les trajets en ferry";
+"route_roundabout_exit" = "Prenez la %dᵉ sortie";

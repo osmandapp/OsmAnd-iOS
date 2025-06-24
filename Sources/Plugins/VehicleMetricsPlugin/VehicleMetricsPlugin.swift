@@ -234,34 +234,38 @@ extension VehicleMetricsPlugin {
 extension VehicleMetricsPlugin {
     override func attachAdditionalInfo(toRecordedTrack location: CLLocation, json: NSMutableData) {
         super.attachAdditionalInfo(toRecordedTrack: location, json: json)
-        guard OAIAPHelper.isVehicleMetricsAvailable() else {
-            return
-        }
+        
+        guard OAIAPHelper.isVehicleMetricsAvailable() else { return }
         
         let mode = OAAppSettings.sharedManager().applicationMode.get()
-        let commandNames: [String]? = TRIP_RECORDING_VEHICLE_METRICS.get(mode)
-        let selectedCommands: [OBDCommand] = commandNames?.compactMap { OBDCommand.companion.getCommand(name: $0) } ?? []
-        
+        let commandNames = TRIP_RECORDING_VEHICLE_METRICS.get(mode) ?? []
+        let selectedCommands = Set(commandNames.compactMap { OBDCommand.companion.getCommand(name: $0) })
+
         guard !selectedCommands.isEmpty,
               let rawData = OBDService.shared.obdDispatcher?.getRawData() as? [OBDCommand: Any] else {
             return
         }
+        
+        var jsonDict: [String: String] = [:]
+        let prefix = GpxUtilities().OSMAND_EXTENSIONS_PREFIX
 
-        for (command, dataField) in rawData {
+        rawData.forEach { command, dataField in
             guard selectedCommands.contains(command),
                   let tag = command.gpxTag,
-                  // FIXME:
-                  let value = dataField as? OBDDataField<AnyObject> else {
-                continue
+                  let value = (dataField as? OBDDataField<AnyObject>)?.value as? NSNumber else {
+                return
             }
-            
-            let key = GpxUtilities().OSMAND_EXTENSIONS_PREFIX + tag
-            if let jsonObject = try? JSONSerialization.jsonObject(with: json as Data) as? NSMutableDictionary {
-                jsonObject[key] = value.value
-                if let updatedData = try? JSONSerialization.data(withJSONObject: jsonObject, options: []) {
-                    json.setData(updatedData)
-                }
-            }
+
+            jsonDict[prefix + tag] = value.stringValue
+        }
+        
+        guard !jsonDict.isEmpty else { return }
+
+        do {
+            let jsonData = try JSONEncoder().encode(jsonDict)
+            json.append(jsonData)
+        } catch {
+            NSLog("VehicleMetricsPlugin -> failed to encode sensor data: \(error.localizedDescription)")
         }
     }
 }

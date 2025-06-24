@@ -16,7 +16,7 @@ final class VehicleMetricsTripRecordingCommandsViewController: OABaseNavbarViewC
         guard let plugin = vehicleMetricsPlugin else {
             return SelectionManager(allItems: allCommands, initiallySelected: [])
         }
-
+        
         let selectedCommands = plugin.TRIP_RECORDING_VEHICLE_METRICS.get(appMode) ?? []
         return SelectionManager(allItems: allCommands, initiallySelected: selectedCommands)
     }()
@@ -214,8 +214,7 @@ extension VehicleMetricsTripRecordingCommandsViewController {
             for: .normal
         )
         
-        let items = [selectDeselectButton]
-        toolbarItems = items
+        toolbarItems = [selectDeselectButton]
     }
     
     @objc private func toggleSelectAllCommands() {

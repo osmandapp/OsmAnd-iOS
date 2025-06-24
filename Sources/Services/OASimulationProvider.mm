@@ -67,14 +67,15 @@
         }
         auto road = _roads[i];
         BOOL firstRoad = i == _currentRoad;
-        BOOL plus = road->getStartPointIndex() < road->getEndPointIndex();
-        for (int j = firstRoad ? _currentSegment : (road->getStartPointIndex() + (plus ? +1 : -1));
-             plus ? j <= road->getEndPointIndex() : j >= road->getEndPointIndex();
-             j += plus ? +1 : -1)
+        //BOOL plus = road->getStartPointIndex() < road->getEndPointIndex();
+        int increment = road->getStartPointIndex() < road->getEndPointIndex() ? +1 : -1;
+        for (int j = firstRoad ? _currentSegment : (road->getStartPointIndex() + increment);
+             increment > 0 ? j <= road->getEndPointIndex() : j >= road->getEndPointIndex();
+             j += increment)
         {
             auto obj = road->object;
-            int st31x = obj->getPoint31XTile(plus ? j - 1 : j + 1);
-            int st31y = obj->getPoint31YTile(plus ? j - 1 : j + 1);
+            int st31x = obj->getPoint31XTile(j - increment);
+            int st31y = obj->getPoint31YTile(j - increment);
             int end31x = obj->pointsX[j];
             int end31y = obj->pointsY[j];
             BOOL last = i == _roads.size() - 1 && j == road->getEndPointIndex();
@@ -99,10 +100,9 @@
             }
             else
             {
-                // LOG.error(String.format(Locale.US, "proceedMeters break at the end of the road (sx=%d, sy=%d) (%s)", st31x, st31y, road));
+                NSLog(@"proceedMeters break at the end of the road (sx=%d, sy=%d) (%s)", st31x, st31y, road->toString().c_str());
                 break;
             }
-            j += plus ? 1 : -1;
         }
     }
     return -1;

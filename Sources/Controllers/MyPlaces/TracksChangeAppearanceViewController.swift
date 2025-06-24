@@ -31,12 +31,14 @@ private enum RowKey: String {
     case splitIntervalNoneDescrRowKey
 }
 
+@objc(OATracksChangeAppearanceViewController)
+@objcMembers
 final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private static let customStringValue = "customStringValue"
     private static let widthArrayValue = "widthArrayValue"
     private static let hasTopLabels = "hasTopLabels"
     private static let hasBottomLabels = "hasBottomLabels"
-    private static let routeStatisticsAttributesStrings: [String] = ["routeInfo_roadClass", "routeInfo_surface", "routeInfo_smoothness", "routeInfo_winter_ice_road", "routeInfo_tracktype", "routeInfo_horse_scale"]
+    static let routeStatisticsAttributesStrings: [String] = ["routeInfo_roadClass", "routeInfo_surface", "routeInfo_smoothness", "routeInfo_winter_ice_road", "routeInfo_tracktype", "routeInfo_horse_scale"]
     
     private var tracks: Set<TrackItem>
     private var initialData: AppearanceData

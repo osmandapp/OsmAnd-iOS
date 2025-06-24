@@ -125,10 +125,7 @@ class WidgetType: NSObject {
     }
     
     func isProWidget() -> Bool {
-        return self == .elevationProfile || self == .altitudeMapCenter
-        // FIXME: https://github.com/osmandapp/OsmAnd-Issues/issues/2816
-//        return self == .elevationProfile || self == .altitudeMapCenter
-//        || (isOBDWidget() && self != obdSpeed && this != obdRPM);
+        self == .elevationProfile || self == .altitudeMapCenter || (isOBDWidget() && self != .OBDSpeed && self != .OBDRpm)
     }
 
     func getDefaultOrder() -> Int {

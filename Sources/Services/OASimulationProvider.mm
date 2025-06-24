@@ -59,12 +59,12 @@
 
 - (double) proceedMeters:(float)meters l:(CLLocation **)l
 {
+    if (_currentRoad == -1)
+    {
+        return -1;
+    }
     for (int i = _currentRoad; i < _roads.size(); i++)
     {
-        if (_currentRoad == -1)
-        {
-            return -1;
-        }
         auto road = _roads[i];
         BOOL firstRoad = i == _currentRoad;
         int increment = road->getStartPointIndex() < road->getEndPointIndex() ? +1 : -1;
@@ -73,8 +73,8 @@
              j += increment)
         {
             auto obj = road->object;
-            int st31x = obj->getPoint31XTile(j - increment);
-            int st31y = obj->getPoint31YTile(j - increment);
+            int st31x = obj->pointsX[j - increment];
+            int st31y = obj->pointsY[j - increment];
             int end31x = obj->pointsX[j];
             int end31y = obj->pointsY[j];
             BOOL last = i == _roads.size() - 1 && j == road->getEndPointIndex();

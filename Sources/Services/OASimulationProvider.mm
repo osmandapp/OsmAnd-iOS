@@ -67,7 +67,6 @@
         }
         auto road = _roads[i];
         BOOL firstRoad = i == _currentRoad;
-        //BOOL plus = road->getStartPointIndex() < road->getEndPointIndex();
         int increment = road->getStartPointIndex() < road->getEndPointIndex() ? +1 : -1;
         for (int j = firstRoad ? _currentSegment : (road->getStartPointIndex() + increment);
              increment > 0 ? j <= road->getEndPointIndex() : j >= road->getEndPointIndex();
@@ -94,9 +93,14 @@
             {
                 int prx = (int) (st31x + (end31x - st31x) * (meters / dd));
                 int pry = (int) (st31y + (end31y - st31y) * (meters / dd));
+                if (prx == 0 || pry == 0)
+                {
+                    NSLog(@"proceedMeters zero x or y (%d,%d) (%s)", prx, pry, road->toString().c_str());
+                    return -1;
+                }
                 
                 *l = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(OsmAnd::Utilities::get31LatitudeY(pry), OsmAnd::Utilities::get31LongitudeX(prx)) altitude:(*l).altitude horizontalAccuracy:0 verticalAccuracy:(*l).verticalAccuracy course:(*l).course speed:(*l).speed timestamp:(*l).timestamp];
-                return (float) MAX(meters - dd, 0);
+                return MAX(meters - dd, 0);
             }
             else
             {

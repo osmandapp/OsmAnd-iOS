@@ -245,10 +245,10 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     }
     
     private func createBooleanMenuWith(currentValue: String, pref: OACommonBoolean, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
-        let actions = options.map { row -> UIAction in
-            let title = row.title
-            let state: UIMenuElement.State = (title == currentValue) ? .on : .off
-            return UIAction(title: title ?? "", image: UIImage.templateImageNamed(row.iconName), state: state) { [weak self] _ in
+        let actions = options.compactMap { row -> UIAction? in
+            guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
+            let state: UIMenuElement.State = title == currentValue ? .on : .off
+            return UIAction(title: title, image: UIImage.templateImageNamed(row.iconName), state: state) { [weak self] _ in
                 guard let self else { return }
                 let newBool = ((row.obj(forKey: "value") as? Int) ?? 0) == 1
                 if self.createNew {
@@ -265,11 +265,11 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     }
         
     private func createStringMenuWith(currentValue: String, pref: OACommonString, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
-        let actions = options.map { row -> UIAction in
+        let actions = options.compactMap { row -> UIAction? in
+            guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
             let raw = row.obj(forKey: "value") as? String ?? ""
-            let title = row.title
-            let state: UIMenuElement.State = (raw == currentValue) ? .on : .off
-            return UIAction(title: title ?? "", state: state) { [weak self] _ in
+            let state: UIMenuElement.State = raw == currentValue ? .on : .off
+            return UIAction(title: title, state: state) { [weak self] _ in
                 guard let self else { return }
                 if self.createNew {
                     self.widgetConfigurationParams?[pref.key] = raw

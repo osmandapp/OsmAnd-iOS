@@ -64,9 +64,9 @@ class OBDTextWidget: OASimpleWidget {
     }
     
     override func updateInfo() -> Bool {
-        guard let wt = widgetType, wt.isPurchased(), let plug = plugin, let comp = widgetComputer else { return false }
-        let subtext = plug.getWidgetUnit(comp.type)
-        let textData = plug.getWidgetValue(computerWidget: comp)
+        guard let wt = widgetType, wt.isPurchased(), let plugin, let widgetComputer else { return false }
+        let subtext = plugin.getWidgetUnit(widgetComputer.type)
+        let textData = plugin.getWidgetValue(computerWidget: widgetComputer)
         if textData != cacheTextData || subtext != cacheSubTextData {
             setText(textData, subtext: subtext)
             cacheTextData = textData
@@ -82,8 +82,7 @@ class OBDTextWidget: OASimpleWidget {
         let updatedSettingsGroup: UIMenu = {
             guard supportsAverageMode(), averageModePref?.get() == true else { return settingsGroup }
             let resetAction = UIAction(title: localizedString("reset_average_value"), image: .icCustomReset) { [weak self] _ in
-                guard let self else { return }
-                self.resetAverageValue()
+                self?.resetAverageValue()
             }
             
             return settingsGroup.replacingChildren([resetAction] + settingsGroup.children)
@@ -110,7 +109,7 @@ class OBDTextWidget: OASimpleWidget {
                 isAvg = avgPref.get()
             }
             let valueKeys = isTemperatureWidget() ? ["current_temperature", "average_temperature"] : ["shared_string_instant", "average"]
-            let titleKey = valueKeys[ isAvg ? 1 : 0 ]
+            let titleKey = valueKeys[isAvg ? 1 : 0]
             modeRow.setObj(localizedString(titleKey), forKey: "value")
             let possibleValues = valueKeys.enumerated().map { idx, key in
                 let row = OATableRowData()
@@ -209,10 +208,10 @@ class OBDTextWidget: OASimpleWidget {
         }
         
         guard let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false).makeProfile() else { fatalError("Failed to register preference \(prefId)") }
-        if let params = widgetParams {
-            if let rawBool = params[prefId] as? Bool {
+        if let widgetParams {
+            if let rawBool = widgetParams[prefId] as? Bool {
                 preference.set(rawBool, mode: appMode)
-            } else if let rawBase = params[Self.averageModePrefKey] as? Bool {
+            } else if let rawBase = widgetParams[Self.averageModePrefKey] as? Bool {
                 preference.set(rawBase, mode: appMode)
             }
         }
@@ -229,10 +228,10 @@ class OBDTextWidget: OASimpleWidget {
         }
         
         guard let preference = OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: Self.defaultIntervalMillis)?.makeProfile() else { fatalError("Failed to register preference \(prefId)") }
-        if let params = widgetParams {
-            if let rawString = params[prefId] as? String, let rawValue = Int(rawString) {
+        if let widgetParams {
+            if let rawString = widgetParams[prefId] as? String, let rawValue = Int(rawString) {
                 preference.set(rawValue, mode: appMode)
-            } else if let rawString = params[Self.measuredIntervalPrefKey] as? String, let rawValue = Int(rawString) {
+            } else if let rawString = widgetParams[Self.measuredIntervalPrefKey] as? String, let rawValue = Int(rawString) {
                 preference.set(rawValue, mode: appMode)
             }
         }
@@ -246,21 +245,33 @@ class OBDTextWidget: OASimpleWidget {
     }
     
     private func supportsAverageMode() -> Bool {
-        switch widgetType {
-        case .OBDRpm, .OBDSpeed, .OBDCalculatedEngineLoad, .OBDFuelPressure, .OBDThrottlePosition, .OBDBatteryVoltage, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDEngineCoolantTemp:
-            return true
-        default:
-            return false
-        }
+        let supportedTypes: Set<WidgetType> = [
+            .OBDRpm,
+            .OBDSpeed,
+            .OBDCalculatedEngineLoad,
+            .OBDFuelPressure,
+            .OBDThrottlePosition,
+            .OBDBatteryVoltage,
+            .OBDAirIntakeTemp,
+            .engineOilTemperature,
+            .OBDAmbientAirTemp,
+            .OBDEngineCoolantTemp
+        ]
+
+        guard let widgetType else { return false }
+        return supportedTypes.contains(widgetType)
     }
     
     private func isTemperatureWidget() -> Bool {
-        switch widgetType {
-        case .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDEngineCoolantTemp:
-            return true
-        default:
-            return false
-        }
+        let supportedTypes: Set<WidgetType> = [
+            .OBDAirIntakeTemp,
+            .engineOilTemperature,
+            .OBDAmbientAirTemp,
+            .OBDEngineCoolantTemp
+        ]
+        
+        guard let widgetType else { return false }
+        return supportedTypes.contains(widgetType)
     }
     
     func updatePrefs(prefsChanged: Bool) {

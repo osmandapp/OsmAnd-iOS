@@ -61,6 +61,7 @@ private enum FuelConsumptionMode: String, CaseIterable {
 @objcMembers
 final class OBDFuelConsumptionWidget: OBDTextWidget {
     private static let obdFuelConsumptionModeKey = "obd_fuel_consumption_mode"
+    private static let fuelConsumptionAverageTimeSeconds: Int32 = 5 * 60
     private var fuelConsumptionModePref: OACommonString?
     
     convenience init(customId: String?, widgetType: WidgetType, appMode: OAApplicationMode, widgetParams: [String: Any]? = nil) {
@@ -149,7 +150,7 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
     private func getAverageTime(for type: OBDDataComputer.OBDTypeWidget) -> Int32 {
         switch type {
         case .fuelConsumptionRatePercentHour, .fuelConsumptionRateLiterHour, .fuelConsumptionRateLiterKm:
-            return 5 * 60
+            return Self.fuelConsumptionAverageTimeSeconds
         default:
             return 0
         }

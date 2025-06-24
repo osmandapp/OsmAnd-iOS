@@ -196,7 +196,8 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                        cell: DownloadingCell) {
         if let resourceItem,
            resourceItem.objcResourceItem != nil,
-           let resourceId = resourceItem.resourceId() {
+           let rawId = resourceItem.resourceId() {
+            let resourceId = (resourceItem as? OAMultipleResourceSwiftItem)?.getResourceId() ?? rawId
             if getResource(resourceId) == nil {
                 saveResource(resource: resourceItem, resourceId: resourceId)
             }
@@ -211,7 +212,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             }
             
             cells[resourceId] = cell
-            setupCell(resourceId)
+            _ = setupCell(resourceId)
         }
     }
     

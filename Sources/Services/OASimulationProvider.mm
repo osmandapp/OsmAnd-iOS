@@ -57,18 +57,24 @@
     }
 }
 
-- (float) proceedMeters:(float)meters l:(CLLocation **)l
+- (double) proceedMeters:(float)meters l:(CLLocation **)l
 {
     for (int i = _currentRoad; i < _roads.size(); i++)
     {
+        if (_currentRoad == -1)
+        {
+            return -1;
+        }
         auto road = _roads[i];
         BOOL firstRoad = i == _currentRoad;
         BOOL plus = road->getStartPointIndex() < road->getEndPointIndex();
-        for (int j = firstRoad ? _currentSegment : road->getStartPointIndex() + 1; j <= road->getEndPointIndex(); )
+        for (int j = firstRoad ? _currentSegment : (road->getStartPointIndex() + (plus ? +1 : -1));
+             plus ? j <= road->getEndPointIndex() : j >= road->getEndPointIndex();
+             j += plus ? +1 : -1)
         {
             auto obj = road->object;
-            int st31x = obj->pointsX[j - 1];
-            int st31y = obj->pointsY[j - 1];
+            int st31x = obj->getPoint31XTile(plus ? j - 1 : j + 1);
+            int st31y = obj->getPoint31YTile(plus ? j - 1 : j + 1);
             int end31x = obj->pointsX[j];
             int end31y = obj->pointsY[j];
             BOOL last = i == _roads.size() - 1 && j == road->getEndPointIndex();
@@ -83,13 +89,18 @@
             {
                 meters -= dd;
             }
-            else
+            else if (dd > 0)
             {
                 int prx = (int) (st31x + (end31x - st31x) * (meters / dd));
                 int pry = (int) (st31y + (end31y - st31y) * (meters / dd));
                 
                 *l = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(OsmAnd::Utilities::get31LatitudeY(pry), OsmAnd::Utilities::get31LongitudeX(prx)) altitude:(*l).altitude horizontalAccuracy:0 verticalAccuracy:(*l).verticalAccuracy course:(*l).course speed:(*l).speed timestamp:(*l).timestamp];
                 return (float) MAX(meters - dd, 0);
+            }
+            else
+            {
+                // LOG.error(String.format(Locale.US, "proceedMeters break at the end of the road (sx=%d, sy=%d) (%s)", st31x, st31y, road));
+                break;
             }
             j += plus ? 1 : -1;
         }
@@ -100,18 +111,18 @@
 /**
  * @return null if it is not available of far from boundaries
  */
-- (CLLocation *) getSimulatedLocation
+- (OALocation *) getSimulatedLocationForTunnel
 {
     if (![self isSimulatedDataAvailable])
         return nil;
     
     CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(0, 0) altitude:_startLocation.altitude horizontalAccuracy:-1 verticalAccuracy:0 course:0 speed:_startLocation.speed timestamp:[NSDate date]];
-    float meters = _startLocation.speed * ([[NSDate date] timeIntervalSince1970] - [_startLocation.timestamp timeIntervalSince1970]);
-    float proc = [self proceedMeters:meters l:&loc];
+    double meters = _startLocation.speed * ([[NSDate date] timeIntervalSince1970] - [_startLocation.timestamp timeIntervalSince1970]);
+    double proc = [self proceedMeters:meters l:&loc];
     if (proc < 0 || proc >= 100) {
         return nil;
     }
-    return [[CLLocation alloc] initWithCoordinate:loc.coordinate altitude:loc.altitude horizontalAccuracy:loc.horizontalAccuracy verticalAccuracy:loc.verticalAccuracy course:loc.course speed:loc.speed timestamp:loc.timestamp];
+    return [[OALocation alloc] initWithProvider:@"TUNNEL" location:loc];
 }
 
 - (BOOL) isSimulatedDataAvailable

@@ -9,55 +9,87 @@
 import XCTest
 
 final class SelectionManagerTests: XCTestCase {
-
+    
     // MARK: - Int Tests
 
-    func testInitialization_withValidSelection() {
-        let manager = SelectionManager(allItems: [1, 2, 3], initiallySelected: [2, 3])
-        XCTAssertEqual(manager.selectedItems, [2, 3])
+    func testInitWithValidSelectionSetsSelectedItems() {
+        let manager = SelectionManager(allItems: [1, 2, 3], initiallySelected: [2])
+        XCTAssertEqual(manager.selectedItems, [2])
         XCTAssertFalse(manager.isEmpty)
         XCTAssertFalse(manager.areAllSelected)
+        XCTAssertFalse(manager.hasChanges)
     }
 
-    func testInitialization_withInvalidSelection() {
+    func testInitWithInvalidSelectionResultsInEmptySelection() {
         let manager = SelectionManager(allItems: [1, 2], initiallySelected: [3])
         XCTAssertEqual(manager.selectedItems, [])
         XCTAssertTrue(manager.isEmpty)
+        XCTAssertFalse(manager.hasChanges)
     }
 
-    func testToggle_addAndRemove() {
-        let manager = SelectionManager(allItems: [1, 2, 3])
+    func testToggleSelectedItemRemovesFromSelection() {
+        var manager = SelectionManager(allItems: [1, 2, 3], initiallySelected: [2])
         manager.toggle(2)
-        XCTAssertEqual(manager.selectedItems, [2])
-        manager.toggle(2)
-        XCTAssertTrue(manager.selectedItems.isEmpty)
+        XCTAssertEqual(manager.selectedItems, [])
+        XCTAssertTrue(manager.hasChanges)
     }
 
-    func testSelectAllAndDeselectAll() {
-        let manager = SelectionManager(allItems: [1, 2, 3])
+    func testToggleUnselectedItemAddsToSelection() {
+        var manager = SelectionManager(allItems: [1, 2, 3], initiallySelected: [2])
+        manager.toggle(3)
+        XCTAssertEqual(manager.selectedItems, [2, 3])
+        XCTAssertTrue(manager.hasChanges)
+    }
+
+    func testSelectAll() {
+        var manager = SelectionManager(allItems: [1, 2, 3])
         manager.selectAll()
         XCTAssertEqual(manager.selectedItems, [1, 2, 3])
         XCTAssertTrue(manager.areAllSelected)
+        XCTAssertTrue(manager.hasChanges)
+    }
 
+    func testDeselectAll() {
+        var manager = SelectionManager(allItems: [1, 2, 3], initiallySelected: [1])
+        manager.deselectAll()
+        XCTAssertTrue(manager.selectedItems.isEmpty)
+        XCTAssertTrue(manager.isEmpty)
+        XCTAssertTrue(manager.hasChanges)
+    }
+
+    func testSelectAllThenDeselectAllResultsInEmptySelection() {
+        var manager = SelectionManager(allItems: [1, 2])
+        manager.selectAll()
         manager.deselectAll()
         XCTAssertTrue(manager.isEmpty)
+        XCTAssertFalse(manager.hasChanges)
+    }
+
+    func testHasChangesIsFalseAfterRevertingToInitialSelection() {
+        var manager = SelectionManager(allItems: [1, 2, 3], initiallySelected: [2])
+        manager.toggle(2) // remove
+        manager.toggle(3) // add
+        XCTAssertTrue(manager.hasChanges)
+
+        manager.toggle(2) // add back
+        manager.toggle(3) // remove
+        XCTAssertEqual(manager.selectedItems, [2])
+        XCTAssertFalse(manager.hasChanges)
     }
 
     // MARK: - String Tests
 
-    func testStringSelectionManager() {
-        let manager = SelectionManager(allItems: ["apple", "banana", "orange"], initiallySelected: ["banana"])
-        XCTAssertEqual(manager.selectedItems, ["banana"])
+    func testStringSelectionBehavior() {
+        var manager = SelectionManager(allItems: ["a", "b", "c"], initiallySelected: ["b"])
+        XCTAssertEqual(manager.selectedItems, ["b"])
+        XCTAssertFalse(manager.hasChanges)
 
-        let mutable = manager
-        mutable.toggle("orange")
-        XCTAssertEqual(mutable.selectedItems, ["banana", "orange"])
+        manager.toggle("c")
+        XCTAssertEqual(manager.selectedItems, ["b", "c"])
+        XCTAssertTrue(manager.hasChanges)
 
-        mutable.selectAll()
-        XCTAssertTrue(mutable.areAllSelected)
-
-        mutable.deselectAll()
-        XCTAssertTrue(mutable.isEmpty)
+        manager.deselectAll()
+        XCTAssertTrue(manager.isEmpty)
     }
 
     // MARK: - Custom Struct Tests
@@ -66,22 +98,21 @@ final class SelectionManagerTests: XCTestCase {
         let name: String
     }
 
-    func testCustomStructSelectionManager() {
-        let apple = Fruit(name: "Apple")
-        let banana = Fruit(name: "Banana")
-        let cherry = Fruit(name: "Cherry")
+    func testCustomStructSelectionBehavior() {
+        let apple = Fruit(name: "apple")
+        let banana = Fruit(name: "banana")
+        let cherry = Fruit(name: "cherry")
 
-        let manager = SelectionManager(allItems: [apple, banana, cherry], initiallySelected: [banana])
+        var manager = SelectionManager(allItems: [apple, banana, cherry], initiallySelected: [banana])
         XCTAssertEqual(manager.selectedItems, [banana])
+        XCTAssertFalse(manager.hasChanges)
 
-        let mutable = manager
-        mutable.toggle(cherry)
-        XCTAssertEqual(mutable.selectedItems, [banana, cherry])
+        manager.toggle(cherry)
+        XCTAssertEqual(manager.selectedItems, [banana, cherry])
+        XCTAssertTrue(manager.hasChanges)
 
-        mutable.selectAll()
-        XCTAssertTrue(mutable.areAllSelected)
-
-        mutable.deselectAll()
-        XCTAssertTrue(mutable.isEmpty)
+        manager.deselectAll()
+        XCTAssertTrue(manager.isEmpty)
+        XCTAssertTrue(manager.hasChanges)
     }
 }

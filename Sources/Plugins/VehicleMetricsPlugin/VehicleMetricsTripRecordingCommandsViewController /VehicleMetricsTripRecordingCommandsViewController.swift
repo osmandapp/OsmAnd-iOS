@@ -10,28 +10,26 @@ final class VehicleMetricsTripRecordingCommandsViewController: OABaseNavbarViewC
     
     private let appMode: OAApplicationMode
     private let onApplyAction: (() -> Void)?
-    private let initialSelectedCommands: [String]
-    private let selectionManager: SelectionManager<String>
+    
+    private lazy var selectionManager: SelectionManager<String> = {
+        let allCommands = VehicleMetricsItem.allCommands
+        guard let plugin = vehicleMetricsPlugin else {
+            return SelectionManager(allItems: allCommands, initiallySelected: [])
+        }
+
+        let selectedCommands = plugin.TRIP_RECORDING_VEHICLE_METRICS.get(appMode) ?? []
+        return SelectionManager(allItems: allCommands, initiallySelected: selectedCommands)
+    }()
     
     private lazy var vehicleMetricsPlugin: VehicleMetricsPlugin? = {
         OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin
     }()
-    
-    private var hasChanges: Bool {
-        Set(initialSelectedCommands) != selectionManager.selectedItems
-    }
     
     // MARK: - Init
     
     @objc init(appMode: OAApplicationMode, onApplyAction: (() -> Void)? = nil) {
         self.appMode = appMode
         self.onApplyAction = onApplyAction
-        
-        let commands = (OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin)?
-            .TRIP_RECORDING_VEHICLE_METRICS
-            .get(appMode) ?? []
-        self.initialSelectedCommands = commands
-        self.selectionManager = SelectionManager(allItems: VehicleMetricsItem.allCommands, initiallySelected: commands)
         super.init()
     }
     
@@ -89,7 +87,7 @@ extension VehicleMetricsTripRecordingCommandsViewController {
     }
     
     override func onLeftNavbarButtonPressed() {
-        if !hasChanges {
+        if !selectionManager.hasChanges {
             dismiss()
         } else {
             presentExitWithoutSavingAlert()
@@ -117,7 +115,7 @@ extension VehicleMetricsTripRecordingCommandsViewController {
     }
     
     private func configureRightBarButtonState() {
-        setRightBarButtonEnabled(hasChanges)
+        setRightBarButtonEnabled(selectionManager.hasChanges)
     }
     
     private func setRightBarButtonEnabled(_ isEnabled: Bool) {
@@ -236,12 +234,12 @@ extension VehicleMetricsTripRecordingCommandsViewController {
 extension VehicleMetricsTripRecordingCommandsViewController: UIAdaptivePresentationControllerDelegate {
     
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        if hasChanges {
+        if selectionManager.hasChanges {
             presentExitWithoutSavingAlert()
         }
     }
     
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        !hasChanges
+        !selectionManager.hasChanges
     }
 }

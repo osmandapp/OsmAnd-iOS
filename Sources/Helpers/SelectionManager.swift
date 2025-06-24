@@ -7,9 +7,11 @@
 //
 
 final class SelectionManager<T: Hashable> {
-    let allItems: Set<T>
+    private let allItems: Set<T>
+    private let initiallySelectedItems: Set<T>
+    
     private(set) var selectedItems: Set<T> = []
-
+   
     var areAllSelected: Bool {
         selectedItems == allItems
     }
@@ -17,11 +19,16 @@ final class SelectionManager<T: Hashable> {
     var isEmpty: Bool {
         selectedItems.isEmpty
     }
+    
+    var hasChanges: Bool {
+        initiallySelectedItems != selectedItems
+    }
 
     init(allItems: [T], initiallySelected: [T] = []) {
         self.allItems = Set(allItems)
         let validSelection = initiallySelected.filter { allItems.contains($0) }
         self.selectedItems = Set(validSelection)
+        self.initiallySelectedItems = selectedItems
     }
 
     func toggle(_ item: T) {

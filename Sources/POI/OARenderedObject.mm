@@ -53,7 +53,7 @@
         }
         double lat = OsmAnd::Utilities::get31LatitudeY(obfMapObject->getLabelCoordinateY());
         double lon = OsmAnd::Utilities::get31LongitudeX(obfMapObject->getLabelCoordinateX());
-        [renderedObject setLabelLatLon:CLLocationCoordinate2DMake(lat, lon)];
+        [renderedObject setLabelLatLon:[[CLLocation alloc] initWithLatitude:lat longitude:lon]];
         
         if (symbolInfo)
         {

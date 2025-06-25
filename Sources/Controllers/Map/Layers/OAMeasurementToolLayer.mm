@@ -14,6 +14,7 @@
 #import "OANativeUtilities.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAAppSettings.h"
+#import "OAPointDescription.h"
 #import "CLLocation+Extension.h"
 #import "OsmAndSharedWrapper.h"
 
@@ -503,6 +504,16 @@
         auto point31 = [OANativeUtilities convertFromPointI:point];
         [self.mapViewController goToPosition:point31 animated:YES];
     }
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    return  nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    return nil;
 }
 
 @end

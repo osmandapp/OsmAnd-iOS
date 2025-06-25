@@ -26,9 +26,6 @@
 
 #define WAY_MODULO_REMAINDER 1;
 
-static const int AMENITY_ID_RIGHT_SHIFT = 1;
-static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
-
 @implementation OAOpenStreetMapLocalUtil
 
 - (void)closeChangeSet {

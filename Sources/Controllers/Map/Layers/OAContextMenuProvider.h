@@ -12,7 +12,7 @@
 
 const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 
-@class OATargetPoint;
+@class OATargetPoint, OAPointDescription, OAMapSelectionResult, OASelectedMapObject;
 
 typedef NS_ENUM(NSInteger, EOAPinVerticalAlignment)
 {
@@ -34,13 +34,19 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 - (OATargetPoint *) getTargetPoint:(id)obj;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation;
-//- (CLLocationCoordinate2D) getObjectLocation(OATargetPoint *)o;
-//- (OAPointDescription *) getObjectName:(OATargetPoint *)o;
+- (BOOL) isSecondaryProvider;
+
+- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
+
+- (CLLocation *) getObjectLocation:(id)obj;
+- (OAPointDescription *) getObjectName:(id)obj;
+
+- (BOOL) showMenuAction:(id)object;
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation;
+
 //- (BOOL) disableSingleTap;
 //- (BOOL) disableLongPressOnMap;
 //- (BOOL) isObjectClickable:(OATargetPoint *)o;
-//- (BOOL) runExclusiveAction:(OATargetPoint *)o unknownLocation:(BOOL)unknownLocation;
 
 @end
 

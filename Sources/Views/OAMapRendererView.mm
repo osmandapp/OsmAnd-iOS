@@ -591,6 +591,11 @@ forcedUpdate:(BOOL)forcedUpdate
     return _frameId;
 }
 
+- (BOOL)isPositionVisible:(double)lat lon:(double)lon
+{
+    return YES;
+}
+
 - (BOOL)isPositionVisible:(OsmAnd::PointI)pos
 {
     return _renderer->isPositionVisible(pos);

@@ -286,14 +286,14 @@ class OBDTextWidget: OASimpleWidget {
         }()
         
         if prefsChanged {
-            if let wc = widgetComputer {
-                widgetComputer = OBDDataComputer.shared.registerWidget(type: wc.type, averageTimeSeconds: Int32(newTimeSeconds))
+            if let widgetComputer {
+                self.widgetComputer = OBDDataComputer.shared.registerWidget(type: widgetComputer.type, averageTimeSeconds: Int32(newTimeSeconds))
             }
         } else {
             widgetComputer?.averageTimeSeconds = Int32(newTimeSeconds)
         }
         
-        self.updateInfo()
+        updateInfo()
         configureShadowButtonMenu()
     }
     

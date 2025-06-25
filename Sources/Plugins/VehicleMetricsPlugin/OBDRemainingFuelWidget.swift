@@ -44,8 +44,7 @@ private enum RemainingFuelMode: String, CaseIterable {
                 }
             }()
             
-            let right = localizedString(unitKey)
-            return String(format: localizedString("ltr_or_rtl_combine_with_brackets"), left, right)
+            return String(format: localizedString("ltr_or_rtl_combine_with_brackets"), left, localizedString(unitKey))
             
         case .distance:
             let left = localizedString("shared_string_distance")
@@ -60,8 +59,7 @@ private enum RemainingFuelMode: String, CaseIterable {
                 }
             }()
             
-            let right = localizedString(unitKey)
-            return String(format: localizedString("ltr_or_rtl_combine_with_brackets"), left, right)
+            return String(format: localizedString("ltr_or_rtl_combine_with_brackets"), left, localizedString(unitKey))
         }
     }
 }
@@ -105,12 +103,12 @@ final class OBDRemainingFuelWidget: OBDTextWidget {
         modeRow.title = localizedString("shared_string_mode")
         modeRow.setObj(remainingFuelModePref as Any, forKey: "pref")
         let currentRaw: String = {
-            guard let pref = remainingFuelModePref else { return RemainingFuelMode.percent.rawValue }
-            if isCreate, let params = widgetConfigurationParams, let overrideRaw = params[pref.key] as? String, RemainingFuelMode(rawValue: overrideRaw) != nil {
+            guard let remainingFuelModePref else { return RemainingFuelMode.percent.rawValue }
+            if isCreate, let widgetConfigurationParams, let overrideRaw = widgetConfigurationParams[remainingFuelModePref.key] as? String, RemainingFuelMode(rawValue: overrideRaw) != nil {
                 return overrideRaw
             }
 
-            return pref.get(appMode) ?? RemainingFuelMode.percent.rawValue
+            return remainingFuelModePref.get(appMode) ?? RemainingFuelMode.percent.rawValue
         }()
         modeRow.setObj(currentRaw, forKey: "value")
         let options: [OATableRowData] = RemainingFuelMode.allCases.map { mode in

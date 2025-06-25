@@ -96,12 +96,12 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
         modeRow.title = localizedString("shared_string_mode")
         modeRow.setObj(fuelConsumptionModePref as Any, forKey: "pref")
         let currentRaw: String = {
-            guard let pref = fuelConsumptionModePref else { return FuelConsumptionMode.volumePer100Units.rawValue }
-            if isCreate, let widgetConfigurationParams, let overrideRaw = widgetConfigurationParams[pref.key] as? String, FuelConsumptionMode(rawValue: overrideRaw) != nil {
+            guard let fuelConsumptionModePref else { return FuelConsumptionMode.volumePer100Units.rawValue }
+            if isCreate, let widgetConfigurationParams, let overrideRaw = widgetConfigurationParams[fuelConsumptionModePref.key] as? String, FuelConsumptionMode(rawValue: overrideRaw) != nil {
                 return overrideRaw
             }
             
-            return pref.get(appMode) ?? FuelConsumptionMode.volumePer100Units.rawValue
+            return fuelConsumptionModePref.get(appMode) ?? FuelConsumptionMode.volumePer100Units.rawValue
         }()
         modeRow.setObj(currentRaw, forKey: "value")
         let options: [OATableRowData] = FuelConsumptionMode.allCases.map { mode in

@@ -476,6 +476,7 @@
 		32C21CB127DFC18E00DE4266 /* OAAlertBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32C21CB027DFC18E00DE4266 /* OAAlertBottomSheetViewController.mm */; };
 		32C21CB327E08EFD00DE4266 /* OAAlertBottomSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32C21CB227E08E4D00DE4266 /* OAAlertBottomSheetViewController.xib */; };
 		32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C21CB627E0A66A00DE4266 /* OARecordSettingsBottomSheetViewController.m */; };
+		32C41F542E0C4CEF00E9941C /* OAHeightDataLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32C41F532E0C4CED00E9941C /* OAHeightDataLoader.mm */; };
 		32C91E5B25A86A5700FA6470 /* ic_custom_compass_widget_hide@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */; };
 		32C91E5D25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
 		32C91E6525A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
@@ -3927,6 +3928,8 @@
 		32C21CB227E08E4D00DE4266 /* OAAlertBottomSheetViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAAlertBottomSheetViewController.xib; sourceTree = "<group>"; };
 		32C21CB527E0A65300DE4266 /* OARecordSettingsBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARecordSettingsBottomSheetViewController.h; sourceTree = "<group>"; };
 		32C21CB627E0A66A00DE4266 /* OARecordSettingsBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARecordSettingsBottomSheetViewController.m; sourceTree = "<group>"; };
+		32C41F522E0C4CDF00E9941C /* OAHeightDataLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAHeightDataLoader.h; sourceTree = "<group>"; };
+		32C41F532E0C4CED00E9941C /* OAHeightDataLoader.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHeightDataLoader.mm; sourceTree = "<group>"; };
 		32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@3x.png"; sourceTree = "<group>"; };
 		32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@3x.png"; sourceTree = "<group>"; };
 		32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@2x.png"; sourceTree = "<group>"; };
@@ -8162,6 +8165,8 @@
 				32C1C4E52DD4C4F200A053D4 /* OAClickableWayHelper+cpp.h */,
 				3279D5112DF99EA3007A5F6E /* OAClickableWayMenuProvider.h */,
 				3279D5122DF99EA9007A5F6E /* OAClickableWayMenuProvider.mm */,
+				32C41F522E0C4CDF00E9941C /* OAHeightDataLoader.h */,
+				32C41F532E0C4CED00E9941C /* OAHeightDataLoader.mm */,
 				32C1C4E62DD4C4F200A053D4 /* OAMapSelectionHelper.h */,
 				32C1C4E72DD4C4F200A053D4 /* OAMapSelectionHelper.mm */,
 				32C1C4E82DD4C4F200A053D4 /* OAMapSelectionResult.h */,
@@ -16468,6 +16473,7 @@
 				DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */,
 				32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */,
 				46DB0A632C5CEA8F001356D5 /* ConcurrentArray.swift in Sources */,
+				32C41F542E0C4CEF00E9941C /* OAHeightDataLoader.mm in Sources */,
 				FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */,
 				DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */,
 				DA5A812926C563A700F274C7 /* OAMapillaryTilesProvider.mm in Sources */,

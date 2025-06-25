@@ -200,7 +200,17 @@
         double y = [yPoints[i] doubleValue];
         [bbox expandLeft:x top:y right:x bottom:y];
     }
-    return bbox;
+//    return bbox;
+    
+    
+    // TODO: Fix and delete later
+    // Strange bug. Function from lib expandLeft(...) swaps top and bottom values.
+    OASKQuadRect *bboxFixed = [[OASKQuadRect alloc] init];
+    bboxFixed.top = bbox.bottom;
+    bboxFixed.bottom = bbox.top;
+    bboxFixed.left = bbox.left;
+    bboxFixed.right = bbox.right;
+    return bboxFixed;
 }
 
 - (BOOL) isClickableWayTags:(NSDictionary<NSString *, NSString *> *)tags

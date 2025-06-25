@@ -237,8 +237,12 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     }
     
     private func extractResourceId(from item: OAResourceSwiftItem?) -> String? {
-        guard let item, item.objcResourceItem != nil, let rawId = item.resourceId() else { return nil }
-        return (item as? OAMultipleResourceSwiftItem)?.getResourceId() ?? rawId
+        guard let item, item.objcResourceItem != nil else { return nil }
+        if let multipleItem = item as? OAMultipleResourceSwiftItem {
+            return multipleItem.getResourceId()
+        }
+        
+        return item.resourceId()
     }
     
     // MARK: - Downloading cell progress observer's methods

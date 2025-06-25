@@ -82,7 +82,6 @@
     UIView *_widgetView;
     NSArray<RoadShield *> *_cachedRoadShields;
     std::shared_ptr<const OsmAnd::TextRasterizer> _textRasterizer;
-    OATextState *_textState;
 }
 
 - (instancetype)initWithHorisontalMini:(BOOL)horisontalMini
@@ -214,7 +213,7 @@
     
     if (shields.count != 0)
     {
-        const BOOL isShieldsEqual = [shields isEqualToArray:_cachedRoadShields];
+        BOOL isShieldsEqual = [shields isEqualToArray:_cachedRoadShields];
         if (!isShieldsEqual)
             [self setRoadShield:_shieldImage shields:shields];
         else
@@ -249,8 +248,7 @@
     
     if (exitNumber.length > 0)
     {
-        NSString *exit = OALocalizedString(@"shared_string_road_exit");
-        NSString *exitViewText = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), exit, exitNumber];
+        NSString *exitViewText = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"shared_string_road_exit"), exitNumber];
         _exitLabel.text = exitViewText;
         [_exitView setHidden:NO];
     }
@@ -568,7 +566,6 @@
     UIColor *valueTextColor = self.valueTextColor;
     UIColor *textColorSecondary = [UIColor colorNamed:ACColorNameTextColorSecondary];
     UIColor *borderColor = [UIColor colorNamed:ACColorNameWidgetSeparatorColor];
-    _textState = textState;
     _distanceLabel.textColor = valueTextColor;
     _exitLabel.textColor = valueTextColor;
     _exitLabel.borderColor = self.isNightMode ? borderColor.dark : borderColor.light;
@@ -663,7 +660,7 @@
 
 - (void)applySuitableTextFont
 {
-    UIFontWeight typefaceStyle = _textState.textBold ? UIFontWeightBold : UIFontWeightSemibold;
+    UIFontWeight typefaceStyle = UIFontWeightSemibold;
     _distanceLabel.font = [UIFont scaledSystemFontOfSize:self.distanceFont weight:typefaceStyle];
     _exitLabel.font = [UIFont scaledSystemFontOfSize:self.exitFont weight:typefaceStyle];
     _streetLabel.font = [UIFont scaledSystemFontOfSize:self.streetFont weight:typefaceStyle];

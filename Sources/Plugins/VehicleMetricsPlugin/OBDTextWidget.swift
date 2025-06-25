@@ -45,7 +45,7 @@ class OBDTextWidget: OASimpleWidget {
             widgetComputer = OBDDataComputer.shared.registerWidget(type: fieldType, averageTimeSeconds: Int32(averageTimeSeconds))
         }
         
-        _ = updateInfo()
+        updateInfo()
         setIconFor(widgetType)
         onClickFunction = { [weak self] _ in
             guard let self, self.supportsAverageMode(), let avgPref = self.averageModePref else { return }
@@ -63,8 +63,8 @@ class OBDTextWidget: OASimpleWidget {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func updateInfo() -> Bool {
-        guard let wt = widgetType, wt.isPurchased(), let plugin, let widgetComputer else { return false }
+    @discardableResult override func updateInfo() -> Bool {
+        guard let widgetType, widgetType.isPurchased(), let plugin, let widgetComputer else { return false }
         let subtext = plugin.getWidgetUnit(widgetComputer.type)
         let textData = plugin.getWidgetValue(computerWidget: widgetComputer)
         if textData != cacheTextData || subtext != cacheSubTextData {
@@ -79,21 +79,22 @@ class OBDTextWidget: OASimpleWidget {
     }
     
     override func configureContextMenu(addGroup: UIMenu, settingsGroup: UIMenu, deleteGroup: UIMenu) -> UIMenu {
-        let updatedSettingsGroup: UIMenu = {
-            guard supportsAverageMode(), averageModePref?.get() == true else { return settingsGroup }
+        var updatedSettingsGroup = settingsGroup
+        if supportsAverageMode(), averageModePref?.get() == true {
             let resetAction = UIAction(title: localizedString("reset_average_value"), image: .icCustomReset) { [weak self] _ in
-                self?.resetAverageValue()
+                guard let self else { return }
+                self.resetAverageValue()
             }
             
-            return settingsGroup.replacingChildren([resetAction] + settingsGroup.children)
-        }()
+            updatedSettingsGroup = settingsGroup.replacingChildren([resetAction] + settingsGroup.children)
+        }
         
         return UIMenu(title: "", children: [addGroup, updatedSettingsGroup, deleteGroup])
     }
     
     override func getSettingsData(_ appMode: OAApplicationMode, widgetConfigurationParams: [String: Any]?, isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
-        if supportsAverageMode(), let avgPref = averageModePref {
+        if supportsAverageMode(), let averageModePref {
             let section = data.createNewSection()
             section.headerText = localizedString("shared_string_settings")
             
@@ -101,12 +102,12 @@ class OBDTextWidget: OASimpleWidget {
             modeRow.cellType = OAButtonTableViewCell.reuseIdentifier
             modeRow.key = "average_obd_mode_key"
             modeRow.title = localizedString("shared_string_mode")
-            modeRow.setObj(avgPref, forKey: "pref")
+            modeRow.setObj(averageModePref, forKey: "pref")
             let isAvg: Bool
-            if isCreate, let params = widgetConfigurationParams, let override = params[avgPref.key] as? Bool {
+            if isCreate, let widgetConfigurationParams, let override = widgetConfigurationParams[averageModePref.key] as? Bool {
                 isAvg = override
             } else {
-                isAvg = avgPref.get()
+                isAvg = averageModePref.get()
             }
             let valueKeys = isTemperatureWidget() ? ["current_temperature", "average_temperature"] : ["shared_string_instant", "average"]
             let titleKey = valueKeys[isAvg ? 1 : 0]
@@ -120,17 +121,17 @@ class OBDTextWidget: OASimpleWidget {
             }
             modeRow.setObj(possibleValues, forKey: "possible_values")
             
-            if isAvg, let intervalPref = measuredIntervalPref {
+            if isAvg, let measuredIntervalPref {
                 let intervalRow = section.createNewRow()
                 intervalRow.cellType = OAValueTableViewCell.reuseIdentifier
                 intervalRow.key = "value_pref"
                 intervalRow.title = localizedString("shared_string_interval")
-                intervalRow.setObj(intervalPref, forKey: "pref")
+                intervalRow.setObj(measuredIntervalPref, forKey: "pref")
                 var currentValue = Self.defaultIntervalMillis
-                if let params = widgetConfigurationParams, let key = params.keys.first(where: { $0.hasPrefix(Self.measuredIntervalPrefKey) }), let str = params[key] as? String, let v = Int(str) {
+                if let widgetConfigurationParams, let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix(Self.measuredIntervalPrefKey) }), let str = widgetConfigurationParams[key] as? String, let v = Int(str) {
                     currentValue = v
                 } else if !isCreate {
-                    currentValue = Int(intervalPref.get(appMode))
+                    currentValue = Int(measuredIntervalPref.get(appMode))
                 }
                 intervalRow.setObj(OBDTextWidget.formatIntervals(interval: currentValue), forKey: "value")
                 let sliderRow = OATableRowData()
@@ -201,8 +202,8 @@ class OBDTextWidget: OASimpleWidget {
     
     private func registerAverageModePref(_ customId: String?, widgetParams: [String: Any]?, appMode: OAApplicationMode) -> OACommonBoolean {
         let prefId: String
-        if let id = customId, !id.isEmpty {
-            prefId = Self.averageModePrefKey + id
+        if let customId, !customId.isEmpty {
+            prefId = Self.averageModePrefKey + customId
         } else {
             prefId = Self.averageModePrefKey
         }
@@ -221,8 +222,8 @@ class OBDTextWidget: OASimpleWidget {
     
     private func registerMeasuredIntervalPref(_ customId: String?, widgetParams: [String: Any]?, appMode: OAApplicationMode) -> OACommonLong {
         let prefId: String
-        if let id = customId, !id.isEmpty {
-            prefId = Self.measuredIntervalPrefKey + id
+        if let customId, !customId.isEmpty {
+            prefId = Self.measuredIntervalPrefKey + customId
         } else {
             prefId = Self.measuredIntervalPrefKey
         }
@@ -245,6 +246,7 @@ class OBDTextWidget: OASimpleWidget {
     }
     
     private func supportsAverageMode() -> Bool {
+        guard let widgetType else { return false }
         let supportedTypes: Set<WidgetType> = [
             .OBDRpm,
             .OBDSpeed,
@@ -257,12 +259,12 @@ class OBDTextWidget: OASimpleWidget {
             .OBDAmbientAirTemp,
             .OBDEngineCoolantTemp
         ]
-
-        guard let widgetType else { return false }
+        
         return supportedTypes.contains(widgetType)
     }
     
     private func isTemperatureWidget() -> Bool {
+        guard let widgetType else { return false }
         let supportedTypes: Set<WidgetType> = [
             .OBDAirIntakeTemp,
             .engineOilTemperature,
@@ -270,7 +272,6 @@ class OBDTextWidget: OASimpleWidget {
             .OBDEngineCoolantTemp
         ]
         
-        guard let widgetType else { return false }
         return supportedTypes.contains(widgetType)
     }
     
@@ -292,7 +293,7 @@ class OBDTextWidget: OASimpleWidget {
             widgetComputer?.averageTimeSeconds = Int32(newTimeSeconds)
         }
         
-        _ = self.updateInfo()
+        self.updateInfo()
         configureShadowButtonMenu()
     }
     

@@ -25,56 +25,44 @@ private enum RemainingFuelMode: String, CaseIterable {
     }
     
     func getTitle(appMode: OAApplicationMode) -> String {
-        let volumeCase: EOAVolumeConstant = OAAppSettings.sharedManager().volumeUnits.get(appMode)
-        let metricCase: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get(appMode)
-        let leftText: String = {
-            switch self {
-            case .volume:
-                return localizedString("shared_string_volume")
-            case .distance:
-                return localizedString("shared_string_distance")
-            case .percent:
-                return localizedString("percent_unit")
-            }
-        }()
-        
-        let rightText: String = {
-            switch self {
-            case .volume:
-                let unitKey: String
-                switch volumeCase {
+        let settings = OAAppSettings.sharedManager()
+        switch self {
+        case .percent:
+            return localizedString("percent_unit")
+        case .volume:
+            let left = localizedString("shared_string_volume")
+            let unitKey = {
+                switch settings?.volumeUnits.get(appMode) {
                 case .LITRES:
-                    unitKey = "litres"
+                    return "litres"
                 case .IMPERIAL_GALLONS:
-                    unitKey = "imperial_gallons"
+                    return "imperial_gallons"
                 case .US_GALLONS:
-                    unitKey = "us_gallons"
+                    return "us_gallons"
                 default:
-                    unitKey = "litres"
+                    return "litres"
                 }
-                return localizedString(unitKey)
-            case .distance:
-                let unitKey: String
-                switch metricCase {
+            }()
+            
+            let right = localizedString(unitKey)
+            return String(format: localizedString("ltr_or_rtl_combine_with_brackets"), left, right)
+            
+        case .distance:
+            let left = localizedString("shared_string_distance")
+            let unitKey = {
+                switch settings?.metricSystem.get(appMode) {
                 case .KILOMETERS_AND_METERS:
-                    unitKey = "km"
-                case .NAUTICAL_MILES_AND_METERS,
-                        .NAUTICAL_MILES_AND_FEET:
-                    unitKey = "nm"
+                    return "km"
+                case .NAUTICAL_MILES_AND_METERS, .NAUTICAL_MILES_AND_FEET:
+                    return "nm"
                 default:
-                    unitKey = "mile"
+                    return "mile"
                 }
-                return localizedString(unitKey)
-            case .percent:
-                return ""
-            }
-        }()
-        
-        if self == .percent {
-            return leftText
+            }()
+            
+            let right = localizedString(unitKey)
+            return String(format: localizedString("ltr_or_rtl_combine_with_brackets"), left, right)
         }
-        
-        return String(format: localizedString("ltr_or_rtl_combine_with_brackets"), leftText, rightText)
     }
 }
 
@@ -91,7 +79,7 @@ final class OBDRemainingFuelWidget: OBDTextWidget {
         self.remainingFuelModePref = registerRemainingFuelPref(customId, widgetParams: widgetParams, appMode: appMode)
         let typeWidget = getFieldType()
         self.widgetComputer = OBDDataComputer.shared.registerWidget(type: typeWidget, averageTimeSeconds: 0)
-        _ = updateInfo()
+        updateInfo()
         setIconFor(widgetType)
         onClickFunction = { [weak self] _ in
             guard let self else { return }
@@ -140,14 +128,14 @@ final class OBDRemainingFuelWidget: OBDTextWidget {
         super.updatePrefs(prefsChanged: prefsChanged)
         let typeWidget = getFieldType()
         if prefsChanged {
-            if let wc = widgetComputer, wc.type != typeWidget, wc.averageTimeSeconds != 0 {
-                OBDDataComputer.shared.removeWidget(w: wc)
+            if let widgetComputer, widgetComputer.type != typeWidget, widgetComputer.averageTimeSeconds != 0 {
+                OBDDataComputer.shared.removeWidget(w: widgetComputer)
             }
             
             widgetComputer = OBDDataComputer.shared.registerWidget(type: typeWidget, averageTimeSeconds: 0)
         }
         
-        _ = updateInfo()
+        updateInfo()
     }
     
     private func getFieldType() -> OBDDataComputer.OBDTypeWidget {
@@ -159,30 +147,30 @@ final class OBDRemainingFuelWidget: OBDTextWidget {
     }
     
     private func nextMode() {
-        guard let pref = remainingFuelModePref else { return }
+        guard let remainingFuelModePref else { return }
         let modes = RemainingFuelMode.allCases
         guard !modes.isEmpty else { return }
-        let rawValue = pref.get() ?? modes[0].rawValue
+        let rawValue = remainingFuelModePref.get() ?? modes[0].rawValue
         let currentMode = RemainingFuelMode(rawValue: rawValue) ?? modes[0]
         guard let currentIndex = modes.firstIndex(of: currentMode) else { return }
         let nextMode = modes[(currentIndex + 1) % modes.count]
-        pref.set(nextMode.rawValue)
+        remainingFuelModePref.set(nextMode.rawValue)
         updatePrefs(prefsChanged: true)
     }
     
     private func registerRemainingFuelPref(_ customId: String?, widgetParams: [String: Any]?, appMode: OAApplicationMode) -> OACommonString {
         let prefId: String
-        if let id = customId, !id.isEmpty {
-            prefId = Self.obdRemainingFuelModeKey + id
+        if let customId, !customId.isEmpty {
+            prefId = Self.obdRemainingFuelModeKey + customId
         } else {
             prefId = Self.obdRemainingFuelModeKey
         }
         
         guard let pref = OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: RemainingFuelMode.percent.rawValue).makeProfile() else { fatalError("Failed to register preference \(prefId)") }
-        if let params = widgetParams {
-            if let raw = params[prefId] as? String, RemainingFuelMode(rawValue: raw) != nil {
+        if let widgetParams {
+            if let raw = widgetParams[prefId] as? String, RemainingFuelMode(rawValue: raw) != nil {
                 pref.set(raw, mode: appMode)
-            } else if let base = params[Self.obdRemainingFuelModeKey] as? String, RemainingFuelMode(rawValue: base) != nil {
+            } else if let base = widgetParams[Self.obdRemainingFuelModeKey] as? String, RemainingFuelMode(rawValue: base) != nil {
                 pref.set(base, mode: appMode)
             }
         }

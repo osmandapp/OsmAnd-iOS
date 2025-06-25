@@ -210,10 +210,10 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             cell.button.configuration = config
             if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = RouteInfoDisplayPriority(rawValue: pref.defValue)?.key {
                 cell.button.menu = createDisplayPriorityMenuWith(value: value ?? defValue, pref: pref, indexPath: indexPath)
-            } else if let boolPref = item.obj(forKey: "pref") as? OACommonBoolean, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let current = value {
-                cell.button.menu = createBooleanMenuWith(currentValue: current, pref: boolPref, options: options, indexPath: indexPath)
-            } else if item.key == "fuel_consumption_mode_key", let pref = item.obj(forKey: "pref") as? OACommonString, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let current = value {
-                cell.button.menu = createStringMenuWith(currentValue: current, pref: pref, options: options, indexPath: indexPath)
+            } else if let boolPref = item.obj(forKey: "pref") as? OACommonBoolean, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
+                cell.button.menu = createBooleanMenuWith(currentValue: value, pref: boolPref, options: options, indexPath: indexPath)
+            } else if item.key == "fuel_consumption_mode_key", let pref = item.obj(forKey: "pref") as? OACommonString, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
+                cell.button.menu = createStringMenuWith(currentValue: value, pref: pref, options: options, indexPath: indexPath)
             }
             cell.button.showsMenuAsPrimaryAction = true
             cell.button.changesSelectionAsPrimaryAction = true

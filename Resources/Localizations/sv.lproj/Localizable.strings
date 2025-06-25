@@ -3379,3 +3379,11 @@
 "customize_grid_color" = "Anpassa rutnätsfärg";
 "save_favorite_default_appearance" = "Tillämpa ändringar på de existerande punkterna i mappen eller bara på nya?";
 "sensor_data" = "Sensordata";
+"intermediate_first" = "Mellanliggande först";
+"shared_string_default_view" = "Standardvy";
+"prime_meridian" = "Nollmeridian";
+"meridian_180" = "180°-meridianen";
+"rendering_attr_showClimbingRoutes_description" = "Visa klätterrutter";
+"map_widget_route_information" = "Ruttinformation";
+"rendering_attr_showClimbingRoutes_name" = "Klätterrutter";
+"destination_first" = "Destination först";

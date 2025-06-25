@@ -3692,3 +3692,5 @@
 "three_years_subscription" = "Langganan tiga tahun";
 "three_months_subscription" = "Langganan tiga bulan";
 "years_3" = "Tiga tahun";
+"route_roundabout_exit" = "Ambil keluar %d";
+"ios_release_5_1" = "• Dukungan tambahan untuk pembelian web dan lintas platform\n• Widget navigasi baru menggabungkan petunjuk panah dan navigasi\n• Menambahkan tindakan ganti nama untuk grup favorit\n• Menambahkan opsi \"unit volume\" dan \"kapasitas tangki bahan bakar\"\n• Menambahkan overlay \"koordinat kisi\"\n• Widget di panel kiri & kanan sekarang termasuk opsi tinggi\n• Menambahkan kemampuan untuk menetapkan kegiatan ke trek\n• Memperbaiki kemogokan di CarPlay dengan iOS 15\n• Ukuran ukuran otomatis dengan widget di panel kiri dan kanan telah diselesaikan\n• Ketidakcocokan pemandu perjalanan telah diperbaiki\n• Masalah dengan pembelian lintas platform telah diselesaikan\n• Memperbaiki masalah layar hitam di CarPlay setelah startup\n";

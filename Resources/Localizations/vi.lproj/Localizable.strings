@@ -56,7 +56,7 @@
 "route_tl" = "Rẽ trái và đi";
 "route_tshl" = "Ngoặt trái và đi";
 "route_tsll" = "Chếch sang trái và đi";
-"route_tu" = "Quay đầu lại và đi thẳng";
+"route_tu" = "Quay đầu xe và đi";
 "route_head" = "Đi theo";
 "coords_search" = "Tìm kiếm bằng tọa độ";
 
@@ -2004,3 +2004,14 @@
 "rendering_attr_surface_ground_name" = "Mặt đất";
 "rendering_attr_highway_class_cycleway_name" = "Đường xe đạp";
 "osm_live_plan_pricing" = "Kế hoạch & Giá";
+"download_file" = "Tải tệp xuống";
+"get_osmand_live" = "Đăng ký OsmAnd Live để mở khóa tất cả tính năng: các bản cập nhật bản đồ hàng ngày và không giới hạn lượt tải xuống, tất cả plugin miễn phí và trả phí, Wikipedia, Wikivoyage và nhiều hơn nữa.";
+"shared_string_world" = "Thế giới";
+"shared_string_bookmark" = "Dấu trang";
+"travel_card_download_descr" = "Tải xuống các hướng dẫn du lịch Wikivoyage để xem các bài viết về các địa điểm trên khắp thế giới mà không cần kết nối Internet.";
+"osm_live_payment_contribute_descr" = "Các khoản quyên góp giúp hỗ trợ kinh phí cho việc lập bản đồ của OSM.";
+"get_unlimited_access" = "Đăng ký quyền truy cập không giới hạn";
+"popular_destinations" = "Các điểm đến nổi tiếng";
+"download_all" = "Tải xuống tất cả";
+"coord_input_add_point" = "Thêm điểm";
+"start_editing_card_image_text" = "Cẩm nang du lịch miễn phí toàn cầu mà ai cũng có thể đóng góp chỉnh sửa.";

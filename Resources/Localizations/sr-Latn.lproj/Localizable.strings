@@ -39,7 +39,7 @@
 "route_stops_before" = "%@ stajanja pre";
 "transport_Routes" = "Rute";
 "transport_nearby_routes_within" = "Prevoz u blizini";
-"transport_nearby_routes" = "Unutar";
+"transport_nearby_routes" = "Blizu";
 "shared_string_control_stop" = "Zaustavi";
 "cancel_navigation" = "Zaustavi navođenje";
 "start_navigation" = "Počni navigaciju";

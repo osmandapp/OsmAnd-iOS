@@ -449,7 +449,7 @@ static const NSInteger _buttonsCount = 4;
         if ((self.customController.topToolbarType == ETopToolbarTypeFloating || self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton) && self.customController.buttonBack)
         {
             self.customController.buttonBack.alpha = self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton ? 1.0 : [self getMiddleToolbarAlpha];
-            self.customController.buttonBack.hidden = NO;
+            self.customController.buttonBack.hidden = self.customController.buttonBack.alpha == 0.0;
             [self.parentView insertSubview:self.customController.buttonBack belowSubview:self.customController.navBar];
         }
         if (!showTopControls)

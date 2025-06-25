@@ -2719,3 +2719,10 @@
 "help_article_purchases_giveaway_name" = "Προσφορά";
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
+"fuel_tank_capacity" = "Χωρητικότητα ντεπόζιτου";
+"us_gallons_unit" = "γαλ";
+"imperial_gallons" = "Αυτοκρατορικά γαλόνια";
+"three_years_subscription" = "Συνδρομή τριών ετών";
+"osm_live_payment_renews_3_years" = "Ανανεώνεται κάθε τρία έτη";
+"us_gallons" = "Γαλόνια ΗΠΑ";
+"fuel_tank_capacity_description" = "Εισάγετε την χωρητικότητα του ρεζερβουάρ για επακριβή παρακολούθηση των επιπέδων καυσίμου και κατανάλωσης";

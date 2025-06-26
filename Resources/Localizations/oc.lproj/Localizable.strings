@@ -1392,7 +1392,7 @@
 "routing_attr_avoid_shuttle_train_name" = "Evitar lei trens naveta";
 "routing_attr_avoid_shuttle_train_description" = "Evitar lei trens naveta";
 "rendering_attr_busRoutes_name" = "Linhas de bus";
-"rendering_attr_pisteRoutes_name" = "Pistas d\'esquí";
+"rendering_attr_pisteRoutes_name" = "Pistas d'esquí";
 "move_marker_bottom_sheet_title" = "Desplacatz la mapa per modificar la posicion dau marcador";
 "quick_action_remove_next_destination" = "Suprimir lo ponch d’etapa pus pròche";
 "app_mode_offroad" = "Fòra de camin";
@@ -1582,7 +1582,7 @@
 "rendering_attr_shareTaxiRoutes_name" = "Partejar lei percors en taxi";
 "rendering_attr_piste_type_skitour_name" = "Esquí de montanha";
 "rendering_attr_roadStyle_description" = "Representacion dei vias";
-"rendering_attr_hideWaterPolygons_name" = "Amagar l\'aiga";
+"rendering_attr_hideWaterPolygons_name" = "Amagar l'aiga";
 "rendering_attr_hideUnderground_name" = "Elements sosterranhs";
 "rendering_value_red_name" = "Roge -a";
 "rendering_attr_piste_difficulty_novice_name" = "Novèu";

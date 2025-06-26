@@ -3435,3 +3435,11 @@
 "add_hidden_group_info" = "Den tillagda punkten kan hittas i \"%@\". Sluta dölja den valda gruppen för att visa den på kartan.";
 "auto_25_chars_route_tu_kl" = "Gör en u-sväng och håll till vänster";
 "change_activity" = "Byt aktivitet";
+"intermediate_first" = "Mellanliggande först";
+"shared_string_default_view" = "Standardvy";
+"prime_meridian" = "Nollmeridian";
+"meridian_180" = "180°-meridianen";
+"rendering_attr_showClimbingRoutes_description" = "Visa klätterrutter";
+"map_widget_route_information" = "Ruttinformation";
+"rendering_attr_showClimbingRoutes_name" = "Klätterrutter";
+"destination_first" = "Destination först";

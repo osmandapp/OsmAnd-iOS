@@ -2501,7 +2501,7 @@
 "routing_attr_difficulty_preference_no_preference_name" = "Brak preferencji";
 "rendering_attr_hideMilitaryAreas_description" = "Ukryj obszary wojskowe";
 "rendering_attr_depthContourWidth_description" = "Szerokość linii konturowej głębokości";
-"rendering_attr_showWaterwayTunnels_name" = "Tunele dróg wodnych";
+"rendering_attr_showWaterwayTunnels_name" = "Zwiększ widoczność tuneli wodnych";
 "routing_attr_avoid_fords_description" = "Unikaj brodów";
 "routing_attr_avoid_footways_name" = "Unikaj chodników";
 "rendering_attr_showShareTaxiRoutes_name" = "Trasy transportu wahadłowego";
@@ -2581,7 +2581,7 @@
 "history_actions_footer_text" = "Można wyeksportować historię do pliku. Można usunąć wszystkie zapisy historii zarejestrowane do tej pory.";
 "search_favorites" = "Szukaj w Ulubionych";
 "speak_route_deviation" = "Zapowiedź zbaczania z trasy";
-"compass_click_desc" = "Wskazówka: Stuknij przycisk kompasu, aby przełączyć tryb orientacji mapy.";
+"compass_click_desc" = "Stuknij dwukrotnie przycisk kompasu, aby przełączyć tryb orientacji mapy.";
 "rendering_value_sacScale_description" = "Szwajcarski Klub Alpejski";
 "free_favorites_backup" = "Darmowa kopia zapasowa ulubionych";
 "free_account" = "Darmowe konto";
@@ -2720,7 +2720,7 @@
 "skip_download" = "Pomiń pobieranie";
 "osmand_cloud_deletion_all_data_warning" = "Wszystkie dane z OsmAnd Cloud zostaną %@. Dane na urządzeniu pozostaną nienaruszone.";
 "help_article_search_search_poi_name" = "Wyszukaj POI";
-"help_article_navigation_guidance_name" = "Wskazówki";
+"help_article_navigation_guidance_name" = "Wskazówki nawigacyjne";
 "activity_type_offroad_name" = "Terenowe";
 "help_article_plan_route_name" = "Zaplanuj trasę";
 "quick_action_coordinates_widget_descr" = "Przełącznik służący do pokazywania lub ukrywania widżetu Współrzędne na mapie.";
@@ -2757,7 +2757,7 @@
 "temperature_widget_desc" = "Pokazuje temperaturę dla bieżącego centrum mapy.";
 "shared_string_chest" = "Klatka piersiowa";
 "first_marker_widget_desc" = "Możesz skonfigurować widżet, aby pokazywał odległość lub szacunkowy pozostały czas przybycia do pierwszego markera mapy.";
-"map_widget_group_glide_desc" = "Widżety pokazują współczynnik poślizgu do docelowego lub średni współczynnik poślizgu dla bieżącej podróży.";
+"map_widget_group_glide_desc" = "Widżety wyświetlają stosunek przebytej odległości do utraconej wysokości – względem celu lub jako średnią dla całej trasy.";
 "external_device_details_battery" = "Bateria";
 "enter_new_name" = "Wprowadź nową nazwę";
 "shared_string_next_event" = "Następne zdarzenie";
@@ -2794,7 +2794,7 @@
 "av_notes_choose_action_widget_desc" = "Wybierz akcję.";
 "angular_measeurement" = "Jednostka kąta";
 "cache_size" = "Wielkość pamięci podręcznej";
-"deleting_complete" = "Usuwanie zakończone";
+"deleting_complete" = "Usunięto pomyślnie";
 "oldest_date_first" = "Najpierw najstarsza data";
 "altitude_widget_desc" = "Pokazuje wysokość nad poziomem morza bieżącej geolokalizacji.";
 "bicycle_scd_device_name" = "Urządzenie do roweru";
@@ -3220,7 +3220,7 @@
 "lock_screen" = "Zablokuj ekran";
 "max_sensor_temperature" = "Temperatura, wartość max";
 "with_waypoints" = "Z punktami orientacyjnymi";
-"not_specified" = "Nie określono";
+"not_specified" = "Nie podano";
 "help_article_map_routes_name" = "Trasy";
 "shared_string_interface" = "Interfejs";
 "help_article_personal_color_palette_schemes_name" = "Schematy kolorów";
@@ -3230,7 +3230,7 @@
 "battery_saving_mode" = "Tryb oszczędzania baterii";
 "date_of_creation" = "Data utworzenia";
 "lock_screen_description" = "Włącza lub wyłącza funkcję ekranu dotykowego, aby zapobiec przypadkowym dotknięciom";
-"discard_filter_changes_prompt" = "Czy na pewno chcesz zresetować wszystkie filtry?";
+"discard_filter_changes_prompt" = "Zresetować wszystkie filtry?";
 "driving_region_uk" = "Wielka Brytania i podobne";
 "avg_sensor_heartrate" = "Średnie tętno";
 "map_widget_map_scale" = "Skala mapy";

@@ -2761,3 +2761,10 @@
 "poi_filter_fuel" = "Καύσιμα";
 "preview_next_turn" = "Προεπισκόπηση επόμενης στροφής";
 "dd_mm_mmm_format" = "ΜΜ°ΠΠ.ΠΠΠ′";
+"fuel_tank_capacity" = "Χωρητικότητα ντεπόζιτου";
+"us_gallons_unit" = "γαλ";
+"imperial_gallons" = "Αυτοκρατορικά γαλόνια";
+"three_years_subscription" = "Συνδρομή τριών ετών";
+"osm_live_payment_renews_3_years" = "Ανανεώνεται κάθε τρία έτη";
+"us_gallons" = "Γαλόνια ΗΠΑ";
+"fuel_tank_capacity_description" = "Εισάγετε την χωρητικότητα του ρεζερβουάρ για επακριβή παρακολούθηση των επιπέδων καυσίμου και κατανάλωσης";

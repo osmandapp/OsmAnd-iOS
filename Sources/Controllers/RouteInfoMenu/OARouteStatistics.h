@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+FOUNDATION_EXPORT NSArray<NSString *> * const kRouteStatisticsAttributesStrings;
+
 @interface OARouteSegmentAttribute : NSObject
 
 @property (nonatomic, readonly) NSInteger color;

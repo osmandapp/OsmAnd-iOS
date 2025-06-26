@@ -8,6 +8,8 @@
 
 #import "OARouteStatistics.h"
 
+NSArray<NSString *> * const kRouteStatisticsAttributesStrings = @[@"routeInfo_roadClass", @"routeInfo_surface", @"routeInfo_smoothness", @"routeInfo_winter_ice_road", @"routeInfo_tracktype", @"routeInfo_horse_scale"];
+
 @implementation OARouteStatistics
 
 - (instancetype) initWithName:(NSString *)name elements:(NSArray<OARouteSegmentAttribute *> *)elements partition:(NSDictionary<NSString *, OARouteSegmentAttribute *> *) partition totalDistance:(float)totalDistance {

@@ -986,7 +986,7 @@ static const NSInteger kColorsSection = 1;
     [menuElements addObject:gradientColorMenu];
 
     NSMutableArray<UIAction *> *proColorActions = [NSMutableArray array];
-    for (NSString *attribute in OATracksChangeAppearanceViewController.routeStatisticsAttributesStrings)
+    for (NSString *attribute in kRouteStatisticsAttributesStrings)
     {
         UIAction *proAction = [self createProColorActionWithTitleKey:[attribute stringByAppendingString:@"_name"]
                                                       parameterValue:attribute

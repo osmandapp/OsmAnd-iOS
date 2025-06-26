@@ -497,7 +497,7 @@
 "measurement_units" = "Đơn vị đo";
 "weather_temperature_celsius" = "độ C";
 "rendering_attr_showTrainRoutes_name" = "Tuyến tàu hoả";
-"rendering_attr_hideMilitaryAreas_name" = "Ẩn các khu vực quân sự";
+"rendering_attr_hideMilitaryAreas_name" = "Các khu vực quân sự";
 "speed_mode" = "Chế độ tốc độ";
 "time_to_destination_widget_desc" = "Widget hiện \"Thời gian đến\" hoặc \"Thời gian di chuyển\" đến điểm đến cuối cùng. Thời gian được cập nhật liên tục trong khi điều hướng và nó bằng với thời gian tính từ vị trí hiện tại.";
 "trip_recording_uphill_widget_desc" = "Hiện tổng những lần đi lên của chuyến đi đang được ghi.";
@@ -983,7 +983,7 @@
 "rendering_attr_smoothness_very_bad_name" = "Rất xấu";
 "rendering_attr_showRoadMaps_description" = "Chọn khi nào cần hiển thị bản đồ chỉ có đường đi:";
 "routing_attr_allow_gate_name" = "Cho phép sử dụng cổng";
-"rendering_attr_hideWaterPolygons_description" = "Nước";
+"rendering_attr_hideWaterPolygons_description" = "Ẩn nước";
 "rendering_attr_surface_sett_name" = "Gạch lát đường";
 "rendering_attr_surface_compacted_name" = "Đã được nén bằng xe lu";
 "rendering_attr_surface_wood_name" = "Gỗ";
@@ -996,7 +996,7 @@
 "rendering_attr_contourColorScheme_description" = "Hệ màu đường đồng mức";
 "routing_attr_avoid_ferries_description" = "Tránh phà";
 "routeInfo_surface_description" = "Cung cấp thông tin về bề mặt đường/lối đi bộ.";
-"rendering_attr_hideWaterPolygons_name" = "Ẩn nước";
+"rendering_attr_hideWaterPolygons_name" = "Nước";
 "rendering_attr_smoothness_very_horrible_name" = "Rất tồi tệ";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Phẳng";
 "rendering_attr_smoothness_good_name" = "Tốt";
@@ -1453,7 +1453,7 @@
 "route_line_use_map_style_width" = "Dùng độ dày mặc định theo kiểu bản đồ (%@).";
 "map_locale" = "Ngôn ngữ bản đồ";
 "altitude_descent" = "Xuống dốc";
-"shared_string_options" = "Tùy chọn";
+"shared_string_options" = "Những lựa chọn";
 "quick_action_map_styles" = "Kiểu bản đồ";
 "about_osmAnd" = "Về OsmAnd";
 "map_magnifier" = "Kính phóng đại bản đồ";
@@ -1522,7 +1522,7 @@
 "shared_string_interface" = "Giao diện";
 "srtm_plugin_name" = "Địa hình";
 "rendering_attr_hideProposed_name" = "Các đối tượng được đề xuất";
-"cloud_sync_progress" = "Đồng bộ...%@";
+"cloud_sync_progress" = "Đồng bộ... %@";
 "backup_delete_all_data" = "Xoá tất cả dữ liệu của tôi";
 "search_more" = "Tìm thêm…";
 "select_folder_descr" = "Chọn thư mục hoặc thêm một cái mới";

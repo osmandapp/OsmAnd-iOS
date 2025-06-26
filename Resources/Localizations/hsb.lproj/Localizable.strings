@@ -1104,3 +1104,16 @@
 "sort_subfolders_tracks" = "Podrjadowaki sortěrować";
 "shared_string_to" = "Do";
 "transport_stop" = "Zastanišćo";
+"auto_25_chars_route_roundabout_kl" = "wzmi %d. wujězd a wostań nalěwo";
+"auto_25_chars_route_tl_kr" = "wotboč dolěwa a wostań naprawo";
+"auto_25_chars_route_tr_kl" = "wotboč doprawa a wostań nalěwo";
+"shared_string_date" = "Datum";
+"poi_filter_fuel" = "Bencin";
+"auto_25_chars_route_tu_kl" = "wobroć so a wostań nalěwo";
+"ask_every_time" = "kóždy raz so prašeć";
+"mapillary_action_descr" = "Přinošuj swoje wobrazy přez Mapillary.";
+"auto_25_chars_route_tr_kr" = "wotboč doprawa a wostań naprawo";
+"auto_25_chars_route_tl_kl" = "wotboč dolěwa a wostań nalěwo";
+"auto_25_chars_route_roundabout_kr" = "wzmi %d. wujězd a wostań naprawo";
+"auto_25_chars_route_tu_kr" = "wobroć so a wostań naprawo";
+"online_photos" = "Wobrazy w syći";

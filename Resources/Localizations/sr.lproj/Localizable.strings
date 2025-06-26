@@ -21,7 +21,6 @@
 "months_3" = "Три месеца";
 "price_free" = "Бесплатно";
 "get_discount_title" = "Набавите %d %@ за %@ ниже.";
-"get_free_trial_title" = "Започните %d %@ бесплатну пробу.";
 "get_discount_short_descr" = "%@ за %d %@, онда %@";
 "get_discount_first_part" = "%@ првих %@";
 "get_discount_first_few_parts" = "%@ за прве %@";
@@ -1601,7 +1600,7 @@
 "map_coords" = "Мапа: Шир %.5f Дуж %.5f";
 "shared_string_gpx_points" = "Тачке";
 "shared_string_overview" = "Сажетак";
-"shared_string_activity" = "Дејство";
+"shared_string_activity" = "Активност";
 "gpx_cancel_route_q" = "Желите ли да откажете ову руту?";
 "local_indexes_cat_backup" = "Искључено";
 "gpx_trip_groups" = "Групе путања";
@@ -1685,7 +1684,7 @@
 "search_another_country" = "Одаберите другу област";
 "skip_map_downloading" = "Прескочи преузимање карата";
 "skip_map_downloading_desc_ios" = "Немате инсталирану ниједну ван мрежну мапу. Можете да изаберете мапу са листе или да преузмете мапе касније преко Мени - Управљање датотекама мапе";
-"wiki_around" = "Чланци Википедије о околини";
+"wiki_around" = "Популарна места у близини";
 "search_categories" = "Врсте";
 "items_selected" = "%d изабрано";
 "how_to_open_wiki_title" = "Како да отворите чланке са Википедије?";
@@ -1942,7 +1941,7 @@
 "rendering_attr_surface_snow_name" = "Снег";
 "rendering_attr_highway_class_cycleway_name" = "Бициклистичка стаза";
 "routing_attr_piste_type_downhill_description" = "Падине алпског скијања или спуштања и приступ скијаштим жичарама.";
-"rendering_attr_hideWaterPolygons_name" = "Сакриј воду";
+"rendering_attr_hideWaterPolygons_name" = "Вода";
 "routing_attr_avoid_stairs_name" = "Без степеница";
 "rendering_value_walkingRoutesOSMC_name" = "ОСМЦ";
 "rendering_attr_piste_type_skitour_name" = "Скијашка тура";
@@ -2012,7 +2011,7 @@
 "rendering_attr_smoothness_very_horrible_name" = "Преужасно";
 "routing_attr_allow_intermediate_name" = "Дозволи успутне путеве";
 "rendering_attr_trolleybusRoutes_name" = "Путеви тролејбуса";
-"rendering_attr_hideWaterPolygons_description" = "Воде";
+"rendering_attr_hideWaterPolygons_description" = "Сакриј воду";
 "rendering_attr_piste_difficulty_extreme_name" = "Крајње сложена";
 "rendering_value_low_name" = "Ретка";
 "rendering_value_lightgreen_name" = "Светла зелена";
@@ -2040,7 +2039,7 @@
 "rendering_attr_alpineHiking_description" = "Разврставање по тежини врста путања.";
 "rendering_attr_highway_class_bridleway_name" = "Коњичка стаза";
 "routing_attr_avoid_share_taxi_name" = "Без дељених таксија";
-"rendering_attr_pisteRoutes_name" = "Скијалишта";
+"rendering_attr_pisteRoutes_name" = "Скијашке руте";
 "rendering_attr_piste_type_sled_name" = "Саонице";
 "rendering_attr_noPolygons_description" = "Начини провидним све ваздушне одлике терена.";
 "routing_attr_allow_classic_only_description" = "Стазе припремљене за обичан начин без путева за клизање. Ово укључује и стазе припремљене малим возилима за снег и путањама које су скијаши направили.";
@@ -2497,7 +2496,7 @@
 "contributions_may_calculate_with_delay" = "Прорачунавање допроноса може потрајати неколико часова.";
 "backup_version_history" = "Повест издања";
 "rendering_attr_noNatureReserveBoundaries_description" = "Сакриј резервате природе, заштићена подручја и границе националних паркова.";
-"rendering_attr_hideMilitaryAreas_name" = "Сакриј војна подручја";
+"rendering_attr_hideMilitaryAreas_name" = "Војна подручја";
 "rendering_attr_noNatureReserveBoundaries_name" = "Природне границе";
 "routing_attr_goods_restrictions_description" = "Проверите дозволе приступа за лака товарна возила (роба)";
 "rendering_attr_weatherTempContours_name" = "Топлотни обриси";
@@ -3596,12 +3595,12 @@
 "shared_string_millimeters_short" = "mm";
 "short_min" = "m";
 "download_tab_conflicts" = "Неразрешено";
-"cloud_sync_progress" = "Усклади…%@";
+"cloud_sync_progress" = "Усклади… %@";
 "battery_widget_level_privacy_ios_desc" = "Из разлога приватности иОС-а, виџет може да прикаже ниво батерије само у корацима од 5%, као што су 35%, 60% или 85%";
 "detailed_track_guidance_description" = "ОсмАнд ће ускладити вашу руту са оближњим путевима како би се боље оријентисао на сваком завоју.";
 "ask_every_time" = "Питај сваки пут";
 "detailed_track_guidance" = "Детаљан водич за стазу";
-"attach_roads_descr" = "Причврстите своју стазу на путеве да бисте добили детаљне информације о рути са упутствима за скретање и атрибутима пута.";
+"attach_roads_descr" = "Причврстите своју стазу на путеве да бисте добили детаљне информације о рути, укључујући упутства скретање по скретање и атрибуте пута.";
 "auto_25_chars_route_kr" = "Настави десно";
 "auto_25_chars_route_tr" = "Скрени десно";
 "auto_25_chars_route_tslr" = "Скрени благо удесно";
@@ -3615,8 +3614,8 @@
 "auto_25_chars_route_tr_kr" = "Скрените десно и држите десно";
 "auto_25_chars_route_tu_kl" = "Направите полукружно и држите лево";
 "auto_25_chars_route_tu_kr" = "Направите полукружно и држите десно";
-"auto_25_chars_route_roundabout_kl" = "Изађите на %d излазу и држите лево";
-"auto_25_chars_route_roundabout_kr" = "Изађите на %d излазу и држите десно";
+"auto_25_chars_route_roundabout_kl" = "Изађите на излазу %d и држите лево";
+"auto_25_chars_route_roundabout_kr" = "Изађите на излазу %d и држите десно";
 "auto_25_chars_route_kl" = "Настави лево";
 "auto_25_chars_route_tshr" = "Скрени оштро десно";
 "new_smart_folder" = "Нови паметан фолдер";
@@ -3649,7 +3648,7 @@
 "sensor_data_settings_description" = "прикажи главне податке са сензора";
 "sensor_data" = "Подаци пријемника";
 "profile_icons" = "Икона профила";
-"add_hidden_group_info" = "Додата тачка може се наћи у \"%@\". Откријте сакривену означену групу да је прикажете на карти.";
+"add_hidden_group_info" = "Додату тачку можете наћи у \"%@\". Откријте сакривену означену групу да је прикажете на карти.";
 "terrain_map" = "Теренска мапа (3Д)";
 "shared_string_unchanged" = "Непромењено";
 "each_favourite_point_own_icon" = "Свака омиљена тачка би задржала своју икону.";
@@ -3673,7 +3672,7 @@
 "shared_string_original" = "Оригинал";
 "labels_position" = "Положај ознака";
 "grid_color" = "Боја мреже";
-"apply_to_all_points" = "Примени на све тачке ";
+"apply_to_all_points" = "Примени на све тачке";
 "save_favorite_default_appearance" = "Да ли применити измене на постојеће тачке у фолдеру или само на нове?";
 "original_icon_description" = "Свака тачка би задржала своју сличицу.";
 "original_color_description" = "Свака тачка би задржала своју боју.";
@@ -3703,4 +3702,6 @@
 "three_years_subscription" = "Трогодишња претплата";
 "three_months_subscription" = "Тромесечна чланарина";
 "ios_release_5_1" = "• Додата је подршка за куповину на вебу и преко платформи\n• Нови виџет за навигацију комбинује стрелицу за скретање и упутства за навигацију\n• Додата је акција преименовања за групе омиљених\n• Додате су опције „Јединица запремине“ и „Капацитет резервоара за гориво“\n• Додат је преклапајући слој „Мрежа координата“\n• Виџети на левом и десном панелу сада укључују опцију висине\n• Додата је могућност додељивања активности стазама\n• Исправљен је пад система КарПлеј са иОС 15\n• Решени су проблеми са аутоматским мењањем величине виџета на левом и десном панелу\n• Решена је некомпатибилност туристичких водича\n• Решен је проблем са куповином преко различитих платформи\n• Решен је проблем црног екрана на КарПлеју након покретања\n";
+"routing_attr_allow_ferries_description" = "Дозволи упућивање у путање трајеката";
+"routing_attr_allow_ferries_name" = "Дозволи трајекте";
 "route_roundabout_exit" = "Идите на %d излаз";

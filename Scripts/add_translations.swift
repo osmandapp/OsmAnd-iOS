@@ -16,7 +16,7 @@ let DEBUG = false
 let LOGGING = false
 
 ///For debug set here your Osmand repositories path
-let DEBUG_OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
+let DEBUG_OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Documents/OsmAnd"
 
 ///For quick debugging you can write interesting key only in this var.
 let DEBUG_STOP_KEY = "empty_purchases_description"
@@ -125,7 +125,7 @@ var languageDict = [
     "uz-Cyrl" : "uz",           // Uzbek (Cyrillic)
     "vi" : "vi",                // Vietnamese
     "zh-Hans" : "zh-rCN",       // Chinese Simplified
-    "zh-Hant" : "zh-rTW",       // Chinese Traditional   
+    "zh-Hant" : "zh-rTW",       // Chinese Traditional
 ]
 
 // For quick debug just comment out all unnecessary languages. Like this
@@ -291,7 +291,7 @@ class IOSReader {
 class IOSWriter {
     
     static var jointEnAndroidIosDict: [String:String]?
-    static var commonValuesDict: [String:[String]] = [:] // IOS_GUESS_KEYS_FROM_ANDROID_VALUES - to delete?    
+    static var commonValuesDict: [String:[String]] = [:] // IOS_GUESS_KEYS_FROM_ANDROID_VALUES - to delete?
     
     static func syncTranslations() {
         let iosEnglishDict = IOSReader.parseTranslationFile(language: iosEnglishKey)
@@ -409,7 +409,7 @@ class IOSWriter {
         }
     }
 
-    static func readFileToStrings(_ filePath: String) -> [String] {            
+    static func readFileToStrings(_ filePath: String) -> [String] {
         var processedStrings = [String]()
         do {
             let fileContent = try String(contentsOfFile: filePath, encoding: .utf8)
@@ -420,7 +420,7 @@ class IOSWriter {
                 while line.trimmingCharacters(in: .whitespacesAndNewlines).hasPrefix("//") {
                     if let index = line.firstIndex(of: "\n") {
                         processedStrings.append(String(line[..<index]) )
-                        line = String(line[line.index(after: index)...])    
+                        line = String(line[line.index(after: index)...])
                     } else {
                         processedStrings.append(line)
                         line = "" // No more content after the first line
@@ -442,12 +442,12 @@ class IOSWriter {
         } else {
             // Split the string into key and value components using the "=" delimiter
             let components = string.split(separator: "=", maxSplits: 1).map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
-            var key = ""        
+            var key = ""
             if components.count > 1 {
-                key = components[0].trimmingCharacters(in: CharacterSet(charactersIn: "\""))        
+                key = components[0].trimmingCharacters(in: CharacterSet(charactersIn: "\""))
             }
-            if key.isEmpty && string.trimmingCharacters(in: .whitespaces) != "" {           
-                print("Missing key \(string) ") 
+            if key.isEmpty && string.trimmingCharacters(in: .whitespaces) != "" {
+                print("Missing key \(string) ")
             }
             return key
         }
@@ -466,11 +466,9 @@ class IOSWriter {
                 // Update from localized android dict
                 guard let androidValue = androidDict[elem.key] else { continue }
                 guard valueHasNoPlaceholders(value: androidValue) else { continue }
-                guard !isEnglishDuplicateInLocalFile(iosEnglishDict, language, elem.key, androidValue) else { continue }                
+                guard !isEnglishDuplicateInLocalFile(iosEnglishDict, language, elem.key, androidValue) else { continue }
                 if iosDict.keys.contains(elem.key) {
-                    if androidValue != iosDict[elem.key] {
-                        keysToUpdate.updateValue(androidValue, forKey: elem.key)    
-                    }
+                    keysToUpdate.updateValue(androidValue, forKey: elem.key)
                 } else {
                     keysToAdd.updateValue(androidValue, forKey: elem.key)
                 }
@@ -482,7 +480,7 @@ class IOSWriter {
                 if let androidKey = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: [elem.key]) {
                     guard let androidValue = androidDict[androidKey] else { continue }
                     guard valueHasNoPlaceholders(value: androidValue) else { continue }
-                    guard !isEnglishDuplicateInLocalFile(iosEnglishDict, language, elem.key, androidValue) else { continue }                
+                    guard !isEnglishDuplicateInLocalFile(iosEnglishDict, language, elem.key, androidValue) else { continue }
                     if iosDict.keys.contains(elem.key) {
                         if androidValue != iosDict[elem.key] {
                             keysToUpdate.updateValue(androidValue, forKey: elem.key)
@@ -510,17 +508,17 @@ class IOSWriter {
             var updatedStrings = [String]()
             for string in readStrings {
                 let key = extractKey(string)
-                if key.isEmpty { 
+                if key.isEmpty {
                     // keep line as it is
                     updatedStrings.append(string)
-                    continue     
+                    continue
                 }
-                let currentValue = iosDict[key] ?? ""                                
+                let currentValue = iosDict[key] ?? ""
                 keyOccurrences[key, default: 0] += 1
                 if keyOccurrences[key]! > 1 {
                     print("Error removing duplicate key ! \(string) ")
                     continue
-                } 
+                }
                 var newString = string
                 var newValue = currentValue
                 if let androidValue = keysToUpdate[key], let updatedString = replaceValueText(newValue: filterUnsafeChars(androidValue), inFullString: string),
@@ -531,11 +529,11 @@ class IOSWriter {
                     // print("Update key ! \(string)  \(currentValue) -> \(androidValue)?? ")
                 }
                 
-                if ALLOW_TO_HAVE_ENGLISH_NAMES || 
+                if ALLOW_TO_HAVE_ENGLISH_NAMES ||
                         !self.isDuplicateEnString(key: key, currentValue: currentValue, newValue: newValue, language: language, iosEnglishDict: iosEnglishDict) {
                     updatedStrings.append(newString);
                 }
-            }  
+            }
             // 3. Add new translations
             for elem in keysToAdd {
                 // if keyOccurrences[elem.key]! < 1 {

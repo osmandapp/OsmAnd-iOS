@@ -140,7 +140,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     // MARK: - Cell setup methods
     
-    override func setupCell(_ resourceId: String) -> DownloadingCell? {
+    @discardableResult override func setupCell(_ resourceId: String) -> DownloadingCell? {
         if let resourceItem = getResource(resourceId) {
             resourceItem.refreshDownloadTask()
             var subtitle = ""
@@ -194,25 +194,22 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     func configureWith(resourceItem: OAResourceSwiftItem?,
                        cell: DownloadingCell) {
-        if let resourceItem,
-           resourceItem.objcResourceItem != nil,
-           let resourceId = resourceItem.resourceId() {
-            if getResource(resourceId) == nil {
-                saveResource(resource: resourceItem, resourceId: resourceId)
-            }
-            if resourceItem.downloadTask() != nil {
-                saveStatus(resourceId: resourceId, status: .inProgress)
-            }
-            if statuses[resourceId] == nil {
-                statuses[resourceId] = .idle
-            }
-            if progresses[resourceId] == nil {
-                progresses[resourceId] = 0
-            }
-            
-            cells[resourceId] = cell
-            setupCell(resourceId)
+        guard let resourceItem, let resourceId = extractResourceId(from: resourceItem) else { return }
+        if getResource(resourceId) == nil {
+            saveResource(resource: resourceItem, resourceId: resourceId)
         }
+        if resourceItem.downloadTask() != nil {
+            saveStatus(resourceId: resourceId, status: .inProgress)
+        }
+        if statuses[resourceId] == nil {
+            statuses[resourceId] = .idle
+        }
+        if progresses[resourceId] == nil {
+            progresses[resourceId] = 0
+        }
+        
+        cells[resourceId] = cell
+        setupCell(resourceId)
     }
     
     func getOrCreateCell(_ resourceId: String, swiftResourceItem: OAResourceSwiftItem?) -> DownloadingCell? {
@@ -237,6 +234,15 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                 OAPluginPopupViewController.ask(forPlugin: kInAppId_Addon_Srtm)
             }
         }
+    }
+    
+    private func extractResourceId(from item: OAResourceSwiftItem?) -> String? {
+        guard let item, item.objcResourceItem != nil else { return nil }
+        if let multipleItem = item as? OAMultipleResourceSwiftItem {
+            return multipleItem.getResourceId()
+        }
+        
+        return item.resourceId()
     }
     
     // MARK: - Downloading cell progress observer's methods
@@ -341,8 +347,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             return nil
         }
         
-        taskKey = taskKey.replacingOccurrences(of: "resource:", with: "")
-        taskKey = taskKey.replacingOccurrences(of: "srtmf:", with: "srtm")
+        taskKey = taskKey.replacingOccurrences(of: "resource:", with: "").replacingOccurrences(of: ".srtmf.obf", with: ".srtm.obf")
         return taskKey
     }
 }

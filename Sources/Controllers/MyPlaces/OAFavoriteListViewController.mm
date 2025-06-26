@@ -398,7 +398,9 @@ static UIViewController *parentController;
                 if ([cellType isEqualToString:@"group"])
                 {
                     FavoriteTableGroup *group = groupData[@"group"];
-                    item = [group.favoriteGroup.points objectAtIndex:i.row - 1];
+                    if (group.favoriteGroup.points != nil && [group.favoriteGroup.points count] > (i.row - 1)) {
+                        item = [group.favoriteGroup.points objectAtIndex:i.row - 1];
+                    }
                 }
             }
             

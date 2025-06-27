@@ -36,7 +36,7 @@
     return self;
 }
 
-- (instancetype) initWithVoiceRouter:(OAVoiceRouter *) voiceRouter voiceProvider:(NSString *)provider
+- (instancetype) initWithVoiceRouter:(OAVoiceRouter *)voiceRouter voiceProvider:(NSString *)provider
 {
     self = [super init];
     if (self)
@@ -47,15 +47,6 @@
         _vrt = voiceRouter;
         _voiceProvider = provider == nil ? @"" : provider;
         _isInterrupted = NO;
-        NSString *resourceName = [NSString stringWithFormat:@"%@%@", _voiceProvider, @"_tts"];
-        NSString *jsPath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"js"];
-        
-        if (jsPath == nil)
-            return nil;
-        
-        _context = [[JSContext alloc] init];
-        NSString *scriptString = [NSString stringWithContentsOfFile:jsPath encoding:NSUTF8StringEncoding error:nil];
-        [_context evaluateScript:scriptString];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleAudioSessionInterruption:)
@@ -121,7 +112,7 @@
 
 - (OACommandBuilder *)newCommandBuilder
 {
-    OACommandBuilder *commandBuilder = [[OACommandBuilder alloc] initWithCommandPlayer:self jsContext:_context];
+    OACommandBuilder *commandBuilder = [[OACommandBuilder alloc] initWithCommandPlayer:self voiceProvider:_voiceProvider];
     OAAppSettings *settings = [OAAppSettings sharedManager];
     [commandBuilder setParameters:[OAMetricsConstant toTTSString:[settings.metricSystem get]] mode:YES];
     return commandBuilder;

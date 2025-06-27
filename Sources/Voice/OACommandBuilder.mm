@@ -52,7 +52,7 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 static NSString * const C_SET_METRICS = @"setMetricConst";
 static NSString * const C_SET_MODE = @"setMode";
 
-- (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player jsContext:(JSContext *) context
+- (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player voiceProvider:(NSString *)voiceProvider
 {
     self = [super init];
     if (self)
@@ -60,7 +60,16 @@ static NSString * const C_SET_MODE = @"setMode";
         commandPlayer = player;
         alreadyExecuted = NO;
         listStruct = [NSMutableArray array];
-        self->context = context;
+        NSString *resourceName = [NSString stringWithFormat:@"%@%@", voiceProvider, @"_tts"];
+        NSString *jsPath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"js"];
+        
+        if (jsPath == nil)
+            return nil;
+        
+        JSVirtualMachine *jsvm = [[JSVirtualMachine alloc] init];
+        self->context = [[JSContext alloc] initWithVirtualMachine:jsvm];
+        NSString *scriptString = [NSString stringWithContentsOfFile:jsPath encoding:NSUTF8StringEncoding error:nil];
+        [self->context evaluateScript:scriptString];
     }
     return self;
 }
@@ -73,7 +82,7 @@ static NSString * const C_SET_MODE = @"setMode";
                                      userInfo:nil];
 }
 
-- (void) setParameters:(NSString *) metricConstant mode:(BOOL) tts
+- (void) setParameters:(NSString *)metricConstant mode:(BOOL)tts
 {
     [context[C_SET_METRICS] callWithArguments:@[metricConstant]];
     [context[C_SET_MODE] callWithArguments:@[@(YES)]];

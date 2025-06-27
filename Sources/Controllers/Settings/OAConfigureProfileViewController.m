@@ -50,10 +50,24 @@
 #import "OAMapSource.h"
 #import "OAObservable.h"
 
-#define kSidePadding 16.
-#define BACKUP_INDEX_DIR @"backup"
-#define OSMAND_SETTINGS_FILE_EXT @"osf"
-#define kWasClosedFreeBackupSettingsBannerKey @"wasClosedFreeBackupSettingsBanner"
+static const CGFloat kSidePadding = 16.0;
+
+static NSString * const kBackupIndexDir = @"backup";
+static NSString * const kOsmandSettingsFileExt = @"osf";
+static NSString * const kWasClosedFreeBackupSettingsBannerKey = @"wasClosedFreeBackupSettingsBanner";
+
+NSString * const kNavigationSettings = @"nav_settings";
+
+static NSString * const kGeneralSettings              = @"general_settings";
+static NSString * const kProfileAppearanceSettings    = @"profile_appearance";
+static NSString * const kExportProfileSettings        = @"export_profile";
+static NSString * const kTrackRecordingSettings       = @"trip_rec";
+static NSString * const kOsmEditsSettings             = @"osm_edits";
+static NSString * const kOsmandDevelopmentSettings    = @"osmand_development";
+static NSString * const kWeatherSettings              = @"weather";
+static NSString * const kWikipediaSettings            = @"wikipedia";
+static NSString * const kExternalSensors              = @"externalSensors";
+static NSString * const kVehicleMetrics               = @"vehicleMetrics";
 
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeNone = 0,
@@ -305,6 +319,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"title" : externalSensors.getName,
             @"img" : @"ic_custom_sensor",
             @"key" : kExternalSensors
+        }];
+    }
+    
+    OAPlugin *vehicleMetrics = [OAPluginsHelper getEnabledPlugin:VehicleMetricsPlugin.class];
+    if (vehicleMetrics)
+    {
+        [plugins addObject:@{
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"obd_plugin_name"),
+            @"img" : @"ic_custom_vehicle_metrics_colored",
+            @"key" : kVehicleMetrics
         }];
     }
     
@@ -643,6 +668,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             settingsScreen = [[OAWikipediaSettingsViewController alloc] initWithAppMode:_appMode];
         else if ([targetScreenKey isEqualToString:kExternalSensors])
             settingsScreen = [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
+        else if ([targetScreenKey isEqualToString:kVehicleMetrics])
+            settingsScreen = [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];
     }

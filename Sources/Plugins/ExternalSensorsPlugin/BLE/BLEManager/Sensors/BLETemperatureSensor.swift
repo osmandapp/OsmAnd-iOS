@@ -40,7 +40,7 @@ final class BLETemperatureSensor: Sensor {
         return [lastTemperatureData].compactMap { $0 }
     }
     
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+    override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
             return
         }

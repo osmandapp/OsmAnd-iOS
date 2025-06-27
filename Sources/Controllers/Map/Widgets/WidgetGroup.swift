@@ -25,7 +25,9 @@ class WidgetGroup: NSObject {
     static let externalSensors = WidgetGroup(title: localizedString("external_sensors_plugin_name"), descr: localizedString("external_sensors_plugin_description"), iconName: "widget_sensor_external")
     static let glide = WidgetGroup(title: localizedString("map_widget_group_glide_ratio"), descr: localizedString("map_widget_group_glide_desc"), iconName: "widget_glide_ratio_to_target")
     
-    static let values = [routeManeuvers, navigationPoints, coordinatesWidget, mapMarkers, bearing, tripRecording, developerOptions, altitude, weather, sunriseSunset, externalSensors]
+    static let vehicleMetrics = WidgetGroup(title: localizedString("obd_widget_group"), descr: localizedString("purchase_feature_desc_vehicle_metrics_obd_ii"), iconName: "widget_obd_vehicle_info")
+        
+    static let values = [routeManeuvers, navigationPoints, coordinatesWidget, mapMarkers, bearing, tripRecording, developerOptions, altitude, weather, sunriseSunset, externalSensors, vehicleMetrics]
     
     let title: String
     let descr: String?

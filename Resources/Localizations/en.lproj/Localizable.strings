@@ -4115,5 +4115,98 @@
 "shared_string_date" = "Date";
 
 "add_hidden_group_info" = "The added point can be found in \"%@\". Unhide the selected group to show it on the map.";
+
+"purchase_feature_desc_vehicle_metrics_obd_ii" = "Track vital vehicle data using the OBD-II protocol. Monitor key metrics like speed, engine RPM, fuel consumption, and more.";
+
+"obd_plugin_description" = "Monitor key vehicle metrics using the OBD-II protocol. Access data including:\n
+• Engine speed, Engine Runtime, Calculated Engine Load \n
+• Fuel consumption, Fuel pressure, Remaining fuel\n
+• Intake temperature, Ambient temperature, Coolant temperature, Engine Oil Temperature\n
+• Vehicle speed, Throttle Position, Battery voltage";
+
+"vehicle_metrics_obd_ii" = "Vehicle Metrics (OBD-II)";
+"connect_obd_instructions_title" = "OsmAnd supports Bluetooth connections to OBD-II scanners.";
+"obd_how_to_connect" = "How to connect:";
+"connect_obd_instructions_step" = "1. Connect the scanner to your vehicle\'s OBD-II port.\n\n
+2. Turn on your vehicle\'s engine\n\n
+3. Enable Bluetooth on your device\n\n
+4. Tap \'%@\' and select your scanner from the list.";
+"obd_bluetooth_off_description" = "Turn on Bluetooth to find and connect scanners.";
+"obd_searching_text_description" = "Please keep your device close to the scanner. Ensure the vehicle\'s engine is running.";
+"obd_searching_text" = "Searching for scanners";
+"obd_nothing_found_text" = "No scanners found";
+
+"obd_nothing_found_description" = "Please check the following:\n
+– Ensure Bluetooth is turned on\n
+– Vehicle engine is running\n
+– Make sure your device is within range of the scanner.";
+
+"obd_vin"= "VIN";
+"obd_vin_desc" = "VIN code over OBD";
+"obd_vehicle_info" = "Vehicle info";
+"obd_widget_vehicle_speed" = "Vehicle speed";
+"obd_widget_engine_speed" = "Engine speed";
+
+"obd_engine_runtime_desc" = "Shows shows how long the engine has been running since it was started.";
+"obd_engine_runtime" = "Engine Runtime";
+"obd_battery_voltage_desc" = "Shows the voltage level of the vehicle\'s battery";
+"obd_fuel_pressure_desc" = "Shows the pressure within the fuel system";
+"obd_throttle_position" = "Throttle Position";
+"obd_throttle_position_desc" = "Shows the angle of the throttle plate in the throttle body.";
+"obd_calculated_engine_load_desc" = "Shows the percentage of the engine’s available power being used at a given moment.";
+"obd_calculated_engine_load" = "Calculated Engine Load";
+"obd_engine_coolant_temp_desc" = "Shows the temperature of the engine’s coolant";
+"obd_speed_desc" = "Shows speed from the Vehicle Speed Sensor (VSS).";
+"obd_engine_oil_temperature_desc" = "Shows the temperature of the engine oil.";
+"obd_engine_oil_temperature" = "Engine Oil Temperature";
+"obd_ambient_air_temp_desc" = "Shows the temperature outside the vehicle.";
+"obd_air_intake_temp_desc" = "Shows the temperature of the air entering the engine intake manifold.";
+"obd_fuel_consumption_rate_sensor_type" = "Use selected units in name.";
+"remaining_fuel_description" = "Shows the amount of fuel left in the vehicle\'s tank";
+"remaining_fuel" = "Remaining fuel";
+"obd_fuel_consumption_desc" = "Shows the rate of fuel usage by the engine, calculated based on remaining fuel, tank size, and distance covered as determined by GPS.";
+"obd_fuel_consumption" = "Fuel consumption";
+
+"rpm_unit" = "rpm";
+"obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";
+"obd_fuel_level_desc" = "Shows vehicle fuel level over OBD sensor";
+"obd_fuel_left_distance_desc" = "Shows distance vehicle can drive on left fuel level over OBD sensor";
+"obd_fuel_type_desc" = "Shows vehicle fuel type over OBD sensor";
+"obd_air_intake_temp" = "Intake temperature";
+"obd_ambient_air_temp" = "Ambient temperature";
+"obd_battery_voltage" = "Battery voltage";
+"obd_engine_coolant_temp" = "Coolant temperature";
+"obd_fuel_level" = "Fuel Efficiency (%)";
+"obd_fuel_consumption_rate" = "Fuel consumption rate";
+"obd_fuel_consumption_rate_desc" = "Shows vehicle fuel consumption rate based on OBD an location";
+"obd_fuel_left_liters" = "Fuel left (liters)";
+"obd_fuel_type" = "Fuel type";
+
+"obd_fuel_pressure" = "Fuel pressure";
+
+"obd_fuel_consumption_rate_l_h" = "Fuel consumption rate (L/h)";
+"obd_fuel_consumption_rate_sensor" = "Fuel consumption rate (sensor)";
+"obd_fuel_consumption_rate_l_h_desc" = "Shows vehicle fuel consumption rate based on calculations (L/h)";
+"obd_fuel_consumption_rate_sensor_desc" = "Shows vehicle fuel consumption rate based on sensor (L/h)";
+
+"obd_fuel_level_liter" = "Fuel level (l)";
+"obd_fuel_level_percent" = "Fuel level (%)";
+"obd_fuel_left_km" = "Fuel left (km)";
+"obd_fuel_consumption_rate_scanner" = "Fuel consumption rate (obd)";
+"obd_fuel_consumption_rate_liter_hour" = "Fuel consumption rate";
+"obd_fuel_consumption_rate_percent_hour" = "Fuel consumption rate %/h";
+
+"obd_fuel_consumption_rate_l_km" = "Fuel consumption rate (L/100 km)";
+"obd_fuel_consumption_rate_l_km_desc" = "Shows vehicle fuel consumption rate based on calculations (L/100 km)";
+"simulate_obd" = "Simulate obd data";
+
+"kpa_unit" = "kPa";
+"percent_unit" = "%";
+"percent_hour" = "%/h";
+"liter_per_hour" = "L/h";
+
+"unit_volt" = "V";
+"obd_widget_group" = "Vehicle Metrics";
+
 "routing_attr_allow_ferries_description" = "Allow routing by ferry routes";
 "routing_attr_allow_ferries_name" = "Allow ferries";

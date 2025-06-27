@@ -20,7 +20,7 @@ class Sensor {
         self.sensorId = sensorId
     }
     
-    func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) { }
+    func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) { }
     
     func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
         nil
@@ -32,7 +32,6 @@ class Sensor {
 
     func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
     }
-
 }
 
 protocol SensorData {

@@ -360,9 +360,10 @@ extension CentralProxy: CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         let uuid = peripheral.identifier
+        NSLog("didDisconnectPeripheral: \(uuid)")
         
         var userInfo: [AnyHashable: Any] = ["identifier": uuid]
-        if let error = error {
+        if let error {
             userInfo["error"] = error
         }
         

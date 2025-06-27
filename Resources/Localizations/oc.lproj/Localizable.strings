@@ -21,7 +21,6 @@
 "months_3" = "Trimèstre";
 "price_free" = "A gratis";
 "get_discount_title" = "Acquistar %d %@ amb un %d%% de descòmpte.";
-"get_free_trial_title" = "Començatz vòstre assai a gratis de %d %@.";
 "get_discount_short_descr" = "%@ pendent %d %@, %@ puei";
 "get_discount_first_part" = "%@ per lei premiers %@";
 "get_discount_first_few_parts" = "%@ tot d'una %@";
@@ -2719,3 +2718,7 @@
 "quick_action_toggle_preference" = "Una bascula per cambiar de preferéncias.";
 "shared_string_local" = "Installat en locau";
 "transport_stop" = "Arrèst";
+"three_months_subscription" = "Abonament trimestrau";
+"map_widget_distance" = "Distància";
+"shared_string_view_all" = "Tot visualizar";
+"add_hidden_group_info" = "Lo ponch ajustat se tròba dins \"1%@\". Desamagar lo grop seleccionat per lo visualizar sus la mapa.";

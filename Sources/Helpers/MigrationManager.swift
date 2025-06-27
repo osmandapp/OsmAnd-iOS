@@ -505,7 +505,8 @@ final class MigrationManager: NSObject {
 
         let changeSettingKeys = [
             "top_widget_panel_order": "widget_top_panel_order",
-            "bottom_widget_panel_order": "widget_bottom_panel_order"
+            "bottom_widget_panel_order": "widget_bottom_panel_order",
+            "shared_string_automatic": "driving_region_automatic"
         ]
 
         let changeWidgetIds = [

@@ -828,7 +828,7 @@ static int PROFILE_TRUCK = 1000;
 
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def
 {
-    for (OAApplicationMode *p in _values)
+    for (OAApplicationMode *p in [_values copy])
     {
         if ([p.stringKey isEqualToString:key])
             return p;

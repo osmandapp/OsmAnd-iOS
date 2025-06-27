@@ -16,7 +16,6 @@
 "months_3" = "Tre månadar";
 "price_free" = "Gratis";
 "get_discount_title" = "Kjøp %d %@ med %d%% rabatt.";
-"get_free_trial_title" = "Start din %d %@ prøveperiode.";
 "get_discount_first_part" = "%@ for den fyrste %@";
 "get_discount_first_few_parts" = "%@ dei fyrste %@";
 "get_discount_second_part" = "Deretter %@";
@@ -461,3 +460,5 @@
 "download_srtm_maps" = "Høgdekurver";
 "map_widget_gps_info" = "GPS-info";
 "transport_stop" = "Stopp";
+"poi_filter_fuel" = "Drivstoff";
+"map_widget_distance" = "Avstand";

@@ -298,7 +298,7 @@
 "no_inet_connection" = "Sem conexão à Internet";
 "no_inet_connection_desc_map" = "É necessário baixar os mapas.";
 "search_location" = "Procurando localização…";
-"wiki_around" = "Artigos do Wikipédia próximos";
+"wiki_around" = "Locais populares próximos";
 "custom_search" = "Busca personalizada";
 "subcategories" = "Subcategorias";
 "create_custom_poi" = "Criar filtro personalizado";
@@ -1032,7 +1032,6 @@
 "osmand_live_updates_size" = "Tamanho das atualizações descarregadas";
 "mapil_select_user" = "Selecionar utilizador";
 "get_discount_title" = "Obter %d %@ de %@ desconto.";
-"get_free_trial_title" = "Comece a avaliação gratuita de %1$d %2$s.";
 "get_discount_short_descr" = "%@ por %d %@, depois %@";
 "osm_succsessful_uploads" = "Sucesso";
 "osm_upload_complete" = "Envio terminado";
@@ -3463,7 +3462,7 @@
 "add_widget_to_the_right" = "Adicionar widget à direita";
 "reset_average_speed" = "Redefinir velocidade média";
 "obd_plugin_name" = "Métricas de veículos";
-"cloud_sync_progress" = "A sincronizar…%@";
+"cloud_sync_progress" = "Sincronizando… %@";
 "rendering_attr_showClimbingRoutes_description" = "Mostrar rotas de escalada";
 "OsmAnd Maps" = "OsmAnd Maps";
 "poi" = "POI";
@@ -3510,7 +3509,7 @@
 "detailed_track_guidance" = "Orientação detalhada na trilha";
 "detailed_track_guidance_description" = "O OsmAnd combinará sua trilha com as estradas próximas para uma orientação aprimorada curva a curva.";
 "ask_every_time" = "Perguntar sempre";
-"attach_roads_descr" = "Anexe sua trilha às estradas para obter informações detalhadas da rota com instruções de direção e atributos da estrada.";
+"attach_roads_descr" = "Anexe sua trilha às estradas para obter informações detalhadas da rota, incluindo instruções passo a passo e atributos da estrada.";
 "shared_string_subfolders_in" = "Subpastas em";
 "shared_string_sorted_by" = "é classificado por:";
 "shared_string_legal" = "Legal";
@@ -3671,7 +3670,7 @@
 "shared_string_edges" = "Bordas";
 "labels_position" = "Posição dos rótulos";
 "default_appearance" = "Aparência padrão";
-"apply_to_all_points" = "Aplicar a todos os pontos. ";
+"apply_to_all_points" = "Aplicar a todos os pontos";
 "intermediate_first" = "Intermediário primeiro";
 "destination_first" = "Destino primeiro";
 "display_priority" = "Prioridade de exibição";
@@ -3694,3 +3693,11 @@
 "original_icon_description" = "Cada ponto manteria seu próprio ícone.";
 "original_color_description" = "Cada ponto manteria sua própria cor.";
 "original_shape_description" = "Cada ponto manteria sua própria forma.";
+"years_3" = "Três anos";
+"osm_live_payment_renews_3_years" = "Renovação a cada três anos";
+"three_months_subscription" = "Três meses de assinatura";
+"three_years_subscription" = "Três anos de assinatura";
+"routing_attr_allow_ferries_description" = "Permitir roteamento por rotas de balsa";
+"route_roundabout_exit" = "Saia em %d";
+"routing_attr_allow_ferries_name" = "Permitir balsas";
+"add_hidden_group_info" = "O ponto adicionado pode ser encontrado em \"%@\". Reexibir o grupo selecionado para mostrá-lo no mapa.";

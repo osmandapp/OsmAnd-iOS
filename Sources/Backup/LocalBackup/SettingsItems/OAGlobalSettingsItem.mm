@@ -32,7 +32,8 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
         @"osmand.srtm.paid": kInAppId_Addon_Srtm,
         @"osmand.wikipedia": kInAppId_Addon_Wiki,
         @"osmand.weather": kInAppId_Addon_Weather,
-        @"osmand.sensor": kInAppId_Addon_External_Sensors
+        @"osmand.sensor": kInAppId_Addon_External_Sensors,
+        @"osmand.vehicle.metrics": kInAppId_Addon_Vehicle_Metrics
         //        @"osmand.antplus"
         //        @"osmand.accessibility":
         //        @"osmand.rastermaps"
@@ -87,6 +88,21 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
     return self.getJsonWriter;
 }
 
+- (NSString *)getAndroidPluginId:(NSString *)iosPluginId
+{
+    NSString __block *res = @"";
+    [_pluginIdMapping enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull _androidPluginId, NSString * _Nonnull _iosPluginId, BOOL * _Nonnull stop) {
+        if ([_iosPluginId isEqualToString:iosPluginId])
+            res = _androidPluginId;
+    }];
+    return res;
+}
+
+- (NSString *)getIosPluginId:(NSString *)androidPluginId
+{
+    return _pluginIdMapping[androidPluginId];
+}
+
 - (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
@@ -107,23 +123,22 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
     else if ([key isEqualToString:@"enabled_plugins"] && [[OAAppSettings sharedManager] getGlobalPreference:key].shared)
     {
         NSArray<NSString *> *enabledPlugins = [[[settings getGlobalPreference:key] toStringValue:nil] componentsSeparatedByString:@","];
-        NSArray<NSString *> *futureEnabledPlugins = [value componentsSeparatedByString:@","];
-        for (NSString *pluginId in enabledPlugins)
+        NSArray<NSString *> *androidEnabledPlugins = [value componentsSeparatedByString:@","];
+        for (NSString *iosPluginId in enabledPlugins)
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [OAIAPHelper.sharedInstance disableProduct:pluginId];
-            });
-        }
-        [settings setGlobalPreference:@"" key:key];
-        for (NSString *pluginId in futureEnabledPlugins)
-        {
-            NSString *correctedId = _pluginIdMapping[pluginId];
-            if (correctedId)
-            {
+            NSString *androidPluginId = [self getAndroidPluginId:iosPluginId];
+            if (androidPluginId.length > 0 && ![androidEnabledPlugins containsObject:androidPluginId])
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [OAIAPHelper.sharedInstance enableProduct:correctedId];
+                    [OAIAPHelper.sharedInstance disableProduct:iosPluginId];
                 });
-            }
+        }
+        for (NSString *androidPluginId in androidEnabledPlugins)
+        {
+            NSString *iosPluginId = [self getIosPluginId:androidPluginId];
+            if (iosPluginId.length > 0 && ![enabledPlugins containsObject:iosPluginId])
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [OAIAPHelper.sharedInstance enableProduct:iosPluginId];
+                });
         }
         return;
     }

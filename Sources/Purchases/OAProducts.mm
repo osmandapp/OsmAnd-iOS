@@ -689,6 +689,8 @@
                 purchased = [OAIAPHelper isWikipediaPurchased];
             else if ([self.productIdentifier isEqualToString:kInAppId_Addon_External_Sensors])
                 purchased = [OAIAPHelper isSensorPurchased];
+            else if ([self.productIdentifier isEqualToString:kInAppId_Addon_Vehicle_Metrics])
+                purchased = [OAIAPHelper isVehicleMetricsPurchased];
 
             if (!purchased && self.feature)
             {
@@ -2482,6 +2484,47 @@
 
 @end
 
+@implementation OAVehicleMetricsProduct
+
+- (instancetype)init
+{
+    self.free = YES;
+    self = [super initWithIdentifier:kInAppId_Addon_Vehicle_Metrics];
+    return self;
+}
+
+- (OAFeature *)feature
+{
+    return OAFeature.VEHICLEMETRICS;
+}
+
+- (NSString *)productScreenshotName
+{
+    return @"img_help_vehicle_metrics";
+}
+
+- (NSString *)productIconName
+{
+    return @"ic_custom_car_info";
+}
+
+- (NSString *)localizedTitle
+{
+    return OALocalizedString(@"obd_plugin_name");
+}
+
+- (NSString *)localizedDescription
+{
+    return OALocalizedString(@"obd_plugin_description");
+}
+
+- (NSString *)localizedDescriptionExt
+{
+    return OALocalizedString(@"obd_plugin_description");
+}
+
+@end
+
 
 @implementation OACarPlayProduct
 
@@ -2810,6 +2853,7 @@
 @property (nonatomic) OAProduct *mapillary;
 @property (nonatomic) OAProduct *weather;
 @property (nonatomic) OAProduct *sensors;
+@property (nonatomic) OAProduct *vehicleMetrics;
 @property (nonatomic) OAProduct *carplay;
 @property (nonatomic) OAProduct *osmandDevelopment;
 
@@ -2860,6 +2904,7 @@
         self.mapillary = [[OAMapillaryProduct alloc] init];
         self.weather = [[OAWeatherProduct alloc] init];
         self.sensors = [[OAExternalSensorsProduct alloc] init];
+        self.vehicleMetrics = [OAVehicleMetricsProduct new];
         self.carplay = [[OACarPlayProduct alloc] init];
         self.osmandDevelopment = [[OAOsmandDevelopmentProduct alloc] init];
 
@@ -2884,6 +2929,7 @@
                              self.mapillary,
                              self.weather,
                              self.sensors,
+                             self.vehicleMetrics,
                              self.osmandDevelopment
         ];
 

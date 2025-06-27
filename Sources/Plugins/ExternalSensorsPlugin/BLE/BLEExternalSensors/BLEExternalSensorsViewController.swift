@@ -59,7 +59,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
-                                               name: .DeviceDisconnected,
+                                               name: .deviceDisconnected,
                                                object: nil)
         if UserDefaults.standard.bool(for: .wasAuthorizationRequestBluetooth) {
             detectBluetoothState()
@@ -78,7 +78,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         let add = UIBarButtonItem(barButtonSystemItem: .add,
                                   target: self,
                                   action: #selector(onRightNavbarButtonPressed))
-        add.tintColor = UIColor.iconColorActive
+        add.tintColor = .iconColorActive
         return [add]
     }
     
@@ -88,7 +88,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-        if DeviceHelper.shared.hasPairedDevices {
+        if DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS) {
             configurePairedDevices()
         } else {
             configureNoPairedDevices()
@@ -96,7 +96,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     override func getTitleForHeader(_ section: Int) -> String? {
-        if DeviceHelper.shared.hasPairedDevices {
+        if DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS) {
             switch section {
             case 0:
                 if let connected = sectionsDevicesData[.connected], !connected.isEmpty {
@@ -114,7 +114,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         return nil
     }
     
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell?
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
@@ -132,10 +132,10 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 if let key = item.key, let item = ExternalSensorsCellData(rawValue: key) {
                     switch item {
                     case .title:
-                        cell.titleLabel.textColor = UIColor.textColorPrimary
+                        cell.titleLabel.textColor = .textColorPrimary
                         cell.selectionStyle = .none
                     case .learnMore:
-                        cell.titleLabel.textColor = UIColor.textColorActive
+                        cell.titleLabel.textColor = .textColorActive
                         cell.selectionStyle = .default
                     }
                 }
@@ -157,7 +157,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        if DeviceHelper.shared.hasPairedDevices {
+        if DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS) {
             return 30
         }
         return .leastNonzeroMagnitude
@@ -172,7 +172,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         if let key = item.key {
             if let item = ExternalSensorsCellData(rawValue: key) {
                 if case .learnMore = item {
-                    guard let settingsURL = URL(string: docs_external_sensors),
+                    guard let settingsURL = URL(string: docsExternalSensorsURL),
                           UIApplication.shared.canOpenURL(settingsURL) else {
                         return
                     }
@@ -201,8 +201,9 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     private func configureStartState() {
-        pairNewSensorButton.isHidden = DeviceHelper.shared.hasPairedDevices
-        if !DeviceHelper.shared.hasPairedDevices {
+        let hasPairedDevicesExcludingOBD = DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS)
+        pairNewSensorButton.isHidden = hasPairedDevicesExcludingOBD
+        if !hasPairedDevicesExcludingOBD {
             tableView.sectionHeaderTopPadding = 0
             tableView.contentInset.top = 0
             tableView.contentInset.bottom = 64
@@ -229,7 +230,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                                                queue: nil) { [weak self] _ in
             guard let self else { return }
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
-            guard DeviceHelper.shared.hasPairedDevices else { return }
+            guard DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS) else { return }
             configureStartState()
             reloadData()
         }
@@ -285,8 +286,8 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
     private func configurePairedDevices() {
         sectionsDevicesData.removeAll()
-        if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
-            let connectedDevices = DeviceHelper.shared.connectedDevices
+        if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices(excluding: .OBD_VEHICLE_METRICS) {
+            let connectedDevices = DeviceHelper.shared.connectedDevices(excludingType: .OBD_VEHICLE_METRICS)
             
             if !connectedDevices.isEmpty {
                 let connectedSection = tableData.createNewSection()
@@ -297,15 +298,15 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 }
                 sectionsDevicesData[.connected] = connectedDevices
             }
-            let disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices)
+            let disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices).filter { $0.deviceType != .OBD_VEHICLE_METRICS }
             if !disconnectedDevices.isEmpty {
-                createDesconnectedDevicesSection(disconnectedDevices: disconnectedDevices)
+                createDisconnectedDevicesSection(disconnectedDevices: disconnectedDevices)
             }
             tableView.reloadData()
         }
     }
     
-    private func createDesconnectedDevicesSection(disconnectedDevices: [Device]) {
+    private func createDisconnectedDevicesSection(disconnectedDevices: [Device]) {
         let disconnectedSection = tableData.createNewSection()
         disconnectedDevices.forEach { _ in
             let row = disconnectedSection.createNewRow()

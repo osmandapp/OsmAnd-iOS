@@ -37,7 +37,6 @@ final class RouteInfoWidget: OASimpleWidget {
     private var cachedDisplayPriority: RouteInfoDisplayPriority?
     private var hasSecondaryData: Bool
     private var cachedMetricSystem: Int?
-    private var textState: OATextState?
     private let calculator: RouteInfoCalculator
     private let updateIntervalSeconds = TimeInterval(TimeToNavigationPointWidget.UPDATE_INTERVAL_SECONDS)
     // swiftlint:disable force_unwrapping
@@ -149,7 +148,6 @@ final class RouteInfoWidget: OASimpleWidget {
         super.updateColors(textState)
         
         let valueTextColor = valueTextColor
-        self.textState = textState
         firstLineRightLabel.textColor = valueTextColor
         secondLineRightLabel.textColor = valueTextColor
         secondaryDividerView.backgroundColor = isNightMode() ? .widgetSeparator.dark : .widgetSeparator.light
@@ -341,7 +339,7 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private func applySuitableTextFont() {
-        let typefaceStyle: UIFont.Weight = textState?.textBold == true ? .bold : .semibold
+        let typefaceStyle: UIFont.Weight = .semibold
         let hasEnoughWidth = hasEnoughWidth
         let minValueFontSize = minValueFontSize
         let isSmallSize = isSmallSize

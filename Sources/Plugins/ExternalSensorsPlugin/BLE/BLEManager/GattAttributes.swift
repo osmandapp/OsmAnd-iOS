@@ -39,6 +39,12 @@ enum GattAttributes {
                                       */
     ]
     
+    static let OBD_SERVICES = [
+        CBUUID(string: "FFE0"),
+        CBUUID(string: "FFF0"),
+        CBUUID(string: "18F0") // e.g. VGate iCar Pro
+    ]
+    
     static let SUPPORTED_CHARACTERISTICS = [CHARACTERISTIC_CYCLING_SPEED_AND_CADENCE_MEASUREMENT,
                                             CHARACTERISTIC_HEART_RATE_MEASUREMENT,
                                             CHARACTERISTIC_BP_MEASUREMENT,

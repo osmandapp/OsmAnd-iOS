@@ -20,7 +20,7 @@ final class BLEManager {
     static let shared = BLEManager()
     
     private static let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier!,
+        subsystem: Bundle.main.bundleIdentifier ?? "OsmAnd",
         category: String(describing: BLEManager.self)
     )
     
@@ -30,32 +30,46 @@ final class BLEManager {
     
     private(set) var discoveredDevices = [Device]()
     
+    private var restoreStateObserver: NSObjectProtocol?
+    private var centralStateObserver: NSObjectProtocol?
+    
     private init() {
-        NotificationCenter.default.addObserver(forName: Central.CentralManagerWillRestoreState,
-                                               object: nil,
-                                               queue: nil) { notification in
-            if let restoredPeripherals = notification.userInfo?["peripherals"] as? [Peripheral], !restoredPeripherals.isEmpty {
-                debugPrint(restoredPeripherals)
-                if OAIAPHelper.isOsmAndProAvailable() {
-                    DeviceHelper.shared.restoreConnectedDevices(with: restoredPeripherals)
-                } else {
-                    restoredPeripherals.forEach {
-                        $0.disconnect(completion: { _ in }) }
-                }
+        restoreStateObserver = NotificationCenter.default.addObserver(forName: Central.CentralManagerWillRestoreState,
+                                                                      object: nil,
+                                                                      queue: nil) { [weak self] notification in
+            guard let self,
+                  let restoredPeripherals = notification.userInfo?["peripherals"] as? [Peripheral],
+                  !restoredPeripherals.isEmpty else {
+                return
             }
+            
+            debugPrint(restoredPeripherals)
+            
+            guard let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() else {
+                Self.logger.warning("restoreConnectedDevices: pairedDevices is empty")
+                return
+            }
+            
+            let devices = DeviceHelper.shared.getDevicesFrom(peripherals: restoredPeripherals, pairedDevices: pairedDevices)
+            
+            let nonOBDDevices = devices.filter { $0.deviceType != .OBD_VEHICLE_METRICS }
+            let obdDevices = devices.filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+            
+            handleRestoredDevices(devices: nonOBDDevices, isAllowed: OAIAPHelper.isSensorPurchased())
+            handleRestoredDevices(devices: obdDevices, isAllowed: OAIAPHelper.isVehicleMetricsPurchased())
         }
         
-        NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
-                                               object: Central.sharedInstance,
-                                               queue: nil) { notification in
+        centralStateObserver = NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
+                                                                      object: Central.sharedInstance,
+                                                                      queue: nil) { notification in
             guard let state = notification.userInfo?["state"] as? CBManagerState else {
                 return
             }
             if case .poweredOff = state {
-                if OAIAPHelper.isOsmAndProAvailable() {
+                if OAIAPHelper.isOsmAndProAvailable() || OAIAPHelper.isMapsPlusAvailable() {
                     // Peripheral that are no longer valid must be rediscovered again (happens when for example the Bluetooth is turned off
                     // from a user's phone and turned back on
-                    DeviceHelper.shared.disconnectAllDevices(reason: .bluetoothPoweredOff)
+                    DeviceHelper.shared.disconnectDevices(reason: .bluetoothPoweredOff)
                 }
             }
         }
@@ -87,7 +101,7 @@ final class BLEManager {
                 } else {
                     let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
                     if let device = DeviceFactory.createDevice(with: uuids) {
-                        var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? device.deviceServiceName
+                        var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? peripheral.name ?? device.deviceServiceName
                         if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
                             deviceName = savedDevice.deviceName
                         }
@@ -131,11 +145,11 @@ final class BLEManager {
     }
     
     func removeAndDisconnectDiscoveredDevices() {
-        BLEManager.shared.discoveredDevices.forEach {
+        discoveredDevices.forEach {
             $0.disableRSSI()
             DeviceHelper.shared.disconnectIfNeeded(device: $0)
         }
-        BLEManager.shared.discoveredDevices.removeAll()
+        discoveredDevices.removeAll()
     }
     
     func stopScan() {
@@ -154,5 +168,24 @@ final class BLEManager {
     
     func removeAllDiscoveredDevices() {
         discoveredDevices.removeAll()
+    }
+    
+    private func handleRestoredDevices(devices: [Device], isAllowed: Bool) {
+        guard !devices.isEmpty else { return }
+        
+        if isAllowed {
+            DeviceHelper.shared.updateConnected(devices: devices)
+        } else {
+            devices.forEach { $0.disconnect(completion: { _ in }) }
+        }
+    }
+    
+    deinit {
+        if let observer = restoreStateObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = centralStateObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 }

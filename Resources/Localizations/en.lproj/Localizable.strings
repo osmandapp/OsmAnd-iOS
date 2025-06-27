@@ -27,7 +27,6 @@
 "price_free" = "Free";
 
 "get_discount_title" = "Get %d %@ at %@ off.";
-"get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
 "get_discount_first_part" = "%@ for the first %@";
 "get_discount_first_few_parts" = "%@ for first %@";
@@ -503,7 +502,7 @@
 "detailed_track_guidance" = "Detailed track guidance";
 "detailed_track_guidance_description" = "OsmAnd will match your track to nearby roads for enhanced turn-by-turn guidance.";
 "ask_every_time" = "Ask every time";
-"attach_roads_descr" = "Attach your track to roads to get detailed route information with turn instructions and road attributes.";
+"attach_roads_descr" = "Attach your track to roads to get detailed route information, including turn-by-turn instructions and road attributes.";
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
@@ -2581,7 +2580,7 @@
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 
-"wiki_around" = "Nearby Wikipedia articles";
+"wiki_around" = "Nearby popular places";
 "search_categories" = "Categories";
 "items_selected" = "%d selected";
 
@@ -2907,7 +2906,7 @@
 "rendering_attr_surface_snow_name" = "Snow";
 "rendering_attr_highway_class_cycleway_name" = "Cycleway";
 "routing_attr_piste_type_downhill_description" = "Slopes for alpine or downhill skiing and access to ski lifts.";
-"rendering_attr_hideWaterPolygons_name" = "Hide water";
+"rendering_attr_hideWaterPolygons_name" = "Water";
 "routing_attr_avoid_stairs_name" = "No stairs";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_skitour_name" = "Skitour";
@@ -2983,7 +2982,7 @@
 "rendering_attr_smoothness_very_horrible_name" = "Very horrible";
 "routing_attr_allow_intermediate_name" = "Allow intermediate routes";
 "rendering_attr_trolleybusRoutes_name" = "Trolleybus routes";
-"rendering_attr_hideWaterPolygons_description" = "Water";
+"rendering_attr_hideWaterPolygons_description" = "Hide water";
 "rendering_attr_piste_difficulty_extreme_name" = "Extreme";
 "rendering_value_low_name" = "Low";
 "rendering_value_lightgreen_name" = "Light green";
@@ -3016,7 +3015,7 @@
 "rendering_attr_alpineHiking_description" = "Difficulty classification types for the routes.";
 "rendering_attr_highway_class_bridleway_name" = "Bridleway";
 "routing_attr_avoid_share_taxi_name" = "No share taxi";
-"rendering_attr_pisteRoutes_name" = "Ski slopes";
+"rendering_attr_pisteRoutes_name" = "Ski routes";
 "rendering_attr_piste_type_sled_name" = "Sled";
 "rendering_attr_noPolygons_description" = "Make all areal land features on map transparent.";
 "routing_attr_allow_classic_only_description" = "Routes groomed for classic style only without skating trails. This includes routes groomed by a smaller snowmobile with looser piste and tracks made manually by skiers.";
@@ -3659,7 +3658,7 @@
 "routing_attr_avoid_highway_description" = "Avoid highways";
 "routing_attr_prefer_hiking_routes_description" = "Prefer hiking routes";
 "rendering_attr_weatherWindSpeedContours_name" = "Wind speed isolines";
-"rendering_attr_hideMilitaryAreas_name" = "Hide military areas";
+"rendering_attr_hideMilitaryAreas_name" = "Military areas";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Show fixme tags";
 "rendering_attr_horse_scale_dangerous_name" = "Dangerous";
 "rendering_attr_seabedDetail_description" = "Additional text info on seabed surface_qualification, combined surface types, category and taxon of weed or seagrass";
@@ -3852,7 +3851,7 @@
 "default_appearance_desc" = "Default color, icon and shape will apply to the added favorite points into the group.";
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
-"apply_to_all_points" = "Apply to all points ";
+"apply_to_all_points" = "Apply to all points";
 "save_favorite_default_appearance" = "Apply changes to the existing points in the folder or only to new ones?";
 "original_icon_description" = "Each point would keep its own icon.";
 "original_color_description" = "Each point would keep its own color.";
@@ -4116,3 +4115,98 @@
 "shared_string_date" = "Date";
 
 "add_hidden_group_info" = "The added point can be found in \"%@\". Unhide the selected group to show it on the map.";
+
+"purchase_feature_desc_vehicle_metrics_obd_ii" = "Track vital vehicle data using the OBD-II protocol. Monitor key metrics like speed, engine RPM, fuel consumption, and more.";
+
+"obd_plugin_description" = "Monitor key vehicle metrics using the OBD-II protocol. Access data including:\n
+• Engine speed, Engine Runtime, Calculated Engine Load \n
+• Fuel consumption, Fuel pressure, Remaining fuel\n
+• Intake temperature, Ambient temperature, Coolant temperature, Engine Oil Temperature\n
+• Vehicle speed, Throttle Position, Battery voltage";
+
+"vehicle_metrics_obd_ii" = "Vehicle Metrics (OBD-II)";
+"connect_obd_instructions_title" = "OsmAnd supports Bluetooth connections to OBD-II scanners.";
+"obd_how_to_connect" = "How to connect:";
+"connect_obd_instructions_step" = "1. Connect the scanner to your vehicle\'s OBD-II port.\n\n
+2. Turn on your vehicle\'s engine\n\n
+3. Enable Bluetooth on your device\n\n
+4. Tap \'%@\' and select your scanner from the list.";
+"obd_bluetooth_off_description" = "Turn on Bluetooth to find and connect scanners.";
+"obd_searching_text_description" = "Please keep your device close to the scanner. Ensure the vehicle\'s engine is running.";
+"obd_searching_text" = "Searching for scanners";
+"obd_nothing_found_text" = "No scanners found";
+
+"obd_nothing_found_description" = "Please check the following:\n
+– Ensure Bluetooth is turned on\n
+– Vehicle engine is running\n
+– Make sure your device is within range of the scanner.";
+
+"obd_vin"= "VIN";
+"obd_vin_desc" = "VIN code over OBD";
+"obd_vehicle_info" = "Vehicle info";
+"obd_widget_vehicle_speed" = "Vehicle speed";
+"obd_widget_engine_speed" = "Engine speed";
+
+"obd_engine_runtime_desc" = "Shows shows how long the engine has been running since it was started.";
+"obd_engine_runtime" = "Engine Runtime";
+"obd_battery_voltage_desc" = "Shows the voltage level of the vehicle\'s battery";
+"obd_fuel_pressure_desc" = "Shows the pressure within the fuel system";
+"obd_throttle_position" = "Throttle Position";
+"obd_throttle_position_desc" = "Shows the angle of the throttle plate in the throttle body.";
+"obd_calculated_engine_load_desc" = "Shows the percentage of the engine’s available power being used at a given moment.";
+"obd_calculated_engine_load" = "Calculated Engine Load";
+"obd_engine_coolant_temp_desc" = "Shows the temperature of the engine’s coolant";
+"obd_speed_desc" = "Shows speed from the Vehicle Speed Sensor (VSS).";
+"obd_engine_oil_temperature_desc" = "Shows the temperature of the engine oil.";
+"obd_engine_oil_temperature" = "Engine Oil Temperature";
+"obd_ambient_air_temp_desc" = "Shows the temperature outside the vehicle.";
+"obd_air_intake_temp_desc" = "Shows the temperature of the air entering the engine intake manifold.";
+"obd_fuel_consumption_rate_sensor_type" = "Use selected units in name.";
+"remaining_fuel_description" = "Shows the amount of fuel left in the vehicle\'s tank";
+"remaining_fuel" = "Remaining fuel";
+"obd_fuel_consumption_desc" = "Shows the rate of fuel usage by the engine, calculated based on remaining fuel, tank size, and distance covered as determined by GPS.";
+"obd_fuel_consumption" = "Fuel consumption";
+
+"rpm_unit" = "rpm";
+"obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";
+"obd_fuel_level_desc" = "Shows vehicle fuel level over OBD sensor";
+"obd_fuel_left_distance_desc" = "Shows distance vehicle can drive on left fuel level over OBD sensor";
+"obd_fuel_type_desc" = "Shows vehicle fuel type over OBD sensor";
+"obd_air_intake_temp" = "Intake temperature";
+"obd_ambient_air_temp" = "Ambient temperature";
+"obd_battery_voltage" = "Battery voltage";
+"obd_engine_coolant_temp" = "Coolant temperature";
+"obd_fuel_level" = "Fuel Efficiency (%)";
+"obd_fuel_consumption_rate" = "Fuel consumption rate";
+"obd_fuel_consumption_rate_desc" = "Shows vehicle fuel consumption rate based on OBD an location";
+"obd_fuel_left_liters" = "Fuel left (liters)";
+"obd_fuel_type" = "Fuel type";
+
+"obd_fuel_pressure" = "Fuel pressure";
+
+"obd_fuel_consumption_rate_l_h" = "Fuel consumption rate (L/h)";
+"obd_fuel_consumption_rate_sensor" = "Fuel consumption rate (sensor)";
+"obd_fuel_consumption_rate_l_h_desc" = "Shows vehicle fuel consumption rate based on calculations (L/h)";
+"obd_fuel_consumption_rate_sensor_desc" = "Shows vehicle fuel consumption rate based on sensor (L/h)";
+
+"obd_fuel_level_liter" = "Fuel level (l)";
+"obd_fuel_level_percent" = "Fuel level (%)";
+"obd_fuel_left_km" = "Fuel left (km)";
+"obd_fuel_consumption_rate_scanner" = "Fuel consumption rate (obd)";
+"obd_fuel_consumption_rate_liter_hour" = "Fuel consumption rate";
+"obd_fuel_consumption_rate_percent_hour" = "Fuel consumption rate %/h";
+
+"obd_fuel_consumption_rate_l_km" = "Fuel consumption rate (L/100 km)";
+"obd_fuel_consumption_rate_l_km_desc" = "Shows vehicle fuel consumption rate based on calculations (L/100 km)";
+"simulate_obd" = "Simulate obd data";
+
+"kpa_unit" = "kPa";
+"percent_unit" = "%";
+"percent_hour" = "%/h";
+"liter_per_hour" = "L/h";
+
+"unit_volt" = "V";
+"obd_widget_group" = "Vehicle Metrics";
+
+"routing_attr_allow_ferries_description" = "Allow routing by ferry routes";
+"routing_attr_allow_ferries_name" = "Allow ferries";

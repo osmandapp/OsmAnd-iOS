@@ -10,7 +10,7 @@ extension DateFormatter {
     static let dateStyleMedium: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
-        formatter.locale = Locale.current
+        formatter.locale = .current
         return formatter
     }()
     

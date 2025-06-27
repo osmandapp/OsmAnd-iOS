@@ -188,10 +188,16 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     [self updateSettingsButtonState];
 }
 
-- (void)updateSettingsButtonState
-{
-    if ([_product.productIdentifier isEqualToString:kInAppId_Addon_External_Sensors])
-    [self.navigationItem setRightBarButtonItemsisEnabled:(_product.isPurchased && !_product.disabled) tintColor:NULL];
+- (void)updateSettingsButtonState {
+    NSArray *supportedIdentifiers = @[
+        kInAppId_Addon_External_Sensors,
+        kInAppId_Addon_Vehicle_Metrics
+    ];
+
+    if ([supportedIdentifiers containsObject:_product.productIdentifier]) {
+        BOOL isEnabled = _product.isPurchased && !_product.disabled;
+        [self.navigationItem setRightBarButtonItemsIsEnabled:isEnabled tintColor:nil];
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -428,13 +434,9 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     else if ([_product isKindOfClass:OAWikiProduct.class])
         return [[OAWikipediaSettingsViewController alloc] initWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
     else if ([_product isKindOfClass:OAExternalSensorsProduct.class])
-    {
         return [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
-    }
     else if ([_product isKindOfClass:OAVehicleMetricsProduct.class])
-    {
         return [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
-    }
     
     return nil;
 }

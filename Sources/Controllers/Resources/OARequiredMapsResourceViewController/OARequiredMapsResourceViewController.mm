@@ -522,7 +522,7 @@
             _isActiveOnlineCalculateRequest = YES;
             [self selectAllCells:NO];
             [self reloadDataWithAnimated:NO completion:nil];
-            [self.navigationItem setRightBarButtonItemsisEnabled:NO tintColor:[UIColor colorNamed:ACColorNameButtonBgColorDisabled]];
+            [self.navigationItem setRightBarButtonItemsIsEnabled:NO tintColor:[UIColor colorNamed:ACColorNameButtonBgColorDisabled]];
             __weak __typeof(self) weakSelf = self;
             [OAResourcesUIHelper onlineCalculateRequestWithRouteCalculationResult:prevRoute completion:^(NSArray<CLLocation *> *locations, NSError *error) {
                 __strong __typeof(weakSelf) strongSelf = weakSelf;

@@ -6,26 +6,17 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
 
 final class DevicesSettingsCollection {
     
     private let storage = UserDefaults.standard
     
-    var hasPairedDevicesExcludingOBD: Bool {
-        if let deviceSettingsArray: [DeviceSettings] = storage[.deviceSettings] {
-            let filteredDevices = deviceSettingsArray.filter { $0.deviceType != .OBD_VEHICLE_METRICS }
-            return !filteredDevices.isEmpty
-        }
-        return false
+    func hasPairedDevices(ofType deviceType: DeviceType) -> Bool {
+        getSettingsForPairedDevices()?.contains { $0.deviceType == deviceType } ?? false
     }
-    
-    var hasPairedDevicesOnlyOBD: Bool {
-        if let deviceSettingsArray: [DeviceSettings] = storage[.deviceSettings] {
-            let obdDevices = deviceSettingsArray.filter { $0.deviceType == .OBD_VEHICLE_METRICS }
-            return !obdDevices.isEmpty
-        }
-        return false
+
+    func hasPairedDevices(excludingType deviceType: DeviceType) -> Bool {
+        getSettingsForPairedDevices()?.contains { $0.deviceType != deviceType } ?? false
     }
     
     func getSettingsForPairedDevices() -> [DeviceSettings]? {

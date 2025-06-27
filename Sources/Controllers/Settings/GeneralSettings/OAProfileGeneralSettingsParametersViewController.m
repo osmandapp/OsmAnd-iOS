@@ -759,7 +759,6 @@
         [_settings.volumeUnits set:IMPERIAL_GALLONS mode:self.appMode];
     else if ([name isEqualToString:@"us_gallons"])
         [_settings.volumeUnits set:US_GALLONS mode:self.appMode];
-    [_settings.volumeUnitsChangedManually set:YES mode:self.appMode];
 }
 
 - (void) selectSettingAngularUnits:(NSString *)name

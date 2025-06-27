@@ -640,7 +640,7 @@
 "search_another_country" = "Vybrat jinou oblast";
 "skip_map_downloading" = "Přeskočit stahování map";
 "skip_map_downloading_desc_ios" = "Nemáte nainstalovanou žádnou offline mapu. Můžete vybrat mapu ze seznamu, nebo stáhnout mapy později přes Menu - Spravovat mapové soubory";
-"wiki_around" = "Články Wikipedie v okolí";
+"wiki_around" = "Populární místa v okolí";
 "search_categories" = "Kategorie";
 "items_selected" = "%d vybraných";
 "custom_search" = "Vlastní vyhledávání";
@@ -1105,7 +1105,7 @@
 "rendering_attr_roadStyle_name" = "Styl cesty";
 "rendering_value_pink_name" = "růžová";
 "routing_attr_avoid_toll_name" = "Žádné placené silnice";
-"rendering_attr_pisteRoutes_name" = "Lyžařské svahy";
+"rendering_attr_pisteRoutes_name" = "Lyžařské trasy";
 "rendering_attr_smoothness_excellent_name" = "Vynikající";
 "rendering_attr_surface_paving_stones_name" = "Zámková dlažba";
 "rendering_value_light_brown_name" = "Světle hnědá";
@@ -1135,7 +1135,7 @@
 "rendering_value_bold_name" = "Tučné";
 "rendering_attr_contourLines_name" = "Zobrazit vrstevnice";
 "rendering_attr_contourColorScheme_name" = "Barevné schéma vrstevnic";
-"rendering_attr_hideWaterPolygons_description" = "Voda";
+"rendering_attr_hideWaterPolygons_description" = "Skrýt vodu";
 "routing_attr_piste_type_nordic_description" = "Trasy pro severské nebo běžecké lyžování.";
 "rendering_attr_undefined_name" = "Neurčené";
 "rendering_attr_depthContours_name" = "Námořní hloubkové vrstevnice";
@@ -1175,7 +1175,7 @@
 "rendering_value_darkyellow_name" = "Tmavě žlutá";
 "routing_attr_piste_type_skitour_name" = "Lyžařské okruhy";
 "rendering_attr_hikingRoutesOSMC_description" = "Vykreslovat cesty podle OSMC značení.";
-"rendering_attr_hideWaterPolygons_name" = "Skrýt vodu";
+"rendering_attr_hideWaterPolygons_name" = "Voda";
 "routing_attr_avoid_ferry_description" = "Vyhne se trajektům";
 "routing_attr_avoid_stairs_name" = "Žádné schody";
 "rendering_attr_subwayMode_name" = "Trasy metra";
@@ -1286,7 +1286,6 @@
 "get_discount_first_few_parts" = "%@ za první %@";
 "get_discount_first_part" = "%@ za první %@";
 "get_discount_short_descr" = "%@ za %d %@, potom %@";
-"get_free_trial_title" = "Začněte svou zkušební dobu na %d %@ zdarma.";
 "get_discount_title" = "Získejte %d %@ při slevě %@.";
 "years_short" = "R";
 "year_short" = "R";
@@ -2621,7 +2620,7 @@
 "speed_camera_pois" = "Body rychlostních radarů";
 "uninstall_speed_cameras" = "Odinstalovat rychlostní radary";
 "shared_string_does_not_exist" = "Neexistuje";
-"rendering_attr_hideMilitaryAreas_name" = "Skrýt vojenské prostory";
+"rendering_attr_hideMilitaryAreas_name" = "Vojenské prostory";
 "rendering_attr_horse_scale_impossible_name" = "Nemožné";
 "rendering_attr_horse_scale_common_name" = "Společné";
 "rendering_attr_showTrolleybusRoutes_name" = "Trolejbusové linky";
@@ -3574,12 +3573,12 @@
 "icon_group_sport" = "Sport";
 "shared_string_open_street_map" = "OpenStreetMap";
 "km_h" = "km/h";
-"cloud_sync_progress" = "Synchronizace...%@";
+"cloud_sync_progress" = "Synchronizace... %@";
 "download_tab_conflicts" = "Nevyřešené";
 "battery_widget_level_privacy_ios_desc" = "Z důvodu ochrany soukromí v systému iOS může widget zobrazovat úroveň nabití baterie pouze v 5% krocích, například 35 %, 60 % nebo 85 %";
 "detailed_track_guidance" = "Podrobné pokyny ke stopě";
 "ask_every_time" = "Pokaždé se ptejte";
-"attach_roads_descr" = "Připojte svou trasu k silnicím a získejte podrobné informace o trase s pokyny pro odbočení a atributy silnice.";
+"attach_roads_descr" = "Připojte svoji stopu k cestám, abyste získali detailní informace o trase včetně navigačních pokynů a vlastností cest.";
 "detailed_track_guidance_description" = "OsmAnd přizpůsobí vaši stopu blízkým silnicím pro vylepšené navádění krok za krokem.";
 "auto_25_chars_route_kr" = "Držte se vpravo";
 "auto_25_chars_route_kl" = "Držte se vlevo";
@@ -3594,9 +3593,9 @@
 "auto_25_chars_route_tr_kl" = "Zahněte vpravo a držte se vlevo";
 "auto_25_chars_route_tr_kr" = "Zahněte vpravo a držte se vpravo";
 "auto_25_chars_route_tu_kl" = "Otočte se a držte se vlevo";
-"auto_25_chars_route_roundabout_kl" = "Vyjeďte %d výjezdem a držte se vlevo";
+"auto_25_chars_route_roundabout_kl" = "Použijte %d. výjezd a držte se vlevo";
 "auto_25_chars_route_tl_kl" = "Zahněte vlevo a držte se vlevo";
-"auto_25_chars_route_roundabout_kr" = "Vyjeďte %d výjezdem a držte se vpravo";
+"auto_25_chars_route_roundabout_kr" = "Použijte %d. výjezd a držte se vpravo";
 "auto_25_chars_route_tu_kr" = "Otočte se a držte se vpravo";
 "save_as_smart_folder" = "Uložit jako chytrou složku";
 "new_smart_folder" = "Nová chytrá složka";
@@ -3629,7 +3628,7 @@
 "sensor_data_settings_description" = "zobrazit hlavní data ze senzoru";
 "profile_icons" = "Ikona profilu";
 "terrain_map" = "Mapa terénu (3D)";
-"add_hidden_group_info" = "Přidaný bod naleznete v „%@“. Zrušte skrytí vybrané skupiny pro zobrazení na mapě.";
+"add_hidden_group_info" = "Přidaný bod můžete jej najít v \"%@\". Odkryjte vybranou skupinu, aby se zobrazil na mapě.";
 "shared_string_unchanged" = "Nezměněno";
 "each_favourite_point_own_icon" = "Každý oblíbený bod si ponechá svoji vlastní ikonu.";
 "unchanged_parameter_summary" = "Každá stopa si uchová své vlastní parametry.";
@@ -3656,7 +3655,7 @@
 "grid_color" = "Barva mřížky";
 "customize_grid_color" = "Přizpůsobení barvy mřížky";
 "default_appearance" = "Výchozí vzhled";
-"apply_to_all_points" = "Platí pro všechny body ";
+"apply_to_all_points" = "Použít pro všechny body";
 "original_color_description" = "Každý bod by si zachoval svou vlastní barvu.";
 "original_shape_description" = "Každý bod by si zachoval svůj vlastní tvar.";
 "shared_string_original" = "Originál";
@@ -3676,8 +3675,12 @@
 "intermediate_first" = "Nejprve mezicíle";
 "shared_string_default_view" = "Výchozí zobrazení";
 "preview_next_turn_descr" = "Automaticky otočí mapu pro náhled další odbočky nebo manévru";
-"preview_next_turn" = "Náhled další odbočky";
+"preview_next_turn" = "Ukázat příští odbočku";
 "years_3" = "Tři roky";
 "three_months_subscription" = "Tříměsíční předplatné";
 "osm_live_payment_renews_3_years" = "Obnovuje se každé tři roky";
 "three_years_subscription" = "Tříleté předplatné";
+"ios_release_5_1" = "• Přidána podpora pro webové a multiplatformní nákupy\n• Nový navigační widget kombinuje směrovou šipku a navigační pokyny\n• Přidána akce pro přejmenování skupin Oblíbených\n• Přidány možnosti „Jednotka objemu“ a „Kapacita palivové nádrže“\n• Přidána překryvná vrstva „Mřížka souřadnic“\n• Widgety na levém a pravém panelu nyní obsahují možnost nastavení výšky\n• Přidána možnost přiřadit aktivity ke stopám\n• Opraven pád na CarPlay s iOS 15\n• Byly vyřešeny problémy s automatickou změnou velikosti widgetů na levém a pravém panelu\n• Byla opravena nekompatibilita cestovních průvodců\n• Problém s multiplatformními nákupy byl vyřešen\n• Opraven problém s černou obrazovkou na CarPlay po spuštění\n";
+"routing_attr_allow_ferries_name" = "Povolit trajekty";
+"routing_attr_allow_ferries_description" = "Povolit plánování trasy s trajekty";
+"route_roundabout_exit" = "Vyjeďte %d výjezdem";

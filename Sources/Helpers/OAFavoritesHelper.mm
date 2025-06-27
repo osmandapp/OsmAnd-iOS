@@ -1012,7 +1012,7 @@ static NSOperationQueue *_favQueue;
     return _flatBackgroundContourIcons;
 }
 
-+ (OASGpxFile *) asGpxFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups
++ (OASGpxFile *)asGpxFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups
 {
     OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
     for (OAFavoriteGroup *group in favoriteGroups)
@@ -1292,14 +1292,25 @@ static NSOperationQueue *_favQueue;
 
 - (OASGpxUtilitiesPointsGroup *)toPointsGroup
 {
+    NSString *mxPrefix = @"mx_";
+    _iconName = [self removePrefix:mxPrefix fromValue:_iconName];
     OASGpxUtilitiesPointsGroup *pointsGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:_name iconName:_iconName backgroundType:_backgroundType color:[self color].toARGBNumber];
     pointsGroup.hidden = !_isVisible;
     NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
+    
     for (OAFavoriteItem *point in _points)
+    {
+        [point setIcon:[self removePrefix:mxPrefix fromValue:[point getIcon]]];
         [points addObject:[point toWpt]];
-
+    }
+    
     pointsGroup.points = points;
     return pointsGroup;
+}
+
+- (NSString *)removePrefix:(NSString *)prefix fromValue:(NSString *)value
+{
+    return value && [value hasPrefix:prefix] ? [value substringFromIndex:prefix.length] : value;
 }
 
 + (OAFavoriteGroup *)fromPointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup

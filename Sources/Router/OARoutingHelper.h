@@ -125,5 +125,6 @@ struct RouteSegmentResult;
 + (double) getPosTolerance:(double)accuracy;
 
 - (double) getMaxAllowedProjectDist:(CLLocation *)location;
+- (BOOL) isTunnelLocationSimulated:(CLLocation *)location;
 
 @end

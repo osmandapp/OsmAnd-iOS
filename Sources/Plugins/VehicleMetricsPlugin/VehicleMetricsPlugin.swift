@@ -22,7 +22,8 @@ final class VehicleMetricsPlugin: OAPlugin {
     
     override func disable() {
         super.disable()
-        DeviceHelper.shared.disconnectAllOBDDevices(reason: .pluginOff)
+
+        DeviceHelper.shared.disconnectDevices(only: .OBD_VEHICLE_METRICS, reason: .pluginOff)
     }
     
     override func update(_ location: CLLocation) {

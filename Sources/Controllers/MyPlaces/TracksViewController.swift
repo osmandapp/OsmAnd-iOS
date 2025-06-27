@@ -661,7 +661,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             return TracksSortMode.getByTitle(sortModeTitle)
         }
         
-        return .lastModified
+        return TracksSortModeHelper.getDefaultSortMode(for: currentFolder.getId())
     }
     
     private func getSearchTracksSortMode() -> TracksSortMode {

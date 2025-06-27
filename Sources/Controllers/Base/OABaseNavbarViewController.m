@@ -421,8 +421,8 @@
 
     UIImage *centerIcon = [self getCenterIconAboveTitle];
     CGFloat titleWidth = centerIcon
-        ? centerIcon.size.width
-        : [OAUtilities calculateTextBounds:[[NSAttributedString alloc] initWithString:self.title attributes:titleAttributes] width:freeSpaceForTitle].width;
+    ? centerIcon.size.width
+    : [OAUtilities calculateTextBounds:[[NSAttributedString alloc] initWithString:self.title ?: @"" attributes:titleAttributes] width:freeSpaceForTitle].width;
     freeSpaceForNavbarButton -= titleWidth;
     freeSpaceForNavbarButton /= 2;
     freeSpaceForNavbarButton -= 12.;

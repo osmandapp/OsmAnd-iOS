@@ -1022,3 +1022,8 @@
 "start_navigation" = "Pokreni navigaciju";
 "shared_string_next_event" = "Sljedeći događaj";
 "map_widget_sun_position_desc" = "Prikazuje vrijeme do izlaska ili zalaska sunca.";
+"shared_string_pause" = "Pauziraj";
+"gpx_direction_arrows" = "Strelice smjera";
+"preview_next_turn" = "Pregled sljedećeg skretanja";
+"track_show_start_finish_icons" = "Prikaži ikone početka i kraja";
+"poi_filter_fuel" = "Gorivo";

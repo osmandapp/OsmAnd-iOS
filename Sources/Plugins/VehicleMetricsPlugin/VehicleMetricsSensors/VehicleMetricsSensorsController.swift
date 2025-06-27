@@ -97,7 +97,8 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-        if DeviceHelper.shared.hasPairedDevicesOnlyOBD {
+
+        if DeviceHelper.shared.hasPairedDevices(ofType: .OBD_VEHICLE_METRICS) {
             configurePairedDevices()
         } else {
             configureNoPairedDevices()
@@ -105,7 +106,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     override func getTitleForHeader(_ section: Int) -> String? {
-        if DeviceHelper.shared.hasPairedDevicesOnlyOBD {
+        if DeviceHelper.shared.hasPairedDevices(ofType: .OBD_VEHICLE_METRICS) {
             switch section {
             case 0:
                 if let connected = sectionsDevicesData[.connected], !connected.isEmpty {
@@ -162,7 +163,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        DeviceHelper.shared.hasPairedDevicesOnlyOBD ? 30 : .leastNonzeroMagnitude
+        DeviceHelper.shared.hasPairedDevices(ofType: .OBD_VEHICLE_METRICS) ? 30 : .leastNonzeroMagnitude
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -204,7 +205,8 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     private func configureStartState() {
-        let hasPairedDevicesOnlyOBD = DeviceHelper.shared.hasPairedDevicesOnlyOBD
+        let hasPairedDevicesOnlyOBD = DeviceHelper.shared.hasPairedDevices(ofType: .OBD_VEHICLE_METRICS)
+
         pairNewSensorButton.isHidden = hasPairedDevicesOnlyOBD
         if !hasPairedDevicesOnlyOBD {
             tableView.sectionHeaderTopPadding = 0
@@ -236,7 +238,9 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
                                                queue: nil) { [weak self] _ in
             guard let self else { return }
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
-            guard DeviceHelper.shared.hasPairedDevicesOnlyOBD else { return }
+
+            guard DeviceHelper.shared.hasPairedDevices(ofType: .OBD_VEHICLE_METRICS) else { return }
+            
             configureStartState()
             reloadData()
         }
@@ -316,8 +320,9 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     private func configurePairedDevices() {
         sectionsDevicesData.removeAll()
-        if let pairedDevices = DeviceHelper.shared.getSettingsForPairedOnlyOBDDevices() {
-            let connectedDevices = DeviceHelper.shared.connectedOnlyOBDDevices
+
+        if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices(matching: .OBD_VEHICLE_METRICS) {
+            let connectedDevices = DeviceHelper.shared.connectedDevices(ofType: .OBD_VEHICLE_METRICS)
             
             if !connectedDevices.isEmpty {
                 let connectedSection = tableData.createNewSection()

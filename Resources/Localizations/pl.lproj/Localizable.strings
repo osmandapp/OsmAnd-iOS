@@ -3330,3 +3330,7 @@
 "sensor_data" = "Dane z czujników";
 "three_years_subscription" = "Trzyletnia subskrypcja";
 "osm_live_payment_renews_3_years" = "Odnawia się co trzy lata";
+"add_widget_below" = "Dodaj widżet poniżej";
+"add_widget_to_the_right" = "Dodaj widżet po prawej";
+"add_widget_to_the_left" = "Dodaj widżet po lewej";
+"add_widget_above" = "Dodaj widżet powyżej";

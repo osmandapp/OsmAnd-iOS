@@ -840,12 +840,10 @@ static const NSInteger kColorsSection = 1;
             [sensorActions addObject:action];
     }
     
-    UIMenu *noneMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[noneAction]];
-    UIMenu *sensorMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:sensorActions];
-    UIMenu *fixedHeightMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[fixedHeightAction]];
-    
     NSString *selectedTitle = visualizationTypes[@(visualization3dByType)];
-    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:@[noneMenu, sensorMenu, fixedHeightMenu]];
+    return [self createChevronMenu:OALocalizedString(selectedTitle)
+                            button:button
+                      menuElements:@[@[noneAction], sensorActions, @[fixedHeightAction]]];
 }
 
 - (UIMenu *)createWallColorMenuForCellButton:(UIButton *)button
@@ -881,16 +879,11 @@ static const NSInteger kColorsSection = 1;
     NSArray<NSNumber *> *colorTypes = @[@(EOAGPX3DLineVisualizationWallColorTypeSolid), @(EOAGPX3DLineVisualizationWallColorTypeDownwardGradient), @(EOAGPX3DLineVisualizationWallColorTypeUpwardGradient)];
     NSArray<NSNumber *> *dataTypes = @[@(EOAGPX3DLineVisualizationWallColorTypeAltitude), @(EOAGPX3DLineVisualizationWallColorTypeSlope), @(EOAGPX3DLineVisualizationWallColorTypeSpeed)];
     
-    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
-    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:noneTypes.firstObject]]]]];
-    
     NSMutableArray<UIAction *> *colorActions = [NSMutableArray array];
     for (NSNumber *type in colorTypes)
     {
         [colorActions addObject:[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:type]]];
     }
-    
-    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:colorActions]];
     
     NSMutableArray<UIAction *> *dataActions = [NSMutableArray array];
     for (NSNumber *type in dataTypes)
@@ -898,10 +891,10 @@ static const NSInteger kColorsSection = 1;
         [dataActions addObject:[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:type]]];
     }
     
-    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:dataActions]];
-    
     NSString *selectedTitle = wallColorTypes[@(visualization3dWallColorType)];
-    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:[menuElements copy]];
+    return [self createChevronMenu:OALocalizedString(selectedTitle)
+                            button:button
+                      menuElements:@[@[[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:noneTypes.firstObject]]], colorActions, dataActions]];
 }
 
 - (UIMenu *)createTrackLineMenuForCellButton:(UIButton *)button
@@ -939,14 +932,15 @@ static const NSInteger kColorsSection = 1;
     
     NSString *title = [menuElements[selectedIndex] title];
     
-    return [self createChevronMenu:title button:button menuElements:[menuElements copy]];
+    return [self createChevronMenu:title
+                            button:button
+                      menuElements:@[menuElements]];
 }
 
 - (UIMenu *)createColoringMenuForCellButton:(UIButton *)button
 {
     BOOL isRouteInfoAttribute = [_selectedItem.coloringType isRouteInfoAttribute];
     __weak __typeof(self) weakSelf = self;
-    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
     
     UIAction *solidColorAction = [UIAction actionWithTitle:OALocalizedString(@"track_coloring_solid", nil)
                                                      image:nil
@@ -955,8 +949,6 @@ static const NSInteger kColorsSection = 1;
         [weakSelf selectColorType:OAColoringType.TRACK_SOLID];
     }];
     solidColorAction.state = [_selectedItem.coloringType isTrackSolid] ? UIMenuElementStateOn : UIMenuElementStateOff;
-    UIMenu *solidColorMenu = [self inlineMenuWithActions:@[solidColorAction]];
-    [menuElements addObject:solidColorMenu];
 
     UIAction *altitudeAction = [UIAction actionWithTitle:OALocalizedString(@"altitude", nil)
                                                    image:nil
@@ -982,9 +974,6 @@ static const NSInteger kColorsSection = 1;
     }];
     slopeAction.state = [_selectedItem.coloringType isSlope] ? UIMenuElementStateOn : UIMenuElementStateOff;
 
-    UIMenu *gradientColorMenu = [self inlineMenuWithActions:@[altitudeAction, speedAction, slopeAction]];
-    [menuElements addObject:gradientColorMenu];
-
     NSMutableArray<UIAction *> *proColorActions = [NSMutableArray array];
     for (NSString *attribute in OASColoringType.routeStatisticsAttributesStrings)
     {
@@ -994,19 +983,10 @@ static const NSInteger kColorsSection = 1;
                                                 isRouteInfoAttribute:isRouteInfoAttribute];
         [proColorActions addObject:proAction];
     }
-    UIMenu *proColorMenu = [self inlineMenuWithActions:proColorActions];
-    [menuElements addObject:proColorMenu];
 
-    return [self createChevronMenu:_selectedItem.title button:button menuElements:[menuElements copy]];
-}
-
-- (UIMenu *)inlineMenuWithActions:(NSArray<UIMenuElement *> *)actions
-{
-    return [UIMenu menuWithTitle:@""
-                           image:nil
-                      identifier:nil
-                         options:UIMenuOptionsDisplayInline
-                        children:actions];
+    return [self createChevronMenu:_selectedItem.title
+                            button:button
+                      menuElements:@[@[solidColorAction], @[altitudeAction, speedAction, slopeAction], proColorActions]];
 }
 
 - (UIAction *)createProColorActionWithTitleKey:(NSString *)titleKey
@@ -1042,7 +1022,7 @@ static const NSInteger kColorsSection = 1;
 
 - (UIMenu *)createChevronMenu:(NSString *)title
                        button:(UIButton *)button
-                 menuElements:(NSArray<UIMenuElement *> *)menuElements
+                 menuElements:(NSArray<NSArray<UIMenuElement *> *> *)menuElements
 {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
     
@@ -1058,7 +1038,7 @@ static const NSInteger kColorsSection = 1;
     
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     
-    return [UIMenu menuWithChildren:menuElements];
+    return [UIMenu composedMenuFrom:menuElements];//[UIMenu menuWithChildren:menuElements];
 }
 
 - (BOOL)hasValidDataForKey:(NSString *)key

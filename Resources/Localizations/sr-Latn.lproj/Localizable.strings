@@ -3763,4 +3763,12 @@
 "vehicle_metrics_obd_ii" = "Metrika vozila (OBD-II)";
 "connect_obd_instructions_title" = "OsmAnd podržava Bluetooth veze sa OBD-II senzorima.";
 "obd_how_to_connect" = "Kako se povezati:";
-"connect_obd_instructions_step" = "1. Povežite skener sa OBD-II portom vašeg vozila.\n\n2. Uključite motor vašeg vozila\n\n3. Omogućite Bluetooth na svom uređaju";
+"connect_obd_instructions_step" = "1. Povežite skener sa OBD-II portom vašeg vozila.\n\n2. Uključite motor vašeg vozila\n\n3. Omogućite Bluetooth na svom uređaju\n\n4. Tapnite '%@' i izaberite skener sa liste.";
+"obd_bluetooth_off_description" = "Uključite Bluetooth da biste pronašli i povezali skenere.";
+"obd_searching_text_description" = "Držite uređaj blizu skenera. Uverite se da motor vozila radi.";
+"obd_searching_text" = "Pretraga skenera";
+"obd_nothing_found_text" = "Nisu pronađeni skeneri";
+"obd_nothing_found_description" = "Proverite sledeće:\n– Proverite da li je Bluetooth uključen\n– Motor vozila radi\n– Proverite da li je vaš uređaj u dometu skenera.";
+"obd_vin" = "VIN";
+"obd_vin_desc" = "VIN kod preko OBD-a";
+"obd_vehicle_info" = "Informacije o vozilu";

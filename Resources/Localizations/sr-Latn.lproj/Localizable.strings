@@ -3761,4 +3761,6 @@
 "purchase_feature_desc_vehicle_metrics_obd_ii" = "Pratite vitalne podatke o vozilu koristeći OBD-II protokol. Pratite ključne metrike kao što su brzina, broj obrtaja motora, potrošnja goriva i još mnogo toga.";
 "obd_plugin_description" = "Pratite ključne metrike vozila pomoću OBD-II protokola. Pristupni podaci uključujući:\n• Brzina motora, Vreme rada motora, Izračunato opterećenje motora\n• Potrošnja goriva, Pritisak goriva, Preostalo gorivo\n• Usisna temperatura, Temperatura okoline, Temperatura rashladne tečnosti, Temperatura motornog ulja\n• Brzina vozila, Položaj gasa, Napon baterije";
 "vehicle_metrics_obd_ii" = "Metrika vozila (OBD-II)";
-"connect_obd_instructions_title" = "OsmAnd podržava Bluetooth veze sa OBD-II skenerima.";
+"connect_obd_instructions_title" = "OsmAnd podržava Bluetooth veze sa OBD-II senzorima.";
+"obd_how_to_connect" = "Kako se povezati:";
+"connect_obd_instructions_step" = "1. Povežite skener sa OBD-II portom vašeg vozila.\n\n2. Uključite motor vašeg vozila\n\n3. Omogućite Bluetooth na svom uređaju";

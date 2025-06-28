@@ -3449,5 +3449,7 @@
 "routing_attr_allow_ferries_description" = "Tillåt färjerutter vid ruttplanering";
 "quick_action_showhide_coordinates_grid_descr" = "Åtgärd för att kontrollera Koordinat-rutnätets synlighet på kartan.";
 "layer_coordinates_grid" = "Koordinatrutnät";
-"original_color_description" = "Varje punkt skulle behålla dess egen färg.";
+"original_color_description" = "Varje punkt skulle behålla sin egen färg.";
 "original_icon_description" = "Varje punkt skulle behålla sin egen ikon.";
+"original_shape_description" = "Varje punkt skulle behålla sin egen form.";
+"map_widget_route_information_desc" = "Visar den beräknade ankomsttiden, återstående restiden och avståndet för nuvarande navigeringsrutt.";

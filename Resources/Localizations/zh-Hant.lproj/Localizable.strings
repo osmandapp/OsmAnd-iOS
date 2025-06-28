@@ -1431,7 +1431,7 @@
 "light_theme" = "明亮";
 "shared_string_max" = "最大";
 "routing_profile_direct_to" = "點對點";
-"shared_string_min" = "分鐘";
+"shared_string_min" = "最小";
 "shared_string_legend" = "圖例";
 "select_distance_route_will_recalc" = "選取要重新計算路徑的距離。";
 "add_to_a_track" = "新增到軌跡";

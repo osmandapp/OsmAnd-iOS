@@ -1438,7 +1438,7 @@
 "recalculate_route" = "Επαναυπολογισμός διαδρομής";
 "interrupt_music_descr" = "Η φωνή προτρέπει παύση της αναπαραγωγής της μουσικής.";
 "position_on_map_bottom" = "Κάτω μέρος";
-"rendering_attr_showMonorailRoutes_name" = "Δρομολόγια monorail";
+"rendering_attr_showMonorailRoutes_name" = "Δρομολόγια μονοτρόχιου σιδηρόδροµου";
 "are_you_sure" = "Είσαστε σίγουροι.";
 "shared_string_angle" = "Γωνία";
 "error_calculating_route" = "Αδυναμία υπολογισμού διαδρομής.";

@@ -159,7 +159,7 @@
 "choose_auto_follow_route_descr" = "Изчакване преди картата да се върне към текущата позиция.";
 "auto_zoom_map" = "Авто-мащабиране";
 "auto_zoom_map_descr" = "Увеличението е съобразено със скоростта (само при винаги видимо местоположение).";
-"snap_to_road" = "Придържай мястото към пътя";
+"snap_to_road" = "Придържане към пътя";
 "snap_to_road_descr" = "Иконата за позиция ще се придържа към текущия маршрут";
 "show_warnings_title" = "Показване на предупреждения…";
 "show_warnings_descr" = "Настройте предупреждения (ограничения на скоростта, знак „Стоп“, легнали полицаи, тунели), камери за контрол на скорост и информация за пътни ленти.";
@@ -203,7 +203,7 @@
 "calculate_osmand_route_without_internet" = "Изчисляване на OsmAnd сегмент от маршрута без Интернет";
 "routing_settings_2" = "Настройки на маршрутизиране";
 "impassable_road" = "Избягване на пътища…";
-"temporary_conditional_routing" = "Отчитане на временните ограничения";
+"temporary_conditional_routing" = "Отчитане на временни ограничения";
 "impassable_road_desc" = "Изберете пътищата, които да избегнете по време на маршрутизация.";
 "interrupt_music_descr" = "Прекъсване на музиката при гласови напътствия.";
 "interrupt_music" = "Прекъсване на музика";
@@ -271,7 +271,7 @@
 "si_mi_feet" = "Мили/фута";
 "si_mi_yard" = "Мили/ярда";
 "si_mi_meters" = "Мили / метри";
-"si_km_m" = "Километри/метри";
+"si_km_m" = "Километри / метри";
 "si_nm" = "Морски мили";
 "si_kmh" = "Километри в час";
 "si_mph" = "Мили в час";
@@ -633,7 +633,7 @@
 "ui_customization_short_descr" = "Елементи на странич. меню, контекстуално меню";
 "reorder_profiles" = "Промяна на списъка с профили";
 "profile_alert_need_profile_name_title" = "Въведете име на профила";
-"select_navigation_icon" = "Икона на позицията по време на движение";
+"select_navigation_icon" = "Икона по време на движение";
 "base_profile_descr_public_transport" = "Вид на обществения транспорт";
 "profile_prefs_reset_successful" = "Настройките на профила са нулирани.";
 "selected_profile" = "Избран профил";
@@ -1226,7 +1226,7 @@
 "routing_attr_width_name" = "Ширина";
 "rendering_attr_hmRendered_name" = "Повече подробности";
 "rendering_attr_roadColors_name" = "Цветова схема на пътищата";
-"width_limit_description" = "Задайте ширината на автомобила, по маршрута може да има ограничения за широки превозни средства.";
+"width_limit_description" = "Задайте ширината на превозното средство, по маршрута може да има ограничения за широки превозни средства.";
 "default_speed_dialog_msg" = "Изчислява времето за пристигане за непознати видове пътища и ограничава скоростта за всички пътища (може да повлияе на маршрута)";
 
 
@@ -1918,7 +1918,7 @@
 "calculate_online" = "Изчисляване онлайн";
 "add_button" = "Добавяне на бутон";
 "custom_buttons" = "Потребителски бутони";
-"route_recalculation_dist_title" = "Минимално разстояние до преизчисленият маршрут";
+"route_recalculation_dist_title" = "При отклонение";
 "default_buttons" = "Подразбирани бутони";
 "edit_tilesource_minzoom" = "Минимално увеличение";
 "shared_string_limit" = "Ограничение";
@@ -2201,3 +2201,34 @@
 "mapillary_action_descr" = "Споделете, какво виждате на улицата чрез Mapillary.";
 "shared_string_original" = "Оригинал";
 "us_gallons" = "Галони (САЩ)";
+"res_deleting" = "Премахване…";
+"osm_live_payment_renews_3_years" = "Подновяване на три години";
+"years_3" = "Три години";
+"three_years_subscription" = "Тригодишен абонамент";
+"sensor_data" = "Данни от сензор";
+"customize_grid_color" = "Избиране на цвят на решетката";
+"grid_color" = "Цвят на решетката";
+"shared_string_edges" = "По края";
+"labels_position" = "Място на етикетите";
+"routing_attr_allow_ferries_name" = "Допускане на фериботи";
+"routing_attr_allow_ferries_description" = "Допускане на маршрутизиране по маршрути с ферибот";
+"key_hint_zoom_out" = "Отдалечаване";
+"add_widget" = "Добавяне на приспособление";
+"add_widget_below" = "Добавяне отдолу";
+"add_widget_above" = "Добавяне отгоре";
+"add_widget_to_the_right" = "Добавяне отдясно";
+"add_widget_to_the_left" = "Добавяне отляво";
+"map_during_navigation" = "Картата при маршрутизиране";
+"help_article_navigation_routing_name" = "Настройки на маршрутизацията";
+"route_parameters" = "Настройки на маршрутизацията";
+"height_limit_description" = "Задайте височината на превозното средство, по маршрута може да има ограничения за високи превозни средства.";
+"weight_limit_description" = "Задайте масата на превозното средство, по маршрута може да има ограничения за тежки превозни средства.";
+"lenght_limit_description" = "Задайте дължината на превозното средство, по маршрута може да има ограничения за дълги превозни средства.";
+"screen_alerts" = "Предупреждения на екрана";
+"dialogs_and_notifications_title" = "Диалози и известия";
+"dialogs_and_notifications_descr" = "Управление на изскачащи прозорци, диалози и известия.";
+"download_map_dialog" = "Диалог за изтегляне на карти";
+"select_map_icon" = "Икона по време на покой";
+"select_color" = "Избиране на цвят";
+"personal_category_name" = "Лични";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "Мрежа от възлите на велосипедните маршрути";

@@ -310,7 +310,7 @@
 "auto_follow_location_enabled" = "自动将使用中的地图视图置中。";
 "unknown_location" = "位置尚不清楚。";
 "unit_of_length" = "长度单位";
-"unit_of_length_descr" = "改变测量的距离。";
+"unit_of_length_descr" = "更改距离的测量单位。";
 "coords_format" = "坐标格式";
 "coords_format_descr" = "地理坐标的格式。";
 "rotate_map_to" = "地图方位";
@@ -362,7 +362,7 @@
 "left_side_navigation" = "靠左行驶";
 "search_nearby" = "在附近搜索";
 "cancel_navigation" = "停止导航";
-"shared_string_search" = "搜索";
+"shared_string_search" = "查找";
 "search_radius" = "搜索半径";
 "simulate_your_location" = "模拟您的位置";
 "animate_routing_route_not_calculated" = "请先计算路线";
@@ -1508,7 +1508,7 @@
 "rendering_attr_showLightRailRoutes_name" = "轻轨线路";
 "verify_email_address_descr" = "验证码已发送至 %@。请在下方字段输入它。";
 "segments_count" = "路段 %d";
-"altitude" = "海拔";
+"altitude" = "海拔高度";
 "backup_error_token_is_not_valid" = "所提供的设备 ID 或令牌有问题";
 "reorder_profiles" = "编辑配置文件列表";
 "backup_error_gzip_only_supported_upload" = "该文件应以 .gzip 格式发送";

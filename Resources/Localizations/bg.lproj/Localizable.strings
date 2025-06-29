@@ -203,7 +203,7 @@
 "calculate_osmand_route_without_internet" = "Изчисляване на OsmAnd сегмент от маршрута без Интернет";
 "routing_settings_2" = "Настройки на маршрутизиране";
 "impassable_road" = "Избягване на пътища…";
-"temporary_conditional_routing" = "Отчитане на временните ограничения";
+"temporary_conditional_routing" = "Отчитане на временни ограничения";
 "impassable_road_desc" = "Изберете пътищата, които да избегнете по време на маршрутизация.";
 "interrupt_music_descr" = "Прекъсване на музиката при гласови напътствия.";
 "interrupt_music" = "Прекъсване на музика";
@@ -271,7 +271,7 @@
 "si_mi_feet" = "Мили/фута";
 "si_mi_yard" = "Мили/ярда";
 "si_mi_meters" = "Мили / метри";
-"si_km_m" = "Километри/метри";
+"si_km_m" = "Километри / метри";
 "si_nm" = "Морски мили";
 "si_kmh" = "Километри в час";
 "si_mph" = "Мили в час";
@@ -1226,7 +1226,7 @@
 "routing_attr_width_name" = "Ширина";
 "rendering_attr_hmRendered_name" = "Повече подробности";
 "rendering_attr_roadColors_name" = "Цветова схема на пътищата";
-"width_limit_description" = "Задайте ширината на автомобила, по маршрута може да има ограничения за широки превозни средства.";
+"width_limit_description" = "Задайте ширината на превозното средство, по маршрута може да има ограничения за широки превозни средства.";
 "default_speed_dialog_msg" = "Изчислява времето за пристигане за непознати видове пътища и ограничава скоростта за всички пътища (може да повлияе на маршрута)";
 
 
@@ -1918,7 +1918,7 @@
 "calculate_online" = "Изчисляване онлайн";
 "add_button" = "Добавяне на бутон";
 "custom_buttons" = "Потребителски бутони";
-"route_recalculation_dist_title" = "Минимално разстояние до преизчисленият маршрут";
+"route_recalculation_dist_title" = "При отклонение";
 "default_buttons" = "Подразбирани бутони";
 "edit_tilesource_minzoom" = "Минимално увеличение";
 "shared_string_limit" = "Ограничение";
@@ -2219,4 +2219,11 @@
 "add_widget_to_the_right" = "Добавяне отдясно";
 "add_widget_to_the_left" = "Добавяне отляво";
 "map_during_navigation" = "Картата при маршрутизиране";
-"help_article_navigation_routing_name" = "Настройни на маршрутизацията";
+"help_article_navigation_routing_name" = "Настройки на маршрутизацията";
+"route_parameters" = "Настройки на маршрутизацията";
+"height_limit_description" = "Задайте височината на превозното средство, по маршрута може да има ограничения за високи превозни средства.";
+"weight_limit_description" = "Задайте масата на превозното средство, по маршрута може да има ограничения за тежки превозни средства.";
+"lenght_limit_description" = "Задайте дължината на превозното средство, по маршрута може да има ограничения за дълги превозни средства.";
+"screen_alerts" = "Предупреждения на екрана";
+"dialogs_and_notifications_title" = "Диалози и извстия";
+"dialogs_and_notifications_descr" = "Управление на изскачащи прозорци, диалози и известия";

@@ -633,7 +633,7 @@
 "ui_customization_short_descr" = "Елементи на странич. меню, контекстуално меню";
 "reorder_profiles" = "Промяна на списъка с профили";
 "profile_alert_need_profile_name_title" = "Въведете име на профила";
-"select_navigation_icon" = "Икона на позицията по време на движение";
+"select_navigation_icon" = "Икона по време на движение";
 "base_profile_descr_public_transport" = "Вид на обществения транспорт";
 "profile_prefs_reset_successful" = "Настройките на профила са нулирани.";
 "selected_profile" = "Избран профил";
@@ -2225,5 +2225,10 @@
 "weight_limit_description" = "Задайте масата на превозното средство, по маршрута може да има ограничения за тежки превозни средства.";
 "lenght_limit_description" = "Задайте дължината на превозното средство, по маршрута може да има ограничения за дълги превозни средства.";
 "screen_alerts" = "Предупреждения на екрана";
-"dialogs_and_notifications_title" = "Диалози и извстия";
-"dialogs_and_notifications_descr" = "Управление на изскачащи прозорци, диалози и известия";
+"dialogs_and_notifications_title" = "Диалози и известия";
+"dialogs_and_notifications_descr" = "Управление на изскачащи прозорци, диалози и известия.";
+"download_map_dialog" = "Диалог за изтегляне на карти";
+"select_map_icon" = "Икона по време на покой";
+"select_color" = "Избиране на цвят";
+"personal_category_name" = "Лични";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "Мрежа от възлите на велосипедните маршрути";

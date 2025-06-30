@@ -1038,7 +1038,7 @@ static const NSInteger kColorsSection = 1;
     
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     
-    return [UIMenu composedMenuFrom:menuElements];//[UIMenu menuWithChildren:menuElements];
+    return [UIMenu composedMenuFrom:menuElements];
 }
 
 - (BOOL)hasValidDataForKey:(NSString *)key

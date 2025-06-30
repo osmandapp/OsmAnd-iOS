@@ -40,3 +40,8 @@ extension PointAttributes {
     static let GPXTPX_PREFIX = "gpxtpx:"
     static let OSMAND_EXTENSIONS_PREFIX = "osmand:"
 }
+
+@objc(OASColoringType)
+extension ColoringType {
+    static let routeStatisticsAttributesStrings = ["routeInfo_roadClass", "routeInfo_surface", "routeInfo_smoothness", "routeInfo_winter_ice_road", "routeInfo_tracktype", "routeInfo_horse_scale"]
+}

@@ -6,13 +6,13 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 #define kNextTurnInfoWidgetHeight 112
 
-@interface OANextTurnWidget : OATextInfoWidget
+@interface OANextTurnWidget : OASimpleWidget
 
 - (instancetype)initWithHorisontalMini:(BOOL)horisontalMini
                               nextNext:(BOOL)nextNext

@@ -210,7 +210,7 @@ final class RouteInfoWidget: OASimpleWidget {
         
         applySuitableTextFont()
         
-        updateHeightConstraint(with: .equal, constant: widgetHeight, priority: .defaultHigh)
+        updateHeightConstraint(with: .equal, constant: WidgetSizeStyleObjWrapper.getMaxWidgetHeightFor(type: widgetSizeStyle), priority: .defaultHigh)
         updatePrimaryBlockWith(destinationInfo: cachedRouteInfo.first, displayValues: orderedDisplayValues)
         updateSecondaryBlockWith(destinationInfo: cachedRouteInfo.count > 1 ? cachedRouteInfo[1] : nil, displayValues: orderedDisplayValues)
         isForceUpdate = false
@@ -457,15 +457,6 @@ extension RouteInfoWidget {
         switch widgetSizeStyle {
         case .small, .medium: 14
         case .large: 16
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
-    }
-    
-    private var widgetHeight: CGFloat {
-        switch widgetSizeStyle {
-        case .small: 48
-        case .medium: 72
-        case .large: 96
         @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
         }
     }

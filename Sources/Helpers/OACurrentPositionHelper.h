@@ -44,5 +44,8 @@ typedef BOOL(^OARoadResultMatcherIsCancelled)();
 + (double) getOrthogonalDistance:(std::shared_ptr<RouteDataObject>) r loc:(CLLocation *)loc;
 - (std::shared_ptr<RouteDataObject>) getLastKnownRouteSegment:(CLLocation *)loc;
 - (void) getRouteSegment:(CLLocation *)loc appMode:(OAApplicationMode *)appMode matcher:(OARoadResultMatcher *)matcher;
+- (NSString *)getRoadName:(CLLocation *)lastKnownLocation;
+- (NSString *)getRoadRef:(CLLocation *)lastKnownLocation;
+- (NSString *)getDestinationName:(CLLocation *)lastKnownLocation;
 
 @end

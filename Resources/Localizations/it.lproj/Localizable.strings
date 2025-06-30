@@ -3619,7 +3619,7 @@
 "terrain_map" = "Mappa terreno (3D)";
 "no_photos_available_descr" = "Nessuna foto è stata ancora aggiunta dagli utenti per questa posizione";
 "download_successful" = "Immagine scaricata nei Documenti/Download.";
-"sensor_data" = "Dati sensore";
+"sensor_data" = "Dati dei sensori";
 "sensor_data_settings_description" = "Mostra i dati principali dal sensore";
 "battery_level_settings_description" = "Mostra come valore principale il sensore di basso livello della batteria";
 "shared_string_date" = "Data";
@@ -3686,3 +3686,4 @@
 "display_priority" = "Priorità del display";
 "three_months_subscription" = "Sottoscrizione trimestrale";
 "destination_first" = "Destinazione prima";
+"ios_release_5_1" = "Aggiunto il supporto per acquisti via web e multi-piattaforma\nIstruzioni di navigazione e freccia per le svolte ora sono uniti con widget di navigazione\nAggiunta un'azione di rinominazione per i gruppi preferiti\nAggiunte opzioni per Unità di Volume e Capacità del serbatoio\nAggiunta una sovrapposizione per una griglia delle coordinate\nI widget nei pannelli a destra e sinistra adesso includono un'opzione per l'altezza\nAggiuntà l'opzione per assegnare attività ai tracciati\nRiparato un crash con Apple CarPlay su iOS 15\nProblemi di ridimensionamento automatico con i widget dei pannelli laterali sono stati riparati\nL'incompatibilità delle guide di viaggio sono state riparate\nIl problema con acquisti multi-piattaforma è stato riparato\nRiparato il problema dello schermo nero su CarPlay all'avvio.\n";

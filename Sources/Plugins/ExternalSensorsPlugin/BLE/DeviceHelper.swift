@@ -253,10 +253,10 @@ extension DeviceHelper {
             return
         }
         connectedDevices.append(device)
-        if let discoveredDevice = BLEManager.shared.discoveredDevices.first(where: { $0.id == device.id }) {
+        if let discoveredDevice = BLEManager.shared.discoveredDevices.first(where: { $0.id == device.id && $0.deviceType != .OBD_VEHICLE_METRICS }) {
             discoveredDevice.notifyRSSI()
         }
-        if let connectedDevice = connectedDevices.first(where: { $0.id == device.id }) {
+        if let connectedDevice = connectedDevices.first(where: { $0.id == device.id && $0.deviceType != .OBD_VEHICLE_METRICS }) {
             connectedDevice.notifyRSSI()
         }
     }

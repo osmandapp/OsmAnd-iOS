@@ -1442,6 +1442,8 @@
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "ltr_or_rtl_combine_via_of" = "%ld of %ld";
+"ltr_or_rtl_combine_via_per" = "%@ per %@";
+"ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 
 "of" = "%d of %d";
 "downloaded_bytes" = "%@ of %@";
@@ -3921,6 +3923,32 @@
 "map_widget_glide_average_desc" = "Shows the average glide ratio for the set interval.";
 "map_widget_glide_target_desc" = "Shows the glide ratio needed to reach the target point.";
 "map_widget_group_glide_ratio" = "Glide ratio";
+"obd_widget_vehicle_speed" = "Vehicle speed";
+"obd_speed_desc" = "Shows speed from the Vehicle Speed Sensor (VSS).";
+"obd_widget_engine_speed" = "Engine speed";
+"obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";
+"obd_engine_runtime" = "Engine Runtime";
+"obd_engine_runtime_desc" = "Shows shows how long the engine has been running since it was started.";
+"obd_fuel_pressure" = "Fuel pressure";
+"obd_fuel_pressure_desc" = "Shows the pressure within the fuel system";
+"obd_air_intake_temp" = "Intake temperature";
+"obd_air_intake_temp_desc" = "Shows the temperature of the air entering the engine intake manifold.";
+"obd_engine_oil_temperature" = "Engine Oil Temperature";
+"obd_engine_oil_temperature_desc" = "Shows the temperature of the engine oil.";
+"obd_ambient_air_temp" = "Ambient temperature";
+"obd_ambient_air_temp_desc" = "Shows the temperature outside the vehicle.";
+"obd_battery_voltage" = "Battery voltage";
+"obd_battery_voltage_desc" = "Shows the voltage level of the vehicle\'s battery";
+"obd_engine_coolant_temp" = "Coolant temperature";
+"obd_engine_coolant_temp_desc" = "Shows the temperature of the engine’s coolant";
+"remaining_fuel" = "Remaining fuel";
+"remaining_fuel_description" = "Shows the amount of fuel left in the vehicle\'s tank";
+"obd_calculated_engine_load" = "Calculated Engine Load";
+"obd_calculated_engine_load_desc" = "Shows the percentage of the engine’s available power being used at a given moment.";
+"obd_throttle_position" = "Throttle Position";
+"obd_throttle_position_desc" = "Shows the angle of the throttle plate in the throttle body.";
+"obd_fuel_consumption" = "Fuel consumption";
+"obd_fuel_consumption_desc" = "Shows the rate of fuel usage by the engine, calculated based on remaining fuel, tank size, and distance covered as determined by GPS.";
 "map_widget_group_glide_desc" = "Widgets show the glide ratio to the target or average glide ratio for the current trip.";
 "target_elevation" = "Target elevation";
 "average_glide_ratio_time_interval_desc" = "Shows the average glide ratio or vertical speed for the set interval.";
@@ -4166,6 +4194,14 @@
 "remaining_fuel" = "Remaining fuel";
 "obd_fuel_consumption_desc" = "Shows the rate of fuel usage by the engine, calculated based on remaining fuel, tank size, and distance covered as determined by GPS.";
 "obd_fuel_consumption" = "Fuel consumption";
+
+"reset_average_value" = "Reset average value";
+"current_temperature" = "Current temperature";
+"average_temperature" = "Average temperature";
+"shared_string_instant" = "Instant";
+"average" = "Average";
+"shared_string_hour" = "Hour";
+"shared_string_volume" = "Volume";
 
 "rpm_unit" = "rpm";
 "obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";

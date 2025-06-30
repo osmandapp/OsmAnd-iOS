@@ -551,7 +551,6 @@
 		4613BFAD2A93DECC004385FB /* ic_custom_screen_side_bottom_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BFA52A93DECC004385FB /* ic_custom_screen_side_bottom_48@3x.png */; };
 		4617129E2B973C34000446F9 /* GlideUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4617129D2B973C34000446F9 /* GlideUtils.swift */; };
 		4619604B2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4619604A2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift */; };
-		461A3F0029F6A62C008EE079 /* OATrackColoringTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */; };
 		461A3F0429F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */; };
 		461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */; };
 		461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */; };
@@ -4010,8 +4009,6 @@
 		4613BFA52A93DECC004385FB /* ic_custom_screen_side_bottom_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_bottom_48@3x.png"; path = "Resources/Icons/ic_custom_screen_side_bottom_48@3x.png"; sourceTree = "<group>"; };
 		4617129D2B973C34000446F9 /* GlideUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideUtils.swift; sourceTree = "<group>"; };
 		4619604A2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalSettingsWriteToTrackSettingsViewController.swift; sourceTree = "<group>"; };
-		461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATrackColoringTypeViewController.h; sourceTree = "<group>"; };
-		461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATrackColoringTypeViewController.m; sourceTree = "<group>"; };
 		461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACollectionSingleLineTableViewCell.xib; sourceTree = "<group>"; };
 		461A3F0529F6E29C008EE079 /* OACollectionSingleLineTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollectionSingleLineTableViewCell.h; sourceTree = "<group>"; };
 		461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACollectionSingleLineTableViewCell.m; sourceTree = "<group>"; };
@@ -7950,7 +7947,6 @@
 		0AC993FB26E903E50004181F /* TrackMenu */ = {
 			isa = PBXGroup;
 			children = (
-				468CE3EE29F82DE100F3C3E5 /* Appearance */,
 				0A1051D12731A30200BDF6C4 /* MenuBuilder */,
 				B0D6129A27B65E33BA711114 /* OAAddWaypointViewController.h */,
 				B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */,
@@ -9599,15 +9595,6 @@
 				2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */,
 			);
 			path = Handlers;
-			sourceTree = "<group>";
-		};
-		468CE3EE29F82DE100F3C3E5 /* Appearance */ = {
-			isa = PBXGroup;
-			children = (
-				461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */,
-				461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */,
-			);
-			path = Appearance;
 			sourceTree = "<group>";
 		};
 		468D9C6A2C00FDF100ED368A /* Buttons */ = {
@@ -17775,7 +17762,6 @@
 				CA4ED6AAA32538E21DD77883 /* OASettingsBackupViewController.mm in Sources */,
 				46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */,
 				CA4EDCD4B8149095B74FD700 /* OACloudAccountLogoutViewController.mm in Sources */,
-				461A3F0029F6A62C008EE079 /* OATrackColoringTypeViewController.m in Sources */,
 				CA4EDBFDA7FC431D027A815E /* OADeleteAllVersionsBackupViewController.mm in Sources */,
 				FAA6505B2ADD42C50020DCEA /* Device.swift in Sources */,
 				CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */,

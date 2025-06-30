@@ -75,5 +75,4 @@ final class OBDVehicleMetricsDevice: Device {
     override func notifyRSSI() { }
     
     override func disableRSSI() { }
-    
 }

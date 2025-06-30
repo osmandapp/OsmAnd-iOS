@@ -121,8 +121,6 @@
         
         return byteCount;
     }
-
-    return 0;
 }
 
 - (nonnull OASOkioTimeout *)timeout

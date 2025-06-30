@@ -52,7 +52,7 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 static NSString * const C_SET_METRICS = @"setMetricConst";
 static NSString * const C_SET_MODE = @"setMode";
 
-- (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player voiceProvider:(NSString *)voiceProvider
+- (nullable instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player voiceProvider:(NSString *)voiceProvider
 {
     self = [super init];
     if (self)
@@ -63,7 +63,7 @@ static NSString * const C_SET_MODE = @"setMode";
         NSString *resourceName = [NSString stringWithFormat:@"%@%@", voiceProvider, @"_tts"];
         NSString *jsPath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"js"];
         
-        if (jsPath == nil)
+        if (!jsPath)
             return nil;
         
         JSVirtualMachine *jsvm = [[JSVirtualMachine alloc] init];

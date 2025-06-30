@@ -63,19 +63,33 @@
 
 - (void)playCommands:(OACommandBuilder *)builder
 {
-    if ([_vrt isMute] || _isInterrupted)
+    if ([_vrt isMute])
         return;
     
+    if (_isInterrupted)
+    {
+        NSLog(@"[OATTSCommandPlayerImpl] Cannot play commands: Audio session is currently interrupted.");
+        return;
+    }
+    
+    NSError *categoryError = nil;
     BOOL categorySet = [_audioSession setCategory:AVAudioSessionCategoryPlayback
                                              mode:AVAudioSessionModeVoicePrompt
                                           options:AVAudioSessionCategoryOptionDuckOthers
-                                            error:nil];
+                                            error:&categoryError];
     if (!categorySet)
+    {
+        NSLog(@"[OATTSCommandPlayerImpl] Error setting audio session category: %@", categoryError.localizedDescription);
         return;
+    }
     
-    BOOL activated = [_audioSession setActive:YES error:nil];
+    NSError *activationError = nil;
+    BOOL activated = [_audioSession setActive:YES error:&activationError];
     if (!activated)
+    {
+        NSLog(@"[OATTSCommandPlayerImpl] Error activating audio session: %@", activationError.localizedDescription);
         return;
+    }
     
     NSMutableString *toSpeak = [[NSMutableString alloc] init];
     NSArray<NSString *> *uterrances = [builder getUtterances];
@@ -121,7 +135,12 @@
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance
 {
     if (!_isInterrupted)
-        [_audioSession setActive:NO error:nil];
+    {
+        NSError *error = nil;
+        [_audioSession setActive:NO error:&error];
+        if (error)
+            NSLog(@"[OATTSCommandPlayerImpl] Error deactivating audio session: %@", error.localizedDescription);
+    }
 }
 
 - (BOOL)supportsStructuredStreetNames
@@ -150,7 +169,14 @@
         AVAudioSessionInterruptionOptions options = [info[AVAudioSessionInterruptionOptionKey] unsignedIntegerValue];
         _isInterrupted = NO;
         if (options == AVAudioSessionInterruptionOptionShouldResume)
-            [_audioSession setActive:YES error:nil];
+        {
+            NSError *error = nil;
+            BOOL activated = [_audioSession setActive:YES error:&error];
+            if (!activated)
+                NSLog(@"[OATTSCommandPlayerImpl] Error reactivating audio session: %@", error.localizedDescription);
+            else
+                NSLog(@"[OATTSCommandPlayerImpl] Audio session reactivated successfully.");
+        }
     }
 }
 

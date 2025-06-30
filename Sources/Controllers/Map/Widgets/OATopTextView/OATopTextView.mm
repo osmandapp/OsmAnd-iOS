@@ -36,6 +36,7 @@
 #import "OANativeUtilities.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAStreetNameWidgetParams.h"
 
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/MapStyleEvaluator.h>
@@ -86,7 +87,6 @@
     std::shared_ptr<const OsmAnd::TextRasterizer> _textRasterizer;
     OACurrentStreetName *_prevStreetName;
     NSArray<RoadShield *> *cachedRoadShields;
-    NSString *_roadShieldName;
     
     UIFont *_textFont;
     UIFont *_textWaypointFont;
@@ -504,58 +504,9 @@ static int stackViewLeadingToRefViewPadding = 16;
 {
     OACurrentStreetName *streetName = nil;
     BOOL showClosestWaypointFirstInAddress = YES;
-    if ([_routingHelper isRouteCalculated] && ![OARoutingHelper isDeviatedFromRoute])
-    {
-        if ([_routingHelper isFollowingMode])
-        {
-            OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
-            streetName = [_routingHelper getCurrentName:nextDirInfo];
-            _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
-        }
-        else
-        {
-            int di = [OARouteInfoView getDirectionInfo];
-            if (di >= 0 && [OARouteInfoView isVisible] && di < [_routingHelper getRouteDirections].count)
-            {
-                showClosestWaypointFirstInAddress = NO;
-                streetName = [_routingHelper getCurrentName:[_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES]];
-                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
-            }
-        }
-    }
-    else if ([_trackingUtilities isMapLinkedToLocation])
-    {
-        streetName = [[OACurrentStreetName alloc] init];
-        CLLocation *lastKnownLocation = _locationProvider.lastKnownLocation;
-        std::shared_ptr<RouteDataObject> road;
-        if (lastKnownLocation)
-        {
-            road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
-            if (road)
-            {
-                string lang = _settings.settingPrefMapLanguage.get ? _settings.settingPrefMapLanguage.get.UTF8String : "";
-                bool transliterate = _settings.settingMapLanguageTranslit.get;
-
-                string rStreetName = road->getName(lang, transliterate);
-                string rRefName = road->getRef(lang, transliterate, road->bearingVsRouteDirection(lastKnownLocation.course));
-                string rDestinationName = road->getDestinationName(lang, transliterate, true);
-                
-                NSString *strtName = [NSString stringWithUTF8String:rStreetName.c_str()];
-                NSString *refName = [NSString stringWithUTF8String:rRefName.c_str()];
-                NSString *destinationName = [NSString stringWithUTF8String:rDestinationName.c_str()];
-
-                streetName.text = [OARoutingHelperUtils formatStreetName:strtName ref:refName destination:destinationName towards:@"»"];
-            }
-            if (streetName.text.length > 0 && road)
-            {
-                double dist = [OACurrentPositionHelper getOrthogonalDistance:road loc:lastKnownLocation];
-                if (dist < 50)
-                    streetName.showMarker = YES;
-                else
-                    streetName.text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_near"), streetName.text];
-            }
-        }
-    }
+    OAStreetNameWidgetParams *params = [[OAStreetNameWidgetParams alloc] initWithTurnDrawable:_turnDrawable calc1:_calc1];
+    streetName = params.streetName;
+    showClosestWaypointFirstInAddress = params.showClosestWaypointFirstInAddress;
     
     //Change several shields to one
     if (streetName.shields.count > 1)
@@ -777,11 +728,9 @@ static int stackViewLeadingToRefViewPadding = 16;
     if (textImage)
     {
         view.image = [OANativeUtilities skImageToUIImage:textImage];
-        _roadShieldName = name;
         return YES;
     }
 
-    _roadShieldName = nil;
     return NO;
 }
 

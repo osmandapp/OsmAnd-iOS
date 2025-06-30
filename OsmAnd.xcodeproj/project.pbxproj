@@ -215,6 +215,9 @@
 		2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */; };
 		2717D3D22DC8D8A600B7BD22 /* BaseAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */; };
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
+		274C43F12DEDBA7100585952 /* OANextTurnWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */; };
+		27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */; };
+		27E3C2032DF1ADD40053958E /* OAStreetNameWidgetParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = 27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */; };
 		27F050912DD38E310058075F /* RouteInfoDisplayPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */; };
 		27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508F2DD38E310058075F /* RouteInfoWidget.swift */; };
 		27F050932DD38E310058075F /* RouteInfoDisplayValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508E2DD38E310058075F /* RouteInfoDisplayValue.swift */; };
@@ -551,7 +554,6 @@
 		4613BFAD2A93DECC004385FB /* ic_custom_screen_side_bottom_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BFA52A93DECC004385FB /* ic_custom_screen_side_bottom_48@3x.png */; };
 		4617129E2B973C34000446F9 /* GlideUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4617129D2B973C34000446F9 /* GlideUtils.swift */; };
 		4619604B2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4619604A2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift */; };
-		461A3F0029F6A62C008EE079 /* OATrackColoringTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */; };
 		461A3F0429F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */; };
 		461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */; };
 		461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */; };
@@ -1415,6 +1417,9 @@
 		C5B2AA612DB00700007FB854 /* GridFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2AA602DB00700007FB854 /* GridFormat.swift */; };
 		C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */; };
 		C5B4AE5E2B1F51740019F357 /* MenuHelpDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */; };
+		C5BC8DD52E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */; };
+		C5BC8DD72E0408D400CF0815 /* OBDRemainingFuelWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */; };
+		C5C9BB912DF9A087003B7550 /* OBDTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */; };
 		C5CD4CF029EFE6AC00B35C3D /* ic_navbar_trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */; };
 		C5CD4CF129EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */; };
 		C5CD4CF229EFE6AC00B35C3D /* ic_navbar_trash@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEE29EFE6AB00B35C3D /* ic_navbar_trash@3x.png */; };
@@ -3547,6 +3552,10 @@
 		2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesCollectionHandler.swift; sourceTree = "<group>"; };
 		2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceCategory.swift; sourceTree = "<group>"; };
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
+		274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OANextTurnWidget.xib; sourceTree = "<group>"; };
+		27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NextTurnWidget+Extension.swift"; sourceTree = "<group>"; };
+		27E3C1FF2DF1AD340053958E /* OAStreetNameWidgetParams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStreetNameWidgetParams.h; sourceTree = "<group>"; };
+		27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreetNameWidgetParams.mm; sourceTree = "<group>"; };
 		27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayPriority.swift; sourceTree = "<group>"; };
 		27F0508E2DD38E310058075F /* RouteInfoDisplayValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayValue.swift; sourceTree = "<group>"; };
 		27F0508F2DD38E310058075F /* RouteInfoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidget.swift; sourceTree = "<group>"; };
@@ -4012,8 +4021,6 @@
 		4613BFA52A93DECC004385FB /* ic_custom_screen_side_bottom_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_bottom_48@3x.png"; path = "Resources/Icons/ic_custom_screen_side_bottom_48@3x.png"; sourceTree = "<group>"; };
 		4617129D2B973C34000446F9 /* GlideUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideUtils.swift; sourceTree = "<group>"; };
 		4619604A2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalSettingsWriteToTrackSettingsViewController.swift; sourceTree = "<group>"; };
-		461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATrackColoringTypeViewController.h; sourceTree = "<group>"; };
-		461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATrackColoringTypeViewController.m; sourceTree = "<group>"; };
 		461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACollectionSingleLineTableViewCell.xib; sourceTree = "<group>"; };
 		461A3F0529F6E29C008EE079 /* OACollectionSingleLineTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollectionSingleLineTableViewCell.h; sourceTree = "<group>"; };
 		461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACollectionSingleLineTableViewCell.m; sourceTree = "<group>"; };
@@ -5117,6 +5124,9 @@
 		C5B2AA602DB00700007FB854 /* GridFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridFormat.swift; sourceTree = "<group>"; };
 		C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpDetailsViewController.swift; sourceTree = "<group>"; };
 		C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHelpDataService.swift; sourceTree = "<group>"; };
+		C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDFuelConsumptionWidget.swift; sourceTree = "<group>"; };
+		C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDRemainingFuelWidget.swift; sourceTree = "<group>"; };
+		C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDTextWidget.swift; sourceTree = "<group>"; };
 		C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@2x.png"; path = "Resources/Icons/ic_navbar_trash@2x.png"; sourceTree = "<group>"; };
 		C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_upload_to_openstreetmap_outlined@3x.png"; path = "Resources/Icons/ic_navbar_upload_to_openstreetmap_outlined@3x.png"; sourceTree = "<group>"; };
 		C5CD4CEE29EFE6AB00B35C3D /* ic_navbar_trash@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@3x.png"; path = "Resources/Icons/ic_navbar_trash@3x.png"; sourceTree = "<group>"; };
@@ -7954,7 +7964,6 @@
 		0AC993FB26E903E50004181F /* TrackMenu */ = {
 			isa = PBXGroup;
 			children = (
-				468CE3EE29F82DE100F3C3E5 /* Appearance */,
 				0A1051D12731A30200BDF6C4 /* MenuBuilder */,
 				B0D6129A27B65E33BA711114 /* OAAddWaypointViewController.h */,
 				B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */,
@@ -7981,6 +7990,17 @@
 				3233B36B29EEBA060056793F /* OATrackMenuHudViewControllerConstants.h */,
 			);
 			path = TrackMenu;
+			sourceTree = "<group>";
+		};
+		27E3C1FC2DF0A0350053958E /* OATopTextView */ = {
+			isa = PBXGroup;
+			children = (
+				27E3C1FF2DF1AD340053958E /* OAStreetNameWidgetParams.h */,
+				27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */,
+				DA5A7F4626C563A400F274C7 /* OATopTextView.h */,
+				DA5A7F3B26C563A400F274C7 /* OATopTextView.mm */,
+			);
+			path = OATopTextView;
 			sourceTree = "<group>";
 		};
 		27F050902DD38E310058075F /* RouteInfo */ = {
@@ -9603,15 +9623,6 @@
 				2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */,
 			);
 			path = Handlers;
-			sourceTree = "<group>";
-		};
-		468CE3EE29F82DE100F3C3E5 /* Appearance */ = {
-			isa = PBXGroup;
-			children = (
-				461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */,
-				461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */,
-			);
-			path = Appearance;
 			sourceTree = "<group>";
 		};
 		468D9C6A2C00FDF100ED368A /* Buttons */ = {
@@ -12684,6 +12695,7 @@
 				DA5A7F2326C563A400F274C7 /* OAMapWidgetRegistry.mm */,
 				DA5A7F3126C563A400F274C7 /* OANextTurnWidget.h */,
 				DA5A7F3526C563A400F274C7 /* OANextTurnWidget.mm */,
+				27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */,
 				DA5A7F2826C563A400F274C7 /* OARulerWidget.h */,
 				DA5A7F2B26C563A400F274C7 /* OARulerWidget.mm */,
 				464CE4252B56C8D9001F4DAE /* OASimpleWidget.h */,
@@ -12695,8 +12707,7 @@
 				DA5A7F2C26C563A400F274C7 /* OATextInfoWidget.h */,
 				DA5A7F2126C563A400F274C7 /* OATextInfoWidget.mm */,
 				FA2778262B67B5F200D65926 /* TextInfoWidget+Extension.swift */,
-				DA5A7F4626C563A400F274C7 /* OATopTextView.h */,
-				DA5A7F3B26C563A400F274C7 /* OATopTextView.mm */,
+				27E3C1FC2DF0A0350053958E /* OATopTextView */,
 				DA5A7F1F26C563A400F274C7 /* OATurnDrawable.h */,
 				32B451832C062CA2003390C9 /* OATurnDrawable+cpp.h */,
 				DA5A7F2E26C563A400F274C7 /* OATurnDrawable.mm */,
@@ -13229,6 +13240,7 @@
 				B247453D27E3A8D000C18C3F /* OACloudIntroductionHeaderView.xib */,
 				DA5A807826C563A500F274C7 /* OACoordinatesBaseWidget.xib */,
 				27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */,
+				274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */,
 				DAC849B526CF97EE00018091 /* OADownloadMapWidget.xib */,
 				DA5A807426C563A500F274C7 /* OADownloadProgressView.xib */,
 				0A3EE20D275E4EE600C8B772 /* OAFoldersCollectionView.xib */,
@@ -13790,6 +13802,9 @@
 				FA899F202DD344AA0022F736 /* VehicleMetricsSearchViewController */,
 				FA24317E2DD202A600B52998 /* VehicleMetricsSensors */,
 				FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */,
+				C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */,
+				C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */,
+				C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */,
 			);
 			path = VehicleMetricsPlugin;
 			sourceTree = "<group>";
@@ -14626,6 +14641,7 @@
 				32309A652698D1F7005751F5 /* ic_custom_direction_bearing_day@2x.png in Resources */,
 				DA5A823C26C563A700F274C7 /* OABaseBigTitleSettingsViewController.xib in Resources */,
 				DA68B3D7233B822100F5ACCC /* ic_profile_pedestrian@3x.png in Resources */,
+				274C43F12DEDBA7100585952 /* OANextTurnWidget.xib in Resources */,
 				0A7DAF8F270C401E0059238B /* ic_custom_folder_move@3x.png in Resources */,
 				0A3EE20E275E4EE600C8B772 /* OAFoldersCollectionView.xib in Resources */,
 				DA540D8E229E63270069201E /* ic_custom_plus@2x.png in Resources */,
@@ -16779,6 +16795,7 @@
 				FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */,
 				C556C85329BA0844006794D5 /* OASunriseSunsetWidget.mm in Sources */,
 				DA5A848926C563A900F274C7 /* OASaveTrackViewController.mm in Sources */,
+				C5C9BB912DF9A087003B7550 /* OBDTextWidget.swift in Sources */,
 				DA84999C287EBF27002B1E11 /* OABaseDeleteFilesCommand.m in Sources */,
 				46F494132B4D9D6400CAB805 /* OAGPXDataSetType.m in Sources */,
 				DA5A838626C563A800F274C7 /* OADestinationItem.m in Sources */,
@@ -16832,6 +16849,7 @@
 				46CBC9722B96126C005CC244 /* GlideBaseWidget.swift in Sources */,
 				4695B25F2CF0A5D3003FB38A /* TrackChartHelper.swift in Sources */,
 				DA5A835526C563A800F274C7 /* OAGPXTrackCell.m in Sources */,
+				27E3C2032DF1ADD40053958E /* OAStreetNameWidgetParams.mm in Sources */,
 				DA5A844926C563A900F274C7 /* OADiscountToolbarViewController.mm in Sources */,
 				DA5A84A926C563A900F274C7 /* OAAddTrackFolderViewController.m in Sources */,
 				FA92170E2D52544F0074E958 /* GalleryGridDetailViewController.swift in Sources */,
@@ -16990,10 +17008,12 @@
 				DA5A819C26C563A700F274C7 /* OAAddPOIAction.mm in Sources */,
 				DA5A839B26C563A800F274C7 /* OAOptionsPanelBlackViewController.m in Sources */,
 				46207CF72B9A7EDE000D337D /* String+Extension.swift in Sources */,
+				C5BC8DD72E0408D400CF0815 /* OBDRemainingFuelWidget.swift in Sources */,
 				DA5A83AA26C563A800F274C7 /* OAAdvancedEditingViewController.mm in Sources */,
 				FAC346F52E052D3D002653CA /* VehicleMetricsItem.swift in Sources */,
 				464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */,
 				DA5A812526C563A700F274C7 /* OATransportStopType.m in Sources */,
+				C5BC8DD52E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift in Sources */,
 				DA5A84F826C563A900F274C7 /* OAMapStyleSettings.mm in Sources */,
 				DA5A840926C563A800F274C7 /* OAMapDownloadController.mm in Sources */,
 				DA5A835C26C563A800F274C7 /* OAPreviewZoomLevelsCell.m in Sources */,
@@ -17448,6 +17468,7 @@
 				DA5A84BB26C563A900F274C7 /* OAPublicTransportOptionsBottomSheet.mm in Sources */,
 				DA5A832726C563A800F274C7 /* OARouteInfoAltitudeCell.m in Sources */,
 				DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */,
+				27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */,
 				DA2483E72927916700189AF2 /* OAStatusBackupTableViewController.mm in Sources */,
 				FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */,
 				FAA650512ADD42C50020DCEA /* BLESearchViewController.swift in Sources */,
@@ -17798,7 +17819,6 @@
 				CA4ED6AAA32538E21DD77883 /* OASettingsBackupViewController.mm in Sources */,
 				46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */,
 				CA4EDCD4B8149095B74FD700 /* OACloudAccountLogoutViewController.mm in Sources */,
-				461A3F0029F6A62C008EE079 /* OATrackColoringTypeViewController.m in Sources */,
 				CA4EDBFDA7FC431D027A815E /* OADeleteAllVersionsBackupViewController.mm in Sources */,
 				FAA6505B2ADD42C50020DCEA /* Device.swift in Sources */,
 				CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */,

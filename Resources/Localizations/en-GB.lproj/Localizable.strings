@@ -115,3 +115,5 @@
 "shared_string_favorites" = "Favourites";
 "shared_string_favorite" = "Favourite";
 "towards" = "towards";
+"original_color_description" = "Each point would keep its own colour.";
+"apply_to_all_points" = "Apply to all points";

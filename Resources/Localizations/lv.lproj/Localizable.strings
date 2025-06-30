@@ -1474,3 +1474,12 @@
 "quick_action_need_to_add_item_to_list" = "Ir nepieciešams pievienot vismaz vienu vienību sarakstā \"Ātrās darbības\" iestatījumos";
 "transport_stop" = "Pietura";
 "shared_string_to" = "Līdz";
+"dd_mm_ss_format" = "GG°MM′SS″";
+"shared_string_view_all" = "Skatīt visu";
+"dd_ddddd_format" = "GG.GGGGG°";
+"mapillary_action_descr" = "Pievienojiet savus šīs vietas ielas līmeņa skatus caur Mapillary.";
+"shared_string_pause" = "Pauze";
+"shared_string_date" = "Datums";
+"poi_filter_fuel" = "Degviela";
+"dd_mm_mmm_format" = "GG°MM.MMM′";
+"online_photos" = "Tiešsaistes fotoattēli";

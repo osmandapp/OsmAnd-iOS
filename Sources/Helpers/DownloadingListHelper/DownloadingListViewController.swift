@@ -61,7 +61,7 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
                 let row = section.createNewRow()
                 row.cellType = DownloadingCell.reuseIdentifier
                 row.title = task.title
-                let resourceId = task.key.replacingOccurrences(of: "resource:", with: "")
+                let resourceId = task.key.replacingOccurrences(of: "resource:", with: "").replacingOccurrences(of: ".srtmf.obf", with: ".srtm.obf")
                 row.setObj(resourceId, forKey: "resourceId")
                 row.setObj(resourceItem, forKey: "item")
             }

@@ -404,7 +404,7 @@
 "search_another_country" = "Vælg et andet område";
 "skip_map_downloading" = "Spring over hentning af kort";
 "skip_map_downloading_desc_ios" = "Der er ingen offline kort installeret. Vælg et kort fra listen eller hent et kort senere via Menu - Administrer kort";
-"wiki_around" = "Wikipedia-artikler i nærheden";
+"wiki_around" = "Populære steder i nærheden";
 "search_categories" = "Kategorier";
 "items_selected" = "%d valgt";
 "custom_search" = "Brugerdefineret søgning";
@@ -971,7 +971,6 @@
 "years_5" = "År";
 "price_free" = "Gratis";
 "get_discount_title" = "Få %d %@ med %@ rabat.";
-"get_free_trial_title" = "Start %d %@ gratis prøveversion.";
 "get_discount_short_descr" = "%@ for %d %@, og derefter %@";
 "osm_succsessful_uploads" = "Vellykket";
 "osm_failed_uploads" = "Mislykkedes";
@@ -1240,7 +1239,7 @@
 "rendering_attr_smoothness_very_bad_name" = "Meget dårlig";
 "routing_attr_height_description" = "Angiv køretøjets højde der tillades på ruter.";
 "routing_attr_avoid_bus_description" = "Undgår busser og trolleybusser";
-"rendering_attr_hideWaterPolygons_name" = "Skjul vand";
+"rendering_attr_hideWaterPolygons_name" = "Vand";
 "rendering_value_high_name" = "Høj";
 "rendering_attr_contourColorScheme_description" = "Farvetema for højdekurver";
 "rendering_attr_hideWoodScrubs_name" = "Skov og beplantning";
@@ -1393,7 +1392,7 @@
 "rendering_value_bold_name" = "Fed";
 "routing_attr_driving_style_balance_name" = "Balanceret";
 "rendering_attr_piste_difficulty_undefined_name" = "Ikke defineret";
-"rendering_attr_pisteRoutes_name" = "Skiløjper";
+"rendering_attr_pisteRoutes_name" = "Skiruter";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Nodenetværk";
 "rendering_value__name" = "Standard";
 "rendering_attr_piste_difficulty_novice_name" = "Begynder";
@@ -1420,7 +1419,7 @@
 "rendering_attr_highway_class_road_name" = "Vej";
 "rendering_attr_piste_type_snow_park_name" = "Terrænpark";
 "rendering_attr_currentTrackColor_description" = "GPX-farve";
-"rendering_attr_hideWaterPolygons_description" = "Vand";
+"rendering_attr_hideWaterPolygons_description" = "Skjul vand";
 "routing_attr_piste_type_skitour_name" = "Turski";
 "rendering_attr_piste_type_sleigh_name" = "Slæde";
 "rendering_attr_hikingRoutesOSMC_name" = "Vandreruter";
@@ -1534,7 +1533,7 @@
 "product_desc_antarctica" = "Ubegrænset hentning af kort til Antarktis";
 "map_settings_line_density_slowdown_warning" = "Høj linjetæthed kan bremse kortgengivelse";
 "poi_filter_public_transport" = "Kollektivtrafik";
-"transfers" = "overførsler";
+"transfers" = "Overførsler";
 "temporary_conditional_routing" = "Tag højde for midlertidige begrænsninger";
 "avoid_transport_type" = "Undgå transporttyper";
 "allow_3d_descr" = "Aktivér indstillingen for at kunne se kortet i 2.5D-perspektivet";
@@ -2624,7 +2623,7 @@
 "routing_attr_prefer_tactile_paving_name" = "Foretræk taktil belægning";
 "rendering_attr_horseScale_name" = "Sværhedsgraden af ridestier";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Skematisk visning af ikoner ved lave zoomniveauer";
-"rendering_attr_hideMilitaryAreas_name" = "Skjul militære områder";
+"rendering_attr_hideMilitaryAreas_name" = "Militære områder";
 "routing_attr_allow_streams_name" = "Tillad vandløb og afløb";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Vis retmig-mærker";
 "rendering_attr_weatherTempContours_name" = "Temperatur-isolinjer";
@@ -2767,7 +2766,7 @@
 "current_speed_widget_desc" = "Viser din aktuelle hastighed registreret via GPS.";
 "time_to_go_desc" = "Tid i minutter eller timer for at nå din destination.";
 "arrival_time_widget_desc" = "Tidspunkt for ankomst til destinationsstedet.";
-"lanes_widgets_desc" = "Viser det aktuelle vejbane-layout og fremhæver de vejbaner, der skal benyttes under navigation.";
+"lanes_widgets_desc" = "Viser det aktuelle vejbane-layout og fremhæver de vejbaner, der skal benyttes under vejvisning.";
 "map_markers_bar_widget_desc" = "Det øverste bjælkemodul viser afstanden og retningen til den næste kortmarkør fra din aktuelle placering. Modulet kan konfigureres til at vise 1 eller 2 markører.";
 "street_name_widget_desc" = "Gadenavn-modulet viser det aktuelle gadenavn med en lige placeringspil eller det næste gadenavn med en pil, der angiver et kommende sving.";
 "coordinates_widget_desc" = "Viser de geografiske koordinater for den aktuelle geografiske placering.";
@@ -3333,7 +3332,7 @@
 "weather_wind_animation_enable_descr" = "Aktivér for at se laget med vindanimation på kortet.";
 "osmand_cloud_delete_account_descr_with_email" = "Er du sikker på, at du vil slette OsmAnd Cloud-kontoen: %@?";
 "battery_saving_mode" = "Batterisparetilstand";
-"quick_action_toggle_preference" = "Et skifter til at ændre præference.";
+"quick_action_toggle_preference" = "En skifter til at ændre præference.";
 "shared_string_local" = "Lokal";
 "map_settings_weather_temp_air" = "Lufttemperatur";
 "map_settings_weather_temp_water" = "Vandtemperatur";
@@ -3421,7 +3420,7 @@
 "rendering_attr_showClimbingRoutes_description" = "Vis klatreruter";
 "reset_average_speed" = "Nulstil gennemsnitshastighed";
 "transport_stop" = "Stoppested";
-"cloud_sync_progress" = "Synkroniserer...%@";
+"cloud_sync_progress" = "Synkroniserer… %@";
 "start_navigation" = "Start navigation";
 "cancel_navigation" = "Stop navigation";
 "day_short" = "D";
@@ -3597,7 +3596,7 @@
 "product_title_pro" = "OsmAnd Pro";
 "battery_widget_level_privacy_ios_desc" = "På grund af OS' beskyttelse af personlige oplysninger kan modulet kun vise batteriniveauet i trin på 5 %, f.eks. 35 %, 60 % eller 85 %";
 "detailed_track_guidance" = "Detaljeret sporvejledning";
-"attach_roads_descr" = "Fastgør dit spor til veje for at få detaljerede ruteoplysninger med svinginstruktioner og vejegenskaber.";
+"attach_roads_descr" = "Fastgør dit spor til veje for at få detaljerede ruteoplysninger, inklusive præcise svinginstruktioner og vejegenskaber.";
 "detailed_track_guidance_description" = "OsmAnd vil matche dit spor med nærliggende veje for at forbedre sving-for-sving-vejledningen.";
 "ask_every_time" = "Spørg hver gang";
 "auto_25_chars_route_kr" = "Hold til højre";
@@ -3648,7 +3647,7 @@
 "sensor_data" = "Sensordata";
 "profile_icons" = "Profilikon";
 "terrain_map" = "Terrænkort (3D)";
-"add_hidden_group_info" = "Det tilføjede punkt kan findes i \"%s\". Fjern skjulning for den valgte gruppe for at vise den på kortet.";
+"add_hidden_group_info" = "Det tilføjede punkt kan findes i \"%@\". Fjern skjulning for den valgte gruppe for at vise den på kortet.";
 "unchanged_parameter_summary" = "Hvert spor beholder sine egne parametre.";
 "shared_string_unchanged" = "Uændret";
 "each_favourite_point_own_icon" = "Hvert favoritpunkt vil have sit eget ikon.";
@@ -3674,7 +3673,7 @@
 "prime_meridian" = "Førstemeridian";
 "meridian_180" = "180. længdekreds";
 "customize_grid_color" = "Tilpas gitterfarve";
-"apply_to_all_points" = "Anvend på alle punkter ";
+"apply_to_all_points" = "Anvend på alle punkter";
 "original_color_description" = "Hvert punkt ville beholde sin egen farve.";
 "original_shape_description" = "Hvert punkt ville beholde sin egen form.";
 "original_icon_description" = "Hvert punkt ville beholde sit eget ikon.";
@@ -3700,3 +3699,22 @@
 "osm_live_payment_renews_3_years" = "Fornyes hvert tredje år";
 "years_3" = "Tre år";
 "three_years_subscription" = "Tre års abonnement";
+"ios_release_5_1" = "• Tilføjet understøttelse af køb på web og på tværs af platforme\n• Nyt navigationsmodul kombinerer svingpil og navigationsinstruktioner\n• Tilføjet mulighed for at omdøbe favoritgrupper\n• Tilføjet indstillingerne »Volumenenhed« og »Brændstoftankens kapacitet«\n• Tilføjet en \"Koordinatnet\" overlejring\n• Moduler på venstre og højre panel indeholder nu en højdeindstilling\n• Tilføjet muligheden for at tildele aktiviteter til spor\n• Rettet et nedbrud på CarPlay med iOS 15\n• Problemer med automatisk størrelsesændring af moduler på venstre og højre panel er blevet løst\n• Inkompatibilitet med rejseguider er blevet rettet\n• Problemet med køb på tværs af platforme er blevet løst\n• Rettet problemet med en sort skærm på CarPlay efter opstart\n";
+"routing_attr_allow_ferries_name" = "Tillad færger";
+"routing_attr_allow_ferries_description" = "Tillad ruteberegning via færgeruter";
+"route_roundabout_exit" = "Tag %d afkørsel";
+"purchase_feature_desc_vehicle_metrics_obd_ii" = "Følg vigtige køretøjsdata ved hjælp af OBD-II-protokollen. Overvåg nøgletal som hastighed, motoromdrejninger, brændstofforbrug og meget mere.";
+"obd_plugin_description" = "Overvåg vigtige køretøjsmålinger ved hjælp af OBD-II-protokollen. Få adgang til data, herunder:\n• Motorhastighed, motorens driftstid, beregnet motorbelastning \n• Brændstofforbrug, Brændstoftryk, Resterende brændstof\n• Indsugningstemperatur, omgivelsestemperatur, kølevæsketemperatur, motorolietemperatur\n• Køretøjets hastighed, gasspjældets position, batterispænding";
+"vehicle_metrics_obd_ii" = "Køretøjets målinger (OBD-II)";
+"connect_obd_instructions_title" = "OsmAnd understøtter Bluetooth-forbindelser til OBD-II-scannere.";
+"obd_how_to_connect" = "Sådan skaber du forbindelse:";
+"connect_obd_instructions_step" = "1. Tilslut scanneren til køretøjets OBD-II-port.\n\n2. Tænd for køretøjets motor\n\n3. Aktivér Bluetooth på din enhed\n\n4. Tryk på '%@' og vælg din scanner fra listen.";
+"obd_bluetooth_off_description" = "Slå Bluetooth til for at finde og forbinde scannere.";
+"obd_searching_text_description" = "Hold din enhed tæt på scanneren. Sørg for, at køretøjets motor kører.";
+"obd_searching_text" = "Søger efter scannere";
+"obd_nothing_found_text" = "Ingen scannere fundet";
+"obd_nothing_found_description" = "Tjek venligst følgende:\n– Sørg for, at Bluetooth er slået til\n– Køretøjets motor kører\n– Sørg for, at din enhed er inden for scannerens rækkevidde.";
+"obd_vin" = "VIN";
+"obd_vin_desc" = "VIN-kode over OBD";
+"obd_vehicle_info" = "Info om køretøjet";
+"obd_widget_vehicle_speed" = "Køretøjets hastighed";

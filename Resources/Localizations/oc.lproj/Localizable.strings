@@ -21,7 +21,6 @@
 "months_3" = "Trimèstre";
 "price_free" = "A gratis";
 "get_discount_title" = "Acquistar %d %@ amb un %d%% de descòmpte.";
-"get_free_trial_title" = "Començatz vòstre assai a gratis de %d %@.";
 "get_discount_short_descr" = "%@ pendent %d %@, %@ puei";
 "get_discount_first_part" = "%@ per lei premiers %@";
 "get_discount_first_few_parts" = "%@ tot d'una %@";
@@ -1393,7 +1392,7 @@
 "routing_attr_avoid_shuttle_train_name" = "Evitar lei trens naveta";
 "routing_attr_avoid_shuttle_train_description" = "Evitar lei trens naveta";
 "rendering_attr_busRoutes_name" = "Linhas de bus";
-"rendering_attr_pisteRoutes_name" = "Pistas d\'esquí";
+"rendering_attr_pisteRoutes_name" = "Pistas d'esquí";
 "move_marker_bottom_sheet_title" = "Desplacatz la mapa per modificar la posicion dau marcador";
 "quick_action_remove_next_destination" = "Suprimir lo ponch d’etapa pus pròche";
 "app_mode_offroad" = "Fòra de camin";
@@ -1583,7 +1582,7 @@
 "rendering_attr_shareTaxiRoutes_name" = "Partejar lei percors en taxi";
 "rendering_attr_piste_type_skitour_name" = "Esquí de montanha";
 "rendering_attr_roadStyle_description" = "Representacion dei vias";
-"rendering_attr_hideWaterPolygons_name" = "Amagar l\'aiga";
+"rendering_attr_hideWaterPolygons_name" = "Amagar l'aiga";
 "rendering_attr_hideUnderground_name" = "Elements sosterranhs";
 "rendering_value_red_name" = "Roge -a";
 "rendering_attr_piste_difficulty_novice_name" = "Novèu";
@@ -2719,3 +2718,7 @@
 "quick_action_toggle_preference" = "Una bascula per cambiar de preferéncias.";
 "shared_string_local" = "Installat en locau";
 "transport_stop" = "Arrèst";
+"three_months_subscription" = "Abonament trimestrau";
+"map_widget_distance" = "Distància";
+"shared_string_view_all" = "Tot visualizar";
+"add_hidden_group_info" = "Lo ponch ajustat se tròba dins \"1%@\". Desamagar lo grop seleccionat per lo visualizar sus la mapa.";

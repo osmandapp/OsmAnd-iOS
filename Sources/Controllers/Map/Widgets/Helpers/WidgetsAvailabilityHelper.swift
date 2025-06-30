@@ -40,7 +40,7 @@ class WidgetsAvailabilityHelper: NSObject {
         
         // left
         let navigationSet1: [OAApplicationMode] = [.car(), .bicycle(), .boat(), .ski(), .truck(), .motorcycle(), .horse(), .moped()]
-        let navigationSet2: [OAApplicationMode] = [.pedestrian(), .public_TRANSPORT(), .aircraft()]
+        let navigationSet2: [OAApplicationMode] = [.pedestrian(), .public_TRANSPORT(), .aircraft(), .train()]
         
         regWidgetVisibility(widgetType: .nextTurn, appModes: navigationSet1)
         regWidgetVisibility(widgetType: .smallNextTurn, appModes: navigationSet2)

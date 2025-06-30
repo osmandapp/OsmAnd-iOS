@@ -37,9 +37,8 @@ final class RouteInfoWidget: OASimpleWidget {
     private var cachedDisplayPriority: RouteInfoDisplayPriority?
     private var hasSecondaryData: Bool
     private var cachedMetricSystem: Int?
-    private var textState: OATextState?
     private let calculator: RouteInfoCalculator
-    private let maxFontSize: CGFloat = 50
+    private let updateIntervalSeconds = TimeInterval(TimeToNavigationPointWidget.UPDATE_INTERVAL_SECONDS)
     // swiftlint:disable force_unwrapping
     private let settings = OAAppSettings.sharedManager()!
     private lazy var widgetView = Bundle.main.loadNibNamed("RouteInfoWidget", owner: self, options: nil)![0] as! UIView
@@ -149,7 +148,6 @@ final class RouteInfoWidget: OASimpleWidget {
         super.updateColors(textState)
         
         let valueTextColor = valueTextColor
-        self.textState = textState
         firstLineRightLabel.textColor = valueTextColor
         secondLineRightLabel.textColor = valueTextColor
         secondaryDividerView.backgroundColor = isNightMode() ? .widgetSeparator.dark : .widgetSeparator.light
@@ -185,7 +183,20 @@ final class RouteInfoWidget: OASimpleWidget {
         if !isForceUpdate && !visibilityChanged && !isUpdateNeeded(for: routeInfo) {
             return
         }
-        cachedRouteInfo = routeInfo
+        
+        if cachedRouteInfo.count != routeInfo.count {
+            cachedRouteInfo = routeInfo
+        } else {
+            for i in 0..<routeInfo.count {
+                let updateIntervalPassed = abs(routeInfo[i].timeToGo - cachedRouteInfo[i].timeToGo) > updateIntervalSeconds
+                if updateIntervalPassed {
+                    cachedRouteInfo[i].timeToGo = routeInfo[i].timeToGo
+                    cachedRouteInfo[i].arrivalTime = routeInfo[i].arrivalTime
+                }
+                
+                cachedRouteInfo[i].distance = routeInfo[i].distance
+            }
+        }
         
         let hasSecondaryData = hasSecondaryDataValue
         if self.hasSecondaryData != hasSecondaryData {
@@ -199,7 +210,7 @@ final class RouteInfoWidget: OASimpleWidget {
         
         applySuitableTextFont()
         
-        updateHeightConstraint(with: .equal, constant: widgetHeight, priority: .defaultHigh)
+        updateHeightConstraint(with: .equal, constant: WidgetSizeStyleObjWrapper.getMaxWidgetHeightFor(type: widgetSizeStyle), priority: .defaultHigh)
         updatePrimaryBlockWith(destinationInfo: cachedRouteInfo.first, displayValues: orderedDisplayValues)
         updateSecondaryBlockWith(destinationInfo: cachedRouteInfo.count > 1 ? cachedRouteInfo[1] : nil, displayValues: orderedDisplayValues)
         isForceUpdate = false
@@ -324,29 +335,30 @@ final class RouteInfoWidget: OASimpleWidget {
     private func isDataChanged(for i1: DestinationInfo, and i2: DestinationInfo) -> Bool {
         let distanceDiff = abs(i1.distance - i2.distance)
         let timeToGoDiff = abs(i1.timeToGo - i2.timeToGo)
-        return distanceDiff > 10 || timeToGoDiff > 30
+        return distanceDiff > 10 || timeToGoDiff > updateIntervalSeconds
     }
     
     private func applySuitableTextFont() {
-        let typefaceStyle: UIFont.Weight = textState?.textBold == true ? .bold : .semibold
+        let typefaceStyle: UIFont.Weight = .semibold
         let hasEnoughWidth = hasEnoughWidth
         let minValueFontSize = minValueFontSize
         let isSmallSize = isSmallSize
         let secondLineMinValueFontSize = secondLineMinValueFontSize
-        firstLineLeftLabel.font = .scaledSystemFont(ofSize: hasEnoughWidth && !hasSecondaryData ? WidgetSizeStyleObjWrapper.getValueFontSizeFor(type: widgetSizeStyle) : firstLineValueFontSize, weight: typefaceStyle, maximumSize: maxFontSize)
+        let hasEnoughWidthAndNoSecondaryData = hasEnoughWidth && !hasSecondaryData
+        firstLineLeftLabel.font = .scaledMonospacedDigitSystemFont(ofSize: hasEnoughWidthAndNoSecondaryData ? WidgetSizeStyleObjWrapper.getValueFontSizeFor(type: widgetSizeStyle) : firstLineValueFontSize, weight: typefaceStyle)
         firstLineLeftLabel.adjustsFontSizeToFitWidth = true
         firstLineLeftLabel.minimumScaleFactor = minValueFontSize / firstLineLeftLabel.font.pointSize
         
-        secondLineLeftLabel.font = .scaledSystemFont(ofSize: secondLineValueFontSize, weight: .semibold, maximumSize: maxFontSize)
+        secondLineLeftLabel.font = .scaledMonospacedDigitSystemFont(ofSize: secondLineValueFontSize, weight: typefaceStyle)
         secondLineLeftLabel.adjustsFontSizeToFitWidth = true
         secondLineLeftLabel.minimumScaleFactor = secondLineMinValueFontSize / secondLineLeftLabel.font.pointSize
-        secondLineLeftLabel.isHidden = isSmallSize || (hasEnoughWidth && !hasSecondaryData)
+        secondLineLeftLabel.isHidden = isSmallSize || hasEnoughWidthAndNoSecondaryData
         
-        firstLineRightLabel.font = isSmallSize ? .scaledSystemFont(ofSize: minValueFontSize, weight: typefaceStyle) : firstLineLeftLabel.font
+        firstLineRightLabel.font = isSmallSize ? .scaledMonospacedDigitSystemFont(ofSize: minValueFontSize, weight: typefaceStyle) : firstLineLeftLabel.font
         firstLineRightLabel.adjustsFontSizeToFitWidth = firstLineLeftLabel.adjustsFontSizeToFitWidth
         firstLineRightLabel.minimumScaleFactor = minValueFontSize / firstLineRightLabel.font.pointSize
         
-        secondLineRightLabel.font = isSmallSize ? .scaledSystemFont(ofSize: minValueFontSize, weight: typefaceStyle) : secondLineLeftLabel.font
+        secondLineRightLabel.font = isSmallSize ? .scaledMonospacedDigitSystemFont(ofSize: minValueFontSize, weight: typefaceStyle) : secondLineLeftLabel.font
         secondLineRightLabel.adjustsFontSizeToFitWidth = secondLineLeftLabel.adjustsFontSizeToFitWidth
         secondLineRightLabel.minimumScaleFactor = (isSmallSize ? minValueFontSize : secondLineMinValueFontSize) / secondLineRightLabel.font.pointSize
     }
@@ -406,7 +418,7 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private func formatDistanceWith(meters: Int32) -> String {
-        OAOsmAndFormatter.getFormattedDistance(Float(meters))
+        OAOsmAndFormatter.getFormattedDistance(Float(meters), with: .useLowerBounds)
     }
 
     override func isEnabledShowIconSwitch(with widgetsPanel: WidgetsPanel, widgetConfigurationParams: [String: Any]?) -> Bool {
@@ -445,15 +457,6 @@ extension RouteInfoWidget {
         switch widgetSizeStyle {
         case .small, .medium: 14
         case .large: 16
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
-    }
-    
-    private var widgetHeight: CGFloat {
-        switch widgetSizeStyle {
-        case .small: 48
-        case .medium: 72
-        case .large: 96
         @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
         }
     }

@@ -27,7 +27,6 @@
 "price_free" = "Free";
 
 "get_discount_title" = "Get %d %@ at %@ off.";
-"get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
 "get_discount_first_part" = "%@ for the first %@";
 "get_discount_first_few_parts" = "%@ for first %@";
@@ -318,6 +317,8 @@
 "time_to_go_desc" = "Time in minutes or hours needed to reach your destination.";
 "arrival_time_widget_desc" = "Time of arrival at the destination point.";
 "lanes_widgets_desc" = "Shows the current road lanes layout and highlights the ones to take while navigating.";
+"route_guidance_desc" = "Provides real-time route guidance, including distance to the next turn, road name, current street name, and lane information. Widgets are active during navigation.";
+"route_guidance" = "Route guidance";
 "map_markers_bar_widget_desc" = "The top bar widget displays the distance and direction to the next Map marker from your current location. The widget can be configured to show 1 or 2 markers.";
 "street_name_widget_desc" = "The Street name widget shows the current street name with a straight location arrow, or the next street name with an arrow indicating an upcoming turn.";
 "coordinates_widget_desc" = "Shows the geographic coordinates of current geolocation.";
@@ -378,6 +379,7 @@
 "map_widget_next_turn" = "Next turn";
 "map_widget_next_turn_small" = "Next turn (small)";
 "map_widget_next_next_turn" = "Second next turn";
+"shared_string_road_exit" = "Exit";
 "always_center_position_on_map" = "Position placement always in center";
 "position_on_map" = "Location position on screen";
 "position_on_map_center" = "Center";
@@ -503,7 +505,7 @@
 "detailed_track_guidance" = "Detailed track guidance";
 "detailed_track_guidance_description" = "OsmAnd will match your track to nearby roads for enhanced turn-by-turn guidance.";
 "ask_every_time" = "Ask every time";
-"attach_roads_descr" = "Attach your track to roads to get detailed route information with turn instructions and road attributes.";
+"attach_roads_descr" = "Attach your track to roads to get detailed route information, including turn-by-turn instructions and road attributes.";
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
@@ -1443,6 +1445,8 @@
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "ltr_or_rtl_combine_via_of" = "%ld of %ld";
+"ltr_or_rtl_combine_via_per" = "%@ per %@";
+"ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 
 "of" = "%d of %d";
 "downloaded_bytes" = "%@ of %@";
@@ -2581,7 +2585,7 @@
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 
-"wiki_around" = "Nearby Wikipedia articles";
+"wiki_around" = "Nearby popular places";
 "search_categories" = "Categories";
 "items_selected" = "%d selected";
 
@@ -2907,7 +2911,7 @@
 "rendering_attr_surface_snow_name" = "Snow";
 "rendering_attr_highway_class_cycleway_name" = "Cycleway";
 "routing_attr_piste_type_downhill_description" = "Slopes for alpine or downhill skiing and access to ski lifts.";
-"rendering_attr_hideWaterPolygons_name" = "Hide water";
+"rendering_attr_hideWaterPolygons_name" = "Water";
 "routing_attr_avoid_stairs_name" = "No stairs";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_skitour_name" = "Skitour";
@@ -2983,7 +2987,7 @@
 "rendering_attr_smoothness_very_horrible_name" = "Very horrible";
 "routing_attr_allow_intermediate_name" = "Allow intermediate routes";
 "rendering_attr_trolleybusRoutes_name" = "Trolleybus routes";
-"rendering_attr_hideWaterPolygons_description" = "Water";
+"rendering_attr_hideWaterPolygons_description" = "Hide water";
 "rendering_attr_piste_difficulty_extreme_name" = "Extreme";
 "rendering_value_low_name" = "Low";
 "rendering_value_lightgreen_name" = "Light green";
@@ -3016,7 +3020,7 @@
 "rendering_attr_alpineHiking_description" = "Difficulty classification types for the routes.";
 "rendering_attr_highway_class_bridleway_name" = "Bridleway";
 "routing_attr_avoid_share_taxi_name" = "No share taxi";
-"rendering_attr_pisteRoutes_name" = "Ski slopes";
+"rendering_attr_pisteRoutes_name" = "Ski routes";
 "rendering_attr_piste_type_sled_name" = "Sled";
 "rendering_attr_noPolygons_description" = "Make all areal land features on map transparent.";
 "routing_attr_allow_classic_only_description" = "Routes groomed for classic style only without skating trails. This includes routes groomed by a smaller snowmobile with looser piste and tracks made manually by skiers.";
@@ -3290,6 +3294,7 @@
 "terrain_map" = "Terrain map (3D)";
 "shared_string_cross_buy" = "Cross-buy";
 "shared_string_relief_3d" = "3D Relief";
+"route_roundabout_exit" = "Take %d exit";
 
 "track_has_no_needed_data" = "The track is missing the respective data.";
 "select_another_colorization" = "Please select another type of coloring.";
@@ -3658,7 +3663,7 @@
 "routing_attr_avoid_highway_description" = "Avoid highways";
 "routing_attr_prefer_hiking_routes_description" = "Prefer hiking routes";
 "rendering_attr_weatherWindSpeedContours_name" = "Wind speed isolines";
-"rendering_attr_hideMilitaryAreas_name" = "Hide military areas";
+"rendering_attr_hideMilitaryAreas_name" = "Military areas";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Show fixme tags";
 "rendering_attr_horse_scale_dangerous_name" = "Dangerous";
 "rendering_attr_seabedDetail_description" = "Additional text info on seabed surface_qualification, combined surface types, category and taxon of weed or seagrass";
@@ -3851,7 +3856,7 @@
 "default_appearance_desc" = "Default color, icon and shape will apply to the added favorite points into the group.";
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
-"apply_to_all_points" = "Apply to all points ";
+"apply_to_all_points" = "Apply to all points";
 "save_favorite_default_appearance" = "Apply changes to the existing points in the folder or only to new ones?";
 "original_icon_description" = "Each point would keep its own icon.";
 "original_color_description" = "Each point would keep its own color.";
@@ -3921,6 +3926,32 @@
 "map_widget_glide_average_desc" = "Shows the average glide ratio for the set interval.";
 "map_widget_glide_target_desc" = "Shows the glide ratio needed to reach the target point.";
 "map_widget_group_glide_ratio" = "Glide ratio";
+"obd_widget_vehicle_speed" = "Vehicle speed";
+"obd_speed_desc" = "Shows speed from the Vehicle Speed Sensor (VSS).";
+"obd_widget_engine_speed" = "Engine speed";
+"obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";
+"obd_engine_runtime" = "Engine Runtime";
+"obd_engine_runtime_desc" = "Shows shows how long the engine has been running since it was started.";
+"obd_fuel_pressure" = "Fuel pressure";
+"obd_fuel_pressure_desc" = "Shows the pressure within the fuel system";
+"obd_air_intake_temp" = "Intake temperature";
+"obd_air_intake_temp_desc" = "Shows the temperature of the air entering the engine intake manifold.";
+"obd_engine_oil_temperature" = "Engine Oil Temperature";
+"obd_engine_oil_temperature_desc" = "Shows the temperature of the engine oil.";
+"obd_ambient_air_temp" = "Ambient temperature";
+"obd_ambient_air_temp_desc" = "Shows the temperature outside the vehicle.";
+"obd_battery_voltage" = "Battery voltage";
+"obd_battery_voltage_desc" = "Shows the voltage level of the vehicle\'s battery";
+"obd_engine_coolant_temp" = "Coolant temperature";
+"obd_engine_coolant_temp_desc" = "Shows the temperature of the engine’s coolant";
+"remaining_fuel" = "Remaining fuel";
+"remaining_fuel_description" = "Shows the amount of fuel left in the vehicle\'s tank";
+"obd_calculated_engine_load" = "Calculated Engine Load";
+"obd_calculated_engine_load_desc" = "Shows the percentage of the engine’s available power being used at a given moment.";
+"obd_throttle_position" = "Throttle Position";
+"obd_throttle_position_desc" = "Shows the angle of the throttle plate in the throttle body.";
+"obd_fuel_consumption" = "Fuel consumption";
+"obd_fuel_consumption_desc" = "Shows the rate of fuel usage by the engine, calculated based on remaining fuel, tank size, and distance covered as determined by GPS.";
 "map_widget_group_glide_desc" = "Widgets show the glide ratio to the target or average glide ratio for the current trip.";
 "target_elevation" = "Target elevation";
 "average_glide_ratio_time_interval_desc" = "Shows the average glide ratio or vertical speed for the set interval.";
@@ -4167,6 +4198,14 @@
 "obd_fuel_consumption_desc" = "Shows the rate of fuel usage by the engine, calculated based on remaining fuel, tank size, and distance covered as determined by GPS.";
 "obd_fuel_consumption" = "Fuel consumption";
 
+"reset_average_value" = "Reset average value";
+"current_temperature" = "Current temperature";
+"average_temperature" = "Average temperature";
+"shared_string_instant" = "Instant";
+"average" = "Average";
+"shared_string_hour" = "Hour";
+"shared_string_volume" = "Volume";
+
 "rpm_unit" = "rpm";
 "obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";
 "obd_fuel_level_desc" = "Shows vehicle fuel level over OBD sensor";
@@ -4210,3 +4249,6 @@
 "vehicle_metrics_recording_description" = "Select the parameters to be recorded in the GPX file.";
 "shared_string_other" = "Other";
 "shared_string_engine" = "Engine";
+
+"routing_attr_allow_ferries_description" = "Allow routing by ferry routes";
+"routing_attr_allow_ferries_name" = "Allow ferries";

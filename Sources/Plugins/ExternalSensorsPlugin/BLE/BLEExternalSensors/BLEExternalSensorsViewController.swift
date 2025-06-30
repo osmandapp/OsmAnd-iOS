@@ -88,7 +88,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-        if DeviceHelper.shared.hasPairedDevicesExcludingOBD {
+        if DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS) {
             configurePairedDevices()
         } else {
             configureNoPairedDevices()
@@ -96,7 +96,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     override func getTitleForHeader(_ section: Int) -> String? {
-        if DeviceHelper.shared.hasPairedDevicesExcludingOBD {
+        if DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS) {
             switch section {
             case 0:
                 if let connected = sectionsDevicesData[.connected], !connected.isEmpty {
@@ -113,8 +113,8 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
         return nil
     }
-    
-    override func getRow(_ indexPath: IndexPath) -> UITableViewCell! {
+
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell?
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
@@ -157,7 +157,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        if DeviceHelper.shared.hasPairedDevicesExcludingOBD {
+        if DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS) {
             return 30
         }
         return .leastNonzeroMagnitude
@@ -201,7 +201,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     private func configureStartState() {
-        let hasPairedDevicesExcludingOBD = DeviceHelper.shared.hasPairedDevicesExcludingOBD
+        let hasPairedDevicesExcludingOBD = DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS)
         pairNewSensorButton.isHidden = hasPairedDevicesExcludingOBD
         if !hasPairedDevicesExcludingOBD {
             tableView.sectionHeaderTopPadding = 0
@@ -230,7 +230,9 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                                                queue: nil) { [weak self] _ in
             guard let self else { return }
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
-            guard DeviceHelper.shared.hasPairedDevicesExcludingOBD else { return }
+
+            guard DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS) else { return }
+
             configureStartState()
             reloadData()
         }
@@ -286,8 +288,8 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
     private func configurePairedDevices() {
         sectionsDevicesData.removeAll()
-        if let pairedDevices = DeviceHelper.shared.getSettingsForPairedExcludingOBDDevices() {
-            let connectedDevices = DeviceHelper.shared.connectedExcludingOBDDevices
+        if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices(excluding: .OBD_VEHICLE_METRICS) {
+            let connectedDevices = DeviceHelper.shared.connectedDevices(excludingType: .OBD_VEHICLE_METRICS)
             
             if !connectedDevices.isEmpty {
                 let connectedSection = tableData.createNewSection()

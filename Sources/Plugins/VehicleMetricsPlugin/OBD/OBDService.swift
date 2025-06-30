@@ -14,8 +14,8 @@ extension Notification.Name {
 final class OBDService: NSObject {
     static let shared = OBDService()
     
-    private(set) var obdDispatcher: OBDDispatcher?
     private var cachedObdSensor: OBDVehicleMetricsSensor?
+    private(set) var obdDispatcher: OBDDispatcher?
     
     private override init() {
         super.init()

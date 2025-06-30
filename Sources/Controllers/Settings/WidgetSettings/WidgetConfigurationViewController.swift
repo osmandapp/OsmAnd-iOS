@@ -53,7 +53,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     override func generateData() {
         tableData.clearAllData()
         // Add section for simple widgets
-        if !WidgetType.isComplexWidget(widgetInfo.key) && !Self.excludedUISettingsWidgetKeys.contains(widgetInfo.key) {
+        if !WidgetType.isComplexWidget(widgetInfo.key) && (!Self.excludedUISettingsWidgetKeys.contains(widgetInfo.key) || widgetPanel.isPanelVertical) {
             if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode, widgetsPanel: widgetPanel, widgetConfigurationParams) {
                 for i in 0 ..< settingsData.sectionCount() {
                     tableData.addSection(settingsData.sectionData(for: i))
@@ -193,7 +193,13 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         } else if item.cellType == OAButtonTableViewCell.getIdentifier() {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.reuseIdentifier) as! OAButtonTableViewCell
             let value = item.obj(forKey: "value") as? String
+            if cell.contentHeightConstraint == nil {
+                let constraint = cell.contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
+                constraint.isActive = true
+                cell.contentHeightConstraint = constraint
+            }
             cell.selectionStyle = .none
+            cell.leftIconVisibility(item.key != "average_obd_mode_key" && item.key != "fuel_consumption_mode_key")
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
@@ -204,6 +210,10 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             cell.button.configuration = config
             if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = RouteInfoDisplayPriority(rawValue: pref.defValue)?.key {
                 cell.button.menu = createDisplayPriorityMenuWith(value: value ?? defValue, pref: pref, indexPath: indexPath)
+            } else if let boolPref = item.obj(forKey: "pref") as? OACommonBoolean, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
+                cell.button.menu = createBooleanMenuWith(currentValue: value, pref: boolPref, options: options, indexPath: indexPath)
+            } else if item.key == "fuel_consumption_mode_key", let pref = item.obj(forKey: "pref") as? OACommonString, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
+                cell.button.menu = createStringMenuWith(currentValue: value, pref: pref, options: options, indexPath: indexPath)
             }
             cell.button.showsMenuAsPrimaryAction = true
             cell.button.changesSelectionAsPrimaryAction = true
@@ -231,6 +241,46 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 tableView.reloadData()
             }
         }
+        return UIMenu(options: .singleSelection, children: actions)
+    }
+    
+    private func createBooleanMenuWith(currentValue: String, pref: OACommonBoolean, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
+        let actions = options.compactMap { row -> UIAction? in
+            guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
+            let state: UIMenuElement.State = title == currentValue ? .on : .off
+            return UIAction(title: title, image: UIImage.templateImageNamed(row.iconName), state: state) { [weak self] _ in
+                guard let self else { return }
+                let newBool = ((row.obj(forKey: "value") as? Int) ?? 0) == 1
+                if self.createNew {
+                    self.widgetConfigurationParams?[pref.key] = newBool
+                } else {
+                    pref.set(newBool)
+                }
+                
+                self.onWidgetStateChanged()
+            }
+        }
+        
+        return UIMenu(options: .singleSelection, children: actions)
+    }
+        
+    private func createStringMenuWith(currentValue: String, pref: OACommonString, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
+        let actions = options.compactMap { row -> UIAction? in
+            guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
+            let raw = row.obj(forKey: "value") as? String ?? ""
+            let state: UIMenuElement.State = raw == currentValue ? .on : .off
+            return UIAction(title: title, state: state) { [weak self] _ in
+                guard let self else { return }
+                if self.createNew {
+                    self.widgetConfigurationParams?[pref.key] = raw
+                } else {
+                    pref.set(raw)
+                }
+                
+                self.onWidgetStateChanged()
+            }
+        }
+        
         return UIMenu(options: .singleSelection, children: actions)
     }
     
@@ -300,6 +350,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             OsmAndApp.swiftInstance().data.destinationsChangeObservable.notifyEvent()
         } else if widgetInfo.key == WidgetType.radiusRuler.id || widgetInfo.key.hasPrefix(WidgetType.radiusRuler.id + MapWidgetInfo.DELIMITER) {
             (widgetInfo.widget as? RulerDistanceWidget)?.updateRulerObservable.notifyEvent()
+        } else if let textWidget = self.widgetInfo.widget as? OBDTextWidget {
+            textWidget.updatePrefs(prefsChanged: true)
         }
         generateData()
         onWidgetStateChangedAction?()

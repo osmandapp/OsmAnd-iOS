@@ -1829,6 +1829,7 @@
 @implementation OAExternalProduct
 {
     NSString *_name;
+    NSString *_icon;
     EOAPurchaseOrigin _origin;
     OAFeature *_feature;
     BOOL _featurePro;
@@ -1837,10 +1838,11 @@
     BOOL _featureNautical;
 }
 
-- (instancetype) initWithSku:(NSString *)sku name:(NSString *)name feature:(OAFeature *)feature origin:(EOAPurchaseOrigin)origin featurePro:(BOOL)featurePro featureMaps:(BOOL)featureMaps featureContours:(BOOL)featureContours featureNautical:(BOOL)featureNautical
+- (instancetype) initWithSku:(NSString *)sku name:(NSString *)name icon:(NSString *)icon feature:(OAFeature *)feature origin:(EOAPurchaseOrigin)origin featurePro:(BOOL)featurePro featureMaps:(BOOL)featureMaps featureContours:(BOOL)featureContours featureNautical:(BOOL)featureNautical
 {
     self = [super initWithIdentifier:sku];
     _name = name;
+    _icon = icon;
     _feature = feature;
     _origin = origin;
     _featurePro = featurePro;
@@ -1882,7 +1884,9 @@
 
 - (NSString *) productIconName
 {
-    if (_featurePro)
+    if (_icon.length > 0)
+        return _icon;
+    else if (_featurePro)
         return @"ic_custom_osmand_pro_logo_colored";
     else if (_featureContours)
         return @"ic_plugin_contourlines";
@@ -1935,7 +1939,8 @@
     NSString *name = json[@"name"];
     if (!name)
         name = OALocalizedString(@"in_app_purchase");
-    
+
+    NSString *icon = json[@"icon"];
     NSString *platform = json[@"platform"];
     if (platform.length == 0)
     {
@@ -1968,7 +1973,7 @@
         return nil;
     }
     
-    return [[OAExternalProduct alloc] initWithSku:sku name:name feature:feature origin:origin featurePro:featurePro featureMaps:featureMaps featureContours:featureContours featureNautical:featureNautical];
+    return [[OAExternalProduct alloc] initWithSku:sku name:name icon:icon feature:feature origin:origin featurePro:featurePro featureMaps:featureMaps featureContours:featureContours featureNautical:featureNautical];
 }
 
 @end

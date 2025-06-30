@@ -1418,6 +1418,9 @@
 		C5B2AA612DB00700007FB854 /* GridFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2AA602DB00700007FB854 /* GridFormat.swift */; };
 		C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */; };
 		C5B4AE5E2B1F51740019F357 /* MenuHelpDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */; };
+		C5BC8DD52E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */; };
+		C5BC8DD72E0408D400CF0815 /* OBDRemainingFuelWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */; };
+		C5C9BB912DF9A087003B7550 /* OBDTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */; };
 		C5CD4CF029EFE6AC00B35C3D /* ic_navbar_trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */; };
 		C5CD4CF129EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */; };
 		C5CD4CF229EFE6AC00B35C3D /* ic_navbar_trash@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEE29EFE6AB00B35C3D /* ic_navbar_trash@3x.png */; };
@@ -3096,13 +3099,19 @@
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
 		FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */; };
 		FA186E482BFCF15A007EE77D /* SpeedLimitWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */; };
+		FA1D6DAE2DCE04710080E374 /* VehicleMetricsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */; };
 		FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */; };
 		FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */; };
 		FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */; };
+		FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA24317F2DD202E700B52998 /* VehicleMetricsSensorsController.swift */; };
+		FA2431822DD203AA00B52998 /* VehicleMetricsSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA2431812DD203AA00B52998 /* VehicleMetricsSensors.storyboard */; };
 		FA2778272B67B5F200D65926 /* TextInfoWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2778262B67B5F200D65926 /* TextInfoWidget+Extension.swift */; };
 		FA282AEF2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA282AEE2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift */; };
 		FA282AF62C2C456700CC7AC1 /* WeatherNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA282AF32C2C456700CC7AC1 /* WeatherNavigationBarView.swift */; };
 		FA282AF72C2C456700CC7AC1 /* WeatherNavigationBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA282AF42C2C456700CC7AC1 /* WeatherNavigationBarView.xib */; };
+		FA2E95C12DDDD97600B0ACA0 /* SearchOBDDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E95C02DDDD97500B0ACA0 /* SearchOBDDeviceTableViewCell.swift */; };
+		FA2E95C32DDE0A6C00B0ACA0 /* OBDService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */; };
+		FA30E6292DE9932400F09141 /* UIMenu+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */; };
 		FA327BFE2BB418F900CFADCF /* MissingMapsCalculator.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */; };
 		FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */; };
 		FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE42ADF026D0001C11D /* DeviceType.swift */; };
@@ -3139,6 +3148,8 @@
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
 		FA5D19E12CC00B1100E01A27 /* GPXDataItemGPXFileWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */; };
 		FA5D71E12CE24C570062BC4D /* LockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */; };
+		FA5FB63F2DE06AF800ABECCF /* OAOBDConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */; };
+		FA5FB6422DE0757700ABECCF /* OBDComputerWidgetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */; };
 		FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */; };
 		FA63F24E2AF3DC550040A0CE /* SensorWidgetDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */; };
 		FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */; };
@@ -3180,6 +3191,10 @@
 		FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */; };
 		FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */; };
 		FA882EF22CDCFE98001F3814 /* LockScreenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */; };
+		FA899F1E2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA899F1D2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift */; };
+		FA899F1F2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA899F1C2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard */; };
+		FA899F262DD4CC690022F736 /* OBDVehicleMetricsDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA899F252DD4CC690022F736 /* OBDVehicleMetricsDevice.swift */; };
+		FA899F282DD4D22B0022F736 /* OBDVehicleMetricsSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA899F272DD4D22B0022F736 /* OBDVehicleMetricsSensor.swift */; };
 		FA9217072D50C9640074E958 /* GalleryGridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9217062D50C9640074E958 /* GalleryGridViewController.swift */; };
 		FA92170E2D52544F0074E958 /* GalleryGridDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA92170D2D5254420074E958 /* GalleryGridDetailViewController.swift */; };
 		FA9217102D525D600074E958 /* GalleryContextMenuProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA92170F2D525D600074E958 /* GalleryContextMenuProvider.swift */; };
@@ -3228,6 +3243,7 @@
 		FACB02AA2D54C52000EBE87F /* ImageCache+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */; };
 		FACB02AC2D54F71C00EBE87F /* DownloadImageMetadataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */; };
 		FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */; };
+		FACDC63D2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAD258A82D7856EE001C875F /* vi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = FAD258A72D7856EE001C875F /* vi_tts.js */; };
 		FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD848992CAD6F950018AF92 /* WptPtExtension.swift */; };
@@ -3235,6 +3251,7 @@
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
 		FAE0B7162AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */; };
+		FAE0F0862DF05B5200795D1D /* ValueConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0F0852DF05B5200795D1D /* ValueConverter.swift */; };
 		FAE3A5792D47BCA700E97159 /* OACollapsableView.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE3A5782D47BCA700E97159 /* OACollapsableView.m */; };
 		FAE446C42CCFC82700598BE3 /* ZoomLevelWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE446C32CCFC82400598BE3 /* ZoomLevelWidgetState.swift */; };
 		FAE446D62CD3C10900598BE3 /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE446D52CD3C10300598BE3 /* UIScreen+Extension.swift */; };
@@ -5105,6 +5122,9 @@
 		C5B2AA602DB00700007FB854 /* GridFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridFormat.swift; sourceTree = "<group>"; };
 		C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpDetailsViewController.swift; sourceTree = "<group>"; };
 		C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHelpDataService.swift; sourceTree = "<group>"; };
+		C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDFuelConsumptionWidget.swift; sourceTree = "<group>"; };
+		C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDRemainingFuelWidget.swift; sourceTree = "<group>"; };
+		C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDTextWidget.swift; sourceTree = "<group>"; };
 		C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@2x.png"; path = "Resources/Icons/ic_navbar_trash@2x.png"; sourceTree = "<group>"; };
 		C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_upload_to_openstreetmap_outlined@3x.png"; path = "Resources/Icons/ic_navbar_upload_to_openstreetmap_outlined@3x.png"; sourceTree = "<group>"; };
 		C5CD4CEE29EFE6AB00B35C3D /* ic_navbar_trash@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@3x.png"; path = "Resources/Icons/ic_navbar_trash@3x.png"; sourceTree = "<group>"; };
@@ -7672,13 +7692,19 @@
 		FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunPositionMode.swift; sourceTree = "<group>"; };
 		FA186E462BFCF15A007EE77D /* SpeedLimitWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeedLimitWrapper.h; sourceTree = "<group>"; };
 		FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SpeedLimitWrapper.mm; sourceTree = "<group>"; };
+		FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsPlugin.swift; sourceTree = "<group>"; };
 		FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSensor.swift; sourceTree = "<group>"; };
 		FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSCDDevice.swift; sourceTree = "<group>"; };
 		FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCharacteristic.swift; sourceTree = "<group>"; };
+		FA24317F2DD202E700B52998 /* VehicleMetricsSensorsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsSensorsController.swift; sourceTree = "<group>"; };
+		FA2431812DD203AA00B52998 /* VehicleMetricsSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VehicleMetricsSensors.storyboard; sourceTree = "<group>"; };
 		FA2778262B67B5F200D65926 /* TextInfoWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInfoWidget+Extension.swift"; sourceTree = "<group>"; };
 		FA282AEE2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataSourceViewController.swift; sourceTree = "<group>"; };
 		FA282AF32C2C456700CC7AC1 /* WeatherNavigationBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherNavigationBarView.swift; sourceTree = "<group>"; };
 		FA282AF42C2C456700CC7AC1 /* WeatherNavigationBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WeatherNavigationBarView.xib; sourceTree = "<group>"; };
+		FA2E95C02DDDD97500B0ACA0 /* SearchOBDDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOBDDeviceTableViewCell.swift; sourceTree = "<group>"; };
+		FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDService.swift; sourceTree = "<group>"; };
+		FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIMenu+Extension.swift"; sourceTree = "<group>"; };
 		FA327BFC2BB418F900CFADCF /* MissingMapsCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingMapsCalculator.h; sourceTree = "<group>"; };
 		FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MissingMapsCalculator.mm; sourceTree = "<group>"; };
 		FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEChangeDeviceNameViewController.swift; sourceTree = "<group>"; };
@@ -7717,6 +7743,9 @@
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXDataItemGPXFileWrapper.swift; sourceTree = "<group>"; };
 		FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockHelper.swift; sourceTree = "<group>"; };
+		FA5FB63D2DE06AD500ABECCF /* OAOBDConnector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOBDConnector.h; sourceTree = "<group>"; };
+		FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOBDConnector.m; sourceTree = "<group>"; };
+		FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDComputerWidgetExtension.swift; sourceTree = "<group>"; };
 		FA6116102C787B7C005C3ABD /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
 		FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDataField.swift; sourceTree = "<group>"; };
 		FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataField.swift; sourceTree = "<group>"; };
@@ -7761,6 +7790,10 @@
 		FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSCDDevice.swift; sourceTree = "<group>"; };
 		FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSensor.swift; sourceTree = "<group>"; };
 		FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenAction.swift; sourceTree = "<group>"; };
+		FA899F1C2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VehicleMetricsSearchViewController.storyboard; sourceTree = "<group>"; };
+		FA899F1D2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsSearchViewController.swift; sourceTree = "<group>"; };
+		FA899F252DD4CC690022F736 /* OBDVehicleMetricsDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDVehicleMetricsDevice.swift; sourceTree = "<group>"; };
+		FA899F272DD4D22B0022F736 /* OBDVehicleMetricsSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDVehicleMetricsSensor.swift; sourceTree = "<group>"; };
 		FA9217062D50C9640074E958 /* GalleryGridViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryGridViewController.swift; sourceTree = "<group>"; };
 		FA92170D2D5254420074E958 /* GalleryGridDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryGridDetailViewController.swift; sourceTree = "<group>"; };
 		FA92170F2D525D600074E958 /* GalleryContextMenuProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryContextMenuProvider.swift; sourceTree = "<group>"; };
@@ -7808,6 +7841,7 @@
 		FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCache+Extension.swift"; sourceTree = "<group>"; };
 		FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageMetadataService.swift; sourceTree = "<group>"; };
 		FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
+		FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsDescriptionViewController.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
 		FAD258A72D7856EE001C875F /* vi_tts.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = vi_tts.js; path = ../resources/voice/vi/vi_tts.js; sourceTree = SOURCE_ROOT; };
@@ -7817,6 +7851,7 @@
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
 		FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BLEPairedSensors.storyboard; sourceTree = "<group>"; };
 		FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "СhoicePairedDeviceTableViewCell.swift"; sourceTree = "<group>"; };
+		FAE0F0852DF05B5200795D1D /* ValueConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueConverter.swift; sourceTree = "<group>"; };
 		FAE3A5772D47BCA700E97159 /* OACollapsableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableView.h; sourceTree = "<group>"; };
 		FAE3A5782D47BCA700E97159 /* OACollapsableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACollapsableView.m; sourceTree = "<group>"; };
 		FAE446C32CCFC82400598BE3 /* ZoomLevelWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelWidgetState.swift; sourceTree = "<group>"; };
@@ -10694,6 +10729,7 @@
 		DA5A797626C563A000F274C7 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				FA1D6DAC2DCE04640080E374 /* VehicleMetricsPlugin */,
 				FACE409C2AEA9A8000E1E43A /* ExternalSensorsPlugin */,
 				32119B3A28477112005E1E0C /* Development */,
 				DA5A799526C563A000F274C7 /* Mapillary */,
@@ -13230,6 +13266,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FAE0F0852DF05B5200795D1D /* ValueConverter.swift */,
 				2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */,
 				2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */,
 				FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */,
@@ -13600,6 +13637,7 @@
 		DAABE4EC2A16578A00569F71 /* SwiftExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */,
 				FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */,
 				FA9217112D5277310074E958 /* DateFormatter+Extension.swift */,
 				FAE446D52CD3C10300598BE3 /* UIScreen+Extension.swift */,
@@ -13754,6 +13792,31 @@
 			path = OACustomSourceDetailsViewController;
 			sourceTree = "<group>";
 		};
+		FA1D6DAC2DCE04640080E374 /* VehicleMetricsPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				FA2E95BF2DDDD96000B0ACA0 /* SearchOBDDeviceTableViewCell */,
+				FACDC6422DDB7BCA00CB0C55 /* OBD */,
+				FACDC63B2DDB315F00CB0C55 /* VehicleMetricsDescriptionViewController */,
+				FA899F202DD344AA0022F736 /* VehicleMetricsSearchViewController */,
+				FA24317E2DD202A600B52998 /* VehicleMetricsSensors */,
+				FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */,
+				C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */,
+				C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */,
+				C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */,
+			);
+			path = VehicleMetricsPlugin;
+			sourceTree = "<group>";
+		};
+		FA24317E2DD202A600B52998 /* VehicleMetricsSensors */ = {
+			isa = PBXGroup;
+			children = (
+				FA2431812DD203AA00B52998 /* VehicleMetricsSensors.storyboard */,
+				FA24317F2DD202E700B52998 /* VehicleMetricsSensorsController.swift */,
+			);
+			path = VehicleMetricsSensors;
+			sourceTree = "<group>";
+		};
 		FA282AF52C2C456700CC7AC1 /* WeatherNavigationBarView */ = {
 			isa = PBXGroup;
 			children = (
@@ -13761,6 +13824,14 @@
 				FA282AF42C2C456700CC7AC1 /* WeatherNavigationBarView.xib */,
 			);
 			path = WeatherNavigationBarView;
+			sourceTree = "<group>";
+		};
+		FA2E95BF2DDDD96000B0ACA0 /* SearchOBDDeviceTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				FA2E95C02DDDD97500B0ACA0 /* SearchOBDDeviceTableViewCell.swift */,
+			);
+			path = SearchOBDDeviceTableViewCell;
 			sourceTree = "<group>";
 		};
 		FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */ = {
@@ -13858,6 +13929,15 @@
 				DA5A7DCE26C563A300F274C7 /* OAFloatingButtonsHudViewController.mm */,
 			);
 			path = OAFloatingButtonsHudViewController;
+			sourceTree = "<group>";
+		};
+		FA5FB6402DE06E1600ABECCF /* OBDConnector */ = {
+			isa = PBXGroup;
+			children = (
+				FA5FB63D2DE06AD500ABECCF /* OAOBDConnector.h */,
+				FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */,
+			);
+			path = OBDConnector;
 			sourceTree = "<group>";
 		};
 		FA6116122C787B7C005C3ABD /* Charts */ = {
@@ -13961,6 +14041,15 @@
 			path = UserDefaultsKey;
 			sourceTree = "<group>";
 		};
+		FA899F202DD344AA0022F736 /* VehicleMetricsSearchViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FA899F1C2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard */,
+				FA899F1D2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift */,
+			);
+			path = VehicleMetricsSearchViewController;
+			sourceTree = "<group>";
+		};
 		FAA650332ADD42990020DCEA /* BLE */ = {
 			isa = PBXGroup;
 			children = (
@@ -14014,6 +14103,7 @@
 		FAA6503A2ADD42C40020DCEA /* Sensors */ = {
 			isa = PBXGroup;
 			children = (
+				FA899F272DD4D22B0022F736 /* OBDVehicleMetricsSensor.swift */,
 				FAA6503C2ADD42C40020DCEA /* Sensor.swift */,
 				FAA6503B2ADD42C40020DCEA /* BLEBatterySensor.swift */,
 				FAA6503D2ADD42C40020DCEA /* BLEHeartRateSensor.swift */,
@@ -14027,6 +14117,7 @@
 		FAA650402ADD42C40020DCEA /* Devices */ = {
 			isa = PBXGroup;
 			children = (
+				FA899F252DD4CC690022F736 /* OBDVehicleMetricsDevice.swift */,
 				FAA650452ADD42C40020DCEA /* Device.swift */,
 				FA359EE42ADF026D0001C11D /* DeviceType.swift */,
 				FAA650442ADD42C40020DCEA /* DeviceFactory.swift */,
@@ -14098,6 +14189,24 @@
 				FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */,
 			);
 			path = SpeedLimitView;
+			sourceTree = "<group>";
+		};
+		FACDC63B2DDB315F00CB0C55 /* VehicleMetricsDescriptionViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */,
+			);
+			path = VehicleMetricsDescriptionViewController;
+			sourceTree = "<group>";
+		};
+		FACDC6422DDB7BCA00CB0C55 /* OBD */ = {
+			isa = PBXGroup;
+			children = (
+				FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */,
+				FA5FB6402DE06E1600ABECCF /* OBDConnector */,
+				FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */,
+			);
+			path = OBD;
 			sourceTree = "<group>";
 		};
 		FACE409C2AEA9A8000E1E43A /* ExternalSensorsPlugin */ = {
@@ -14894,6 +15003,7 @@
 				DA0D1630281BEEF500CEEF58 /* map_turn_slight_left@3x.png in Resources */,
 				32BBDC9C2C049B0C0090D37E /* RouteInfoListItemCell.xib in Resources */,
 				DA5A82C626C563A800F274C7 /* OAWaypointCell.xib in Resources */,
+				FA2431822DD203AA00B52998 /* VehicleMetricsSensors.storyboard in Resources */,
 				84EE2DE21AFD149F007C9A94 /* map_banner@3x.png in Resources */,
 				FAD258A82D7856EE001C875F /* vi_tts.js in Resources */,
 				DA04D777284F86060097CAED /* ic_custom_zero_downloads_big@3x.png in Resources */,
@@ -15658,6 +15768,7 @@
 				843E5D891AB341E000BE14BE /* menu_direction_icon@3x.png in Resources */,
 				158DE48E25AEF31B007C1B57 /* ic_destination_pin_6@2x.png in Resources */,
 				323BD9112628850400D255ED /* ic_bg_point_octagon_top@2x.png in Resources */,
+				FA899F1F2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard in Resources */,
 				DA23425423477F33003911B8 /* ic_custom_clear_list@2x.png in Resources */,
 				8476E27C1F6C1EEC00EC274F /* map_car_location_lost_night@3x.png in Resources */,
 				323BD9082628850400D255ED /* ic_bg_point_square_bottom@2x.png in Resources */,
@@ -16417,6 +16528,7 @@
 				DA5A81CD26C563A700F274C7 /* QuadTree.m in Sources */,
 				DA4ABF2F2876E4C200B996EF /* OAItemExporter.m in Sources */,
 				DA5A83B126C563A800F274C7 /* OAWebViewController.m in Sources */,
+				FA30E6292DE9932400F09141 /* UIMenu+Extension.swift in Sources */,
 				DA5A825D26C563A700F274C7 /* OAFoldersCollectionViewCell.m in Sources */,
 				DA5A836D26C563A800F274C7 /* OAAppModeCell.mm in Sources */,
 				DA5A84E326C563A900F274C7 /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
@@ -16507,6 +16619,7 @@
 				DA5A81C626C563A700F274C7 /* OACollatorStringMatcher.m in Sources */,
 				DA5A81E926C563A700F274C7 /* OAHistoryHelper.m in Sources */,
 				DA5A84B526C563A900F274C7 /* OAAddDestinationBottomSheetViewController.mm in Sources */,
+				FAE0F0862DF05B5200795D1D /* ValueConverter.swift in Sources */,
 				DA5A824526C563A700F274C7 /* OAVehicleParametersViewController.mm in Sources */,
 				323B501D2C887ABB002BDF31 /* ProfileAppearanceLocationRadiusViewController.swift in Sources */,
 				DA5A853026C563A900F274C7 /* OAOsmAndLiveHelper.mm in Sources */,
@@ -16555,6 +16668,7 @@
 				DA5A814F26C563A700F274C7 /* OACarPlayFavoritesListController.mm in Sources */,
 				DA5A813826C563A700F274C7 /* OAOsmBugResult.m in Sources */,
 				B247455727E6470A00C18C3F /* OATwoFilledButtonsTableViewCell.m in Sources */,
+				FA2E95C32DDE0A6C00B0ACA0 /* OBDService.swift in Sources */,
 				DA5A812326C563A700F274C7 /* OATransportStop.mm in Sources */,
 				DA5A84BF26C563A900F274C7 /* OAPointOptionsBottomSheetViewController.mm in Sources */,
 				DA5A852D26C563A900F274C7 /* OASaveGpxToTripsActivity.mm in Sources */,
@@ -16661,6 +16775,7 @@
 				FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */,
 				C556C85329BA0844006794D5 /* OASunriseSunsetWidget.mm in Sources */,
 				DA5A848926C563A900F274C7 /* OASaveTrackViewController.mm in Sources */,
+				C5C9BB912DF9A087003B7550 /* OBDTextWidget.swift in Sources */,
 				DA84999C287EBF27002B1E11 /* OABaseDeleteFilesCommand.m in Sources */,
 				46F494132B4D9D6400CAB805 /* OAGPXDataSetType.m in Sources */,
 				DA5A838626C563A800F274C7 /* OADestinationItem.m in Sources */,
@@ -16873,9 +16988,11 @@
 				DA5A819C26C563A700F274C7 /* OAAddPOIAction.mm in Sources */,
 				DA5A839B26C563A800F274C7 /* OAOptionsPanelBlackViewController.m in Sources */,
 				46207CF72B9A7EDE000D337D /* String+Extension.swift in Sources */,
+				C5BC8DD72E0408D400CF0815 /* OBDRemainingFuelWidget.swift in Sources */,
 				DA5A83AA26C563A800F274C7 /* OAAdvancedEditingViewController.mm in Sources */,
 				464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */,
 				DA5A812526C563A700F274C7 /* OATransportStopType.m in Sources */,
+				C5BC8DD52E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift in Sources */,
 				DA5A84F826C563A900F274C7 /* OAMapStyleSettings.mm in Sources */,
 				DA5A840926C563A800F274C7 /* OAMapDownloadController.mm in Sources */,
 				DA5A835C26C563A800F274C7 /* OAPreviewZoomLevelsCell.m in Sources */,
@@ -16943,6 +17060,7 @@
 				DA5A850726C563A900F274C7 /* OATableViewCellWithButton.m in Sources */,
 				46E9ADA128DC9FD000CC55F9 /* OAButtonTableViewCell.m in Sources */,
 				3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */,
+				FA899F282DD4D22B0022F736 /* OBDVehicleMetricsSensor.swift in Sources */,
 				46E10A372BB7400000B9D5C9 /* GlideAverageWidgetState.swift in Sources */,
 				DA4ABEE72876DA5D00B996EF /* OASettingsItemWriter.m in Sources */,
 				DA5A830626C563A800F274C7 /* OAImagesTableViewCell.m in Sources */,
@@ -16957,6 +17075,7 @@
 				DA5A812C26C563A700F274C7 /* OAWaypointsMapLayerProvider.mm in Sources */,
 				DA5A823E26C563A700F274C7 /* OAProfileDataObject.m in Sources */,
 				46DB0A7E2C5D1602001356D5 /* GradientUiHelper.swift in Sources */,
+				FA899F1E2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift in Sources */,
 				DAA9F44E27EC9EB8002BB1A8 /* OARegisterUserCommand.m in Sources */,
 				DA5A836126C563A800F274C7 /* OASliderWithValuesCell.m in Sources */,
 				DA5A84BE26C563A900F274C7 /* OASegmentOptionsBottomSheetViewController.mm in Sources */,
@@ -17068,11 +17187,13 @@
 				DA5A854E26C563A900F274C7 /* OAGPXUIHelper.mm in Sources */,
 				DA5A83B626C563A800F274C7 /* OAActionAddCategoryViewController.mm in Sources */,
 				8AE943B327A28BE900961319 /* OAWeatherRasterLayer.mm in Sources */,
+				FA1D6DAE2DCE04710080E374 /* VehicleMetricsPlugin.swift in Sources */,
 				DA5A813B26C563A700F274C7 /* OAOsmMapUtils.mm in Sources */,
 				DA5A856026C563A900F274C7 /* OARTargetPoint.mm in Sources */,
 				DA5A837426C563A800F274C7 /* OARouteSegmentShieldView.mm in Sources */,
 				DA4ABF142876DA6800B996EF /* OAPluginSettingsItem.mm in Sources */,
 				327D68A52A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift in Sources */,
+				FA5FB63F2DE06AF800ABECCF /* OAOBDConnector.m in Sources */,
 				DA8DC3982A0CF47D006C116B /* MapMarkerSideWidget.swift in Sources */,
 				FA6408752D3E8047005FD12D /* WikiImageCard.swift in Sources */,
 				DA8DC39D2A0E2247006C116B /* OAMapViewHelper.mm in Sources */,
@@ -17233,6 +17354,7 @@
 				DA5A846026C563A900F274C7 /* OARasterMapLayer.mm in Sources */,
 				DA5A812A26C563A700F274C7 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
 				DA5A84F726C563A900F274C7 /* OAAppData.m in Sources */,
+				FA5FB6422DE0757700ABECCF /* OBDComputerWidgetExtension.swift in Sources */,
 				DA5A846326C563A900F274C7 /* OAMapLayer.mm in Sources */,
 				DA5A849B26C563A900F274C7 /* OAClearPointsCommand.mm in Sources */,
 				323084D926E933FE00D6FC67 /* OAOsmAndFormatter.mm in Sources */,
@@ -17271,6 +17393,7 @@
 				DA4ABF152876DA6800B996EF /* OAOsmEditsSettingsItem.mm in Sources */,
 				DA4ABF242876DA6800B996EF /* OAOsmNotesSettingsItem.mm in Sources */,
 				DA5A84C026C563A900F274C7 /* OAPlanningOptionsBottomSheetViewController.mm in Sources */,
+				FACDC63D2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift in Sources */,
 				DA5A81DC26C563A700F274C7 /* OABuilding.mm in Sources */,
 				DA5A849D26C563A900F274C7 /* OARemovePointCommand.mm in Sources */,
 				DA5A819926C563A700F274C7 /* OAGPXAction.mm in Sources */,
@@ -17416,6 +17539,7 @@
 				FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */,
 				464BF4A52C04F7D6000D6908 /* CompassButtonState.swift in Sources */,
 				DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */,
+				FA899F262DD4CC690022F736 /* OBDVehicleMetricsDevice.swift in Sources */,
 				DA5A84B026C563A900F274C7 /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				DA5A848726C563A900F274C7 /* OANavigationController.m in Sources */,
 				DA5A82EC26C563A800F274C7 /* OAIconsCollectionViewCell.m in Sources */,
@@ -17506,6 +17630,7 @@
 				DABC7F1F27B65C36005C76E2 /* OACurrentStreetName.mm in Sources */,
 				DA775B8D27E618070081B9C1 /* OABackupInfo.mm in Sources */,
 				DA5A83A926C563A800F274C7 /* OABasicEditingViewController.mm in Sources */,
+				FA2E95C12DDDD97600B0ACA0 /* SearchOBDDeviceTableViewCell.swift in Sources */,
 				DA35963529B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm in Sources */,
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,
 				FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */,
@@ -17686,6 +17811,7 @@
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,
 				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
+				FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */,
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,
 				CA4ED87EDFA076F9F7F63A4C /* OABenefitsOsmContributorsViewController.m in Sources */,
 				CA4EDCD265973B276DCF2FE8 /* OAMappersViewController.m in Sources */,

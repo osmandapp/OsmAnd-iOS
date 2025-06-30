@@ -21,7 +21,6 @@
 "months_3" = "Tri mis";
 "price_free" = "Am ddim";
 "get_discount_title" = "Cael %d %@ am %@ i ffwrdd.";
-"get_free_trial_title" = "Dechreuwch eich cyfnod am ddim %d %@.";
 "get_discount_short_descr" = "%@ am %d %@, wedyn %@";
 "get_discount_first_part" = "%@ am y %@ cyntaf";
 "get_discount_second_part" = "Yna %@";
@@ -2014,3 +2013,16 @@
 "shared_string_minute_lowercase" = "mun";
 "transport_stop" = "Stopio";
 "shared_string_to" = "I";
+"dd_mm_mmm_format" = "GG°MM.MMM′";
+"map_widget_distance" = "Pellter";
+"three_months_subscription" = "Tanysgrifiad tri mis";
+"mapillary_action_descr" = "Rhanna dy olygfa ar lefel y stryd trwy Mapillary.";
+"add_hidden_group_info" = "Mae\'r pwynt ychwanegol i\'w weld yn \"%@\". Datguddia\'r grŵp a ddewiswyd i\'w ddangos ar y map.";
+"shared_string_items" = "Eitemau";
+"shared_string_view_all" = "Gweld y cwbl";
+"default_appearance" = "Golwg rhagosodedig";
+"online_photos" = "Lluniau arlein";
+"shared_string_date" = "Dyddiad";
+"poi_filter_fuel" = "Tanwydd";
+"shared_string_pause" = "Oedi";
+"dd_ddddd_format" = "GG.GGGG°";

@@ -18,7 +18,7 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectButton: UIButton!
     
     var onUpdateConnectStateAction: ((DeviceState) -> Void)?
-    var didPaireDeviceAction: (() -> Void)?
+    var didPairedDeviceAction: (() -> Void)?
     
     private var device: Device?
     
@@ -38,6 +38,10 @@ final class DescriptionDeviceHeader: UIView {
     func updateActiveServiceImage() {
         guard let device else { return }
         deviceImageView.image = device.getServiceConnectedImage
+    }
+    
+    func showSignalIndicator(show: Bool) {
+        signalIndicatorImageView.isHidden = !show
     }
     
     private func changeDisconnectedState(device: Device) {
@@ -93,12 +97,12 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success:
-                debugPrint("connect success | \(device.deviceServiceName) | \(device.deviceName)")
+                NSLog("connect success | \(device.deviceServiceName) | \(device.deviceName)")
                 let isPairedDevice = DeviceHelper.shared.isPairedDevice(id: device.id)
                 DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
                 DeviceHelper.shared.addConnected(device: device)
                 if !isPairedDevice {
-                    didPaireDeviceAction?()
+                    didPairedDeviceAction?()
                 }
                 configureConnectButtonTitle(with: .disconnected)
                 discoverServices(serviceUUIDs: nil)
@@ -124,10 +128,10 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success(let services):
-                debugPrint("discoverCharacteristics: success")
+                NSLog("discoverCharacteristics: success")
                 discoverCharacteristics(services: services)
             case .failure(let error):
-                debugPrint("discoverCharacteristics: \(error)")
+                NSLog("discoverCharacteristics: \(error)")
                 showErrorAlertWith(message: error.localizedDescription)
             }
         }
@@ -135,36 +139,51 @@ final class DescriptionDeviceHeader: UIView {
     
     private func discoverCharacteristics(services: [CBService]) {
         guard let device else { return }
+        
+        var completedCount = 0
+        let totalServices = services.count
+
         for service in services {
             device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
                 guard let self else { return }
+                
+                defer {
+                    completedCount += 1
+                    if completedCount == totalServices, device.deviceType == .OBD_VEHICLE_METRICS {
+                        OBDService.shared.startDispatcher()
+                    }
+                }
+                
                 switch result {
                 case .success(let characteristics):
                     for characteristic in characteristics {
                         debugPrint(characteristic)
+                        
                         if characteristic.properties.contains(.read) {
                             device.update(with: characteristic) { _ in }
                         }
+                        
                         if characteristic.properties.contains(.notify) {
-                            debugPrint("\(characteristic.uuid): properties contains .notify")
+                            NSLog("[\(characteristic.uuid)] supports .notify, enabling...")
                             device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { notifyResult in
                                 switch notifyResult {
                                 case .success(let isNotifying):
-                                    debugPrint("success: this peripheral was registered for change notifications to the characteristic [\(characteristic.uuid)]: \(isNotifying)")
+                                    NSLog("Notifications enabled for [\(characteristic.uuid)]: \(isNotifying)")
                                 case .failure(let error):
-                                    debugPrint("failure: this peripheral was not registered for change notifications to the characteristic [\(characteristic.uuid)]:  \(error.localizedDescription)")
+                                    NSLog("Failed to enable notifications for [\(characteristic.uuid)]: \(error.localizedDescription)")
                                 }
                             }
                         }
                     }
+                    
                 case .failure(let error):
-                    debugPrint("discoverCharacteristics: \(error)")
+                    NSLog("Failed to discover characteristics for service [\(service.uuid)]: \(error.localizedDescription)")
                     showErrorAlertWith(message: error.localizedDescription)
                 }
             }
         }
     }
-    
+
     private func disconnect() {
         guard let device else { return }
         configureConnectButtonTitle(with: .disconnecting)

@@ -129,6 +129,14 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
     return time;
 }
 
++ (NSString *)getFormattedTimeRuntime:(NSInteger)seconds
+{
+    NSInteger totalMinutes = seconds / 60;
+    NSInteger hours = totalMinutes / 60;
+    NSInteger minutes = totalMinutes % 60;
+    return [NSString stringWithFormat:@"%ld:%02ld", (long)hours, (long)minutes];
+}
+
 + (NSString *) getFormattedAlarmInfoDistance:(float)meters
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
@@ -809,6 +817,19 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         }
     }
     return preparedValueToSave;
+}
+
++ (float)convertLiterToVolumeUnitWithVolumeUnit:(EOAVolumeConstant)volumeUnit value:(float)value
+{
+    switch (volumeUnit) {
+        case US_GALLONS:
+            return value / (float)US_GALLONS_IN_LITER;
+        case IMPERIAL_GALLONS:
+            return value / (float)IMPERIAL_GALLONS_IN_LITER;
+        case LITRES:
+        default:
+            return value;
+    }
 }
 
 + (NSArray<NSNumber *> *)generate10BaseRoundingBoundsWithMax:(int)max multCoef:(int)multCoef

@@ -57,7 +57,7 @@ class WidgetType: NSObject {
     static func isComplexWidget(_ widgetId: String) -> Bool {
         Self.complexWidgetIds.contains(widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId.substring(to: widgetId.find(MapWidgetInfo.DELIMITER)) : widgetId)
     }
-
+    
     func getGroup() -> WidgetGroup? {
         group
     }
@@ -81,6 +81,10 @@ class WidgetType: NSObject {
 //            return R.string.av_notes_choose_action_widget_desc;
 //        }
         return ""
+    }
+    
+    func isOBDWidget() -> Bool {
+        getGroup() == .vehicleMetrics;
     }
 
     func getSecondaryDescription() -> String? {
@@ -115,12 +119,13 @@ class WidgetType: NSObject {
         }
         return nil
     }
-
+    
     func isPurchased() -> Bool {
-        if WidgetType.getProWidgets().contains(where: { $0.id == self.id }) {
-            return OAIAPHelper.isOsmAndProAvailable()
-        }
-        return true
+        OAIAPHelper.isWidgetPurchased(self)
+    }
+    
+    func isProWidget() -> Bool {
+        self == .elevationProfile || self == .altitudeMapCenter || (isOBDWidget() && self != .OBDSpeed && self != .OBDRpm)
     }
 
     func getDefaultOrder() -> Int {
@@ -295,6 +300,21 @@ extension WidgetType {
     static let glideTarget = WidgetType(ordinal: 53, id: "glide_ratio_to_target", title: localizedString("glide_ratio_to_target"), descr: localizedString("map_widget_glide_target_desc"), iconName: "widget_glide_ratio_to_target", group: .glide, defaultPanel: .rightPanel)
     static let glideAverage = WidgetType(ordinal: 54, id: "average_glide_ratio", title: localizedString("average_glide_ratio"), descr: localizedString("map_widget_glide_average_desc"), iconName: "widget_glide_ratio_average", group: .glide, defaultPanel: .rightPanel)
     
+    // Vehicle Metrics
+    static let OBDSpeed = WidgetType(ordinal: 55, id: "obd_speed", title: localizedString("obd_widget_vehicle_speed"), descr: localizedString("obd_speed_desc"), iconName: "widget_obd_speed", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDRpm = WidgetType(ordinal: 56, id: "obd_rpm", title: localizedString("obd_widget_engine_speed"), descr: localizedString("obd_rpm_desc"), iconName: "widget_obd_engine_speed", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDEngineRuntime = WidgetType(ordinal: 57, id: "obd_engine_runtime", title: localizedString("obd_engine_runtime"), descr: localizedString("obd_engine_runtime_desc"), iconName: "widget_obd_engine_runtime", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDFuelPressure = WidgetType(ordinal: 58, id: "obd_fuel_pressure", title: localizedString("obd_fuel_pressure"), descr: localizedString("obd_fuel_pressure_desc"), iconName: "widget_obd_fuel_pressure", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDAirIntakeTemp = WidgetType(ordinal: 59, id: "obd_intake_air_temp", title: localizedString("obd_air_intake_temp"), descr: localizedString("obd_air_intake_temp_desc"), iconName: "widget_obd_temperature_intake", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let engineOilTemperature = WidgetType(ordinal: 60, id: "obd_engine_oil_temperature", title: localizedString("obd_engine_oil_temperature"), descr: localizedString("obd_engine_oil_temperature_desc"), iconName: "widget_obd_temperature_engine_oil", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDAmbientAirTemp = WidgetType(ordinal: 61, id: "obd_ambient_air_temp", title: localizedString("obd_ambient_air_temp"), descr: localizedString("obd_ambient_air_temp_desc"), iconName: "widget_obd_temperature_outside", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDBatteryVoltage = WidgetType(ordinal: 62, id: "obd_battery_voltage", title: localizedString("obd_battery_voltage"), descr: localizedString("obd_battery_voltage_desc"), iconName: "widget_obd_battery_voltage", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDEngineCoolantTemp = WidgetType(ordinal: 63, id: "obd_engine_coolant_temp", title: localizedString("obd_engine_coolant_temp"), descr: localizedString("obd_engine_coolant_temp_desc"), iconName: "widget_obd_temperature_coolant", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDRemainingFuel = WidgetType(ordinal: 64, id: "obd_remaining_fuel", title: localizedString("remaining_fuel"), descr: localizedString("remaining_fuel_description"), iconName: "widget_obd_fuel_remaining", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDCalculatedEngineLoad = WidgetType(ordinal: 65, id: "obd_calculated_engine_load", title: localizedString("obd_calculated_engine_load"), descr: localizedString("obd_calculated_engine_load_desc"), iconName: "widget_obd_engine_calculated_load", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDThrottlePosition = WidgetType(ordinal: 66, id: "obd_throttle_position", title: localizedString("obd_throttle_position"), descr: localizedString("obd_throttle_position_desc"), iconName: "widget_obd_throttle_position", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    static let OBDFuelConsumption = WidgetType(ordinal: 67, id: "obd_fuel_consumption", title: localizedString("obd_fuel_consumption"), descr: localizedString("obd_fuel_consumption_desc"), iconName: "widget_obd_fuel_consumption", group: .vehicleMetrics, defaultPanel: .rightPanel)
+    
     static let values = [nextTurn,
                          smallNextTurn,
                          secondNextTurn,
@@ -363,6 +383,19 @@ extension WidgetType {
                          bicycleSpeed,
                          temperature,
                          glideTarget,
-                         glideAverage
+                         glideAverage,
+                         OBDSpeed,
+                         OBDRpm,
+                         OBDEngineRuntime,
+                         OBDFuelPressure,
+                         OBDAirIntakeTemp,
+                         engineOilTemperature,
+                         OBDAmbientAirTemp,
+                         OBDBatteryVoltage,
+                         OBDEngineCoolantTemp,
+                         OBDRemainingFuel,
+                         OBDCalculatedEngineLoad,
+                         OBDThrottlePosition,
+                         OBDFuelConsumption
     ]
 }

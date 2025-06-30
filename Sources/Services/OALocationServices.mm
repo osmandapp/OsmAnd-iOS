@@ -607,7 +607,7 @@
 {
     if (_simulatePosition)
     {
-        CLLocation *loc = [_simulatePosition getSimulatedLocation];
+        OALocation *loc = [_simulatePosition getSimulatedLocationForTunnel];
         if (loc)
         {
             [self setLocation:loc simulated:YES];

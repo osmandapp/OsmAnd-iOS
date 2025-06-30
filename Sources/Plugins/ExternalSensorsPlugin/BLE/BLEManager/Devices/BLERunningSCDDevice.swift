@@ -64,7 +64,7 @@ final class BLERunningSCDDevice: Device {
         [.bicycleSpeed, .bicycleCadence, .bicycleDistance]
     }
     
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+    override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }
 }

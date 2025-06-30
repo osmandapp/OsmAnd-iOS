@@ -4977,7 +4977,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_profilePreferences setObject:_interruptMusic forKey:@"interrupt_music"];
 
         _previewNextTurn = [OACommonBoolean withKey:previewNextTurnKey defValue:YES];
-        [_profilePreferences setObject:_snapToRoad forKey:@"preview_next_turn"];
+        [_profilePreferences setObject:_previewNextTurn forKey:@"preview_next_turn"];
 
         _snapToRoad = [OACommonBoolean withKey:snapToRoadKey defValue:NO];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];

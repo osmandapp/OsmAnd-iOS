@@ -978,7 +978,6 @@ static const NSInteger kColorsSection = 1;
     for (NSString *attribute in OASColoringType.routeStatisticsAttributesStrings)
     {
         UIAction *proAction = [self createProColorActionWithTitleKey:[attribute stringByAppendingString:@"_name"]
-                                                      parameterValue:attribute
                                                       selectedString:attribute
                                                 isRouteInfoAttribute:isRouteInfoAttribute];
         [proColorActions addObject:proAction];
@@ -990,7 +989,6 @@ static const NSInteger kColorsSection = 1;
 }
 
 - (UIAction *)createProColorActionWithTitleKey:(NSString *)titleKey
-                               parameterValue:(NSString *)parameterValue
                                selectedString:(NSString *)selectedString
                         isRouteInfoAttribute:(BOOL)isRouteInfoAttribute
 {

@@ -33,7 +33,7 @@
 "shared_string_edit" = "编辑";
 "shared_string_modify" = "修改";
 "first_time_continue" = "稍后";
-"shared_string_all" = "全部";
+"shared_string_all" = "所有";
 "shared_string_from" = "之于";
 "offline_maps" = "离线地图";
 "shared_string_download_map" = "下载地图";
@@ -651,7 +651,7 @@
 "shared_string_about" = "关于";
 "gpx_ascent" = "上坡";
 "quick_action_replace_destination" = "更换目的地";
-"shared_string_off" = "关";
+"shared_string_off" = "关闭";
 "update_now" = "立即更新";
 "quick_action_map_source_action" = "添加地图来源";
 "quick_action_navigation_voice" = "打开／关闭语音";
@@ -1211,7 +1211,7 @@
 "osmand_purchases_item" = "OsmAnd 购买";
 "shared_string_enable" = "启用";
 "shared_string_import" = "导入";
-"shared_string_disable" = "禁用";
+"shared_string_disable" = "停用";
 "sort_last_modified" = "上次修改";
 "icon_group_sport" = "运动";
 "select_group" = "选择组";
@@ -2716,3 +2716,4 @@
 "dd_mm_ss_format" = "度度°分分′秒秒″";
 "attach_roads_descr" = "将轨迹附加到道路上，即可获得详细的路线信息，包括转弯指示和道路属性。";
 "routing_attr_allow_ferries_name" = "允许轮渡";
+"by_name" = "按名称";

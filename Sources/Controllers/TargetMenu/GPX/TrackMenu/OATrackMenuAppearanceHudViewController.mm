@@ -892,9 +892,23 @@ static const NSInteger kColorsSection = 1;
     }
     
     NSString *selectedTitle = wallColorTypes[@(visualization3dWallColorType)];
+    
+    NSMutableArray<UIAction *> *noneActions = [NSMutableArray array];
+    NSNumber *firstNoneType = noneTypes.firstObject;
+    
+    if (firstNoneType)
+    {
+        NSUInteger index = [wallColorTypes.allKeys indexOfObject:firstNoneType];
+        if (index != NSNotFound && index < actions.count)
+        {
+            UIAction *noneAction = actions[index];
+            [noneActions addObject:noneAction];
+        }
+    }
+    
     return [self createChevronMenu:OALocalizedString(selectedTitle)
                             button:button
-                      menuElements:@[@[[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:noneTypes.firstObject]]], colorActions, dataActions]];
+                      menuElements:@[noneActions, colorActions, dataActions]];
 }
 
 - (UIMenu *)createTrackLineMenuForCellButton:(UIButton *)button

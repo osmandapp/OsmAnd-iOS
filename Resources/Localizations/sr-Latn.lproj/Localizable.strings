@@ -3772,3 +3772,15 @@
 "obd_vin" = "VIN";
 "obd_vin_desc" = "VIN kod preko OBD-a";
 "obd_vehicle_info" = "Informacije o vozilu";
+"ltr_or_rtl_combine_via_per" = "%@ za %@";
+"ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
+"route_guidance" = "Navođenje rutom";
+"route_guidance_desc" = "Pruža informacije o putu u realnom vremenu, uključujući udaljenost do sledećeg skretanja, ime puteva, sadašnji naziv ulice i trake. Dodaci su aktivni tokom navigacije.";
+"shared_string_road_exit" = "Izlaz";
+"current_temperature" = "Trenutna temperatura";
+"reset_average_value" = "Reset srednje vrednosti";
+"average_temperature" = "Prosečna temperatura";
+"shared_string_instant" = "Instant";
+"average" = "Prosečna";
+"shared_string_hour" = "Sat";
+"shared_string_volume" = "Volumen";

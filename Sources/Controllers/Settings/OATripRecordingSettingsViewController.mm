@@ -147,6 +147,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
         [_settings.mapSettingSaveTrackIntervalGlobal resetModeToDefault:self.appMode];
         [_settings.mapSettingSaveTrackInterval resetModeToDefault:self.appMode];
         [_settings.currentTrackRouteActivity resetModeToDefault:self.appMode];
+        [self resetTripRecordingVehicleMetricsModeToDefault:self.appMode];
+        
         [self generateData];
         [self.tableView reloadData];
     }];
@@ -156,6 +158,15 @@ static NSArray<NSString *> *minTrackSpeedNames;
     alert.preferredAction = resetAction;
 
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)resetTripRecordingVehicleMetricsModeToDefault:(OAApplicationMode *)mode
+{
+    VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
+    if (plugin)
+    {
+        [plugin.TRIP_RECORDING_VEHICLE_METRICS resetModeToDefault:self.appMode];
+    }
 }
 
 #pragma mark - Table data
@@ -306,7 +317,20 @@ static NSArray<NSString *> *minTrackSpeedNames;
     
                 [dataSettingsSection addObject:externalSensorsDict];
             }
-
+            
+            if ([OAPluginsHelper isEnabled:[VehicleMetricsPlugin class]])
+            {
+                BOOL isVehicleMetricsAvailable = [OAIAPHelper isVehicleMetricsAvailable];
+                [dataSettingsSection addObject:@{
+                    @"name" : @"vehicleMetrics",
+                    @"title" : OALocalizedString(@"obd_plugin_name"),
+                    @"value" : isVehicleMetricsAvailable ? [self getActiveCommandsVehicleMetricsDescription] : @"",
+                    @"isProButtonVisible" : @(!isVehicleMetricsAvailable),
+                    @"actionSelector": NSStringFromSelector(@selector(onProButtonTapped)),
+                    @"type" : OAValueTableViewCell.reuseIdentifier
+                }];
+            }
+            
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
             NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]}];
@@ -410,6 +434,24 @@ static NSArray<NSString *> *minTrackSpeedNames;
     _data = [NSArray arrayWithArray:dataArr];
 }
 
+- (NSString *)getActiveCommandsVehicleMetricsDescription
+{
+    NSString *description = OALocalizedString(@"shared_string_none");
+    
+    VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
+    if (plugin)
+    {
+        auto commands = [plugin.TRIP_RECORDING_VEHICLE_METRICS get:self.appMode];
+        if ([commands count] > 0)
+        {
+            description = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @([commands count]).stringValue, @([VehicleMetricsItemObjcWrapper allCommands].count).stringValue];
+        }
+    }
+
+    return description;
+}
+
+
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     if (_settingsType == kTripRecordingSettingsScreenGeneral)
@@ -496,7 +538,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     {
         OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OAValueTableViewCell.reuseIdentifier];
         [cell descriptionVisibility:NO];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.titleLabel.text = item[@"title"];
         cell.valueLabel.text = item[@"value"];
         if ([item[@"key"] isEqualToString:@"nav_interval"] && ![_settings.saveTrackToGPX get:self.appMode])
@@ -512,6 +553,17 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 vw.alpha = 1;
             cell.userInteractionEnabled = YES;
             cell.leftIconView.tintColor = self.appMode.getProfileColor;
+        }
+        
+        NSNumber *isProButtonVisible = item[@"isProButtonVisible"];
+        if (isProButtonVisible && isProButtonVisible.boolValue) {
+            [cell showProButton:YES];
+            [cell.proButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.proButton addTarget:self action:NSSelectorFromString(item[@"actionSelector"]) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        } else {
+            [cell showProButton:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
         NSString *img = item[@"img"];
@@ -602,6 +654,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
 }
 
 #pragma mark - Selectors
+
+- (void)onProButtonTapped
+{
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.VEHICLEMETRICS navController:self.navigationController];
+}
 
 - (void) applyParameter:(id)sender
 {
@@ -734,6 +791,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
         [_settings.saveTrackToGPX resetModeToDefault:self.appMode];
         [_settings.autoSplitRecording resetModeToDefault:self.appMode];
         [_settings.currentTrackRouteActivity resetModeToDefault:self.appMode];
+        [self resetTripRecordingVehicleMetricsModeToDefault:self.appMode];
+        
         [self generateData];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.numberOfSections)] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
@@ -744,8 +803,22 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     else if ([name isEqualToString:@"externalSensors"])
     {
-        OAExternalSettingsWriteToTrackSettingsViewController *contoller = [[OAExternalSettingsWriteToTrackSettingsViewController alloc] initWithApplicationMode:self.appMode];
-        [self showViewController:contoller];
+        OAExternalSettingsWriteToTrackSettingsViewController *controller = [[OAExternalSettingsWriteToTrackSettingsViewController alloc] initWithApplicationMode:self.appMode];
+        [self showViewController:controller];
+    }
+    else if ([name isEqualToString:@"vehicleMetrics"])
+    {
+        NSNumber *isProButtonVisible = item[@"isProButtonVisible"];
+        if (isProButtonVisible && isProButtonVisible.boolValue) {
+            [self onProButtonTapped];
+        } else {
+            __weak __typeof(self) weakSelf = self;
+            VehicleMetricsTripRecordingCommandsViewController *controller = [[VehicleMetricsTripRecordingCommandsViewController alloc] initWithAppMode:self.appMode onApplyAction:^{
+                [weakSelf generateData];
+                [weakSelf.tableView reloadData];
+            }];
+            [self showModalViewController:controller];
+        }
     }
 }
 

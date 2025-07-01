@@ -6,7 +6,10 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+@objcMembers
 final class VehicleMetricsPlugin: OAPlugin {
+    
+    let TRIP_RECORDING_VEHICLE_METRICS: OACommonStringList = OAAppSettings.sharedManager().registerStringListPreference("trip_recording_vehicle_metrics", defValue: nil).makeProfile().makeShared()
     
     override func getId() -> String? {
         kInAppId_Addon_Vehicle_Metrics
@@ -257,5 +260,46 @@ extension VehicleMetricsPlugin {
             return 0
         }
         return floatValue
+    }
+}
+
+// MARK: - Trip recording
+
+extension VehicleMetricsPlugin {
+    override func attachAdditionalInfo(toRecordedTrack location: CLLocation, json: NSMutableData) {
+        super.attachAdditionalInfo(toRecordedTrack: location, json: json)
+        
+        guard OAIAPHelper.isVehicleMetricsAvailable() else { return }
+        
+        let mode = OAAppSettings.sharedManager().applicationMode.get()
+        let commandNames = TRIP_RECORDING_VEHICLE_METRICS.get(mode) ?? []
+        let selectedCommands = Set(commandNames.compactMap { OBDCommand.companion.getCommand(name: $0) })
+
+        guard !selectedCommands.isEmpty,
+              let rawData = OBDService.shared.obdDispatcher?.getRawData() as? [OBDCommand: Any] else {
+            return
+        }
+        
+        var jsonDict: [String: String] = [:]
+        let prefix = GpxUtilities().OSMAND_EXTENSIONS_PREFIX
+
+        rawData.forEach { command, dataField in
+            guard selectedCommands.contains(command),
+                  let tag = command.gpxTag,
+                  let value = (dataField as? OBDDataField<AnyObject>)?.value as? NSNumber else {
+                return
+            }
+
+            jsonDict[prefix + tag] = value.stringValue
+        }
+        
+        guard !jsonDict.isEmpty else { return }
+
+        do {
+            let jsonData = try JSONEncoder().encode(jsonDict)
+            json.append(jsonData)
+        } catch {
+            NSLog("VehicleMetricsPlugin -> failed to encode sensor data: \(error.localizedDescription)")
+        }
     }
 }

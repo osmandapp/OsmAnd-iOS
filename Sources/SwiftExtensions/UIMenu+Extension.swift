@@ -6,7 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-@objc
 extension UIMenu {
     /* Example:
      UIMenu.composedMenu(from: [
@@ -21,8 +20,8 @@ extension UIMenu {
     /// - Parameter sections: A two-dimensional array where each inner array represents
     ///   a section of `UIMenuElement` items.
     /// - Returns: A `UIMenu` object containing the provided sections, each displayed as an inline submenu.
-    static func composedMenu(from sections: [[UIMenuElement]]) -> UIMenu {
-        UIMenu(title: "", children: sections.map(UIMenu.inlineSection))
+    @objc static func composedMenu(from sections: [[UIMenuElement]]) -> UIMenu {
+        UIMenu(title: "", children: sections.map(inlineSection))
     }
 
     /// Creates an inline menu section from a list of menu elements.

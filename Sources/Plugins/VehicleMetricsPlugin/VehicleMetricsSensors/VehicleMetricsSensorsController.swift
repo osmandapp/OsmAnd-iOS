@@ -206,7 +206,6 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     private func configureStartState() {
         let hasPairedDevicesOnlyOBD = DeviceHelper.shared.hasPairedDevices(ofType: .OBD_VEHICLE_METRICS)
-
         pairNewSensorButton.isHidden = hasPairedDevicesOnlyOBD
         if !hasPairedDevicesOnlyOBD {
             tableView.sectionHeaderTopPadding = 0

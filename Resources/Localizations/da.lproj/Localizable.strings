@@ -3718,3 +3718,17 @@
 "obd_vin_desc" = "VIN-kode over OBD";
 "obd_vehicle_info" = "Info om køretøjet";
 "obd_widget_vehicle_speed" = "Køretøjets hastighed";
+"route_guidance_desc" = "Giver rutevejledning i realtid, herunder afstand til næste sving, vejnavn, aktuelt gadenavn og oplysninger om vognbane. Moduler er aktive under navigation.";
+"route_guidance" = "Rutevejledning";
+"shared_string_road_exit" = "Afkørsel";
+"ltr_or_rtl_combine_via_per" = "%@ per %@";
+"ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
+"obd_speed_desc" = "Viser hastighed fra køretøjets hastighedssensor (VSS).";
+"obd_widget_engine_speed" = "Motorhastighed";
+"obd_rpm_desc" = "Viser køretøjets omdrejningstæller via OBD-sensoren";
+"obd_engine_runtime" = "Motorens køretid";
+"obd_engine_runtime_desc" = "Viser, hvor længe motoren har kørt, siden den blev startet.";
+"obd_fuel_pressure" = "Brændstoftryk";
+"obd_fuel_pressure_desc" = "Viser trykket i brændstofsystemet";
+"obd_air_intake_temp" = "Luftindtagets temperatur";
+"obd_air_intake_temp_desc" = "Viser temperaturen på den luft, der kommer ind i motorens indsugningsmanifold.";

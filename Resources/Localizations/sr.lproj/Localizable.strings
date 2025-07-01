@@ -3774,3 +3774,15 @@
 "liter_per_hour" = "L/h";
 "unit_volt" = "V";
 "obd_widget_group" = "Метрика возила";
+"route_guidance_desc" = "Пружа тренутачно навођење путањом, укључујући удаљеност до следећег скретања, назив пута, тренутни назив улице и податке о траци. Справице се приказују током навођења.";
+"route_guidance" = "Усмеравање руте";
+"shared_string_road_exit" = "Излаз";
+"ltr_or_rtl_combine_via_per" = "%@ по %@";
+"ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
+"reset_average_value" = "Ресетујт просечну вредност";
+"current_temperature" = "Тренутна температура";
+"average_temperature" = "Просечна температура";
+"shared_string_instant" = "Тренутно";
+"average" = "Просек";
+"shared_string_hour" = "Час";
+"shared_string_volume" = "Запремина";

@@ -12,8 +12,6 @@
 @implementation OASelectedGpxPoint
 {
     OASGpxFile *_selectedGpxFile;
-//    OASelectedGpxFile *_selectedGpxFile;
-    
     OASWptPt *_selectedPoint;
     OASWptPt *_prevPoint;
     OASWptPt *_nextPoint;
@@ -39,30 +37,6 @@
     }
     return self;
 }
-
-//- (instancetype)initWith:(OASelectedGpxFile *)selectedGpxFile selectedPoint:(OASWptPt *)selectedPoint
-//{
-//    return [self initWith:selectedGpxFile selectedPoint:selectedPoint prevPoint:nil nextPoint:nil braring:NAN showTrackPointMenu:NO];
-//}
-//
-//- (instancetype)initWith:(OASelectedGpxFile *)selectedGpxFile selectedPoint:(OASWptPt *)selectedPoint prevPoint:(OASWptPt *)prevPoint nextPoint:(OASWptPt *)nextPoint braring:(double)bearing  showTrackPointMenu:(BOOL)showTrackPointMenu
-//{
-//    self = [super init];
-//    if (self) {
-//        _selectedGpxFile = selectedGpxFile;
-//        _selectedPoint = selectedPoint;
-//        _prevPoint = prevPoint;
-//        _nextPoint = nextPoint;
-//        _bearing = bearing;
-//        _showTrackPointMenu = showTrackPointMenu;
-//    }
-//    return self;
-//}
-
-//- (OASelectedGpxFile *) getSelectedGpxFile
-//{
-//    return _selectedGpxFile;
-//}
     
 - (OASGpxFile *) getSelectedGpxFile
 {
@@ -73,8 +47,5 @@
 {
     return _selectedPoint;
 }
-
-//TODO: implement
     
-
 @end

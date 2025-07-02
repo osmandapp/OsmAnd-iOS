@@ -865,7 +865,7 @@
 "rendering_attr_showSurfaces_name" = "显示路面材质";
 "rendering_attr_contourWidth_description" = "等高线线宽";
 "rendering_attr_noPolygons_description" = "透明表示地图上所有的陆地区域。";
-"routing_attr_avoid_train_description" = "避免火车";
+"routing_attr_avoid_train_description" = "避开火车a";
 "routing_attr_avoid_unpaved_description" = "避开未铺设道路";
 "rendering_value_default13_name" = "默认 (13)";
 "rendering_attr_hideNonVehicleHighways_name" = "非车辆公路";
@@ -876,7 +876,7 @@
 "rendering_attr_currentTrackWidth_description" = "GPX 宽度";
 "rendering_value_blue_name" = "蓝色";
 "rendering_attr_moreDetailed_name" = "更多细节";
-"routing_attr_avoid_bus_description" = "避免公交和无轨电车";
+"routing_attr_avoid_bus_description" = "避开公交车和无轨电车";
 "routing_attr_weight_name" = "重量";
 "rendering_value_light_brown_name" = "浅棕色";
 "rendering_attr_appMode_description" = "优化的地图用于";
@@ -900,13 +900,13 @@
 "rendering_attr_hidePOILabels_name" = "兴趣点（POI）标签";
 "routing_attr_height_obstacles_description" = "预计行程时间将反映海拔影响。路线偏好有助于避开陡峭的上坡：";
 "rendering_attr_surface_ice_name" = "冰面";
-"routing_attr_avoid_share_taxi_description" = "避免共享出租车";
+"routing_attr_avoid_share_taxi_description" = "避开共享出租车";
 "rendering_attr_surface_snow_name" = "雪地";
 "rendering_attr_surface_mud_name" = "泥路";
 "routing_attr_driving_style_name" = "骑行风格";
 "rendering_attr_surface_paving_stones_name" = "铺路石";
 "rendering_value_medium_w_name" = "中等";
-"routing_attr_avoid_shuttle_train_description" = "避免使用接驳列车";
+"routing_attr_avoid_shuttle_train_description" = "避开汽车接驳列车";
 "rendering_attr_surface_wood_name" = "木头";
 "rendering_value_black_name" = "黑色";
 "rendering_attr_buildings15zoom_name" = "15 级缩放建筑物";
@@ -1604,7 +1604,7 @@
 "routing_attr_allow_skating_only_name" = "只允许滑冰路线";
 "routing_attr_allow_skating_only_description" = "只为自由式滑冰或滑冰而铺设的路线，没有经典赛道。";
 "routing_attr_allow_classic_only_description" = "仅为经典风格的滑雪路线，不含滑冰道。这包括由小型雪地摩托开辟的松软滑雪道和滑雪者人工开辟的滑雪道。";
-"routing_attr_allow_intermediate_description" = "难度较高的路线，路段较为陡峭。一般来说，应避免一些障碍物。";
+"routing_attr_allow_intermediate_description" = "更困难的路线，带有较陡的路段。通常会有一些应当避开的障碍物。";
 "choose_what_to_restore" = "选择要恢复的数据。";
 "login_help_email_title" = "OsmAnd iOS云";
 "map_widget_rendering_fps" = "地图渲染 FPS";

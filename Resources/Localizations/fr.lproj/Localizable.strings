@@ -3782,3 +3782,6 @@
 "average" = "Moyenne";
 "shared_string_hour" = "Heure";
 "shared_string_volume" = "Volume";
+"vehicle_metrics_recording_description" = "Sélectionnez les paramètres à enregistrer dans le fichier GPX.";
+"shared_string_other" = "Autre";
+"shared_string_engine" = "Moteur";

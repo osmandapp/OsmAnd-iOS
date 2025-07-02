@@ -865,14 +865,14 @@
 "rendering_attr_showSurfaces_name" = "显示路面材质";
 "rendering_attr_contourWidth_description" = "等高线线宽";
 "rendering_attr_noPolygons_description" = "透明表示地图上所有的陆地区域。";
-"routing_attr_avoid_train_description" = "避开火车a";
+"routing_attr_avoid_train_description" = "避开火车";
 "routing_attr_avoid_unpaved_description" = "避开未铺设道路";
 "rendering_value_default13_name" = "默认 (13)";
 "rendering_attr_hideNonVehicleHighways_name" = "非车辆公路";
 "rendering_attr_smoothness_good_name" = "优良";
 "routing_attr_height_description" = "规定路线上允许的车辆高度。";
 "rendering_value_walkingRoutesScopeOSMC_name" = "网络从属";
-"routing_attr_avoid_tram_description" = "避免电车";
+"routing_attr_avoid_tram_description" = "避开有轨电车";
 "rendering_attr_currentTrackWidth_description" = "GPX 宽度";
 "rendering_value_blue_name" = "蓝色";
 "rendering_attr_moreDetailed_name" = "更多细节";
@@ -2718,3 +2718,4 @@
 "routing_attr_allow_ferries_name" = "允许轮渡";
 "by_name" = "按名称";
 "rendering_attr_showClimbingRoutes_description" = "显示攀岩路线";
+"reset_average_speed" = "重置平均速度";

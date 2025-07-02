@@ -3784,3 +3784,6 @@
 "average" = "Prosečna";
 "shared_string_hour" = "Sat";
 "shared_string_volume" = "Volumen";
+"vehicle_metrics_recording_description" = "Izaberite parametre koji će biti snimljeni u GPX fajlu.";
+"shared_string_other" = "Drugi";
+"shared_string_engine" = "Motor";

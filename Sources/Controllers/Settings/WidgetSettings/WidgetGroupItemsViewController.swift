@@ -69,29 +69,20 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
     
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        if let widgetInfo = item.obj(forKey: "widget_info") as? MapWidgetInfo {
-            if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
-                if widgetType.isPurchased() {
-                    guard let vc = WidgetConfigurationViewController() else {
-                        return
-                    }
-                    vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
-                    vc.widgetInfo = widgetInfo
-                    vc.widgetPanel = widgetPanel
-                    vc.addToNext = addToNext
-                    vc.selectedWidget = selectedWidget
-                    vc.createNew = true
-                    navigationController?.pushViewController(vc, animated: true)
-                } else if widgetType == .altitudeMapCenter {
-                    if let navigationController {
-                        OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
-                    }
-                } else if widgetType.isOBDWidget() && widgetType != .OBDSpeed && widgetType != .OBDRpm {
-                    if let navigationController {
-                        OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.vehiclemetrics(), navController: navigationController)
-                    }
-                }
-            }
+        guard let widgetInfo = item.obj(forKey: "widget_info") as? MapWidgetInfo, let widgetType = item.obj(forKey: "widget_type") as? WidgetType, let navigationController else { return }
+        if widgetType.isPurchased() {
+            guard let vc = WidgetConfigurationViewController() else { return }
+            vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
+            vc.widgetInfo = widgetInfo
+            vc.widgetPanel = widgetPanel
+            vc.addToNext = addToNext
+            vc.selectedWidget = selectedWidget
+            vc.createNew = true
+            navigationController.pushViewController(vc, animated: true)
+        } else if widgetType == .altitudeMapCenter {
+            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
+        } else if widgetType.isOBDWidget() && widgetType != .OBDSpeed && widgetType != .OBDRpm {
+            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.vehiclemetrics(), navController: navigationController)
         }
     }
 }

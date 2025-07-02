@@ -86,9 +86,9 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
                     if let navigationController {
                         OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
                     }
-                } else if [.OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption].contains(widgetType) {
-                    if let navigationController {
-                        OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.vehiclemetrics(), navController: navigationController)
+                } else if widgetType.isOBDWidget() && widgetType != .OBDSpeed && widgetType != .OBDRpm {
+                    if let nav = navigationController {
+                        OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.vehiclemetrics(), navController: nav)
                     }
                 }
             }

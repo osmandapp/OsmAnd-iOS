@@ -86,6 +86,10 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
                     if let navigationController {
                         OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
                     }
+                } else if [.OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption].contains(widgetType) {
+                    if let navigationController {
+                        OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.vehiclemetrics(), navController: navigationController)
+                    }
                 }
             }
         }
@@ -95,7 +99,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
 // MARK: Appearance
 extension WidgetGroupItemsViewController {
     
-    override func getTitle() -> String! {
+    override func getTitle() -> String {
         widgetGroup.title
     }
     
@@ -107,7 +111,7 @@ extension WidgetGroupItemsViewController {
         false
     }
     
-    override func getTableHeaderDescriptionAttr() -> NSAttributedString! {
+    override func getTableHeaderDescriptionAttr() -> NSAttributedString {
         let attrStr = NSMutableAttributedString(string: widgetGroup.descr ?? "")
         // Set font attribute
         let font = UIFont.systemFont(ofSize: 17)

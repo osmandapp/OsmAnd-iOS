@@ -1470,7 +1470,7 @@
 "use_displayed_track_for_navigation" = "Να χρησιμοποιηθεί το εμφανιζόμενο ίχνος για πλοήγηση.";
 "search_location" = "Αναζήτηση της τοποθεσίας…";
 "osm_live_payment_desc" = "Η συνδρομή επιβαρύνεται ανά επιλεγμένη περίοδο. Μπορείτε να την ακυρώσετε στο Google Play οποτεδήποτε.";
-"create_custom_categories_list_promo" = "Η αλλαγή της σειράς διάταξης του καταλόγου, αποκρύπτει τις κατηγορίες. Μπορείτε να εισάγετε ή να εξάγετε όλες τις αλλαγές με κατατομές (προφίλ).";
+"create_custom_categories_list_promo" = "Αλλάξτε την σειρά διάταξης και αποκρύψτε τις κατηγορίες. Εισάγετε ή εξάγετε όλες τις αλλαγές ως προφίλ.";
 "choose_auto_follow_route_descr" = "Χρόνος μέχρι η προβολή του χάρτη να συγχρονιστεί με την τρέχουσα θέση.";
 "save_poi_without_poi_type_message" = "Αποθήκευση ΣΕ χωρίς τύπο.";
 "quick_action_showhide_mapillary_descr" = "Εναλλαγή εμφάνισης ή απόκρυψης της στρώσης Mapillary του χάρτη.";
@@ -1523,7 +1523,7 @@
 "rendering_attr_showWaterwayTunnels_name" = "Αύξηση ορατότητας για σήραγγες οδών νερού";
 "routing_attr_prefer_hiking_routes_name" = "Προτιμήστε διαδρομές για πεζοπορία";
 "rendering_attr_showTramRoutes_name" = "Δρομολόγια τραμ";
-"routing_attr_allow_intermittent_name" = "Επιτρέψτε διακοπτόμενες οδούς νερού";
+"routing_attr_allow_intermittent_name" = "Να επιτρέπονται υδάτινα ρέματα διακοπτόμενης ροής";
 "routing_attr_allow_streams_description" = "Επιτρέψτε ρέματα και οχετούς";
 "routing_attr_length_description" = "Καθορίστε μήκος οχήματος που επιτρέπεται στους δρόμους.";
 "routing_attr_allow_intermittent_description" = "Επιτρέψτε διακοπτόμενες οδούς νερού";

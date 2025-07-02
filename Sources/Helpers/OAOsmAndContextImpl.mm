@@ -71,6 +71,18 @@ static NSString * const kGpxImportDir = @"import";
     return nil;
 }
 
+
+- (OASFloat *)getFloatPreferenceName:(NSString *)name {
+    double value = 0;
+     
+     OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:name];
+     if ([pref isKindOfClass:[OACommonDouble class]]) {
+         value = [(OACommonDouble *)pref get];
+     }
+
+     return [[OASFloat alloc] initWithFloat:value];
+}
+
 - (void)setStringPreferenceName:(NSString *)name value:(NSString *)value __attribute__((swift_name("setStringPreference(name:value:)")))
 {
     OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:name];
@@ -187,7 +199,6 @@ static NSString * const kGpxImportDir = @"import";
 
 - (void)searchNearestCityNameLatLon:(OASKLatLon *)latLon callback:(void (^)(NSString * _Nonnull))callback
 {
-    // FIXME: crash
     @autoreleasepool {
         OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
         callback(nearestCityPOI ? nearestCityPOI.name : @"");

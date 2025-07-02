@@ -385,7 +385,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     _shadowButton = [[UIButton alloc] initWithFrame:CGRectZero];
     _shadowButton.translatesAutoresizingMaskIntoConstraints = NO;
     [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
-    _shadowButton.menu = [self configureContextWidgetMenu];
+    [self configureShadowButtonMenu];
     [self addSubview:_shadowButton];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -562,7 +562,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void) setTextNoUpdateVisibility:(NSString *)text subtext:(NSString *)subtext
 {
-    if ([_text isEqualToString:text] && [subtext isEqualToString:subtext])
+    if ([_text isEqualToString:text] && [_subtext isEqualToString:subtext])
         return;
     if (text.length == 0 && subtext.length == 0)
     {
@@ -758,7 +758,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         
         if (!_shadowButton.menu)
         {
-            _shadowButton.menu = [self configureContextWidgetMenu];
+            [self configureShadowButtonMenu];
         }
     }
     [self refreshLayout];
@@ -768,6 +768,11 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 {
     if (self.delegate)
         [self.delegate widgetChanged:self];
+}
+
+- (void)configureShadowButtonMenu
+{
+    _shadowButton.menu = [self configureContextWidgetMenu];
 }
 
 - (void) addAccessibilityLabelsWithValue:(NSString *)value
@@ -933,7 +938,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     [self refreshLabel];
 }
 
-- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel
+- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
 {
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];
@@ -950,7 +955,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
                              [UIImage imageNamed:ACImageNameIcCustom20HeightL]]
                     forKey:@"values"];
     
-    if ([self isEnabledShowIconSwitchWith:widgetsPanel])
+    if ([self isEnabledShowIconSwitchWith:widgetsPanel widgetConfigurationParams:widgetConfigurationParams])
     {
         OATableRowData *showIconRow = section.createNewRow;
         showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
@@ -961,9 +966,14 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     return data;
 }
 
-- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel
+- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
 {
-    return [widgetsPanel isPanelVertical];
+    if ([widgetsPanel isPanelVertical])
+        return YES;
+    
+    NSNumber *styleNum = widgetConfigurationParams[@"widgetSizeStyle"];
+    EOAWidgetSizeStyle style = styleNum ? (EOAWidgetSizeStyle)styleNum.integerValue : [self.widgetSizePref get:[self getAppMode]];
+    return style == EOAWidgetSizeStyleMedium || style == EOAWidgetSizeStyleLarge;
 }
 
 - (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams

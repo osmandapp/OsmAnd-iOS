@@ -104,7 +104,7 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
         navigationItem.setRightBarButtonItems(isEnabled: false, with: UIColor.buttonBgColorDisabled)
         if !text.isEmpty {
             wheelSizeString = text
-            navigationItem.setRightBarButtonItems(isEnabled: true, with: UIColor.iconColorActive)
+            navigationItem.setRightBarButtonItems(isEnabled: true, with: .iconColorActive)
         }
     }
     

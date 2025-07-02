@@ -21,7 +21,6 @@
 "shared_string_time" = "Вакыт";
 "shared_string_reset" = "Бетерү";
 "shared_string_turn_off" = "Сүндерү";
-
 "shared_string_angle" = "Почмак";
 
 // HUD
@@ -144,3 +143,4 @@
 "shared_string_move" = "Күчерү";
 "activity_type_winter_name" = "Кыш";
 "downloaded_bytes" = "%@ / %@";
+"shared_string_date" = "Дата";

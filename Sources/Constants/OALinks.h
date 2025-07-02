@@ -19,7 +19,7 @@
 #define kOsmAndMapPathPrefix @"/map"
 
 //#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-9-released"
-#define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios"
+#define kDocsLatestVersion  @"https://osmand.net/blog/osmand-ios-5-1-released"
 #define kBlogGuideline  @"https://osmand.net/blog/guideline-pt"
 
 #define kSupportEmail @"support@osmand.net"
@@ -134,6 +134,10 @@ static NSString * const k_weather_global_forecast_system = @"https://www.ncei.no
 #define docs_widget_mapillary @"https://docs.osmand.net/docs/user/widgets/info-widgets/#-mapillary-widget"
 #define docs_widget_parking @"https://docs.osmand.net/docs/user/widgets/info-widgets/#-parking-widget"
 #define docs_widget_distance_by_tap @"https://docs.osmand.net/docs/user/widgets/radius-ruler#distance-by-tap-tool"
-#define docs_external_sensors @"https://docs.osmand.net/docs/user/plugins/external-sensors"
+
+static NSString * const docsExternalSensorsURL = @"https://docs.osmand.net/docs/user/plugins/external-sensors";
+static NSString * const docsVehicleMetricsURL = @"https://docs.osmand.net/docs/user/plugins/vehicle-metrics";
+
+
 
 #endif /* OALinks_h */

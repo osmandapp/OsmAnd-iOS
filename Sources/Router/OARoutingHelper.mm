@@ -43,7 +43,7 @@
 #define DEFAULT_GPS_TOLERANCE 12
 #define POSITION_TOLERANCE 60
 #define POS_TOLERANCE_DEVIATION_MULTIPLIER 2
-#define MAX_POSSIBLE_SPEED 140 // 504 km/h
+#define MAX_POSSIBLE_SPEED 340 // ~ 1 Mach
 
 static NSInteger GPS_TOLERANCE = DEFAULT_GPS_TOLERANCE;
 static double ARRIVAL_DISTANCE_FACTOR = 1;
@@ -653,7 +653,7 @@ static BOOL _isDeviatedFromRoute = false;
         NSTimeInterval time = [currentLocation.timestamp timeIntervalSinceDate:_lastGoodRouteLocation.timestamp];
         CLLocationDistance dist = [currentLocation distanceFromLocation:_lastGoodRouteLocation];
         if (time > 0) {
-            double speed = dist / (time / 1000);
+            double speed = dist / (time / 1000.0);
             return speed > MAX_POSSIBLE_SPEED;
         }
     }
@@ -733,7 +733,12 @@ static BOOL _isDeviatedFromRoute = false;
             // 4. Identify if UTurn is needed
             if ([self identifyUTurnIsNeeded:currentLocation posTolerance:posTolerance])
                 _isDeviatedFromRoute = true;
-            
+            // 4.5. Disable recalculation in tunnels (tunnel locations are simulated)
+            if ([self isTunnelLocationSimulated:currentLocation])
+            {
+                _isDeviatedFromRoute = false;
+                calculateRoute = false;
+            }
             // 5. Update Voice router
             // Do not update in route planning mode
             BOOL inRecalc = calculateRoute || [self isRouteBeingCalculated];
@@ -761,7 +766,8 @@ static BOOL _isDeviatedFromRoute = false;
                 if ([_settings.snapToRoad get] && currentRoute + 1 < routeNodes.count)
                 {
                     CLLocation *nextRouteLocation = routeNodes[currentRoute + 1];
-                    locationProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:locationProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
+                    BOOL previewNextTurn = _settings.previewNextTurn.get;
+                    locationProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:locationProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation previewNextTurn:previewNextTurn];
                 }
                 else if ([_settings.snapToRoad get])
                 {
@@ -1136,6 +1142,16 @@ static BOOL _isDeviatedFromRoute = false;
 {
     double posTolerance = [self.class getPosTolerance:location.horizontalAccuracy];
     return _mode && _mode.hasFastSpeed ? posTolerance : posTolerance / 2;
+}
+
+- (BOOL) isTunnelLocationSimulated:(CLLocation *)location
+{
+    if ([location isKindOfClass:OALocation.class])
+    {
+        OALocation *loc = (OALocation *) location;
+        return [loc.provider isEqualToString:@"TUNNEL"];
+    }
+    return false;
 }
 
 @end

@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isUpdateNeeded;
 - (BOOL)isMetricSystemDepended;
 - (BOOL)isAngularUnitsDepended;
-- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel;
+- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams;
 - (BOOL)isEnabledTextInfoComponents;
 - (void)setMetricSystemDepended:(BOOL)newValue;
 - (void)setAngularUnitsDepended:(BOOL)newValue;
@@ -87,6 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)configurePrefsWithId:(nullable NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(nullable NSDictionary *)widgetParams;
 - (void)configureSimpleLayout;
 - (void)refreshLayout;
+- (void)configureShadowButtonMenu;
 - (nullable OAApplicationMode *)getAppMode;
 - (nullable OAWidgetsPanel *)getWidgetPanel;
 - (nullable OAMapWidgetInfo *)getWidgetInfo;

@@ -19,6 +19,8 @@
 #import "OAProducts.h"
 #import "OAExportSettingsType.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OsmAnd_Maps-Swift.h"
+
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
 NSString *const OAIAPProductsRequestFailedNotification = @"OAIAPProductsRequestFailedNotification";
@@ -42,6 +44,7 @@ static NSString *kPlatformGoogle = @"google";
 static NSString *kPlatformApple = @"apple";
 static NSString *kPlatformAmazon = @"amazon";
 static NSString *kPlatformHuawei = @"huawei";
+static NSString *kPlatformFastspring = @"fastspring";
 
 typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success);
 
@@ -309,6 +312,11 @@ static OASubscriptionState *EXPIRED;
     return [self isOsmAndProAvailable] || [self isMapsPlusAvailable];
 }
 
++ (BOOL)isVehicleMetricsPurchased
+{
+    return [self isOsmAndProAvailable];
+}
+
 + (BOOL)isLiveUpdatesSubscription:(OASubscription *)subscription
 {
     return [subscription.identifierNoVersion isEqualToString:kSubscriptionId_Osm_Live_Subscription_Monthly]
@@ -330,6 +338,21 @@ static OASubscriptionState *EXPIRED;
 + (BOOL) isFullVersion:(OAProduct *)product
 {
     return [product.productIdentifier isEqualToString:kInAppId_Maps_Full];
+}
+
++ (BOOL)isWidgetPurchased:(OAWidgetType *)widgetType {
+    if ([widgetType isProWidget]) {
+        return [widgetType isOBDWidget] ? [self isVehicleMetricsAvailable] : [self isProWidgetsAvailable];
+    }
+    return YES;
+}
+
++ (BOOL)isVehicleMetricsAvailable {
+    return [[self class] isOsmAndProAvailable];
+}
+
++ (BOOL)isProWidgetsAvailable {
+    return [[self class] isOsmAndProAvailable];
 }
 
 - (NSArray<OASubscription *> *) getEverMadeSubscriptions
@@ -378,6 +401,12 @@ static OASubscriptionState *EXPIRED;
 {
     OAInAppStateHolder *holder = _inAppStateMap[sku];
     return holder ? @(holder.purchaseTime) : nil;
+}
+
+- (NSNumber *) getInAppExpireTime:(NSString *)sku
+{
+    OAInAppStateHolder *holder = _inAppStateMap[sku];
+    return holder.expireTime ? @(holder.expireTime) : nil;
 }
 
 + (OAIAPHelper *) sharedInstance
@@ -458,6 +487,11 @@ static OASubscriptionState *EXPIRED;
 - (OAProduct *) sensors
 {
     return _products.sensors;
+}
+
+- (OAProduct *)vehicleMetrics
+{
+    return _products.vehicleMetrics;
 }
 
 - (OAProduct *) carplay
@@ -1015,6 +1049,7 @@ static OASubscriptionState *EXPIRED;
             BOOL contour = NO;
             BOOL wiki = NO;
             BOOL sensors = NO;
+            BOOL vehicleMetrics = NO;
             NSMutableArray<OASubscription *> *purchasedSubs = [NSMutableArray array];
             for (OAProduct *product in products)
             {
@@ -1053,7 +1088,11 @@ static OASubscriptionState *EXPIRED;
                 {
                     sensors = YES;
                 }
-
+                else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Vehicle_Metrics])
+                {
+                    vehicleMetrics = YES;
+                }
+                
                 BOOL wasPurchased = [product isPurchased];
                 [_products setPurchased:product.productIdentifier];
                 if (!wasPurchased)
@@ -1063,7 +1102,7 @@ static OASubscriptionState *EXPIRED;
             if (!full)
             {
                 for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
-                    if (holder.linkedProduct == self.mapsFull)
+                    if (holder.linkedProduct && holder.linkedProduct.isFullVersion)
                     {
                         full = YES;
                         break;
@@ -1072,9 +1111,24 @@ static OASubscriptionState *EXPIRED;
             if (!maps)
             {
                 for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
-                    if (holder.linkedSubscription == self.mapsAnnually && holder.state == OASubscriptionState.ACTIVE)
+                    if (holder.linkedSubscription && holder.linkedSubscription.isMaps && holder.state == OASubscriptionState.ACTIVE)
                     {
                         maps = YES;
+                        break;
+                    }
+            }
+            if (!pro)
+            {
+                for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
+                    if (holder.linkedSubscription && holder.linkedSubscription.isOsmAndPro && holder.state == OASubscriptionState.ACTIVE)
+                    {
+                        pro = YES;
+                        break;
+                    }
+                for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
+                    if (holder.linkedProduct && holder.linkedProduct.isOsmAndPro)
+                    {
+                        pro = YES;
                         break;
                     }
             }
@@ -2020,7 +2074,7 @@ static OASubscriptionState *EXPIRED;
             stateHolder.expireTime = [subObj[@"expire_time"] integerValue] / 1000;
             stateHolder.origin = [self getPurchaseOriginBySku:sku];
             stateHolder.duration = [self getSubscriptionDurationBySku:sku origin:stateHolder.origin startTime:stateHolder.startTime expireTime:stateHolder.expireTime];
-            stateHolder.linkedSubscription = [self getLinkedSubscriptionBySku:sku];
+            stateHolder.linkedSubscription = [OAExternalSubscription buildFromJson:subObj];
             subscriptionStateMap[sku] = stateHolder;
         }
     }
@@ -2046,6 +2100,22 @@ static OASubscriptionState *EXPIRED;
     else if ([sku.lowerCase containsString:@".amazon."])
         return EOAPurchaseOriginAmazon;
     else if ([sku.lowerCase containsString:@".fastspring."])
+        return EOAPurchaseOriginFastSpring;
+    
+    return EOAPurchaseOriginUndefined;
+}
+
++ (EOAPurchaseOrigin)getPurchaseOriginByPlatform:(NSString *)platform
+{
+    if ([platform isEqualToString:kPlatformGoogle])
+        return EOAPurchaseOriginAndroid;
+    else if ([platform isEqualToString:kPlatformApple])
+        return EOAPurchaseOriginIOS;
+    else if ([platform isEqualToString:kPlatformHuawei])
+        return EOAPurchaseOriginHuawei;
+    else if ([platform isEqualToString:kPlatformApple])
+        return EOAPurchaseOriginAmazon;
+    else if ([platform isEqualToString:kPlatformFastspring])
         return EOAPurchaseOriginFastSpring;
     
     return EOAPurchaseOriginUndefined;
@@ -2212,10 +2282,14 @@ static OASubscriptionState *EXPIRED;
         NSString *sku = obj[@"sku"];
         NSString *platform = obj[@"platform"];
         NSString *purchaseTimeStr = obj[@"purchaseTime"];
+        NSString *expireTimeStr = obj[@"expireTime"];
         long purchaseTime = 0;
         if (purchaseTimeStr.length > 0)
             purchaseTime = (long) purchaseTimeStr.longLongValue / 1000;
-        
+        long expireTime = 0;
+        if (expireTimeStr.length > 0)
+            expireTime = (long) expireTimeStr.longLongValue / 1000;
+
         if (sku.length > 0)
         {
             OAInAppStateHolder *stateHolder = [[OAInAppStateHolder alloc] init];
@@ -2223,108 +2297,12 @@ static OASubscriptionState *EXPIRED;
             stateHolder.origin = [self getPurchaseOriginBySku:sku];
             stateHolder.platform = platform;
             stateHolder.purchaseTime = purchaseTime;
-            stateHolder.linkedProduct = [self getLinkedPurchaseBySku:sku];
+            stateHolder.expireTime = expireTime;
+            stateHolder.linkedProduct = [OAExternalProduct buildFromJson:obj];
             inAppsStateMap[sku] = stateHolder;
         }
     }
     return inAppsStateMap;
-}
-
-- (nullable OAProduct *)getLinkedPurchaseBySku:(nonnull NSString *)sku
-{
-    OAProduct *fullVersion = self.mapsFull;
-    OAProduct *depthContours = self.nautical;
-    OAProduct *contourLines = self.srtm;
-    
-    // Google
-    if ([sku isEqualToString:@"osmand_full_version_price"])
-        return fullVersion;
-    if ([sku isEqualToString:@"net.osmand.seadepth"] || [sku isEqualToString:@"net.osmand.seadepth_plus"])
-        return depthContours;
-    if ([sku isEqualToString:@"net.osmand.contourlines"] || [sku isEqualToString:@"net.osmand.contourlines_plus"])
-        return contourLines;
-    
-    // iOS
-    if ([sku isEqualToString:@"net.osmand.maps.inapp.maps.plus"])
-        return fullVersion;
-    if ([sku isEqualToString:@"net.osmand.maps.inapp.addon.nautical"])
-        return depthContours;
-    if ([sku isEqualToString:@"net.osmand.maps.inapp.addon.srtm"])
-        return contourLines;
-    
-    // Amazon
-    if ([sku isEqualToString:@"net.osmand.amazon.maps.inapp"])
-        return fullVersion;
-
-    // Huawei
-    if ([sku isEqualToString:@"net.osmand.huawei.full"])
-        return fullVersion;
-    if ([sku isEqualToString:@"net.osmand.huawei.seadepth"])
-        return depthContours;
-    if ([sku isEqualToString:@"net.osmand.huawei.contourlines"])
-        return contourLines;
-    
-    // FastSpring
-    if ([sku isEqualToString:@"net.osmand.fastspring.inapp.maps.plus"])
-        return fullVersion;
-    
-    return nil;
-}
-
-- (nullable OASubscription *)getLinkedSubscriptionBySku:(nonnull NSString *)sku
-{
-    OASubscription *monthlyLiveUpdates = self.monthlyLiveUpdates;
-    OASubscription *proMonthly = self.proMonthly;
-    OASubscription *proAnnually = self.proAnnually;
-    OASubscription *mapsAnnually = self.mapsAnnually;
-    
-    // Google
-    if ([sku hasPrefix:@"osm_live_subscription_monthly_"])
-        return monthlyLiveUpdates;
-    if ([sku hasPrefix:@"osmand_pro_monthly_"])
-        return proMonthly;
-    if ([sku hasPrefix:@"osmand_pro_annual_"])
-        return proAnnually;
-    if ([sku hasPrefix:@"osmand_maps_annual_"])
-        return mapsAnnually;
-
-    // iOS
-    if ([sku isEqualToString:@"net.osmand.maps.subscription.monthly"])
-        return monthlyLiveUpdates;
-    if ([sku hasPrefix:@"net.osmand.maps.subscription.pro.monthly"])
-        return proMonthly;
-    if ([sku hasPrefix:@"net.osmand.maps.subscription.pro.annual"])
-        return proAnnually;
-    if ([sku hasPrefix:@"net.osmand.maps.subscription.plus.annual"])
-        return mapsAnnually;
-
-    // Amazon
-    if ([sku containsString:@".amazon.pro.monthly"])
-        return proMonthly;
-    if ([sku containsString:@".amazon.pro.annual"])
-        return proAnnually;
-    if ([sku containsString:@".amazon.maps.annual"])
-        return mapsAnnually;
-
-    // Huawei
-    if ([sku hasPrefix:@"net.osmand.huawei.monthly"])
-        return monthlyLiveUpdates;
-    if ([sku hasPrefix:@"net.osmand.huawei.monthly.pro"])
-        return proMonthly;
-    if ([sku hasPrefix:@"net.osmand.huawei.annual.pro"])
-        return proAnnually;
-    if ([sku hasPrefix:@"net.osmand.huawei.annual.maps"])
-        return mapsAnnually;
-
-    // FastSpring
-    if ([sku hasPrefix:@"net.osmand.fastspring.subscription.pro.monthly"])
-        return proMonthly;
-    if ([sku hasPrefix:@"net.osmand.fastspring.subscription.pro.annual"])
-        return proAnnually;
-    if ([sku hasPrefix:@"net.osmand.fastspring.subscription.maps.annual"])
-        return mapsAnnually;
-
-    return nil;
 }
 
 @end

@@ -526,6 +526,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 {
     CGRect frame = self.titleView.frame;
     frame.origin.x = self.buttonCancel.frame.origin.x + self.buttonCancel.frame.size.width;
+    frame.size.width = self.navBar.frame.size.width - frame.origin.x;
     self.titleView.frame = frame;
 }
 

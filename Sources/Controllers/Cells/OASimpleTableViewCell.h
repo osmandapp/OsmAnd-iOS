@@ -48,6 +48,7 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
 - (void)textIndentsStyle:(EOATableViewCellTextIndentsStyle)style;
 - (void)anchorContent:(EOATableViewCellContentStyle)style;
 - (void)anchorContentTextStackView:(EOATableViewCellContentStyle)style;
+- (void)configureAccessibilityWithTitle:(nullable NSString *)title selected:(BOOL)isSelected;
 
 - (void)hideTopSpace;
 

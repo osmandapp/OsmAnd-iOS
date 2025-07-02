@@ -319,4 +319,52 @@ extension GpxDataItem {
     var gpxFileNameWithoutExtension: String {
         gpxFileName.deletingPathExtension()
     }
+    
+    func updateAppearance() {
+        let gpx: GpxFile? = GpxUtilities.shared.loadGpxFile(file: file)
+        guard let gpx, gpx.error == nil else { return }
+        let extensions = gpx.getExtensionsToRead()
+        if extensions["split_type"] != nil {
+            splitType = OAGPXDatabase.splitType(byName: gpx.getSplitType())
+        }
+        if extensions["split_interval"] != nil {
+            splitInterval = gpx.getSplitInterval()
+        }
+        if extensions["color"] != nil {
+            color = gpx.getColor(defColor: 0)?.intValue ?? 0
+        }
+        if extensions["coloring_type"] != nil {
+            coloringType = gpx.getColoringType() ?? ""
+        }
+        if extensions["color_palette"] != nil {
+            gradientPaletteName = gpx.getGradientColorPalette()
+        }
+        if extensions["width"] != nil {
+            width = gpx.getWidth(defaultWidth: nil) ?? ""
+        }
+        if extensions["show_arrows"] != nil {
+            showArrows = gpx.isShowArrows()
+        }
+        if extensions["show_start_finish"] != nil {
+            showStartFinish = gpx.isShowStartFinish()
+        }
+        if extensions["vertical_exaggeration_scale"] != nil {
+            verticalExaggerationScale = Double(gpx.getAdditionalExaggeration())
+        }
+        if extensions["elevation_meters"] != nil {
+            elevationMeters = Double(gpx.getElevationMeters())
+        }
+        if extensions["line_3d_visualization_by_type"] != nil {
+            visualization3dByType = OAGPXDatabase.lineVisualizationByType(forName: gpx.get3DVisualizationType())
+        }
+        if extensions["line_3d_visualization_wall_color_type"] != nil {
+            visualization3dWallColorType = OAGPXDatabase.lineVisualizationWallColorType(forName: gpx.get3DWallColoringType())
+        }
+        if extensions["line_3d_visualization_position_type"] != nil {
+            visualization3dPositionType = OAGPXDatabase.lineVisualizationPositionType(forName: gpx.get3DLinePositionType())
+        }
+        if extensions["is_join_segments"] != nil {
+            joinSegments = gpx.isJoinSegments()
+        }
+    }
 }

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OALocationSimulation.h"
 
 #include <vector>
 
@@ -16,7 +17,7 @@ struct RouteSegmentResult;
 @interface OASimulationProvider : NSObject
 
 - (void) startSimulation:(std::vector<std::shared_ptr<RouteSegmentResult>>)roads currentLocation:(CLLocation *)currentLocation;
-- (CLLocation *) getSimulatedLocation;
+- (OALocation *) getSimulatedLocationForTunnel;
 - (BOOL) isSimulatedDataAvailable;
 
 @end

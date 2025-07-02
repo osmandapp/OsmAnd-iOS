@@ -147,6 +147,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
         [_settings.mapSettingSaveTrackIntervalGlobal resetModeToDefault:self.appMode];
         [_settings.mapSettingSaveTrackInterval resetModeToDefault:self.appMode];
         [_settings.currentTrackRouteActivity resetModeToDefault:self.appMode];
+        [self resetTripRecordingVehicleMetricsModeToDefault:self.appMode];
+        
         [self generateData];
         [self.tableView reloadData];
     }];
@@ -156,6 +158,15 @@ static NSArray<NSString *> *minTrackSpeedNames;
     alert.preferredAction = resetAction;
 
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)resetTripRecordingVehicleMetricsModeToDefault:(OAApplicationMode *)mode
+{
+    VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
+    if (plugin)
+    {
+        [plugin.TRIP_RECORDING_VEHICLE_METRICS resetModeToDefault:self.appMode];
+    }
 }
 
 #pragma mark - Table data
@@ -177,39 +188,39 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             [dataArr addObject:
              @[@{
-                   @"header" : OALocalizedString(@"save_track_logging_accuracy"),
-                   @"name" : @"rec_interval",
-                   @"title" : OALocalizedString(@"save_global_track_interval"),
-                   @"description" : OALocalizedString(@"save_global_track_interval_descr"),
-                   @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"confirm_every_run") : recIntervalValue,
-                   @"type" : OAValueTableViewCell.reuseIdentifier }
+                 @"header" : OALocalizedString(@"save_track_logging_accuracy"),
+                 @"name" : @"rec_interval",
+                 @"title" : OALocalizedString(@"save_global_track_interval"),
+                 @"description" : OALocalizedString(@"save_global_track_interval_descr"),
+                 @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"confirm_every_run") : recIntervalValue,
+                 @"type" : OAValueTableViewCell.reuseIdentifier }
              ]];
-            
+
             [dataArr addObject:
              @[@{
-                   @"name" : @"logging_min_distance",
-                   @"title" : OALocalizedString(@"monitoring_min_distance"),
-                   @"description" : OALocalizedString(@"logging_min_distance_descr"),
-                   @"value" : minDistValue,
-                   @"type" : OAValueTableViewCell.reuseIdentifier }
+                 @"name" : @"logging_min_distance",
+                 @"title" : OALocalizedString(@"monitoring_min_distance"),
+                 @"description" : OALocalizedString(@"logging_min_distance_descr"),
+                 @"value" : minDistValue,
+                 @"type" : OAValueTableViewCell.reuseIdentifier }
              ]];
-            
+
             [dataArr addObject:
              @[@{
-                   @"name" : @"logging_min_accuracy",
-                   @"title" : OALocalizedString(@"monitoring_min_accuracy"),
-                   @"description" : OALocalizedString(@"logging_min_accuracy_descr"),
-                   @"value" : minPrecision,
-                   @"type" : OAValueTableViewCell.reuseIdentifier }
+                 @"name" : @"logging_min_accuracy",
+                 @"title" : OALocalizedString(@"monitoring_min_accuracy"),
+                 @"description" : OALocalizedString(@"logging_min_accuracy_descr"),
+                 @"value" : minPrecision,
+                 @"type" : OAValueTableViewCell.reuseIdentifier }
              ]];
-            
+
             [dataArr addObject:
              @[@{
-                   @"name" : @"logging_min_speed",
-                   @"title" : OALocalizedString(@"monitoring_min_speed"),
-                   @"description" : OALocalizedString(@"logging_min_speed_descr"),
-                   @"value" : minSpeed,
-                   @"type" : OAValueTableViewCell.reuseIdentifier }
+                 @"name" : @"logging_min_speed",
+                 @"title" : OALocalizedString(@"monitoring_min_speed"),
+                 @"description" : OALocalizedString(@"logging_min_speed_descr"),
+                 @"value" : minSpeed,
+                 @"type" : OAValueTableViewCell.reuseIdentifier }
              ]];
             
             [dataArr addObject:
@@ -219,19 +230,19 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"description" : OALocalizedString(@"save_heading_descr"),
                  @"value" : @([_settings.saveHeadingToGpx get:self.appMode]),
                  @"type" : OASwitchTableViewCell.reuseIdentifier
-                }
+             }
              ]];
             
             _navigationSection = (int) dataArr.count;
             [dataArr addObject:
              @[@{
-                   @"header" : OALocalizedString(@"routing_settings"),
-                   @"name" : @"track_during_nav",
-                   @"title" : OALocalizedString(@"save_track_to_gpx"),
-                   @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"save_track_to_gpx_descrp"), OALocalizedString(@"logging_interval_navigation_descr")],
-                   @"value" : _settings.saveTrackToGPX,
-                   @"img" : @"ic_custom_navigation",
-                   @"type" : OASwitchTableViewCell.reuseIdentifier },
+                 @"header" : OALocalizedString(@"routing_settings"),
+                 @"name" : @"track_during_nav",
+                 @"title" : OALocalizedString(@"save_track_to_gpx"),
+                 @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"save_track_to_gpx_descrp"), OALocalizedString(@"logging_interval_navigation_descr")],
+                 @"value" : _settings.saveTrackToGPX,
+                 @"img" : @"ic_custom_navigation",
+                 @"type" : OASwitchTableViewCell.reuseIdentifier },
                @{
                    @"name" : @"logging_interval_navigation",
                    @"title" : OALocalizedString(@"save_track_interval"),
@@ -251,6 +262,16 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"type" : OASwitchTableViewCell.reuseIdentifier }]];
 
+            NSMutableDictionary *routeActivityDict = [@{
+                @"header": OALocalizedString(@"data_settings"),
+                @"name": @"routeActivity",
+                @"title": OALocalizedString(@"shared_string_activity"),
+                @"value": [[OASRouteActivityHelper shared] findRouteActivityId:[_settings.currentTrackRouteActivity get:self.appMode]].label ?: OALocalizedString(@"shared_string_none"),
+                @"type": OAValueTableViewCell.reuseIdentifier
+            } mutableCopy];
+            
+            NSMutableArray *dataSettingsSection = [NSMutableArray arrayWithObject:routeActivityDict];
+            [dataArr addObject:dataSettingsSection];
             if ([OAPluginsHelper isEnabled:OAExternalSensorsPlugin.class])
             {
                 NSInteger devices = 0;
@@ -286,22 +307,30 @@ static NSArray<NSString *> *minTrackSpeedNames;
                         }
                     }
                 }
-                [dataArr addObject:@[
-                    @{
-                        @"header" : OALocalizedString(@"data_settings"),
-                        @"name" : @"routeActivity",
-                        @"title" : OALocalizedString(@"shared_string_activity"),
-                        @"value" : [[OASRouteActivityHelper shared] findRouteActivityId:[_settings.currentTrackRouteActivity get:self.appMode]].label ?: OALocalizedString(@"shared_string_none"),
-                        @"type" : OAValueTableViewCell.reuseIdentifier
-                    },
-                    @{
-                        @"name" : @"externalSensors",
-                        @"title" : OALocalizedString(@"external_sensors_plugin_name"),
-                        @"value" : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @(devices).stringValue, @(devicesAll).stringValue],
-                        @"type" : OAValueTableViewCell.reuseIdentifier
-                    }]];
-            }
 
+                NSDictionary *externalSensorsDict = @{
+                    @"name": @"externalSensors",
+                    @"title": OALocalizedString(@"external_sensors_plugin_name"),
+                    @"value": [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @(devices).stringValue, @(devicesAll).stringValue],
+                    @"type": OAValueTableViewCell.reuseIdentifier
+                };
+    
+                [dataSettingsSection addObject:externalSensorsDict];
+            }
+            
+            if ([OAPluginsHelper isEnabled:[VehicleMetricsPlugin class]])
+            {
+                BOOL isVehicleMetricsAvailable = [OAIAPHelper isVehicleMetricsAvailable];
+                [dataSettingsSection addObject:@{
+                    @"name" : @"vehicleMetrics",
+                    @"title" : OALocalizedString(@"obd_plugin_name"),
+                    @"value" : isVehicleMetricsAvailable ? [self getActiveCommandsVehicleMetricsDescription] : @"",
+                    @"isProButtonVisible" : @(!isVehicleMetricsAvailable),
+                    @"actionSelector": NSStringFromSelector(@selector(onProButtonTapped)),
+                    @"type" : OAValueTableViewCell.reuseIdentifier
+                }];
+            }
+            
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
             NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]}];
@@ -348,11 +377,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
             for (NSNumber *num in settings.trackIntervalArray)
             {
                 [dataArr addObject: @{
-                                  @"title" : [settings getFormattedTrackInterval:[num intValue]],
-                                  @"value" : @"",
-                                  @"img" : ([settings.mapSettingSaveTrackIntervalGlobal get:self.appMode] == [num intValue] && !alwaysAsk)
-                                  ? @"menu_cell_selected.png" : @"",
-                                  @"type" : kCellTypeCheck }];
+                    @"title" : [settings getFormattedTrackInterval:[num intValue]],
+                    @"value" : @"",
+                    @"img" : ([settings.mapSettingSaveTrackIntervalGlobal get:self.appMode] == [num intValue] && !alwaysAsk)
+                    ? @"menu_cell_selected.png" : @"",
+                    @"type" : kCellTypeCheck }];
             }
             break;
         }
@@ -361,10 +390,10 @@ static NSArray<NSString *> *minTrackSpeedNames;
             for (NSNumber *num in settings.trackIntervalArray)
             {
                 [dataArr addObject: @{
-                                      @"title" : [settings getFormattedTrackInterval:[num intValue]],
-                                      @"value" : @"",
-                                      @"img" : ([settings.mapSettingSaveTrackInterval get:self.appMode] == [num intValue])
-                                      ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    @"title" : [settings getFormattedTrackInterval:[num intValue]],
+                    @"value" : @"",
+                    @"img" : ([settings.mapSettingSaveTrackInterval get:self.appMode] == [num intValue])
+                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         }
@@ -372,30 +401,30 @@ static NSArray<NSString *> *minTrackSpeedNames;
             for (int i = 0; i < trackPrecisionValues.count; i++)
             {
                 [dataArr addObject: @{
-                                      @"title" : trackPrecisionNames[i],
-                                      @"value" : @"",
-                                      @"img" : ([settings.saveTrackPrecision get:self.appMode] == trackPrecisionValues[i].floatValue)
-                                      ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    @"title" : trackPrecisionNames[i],
+                    @"value" : @"",
+                    @"img" : ([settings.saveTrackPrecision get:self.appMode] == trackPrecisionValues[i].floatValue)
+                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         case kTripRecordingSettingsScreenMinSpeed:
             for (int i = 0; i < minTrackSpeedValues.count; i++)
             {
                 [dataArr addObject: @{
-                                      @"title" : minTrackSpeedNames[i],
-                                      @"value" : @"",
-                                      @"img" : ([settings.saveTrackMinSpeed get:self.appMode] == minTrackSpeedValues[i].floatValue / MPS_TO_KMH_MULTIPLIER)
-                                      ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    @"title" : minTrackSpeedNames[i],
+                    @"value" : @"",
+                    @"img" : ([settings.saveTrackMinSpeed get:self.appMode] == minTrackSpeedValues[i].floatValue / MPS_TO_KMH_MULTIPLIER)
+                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         case kTripRecordingSettingsScreenMinDistance:
             for (int i = 0; i < minTrackDistanceValues.count; i++)
             {
                 [dataArr addObject: @{
-                                      @"title" : minTrackDistanceNames[i],
-                                      @"value" : @"",
-                                      @"img" : ([settings.saveTrackMinDistance get:self.appMode] == minTrackDistanceValues[i].floatValue)
-                                      ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    @"title" : minTrackDistanceNames[i],
+                    @"value" : @"",
+                    @"img" : ([settings.saveTrackMinDistance get:self.appMode] == minTrackDistanceValues[i].floatValue)
+                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         default:
@@ -404,6 +433,24 @@ static NSArray<NSString *> *minTrackSpeedNames;
     
     _data = [NSArray arrayWithArray:dataArr];
 }
+
+- (NSString *)getActiveCommandsVehicleMetricsDescription
+{
+    NSString *description = OALocalizedString(@"shared_string_none");
+    
+    VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
+    if (plugin)
+    {
+        auto commands = [plugin.TRIP_RECORDING_VEHICLE_METRICS get:self.appMode];
+        if ([commands count] > 0)
+        {
+            description = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @([commands count]).stringValue, @([VehicleMetricsItemObjcWrapper allCommands].count).stringValue];
+        }
+    }
+
+    return description;
+}
+
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
@@ -491,7 +538,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     {
         OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OAValueTableViewCell.reuseIdentifier];
         [cell descriptionVisibility:NO];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.titleLabel.text = item[@"title"];
         cell.valueLabel.text = item[@"value"];
         if ([item[@"key"] isEqualToString:@"nav_interval"] && ![_settings.saveTrackToGPX get:self.appMode])
@@ -507,6 +553,17 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 vw.alpha = 1;
             cell.userInteractionEnabled = YES;
             cell.leftIconView.tintColor = self.appMode.getProfileColor;
+        }
+        
+        NSNumber *isProButtonVisible = item[@"isProButtonVisible"];
+        if (isProButtonVisible && isProButtonVisible.boolValue) {
+            [cell showProButton:YES];
+            [cell.proButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.proButton addTarget:self action:NSSelectorFromString(item[@"actionSelector"]) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        } else {
+            [cell showProButton:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
         NSString *img = item[@"img"];
@@ -597,6 +654,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
 }
 
 #pragma mark - Selectors
+
+- (void)onProButtonTapped
+{
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.VEHICLEMETRICS navController:self.navigationController];
+}
 
 - (void) applyParameter:(id)sender
 {
@@ -729,6 +791,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
         [_settings.saveTrackToGPX resetModeToDefault:self.appMode];
         [_settings.autoSplitRecording resetModeToDefault:self.appMode];
         [_settings.currentTrackRouteActivity resetModeToDefault:self.appMode];
+        [self resetTripRecordingVehicleMetricsModeToDefault:self.appMode];
+        
         [self generateData];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.numberOfSections)] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
@@ -739,8 +803,22 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     else if ([name isEqualToString:@"externalSensors"])
     {
-        OAExternalSettingsWriteToTrackSettingsViewController *contoller = [[OAExternalSettingsWriteToTrackSettingsViewController alloc] initWithApplicationMode:self.appMode];
-        [self showViewController:contoller];
+        OAExternalSettingsWriteToTrackSettingsViewController *controller = [[OAExternalSettingsWriteToTrackSettingsViewController alloc] initWithApplicationMode:self.appMode];
+        [self showViewController:controller];
+    }
+    else if ([name isEqualToString:@"vehicleMetrics"])
+    {
+        NSNumber *isProButtonVisible = item[@"isProButtonVisible"];
+        if (isProButtonVisible && isProButtonVisible.boolValue) {
+            [self onProButtonTapped];
+        } else {
+            __weak __typeof(self) weakSelf = self;
+            VehicleMetricsTripRecordingCommandsViewController *controller = [[VehicleMetricsTripRecordingCommandsViewController alloc] initWithAppMode:self.appMode onApplyAction:^{
+                [weakSelf generateData];
+                [weakSelf.tableView reloadData];
+            }];
+            [self showModalViewController:controller];
+        }
     }
 }
 

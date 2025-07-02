@@ -71,11 +71,17 @@ protocol SortableFolder {
         return formatter
     }()
     
-    @objc static var defaultSortModeTitle: String {
-        TracksSortMode.lastModified.title
+    @objc static func getDefaultSortMode(for sortEntryId: String?) -> TracksSortMode {
+        sortEntryId == nil || sortEntryId?.isEmpty == true || sortEntryId == "rec" || sortEntryId == "import"
+        ? .lastModified
+        : .nameAZ
     }
     
-    @objc static func title(for mode: TracksSortMode) -> String {
+    @objc static func getDefaultSortModeTitle(for sortEntryId: String?) -> String {
+        title(for: getDefaultSortMode(for: sortEntryId))
+    }
+    
+    @objc static private func title(for mode: TracksSortMode) -> String {
         mode.title
     }
     

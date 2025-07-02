@@ -1256,3 +1256,13 @@
 "shared_string_to" = "\"വരെ \"";
 "transport_stop" = "നിര്‍ത്തുക";
 "shared_string_minute_lowercase" = "മി.";
+"online_photos" = "\"ഓണ്‍ലൈന്‍ ഫോട്ടോകള്‍ \"";
+"customize_grid_color" = "ഗ്രിഡിന്റെ കളർ കസ്റ്റമൈസ്";
+"dd_mm_ss_format" = "\"ഡിഡി°എംഎം\' എസ്എസ്\'\' \"";
+"shared_string_pause" = "താല്‍ക്കാലികമായുള്ള നിര്‍ത്തല്‍";
+"shared_string_date" = "\"തിയതി \"";
+"poi_filter_fuel" = "\"ഇന്ധനം \"";
+"dd_ddddd_format" = "ഡിഡി.ഡിഡിഡിഡിഡി°";
+"grid_color" = "ഗ്രിഡിന്റെ കളർ";
+"mapillary_action_descr" = "\"ഈ ലൊക്കേഷന്റെ  സ്ട്രീറ്റ്-വ്യൂ കാഴ്ച മാപ്പില്ലാറി വഴി സംഭാവന ചെയ്യുക.\"";
+"dd_mm_mmm_format" = "\"ഡിഡി°എംഎം.എംഎംഎം\' \"";

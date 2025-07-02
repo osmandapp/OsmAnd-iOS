@@ -32,6 +32,12 @@
     [self updateMargins];
 }
 
+- (void)showProButton:(BOOL)show
+{
+    [self valueVisibility:!show];
+    self.proButton.hidden = !show;
+}
+
 - (BOOL)checkSubviewsToUpdateMargins
 {
     return !self.valueStackView.hidden;

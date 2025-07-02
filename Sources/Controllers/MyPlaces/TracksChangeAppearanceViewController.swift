@@ -36,7 +36,6 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private static let widthArrayValue = "widthArrayValue"
     private static let hasTopLabels = "hasTopLabels"
     private static let hasBottomLabels = "hasBottomLabels"
-    private static let routeStatisticsAttributesStrings: [String] = ["routeInfo_roadClass", "routeInfo_surface", "routeInfo_smoothness", "routeInfo_winter_ice_road", "routeInfo_tracktype", "routeInfo_horse_scale"]
     
     private var tracks: Set<TrackItem>
     private var initialData: AppearanceData
@@ -449,7 +448,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     
     private func configureColorType() {
         guard let typeStr = preselectParameter(in: tracks, extractor: { $0.coloringType }) else { return }
-        let normalizedTypeStr = TracksChangeAppearanceViewController.routeStatisticsAttributesStrings.contains(typeStr) ? typeStr.replacingOccurrences(of: "routeInfo", with: "route_info") : typeStr
+        let normalizedTypeStr = ColoringType.routeStatisticsAttributesStrings.contains(typeStr) ? typeStr.replacingOccurrences(of: "routeInfo", with: "route_info") : typeStr
         selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: normalizedTypeStr, defaultValue: .trackSolid)
         initialData.setParameter(.coloringType, value: selectedColorType?.id)
         data.setParameter(.coloringType, value: selectedColorType?.id)
@@ -807,7 +806,7 @@ extension TracksChangeAppearanceViewController {
         }
         let gradientColorMenu = inlineMenu(withActions: [altitudeAction, speedAction, slopeAction])
         
-        let proColorActions = TracksChangeAppearanceViewController.routeStatisticsAttributesStrings.map { attribute in
+        let proColorActions = ColoringType.routeStatisticsAttributesStrings.map { attribute in
             return createProColorAction(titleKey: attribute + "_name", parameterValue: attribute, selectedString: attribute, isRouteInfoAttribute: isRouteInfoAttribute)
         }
         let proColorMenu = inlineMenu(withActions: proColorActions)

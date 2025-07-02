@@ -7,7 +7,6 @@
 //
 
 #import "OATrackMenuAppearanceHudViewController.h"
-#import "OATrackColoringTypeViewController.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
 #import "OASlider.h"
@@ -92,7 +91,7 @@ static const NSInteger kColorsSection = 1;
 
 @end
 
-@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate, ColorCollectionViewControllerDelegate, OACollectionTableViewCellDelegate>
+@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OAColorsCollectionCellDelegate, ColorCollectionViewControllerDelegate, OACollectionTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
@@ -108,6 +107,7 @@ static const NSInteger kColorsSection = 1;
 @property (nonatomic) BOOL forceHiding;
 @property (nonatomic) OsmAndAppInstance app;
 @property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
+@property (nonatomic) OAColorItem *baseColorItem;
 @property (nonatomic) OAColorItem *selectedColorItem;
 @property (nonatomic) BOOL isNewColorSelected;
 @property (nonatomic) BOOL isDefaultColorRestored;
@@ -144,6 +144,8 @@ static const NSInteger kColorsSection = 1;
     
     NSArray<OASGpxDataItem *> *_wholeFolderTracks;
     LeftIconRightStackTitleDescriptionButtonView *_trackView3DEmptyView;
+    
+    NSString *_selectedRouteAttributesString;
 }
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx state:(OATrackMenuViewControllerState *)state analysis:(OASGpxTrackAnalysis *)analysis {
@@ -185,6 +187,7 @@ static const NSInteger kColorsSection = 1;
         ? [OAColoringType getNonNullTrackColoringTypeByName:coloringType]
         : OAColoringType.TRACK_SOLID;
     
+    _selectedRouteAttributesString = [type isRouteInfoAttribute] ? [type getName:coloringType] : nil;
     
     _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [type toColorizationType]];
 
@@ -441,6 +444,7 @@ static const NSInteger kColorsSection = 1;
     if (!_selectedColorItem)
         _selectedColorItem = [_appearanceCollection getDefaultLineColorItem];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
+    _baseColorItem = _selectedColorItem;
 
     [_sortedPaletteColorItems replaceAllWithObjectsSync:[_gradientColorsCollection getPaletteColors]];
     _selectedPaletteColorItem = [_gradientColorsCollection getPaletteColorByName:[self getGPXGradientPaletteName]];
@@ -642,17 +646,13 @@ static const NSInteger kColorsSection = 1;
 - (UIMenu *)createMenuForKey:(NSString *)key button:(UIButton *)button
 {
     if ([key isEqualToString:@"visualization_3d_visualized_by"])
-    {
         return [self createVisualizedByMenuForCellButton:button];
-    }
     else if ([key isEqualToString:@"visualization_3d_wall_color"])
-    {
         return [self createWallColorMenuForCellButton:button];
-    }
     else if ([key isEqualToString:@"visualization_3d_track_line"])
-    {
         return [self createTrackLineMenuForCellButton:button];
-    }
+    else if ([key isEqualToString:@"color_title"])
+        return [self createColoringMenuForCellButton:button];
     NSAssert(NO, @"createMenuForKey key is not implemented");
     return nil;
 }
@@ -840,12 +840,10 @@ static const NSInteger kColorsSection = 1;
             [sensorActions addObject:action];
     }
     
-    UIMenu *noneMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[noneAction]];
-    UIMenu *sensorMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:sensorActions];
-    UIMenu *fixedHeightMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[fixedHeightAction]];
-    
     NSString *selectedTitle = visualizationTypes[@(visualization3dByType)];
-    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:@[noneMenu, sensorMenu, fixedHeightMenu]];
+    return [self createChevronMenu:OALocalizedString(selectedTitle)
+                            button:button
+                      menuElements:@[@[noneAction], sensorActions, @[fixedHeightAction]]];
 }
 
 - (UIMenu *)createWallColorMenuForCellButton:(UIButton *)button
@@ -881,16 +879,11 @@ static const NSInteger kColorsSection = 1;
     NSArray<NSNumber *> *colorTypes = @[@(EOAGPX3DLineVisualizationWallColorTypeSolid), @(EOAGPX3DLineVisualizationWallColorTypeDownwardGradient), @(EOAGPX3DLineVisualizationWallColorTypeUpwardGradient)];
     NSArray<NSNumber *> *dataTypes = @[@(EOAGPX3DLineVisualizationWallColorTypeAltitude), @(EOAGPX3DLineVisualizationWallColorTypeSlope), @(EOAGPX3DLineVisualizationWallColorTypeSpeed)];
     
-    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
-    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:noneTypes.firstObject]]]]];
-    
     NSMutableArray<UIAction *> *colorActions = [NSMutableArray array];
     for (NSNumber *type in colorTypes)
     {
         [colorActions addObject:[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:type]]];
     }
-    
-    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:colorActions]];
     
     NSMutableArray<UIAction *> *dataActions = [NSMutableArray array];
     for (NSNumber *type in dataTypes)
@@ -898,10 +891,24 @@ static const NSInteger kColorsSection = 1;
         [dataActions addObject:[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:type]]];
     }
     
-    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:dataActions]];
-    
     NSString *selectedTitle = wallColorTypes[@(visualization3dWallColorType)];
-    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:[menuElements copy]];
+    
+    NSMutableArray<UIAction *> *noneActions = [NSMutableArray array];
+    NSNumber *firstNoneType = noneTypes.firstObject;
+    
+    if (firstNoneType)
+    {
+        NSUInteger index = [wallColorTypes.allKeys indexOfObject:firstNoneType];
+        if (index != NSNotFound && index < actions.count)
+        {
+            UIAction *noneAction = actions[index];
+            [noneActions addObject:noneAction];
+        }
+    }
+    
+    return [self createChevronMenu:OALocalizedString(selectedTitle)
+                            button:button
+                      menuElements:@[noneActions, colorActions, dataActions]];
 }
 
 - (UIMenu *)createTrackLineMenuForCellButton:(UIButton *)button
@@ -939,12 +946,95 @@ static const NSInteger kColorsSection = 1;
     
     NSString *title = [menuElements[selectedIndex] title];
     
-    return [self createChevronMenu:title button:button menuElements:[menuElements copy]];
+    return [self createChevronMenu:title
+                            button:button
+                      menuElements:@[menuElements]];
+}
+
+- (UIMenu *)createColoringMenuForCellButton:(UIButton *)button
+{
+    BOOL isRouteInfoAttribute = [_selectedItem.coloringType isRouteInfoAttribute];
+    __weak __typeof(self) weakSelf = self;
+    
+    UIAction *solidColorAction = [UIAction actionWithTitle:OALocalizedString(@"track_coloring_solid", nil)
+                                                     image:nil
+                                                identifier:nil
+                                                   handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf selectColorType:OAColoringType.TRACK_SOLID];
+    }];
+    solidColorAction.state = [_selectedItem.coloringType isTrackSolid] ? UIMenuElementStateOn : UIMenuElementStateOff;
+
+    UIAction *altitudeAction = [UIAction actionWithTitle:OALocalizedString(@"altitude", nil)
+                                                   image:nil
+                                              identifier:nil
+                                                 handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf selectColorType:OAColoringType.ALTITUDE];
+    }];
+    altitudeAction.state = [_selectedItem.coloringType isAltitude] ? UIMenuElementStateOn : UIMenuElementStateOff;
+    
+    UIAction *speedAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_speed", nil)
+                                                image:nil
+                                           identifier:nil
+                                              handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf selectColorType:OAColoringType.SPEED];
+    }];
+    speedAction.state = [_selectedItem.coloringType isSpeed] ? UIMenuElementStateOn : UIMenuElementStateOff;
+    
+    UIAction *slopeAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope", nil)
+                                                image:nil
+                                           identifier:nil
+                                              handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf selectColorType:OAColoringType.SLOPE];
+    }];
+    slopeAction.state = [_selectedItem.coloringType isSlope] ? UIMenuElementStateOn : UIMenuElementStateOff;
+
+    NSMutableArray<UIAction *> *proColorActions = [NSMutableArray array];
+    for (NSString *attribute in OASColoringType.routeStatisticsAttributesStrings)
+    {
+        UIAction *proAction = [self createProColorActionWithTitleKey:[attribute stringByAppendingString:@"_name"]
+                                                      selectedString:attribute
+                                                isRouteInfoAttribute:isRouteInfoAttribute];
+        [proColorActions addObject:proAction];
+    }
+
+    return [self createChevronMenu:_selectedItem.title
+                            button:button
+                      menuElements:@[@[solidColorAction], @[altitudeAction, speedAction, slopeAction], proColorActions]];
+}
+
+- (UIAction *)createProColorActionWithTitleKey:(NSString *)titleKey
+                               selectedString:(NSString *)selectedString
+                        isRouteInfoAttribute:(BOOL)isRouteInfoAttribute
+{
+    NSString *title = localizedString(titleKey);
+    BOOL isOsmAndProAvailable = [OAIAPHelper isOsmAndProAvailable];
+    UIImage *image = isOsmAndProAvailable ? nil : [UIImage imageNamed:@"ic_custom_pro_logo_outlined"];
+    __weak __typeof(self) weakSelf = self;
+
+    UIAction *action = [UIAction actionWithTitle:title
+                                           image:image
+                                      identifier:nil
+                                         handler:^(__kindof UIAction * _Nonnull action) {
+        if (isOsmAndProAvailable)
+        {
+            _selectedRouteAttributesString = selectedString;
+            [weakSelf selectColorType:OAColoringType.ATTRIBUTE];
+        } else if (weakSelf.navigationController)
+        {
+            [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature ADVANCED_WIDGETS]
+                                                  navController:weakSelf.navigationController];
+            [weakSelf selectColorType:_selectedItem.coloringType];
+        }
+    }];
+    
+    action.state = isRouteInfoAttribute && [_selectedRouteAttributesString isEqualToString:selectedString] ? UIMenuElementStateOn : UIMenuElementStateOff;
+
+    return action;
 }
 
 - (UIMenu *)createChevronMenu:(NSString *)title
                        button:(UIButton *)button
-                 menuElements:(NSArray<UIMenuElement *> *)menuElements
+                 menuElements:(NSArray<NSArray<UIMenuElement *> *> *)menuElements
 {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
     
@@ -960,7 +1050,7 @@ static const NSInteger kColorsSection = 1;
     
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     
-    return [UIMenu menuWithChildren:menuElements];
+    return [UIMenu composedMenuFrom:menuElements];
 }
 
 - (BOOL)hasValidDataForKey:(NSString *)key
@@ -984,13 +1074,7 @@ static const NSInteger kColorsSection = 1;
     {
         [colorsCells addObject:[OAGPXTableCellData withData:@{
             kTableKey: @"color_title",
-            kCellType: [OAValueTableViewCell getCellIdentifier],
-            kTableValues: @{
-                @"string_value": _selectedItem.title,
-                @"accessibility_label": OALocalizedString(@"shared_string_coloring"),
-                @"accessibility_value": _selectedItem.title,
-                @"accessoryType": @(UITableViewCellAccessoryDisclosureIndicator)
-            },
+            kCellType: [OAButtonTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"shared_string_coloring"),
         }]];
     }
@@ -1357,6 +1441,59 @@ static const NSInteger kColorsSection = 1;
     return [_selectedItem.coloringType isRouteInfoAttribute];
 }
 
+- (BOOL)hasChanges
+{
+    if ([self getGPXShowArrows] != _backupGpxItem.showArrows)
+        return YES;
+    
+    if ([self getGPXShowStartFinish] != _backupGpxItem.showStartFinish)
+        return YES;
+    
+    NSString *currentColoringType = [self getGPXColoringType].length > 0 ? [self getGPXColoringType] : OAColoringType.TRACK_SOLID.name;
+    NSString *backupColoringType = _backupGpxItem.coloringType.length > 0 ? _backupGpxItem.coloringType : OAColoringType.TRACK_SOLID.name;
+    if (![currentColoringType isEqualToString:backupColoringType])
+        return YES;
+    
+    if (_baseColorItem.value != _selectedColorItem.value)
+        return YES;
+    
+    NSString *currentGradientName = [self getGPXGradientPaletteName].length > 0 ? [self getGPXGradientPaletteName] : [[_gradientColorsCollection getDefaultGradientPalette] paletteName].length > 0 ? [[_gradientColorsCollection getDefaultGradientPalette] paletteName] : @"";
+    NSString *backupGradientName = _backupGpxItem.gradientPaletteName.length > 0 ? _backupGpxItem.gradientPaletteName : [[_gradientColorsCollection getDefaultGradientPalette] paletteName].length > 0 ? [[_gradientColorsCollection getDefaultGradientPalette] paletteName] : @"";
+    if (![currentGradientName isEqualToString:backupGradientName])
+        return YES;
+    
+    NSString *currentWidth = [self getGPXWidth].length > 0 ? [self getGPXWidth] : [OAGPXTrackWidth getDefault].key ?: @"";
+    NSString *backupWidth = _backupGpxItem.width.length > 0 ? _backupGpxItem.width : [OAGPXTrackWidth getDefault].key ?: @"";
+    if (![currentWidth isEqualToString:backupWidth])
+        return YES;
+    
+    if ([self getGPXVisualization3dByType] != _backupGpxItem.visualization3dByType)
+        return YES;
+    
+    if ([self getGPXVisualizationPositionType] != _backupGpxItem.visualization3dPositionType)
+        return YES;
+    
+    if ([self getGPXVisualization3dWallColorType] != _backupGpxItem.visualization3dWallColorType)
+        return YES;
+    
+    if ([self getGPXVerticalExaggerationScale] != _backupGpxItem.verticalExaggerationScale)
+        return YES;
+    
+    if ([self getGPXElevationMeters] != _backupGpxItem.elevationMeters)
+        return YES;
+    
+    if ([self getGPXSplitType] != _backupGpxItem.splitType)
+        return YES;
+    
+    if ([self getGPXSplitInterval] != _backupGpxItem.splitInterval)
+        return YES;
+    
+    if ([self getGPXShowJoinSegments] != _backupGpxItem.joinSegments)
+        return YES;
+    
+    return NO;
+}
+
 - (void)checkColoringAvailability
 {
     BOOL isAvailable = [_selectedItem.coloringType isAvailableInSubscription];
@@ -1417,7 +1554,34 @@ static const NSInteger kColorsSection = 1;
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
-    [self hide];
+    if ([self hasChanges])
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"unsaved_changes") message:OALocalizedString(@"unsaved_changes_will_be_lost_discard") preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        UIAlertAction *discardAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_discard") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [self hide];
+        }];
+        [alert addAction:discardAction];
+        
+        UIAlertAction *saveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self onDoneButtonPressed:nil];
+        }];
+        [alert addAction:saveAction];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:cancelAction];
+        
+        UIButton *sourceButton = (UIButton *)sender;
+        alert.popoverPresentationController.sourceView = sourceButton;
+        alert.popoverPresentationController.sourceRect = sourceButton.frame;
+        alert.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        [self hide];
+    }
 }
 
 - (IBAction)onDoneButtonPressed:(id)sender
@@ -1540,7 +1704,6 @@ static const NSInteger kColorsSection = 1;
 
             cell.accessibilityLabel = cell.titleLabel.text;
             cell.accessibilityValue = cell.valueLabel.text;
-
         }
         return cell;
     }
@@ -1793,7 +1956,7 @@ static const NSInteger kColorsSection = 1;
         OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         OAGPXTableSectionData *sectionData = _tableData[indexPath.section];
         BOOL is3dTrackSection = [sectionData.key isEqualToString:@"3d_track_section"];
-        if (is3dTrackSection)
+        if (is3dTrackSection || [cellData.key isEqualToString:@"color_title"])
         {
             cell.titleLabel.text = cellData.title;
             [cell descriptionVisibility:NO];
@@ -2077,18 +2240,7 @@ static const NSInteger kColorsSection = 1;
 
 - (void)updateData:(OAGPXBaseTableData *)tableData
 {
-    if ([tableData.key isEqualToString:@"color_title"])
-    {
-        [tableData setData:@{
-            kTableValues: @{
-                @"string_value": _selectedItem.title,
-                @"accessibility_label": OALocalizedString(@"shared_string_coloring"),
-                @"accessibility_value": _selectedItem.title,
-                @"accessoryType": @(UITableViewCellAccessoryDisclosureIndicator)
-            }
-        }];
-    }
-    else if ([tableData.key isEqualToString:@"colors_section"])
+    if ([tableData.key isEqualToString:@"colors_section"])
     {
         OAGPXTableSectionData *section = (OAGPXTableSectionData *) tableData;
         [self updateData:section.subjects.firstObject];
@@ -2335,21 +2487,7 @@ static const NSInteger kColorsSection = 1;
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {
-    if ([tableData.key isEqualToString:@"color_title"])
-    {
-        OATrackColoringTypeViewController *coloringViewController = [[OATrackColoringTypeViewController alloc] initWithAvailableColoringTypes:_availableColoringTypes selectedItem:_selectedItem];
-        coloringViewController.delegate = self;
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:coloringViewController];
-        navigationController.modalPresentationStyle = UIModalPresentationPageSheet;
-        UISheetPresentationController *sheet = navigationController.sheetPresentationController;
-        if (sheet)
-        {
-            sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent];
-            sheet.preferredCornerRadius = 20;
-        }
-        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
-    }
-    else if ([tableData.key isEqualToString:@"allColors"])
+    if ([tableData.key isEqualToString:@"allColors"])
     {
         ItemsCollectionViewController *colorCollectionViewController = nil;
         if ([self isSelectedTypeSolid])
@@ -2476,10 +2614,26 @@ static const NSInteger kColorsSection = 1;
     }
 }
 
-#pragma mark - OATrackColoringTypeDelegate
-
-- (void)onColoringTypeSelected:(OATrackAppearanceItem *)selectedItem
+- (void)selectColorType:(OAColoringType *)selectedColoringType
 {
+    OATrackAppearanceItem *selectedItem;
+    
+    for (OATrackAppearanceItem *item in _availableColoringTypes)
+    {
+        if (![item.coloringType.name isEqualToString:selectedColoringType.name])
+            continue;
+        
+        if (![item.coloringType.name isEqualToString:OAColoringType.ATTRIBUTE.name] ||
+            [item.attrName isEqualToString:_selectedRouteAttributesString])
+        {
+            selectedItem = item;
+            break;
+        }
+    }
+    
+    if (!selectedItem)
+        return;
+    
     _selectedItem = selectedItem;
     if ([self isSelectedTypeGradient])
     {

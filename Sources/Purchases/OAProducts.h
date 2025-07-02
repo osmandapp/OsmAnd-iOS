@@ -49,6 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_Advanced_Widgets @"net.osmand.maps.inapp.addon.advanced_widgets"
 #define kInAppId_Addon_OsmandDevelopment @"net.osmand.maps.inapp.addon.development"
 #define kInAppId_Addon_External_Sensors @"net.osmand.maps.inapp.addon.external_sensors"
+#define kInAppId_Addon_Vehicle_Metrics @"net.osmand.maps.inapp.addon.vehicle_metrics"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0
@@ -224,6 +225,13 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 - (NSString *) productIconName;
 - (NSString *) productScreenshotName;
 
+- (BOOL) isFullVersion;
+- (BOOL) isNautical;
+- (BOOL) isContourLines;
+- (BOOL) isLiveUpdates;
+- (BOOL) isOsmAndPro;
+- (BOOL) isMaps;
+
 @end
 
 @interface OASubscription : OAProduct
@@ -295,6 +303,18 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 
 @end
 
+@interface OAExternalSubscription : OASubscription
+
++ (OAExternalSubscription *) buildFromJson:(NSDictionary *)json;
+
+@end
+
+@interface OAExternalProduct : OAProduct
+
++ (OAExternalProduct *) buildFromJson:(NSDictionary *)json;
+
+@end
+
 @interface OAMapsFullProduct : OAProduct
 @end
 
@@ -328,6 +348,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @end
 
 @interface OAExternalSensorsProduct : OAProduct
+@end
+
+@interface OAVehicleMetricsProduct : OAProduct
 @end
 
 @interface OACarPlayProduct : OAProduct
@@ -383,6 +406,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) OAProduct *mapillary;
 @property (nonatomic, readonly) OAProduct *weather;
 @property (nonatomic, readonly) OAProduct *sensors;
+@property (nonatomic, readonly) OAProduct *vehicleMetrics;
 @property (nonatomic, readonly) OAProduct *carplay;
 @property (nonatomic, readonly) OAProduct *osmandDevelopment;
 

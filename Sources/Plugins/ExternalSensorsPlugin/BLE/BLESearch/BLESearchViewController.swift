@@ -86,7 +86,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     
     // MARK: - Life Cycle
     
-    override func getTitle() -> String! {
+    override func getTitle() -> String {
         localizedString("ant_plus_searching")
     }
     
@@ -111,11 +111,11 @@ final class BLESearchViewController: OABaseNavbarViewController {
         detectBluetoothState()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceRSSIUpdated),
-                                               name: .DeviceRSSIUpdated,
+                                               name: .deviceRSSIUpdated,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
-                                               name: .DeviceDisconnected,
+                                               name: .deviceDisconnected,
                                                object: nil)
     }
     
@@ -128,7 +128,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
         tableView.reloadData()
     }
     
-    override func getTitleForHeader(_ section: Int) -> String! {
+    override func getTitleForHeader(_ section: Int) -> String {
         String(format: localizedString("bluetooth_found_title"), discoveredDevices.count).uppercased()
     }
     
@@ -136,7 +136,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
         30
     }
     
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchDeviceTableViewCell.reuseIdentifier) as! SearchDeviceTableViewCell
         // separators go edge to edge
         cell.separatorInset = .zero
@@ -154,7 +154,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
         header?.textLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
     }
     
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath) {
         let controller = BLEDescriptionViewController()
         controller.device = discoveredDevices[indexPath.row]
         navigationController?.pushViewController(controller, animated: true)

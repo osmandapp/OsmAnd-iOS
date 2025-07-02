@@ -31,15 +31,13 @@
 #import "OAFavoritesHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OAMapSelectionHelper.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/SingleSkImage.h>
 
-#define firstLineId 11
-#define firstOutlineId 10
-#define secondLineId 21
-#define secondOutlineId 20
+#define kLabelOffset 4
 
 @interface OADestinationsLayer () <OAStateChangedListener>
 
@@ -48,7 +46,16 @@
 @implementation OADestinationsLayer
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _destinationsMarkersCollection;
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _distanceMarkersCollection;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _linesCollection;
+
+    std::shared_ptr<OsmAnd::MapMarker> _firstDistanceMarker;
+    std::shared_ptr<OsmAnd::VectorLine> _firstLine;
+    std::shared_ptr<OsmAnd::VectorLine> _firstOutline;
+
+    std::shared_ptr<OsmAnd::MapMarker> _secondDistanceMarker;
+    std::shared_ptr<OsmAnd::VectorLine> _secondLine;
+    std::shared_ptr<OsmAnd::VectorLine> _secondOutline;
 
     OAAutoObserverProxy* _destinationAddObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
@@ -105,6 +112,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _distanceMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     _myPositionLayerBaseOrder = self.mapViewController.mapLayers.myPositionLayer.baseOrder;
         
     [self.app.data.mapLayersConfiguration setLayer:self.layerId Visibility:YES];
@@ -275,6 +283,7 @@
 {
     [self.mapViewController runWithRenderSync:^{
         [self.mapView addKeyedSymbolsProvider:_destinationsMarkersCollection];
+        [self.mapView addKeyedSymbolsProvider:_distanceMarkersCollection];
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }];
 }
@@ -283,6 +292,7 @@
 {
     [self.mapViewController runWithRenderSync:^{
         [self.mapView removeKeyedSymbolsProvider:_destinationsMarkersCollection];
+        [self.mapView removeKeyedSymbolsProvider:_distanceMarkersCollection];
         [self.mapView removeKeyedSymbolsProvider:_linesCollection];
     }];
 }
@@ -369,26 +379,31 @@
         if (currLoc)
         {
             if (firstMarkerDestination)
-                [self drawLine:firstMarkerDestination fromLocation:currLoc lineId:firstLineId outlineId:firstOutlineId];
-            
+                [self drawLine:firstMarkerDestination fromLocation:currLoc vectorLine:_firstLine vectorLine:_firstOutline mapMarker:_firstDistanceMarker];
+
             if (secondMarkerDestination && [settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
             {
-                [self drawLine:secondMarkerDestination fromLocation:currLoc lineId:secondLineId outlineId:secondOutlineId];
+                [self drawLine:secondMarkerDestination fromLocation:currLoc vectorLine:_secondLine vectorLine:_secondOutline mapMarker:_secondDistanceMarker];
             }
             else
             {
-                _linesCollection->removeLine([self getLine:secondOutlineId]);
-                _linesCollection->removeLine([self getLine:secondLineId]);
+                _linesCollection->removeLine(_secondOutline);
+                _linesCollection->removeLine(_secondLine);
+                _distanceMarkersCollection->removeMarker(_secondDistanceMarker);
             }
         }
     }
     else
     {
+        _distanceMarkersCollection->removeAllMarkers();
         _linesCollection->removeAllLines();
     }
 }
 
-- (void) drawLine:(OADestination *)destination fromLocation:(CLLocation *)currLoc lineId:(int)lineId outlineId:(int)outlineId
+- (void) drawLine:(OADestination *)destination fromLocation:(CLLocation *)currLoc
+        vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)line
+        vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)outline
+        mapMarker:(std::shared_ptr<OsmAnd::MapMarker>&)marker
 {
     QVector<OsmAnd::PointI> points;
     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(destination.latitude, destination.longitude)));
@@ -407,55 +422,52 @@
 
     const auto color = [destination.color toFColorARGB];
     const auto outlineColor = OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0);
-    const auto& line = [self getLine:lineId];
-    const auto& outline = [self getLine:outlineId];
     if (line == nullptr || outline == nullptr)
     {
         OsmAnd::VectorLineBuilder outlineBuilder;
-        outlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId + 1)
-        .setIsHidden(false)
-        .setLineId(outlineId)
-        .setLineWidth(strokeWidth * 1.5)
-        .setLineDash(outlinePattern)
-        .setPoints(points)
-        .setFillColor(outlineColor);
-        outlineBuilder.buildAndAddToCollection(_linesCollection);
-        
-        OsmAnd::VectorLineBuilder inlineBuilder;
-        inlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId)
-        .setIsHidden(false)
-        .setLineId(lineId)
-        .setLineWidth(strokeWidth)
-        .setLineDash(inlinePattern)
-        .setPoints(points)
-        .setFillColor(color);
-        inlineBuilder.buildAndAddToCollection(_linesCollection);
-    }
-    else
-    {
-        outline->setIsHidden(false);
-        outline->setLineWidth(strokeWidth * 1.5);
-        outline->setLineDash(outlinePattern);
-        outline->setPoints(points);
-        outline->setFillColor(outlineColor);
-        
-        line->setIsHidden(false);
-        line->setLineWidth(strokeWidth);
-        line->setLineDash(inlinePattern);
-        line->setPoints(points);
-        line->setFillColor(color);
-    }
-}
+        outlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + 1);
+        outline = outlineBuilder.buildAndAddToCollection(_linesCollection);
 
-- (const std::shared_ptr<OsmAnd::VectorLine>) getLine:(int)lineId
-{
-    const auto& lines = _linesCollection->getLines();
-    for (auto it = lines.begin(); it != lines.end(); ++it)
-    {
-        if ((*it)->lineId == lineId)
-            return *it;
+        OsmAnd::VectorLineBuilder inlineBuilder;
+        inlineBuilder.setBaseOrder(_myPositionLayerBaseOrder);
+        line = inlineBuilder.buildAndAddToCollection(_linesCollection);
     }
-    return nullptr;
+
+    outline->setIsHidden(false);
+    outline->setLineWidth(strokeWidth * 1.5);
+    outline->setLineDash(outlinePattern);
+    outline->setFillColor(outlineColor);
+
+    line->setIsHidden(false);
+    line->setLineWidth(strokeWidth);
+    line->setLineDash(inlinePattern);
+    line->setFillColor(color);
+
+    if (points != outline->getPoints())
+    {
+        outline->setPoints(points);
+        outline->detachMarker(marker);
+
+        line->setPoints(points);
+
+        _distanceMarkersCollection->removeMarker(marker);
+
+        const auto dist = OsmAnd::Utilities::distance(destination.longitude, destination.latitude,
+              currLoc.coordinate.longitude, currLoc.coordinate.latitude);
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
+
+        OsmAnd::MapMarkerBuilder distanceMarkerBuilder;
+        distanceMarkerBuilder.setIsHidden(false);
+        distanceMarkerBuilder.setBaseOrder(self.baseOrder - 1);
+        distanceMarkerBuilder.setCaption([distance UTF8String]);
+        distanceMarkerBuilder.setCaptionStyle(self.captionStyle);
+
+        // We need to recreate marker each time as new caption needs new symbol
+        marker = distanceMarkerBuilder.buildAndAddToCollection(_distanceMarkersCollection);
+        marker->setOffsetFromLine(kLabelOffset);
+
+        outline->attachMarker(marker);
+    }
 }
 
 - (BOOL) isMarkerOnWaypoint:(OADestination *)marker

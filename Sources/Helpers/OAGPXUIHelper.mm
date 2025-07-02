@@ -457,10 +457,17 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         {
             _exportingGpxFile = gpxDoc;
         }
-        [OAGPXUIHelper addAppearanceToGpx:_exportingGpxFile gpxItem:_exportingGpx];
         
-        OASKFile *file = [[OASKFile alloc] initWithFilePath:_exportFilePath];
-        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:_exportingGpxFile];
+        if ([_exportingGpx hasAppearanceData])
+        {
+            [OAGPXUIHelper addAppearanceToGpx:_exportingGpxFile gpxItem:_exportingGpx];
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:_exportFilePath];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:_exportingGpxFile];
+        }
+        else
+        {
+            _exportFilePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
+        }
     }
 
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];

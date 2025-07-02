@@ -9,6 +9,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OASizes.h"
 #import "UITableViewCell+getTableView.h"
+#import "Localization.h"
 
 @interface OASimpleTableViewCell () <UIGestureRecognizerDelegate>
 
@@ -96,6 +97,23 @@
     self.topContentSpaceView.hidden = hidden;
     self.bottomContentSpaceView.hidden = hidden;
     self.contentOutsideStackViewVertical.spacing = hidden ? 3 : 4;
+}
+
+- (void)configureAccessibilityWithTitle:(nullable NSString *)title selected:(BOOL)isSelected
+{
+    self.isAccessibilityElement = YES;
+    self.accessibilityLabel = title;
+    self.accessibilityTraits = UIAccessibilityTraitButton;
+    
+    if (isSelected)
+    {
+        self.accessibilityTraits |= UIAccessibilityTraitSelected;
+        self.accessibilityValue = OALocalizedString(@"shared_string_selected");
+    }
+    else
+    {
+        self.accessibilityValue = OALocalizedString(@"shared_string_not_selected");
+    }
 }
 
 - (BOOL)checkSubviewsToUpdateMargins

@@ -14,13 +14,15 @@
 #import "OABaseDetailsObject.h"
 #import "OAContextMenuProvider.h"
 #import "OASelectedMapObject.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAMapSelectionResult
 {
+    NSString *_lang;
     CGPoint _point;
     CLLocation *_pointLatLon;
     
-    id _provider;
+    id _poiProvider;
     
     NSMutableArray<OASelectedMapObject *> *_allObjects;
     NSMutableArray<OASelectedMapObject *> *_processedObjects;
@@ -39,7 +41,9 @@
         CLLocation *loc = [mapVc getLatLonFromElevatedPixel:point.x y:point.y];
         _pointLatLon = loc;
         
-        _provider = mapVc.mapLayers.poiLayer;
+        _poiProvider = mapVc.mapLayers.poiLayer;
+        
+        _lang = [LocaleHelper getPreferredPlacesLanguage];
     }
     return self;
 }
@@ -71,25 +75,43 @@
 
 - (void) groupByOsmIdAndWikidataId
 {
+    if (_allObjects.count == 1)
+    {
+        [_processedObjects addObjectsFromArray:_allObjects];
+        return;
+    }
+    
+    NSMutableArray<OASelectedMapObject *> *other = [NSMutableArray new];
+    NSMutableArray<OABaseDetailsObject *> *detailsObjects = [self processObjects:_allObjects other:other];
+    
+    for (OABaseDetailsObject *object in detailsObjects)
+    {
+        if ([object getObjects].count > 1)
+        {
+            OASelectedMapObject *selectedObject = [[OASelectedMapObject alloc] initWithMapObject:object provider:_poiProvider];
+            [_processedObjects addObject:selectedObject];
+        }
+        else
+        {
+            OASelectedMapObject *selectedObject = [[OASelectedMapObject alloc] initWithMapObject:[object getObjects][0] provider:_poiProvider];
+            [_processedObjects addObject:selectedObject];
+        }
+    }
+    [_processedObjects addObjectsFromArray:other];
+}
+
+- (NSMutableArray<OABaseDetailsObject *> *) processObjects:(NSMutableArray<OASelectedMapObject *> *)selectedObjects other:(NSMutableArray<OASelectedMapObject *> *)other
+{
     NSMutableArray<OABaseDetailsObject *> *detailsObjects = [NSMutableArray new];
-    for (OASelectedMapObject *selectedObject in _allObjects)
+    for (OASelectedMapObject *selectedObject in selectedObjects)
     {
         id object = selectedObject.object;
-        if ([OABaseDetailsObject shouldSkip:object])
-        {
-            [_processedObjects addObject:selectedObject];
-            continue;
-        }
-        NSMutableArray<OABaseDetailsObject *> *overlapped = [NSMutableArray new];
-        for (OABaseDetailsObject *detailsObject in detailsObjects)
-        {
-            if ([detailsObject overlapsWith:object])
-                [overlapped addObject:detailsObject];
-        }
+        NSMutableArray<OABaseDetailsObject *> *overlapped = [self collectOverlappedObjects:object detailsObjects:detailsObjects];
+        
         OABaseDetailsObject *detailsObject;
-        if (NSArrayIsEmpty(overlapped))
+        if (overlapped.count == 0)
         {
-            detailsObject = [[OABaseDetailsObject alloc] init];
+            detailsObject = [[OABaseDetailsObject alloc] initWithLang:_lang];
         }
         else
         {
@@ -98,18 +120,30 @@
             {
                 [detailsObject merge:overlapped[i]];
             }
-            
             [detailsObjects removeObjectsInArray:overlapped];
         }
-        [detailsObject addObject:object provider:selectedObject.provider];
-        [detailsObjects addObject:detailsObject];
+        
+        if ([detailsObject addObject:object])
+        {
+            [detailsObjects addObject:detailsObject];
+        }
+        else
+        {
+            [other addObject:selectedObject];
+        }
     }
-    for (OABaseDetailsObject *object in detailsObjects)
+    return detailsObjects;
+}
+
+- (NSMutableArray<OABaseDetailsObject *> *) collectOverlappedObjects:(id)object detailsObjects:(NSMutableArray<OABaseDetailsObject *> *)detailsObjects
+{
+    NSMutableArray<OABaseDetailsObject *> *overlapped = [NSMutableArray new];
+    for (OABaseDetailsObject *detailsObject in detailsObjects)
     {
-        [object combineData];
-        OASelectedMapObject *selectedObject = [[OASelectedMapObject alloc] initWithMapObject:object provider:_provider];
-        [_processedObjects addObject:selectedObject];
+        if ([detailsObject overlapsWith:object])
+            [overlapped addObject:detailsObject];
     }
+    return overlapped;
 }
 
 - (BOOL) isEmpty

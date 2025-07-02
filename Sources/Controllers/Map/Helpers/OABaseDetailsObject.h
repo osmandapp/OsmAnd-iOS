@@ -11,26 +11,43 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-@class OAPOI, OASelectedMapObject, OABaseDetailsObject;
+@class OAPOI, OASelectedMapObject, OABaseDetailsObject, OATransportStop, OARenderedObject;
 
 @interface OABaseDetailsObject : NSObject
 
 @property (nonatomic, readonly) NSMutableSet<NSNumber *> *osmIds;
 @property (nonatomic, readonly) NSMutableSet<NSString *> *wikidataIds;
-@property (nonatomic, readonly) NSMutableArray<OASelectedMapObject *> *selectedObjects;
+@property (nonatomic, readonly) NSMutableArray<id> *objects;
+@property (nonatomic, readonly) NSString *lang;
 
-- (instancetype)initWithObject:(id<OAContextMenuProvider>)object provider:(id<OAContextMenuProvider>)provider;
+- (instancetype) initWithLang:(NSString *)lang;
+- (instancetype) initWithObject:(id)object lang:(NSString *)lang;
+- (instancetype) initWithAmenities:(NSArray<OAPOI *> *)amenities lang:(NSString *)lang;
 
-- (OAPOI *)getSyntheticAmenity;
-- (CLLocation *)getLocation;
-- (NSMutableArray<OASelectedMapObject *> *)getSelectedObjects;
-- (void)addObject:(id)object provider:(id<OAContextMenuProvider>)provider;
-- (BOOL)overlapsWith:(id)object;
-- (void)merge:(OABaseDetailsObject*)other;
-- (void)combineData;
-- (void)processAmenity:(OAPOI *)amenity contentLocales:(NSMutableSet<NSString *> *)contentLocales;
+- (OAPOI *) getSyntheticAmenity;
+- (CLLocation *) getLocation;
+- (NSMutableArray<id> *) getObjects;
 
-+ (BOOL)shouldSkip:(id) object;
+- (BOOL) isObjectFull;
+- (BOOL) isObjectEmpty;
+
+- (BOOL) addObject:(id)object;
+
+- (BOOL) overlapsWith:(id)object;
+- (void) merge:(id)object;
+- (void) combineData;
+- (void) processAmenity:(OAPOI *)amenity contentLocales:(NSMutableSet<NSString *> *)contentLocales;
+
+- (void) setObfResourceName:(NSString *)obfName;
+
+- (void) setX:(NSMutableArray<NSNumber *> *)x;
+- (void) setY:(NSMutableArray<NSNumber *> *)y;
+- (void) addX:(NSNumber *)x;
+- (void) addY:(NSNumber *)y;
+
+- (NSArray<OAPOI *> *) getAmenities;
+- (NSArray<OATransportStop *> *) getTransportStops;
+- (NSArray<OARenderedObject *> *) getRenderedObjects;
 
 @end
 

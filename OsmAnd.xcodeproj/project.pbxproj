@@ -477,6 +477,7 @@
 		32C21CB327E08EFD00DE4266 /* OAAlertBottomSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32C21CB227E08E4D00DE4266 /* OAAlertBottomSheetViewController.xib */; };
 		32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C21CB627E0A66A00DE4266 /* OARecordSettingsBottomSheetViewController.m */; };
 		32C41F542E0C4CEF00E9941C /* OAHeightDataLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32C41F532E0C4CED00E9941C /* OAHeightDataLoader.mm */; };
+		32C41F592E15370D00E9941C /* LocaleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C41F582E15370800E9941C /* LocaleHelper.swift */; };
 		32C91E5B25A86A5700FA6470 /* ic_custom_compass_widget_hide@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */; };
 		32C91E5D25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
 		32C91E6525A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
@@ -3930,6 +3931,7 @@
 		32C21CB627E0A66A00DE4266 /* OARecordSettingsBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARecordSettingsBottomSheetViewController.m; sourceTree = "<group>"; };
 		32C41F522E0C4CDF00E9941C /* OAHeightDataLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAHeightDataLoader.h; sourceTree = "<group>"; };
 		32C41F532E0C4CED00E9941C /* OAHeightDataLoader.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHeightDataLoader.mm; sourceTree = "<group>"; };
+		32C41F582E15370800E9941C /* LocaleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleHelper.swift; sourceTree = "<group>"; };
 		32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@3x.png"; sourceTree = "<group>"; };
 		32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@3x.png"; sourceTree = "<group>"; };
 		32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@2x.png"; sourceTree = "<group>"; };
@@ -13315,6 +13317,7 @@
 				C5B2AA602DB00700007FB854 /* GridFormat.swift */,
 				32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */,
 				DA5A80AC26C563A600F274C7 /* kml2gpx.xslt */,
+				32C41F582E15370800E9941C /* LocaleHelper.swift */,
 				FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */,
 				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
 				FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */,
@@ -17275,6 +17278,7 @@
 				46E8FFC729ED759000DB1EFE /* UINavigationController+keyCommands.m in Sources */,
 				DA5A844E26C563A900F274C7 /* OATransportStopsLayer.mm in Sources */,
 				DA5A831426C563A800F274C7 /* OARouteInfoLegendCell.m in Sources */,
+				32C41F592E15370D00E9941C /* LocaleHelper.swift in Sources */,
 				DA5A812D26C563A700F274C7 /* IOAMapTiledCollectionProvider.mm in Sources */,
 				32BBDC9B2C0497CF0090D37E /* RouteInfoListItemCell.swift in Sources */,
 				FA6408772D3E8295005FD12D /* NoImagesCell.swift in Sources */,

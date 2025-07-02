@@ -761,6 +761,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     
     OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:file];
     trackItem.dataItem = gpx;
+    [trackItem resetAppearanceToOriginal];
     OASGpxTrackAnalysis *trackAnalysis = analysis?: [gpx getAnalysis];
     
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:CLLocationCoordinate2DMake(selectedPoint.lat, selectedPoint.lon) openedFromMap:YES];

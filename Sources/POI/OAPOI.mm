@@ -455,6 +455,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (void) copyAdditionalInfo:(OAPOI *)amenity overwrite:(BOOL)overwrite
 {
     MutableOrderedDictionary<NSString *,NSString *> *map = [amenity getInternalAdditionalInfoMap];
+    [self copyAdditionalInfoWithMap:map overwrite:overwrite];
+}
+
+- (void) copyAdditionalInfoWithMap:(MutableOrderedDictionary<NSString *,NSString *> *)map overwrite:(BOOL)overwrite
+{
     if (overwrite || !_values)
     {
         [self setAdditionalInfo:map];
@@ -739,6 +744,18 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 {
     self.x = renderedObject.x;
     self.y = renderedObject.y;
+}
+
+- (int64_t) getOsmId
+{
+    int64_t _osmId = self.obfId;
+    if (_osmId == -1)
+        return -1;
+    
+    if ([ObfConstants isShiftedID:_osmId])
+        return [ObfConstants getOsmId:_osmId];
+    else
+        return _osmId >> AMENITY_ID_RIGHT_SHIFT;
 }
 
 - (BOOL) isEqual:(id)o

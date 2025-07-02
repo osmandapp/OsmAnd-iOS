@@ -1501,6 +1501,7 @@ typedef enum
             OASGpxDataItem *dataItem = (OASGpxDataItem *)targetPoint.targetObj;
             trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
             trackItem.dataItem = dataItem;
+            trackItem.color;
         }
         else if ([targetPoint.targetObj isKindOfClass:[OASGpxFile class]])
         {

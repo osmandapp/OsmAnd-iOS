@@ -119,7 +119,9 @@ static int DEFAULT_ELO = 900;
 
 - (void)setAdditionalInfo:(NSDictionary<NSString *, NSString *> *)additionalInfo;
 - (void)setAdditionalInfo:(NSString *)tag value:(NSString *)value;
+
 - (void) copyAdditionalInfo:(OAPOI *)amenity overwrite:(BOOL)overwrite;
+- (void) copyAdditionalInfoWithMap:(MutableOrderedDictionary<NSString *,NSString *> *)map overwrite:(BOOL)overwrite;
 
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang;
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;
@@ -147,6 +149,8 @@ static int DEFAULT_ELO = 900;
 - (NSString *)getTagSuffix:(NSString *)tagPrefix;
 
 - (void) setXYPoints:(OARenderedObject *)renderedObject;
+
+- (int64_t) getOsmId;
 
 - (BOOL) strictEquals:(id)object;
 

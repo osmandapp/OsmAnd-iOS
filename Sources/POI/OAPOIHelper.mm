@@ -73,6 +73,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     NSMapTable<NSString *, NSString *> *_deprecatedTags;
     
     OsmAnd::PointI _myLocation;
+    
+    NSMutableArray<NSString *> *_publicTransportTypes;
 
     BOOL _isInit;
 }
@@ -160,6 +162,35 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     if (_otherPoiCategory && _otherPoiCategory.poiTypes.count > 0)
         return _otherPoiCategory.poiTypes[0];
     return nil;
+}
+
+- (NSMutableArray<NSString *> *) getPublicTransportTypes
+{
+    if (!_publicTransportTypes && _isInit)
+    {
+        OAPOICategory *category = [self getPoiCategoryByName:@"transportation"];
+        if (category)
+        {
+            _publicTransportTypes = [NSMutableArray new];
+            NSArray<OAPOIFilter *> *filters = category.poiFilters;
+            for (OAPOIFilter *poiFilter in filters)
+            {
+                if ([poiFilter.name isEqualToString:@"public_transport"] ||
+                    [poiFilter.name isEqualToString:@"water_transport"] )
+                {
+                    for (OAPOIType *poiType in poiFilter.poiTypes)
+                    {
+                        [_publicTransportTypes addObject:poiType.name];
+                        for (OAPOIType *poiAdditionalType in poiType.poiAdditionals)
+                        {
+                            [_publicTransportTypes addObject:poiAdditionalType.name];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return _publicTransportTypes;
 }
 
 - (NSArray<OAPOICategory *> *) getCategories:(BOOL)includeMapCategory

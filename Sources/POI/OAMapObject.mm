@@ -28,6 +28,9 @@
 
 - (CLLocation *) getLocation
 {
+    if (self.latitude == 0 || self.latitude == -1 || self.longitude == 0 || self.longitude == -1)
+        return nil;
+    
     return [[CLLocation alloc] initWithLatitude:self.latitude longitude:self.longitude];
 }
 

@@ -34,7 +34,7 @@
 "shared_string_modify" = "修改";
 "first_time_continue" = "稍后";
 "shared_string_all" = "所有";
-"shared_string_from" = "之于";
+"shared_string_from" = "从";
 "offline_maps" = "离线地图";
 "shared_string_download_map" = "下载地图";
 // HUD
@@ -703,7 +703,7 @@
 "context_menu_item_directions_from" = "设为起点";
 "mapillary_menu_title_pano" = "仅显示 360° 图像";
 "quick_action_interim_dialog" = "显示临时的对话框";
-"nm" = "";
+"nm" = "海里";
 "quick_action_start_stop_nav_descr" = "点击该按钮以开始或结束导航。";
 "quick_action_add_create_items" = "创建项目";
 "mapillary_menu_title_tile_cache" = "区片缓存";
@@ -730,7 +730,7 @@
 "rendering_attr_highway_class_road_name" = "道路";
 "rendering_attr_hideWaterPolygons_name" = "水系";
 "routing_attr_avoid_ice_roads_fords_description" = "避开结冰和涉水道路。";
-"routing_attr_avoid_bus_name" = "不乘坐公交";
+"routing_attr_avoid_bus_name" = "避开公共汽车";
 "rendering_attr_showAccess_name" = "显示访问限制";
 "routing_attr_avoid_ice_roads_fords_name" = "无结冰道路或浅滩";
 "rendering_attr_surface_metal_name" = "金属";
@@ -784,7 +784,7 @@
 "routing_attr_relief_smoothness_factor_plains_name" = "少丘陵";
 "rendering_attr_noPolygons_name" = "多边形";
 "rendering_attr_horseRoutes_name" = "马匹路线";
-"routing_attr_avoid_train_name" = "不乘坐火车";
+"routing_attr_avoid_train_name" = "避开火车";
 "routing_attr_avoid_stairs_description" = "避开楼梯";
 "routeInfo_road_types_name" = "道路类型";
 "rendering_attr_pisteGrooming_name" = "滑雪道修整";
@@ -821,7 +821,7 @@
 "rendering_attr_smoothness_very_horrible_name" = "超极端";
 "rendering_attr_surface_stone_name" = "石地";
 "rendering_value_lightblue_name" = "淡蓝色";
-"routing_attr_avoid_share_taxi_name" = "不乘坐共享出租车";
+"routing_attr_avoid_share_taxi_name" = "避开共享出租车";
 "rendering_attr_smoothness_bad_name" = "劣质";
 "rendering_attr_surface_grass_name" = "草地";
 "rendering_attr_appMode_name" = "渲染模式";
@@ -840,7 +840,7 @@
 "rendering_attr_hmRendered_description" = "增加地图显示的详细信息量。";
 "rendering_attr_shareTaxiRoutes_name" = "共享出租车路线";
 "rendering_attr_surfaceIntegrity_name" = "道路表面完整性";
-"routing_attr_avoid_subway_name" = "不乘坐地铁";
+"routing_attr_avoid_subway_name" = "避开地铁";
 "rendering_value_highContrastRoads_name" = "高对比度道路";
 "rendering_attr_smoothness_excellent_name" = "极佳";
 "rendering_value_purple_name" = "紫色";
@@ -852,7 +852,7 @@
 "rendering_value_white_name" = "白色";
 "rendering_attr_contourLines_name" = "显示等高线";
 "rendering_attr_hideIcons_name" = "兴趣点图标";
-"routing_attr_avoid_subway_description" = "避免地铁和轻轨交通";
+"routing_attr_avoid_subway_description" = "避开地铁和轻轨交通";
 "rendering_attr_contourWidth_name" = "等高线线宽";
 "rendering_attr_highway_class_path_name" = "步道";
 "rendering_attr_hideAccess_name" = "访问限制";
@@ -865,18 +865,18 @@
 "rendering_attr_showSurfaces_name" = "显示路面材质";
 "rendering_attr_contourWidth_description" = "等高线线宽";
 "rendering_attr_noPolygons_description" = "透明表示地图上所有的陆地区域。";
-"routing_attr_avoid_train_description" = "避免火车";
+"routing_attr_avoid_train_description" = "避开火车";
 "routing_attr_avoid_unpaved_description" = "避开未铺设道路";
 "rendering_value_default13_name" = "默认 (13)";
 "rendering_attr_hideNonVehicleHighways_name" = "非车辆公路";
 "rendering_attr_smoothness_good_name" = "优良";
 "routing_attr_height_description" = "规定路线上允许的车辆高度。";
 "rendering_value_walkingRoutesScopeOSMC_name" = "网络从属";
-"routing_attr_avoid_tram_description" = "避免电车";
+"routing_attr_avoid_tram_description" = "避开有轨电车";
 "rendering_attr_currentTrackWidth_description" = "GPX 宽度";
 "rendering_value_blue_name" = "蓝色";
 "rendering_attr_moreDetailed_name" = "更多细节";
-"routing_attr_avoid_bus_description" = "避免公交和无轨电车";
+"routing_attr_avoid_bus_description" = "避开公交车和无轨电车";
 "routing_attr_weight_name" = "重量";
 "rendering_value_light_brown_name" = "浅棕色";
 "rendering_attr_appMode_description" = "优化的地图用于";
@@ -889,7 +889,7 @@
 "rendering_attr_hideHouseNumbers_name" = "隐藏门牌号码";
 "rendering_value_defaultTranslucentCyan_name" = "默认 (半透明青色)";
 "rendering_value_default_name" = "默认";
-"routing_attr_avoid_tram_name" = "不乘坐电车";
+"routing_attr_avoid_tram_name" = "避开电车";
 "rendering_attr_showCycleRoutes_name" = "自行车路线";
 "rendering_attr_contourDensity_description" = "等高线密度";
 "rendering_attr_hideProposed_name" = "提议的对象";
@@ -898,15 +898,15 @@
 "routing_attr_prefer_unpaved_name" = "偏好未铺设道路";
 "routing_attr_avoid_toll_description" = "避开收费公路";
 "rendering_attr_hidePOILabels_name" = "兴趣点（POI）标签";
-"routing_attr_height_obstacles_description" = "预计行程时间将反映海拔影响。路线偏好有助于避免陡峭的上坡：";
+"routing_attr_height_obstacles_description" = "预计行程时间将反映海拔影响。路线偏好有助于避开陡峭的上坡：";
 "rendering_attr_surface_ice_name" = "冰面";
-"routing_attr_avoid_share_taxi_description" = "避免共享出租车";
+"routing_attr_avoid_share_taxi_description" = "避开共享出租车";
 "rendering_attr_surface_snow_name" = "雪地";
 "rendering_attr_surface_mud_name" = "泥路";
 "routing_attr_driving_style_name" = "骑行风格";
 "rendering_attr_surface_paving_stones_name" = "铺路石";
 "rendering_value_medium_w_name" = "中等";
-"routing_attr_avoid_shuttle_train_description" = "避免使用区间列车";
+"routing_attr_avoid_shuttle_train_description" = "避开汽车接驳列车";
 "rendering_attr_surface_wood_name" = "木头";
 "rendering_value_black_name" = "黑色";
 "rendering_attr_buildings15zoom_name" = "15 级缩放建筑物";
@@ -1033,7 +1033,7 @@
 "add_online_source" = "添加在线资源";
 "routing_profile_geocoding" = "地理编码";
 "public_transport_warning_title" = "公共交通导航目前处于测试阶段，可能出现错误和信息不准确。";
-"exit_at" = "在该站下车";
+"exit_at" = "此站下车";
 "shared_string_deselect_all" = "全部取消";
 "avoid_road" = "避开道路";
 "shared_string_menu" = "菜单";
@@ -1108,7 +1108,7 @@
 "public_transport_try_change_settings" = "尝试更改设置。";
 "quick_action_remove_next_destination" = "下一个目的地点";
 "shared_string_settings" = "设置";
-"vessel_width_limit_description" = "设置船只宽度以避免狭窄的桥梁";
+"vessel_width_limit_description" = "设置船只宽度以避开狭窄的桥梁";
 "none_point_error" = "请添加至少一个点。";
 "hide_compass_ruler" = "隐藏罗盘标尺";
 "plan_route_open_existing_track" = "打开现有的轨迹";
@@ -1604,7 +1604,7 @@
 "routing_attr_allow_skating_only_name" = "只允许滑冰路线";
 "routing_attr_allow_skating_only_description" = "只为自由式滑冰或滑冰而铺设的路线，没有经典赛道。";
 "routing_attr_allow_classic_only_description" = "仅为经典风格的滑雪路线，不含滑冰道。这包括由小型雪地摩托开辟的松软滑雪道和滑雪者人工开辟的滑雪道。";
-"routing_attr_allow_intermediate_description" = "难度较高的路线，路段较为陡峭。一般来说，应避免一些障碍物。";
+"routing_attr_allow_intermediate_description" = "更困难的路线，带有较陡的路段。通常会有一些应当避开的障碍物。";
 "choose_what_to_restore" = "选择要恢复的数据。";
 "login_help_email_title" = "OsmAnd iOS云";
 "map_widget_rendering_fps" = "地图渲染 FPS";
@@ -1826,7 +1826,7 @@
 "save_heading_descr" = "录制时将航向保存到每个轨迹点。";
 "turn_arrows_descr" = "选择是否在路线线条上显示转向箭头。";
 "parked_at" = "停在";
-"vessel_height_limit_description" = "设置船只高度，以避免过低桥梁。请记住，如果桥是可移动的，我们将使用它在打开状态下的高度。";
+"vessel_height_limit_description" = "设置船只高度，以避开过低桥梁。请记住，如果桥是可移动的，我们将使用它在打开状态下的高度。";
 "verification_code_missing" = "我没有收到验证码";
 "position_on_map_bottom" = "底部";
 "local_backup_descr" = "从本地文件备份或恢复数据。";
@@ -2243,7 +2243,7 @@
 "report_an_issues" = "报告问题";
 "announcement_time_arrive" = "到达目的地";
 "help_article_map_tracks_on_map_name" = "轨迹与路线";
-"map_markers_bar_widget_desc" = "在顶部栏微件上，您可以看到从当前位置到标记处的距离和方向。可以配置为在小部件中看到 1 或 2 个顶部标记。";
+"map_markers_bar_widget_desc" = "顶栏小工具显示从您当前位置到下一个地图标记的距离和方向。该小工具可配置为显示 1 个或 2 个标记。";
 "add_page" = "添加页面";
 "shared_string_dark" = "暗色";
 "map_widget_zoom_level" = "缩放层级";
@@ -2463,7 +2463,7 @@
 "cloud_item_restored" = "%@ 已还原至云端。";
 "edit_tilesource_maxzoom" = "最大显示级别";
 "default_buttons" = "默认按钮";
-"avoid_pt_types_descr" = "选择导航时要避免的公共交通类型：";
+"avoid_pt_types_descr" = "选择导航时要避开的公共交通类型：";
 "shared_string_item" = "项目";
 "shared_string_round_up" = "向上取整";
 "shared_string_precise" = "精确";
@@ -2479,7 +2479,7 @@
 "empty_name" = "空名称";
 "shared_string_activity" = "活动";
 "add_button" = "新增按钮";
-"avoid_pt_types" = "避免特定交通类型……";
+"avoid_pt_types" = "避开特定交通类型……";
 "trash_is_empty_banner_desc" = "从 OsmAnd Cloud 中删除的文件将在 %@ 天后在此处可用。";
 "auto_zoom" = "自动缩放";
 "route_recalculation_dist_title" = "重新计算路线的最短距离";
@@ -2718,3 +2718,4 @@
 "routing_attr_allow_ferries_name" = "允许轮渡";
 "by_name" = "按名称";
 "rendering_attr_showClimbingRoutes_description" = "显示攀岩路线";
+"reset_average_speed" = "重置平均速度";

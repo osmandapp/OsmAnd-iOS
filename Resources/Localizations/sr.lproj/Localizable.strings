@@ -3786,3 +3786,6 @@
 "average" = "Просек";
 "shared_string_hour" = "Час";
 "shared_string_volume" = "Запремина";
+"vehicle_metrics_recording_description" = "Изаберите параметре који ће бити снимљени у ГПКС фајлу.";
+"shared_string_other" = "Друго";
+"shared_string_engine" = "Мотор";

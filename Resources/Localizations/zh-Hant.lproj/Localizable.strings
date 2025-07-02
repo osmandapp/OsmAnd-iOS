@@ -1152,7 +1152,7 @@
 "rendering_attr_tramRoutes_name" = "有軌電車路線";
 "routing_attr_height_obstacles_description" = "預計行程時間將反映海拔影響。路線偏好可以協助避免陡峭的上坡：";
 "rendering_attr_showAccess_name" = "顯示進入限制";
-"routing_attr_avoid_shuttle_train_description" = "避開來往頻繁的鐵路";
+"routing_attr_avoid_shuttle_train_description" = "避開汽車接駁列車";
 "rendering_attr_undefined_name" = "未定義";
 "rendering_attr_surface_dirt_name" = "土";
 "rendering_attr_roadColors_description" = "選擇道路的色彩調配：";

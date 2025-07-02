@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 
 - (BOOL) showMenuAction:(id)object;
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation;
+- (int64_t) getSelectionPointOrder:(id)selectedObject;
 
 //- (BOOL) disableSingleTap;
 //- (BOOL) disableLongPressOnMap;

@@ -216,6 +216,11 @@ static const int START_ZOOM = 10;
     return NO;
 }
 
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
 #pragma mark - OAMoveObjectProvider
 
 - (BOOL)isObjectMovable:(id)object

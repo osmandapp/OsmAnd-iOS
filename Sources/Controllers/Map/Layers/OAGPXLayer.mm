@@ -2019,6 +2019,11 @@ colorizationScheme:(int)colorizationScheme
     return NO;
 }
 
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
 
 #pragma mark - OAMoveObjectProvider
 

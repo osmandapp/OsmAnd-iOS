@@ -36,6 +36,11 @@
     return NO;
 }
 
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
 - (BOOL)isSecondaryProvider
 {
     return NO;

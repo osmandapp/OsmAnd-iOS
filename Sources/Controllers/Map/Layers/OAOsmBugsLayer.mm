@@ -232,4 +232,9 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     return NO;
 }
 
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
 @end

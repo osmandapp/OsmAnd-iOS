@@ -955,4 +955,9 @@ typedef enum {
     return NO;
 }
 
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
 @end

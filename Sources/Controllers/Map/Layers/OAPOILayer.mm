@@ -72,6 +72,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     OAPOIFiltersHelper *_filtersHelper;
     
+    NSMutableDictionary<NSNumber *, OAPOI *> *_topPlaces;
+    
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _wikiSymbolsProvider;
 }
@@ -569,6 +571,37 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    if ([self isTopPlace:selectedObject])
+        return [self getTopPlaceBaseOrder];
+    else
+        return 0;
+}
+
+- (BOOL) isTopPlace:(id)object
+{
+    if (_topPlaces)
+    {
+        int64_t placeId = -1;
+        if ([object isKindOfClass:OAPOI.class])
+            placeId = ((OAPOI *)object).obfId;
+        else if ([object isKindOfClass:OABaseDetailsObject.class])
+            placeId = [((OABaseDetailsObject *)object) getSyntheticAmenity].obfId;
+        else
+            placeId = -1;
+        
+        return placeId != -1 && _topPlaces[@(placeId)];
+    }
+    
+    return NO;
+}
+
+- (int64_t) getTopPlaceBaseOrder
+{
+    return [self pointsOrder] - 100;
 }
 
 - (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects

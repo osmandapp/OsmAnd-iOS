@@ -445,14 +445,52 @@
     CLLocation *pointLatLon = [result getPointLatLon];
     NSMutableArray<OASelectedMapObject *> *selectedObjects = [result getProcessedObjects];
     
+    int64_t objectSelectionThreshold = 0;
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
         if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
             id<OAContextMenuProvider> provider = selectedObject.provider;
-            if (provider && [provider runExclusiveAction:selectedObject.object unknownLocation:showUnknownLocation])
-                return YES;
+            int64_t selectionThreshold = [provider getSelectionPointOrder:selectedObject.object];
+            if (selectionThreshold <= objectSelectionThreshold)
+            {
+                objectSelectionThreshold = selectionThreshold;
+            }
         }
+    }
+    NSMutableArray<OASelectedMapObject *> *objectsAvailableForSelection = [NSMutableArray new];
+    
+    for (OASelectedMapObject *selectedObject in selectedObjects)
+    {
+        if (objectSelectionThreshold < 0)
+        {
+            if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
+            {
+                id<OAContextMenuProvider> provider = selectedObject.provider;
+                if ([provider isKindOfClass:OAMapLayer.class])
+                {
+                    OAMapLayer *layer = provider;
+                    if ([layer pointsOrder] <= objectSelectionThreshold)
+                    {
+                        [objectsAvailableForSelection addObject:selectedObject];
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+        id<OAContextMenuProvider> provider = selectedObject.provider;
+        if (provider && [provider runExclusiveAction:selectedObject.object unknownLocation:showUnknownLocation])
+        {
+            return YES;
+        }
+    }
+    
+    if (objectSelectionThreshold < 0)
+    {
+        selectedObjects = objectsAvailableForSelection;
     }
     
     if (selectedObjects.count == 1)
@@ -465,7 +503,7 @@
         id<OAContextMenuProvider> provider = selectedObject.provider;
         if (provider)
         {
-            if (!latLon)
+            if (!latLon || objectSelectionThreshold < 0)
             {
                 latLon = [provider getObjectLocation:selectedObject];
             }
@@ -549,6 +587,11 @@
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 - (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;

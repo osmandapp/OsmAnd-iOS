@@ -11,7 +11,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapLayers.h"
-#import "OAPlaceDetailsObject.h"
+#import "OABaseDetailsObject.h"
 #import "OAContextMenuProvider.h"
 #import "OASelectedMapObject.h"
 
@@ -71,25 +71,25 @@
 
 - (void) groupByOsmIdAndWikidataId
 {
-    NSMutableArray<OAPlaceDetailsObject *> *detailsObjects = [NSMutableArray new];
+    NSMutableArray<OABaseDetailsObject *> *detailsObjects = [NSMutableArray new];
     for (OASelectedMapObject *selectedObject in _allObjects)
     {
         id object = selectedObject.object;
-        if ([OAPlaceDetailsObject shouldSkip:object])
+        if ([OABaseDetailsObject shouldSkip:object])
         {
             [_processedObjects addObject:selectedObject];
             continue;
         }
-        NSMutableArray<OAPlaceDetailsObject *> *overlapped = [NSMutableArray new];
-        for (OAPlaceDetailsObject *detailsObject in detailsObjects)
+        NSMutableArray<OABaseDetailsObject *> *overlapped = [NSMutableArray new];
+        for (OABaseDetailsObject *detailsObject in detailsObjects)
         {
             if ([detailsObject overlapsWith:object])
                 [overlapped addObject:detailsObject];
         }
-        OAPlaceDetailsObject *detailsObject;
+        OABaseDetailsObject *detailsObject;
         if (NSArrayIsEmpty(overlapped))
         {
-            detailsObject = [[OAPlaceDetailsObject alloc] init];
+            detailsObject = [[OABaseDetailsObject alloc] init];
         }
         else
         {
@@ -104,7 +104,7 @@
         [detailsObject addObject:object provider:selectedObject.provider];
         [detailsObjects addObject:detailsObject];
     }
-    for (OAPlaceDetailsObject *object in detailsObjects)
+    for (OABaseDetailsObject *object in detailsObjects)
     {
         [object combineData];
         OASelectedMapObject *selectedObject = [[OASelectedMapObject alloc] initWithMapObject:object provider:_provider];

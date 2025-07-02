@@ -1,5 +1,5 @@
 //
-//  OAPlaceDetailsObject.h
+//  OABaseDetailsObject.h
 //  OsmAnd
 //
 //  Created by Max Kojin on 02/05/25.
@@ -11,9 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-@class OAPOI, OASelectedMapObject, OAPlaceDetailsObject;
+@class OAPOI, OASelectedMapObject, OABaseDetailsObject;
 
-@interface OAPlaceDetailsObject : NSObject
+@interface OABaseDetailsObject : NSObject
 
 @property (nonatomic, readonly) NSMutableSet<NSNumber *> *osmIds;
 @property (nonatomic, readonly) NSMutableSet<NSString *> *wikidataIds;
@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSMutableArray<OASelectedMapObject *> *)getSelectedObjects;
 - (void)addObject:(id)object provider:(id<OAContextMenuProvider>)provider;
 - (BOOL)overlapsWith:(id)object;
-- (void)merge:(OAPlaceDetailsObject*)other;
+- (void)merge:(OABaseDetailsObject*)other;
 - (void)combineData;
 - (void)processAmenity:(OAPOI *)amenity contentLocales:(NSMutableSet<NSString *> *)contentLocales;
 

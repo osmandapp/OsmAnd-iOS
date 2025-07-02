@@ -31,7 +31,7 @@
 #import "OsmAndSharedWrapper.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
-#import "OAPlaceDetailsObject.h"
+#import "OABaseDetailsObject.h"
 #import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -426,9 +426,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     {
         return (OAPOI *)object;
     }
-    else if ([object isKindOfClass:OAPlaceDetailsObject.class])
+    else if ([object isKindOfClass:OABaseDetailsObject.class])
     {
-        return [(OAPlaceDetailsObject *)object getSyntheticAmenity];
+        return [(OABaseDetailsObject *)object getSyntheticAmenity];
     }
     return nil;
 }
@@ -455,12 +455,12 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return [self getTargetPoint:obj renderedObject:nil placeDetailsObject:nil];
     else if ([obj isKindOfClass:OARenderedObject.class])
         return [self getTargetPoint:nil renderedObject:obj placeDetailsObject:nil];
-    else if ([obj isKindOfClass:OAPlaceDetailsObject.class])
+    else if ([obj isKindOfClass:OABaseDetailsObject.class])
         return [self getTargetPoint:nil renderedObject:nil placeDetailsObject:obj];
     return nil;
 }
 
-- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject placeDetailsObject:(OAPlaceDetailsObject *)placeDetailsObject
+- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject placeDetailsObject:(OABaseDetailsObject *)placeDetailsObject
 {
     if (placeDetailsObject)
         poi = [placeDetailsObject getSyntheticAmenity];

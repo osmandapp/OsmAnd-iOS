@@ -1,18 +1,18 @@
 //
-//  OAPlaceDetailsObject.mm
+//  OABaseDetailsObject.mm
 //  OsmAnd
 //
 //  Created by Max Kojin on 02/05/25.
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-#import "OAPlaceDetailsObject.h"
+#import "OABaseDetailsObject.h"
 #import "OAMapSelectionResult.h"
 #import "OASelectedMapObject.h"
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
 
-@implementation OAPlaceDetailsObject
+@implementation OABaseDetailsObject
 {
     OAPOI *_syntheticAmenity;
 }
@@ -105,7 +105,7 @@
         (!NSStringIsEmpty(wikidata) && [_wikidataIds containsObject:wikidata]);
 }
 
-- (void) merge:(OAPlaceDetailsObject*)other
+- (void) merge:(OABaseDetailsObject*)other
 {
     [_osmIds addObjectsFromArray:other.osmIds.allObjects];
     [_wikidataIds addObjectsFromArray:other.wikidataIds.allObjects];

@@ -1,14 +1,14 @@
 //
-//  OAPlaceDetailsObject.h
+//  OABaseDetailsObject.h
 //  OsmAnd
 //
 //  Created by Max Kojin on 02/05/25.
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-@class OAPOI, OASelectedMapObject, OAPlaceDetailsObject;
+@class OAPOI, OASelectedMapObject, OABaseDetailsObject;
 
-@interface OAPlaceDetailsObject : NSObject
+@interface OABaseDetailsObject : NSObject
 
 @property (nonatomic, readonly) NSMutableSet<NSNumber *> *osmIds;
 @property (nonatomic, readonly) NSMutableSet<NSString *> *wikidataIds;
@@ -21,7 +21,7 @@
 - (NSMutableArray<OASelectedMapObject *> *) getSelectedObjects;
 - (void) addObject:(id)object;
 - (BOOL) overlapsWith:(id)object;
-- (void) merge:(OAPlaceDetailsObject*)other;
+- (void) merge:(OABaseDetailsObject*)other;
 - (void) combineData;
 - (void) processAmenity:(OAPOI *)amenity contentLocales:(NSSet<NSString *> *)contentLocales;
 

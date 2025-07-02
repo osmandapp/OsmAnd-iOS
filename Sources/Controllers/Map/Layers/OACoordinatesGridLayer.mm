@@ -80,10 +80,11 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 
 - (void)resetLayer
 {
-    [super resetLayer];
-    
-    [self.mapView removeKeyedSymbolsProvider:_marksProvider];
-    _marksProvider.reset();
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [super resetLayer];
+        [self.mapView removeKeyedSymbolsProvider:_marksProvider];
+        _marksProvider.reset();
+    });
 }
 
 - (void)deinitLayer
@@ -106,13 +107,17 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 
 - (void)onPreferenceChange
 {
-    [self updateGridSettings];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateGridSettings];
+    });
 }
 
 - (void)onWidgetsLayoutDidChange
 {
     _marginFactorUpdateNeeded = YES;
-    [self updateGridSettings];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateGridSettings];
+    });
 }
 
 - (void)updateGridSettings

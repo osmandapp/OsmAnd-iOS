@@ -43,7 +43,10 @@
         @"piste:type",
         @"piste:difficulty",
         @"mtb:scale",
-        @"dirtbike:scale"
+        @"dirtbike:scale",
+        @"snowmobile=yes",
+        @"snowmobile=designated",
+        @"snowmobile=permissive"
     ]];
     
     _requiredTagsAny = [NSSet setWithArray:@[
@@ -85,12 +88,14 @@
 
 - (BOOL) isClickableWay:(OARenderedObject *)renderedObject
 {
-    return renderedObject.x.count > 1 && [self isClickableWayTags:renderedObject.tags]; // v1
+    NSString *name = [renderedObject name];
+    return renderedObject.x.count > 1 && [self isClickableWayTags:name tags:renderedObject.tags]; // v1
 }
 
 - (BOOL) isClickableWay:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
 {
-    return obfMapObject->points31.size() > 1 && [self isClickableWayTags:tags]; // v2 with prefetched tags
+    NSString *name = obfMapObject->getCaptionInNativeLanguage().toNSString();
+    return obfMapObject->points31.size() > 1 && [self isClickableWayTags:name tags:tags]; // v2 with prefetched tags
 }
 
 - (OAClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon renderedObject:(OARenderedObject *)renderedObject
@@ -132,11 +137,12 @@
     OASGpxFile *gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
     OASRouteActivityHelper *helper = OASRouteActivityHelper.shared;
     
-    for (NSString *clickableTag in _clickableTags)
+    for (NSString *clickableTagValue in _clickableTags)
     {
-        if (tags[clickableTag])
+        NSString *tag = [[clickableTagValue componentsSeparatedByString:@"="] firstObject];
+        if (tags[tag])
         {
-            OASRouteActivity *activity = [helper findActivityByTagTag:clickableTag];
+            OASRouteActivity *activity = [helper findActivityByTagTag:clickableTagValue];
             if (activity)
             {
                 NSString *activityType = activity.id;
@@ -213,7 +219,7 @@
     return bboxFixed;
 }
 
-- (BOOL) isClickableWayTags:(NSDictionary<NSString *, NSString *> *)tags
+- (BOOL) isClickableWayTags:(NSString *)name tags:(NSDictionary<NSString *, NSString *> *)tags
 {
     for (NSString *forbiddenKey in _forbiddenTags)
     {
@@ -228,12 +234,23 @@
     
     for (NSString *required in _requiredTagsAny)
     {
-        if (tags[required])
+        // some objects have name passed from object props but not in the tags
+        BOOL isRequiredNameFound = [required isEqualToString:@"name"] && !NSStringIsEmpty(name);
+                    
+        if (tags[required] || isRequiredNameFound)
         {
             for (NSString *key in tags)
             {
                 if ([_clickableTags containsObject:key])
                     return YES;
+                
+                NSString *value = tags[key]; // snowmobile=yes, etc
+                if (value )
+                {
+                    NSString *keyValueLine = [NSString stringWithFormat:@"%@=%@", key, value];
+                    if ([_clickableTags containsObject:keyValueLine])
+                        return YES;
+                }
             }
         }
     }

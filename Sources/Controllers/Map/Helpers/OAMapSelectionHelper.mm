@@ -172,7 +172,21 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                     [names addObject:nativeName];
                 
                 uint64_t obfId = cppAmenity->id.id;
+                
+                //old
                 amenity = [self.class findAmenity:result.objectLatLon names:names obfId:obfId];
+                
+                //TODO: implement?
+                /*
+                // new
+                Amenity requestAmenity = new Amenity();
+                requestAmenity.setId(id);
+                requestAmenity.setLocation(result.objectLatLon);
+
+                AmenitySearcher.Settings settings = app.getResourceManager().getDefaultAmenitySearchSettings();
+                AmenitySearcher.Request request = new AmenitySearcher.Request(requestAmenity, names);
+                detailsObject = amenitySearcher.searchDetailedObject(request, settings);
+                 */
             }
             else
             {
@@ -223,16 +237,45 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                                 
                                 BOOL allowRenderedObjects = !isOsmRoute && !isClickableWay &&  !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags([self toQHash:tags]);
                                 
-                                amenity = [self getAmenity:latLon obfMapObject:obfMapObject tags:tags];
+//                                //TODO: update down here
+//                                amenity = [self getAmenity:latLon obfMapObject:obfMapObject tags:tags];
+////                                RenderedObject renderedObject = createRenderedObject(symbolInfo, obfMapObject, tags);
+//                                
+//                                if (amenity)
+//                                {
+//                                    [amenity setMapIconName:[self getMapIconName:symbolInfo]];
+//                                }
+//                                else if (allowRenderedObjects)
+//                                {
+////                                    OARenderedObject *renderedObject = [self createRenderedObject:result symbolInfo:symbolInfo obfMapObject:obfMapObject tags:tags];   //TODO: not tested yet
+//                                }
                                 
-                                if (amenity)
+                                
+                                OARenderedObject *renderedObject = [self createRenderedObject:symbolInfo obfMapObject:obfMapObject tags:tags];
+                                if (renderedObject)
                                 {
-                                    [amenity setMapIconName:[self getMapIconName:symbolInfo]];
+                                    if (allowRenderedObjects)
+                                    {
+                                        [result collect:renderedObject provider:nil];
+                                    }
+                                    else
+                                    {
+                                        BOOL stop = YES;
+                                        //TODO: implement?
+                                        /*
+                                        AmenitySearcher.Settings settings = app.getResourceManager().getDefaultAmenitySearchSettings();
+                                        AmenitySearcher.Request request = new AmenitySearcher.Request(renderedObject);
+                                        detailsObject = amenitySearcher.searchDetailedObject(request, settings);
+                                        if (detailsObject != null) {
+                                            detailsObject.setMapIconName(getMapIconName(symbolInfo));
+                                            addGeometry(detailsObject, obfMapObject);
+                                            detailsObject.setObfResourceName(obfMapObject.getObfSection().getName());
+                                        }
+                                         */
+                                    }
                                 }
-                                else if (allowRenderedObjects)
-                                {
-                                    [self addRenderedObject:result symbolInfo:symbolInfo obfMapObject:obfMapObject tags:tags];   //TODO: not tested yet
-                                }
+                                
+                                
                             }
                         }
                     }
@@ -243,6 +286,13 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             {
                 [result collect:amenity provider:_provider];
             }
+            
+            //TODO: update
+            /*
+            if (detailsObject != null && !isTransportStop(result.getAllObjects(), detailsObject)) {
+                result.collect(detailsObject, mapLayers.getPoiMapLayer());
+            }
+            */
         }
     }
 }
@@ -258,7 +308,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (NSString *) getMapIconName:(OsmAnd::IMapRenderer::MapSymbolInformation)symbolInfo
 {
-    const auto rasterMapSymbol = [self getRasterMapSymbol:symbolInfo];
+    const auto rasterMapSymbol = [self getRasterMapSymbolWithSymbolInfo:symbolInfo];
     if (rasterMapSymbol != nullptr && rasterMapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Icon)
     {
         return rasterMapSymbol->content.toNSString();
@@ -266,20 +316,29 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return nil;
 }
 
-- (const shared_ptr<const OsmAnd::BillboardRasterMapSymbol>) getRasterMapSymbol:(OsmAnd::IMapRenderer::MapSymbolInformation)symbolInfo
+- (const shared_ptr<const OsmAnd::BillboardRasterMapSymbol>) getRasterMapSymbolWithSymbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation)symbolInfo
 {
-    if (const auto rasterMapSymbol = std::static_pointer_cast<const OsmAnd::BillboardRasterMapSymbol>(symbolInfo.mapSymbol))
+    return [self getRasterMapSymbol:symbolInfo.mapSymbol];
+}
+
+- (const shared_ptr<const OsmAnd::BillboardRasterMapSymbol>) getRasterMapSymbol:(shared_ptr<const OsmAnd::MapSymbol>)mapSymbol
+{
+    if (const auto rasterMapSymbol = std::static_pointer_cast<const OsmAnd::BillboardRasterMapSymbol>(mapSymbol))
     {
         return rasterMapSymbol;
     }
     return nullptr;
 }
 
-- (void) addRenderedObject:(OAMapSelectionResult *)result symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation)symbolInfo obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
+- (OARenderedObject *) createRenderedObject:(OsmAnd::IMapRenderer::MapSymbolInformation)symbolInfo obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
 {
-    const auto rasterMapSymbol = [self getRasterMapSymbol:symbolInfo];
+    const auto rasterMapSymbol = [self getRasterMapSymbolWithSymbolInfo:symbolInfo];
     if (rasterMapSymbol != nullptr)
     {
+        const auto group = rasterMapSymbol->groupPtr;
+        const auto symbolIcon = [self getRasterMapSymbol:group->getFirstSymbolWithContentClass(OsmAnd::RasterMapSymbol::ContentClass::Icon)];
+        const auto symbolCaption = [self getRasterMapSymbol:group->getFirstSymbolWithContentClass(OsmAnd::RasterMapSymbol::ContentClass::Caption)];
+        
         OARenderedObject *renderedObject = [[OARenderedObject alloc] init];
         if (const auto& mapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(obfMapObject))
         {
@@ -296,21 +355,21 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         double lon = OsmAnd::Utilities::get31LongitudeX(obfMapObject->getLabelCoordinateX());
         [renderedObject setLabelLatLon:[[CLLocation alloc] initWithLatitude:lat longitude:lon]];
         
-        if (rasterMapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Caption)
+        if (symbolIcon != nullptr)
         {
-            [renderedObject setName:rasterMapSymbol->content.toNSString()];
+            [renderedObject setIconRes:symbolIcon->content.toNSString()];
         }
-        if (rasterMapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Icon)
+        if (symbolCaption != nullptr)
         {
-            [renderedObject setIconRes:rasterMapSymbol->content.toNSString()];
+            [renderedObject setName:symbolCaption->content.toNSString()];
         }
         for (NSString *key in tags)
         {
             renderedObject.tags[key] = tags[key];
-            
         }
-        [result collect:renderedObject provider:nil];
+        return renderedObject;
     }
+    return nil;
 }
 
 - (OAPOI *) getAmenity:(CLLocation *)latLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
@@ -365,6 +424,19 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     }
     return NO;
 }
+
+//TODO: implement addGeometry() ?
+/*
+private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfMapObject obfMapObject) {
+    if (detailObj != null && !detailObj.hasGeometry() && obfMapObject.getPoints31().size() > 1) {
+        QVectorPointI points31 = obfMapObject.getPoints31();
+        for (int k = 0; k < points31.size(); k++) {
+            detailObj.addX(points31.get(k).getX());
+            detailObj.addY(points31.get(k).getY());
+        }
+    }
+}
+ */
 
 - (BOOL) isUniqueGpxFileName:(NSMutableArray<OASelectedMapObject *> *)selectedObjects gpxFileName:(NSString *)gpxFileName
 {

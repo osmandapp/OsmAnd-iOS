@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OASelectedGpxPoint: NSObject
 
-- (instancetype)initWith:(OASGpxFile *)selectedGpxFile selectedPoint:(OASWptPt *)selectedPoint;
+- (instancetype)initWith:(OASGpxFile * _Nullable)selectedGpxFile selectedPoint:(OASWptPt * _Nullable)selectedPoint;
 
 //- (instancetype)initWith:(OASelectedGpxFile *)selectedGpxFile selectedPoint:(OASWptPt *)selectedPoint;
 //- (instancetype)initWith:(OASelectedGpxFile *)selectedGpxFile selectedPoint:(OASWptPt *)selectedPoint prevPoint:(OASWptPt *)prevPoint nextPoint:(OASWptPt *)nextPoint braring:(double)bearing  showTrackPointMenu:(BOOL)showTrackPointMenu;

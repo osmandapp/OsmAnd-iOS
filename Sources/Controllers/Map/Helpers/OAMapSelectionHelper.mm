@@ -22,7 +22,6 @@
 #import "OAPOI.h"
 #import "OATransportStop.h"
 #import "OAPOIFilter.h"
-#import "OAClickableWay.h"
 #import "OAClickableWayHelper.h"
 #import "OAClickableWayHelper+cpp.h"
 #import "OASelectedMapObject.h"

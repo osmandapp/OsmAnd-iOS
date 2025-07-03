@@ -84,6 +84,13 @@
 #import "OASearchResult.h"
 #import "OAWikiWebViewController.h"
 
+
+
+//TODO: delete after rewriteing all classes to swift?
+#import "OASelectedGpxPoint.h"
+
+
+
 // Widgets
 #import "OAMapWidgetRegistry.h"
 #import "OAWidgetState.h"

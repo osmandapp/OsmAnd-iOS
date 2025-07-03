@@ -7,7 +7,6 @@
 //
 
 #import "OAClickableWayAsyncTask.h"
-#import "OAClickableWay.h"
 #import "OASelectedGpxPoint.h"
 #import "OAGPXUIHelper.h"
 #import "OAHeightDataLoader.h"

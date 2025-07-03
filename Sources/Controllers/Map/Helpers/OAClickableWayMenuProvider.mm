@@ -8,7 +8,6 @@
 
 #import "OAClickableWayMenuProvider.h"
 #import "OAClickableWayAsyncTask.h"
-#import "OAClickableWay.h"
 #import "OASelectedGpxPoint.h"
 #import "OASelectedMapObject.h"
 #import "OAPointDescription.h"

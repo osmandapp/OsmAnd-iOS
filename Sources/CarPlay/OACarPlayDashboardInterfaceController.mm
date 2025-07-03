@@ -128,8 +128,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     if (_isInRoutePreview)
     {        
-        CPRouteChoice *routeChoice1 = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
-        [self mapTemplate:_mapTemplate startedTrip:_currentTrip usingRouteChoice:routeChoice1];
+        CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
+        [self mapTemplate:_mapTemplate startedTrip:_currentTrip usingRouteChoice:routeChoice];
     }
 }
 
@@ -435,12 +435,15 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         
         __weak __typeof(self) weakSelf = self;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (_isInRoutePreview)
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+            if (strongSelf->_isInRoutePreview)
             {
                 NSLog(@"[CarPlay] WARNING: _isInRoutePreview YES");
                 return;
             }
-            [weakSelf startNavigationSessionWithTrip:trip];
+            [strongSelf startNavigationSessionWithTrip:trip];
         });
         return;
     }

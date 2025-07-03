@@ -217,6 +217,34 @@
     return endTime - startTime;
 }
 
++ (long)liveTimeSpanForGpx:(OASGpxFile *)gpx withoutGaps:(BOOL)withoutGaps
+{
+    long totalActiveDuration = 0;
+    long earliestSegmentStart = LLONG_MAX;
+    long latestSegmentEnd = 0;
+    for (OASTrack *track in gpx.tracks)
+    {
+        for (OASTrkSegment *segment in track.segments)
+        {
+            NSArray<OASWptPt *> *points = segment.points;
+            if (points.count <= 1)
+                continue;
+            
+            long segmentDuration = [self getSegmentTime:segment];
+            totalActiveDuration += segmentDuration;
+            long segmentStartTime = ((OASWptPt *)points.firstObject).time;
+            long segmentEndTime = ((OASWptPt *)points.lastObject).time;
+            earliestSegmentStart = MIN(earliestSegmentStart, segmentStartTime);
+            latestSegmentEnd = MAX(latestSegmentEnd,   segmentEndTime);
+        }
+    }
+    
+    if (earliestSegmentStart == LLONG_MAX)
+        return 0;
+    
+    return withoutGaps ? totalActiveDuration : (latestSegmentEnd - earliestSegmentStart);
+}
+
 + (double) getSegmentDistance:(OASTrkSegment *)segment
 {
     double distance = 0;

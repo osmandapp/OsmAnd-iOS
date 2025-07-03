@@ -2165,11 +2165,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             _mapSourceInvalidated = YES;
             return;
         }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [_mapLayers.myPositionLayer updateMyLocationCourseProvider];
-            [self updateCurrentMapSource];
-        });
+        [_mapLayers.myPositionLayer updateMyLocationCourseProvider];
+        [self updateCurrentMapSource];
         [[OAMapViewTrackingUtilities instance] updateSettings];
     });
 }

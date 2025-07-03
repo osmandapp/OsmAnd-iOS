@@ -983,7 +983,7 @@
 "purchase_dialog_title" = "选择计划";
 "rendering_attr_whiteWaterSports_name" = "白水运动";
 "rendering_value_darkyellow_name" = "暗黄色";
-"rendering_attr_piste_difficulty_aerialway_name" = "空中航线";
+"rendering_attr_piste_difficulty_aerialway_name" = "缆索交通系统";
 "rendering_attr_piste_difficulty_undefined_name" = "未定义";
 "rendering_attr_piste_difficulty_extreme_name" = "极限";
 "rendering_attr_piste_difficulty_freeride_name" = "自由滑雪";
@@ -1015,7 +1015,7 @@
 "app_mode_offroad" = "越野";
 "app_mode_scooter" = "踏板车";
 "app_mode_monowheel" = "独轮";
-"routing_attr_freeride_policy_name" = "越野滑雪";
+"routing_attr_freeride_policy_name" = "野雪滑行";
 "routing_attr_piste_type_sled_name" = "雪橇";
 "day_off_label" = "关闭";
 "routing_attr_length_name" = "长度";
@@ -1598,12 +1598,12 @@
 "routing_attr_piste_type_downhill_description" = "可进行高山或滑降滑雪的斜坡，并可使用滑雪缆车。";
 "routing_attr_piste_type_nordic_description" = "适合北欧或越野滑雪的小径。";
 "routing_attr_allow_classic_only_name" = "只允许经典路线";
-"routing_attr_difficulty_preference_description" = "倾向于这种难度的路线，尽管如果时间较短，使用更难或更容易的滑雪道的路线仍是可能的。";
+"routing_attr_difficulty_preference_description" = "优先选择此难度等级的路线，尽管当距离更短时，仍可能使用更难或容易的滑雪路线。";
 "routing_attr_piste_type_sled_description" = "供雪橇使用的斜坡。";
 "routing_attr_avoid_sett_name" = "无原石铺砖";
-"routing_attr_allow_skating_only_name" = "只允许滑冰路线";
-"routing_attr_allow_skating_only_description" = "只为自由式滑冰或滑冰而铺设的路线，没有经典赛道。";
-"routing_attr_allow_classic_only_description" = "仅为经典风格的滑雪路线，不含滑冰道。这包括由小型雪地摩托开辟的松软滑雪道和滑雪者人工开辟的滑雪道。";
+"routing_attr_allow_skating_only_name" = "允许滑行 / 自由式滑雪路线";
+"routing_attr_allow_skating_only_description" = "仅为自由式或滑行滑雪整修的路线，不设传统滑道。";
+"routing_attr_allow_classic_only_description" = "仅针对传统滑雪方式整修的路线，不含滑行滑雪道。这包括由小型雪地摩托整修的松软滑雪道和滑雪者人工开辟的滑雪道。";
 "routing_attr_allow_intermediate_description" = "更困难的路线，带有较陡的路段。通常会有一些应当避开的障碍物。";
 "choose_what_to_restore" = "选择要恢复的数据。";
 "login_help_email_title" = "OsmAnd iOS云";
@@ -1669,7 +1669,7 @@
 "save_poi_without_poi_type_message" = "要保存无类型的 POI 吗？";
 "routing_attr_avoid_tunnels_description" = "避开隧道";
 "weather_online_cache" = "在线缓存";
-"routing_attr_freeride_policy_description" = "“自由式滑雪(Freeride)”和“越野滑雪(Off-piste)”是非官方的路线和通道。通常未经修饰，没有维护，晚上没有检查。请自行承担风险。";
+"routing_attr_freeride_policy_description" = "“自由式滑雪(Freeride)”和“野雪滑(Off-piste)”属于非官方路线和通道。通常未 经整修、无人维护，且晚上不进行巡查。请自行承担风险。";
 "select_wikipedia_article_langs" = "选择地图上维基百科文章的语言，在阅读文章时切换到任何可用的语言。";
 "fav_point_dublicate_message" = "收藏重命名为%@，以避免重复。";
 "by_transport_type" = "乘坐 %@";

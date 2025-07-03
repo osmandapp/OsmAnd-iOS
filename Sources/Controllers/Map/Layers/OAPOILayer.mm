@@ -25,6 +25,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OARouteKey.h"
+#import "OARouteKey+cpp.h"
 #import "OANetworkRouteDrawable.h"
 #import "OAPluginsHelper.h"
 #import "OAAppSettings.h"

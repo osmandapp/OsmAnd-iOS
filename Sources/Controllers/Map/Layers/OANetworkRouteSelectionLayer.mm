@@ -11,6 +11,7 @@
 #import "OANetworkRouteSelectionTask.h"
 #import "OAMapSelectionResult.h"
 #import "OARouteKey.h"
+#import "OARouteKey+cpp.h"
 #import "OAPointDescription.h"
 #import "OANativeUtilities.h"
 #import "OAGPXUIHelper.h"

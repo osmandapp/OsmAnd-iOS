@@ -15,6 +15,7 @@
 #import "OAImageDescTableViewCell.h"
 #import "OAPOIType.h"
 #import "OARouteKey.h"
+#import "OARouteKey+cpp.h"
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAOsmEditingPlugin.h"

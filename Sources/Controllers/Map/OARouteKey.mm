@@ -7,6 +7,7 @@
 //
 
 #import "OARouteKey.h"
+#import "OARouteKey+cpp.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -18,6 +19,13 @@ static NSDictionary<NSString *, NSString *> *SHIELD_TO_OSMC = @{
     @"shield_textcolor": @"osmc_textcolor",
     @"shield_text": @"osmc_text"
 };
+
+
+@interface OARouteKey()
+
+@property (nonatomic) OsmAnd::NetworkRouteKey routeKey;
+
+@end
 
 
 @implementation OARouteKey

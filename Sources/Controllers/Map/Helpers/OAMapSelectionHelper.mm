@@ -30,6 +30,7 @@
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
 #import "OARouteKey.h"
+#import "OARouteKey+cpp.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>

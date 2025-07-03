@@ -22,6 +22,7 @@
 #import "OAMapViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OARouteKey.h"
+#import "OARouteKey+cpp.h"
 #import "OAAppData.h"
 #import "OALocationServices.h"
 #import "OAMapRendererView.h"

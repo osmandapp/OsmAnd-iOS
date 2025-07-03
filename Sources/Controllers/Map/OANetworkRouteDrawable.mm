@@ -8,6 +8,7 @@
 
 #import "OANetworkRouteDrawable.h"
 #import "OARouteKey.h"
+#import "OARouteKey+cpp.h"
 #import "OADayNightHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"

@@ -84,6 +84,8 @@
 #import "OASearchResult.h"
 #import "OAWikiWebViewController.h"
 #import "OATransportStop.h"
+#import "OAHeightDataLoader.h"
+#import "OARouteKey.h"
 
 
 

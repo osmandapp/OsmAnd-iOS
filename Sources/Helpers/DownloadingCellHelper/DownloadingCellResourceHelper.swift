@@ -248,15 +248,12 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     // MARK: - Downloading cell progress observer's methods
     
     @objc private func onDownloadResourceTaskProgressChanged(observer: Any, key: Any, value: Any) {
-        guard let resourceId = Self.getResourceIdFromNotificationKey(key: key, value: value) else { return }
-        guard let parsedValue = value as? NSNumber else { return }
+        guard let resourceId = Self.getResourceIdFromNotificationKey(key: key, value: value), let parsedValue = value as? NSNumber else { return }
         let progress = parsedValue.floatValue
         
-        if helperHasItemFor(resourceId) {
-            DispatchQueue.main.async { [weak self] in
-                
-                self?.setCellProgress(resourceId: resourceId, progress: progress, status: .inProgress)
-            }
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.helperHasItemFor(resourceId) else { return }
+            self.setCellProgress(resourceId: resourceId, progress: progress, status: .inProgress)
         }
     }
     

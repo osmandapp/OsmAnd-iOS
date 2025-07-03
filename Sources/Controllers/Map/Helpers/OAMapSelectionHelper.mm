@@ -25,8 +25,6 @@
 #import "OAPOIFilter.h"
 #import "OAClickableWayHelper.h"
 #import "OAClickableWayHelper+cpp.h"
-#import "OASelectedMapObject.h"
-#import "OASelectedGpxPoint.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
 #import "OARouteKey.h"
@@ -443,8 +441,8 @@ private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfM
 {
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
-        id object = selectedObject.object;
-        if ([object isKindOfClass:OASelectedGpxPoint.class] && [selectedObject.provider isKindOfClass:OAGPXLayer.class])
+        id object = [selectedObject getObject];
+        if ([object isKindOfClass:OASelectedGpxPoint.class] && [[selectedObject getProvider] isKindOfClass:OAGPXLayer.class])
         {
             OASelectedGpxPoint *gpxPoint = (OASelectedGpxPoint *)object;
             if ([[[gpxPoint getSelectedGpxFile] path] hasSuffix:gpxFileName])
@@ -460,8 +458,8 @@ private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfM
 {
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
-        if ([selectedObject.object isKindOfClass:OAClickableWay.class] &&
-            [clickableWay getOsmId] == [((OAClickableWay *) selectedObject.object) getOsmId])
+        if ([[selectedObject getObject] isKindOfClass:OAClickableWay.class] &&
+            [clickableWay getOsmId] == [((OAClickableWay *) [selectedObject getObject]) getOsmId])
         {
             return NO;
         }
@@ -475,10 +473,10 @@ private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfM
 {
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
-        if ([selectedObject.object isKindOfClass:NSArray.class] &&
-            [selectedObject.provider isKindOfClass:OAGPXLayer.class])
+        if ([[selectedObject getObject] isKindOfClass:NSArray.class] &&
+            [[selectedObject getProvider] isKindOfClass:OAGPXLayer.class])
         {
-            NSArray *pair = (NSArray *)selectedObject.object;
+            NSArray *pair = (NSArray *)[selectedObject getObject];
             id firstOblect = [pair firstObject];
             if (firstOblect && [firstOblect isKindOfClass:OATravelGpx.class])
             {
@@ -536,7 +534,7 @@ private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfM
 {
     for (OASelectedMapObject *selectedObject in [result getAllObjects])
     {
-        id object = selectedObject.object;
+        id object = [selectedObject getObject];
         if ([object isKindOfClass:NSArray.class])
         {
             id firstObject = [((NSArray *) object) firstObject];
@@ -553,7 +551,7 @@ private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfM
 {
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
-        id object = selectedObject.object;
+        id object = [selectedObject getObject];
         if ([object isKindOfClass:OAPOI.class] && [((OAPOI *)object) strictEquals:amenity])
         {
             OAPOI *poi = ((OAPOI *)object);
@@ -608,7 +606,7 @@ private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfM
         
         for (OASelectedMapObject *selectedObject in selectedObjects)
         {
-            id object = selectedObject.object;
+            id object = [selectedObject getObject];
             if ([object isKindOfClass:[OAPOI class]])
             {
                 OAPOI *amenity = (OAPOI *)object;
@@ -629,7 +627,7 @@ private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfM
                     [selectedObjects addObject:newTransportStop];
                     
                     [selectedObjects filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OASelectedMapObject *selectedObject, NSDictionary *bindings) {
-                        return (!selectedObject && !amenity) || [amenity isEqual:selectedObject.object];
+                        return (!selectedObject && !amenity) || [amenity isEqual:[selectedObject getObject]];
                     }]];
 
                 }

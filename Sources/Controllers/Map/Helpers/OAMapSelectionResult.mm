@@ -12,7 +12,6 @@
 #import "OAMapViewController.h"
 #import "OAMapLayers.h"
 #import "OAContextMenuProvider.h"
-#import "OASelectedMapObject.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OAMapSelectionResult
@@ -104,7 +103,7 @@
     NSMutableArray<OABaseDetailsObject *> *detailsObjects = [NSMutableArray new];
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
-        id object = selectedObject.object;
+        id object = [selectedObject getObject];
         NSMutableArray<OABaseDetailsObject *> *overlapped = [self collectOverlappedObjects:object detailsObjects:detailsObjects];
         
         OABaseDetailsObject *detailsObject;

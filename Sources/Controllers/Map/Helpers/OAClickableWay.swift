@@ -27,7 +27,7 @@ final class OAClickableWay: NSObject {
         let wpt = WptPt()
         wpt.lat = selectedLatLon.coordinate.latitude
         wpt.lon = selectedLatLon.coordinate.longitude
-        self.selectedGpxPoint = OASelectedGpxPoint(nil, selectedPoint: wpt)
+        self.selectedGpxPoint = OASelectedGpxPoint(selectedGpxFile: nil, selectedPoint: wpt)
         
         super.init()
     }

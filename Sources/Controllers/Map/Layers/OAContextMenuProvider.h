@@ -8,8 +8,6 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-#include <OsmAndCore/Map/IMapRenderer.h>
-
 const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 
 @class OATargetPoint, OAPointDescription, OAMapSelectionResult, OASelectedMapObject;

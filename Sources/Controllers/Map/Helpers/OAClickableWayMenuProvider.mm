@@ -7,8 +7,6 @@
 //
 
 #import "OAClickableWayMenuProvider.h"
-#import "OASelectedGpxPoint.h"
-#import "OASelectedMapObject.h"
 #import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -19,9 +17,9 @@
 - (BOOL) showMenuAction:(id)object
 {
     OASelectedMapObject *selectedMapObject = (OASelectedMapObject *)object;
-    if ([[selectedMapObject object] isKindOfClass:OAClickableWay.class])
+    if ([[selectedMapObject getObject] isKindOfClass:OAClickableWay.class])
     {
-        OAClickableWay *clickableWay = (OAClickableWay *)[selectedMapObject object];
+        OAClickableWay *clickableWay = (OAClickableWay *)[selectedMapObject getObject];
         OAClickableWayAsyncTask *task = [[OAClickableWayAsyncTask alloc] initWithClickableWay:clickableWay];
         [task execute];
         return YES;

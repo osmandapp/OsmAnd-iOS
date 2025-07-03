@@ -86,13 +86,7 @@
 #import "OATransportStop.h"
 #import "OAHeightDataLoader.h"
 #import "OARouteKey.h"
-
-
-
-//TODO: delete after rewriteing all classes to swift?
-#import "OASelectedGpxPoint.h"
-
-
+#import "OAContextMenuProvider.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

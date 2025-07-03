@@ -38,7 +38,7 @@
 #import "OAMapUtils+cpp.h"
 #import "OAMapSelectionHelper.h"
 #import "OAMapSelectionResult.h"
-#import "OASelectedMapObject.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -449,10 +449,10 @@
     int64_t objectSelectionThreshold = 0;
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
-        if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
+        if ([selectedObject getProvider] && [[selectedObject getProvider] conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
-            id<OAContextMenuProvider> provider = selectedObject.provider;
-            int64_t selectionThreshold = [provider getSelectionPointOrder:selectedObject.object];
+            id<OAContextMenuProvider> provider = [selectedObject getProvider];
+            int64_t selectionThreshold = [provider getSelectionPointOrder:[selectedObject getObject]];
             if (selectionThreshold <= objectSelectionThreshold)
             {
                 objectSelectionThreshold = selectionThreshold;
@@ -465,9 +465,9 @@
     {
         if (objectSelectionThreshold < 0)
         {
-            if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
+            if ([selectedObject getProvider] && [[selectedObject getProvider] conformsToProtocol:@protocol(OAContextMenuProvider)])
             {
-                id<OAContextMenuProvider> provider = selectedObject.provider;
+                id<OAContextMenuProvider> provider = [selectedObject getProvider];
                 if ([provider isKindOfClass:OAMapLayer.class])
                 {
                     OAMapLayer *layer = provider;
@@ -482,8 +482,8 @@
                 }
             }
         }
-        id<OAContextMenuProvider> provider = selectedObject.provider;
-        if (provider && [provider runExclusiveAction:selectedObject.object unknownLocation:showUnknownLocation])
+        id<OAContextMenuProvider> provider = [selectedObject getProvider];
+        if (provider && [provider runExclusiveAction:[selectedObject getObject] unknownLocation:showUnknownLocation])
         {
             return YES;
         }
@@ -497,11 +497,11 @@
     if (selectedObjects.count == 1)
     {
         OASelectedMapObject *selectedObject = selectedObjects[0];
-        id selectedObj = selectedObject.object;
+        id selectedObj = [selectedObject getObject];
         CLLocation *latLon = [result objectLatLon];
         OAPointDescription *pointDescription;
         
-        id<OAContextMenuProvider> provider = selectedObject.provider;
+        id<OAContextMenuProvider> provider = [selectedObject getProvider];
         if (provider)
         {
             if (!latLon || objectSelectionThreshold < 0)
@@ -546,13 +546,13 @@
     NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray new];
     for (OASelectedMapObject *selectedObject in selectedObjects)
     {
-        id<OAContextMenuProvider> provider = selectedObject.provider;
+        id<OAContextMenuProvider> provider = [selectedObject getProvider];
         if (!provider)
             provider = self.mapViewController.mapLayers.poiLayer;
         
         if (provider)
         {
-            OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object];
+            OATargetPoint *targetPoint = [provider getTargetPoint:[selectedObject getObject]];
             if (targetPoint)
                 [targetPoints addObject:targetPoint];
             
@@ -569,9 +569,9 @@
     {
         OATargetPoint *targetPoint;
         if (provider)
-            targetPoint = [provider getTargetPoint:object.object];
+            targetPoint = [provider getTargetPoint:[object getObject]];
         else
-            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object.object];
+            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:[object getObject]];
             
         if (targetPoint)
         {

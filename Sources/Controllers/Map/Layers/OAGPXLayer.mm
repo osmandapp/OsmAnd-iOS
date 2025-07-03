@@ -35,7 +35,6 @@
 #import "OAColoringType.h"
 #import "OAConcurrentCollections.h"
 #import "OAMapSelectionResult.h"
-#import "OASelectedGpxPoint.h"
 #import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"

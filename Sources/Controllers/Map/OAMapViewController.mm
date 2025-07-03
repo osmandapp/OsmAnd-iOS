@@ -3755,9 +3755,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
     [_mapLayers.gpxMapLayer refreshGpxTracks:gpxFilesDic reset:YES];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_gpxTracksRefreshedObservable notifyEvent];
-    });
+    [_gpxTracksRefreshedObservable notifyEvent];
 }
 
 - (void)refreshGpxTracks

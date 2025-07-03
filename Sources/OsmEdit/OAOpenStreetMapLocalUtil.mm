@@ -20,6 +20,7 @@
 #import "OAEditPOIData.h"
 #import "OATargetPoint.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OAPOILocationType.h"
 
 #include <OsmAndCore/Utilities.h>

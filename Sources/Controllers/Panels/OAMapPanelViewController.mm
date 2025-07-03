@@ -75,6 +75,7 @@
 #import "OAGPXEditWptViewController.h"
 #import "OAPOI.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OAPOILocationType.h"
 #import "OAAnalyticsHelper.h"
 #import "OATargetMultiView.h"

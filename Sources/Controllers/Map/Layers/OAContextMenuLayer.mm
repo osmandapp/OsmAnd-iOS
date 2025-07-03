@@ -29,6 +29,7 @@
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OATransportStopsBaseController.h"

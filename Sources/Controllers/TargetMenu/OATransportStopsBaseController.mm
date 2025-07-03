@@ -10,6 +10,7 @@
 #import "OATransportStopRoute.h"
 #import "OAAppSettings.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OATransportStopAggregated.h"
 #import "OsmAndApp.h"
 #import "OAPOI.h"

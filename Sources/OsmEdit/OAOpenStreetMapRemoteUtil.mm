@@ -22,6 +22,7 @@
 #import "OAPOICategory.h"
 #import "OAOsmBaseStorage.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OAPOILocationType.h"
 #import "OARootViewController.h"
 #import "OAAppVersion.h"

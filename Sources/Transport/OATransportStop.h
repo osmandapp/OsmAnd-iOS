@@ -8,15 +8,10 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-#include <OsmAndCore/Data/TransportStop.h>
-
 @class OAPOI, OATransportStopAggregated;
 
 @interface OATransportStop : NSObject
 
-- (instancetype)initWithStop:(std::shared_ptr<const OsmAnd::TransportStop>)stop;
-
-@property (nonatomic, assign, readonly) std::shared_ptr<const OsmAnd::TransportStop> stop;
 @property (nonatomic, readonly) CLLocationCoordinate2D location;
 @property (nonatomic, readonly, nullable) NSString *name;
 

@@ -11,7 +11,6 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapLayers.h"
-#import "OABaseDetailsObject.h"
 #import "OAContextMenuProvider.h"
 #import "OASelectedMapObject.h"
 #import "OsmAnd_Maps-Swift.h"

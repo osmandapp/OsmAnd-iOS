@@ -31,7 +31,6 @@
 #import "OsmAndSharedWrapper.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
-#import "OABaseDetailsObject.h"
 #import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 

@@ -17,6 +17,7 @@
 #import "OATransportRoutingHelper.h"
 #import "OATransportStopType.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OARouteDirectionInfo.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"

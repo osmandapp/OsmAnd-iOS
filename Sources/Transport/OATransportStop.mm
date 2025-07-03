@@ -7,11 +7,19 @@
 //
 
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
 #import "OAPOIHelper.h"
 
 #include <OsmAndCore/Utilities.h>
+
+@interface OATransportStop()
+
+@property (nonatomic, assign) std::shared_ptr<const OsmAnd::TransportStop> stop;
+
+@end
+
 
 @implementation OATransportStop
 {

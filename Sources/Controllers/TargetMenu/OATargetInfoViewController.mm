@@ -22,6 +22,7 @@
 #import "OALocationServices.h"
 #import "OAPOICategory.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OACollapsableNearestPoiWikiView.h"
 #import "OATransportStopRoute.h"
 #import "OACollapsableTransportStopRoutesView.h"

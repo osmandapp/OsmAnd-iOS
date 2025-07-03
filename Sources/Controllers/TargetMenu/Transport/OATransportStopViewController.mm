@@ -8,6 +8,7 @@
 
 #import "OATransportStopViewController.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OATransportStopRoute.h"
 #import "OATransportStopType.h"
 #import "OAUtilities.h"

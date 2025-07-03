@@ -321,24 +321,19 @@
 
 - (UIImage *)getCenterIconAboveTitle
 {
-      NSString *backgroundIcon = nil;
-      
-      if (_selectedBackgroundIndex >= 0 && _selectedBackgroundIndex < _backgroundIconNames.count) {
-          backgroundIcon = _backgroundIconNames[_selectedBackgroundIndex];
-      } else {
-          _selectedBackgroundIndex = 0;
-      }
-
-      if (backgroundIcon)
-      {
-          return [OAFavoritesHelper getCompositeIcon:_selectedIconName
-                                       backgroundIcon:backgroundIcon
-                                                color:[_selectedColorItem getColor]];
-      }
-      else
-      {
-          return nil;
-      }
+    NSString *backgroundIcon = nil;
+    
+    if (_selectedBackgroundIndex >= 0 && _selectedBackgroundIndex < _backgroundIconNames.count)
+        backgroundIcon = _backgroundIconNames[_selectedBackgroundIndex];
+    else
+        _selectedBackgroundIndex = 0;
+    
+    if (backgroundIcon)
+        return [OAFavoritesHelper getCompositeIcon:_selectedIconName
+                                    backgroundIcon:backgroundIcon
+                                             color:[_selectedColorItem getColor]];
+    else
+        return nil;
 }
 
 - (UIView *)createSubview

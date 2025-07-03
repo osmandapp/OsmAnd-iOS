@@ -16,4 +16,6 @@
 @property (nonatomic, readonly) OsmAnd::TextRasterizer::Style captionStyle;
 @property (nonatomic, readonly) double captionTopSpace;
 
+- (void) updateCaptionStyle;
+
 @end

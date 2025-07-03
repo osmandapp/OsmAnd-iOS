@@ -65,6 +65,8 @@
     BOOL _showCaptionsCache;
     double _textSize;
     int _myPositionLayerBaseOrder;
+
+    BOOL _reconstructMarker;
 }
 
 - (NSString *) layerId
@@ -117,6 +119,8 @@
     [self.mapView addSubview:_destinationLayerWidget];
 
     [self refreshDestinationsMarkersCollection];
+
+    _reconstructMarker = false;
 }
 
 - (void) onMapFrameRendered
@@ -194,6 +198,8 @@
     {
         _showCaptionsCache = self.showCaptions;
         _textSize = OAAppSettings.sharedManager.textSize.get;
+        [self updateCaptionStyle];
+        _reconstructMarker = true;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self hide];
             [self refreshDestinationsMarkersCollection];
@@ -433,6 +439,13 @@
     line->setLineWidth(strokeWidth);
     line->setLineDash(inlinePattern);
     line->setFillColor(color);
+
+    if (_reconstructMarker)
+    {
+        // set empty points to trigger _hasUnappliedChanges
+        outline->setPoints(QVector<OsmAnd::PointI>());
+        _reconstructMarker = false;
+    }
 
     if (points != outline->getPoints())
     {

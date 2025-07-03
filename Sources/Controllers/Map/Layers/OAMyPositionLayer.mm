@@ -771,7 +771,7 @@ typedef enum {
     _currentMarkerState = c.currentMarkerState;
     for (OAMarkerCollection *mc in _modeMarkers.objectEnumerator)
         if (mc != c)
-            [self updateCollectionLocation:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:NO];
+            [self updateCollectionLocation:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:animationDuration visible:NO];
 }
 
 - (void) updateCollectionLocation:(OAMarkerCollection *)c newLocation:(CLLocation *)newLocation newTarget31:(OsmAnd::PointI)newTarget31 newHeading:(CLLocationDirection)newHeading animationDuration:(float)animationDuration visible:(BOOL)visible

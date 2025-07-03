@@ -127,7 +127,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (void) onTripStartTriggered
 {
     if (_isInRoutePreview)
-    {
+    {        
         CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
         [self mapTemplate:_mapTemplate startedTrip:_currentTrip usingRouteChoice:routeChoice];
     }
@@ -152,7 +152,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     if ([[OAMapViewTrackingUtilities instance] is3DMode])
         _wasIn3DBeforePreview = YES;
 
-    [OAOsmAndFormatter getFormattedTimeHM:_routingHelper.getLeftTime];
     CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
     
     OATargetPointsHelper *targetHelper = OATargetPointsHelper.sharedInstance;
@@ -422,9 +421,46 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void)mapTemplate:(CPMapTemplate *)mapTemplate startedTrip:(CPTrip *)trip usingRouteChoice:(CPRouteChoice *)routeChoice
 {
+    NSLog(@"[CarPlay] startedTrip");
+
     [mapTemplate hideTripPreviews];
     _isInRoutePreview = NO;
-    
+
+    if (_navigationSession != nil)
+    {
+        NSLog(@"[CarPlay] WARNING: Existing navigationSession found — finishing it: %@", _navigationSession);
+
+        [_navigationSession finishTrip];
+        _navigationSession = nil;
+        
+        __weak __typeof(self) weakSelf = self;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+            if (strongSelf->_isInRoutePreview)
+            {
+                NSLog(@"[CarPlay] WARNING: _isInRoutePreview YES");
+                return;
+            }
+            [strongSelf startNavigationSessionWithTrip:trip];
+        });
+        return;
+    }
+
+    [self startNavigationSessionWithTrip:trip];
+}
+
+- (void)startNavigationSessionWithTrip:(CPTrip *)trip
+{
+    if (_navigationSession != nil)
+    {
+        NSLog(@"[CarPlay] WARNING: Attempt to start navigation while _navigationSession is already active: %@", _navigationSession);
+        return;
+    }
+
+    NSLog(@"[CarPlay] Starting new navigation session: %@", _navigationSession);
+
     _navigationSession = [_mapTemplate startNavigationSessionForTrip:trip];
     [self returnTo3dMode];
     [[OARootViewController instance].mapPanel startNavigation];
@@ -946,7 +982,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (void)onMapViewAttached
 {
     OARouteCalculationResult *route = [_routingHelper getRoute];
-    CLLocation * start = _routingHelper.getLastFixedLocation;
+    CLLocation *start = _routingHelper.getLastFixedLocation;
     if (route && start && _routingHelper.isRouteCalculated)
     {
         [self enterRoutePreviewMode];

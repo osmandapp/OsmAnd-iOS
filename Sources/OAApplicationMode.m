@@ -38,6 +38,8 @@ static NSMapTable<NSString *, NSMutableSet<OAApplicationMode *> *> *_widgetsAvai
 static NSMutableArray<OAApplicationMode *> *_defaultValues;
 static NSMutableArray<OAApplicationMode *> *_values;
 static NSMutableArray<OAApplicationMode *> *_cachedFilteredValues;
+static NSObject *_cachedFilteredValuesLock;
+
 static NSString *_cachedAvailableApplicationModes;
 static OAAutoObserverProxy* _listener;
 
@@ -67,6 +69,7 @@ static int PROFILE_TRUCK = 1000;
     _defaultValues = [NSMutableArray array];
     _cachedFilteredValues = [NSMutableArray array];
     _cachedAvailableApplicationModes = @"";
+    _cachedFilteredValuesLock = [NSObject new];
 
     _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"rendering_value_browse_map_name") stringKey:@"default"];
     _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
@@ -232,7 +235,15 @@ static int PROFILE_TRUCK = 1000;
 + (NSArray<OAApplicationMode *> *) values
 {
     NSString *available = OAAppSettings.sharedManager.availableApplicationModes.get;
-    if (_cachedFilteredValues.count == 0 || ![_cachedAvailableApplicationModes isEqualToString:available])
+    BOOL needRebuild = NO;
+    @synchronized (_cachedFilteredValuesLock) {
+        if (_cachedFilteredValues.count == 0 || ![_cachedAvailableApplicationModes isEqualToString:available]) {
+            needRebuild = YES;
+            _cachedFilteredValues = [NSMutableArray array];
+            _cachedAvailableApplicationModes = available;
+        }
+    }
+    if (needRebuild)
     {
         if (!_listener)
         {
@@ -240,26 +251,27 @@ static int PROFILE_TRUCK = 1000;
                                                   withHandler:@selector(onAvailableAppModesChanged)
                                                    andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
         }
-        @synchronized (_cachedFilteredValues) {
-            _cachedFilteredValues = [NSMutableArray array];
-        }
-        _cachedAvailableApplicationModes = available;
-        for (OAApplicationMode *v in _values)
+        for (OAApplicationMode *v in [_values copy])
         {
             if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT) {
-                @synchronized (_cachedFilteredValues) {
+                @synchronized (_cachedFilteredValuesLock) {
                     [_cachedFilteredValues addObject:v];
                 }
             }
         }
     }
-    return [NSArray arrayWithArray:_cachedFilteredValues];
-
+    
+    NSArray *valuesCopy;
+    @synchronized (_cachedFilteredValuesLock) {
+        valuesCopy = [_cachedFilteredValues copy];
+    }
+    return valuesCopy;
 }
+
 
 + (void) onAvailableAppModesChanged
 {
-    @synchronized (_cachedFilteredValues) {
+    @synchronized (_cachedFilteredValuesLock) {
         _cachedFilteredValues = [NSMutableArray array];
     }
 }
@@ -685,7 +697,7 @@ static int PROFILE_TRUCK = 1000;
     [_defaultValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
         return [self compareModes:obj1 obj2:obj2];
     }];
-    @synchronized (_cachedFilteredValues) {
+    @synchronized (_cachedFilteredValuesLock) {
         [_cachedFilteredValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
             return [self compareModes:obj1 obj2:obj2];
         }];
@@ -775,7 +787,7 @@ static int PROFILE_TRUCK = 1000;
     OAAppSettings *settings = OAAppSettings.sharedManager;
     if ([modes containsObject:settings.applicationMode.get])
         [settings setApplicationModePref:_DEFAULT];
-    @synchronized (_cachedFilteredValues) {
+    @synchronized (_cachedFilteredValuesLock) {
         [_cachedFilteredValues removeObjectsInArray:modes];
     }
     [self saveCustomAppModesToSettings];

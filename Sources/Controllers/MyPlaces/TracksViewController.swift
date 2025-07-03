@@ -1542,23 +1542,34 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     @objc private func onObservedRecordedTrackChanged() {
-        guard isRootFolder else { return }
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            guard view.window != nil else {
-                shouldReloadTableViewOnAppear = true
-                return
-            }
-            generateData()
-            let numberOfRows = tableView.numberOfRows(inSection: 0)
-            if numberOfRows > 0 {
-                let recordingTrackRowIndexPath = IndexPath(row: 0, section: 0)
-                tableView.reloadRows(at: [recordingTrackRowIndexPath], with: .none)
-            } else {
-                tableView.reloadData()
-            }
-        }
-    }
+         guard isRootFolder else { return }
+         DispatchQueue.main.async { [weak self] in
+             guard let self else { return }
+             guard view.window != nil else {
+                 shouldReloadTableViewOnAppear = true
+                 return
+             }
+             generateData()
+             
+             let section = 0
+             guard tableView.numberOfSections > section else {
+                 return
+             }
+             
+             let numberOfRows = tableView.numberOfRows(inSection: section)
+             if numberOfRows > 0 {
+                 let indexPath = IndexPath(row: 0, section: section)
+                 
+                 if tableView.indexPathsForVisibleRows?.contains(indexPath) == true {
+                     tableView.reloadRows(at: [indexPath], with: .none)
+                 } else {
+                     tableView.reloadData()
+                 }
+             } else {
+                 tableView.reloadData()
+             }
+         }
+     }
     
     @objc private func didFinishImport() {
         guard view.window != nil else { return }

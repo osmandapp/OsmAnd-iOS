@@ -23,13 +23,18 @@
 
 @implementation OAItemProgressInfo
 
-- (instancetype) initWithType:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress work:(NSInteger)work finished:(BOOL)finished
+- (instancetype)initWithType:(NSString *)type
+                     fileName:(NSString *)fileName
+                     progress:(NSInteger)progress
+                         work:(NSInteger)work
+                     finished:(BOOL)finished
 {
     self = [super init];
     if (self)
     {
-        _type = type;
-        _fileName = fileName;
+        _type = [type copy];
+        _fileName = [fileName copy];
+        
         _work = work;
         _value = progress;
         _finished = finished;

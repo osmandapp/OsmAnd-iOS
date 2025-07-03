@@ -7,7 +7,6 @@
 //
 
 #import "OASelectedGpxPoint.h"
-#import "OASelectedGpxFile.h"
 
 @implementation OASelectedGpxPoint
 {

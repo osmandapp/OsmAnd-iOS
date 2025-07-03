@@ -227,7 +227,6 @@
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
 		3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */; };
-		320379142DF736E900B1780C /* OASelectedGpxFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320379132DF736E700B1780C /* OASelectedGpxFile.mm */; };
 		320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */; };
 		32048FC52A25E70200AA4B71 /* BaseOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */; };
 		32048FC72A26084000AA4B71 /* OsmOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */; };
@@ -3581,8 +3580,6 @@
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
 		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
 		3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsCollectionViewController.swift; sourceTree = "<group>"; };
-		320379122DF736D100B1780C /* OASelectedGpxFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASelectedGpxFile.h; sourceTree = "<group>"; };
-		320379132DF736E700B1780C /* OASelectedGpxFile.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASelectedGpxFile.mm; sourceTree = "<group>"; };
 		320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerWidgetSettingsViewController.swift; sourceTree = "<group>"; };
 		32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOAuthHelper.swift; sourceTree = "<group>"; };
 		32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthHelper.swift; sourceTree = "<group>"; };
@@ -8226,8 +8223,6 @@
 				32C1C4E72DD4C4F200A053D4 /* OAMapSelectionHelper.mm */,
 				32C1C4E82DD4C4F200A053D4 /* OAMapSelectionResult.h */,
 				32C1C4E92DD4C4F200A053D4 /* OAMapSelectionResult.mm */,
-				320379122DF736D100B1780C /* OASelectedGpxFile.h */,
-				320379132DF736E700B1780C /* OASelectedGpxFile.mm */,
 				DA5A7F0C26C563A400F274C7 /* OASelectedGPXHelper.h */,
 				DA5A7F1426C563A400F274C7 /* OASelectedGPXHelper.mm */,
 				32F6B4292DEDD703002DBCEE /* OASelectedGpxPoint.h */,
@@ -17406,7 +17401,6 @@
 				C57693192D67148400E4F772 /* ChangeTracksAppearanceTask.swift in Sources */,
 				DA5A81DE26C563A700F274C7 /* OAStreet.mm in Sources */,
 				325CFBEB2B5052E000090DF2 /* TracksViewController.swift in Sources */,
-				320379142DF736E900B1780C /* OASelectedGpxFile.mm in Sources */,
 				32DE2BE42B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift in Sources */,
 				FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */,
 				DA5A814426C563A700F274C7 /* OAOsmNotePoint.m in Sources */,

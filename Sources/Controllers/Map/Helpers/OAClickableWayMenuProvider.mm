@@ -71,49 +71,8 @@
     
 }
 
-//TODO: delete?
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
-    /*
-    if ([obj isKindOfClass:[OAClickableWay class]])
-    {
-        OAClickableWay *clickableWay = (OAClickableWay *)obj;
-        OASGpxFile *gpxFile = [clickableWay getGpxFile];
-//        OASGpxTrackAnalysis *analysis [gpxFile getAnalysisFileTimestamp:0];
-//        NSString *safeFileName = [clickableWay getGpxFile];
-        
-        
-        
-        //[gpxFile recalculateProcessPoint]; // ??
-        
-        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-        targetPoint.type = OATargetGPX;
-        
-//        targetPoint.type = OATargetNetworkGPX; // ???
-        
-        targetPoint.targetObj = gpxFile;
-
-        targetPoint.icon = [UIImage imageNamed:@"ic_custom_trip"];
-        targetPoint.title = [clickableWay getWayName];
-
-        targetPoint.sortIndex = (NSInteger)targetPoint.type;
-        targetPoint.values = @{ @"opened_from_map": @YES };
-
-        return targetPoint;
-//
-//        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-//        targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
-//        targetPoint.title = destination.desc;
-//        
-//        targetPoint.icon = [UIImage imageNamed:destination.markerResourceName];
-//        targetPoint.type = OATargetDestination;
-//        
-//        targetPoint.targetObj = destination;
-//        
-//        targetPoint.sortIndex = (NSInteger)targetPoint.type;
-//        return targetPoint;
-    }
-     */
     return nil;
 }
 

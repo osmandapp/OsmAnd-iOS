@@ -50,7 +50,7 @@ class OAClickableWayAsyncTask: OABaseLoadAsyncTask {
             let safeFileName = clickableWay.getGpxFileName() + GPX_FILE_EXT
             let selectedPoint = clickableWay.getSelectedGpxPoint().getSelectedPoint()
             
-            OAGPXUIHelper.saveAndOpenGpx(name, filepath: safeFileName, gpxFile: gpxFile, selectedPoint: selectedPoint, analysis: analysis, routeKey: nil)
+            OAGPXUIHelper.saveAndOpenGpx(name, filepath: safeFileName, gpxFile: gpxFile, selectedPoint: selectedPoint, analysis: analysis, routeKey: nil, forceAdjustCentering: true)
             return true
         }
         return false

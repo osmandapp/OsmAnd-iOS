@@ -751,6 +751,11 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
 
 + (void) saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(OARouteKey *)routeKey
 {
+    [self.class saveAndOpenGpx:name filepath:filepath gpxFile:gpxFile selectedPoint:selectedPoint analysis:analysis routeKey:routeKey forceAdjustCentering:NO];
+}
+
++ (void) saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(OARouteKey *)routeKey forceAdjustCentering:(BOOL)forceAdjustCentering
+{
     NSString *folderPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:@"Temp"];
     filepath = [folderPath stringByAppendingPathComponent:filepath];
     NSFileManager *manager = NSFileManager.defaultManager;
@@ -772,7 +777,8 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     [trackItem resetAppearanceToOriginal];
     OASGpxTrackAnalysis *trackAnalysis = analysis?: [gpx getAnalysis];
     
-    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:CLLocationCoordinate2DMake(selectedPoint.lat, selectedPoint.lon) openedFromMap:YES];
+    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:CLLocationCoordinate2DMake(selectedPoint.lat, selectedPoint.lon) openedFromMap:NO];
+    state.forceAdjustCentering = forceAdjustCentering;
     
     if (!routeKey)
         routeKey = [OARouteKey fromGpx:gpxFile];

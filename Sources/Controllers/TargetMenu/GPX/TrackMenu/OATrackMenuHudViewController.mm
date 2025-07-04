@@ -600,7 +600,7 @@
 
 - (BOOL)adjustCentering
 {
-    return ![self openedFromMap] && !_wasFirstOpening;
+    return (![self openedFromMap] && !_wasFirstOpening) || (_reopeningState.forceAdjustCentering);
 }
 
 - (BOOL)stopChangingHeight:(UIView *)view

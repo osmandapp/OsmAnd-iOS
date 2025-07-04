@@ -235,7 +235,7 @@
             long segmentStartTime = ((OASWptPt *)points.firstObject).time;
             long segmentEndTime = ((OASWptPt *)points.lastObject).time;
             earliestSegmentStart = MIN(earliestSegmentStart, segmentStartTime);
-            latestSegmentEnd = MAX(latestSegmentEnd,   segmentEndTime);
+            latestSegmentEnd = MAX(latestSegmentEnd, segmentEndTime);
         }
     }
     

@@ -391,8 +391,8 @@
 
 + (BOOL)areLatLonEqual:(CGFloat)lat1 lon1:(CGFloat)lon1 lat2:(CGFloat)lat2 lon2:(CGFloat)lon2
 {
-    BOOL latEqual = (isnan(lat1) && isnan(lat2)) || (abs(lat1 - lat2) < 0.00001);
-    BOOL lonEqual = (isnan(lon1) && isnan(lon2)) || (abs(lon1 - lon2) < 0.00001);
+    BOOL latEqual = (isnan(lat1) && isnan(lat2)) || (abs(lat1 - lat2) < 0.000001);
+    BOOL lonEqual = (isnan(lon1) && isnan(lon2)) || (abs(lon1 - lon2) < 0.000001);
     return latEqual && lonEqual;
 }
 

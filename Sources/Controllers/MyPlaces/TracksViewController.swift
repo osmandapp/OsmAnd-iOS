@@ -653,7 +653,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func getTracksSortMode() -> TracksSortMode {
         let sortModes = settings.getTracksSortModes() ?? [:]
-        if isSmartFolder, let smartFolder = smartFolder {
+        if isSmartFolder, let smartFolder {
             if let sortModeTitle = sortModes[smartFolder.getId()] {
                 return TracksSortMode.getByTitle(sortModeTitle)
             }
@@ -1831,6 +1831,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if let vc = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
             vc.smartFolder = smartFolder
             vc.rootFolder = rootFolder
+            vc.currentFolder = currentFolder
             vc.visibleTracksFolder = visibleTracksFolder
             vc.isRootFolder = false
             vc.isSmartFolder = true

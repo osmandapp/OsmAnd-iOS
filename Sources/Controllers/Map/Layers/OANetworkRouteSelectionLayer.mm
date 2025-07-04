@@ -9,7 +9,6 @@
 #import "OANetworkRouteSelectionLayer.h"
 #import "OANetworkRouteDrawable.h"
 #import "OANetworkRouteSelectionTask.h"
-#import "OAMapSelectionResult.h"
 #import "OARouteKey.h"
 #import "OARouteKey+cpp.h"
 #import "OAPointDescription.h"

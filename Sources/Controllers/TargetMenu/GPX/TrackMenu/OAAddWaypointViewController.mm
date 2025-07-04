@@ -13,6 +13,7 @@
 #import "OATrackMenuHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OAContextMenuLayer.h"
+#import "OAContextMenuLayer+cpp.h"
 #import "OAMapLayers.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"

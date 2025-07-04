@@ -23,10 +23,10 @@
 #import "OADownloadsManager.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWeatherToolbar.h"
-#import "OAMapSelectionResult.h"
 #import "OAPointDescription.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

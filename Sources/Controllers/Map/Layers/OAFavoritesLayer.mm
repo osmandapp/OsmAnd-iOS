@@ -22,11 +22,12 @@
 #import "OAPlugin.h"
 #import "OAAppSettings.h"
 #import "OAAppData.h"
-#import "OAMapSelectionResult.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OASymbolMapLayer+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

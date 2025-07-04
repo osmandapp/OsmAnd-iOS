@@ -116,6 +116,7 @@
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
 #import "OASelectedGPXHelper.h"
+#import "OAContextMenuLayer+cpp.h"
 
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>

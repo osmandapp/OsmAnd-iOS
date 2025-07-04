@@ -25,7 +25,6 @@
 #import "OAApplicationMode.h"
 #import "OAModel3dHelper+cpp.h"
 #import "OAPointDescription.h"
-#import "OAMapSelectionResult.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>

@@ -22,12 +22,12 @@
 #import "OAPluginsHelper.h"
 #import "OAAppSettings.h"
 #import "OAAppData.h"
-#import "OAMapSelectionResult.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmNotePoint.h"
 #import "OAOsmEditsLayer.h"
 #import "Localization.h"
 #import "OAPointDescription.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

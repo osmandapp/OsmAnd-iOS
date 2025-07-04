@@ -17,8 +17,8 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
-#import "OAMapSelectionResult.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <SkCGUtils.h>
 #include <SkImage.h>

@@ -12,9 +12,9 @@ import Foundation
 class OASelectedMapObject: NSObject {
     
     private var object: Any
-    private var provider: OAContextMenuProvider
+    private var provider: OAContextMenuProvider?
     
-    init(mapObject: Any, provider: OAContextMenuProvider) {
+    init(mapObject: Any, provider: OAContextMenuProvider?) {
         self.object = mapObject
         self.provider = provider
         super.init()
@@ -24,7 +24,7 @@ class OASelectedMapObject: NSObject {
         return object
     }
     
-    func getProvider() -> OAContextMenuProvider {
+    func getProvider() -> OAContextMenuProvider? {
         return provider
     }
 } 

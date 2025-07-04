@@ -7,6 +7,7 @@
 //
 
 #import "OAContextMenuLayer.h"
+#import "OAContextMenuLayer+cpp.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
@@ -37,7 +38,6 @@
 #import "OAColors.h"
 #import "OAMapUtils+cpp.h"
 #import "OAMapSelectionHelper.h"
-#import "OAMapSelectionResult.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
@@ -443,7 +443,7 @@
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
     OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
-    CLLocation *pointLatLon = [result getPointLatLon];
+    CLLocation *pointLatLon = result.pointLatLon;
     NSMutableArray<OASelectedMapObject *> *selectedObjects = [result getProcessedObjects];
     
     int64_t objectSelectionThreshold = 0;

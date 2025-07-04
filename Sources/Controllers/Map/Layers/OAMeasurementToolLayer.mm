@@ -17,6 +17,7 @@
 #import "OAPointDescription.h"
 #import "CLLocation+Extension.h"
 #import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>

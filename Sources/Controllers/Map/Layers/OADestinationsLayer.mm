@@ -27,11 +27,12 @@
 #import "OAAppSettings.h"
 #import "OAAppData.h"
 #import "OAPOI.h"
-#import "OAMapSelectionResult.h"
 #import "OAFavoritesHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OAMapSelectionHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OASymbolMapLayer+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>

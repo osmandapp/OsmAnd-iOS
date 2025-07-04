@@ -2663,6 +2663,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     [_mapLayers.poiLayer updateLayer];
 }
 
+- (OAPOILayer *) getMapPoiLayer
+{
+    return _mapLayers.poiLayer;
+}
+
 - (void) onLayersConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{

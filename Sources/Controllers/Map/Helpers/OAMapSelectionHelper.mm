@@ -7,7 +7,6 @@
 //
 
 #import "OAMapSelectionHelper.h"
-#import "OAMapSelectionResult.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
@@ -212,7 +211,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                             }
                             else if (isClickableWay)
                             {
-                                OAClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:[result getPointLatLon] obfMapObject:obfMapObject tags:tags];
+                                OAClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:result.pointLatLon obfMapObject:obfMapObject tags:tags];
                                 [self addClickableWay:result clickableWay:clickableWay];                      //TODO: not tested yet
                             }
                         }

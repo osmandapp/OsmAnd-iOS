@@ -33,10 +33,11 @@
 #import "OAAppSettings.h"
 #import "OAAppData.h"
 #import "OAObservable.h"
-#import "OAMapSelectionResult.h"
 #import "OAOsmNotePoint.h"
 #import "Localization.h"
 #import "OAPointDescription.h"
+#import "OASymbolMapLayer+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

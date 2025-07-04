@@ -8,8 +8,6 @@
 
 #import "OASymbolMapLayer.h"
 
-#include <OsmAndCore/Map/MapMarker.h>
-
 @class OATargetPoint, OAMapObject, OARenderedObject;
 
 @protocol OAChangePositionModeDelegate <NSObject>
@@ -28,8 +26,6 @@
 - (void) enterAddGpxPointMode;
 - (void) quitAddGpxPoint;
 
-- (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker;
-
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;
 
@@ -40,7 +36,6 @@
 - (OATargetPoint *) getTargetPoint:(id)obj;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
 
-- (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;
 - (void) hideRegionHighlight;
 
 - (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(double)lat lon:(double)lon mapObject:(OAMapObject *)mapObject;

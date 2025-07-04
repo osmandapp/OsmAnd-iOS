@@ -17,9 +17,9 @@
 #import "OAAppSettings.h"
 #import "OAAppData.h"
 #import "OAObservable.h"
-#import "OAMapSelectionResult.h"
 #import "OAMapUtils.h"
 #import "OAPointDescription.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include "OAMapillaryTilesProvider.h"
 #include <OsmAndCore/Utilities.h>

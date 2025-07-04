@@ -34,8 +34,8 @@
 #import "OAObservable.h"
 #import "OAColoringType.h"
 #import "OAConcurrentCollections.h"
-#import "OAMapSelectionResult.h"
 #import "OAPointDescription.h"
+#import "OASymbolMapLayer+cpp.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 

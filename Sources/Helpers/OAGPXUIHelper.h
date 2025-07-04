@@ -36,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *) getDescription:(OASGpxDataItem *)gpx;
 
 + (long) getSegmentTime:(OASTrkSegment *)segment;
++ (long)liveTimeSpanForGpx:(OASGpxFile *)gpx withoutGaps:(BOOL)withoutGaps;
 + (double) getSegmentDistance:(OASTrkSegment *)segment;
 
 + (NSArray<OAGpxFileInfo *> *) getSortedGPXFilesInfo:(nullable NSString *)dir

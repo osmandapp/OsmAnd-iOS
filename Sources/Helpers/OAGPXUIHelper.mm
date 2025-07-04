@@ -220,14 +220,14 @@
 + (long)liveTimeSpanForGpx:(OASGpxFile *)gpx withoutGaps:(BOOL)withoutGaps
 {
     long totalActiveDuration = 0;
-    long earliestSegmentStart = LLONG_MAX;
+    long earliestSegmentStart = LONG_MAX;
     long latestSegmentEnd = 0;
     for (OASTrack *track in gpx.tracks)
     {
         for (OASTrkSegment *segment in track.segments)
         {
             NSArray<OASWptPt *> *points = segment.points;
-            if (points.count <= 1)
+            if (points.count < 2)
                 continue;
             
             long segmentDuration = [self getSegmentTime:segment];
@@ -239,7 +239,7 @@
         }
     }
     
-    if (earliestSegmentStart == LLONG_MAX)
+    if (earliestSegmentStart == LONG_MAX)
         return 0;
     
     return withoutGaps ? totalActiveDuration : (latestSegmentEnd - earliestSegmentStart);

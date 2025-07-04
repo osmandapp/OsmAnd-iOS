@@ -228,6 +228,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     UIPanGestureRecognizer* _grElevation;
     UITapGestureRecognizer* _grSymbolContextMenu;
     UILongPressGestureRecognizer* _grPointContextMenu;
+    UILongPressGestureRecognizer* _grImmediateTouch;
     BOOL _startRotating;
     BOOL _startZooming;
     float _startAzimuth;
@@ -240,6 +241,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     NSMutableArray<OATouchLocation *> *_zoomTouchLocations;
     NSMutableArray<OATouchLocation *> *_rotateTouchLocations;
     OATouchLocation *_carPlayMapTouchLocation;
+    
+    NSValue *_lastImmediateTouch;
 
     CLLocationCoordinate2D _centerLocationForMapArrows;
     OsmAnd::PointI _cachedTarget31;
@@ -282,6 +285,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _moveTouchLocations = [NSMutableArray array];
     _zoomTouchLocations = [NSMutableArray array];
     _rotateTouchLocations = [NSMutableArray array];
+    _lastImmediateTouch = nil;
     
     _gpxFilesRec = [NSMutableArray array];
     _gpxFilesTemp = [NSMutableArray array];
@@ -436,6 +440,12 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _grPointContextMenu = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                         action:@selector(pointContextMenuGestureDetected:)];
     _grPointContextMenu.delegate = self;
+    _grPointContextMenu.minimumPressDuration = 0.1;
+    
+    _grImmediateTouch = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                      action:@selector(immediateTouchDetected:)];
+    _grImmediateTouch.delegate = self;
+    _grImmediateTouch.minimumPressDuration = 0.0;
 
     // prevents single tap to fire together with double tap
     [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomIn];
@@ -629,6 +639,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     [_mapView addGestureRecognizer:_grElevation];
     [_mapView addGestureRecognizer:_grSymbolContextMenu];
     [_mapView addGestureRecognizer:_grPointContextMenu];
+    [_mapView addGestureRecognizer:_grImmediateTouch];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication*)application
@@ -854,7 +865,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _mapView.mapAnimator->pause();
     _mapView.mapAnimator->cancelAllAnimations();
 
-    if (gestureRecognizer != _grPointContextMenu)
+    if (gestureRecognizer != _grPointContextMenu && gestureRecognizer != _grImmediateTouch)
     {
         [self postMapGestureAction];
     }
@@ -892,6 +903,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return NO;
     if (gestureRecognizer == _grSymbolContextMenu && otherGestureRecognizer == _grPointContextMenu)
         return NO;
+    if (gestureRecognizer == _grImmediateTouch && otherGestureRecognizer == _grPointContextMenu)
+        return YES;
+    if (gestureRecognizer == _grPointContextMenu && otherGestureRecognizer == _grImmediateTouch)
+        return YES;
     if (gestureRecognizer == _grSymbolContextMenu && otherGestureRecognizer == _grZoomIn)
         return NO;
     if (gestureRecognizer == _grZoomIn && otherGestureRecognizer == _grSymbolContextMenu)
@@ -1596,6 +1611,26 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return [self pointContextMenuGestureDetected:recognizer];
 }
 
+- (BOOL) immediateTouchDetected:(UIGestureRecognizer*)recognizer
+{
+    if (!self.mapViewLoaded)
+        return NO;
+    
+    CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
+    touchPoint.x *= _mapView.contentScaleFactor;
+    touchPoint.y *= _mapView.contentScaleFactor;
+    OsmAnd::PointI touchLocation;
+    [_mapView convert:touchPoint toLocation:&touchLocation];
+    
+    double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
+    double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+    
+    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(lat, lon);
+    _lastImmediateTouch = [NSValue valueWithBytes:&coordinate objCType:@encode(CLLocationCoordinate2D)];
+    
+    return YES;
+}
+
 - (BOOL) pointContextMenuGestureDetected:(UIGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
@@ -1635,9 +1670,23 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated:nil];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
-        
+
         // Handle route planning touch events
-        [_mapLayers.routePlanningLayer onMapPointSelected:CLLocationCoordinate2DMake(lat, lon) longPress:longPress];
+        if (longPress)
+        {
+            _lastImmediateTouch = nil;
+            [_mapLayers.routePlanningLayer onMapPointSelected:CLLocationCoordinate2DMake(lat, lon) longPress:YES];
+        }
+        else
+        {
+            if (_lastImmediateTouch)
+            {
+                CLLocationCoordinate2D coordinate;
+                [_lastImmediateTouch getValue:&coordinate];
+                [_mapLayers.routePlanningLayer onMapPointSelected:coordinate longPress:NO];
+                _lastImmediateTouch = nil;
+            }
+        }
         return YES;
     }
     return NO;

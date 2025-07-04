@@ -2657,3 +2657,6 @@
 "detailed_track_guidance_description" = "OsmAnd combinarà la vostra traça a les carreteres properes per millorar la indicació de maniobres.";
 "auto_25_chars_route_kr" = "Manteniu-vos a la dreta";
 "no_photos_available_descr" = "Encara no s\'ha afegit cap foto d\'usuaris per aquest lloc";
+"osm_live_payment_renews_3_years" = "Renovació cada tres anys";
+"years_3" = "Tres anys";
+"three_years_subscription" = "Subscripció de tres anys";

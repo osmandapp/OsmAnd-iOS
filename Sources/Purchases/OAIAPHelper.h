@@ -194,6 +194,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 + (BOOL)isMapsSubscription:(OASubscription *)subscription;
 + (BOOL)isFullVersion:(OAProduct *)product;
 + (BOOL)isVehicleMetricsPurchased;
++ (BOOL)isVehicleMetricsAvailable;
 
 + (EOAPurchaseOrigin)getPurchaseOriginByPlatform:(NSString *)platform;
 

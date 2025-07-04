@@ -518,7 +518,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 + (void) showChoosePlanScreenWithFeature:(OAFeature * _Nullable)feature navController:(UINavigationController *)navController
 {
     OAChoosePlanViewController *choosePlanViewController =
-            [[OAChoosePlanViewController alloc] initWithFeature:feature ? feature : OAFeature.OSMAND_PRO_FEATURES.firstObject];
+            [[OAChoosePlanViewController alloc] initWithFeature:feature ?: OAFeature.OSMAND_PRO_FEATURES.firstObject];
     [self showImpl:choosePlanViewController navController:navController];
 }
 

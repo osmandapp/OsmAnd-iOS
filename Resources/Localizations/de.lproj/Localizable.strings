@@ -2760,7 +2760,7 @@
 "generate_hillshade_from_3d_maps" = "Schummerungs-Rasterkarten aus 3D-Karten erzeugen";
 "disable_vertex_hillshade_3d" = "Eckpunkt-Schummerung in 3D deaktivieren";
 "test_heightmap" = "Test-Höhenkarte";
-"generate_slope_from_3d_maps" = "Erzeugen von Hangrasterkarten aus 3D-Karten";
+"generate_slope_from_3d_maps" = "Hangrasterkarten aus 3D-Karten erzeugen";
 "perform_oauth_authorization" = "Anmeldung über OAuth";
 "user_name" = "OSM-Benutzername";
 "av_notes_photo_widget_desc" = "Durch Tippen auf das Widget kann ein Foto aufgenommen werden.";

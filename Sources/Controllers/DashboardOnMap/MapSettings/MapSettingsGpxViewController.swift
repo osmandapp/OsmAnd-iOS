@@ -308,46 +308,46 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
       
         let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
             guard let self else { return nil }
-            let openAction = UIAction(title: localizedString("shared_string_open_track"), image: UIImage.icCustomOverview) { _ in
+            let openAction = UIAction(title: localizedString("shared_string_open_track"), image: .icCustomOverview) { _ in
                 self.onTrackOpenClicked(track: trackItem)
             }
-            let appearenceAction = UIAction(title: localizedString("shared_string_appearance"), image: UIImage.icCustomAppearanceOutlined) { _ in
+            let appearenceAction = UIAction(title: localizedString("shared_string_appearance"), image: .icCustomAppearanceOutlined) { _ in
                 self.onTrackAppearenceClicked(track: trackItem)
             }
-            let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: UIImage.icCustomNavigationOutlined) { _ in
+            let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { _ in
                 self.onTrackNavigationClicked(track: trackItem)
             }
             let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [openAction, appearenceAction, navigationAction])
             
-            let analyzeAction = UIAction(title: localizedString("gpx_analyze"), image: UIImage.icCustomGraph) { _ in
+            let analyzeAction = UIAction(title: localizedString("gpx_analyze"), image: .icCustomGraph) { _ in
                 self.onTrackAnalyzeClicked(track: trackItem)
             }
             let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [analyzeAction])
             
-            let shareAction = UIAction(title: localizedString("shared_string_share"), image: UIImage.icCustomExportOutlined) { _ in
+            let shareAction = UIAction(title: localizedString("shared_string_share"), image: .icCustomExportOutlined) { _ in
                 let cellScreenArea = self.view.convert(self.tableView.rectForRow(at: indexPath), from: self.tableView)
                 self.onTrackShareClicked(track: trackItem, touchPointArea: cellScreenArea)
             }
-            let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: UIImage.icCustomUploadToOpenstreetmapOutlined) { _ in
+            let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined) { _ in
                 self.onTrackUploadToOsmClicked(track: trackItem)
             }
             let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [shareAction, uploadToOsmAction])
             
-            let editAction = UIAction(title: localizedString("shared_string_edit"), image: UIImage.icCustomTrackEdit) { _ in
+            let editAction = UIAction(title: localizedString("shared_string_edit"), image: .icCustomTrackEdit) { _ in
                 self.onTrackEditClicked(track: trackItem)
             }
-            let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage.icCustomCopy) { _ in
+            let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: .icCustomCopy) { _ in
                 self.onTrackDuplicateClicked(track: trackItem)
             }
-            let renameAction = UIAction(title: localizedString("shared_string_rename"), image: UIImage.icCustomEdit) { _ in
+            let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { _ in
                 self.onTrackRenameClicked(track: trackItem)
             }
-            let moveAction = UIAction(title: localizedString("shared_string_move"), image: UIImage.icCustomFolderMoveOutlined) { _ in
+            let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { _ in
                 self.onTrackMoveClicked(track: trackItem)
             }
             let fourthButtonsSection = UIMenu(title: "", options: .displayInline, children: [editAction, duplicateAction, renameAction, moveAction])
             
-            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage.icCustomTrashOutlined, attributes: .destructive) { _ in
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { _ in
                 self.onTrackDeleteClicked(track: trackItem)
             }
             let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])

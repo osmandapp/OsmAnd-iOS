@@ -283,6 +283,7 @@ extension DeviceHelper {
                         debugPrint("updateConnected success | \(device.deviceServiceName) | \(device.deviceName)")
                         device.addObservers()
                         device.notifyRSSI()
+
                         setDevicePaired(device: device, isPaired: true)
                         connectedDevices.append(device)
                         discoverServices(device: device)

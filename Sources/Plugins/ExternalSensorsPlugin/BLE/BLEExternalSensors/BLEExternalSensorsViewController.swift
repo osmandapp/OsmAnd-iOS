@@ -88,7 +88,6 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-
         if DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS) {
             configurePairedDevices()
         } else {
@@ -231,6 +230,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                                                queue: nil) { [weak self] _ in
             guard let self else { return }
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
+
             guard DeviceHelper.shared.hasPairedDevices(excludingType: .OBD_VEHICLE_METRICS) else { return }
 
             configureStartState()

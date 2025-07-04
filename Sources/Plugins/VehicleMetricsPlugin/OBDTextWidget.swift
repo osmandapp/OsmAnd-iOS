@@ -65,6 +65,7 @@ class OBDTextWidget: OASimpleWidget {
     
     @discardableResult override func updateInfo() -> Bool {
         guard let widgetType, widgetType.isPurchased(), let plugin, let widgetComputer else { return false }
+        updateVisibility(plugin.isEnabled())
         let subtext = plugin.getWidgetUnit(widgetComputer.type)
         let textData = plugin.getWidgetValue(computerWidget: widgetComputer)
         if textData != cacheTextData || subtext != cacheSubTextData {

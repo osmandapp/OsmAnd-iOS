@@ -56,11 +56,13 @@ final class SensorTextWidget: OASimpleWidget {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func updateInfo() -> Bool {
+    @discardableResult override func updateInfo() -> Bool {
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
             applyDeviceId()
         }
         updateSensorData(sensor: getCurrentSensor())
+        guard let plugin else { return false }
+        updateVisibility(plugin.isEnabled())
         return false
     }
     

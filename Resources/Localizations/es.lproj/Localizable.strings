@@ -3649,3 +3649,5 @@
 "auto_25_chars_route_tshr" = "Gire bruscamente a la derecha";
 "no_photos_available_descr" = "Aún no se han añadido fotos de usuarios a esta ubicación";
 "three_months_subscription" = "Suscripción trimestral";
+"ltr_or_rtl_combine_via_per" = "%@ por %@";
+"shared_string_litres" = "litres";

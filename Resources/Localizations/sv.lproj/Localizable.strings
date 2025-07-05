@@ -1048,7 +1048,7 @@
 "edit_tilesource_elliptic_tile" = "Elliptisk Mercator-projektion";
 "pseudo_mercator_projection" = "Pseudo-Mercator-projektion";
 "sqlite_db_file" = "SQLiteDB-fil";
-"one_image_per_tile" = "En bildfil per raster-ruta";
+"one_image_per_tile" = "En bildfil per kartruta";
 "res_zoom_levels_desc" = "Parametern påverkar kartvisningen olika om den används som huvudkarta eller över-/underläggskarta.\n\nHuvudkarta: visning är begränsad helt till angivna zoomnivåer.\n\nÖver-/Underlägg: läses in och visas som vanligt inom zoomnivåerna, men skalas upp/ner utanför angivna värden.";
 "res_expire_time_desc" = "Förfallotid i minuter. Cachelagrade raster-rutor läses om efter angiven tid. Lämna tomt om du inte behöver läsa om rutor för den här källan.\nEn dag är 1440 minuter.\nEn vecka är 10 080 minuter.\nEn månad är ca 43 200 minuter.";
 "res_name_warning" = "Filnamn kan inte vara tomt";
@@ -1057,7 +1057,7 @@
 "res_expire_warning" = "Förfallotid behöver vara ett tal mellan 0 och 10000000";
 "res_zoom_invalid_value" = "Zoomvärden behöver vara inom intervallet 1 - 22";
 "res_offlineSQL_URL_warning" = "Stöds inte för denna karttyp";
-"clear_tiles_warning" = "Utförandet av dessa ändringar kommer att radera den cachade datan för denna kartrutekälla.";
+"clear_tiles_warning" = "Utförandet av dessa ändringar kommer att radera den cachade datan för denna kartrutekälla";
 "welmode_download_maps" = "Hämta kartor";
 "srtm_unit_format" = "Måttenhet för höjdkurvor";
 "srtm_download_single_help_message" = "Vänligen välj variant. Du kommer behöva ladda ner filen på nytt för att ändra formatet.";
@@ -1161,7 +1161,7 @@
 "mapillary_descr" = "Online gatunivåbilder för alla. Upptäck platser, samarbeta, fånga världen.";
 "mapillary_turn_on_widget" = "Aktivera Mapillary widgeten";
 "mapillary_turn_on_widget_descr" = "Ger dig möjlighet att snabbt och enkelt bidra till Mapillary";
-"mapillary_menu_title_tile_cache" = "Tile-cache";
+"mapillary_menu_title_tile_cache" = "Cache för kartrutor";
 "shared_string_reload" = "Uppdatera";
 "show_more" = "Visa mer";
 "mapil_reload_cache" = "Ladda om tile-cachen för att se senaste datan";

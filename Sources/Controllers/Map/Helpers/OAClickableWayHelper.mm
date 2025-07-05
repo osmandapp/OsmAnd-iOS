@@ -203,19 +203,30 @@
     {
         double x = [xPoints[i] doubleValue];
         double y = [yPoints[i] doubleValue];
-        [bbox expandLeft:x top:y right:x bottom:y];
+        
+        // [bbox expandLeft:x top:y right:x bottom:y];  // Kotlin func runs with bug. Sometimes it swaps left-right, or top-bottom;
+        [self expandBbox:bbox left:x top:y right:x bottom:y];
     }
-//    return bbox;
-    
-    
-    // TODO: Fix and delete later
-    // Strange bug. Function from lib expandLeft(...) swaps top and bottom values.
-    OASKQuadRect *bboxFixed = [[OASKQuadRect alloc] init];
-    bboxFixed.top = bbox.bottom;
-    bboxFixed.bottom = bbox.top;
-    bboxFixed.left = bbox.left;
-    bboxFixed.right = bbox.right;
-    return bboxFixed;
+    return bbox;
+}
+
+- (void) expandBbox:(OASKQuadRect *)bbox left:(double)left top:(double)top right:(double)right bottom:(double)bottom
+{
+    BOOL hasInitialState = bbox.left == 0 && bbox.top == 0 && bbox.right == 0 && bbox.bottom == 0;
+    if (hasInitialState)
+    {
+        bbox.left = left;
+        bbox.top = top;
+        bbox.right = right;
+        bbox.bottom = bottom;
+    }
+    else
+    {
+        bbox.left = left <= right ? min(left, bbox.left) : max(left, bbox.left);
+        bbox.right = left <= right ? max(right, bbox.right) : min(right, bbox.right);
+        bbox.top = top <= bottom ? min(top, bbox.top) : max(top, bbox.top);
+        bbox.bottom = top <= bottom ? max(bottom, bbox.bottom) : min(bottom, bbox.bottom);
+    }
 }
 
 - (BOOL) isClickableWayTags:(NSString *)name tags:(NSDictionary<NSString *, NSString *> *)tags

@@ -3702,4 +3702,7 @@
 "obd_battery_voltage" = "Napětí baterie";
 "obd_engine_coolant_temp" = "Teplota chladicí kapaliny";
 "remaining_fuel" = "Zbývající palivo";
-"remaining_fuel_description" = "Zobrazuje zbývající množství paliva v nádrži vozidla.";
+"remaining_fuel_description" = "Zobrazuje zbývající množství paliva v nádrži vozidla";
+"obd_fuel_consumption" = "Spotřeba paliva";
+"obd_fuel_consumption_desc" = "Zobrazuje míru spotřeby paliva v motoru vypočítanou na základě zbývajícího paliva, velikosti nádrže a ujeté vzdálenosti podle GPS.";
+"obd_plugin_description" = "Sledování klíčových parametrů vozidla pomocí protokolu OBD-II. Přístup k datům včetně:\n- otáčky motoru, doba chodu motoru, vypočtené zatížení motoru.\n- Spotřeba paliva, Tlak paliva, Zbývající palivo.\n- Teplota sání, Teplota okolí, Teplota chladicí kapaliny, Teplota motorového oleje.\n- Rychlost vozidla, Poloha škrticí klapky, Napětí baterie.";

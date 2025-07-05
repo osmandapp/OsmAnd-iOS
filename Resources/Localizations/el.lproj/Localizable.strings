@@ -554,7 +554,7 @@
 "routing_attr_width_name" = "Πλάτος";
 "routeInfo_roadClass_name" = "Τύπος δρόμου";
 "routeInfo_winter_ice_road_name" = "Δρόμοι του Χειμώνα και παγωμένοι δρόμοι";
-"routing_attr_piste_type_sled_name" = "Έλκηθρο";
+"routing_attr_piste_type_sled_name" = "Έλκηθρο κατάβασης";
 "routing_attr_height_obstacles_description" = "Ο προβλεπόμενος χρόνος ταξιδιού θα αντανακλά αντίκτυπο υψομέτρου. Η προτίμηση δρομολόγησης μπορεί να βοηθήσει στην αποφυγή απότομων ανηφοριών:";
 "rendering_attr_hmRendered_description" = "Αύξηση λεπτομέρειας χάρτη.";
 "rendering_attr_appMode_name" = "Τρόπος απεικόνισης";
@@ -631,7 +631,7 @@
 "rendering_attr_shareTaxiRoutes_name" = "Διαδρομές αγοραίου";
 "rendering_attr_surface_grass_name" = "Χορτάρι";
 "rendering_attr_contourColorScheme_description" = "Χρωματικοί συνδυασμοί ισοϋψών γραμμών";
-"rendering_attr_piste_type_sled_name" = "Έλκηθρο";
+"rendering_attr_piste_type_sled_name" = "Έλκηθρο κατάβασης";
 "routing_attr_allow_skating_only_name" = "Να επιτρέπονται μόνο διαδρομές με πατίνια";
 "routing_attr_weight_description" = "Καθορίσετε το επιτρεπόμενο όριο βάρους του οχήματος στις διαδρομές.";
 "rendering_attr_highway_class_footway_name" = "Πεζόδρομος";
@@ -702,7 +702,7 @@
 "rendering_attr_smoothness_horrible_name" = "Απαίσιο";
 "rendering_attr_surface_fine_gravel_name" = "Λεπτό χαλίκι";
 "rendering_attr_currentTrackWidth_name" = "πλάτος GPX";
-"rendering_attr_piste_type_sleigh_name" = "Έλκηθρο";
+"rendering_attr_piste_type_sleigh_name" = "Ελκούμενο έλκηθρο";
 "rendering_attr_surface_stone_name" = "Πέτρα";
 "rendering_value_germanRoadAtlas_name" = "Γερμανικός άτλαντας δρόμων";
 "rendering_attr_ice_road_name" = "Παγωμένος δρόμος";
@@ -1349,7 +1349,7 @@
 "altitude_descent" = "Κατηφόρα";
 "debugging_and_development" = "Ανάπτυξη του OsmAnd";
 "osm_live_subscriptions" = "Συνδρομές";
-"osmand_development_plugin_description" = "Ρυθμίσεις για τα χαρακτηριστικά ανάπτυξης και αποσφαλμάτωσης όπως απόδοση απεικόνισης, ή η φωνητική καθοδήγηση. Αυτές οι ρυθμίσεις προορίζονται για τους προγραμματιστές και δεν χρειάζονται στην κανονική χρήση της εφαρμογής.";
+"osmand_development_plugin_description" = "Παρέχει λειτουργικότητα για δοκιμή και αποσφαλμάτωση του OsmAnd: προσομοίωση διαδρομών πλοήγησης, παρακολούθηση της απεικόνισης οθόνης, έλεγχος απόδοσης, κλπ. Αυτό το πρόσθετο δεν απαιτείται για κανονική χρήση της εφαρμογής.";
 "daily_map_updates" = "Ωριαίες ενημερώσεις χαρτών";
 "restore_purchases" = "Επαναφορά αγορών";
 "private_access_routing_req" = "Ο προορισμός σας βρίσκεται σε ιδιωτική περιοχή. Να επιτραπεί η πρόσβαση σε ιδιωτικούς δρόμους για αυτό το ταξίδι.";
@@ -2768,3 +2768,6 @@
 "osm_live_payment_renews_3_years" = "Ανανεώνεται κάθε τρία έτη";
 "us_gallons" = "Γαλόνια ΗΠΑ";
 "fuel_tank_capacity_description" = "Εισάγετε την χωρητικότητα του ρεζερβουάρ για επακριβή παρακολούθηση των επιπέδων καυσίμου και κατανάλωσης";
+"quick_action_toggle_preference" = "Ένας διακόπτης για αλλαγή της προτίμησης.";
+"kpa_unit" = "kPa";
+"obd_searching_text_description" = "Παρακαλούμε κρατήστε την συσκευή σας κοντά στον σαρωτή. Βεβαιωθείτε ότι η μηχανή του οχήματος είναι σε λειτουργία.";

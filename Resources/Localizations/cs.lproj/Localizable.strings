@@ -3712,3 +3712,9 @@
 "connect_obd_instructions_step" = "1. Připojte snímač k portu OBD-II vašeho vozidla.\n\n2. Zapněte motor vozidla\n\n3. 4. Povolte na svém zařízení funkci Bluetooth\n\n4. Klepněte na „%@“ a vyberte ze seznamu svůj snímač.";
 "obd_bluetooth_off_description" = "Zapněte funkci Bluetooth a vyhledejte a připojte snímače.";
 "obd_searching_text_description" = "Držte zařízení v blízkosti snímače. Ujistěte se, že motor vozidla běží.";
+"obd_searching_text" = "Vyhledávání snímačů";
+"obd_nothing_found_text" = "Nebyly nalezeny žádné snímače";
+"obd_nothing_found_description" = "Zkontrolujte prosím následující:\n- Zkontrolujte, zda je zapnutý Bluetooth\n- motor vozidla je spuštěný\n- ujistěte se, že je vaše zařízení v dosahu snímače.";
+"obd_vin" = "VIN";
+"obd_vin_desc" = "VIN kód přes OBD";
+"obd_vehicle_info" = "Informace o vozidle";

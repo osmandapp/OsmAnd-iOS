@@ -3693,7 +3693,7 @@
 "shared_string_default_view" = "Подразумевани приказ";
 "dd_ddddd_format" = "DD.DDDDD°";
 "type_of_activity" = "Тип активности";
-"display_priority" = "";
+"display_priority" = "Приоритет приказа";
 "map_widget_route_information_desc" = "Приказује процењено време доласка, преостало време путовања и удаљеност за тренутну навигациону руту.";
 "preview_next_turn" = "Преглед следећег скретања";
 "preview_next_turn_descr" = "Аутоматски ротира мапу ради прегледа следећег скретања или маневра";

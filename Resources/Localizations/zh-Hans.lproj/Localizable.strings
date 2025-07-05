@@ -2726,3 +2726,4 @@
 "external_device_characteristic_cadence" = "踏频";
 "obd_vin_desc" = "通过车载诊断系统获取车辆识别号码";
 "app_profile" = "配置文件";
+"shared_string_open_street_map" = "开放街道地图";

@@ -1027,3 +1027,5 @@
 "preview_next_turn" = "Pregled sljedećeg skretanja";
 "track_show_start_finish_icons" = "Prikaži ikone početka i kraja";
 "poi_filter_fuel" = "Gorivo";
+"icon_group_nautical" = "Pomorstvo";
+"icon_group_industrial" = "Industrija";

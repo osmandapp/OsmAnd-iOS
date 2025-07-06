@@ -1137,7 +1137,7 @@
 "wiki_menu_download_descr" = "Απαιτούνται πρόσθετοι χάρτες για να προβάλετε τα ΣΕ της Wikipedia στον χάρτη.";
 "gpxup_trackable" = "Ιχνηλάσιμο";
 "welmode_download_maps" = "Λήψη χαρτών";
-"navigate_point_olc" = "Κώδικας Ανοιχτής Τοποθεσίας (OLC)";
+"navigate_point_olc" = "Κωδικός Ανοιχτής Τοποθεσίας (OLC)";
 "some_articles_may_not_available_in_lang" = "Μερικά άρθρα της Wikipedia μπορεί να μην είναι διαθέσιμα στη γλώσσα σας.";
 "added_profiles" = "Κατατομές (προφίλ) που προστέθηκαν";
 "navigate_point_easting" = "προς Ανατολάς";
@@ -2373,7 +2373,7 @@
 "plugin_popup_weather_ask" = "Παρακαλούμε ενεργοποιήστε το πρόσθετο Καιρού";
 "restore_from_osmand_cloud" = "Επαναφορά από OsmAnd Cloud";
 "pro_features" = "Δυνατότητες Pro";
-"intro_promo" = "Παγκόσμιος χάρτης εκτός σύνδεσης";
+"intro_promo" = "Παγκόσμιοι χάρτες εκτός σύνδεσης";
 "shared_string_hide_from_map" = "Απόκρυψη από το χάρτη";
 "map_settings_overunder" = "Επικάλυψη / Υπόστρωμα";
 "shared_string_analysis" = "Αναλυτικά";
@@ -2810,4 +2810,11 @@
 "sett_deg_min" = "Μοίρες και λεπτά";
 "sett_arr" = "Βέλη χάρτη";
 "sett_units" = "Μονάδες";
-"units_of_speed" = "Μονάδες μέτρησης ταχύτητας";
+"units_of_speed" = "Μονάδες ταχύτητας";
+"do_not_rotate" = "Μην περιστρέφεις";
+"allow_3D_view" = "2.5D όψη";
+"intro_download" = "Λήψη\nχάρτη";
+"intro_welcome" = "Καλώς ήρθατε στο\nOsmAnd";
+"intro_placeholder" = "εισάγετε το όνομα της περιοχής σας";
+"navigate_point_format_OLC" = "Κωδικός Ανοιχτής Τοποθεσίας (OLC)";
+"navigate_point_format_UTM" = "UTM";

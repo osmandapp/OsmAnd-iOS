@@ -206,7 +206,7 @@
     }
 
     NSMutableArray<OAGPXTableCellData *> *subjects = [NSMutableArray array];
-    QMap<QString, QString> tagsToGpx = routeKey.routeKey.tagsToGpx();
+    QMap<QString, QString> tagsToGpx = routeKey.routeKey.tagsMap();
     _nameTags = [[NSMutableArray alloc] init];
     BOOL hasName = NO;
     for (auto i = tagsToGpx.cbegin(), end = tagsToGpx.cend(); i != end; ++i)
@@ -216,10 +216,20 @@
         if ([routeTagKey hasPrefix:@"osmc"]
             || [routeTagKey isEqualToString:@"name"]
             || ([routeTagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
+            || ([routeTagKey isEqualToString:@"way_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
             || [routeTagKey isEqualToString:@"color"]
             || [routeTagKey hasPrefix:@"osmand"]
             || [routeTagKey isEqualToString:@"type"])
             continue;
+        
+        if ([routeTagKey containsString:@":"] && ![routeTagKey hasPrefix:@"name"] && ![routeTagKey hasPrefix:@"ref"])
+        {
+            NSString *mainTag = [routeTagKey componentsSeparatedByString:@":"][1];
+            if (tagsToGpx.contains(QString::fromNSString(mainTag)))
+            {
+                continue;   // skip synthetic xxx:ref if ref exists (piste:ref, etc)
+            }
+        }
         
         OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
         NSString *routeTagTitle = poiType ? poiType.nameLocalized : [OAPOIHelper.sharedInstance getPhraseByName:routeTagKey];
@@ -262,9 +272,9 @@
         {
             routeTagTitle = OALocalizedString(@"shared_string_symbol");
         }
-        else if ([routeTagKey isEqualToString:@"relation_id"])
+        else if ([routeTagKey isEqualToString:@"relation_id"] || [routeTagKey isEqualToString:@"way_id"])
         {
-            routeTagTitle = OALocalizedString(@"osm_id");
+            routeTagTitle = OALocalizedString(@"shared_string_osm_id");
         }
         else if ([[OAPOIHelper sharedInstance] isNameTag:routeTagKey])
         {
@@ -291,7 +301,11 @@
     [subjects sortUsingComparator:^NSComparisonResult(OAGPXTableCellData * _Nonnull cellData1, OAGPXTableCellData * _Nonnull cellData2) {
         int order1 = [cellData1.values[@"order"] intValue];
         int order2 = [cellData2.values[@"order"] intValue];
-        return [OAUtilities compareInt:order1 y:order2];
+        
+        if (order1 != order2)
+            return [OAUtilities compareInt:order1 y:order2];
+        
+        return [cellData1.title compare:cellData2.title];
     }];
 
     [infoSectionData.subjects addObjectsFromArray:subjects];

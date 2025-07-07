@@ -197,7 +197,7 @@
                 _reopeningState.routeKey = routeKey;
             _isNewRoute = _reopeningState.routeKey != nil
                 && [[self.doc.path stringByDeletingLastPathComponent].lastPathComponent isEqualToString:@"Temp"];
-            _routeKey = _reopeningState.routeKey ?: [OARouteKey fromGpx:self.doc];
+            _routeKey = _reopeningState.routeKey ?: [OARouteKey fromGpxFile:self.doc];
             if (_routeKey && !_reopeningState.trackIcon)
             {
                 OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:_routeKey];
@@ -1620,7 +1620,7 @@
     self.gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
     self.gpx.dataItem = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.path];
 
-    _routeKey = [OARouteKey fromGpx:self.doc];
+    _routeKey = [OARouteKey fromGpxFile:self.doc];
     _isNewRoute = NO;
     [self.mapViewController hideTempGpxTrack];
     self.isShown = NO;

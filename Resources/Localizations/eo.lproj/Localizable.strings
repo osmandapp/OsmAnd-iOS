@@ -2391,7 +2391,7 @@
 "wall_height" = "Alto de muro";
 "route_recalculation_dist_title" = "Minimuma distanco por rekalkuli kurson";
 "avoid_pt_types" = "Eviti transportilojn…";
-"osm_id" = "OSM-identigilo";
+"shared_string_osm_id" = "OSM-identigilo";
 "shared_string_millimeters" = "Milimetroj";
 "edit_tilesource_maxzoom" = "Maksimuma skal-nivelo";
 "when_exceeded" = "Kiam superigita";

@@ -3366,7 +3366,7 @@
 "location_radius" = "Raza de localizare";
 "resting_position_icon" = "Pictograma poziției de odihnă";
 "shared_string_author" = "Autor";
-"osm_id" = "ID OSM";
+"shared_string_osm_id" = "ID OSM";
 "shared_string_relief_3d" = "Relief 3D";
 "offline_wikivoyage" = "Wikivoyage offline";
 "tracker_item" = "OsmAnd monitor";

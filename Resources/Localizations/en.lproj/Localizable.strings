@@ -4011,7 +4011,7 @@
 "track_3d_empty_view_title" = "3D Track view";
 "track_3d_empty_view_description" = "Explore the track in interactive 3D! Visualize height, speed, and more directly on the map.";
 
-"osm_id" = "OSM ID";
+"shared_string_osm_id" = "OSM ID";
 "shared_string_millimeters" = "Millimeters";
 
 "shared_string_speedometer" = "Speedometer";

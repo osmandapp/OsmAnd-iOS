@@ -3580,7 +3580,7 @@
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
 "product_title_plus" = "Maps+";
 "short_min" = "m";
-"osm_id" = "OSM ID";
+"shared_string_osm_id" = "OSM ID";
 "shared_a_z" = "A - Z";
 "huawei_appgallery" = "Huawei AppGallery";
 "mtb_imba_full" = "International Mountain Bicycling Association";

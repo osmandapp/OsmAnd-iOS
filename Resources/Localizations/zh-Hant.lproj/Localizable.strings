@@ -3568,7 +3568,7 @@
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "mapillary_item" = "OsmAnd + Mapillary";
-"osm_id" = "OSM 帳號";
+"shared_string_osm_id" = "OSM 帳號";
 "help_article_navigation_auto_car_name" = "Android Auto";
 "help_article_navigation_car_play_name" = "CarPlay";
 "app_mode_ufo" = "UFO";

@@ -784,7 +784,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     state.forceAdjustCentering = forceAdjustCentering;
     
     if (!routeKey)
-        routeKey = [OARouteKey fromGpx:gpxFile];
+        routeKey = [OARouteKey fromGpxFile:gpxFile];
     
     if (routeKey)
     {

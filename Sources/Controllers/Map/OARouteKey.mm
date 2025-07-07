@@ -20,22 +20,36 @@ static NSDictionary<NSString *, NSString *> *SHIELD_TO_OSMC = @{
     @"shield_text": @"osmc_text"
 };
 
+static NSString *NETWORK_ROUTE_TYPE = @"type";
+
 
 @interface OARouteKey()
 
 @property (nonatomic) OsmAnd::NetworkRouteKey routeKey;
+@property (nonatomic) OsmAnd::NetworkRouteKey type;
 
 @end
 
 
 @implementation OARouteKey
 
-- (instancetype) initWithKey:(const OsmAnd::NetworkRouteKey &)key
+- (instancetype) initWithKey:(const OsmAnd::NetworkRouteKey &)key type:(const OsmAnd::OsmRouteType *)type
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _routeKey = key;
         _localizedTitle = [self getLocalizedTitle];
+        _type = type;
+    }
+    return self;
+}
+
+- (instancetype) initWithKey:(const OsmAnd::NetworkRouteKey &)key
+{
+    self = [self initWithKey:key type:OsmAnd::OsmRouteType::UNKNOWN];
+    if (self)
+    {
     }
     return self;
 }
@@ -61,24 +75,33 @@ static NSDictionary<NSString *, NSString *> *SHIELD_TO_OSMC = @{
     return self.routeKey.operator int();
 }
 
-+ (OARouteKey *) fromGpx:(OASGpxFile *)gpx
++ (OARouteKey *) fromGpxFile:(OASGpxFile *)gpxFile
 {
-    OASMutableDictionary<NSString *,NSString *> * networkRouteKeyTags = gpx.networkRouteKeyTags;
-    QMap<QString, QString> tags;
-    for (NSString *key in networkRouteKeyTags)
-        tags.insert(QString::fromNSString(key), QString::fromNSString(networkRouteKeyTags[key]));
-    
-    auto rk = OsmAnd::NetworkRouteKey::fromGpx(tags);
-    if (rk)
+    OASMutableDictionary<NSString *,NSString *> * networkRouteKeyTags = gpxFile.networkRouteKeyTags;
+    NSString *type = networkRouteKeyTags[NETWORK_ROUTE_TYPE];
+    if (!NSStringIsEmpty(type))
     {
-        auto key = *rk;
-        return [[OARouteKey alloc] initWithKey:key];
+        auto routeType = OsmAnd::OsmRouteType::getByTag(QString::fromNSString(type));
+        if (routeType)
+        {
+            const auto routeKey = std::make_shared<OsmAnd::NetworkRouteKey>(routeType);
+            routeKey->type = routeType;
+            for (NSString *key in networkRouteKeyTags)
+            {
+                routeKey->addTag(QString::fromNSString(key), QString::fromNSString(networkRouteKeyTags[key]));
+            }
+            
+            if (routeKey)
+            {
+                return [[OARouteKey alloc] initWithKey:*routeKey type:routeType];
+            }
+        }
     }
     
-    OASMetadata * metadata = gpx.metadata;
+    OASMetadata * metadata = gpxFile.metadata;
     NSMutableDictionary<NSString *, NSString *> *combinedExtensionsTags = [NSMutableDictionary new];
     [combinedExtensionsTags addEntriesFromDictionary:[metadata getExtensionsToRead]];
-    [combinedExtensionsTags addEntriesFromDictionary:[gpx getExtensionsToRead]];
+    [combinedExtensionsTags addEntriesFromDictionary:[gpxFile getExtensionsToRead]];
     return [self.class fromShieldTags:combinedExtensionsTags];
 }
 
@@ -105,18 +128,19 @@ static NSDictionary<NSString *, NSString *> *SHIELD_TO_OSMC = @{
                 shieldTags[osmc] = value;
             }
         }
-            
-        QMap<QString, QString> tags;
-        tags.insert("type", OsmAnd::OsmRouteType::UNKNOWN->name);
+        
+        const auto routeType = OsmAnd::OsmRouteType::UNKNOWN;
+        const auto routeKey = std::make_shared<OsmAnd::NetworkRouteKey>(routeType);
+        routeKey->type = routeType;
         
         for (NSString *key in shieldTags)
-            tags.insert(QString::fromNSString(key), QString::fromNSString(shieldTags[key]));
-        
-        auto rk = OsmAnd::NetworkRouteKey::fromGpx(tags);
-        if (rk)
         {
-            auto key = *rk;
-            return [[OARouteKey alloc] initWithKey:key];
+            routeKey->addTag(QString::fromNSString(key), QString::fromNSString(shieldTags[key]));
+        }
+        
+        if (routeKey)
+        {
+            return [[OARouteKey alloc] initWithKey:*routeKey type:routeType];
         }
     }
     
@@ -133,7 +157,7 @@ static NSDictionary<NSString *, NSString *> *SHIELD_TO_OSMC = @{
 
 - (NSString *)getLocalizedTitle
 {
-    QMap<QString, QString> tagsToGpx = _routeKey.tagsToGpx();
+    QMap<QString, QString> tagsToGpx = _routeKey.tagsMap();
     NSString *key = [NSString stringWithFormat:@"name:%@", [OAAppSettings sharedManager].settingPrefMapLanguage.get];
     NSString *result = tagsToGpx.value(QString::fromNSString(key)).toNSString();
     return result;

@@ -14,7 +14,7 @@
 
 @property (nonatomic, readonly) NSString *localizedTitle;
 
-+ (OARouteKey *) fromGpx:(OASGpxFile *)gpx;
++ (OARouteKey *) fromGpxFile:(OASGpxFile *)gpxFile;
 - (NSString *) getActivityTypeTitle;
 
 @end

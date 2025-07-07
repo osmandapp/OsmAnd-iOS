@@ -3293,7 +3293,7 @@
 "getting_list_required_maps" = "A obter uma lista de mapas necessários...";
 "osmand_depelopment_use_old_routing" = "Utilizar o antigo roteamento (A*)";
 "average_vertical_speed" = "Velocidade vertical média";
-"osm_id" = "ID do OSM";
+"shared_string_osm_id" = "ID do OSM";
 "routing_algorithm" = "Algoritmo de roteamento";
 "auto_zoom" = "Ampliação automática";
 "shared_string_development" = "Desenvolvimento";

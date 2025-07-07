@@ -2574,7 +2574,7 @@
 "yard" = "yard";
 "navigate_point_olc" = "Open Location Code (OLC)";
 "navigate_point_format_DMS" = "GGG MM SS.S";
-"osm_id" = "OSM-ID";
+"shared_string_osm_id" = "OSM-ID";
 "navigate_point_format_DM" = "GGG MM.MMM";
 "of" = "%d van de %d";
 "downloaded_bytes" = "%@ van %@";

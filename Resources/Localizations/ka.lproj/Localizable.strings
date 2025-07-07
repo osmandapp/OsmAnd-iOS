@@ -2211,3 +2211,5 @@
 "map_widget_distance" = "მანძილი";
 "shared_string_original" = "ორიგინალი";
 "shared_string_date" = "თარიღი";
+"day_short" = "დ";
+"osm_live_payment_renews_3_years" = "განახლდება ყოველ სამ წელიწადში";

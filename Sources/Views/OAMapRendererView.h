@@ -30,6 +30,7 @@ static const int kSymbolsUpdateInterval = 2000;
 
 static const int kObfRasterLayer = 0;
 static const int kObfSymbolSection = 1;
+static const int kPOISymbolSection = 1000;
 
 static const float kMinAllowedElevationAngle = 10.0f;
 

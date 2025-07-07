@@ -2852,4 +2852,4 @@
 "shared_string_road_exit" = "Έξοδος";
 "map_widget_zoom_level" = "Επίπεδο μεγέθυνσης";
 "map_widget_target_distance" = "Απόσταση από κάμερα προς στόχο";
-"map_widget_camera_distance" = "Ανύψωση κάμερας";
+"map_widget_camera_distance" = "Υψόμετρο κάμερας";

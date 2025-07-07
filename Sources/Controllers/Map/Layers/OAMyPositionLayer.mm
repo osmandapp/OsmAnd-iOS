@@ -760,7 +760,7 @@ typedef enum {
 
     float animationDuration = 0;
     if (OAAppSettings.sharedManager.animateMyLocation.get && prevLocation
-        && ![OAMapUtils areLatLonEqual:newLocation.coordinate l2:prevLocation.coordinate])
+        && ![OAMapUtils areLatLonEqual:newLocation.coordinate coordinate2:prevLocation.coordinate precision:0.000001])
     {
         animationDuration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
         if (animationDuration > 5)

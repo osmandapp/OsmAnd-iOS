@@ -756,6 +756,9 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
 
 + (void) saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(OARouteKey *)routeKey forceAdjustCentering:(BOOL)forceAdjustCentering
 {
+    // Force hiding opened context menu. (With deleting Temp gpx folder)
+    [OARootViewController.instance.mapPanel hideScrollableHudViewController];
+    
     NSString *folderPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:@"Temp"];
     filepath = [folderPath stringByAppendingPathComponent:filepath];
     NSFileManager *manager = NSFileManager.defaultManager;
@@ -788,6 +791,9 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
         OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:routeKey];
         state.trackIcon = drawable.getIcon;
     }
+    
+    // Hide old context menu and open a new one.
+    // If old context menu already closed, then "hideAndDeleteAllTempGpx()" will not run.
     
     [OARootViewController.instance.mapPanel openTargetViewWithGPX:trackItem
                               items:nil

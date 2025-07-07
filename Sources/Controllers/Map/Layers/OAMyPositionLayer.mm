@@ -760,7 +760,7 @@ typedef enum {
 
     float animationDuration = 0;
     if (OAAppSettings.sharedManager.animateMyLocation.get && prevLocation
-        && ![OAMapUtils areLatLonEqual:newLocation.coordinate l2:prevLocation.coordinate])
+        && ![OAMapUtils areLatLonEqual:newLocation.coordinate coordinate2:prevLocation.coordinate precision:0.000001])
     {
         animationDuration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
         if (animationDuration > 5)
@@ -771,7 +771,7 @@ typedef enum {
     _currentMarkerState = c.currentMarkerState;
     for (OAMarkerCollection *mc in _modeMarkers.objectEnumerator)
         if (mc != c)
-            [self updateCollectionLocation:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:NO];
+            [self updateCollectionLocation:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:animationDuration visible:NO];
 }
 
 - (void) updateCollectionLocation:(OAMarkerCollection *)c newLocation:(CLLocation *)newLocation newTarget31:(OsmAnd::PointI)newTarget31 newHeading:(CLLocationDirection)newHeading animationDuration:(float)animationDuration visible:(BOOL)visible

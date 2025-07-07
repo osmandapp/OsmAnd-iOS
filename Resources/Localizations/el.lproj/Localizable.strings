@@ -2843,3 +2843,13 @@
 "trip_recording_distance_widget_desc" = "Εμφανίζει την απόσταση της τρέχουσας καταγεγραμμένης διαδρομής.";
 "average_speed_skip_stops" = "Λαμβάνει τις στάσεις υπ'όψιν";
 "route_guidance" = "Καθοδήγηση διαδρομής";
+"map_widget_distance_to_intermediate" = "Απόσταση μέχρι ενδιάμεση";
+"map_widget_time_to_destination" = "Χρόνος μέχρι προορισμό";
+"map_widget_time_to_intermediate" = "Χρόνος μέχρι ενδιάμεση";
+"go_to_marker_location" = "Πήγαινε στην τοποθεσία δείκτη";
+"side_marker_eta" = "Εκτιμώμενος χρόνος άφιξης";
+"map_markers_bar" = "Μπάρα δεικτών χάρτη";
+"shared_string_road_exit" = "Έξοδος";
+"map_widget_zoom_level" = "Επίπεδο μεγέθυνσης";
+"map_widget_target_distance" = "Απόσταση από κάμερα προς στόχο";
+"map_widget_camera_distance" = "Ανύψωση κάμερας";

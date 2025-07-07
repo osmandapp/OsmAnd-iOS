@@ -120,7 +120,7 @@
         _favoritesMapProvider.reset(new OAFavoritesMapLayerProvider(
             [OAFavoritesHelper getFavoritesCollection]->getVisibleFavoriteLocations(),
             self.pointsOrder, hiddenPoints, self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
-        [self.mapView addTiledSymbolsProvider:_favoritesMapProvider];
+        [self.mapView addTiledSymbolsProvider:kFavoritesSymbolSection provider:_favoritesMapProvider];
     }];
 }
 

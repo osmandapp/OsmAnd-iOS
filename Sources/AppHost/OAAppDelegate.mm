@@ -227,7 +227,6 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     return YES;
 }
 
-
 - (BOOL)isAppInitializing
 {
     return _appInitializing;

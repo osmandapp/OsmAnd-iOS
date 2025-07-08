@@ -85,7 +85,6 @@ final class AppStartupMonitor: NSObject {
 }
 
 extension AppStartupMonitor {
-    
     /// Records a startup event if startup logging has not yet been marked as finished.
     /// The event can optionally include the class name of the object that triggered the log.
     ///

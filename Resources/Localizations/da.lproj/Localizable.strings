@@ -3739,4 +3739,13 @@
 "obd_battery_voltage" = "Batterispænding";
 "obd_engine_coolant_temp" = "Kølevæskens temperatur";
 "remaining_fuel" = "Resterende brændstof";
-"remaining_fuel_description" = "Viser mængden af brændstof, der er tilbage i bilens tank";
+"remaining_fuel_description" = "Viser mængden af brændstof, der er tilbage i køretøjets tank";
+"obd_fuel_consumption" = "Brændstofforbrug";
+"obd_fuel_consumption_desc" = "Viser motorens brændstofforbrug, beregnet ud fra resterende brændstof, tankstørrelse og tilbagelagt distance som bestemt af GPS.";
+"obd_battery_voltage_desc" = "Viser spændingsniveauet på køretøjets batteri";
+"obd_throttle_position" = "Gasspjældets position";
+"obd_throttle_position_desc" = "Viser gasspjældets vinkel i gasspjældshuset.";
+"obd_calculated_engine_load_desc" = "Viser den procentdel af motorens tilgængelige effekt, der bruges på et givet tidspunkt.";
+"obd_calculated_engine_load" = "Beregnet motorbelastning";
+"obd_engine_coolant_temp_desc" = "Viser temperaturen på motorens kølevæske";
+"obd_fuel_consumption_rate_sensor_type" = "Brug valgte enheder i navnet.";

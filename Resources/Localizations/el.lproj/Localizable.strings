@@ -2921,5 +2921,15 @@
 "shared_string_hour" = "Ώρα";
 "shared_string_volume" = "Όγκος";
 "rpm_unit" = "σαλ";
-"shared_string_instant" = "Άμεσα";
+"shared_string_instant" = "Άμεσο";
 "average" = "Μέσο";
+"current_temperature" = "Τρέχουσα θερμοκρασία";
+"average_temperature" = "Μέση θερμοκρασία";
+"obd_widget_vehicle_speed" = "Ταχύτητα οχήματος";
+"obd_widget_engine_speed" = "Ταχύτητα μηχανής";
+"obd_vehicle_info" = "Πληροφορίες οχήματος";
+"vehicle_metrics_obd_ii" = "Μετρικές οχήματος (OBD-II)";
+"download_failed" = "Λήψη απέτυχε";
+"download_successful" = "Η εικόνα κατέβηκε στα Έγγραφα/Λήψεις.";
+"map_widget_distance" = "Απόσταση";
+"map_widget_map_scale" = "Κλίμακα χάρτη";

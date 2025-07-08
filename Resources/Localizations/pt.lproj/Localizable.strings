@@ -3682,3 +3682,5 @@
 "shared_string_view_all" = "Ver tudo";
 "fuel_tank_capacity" = "Capacidade do depósito de combustível";
 "poi_filter_fuel" = "Combustível";
+"osm_live_payment_renews_3_years" = "Renova a cada três anos";
+"years_3" = "Três anos";

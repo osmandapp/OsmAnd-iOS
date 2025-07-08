@@ -442,12 +442,12 @@
 
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
-    OAMapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
+    MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
     CLLocation *pointLatLon = result.pointLatLon;
-    NSMutableArray<OASelectedMapObject *> *selectedObjects = [result getProcessedObjects];
+    NSMutableArray<SelectedMapObject *> *selectedObjects = [result getProcessedObjects];
     
     int64_t objectSelectionThreshold = 0;
-    for (OASelectedMapObject *selectedObject in selectedObjects)
+    for (SelectedMapObject *selectedObject in selectedObjects)
     {
         if ([selectedObject getProvider] && [[selectedObject getProvider] conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
@@ -459,9 +459,9 @@
             }
         }
     }
-    NSMutableArray<OASelectedMapObject *> *objectsAvailableForSelection = [NSMutableArray new];
+    NSMutableArray<SelectedMapObject *> *objectsAvailableForSelection = [NSMutableArray new];
     
-    for (OASelectedMapObject *selectedObject in selectedObjects)
+    for (SelectedMapObject *selectedObject in selectedObjects)
     {
         if (objectSelectionThreshold < 0)
         {
@@ -496,7 +496,7 @@
     
     if (selectedObjects.count == 1)
     {
-        OASelectedMapObject *selectedObject = selectedObjects[0];
+        SelectedMapObject *selectedObject = selectedObjects[0];
         id selectedObj = [selectedObject getObject];
         CLLocation *latLon = [result objectLatLon];
         OAPointDescription *pointDescription;
@@ -538,13 +538,13 @@
     return NO;
 }
 
-- (void) showContextMenuForSelectedObjects:(CLLocation *)latLon selectedObjects:(NSArray<OASelectedMapObject *> *)selectedObjects
+- (void) showContextMenuForSelectedObjects:(CLLocation *)latLon selectedObjects:(NSArray<SelectedMapObject *> *)selectedObjects
 {
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
     
     // Android calls context menu without TargetPoint, but with SelectedMapObject directly
     NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray new];
-    for (OASelectedMapObject *selectedObject in selectedObjects)
+    for (SelectedMapObject *selectedObject in selectedObjects)
     {
         id<OAContextMenuProvider> provider = [selectedObject getProvider];
         if (!provider)
@@ -563,7 +563,7 @@
         [mapPanel showContextMenuWithPoints:targetPoints];
 }
 
-- (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(OASelectedMapObject *)object provider:(id<OAContextMenuProvider>)provider
+- (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(SelectedMapObject *)object provider:(id<OAContextMenuProvider>)provider
 {
     if (!provider || ![provider showMenuAction:object])
     {

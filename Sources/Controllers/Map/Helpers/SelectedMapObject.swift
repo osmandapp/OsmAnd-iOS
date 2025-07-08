@@ -1,5 +1,5 @@
 //
-//  OASelectedMapObject.swift
+//  SelectedMapObject.swift
 //  OsmAnd
 //
 //  Created by Max Kojin on 02/06/25.
@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-class OASelectedMapObject: NSObject {
+class SelectedMapObject: NSObject {
     
     private var object: Any
     private var provider: OAContextMenuProvider?

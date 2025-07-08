@@ -1,5 +1,5 @@
 //
-//  OASelectedGpxPoint.swift
+//  SelectedGpxPoint.swift
 //  OsmAnd
 //
 //  Created by Max Kojin on 02/06/25.
@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-class OASelectedGpxPoint: NSObject {
+class SelectedGpxPoint: NSObject {
     
     private var selectedGpxFile: GpxFile?
     private var selectedPoint: WptPt?

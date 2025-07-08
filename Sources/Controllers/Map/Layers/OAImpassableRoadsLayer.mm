@@ -158,7 +158,7 @@ static const int START_ZOOM = 10;
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     NSArray<OAAvoidRoadInfo *> *impassableRoads = [[OAAvoidSpecificRoads instance] getImpassableRoads];
     

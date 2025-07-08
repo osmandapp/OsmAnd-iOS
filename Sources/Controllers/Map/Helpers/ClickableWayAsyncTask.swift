@@ -1,5 +1,5 @@
 //
-//  OAClickableWayAsyncTask.swift
+//  ClickableWayAsyncTask.swift
 //  OsmAnd
 //
 //  Created by Max Kojin on 13/06/25.
@@ -9,11 +9,11 @@
 import Foundation
 
 @objcMembers
-class OAClickableWayAsyncTask: OABaseLoadAsyncTask {
+class ClickableWayAsyncTask: OABaseLoadAsyncTask {
     
-    private var clickableWay: OAClickableWay
+    private var clickableWay: ClickableWay
     
-    init(clickableWay: OAClickableWay) {
+    init(clickableWay: ClickableWay) {
         self.clickableWay = clickableWay
         super.init()
     }
@@ -24,11 +24,11 @@ class OAClickableWayAsyncTask: OABaseLoadAsyncTask {
     }
     
     override func onPostExecute(result: Any?) {
-        openAsGpxFile(result as? OAClickableWay)
+        openAsGpxFile(result as? ClickableWay)
         super.onPostExecute(result: result)
     }
     
-    private func readHeightData(_ clickableWay: OAClickableWay) -> Bool {
+    private func readHeightData(_ clickableWay: ClickableWay) -> Bool {
         let loader = OAHeightDataLoader()
         let waypoints = loader.loadHeightData(asWaypoints: Int64(clickableWay.getOsmId()), bbox31: clickableWay.getBbox())
         
@@ -42,7 +42,7 @@ class OAClickableWayAsyncTask: OABaseLoadAsyncTask {
         return false
     }
     
-    private func openAsGpxFile(_ clickableWay: OAClickableWay?) -> Bool {
+    private func openAsGpxFile(_ clickableWay: ClickableWay?) -> Bool {
         if let clickableWay = clickableWay {
             let gpxFile = clickableWay.getGpxFile()
             let analysis = gpxFile.getAnalysis(fileTimestamp: 0)

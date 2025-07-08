@@ -60,12 +60,12 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return self;
 }
 
-- (OAMapSelectionResult *) collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
+- (MapSelectionResult *) collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
 {
     if (!_provider)
         _provider = _provider = OARootViewController.instance.mapPanel.mapViewController.mapLayers.poiLayer;
     
-    OAMapSelectionResult *result = [[OAMapSelectionResult alloc] initWithPoint:point];
+    MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:point];
     [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO];
     [self collectObjectsFromMap:result point:point]; //start from this
     
@@ -77,12 +77,12 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return result;
 }
 
-- (void) collectObjectsFromMap:(OAMapSelectionResult *)result point:(CGPoint)point
+- (void) collectObjectsFromMap:(MapSelectionResult *)result point:(CGPoint)point
 {
     [self selectObjectsFromOpenGl:result point:point];
 }
 
-- (void) collectObjectsFromLayers:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation secondaryObjects:(BOOL)secondaryObjects
+- (void) collectObjectsFromLayers:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation secondaryObjects:(BOOL)secondaryObjects
 {
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
 
@@ -107,7 +107,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     }
 }
 
-- (void) selectObjectsFromOpenGl:(OAMapSelectionResult *)result point:(CGPoint)point
+- (void) selectObjectsFromOpenGl:(MapSelectionResult *)result point:(CGPoint)point
 {
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     OAMapRendererView *rendererView = (OAMapRendererView *) mapVc.view;
@@ -210,7 +210,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                             }
                             else if (isClickableWay)
                             {
-                                OAClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:result.pointLatLon obfMapObject:obfMapObject tags:tags];
+                                ClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:result.pointLatLon obfMapObject:obfMapObject tags:tags];
                                 [self addClickableWay:result clickableWay:clickableWay];
                             }
                         }
@@ -377,7 +377,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return amenity;
 }
 
-- (void) addTravelGpx:(OAMapSelectionResult *)result routeId:(NSString *)routeId
+- (void) addTravelGpx:(MapSelectionResult *)result routeId:(NSString *)routeId
 {
     //Never triggered
     OATravelGpx *travelGpx = [OATravelObfHelper.shared searchTravelGpxWithLatLon:result.objectLatLon.coordinate routeId:routeId];
@@ -398,7 +398,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     }
 }
 
-- (BOOL) addClickableWay:(OAMapSelectionResult *)result clickableWay:(OAClickableWay *)clickableWay
+- (BOOL) addClickableWay:(MapSelectionResult *)result clickableWay:(ClickableWay *)clickableWay
 {
     if (clickableWay && [self isUniqueClickableWay:[result getAllObjects] clickableWay:clickableWay])
     {
@@ -408,14 +408,14 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return NO;
 }
 
-- (BOOL) isUniqueGpxFileName:(NSMutableArray<OASelectedMapObject *> *)selectedObjects gpxFileName:(NSString *)gpxFileName
+- (BOOL) isUniqueGpxFileName:(NSMutableArray<SelectedMapObject *> *)selectedObjects gpxFileName:(NSString *)gpxFileName
 {
-    for (OASelectedMapObject *selectedObject in selectedObjects)
+    for (SelectedMapObject *selectedObject in selectedObjects)
     {
         id object = [selectedObject getObject];
-        if ([object isKindOfClass:OASelectedGpxPoint.class] && [[selectedObject getProvider] isKindOfClass:OAGPXLayer.class])
+        if ([object isKindOfClass:SelectedGpxPoint.class] && [[selectedObject getProvider] isKindOfClass:OAGPXLayer.class])
         {
-            OASelectedGpxPoint *gpxPoint = (OASelectedGpxPoint *)object;
+            SelectedGpxPoint *gpxPoint = (SelectedGpxPoint *)object;
             if ([[[gpxPoint getSelectedGpxFile] path] hasSuffix:gpxFileName])
             {
                 return NO;
@@ -425,12 +425,12 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return YES;
 }
 
-- (BOOL) isUniqueClickableWay:(NSMutableArray<OASelectedMapObject *> *)selectedObjects clickableWay:(OAClickableWay *)clickableWay
+- (BOOL) isUniqueClickableWay:(NSMutableArray<SelectedMapObject *> *)selectedObjects clickableWay:(ClickableWay *)clickableWay
 {
-    for (OASelectedMapObject *selectedObject in selectedObjects)
+    for (SelectedMapObject *selectedObject in selectedObjects)
     {
-        if ([[selectedObject getObject] isKindOfClass:OAClickableWay.class] &&
-            [clickableWay getOsmId] == [((OAClickableWay *) [selectedObject getObject]) getOsmId])
+        if ([[selectedObject getObject] isKindOfClass:ClickableWay.class] &&
+            [clickableWay getOsmId] == [((ClickableWay *) [selectedObject getObject]) getOsmId])
         {
             return NO;
         }
@@ -440,9 +440,9 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return [self isUniqueGpxFileName:selectedObjects gpxFileName:gpxFileName];
 }
 
-- (BOOL) isUniqueTravelGpx:(NSMutableArray<OASelectedMapObject *> *)selectedObjects travelGpx:(OATravelGpx *)travelGpx
+- (BOOL) isUniqueTravelGpx:(NSMutableArray<SelectedMapObject *> *)selectedObjects travelGpx:(OATravelGpx *)travelGpx
 {
-    for (OASelectedMapObject *selectedObject in selectedObjects)
+    for (SelectedMapObject *selectedObject in selectedObjects)
     {
         if ([[selectedObject getObject] isKindOfClass:NSArray.class] &&
             [[selectedObject getProvider] isKindOfClass:OAGPXLayer.class])
@@ -464,7 +464,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return [self isUniqueGpxFileName:selectedObjects gpxFileName:gpxFileName];
 }
 
-- (BOOL) addOsmRoutesAround:(OAMapSelectionResult *)result point:(CGPoint)point selectorFilter:(OsmAnd::NetworkRouteSelectorFilter *)selectorFilter
+- (BOOL) addOsmRoutesAround:(MapSelectionResult *)result point:(CGPoint)point selectorFilter:(OsmAnd::NetworkRouteSelectorFilter *)selectorFilter
 {
     if (selectorFilter != nullptr && selectorFilter->typeFilter.isEmpty())
     {
@@ -511,7 +511,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return routeSelectorFilter;
 }
 
-- (BOOL) putRouteGpxToSelected:(OAMapSelectionResult *)result provider:(id<OAContextMenuProvider>)provider rect:(OASKQuadRect *)rect selectorFilter:(OsmAnd::NetworkRouteSelectorFilter *)selectorFilter
+- (BOOL) putRouteGpxToSelected:(MapSelectionResult *)result provider:(id<OAContextMenuProvider>)provider rect:(OASKQuadRect *)rect selectorFilter:(OsmAnd::NetworkRouteSelectorFilter *)selectorFilter
 {
     OsmAnd::PointI topLeft31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.top, rect.left)];
     OsmAnd::PointI bottomRight31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.bottom, rect.right)];
@@ -535,9 +535,9 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return added > 0;
 }
 
-- (BOOL) isUniqueOsmRoute:(OAMapSelectionResult *)result tmpKey:(OARouteKey *)tmpKey
+- (BOOL) isUniqueOsmRoute:(MapSelectionResult *)result tmpKey:(OARouteKey *)tmpKey
 {
-    for (OASelectedMapObject *selectedObject in [result getAllObjects])
+    for (SelectedMapObject *selectedObject in [result getAllObjects])
     {
         id object = [selectedObject getObject];
         if ([object isKindOfClass:NSArray.class])
@@ -552,9 +552,9 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return YES;
 }
 
-- (BOOL) isUniqueAmenity:(NSMutableArray<OASelectedMapObject *> *)selectedObjects amenity:(OAPOI *)amenity
+- (BOOL) isUniqueAmenity:(NSMutableArray<SelectedMapObject *> *)selectedObjects amenity:(OAPOI *)amenity
 {
-    for (OASelectedMapObject *selectedObject in selectedObjects)
+    for (SelectedMapObject *selectedObject in selectedObjects)
     {
         id object = [selectedObject getObject];
         if ([object isKindOfClass:OAPOI.class] && [((OAPOI *)object) strictEquals:amenity])
@@ -602,14 +602,14 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return _publicTransportTypes;
 }
 
-- (void) processTransportStops:(NSMutableArray<OASelectedMapObject *> *)selectedObjects
+- (void) processTransportStops:(NSMutableArray<SelectedMapObject *> *)selectedObjects
 {
     NSArray<NSString *> *publicTransportTypes = [self getPublicTransportTypes];
     if (publicTransportTypes)
     {
         NSMutableArray<OAPOI *> *transportStopAmenities = [NSMutableArray array];
         
-        for (OASelectedMapObject *selectedObject in selectedObjects)
+        for (SelectedMapObject *selectedObject in selectedObjects)
         {
             id object = [selectedObject getObject];
             if ([object isKindOfClass:[OAPOI class]])
@@ -628,10 +628,10 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 OATransportStop *transportStop = [OATransportStopsBaseController findNearestTransportStopForAmenity:amenity];
                 if (transportStop && transportStopsLayer)
                 {
-                    OASelectedMapObject *newTransportStop = [[OASelectedMapObject alloc] initWithMapObject:transportStop provider:transportStopsLayer];
+                    SelectedMapObject *newTransportStop = [[SelectedMapObject alloc] initWithMapObject:transportStop provider:transportStopsLayer];
                     [selectedObjects addObject:newTransportStop];
                     
-                    [selectedObjects filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OASelectedMapObject *selectedObject, NSDictionary *bindings) {
+                    [selectedObjects filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(SelectedMapObject *selectedObject, NSDictionary *bindings) {
                         return (!selectedObject && !amenity) || [amenity isEqual:[selectedObject getObject]];
                     }]];
 

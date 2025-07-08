@@ -16,11 +16,11 @@
 
 - (BOOL) showMenuAction:(id)object
 {
-    OASelectedMapObject *selectedMapObject = (OASelectedMapObject *)object;
-    if ([[selectedMapObject getObject] isKindOfClass:OAClickableWay.class])
+    SelectedMapObject *selectedMapObject = (SelectedMapObject *)object;
+    if ([[selectedMapObject getObject] isKindOfClass:ClickableWay.class])
     {
-        OAClickableWay *clickableWay = (OAClickableWay *)[selectedMapObject getObject];
-        OAClickableWayAsyncTask *task = [[OAClickableWayAsyncTask alloc] initWithClickableWay:clickableWay];
+        ClickableWay *clickableWay = (ClickableWay *)[selectedMapObject getObject];
+        ClickableWayAsyncTask *task = [[ClickableWayAsyncTask alloc] initWithClickableWay:clickableWay];
         [task execute];
         return YES;
     }
@@ -44,9 +44,9 @@
 
 - (CLLocation *) getObjectLocation:(id)obj
 {
-    if ([obj isKindOfClass:OAClickableWay.class])
+    if ([obj isKindOfClass:ClickableWay.class])
     {
-        OAClickableWay *clickableWay = (OAClickableWay *)obj;
+        ClickableWay *clickableWay = (ClickableWay *)obj;
         OASWptPt *wpt = [[clickableWay getSelectedGpxPoint] getSelectedPoint];
         return [[CLLocation alloc] initWithLatitude:[wpt getLatitude] longitude:[wpt getLongitude]];
     }
@@ -55,16 +55,16 @@
 
 - (OAPointDescription *) getObjectName:(id)obj
 {
-    if ([obj isKindOfClass:OAClickableWay.class])
+    if ([obj isKindOfClass:ClickableWay.class])
     {
-        OAClickableWay *clickableWay = (OAClickableWay *)obj;
+        ClickableWay *clickableWay = (ClickableWay *)obj;
         NSString *name = [clickableWay getWayName];
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX name:name];
     }
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     
 }

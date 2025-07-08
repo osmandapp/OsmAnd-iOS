@@ -1628,7 +1628,7 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
-- (void) getTracksFromPoint:(CLLocationCoordinate2D)point result:(OAMapSelectionResult *)result
+- (void) getTracksFromPoint:(CLLocationCoordinate2D)point result:(MapSelectionResult *)result
 {
     double textSize = [OAAppSettings.sharedManager.textSize get];
     textSize = textSize < 1. ? 1. : textSize;
@@ -1893,7 +1893,7 @@ colorizationScheme:(int)colorizationScheme
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     if ([self.mapViewController getMapZoom] < START_ZOOM)
         return;
@@ -1908,7 +1908,7 @@ colorizationScheme:(int)colorizationScheme
     return NO;
 }
 
-- (void) collectWptFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+- (void) collectWptFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     CGPoint point = [result getPoint];
     int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
@@ -1935,7 +1935,7 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
-- (void) collectTracksFromPoint:(OAMapSelectionResult *)result showTrackPointMenu:(BOOL)showTrackPointMenu
+- (void) collectTracksFromPoint:(MapSelectionResult *)result showTrackPointMenu:(BOOL)showTrackPointMenu
 {
     CGPoint point = [result getPoint];
     OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:point];
@@ -1971,9 +1971,9 @@ colorizationScheme:(int)colorizationScheme
         OASWptPt *wpt = (OASWptPt *)obj;
         return [[CLLocation alloc] initWithLatitude:[wpt getLatitude] longitude:[wpt getLongitude]];
     }
-    else if ([obj isKindOfClass:OASelectedGpxPoint.class])
+    else if ([obj isKindOfClass:SelectedGpxPoint.class])
     {
-        OASelectedGpxPoint *selectedGpxPoint = (OASelectedGpxPoint *)obj;
+        SelectedGpxPoint *selectedGpxPoint = (SelectedGpxPoint *)obj;
         OASWptPt *point = [selectedGpxPoint getSelectedPoint];
         return [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
     }
@@ -1987,9 +1987,9 @@ colorizationScheme:(int)colorizationScheme
         OASWptPt *wpt = obj;
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:[wpt name]];
     }
-    else if ([obj isKindOfClass:OASelectedGpxPoint.class])
+    else if ([obj isKindOfClass:SelectedGpxPoint.class])
     {
-        OASGpxFile *selectedGpxFile = [((OASelectedGpxPoint *)obj) getSelectedGpxFile];
+        OASGpxFile *selectedGpxFile = [((SelectedGpxPoint *)obj) getSelectedGpxFile];
         NSString *name;
         if ([selectedGpxFile showCurrentTrack])
         {

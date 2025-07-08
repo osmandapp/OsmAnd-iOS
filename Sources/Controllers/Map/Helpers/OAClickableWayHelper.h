@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-@class OAClickableWay, OARenderedObject, OAClickableWayMenuProvider;
+@class ClickableWay, OARenderedObject, OAClickableWayMenuProvider;
 
 @interface OAClickableWayHelper : NSObject
 

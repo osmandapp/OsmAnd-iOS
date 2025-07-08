@@ -10,7 +10,7 @@
 
 const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 
-@class OATargetPoint, OAPointDescription, OAMapSelectionResult, OASelectedMapObject;
+@class OATargetPoint, OAPointDescription, MapSelectionResult, SelectedMapObject;
 
 typedef NS_ENUM(NSInteger, EOAPinVerticalAlignment)
 {
@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 
 - (BOOL) isSecondaryProvider;
 
-- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
 
 - (CLLocation *) getObjectLocation:(id)obj;
 - (OAPointDescription *) getObjectName:(id)obj;

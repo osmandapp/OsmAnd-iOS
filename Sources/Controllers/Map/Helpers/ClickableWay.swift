@@ -1,5 +1,5 @@
 //
-//  OAClickableWay.swift
+//  ClickableWay.swift
 //  OsmAnd
 //
 //  Created by Max Kojin on 07/05/25.
@@ -10,13 +10,13 @@ import Foundation
 import CoreLocation
 
 @objcMembers
-final class OAClickableWay: NSObject {
+final class ClickableWay: NSObject {
     
     private let osmId: UInt64
     private let name: String?
     private let bbox: KQuadRect
     private let gpxFile: GpxFile
-    private let selectedGpxPoint: OASelectedGpxPoint
+    private let selectedGpxPoint: SelectedGpxPoint
     
     init(gpxFile: GpxFile, osmId: UInt64, name: String?, selectedLatLon: CLLocation, bbox: KQuadRect) {
         self.gpxFile = gpxFile
@@ -27,7 +27,7 @@ final class OAClickableWay: NSObject {
         let wpt = WptPt()
         wpt.lat = selectedLatLon.coordinate.latitude
         wpt.lon = selectedLatLon.coordinate.longitude
-        self.selectedGpxPoint = OASelectedGpxPoint(selectedGpxFile: nil, selectedPoint: wpt)
+        self.selectedGpxPoint = SelectedGpxPoint(selectedGpxFile: nil, selectedPoint: wpt)
         
         super.init()
     }
@@ -44,7 +44,7 @@ final class OAClickableWay: NSObject {
         return gpxFile
     }
     
-    func getSelectedGpxPoint() -> OASelectedGpxPoint {
+    func getSelectedGpxPoint() -> SelectedGpxPoint {
         return selectedGpxPoint
     }
     

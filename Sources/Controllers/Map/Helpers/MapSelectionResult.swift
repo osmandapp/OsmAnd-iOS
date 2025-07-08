@@ -1,5 +1,5 @@
 //
-//  OAMapSelectionResult.swift
+//  MapSelectionResult.swift
 //  OsmAnd
 //
 //  Created by Max Kojin on 02/05/25.
@@ -11,7 +11,7 @@ import CoreLocation
 import UIKit
 
 @objcMembers
-class OAMapSelectionResult: NSObject {
+class MapSelectionResult: NSObject {
     
     private var lang: String
     private var point: CGPoint
@@ -20,8 +20,8 @@ class OAMapSelectionResult: NSObject {
     
     private var poiProvider: OAContextMenuProvider
     
-    private var allObjects: Array<OASelectedMapObject>
-    private var processedObjects: Array<OASelectedMapObject>
+    private var allObjects: Array<SelectedMapObject>
+    private var processedObjects: Array<SelectedMapObject>
     
     init(point: CGPoint) {
         self.point = point
@@ -41,16 +41,16 @@ class OAMapSelectionResult: NSObject {
         return point
     }
     
-    func getAllObjects() -> Array<OASelectedMapObject> {
+    func getAllObjects() -> Array<SelectedMapObject> {
         return allObjects
     }
     
-    func getProcessedObjects() -> Array<OASelectedMapObject> {
+    func getProcessedObjects() -> Array<SelectedMapObject> {
         return processedObjects
     }
     
     func collect(_ object: Any, provider: Any) {
-        allObjects.append(OASelectedMapObject(mapObject: object, provider: provider as? OAContextMenuProvider))
+        allObjects.append(SelectedMapObject(mapObject: object, provider: provider as? OAContextMenuProvider))
     }
     
     func groupByOsmIdAndWikidataId() {
@@ -59,30 +59,30 @@ class OAMapSelectionResult: NSObject {
             return
         }
         
-        var other = Array<OASelectedMapObject>()
+        var other = Array<SelectedMapObject>()
         var detailsObjects = processObjects(allObjects, other: &other)
         
         for object in detailsObjects {
             if object.getObjects().count > 1 {
-                let selectedObject = OASelectedMapObject(mapObject: object, provider: poiProvider)
+                let selectedObject = SelectedMapObject(mapObject: object, provider: poiProvider)
                 processedObjects.append(selectedObject)
             } else {
-                let selectedObject = OASelectedMapObject(mapObject: object.getObjects()[0], provider: poiProvider)
+                let selectedObject = SelectedMapObject(mapObject: object.getObjects()[0], provider: poiProvider)
                 processedObjects.append(selectedObject)
             }
         }
         processedObjects.append(contentsOf: other)
     }
     
-    private func processObjects(_ selectedObjects: Array<OASelectedMapObject>, other: inout Array<OASelectedMapObject>) -> Array<OABaseDetailsObject> {
-        var detailsObjects = Array<OABaseDetailsObject>()
+    private func processObjects(_ selectedObjects: Array<SelectedMapObject>, other: inout Array<SelectedMapObject>) -> Array<BaseDetailsObject> {
+        var detailsObjects = Array<BaseDetailsObject>()
         for selectedObject in selectedObjects {
             let object = selectedObject.getObject()
             var overlapped = collectOverlappedObjects(object, detailsObjects: detailsObjects)
             
-            let detailsObject: OABaseDetailsObject
+            let detailsObject: BaseDetailsObject
             if overlapped.count == 0 {
-                detailsObject = OABaseDetailsObject(lang: lang)
+                detailsObject = BaseDetailsObject(lang: lang)
             } else {
                 detailsObject = overlapped[0]
                 for i in 1..<overlapped.count {
@@ -101,8 +101,8 @@ class OAMapSelectionResult: NSObject {
         return detailsObjects
     }
     
-    private func collectOverlappedObjects(_ object: Any, detailsObjects: Array<OABaseDetailsObject>) -> Array<OABaseDetailsObject> {
-        var overlapped = Array<OABaseDetailsObject>()
+    private func collectOverlappedObjects(_ object: Any, detailsObjects: Array<BaseDetailsObject>) -> Array<BaseDetailsObject> {
+        var overlapped = Array<BaseDetailsObject>()
         for detailsObject in detailsObjects {
             if detailsObject.overlapsWith(object) {
                 overlapped.append(detailsObject)

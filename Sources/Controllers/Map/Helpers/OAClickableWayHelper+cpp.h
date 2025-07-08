@@ -14,6 +14,6 @@
 
 - (BOOL)isClickableWay:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags;
 
-- (OAClickableWay *)loadClickableWay:(CLLocation *)selectedLatLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags;
+- (ClickableWay *)loadClickableWay:(CLLocation *)selectedLatLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags;
 
 @end

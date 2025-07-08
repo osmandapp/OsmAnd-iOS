@@ -428,9 +428,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     {
         return (OAPOI *)object;
     }
-    else if ([object isKindOfClass:OABaseDetailsObject.class])
+    else if ([object isKindOfClass:BaseDetailsObject.class])
     {
-        return [(OABaseDetailsObject *)object getSyntheticAmenity];
+        return [(BaseDetailsObject *)object getSyntheticAmenity];
     }
     return nil;
 }
@@ -457,12 +457,12 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return [self getTargetPoint:obj renderedObject:nil placeDetailsObject:nil];
     else if ([obj isKindOfClass:OARenderedObject.class])
         return [self getTargetPoint:nil renderedObject:obj placeDetailsObject:nil];
-    else if ([obj isKindOfClass:OABaseDetailsObject.class])
+    else if ([obj isKindOfClass:BaseDetailsObject.class])
         return [self getTargetPoint:nil renderedObject:nil placeDetailsObject:obj];
     return nil;
 }
 
-- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject placeDetailsObject:(OABaseDetailsObject *)placeDetailsObject
+- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject placeDetailsObject:(BaseDetailsObject *)placeDetailsObject
 {
     if (placeDetailsObject)
         poi = [placeDetailsObject getSyntheticAmenity];
@@ -588,8 +588,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         int64_t placeId = -1;
         if ([object isKindOfClass:OAPOI.class])
             placeId = ((OAPOI *)object).obfId;
-        else if ([object isKindOfClass:OABaseDetailsObject.class])
-            placeId = [((OABaseDetailsObject *)object) getSyntheticAmenity].obfId;
+        else if ([object isKindOfClass:BaseDetailsObject.class])
+            placeId = [((BaseDetailsObject *)object) getSyntheticAmenity].obfId;
         else
             placeId = -1;
         
@@ -604,7 +604,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return [self pointsOrder] - 100;
 }
 
-- (void) collectObjectsFromPoint:(OAMapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     
 }

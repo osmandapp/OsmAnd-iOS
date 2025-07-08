@@ -1,5 +1,5 @@
 //
-//  OABaseDetailsObject.swift
+//  BaseDetailsObject.swift
 //  OsmAnd
 //
 //  Created by Max Kojin on 02/05/25.
@@ -11,17 +11,17 @@ import CoreLocation
 
 private let MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS: Double = 30.0
 
-private enum EOAObjectCompleteness: UInt {
+private enum ObjectCompleteness: UInt {
     case empty = 0
     case combined = 1
     case full = 2
 }
 
 @objcMembers
-final class OABaseDetailsObject: NSObject {
+final class BaseDetailsObject: NSObject {
     
     private var syntheticAmenity: OAPOI
-    private var objectCompleteness: EOAObjectCompleteness
+    private var objectCompleteness: ObjectCompleteness
     private var searchResultResource: EOASearchResultResource
     private var obfResourceName: String?
     
@@ -93,7 +93,7 @@ final class OABaseDetailsObject: NSObject {
             return false
         }
         
-        if let detailsObject = object as? OABaseDetailsObject {
+        if let detailsObject = object as? BaseDetailsObject {
             for obj in detailsObject.getObjects() {
                 addObject(obj)
             }
@@ -219,7 +219,7 @@ final class OABaseDetailsObject: NSObject {
     }
     
     func merge(_ object: Any) {
-        if let detailsObject = object as? OABaseDetailsObject {
+        if let detailsObject = object as? BaseDetailsObject {
             mergeBaseDetailsObject(detailsObject)
         }
         if let transportStop = object as? OATransportStop {
@@ -230,7 +230,7 @@ final class OABaseDetailsObject: NSObject {
         }
     }
     
-    private func mergeBaseDetailsObject(_ other: OABaseDetailsObject) {
+    private func mergeBaseDetailsObject(_ other: BaseDetailsObject) {
         osmIds.formUnion(other.osmIds)
         wikidataIds.formUnion(other.wikidataIds)
         objects.append(contentsOf: other.objects)
@@ -470,7 +470,7 @@ final class OABaseDetailsObject: NSObject {
         return object is OAPOI ||
                object is OATransportStop ||
                object is OARenderedObject ||
-               object is OABaseDetailsObject
+               object is BaseDetailsObject
     }
     
     func getAmenities() -> [OAPOI] {
@@ -522,7 +522,7 @@ final class OABaseDetailsObject: NSObject {
     }
     
     static func getResourceType(_ object: Any) -> EOASearchResultResource {
-        if let detailsObject = object as? OABaseDetailsObject {
+        if let detailsObject = object as? BaseDetailsObject {
             return detailsObject.getResourceType()
         }
         if let amenity = object as? OAPOI {
@@ -555,7 +555,7 @@ final class OABaseDetailsObject: NSObject {
         if let poi = object as? OAPOI {
             amenity = poi
         }
-        if let detailsObject = object as? OABaseDetailsObject {
+        if let detailsObject = object as? BaseDetailsObject {
             amenity = detailsObject.getSyntheticAmenity()
         }
         
@@ -570,7 +570,7 @@ final class OABaseDetailsObject: NSObject {
     }
     
     static func getClassOrder(_ object: Any) -> Int {
-        if object is OABaseDetailsObject {
+        if object is BaseDetailsObject {
             return 1
         }
         if object is OAPOI {

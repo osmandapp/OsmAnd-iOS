@@ -97,7 +97,7 @@
     return obfMapObject->points31.size() > 1 && [self isClickableWayTags:name tags:tags]; // v2 with prefetched tags
 }
 
-- (OAClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon renderedObject:(OARenderedObject *)renderedObject
+- (ClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon renderedObject:(OARenderedObject *)renderedObject
 {
     uint64_t osmId = [ObfConstants getOsmId:renderedObject.obfId >> AMENITY_ID_RIGHT_SHIFT];
     MutableOrderedDictionary<NSString *,NSString *> *tags = renderedObject.tags;
@@ -108,7 +108,7 @@
     return [self loadClickableWay:selectedLatLon bbox:bbox xPoints:xPoints yPoints:yPoints osmId:osmId name:name tags:tags];
 }
 
-- (OAClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
+- (ClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
 {
     if (const auto binaryMapObject = std::dynamic_pointer_cast<const OsmAnd::BinaryMapObject>(obfMapObject))
     {
@@ -130,7 +130,7 @@
     return nil;
 }
 
-- (OAClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon bbox:(OASKQuadRect *)bbox xPoints:(NSMutableArray<NSNumber *> *)xPoints yPoints:(NSMutableArray<NSNumber *> *)yPoints osmId:(uint64_t)osmId name:(NSString *)name tags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
+- (ClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon bbox:(OASKQuadRect *)bbox xPoints:(NSMutableArray<NSNumber *> *)xPoints yPoints:(NSMutableArray<NSNumber *> *)yPoints osmId:(uint64_t)osmId name:(NSString *)name tags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
 {
     
     OASGpxFile *gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
@@ -174,7 +174,7 @@
         [gpxFile setColorColor_:color];
     }
    
-    return [[OAClickableWay alloc] initWithGpxFile:gpxFile osmId:osmId name:name selectedLatLon:selectedLatLon bbox:bbox];
+    return [[ClickableWay alloc] initWithGpxFile:gpxFile osmId:osmId name:name selectedLatLon:selectedLatLon bbox:bbox];
 }
 
 - (NSString *) getGpxColorByTags:(MutableOrderedDictionary<NSString *,NSString *> *)tags

@@ -62,6 +62,7 @@
     CGRect prevBounds;
     int _frameId;
     NSTimeInterval _lastUpdateTime;
+    CGPoint _lastImmediateTouchPoint;
 }
 
 + (Class) layerClass
@@ -104,6 +105,7 @@
     _colorRenderBuffer = 0;
     _framebuffer = 0;
     _displayLink = nil;
+    _lastImmediateTouchPoint = CGPointZero;
 
     _viewportXScale = kViewportScale;
     _viewportYScale = kViewportScale;
@@ -1193,6 +1195,17 @@ forcedUpdate:(BOOL)forcedUpdate
     	_displayLink.preferredFrameRateRange = CAFrameRateRangeMake(20.0f, 20.0f, 20.0f);
     else
         _displayLink.preferredFrameRateRange = CAFrameRateRangeDefault;
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    _lastImmediateTouchPoint = [touch locationInView:self];
+}
+
+- (CGPoint)lastImmediateTouchPoint
+{
+    return _lastImmediateTouchPoint;
 }
 
 @end

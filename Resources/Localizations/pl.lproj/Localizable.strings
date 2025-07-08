@@ -3348,4 +3348,7 @@
 "route_guidance_desc" = "Wyświetla wskazówki nawigacyjne w czasie rzeczywistym, w tym odległość od następnego skrętu, nazwa ulicy, oraz informacje o pasach drogowych. Widżety są aktywne podczas nawigacji.";
 "route_guidance" = "Wskazówki nawigacyjne";
 "obd_widget_group" = "Jednostki pojazdu";
-"rpm_unit" = "rpm";
+"rpm_unit" = "obroty/s";
+"obd_rpm_desc" = "Wyświetla tachometr obrotów/s pojazdu nad sensorem OBD";
+"obd_fuel_level_desc" = "Wyświetla poziom paliwa pojazdu nad sensorem OBD";
+"obd_fuel_left_distance_desc" = "Wyświetla szacowany dystans, przez który pojazd może przejechać na pozostałym paliwie, nad sensorem OBD.";

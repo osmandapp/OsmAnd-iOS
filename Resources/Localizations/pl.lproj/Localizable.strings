@@ -3344,4 +3344,8 @@
 "tracker_item" = "Monitor OsmAnd";
 "testFlight" = "TestFlight";
 "rendering_attr_showDirtbikeTrails_description" = "Pokaż terenowe trasy rowerowe";
-"battery_widget_level_privacy_ios_desc" = "Z powodu zabezpieczeń w systemie iOS, widżet może wyświetlać procent baterii tylko w pięcioprocentowych odstępach, na przykład 35%, 60% lub 80%.";
+"battery_widget_level_privacy_ios_desc" = "Z powodu zabezpieczeń w systemie iOS, widżet może wyświetlać procent baterii tylko w pięcioprocentowych odstępach, na przykład 35%, 60% lub 80%";
+"route_guidance_desc" = "Wyświetla wskazówki nawigacyjne w czasie rzeczywistym, w tym odległość od następnego skrętu, nazwa ulicy, oraz informacje o pasach drogowych. Widżety są aktywne podczas nawigacji.";
+"route_guidance" = "Wskazówki nawigacyjne";
+"obd_widget_group" = "Jednostki pojazdu";
+"rpm_unit" = "rpm";

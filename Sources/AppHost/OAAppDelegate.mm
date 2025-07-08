@@ -38,7 +38,7 @@
 #import "OACloudAccountVerificationViewController.h"
 #import "OARootViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import "OsmAnd_Maps-Swift.h"
+#import "StartupLogging.h"
 
 #include <QDir>
 #include <QFile>
@@ -91,27 +91,30 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             if (_didFinishLaunching)
             {
                 _didFinishLaunching = NO;
-                //[self configureAppLaunchEvent:AppLaunchEventRestoreSession];
                 [self configureAppLaunchEvent:AppLaunchEventSetupRoot];
             }
+            LogStartup(@"initialize: already done");
             return YES;
         }
 
         if (_appInitializing)
+        {
+            LogStartup(@"initialize: already initializing");
             return NO;
+        }
 
         _appInitializing = YES;
     }
-
+    
+    LogStartup(@"initialize: starting");
     [self configureAppLaunchEvent:AppLaunchEventStart];
-
-    NSLog(@"OAAppDelegate initialize start");
 
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
     [device beginGeneratingDeviceOrientationNotifications];
     device.batteryMonitoringEnabled = YES;
-    
+    LogStartup(@"initialize: device configured");
+
     // Update app execute counter
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     NSInteger execCount = [settings integerForKey:kAppExecCounter];
@@ -121,52 +124,59 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
         [settings setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppInstalledDate];
 
     [settings synchronize];
+    LogStartup(@"initialize: app counters updated");
 
     // Create instance of OsmAnd application
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
-    
+    LogStartup(@"initialize: OsmAnd instance created");
+
     _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
-        
         [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
         _appInitTask = UIBackgroundTaskInvalid;
     }];
     
     dispatch_async(initializeQueue, ^{
-        
-        NSLog(@"OAAppDelegate beginBackgroundTask");
+
+        LogStartup(@"initialize: background task started");
 
         // Initialize OsmAnd core
         if (![_app initializeCore])
         {
-            NSLog(@"OAAppDelegate failed to initialize core");
+            LogStartup(@"initialize: core initialization failed");
             return;
         }
+        LogStartup(@"initialize: core initialized");
 
         // Initialize application in background
         if (![_app initialize])
         {
-            NSLog(@"OAAppDelegate failed to initialize app");
+            LogStartup(@"initialize: app initialization failed");
             return;
         }
+        LogStartup(@"initialize: app initialized");
 
         dispatch_async(dispatch_get_main_queue(), ^{
+
+            LogStartup(@"initialize: main thread started");
             
-            // Initialize application in main thread
-            //[_app initialize];
             [[OAScreenOrientationHelper sharedInstance] updateSettings];
-            
-            // Configure ThemeManager
+            LogStartup(@"initialize: screen orientation updated");
+
             OAAppSettings *appSettings = [OAAppSettings sharedManager];
             OAApplicationMode *initialAppMode = [appSettings.useLastApplicationModeByDefault get] ?
-            [OAApplicationMode valueOfStringKey:[appSettings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] : appSettings.defaultApplicationMode.get;
+                [OAApplicationMode valueOfStringKey:[appSettings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
+                appSettings.defaultApplicationMode.get;
             [[ThemeManager shared] configureWithAppMode:initialAppMode];
-            
+            LogStartup(@"initialize: theme configured");
+
             [OAOsmOAuthHelper logOutIfNeeded];
+            LogStartup(@"initialize: OAuth checked");
 
             [self askReview];
+            LogStartup(@"initialize: review requested");
 
-            // Create root view controller
             [self configureAppLaunchEvent:AppLaunchEventSetupRoot];
+
             BOOL mapInstalled = NO;
             for (const auto& resource : _app.resourcesManager->getLocalResources())
             {
@@ -177,38 +187,46 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
                     break;
                 }
             }
-            // Show intro screen
             if (!mapInstalled)
             {
                 [self configureAppLaunchEvent:AppLaunchEventFirstLaunch];
+                LogStartup(@"initialize: first launch detected (no maps)");
             }
+
             UIScene *scene = UIApplication.sharedApplication.mainScene;
             SceneDelegate *sd = (SceneDelegate *)scene.delegate;
             if (sd.loadedURL)
             {
                 [self openURL:sd.loadedURL];
                 sd.loadedURL = nil;
+                LogStartup(@"initialize: loaded URL handled");
             }
+
             [OAUtilities clearTmpDirectory];
+            LogStartup(@"initialize: temp directory cleared");
 
             [self requestUpdatesOnNetworkReachable];
+            LogStartup(@"initialize: requested updates on network reachable");
 
             _appInitDone = YES;
             _appInitializing = NO;
-            
+
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
 
-            NSLog(@"OAAppDelegate endBackgroundTask");
-            
-            // Check for updates every hour when the app is in the foreground
+            LogStartup(@"initialize: background task ended");
+
             [self initCheckUpdatesTimer];
+            LogStartup(@"initialize: update timer initialized");
+            LogStartup(@"initialize: finish");
         });
     });
-    
-    NSLog(@"OAAppDelegate initialize finish");
+
+    LogStartup(@"initialize: dispatch_async scheduled");
+
     return YES;
 }
+
 
 - (BOOL)isAppInitializing
 {
@@ -274,8 +292,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     }
 }
 
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    LogStartup(@"willFinishLaunchingWithOptions");
+    return YES;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    LogStartup(@"didFinishLaunchingWithOptions");
     _didFinishLaunching = YES;
    
     if (!_dataFetchQueue)

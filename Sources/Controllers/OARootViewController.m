@@ -33,11 +33,10 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OANavigationController.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "StartupLogging.h"
 
 #define _(name) OARootViewController__##name
 #define commonInit _(commonInit)
-#define deinit _(deinit)
 
 #define TEST_LOCAL_PURCHASE NO
 
@@ -117,8 +116,9 @@ typedef enum : NSUInteger {
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    LogStartup(@"viewDidLoad");
     
-    // 80% of smallest device width in portait mode (320 points)
+    // 80% of smallest device width in portrait mode (320 points)
     self.leftFixedWidth = kDrawerWidth;
     self.rightFixedWidth = kDrawerWidth;
     self.shouldResizeLeftPanel = NO;
@@ -150,6 +150,7 @@ typedef enum : NSUInteger {
         [self handleOsmAndCloudVerification:self.token];
         self.token = nil;
     }
+    LogStartup(@"viewDidAppear");
 }
 
 - (BOOL) prefersStatusBarHidden

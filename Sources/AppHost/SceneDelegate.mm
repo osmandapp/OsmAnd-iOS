@@ -42,7 +42,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAAppDelegate.h"
 #import "OAFirstUsageWizardController.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "StartupLogging.h"
 
 #include <QDir>
 #include <QFile>
@@ -75,44 +75,64 @@
     }
     return self;
 }
+
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
 {
-    NSLog(@"SceneDelegate willConnectToSession");
+    LogStartup(@"scene willConnectToSession");
+    
     _windowScene = (UIWindowScene *)scene;
-    if (!_windowScene) {
-        NSLog(@"SceneDelegate _windowScene in nil");
+    if (!_windowScene)
+    {
+        LogStartup(@"windowScene is nil — abort");
         return;
     }
     
     _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
+    LogStartup(@"UIWindow created");
     
     OAAppDelegate *appDelegate = [self appDelegate];
     [appDelegate initialize];
-
-    _rootViewController = appDelegate.rootViewController;
-
-    [self configureServices];
+    LogStartup(@"appDelegate initialize called");
     
-    if (connectionOptions.URLContexts.count > 0) {
-        NSURL *url = [connectionOptions.URLContexts allObjects].firstObject.URL;
+    _rootViewController = appDelegate.rootViewController;
+    LogStartup(@"rootViewController assigned");
+    
+    [self configureServices];
+    LogStartup(@"services configured");
+    
+    if (connectionOptions.URLContexts.count > 0)
+    {
+        NSURL *url = [connectionOptions.URLContexts.allObjects.firstObject URL];
+        NSLog(@"handling URL: %@", url);
         [self openURL:url];
+        LogStartup(@"handled URL context");
     }
     
-    if (connectionOptions.userActivities.count > 0) {
-        NSUserActivity *userActivity = [connectionOptions.userActivities allObjects].firstObject;
-        if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+    if (connectionOptions.userActivities.count > 0)
+    {
+        NSUserActivity *userActivity = connectionOptions.userActivities.allObjects.firstObject;
+        if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb])
+        {
             NSURL *webpageURL = userActivity.webpageURL;
-            if ([[UIApplication sharedApplication] canOpenURL:webpageURL]) {
+            if ([[UIApplication sharedApplication] canOpenURL:webpageURL])
+            {
+                NSLog(@"handling Universal Link: %@", webpageURL);
                 [self openURL:webpageURL];
+                LogStartup(@"handled Universal Link");
             }
         }
     }
+    
     [self configureSceneState:appDelegate.appLaunchEvent];
+    LogStartup(@"scene state configured");
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(launchUpdateStateNotification:)
-                                                     name:OALaunchUpdateStateNotification object:nil];
+                                             selector:@selector(launchUpdateStateNotification:)
+                                                 name:OALaunchUpdateStateNotification
+                                               object:nil];
+    LogStartup(@"scene setup complete");
 }
+
 
 - (void)sceneDidBecomeActive:(UIScene *)scene
 {

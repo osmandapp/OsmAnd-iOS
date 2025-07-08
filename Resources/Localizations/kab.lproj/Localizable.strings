@@ -53,7 +53,7 @@
 "rendering_value_pink_name" = "Axuxi";
 "rendering_value_medium_name" = "Alemmas";
 "index_name_russia" = "Rruss";
-"osmand_parking_warning" = "Γur-k";
+"osmand_parking_warning" = "Ɣur-k";
 "rendering_value_pedestrian_name" = "Amsebrid";
 "rendering_value_disabled_name" = "Yensa";
 "rendering_attr_surface_snow_name" = "Adfel";
@@ -311,7 +311,7 @@
 "osn_add_dialog_title" = "rnu";
 "prefer_in_routing_title" = "Smenyif…";
 "app_mode_utv" = "Côte à côte";
-"buy" = "AΓ";
+"buy" = "AƔ";
 "shared_string_actions" = "Tigawin";
 "next_proceed" = "Ɣer zdat";
 "no_inet_connection" = "Ulac tuqqna n Internet";
@@ -700,7 +700,7 @@
 "shared_string_delete_all" = "Kkes-it meṛṛa";
 "data_settings" = "Isefka";
 "ltr_or_rtl_combine_via_slash" = "%@ di %@";
-"route_to" = "I :";
+"route_to" = "Ar:";
 "duration_ago" = "%@ aya";
 "nothing_found" = "Ulac ayen yettwafen";
 "settings_item_read_error" = "Ur izmir ara ad d-iɣer %@.";

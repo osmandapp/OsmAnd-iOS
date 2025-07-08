@@ -478,7 +478,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     CLLocation *maxLatLon = [mapVc getLatLonFromElevatedPixel:point.x + searchRadius y:point.y + searchRadius];
     OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:minLatLon.coordinate.longitude top:minLatLon.coordinate.latitude right:maxLatLon.coordinate.longitude bottom:maxLatLon.coordinate.latitude];
     
-    return [self putRouteGpxToSelected:result provider:networkRouteSelectionLayer rect:rect];
+    return [self putRouteGpxToSelected:result provider:networkRouteSelectionLayer rect:rect selectorFilter:selectorFilter];
 }
 
 - (OsmAnd::NetworkRouteSelectorFilter *) createRouteFilter
@@ -511,7 +511,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return routeSelectorFilter;
 }
 
-- (BOOL) putRouteGpxToSelected:(OAMapSelectionResult *)result provider:(id<OAContextMenuProvider>)provider rect:(OASKQuadRect *)rect
+- (BOOL) putRouteGpxToSelected:(OAMapSelectionResult *)result provider:(id<OAContextMenuProvider>)provider rect:(OASKQuadRect *)rect selectorFilter:(OsmAnd::NetworkRouteSelectorFilter *)selectorFilter
 {
     OsmAnd::PointI topLeft31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.top, rect.left)];
     OsmAnd::PointI bottomRight31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.bottom, rect.right)];
@@ -519,6 +519,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     
     int added = 0;
     auto networkRouteSelector = std::make_shared<OsmAnd::NetworkRouteSelector>([OsmAndApp instance].resourcesManager->obfsCollection);
+    networkRouteSelector->rCtx->setNetworkFilter(*selectorFilter);
     auto routes = networkRouteSelector->getRoutes(area31, false, nullptr);
     
     for (auto it = routes.begin(); it != routes.end(); ++it)

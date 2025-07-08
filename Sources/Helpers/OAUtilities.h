@@ -52,6 +52,7 @@ static inline BOOL NSArrayIsEmpty(NSArray * _Nullable array) {
 
 static inline BOOL NSDictionaryIsEmpty(NSDictionary * _Nullable dictionary) {
     return !dictionary || dictionary.count == 0;
+}
 
 static inline void executeOnMainThread(dispatch_block_t block)
 {

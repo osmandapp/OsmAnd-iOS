@@ -3732,3 +3732,11 @@
 "obd_fuel_pressure_desc" = "Viser trykket i brændstofsystemet";
 "obd_air_intake_temp" = "Luftindtagets temperatur";
 "obd_air_intake_temp_desc" = "Viser temperaturen på den luft, der kommer ind i motorens indsugningsmanifold.";
+"obd_engine_oil_temperature" = "Motoroliens temperatur";
+"obd_engine_oil_temperature_desc" = "Viser temperaturen på motorolien.";
+"obd_ambient_air_temp" = "Omgivelsernes temperatur";
+"obd_ambient_air_temp_desc" = "Viser temperaturen uden for bilen.";
+"obd_battery_voltage" = "Batterispænding";
+"obd_engine_coolant_temp" = "Kølevæskens temperatur";
+"remaining_fuel" = "Resterende brændstof";
+"remaining_fuel_description" = "Viser mængden af brændstof, der er tilbage i bilens tank";

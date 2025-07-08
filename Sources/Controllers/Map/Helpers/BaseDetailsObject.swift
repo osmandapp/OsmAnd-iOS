@@ -163,12 +163,10 @@ final class BaseDetailsObject: NSObject {
     }
     
     private func overlapPublicTransport(_ renderedObjects: [OARenderedObject], stops: [OATransportStop]) -> Bool {
-        for renderedObject in renderedObjects {
-            if overlapPublicTransport(withRenderedObject: renderedObject, stops: stops) {
-                return true
-            }
+        let found = renderedObjects.first { renderedObject in
+            overlapPublicTransport(withRenderedObject: renderedObject, stops: stops)
         }
-        return false
+        return found != nil
     }
     
     private func overlapPublicTransport(withRenderedObject renderedObject: OARenderedObject, stops: [OATransportStop]) -> Bool {
@@ -286,7 +284,7 @@ final class BaseDetailsObject: NSObject {
                 }
             } else if let renderedObject = object as? OARenderedObject {
                 let type = ObfConstants.getOsmEntityType(renderedObject)
-                if let type = type {
+                if let type {
                     let osmId = ObfConstants.getOsmObjectId(renderedObject)
                     let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
                     
@@ -473,34 +471,20 @@ final class BaseDetailsObject: NSObject {
                object is BaseDetailsObject
     }
     
+    private func getObjects<T>(ofType type: T.Type) -> [T] {
+       objects.compactMap { $0 as? T }
+    }
+    
     func getAmenities() -> [OAPOI] {
-        var amenities = [OAPOI]()
-        for object in objects {
-            if let amenity = object as? OAPOI {
-                amenities.append(amenity)
-            }
-        }
-        return amenities
+        getObjects(ofType: OAPOI.self)
     }
     
     func getTransportStops() -> [OATransportStop] {
-        var stops = [OATransportStop]()
-        for object in objects {
-            if let stop = object as? OATransportStop {
-                stops.append(stop)
-            }
-        }
-        return stops
+        getObjects(ofType: OATransportStop.self)
     }
     
     func getRenderedObjects() -> [OARenderedObject] {
-        var renderedObjects = [OARenderedObject]()
-        for object in objects {
-            if let renderedObject = object as? OARenderedObject {
-                renderedObjects.append(renderedObject)
-            }
-        }
-        return renderedObjects
+        getObjects(ofType: OARenderedObject.self)
     }
     
     static func findObfType(_ obfResourceName: String?, amenity: OAPOI) -> EOASearchResultResource {

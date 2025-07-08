@@ -119,15 +119,9 @@ final class TravelObfHelper : NSObject {
     }
     
     func searchTravelGpx(latLon: CLLocationCoordinate2D, routeId: String) -> TravelGpx? {
-       
-        
-        
-        //TODO: Implement
-        
-        
+        //Never triggered. implement later
         return nil
     }
-    
     
     func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {
         var foundAmenities = [OAFoundAmenity]()
@@ -876,9 +870,6 @@ final class TravelObfHelper : NSObject {
     }
     
     func openTrackMenu(article: TravelArticle, gpxFileName: String, latLon: CLLocation, adjustMapPosition: Bool) {
-        
-        //TODO: implement
-        
     }
     
 }

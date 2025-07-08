@@ -379,6 +379,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (void) addTravelGpx:(OAMapSelectionResult *)result routeId:(NSString *)routeId
 {
+    //Never triggered
     OATravelGpx *travelGpx = [OATravelObfHelper.shared searchTravelGpxWithLatLon:result.objectLatLon.coordinate routeId:routeId];
     
     if (travelGpx && [self isUniqueTravelGpx:[result getAllObjects] travelGpx:travelGpx])

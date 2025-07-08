@@ -43,7 +43,7 @@ class ClickableWayAsyncTask: OABaseLoadAsyncTask {
     }
     
     private func openAsGpxFile(_ clickableWay: ClickableWay?) -> Bool {
-        if let clickableWay = clickableWay {
+        if let clickableWay {
             let gpxFile = clickableWay.getGpxFile()
             let analysis = gpxFile.getAnalysis(fileTimestamp: 0)
             let name = clickableWay.getGpxFileName()

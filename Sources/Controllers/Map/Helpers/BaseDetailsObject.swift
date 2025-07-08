@@ -105,7 +105,7 @@ final class BaseDetailsObject: NSObject {
             if osmId != -1 {
                 osmIds.insert(Int(osmId))
             }
-            if let wikidata = wikidata, !wikidata.isEmpty {
+            if let wikidata, !wikidata.isEmpty {
                 wikidataIds.insert(wikidata)
             }
         }
@@ -176,7 +176,7 @@ final class BaseDetailsObject: NSObject {
         let tags = renderedObject.tags
         let name = renderedObject.name
         
-        if let name = name, !name.isEmpty {
+        if let name, !name.isEmpty {
             var namesEqual = false
             for stop in stops {
                 if let stopName = stop.name {
@@ -541,9 +541,9 @@ final class BaseDetailsObject: NSObject {
             amenity = detailsObject.getSyntheticAmenity()
         }
         
-        if let amenity = amenity, getResourceType(object) == .travel {
+        if let amenity, getResourceType(object) == .travel {
             let lang = amenity.getTagSuffix("\(LANG_YES):")
-            if let lang = lang {
+            if let lang {
                 return lang
             }
         }

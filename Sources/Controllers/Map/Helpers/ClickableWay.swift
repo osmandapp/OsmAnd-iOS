@@ -53,7 +53,7 @@ final class ClickableWay: NSObject {
     }
     
     func getWayName() -> String {
-        if let name = name, !name.isEmpty {
+        if let name, !name.isEmpty {
             return name
         } else {
             let altName = gpxFile.getExtensionsToRead()["ref"]

@@ -103,9 +103,9 @@
     if (connectionOptions.URLContexts.count > 0)
     {
         NSURL *url = [connectionOptions.URLContexts.allObjects.firstObject URL];
-        NSLog(@"handling URL: %@", url);
         [self openURL:url];
-        LogStartup(@"handled URL context");
+        NSString *handledMessage = [NSString stringWithFormat:@"Handled URL context: %@", url];
+        LogStartup(handledMessage);
     }
     
     if (connectionOptions.userActivities.count > 0)
@@ -116,9 +116,9 @@
             NSURL *webpageURL = userActivity.webpageURL;
             if ([[UIApplication sharedApplication] canOpenURL:webpageURL])
             {
-                NSLog(@"handling Universal Link: %@", webpageURL);
                 [self openURL:webpageURL];
-                LogStartup(@"handled Universal Link");
+                NSString *handlingMessage = [NSString stringWithFormat:@"Handling Universal Link: %@", webpageURL];
+                LogStartup(handlingMessage);
             }
         }
     }

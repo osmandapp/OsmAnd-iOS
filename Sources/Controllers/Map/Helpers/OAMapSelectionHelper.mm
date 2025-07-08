@@ -394,7 +394,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     }
     else if (!travelGpx)
     {
-        NSLog(@"addTravelGpx() searchTravelGpx() travelGpx is null")
+        NSLog(@"addTravelGpx() searchTravelGpx() travelGpx is null");
     }
 }
 

@@ -3208,7 +3208,7 @@
 "rendering_attr_padusHideBoundaries_name" = "Ukryj granice gruntów publicznych";
 "rendering_value_access_name" = "Według typu dostępu";
 "rendering_attr_padusDisplayMode_description" = "Według typu dostępu lub nazwy menedżera";
-"rendering_attr_showDirtbikeTrails_name" = "Terenowe szlaki rowerowe";
+"rendering_attr_showDirtbikeTrails_name" = "Terenowa trasa rowerowa";
 "shared_string_reset_all" = "Resetuj wszystko";
 "max_sensor_heartrate" = "Maksymalne tętno";
 "delete_widget" = "Usunąć widżet?";
@@ -3249,7 +3249,7 @@
 "help_article_navigation_car_play_name" = "CarPlay";
 "help_article_navigation_routing_brouter_name" = "BRouter";
 "OsmAnd Maps" = "Mapy OsmAnd";
-"start_point" = "Start";
+"start_point" = "Początek";
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
 "quick_action_save_recorded_trip_and_continue" = "Nagrana podróż i kontynuacja";
 "new_trip_segment" = "Nowy odcinek podróży";
@@ -3334,3 +3334,14 @@
 "add_widget_to_the_right" = "Dodaj widżet po prawej";
 "add_widget_to_the_left" = "Dodaj widżet po lewej";
 "add_widget_above" = "Dodaj widżet powyżej";
+"help_article_map_tracks_name" = "Ścieżki";
+"help_article_map_tracks_track_context_menu_name" = "Menu kontekstowe ścieżek";
+"help_article_map_tracks_appearance_name" = "Wygląd ścieżki";
+"help_article_personal_tracks_manage_tracks_name" = "Zarządzaj ścieżkami";
+"help_article_personal_tracks_smart_folder_name" = "Folder Smart (Filtr)";
+"help_article_troubleshooting_resources_name" = "Zasoby i modyfikacje";
+"help_article_troubleshooting_video_tutorials_name" = "Samouczki i przewodniki wideo";
+"tracker_item" = "Monitor OsmAnd";
+"testFlight" = "TestFlight";
+"rendering_attr_showDirtbikeTrails_description" = "Pokaż terenowe trasy rowerowe";
+"battery_widget_level_privacy_ios_desc" = "Z powodu zabezpieczeń w systemie iOS, widżet może wyświetlać procent baterii tylko w pięcioprocentowych odstępach, na przykład 35%, 60% lub 80%.";

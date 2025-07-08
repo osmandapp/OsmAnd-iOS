@@ -30,6 +30,7 @@
 #import "OsmAndSharedWrapper.h"
 #import "OAGpxApproximationHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAWorldRegion.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
@@ -370,6 +371,7 @@
     NSMutableSet<NSString *> *_nativeFiles;
     MissingMapsCalculator *_missingMapsCalculator;
     NSObject *_nativeRoutingLock;
+    OAWorldRegion *_or;
 }
 
 - (instancetype)init
@@ -388,6 +390,7 @@
             {
                 [self onLocalResourcesChanged];
             });
+        _or = OsmAndApp.instance.worldRegion;
     }
     return self;
 }
@@ -881,13 +884,14 @@
             // router->USE_ONLY_HH_ROUTING = hhRoutingOnly; // set true to debug HH routing
         }
 
+        NSArray<CLLocation *> *targets = (inters.count > 0) ? [inters arrayByAddingObject:en] : @[en];
+
         if (router->CALCULATE_MISSING_MAPS)
         {
             if (!_missingMapsCalculator)
             {
                 _missingMapsCalculator = [MissingMapsCalculator new];
             }
-            NSArray<CLLocation *> *targets = (inters.count > 0) ? [inters arrayByAddingObject:en] : @[en];
             if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:!oldRouting])
             {
                 OARouteCalculationResult *r = [[OARouteCalculationResult alloc] initWithErrorMessage:[_missingMapsCalculator getErrorMessage]];
@@ -898,11 +902,12 @@
                 return r;
             }
         }
-    
+
         if (complexCtx)
         {
             try
             {
+                [self calculateRegionsWithAllRoutePoints:complexCtx start:st targets:targets];
                 result = router->searchRoute(complexCtx, startX, startY, endX, endY, intX, intY, precalculated);
                 // discard ctx and replace with calculated
                 ctx = complexCtx;
@@ -917,11 +922,13 @@
                     }
                 });
                  */
+                [self calculateRegionsWithAllRoutePoints:ctx start:st targets:targets];
                 result = router->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
             }
         }
         else
         {
+            [self calculateRegionsWithAllRoutePoints:ctx start:st targets:targets];
             result = router->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
         }
         
@@ -965,6 +972,44 @@
     catch (NSException *e)
     {
         return [[OARouteCalculationResult alloc] initWithErrorMessage:e.reason];
+    }
+}
+
+- (void) calculateRegionsWithAllRoutePoints:(std::shared_ptr<RoutingContext>)ctx
+                                      start:(CLLocation *)start
+                                    targets:(NSArray<CLLocation *> *)targets
+{
+    NSMutableDictionary<NSString*, NSNumber*> *regionCounter = [NSMutableDictionary dictionary];
+
+    [self getRegionsOfPoint:start regionCounter:regionCounter];
+
+    for (CLLocation *loc in targets) {
+       [self getRegionsOfPoint:loc regionCounter:regionCounter];
+    }
+
+    int allPoints = 1 + (int)targets.count;
+
+    std::vector<std::string> result;
+    for (NSString *region in regionCounter) {
+        if ([regionCounter[region] intValue] == allPoints) {
+            result.emplace_back([region UTF8String]);
+        }
+    }
+    ctx->regionsCoveringStartAndTargets = std::move(result);
+}
+
+- (void) getRegionsOfPoint:(CLLocation *) ll
+             regionCounter:(NSMutableDictionary<NSString*, NSNumber*> *) regionCounter
+{
+    NSArray<OAWorldRegion *> *regionsArray = [_or getWorldRegionsAtWithoutSort:ll.coordinate.latitude longitude:ll.coordinate.longitude];
+    for (OAWorldRegion *region in regionsArray)
+    {
+        NSString *name = region.downloadsIdPrefix;
+        if ([name hasSuffix:@"."])
+        {
+            name = [name substringToIndex:[name length] - 1];
+        }
+        regionCounter[name] = @([regionCounter[name] integerValue] + 1);
     }
 }
 

@@ -52,6 +52,13 @@ static inline BOOL NSArrayIsEmpty(NSArray * _Nullable array) {
 
 static inline BOOL NSDictionaryIsEmpty(NSDictionary * _Nullable dictionary) {
     return !dictionary || dictionary.count == 0;
+
+static inline void executeOnMainThread(dispatch_block_t block)
+{
+    if ([NSThread isMainThread])
+        block();
+    else
+        dispatch_async(dispatch_get_main_queue(), block);
 }
 
 @interface UIBezierPath (util)

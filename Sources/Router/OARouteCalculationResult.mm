@@ -606,7 +606,6 @@
     long time = 0;
     if (_currentDirectionInfo < _directions.count)
     {
-        OARouteDirectionInfo *current = _directions[_currentDirectionInfo];
         // Locate next direction of interest
         int nextInd = _currentDirectionInfo + 1;
         while (nextInd < _directions.count)

@@ -429,6 +429,7 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
             return ![wr regionMap] && [wr regionRoads];
         }
     }
+    return NO;
 }
 
 @end

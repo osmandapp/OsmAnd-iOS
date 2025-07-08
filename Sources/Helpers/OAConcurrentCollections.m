@@ -266,7 +266,10 @@
 
 - (NSDictionary *)asDictionary
 {
-    return [NSDictionary dictionaryWithDictionary:_dictionary];
+    @synchronized (_lock)
+    {
+        return _dictionary ? [_dictionary copy] : @{};
+    }
 }
 
 @end

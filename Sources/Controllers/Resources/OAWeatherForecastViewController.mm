@@ -1287,16 +1287,37 @@
         }];
     }
 }
-
 - (void)onUpdateForecast
 {
     if (_selectedIndexPath)
     {
-        NSMutableDictionary *forecastCell = _data[_selectedIndexPath.section][@"cells"][_selectedIndexPath.row];
-        OAWorldRegion *region = (OAWorldRegion *) forecastCell[@"region"];
-        NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
-        forecastCell[@"description"] = [OAWeatherHelper getStatusInfoDescription:regionId];
-        [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        NSInteger section = _selectedIndexPath.section;
+        NSInteger row = _selectedIndexPath.row;
+        
+        if (section < _data.count)
+        {
+            NSDictionary *sectionDict = _data[section];
+            NSArray *cells = sectionDict[@"cells"];
+            
+            if ([cells isKindOfClass:[NSArray class]] && row < cells.count)
+            {
+                NSMutableDictionary *forecastCell = cells[row];
+                OAWorldRegion *region = (OAWorldRegion *)forecastCell[@"region"];
+                NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
+                forecastCell[@"description"] = [OAWeatherHelper getStatusInfoDescription:regionId];
+                
+                [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath]
+                                      withRowAnimation:UITableViewRowAnimationNone];
+            }
+            else
+            {
+                NSLog(@"[OAWeatherForecastVC] Invalid row or 'cells' is not NSArray: section=%ld row=%ld", (long)section, (long)row);
+            }
+        }
+        else
+        {
+            NSLog(@"[OAWeatherForecastVC] Invalid section: %ld (data count: %lu)", (long)section, (unsigned long)_data.count);
+        }
     }
 }
 

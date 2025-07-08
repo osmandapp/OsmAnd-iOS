@@ -3776,3 +3776,6 @@
 "connect_obd_instructions_step" = "1. Sambungkan pemindai ke port OBD-II kendaraan Anda.\n\n2. Nyalakan mesin kendaraan Anda\n\n3. Aktifkan Bluetooth di perangkat Anda\n\n4. Ketuk '%@' dan pilih pemindai Anda dari daftar.";
 "obd_nothing_found_description" = "Periksa hal-hal berikut:\n– Pastikan Bluetooth aktif\n– Mesin kendaraan menyala\n– Pastikan perangkat Anda berada dalam jangkauan pemindai.";
 "obd_plugin_description" = "Pantau metrik utama kendaraan menggunakan protokol OBD-II. Akses data termasuk:\n• Kecepatan mesin, Waktu Mesin Berjalan, Beban Mesin yang Dihitung\n• Konsumsi bahan bakar, Tekanan bahan bakar, Bahan bakar tersisa\n• Suhu masuk, Suhu lingkungan, Suhu pendingin, Suhu Oli Mesin\n• Kecepatan kendaraan, Posisi Throttle, Tegangan baterai";
+"vehicle_metrics_recording_description" = "Pilih parameter untuk direkam dalam berkas GPX.";
+"shared_string_other" = "Lainnya";
+"shared_string_engine" = "Mesin";

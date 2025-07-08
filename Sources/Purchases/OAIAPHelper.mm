@@ -1026,6 +1026,45 @@ static OASubscriptionState *EXPIRED;
     
     [self getActiveProducts:^(NSArray<OAProduct *> *products, NSDictionary<NSString *,NSDate *> *expirationDates, BOOL success) {
         
+        BOOL subscribed = NO;
+        BOOL live = NO;
+        BOOL pro = NO;
+        BOOL maps = NO;
+        BOOL full = NO;
+        BOOL depth = NO;
+        BOOL contour = NO;
+        BOOL wiki = NO;
+        BOOL sensors = NO;
+        BOOL vehicleMetrics = NO;
+
+        for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
+            if (holder.linkedProduct && holder.linkedProduct.isFullVersion)
+            {
+                full = YES;
+                break;
+            }
+        
+        for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
+            if (holder.linkedSubscription && holder.linkedSubscription.isMaps && holder.state == OASubscriptionState.ACTIVE)
+            {
+                maps = YES;
+                break;
+            }
+        
+        for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
+            if (holder.linkedSubscription && holder.linkedSubscription.isOsmAndPro && holder.state == OASubscriptionState.ACTIVE)
+            {
+                pro = YES;
+                break;
+            }
+        for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
+            if (holder.linkedProduct && holder.linkedProduct.isOsmAndPro)
+            {
+                pro = YES;
+                break;
+            }
+        
+        NSMutableArray<OAProduct *> *purchased = [NSMutableArray array];
         if (products)
         {
             [expirationDates enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull prodId, NSDate * _Nonnull expDate, BOOL * _Nonnull stop) {
@@ -1039,17 +1078,6 @@ static OASubscriptionState *EXPIRED;
                 //    [_products setExpired:product.productIdentifier];
             }
             
-            NSMutableArray<OAProduct *> *purchased = [NSMutableArray array];
-            BOOL subscribed = NO;
-            BOOL live = NO;
-            BOOL pro = NO;
-            BOOL maps = NO;
-            BOOL full = NO;
-            BOOL depth = NO;
-            BOOL contour = NO;
-            BOOL wiki = NO;
-            BOOL sensors = NO;
-            BOOL vehicleMetrics = NO;
             NSMutableArray<OASubscription *> *purchasedSubs = [NSMutableArray array];
             for (OAProduct *product in products)
             {
@@ -1097,40 +1125,6 @@ static OASubscriptionState *EXPIRED;
                 [_products setPurchased:product.productIdentifier];
                 if (!wasPurchased)
                     [purchased addObject:product];
-            }
-            
-            if (!full)
-            {
-                for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
-                    if (holder.linkedProduct && holder.linkedProduct.isFullVersion)
-                    {
-                        full = YES;
-                        break;
-                    }
-            }
-            if (!maps)
-            {
-                for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
-                    if (holder.linkedSubscription && holder.linkedSubscription.isMaps && holder.state == OASubscriptionState.ACTIVE)
-                    {
-                        maps = YES;
-                        break;
-                    }
-            }
-            if (!pro)
-            {
-                for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
-                    if (holder.linkedSubscription && holder.linkedSubscription.isOsmAndPro && holder.state == OASubscriptionState.ACTIVE)
-                    {
-                        pro = YES;
-                        break;
-                    }
-                for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
-                    if (holder.linkedProduct && holder.linkedProduct.isOsmAndPro)
-                    {
-                        pro = YES;
-                        break;
-                    }
             }
             
             NSArray<OASubscription *> *subs = [self.subscriptionList getPurchasedSubscriptions];
@@ -1207,19 +1201,19 @@ static OASubscriptionState *EXPIRED;
                     [s setPurchaseCancelledTime:0];
                 }
             }
+        }
 
-            [_settings.liveUpdatesPurchased set:live];
-            [_settings.osmandProPurchased set:pro];
-            [_settings.osmandMapsPurchased set:maps];
-            [_settings.fullVersionPurchased set:full];
-            [_settings.depthContoursPurchased set:depth];
-            [_settings.contourLinesPurchased set:contour];
-            [_settings.wikipediaPurchased set:wiki];
+        [_settings.liveUpdatesPurchased set:live];
+        [_settings.osmandProPurchased set:pro];
+        [_settings.osmandMapsPurchased set:maps];
+        [_settings.fullVersionPurchased set:full];
+        [_settings.depthContoursPurchased set:depth];
+        [_settings.contourLinesPurchased set:contour];
+        [_settings.wikipediaPurchased set:wiki];
 
-            for (OAProduct *p in purchased)
-            {
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:p.productIdentifier userInfo:nil];
-            }
+        for (OAProduct *p in purchased)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:p.productIdentifier userInfo:nil];
         }
 
         _wasProductListFetched = success;

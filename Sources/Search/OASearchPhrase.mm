@@ -753,16 +753,26 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         [w syncWordWithResult];
 }
 
-- (NSString *) getText:(BOOL)includeUnknownPart
+- (NSString *)getText:(BOOL)includeUnknownPart
 {
     NSMutableString *sb = [NSMutableString string];
     for (OASearchWord *s in self.words)
     {
-        [sb appendString:s.word];
+        if (s.word != nil)
+            [sb appendString:s.word];
+        else
+            NSLog(@"[OASearchPhrase] Warning: OASearchWord.word is nil for a word in words");
+        
         [sb appendString:DELIMITER];
     }
+    
     if (includeUnknownPart)
-        [sb appendString:_unknownSearchPhrase];
+    {
+        if (_unknownSearchPhrase != nil)
+            [sb appendString:_unknownSearchPhrase];
+        else
+            NSLog(@"[OASearchPhrase] Warning: _unknownSearchPhrase is nil");
+    }
     
     return [NSString stringWithString:sb];
 }

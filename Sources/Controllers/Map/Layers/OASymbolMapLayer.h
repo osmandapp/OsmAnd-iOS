@@ -13,4 +13,6 @@
 @property (nonatomic, readonly) BOOL showCaptions;
 @property (nonatomic, readonly) double captionTopSpace;
 
+- (void) updateCaptionStyle;
+
 @end

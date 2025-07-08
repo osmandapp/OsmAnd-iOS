@@ -104,8 +104,10 @@ typedef enum {
     _courseMarkerDay->setIsAccuracyCircleVisible(false);
     _courseMarkerNight->setIsHidden(true);
     _courseMarkerNight->setIsAccuracyCircleVisible(false);
-    [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(0.0f)];
     
+    executeOnMainThread(^{
+        [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(0.0f)];
+    });
 }
 
 - (void) setCurrentMarkerState:(EOAMarkerState)state showHeading:(BOOL)showHeading
@@ -209,13 +211,17 @@ typedef enum {
     {
         [_mapView setMyLocationCircleColor:(circleColor.withAlpha(0.2f))];
         [_mapView setMyLocationCirclePosition:(circleLocation31)];
-        [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(circleRadius)];
+        executeOnMainThread(^{
+            [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(circleRadius)];
+        });
         [_mapView setMyLocationSectorDirection:(sectorDirection)];
         [_mapView setMyLocationSectorRadius:(sectorRadius)];
     }
     else
     {
-        [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(0.0f)];
+        executeOnMainThread(^{
+            [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(0.0f)];
+        });
         [_mapView setMyLocationSectorRadius:(0.0f)];
     }
 }
@@ -236,7 +242,9 @@ typedef enum {
     {
         marker->setIsAccuracyCircleVisible(true);
         marker->setAccuracyCircleRadius(horizontalAccuracy);
-        [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(horizontalAccuracy)];
+        executeOnMainThread(^{
+            [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(horizontalAccuracy)];
+        });
 
         _mapView.mapMarkersAnimator->cancelAnimations(marker);
         if (animationDuration > 0)
@@ -753,7 +761,7 @@ typedef enum {
 
     float animationDuration = 0;
     if (OAAppSettings.sharedManager.animateMyLocation.get && prevLocation
-        && ![OAMapUtils areLatLonEqual:newLocation.coordinate l2:prevLocation.coordinate])
+        && ![OAMapUtils areLatLonEqual:newLocation.coordinate coordinate2:prevLocation.coordinate precision:0.000001])
     {
         animationDuration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
         if (animationDuration > 5)
@@ -764,7 +772,7 @@ typedef enum {
     _currentMarkerState = c.currentMarkerState;
     for (OAMarkerCollection *mc in _modeMarkers.objectEnumerator)
         if (mc != c)
-            [self updateCollectionLocation:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:NO];
+            [self updateCollectionLocation:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:animationDuration visible:NO];
 }
 
 - (void) updateCollectionLocation:(OAMarkerCollection *)c newLocation:(CLLocation *)newLocation newTarget31:(OsmAnd::PointI)newTarget31 newHeading:(CLLocationDirection)newHeading animationDuration:(float)animationDuration visible:(BOOL)visible

@@ -140,7 +140,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 {
                     if (billboardAdditionalParams->overridesPosition31)
                     {
-                        lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x); //TODO: not tested yet
+                        lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x);
                         lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
                         result.objectLatLon = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
                     }
@@ -148,7 +148,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 
                 if (const auto amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
                 {
-                    cppAmenity = amenitySymbolGroup->amenity;                                     //TODO: not tested yet
+                    cppAmenity = amenitySymbolGroup->amenity;
                 }
             }
             else
@@ -158,7 +158,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             
             if (cppAmenity != nullptr)
             {
-                NSMutableArray<NSString *> *names = [NSMutableArray new];                       //TODO: not tested yet
+                // Never triggered
+                NSMutableArray<NSString *> *names = [NSMutableArray new];
                 for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(cppAmenity->localizedNames)))
                 {
                     NSString *name = entry.value().toNSString();
@@ -171,21 +172,16 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                     [names addObject:nativeName];
                 
                 uint64_t obfId = cppAmenity->id.id;
-                
-                //old
                 amenity = [self.class findAmenity:result.objectLatLon names:names obfId:obfId];
                 
-                //TODO: implement?
                 /*
-                // new
                 Amenity requestAmenity = new Amenity();
                 requestAmenity.setId(id);
                 requestAmenity.setLocation(result.objectLatLon);
-
                 AmenitySearcher.Settings settings = app.getResourceManager().getDefaultAmenitySearchSettings();
                 AmenitySearcher.Request request = new AmenitySearcher.Request(requestAmenity, names);
                 detailsObject = amenitySearcher.searchDetailedObject(request, settings);
-                 */
+                */
             }
             else
             {
@@ -209,12 +205,13 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                         {
                             if (isTravelGpx)
                             {
-                                [self addTravelGpx:result routeId: tags[ROUTE_ID]];                           //TODO: not tested yet
+                                // Never triggered
+                                [self addTravelGpx:result routeId: tags[ROUTE_ID]];
                             }
                             else if (isClickableWay)
                             {
                                 OAClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:result.pointLatLon obfMapObject:obfMapObject tags:tags];
-                                [self addClickableWay:result clickableWay:clickableWay];                      //TODO: not tested yet
+                                [self addClickableWay:result clickableWay:clickableWay];
                             }
                         }
                         
@@ -236,21 +233,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                                 }
                                 
                                 BOOL allowRenderedObjects = !isOsmRoute && !isClickableWay &&  !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags([self toQHash:tags]);
-                                
-//                                //TODO: update down here
-//                                amenity = [self getAmenity:latLon obfMapObject:obfMapObject tags:tags];
-////                                RenderedObject renderedObject = createRenderedObject(symbolInfo, obfMapObject, tags);
-//                                
-//                                if (amenity)
-//                                {
-//                                    [amenity setMapIconName:[self getMapIconName:symbolInfo]];
-//                                }
-//                                else if (allowRenderedObjects)
-//                                {
-////                                    OARenderedObject *renderedObject = [self createRenderedObject:result symbolInfo:symbolInfo obfMapObject:obfMapObject tags:tags];   //TODO: not tested yet
-//                                }
-                                
-                                
+                                                                
                                 OARenderedObject *renderedObject = [self createRenderedObject:symbolInfo obfMapObject:obfMapObject tags:tags];
                                 if (renderedObject)
                                 {
@@ -260,8 +243,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                                     }
                                     else
                                     {
-                                        BOOL stop = YES;
-                                        //TODO: implement?
+                                        // Triggered but always was nil
                                         /*
                                         AmenitySearcher.Settings settings = app.getResourceManager().getDefaultAmenitySearchSettings();
                                         AmenitySearcher.Request request = new AmenitySearcher.Request(renderedObject);
@@ -271,23 +253,16 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                                             addGeometry(detailsObject, obfMapObject);
                                             detailsObject.setObfResourceName(obfMapObject.getObfSection().getName());
                                         }
-                                         */
+                                        */
                                     }
                                 }
-                                
-                                
                             }
                         }
                     }
                 }
             }
             
-            if (amenity && [self isUniqueAmenity:[result getAllObjects] amenity:amenity])                            //TODO: not tested
-            {
-                [result collect:amenity provider:_provider];
-            }
-            
-            //TODO: update
+            // Never triggered
             /*
             if (detailsObject != null && !isTransportStop(result.getAllObjects(), detailsObject)) {
                 result.collect(detailsObject, mapLayers.getPoiMapLayer());
@@ -408,11 +383,18 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     
     if (travelGpx && [self isUniqueTravelGpx:[result getAllObjects] travelGpx:travelGpx])
     {
-
+        /*
+        WptPt selectedPoint = new WptPt();
+        selectedPoint.setLat(result.getPointLatLon().getLatitude());
+        selectedPoint.setLon(result.getPointLatLon().getLongitude());
+        SelectedGpxPoint selectedGpxPoint = new SelectedGpxPoint(null, selectedPoint);
+        result.collect(new Pair<>(travelGpx, selectedGpxPoint), mapLayers.getTravelSelectionLayer());
+         */
     }
-    
-    
-    //TODO: implement later
+    else if (!travelGpx)
+    {
+        NSLog(@"addTravelGpx() searchTravelGpx() travelGpx is null")
+    }
 }
 
 - (BOOL) addClickableWay:(OAMapSelectionResult *)result clickableWay:(OAClickableWay *)clickableWay
@@ -424,19 +406,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     }
     return NO;
 }
-
-//TODO: implement addGeometry() ?
-/*
-private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfMapObject obfMapObject) {
-    if (detailObj != null && !detailObj.hasGeometry() && obfMapObject.getPoints31().size() > 1) {
-        QVectorPointI points31 = obfMapObject.getPoints31();
-        for (int k = 0; k < points31.size(); k++) {
-            detailObj.addX(points31.get(k).getX());
-            detailObj.addY(points31.get(k).getY());
-        }
-    }
-}
- */
 
 - (BOOL) isUniqueGpxFileName:(NSMutableArray<OASelectedMapObject *> *)selectedObjects gpxFileName:(NSString *)gpxFileName
 {
@@ -482,8 +451,6 @@ private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfM
             if (firstOblect && [firstOblect isKindOfClass:OATravelGpx.class])
             {
                 OATravelGpx *gpx = firstOblect;
-                
-                // TODO: test this isEqual method
                 if (travelGpx == gpx)
                 {
                     return NO;

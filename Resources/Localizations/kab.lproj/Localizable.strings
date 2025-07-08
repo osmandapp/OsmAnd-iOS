@@ -186,7 +186,7 @@
 "rendering_attr_smoothness_excellent_name" = "Yufrar ($1)";
 "app_mode_default" = "Snirem";
 "shared_string_back" = "Uɣal";
-"shared_string_read_more" = "Γer uggar";
+"shared_string_read_more" = "Ɣeṛ ugar";
 "cancel_navigation" = "Seḥbes tunigin";
 "rotate_map_to" = "Taɣda n tkarḍa";
 "app_mode_osm" = "Rnu neɣ ẓreg ifarisen n OSM";
@@ -317,14 +317,14 @@
 "no_inet_connection" = "Ulac tuqqna n Internet";
 "rendering_attr_highway_class_steps_name" = "Imecwaṛen";
 "rendering_attr_hideWaterPolygons_name" = "Ffer aman";
-"shared_string_ok" = "Γas";
+"shared_string_ok" = "Ɣas";
 "city_type_village" = "Taddart";
 "quick_action_add_poi" = "Rnu";
 "shared_string_collapse" = "Ḍfes";
 "daily" = "Yal ass";
 "shared_string_time" = "Akud";
 "gpx_tags_txt" = "Tibzimin";
-"shared_string_about" = "Γef";
+"shared_string_about" = "Ɣef";
 "contact_info" = "Talɣut n unermes";
 "select_street" = "Fren abrid";
 "si_mph" = "Imilen deg usrag";
@@ -700,7 +700,7 @@
 "shared_string_delete_all" = "Kkes-it meṛṛa";
 "data_settings" = "Isefka";
 "ltr_or_rtl_combine_via_slash" = "%@ di %@";
-"route_to" = "Γer :";
+"route_to" = "I :";
 "duration_ago" = "%@ aya";
 "nothing_found" = "Ulac ayen yettwafen";
 "settings_item_read_error" = "Ur izmir ara ad d-iɣer %@.";
@@ -773,7 +773,7 @@
 "shared_string_read" = "Ɣeṛ";
 "lang_sr-Latn" = "Tasiṛbit (Talaṭinit)";
 "shared_string_move" = "Senkez";
-"context_menu_read_article" = "Γer amagrad";
+"context_menu_read_article" = "Ɣer amagrad";
 "upload_poi" = "Ali";
 "network" = "Aẓeṭṭa";
 "shared_string_accessibility" = "Tuffart";

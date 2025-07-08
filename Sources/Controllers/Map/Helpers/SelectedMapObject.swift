@@ -21,10 +21,10 @@ class SelectedMapObject: NSObject {
     }
     
     func getObject() -> Any {
-        return object
+        object
     }
     
     func getProvider() -> OAContextMenuProvider? {
-        return provider
+        provider
     }
 } 

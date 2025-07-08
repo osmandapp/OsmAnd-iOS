@@ -33,23 +33,23 @@ final class ClickableWay: NSObject {
     }
     
     func getOsmId() -> UInt64 {
-        return osmId
+        osmId
     }
     
     func getBbox() -> KQuadRect {
-        return bbox
+        bbox
     }
     
     func getGpxFile() -> GpxFile {
-        return gpxFile
+        gpxFile
     }
     
     func getSelectedGpxPoint() -> SelectedGpxPoint {
-        return selectedGpxPoint
+        selectedGpxPoint
     }
     
     func getGpxFileName() -> String {
-        return getWayName().sanitizeFileName()
+        getWayName().sanitizeFileName()
     }
     
     func getWayName() -> String {
@@ -62,6 +62,6 @@ final class ClickableWay: NSObject {
     }
     
     func toString() -> String {
-        return getWayName()
+        getWayName()
     }
 } 

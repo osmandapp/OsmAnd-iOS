@@ -33,10 +33,10 @@ class SelectedGpxPoint: NSObject {
     }
     
     func getSelectedGpxFile() -> GpxFile? {
-        return selectedGpxFile
+        selectedGpxFile
     }
     
     func getSelectedPoint() -> WptPt? {
-        return selectedPoint
+        selectedPoint
     }
 } 

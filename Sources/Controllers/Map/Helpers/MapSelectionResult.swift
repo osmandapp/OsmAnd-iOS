@@ -38,15 +38,15 @@ class MapSelectionResult: NSObject {
     }
     
     func getPoint() -> CGPoint {
-        return point
+        point
     }
     
     func getAllObjects() -> Array<SelectedMapObject> {
-        return allObjects
+        allObjects
     }
     
     func getProcessedObjects() -> Array<SelectedMapObject> {
-        return processedObjects
+        processedObjects
     }
     
     func collect(_ object: Any, provider: Any) {
@@ -112,6 +112,6 @@ class MapSelectionResult: NSObject {
     }
     
     func isEmpty() -> Bool {
-        return allObjects.count == 0
+        allObjects.count == 0
     }
 } 

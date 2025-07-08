@@ -20,15 +20,15 @@ private enum ObjectCompleteness: UInt {
 @objcMembers
 final class BaseDetailsObject: NSObject {
     
-    private var syntheticAmenity: OAPOI
-    private var objectCompleteness: ObjectCompleteness
-    private var searchResultResource: EOASearchResultResource
-    private var obfResourceName: String?
-    
     var osmIds: Set<Int>
     var wikidataIds: Set<String>
     var objects: Array<Any>
     var lang: String
+    
+    private var syntheticAmenity: OAPOI
+    private var objectCompleteness: ObjectCompleteness
+    private var searchResultResource: EOASearchResultResource
+    private var obfResourceName: String?
     
     override init() {
         self.lang = "en"
@@ -47,14 +47,16 @@ final class BaseDetailsObject: NSObject {
     }
     
     convenience init(object: Any, lang: String) {
-        self.init(lang: lang.isEmpty ? "en" : lang)
-        self.lang = lang.isEmpty ? "en" : lang
+        let effectiveLang = lang.isEmpty ? "en" : lang
+        self.init(lang: effectiveLang)
+        self.lang = effectiveLang
         self.addObject(object)
     }
     
     convenience init(amenities: [OAPOI], lang: String) {
-        self.init(lang: lang.isEmpty ? "en" : lang)
-        self.lang = lang.isEmpty ? "en" : lang
+        let effectiveLang = lang.isEmpty ? "en" : lang
+        self.init(lang: effectiveLang)
+        self.lang = effectiveLang
         
         for amenity in amenities {
             self.addObject(amenity)
@@ -68,30 +70,28 @@ final class BaseDetailsObject: NSObject {
     }
     
     func getSyntheticAmenity() -> OAPOI {
-        return syntheticAmenity
+        syntheticAmenity
     }
     
     func getLocation() -> CLLocation? {
-        return syntheticAmenity.getLocation()
+        syntheticAmenity.getLocation()
     }
     
     func getObjects() -> Array<Any> {
-        return objects
+        objects
     }
     
     func isObjectFull() -> Bool {
-        return objectCompleteness == .full || objectCompleteness == .combined
+        objectCompleteness == .full || objectCompleteness == .combined
     }
     
     func isObjectEmpty() -> Bool {
-        return objectCompleteness == .empty
+        objectCompleteness == .empty
     }
     
     
     func addObject(_ object: Any) -> Bool {
-        if !isSupportedObjectType(object) {
-            return false
-        }
+        guard isSupportedObjectType(object) else { return false }
         
         if let detailsObject = object as? BaseDetailsObject {
             for obj in detailsObject.getObjects() {

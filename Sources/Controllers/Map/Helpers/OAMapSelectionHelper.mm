@@ -33,6 +33,7 @@
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
+#import <OsmAndCore/NetworkRouteContext.h>
 
 static int AMENITY_SEARCH_RADIUS = 50;
 static int AMENITY_SEARCH_RADIUS_FOR_RELATION = 500;
@@ -152,7 +153,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             }
             else
             {
-                result.objectLatLon = [mapVc getLatLonFromElevatedPixel:point.x y:point.y]; //TODO: not tested yet
+                result.objectLatLon = [mapVc getLatLonFromElevatedPixel:point.x y:point.y];
             }
             
             if (cppAmenity != nullptr)
@@ -200,7 +201,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                         
                         if (isOsmRoute && !osmRoutesAlreadyAdded)
                         {
-                            osmRoutesAlreadyAdded = [self addOsmRoutesAround:result point:point];
+                            const auto selectorFilter = [self createRouteFilter];
+                            osmRoutesAlreadyAdded = [self addOsmRoutesAround:result point:point selectorFilter:selectorFilter];
                         }
                         
                         if (!isOsmRoute || !osmRoutesAlreadyAdded)
@@ -494,8 +496,13 @@ private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfM
     return [self isUniqueGpxFileName:selectedObjects gpxFileName:gpxFileName];
 }
 
-- (BOOL) addOsmRoutesAround:(OAMapSelectionResult *)result point:(CGPoint)point
+- (BOOL) addOsmRoutesAround:(OAMapSelectionResult *)result point:(CGPoint)point selectorFilter:(OsmAnd::NetworkRouteSelectorFilter *)selectorFilter
 {
+    if (selectorFilter != nullptr && selectorFilter->typeFilter.isEmpty())
+    {
+        return NO;
+    }
+    
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     OANetworkRouteSelectionLayer *networkRouteSelectionLayer = mapVc.mapLayers.networkRouteSelectionLayer;
     int searchRadius = [networkRouteSelectionLayer getScaledTouchRadius:[networkRouteSelectionLayer getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
@@ -504,6 +511,36 @@ private void addGeometry(@Nullable BaseDetailsObject detailObj,    @NonNull ObfM
     OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:minLatLon.coordinate.longitude top:minLatLon.coordinate.latitude right:maxLatLon.coordinate.longitude bottom:maxLatLon.coordinate.latitude];
     
     return [self putRouteGpxToSelected:result provider:networkRouteSelectionLayer rect:rect];
+}
+
+- (OsmAnd::NetworkRouteSelectorFilter *) createRouteFilter
+{
+    const auto routeSelectorFilter = new OsmAnd::NetworkRouteSelectorFilter();
+    
+    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+    for (OAMapStyleParameter *param in [styleSettings getAllParameters])
+    {
+        QString attrName = QString::fromNSString(param.name);
+        const auto osmRouteType = OsmAnd::OsmRouteType::getByRenderingPropertyAttr(attrName);
+        if (osmRouteType != nullptr)
+        {
+            BOOL isEnabled;
+            NSString *storedValue = [param storedValue];
+            if (attrName == OsmAnd::OsmRouteType::HIKING->renderingPropertyAttr)
+            {
+                isEnabled = !NSStringIsEmpty(storedValue) && ![storedValue isEqualToString:@"disabled"];
+            }
+            else
+            {
+                isEnabled = !NSStringIsEmpty(storedValue) && [storedValue isEqualToString:@"true"];
+            }
+            if (isEnabled)
+            {
+                routeSelectorFilter->typeFilter.insert(*osmRouteType);
+            }
+        }
+    }
+    return routeSelectorFilter;
 }
 
 - (BOOL) putRouteGpxToSelected:(OAMapSelectionResult *)result provider:(id<OAContextMenuProvider>)provider rect:(OASKQuadRect *)rect

@@ -488,10 +488,10 @@ final class BaseDetailsObject: NSObject {
     }
     
     static func findObfType(_ obfResourceName: String?, amenity: OAPOI) -> EOASearchResultResource {
-        if let obfResourceName = obfResourceName, obfResourceName.contains("basemap") {
+        if let obfResourceName, obfResourceName.contains("basemap") {
             return .basemap
         }
-        if let obfResourceName = obfResourceName, (obfResourceName.contains("travel") || obfResourceName.contains("wikivoyage")) {
+        if let obfResourceName, (obfResourceName.contains("travel") || obfResourceName.contains("wikivoyage")) {
             return .travel
         }
         if amenity.type?.category.isWiki() == true {
@@ -515,14 +515,12 @@ final class BaseDetailsObject: NSObject {
         return .detailed
     }
     
-    func setX(_ x: Array<Int>) {
-        let objcX = NSMutableArray(array: x.map { NSNumber(value: $0) })
-        syntheticAmenity.x = objcX
+    func setX(_ x: [Int]) {
+        syntheticAmenity.x = x as? NSMutableArray
     }
     
-    func setY(_ y: Array<Int>) {
-        let objcY = NSMutableArray(array: y.map { NSNumber(value: $0) })
-        syntheticAmenity.y = objcY
+    func setY(_ y: [Int]) {
+        syntheticAmenity.y = y as? NSMutableArray
     }
     
     func addX(_ x: NSNumber) {

@@ -525,7 +525,7 @@
 "general_settings_2" = "Ustawienia ogólne";
 "general_settings_descr" = "Skonfiguruj wyświetlanie i wspólne ustawienia dla aplikacji.";
 "routing_settings_descr" = "Określ opcje nawigacji.";
-"auto_zoom_none" = "Brak automatycznego przybliżania";
+"auto_zoom_none" = "Wyłącz automatyczne zbliżanie mapy";
 "auto_zoom_close" = "Zbliżenie";
 "auto_zoom_far" = "Widok pośredni";
 "auto_zoom_farthest" = "Widok szeroki";
@@ -3114,14 +3114,14 @@
 "shared_string_article" = "Artykuł";
 "ft_s" = "stóp/s";
 "downward_gradient" = "Nachylenie w dół";
-"vertical_exaggeration" = "Pionowe wyolbrzymienie";
-"distance_during_navigation" = "Odległość podczas nawigacji";
+"vertical_exaggeration" = "Pionowe wybrzuszenie";
+"distance_during_navigation" = "Dystans podczas nawigacji";
 "tomorrow" = "Jutro";
 "auto_zoom_discrete" = "Dyskretny";
 "rendering_attr_padusDisplayMode_name" = "Tryb wyświetlania terenów publicznych";
 "upward_gradient" = "Nachylenie w górę";
-"vertical_exaggeration_description" = "Zmieniając wartość skali, można podkreślić płaskorzeźbę 3D.";
-"auto_zoom_smooth" = "Płynny";
+"vertical_exaggeration_description" = "Zmieniając wartość skali, można zróżnicować głębię 3D.";
+"auto_zoom_smooth" = "Płynne";
 "routing_attr_avoid_cobblestone_description" = "Unikaj kocich łbów";
 "routing_attr_avoid_cobblestone_name" = "Unikaj kocich łbów";
 "rendering_value_dark_orange_name" = "Ciemnopomarańczowy";
@@ -3167,7 +3167,7 @@
 "display_position_automatic_descr" = "Zależy od orientacji mapy: dół dla kierunku ruchu, środek dla wszystkich innych.";
 "transport_hazmat_title" = "Transport materiałów niebezpiecznych";
 "weather_source_GFS_description" = "Globalny system prognoz z Krajowych Centrów Prognoz Środowiskowych";
-"missing_maps_ignore_details" = "Pobrane mapy zasłaniają twoją trasę? Nawiguj z nimi jeżeli okolica jest Tobie znana.";
+"missing_maps_ignore_details" = "Pobrane mapy zasłaniają Twoją trasę? Nawiguj z nimi jeżeli okolica jest Tobie znana.";
 "missing_maps_ignore" = "Skorzystaj z pobranych map";
 "weather_data_sources_prompt" = "OsmAnd dostarcza dane pogodowe z dwóch źródeł:";
 "map_settings_weather_wind_animation" = "Animacja wiatru";
@@ -3400,3 +3400,9 @@
 "resting_position_icon_summary" = "Ikona wyświetla się, gdy nie poruszasz się.";
 "resting_position_icon" = "Pozycja ikony spoczynku";
 "tts_title" = "Tekst na mowę";
+"shared_string_symbol" = "Symbol";
+"nav_type_brouter" = "BRouter";
+"preview_next_turn_descr" = "Automatycznie obraca mapę aby wyświetlić następny skręt lub manewr";
+"download_persian_voice_alert_title" = "Pobierz plik perskiej ścieżki dźwiękowej:";
+"download_persian_voice_alert_descr_ios" = "Ustawienia -> Dostępność -> Zawartość głosowa -> Ścieżki dźwiękowe -> Perski -> Dariush";
+"download_persian_voice_alert_descr_macos" = "Ustawienia -> Dostępność -> Zawartość głosowa -> Ścieżki dźwiękowe systemu -> Zarządzaj ścieżkami dźwiękowymi -> Perski -> Dariush";

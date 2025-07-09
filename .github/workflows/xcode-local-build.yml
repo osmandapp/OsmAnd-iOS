@@ -58,42 +58,42 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.1
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-iOS
         path: ios
         clean: true
     - name: Checkout android
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.1
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd
         path: android
         clean: false
     - name: Checkout build
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.1
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-build
         path: build
         clean: false
     - name: Checkout core legacy
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.1
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
         clean: false
     - name: Checkout core
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.1
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-core
         path: core
         clean: false
     - name: Checkout resources
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/r5.1
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-resources
         path: resources
         clean: false

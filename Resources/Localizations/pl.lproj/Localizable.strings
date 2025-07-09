@@ -1050,7 +1050,7 @@
 "quick_action_map_style" = "Styl mapy";
 "quick_action_map_source" = "Zmień zasób mapy";
 "quick_action_map_overlay" = "Nakładka";
-"quick_action_map_underlay" = "Zmień podkład mapy";
+"quick_action_map_underlay" = "Podłóż pod spód";
 "quick_action_replace_destination" = "Zastąp cel trasy";
 "add_destination" = "Dodaj cel trasy";
 "quick_action_add_first_intermediate" = "Dodaj pierwszy pośredni cel trasy";
@@ -3376,5 +3376,15 @@
 "navigation_position" = "Pozycja nawigacyjna";
 "monitoring_control_start" = "Nagraj";
 "resting_navigation_position" = "Pozycja spoczynkowa i nawigacyjna";
-"view_angle_description" = "Wyświetla obszar ukształtowany w stożek w którym jesteś skierowany";
+"view_angle_description" = "Wyświetla strzałkę wskazującą kierunek w którym jesteś skierowany";
 "view_angle" = "Kąt widzenia";
+"location_radius_description" = "Wyświetla okrągły obszar który wskazuje obecną dokładność lokalizacji";
+"location_radius" = "Promień lokalizacji";
+"rendering_value_pale_name" = "Granica";
+"quick_action_terrain_color_scheme" = "Schemat kolorów terenu";
+"quick_action_directions_from" = "Punkt początkowy";
+"quick_action_destination" = "Kierunek";
+"ruler_circles" = "Okręgi miary";
+"app_profile" = "Profil aplikacji";
+"shared_string_set" = "Ustaw";
+"shared_string_replace" = "Zastąp";

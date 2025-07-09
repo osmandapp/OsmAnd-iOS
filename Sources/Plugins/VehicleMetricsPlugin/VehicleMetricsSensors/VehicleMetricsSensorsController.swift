@@ -177,11 +177,12 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         }
         if let item = CellData(rawValue: key) {
             if case .learnMore = item {
-                guard let settingsURL = URL(string: docsVehicleMetricsURL),
-                      UIApplication.shared.canOpenURL(settingsURL) else {
+                guard let settingsURL = URL(string: docsVehicleMetricsURL) else {
                     return
                 }
-                UIApplication.shared.open(settingsURL)
+                let safariViewController = SFSafariViewController(url: settingsURL)
+                safariViewController.preferredControlTintColor = .iconColorActive
+                present(safariViewController, animated: true, completion: nil)
             }
         } else if let item = ConnectState(rawValue: key) {
             if let items = sectionsDevicesData[item], items.count > indexPath.row {
@@ -233,8 +234,8 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         }
 
         centralStateObserver = NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
-                                               object: Central.sharedInstance,
-                                               queue: nil) { [weak self] _ in
+                                                                      object: Central.sharedInstance,
+                                                                      queue: nil) { [weak self] _ in
             guard let self else { return }
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
 
@@ -377,7 +378,6 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         if let observer = centralStateObserver {
             NotificationCenter.default.removeObserver(observer)
         }
-
     }
 }
 

@@ -10,11 +10,11 @@ on:
       buildversion:
         description: 'Consequent Build Number (Testflight)'
         required: true
-        default: '51xx'
+        default: '52xx'
       releaseversion:
         description: 'Release Version'
         required: true
-        default: '5.1.0'
+        default: '5.2.0'
 jobs:
   build:
     runs-on: self-hosted

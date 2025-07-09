@@ -49,6 +49,7 @@
 #import "OASharedUtil.h"
 #import "OAMapSource.h"
 #import "OAObservable.h"
+#import "StartupLogging.h"
 
 #include <algorithm>
 #include <QList>
@@ -347,35 +348,43 @@ NSString *const kXmlColon = @"_-_";
 
 - (BOOL) initializeImpl
 {
+    LogStartup(@"initialize start");
     NSLog(@"OsmAndApp initialize start (%@)", [NSThread isMainThread] ? @"Main thread" : @"Background thread");
+
     if (_initialized)
     {
-        NSLog(@"OsmAndApp already initialized. Finish.");
+        LogStartup(@"already initialized - finish");
         return YES;
     }
 
     NSError* versionError = nil;
-    
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     BOOL hideAllGPX = [defaults boolForKey:@"hide_all_gpx"];
     BOOL resetSettings = [defaults boolForKey:@"reset_settings"];
     BOOL resetRouting = [defaults boolForKey:@"reset_routing"];
     OAAppSettings *settings = [OAAppSettings sharedManager];
+
     [settings setDisabledTypes:[settings.speedCamerasUninstalled get] ? [NSSet setWithObject:SPEED_CAMERA] : [NSSet set]];
+    LogStartup(@"settings disabled types set");
+
     if (hideAllGPX)
     {
         [settings.mapSettingVisibleGpx set:@[]];
         [defaults setBool:NO forKey:@"hide_all_gpx"];
         [defaults synchronize];
+        LogStartup(@"hideAllGPX applied");
     }
     if (resetRouting)
     {
         [settings clearImpassableRoads];
         [defaults setBool:NO forKey:@"reset_routing"];
         [defaults synchronize];
+        LogStartup(@"resetRouting applied");
     }
     if (resetSettings)
     {
+        LogStartup(@"resetSettings start");
         int freeMaps = -1;
         if ([defaults objectForKey:@"freeMapsAvailable"]) {
             freeMaps = (int)[defaults integerForKey:@"freeMapsAvailable"];
@@ -384,11 +393,11 @@ NSString *const kXmlColon = @"_-_";
         NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
         [defaults removePersistentDomainForName:appDomain];
         [defaults synchronize];
-        
+
         if (freeMaps != -1) {
             [defaults setInteger:freeMaps forKey:@"freeMapsAvailable"];
         }
-        
+
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@(NO) forKey:@"hide_all_gpx"];
         [defaults registerDefaults:defHideAllGPX];
@@ -399,12 +408,13 @@ NSString *const kXmlColon = @"_-_";
 
         _data = [OAAppData defaults];
         [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
-                         forKey:kAppData];
-        
+                     forKey:kAppData];
+
         [defaults setBool:NO forKey:@"hide_all_gpx"];
         [defaults setBool:NO forKey:@"reset_settings"];
         [defaults setBool:NO forKey:@"reset_routing"];
         [defaults synchronize];
+        LogStartup(@"resetSettings completed");
     }
 
     OALog(@"Data path: %@", _dataPath);
@@ -412,18 +422,21 @@ NSString *const kXmlColon = @"_-_";
     OALog(@"GPX path: %@", _gpxPath);
     OALog(@"Cache path: %@", _cachePath);
     OALog(@"Weather Forecast path: %@", _weatherForecastPath);
+    LogStartup(@"paths logged");
 
-    // Unpack app data    
+    // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
     [_data postInit];
+    LogStartup(@"app data unpacked and postInit done");
 
     settings.simulateNavigation = NO;
     settings.simulateNavigationMode = [OASimulationMode toKey:EOASimulationModePreview];
     settings.simulateNavigationSpeed = kSimMinSpeed;
-    
-    [_data setLastMapSourceVariant:settings.applicationMode.get.variantKey];
 
-    // Get location of a shipped world mini-basemap and it's version stamp
+    [_data setLastMapSourceVariant:settings.applicationMode.get.variantKey];
+    LogStartup(@"simulation settings configured");
+
+    // Get location of a shipped world mini-basemap and its version stamp
     _worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
                                                                 ofType:@"obf"
                                                            inDirectory:@"Shipped"];
@@ -435,12 +448,16 @@ NSString *const kXmlColon = @"_-_";
                                                                            error:&versionError];
     NSString* worldMiniBasemapVersion = [worldMiniBasemapStampContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, _worldMiniBasemapFilename);
-    
+    LogStartup(@"world mini-basemap located");
+
     _webClient = std::make_shared<OAWebClient>();
+    LogStartup(@"web client created");
 
     _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];
     _osmAndLiveUpdatedObservable = [[OAObservable alloc] init];
+    LogStartup(@"observables initialized");
+
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                          _documentsDir.absolutePath(),
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
@@ -452,7 +469,9 @@ NSString *const kXmlColon = @"_-_";
                                                          QString::fromNSString(@"https://download.osmand.net"),
                                                          QString::fromNSString([self generateIndexesUrl]),
                                                          _webClient));
+    LogStartup(@"resources manager created");
 
+    // Attach observables handlers
     _resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                              [self]
                                                              (const OsmAnd::ResourcesManager* const resourcesManager,
@@ -466,20 +485,26 @@ NSString *const kXmlColon = @"_-_";
                                                                      [[OAAvoidSpecificRoads instance] initRouteObjects:YES];
                                                                  });
                                                              });
-    
+    LogStartup(@"localResourcesChangeObservable attached");
+
     _resourcesManager->repositoryUpdateObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                          [self]
                                                          (const OsmAnd::ResourcesManager* const resourcesManager)
                                                          {
                                                              [_resourcesRepositoryUpdatedObservable notifyEventWithKey:self];
                                                          });
+    LogStartup(@"repositoryUpdateObservable attached");
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early");
         return NO;
+    }
 
     [self instantiateWeatherResourcesManager];
+    LogStartup(@"weather resources manager instantiated");
 
-    // Check for NSURLIsExcludedFromBackupKey and setup if needed
+    // Check and apply excluded from backup attributes
     const auto& localResources = _resourcesManager->getLocalResources();
     for (const auto& resource : localResources)
     {
@@ -489,15 +514,18 @@ NSString *const kXmlColon = @"_-_";
             [self applyExcludedFromBackup:localPath];
         }
     }
-    
+    LogStartup(@"excludedFromBackup applied to local resources");
+
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
     {
         [self applyExcludedFromBackup:filePath];
     }
-    
+    LogStartup(@"excludedFromBackup applied to map creator files");
+
+    // Versioning logic
     float currentVersion = OAAppVersion.getVersionNumber;
     float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
-    
+
     NSString *prevBuildVersion = [[NSUserDefaults standardUserDefaults] stringForKey:kBuildVersion];
     if (prevBuildVersion)
     {
@@ -512,18 +540,24 @@ NSString *const kXmlColon = @"_-_";
     {
         [[NSUserDefaults standardUserDefaults] setObject:[OAAppVersion getBuildVersion] forKey:kBuildVersion];
     }
-    
+    LogStartup(@"version check done");
+
     if (_terminating)
+    {
+        LogStartup(@"terminating early after version check");
         return NO;
+    }
 
     if (_firstLaunch)
     {
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         _resourcesManager->installBuiltInTileSources();
+        LogStartup(@"first launch - built-in tile sources installed");
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
     else if (currentVersion != prevVersion)
     {
+        LogStartup(@"app version changed - migrating settings");
         if (prevVersion < VERSION_3_10)
         {
             // Reset map sources
@@ -531,12 +565,14 @@ NSString *const kXmlColon = @"_-_";
             _data.underlayMapSource = nil;
             _data.lastMapSource = [OAAppData defaultMapSource];
             _resourcesManager->installBuiltInTileSources();
-            
+
             [self clearUnsupportedTilesCache];
+            LogStartup(@"version < 3.10 migration done");
         }
         if (prevVersion < VERSION_3_14)
         {
             [OAAppSettings.sharedManager.availableApplicationModes set:@"car,bicycle,pedestrian,public_transport,"];
+            LogStartup(@"version < 3.14 migration done");
         }
         if (prevVersion < VERSION_4_2)
         {
@@ -549,6 +585,7 @@ NSString *const kXmlColon = @"_-_";
                     [NSFileManager.defaultManager removeItemAtPath:[_inboxPath stringByAppendingPathComponent:inboxFile] error:nil];
                 }
             }
+            LogStartup(@"version < 4.2 migration done");
         }
         if (prevVersion < VERSION_4_4_1)
         {
@@ -561,43 +598,59 @@ NSString *const kXmlColon = @"_-_";
                 else if (value == 1)
                     [settings.activeMarkers set:TWO_ACTIVE_MARKERS mode:appMode];
             }
+            LogStartup(@"version < 4.4.1 migration done");
         }
         if (prevVersion < VERSION_4_7_5)
         {
             [OAAppSettings sharedManager].requireUploadPurchases = YES;
+            LogStartup(@"version < 4.7.5 migration done");
         }
 
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early after migrations");
         return NO;
+    }
 
     BOOL rescan = [BundledAssets.shared migrateResourcesToDocumentsIfNeededWithDataPath:_dataPath documentsPath:_documentsPath
                 versionChanged: currentVersion != prevVersion || _firstLaunch];
     if (rescan)
+    {
         _resourcesManager->rescanUnmanagedStoragePaths(true);
+        LogStartup(@"resources rescanned after migration");
+    }
 
     // Copy regions.ocbf to Documents/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
-    
+
     if ([OAOcbfHelper isBundledOcbfNewer])
+    {
         [[NSFileManager defaultManager] removeItemAtPath:ocbfPathLib error:nil];
-    
+        LogStartup(@"old regions.ocbf removed");
+    }
+
     if (![[NSFileManager defaultManager] fileExistsAtPath:ocbfPathLib])
     {
         NSError *error = nil;
         [[NSFileManager defaultManager] copyItemAtPath:ocbfPathBundle toPath:ocbfPathLib error:&error];
         if (error)
             NSLog(@"Error copying file: %@ to %@ - %@", ocbfPathBundle, ocbfPathLib, [error localizedDescription]);
+        LogStartup(@"regions.ocbf copied");
     }
     [self applyExcludedFromBackup:ocbfPathLib];
+    LogStartup(@"excludedFromBackup applied to regions.ocbf");
 
     // Copy proj.db to Library/Application Support/proj
     NSString *projDbPathBundle = [[NSBundle mainBundle] pathForResource:@"proj" ofType:@"db"];
     NSString *projDbPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj/proj.db"];
+
     [[NSFileManager defaultManager] removeItemAtPath:projDbPathLib error:nil];
+    LogStartup(@"old proj.db removed");
+
     if (![[NSFileManager defaultManager] fileExistsAtPath:projDbPathLib])
     {
         NSError *errorDir = nil;
@@ -610,48 +663,75 @@ NSString *const kXmlColon = @"_-_";
         [[NSFileManager defaultManager] copyItemAtPath:projDbPathBundle toPath:projDbPathLib error:&error];
         if (error)
             NSLog(@"Error copying file: %@ to %@ - %@", projDbPathBundle, projDbPathLib, [error localizedDescription]);
-
+        LogStartup(@"proj.db copied");
     }
     [self applyExcludedFromBackup:projDbPathLib];
+    LogStartup(@"excludedFromBackup applied to proj.db");
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early after file setup");
         return NO;
+    }
 
     [OAFavoritesHelper initFavorites];
+    LogStartup(@"favorites initialized");
 
     // Load resources list
-    
+
     // If there's no repository available and there's internet connection, just update it
     if (!self.resourcesManager->isRepositoryAvailable() && AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self startRepositoryUpdateAsync:YES];
+        LogStartup(@"repository update started async");
     }
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early after repository update");
         return NO;
+    }
 
     // Load world regions
     [self loadWorldRegions];
+    LogStartup(@"world regions loaded");
+
     [OAManageResourcesViewController prepareData];
+    LogStartup(@"manage resources view controller data prepared");
+
     [_worldRegion buildResourceGroupItem];
+    LogStartup(@"world region resource group built");
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early after world region build");
         return NO;
+    }
 
     [[OAWeatherHelper sharedInstance] clearOutdatedCache];
+    LogStartup(@"weather cache cleared");
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early after weather cache clear");
         return NO;
+    }
 
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
     [[OAAvoidSpecificRoads instance] initRouteObjects:NO];
     [self loadRoutingFiles];
+    LogStartup(@"routing files loaded");
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early after routing files load");
         return NO;
+    }
 
     initMapFilesFromCache(_routingMapsCachePath.UTF8String);
+    LogStartup(@"map files initialized from cache");
 
+    // Init observables
     _dayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
     _updateGpxTracksOnMapObservable = [[OAObservable alloc] init];
@@ -666,74 +746,119 @@ NSString *const kXmlColon = @"_-_";
     _backgroundStateObservable = [[OAObservable alloc] init];
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];
+    _mapModeObservable = [[OAObservable alloc] init];
+    LogStartup(@"observables initialized");
 
     _mapMode = OAMapModeFree;
     _prevMapMode = OAMapModeFree;
-    _mapModeObservable = [[OAObservable alloc] init];
 
     _downloadsManager = [[OADownloadsManager alloc] init];
+    LogStartup(@"downloads manager initialized");
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early after downloads manager init");
         return NO;
+    }
 
     _resourcesInstaller = [[OAResourcesInstaller alloc] init];
+    LogStartup(@"resources installer initialized");
 
     _locationServices = [[OALocationServices alloc] initWith:self];
     if (_locationServices.available && _locationServices.allowed)
+    {
         [_locationServices start];
+        LogStartup(@"location services initialized and started");
+    }
 
     [self allowScreenTurnOff:NO];
+    LogStartup(@"screen turn off disallowed");
 
     _appearance = [[OADaytimeAppearance alloc] init];
+    LogStartup(@"OADaytimeAppearance initialized");
     _appearanceChangeObservable = [[OAObservable alloc] init];
-    
+    LogStartup(@"_appearanceChangeObservable initialized");
+
     [OAMapStyleSettings sharedInstance];
-    
+    LogStartup(@"map style settings initialized");
+
     [[OATargetPointsHelper sharedInstance] removeAllWayPoints:NO clearBackup:!(OsmAndApp.instance.data.pointToStart && OsmAndApp.instance.data.pointToNavigate)];
-    
+    LogStartup(@"target points cleared");
+
     [[OASGpxDbHelper shared] loadItemsBlocking];
-    // Init track recorder
+    LogStartup(@"GPX DB helper loaded items blocking");
+
     [OASavingTrackHelper sharedInstance];
-    
+    LogStartup(@"track recorder initialized");
+
     [OAMapCreatorHelper sharedInstance];
+    LogStartup(@"map creator helper initialized");
+
     [OATerrainLayer sharedInstanceHillshade];
+    LogStartup(@"terrain layer hillshade initialized");
+
     [OATerrainLayer sharedInstanceSlope];
+    LogStartup(@"terrain layer slope initialized");
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early after terrain layers");
         return NO;
+    }
 
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
     [iapHelper resetTestPurchases];
     [iapHelper requestProductsWithCompletionHandler:nil];
+    LogStartup(@"IAP helper reset and requested products");
 
     [OAApplicationMode onApplicationStart];
     OAApplicationMode *initialAppMode = [settings.useLastApplicationModeByDefault get] ?
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
+    LogStartup(@"application mode set");
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early after app mode set");
         return NO;
+    }
 
     [OAPluginsHelper initPlugins];
+    LogStartup(@"plugins initialized");
+
     [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
+    LogStartup(@"migration manager migration checked/done");
+
     [OAPOIHelper sharedInstance];
+    LogStartup(@"POI helper initialized");
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early after POI helper init");
         return NO;
+    }
 
     [OAQuickSearchHelper instance];
+    LogStartup(@"quick search helper initialized");
+
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     [helper reloadAllPoiFilters];
     [helper loadSelectedPoiFilters];
+    LogStartup(@"POI filters loaded");
 
     if (_terminating)
+    {
+        LogStartup(@"terminating early before finalizing init");
         return NO;
+    }
 
     _initialized = YES;
+    LogStartup(@"initialize finish");
     NSLog(@"OsmAndApp initialize finish");
     return YES;
 }
+
 
 - (NSString *) generateIndexesUrl
 {

@@ -3367,4 +3367,14 @@
 "auto_25_chars_route_tr" = "Skręć w prawo";
 "shared_string_road_exit" = "Wyjedź";
 "auto_25_chars_route_tshr" = "Skręć ostro w prawo";
-"auto_25_chars_route_tslr" = "Skręc lekko w prawo";
+"auto_25_chars_route_tslr" = "Skręć lekko w prawo";
+"auto_25_chars_route_tl" = "Skręć w lewo";
+"auto_25_chars_route_tshl" = "Skręć ostro w lewo";
+"auto_25_chars_route_tsll" = "Skręć lekko w lewo";
+"auto_25_chars_route_tu" = "Zawróć";
+"resting_position" = "Pozycja spoczynkowa";
+"navigation_position" = "Pozycja nawigacyjna";
+"monitoring_control_start" = "Nagraj";
+"resting_navigation_position" = "Pozycja spoczynkowa i nawigacyjna";
+"view_angle_description" = "Wyświetla obszar ukształtowany w stożek w którym jesteś skierowany";
+"view_angle" = "Kąt widzenia";

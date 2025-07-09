@@ -357,7 +357,6 @@
     {
         for (const auto& p : points)
         {
-            pointMarkerBuilder.setMarkerId(collection->getMarkers().size());
             auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
             marker->setPosition(p);
         }

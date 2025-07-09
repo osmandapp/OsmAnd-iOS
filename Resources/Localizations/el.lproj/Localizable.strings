@@ -2968,5 +2968,10 @@
 "obd_nothing_found_description" = "Παρακαλούμε ελέγξτε τα ακόλουθα:\n– Βεβαιωθείτε ότι το Bluetooth είναι ενεργοποιημένο\n– Η μηχανή του οχήματος είναι σε λειτουργία\n– Βεβαιωθείτε ότι η συσκευή σας είναι εντός εμβέλειας του σαρωτή.";
 "obd_how_to_connect" = "Πως να συνδέσετε:";
 "obd_bluetooth_off_description" = "Ενεργοποιήστε το Bluetooth για να αναζητήσετε και να συνδέσετε σαρωτές.";
-"plan_route_split_after" = "Διαχωρισμός μετά από";
-"plan_route_split_before" = "Διαχωρισμός πριν από";
+"plan_route_split_after" = "Διαχωρισμός μετά";
+"plan_route_split_before" = "Διαχωρισμός πριν";
+"track_3d" = "3d ίχνος";
+"fixed_height" = "Σταθερό ύψος";
+"downward_gradient" = "Κατηφορική κλίση";
+"upward_gradient" = "Ανηφορική κλίση";
+"required_maps_list" = "Χάρτες που επίσης θα χρησιμοποιηθούν: %1$s";

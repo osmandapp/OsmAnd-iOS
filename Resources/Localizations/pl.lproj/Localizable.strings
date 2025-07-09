@@ -572,7 +572,7 @@
 "res_dmap" = "Mapa szczegółowa";
 "res_cancel_upd_q" = "Zamierzasz anulować aktualizację %@.";
 "res_cancel_inst_q" = "Zamierzasz anulować instalację %@.";
-"created_on" = "Utworzono";
+"created_on" = "Utworzono w";
 "feedback" = "Opinie";
 "menu_about" = "O programie";
 "pickup_car_at" = "Odbierz samochód z parkingu o";
@@ -2645,7 +2645,7 @@
 "routing_attr_hazmat_category_usa_7_name" = "Substancje radioaktywne";
 "rendering_attr_lightDetail_description" = "Domyślnie: nazwa znaku morskiego (light character.group.period), wybierz dodatkowe informacje o sektorach od 1 do 3 lub sektorze 1,2,3,4,5 znaku świetlnego";
 "rendering_value_name_only_name" = "Tylko nazwa";
-"rendering_attr_showToll_name" = "Pokaż ograniczenia opłat drogowych";
+"rendering_attr_showToll_name" = "Pokaż opłaty drogowe";
 "rendering_value_defaultMedium_name" = "Domyślny (średni)";
 "routing_attr_allow_via_ferrata_name" = "Trasa górska (Via ferrata)";
 "lang_sr-Latn" = "Serbski (łaciński)";
@@ -3035,7 +3035,7 @@
 "osmand_cloud_delete_account_confirmation" = "Usunąć konto\?";
 "shared_string_all_colors" = "Wszystkie kolory";
 "shared_string_precise" = "Precyzyjnie";
-"no_track_files" = "Nie masz żadnych plików ścieżek";
+"no_track_files" = "Nie masz żadnych plików tras";
 "help_article_plugins_custom_name" = "Pakiet niestandardowy";
 "shared_string_setup_route" = "Ustaw trasę";
 "add_widget" = "Dodaj widżet";
@@ -3117,8 +3117,8 @@
 "vertical_exaggeration" = "Pionowe wybrzuszenie";
 "distance_during_navigation" = "Dystans podczas nawigacji";
 "tomorrow" = "Jutro";
-"auto_zoom_discrete" = "Dyskretny";
-"rendering_attr_padusDisplayMode_name" = "Tryb wyświetlania terenów publicznych";
+"auto_zoom_discrete" = "Natcyhmiastowy";
+"rendering_attr_padusDisplayMode_name" = "Tryb wyświetlania obszarów publicznych";
 "upward_gradient" = "Nachylenie w górę";
 "vertical_exaggeration_description" = "Zmieniając wartość skali, można zróżnicować głębię 3D.";
 "auto_zoom_smooth" = "Płynne";
@@ -3132,7 +3132,7 @@
 "shared_string_always" = "Zawsze";
 "shared_string_item" = "Pozycja";
 "shared_string_bottom" = "Dół";
-"speedometer_description" = "Pokazuje bieżącą prędkość zgłoszoną przez GPS";
+"speedometer_description" = "Pokazuje bieżącą prędkość poprzez GPS";
 "default_buttons" = "Przyciski domyślne";
 "track_3d_empty_view_description" = "Przeglądaj tor w interaktywnym 3D! Wizualizuj wysokość, prędkość i inne parametry bezpośrednio na mapie.";
 "shared_string_class" = "Klasa";
@@ -3144,7 +3144,7 @@
 "add_button" = "Dodaj przycisk";
 "route_recalculation_dist_title" = "Minimalna odległość do ponownego wyznaczenia trasy";
 "dangerous_goods" = "Towary niebezpieczne";
-"when_exceeded" = "Po przekroczeniu";
+"when_exceeded" = "Przy przekraczaniu";
 "speed_limit_warning" = "Ostrzeżenie o ograniczeniu prędkości";
 "empty_name" = "Pusta nazwa";
 "edit_tilesource_maxzoom" = "Maksymalne przybliżenie";
@@ -3210,7 +3210,7 @@
 "rendering_attr_padusDisplayMode_description" = "Według typu dostępu lub nazwy menedżera";
 "rendering_attr_showDirtbikeTrails_name" = "Terenowa trasa rowerowa";
 "shared_string_reset_all" = "Resetuj wszystko";
-"max_sensor_heartrate" = "Maksymalne tętno";
+"max_sensor_heartrate" = "Tętno, maksymalne";
 "delete_widget" = "Usunąć widżet?";
 "screen_is_unlocked" = "Ekran dotykowy jest odblokowany.";
 "avg_sensor_temperature" = "Temperatura, wartość średnia";
@@ -3232,7 +3232,7 @@
 "lock_screen_description" = "Włącza lub wyłącza funkcję ekranu dotykowego, aby zapobiec przypadkowym dotknięciom";
 "discard_filter_changes_prompt" = "Zresetować wszystkie filtry?";
 "driving_region_uk" = "Wielka Brytania i podobne";
-"avg_sensor_heartrate" = "Średnie tętno";
+"avg_sensor_heartrate" = "Tętno, średnie";
 "map_widget_map_scale" = "Skala mapy";
 "all_folders" = "Wszystkie foldery";
 "obd_plugin_name" = "Metryki pojazdu";
@@ -3406,3 +3406,22 @@
 "download_persian_voice_alert_title" = "Pobierz plik perskiej ścieżki dźwiękowej:";
 "download_persian_voice_alert_descr_ios" = "Ustawienia -> Dostępność -> Zawartość głosowa -> Ścieżki dźwiękowe -> Perski -> Dariush";
 "download_persian_voice_alert_descr_macos" = "Ustawienia -> Dostępność -> Zawartość głosowa -> Ścieżki dźwiękowe systemu -> Zarządzaj ścieżkami dźwiękowymi -> Perski -> Dariush";
+"rendering_attr_padusHideBoundaries_description" = "Ukryj granice obszarów publicznych ale zostaw obszary";
+"shared_string_link" = "Łącze";
+"no_tracks_on_map" = "Brak tras na mapie";
+"max_sensor_cadence" = "Kadencja rowerowa, maksymalna";
+"avg_sensor_cadence" = "Kadencja rowerowa, średnia";
+"max_sensor_bycicle_power" = "Moc rowerowa, maksymalna";
+"avg_sensor_bycicle_power" = "Moc rowerowa, średnia";
+"shared_string_subfolders_in" = "Podfoldery";
+"shared_string_sorted_by" = "sortowane:";
+"max_sensor_speed" = "Prędkościomierz, maksymalny";
+"avg_sensor_speed" = "Prędkościomierz, średni";
+"shared_string_ellipsis" = "…";
+"rendering_attr_showToll_description" = "Pokaż opłaty na drogach";
+"target_elevation" = "Cel wysokości";
+"route_your_destination_is_on_left" = "Twój cel jest po lewej stronie";
+"route_your_destination_is_on_right" = "Twój cel jest po prawej stronie";
+"route_your_destination_is_on_ahead" = "Twój cel jest na wprost";
+"driving_region_australia" = "Australia";
+"liter" = "l";

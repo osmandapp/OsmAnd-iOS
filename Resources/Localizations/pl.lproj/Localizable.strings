@@ -1050,7 +1050,7 @@
 "quick_action_map_style" = "Styl mapy";
 "quick_action_map_source" = "Zmień zasób mapy";
 "quick_action_map_overlay" = "Nakładka";
-"quick_action_map_underlay" = "Podłóż pod spód";
+"quick_action_map_underlay" = "Podłóż";
 "quick_action_replace_destination" = "Zastąp cel trasy";
 "add_destination" = "Dodaj cel trasy";
 "quick_action_add_first_intermediate" = "Dodaj pierwszy pośredni cel trasy";
@@ -3039,7 +3039,7 @@
 "help_article_plugins_custom_name" = "Pakiet niestandardowy";
 "shared_string_setup_route" = "Ustaw trasę";
 "add_widget" = "Dodaj widżet";
-"widget_panels_descr" = "Wybierz część ekranu do dodania lub przesunięcia widżetów";
+"widget_panels_descr" = "Wybierz część ekranu do dodania lub przesunięcia widżetów.";
 "poi_operator" = "Operator";
 "add_row" = "Dodaj rząd";
 "required_maps" = "Wymagane mapy";
@@ -3167,8 +3167,8 @@
 "display_position_automatic_descr" = "Zależy od orientacji mapy: dół dla kierunku ruchu, środek dla wszystkich innych.";
 "transport_hazmat_title" = "Transport materiałów niebezpiecznych";
 "weather_source_GFS_description" = "Globalny system prognoz z Krajowych Centrów Prognoz Środowiskowych";
-"missing_maps_ignore_details" = "Niektóre już pobrane mapy mogą być odpowiednie dla danej trasy. Jeśli znasz obszar i mapy, możesz spróbować wyznaczyć trasę przy użyciu istniejących map.";
-"missing_maps_ignore" = "Skorzystaj z istniejących map";
+"missing_maps_ignore_details" = "Pobrane mapy zasłaniają twoją trasę? Nawiguj z nimi jeżeli okolica jest Tobie znana.";
+"missing_maps_ignore" = "Skorzystaj z pobranych map";
 "weather_data_sources_prompt" = "OsmAnd dostarcza dane pogodowe z dwóch źródeł:";
 "map_settings_weather_wind_animation" = "Animacja wiatru";
 "weather_source_ecmwf_description" = "Europejskie Centrum Prognoz Średnioterminowych";
@@ -3388,3 +3388,15 @@
 "app_profile" = "Profil aplikacji";
 "shared_string_set" = "Ustaw";
 "shared_string_replace" = "Zastąp";
+"quick_action_track_waypoint" = "Punkt ścieżki";
+"quick_action_parking_place" = "Miejsce parkowania";
+"quick_action_verb_show_hide" = "Pokaż / Ukryj";
+"quick_action_verb_pause_resume" = "Wstrzymaj / Wznów";
+"quick_action_verb_turn_on_off" = "Włącz / Wyłącz";
+"quick_action_verb_start_stop" = "Start / Stop";
+"profile_icon" = "Ikona profilu";
+"navigation_position_icon_summary" = "Ikona wyświetla się, gdy włączona jest nawigacja lub poruszasz się.";
+"navigation_position_icon" = "Pozycja ikony nawigacji";
+"resting_position_icon_summary" = "Ikona wyświetla się, gdy nie poruszasz się.";
+"resting_position_icon" = "Pozycja ikony spoczynku";
+"tts_title" = "Tekst na mowę";

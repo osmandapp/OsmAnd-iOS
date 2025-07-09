@@ -2029,7 +2029,7 @@
 "simulate_location_unselected_track_footer" = "Χρειάζεται να επιλέξετε αρχείο ίχνους";
 "unlimited_map_downloads" = "Απεριόριστες λήψεις χάρτη";
 "res_map_of_region" = "Χάρτης της περιοχής";
-"continue_with" = "Συνεχίστε με το %@";
+"continue_with" = "Συνέχεια με %@";
 "routing_attr_goods_restrictions_name" = "Παράδοση αγαθών";
 "route_line_use_map_style_color" = "Χρησιμοποιήστε το προεπιλεγμένο χρώμα του στυλ χάρτη (%@).";
 "customize_route_line" = "Προσαρμογή γραμμής διαδρομής";
@@ -3072,4 +3072,6 @@
 "amazon_appstore" = "Amazon Appstore";
 "huawei_appgallery" = "Huawei AppGallery";
 "product_title_plus" = "Maps+";
-"not_available_with" = "Δεν είναι διαθέσιμο με %@";
+"not_available_with" = "Μη διαθέσιμο με %@";
+"product_title_pro" = "OsmAnd Pro";
+"track_has_no_needed_data" = "Λείπουν τα αντίστοιχα δεδομένα από το ίχνος.";

@@ -1602,8 +1602,19 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!self.mapViewLoaded)
         return NO;
 
+    BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
+
     // Get location of the gesture
-    CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
+    CGPoint touchPoint;
+    if (!longPress && !CGPointEqualToPoint(_mapView.lastImmediateTouchPoint, CGPointZero))
+    {
+        touchPoint = _mapView.lastImmediateTouchPoint;
+    }
+    else
+    {
+        touchPoint = [recognizer locationOfTouch:0 inView:self.view];
+    }
+    
     touchPoint.x *= _mapView.contentScaleFactor;
     touchPoint.y *= _mapView.contentScaleFactor;
     OsmAnd::PointI touchLocation;
@@ -1626,7 +1637,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         while (![_mapView resumeSymbolsUpdate]);
     }
     
-    BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
     BOOL accepted = longPress && recognizer.state == UIGestureRecognizerStateBegan;
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)

@@ -3774,3 +3774,16 @@
 "obd_fuel_level_percent" = "Brændstofniveau (%)";
 "obd_fuel_left_km" = "Brændstof tilbage (km)";
 "obd_fuel_consumption_rate_scanner" = "Brændstofforbrug (obd)";
+"obd_fuel_consumption_rate_percent_hour" = "Brændstofforbrug %/t";
+"obd_fuel_consumption_rate_l_km" = "Brændstofforbrug (L/100 km)";
+"obd_fuel_consumption_rate_l_km_desc" = "Viser køretøjets brændstofforbrug baseret på beregninger (L/100 km)";
+"simulate_obd" = "Simulér obd-data";
+"kpa_unit" = "kPa";
+"percent_unit" = "%";
+"percent_hour" = "%/t";
+"liter_per_hour" = "L/t";
+"unit_volt" = "V";
+"obd_widget_group" = "Køretøjsparametre";
+"vehicle_metrics_recording_description" = "Vælg de parametre, der skal registreres i GPX-filen.";
+"shared_string_other" = "Andre";
+"shared_string_engine" = "Motor";

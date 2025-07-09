@@ -875,7 +875,7 @@
 "instalation_troubleshooting_item" = "Installation et débogage";
 // GPX colors
 "plugin_nautical_descr" = "Enrichit la carte avec des informations sur les routes maritimes, le balisage, les zones de danger, les restrictions de mouillage, etc. Pour afficher cette vue, téléchargez la carte marine correspondante puis activez-la dans \"Paramétrer la carte\". \n \nPlus d\'informations sur %@.";
-"osmand_parking_plugin_description" = "Mémorisez la position de votre véhicule et soyez alertés avant la fin de durée du stationnement. Pour placer le marqueur, sélectionnez un point sur la carte, allez dans \"Actions\" et sélectionnez \"Stationnement\".";
+"osmand_parking_plugin_description" = "Enregistrez la position de votre véhicule et soyez alertés avant la fin du temps de stationnement. Pour placer une marque, sélectionnez un point sur la carte, allez dans « Actions » et sélectionnez « Stationnement ».";
 "plugin_ski_descr" = "Affichage optimisé pour les zones de sports d\'hiver : visualisez les remontées mécaniques et les pistes de ski (y compris les itinéraires hors-piste) qui sont colorées selon leur niveau de difficulté. Pour afficher cette vue, activez cette extension puis allez dans \"Paramétrer la carte\" et enfin sélectionnez le style \"Hiver et Ski\".";
 "product_desc_ext_trip_planning" = "Le plugin de planification de trajet vous permet de créer votre trajet sur la carte, de le sauvegarder, de mesurer la distance entre les points reliés par des lignes droites, etc. Conçu pour la planification préliminaire des trajets plutôt que pour la construction d'un itinéraire complet.";
 "osm_editing_plugin_name" = "Édition OpenStreetMap";
@@ -1760,7 +1760,7 @@
 "carplay_active_message" = "La carte est affichée via CarPlay";
 "tracks_empty" = "Votre liste de trace est vide";
 "street_level_imagery" = "Photos des rues";
-"markers_history" = "Historique des marqueurs";
+"markers_history" = "Historique des marques";
 
 // Resources
 "shared_string_resources" = "Téléchargés";
@@ -2779,7 +2779,7 @@
 "shared_string_bearing" = "Direction";
 "map_widget_current_speed" = "Vitesse instantanée";
 "map_widget_gps_info" = "Informations GPS";
-"map_markers_desc" = "Le widget affiche la Distance ou l\'Heure d\'arrivée estimée (ETA) pour les deux premiers marqueurs de la liste des marqueurs de la carte.";
+"map_markers_desc" = "Le widget affiche la Distance ou l'Heure d'arrivée estimée (ETA) pour les deux premières marques de la liste des marques de la carte.";
 "route_maneuvers_desc" = "Les widgets de navigation sont activés pendant la navigation et affichent des informations telles que la distance, l\'heure d\'arrivée ou de départ, les prochaines bifurcations, l\'orientation, le nom de la rue actuelle, les informations sur les voies, la vitesse maximale, les alertes, les POI et les points de passage.";
 "shared_string_buttons" = "Boutons";
 "shared_string_rearrange" = "Réarranger";
@@ -2798,7 +2798,7 @@
 "coordinates_widget_current_location_desc" = "Affiche les coordonnées de la position actuelle";
 "av_notes_video_widget_desc" = "Appuyez sur le gadget pour enregistrer une vidéo.";
 "trip_recording_uphill_widget_desc" = "Affiche le dénivelé positif cumulé du trajet en cours d\'enregistrement.";
-"first_marker_widget_desc" = "Vous pouvez paramétrer le gadget pour afficher la Distance restante ou l\'Heure estimée d\'arrivée jusqu’au premier marqueur.";
+"first_marker_widget_desc" = "Vous pouvez configurer le widget pour afficher la Distance restante ou l'Heure estimée d'arrivée jusqu’à la première marque.";
 "relative_bearing_widget_desc" = "Affiche l\'angle entre la direction de votre déplacement et la destination.";
 "time_to_destination_widget_desc" = "Le gadget affiche \"L\'heure d\'arrivée\" ou \"La durée restante\" jusqu\'à destination. Ces informations sont actualisées pendant le guidage et calculées à partir de votre position actuelle.";
 "time_to_intermediate_widget_desc" = "Le gadget affiche \"L\'heure d\'arrivée\" ou \"La durée restante\" jusqu\'au prochain point intermédiaire. Ces informations sont actualisées pendant le guidage et une fois ce point intermédiaire atteint, les informations seront calculées pour le point intermédiaire suivant.";
@@ -2808,7 +2808,7 @@
 "bearing_secondary_desc" = "Vous pouvez modifier le format d\'affichage utilisé en : %@ - %@ - %@.";
 "coordinates_widget_secondary_desc" = "Vous pouvez modifier le format des coordonnées en %@ - %@ - %@.";
 "weather_widgets_secondary_desc" = "Les unités de mesure peuvent être modifiées dans les paramètres du plugin météo.";
-"map_markers_bar" = "Barre de marqueurs";
+"map_markers_bar" = "Barre de marques";
 "map_widget_time_to_destination" = "Temps restant jusqu\'à destination";
 "map_widget_distance_to_destination" = "Distance jusqu\'à destination";
 "map_widget_distance_to_intermediate" = "Distance du point intermédiaire";
@@ -3010,9 +3010,9 @@
 "help_article_navigation_routing_train_routing_name" = "Navigation en train";
 "help_article_navigation_routing_public_transport_navigation_name" = "Navigation en transports publics";
 "help_article_search_search_coordinates_name" = "Rechercher par coordonnées";
-"help_article_navigation_setup_markers_navigation_name" = "Naviguer par marqueurs";
+"help_article_navigation_setup_markers_navigation_name" = "Guidage par marques";
 "help_article_map_point_layers_on_map_name" = "Points sur la carte";
-"help_article_plan_route_coordinate_input_name" = "Saisie de coordonnées";
+"help_article_plan_route_coordinate_input_name" = "Saisir des coordonnées";
 "help_article_map_vector_maps_name" = "Cartes vectorielles (styles de cartes)";
 "help_article_start_with_main_menu_name" = "Menu principal";
 "shared_string_accessibility" = "Accessibilité";

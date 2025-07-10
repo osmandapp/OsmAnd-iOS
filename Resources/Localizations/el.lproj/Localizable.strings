@@ -94,7 +94,7 @@
 "open_till" = "Ανοιχτά μέχρι τις";
 "osmand_parking_overdue" = "εκπρόθεσμο";
 "index_name_russia" = "Ρωσία";
-"map_widget_magnetic_bearing" = "Μαγνητική ανοχή";
+"map_widget_magnetic_bearing" = "Μαγνητικός προσανατολισμός";
 "osm_edit_created_note" = "Δημιουργήθηκε σημείωση OSM";
 "starting_point" = "Αρχικό σημείο";
 "shared_string_read_more" = "Περισσότερα";
@@ -246,7 +246,7 @@
 "wikivoyage_travel_guide_descr" = "Οδηγοί για τα πιο ενδιαφέροντα μέρη στον πλανήτη, μέσα στο OsmAnd, χωρίς σύνδεση διαδικτύου.";
 "exit_without_saving" = "Έξοδος χωρίς αποθήκευση;";
 "shared_string_example" = "Παράδειγμα";
-"map_widget_bearing" = "Σχετική ανοχή";
+"map_widget_bearing" = "Σχετικός προσανατολισμός";
 "day_off_label" = "κλειστό";
 "mapillary_menu_title_pano" = "Εμφάνιση μόνο εικόνων 360°";
 "route_parameters" = "Παράμετροι διαδρομής";
@@ -3180,6 +3180,15 @@
 "prch_nau_q3" = "Μπορείτε να το εγκαταστήσετε αργότερα μέσα από τους Χάρτες & Πηγές.";
 "checking_for_duplicates" = "Έλεγχος για διπλότυπα...";
 "err_profile_import" = "Σφάλμα ανάγνωσης δεδομένων αντικειμένου: %@";
-"profile_import_success" = "Το προφίλ της εφαρμογής εισήχθη επιτυχώς";
+"profile_import_success" = "Το προφίλ εφαρμογής εισήχθη επιτυχώς";
 "empty_profile_name_warning" = "Το όνομα του προφίλ δεν μπορεί να είναι κενό.";
 "all_application_profiles" = "Όλα τα προφίλ εφαρμογής";
+"after_tapping_done" = "Μόλις πατήσετε Έγινε, όλα τα διαγραμμένα προφίλ θα χαθούν οριστικά.";
+"will_be_show_while_moving" = "Θα εμφανίζεται όσο κινήστε";
+"max_speed_widget_desc" = "Εμφανίζει το όριο ταχύτητας του δρόμου στον οποίο οδηγείτε εκείνη την στιγμή.";
+"arrival_time_widget_desc" = "Χρόνος άφιξης στο σημείο προορισμού.";
+"map_widget_true_bearing" = "Πραγματικός προσανατολισμός";
+"map_widget_sunrise_desc" = "Εμφανίζει την ώρα της επόμενης ανατολής του ηλίου ή τον χρόνο που απομένει μέχρι την ανατολή του ηλίου.";
+"map_widget_sunset_desc" = "Εμφανίζει την ώρα της επόμενης δύσης του ηλίου ή τον χρόνο που απομένει μέχρι την δύση του ηλίου.";
+"map_widget_trip_recording_downhill" = "Κατηφόρα";
+"map_widget_trip_recording_uphill" = "Ανάβαση";

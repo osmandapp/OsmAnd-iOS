@@ -135,12 +135,7 @@
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance
 {
     if (!_isInterrupted)
-    {
-        NSError *error = nil;
-        [_audioSession setActive:NO error:&error];
-        if (error)
-            NSLog(@"[OATTSCommandPlayerImpl] Error deactivating audio session: %@", error.localizedDescription);
-    }
+        [_audioSession setActive:NO error:nil];
 }
 
 - (BOOL)supportsStructuredStreetNames

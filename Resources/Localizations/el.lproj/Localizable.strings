@@ -3170,3 +3170,4 @@
 "inapp_not_found" = "Το %@ δε βρέθηκε στο OsmAnd. Πιθανώς να έχει ακυρωθεί.";
 "touting_specified_vehicle_parameters_descr" = "Οι καθορισμένες παράμετροι οχήματος ίσως επηρεάσουν την δρομολόγηση.";
 "battery_level_settings_description" = "Εμφάνιση επιπέδου μπαταρίας αισθητήρα ως κύρια τιμή";
+"carplay_profile_descr" = "Το προφίλ που θα χρησιμοποιηθεί όταν είστε συνδεδεμένοι στο CarPlay.";

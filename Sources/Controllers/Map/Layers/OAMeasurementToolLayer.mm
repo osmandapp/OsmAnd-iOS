@@ -70,7 +70,7 @@
     
     [self.mapView addKeyedSymbolsProvider:_collection];
     [self.mapView addKeyedSymbolsProvider:_lastLineCollection];
-    [self.mapView addKeyedSymbolsProvider:_pointMarkers];
+    [self.mapView addKeyedSymbolsProvider:kPointMarkersSymbolSection provider:_pointMarkers];
     [self.mapView addKeyedSymbolsProvider:_selectedMarkerCollection];
 }
 
@@ -98,6 +98,7 @@
     {
         [self updateLastPointToCenter];
         [self updateDistAndBearing];
+        self.mapViewController.mapView.renderer->updateSubsection(kPointMarkersSymbolSection);
     }
 }
 
@@ -212,7 +213,7 @@
     {
         [self.mapView addKeyedSymbolsProvider:_collection];
         [self.mapView addKeyedSymbolsProvider:_lastLineCollection];
-        [self.mapView addKeyedSymbolsProvider:_pointMarkers];
+        [self.mapView addKeyedSymbolsProvider:kPointMarkersSymbolSection provider:_pointMarkers];
         [self.mapView addKeyedSymbolsProvider:_selectedMarkerCollection];
     }
     _cachedCenter = OsmAnd::PointI(0, 0);

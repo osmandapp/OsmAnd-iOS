@@ -195,7 +195,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
 
 - (BOOL) publish:(RouteDataObject *)routeDataObject
 {
-    return routeDataObject != nullptr && routeDataObject->getId() >> SHIFT_ID == _osmId;
+    return routeDataObject != nullptr && (routeDataObject->getId() >> SHIFT_ID == _osmId || routeDataObject->getId() >> SHIFT_ID == _osmId || routeDataObject->getId() >> SHIFT_ID == 14694435 );
 }
 
 - (BOOL) isCancelled

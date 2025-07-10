@@ -3864,6 +3864,7 @@
 		328EE3602E1732B1003CDB48 /* OASymbolMapLayer+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OASymbolMapLayer+cpp.h"; sourceTree = "<group>"; };
 		328EECD429DC5F91002922AA /* OATripRecordingElevationWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingElevationWidget.h; sourceTree = "<group>"; };
 		328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingElevationWidget.mm; sourceTree = "<group>"; };
+		32931B452E1EE3EF00197723 /* OATravelGuidesHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OATravelGuidesHelper+cpp.h"; sourceTree = "<group>"; };
 		32961CA62991377E00CF5DAB /* OAUploadGPXFilesTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUploadGPXFilesTask.h; sourceTree = "<group>"; };
 		3296B44C27F878FE00108AF7 /* ic_navbar_overflow_menu_stroke@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@2x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@2x.png"; sourceTree = "<group>"; };
 		3296B44D27F878FE00108AF7 /* ic_custom_wind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@3x.png"; path = "Resources/Icons/ic_custom_wind@3x.png"; sourceTree = "<group>"; };
@@ -8056,6 +8057,7 @@
 			isa = PBXGroup;
 			children = (
 				320F712A2A82689B0071C0E7 /* OATravelGuidesHelper.h */,
+				32931B452E1EE3EF00197723 /* OATravelGuidesHelper+cpp.h */,
 				320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */,
 				32EB3DEF2AC3256B0018D9B8 /* OATravelLocalDataDbHelper.h */,
 				32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */,
@@ -12030,7 +12032,6 @@
 			isa = PBXGroup;
 			children = (
 				FA73410B2BBAED4B00CBF7EC /* LeftIconRightStackView */,
-				DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */,
 				DA5A7D5126C563A300F274C7 /* OAAppModeCell.h */,
 				DA5A7D4526C563A300F274C7 /* OAAppModeCell.mm */,
 				DA5A7D6026C563A300F274C7 /* OAAppModeCell.xib */,
@@ -13403,6 +13404,7 @@
 				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
 				DA5A809626C563A500F274C7 /* OAGPXUIHelper.h */,
 				DA5A80D926C563A600F274C7 /* OAGPXUIHelper.mm */,
+				DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */,
 				DA5A80A126C563A500F274C7 /* OAJsonHelper.h */,
 				DA5A80CD26C563A600F274C7 /* OAJsonHelper.m */,
 				DA5A80B126C563A600F274C7 /* OAKml2Gpx.h */,

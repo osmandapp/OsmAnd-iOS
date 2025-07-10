@@ -28,6 +28,8 @@
 #import "OAPOIHelper+cpp.h"
 #import "OARouteKey.h"
 #import "OARouteKey+cpp.h"
+#import "OATravelGuidesHelper+cpp.h"
+#import "OAClickableWayMenuProvider.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
@@ -519,7 +521,11 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     
     int added = 0;
     auto networkRouteSelector = std::make_shared<OsmAnd::NetworkRouteSelector>([OsmAndApp instance].resourcesManager->obfsCollection);
-    networkRouteSelector->rCtx->setNetworkFilter(*selectorFilter);
+    if (selectorFilter != nullptr)
+    {
+        networkRouteSelector->rCtx->setNetworkFilter(*selectorFilter);
+    }
+    
     auto routes = networkRouteSelector->getRoutes(area31, false, nullptr);
     
     for (auto it = routes.begin(); it != routes.end(); ++it)
@@ -758,6 +764,87 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         }
     }
     return nil;
+}
+
+- (BOOL) showContextMenuForSearchResult:(OAPOI *)poi filename:(NSString *)filename
+{
+    BOOL canBeRoute = [poi isRouteTrack] || !NSStringIsEmpty(poi.values[@"ref"]) || !NSStringIsEmpty(poi.values[@"route_id"]);
+    if (!canBeRoute)
+        return NO;
+    
+    MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:CGPointMake(0, 0)];
+    CLLocation *latLon = [poi getLocation];
+    result.objectLatLon = latLon;
+    
+    OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:poi];
+    NSString *trackName = [poi getGpxFileName:nil];
+    if (filename)
+    {
+        travelGpx.file = filename;
+        if (![travelGpx.file hasSuffix:@".obf"])
+            [travelGpx.file stringByAppendingPathExtension:@"obf"];
+    }
+    OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(50, OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude)));
+    
+    const auto foundBinaryMapObjects = [OATravelGuidesHelper searchGpxMapObject:travelGpx bbox31:bbox31];
+    
+    BOOL osmRoutesAlreadyAdded = NO;
+    for (const auto obfMapObject : foundBinaryMapObjects)
+    {
+        MutableOrderedDictionary<NSString *,NSString *> *tags = [self getOrderedTags:obfMapObject->getResolvedAttributesListPairs()];
+        BOOL isOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
+        BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
+        
+        if (isClickableWay)
+        {
+            ClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:latLon obfMapObject:obfMapObject tags:tags];
+            [self addClickableWay:result clickableWay:clickableWay];
+        }
+        if (isOsmRoute || !osmRoutesAlreadyAdded)
+        {
+            OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+            OANetworkRouteSelectionLayer *networkRouteSelectionLayer = mapVc.mapLayers.networkRouteSelectionLayer;
+            int searchRadius = [networkRouteSelectionLayer getScaledTouchRadius:[networkRouteSelectionLayer getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+            OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude));
+            OsmAnd::AreaI rect31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(AMENITY_SEARCH_RADIUS, point31);
+            OsmAnd::Utilities::get31LatitudeY(rect31.top());
+            OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:OsmAnd::Utilities::get31LongitudeX(rect31.left()) top:OsmAnd::Utilities::get31LatitudeY(rect31.top()) right:OsmAnd::Utilities::get31LongitudeX(rect31.right()) bottom:OsmAnd::Utilities::get31LatitudeY(rect31.bottom())];
+    
+            osmRoutesAlreadyAdded = [self putRouteGpxToSelected:result provider:networkRouteSelectionLayer rect:rect selectorFilter:nil];
+        }
+    }
+    
+    [result groupByOsmIdAndWikidataId];
+    NSMutableArray<SelectedMapObject *> *selectedObjects = [result getProcessedObjects];
+    
+    if ([selectedObjects count] > 0)
+    {
+        NSString *poiName = [poi.name lowercaseString];
+        for (SelectedMapObject *selectedObject in selectedObjects)
+        {
+            if ([[selectedObject getObject] isKindOfClass:NSArray.class])
+            {
+                OARouteKey *routeKey = [selectedObject getObject][0];
+                NSString *name = [routeKey.routeKey.getRouteName().toNSString() lowercaseString];
+                if ([poiName isEqualToString:name])
+                {
+                    [[selectedObject getProvider] showMenuAction:selectedObject];
+                    return YES;
+                }
+            }
+            else if ([[selectedObject getObject] isKindOfClass:ClickableWay.class])
+            {
+                ClickableWay *clickableWay = [selectedObject getObject];
+                NSString *name = [[clickableWay toString] lowercaseString];
+                if ([poiName isEqualToString:name])
+                {
+                    [[selectedObject getProvider] showMenuAction:selectedObject];
+                    return YES;
+                }
+            }
+        }
+    }
+    return NO;
 }
 
 - (QHash<QString, QString>) toQHash:(NSDictionary<NSString *, NSString *> *) dict

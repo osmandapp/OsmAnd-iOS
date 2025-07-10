@@ -870,8 +870,31 @@ final class TravelObfHelper : NSObject {
     }
     
     func openTrackMenu(article: TravelArticle, gpxFileName: String, latLon: CLLocation, adjustMapPosition: Bool) {
+        let callback = OpenTrackMenuDelegate()
+        callback.gpxFileName = gpxFileName
+        callback.latLon = latLon
+        
+        readGpxFile(article: article, callback: callback)
     }
     
+}
+
+final private class OpenTrackMenuDelegate: GpxReadDelegate {
+    
+    var isGpxReading: Bool = false
+    var latLon: CLLocation?
+    var gpxFileName: String?
+    
+    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
+        guard let latLon, let gpxFileName, let gpxFile, let file = gpxFile.object, let analysis = article.getAnalysis() else { return }
+
+        var wptPt = WptPt()
+        wptPt.lat = latLon.coordinate.latitude
+        wptPt.lon = latLon.coordinate.longitude
+        let safeFileName = gpxFileName.appending(GPX_FILE_EXT)
+                
+        OAGPXUIHelper.saveAndOpenGpx(gpxFileName, filepath: safeFileName, gpxFile: file, selectedPoint: wptPt, analysis: analysis, routeKey: nil, forceAdjustCentering: true)
+    }
 }
 
 final class GpxFileReader {

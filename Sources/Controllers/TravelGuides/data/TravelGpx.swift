@@ -64,12 +64,12 @@ final class TravelGpx : TravelArticle {
         activityType = amenity.getTagContent(TravelGpx.ROUTE_ACTIVITY_TYPE)
         ref = amenity.getRef()
         
-        totalDistance = Float(amenity.getTagContent(TravelGpx.DISTANCE)) ?? 0
-        diffElevationUp = Double(amenity.getTagContent(TravelGpx.DIFF_ELEVATION_UP)) ?? 0
-        diffElevationDown = Double(amenity.getTagContent(TravelGpx.DIFF_ELEVATION_DOWN)) ?? 0
-        maxElevation = Double(amenity.getTagContent(TravelGpx.MAX_ELEVATION)) ?? 0
-        minElevation = Double(amenity.getTagContent(TravelGpx.MIN_ELEVATION)) ?? 0
-        avgElevation = Double(amenity.getTagContent(TravelGpx.AVERAGE_ELEVATION)) ?? 0
+        totalDistance = Float(amenity.getTagContent(TravelGpx.DISTANCE) ?? "0") ?? 0
+        diffElevationUp = Double(amenity.getTagContent(TravelGpx.DIFF_ELEVATION_UP) ?? "0") ?? 0
+        diffElevationDown = Double(amenity.getTagContent(TravelGpx.DIFF_ELEVATION_DOWN) ?? "0") ?? 0
+        maxElevation = Double(amenity.getTagContent(TravelGpx.MAX_ELEVATION) ?? "0") ?? 0
+        minElevation = Double(amenity.getTagContent(TravelGpx.MIN_ELEVATION) ?? "0") ?? 0
+        avgElevation = Double(amenity.getTagContent(TravelGpx.AVERAGE_ELEVATION)  ?? "0") ?? 0
         
         let helper = TravelObfHelper.shared
         
@@ -89,7 +89,7 @@ final class TravelGpx : TravelArticle {
             }
         }
         
-        if (!amenity.getAdditionalInfo(ROUTE_MEMBERS_IDS).isEmpty) {
+        if let value = amenity.getAdditionalInfo(ROUTE_MEMBERS_IDS), !value.isEmpty {
             isSuperRoute = true
         }
     }

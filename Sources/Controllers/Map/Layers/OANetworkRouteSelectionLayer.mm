@@ -141,6 +141,11 @@
 
 - (BOOL) showMenuAction:(id)object
 {
+    if ([object isKindOfClass:SelectedMapObject.class])
+    {
+        SelectedMapObject *obj = object;
+        object = [obj getObject];
+    }
     if (object && [object isKindOfClass:NSArray.class])
     {
         NSArray *pair = object;

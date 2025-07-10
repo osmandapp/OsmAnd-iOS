@@ -8,7 +8,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class MapSelectionResult, OAPOI;
+@class MapSelectionResult, OAPOI, ClickableWay;
 
 @interface OAMapSelectionHelper : NSObject
 
@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAPOI *)findAmenityByOsmId:(CLLocation *)latLon obfId:(uint64_t)obfId;
 + (OAPOI *)findAmenityByOsmId:(NSArray<OAPOI *> *)amenities obfId:(uint64_t)obfId point:(CLLocation *)point;
 + (OAPOI *)findAmenityByName:(NSArray<OAPOI *> *)amenities names:(NSArray<NSString *> *)names;
+
+- (BOOL) showContextMenuForSearchResult:(OAPOI *)poi filename:(NSString *)filename;
 
 @end
 

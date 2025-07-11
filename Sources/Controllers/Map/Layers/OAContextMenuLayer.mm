@@ -449,10 +449,10 @@
     int64_t objectSelectionThreshold = 0;
     for (SelectedMapObject *selectedObject in selectedObjects)
     {
-        if ([selectedObject getProvider] && [[selectedObject getProvider] conformsToProtocol:@protocol(OAContextMenuProvider)])
+        if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
-            id<OAContextMenuProvider> provider = [selectedObject getProvider];
-            int64_t selectionThreshold = [provider getSelectionPointOrder:[selectedObject getObject]];
+            id<OAContextMenuProvider> provider = selectedObject.provider;
+            int64_t selectionThreshold = [provider getSelectionPointOrder:selectedObject.object];
             if (selectionThreshold <= objectSelectionThreshold)
             {
                 objectSelectionThreshold = selectionThreshold;
@@ -465,9 +465,9 @@
     {
         if (objectSelectionThreshold < 0)
         {
-            if ([selectedObject getProvider] && [[selectedObject getProvider] conformsToProtocol:@protocol(OAContextMenuProvider)])
+            if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
             {
-                id<OAContextMenuProvider> provider = [selectedObject getProvider];
+                id<OAContextMenuProvider> provider = selectedObject.provider;
                 if ([provider isKindOfClass:OAMapLayer.class])
                 {
                     OAMapLayer *layer = provider;
@@ -482,8 +482,8 @@
                 }
             }
         }
-        id<OAContextMenuProvider> provider = [selectedObject getProvider];
-        if (provider && [provider runExclusiveAction:[selectedObject getObject] unknownLocation:showUnknownLocation])
+        id<OAContextMenuProvider> provider = selectedObject.provider;
+        if (provider && [provider runExclusiveAction:selectedObject.object unknownLocation:showUnknownLocation])
         {
             return YES;
         }
@@ -497,11 +497,11 @@
     if (selectedObjects.count == 1)
     {
         SelectedMapObject *selectedObject = selectedObjects[0];
-        id selectedObj = [selectedObject getObject];
+        id selectedObj = selectedObject.object;
         CLLocation *latLon = [result objectLatLon];
         OAPointDescription *pointDescription;
         
-        id<OAContextMenuProvider> provider = [selectedObject getProvider];
+        id<OAContextMenuProvider> provider = selectedObject.provider;
         if (provider)
         {
             if (!latLon || objectSelectionThreshold < 0)
@@ -546,13 +546,13 @@
     NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray new];
     for (SelectedMapObject *selectedObject in selectedObjects)
     {
-        id<OAContextMenuProvider> provider = [selectedObject getProvider];
+        id<OAContextMenuProvider> provider = selectedObject.provider;
         if (!provider)
             provider = self.mapViewController.mapLayers.poiLayer;
         
         if (provider)
         {
-            OATargetPoint *targetPoint = [provider getTargetPoint:[selectedObject getObject]];
+            OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object];
             if (targetPoint)
                 [targetPoints addObject:targetPoint];
             
@@ -569,9 +569,9 @@
     {
         OATargetPoint *targetPoint;
         if (provider)
-            targetPoint = [provider getTargetPoint:[object getObject]];
+            targetPoint = [provider getTargetPoint:object.object];
         else
-            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:[object getObject]];
+            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object.object];
             
         if (targetPoint)
         {

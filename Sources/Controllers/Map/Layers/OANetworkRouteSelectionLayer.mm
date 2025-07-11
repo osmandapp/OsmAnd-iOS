@@ -144,7 +144,7 @@
     if ([object isKindOfClass:SelectedMapObject.class])
     {
         SelectedMapObject *obj = object;
-        object = [obj getObject];
+        object = obj.object;
     }
     if (object && [object isKindOfClass:NSArray.class])
     {

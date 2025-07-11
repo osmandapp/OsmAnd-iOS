@@ -11,20 +11,12 @@ import Foundation
 @objcMembers
 class SelectedMapObject: NSObject {
     
-    private var object: Any
-    private var provider: OAContextMenuProvider?
+    private(set) var object: Any
+    private(set) var provider: OAContextMenuProvider?
     
     init(mapObject: Any, provider: OAContextMenuProvider?) {
         self.object = mapObject
         self.provider = provider
         super.init()
-    }
-    
-    func getObject() -> Any {
-        object
-    }
-    
-    func getProvider() -> OAContextMenuProvider? {
-        provider
     }
 } 

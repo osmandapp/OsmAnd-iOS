@@ -77,7 +77,7 @@ class MapSelectionResult: NSObject {
     private func processObjects(_ selectedObjects: Array<SelectedMapObject>, other: inout Array<SelectedMapObject>) -> Array<BaseDetailsObject> {
         var detailsObjects = Array<BaseDetailsObject>()
         for selectedObject in selectedObjects {
-            let object = selectedObject.getObject()
+            let object = selectedObject.object
             var overlapped = collectOverlappedObjects(object, detailsObjects: detailsObjects)
             
             let detailsObject: BaseDetailsObject

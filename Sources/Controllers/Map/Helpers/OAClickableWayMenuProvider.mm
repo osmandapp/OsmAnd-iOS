@@ -17,9 +17,9 @@
 - (BOOL) showMenuAction:(id)object
 {
     SelectedMapObject *selectedMapObject = (SelectedMapObject *)object;
-    if ([[selectedMapObject getObject] isKindOfClass:ClickableWay.class])
+    if ([selectedMapObject.object isKindOfClass:ClickableWay.class])
     {
-        ClickableWay *clickableWay = (ClickableWay *)[selectedMapObject getObject];
+        ClickableWay *clickableWay = (ClickableWay *)selectedMapObject.object;
         ClickableWayAsyncTask *task = [[ClickableWayAsyncTask alloc] initWithClickableWay:clickableWay];
         [task execute];
         return YES;

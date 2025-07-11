@@ -417,8 +417,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     for (SelectedMapObject *selectedObject in selectedObjects)
     {
-        id object = [selectedObject getObject];
-        if ([object isKindOfClass:SelectedGpxPoint.class] && [[selectedObject getProvider] isKindOfClass:OAGPXLayer.class])
+        id object = selectedObject.object;
+        if ([object isKindOfClass:SelectedGpxPoint.class] && [selectedObject.provider isKindOfClass:OAGPXLayer.class])
         {
             SelectedGpxPoint *gpxPoint = (SelectedGpxPoint *)object;
             if ([[gpxPoint.selectedGpxFile path] hasSuffix:gpxFileName])
@@ -434,8 +434,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     for (SelectedMapObject *selectedObject in selectedObjects)
     {
-        if ([[selectedObject getObject] isKindOfClass:ClickableWay.class] &&
-            clickableWay.osmId == ((ClickableWay *) [selectedObject getObject]).osmId)
+        if ([selectedObject.object isKindOfClass:ClickableWay.class] &&
+            clickableWay.osmId == ((ClickableWay *) selectedObject.object).osmId)
         {
             return NO;
         }
@@ -449,10 +449,10 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     for (SelectedMapObject *selectedObject in selectedObjects)
     {
-        if ([[selectedObject getObject] isKindOfClass:NSArray.class] &&
-            [[selectedObject getProvider] isKindOfClass:OAGPXLayer.class])
+        if ([selectedObject.object isKindOfClass:NSArray.class] &&
+            [selectedObject.provider isKindOfClass:OAGPXLayer.class])
         {
-            NSArray *pair = (NSArray *)[selectedObject getObject];
+            NSArray *pair = (NSArray *)selectedObject.object;
             id firstOblect = [pair firstObject];
             if ([firstOblect isKindOfClass:OATravelGpx.class])
             {
@@ -548,7 +548,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     for (SelectedMapObject *selectedObject in [result getAllObjects])
     {
-        id object = [selectedObject getObject];
+        id object = selectedObject.object;
         if ([object isKindOfClass:NSArray.class])
         {
             id firstObject = [((NSArray *) object) firstObject];
@@ -565,7 +565,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     for (SelectedMapObject *selectedObject in selectedObjects)
     {
-        id object = [selectedObject getObject];
+        id object = selectedObject.object;
         if ([object isKindOfClass:OAPOI.class] && [((OAPOI *)object) strictEquals:amenity])
         {
             OAPOI *poi = (OAPOI *)object;
@@ -620,7 +620,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         
         for (SelectedMapObject *selectedObject in selectedObjects)
         {
-            id object = [selectedObject getObject];
+            id object = selectedObject.object;
             if ([object isKindOfClass:[OAPOI class]])
             {
                 OAPOI *amenity = (OAPOI *)object;
@@ -641,7 +641,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                     [selectedObjects addObject:newTransportStop];
                     
                     [selectedObjects filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(SelectedMapObject *selectedObject, NSDictionary *bindings) {
-                        return (!selectedObject && !amenity) || [amenity isEqual:[selectedObject getObject]];
+                        return (!selectedObject && !amenity) || [amenity isEqual:selectedObject.object];
                     }]];
 
                 }
@@ -825,23 +825,23 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         NSString *poiName = [poi.name lowercaseString];
         for (SelectedMapObject *selectedObject in selectedObjects)
         {
-            if ([[selectedObject getObject] isKindOfClass:NSArray.class])
+            if ([selectedObject.object isKindOfClass:NSArray.class])
             {
-                OARouteKey *routeKey = [selectedObject getObject][0];
+                OARouteKey *routeKey = selectedObject.object[0];
                 NSString *name = [routeKey.routeKey.getRouteName().toNSString() lowercaseString];
                 if ([poiName isEqualToString:name])
                 {
-                    [[selectedObject getProvider] showMenuAction:selectedObject];
+                    [selectedObject.provider showMenuAction:selectedObject];
                     return YES;
                 }
             }
-            else if ([[selectedObject getObject] isKindOfClass:ClickableWay.class])
+            else if ([selectedObject.object isKindOfClass:ClickableWay.class])
             {
-                ClickableWay *clickableWay = [selectedObject getObject];
+                ClickableWay *clickableWay = selectedObject.object;
                 NSString *name = [[clickableWay toString] lowercaseString];
                 if ([poiName isEqualToString:name])
                 {
-                    [[selectedObject getProvider] showMenuAction:selectedObject];
+                    [selectedObject.provider showMenuAction:selectedObject];
                     return YES;
                 }
             }

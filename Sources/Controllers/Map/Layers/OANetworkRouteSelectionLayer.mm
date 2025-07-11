@@ -24,7 +24,7 @@
 
 - (void) loadNetworkGpx:(NSArray *)pair lat:(double)lat lon:(double)lon
 {
-    __weak OANetworkRouteSelectionLayer *weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     
     if (pair.count > 1 && [pair[0] isKindOfClass:OARouteKey.class] && [pair[1] isKindOfClass:OASKQuadRect.class])
     {

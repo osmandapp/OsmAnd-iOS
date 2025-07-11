@@ -425,7 +425,6 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
     {
         [result collect:obj provider:self];
     }
-    
 }
 
 - (BOOL)isSecondaryProvider

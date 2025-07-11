@@ -338,15 +338,14 @@ static const int START_ZOOM = 10;
     int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
     
     NSArray<OAOsmNotePoint *> *osmBugs = [[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints];
-    if (!NSArrayIsEmpty(osmBugs))
-    {
-        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));
-        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
-        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
-        [self collectOsmEditsFromScreenArea:osmBugs screenArea:touchPolygon31 result:result];
-    }
+    [self collectOsmEdits:osmBugs result:result pixel:pixel radiusPixels:radiusPixels];
     
     NSArray<OAOpenStreetMapPoint *> *osmEdits = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
+    [self collectOsmEdits:osmEdits result:result pixel:pixel radiusPixels:radiusPixels];
+}
+
+- (void) collectOsmEdits:(NSArray<OAOsmPoint *> *)osmEdits result:(MapSelectionResult *)result pixel:(CGPoint)pixel radiusPixels:(int)radiusPixels
+{
     if (!NSArrayIsEmpty(osmEdits))
     {
         CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));

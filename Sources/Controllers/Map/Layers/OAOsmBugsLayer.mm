@@ -175,8 +175,6 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
         CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
         OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
         
-        
-        
         for (OAOsmNotePoint *note in objects)
         {
             // Android has extra settings check here. 

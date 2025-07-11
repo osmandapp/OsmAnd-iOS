@@ -3714,10 +3714,10 @@
 "rendering_value_sector1_name" = "Sector 3";
 "rendering_value_sector3_name" = "Sector 4";
 "rendering_value_sector4_name" = "mm";
-"shared_string_millimeters_short" = "";
+"shared_string_millimeters_short" = "mm";
 "weather_source_GFS_title" = "GFS";
 "shared_string_local" = "Wikimedia";
-"wikimedia" = "Imagen descargada a Documentos/Descargar.";
+"wikimedia" = "Wikimedia";
 "download_successful" = "Mostrar datos principales del sensor";
 "sensor_data_settings_description" = "Mostrar nivel de batería del sensor como valor principal";
 "battery_level_settings_description" = "Monitorea datos vitales del vehículo mediante el protocolo OBD-II. Monitorea métricas clave como velocidad, RPM del motor, consumo de combustible y más.";

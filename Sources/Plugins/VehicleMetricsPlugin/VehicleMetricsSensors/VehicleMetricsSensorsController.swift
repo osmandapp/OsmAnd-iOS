@@ -305,21 +305,26 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     private func getEmptyDescriptionAttributedString() -> NSAttributedString {
         let title = localizedString("connect_obd_instructions_title")
         let howTo = localizedString("obd_how_to_connect")
-        let steps = String(format: localizedString("connect_obd_instructions_step"), localizedString("external_device_status_connect")).replacingOccurrences(of: "\n\n", with: "\n")
+        
+        var steps = String(format: localizedString("connect_obd_instructions_step"), localizedString("external_device_status_connect"))
+        
+        // Normalize line breaks: remove extra spaces and multiple \n (Different translation in localization strings)
+        steps = steps.replacingOccurrences(of: "\\s*\\n\\s*", with: "\n", options: .regularExpression)
         
         let fullText = "\(title)\n\n\(howTo)\n\(steps)"
         let fullAttributedText = NSMutableAttributedString(string: fullText)
         
         if let boldFont = UIFont.scaledBoldSystemFont(ofSize: 17) {
             let howToRange = (fullText as NSString).range(of: howTo)
-            
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.paragraphSpacing = 12
-            
-            fullAttributedText.addAttributes([
-                .font: boldFont,
-                .paragraphStyle: paragraphStyle
-            ], range: howToRange)
+            if howToRange.location != NSNotFound {
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.paragraphSpacing = 12
+                
+                fullAttributedText.addAttributes([
+                    .font: boldFont,
+                    .paragraphStyle: paragraphStyle
+                ], range: howToRange)
+            }
         }
         
         return fullAttributedText

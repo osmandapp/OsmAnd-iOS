@@ -258,6 +258,57 @@
     return [input hasPrefix:prefix] ? [input stringByReplacingOccurrencesOfString:prefix withString:@""] : input;
 }
 
+- (void)checkShieldOverflow
+{
+    if ([self isPanelVertical] && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
+    {
+        CGFloat containerWidth = self.frame.size.width - _leftArrowView.frame.size.width - _mainStackView.spacing;
+        CGFloat usedWidth = 0;
+        int addedCount = 0;
+        
+        for (NSInteger i = 0; i < _shieldStackView.subviews.count; i++)
+        {
+            UIView *shieldView = _shieldStackView.subviews[i];
+            UIView *view = shieldView.subviews.firstObject;
+            
+            if (!view || ![view isKindOfClass:[UIImageView class]])
+                continue;
+            
+            UIImageView *imageView = (UIImageView *)view;
+            CGFloat totalWidth = 0;
+            
+            NSLayoutConstraint *shieldWidthConstraint;
+            for (NSInteger j = 0; j < imageView.constraints.count; j++)
+            {
+                NSLayoutConstraint *constraint = imageView.constraints[j];
+                if (constraint.firstAttribute == NSLayoutAttributeWidth)
+                {
+                    shieldWidthConstraint = constraint;
+                    totalWidth += constraint.constant;
+                    if (i < _shieldStackView.subviews.count - 1)
+                        totalWidth += _shieldStackView.spacing;
+                }
+            }
+            
+            if (!shieldWidthConstraint)
+                continue;
+
+            if (usedWidth + totalWidth <= containerWidth - 2 * shieldWidthConstraint.constant)
+            {
+                shieldView.hidden = NO;
+                usedWidth += totalWidth;
+                addedCount++;
+            }
+            else
+            {
+                shieldView.hidden = YES;
+            }
+        }
+        
+        [_shieldStackView setHidden:addedCount == 0];
+    }
+}
+
 - (void)setExit:(OACurrentStreetName *)streetName
 {
     NSString *exitNumber = nil;
@@ -325,7 +376,8 @@
             }
         }
     }
-    [_shieldStackView setHidden:isShieldSet];
+    [_shieldStackView setHidden:!isShieldSet];
+    [self checkShieldOverflow];
 }
 
 - (BOOL) setRoadShield:(UIImageView *)view shield:(RoadShield *)shield
@@ -668,6 +720,8 @@
     if ([self isPanelVertical])
     {
         [self setStreetName:streetName];
+        if (streetName.shields.count != 0)
+            [self checkShieldOverflow];
         [self applySuitableTextFont];
         [self applySuitableLayout];
         [self replaceComponentsIfNeeded];

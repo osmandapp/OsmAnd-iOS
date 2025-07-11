@@ -24,7 +24,6 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
     EOASearchResultResourceTravel
 };
 
-
 @interface CheckWordsMatchCount : NSObject
 
 @property BOOL allWordsEqual;

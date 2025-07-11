@@ -10,11 +10,11 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAResultMatcher.h"
 
-#define OSM_WIKI_CATEGORY @"osmwiki"
-#define SPEED_CAMERA @"speed_camera"
-#define WIKI_LANG @"wiki_lang"
-#define WIKI_PLACE @"wiki_place"
-#define ROUTE_ARTICLE_POINT @"route_article_point"
+extern NSString * const OSM_WIKI_CATEGORY;
+extern NSString * const SPEED_CAMERA ;
+extern NSString * const WIKI_LANG;
+extern NSString * const WIKI_PLACE;
+extern NSString * const ROUTE_ARTICLE_POINT;
 
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};

@@ -19,11 +19,54 @@
 
 #include <OsmAndCore/ICU.h>
 
-#define TYPE @"type"
-#define SUBTYPE @"subtype"
-#define POI_NAME @"name"
-#define COLLAPSABLE_PREFIX @"collapsable_"
-#define SEPARATOR @";"
+NSString * const TYPE = @"type";
+NSString * const POI_NAME = @"name";
+NSString * const COLLAPSABLE_PREFIX = @"collapsable_";
+NSString * const SEPARATOR = @";";
+
+NSString * const URL_TAG = @"url";
+NSString * const WEBSITE_TAG = @"website";
+NSString * const PHONE_TAG = @"phone";
+NSString * const MOBILE_TAG = @"mobile";
+NSString * const DESCRIPTION_TAG = @"description";
+NSString * const ROUTE_TAG = @"route";
+NSString * const OPENING_HOURS_TAG = @"opening_hours";
+NSString * const SERVICE_TIMES_TAG = @"service_times";
+NSString * const COLLECTION_TIMES_TAG = @"collection_times";
+NSString * const CONTENT_TAG = @"content";
+NSString * const CUISINE_TAG = @"cuisine";
+NSString * const WIKIDATA_TAG = @"wikidata";
+NSString * const WIKIMEDIA_COMMONS_TAG = @"wikimedia_commons";
+NSString * const WIKIPEDIA_TAG = @"wikipedia";
+NSString * const MAPILLARY_TAG = @"mapillary";
+NSString * const DISH_TAG = @"dish";
+NSString * const POI_REF = @"ref";
+NSString * const OSM_DELETE_VALUE = @"delete";
+NSString * const OSM_DELETE_TAG = @"osmand_change";
+NSString * const OSM_ACCESS_PRIVATE_VALUE = @"private";
+NSString * const OSM_ACCESS_PRIVATE_TAG = @"access_private";
+NSString * const IMAGE_TITLE = @"image_title";
+NSString * const IS_PART = @"is_part";
+NSString * const IS_PARENT_OF = @"is_parent_of";
+NSString * const IS_AGGR_PART = @"is_aggr_part";
+NSString * const CONTENT_JSON = @"json";
+NSString * const ROUTE_ID = @"route_id";
+NSString * const ROUTE_SOURCE = @"route_source";
+NSString * const ROUTE_NAME = @"route_name";
+NSString * const COLOR_TAG = @"color";
+NSString * const LANG_YES = @"lang_yes";
+NSString * const GPX_ICON = @"gpx_icon";
+NSString * const POITYPE = @"type";
+NSString * const SUBTYPE = @"subtype";
+NSString * const AMENITY_NAME = @"name";
+NSString * const ROUTES = @"routes";
+NSString * const ROUTE_ARTICLE = @"route_article";
+NSString * const ROUTE_PREFIX = @"routes_";
+NSString * const ROUTE_TRACK = @"route_track";
+NSString * const ROUTE_TRACK_POINT = @"route_track_point";
+NSString * const ROUTE_BBOX_RADIUS = @"route_bbox_radius";
+NSString * const ROUTE_MEMBERS_IDS = @"route_members_ids";
+NSString * const TRAVEL_EVO_TAG = @"travel_elo";
 
 static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     COLOR_NAME_EXTENSION_KEY,

@@ -3198,5 +3198,15 @@
 "download_persian_voice_alert_title" = "Κατεβάστε αρχείο Περσικής φωνής:";
 "route_your_destination_is_on_ahead" = "Ο προορισμός σας είναι ευθεία μπροστά";
 "map_markers_history" = "Ιστορικό δεικτών χάρτη";
-"search_history_disabled" = "Η αναζήτηση ιστορικού είναι απενεργοποιημένη";
+"search_history_disabled" = "Το ιστορικό αναζήτησης είναι απενεργοποιημένο";
 "enable_search_history" = "Μπορείτε να ενεργοποιήσετε το ιστορικό αναζήτησης στις Ρυθμίσεις";
+"attribute" = "Χαρακτηριστικό";
+"unsaved_changes" = "Μη αποθηκευμένες αλλαγές";
+"unsaved_changes_will_be_lost_discard" = "Οποιεσδήποτε μη αποθηκευμένες αλλαγές θα χαθούν. Απόρριψη αλλαγών;";
+"shared_string_discard" = "Απόρριψη";
+"shared_string_cancelled" = "Ακυρώθηκε";
+"shared_string_estimated_time_span" = "Εκτιμώμενη χρονική διάρκεια";
+"shared_string_changed" = "Αλλαγμένο";
+"shared_string_leave" = "Αποχώρησε";
+"shared_string_data_type" = "Τύπος δεδομένων";
+"shared_string_author" = "Συντάκτης";

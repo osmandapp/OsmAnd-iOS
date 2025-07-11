@@ -561,9 +561,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     else
                     {
                         filter = [[OAPOIFiltersHelper sharedInstance] getSearchByNamePOIFilter];
-                        if ([searchPhrase getFirstUnknownSearchWord].length > 0)
+                        if ([searchPhrase getFullSearchPhrase].length > 0)
                         {
-                            [filter setFilterByName:[searchPhrase getFirstUnknownSearchWord]];
+                            [filter setFilterByName:[searchPhrase getFullSearchPhrase]];
                             [filter clearCurrentResults];
                         }
                     }

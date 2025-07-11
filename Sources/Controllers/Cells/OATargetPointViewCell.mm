@@ -15,7 +15,6 @@
 #import "Localization.h"
 #import "OAFavoriteItem.h"
 #import "OATransportStop.h"
-#import "OATransportStop+cpp.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPOI.h"

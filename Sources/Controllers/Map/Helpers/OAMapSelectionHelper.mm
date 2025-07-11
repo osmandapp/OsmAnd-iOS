@@ -20,7 +20,6 @@
 #import "OAMapObject.h"
 #import "OAPOI.h"
 #import "OATransportStop.h"
-#import "OATransportStop+cpp.h"
 #import "OAPOIFilter.h"
 #import "OAClickableWayHelper.h"
 #import "OAClickableWayHelper+cpp.h"

@@ -10,7 +10,6 @@
 #import "OAUtilities.h"
 #import "OATransportStopRoute.h"
 #import "OATransportStop.h"
-#import "OATransportStop+cpp.h"
 #import "OATransportRouteController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"

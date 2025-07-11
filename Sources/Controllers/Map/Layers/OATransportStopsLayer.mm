@@ -13,7 +13,6 @@
 #import "OAUtilities.h"
 #import "OATargetPoint.h"
 #import "OATransportStop.h"
-#import "OATransportStop+cpp.h"
 #import "OAMapStyleSettings.h"
 #import "OATransportStopRoute.h"
 #import "OATransportStopAggregated.h"

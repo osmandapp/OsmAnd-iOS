@@ -234,7 +234,7 @@ extension DeviceHelper {
     func disconnectIfNeeded(device: Device) {
         if device.isConnected || device.isConnecting {
             if device.isSimulator {
-                disconnectOBDSimulator()
+                disconnectSimulatorFor(deviceType: device.deviceType)
             } else {
                 device.peripheral.disconnect { result in
                     switch result {

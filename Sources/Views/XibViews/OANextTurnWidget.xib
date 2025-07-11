@@ -29,6 +29,7 @@
                 <outlet property="shieldImage" destination="Bo0-l4-pAu" id="xVW-mx-Yzp"/>
                 <outlet property="shieldStackView" destination="9n9-Ct-Tsh" id="xSy-ag-zrF"/>
                 <outlet property="shieldView" destination="dH6-Si-WWm" id="frh-cH-59i"/>
+                <outlet property="shieldWidthConstraint" destination="6kM-KC-MF8" id="gfh-8J-V4j"/>
                 <outlet property="showButton" destination="Ihw-vI-BZ9" id="U6u-oR-uTe"/>
                 <outlet property="streetLabel" destination="kIr-1g-Uxg" id="F8Q-zA-UyT"/>
                 <outlet property="streetStackView" destination="f78-F6-OuQ" id="VyS-J2-KkV"/>
@@ -134,15 +135,16 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="f78-F6-OuQ">
                                             <rect key="frame" x="0.0" y="46" width="328" height="38"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9n9-Ct-Tsh">
+                                                <stackView opaque="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9n9-Ct-Tsh">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="38"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" horizontalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dH6-Si-WWm">
                                                             <rect key="frame" x="0.0" y="0.0" width="50" height="38"/>
                                                             <subviews>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bo0-l4-pAu">
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bo0-l4-pAu">
                                                                     <rect key="frame" x="0.0" y="1" width="50" height="36"/>
                                                                     <constraints>
+                                                                        <constraint firstAttribute="width" constant="50" id="6kM-KC-MF8"/>
                                                                         <constraint firstAttribute="height" constant="36" id="b4O-NB-RTI"/>
                                                                     </constraints>
                                                                 </imageView>

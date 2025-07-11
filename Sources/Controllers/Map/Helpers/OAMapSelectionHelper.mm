@@ -383,23 +383,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (void) addTravelGpx:(MapSelectionResult *)result routeId:(NSString *)routeId
 {
-    //Never triggered
-    OATravelGpx *travelGpx = [OATravelObfHelper.shared searchTravelGpxWithLatLon:result.objectLatLon.coordinate routeId:routeId];
-    
-    if (travelGpx && [self isUniqueTravelGpx:[result getAllObjects] travelGpx:travelGpx])
-    {
-        /*
-        WptPt selectedPoint = new WptPt();
-        selectedPoint.setLat(result.getPointLatLon().getLatitude());
-        selectedPoint.setLon(result.getPointLatLon().getLongitude());
-        SelectedGpxPoint selectedGpxPoint = new SelectedGpxPoint(null, selectedPoint);
-        result.collect(new Pair<>(travelGpx, selectedGpxPoint), mapLayers.getTravelSelectionLayer());
-         */
-    }
-    else if (!travelGpx)
-    {
-        NSLog(@"addTravelGpx() searchTravelGpx() travelGpx is null");
-    }
+    // Never triggered
+    // Implement later if needed
 }
 
 - (BOOL) addClickableWay:(MapSelectionResult *)result clickableWay:(ClickableWay *)clickableWay

@@ -2795,19 +2795,16 @@ static const double d180PI = 180.0 / M_PI_2;
     return lc;
 }
 
-+ (NSString *)convertToPermittedFileName:(NSString *)filename
-{
-    NSString *name = [filename stringByReplacingOccurrencesOfString:@"\"" withString:@"~"];
-    name = [name stringByReplacingOccurrencesOfString:@"*" withString:@"~"];
-    name = [name stringByReplacingOccurrencesOfString:@"*" withString:@"~"];
-    name = [name stringByReplacingOccurrencesOfString:@"/" withString:@"~"];
-    name = [name stringByReplacingOccurrencesOfString:@":" withString:@"~"];
-    name = [name stringByReplacingOccurrencesOfString:@"<" withString:@"~"];
-    name = [name stringByReplacingOccurrencesOfString:@">" withString:@"~"];
-    name = [name stringByReplacingOccurrencesOfString:@"?" withString:@"~"];
-    name = [name stringByReplacingOccurrencesOfString:@"\\" withString:@"~"];
-    name = [name stringByReplacingOccurrencesOfString:@"|" withString:@"~"];
-    return name;
++ (NSString *)convertToPermittedFileName:(NSString *)filename {
+    static NSCharacterSet *forbiddenCharacters = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        forbiddenCharacters = [NSCharacterSet characterSetWithCharactersInString:@"\"*/:<>?\\|"];
+    });
+
+    NSArray<NSString *> *components = [filename componentsSeparatedByCharactersInSet:forbiddenCharacters];
+    NSString *sanitized = [components componentsJoinedByString:@"~"];
+    return sanitized;
 }
 
 + (natural_t) get_free_memory

@@ -26,7 +26,6 @@
 #import "OASavingTrackHelper.h"
 #import "OANetworkRouteDrawable.h"
 #import "OARouteKey.h"
-#import "OARouteKey+cpp.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppVersion.h"
 

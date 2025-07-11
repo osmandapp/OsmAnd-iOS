@@ -109,18 +109,9 @@ final class TravelObfHelper : NSObject {
         return popularArticles
     }
     
-    
-    
-    
-    
     func isTravelGpxTags(_ tags: [String: String]) -> Bool {
-        tags[ROUTE_ID] != nil &&
-            (tags[ROUTE_TAG] == "segment" || tags[TravelGpx.ROUTE_TYPE] != nil)
-    }
-    
-    func searchTravelGpx(latLon: CLLocationCoordinate2D, routeId: String) -> TravelGpx? {
-        //Never triggered. implement later
-        return nil
+        guard let routeTag = tags[ROUTE_ID] else { return false }
+        return routeTag == "segment" || tags[TravelGpx.ROUTE_TYPE] != nil
     }
     
     func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {

@@ -18,7 +18,6 @@
 #import "OAMapViewController.h"
 #import "OANativeUtilities.h"
 #import "OAContextMenuLayer.h"
-#import "OAContextMenuLayer+cpp.h"
 #import "OAMapLayers.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmNotePoint.h"

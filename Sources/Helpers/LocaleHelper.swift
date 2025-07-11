@@ -7,7 +7,7 @@
 //
 
 @objcMembers
-class LocaleHelper: NSObject {
+final class LocaleHelper: NSObject {
     
     static func getPreferredPlacesLanguage() -> String {
         let locale = OAAppSettings.sharedManager().settingPrefMapLanguage.get()

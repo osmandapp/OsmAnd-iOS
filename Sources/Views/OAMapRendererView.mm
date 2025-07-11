@@ -257,6 +257,11 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->addSymbolsProvider(provider);
 }
 
+- (void)addKeyedSymbolsProvider:(int)subsectionIndex provider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider
+{
+    _renderer->addSymbolsProvider(subsectionIndex, provider);
+}
+
 - (bool)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
 {
     return _renderer->removeSymbolsProvider(provider);

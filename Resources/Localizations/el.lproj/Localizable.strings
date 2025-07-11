@@ -3249,4 +3249,5 @@
 "smart_folder_name_present" = "Υπάρχει ήδη τέτοιος έξυπνος φάκελος";
 "select_segment" = "Επιλογή τμήματος";
 "track_multiple_segments_select" = "%@ έχει περισσότερα από ένα τμήματα. Παρακαλούμε επιλέξτε ένα κομμάτι του ίχνους σας για να χρησιμοποιήσετε για πλοήγηση.";
-"segments_count" = "Τμήμα %@";
+"segments_count" = "Τμήμα %d";
+"osmand_live" = "OsmAnd Live";

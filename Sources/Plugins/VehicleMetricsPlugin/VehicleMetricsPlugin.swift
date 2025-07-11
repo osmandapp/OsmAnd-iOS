@@ -10,6 +10,7 @@
 final class VehicleMetricsPlugin: OAPlugin {
     
     let TRIP_RECORDING_VEHICLE_METRICS: OACommonStringList = OAAppSettings.sharedManager().registerStringListPreference("trip_recording_vehicle_metrics", defValue: nil).makeProfile().makeShared()
+    var isOBDSimulatorConnected = false
     
     override func getId() -> String? {
         kInAppId_Addon_Vehicle_Metrics
@@ -27,6 +28,7 @@ final class VehicleMetricsPlugin: OAPlugin {
         super.disable()
 
         DeviceHelper.shared.disconnectDevices(only: .OBD_VEHICLE_METRICS, reason: .pluginOff)
+        DeviceHelper.shared.disconnectOBDSimulator()
     }
     
     override func update(_ location: CLLocation) {

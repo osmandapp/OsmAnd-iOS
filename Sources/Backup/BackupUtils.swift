@@ -62,7 +62,7 @@ final class BackupUtils: NSObject {
                                             remoteFiles: [OARemoteFile],
                                             infoFiles: Bool) -> [OARemoteFile: OASettingsItem] {
         var res = [OARemoteFile: OASettingsItem]()
-        var files = remoteFiles
+        let files = remoteFiles
         var settingsItemMap = [String: OASettingsItem]()
         var subtypeFolders = [OAFileSettingsItem]()
         let DELIMETER = "___"

@@ -59,6 +59,11 @@
     return PLUGIN_ID;
 }
 
+- (void)disable {
+    [super disable];
+    [[DeviceHelper shared] disconnectOBDSimulator];
+}
+
 - (BOOL) isEnableByDefault
 {
     return NO;

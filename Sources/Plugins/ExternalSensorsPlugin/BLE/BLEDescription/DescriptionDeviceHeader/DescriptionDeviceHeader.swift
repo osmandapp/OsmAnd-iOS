@@ -76,8 +76,8 @@ final class DescriptionDeviceHeader: UIView {
             imageContainerView.backgroundColor = .buttonBgColorTertiary
         } else {
             connectStatusLabel.text = localizedString("external_device_status_disconnected")
-            signalIndicatorImageView.tintColor = UIColor.iconColorSecondary
-            signalIndicatorImageView.image = UIImage(named: "ic_small_signal_not_found")
+            signalIndicatorImageView.tintColor = .iconColorSecondary
+            signalIndicatorImageView.image = .icSmallSignalNotFound
             deviceImageView.image = device.getServiceDisconnectedImage
             deviceImageView.tintColor = .iconColorDefault
             configureConnectButtonTitle(with: .connected)
@@ -105,7 +105,13 @@ final class DescriptionDeviceHeader: UIView {
                     didPairedDeviceAction?()
                 }
                 configureConnectButtonTitle(with: .disconnected)
-                discoverServices(serviceUUIDs: nil)
+                if !device.isSimulator {
+                    // On car sensor connect, stop simulator
+                    if device.deviceType == .OBD_VEHICLE_METRICS {
+                        DeviceHelper.shared.disconnectOBDSimulator()
+                    }
+                    discoverServices(serviceUUIDs: nil)
+                }
                 deviceImageView.image = device.getServiceConnectedImage
             case .failure(let error):
                 if let error = error as? SBError {

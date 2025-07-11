@@ -48,7 +48,7 @@
 {
     OAIconsCollectionViewCell* cell = nil;
     cell = (OAIconsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAIconsCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
-    UIImage *img = nil;
+
     NSString *imgName = _dataArray[indexPath.row];
     cell.iconImageView.image = [UIImage templateImageNamed:imgName];
     cell.iconImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];

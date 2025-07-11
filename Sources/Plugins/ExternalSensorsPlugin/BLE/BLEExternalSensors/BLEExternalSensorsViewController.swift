@@ -172,11 +172,12 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         if let key = item.key {
             if let item = ExternalSensorsCellData(rawValue: key) {
                 if case .learnMore = item {
-                    guard let settingsURL = URL(string: docsExternalSensorsURL),
-                          UIApplication.shared.canOpenURL(settingsURL) else {
+                    guard let settingsURL = URL(string: docsVehicleMetricsURL) else {
                         return
                     }
-                    UIApplication.shared.open(settingsURL)
+                    let safariViewController = SFSafariViewController(url: settingsURL)
+                    safariViewController.preferredControlTintColor = .iconColorActive
+                    present(safariViewController, animated: true, completion: nil)
                 }
             } else if let item = ExternalSensorsConnectState(rawValue: key) {
                 if let items = sectionsDevicesData[item], items.count > indexPath.row {

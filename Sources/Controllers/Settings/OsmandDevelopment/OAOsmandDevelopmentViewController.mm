@@ -30,6 +30,7 @@
 #import "OAPluginsHelper.h"
 #import "OASwitchTableViewCell.h"
 #import "OAObservable.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
 
@@ -46,6 +47,7 @@ NSString *const kCellSwitchIsOnKey = @"kCellSwitchIsOnKey";
 NSString *const kUse3dIconsKey = @"kUse3dIconsKey";
 NSString *const kBatterySavingModeKey = @"kBatterySavingModeKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
+NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 
 #pragma mark - Initialization
 
@@ -93,6 +95,14 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         kCellDescrKey : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
         @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];
+    
+    [simulationSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kSimulateOBDDataKey,
+        kCellTitleKey : OALocalizedString(@"simulate_obd"),
+        @"isOn" : @([[OAAppSettings sharedManager].simulateOBDData get])
+    }];
+    
     [_data addSection:simulationSection];
     
     OATableSectionData *renderingSection = [OATableSectionData sectionData];
@@ -184,13 +194,17 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         [[OAAppSettings sharedManager].use3dIconsByDefault set:sender.isOn];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
-    if ([item.key isEqualToString:kBatterySavingModeKey])
+    else if ([item.key isEqualToString:kBatterySavingModeKey])
     {
         [[OAAppSettings sharedManager].batterySavingMode set:sender.isOn];
         if (sender.isOn)
-        	[OARootViewController.instance.mapPanel.mapViewController.mapView limitFrameRefreshRate];
+            [OARootViewController.instance.mapPanel.mapViewController.mapView limitFrameRefreshRate];
         else
-        	[OARootViewController.instance.mapPanel.mapViewController.mapView restoreFrameRefreshRate];
+            [OARootViewController.instance.mapPanel.mapViewController.mapView restoreFrameRefreshRate];
+    } else if ([item.key isEqualToString:kSimulateOBDDataKey]) {
+        [[OAAppSettings sharedManager].simulateOBDData set:sender.isOn];
+        if (!sender.isOn)
+            [[DeviceHelper shared] disconnectOBDSimulator];
     }
 }
 

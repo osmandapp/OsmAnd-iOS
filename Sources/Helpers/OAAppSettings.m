@@ -460,6 +460,7 @@ static NSString * const topWidgetPanelOrderOldKey = @"top_widget_panel_order";
 static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_order";
 
 static NSString * const useOldRoutingKey = @"useOldRoutingKey";
+static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @interface OAMetricsConstant()
 
@@ -5395,6 +5396,9 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         
         _useOldRouting = [[[OACommonBoolean withKey:useOldRoutingKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_useOldRouting forKey:@"use_old_routing"];
+        
+        _simulateOBDData = [[[OACommonBoolean withKey:simulateOBDDataKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_simulateOBDData forKey:@"simulate_obd_data"];
 
         [self fetchImpassableRoads];
 

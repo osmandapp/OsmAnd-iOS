@@ -28,4 +28,8 @@ final class DeviceFactory {
         }
         return nil
     }
+    
+    static func makeOBDSimulatorDevice() -> OBDSimulatorVehicleMetricsDevice {
+        OBDSimulatorVehicleMetricsDevice()
+    }
 }

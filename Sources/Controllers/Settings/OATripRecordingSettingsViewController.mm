@@ -291,14 +291,14 @@ static NSArray<NSString *> *minTrackSpeedNames;
                             {
                                 if ([deviceId isEqualToString:[plugin getAnyConnectedDeviceId]])
                                 {
-                                    if ([[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject)
+                                    if ([[DeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject)
                                     {
                                         devices++;
                                     }
                                 }
                                 else
                                 {
-                                    if ([[OADeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId])
+                                    if ([[DeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId])
                                     {
                                         devices++;
                                     }

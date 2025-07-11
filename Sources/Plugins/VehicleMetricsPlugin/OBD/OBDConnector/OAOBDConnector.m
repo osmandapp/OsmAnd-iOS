@@ -12,6 +12,7 @@
 
 @interface OAOBDConnector() <OASOBDConnector>
 @property (nonatomic, strong, nullable) OASOBDSimulationSource *simulator;
+@property (nonatomic, assign) BOOL isSimulator;
 @end
 
 @interface OAOkioSource() <OASOkioSource>
@@ -23,25 +24,37 @@
 @implementation OAOBDConnector
 
 - (OASOBDSimulationSource *)simulator {
-    if (!_simulator) {
+    if (!_simulator)
+    {
         _simulator = [[OASOBDSimulationSource alloc] init];
     }
     return _simulator;
+}
+
+- (instancetype)initWithIsSimulator:(BOOL)isSimulator
+{
+    self = [super init];
+    if (self)
+    {
+        _isSimulator = isSimulator;
+    }
+    return self;
 }
 
 - (OASKotlinPair<id<OASOkioSource>,id<OASOkioSink>> * _Nullable)connect
 {
     NSLog(@"[OAOBDConnector] -> connect");
     
-    // NOTE: real device
-    OAOkioSource *itemSource = [OAOkioSource new];
-    OAOkioSink *itemSink = [OAOkioSink new];
-    OASKotlinPair *pair = [[OASKotlinPair alloc] initWithFirst:itemSource second:itemSink];
-    
-    // NOTE: obd Simulator
-    // OASKotlinPair *pair = [[OASKotlinPair alloc] initWithFirst:_simulator.reader second:_simulator.writer];
-    
-    return pair;
+    if (_isSimulator)
+    {
+        // NOTE: obd Simulator
+        return [[OASKotlinPair alloc] initWithFirst:self.simulator.reader second:self.simulator.writer];
+    }
+    else
+    {
+        // NOTE: real device
+        return [[OASKotlinPair alloc] initWithFirst:[OAOkioSource new] second:[OAOkioSink new]];;
+    }
 }
 
 - (void)disconnect
@@ -89,7 +102,8 @@
 
 - (int64_t)readSink:(OASOkioBuffer *)sink
           byteCount:(int64_t)byteCount
-              error:(NSError * _Nullable __autoreleasing *)error {
+              error:(NSError * _Nullable __autoreleasing *)error
+{
     if (![_OBDService isBufferReadyForRead])
         return 0;
     
@@ -99,12 +113,15 @@
     
     NSLog(@"readSink: %@", buffer);
     [_OBDService isProcessingReadingWithIsReading:YES];
-    if (buffer.length <= byteCount) {
+    if (buffer.length <= byteCount)
+    {
         [_OBDService clearBuffer];
         [sink writeUtf8String:buffer];
         [_OBDService isProcessingReadingWithIsReading:NO];
         return buffer.length;
-    } else {
+    }
+    else
+    {
         NSString *substring = [buffer substringToIndex:byteCount];
         NSLog(@"substring: %@", substring);
         NSString *bufferToWrite = [buffer substringFromIndex:byteCount];

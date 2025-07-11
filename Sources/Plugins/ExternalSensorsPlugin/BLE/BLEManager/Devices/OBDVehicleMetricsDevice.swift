@@ -6,7 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-final class OBDVehicleMetricsDevice: Device {
+class OBDVehicleMetricsDevice: Device {
     
     var ecuWriteCharacteristic: CBCharacteristic?
     
@@ -32,8 +32,8 @@ final class OBDVehicleMetricsDevice: Device {
     }
     
     override func discoverCharacteristics(withUUIDs characteristicUUIDs: [CBUUIDConvertible]? = nil,
-                                 ofServiceWithUUID serviceUUID: CBUUIDConvertible,
-                                 completion: @escaping CharacteristicRequestCallback) {
+                                          ofServiceWithUUID serviceUUID: CBUUIDConvertible,
+                                          completion: @escaping CharacteristicRequestCallback) {
         peripheral.discoverCharacteristics(withUUIDs: characteristicUUIDs,
                                            ofServiceWithUUID: serviceUUID,
                                            completion: { [weak self] result in
@@ -75,4 +75,95 @@ final class OBDVehicleMetricsDevice: Device {
     override func notifyRSSI() { }
     
     override func disableRSSI() { }
+}
+
+final class OBDSimulatorVehicleMetricsDevice: OBDVehicleMetricsDevice {
+    
+    static let simulatorId = "simulator_OBD"
+    
+    override var id: String { Self.simulatorId }
+    
+    override var state: DeviceState {
+        plugin?.isOBDSimulatorConnected == true ? .connected : .disconnected
+    }
+    
+    override var isConnected: Bool {
+        plugin?.isOBDSimulatorConnected == true
+    }
+    
+    override var isConnecting: Bool { false }
+    
+    private var simulationTimer: Timer?
+    
+    private var plugin: VehicleMetricsPlugin? {
+        OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin
+    }
+    
+    override func connect(withTimeout timeout: TimeInterval?, completion: @escaping ConnectPeripheralCallback) {
+        guard let plugin else {
+            completion(.failure(SimulatorError.unableToConnect))
+            return
+        }
+        
+        plugin.isOBDSimulatorConnected = true
+        completion(.success)
+        OBDService.shared.startDispatcher(isSimulator: true)
+        startSimulationTimer()
+    }
+    
+    override func disconnect(completion: @escaping DisconnectPeripheralCallback) {
+        guard let plugin else {
+            completion(.failure(SimulatorError.unableToDisconnect))
+            return
+        }
+        
+        plugin.isOBDSimulatorConnected = false
+        OBDService.shared.stopDispatcher()
+        stopSimulationTimer()
+        completion(.success)
+    }
+    
+    override init() {
+        super.init()
+        isSimulator = true
+        deviceName = "Simulation Device"
+    }
+    
+    // MARK: - Simulation Timer
+    
+    private func startSimulationTimer() {
+        stopSimulationTimer()
+        
+        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            self?.performSimulationTick()
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        simulationTimer = timer
+    }
+    
+    private func stopSimulationTimer() {
+        simulationTimer?.invalidate()
+        simulationTimer = nil
+    }
+    
+    private func performSimulationTick() {
+        didChangeCharacteristic?()
+    }
+    
+    deinit {
+        stopSimulationTimer()
+    }
+}
+
+// MARK: - Simulator Errors
+
+private enum SimulatorError: Error {
+    case unableToConnect, unableToDisconnect
+    
+    var errorDescription: String? {
+        switch self {
+        case .unableToConnect: "Failed to connect to the OBD simulator."
+        case .unableToDisconnect: "Failed to disconnect from the OBD simulator."
+        }
+    }
 }

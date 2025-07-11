@@ -3724,3 +3724,4 @@
 "obd_rpm_desc" = "Zeigt mithilfe des OBD-Sensors die Drehzahl des Fahrzeugtachos an";
 "obd_fuel_pressure" = "Kraftstoffdruck";
 "obd_air_intake_temp" = "Ansaugtemperatur";
+"ltr_or_rtl_combine_with_brackets" = "%@ (%@)";

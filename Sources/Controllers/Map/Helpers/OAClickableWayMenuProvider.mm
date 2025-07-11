@@ -47,7 +47,7 @@
     if ([obj isKindOfClass:ClickableWay.class])
     {
         ClickableWay *clickableWay = (ClickableWay *)obj;
-        OASWptPt *wpt = [[clickableWay getSelectedGpxPoint] getSelectedPoint];
+        OASWptPt *wpt = clickableWay.selectedGpxPoint.selectedPoint;
         return [[CLLocation alloc] initWithLatitude:[wpt getLatitude] longitude:[wpt getLongitude]];
     }
     return  nil;
@@ -62,11 +62,6 @@
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX name:name];
     }
     return nil;
-}
-
-- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
-{
-    
 }
 
 - (OATargetPoint *) getTargetPoint:(id)obj

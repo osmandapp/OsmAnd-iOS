@@ -34,11 +34,6 @@
 
 #pragma mark - OAContextMenuProvider
 
-- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
-{
-    // collected by parent layer
-}
-
 - (BOOL)isSecondaryProvider
 {
     return NO;

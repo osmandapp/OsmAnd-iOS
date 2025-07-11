@@ -103,7 +103,10 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             
             if ([provider isSecondaryProvider] || secondaryObjects)
             {
-                [provider collectObjectsFromPoint:result unknownLocation:unknownLocation excludeUntouchableObjects:NO];
+                if ([provider respondsToSelector:@selector(collectObjectsFromPoint:unknownLocation:excludeUntouchableObjects:)])
+                {
+                    [provider collectObjectsFromPoint:result unknownLocation:unknownLocation excludeUntouchableObjects:NO];
+                }
             }
         }
     }
@@ -418,7 +421,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         if ([object isKindOfClass:SelectedGpxPoint.class] && [[selectedObject getProvider] isKindOfClass:OAGPXLayer.class])
         {
             SelectedGpxPoint *gpxPoint = (SelectedGpxPoint *)object;
-            if ([[[gpxPoint getSelectedGpxFile] path] hasSuffix:gpxFileName])
+            if ([[gpxPoint.selectedGpxFile path] hasSuffix:gpxFileName])
             {
                 return NO;
             }
@@ -432,7 +435,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     for (SelectedMapObject *selectedObject in selectedObjects)
     {
         if ([[selectedObject getObject] isKindOfClass:ClickableWay.class] &&
-            [clickableWay getOsmId] == [((ClickableWay *) [selectedObject getObject]) getOsmId])
+            clickableWay.osmId == ((ClickableWay *) [selectedObject getObject]).osmId)
         {
             return NO;
         }
@@ -451,7 +454,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         {
             NSArray *pair = (NSArray *)[selectedObject getObject];
             id firstOblect = [pair firstObject];
-            if (firstOblect && [firstOblect isKindOfClass:OATravelGpx.class])
+            if ([firstOblect isKindOfClass:OATravelGpx.class])
             {
                 OATravelGpx *gpx = firstOblect;
                 if (travelGpx == gpx)
@@ -565,13 +568,13 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         id object = [selectedObject getObject];
         if ([object isKindOfClass:OAPOI.class] && [((OAPOI *)object) strictEquals:amenity])
         {
-            OAPOI *poi = ((OAPOI *)object);
+            OAPOI *poi = (OAPOI *)object;
             if ([poi strictEquals:amenity])
                 return NO;
         }
         else if ([object isKindOfClass:OATransportStop.class])
         {
-            OATransportStop *transportSpop = ((OATransportStop *)object);
+            OATransportStop *transportSpop = (OATransportStop *)object;
             if ([transportSpop.name hasPrefix:amenity.name])
                 return NO;
         }
@@ -602,7 +605,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                     }
                 }
             }
-            _publicTransportTypes = [NSArray arrayWithArray:publicTransportTypes];
+            _publicTransportTypes = [publicTransportTypes copy];
         }
     }
     return _publicTransportTypes;

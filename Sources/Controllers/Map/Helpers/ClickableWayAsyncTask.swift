@@ -30,10 +30,10 @@ class ClickableWayAsyncTask: OABaseLoadAsyncTask {
     
     private func readHeightData(_ clickableWay: ClickableWay) -> Bool {
         let loader = OAHeightDataLoader()
-        let waypoints = loader.loadHeightData(asWaypoints: Int64(clickableWay.getOsmId()), bbox31: clickableWay.getBbox())
+        let waypoints = loader.loadHeightData(asWaypoints: Int64(clickableWay.osmId), bbox31: clickableWay.bbox)
         
         if let waypoints, waypoints.count > 0,
-           let tracks = clickableWay.getGpxFile().tracks as? [Track],
+           let tracks = clickableWay.gpxFile.tracks as? [Track],
            let segments = tracks.first?.segments as? [TrkSegment] {
             
             segments[0].points = waypoints
@@ -44,11 +44,11 @@ class ClickableWayAsyncTask: OABaseLoadAsyncTask {
     
     private func openAsGpxFile(_ clickableWay: ClickableWay?) -> Bool {
         if let clickableWay {
-            let gpxFile = clickableWay.getGpxFile()
+            let gpxFile = clickableWay.gpxFile
             let analysis = gpxFile.getAnalysis(fileTimestamp: 0)
             let name = clickableWay.getGpxFileName()
             let safeFileName = clickableWay.getGpxFileName() + GPX_FILE_EXT
-            let selectedPoint = clickableWay.getSelectedGpxPoint().getSelectedPoint()
+            let selectedPoint = clickableWay.selectedGpxPoint.selectedPoint
             
             OAGPXUIHelper.saveAndOpenGpx(name, filepath: safeFileName, gpxFile: gpxFile, selectedPoint: selectedPoint, analysis: analysis, routeKey: nil, forceAdjustCentering: true)
             return true

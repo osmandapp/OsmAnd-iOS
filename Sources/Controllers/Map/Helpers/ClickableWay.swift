@@ -12,11 +12,11 @@ import CoreLocation
 @objcMembers
 final class ClickableWay: NSObject {
     
-    private let osmId: UInt64
-    private let name: String?
-    private let bbox: KQuadRect
-    private let gpxFile: GpxFile
-    private let selectedGpxPoint: SelectedGpxPoint
+    private(set) var osmId: UInt64
+    private(set) var name: String?
+    private(set) var bbox: KQuadRect
+    private(set) var gpxFile: GpxFile
+    private(set) var selectedGpxPoint: SelectedGpxPoint
     
     init(gpxFile: GpxFile, osmId: UInt64, name: String?, selectedLatLon: CLLocation, bbox: KQuadRect) {
         self.gpxFile = gpxFile
@@ -32,26 +32,6 @@ final class ClickableWay: NSObject {
         super.init()
     }
     
-    func getOsmId() -> UInt64 {
-        osmId
-    }
-    
-    func getBbox() -> KQuadRect {
-        bbox
-    }
-    
-    func getGpxFile() -> GpxFile {
-        gpxFile
-    }
-    
-    func getSelectedGpxPoint() -> SelectedGpxPoint {
-        selectedGpxPoint
-    }
-    
-    func getGpxFileName() -> String {
-        getWayName().sanitizeFileName()
-    }
-    
     func getWayName() -> String {
         if let name, !name.isEmpty {
             return name
@@ -59,6 +39,10 @@ final class ClickableWay: NSObject {
             let altName = gpxFile.getExtensionsToRead()["ref"]
             return altName ?? String(osmId)
         }
+    }
+    
+    func getGpxFileName() -> String {
+        getWayName().sanitizeFileName()
     }
     
     func toString() -> String {

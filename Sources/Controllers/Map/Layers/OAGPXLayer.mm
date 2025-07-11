@@ -1974,7 +1974,7 @@ colorizationScheme:(int)colorizationScheme
     else if ([obj isKindOfClass:SelectedGpxPoint.class])
     {
         SelectedGpxPoint *selectedGpxPoint = (SelectedGpxPoint *)obj;
-        OASWptPt *point = [selectedGpxPoint getSelectedPoint];
+        OASWptPt *point = selectedGpxPoint.selectedPoint;
         return [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
     }
     return  nil;
@@ -1989,7 +1989,7 @@ colorizationScheme:(int)colorizationScheme
     }
     else if ([obj isKindOfClass:SelectedGpxPoint.class])
     {
-        OASGpxFile *selectedGpxFile = [((SelectedGpxPoint *)obj) getSelectedGpxFile];
+        OASGpxFile *selectedGpxFile = ((SelectedGpxPoint *)obj).selectedGpxFile;
         NSString *name;
         if ([selectedGpxFile showCurrentTrack])
         {

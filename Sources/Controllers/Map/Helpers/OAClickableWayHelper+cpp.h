@@ -10,6 +10,9 @@
 
 #include <OsmAndCore/Data/ObfMapObject.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @interface OAClickableWayHelper(cpp)
 
 - (BOOL)isClickableWay:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags;
@@ -17,3 +20,6 @@
 - (ClickableWay *)loadClickableWay:(CLLocation *)selectedLatLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

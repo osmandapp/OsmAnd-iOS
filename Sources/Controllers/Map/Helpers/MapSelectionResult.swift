@@ -101,14 +101,8 @@ class MapSelectionResult: NSObject {
         return detailsObjects
     }
     
-    private func collectOverlappedObjects(_ object: Any, detailsObjects: Array<BaseDetailsObject>) -> Array<BaseDetailsObject> {
-        var overlapped = Array<BaseDetailsObject>()
-        for detailsObject in detailsObjects {
-            if detailsObject.overlapsWith(object) {
-                overlapped.append(detailsObject)
-            }
-        }
-        return overlapped
+    private func collectOverlappedObjects(_ object: Any, detailsObjects: [BaseDetailsObject]) -> [BaseDetailsObject] {
+        return detailsObjects.filter { $0.overlapsWith(object) }
     }
     
     func isEmpty() -> Bool {

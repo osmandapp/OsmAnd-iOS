@@ -139,7 +139,8 @@
     for (NSString *clickableTagValue in _clickableTags)
     {
         NSString *tag = [[clickableTagValue componentsSeparatedByString:@"="] firstObject];
-        if (tags[tag])
+        NSString *value = tags[tag];
+        if (!NSStringIsEmpty(value))
         {
             OASRouteActivity *activity = [helper findActivityByTagTag:clickableTagValue];
             if (activity)
@@ -165,8 +166,7 @@
     
     OASTrack *track = [[OASTrack alloc] init];
     [track.segments addObject:trkSegment];
-    NSMutableArray<OASTrack *> *tracks = [NSMutableArray arrayWithObject:track];
-    [gpxFile setTracks:tracks]; // immutable
+    [gpxFile setTracks:@[track]];
     
     NSString *color = [self getGpxColorByTags:tags];
     if (color)

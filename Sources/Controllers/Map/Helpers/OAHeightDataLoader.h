@@ -6,10 +6,16 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @class OASKQuadRect, OASWptPt;
 
 @interface OAHeightDataLoader: NSObject
 
-- (NSMutableArray<OASWptPt *> *) loadHeightDataAsWaypoints:(int64_t)osmId bbox31:(OASKQuadRect *)bbox31;
+- (NSMutableArray<OASWptPt *> * _Nullable) loadHeightDataAsWaypoints:(int64_t)osmId bbox31:(OASKQuadRect *)bbox31;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

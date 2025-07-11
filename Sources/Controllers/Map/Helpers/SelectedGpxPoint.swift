@@ -11,8 +11,8 @@ import Foundation
 @objcMembers
 class SelectedGpxPoint: NSObject {
     
-    private var selectedGpxFile: GpxFile?
-    private var selectedPoint: WptPt?
+    private(set) var selectedGpxFile: GpxFile?
+    private(set) var selectedPoint: WptPt?
     private var prevPoint: WptPt?
     private var nextPoint: WptPt?
     private var bearing: Double
@@ -30,13 +30,5 @@ class SelectedGpxPoint: NSObject {
         self.bearing = bearing
         self.showTrackPointMenu = showTrackPointMenu
         super.init()
-    }
-    
-    func getSelectedGpxFile() -> GpxFile? {
-        selectedGpxFile
-    }
-    
-    func getSelectedPoint() -> WptPt? {
-        selectedPoint
     }
 } 

@@ -163,10 +163,9 @@ final class BaseDetailsObject: NSObject {
     }
     
     private func overlapPublicTransport(_ renderedObjects: [OARenderedObject], stops: [OATransportStop]) -> Bool {
-        let found = renderedObjects.first { renderedObject in
+        return renderedObjects.contains { renderedObject in
             overlapPublicTransport(withRenderedObject: renderedObject, stops: stops)
         }
-        return found != nil
     }
     
     private func overlapPublicTransport(withRenderedObject renderedObject: OARenderedObject, stops: [OATransportStop]) -> Bool {
@@ -383,11 +382,11 @@ final class BaseDetailsObject: NSObject {
     }
     
     private func processPolygonCoordinates(x: NSMutableArray, y: NSMutableArray) {
-        if syntheticAmenity.x.count > 0, x.count > 0 {
-            syntheticAmenity.x.addObjects(from: x as! [Any])
+        if let xArray = x as? [Any], xArray.count > 0, syntheticAmenity.x.count > 0 {
+            syntheticAmenity.x.addObjects(from: xArray)
         }
-        if syntheticAmenity.y.count > 0 && y.count > 0 {
-            syntheticAmenity.y.addObjects(from: y as! [Any])
+        if let yArray = y as? [Any], yArray.count > 0, syntheticAmenity.y.count > 0 {
+            syntheticAmenity.y.addObjects(from: yArray)
         }
     }
     
@@ -488,11 +487,13 @@ final class BaseDetailsObject: NSObject {
     }
     
     static func findObfType(_ obfResourceName: String?, amenity: OAPOI) -> EOASearchResultResource {
-        if let obfResourceName, obfResourceName.contains("basemap") {
-            return .basemap
-        }
-        if let obfResourceName, (obfResourceName.contains("travel") || obfResourceName.contains("wikivoyage")) {
-            return .travel
+        if let obfResourceName {
+            if obfResourceName.contains("basemap") {
+                return .basemap
+            }
+            if (obfResourceName.contains("travel") || obfResourceName.contains("wikivoyage")) {
+                return .travel
+            }
         }
         if amenity.type?.category.isWiki() == true {
             return .wikipedia
@@ -552,18 +553,17 @@ final class BaseDetailsObject: NSObject {
     }
     
     static func getClassOrder(_ object: Any) -> Int {
-        if object is BaseDetailsObject {
+        switch object {
+        case is BaseDetailsObject:
             return 1
-        }
-        if object is OAPOI {
+        case is OAPOI:
             return 2
-        }
-        if object is OATransportStop {
+        case is OATransportStop:
             return 3
-        }
-        if object is OARenderedObject {
+        case is OARenderedObject:
             return 4
+        default:
+            return 5
         }
-        return 5
     }
 } 

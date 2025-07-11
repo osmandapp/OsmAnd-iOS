@@ -34,14 +34,15 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 
 - (BOOL) isSecondaryProvider;
 
-- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
-
 - (CLLocation *) getObjectLocation:(id)obj;
 - (OAPointDescription *) getObjectName:(id)obj;
 
 - (BOOL) showMenuAction:(id)object;
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation;
 - (int64_t) getSelectionPointOrder:(id)selectedObject;
+
+@optional
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
 
 //- (BOOL) disableSingleTap;
 //- (BOOL) disableLongPressOnMap;

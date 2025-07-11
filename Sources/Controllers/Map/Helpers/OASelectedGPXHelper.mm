@@ -14,7 +14,7 @@
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#define kBackupSuffix @"_osmand_backup"
+static NSString *kBackupSuffix = @"_osmand_backup";
 
 @implementation OASelectedGPXHelper
 {

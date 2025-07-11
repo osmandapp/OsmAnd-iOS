@@ -197,11 +197,6 @@
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
-{
-    
-}
-
 - (BOOL)isSecondaryProvider
 {
     return NO;

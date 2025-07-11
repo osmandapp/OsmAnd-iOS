@@ -2386,7 +2386,7 @@
 "shared_string_speedometer" = "Abiadura-neurgailua";
 "track_3d_empty_view_description" = "Ikusi arrastoa 3D interaktiboan! Ikusi altuera, abiadura eta gehiago zuzenean mapan.";
 "route_recalculation_dist_title" = "Gutxieneko distantzia ibilbidea birkalkulatzeko";
-"osm_id" = "OSMaren ID";
+"shared_string_osm_id" = "OSMaren ID";
 "track_appearance_3D_visualization" = "3D bistaratzea";
 "shared_string_limit" = "Muga";
 "shared_string_top_bottom" = "Goian eta behean";

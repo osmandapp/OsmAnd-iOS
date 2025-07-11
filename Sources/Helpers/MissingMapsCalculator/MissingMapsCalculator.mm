@@ -319,7 +319,7 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
                 {
                     SearchQuery q((uint32_t)(x << zoomToLoad), (uint32_t)((x + 1) << zoomToLoad), (uint32_t)(y << zoomToLoad),
                                   (uint32_t)((y + 1) << zoomToLoad));
-                    if (r.reader->routingIndexes.size() > 0 && searchRouteSubregionsForBinaryMapFile(r.reader, &q))
+                    if (r.reader->routingIndexes.size() > 0 && searchRouteSubregionsForBinaryMapFile(r.reader, &q).size() > 0)
                     {
                         [pnt.regions insertObject:r.downloadName atIndex:0];
                     }

@@ -2771,6 +2771,42 @@ static const double d180PI = 180.0 / M_PI_2;
     return newName;
 }
 
+// Example: "Asia_wikivoyage_2.travel.obf" -> "asia_wikivoyage_00_00_00"
++ (NSString *) simplifyFileName:(NSString *)filename
+{
+    NSString *lc = [filename lowercaseString];
+    
+    NSRange dotRange = [lc rangeOfString:@"."];
+    if (dotRange.location != NSNotFound) {
+        lc = [lc substringToIndex:dotRange.location];
+    }
+    
+    if ([lc hasSuffix:@"_2"]) {
+        lc = [lc substringToIndex:lc.length - @"_2".length];
+    }
+    
+    NSCharacterSet *decimalSet = [NSCharacterSet decimalDigitCharacterSet];
+    BOOL hasTimestampEnd = [lc rangeOfCharacterFromSet:decimalSet].location != NSNotFound;
+
+    if (!hasTimestampEnd) {
+        lc = [lc stringByAppendingString:@"_00_00_00"];
+    }
+    
+    return lc;
+}
+
++ (NSString *)convertToPermittedFileName:(NSString *)filename {
+    static NSCharacterSet *forbiddenCharacters = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        forbiddenCharacters = [NSCharacterSet characterSetWithCharactersInString:@"\"*/:<>?\\|"];
+    });
+
+    NSArray<NSString *> *components = [filename componentsSeparatedByCharactersInSet:forbiddenCharacters];
+    NSString *sanitized = [components componentsJoinedByString:@"~"];
+    return sanitized;
+}
+
 + (natural_t) get_free_memory
 {
     mach_port_t host_port;

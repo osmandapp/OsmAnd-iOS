@@ -11,37 +11,38 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-#define POINT_TYPE_FAVORITE @"favorite"
-#define POINT_TYPE_WPT @"wpt"
-#define POINT_TYPE_GPX @"gpx"
-#define POINT_TYPE_RTE @"rte"
-#define POINT_TYPE_POI @"poi"
-#define POINT_TYPE_ADDRESS @"address"
-#define POINT_TYPE_OSM_NOTE "osm_note"
-#define POINT_TYPE_MARKER @"marker"
-#define POINT_TYPE_PARKING_MARKER @"parking_marker"
-#define POINT_TYPE_AUDIO_NOTE @"audionote"
-#define POINT_TYPE_VIDEO_NOTE @"videonote"
-#define POINT_TYPE_PHOTO_NOTE @"photonote"
-#define POINT_TYPE_LOCATION @"location"
-#define POINT_TYPE_MY_LOCATION @"my_location"
-#define POINT_TYPE_ALARM @"alarm"
-#define POINT_TYPE_TARGET @"destination"
-#define POINT_TYPE_MAP_MARKER @"map_marker"
-#define POINT_TYPE_OSM_BUG @"bug"
-#define POINT_TYPE_WORLD_REGION @"world_region"
-#define POINT_TYPE_GPX_FILE @"gpx_file"
-#define POINT_TYPE_WORLD_REGION_SHOW_ON_MAP @"world_region_show_on_map"
-#define POINT_TYPE_BLOCKED_ROAD @"blocked_road"
-#define POINT_TYPE_TRANSPORT_ROUTE @"transport_route"
-#define POINT_TYPE_TRANSPORT_STOP @"transport_stop"
-#define POINT_TYPE_MAPILLARY_IMAGE @"mapillary_image"
-#define POINT_TYPE_POI_TYPE @"poi_type"
-#define POINT_TYPE_CUSTOM_POI_FILTER @"custom_poi_filter"
+static NSString *POINT_TYPE_FAVORITE = @"favorite";
+static NSString *POINT_TYPE_WPT = @"wpt";
+static NSString *POINT_TYPE_GPX = @"gpx";
+static NSString *POINT_TYPE_ROUTE = @"route";
+static NSString *POINT_TYPE_RTE = @"rte";
+static NSString *POINT_TYPE_POI = @"poi";
+static NSString *POINT_TYPE_ADDRESS = @"address";
+static NSString *POINT_TYPE_OSM_NOTE = @"osm_note";
+static NSString *POINT_TYPE_MARKER = @"marker";
+static NSString *POINT_TYPE_PARKING_MARKER = @"parking_marker";
+static NSString *POINT_TYPE_AUDIO_NOTE = @"audionote";
+static NSString *POINT_TYPE_VIDEO_NOTE = @"videonote";
+static NSString *POINT_TYPE_PHOTO_NOTE = @"photonote";
+static NSString *POINT_TYPE_LOCATION = @"location";
+static NSString *POINT_TYPE_MY_LOCATION = @"my_location";
+static NSString *POINT_TYPE_ALARM = @"alarm";
+static NSString *POINT_TYPE_TARGET = @"destination";
+static NSString *POINT_TYPE_MAP_MARKER = @"map_marker";
+static NSString *POINT_TYPE_OSM_BUG = @"bug";
+static NSString *POINT_TYPE_WORLD_REGION = @"world_region";
+static NSString *POINT_TYPE_GPX_FILE = @"gpx_file";
+static NSString *POINT_TYPE_WORLD_REGION_SHOW_ON_MAP = @"world_region_show_on_map";
+static NSString *POINT_TYPE_BLOCKED_ROAD = @"blocked_road";
+static NSString *POINT_TYPE_TRANSPORT_ROUTE = @"transport_route";
+static NSString *POINT_TYPE_TRANSPORT_STOP = @"transport_stop";
+static NSString *POINT_TYPE_MAPILLARY_IMAGE = @"mapillary_image";
+static NSString *POINT_TYPE_POI_TYPE = @"poi_type";
+static NSString *POINT_TYPE_CUSTOM_POI_FILTER = @"custom_poi_filter";
 
-#define POINT_LOCATION_URL 200
-#define OSM_LOCATION_URL 210
-#define POINT_LOCATION_LIST_HEADER 201
+static const int POINT_LOCATION_URL = 200;
+static const int OSM_LOCATION_URL = 210;
+static const int POINT_LOCATION_LIST_HEADER = 201;
 
 @protocol OALocationPoint;
 

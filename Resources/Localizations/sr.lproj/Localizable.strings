@@ -3306,7 +3306,7 @@
 "required_maps_list" = "Карте које ће се такође користити: %@";
 "getting_list_required_maps" = "Преузимање листе потребних мапа…";
 "average_vertical_speed" = "Просечна вертикална брзина";
-"osm_id" = "ОСМ ИД";
+"shared_string_osm_id" = "ОСМ ИД";
 "osmand_depelopment_use_old_routing" = "Koristi staro rutiranje (A*)";
 "auto_zoom_smooth" = "Гладко";
 "routing_algorithm" = "Алгоритам рутирања";

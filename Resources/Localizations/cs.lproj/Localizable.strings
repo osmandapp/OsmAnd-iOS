@@ -3479,7 +3479,7 @@
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "m_s" = "m/s";
 "osmand_cloud" = "OsmAnd Cloud";
-"osm_id" = "OSM ID";
+"shared_string_osm_id" = "OSM ID";
 "weather_source_ecmwf_title" = "ECMWF";
 "shared_string_ok" = "OK";
 "mapillary" = "Mapillary";

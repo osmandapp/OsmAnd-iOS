@@ -2760,7 +2760,7 @@
 "map_widget_group_glide_desc" = "Widżety wyświetlają stosunek przebytej odległości do utraconej wysokości – względem celu lub jako średnią dla całej trasy.";
 "external_device_details_battery" = "Bateria";
 "enter_new_name" = "Wprowadź nową nazwę";
-"shared_string_next_event" = "Następne zdarzenie";
+"shared_string_next_event" = "Następne wydarzenie";
 "map_settings_topography" = "Poziomice";
 "map_widget_trip_recording_uphill" = "Podjazd";
 "exit_number" = "Numer wyjścia";
@@ -3113,13 +3113,13 @@
 "shared_string_deleting_complete" = "Usuwanie zakończone";
 "shared_string_article" = "Artykuł";
 "ft_s" = "stóp/s";
-"downward_gradient" = "Nachylenie w dół";
+"downward_gradient" = "Przejście w dół";
 "vertical_exaggeration" = "Pionowe wybrzuszenie";
 "distance_during_navigation" = "Dystans podczas nawigacji";
 "tomorrow" = "Jutro";
 "auto_zoom_discrete" = "Natcyhmiastowy";
 "rendering_attr_padusDisplayMode_name" = "Tryb wyświetlania obszarów publicznych";
-"upward_gradient" = "Nachylenie w górę";
+"upward_gradient" = "Przejście w górę";
 "vertical_exaggeration_description" = "Zmieniając wartość skali, można zróżnicować głębię 3D.";
 "auto_zoom_smooth" = "Płynne";
 "routing_attr_avoid_cobblestone_description" = "Unikaj kocich łbów";
@@ -3425,3 +3425,4 @@
 "route_your_destination_is_on_ahead" = "Twój cel jest na wprost";
 "driving_region_australia" = "Australia";
 "liter" = "l";
+"quick_action_first_intermediate" = "Pierwszy od dołu";

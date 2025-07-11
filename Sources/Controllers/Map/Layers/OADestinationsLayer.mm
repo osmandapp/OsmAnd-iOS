@@ -605,7 +605,7 @@
                     if (mapObj)
                     {
                         [_amenities addObject:mapObj];
-                        [result collect:marker provider:self];
+                        [result collect:mapObj provider:self];
                     }
                     else
                     {

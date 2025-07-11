@@ -31,11 +31,15 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     private lazy var bluetoothDisableViewHeader: BluetoothDisableView = .fromNib()
     
+    var isOBDSimulatorEnabled: Bool {
+        OAAppSettings.sharedManager().simulateOBDData.get()
+    }
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         initTableData()
     }
-
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -51,7 +55,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         configureStartState()
         reloadData()
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configureStartState()
@@ -97,7 +101,10 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-
+        if isOBDSimulatorEnabled, !DeviceHelper.shared.isPairedDevice(id: OBDSimulatorVehicleMetricsDevice.simulatorId) {
+            DeviceHelper.shared.setDevicePaired(device: DeviceFactory.makeOBDSimulatorDevice(), isPaired: true)
+        }
+        
         if DeviceHelper.shared.hasPairedDevices(ofType: .OBD_VEHICLE_METRICS) {
             configurePairedDevices()
         } else {
@@ -333,7 +340,14 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
                 }
                 sectionsDevicesData[.connected] = connectedDevices
             }
-            let disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices).filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+            var disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices).filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+            
+            if isOBDSimulatorEnabled,
+               !connectedDevices.contains(where: { $0.isSimulator }),
+               !disconnectedDevices.contains(where: { $0.isSimulator }) {
+                disconnectedDevices.insert(DeviceFactory.makeOBDSimulatorDevice(), at: 0)
+            }
+         
             if !disconnectedDevices.isEmpty {
                 createDisconnectedDevicesSection(disconnectedDevices: disconnectedDevices)
             }
@@ -361,7 +375,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     @objc private func handleDispatcherStart() {
         guard view.window != nil else { return }
-        self.reloadData()
+        reloadData()
     }
     
     @objc private func deviceDisconnected() {
@@ -386,21 +400,31 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
 extension VehicleMetricsSensorsController {
     private func getConnectionStateAction(for device: Device) -> UIAction {
         let isConnected = device.isConnected
-
         let titleKey = isConnected ? "external_device_status_disconnect" : "external_device_status_connect"
         let image: UIImage = isConnected ? .icCustomObd2ConnectorDisable : .icCustomObd2Connector
         let actionTitle = localizedString(titleKey)
 
-        let action = UIAction(title: actionTitle, image: image) { _ in
+        return UIAction(title: actionTitle, image: image) { [weak self] _ in
+            guard let self else { return }
+            
             if isConnected {
-                device.disconnect(completion: { _ in })
+                if device.isSimulator {
+                    DeviceHelper.shared.disconnectOBDSimulator()
+                    reloadData()
+                } else {
+                    device.disconnect { result in
+                        if case .success = result {
+                            DeviceHelper.shared.removeDisconnected(device: device)
+                            self.reloadData()
+                        }
+                    }
+                }
             } else {
                 DeviceHelper.shared.updateConnected(devices: [device])
             }
         }
-        return action
     }
-    
+
     override func tableView(_ tableView: UITableView,
                             contextMenuConfigurationForRowAt indexPath: IndexPath,
                             point: CGPoint) -> UIContextMenuConfiguration? {

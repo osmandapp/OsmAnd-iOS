@@ -22,7 +22,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     
     private func configureScene() {
         NotificationCenter.default.removeObserver(self)
-        guard let window else { return }
+        guard window != nil else { return }
         guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
         appDelegate.initialize()
 

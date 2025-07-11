@@ -3137,7 +3137,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             continue;
         }
 
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:key];
         for (OASWptPt *loc in [doc getPointsList]) {
             OASGpxUtilitiesPointsGroup *group = loc.category ? doc.pointsGroups[loc.category] : nil;
             if (group && group.hidden)

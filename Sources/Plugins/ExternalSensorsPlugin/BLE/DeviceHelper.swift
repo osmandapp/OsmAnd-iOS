@@ -9,12 +9,20 @@
 import CoreBluetooth
 import OSLog
 
-@objc(OADeviceHelper)
 @objcMembers
 final class DeviceHelper: NSObject {
     static let shared = DeviceHelper()
     
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "OsmAnd",
+        category: String(describing: DeviceHelper.self)
+    )
+    
     let devicesSettingsCollection = DevicesSettingsCollection()
+    
+    private(set) var connectedDevices = [Device]()
+    
+    private override init() {}
     
     func hasPairedDevices(ofType deviceType: DeviceType) -> Bool {
         devicesSettingsCollection.hasPairedDevices(ofType: deviceType)
@@ -31,15 +39,6 @@ final class DeviceHelper: NSObject {
     func connectedDevices(excludingType deviceType: DeviceType) -> [Device] {
         connectedDevices.filter { $0.deviceType != deviceType }
     }
-    
-    private static let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier ?? "OsmAnd",
-        category: String(describing: DeviceHelper.self)
-    )
-    
-    private(set) var connectedDevices = [Device]()
-    
-    private override init() {}
     
     func getConnectedDevicesForWidget(type: WidgetType) -> [Device]? {
         connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
@@ -58,19 +57,34 @@ final class DeviceHelper: NSObject {
     }
     
     func getPairedDevicesFor(type: WidgetType) -> [Device]? {
-        if let pairedDevices = getSettingsForPairedDevices() {
-            let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)! })
-            let connectedPeripherals = peripherals.filter { $0.state == .connected }
-            updatePeripheralsForConnectedDevices(peripherals: connectedPeripherals)
-            
-            let disconnectedPeripherals = peripherals.filter { $0.state != .connected }
-            let disconnectedDevices = getDevicesFrom(peripherals: disconnectedPeripherals,
-                                                     pairedDevices: pairedDevices)
-            
-            let devices = connectedDevices + disconnectedDevices
-            return devices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
+        guard let pairedDevices = getSettingsForPairedDevices() else {
+            return nil
         }
-        return nil
+        
+        let filteredPairedDevices = pairedDevices.filter { !$0.deviceId.lowercased().contains("simulator") }
+        if filteredPairedDevices.isEmpty {
+            return nil
+        }
+        
+        let uuids = filteredPairedDevices.compactMap { UUID(uuidString: $0.deviceId) }
+        if uuids.isEmpty {
+            return nil
+        }
+        
+        let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: uuids)
+        
+        let connectedPeripherals = peripherals.filter { $0.state == .connected }
+        updatePeripheralsForConnectedDevices(peripherals: connectedPeripherals)
+        
+        let disconnectedPeripherals = peripherals.filter { $0.state != .connected }
+        let disconnectedDevices = getDevicesFrom(peripherals: disconnectedPeripherals,
+                                                 pairedDevices: filteredPairedDevices)
+        
+        let devices = connectedDevices + disconnectedDevices
+        
+        let supportedDevices = devices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
+        
+        return supportedDevices.isEmpty ? nil : supportedDevices
     }
     
     func getConnectedAndDisconnectedDevicesForWidget(type: WidgetType) -> [Device]? {
@@ -219,12 +233,16 @@ extension DeviceHelper {
     
     func disconnectIfNeeded(device: Device) {
         if device.isConnected || device.isConnecting {
-            device.peripheral.disconnect { result in
-                switch result {
-                case .success:
-                    NSLog("[DeviceHelper] - success | disconnectIfNeeded | id: \(device.id) | name: \(device.deviceName)")
-                case .failure(let error):
-                    NSLog("[DeviceHelper] - failure | disconnectIfNeeded | id: \(device.id) | name: \(device.deviceName) | error: \(error.localizedDescription)")
+            if device.isSimulator {
+                disconnectOBDSimulator()
+            } else {
+                device.peripheral.disconnect { result in
+                    switch result {
+                    case .success:
+                        NSLog("[DeviceHelper] - success | disconnectIfNeeded | id: \(device.id) | name: \(device.deviceName)")
+                    case .failure(let error):
+                        NSLog("[DeviceHelper] - failure | disconnectIfNeeded | id: \(device.id) | name: \(device.deviceName) | error: \(error.localizedDescription)")
+                    }
                 }
             }
         }
@@ -286,7 +304,13 @@ extension DeviceHelper {
 
                         setDevicePaired(device: device, isPaired: true)
                         connectedDevices.append(device)
-                        discoverServices(device: device)
+                        if !device.isSimulator {
+                            // On car sensor connect, stop simulator
+                            if device.deviceType == .OBD_VEHICLE_METRICS {
+                                disconnectOBDSimulator()
+                            }
+                            discoverServices(device: device)
+                        }
                     case .failure(let error):
                         Self.logger.error("updateConnected failure: \(String(describing: error.localizedDescription))")
                     }
@@ -360,5 +384,22 @@ extension DeviceHelper {
 extension DeviceHelper {
     func getOBDDevice() -> OBDVehicleMetricsDevice? {
         connectedDevices.first(where: { $0.deviceType == .OBD_VEHICLE_METRICS }) as? OBDVehicleMetricsDevice
+    }
+    
+    func getConnectedSimulatorFor(deviceType: DeviceType) -> Device? {
+        connectedDevices.first(where: { $0.deviceType == deviceType && $0.isSimulator })
+    }
+    
+    func disconnectSimulatorFor(deviceType: DeviceType) {
+        guard let device = getConnectedSimulatorFor(deviceType: deviceType) else {
+            return
+        }
+        device.disconnect { [weak self] _ in
+            self?.removeDisconnected(device: device)
+        }
+    }
+    
+    func disconnectOBDSimulator() {
+        disconnectSimulatorFor(deviceType: .OBD_VEHICLE_METRICS)
     }
 }

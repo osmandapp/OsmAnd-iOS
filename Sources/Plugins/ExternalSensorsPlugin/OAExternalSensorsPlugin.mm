@@ -66,7 +66,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 {
     [super disable];
 
-    [[OADeviceHelper shared] disconnectAllSensorDevicesWithReason:DisconnectDeviceReasonPluginOff];
+    [[DeviceHelper shared] disconnectAllSensorDevicesWithReason:DisconnectDeviceReasonPluginOff];
 }
 
 - (void)setEnabled:(BOOL)enabled
@@ -222,9 +222,9 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
         {
             OADevice *device = nil;
             if ([deviceId isEqualToString:[self getAnyConnectedDeviceId]])
-                device = [[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject;
+                device = [[DeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject;
             else
-                device = [[OADeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId];
+                device = [[DeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId];
             
             if (device)
                 [device writeSensorDataToJsonWithJson:json widgetDataFieldType:widgetType];

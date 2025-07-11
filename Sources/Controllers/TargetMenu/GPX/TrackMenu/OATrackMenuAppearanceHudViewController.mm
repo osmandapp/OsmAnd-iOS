@@ -1755,7 +1755,6 @@ static const NSInteger kColorsSection = 1;
     {
         OACollectionSingleLineTableViewCell *cell =
             [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-        cell.separatorInset = UIEdgeInsetsZero;
         BOOL isRightActionButtonVisible = [self isSelectedTypeSolid];
         [cell rightActionButtonVisibility:isRightActionButtonVisible];
         [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil
@@ -1963,6 +1962,18 @@ static const NSInteger kColorsSection = 1;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell leftIconVisibility:NO];
             cell.leftIconView.image = nil;
+            if ([cellData.key isEqualToString:@"color_title"])
+            {
+                if (![self isSelectedTypeAttribute])
+                {
+                    [cell setCustomLeftSeparatorInset:YES];
+                    cell.separatorInset = UIEdgeInsetsMake(0., tableView.bounds.size.width, 0., 0.);
+                }
+                else
+                {
+                    [cell setCustomLeftSeparatorInset:NO];
+                }
+            }
             [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
             cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];

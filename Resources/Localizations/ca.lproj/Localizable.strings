@@ -575,7 +575,7 @@
 "speak_cameras" = "Radars";
 "speak_traffic_warnings" = "Notificacions de trànsit";
 "shared_string_gpx_waypoints" = "Fites de la traça";
-"speak_favorites" = "favorits propers";
+"speak_favorites" = "Favorits propers";
 "speak_poi" = "PDI propers";
 "speak_pedestrian" = "Passos de zebra";
 "int_seconds" = "segons";
@@ -1052,7 +1052,7 @@
 "quick_action_replace_destination" = "Substitueix destinació";
 "add_destination" = "Afegeix destinació";
 "quick_action_add_first_intermediate" = "Afegeix primer intermedi";
-"quick_action_auto_zoom" = "Mapa de zoom automàtic";
+"quick_action_auto_zoom" = "Zoom automàtic del mapa";
 "quick_action_resume_pause_navigation" = "Atura o reprèn la navegació";
 "quick_action_start_stop_navigation" = "Inicia/atura la navegació";
 "toggle_day_night" = "Canvia mode diürn/nocturn";
@@ -1224,7 +1224,7 @@
 "rendering_attr_smoothness_bad_name" = "Dolenta";
 "rendering_attr_surface_unpaved_name" = "Sense asfaltar";
 "routing_attr_prefer_motorway_description" = "Preferència per autopistes";
-"rendering_attr_showCycleRoutes_name" = "Rutes de cicle";
+"rendering_attr_showCycleRoutes_name" = "Rutes ciclistes";
 "routing_attr_avoid_tram_description" = "Evita el tram";
 "rendering_attr_noPolygons_name" = "Polígons";
 "rendering_attr_surface_sett_name" = "Llambordí";
@@ -1241,7 +1241,7 @@
 "rendering_attr_piste_type_nordic_name" = "Nòrdic";
 "rendering_attr_surface_mud_name" = "Fangar";
 "rendering_attr_surface_fine_gravel_name" = "Graveta";
-"routing_attr_avoid_sett_name" = "Sense sett";
+"routing_attr_avoid_sett_name" = "Sense llambordes";
 "rendering_value_lightblue_name" = "Blau cel";
 "routing_attr_avoid_borders_name" = "Sense pasos fronterers";
 "routing_attr_avoid_ferries_name" = "Sense transbordadors";
@@ -1268,7 +1268,7 @@
 "rendering_value_blue_name" = "Blau";
 "routing_attr_allow_private_name" = "Permet l\'accés privat";
 "rendering_value_yellow_name" = "Groc";
-"routing_attr_avoid_sett_description" = "Evita sett";
+"routing_attr_avoid_sett_description" = "Evita les llambordes";
 "routing_attr_allow_private_description" = "Permet l\'accés a zones privades.";
 "rendering_attr_streetLightingNight_name" = "Mostra només de nit";
 "routing_attr_avoid_toll_description" = "Evita les vies de peatge";
@@ -1404,7 +1404,7 @@
 "routing_attr_freeride_policy_name" = "Fora de pista";
 "routing_attr_avoid_ferries_description" = "Evita els transbordadors";
 "rendering_attr_surface_dirt_name" = "Pols";
-"routing_attr_driving_style_name" = "Estil de l'esquerda";
+"routing_attr_driving_style_name" = "Estil de conducció";
 "rendering_attr_hideBuildings_name" = "Edificis";
 "rendering_attr_roadStyle_description" = "Estil de via";
 "routing_attr_weight_name" = "Pes";
@@ -2673,7 +2673,7 @@
 "add_widget" = "Afegeix un giny";
 "meridian_180" = "180è meridià";
 "prime_meridian" = "Meridià primer";
-"equator" = "Equator";
+"equator" = "Equador";
 "quick_action_showhide_coordinates_grid_descr" = "Acció per a controlar la visibilitat de la quadrícula de coordenades en el mapa.";
 "layer_coordinates_grid" = "Quadrícula de coordenades";
 "save_favorite_default_appearance" = "Voleu aplicar canvis als punts existents a la carpeta o només als nous?";
@@ -2714,7 +2714,7 @@
 "obd_fuel_consumption_desc" = "Mostra la taxa d'ús de combustible pel motor, calculada en base al combustible restant, la mida del tanc i la distància coberta segons determini el GPS.";
 "obd_fuel_consumption" = "Consum de combustible";
 "reset_average_value" = "Restableix el valor mitjà";
-"shared_string_instant" = "Intant";
+"shared_string_instant" = "Instantani";
 "current_temperature" = "Temperatura actual";
 "average_temperature" = "Temperatura mitjana";
 "obd_fuel_consumption_rate_l_h" = "Taxa de consum de combustible (L/h)";
@@ -2746,7 +2746,7 @@
 "required_maps" = "Mapes requerits";
 "vertical_exaggeration_description" = "\"Per canviar el valor de l'escala, podeu emfatitzar el relleu en 3D\".";
 "unchanged_parameter_summary" = "Cada pista conservarà els seus propis paràmetres.";
-"shared_string_unchanged" = "Sense canviar";
+"shared_string_unchanged" = "Sense canvis";
 "map_widget_map_scale" = "Escala del mapa";
 "distance_during_navigation" = "Distància durant la navegació";
 "auto_zoom_smooth" = "Suavitzat";
@@ -3118,11 +3118,11 @@
 "announcement_time_descr" = "El temps d'anunci dels diferents senyals de veu depèn del tipus de sol·licitud, la velocitat de navegació actual i la velocitat de navegació per defecte.";
 "announcement_time_intervals" = "Intervals de temps i distància";
 "announcement_time_arrive" = "Arriba a la destinació";
-"announcement_time_off_route" = "Ruta fora";
+"announcement_time_off_route" = "Fora de la ruta";
 "announcement_time_prepare" = "Prepara";
 "announcement_time_prepare_long" = "Preparació llarga";
 "announcement_time_approach" = "Aproximació";
-"announcement_time_passing" = "Passat";
+"announcement_time_passing" = "Passant";
 "change_folder" = "Canvia la carpeta";
 "edit_track" = "Edita la pista";
 "upload_to_openstreetmap" = "Puja a l'OpenStreetMap";
@@ -3136,7 +3136,7 @@
 "sign_in_with_open_street_map" = "Inicia sessió amb OpenStreetMap";
 "login_open_street_map_org" = "Inicieu la sessió a OpenStreetMap.org";
 "quick_action_switch_profile_descr" = "El botó d'acció canvia entre els perfils seleccionats.";
-"tracker_item" = "Seguidor OsmAnd";
+"tracker_item" = "Rastrejador de OsmAnd";
 "search_poi_types_descr" = "Combinar tipus POI de diferents categories. Toca commutador per seleccionar-ho tot, toca el costat esquerre a la selecció de categories.";
 "lang_ckb" = "Kurd central";
 "mgrs_format_descr" = "OsmAnd utilitza MGRS, que és similar al format UTM de l'OTAN.";

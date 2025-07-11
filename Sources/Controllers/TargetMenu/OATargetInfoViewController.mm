@@ -1075,7 +1075,7 @@ static const CGFloat kTextMaxHeight = 150.0;
         cell.backgroundColor = _contentColor;
         cell.webView.backgroundColor = _contentColor;
         cell.iconView.image = info.icon;
-        [cell.webView loadHTMLString:[kViewPortHtml stringByAppendingString:info.text ? info.text : @""]  baseURL:nil];
+        [cell.webView loadHTMLString:[kViewPortHtml stringByAppendingString:info.text ?: @""]  baseURL:nil];
         
         return cell;
     }

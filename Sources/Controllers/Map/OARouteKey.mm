@@ -165,8 +165,7 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    OARouteKey *copy = [[OARouteKey allocWithZone:zone] initWithKey:_routeKey];
-    return copy;
+    return [[OARouteKey allocWithZone:zone] initWithKey:_routeKey];
 }
 
 @end

@@ -104,7 +104,7 @@ static const int BOTTOM_CONSTANT = 1;
 - (CLLocation *) getMapLocation;
 
 - (float) getMapZoom;
-- (float) getMap3DModeElevationAngle;
+- (float)getMap3DModeElevationAngle;
 - (void) refreshMap;
 
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;

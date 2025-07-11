@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 - (OATargetPoint *) getTargetPoint:(id)obj;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
 
-- (BOOL) isSecondaryProvider;
+- (BOOL)isSecondaryProvider;
 
 - (CLLocation *) getObjectLocation:(id)obj;
 - (OAPointDescription *) getObjectName:(id)obj;

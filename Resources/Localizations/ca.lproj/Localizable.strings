@@ -3140,6 +3140,6 @@
 "search_poi_types_descr" = "Combinar tipus POI de diferents categories. Toca commutador per seleccionar-ho tot, toca el costat esquerre a la selecció de categories.";
 "lang_ckb" = "Kurd central";
 "mgrs_format_descr" = "OsmAnd utilitza MGRS, que és similar al format UTM de l'OTAN.";
-"mapillary" = "Mapil·lar";
+"mapillary" = "Mapillary";
 "rendering_value_defaultMedium_name" = "Per defecte (mitjà)";
 "battery_saving_mode" = "Mode de desament de bateria";

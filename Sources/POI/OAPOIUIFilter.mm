@@ -606,8 +606,14 @@
     if (name.length == 0)
         poiStringWithoutType = typeName;
     poiStringWithoutType = [NSString stringWithFormat:@"%@ %@", typeName, name];
-
-    NSMutableArray *names = [NSMutableArray array];
+	
+	QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
+	NSMutableArray *names = [NSMutableArray array];
+	for (auto i = decodedValues.cbegin(), end = decodedValues.cend(); i != end; ++i)
+	{
+		[names addObject:[NSString stringWithFormat:@"%@ %@", typeName, i.value().toNSString()]];
+	}
+	
     for (const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
     {
         [names addObject:entry.value().toNSString()];

@@ -3477,7 +3477,7 @@
 "shared_string_sorted_by" = "ordenado por:";
 "help_article_map_tracks_name" = "Pistas";
 "help_article_personal_color_palette_schemes_name" = "Esquemas de colores";
-"obd_plugin_name" = "Métricas del panel de control";
+"obd_plugin_name" = "Métricas del vehículo";
 "add_widget_above" = "Añadir widget arriba";
 "add_widget_to_the_right" = "Añadir widget a la derecha";
 "delete_widget" = "¿Eliminar el widget?";
@@ -3706,7 +3706,7 @@
 "obd_battery_voltage" = "Voltaje de la batería";
 "obd_engine_coolant_temp" = "Temperatura del refrigerante";
 "remaining_fuel" = "Combustible restante";
-"remaining_fuel_description" = "Muestra la cantidad de combustible restante en el tanque del vehículo.";
+"remaining_fuel_description" = "Muestra la cantidad de combustible restante en el tanque del vehículo";
 "obd_fuel_consumption" = "Consumo de combustible";
 "obd_fuel_consumption_desc" = "Muestra la tasa de consumo de combustible del motor, calculada en función del combustible restante, el tamaño del tanque y la distancia recorrida, según lo determinado por el GPS.";
 "rendering_value_sector5_name" = "Sector 5";
@@ -3739,7 +3739,7 @@
 "obd_widget_engine_speed" = "Velocidad del motor";
 "obd_engine_runtime_desc" = "Muestra el tiempo que el motor ha estado funcionando desde que se arrancó.";
 "obd_engine_runtime" = "Tiempo de funcionamiento del motor";
-"obd_battery_voltage_desc" = "Muestra el nivel de voltaje de la batería del vehículo.";
+"obd_battery_voltage_desc" = "Muestra el nivel de voltaje de la batería del vehículo";
 "obd_fuel_pressure_desc" = "Muestra la presión en el sistema de combustible";
 "obd_throttle_position" = "Posición del acelerador";
 "obd_throttle_position_desc" = "Muestra el ángulo de la placa del acelerador en el cuerpo del acelerador.";

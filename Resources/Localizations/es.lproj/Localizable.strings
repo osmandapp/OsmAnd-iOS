@@ -3714,8 +3714,8 @@
 "rendering_value_sector1_name" = "Sector 3";
 "rendering_value_sector3_name" = "Sector 4";
 "rendering_value_sector4_name" = "mm";
-"shared_string_millimeters_short" = "GFS";
-"weather_source_GFS_title" = "Local";
+"shared_string_millimeters_short" = "";
+"weather_source_GFS_title" = "GFS";
 "shared_string_local" = "Wikimedia";
 "wikimedia" = "Imagen descargada a Documentos/Descargar.";
 "download_successful" = "Mostrar datos principales del sensor";

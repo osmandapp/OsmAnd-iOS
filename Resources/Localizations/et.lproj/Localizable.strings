@@ -79,7 +79,7 @@
 "simulate_routing_descr" = "Simuleeri oma asukohta kasutades arvutatud teekonda";
 "select_avoid_descr" = "Vali navigeerimise ajal välditavad teed. Võid valida tee kaardil või tee liigi allolevast loetelust.";
 "no_active_route" = "Aktiivne teekond puudub";
-"day_night_info_description" = "Päikesetõus: %@  \nPäikeseloojang: %@";
+"day_night_info_description" = "Päikesetõus: %@ \nPäikeseloojang: %@";
 "day_night_info" = "Päeva/öö teave";
 "daynight_mode_auto" = "Päikesetõus/loojang";
 "route_simulation" = "Teekonna simuleerimine";
@@ -512,7 +512,7 @@
 "sett_arr" = "Kaardi nooled";
 "shared_string_location" = "Asukoht";
 "sett_arr_map" = "Kaardi keskkoht";
-"short_location_on_map" = "Lai %@  \nPik %@";
+"short_location_on_map" = "LK %@ \nPK %@";
 "navigate_point_format_OLC" = "Avatud asukoha kood (OLC)";
 "shared_string_example" = "Näide";
 "utm_description" = "OsmAnd kasutab UTM standardvormingut, mis on sarnane, kuid mitte identne UTM NATO vorminguga.";
@@ -3460,7 +3460,7 @@
 "layer_coordinates_grid" = "Koordinaatide võrgustik";
 "routing_attr_difficulty_preference_advanced_name" = "Täiendavad seadistused";
 "default_appearance" = "Vaikimisi välimus";
-"apply_to_all_points" = "Rakenda kõikidele punktidele ";
+"apply_to_all_points" = "Rakenda kõikidele punktidele";
 "original_icon_description" = "Iga punkt säilitab oma ikooni.";
 "original_color_description" = "Iga punkt säilitab oma värvi.";
 "original_shape_description" = "Iga punkt säilitab oma kuju.";

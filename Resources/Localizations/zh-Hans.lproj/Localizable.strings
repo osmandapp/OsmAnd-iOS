@@ -461,7 +461,7 @@
 "sort_by_name" = "按名称排序";
 "map_markers_other" = "其他标记";
 "navigation_over_track" = "开始沿着轨迹导航吗？";
-"gpx_option_calculate_first_last_segment" = "计算第一和最后一个路段间的 OsmAnd 路线";
+"gpx_option_calculate_first_last_segment" = "为首段和末段路线段计算 OsmAnd 路线";
 "gpx_option_from_start_point" = "沿着整条轨迹";
 "gpx_option_reverse_route" = "反转轨迹方向";
 "use_points_as_intermediates" = "计算两点之间的路线";
@@ -1451,7 +1451,7 @@
 "routeInfo_tracktype_description" = "根据表面成分给路线或轨迹线上色。通常适用于道路网络大部分未铺设的情况。";
 "save_heading" = "包括航向";
 "selected_profile" = "当前所选配置文件";
-"join_segments" = "加入分段";
+"join_segments" = "连接所有轨迹段";
 "routeInfo_roadClass_description" = "按道路分类给路线或轨迹线上色。";
 "number_of_tiles" = "瓦片数量";
 "rendering_attr_showRunningRoutes_name" = "跑步路线";
@@ -1718,7 +1718,7 @@
 "settings_item_read_error" = "无法从 \'%@\' 中读取。";
 "routing_attr_motor_type_diesel_name" = "柴油";
 "select_another_colorization" = "请选择另一种着色类型。";
-"gpx_selection_segment_title" = "分段";
+"gpx_selection_segment_title" = "轨迹段";
 "weather_pressure_hectopascals" = "百帕";
 "pro_features" = "专业版功能";
 "first_intermediate_dest_description" = "添加始发站";
@@ -1774,7 +1774,7 @@
 "sett_generic_ext_input" = "键盘";
 "shared_string_selected" = "已选择";
 "recalc_angle_dialog_title" = "我的位置和路线之间的最小角度";
-"route_between_points_add_track_desc" = "选择一个要添加新分段的轨迹文件。";
+"route_between_points_add_track_desc" = "请选择一个轨迹文件以添加新的轨迹段。";
 "backup_pause_all" = "暂停全部";
 "weather_precip_milimeters" = "毫米";
 "search_poi_types_descr" = "合并不同类别的兴趣点类型。点击开关全选，点击左侧选择类别。";
@@ -2475,7 +2475,7 @@
 "shared_string_all_colors" = "所有颜色";
 "edit_tilesource_minzoom" = "最小显示级别";
 "shared_string_class" = "分级";
-"display_position_automatic_descr" = "取决于地图方向：底部为移动方向，中心为所有其他方向。";
+"display_position_automatic_descr" = "取决于地图朝向：若按移动方向显示，则定位图标在底部；否则居中显示。";
 "empty_name" = "空名称";
 "shared_string_activity" = "活动";
 "add_button" = "新增按钮";

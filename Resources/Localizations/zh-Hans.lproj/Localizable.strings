@@ -1043,7 +1043,7 @@
 "shared_string_example" = "示例";
 "clear_tiles_warning" = "应用这些更改将清除此图块源的缓存数据";
 "shared_string_copy" = "复制";
-"next_segment" = "下一段";
+"next_segment" = "下一分段";
 "reset_to_default" = "重置为默认值";
 "transport_stops" = "站点";
 "appearance_on_the_map" = "在地图上的外观";
@@ -1756,7 +1756,7 @@
 "routing_attr_avoid_low_emission_zone_description" = "避开低排放区";
 "mapillary_descr" = "供所有人使用的在线街景照片。协作发现景点，捕捉世界之美。";
 "reset_to_default_category_button_promo" = "“重置为默认值”会将排序顺序恢复为安装时的默认值。";
-"recalc_angle_dialog_descr" = "将显示我的位置和计算的路径之间的额外直线段，直到重新计算路径";
+"recalc_angle_dialog_descr" = "在路线重新计算之前，会显示一段从我的位置到已计算路线之间的额外直线线段";
 "activity_type_mountainbike_name" = "山地车";
 "srtm_download_single_help_message" = "请选择变体。您需要重新下载文件以更改格式。";
 "sign_in_with_open_street_map" = "用 OpenStreetMap 登录";
@@ -1774,7 +1774,7 @@
 "sett_generic_ext_input" = "键盘";
 "shared_string_selected" = "已选择";
 "recalc_angle_dialog_title" = "我的位置和路线之间的最小角度";
-"route_between_points_add_track_desc" = "选择一个要添加新片段的轨迹文件。";
+"route_between_points_add_track_desc" = "选择一个要添加新分段的轨迹文件。";
 "backup_pause_all" = "暂停全部";
 "weather_precip_milimeters" = "毫米";
 "search_poi_types_descr" = "合并不同类别的兴趣点类型。点击开关全选，点击左侧选择类别。";
@@ -1963,7 +1963,7 @@
 "dont_download" = "不要下载";
 "wikivoyage_download_pics" = "下载图像";
 "mtb_imba_full" = "国际山地自行车协会";
-"mtb_segment_classification" = "路段难度分级";
+"mtb_segment_classification" = "路径难度分类";
 "cloud_changes_will_be_dismissed" = "将取消云端变更";
 "shared_string_modified" = "已修改";
 "rendering_attr_showMtbScale_name" = "显示山地自行车难度分级";

@@ -1963,7 +1963,7 @@
 "dont_download" = "不要下载";
 "wikivoyage_download_pics" = "下载图像";
 "mtb_imba_full" = "国际山地自行车协会";
-"mtb_segment_classification" = "段分类";
+"mtb_segment_classification" = "路段难度分级";
 "cloud_changes_will_be_dismissed" = "将取消云端变更";
 "shared_string_modified" = "已修改";
 "rendering_attr_showMtbScale_name" = "显示山地自行车难度分级";

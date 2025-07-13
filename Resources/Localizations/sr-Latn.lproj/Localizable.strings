@@ -1532,7 +1532,7 @@
 "product_desc_wiki" = "Članci Vikipedije zasnovani na lokaciji na mapi";
 "purchases_feature_desc_wikipedia" = "Članci sa Vikipedije, bez interneta . Odvojene po regijama i dostupni na svim jezicima.";
 "shared_string_all_languages" = "Svi jezici";
-"select_wikipedia_article_langs" = "Odaberi jezik za Vikipedijine članke na mapi. Prebaci na bilo koji drugi dostupni jezik dok čitaš članak.";
+"select_wikipedia_article_langs" = "Odaberi jezik za Vikipedie članke na mapi. Prebaci na bilo koji drugi dostupni jezik dok čitaš članak.";
 "wiki_menu_download_descr" = "Za prikaz Wikipedia TOI su potrebne dodatne mape.";
 "some_articles_may_not_available_in_lang" = "Neki članci sa Vikipedije su možda dostupni na jeziku.";
 "available_languages" = "Dostupni jezici";

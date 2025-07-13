@@ -2666,7 +2666,7 @@
 "shared_string_edges" = "Vores";
 "labels_position" = "Posició de les etiquetes";
 "routing_attr_allow_ferries_name" = "Permet ferris";
-"routing_attr_allow_ferries_description" = "Permet l'encaminament per rutes de ferri";
+"routing_attr_allow_ferries_description" = "Permet la navegació per rutes de ferri";
 "intermediate_first" = "Intermedi primer";
 "destination_first" = "Destinació primer";
 "display_priority" = "Mostra la prioritat";
@@ -3040,7 +3040,7 @@
 "osmand_maps_plus_tagline" = "Obté característiques esteses";
 "redeem_promo_code" = "Canvia el codi promocional";
 "nautical_depth" = "Profunditat nàutica";
-"offline_wikivoyage" = "Viquiviat fora de línia";
+"offline_wikivoyage" = "Viquiviatges fora de línia";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia i Wikivoyage fora de línia";
 "unlimited_map_downloads" = "Descàrregues de mapes il·limitats";
 "purchases_feature_desc_osmand_cloud" = "Obtenir OsmAnd Cloud per emmagatzemar totes les dades d'OsmAnd en línia. No hi ha dades perdudes després de la reinstal·lació. Fes una còpia de seguretat i restaura tota la informació fàcilment.";
@@ -3062,9 +3062,9 @@
 "backup_danger_zone" = "Zona de perill";
 "backup_delete_all_data_warning" = "Esteu a punt d'eliminar totes les dades prèviament pujades a OsmAnd Cloud, incloent-hi l'historial de versions.\n\nNo podrà recuperar les dades suprimides.";
 "backup_delete_all_data" = "Suprimeix totes les meves dades";
-"shared_string_logout" = "Surt";
+"shared_string_logout" = "Tanca sessió";
 "upload_local_version" = "Puja la versió local";
-"backup_pause_all" = "Pausa-ho tot";
+"backup_pause_all" = "Pausa tot";
 "backup_view_conflicts" = "Mostra els conflictes";
 "make_backup_descr" = "Hi ha molts canvis en aquest dispositiu, si us plau, feu una còpia de seguretat d'aquestes dades per no perdre-les.";
 "make_backup" = "Fes una còpia de seguretat";
@@ -3078,12 +3078,12 @@
 "backup_into_file" = "Fes una còpia de seguretat com a fitxer";
 "local_backup" = "Còpia local";
 "osmand_cloud_authorize_descr" = "No perdis mai les teves dades. Fes una còpia de seguretat i restaura tota la informació fàcilment.";
-"osmand_cloud" = "Núvol OsmAnd";
+"osmand_cloud" = "OsmAnd Cloud";
 "last_backup" = "Última còpia de seguretat";
 "routing_attr_avoid_low_emission_zone_name" = "Evita les zones de baixes emissions";
 "routing_attr_avoid_low_emission_zone_description" = "Evita les zones de baixes emissions";
-"shared_string_max_height" = "Max. alçada";
-"shared_string_min_height" = "Mín. alçada";
+"shared_string_max_height" = "Alçada màxima";
+"shared_string_min_height" = "Alçada mínima";
 "user_points" = "Punts d'usuari";
 "announce_when_exceeded" = "Anuncia quan s'excedeixi";
 "exit_number" = "Número de sortida";

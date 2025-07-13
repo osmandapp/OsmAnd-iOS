@@ -3395,7 +3395,7 @@
 "download_persian_voice_alert_title" = "Persische Sprachdatei herunterladen:";
 "download_persian_voice_alert_descr_ios" = "Einstellungen -> Eingabehilfen -> Gesprochene Inhalte -> Stimmen -> Persisch -> Dariush";
 "download_persian_voice_alert_descr_macos" = "Einstellungen -> Eingabehilfen -> Gesprochene Inhalte -> Systemstimme -> Stimmen verwalten -> Persisch -> Dariush";
-"shared_string_minute_lowercase" = "Min";
+"shared_string_minute_lowercase" = "min";
 "root_folder" = "Root-Verzeichnis";
 "all_folders" = "Alle Verzeichnisse";
 "not_specified" = "Nicht spezifiziert";

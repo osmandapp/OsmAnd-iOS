@@ -165,7 +165,7 @@ static const int START_ZOOM = 10;
     if ([self.mapViewController getMapZoom] >= START_ZOOM && !excludeUntouchableObjects && !NSArrayIsEmpty(impassableRoads))
     {
         int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-        CGPoint pixel = [result getPoint];
+        CGPoint pixel = result.point;
         CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 2));
         CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 3));
         OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
@@ -182,7 +182,7 @@ static const int START_ZOOM = 10;
     }
 }
 
-- (BOOL) isSecondaryProvider
+- (BOOL)isSecondaryProvider
 {
     return NO;
 }

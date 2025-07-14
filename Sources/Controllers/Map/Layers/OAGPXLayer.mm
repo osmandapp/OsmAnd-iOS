@@ -1910,7 +1910,7 @@ colorizationScheme:(int)colorizationScheme
 
 - (void) collectWptFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    CGPoint point = [result getPoint];
+    CGPoint point = result.point;
     int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
     
     OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
@@ -1937,7 +1937,7 @@ colorizationScheme:(int)colorizationScheme
 
 - (void) collectTracksFromPoint:(MapSelectionResult *)result showTrackPointMenu:(BOOL)showTrackPointMenu
 {
-    CGPoint point = [result getPoint];
+    CGPoint point = result.point;
     OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:point];
     const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
     [self getTracksFromPoint:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude) result:result];

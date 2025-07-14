@@ -430,7 +430,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     }
     else if ([object isKindOfClass:BaseDetailsObject.class])
     {
-        return [(BaseDetailsObject *)object getSyntheticAmenity];
+        return ((BaseDetailsObject *)object).syntheticAmenity;
     }
     return nil;
 }
@@ -465,7 +465,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 - (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject placeDetailsObject:(BaseDetailsObject *)placeDetailsObject
 {
     if (placeDetailsObject)
-        poi = [placeDetailsObject getSyntheticAmenity];
+        poi = placeDetailsObject.syntheticAmenity;
     
     if (poi)
     {
@@ -589,7 +589,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         if ([object isKindOfClass:OAPOI.class])
             placeId = ((OAPOI *)object).obfId;
         else if ([object isKindOfClass:BaseDetailsObject.class])
-            placeId = [((BaseDetailsObject *)object) getSyntheticAmenity].obfId;
+            placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId;
         else
             placeId = -1;
         

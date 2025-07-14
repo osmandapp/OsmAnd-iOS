@@ -168,7 +168,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     
     if (zoom >= START_ZOOM && !NSArrayIsEmpty(objects))
     {
-        CGPoint pixel = [result getPoint];
+        CGPoint pixel = result.point;
         int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
         
         CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));

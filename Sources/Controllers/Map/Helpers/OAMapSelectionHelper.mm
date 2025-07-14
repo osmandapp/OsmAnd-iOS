@@ -70,7 +70,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO];
     [self collectObjectsFromMap:result point:point]; //start from this
     
-    [self processTransportStops:[result getAllObjects]];
+    [self processTransportStops:result.allObjects];
     if ([result isEmpty])
         [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:YES];
     
@@ -389,7 +389,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (BOOL) addClickableWay:(MapSelectionResult *)result clickableWay:(ClickableWay *)clickableWay
 {
-    if (clickableWay && [self isUniqueClickableWay:[result getAllObjects] clickableWay:clickableWay])
+    if (clickableWay && [self isUniqueClickableWay:result.allObjects clickableWay:clickableWay])
     {
         [result collect:clickableWay provider:[_clickableWayHelper getContextMenuProvider]];
         return YES;
@@ -530,7 +530,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (BOOL) isUniqueOsmRoute:(MapSelectionResult *)result tmpKey:(OARouteKey *)tmpKey
 {
-    for (SelectedMapObject *selectedObject in [result getAllObjects])
+    for (SelectedMapObject *selectedObject in result.allObjects)
     {
         id object = selectedObject.object;
         if ([object isKindOfClass:NSArray.class])

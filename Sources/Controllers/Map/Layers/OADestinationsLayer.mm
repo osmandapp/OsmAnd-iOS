@@ -572,7 +572,7 @@
         return;
     
     [_amenities removeAllObjects];
-    CGPoint pixel = [result getPoint];
+    CGPoint pixel = result.point;
     int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
  
     CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 2));

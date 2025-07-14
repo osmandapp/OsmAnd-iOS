@@ -331,7 +331,7 @@ static const int START_ZOOM = 10;
 
 - (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    CGPoint pixel = [result getPoint];
+    CGPoint pixel = result.point;
     if ([self.mapViewController getMapZoom] < START_ZOOM)
         return;
     
@@ -344,7 +344,7 @@ static const int START_ZOOM = 10;
     [self collectOsmEdits:osmEdits result:result pixel:pixel radiusPixels:radiusPixels];
 }
 
-- (void) collectOsmEdits:(NSArray<OAOsmPoint *> *)osmEdits result:(MapSelectionResult *)result pixel:(CGPoint)pixel radiusPixels:(int)radiusPixels
+- (void)collectOsmEdits:(NSArray<OAOsmPoint *> *)osmEdits result:(MapSelectionResult *)result pixel:(CGPoint)pixel radiusPixels:(int)radiusPixels
 {
     if (!NSArrayIsEmpty(osmEdits))
     {

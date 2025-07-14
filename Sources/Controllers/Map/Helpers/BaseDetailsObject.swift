@@ -25,7 +25,7 @@ final class BaseDetailsObject: NSObject {
     var objects: Array<Any>
     var lang: String
     
-    private var syntheticAmenity: OAPOI
+    private(set) var syntheticAmenity: OAPOI
     private var objectCompleteness: ObjectCompleteness
     private var searchResultResource: EOASearchResultResource
     private var obfResourceName: String?
@@ -69,16 +69,8 @@ final class BaseDetailsObject: NSObject {
         obfResourceName = obfName
     }
     
-    func getSyntheticAmenity() -> OAPOI {
-        syntheticAmenity
-    }
-    
     func getLocation() -> CLLocation? {
         syntheticAmenity.getLocation()
-    }
-    
-    func getObjects() -> Array<Any> {
-        objects
     }
     
     func isObjectFull() -> Bool {
@@ -94,7 +86,7 @@ final class BaseDetailsObject: NSObject {
         guard isSupportedObjectType(object) else { return false }
         
         if let detailsObject = object as? BaseDetailsObject {
-            for obj in detailsObject.getObjects() {
+            for obj in detailsObject.objects {
                 addObject(obj)
             }
         } else {
@@ -163,14 +155,12 @@ final class BaseDetailsObject: NSObject {
     }
     
     private func overlapPublicTransport(_ renderedObjects: [OARenderedObject], stops: [OATransportStop]) -> Bool {
-        return renderedObjects.contains { renderedObject in
-            overlapPublicTransport(withRenderedObject: renderedObject, stops: stops)
-        }
+        renderedObjects.contains { overlapPublicTransport(withRenderedObject: $0, stops: stops) }
     }
     
     private func overlapPublicTransport(withRenderedObject renderedObject: OARenderedObject, stops: [OATransportStop]) -> Bool {
-        let transportTypes = OAPOIHelper.sharedInstance().getPublicTransportTypes() as? [String]
-        guard let transportTypes, !transportTypes.isEmpty, !stops.isEmpty else { return false }
+        guard let transportTypes = OAPOIHelper.sharedInstance().getPublicTransportTypes() as? [String] else { return false }
+        guard !transportTypes.isEmpty && !stops.isEmpty else { return false }
         
         let tags = renderedObject.tags
         let name = renderedObject.name
@@ -382,10 +372,12 @@ final class BaseDetailsObject: NSObject {
     }
     
     private func processPolygonCoordinates(x: NSMutableArray, y: NSMutableArray) {
-        if let xArray = x as? [Any], xArray.count > 0, syntheticAmenity.x.count > 0 {
+        guard let xArray = x as? [Any], let yArray = y as? [Any], let syntXArray = syntheticAmenity.x as? [Any], let syntYArray = syntheticAmenity.y as? [Any] else { return }
+        
+        if !xArray.isEmpty, !syntXArray.isEmpty {
             syntheticAmenity.x.addObjects(from: xArray)
         }
-        if let yArray = y as? [Any], yArray.count > 0, syntheticAmenity.y.count > 0 {
+        if !yArray.isEmpty, !syntYArray.isEmpty {
             syntheticAmenity.y.addObjects(from: yArray)
         }
     }
@@ -491,7 +483,7 @@ final class BaseDetailsObject: NSObject {
             if obfResourceName.contains("basemap") {
                 return .basemap
             }
-            if (obfResourceName.contains("travel") || obfResourceName.contains("wikivoyage")) {
+            if obfResourceName.contains("travel") || obfResourceName.contains("wikivoyage") {
                 return .travel
             }
         }
@@ -539,7 +531,7 @@ final class BaseDetailsObject: NSObject {
             amenity = poi
         }
         if let detailsObject = object as? BaseDetailsObject {
-            amenity = detailsObject.getSyntheticAmenity()
+            amenity = detailsObject.syntheticAmenity
         }
         
         if let amenity, getResourceType(object) == .travel {

@@ -241,7 +241,7 @@ static int MIN_POINTS_ZOOM = 17;
     if (!_mapillaryMapProvider || [self.mapViewController getMapZoom] < MIN_POINTS_ZOOM)
         return;
     
-    CGPoint pixel = [result getPoint];
+    CGPoint pixel = result.point;
     OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:pixel];
     const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
 

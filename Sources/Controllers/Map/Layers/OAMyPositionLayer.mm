@@ -916,7 +916,7 @@ typedef enum {
     
     if ([self.mapViewController getMapZoom] >= 3 && !excludeUntouchableObjects)
     {
-        CGPoint point = [result getPoint];
+        CGPoint point = result.point;
         int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
         OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
         if (touchPolygon31 == OsmAnd::AreaI())

@@ -415,7 +415,7 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
     if (excludeUntouchableObjects)
         return;
     
-    OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:[result getPoint]];
+    OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:result.point];
     const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
     CLLocationCoordinate2D location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
     

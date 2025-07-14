@@ -270,7 +270,7 @@ static const int START_ZOOM = 6;
     if (NSArrayIsEmpty(favouritePoints))
         return;
     
-    CGPoint point = [result getPoint];
+    CGPoint point = result.point;
     int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
     OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
     if (touchPolygon31 == OsmAnd::AreaI())

@@ -14,13 +14,13 @@ import UIKit
 class MapSelectionResult: NSObject {
     
     private var lang: String
-    private var point: CGPoint
+    private(set) var point: CGPoint
     var pointLatLon: CLLocation?
     var objectLatLon: CLLocation?
     
     private var poiProvider: OAContextMenuProvider
     
-    private var allObjects: Array<SelectedMapObject>
+    private(set) var allObjects: Array<SelectedMapObject>
     private var processedObjects: Array<SelectedMapObject>
     
     init(point: CGPoint) {
@@ -37,15 +37,7 @@ class MapSelectionResult: NSObject {
         super.init()
     }
     
-    func getPoint() -> CGPoint {
-        point
-    }
-    
-    func getAllObjects() -> Array<SelectedMapObject> {
-        allObjects
-    }
-    
-    func getProcessedObjects() -> Array<SelectedMapObject> {
+    func getProcessedObjects() -> [SelectedMapObject] {
         processedObjects
     }
     
@@ -59,15 +51,15 @@ class MapSelectionResult: NSObject {
             return
         }
         
-        var other = Array<SelectedMapObject>()
-        var detailsObjects = processObjects(allObjects, other: &other)
+        var other = [SelectedMapObject]()
+        let detailsObjects = processObjects(allObjects, other: &other)
         
         for object in detailsObjects {
-            if object.getObjects().count > 1 {
+            if object.objects.count > 1 {
                 let selectedObject = SelectedMapObject(mapObject: object, provider: poiProvider)
                 processedObjects.append(selectedObject)
             } else {
-                let selectedObject = SelectedMapObject(mapObject: object.getObjects()[0], provider: poiProvider)
+                let selectedObject = SelectedMapObject(mapObject: object.objects[0], provider: poiProvider)
                 processedObjects.append(selectedObject)
             }
         }

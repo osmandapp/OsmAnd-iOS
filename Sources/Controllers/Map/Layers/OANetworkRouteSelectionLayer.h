@@ -13,9 +13,9 @@
 
 @interface OANetworkRouteSelectionLayer : OASymbolMapLayer<OAContextMenuProvider>
 
-- (void) onCancelNetworkGPX;
+- (void)onCancelNetworkGPX;
 
-- (void) removeFromCacheBy:(OARouteKey *)routeKey;
-- (void) clearCache;
+- (void)removeFromCacheBy:(OARouteKey *)routeKey;
+- (void)clearCache;
 
 @end

@@ -1917,8 +1917,8 @@ colorizationScheme:(int)colorizationScheme
     if (touchPolygon31 == OsmAnd::AreaI())
         return;
     
-    NSMutableDictionary<NSString *,OASGpxFile *> *visibleGpxFiles = [[OASelectedGPXHelper instance] getSelectedGPXFiles];
-    for (OASGpxFile *g in [visibleGpxFiles allValues])
+    NSArray<OASGpxFile *> *visibleGpxFiles = [[OASelectedGPXHelper instance] getSelectedGPXFiles];
+    for (OASGpxFile *g in visibleGpxFiles)
     {
         NSArray<OASWptPt *> *pts = [self getSelectedFilePoints:g];
         for (OASWptPt *waypoint in pts)

@@ -178,12 +178,12 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     return nil;
 }
 
--(BOOL) isShowingAnyGpxFiles
+- (BOOL)isShowingAnyGpxFiles
 {
     return _activeGpx.count > 0;
 }
 
--(void) clearAllGpxFilesToShow:(BOOL) backupSelection
+- (void)clearAllGpxFilesToShow:(BOOL) backupSelection
 {
     NSMutableArray *backedUp = [NSMutableArray new];
     if (backupSelection)
@@ -200,7 +200,7 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     [_selectedGPXFilesBackup addObjectsFromArray:backedUp];
 }
 
--(void) restoreSelectedGpxFiles
+- (void)restoreSelectedGpxFiles
 {
     NSMutableArray *restored = [NSMutableArray new];
     if (_selectedGPXFilesBackup.count == 0)
@@ -217,7 +217,7 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     [_selectedGPXFilesBackup removeAllObjects];
 }
 
-+ (void) renameVisibleTrack:(NSString *)oldPath newPath:(NSString *)newPath
++ (void)renameVisibleTrack:(NSString *)oldPath newPath:(NSString *)newPath
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx.get];
@@ -234,7 +234,7 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     [settings.mapSettingVisibleGpx set:[NSArray arrayWithArray:visibleGpx]];
 }
 
-- (NSString *) getSelectedGPXFilePath:(NSString *)fileName
+- (NSString *)getSelectedGPXFilePath:(NSString *)fileName
 {
     NSString *suffix = [NSString stringWithFormat:@"/%@", fileName];
     for (NSString *selectedGpxFile in _selectedGPXFilesBackup)
@@ -247,12 +247,12 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     return nil;
 }
 
-- (NSMutableDictionary<NSString *,OASGpxFile *> *) getSelectedGPXFiles
+- (NSArray<OASGpxFile *> *)getSelectedGPXFiles
 {
-    return _activeGpx;
+    return [_activeGpx allValues];
 }
 
-- (OASWptPt *) getVisibleWayPointByLat:(double)lat lon:(double)lon
+- (OASWptPt *)getVisibleWayPointByLat:(double)lat lon:(double)lon
 {
     CLLocationCoordinate2D markerLatLon = CLLocationCoordinate2DMake(lat, lon);
     if (CLLocationCoordinate2DIsValid(markerLatLon))

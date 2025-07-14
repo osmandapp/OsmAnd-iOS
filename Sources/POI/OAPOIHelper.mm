@@ -1545,10 +1545,9 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
                                   },
                                   ctrl);
             
-            
             for (OAPOI *amenity in foundAmenities)
             {
-                NSNumber *obfId =  @(amenity.obfId);
+                NSNumber *obfId = @(amenity.obfId);
                 if ([amenity isClosed])
                 {
                     [closedAmenities addObject:obfId];
@@ -1559,7 +1558,6 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
                     [actualAmenities addObject:amenity];
                 }
             }
-            
         }
     }
     return actualAmenities;

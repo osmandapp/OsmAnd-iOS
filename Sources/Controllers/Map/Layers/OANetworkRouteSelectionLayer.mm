@@ -22,7 +22,7 @@
     OANetworkRouteSelectionTask *_selectionTask;
 }
 
-- (void) loadNetworkGpx:(NSArray *)pair lat:(double)lat lon:(double)lon
+- (void)loadNetworkGpx:(NSArray *)pair lat:(double)lat lon:(double)lon
 {
     __weak __typeof(self) weakSelf = self;
     
@@ -49,7 +49,7 @@
     }
 }
 
-- (void) saveAndOpenGpx:(OASGpxFile *)gpxFile pair:(NSArray *)pair lat:(double)lat lon:(double)lon
+- (void)saveAndOpenGpx:(OASGpxFile *)gpxFile pair:(NSArray *)pair lat:(double)lat lon:(double)lon
 {
     if (pair.count > 1 && [pair[0] isKindOfClass:OARouteKey.class] && [pair[1] isKindOfClass:OASKQuadRect.class])
     {
@@ -65,18 +65,18 @@
     }
 }
 
-- (BOOL) isSelectingRoute
+- (BOOL)isSelectingRoute
 {
     return _selectionTask;
 }
 
-- (void) cancelRouteSelection
+- (void)cancelRouteSelection
 {
     [_selectionTask setCancelled:YES];
     _selectionTask = nil;
 }
 
-- (void) onCancelNetworkGPX
+- (void)onCancelNetworkGPX
 {
     [self cancelRouteSelection];
     [OARootViewController.instance.mapPanel hideProgress];
@@ -84,33 +84,33 @@
 
 #pragma mark - Cache
 
-- (OASGpxFile *) getFromCacheBy:(OARouteKey *)routeKey
+- (OASGpxFile *)getFromCacheBy:(OARouteKey *)routeKey
 {
     if (!_routesCache)
         _routesCache = [NSMutableDictionary new];
     return _routesCache[routeKey];
 }
 
-- (void) saveToCache:(OASGpxFile *)gpxFile routeKey:(OARouteKey *)routeKey
+- (void)saveToCache:(OASGpxFile *)gpxFile routeKey:(OARouteKey *)routeKey
 {
     if (!_routesCache)
         _routesCache = [NSMutableDictionary new];
     _routesCache[routeKey] = gpxFile;
 }
 
-- (void) removeFromCacheBy:(OARouteKey *)routeKey
+- (void)removeFromCacheBy:(OARouteKey *)routeKey
 {
     [_routesCache removeObjectForKey:routeKey];
 }
 
-- (void) clearCache
+- (void)clearCache
 {
     [_routesCache removeAllObjects];
 }
 
 #pragma mark - OAContextMenuProvider
 
-- (CLLocation *) getObjectLocation:(id)obj
+- (CLLocation *)getObjectLocation:(id)obj
 {
     if (obj && [obj isKindOfClass:NSArray.class])
     {
@@ -124,7 +124,7 @@
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)obj
+- (OAPointDescription *)getObjectName:(id)obj
 {
     if (obj && [obj isKindOfClass:NSArray.class])
     {
@@ -139,7 +139,7 @@
     return  nil;
 }
 
-- (BOOL) showMenuAction:(id)object
+- (BOOL)showMenuAction:(id)object
 {
     if ([object isKindOfClass:SelectedMapObject.class])
     {
@@ -171,12 +171,12 @@
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+- (BOOL)runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }
 
-- (int64_t) getSelectionPointOrder:(id)selectedObject
+- (int64_t)getSelectionPointOrder:(id)selectedObject
 {
     return 0;
 }
@@ -186,7 +186,7 @@
     return NO;
 }
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj
 {
     if (obj && [obj isKindOfClass:NSArray.class])
     {
@@ -216,7 +216,7 @@
     return nil;
 }
 
-- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+- (OATargetPoint *)getTargetPointCpp:(const void *)obj
 {
     return nil;
 }

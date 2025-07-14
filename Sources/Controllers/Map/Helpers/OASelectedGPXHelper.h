@@ -25,9 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isShowingAnyGpxFiles;
 - (void)clearAllGpxFilesToShow:(BOOL) backupSelection;
 - (void)restoreSelectedGpxFiles;
-- (nullable NSString *) getSelectedGPXFilePath:(NSString *)fileName;
-- (NSMutableDictionary<NSString *,OASGpxFile *> *) getSelectedGPXFiles;
-- (OASWptPt *) getVisibleWayPointByLat:(double)lat lon:(double)lon;
+- (nullable NSString *)getSelectedGPXFilePath:(NSString *)fileName;
+- (NSArray<OASGpxFile *> *)getSelectedGPXFiles;
+- (OASWptPt *)getVisibleWayPointByLat:(double)lat lon:(double)lon;
 
 + (void)renameVisibleTrack:(NSString *)oldPath newPath:(NSString *) newPath;
 

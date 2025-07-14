@@ -14,7 +14,7 @@
 
 #pragma mark - OAContextMenuProvider
 
-- (BOOL) showMenuAction:(id)object
+- (BOOL)showMenuAction:(id)object
 {
     SelectedMapObject *selectedMapObject = (SelectedMapObject *)object;
     if ([selectedMapObject.object isKindOfClass:ClickableWay.class])
@@ -27,12 +27,12 @@
     return NO;
 }
 
-- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+- (BOOL)runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
 }
 
-- (int64_t) getSelectionPointOrder:(id)selectedObject
+- (int64_t)getSelectionPointOrder:(id)selectedObject
 {
     return 0;
 }
@@ -42,7 +42,7 @@
     return NO;
 }
 
-- (CLLocation *) getObjectLocation:(id)obj
+- (CLLocation *)getObjectLocation:(id)obj
 {
     if ([obj isKindOfClass:ClickableWay.class])
     {
@@ -53,7 +53,7 @@
     return  nil;
 }
 
-- (OAPointDescription *) getObjectName:(id)obj
+- (OAPointDescription *)getObjectName:(id)obj
 {
     if ([obj isKindOfClass:ClickableWay.class])
     {
@@ -64,12 +64,12 @@
     return nil;
 }
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj
 {
     return nil;
 }
 
-- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+- (OATargetPoint *)getTargetPointCpp:(const void *)obj
 {
     return nil;
 }

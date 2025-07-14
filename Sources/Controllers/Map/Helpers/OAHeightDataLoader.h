@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAHeightDataLoader: NSObject
 
-- (NSMutableArray<OASWptPt *> * _Nullable) loadHeightDataAsWaypoints:(int64_t)osmId bbox31:(OASKQuadRect *)bbox31;
+- (NSMutableArray<OASWptPt *> * _Nullable)loadHeightDataAsWaypoints:(int64_t)osmId bbox31:(OASKQuadRect *)bbox31;
 
 @end
 

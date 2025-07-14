@@ -26,7 +26,7 @@
     OAClickableWayMenuProvider *_activator;
 }
 
-- (instancetype) init
+- (instancetype)init
 {
     self = [super init];
     if (self)
@@ -36,7 +36,7 @@
     return self;
 }
 
-- (void) commonInit
+- (void)commonInit
 {
     _clickableTags = [NSSet setWithArray:@[
         @"piste:type",
@@ -80,24 +80,24 @@
     _activator = [[OAClickableWayMenuProvider alloc] init];
 }
 
-- (OAClickableWayMenuProvider *) getContextMenuProvider
+- (OAClickableWayMenuProvider *)getContextMenuProvider
 {
     return _activator;
 }
 
-- (BOOL) isClickableWay:(OARenderedObject *)renderedObject
+- (BOOL)isClickableWay:(OARenderedObject *)renderedObject
 {
     NSString *name = [renderedObject name];
     return renderedObject.x.count > 1 && [self isClickableWayTags:name tags:renderedObject.tags]; // v1
 }
 
-- (BOOL) isClickableWay:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
+- (BOOL)isClickableWay:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
 {
     NSString *name = obfMapObject->getCaptionInNativeLanguage().toNSString();
     return obfMapObject->points31.size() > 1 && [self isClickableWayTags:name tags:tags]; // v2 with prefetched tags
 }
 
-- (ClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon renderedObject:(OARenderedObject *)renderedObject
+- (ClickableWay *)loadClickableWay:(CLLocation *)selectedLatLon renderedObject:(OARenderedObject *)renderedObject
 {
     uint64_t osmId = [ObfConstants getOsmId:renderedObject.obfId >> AMENITY_ID_RIGHT_SHIFT];
     MutableOrderedDictionary<NSString *,NSString *> *tags = renderedObject.tags;
@@ -108,7 +108,7 @@
     return [self loadClickableWay:selectedLatLon bbox:bbox xPoints:xPoints yPoints:yPoints osmId:osmId name:name tags:tags];
 }
 
-- (ClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
+- (ClickableWay *)loadClickableWay:(CLLocation *)selectedLatLon obfMapObject:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
 {
     if (const auto binaryMapObject = std::dynamic_pointer_cast<const OsmAnd::BinaryMapObject>(obfMapObject))
     {
@@ -130,7 +130,7 @@
     return nil;
 }
 
-- (ClickableWay *) loadClickableWay:(CLLocation *)selectedLatLon bbox:(OASKQuadRect *)bbox xPoints:(NSMutableArray<NSNumber *> *)xPoints yPoints:(NSMutableArray<NSNumber *> *)yPoints osmId:(uint64_t)osmId name:(NSString *)name tags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
+- (ClickableWay *)loadClickableWay:(CLLocation *)selectedLatLon bbox:(OASKQuadRect *)bbox xPoints:(NSMutableArray<NSNumber *> *)xPoints yPoints:(NSMutableArray<NSNumber *> *)yPoints osmId:(uint64_t)osmId name:(NSString *)name tags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
 {
     
     OASGpxFile *gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
@@ -177,7 +177,7 @@
     return [[ClickableWay alloc] initWithGpxFile:gpxFile osmId:osmId name:name selectedLatLon:selectedLatLon bbox:bbox];
 }
 
-- (NSString *) getGpxColorByTags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
+- (NSString *)getGpxColorByTags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
 {
     for (NSString *key in _clickableTags)
     {
@@ -196,7 +196,7 @@
     return nil;
 }
 
-- (OASKQuadRect *) calcSearchQuadRect:(NSMutableArray<NSNumber *> *)xPoints yPoints:(NSMutableArray<NSNumber *> *)yPoints
+- (OASKQuadRect *)calcSearchQuadRect:(NSMutableArray<NSNumber *> *)xPoints yPoints:(NSMutableArray<NSNumber *> *)yPoints
 {
     OASKQuadRect *bbox = [[OASKQuadRect alloc] init];
     for (int i = 0; i < min(xPoints.count, yPoints.count); i++)
@@ -210,7 +210,7 @@
     return bbox;
 }
 
-- (void) expandBbox:(OASKQuadRect *)bbox left:(double)left top:(double)top right:(double)right bottom:(double)bottom
+- (void)expandBbox:(OASKQuadRect *)bbox left:(double)left top:(double)top right:(double)right bottom:(double)bottom
 {
     BOOL hasInitialState = bbox.left == 0 && bbox.top == 0 && bbox.right == 0 && bbox.bottom == 0;
     if (hasInitialState)
@@ -229,7 +229,7 @@
     }
 }
 
-- (BOOL) isClickableWayTags:(NSString *)name tags:(NSDictionary<NSString *, NSString *> *)tags
+- (BOOL)isClickableWayTags:(NSString *)name tags:(NSDictionary<NSString *, NSString *> *)tags
 {
     for (NSString *forbiddenKey in _forbiddenTags)
     {

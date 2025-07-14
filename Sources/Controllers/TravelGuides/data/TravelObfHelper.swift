@@ -864,10 +864,8 @@ final class TravelObfHelper : NSObject {
         let callback = OpenTrackMenuDelegate()
         callback.gpxFileName = gpxFileName
         callback.latLon = latLon
-        
         readGpxFile(article: article, callback: callback)
     }
-    
 }
 
 final private class OpenTrackMenuDelegate: GpxReadDelegate {

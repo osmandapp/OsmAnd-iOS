@@ -64,7 +64,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
     return self;
 }
 
-- (NSMutableArray<OASWptPt *> *) loadHeightDataAsWaypoints:(int64_t)osmId bbox31:(OASKQuadRect *)bbox31
+- (NSMutableArray<OASWptPt *> *)loadHeightDataAsWaypoints:(int64_t)osmId bbox31:(OASKQuadRect *)bbox31
 {
     _results.clear();
     _osmId = osmId;
@@ -96,7 +96,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
     return nil;
 }
 
-- (BOOL) loadRouteDataObjects:(OASKQuadRect *)bbox31 results:(std::map<int64_t, RouteDataObject *>&)results
+- (BOOL)loadRouteDataObjects:(OASKQuadRect *)bbox31 results:(std::map<int64_t, RouteDataObject *>&)results
 {
     int loaded = 0;
     
@@ -120,7 +120,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
     return loaded > 0;
 }
 
-- (int) loadRouteDataObjects:(int)x y:(int)y results:(std::map<int64_t, RouteDataObject *>&)results
+- (int)loadRouteDataObjects:(int)x y:(int)y results:(std::map<int64_t, RouteDataObject *>&)results
 {
     int loaded = 0;
     std::unordered_set<int64_t> deletedIds;
@@ -193,12 +193,12 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
     return loaded;
 }
 
-- (BOOL) publish:(RouteDataObject *)routeDataObject
+- (BOOL)publish:(RouteDataObject *)routeDataObject
 {
     return routeDataObject != nullptr && (routeDataObject->getId() >> SHIFT_ID == _osmId || routeDataObject->getId() >> SHIFT_ID == _osmId || routeDataObject->getId() >> SHIFT_ID == 14694435 );
 }
 
-- (BOOL) isCancelled
+- (BOOL)isCancelled
 {
     return _results.count(_osmId) > 0;
 }

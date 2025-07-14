@@ -12,7 +12,7 @@
 
 @interface OAContextMenuLayer(cpp)
 
-- (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker;
+- (std::shared_ptr<OsmAnd::MapMarker>)getContextPinMarker;
 
 - (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;
 

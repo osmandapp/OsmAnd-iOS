@@ -83,7 +83,7 @@ final class TravelGpx : TravelArticle {
             initShortLinkTiles(shortLinkTiles: shortLinkTiles)
         }
     
-        if activityType == nil || activityType!.isEmpty {
+        if activityType?.isEmpty ?? true {
             if let key = amenity.getAdditionalInfoKeys().first(where: { $0.hasPrefix(Self.ROUTE_ACTIVITY_TYPE) }) {
                 activityType = amenity.getTagContent(key)
             }

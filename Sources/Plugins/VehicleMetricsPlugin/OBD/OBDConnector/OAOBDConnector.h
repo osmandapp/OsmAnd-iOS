@@ -8,9 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAOBDConnector : NSObject
 @property (nonatomic, copy, nullable) void (^disconnectHandler)(void);
 @property (nonatomic, copy, nullable) void (^failureHandler)(void);
+
+- (instancetype)initWithIsSimulator:(BOOL)isSimulator;
 
 @end
 
@@ -19,3 +23,5 @@
 
 @interface OAOkioSink : NSObject
 @end
+
+NS_ASSUME_NONNULL_END

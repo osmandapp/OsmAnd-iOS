@@ -269,31 +269,19 @@
         for (NSInteger i = 0; i < _shieldStackView.subviews.count; i++)
         {
             UIView *shieldView = _shieldStackView.subviews[i];
-            UIView *view = shieldView.subviews.firstObject;
+            UIImageView *view = shieldView.subviews.firstObject;
             
-            if (!view || ![view isKindOfClass:[UIImageView class]])
+            if (![view isKindOfClass:[UIImageView class]])
                 continue;
             
-            UIImageView *imageView = (UIImageView *)view;
             CGFloat totalWidth = 0;
+            CGFloat width = [self getWidthFor:view.image];
             
-            NSLayoutConstraint *shieldWidthConstraint;
-            for (NSInteger j = 0; j < imageView.constraints.count; j++)
-            {
-                NSLayoutConstraint *constraint = imageView.constraints[j];
-                if (constraint.firstAttribute == NSLayoutAttributeWidth)
-                {
-                    shieldWidthConstraint = constraint;
-                    totalWidth += constraint.constant;
-                    if (i < _shieldStackView.subviews.count - 1)
-                        totalWidth += _shieldStackView.spacing;
-                }
-            }
+            totalWidth += width;
+            if (i < _shieldStackView.subviews.count - 1)
+                totalWidth += _shieldStackView.spacing;
             
-            if (!shieldWidthConstraint)
-                continue;
-
-            if (usedWidth + totalWidth <= containerWidth - 2 * shieldWidthConstraint.constant)
+            if (usedWidth + totalWidth <= containerWidth - 3 * width)
             {
                 shieldView.hidden = NO;
                 usedWidth += totalWidth;

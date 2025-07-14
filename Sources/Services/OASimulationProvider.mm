@@ -67,18 +67,30 @@
     {
         auto road = _roads[i];
         BOOL firstRoad = i == _currentRoad;
-        int increment = road->getStartPointIndex() < road->getEndPointIndex() ? +1 : -1;
-        for (int j = firstRoad ? _currentSegment : (road->getStartPointIndex() + increment);
-             increment > 0 ? j <= road->getEndPointIndex() : j >= road->getEndPointIndex();
-             j += increment)
+        BOOL plus = road->getStartPointIndex() < road->getEndPointIndex();
+        int increment = plus ? +1 : -1;
+        int start = road->getStartPointIndex();
+        if (firstRoad)
+        {
+                // first segment is [currentSegment - 1, currentSegment]
+                if (plus)
+                {
+                        start = _currentSegment - increment;
+                }
+                else
+                {
+                        start = _currentSegment;
+                }
+        }
+        for (int j = start; j != road->getEndPointIndex(); j += increment)
         {
             auto obj = road->object;
-            int st31x = obj->pointsX[j - increment];
-            int st31y = obj->pointsY[j - increment];
-            int end31x = obj->pointsX[j];
-            int end31y = obj->pointsY[j];
-            BOOL last = i == _roads.size() - 1 && j == road->getEndPointIndex();
-            BOOL first = firstRoad && j == _currentSegment;
+            int st31x = obj->getPoint31XTile(j);
+            int st31y = obj->getPoint31YTile(j);
+            int end31x = obj->getPoint31XTile(j + increment);
+            int end31y = obj->getPoint31YTile(j + increment);
+            BOOL last = i == _roads.size() - 1 && j == road->getEndPointIndex() - increment;
+            BOOL first = firstRoad && j == start;
             if (first)
             {
                 st31x = _currentPoint.first;
@@ -98,7 +110,6 @@
                     NSLog(@"proceedMeters zero x or y (%d,%d) (%s)", prx, pry, road->toString().c_str());
                     return -1;
                 }
-                
                 *l = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(OsmAnd::Utilities::get31LatitudeY(pry), OsmAnd::Utilities::get31LongitudeX(prx)) altitude:(*l).altitude horizontalAccuracy:0 verticalAccuracy:(*l).verticalAccuracy course:(*l).course speed:(*l).speed timestamp:(*l).timestamp];
                 return MAX(meters - dd, 0);
             }

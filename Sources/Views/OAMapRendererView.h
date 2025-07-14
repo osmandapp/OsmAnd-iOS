@@ -32,6 +32,9 @@ static const int kObfRasterLayer = 0;
 static const int kObfSymbolSection = 1;
 static const int kPOISymbolSection = 1000;
 static const int kFavoritesSymbolSection = 1001;
+static const int kRulerByTapSymbolSection = 1002;
+static const int kDystanceMarkersSymbolSection = 1003;
+static const int kPointMarkersSymbolSection = 1004;
 
 static const float kMinAllowedElevationAngle = 10.0f;
 
@@ -99,6 +102,7 @@ struct CLLocationCoordinate2D;
 - (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (void)addTiledSymbolsProvider:(int)subsectionIndex provider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
+- (void)addKeyedSymbolsProvider:(int)subsectionIndex provider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
 - (bool)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (bool)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
 - (void)removeAllSymbolsProviders;

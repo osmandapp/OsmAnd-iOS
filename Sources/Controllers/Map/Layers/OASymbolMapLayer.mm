@@ -7,7 +7,6 @@
 //
 
 #import "OASymbolMapLayer.h"
-#import "OASymbolMapLayer+cpp.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAColors.h"

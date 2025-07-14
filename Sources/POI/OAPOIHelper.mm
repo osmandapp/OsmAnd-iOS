@@ -7,7 +7,6 @@
 //
 
 #import "OAPOIHelper.h"
-#import "OAPOIHelper+cpp.h"
 #import "OAPOI.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
@@ -29,6 +28,7 @@
 #import "OAMapRendererView.h"
 #import "Localization.h"
 #import "OANativeUtilities.h"
+#import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/CommonTypes.h>
@@ -45,6 +45,9 @@
 #include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 #include <OsmAndCore/ICU.h>
+#include <OsmAndCore.h>
+#include <OsmAndCore/Data/Amenity.h>
+#include <OsmAndCore/Data/MapObject.h>
 
 int const kSearchLimitRaw = 5000;
 int const kRadiusKmToMetersKoef = 1200.0;

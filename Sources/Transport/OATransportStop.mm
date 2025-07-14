@@ -7,11 +7,11 @@
 //
 
 #import "OATransportStop.h"
-#import "OATransportStop+cpp.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
 #import "OAPOIHelper.h"
 
+#include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Utilities.h>
 
 @interface OATransportStop()

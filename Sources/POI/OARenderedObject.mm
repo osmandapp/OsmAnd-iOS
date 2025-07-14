@@ -7,10 +7,13 @@
 //
 
 #import "OARenderedObject.h"
-#import "OARenderedObject+cpp.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/PointsAndAreas.h>
+#include <OsmAndCore/Data/ObfMapObject.h>
+#include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/Utilities.h>
 

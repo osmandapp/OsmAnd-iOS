@@ -7,10 +7,11 @@
 //
 
 #import "OARouteKey.h"
-#import "OARouteKey+cpp.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
+
+#import <OsmAndCore/NetworkRouteContext.h>
 
 static NSDictionary<NSString *, NSString *> *SHIELD_TO_OSMC = @{
     @"shield_bg": @"osmc_background",

@@ -55,7 +55,6 @@
 #import "OATopIndexFilter.h"
 #import "OAResourcesUIHelper.h"
 #import "OAMapSelectionHelper.h"
-#import "OAClickableWayHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

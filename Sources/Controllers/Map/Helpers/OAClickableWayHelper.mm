@@ -7,7 +7,6 @@
 //
 
 #import "OAClickableWayHelper.h"
-#import "OAClickableWayHelper+cpp.h"
 #import "OARenderedObject.h"
 #import "QuadRect.h"
 #import "OAAppVersion.h"

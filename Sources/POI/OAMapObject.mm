@@ -7,8 +7,9 @@
 //
 
 #import "OAMapObject.h"
-#import "OAMapObject+cpp.h"
 #import "OAUtilities.h"
+
+#include <OsmAndCore/Utilities.h>
 
 @implementation OAMapObject
 {

@@ -7,7 +7,6 @@
 //
 
 #import "OAContextMenuLayer.h"
-#import "OAContextMenuLayer+cpp.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"

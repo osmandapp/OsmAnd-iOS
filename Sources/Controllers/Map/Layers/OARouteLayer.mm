@@ -397,7 +397,7 @@ struct DrawPathData
         else
         {
             NSNumber *colorVal = [self getParamFromAttr:@"color"];
-            BOOL hasStyleColor = (colorVal && colorVal.intValue != -1 && colorVal.intValue == _routeLineColor)
+            BOOL hasStyleColor = (colorVal && colorVal.longValue != -1 && colorVal.longValue == _routeLineColor)
                 || _routeLineColor == kDefaultRouteLineDayColor
                 || _routeLineColor == kDefaultRouteLineNightColor;
             
@@ -498,9 +498,9 @@ struct DrawPathData
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     NSNumber *colorVal = [self getParamFromAttr:forTurnArrows ? @"color_3" : @"color"];
-    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
+    BOOL hasStyleColor = colorVal && colorVal.longValue != -1;
     return hasStyleColor
-            ? colorVal.intValue
+            ? colorVal.longValue
             : isNight
                     ? forTurnArrows ? kDefaultTurnArrowsNightColor : kDefaultRouteLineNightColor
                     : forTurnArrows ? kDefaultTurnArrowsDayColor : kDefaultRouteLineDayColor;
@@ -509,15 +509,15 @@ struct DrawPathData
 - (NSInteger)getWalkDefaultColor
 {
     NSNumber *colorVal = _walkAttributes[@"color"];
-    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
-    return hasStyleColor ? colorVal.intValue : kDefaultWalkingRouteLineColor;
+    BOOL hasStyleColor = colorVal && colorVal.longValue != -1;
+    return hasStyleColor ? colorVal.longValue : kDefaultWalkingRouteLineColor;
 }
 
 - (NSInteger)getWalkPTDefaultColor
 {
     NSNumber *colorVal = _walkPTAttributes[@"color"];
-    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
-    return hasStyleColor ? colorVal.intValue : kDefaultWalkingRouteLineColor;
+    BOOL hasStyleColor = colorVal && colorVal.longValue != -1;
+    return hasStyleColor ? colorVal.longValue : kDefaultWalkingRouteLineColor;
 }
 
 - (OAPreviewRouteLineInfo *)getPreviewRouteLineInfo

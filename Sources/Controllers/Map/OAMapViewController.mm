@@ -3827,13 +3827,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (_mapPresentationEnvironment)
         {
             NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
-            QHash<QString, int> renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
-            QHashIterator<QString, int> it(renderingAttrs);
+            QHash<QString, int64_t> renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
+            QHashIterator<QString, int64_t> it(renderingAttrs);
             while (it.hasNext()) {
                 it.next();
                 NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
                 NSNumber *value = @(it.value());
-                if (value.intValue == -1)
+                if (value.longValue == -1)
                     continue;
                 
                 [result setObject:value forKey:key];

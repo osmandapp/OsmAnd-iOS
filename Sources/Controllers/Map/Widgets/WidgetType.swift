@@ -214,7 +214,7 @@ class WidgetType: NSObject {
 
 extension WidgetType {
     // Left panel
-    static let nextTurn = WidgetType(ordinal: 1, id: "next_turn", title: localizedString("map_widget_next_turn"), descr: localizedString("next_turn_widget_desc"), iconName: "widget_next_turn", group: .routeManeuvers, verticalGroup: .routeGuidance, defaultPanel: .leftPanel)
+    static let nextTurn = WidgetType(ordinal: 1, id: "next_turn", title: localizedString("map_widget_next_turn"), descr: localizedString("next_turn_widget_desc"), iconName: "widget_next_turn", group: .routeManeuvers, verticalGroup: .routeGuidance, defaultPanel: .topPanel)
     
     static let smallNextTurn = WidgetType(ordinal: 2, id: "next_turn_small", title: localizedString("map_widget_next_turn_small"), descr: localizedString("next_turn_widget_desc"), iconName: "widget_next_turn_small", group: .routeManeuvers, defaultPanel: .leftPanel)
     static let secondNextTurn = WidgetType(ordinal: 3, id: "next_next_turn", title: localizedString("map_widget_next_next_turn"), descr: localizedString("second_next_turn_widget_desc"), iconName: "widget_second_next_turn", group: .routeManeuvers, verticalGroup: .routeGuidance, defaultPanel: .leftPanel)

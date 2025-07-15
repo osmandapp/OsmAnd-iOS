@@ -3574,4 +3574,6 @@
 "import_profile_descr" = "För att importera en profil, tryck på den nödvändiga filen (*.osf) i alla program och välj \"Kopiera till OsmAnd Maps\"";
 "change_route_type_before" = "Ändra färdvägstyp före denna punkt";
 "change_route_type_after" = "Ändra färdvägstyp efter denna punkt";
-"next_seg_descr" = "The next segment will be recalculated using selected profile.";
+"next_seg_descr" = "Nästa segment beräknas med vald profil.";
+"whole_track_descr" = "Hela spåret beräknas om med den valda profilen.";
+"next_segs_recalc_descr" = "Alla kommande delar kommer bli omräknad med den valda profilen";

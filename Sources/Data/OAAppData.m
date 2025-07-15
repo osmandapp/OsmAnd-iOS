@@ -178,7 +178,7 @@
     return self;
 }
 
-- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode
+- (void)setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode
 {
     @synchronized (_lock)
     {
@@ -205,9 +205,82 @@
         else if ([key isEqualToString:@"travelGuidesImagesDownloadMode"])
         {
             [_travelGuidesImagesDownloadModeProfile setValueFromString:value appMode:mode];
+        } else {
+          //  [self configureStringValue:value forKey:key mode:mode];
         }
     }
 }
+
+static NSArray<NSString *> *excludeKeys = @[
+    @"drawer_items_default",
+    @"context_menu_items",
+    @"collapsed_configure_map_categories",
+    @"trip_recording_Y_axis",
+    @"drawer_items",
+    @"configure_map_items"
+];
+
+- (void)configureStringValue:(NSString *)strValue
+                      forKey:(NSString *)key
+                        mode:(OAApplicationMode *)mode
+{
+    if (strValue.length == 0) return;
+
+    NSString *modeKey = [NSString stringWithFormat:@"%@_%@", key, mode.stringKey];
+    NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+
+    NSString *lowerStr = strValue.lowercaseString;
+    if ([lowerStr isEqualToString:@"true"]) {
+        [defaults setBool:YES forKey:modeKey];
+        return;
+    }
+    if ([lowerStr isEqualToString:@"false"]) {
+        [defaults setBool:NO forKey:modeKey];
+        return;
+    }
+
+    // Try integer
+    NSInteger intValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:strValue];
+    if ([scanner scanInteger:&intValue] && scanner.isAtEnd) {
+        [defaults setInteger:intValue forKey:modeKey];
+        return;
+    }
+
+    // Try double
+    double doubleValue = 0.0;
+    scanner = [NSScanner scannerWithString:strValue];
+    if ([scanner scanDouble:&doubleValue] && scanner.isAtEnd) {
+        [defaults setDouble:doubleValue forKey:modeKey];
+        return;
+    }
+
+    // Try nested array ("a,b;c,d")
+    if ([strValue containsString:@";"])
+    {
+        NSMutableArray<NSArray<NSString *> *> *nestedArray = [NSMutableArray array];
+        for (NSString *subStr in [strValue componentsSeparatedByString:@";"])
+        {
+            if (subStr.length > 0)
+            {
+                [nestedArray addObject:[subStr componentsSeparatedByString:@","]];
+            }
+        }
+        [defaults setObject:nestedArray forKey:modeKey];
+        return;
+    }
+
+    // Try flat array ("a,b,c")
+    if ([strValue containsString:@","])
+    {
+        NSArray<NSString *> *array = [strValue componentsSeparatedByString:@","];
+        [defaults setObject:array forKey:modeKey];
+        return;
+    }
+
+    NSLog(@"%@: %@", key, strValue);
+}
+
 
 - (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode
 {

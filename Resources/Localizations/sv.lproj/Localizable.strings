@@ -3485,3 +3485,14 @@
 "obd_vin_desc" = "VIN-kod över OBD";
 "battery_widget_level_privacy_ios_desc" = "På grund av iOS integritetsskäl kan widgeten endast visa batterinivån i 5% steg, till exempel 35%, 60% eller 85%";
 "help_article_personal_tracks_smart_folder_name" = "Smart mapp (filter)";
+"testFlight" = "TestFlight";
+"obd_vin" = "Chassinummer";
+"route_guidance_desc" = "Ger ruttvägledning i realtid, inklusive avstånd till nästa sväng, vägnamn, aktuellt gatunamn och körfältsinformation. Widgetar är aktiva under navigering.";
+"route_guidance" = "Vägledning";
+"obd_widget_group" = "Fordonsmetri";
+"obd_rpm_desc" = "Visar fordonets varvräknare via OBD-sensorn";
+"obd_fuel_level_desc" = "Visar fordonets bränslenivå över OBD-sensorn";
+"obd_fuel_left_distance_desc" = "Visar avstånd fordon kan köra på vänster bränslenivå över OBD sensor";
+"obd_fuel_type_desc" = "Visar fordonsbränsle typ över OBD sensor";
+"obd_air_intake_temp" = "Inloppstemperatur";
+"obd_ambient_air_temp" = "Omgivningstemperatur:";

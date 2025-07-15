@@ -1640,7 +1640,11 @@ static const NSInteger kColorsSection = 1;
 
 - (void)configureGPXWith:(OASGpxFile *)gpxFile
 {
-    [gpxFile setWidthWidth:self.gpx.width];
+    if (self.gpx.width.length > 0)
+    {
+        [gpxFile setWidthWidth:self.gpx.width];
+    }
+    
     [gpxFile setShowArrowsShowArrows:self.gpx.showArrows];
     [gpxFile setShowStartFinishShowStartFinish:self.gpx.showStartFinish];
     // setVerticalExaggerationScale -> setAdditionalExaggerationAdditionalExaggeration (SharedLib)
@@ -1649,13 +1653,24 @@ static const NSInteger kColorsSection = 1;
     [gpxFile set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)self.gpx.visualization3dByType]];
     [gpxFile set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)_backupGpxItem.visualization3dWallColorType]];
     [gpxFile set3DLinePositionTypeTrackLinePositionType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)self.gpx.visualization3dPositionType]];
-    [gpxFile setColoringTypeColoringType:self.gpx.coloringType];
-    OASInt *color = [[OASInt alloc] initWithInt:(int)self.gpx.color];
-    [gpxFile setColorColor:color];
+    if (self.gpx.coloringType.length > 0)
+    {
+        [gpxFile setColoringTypeColoringType:self.gpx.coloringType];
+    }
+   
+    if (self.gpx.color != 0)
+    {
+        OASInt *color = [[OASInt alloc] initWithInt:(int)self.gpx.color];
+        [gpxFile setColorColor:color];
+    }
     
     [gpxFile setSplitIntervalSplitInterval:self.gpx.splitInterval];
     [gpxFile setSplitTypeGpxSplitType:[OAGPXDatabase splitTypeNameByValue:self.gpx.splitType]];
     [gpxFile setJoinSegmentIsJoinSegment:self.gpx.joinSegments];
+    
+    if (self.gpx.gradientPaletteName && self.gpx.gradientPaletteName.length > 0) {
+        [gpxFile setGradientColorPaletteGradientColorPaletteName:self.gpx.gradientPaletteName];
+    }
 }
 
 #pragma mark - UITableViewDataSource

@@ -3505,4 +3505,12 @@
 "download_persian_voice_alert_title" = "Ladda ner persisk röstfil:";
 "download_persian_voice_alert_descr_ios" = "Inställningar -> Tillgänglighet -> Spoken innehåll -> Röster -> Persiska -> Dariush";
 "download_persian_voice_alert_descr_macos" = "Inställningar -> Tillgänglighet -> Spoken innehåll -> Systemröst -> Hantera röster -> persiska -> Dariush";
-"rendering_attr_padusDisplayMode_name" = "Offentliga marker display läge";
+"rendering_attr_padusDisplayMode_name" = "Visningsläge för allmän mark";
+"rendering_attr_padusDisplayMode_description" = "Efter åtkomsttyp eller administratörsnamn";
+"rendering_value_access_name" = "Efter åtkomsttyp";
+"rendering_value_managerName_name" = "Efter chefens namn";
+"rendering_attr_padusHideBoundaries_name" = "Dölj gränser för offentlig mark";
+"rendering_attr_padusHideBoundaries_description" = "Dölj gränser för offentlig mark men lämna områden";
+"shared_string_subfolders_in" = "Undermappar i";
+"shared_string_sorted_by" = "sorteras efter:";
+"shared_string_ellipsis" = "..…";

@@ -3495,4 +3495,14 @@
 "obd_fuel_left_distance_desc" = "Visar avstånd fordon kan köra på vänster bränslenivå över OBD sensor";
 "obd_fuel_type_desc" = "Visar fordonsbränsle typ över OBD sensor";
 "obd_air_intake_temp" = "Inloppstemperatur";
-"obd_ambient_air_temp" = "Omgivningstemperatur:";
+"obd_ambient_air_temp" = "Omgivningstemperatur";
+"obd_engine_coolant_temp" = "Kylvätsketemperatur";
+"obd_fuel_consumption_rate_desc" = "Visar fordons bränsleförbrukningshastighet baserat på OBD en plats";
+"shared_string_road_exit" = "Avfart";
+"route_descr_destination" = "Destination";
+"weather_source_GFS_description" = "Globala prognossystemet från National Centers for Environmental Prediction";
+"shared_string_symbol" = "Symbol";
+"download_persian_voice_alert_title" = "Ladda ner persisk röstfil:";
+"download_persian_voice_alert_descr_ios" = "Inställningar -> Tillgänglighet -> Spoken innehåll -> Röster -> Persiska -> Dariush";
+"download_persian_voice_alert_descr_macos" = "Inställningar -> Tillgänglighet -> Spoken innehåll -> Systemröst -> Hantera röster -> persiska -> Dariush";
+"rendering_attr_padusDisplayMode_name" = "Offentliga marker display läge";

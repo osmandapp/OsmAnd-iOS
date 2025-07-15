@@ -3570,4 +3570,5 @@
 "ltr_or_rtl_combine_via_per" = "%@ per %@";
 "ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 "after_tapping_done" = "När du trycker på Done förloras raderade profiler helt.";
-"profile_sett_descr" = "Affect selected application profile";
+"profile_sett_descr" = "Påverka vald applikationsprofil";
+"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";

@@ -3577,4 +3577,8 @@
 "next_seg_descr" = "Nästa segment beräknas med vald profil.";
 "whole_track_descr" = "Hela spåret beräknas om med den valda profilen.";
 "next_segs_recalc_descr" = "Alla kommande delar kommer bli omräknad med den valda profilen";
-"prev_segs_recalc_descr" = "Alla tidigare segment kommer att beräknas om med den valda profilen.";
+"prev_segs_recalc_descr" = "Alla tidigare segment kommer att beräknas om med den valda profilen";
+"new_smart_folder" = "Ny smart mapp";
+"no_matched_tracks" = "Inga matchade spår";
+"no_matched_tracks_descr" = "Dina filterkriterier stämde inte överens med några av dina spår";
+"empty_smart_folder_descr" = "Alla motsvarande spår kommer automatiskt visas här";

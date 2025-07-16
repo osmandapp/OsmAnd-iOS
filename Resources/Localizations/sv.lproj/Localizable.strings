@@ -3622,4 +3622,6 @@
 "quick_action_replace_dest_descr" = "Tryck på denna åtgärdsknapp sätter destinationen till kartcentpunkten, kasserar den tidigare fastställda destinationen (om någon).";
 "quick_action_autozoom_descr" = "Tryck på den här åtgärdsknappen slår på / av map auto zoomläge enligt aktuell hastighet.";
 "quick_action_destination" = "Destination";
-"cannot_add_marker_desc" = "Ta bort en riktning åtminstone och retry";
+"cannot_add_marker_desc" = "Ta bort minst en riktning och försök igen";
+"cannot_add_destination" = "Kan inte lägga till riktning";
+"cubic_m" = "m³";

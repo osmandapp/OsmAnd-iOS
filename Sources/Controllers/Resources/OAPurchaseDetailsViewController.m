@@ -113,8 +113,8 @@
 
 - (void)registerCells
 {
-    for (NSString *identifier in @[[OAValueTableViewCell getCellIdentifier],
-                                   [OARightIconTableViewCell getCellIdentifier],
+    for (NSString *identifier in @[[OAValueTableViewCell reuseIdentifier],
+                                   [OARightIconTableViewCell reuseIdentifier],
                                    [OATitleDescriptionBigIconCell reuseIdentifier]])
         [self addCell:identifier];
 }

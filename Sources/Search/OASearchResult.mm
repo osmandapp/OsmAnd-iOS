@@ -9,7 +9,6 @@
 //  git revision aea6f3ff8842b91fda4b471e24015e4142c52d13
 
 #import "OASearchResult.h"
-#import "OASearchResult+cpp.h"
 #import "OASearchPhrase.h"
 
 #import "OAStreet.h"
@@ -23,6 +22,8 @@
 #import "OASearchCoreFactory.h"
 #import "OAArabicNormalizer.h"
 
+#include <OsmAndCore/Data/Amenity.h>
+#include <OsmAndCore/IFavoriteLocation.h>
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <OsmAndCore/ICU.h>

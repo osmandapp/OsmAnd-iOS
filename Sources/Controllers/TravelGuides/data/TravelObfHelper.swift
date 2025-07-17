@@ -18,6 +18,7 @@ final class TravelObfHelper : NSObject {
     let ARTICLE_SEARCH_RADIUS = 50 * 1000
     let SAVED_ARTICLE_SEARCH_RADIUS = 30 * 1000
     let MAX_SEARCH_RADIUS = 800 * 1000
+    let TRAVEL_GPX_SEARCH_RADIUS = 10 * 1000 // Ref: POI_SEARCH_POINTS_INTERVAL_M in tools
     
     let TRAVEL_GPX_CONVERT_FIRST_LETTER: Character = "A"
     let TRAVEL_GPX_CONVERT_FIRST_DIST = 5000
@@ -109,6 +110,10 @@ final class TravelObfHelper : NSObject {
         return popularArticles
     }
     
+    func isTravelGpxTags(_ tags: [String: String]) -> Bool {
+        return tags[ROUTE_ID] != nil && tags[ROUTE_TAG] == "segment" || tags[TravelGpx.ROUTE_TYPE] != nil
+    }
+    
     func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {
         var foundAmenities = [OAFoundAmenity]()
         var searchRadius = ARTICLE_SEARCH_RADIUS
@@ -162,11 +167,25 @@ final class TravelObfHelper : NSObject {
         return results
     }
     
+    func searchFilterShouldAccept(_ subcategory: String?, filterSubcategories: [String]?) -> Bool {
+        guard let subcategory, let filterSubcategories else { return false }
+        
+        for filter in filterSubcategories {
+            if filter == subcategory {
+                return true
+            }
+            if filter == ROUTE_TRACK && subcategory.hasPrefix(ROUTES_PREFIX) {
+                return true // include routes:routes_xxx with routes:route_track filter
+            }
+        }
+        return false
+    }
+    
     func cacheTravelArticles(file: String?, amenity: OAPOI, lang: String?, readPoints: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
         var articles: [String: TravelArticle]? = [:]
         guard let file else {return nil}
-        if amenity.subType == ROUTE_TRACK {
+        if amenity.isRouteTrack() {
             articles = readRoutePoint(file: file, amenity: amenity)
         } else {
             articles = readArticles(file: file, amenity: amenity)
@@ -190,7 +209,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func getTravelGpx(file: String?, amenity: OAPOI) -> TravelGpx {
-        var travelGpx = TravelGpx()
+        let travelGpx = TravelGpx(amenity: amenity)
         travelGpx.file = file
         let title = amenity.name
         
@@ -200,7 +219,7 @@ final class TravelObfHelper : NSObject {
 
         travelGpx.routeId = amenity.getTagContent(ROUTE_ID)
         travelGpx.user = amenity.getTagContent(TravelGpx.USER)
-        travelGpx.activityType = amenity.getTagContent(TravelGpx.ACTIVITY_TYPE)
+        travelGpx.activityType = amenity.getTagContent(TravelGpx.ROUTE_ACTIVITY_TYPE)
         travelGpx.ref = amenity.getRef()
         
         travelGpx.totalDistance = Float(amenity.getTagContent(TravelGpx.DISTANCE)) ?? 0
@@ -210,7 +229,7 @@ final class TravelObfHelper : NSObject {
         travelGpx.minElevation = Double(amenity.getTagContent(TravelGpx.MIN_ELEVATION)) ?? 0
         travelGpx.avgElevation = Double(amenity.getTagContent(TravelGpx.AVERAGE_ELEVATION)) ?? 0
         
-        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_RADIUS) {
+        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_BBOX_RADIUS) {
             OAUtilities.convertChar(toDist: String(radius[0]), firstLetter: String(TRAVEL_GPX_CONVERT_FIRST_LETTER), firstDist: Int32(TRAVEL_GPX_CONVERT_MULT_1), mult1: 0, mult2: Int32(TRAVEL_GPX_CONVERT_MULT_2))
         }
         return travelGpx
@@ -853,6 +872,31 @@ final class TravelObfHelper : NSObject {
     
     func createTitle(name: String) -> String {
         OAUtilities.capitalizeFirstLetter(name)
+    }
+    
+    func openTrackMenu(article: TravelArticle, gpxFileName: String, latLon: CLLocation, adjustMapPosition: Bool) {
+        let callback = OpenTrackMenuDelegate()
+        callback.gpxFileName = gpxFileName
+        callback.latLon = latLon
+        readGpxFile(article: article, callback: callback)
+    }
+}
+
+final private class OpenTrackMenuDelegate: GpxReadDelegate {
+    
+    var isGpxReading: Bool = false
+    var latLon: CLLocation?
+    var gpxFileName: String?
+    
+    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
+        guard let latLon, let gpxFileName, let gpxFile, let file = gpxFile.object, let analysis = article.getAnalysis() else { return }
+
+        var wptPt = WptPt()
+        wptPt.lat = latLon.coordinate.latitude
+        wptPt.lon = latLon.coordinate.longitude
+        let safeFileName = gpxFileName.appending(GPX_FILE_EXT)
+                
+        OAGPXUIHelper.saveAndOpenGpx(gpxFileName, filepath: safeFileName, gpxFile: file, selectedPoint: wptPt, analysis: analysis, routeKey: nil, forceAdjustCentering: true)
     }
 }
 

@@ -3569,7 +3569,7 @@
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "osmand_live" = "OsmAnd Lajv";
 "foot" = "ft";
-"osm_id" = "OSM ID";
+"shared_string_osm_id" = "OSM ID";
 "mapillary_item" = "OsmAnd + Mapilari";
 "units_nm_h" = "nmi/h";
 "download_tab_conflicts" = "Nerazrešeno";

@@ -8,6 +8,7 @@
 
 #import "OANetworkRouteSelectionTask.h"
 #import "OARouteKey.h"
+#import "OARouteKey+cpp.h"
 #import "OsmAndApp.h"
 #import "OsmAndSharedWrapper.h"
 

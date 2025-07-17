@@ -21,6 +21,7 @@
 #import "OATransportStopsLayer.h"
 #import "OATransportRouteToolbarViewController.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/TransportRoute.h>

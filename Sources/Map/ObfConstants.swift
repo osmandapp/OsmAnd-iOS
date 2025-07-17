@@ -35,6 +35,21 @@ final class ObfConstants: NSObject {
         return "https://www.openstreetmap.org/\(type)/\(osmId)"
     }
     
+    static func createMapObjectIdFromOsmId(_ osmId: Int64, type: String?) -> Int64 {
+        guard let type else { return osmId }
+        
+        switch type {
+        case NODE:
+            return osmId << AMENITY_ID_RIGHT_SHIFT
+        case WAY:
+            return (osmId << AMENITY_ID_RIGHT_SHIFT) + 1
+        case RELATION:
+            return RELATION_BIT + ((osmId << SHIFT_ID) << DUPLICATE_SPLIT)
+        default:
+            return osmId
+        }
+    }
+    
     static func getOsmObjectId(_ object: OAMapObject) -> Int64 {
         var originalId: Int64 = -1
         var obfId = object.obfId

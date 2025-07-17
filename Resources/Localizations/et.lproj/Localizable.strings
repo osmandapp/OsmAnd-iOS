@@ -2843,7 +2843,7 @@
 "no_widgets_descr" = "Lisa saadavalolevate vidinate hulgast mõni vajalik vidin.";
 "external_device_status_disconnected" = "Ühendus on katkestatud";
 "external_device_status_disconnect" = "Katkesta ühendus";
-"osm_id" = "OSMi kasutajatunnus";
+"shared_string_osm_id" = "OSMi kasutajatunnus";
 "daynight_mode_app_theme_summary" = "Kaardi kujundus arvestab rakenduse üldise kujundusega - päevavaade heleda kujunduse puhul ja öövaade tumeda kujunduse puhul";
 "rendering_attr_showDirtbikeTrails_description" = "Näita maastikurattaradasid";
 "daynight_mode_sunrise_sunset_summary" = "Kaart vahetab päeva- ja öövaadet vastavalt kohalikele päikesetõusu ja -loojangu aegadele.";

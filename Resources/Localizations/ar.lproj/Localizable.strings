@@ -3385,7 +3385,7 @@
 "online_plugins" = "الإضافات على الإنترنت";
 "shared_string_top_bottom" = "أعلى و أسفل";
 "track_3d_empty_view_description" = "استكشاف المسار في 3D التفاعلية! تصور الارتفاع والسرعة والمزيد مباشرة على الخريطة.";
-"osm_id" = "معرف OSM";
+"shared_string_osm_id" = "معرف OSM";
 "shared_string_millimeters" = "مليمترات";
 "edit_tilesource_maxzoom" = "الحد الأقصى للتكبير";
 "edit_tilesource_minzoom" = "الحد الأدنى من التكبير";

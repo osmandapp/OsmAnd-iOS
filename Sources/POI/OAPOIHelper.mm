@@ -7,7 +7,6 @@
 //
 
 #import "OAPOIHelper.h"
-#import "OAPOIHelper+cpp.h"
 #import "OAPOI.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
@@ -29,12 +28,15 @@
 #import "OAMapRendererView.h"
 #import "Localization.h"
 #import "OANativeUtilities.h"
+#import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
+#include <OsmAndCore/Data/Road.h>
+#include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/FunctorQueryController.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/ISearch.h>
@@ -43,12 +45,21 @@
 #include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 #include <OsmAndCore/ICU.h>
+#include <OsmAndCore.h>
+#include <OsmAndCore/Data/Amenity.h>
+#include <OsmAndCore/Data/MapObject.h>
 
-#define kSearchLimitRaw 5000
-#define kRadiusKmToMetersKoef 1200.0
-#define kZoomToSearchPOI 16.0
+int const kSearchLimitRaw = 5000;
+int const kRadiusKmToMetersKoef = 1200.0;
+int const kZoomToSearchPOI = 16.0;
 
 static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"nat_name", @"reg_name", @"loc_name", @"old_name", @"alt_name", @"short_name", @"official_name", @"lock_name"];
+
+NSString * const OSM_WIKI_CATEGORY = @"osmwiki";
+NSString * const SPEED_CAMERA = @"speed_camera";
+NSString * const WIKI_LANG = @"wiki_lang";
+NSString * const WIKI_PLACE = @"wiki_place";
+NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 @implementation OAPOIHelper {
 
@@ -71,6 +82,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     NSMapTable<NSString *, NSString *> *_deprecatedTags;
     
     OsmAnd::PointI _myLocation;
+    
+    NSMutableArray<NSString *> *_publicTransportTypes;
 
     BOOL _isInit;
 }
@@ -158,6 +171,35 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     if (_otherPoiCategory && _otherPoiCategory.poiTypes.count > 0)
         return _otherPoiCategory.poiTypes[0];
     return nil;
+}
+
+- (NSMutableArray<NSString *> *) getPublicTransportTypes
+{
+    if (!_publicTransportTypes && _isInit)
+    {
+        OAPOICategory *category = [self getPoiCategoryByName:@"transportation"];
+        if (category)
+        {
+            _publicTransportTypes = [NSMutableArray new];
+            NSArray<OAPOIFilter *> *filters = category.poiFilters;
+            for (OAPOIFilter *poiFilter in filters)
+            {
+                if ([poiFilter.name isEqualToString:@"public_transport"] ||
+                    [poiFilter.name isEqualToString:@"water_transport"] )
+                {
+                    for (OAPOIType *poiType in poiFilter.poiTypes)
+                    {
+                        [_publicTransportTypes addObject:poiType.name];
+                        for (OAPOIType *poiAdditionalType in poiType.poiAdditionals)
+                        {
+                            [_publicTransportTypes addObject:poiAdditionalType.name];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return _publicTransportTypes;
 }
 
 - (NSArray<OAPOICategory *> *) getCategories:(BOOL)includeMapCategory
@@ -1100,7 +1142,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     return [NSArray arrayWithArray:arr];
 }
 
-+ (NSArray<OAPOI *> *) findTravelGuides:(NSArray<NSString *> *)categoryNames location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
++ (NSArray<OAPOI *> *) findTravelGuides:(NSArray<NSString *> *)categoryNames currentLocation:(OsmAnd::PointI)currentLocation bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
 {
     OsmAndAppInstance _app = [OsmAndApp instance];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
@@ -1115,18 +1157,6 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     
     const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
     
-    if (categoryNames)
-    {
-        auto categoriesFilter = QHash<QString, QStringList>();
-        QStringList categories = QStringList();
-        for (NSString *categoryName in categoryNames)
-            categories.append(QString::fromNSString(categoryName));
-        
-        categoriesFilter.insert(QString::fromNSString(@"travel"), categories);
-        categoriesFilter.insert(QString::fromNSString(@"routes"), categories);
-        searchCriteria->categoriesFilter = categoriesFilter;
-    }
-    
     if (bbox31.width() != 0 && bbox31.height() != 0)
     {
         searchCriteria->bbox31 = bbox31;
@@ -1137,22 +1167,25 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
   
     search->performTravelGuidesSearch(QString::fromNSString(reader), *searchCriteria,
-                                      [&arr, &location, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                      [&categoryNames, &arr, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                                 const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
         
                                 if (![processedPoi containsObject:@(am->id.id)])
                                 {
-                                    [processedPoi addObject:@(am->id.id)];
-                                    OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
-                                    poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, am->position31);
-                                    if (publish)
+                                    if ([OATravelObfHelper.shared searchFilterShouldAccept:am->subType.toNSString() filterSubcategories:categoryNames])
                                     {
-                                        done = publish(poi);
-                                    }
-                                    else
-                                    {
-                                        [arr addObject:poi];
+                                        [processedPoi addObject:@(am->id.id)];
+                                        OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
+                                        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
+                                        if (publish)
+                                        {
+                                            done = publish(poi);
+                                        }
+                                        else
+                                        {
+                                            [arr addObject:poi];
+                                        }
                                     }
                                 }
                           },
@@ -1161,7 +1194,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     return [NSArray arrayWithArray:arr];
 }
 
-- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryNames:(NSArray<NSString *> *)categoryNames poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
+- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryNames:(NSArray<NSString *> *)categoryNames poiTypeName:(NSString *)typeName currentLocation:(OsmAnd::PointI)currentLocation bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
 {
     _isSearchDone = NO;
     _breakSearch = NO;
@@ -1186,7 +1219,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     searchCriteria->name = QString::fromNSString(keyword ? keyword : @"");
     searchCriteria->obfInfoAreaFilter = _visibleArea;
     searchCriteria->bbox31 = bbox31;
-    searchCriteria->xy31 = location;
+    searchCriteria->xy31 = currentLocation;
     
     if (categoryNames)
     {
@@ -1435,6 +1468,95 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     return [NSArray arrayWithArray:arr];
 }
 
+
++ (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter *)additionalFilter bbox31:(OsmAnd::AreaI )bbox31 currentLocation:(OsmAnd::PointI)currentLocation includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> *)matcher publish:(BOOL(^)(OAPOI *poi))publish
+{
+    NSMutableSet<NSNumber *> *openAmenities = [NSMutableSet new];
+    NSMutableSet<NSNumber *> *closedAmenities = [NSMutableSet new];
+    NSMutableArray<OAPOI *> *actualAmenities = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
+    
+    OASearchPoiTypeFilter *filter = searchFilter;
+    BOOL done = false;
+    
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([&done]
+                                                  (const OsmAnd::FunctorQueryController* const controller)
+                                                  {
+                                                      return done;
+                                                  }));
+    
+    const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+    const auto& obfsCollection = [OsmAndApp instance].resourcesManager->obfsCollection;
+    NSArray<NSString *> *repos = [self getAmenityRepositoriesNames:includeTravel];
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+    
+    if (bbox31.width() != 0 && bbox31.height() != 0)
+    {
+        searchCriteria->bbox31 = bbox31;
+    }
+    
+    BOOL isEmpty = !filter || [filter isEmpty];
+    
+    if (isEmpty && additionalFilter)
+    {
+        filter = nil;
+    }
+    if (!isEmpty || additionalFilter)
+    {
+        for (NSString *repoName in repos)
+        {
+            if (matcher && matcher.isCancelled)
+            {
+                break;
+            }
+            
+            NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
+            
+            search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
+                                              [&filter, &foundAmenities, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                  {
+                                        const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                
+                                        OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:am];
+                                        BOOL accept = [filter accept:type.category subcategory:type.name];
+                
+                                        if (![processedPoi containsObject:@(am->id.id)] && accept)
+                                        {
+                                            [processedPoi addObject:@(am->id.id)];
+                                            OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
+                                            poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
+                                            
+                                            if (publish)
+                                            {
+                                                done = publish(poi);
+                                            }
+                                            else
+                                            {
+                                                [foundAmenities addObject:poi];
+                                            }
+                                        }
+                                  },
+                                  ctrl);
+            
+            for (OAPOI *amenity in foundAmenities)
+            {
+                NSNumber *obfId = @(amenity.obfId);
+                if ([amenity isClosed])
+                {
+                    [closedAmenities addObject:obfId];
+                }
+                else if (![closedAmenities containsObject:obfId] && ![openAmenities containsObject:obfId])
+                {
+                    [openAmenities addObject:obfId];
+                    [actualAmenities addObject:amenity];
+                }
+            }
+        }
+    }
+    return actualAmenities;
+}
+
 + (NSArray<OAPOI *> *) findPOIsByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
     OACollatorStringMatcher *mt = [[OACollatorStringMatcher alloc] initWithPart:query mode:CHECK_STARTS_FROM_SPACE];
@@ -1579,9 +1701,11 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     poi.subType = amenity->subType.toNSString();
 
     if (poi.name.length == 0)
-        poi.name = type.name;
+        poi.name = type.nameLocalized;
     if (poi.nameLocalized.length == 0)
         poi.nameLocalized = type.nameLocalized;
+    if (poi.enName.length == 0)
+        poi.enName = type.nameLocalizedEN;
 
     if (names.count == 0)
     {
@@ -1706,9 +1830,6 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         
         [translation setObject:pt forKey:[[pt.name stringByReplacingOccurrencesOfString:@"_" withString:@" "] lowerCase]];
         [translation setObject:pt forKey:[pt.nameLocalized lowerCase]];
-//        
-//        translation.put(pt.getKeyName().replace('_', ' ').toLowerCase(), pt);
-//        translation.put(pt.getTranslation().toLowerCase(), pt);
     }
 }
 
@@ -1777,6 +1898,62 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
             [values setObject:entry.value.toNSString() forKey:entry.declaration->tagName.toNSString()];
         }
     }
+}
+
++ (QList< std::shared_ptr<const OsmAnd::ObfFile> >) getAmenityRepositories:(BOOL)includeTravel
+{
+    QList< std::shared_ptr<const OsmAnd::ObfFile> > baseMaps;
+    QList< std::shared_ptr<const OsmAnd::ObfFile> > result;
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    QList<std::shared_ptr<const OsmAnd::ObfFile> > obfFiles = app.resourcesManager->obfsCollection->getObfFiles();
+    
+    std::sort(obfFiles.begin(), obfFiles.end(), [](const auto &a, const auto &b) {
+        NSString *nameA = a->filePath.toNSString();
+        NSString *nameB = b->filePath.toNSString();
+        if (nameA)
+            nameA = [OAUtilities simplifyFileName:[nameA lastPathComponent]];
+        if (nameB)
+            nameB = [OAUtilities simplifyFileName:[nameA lastPathComponent]];
+        
+        return [nameA compare:nameB] == NSOrderedAscending;
+    });
+    
+    for (const auto& file : obfFiles)
+    {
+        NSString *path = file->filePath.toNSString();
+        if ([path hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT])
+        {
+            // android has here TravelRendererHelper.getFileVisibilityProperty()
+            //if (!includeTravel || !app.getTravelRendererHelper().getFileVisibilityProperty(fileName).get()) {
+            if (!includeTravel)
+                continue;
+        }
+        
+        if ([self isWorldMap:path])
+            baseMaps.append(file);
+        else
+            result.append(file);
+    }
+    result.append(baseMaps);
+    return result;
+}
+
++ (NSArray<NSString *> *) getAmenityRepositoriesNames:(BOOL)includeTravel
+{
+    NSMutableArray<NSString *> *filePaths = [NSMutableArray new];
+    const auto files = [self getAmenityRepositories:includeTravel];
+    for (const auto file : files)
+    {
+        [filePaths addObject:file->filePath.toNSString()];
+    }
+    return filePaths;
+}
+
++ (BOOL) isWorldMap:(NSString *)obfFilePath
+{
+    NSString *fileName = [[obfFilePath lastPathComponent] lowerCase];
+    return [fileName hasPrefix:@"world_"] || [fileName containsString:@"basemap"];
 }
 
 @end

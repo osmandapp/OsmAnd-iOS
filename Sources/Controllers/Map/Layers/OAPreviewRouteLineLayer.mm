@@ -234,7 +234,7 @@
             OsmAnd::ColorARGB lineColor = [color toFColorARGB];
 
             NSNumber *colorVal = [self getParamFromAttr:@"color"];
-            BOOL hasStyleColor = (colorVal && colorVal.longValue != -1 && colorVal.longValue == _routeLineColor)
+            BOOL hasStyleColor = (colorVal && colorVal.intValue == _routeLineColor)
                     || _routeLineColor == kDefaultRouteLineDayColor
                     || _routeLineColor == kDefaultRouteLineNightColor;
 
@@ -294,9 +294,8 @@
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     NSNumber *colorVal = [self getParamFromAttr:forTurnArrows ? @"color_3" : @"color"];
-    BOOL hasStyleColor = colorVal && colorVal.longValue != -1;
-    return hasStyleColor
-            ? colorVal.longValue
+    return colorVal
+            ? colorVal.intValue
             : isNight
                     ? forTurnArrows ? kDefaultTurnArrowsNightColor : kDefaultRouteLineNightColor
                     : forTurnArrows ? kDefaultTurnArrowsDayColor : kDefaultRouteLineDayColor;

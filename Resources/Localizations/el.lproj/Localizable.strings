@@ -947,7 +947,7 @@
 "default_speed_dialog_msg" = "Εκτιμά τον χρόνο άφιξης αγνώστων τύπων δρόμων και περιορίζει την ταχύτητα σε όλους τους δρόμους (μπορεί να επηρεάσει τη διαδρομή)";
 "base_profile_descr_car" = "Αυτοκίνητο, φορτηγό, μηχανή";
 "reverse_route" = "Αντιστροφή διαδρομής";
-"accessibility_announce" = "Ανακοίνωση";
+"accessibility_announce" = "Αναγγελία";
 "base_profile_descr_pedestrian" = "Περπάτημα, πεζοπορία, τρέξιμο";
 "shared_string_legend" = "Υπόμνημα";
 "shared_string_language" = "Γλώσσα";
@@ -1415,7 +1415,7 @@
 "add_group" = "Προσθήκη ομάδας";
 "position_on_map_center" = "Κέντρο";
 "rendering_attr_showLightRailRoutes_name" = "Δρομολόγια ελαφρού σιδηροδρόμου";
-"route_descr_select_destination" = "Ορίστε Προορισμό";
+"route_descr_select_destination" = "Ορίστε προορισμό";
 "shared_string_added" = "Προστέθηκε";
 "tracks_on_map" = "Εμφανιζόμενα ίχνη";
 "public_transport_warning_descr_blog" = "Μάθετε περισσότερα για το πώς δρομολογεί το OsmAnd στο ιστολόγιό μας.";
@@ -1436,7 +1436,7 @@
 "empty_route_calculated" = "Η υπολογισμένη διαδρομή είναι κενή.";
 "recalc_angle_dialog_title" = "Ελάχιστη γωνία μεταξύ της θέσης και της διαδρομής μου";
 "recalculate_route" = "Επαναυπολογισμός διαδρομής";
-"interrupt_music_descr" = "Η φωνή προτρέπει παύση της αναπαραγωγής της μουσικής.";
+"interrupt_music_descr" = "Οι φωνητικές ειδοποιήσεις κάνουν παύση της αναπαραγωγής της μουσικής.";
 "position_on_map_bottom" = "Κάτω μέρος";
 "rendering_attr_showMonorailRoutes_name" = "Δρομολόγια μονοτρόχιου σιδηρόδροµου";
 "are_you_sure" = "Είσαστε σίγουροι;";
@@ -3301,4 +3301,5 @@
 "shared_string_article" = "Άρθρο";
 "article_added_to_bookmark" = " προστέθηκε στους σελιδοδείκτες.";
 "article_removed_from_bookmark" = " αφαιρέθηκε από τους σελιδοδείκτες.";
-"backup_error_size_is_exceeded" = "Το μέγιστο μέγεθος του OsmAnd Cloud ξεπερνά τα %1$s";
+"backup_error_size_is_exceeded" = "Το μέγιστο μέγεθος του OsmAnd Cloud ξεπερνά τα %@";
+"banner_payment_free_backup_settings_title" = "Δωρεάν αντίγραφο ασφαλείας ρυθμίσεων";

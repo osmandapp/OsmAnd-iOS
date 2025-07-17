@@ -3344,17 +3344,20 @@
 "expired" = "Expired";
 "shared_string_expires" = "Expires";
 "manage_subscription" = "Manage subscription";
+"manage_purchases" = "Manage purchases";
 "subscription" = "Subscription";
 "google_play" = "Google Play";
 "app_store" = "App Store";
 "amazon_appstore" = "Amazon Appstore";
 "huawei_appgallery" = "Huawei AppGallery";
-"osmand_web" = "OsmAnd Web";
+"osmand_web" = "OsmAnd Web (FastSpring)";
 "promo" = "Promo";
 "purchase_origin" = "Purchase origin";
 "contact_support" = "Contact support";
 "contact_support_description" = "If you have any questions, please contact us at %@.";
 "loading_purchase_information" = "Loading purchase information";
+"fastspring_subscription_desc" = "You can manage or cancel your subscription through FastSpring account management portal.";
+"fastspring_one_time_payment_desc" = "You can manage your purchases through FastSpring account management portal.";
 
 "shared_string_now" = "Now";
 

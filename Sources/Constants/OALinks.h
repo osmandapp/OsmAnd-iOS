@@ -48,6 +48,7 @@ static NSString * const k_docs_plugin_nautical = @"https://osmand.net/docs/user/
 static NSString * const k_docs_plugin_osm = @"https://osmand.net/docs/user/plugins/osm-editing";
 static NSString * const k_docs_plugin_srtm = @"https://osmand.net/docs/user/plugins/topography";
 static NSString * const k_weather_global_forecast_system = @"https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast";
+static NSString * const kFastSpringManage = @"https://osmand.onfastspring.com/account";
 
 #define kDocsAddOnlineMaps  @"https://docs.osmand.net/docs/user/map/raster-maps#add-new-online-raster-map-source"
 #define kDocsWidgets  @"https://docs.osmand.net/docs/user/widgets/"

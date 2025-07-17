@@ -3482,7 +3482,6 @@
 "liter" = "ltr";
 "us_gallons" = "USA gallon";
 "navigate_point_mgrs" = "MGRS";
-"osmand_web" = "OsmAndi veeb";
 "rendering_attr_hideMilitaryAreas_name" = "Peida sõjaväealad";
 "wheel_circumference" = "Ratta ümbermõõt";
 "routing_attr_avoid_4wd_only_description" = "Väldi teid, mis sobivad vaid neljarattaveoga sõidukitele";

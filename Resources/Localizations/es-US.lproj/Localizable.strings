@@ -3634,7 +3634,6 @@
 "shared_strings_dimensions" = "Dimensiones";
 "fuel_tank_capacity" = "Capacidad del tanque de combustible";
 "poi_filter_fuel" = "Combustible";
-"osmand_web" = "OsmAnd Web";
 "shared_string_unchanged" = "Sin cambios";
 "each_favourite_point_own_icon" = "Cada punto favorito conservaría su propio ícono.";
 "unchanged_parameter_summary" = "Cada traza conservará sus propios parámetros.";

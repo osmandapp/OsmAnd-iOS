@@ -116,7 +116,7 @@
 "quick_action_add_category" = "Προσθήκη κατηγορίας";
 "ending_point_too_far" = "Το τελικό σημείο είναι πολύ μακριά από τον πλησιέστερο δρόμο.";
 "arrival_distance_factor_early" = "Πρόωρα";
-"free" = "Ελεύθερο %@";
+"free" = "Ελεύθερα %@";
 "context_menu_item_open_note" = "Άνοιγμα σημείωσης OSM";
 "speed_limit_exceed" = "Ανοχή ορίου ταχύτητας";
 "week" = "Εβδομάδα";
@@ -204,7 +204,7 @@
 "shared_string_select_on_map" = "Επιλέξτε στον χάρτη";
 "shared_string_waypoint" = "Σημείο διαδρομής";
 "show_pedestrian_warnings" = "Διαβάσεις πεζών";
-"search_nearby" = "Αναζήτηση στη γύρω περιοχή";
+"search_nearby" = "Αναζήτηση στην περιοχή";
 "versions_item" = "Εκδόσεις";
 "prefer_in_routing_descr" = "Να προτιμώνται αυτοκινητόδρομοι.";
 "local_indexes_cat_backup" = "Απενεργοποιημένο";
@@ -426,7 +426,7 @@
 "daynight_mode_night" = "Νύχτα";
 "toggle_poi" = "Εμφάνιση/απόκρυψη ΣΕ";
 "map_widget_max_speed" = "Όριο ταχύτητας";
-"rendering_category_transport" = "Μ.Μ.Μ";
+"rendering_category_transport" = "Συγκοινωνία";
 "towards" = "προς";
 "quick_action_add_marker" = "Προσθήκη δείκτη χάρτη";
 "in_app_purchase_desc" = "Εφάπαξ πληρωμή";
@@ -719,7 +719,7 @@
 "rendering_value_light_brown_name" = "Ανοιχτό καφετί";
 "routing_attr_piste_type_nordic_name" = "Εκτός πίστας και σκανδιναβική χιονοδρομία";
 "routing_attr_prefer_motorway_description" = "Να προτιμώνται αυτοκινητόδρομοι";
-"rendering_attr_transportStops_name" = "Στάσεις Μ.Μ.Μ";
+"rendering_attr_transportStops_name" = "Στάσεις συγκοινωνίας";
 "routing_attr_avoid_subway_description" = "Απέφυγε μετρό και ελαφρά μέσα σταθερής τροχιάς";
 "routing_attr_height_obstacles_name" = "Χρήση υψομετρικών δεδομένων";
 "rendering_attr_pisteGrooming_name" = "Συντήρηση πίστας";
@@ -943,7 +943,7 @@
 "day_short" = "Μ";
 "temporary_conditional_routing" = "Λάβετε υπόψη τους προσωρινούς περιορισμούς";
 "base_profile_descr_bicycle" = "Ποδήλατο βουνού, μοτοποδήλατο, άλογο";
-"shared_string_profiles" = "Κατανομές";
+"shared_string_profiles" = "Προφίλ";
 "default_speed_dialog_msg" = "Εκτιμά τον χρόνο άφιξης αγνώστων τύπων δρόμων και περιορίζει την ταχύτητα σε όλους τους δρόμους (μπορεί να επηρεάσει τη διαδρομή)";
 "base_profile_descr_car" = "Αυτοκίνητο, φορτηγό, μηχανή";
 "reverse_route" = "Αντιστροφή διαδρομής";
@@ -977,7 +977,7 @@
 "configure_screen_quick_action" = "Γρήγορη ενέργεια";
 "quick_action_remove_next_destination_descr" = "Διαγράφει τον επόμενο προορισμό στη διαδρομή σας. Εάν είναι ο τελικός προορισμός, θα σταματήσει η πλοήγηση.";
 "profile_alert_need_profile_name_title" = "Εισάγετε το όνομα προφίλ";
-"profile_type_custom_string" = "Προσαρμοσμένη κατανομή";
+"profile_type_custom_string" = "Προσαρμοσμένο προφίλ";
 "special_routing_type" = "Ειδική δρομολόγηση";
 "shared_string_copy" = "Αντιγραφή";
 "shared_string_settings" = "Ρυθμίσεις";
@@ -1003,7 +1003,7 @@
 "public_transport_hide" = "Απόκρυψη δημόσιων συγκοινωνιών";
 "select_base_profile_dialog_message" = "Βασίστε το προσαρμοσμένο σας προφίλ σε ένα από τα προεπιλεγμένα προφίλ της εφαρμογής, αυτό καθορίζει τη βασική εγκατάσταση όπως ορατότητα των γραφικών στοιχείων και μονάδες ταχύτητας και απόστασης. Αυτά είναι τα προεπιλεγμένα προφίλ της εφαρμογής, μαζί με παραδείγματα προσαρμοσμένων προφίλ που μπορούν να επεκταθούν σε:";
 "shared_string_continue" = "Συνέχεια";
-"public_transport_warning_title" = "Η περιήγηση με τα δημόσια Μ.Μ.Μ είναι προς το παρόν σε δοκιμαστικό έλεγχο, αναμένονται λάθη και ανακρίβειες.";
+"public_transport_warning_title" = "Η περιήγηση με τη δημόσια συγκοινωνία είναι προς το παρόν σε δοκιμαστικό έλεγχο, αναμένονται λάθη και ανακρίβειες.";
 "route_between_points" = "Διαδρομή μεταξύ σημείων";
 "quick_action_showhide_mapillary_title" = "Εμφάνιση/Απόκρυψη Mapillary";
 "index_name_antarctica" = "Ανταρκτική";
@@ -1106,7 +1106,7 @@
 "access_default_color" = "Προεπιλεγμένο χρώμα";
 "shared_string_disable" = "Απενεργοποίηση";
 "custom_osmand_plugin" = "Προσαρμοσμένο πρόσθετο OsmAnd";
-"download_regular_maps" = "Τυπικοί χάρτες";
+"download_regular_maps" = "Τυπικός χάρτης";
 "osmand_settings" = "Ρυθμίσεις OsmAnd";
 "shared_string_circle" = "Κύκλος";
 "download_tab_local" = "Τοπικά";
@@ -1502,7 +1502,7 @@
 "map_widget_parking" = "Στάθμευση";
 "vessel_height_limit_description" = "Ορίστε ύψος σκάφος για αποφυγή χαμηλών γεφυρών. Σημειώστε ότι εάν η γέφυρα είναι κινητή, θα χρησιμοποιηθεί το ύψος της στην ανοικτή κατάσταση.";
 "move_point" = "Μετακίνηση σημείου";
-"public_transport_ped_route_title" = "Η διαδρομή με τα πόδια είναι κατά προσέγγιση %@ και μπορεί να είναι πιο σύντομη από τα δημόσια Μ.Μ.Μ";
+"public_transport_ped_route_title" = "Η διαδρομή με τα πόδια είναι κατά προσέγγιση %@ και μπορεί να είναι πιο σύντομη από τη δημόσια συγκοινωνία";
 "rendering_attr_showFunicularRoutes_name" = "Δρομολόγια τελεφερίκ";
 "my_location" = "Η θέση μου";
 "mapillary_descr" = "Διαδικτυακές φωτογραφίες δρόμου για όλους. Ανακαλύψτε θέσεις, συνεργαστείτε, αποτυπώστε τον κόσμο.";
@@ -1513,7 +1513,7 @@
 "free_version_message" = "%@ χάρτες για λήψη ή ενημέρωση.";
 "recalc_angle_dialog_descr" = "Θα εμφανιστεί ένα πολύ ευθύ τμήμα μεταξύ της θέσης μου και της υπολογισμένης διαδρομής μέχρι να υπολογιστεί εκ νέου η διαδρομή";
 "shared_string_refresh" = "Ανανέωση";
-"confirm_usage_speed_cameras" = "Σε πολλές χώρες (Γερμανία, Γαλλία, Ιταλία κ.α) η χρήση προειδοποιήσεων κάμερας ταχύτητας είναι παράνομη. Το OsmAnd δεν αναλαμβάνει καμία ευθύνη, εάν παραβιάζετε τον νόμο. Παρακαλούμε πατήστε \'Ναι\' μόνο εάν δικαιούστε να χρησιμοποιήσετε αυτό το γνώρισμα.";
+"confirm_usage_speed_cameras" = "Σε πολλές χώρες (Γερμανία, Γαλλία, Ιταλία κ.α) η χρήση προειδοποιήσεων κάμερας ταχύτητας είναι παράνομη. Το OsmAnd δεν αναλαμβάνει καμία ευθύνη εάν παραβιάζετε το νόμο. Παρακαλούμε πατήστε 'Ναι' μόνο εάν δικαιούστε να χρησιμοποιήσετε αυτό το χαρακτηριστικό.";
 "add_waypoint" = "Προσθήκη σημείου διαδρομής";
 "gpx_selection_segment_title" = "Τμήμα";
 "routing_attr_allow_streams_name" = "Επιτρέψτε ρέματα και οχετούς";
@@ -1561,9 +1561,9 @@
 "osmand_parking_plugin_name" = "Θέση στάθμευσης";
 "shared_string_legal" = "Νομικά";
 "uninstall_speed_cameras" = "Απεγκατάσταση καμερών ταχύτητας";
-"speed_cameras_legal_descr" = "Σε κάποιες χώρες ή περιοχές, η χρήση εφαρμογών προειδοποίησης κάμερας ασφαλείας απαγορεύεται από τον νόμο. \n \nΧρειάζεται να κάνετε μια επιλογή ανάλογα με τον νόμο της χώρας σας. \n \nΕπιλέξτε %@ και θα πάρετε προειδοποιήσεις για τις κάμερες ασφαλείας. \n \nΕπιλέξτε %@. Όλα τα δεδομένα που σχετίζονται με κάμερες ταχύτητας: προειδοποιήσεις, ανακοινώσεις, ΣΕ, θα διαγραφούν μέχρι να επανεγκατασταθεί πλήρως το OsmAnd.";
+"speed_cameras_legal_descr" = "Σε κάποιες χώρες ή περιοχές, η χρήση εφαρμογών προειδοποίησης κάμερας ασφαλείας απαγορεύεται από το νόμο. \n \nΧρειάζεται να κάνετε μια επιλογή ανάλογα με το νόμο της χώρας σας. \n \nΕπιλέξτε %1$s και θα λαμβάνετε προειδοποιήσεις για τις κάμερες ταχύτητας. \n \nΕπιλέξτε %2$s. Όλα τα δεδομένα που σχετίζονται με κάμερες ταχύτητας: προειδοποιήσεις, ανακοινώσεις, ΣΕ, θα διαγραφούν μέχρι να επανεγκατασταθεί πλήρως το OsmAnd.";
 "speed_camera_pois" = "Κάμερα ταχύτητας ΣΕ";
-"speed_cameras_alert" = "Οι προειδοποιήσεις καμερών ταχύτητας απαγορεύονται από τον νόμο σε κάποιες χώρες.";
+"speed_cameras_alert" = "Οι προειδοποιήσεις καμερών ταχύτητας απαγορεύονται από το νόμο σε κάποιες χώρες.";
 "lang_zh-Hant" = "Κινέζικα (Παραδοσιακά)";
 "shared_string_keep_active" = "Διατήρηση ενεργότητας";
 "shared_string_height" = "Ύψος";
@@ -1646,7 +1646,7 @@
 "external_sensors_support" = "Υποστήριξη εξωτερικών αισθητήρων";
 "map_settings_weather_pressure" = "Πίεση";
 "map_settings_weather_wind" = "Άνεμος";
-"external_sensors_plugin_name" = "Εξωτερικοί Αισθητήρες";
+"external_sensors_plugin_name" = "Εξωτερικοί αισθητήρες";
 "shared_string_weather" = "Καιρός";
 "weather_update_disabled" = "Ανενεργό";
 "weather_update_over_any_network" = "Σε οποιοδήποτε δίκτυο";
@@ -1923,7 +1923,7 @@
 "download_install_beta_version" = "Λήψη και εγκατάσταση beta εκδόσεων του OsmAnd";
 "online_plugins" = "Διαδικτυακές επεκτάσεις";
 "shared_string_maximum" = "Μέγιστο";
-"res_mapsres" = "Χάρτες & πόροι";
+"res_mapsres" = "Χάρτες & πηγές";
 "res_world_map" = "Παγκόσμιος χάρτης";
 "worldwide_maps" = "Παγκόσμιοι χάρτες";
 "res_worldwide" = "Παγκόσμια";
@@ -1943,7 +1943,7 @@
 "edit_tilesource_minzoom" = "Ελάχιστο ζουμ";
 "edit_tilesource_maxzoom" = "Μέγιστο ζουμ";
 "shared_string_item" = "Αντικείμενο";
-"avoid_pt_types" = "Αποφυγή ειδών Μ.Μ.Μ…";
+"avoid_pt_types" = "Αποφυγή ειδών συγκοινωνίας…";
 "speed_limit_warning" = "Προειδοποίηση ορίου ταχύτητας";
 "shared_string_bottom" = "Πάτος";
 "avoid_pt_types_descr" = "Αποφυγή ειδών δημοσίων ΜΜΜ στην πλοήγηση:";
@@ -2123,7 +2123,7 @@
 "shared_string_purchased" = "Αγοράστηκε";
 "annual_subscription" = "Ετήσια συνδρομή";
 "monthly_subscription" = "Μηνιαία συνδρομή";
-"user_points" = "Πόντοι χρήστη";
+"user_points" = "Σημεία χρήστη";
 "shared_string_contours" = "Ισοϋψείς";
 "new_device_account" = "Νέα συσκευή / νέος λογαριασμός";
 "map_widget_distance_to_destination" = "Απόσταση μέχρι προορισμό";
@@ -2493,7 +2493,7 @@
 "cannot_add_destination" = "Δεν είναι δυνατή η προσθήκη κατεύθυνσης";
 "help_search" = "Αναζήτηση χάρτη";
 "import_title" = "Εισαγωγή δεδομένων";
-"cleared_travel_search_history" = "Το ιστορικό εκκαθαρίστηκε";
+"cleared_travel_search_history" = "Το ιστορικό καθαρίστηκε";
 "images" = "Εικόνες";
 "add_notification_calendar" = "Προσθήκη ειδοποίησης στο Ημερολόγιο";
 "product_desc_europe" = "Απεριόριστες λήψεις χαρτών για την Ευρώπη";
@@ -3293,3 +3293,12 @@
 "reset_all_settings_desc" = "Επαναφορά όλων των ρυθμίσεων στην προεπιλογή;";
 "app_restart_required" = "Απαιτείται η επανεκκίνηση της εφαρμογής για να εφαρμοσθούν μερικές ρυθμίσεις.";
 "copy_from_other_profile_descr" = "Μπορείτε να αντιγράψετε όλες τις ρυθμίσεις από οποιοδήποτε προφίλ προς το επιλεγμένο προφίλ: ";
+"osm_editing_settings_descr" = "Οι ρυθμίσεις αυτού του πρόσθετου είναι καθολικές, και εφαρμόζονται σε όλα τα προφίλ.";
+"popular_articles_not_found_title" = "Δε βρέθηκαν δημοφιλή άρθρα";
+"popular_articles_not_found_descr" = "Δεν υπάρχουν άρθρα κοντά στο κέντρο του χάρτη. Χρησιμοποιήστε την αναζήτηση για να βρείτε άρθρα.";
+"clear_travel_search_history" = "Καθαρισμός του ιστορικού αναζήτησης Ταξιδιών;";
+"article_has_no_points" = "Το άρθρο δεν έχει σημεία";
+"shared_string_article" = "Άρθρο";
+"article_added_to_bookmark" = " προστέθηκε στους σελιδοδείκτες.";
+"article_removed_from_bookmark" = " αφαιρέθηκε από τους σελιδοδείκτες.";
+"backup_error_size_is_exceeded" = "Το μέγιστο μέγεθος του OsmAnd Cloud ξεπερνά τα %1$s";

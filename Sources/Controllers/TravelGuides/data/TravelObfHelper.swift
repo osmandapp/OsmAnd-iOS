@@ -18,6 +18,7 @@ final class TravelObfHelper : NSObject {
     let ARTICLE_SEARCH_RADIUS = 50 * 1000
     let SAVED_ARTICLE_SEARCH_RADIUS = 30 * 1000
     let MAX_SEARCH_RADIUS = 800 * 1000
+    let TRAVEL_GPX_SEARCH_RADIUS = 10 * 1000 // Ref: POI_SEARCH_POINTS_INTERVAL_M in tools
     
     let TRAVEL_GPX_CONVERT_FIRST_LETTER: Character = "A"
     let TRAVEL_GPX_CONVERT_FIRST_DIST = 5000
@@ -110,8 +111,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func isTravelGpxTags(_ tags: [String: String]) -> Bool {
-        guard let routeTag = tags[ROUTE_ID] else { return false }
-        return routeTag == "segment" || tags[TravelGpx.ROUTE_TYPE] != nil
+        return tags[ROUTE_ID] != nil && tags[ROUTE_TAG] == "segment" || tags[TravelGpx.ROUTE_TYPE] != nil
     }
     
     func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {
@@ -167,11 +167,25 @@ final class TravelObfHelper : NSObject {
         return results
     }
     
+    func searchFilterShouldAccept(_ subcategory: String?, filterSubcategories: [String]?) -> Bool {
+        guard let subcategory, let filterSubcategories else { return false }
+        
+        for filter in filterSubcategories {
+            if filter == subcategory {
+                return true
+            }
+            if filter == ROUTE_TRACK && subcategory.hasPrefix(ROUTES_PREFIX) {
+                return true // include routes:routes_xxx with routes:route_track filter
+            }
+        }
+        return false
+    }
+    
     func cacheTravelArticles(file: String?, amenity: OAPOI, lang: String?, readPoints: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
         var articles: [String: TravelArticle]? = [:]
         guard let file else {return nil}
-        if amenity.subType == ROUTE_TRACK {
+        if amenity.isRouteTrack() {
             articles = readRoutePoint(file: file, amenity: amenity)
         } else {
             articles = readArticles(file: file, amenity: amenity)

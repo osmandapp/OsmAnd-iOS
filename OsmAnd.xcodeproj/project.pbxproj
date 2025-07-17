@@ -511,6 +511,7 @@
 		32EAF9FF2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */; };
 		32EAFA012AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EAFA002AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift */; };
 		32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */; };
+		32EEB6322E286525002216B0 /* OATravelSelectionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EEB6312E286521002216B0 /* OATravelSelectionLayer.mm */; };
 		32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */; };
 		32F3A6AC2D5E1A43008AE4CA /* IconsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */; };
 		32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */; };
@@ -3999,6 +4000,8 @@
 		32EB3DEF2AC3256B0018D9B8 /* OATravelLocalDataDbHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelLocalDataDbHelper.h; sourceTree = "<group>"; };
 		32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelLocalDataDbHelper.mm; sourceTree = "<group>"; };
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		32EEB6302E28651B002216B0 /* OATravelSelectionLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelSelectionLayer.h; sourceTree = "<group>"; };
+		32EEB6312E286521002216B0 /* OATravelSelectionLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelSelectionLayer.mm; sourceTree = "<group>"; };
 		32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiIconCollectionHandler.swift; sourceTree = "<group>"; };
 		32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsAppearanceCategory.swift; sourceTree = "<group>"; };
 		32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXImportUIHelper.h; sourceTree = "<group>"; };
@@ -12661,8 +12664,8 @@
 				DA66ACBE26D91C5700D43299 /* OABaseVectorLinesLayer.h */,
 				DA66ACBF26D91C5800D43299 /* OABaseVectorLinesLayer.mm */,
 				DA5A7EE326C563A400F274C7 /* OAContextMenuLayer.h */,
-				328EE35E2E172BE9003CDB48 /* OAContextMenuLayer+cpp.h */,
 				DA5A7EEF26C563A400F274C7 /* OAContextMenuLayer.mm */,
+				328EE35E2E172BE9003CDB48 /* OAContextMenuLayer+cpp.h */,
 				DA5A7EF426C563A400F274C7 /* OAContextMenuProvider.h */,
 				C5DF39B32DBB6CA800332496 /* OACoordinatesGridLayer.h */,
 				C5DF39B42DBB6CA800332496 /* OACoordinatesGridLayer.mm */,
@@ -12710,12 +12713,14 @@
 				DA5A7EFF26C563A400F274C7 /* OARulerByTapControlLayer.h */,
 				DA5A7EDB26C563A400F274C7 /* OARulerByTapControlLayer.mm */,
 				DA5A7EF726C563A400F274C7 /* OASymbolMapLayer.h */,
-				328EE3602E1732B1003CDB48 /* OASymbolMapLayer+cpp.h */,
 				DA5A7ED726C563A400F274C7 /* OASymbolMapLayer.mm */,
+				328EE3602E1732B1003CDB48 /* OASymbolMapLayer+cpp.h */,
 				DA5A7EF926C563A400F274C7 /* OATerrainMapLayer.h */,
 				DA5A7EFA26C563A400F274C7 /* OATerrainMapLayer.mm */,
 				DA5A7ED826C563A400F274C7 /* OATransportStopsLayer.h */,
 				DA5A7ECF26C563A400F274C7 /* OATransportStopsLayer.mm */,
+				32EEB6302E28651B002216B0 /* OATravelSelectionLayer.h */,
+				32EEB6312E286521002216B0 /* OATravelSelectionLayer.mm */,
 				DA5A7EFE26C563A400F274C7 /* OAUnderlayMapLayer.h */,
 				DA5A7ED126C563A400F274C7 /* OAUnderlayMapLayer.mm */,
 				8A3BE84D27DBB2AC00C5DFE2 /* OAWeatherContourLayer.h */,
@@ -16624,6 +16629,7 @@
 				DA5A831126C563A800F274C7 /* OARouteInfoCell.m in Sources */,
 				DA5A835A26C563A800F274C7 /* OABottomSheetHeaderButtonCell.m in Sources */,
 				DA5A83A226C563A800F274C7 /* OAOsmEditingViewController.mm in Sources */,
+				32EEB6322E286525002216B0 /* OATravelSelectionLayer.mm in Sources */,
 				DA5A845F26C563A900F274C7 /* OAImpassableRoadsLayer.mm in Sources */,
 				DA5A81CD26C563A700F274C7 /* QuadTree.m in Sources */,
 				DA4ABF2F2876E4C200B996EF /* OAItemExporter.m in Sources */,

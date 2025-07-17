@@ -41,6 +41,19 @@ class TravelArticle: NSObject {
     var routeRadius = -1
     var bbox31: KQuadRect?
     
+    func getGpxFileName() -> String {
+        var gpxFileName = routeId
+        if let title, !title.isEmpty {
+            gpxFileName = title
+        }
+        if let gpxFileName {
+            return gpxFileName.sanitizeFileName()
+        } else {
+            print("Empty travel article in " + (file ?? "EmptyFileName"))
+            return "Travel Article File"
+        }
+    }
+    
     func initShortLinkTiles(shortLinkTiles: String) {
         bbox31 = KQuadRect()
         let mapUtils = KMapUtils.shared

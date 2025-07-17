@@ -1157,18 +1157,6 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     
     const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
     
-    if (categoryNames)
-    {
-        auto categoriesFilter = QHash<QString, QStringList>();
-        QStringList categories = QStringList();
-        for (NSString *categoryName in categoryNames)
-            categories.append(QString::fromNSString(categoryName));
-        
-        categoriesFilter.insert(QString::fromNSString(@"travel"), categories);
-        categoriesFilter.insert(QString::fromNSString(@"routes"), categories);
-        searchCriteria->categoriesFilter = categoriesFilter;
-    }
-    
     if (bbox31.width() != 0 && bbox31.height() != 0)
     {
         searchCriteria->bbox31 = bbox31;
@@ -1179,22 +1167,25 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
   
     search->performTravelGuidesSearch(QString::fromNSString(reader), *searchCriteria,
-                                      [&arr, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                      [&categoryNames, &arr, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                                 const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
         
                                 if (![processedPoi containsObject:@(am->id.id)])
                                 {
-                                    [processedPoi addObject:@(am->id.id)];
-                                    OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
-                                    poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
-                                    if (publish)
+                                    if ([OATravelObfHelper.shared searchFilterShouldAccept:am->subType.toNSString() filterSubcategories:categoryNames])
                                     {
-                                        done = publish(poi);
-                                    }
-                                    else
-                                    {
-                                        [arr addObject:poi];
+                                        [processedPoi addObject:@(am->id.id)];
+                                        OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
+                                        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
+                                        if (publish)
+                                        {
+                                            done = publish(poi);
+                                        }
+                                        else
+                                        {
+                                            [arr addObject:poi];
+                                        }
                                     }
                                 }
                           },

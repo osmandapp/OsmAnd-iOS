@@ -61,8 +61,9 @@ NSString * const SUBTYPE = @"subtype";
 NSString * const AMENITY_NAME = @"name";
 NSString * const ROUTES = @"routes";
 NSString * const ROUTE_ARTICLE = @"route_article";
-NSString * const ROUTE_PREFIX = @"routes_";
+NSString * const ROUTE_PREFIX = @"route_";
 NSString * const ROUTE_TRACK = @"route_track";
+NSString * const ROUTES_PREFIX= @"routes_";
 NSString * const ROUTE_TRACK_POINT = @"route_track_point";
 NSString * const ROUTE_BBOX_RADIUS = @"route_bbox_radius";
 NSString * const ROUTE_MEMBERS_IDS = @"route_members_ids";
@@ -202,7 +203,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     }
     else
     {
-        BOOL hasRouteTrackSubtype = [_subType hasPrefix:ROUTE_PREFIX] || [_subType isEqualToString:ROUTE_TRACK];
+        BOOL hasRouteTrackSubtype = [_subType hasPrefix:ROUTES_PREFIX] || [_subType isEqualToString:ROUTE_TRACK];
         BOOL hasGeometry = _values && _values[ROUTE_BBOX_RADIUS];
         return hasRouteTrackSubtype && hasGeometry && !NSStringIsEmpty([self getRouteId]);
     }

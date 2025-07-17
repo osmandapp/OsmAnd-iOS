@@ -1498,7 +1498,8 @@ typedef enum
     if (targetPoint.type == OATargetGPX)
     {
         OASTrackItem *trackItem;
-        if ([targetPoint.targetObj isKindOfClass:[OASGpxDataItem class]]) {
+        if ([targetPoint.targetObj isKindOfClass:[OASGpxDataItem class]])
+        {
             OASGpxDataItem *dataItem = (OASGpxDataItem *)targetPoint.targetObj;
             trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
             trackItem.dataItem = dataItem;
@@ -1508,6 +1509,13 @@ typedef enum
         {
             OASGpxFile *gpxFile = (OASGpxFile *)targetPoint.targetObj;
             trackItem = [[OASTrackItem alloc] initWithGpxFile:gpxFile];
+        }
+        else if ([targetPoint.targetObj isKindOfClass:[OATravelGpx class]])
+        {
+            OATravelGpx *travelGPX = (OATravelGpx *)targetPoint.targetObj;
+            CLLocation *latLon = [[CLLocation alloc] initWithLatitude:travelGPX.lat longitude:travelGPX.lon];
+            [OATravelObfHelper.shared openTrackMenuWithArticle:travelGPX gpxFileName:[travelGPX getGpxFileName] latLon:latLon adjustMapPosition:YES];
+            return;
         }
         if (trackItem)
         {

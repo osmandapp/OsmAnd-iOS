@@ -29,6 +29,7 @@
 #import "OARouteKey+cpp.h"
 #import "OATravelGuidesHelper+cpp.h"
 #import "OAClickableWayMenuProvider.h"
+#import "OATravelSelectionLayer.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
@@ -93,14 +94,15 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     for (OAMapLayer *layer in layers)
     {
         // Android doesn't have that layer here
-        if ([layer isKindOfClass:OAOsmBugsLayer.class])
+        if ([layer isKindOfClass:OAOsmBugsLayer.class] ||
+            [layer isKindOfClass:OAGPXRecLayer.class])
             continue;
         
         if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
             id<OAContextMenuProvider> provider = ((id<OAContextMenuProvider>)layer);
             
-            if ([provider isSecondaryProvider] || secondaryObjects)
+            if (![provider isSecondaryProvider] || secondaryObjects)
             {
                 if ([provider respondsToSelector:@selector(collectObjectsFromPoint:unknownLocation:excludeUntouchableObjects:)])
                 {
@@ -186,6 +188,13 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 AmenitySearcher.Request request = new AmenitySearcher.Request(requestAmenity, names);
                 detailsObject = amenitySearcher.searchDetailedObject(request, settings);
                 */
+                
+                
+                NSString *routeId = amenity.values[ROUTE_ID];
+                if (routeId)
+                    [self addTravelGpx:result routeId: routeId];
+                else
+                    [result collect:amenity provider:_provider];
             }
             else
             {
@@ -209,7 +218,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                         {
                             if (isTravelGpx)
                             {
-                                // Never triggered
                                 [self addTravelGpx:result routeId: tags[ROUTE_ID]];
                             }
                             else if (isClickableWay)
@@ -383,8 +391,21 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (void)addTravelGpx:(MapSelectionResult *)result routeId:(NSString *)routeId
 {
-    // Never triggered
-    // Implement later if needed
+    OATravelGpx *travelGpx = [OATravelGuidesHelper searchTravelGpx:result.pointLatLon routeId:routeId];
+    if (travelGpx && [self isUniqueTravelGpx:result.allObjects travelGpx:travelGpx])
+    {
+        OASWptPt *selectedPoint = [[OASWptPt alloc] initWithLat:result.pointLatLon.coordinate.latitude lon:result.pointLatLon.coordinate.longitude];
+        SelectedGpxPoint *selectedGpxPoint = [[SelectedGpxPoint alloc] initWithSelectedGpxFile:nil selectedPoint:selectedPoint];
+        
+        OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+        OATravelSelectionLayer *provider = mapVc.mapLayers.travelSelectionLayer;
+
+        [result collect:@[travelGpx, selectedGpxPoint] provider:provider];
+    }
+    else if (!travelGpx)
+    {
+        NSLog(@"addTravelGpx() searchTravelGpx() travelGpx is null");
+    }
 }
 
 - (BOOL)addClickableWay:(MapSelectionResult *)result clickableWay:(ClickableWay *)clickableWay
@@ -431,17 +452,20 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (BOOL)isUniqueTravelGpx:(NSMutableArray<SelectedMapObject *> *)selectedObjects travelGpx:(OATravelGpx *)travelGpx
 {
+    if (selectedObjects.count == 0)
+        return YES;
+    
     for (SelectedMapObject *selectedObject in selectedObjects)
     {
         if ([selectedObject.object isKindOfClass:NSArray.class] &&
-            [selectedObject.provider isKindOfClass:OAGPXLayer.class])
+            ([selectedObject.provider isKindOfClass:OAGPXLayer.class] || [selectedObject.provider isKindOfClass:OATravelSelectionLayer.class]))
         {
             NSArray *pair = (NSArray *)selectedObject.object;
             id firstOblect = [pair firstObject];
             if ([firstOblect isKindOfClass:OATravelGpx.class])
             {
                 OATravelGpx *gpx = firstOblect;
-                if (travelGpx == gpx)
+                if ([travelGpx equalsWithObj:gpx])
                 {
                     return NO;
                 }
@@ -449,7 +473,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         }
     }
     
-    NSString *gpxFileName = [travelGpx.file lastPathComponent];
+    NSString *gpxFileName = [[travelGpx getGpxFileName] stringByAppendingString:GPX_FILE_EXT];
     return [self isUniqueGpxFileName:selectedObjects gpxFileName:gpxFileName];
 }
 

@@ -391,10 +391,13 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
                 gpxFile.metadata.link = [[OASLink alloc] initWithHref:link];
             }
         }
-        for (OAPOI *wayPoint in pointList)
+        if (pointList.count > 1)
         {
-            OASWptPt *wpt = [self.class createWptPt:wayPoint lang:article.lang];
-            [gpxFile addPointPoint:wpt];
+            for (OAPOI *wayPoint in pointList)
+            {
+                OASWptPt *wpt = [self.class createWptPt:wayPoint lang:article.lang];
+                [gpxFile addPointPoint:wpt];
+            }
         }
     }
     OAGPXDocumentAdapter *gpxAdapter = [[OAGPXDocumentAdapter alloc] init];
@@ -510,16 +513,103 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
             if (tag == QStringLiteral("name"))
                 name = stringValue;
         }
-        
-        if ((travelGpx.ref && travelGpx.routeId && ref == [travelGpx.ref lowercaseString] && routeId == [travelGpx.routeId lowercaseString]) ||
-            (travelGpx.routeId && routeId == [travelGpx.routeId lowercaseString]) ||
-            (travelGpx.ref && ref == [travelGpx.ref lowercaseString]) ||
-            (travelGpx.title && name == [travelGpx.title lowercaseString]))
+        if ((travelGpx.ref && travelGpx.routeId && [ref isEqualToString:[travelGpx.ref lowercaseString]] && [routeId isEqualToString:[travelGpx.routeId lowercaseString]]) ||
+            (travelGpx.routeId && [routeId isEqualToString:[travelGpx.routeId lowercaseString]]) ||
+            (travelGpx.ref && [ref isEqualToString:[travelGpx.ref lowercaseString]]) ||
+            (travelGpx.title && [name isEqualToString:[travelGpx.title lowercaseString]]))
         {
             segmentList.append(binaryMapObject);
         }
     }
     return segmentList;
+}
+
++ (OATravelGpx *)searchTravelGpx:(CLLocation *)location routeId:(NSString *)routeId
+{
+    if (NSStringIsEmpty(routeId))
+        return nil;
+    
+    OATravelObfHelper *helper = OATravelObfHelper.shared;
+    NSArray<NSString *> *readers = [helper getReaders];
+    CLLocation *currentLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
+    const auto currentLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude));
+    
+    NSMutableArray<OAFoundAmenity *> *foundAmenities = [NSMutableArray new];
+    NSInteger searchRadius = helper.TRAVEL_GPX_SEARCH_RADIUS;
+    OATravelGpx *travelGpx;
+    
+    while (!travelGpx && searchRadius < helper.MAX_SEARCH_RADIUS)
+    {
+        for (NSString *reader in readers)
+        {
+            int previousFoundSize = foundAmenities.count;
+            BOOL firstSearchCycle = searchRadius == helper.TRAVEL_GPX_SEARCH_RADIUS;
+            if (firstSearchCycle)
+            {
+                [self searchTravelGpxAmenityByRouteId:foundAmenities repo:reader routeId:routeId location:location searchRadius:searchRadius currentLocationI:currentLocationI];
+            }
+            
+            BOOL nothingFound = previousFoundSize == foundAmenities.count;
+            if (nothingFound)
+            {
+                // fallback to non-indexed route_id (compatibility with old files)
+                [self searchAmenity:location.coordinate.latitude lon:location.coordinate.longitude reader:reader radius:searchRadius searchFilters:@[ROUTE_TRACK] publish:^BOOL(OAPOI *poi) {
+                    
+                    OAFoundAmenity *foundAmenity = [[OAFoundAmenity alloc] initWithFile:reader amenity:poi];
+                    [foundAmenities addObject:foundAmenity];
+                    return YES;
+                }];
+            }
+
+        }
+        
+        for (OAFoundAmenity *foundAmenity in foundAmenities)
+        {
+            NSString *aRouteId = [foundAmenity.amenity getRouteId];
+            NSString *lcRouteId = aRouteId ? [aRouteId lowercaseString] : nil;
+            if ([[routeId lowercaseString] isEqualToString:lcRouteId])
+            {
+                travelGpx = [self getTravelGpx:foundAmenity.file amenity:foundAmenity.amenity];
+                break;
+            }
+            
+        }
+        searchRadius *= 2;
+    }
+    
+    if (!travelGpx)
+    {
+        NSLog(@"searchTravelGpx(%f %f, %@) failed", location.coordinate.latitude, location.coordinate.longitude, routeId);
+    }
+ 
+    return travelGpx;
+}
+
++ (OATravelGpx *)getTravelGpx:(NSString *)file amenity:(OAPOI *)amenity
+{
+    OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:amenity];
+    travelGpx.file = file;
+    return travelGpx;
+}
+
++ (void)searchTravelGpxAmenityByRouteId:(NSMutableArray<OAFoundAmenity *> *)amenitiesList repo:(NSString *)repo routeId:(NSString *)routeId location:(CLLocation *)location searchRadius:(NSInteger)searchRadius currentLocationI:(OsmAnd::PointI)currentLocationI
+{
+    
+    OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(searchRadius, OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
+    
+    [OAPOIHelper findTravelGuides:@[ROUTE_TRACK] currentLocation:currentLocationI bbox31:bbox31 reader:repo publish:^BOOL(OAPOI * _Nonnull poi) {
+        
+        if ([poi.subType hasPrefix:ROUTES_PREFIX] || [poi.subType isEqualToString:ROUTE_TRACK])
+        {
+            if ([poi.values[@"route_id"] isEqualToString:routeId])
+            {
+                OAFoundAmenity *foundAmenity = [[OAFoundAmenity alloc] initWithFile:repo amenity:poi];
+                [amenitiesList addObject:foundAmenity];
+                return YES;
+            }
+        }
+        return NO;
+    }];
 }
 
 @end

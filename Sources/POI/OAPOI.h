@@ -49,6 +49,7 @@ extern NSString * const ROUTES;
 extern NSString * const ROUTE_ARTICLE;
 extern NSString * const ROUTE_PREFIX;
 extern NSString * const ROUTE_TRACK;
+extern NSString * const ROUTES_PREFIX;
 extern NSString * const ROUTE_TRACK_POINT;
 extern NSString * const ROUTE_BBOX_RADIUS;
 extern NSString * const ROUTE_MEMBERS_IDS;

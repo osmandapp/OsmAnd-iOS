@@ -558,7 +558,25 @@ static NSInteger const kMap3DModeButtonTag = -990;
 
 - (NSString *) sanitizeFileName
 {
-    return [[[self componentsSeparatedByCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]] componentsJoinedByString:@"_"];
+    NSMutableString *sanitized = [self mutableCopy];
+
+    NSArray<NSString *> *toReplaceWithUnderscore = @[
+        @"/", @"\\", @":", @";", @"*", @"?", @"`", @"'", @"\"", @"<", @">", @"|", @"&", @"\0", @"\n", @"\r"
+    ];
+
+    for (NSString *symbol in toReplaceWithUnderscore) {
+        [sanitized replaceOccurrencesOfString:symbol
+                                   withString:@"_"
+                                      options:0
+                                        range:NSMakeRange(0, sanitized.length)];
+    }
+
+    [sanitized replaceOccurrencesOfString:@"\t"
+                               withString:@" "
+                                  options:0
+                                    range:NSMakeRange(0, sanitized.length)];
+
+    return [sanitized stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 - (NSString *) xmlStringToString

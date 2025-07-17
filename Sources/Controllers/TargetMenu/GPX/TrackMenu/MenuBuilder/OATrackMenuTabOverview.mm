@@ -84,27 +84,32 @@
                     {
                         iconName = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle ? article.imageTitle : @"" thumbnail:NO];
                     }
-                    OAGPXTableCellData *articleRow = [OAGPXTableCellData withData:@{
-                        kTableKey: @"article",
-                        kCellType: [OAArticleTravelCell getCellIdentifier],
-                        kCellTitle: article.title ? article.title : @"nil",
-                        kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content],
-                        kCellRightIconName: iconName,
-                        kTableValues: @{
-                            @"isPartOf": geoDescription ? geoDescription : @"",
-                            @"article": article,
-                            @"lang": lang
-                        }
-                    }];
-                    [wikivoyageSectionData.subjects addObject:articleRow];
+                    
+                    NSString *content = [OATravelGuidesHelper getPatrialContent:article.content];
+                    if (!NSStringIsEmpty(content))
+                    {
+                        OAGPXTableCellData *articleRow = [OAGPXTableCellData withData:@{
+                            kTableKey: @"article",
+                            kCellType: [OAArticleTravelCell getCellIdentifier],
+                            kCellTitle: article.title ? article.title : @"nil",
+                            kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content] ?: @"qwerty",
+                            kCellRightIconName: iconName,
+                            kTableValues: @{
+                                @"isPartOf": geoDescription ? geoDescription : @"",
+                                @"article": article,
+                                @"lang": lang
+                            }
+                        }];
+                        [wikivoyageSectionData.subjects addObject:articleRow];
 
-                    OAGPXTableCellData *readCellData = [OAGPXTableCellData withData:@{
-                        kTableKey: @"readArticle",
-                        kCellType: [OASimpleTableViewCell getCellIdentifier],
-                        kCellTitle: OALocalizedString(@"shared_string_read"),
-                        kTableValues: @{ @"articleId": [article generateIdentifier], @"lang": lang }
-                    }];
-                    [wikivoyageSectionData.subjects addObject:readCellData];
+                        OAGPXTableCellData *readCellData = [OAGPXTableCellData withData:@{
+                            kTableKey: @"readArticle",
+                            kCellType: [OASimpleTableViewCell getCellIdentifier],
+                            kCellTitle: OALocalizedString(@"shared_string_read"),
+                            kTableValues: @{ @"articleId": [article generateIdentifier], @"lang": lang }
+                        }];
+                        [wikivoyageSectionData.subjects addObject:readCellData];
+                    }
                 }
             }
         }

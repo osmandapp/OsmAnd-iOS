@@ -8,6 +8,7 @@
 
 #import "OAPurchaseDetailsViewController.h"
 #import "OAValueTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OATitleDescriptionBigIconCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -271,7 +272,7 @@
 {
     [section addRowFromDictionary:@{
         kCellKeyKey : @"fastspring_desc",
-        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : [_product isKindOfClass:OASubscription.class] ? OALocalizedString(@"fastspring_subscription_desc") : OALocalizedString(@"fastspring_one_time_payment_desc"),
     }];
     
@@ -359,6 +360,23 @@
         }
         outCell = cell;
     }
+    else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    {
+        OARightIconTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightRegular];
+        cell.titleLabel.text = item.title;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell rightIconVisibility:NO];
+        return cell;
+    }
     else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
@@ -372,7 +390,6 @@
         }
         if (cell)
         {
-            BOOL isFastSpringDescription = [item.key isEqualToString:@"fastspring_desc"];
             BOOL isManageSubscription = [item.key isEqualToString:@"manage_subscription"];
             cell.selectionStyle = isManageSubscription ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             
@@ -387,18 +404,11 @@
                 }
             }
             
-            UIColor *tintColor;
-            if (isFastSpringDescription)
-                tintColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-            else if (isManageSubscription)
-                tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
-            else
-                tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            UIColor *tintColor = [UIColor colorNamed:isManageSubscription ? ACColorNameTextColorActive : ACColorNameTextColorSecondary];
             cell.titleLabel.text = item.title;
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
             cell.titleLabel.textColor = tintColor;
             cell.valueLabel.text = isManageSubscription ? @"" : item.descr;
-            [cell valueVisibility:!isFastSpringDescription];
             cell.accessoryView = isManageSubscription ? [[UIImageView alloc] initWithImage:[item objForKey:kCellIconKey]] : nil;
             cell.accessoryView.tintColor = tintColor;
         }

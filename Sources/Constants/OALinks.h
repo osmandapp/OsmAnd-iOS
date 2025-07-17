@@ -110,6 +110,8 @@ static NSString * const k_weather_global_forecast_system = @"https://www.ncei.no
 #define kAppleRedeemPromoCode  @"https://support.apple.com/en-gb/HT201209"
 #define kAppleManageSubscriptions @"https://apps.apple.com/account/subscriptions"
 
+#define kFastSpringManage @"https://osmand.onfastspring.com/account"
+
 #define kWeatherTilesUrlPrefix @"https://osmand.net/weather/gfs/tiff/"
 
 #define docs_widgets @"https://docs.osmand.net/docs/user/widgets/"

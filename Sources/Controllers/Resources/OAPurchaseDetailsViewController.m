@@ -223,16 +223,11 @@
         kCellTitleKey : OALocalizedString(@"purchase_origin"),
         kCellDescrKey : [self purchaseOriginToString:_origin]
     }];
-
-    if (isSubscription && _origin == EOAPurchaseOriginIOS)
-    {
-        [productSection addRowFromDictionary:@{
-            kCellKeyKey: @"manage_subscription",
-            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-            kCellTitleKey : OALocalizedString(@"manage_subscription"),
-            @"icon" : [UIImage templateImageNamed:@"ic_custom_shop_bag"]
-        }];
-    }
+    
+    if (_origin == EOAPurchaseOriginFastSpring)
+        [self generateDataForFastSpringForSection:productSection];
+    else if (isSubscription && _origin == EOAPurchaseOriginIOS)
+        [self generateManageSubscriptionForSection:productSection];
 }
 
 - (void)generateDataForCrossplatform
@@ -266,6 +261,30 @@
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"purchase_origin"),
         kCellDescrKey : [self purchaseOriginToString:_origin]
+    }];
+    
+    if (_origin == EOAPurchaseOriginFastSpring)
+        [self generateDataForFastSpringForSection:productSection];
+}
+
+- (void)generateDataForFastSpringForSection:(OATableSectionData *)section
+{
+    [section addRowFromDictionary:@{
+        kCellKeyKey : @"fastspring_desc",
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : [_product isKindOfClass:OASubscription.class] ? OALocalizedString(@"fastspring_subscription_desc") : OALocalizedString(@"fastspring_one_time_payment_desc"),
+    }];
+    
+    [self generateManageSubscriptionForSection:section];
+}
+
+- (void)generateManageSubscriptionForSection:(OATableSectionData *)section
+{
+    [section addRowFromDictionary:@{
+        kCellKeyKey: @"manage_subscription",
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"manage_subscription"),
+        kCellIconKey : [UIImage templateImageNamed:@"ic_custom_shop_bag"]
     }];
 }
 
@@ -353,15 +372,34 @@
         }
         if (cell)
         {
+            BOOL isFastSpringDescription = [item.key isEqualToString:@"fastspring_desc"];
             BOOL isManageSubscription = [item.key isEqualToString:@"manage_subscription"];
             cell.selectionStyle = isManageSubscription ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             
-            UIColor *tintColor = isManageSubscription ? [UIColor colorNamed:ACColorNameTextColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+            NSIndexPath *nextIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+            if (nextIndexPath)
+            {
+                OATableRowData *nextItem = [_data itemForIndexPath:nextIndexPath];
+                if (_origin == EOAPurchaseOriginFastSpring && [nextItem.key isEqualToString:@"fastspring_desc"])
+                {
+                    [cell setCustomLeftSeparatorInset:YES];
+                    cell.separatorInset = UIEdgeInsetsZero;
+                }
+            }
+            
+            UIColor *tintColor;
+            if (isFastSpringDescription)
+                tintColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            else if (isManageSubscription)
+                tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            else
+                tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.titleLabel.text = item.title;
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
             cell.titleLabel.textColor = tintColor;
             cell.valueLabel.text = isManageSubscription ? @"" : item.descr;
-            cell.accessoryView = isManageSubscription ? [[UIImageView alloc] initWithImage:[item objForKey:@"icon"]] : nil;
+            [cell valueVisibility:!isFastSpringDescription];
+            cell.accessoryView = isManageSubscription ? [[UIImageView alloc] initWithImage:[item objForKey:kCellIconKey]] : nil;
             cell.accessoryView.tintColor = tintColor;
         }
         outCell = cell;
@@ -384,7 +422,7 @@
     BOOL isManageSubscription = [item.key isEqualToString:@"manage_subscription"];
     if (isManageSubscription)
     {
-        [self presentViewController:[[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:kAppleManageSubscriptions]]
+        [self presentViewController:[[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:_origin == EOAPurchaseOriginFastSpring ? kFastSpringManage : kAppleManageSubscriptions]]
                            animated:YES
                          completion:nil];
     }

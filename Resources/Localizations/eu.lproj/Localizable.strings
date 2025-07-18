@@ -2562,3 +2562,10 @@
 "sensor_data" = "Sentsoreen datuak";
 "intermediate_first" = "Tarteko lehenengoa";
 "destination_first" = "Lehenengo helmuga";
+"display_priority" = "Bistaratze lehentasuna";
+"add_widget" = "Gehitu trepeta";
+"meridian_180" = "180 meridianoa";
+"prime_meridian" = "Zero meridianoa";
+"equator" = "Ekuatorea";
+"quick_action_showhide_coordinates_grid_descr" = "Maparen koordenatuen saretaren ikusgarritasuna kontrolatzeko ekintza.";
+"layer_coordinates_grid" = "Koordenatuen sarea";

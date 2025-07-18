@@ -2075,7 +2075,7 @@
 "shared_string_markers" = "Markoj";
 "ant_plus_bluetooth_off" = "Bludento estas malaktiva";
 "time_to_go_desc" = "Tempo en minutoj aŭ horoj necesa por akiri vian alcelan lokon.";
-"user_points" = "Poentoj de uzanto";
+"user_points" = "Objektoj de uzanto";
 "altitude_widget_desc" = "Fenestraĵo montranta altecon super la marnivelo por la nuna pozicio.";
 "complex_widget_alert" = "La fenestraĵo %@ estu nur en aparta vico.";
 "relative_bearing_widget_desc" = "Angulo inter direkto de via movado kaj la alcela loko.";

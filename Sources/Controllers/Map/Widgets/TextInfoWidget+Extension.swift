@@ -10,7 +10,7 @@ extension OATextInfoWidget {
     
     @objc
     func configureContextMenu(addGroup: UIMenu, settingsGroup: UIMenu, deleteGroup: UIMenu) -> UIMenu {
-        return UIMenu(title: "", children: [addGroup, settingsGroup, deleteGroup]);
+        UIMenu(title: "", children: [addGroup, settingsGroup, deleteGroup])
     }
     
     @objc
@@ -139,6 +139,14 @@ extension OATextInfoWidget {
         }
         widgetSizePref?.set(style, mode: appMode)
     }
+    
+    @objc func widgetSizeStyleFor(appMode: OAApplicationMode) -> EOAWidgetSizeStyle {
+        guard widgetSizePref != nil else {
+            return .medium
+        }
+        return widgetSizePref?.get(appMode) ?? .medium
+    }
+    
 }
 
 extension Array where Element == OATextInfoWidget {
@@ -146,7 +154,7 @@ extension Array where Element == OATextInfoWidget {
         var styleCounts: [EOAWidgetSizeStyle: Int] = [:]
         
         for widget in self {
-            let style = widget.widgetSizeStyle
+            let style = widget.widgetSizeStyleFor(appMode: appMode)
             styleCounts[style] = (styleCounts[style] ?? 0) + 1
         }
         guard let mostFrequentStyle = styleCounts.max(by: { $0.value < $1.value })?.key else {

@@ -3096,7 +3096,6 @@
 		FA069C6B2B9F65750007E4DE /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */; };
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
-		FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */; };
 		FA186E482BFCF15A007EE77D /* SpeedLimitWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */; };
 		FA1D6DAE2DCE04710080E374 /* VehicleMetricsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */; };
 		FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */; };
@@ -7692,7 +7691,6 @@
 		FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
 		FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
-		FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunPositionMode.swift; sourceTree = "<group>"; };
 		FA186E462BFCF15A007EE77D /* SpeedLimitWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeedLimitWrapper.h; sourceTree = "<group>"; };
 		FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SpeedLimitWrapper.mm; sourceTree = "<group>"; };
 		FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsPlugin.swift; sourceTree = "<group>"; };
@@ -12754,7 +12752,6 @@
 				DA5A7F1B26C563A400F274C7 /* OATimeWidgetState.m */,
 				DA5A7F1C26C563A400F274C7 /* OAWidgetState.h */,
 				DA5A7F1726C563A400F274C7 /* OAWidgetState.m */,
-				FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */,
 				DAA61CBB2A02576A00AFF65D /* TimeToNavigationPointWidgetState.swift */,
 			);
 			path = WidgetStates;
@@ -17191,7 +17188,6 @@
 				DA5A853B26C563A900F274C7 /* OAFileNameTranslationHelper.m in Sources */,
 				DA5A819026C563A700F274C7 /* OAShowHideGPXTracksAction.mm in Sources */,
 				DA5A82E526C563A800F274C7 /* OAPublicTransportShieldCell.mm in Sources */,
-				FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */,
 				32FF4C312C19D59A00246B36 /* DownloadingCellResourceHelper.swift in Sources */,
 				DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */,
 				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,

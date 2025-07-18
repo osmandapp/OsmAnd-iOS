@@ -381,6 +381,7 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
 
 - (BOOL)isSetForMode:(OAApplicationMode *)mode;
+- (nullable NSNumber *)valueFromString:(nonnull NSString *)string appMode:(nonnull OAApplicationMode *)mode;
 
 @end
 
@@ -719,6 +720,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (OADownloadMode *) get:(OAApplicationMode *)mode;
 - (void) set:(OADownloadMode *)downloadMode;
 - (void) set:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
+- (OADownloadMode *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode;
 
 @end
 
@@ -733,6 +735,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (OAColoringType *) get:(OAApplicationMode *)mode;
 - (void) set:(OAColoringType *)coordinateInputFormats;
 - (void) set:(OAColoringType *)coordinateInputFormats mode:(OAApplicationMode *)mode;
+- (OAColoringType *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode;
 
 @end
 
@@ -744,6 +747,23 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (EOAWidgetSizeStyle) get:(OAApplicationMode *)mode;
 - (void) set:(EOAWidgetSizeStyle)widgetSizeStyle;
 - (void) set:(EOAWidgetSizeStyle)widgetSizeStyle mode:(OAApplicationMode *)mode;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOASunPositionMode) {
+    EOASunPositionModeSunPositionMode,
+    EOASunPositionModeSunsetMode,
+    EOASunPositionModeSunriseMode
+};
+
+@interface OACommonSunPositionMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(EOASunPositionMode)defValue;
+
+- (EOASunPositionMode)get;
+- (EOASunPositionMode)get:(OAApplicationMode *)mode;
+- (void)set:(EOASunPositionMode)positionMode;
+- (void)set:(EOASunPositionMode)positionMode mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -1171,6 +1191,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 - (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue;
 - (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue;
+- (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue;
 
 // Direction Appearance
 

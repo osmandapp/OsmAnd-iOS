@@ -152,9 +152,9 @@ static const double locationChangeAccuracy = 0.0001;
     OATableSectionData *section = [data createNewSection];
     section.headerText = OALocalizedString(@"shared_string_settings");
     
-    SunPositionMode currentValue = type == OAWidgetType.sunPosition
-    ? (SunPositionMode)[_state getSunPositionPreference].defValue
-    : (SunPositionMode)[[_state getSunPositionPreference] get:appMode];
+    EOASunPositionMode currentValue = type == OAWidgetType.sunPosition
+    ? (EOASunPositionMode)[_state getSunPositionPreference].defValue
+    : (EOASunPositionMode)[[_state getSunPositionPreference] get:appMode];
 
     if (type == OAWidgetType.sunPosition)
     {
@@ -172,12 +172,12 @@ static const double locationChangeAccuracy = 0.0001;
             {
                 NSNumber *widgetValue = widgetConfigurationParams[key];
                 if (widgetValue != nil)
-                    currentValue = (SunPositionMode)widgetValue.intValue;
+                    currentValue = (EOASunPositionMode)widgetValue.intValue;
             }
         }
         else if (!isCreate)
         {
-            currentValue = (SunPositionMode)[[_state getSunPositionPreference] get:appMode];
+            currentValue = (EOASunPositionMode)[[_state getSunPositionPreference] get:appMode];
         }
         [row setObj:[self getTitleForSunPositionMode:currentValue] forKey:@"value"];
         [row setObj:self.getPossibleFormatValues forKey:@"possible_values"];
@@ -233,9 +233,9 @@ static const double locationChangeAccuracy = 0.0001;
     NSMutableArray<OATableRowData *> *res = [NSMutableArray array];
     
     NSDictionary *dict = @{
-        @(SunPositionModeSunPositionMode):OALocalizedString(@"shared_string_next_event"),
-        @(SunPositionModeSunsetMode):OALocalizedString(@"map_widget_sunset"),
-        @(SunPositionModeSunriseMode):OALocalizedString(@"map_widget_sunrise")
+        @(EOASunPositionModeSunPositionMode):OALocalizedString(@"shared_string_next_event"),
+        @(EOASunPositionModeSunsetMode):OALocalizedString(@"map_widget_sunset"),
+        @(EOASunPositionModeSunriseMode):OALocalizedString(@"map_widget_sunrise")
     };
     
     for (NSNumber *key in dict)
@@ -250,7 +250,7 @@ static const double locationChangeAccuracy = 0.0001;
     return res;
 }
 
-- (NSArray<OATableRowData *> *) getPossibleValuesWithSunPositionMode:(SunPositionMode)sunPositionMode
+- (NSArray<OATableRowData *> *) getPossibleValuesWithSunPositionMode:(EOASunPositionMode)sunPositionMode
 {
     NSMutableArray<OATableRowData *> *res = [NSMutableArray array];
     
@@ -272,15 +272,15 @@ static const double locationChangeAccuracy = 0.0001;
 }
 
 - (NSString *)getWidgetName {
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
+    EOASunPositionMode sunPositionMode = (EOASunPositionMode)[[_state getSunPositionPreference] get];
     
     NSString *sunsetStringId = OALocalizedString(@"map_widget_sunset");
     NSString *sunriseStringId = OALocalizedString(@"map_widget_sunrise");
     NSMutableString *result = [NSMutableString string];
     
-    if (OAWidgetType.sunset == self.widgetType || (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunsetMode)) {
+    if (OAWidgetType.sunset == self.widgetType || (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == EOASunPositionModeSunsetMode)) {
         [result appendString:sunsetStringId];
-    } else if (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunPositionMode) {
+    } else if (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == EOASunPositionModeSunPositionMode) {
         [result appendString:_state.lastIsDayTime ? sunsetStringId : sunriseStringId];
     } else {
         [result appendString:sunriseStringId];
@@ -299,19 +299,19 @@ static const double locationChangeAccuracy = 0.0001;
     return result;
 }
 
-- (NSString *)getTitleForSunPositionMode:(SunPositionMode)mode {
+- (NSString *)getTitleForSunPositionMode:(EOASunPositionMode)mode {
     switch (mode)
     {
-        case SunPositionModeSunPositionMode:
+        case EOASunPositionModeSunPositionMode:
             return OALocalizedString(@"shared_string_next_event");
-        case SunPositionModeSunsetMode:
+        case EOASunPositionModeSunsetMode:
             return OALocalizedString(@"map_widget_sunset");
-        case SunPositionModeSunriseMode:
+        case EOASunPositionModeSunriseMode:
             return OALocalizedString(@"map_widget_sunrise");
     }
 }
 
-- (NSString *)getTitle:(EOASunriseSunsetMode)ssm sunPositionMode:(SunPositionMode)sunPositionMode
+- (NSString *)getTitle:(EOASunriseSunsetMode)ssm sunPositionMode:(EOASunPositionMode)sunPositionMode
 {
     switch (ssm)
     {
@@ -324,7 +324,7 @@ static const double locationChangeAccuracy = 0.0001;
     }
 }
 
-- (NSString *)getNextEventString:(SunPositionMode)sunPositionMode {
+- (NSString *)getNextEventString:(EOASunPositionMode)sunPositionMode {
     OAWidgetType *type = [_state getWidgetType];
     NSString *eventString = @"";
     
@@ -332,10 +332,10 @@ static const double locationChangeAccuracy = 0.0001;
     {
         switch (sunPositionMode)
         {
-            case SunPositionModeSunriseMode:
+            case EOASunPositionModeSunriseMode:
                 eventString = @"map_widget_next_sunrise";
                 break;
-            case SunPositionModeSunsetMode:
+            case EOASunPositionModeSunsetMode:
                 eventString = @"map_widget_next_sunset";
                 break;
             default:
@@ -384,13 +384,13 @@ static const double locationChangeAccuracy = 0.0001;
     NSDate *sunrise = [sunriseSunset getSunrise];
     NSDate *sunset = [sunriseSunset getSunset];
     NSDate *nextTimeDate;
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
+    EOASunPositionMode sunPositionMode = (EOASunPositionMode)[[_state getSunPositionPreference] get];
     OAWidgetType *type = [_state getWidgetType];
-    if (OAWidgetType.sunset == type || (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunsetMode))
+    if (OAWidgetType.sunset == type || (OAWidgetType.sunPosition == type && sunPositionMode == EOASunPositionModeSunsetMode))
     {
         nextTimeDate = sunset;
     }
-    else if (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunPositionMode)
+    else if (OAWidgetType.sunPosition == type && sunPositionMode == EOASunPositionModeSunPositionMode)
     {
         _state.lastIsDayTime = [sunriseSunset isDaytime];
         nextTimeDate = _state.lastIsDayTime ? sunset : sunrise;

@@ -178,7 +178,10 @@
     return self;
 }
 
-- (void)setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode
+- (void)setSettingValue:(NSString *)value
+                 forKey:(NSString *)key
+                   mode:(OAApplicationMode *)mode
+             notHandled:(void (^)(NSString *value, NSString *key, OAApplicationMode *mode))notHandled
 {
     @synchronized (_lock)
     {
@@ -206,109 +209,64 @@
         {
             [_travelGuidesImagesDownloadModeProfile setValueFromString:value appMode:mode];
         } else {
-          //  [self configureStringValue:value forKey:key mode:mode];
+            if (notHandled)
+                notHandled(value, key, mode);
         }
     }
 }
 
-static NSArray<NSString *> *excludeKeys = @[
-    @"drawer_items_default",
-    @"context_menu_items",
-    @"collapsed_configure_map_categories",
-    @"trip_recording_Y_axis",
-    @"drawer_items",
-    @"configure_map_items"
-];
-
-- (void)configureStringValue:(NSString *)strValue
-                      forKey:(NSString *)key
-                        mode:(OAApplicationMode *)mode
-{
-    if (strValue.length == 0) return;
-
-    NSString *modeKey = [NSString stringWithFormat:@"%@_%@", key, mode.stringKey];
-    NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
-
-    NSString *lowerStr = strValue.lowercaseString;
-    if ([lowerStr isEqualToString:@"true"]) {
-        [defaults setBool:YES forKey:modeKey];
-        return;
-    }
-    if ([lowerStr isEqualToString:@"false"]) {
-        [defaults setBool:NO forKey:modeKey];
-        return;
-    }
-
-    // Try integer
-    NSInteger intValue = 0;
-    NSScanner *scanner = [NSScanner scannerWithString:strValue];
-    if ([scanner scanInteger:&intValue] && scanner.isAtEnd) {
-        [defaults setInteger:intValue forKey:modeKey];
-        return;
-    }
-
-    // Try double
-    double doubleValue = 0.0;
-    scanner = [NSScanner scannerWithString:strValue];
-    if ([scanner scanDouble:&doubleValue] && scanner.isAtEnd) {
-        [defaults setDouble:doubleValue forKey:modeKey];
-        return;
-    }
-
-    // Try nested array ("a,b;c,d")
-    if ([strValue containsString:@";"])
-    {
-        NSMutableArray<NSArray<NSString *> *> *nestedArray = [NSMutableArray array];
-        for (NSString *subStr in [strValue componentsSeparatedByString:@";"])
-        {
-            if (subStr.length > 0)
-            {
-                [nestedArray addObject:[subStr componentsSeparatedByString:@","]];
-            }
-        }
-        [defaults setObject:nestedArray forKey:modeKey];
-        return;
-    }
-
-    // Try flat array ("a,b,c")
-    if ([strValue containsString:@","])
-    {
-        NSArray<NSString *> *array = [strValue componentsSeparatedByString:@","];
-        [defaults setObject:array forKey:modeKey];
-        return;
-    }
-
-    NSLog(@"%@: %@", key, strValue);
-}
-
-
-- (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode
+- (void)addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode
 {
     @synchronized (_lock)
     {
-        if ([_verticalExaggerationScaleProfile isSetForMode:mode])
-        {
-            prefs[@"vertical_exaggeration_scale"] = [NSString stringWithFormat:@"%f", ([_verticalExaggerationScaleProfile get:mode])];
+        if ([_verticalExaggerationScaleProfile isSetForMode:mode]) {
+            prefs[@"vertical_exaggeration_scale"] =
+                [NSString stringWithFormat:@"%f", [_verticalExaggerationScaleProfile get:mode]];
         }
-        if ([_mapillaryProfile isSetForMode:mode])
+
+        NSDictionary *profiles = @{
+            @"show_mapillary": _mapillaryProfile,
+            @"global_wikipedia_poi_enabled": _wikipediaGlobalProfile,
+            @"wikipedia_poi_enabled_languages": _wikipediaLanguagesProfile,
+            @"wikipedia_images_download_mode": _wikipediaImagesDownloadModeProfile,
+            kTravelGuidesImagesDownloadModeKey: _travelGuidesImagesDownloadModeProfile,
+            kWeatherSourceKey: _weatherSourceProfile,
+            kWeatherTempKey: _weatherTempProfile,
+            kWeatherPressureKey: _weatherPressureProfile,
+            kWeatherWindKey: _weatherWindProfile,
+            kWeatherWindAnimationKey: _weatherWindAnimationProfile,
+            kWeatherCloudKey: _weatherCloudProfile,
+            kWeatherPrecipKey: _weatherPrecipProfile,
+            // TODO: Settings with units have a different format compared to Android; will need to be fixed.
+            // https://github.com/osmandapp/OsmAnd-Issues/issues/2776#issuecomment-3088962795
+           // kWeatherTempUnitKey: _weatherTempUnitProfile,
+           // kWeatherPressureUnitKey: _weatherPressureUnitProfile,
+           // kWeatherWindUnitKey: _weatherWindUnitProfile,
+           // kWeatherWindAnimationWindUnitKey: _weatherWindAnimationUnitProfile,
+           // kWeatherCloudUnitKey: _weatherCloudUnitProfile,
+           // kWeatherPrecipUnitKey: _weatherPrecipUnitProfile,
+            kWeatherTempAlphaKey: _weatherTempAlphaProfile,
+            kWeatherPressureAlphaKey: _weatherPressureAlphaProfile,
+            kWeatherWindAlphaKey: _weatherWindAlphaProfile,
+            kWeatherWindToolbarAlphaKey: _weatherWindToolbarAlphaProfile,
+            kWeatherCloudAlphaKey: _weatherCloudAlphaProfile,
+            kWeatherPrecipAlphaKey: _weatherPrecipAlphaProfile,
+            kWeatherTempUnitAutoKey: _weatherTempUnitAutoProfile,
+            kWeatherPressureUnitAutoKey: _weatherPressureUnitAutoProfile,
+            kWeatherWindUnitAutoKey: _weatherWindUnitAutoProfile,
+            kWeatherWindAnimationUnitAutoKey: _weatherWindAnimationUnitAutoProfile,
+            kWeatherCloudUnitAutoKey: _weatherCloudUnitAutoProfile,
+            kWeatherPrecipUnitAutoKey: _weatherPrecipUnitAutoProfile
+        };
+
+        for (NSString *key in profiles)
         {
-            prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
-        }
-        if ([_wikipediaGlobalProfile isSetForMode:mode])
-        {
-            prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
-        }
-        if ([_wikipediaLanguagesProfile isSetForMode:mode])
-        {
-            prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
-        }
-        if ([_wikipediaImagesDownloadModeProfile isSetForMode:mode])
-        {
-            prefs[@"wikipedia_images_download_mode"] = [_wikipediaImagesDownloadModeProfile toStringValue:mode];
-        }
-        if ([_travelGuidesImagesDownloadModeProfile isSetForMode:mode])
-        {
-            prefs[@"travelGuidesImagesDownloadMode"] = [_travelGuidesImagesDownloadModeProfile toStringValue:mode];
+            id profile = profiles[key];
+            if ([profile isSetForMode:mode])
+            {
+                // NOTE: The value 0.67 is saved as 70 (similar to Android).  "weatherTempAlpha" : "0.7",
+                prefs[key] = [profile toStringValue:mode];
+            }
         }
     }
 }
@@ -396,8 +354,8 @@ static NSArray<NSString *> *excludeKeys = @[
     _weatherWindToolbarProfile = [OACommonBoolean withKey:kWeatherWindToolbarKey defValue:NO];
     _weatherWindUnitProfile = [OACommonUnit withKey:kWeatherWindUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_SPEED]];
     _weatherWindUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindUnitAutoKey defValue:YES];
-    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
-    _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
     _weatherCloudProfile = [OACommonBoolean withKey:kWeatherCloudKey defValue:NO];
     _weatherCloudToolbarProfile = [OACommonBoolean withKey:kWeatherCloudToolbarKey defValue:NO];
     _weatherCloudUnitProfile = [OACommonUnit withKey:kWeatherCloudUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_CLOUD]];

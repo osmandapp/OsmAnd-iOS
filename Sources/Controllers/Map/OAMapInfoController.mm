@@ -694,6 +694,13 @@
     [self registerAllControls];
     //[_mapWidgetRegistry reorderWidgets];
     [self recreateControls:NO];
+    
+    // After import, widgets on the top and bottom panels may have different sizes
+    // (from a different application mode), since these panels already contained widgets of other sizes.
+    // We will normalize them to a single size: all widgets will adopt the size
+    // that occurs most frequently in the row.
+    [WidgetUtils applyMostFrequentStyleForPagedWidgetsWithAppMode:[[OAAppSettings sharedManager].applicationMode get]
+                                                      filterModes:KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]];
 }
 
 - (void) recreateControls

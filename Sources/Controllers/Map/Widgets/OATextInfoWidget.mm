@@ -1018,9 +1018,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     NSString *prefId = [kSizeStylePref stringByAppendingString:self.widgetType.id];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
-    if ([prefId hasSuffix:@"1730986679903"]) {
-        NSLog(@"");
-    }
     return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:[[self getWidgetPanel] isPanelVertical] || self.widgetType.getPanel.isPanelVertical ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
 }
 

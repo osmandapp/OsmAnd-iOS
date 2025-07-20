@@ -3303,3 +3303,13 @@
 "article_removed_from_bookmark" = " αφαιρέθηκε από τους σελιδοδείκτες.";
 "backup_error_size_is_exceeded" = "Το μέγιστο μέγεθος του OsmAnd Cloud ξεπερνά τα %@";
 "banner_payment_free_backup_settings_title" = "Δωρεάν αντίγραφο ασφαλείας ρυθμίσεων";
+"map_settings_weather_wind_animation" = "Κινούμενα γραφικά ανέμου";
+"no_widgets_here_yet" = "Δεν υπάρχουν γραφικά στοιχεία εδώ ακόμα";
+"no_widgets_descr" = "Προσθέστε ένα ή περισσότερα γραφικά στοιχεία από την λίστα με τα διαθέσιμα γραφικά στοιχεία.";
+"zoom_levels_difference_description" = "Η μεγάλη διαφορά μεταξύ των επιπέδων εστίασης μπορεί να αυξήσει το μέγεθος των ληφθέντων δεδομένων.";
+"default_appearance_desc" = "Προεπιλεγμένο χρώμα, εικονίδιο και σχήμα θα εφαρμοστούν στα προστιθέμενα αγαπημένα σημεία της ομάδας.";
+"rendering_attr_seabedDetail_name" = "Λεπτομέρειες πυθμένα";
+"routeInfo_roadClass_description" = "Χρωματισμός της διαδρομής ή της γραμμής ίχνους βάσει της ταξινόμησης του δρόμου.";
+"contributions_may_calculate_with_delay" = "Ο υπολογισμός των συνεισφορών μπορεί να διαρκέσει αρκετές ώρες.";
+"reset_to_original" = "Επαναφορά στο αρχικό";
+"logout_from_osmand_cloud_decsr" = "Αποσύνδεση;\nΘα χρειαστεί να συνδεθείτε ξανά για αντίγραφα ασφαλείας ή επαναφορά δεδομένων.";

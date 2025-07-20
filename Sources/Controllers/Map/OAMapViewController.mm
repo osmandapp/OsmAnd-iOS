@@ -2343,7 +2343,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
             OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
 
-            _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
+            _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection, OsmAnd::ObfMapObjectsProvider::Mode::BinaryMapObjectsAndRoads, 2));
 
             NSLog(@"%@", [OAUtilities currentLang]);
             

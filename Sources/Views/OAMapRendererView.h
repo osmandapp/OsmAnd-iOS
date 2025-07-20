@@ -26,7 +26,7 @@
 static const float kViewportScale = 1.0f;
 static const float kViewportBottomScale = 1.5f;
 
-static const int kSymbolsUpdateInterval = 2000;
+static const int kSymbolsUpdateInterval = 1000;
 
 static const int kObfRasterLayer = 0;
 static const int kObfSymbolSection = 1;

@@ -46,6 +46,7 @@ NSString *const kCellSwitchIsOnKey = @"kCellSwitchIsOnKey";
 NSString *const kUse3dIconsKey = @"kUse3dIconsKey";
 NSString *const kBatterySavingModeKey = @"kBatterySavingModeKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
+NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
 
 #pragma mark - Initialization
 
@@ -110,6 +111,16 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         @"isOn" : @([[OAAppSettings sharedManager].batterySavingMode get])
     }];
     [_data addSection:renderingSection];
+    
+    OATableSectionData *renderingDebugSection = [OATableSectionData sectionData];
+    renderingDebugSection.headerText = OALocalizedString(@"map_text");
+    [renderingDebugSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kTraceRenderingKey,
+        kCellTitleKey : OALocalizedString(@"trace_rendering"),
+        @"isOn" : @([[OAAppSettings sharedManager].debugRenderingInfo get])
+    }];
+    [_data addSection:renderingDebugSection];
 }
 
 - (NSInteger)sectionsCount
@@ -184,13 +195,18 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         [[OAAppSettings sharedManager].use3dIconsByDefault set:sender.isOn];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
-    if ([item.key isEqualToString:kBatterySavingModeKey])
+    else if ([item.key isEqualToString:kBatterySavingModeKey])
     {
         [[OAAppSettings sharedManager].batterySavingMode set:sender.isOn];
         if (sender.isOn)
         	[OARootViewController.instance.mapPanel.mapViewController.mapView limitFrameRefreshRate];
         else
         	[OARootViewController.instance.mapPanel.mapViewController.mapView restoreFrameRefreshRate];
+    }
+    else if ([item.key isEqualToString:kTraceRenderingKey])
+    {
+        [[OAAppSettings sharedManager].debugRenderingInfo set:sender.isOn];
+        _app.performanceMetricsEnabled = sender.isOn;
     }
 }
 

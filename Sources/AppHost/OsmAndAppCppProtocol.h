@@ -20,6 +20,8 @@
 @protocol OsmAndAppCppProtocol <NSObject>
 @required
 
+@property(nonatomic, assign) bool performanceMetricsEnabled;
+
 @property(nonatomic, readonly) QDir dataDir;
 @property(nonatomic, readonly) QDir documentsDir;
 

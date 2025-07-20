@@ -71,6 +71,7 @@
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/GeoCommonTypes.h>
+#include <OsmAndCore/Map/MapRendererPerformanceMetrics.h>
 #include <openingHoursParser.h>
 
 #define k3MonthInSeconds 60 * 60 * 24 * 90
@@ -114,6 +115,7 @@ NSString *const kXmlColon = @"_-_";
 }
 
 @synthesize initialized = _initialized;
+@synthesize performanceMetricsEnabled = _performanceMetricsEnabled;
 @synthesize dataPath = _dataPath;
 @synthesize dataDir = _dataDir;
 @synthesize documentsPath = _documentsPath;
@@ -365,6 +367,8 @@ NSString *const kXmlColon = @"_-_";
     BOOL resetRouting = [defaults boolForKey:@"reset_routing"];
     OAAppSettings *settings = [OAAppSettings sharedManager];
 
+    self.performanceMetricsEnabled = settings.debugRenderingInfo.get;
+    
     [settings setDisabledTypes:[settings.speedCamerasUninstalled get] ? [NSSet setWithObject:SPEED_CAMERA] : [NSSet set]];
     LogStartup(@"settings disabled types set");
 
@@ -940,6 +944,12 @@ NSString *const kXmlColon = @"_-_";
 - (std::shared_ptr<RoutingConfigurationBuilder>) getCustomRoutingConfig:(std::string &)key
 {
     return _customRoutingConfigs[key];
+}
+
+- (void)setPerformanceMetricsEnabled:(bool)performanceMetricsEnabled
+{
+    _performanceMetricsEnabled = performanceMetricsEnabled;
+    OsmAnd::enablePerformanceMetrics(performanceMetricsEnabled);
 }
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getRoutingConfigForMode:(OAApplicationMode *)mode

@@ -3725,7 +3725,7 @@
 "obd_how_to_connect" = "Så ansluter du:";
 "connect_obd_instructions_step" = "1. Anslut skannern till ditt fordons OBD-II-port.\n\n2. Slå på ditt fordons motor.\n\n3. Aktivera Bluetooth på din enhet.\n\n4. Tryck '%@' och välj din skanner från listan.";
 "obd_bluetooth_off_description" = "Slå på Bluetooth för att hitta och ansluta skannrar.";
-"obd_searching_text_description" = "Vänliga ha din enhet nära skannern. Försäkra dig om att fordonets motor är igång.";
+"obd_searching_text_description" = "Håll din enhet nära skannern. Försäkra dig om att fordonets motor är igång.";
 "obd_searching_text" = "Söker efter skannrar";
 "obd_nothing_found_text" = "Inga skannrar hittade";
 "obd_nothing_found_description" = "Vänlig kontrollera följande:\n– Säkerställ att Bluetooth är påslaget\n– Motorn är igång\n– Försäkra dig om att din enhet är inom räckhåll för skannern.";
@@ -3771,3 +3771,6 @@
 "shared_string_other" = "Övrigt";
 "shared_string_engine" = "Motor";
 "routing_attr_allow_ferries_name" = "Tillåt färjor";
+"connect_obd_instructions_title" = "OsmAnd stödjer Bluetooth-anslutning till OBD-II skannrar.";
+"purchase_feature_desc_vehicle_metrics_obd_ii" = "Håll koll på viktiga fordonsdata genom användning av OBD-II-protokollet. Övervaka nyckeltal som hastighet, motorvarvtal, bränsleförbrukning, med mera.";
+"obd_plugin_description" = "Övervaka viktiga fordonsdata med OBD-II-protokollet. Få tillgång till information som:\n• Motorhastighet, motorns körtid, beräknad motorbelastning\n• Bränsleförbrukning, bränsletryck, återstående bränsle\n• Intagstemperatur, omgivningstemperatur, kylartemperatur, motoroljetemperatur\n• Fordonshastighet, gasposition, batterispänning";

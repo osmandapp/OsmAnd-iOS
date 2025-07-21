@@ -26,7 +26,7 @@ final class AmenitySearcherRequest: NSObject {
                 names.append(contentsOf:localizedNames)
             }
         } else if let renderedObject = mapObject as? OARenderedObject {
-            latLon = renderedObject.getLocation()
+            latLon = renderedObject.getLocation() ?? renderedObject.labelLatLon
             if let localizedNames = renderedObject.localizedNames.allValues as? [String] {
                 names.append(contentsOf:localizedNames)
             }

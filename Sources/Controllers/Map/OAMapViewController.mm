@@ -3832,8 +3832,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 it.next();
                 NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
                 NSNumber *value = @(it.value());
-                if (value.intValue == -1)
-                    continue;
                 
                 [result setObject:value forKey:key];
             }

@@ -512,6 +512,7 @@
 		32EAFA012AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EAFA002AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift */; };
 		32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */; };
 		32EEB6322E286525002216B0 /* OATravelSelectionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EEB6312E286521002216B0 /* OATravelSelectionLayer.mm */; };
+		32EEB6452E2ABA3C002216B0 /* AmenitySearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EEB6442E2ABA35002216B0 /* AmenitySearcher.swift */; };
 		32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */; };
 		32F3A6AC2D5E1A43008AE4CA /* IconsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */; };
 		32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */; };
@@ -3992,6 +3993,7 @@
 		32E2D2FF29B9DB5600A17D0B /* ic_custom_coordinates_map_center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_map_center@2x.png"; path = "Resources/Icons/ic_custom_coordinates_map_center@2x.png"; sourceTree = "<group>"; };
 		32E2D30029B9DB5600A17D0B /* ic_custom_coordinates_map_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_map_center@3x.png"; path = "Resources/Icons/ic_custom_coordinates_map_center@3x.png"; sourceTree = "<group>"; };
 		32E2D30129B9DB5700A17D0B /* ic_custom_coordinates_location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_location@2x.png"; path = "Resources/Icons/ic_custom_coordinates_location@2x.png"; sourceTree = "<group>"; };
+		32E2F7E82E2CD796000F1A78 /* EOAEntityType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EOAEntityType.h; sourceTree = "<group>"; };
 		32E6C7C72AB9BE1A00821F1E /* TravelSearchHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSearchHelper.swift; sourceTree = "<group>"; };
 		32EAF9FA2AE0241F00646807 /* TravelGuidesSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesSettingsViewController.swift; sourceTree = "<group>"; };
 		32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManagerWrapper.h; sourceTree = "<group>"; };
@@ -4002,6 +4004,7 @@
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		32EEB6302E28651B002216B0 /* OATravelSelectionLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelSelectionLayer.h; sourceTree = "<group>"; };
 		32EEB6312E286521002216B0 /* OATravelSelectionLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelSelectionLayer.mm; sourceTree = "<group>"; };
+		32EEB6442E2ABA35002216B0 /* AmenitySearcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenitySearcher.swift; sourceTree = "<group>"; };
 		32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiIconCollectionHandler.swift; sourceTree = "<group>"; };
 		32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsAppearanceCategory.swift; sourceTree = "<group>"; };
 		32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXImportUIHelper.h; sourceTree = "<group>"; };
@@ -10732,6 +10735,7 @@
 		DA5A793926C5639F00F274C7 /* OsmData */ = {
 			isa = PBXGroup;
 			children = (
+				32E2F7E82E2CD796000F1A78 /* EOAEntityType.h */,
 				DA5A793B26C5639F00F274C7 /* OAEntity.h */,
 				DA5A794426C5639F00F274C7 /* OAEntity.m */,
 				DA5A794326C5639F00F274C7 /* OAEntityInfo.h */,
@@ -13345,11 +13349,11 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				325DAE652DFFF07E002CB022 /* AsyncTask */,
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
-				FAE0F0852DF05B5200795D1D /* ValueConverter.swift */,
+				32EEB6442E2ABA35002216B0 /* AmenitySearcher.swift */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
+				325DAE652DFFF07E002CB022 /* AsyncTask */,
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
 				46DB0A622C5CEA8F001356D5 /* ConcurrentArray.swift */,
 				0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */,
@@ -13360,6 +13364,7 @@
 				46DC808329B8884F00C477C3 /* Enums */,
 				46ED6C3C2B333A4600A5555F /* Extensions */,
 				C5484DC62CD21F03004C5F27 /* FormattedValue.swift */,
+				DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */,
 				C5B2AA602DB00700007FB854 /* GridFormat.swift */,
 				32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */,
 				DA5A80AC26C563A600F274C7 /* kml2gpx.xslt */,
@@ -13409,7 +13414,6 @@
 				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
 				DA5A809626C563A500F274C7 /* OAGPXUIHelper.h */,
 				DA5A80D926C563A600F274C7 /* OAGPXUIHelper.mm */,
-				DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */,
 				DA5A80A126C563A500F274C7 /* OAJsonHelper.h */,
 				DA5A80CD26C563A600F274C7 /* OAJsonHelper.m */,
 				DA5A80B126C563A600F274C7 /* OAKml2Gpx.h */,
@@ -13457,7 +13461,6 @@
 				05898FB12B511E0500E64B58 /* OASvgHelper.mm */,
 				DAB9AECB28E192D300AD01CE /* OAURLSessionProgress.h */,
 				DAB9AECC28E192D300AD01CE /* OAURLSessionProgress.m */,
-				FAA055792E0301AA00F84EDF /* SelectionManager.swift */,
 				32AD5D582A2F10EA00A51B60 /* OAuthHelper */,
 				DA5A80C226C563A600F274C7 /* OAUtilities.h */,
 				DA5A809226C563A500F274C7 /* OAUtilities.m */,
@@ -13480,11 +13483,13 @@
 				DA5A809E26C563A500F274C7 /* OrderedDictionary.m */,
 				C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */,
 				46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */,
+				FAA055792E0301AA00F84EDF /* SelectionManager.swift */,
 				FA45851C2C946046003A5AD7 /* SharedLibHelpers */,
 				DA5A809026C563A500F274C7 /* SunriseSunset.h */,
 				DA5A80C326C563A600F274C7 /* SunriseSunset.m */,
 				DA5A80C526C563A600F274C7 /* UIColor+RGB.swift */,
 				FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */,
+				FAE0F0852DF05B5200795D1D /* ValueConverter.swift */,
 				460767112A49F86400AF63F2 /* WikiAlgorithms.swift */,
 			);
 			path = Helpers;
@@ -17443,6 +17448,7 @@
 				DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */,
 				DA5A837126C563A800F274C7 /* OARoutingInfoCell.mm in Sources */,
 				DA653CD9288ACEDF00AB623C /* OATitleIconProgressbarCell.mm in Sources */,
+				32EEB6452E2ABA3C002216B0 /* AmenitySearcher.swift in Sources */,
 				DA5A844526C563A900F274C7 /* UIViewController+OARootViewController.m in Sources */,
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,
 				DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */,

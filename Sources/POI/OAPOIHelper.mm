@@ -622,19 +622,22 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     }
     
     
-    NSString *n = poi.nameLocalized;
-    if (typeName && [n indexOf:typeName] != -1)
+    NSString *localName = poi.nameLocalized;
+    if (typeName && [localName indexOf:typeName] != -1)
     {
         // type is contained in name e.g.
-        // n = "Bakery the Corner"
+        // localName = "Bakery the Corner"
         // type = "Bakery"
         // no need to repeat this
-        return n;
+        return localName;
     }
-    if (n.length == 0)
+    if (NSStringIsEmpty(localName) && poi.isRouteTrack)
+        localName = [poi getAdditionalInfo:ROUTE_ID];;
+    
+    if (localName.length == 0)
         return typeName;
 
-    return [NSString stringWithFormat:@"%@ %@", typeName, n];
+    return [NSString stringWithFormat:@"%@ %@", typeName, localName];
 }
 
 - (NSString *) getFormattedOpeningHours:(OAPOI *)poi
@@ -1468,6 +1471,15 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     return [NSArray arrayWithArray:arr];
 }
 
++ (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter *)additionalFilter lat:(double)lat lon:(double)lon radius:(int)radius includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> *)matcher publish:(BOOL(^)(OAPOI *poi))publish
+{
+    CLLocation *currentLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
+    OsmAnd::PointI currentLocation31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude));
+    
+    OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, point31);
+    return [self findPOI:searchFilter additionalFilter:additionalFilter bbox31:bbox31 currentLocation:point31 includeTravel:includeTravel matcher:matcher publish:publish];
+}
 
 + (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter *)additionalFilter bbox31:(OsmAnd::AreaI )bbox31 currentLocation:(OsmAnd::PointI)currentLocation includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> *)matcher publish:(BOOL(^)(OAPOI *poi))publish
 {

@@ -108,6 +108,7 @@ static int DEFAULT_ELO = 900;
 - (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate;
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
+- (NSDictionary<NSString *, NSString *> *)getAltNamesMap;
 
 - (NSString *)getEnName:(BOOL)transliterate;
 

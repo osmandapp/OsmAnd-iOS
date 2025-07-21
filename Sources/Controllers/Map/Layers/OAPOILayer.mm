@@ -424,6 +424,11 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (OAPOI *) getAmenity:(id)object
 {
+    if ([object isKindOfClass:SelectedMapObject.class])
+    {
+        SelectedMapObject *obj = object;
+        object = obj.object;
+    }
     if ([object isKindOfClass:OAPOI.class])
     {
         return (OAPOI *)object;
@@ -545,7 +550,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 - (BOOL) showMenuAction:(id)object
 {
     OAPOI *amenity = [self getAmenity:object];
-    if (amenity && [amenity.type.name isEqualToString:ROUTES])
+    if (amenity && ([amenity.type.name isEqualToString:ROUTES] || [amenity.type.name hasPrefix:ROUTES]))
     {
         if ([amenity.subType isEqualToString:ROUTE_ARTICLE])
         {

@@ -253,7 +253,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         if ([article isKindOfClass:OATravelGpx.class])
         {
             OsmAnd::AreaI emptyArea;
-            segmentList = [self.class searchGpxMapObject:article bbox31:emptyArea];
+            segmentList = [self.class searchGpxMapObject:article bbox31:emptyArea reader:reader];
         }
         
         //publish function
@@ -441,20 +441,23 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     return [OASelectedGPXHelper.instance getSelectedGPXFilePath:fileName];
 }
 
-+ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx bbox31:(OsmAnd::AreaI)bbox31
++ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader
 {
     OsmAndAppInstance app = OsmAndApp.instance;
     QList< std::shared_ptr<const OsmAnd::ObfFile> > files = app.resourcesManager->obfsCollection->getObfFiles();
     std::shared_ptr<const OsmAnd::ObfFile> res;
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > result;
     
+    NSArray<NSString *> *travelObfNames = [self.class getTravelGuidesObfList];
+    
     NSString *filename = travelGpx.file;
-    if (!NSStringIsEmpty(filename))
+        if (!NSStringIsEmpty(filename) || !NSStringIsEmpty(reader))
     {
         for (const auto& file : files)
         {
-            NSString *path = file->filePath.toNSString();
-            if ([[path lowercaseString] hasSuffix:[travelGpx.file lowercaseString]])
+            NSString *path = [file->filePath.toNSString() lowercaseString];
+            if (filename && [[path lowercaseString] hasSuffix:[filename lowercaseString]] ||
+                reader && [[path lowercaseString] hasSuffix:[reader lowercaseString]])
             {
                 const auto found = [self.class searchGpxMapObject:travelGpx res:file bbox31:bbox31];
                 result.append(found);
@@ -465,11 +468,18 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     {
         for (const auto& file : files)
         {
-            const auto found =  [self.class searchGpxMapObject:travelGpx res:file bbox31:bbox31];
-            if (found.size() > 0)
+            NSString *path = [file->filePath.toNSString() lowercaseString];
+            for (NSString *travelObfName in travelObfNames)
             {
-                result.append(found);
-                return found;
+                if ([path hasSuffix:travelObfName])
+                {
+                    const auto found =  [self.class searchGpxMapObject:travelGpx res:file bbox31:bbox31];
+                    if (found.size() > 0)
+                    {
+                        result.append(found);
+                        return found;
+                    }
+                }
             }
         }
     }

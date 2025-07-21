@@ -87,6 +87,7 @@
 #import "OAHeightDataLoader.h"
 #import "OARouteKey.h"
 #import "OAContextMenuProvider.h"
+#import "EOAEntityType.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

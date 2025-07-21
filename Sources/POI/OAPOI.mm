@@ -23,6 +23,7 @@ NSString * const TYPE = @"type";
 NSString * const POI_NAME = @"name";
 NSString * const COLLAPSABLE_PREFIX = @"collapsable_";
 NSString * const SEPARATOR = @";";
+NSString * const ALT_NAME_WITH_LANG_PREFIX = @"alt_name:";
 
 NSString * const URL_TAG = @"url";
 NSString * const WEBSITE_TAG = @"website";
@@ -301,6 +302,21 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         
         return mp;
     }
+}
+
+- (NSDictionary<NSString *, NSString *> *)getAltNamesMap
+{
+    NSMutableDictionary *names = [NSMutableDictionary dictionary];
+    for (NSString *nm in [self getAdditionalInfoKeys])
+    {
+        NSString *name = [self getAdditionalInfo][nm];
+        if ([nm hasPrefix:ALT_NAME_WITH_LANG_PREFIX])
+        {
+            NSString *key = [nm substringFromIndex:ALT_NAME_WITH_LANG_PREFIX.length];
+            names[key] = name;
+        }
+    }
+    return names;
 }
 
 - (NSString *)getEnName:(BOOL)transliterate

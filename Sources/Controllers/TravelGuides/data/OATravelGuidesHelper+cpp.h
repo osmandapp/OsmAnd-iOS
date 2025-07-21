@@ -14,6 +14,6 @@
 
 @interface OATravelGuidesHelper(cpp)
 
-+ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >)searchGpxMapObject:(OATravelGpx *)travelGpx bbox31:(OsmAnd::AreaI)bbox31;
++ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >)searchGpxMapObject:(OATravelGpx *)travelGpx bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader;
 
 @end

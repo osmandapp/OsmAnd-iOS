@@ -25,9 +25,9 @@ final class ObfConstants: NSObject {
     static private let AMENITY_ID_RIGHT_SHIFT = 1
     static private let WAY_MODULO_REMAINDER = 1
     
-    static private let NODE = "node"
-    static private let WAY = "way"
-    static private let RELATION = "relation"
+    static private let NODE = kEntityTypeNode
+    static private let WAY = kEntityTypeWay
+    static private let RELATION = kEntityTypeRelation
     
     static func getOsmUrlForId(_ object: OAMapObject) -> String {
         guard let type = getOsmEntityType(object) else { return "" }

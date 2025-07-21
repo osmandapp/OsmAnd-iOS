@@ -206,22 +206,22 @@
 +(EOAEntityType)typeOf:(OAEntity *)entity
 {
     if ([entity isKindOfClass:[OANode class]]) {
-        return NODE;
+        return EOAEntityTypeNode;
     } else if ([entity isKindOfClass:[OAWay class]]) {
-        return WAY;
+        return EOAEntityTypeWay;
     } else if ([entity isKindOfClass:[OARelation class]]) {
-        return RELATION;
+        return EOAEntityTypeRelation;
     }
-    return UNDEFINED;
+    return EOAEntityTypeUndefined;
 }
 
 +(NSString *)stringType:(EOAEntityType)entityType
 {
-    if (entityType == NODE) {
+    if (entityType == EOAEntityTypeNode) {
         return @"NODE";
-    } else if (entityType == WAY) {
+    } else if (entityType == EOAEntityTypeWay) {
         return @"WAY";
-    } else if (entityType == RELATION) {
+    } else if (entityType == EOAEntityTypeRelation) {
         return @"RELATION";
     }
     return @"UNDEFINED";
@@ -242,13 +242,13 @@
 +(EOAEntityType)typeFromString:(NSString *)entityName
 {
     if ([entityName caseInsensitiveCompare:@"NODE"] == NSOrderedSame) {
-        return NODE;
+        return EOAEntityTypeNode;
     } else if ([entityName caseInsensitiveCompare:@"WAY"] == NSOrderedSame) {
-        return WAY;
+        return EOAEntityTypeWay;
     } else if ([entityName caseInsensitiveCompare:@"RELATION"] == NSOrderedSame) {
-        return RELATION;
+        return EOAEntityTypeRelation;
     }
-    return UNDEFINED;
+    return EOAEntityTypeUndefined;
 }
 
 -(NSString *) toNSString
@@ -341,9 +341,9 @@
 -(NSString *) getOsmUrl
 {
     static NSString * const browseUrl = @"https://www.openstreetmap.org/browse/";
-    if (_entityType == NODE)
+    if (_entityType == EOAEntityTypeNode)
         return [NSString stringWithFormat:@"%@node/%lld", browseUrl, _identifier];
-    if (_entityType == WAY)
+    if (_entityType == EOAEntityTypeWay)
         return [NSString stringWithFormat:@"%@way/%lld", browseUrl, _identifier];
     return nil;
 }

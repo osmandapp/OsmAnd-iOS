@@ -402,7 +402,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
         OAOsmBaseStorage *baseStorage = [[OAOsmBaseStorage alloc] init];
         [baseStorage setConvertTagsToLC:NO];
         [baseStorage parseResponseSync:res];
-        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? WAY : NODE) identifier:entityId];
+        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? EOAEntityTypeWay : EOAEntityTypeNode) identifier:entityId];
         OAEntity *entity = [baseStorage getRegisteredEntities][enId];
         _entityInfo = [baseStorage getRegisteredEntityInfo][enId];
         _entityInfoId = enId;
@@ -465,7 +465,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
         OAOsmBaseStorage *baseStorage = [[OAOsmBaseStorage alloc] init];
         [baseStorage setConvertTagsToLC:NO];
         [baseStorage parseResponseSync:res];
-        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? WAY : NODE) identifier:entityId];
+        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? EOAEntityTypeWay : EOAEntityTypeNode) identifier:entityId];
         OAEntity *downloadedEntity = [baseStorage getRegisteredEntities][enId];
         NSMutableDictionary<NSString *, NSString *> *updatedTags = [NSMutableDictionary new];
         for (NSString *tagKey in [entity getTagKeySet]) {

@@ -20,7 +20,7 @@ extern NSString * const ROUTE_ARTICLE_POINT;
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @class OAPOI, OAPOIType, OAPOIBaseType, OAPOICategory, OAPOIFilter;
-@class OASearchPoiTypeFilter, OAPOIUIFilter;
+@class OASearchPoiTypeFilter, OAPOIUIFilter, OATopIndexFilter;
 
 @protocol OAPOISearchDelegate
 
@@ -106,5 +106,5 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 + (OAPOI *) findPOIByOsmId:(long long)osmId lat:(double)lat lon:(double)lon;
 + (OAPOI *) findPOIByName:(NSString *)name lat:(double)lat lon:(double)lon;
 + (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon;
-
++ (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter *)additionalFilter lat:(double)lat lon:(double)lon radius:(int)radius includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> *)matcher publish:(BOOL(^)(OAPOI *poi))publish;
 @end

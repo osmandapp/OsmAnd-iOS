@@ -11,7 +11,7 @@ import Foundation
 @objcMembers
 class SelectedMapObject: NSObject {
     
-    private(set) var object: Any
+    var object: Any
     private(set) var provider: OAContextMenuProvider?
     
     init(mapObject: Any, provider: OAContextMenuProvider?) {

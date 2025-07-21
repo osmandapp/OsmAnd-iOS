@@ -91,7 +91,7 @@
     
     [self.mapView addKeyedSymbolsProvider:_collection];
     
-    _lineWidth = kDefaultWidthMultiplier * kWidthCorrectionValue;
+    _lineWidth = [self getDefaultLineWidth];
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [NSMutableDictionary dictionary];
@@ -190,6 +190,11 @@
 - (NSInteger)getCustomRouteWidthMax
 {
     return 36;
+}
+
+- (CGFloat)getDefaultLineWidth
+{
+    return kDefaultWidthMultiplier * kWidthCorrectionValue;
 }
 
 - (BOOL)isVisible
@@ -394,7 +399,7 @@
     }
     else
     {
-        width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+        width = [self getParamFromAttr:@"strokeWidth"] ? [self getParamFromAttr:@"strokeWidth"].floatValue : [self getDefaultLineWidth];
     }
 
     return width * VECTOR_LINE_SCALE_COEF;

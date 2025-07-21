@@ -153,7 +153,7 @@ struct DrawPathData
     [self.mapView addKeyedSymbolsProvider:_collection];
     [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
 
-    _lineWidth = kDefaultWidthMultiplier * kWidthCorrectionValue;
+    _lineWidth = [self getDefaultLineWidth];
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [[NSCache alloc] init];
@@ -242,6 +242,11 @@ struct DrawPathData
 - (NSInteger)getCustomRouteWidthMax
 {
     return 36;
+}
+
+- (CGFloat)getDefaultLineWidth
+{
+    return kDefaultWidthMultiplier * kWidthCorrectionValue;
 }
 
 - (void)drawRouteMarkers:(const std::shared_ptr<TransportRouteResultSegment> &)routeSegment
@@ -611,7 +616,7 @@ struct DrawPathData
     }
     else
     {
-        width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+        width = [self getParamFromAttr:@"strokeWidth"] ? [self getParamFromAttr:@"strokeWidth"].floatValue : [self getDefaultLineWidth];
     }
 
     return width * VECTOR_LINE_SCALE_COEF;

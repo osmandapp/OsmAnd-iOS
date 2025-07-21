@@ -26,16 +26,6 @@ class WidgetInfoCreator: NSObject {
         return nil
     }
     
-//    public MapWidgetInfo createWidgetInfo(@NonNull MapWidgetsFactory factory,
-//                                          @NonNull String key, @NonNull WidgetType widgetType) {
-//        WidgetsPanel panel = widgetType.getPanel(key, appMode, settings);
-//        MapWidget widget = factory.createMapWidget(key, widgetType, panel);
-//        if (widget != null) {
-//            return askCreateWidgetInfo(key, widget, widgetType, panel);
-//        }
-//        return null;
-//    }
-    
     func createCustomWidgetInfo(factory: MapWidgetsFactory, key: String, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
         let widget = factory.createMapWidget(customId: key, widgetType: widgetType, widgetParams: widgetParams)
         if let widget = widget {

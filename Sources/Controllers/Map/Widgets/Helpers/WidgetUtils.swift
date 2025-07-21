@@ -347,6 +347,7 @@ extension WidgetUtils {
             
             for pageWidgets in pagedWidgets {
                 let textWidgets = pageWidgets.compactMap { $0.widget as? OATextInfoWidget }
+                guard textWidgets.count > 1 else { continue }
                 textWidgets.updateWithMostFrequentStyle(with: appMode)
             }
         }

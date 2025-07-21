@@ -8,7 +8,7 @@
 
 #import "OARouteKey.h"
 
-#import <OsmAndCore/NetworkRouteContext.h>
+#include  <OsmAndCore/NetworkRouteContext.h>
 
 
 @interface OARouteKey(cpp)

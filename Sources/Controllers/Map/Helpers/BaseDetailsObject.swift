@@ -508,6 +508,10 @@ final class BaseDetailsObject: NSObject {
         return .detailed
     }
     
+    func setMapIconName(_ mapIconName: String) {
+        syntheticAmenity.mapIconName = mapIconName
+    }
+    
     func setX(_ x: [Int]) {
         syntheticAmenity.x = x as? NSMutableArray
     }
@@ -522,6 +526,10 @@ final class BaseDetailsObject: NSObject {
     
     func addY(_ y: NSNumber) {
         syntheticAmenity.y.add(y)
+    }
+    
+    func hasGeometry() -> Bool {
+        syntheticAmenity.x.count > 0 && syntheticAmenity.y.count > 0
     }
     
     static func getLangForTravel(_ object: Any) -> String {

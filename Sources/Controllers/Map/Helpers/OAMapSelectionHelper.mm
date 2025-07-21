@@ -35,7 +35,8 @@
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
-#import <OsmAndCore/NetworkRouteContext.h>
+#include <OsmAndCore/NetworkRouteContext.h>
+#include <OsmAndCore/Data/ObfMapObject.h>
 
 static int AMENITY_SEARCH_RADIUS = 50;
 static int AMENITY_SEARCH_RADIUS_FOR_RELATION = 500;
@@ -191,7 +192,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             {
                 if (const auto mapObjectSymbolsGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
                 {
-                    if (const auto obfMapObject = mapObjectSymbolsGroup->mapObject)
+                    if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(mapObjectSymbolsGroup->mapObject))
                     {
                         MutableOrderedDictionary<NSString *,NSString *> *tags = [self getOrderedTags:obfMapObject->getResolvedAttributesListPairs()];
                         
@@ -246,18 +247,13 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                                     }
                                     else
                                     {
-                                        // Triggered but always was nil
-                                        
                                         AmenitySearcherRequest *request = [[AmenitySearcherRequest alloc] initWithMapObject:renderedObject];
                                         detailsObject = [amenitySearcher searchDetailedObject:request];
-                                        
                                         if (detailsObject)
                                         {
-                                            /*
-                                            detailsObject.setMapIconName(getMapIconName(symbolInfo));
-                                            addGeometry(detailsObject, obfMapObject);
-                                            detailsObject.setObfResourceName(obfMapObject.getObfSection().getName());
-                                            */
+                                            [detailsObject setMapIconName:[self getMapIconName:symbolInfo]];
+                                            [self addGeometry:detailsObject obfMapObject:obfMapObject];
+                                            [detailsObject setObfResourceName:obfMapObject->obfSection->name.toNSString()];
                                         }
                                     }
                                 }
@@ -407,6 +403,19 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         return YES;
     }
     return NO;
+}
+
+- (void)addGeometry:(BaseDetailsObject *)detailObj obfMapObject:(shared_ptr<const OsmAnd::ObfMapObject>)obfMapObject
+{
+    if (detailObj && ![detailObj hasGeometry] && obfMapObject->points31.size() > 1)
+    {
+        const auto points31 = obfMapObject->points31;
+        for (int i = 0; i < points31.size(); i++)
+        {
+            [detailObj addX:@(points31[i].x)];
+            [detailObj addY:@(points31[i].y)];
+        }
+    }
 }
 
 - (BOOL)isUniqueGpxFileName:(NSMutableArray<SelectedMapObject *> *)selectedObjects gpxFileName:(NSString *)gpxFileName

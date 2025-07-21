@@ -560,27 +560,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     return YES;
 }
 
-- (BOOL)isUniqueAmenity:(NSMutableArray<SelectedMapObject *> *)selectedObjects amenity:(OAPOI *)amenity
-{
-    for (SelectedMapObject *selectedObject in selectedObjects)
-    {
-        id object = selectedObject.object;
-        if ([object isKindOfClass:OAPOI.class] && [((OAPOI *)object) strictEquals:amenity])
-        {
-            OAPOI *poi = (OAPOI *)object;
-            if ([poi strictEquals:amenity])
-                return NO;
-        }
-        else if ([object isKindOfClass:OATransportStop.class])
-        {
-            OATransportStop *transportSpop = (OATransportStop *)object;
-            if ([transportSpop.name hasPrefix:amenity.name])
-                return NO;
-        }
-    }
-    return YES;
-}
-
 - (BOOL)isTransportStop:(NSArray<SelectedMapObject *> *)selectedObjects detail:(BaseDetailsObject *)detail
 {
     for (SelectedMapObject *selectedObject in selectedObjects)

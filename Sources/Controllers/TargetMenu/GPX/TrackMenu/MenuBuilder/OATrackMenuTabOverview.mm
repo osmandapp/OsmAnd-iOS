@@ -91,7 +91,7 @@
                         OAGPXTableCellData *articleRow = [OAGPXTableCellData withData:@{
                             kTableKey: @"article",
                             kCellType: [OAArticleTravelCell getCellIdentifier],
-                            kCellTitle: article.title ? article.title : @"nil",
+                            kCellTitle: article.title ?: @"nil",
                             kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content] ?: @"qwerty",
                             kCellRightIconName: iconName,
                             kTableValues: @{

@@ -204,7 +204,7 @@ static const int START_ZOOM = 6;
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
-    if (obj && [obj isKindOfClass:OAFavoriteItem.class])
+    if ([obj isKindOfClass:OAFavoriteItem.class])
     {
         OAFavoriteItem *favorite = (OAFavoriteItem *) obj;
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];

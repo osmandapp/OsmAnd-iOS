@@ -112,7 +112,7 @@
 
 - (CLLocation *)getObjectLocation:(id)obj
 {
-    if (obj && [obj isKindOfClass:NSArray.class])
+    if ([obj isKindOfClass:NSArray.class])
     {
         NSArray *pair = obj;
         if (pair.count > 1 && [pair[0] isKindOfClass:OARouteKey.class] && [pair[1] isKindOfClass:OASKQuadRect.class])
@@ -126,7 +126,7 @@
 
 - (OAPointDescription *)getObjectName:(id)obj
 {
-    if (obj && [obj isKindOfClass:NSArray.class])
+    if ([obj isKindOfClass:NSArray.class])
     {
         NSArray *pair = obj;
         if (pair.count > 1 && [pair[0] isKindOfClass:OARouteKey.class] && [pair[1] isKindOfClass:OASKQuadRect.class])
@@ -188,7 +188,7 @@
 
 - (OATargetPoint *)getTargetPoint:(id)obj
 {
-    if (obj && [obj isKindOfClass:NSArray.class])
+    if ([obj isKindOfClass:NSArray.class])
     {
         NSArray *pair = obj;
         if (pair.count > 1 && [pair[0] isKindOfClass:OARouteKey.class] && [pair[1] isKindOfClass:OASKQuadRect.class])

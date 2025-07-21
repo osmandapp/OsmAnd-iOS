@@ -558,6 +558,9 @@ static NSInteger const kMap3DModeButtonTag = -990;
 
 - (NSString *) sanitizeFileName
 {
+    if (self.length == 0)
+        return @"";
+    
     NSMutableString *sanitized = [self mutableCopy];
 
     NSArray<NSString *> *toReplaceWithUnderscore = @[

@@ -21,7 +21,7 @@
         SelectedMapObject *selectedObj = obj;
         obj = selectedObj.object;
     }
-    if (obj && [obj isKindOfClass:NSArray.class])
+    if ([obj isKindOfClass:NSArray.class])
     {
         NSArray *pair = obj;
         if (pair.count > 1 && [pair[0] isKindOfClass:OATravelGpx.class] && [pair[1] isKindOfClass:SelectedGpxPoint.class])
@@ -36,7 +36,7 @@
 
 - (OAPointDescription *)getObjectName:(id)obj
 {
-    if (obj && [obj isKindOfClass:NSArray.class])
+    if ([obj isKindOfClass:NSArray.class])
     {
         NSArray *pair = obj;
         if (pair.count > 1 && [pair[0] isKindOfClass:OATravelGpx.class] && [pair[1] isKindOfClass:SelectedGpxPoint.class])
@@ -100,7 +100,7 @@
         SelectedMapObject *selectedObj = obj;
         obj = selectedObj.object;
     }
-    if (obj && [obj isKindOfClass:NSArray.class])
+    if ([obj isKindOfClass:NSArray.class])
     {
         NSArray *pair = obj;
         if (pair.count > 1 && [pair[0] isKindOfClass:OATravelGpx.class] && [pair[1] isKindOfClass:SelectedGpxPoint.class])

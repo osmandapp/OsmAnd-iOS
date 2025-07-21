@@ -570,7 +570,6 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
                     return YES;
                 }];
             }
-
         }
         
         for (OAFoundAmenity *foundAmenity in foundAmenities)

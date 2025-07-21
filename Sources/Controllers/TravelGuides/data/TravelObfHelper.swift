@@ -169,16 +169,12 @@ final class TravelObfHelper : NSObject {
     
     func searchFilterShouldAccept(_ subcategory: String?, filterSubcategories: [String]?) -> Bool {
         guard let subcategory, let filterSubcategories else { return false }
-        
-        for filter in filterSubcategories {
-            if filter == subcategory {
-                return true
-            }
-            if filter == ROUTE_TRACK && subcategory.hasPrefix(ROUTES_PREFIX) {
-                return true // include routes:routes_xxx with routes:route_track filter
-            }
+    
+        return filterSubcategories.contains {
+            // include routes:routes_xxx with routes:route_track filter
+            $0 == subcategory ||
+            ($0 == ROUTE_TRACK && subcategory.hasPrefix(ROUTES_PREFIX))
         }
-        return false
     }
     
     func cacheTravelArticles(file: String?, amenity: OAPOI, lang: String?, readPoints: Bool, callback: GpxReadDelegate?) -> TravelArticle? {

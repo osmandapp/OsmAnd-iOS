@@ -49,7 +49,7 @@ class TravelArticle: NSObject {
         if let gpxFileName {
             return gpxFileName.sanitizeFileName()
         } else {
-            print("Empty travel article in " + (file ?? "EmptyFileName"))
+            debugPrint("Empty travel article in " + (file ?? "EmptyFileName"))
             return "Travel Article File"
         }
     }

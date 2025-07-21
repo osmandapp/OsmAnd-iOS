@@ -99,7 +99,6 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         if let widgetKeys = OAAppSettings.sharedManager().customWidgetKeys.get(appMode), !widgetKeys.isEmpty {
             for key in widgetKeys {
                 if let widgetType = WidgetType.getById(key) {
-                    // FIXME: sync with android
                     if let widgetInfo = creator.createCustomWidgetInfo(factory: factory, key: key, widgetType: widgetType) {
                         mapWidgetsCache.append(widgetInfo)
                     }

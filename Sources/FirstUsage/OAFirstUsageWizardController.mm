@@ -30,11 +30,11 @@
 #import "OAUtilities.h"
 #import "OAAppVersion.h"
 #import "OAResourcesUISwiftHelper.h"
+#import "StartupLogging.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
-const static int PROGRESS_ON_MARGIN = 29;
 const static int PROGRESS_OFF_MARGIN = 8;
 
 typedef enum
@@ -124,6 +124,7 @@ typedef enum
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    LogStartup(@"viewDidLoad");
     
     _app = [OsmAndApp instance];
 
@@ -213,6 +214,13 @@ typedef enum
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self configureUI];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    LogStartup(@"viewDidAppear");
+    MarkStartupFinished();
 }
 
 - (void)configureUI

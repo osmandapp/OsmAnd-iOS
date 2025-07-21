@@ -1532,7 +1532,7 @@
 "product_desc_wiki" = "Članci Vikipedije zasnovani na lokaciji na mapi";
 "purchases_feature_desc_wikipedia" = "Članci sa Vikipedije, bez interneta . Odvojene po regijama i dostupni na svim jezicima.";
 "shared_string_all_languages" = "Svi jezici";
-"select_wikipedia_article_langs" = "Odaberi jezik za Vikipedijine članke na mapi. Prebaci na bilo koji drugi dostupni jezik dok čitaš članak.";
+"select_wikipedia_article_langs" = "Odaberi jezik za Vikipedia članke na mapi. Prebaci na bilo koji drugi dostupni jezik dok čitaš članak.";
 "wiki_menu_download_descr" = "Za prikaz Wikipedia TOI su potrebne dodatne mape.";
 "some_articles_may_not_available_in_lang" = "Neki članci sa Vikipedije su možda dostupni na jeziku.";
 "available_languages" = "Dostupni jezici";
@@ -2582,8 +2582,8 @@
 "rendering_attr_showMtbScaleIMBATrails_description" = "Prikazuj odgovarajuće planinske biciklističke staze.";
 "rendering_attr_depthContourWidth_description" = "Širina linija obrisa dubine";
 "rendering_attr_weatherCloudContours_name" = "Cloud linije obrisa";
-"speak_route_deviation" = "Obaveštava o napuštanju rute";
-"speak_gps_signal_status" = "Najavljuje gubljenje jačine signala GPS-a i povratak";
+"speak_route_deviation" = "Obaveštenje o napuštanju rute";
+"speak_gps_signal_status" = "Najava gubljenja jačine signala GPS-a i povratak";
 "announcement_time_title" = "Vreme objave";
 "click_on_widget" = "Klikni na vidžet";
 "no_widgets_descr" = "Dodaj jedan ili više vidžeta dostupnih sa spiska.";
@@ -2833,7 +2833,7 @@
 "map_widget_ant_bicycle_dist" = "Rastojanje bicikla";
 "map_widget_ant_bicycle_dist_desc" = "Prikazuje pređeni put";
 "depth_contours" = "Konture dubine";
-"speak_route_recalculation" = "Obaveštava o preračunavanju rute";
+"speak_route_recalculation" = "Obaveštenje o preračunavanju rute";
 "external_sensors_plugin_name" = "Spoljašnji senzori";
 "external_sensors_plugin_description" = "Pristup spoljnim prijemnicima, npr. otkucajima srca, brzini bicikla, snazi kretanja bicikla, ili taktu. Zahteva da uređaj bude povezan sa odgovarajućim prijemnicima preko ANT + bežični lični mrežni protokol.";
 "map_widget_rendering_fps" = "Obrada mape u slikama po sekundi";
@@ -3785,5 +3785,5 @@
 "shared_string_hour" = "Sat";
 "shared_string_volume" = "Volumen";
 "vehicle_metrics_recording_description" = "Izaberite parametre koji će biti snimljeni u GPX fajlu.";
-"shared_string_other" = "Drugi";
+"shared_string_other" = "GPS najave";
 "shared_string_engine" = "Motor";

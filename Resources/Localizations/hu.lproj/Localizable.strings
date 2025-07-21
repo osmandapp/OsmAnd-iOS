@@ -917,7 +917,7 @@
 "rendering_attr_OSMMapperAssistant_name" = "OSM térképezősegéd";
 "rendering_value_dark_brown_name" = "Sötétbarna";
 "routing_attr_driving_style_safety_name" = "Mellékutak előnyben részesítése";
-"routing_attr_avoid_borders_description" = "Elkerüli országhatár átlépését";
+"routing_attr_avoid_borders_description" = "Elkerüli az országhatár átlépését";
 "rendering_attr_highway_class_road_name" = "Út";
 "rendering_value_defaultTranslucentCyan_name" = "Alapértelmezett (átlátszó cián)";
 "routing_attr_avoid_motorway_description" = "Elkerüli az autópályákat";
@@ -991,7 +991,7 @@
 "rendering_attr_currentTrackColor_description" = "GPX színe";
 "rendering_attr_highway_class_motorway_name" = "Autópálya";
 "routing_attr_avoid_bus_description" = "Elkerüli a buszokat és a trolibuszokat";
-"rendering_attr_surface_cobblestone_name" = "Nagy kavics (görgeteg)";
+"rendering_attr_surface_cobblestone_name" = "Durva kőburkolat";
 "routing_attr_piste_type_sled_description" = "Szánkópályák.";
 "routing_attr_weight_name" = "Súly";
 "rendering_attr_streetLightingNight_name" = "Csak éjszaka jelenjék meg";
@@ -2795,8 +2795,8 @@
 "required_maps" = "Szükséges térképek";
 "tomorrow" = "Holnap";
 "rendering_value_dark_orange_name" = "Sötét narancs";
-"routing_attr_avoid_cobblestone_name" = "Macskakő elkerülése";
-"routing_attr_avoid_cobblestone_description" = "Macskakő elkerülése";
+"routing_attr_avoid_cobblestone_name" = "Durva kőburkolat elkerülése";
+"routing_attr_avoid_cobblestone_description" = "Durva kőburkolat elkerülése";
 "downward_gradient" = "Lejtés foka";
 "in_case_of_reverse_direction" = "Ellentétes irány esetén";
 "shared_string_limit" = "Korlátozás";

@@ -3241,6 +3241,7 @@
 		FAA650602ADD42C50020DCEA /* DescriptionDeviceHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */; };
 		FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */; };
 		FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */; };
+		FAAD725A2E1BBE51000807A0 /* AppStartupMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAD72592E1BBE51000807A0 /* AppStartupMonitor.swift */; };
 		FAB2B14B2C787E3900B59B7A /* DGCharts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FA6116182C787B7C005C3ABD /* DGCharts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAB302A92DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */; };
 		FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6243E2E0953830048965E /* SelectionManagerTests.swift */; };
@@ -7872,6 +7873,8 @@
 		FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DescriptionDeviceHeader.xib; sourceTree = "<group>"; };
 		FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEInitHeader.swift; sourceTree = "<group>"; };
 		FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackItemExtension.swift; sourceTree = "<group>"; };
+		FAAD72592E1BBE51000807A0 /* AppStartupMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartupMonitor.swift; sourceTree = "<group>"; };
+		FAAD725E2E1BEF5F000807A0 /* StartupLogging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartupLogging.h; sourceTree = "<group>"; };
 		FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDownloadingCellResourceHelper.swift; sourceTree = "<group>"; };
 		FAB6243E2E0953830048965E /* SelectionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionManagerTests.swift; sourceTree = "<group>"; };
 		FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OsmAnd MapsTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -13505,6 +13508,7 @@
 				DA5A80EB26C563A600F274C7 /* OALocationSimulation.mm */,
 				DA5A80EA26C563A600F274C7 /* OASimulationProvider.h */,
 				DA5A80E626C563A600F274C7 /* OASimulationProvider.mm */,
+				FAAD725B2E1BBE6E000807A0 /* AppStartupMonitor */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -14255,6 +14259,15 @@
 				FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */,
 			);
 			path = DescriptionDeviceHeader;
+			sourceTree = "<group>";
+		};
+		FAAD725B2E1BBE6E000807A0 /* AppStartupMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				FAAD72592E1BBE51000807A0 /* AppStartupMonitor.swift */,
+				FAAD725E2E1BEF5F000807A0 /* StartupLogging.h */,
+			);
+			path = AppStartupMonitor;
 			sourceTree = "<group>";
 		};
 		FAB6243D2E0953580048965E /* Managers */ = {
@@ -16731,6 +16744,7 @@
 				32839A372AF0F911007B5057 /* WikiImageCacheHelper.swift in Sources */,
 				4663AB412951CB6200D9781E /* OAInputTableViewCell.m in Sources */,
 				DA5A83DD26C563A800F274C7 /* OAFavoriteListViewController.mm in Sources */,
+				FAAD725A2E1BBE51000807A0 /* AppStartupMonitor.swift in Sources */,
 				DA5A81C626C563A700F274C7 /* OACollatorStringMatcher.m in Sources */,
 				DA5A81E926C563A700F274C7 /* OAHistoryHelper.m in Sources */,
 				DA5A84B526C563A900F274C7 /* OAAddDestinationBottomSheetViewController.mm in Sources */,

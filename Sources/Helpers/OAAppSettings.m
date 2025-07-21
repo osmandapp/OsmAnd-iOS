@@ -5296,7 +5296,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _batterySavingMode = [[[OACommonBoolean withKey:batterySavingModeKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_batterySavingMode forKey:@"battery_saving"];
 
-        _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
+        _levelToSwitchVectorRaster = [[OACommonInteger withKey:levelToSwitchVectorRasterKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
 
         // For now this can be changed only in TestVoiceActivity

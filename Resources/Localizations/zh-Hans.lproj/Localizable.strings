@@ -74,7 +74,7 @@
 "shared_string_control_start" = "开始";
 "track_recording" = "轨迹录制";
 "shared_string_currently_recording_track" = "当前录制轨迹";
-"gpx_start_new_segment" = "开始新区段";
+"gpx_start_new_segment" = "开始新的分段轨迹";
 "save_current_track" = "保存当前轨迹";
 "save_track_interval_globally" = "记录间隔";
 "track_interval_remember" = "记住我的选择";
@@ -211,7 +211,7 @@
 "will_close_at" = "关闭于";
 "osm_live_active" = "活动";
 "total_time" = "总时间";
-"moving_time" = "运动时间";
+"moving_time" = "移动时间";
 "change_color" = "改变颜色";
 "rename_track" = "重命名轨迹";
 "local_indexes_cat_backup" = "已停用";
@@ -403,7 +403,7 @@
 "speak_speed_limit" = "播报限速";
 "speak_cameras" = "播报测速电子眼";
 "speak_traffic_warnings" = "交通警告";
-"speak_poi" = "附近的 POI";
+"speak_poi" = "附近的兴趣点";
 "speak_pedestrian" = "人行横道";
 "select_gpx" = "选择 GPX…";
 "shared_string_collapse" = "折叠";
@@ -461,7 +461,7 @@
 "sort_by_name" = "按名称排序";
 "map_markers_other" = "其他标记";
 "navigation_over_track" = "开始沿着轨迹导航吗？";
-"gpx_option_calculate_first_last_segment" = "计算第一和最后一个路段间的 OsmAnd 路线";
+"gpx_option_calculate_first_last_segment" = "为首段和末段路线段计算 OsmAnd 路线";
 "gpx_option_from_start_point" = "沿着整条轨迹";
 "gpx_option_reverse_route" = "反转轨迹方向";
 "use_points_as_intermediates" = "计算两点之间的路线";
@@ -502,8 +502,8 @@
 "arrival_distance_descr" = "你想到达通知何时通知？";
 "default_speed_system" = "速度测量";
 "default_speed_system_descr" = "定义速度单位。";
-"speed_limit_exceed" = "速度限制容忍程度";
-"speed_limit_exceed_message" = "选择限速容许幅度，超过限速容许幅度将收到语音警告。";
+"speed_limit_exceed" = "速度限制宽容度";
+"speed_limit_exceed_message" = "选择限速的容许范围，超过该范围时将收到语音警告。";
 "wake_on_voice" = "点亮屏幕";
 "wake_on_voice_descr" = "（如果屏幕未点亮）在接近转弯地点时点亮屏幕。";
 "voice_pref_title" = "语音";
@@ -909,7 +909,7 @@
 "routing_attr_avoid_shuttle_train_description" = "避开汽车接驳列车";
 "rendering_attr_surface_wood_name" = "木头";
 "rendering_value_black_name" = "黑色";
-"rendering_attr_buildings15zoom_name" = "15 级缩放建筑物";
+"rendering_attr_buildings15zoom_name" = "在 15 级缩放时显示建筑物";
 "rendering_value_thin_name" = "细";
 "routing_attr_avoid_stairs_name" = "避开楼梯";
 "rendering_attr_showMtbRoutes_name" = "山地自行车路线";
@@ -1043,7 +1043,7 @@
 "shared_string_example" = "示例";
 "clear_tiles_warning" = "应用这些更改将清除此图块源的缓存数据";
 "shared_string_copy" = "复制";
-"next_segment" = "下一段";
+"next_segment" = "下一分段";
 "reset_to_default" = "重置为默认值";
 "transport_stops" = "站点";
 "appearance_on_the_map" = "在地图上的外观";
@@ -1123,7 +1123,7 @@
 "weight_limit_description" = "提供你的车辆重量，较重的车辆可能会受到一些路线限制。";
 "gpx_parse_error" = "GPX 文件存在问题。 \n \n您可联系 OsmAnd 支持进一步排查。";
 "simplified_track_description" = "只有路线线条会被保存，路径点将被删除。";
-"open_saved_track" = "打开保存的轨迹";
+"open_saved_track" = "打开已保存的轨迹";
 "profile_type_osmand_string" = "OsmAnd 配置文件";
 "profile_type_user_string" = "用户配置文件";
 "map_settings_install_maps" = "选择要安装或更新的地图";
@@ -1152,7 +1152,7 @@
 "plugin_popup_osm_editing_title" = "开启 OpenStreetMap 编辑";
 "map_update_warning" = "是否要重新加载来自互联网的瓦片数据？";
 "use_of_downloaded_map" = "现在，你可以离线使用此地图作为主地图源或叠加层/背景层";
-"zoom_levels_difference_description" = "缩放级别之间的巨大差异可能会增加下载数据的大小。";
+"zoom_levels_difference_description" = "缩放级别之间的巨大差异会增加下载数据的大小。";
 "online_sources" = "在线资源";
 "select_online_source" = "选择来源";
 
@@ -1434,7 +1434,7 @@
 "lang_hsb" = "索布语（上游）";
 "lang_vo" = "沃拉普克语";
 "lang_sv" = "瑞典语";
-"grey_color_undefined" = "没有数据的部分是灰色的。";
+"grey_color_undefined" = "缺少数据的部分是灰色的。";
 "shared_string_feet" = "英尺";
 "search_more" = "搜索更多…";
 "srtm_download_list_help_message" = "OsmAnd 提供以米和英尺为单位的等高线数据。您需要重新下载文件以更改格式。";
@@ -1451,7 +1451,7 @@
 "routeInfo_tracktype_description" = "根据表面成分给路线或轨迹线上色。通常适用于道路网络大部分未铺设的情况。";
 "save_heading" = "包括航向";
 "selected_profile" = "当前所选配置文件";
-"join_segments" = "加入分段";
+"join_segments" = "连接所有轨迹段";
 "routeInfo_roadClass_description" = "按道路分类给路线或轨迹线上色。";
 "number_of_tiles" = "瓦片数量";
 "rendering_attr_showRunningRoutes_name" = "跑步路线";
@@ -1718,7 +1718,7 @@
 "settings_item_read_error" = "无法从 \'%@\' 中读取。";
 "routing_attr_motor_type_diesel_name" = "柴油";
 "select_another_colorization" = "请选择另一种着色类型。";
-"gpx_selection_segment_title" = "区段";
+"gpx_selection_segment_title" = "轨迹段";
 "weather_pressure_hectopascals" = "百帕";
 "pro_features" = "专业版功能";
 "first_intermediate_dest_description" = "添加始发站";
@@ -1756,7 +1756,7 @@
 "routing_attr_avoid_low_emission_zone_description" = "避开低排放区";
 "mapillary_descr" = "供所有人使用的在线街景照片。协作发现景点，捕捉世界之美。";
 "reset_to_default_category_button_promo" = "“重置为默认值”会将排序顺序恢复为安装时的默认值。";
-"recalc_angle_dialog_descr" = "将显示我的位置和计算的路径之间的额外直线段，直到重新计算路径";
+"recalc_angle_dialog_descr" = "在路线重新计算之前，会显示一段从我的位置到已计算路线之间的额外直线线段";
 "activity_type_mountainbike_name" = "山地车";
 "srtm_download_single_help_message" = "请选择变体。您需要重新下载文件以更改格式。";
 "sign_in_with_open_street_map" = "用 OpenStreetMap 登录";
@@ -1774,7 +1774,7 @@
 "sett_generic_ext_input" = "键盘";
 "shared_string_selected" = "已选择";
 "recalc_angle_dialog_title" = "我的位置和路线之间的最小角度";
-"route_between_points_add_track_desc" = "选择一个要添加新片段的轨迹文件。";
+"route_between_points_add_track_desc" = "请选择一个轨迹文件以添加新的轨迹段。";
 "backup_pause_all" = "暂停全部";
 "weather_precip_milimeters" = "毫米";
 "search_poi_types_descr" = "合并不同类别的兴趣点类型。点击开关全选，点击左侧选择类别。";
@@ -1910,13 +1910,13 @@
 "quick_action_navigation_voice_off" = "取消静音";
 "osm_editing_plugin_name" = "OpenStreetMap 编辑";
 "auth_failed" = "授权失败";
-"only_selected_segment_recalc" = "只有已选中的区段将使用所选择的配置文件重新计算。";
-"add_point_before" = "在之前添加点";
+"only_selected_segment_recalc" = "只有已选中的轨迹段将使用所选的配置文件重新计算。";
+"add_point_before" = "在此之前新增点";
 "local_openstreetmap_uploading" = "正在上传…";
 "quick_action_map_style_action" = "添加地图样式";
 "osm_edit_reopened_note" = "重新打开 OSM 注记";
 "osm_editing_plugin_description" = "向由全球社区所维护的综合性地图 OpenStreetMap 做出贡献，并为每个用户提供最新的开源数据。 \n \n您可以在我们的网站上找到有关如何编辑地图的说明 %@。";
-"add_point_after" = "在之后添加点";
+"add_point_after" = "在此之后新增点";
 "mgrs_format_descr" = "OsmAnd使用MGRS，类似于UTM NATO格式。";
 "download_wikipedia_data" = "下载维基百科数据";
 "route_add_start_point" = "添加出发地";
@@ -1963,7 +1963,7 @@
 "dont_download" = "不要下载";
 "wikivoyage_download_pics" = "下载图像";
 "mtb_imba_full" = "国际山地自行车协会";
-"mtb_segment_classification" = "细分分类";
+"mtb_segment_classification" = "路径难度分类";
 "cloud_changes_will_be_dismissed" = "将取消云端变更";
 "shared_string_modified" = "已修改";
 "rendering_attr_showMtbScale_name" = "显示山地自行车难度分级";
@@ -2300,7 +2300,7 @@
 "saved_articles" = "已存书签的文章";
 "map_widget_zoom_level_desc" = "显示当前的地图缩放级别。";
 "search_favorites" = "在我的收藏中搜索";
-"average_speed_skip_stops" = "考虑停留时间";
+"average_speed_skip_stops" = "考虑停止时间";
 "map_widget_next_sunrise" = "下次日出";
 "map_widget_rendering_fps_desc" = "显示地图和地图元素的显示和刷新速度，以每秒帧数 （FPS） 表示。";
 "widget_secondary_desc_part_of" = "%@ 插件的一部分。";
@@ -2475,7 +2475,7 @@
 "shared_string_all_colors" = "所有颜色";
 "edit_tilesource_minzoom" = "最小显示级别";
 "shared_string_class" = "分级";
-"display_position_automatic_descr" = "取决于地图方向：底部为移动方向，中心为所有其他方向。";
+"display_position_automatic_descr" = "取决于地图朝向：若按移动方向显示，则定位图标在底部；否则居中显示。";
 "empty_name" = "空名称";
 "shared_string_activity" = "活动";
 "add_button" = "新增按钮";
@@ -2635,7 +2635,7 @@
 "auto_25_chars_route_roundabout_kr" = "从第 %d 出口离开并靠右";
 "shared_strings_dimensions" = "尺寸规格";
 "auto_25_chars_route_tshl" = "向左急转";
-"new_trip_segment" = "新的行程段";
+"new_trip_segment" = "新的行程分段";
 "online_photos" = "在线照片";
 "auto_25_chars_route_kl" = "保持在左侧";
 "auto_25_chars_route_tu" = "调头";
@@ -2727,3 +2727,4 @@
 "obd_vin_desc" = "通过车载诊断系统获取车辆识别号码";
 "app_profile" = "配置文件";
 "shared_string_open_street_map" = "开放街道地图";
+"average" = "平均";

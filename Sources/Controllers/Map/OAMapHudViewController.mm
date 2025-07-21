@@ -42,10 +42,10 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAMapStyleSettings.h"
 #import "OAWeatherHelper.h"
+#import "StartupLogging.h"
 
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
-#define deinit _(deinit)
 
 static const float kButtonWidth = 50.0;
 static const float kButtonOffset = 16.0;
@@ -112,11 +112,6 @@ static const float kDistanceMeters = 100.0;
     return self;
 }
 
-- (void) dealloc
-{
-    [self deinit];
-}
-
 - (void) commonInit
 {
     _mapHudType = EOAMapHudBrowse;
@@ -176,14 +171,10 @@ static const float kDistanceMeters = 100.0;
     _cachedLocationAvailableState = NO;
 }
 
-- (void) deinit
-{
-
-}
-
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    LogStartup(@"viewDidLoad");
 
     _mapInfoController = [[OAMapInfoController alloc] initWithHudViewController:self];
 
@@ -333,6 +324,9 @@ static const float kDistanceMeters = 100.0;
     
     if (self.toolbarViewController)
         [self.toolbarViewController onViewDidAppear:self.mapHudType];
+    
+    LogStartup(@"viewDidAppear");
+    MarkStartupFinished();
 }
 
 - (void) viewWillDisappear:(BOOL)animated

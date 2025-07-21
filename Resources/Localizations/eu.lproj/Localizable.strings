@@ -2556,3 +2556,16 @@
 "smart_folder_name_present" = "Karpeta adimenduna dagoeneko badago";
 "three_months_subscription" = "Hiru hilabeteko harpidetza";
 "auto_25_chars_route_tr" = "Biratu eskuinera";
+"osm_live_payment_renews_3_years" = "Berritu hiru urtero";
+"years_3" = "Hiru urte";
+"three_years_subscription" = "Hiru urteko harpidetza";
+"sensor_data" = "Sentsoreen datuak";
+"intermediate_first" = "Tarteko lehenengoa";
+"destination_first" = "Lehenengo helmuga";
+"display_priority" = "Bistaratze lehentasuna";
+"add_widget" = "Gehitu trepeta";
+"meridian_180" = "180 meridianoa";
+"prime_meridian" = "Zero meridianoa";
+"equator" = "Ekuatorea";
+"quick_action_showhide_coordinates_grid_descr" = "Maparen koordenatuen saretaren ikusgarritasuna kontrolatzeko ekintza.";
+"layer_coordinates_grid" = "Koordenatuen sarea";

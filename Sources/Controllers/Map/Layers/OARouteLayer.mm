@@ -1358,7 +1358,7 @@ struct DrawPathData
     if ([obj isKindOfClass:OATransportStop.class])
     {
         OATransportStop *transportStop = (OATransportStop *)obj;
-        return [[CLLocation alloc] initWithLatitude:transportStop.location.latitude longitude:transportStop.location.longitude];
+        return [[CLLocation alloc] initWithLatitude:transportStop.latitude longitude:transportStop.longitude];
     }
     return  nil;
 }

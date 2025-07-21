@@ -70,7 +70,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     
     MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:point];
     [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO];
-    [self collectObjectsFromMap:result point:point]; //start from this
+    [self collectObjectsFromMap:result point:point];
     
     [self processTransportStops:result];
     

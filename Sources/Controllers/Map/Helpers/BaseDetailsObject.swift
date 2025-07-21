@@ -195,7 +195,7 @@ final class BaseDetailsObject: NSObject {
         
         if isStop {
             for stop in stops {
-                let distance = OAMapUtils.getDistance(stop.location, second: renderedObject.getLocation().coordinate)
+                let distance = OAMapUtils.getDistance(stop.getLocation().coordinate, second: renderedObject.getLocation().coordinate)
                 if distance < MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS {
                     return true
                 }
@@ -261,14 +261,11 @@ final class BaseDetailsObject: NSObject {
                 if let poi = transportStop.poi {
                     processAmenity(poi, contentLocales: &contentLocales)
                 } else {
-                    // TODO: refactor OATransportStop to be a subclass of OAMapObject
-                    // TODO: replace transportStop.poi -> transportStop
-                    
-                    processId(transportStop.poi)
-                    syntheticAmenity.copyNames(transportStop.poi)
+                    processId(transportStop)
+                    syntheticAmenity.copyNames(transportStop)
                     if syntheticAmenity.getLocation() == nil {
-                        syntheticAmenity.latitude = transportStop.location.latitude
-                        syntheticAmenity.longitude = transportStop.location.longitude
+                        syntheticAmenity.latitude = transportStop.latitude
+                        syntheticAmenity.longitude = transportStop.longitude
                     }
                 }
             } else if let renderedObject = object as? OARenderedObject {

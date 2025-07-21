@@ -86,9 +86,10 @@ static OATransportRouteToolbarViewController *toolbarController;
 
 - (void) showTransportStop:(std::shared_ptr<OsmAnd::TransportStop>)stop stopIndex:(int)stopIndex
 {
-    _transportRoute.stop = stop;
+    OATransportStop *transportStop = [[OATransportStop alloc] initWithStop:stop];
+    _transportRoute.stop = transportStop;
     [_transportRoute setStopIndex:stopIndex];
-    _transportRoute.refStop = stop;
+    _transportRoute.refStop = transportStop;
 
     [self refreshContextMenu];
 }
@@ -148,10 +149,10 @@ static OATransportRouteToolbarViewController *toolbarController;
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     const auto& lang = QString::fromNSString(prefLang);
 
-    if (transportRoute.refStop && transportRoute.refStop->getName(lang, transliterate).length() > 0)
-        return transportRoute.refStop->getName(lang, transliterate).toNSString();
-    else if (transportRoute.stop && transportRoute.stop->getName(lang, transliterate).length() > 0)
-        return transportRoute.stop->getName(lang, transliterate).toNSString();
+    if (transportRoute.refStop && [transportRoute.refStop getStopObjectName:prefLang transliterate:transliterate].length > 0)
+        return [transportRoute.refStop getStopObjectName:prefLang transliterate:transliterate];
+    else if (transportRoute.stop && [transportRoute.stop getStopObjectName:prefLang transliterate:transliterate].length > 0)
+        return [transportRoute.stop getStopObjectName:prefLang transliterate:transliterate];
     else if ([transportRoute getDescription:NO].length > 0)
         return [transportRoute getDescription:NO];
     else
@@ -245,9 +246,9 @@ static OATransportRouteToolbarViewController *toolbarController;
 {
     CLLocationCoordinate2D latLon;
     if (r.refStop)
-        latLon = CLLocationCoordinate2DMake(r.refStop->location.latitude, r.refStop->location.longitude);
+        latLon = CLLocationCoordinate2DMake(r.refStop.latitude, r.refStop.longitude);
     else if (r.stop)
-        latLon = CLLocationCoordinate2DMake(r.stop->location.latitude, r.stop->location.longitude);
+        latLon = CLLocationCoordinate2DMake(r.stop.latitude, r.stop.longitude);
     else
         latLon = [r calculateBounds:0].center;
     
@@ -274,9 +275,9 @@ static OATransportRouteToolbarViewController *toolbarController;
     OATransportStopRoute *r = [transportRoute clone];    
     toolbarController.transportRoute = r;
     if (r.refStop)
-        toolbarController.transportStop = [[OATransportStop alloc] initWithStop:r.refStop];
+        toolbarController.transportStop = r.refStop;
     if (r.stop)
-        toolbarController.transportStop = [[OATransportStop alloc] initWithStop:r.stop];
+        toolbarController.transportStop = r.stop;
     toolbarController.toolbarTitle = [self.class getTitle:r];
 
     [[OARootViewController instance].mapPanel showToolbar:toolbarController];

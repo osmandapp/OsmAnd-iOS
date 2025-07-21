@@ -176,7 +176,7 @@
         
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetTransportStop;
-        targetPoint.location = item.location;        
+        targetPoint.location = [item getLocation].coordinate;
         targetPoint.targetObj = item;
         if (item.transportStopAggregated && item.transportStopAggregated.localTransportStops.count == 0 && item.poi)
         {
@@ -206,7 +206,7 @@
     if ([obj isKindOfClass:OATransportStop.class])
     {
         OATransportStop *transportStop = (OATransportStop *)obj;
-        return [[CLLocation alloc] initWithLatitude:transportStop.location.latitude longitude:transportStop.location.longitude];
+        return [[CLLocation alloc] initWithLatitude:transportStop.latitude longitude:transportStop.longitude];
     }
     return  nil;
 }

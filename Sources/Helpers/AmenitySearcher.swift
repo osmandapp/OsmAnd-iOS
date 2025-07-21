@@ -21,7 +21,9 @@ final class AmenitySearcherRequest: NSObject {
         if let poi = mapObject as? OAPOI {
             latLon = poi.getLocation()
             wikidata = poi.getWikidata()
-            names.append(poi.name ?? "")
+            if let name = poi.name {
+                names.append(name)
+            }
             if let localizedNames = poi.localizedNames.allValues as? [String] {
                 names.append(contentsOf:localizedNames)
             }
@@ -33,9 +35,15 @@ final class AmenitySearcherRequest: NSObject {
             if let value = renderedObject.tags[WIKIDATA_TAG] as? String {
                 wikidata = value
             }
-        } else if mapObject is OATransportStop {
-            
-            //TODO: implement after OATransportStop refactor
+        } else if let stop = mapObject as? OATransportStop {
+            stop.findAmenityDataIfNeeded()
+            latLon = stop.getLocation();
+            if let name = stop.name {
+                names.append(name)
+            }
+            if let localizedNames = stop.localizedNames.allValues as? [String] {
+                names.append(contentsOf:localizedNames)
+            }
             
         } else {
             latLon = mapObject.getLocation()

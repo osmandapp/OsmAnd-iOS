@@ -6,18 +6,21 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
+#import "OAMapObject.h"
+
 #import <CoreLocation/CoreLocation.h>
 
 @class OAPOI, OATransportStopAggregated;
 
-@interface OATransportStop : NSObject
+@interface OATransportStop : OAMapObject
 
-@property (nonatomic, readonly) CLLocationCoordinate2D location;
-@property (nonatomic, readonly, nullable) NSString *name;
-
+@property (nonatomic) uint64_t stopId;
 @property (nonatomic, nullable) OAPOI *poi;
 @property (nonatomic) int distance;
-
+@property (nonatomic) NSArray<CLLocation *> *exitLocations;
 @property (nonatomic, nullable) OATransportStopAggregated *transportStopAggregated;
+
+- (void)findAmenityDataIfNeeded;
+- (NSString *)getStopObjectName:(NSString *)lang transliterate:(BOOL)transliterate;
 
 @end

@@ -13,6 +13,7 @@
 #import "OAUtilities.h"
 #import "OATargetPoint.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OAMapStyleSettings.h"
 #import "OATransportStopRoute.h"
 #import "OATransportStopAggregated.h"
@@ -20,6 +21,7 @@
 #import "OAPointDescription.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesTransportRouteIconProvider.h"
 #include <OsmAndCore/Ref.h>
@@ -36,6 +38,9 @@
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
+
+static const int START_ZOOM_SELECTED_TRANSPORT_ROUTE = 10;
+static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
 
 @implementation OATransportStopsLayer
 {
@@ -219,6 +224,59 @@
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_TRANSPORT_STOP typeName:OALocalizedString(@"transport_Stop") name:[transportStop name]];
     }
     return nil;
+}
+
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
+{
+    if ([self.mapViewController getMapZoom] < START_ZOOM_ALL_TRANSPORT_STOPS)
+           return;
+    
+    [self collectTransportStopsFromPoint:result];
+}
+
+- (void)collectTransportStopsFromPoint:(MapSelectionResult *)result
+{
+    NSMutableArray<NSString *> *addedTransportStops = [NSMutableArray new];
+    CGPoint point = result.point;
+    int delta = 20;
+    OsmAnd::PointI tl = OsmAnd::PointI(point.x - delta, point.y - delta);
+    OsmAnd::PointI br = OsmAnd::PointI(point.x + delta, point.y + delta);
+    OsmAnd::AreaI touchPolygon31(tl, br);
+    
+    const auto& symbolInfos = [self.mapView getSymbolsIn:touchPolygon31 strict:NO];
+    for (const auto symbolInfo : symbolInfos)
+    {
+        OsmAnd::TransportStopSymbolsProvider::TransportStopSymbolsGroup* transportStopSymbolGroup = dynamic_cast<OsmAnd::TransportStopSymbolsProvider::TransportStopSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
+        if (transportStopSymbolGroup != nullptr)
+        {
+            const auto transportStopObject = transportStopSymbolGroup->transportStop;
+            if (transportStopObject != nullptr)
+            {
+                OATransportStop *transportStop = [[OATransportStop alloc] initWithStop:transportStopObject];
+                if (transportStop && ![addedTransportStops containsObject:transportStop.name])
+                {
+                    [addedTransportStops addObject:transportStop.name];
+                    [result collect:transportStop provider:self];
+                }
+                BOOL stop = YES;
+            }
+        }
+    }
+}
+
+- (int64_t)getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
+- (BOOL)runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (BOOL)showMenuAction:(id)object
+{
+    return NO;
 }
 
 @end

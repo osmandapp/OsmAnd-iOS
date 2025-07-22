@@ -11,6 +11,8 @@
 @interface OAValueTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIStackView *valueStackView;
+@property (nonatomic) IBOutlet NSLayoutConstraint *titleWidthGreaterThanEqualConstraint;
+@property (nonatomic) IBOutlet NSLayoutConstraint *titleWidthEqualConstraint;
 
 @end
 
@@ -41,6 +43,21 @@
 - (BOOL)checkSubviewsToUpdateMargins
 {
     return !self.valueStackView.hidden;
+}
+
+- (void)setActiveTitleWidthGreaterThanEqualConstraint:(BOOL)active
+{
+    _titleWidthGreaterThanEqualConstraint.active = active;
+}
+
+- (void)setActiveTitleWidthEqualConstraint:(BOOL)active
+{
+    _titleWidthEqualConstraint.active = active;
+}
+
+- (void)setTitleWidthEqualConstraintValue:(CGFloat)value
+{
+    _titleWidthEqualConstraint.constant = value;
 }
 
 @end

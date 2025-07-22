@@ -156,6 +156,7 @@
     }];
 
     [productSection addRowFromDictionary:@{
+        kCellKeyKey : @"purchase_origin",
         kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
         kCellTitleKey : OALocalizedString(@"purchase_origin"),
         kCellDescrKey : @"-"
@@ -228,6 +229,7 @@
     }];
     
     [productSection addRowFromDictionary:@{
+        kCellKeyKey : @"purchase_origin",
         kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
         kCellTitleKey : OALocalizedString(@"purchase_origin"),
         kCellDescrKey : [self purchaseOriginToString:_origin]
@@ -267,6 +269,7 @@
     }];
 
     [productSection addRowFromDictionary:@{
+        kCellKeyKey : @"purchase_origin",
         kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
         kCellTitleKey : OALocalizedString(@"purchase_origin"),
         kCellDescrKey : [self purchaseOriginToString:_origin]
@@ -409,6 +412,15 @@
         cell.titleLabel.text = item.title;
         cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
         cell.titleLabel.textColor = tintColor;
+        
+        if ([item.key isEqualToString:@"purchase_origin"])
+        {
+            CGSize textSize = [cell.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: cell.titleLabel.font}];
+            [cell setActiveTitleWidthGreaterThanEqualConstraint:false];
+            [cell setActiveTitleWidthEqualConstraint:true];
+            [cell setTitleWidthEqualConstraintValue:textSize.width];
+        }
+        
         cell.valueLabel.text = isManageSubscription ? @"" : item.descr;
         cell.accessoryView = isManageSubscription ? [[UIImageView alloc] initWithImage:[item objForKey:kCellIconKey]] : nil;
         cell.accessoryView.tintColor = tintColor;

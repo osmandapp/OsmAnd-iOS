@@ -74,10 +74,16 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="8qC-Rq-OXb"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="pGO-oH-k3f"/>
+                                                    <constraint firstAttribute="width" constant="100" id="tVs-du-54e"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <color key="textColor" name="textColorPrimary"/>
                                                 <nil key="highlightedColor"/>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="tVs-du-54e"/>
+                                                    </mask>
+                                                </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RAZ-Y1-CfK">
                                                 <rect key="frame" x="0.0" y="24" width="133" height="16"/>
@@ -180,6 +186,8 @@
                 <outlet property="textCustomMarginTopStackView" destination="kKL-Xr-Rbt" id="8b7-n3-JO3"/>
                 <outlet property="textStackView" destination="cg3-NR-OYx" id="HmV-rs-mNc"/>
                 <outlet property="titleLabel" destination="f1L-rN-XiG" id="buz-tl-eCo"/>
+                <outlet property="titleWidthEqualConstraint" destination="tVs-du-54e" id="dcR-Nq-17d"/>
+                <outlet property="titleWidthGreaterThanEqualConstraint" destination="8qC-Rq-OXb" id="KU8-BX-9gV"/>
                 <outlet property="topContentSpaceView" destination="oBc-Dx-kEA" id="Hls-Re-f9U"/>
                 <outlet property="valueLabel" destination="32H-RA-OLd" id="Fcs-Xj-qQc"/>
                 <outlet property="valueStackView" destination="68V-3N-ZFk" id="vmm-Oc-kZp"/>

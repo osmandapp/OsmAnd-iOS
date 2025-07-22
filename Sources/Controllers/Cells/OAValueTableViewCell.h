@@ -15,5 +15,8 @@
 
 - (void)valueVisibility:(BOOL)show;
 - (void)showProButton:(BOOL)show;
+- (void)setActiveTitleWidthGreaterThanEqualConstraint:(BOOL)active;
+- (void)setActiveTitleWidthEqualConstraint:(BOOL)active;
+- (void)setTitleWidthEqualConstraintValue:(CGFloat)value;
 
 @end

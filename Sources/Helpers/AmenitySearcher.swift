@@ -128,13 +128,12 @@ final class AmenitySearcher: NSObject {
     private func findByName(amenities: [OAPOI], names: [String], searchLatLon: CLLocation) -> OAPOI? {
         guard !names.isEmpty, !amenities.isEmpty else { return nil }
         
-        var sorted = amenities.sorted { OAMapUtils.getDistance($0.getLocation().coordinate, second: searchLatLon.coordinate) < OAMapUtils.getDistance($1.getLocation().coordinate, second: searchLatLon.coordinate) }
-            .filter { !$0.isClosed() }
-            .filter { namesMatcher(amenity: $0, matchList: names, matchAllLanguagesAndAltNames: false) }
+        let sorted = amenities.filter { !$0.isClosed() && namesMatcher(amenity: $0, matchList: names, matchAllLanguagesAndAltNames: false) }
+            .sorted { OAMapUtils.getDistance($0.getLocation().coordinate, second: searchLatLon.coordinate) < OAMapUtils.getDistance($1.getLocation().coordinate, second: searchLatLon.coordinate) }
         
-        var found = sorted.first { amenity in
+        let found = sorted.first { amenity in
             guard let travelRouteId = amenity.getAdditionalInfo()["route_id"] as? String else { return false }
-            return !amenity.isClosed() && amenity.isRoutePoint() && amenity.name.isEmpty && names.contains(travelRouteId)
+            return amenity.isRoutePoint() && amenity.name.isEmpty && names.contains(travelRouteId)
         }
         if let found {
             return found
@@ -183,10 +182,8 @@ final class AmenitySearcher: NSObject {
                 let withPoiTypes = allAmenityNames.map { "\(typeName) \($0)" }
                 allAmenityNames.formUnion(withPoiTypes)
             }
-            for match in matchList {
-                if allAmenityNames.contains(match) {
-                    return true
-                }
+            if matchList.first(where: { allAmenityNames.contains($0) }) != nil {
+                return true
             }
         }
         return false

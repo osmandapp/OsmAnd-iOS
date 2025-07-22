@@ -186,7 +186,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     
     func onNewProfilePressed() {
         let vc = OACreateProfileViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func getLocationPositionIcon() -> String {

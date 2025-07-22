@@ -164,7 +164,7 @@
 
 - (void)generateDataForProduct
 {
-    BOOL isSubscription = [_product isKindOfClass:OASubscription.class];
+    BOOL isSubscription = [self isSubscription];
     BOOL isDepthContours = [_product.productIdentifier isEqualToString:kInAppId_Addon_Nautical];
 
     OATableSectionData *productSection = [_data createNewSection];
@@ -189,7 +189,7 @@
 
     NSString *purchasedType = OALocalizedString(@"shared_string_purchased");
     NSDate *date = nil;
-    if ([_product isKindOfClass:OASubscription.class])
+    if ([self isSubscription])
     {
         if (_product.purchaseState == PSTATE_NOT_PURCHASED)
             purchasedType = OALocalizedString(@"expired");
@@ -213,7 +213,7 @@
     formatter.dateStyle = NSDateFormatterMediumStyle;
     
     NSString *descr = date ? [formatter stringFromDate:date] : @"";
-    if (_product.purchaseState == PSTATE_NOT_PURCHASED && [_product isKindOfClass:OASubscription.class])
+    if (_product.purchaseState == PSTATE_NOT_PURCHASED && [self isSubscription])
     {
         if (_product.expirationDate)
             descr = [formatter stringFromDate:_product.expirationDate];
@@ -281,7 +281,7 @@
     [section addRowFromDictionary:@{
         kCellKeyKey : @"fastspring_desc",
         kCellTypeKey : [OARightIconTableViewCell reuseIdentifier],
-        kCellTitleKey : OALocalizedString([_product isKindOfClass:OASubscription.class] ? @"fastspring_subscription_desc" : @"fastspring_one_time_payment_desc"),
+        kCellTitleKey : OALocalizedString([self isSubscription] ? @"fastspring_subscription_desc" : @"fastspring_one_time_payment_desc"),
     }];
     
     [self generateManageSubscriptionForSection:section];
@@ -292,7 +292,7 @@
     [section addRowFromDictionary:@{
         kCellKeyKey: @"manage_subscription",
         kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
-        kCellTitleKey : OALocalizedString(@"manage_subscription"),
+        kCellTitleKey : OALocalizedString([self isOriginFastSpring] && ![self isSubscription] ? @"manage_purchases" : @"manage_subscription"),
         kCellIconKey : [UIImage templateImageNamed:@"ic_custom_shop_bag"]
     }];
 }
@@ -324,11 +324,16 @@
     return _origin == EOAPurchaseOriginFastSpring;
 }
 
+- (BOOL)isSubscription
+{
+    return [_product isKindOfClass:OASubscription.class];
+}
+
 - (UIImage *)getIcon
 {
     NSString *iconName = _product.productIconName;
     UIImage *icon;
-    if ([_product isKindOfClass:OASubscription.class] || [_product isFullVersion] || [_product isKindOfClass:OAExternalProduct.class])
+    if ([self isSubscription] || [_product isFullVersion] || [_product isKindOfClass:OAExternalProduct.class])
     {
         icon = [UIImage imageNamed:[iconName stringByAppendingString:@"_big"]];
         if (!icon)

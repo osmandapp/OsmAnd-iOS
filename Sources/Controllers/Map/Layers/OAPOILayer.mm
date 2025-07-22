@@ -435,7 +435,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     }
     else if ([object isKindOfClass:BaseDetailsObject.class])
     {
-        return ((BaseDetailsObject *)object).syntheticAmenity;
+        BaseDetailsObject *baseDetailsObject = object;
+        return (baseDetailsObject).syntheticAmenity;
     }
     return nil;
 }

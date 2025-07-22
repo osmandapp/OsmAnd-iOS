@@ -1335,32 +1335,52 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
+    [self showContextMenuWithPoints:targetPoints selectedObjects:nil touchPointLatLon:nil];
+}
+
+- (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(CLLocation *)touchPointLatLon
+{
     if (_activeTargetType == OATargetGPX && _scrollableHudViewController)
         [_scrollableHudViewController forceHide];
 
     if (self.isNewContextMenuDisabled)
         return;
+    
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OAContextMenuLayer *contextLayer = mapPanel.mapViewController.mapLayers.contextMenuLayer;
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
 
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
+    NSMutableArray<SelectedMapObject *> *validSelectedObjects = [NSMutableArray array];
         
     if (_activeTargetType == OATargetRouteIntermediateSelection && targetPoints.count > 1)
     {
         [validPoints addObjectsFromArray:targetPoints];
+        if (selectedObjects)
+            [validSelectedObjects addObjectsFromArray:selectedObjects];
     }
     else
     {
-        for (OATargetPoint *targetPoint in targetPoints)
+        for (int i = 0; i < targetPoints.count; i++)
         {
+            OATargetPoint *targetPoint = targetPoints[i];
             if ([self processTargetPoint:targetPoint])
+            {
                 [validPoints addObject:targetPoint];
+                if (selectedObjects)
+                    [validSelectedObjects addObject:selectedObjects[i]];
+            }
         }
     }
     
     if (validPoints.count == 0)
     {
         return;
+    }
+    if (selectedObjects.count == 1)
+    {
+        [contextLayer showContextMenu:touchPointLatLon object:selectedObjects[0]];
     }
     else if (validPoints.count == 1)
     {
@@ -1371,13 +1391,16 @@ typedef enum
         for (OATargetPoint *targetPoint in validPoints)
             [self applyTargetPointController:targetPoint];
 
-        [self showMultiContextMenu:validPoints];
+        if (validSelectedObjects && validSelectedObjects.count != validPoints.count)
+            validSelectedObjects = nil;
+        
+        [self showMultiContextMenu:touchPointLatLon points:validPoints selectedObjects:validSelectedObjects];
     }
 }
 
-- (void) showMultiContextMenu:(NSArray<OATargetPoint *> *)points
+- (void) showMultiContextMenu:(CLLocation *)touchPointLatLon points:(NSArray<OATargetPoint *> *)points selectedObjects:(NSMutableArray<SelectedMapObject *> *)selectedObjects
 {
-    [self showMultiPointMenu:points onComplete:^{
+    [self showMultiPointMenu:touchPointLatLon points:points selectedObjects:selectedObjects onComplete:^{
         
     }];
 }
@@ -2436,7 +2459,7 @@ typedef enum
     }];
 }
 
-- (void) showMultiPointMenu:(NSArray<OATargetPoint *> *)points onComplete:(void (^)(void))onComplete
+- (void) showMultiPointMenu:(CLLocation *)touchPointLatLon points:(NSArray<OATargetPoint *> *)points selectedObjects:(NSMutableArray<SelectedMapObject *> *)selectedObjects onComplete:(void (^)(void))onComplete
 {
     if (_dashboard)
         [self closeDashboard];
@@ -2454,6 +2477,8 @@ typedef enum
     
     [self.targetMultiMenuView setActiveTargetType:_activeTargetType];
     [self.targetMultiMenuView setTargetPoints:points];
+    [self.targetMultiMenuView setSelectedMapObjects:selectedObjects];
+    [self.targetMultiMenuView setTouchPoint:touchPointLatLon];
     
     [self.view addSubview:self.targetMultiMenuView];
     

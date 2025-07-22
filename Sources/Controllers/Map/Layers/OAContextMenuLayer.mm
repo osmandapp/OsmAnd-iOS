@@ -493,25 +493,16 @@
     if (selectedObjects.count == 1)
     {
         SelectedMapObject *selectedObject = selectedObjects[0];
-        id selectedObj = selectedObject.object;
         CLLocation *latLon = [result objectLatLon];
-        OAPointDescription *pointDescription;
-        
-        id<OAContextMenuProvider> provider = selectedObject.provider;
-        if (provider)
+        if (!latLon || objectSelectionThreshold < 0 && selectedObject.provider)
         {
-            if (!latLon || objectSelectionThreshold < 0)
-            {
-                latLon = [provider getObjectLocation:selectedObject];
-            }
-            pointDescription = [provider getObjectName:selectedObj];
+            id<OAContextMenuProvider> provider = selectedObject.provider;
+            latLon = [provider getObjectLocation:selectedObject];
         }
         if (!latLon)
-        {
             latLon = pointLatLon;
-        }
-        
-        [self showContextMenu:latLon pointDescription:pointDescription object:selectedObject provider:provider];
+
+        [self showContextMenu:latLon object:selectedObject];
         return YES;
     }
     else if (selectedObjects.count > 1)
@@ -534,12 +525,13 @@
     return NO;
 }
 
-- (void) showContextMenuForSelectedObjects:(CLLocation *)latLon selectedObjects:(NSArray<SelectedMapObject *> *)selectedObjects
+- (void) showContextMenuForSelectedObjects:(CLLocation *)touchPointLatLon selectedObjects:(NSArray<SelectedMapObject *> *)selectedObjects
 {
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
     
     // Android calls context menu without TargetPoint, but with SelectedMapObject directly
     NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray new];
+    NSMutableArray<SelectedMapObject *> *filteredSelectedObjects = [NSMutableArray new];
     for (SelectedMapObject *selectedObject in selectedObjects)
     {
         id<OAContextMenuProvider> provider = selectedObject.provider;
@@ -550,13 +542,31 @@
         {
             OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object];
             if (targetPoint)
+            {
+                [filteredSelectedObjects addObject:selectedObject];
                 [targetPoints addObject:targetPoint];
-            
-           
+            }
         }
     }
     if (!NSArrayIsEmpty(targetPoints))
-        [mapPanel showContextMenuWithPoints:targetPoints];
+        [mapPanel showContextMenuWithPoints:targetPoints selectedObjects:filteredSelectedObjects touchPointLatLon:touchPointLatLon];
+}
+
+- (void) showContextMenu:(CLLocation *)latLon object:(SelectedMapObject *)selectedObject
+{
+    id selectedObj = selectedObject.object;
+    OAPointDescription *pointDescription;
+    
+    id<OAContextMenuProvider> provider = selectedObject.provider;
+    if (provider)
+    {
+        if (!latLon)
+        {
+            latLon = [provider getObjectLocation:selectedObject];
+        }
+        pointDescription = [provider getObjectName:selectedObj];
+    }
+    [self showContextMenu:latLon pointDescription:pointDescription object:selectedObject provider:provider];
 }
 
 - (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(SelectedMapObject *)object provider:(id<OAContextMenuProvider>)provider

@@ -920,6 +920,7 @@ final class GpxFileReader {
     
     func onPreExecute() {
         if let callback {
+            OARootViewController.instance().view.addSpinner(inCenterOfCurrentView: true)
             callback.onGpxFileReading?()
         }
     }
@@ -939,5 +940,6 @@ final class GpxFileReader {
                 callback.onGpxFileRead(gpxFile: gpxFile, article: article)
             }
         }
+        OARootViewController.instance().view.removeSpinner()
     }
 }

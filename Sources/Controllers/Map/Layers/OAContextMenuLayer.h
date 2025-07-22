@@ -8,7 +8,7 @@
 
 #import "OASymbolMapLayer.h"
 
-@class OATargetPoint, OAMapObject, OARenderedObject;
+@class OATargetPoint, OAMapObject, OARenderedObject, SelectedMapObject;
 
 @protocol OAChangePositionModeDelegate <NSObject>
 
@@ -30,6 +30,7 @@
 - (void) hideContextPinMarker;
 
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide;
+- (void) showContextMenu:(CLLocation *)touchPointLatLon object:(SelectedMapObject *)selectedObject;
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
 

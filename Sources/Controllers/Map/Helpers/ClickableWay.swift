@@ -6,6 +6,9 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// OsmAnd/src/net/osmand/plus/track/clickable/ClickableWay.java
+// git revision c43d43bf111f9fc150f3b96cac7c1414bd34aa80
+
 import Foundation
 import CoreLocation
 

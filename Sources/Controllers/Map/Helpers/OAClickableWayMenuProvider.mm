@@ -6,6 +6,9 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// OsmAnd/src/net/osmand/plus/track/clickable/ClickableWayMenuProvider.java
+// git revision ceabdd1bbac25379eaf6332b844f6601b62433b1
+
 #import "OAClickableWayMenuProvider.h"
 #import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"

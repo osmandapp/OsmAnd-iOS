@@ -6,6 +6,9 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// OsmAnd-java/src/main/java/net/osmand/binary/HeightDataLoader.java
+// git revision a9b2a06728af2430efcc0bcf90b0c3568d239da1
+
 #import "OAHeightDataLoader.h"
 #import "OsmAnd_Maps-Swift.h"
 

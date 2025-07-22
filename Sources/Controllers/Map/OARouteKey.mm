@@ -6,6 +6,9 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
+// OsmAnd-java/src/main/java/net/osmand/router/network/NetworkRouteSelector.java
+// git revision 1458fe01870a21e8c92cccdb2204f701ac9e011e
+
 #import "OARouteKey.h"
 #import "Localization.h"
 #import "OAAppSettings.h"

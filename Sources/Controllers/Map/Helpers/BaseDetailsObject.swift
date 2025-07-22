@@ -6,6 +6,9 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// OsmAnd-java/src/main/java/net/osmand/data/BaseDetailsObject.java
+// git revision 6760f7a070f136795c5f30c24157f3fa1e821522
+
 import Foundation
 import CoreLocation
 

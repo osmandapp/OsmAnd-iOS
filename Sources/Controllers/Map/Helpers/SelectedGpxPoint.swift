@@ -6,6 +6,9 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// OsmAnd/src/net/osmand/plus/mapcontextmenu/controllers/SelectedGpxMenuController.java
+// git revision 3cf155a0312432ffd9f85da619e30ca4fb54e195
+
 import Foundation
 
 @objcMembers

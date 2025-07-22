@@ -6,6 +6,9 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// OsmAnd-java/src/main/java/net/osmand/search/AmenitySearcher.java
+// git revision c3d7a8a378dc84251eb7ca72dd10958af86d2225
+
 @objcMembers
 final class AmenitySearcherRequest: NSObject {
     var latLon: CLLocation?

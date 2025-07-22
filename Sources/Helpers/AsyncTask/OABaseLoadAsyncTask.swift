@@ -6,6 +6,9 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// OsmAnd/src/net/osmand/plus/base/BaseLoadAsyncTask.java
+// git revision 2f2b0e02d375e028289b45870999ffe6ffdd012e
+
 import Foundation
 
 @objcMembers

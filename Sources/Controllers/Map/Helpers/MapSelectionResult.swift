@@ -6,6 +6,9 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// OsmAnd/src/net/osmand/plus/views/layers/MapSelectionResult.java
+// git revision 744c6b5831ca13767b936d62be8c78138b8dda08
+
 import Foundation
 import CoreLocation
 import UIKit

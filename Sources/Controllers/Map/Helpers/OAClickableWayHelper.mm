@@ -6,6 +6,9 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// OsmAnd/src/net/osmand/plus/track/clickable/ClickableWayHelper.java
+// git revision 67986ad06706ddf7f5a87eb3bb3c7a545ad957fe
+
 #import "OAClickableWayHelper.h"
 #import "OARenderedObject.h"
 #import "QuadRect.h"

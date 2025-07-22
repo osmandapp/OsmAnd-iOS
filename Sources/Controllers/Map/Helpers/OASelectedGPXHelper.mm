@@ -6,6 +6,9 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
+// OsmAnd/src/net/osmand/plus/views/layers/MapSelectionHelper.java
+// git revision 14c59e54e11dd340f5cbf9ea99b9f2a85ae9c644
+
 #import "OASelectedGPXHelper.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"

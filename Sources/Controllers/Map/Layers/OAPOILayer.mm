@@ -395,7 +395,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (BOOL)isRouteEnabledForKey:(OARouteKey *)routeKey
 {
-    if ([routeKey.routeKey.getTag().toNSString() isEqualToString:@"hiking"])
+    if ([[routeKey getRouteTag] isEqualToString:@"hiking"])
     {
         OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
         OAMapStyleParameter *routesParameter = [styleSettings getParameter:HIKING_ROUTES_OSMC_ATTR];
@@ -412,7 +412,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     point.targetObj = key;
     OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:key];
     point.icon = drawable.getIcon;
-    point.title = key.routeKey.getRouteName().toNSString();
+    point.title = [key getRouteName];
     NSArray *areaPoints = @[@(area.topLeft.x), @(area.topLeft.y), @(area.bottomRight.x), @(area.bottomRight.y)];
     point.values = @{ @"area": areaPoints };
 

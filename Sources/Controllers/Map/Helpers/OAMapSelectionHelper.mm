@@ -837,7 +837,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             if ([selectedObject.object isKindOfClass:NSArray.class])
             {
                 OARouteKey *routeKey = selectedObject.object[0];
-                NSString *name = [routeKey.routeKey.getRouteName().toNSString() lowercaseString];
+                NSString *name = [[routeKey getRouteName] lowercaseString];
                 if ([poiName isEqualToString:name])
                 {
                     [selectedObject.provider showMenuAction:selectedObject];

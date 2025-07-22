@@ -10,7 +10,6 @@
 #import "OANetworkRouteDrawable.h"
 #import "OANetworkRouteSelectionTask.h"
 #import "OARouteKey.h"
-#import "OARouteKey+cpp.h"
 #import "OAPointDescription.h"
 #import "OANativeUtilities.h"
 #import "OAGPXUIHelper.h"
@@ -132,7 +131,7 @@
         if (pair.count > 1 && [pair[0] isKindOfClass:OARouteKey.class] && [pair[1] isKindOfClass:OASKQuadRect.class])
         {
             OARouteKey *routeKey = pair[0];
-            NSString *name = routeKey.routeKey.getRouteName().toNSString();
+            NSString *name = [routeKey getRouteName];
             return [[OAPointDescription alloc] initWithType:POINT_TYPE_ROUTE name:name];
         }
     }
@@ -202,7 +201,7 @@
             point.targetObj = routeKey;
             OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:routeKey];
             point.icon = drawable.getIcon;
-            point.title = routeKey.routeKey.getRouteName().toNSString();
+            point.title = [routeKey getRouteName];
             
             OsmAnd::PointI topLeft31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.top, rect.left)];
             OsmAnd::PointI bottomRight31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.bottom, rect.right)];

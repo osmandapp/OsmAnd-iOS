@@ -15,7 +15,6 @@
 #import "OAImageDescTableViewCell.h"
 #import "OAPOIType.h"
 #import "OARouteKey.h"
-#import "OARouteKey+cpp.h"
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAOsmEditingPlugin.h"
@@ -198,7 +197,7 @@
     }];
     [data.subjects addObject:infoSectionData];
 
-    NSString *tag = routeKey.routeKey.getTag().toNSString();
+    NSString *tag = [routeKey getRouteTag];
     if (![tag isEqualToString:@"unknown"])
     {
         OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
@@ -211,13 +210,12 @@
     }
 
     NSMutableArray<OAGPXTableCellData *> *subjects = [NSMutableArray array];
-    QMap<QString, QString> tagsToGpx = routeKey.routeKey.tagsMap();
+    NSArray<NSString *> *tagsToGpx = [routeKey getRouteMapAllKeys];
     _nameTags = [[NSMutableArray alloc] init];
     BOOL hasName = NO;
-    for (auto i = tagsToGpx.cbegin(), end = tagsToGpx.cend(); i != end; ++i)
+    for (NSString *routeTagKey in tagsToGpx)
     {
-        NSString *routeTagKey = i.key().toNSString();
-        NSString *routeTagValue = i.value().toNSString();
+        NSString *routeTagValue = [routeKey getRouteValue:routeTagKey];;
         if ([routeTagKey hasPrefix:@"osmc"]
             || [routeTagKey isEqualToString:@"name"]
             || ([routeTagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
@@ -230,7 +228,7 @@
         if ([routeTagKey containsString:@":"] && ![routeTagKey hasPrefix:@"name"] && ![routeTagKey hasPrefix:@"ref"])
         {
             NSString *mainTag = [routeTagKey componentsSeparatedByString:@":"][1];
-            if (tagsToGpx.contains(QString::fromNSString(mainTag)))
+            if ([tagsToGpx containsObject:mainTag])
             {
                 continue;   // skip synthetic xxx:ref if ref exists (piste:ref, etc)
             }
@@ -271,7 +269,7 @@
             NSString *stringKey = [NSString stringWithFormat:@"rendering_value_%@_name", routeTagValue];
             routeTagValue = OALocalizedString(stringKey);
             if ([routeTagValue isEqualToString:stringKey])
-                routeTagValue = i.value().toNSString().uppercaseString;
+                routeTagValue = routeTagValue.uppercaseString;
         }
         else if ([routeTagKey isEqualToString:@"symbol"])
         {

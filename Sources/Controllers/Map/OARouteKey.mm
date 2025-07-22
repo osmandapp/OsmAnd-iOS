@@ -55,6 +55,30 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
     return self;
 }
 
+- (NSString *)getRouteName
+{
+    return _routeKey.getRouteName().toNSString();
+}
+
+- (NSString *)getRouteTag
+{
+    return _routeKey.getTag().toNSString();
+}
+
+- (NSArray<NSString *> *)getRouteMapAllKeys
+{
+    NSMutableArray<NSString *> *allKeys = [NSMutableArray new];
+    const auto qKeys = _routeKey.tagsMap().keys();
+    for (const QString &qKey : qKeys) {
+        [allKeys addObject:qKey.toNSString()];
+    }
+    return allKeys;
+}
+
+- (NSString *)getRouteValue:(NSString *)key
+{
+    return _routeKey.getValue(QString::fromNSString(key)).toNSString();
+}
 
 - (BOOL)isEqual:(id)object
 {

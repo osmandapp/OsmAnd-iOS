@@ -60,7 +60,7 @@
         SelectedMapObject *obj = object;
         object = obj.object;
     }
-    if (object && [object isKindOfClass:NSArray.class])
+    if ([object isKindOfClass:NSArray.class])
     {
         NSArray *pair = object;
         if (pair.count > 1 && [pair[0] isKindOfClass:OATravelGpx.class] && [pair[1] isKindOfClass:SelectedGpxPoint.class])

@@ -8,7 +8,6 @@
 
 #import "OANetworkRouteDrawable.h"
 #import "OARouteKey.h"
-#import "OARouteKey+cpp.h"
 #import "OADayNightHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
@@ -42,8 +41,8 @@
 
 - (UIImage *)getIcon
 {
-    const auto tag = QStringLiteral("route_") + _routeKey.routeKey.getTag();
-    const auto text = _routeKey.routeKey.getValue(QStringLiteral("osmc_text"));
+    const auto tag = QString::fromNSString([NSString stringWithFormat:@"route_%@", [_routeKey getRouteTag]]);
+    const auto text = QString::fromNSString([_routeKey getRouteValue:@"osmc_text"]);
     const auto &env = _env.mapPresentationEnvironment;
     OsmAnd::MapStyleEvaluator textEvaluator(env->mapStyle, env->displayDensityFactor);
     env->applyTo(textEvaluator);
@@ -51,7 +50,7 @@
 
     if (text.length() > 0)
     {
-        const auto color = _routeKey.routeKey.getValue(QStringLiteral("osmc_textcolor"));
+        const auto color = QString::fromNSString([_routeKey getRouteValue:@"osmc_textcolor"]);
         textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, tag);
         textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QStringLiteral(""));
         textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MINZOOM, 14);
@@ -64,7 +63,7 @@
 
     OsmAnd::TextRasterizer::Style textStyle;
     QList<sk_sp<const SkImage>> layers;
-    const auto background = _routeKey.routeKey.getValue(QStringLiteral("osmc_background"));
+    const auto background = QString::fromNSString([_routeKey getRouteValue:@"osmc_background"]);
     if (!background.isEmpty())
     {
         QString shieldName = QStringLiteral("osmc_") + background + QStringLiteral("_bg");
@@ -74,7 +73,7 @@
             layers << shield;
     }
     
-    const auto foreground = _routeKey.routeKey.getValue(QStringLiteral("osmc_foreground"));
+    const auto foreground = QString::fromNSString([_routeKey getRouteValue:@"osmc_foreground"]);
     if (!foreground.isEmpty())
     {
         QString shieldName = QStringLiteral("osmc_") + foreground;

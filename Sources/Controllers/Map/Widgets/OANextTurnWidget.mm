@@ -112,7 +112,7 @@
         _horisontalMini = horisontalMini;
         _nextNext = nextNext;
         _calc1 = [[OANextDirectionInfo alloc] init];
-        _turnDrawable = [[OATurnDrawable alloc] initWithMini:horisontalMini themeColor:EOATurnDrawableThemeColorMap];
+        _turnDrawable = [[OATurnDrawable alloc] initWithMini:![self isPanelVertical] && horisontalMini themeColor:EOATurnDrawableThemeColorMap];
         _textRasterizer = OsmAnd::TextRasterizer::getDefault();
         
         if ([self isPanelVertical])
@@ -307,7 +307,7 @@
     else if (streetName.exitRef.length > 0)
         exitNumber = streetName.exitRef;
     
-    if (exitNumber.length > 0 && turnType && !turnType->isRoundAbout())
+    if (exitNumber.length > 0)
     {
         NSString *exitViewText = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"shared_string_road_exit"), exitNumber];
         _exitLabel.text = exitViewText;
@@ -523,14 +523,18 @@
         || ([self isPanelVertical] && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
         || vis)
     {
-        _turnDrawable.textFont = self.primaryFont;
         if ([self isPanelVertical])
+        {
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
+        }
         else
+        {
+            _turnDrawable.textFont = self.primaryFont;
             if (_horisontalMini)
                 [self setTurnDrawable:_turnDrawable gone:false];
             else
                 [self setTopTurnDrawable:_turnDrawable];
+        }  
     }
 }
 

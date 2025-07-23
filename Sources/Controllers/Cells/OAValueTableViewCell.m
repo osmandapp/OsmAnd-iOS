@@ -45,6 +45,7 @@
     return !self.valueStackView.hidden;
 }
 
+// Give value label more space to be closer to title label
 - (void)setupValueLabelFlexible
 {
     _titleWidthConstraint.active = NO;

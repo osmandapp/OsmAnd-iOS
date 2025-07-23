@@ -11,8 +11,8 @@
 @interface OAValueTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIStackView *valueStackView;
-@property (nonatomic) IBOutlet NSLayoutConstraint *titleWidthGreaterThanEqualConstraint;
-@property (nonatomic) IBOutlet NSLayoutConstraint *titleWidthEqualConstraint;
+@property (nonatomic) IBOutlet NSLayoutConstraint *titleWidthConstraint;
+@property (nonatomic) IBOutlet NSLayoutConstraint *valueWidthConstraint;
 
 @end
 
@@ -45,19 +45,20 @@
     return !self.valueStackView.hidden;
 }
 
-- (void)setActiveTitleWidthGreaterThanEqualConstraint:(BOOL)active
+- (void)setupValueLabelFlexible
 {
-    _titleWidthGreaterThanEqualConstraint.active = active;
+    _titleWidthConstraint.active = NO;
+    _valueWidthConstraint.active = NO;
+    [_valueStackView setContentHuggingPriority:249 forAxis:UILayoutConstraintAxisHorizontal];
+    [self.contentInsideStackView setDistribution:UIStackViewDistributionFillProportionally];
 }
 
-- (void)setActiveTitleWidthEqualConstraint:(BOOL)active
+- (void)resetValueLabelToDefault
 {
-    _titleWidthEqualConstraint.active = active;
-}
-
-- (void)setTitleWidthEqualConstraintValue:(CGFloat)value
-{
-    _titleWidthEqualConstraint.constant = value;
+    _titleWidthConstraint.active = YES;
+    _valueWidthConstraint.active = YES;
+    [_valueStackView setContentHuggingPriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
+    [self.contentInsideStackView setDistribution:UIStackViewDistributionFill];
 }
 
 @end

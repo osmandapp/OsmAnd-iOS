@@ -414,12 +414,9 @@
         cell.titleLabel.textColor = tintColor;
         
         if ([item.key isEqualToString:@"purchase_origin"])
-        {
-            CGSize textSize = [cell.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: cell.titleLabel.font}];
-            [cell setActiveTitleWidthGreaterThanEqualConstraint:false];
-            [cell setActiveTitleWidthEqualConstraint:true];
-            [cell setTitleWidthEqualConstraintValue:textSize.width];
-        }
+            [cell setupValueLabelFlexible];
+        else
+            [cell resetValueLabelToDefault];
         
         cell.valueLabel.text = isManageSubscription ? @"" : item.descr;
         cell.accessoryView = isManageSubscription ? [[UIImageView alloc] initWithImage:[item objForKey:kCellIconKey]] : nil;

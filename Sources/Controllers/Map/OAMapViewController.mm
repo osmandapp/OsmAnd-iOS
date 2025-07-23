@@ -421,13 +421,15 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _grZoomOut.numberOfTouchesRequired = 2;
 
     // - MouseWheelScroll gesture (run under MacOS)
-    _grMouseWheelScroll = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                  action:@selector(mouseWheelScrollGuestureDetected:)];
-    _grMouseWheelScroll.delegate = self;
-    _grMouseWheelScroll.allowedScrollTypesMask = 3; // discrete & continuous only
-    _grMouseWheelScroll.minimumNumberOfTouches = 0;
-    _grMouseWheelScroll.maximumNumberOfTouches = 0;
-    _grMouseWheelScroll.cancelsTouchesInView = NO;
+    if ([OAUtilities isiOSAppOnMac]) {
+        _grMouseWheelScroll = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                      action:@selector(mouseWheelScrollGuestureDetected:)];
+        _grMouseWheelScroll.delegate = self;
+        _grMouseWheelScroll.allowedScrollTypesMask = UIScrollTypeMaskAll;
+        _grMouseWheelScroll.minimumNumberOfTouches = 0;
+        _grMouseWheelScroll.maximumNumberOfTouches = 0;
+        _grMouseWheelScroll.cancelsTouchesInView = NO;
+    }
 
     // - Elevation gesture
     _grElevation = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -641,7 +643,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     [_mapView addGestureRecognizer:_grSymbolContextMenu];
     [_mapView addGestureRecognizer:_grPointContextMenu];
 
-    if (@available(iOS 13.4, *))
+    if ([OAUtilities isiOSAppOnMac])
         [_mapView addGestureRecognizer:_grMouseWheelScroll];
 }
 
@@ -1562,7 +1564,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     if (recognizer.numberOfTouches > 0)
     {
-        for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+        for (NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
         {
             CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
 

@@ -107,14 +107,6 @@ final class MapWidgetsFactory: NSObject {
             return GlideAverageWidget(with: glideWidgetState, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
-        case .heartRate, .bicycleCadence, .bicycleDistance, .bicycleSpeed, .temperature:
-            return SensorTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: widgetParams)
-        case .OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDCalculatedEngineLoad, .OBDThrottlePosition:
-            return OBDTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: widgetParams)
-        case .OBDFuelConsumption:
-            return OBDFuelConsumptionWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: widgetParams)
-        case .OBDRemainingFuel:
-            return OBDRemainingFuelWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: widgetParams)
         default:
             return OAPluginsHelper.createMapWidget(widgetType, customId: customId, appMode: appMode, widgetParams: widgetParams)
         }

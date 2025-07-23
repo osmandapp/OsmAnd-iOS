@@ -50,7 +50,7 @@
 {
     _titleWidthConstraint.active = NO;
     _valueWidthConstraint.active = NO;
-    [_valueStackView setContentHuggingPriority:249 forAxis:UILayoutConstraintAxisHorizontal];
+    [_valueStackView setContentHuggingPriority:UILayoutPriorityDefaultLow - 1 forAxis:UILayoutConstraintAxisHorizontal];
     [self.contentInsideStackView setDistribution:UIStackViewDistributionFillProportionally];
 }
 

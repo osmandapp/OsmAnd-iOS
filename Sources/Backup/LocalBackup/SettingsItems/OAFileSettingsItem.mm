@@ -31,6 +31,10 @@
             return @"routing_config";
         case EOASettingsItemFileSubtypeRenderingStyle:
             return @"rendering_style";
+        case EOASettingsItemFileSubtypeNauticalDepth:
+            return @"nautical_depth";
+        case EOASettingsItemFileSubtypeTerrainMap:
+            return @"terrain";
         case EOASettingsItemFileSubtypeObfMap:
             return @"obf_map";
         case EOASettingsItemFileSubtypeTilesMap:
@@ -64,21 +68,23 @@
         case EOASettingsItemFileSubtypeObfMap:
         case EOASettingsItemFileSubtypeWikiMap:
         case EOASettingsItemFileSubtypeSrtmMap:
+        case EOASettingsItemFileSubtypeNauticalDepth:
+        case EOASettingsItemFileSubtypeTerrainMap:
         case EOASettingsItemFileSubtypeRoadMap:
         case EOASettingsItemFileSubtypeTilesMap:
-            return [documentsPath stringByAppendingPathComponent:RESOURCES_DIR];
+        case EOASettingsItemFileSubtypeTravel:
+            return RESOURCES_DIR;
         case EOASettingsItemFileSubtypeRenderingStyle:
-            return [documentsPath stringByAppendingPathComponent:RENDERERS_DIR];
+            return RENDERERS_DIR;
         case EOASettingsItemFileSubtypeRoutingConfig:
-            return [documentsPath stringByAppendingPathComponent:ROUTING_PROFILES_DIR];
+            return ROUTING_PROFILES_DIR;
         case EOASettingsItemFileSubtypeGpx:
-            return OsmAndApp.instance.gpxPath;
+            return GPX_DIR;
             // unsupported
-//        case EOASettingsItemFileSubtypeTravel:
 //        case EOASettingsItemFileSubtypeVoice:
 //            return [documentsPath stringByAppendingPathComponent:@"Voice"];
         case EOASettingsItemFileSubtypeColorPalette:
-            return [documentsPath stringByAppendingPathComponent:COLOR_PALETTE_DIR];
+            return COLOR_PALETTE_DIR;
         default:
             return @"";
     }
@@ -129,15 +135,15 @@
             case EOASettingsItemFileSubtypeUnknown:
             case EOASettingsItemFileSubtypeOther:
                 break;
-            case EOASettingsItemFileSubtypeObfMap:
-            {
-                if ([name hasSuffix:BINARY_MAP_INDEX_EXT])
-                    return subtype;
-                break;
-            }
             case EOASettingsItemFileSubtypeSrtmMap:
             {
                 if ([name hasSuffix:BINARY_SRTM_MAP_INDEX_EXT] || [name hasSuffix:BINARY_SRTMF_MAP_INDEX_EXT])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeTerrainMap:
+            {
+                if ([name hasSuffix:TIF_EXT])
                     return subtype;
                 break;
             }
@@ -147,47 +153,26 @@
                     return subtype;
                 break;
             }
-            case EOASettingsItemFileSubtypeGpx:
+            case EOASettingsItemFileSubtypeObfMap:
             {
-                if ([name hasSuffix:@".gpx"])
+                // android has additions check:
+                // if (name.endsWith(IndexConstants.BINARY_MAP_INDEX_EXT) && !name.contains(File.separator)) {
+                // if ([name hasSuffix:BINARY_MAP_INDEX_EXT] && ![name containsString:@"/"])
+
+                if ([name hasSuffix:BINARY_MAP_INDEX_EXT] )
                     return subtype;
                 break;
             }
             case EOASettingsItemFileSubtypeVoice:
             {
-                if ([name hasSuffix:@"tts.js"])
+                if ([name hasSuffix:VOICE_PROVIDER_SUFFIX])
                     return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeTravel:
-            {
-                if ([name hasSuffix:@".sqlite"] && [name.lowercaseString containsString:@"travel"])
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeTilesMap:
-            {
-                if ([name hasSuffix:@".sqlitedb"] || name.pathExtension.length == 0)
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeRoutingConfig:
-            {
-                if ([name hasSuffix:@".xml"] && ![name hasSuffix:RENDERER_INDEX_EXT])
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeRenderingStyle:
-            {
-                if ([name hasSuffix:RENDERER_INDEX_EXT])
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeRoadMap:
-            {
-                if ([name containsString:@"road"])
-                    return subtype;
-                break;
+                else if ([name hasSuffix:TTSVOICE_INDEX_EXT_JS])
+                {
+                    NSArray<NSString *> *pathComponents = [name componentsSeparatedByString:@"/"];
+                    if (pathComponents.count > 1 && [pathComponents[0] hasSuffix:VOICE_PROVIDER_SUFFIX])
+                        return subtype;
+                }
             }
             case EOASettingsItemFileSubtypeNauticalDepth:
             {
@@ -201,6 +186,42 @@
                     return subtype;
                 break;
             }
+//            case EOASettingsItemFileSubtypeGpx:
+//            {
+//                if ([name hasSuffix:GPX_FILE_EXT])
+//                    return subtype;
+//                break;
+//            }
+//            case EOASettingsItemFileSubtypeTravel:
+//            {
+//                if ([name hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT] || ([name hasSuffix:BINARY_WIKIVOYAGE_MAP_INDEX_EXT] && [name.lowercaseString containsString:@"travel"]))
+//                    return subtype;
+//                break;
+//            }
+//            case EOASettingsItemFileSubtypeTilesMap:
+//            {
+//                if ([name hasSuffix:SQLITE_EXT] || name.pathExtension.length == 0)
+//                    return subtype;
+//                break;
+//            }
+//            case EOASettingsItemFileSubtypeRoutingConfig:
+//            {
+//                if ([name hasSuffix:ROUTING_FILE_EXT] && ![name hasSuffix:RENDERER_INDEX_EXT])
+//                    return subtype;
+//                break;
+//            }
+//            case EOASettingsItemFileSubtypeRenderingStyle:
+//            {
+//                if ([name hasSuffix:RENDERER_INDEX_EXT])
+//                    return subtype;
+//                break;
+//            }
+//            case EOASettingsItemFileSubtypeRoadMap:
+//            {
+//                if ([name containsString:@"road"])
+//                    return subtype;
+//                break;
+//            }
             default:
             {
                 NSString *subtypeFolder = [self.class getSubtypeFolder:subtype];
@@ -215,7 +236,7 @@
 
 + (BOOL) isMap:(EOASettingsItemFileSubtype)type
 {
-    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth;
+    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth || type == EOASettingsItemFileSubtypeTravel;
 }
 
 + (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype
@@ -285,7 +306,8 @@
         }
         
         self.filePath = filePath;
-        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
+        NSString *relativePath = [filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.documentsPath withString:@""];
+        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:relativePath];
         if (self.subtype == EOASettingsItemFileSubtypeUnknown)
         {
             if (error)
@@ -325,11 +347,11 @@
             if (![file hasPrefix:@"/"])
                 file = [@"/" stringByAppendingString:file];
             NSString *path = [[file substringFromIndex:1] stringByReplacingOccurrencesOfString:@"tracks/" withString:@""];
-            self.filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path];
+            self.filePath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:[[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path]];
         }
         else
         {
-            self.filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
+            self.filePath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:[[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name]];
         }
     }
     return self;

@@ -22,6 +22,7 @@
 #import "OAOperationLog.h"
 #import "OAAtomicInteger.h"
 #import "Localization.h"
+#import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @interface OAItemFileDownloadTask : NSOperation
@@ -643,7 +644,7 @@
     {
         NSString *type = remoteFile.type;
         NSString *fileName = remoteFile.name;
-        if ([type isEqualToString:[OASettingsItemType typeName:EOASettingsItemTypeFile]] && [fileName hasPrefix:[OAFileSettingsItemFileSubtype getSubtypeFolder:EOASettingsItemFileSubtypeVoice]])
+        if ([type isEqualToString:[OASettingsItemType typeName:EOASettingsItemTypeFile]] && [fileName hasPrefix:[OsmAndApp.instance.documentsPath stringByAppendingPathComponent:[OAFileSettingsItemFileSubtype getSubtypeFolder:EOASettingsItemFileSubtypeVoice]]])
         {
             // TODO: support voice
 //            EOAFileSubtype subtype = [OAFileSubtype getSubtypeByFileName:fileName];

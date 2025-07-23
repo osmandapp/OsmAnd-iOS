@@ -155,7 +155,7 @@ struct DrawPathData
     [self.mapView addKeyedSymbolsProvider:_collection];
     [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
 
-    _lineWidth = kDefaultWidthMultiplier * kWidthCorrectionValue;
+    _lineWidth = [self getDefaultLineWidth];
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [[NSCache alloc] init];
@@ -244,6 +244,11 @@ struct DrawPathData
 - (NSInteger)getCustomRouteWidthMax
 {
     return 36;
+}
+
+- (CGFloat)getDefaultLineWidth
+{
+    return kDefaultWidthMultiplier * kWidthCorrectionValue;
 }
 
 - (void)drawRouteMarkers:(const std::shared_ptr<TransportRouteResultSegment> &)routeSegment
@@ -399,7 +404,7 @@ struct DrawPathData
         else
         {
             NSNumber *colorVal = [self getParamFromAttr:@"color"];
-            BOOL hasStyleColor = (colorVal && colorVal.intValue != -1 && colorVal.intValue == _routeLineColor)
+            BOOL hasStyleColor = (colorVal && colorVal.intValue == _routeLineColor)
                 || _routeLineColor == kDefaultRouteLineDayColor
                 || _routeLineColor == kDefaultRouteLineNightColor;
             
@@ -500,8 +505,7 @@ struct DrawPathData
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     NSNumber *colorVal = [self getParamFromAttr:forTurnArrows ? @"color_3" : @"color"];
-    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
-    return hasStyleColor
+    return colorVal
             ? colorVal.intValue
             : isNight
                     ? forTurnArrows ? kDefaultTurnArrowsNightColor : kDefaultRouteLineNightColor
@@ -511,15 +515,13 @@ struct DrawPathData
 - (NSInteger)getWalkDefaultColor
 {
     NSNumber *colorVal = _walkAttributes[@"color"];
-    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
-    return hasStyleColor ? colorVal.intValue : kDefaultWalkingRouteLineColor;
+    return colorVal ? colorVal.intValue : kDefaultWalkingRouteLineColor;
 }
 
 - (NSInteger)getWalkPTDefaultColor
 {
     NSNumber *colorVal = _walkPTAttributes[@"color"];
-    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
-    return hasStyleColor ? colorVal.intValue : kDefaultWalkingRouteLineColor;
+    return colorVal ? colorVal.intValue : kDefaultWalkingRouteLineColor;
 }
 
 - (OAPreviewRouteLineInfo *)getPreviewRouteLineInfo
@@ -616,7 +618,7 @@ struct DrawPathData
     }
     else
     {
-        width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+        width = [self getParamFromAttr:@"strokeWidth"] ? [self getParamFromAttr:@"strokeWidth"].floatValue : [self getDefaultLineWidth];
     }
 
     return width * VECTOR_LINE_SCALE_COEF;

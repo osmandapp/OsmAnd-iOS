@@ -25,7 +25,7 @@ final class OBDService: NSObject {
                                                object: nil)
     }
     
-    func startDispatcher() {
+    func startDispatcher(isSimulator: Bool = false) {
         NSLog("[OBDService] -> startDispatcher")
         
         if obdDispatcher != nil {
@@ -41,14 +41,18 @@ final class OBDService: NSObject {
         self.obdDispatcher = dispatcher
         OBDDataComputer.shared.obdDispatcher = dispatcher
         
-        let connector = OAOBDConnector()
+        let connector = OAOBDConnector(isSimulator: isSimulator)
 
         connector.disconnectHandler = {
             NSLog("[OBDService] -> disconnectHandler")
         }
         connector.failureHandler = {
             NSLog("[OBDService] -> failureHandler")
-            DeviceHelper.shared.getOBDDevice()?.disconnect(completion: { _ in })
+            if isSimulator {
+                DeviceHelper.shared.disconnectOBDSimulator()
+            } else {
+                DeviceHelper.shared.getOBDDevice()?.disconnect(completion: { _ in })
+            }
         }
         
         if let obdConnector = connector as? OBDConnector {

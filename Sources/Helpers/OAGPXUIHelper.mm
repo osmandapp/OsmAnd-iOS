@@ -466,7 +466,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         }
         else
         {
-            _exportFilePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
+            _exportFilePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:trackItem.gpxFilePath];
         }
     }
 

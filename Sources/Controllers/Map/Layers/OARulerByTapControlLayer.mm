@@ -143,7 +143,7 @@
         [self drawDistanceMarker:distance];
         
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
-        [self.mapView addKeyedSymbolsProvider:_lineEndsMarkersCollection];
+        [self.mapView addKeyedSymbolsProvider:kRulerByTapSymbolSection provider:_lineEndsMarkersCollection];
         _showingLine = YES;
     }
 }
@@ -353,7 +353,10 @@
                     NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
                     _rulerDistance = distance;
                     if (self.lineDrawingDelegate)
+                    {
                         [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue) distance:distance];
+                        _mapViewController.mapView.renderer->updateSubsection(kRulerByTapSymbolSection);
+                    }
                 }
             }
         }
@@ -370,7 +373,10 @@
                 NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
                 _rulerDistance = distance;
                 if (self.lineDrawingDelegate)
+                {
                     [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue) distance:distance];
+                    _mapViewController.mapView.renderer->updateSubsection(kRulerByTapSymbolSection);
+                }
             }
         }
     }

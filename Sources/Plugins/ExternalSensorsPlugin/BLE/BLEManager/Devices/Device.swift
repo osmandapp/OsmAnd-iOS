@@ -29,7 +29,10 @@ enum DeviceState: Int {
 @objc(OADevice)
 @objcMembers
 class Device: NSObject {
+    // swiftlint:disable all
     static let identifier = "identifier"
+    
+    class var getServiceUUID: String { "" }
     
     var deviceType: DeviceType!
     var rssi = -1
@@ -37,10 +40,10 @@ class Device: NSObject {
     var didChangeCharacteristic: (() -> Void)?
     var didDisconnect: (() -> Void)?
     var isSelected = false
+    var isSimulator = false
     
-    private(set) var peripheral: Peripheral!
-    
-    private var RSSIUpdateTimer: Timer?
+    var sensors = [Sensor]()
+    var sections = [String: Any]()
     
     var deviceServiceName: String {
         ""
@@ -58,11 +61,8 @@ class Device: NSObject {
         peripheral.state == .connecting
     }
     
-    var sensors = [Sensor]()
-    var sections = [String: Any]()
-    
-    class var getServiceUUID: String {
-        ""
+    var state: DeviceState {
+        DeviceState(rawValue: peripheral.state.rawValue) ?? .disconnected
     }
     
     var getServiceConnectedImage: UIImage? {
@@ -80,6 +80,14 @@ class Device: NSObject {
     var getSettingsFields: [String: Any]? {
         nil
     }
+    
+    private(set) var peripheral: Peripheral!
+    
+    private var RSSIUpdateTimer: Timer?
+    
+    // swiftlint:enable all
+    
+    // MARK: - Initializer
     
     init(deviceType: DeviceType!,
          rssi: Int = 1,
@@ -147,7 +155,7 @@ class Device: NSObject {
      - 0 : Device Information
      - 1 : Heart Rate
      */
-
+    
     func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
         for sensor in sensors {
             if let widgetTypes = sensor.getSupportedWidgetDataFieldTypes(), widgetTypes.contains(widgetDataFieldType) {
@@ -176,6 +184,10 @@ class Device: NSObject {
         didDisconnect?()
     }
     
+    func connect(withTimeout timeout: TimeInterval?, completion: @escaping ConnectPeripheralCallback) {
+        peripheral.connect(withTimeout: timeout, completion: completion)
+    }
+    
     private func peripheralCharacteristicValueUpdate(notification: NSNotification) {
         guard let userInfo = notification.userInfo,
               notification.userInfo?["error"] as? SBError == nil else {
@@ -194,16 +206,8 @@ class Device: NSObject {
 
 extension Device {
     
-    var state: DeviceState {
-        DeviceState(rawValue: peripheral.state.rawValue) ?? .disconnected
-    }
-    
     func setPeripheral(peripheral: Peripheral) {
         self.peripheral = peripheral
-    }
-    
-    func connect(withTimeout timeout: TimeInterval?, completion: @escaping ConnectPeripheralCallback) {
-        peripheral.connect(withTimeout: timeout, completion: completion)
     }
     
     func discoverServices(withUUIDs serviceUUIDs: [CBUUIDConvertible]? = nil,
@@ -222,10 +226,10 @@ extension Device {
     }
     
     func writeValue(ofDescriptorWithUUID descriptorUUID: CBUUIDConvertible,
-                           fromCharacWithUUID characUUID: CBUUIDConvertible,
-                           ofServiceWithUUID serviceUUID: CBUUIDConvertible,
-                           value: Data,
-                           completion: @escaping WriteRequestCallback) {
+                    fromCharacWithUUID characUUID: CBUUIDConvertible,
+                    ofServiceWithUUID serviceUUID: CBUUIDConvertible,
+                    value: Data,
+                    completion: @escaping WriteRequestCallback) {
         peripheral.writeValue(ofCharacWithUUID: characUUID,
                               fromServiceWithUUID: serviceUUID,
                               value: value,
@@ -233,7 +237,7 @@ extension Device {
     }
 }
 
-// RSSI
+// MARK: - RSSI
 extension Device {
     func notifyRSSI() {
         disableRSSI()

@@ -178,7 +178,10 @@
     return self;
 }
 
-- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode
+- (void)setSettingValue:(NSString *)value
+                 forKey:(NSString *)key
+                   mode:(OAApplicationMode *)mode
+             notHandled:(void (^)(NSString *value, NSString *key, OAApplicationMode *mode))notHandled
 {
     @synchronized (_lock)
     {
@@ -205,37 +208,65 @@
         else if ([key isEqualToString:@"travelGuidesImagesDownloadMode"])
         {
             [_travelGuidesImagesDownloadModeProfile setValueFromString:value appMode:mode];
+        } else {
+            if (notHandled)
+                notHandled(value, key, mode);
         }
     }
 }
 
-- (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode
+- (void)addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode
 {
     @synchronized (_lock)
     {
-        if ([_verticalExaggerationScaleProfile isSetForMode:mode])
-        {
-            prefs[@"vertical_exaggeration_scale"] = [NSString stringWithFormat:@"%f", ([_verticalExaggerationScaleProfile get:mode])];
+        if ([_verticalExaggerationScaleProfile isSetForMode:mode]) {
+            prefs[@"vertical_exaggeration_scale"] =
+                [NSString stringWithFormat:@"%f", [_verticalExaggerationScaleProfile get:mode]];
         }
-        if ([_mapillaryProfile isSetForMode:mode])
+
+        NSDictionary *profiles = @{
+            @"show_mapillary": _mapillaryProfile,
+            @"global_wikipedia_poi_enabled": _wikipediaGlobalProfile,
+            @"wikipedia_poi_enabled_languages": _wikipediaLanguagesProfile,
+            @"wikipedia_images_download_mode": _wikipediaImagesDownloadModeProfile,
+            kTravelGuidesImagesDownloadModeKey: _travelGuidesImagesDownloadModeProfile,
+            kWeatherSourceKey: _weatherSourceProfile,
+            kWeatherTempKey: _weatherTempProfile,
+            kWeatherPressureKey: _weatherPressureProfile,
+            kWeatherWindKey: _weatherWindProfile,
+            kWeatherWindAnimationKey: _weatherWindAnimationProfile,
+            kWeatherCloudKey: _weatherCloudProfile,
+            kWeatherPrecipKey: _weatherPrecipProfile,
+            // TODO: Settings with units have a different format compared to Android; will need to be fixed.
+            // https://github.com/osmandapp/OsmAnd-Issues/issues/2776#issuecomment-3088962795
+           // kWeatherTempUnitKey: _weatherTempUnitProfile,
+           // kWeatherPressureUnitKey: _weatherPressureUnitProfile,
+           // kWeatherWindUnitKey: _weatherWindUnitProfile,
+           // kWeatherWindAnimationWindUnitKey: _weatherWindAnimationUnitProfile,
+           // kWeatherCloudUnitKey: _weatherCloudUnitProfile,
+           // kWeatherPrecipUnitKey: _weatherPrecipUnitProfile,
+            kWeatherTempAlphaKey: _weatherTempAlphaProfile,
+            kWeatherPressureAlphaKey: _weatherPressureAlphaProfile,
+            kWeatherWindAlphaKey: _weatherWindAlphaProfile,
+            kWeatherWindToolbarAlphaKey: _weatherWindToolbarAlphaProfile,
+            kWeatherCloudAlphaKey: _weatherCloudAlphaProfile,
+            kWeatherPrecipAlphaKey: _weatherPrecipAlphaProfile,
+            kWeatherTempUnitAutoKey: _weatherTempUnitAutoProfile,
+            kWeatherPressureUnitAutoKey: _weatherPressureUnitAutoProfile,
+            kWeatherWindUnitAutoKey: _weatherWindUnitAutoProfile,
+            kWeatherWindAnimationUnitAutoKey: _weatherWindAnimationUnitAutoProfile,
+            kWeatherCloudUnitAutoKey: _weatherCloudUnitAutoProfile,
+            kWeatherPrecipUnitAutoKey: _weatherPrecipUnitAutoProfile
+        };
+
+        for (NSString *key in profiles)
         {
-            prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
-        }
-        if ([_wikipediaGlobalProfile isSetForMode:mode])
-        {
-            prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
-        }
-        if ([_wikipediaLanguagesProfile isSetForMode:mode])
-        {
-            prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
-        }
-        if ([_wikipediaImagesDownloadModeProfile isSetForMode:mode])
-        {
-            prefs[@"wikipedia_images_download_mode"] = [_wikipediaImagesDownloadModeProfile toStringValue:mode];
-        }
-        if ([_travelGuidesImagesDownloadModeProfile isSetForMode:mode])
-        {
-            prefs[@"travelGuidesImagesDownloadMode"] = [_travelGuidesImagesDownloadModeProfile toStringValue:mode];
+            id profile = profiles[key];
+            if ([profile isSetForMode:mode])
+            {
+                // NOTE: The value 0.67 is saved as 70 (similar to Android).  "weatherTempAlpha" : "0.7",
+                prefs[key] = [profile toStringValue:mode];
+            }
         }
     }
 }
@@ -323,8 +354,8 @@
     _weatherWindToolbarProfile = [OACommonBoolean withKey:kWeatherWindToolbarKey defValue:NO];
     _weatherWindUnitProfile = [OACommonUnit withKey:kWeatherWindUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_SPEED]];
     _weatherWindUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindUnitAutoKey defValue:YES];
-    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
-    _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
     _weatherCloudProfile = [OACommonBoolean withKey:kWeatherCloudKey defValue:NO];
     _weatherCloudToolbarProfile = [OACommonBoolean withKey:kWeatherCloudToolbarKey defValue:NO];
     _weatherCloudUnitProfile = [OACommonUnit withKey:kWeatherCloudUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_CLOUD]];

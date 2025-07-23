@@ -84,7 +84,6 @@
 - (void) createFilteredFilesToDownload
 {
     NSMutableArray<OARemoteFile *> *files = [NSMutableArray array];
-    OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OARemoteFile *remoteFile in _filesToDownload)
     {
         OAExportSettingsType *type = [OAExportSettingsType findByRemoteFile:remoteFile];
@@ -108,7 +107,6 @@
 - (void) createFilteredFilesToUpload
 {
     NSMutableArray<OALocalFile *> *files = [NSMutableArray array];
-    OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OALocalFile *localFile in _filesToUpload)
     {
         OAExportSettingsType *type = [OAExportSettingsType findBySettingsItem:localFile.item];
@@ -123,7 +121,6 @@
 - (void) createFilteredFilesToDelete
 {
     NSMutableArray<OARemoteFile *> *files = [NSMutableArray array];
-    OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OARemoteFile *remoteFile in _filesToDelete)
     {
         OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:remoteFile];
@@ -136,7 +133,6 @@
 - (void) createFilteredLocalFilesToDelete
 {
     NSMutableArray<OALocalFile *> *files = [NSMutableArray array];
-    OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OALocalFile *localFile in _localFilesToDelete)
     {
         OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:localFile.item];

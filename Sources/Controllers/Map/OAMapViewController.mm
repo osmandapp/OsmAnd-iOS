@@ -1614,8 +1614,19 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!self.mapViewLoaded)
         return NO;
 
+    BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
+
     // Get location of the gesture
-    CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
+    CGPoint touchPoint;
+    if (!longPress && !CGPointEqualToPoint(_mapView.lastImmediateTouchPoint, CGPointZero))
+    {
+        touchPoint = _mapView.lastImmediateTouchPoint;
+    }
+    else
+    {
+        touchPoint = [recognizer locationOfTouch:0 inView:self.view];
+    }
+    
     touchPoint.x *= _mapView.contentScaleFactor;
     touchPoint.y *= _mapView.contentScaleFactor;
     OsmAnd::PointI touchLocation;
@@ -1638,7 +1649,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         while (![_mapView resumeSymbolsUpdate]);
     }
     
-    BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
     BOOL accepted = longPress && recognizer.state == UIGestureRecognizerStateBegan;
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)
@@ -3154,7 +3164,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             continue;
         }
 
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:key];
         for (OASWptPt *loc in [doc getPointsList]) {
             OASGpxUtilitiesPointsGroup *group = loc.category ? doc.pointsGroups[loc.category] : nil;
             if (group && group.hidden)
@@ -3840,8 +3849,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 it.next();
                 NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
                 NSNumber *value = @(it.value());
-                if (value.intValue == -1)
-                    continue;
                 
                 [result setObject:value forKey:key];
             }

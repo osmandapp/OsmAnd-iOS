@@ -11,6 +11,8 @@
 @interface OAValueTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIStackView *valueStackView;
+@property (nonatomic) IBOutlet NSLayoutConstraint *titleWidthConstraint;
+@property (nonatomic) IBOutlet NSLayoutConstraint *valueWidthConstraint;
 
 @end
 
@@ -41,6 +43,23 @@
 - (BOOL)checkSubviewsToUpdateMargins
 {
     return !self.valueStackView.hidden;
+}
+
+// Give value label more space to be closer to title label
+- (void)setupValueLabelFlexible
+{
+    _titleWidthConstraint.active = NO;
+    _valueWidthConstraint.active = NO;
+    [_valueStackView setContentHuggingPriority:UILayoutPriorityDefaultLow - 1 forAxis:UILayoutConstraintAxisHorizontal];
+    [self.contentInsideStackView setDistribution:UIStackViewDistributionFillProportionally];
+}
+
+- (void)resetValueLabelToDefault
+{
+    _titleWidthConstraint.active = YES;
+    _valueWidthConstraint.active = YES;
+    [_valueStackView setContentHuggingPriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
+    [self.contentInsideStackView setDistribution:UIStackViewDistributionFill];
 }
 
 @end

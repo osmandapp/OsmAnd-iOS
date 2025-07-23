@@ -2359,7 +2359,7 @@
 "rendering_value_small_name" = "Kicsi";
 "rendering_attr_showToll_name" = "Útdíjkorlátozások megjelenítése";
 "rendering_value_managerName_name" = "Kezelő neve szerint";
-"routing_attr_allow_via_ferrata_name" = "Hegyoldali útvonal (Via ferrata)";
+"routing_attr_allow_via_ferrata_name" = "Mászóútvonal (Via ferrata)";
 "routing_attr_hazmat_category_usa_1_name" = "Robbanóanyagok";
 "rendering_attr_showProposed_name" = "Tervezett objektumok";
 "rendering_value_sector1_name" = "1. szektor";
@@ -2368,7 +2368,7 @@
 "rendering_value_sector2_name" = "2. szektor";
 "routing_attr_hazmat_category_usa_2_name" = "Gázok";
 "rendering_attr_padusDisplayMode_description" = "Használhatóság vagy a kezelő neve szerint";
-"routing_attr_allow_via_ferrata_description" = "Hegyi útvonal rögzített kábelekkel, fellépőkkel, létrákkal és hidakkal.";
+"routing_attr_allow_via_ferrata_description" = "Mászóútvonal rögzített kábelekkel, fellépőkkel, létrákkal és hidakkal.";
 "shared_string_accessibility" = "Kisegítő lehetőségek";
 "map_marker_interval_dialog_desc" = "Adja meg azt az időintervallumot, amelyre a rendszer az átlagsebességet mérje a becsült érkezési idő kiszámításához.";
 "air_pressure_widget_desc" = "Megjeleníti a légnyomást a jelenlegi térképközéppontnál.";

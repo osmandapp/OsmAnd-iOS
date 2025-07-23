@@ -137,6 +137,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_destinationLayerWidget drawLayer];
+        self.mapViewController.mapView.renderer->updateSubsection(kDystanceMarkersSymbolSection);
     });
 }
 
@@ -289,8 +290,8 @@
 - (void) show
 {
     [self.mapViewController runWithRenderSync:^{
-        [self.mapView addKeyedSymbolsProvider:_destinationsMarkersCollection];
-        [self.mapView addKeyedSymbolsProvider:_distanceMarkersCollection];
+        [self.mapView addKeyedSymbolsProvider:kDystanceMarkersSymbolSection provider:_destinationsMarkersCollection];
+        [self.mapView addKeyedSymbolsProvider:kDystanceMarkersSymbolSection provider:_distanceMarkersCollection];
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }];
 }
@@ -394,17 +395,33 @@
             }
             else
             {
-                _linesCollection->removeLine(_secondOutline);
-                _linesCollection->removeLine(_secondLine);
-                _distanceMarkersCollection->removeMarker(_secondDistanceMarker);
+                [self clearLine:_secondLine vectorLine:_secondOutline mapMarker:_secondDistanceMarker];
             }
         }
     }
     else
     {
+        [self clearLine:_firstLine vectorLine:_firstOutline mapMarker:_firstDistanceMarker];
+        [self clearLine:_secondLine vectorLine:_secondOutline mapMarker:_secondDistanceMarker];
         _distanceMarkersCollection->removeAllMarkers();
         _linesCollection->removeAllLines();
     }
+}
+
+- (void) clearLine:(std::shared_ptr<OsmAnd::VectorLine>&)line
+        vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)outline
+        mapMarker:(std::shared_ptr<OsmAnd::MapMarker>&)marker
+{
+    _linesCollection->removeLine(outline);
+    _linesCollection->removeLine(line);
+
+    _distanceMarkersCollection->removeMarker(marker);
+
+    outline->detachMarker(marker);
+
+    outline.reset();
+    line.reset();
+    marker.reset();
 }
 
 - (void) drawLine:(OADestination *)destination fromLocation:(CLLocation *)currLoc

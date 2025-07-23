@@ -205,7 +205,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
         OAOnlineOsmNoteWrapper *note = (OAOnlineOsmNoteWrapper *)obj;
         return  [[CLLocation alloc] initWithLatitude:note.latitude longitude:note.longitude];
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj
@@ -217,7 +217,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
         NSString *typeName = note.typeName ?: OALocalizedString(@"osn_bug_name");
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_OSM_NOTE typeName:typeName name:name];
     }
-    return  nil;
+    return nil;
 }
 
 - (BOOL) showMenuAction:(id)object

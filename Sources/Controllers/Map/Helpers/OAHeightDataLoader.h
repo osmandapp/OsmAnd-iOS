@@ -8,12 +8,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol OACancellable <NSObject>
+
+- (BOOL) isCancelled;
+
+@end
+
 
 @class OASKQuadRect, OASWptPt;
 
 @interface OAHeightDataLoader: NSObject
 
 - (NSMutableArray<OASWptPt *> * _Nullable)loadHeightDataAsWaypoints:(int64_t)osmId bbox31:(OASKQuadRect *)bbox31;
+
+@property (nonatomic, weak) id<OACancellable> cancellable;
 
 @end
 

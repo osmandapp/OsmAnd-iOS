@@ -9,7 +9,9 @@
 import Foundation
 
 @objcMembers
-class OAAsyncTask: NSObject {
+class OAAsyncTask: NSObject, OACancellable {
+    
+    var cancelled: Bool = false
     
     func execute() {
         onPreExecute()
@@ -33,4 +35,8 @@ class OAAsyncTask: NSObject {
     func onPostExecute(result: Any?) {
         // override
     }
-} 
+    
+    func isCancelled() -> Bool {
+        cancelled
+    }
+}

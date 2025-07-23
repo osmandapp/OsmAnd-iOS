@@ -65,7 +65,7 @@ NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
 
 - (NSString *)getTitle
 {
-    return OALocalizedString(@"debugging_and_development");;
+    return OALocalizedString(@"debugging_and_development");
 }
 
 - (NSString *)getTableHeaderDescription

@@ -303,7 +303,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         {
             frame.size.width = DeviceScreenWidth * 0.45;
             frame.size.height = DeviceScreenHeight;
-            frame.origin = CGPointMake(0., 44);;
+            frame.origin = CGPointMake(0., 44);
         }
         else
         {

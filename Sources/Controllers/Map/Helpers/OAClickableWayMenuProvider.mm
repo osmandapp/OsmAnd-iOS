@@ -53,7 +53,7 @@
         OASWptPt *wpt = clickableWay.selectedGpxPoint.selectedPoint;
         return [[CLLocation alloc] initWithLatitude:[wpt getLatitude] longitude:[wpt getLongitude]];
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *)getObjectName:(id)obj

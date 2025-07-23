@@ -203,7 +203,7 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
         {
             [stop setTransportStopAggregated:stopAggregated];
             NSString *stopName = [[stop name] lowercaseString];
-            auto dist = OsmAnd::Utilities::distance(stop.longitude, stop.latitude, lat, lon);
+            auto dist = OsmAnd::Utilities::distance(stop.longitude, stop.latitude, lon, lat);
             
             if (([stopName containsString:amenityName] || [amenityName containsString:stopName])
                 && dist < MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS

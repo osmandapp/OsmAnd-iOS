@@ -1977,7 +1977,7 @@ colorizationScheme:(int)colorizationScheme
         OASWptPt *point = selectedGpxPoint.selectedPoint;
         return [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj

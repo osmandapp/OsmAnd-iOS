@@ -3017,7 +3017,7 @@ static const double d180PI = 180.0 / M_PI_2;
         dist *= iteration % 2 == 1 ? mult1 : mult2;
     }
     
-    return dist;;
+    return dist;
 }
 
 + (BOOL) isValidFileName:(NSString *)name

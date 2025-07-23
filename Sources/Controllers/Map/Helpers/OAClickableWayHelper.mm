@@ -155,7 +155,7 @@
     }
     
     [[gpxFile.metadata getExtensionsToWrite] addEntriesFromDictionary:tags];
-    [gpxFile.metadata getExtensionsToWrite][@"way_id"] = [NSString stringWithFormat:@"%d", osmId];
+    [gpxFile.metadata getExtensionsToWrite][@"way_id"] = @(osmId).stringValue;
     
     OASTrkSegment *trkSegment = [[OASTrkSegment alloc] init];
     for (int i = 0; i < min(xPoints.count, yPoints.count); i++)
@@ -207,6 +207,8 @@
         double y = [yPoints[i] doubleValue];
         
         // [bbox expandLeft:x top:y right:x bottom:y];  // Kotlin func runs with bug. Sometimes it swaps left-right, or top-bottom;
+        // TODO: wait for fix and remove this function
+        // https://github.com/osmandapp/OsmAnd/pull/23097
         [self expandBbox:bbox left:x top:y right:x bottom:y];
     }
     return bbox;

@@ -336,7 +336,7 @@ static int MIN_POINTS_ZOOM = 17;
         OAMapillaryImage * image = (OAMapillaryImage *)obj;
         return [[CLLocation alloc] initWithLatitude:image.latitude longitude:image.longitude];
     }
-    return  nil;;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj
@@ -345,7 +345,7 @@ static int MIN_POINTS_ZOOM = 17;
     {
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_MAPILLARY_IMAGE name:OALocalizedString(@"mapillary_image")];
     }
-    return  nil;;
+    return nil;
 }
 
 - (BOOL) showMenuAction:(id)object

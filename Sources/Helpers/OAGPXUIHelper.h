@@ -75,7 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
                  doc:(nullable OASGpxFile *)doc
              newName:(nullable NSString *)newName
               hostVC:(UIViewController*)hostVC
-    updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;;
+    updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;
 
 + (NSString *)buildTrackSegmentName:(OASGpxFile *)gpxFile
                               track:(OASTrack *)track

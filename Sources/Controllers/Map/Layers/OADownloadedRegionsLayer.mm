@@ -440,7 +440,7 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
         CLLocationCoordinate2D center = [mapObject.worldRegion regionCenter];
         return [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj

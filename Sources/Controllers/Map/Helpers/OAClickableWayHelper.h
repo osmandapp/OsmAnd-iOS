@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (OAClickableWayMenuProvider *)getContextMenuProvider;
 
 - (BOOL)isClickableWay:(OARenderedObject *)renderedObject;
-- (BOOL) isClickableWayTags:(NSString *)name tags:(NSDictionary<NSString *, NSString *> *)tags;
+- (BOOL)isClickableWayTags:(NSString *)name tags:(NSDictionary<NSString *, NSString *> *)tags;
 
 @end
 

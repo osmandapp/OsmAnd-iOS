@@ -30,7 +30,7 @@ extern NSString * const POI_REF;
 extern NSString * const OSM_DELETE_VALUE;
 extern NSString * const OSM_DELETE_TAG;
 extern NSString * const OSM_ACCESS_PRIVATE_VALUE;
-extern NSString * const OSM_ACCESS_PRIVATE_TAG;;
+extern NSString * const OSM_ACCESS_PRIVATE_TAG;
 extern NSString * const IMAGE_TITLE;
 extern NSString * const IS_PART;
 extern NSString * const IS_PARENT_OF;

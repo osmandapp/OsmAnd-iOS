@@ -59,7 +59,7 @@
     BOOL res = [super needsUpdateConstraints];
     if (!res)
     {
-        BOOL hasImage = !self.iconView.hidden;;
+        BOOL hasImage = !self.iconView.hidden;
 
         res = res || self.titleToIconConstraint.active != hasImage;
         res = res || self.titleToMarginConstraint.active != !hasImage;

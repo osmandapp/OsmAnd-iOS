@@ -33,9 +33,11 @@ class ClickableWayAsyncTask: OABaseLoadAsyncTask {
     
     private func readHeightData(_ clickableWay: ClickableWay) -> Bool {
         let loader = OAHeightDataLoader()
+        loader.cancellable = self
         let waypoints = loader.loadHeightData(asWaypoints: Int64(clickableWay.osmId), bbox31: clickableWay.bbox)
         
-        if let waypoints, waypoints.count > 0,
+        if !isCancelled(),
+           let waypoints, waypoints.count > 0,
            let tracks = clickableWay.gpxFile.tracks as? [Track],
            let segments = tracks.first?.segments as? [TrkSegment] {
             

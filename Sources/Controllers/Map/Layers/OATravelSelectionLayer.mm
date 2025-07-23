@@ -31,7 +31,7 @@
             return [[CLLocation alloc] initWithLatitude:selectedPoint.lat longitude:selectedPoint.lon];
         }
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *)getObjectName:(id)obj
@@ -50,7 +50,7 @@
                 return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX name:travelGpx.routeId];
         }
     }
-    return  nil;
+    return nil;
 }
 
 - (BOOL)showMenuAction:(id)object

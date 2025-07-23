@@ -193,7 +193,7 @@ static const int START_ZOOM = 10;
     {
         return ((OAAvoidRoadInfo *)obj).location;
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj
@@ -203,7 +203,7 @@ static const int START_ZOOM = 10;
         OAAvoidRoadInfo *route = obj;
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_BLOCKED_ROAD name:[route name]];
     }
-    return  nil;
+    return nil;
 }
 
 - (BOOL) showMenuAction:(id)object

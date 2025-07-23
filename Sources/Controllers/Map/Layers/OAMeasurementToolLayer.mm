@@ -509,7 +509,7 @@
 
 - (CLLocation *) getObjectLocation:(id)obj
 {
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj

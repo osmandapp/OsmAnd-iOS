@@ -31,7 +31,10 @@ final class AmenitySearcherRequest: NSObject {
                 names.append(contentsOf:localizedNames)
             }
         } else if let renderedObject = mapObject as? OARenderedObject {
-            latLon = renderedObject.getLocation() ?? renderedObject.labelLatLon
+            latLon = renderedObject.getLocation()
+            if latLon == nil || latLon?.coordinate.latitude == 0 && latLon?.coordinate.latitude == 0 {
+                latLon = renderedObject.labelLatLon
+            }
             if let localizedNames = renderedObject.localizedNames.allValues as? [String] {
                 names.append(contentsOf:localizedNames)
             }

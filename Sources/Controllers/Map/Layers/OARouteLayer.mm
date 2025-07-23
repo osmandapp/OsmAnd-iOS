@@ -1360,7 +1360,7 @@ struct DrawPathData
         OATransportStop *transportStop = (OATransportStop *)obj;
         return [[CLLocation alloc] initWithLatitude:transportStop.latitude longitude:transportStop.longitude];
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj

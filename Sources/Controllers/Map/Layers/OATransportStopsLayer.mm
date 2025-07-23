@@ -213,7 +213,7 @@ static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
         OATransportStop *transportStop = (OATransportStop *)obj;
         return [[CLLocation alloc] initWithLatitude:transportStop.latitude longitude:transportStop.longitude];
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj
@@ -258,7 +258,6 @@ static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
                     [addedTransportStops addObject:transportStop.name];
                     [result collect:transportStop provider:self];
                 }
-                BOOL stop = YES;
             }
         }
     }

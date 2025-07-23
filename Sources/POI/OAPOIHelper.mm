@@ -632,7 +632,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
         return localName;
     }
     if (NSStringIsEmpty(localName) && poi.isRouteTrack)
-        localName = [poi getAdditionalInfo:ROUTE_ID];;
+        localName = [poi getAdditionalInfo:ROUTE_ID];
     
     if (localName.length == 0)
         return typeName;
@@ -1926,7 +1926,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
         if (nameA)
             nameA = [OAUtilities simplifyFileName:[nameA lastPathComponent]];
         if (nameB)
-            nameB = [OAUtilities simplifyFileName:[nameA lastPathComponent]];
+            nameB = [OAUtilities simplifyFileName:[nameB lastPathComponent]];
         
         return [nameA compare:nameB] == NSOrderedAscending;
     });

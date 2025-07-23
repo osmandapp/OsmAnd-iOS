@@ -91,7 +91,7 @@
                             kTableKey: @"article",
                             kCellType: [OAArticleTravelCell getCellIdentifier],
                             kCellTitle: article.title ?: @"nil",
-                            kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content] ?: @"qwerty",
+                            kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content] ?: @"",
                             kCellRightIconName: iconName,
                             kTableValues: @{
                                 @"isPartOf": geoDescription ? geoDescription : @"",
@@ -215,7 +215,7 @@
     BOOL hasName = NO;
     for (NSString *routeTagKey in tagsToGpx)
     {
-        NSString *routeTagValue = [routeKey getRouteValue:routeTagKey];;
+        NSString *routeTagValue = [routeKey getRouteValue:routeTagKey];
         if ([routeTagKey hasPrefix:@"osmc"]
             || [routeTagKey isEqualToString:@"name"]
             || ([routeTagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])

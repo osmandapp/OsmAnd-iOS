@@ -1875,7 +1875,7 @@
                 NSString *newNameToChange = newName;
                 if ([newName hasSuffix:fileExtension])
                 {
-                    newNameToChange = [newName substringToIndex:newName.length - fileExtension.length];;
+                    newNameToChange = [newName substringToIndex:newName.length - fileExtension.length];
                 }
                 __weak __typeof(self) weakSelf = self;
                 [weakSelf.gpxUIHelper renameTrack:weakSelf.gpx.dataItem
@@ -2162,7 +2162,7 @@
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];;
+            cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         outCell = cell;
     }

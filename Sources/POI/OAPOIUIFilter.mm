@@ -595,7 +595,7 @@
     OANameStringMatcher *sm = [[OANameStringMatcher alloc] initWithNamePart:[nameFilter trim] mode:CHECK_CONTAINS];
     
     
-    NSString *name = amenity->nativeName.toNSString();;
+    NSString *name = amenity->nativeName.toNSString();
     NSString *typeName = [[OAPOIHelper sharedInstance] getPhrase:type];
     NSString *poiStringWithoutType;
 

@@ -1292,7 +1292,7 @@ static BOOL _repositoryUpdated = NO;
         if (match)
             item.downloadTask = [self getDownloadTaskFor:localResource->id.toNSString()];
         item.size = localResource->size;
-        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];;
+        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
         item.worldRegion = match;
         NSString *localResourcePath = localResource->localPath.toNSString();
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];

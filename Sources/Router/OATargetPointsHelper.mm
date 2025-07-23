@@ -614,7 +614,7 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             NSString *pointName = [self getLocationName:_myLocationToStart.point];
             [_myLocationToStart.pointDescription setName:pointName];
-            [_app.data setMyLocationToStart:_myLocationToStart];;
+            [_app.data setMyLocationToStart:_myLocationToStart];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateRouteAndRefresh:NO];
                 _isSearchingMyLocation = NO;

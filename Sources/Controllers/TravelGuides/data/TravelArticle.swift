@@ -62,9 +62,9 @@ class TravelArticle: NSObject {
         for shortLink in compoinents {
             let bbox = mapUtils.decodeShortLinkToQuadRect(shortLink: shortLink)
             let left = Double(mapUtils.get31TileNumberX(longitude: bbox.left))
-            let top = Double(mapUtils.get31TileNumberX(longitude: bbox.top))
+            let top = Double(mapUtils.get31TileNumberY(latitude: bbox.top))
             let right = Double(mapUtils.get31TileNumberX(longitude: bbox.right))
-            let bottom = Double(mapUtils.get31TileNumberX(longitude: bbox.bottom))
+            let bottom = Double(mapUtils.get31TileNumberY(latitude: bbox.bottom))
             bbox31?.expand(left: left, top: top, right: right, bottom: bottom)
         }
     }

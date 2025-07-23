@@ -650,7 +650,7 @@
         OAPOI *amenity = (OAPOI *)obj;
         return [amenity getLocation];
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj

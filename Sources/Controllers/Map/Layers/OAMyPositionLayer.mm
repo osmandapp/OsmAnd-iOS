@@ -944,7 +944,7 @@ typedef enum {
     {
         return _lastLocation;
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj

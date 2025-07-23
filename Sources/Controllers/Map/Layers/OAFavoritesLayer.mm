@@ -302,7 +302,7 @@ static const int START_ZOOM = 6;
         OAFavoriteItem *favorite = (OAFavoriteItem *)obj;
         return [[CLLocation alloc] initWithLatitude:[favorite getLatitude] longitude:favorite.getLongitude];
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj
@@ -312,7 +312,7 @@ static const int START_ZOOM = 6;
         OAFavoriteItem *favorite = (OAFavoriteItem *)obj;
         return [favorite getPointDescription];
     }
-    return  nil;
+    return nil;
 }
 
 - (BOOL) showMenuAction:(id)object

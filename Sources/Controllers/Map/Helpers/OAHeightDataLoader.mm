@@ -36,11 +36,10 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
         // force load subregions in map files (if needed)
         // heigh data will be load for selected map file only in loadRouteDataObjects()
         const auto& localResources = OsmAndApp.instance.resourcesManager->getSortedLocalResources();
-        BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
         for (const auto& resource : localResources)
         {
             cacheBinaryMapFileIfNeeded(resource->localPath.toStdString(), true);
-            initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting, true);
+            initBinaryMapFile(resource->localPath.toStdString(), false, true);
         }
         
         std::vector<BinaryMapFile *> readers = getOpenMapFiles();
@@ -198,12 +197,12 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
 
 - (BOOL)publish:(RouteDataObject *)routeDataObject
 {
-    return routeDataObject != nullptr && (routeDataObject->getId() >> SHIFT_ID == _osmId || routeDataObject->getId() >> SHIFT_ID == _osmId || routeDataObject->getId() >> SHIFT_ID == 14694435 );
+    return routeDataObject != nullptr && (routeDataObject->getId() >> SHIFT_ID == _osmId);
 }
 
 - (BOOL)isCancelled
 {
-    return _results.count(_osmId) > 0;
+    return _results[_osmId] != nullptr || (_cancellable && [_cancellable isCancelled]);
 }
 
 @end

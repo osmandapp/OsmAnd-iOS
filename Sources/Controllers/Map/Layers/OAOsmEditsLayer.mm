@@ -391,7 +391,7 @@ static const int START_ZOOM = 10;
         OAOsmPoint *point = (OAOsmPoint *)obj;
         return  [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj
@@ -414,7 +414,7 @@ static const int START_ZOOM = 10;
         }
         return [[OAPointDescription alloc] initWithType:type name:name];
     }
-    return  nil;
+    return nil;
 }
 
 - (BOOL) showMenuAction:(id)object

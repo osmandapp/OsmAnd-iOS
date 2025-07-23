@@ -405,7 +405,7 @@
 
 + (NSString *)getExtensionValue:(NSDictionary<NSString *, NSString *> *)dic key:(NSString *)key
 {
-    return [dic objectForKey:key];;
+    return [dic objectForKey:key];
 
 }
 
@@ -1720,7 +1720,7 @@
         NSMutableArray<NSNumber *> *startI = [NSMutableArray arrayWithObject:@(0)];
         NSMutableArray<NSNumber *> *endI = [NSMutableArray arrayWithObject:@(locs.count)];
         locs = [NSMutableArray arrayWithArray:[self findStartAndEndLocationsFromRoute:locs startLoc:params.start endLoc:params.end startI:startI endI:endI]];
-        NSMutableArray<OARouteDirectionInfo *> *directions = [self calcDirections:startI[0] endI:endI[0] inputDirections:[rcr getRouteDirections]];;
+        NSMutableArray<OARouteDirectionInfo *> *directions = [self calcDirections:startI[0] endI:endI[0] inputDirections:[rcr getRouteDirections]];
         [self insertInitialSegment:params points:locs directions:directions calculateOsmAndRouteParts:YES];
         res = [[OARouteCalculationResult alloc] initWithLocations:locs directions:directions params:params waypoints:nil addMissingTurns:YES];
     }

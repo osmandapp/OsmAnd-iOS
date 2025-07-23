@@ -120,7 +120,7 @@
             return [[CLLocation alloc] initWithLatitude:[rect centerY] longitude:[rect centerX]];
         }
     }
-    return  nil;
+    return nil;
 }
 
 - (OAPointDescription *)getObjectName:(id)obj
@@ -135,7 +135,7 @@
             return [[OAPointDescription alloc] initWithType:POINT_TYPE_ROUTE name:name];
         }
     }
-    return  nil;
+    return nil;
 }
 
 - (BOOL)showMenuAction:(id)object

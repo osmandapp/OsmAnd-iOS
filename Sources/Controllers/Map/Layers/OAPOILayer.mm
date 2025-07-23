@@ -596,8 +596,6 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             placeId = ((OAPOI *)object).obfId;
         else if ([object isKindOfClass:BaseDetailsObject.class])
             placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId;
-        else
-            placeId = -1;
         
         return placeId != -1 && _topPlaces[@(placeId)];
     }

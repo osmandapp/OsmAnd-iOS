@@ -186,42 +186,6 @@
                     return subtype;
                 break;
             }
-//            case EOASettingsItemFileSubtypeGpx:
-//            {
-//                if ([name hasSuffix:GPX_FILE_EXT])
-//                    return subtype;
-//                break;
-//            }
-//            case EOASettingsItemFileSubtypeTravel:
-//            {
-//                if ([name hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT] || ([name hasSuffix:BINARY_WIKIVOYAGE_MAP_INDEX_EXT] && [name.lowercaseString containsString:@"travel"]))
-//                    return subtype;
-//                break;
-//            }
-//            case EOASettingsItemFileSubtypeTilesMap:
-//            {
-//                if ([name hasSuffix:SQLITE_EXT] || name.pathExtension.length == 0)
-//                    return subtype;
-//                break;
-//            }
-//            case EOASettingsItemFileSubtypeRoutingConfig:
-//            {
-//                if ([name hasSuffix:ROUTING_FILE_EXT] && ![name hasSuffix:RENDERER_INDEX_EXT])
-//                    return subtype;
-//                break;
-//            }
-//            case EOASettingsItemFileSubtypeRenderingStyle:
-//            {
-//                if ([name hasSuffix:RENDERER_INDEX_EXT])
-//                    return subtype;
-//                break;
-//            }
-//            case EOASettingsItemFileSubtypeRoadMap:
-//            {
-//                if ([name containsString:@"road"])
-//                    return subtype;
-//                break;
-//            }
             default:
             {
                 NSString *subtypeFolder = [self.class getSubtypeFolder:subtype];

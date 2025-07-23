@@ -3678,7 +3678,6 @@
 "fuel_tank_capacity" = "Fassungsvermögen des Kraftstofftanks";
 "fuel_tank_capacity_description" = "Geben Sie das Fassungsvermögen Ihres Tanks ein, um Kraftstoffstand und -verbrauch genau zu verfolgen";
 "poi_filter_fuel" = "Kraftstoff";
-"osmand_web" = "OsmAnd Web";
 "unit_of_volume_description" = "Ausgewählte Einheiten werden für alle volumenabhängigen Daten im aktuellen Profil genutzt.";
 "shared_strings_dimensions" = "Abmessungen";
 "dd_ddddd_format" = "DD.DDDDD°";

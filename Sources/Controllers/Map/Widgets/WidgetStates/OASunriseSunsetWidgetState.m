@@ -19,7 +19,7 @@
     OAWidgetType *_widgetType;
     OAAppSettings *_settings;
     OACommonInteger *_preference;
-    OACommonInteger *_sunPositionPreference;
+    OACommonSunPositionMode *_sunPositionPreference;
 }
 
 - (instancetype)initWithWidgetType:(OAWidgetType *)widgetType
@@ -43,7 +43,7 @@
     return _widgetType;
 }
 
-- (OACommonInteger *)getSunPositionPreference {
+- (OACommonSunPositionMode *)getSunPositionPreference {
     return _sunPositionPreference;
 }
 
@@ -52,28 +52,28 @@
     return _widgetType == OAWidgetType.sunrise;
 }
 
-- (NSString *)getTitleForSunPositionMode:(SunPositionMode)mode
+- (NSString *)getTitleForSunPositionMode:(EOASunPositionMode)mode
 {
     switch (mode)
     {
-        case SunPositionModeSunPositionMode:
+        case EOASunPositionModeSunPositionMode:
             return OALocalizedString(@"shared_string_next_event");
-        case SunPositionModeSunsetMode:
+        case EOASunPositionModeSunsetMode:
             return OALocalizedString(@"map_widget_sunset");
-        case SunPositionModeSunriseMode:
+        case EOASunPositionModeSunriseMode:
             return OALocalizedString(@"map_widget_sunrise");
     }
 }
 
 - (NSString *)getWidgetIconName {
-    SunPositionMode sunPositionMode = (SunPositionMode)[_sunPositionPreference get];
+    EOASunPositionMode sunPositionMode = (EOASunPositionMode)[_sunPositionPreference get];
     
     NSString *sunsetStringId = @"widget_sunset";
     NSString *sunriseStringId = @"widget_sunrise";
     
-    if (OAWidgetType.sunset == _widgetType || (OAWidgetType.sunPosition == _widgetType && sunPositionMode == SunPositionModeSunsetMode)) {
+    if (OAWidgetType.sunset == _widgetType || (OAWidgetType.sunPosition == _widgetType && sunPositionMode == EOASunPositionModeSunsetMode)) {
         return sunsetStringId;
-    } else if (OAWidgetType.sunPosition == _widgetType && sunPositionMode == SunPositionModeSunPositionMode) {
+    } else if (OAWidgetType.sunPosition == _widgetType && sunPositionMode == EOASunPositionModeSunPositionMode) {
         return _lastIsDayTime ? sunsetStringId : sunriseStringId;
     } else {
         return sunriseStringId;
@@ -84,7 +84,7 @@
 {
     if (_widgetType == OAWidgetType.sunPosition)
     {
-        SunPositionMode sunPositionMode = (SunPositionMode)[_sunPositionPreference get];
+        EOASunPositionMode sunPositionMode = (EOASunPositionMode)[_sunPositionPreference get];
         return [NSString stringWithFormat:@"%@: %@", _widgetType.title, [self getTitleForSunPositionMode:sunPositionMode]];
     }
     return _widgetType.title;
@@ -171,25 +171,25 @@
     return preference;
 }
 
-- (OACommonInteger *)registerSunPositionPreference:(NSString *)customId widgetParams:(nullable NSDictionary *)widgetParams {
+- (OACommonSunPositionMode *)registerSunPositionPreference:(NSString *)customId widgetParams:(nullable NSDictionary *)widgetParams {
     NSString *prefId = @"sun_position_widget_mode";
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
     
     // day_night_mode_sunset | day_night_mode_sunrise | day_night_mode_sun_position
-    SunPositionMode sunPositionMode = SunPositionModeSunPositionMode;
+    EOASunPositionMode sunPositionMode = EOASunPositionModeSunPositionMode;
     if (widgetParams)
     {
         NSString *widgetValue = widgetParams[@"id"];
         if ([widgetValue isEqualToString:@"day_night_mode_sunset"])
         {
-            sunPositionMode = SunPositionModeSunsetMode;
+            sunPositionMode = EOASunPositionModeSunsetMode;
         }
         else if ([widgetValue isEqualToString:@"day_night_mode_sunrise"]) {
-            sunPositionMode = SunPositionModeSunriseMode;
+            sunPositionMode = EOASunPositionModeSunriseMode;
         }
     }
-    OACommonInteger *preference = [[[OAAppSettings sharedManager] registerIntPreference:prefId defValue:(int)sunPositionMode] makeProfile];
+    OACommonSunPositionMode *preference = [[[OAAppSettings sharedManager] registerSunPositionModePreference:prefId defValue:(int)sunPositionMode] makeProfile];
       
     if (widgetParams)
     {

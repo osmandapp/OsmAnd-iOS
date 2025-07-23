@@ -3487,7 +3487,6 @@
 "weather_pressure_hectopascals" = "Hectopascals";
 "navigate_point_olc_short" = "OLC";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"osmand_web" = "OsmAnd Web";
 "no_photos_available_descr" = "Nenhuma foto de usuário foi adicionada a este local ainda";
 "mapillary_action_descr" = "Compartilhe a sua vista ao nível da rua através do Mapillary.";
 "auto_25_chars_route_tl_kl" = "Vire à esquerda e mantenha-se à esquerda";

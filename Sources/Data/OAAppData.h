@@ -187,7 +187,10 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 
 - (void)resetVerticalExaggerationScale;
 
-- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode;
+- (void)setSettingValue:(NSString *)value
+                 forKey:(NSString *)key
+                   mode:(OAApplicationMode *)mode
+             notHandled:(void (^)(NSString *value, NSString *key, OAApplicationMode *mode))notHandled;
 - (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode;
 
 - (void) resetProfileSettingsForMode:(OAApplicationMode *)mode;

@@ -6,7 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-
 final class DevicesSettingsCollection {
     
     private let storage = UserDefaults.standard

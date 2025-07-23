@@ -15,5 +15,7 @@
 
 - (void)valueVisibility:(BOOL)show;
 - (void)showProButton:(BOOL)show;
+- (void)setupValueLabelFlexible;
+- (void)resetValueLabelToDefault;
 
 @end

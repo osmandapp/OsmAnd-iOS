@@ -460,6 +460,7 @@ static NSString * const topWidgetPanelOrderOldKey = @"top_widget_panel_order";
 static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_order";
 
 static NSString * const useOldRoutingKey = @"useOldRoutingKey";
+static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @interface OAMetricsConstant()
 
@@ -1621,6 +1622,12 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return @"";
 }
 
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    NSAssert(NO, @"valueFromString method is not implemented");
+    return @(0);
+}
+
 - (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode
 {
     [self setValue:[self getValue:sourceAppMode] mode:targetAppMode];
@@ -2390,10 +2397,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:kStateAlwaysKey])
-        return [self set:EOASpeedLimitWarningStateAlways mode:mode];
-    else if ([strValue isEqualToString:kWhenExceededKey])
-        return [self set:EOASpeedLimitWarningStateWhenExceeded mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *stateMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        stateMap = @{
+            kStateAlwaysKey: @(EOASpeedLimitWarningStateAlways),
+            kWhenExceededKey: @(EOASpeedLimitWarningStateWhenExceeded)
+        };
+    });
+
+    return stateMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2481,12 +2501,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"FARTHEST"])
-        return [self set:AUTO_ZOOM_MAP_FARTHEST mode:mode];
-    else if ([strValue isEqualToString:@"FAR"])
-        return [self set:AUTO_ZOOM_MAP_FAR mode:mode];
-    else if ([strValue isEqualToString:@"CLOSE"])
-        return [self set:AUTO_ZOOM_MAP_CLOSE mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *zoomMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        zoomMap = @{
+            @"FARTHEST": @(AUTO_ZOOM_MAP_FARTHEST),
+            @"FAR": @(AUTO_ZOOM_MAP_FAR),
+            @"CLOSE": @(AUTO_ZOOM_MAP_CLOSE)
+        };
+    });
+    return zoomMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2574,18 +2605,25 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"KILOMETERS_PER_HOUR"])
-        return [self set:KILOMETERS_PER_HOUR mode:mode];
-    else if ([strValue isEqualToString:@"MILES_PER_HOUR"])
-        return [self set:MILES_PER_HOUR mode:mode];
-    else if ([strValue isEqualToString:@"METERS_PER_SECOND"])
-        return [self set:METERS_PER_SECOND mode:mode];
-    else if ([strValue isEqualToString:@"MINUTES_PER_MILE"])
-        return [self set:MINUTES_PER_MILE mode:mode];
-    else if ([strValue isEqualToString:@"MINUTES_PER_KILOMETER"])
-        return [self set:MINUTES_PER_KILOMETER mode:mode];
-    else if ([strValue isEqualToString:@"NAUTICALMILES_PER_HOUR"])
-        return [self set:NAUTICALMILES_PER_HOUR mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode {
+    static NSDictionary<NSString *, NSNumber *> *speedMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        speedMap = @{
+            @"KILOMETERS_PER_HOUR": @(KILOMETERS_PER_HOUR),
+            @"MILES_PER_HOUR": @(MILES_PER_HOUR),
+            @"METERS_PER_SECOND": @(METERS_PER_SECOND),
+            @"MINUTES_PER_MILE": @(MINUTES_PER_MILE),
+            @"MINUTES_PER_KILOMETER": @(MINUTES_PER_KILOMETER),
+            @"NAUTICALMILES_PER_HOUR": @(NAUTICALMILES_PER_HOUR)
+        };
+    });
+    return speedMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2658,12 +2696,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"LITRES"])
-        return [self set:LITRES mode:mode];
-    else if ([strValue isEqualToString:@"IMPERIAL_GALLONS"])
-        return [self set:IMPERIAL_GALLONS mode:mode];
-    else if ([strValue isEqualToString:@"US_GALLONS"])
-        return [self set:US_GALLONS mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *volumeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        volumeMap = @{
+            @"LITRES": @(LITRES),
+            @"IMPERIAL_GALLONS": @(IMPERIAL_GALLONS),
+            @"US_GALLONS": @(US_GALLONS)
+        };
+    });
+    return volumeMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2730,12 +2779,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"DEGREES"])
-        return [self set:DEGREES mode:mode];
-    else if ([strValue isEqualToString:@"DEGREES360"])
-        return [self set:DEGREES360 mode:mode];
-    else if ([strValue isEqualToString:@"MILLIRADS"])
-        return [self set:MILLIRADS mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *angleMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        angleMap = @{
+            @"DEGREES": @(DEGREES),
+            @"DEGREES360": @(DEGREES360),
+            @"MILLIRADS": @(MILLIRADS)
+        };
+    });
+    return angleMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2802,15 +2862,22 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    switch (strValue.intValue) {
-        case 1:
-            [self set:ONE_ACTIVE_MARKER mode:mode];
-            break;
-        case 2:
-            [self set:TWO_ACTIVE_MARKERS mode:mode];
-        default:
-            break;
-    }
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSNumber *, NSNumber *> *markerMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        markerMap = @{
+            @1: @(ONE_ACTIVE_MARKER),
+            @2: @(TWO_ACTIVE_MARKERS)
+        };
+    });
+    return markerMap[@(string.intValue)];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2878,20 +2945,27 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"EUROPE_ASIA"])
-        return [self set:DR_EUROPE_ASIA mode:mode];
-    else if ([strValue isEqualToString:@"US"])
-        return [self set:DR_US mode:mode];
-    else if ([strValue isEqualToString:@"CANADA"])
-        return [self set:DR_CANADA mode:mode];
-    else if ([strValue isEqualToString:@"UK_AND_OTHERS"])
-        return [self set:DR_UK_AND_OTHERS mode:mode];
-    else if ([strValue isEqualToString:@"JAPAN"])
-        return [self set:DR_JAPAN mode:mode];
-    else if ([strValue isEqualToString:@"INDIA"])
-        return [self set:DR_INDIA mode:mode];
-    else if ([strValue isEqualToString:@"AUSTRALIA"])
-        return [self set:DR_AUSTRALIA mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *regionMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        regionMap = @{
+            @"EUROPE_ASIA": @(DR_EUROPE_ASIA),
+            @"US": @(DR_US),
+            @"CANADA": @(DR_CANADA),
+            @"UK_AND_OTHERS": @(DR_UK_AND_OTHERS),
+            @"JAPAN": @(DR_JAPAN),
+            @"INDIA": @(DR_INDIA),
+            @"AUSTRALIA": @(DR_AUSTRALIA)
+        };
+    });
+    return regionMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2966,18 +3040,26 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"KILOMETERS_AND_METERS"])
-        return [self set:KILOMETERS_AND_METERS mode:mode];
-    else if ([strValue isEqualToString:@"MILES_AND_FEET"])
-        return [self set:MILES_AND_FEET mode:mode];
-    else if ([strValue isEqualToString:@"MILES_AND_METERS"])
-        return [self set:MILES_AND_METERS mode:mode];
-    else if ([strValue isEqualToString:@"MILES_AND_YARDS"])
-        return [self set:MILES_AND_YARDS mode:mode];
-    else if ([strValue isEqualToString:@"NAUTICAL_MILES_AND_METERS"])
-        return [self set:NAUTICAL_MILES_AND_METERS mode:mode];
-    else if ([strValue isEqualToString:@"NAUTICAL_MILES_AND_FEET"])
-        return [self set:NAUTICAL_MILES_AND_FEET mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *distanceMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        distanceMap = @{
+            @"KILOMETERS_AND_METERS": @(KILOMETERS_AND_METERS),
+            @"MILES_AND_FEET": @(MILES_AND_FEET),
+            @"MILES_AND_METERS": @(MILES_AND_METERS),
+            @"MILES_AND_YARDS": @(MILES_AND_YARDS),
+            @"NAUTICAL_MILES_AND_METERS": @(NAUTICAL_MILES_AND_METERS),
+            @"NAUTICAL_MILES_AND_FEET": @(NAUTICAL_MILES_AND_FEET)
+        };
+    });
+    return distanceMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3050,12 +3132,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"FIRST"])
-        return [self set:RULER_MODE_DARK mode:mode];
-    else if ([strValue isEqualToString:@"SECOND"])
-        return [self set:RULER_MODE_LIGHT mode:mode];
-    else if ([strValue isEqualToString:@"EMPTY"])
-        return [self set:RULER_MODE_NO_CIRCLES mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *rulerModeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        rulerModeMap = @{
+            @"FIRST": @(RULER_MODE_DARK),
+            @"SECOND": @(RULER_MODE_LIGHT),
+            @"EMPTY": @(RULER_MODE_NO_CIRCLES)
+        };
+    });
+    return rulerModeMap[string];
 }
 
 + (NSString *) rulerWidgetModeToString:(EOARulerWidgetMode)rulerMode
@@ -3135,12 +3228,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"ON"])
-        return [self set:EOAWikiArticleShowConstantOn mode:mode];
-    else if ([strValue isEqualToString:@"OFF"])
-        return [self set:EOAWikiArticleShowConstantOff mode:mode];
-    else if ([strValue isEqualToString:@"WIFI"])
-        return [self set:EOAWikiArticleShowConstantWiFi mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *wikiArticleMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        wikiArticleMap = @{
+            @"ON": @(EOAWikiArticleShowConstantOn),
+            @"OFF": @(EOAWikiArticleShowConstantOff),
+            @"WIFI": @(EOAWikiArticleShowConstantWiFi)
+        };
+    });
+    return wikiArticleMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3207,19 +3311,26 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"INITIAL_STATE"])
-        return [self set:EOARateUsStateInitialState mode:mode];
-    else if ([strValue isEqualToString:@"IGNORED"])
-        return [self set:EOARateUsStateIgnored mode:mode];
-    else if ([strValue isEqualToString:@"LIKED"])
-        return [self set:EOARateUsStateLiked mode:mode];
-    else if ([strValue isEqualToString:@"DISLIKED_WITH_MESSAGE"])
-        return [self set:EOARateUsStateDislikedWithMessage mode:mode];
-    else if ([strValue isEqualToString:@"DISLIKED_WITHOUT_MESSAGE"])
-        return [self set:EOARateUsStateDislikedWithoutMessage mode:mode];
-    else if ([strValue isEqualToString:@"DISLIKED_OR_IGNORED_AGAIN"])
-        return [self set:EOARateUsStateDislikedOrIgnoredAgain mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
 
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *rateUsStateMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        rateUsStateMap = @{
+            @"INITIAL_STATE": @(EOARateUsStateInitialState),
+            @"IGNORED": @(EOARateUsStateIgnored),
+            @"LIKED": @(EOARateUsStateLiked),
+            @"DISLIKED_WITH_MESSAGE": @(EOARateUsStateDislikedWithMessage),
+            @"DISLIKED_WITHOUT_MESSAGE": @(EOARateUsStateDislikedWithoutMessage),
+            @"DISLIKED_OR_IGNORED_AGAIN": @(EOARateUsStateDislikedOrIgnoredAgain)
+        };
+    });
+    return rateUsStateMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3292,12 +3403,22 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"SPEED"])
-        return [self set:EOAGradientScaleTypeSpeed mode:mode];
-    else if ([strValue isEqualToString:@"ALTITUDE"])
-        return [self set:EOAGradientScaleTypeAltitude mode:mode];
-    else if ([strValue isEqualToString:@"SLOPE"])
-        return [self set:EOAGradientScaleTypeSlope mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode {
+    static NSDictionary<NSString *, NSNumber *> *gradientScaleMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        gradientScaleMap = @{
+            @"SPEED": @(EOAGradientScaleTypeSpeed),
+            @"ALTITUDE": @(EOAGradientScaleTypeAltitude),
+            @"SLOPE": @(EOAGradientScaleTypeSlope)
+        };
+    });
+    return gradientScaleMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3364,14 +3485,24 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"PUBLIC"])
-        return [self set:EOAUploadVisibilityPublic mode:mode];
-    else if ([strValue isEqualToString:@"IDENTIFIABLE"])
-        return [self set:EOAUploadVisibilityIdentifiable mode:mode];
-    else if ([strValue isEqualToString:@"TRACKABLE"])
-        return [self set:EOAUploadVisibilityTrackable mode:mode];
-    else if ([strValue isEqualToString:@"PRIVATE"])
-        return [self set:EOAUploadVisibilityPrivate mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *uploadVisibilityMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        uploadVisibilityMap = @{
+            @"PUBLIC": @(EOAUploadVisibilityPublic),
+            @"IDENTIFIABLE": @(EOAUploadVisibilityIdentifiable),
+            @"TRACKABLE": @(EOAUploadVisibilityTrackable),
+            @"PRIVATE": @(EOAUploadVisibilityPrivate)
+        };
+    });
+    return uploadVisibilityMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3440,16 +3571,24 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"DD_MM_MMM"])
-        return [self set:EOACoordinateInputFormatsDdMmMmm mode:mode];
-    else if ([strValue isEqualToString:@"DD_MM_MMMM"])
-        return [self set:EOACoordinateInputFormatsDdMmMmmm mode:mode];
-    else if ([strValue isEqualToString:@"DD_DDDDD"])
-        return [self set:EOACoordinateInputFormatsDdDdddd mode:mode];
-    else if ([strValue isEqualToString:@"DD_DDDDDD"])
-        return [self set:EOACoordinateInputFormatsDdDddddd mode:mode];
-    else if ([strValue isEqualToString:@"DD_MM_SS"])
-        return [self set:EOACoordinateInputFormatsDdMmSs mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode {
+    static NSDictionary<NSString *, NSNumber *> *coordinateFormatMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        coordinateFormatMap = @{
+            @"DD_MM_MMM": @(EOACoordinateInputFormatsDdMmMmm),
+            @"DD_MM_MMMM": @(EOACoordinateInputFormatsDdMmMmmm),
+            @"DD_DDDDD": @(EOACoordinateInputFormatsDdDdddd),
+            @"DD_DDDDDD": @(EOACoordinateInputFormatsDdDddddd),
+            @"DD_MM_SS": @(EOACoordinateInputFormatsDdMmSs)
+        };
+    });
+    return coordinateFormatMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3541,13 +3680,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"none"])
-        return [self set:OADownloadMode.NONE mode:mode];
-    else if ([strValue isEqualToString:@"wifi"])
-        return [self set:OADownloadMode.WIFI_ONLY mode:mode];
-    else if ([strValue isEqualToString:@"wifi"])
-        return [self set:OADownloadMode.ANY_NETWORK mode:mode];
-    
+    OADownloadMode *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [self set:value mode:mode];
+}
+
+- (OADownloadMode *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, OADownloadMode *> *downloadModeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        downloadModeMap = @{
+            @"none": OADownloadMode.NONE,
+            @"wifi": OADownloadMode.WIFI_ONLY,
+            @"any": OADownloadMode.ANY_NETWORK
+        };
+    });
+    return downloadModeMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3629,20 +3778,27 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"default"])
-        return [self set:OAColoringType.DEFAULT mode:mode];
-    else if ([strValue isEqualToString:@"custom_color"])
-        return [self set:OAColoringType.CUSTOM_COLOR mode:mode];
-    else if ([strValue isEqualToString:@"solid"])
-        return [self set:OAColoringType.TRACK_SOLID mode:mode];
-    else if ([strValue isEqualToString:@"speed"])
-        return [self set:OAColoringType.SPEED mode:mode];
-    else if ([strValue isEqualToString:@"altitude"])
-        return [self set:OAColoringType.ALTITUDE mode:mode];
-    else if ([strValue isEqualToString:@"slope"])
-        return [self set:OAColoringType.SLOPE mode:mode];
-    else if ([strValue isEqualToString:@"attribute"])
-        return [self set:OAColoringType.ATTRIBUTE mode:mode];
+    OAColoringType *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [self set:value mode:mode];
+}
+
+- (OAColoringType *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, OAColoringType *> *coloringTypeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        coloringTypeMap = @{
+            @"default": OAColoringType.DEFAULT,
+            @"custom_color": OAColoringType.CUSTOM_COLOR,
+            @"solid": OAColoringType.TRACK_SOLID,
+            @"speed": OAColoringType.SPEED,
+            @"altitude": OAColoringType.ALTITUDE,
+            @"slope": OAColoringType.SLOPE,
+            @"attribute": OAColoringType.ATTRIBUTE
+        };
+    });
+    return coloringTypeMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3802,7 +3958,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void) set:(EOAWidgetSizeStyle)widgetSizeStyle
 {
-    [super set:widgetSizeStyle];
+    [super set:(int)widgetSizeStyle];
 }
 
 - (EOAWidgetSizeStyle) get:(OAApplicationMode *)mode
@@ -3812,17 +3968,30 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void) set:(EOAWidgetSizeStyle)widgetSizeStyle mode:(OAApplicationMode *)mode
 {
-    [super set:widgetSizeStyle mode:mode];
+    [super set:(int)widgetSizeStyle mode:mode];
 }
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"SMALL"])
-        return [self set:EOAWidgetSizeStyleSmall mode:mode];
-    else if ([strValue isEqualToString:@"MEDIUM"])
-        return [self set:EOAWidgetSizeStyleMedium mode:mode];
-    else if ([strValue isEqualToString:@"LARGE"])
-        return [self set:EOAWidgetSizeStyleLarge mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.intValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string
+                               appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *styleMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        styleMap = @{
+            @"SMALL": @(EOAWidgetSizeStyleSmall),
+            @"MEDIUM": @(EOAWidgetSizeStyleMedium),
+            @"LARGE": @(EOAWidgetSizeStyleLarge)
+        };
+    });
+    
+    return styleMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3844,6 +4013,89 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAWidgetSizeStyle) ((NSNumber *) pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OACommonSunPositionMode
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOASunPositionMode)defValue
+{
+    OACommonSunPositionMode *obj = [[OACommonSunPositionMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOASunPositionMode)get
+{
+    return [super get];
+}
+
+- (void)set:(EOASunPositionMode)positionMode
+{
+    [super set:(int)positionMode];
+}
+
+- (EOASunPositionMode)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOASunPositionMode)positionMode mode:(OAApplicationMode *)mode
+{
+    [super set:(int)positionMode mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.intValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string
+                      appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *modeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        modeMap = @{
+            @"SUN_POSITION_MODE": @(EOASunPositionModeSunPositionMode),
+            @"SUNSET_MODE": @(EOASunPositionModeSunsetMode),
+            @"SUNRISE_MODE": @(EOASunPositionModeSunriseMode)
+        };
+    });
+    
+    return modeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOASunPositionModeSunPositionMode:
+            return @"SUN_POSITION_MODE";
+        case EOASunPositionModeSunsetMode:
+            return @"SUNSET_MODE";
+        default:
+            return @"SUNRISE_MODE";
+    }
+}
+
+- (void)resetToDefault
+{
+    EOASunPositionMode defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOASunPositionMode)((NSNumber *)pDefault).intValue;
 
     [self set:defaultValue];
 }
@@ -3900,10 +4152,22 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:kZoomKey])
-        return [self set:EOAWidgetZoom mode:mode];
-    else if ([strValue isEqualToString:kMapScaleKey])
-        return [self set:EOAWidgetMapScale mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kZoomKey: @(EOAWidgetZoom),
+            kMapScaleKey: @(EOAWidgetMapScale)
+        };
+    });
+    return map[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3983,12 +4247,23 @@ static NSString *kDistanceKey = @"DISTANCE";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:kArrivalTimeKey])
-        return [self set:RouteInfoDisplayValueArrivalTime mode:mode];
-    else if ([strValue isEqualToString:kTimeToGoKey])
-        return [self set:RouteInfoDisplayValueTimeToGo mode:mode];
-    else if ([strValue isEqualToString:kDistanceKey])
-        return [self set:RouteInfoDisplayValueDistance mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kArrivalTimeKey: @(RouteInfoDisplayValueArrivalTime),
+            kTimeToGoKey: @(RouteInfoDisplayValueTimeToGo),
+            kDistanceKey: @(RouteInfoDisplayValueDistance)
+        };
+    });
+    return map[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -4067,12 +4342,23 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     [self set:defaultValue];
 }
 
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode {
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:kIntermediateFirstKey])
-        return [self set:RouteInfoDisplayPriorityIntermediateFirst mode:mode];
-    else if ([strValue isEqualToString:kDestinationFirstKey])
-        return [self set:RouteInfoDisplayPriorityDestinationFirst mode:mode];
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kIntermediateFirstKey: @(RouteInfoDisplayPriorityIntermediateFirst),
+            kDestinationFirstKey: @(RouteInfoDisplayPriorityDestinationFirst)
+        };
+    });
+    return map[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -4138,14 +4424,24 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"DAY"])
-        return [self set:DayNightModeDay mode:mode];
-    else if ([strValue isEqualToString:@"NIGHT"])
-        return [self set:DayNightModeNight mode:mode];
-    else if ([strValue isEqualToString:@"APP_THEME"])
-        return [self set:DayNightModeAppTheme mode:mode];
-    else if ([strValue isEqualToString:@"AUTO"])
-        return [self set:DayNightModeAuto mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            @"DAY": @(DayNightModeDay),
+            @"NIGHT": @(DayNightModeNight),
+            @"APP_THEME": @(DayNightModeAppTheme),
+            @"AUTO": @(DayNightModeAuto)
+        };
+    });
+    return map[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -4210,16 +4506,25 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"DD_MM_SS"])
-        return [self set:GridFormatDms mode:mode];
-    else if ([strValue isEqualToString:@"DD_MM_MMM"])
-        return [self set:GridFormatDm mode:mode];
-    else if ([strValue isEqualToString:@"DD_DDDDD"])
-        return [self set:GridFormatDigital mode:mode];
-    else if ([strValue isEqualToString:@"UTM"])
-        return [self set:GridFormatUtm mode:mode];
-    else if ([strValue isEqualToString:@"MGRS"])
-        return [self set:GridFormatMgrs mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            @"DD_MM_SS": @(GridFormatDms),
+            @"DD_MM_MMM": @(GridFormatDm),
+            @"DD_DDDDD": @(GridFormatDigital),
+            @"UTM": @(GridFormatUtm),
+            @"MGRS": @(GridFormatMgrs)
+        };
+    });
+    return map[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -4292,12 +4597,23 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     [super set:gridLabelsPosition mode:mode];
 }
 
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode {
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"EDGES"])
-        return [self set:GridLabelsPositionEdges mode:mode];
-    else if ([strValue isEqualToString:@"CENTER"])
-        return [self set:GridLabelsPositionCenter mode:mode];
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            @"EDGES": @(GridLabelsPositionEdges),
+            @"CENTER": @(GridLabelsPositionCenter)
+        };
+    });
+    return map[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -5395,6 +5711,9 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         
         _useOldRouting = [[[OACommonBoolean withKey:useOldRoutingKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_useOldRouting forKey:@"use_old_routing"];
+        
+        _simulateOBDData = [[[OACommonBoolean withKey:simulateOBDDataKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_simulateOBDData forKey:@"simulate_obd_data"];
 
         [self fetchImpassableRoads];
 
@@ -5528,6 +5847,16 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         return (OACommonWidgetSizeStyle *) [_registeredPreferences objectForKey:key];
     
     OACommonWidgetSizeStyle *p = [OACommonWidgetSizeStyle withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonSunPositionMode *) [_registeredPreferences objectForKey:key];
+    
+    OACommonSunPositionMode *p = [OACommonSunPositionMode withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
 }

@@ -66,7 +66,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 {
     [super disable];
 
-    [[OADeviceHelper shared] disconnectAllSensorDevicesWithReason:DisconnectDeviceReasonPluginOff];
+    [[DeviceHelper shared] disconnectAllSensorDevicesWithReason:DisconnectDeviceReasonPluginOff];
 }
 
 - (void)setEnabled:(BOOL)enabled
@@ -180,18 +180,25 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
                                        appMode:(OAApplicationMode *)appMode
                                   widgetParams:(NSDictionary *)widgetParams
 {
-    if (widgetType == OAWidgetType.heartRate)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.heartRate appMode:appMode widgetParams:widgetParams];
-    else if (widgetType == OAWidgetType.bicycleCadence)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleCadence appMode:appMode widgetParams:widgetParams];
-    else if (widgetType == OAWidgetType.bicycleSpeed)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleSpeed appMode:appMode widgetParams:widgetParams];
-    else if (widgetType == OAWidgetType.bicycleDistance)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleDistance appMode:appMode widgetParams:widgetParams];
-    else if (widgetType == OAWidgetType.temperature)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.temperature appMode:appMode widgetParams:widgetParams];
+    NSSet<OAWidgetType *> *sensorTypes = [NSSet setWithArray:@[
+        OAWidgetType.heartRate,
+        OAWidgetType.bicycleCadence,
+        OAWidgetType.bicycleSpeed,
+        OAWidgetType.bicycleDistance,
+        OAWidgetType.temperature
+    ]];
+    
+    if ([sensorTypes containsObject:widgetType])
+    {
+        return [[SensorTextWidget alloc] initWithCustomId:customId
+                                               widgetType:widgetType
+                                                  appMode:appMode
+                                             widgetParams:widgetParams];
+    }
+    
     return nil;
 }
+
 
 - (NSString *) getName
 {
@@ -222,9 +229,9 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
         {
             OADevice *device = nil;
             if ([deviceId isEqualToString:[self getAnyConnectedDeviceId]])
-                device = [[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject;
+                device = [[DeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject;
             else
-                device = [[OADeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId];
+                device = [[DeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId];
             
             if (device)
                 [device writeSensorDataToJsonWithJson:json widgetDataFieldType:widgetType];

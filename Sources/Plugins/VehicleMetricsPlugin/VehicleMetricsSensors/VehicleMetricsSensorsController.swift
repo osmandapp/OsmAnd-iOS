@@ -31,11 +31,15 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     private lazy var bluetoothDisableViewHeader: BluetoothDisableView = .fromNib()
     
+    var isOBDSimulatorEnabled: Bool {
+        OAAppSettings.sharedManager().simulateOBDData.get()
+    }
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         initTableData()
     }
-
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -51,7 +55,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         configureStartState()
         reloadData()
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configureStartState()
@@ -97,7 +101,10 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-
+        if isOBDSimulatorEnabled, !DeviceHelper.shared.isPairedDevice(id: OBDSimulatorVehicleMetricsDevice.simulatorId) {
+            DeviceHelper.shared.setDevicePaired(device: DeviceFactory.makeOBDSimulatorDevice(), isPaired: true)
+        }
+        
         if DeviceHelper.shared.hasPairedDevices(ofType: .OBD_VEHICLE_METRICS) {
             configurePairedDevices()
         } else {
@@ -177,11 +184,12 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         }
         if let item = CellData(rawValue: key) {
             if case .learnMore = item {
-                guard let settingsURL = URL(string: docsVehicleMetricsURL),
-                      UIApplication.shared.canOpenURL(settingsURL) else {
+                guard let settingsURL = URL(string: docsVehicleMetricsURL) else {
                     return
                 }
-                UIApplication.shared.open(settingsURL)
+                let safariViewController = SFSafariViewController(url: settingsURL)
+                safariViewController.preferredControlTintColor = .iconColorActive
+                present(safariViewController, animated: true, completion: nil)
             }
         } else if let item = ConnectState(rawValue: key) {
             if let items = sectionsDevicesData[item], items.count > indexPath.row {
@@ -233,8 +241,8 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         }
 
         centralStateObserver = NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
-                                               object: Central.sharedInstance,
-                                               queue: nil) { [weak self] _ in
+                                                                      object: Central.sharedInstance,
+                                                                      queue: nil) { [weak self] _ in
             guard let self else { return }
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
 
@@ -297,21 +305,26 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     private func getEmptyDescriptionAttributedString() -> NSAttributedString {
         let title = localizedString("connect_obd_instructions_title")
         let howTo = localizedString("obd_how_to_connect")
-        let steps = String(format: localizedString("connect_obd_instructions_step"), localizedString("external_device_status_connect")).replacingOccurrences(of: "\n\n", with: "\n")
+        
+        var steps = String(format: localizedString("connect_obd_instructions_step"), localizedString("external_device_status_connect"))
+        
+        // Normalize line breaks: remove extra spaces and multiple \n (Different translation in localization strings)
+        steps = steps.replacingOccurrences(of: "\\s*\\n\\s*", with: "\n", options: .regularExpression)
         
         let fullText = "\(title)\n\n\(howTo)\n\(steps)"
         let fullAttributedText = NSMutableAttributedString(string: fullText)
         
         if let boldFont = UIFont.scaledBoldSystemFont(ofSize: 17) {
             let howToRange = (fullText as NSString).range(of: howTo)
-            
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.paragraphSpacing = 12
-            
-            fullAttributedText.addAttributes([
-                .font: boldFont,
-                .paragraphStyle: paragraphStyle
-            ], range: howToRange)
+            if howToRange.location != NSNotFound {
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.paragraphSpacing = 12
+                
+                fullAttributedText.addAttributes([
+                    .font: boldFont,
+                    .paragraphStyle: paragraphStyle
+                ], range: howToRange)
+            }
         }
         
         return fullAttributedText
@@ -332,7 +345,14 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
                 }
                 sectionsDevicesData[.connected] = connectedDevices
             }
-            let disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices).filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+            var disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices).filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+            
+            if isOBDSimulatorEnabled,
+               !connectedDevices.contains(where: { $0.isSimulator }),
+               !disconnectedDevices.contains(where: { $0.isSimulator }) {
+                disconnectedDevices.insert(DeviceFactory.makeOBDSimulatorDevice(), at: 0)
+            }
+         
             if !disconnectedDevices.isEmpty {
                 createDisconnectedDevicesSection(disconnectedDevices: disconnectedDevices)
             }
@@ -360,7 +380,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     
     @objc private func handleDispatcherStart() {
         guard view.window != nil else { return }
-        self.reloadData()
+        reloadData()
     }
     
     @objc private func deviceDisconnected() {
@@ -377,7 +397,6 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         if let observer = centralStateObserver {
             NotificationCenter.default.removeObserver(observer)
         }
-
     }
 }
 
@@ -386,21 +405,31 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
 extension VehicleMetricsSensorsController {
     private func getConnectionStateAction(for device: Device) -> UIAction {
         let isConnected = device.isConnected
-
         let titleKey = isConnected ? "external_device_status_disconnect" : "external_device_status_connect"
         let image: UIImage = isConnected ? .icCustomObd2ConnectorDisable : .icCustomObd2Connector
         let actionTitle = localizedString(titleKey)
 
-        let action = UIAction(title: actionTitle, image: image) { _ in
+        return UIAction(title: actionTitle, image: image) { [weak self] _ in
+            guard let self else { return }
+            
             if isConnected {
-                device.disconnect(completion: { _ in })
+                if device.isSimulator {
+                    DeviceHelper.shared.disconnectOBDSimulator()
+                    reloadData()
+                } else {
+                    device.disconnect { result in
+                        if case .success = result {
+                            DeviceHelper.shared.removeDisconnected(device: device)
+                            self.reloadData()
+                        }
+                    }
+                }
             } else {
                 DeviceHelper.shared.updateConnected(devices: [device])
             }
         }
-        return action
     }
-    
+
     override func tableView(_ tableView: UITableView,
                             contextMenuConfigurationForRowAt indexPath: IndexPath,
                             point: CGPoint) -> UIContextMenuConfiguration? {

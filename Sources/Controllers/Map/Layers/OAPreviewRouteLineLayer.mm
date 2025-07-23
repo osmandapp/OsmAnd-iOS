@@ -91,7 +91,7 @@
     
     [self.mapView addKeyedSymbolsProvider:_collection];
     
-    _lineWidth = kDefaultWidthMultiplier * kWidthCorrectionValue;
+    _lineWidth = [self getDefaultLineWidth];
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [NSMutableDictionary dictionary];
@@ -192,6 +192,11 @@
     return 36;
 }
 
+- (CGFloat)getDefaultLineWidth
+{
+    return kDefaultWidthMultiplier * kWidthCorrectionValue;
+}
+
 - (BOOL)isVisible
 {
     return !_collection->getLines().isEmpty();
@@ -234,7 +239,7 @@
             OsmAnd::ColorARGB lineColor = [color toFColorARGB];
 
             NSNumber *colorVal = [self getParamFromAttr:@"color"];
-            BOOL hasStyleColor = (colorVal && colorVal.intValue != -1 && colorVal.intValue == _routeLineColor)
+            BOOL hasStyleColor = (colorVal && colorVal.intValue == _routeLineColor)
                     || _routeLineColor == kDefaultRouteLineDayColor
                     || _routeLineColor == kDefaultRouteLineNightColor;
 
@@ -294,8 +299,7 @@
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     NSNumber *colorVal = [self getParamFromAttr:forTurnArrows ? @"color_3" : @"color"];
-    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
-    return hasStyleColor
+    return colorVal
             ? colorVal.intValue
             : isNight
                     ? forTurnArrows ? kDefaultTurnArrowsNightColor : kDefaultRouteLineNightColor
@@ -395,7 +399,7 @@
     }
     else
     {
-        width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+        width = [self getParamFromAttr:@"strokeWidth"] ? [self getParamFromAttr:@"strokeWidth"].floatValue : [self getDefaultLineWidth];
     }
 
     return width * VECTOR_LINE_SCALE_COEF;

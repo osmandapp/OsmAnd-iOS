@@ -107,8 +107,6 @@ final class MapWidgetsFactory: NSObject {
             return GlideAverageWidget(with: glideWidgetState, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
-        case .heartRate, .bicycleCadence, .bicycleDistance, .bicycleSpeed, .temperature:
-            return SensorTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: widgetParams)
         default:
             return OAPluginsHelper.createMapWidget(widgetType, customId: customId, appMode: appMode, widgetParams: widgetParams)
         }

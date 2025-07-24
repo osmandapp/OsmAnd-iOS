@@ -200,7 +200,16 @@
 
 + (BOOL) isMap:(EOASettingsItemFileSubtype)type
 {
-    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth || type == EOASettingsItemFileSubtypeTravel;
+    NSArray<NSNumber *> *mapTypes = @[
+        @(EOASettingsItemFileSubtypeObfMap),
+        @(EOASettingsItemFileSubtypeWikiMap),
+        @(EOASettingsItemFileSubtypeSrtmMap),
+        @(EOASettingsItemFileSubtypeTilesMap),
+        @(EOASettingsItemFileSubtypeRoadMap),
+        @(EOASettingsItemFileSubtypeNauticalDepth),
+        @(EOASettingsItemFileSubtypeTravel)
+    ];
+    return [mapTypes containsObject:@(type)];
 }
 
 + (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype

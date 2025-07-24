@@ -79,6 +79,7 @@
     OsmAndAppInstance _app;
     
     BOOL _nextNext;
+    BOOL _isPanelVertical;
     OANextDirectionInfo *_calc1;
     UIView *_widgetView;
     NSArray<RoadShield *> *_cachedRoadShields;
@@ -168,7 +169,7 @@
 - (void) layoutSubviews
 {
     [super layoutSubviews];
-    if ([self isPanelVertical])
+    if ([self isPanelVertical] && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
         [self updateNextTurnInfo];
 }
 
@@ -580,7 +581,9 @@
 
 - (BOOL)isPanelVertical
 {
-    return [[self getWidgetPanel] isPanelVertical];
+    if (!_isPanelVertical)
+        _isPanelVertical = [[self getWidgetPanel] isPanelVertical];
+    return _isPanelVertical;
 }
 
 - (BOOL)isEnabledTextInfoComponents

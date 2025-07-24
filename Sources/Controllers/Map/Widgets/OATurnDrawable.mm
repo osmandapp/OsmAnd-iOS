@@ -139,7 +139,7 @@
         [_pathForTurnForDrawing stroke];
     }
 
-    if (_turnType && !_mini && _turnType->getExitOut() > 0)
+    if (_turnType && !_mini && _turnType->getExitOut() > 0 && _textFont)
     {
         NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
         attributes[NSForegroundColorAttributeName] = [self getThemeColor:[UIColor colorNamed:ACColorNameWidgetValueColor]];

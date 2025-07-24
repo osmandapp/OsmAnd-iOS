@@ -3246,7 +3246,7 @@
 "location_radius_description" = "Visar ett cirkulärt område som representerar noggrannhet och felmarginal för nuvarande plats";
 "quick_action_terrain_color_scheme" = "Färgschema för terrängen";
 "navigation_position_icon_summary" = "Symbol som visas medan du förflyttar dig eller navigerar.";
-"quick_action_need_to_add_item_to_list" = "Lägg till minst ett objekt i listan bland inställningarna för \'Snabbhandlingar\'";
+"quick_action_need_to_add_item_to_list" = "Lägg till minst ett objekt i listan i inställningarna för 'Snabbåtgärder'";
 "wall_height" = "Vägghöjd";
 "rendering_value_dark_orange_name" = "Mörkt orange";
 "user_palette" = "Användarpalett";
@@ -3774,3 +3774,9 @@
 "connect_obd_instructions_title" = "OsmAnd stödjer Bluetooth-anslutning till OBD-II skannrar.";
 "purchase_feature_desc_vehicle_metrics_obd_ii" = "Håll koll på viktiga fordonsdata genom användning av OBD-II-protokollet. Övervaka nyckeltal som hastighet, motorvarvtal, bränsleförbrukning, med mera.";
 "obd_plugin_description" = "Övervaka viktiga fordonsdata med OBD-II-protokollet. Få tillgång till information som:\n• Motorhastighet, motorns körtid, beräknad motorbelastning\n• Bränsleförbrukning, bränsletryck, återstående bränsle\n• Intagstemperatur, omgivningstemperatur, kylartemperatur, motoroljetemperatur\n• Fordonshastighet, gasposition, batterispänning";
+"manage_purchases" = "Hantera köp";
+"trace_rendering" = "Info för felsökning av prestanda";
+"trace_rendering_descr" = "Visa renderings- och navigeringsprestanda.";
+"map_text" = "Kartrendering";
+"quick_action_source_switch_descr" = "Tryck på snabbåtgärden stegar genom listan nedan.";
+"quick_action_poi_add_descr" = "Tryck på snabbåtgärden möjliggör att snabbt lägga till intressepunkter i kartan med förinställda taggar.";

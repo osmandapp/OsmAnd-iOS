@@ -32,7 +32,7 @@ final class AmenitySearcherRequest: NSObject {
             }
         } else if let renderedObject = mapObject as? OARenderedObject {
             latLon = renderedObject.getLocation()
-            if latLon == nil || latLon?.coordinate.latitude == 0 && latLon?.coordinate.latitude == 0 {
+            if latLon == nil || latLon?.coordinate.latitude == 0 && latLon?.coordinate.longitude == 0 {
                 latLon = renderedObject.labelLatLon
             }
             if let localizedNames = renderedObject.localizedNames.allValues as? [String] {

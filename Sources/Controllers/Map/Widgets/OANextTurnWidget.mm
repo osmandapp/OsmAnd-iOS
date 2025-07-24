@@ -165,6 +165,13 @@
     return self;
 }
 
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    if ([self isPanelVertical])
+        [self updateNextTurnInfo];
+}
+
 - (UIView *)widgetView
 {
     if (!_widgetView)

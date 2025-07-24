@@ -87,16 +87,10 @@
     return _activator;
 }
 
-- (BOOL)isClickableWay:(OARenderedObject *)renderedObject
-{
-    NSString *name = [renderedObject name];
-    return renderedObject.x.count > 1 && [self isClickableWayTags:name tags:renderedObject.tags]; // v1
-}
-
 - (BOOL)isClickableWay:(const std::shared_ptr<const OsmAnd::MapObject>)obfMapObject tags:(NSDictionary<NSString *, NSString *> *)tags
 {
     NSString *name = obfMapObject->getCaptionInNativeLanguage().toNSString();
-    return obfMapObject->points31.size() > 1 && [self isClickableWayTags:name tags:tags]; // v2 with prefetched tags
+    return obfMapObject->points31.size() > 1 && [self isClickableWayTags:name tags:tags];
 }
 
 - (ClickableWay *)loadClickableWay:(CLLocation *)selectedLatLon renderedObject:(OARenderedObject *)renderedObject

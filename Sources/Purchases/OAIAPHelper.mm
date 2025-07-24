@@ -1201,15 +1201,15 @@ static OASubscriptionState *EXPIRED;
                     [s setPurchaseCancelledTime:0];
                 }
             }
-        }
 
-        [_settings.liveUpdatesPurchased set:live];
-        [_settings.osmandProPurchased set:pro];
-        [_settings.osmandMapsPurchased set:maps];
-        [_settings.fullVersionPurchased set:full];
-        [_settings.depthContoursPurchased set:depth];
-        [_settings.contourLinesPurchased set:contour];
-        [_settings.wikipediaPurchased set:wiki];
+            [_settings.liveUpdatesPurchased set:live];
+            [_settings.osmandProPurchased set:pro];
+            [_settings.osmandMapsPurchased set:maps];
+            [_settings.fullVersionPurchased set:full];
+            [_settings.depthContoursPurchased set:depth];
+            [_settings.contourLinesPurchased set:contour];
+            [_settings.wikipediaPurchased set:wiki];
+        }
 
         for (OAProduct *p in purchased)
         {

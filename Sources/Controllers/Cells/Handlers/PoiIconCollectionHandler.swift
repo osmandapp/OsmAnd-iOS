@@ -45,35 +45,33 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private func setup() {
         initIconCategories()
         setScrollDirection(.horizontal)
-        selectCategory(LAST_USED_KEY)
+        setSelectedIndexPath(IndexPath(row: 0, section: 0))
+        selectCategory(categoriesByKeyName.keys.contains(LAST_USED_KEY) ? LAST_USED_KEY : SPECIAL_KEY)
     }
     
     func initIconCategories() {
         if Self.cachedCategories.isEmpty {
             initOriginalCategory()
-            initLastUsedCategory()
             initAssetsCategories()
             initActivitiesCategory()
             initPoiCategories()
-            sortCategories()
-            
             categories.forEach { categoriesByKeyName[$0.key] = $0 }
-            
             Self.cachedCategories = categories
             Self.cachedCategoriesByKeyName = categoriesByKeyName
-            
             loadAllIconsData()
         } else {
             categories = Self.cachedCategories
             categoriesByKeyName = Self.cachedCategoriesByKeyName
-            initLastUsedCategory()
         }
+
+        initLastUsedCategory()
+        sortCategories()
         initFilteredCategories()
     }
     
     private func initFilteredCategories() {
-        categories = Self.cachedCategories.filter { isFavoriteList || $0.key != ORIGINAL_KEY }
-        categoriesByKeyName = Self.cachedCategoriesByKeyName.filter { isFavoriteList || $0.key != ORIGINAL_KEY }
+        categories = categories.filter { isFavoriteList || $0.key != ORIGINAL_KEY }
+        categoriesByKeyName = Dictionary(uniqueKeysWithValues: categories.map { ($0.key, $0) })
     }
     
     func setIconName(_ iconName: String) {
@@ -132,12 +130,11 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     private func initLastUsedCategory() {
-        if let icons = OAAppSettings.sharedManager().lastUsedFavIcons.get(), !icons.isEmpty {
-            lastUsedIcons = icons
-            let category = IconsAppearanceCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
-            categories.append(category)
-            categoriesByKeyName[LAST_USED_KEY] = category
-        }
+        guard !categories.contains(where: { $0.key == LAST_USED_KEY }), let icons = OAAppSettings.sharedManager().lastUsedFavIcons.get(), !icons.isEmpty else { return }
+        lastUsedIcons = icons
+        let category = IconsAppearanceCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
+        categories.append(category)
+        categoriesByKeyName[LAST_USED_KEY] = category
     }
     
     private func initAssetsCategories() {

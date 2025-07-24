@@ -1203,7 +1203,7 @@
 "routing_attr_difficulty_preference_name" = "Dificuldade preferida";
 "routeInfo_smoothness_name" = "Suavidade";
 "routing_attr_allow_intermediate_name" = "Permitir rotas intermediárias";
-"rendering_attr_pisteRoutes_name" = "Pistas de esqui";
+"rendering_attr_pisteRoutes_name" = "Rotas de esqui";
 "rendering_value_bold_name" = "Grosso";
 "rendering_attr_showRoadMaps_description" = "Escolher quando exibir somente vias no mapa:";
 "rendering_attr_surface_unpaved_name" = "Não pavimentado";
@@ -1406,7 +1406,7 @@
 "routing_attr_allow_skating_only_description" = "Rotas preparadas para estilo livre ou só patinação sem trilhas clássicas.";
 "rendering_value_medium_w_name" = "Médio";
 "rendering_attr_contourLines_description" = "Exibir a partir do nível de zoom (requer dados de linha de contorno):";
-"rendering_attr_hideWaterPolygons_description" = "Água";
+"rendering_attr_hideWaterPolygons_description" = "Ocultar água";
 "rendering_value_fine_name" = "Mais fino";
 "rendering_attr_trolleybusRoutes_name" = "Linhas de trólebus";
 "rendering_attr_piste_type_nordic_name" = "Nórdico";
@@ -1422,7 +1422,7 @@
 "rendering_attr_moreDetailed_name" = "Mais detalhes";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
 "routing_attr_avoid_sett_name" = "Sem paralelepípedo";
-"rendering_attr_hideWaterPolygons_name" = "Ocultar água";
+"rendering_attr_hideWaterPolygons_name" = "Água";
 "rendering_value_black_name" = "Preto";
 "rendering_attr_contourDensity_name" = "Densidade das curvas de nível";
 "rendering_attr_piste_type_snow_park_name" = "Parque de terreno";
@@ -2603,7 +2603,7 @@
 "si_nm_ft" = "Milhas náuticas/pés";
 "si_nm_mt" = "Milhas náuticas/metros";
 "rendering_attr_noNatureReserveBoundaries_description" = "Ocultar reserva natural,áreas protegidas e limites de parque nacional.";
-"rendering_attr_hideMilitaryAreas_name" = "Ocultar áreas militares";
+"rendering_attr_hideMilitaryAreas_name" = "Áreas militares";
 "rendering_attr_noNatureReserveBoundaries_name" = "Limites naturais";
 "routing_attr_goods_restrictions_description" = "Considere as permissões de acesso para veículos de mercadorias leves (mercadorias)";
 "rendering_attr_weatherTempContours_name" = "Isolinos de temperatura";
@@ -3781,3 +3781,9 @@
 "vehicle_metrics_recording_description" = "Selecione os parâmetros que serão registrados no arquivo GPX.";
 "shared_string_other" = "Outros";
 "shared_string_engine" = "Motor";
+"ios_release_4_9" = "• Comportamento da bússola modificado: um único toque gira o mapa para o norte, enquanto um toque duplo alterna a orientação\n• Adicionada funcionalidade de pesquisa para as marcas mais populares\n• Aparência do gráfico melhorada: os rótulos do eixo Y já não se sobrepõem ao gráfico\n• Adicionadas estatísticas totais de trajetória ao rodapé de cada pasta\n• Agrupou todas as tags com traduções em um único item no menu de contexto\n• Corrigiu um problema em que a categoria POI estava faltando no menu de contexto\n• Corrigiu um problema com a detecção automática do idioma do prompt de voz\n• Corrigiu uma falha nos parâmetros de rota do perfil Boat\n• Melhorias no CarPlay: resolvido um problema em que o widget de navegação principal não era atualizado após o recálculo da rota e corrigido o tamanho das setas no widget da próxima curva\n• Introduzido um parâmetro do modo Mapa que agora segue o tema do aplicativo\n• Melhorada a interface do usuário para seleção do ícone de localização, adicionadas opções para desativar o raio de localização e o ângulo de visão\n• Adicionada ação rápida para alterar a “Posição da localização na tela”\n";
+"ios_release_5_0" = "• Introduzidas pastas inteligentes para organização automática de trilhas.\n• Adicionado visualizador de galeria em tela cheia para imagens da Wikimedia.\n• Adicionado suporte para conversão de texto em fala (TTS) em vietnamita e hebraico para navegação.\n• Adicionadas ações rápidas para controlar o registro de viagens.\n• Adicionada a opção “Orientação detalhada da trilha” e uma caixa de diálogo com sugestões para “Anexar às estradas”.\n• Picos proeminentes tornados detectáveis por meio do mapa e da pesquisa.\n• Adicionado destaque de bordas para edifícios e áreas com informações detalhadas.\n• Adicionada uma opção para alternar a visibilidade de grupos favoritos separados no mapa.\n• Opções de ícones expandidas para favoritos, adicionando ícones de todas as categorias de POI.\n• Adicionada exibição do nível da bateria para sensores externos.\n• Adicionada uma opção para alterar a aparência de várias trilhas simultaneamente.\n• Adicionada uma ação “Redefinir” para o widget Velocidade média.\n• Pesquisa CarPlay: adicionada a capacidade de selecionar edifícios.\n• Corrigida a sequência de entrada de coordenadas UTM.\n• Corrigido um problema com as cores dos pontos de referência das trilhas.\n• Corrigido o botão “Baixar tudo” ausente para mapas de terreno.\n• Corrigido um problema em que artigos populares às vezes estavam ausentes nos Guias de viagem.\n";
+"ios_release_5_1" = "• Adicionado suporte para compras na web e em várias plataformas\n• Novo widget de navegação combina seta de curva e instruções de navegação\n• Adicionada uma ação de renomeação para grupos favoritos\n• Adicionadas as opções “Unidade de volume” e “Capacidade do tanque de combustível”\n• Adicionada uma sobreposição de “Grade de coordenadas”\n• Os widgets nos painéis esquerdo e direito agora incluem uma opção de altura\n• Adicionada a capacidade de atribuir atividades a trilhas\n• Corrigida uma falha no CarPlay com o iOS 15\n• Problemas de redimensionamento automático com widgets nos painéis esquerdo e direito foram resolvidos\n• A incompatibilidade dos guias de viagem foi corrigida\n• O problema com compras entre plataformas foi resolvido\n• Corrigido o problema da tela preta no CarPlay após a inicialização\n";
+"obd_plugin_description" = "Monitore as principais métricas do veículo usando o protocolo OBD-II. Acesse dados incluindo:\n• Velocidade do motor, tempo de funcionamento do motor, carga calculada do motor\n• Consumo de combustível, pressão do combustível, combustível restante\n• Temperatura de admissão, temperatura ambiente, temperatura do líquido de arrefecimento, temperatura do óleo do motor\n• Velocidade do veículo, posição do acelerador, tensão da bateria";
+"connect_obd_instructions_step" = "1. Conecte o scanner à porta OBD-II do seu veículo.\n\n2. Ligue o motor do seu veículo.\n\n3. Ative o Bluetooth no seu dispositivo.\n\n4. Toque em '%@' e selecione o seu scanner na lista.";
+"obd_nothing_found_description" = "Verifique o seguinte:\n– Certifique-se de que o Bluetooth está ativado\n– O motor do veículo está ligado\n– Certifique-se de que o seu dispositivo está dentro do alcance do scanner.";

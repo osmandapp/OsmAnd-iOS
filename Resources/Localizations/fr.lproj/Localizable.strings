@@ -294,7 +294,7 @@
 // Menu
 "shared_string_my_places" = "Favoris";
 "add_parking" = "Ajouter comme position de stationnement";
-"add_waypoint" = "Ajouter un point de passage";
+"add_waypoint" = "Ajouter une étape";
 "add_waypoint_short" = "Ajouter un point de passage";
 "edit_waypoint_short" = "Modifier le point de passage";
 "pickup_car" = "Récupérer la voiture";

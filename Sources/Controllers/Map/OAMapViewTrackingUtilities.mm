@@ -476,18 +476,8 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 
                 if (direction >= 0 && timeSinceLasGestureRotating > 1)
                 {
-                    if (azimuthAnimation)
-                    {
-                        _mapView.mapAnimator->cancelAnimation(azimuthAnimation);
-                        _mapView.mapAnimator->animateAzimuthTo(direction, azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(), OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
-                    }
-                    else
-                    {
-                        _mapView.mapAnimator->animateAzimuthTo(direction,
-                                                            kOneSecondAnimatonTime,
-                                                            OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                            kLocationServicesAnimationKey);
-                    }
+                    if (!azimuthAnimation)
+                        _mapView.mapAnimator->animateAzimuthTo(direction, kOneSecondAnimatonTime, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
                 }
 
                 _mapView.mapAnimator->resume();
@@ -669,18 +659,8 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 
                 if (direction >= 0 && timeSinceLasGestureRotating > 1)
                 {
-                    if (azimuthAnimation)
-                    {
-                        _mapView.mapAnimator->cancelAnimation(azimuthAnimation);
-                        _mapView.mapAnimator->animateAzimuthTo(direction, azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(), OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
-                    }
-                    else
-                    {
-                        _mapView.mapAnimator->animateAzimuthTo(direction,
-                                                            kOneSecondAnimatonTime,
-                                                            OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                            kLocationServicesAnimationKey);
-                    }
+                    if (!azimuthAnimation)
+                        _mapView.mapAnimator->animateAzimuthTo(direction, kOneSecondAnimatonTime, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
                 }
                 
                 BOOL freeMapCenterMode = [_settings.rotateMap get] == ROTATE_MAP_COMPASS && !(_app.mapMode == OAMapModePositionTrack);

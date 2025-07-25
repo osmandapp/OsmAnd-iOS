@@ -472,9 +472,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 const auto azimuthAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
 
-                NSTimeInterval timeSinceLasGestureRotating = [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970;
-
-                if (direction >= 0 && timeSinceLasGestureRotating > 1)
+                if (direction >= 0)
                 {
                     if (!azimuthAnimation)
                         _mapView.mapAnimator->animateAzimuthTo(direction, kOneSecondAnimatonTime, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
@@ -655,9 +653,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 const auto azimuthAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 
-                NSTimeInterval timeSinceLasGestureRotating = [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970;
-                
-                if (direction >= 0 && timeSinceLasGestureRotating > 1)
+                if (direction >= 0)
                 {
                     if (!azimuthAnimation)
                         _mapView.mapAnimator->animateAzimuthTo(direction, kOneSecondAnimatonTime, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);

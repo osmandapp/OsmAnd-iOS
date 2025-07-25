@@ -4007,19 +4007,36 @@ typedef enum
     [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0 animated:NO];
 }
 
-- (void) buildRoute:(CLLocation *)start end:(CLLocation *)end appMode:(OAApplicationMode *)appMode
+- (void)buildRoute:(CLLocation *)start
+               end:(CLLocation *)end
+           appMode:(OAApplicationMode *)appMode
+            points:(NSArray<CLLocation *> *)points
 {
-   if (appMode)
-       [[OARoutingHelper sharedInstance] setAppMode:appMode];
-
-   [[OATargetPointsHelper sharedInstance] navigateToPoint:end updateRoute:YES intermediate:-1];
-   [self.mapActions enterRoutePlanningModeGivenGpx:nil
-                                           appMode:appMode
-                                              path:nil
-                                              from:start
-                                          fromName:nil
-                    useIntermediatePointsByDefault:NO
-                                        showDialog:YES];
+    if (appMode)
+        [[OARoutingHelper sharedInstance] setAppMode:appMode];
+    
+    [[OATargetPointsHelper sharedInstance] navigateToPoint:end updateRoute:YES intermediate:-1];
+    
+    BOOL hasIntermediatePoints = points.count > 0;
+    
+    if (hasIntermediatePoints)
+    {
+        [[OsmAndApp instance].data clearIntermediatePoints];
+        
+        for (CLLocation *point in points)
+        {
+            [[OsmAndApp instance].data insertIntermediatePoint:[OARTargetPoint create:point name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""]] index:(int)[[OsmAndApp instance].data intermediatePoints].count];
+        }
+    }
+    
+    
+    [self.mapActions enterRoutePlanningModeGivenGpx:nil
+                                            appMode:appMode
+                                               path:nil
+                                               from:start
+                                           fromName:nil
+                     useIntermediatePointsByDefault:hasIntermediatePoints
+                                         showDialog:YES];
 }
 
 - (void) onNavigationClick:(BOOL)hasTargets

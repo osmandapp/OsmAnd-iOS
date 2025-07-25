@@ -1426,19 +1426,18 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             {
                 cell.finishPoint = NO;
                 [cell setDividerVisibility:NO];
+                
                 NSArray<OARTargetPoint *> *points = [_pointsHelper getIntermediatePoints];
-                NSMutableString *via = [NSMutableString string];
+                NSMutableArray<NSString *> *names = [NSMutableArray arrayWithCapacity:points.count];
+
                 for (OARTargetPoint *point in points)
                 {
-                    if (via.length > 0)
-                        [via appendString:@" "];
-                    
-                    NSString *description = [point getOnlyName];
-                    [via appendString:description];
+                    NSString *name = [point getOnlyName];
+                    [names addObject:(name.length > 0 ? name : OALocalizedString(@"map_no_address"))];
                 }
                 [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_intermediate"]];
                 cell.titleLabel.text = OALocalizedString(@"route_via");
-                cell.addressLabel.text = via;
+                cell.addressLabel.text = [names componentsJoinedByString:@" "];
                 [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
                 [self setupButtonLayout:cell.routingCellButton];
                 [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

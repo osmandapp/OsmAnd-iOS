@@ -62,7 +62,7 @@
 "shared_string_waypoint" = "路径点";
 "shared_string_waypoints" = "路径点";
 "shared_string_export" = "导出";
-"import_export" = "导入／导出";
+"import_export" = "导入 / 导出";
 "import_tracks" = "导入轨迹";
 "gpx_add_new" = "添加新文件";
 "gpx_overwrite" = "覆盖";
@@ -206,7 +206,7 @@
 "shared_string_not_selected" = "未选取";
 "shared_string_language" = "语言";
 "shared_string_get" = "获取";
-"srtm_plugin_disabled" = "等高线已禁用";
+"srtm_plugin_disabled" = "地形图已禁用";
 "shared_string_open" = "打开";
 "will_close_at" = "关闭于";
 "osm_live_active" = "活动";
@@ -221,8 +221,8 @@
 "pedestrian" = "行人";
 "plugins_menu_group" = "插件";
 "plugin_popup_wiki_title" = "下载维基百科";
-"plugin_popup_srtm_desc" = "要开始使用等高线功能，请先下载一个区域的等高线";
-"plugin_popup_srtm_ask" = "要下载等高线，你需要激活插件： <b>等高线</b>";
+"plugin_popup_srtm_desc" = "要开始使用地形图功能，请先下载一个区域的地形图";
+"plugin_popup_srtm_ask" = "要下载等高线，你需要激活插件： <b>地形图</b>";
 "plugin_popup_nautical_title" = "下载航海地图";
 "plugin_popup_nautical_desc" = "请先下载航海地图。\n然后转到 <b>地图设置</b> <b>地图类型</b>，然后打开<b>航海</b> 样式";
 "plugin_popup_trip_planning_ask" = "要开始计划行程，你需要激活插件。<b>旅行计划</b>";
@@ -332,7 +332,7 @@
 "map_widget_plain_time" = "当前时间";
 "map_widget_max_speed" = "速度限制";
 "sort_by_distance" = "按距离排序";
-"will_open_tomorrow_at" = "明日开始营业时间";
+"will_open_tomorrow_at" = "明日开始营业于";
 "open_from" = "开始营业于";
 "open_till" = "营业至";
 "empty_route_calculated" = "计算出的路线为空。";
@@ -497,7 +497,7 @@
 "speak_title" = "播报…";
 "speak_descr" = "设置街道名称、交通警告（强制停车、减速带）、测速仪警告、限速等公告。";
 "keep_informing" = "重复导航指令";
-"keep_informing_descr" = "定期重新通报导航指令。";
+"keep_informing_descr" = "定期重复播报导航指令。";
 "arrival_distance" = "到达通告";
 "arrival_distance_descr" = "你想到达通知何时通知？";
 "default_speed_system" = "速度测量";
@@ -505,7 +505,7 @@
 "speed_limit_exceed" = "速度限制宽容度";
 "speed_limit_exceed_message" = "选择限速的容许范围，超过该范围时将收到语音警告。";
 "wake_on_voice" = "点亮屏幕";
-"wake_on_voice_descr" = "（如果屏幕未点亮）在接近转弯地点时点亮屏幕。";
+"wake_on_voice_descr" = "在接近转弯地点时点亮屏幕 (如果屏幕未点亮)。";
 "voice_pref_title" = "语音";
 "voice_provider_descr" = "为导航选择语音指引。";
 "choose_audio_stream" = "语音指引输出";
@@ -562,8 +562,8 @@
 "destination_point" = "目的地 %@";
 "stop_routing_confirm" = "停止导航？";
 "cancel_route" = "放弃路线？";
-"impassable_road_desc" = "选择您在导航时想要避开的道路。";
-"fast_route_mode_descr" = "打开则规划最快路线，关闭则计算最短路线。";
+"impassable_road_desc" = "选择您在导航期间想要避开的道路。";
+"fast_route_mode_descr" = "启用则计算最快路线，禁用则计算最短路线。";
 "relief_smoothness_factor_descr" = "首选的地形：平坦或丘陵。";
 "general_settings_descr" = "配置应用的显示与常规设置。";
 "snap_to_road_descr" = "当前位置图标将与当前导航路径对齐";
@@ -1635,7 +1635,7 @@
 "screen_alerts" = "屏幕警报";
 "rendering_attr_piste_difficulty_connection_name" = "连接";
 "routeInfo_piste_type_name" = "滑雪道类型";
-"routing_attr_allow_gate_description" = "允许使用大门";
+"routing_attr_allow_gate_description" = "允许使用门禁系统";
 "weather_offline_forecast" = "离线预测";
 "rendering_attr_piste_type_snow_park_name" = "地形公园";
 "routing_attr_hazmat_category_name" = "危险品类别";
@@ -1670,7 +1670,7 @@
 "routing_attr_avoid_tunnels_description" = "避开隧道";
 "weather_online_cache" = "在线缓存";
 "routing_attr_freeride_policy_description" = "“自由式滑雪(Freeride)”和“野雪滑(Off-piste)”属于非官方路线和通道。通常未 经整修、无人维护，且晚上不进行巡查。请自行承担风险。";
-"select_wikipedia_article_langs" = "选择地图上维基百科文章的语言，在阅读文章时切换到任何可用的语言。";
+"select_wikipedia_article_langs" = "选择地图上维基百科文章显示的语言，可以在阅读文章时切换到任何可用语言。";
 "fav_point_dublicate_message" = "收藏重命名为%@，以避免重复。";
 "by_transport_type" = "乘坐 %@";
 "local_backup" = "本地备份";
@@ -1699,7 +1699,7 @@
 "free_version_message" = "%@ 地图可下载或更新。";
 "service_is_not_available_please_try_later" = "服务不可用。请稍后再试。";
 "subscribe_email_desc" = "订阅我们的邮件列表，了解应用的折扣，并获得 3 个额外的地图下载！";
-"backup_and_restore" = "备份和恢复";
+"backup_and_restore" = "备份与恢复";
 "get_osmand_live" = "获取 OsmAnd Live 以解锁全部功能：每日无限量地图下载与更新、所有付费与免费插件、维基百科、维基导游等等。";
 "osm_live_payment_discount_descr" = "省下 %@";
 "verification_code_missing_description" = "可能需要10分钟。如果它不在垃圾邮件文件夹中，请使用下面的按钮。";
@@ -2110,7 +2110,7 @@
 "distance_to_intermediate_widget_desc" = "该小工具会显示离第一个中间点还有多远。一旦通过中间点，将会更新为显示到下一个中间点的距离。";
 "lang_zh-Hans" = "简体中文";
 "av_notes_choose_action_widget_desc" = "选择操作。";
-"bearing_secondary_desc" = "您可以更改数据的格式：%@ – %@ – %@。";
+"bearing_secondary_desc" = "您可以更改以下内容中使用的数据格式：%@ – %@ – %@。";
 "ant_plus_pair_bluetooth_prompt" = "您可以将低功耗蓝牙和 ANT+ 传感器与 OsmAnd 配对。";
 "trip_recording_duration_widget_desc" = "显示当前记录的行程时间。";
 "longest_distance_first" = "最长距离优先";

@@ -275,18 +275,31 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (IBAction)deletePressed:(id)sender
 {
+    __weak __typeof(self) weakSelf = self;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_delete_confirmation_descr") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-        OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
-        [p setEntity:_editPoiData.getEntity];
-        [p setAction:DELETE];
-        [p setComment:@""];
-        
-        OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:@[p]];
-        dialog.delegate = self.delegate;
-        [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
+        if ([weakSelf.class isOfflineEditing:_editingUtil])
+        {
+            [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingUtil changedTags:nil callback:^(OAEntity * entity){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                    [[OARootViewController instance].mapPanel targetHide];
+                    [weakSelf.class showContextMenu];
+                });
+            }];
+        }
+        else
+        {
+            OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
+            [p setEntity:_editPoiData.getEntity];
+            [p setAction:DELETE];
+            [p setComment:@""];
+            
+            OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:@[p]];
+            dialog.delegate = weakSelf.delegate;
+            [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
+        }
     }]];
     [self presentViewController:alert animated:YES completion:nil];
     
@@ -432,23 +445,13 @@ typedef NS_ENUM(NSInteger, EditingTab)
     EOAAction action = original.getId <= 0 ? CREATE : MODIFY;
     if (offlineEdit)
     {
+        __weak __typeof(self) weakSelf = self;
         [OAOsmEditingViewController commitEntity:action entity:entity entityInfo:[editingUtil getEntityInfo:poiData.getEntity.getId] comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:^(OAEntity *result) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (editingDelegate)
-                {
                     [editingDelegate refreshData];
-                }
                 else if (result)
-                {
-                    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                    NSArray<OAOpenStreetMapPoint *> *points = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
-                    if (points.count > 0)
-                    {
-                        OAOsmPoint *p = points[points.count - 1];
-                        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
-                        [mapPanel showContextMenu:newTarget];
-                    }
-                }
+                    [weakSelf showContextMenu];
             });
         }];
     }
@@ -472,7 +475,19 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 + (BOOL)isOfflineEditing:(id<OAOpenStreetMapUtilsProtocol>)editingUtil
 {
-    return [editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
+    return [editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class] && [[OAAppSettings sharedManager].offlineEditing get];
+}
+
++ (void)showContextMenu
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    NSArray<OAOpenStreetMapPoint *> *points = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
+    if (points.count > 0)
+    {
+        OAOsmPoint *p = points[points.count - 1];
+        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
+        [mapPanel showContextMenu:newTarget];
+    }
 }
 
 #pragma mark - UIPageViewControllerDataSource

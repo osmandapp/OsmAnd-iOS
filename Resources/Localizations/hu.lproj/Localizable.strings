@@ -2127,7 +2127,7 @@
 "shared_string_cross_buy" = "Több platformra érvényes vásárlás";
 "osmand_cloud_create_account_descr" = "Adja meg az e-mail-címét, ahová küldünk egy ellenőrző kódot,\nés minden adatát összekapcsoljuk vele.";
 "empty_purchases_description" = "Ha a vásárlásai nem jelennek meg itt, lépjen kapcsolatba az ügyfélszolgálatunkkal, vagy koppintson erre: „%@”.";
-"routing_attr_motor_type_electric_name" = "Elektromos áram";
+"routing_attr_motor_type_electric_name" = "Elektromos";
 "si_nm_ft" = "Tengeri mérföld/láb";
 "benefits_for_contributors_primary_descr" = "Az aktív OpenStreetMap.org szerkesztők korlátlan óránkénti térképfrissítésre lehetnek jogosultak.";
 "parked_at" = "leparkolva ekkor:";
@@ -3056,3 +3056,4 @@
 "attach_roads_descr" = "Csatlakoztassa a nyomvonalait az utakhoz, hogy részletes útvonaladatokat kaphasson, beleértve a kanyarodási utasításokat és útvonal-tulajdonságokat.";
 "map_widget_route_information_desc" = "Megjeleníti a becsült érkezési időt, a fennmaradó utazási időt és az aktuális navigációs útvonal távolságát.";
 "auto_25_chars_route_tl_kr" = "Forduljon balra, és tartson jobbra";
+"obd_fuel_type_electric" = "Elektromos";

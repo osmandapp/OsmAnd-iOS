@@ -2099,7 +2099,7 @@
 "restore_from_trash" = "Възстановяване от кошчето";
 "animate_my_location" = "Анимиране на моето местоположение";
 "missing_maps_ignore_details" = "Изтеглените карти покриват маршрута? Използвайте тях, ако познавате района.";
-"quick_action_start_stop_navigation" = "Пискане/спиране маршрутизиране";
+"quick_action_start_stop_navigation" = "Пускане/спиране маршрутизиране";
 "quick_action_switch_night_mode" = "Нощен режим";
 "sqlite_db_file" = "Файл на SQLiteDB";
 "map_settings_under" = "Подложена карта";
@@ -2122,7 +2122,7 @@
 "quick_action_auto_zoom" = "Автом. мащабиране на карта";
 "quick_action_navigation_voice_on" = "Изключване на звука";
 "quick_action_bug_descr" = "Това съобщение ще бъде добавено в полето за коментар.";
-"quick_action_verb_start_stop" = "Пискане/спиране";
+"quick_action_verb_start_stop" = "Пускане/спиране";
 "quick_action_map_underlay" = "Подложена карта";
 "map_settings_over" = "Насложена карта";
 "quick_action_add_create_items" = "Създаване на елементи";
@@ -2232,3 +2232,16 @@
 "select_color" = "Избиране на цвят";
 "personal_category_name" = "Лични";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Мрежа от възлите на велосипедните маршрути";
+"app_profile" = "Профил на приложението";
+"layer_coordinates_grid" = "Координатна мрежа";
+"quick_action_showhide_coordinates_grid_descr" = "Действието управлява видиността на координатната мрежа на картата.";
+"sett_arr_map" = "Център на картата";
+"sett_units" = "Мерни единици";
+"navigate_point_olc" = "Отворен код за местоположение (OLC)";
+"add_group" = "Добавяне на група";
+"select_icon_profile_dialog_title" = "Избиране на пиктограма";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"shared_string_default_view" = "Подразбирана подредба";
+"display_priority" = "Ред на показване";
+"intermediate_first" = "Първо междинната точка";
+"destination_first" = "Първо местоназначението";

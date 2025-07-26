@@ -3809,3 +3809,14 @@
 "obd_fuel_type_hybrid_electric_combustion" = "Hibridni električno i SUS";
 "obd_fuel_type_hybrid_regenerative" = "Hibrid regenerativni";
 "obd_fuel_type_unknown" = "Nepopoznato gorivo";
+"trace_rendering" = "Informacije o otklanjanju pogrešaka";
+"trace_rendering_descr" = "Prikaži performanse prikazivanja i navigacije.";
+"map_text" = "Prikaz mape";
+"manage_purchases" = "Upravljajte kupovinama";
+"osmand_web" = "OsmAnd Web (FastSpring)";
+"fastspring_subscription_desc" = "Možete upravljati ili otkazati pretplatu putem FastSpring portala za upravljanje nalogom.";
+"obd_fuel_type_not_provided" = "Nije navedena vrsta goriva";
+"obd_fuel_type_gasoline" = "Benzin";
+"obd_fuel_type_bifuel_hydrogen" = "Dvogorivno radno Vodonik";
+"obd_fuel_type_hybrid_hydrogen" = "Hibridno Vodonik";
+"obd_fuel_type_hydrogen" = "Vodonik";

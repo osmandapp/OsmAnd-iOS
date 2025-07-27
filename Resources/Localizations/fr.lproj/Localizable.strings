@@ -1680,7 +1680,7 @@
 "empty_filename" = "Le nom du fichier n\'est pas renseigné";
 "plan_route_exit_message" = "Voulez-vous vraiment fermer l'itinéraire planifié sans enregistrer ? Vous perdrez toutes les modifications.";
 "plan_route_open_existing_track" = "Ouvrir une trace existante";
-"plan_route_create_new_route" = "Créer un nouvel itinéraire";
+"plan_route_create_new_route" = "Créer une nouvelle trace";
 "open_saved_track" = "Ouvrir la trace enregistrée";
 "simplified_track" = "Trace simplifiée";
 "prev_segs_recalc_descr" = "Tous les segments précédents seront recalculés avec le profil sélectionné";

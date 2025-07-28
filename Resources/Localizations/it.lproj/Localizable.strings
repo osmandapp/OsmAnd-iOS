@@ -3770,3 +3770,4 @@
 "vehicle_metrics_recording_description" = "Seleziona i parametri da salvare nel file GPX.";
 "shared_string_other" = "Altro";
 "shared_string_engine" = "Motore";
+"obd_fuel_type_electric" = "Elettrico";

@@ -336,7 +336,7 @@
         
         if (_shieldStackView.subviews.count > 1)
         {
-            for (NSInteger i = 1; i < maxShields; i++)
+            for (NSInteger i = 1; i < _shieldStackView.subviews.count; i++)
                 [_shieldStackView.subviews[i] removeFromSuperview];
         }
         

@@ -275,34 +275,37 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (IBAction)deletePressed:(id)sender
 {
-    __weak __typeof(self) weakSelf = self;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_delete_confirmation_descr") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if ([weakSelf.class isOfflineEditing:_editingUtil])
-        {
-            [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingUtil changedTags:nil callback:^(OAEntity * entity){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
-                    [[OARootViewController instance].mapPanel targetHide];
-                    [weakSelf.class showContextMenu];
-                });
-            }];
-        }
-        else
-        {
-            OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
-            [p setEntity:_editPoiData.getEntity];
-            [p setAction:DELETE];
-            [p setComment:@""];
-            
-            OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:@[p]];
-            dialog.delegate = weakSelf.delegate;
-            [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
-        }
+        [self deletePoi];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
-    
+}
+
+- (void)deletePoi
+{
+    __weak __typeof(self) weakSelf = self;
+    if ([self.class isOfflineEditing:_editingUtil])
+    {
+        [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingUtil changedTags:nil callback:^(OAEntity * entity) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+                [weakSelf.class showContextMenu];
+            });
+        }];
+    }
+    else
+    {
+        OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
+        [p setEntity:_editPoiData.getEntity];
+        [p setAction:DELETE];
+        [p setComment:@""];
+        
+        OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:@[p]];
+        dialog.delegate = self.delegate;
+        [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
+    }
 }
 
 - (IBAction)applyPressed:(id)sender

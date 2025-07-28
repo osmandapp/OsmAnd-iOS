@@ -2782,3 +2782,6 @@
 "shared_string_edges" = "Kanter";
 "meridian_180" = "180. meridian";
 "ask_every_time" = "Spør hver gang";
+"labels_position" = "Påskrifters posisjon";
+"customize_grid_color" = "Tilpass rutenettfarge";
+"grid_color" = "Rutenettfarge";

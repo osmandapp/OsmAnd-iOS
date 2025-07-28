@@ -37,8 +37,7 @@ final class ColorPaletteHelper: NSObject {
         super.init()
 
         if let dir = app.colorsPalettePath, let allFiles = try? FileManager.default.contentsOfDirectory(atPath: dir) {
-            let palettes = allFiles.filter { $0.hasSuffix(TXT_EXT) && !$0.hasPrefix(TerrainMode.hillshadeScndPrefix) }
-            palettes.forEach { _ = parseGradientColorPalette($0) }
+            allFiles.filter { !$0.hasPrefix(TerrainMode.hillshadeScndPrefix) }.forEach { parseGradientColorPalette($0) }
         }
         
         directoryObserver.startObserving()
@@ -131,7 +130,7 @@ final class ColorPaletteHelper: NSObject {
         return cachedPalette
     }
 
-    private func parseGradientColorPalette(_ colorPaletteFileName: String) -> ColorPalette? {
+    @discardableResult private func parseGradientColorPalette(_ colorPaletteFileName: String) -> ColorPalette? {
         if colorPaletteFileName.hasSuffix(TXT_EXT) {
             let filePath = getColorPaletteDir().appendingPathComponent(colorPaletteFileName)
             if FileManager.default.fileExists(atPath: filePath) {

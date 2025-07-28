@@ -33,10 +33,15 @@ final class ColorPaletteHelper: NSObject {
 
         let notificationName = NSNotification.Name("ColorPaletteDicrectoryUpdated")
         directoryObserver = DirectoryObserver(app.colorsPalettePath, notificationName: notificationName)
-        directoryObserver.startObserving()
-
+        
         super.init()
 
+        if let dir = app.colorsPalettePath, let allFiles = try? FileManager.default.contentsOfDirectory(atPath: dir) {
+            let palettes = allFiles.filter { $0.hasSuffix(TXT_EXT) && !$0.hasPrefix(TerrainMode.hillshadeScndPrefix) }
+            palettes.forEach { _ = parseGradientColorPalette($0) }
+        }
+        
+        directoryObserver.startObserving()
         filesUpdatedObserver =
             NotificationCenter.default.addObserver(forName: notificationName,
                                                    object: nil,

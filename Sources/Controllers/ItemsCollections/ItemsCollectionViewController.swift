@@ -696,8 +696,12 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         guard let gradientPaletteColors = notification.object as? [PaletteGradientColor],
         let paletteItems else { return }
         
+        let existingIDs = Set(paletteItems.asArray().compactMap { ($0 as? PaletteGradientColor)?.paletteName })
+        let newPalettes = gradientPaletteColors.filter { !existingIDs.contains($0.paletteName) }
+        guard !newPalettes.isEmpty else { return }
+        
         var indexPathsToInsert: [IndexPath] = []
-        for paletteColor in gradientPaletteColors {
+        for paletteColor in newPalettes {
             let index = paletteColor.getIndex() - 1
             let indexPath: IndexPath
             

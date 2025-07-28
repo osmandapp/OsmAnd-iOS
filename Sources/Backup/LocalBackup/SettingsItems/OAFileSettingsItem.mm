@@ -60,11 +60,10 @@
 
 + (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype
 {
-    NSString *documentsPath = OsmAndApp.instance.documentsPath;
     switch (subtype)
     {
         case EOASettingsItemFileSubtypeOther:
-            return documentsPath;
+            return @"";
         case EOASettingsItemFileSubtypeObfMap:
         case EOASettingsItemFileSubtypeWikiMap:
         case EOASettingsItemFileSubtypeSrtmMap:
@@ -200,16 +199,7 @@
 
 + (BOOL) isMap:(EOASettingsItemFileSubtype)type
 {
-    NSArray<NSNumber *> *mapTypes = @[
-        @(EOASettingsItemFileSubtypeObfMap),
-        @(EOASettingsItemFileSubtypeWikiMap),
-        @(EOASettingsItemFileSubtypeSrtmMap),
-        @(EOASettingsItemFileSubtypeTilesMap),
-        @(EOASettingsItemFileSubtypeRoadMap),
-        @(EOASettingsItemFileSubtypeNauticalDepth),
-        @(EOASettingsItemFileSubtypeTravel)
-    ];
-    return [mapTypes containsObject:@(type)];
+    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth || type == EOASettingsItemFileSubtypeTravel;
 }
 
 + (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype

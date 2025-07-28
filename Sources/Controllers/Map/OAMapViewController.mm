@@ -3822,7 +3822,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName
 {
-    @synchronized(self) {
+    @synchronized(_rendererSync) {
         if (_mapPresentationEnvironment)
         {
             NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
@@ -3830,7 +3830,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             QHashIterator<QString, int> it(renderingAttrs);
             while (it.hasNext()) {
                 it.next();
-                NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
+                NSString *key = 0 == it.key().length() ? @"" : it.key().toNSString();
                 NSNumber *value = @(it.value());
                 
                 [result setObject:value forKey:key];

@@ -285,9 +285,9 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void)deletePoi
 {
-    __weak __typeof(self) weakSelf = self;
     if ([self.class isOfflineEditing:_editingUtil])
     {
+        __weak __typeof(self) weakSelf = self;
         [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingUtil changedTags:nil callback:^(OAEntity * entity) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.navigationController popViewControllerAnimated:YES];

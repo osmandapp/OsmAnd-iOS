@@ -14,6 +14,9 @@
 
 #include <binaryRead.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/Road.h>
+#include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 
 static const int ZOOM_TO_LOAD_TILES = 15;
 static const int ZOOM_TO_LOAD_TILES_SHIFT_L = ZOOM_TO_LOAD_TILES + 1;
@@ -26,7 +29,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
     std::map<BinaryMapFile *, std::vector<RouteSubregion>> _readers;
     
     int64_t _osmId;
-    std::map<int64_t, RouteDataObject *> _results;
+    std::map<int64_t, std::shared_ptr<const OsmAnd::Road> > _results;
 }
 
 - (instancetype)init
@@ -70,20 +73,19 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
 {
     _results.clear();
     _osmId = osmId;
-    
     [self loadRouteDataObjects:bbox31 results:_results];
     
-    RouteDataObject *found = _results[osmId];
-    if (found != nullptr && found->getPointsLength() > 0)
+    std::shared_ptr<const OsmAnd::Road> found = _results[osmId];
+    if (found != nullptr && found->points31.size() > 0)
     {
         NSMutableArray<OASWptPt *> *waypoints = [NSMutableArray new];
-        std::vector<double> heightArray = found->calculateHeightArray();
+        QVector<float> heightArray = found->calculateHeightArray();
         
-        for (int i = 0; i < found->getPointsLength(); i++)
+        for (int i = 0; i < found->points31.size(); i++)
         {
             OASWptPt *point = [[OASWptPt alloc] init];
-            [point setLat:OsmAnd::Utilities::get31LatitudeY(found->getPoint31YTile(i))];
-            [point setLon:OsmAnd::Utilities::get31LongitudeX(found->getPoint31XTile(i))];
+            [point setLat:OsmAnd::Utilities::get31LatitudeY(found->points31[i].y)];
+            [point setLon:OsmAnd::Utilities::get31LongitudeX(found->points31[i].x)];
             
             int j = i * 2 + 1;
             if (heightArray.size() > j)
@@ -98,7 +100,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
     return nil;
 }
 
-- (BOOL)loadRouteDataObjects:(OASKQuadRect *)bbox31 results:(std::map<int64_t, RouteDataObject *>&)results
+- (BOOL)loadRouteDataObjects:(OASKQuadRect *)bbox31 results:(std::map<int64_t, std::shared_ptr<const OsmAnd::Road> >&)results
 {
     int loaded = 0;
     
@@ -122,7 +124,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
     return loaded > 0;
 }
 
-- (int)loadRouteDataObjects:(int)x y:(int)y results:(std::map<int64_t, RouteDataObject *>&)results
+- (int)loadRouteDataObjects:(int)x y:(int)y results:(std::map<int64_t, std::shared_ptr<const OsmAnd::Road> >&)results
 {
     int loaded = 0;
     std::unordered_set<int64_t> deletedIds;
@@ -134,70 +136,74 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
     uint32_t bottom = (y + 1) << ZOOM_TO_LOAD_TILES_SHIFT_R;
     SearchQuery q(left, right, top, bottom);
     
-    for (std::map<BinaryMapFile *, std::vector<RouteSubregion>>::iterator it = _readers.begin(); it != _readers.end(); ++it)
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    
+    QList< std::shared_ptr<const OsmAnd::Road> > roadsInBBox;
+    const auto bbox31 = OsmAnd::AreaI(top, left, bottom, right);
+    
+    const auto obfDataInterface = obfsCollection->obtainDataInterface(
+        &bbox31,
+        OsmAnd::MinZoomLevel,
+        OsmAnd::MaxZoomLevel,
+        OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Routing));
+    
+    QList< std::shared_ptr<const OsmAnd::ObfRoutingSectionReader::DataBlock> > referencedCacheEntries;
+    
+    obfDataInterface->loadRoads(
+        OsmAnd::RoutingDataLevel::Detailed,
+        &bbox31,
+        &roadsInBBox,
+        nullptr,
+        nullptr,
+        nullptr,
+        &referencedCacheEntries,
+        nullptr,
+        nullptr);
+    
+
+    for (std::shared_ptr<const OsmAnd::Road> object : roadsInBBox)
     {
-        BinaryMapFile *reader = it->first;
-        std::vector<RouteSubregion> routeSubregions = it->second;
-        std::vector<std::shared_ptr<RoutingIndex>> routeIndexes = reader->routingIndexes;
-        std::vector<RouteSubregion> subregions = searchRouteSubregionsForBinaryMapFile(reader, &q);
-        
-        for (std::shared_ptr<RoutingIndex>& routeIndex : routeIndexes)
+        if ([self isCancelled])
         {
-            std::vector<RouteDataObject *> objects;
-            readRouteDataObjects(&q, reader, subregions, routeIndex, objects);
-            
-            for (RouteDataObject *object : objects)
-            {
-                if ([self isCancelled])
-                {
-                    return loaded;
-                }
-                
-                if ([self publish:object])
-                {
-                    int64_t objId = object->getId();
-                    if (deletedIds.count(objId))
-                    {
-                        // live-updates, osmand_change=delete
-                        continue;
-                    }
-                    if (object->region->routeEncodingRules.size() > 0 && object->isRoadDeleted())
-                    {
-                        deletedIds.insert(objId);
-                        continue;
-                    }
-                    if (usedIds.count(objId) && usedIds[objId] != object->region)
-                    {
-                        // live-update, changed tags
-                        continue;
-                    }
-                    
-                    int64_t shiftedId = objId >> SHIFT_ID;
-                    BOOL valueExisted = results.count(shiftedId) > 0;
-                    if (!valueExisted)
-                        loaded += 1;
-                    
-                    results[shiftedId] = object;
-                    usedIds[objId] = object->region;
-                    
+            return loaded;
+        }
         
-                    // init height only for selected region and only if it needed
-                    const auto heightArray = object->calculateHeightArray();
-                    if (heightArray.size() == 0)
-                    {
-                        checkAndInitRouteRegionRules(reader->getFD(), routeIndex);
-                    }
-                }
+        if ([self publish:object])
+        {
+            int64_t objId = object->id.id;
+            if (deletedIds.count(objId))
+            {
+                // live-updates, osmand_change=delete
+                continue;
             }
+            
+            if (object->isDeleted())
+            {
+                deletedIds.insert(objId);
+                continue;
+            }
+
+            //if (usedIds.containsKey(obj.id) && usedIds.get(obj.id) != obj.region) {
+            //    // live-update, changed tags
+            //    continue;
+            //}
+            
+            int64_t shiftedId = objId >> SHIFT_ID;
+            BOOL valueExisted = results.count(shiftedId) > 0;
+            if (!valueExisted)
+                loaded += 1;
+            
+            results[shiftedId] = object;
+            //usedIds[objId] = object->region;
         }
     }
-    
     return loaded;
 }
 
-- (BOOL)publish:(RouteDataObject *)routeDataObject
+- (BOOL)publish:(std::shared_ptr<const OsmAnd::Road>)route
 {
-    return routeDataObject != nullptr && (routeDataObject->getId() >> SHIFT_ID == _osmId);
+    return route != nullptr && (route->id.id >> SHIFT_ID == _osmId);
 }
 
 - (BOOL)isCancelled

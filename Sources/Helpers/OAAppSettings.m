@@ -1998,6 +1998,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     [self set:strValue mode:mode];
 }
 
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    return string;
+}
+
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return [self get:mode];

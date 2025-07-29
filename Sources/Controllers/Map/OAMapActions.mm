@@ -112,9 +112,9 @@
     [_settings.useIntermediatePointsNavigation set:useIntermediatePointsByDefault];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     
-    OAApplicationMode *mode = appMode ? appMode : [self getRouteProfile:gpxFile];
+    OAApplicationMode *mode = appMode ?: [self getRouteProfile:gpxFile];
     if (!mode)
-        mode = appMode ? appMode : [self getRouteMode];
+        mode = appMode ?: [self getRouteMode];
     
     [_routingHelper setAppMode:mode];
     [_settings setApplicationModePref:mode markAsLastUsed:NO];

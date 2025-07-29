@@ -25,6 +25,12 @@ class ConcurrentArray<Value> {
         defer { pthread_rwlock_unlock(&rwlock) }
         array.append(value)
     }
+    
+    func append(contentsOf values: [Value]) {
+        pthread_rwlock_wrlock(&rwlock)
+        defer { pthread_rwlock_unlock(&rwlock) }
+        array.append(contentsOf: values)
+    }
 
     func remove(at index: Int) {
         pthread_rwlock_wrlock(&rwlock)
@@ -73,6 +79,18 @@ class ConcurrentArray<Value> {
         pthread_rwlock_rdlock(&rwlock)
         defer { pthread_rwlock_unlock(&rwlock) }
         return try array.forEach(body)
+    }
+    
+    func getCount() -> Int {
+        pthread_rwlock_rdlock(&rwlock)
+        defer { pthread_rwlock_unlock(&rwlock) }
+        return array.count
+    }
+    
+    func sort(by areInIncreasingOrder: (Value, Value) throws -> Bool) rethrows {
+        pthread_rwlock_rdlock(&rwlock)
+        defer { pthread_rwlock_unlock(&rwlock) }
+        return try array.sort(by: areInIncreasingOrder)
     }
 
     func asArray() -> [Value] {

@@ -83,6 +83,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         downloadingCellResourceHelper.cleanCellCache()
+        unregisterNotificationsAndObservers()
     }
     
     override func registerObservers() {

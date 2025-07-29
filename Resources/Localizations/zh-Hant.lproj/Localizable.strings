@@ -3664,3 +3664,4 @@
 "attach_roads_descr" = "將追蹤路徑附在道路上，即可獲得詳細的路徑資訊，包括轉彎指示與道路屬性。";
 "auto_25_chars_route_tr_kl" = "向右轉並靠左";
 "smart_folder_name_present" = "這樣的 Smart Folder 已存在";
+"obd_fuel_type_electric" = "電力";

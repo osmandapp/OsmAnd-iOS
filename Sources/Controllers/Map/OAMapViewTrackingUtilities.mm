@@ -468,13 +468,9 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 _mapView.mapAnimator->pause();
 
                 CLLocationDirection direction = [self calculateDirectionWithLocation:newLocation heading:newHeading applyViewAngleVisibility:YES];
-
-                const auto azimuthAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
-                
-                NSTimeInterval timeSinceLasGestureRotating = [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970;
-                
-                if (direction >= 0 && timeSinceLasGestureRotating > 1)
+
+                if (direction >= 0 && [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970 > 1)
                     _mapView.mapAnimator->animateAzimuthTo(direction, kOneSecondAnimatonTime, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
                 
                 _mapView.mapAnimator->resume();
@@ -648,13 +644,10 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                     zoomAnimation = nullptr;
                 if (zoomAnimation)
                     _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
-                
-                const auto azimuthAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+
                 _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 
-                NSTimeInterval timeSinceLasGestureRotating = [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970;
-                
-                if (direction >= 0 && timeSinceLasGestureRotating > 1)
+                if (direction >= 0 && [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970 > 1)
                     _mapView.mapAnimator->animateAzimuthTo(direction, kOneSecondAnimatonTime, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
                 
                 BOOL freeMapCenterMode = [_settings.rotateMap get] == ROTATE_MAP_COMPASS && !(_app.mapMode == OAMapModePositionTrack);

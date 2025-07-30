@@ -279,21 +279,21 @@
     }];
     [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"unit_of_length"),
+        @"title" : OALocalizedString(@"routing_attr_length_name"),
         @"value" : metricSystemValue,
         @"icon" : @"ic_custom_ruler",
         @"key" : @"lengthUnits",
     }];
     [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"units_of_speed"),
+        @"title" : OALocalizedString(@"shared_string_speed"),
         @"value" : speedSystemValue,
         @"icon" : @"ic_action_speed",
         @"key" : @"speedUnits",
     }];
     [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"unit_of_volume"),
+        @"title" : OALocalizedString(@"shared_string_volume"),
         @"value" : volumeSystemValue,
         @"icon" : @"ic_custom_obd_fuel_tank",
         @"key" : @"volumeUnits",

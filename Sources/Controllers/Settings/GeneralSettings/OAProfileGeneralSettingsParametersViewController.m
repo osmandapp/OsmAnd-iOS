@@ -77,13 +77,13 @@
             _title = OALocalizedString(@"driving_region");
             break;
         case EOAProfileGeneralSettingsUnitsOfLenght:
-            _title = OALocalizedString(@"unit_of_length");
+            _title = OALocalizedString(@"routing_attr_length_name");
             break;
         case EOAProfileGeneralSettingsUnitsOfSpeed:
-            _title = OALocalizedString(@"units_of_speed");
+            _title = OALocalizedString(@"shared_string_speed");
             break;
         case EOAProfileGeneralSettingsUnitsOfVolume:
-            _title = OALocalizedString(@"unit_of_volume");
+            _title = OALocalizedString(@"shared_string_volume");
             break;
         case EOAProfileGeneralSettingsUnitsOfTemp:
             _title = OALocalizedString(@"map_settings_weather_temp");

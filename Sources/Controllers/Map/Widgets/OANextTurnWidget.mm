@@ -113,10 +113,14 @@
         _horisontalMini = horisontalMini;
         _nextNext = nextNext;
         _calc1 = [[OANextDirectionInfo alloc] init];
-        _turnDrawable = [[OATurnDrawable alloc] initWithMini:![self isPanelVertical] && horisontalMini themeColor:EOATurnDrawableThemeColorMap];
+        
+        OAWidgetsPanel *panel = [type getPanel:customId ?: type.id appMode:appMode];
+        _isPanelVertical = [panel isPanelVertical];
+        
+        _turnDrawable = [[OATurnDrawable alloc] initWithMini:!_isPanelVertical && horisontalMini themeColor:EOATurnDrawableThemeColorMap];
         _textRasterizer = OsmAnd::TextRasterizer::getDefault();
         
-        if ([self isPanelVertical])
+        if (_isPanelVertical)
         {
             [self layoutWidget];
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
@@ -169,7 +173,7 @@
 - (void) layoutSubviews
 {
     [super layoutSubviews];
-    if ([self isPanelVertical] && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
+    if (_isPanelVertical && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
         [self updateNextTurnInfo];
 }
 
@@ -268,7 +272,7 @@
 
 - (void)checkShieldOverflow
 {
-    if ([self isPanelVertical] && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
+    if (_isPanelVertical && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
     {
         CGFloat containerWidth = self.frame.size.width - _leftArrowView.frame.size.width - _mainStackView.spacing;
         CGFloat usedWidth = 0;
@@ -528,10 +532,10 @@
 {
     BOOL vis = [self updateVisibility:turnType != nullptr];
     if ([_turnDrawable setTurnType:turnType]
-        || ([self isPanelVertical] && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
+        || (_isPanelVertical && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
         || vis)
     {
-        if ([self isPanelVertical])
+        if (_isPanelVertical)
         {
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
         }
@@ -579,16 +583,9 @@
     self.frame = rect;
 }
 
-- (BOOL)isPanelVertical
-{
-    if (!_isPanelVertical)
-        _isPanelVertical = [[self getWidgetPanel] isPanelVertical];
-    return _isPanelVertical;
-}
-
 - (BOOL)isEnabledTextInfoComponents
 {
-    return ![self isPanelVertical];
+    return !_isPanelVertical;
 }
 
 - (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> *)widgetConfigurationParams
@@ -598,7 +595,7 @@
 
 - (void) setTextNoUpdateVisibility:(NSString *)text subtext:(NSString *)subtext
 {
-    if ([self isPanelVertical])
+    if (_isPanelVertical)
     {
         if (text.length == 0 && subtext.length == 0)
             _distanceLabel.text = self.isSimpleLayout ? nil : @"";
@@ -668,7 +665,7 @@
     int nextTurnDistance = 0;
     OACurrentStreetName *streetName = nil;
     
-    if ([self isPanelVertical])
+    if (_isPanelVertical)
     {
         OAStreetNameWidgetParams *params = [[OAStreetNameWidgetParams alloc] initWithTurnDrawable:_turnDrawable calc1:_calc1];
         streetName = params.streetName;
@@ -691,7 +688,7 @@
                 if (info && info.distanceTo >= 0 && info.directionInfo)
                 {
                     streetName = [[OACurrentStreetName alloc] initWithStreetName:info useDestination:true];
-                    if ([self isPanelVertical] && streetName.text.length == 0)
+                    if (_isPanelVertical && streetName.text.length == 0)
                         streetName.text = [info.directionInfo getDescriptionRoutePart];
                     turnType = info.directionInfo.turnType;
                     nextTurnDistance = info.distanceTo;
@@ -710,7 +707,7 @@
             if (info && info.distanceTo > 0 && info.directionInfo)
             {
                 streetName = [[OACurrentStreetName alloc] initWithStreetName:info useDestination:true];
-                if ([self isPanelVertical] && streetName.text.length == 0)
+                if (_isPanelVertical && streetName.text.length == 0)
                     streetName.text = [info.directionInfo getDescriptionRoutePart];
                 turnType = info.directionInfo.turnType;
                 nextTurnDistance = info.distanceTo;
@@ -719,7 +716,7 @@
         }
     }
     
-    if ([self isPanelVertical])
+    if (_isPanelVertical)
     {
         [self setStreetName:streetName];
         if (streetName.shields.count != 0)

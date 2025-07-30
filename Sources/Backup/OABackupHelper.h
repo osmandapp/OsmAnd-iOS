@@ -85,7 +85,7 @@ static inline BOOL backupDebugLogs()
 - (void) deleteAllFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener;
 - (void) deleteOldFiles:(NSArray<OAExportSettingsType *> *)types;
 - (void) deleteOldFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener;
-- (void) deleteAccount:(NSString *)email token:(NSString *)token;
+- (NSError *) deleteAccount:(NSString *)email token:(NSString *)token;
 - (void) checkCode:(NSString *)email token:(NSString *)token;
 - (void) sendCode:(NSString *)email action:(NSString *)action;
 - (NSString *)downloadFile:(NSString *)filePath

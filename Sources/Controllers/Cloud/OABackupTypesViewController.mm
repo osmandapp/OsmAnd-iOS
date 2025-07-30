@@ -226,7 +226,14 @@
                                                            style:UIAlertActionStyleDestructive
                                                          handler:^(UIAlertAction * _Nonnull action)
                                                          {
-                                                             [_backupHelper deleteAllFiles:@[type] listener:self];
+                                                            @try
+                                                            {
+                                                                [_backupHelper deleteAllFiles:@[type] listener:self];
+                                                            }
+                                                            @catch (NSException *exception)
+                                                            {
+                                                                NSLog(@"Error in showClearTypeScreen() -> deleteAllFiles(): %@", exception.reason);
+                                                            }
                                                          }
     ];
 

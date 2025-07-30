@@ -182,6 +182,7 @@
     }
     
     NSString* volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
+    NSString* tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
     
     NSString* geoFormatValue;
     switch ([_settings.settingGeoFormat get:self.appMode]) {
@@ -296,6 +297,13 @@
         @"value" : volumeSystemValue,
         @"icon" : @"ic_custom_obd_fuel_tank",
         @"key" : @"volumeUnits",
+    }];
+    [unitsArr addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"map_settings_weather_temp"),
+        @"value" : tempSystemValue,
+        @"icon" : @"ic_custom_thermometer",
+        @"key" : @"tempUnits"
     }];
     [formatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
@@ -450,6 +458,8 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfSpeed applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"volumeUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfVolume applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"tempUnits"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfTemp applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
         settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
@@ -461,7 +471,7 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"])
+        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else
             [self showModalViewController:settingsViewController];

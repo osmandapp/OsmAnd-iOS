@@ -174,6 +174,7 @@ static NSString * const autoZoomMapScaleKey = @"autoZoomMapScale";
 static NSString * const keepInformingKey = @"keepInforming";
 static NSString * const speedSystemKey = @"speedSystem";
 static NSString * const volumeSystemKey = @"volumeSystem";
+static NSString * const temperatureSystemKey = @"temperatureSystem";
 static NSString * const fuelTankCapacityKey = @"fuelTankCapacity";
 static NSString * const angularUnitsKey = @"angularUnits";
 static NSString * const speedLimitExceedKey = @"speedLimitExceed";
@@ -674,6 +675,60 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         return OALocalizedString(@"us_gallons_unit");
     else
         return OALocalizedString(@"liter");
+}
+
+@end
+
+@interface OATemperatureConstant ()
+
+@property (nonatomic) EOATemperatureConstant volume;
+@property (nonatomic) NSString *key;
+@property (nonatomic) NSString *descr;
+
+@end
+
+@implementation OATemperatureConstant
+
++ (instancetype)withVolumeConstant:(EOATemperatureConstant)volume
+{
+    OATemperatureConstant *obj = [[OATemperatureConstant alloc] init];
+    if (obj)
+    {
+        obj.volume = volume;
+        obj.key = [self.class toHumanString:volume];
+        obj.descr = [self.class getUnitSymbol:volume];
+    }
+    return obj;
+}
+
++ (NSString *)toHumanString:(EOATemperatureConstant)volume
+{
+    switch (volume)
+    {
+        case SYSTEM_DEFAULT:
+            return OALocalizedString(@"device_settings");
+        case CELSIUS:
+            return OALocalizedString(@"weather_temperature_celsius");
+        case FAHRENHEIT:
+            return OALocalizedString(@"weather_temperature_fahrenheit");
+        default:
+            return OALocalizedString(@"device_settings");
+    }
+}
+
++ (NSString *)getUnitSymbol:(EOATemperatureConstant)volume
+{
+    switch (volume)
+    {
+        case SYSTEM_DEFAULT:
+            return [NSUnitTemperature current].displaySymbol;
+        case CELSIUS:
+            return @"°C";
+        case FAHRENHEIT:
+            return @"°F";
+        default:
+            return [NSUnitTemperature current].displaySymbol;
+    }
 }
 
 @end
@@ -2727,6 +2782,88 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
             return @"US_GALLONS";
         default:
             return @"LITRES";
+    }
+}
+
+@end
+
+@implementation OACommonTemperatureConstant
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOATemperatureConstant)defValue {
+    OACommonTemperatureConstant *obj = [[OACommonTemperatureConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOATemperatureConstant)get
+{
+    return [super get];
+}
+
+- (EOATemperatureConstant)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOATemperatureConstant)volumeConstant
+{
+    [super set:volumeConstant];
+}
+
+- (void)set:(EOATemperatureConstant)volumeConstant mode:(OAApplicationMode *)mode
+{
+    [super set:volumeConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOATemperatureConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOATemperatureConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *volumeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        volumeMap = @{
+            @"SYSTEM_DEFAULT": @(SYSTEM_DEFAULT),
+            @"CELSIUS": @(CELSIUS),
+            @"FAHRENHEIT": @(FAHRENHEIT)
+        };
+    });
+    return volumeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case SYSTEM_DEFAULT:
+            return @"SYSTEM_DEFAULT";
+        case CELSIUS:
+            return @"CELSIUS";
+        case FAHRENHEIT:
+            return @"FAHRENHEIT";
+        default:
+            return @"SYSTEM_DEFAULT";
     }
 }
 
@@ -5175,6 +5312,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_profilePreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _volumeUnits = [OACommonVolumeConstant withKey:volumeSystemKey defValue:LITRES];
+        _temperatureUnits = [OACommonTemperatureConstant withKey:temperatureSystemKey defValue:SYSTEM_DEFAULT];
         _fuelTankCapacity = [OACommonDouble withKey:fuelTankCapacityKey defValue:OASOBDDataComputer.shared.DEFAULT_FUEL_TANK_CAPACITY];
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
@@ -5183,6 +5321,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_profilePreferences setObject:_speedSystem forKey:@"default_speed_system"];
         [_profilePreferences setObject:_volumeUnits forKey:@"unit_of_volume"];
+        [_profilePreferences setObject:_temperatureUnits forKey:@"unit_of_temperature"];
         [_profilePreferences setObject:_fuelTankCapacity forKey:@"fuel_tank_capacity"];
         
         _preciseDistanceNumbers = [OACommonBoolean withKey:preciseDistanceNumbersKey defValue:YES];
@@ -5889,6 +6028,26 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     OACommonWidgetDisplayPriority *p = [OACommonWidgetDisplayPriority withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
+}
+
+- (EOATemperatureConstant)getTemperatureUnit
+{
+    return [self getTemperatureUnitForMode:[_applicationMode get]];
+}
+
+- (EOATemperatureConstant)getTemperatureUnitForMode:(OAApplicationMode *)mode
+{
+    EOATemperatureConstant stored = [_temperatureUnits get:mode];
+    if (stored == SYSTEM_DEFAULT)
+    {
+        NSUnitTemperature *sysUnit = [NSUnitTemperature current];
+        if ([sysUnit.symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
+            return FAHRENHEIT;
+        else
+            return CELSIUS;
+    }
+    
+    return stored;
 }
 
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode

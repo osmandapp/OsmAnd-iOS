@@ -176,6 +176,23 @@ typedef NS_ENUM(NSInteger, EOAVolumeConstant)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOATemperatureConstant)
+{
+    SYSTEM_DEFAULT = 0,
+    CELSIUS,
+    FAHRENHEIT
+};
+
+@interface OATemperatureConstant : NSObject
+
+@property (nonatomic, readonly) EOATemperatureConstant volume;
+
++ (instancetype) withVolumeConstant:(EOATemperatureConstant)volume;
++ (NSString *) toHumanString:(EOATemperatureConstant)volume;
++ (NSString *) getUnitSymbol:(EOATemperatureConstant)volume;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOAAngularConstant)
 {
     DEGREES = 0,
@@ -571,6 +588,16 @@ typedef NS_ENUM(NSInteger, EOASpeedLimitWarningState)
 - (EOAVolumeConstant) get:(OAApplicationMode *)mode;
 - (void) set:(EOAVolumeConstant)volumeConstant;
 - (void) set:(EOAVolumeConstant)volumeConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonTemperatureConstant : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOATemperatureConstant)defValue;
+- (EOATemperatureConstant) get;
+- (EOATemperatureConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOATemperatureConstant)volumeConstant;
+- (void) set:(EOATemperatureConstant)volumeConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -1016,6 +1043,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *keepInforming;
 @property (nonatomic) OACommonSpeedConstant *speedSystem;
 @property (nonatomic) OACommonVolumeConstant *volumeUnits;
+@property (nonatomic) OACommonTemperatureConstant *temperatureUnits;
 @property (nonatomic) OACommonDouble *fuelTankCapacity;
 @property (nonatomic) OACommonAngularConstant *angularUnits;
 @property (nonatomic) OACommonDouble *speedLimitExceedKmh;
@@ -1192,6 +1220,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 - (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue;
 - (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue;
 - (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue;
+- (EOATemperatureConstant)getTemperatureUnit;
 
 // Direction Appearance
 

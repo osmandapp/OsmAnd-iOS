@@ -239,7 +239,14 @@
             }
             else
             {
-                [_backupHelper sendCode:email action:@"delete"];
+                @try
+                {
+                    [_backupHelper sendCode:email action:@"delete"];
+                }
+                @catch (NSException *exception)
+                {
+                    NSLog(@"Error in continueButtonPressed() -> sendCode(): %@", exception.reason);
+                }
             }
             _continuePressed = YES;
             [self updateScreen];

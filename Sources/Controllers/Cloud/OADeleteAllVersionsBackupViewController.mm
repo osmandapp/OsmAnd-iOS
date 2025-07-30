@@ -364,10 +364,17 @@
 {
     BOOL isProgressOfDeleteAll = _screenType == EOADeleteAllDataProgressBackupScreenType;
     BOOL isProgressOfRemoveOld = _screenType == EOARemoveOldVersionsProgressBackupScreenType;
-    if (isProgressOfDeleteAll)
-        [[OABackupHelper sharedInstance] deleteAllFiles:nil listener:self];
-    else if (isProgressOfRemoveOld)
-        [[OABackupHelper sharedInstance] deleteOldFiles:nil listener:self];
+    @try
+    {
+        if (isProgressOfDeleteAll)
+            [[OABackupHelper sharedInstance] deleteAllFiles:nil listener:self];
+        else if (isProgressOfRemoveOld)
+            [[OABackupHelper sharedInstance] deleteOldFiles:nil listener:self];
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"Error in deleteBackupFiles(): %@", exception.reason);
+    }
 }
 
 - (void)updateAfterFinished

@@ -1644,7 +1644,7 @@ static const float kDistanceMeters = 100.0;
 
 - (void) recreateAllControls
 {
-    [_mapInfoController recreateAllControls];
+    [_mapInfoController recreateAllControls:NO];
 }
 
 - (void) recreateControls

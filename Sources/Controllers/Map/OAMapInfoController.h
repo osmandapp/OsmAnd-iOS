@@ -50,7 +50,7 @@
 
 - (void) removeSideWidget:(OATextInfoWidget *)widget;
 
-- (void) recreateAllControls;
+- (void) recreateAllControls:(BOOL)registerWidgets;
 - (void) recreateControls;
 - (void) recreateTopWidgetsPanel;
 - (void) updateInfo;

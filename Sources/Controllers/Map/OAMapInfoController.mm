@@ -688,12 +688,12 @@
     [self recreateControls];
 }
 
-- (void) recreateAllControls
+- (void) recreateAllControls:(BOOL)registerWidgets
 {
     [_mapWidgetRegistry clearWidgets];
     [self registerAllControls];
     //[_mapWidgetRegistry reorderWidgets];
-    [self recreateControls:NO];
+    [self recreateControls:registerWidgets];
     
     // After import, widgets on the top and bottom panels may have different sizes
     // (from a different application mode), since these panels already contained widgets of other sizes.

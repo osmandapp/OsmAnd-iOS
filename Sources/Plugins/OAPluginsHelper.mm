@@ -72,7 +72,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:enable];
     [OAMapButtonsHelper.sharedInstance updateActionTypes];
     if (recreateControls)
-        [OARootViewController.instance.mapPanel.hudViewController.mapInfoController recreateAllControls];
+        [OARootViewController.instance.mapPanel.hudViewController.mapInfoController recreateAllControls:YES];
     [plugin updateLayers];
 
     return YES;

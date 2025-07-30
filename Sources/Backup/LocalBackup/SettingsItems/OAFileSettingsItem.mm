@@ -269,8 +269,7 @@
         }
         
         self.filePath = filePath;
-        NSString *relativePath = [filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.documentsPath withString:@""];
-        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:relativePath];
+        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:[filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.documentsPath withString:@""]];
         if (self.subtype == EOASettingsItemFileSubtypeUnknown)
         {
             if (error)

@@ -1243,7 +1243,7 @@
 "rendering_attr_surface_concrete_name" = "Betono";
 "rendering_attr_piste_difficulty_intermediate_name" = "meza";
 "routeInfo_piste_difficulty_name" = "Facilo de skivojo";
-"routing_attr_short_way_description" = "Optimumigita pli mallonga kurso (energiŝpara)";
+"routing_attr_short_way_description" = "Plejbonigita pli mallonga kurso (energiŝpara)";
 "rendering_attr_highway_class_track_grade3_name" = "Mezkvalita";
 "routing_attr_freeride_policy_description" = "Skivojoj malfacilegaj, neoficialaj, nepreparataj kaj nekontrolataj je vespero. Vi eniras nur sub via risko.";
 "rendering_attr_highway_class_street_name" = "Stratoj";

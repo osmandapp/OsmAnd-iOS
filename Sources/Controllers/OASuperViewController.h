@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addNotification:(nullable NSNotificationName)name selector:(SEL)selector;
 - (void)registerObservers;
 - (OAAutoObserverProxy *)addObserver:(OAAutoObserverProxy *)observer;
+- (void)unregisterNotificationsAndObservers;
 
 - (void)applyLocalization;
 - (void)addAccessibilityLabels;

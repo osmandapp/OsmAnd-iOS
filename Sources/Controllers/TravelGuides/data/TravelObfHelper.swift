@@ -33,9 +33,10 @@ final class TravelObfHelper : NSObject {
     private var searchRadius: Int
     private var foundAmenitiesIndex: Int = 0
     private var foundAmenities: [OAFoundAmenity] = []
+    private let lock = NSLock()
     
     private override init() {
-        localDataHelper = TravelLocalDataHelper.shared;
+        localDataHelper = TravelLocalDataHelper.shared
         searchRadius = ARTICLE_SEARCH_RADIUS
     }
     
@@ -48,17 +49,21 @@ final class TravelObfHelper : NSObject {
     }
     
     func initializeDataToDisplay(resetData: Bool) {
+        lock.lock()
         if resetData {
             foundAmenities.removeAll()
             foundAmenitiesIndex = 0
             popularArticles.clear()
             searchRadius = ARTICLE_SEARCH_RADIUS
         }
-        localDataHelper.refreshCachedData();
+        localDataHelper.refreshCachedData()
+        lock.unlock()
         loadPopularArticles()
     }
     
-    func loadPopularArticles() -> PopularArticles {
+    func loadPopularArticles() {
+        defer { lock.unlock() }
+        lock.lock()
         let lang = OAUtilities.currentLang()
         let popularArticles = PopularArticles(artcles: popularArticles)
         if isAnyTravelBookPresent() {
@@ -68,11 +73,13 @@ final class TravelObfHelper : NSObject {
                     guard let location = OATravelGuidesHelper.getMapCenter() else {continue}
                     
                     for reader in getReaders() {
-                        foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius, zoom: -1, searchFilter: ROUTE_ARTICLE, lang: lang!) )
+                        if let lang {
+                            foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius, zoom: -1, searchFilter: ROUTE_ARTICLE, lang: lang) )
+                        }
                         foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius / 5, zoom: 15, searchFilter: ROUTE_TRACK, lang: nil) )
                     }
                     
-                    if !foundAmenities.isEmpty {
+                    if foundAmenities.isEmpty {
                         // In rare cases, amenity could be nil
                         foundAmenities.removeAll { $0.amenity == nil }
                         foundAmenities.sort { a, b in
@@ -86,11 +93,10 @@ final class TravelObfHelper : NSObject {
                 while foundAmenitiesIndex < foundAmenities.count - 1 {
                     let fileAmenity = foundAmenities[foundAmenitiesIndex]
                     if let file = fileAmenity.file {
-                        let amenity = fileAmenity.amenity!
-                        if let name = amenity.getName(lang, transliterate: false), name.length > 0 {
+                        if let amenity = fileAmenity.amenity, let name = amenity.getName(lang, transliterate: false), name.length > 0 {
                             let routeId = amenity.getAdditionalInfo(ROUTE_ID) ?? ""
                             if !popularArticles.containsByRouteId(routeId: routeId) {
-                                if let article = cacheTravelArticles(file: file, amenity: amenity, lang: lang!, readPoints: false, callback: nil) {
+                                if let lang, let article = cacheTravelArticles(file: file, amenity: amenity, lang: lang, readPoints: false, callback: nil) {
                                     if !popularArticles.contains(article: article) {
                                         if !popularArticles.add(article: article) {
                                             articlesLimitReached = true
@@ -106,7 +112,6 @@ final class TravelObfHelper : NSObject {
             } while (!articlesLimitReached && searchRadius < MAX_SEARCH_RADIUS)
         }
         self.popularArticles = popularArticles
-        return popularArticles
     }
     
     func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {

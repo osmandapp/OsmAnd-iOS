@@ -32,7 +32,8 @@ final class TravelObfHelper : NSObject {
     private var popularArticles = PopularArticles()
     private var searchRadius: Int
     private var foundAmenitiesIndex: Int = 0
-    private var foundAmenities = ConcurrentArray<OAFoundAmenity>()
+    private var foundAmenities: [OAFoundAmenity] = []
+    private let lock = NSLock()
     
     private override init() {
         localDataHelper = TravelLocalDataHelper.shared
@@ -48,6 +49,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func initializeDataToDisplay(resetData: Bool) {
+        lock.lock()
         if resetData {
             foundAmenities.removeAll()
             foundAmenitiesIndex = 0
@@ -55,16 +57,19 @@ final class TravelObfHelper : NSObject {
             searchRadius = ARTICLE_SEARCH_RADIUS
         }
         localDataHelper.refreshCachedData()
+        lock.unlock()
         loadPopularArticles()
     }
     
     func loadPopularArticles() {
+        defer { lock.unlock() }
+        lock.lock()
         let lang = OAUtilities.currentLang()
         let popularArticles = PopularArticles(artcles: popularArticles)
         if isAnyTravelBookPresent() {
             var articlesLimitReached = false
             repeat {
-                if foundAmenities.getCount() - foundAmenitiesIndex < PopularArticles.ARTICLES_PER_PAGE {
+                if foundAmenities.count - foundAmenitiesIndex < PopularArticles.ARTICLES_PER_PAGE {
                     guard let location = OATravelGuidesHelper.getMapCenter() else {continue}
                     
                     for reader in getReaders() {
@@ -74,7 +79,7 @@ final class TravelObfHelper : NSObject {
                         foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius / 5, zoom: 15, searchFilter: ROUTE_TRACK, lang: nil) )
                     }
                     
-                    if foundAmenities.getCount() != 0 {
+                    if foundAmenities.isEmpty {
                         // In rare cases, amenity could be nil
                         foundAmenities.removeAll { $0.amenity == nil }
                         foundAmenities.sort { a, b in
@@ -85,8 +90,9 @@ final class TravelObfHelper : NSObject {
                     }
                 }
                 searchRadius = min(searchRadius * 2, MAX_ALLOWED_RADIUS)
-                while foundAmenitiesIndex < foundAmenities.getCount() - 1 {
-                    if let fileAmenity = foundAmenities.get(at: foundAmenitiesIndex), let file = fileAmenity.file {
+                while foundAmenitiesIndex < foundAmenities.count - 1 {
+                    let fileAmenity = foundAmenities[foundAmenitiesIndex]
+                    if let file = fileAmenity.file {
                         if let amenity = fileAmenity.amenity, let name = amenity.getName(lang, transliterate: false), name.length > 0 {
                             let routeId = amenity.getAdditionalInfo(ROUTE_ID) ?? ""
                             if !popularArticles.containsByRouteId(routeId: routeId) {

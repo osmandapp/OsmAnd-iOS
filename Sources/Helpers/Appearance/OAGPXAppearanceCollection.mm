@@ -481,22 +481,32 @@
 
 - (OAColorItem *)addNewSelectedColor:(UIColor *)newColor
 {
-    NSString *newHexColor = [newColor toHexARGBString];
-    NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
-    [customTrackColors addObject:newHexColor];
-    [_settings.customTrackColors set:customTrackColors];
+    @synchronized (self) {
+        if (!newColor) return nil;
 
-    NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
-    [customTrackColorsLastUsed insertObject:newHexColor atIndex:0];
-    [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
+        NSString *newHexColor = [newColor toHexARGBString];
+        if (!newHexColor) return nil;
 
-    [self regenerateSortedPositionAfter:-1 increment:YES];
-    OAColorItem *colorItem = [[OAColorItem alloc] initWithHexColor:newHexColor];
-    [_availableColors insertObject:colorItem atIndex:_defaultColorValues.count];
-    colorItem.sortedPosition = 0;
-    [colorItem generateId];
-    return colorItem;
+        NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
+        [customTrackColors addObject:newHexColor];
+        [_settings.customTrackColors set:customTrackColors];
+
+        NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
+        [customTrackColorsLastUsed insertObject:newHexColor atIndex:0];
+        [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
+
+        [self regenerateSortedPositionAfter:-1 increment:YES];
+        OAColorItem *colorItem = [[OAColorItem alloc] initWithHexColor:newHexColor];
+
+        NSUInteger index = MIN(_defaultColorValues.count, _availableColors.count);
+        [_availableColors insertObject:colorItem atIndex:index];
+
+        colorItem.sortedPosition = 0;
+        [colorItem generateId];
+        return colorItem;
+    }
 }
+
 
 - (OAColorItem *)duplicateColor:(OAColorItem *)colorItem
 {

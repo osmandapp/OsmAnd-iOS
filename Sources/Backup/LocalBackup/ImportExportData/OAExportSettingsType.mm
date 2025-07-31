@@ -33,18 +33,20 @@ static OAExportSettingsType * ACTIVE_MARKERS;
 static OAExportSettingsType * HISTORY_MARKERS;
 static OAExportSettingsType * SEARCH_HISTORY;
 static OAExportSettingsType * NAVIGATION_HISTORY;
+// ITINERARY_GROUPS(new ItineraryGroupsExportType()),
 static OAExportSettingsType * CUSTOM_RENDER_STYLE;
 static OAExportSettingsType * CUSTOM_ROUTING;
+static OAExportSettingsType * ONLINE_ROUTING_ENGINES;
 static OAExportSettingsType * MAP_SOURCES;
 static OAExportSettingsType * STANDARD_MAPS;
 static OAExportSettingsType * WIKI_AND_TRAVEL;
 static OAExportSettingsType * DEPTH_DATA;
+// ROAD_MAPS(new RoadMapsExportType()),
 static OAExportSettingsType * TERRAIN_DATA;
-static OAExportSettingsType * OFFLINE_MAPS;
 static OAExportSettingsType * TTS_VOICE;
 static OAExportSettingsType * VOICE;
-static OAExportSettingsType * ONLINE_ROUTING_ENGINES;
-static OAExportSettingsType * COLOR_DATA;
+// FAVORITES_BACKUP(new FavoritesBackupExportType()),
+static OAExportSettingsType * COLOR_PALETTE;
 
 static NSArray<OAExportSettingsType *> *allValues;
 
@@ -94,7 +96,7 @@ static NSArray<OAExportSettingsType *> *allValues;
     else if (subtype == EOASettingsItemFileSubtypeGpx)
         return TRACKS;
     else if (subtype == EOASettingsItemFileSubtypeColorPalette)
-        return COLOR_DATA;
+        return COLOR_PALETTE;
     else if ([OAFileSettingsItemFileSubtype isMap:subtype])
         return STANDARD_MAPS;
 //    else if (subtype == FileSubtype.TTS_VOICE)
@@ -133,7 +135,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 //        [res addObject:self.TTS_VOICE];
 //        [res addObject:self.VOICE];
 //        [res addObject:self.ONLINE_ROUTING_ENGINES];
-        [res addObject:self.COLOR_DATA];
+        [res addObject:self.COLOR_PALETTE];
         allValues = res;
     }
     
@@ -345,17 +347,17 @@ static NSArray<OAExportSettingsType *> *allValues;
     return nil; // Not implemented
 }
 
-+ (OAExportSettingsType *)COLOR_DATA
++ (OAExportSettingsType *)COLOR_PALETTE
 {
-    if (!COLOR_DATA)
-        COLOR_DATA = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_colors") name:@"COLOR_DATA" itemName:@"FILE" iconName:@"ic_custom_appearance" isAvailableInFreeVersion:NO];
-    return COLOR_DATA;
+    if (!COLOR_PALETTE)
+        COLOR_PALETTE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_colors") name:@"COLOR_PALETTE" itemName:@"FILE" iconName:@"ic_custom_appearance" isAvailableInFreeVersion:NO];
+    return COLOR_PALETTE;
 }
 
 - (BOOL) isSettingsCategory
 {
     return self == self.class.PROFILE || self == self.class.GLOBAL || self == self.class.QUICK_ACTIONS || self == self.class.POI_TYPES
-    || self == self.class.AVOID_ROADS || self == self.class.COLOR_DATA;
+    || self == self.class.AVOID_ROADS || self == self.class.COLOR_PALETTE;
 }
 
 - (BOOL) isMyPlacesCategory

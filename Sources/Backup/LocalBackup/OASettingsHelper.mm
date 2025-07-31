@@ -341,7 +341,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 NSComparisonResult r = [[ColorsPaletteUtils getPaletteTypeName:item1] compare:[ColorsPaletteUtils getPaletteTypeName:item2]];
                 return r == NSOrderedSame ? [[ColorsPaletteUtils getPaletteName:item1] compare:[ColorsPaletteUtils getPaletteName:item2]] : r;
             }];
-            settingsItems[OAExportSettingsType.COLOR_DATA] = items;
+            settingsItems[OAExportSettingsType.COLOR_PALETTE] = items;
         }
     }
 
@@ -974,7 +974,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (routingFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.CUSTOM_ROUTING] = routingFilesList;
     if (colorPaletteFilesList.count > 0 || addEmptyItems)
-        settingsToOperate[OAExportSettingsType.COLOR_DATA] = colorPaletteFilesList;
+        settingsToOperate[OAExportSettingsType.COLOR_PALETTE] = colorPaletteFilesList;
     if (tracksFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.TRACKS] = tracksFilesList;
     if (mapFilesList.count > 0 || addEmptyItems)

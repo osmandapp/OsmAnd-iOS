@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAExportSettingsType *) TTS_VOICE;
 + (OAExportSettingsType *) VOICE;
 + (OAExportSettingsType *) ONLINE_ROUTING_ENGINES;
-+ (OAExportSettingsType *) COLOR_DATA;
++ (OAExportSettingsType *) COLOR_PALETTE;
 
 + (OAExportSettingsType *) findBySettingsItem:(OASettingsItem *)item;
 + (OAExportSettingsType *) findByRemoteFile:(OARemoteFile *)remoteFile;

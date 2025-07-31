@@ -195,7 +195,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             navigationHistoryCount += settings.count;
         else if (type == OAExportSettingsType.GLOBAL)
             globalCount += settings.count;
-        else if (type == OAExportSettingsType.COLOR_DATA)
+        else if (type == OAExportSettingsType.COLOR_PALETTE)
             colorPaletteCount += settings.count;
     }];
 

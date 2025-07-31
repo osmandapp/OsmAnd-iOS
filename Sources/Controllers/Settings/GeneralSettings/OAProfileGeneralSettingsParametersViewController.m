@@ -802,6 +802,8 @@
         [_settings.temperatureUnits set:CELSIUS mode:self.appMode];
     else if ([name isEqualToString:@"fahrenheit"])
         [_settings.temperatureUnits set:FAHRENHEIT mode:self.appMode];
+    
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void) selectSettingAngularUnits:(NSString *)name

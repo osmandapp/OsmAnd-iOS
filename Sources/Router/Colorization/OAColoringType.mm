@@ -176,7 +176,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return self == self.class.SLOPE;
 }
 
-- (BOOL) isRouteInfoAttribute
+- (BOOL)isRouteInfoAttribute
 {
     return self == self.class.ATTRIBUTE;
 }
@@ -241,7 +241,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getRouteSegmentsInTrack:(OASGpxFile *)gpxFile
 {
-    if (![OSMAND_ROUTER_V2 isEqualToString:gpxFile.author])
+    if (!gpxFile.isOsmAndOrigin)
         return {};
     
     std::vector<std::shared_ptr<RouteSegmentResult>> routeSegments;

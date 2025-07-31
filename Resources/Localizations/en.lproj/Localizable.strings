@@ -1637,6 +1637,11 @@
 "update_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
 
+"download_live_updates" = "Live updates";
+"local_indexes_cat_tts" = "Voice prompts (TTS)";
+"local_indexes_cat_voice" = "Voice prompts (recorded)";
+"rendering_styles" = "Rendering styles";
+
 "weather_update_disabled" = "Disabled";
 "weather_update_over_wifi_only" = "Over WIFI only";
 "weather_update_over_any_network" = "Over Any Network";

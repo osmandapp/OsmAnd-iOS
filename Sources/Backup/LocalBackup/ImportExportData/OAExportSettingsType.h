@@ -23,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAExportSettingsType *) TRACKS;
 + (OAExportSettingsType *) OSM_NOTES;
 + (OAExportSettingsType *) OSM_EDITS;
-+ (OAExportSettingsType *) MULTIMEDIA_NOTES;
 + (OAExportSettingsType *) ACTIVE_MARKERS;
 + (OAExportSettingsType *) HISTORY_MARKERS;
 + (OAExportSettingsType *) SEARCH_HISTORY;

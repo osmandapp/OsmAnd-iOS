@@ -18,6 +18,7 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAFavoritesHelper.h"
 #import "OAPluginsHelper.h"
+#import "OALocalItemType.h"
 
 static OAExportSettingsType * PROFILE;
 static OAExportSettingsType * GLOBAL;
@@ -28,12 +29,12 @@ static OAExportSettingsType * FAVORITES;
 static OAExportSettingsType * TRACKS;
 static OAExportSettingsType * OSM_NOTES;
 static OAExportSettingsType * OSM_EDITS;
-static OAExportSettingsType * MULTIMEDIA_NOTES;
+// static OAExportSettingsType * MULTIMEDIA_NOTES;
 static OAExportSettingsType * ACTIVE_MARKERS;
 static OAExportSettingsType * HISTORY_MARKERS;
 static OAExportSettingsType * SEARCH_HISTORY;
 static OAExportSettingsType * NAVIGATION_HISTORY;
-// ITINERARY_GROUPS(new ItineraryGroupsExportType()),
+// static OAExportSettingsType * ITINERARY_GROUPS;
 static OAExportSettingsType * CUSTOM_RENDER_STYLE;
 static OAExportSettingsType * CUSTOM_ROUTING;
 static OAExportSettingsType * ONLINE_ROUTING_ENGINES;
@@ -41,14 +42,15 @@ static OAExportSettingsType * MAP_SOURCES;
 static OAExportSettingsType * STANDARD_MAPS;
 static OAExportSettingsType * WIKI_AND_TRAVEL;
 static OAExportSettingsType * DEPTH_DATA;
-// ROAD_MAPS(new RoadMapsExportType()),
+// static OAExportSettingsType * ROAD_MAPS;
 static OAExportSettingsType * TERRAIN_DATA;
 static OAExportSettingsType * TTS_VOICE;
 static OAExportSettingsType * VOICE;
-// FAVORITES_BACKUP(new FavoritesBackupExportType()),
+// static OAExportSettingsType * FAVORITES_BACKUP;
 static OAExportSettingsType * COLOR_PALETTE;
 
 static NSArray<OAExportSettingsType *> *allValues;
+
 
 @interface OAExportSettingsType ()
 
@@ -245,11 +247,6 @@ static NSArray<OAExportSettingsType *> *allValues;
     return OSM_EDITS;
 }
 
-+ (OAExportSettingsType *)MULTIMEDIA_NOTES
-{
-    return nil; // Not implemented
-}
-
 + (OAExportSettingsType *)ACTIVE_MARKERS
 {
     if (!ACTIVE_MARKERS)
@@ -295,7 +292,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)MAP_SOURCES
 {
     if (!MAP_SOURCES)
-        MAP_SOURCES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title") name:@"MAP_SOURCES" itemName:@"MAP_SOURCES" iconName:@"ic_custom_globe_latitude" isAvailableInFreeVersion:NO];
+        MAP_SOURCES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title") name:@"MAP_SOURCES" itemName:@"MAP_SOURCES" iconName:@"ic_custom_overlay_map" isAvailableInFreeVersion:NO];
     return MAP_SOURCES;
 }
 
@@ -352,6 +349,77 @@ static NSArray<OAExportSettingsType *> *allValues;
     if (!COLOR_PALETTE)
         COLOR_PALETTE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_colors") name:@"COLOR_PALETTE" itemName:@"FILE" iconName:@"ic_custom_appearance" isAvailableInFreeVersion:NO];
     return COLOR_PALETTE;
+}
+
+- (OALocalItemType *)getRelatedLocalItemType
+{
+    if (self == PROFILE)
+        return [OALocalItemType PROFILES];
+    else if (self == GLOBAL)
+        return nil;
+    else if (self == QUICK_ACTIONS)
+        return nil;
+    else if (self == POI_TYPES)
+        return nil;
+    else if (self == AVOID_ROADS)
+        return nil;
+    else if (self == FAVORITES)
+        return [OALocalItemType FAVORITES];
+    else if (self == TRACKS)
+        return [OALocalItemType TRACKS];
+    else if (self == OSM_NOTES)
+        return [OALocalItemType OSM_NOTES];
+    else if (self == OSM_EDITS)
+        return [OALocalItemType OSM_EDITS];
+    //else if (self == MULTIMEDIA_NOTES)
+    //    return [OALocalItemType MULTIMEDIA_NOTES];
+    else if (self == ACTIVE_MARKERS)
+        return [OALocalItemType ACTIVE_MARKERS];
+    else if (self == HISTORY_MARKERS)
+        return [OALocalItemType HISTORY_MARKERS];
+    else if (self == SEARCH_HISTORY)
+        return nil;
+    else if (self == NAVIGATION_HISTORY)
+        return nil;
+    //else if (self == ITINERARY_GROUPS)
+    //    return [OALocalItemType ITINERARY_GROUPS];
+    else if (self == CUSTOM_RENDER_STYLE)
+        return [OALocalItemType RENDERING_STYLES];
+    else if (self == CUSTOM_ROUTING)
+        return [OALocalItemType ROUTING];
+    else if (self == ONLINE_ROUTING_ENGINES)
+        return nil;
+    else if (self == MAP_SOURCES)
+        return [OALocalItemType TILES_DATA];
+    else if (self == STANDARD_MAPS)
+        return [OALocalItemType MAP_DATA];
+    else if (self == WIKI_AND_TRAVEL)
+        return [OALocalItemType WIKI_AND_TRAVEL_MAPS];
+    else if (self == DEPTH_DATA)
+        return [OALocalItemType DEPTH_DATA];
+    //else if (self == ROAD_MAPS)
+    //    return [OALocalItemType ROAD_MAPS];
+    else if (self == TERRAIN_DATA)
+        return [OALocalItemType TERRAIN_DATA];
+    else if (self == TTS_VOICE)
+        return [OALocalItemType TTS_VOICE_DATA];
+    else if (self == VOICE)
+        return [OALocalItemType VOICE_DATA];
+    //else if (self == FAVORITES_BACKUP)
+    //    return [OALocalItemType FAVORITES_BACKUP];
+    else if (self == COLOR_PALETTE)
+        return [OALocalItemType COLOR_DATA];
+    return nil;
+}
+
++ (OAExportSettingsType *)findByLocalItemType:(OALocalItemType *)localItemType
+{
+    for (OAExportSettingsType *value in [self.class getAllValues])
+    {
+        if ([value getRelatedLocalItemType] == localItemType)
+            return value;
+    }
+    return nil;
 }
 
 - (BOOL) isSettingsCategory

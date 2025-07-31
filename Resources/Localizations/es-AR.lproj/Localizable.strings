@@ -175,14 +175,14 @@
 "carplay_active_message" = "El mapa se muestra a través de CarPlay";
 "carplay_profile" = "Perfil de CarPlay";
 "carplay_profile_descr" = "Perfil usado al conectar con CarPlay.";
-"show_traffic_warnings" = "Advertencias del camino";
+"show_traffic_warnings" = "Advertencias viales";
 "show_pedestrian_warnings" = "Cruces peatonales";
 "show_cameras" = "Radares de velocidad";
 "show_lanes" = "Carriles";
 "speak_street_names" = "Nombres de calles (TTS)";
 "speak_speed_limit" = "Límite de velocidad";
 "speak_cameras" = "Radares de velocidad";
-"speak_traffic_warnings" = "Advertencias del camino";
+"speak_traffic_warnings" = "Advertencias viales";
 "shared_string_gpx_waypoints" = "Puntos de referencia de la traza";
 "speak_favorites" = "Favoritos cercanos";
 "speak_poi" = "PDI cercanos";
@@ -244,9 +244,9 @@
 "snap_to_road" = "Ajustar al camino";
 "snap_to_road_descr" = "El ícono de la ubicación actual será ajustado a la ruta de navegación";
 "show_warnings_title" = "Mostrar alertas…";
-"show_warnings_descr" = "Configurá advertencias del camino (límites de velocidad, paradas forzosas, lomadas, túneles), radares de velocidad, e información de carriles.";
+"show_warnings_descr" = "Configurá advertencias viales (límites de velocidad, paradas forzosas, lomadas, túneles), radares de velocidad, e información de carriles.";
 "speak_title" = "Anunciar…";
-"speak_descr" = "Configurá los anuncios para nombres de calles, advertencias del camino (paradas, lomadas), radares y límites de velocidad.";
+"speak_descr" = "Configurá los anuncios para nombres de calles, advertencias viales (paradas, lomadas), radares y límites de velocidad.";
 "keep_informing" = "Repetir instrucciones de navegación";
 "repeat_after" = "Repetir después";
 "keep_informing_descr" = "Repite instrucciones de navegación a intervalos regulares.";
@@ -364,7 +364,7 @@
 "traffic_warning_stop" = "Señal de detención";
 "traffic_warning_calming" = "Reductor de velocidad";
 "traffic_warning_speed_camera" = "Radar de velocidad";
-"traffic_warning" = "Advertencia del camino";
+"traffic_warning" = "Advertencia vial";
 "traffic_warning_railways" = "Paso a nivel";
 "traffic_warning_pedestrian" = "Cruce peatonal";
 "traffic_warning_hazard" = "Advertencia de peligro";

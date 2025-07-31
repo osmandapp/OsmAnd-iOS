@@ -684,6 +684,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if (self.mapViewLoaded)
     {
+        self.mapViewLoaded = NO;
         [_mapView suspendSymbolsUpdate];
         [_mapView releaseContext:YES];
         [_mapView removeFromSuperview];

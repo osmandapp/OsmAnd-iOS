@@ -61,7 +61,7 @@ final class VehicleMetricsPlugin: OAPlugin {
                 .temperatureIntake,
                 .engineOilTemperature,
                 .temperatureAmbient:
-            return getTemperatureUnit()
+            return OATemperatureConstant.getUnitSymbol(getTemperatureUnit())
         case .batteryVoltage:
             return localizedString("unit_volt")
         case .fuelType, .engineRuntime, .vin:
@@ -180,10 +180,8 @@ extension VehicleMetricsPlugin {
         }
     }
     
-    private func getTemperatureUnit() -> String {
-        let formatter = MeasurementFormatter()
-        formatter.locale = .autoupdatingCurrent
-        return formatter.string(from: UnitTemperature.current())
+    private func getTemperatureUnit() -> EOATemperatureConstant {
+        OAAppSettings.sharedManager().getTemperatureUnit()
     }
     
     private func getFormatVolumePerHourUnit() -> String? {
@@ -234,7 +232,7 @@ extension VehicleMetricsPlugin {
     
     private func getConvertedTemperature(data: Float) -> Float {
         let temperature = data
-        if UnitTemperature.current() == .celsius {
+        if getTemperatureUnit() == .CELSIUS {
             return temperature
         } else {
             return temperature * 1.8 + 32

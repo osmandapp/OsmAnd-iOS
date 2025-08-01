@@ -21,85 +21,88 @@
 
 @implementation OAFileSettingsItemFileSubtype
 
-+ (NSString *) getSubtypeName:(EOASettingsItemFileSubtype)subtype
++ (NSString *) getSubtypeName:(EOAFileSettingsItemFileSubtype)subtype
 {
     switch (subtype)
     {
-        case EOASettingsItemFileSubtypeOther:
+        case EOAFileSettingsItemFileSubtypeOther:
             return @"other";
-        case EOASettingsItemFileSubtypeRoutingConfig:
+        case EOAFileSettingsItemFileSubtypeRoutingConfig:
             return @"routing_config";
-        case EOASettingsItemFileSubtypeRenderingStyle:
+        case EOAFileSettingsItemFileSubtypeRenderingStyle:
             return @"rendering_style";
-        case EOASettingsItemFileSubtypeNauticalDepth:
-            return @"nautical_depth";
-        case EOASettingsItemFileSubtypeTerrainMap:
-            return @"terrain";
-        case EOASettingsItemFileSubtypeObfMap:
-            return @"obf_map";
-        case EOASettingsItemFileSubtypeTilesMap:
-            return @"tiles_map";
-        case EOASettingsItemFileSubtypeWikiMap:
+        case EOAFileSettingsItemFileSubtypeWikiMap:
             return @"wiki_map";
-        case EOASettingsItemFileSubtypeSrtmMap:
+        case EOAFileSettingsItemFileSubtypeSrtmMap:
             return @"srtm_map";
-        case EOASettingsItemFileSubtypeRoadMap:
+        case EOAFileSettingsItemFileSubtypeTerrainMap:
+            return @"terrain";
+        case EOAFileSettingsItemFileSubtypeObfMap:
+            return @"obf_map";
+        case EOAFileSettingsItemFileSubtypeTilesMap:
+            return @"tiles_map";
+        case EOAFileSettingsItemFileSubtypeRoadMap:
             return @"road_map";
-        case EOASettingsItemFileSubtypeGpx:
+        case EOAFileSettingsItemFileSubtypeGpx:
             return @"gpx";
-        case EOASettingsItemFileSubtypeVoice:
+        case EOAFileSettingsItemFileSubtypeVoiceTTS:
+            return @"tts_voice";
+        case EOAFileSettingsItemFileSubtypeVoice:
             return @"voice";
-        case EOASettingsItemFileSubtypeTravel:
+        case EOAFileSettingsItemFileSubtypeTravel:
             return @"travel";
-        case EOASettingsItemFileSubtypeColorPalette:
+        //case MULTIMEDIA_NOTES:
+        //    return "multimedia_notes"
+        case EOAFileSettingsItemFileSubtypeNauticalDepth:
+            return @"nautical_depth";
+        //case FAVORITES_BACKUP:
+        //    return "favorites_backup"
+        case EOAFileSettingsItemFileSubtypeColorPalette:
             return @"colors_palette";
         default:
             return @"";
     }
 }
 
-+ (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype
++ (NSString *) getSubtypeFolder:(EOAFileSettingsItemFileSubtype)subtype
 {
     switch (subtype)
     {
-        case EOASettingsItemFileSubtypeUnknown:
+        case EOAFileSettingsItemFileSubtypeUnknown:
             return nil;
-        case EOASettingsItemFileSubtypeOther:
+        case EOAFileSettingsItemFileSubtypeOther:
             return @"";
-        case EOASettingsItemFileSubtypeRoutingConfig:
+        case EOAFileSettingsItemFileSubtypeRoutingConfig:
             return ROUTING_PROFILES_DIR;
-        case EOASettingsItemFileSubtypeRenderingStyle:
+        case EOAFileSettingsItemFileSubtypeRenderingStyle:
             return RENDERERS_DIR;
-        case EOASettingsItemFileSubtypeWikiMap:
-            return RESOURCES_DIR; //android: WIKI_INDEX_DIR
-        case EOASettingsItemFileSubtypeSrtmMap:
-            return RESOURCES_DIR; //android: SRTM_INDEX_DIR
-        case EOASettingsItemFileSubtypeTerrainMap:
-            return RESOURCES_DIR; //android: GEOTIFF_DIR
-        case EOASettingsItemFileSubtypeObfMap:
-            return RESOURCES_DIR; //android: MAPS_PATH
-        case EOASettingsItemFileSubtypeTilesMap:
-            return RESOURCES_DIR; //android: TILES_INDEX_DIR
-        case EOASettingsItemFileSubtypeRoadMap:
-            return RESOURCES_DIR; //android: ROADS_INDEX_DIR
-        case EOASettingsItemFileSubtypeGpx:
-            return GPX_DIR; //android: GPX_INDEX_DIR ("GPX" vs "tracks")
-        // unsupported
-        //case EOASettingsItemFileSubtypeVoiceTTS:
+        case EOAFileSettingsItemFileSubtypeWikiMap:
+            return RESOURCES_DIR;   //android: WIKI_INDEX_DIR
+        case EOAFileSettingsItemFileSubtypeSrtmMap:
+            return RESOURCES_DIR;   //android: SRTM_INDEX_DIR
+        case EOAFileSettingsItemFileSubtypeTerrainMap:
+            return RESOURCES_DIR;   //android: GEOTIFF_DIR
+        case EOAFileSettingsItemFileSubtypeObfMap:
+            return RESOURCES_DIR;   //android: MAPS_PATH
+        case EOAFileSettingsItemFileSubtypeTilesMap:
+            return RESOURCES_DIR;   //android: TILES_INDEX_DIR
+        case EOAFileSettingsItemFileSubtypeRoadMap:
+            return RESOURCES_DIR;   //android: ROADS_INDEX_DIR
+        case EOAFileSettingsItemFileSubtypeGpx:
+            return GPX_DIR;         //android: GPX_INDEX_DIR ("GPX" vs "tracks")
+        //case EOAFileSettingsItemFileSubtypeVoiceTTS:
         //    return [documentsPath stringByAppendingPathComponent:@"Voice"];
-        //case EOASettingsItemFileSubtypeVoice:
+        //case EOAFileSettingsItemFileSubtypeVoice:
         //    return [documentsPath stringByAppendingPathComponent:@"Voice"];
-        case EOASettingsItemFileSubtypeTravel:
-            return RESOURCES_DIR; //android: WIKIVOYAGE_INDEX_DIR
-        // unsupported
+        case EOAFileSettingsItemFileSubtypeTravel:
+            return RESOURCES_DIR;   //android: WIKIVOYAGE_INDEX_DIR
         //case MULTIMEDIA_NOTES:
         //    return AV_INDEX_DIR;
-        case EOASettingsItemFileSubtypeNauticalDepth:
+        case EOAFileSettingsItemFileSubtypeNauticalDepth:
             return RESOURCES_DIR; //android: NAUTICAL_INDEX_DIR
-        // unsupported
         //case FAVORITES_BACKUP:
         //    return BACKUP_INDEX_DIR;
-        case EOASettingsItemFileSubtypeColorPalette:
+        case EOAFileSettingsItemFileSubtypeColorPalette:
             return COLOR_PALETTE_DIR;
             
         default:
@@ -107,70 +110,70 @@
     }
 }
 
-+ (NSString *) getSubtypeFolderName:(EOASettingsItemFileSubtype)subtype
++ (NSString *) getSubtypeFolderName:(EOAFileSettingsItemFileSubtype)subtype
 {
     switch (subtype)
     {
-        case EOASettingsItemFileSubtypeRenderingStyle:
+        case EOAFileSettingsItemFileSubtypeRenderingStyle:
             return RENDERERS_DIR;
-        case EOASettingsItemFileSubtypeRoutingConfig:
+        case EOAFileSettingsItemFileSubtypeRoutingConfig:
             return ROUTING_PROFILES_DIR;
-        case EOASettingsItemFileSubtypeGpx:
+        case EOAFileSettingsItemFileSubtypeGpx:
             return @"tracks";
             // unsupported
-//        case EOASettingsItemFileSubtypeTravel:
-//        case EOASettingsItemFileSubtypeVoice:
+//        case EOAFileSettingsItemFileSubtypeTravel:
+//        case EOAFileSettingsItemFileSubtypeVoice:
 //            return [documentsPath stringByAppendingPathComponent:@"Voice"];
-        case EOASettingsItemFileSubtypeColorPalette:
+        case EOAFileSettingsItemFileSubtypeColorPalette:
             return COLOR_PALETTE_DIR;
         default:
             return @"";
     }
 }
 
-+ (EOASettingsItemFileSubtype) getSubtypeByName:(NSString *)name
++ (EOAFileSettingsItemFileSubtype) getSubtypeByName:(NSString *)name
 {
-    for (int i = 0; i < EOASettingsItemFileSubtypesCount; i++)
+    for (int i = 0; i < EOAFileSettingsItemFileSubtypesCount; i++)
     {
-        NSString *subtypeName = [self.class getSubtypeName:(EOASettingsItemFileSubtype)i];
+        NSString *subtypeName = [self.class getSubtypeName:(EOAFileSettingsItemFileSubtype)i];
         if ([subtypeName isEqualToString:name])
-            return (EOASettingsItemFileSubtype)i;
+            return (EOAFileSettingsItemFileSubtype)i;
     }
-    return EOASettingsItemFileSubtypeUnknown;
+    return EOAFileSettingsItemFileSubtypeUnknown;
 }
 
-+ (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName
++ (EOAFileSettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName
 {
     NSString *name = fileName;
     if ([fileName hasPrefix:@"/"])
         name = [fileName substringFromIndex:1];
 
-    for (int i = 0; i < EOASettingsItemFileSubtypesCount; i++)
+    for (int i = 0; i < EOAFileSettingsItemFileSubtypesCount; i++)
     {
-        EOASettingsItemFileSubtype subtype = (EOASettingsItemFileSubtype) i;
+        EOAFileSettingsItemFileSubtype subtype = (EOAFileSettingsItemFileSubtype) i;
         switch (subtype) {
-            case EOASettingsItemFileSubtypeUnknown:
-            case EOASettingsItemFileSubtypeOther:
+            case EOAFileSettingsItemFileSubtypeUnknown:
+            case EOAFileSettingsItemFileSubtypeOther:
                 break;
-            case EOASettingsItemFileSubtypeSrtmMap:
+            case EOAFileSettingsItemFileSubtypeSrtmMap:
             {
                 if ([name hasSuffix:BINARY_SRTM_MAP_INDEX_EXT] || [name hasSuffix:BINARY_SRTMF_MAP_INDEX_EXT])
                     return subtype;
                 break;
             }
-            case EOASettingsItemFileSubtypeTerrainMap:
+            case EOAFileSettingsItemFileSubtypeTerrainMap:
             {
                 if ([name hasSuffix:TIF_EXT])
                     return subtype;
                 break;
             }
-            case EOASettingsItemFileSubtypeWikiMap:
+            case EOAFileSettingsItemFileSubtypeWikiMap:
             {
                 if ([name hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
                     return subtype;
                 break;
             }
-            case EOASettingsItemFileSubtypeObfMap:
+            case EOAFileSettingsItemFileSubtypeObfMap:
             {
                 // android has additions check:
                 // if (name.endsWith(IndexConstants.BINARY_MAP_INDEX_EXT) && !name.contains(File.separator)) {
@@ -180,7 +183,7 @@
                     return subtype;
                 break;
             }
-            case EOASettingsItemFileSubtypeVoice:
+            case EOAFileSettingsItemFileSubtypeVoice:
             {
                 if ([name hasSuffix:VOICE_PROVIDER_SUFFIX])
                     return subtype;
@@ -191,13 +194,13 @@
                         return subtype;
                 }
             }
-            case EOASettingsItemFileSubtypeNauticalDepth:
+            case EOAFileSettingsItemFileSubtypeNauticalDepth:
             {
                 if ([name hasSuffix:BINARY_DEPTH_MAP_INDEX_EXT])
                     return subtype;
                 break;
             }
-            case EOASettingsItemFileSubtypeColorPalette:
+            case EOAFileSettingsItemFileSubtypeColorPalette:
             {
                 if ([name hasSuffix:TXT_EXT])
                     return subtype;
@@ -212,38 +215,38 @@
             }
         }
     }
-    return EOASettingsItemFileSubtypeUnknown;
+    return EOAFileSettingsItemFileSubtypeUnknown;
 }
 
-+ (BOOL) isMap:(EOASettingsItemFileSubtype)type
++ (BOOL) isMap:(EOAFileSettingsItemFileSubtype)type
 {
-    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeTravel || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTerrainMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth;
+    return type == EOAFileSettingsItemFileSubtypeObfMap || type == EOAFileSettingsItemFileSubtypeWikiMap || type == EOAFileSettingsItemFileSubtypeTravel || type == EOAFileSettingsItemFileSubtypeSrtmMap || type == EOAFileSettingsItemFileSubtypeTerrainMap || type == EOAFileSettingsItemFileSubtypeTilesMap || type == EOAFileSettingsItemFileSubtypeRoadMap || type == EOAFileSettingsItemFileSubtypeNauticalDepth;
 }
 
-+ (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype
++ (NSString *) getIcon:(EOAFileSettingsItemFileSubtype)subtype
 {
     switch (subtype)
     {
-        case EOASettingsItemFileSubtypeObfMap:
-        case EOASettingsItemFileSubtypeTilesMap:
-        case EOASettingsItemFileSubtypeRoadMap:
-        case EOASettingsItemFileSubtypeNauticalDepth:
+        case EOAFileSettingsItemFileSubtypeObfMap:
+        case EOAFileSettingsItemFileSubtypeTilesMap:
+        case EOAFileSettingsItemFileSubtypeRoadMap:
+        case EOAFileSettingsItemFileSubtypeNauticalDepth:
             return @"ic_custom_map";
-        case EOASettingsItemFileSubtypeSrtmMap:
+        case EOAFileSettingsItemFileSubtypeSrtmMap:
             return @"ic_custom_contour_lines";
-        case EOASettingsItemFileSubtypeWikiMap:
+        case EOAFileSettingsItemFileSubtypeWikiMap:
             return @"ic_custom_wikipedia";
-        case EOASettingsItemFileSubtypeGpx:
+        case EOAFileSettingsItemFileSubtypeGpx:
             return @"ic_custom_trip";
-        case EOASettingsItemFileSubtypeVoice:
+        case EOAFileSettingsItemFileSubtypeVoice:
             return @"ic_custom_sound";
-        case EOASettingsItemFileSubtypeTravel:
+        case EOAFileSettingsItemFileSubtypeTravel:
             return @"ic_custom_wikipedia";
-        case EOASettingsItemFileSubtypeRoutingConfig:
+        case EOAFileSettingsItemFileSubtypeRoutingConfig:
             return @"ic_custom_route";
-        case EOASettingsItemFileSubtypeRenderingStyle:
+        case EOAFileSettingsItemFileSubtypeRenderingStyle:
             return @"ic_custom_map_style";
-        case EOASettingsItemFileSubtypeColorPalette:
+        case EOAFileSettingsItemFileSubtypeColorPalette:
             return @"ic_custom_file_color_palette";
             
         default:
@@ -288,7 +291,7 @@
         
         self.filePath = filePath;
         _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:[filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.documentsPath withString:@""]];
-        if (self.subtype == EOASettingsItemFileSubtypeUnknown)
+        if (self.subtype == EOAFileSettingsItemFileSubtypeUnknown)
         {
             if (error)
                 *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFileSubtype userInfo:nil];
@@ -311,17 +314,17 @@
     if (self)
     {
         [self commonInit];
-        if (self.subtype == EOASettingsItemFileSubtypeOther)
+        if (self.subtype == EOAFileSettingsItemFileSubtypeOther)
         {
             self.filePath = [_docPath stringByAppendingString:self.name];
         }
-        else if (self.subtype == EOASettingsItemFileSubtypeUnknown || !self.subtype)
+        else if (self.subtype == EOAFileSettingsItemFileSubtypeUnknown || !self.subtype)
         {
             if (error)
                 *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFileSubtype userInfo:nil];
             return nil;
         }
-        else if (self.subtype == EOASettingsItemFileSubtypeGpx)
+        else if (self.subtype == EOAFileSettingsItemFileSubtypeGpx)
         {
             NSString *file = json[@"file"];
             if (![file hasPrefix:@"/"])
@@ -345,7 +348,7 @@
 {
     switch (_subtype)
     {
-        case EOASettingsItemFileSubtypeGpx: {
+        case EOAFileSettingsItemFileSubtypeGpx: {
             OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
          
             OASKFile *file = [[OASKFile alloc] initWithFilePath:destFilePath];
@@ -353,13 +356,13 @@
                 [gpxDbHelper addItem:[[OASGpxDataItem alloc] initWithFile:file]];
             break;
         }
-        case EOASettingsItemFileSubtypeRenderingStyle:
-        case EOASettingsItemFileSubtypeObfMap:
-        case EOASettingsItemFileSubtypeRoadMap:
-        case EOASettingsItemFileSubtypeWikiMap:
-        case EOASettingsItemFileSubtypeSrtmMap:
-        case EOASettingsItemFileSubtypeTilesMap:
-        case EOASettingsItemFileSubtypeColorPalette:
+        case EOAFileSettingsItemFileSubtypeRenderingStyle:
+        case EOAFileSettingsItemFileSubtypeObfMap:
+        case EOAFileSettingsItemFileSubtypeRoadMap:
+        case EOAFileSettingsItemFileSubtypeWikiMap:
+        case EOAFileSettingsItemFileSubtypeSrtmMap:
+        case EOAFileSettingsItemFileSubtypeTilesMap:
+        case EOAFileSettingsItemFileSubtypeColorPalette:
         {
             OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths(true);
             break;
@@ -407,16 +410,16 @@
     {
         return [OAFileNameTranslationHelper getMapName:_filePath.lastPathComponent];
     }
-    else if (_subtype == EOASettingsItemFileSubtypeVoiceTTS || _subtype == EOASettingsItemFileSubtypeVoice)
+    else if (_subtype == EOAFileSettingsItemFileSubtypeVoiceTTS || _subtype == EOAFileSettingsItemFileSubtypeVoice)
     {
         return [OAFileNameTranslationHelper getVoiceName:_filePath.lastPathComponent];
     }
-    else if (_subtype == EOASettingsItemFileSubtypeRenderingStyle)
+    else if (_subtype == EOAFileSettingsItemFileSubtypeRenderingStyle)
     {
         NSString *name = [[self.name lastPathComponent] stringByReplacingOccurrencesOfString:@".render.xml" withString:@""];
         return [OARendererRegistry getMapStyleInfo:name][@"title"];
     }
-    else if (_subtype == EOASettingsItemFileSubtypeRoutingConfig)
+    else if (_subtype == EOAFileSettingsItemFileSubtypeRoutingConfig)
     {
         return self.name.lastPathComponent;
     }
@@ -472,9 +475,9 @@
 {
     switch (_subtype)
     {
-        case EOASettingsItemFileSubtypeWikiMap:
+        case EOAFileSettingsItemFileSubtypeWikiMap:
             return @"ic_custom_wikipedia";
-        case EOASettingsItemFileSubtypeSrtmMap:
+        case EOAFileSettingsItemFileSubtypeSrtmMap:
             return @"ic_custom_contour_lines";
         default:
             return @"ic_custom_show_on_map";
@@ -510,13 +513,13 @@
         else if (fileName.length > 0)
             _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:fileName];
         else
-            _subtype = EOASettingsItemFileSubtypeUnknown;
+            _subtype = EOAFileSettingsItemFileSubtypeUnknown;
     }
     if (fileName.length > 0)
     {
-        if (self.subtype == EOASettingsItemFileSubtypeOther)
+        if (self.subtype == EOAFileSettingsItemFileSubtypeOther)
             self.name = fileName;
-        else if (self.subtype != EOASettingsItemFileSubtypeUnknown)
+        else if (self.subtype != EOAFileSettingsItemFileSubtypeUnknown)
             self.name = [fileName lastPathComponent];
     }
 }
@@ -524,7 +527,7 @@
 - (void) writeToJson:(id)json
 {
     [super writeToJson:json];
-    if (self.subtype != EOASettingsItemFileSubtypeUnknown)
+    if (self.subtype != EOAFileSettingsItemFileSubtypeUnknown)
         json[@"subtype"] = [OAFileSettingsItemFileSubtype getSubtypeName:self.subtype];
 }
 
@@ -540,9 +543,9 @@
 
 - (BOOL) needMd5Digest
 {
-    return _subtype == EOASettingsItemFileSubtypeVoice
-        || _subtype == EOASettingsItemFileSubtypeVoiceTTS
-        || _subtype == EOASettingsItemFileSubtypeGpx;
+    return _subtype == EOAFileSettingsItemFileSubtypeVoice
+        || _subtype == EOAFileSettingsItemFileSubtypeVoiceTTS
+        || _subtype == EOAFileSettingsItemFileSubtypeGpx;
 }
 
 @end

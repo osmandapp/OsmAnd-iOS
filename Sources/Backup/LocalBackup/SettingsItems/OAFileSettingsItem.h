@@ -12,43 +12,44 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
-    EOASettingsItemFileSubtypeUnknown = -1,
-    EOASettingsItemFileSubtypeOther = 0,
-    EOASettingsItemFileSubtypeRoutingConfig,
-    EOASettingsItemFileSubtypeRenderingStyle,
-    EOASettingsItemFileSubtypeWikiMap,
-    EOASettingsItemFileSubtypeSrtmMap,
-    EOASettingsItemFileSubtypeTerrainMap,
-    EOASettingsItemFileSubtypeNauticalDepth,
-    EOASettingsItemFileSubtypeObfMap,
-    EOASettingsItemFileSubtypeTilesMap,
-    EOASettingsItemFileSubtypeRoadMap,
-    EOASettingsItemFileSubtypeGpx,
-    EOASettingsItemFileSubtypeVoice,
-    EOASettingsItemFileSubtypeVoiceTTS,
-    EOASettingsItemFileSubtypeTravel,
-//    EOASettingsItemFileSubtypeMultimediaFile,
-    EOASettingsItemFileSubtypeColorPalette,
-    EOASettingsItemFileSubtypesCount
+typedef NS_ENUM(NSInteger, EOAFileSettingsItemFileSubtype) {
+    EOAFileSettingsItemFileSubtypeUnknown = -1,
+    EOAFileSettingsItemFileSubtypeOther = 0,
+    EOAFileSettingsItemFileSubtypeRoutingConfig,
+    EOAFileSettingsItemFileSubtypeRenderingStyle,
+    EOAFileSettingsItemFileSubtypeWikiMap,
+    EOAFileSettingsItemFileSubtypeSrtmMap,
+    EOAFileSettingsItemFileSubtypeTerrainMap,
+    EOAFileSettingsItemFileSubtypeObfMap,
+    EOAFileSettingsItemFileSubtypeTilesMap,
+    EOAFileSettingsItemFileSubtypeRoadMap,
+    EOAFileSettingsItemFileSubtypeGpx,
+    EOAFileSettingsItemFileSubtypeVoiceTTS,
+    EOAFileSettingsItemFileSubtypeVoice,
+    EOAFileSettingsItemFileSubtypeTravel,
+    // MULTIMEDIA_NOTES,
+    EOAFileSettingsItemFileSubtypeNauticalDepth,
+    // FAVORITES_BACKUP,
+    EOAFileSettingsItemFileSubtypeColorPalette,
+    EOAFileSettingsItemFileSubtypesCount
 };
 
 @interface OAFileSettingsItemFileSubtype : NSObject
 
-+ (NSString *) getSubtypeName:(EOASettingsItemFileSubtype)subtype;
-+ (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype;
-+ (EOASettingsItemFileSubtype) getSubtypeByName:(NSString *)name;
-+ (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName;
-+ (NSString *) getSubtypeFolderName:(EOASettingsItemFileSubtype)subtype;
-+ (BOOL) isMap:(EOASettingsItemFileSubtype)type;
-+ (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype;
++ (NSString *) getSubtypeName:(EOAFileSettingsItemFileSubtype)subtype;
++ (NSString *) getSubtypeFolder:(EOAFileSettingsItemFileSubtype)subtype;
++ (EOAFileSettingsItemFileSubtype) getSubtypeByName:(NSString *)name;
++ (EOAFileSettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName;
++ (NSString *) getSubtypeFolderName:(EOAFileSettingsItemFileSubtype)subtype;
++ (BOOL) isMap:(EOAFileSettingsItemFileSubtype)type;
++ (NSString *) getIcon:(EOAFileSettingsItemFileSubtype)subtype;
 
 @end
 
 @interface OAFileSettingsItem : OASettingsItem
 
 @property (nonatomic) NSString *filePath;
-@property (nonatomic, readonly) EOASettingsItemFileSubtype subtype;
+@property (nonatomic, readonly) EOAFileSettingsItemFileSubtype subtype;
 @property (nonatomic, assign) long size;
 @property (nonatomic) NSString *md5Digest;
 

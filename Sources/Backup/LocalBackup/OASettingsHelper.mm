@@ -844,17 +844,17 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             case EOASettingsItemTypeFile:
             {
                 OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
-                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
+                if (fileItem.subtype == EOAFileSettingsItemFileSubtypeRenderingStyle)
                     [renderFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeRoutingConfig)
                     [routingFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeColorPalette)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeColorPalette)
                     [colorPaletteFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeWikiMap || fileItem.subtype == EOASettingsItemFileSubtypeTravel)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeWikiMap || fileItem.subtype == EOAFileSettingsItemFileSubtypeTravel)
                     [wikiFilesList addObject:fileItem];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeNauticalDepth)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeNauticalDepth)
                     [nauticalFilesList addObject:fileItem];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeSrtmMap)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeSrtmMap)
                     [terrainFilesList addObject:fileItem];
                 else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
                     [mapFilesList addObject:fileItem];

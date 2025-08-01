@@ -324,9 +324,9 @@
 - (void)setupItemFromFile:(NSMutableDictionary *)item filePath:(NSString *)filePath
 {
     NSString *relativePath = [filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.documentsPath withString:@""];
-        EOASettingsItemFileSubtype fileSubtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:relativePath];
+        EOAFileSettingsItemFileSubtype fileSubtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:relativePath];
     item[@"icon"] = [UIImage templateImageNamed:[OAFileSettingsItemFileSubtype getIcon:fileSubtype]];
-    if (fileSubtype == EOASettingsItemFileSubtypeColorPalette)
+    if (fileSubtype == EOAFileSettingsItemFileSubtypeColorPalette)
     {
         item[@"title"] = [ColorsPaletteUtils getPaletteName:filePath];
         item[@"descr"] = [ColorsPaletteUtils getPaletteTypeName:filePath];

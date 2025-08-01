@@ -87,17 +87,17 @@ static NSArray<OAExportSettingsType *> *allValues;
     return nil;
 }
 
-+ (OAExportSettingsType *)findByFileSubtype:(EOASettingsItemFileSubtype)subtype
++ (OAExportSettingsType *)findByFileSubtype:(EOAFileSettingsItemFileSubtype)subtype
 {
-    if (subtype == EOASettingsItemFileSubtypeRenderingStyle)
+    if (subtype == EOAFileSettingsItemFileSubtypeRenderingStyle)
         return CUSTOM_RENDER_STYLE;
-    else if (subtype == EOASettingsItemFileSubtypeRoutingConfig)
+    else if (subtype == EOAFileSettingsItemFileSubtypeRoutingConfig)
         return CUSTOM_ROUTING;
-//    else if (subtype == EOASettingsItemFileSubtypeMultimediaFile)
+//    else if (subtype == EOAFileSettingsItemFileSubtypeMultimediaFile)
 //        return MULTIMEDIA_NOTES;
-    else if (subtype == EOASettingsItemFileSubtypeGpx)
+    else if (subtype == EOAFileSettingsItemFileSubtypeGpx)
         return TRACKS;
-    else if (subtype == EOASettingsItemFileSubtypeColorPalette)
+    else if (subtype == EOAFileSettingsItemFileSubtypeColorPalette)
         return COLOR_PALETTE;
     else if ([OAFileSettingsItemFileSubtype isMap:subtype])
         return STANDARD_MAPS;

@@ -462,7 +462,7 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
     if (remoteFile.item.type == EOASettingsItemTypeFile)
     {
         OAFileSettingsItem *flItem = (OAFileSettingsItem *) remoteFile.item;
-        if (flItem.subtype == EOASettingsItemFileSubtypeObfMap)
+        if (flItem.subtype == EOAFileSettingsItemFileSubtypeObfMap)
         {
             NSString *mapId = flItem.fileName.lowerCase;
             const auto res = _app.resourcesManager->getResourceInRepository(QString::fromNSString(mapId));

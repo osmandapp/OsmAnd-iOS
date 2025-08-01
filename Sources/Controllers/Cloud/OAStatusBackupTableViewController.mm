@@ -495,9 +495,9 @@
         if ([settingsItem isKindOfClass:OAFileSettingsItem.class])
         {
             OAFileSettingsItem *fileItem = (OAFileSettingsItem *) settingsItem;
-            if (fileItem.subtype == EOASettingsItemFileSubtypeVoiceTTS)
+            if (fileItem.subtype == EOAFileSettingsItemFileSubtypeVoiceTTS)
                 name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts_title")];
-            else if (fileItem.subtype == EOASettingsItemFileSubtypeVoice)
+            else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeVoice)
                 name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"shared_string_recorded")];
         }
     }

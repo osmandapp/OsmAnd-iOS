@@ -611,7 +611,7 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
     __block NSData *resp = nil;
     __block NSString *error = nil;
     [listener onFileUploadStarted:type fileName:fileName work:hasSize ? size : data.length];
-    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES autorizationHeader:nil progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
+    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES authorizationHeader:nil progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
         if (((NSHTTPURLResponse *)response).statusCode != 200)
             error = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
         else

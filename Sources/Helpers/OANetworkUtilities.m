@@ -111,24 +111,48 @@
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
-+ (void) uploadFile:(NSString *)url fileName:(NSString *)fileName params:(NSDictionary<NSString *, NSString *> *)params headers:(NSDictionary<NSString *, NSString *> *)headers data:(NSData *)data gzip:(BOOL)gzip autorizationHeader:(NSString *)autorizationHeader progress:(OAURLSessionProgress *)progress onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
+#ifdef DEBUG
+static NSString *prettyJSONStringFromData(NSData *data)
+{
+    if (!data) return nil;
+    @try {
+        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        if (!json) return nil;
+        NSData *prettyData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+        return [[NSString alloc] initWithData:prettyData encoding:NSUTF8StringEncoding];
+    } @catch (NSException *exception) {
+        return nil;
+    }
+}
+#endif
+
++ (void)uploadFile:(NSString *)url
+          fileName:(NSString *)fileName
+            params:(NSDictionary<NSString *, NSString *> *)params
+           headers:(NSDictionary<NSString *, NSString *> *)headers
+             data:(NSData *)data
+             gzip:(BOOL)gzip
+authorizationHeader:(NSString *)authorizationHeader
+         progress:(OAURLSessionProgress *)progress
+       onComplete:(void (^)(NSData * _Nullable data,
+                            NSURLResponse * _Nullable response,
+                            NSError * _Nullable error))onComplete
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     NSURL *urlObj;
     NSMutableString *paramsStr = nil;
     NSString *paramsSeparator = [url containsString:@"?"] ? @"&" : @"?";
+
     if (params.count > 0)
     {
         paramsStr = [NSMutableString string];
         [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
             if (paramsStr.length > 0)
                 [paramsStr appendString:@"&"];
-
-            [paramsStr appendString:[key escapeUrl]];
-            [paramsStr appendString:@"="];
-            [paramsStr appendString:[value escapeUrl]];
+            [paramsStr appendFormat:@"%@=%@", [key escapeUrl], [value escapeUrl]];
         }];
     }
+
     if (!paramsStr)
         urlObj = [NSURL URLWithString:url];
     else
@@ -142,15 +166,16 @@
     [request addValue:[@"multipart/form-data; boundary=" stringByAppendingString:BOUNDARY] forHTTPHeaderField:@"Content-Type"];
     [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
     [request setTimeoutInterval:1000];
+
     if (headers)
     {
         [headers enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
             [request addValue:obj forHTTPHeaderField:key];
         }];
     }
-    if (autorizationHeader)
-        [request addValue:autorizationHeader forHTTPHeaderField:@"Authorization"];
-    
+    if (authorizationHeader)
+        [request addValue:authorizationHeader forHTTPHeaderField:@"Authorization"];
+
     NSMutableData *postData = [NSMutableData data];
     [postData appendData:[[NSString stringWithFormat:@"--%@\r\n", BOUNDARY] dataUsingEncoding:NSUTF8StringEncoding]];
     [postData appendData:[[NSString stringWithFormat:@"content-disposition: form-data; name=\"file\"; filename=\"%@\"\r\n", fileName] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -159,10 +184,52 @@
     [postData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", BOUNDARY] dataUsingEncoding:NSUTF8StringEncoding]];
     [request setHTTPBody:postData];
 
+#ifdef DEBUG
+    NSLog(@"[OANetworkUtilities] [Upload Request]"
+          "\nURL: %@"
+          "\nParams: %@"
+          "\nFileName: %@"
+          "\nData size: %lu bytes",
+          urlObj.absoluteString,
+          params ?: @"{}",
+          fileName,
+          (unsigned long)data.length);
+#endif
+
     __block BOOL hasFinished = NO;
-    NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration delegate:progress delegateQueue:nil];
-    NSURLSessionDataTask *uploadTask = [urlSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration
+                                                             delegate:progress
+                                                        delegateQueue:nil];
+
+    NSURLSessionDataTask *uploadTask = [urlSession dataTaskWithRequest:request
+                                                     completionHandler:^(NSData * _Nullable data,
+                                                                         NSURLResponse * _Nullable response,
+                                                                         NSError * _Nullable error)
+    {
         hasFinished = YES;
+#ifdef DEBUG
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        NSString *bodyLog = prettyJSONStringFromData(data);
+        if (!bodyLog)
+        {
+            NSString *bodyString = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"<no body>";
+            if (bodyString.length > 2000)
+            {
+                bodyString = [[bodyString substringToIndex:2000] stringByAppendingString:@"... [truncated]"];
+            }
+            bodyLog = bodyString;
+        }
+        
+        NSLog(@"[OANetworkUtilities] [Upload Response]"
+              "\nURL: %@"
+              "\nStatus: %ld"
+              "\nError: %@"
+              "\nBody:\n%@",
+              urlObj.absoluteString,
+              (long)httpResponse.statusCode,
+              error ?: @"none",
+              bodyLog);
+#endif
         if (onComplete)
             onComplete(data, response, error);
         dispatch_semaphore_signal(semaphore);
@@ -173,19 +240,27 @@
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
-+ (BOOL) downloadFile:(NSString *)fileName url:(NSString *)url progress:(OAURLSessionProgress *)progress
++ (BOOL)downloadFile:(NSString *)fileName
+                 url:(NSString *)url
+            progress:(OAURLSessionProgress *)progress
 {
     BOOL success = NO;
+
     if (url != nil && url.length > 0 && fileName != nil && fileName.length > 0)
     {
-        NSURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+        NSLog(@"[OANetworkUtilities] [Download Request] URL: %@", url);
+        NSLog(@"[OANetworkUtilities] [Download] Target file path: %@", fileName);
+
+        NSURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
+                                                        cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                                    timeoutInterval:kTimeout];
         
         NSError __block *error = nil;
         NSData __block *data = nil;
         
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         
-		if (!progress)
+        if (!progress)
         {
             progress = [[OAURLSessionProgress alloc] init];
             [progress setOnProgress:^(int progress, int64_t deltaWork) {}];
@@ -197,27 +272,60 @@
         }];
         
         [progress setOnDownloadError:^(NSError *_error) {
+            if (_error)
+            {
+                NSLog(@"[OANetworkUtilities] [Download] Download error: %@", _error);
+            }
             error = _error;
             dispatch_semaphore_signal(semaphore);
         }];
         
-        NSURLSession *session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration delegate:progress delegateQueue:nil];
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration
+                                                              delegate:progress
+                                                         delegateQueue:nil];
         NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request];
         [task resume];
         
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-
         [session finishTasksAndInvalidate];
         
+        if (error != nil)
+        {
+            NSLog(@"[OANetworkUtilities] [Download] Failed with error: %@", error.localizedDescription);
+            return NO;
+        }
+
         NSFileManager *manager = [NSFileManager defaultManager];
-        if (![manager fileExistsAtPath:[fileName stringByDeletingLastPathComponent]])
-            success = [manager createDirectoryAtPath:[fileName stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+        NSString *dirPath = [fileName stringByDeletingLastPathComponent];
+
+        if (![manager fileExistsAtPath:dirPath])
+        {
+            NSError *dirError = nil;
+            success = [manager createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:&dirError];
+            if (!success)
+                NSLog(@"[OANetworkUtilities] [Download] Failed to create directory: %@, error: %@", dirPath, dirError);
+            else
+                NSLog(@"[OANetworkUtilities] [Download] Created directory: %@", dirPath);
+        }
         else
+        {
             success = YES;
-        
+        }
+
         if (success)
+        {
             success = [data writeToFile:fileName atomically:YES];
+            if (success)
+                NSLog(@"[OANetworkUtilities] [Download] Successfully wrote file to: %@", fileName);
+            else
+                NSLog(@"[OANetworkUtilities] [Download] Failed to write file to: %@", fileName);
+        }
     }
+    else
+    {
+        NSLog(@"[OANetworkUtilities] [Download] Invalid URL or file path. url: %@, fileName: %@", url, fileName);
+    }
+
     return success;
 }
 

@@ -99,7 +99,8 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
                 [listener onFileUploadProgress:nil fileName:fileName progress:progress deltaWork:deltaWork];
         }];
         
-        [OANetworkUtilities uploadFile:url fileName:fileName params:additionalData headers:@{} data:data gzip:YES autorizationHeader:[OAOsmOAuthHelper getAutorizationHeader] progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        [OANetworkUtilities uploadFile:url fileName:fileName params:additionalData headers:@{} data:data gzip:YES authorizationHeader:[OAOsmOAuthHelper getAutorizationHeader] progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             if (listener)
             {
                 NSString *err = nil;

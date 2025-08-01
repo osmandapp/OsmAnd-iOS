@@ -104,36 +104,78 @@
     }
 }
 
-- (NSString *) uploadItemInfo:(OASettingsItem *)item fileName:(NSString *)fileName
+- (NSString *)uploadItemInfo:(OASettingsItem *)item fileName:(NSString *)fileName
 {
-    @try
-    {
+    @try {
         MutableOrderedDictionary *json = [MutableOrderedDictionary new];
         [item writeToJson:json];
+
         BOOL hasFile = json[@"file"] != nil;
         BOOL hasSubtype = json[@"subtype"] != nil;
-        if (json.count > (hasFile ? 2 + (hasSubtype ? 1 : 0) : 1))
+
+        if (json.count <= (hasFile ? 2 + (hasSubtype ? 1 : 0) : 1))
+            return nil;
+
+        NSError *error = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json
+                                                           options:0
+                                                             error:&error];
+        if (!jsonData || error)
         {
-            NSError *error = nil;
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:&error];
-            NSString *path = [_tmpDir stringByAppendingPathComponent:fileName];
-            [jsonData writeToFile:path atomically:NO];
-            BOOL ok = YES;
-            QString filePath = QString::fromNSString([path stringByAppendingPathExtension:@"gz"]);
-            OsmAnd::ArchiveWriter archiveWriter;
-            archiveWriter.createArchive(&ok, filePath, {QString::fromNSString(path)}, QString::fromNSString(_tmpDir), true);
-            
-            if (!error && ok)
-            {
-                _item = item;
-                _isDirListener = NO;
-                return [_backupHelper uploadFile:fileName type:[OASettingsItemType typeName:item.type] data:[NSData dataWithContentsOfFile:filePath.toNSString() options:NSDataReadingMappedAlways error:NULL] size:-1 lastModifiedTime:item.lastModifiedTime listener:self];
-            }
+            NSLog(@"[OANetworkWriter] Failed to serialize JSON for %@: %@", fileName, error.localizedDescription);
+            return nil;
         }
-        return nil;
+
+        NSString *tmpJsonPath = [_tmpDir stringByAppendingPathComponent:fileName];
+
+        NSString *dirPath = [tmpJsonPath stringByDeletingLastPathComponent];
+        NSError *dirError = nil;
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:dirPath
+                                       withIntermediateDirectories:YES
+                                                        attributes:nil
+                                                             error:&dirError])
+        {
+            NSLog(@"[OANetworkWriter] Failed to create directory: %@, reason: %@", dirPath, dirError.localizedDescription);
+            return nil;
+        }
+
+        if (![jsonData writeToFile:tmpJsonPath options:NSDataWritingAtomic error:&error])
+        {
+            NSLog(@"[OANetworkWriter] Failed to write JSON to file: %@, reason: %@", tmpJsonPath, error.localizedDescription);
+            return nil;
+        }
+
+        NSLog(@"[OANetworkWriter] JSON saved at: %@ (size: %lu bytes)", tmpJsonPath, (unsigned long)jsonData.length);
+
+        NSString *gzPath = [tmpJsonPath stringByAppendingPathExtension:@"gz"];
+
+        BOOL ok = YES;
+        OsmAnd::ArchiveWriter archiveWriter;
+        archiveWriter.createArchive(&ok,
+                                    QString::fromNSString(gzPath),
+                                    { QString::fromNSString(tmpJsonPath) },
+                                    QString::fromNSString(_tmpDir),
+                                    true);
+
+        if (!ok)
+        {
+            NSLog(@"[OANetworkWriter] Failed to create archive: %@", gzPath);
+            return nil;
+        }
+        NSLog(@"[OANetworkWriter] Archive created: %@", gzPath);
+
+        _item = item;
+        _isDirListener = NO;
+        return [_backupHelper uploadFile:fileName
+                                    type:[OASettingsItemType typeName:item.type]
+                                    data:[NSData dataWithContentsOfFile:gzPath
+                                                                 options:NSDataReadingMappedAlways
+                                                                   error:nil]
+                                    size:-1
+                       lastModifiedTime:item.lastModifiedTime
+                                listener:self];
     }
-    @catch (NSException* e)
-    {
+    @catch (NSException *e) {
         @throw [NSException exceptionWithName:@"IOException" reason:e.reason userInfo:nil];
     }
 }

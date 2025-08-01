@@ -12,11 +12,11 @@
 #import "OAExportSettingsCategory.h"
 
 static OALocalItemType * MAP_DATA;
-// static OALocalItemType * ROAD_DATA;
+static OALocalItemType * ROAD_DATA;
 static OALocalItemType * LIVE_UPDATES;
 static OALocalItemType * TTS_VOICE_DATA;
 static OALocalItemType * VOICE_DATA;
-// static OALocalItemType * FONT_DATA;
+static OALocalItemType * FONT_DATA;
 static OALocalItemType * TERRAIN_DATA;
 static OALocalItemType * DEPTH_DATA;
 static OALocalItemType * WIKI_AND_TRAVEL_MAPS;
@@ -24,7 +24,7 @@ static OALocalItemType * TILES_DATA;
 static OALocalItemType * WEATHER_DATA;
 static OALocalItemType * RENDERING_STYLES;
 static OALocalItemType * ROUTING;
-// static OALocalItemType * CACHE;
+static OALocalItemType * CACHE;
 static OALocalItemType * FAVORITES;
 static OALocalItemType * TRACKS;
 static OALocalItemType * OSM_NOTES;
@@ -32,7 +32,7 @@ static OALocalItemType * OSM_EDITS;
 static OALocalItemType * MULTIMEDIA_NOTES;
 static OALocalItemType * ACTIVE_MARKERS;
 static OALocalItemType * HISTORY_MARKERS;
-// static OALocalItemType * ITINERARY_GROUPS;
+static OALocalItemType * ITINERARY_GROUPS;
 static OALocalItemType * COLOR_DATA;
 static OALocalItemType * PROFILES;
 static OALocalItemType * OTHER;
@@ -61,6 +61,11 @@ static NSArray<OALocalItemType *> *allValues;
     return MAP_DATA;
 }
 
++ (OALocalItemType *) ROAD_DATA
+{
+    return nil;  // Not implemented
+}
+
 + (OALocalItemType *) LIVE_UPDATES
 {
     if (!LIVE_UPDATES)
@@ -80,6 +85,11 @@ static NSArray<OALocalItemType *> *allValues;
     if (!VOICE_DATA)
         VOICE_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"local_indexes_cat_voice") iconName:@"ic_custom_sound"];
     return VOICE_DATA;
+}
+
++ (OALocalItemType *) FONT_DATA
+{
+    return nil;  // Not implemented
 }
 
 + (OALocalItemType *) TERRAIN_DATA
@@ -131,6 +141,11 @@ static NSArray<OALocalItemType *> *allValues;
     return ROUTING;
 }
 
++ (OALocalItemType *) CACHE
+{
+    return nil;  // Not implemented
+}
+
 + (OALocalItemType *) FAVORITES
 {
     if (!FAVORITES)
@@ -171,6 +186,11 @@ static NSArray<OALocalItemType *> *allValues;
     if (!HISTORY_MARKERS)
         HISTORY_MARKERS = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"markers_history") iconName:@"ic_custom_marker"];
     return HISTORY_MARKERS;
+}
+
++ (OALocalItemType *) ITINERARY_GROUPS
+{
+    return nil;  // Not implemented
 }
 
 + (OALocalItemType *) COLOR_DATA
@@ -251,17 +271,17 @@ static NSArray<OALocalItemType *> *allValues;
 
 - (BOOL) isMyPlacesCategory
 {
-    return [@[FAVORITES, TRACKS, OSM_EDITS, OSM_NOTES, /*MULTIMEDIA_NOTES,*/ ACTIVE_MARKERS, HISTORY_MARKERS, /*ITINERARY_GROUPS*/] containsObject:self];
+    return [@[FAVORITES, TRACKS, OSM_EDITS, OSM_NOTES, MULTIMEDIA_NOTES, ACTIVE_MARKERS, HISTORY_MARKERS, ITINERARY_GROUPS] containsObject:self];
 }
 
 - (BOOL) isResourcesCategory
 {
-    return [@[MAP_DATA, LIVE_UPDATES, TERRAIN_DATA, WIKI_AND_TRAVEL_MAPS, DEPTH_DATA, WEATHER_DATA, TILES_DATA, RENDERING_STYLES, ROUTING, TTS_VOICE_DATA, VOICE_DATA /*FONT_DATA, CACHE*/] containsObject:self];
+    return [@[MAP_DATA, LIVE_UPDATES, TERRAIN_DATA, WIKI_AND_TRAVEL_MAPS, DEPTH_DATA, WEATHER_DATA, TILES_DATA, RENDERING_STYLES, ROUTING, TTS_VOICE_DATA, VOICE_DATA, FONT_DATA, CACHE] containsObject:self];
 }
 
 - (BOOL) isDownloadType
 {
-    return [@[MAP_DATA, TILES_DATA, TERRAIN_DATA, DEPTH_DATA, WIKI_AND_TRAVEL_MAPS, WEATHER_DATA, TTS_VOICE_DATA, VOICE_DATA /*, FONT_DATA*/] containsObject:self];
+    return [@[MAP_DATA, TILES_DATA, TERRAIN_DATA, DEPTH_DATA, WIKI_AND_TRAVEL_MAPS, WEATHER_DATA, TTS_VOICE_DATA, VOICE_DATA, FONT_DATA] containsObject:self];
 }
 
 - (BOOL) isUpdateSupported
@@ -273,7 +293,7 @@ static NSArray<OALocalItemType *> *allValues;
 {
     return [self isDownloadType]
         || self == LIVE_UPDATES
-     /* || self == CACHE */
+        || self == CACHE
         
     //TODO: implement
 //    || ExportType.findBy(this) != null && this != PROFILES;
@@ -297,7 +317,7 @@ static NSArray<OALocalItemType *> *allValues;
 
 - (BOOL) isDerivedFromAssets
 {
-    return [@[TTS_VOICE_DATA, COLOR_DATA /*, FONT_DATA*/] containsObject:self];
+    return [@[TTS_VOICE_DATA, COLOR_DATA, FONT_DATA] containsObject:self];
 }
 
 

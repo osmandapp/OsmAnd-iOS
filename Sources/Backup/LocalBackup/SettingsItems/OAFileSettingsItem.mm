@@ -51,12 +51,12 @@
             return @"voice";
         case EOAFileSettingsItemFileSubtypeTravel:
             return @"travel";
-        //case MULTIMEDIA_NOTES:
-        //    return "multimedia_notes"
+        case EOAFileSettingsItemFileSubtypeMultimediaNotes:
+            return @"multimedia_notes";
         case EOAFileSettingsItemFileSubtypeNauticalDepth:
             return @"nautical_depth";
-        //case FAVORITES_BACKUP:
-        //    return "favorites_backup"
+        case EOAFileSettingsItemFileSubtypeFavoritesBackup:
+            return @"favorites_backup";
         case EOAFileSettingsItemFileSubtypeColorPalette:
             return @"colors_palette";
         default:
@@ -77,31 +77,31 @@
         case EOAFileSettingsItemFileSubtypeRenderingStyle:
             return RENDERERS_DIR;
         case EOAFileSettingsItemFileSubtypeWikiMap:
-            return RESOURCES_DIR;   //android: WIKI_INDEX_DIR
+            return RESOURCES_DIR;       //android: WIKI_INDEX_DIR
         case EOAFileSettingsItemFileSubtypeSrtmMap:
-            return RESOURCES_DIR;   //android: SRTM_INDEX_DIR
+            return RESOURCES_DIR;       //android: SRTM_INDEX_DIR
         case EOAFileSettingsItemFileSubtypeTerrainMap:
-            return RESOURCES_DIR;   //android: GEOTIFF_DIR
+            return RESOURCES_DIR;       //android: GEOTIFF_DIR
         case EOAFileSettingsItemFileSubtypeObfMap:
-            return RESOURCES_DIR;   //android: MAPS_PATH
+            return RESOURCES_DIR;       //android: MAPS_PATH
         case EOAFileSettingsItemFileSubtypeTilesMap:
-            return RESOURCES_DIR;   //android: TILES_INDEX_DIR
+            return RESOURCES_DIR;       //android: TILES_INDEX_DIR
         case EOAFileSettingsItemFileSubtypeRoadMap:
-            return RESOURCES_DIR;   //android: ROADS_INDEX_DIR
+            return RESOURCES_DIR;       //android: ROADS_INDEX_DIR
         case EOAFileSettingsItemFileSubtypeGpx:
-            return GPX_DIR;         //android: GPX_INDEX_DIR ("GPX" vs "tracks")
-        //case EOAFileSettingsItemFileSubtypeVoiceTTS:
-        //    return [documentsPath stringByAppendingPathComponent:@"Voice"];
-        //case EOAFileSettingsItemFileSubtypeVoice:
-        //    return [documentsPath stringByAppendingPathComponent:@"Voice"];
+            return GPX_DIR;             //android: GPX_INDEX_DIR ("GPX" vs "tracks")
+        case EOAFileSettingsItemFileSubtypeVoiceTTS:
+            return nil;                 //android: VOICE_INDEX_DIR
+        case EOAFileSettingsItemFileSubtypeVoice:
+            return nil;                 //android: VOICE_INDEX_DIR
         case EOAFileSettingsItemFileSubtypeTravel:
-            return RESOURCES_DIR;   //android: WIKIVOYAGE_INDEX_DIR
-        //case MULTIMEDIA_NOTES:
-        //    return AV_INDEX_DIR;
+            return RESOURCES_DIR;       //android: WIKIVOYAGE_INDEX_DIR
+        case EOAFileSettingsItemFileSubtypeMultimediaNotes:
+            return nil;                 //android: ROADS_INDEX_DIRAV_INDEX_DIR
         case EOAFileSettingsItemFileSubtypeNauticalDepth:
-            return RESOURCES_DIR; //android: NAUTICAL_INDEX_DIR
-        //case FAVORITES_BACKUP:
-        //    return BACKUP_INDEX_DIR;
+            return RESOURCES_DIR;       //android: NAUTICAL_INDEX_DIR
+        case EOAFileSettingsItemFileSubtypeFavoritesBackup:
+            return nil;                 //android: BACKUP_INDEX_DIR
         case EOAFileSettingsItemFileSubtypeColorPalette:
             return COLOR_PALETTE_DIR;
             
@@ -423,13 +423,14 @@
     {
         return self.name.lastPathComponent;
     }
-//    else if (subtype == FileSubtype.MULTIMEDIA_NOTES) {
+    else if (_subtype == EOAFileSettingsItemFileSubtypeMultimediaNotes)
+    {
 //        if (file.exists()) {
 //            return new Recording(file).getName(app, true);
 //        } else {
 //            return Recording.getNameForMultimediaFile(app, file.getName(), getLastModifiedTime());
 //        }
-//    }
+    }
     return self.name;
 }
 

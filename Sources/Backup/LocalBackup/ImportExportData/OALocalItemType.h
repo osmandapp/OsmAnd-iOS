@@ -21,9 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithTitle:(NSString *)title iconName:(NSString *)iconName;
 
 + (OALocalItemType *) MAP_DATA;
++ (OALocalItemType *) ROAD_DATA;
 + (OALocalItemType *) LIVE_UPDATES;
 + (OALocalItemType *) TTS_VOICE_DATA;
 + (OALocalItemType *) VOICE_DATA;
++ (OALocalItemType *) FONT_DATA;
 + (OALocalItemType *) TERRAIN_DATA;
 + (OALocalItemType *) DEPTH_DATA;
 + (OALocalItemType *) WIKI_AND_TRAVEL_MAPS;
@@ -31,12 +33,15 @@ NS_ASSUME_NONNULL_BEGIN
 + (OALocalItemType *) WEATHER_DATA;
 + (OALocalItemType *) RENDERING_STYLES;
 + (OALocalItemType *) ROUTING;
++ (OALocalItemType *) CACHE;
 + (OALocalItemType *) FAVORITES;
 + (OALocalItemType *) TRACKS;
 + (OALocalItemType *) OSM_NOTES;
 + (OALocalItemType *) OSM_EDITS;
++ (OALocalItemType *) MULTIMEDIA_NOTES;
 + (OALocalItemType *) ACTIVE_MARKERS;
 + (OALocalItemType *) HISTORY_MARKERS;
++ (OALocalItemType *) ITINERARY_GROUPS;
 + (OALocalItemType *) COLOR_DATA;
 + (OALocalItemType *) PROFILES;
 + (OALocalItemType *) OTHER;

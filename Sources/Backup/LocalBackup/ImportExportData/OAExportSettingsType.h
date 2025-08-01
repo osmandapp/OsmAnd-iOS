@@ -23,21 +23,25 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAExportSettingsType *) TRACKS;
 + (OAExportSettingsType *) OSM_NOTES;
 + (OAExportSettingsType *) OSM_EDITS;
++ (OAExportSettingsType *) MULTIMEDIA_NOTES;
 + (OAExportSettingsType *) ACTIVE_MARKERS;
 + (OAExportSettingsType *) HISTORY_MARKERS;
 + (OAExportSettingsType *) SEARCH_HISTORY;
 + (OAExportSettingsType *) NAVIGATION_HISTORY;
++ (OAExportSettingsType *) ITINERARY_GROUPS;
 + (OAExportSettingsType *) CUSTOM_RENDER_STYLE;
 + (OAExportSettingsType *) CUSTOM_ROUTING;
++ (OAExportSettingsType *) ONLINE_ROUTING_ENGINES;
 + (OAExportSettingsType *) MAP_SOURCES;
 + (OAExportSettingsType *) STANDARD_MAPS;
 + (OAExportSettingsType *) WIKI_AND_TRAVEL;
 + (OAExportSettingsType *) DEPTH_DATA;
++ (OAExportSettingsType *) ROAD_MAPS;
 + (OAExportSettingsType *) TERRAIN_DATA;
 + (OAExportSettingsType *) OFFLINE_MAPS;
 + (OAExportSettingsType *) TTS_VOICE;
 + (OAExportSettingsType *) VOICE;
-+ (OAExportSettingsType *) ONLINE_ROUTING_ENGINES;
++ (OAExportSettingsType *) FAVORITES_BACKUP;
 + (OAExportSettingsType *) COLOR_PALETTE;
 
 + (OAExportSettingsType *) findBySettingsItem:(OASettingsItem *)item;

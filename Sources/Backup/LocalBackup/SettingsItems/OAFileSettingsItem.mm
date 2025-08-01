@@ -62,30 +62,48 @@
 {
     switch (subtype)
     {
+        case EOASettingsItemFileSubtypeUnknown:
+            return nil;
         case EOASettingsItemFileSubtypeOther:
             return @"";
-        case EOASettingsItemFileSubtypeObfMap:
-        case EOASettingsItemFileSubtypeWikiMap:
-        case EOASettingsItemFileSubtypeSrtmMap:
-        case EOASettingsItemFileSubtypeNauticalDepth:
-        case EOASettingsItemFileSubtypeTerrainMap:
-        case EOASettingsItemFileSubtypeRoadMap:
-        case EOASettingsItemFileSubtypeTilesMap:
-        case EOASettingsItemFileSubtypeTravel:
-            return RESOURCES_DIR;
-        case EOASettingsItemFileSubtypeRenderingStyle:
-            return RENDERERS_DIR;
         case EOASettingsItemFileSubtypeRoutingConfig:
             return ROUTING_PROFILES_DIR;
+        case EOASettingsItemFileSubtypeRenderingStyle:
+            return RENDERERS_DIR;
+        case EOASettingsItemFileSubtypeWikiMap:
+            return RESOURCES_DIR; //android: WIKI_INDEX_DIR
+        case EOASettingsItemFileSubtypeSrtmMap:
+            return RESOURCES_DIR; //android: SRTM_INDEX_DIR
+        case EOASettingsItemFileSubtypeTerrainMap:
+            return RESOURCES_DIR; //android: GEOTIFF_DIR
+        case EOASettingsItemFileSubtypeObfMap:
+            return RESOURCES_DIR; //android: MAPS_PATH
+        case EOASettingsItemFileSubtypeTilesMap:
+            return RESOURCES_DIR; //android: TILES_INDEX_DIR
+        case EOASettingsItemFileSubtypeRoadMap:
+            return RESOURCES_DIR; //android: ROADS_INDEX_DIR
         case EOASettingsItemFileSubtypeGpx:
-            return GPX_DIR;
-            // unsupported
-//        case EOASettingsItemFileSubtypeVoice:
-//            return [documentsPath stringByAppendingPathComponent:@"Voice"];
+            return GPX_DIR; //android: GPX_INDEX_DIR ("GPX" vs "tracks")
+        // unsupported
+        //case EOASettingsItemFileSubtypeVoiceTTS:
+        //    return [documentsPath stringByAppendingPathComponent:@"Voice"];
+        //case EOASettingsItemFileSubtypeVoice:
+        //    return [documentsPath stringByAppendingPathComponent:@"Voice"];
+        case EOASettingsItemFileSubtypeTravel:
+            return RESOURCES_DIR; //android: WIKIVOYAGE_INDEX_DIR
+        // unsupported
+        //case MULTIMEDIA_NOTES:
+        //    return AV_INDEX_DIR;
+        case EOASettingsItemFileSubtypeNauticalDepth:
+            return RESOURCES_DIR; //android: NAUTICAL_INDEX_DIR
+        // unsupported
+        //case FAVORITES_BACKUP:
+        //    return BACKUP_INDEX_DIR;
         case EOASettingsItemFileSubtypeColorPalette:
             return COLOR_PALETTE_DIR;
+            
         default:
-            return @"";
+            return nil;
     }
 }
 
@@ -188,7 +206,7 @@
             default:
             {
                 NSString *subtypeFolder = [self.class getSubtypeFolder:subtype];
-                if ([name hasPrefix:subtypeFolder])
+                if (subtypeFolder && [name hasPrefix:subtypeFolder])
                     return subtype;
                 break;
             }
@@ -199,7 +217,7 @@
 
 + (BOOL) isMap:(EOASettingsItemFileSubtype)type
 {
-    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth || type == EOASettingsItemFileSubtypeTravel;
+    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeTravel || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTerrainMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth;
 }
 
 + (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype
@@ -313,7 +331,11 @@
         }
         else
         {
-            self.filePath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:[[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name]];
+            self.filePath = OsmAndApp.instance.documentsPath;
+            NSString *folderName = [OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype];
+            if (folderName && folderName.length > 0)
+                self.filePath = [self.filePath stringByAppendingPathComponent:folderName];
+            self.filePath = [self.filePath stringByAppendingPathComponent:self.name];
         }
     }
     return self;

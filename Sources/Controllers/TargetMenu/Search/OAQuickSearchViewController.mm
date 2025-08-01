@@ -561,9 +561,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     else
                     {
                         filter = [[OAPOIFiltersHelper sharedInstance] getSearchByNamePOIFilter];
-                        if ([searchPhrase getFullSearchPhrase].length > 0)
+                        NSString * searchWord = [searchPhrase getUnknownWordToSearch];
+                        if (searchWord != nil && searchWord.length > 0)
                         {
-                            [filter setFilterByName:[searchPhrase getFullSearchPhrase]];
+                            [filter setFilterByName:searchWord];
                             [filter clearCurrentResults];
                         }
                     }

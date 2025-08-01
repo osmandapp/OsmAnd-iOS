@@ -39,7 +39,6 @@
 #import "OAResultMatcher.h"
 #import "OATopIndexFilter.h"
 #import "OACollatorStringMatcher.h"
-#import "OAArabicNormalizer.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
@@ -481,9 +480,6 @@
     if ([phrase getRadiusLevel] > 1 || [phrase getUnknownWordToSearch].length > 3 || [phrase hasMoreThanOneUnknownSearchWord] || [phrase isSearchTypeAllowed:EOAObjectTypePostcode exclusive:YES])
     {
         NSString *wordToSearch = [phrase getUnknownWordToSearch];
-        if ([OAArabicNormalizer isSpecialArabic:wordToSearch]) {
-            wordToSearch = [OAArabicNormalizer normalize:wordToSearch] ?: wordToSearch;
-        }
 
         if (wordToSearch.length == 0)
             return;
@@ -728,9 +724,6 @@
     NSMutableSet<NSString *> *ids = [NSMutableSet new];
 
     NSString *searchWord = [phrase getUnknownWordToSearch];
-    if ([OAArabicNormalizer isSpecialArabic:searchWord]) {
-        searchWord = [OAArabicNormalizer normalize:searchWord] ?: searchWord;
-    }
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
     
     QuadRect *bbox = [phrase getFileId] != nil ? [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_POI_IN_CITY] : [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_INSIDE];

@@ -184,6 +184,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     NSObject* _rendererSync;
     BOOL _mapSourceInvalidated;
+    BOOL _viewHidden;
     CGFloat _contentScaleFactor;
     
     // Current provider of raster map
@@ -521,6 +522,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return self.parentViewController != OARootViewController.instance.mapPanel;
 }
 
+- (BOOL) isMapHidden
+{
+    return _viewHidden && !_app.carPlayActive;
+}
+
 #pragma mark - OAMapRendererDelegate
 
 - (void) frameAnimatorsUpdated
@@ -556,6 +562,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     [super viewWillAppear:animated];
     
+    _viewHidden = NO;
+
     // Update map source (if needed)
     if (_mapSourceInvalidated)
     {
@@ -591,6 +599,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     [super viewDidDisappear:animated];
     
+    _viewHidden = YES;
+
     if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
@@ -2070,7 +2080,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2093,7 +2103,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onMapSettingsChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2108,7 +2118,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onUpdateGpxTracks
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2121,7 +2131,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onUpdateRecTrack
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2140,7 +2150,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2156,7 +2166,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onMapLayerChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded || _app.isInBackground /* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || _app.isInBackground || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2171,7 +2181,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onLastMapSourceChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2187,7 +2197,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onLanguageSettingsChange
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2202,7 +2212,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onLocalResourcesChanged:(const QList< QString >&)ids
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;

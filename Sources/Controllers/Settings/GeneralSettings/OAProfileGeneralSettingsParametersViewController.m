@@ -123,7 +123,19 @@
 
 - (NSString *)getSubtitle
 {
-    return (_settingsType == EOAProfileGeneralSettingsMapOrientation && _openFromMap) || _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation || _settingsType == EOAProfileGeneralSettingsDisplayPosition || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp ? @"" : [self.appMode toHumanString];
+    switch (_settingsType)
+    {
+        case EOAProfileGeneralSettingsMapOrientation:
+            return _openFromMap ? @"" : [self.appMode toHumanString];
+        case EOAProfileGeneralSettingsAppTheme:
+        case EOAProfileGeneralSettingsDistanceDuringNavigation:
+        case EOAProfileGeneralSettingsDisplayPosition:
+        case EOAProfileGeneralSettingsUnitsOfVolume:
+        case EOAProfileGeneralSettingsUnitsOfTemp:
+            return @"";
+        default:
+            return [self.appMode toHumanString];
+    }
 }
 
 - (BOOL)isNavbarSeparatorVisible
@@ -554,7 +566,7 @@
 
 - (BOOL) hideFirstHeader
 {
-    return _settingsType == EOAProfileGeneralSettingsMapOrientation || _settingsType == EOAProfileGeneralSettingsDisplayPosition || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp;
+    return [@[@(EOAProfileGeneralSettingsMapOrientation), @(EOAProfileGeneralSettingsDisplayPosition), @(EOAProfileGeneralSettingsUnitsOfVolume), @(EOAProfileGeneralSettingsUnitsOfTemp)] containsObject:@(_settingsType)];
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section

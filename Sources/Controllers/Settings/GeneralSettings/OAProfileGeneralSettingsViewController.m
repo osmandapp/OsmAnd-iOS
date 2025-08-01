@@ -131,7 +131,7 @@
     else
         drivingRegionValue = [OADrivingRegion getName:[_settings.drivingRegion get:self.appMode]];
     
-    NSString* metricSystemValue;
+    NSString *metricSystemValue;
     switch ([_settings.metricSystem get:self.appMode]) {
         case KILOMETERS_AND_METERS:
             metricSystemValue = OALocalizedString(@"si_km_m");
@@ -156,7 +156,7 @@
             break;
     }
     
-    NSString* speedSystemValue;
+    NSString *speedSystemValue;
     switch ([_settings.speedSystem get:self.appMode]) {
         case KILOMETERS_PER_HOUR:
             speedSystemValue = OALocalizedString(@"si_kmh");
@@ -181,10 +181,10 @@
             break;
     }
     
-    NSString* volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
-    NSString* tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
+    NSString *volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
+    NSString *tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
     
-    NSString* geoFormatValue;
+    NSString *geoFormatValue;
     switch ([_settings.settingGeoFormat get:self.appMode]) {
         case MAP_GEO_FORMAT_DEGREES:
             geoFormatValue = OALocalizedString(@"navigate_point_format_D");
@@ -209,7 +209,7 @@
             break;
     }
     
-    NSString* angularUnitsValue = @"";
+    NSString *angularUnitsValue = @"";
     switch ([_settings.angularUnits get:self.appMode])
     {
         case DEGREES360:
@@ -231,7 +231,7 @@
             break;
     }
     
-    NSString* externalInputDeviceValue;
+    NSString *externalInputDeviceValue;
     if ([_settings.settingExternalInputDevice get:self.appMode] == GENERIC_EXTERNAL_DEVICE)
         externalInputDeviceValue = OALocalizedString(@"sett_generic_ext_input");
     else if ([_settings.settingExternalInputDevice get:self.appMode] == WUNDERLINQ_EXTERNAL_DEVICE)

@@ -2821,7 +2821,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     [super set:volumeConstant mode:mode];
 }
 
-- (void) resetToDefault
+- (void)resetToDefault
 {
     EOATemperatureConstant defaultValue = self.defValue;
     NSObject *pDefault = [self getProfileDefaultValue:self.appMode];

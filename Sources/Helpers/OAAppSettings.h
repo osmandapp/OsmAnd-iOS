@@ -187,9 +187,9 @@ typedef NS_ENUM(NSInteger, EOATemperatureConstant)
 
 @property (nonatomic, readonly) EOATemperatureConstant volume;
 
-+ (instancetype) withVolumeConstant:(EOATemperatureConstant)volume;
-+ (NSString *) toHumanString:(EOATemperatureConstant)volume;
-+ (NSString *) getUnitSymbol:(EOATemperatureConstant)volume;
++ (instancetype)withVolumeConstant:(EOATemperatureConstant)volume;
++ (NSString *)toHumanString:(EOATemperatureConstant)volume;
++ (NSString *)getUnitSymbol:(EOATemperatureConstant)volume;
 
 @end
 

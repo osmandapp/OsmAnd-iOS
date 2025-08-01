@@ -232,10 +232,13 @@ extension VehicleMetricsPlugin {
     
     private func getConvertedTemperature(data: Float) -> Float {
         let temperature = data
-        if getTemperatureUnit() == .CELSIUS {
+        switch getTemperatureUnit() {
+        case .CELSIUS, .SYSTEM_DEFAULT:
             return temperature
-        } else {
+        case .FAHRENHEIT:
             return temperature * 1.8 + 32
+        default:
+            return temperature
         }
     }
     

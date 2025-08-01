@@ -151,9 +151,10 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         distByTapRow.iconTintColor = appMode.getProfileColor()
         distByTapRow.key = "map_widget_distance_by_tap"
         distByTapRow.setObj(NSNumber(value: settings.showDistanceRuler.get()), forKey: Self.selectedKey)
-        distByTapRow.cellType = OASwitchTableViewCell.reuseIdentifier
+        distByTapRow.descr = localizedString(settings.showDistanceRuler.get() ? "shared_string_on" : "shared_string_off")
+        distByTapRow.cellType = OAValueTableViewCell.reuseIdentifier
         distByTapRow.accessibilityLabel = distByTapRow.title
-        distByTapRow.accessibilityLabel = settings.showDistanceRuler.get() ? localizedString("shared_string_on") : localizedString("shared_string_off")
+        distByTapRow.accessibilityLabel = localizedString(settings.showDistanceRuler.get() ? "shared_string_on" : "shared_string_off")
 
         let speedomenterRow = otherSection.createNewRow()
         speedomenterRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -245,7 +246,12 @@ extension ConfigureScreenViewController {
             cell.titleLabel.text = item.title
             if let iconTintColor = item.iconTintColor {
                 cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-                cell.leftIconView.tintColor = iconTintColor
+                if item.key == "map_widget_distance_by_tap" {
+                    let selected = item.bool(forKey: Self.selectedKey)
+                    cell.leftIconView.tintColor = selected ? iconTintColor : .iconColorDefault
+                } else {
+                    cell.leftIconView.tintColor = iconTintColor
+                }
             } else if let iconName = item.iconName {
                 cell.leftIconView.image = UIImage(named: iconName)
             }
@@ -283,9 +289,6 @@ extension ConfigureScreenViewController {
         if data.key == "map_widget_transparent" {
             settings.transparentMapTheme.set(sw.isOn)
             OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateLayout()
-        } else if data.key == "map_widget_distance_by_tap" {
-            settings.showDistanceRuler.set(sw.isOn)
-            OARootViewController.instance().mapPanel.mapViewController.updateTapRulerLayer()
         }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
@@ -316,6 +319,10 @@ extension ConfigureScreenViewController {
                 vc.delegate = self
                 showMediumSheetViewController(vc, isLargeAvailable: false)
             }
+        } else if data.key == "map_widget_distance_by_tap" {
+            let vc = DistanceByTapViewController()
+            vc.delegate = self
+            show(vc)
         } else {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {

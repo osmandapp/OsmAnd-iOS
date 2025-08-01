@@ -303,28 +303,31 @@
         
         _menuHeight += kEmptyHeaderHeight;
         
-        NSMutableArray<NSDictionary *> *unitsRows = [NSMutableArray array];
-        
-        [unitsRows addObject:dividerCell];
-        _menuHeight += [OADividerCell cellHeight:_dividerHeight dividerInsets:UIEdgeInsetsMake(0., [dividerInset floatValue], 0., 0.)];
-        
-        NSDictionary *unitsRow = @{
-            @"cellId" : OAValueTableViewCell.getCellIdentifier,
-            @"type" : kUnitsCell,
-            @"title" : OALocalizedString(@"sett_units"),
-        };
-        [unitsRows addObject:unitsRow];
-        CGFloat valueWidth = [OAUtilities calculateTextBounds:[self getUnitsValue] width:DeviceScreenWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].width;
-        CGFloat titleWidth = width - kTitleValueLabelHorizontalOffset - valueWidth;
-        CGFloat titleHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"sett_units") width:titleWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height;
-        _menuHeight += kTitleValueFixedHeight + titleHeight;
-        
-        [unitsRows addObject:dividerCell];
-        _menuHeight += [OADividerCell cellHeight:_dividerHeight dividerInsets:UIEdgeInsetsMake(0., [dividerInset floatValue], 0., 0.)];
-        
-        [data addObject:@{
-            @"rows" : unitsRows
-        }];
+        if (_layerType != EOAWeatherLayerTypeTemperature && ![_selectedContoursParam isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+        {
+            NSMutableArray<NSDictionary *> *unitsRows = [NSMutableArray array];
+            
+            [unitsRows addObject:dividerCell];
+            _menuHeight += [OADividerCell cellHeight:_dividerHeight dividerInsets:UIEdgeInsetsMake(0., [dividerInset floatValue], 0., 0.)];
+            
+            NSDictionary *unitsRow = @{
+                @"cellId" : OAValueTableViewCell.getCellIdentifier,
+                @"type" : kUnitsCell,
+                @"title" : OALocalizedString(@"sett_units"),
+            };
+            [unitsRows addObject:unitsRow];
+            CGFloat valueWidth = [OAUtilities calculateTextBounds:[self getUnitsValue] width:DeviceScreenWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].width;
+            CGFloat titleWidth = width - kTitleValueLabelHorizontalOffset - valueWidth;
+            CGFloat titleHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"sett_units") width:titleWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height;
+            _menuHeight += kTitleValueFixedHeight + titleHeight;
+            
+            [unitsRows addObject:dividerCell];
+            _menuHeight += [OADividerCell cellHeight:_dividerHeight dividerInsets:UIEdgeInsetsMake(0., [dividerInset floatValue], 0., 0.)];
+            
+            [data addObject:@{
+                @"rows" : unitsRows
+            }];
+        }
     }
     else
     {
@@ -779,8 +782,7 @@
         [_styleSettings setWeatherContourLinesEnabled:YES weatherContourLinesAttr:contoursType];
 
         [self generateData];
-        NSIndexSet *sectionsToReload = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(kContoursTypesSection, tableView.numberOfSections - 1)];
-        [tableView reloadSections:sectionsToReload withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView reloadData];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

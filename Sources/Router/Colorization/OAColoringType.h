@@ -46,6 +46,7 @@
 - (BOOL)isSpeed;
 - (BOOL)isAltitude;
 - (BOOL)isSlope;
+- (BOOL)isRouteInfoAttribute;
 
 @end
 

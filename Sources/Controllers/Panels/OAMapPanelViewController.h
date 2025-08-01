@@ -243,7 +243,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight animated:(BOOL)animated;
 
-- (void) buildRoute:(nullable CLLocation *)start end:(nullable CLLocation *)end appMode:(OAApplicationMode *)appMode;
+- (void)buildRoute:(nullable CLLocation *)start
+                end:(nullable CLLocation *)end
+            appMode:(OAApplicationMode *)appMode
+             points:(nullable NSArray<CLLocation *> *)points;
 
 - (void) onNavigationClick:(BOOL)hasTargets;
 - (void) switchToRouteFollowingLayout;

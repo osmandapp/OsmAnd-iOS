@@ -184,7 +184,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     NSObject* _rendererSync;
     BOOL _mapSourceInvalidated;
-    BOOL _viewHidden;
     CGFloat _contentScaleFactor;
     
     // Current provider of raster map
@@ -537,7 +536,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (BOOL) isMapHidden
 {
-    return _viewHidden && !_app.carPlayActive;
+    return self.view.window == nil && !_app.carPlayActive;
 }
 
 #pragma mark - OAMapRendererDelegate
@@ -574,8 +573,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    _viewHidden = NO;
 
     // Update map source (if needed)
     if (_mapSourceInvalidated)
@@ -611,8 +608,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
-    _viewHidden = YES;
 
     if (self.mapViewLoaded && !_app.carPlayActive)
     {
@@ -3872,7 +3867,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName
 {
-    @synchronized(self) {
+    @synchronized(_rendererSync) {
         if (_mapPresentationEnvironment)
         {
             NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
@@ -3880,7 +3875,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             QHashIterator<QString, int> it(renderingAttrs);
             while (it.hasNext()) {
                 it.next();
-                NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
+                NSString *key = 0 == it.key().length() ? @"" : it.key().toNSString();
                 NSNumber *value = @(it.value());
                 
                 [result setObject:value forKey:key];

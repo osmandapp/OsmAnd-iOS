@@ -259,6 +259,7 @@ NSString *const kXmlColon = @"_-_";
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MMM dd, yyyy HH:mm"];
     NSString *destPath = [[logsPath stringByAppendingPathComponent:[formatter stringFromDate:NSDate.date]] stringByAppendingPathExtension:@"log"];
+    freopen([destPath fileSystemRepresentation], "a+", stdout);
     freopen([destPath fileSystemRepresentation], "a+", stderr);
 #endif
 }

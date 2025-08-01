@@ -33,10 +33,14 @@ final class ColorPaletteHelper: NSObject {
 
         let notificationName = NSNotification.Name("ColorPaletteDicrectoryUpdated")
         directoryObserver = DirectoryObserver(app.colorsPalettePath, notificationName: notificationName)
-        directoryObserver.startObserving()
-
+        
         super.init()
 
+        if let dir = app.colorsPalettePath, let allFiles = try? FileManager.default.contentsOfDirectory(atPath: dir) {
+            allFiles.filter { !$0.hasPrefix(TerrainMode.hillshadeScndPrefix) }.forEach { parseGradientColorPalette($0) }
+        }
+        
+        directoryObserver.startObserving()
         filesUpdatedObserver =
             NotificationCenter.default.addObserver(forName: notificationName,
                                                    object: nil,
@@ -126,7 +130,7 @@ final class ColorPaletteHelper: NSObject {
         return cachedPalette
     }
 
-    private func parseGradientColorPalette(_ colorPaletteFileName: String) -> ColorPalette? {
+    @discardableResult private func parseGradientColorPalette(_ colorPaletteFileName: String) -> ColorPalette? {
         if colorPaletteFileName.hasSuffix(TXT_EXT) {
             let filePath = getColorPaletteDir().appendingPathComponent(colorPaletteFileName)
             if FileManager.default.fileExists(atPath: filePath) {

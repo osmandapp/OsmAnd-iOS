@@ -952,6 +952,10 @@
 "meridian_180" = "180th meridian";
 "quick_action_showhide_coordinates_grid_descr" = "Action to control the visibility of the Coordinates grid on the map.";
 
+"standard_maps" = "Standard maps";
+"wikipedia_and_travel_maps" = "Wikipedia and Travel maps";
+"topography_maps" = "Topography maps";
+
 // HUD
 "hud_heading" = "Heading";
 "hud_no_movement" = "No movement";

@@ -144,7 +144,7 @@
         NSInteger nIsize = [_nodeIds count];
         for (int i = 0; i < nIsize; i++) {
             OANode *n = ((OANode *)[entities objectForKey:[[OAEntityId alloc]
-                                                           initWithEntityType:NODE identifier:_nodeIds[i].longLongValue]]);
+                                                           initWithEntityType:EOAEntityTypeNode identifier:_nodeIds[i].longLongValue]]);
             if (n)
                 [_nodes addObject:n];
         }
@@ -181,7 +181,7 @@
     
     NSMutableArray<OAEntityId *> *ls = [NSMutableArray new];
     for (NSNumber *nodeId in _nodeIds) {
-        [ls addObject:[[OAEntityId alloc] initWithEntityType:NODE identifier:nodeId.longLongValue]];
+        [ls addObject:[[OAEntityId alloc] initWithEntityType:EOAEntityTypeNode identifier:nodeId.longLongValue]];
     }
     return ls;
 }

@@ -2331,7 +2331,7 @@ includeHidden:(BOOL)includeHidden
                                                            withRegionName:YES
                                                          withResourceType:NO];
                         item.resource = resource;
-                        item.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];;
+                        item.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
                         item.worldRegion = region;
                         item.resourceType = resource->type;
                         

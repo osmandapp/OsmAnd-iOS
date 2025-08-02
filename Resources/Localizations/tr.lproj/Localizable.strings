@@ -2996,7 +2996,7 @@
 "map_widget_ant_bicycle_speed" = "Bisiklet Hızı";
 "calculate_online" = "Çevrim içi hesapla";
 "getting_list_required_maps" = "Gerekli haritaların listesi alınıyor...";
-"osm_id" = "OSM kimliği";
+"shared_string_osm_id" = "OSM kimliği";
 "travel_guides_beta" = "Yolculuk rehberleri (Beta)";
 "track_sort_az" = "Ad A - Z";
 "shared_string_nearest" = "En yakın";

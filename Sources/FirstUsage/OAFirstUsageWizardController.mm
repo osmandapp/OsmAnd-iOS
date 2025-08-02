@@ -362,7 +362,7 @@ typedef enum
     return [UIMenu menuWithTitle:@""
                            image:nil
                       identifier:nil
-                         options:UIMenuOptionsDisplayInline children:@[restoreCloudAction, restoreFileAction]];;
+                         options:UIMenuOptionsDisplayInline children:@[restoreCloudAction, restoreFileAction]];
 }
 
 - (void)onRestoreFromFilePressed

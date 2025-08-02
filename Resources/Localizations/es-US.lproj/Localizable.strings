@@ -3317,7 +3317,7 @@
 "edit_tilesource_maxzoom" = "Zum máximo";
 "edit_tilesource_minzoom" = "Zum mínimo";
 "step_by_step" = "Giro a giro";
-"osm_id" = "ID de OSM";
+"shared_string_osm_id" = "ID de OSM";
 "shared_string_item" = "Elemento";
 "auto_zoom" = "Zum automático";
 "shared_string_development" = "Desarrollo";

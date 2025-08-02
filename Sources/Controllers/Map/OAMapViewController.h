@@ -54,7 +54,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 @protocol OAMapRendererViewProtocol;
 
-@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment;
+@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -102,6 +102,7 @@ static const int BOTTOM_CONSTANT = 1;
 @property (nonatomic, assign) BOOL isCarPlayDashboardActive;
 
 - (CLLocation *) getMapLocation;
+
 - (float) getMapZoom;
 - (float)getMap3DModeElevationAngle;
 - (void) refreshMap;
@@ -178,6 +179,7 @@ static const int BOTTOM_CONSTANT = 1;
 - (void) hideRecGpxTrack;
 
 - (void) updatePoiLayer;
+- (OAPOILayer *) getMapPoiLayer;
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
@@ -210,6 +212,8 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (void)getAltitudeForMapCenter:(void (^)(float height))callback;
 - (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^)(float height))callback;
+
+- (CLLocation *) getLatLonFromElevatedPixel:(CGFloat)x y:(CGFloat)y;
 
 - (void)fitTrackOnMap:(LineChartView *)lineChartView
              startPos:(double)startPos

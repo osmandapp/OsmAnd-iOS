@@ -78,7 +78,7 @@
     {
         _currentGpx = [OASavingTrackHelper sharedInstance].currentTrack;
         auto rect = _currentGpx.getRect;
-        movedPoint.position = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);;
+        movedPoint.position = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     }
     else
     {

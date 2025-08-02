@@ -148,7 +148,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (BOOL) isLandscape
 {
-    return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;;
+    return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
 }
 
 - (CGFloat) contentHeight
@@ -437,7 +437,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) downloadZoomedTiles
 {
-    NSString *minZoomTileUrl = [self getZoomTileUrl:_minZoom];;
+    NSString *minZoomTileUrl = [self getZoomTileUrl:_minZoom];
     NSString *maxZoomTileUrl = [self getZoomTileUrl:_maxZoom];
     if (!minZoomTileUrl || !maxZoomTileUrl)
         return;

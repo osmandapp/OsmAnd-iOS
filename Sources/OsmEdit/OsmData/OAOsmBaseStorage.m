@@ -440,13 +440,13 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
 }
 
 - (void)endElement:(const xmlChar *)localname prefix:(const xmlChar *)prefix uri:(const xmlChar *)URI {
-    EOAEntityType type = UNDEFINED;
+    EOAEntityType type = EOAEntityTypeUndefined;
     if (0 == strncmp((const char *)localname, kNodeElementName, kNodeElementNameLength))
-        type = NODE;
+        type = EOAEntityTypeNode;
     else if (0 == strncmp((const char *)localname, kWayElementName, kWayElementNameLength))
-        type = WAY;
+        type = EOAEntityTypeWay;
     else if (0 == strncmp((const char *)localname, kRelationElementName, kRelationElementNameLength))
-        type = RELATION;
+        type = EOAEntityTypeRelation;
     if (0 == strncmp((const char *)localname, kModifyElementName, kModifyElementNameLength))
         _currentModify = 0;
     else if (0 == strncmp((const char *)localname, kCreateElementName, kCreateElementNameLength))
@@ -454,7 +454,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     else if (0 == strncmp((const char *)localname, kDeleteElementName, kDeleteElementNameLength))
         _currentModify = 0;
     
-    if (type != UNDEFINED) {
+    if (type != EOAEntityTypeUndefined) {
         if (_currentParsedEntity) {
             OAEntityId *entityId = [[OAEntityId alloc] initWithEntityType:type identifier:[_currentParsedEntity getId]];
             [_entities setObject:_currentParsedEntity forKey:entityId];

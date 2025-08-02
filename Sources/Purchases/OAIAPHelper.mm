@@ -254,7 +254,7 @@ static OASubscriptionState *EXPIRED;
 
 + (BOOL)isMapsPlusAvailable
 {
-    return [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];;
+    return [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
 }
 
 + (BOOL) isOsmAndProAvailable

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "OATargetPoint.h"
 
+@class SelectedMapObject;
+
 @interface OATargetMultiView : UIView
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
@@ -16,6 +18,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 
 @property (nonatomic) NSArray<OATargetPoint *> *targetPoints;
+
+@property (nonatomic) NSArray<SelectedMapObject *> *selectedMapObjects;
+@property (nonatomic) CLLocation *touchPoint;
+
 @property (nonatomic) OATargetPointType activeTargetType;
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete;
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;

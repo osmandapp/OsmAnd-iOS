@@ -664,12 +664,16 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         // Open TravelGpx track
         article.gpxFile = gpxFile
         let filename = TravelObfHelper.shared.createGpxFile(article: article)
-        OATravelGuidesHelper.createGpxFile(article, fileName: filename)
         view.removeSpinner()
         var hasPoints = false
         if let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile) {
             hasPoints = isPointsReadingMode && gpx.wptPoints > 0
-            if hasPoints {
+            var hasTravelGpxTracks = false
+            if let gpxFile, article is TravelGpx {
+                hasTravelGpxTracks = gpxFile.object.tracks.count > 0
+            }
+            
+            if hasPoints || hasTravelGpxTracks {
                 OAAppSettings.sharedManager().showGpx([filename], update: true)
                 if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
                     let trackItem = TrackItem(file: gpx.file)
@@ -677,7 +681,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                     OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: trackItem,
                                                                                    navControllerHistory: newCurrentHistory,
                                                                                    fromTrackMenu: false,
-                                                                                   selectedTab: .pointsTab)
+                                                                                   selectedTab: hasPoints ? .pointsTab : .overviewTab)
                 }
             }
         }

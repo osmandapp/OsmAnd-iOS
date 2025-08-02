@@ -193,12 +193,12 @@
                     OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
                     NSString *entityType = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
                     OAEntity *entity = nil;
-                    if (entityType && [OAEntity typeFromString:entityType] == NODE)
+                    if (entityType && [OAEntity typeFromString:entityType] == EOAEntityTypeNode)
                     {
                         entity = [[OANode alloc] initWithId:sqlite3_column_int64(statement, 0)
                                                    latitude:sqlite3_column_double(statement, 1) longitude:sqlite3_column_double(statement, 2)];
                         
-                    } else if (entityType && [OAEntity typeFromString:entityType] == WAY)
+                    } else if (entityType && [OAEntity typeFromString:entityType] == EOAEntityTypeWay)
                     {
                         entity = [[OAWay alloc] initWithId:sqlite3_column_int64(statement, 0)
                                                   latitude:sqlite3_column_double(statement, 1) longitude:sqlite3_column_double(statement, 2) ids:[NSArray new]];

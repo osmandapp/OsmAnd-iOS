@@ -33,6 +33,11 @@
 #import "OAAppSettings.h"
 #import "OAAppData.h"
 #import "OAObservable.h"
+#import "OAOsmNotePoint.h"
+#import "Localization.h"
+#import "OAPointDescription.h"
+#import "OASymbolMapLayer+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -41,6 +46,8 @@
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 #include <OsmAndCore/SingleSkImage.h>
 #include <QReadWriteLock>
+
+static const int START_ZOOM = 10;
 
 @implementation OAOsmEditsLayer
 {
@@ -260,7 +267,13 @@
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *)getTargetPointFromPoint:(OAOsmPoint *)point {
+- (OATargetPoint *)getTargetPointFromPoint:(OAOsmPoint *)point
+{
+    return [self.class getTargetPointFromPoint:point];
+}
+
++ (OATargetPoint *)getTargetPointFromPoint:(OAOsmPoint *)point
+{
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     targetPoint.location = CLLocationCoordinate2DMake(point.getLatitude, point.getLongitude);
     NSString *title = point.getName;
@@ -277,7 +290,7 @@
     return targetPoint;
 }
 
--(UIImage *)getUIImageForPoint:(OAOsmPoint *)point
++ (UIImage *)getUIImageForPoint:(OAOsmPoint *)point
 {
     if (point.getGroup == EOAGroupPoi)
     {
@@ -316,29 +329,107 @@
     return [NSArray arrayWithArray:data];
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    if (![[OAAppSettings sharedManager].mapSettingShowOfflineEdits get])
+    CGPoint pixel = result.point;
+    if ([self.mapViewController getMapZoom] < START_ZOOM)
         return;
-    for (const auto& edit : _osmEditsCollection->getMarkers())
+    
+    int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+    
+    NSArray<OAOsmNotePoint *> *osmBugs = [[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints];
+    [self collectOsmEdits:osmBugs result:result pixel:pixel radiusPixels:radiusPixels];
+    
+    NSArray<OAOpenStreetMapPoint *> *osmEdits = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
+    [self collectOsmEdits:osmEdits result:result pixel:pixel radiusPixels:radiusPixels];
+}
+
+- (void)collectOsmEdits:(NSArray<OAOsmPoint *> *)osmEdits result:(MapSelectionResult *)result pixel:(CGPoint)pixel radiusPixels:(int)radiusPixels
+{
+    if (!NSArrayIsEmpty(osmEdits))
     {
-        double lat = OsmAnd::Utilities::get31LatitudeY(edit->getPosition().y);
-        double lon = OsmAnd::Utilities::get31LongitudeX(edit->getPosition().x);
-        NSArray * data = [self getAllPoints];
-        for (OAOsmPoint *osmPoint in data)
-        {
-            double pointLat = osmPoint.getLatitude;
-            double pointLon = osmPoint.getLongitude;
-            if ([OAUtilities isCoordEqual:pointLat srcLon:pointLon destLat:lat destLon:lon])
-            {
-                if (OsmAnd::Utilities::distance(pointLon, pointLat, point.longitude, point.latitude) < 15) {
-                    OATargetPoint *targetPoint = [self getTargetPoint:osmPoint];
-                    if (![found containsObject:targetPoint])
-                        [found addObject:targetPoint];
-                }
-            }
-        }
+        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));
+        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
+        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+        [self collectOsmEditsFromScreenArea:osmEdits screenArea:touchPolygon31 result:result];
     }
+}
+
+- (void) collectOsmEditsFromScreenArea:(NSArray<OAOsmPoint *> *)osmEdits screenArea:(OsmAnd::AreaI)screenArea result:(MapSelectionResult *)result
+{
+    for (OAOsmPoint *osmEdit in osmEdits)
+    {
+        double lat = [osmEdit getLatitude];
+        double lon = [osmEdit getLongitude];
+        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:screenArea];
+        if (shouldAdd)
+            [result collect:osmEdit provider:self];
+    }
+}
+
+- (int) getDefaultRadiusPoi
+{
+    int r;
+    double zoom = self.mapView.zoom;
+    if (zoom <= START_ZOOM) {
+        r = 0;
+    } else {
+        r = 15;
+    }
+    return (int) (r * self.mapView.displayDensityFactor);
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OAOsmPoint.class])
+    {
+        OAOsmPoint *point = (OAOsmPoint *)obj;
+        return  [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OAOsmPoint.class])
+    {
+        OAOsmPoint *point = (OAOsmPoint *)obj;
+        NSString *name = @"";
+        NSString *type = @"";
+        
+        if ([point getGroup] == EOAGroupPoi)
+        {
+            name = [point getName];
+            type = POINT_TYPE_OSM_NOTE;
+        }
+        else if ([point getGroup] == EOAGroupBug)
+        {
+            name = [((OAOsmNotePoint *) point) getText];
+            type = POINT_TYPE_OSM_BUG;
+        }
+        return [[OAPointDescription alloc] initWithType:type name:name];
+    }
+    return nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 #pragma mark - OAMoveObjectProvider

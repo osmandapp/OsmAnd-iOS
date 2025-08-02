@@ -10,6 +10,8 @@
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
 #import "OAOsmAndFormatter.h"
+#import "OAPointDescription.h"
+#import "Localization.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -42,6 +44,11 @@
 - (NSString *) distanceStr:(double)latitude longitude:(double)longitude
 {
     return [OAOsmAndFormatter getFormattedDistance:[self distance:latitude longitude:longitude]];
+}
+
+- (OAPointDescription *) getPointDescription
+{
+    return [[OAPointDescription alloc] initWithType:POINT_TYPE_MARKER typeName:OALocalizedString(@"map_marker") name:_desc];
 }
 
 -(BOOL)isEqual:(id)object

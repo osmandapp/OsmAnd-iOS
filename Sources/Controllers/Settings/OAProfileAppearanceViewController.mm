@@ -944,7 +944,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         
         _locationIconImages = [self getlocationIconImages];
         _navigationIconImages = [self getlocationIconImages];
-        UIColor *newSelectedColor = UIColorFromRGB(_changedProfile.profileColor);;
+        UIColor *newSelectedColor = UIColorFromRGB(_changedProfile.profileColor);
         _profileIconImageView.tintColor = newSelectedColor;
         [self generateData];
 

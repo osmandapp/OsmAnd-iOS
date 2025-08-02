@@ -2532,7 +2532,7 @@
 "amazon_appstore" = "Boutique Amazon";
 "huawei_appgallery" = "Galerie d'applications Huawei";
 "position_on_map_center" = "Centré";
-"routing_attr_motor_type_name" = "Carburant utilisé";
+"routing_attr_motor_type_name" = "Énergie utilisée par le moteur";
 "routing_attr_motor_type_description" = "Sélectionnez le carburant utilisé par le moteur de votre véhicule pour calculer les émissions de CO₂.";
 "routing_attr_motor_type_diesel_name" = "Gazole";
 "routing_attr_motor_type_lpg_name" = "GPL";

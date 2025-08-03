@@ -75,6 +75,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     if (self)
     {
         _gpxItemsToUpload = gpxItemsToUpload;
+        [self commonInit];
     }
     return self;
 }
@@ -85,7 +86,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     _mode = EOAOsmUploadGPXViewConrollerModeInitial;
     _selectedVisibility = EOAOsmUploadGPXVisibilityPublic;
     _descriptionText = @"";
-    _tagsText = kDefaultTag;
+    _tagsText = [self tagsTextWithDefaultActivity];
     _isAuthorised = [OAOsmOAuthHelper isAuthorised];
     _isOAuthAllowed = [OAOsmOAuthHelper isOAuthAllowed];
 }
@@ -462,6 +463,44 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     return UITableViewAutomaticDimension;
 }
 
+#pragma mark - Additions
+
+- (NSString *)tagsTextWithDefaultActivity
+{
+    NSString *baseTag = kDefaultTag;
+    NSString *activityTag = [self defaultActivityFromItems:_gpxItemsToUpload];
+    if (activityTag.length > 0)
+        return [NSString stringWithFormat:@"%@, %@", baseTag, activityTag];
+    
+    return baseTag;
+}
+
+- (nullable NSString *)defaultActivityFromItems:(NSArray<OASTrackItem *> *)items
+{
+    for (OASTrackItem *track in items)
+    {
+        OASGpxDataItem *item = [[OASGpxDbHelper shared] getItemFile:[[OASKFile alloc] initWithFilePath:track.path]];
+        NSString *activity = [item getParameterParameter:OASGpxParameter.activityType];
+        if (activity.length > 0)
+            return activity;
+    }
+    
+    return nil;
+}
+
+- (NSOrderedSet<NSString *> *)orderedTagsFromString:(NSString *)tagsString
+{
+    NSMutableOrderedSet<NSString *> *set = [NSMutableOrderedSet orderedSet];
+    for (NSString *comp in [tagsString componentsSeparatedByString:@","])
+    {
+        NSString *tag = [comp stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+        if (tag.length > 0)
+            [set addObject:tag];
+    }
+    
+    return [set copy];
+}
+
 #pragma mark - Selectors
 
 - (void)onLeftNavbarButtonPressed
@@ -512,9 +551,11 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             
             _filesUploadingProgress = [NSMutableDictionary dictionary];
             _failedFileNames = [NSMutableArray array];
+            NSOrderedSet<NSString *> *tagsSet = [self orderedTagsFromString:_tagsText];
+            NSString *defaultActivity = [self defaultActivityFromItems:_gpxItemsToUpload];
             
             OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *)[OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
-            _uploadTask = [[OAUploadGPXFilesTask alloc] initWithPlugin:plugin gpxItemsToUpload:_gpxItemsToUpload tags:_tagsText visibility:visibility description:_descriptionText listener:self];
+            _uploadTask = [[OAUploadGPXFilesTask alloc] initWithPlugin:plugin gpxItemsToUpload:_gpxItemsToUpload tags:tagsSet defaultActivity:defaultActivity visibility:visibility description:_descriptionText listener:self];
             [_uploadTask uploadTracks];
         }
     }

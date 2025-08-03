@@ -15,7 +15,7 @@
 
 @interface OAUploadGPXFilesTask : NSObject
 
-- (instancetype) initWithPlugin:(OAOsmEditingPlugin *)plugin gpxItemsToUpload:(NSArray<OASTrackItem *> *)gpxItemsToUpload tags:(NSString *)tags visibility:(NSString *)visibility description:(NSString *)description listener:(id<OAOnUploadFileListener>)listener;
+- (instancetype) initWithPlugin:(OAOsmEditingPlugin *)plugin gpxItemsToUpload:(NSArray<OASTrackItem *> *)gpxItemsToUpload tags:(NSOrderedSet<NSString *> *)tags defaultActivity:(NSString *)defaultActivity visibility:(NSString *)visibility description:(NSString *)description listener:(id<OAOnUploadFileListener>)listener;
 
 - (void) uploadTracks;
 

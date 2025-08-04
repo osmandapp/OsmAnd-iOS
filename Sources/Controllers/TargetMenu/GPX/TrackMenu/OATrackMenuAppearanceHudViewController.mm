@@ -971,6 +971,7 @@ static const NSInteger kColorsSection = 1;
         [weakSelf selectColorType:OAColoringType.ALTITUDE];
     }];
     altitudeAction.state = [_selectedItem.coloringType isAltitude] ? UIMenuElementStateOn : UIMenuElementStateOff;
+    altitudeAction.attributes = [self shouldAvailableItem:OAColoringType.ALTITUDE] ? 0 : UIMenuElementAttributesDisabled;
     
     UIAction *speedAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_speed", nil)
                                                 image:nil
@@ -979,6 +980,7 @@ static const NSInteger kColorsSection = 1;
         [weakSelf selectColorType:OAColoringType.SPEED];
     }];
     speedAction.state = [_selectedItem.coloringType isSpeed] ? UIMenuElementStateOn : UIMenuElementStateOff;
+    speedAction.attributes = [self shouldAvailableItem:OAColoringType.SPEED] ? 0 : UIMenuElementAttributesDisabled;
     
     UIAction *slopeAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope", nil)
                                                 image:nil
@@ -987,6 +989,7 @@ static const NSInteger kColorsSection = 1;
         [weakSelf selectColorType:OAColoringType.SLOPE];
     }];
     slopeAction.state = [_selectedItem.coloringType isSlope] ? UIMenuElementStateOn : UIMenuElementStateOff;
+    slopeAction.attributes = [self shouldAvailableItem:OAColoringType.SLOPE] ? 0 : UIMenuElementAttributesDisabled;
 
     NSMutableArray<UIAction *> *proColorActions = [NSMutableArray array];
     for (NSString *attribute in OASColoringType.routeStatisticsAttributesStrings)
@@ -1028,8 +1031,27 @@ static const NSInteger kColorsSection = 1;
     }];
     
     action.state = isRouteInfoAttribute && [_selectedRouteAttributesString isEqualToString:selectedString] ? UIMenuElementStateOn : UIMenuElementStateOff;
+    action.attributes = [self shouldAvailableItem:OAColoringType.ATTRIBUTE attributeName:selectedString] ? 0 : UIMenuElementAttributesDisabled;
 
     return action;
+}
+
+- (BOOL)shouldAvailableItem:(OAColoringType *)type
+{
+    return [self shouldAvailableItem:type attributeName:nil];
+}
+
+- (BOOL)shouldAvailableItem:(OAColoringType *)type attributeName:(NSString *)attributeName
+{
+    for (OATrackAppearanceItem *item in _availableColoringTypes)
+    {
+        if (![item.coloringType.name isEqualToString:type.name])
+            continue;
+        
+        if (![item.coloringType isRouteInfoAttribute] || [item.attrName isEqualToString:attributeName])
+            return item.isEnabled;
+    }
+    return NO;
 }
 
 - (UIMenu *)createChevronMenu:(NSString *)title
@@ -2649,7 +2671,7 @@ static const NSInteger kColorsSection = 1;
         if (![item.coloringType.name isEqualToString:selectedColoringType.name])
             continue;
         
-        if (![item.coloringType.name isEqualToString:OAColoringType.ATTRIBUTE.name] ||
+        if (![item.coloringType isRouteInfoAttribute] ||
             [item.attrName isEqualToString:_selectedRouteAttributesString])
         {
             selectedItem = item;

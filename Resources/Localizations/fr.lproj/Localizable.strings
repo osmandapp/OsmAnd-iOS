@@ -369,7 +369,7 @@
 "shared_string_is_open" = "Ouvert";
 "shared_string_all" = "Tout";
 "poi_filter_by_name" = "Rechercher par nom";
-"poi_filter_closest_poi" = "Points d\'intérêt à proximité";
+"poi_filter_closest_poi" = "Points d'intérêt les plus proches";
 "poi_filter_custom_filter" = "Filtre personnalisé";
 "edit_filter_delete_dialog_title" = "Supprimer ce filtre \?";
 "try_again" = "Essayer à nouveau";
@@ -502,7 +502,7 @@
 "speak_traffic_warnings" = "Alertes de circulation";
 "shared_string_gpx_waypoints" = "Points de passage de la trace";
 "speak_favorites" = "Favoris à proximité";
-"speak_poi" = "POI à proximité";
+"speak_poi" = "Point d'intérêt à proximité";
 "speak_pedestrian" = "Passages piétons";
 "int_seconds" = "secondes";
 "shared_string_never" = "Jamais";

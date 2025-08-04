@@ -131,7 +131,7 @@
     else
         drivingRegionValue = [OADrivingRegion getName:[_settings.drivingRegion get:self.appMode]];
     
-    NSString* metricSystemValue;
+    NSString *metricSystemValue;
     switch ([_settings.metricSystem get:self.appMode]) {
         case KILOMETERS_AND_METERS:
             metricSystemValue = OALocalizedString(@"si_km_m");
@@ -156,7 +156,7 @@
             break;
     }
     
-    NSString* speedSystemValue;
+    NSString *speedSystemValue;
     switch ([_settings.speedSystem get:self.appMode]) {
         case KILOMETERS_PER_HOUR:
             speedSystemValue = OALocalizedString(@"si_kmh");
@@ -181,9 +181,10 @@
             break;
     }
     
-    NSString* volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
+    NSString *volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
+    NSString *tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
     
-    NSString* geoFormatValue;
+    NSString *geoFormatValue;
     switch ([_settings.settingGeoFormat get:self.appMode]) {
         case MAP_GEO_FORMAT_DEGREES:
             geoFormatValue = OALocalizedString(@"navigate_point_format_D");
@@ -208,7 +209,7 @@
             break;
     }
     
-    NSString* angularUnitsValue = @"";
+    NSString *angularUnitsValue = @"";
     switch ([_settings.angularUnits get:self.appMode])
     {
         case DEGREES360:
@@ -230,7 +231,7 @@
             break;
     }
     
-    NSString* externalInputDeviceValue;
+    NSString *externalInputDeviceValue;
     if ([_settings.settingExternalInputDevice get:self.appMode] == GENERIC_EXTERNAL_DEVICE)
         externalInputDeviceValue = OALocalizedString(@"sett_generic_ext_input");
     else if ([_settings.settingExternalInputDevice get:self.appMode] == WUNDERLINQ_EXTERNAL_DEVICE)
@@ -278,24 +279,31 @@
     }];
     [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"unit_of_length"),
+        @"title" : OALocalizedString(@"routing_attr_length_name"),
         @"value" : metricSystemValue,
         @"icon" : @"ic_custom_ruler",
         @"key" : @"lengthUnits",
     }];
     [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"units_of_speed"),
+        @"title" : OALocalizedString(@"shared_string_speed"),
         @"value" : speedSystemValue,
         @"icon" : @"ic_action_speed",
         @"key" : @"speedUnits",
     }];
     [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"unit_of_volume"),
+        @"title" : OALocalizedString(@"shared_string_volume"),
         @"value" : volumeSystemValue,
         @"icon" : @"ic_custom_obd_fuel_tank",
         @"key" : @"volumeUnits",
+    }];
+    [unitsArr addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"map_settings_weather_temp"),
+        @"value" : tempSystemValue,
+        @"icon" : @"ic_custom_thermometer",
+        @"key" : @"tempUnits"
     }];
     [formatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
@@ -450,6 +458,8 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfSpeed applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"volumeUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfVolume applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"tempUnits"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfTemp applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
         settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
@@ -461,7 +471,7 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"])
+        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else
             [self showModalViewController:settingsViewController];

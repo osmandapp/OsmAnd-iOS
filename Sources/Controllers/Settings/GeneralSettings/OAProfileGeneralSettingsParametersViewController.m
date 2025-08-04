@@ -77,13 +77,16 @@
             _title = OALocalizedString(@"driving_region");
             break;
         case EOAProfileGeneralSettingsUnitsOfLenght:
-            _title = OALocalizedString(@"unit_of_length");
+            _title = OALocalizedString(@"routing_attr_length_name");
             break;
         case EOAProfileGeneralSettingsUnitsOfSpeed:
-            _title = OALocalizedString(@"units_of_speed");
+            _title = OALocalizedString(@"shared_string_speed");
             break;
         case EOAProfileGeneralSettingsUnitsOfVolume:
-            _title = OALocalizedString(@"unit_of_volume");
+            _title = OALocalizedString(@"shared_string_volume");
+            break;
+        case EOAProfileGeneralSettingsUnitsOfTemp:
+            _title = OALocalizedString(@"map_settings_weather_temp");
             break;
         case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             _title = OALocalizedString(@"angular_measurment_units");
@@ -120,12 +123,24 @@
 
 - (NSString *)getSubtitle
 {
-    return (_settingsType == EOAProfileGeneralSettingsMapOrientation && _openFromMap) || _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation || _settingsType == EOAProfileGeneralSettingsDisplayPosition || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume ? @"" : [self.appMode toHumanString];
+    switch (_settingsType)
+    {
+        case EOAProfileGeneralSettingsMapOrientation:
+            return _openFromMap ? @"" : [self.appMode toHumanString];
+        case EOAProfileGeneralSettingsAppTheme:
+        case EOAProfileGeneralSettingsDistanceDuringNavigation:
+        case EOAProfileGeneralSettingsDisplayPosition:
+        case EOAProfileGeneralSettingsUnitsOfVolume:
+        case EOAProfileGeneralSettingsUnitsOfTemp:
+            return @"";
+        default:
+            return [self.appMode toHumanString];
+    }
 }
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume ? NO : !_openFromMap;
+    return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp ? NO : !_openFromMap;
 }
 
 - (BOOL)useCustomTableViewHeader
@@ -156,6 +171,8 @@
         return OALocalizedString(@"compass_click_desc");
     else if (_settingsType == EOAProfileGeneralSettingsUnitsOfVolume)
         return OALocalizedString(@"unit_of_volume_description");
+    else if (_settingsType == EOAProfileGeneralSettingsUnitsOfTemp)
+        return OALocalizedString(@"unit_of_temperature_description");
     else
         return @"";
 }
@@ -183,6 +200,7 @@
     NSInteger metricSystem = [_settings.metricSystem get:self.appMode];
     NSInteger speedSystem = [_settings.speedSystem get:self.appMode];
     NSInteger volumeSystem = [_settings.volumeUnits get:self.appMode];
+    NSInteger tempSystem = [_settings.temperatureUnits get:self.appMode];
     NSInteger externamlInputDevices = [_settings.settingExternalInputDevice get:self.appMode];
     if (automatic)
         drivingRegion = -1;
@@ -457,6 +475,30 @@
             }];
             break;
             
+        case EOAProfileGeneralSettingsUnitsOfTemp:
+            [dataArr addObject:@{
+                @"name" : @"deviceSettings",
+                @"title" : [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"device_settings"), [[NSUnitTemperature current] displaySymbol]],
+                @"selected" : @(tempSystem == SYSTEM_DEFAULT),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier]
+            }];
+            [dataArr addObject:@{
+                @"name" : @"celsius",
+                @"title" : [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"weather_temperature_celsius"), @"°C"],
+                @"selected" : @(tempSystem == CELSIUS),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier]
+            }];
+            [dataArr addObject:@{
+                @"name" : @"fahrenheit",
+                @"title" : [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"weather_temperature_fahrenheit"), @"°F"],
+                @"selected" : @(tempSystem == FAHRENHEIT),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier]
+            }];
+            break;
+
         case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             [dataArr addObject:@{
                 @"name" : @"degrees_180",
@@ -524,7 +566,7 @@
 
 - (BOOL) hideFirstHeader
 {
-    return _settingsType == EOAProfileGeneralSettingsMapOrientation || _settingsType == EOAProfileGeneralSettingsDisplayPosition || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume;
+    return [@[@(EOAProfileGeneralSettingsMapOrientation), @(EOAProfileGeneralSettingsDisplayPosition), @(EOAProfileGeneralSettingsUnitsOfVolume), @(EOAProfileGeneralSettingsUnitsOfTemp)] containsObject:@(_settingsType)];
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section
@@ -561,7 +603,7 @@
             [cell leftIconVisibility:item[@"icon"] != nil];
             cell.titleLabel.text = item[@"title"];
             cell.descriptionLabel.text = item[@"description"];
-            if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume)
+            if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp)
             {
                 cell.leftIconView.image = [item[@"selected"] boolValue] ? [UIImage templateImageNamed:item[@"icon"]] : nil;
             }
@@ -574,7 +616,7 @@
             {
                 cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
             }
-            cell.accessoryType = [item[@"selected"] boolValue] && _settingsType != EOAProfileGeneralSettingsAppTheme && _settingsType != EOAProfileGeneralSettingsScreenOrientation && _settingsType != EOAProfileGeneralSettingsDistanceDuringNavigation && _settingsType != EOAProfileGeneralSettingsUnitsOfVolume ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = [item[@"selected"] boolValue] && _settingsType != EOAProfileGeneralSettingsAppTheme && _settingsType != EOAProfileGeneralSettingsScreenOrientation && _settingsType != EOAProfileGeneralSettingsDistanceDuringNavigation && _settingsType != EOAProfileGeneralSettingsUnitsOfVolume && _settingsType != EOAProfileGeneralSettingsUnitsOfTemp ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -619,6 +661,9 @@
             break;
         case EOAProfileGeneralSettingsUnitsOfVolume:
             [self selectSettingVolumeUnits:name];
+            break;
+        case EOAProfileGeneralSettingsUnitsOfTemp:
+            [self selectSettingTemperatureUnits:name];
             break;
         case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             [self selectSettingAngularUnits:name];
@@ -759,6 +804,18 @@
         [_settings.volumeUnits set:IMPERIAL_GALLONS mode:self.appMode];
     else if ([name isEqualToString:@"us_gallons"])
         [_settings.volumeUnits set:US_GALLONS mode:self.appMode];
+}
+
+- (void) selectSettingTemperatureUnits:(NSString *)name
+{
+    if ([name isEqualToString:@"deviceSettings"])
+        [_settings.temperatureUnits set:SYSTEM_DEFAULT mode:self.appMode];
+    else if ([name isEqualToString:@"celsius"])
+        [_settings.temperatureUnits set:CELSIUS mode:self.appMode];
+    else if ([name isEqualToString:@"fahrenheit"])
+        [_settings.temperatureUnits set:FAHRENHEIT mode:self.appMode];
+    
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void) selectSettingAngularUnits:(NSString *)name

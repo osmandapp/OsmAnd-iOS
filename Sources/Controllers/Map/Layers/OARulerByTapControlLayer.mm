@@ -58,6 +58,8 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _lineEndsMarkersCollection;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _linesCollection;
     OARulerByTapView *_rulerByTapView;
+    OAAppSettings *_settings;
+    OAApplicationMode *_appMode;
     
     BOOL _showingLine;
     
@@ -85,6 +87,9 @@
     _rulerByTapView = [[OARulerByTapView alloc] initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, DeviceScreenHeight)];
     _rulerByTapView.lineDrawingDelegate = self;
     _rulerByTapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    _settings = [OAAppSettings sharedManager];
+    _appMode = [_settings.applicationMode get];
     
     _linesCollection.reset(new OsmAnd::VectorLinesCollection());
     _lineEndsMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
@@ -205,11 +210,13 @@
 
 - (void) drawDistanceMarker:(NSString *)distance
 {
+    float textSizeFactor = [OADistanceByTapTextSizeConstant getTextSizeFactor:[_settings.distanceByTapTextSize get:_appMode]];
+    OsmAnd::TextRasterizer::Style captionStyle = self.captionStyle.setSize([self getNormalCaptionSize] * textSizeFactor);
     OsmAnd::MapMarkerBuilder distanceMarkerBuilder;
     distanceMarkerBuilder.setIsHidden(false);
     distanceMarkerBuilder.setBaseOrder(self.baseOrder - 1);
     distanceMarkerBuilder.setCaption([distance UTF8String]);
-    distanceMarkerBuilder.setCaptionStyle(self.captionStyle);
+    distanceMarkerBuilder.setCaptionStyle(captionStyle);
     
     std::shared_ptr<OsmAnd::MapMarker> marker = distanceMarkerBuilder.buildAndAddToCollection(_lineEndsMarkersCollection);
     marker->setOffsetFromLine(LABEL_OFFSET);

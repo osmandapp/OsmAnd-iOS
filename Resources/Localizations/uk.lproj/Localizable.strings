@@ -3824,3 +3824,4 @@
 "obd_fuel_type_hybrid_hydrogen" = "Гібридний водень";
 "obd_fuel_type_hydrogen" = "Водень";
 "obd_fuel_type_unknown" = "Невідомий тип палива";
+"unit_of_temperature_description" = "Вибрані одиниці вимірювання будуть застосовані до всіх даних, пов'язаних з температурою, у поточному профілі.";

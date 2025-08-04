@@ -3820,3 +3820,4 @@
 "obd_fuel_type_hybrid_hydrogen" = "Hybrid-brint";
 "obd_fuel_type_hydrogen" = "Brint";
 "obd_fuel_type_unknown" = "Ukendt brændstoftype";
+"unit_of_temperature_description" = "De valgte enheder anvendes på alle temperaturrelaterede data i den aktuelle profil.";

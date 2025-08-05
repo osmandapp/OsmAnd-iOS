@@ -3380,3 +3380,12 @@
 "osm_delete_confirmation_descr" = "Σίγουρα θέλετε να διαγράψετε αυτό το ΣΕ;";
 "osm_note_upload_immediately" = "Ανέβασμα αμέσως";
 "osm_note_empty_message" = "Παρακαλούμε ορίστε το μήνυμα γι' αυτή τη σημείωση.";
+"obd_fuel_type_bifuel_electric_combustion" = "Διπλό καύσιμο που τρέχει Ηλεκτρικό και Κινητήρα Καύσης";
+"obd_fuel_type_bifuel_electricity" = "Διπλό καύσιμο που τρέχει Ηλεκτρισμό";
+"obd_fuel_type_bifuel_propane" = "Διπλό καύσιμο που τρέχει Προπάνιο";
+"obd_fuel_type_bifuel_cng" = "Διπλό καύσιμο που τρέχει Πεπιεσμένο Φυσικό Αέριο";
+"obd_fuel_type_bifuel_lpg" = "Διπλό καύσιμο που τρέχει Υγροποιημένο Αέριο Πετρελαίου";
+"obd_fuel_type_bifuel_ethanol" = "Διπλό καύσιμο που τρέχει Αιθανόλη";
+"obd_fuel_type_bifuel_methanol" = "Διπλό καύσιμο που τρέχει Μεθανόλη";
+"obd_fuel_type_bifuel_gasoline" = "Διπλό καύσιμο που τρέχει Βενζίνη";
+"backup_error_user_is_already_registered" = "Αυτή η διεύθυνση email χρησιμοποιείται ήδη σε άλλον λογαριασμό";

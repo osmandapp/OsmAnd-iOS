@@ -3801,3 +3801,4 @@
 "obd_fuel_type_hybrid_hydrogen" = "Hybridní vodíkový";
 "obd_fuel_type_hydrogen" = "Vodík";
 "obd_fuel_type_unknown" = "Neznámý typ paliva";
+"unit_of_temperature_description" = "Vybrané jednotky budou použity na všechna data týkající se teploty v aktuálním profilu.";

@@ -480,7 +480,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     for (OASTrackItem *track in items)
     {
         OASGpxDataItem *item = [[OASGpxDbHelper shared] getItemFile:[[OASKFile alloc] initWithFilePath:track.path]];
-        NSString *activity = [item getParameterParameter:OASGpxParameter.activityType];
+        NSString *activity = item ? [item getParameterParameter:OASGpxParameter.activityType] : nil;
         if (activity.length > 0)
             return activity;
     }

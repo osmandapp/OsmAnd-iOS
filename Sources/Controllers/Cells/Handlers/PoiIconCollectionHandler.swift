@@ -45,7 +45,6 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private func setup() {
         initIconCategories()
         setScrollDirection(.horizontal)
-        setSelectedIndexPath(IndexPath(row: 0, section: 0))
         selectCategory(categoriesByKeyName.keys.contains(LAST_USED_KEY) ? LAST_USED_KEY : SPECIAL_KEY)
     }
     

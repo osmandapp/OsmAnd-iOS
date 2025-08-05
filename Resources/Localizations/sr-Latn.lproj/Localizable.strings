@@ -3820,3 +3820,4 @@
 "obd_fuel_type_bifuel_hydrogen" = "Dvogorivno radno Vodonik";
 "obd_fuel_type_hybrid_hydrogen" = "Hibridno Vodonik";
 "obd_fuel_type_hydrogen" = "Vodonik";
+"unit_of_temperature_description" = "Izabrane jedinice će biti primenjene na sve podatke vezane za temperaturu u trenutnom profilu.";

@@ -234,6 +234,7 @@ static NSString * const saveHeadingToGpxKey = @"saveHeadingToGpx";
 
 static NSString * const rulerModeKey = @"rulerMode";
 static NSString * const showDistanceRulerKey = @"showDistanceRuler";
+static NSString * const distanceByTapTextSizeKey = @"distanceByTapTextSize";
 static NSString * const showElevationProfileWidgetKey = @"show_elevation_profile_widget";
 static NSString * const showSlopesOnElevationWidget = @"show_slopes_on_elevation_widget";
 static NSString * const customWidgetKeys = @"custom_widgets_keys";
@@ -1426,6 +1427,40 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (NSString *)description
 {
     return [OASimulationMode toDescription:_mode];
+}
+
+@end
+
+@interface OADistanceByTapTextSizeConstant ()
+
+@property (nonatomic) EOADistanceByTapTextSizeConstant textSize;
+@property (nonatomic) NSString *key;
+@property (nonatomic) float textSizeFactor;
+
+@end
+
+@implementation OADistanceByTapTextSizeConstant
+
++ (instancetype)withDistanceByTapTextSizeConstant:(EOADistanceByTapTextSizeConstant)textSize
+{
+    OADistanceByTapTextSizeConstant *obj = [[OADistanceByTapTextSizeConstant alloc] init];
+    if (obj)
+    {
+        obj.textSize = textSize;
+        obj.key = [self.class toHumanString:textSize];
+        obj.textSizeFactor = [self.class getTextSizeFactor:textSize];
+    }
+    return obj;
+}
+
++ (NSString *)toHumanString:(EOADistanceByTapTextSizeConstant)textSize
+{
+    return OALocalizedString(textSize == LARGE ? @"shared_string_large" : @"shared_string_normal");
+}
+
++ (float)getTextSizeFactor:(EOADistanceByTapTextSizeConstant)textSize
+{
+    return textSize == LARGE ? 1.5 : 1.0;
 }
 
 @end
@@ -4338,6 +4373,77 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 @end
 
+@implementation OACommonDistanceByTapTextSizeConstant
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOADistanceByTapTextSizeConstant)defValue {
+    OACommonDistanceByTapTextSizeConstant *obj = [[OACommonDistanceByTapTextSizeConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOADistanceByTapTextSizeConstant)get
+{
+    return [super get];
+}
+
+- (EOADistanceByTapTextSizeConstant)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant
+{
+    [super set:distanceByTapTextSizeConstant];
+}
+
+- (void)set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant mode:(OAApplicationMode *)mode
+{
+    [super set:distanceByTapTextSizeConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOADistanceByTapTextSizeConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOADistanceByTapTextSizeConstant)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *textSizeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        textSizeMap = @{
+            @"NORMAL": @(NORMAL),
+            @"LARGE": @(LARGE)
+        };
+    });
+    return textSizeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self get:mode] == LARGE ? @"LARGE" : @"NORMAL";
+}
+
+@end
+
 @implementation OACommonWidgetDefaultView
 
 static NSString *kArrivalTimeKey = @"ARRIVAL_TIME";
@@ -5170,6 +5276,9 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
         _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
+        
+        _distanceByTapTextSize = [OACommonDistanceByTapTextSizeConstant withKey:distanceByTapTextSizeKey defValue:NORMAL];
+        [_profilePreferences setObject:_distanceByTapTextSize forKey:@"distance_by_tap_text_size"];
         
         _showElevationProfileWidget = [OACommonBoolean withKey:showElevationProfileWidgetKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:showElevationProfileWidgetKey];

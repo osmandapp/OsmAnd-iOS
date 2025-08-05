@@ -10,4 +10,15 @@ import UIKit
 
 final class ImageHeaderCell: UITableViewCell {
     @IBOutlet weak var backgroundImageView: UIImageView!
+    @IBOutlet private weak var topSpaceConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var bottomSpaceConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var leftSpaceConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var rightSpaceConstraint: NSLayoutConstraint!
+    
+    func configure(verticalSpace: CGFloat, horizontalSpace: CGFloat) {
+        topSpaceConstraint.constant = verticalSpace
+        bottomSpaceConstraint.constant = verticalSpace
+        rightSpaceConstraint.constant = horizontalSpace
+        leftSpaceConstraint.constant = horizontalSpace
+    }
 }

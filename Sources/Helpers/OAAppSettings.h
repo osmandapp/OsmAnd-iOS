@@ -374,6 +374,23 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
+{
+    NORMAL = 0,
+    LARGE
+};
+
+@interface OADistanceByTapTextSizeConstant : NSObject
+
+@property (nonatomic, readonly) EOADistanceByTapTextSizeConstant textSize;
+
++ (instancetype)withDistanceByTapTextSizeConstant:(EOADistanceByTapTextSizeConstant)textSize;
+
++ (NSString *)toHumanString:(EOADistanceByTapTextSizeConstant)textSize;
++ (float)getTextSizeFactor:(EOADistanceByTapTextSizeConstant)textSize;
+
+@end
+
 @interface OACommonPreference : NSObject
 
 @property (nonatomic, readonly) NSString *key;
@@ -812,6 +829,17 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 @end
 
+@interface OACommonDistanceByTapTextSizeConstant : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADistanceByTapTextSizeConstant)defValue;
+
+- (EOADistanceByTapTextSizeConstant) get;
+- (EOADistanceByTapTextSizeConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant;
+- (void) set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonWidgetDefaultView : OACommonInteger
 
 + (instancetype)withKey:(NSString *)key defValue:(int)defValue;
@@ -1055,6 +1083,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonString *routeInfoAttribute;
 @property (nonatomic) OACommonString *routeLineWidth;
 @property (nonatomic) OACommonBoolean *routeShowTurnArrows;
+@property (nonatomic) OACommonDistanceByTapTextSizeConstant *distanceByTapTextSize;
 
 @property (nonatomic) OACommonBoolean *showScreenAlerts;
 @property (nonatomic) OACommonBoolean *showTrafficWarnings;

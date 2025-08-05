@@ -211,12 +211,13 @@
 - (void) drawDistanceMarker:(NSString *)distance
 {
     float textSizeFactor = [OADistanceByTapTextSizeConstant getTextSizeFactor:[_settings.distanceByTapTextSize get:_appMode]];
-    OsmAnd::TextRasterizer::Style captionStyle = self.captionStyle.setSize([self getNormalCaptionSize] * textSizeFactor);
+    OsmAnd::TextRasterizer::Style newCaptionStyle = self.captionStyle;
+    newCaptionStyle.setSize([self getNormalCaptionSize] * textSizeFactor);
     OsmAnd::MapMarkerBuilder distanceMarkerBuilder;
     distanceMarkerBuilder.setIsHidden(false);
     distanceMarkerBuilder.setBaseOrder(self.baseOrder - 1);
     distanceMarkerBuilder.setCaption([distance UTF8String]);
-    distanceMarkerBuilder.setCaptionStyle(captionStyle);
+    distanceMarkerBuilder.setCaptionStyle(newCaptionStyle);
     
     std::shared_ptr<OsmAnd::MapMarker> marker = distanceMarkerBuilder.buildAndAddToCollection(_lineEndsMarkersCollection);
     marker->setOffsetFromLine(LABEL_OFFSET);

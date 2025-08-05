@@ -3822,3 +3822,4 @@
 "obd_fuel_type_hybrid_hydrogen" = "Хибридно Водоник";
 "obd_fuel_type_hydrogen" = "Водоник";
 "obd_fuel_type_unknown" = "Непознати тип горива";
+"unit_of_temperature_description" = "Изабране јединице ће бити примењене на све податке везане за температуру у тренутном профилу.";

@@ -168,6 +168,7 @@
         
         auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
         marker->setPosition(position);
+        marker->setUpdateAfterCreated(true);
         return marker;
     }
     else
@@ -348,6 +349,7 @@
                 {
                     auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
                     marker->setPosition(p);
+                    marker->setUpdateAfterCreated(true);
                     currentDist = 0;
                 }
             }
@@ -359,6 +361,7 @@
         {
             auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
             marker->setPosition(p);
+            marker->setUpdateAfterCreated(true);
         }
     }
 }

@@ -32,7 +32,7 @@
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/SingleSkImage.h>
 
-#define kLabelOffset 4
+#define kLabelOffset 6
 
 @interface OADestinationsLayer () <OAStateChangedListener>
 
@@ -64,7 +64,6 @@
 
     BOOL _showCaptionsCache;
     double _textSize;
-    int _myPositionLayerBaseOrder;
 
     BOOL _reconstructMarker;
 }
@@ -108,8 +107,7 @@
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _distanceMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
-    _myPositionLayerBaseOrder = self.mapViewController.mapLayers.myPositionLayer.baseOrder;
-        
+
     [self.app.data.mapLayersConfiguration setLayer:self.layerId Visibility:YES];
     
     _targetPoints = [OATargetPointsHelper sharedInstance];
@@ -244,7 +242,7 @@
 
     OsmAnd::MapMarkerBuilder builder;
     builder.setIsAccuracyCircleSupported(false)
-    .setBaseOrder(self.pointsOrder)
+    .setBaseOrder(self.baseOrder)
     .setIsHidden(false)
     .setPinIcon(OsmAnd::SingleSkImage(markerIcon))
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
@@ -259,7 +257,8 @@
         builder.setCaptionTopSpace(self.captionTopSpace);
     }
     
-    builder.buildAndAddToCollection(_destinationsMarkersCollection);
+    std::shared_ptr<OsmAnd::MapMarker> marker = builder.buildAndAddToCollection(_destinationsMarkersCollection);
+    marker->setUpdateAfterCreated(true);
 }
 
 - (void) removeDestinationPin:(double)latitude longitude:(double)longitude;
@@ -422,11 +421,11 @@
     if (line == nullptr || outline == nullptr)
     {
         OsmAnd::VectorLineBuilder outlineBuilder;
-        outlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + 1);
+        outlineBuilder.setBaseOrder(self.baseOrder + 1);
         outline = outlineBuilder.buildAndAddToCollection(_linesCollection);
 
         OsmAnd::VectorLineBuilder inlineBuilder;
-        inlineBuilder.setBaseOrder(_myPositionLayerBaseOrder);
+        inlineBuilder.setBaseOrder(self.baseOrder);
         line = inlineBuilder.buildAndAddToCollection(_linesCollection);
     }
 
@@ -469,6 +468,7 @@
         // We need to recreate marker each time as new caption needs new symbol
         marker = distanceMarkerBuilder.buildAndAddToCollection(_distanceMarkersCollection);
         marker->setOffsetFromLine(kLabelOffset);
+        marker->setUpdateAfterCreated(true);
 
         outline->attachMarker(marker);
     }

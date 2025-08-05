@@ -3802,3 +3802,6 @@
 "obd_fuel_type_hydrogen" = "Vodík";
 "obd_fuel_type_unknown" = "Neznámý typ paliva";
 "unit_of_temperature_description" = "Vybrané jednotky budou použity na všechna data týkající se teploty v aktuálním profilu.";
+"distance_by_tap_use_description" = "Klepněte na mapu pro zobrazení vzdálenosti mezi vaší aktuální polohou a místem, na které jste klepli.\n\nKlepněte dvěma prsty na mapu pro zobrazení vzdálenosti mezi těmito dvěma body.";
+"shared_string_normal" = "Normální";
+"shared_string_large" = "Velký";

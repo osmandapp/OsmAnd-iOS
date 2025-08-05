@@ -5710,6 +5710,15 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _currentTrackVisualization3dWallColorType = [[[OACommonInteger withKey:currentTrackVisualization3dWallColorTypeKey defValue:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient] makeGlobal] makeShared];
         _currentTrackVisualization3dPositionType = [[[OACommonInteger withKey:currentTrackVisualization3dPositionTypeKey defValue:EOAGPX3DLineVisualizationPositionTypeTop] makeGlobal] makeShared];
         _currentTrackRouteActivity = [[OACommonString withKey:currentTrackRouteActivityKey defValue:@""] makeProfile];
+        [_currentTrackRouteActivity setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
+        [_currentTrackRouteActivity setModeDefaultValue:@"road_cycling" mode:OAApplicationMode.BICYCLE];
+        [_currentTrackRouteActivity setModeDefaultValue:@"walking" mode:OAApplicationMode.PEDESTRIAN];
+        [_currentTrackRouteActivity setModeDefaultValue:@"train_riding" mode:OAApplicationMode.TRAIN];
+        [_currentTrackRouteActivity setModeDefaultValue:@"motorboat" mode:OAApplicationMode.BOAT];
+        [_currentTrackRouteActivity setModeDefaultValue:@"skiing" mode:OAApplicationMode.SKI];
+        [_currentTrackRouteActivity setModeDefaultValue:@"horse_riding" mode:OAApplicationMode.HORSE];
+        [_currentTrackRouteActivity setModeDefaultValue:@"motor_scooter" mode:OAApplicationMode.MOPED];
+        [_currentTrackRouteActivity setModeDefaultValue:@"truck_hgv" mode:OAApplicationMode.TRUCK];
         
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
         _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];

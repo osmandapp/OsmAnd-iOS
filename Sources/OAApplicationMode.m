@@ -234,38 +234,29 @@ static int PROFILE_TRUCK = 1000;
 
 + (NSArray<OAApplicationMode *> *) values
 {
-    NSString *available = OAAppSettings.sharedManager.availableApplicationModes.get;
-    BOOL needRebuild = NO;
     @synchronized (_cachedFilteredValuesLock) {
-        if (_cachedFilteredValues.count == 0 || ![_cachedAvailableApplicationModes isEqualToString:available]) {
-            needRebuild = YES;
-            _cachedFilteredValues = [NSMutableArray array];
-            _cachedAvailableApplicationModes = available;
-        }
-    }
-    if (needRebuild)
-    {
-        if (!_listener)
-        {
-            _listener = [[OAAutoObserverProxy alloc] initWith:self
-                                                  withHandler:@selector(onAvailableAppModesChanged)
-                                                   andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
-        }
-        for (OAApplicationMode *v in [_values copy])
-        {
-            if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT) {
-                @synchronized (_cachedFilteredValuesLock) {
-                    [_cachedFilteredValues addObject:v];
-                }
-            }
-        }
+        NSString *available = OAAppSettings.sharedManager.availableApplicationModes.get;
+        if (_cachedFilteredValues.count > 0 && [_cachedAvailableApplicationModes isEqualToString:available])
+            return [_cachedFilteredValues copy];
     }
     
-    NSArray *valuesCopy;
+    if (!_listener)
+        _listener = [[OAAutoObserverProxy alloc] initWith:self
+                                              withHandler:@selector(onAvailableAppModesChanged)
+                                               andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
+
+    NSMutableArray<OAApplicationMode *> *newFilteredValues = [NSMutableArray array];
+    NSString *available = OAAppSettings.sharedManager.availableApplicationModes.get;
+    for (OAApplicationMode *v in [_values copy])
+        if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
+            [newFilteredValues addObject:v];
+
     @synchronized (_cachedFilteredValuesLock) {
-        valuesCopy = [_cachedFilteredValues copy];
+        _cachedFilteredValues = newFilteredValues;
+        _cachedAvailableApplicationModes = available;
     }
-    return valuesCopy;
+
+    return [newFilteredValues copy];
 }
 
 

@@ -932,7 +932,7 @@
 "rendering_attr_highway_class_track_grade2_name" = "Toestand 2";
 "rendering_attr_surface_grass_name" = "Gras";
 "routing_attr_avoid_toll_name" = "Geen tolwegen";
-"routing_attr_avoid_ferries_description" = "Vermijdt veerboten";
+"routing_attr_avoid_ferries_description" = "Vermijd veerboten";
 "routing_attr_driving_style_name" = "Rijstijl";
 "rendering_attr_roadColors_name" = "Kleurschema voor wegen";
 "routing_attr_allow_advanced_name" = "Sta gevorderde routes toe";
@@ -2315,7 +2315,7 @@
 "map_markers_history" = "Geschiedenis van mapmarkeringen";
 "last_seven_days" = "Afgelopen 7 dagen";
 "announcement_time_off_route" = "Afwijking van de route";
-"map_widget_zoom_level_desc" = "Toont hoever de kaart is ingezoemd.";
+"map_widget_zoom_level_desc" = "Toont het huidige zoomniveau van de kaart.";
 "lang_sr-Latn" = "Servisch (Latijns schrift)";
 "shared_string_result" = "Resultaat";
 "shared_string_deleting" = "Verwijderen";
@@ -2764,3 +2764,7 @@
 "rendering_attr_padusHideBoundaries_name" = "Verberg de grenzen van openbare ruimtes";
 "rendering_attr_padusHideBoundaries_description" = "Verberg de grenzen van openbare ruimtes maar behoud delen";
 "custom_buttons" = "Eigen knoppen";
+"quick_action_verb_start_pause" = "Start-Pauzeer/Hervat";
+"help_article_personal_color_palette_schemes_name" = "Kleurenschema's";
+"delete_widget" = "Widget verwijderen?";
+"delete_widget_description" = "Deze widget zal verwijderd worden. Je kunt deze later herstellen via Configureer Scherm.";

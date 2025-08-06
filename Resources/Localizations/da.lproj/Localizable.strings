@@ -3821,3 +3821,6 @@
 "obd_fuel_type_hydrogen" = "Brint";
 "obd_fuel_type_unknown" = "Ukendt brændstoftype";
 "unit_of_temperature_description" = "De valgte enheder anvendes på alle temperaturrelaterede data i den aktuelle profil.";
+"distance_by_tap_use_description" = "Tryk på kortet for at se afstanden mellem din aktuelle placering og punktet, der trykkes på.\n\nTryk med to fingre på kortet for at se afstanden mellem de to punkter, der trykkes på.";
+"shared_string_normal" = "Normal";
+"shared_string_large" = "Stor";

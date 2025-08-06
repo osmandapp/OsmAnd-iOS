@@ -3821,3 +3821,6 @@
 "obd_fuel_type_hybrid_hydrogen" = "Hibridno Vodonik";
 "obd_fuel_type_hydrogen" = "Vodonik";
 "unit_of_temperature_description" = "Izabrane jedinice će biti primenjene na sve podatke vezane za temperaturu u trenutnom profilu.";
+"distance_by_tap_use_description" = "Dodirnite mapu da biste videli rastojanje između vaše trenutne lokacije i tačke koju ste dodirnuli.\n\nDodirnite mapu sa dva prsta da biste videli rastojanje između dve tačke koje ste dodirnuli.";
+"shared_string_normal" = "Normalno";
+"shared_string_large" = "Veliko";

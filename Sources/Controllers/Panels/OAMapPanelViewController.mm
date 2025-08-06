@@ -3249,9 +3249,7 @@ typedef enum
     if (gpxFile)
     {
         OASTrkSegment *segment = [gpxFile getGeneralSegment];
-        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment
-            ? [TrackChartHelper getAnalysisFor:segment joinSegments:trackItem.joinSegments]
-            : [gpxFile getAnalysisFileTimestamp:0];
+        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment ? [TrackChartHelper getAnalysisFor:segment joinSegments:trackItem.joinSegments] : [gpxFile getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         if (!segment)

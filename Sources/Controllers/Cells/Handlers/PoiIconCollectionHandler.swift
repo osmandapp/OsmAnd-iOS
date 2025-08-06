@@ -76,7 +76,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     func setIconName(_ iconName: String) {
         guard !iconName.isEmpty else { return }
         for category in categories {
-            if isFavoriteList && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
+            if allIconsVCDelegate == nil && isFavoriteList && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
                 setSelectedIndexPath(IndexPath(row: 0, section: 0))
                 selectCategory(category.key)
                 return

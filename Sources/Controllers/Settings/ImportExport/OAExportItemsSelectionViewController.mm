@@ -422,7 +422,11 @@
         return OALocalizedString(@"roads");
     else if ([filePath hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
         return OALocalizedString(@"download_wikipedia_maps");
-    else if ([filePath hasSuffix:BINARY_SRTM_MAP_INDEX_EXT])
+    else if ([filePath hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT])
+        return OALocalizedString(@"shared_string_travel_guides");
+    else if ([filePath hasSuffix:TIF_EXT])
+        return OALocalizedString(@"shared_string_terrain");
+    else if ([filePath hasSuffix:BINARY_SRTM_MAP_INDEX_EXT] || [filePath hasSuffix:BINARY_SRTMF_MAP_INDEX_EXT])
         return OALocalizedString(@"srtm_plugin_name");
     else if ([filePath hasSuffix:BINARY_MAP_INDEX_EXT])
         return OALocalizedString(@"download_regular_maps");

@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, EOAFileSettingsItemFileSubtype) {
     EOAFileSettingsItemFileSubtypeWikiMap,
     EOAFileSettingsItemFileSubtypeSrtmMap,
     EOAFileSettingsItemFileSubtypeTerrainMap,
+    EOAFileSettingsItemFileSubtypeNauticalDepth,
     EOAFileSettingsItemFileSubtypeObfMap,
     EOAFileSettingsItemFileSubtypeTilesMap,
     EOAFileSettingsItemFileSubtypeRoadMap,
@@ -28,7 +29,6 @@ typedef NS_ENUM(NSInteger, EOAFileSettingsItemFileSubtype) {
     EOAFileSettingsItemFileSubtypeVoice,
     EOAFileSettingsItemFileSubtypeTravel,
     EOAFileSettingsItemFileSubtypeMultimediaNotes,
-    EOAFileSettingsItemFileSubtypeNauticalDepth,
     EOAFileSettingsItemFileSubtypeFavoritesBackup,
     EOAFileSettingsItemFileSubtypeColorPalette,
     EOAFileSettingsItemFileSubtypesCount

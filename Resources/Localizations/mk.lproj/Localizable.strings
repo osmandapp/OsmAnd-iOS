@@ -1841,7 +1841,7 @@
 "map_widget_trip_recording_downhill" = "Nadolnica";
 "trip_recording_downhill_widget_desc" = "Go prikazuva zbirot na site spustanja na tekovnoto snimeno patuvanje.";
 "troubleshooting" = "Problem";
-"delete_history_items" = "Dali da se izbrišat %@ stavkite vo istorijata\?";
+"delete_history_items" = "Dali da se izbrišat %@ stavkite vo istorijata?";
 "apply_to_existing_favorites_descr" = "Primeni promeni na postoečkite omileni točki od grupata ili samo na novi\?";
 "activity_type_offroad_name" = "Nadvor od patot";
 "map_marker_2nd" = "Vtoriot marker na kartata";
@@ -2024,3 +2024,7 @@
 "auto_25_chars_route_tr_kl" = "Svrtete desno i drzete levo";
 "shared_string_items" = "Stavki";
 "auto_25_chars_route_tr_kr" = "Svrtete desno i drzete desno";
+"trace_rendering_descr" = "Prikažete ja izvedbata na renderiranje.";
+"shared_string_other" = "Drug";
+"average" = "Prosecno";
+"trace_rendering" = "Se prikažuvaat informacii za otstranuvanje greški";

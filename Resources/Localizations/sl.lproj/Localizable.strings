@@ -2262,7 +2262,7 @@
 "cloud_recent_changes" = "Spremembe";
 "external_sensors_not_found" = "Senzorji niso bili najdeni";
 "activity_type_walking_name" = "Hoja";
-"delete_history_items" = "Brisati %@ elementov zgodovine\?";
+"delete_history_items" = "Brisati %@ elementov zgodovine?";
 "map_widget_distance_to_destination" = "Razdalja do cilja";
 "shared_string_bearing" = "Smer";
 "map_widget_trip_recording_downhill" = "Navzdol";
@@ -2469,3 +2469,11 @@
 "default_appearance" = "Privzeti videz";
 "auto_25_chars_route_tl_kr" = "Zavij levo in drži se desne";
 "add_hidden_group_info" = "Dodano točko lahko najdeš v »%@«. Razkrij izbrano skupino, da bo prikazana na zemljevidu.";
+"map_text" = "Besedila na zemljevidu";
+"average" = "Povprečje";
+"shared_string_large" = "Veliko";
+"distance_by_tap_use_description" = "Tapni na zemljevid, za ogled razdalje med trenutno lokacijo in tapkano točko. \nZ dvema prstoma tapni na zemljevid, za ogled razdalje med kliknjenima točkama";
+"trace_rendering" = "Informacije o razhroščevanju učinkovitosti delovanja";
+"shared_string_normal" = "Običajno";
+"trace_rendering_descr" = "Pokaži zmogljivost izvajanja izrisovanja in navigacije.";
+"shared_string_other" = "Drugo";

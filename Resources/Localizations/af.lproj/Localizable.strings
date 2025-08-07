@@ -406,3 +406,6 @@
 "app_mode_bicycle" = "Fiets";
 "transport_stop" = "Haltes";
 "poi_filter_fuel" = "Brandstof";
+"trace_rendering_descr" = "Vertoon lewering prestasie";
+"trace_rendering" = "Die lewering van ontfouting inligting";
+"rendering_attr_hideWaterPolygons_description" = "Water";

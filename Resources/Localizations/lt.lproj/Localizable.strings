@@ -729,7 +729,7 @@
 "quick_action_map_source" = "Pakeistižemėlapio šaltinį";
 "quick_action_replace_destination" = "Pakeisti kelionės tikslą";
 "route_add_start_point" = "Pridėti išvykimo pradžios tašką";
-"add_intermediate" = "Pridėti tarpinį tašką";
+"add_intermediate" = "Pridėti tarpinį tikslą";
 "add_home" = "Pridėti namus";
 "add_work" = "Pridėti darbą";
 "favorite_home_category" = "Namai";
@@ -1680,7 +1680,7 @@
 "custom_map_button_name_present" = "Toks mygtukas jau yra";
 "true_bearing_widget_desc" = "Kampas tarp tikrosios šiaurės ir tikslo taško, stebimo iš jūsų vietos.";
 "custom_buttons" = "Pasirinktiniai mygtukai";
-"delete_history_items" = "Ištrinti %@ istorijos elementus?";
+"delete_history_items" = "Ištrinti %@ istorijos elementą (-us)?";
 "track_vertical_exaggeration_description" = "Keisdami mastelio vertę, galite pakeisti 3D takelio aukštį.";
 "shared_string_relief_3d" = "3D reljefas";
 "external_device_status_connected" = "Prijungtas";
@@ -1726,7 +1726,7 @@
 "not_specified" = "Nenurodyta";
 "add_widget_to_the_left" = "Pridėti valdiklį į kairę";
 "help_article_map_routes_name" = "Maršrutai";
-"cloud_sync_progress" = "Sinch…%@";
+"cloud_sync_progress" = "Sinch… %@";
 "detailed_track_guidance" = "Išsamios trasos gairės";
 "online_photos" = "Nuotraukas internete";
 "shared_string_date" = "Data";
@@ -1747,3 +1747,7 @@
 "shared_string_wikivoyage" = "„Wikivoyage“";
 "sett_wunderlinq_ext_input" = "„WunderLINQ“";
 "info_button" = "Informacija";
+"shared_string_other" = "Kita";
+"trace_rendering_descr" = "Rodyti atvaizdavimo našumą.";
+"average" = "Vidurkis";
+"trace_rendering" = "Techninė atvaizdavimo informacija";

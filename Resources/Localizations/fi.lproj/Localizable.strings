@@ -1976,7 +1976,7 @@
 "image_cache" = "Kuvavälimuisti";
 "map_widget_sunset" = "Auringonlasku";
 "report_an_issues" = "Ilmoita ongelmasta";
-"delete_history_items" = "Poistetaanko %@ kohtia historiasta\?";
+"delete_history_items" = "Poistetaanko %@ kohtia historiasta?";
 "shared_string_accessibility" = "Esteettömyys";
 "activity_type_car_name" = "Autoilu";
 "shared_string_explore" = "Tutki";
@@ -2288,3 +2288,7 @@
 "auto_25_chars_route_tu_kl" = "Tee U-käännös ja pysy vasemmalla";
 "smart_folder_name_present" = "Tällainen älykansio on jo olemassa";
 "terrain_map" = "Maastokartta";
+"trace_rendering" = "Hahmottamisen testaustiedot";
+"average" = "Keskiarvo";
+"trace_rendering_descr" = "Näytä hahmottamisen suorituskyky.";
+"shared_string_other" = "Muu";

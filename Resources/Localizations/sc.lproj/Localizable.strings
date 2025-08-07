@@ -1281,7 +1281,7 @@
 "routing_attr_difficulty_preference_description" = "Preferi àndalas de custa dificultade, fintzas si colare in pistas prus difìtziles o prus fàtziles est galu possìbile si est prus curtzu.";
 "rendering_attr_hikingRoutesOSMC_name" = "Àndalas pro s\'escursionismu";
 "routing_attr_avoid_tram_name" = "Perunu tram";
-"rendering_attr_hideWaterPolygons_name" = "Cua s'abba";
+"rendering_attr_hideWaterPolygons_name" = "Cua s\'abba";
 "rendering_attr_hideBuildings_name" = "Edifìtzios";
 "rendering_attr_hideWaterPolygons_description" = "Abba";
 "rendering_attr_hideOverground_name" = "Ogetos subra de terra";
@@ -2740,7 +2740,7 @@
 "map_widget_ant_bicycle_speed_desc" = "Ammustrat sa lestresa de biàgiu";
 "bearing_desc" = "Ammustrat sa diretzione assoluta o relativa cunfronta a un\'obietivu in unidades angulares (in 180 grados, 360 grados o modalidade milliradiantes).";
 "map_widget_group_sunrise_sunset" = "Arbèschida, intrinada";
-"delete_history_items" = "Iscantzellare %@ elementos de sa cronologia\?";
+"delete_history_items" = "Iscantzellare %@ elementos de sa cronologia?";
 "temperature_widget_desc" = "Ammustrat sa temperadura pro su tzentru atuale de sa mapa.";
 "travel_card_download_descr" = "Iscàrriga sas ghias de biàgiu de Wikivoyage pro lèghere artìculos a pitzu de logos in totu su mundu chene tènnere una connessione a ìnternet.";
 "activity_type_hiking_name" = "Escursionismu";
@@ -3013,3 +3013,10 @@
 "auto_25_chars_route_tl_kl" = "Borta cara a manca e mantene·ti a manca";
 "shared_string_date" = "Data";
 "auto_25_chars_route_tr_kr" = "Borta cara a destra e mantene·ti a destra";
+"shared_string_other" = "Àteru";
+"average" = "Mèdia";
+"distance_by_tap_use_description" = "Toca in sa mapa pro bìdere sa distàntzia intre sa positzione atuale tua e su puntu tocadu. \nToca cun duos pòddighes in sa mapa pro bìdere sa distàntzia intre sos puntos tocados";
+"trace_rendering_descr" = "Ammustra sas prestatziones de renderizatzione e navigatzione.";
+"trace_rendering" = "Informatziones de depuratzione de còdighe de su rendimentu";
+"shared_string_normal" = "Normale";
+"shared_string_large" = "Mannu";

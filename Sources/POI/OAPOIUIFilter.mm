@@ -613,11 +613,11 @@
     for (auto i = decodedValues.cbegin(), end = decodedValues.cend(); i != end; ++i)
     {
         // check indexed poi fields
-        if ([i.key().toNSString() hasPrefix:@"name"]
-            || [i.key().toNSString() containsString:@"_name"]
-            || [i.key().toNSString() isEqual:@"wikidata"]
-            || [i.key().toNSString() isEqual:@"route_members_ids"]
-            || [i.key().toNSString() isEqual:@"route_id"])
+        if (i.key().startsWith("name")
+            || i.key().contains("_name")
+            || i.key() == "wikidata"
+            || i.key() == "route_members_ids"
+            || i.key() == "route_id")
         {
             [names addObject:[NSString stringWithFormat:@"%@ %@", typeName, i.value().toNSString()]];
         }

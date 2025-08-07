@@ -613,11 +613,11 @@
     for (auto i = decodedValues.cbegin(), end = decodedValues.cend(); i != end; ++i)
     {
         // check indexed poi fields
-        if (i.key().startsWith("name")
-            || i.key().contains("_name")
-            || i.key() == "wikidata"
-            || i.key() == "route_members_ids"
-            || i.key() == "route_id")
+        if (i.key().startsWith(QStringLiteral("name"))
+            || i.key().contains(QStringLiteral("_name"))
+            || i.key() == QStringLiteral("wikidata")
+            || i.key() == QStringLiteral("route_members_ids")
+            || i.key() == QStringLiteral("route_id"))
         {
             [names addObject:[NSString stringWithFormat:@"%@ %@", typeName, i.value().toNSString()]];
         }

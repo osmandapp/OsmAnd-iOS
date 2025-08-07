@@ -2768,6 +2768,7 @@
 "help_article_personal_color_palette_schemes_name" = "Kleurenschema\'s";
 "delete_widget" = "Widget verwijderen?";
 "delete_widget_description" = "Deze widget zal verwijderd worden. Je kunt deze later herstellen via Configureer Scherm.";
+<<<<<<< HEAD
 "map_text" = "Kaartteksten";
 "connect_obd_instructions_step" = "1. Verbind de scanner met de OBD-II-poort van je voertuig.\n\n 2. Laat de motor van je voertuig draaien\n\n 3. Zet Bluetooth aan op je apparaat\n\n 4. Druk op \'%@\' en selecteer jouw scanner uit de lijst.";
 "shared_string_large" = "Groot";
@@ -2783,3 +2784,12 @@
 "reset_average_speed" = "Reset gemiddelde snelheid";
 "obd_nothing_found_description" = "Controleer het volgende:\n – Zorg ervoor dat Bluetooth is ingeschakeld\n – De motor van het voertuig draait\n – Zorg dat je apparaat binnen het bereik is van de scanner.";
 "no_internet_descr" = "Controleer je internetverbinding en probeer opnieuw.";
+=======
+"reset_average_speed" = "Reset gemiddelde snelheid";
+"no_internet_descr" = "Controleer je internetverbinding en probeer opnieuw.";
+"no_photos_available_descr" = "Er zijn nog geen gebruikersafbeeldingen toegevoegd voor deze locatie";
+"no_photos_available" = "Geen foto's beschikbaar";
+"add_widget_to_the_right" = "Widget rechts toevoegen";
+"add_widget_to_the_left" = "Widget links toevoegen";
+"obd_fuel_type_gasoline" = "Benzine";
+>>>>>>> weblate/master

@@ -3165,7 +3165,7 @@
 "map_3d_mode_action" = "3D prikaz";
 "shared_string_edit_color" = "Uredi boju";
 "carplay" = "KarPlej";
-"delete_history_items" = "Obrisati %@ stavke iz istorije?";
+"delete_history_items" = "Brišete %@ stavke iz istorije?";
 "compass_click_desc" = "Duplo tapni na ikonu kompasa radi promene orijentacije mape.";
 "travel_guides_search_placeholder" = "Pretraga države, grada ili pokrajine";
 "cleared_travel_search_history" = "Istorija očišćena";

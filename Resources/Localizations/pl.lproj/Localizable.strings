@@ -163,7 +163,7 @@
 "worldwide_maps" = "Mapy świata";
 "product_desc_allworld" = "Mapy całego świata";
 "product_desc_asia" = "Nieograniczone pobieranie map dla Azji";
-"wiki_around" = "Artykuły Wikipedii w pobliżu";
+"wiki_around" = "Popularne miejsca w pobliżu";
 "edit_filter" = "Edycja filtra";
 "subcategories" = "Podkategorie";
 "selected_categories" = "Wybrane kategorie";
@@ -3519,3 +3519,4 @@
 "obd_fuel_type_bifuel_hydrogen" = "Pojazd dwupaliwowy zasilany wodorem";
 "obd_engine_oil_temperature_desc" = "Pokazuje temperaturę oleju silnikowego.";
 "map_text" = "Renderowanie mapy";
+"manage_purchases" = "Zarządzaj zakupami";

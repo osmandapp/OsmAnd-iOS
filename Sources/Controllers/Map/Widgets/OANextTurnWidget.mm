@@ -606,8 +606,8 @@
             NSString *text = [_distanceLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall && (!_exitView.hidden || _streetLabel.text.length != 0 || !_shieldStackView.hidden))
                 _distanceLabel.text = [text stringByAppendingString:@","];
-            else
-                _distanceLabel.text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
+            else if ([text hasSuffix:@","])
+                _distanceLabel.text = [text substringToIndex:text.length - 1];
         }
     }
     else

@@ -29,7 +29,7 @@
 
 - (BOOL)acceptPoiSubType:(NSString *)poiSubType value:(NSString *)value 
 {
-    return [self.poiSubType isEqualToString:poiSubType] && [self.value isEqualToString:value];
+    return [self.poiSubType isEqualToString:poiSubType] && [self.value caseInsensitiveCompare:value] == NSOrderedSame;
 }
 
 - (NSString *)getTag 
@@ -81,7 +81,7 @@
     }
     OATopIndexFilter *other = (OATopIndexFilter *)object;
     return [self.tag isEqualToString:other.tag] &&
-           [self.value isEqualToString:other.value];
+           [self.value caseInsensitiveCompare:other.value] == NSOrderedSame;
 }
 
 - (NSUInteger)hash

@@ -2768,3 +2768,10 @@
 "help_article_personal_color_palette_schemes_name" = "Kleurenschema's";
 "delete_widget" = "Widget verwijderen?";
 "delete_widget_description" = "Deze widget zal verwijderd worden. Je kunt deze later herstellen via Configureer Scherm.";
+"reset_average_speed" = "Reset gemiddelde snelheid";
+"no_internet_descr" = "Controleer je internetverbinding en probeer opnieuw.";
+"no_photos_available_descr" = "Er zijn nog geen gebruikersafbeeldingen toegevoegd voor deze locatie";
+"no_photos_available" = "Geen foto's beschikbaar";
+"add_widget_to_the_right" = "Widget rechts toevoegen";
+"add_widget_to_the_left" = "Widget links toevoegen";
+"obd_fuel_type_gasoline" = "Benzine";

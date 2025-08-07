@@ -64,7 +64,7 @@
 - (NSMutableAttributedString *)getAttributedContentText
 {
     NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), OAAppVersion.getVersion];
-    NSString *description = OALocalizedString(@"ios_release_5_1"); // Fix for release 5.1 do not merge to master
+    NSString *description = OALocalizedString([NSString stringWithFormat:@"ios_release_%@", [OAAppVersion getVersionWithSeparator:@"_"]]);
     
     NSString *labelText = [NSString stringWithFormat:@"%@\n\n%@", title, description];
     NSRange boldRange = NSMakeRange(0, title.length);

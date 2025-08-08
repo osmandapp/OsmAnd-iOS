@@ -335,6 +335,14 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
                 [defaults setInteger:(idx != NSNotFound ? idx : 0) forKey:modeKey];
             }
         }
+        else if ([preference isMemberOfClass:[OACommonString class]])
+        {
+            NSNumber *value = [preference valueFromString:strValue appMode:mode];
+            if (value)
+                [defaults setObject:value.stringValue forKey:modeKey];
+            else
+                NSLog(@"[WARNING] Invalid value for preference %@", modeKey);
+        }
         else if ([preference isMemberOfClass:[OACommonInteger class]])
         {
             NSLog(@"[WARNING] Enum not implemented for %@", modeKey);
@@ -346,8 +354,8 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
                 [defaults setInteger:value.integerValue forKey:modeKey];
             else
                 NSLog(@"[WARNING] Invalid value for preference %@", modeKey);
-            }
         }
+    }
     else
         NSLog(@"[WARNING] No preference found for %@", modeKey);
 }
@@ -441,59 +449,6 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
     }
     return YES;
 }
-
-//public void applyAdditionalPrefs() {
-//    if (additionalPrefsJson != null) {
-//        updatePluginResPrefs();
-//
-//        SettingsItemReader reader = getReader();
-//        if (reader instanceof OsmandSettingsItemReader) {
-//            ((OsmandSettingsItemReader) reader).readPreferencesFromJson(additionalPrefsJson);
-//        }
-//    }
-//}
-//
-//private void updatePluginResPrefs() {
-//    String pluginId = getPluginId();
-//    if (Algorithms.isEmpty(pluginId)) {
-//        return;
-//    }
-//    OsmandPlugin plugin = OsmandPlugin.getPlugin(pluginId);
-//    if (plugin instanceof CustomOsmandPlugin) {
-//        CustomOsmandPlugin customPlugin = (CustomOsmandPlugin) plugin;
-//        String resDirPath = IndexConstants.PLUGINS_DIR + pluginId + "/" + customPlugin.getResourceDirName();
-//
-//        for (Iterator<String> it = additionalPrefsJson.keys(); it.hasNext(); ) {
-//            try {
-//                String prefId = it.next();
-//                Object value = additionalPrefsJson.get(prefId);
-//                if (value instanceof JSONObject) {
-//                    JSONObject jsonObject = (JSONObject) value;
-//                    for (Iterator<String> iterator = jsonObject.keys(); iterator.hasNext(); ) {
-//                        String key = iterator.next();
-//                        Object val = jsonObject.get(key);
-//                        if (val instanceof String) {
-//                            val = checkPluginResPath((String) val, resDirPath);
-//                        }
-//                        jsonObject.put(key, val);
-//                    }
-//                } else if (value instanceof String) {
-//                    value = checkPluginResPath((String) value, resDirPath);
-//                    additionalPrefsJson.put(prefId, value);
-//                }
-//            } catch (JSONException e) {
-//                LOG.error(e);
-//            }
-//        }
-//    }
-//}
-//
-//private String checkPluginResPath(String path, String resDirPath) {
-//    if (path.startsWith("@")) {
-//        return resDirPath + "/" + path.substring(1);
-//    }
-//    return path;
-//}
 
 - (void) writeToJson:(id)json
 {

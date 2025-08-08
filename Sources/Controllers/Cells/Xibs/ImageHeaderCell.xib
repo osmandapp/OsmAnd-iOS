@@ -43,6 +43,10 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="backgroundImageView" destination="Aav-UU-hsW" id="Yvi-Ig-tQv"/>
+                <outlet property="bottomSpaceConstraint" destination="0cf-KC-ciO" id="D7B-OY-7PW"/>
+                <outlet property="leftSpaceConstraint" destination="1O8-Qt-7oZ" id="kJr-9g-9Zp"/>
+                <outlet property="rightSpaceConstraint" destination="QV2-c8-i18" id="R37-lH-1yY"/>
+                <outlet property="topSpaceConstraint" destination="a6L-sD-1zg" id="sSt-wD-qLM"/>
             </connections>
             <point key="canvasLocation" x="36.231884057971016" y="167.41071428571428"/>
         </tableViewCell>

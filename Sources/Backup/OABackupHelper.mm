@@ -438,10 +438,21 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
     [_executor addOperation:[[OADeleteOldFilesCommand alloc] initWithTypes:types listener:listener]];
 }
 
-- (void)deleteAccount:(NSString *)email token:(NSString *)token
+- (NSError *)deleteAccount:(NSString *)email token:(NSString *)token
 {
-    [self checkRegistered];
-    [_executor addOperation:[[OADeleteAccountCommand alloc] initWith:email token:token]];
+    @try
+    {
+        [self checkRegistered];
+        [_executor addOperation:[[OADeleteAccountCommand alloc] initWith:email token:token]];
+        return nil;
+    }
+    @catch (NSException *exception)
+    {
+        NSString *errorMessage = [NSString stringWithFormat:@"Error deleteAccount(): %@", exception.reason];
+        NSLog(@"%@", errorMessage);
+        NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedStringFromTable(errorMessage, @"OABackupHelper", nil)};
+        return [[NSError alloc] initWithDomain:@"OABackupHelper" code:0 userInfo:userInfo];
+    }
 }
 
 - (void)checkCode:(NSString *)email token:(NSString *)token
@@ -634,9 +645,9 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
 
 - (void) deleteFilesSync:(NSArray<OARemoteFile *> *)remoteFiles byVersion:(BOOL)byVersion listener:(id<OAOnDeleteFilesListener>)listener
 {
-    [self checkRegistered];
     @try
     {
+        [self checkRegistered];
         OADeleteFilesCommand *command = [[OADeleteFilesCommand alloc] initWithVersion:byVersion listener:listener remoteFiles:remoteFiles];
         NSOperationQueue *executor = [[NSOperationQueue alloc] init];
         [executor addOperations:@[command] waitUntilFinished:YES];

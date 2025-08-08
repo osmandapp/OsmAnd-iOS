@@ -42,7 +42,7 @@
 "cancel_navigation" = "ნავიგაციის შეწყვეტა";
 "intermediate_items_sort_by_distance" = "სახლის ნომრებით დალაგება";
 "switch_start_finish" = "საწყისი წერტილის და დანიშნულების პუნქტის შებრუნება";
-"clear_all_intermediates" = "ყველა შუალედური წერტილის გასუფთავება";
+"clear_all_intermediates" = "ყველა შუალედური სამიზნის გასუფთავება";
 "shared_string_options" = "პარამეტრები";
 "new_destination_point_dialog" = "თქვენ უკვე მიუთითეთ დანიშნულების წერტილი:";
 "replace_destination_point" = "დანიშნულების წერტილის შეცვლა";
@@ -1114,7 +1114,7 @@
 "quick_action_map_source" = "რუკის წყაროს შეცვლა";
 "quick_action_replace_destination" = "დანიშნულების წერტილის შეცვლა";
 "route_add_start_point" = "საწყისი წერტილის დამატება";
-"add_intermediate" = "შუალედური წერტილის დამატება";
+"add_intermediate" = "შუალედური სამიზნე წერტილის დამატება";
 "add_home" = "სახლის დამატება";
 "add_work" = "სამსახურის დამატება";
 "favorite_home_category" = "საწყისი";
@@ -2254,3 +2254,9 @@
 "si_nm_h" = "საზღვაი მილი საათში (კვანძი)";
 "donation_to_osm" = "შეწირულობა OSM-ის საზოგადოებისთვის";
 "osm_live_enter_user_name" = "შეიყვანეთ საჯარო სახელი";
+"shared_string_large" = "დიდი";
+"trace_rendering_descr" = "რენდერის და ნავიგაციის წარმადობის ჩვენება.";
+"shared_string_other" = "სხვა";
+"shared_string_normal" = "ნორმალური";
+"trace_rendering" = "წარმადობის გამართვის ინფორმაცია";
+"average" = "საშუალო";

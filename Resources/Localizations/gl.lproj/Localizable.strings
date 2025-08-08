@@ -1762,3 +1762,8 @@
 "auto_25_chars_route_tu" = "Dá a volta";
 "three_months_subscription" = "Subscrición de tres meses";
 "add_smart_folder" = "Engadir cartafol intelixente";
+"trace_rendering_descr" = "Amosar rendemento do renderizado.";
+"shared_string_other" = "Outros";
+"trace_rendering" = "Información de fallo de renderizado";
+"liter_per_hour" = "l/h";
+"average" = "Media";

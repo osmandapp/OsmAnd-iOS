@@ -438,16 +438,17 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
 
 + (BOOL) isValidLocPhrase:(NSString *)s
 {
-    if (s.length == 0
-        || !([s characterAtIndex:0] == '-'
-             || [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[s characterAtIndex:0]]
-             || [s characterAtIndex:0] == 'S' || [s characterAtIndex:0] == 's'
-             || [s characterAtIndex:0] == 'N' || [s characterAtIndex:0] == 'n'
-             || [s indexOf:@"://"] != -1))
+    if (s.length > 0)
     {
-        return false;
+        NSString *lower = [s lowercaseString];
+        unichar ch = [lower characterAtIndex:0];
+        if (ch == '(' && s.length > 1)
+            ch = [lower characterAtIndex:1]; // (0.1234,5.6789)
+        if (ch == '-' || [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:ch]
+            || ch == 's' || ch == 'n' || [s containsString:@"://"])
+            return YES;
     }
-    return true;
+    return NO;
 }
 
 + (double) parse1Coordinate:(NSMutableArray *)all begin:(int)begin end:(int)end

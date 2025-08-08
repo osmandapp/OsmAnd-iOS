@@ -592,7 +592,7 @@
     if (nameFilter.length == 0)
         return YES;
     
-    OANameStringMatcher *sm = [[OANameStringMatcher alloc] initWithNamePart:[nameFilter trim] mode:CHECK_CONTAINS];
+    OANameStringMatcher *sm = [[OANameStringMatcher alloc] initWithNamePart:[nameFilter trim] mode:CHECK_STARTS_FROM_SPACE];
     
     
     NSString *name = amenity->nativeName.toNSString();
@@ -609,9 +609,18 @@
     
     QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
     NSMutableArray *names = [NSMutableArray array];
+    [names addObject:OsmAnd::ICU::transliterateToLatin(amenity->nativeName).toNSString()];
     for (auto i = decodedValues.cbegin(), end = decodedValues.cend(); i != end; ++i)
     {
-        [names addObject:[NSString stringWithFormat:@"%@ %@", typeName, i.value().toNSString()]];
+        // check indexed poi fields
+        if (i.key().startsWith(QStringLiteral("name"))
+            || i.key().contains(QStringLiteral("_name"))
+            || i.key() == QStringLiteral("wikidata")
+            || i.key() == QStringLiteral("route_members_ids")
+            || i.key() == QStringLiteral("route_id"))
+        {
+            [names addObject:[NSString stringWithFormat:@"%@ %@", typeName, i.value().toNSString()]];
+        }
     }
     
     for (const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))

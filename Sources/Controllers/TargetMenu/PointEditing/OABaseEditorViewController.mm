@@ -435,7 +435,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     [_poiIconCollectionHandler setIconSizeWithSize:24];
     [_poiIconCollectionHandler setSpacingWithSpacing:9];
     
-    if (!_isNewItem)
+    if (!_isNewItem && self.editIconName)
         _selectedIconName = self.editIconName;
     else
     {

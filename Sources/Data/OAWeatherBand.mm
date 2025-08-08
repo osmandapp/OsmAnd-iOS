@@ -13,6 +13,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAObservable.h"
 #import "Localization.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/Map/WeatherDataConverter.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
@@ -197,7 +198,7 @@ static NSString *kPrecipContourStyleName;
         case WEATHER_BAND_CLOUD:
             return _app.data.weatherCloudUnit;
         case WEATHER_BAND_TEMPERATURE:
-            return _app.data.weatherTempUnit;
+            return [[OAAppSettings sharedManager] getTemperatureUnit] == FAHRENHEIT ? [NSUnitTemperature fahrenheit] : [NSUnitTemperature celsius];
         case WEATHER_BAND_PRESSURE:
             return _app.data.weatherPressureUnit;
         case WEATHER_BAND_WIND_SPEED:
@@ -221,9 +222,6 @@ static NSString *kPrecipContourStyleName;
     {
         case WEATHER_BAND_CLOUD:
             _app.data.weatherCloudUnit = (NSUnitCloud *) unit;
-            break;
-        case WEATHER_BAND_TEMPERATURE:
-            _app.data.weatherTempUnit = (NSUnitTemperature *) unit;
             break;
         case WEATHER_BAND_PRESSURE:
             _app.data.weatherPressureUnit = (NSUnitPressure *) unit;
@@ -249,8 +247,6 @@ static NSString *kPrecipContourStyleName;
     {
         case WEATHER_BAND_CLOUD:
             return _app.data.weatherCloudUnitAuto;
-        case WEATHER_BAND_TEMPERATURE:
-            return _app.data.weatherTempUnitAuto;
         case WEATHER_BAND_PRESSURE:
             return _app.data.weatherPressureUnitAuto;
         case WEATHER_BAND_WIND_SPEED:
@@ -271,9 +267,6 @@ static NSString *kPrecipContourStyleName;
     {
         case WEATHER_BAND_CLOUD:
             _app.data.weatherCloudUnitAuto = unitAuto;
-            break;
-        case WEATHER_BAND_TEMPERATURE:
-            _app.data.weatherTempUnitAuto = unitAuto;
             break;
         case WEATHER_BAND_PRESSURE:
             _app.data.weatherPressureUnitAuto = unitAuto;

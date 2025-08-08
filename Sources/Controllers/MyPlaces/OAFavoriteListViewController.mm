@@ -1225,7 +1225,9 @@ static UIViewController *parentController;
 
 - (void)tableView:(UITableView *)tableView willEndContextMenuInteractionWithConfiguration:(UIContextMenuConfiguration *)configuration animator:(id<UIContextMenuInteractionAnimating>)animator
 {
-    _contextMenuVisible = NO;
+    [animator addCompletion:^{
+        _contextMenuVisible = NO;
+    }];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

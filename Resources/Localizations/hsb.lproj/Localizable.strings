@@ -1117,3 +1117,5 @@
 "auto_25_chars_route_roundabout_kr" = "wzmi %d. wujězd a wostań naprawo";
 "auto_25_chars_route_tu_kr" = "wobroć so a wostań naprawo";
 "online_photos" = "Wobrazy w syći";
+"shared_string_other" = "Dalše";
+"trace_rendering_descr" = "Pokaž performancu renderowanja.";

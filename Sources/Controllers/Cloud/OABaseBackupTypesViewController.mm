@@ -365,7 +365,14 @@
 
 - (void)onDeleteTypeData:(OAExportSettingsType *)settingsType
 {
-    [_backupHelper deleteAllFiles:@[settingsType] listener:self];
+    @try
+    {
+        [_backupHelper deleteAllFiles:@[settingsType] listener:self];
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"Error in onDeleteTypeData() -> deleteAllFiles(): %@", exception.reason);
+    }
 }
 
 #pragma mark - OABackupTypesDelegate

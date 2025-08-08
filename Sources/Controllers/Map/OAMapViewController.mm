@@ -228,6 +228,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     UIPanGestureRecognizer* _grElevation;
     UITapGestureRecognizer* _grSymbolContextMenu;
     UILongPressGestureRecognizer* _grPointContextMenu;
+    UIPanGestureRecognizer* _grMouseWheelScroll;
+
     BOOL _startRotating;
     BOOL _startZooming;
     float _startAzimuth;
@@ -403,7 +405,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _grRotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self
                                                              action:@selector(zoomAndRotateGestureDetected:)];
     _grRotate.delegate = self;
-    
+
     // - Zoom-in gesture
     _grZoomIn = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                         action:@selector(zoomInGestureDetected:)];
@@ -417,7 +419,18 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _grZoomOut.delegate = self;
     _grZoomOut.numberOfTapsRequired = 2;
     _grZoomOut.numberOfTouchesRequired = 2;
-    
+
+    // - MouseWheelScroll gesture (run under MacOS)
+    if ([OAUtilities isiOSAppOnMac]) {
+        _grMouseWheelScroll = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                      action:@selector(mouseWheelScrollGuestureDetected:)];
+        _grMouseWheelScroll.delegate = self;
+        _grMouseWheelScroll.allowedScrollTypesMask = UIScrollTypeMaskAll;
+        _grMouseWheelScroll.minimumNumberOfTouches = 0;
+        _grMouseWheelScroll.maximumNumberOfTouches = 0;
+        _grMouseWheelScroll.cancelsTouchesInView = NO;
+    }
+
     // - Elevation gesture
     _grElevation = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                            action:@selector(elevationGestureDetected:)];
@@ -521,6 +534,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return self.parentViewController != OARootViewController.instance.mapPanel;
 }
 
+- (BOOL) isMapHidden
+{
+    return self.view.window == nil && !_app.carPlayActive;
+}
+
 #pragma mark - OAMapRendererDelegate
 
 - (void) frameAnimatorsUpdated
@@ -555,7 +573,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     // Update map source (if needed)
     if (_mapSourceInvalidated)
     {
@@ -590,7 +608,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
+
     if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
@@ -629,6 +647,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     [_mapView addGestureRecognizer:_grElevation];
     [_mapView addGestureRecognizer:_grSymbolContextMenu];
     [_mapView addGestureRecognizer:_grPointContextMenu];
+
+    if ([OAUtilities isiOSAppOnMac])
+        [_mapView addGestureRecognizer:_grMouseWheelScroll];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication*)application
@@ -668,6 +689,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if (self.mapViewLoaded)
     {
+        self.mapViewLoaded = NO;
         [_mapView suspendSymbolsUpdate];
         [_mapView releaseContext:YES];
         [_mapView removeFromSuperview];
@@ -1484,6 +1506,15 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return ABS(angle) >= ZONE_1_ANGLE_THRESHOLD;
 }
 
+- (void) mouseWheelScrollGuestureDetected:(UIPanGestureRecognizer *)recognizer
+{
+    CGPoint delta = [recognizer translationInView:self.view];
+    if (delta.y > 0)
+        [self zoomInGestureDetected:(UITapGestureRecognizer*)recognizer];
+    else if (delta.y < 0)
+        [self zoomOutGestureDetected:(UITapGestureRecognizer*)recognizer];
+}
+
 - (void) zoomInGestureDetected:(UITapGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
@@ -1506,12 +1537,16 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _app.mapMode = OAMapModeFree;
     [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
     
-    CGPoint centerPoint = [self getTouchPoint:recognizer touchIndex:0];
+    CGPoint centerPoint;
+    if (recognizer.numberOfTouches > 0)
+        centerPoint = [self getTouchPoint:recognizer touchIndex:0];
+    else
+        centerPoint = [recognizer locationInView:self.view]; // MouseWheelScroll
+
     OsmAnd::PointI centerLocation;
     [_mapView convert:centerPoint toLocation:&centerLocation];
-
     OsmAnd::PointI destLocation(_mapView.target31.x / 2.0 + centerLocation.x / 2.0, _mapView.target31.y / 2.0 + centerLocation.y / 2.0);
-    
+
     // Zoom and move to target animation
     _mapView.mapAnimator->animateZoomToAndPan(_mapView.zoomLevel + zoomDelta,
                                               destLocation,
@@ -1539,18 +1574,28 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     float zoomDelta = [self currentZoomOutDelta];
 
     // Put tap location to center of screen
-    CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
-    for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+    CGPoint centerPoint;
+    if (recognizer.numberOfTouches > 0)
+        centerPoint = [recognizer locationOfTouch:0 inView:self.view];
+    else
+        centerPoint = [recognizer locationInView:self.view]; // MouseWheelScroll
+
+    if (recognizer.numberOfTouches > 0)
     {
-        CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
-        
-        centerPoint.x += touchPoint.x;
-        centerPoint.y += touchPoint.y;
+        for (NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+        {
+            CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
+
+            centerPoint.x += touchPoint.x;
+            centerPoint.y += touchPoint.y;
+        }
+        centerPoint.x /= recognizer.numberOfTouches;
+        centerPoint.y /= recognizer.numberOfTouches;
     }
-    centerPoint.x /= recognizer.numberOfTouches;
-    centerPoint.y /= recognizer.numberOfTouches;
+
     centerPoint.x *= _mapView.contentScaleFactor;
     centerPoint.y *= _mapView.contentScaleFactor;
+
     OsmAnd::PointI centerLocation;
     [_mapView convert:centerPoint toLocation:&centerLocation];
     
@@ -2081,7 +2126,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2104,7 +2149,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onMapSettingsChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2119,7 +2164,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onUpdateGpxTracks
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2132,7 +2177,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onUpdateRecTrack
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2151,7 +2196,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2167,7 +2212,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onMapLayerChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded || _app.isInBackground /* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || _app.isInBackground || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2182,7 +2227,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onLastMapSourceChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2198,7 +2243,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onLanguageSettingsChange
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2213,7 +2258,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onLocalResourcesChanged:(const QList< QString >&)ids
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3839,7 +3884,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName
 {
-    @synchronized(self) {
+    @synchronized(_rendererSync) {
         if (_mapPresentationEnvironment)
         {
             NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
@@ -3847,7 +3892,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             QHashIterator<QString, int> it(renderingAttrs);
             while (it.hasNext()) {
                 it.next();
-                NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
+                NSString *key = 0 == it.key().length() ? @"" : it.key().toNSString();
                 NSNumber *value = @(it.value());
                 
                 [result setObject:value forKey:key];

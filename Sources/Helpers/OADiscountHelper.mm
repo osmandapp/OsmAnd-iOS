@@ -36,6 +36,12 @@
 
 const static NSString *URL = @"https://osmand.net/api/motd";
 
+static NSString *FEATURE_PRO = @"pro";
+static NSString *FEATURE_MAPS = @"maps";
+static NSString *FEATURE_LIVE = @"live_maps";
+static NSString *FEATURE_CONTOURS = @"contours";
+static NSString *FEATURE_NAUTICAL = @"nautical";
+
 @implementation OAPurchaseCondition
 
 @synthesize helper;
@@ -62,6 +68,30 @@ const static NSString *URL = @"https://osmand.net/api/motd";
 
 @end
 
+@implementation OANotPurchasedFeatureCondition
+
+- (NSString *) getId
+{
+    return @"not_purchased_feature";
+}
+
+- (BOOL) matches:(NSString *)value
+{
+    if ([FEATURE_PRO isEqualToString:value])
+        return !OAIAPHelper.isSubscribedToOsmAndPro;
+    else if ([FEATURE_MAPS isEqualToString:value])
+        return !OAIAPHelper.isSubscribedToMaps && !OAIAPHelper.isFullVersionPurchased;
+    else if ([FEATURE_LIVE isEqualToString:value])
+        return !OAIAPHelper.isSubscribedToLiveUpdates;
+    else if ([FEATURE_CONTOURS isEqualToString:value])
+        return !OAIAPHelper.isContourLinesPurchased;
+    else if ([FEATURE_NAUTICAL isEqualToString:value])
+        return !OAIAPHelper.isDepthContoursPurchased;
+
+    return NO;
+}
+
+@end
 
 @implementation OANotPurchasedSubscriptionCondition
 
@@ -200,6 +230,10 @@ const static NSString *URL = @"https://osmand.net/api/motd";
     OsmAndAppInstance app = OsmAndApp.instance;
     NSString *url = [NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@",
                      URL, OAAppVersion.getVersion, app.getAppInstalledDays, app.getAppExecCount, app.getLanguageCode];
+    NSArray<NSString *> *features = [self getFeatures];
+    if (features.count > 0)
+        url = [url stringByAppendingString:[NSString stringWithFormat:@"&features=%@", [features componentsJoinedByString:@","]]];
+
     NSString *aid = app.getUserIosId;
     if (aid.length > 0)
        url = [url stringByAppendingString:[NSString stringWithFormat:@"&aid=%@", aid]];
@@ -226,6 +260,23 @@ const static NSString *URL = @"https://osmand.net/api/motd";
     }];
     
     [downloadTask resume];
+}
+
+- (NSArray<NSString *> *)getFeatures
+{
+    NSMutableArray<NSString *> *res = [NSMutableArray array];
+    if (OAIAPHelper.isSubscribedToOsmAndPro)
+        [res addObject:FEATURE_PRO];
+    if (OAIAPHelper.isSubscribedToMaps || OAIAPHelper.isFullVersionPurchased)
+        [res addObject:FEATURE_MAPS];
+    if (OAIAPHelper.isSubscribedToLiveUpdates)
+        [res addObject:FEATURE_LIVE];
+    if (OAIAPHelper.isContourLinesPurchased)
+        [res addObject:FEATURE_CONTOURS];
+    if (OAIAPHelper.isDepthContoursPurchased)
+        [res addObject:FEATURE_NAUTICAL];
+    
+    return [res copy];
 }
 
 - (void) processDiscountResponse:(NSData *)data
@@ -280,11 +331,12 @@ const static NSString *URL = @"https://osmand.net/api/motd";
             BOOL oneOfConditionsMatch = NO;
             
             NSArray <id<OACondition>> *purchaseConditions = [NSArray arrayWithObjects:[[OAPurchasedPluginCondition alloc] initWithIAPHelper:helper],
-                                                     [[OANotPurchasedPluginCondition alloc] initWithIAPHelper:helper],
-                                                     [[OANotPurchasedSubscriptionCondition alloc] initWithIAPHelper:helper],
-                                                     [[OAPurchasedSubscriptionCondition alloc] initWithIAPHelper:helper],
-                                                     [[OANotPurchasedInAppPurchaseCondition alloc] initWithIAPHelper:helper],
-                                                     [[OAPurchasedInAppPurchaseCondition alloc] initWithIAPHelper:helper], nil];
+                [[OANotPurchasedFeatureCondition alloc] initWithIAPHelper:helper],
+                [[OANotPurchasedPluginCondition alloc] initWithIAPHelper:helper],
+                [[OANotPurchasedSubscriptionCondition alloc] initWithIAPHelper:helper],
+                [[OAPurchasedSubscriptionCondition alloc] initWithIAPHelper:helper],
+                [[OANotPurchasedInAppPurchaseCondition alloc] initWithIAPHelper:helper],
+                [[OAPurchasedInAppPurchaseCondition alloc] initWithIAPHelper:helper], nil];
             for (NSDictionary *conditionDictionary in conditions)
             {
                 NSArray *conditionsArray = [conditionDictionary valueForKey:@"condition"];

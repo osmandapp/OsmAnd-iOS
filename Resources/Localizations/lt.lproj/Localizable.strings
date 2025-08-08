@@ -76,7 +76,7 @@
 "driving_region_descr" = "Pasirinkite vairavimo regioną: JAV, Europa, Didžioji Britanija, Azija ir kitas.";
 "driving_region" = "Vairavimo regionas";
 "shared_string_automatic" = "Automatinis";
-"routing_attr_length_name" = "Ilgio limitas";
+"routing_attr_length_name" = "Ilgis";
 "default_speed_setting_title" = "Numatytasis greitis";
 "max_speed" = "Didžiausias greitis";
 
@@ -729,7 +729,7 @@
 "quick_action_map_source" = "Pakeistižemėlapio šaltinį";
 "quick_action_replace_destination" = "Pakeisti kelionės tikslą";
 "route_add_start_point" = "Pridėti išvykimo pradžios tašką";
-"add_intermediate" = "Pridėti tarpinį tašką";
+"add_intermediate" = "Pridėti tarpinį tikslą";
 "add_home" = "Pridėti namus";
 "add_work" = "Pridėti darbą";
 "favorite_home_category" = "Namai";
@@ -931,7 +931,7 @@
 "new_filter_desc" = "Įrašykite naujo filtro pavadinimą. Jis bus įtrauktas į jūsų \"Kategorijų\" sąrašą.";
 "user_password" = "Slaptažodis";
 "shared_string_filters" = "Filtrai";
-"edit_filter" = "Redaguoti kategorijas";
+"edit_filter" = "Redaguoti filtrą";
 "edit_filter_save_as_menu_item" = "Išsaugoti kaip";
 "delete_filter" = "Ištrinti filtrą";
 "save_filter" = "Išsaugoti filtrą";
@@ -1101,7 +1101,7 @@
 "rendering_attr_smoothness_intermediate_name" = "Vidutinė";
 "rendering_attr_surface_snow_name" = "Sniegas";
 "rendering_attr_highway_class_cycleway_name" = "Dviračių takas";
-"rendering_attr_hideWaterPolygons_name" = "Slėpti vandenį";
+"rendering_attr_hideWaterPolygons_name" = "Vanduo";
 "routing_attr_avoid_stairs_name" = "Vengti laiptų";
 "rendering_value_walkingRoutesOSMC_name" = "Spalvinimas pagal OSMC pėsčiųjų žygių simbolius";
 "rendering_attr_piste_type_skitour_name" = "Slidžių turas";
@@ -1157,7 +1157,7 @@
 "rendering_value__name" = "Numatytasis";
 "rendering_attr_smoothness_very_horrible_name" = "Labai baisi";
 "rendering_attr_trolleybusRoutes_name" = "Troleibusų maršrutai";
-"rendering_attr_hideWaterPolygons_description" = "Vanduo";
+"rendering_attr_hideWaterPolygons_description" = "Slėpti vandenį";
 "rendering_attr_piste_difficulty_extreme_name" = "Ekstremalus";
 "rendering_value_low_name" = "Žemas";
 "rendering_value_lightgreen_name" = "Šviesiai žalia";
@@ -1476,7 +1476,7 @@
 "service_is_not_available_please_try_later" = "Paslauga nepasiekiama. Bandykite vėliau.";
 "position_on_map_center" = "Centruoti";
 "offline_edition_descr" = "Visada redaguoti neprisijungus prie interneto.";
-"backup_delete_types_descr" = "Ar norite iš debesies ištrinti neįgalintų tipų duomenis\?";
+"backup_delete_types_descr" = "Ar norite iš „OsmAnd Cloud“ ištrinti pasenusių tipų duomenis?";
 "download_wikipedia_data" = "Atsisiųsti Vikipedijos duomenys";
 "shared_string_keep_active" = "Palikti aktyvų";
 "lang_zh-Hant" = "Kinų (Tradicinė)";
@@ -1680,7 +1680,7 @@
 "custom_map_button_name_present" = "Toks mygtukas jau yra";
 "true_bearing_widget_desc" = "Kampas tarp tikrosios šiaurės ir tikslo taško, stebimo iš jūsų vietos.";
 "custom_buttons" = "Pasirinktiniai mygtukai";
-"delete_history_items" = "Ištrinti %@ istorijos elementus?";
+"delete_history_items" = "Ištrinti %@ istorijos elementą (-us)?";
 "track_vertical_exaggeration_description" = "Keisdami mastelio vertę, galite pakeisti 3D takelio aukštį.";
 "shared_string_relief_3d" = "3D reljefas";
 "external_device_status_connected" = "Prijungtas";
@@ -1726,7 +1726,7 @@
 "not_specified" = "Nenurodyta";
 "add_widget_to_the_left" = "Pridėti valdiklį į kairę";
 "help_article_map_routes_name" = "Maršrutai";
-"cloud_sync_progress" = "Sinch…%@";
+"cloud_sync_progress" = "Sinch… %@";
 "detailed_track_guidance" = "Išsamios trasos gairės";
 "online_photos" = "Nuotraukas internete";
 "shared_string_date" = "Data";
@@ -1742,3 +1742,12 @@
 "auto_25_chars_route_kl" = "Laikykitės kairės";
 "unchanged_parameter_summary" = "Kiekvienas takelis išsaugos savo parametrus.";
 "shared_string_show_less" = "Rodyti mažiau";
+"map_text" = "Žemėlapio atvaizdavimas";
+"shared_string_open_street_map" = "„OpenStreetMap“";
+"shared_string_wikivoyage" = "„Wikivoyage“";
+"sett_wunderlinq_ext_input" = "„WunderLINQ“";
+"info_button" = "Informacija";
+"shared_string_other" = "Kita";
+"trace_rendering_descr" = "Rodyti atvaizdavimo našumą.";
+"average" = "Vidurkis";
+"trace_rendering" = "Techninė atvaizdavimo informacija";

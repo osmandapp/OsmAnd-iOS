@@ -197,9 +197,20 @@
     if ([BackupUtils isTokenValid:token])
     {
         if (_sourceType == EOACloudScreenSourceDeleteAccount)
-            [_backupHelper checkCode:[[OAAppSettings sharedManager].backupUserEmail get] token:token];
+        {
+            @try
+            {
+                [_backupHelper checkCode:[[OAAppSettings sharedManager].backupUserEmail get] token:token];
+            }
+            @catch (NSException *exception)
+            {
+                NSLog(@"Error in continueButtonPressed() -> checkCode(): %@", exception.reason);
+            }
+        }
         else
+        {
             [_backupHelper registerDevice:token];
+        }
     }
     else
     {

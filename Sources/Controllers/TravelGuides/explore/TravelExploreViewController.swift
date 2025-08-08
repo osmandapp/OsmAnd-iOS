@@ -70,6 +70,8 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         setupSearchControllerWithFilter(false)
         tableView.keyboardDismissMode = .onDrag
         isInited = true
+        addObserver(OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable))
+        addObserver(OAAutoObserverProxy(self, withHandler: #selector(populateAndUpdate), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable))
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -80,14 +82,14 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         downloadingCellResourceHelper.refreshCellSpinners()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unregisterNotificationsAndObservers()
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         downloadingCellResourceHelper.cleanCellCache()
-    }
-    
-    override func registerObservers() {
-        addObserver(OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable))
-        addObserver(OAAutoObserverProxy(self, withHandler: #selector(populateAndUpdate), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable))
     }
 
     // MARK: Data

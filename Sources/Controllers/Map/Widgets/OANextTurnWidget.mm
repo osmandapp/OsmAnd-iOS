@@ -79,6 +79,7 @@
     OsmAndAppInstance _app;
     
     BOOL _nextNext;
+    BOOL _isPanelVertical;
     OANextDirectionInfo *_calc1;
     UIView *_widgetView;
     NSArray<RoadShield *> *_cachedRoadShields;
@@ -112,10 +113,14 @@
         _horisontalMini = horisontalMini;
         _nextNext = nextNext;
         _calc1 = [[OANextDirectionInfo alloc] init];
-        _turnDrawable = [[OATurnDrawable alloc] initWithMini:horisontalMini themeColor:EOATurnDrawableThemeColorMap];
+        
+        OAWidgetsPanel *panel = [type getPanel:customId ?: type.id appMode:appMode];
+        _isPanelVertical = [panel isPanelVertical];
+        
+        _turnDrawable = [[OATurnDrawable alloc] initWithMini:!_isPanelVertical && horisontalMini themeColor:EOATurnDrawableThemeColorMap];
         _textRasterizer = OsmAnd::TextRasterizer::getDefault();
         
-        if ([self isPanelVertical])
+        if (_isPanelVertical)
         {
             [self layoutWidget];
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
@@ -163,6 +168,13 @@
         }
     }
     return self;
+}
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    if (_isPanelVertical && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
+        [self updateNextTurnInfo];
 }
 
 - (UIView *)widgetView
@@ -260,7 +272,7 @@
 
 - (void)checkShieldOverflow
 {
-    if ([self isPanelVertical] && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
+    if (_isPanelVertical && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
     {
         CGFloat containerWidth = self.frame.size.width - _leftArrowView.frame.size.width - _mainStackView.spacing;
         CGFloat usedWidth = 0;
@@ -307,7 +319,7 @@
     else if (streetName.exitRef.length > 0)
         exitNumber = streetName.exitRef;
     
-    if (exitNumber.length > 0 && turnType && !turnType->isRoundAbout())
+    if (exitNumber.length > 0)
     {
         NSString *exitViewText = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"shared_string_road_exit"), exitNumber];
         _exitLabel.text = exitViewText;
@@ -328,7 +340,7 @@
         
         if (_shieldStackView.subviews.count > 1)
         {
-            for (NSInteger i = 1; i < maxShields; i++)
+            for (NSInteger i = 1; i < _shieldStackView.subviews.count; i++)
                 [_shieldStackView.subviews[i] removeFromSuperview];
         }
         
@@ -520,17 +532,21 @@
 {
     BOOL vis = [self updateVisibility:turnType != nullptr];
     if ([_turnDrawable setTurnType:turnType]
-        || ([self isPanelVertical] && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
+        || (_isPanelVertical && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
         || vis)
     {
-        _turnDrawable.textFont = self.primaryFont;
-        if ([self isPanelVertical])
+        if (_isPanelVertical)
+        {
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
+        }
         else
+        {
+            _turnDrawable.textFont = self.primaryFont;
             if (_horisontalMini)
                 [self setTurnDrawable:_turnDrawable gone:false];
             else
                 [self setTopTurnDrawable:_turnDrawable];
+        }  
     }
 }
 
@@ -567,14 +583,9 @@
     self.frame = rect;
 }
 
-- (BOOL)isPanelVertical
-{
-    return [[self getWidgetPanel] isPanelVertical];
-}
-
 - (BOOL)isEnabledTextInfoComponents
 {
-    return ![self isPanelVertical];
+    return !_isPanelVertical;
 }
 
 - (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> *)widgetConfigurationParams
@@ -584,7 +595,7 @@
 
 - (void) setTextNoUpdateVisibility:(NSString *)text subtext:(NSString *)subtext
 {
-    if ([self isPanelVertical])
+    if (_isPanelVertical)
     {
         if (text.length == 0 && subtext.length == 0)
             _distanceLabel.text = self.isSimpleLayout ? nil : @"";
@@ -595,8 +606,8 @@
             NSString *text = [_distanceLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall && (!_exitView.hidden || _streetLabel.text.length != 0 || !_shieldStackView.hidden))
                 _distanceLabel.text = [text stringByAppendingString:@","];
-            else
-                _distanceLabel.text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
+            else if ([text hasSuffix:@","])
+                _distanceLabel.text = [text substringToIndex:text.length - 1];
         }
     }
     else
@@ -654,7 +665,7 @@
     int nextTurnDistance = 0;
     OACurrentStreetName *streetName = nil;
     
-    if ([self isPanelVertical])
+    if (_isPanelVertical)
     {
         OAStreetNameWidgetParams *params = [[OAStreetNameWidgetParams alloc] initWithTurnDrawable:_turnDrawable calc1:_calc1];
         streetName = params.streetName;
@@ -677,7 +688,7 @@
                 if (info && info.distanceTo >= 0 && info.directionInfo)
                 {
                     streetName = [[OACurrentStreetName alloc] initWithStreetName:info useDestination:true];
-                    if ([self isPanelVertical] && streetName.text.length == 0)
+                    if (_isPanelVertical && streetName.text.length == 0)
                         streetName.text = [info.directionInfo getDescriptionRoutePart];
                     turnType = info.directionInfo.turnType;
                     nextTurnDistance = info.distanceTo;
@@ -696,7 +707,7 @@
             if (info && info.distanceTo > 0 && info.directionInfo)
             {
                 streetName = [[OACurrentStreetName alloc] initWithStreetName:info useDestination:true];
-                if ([self isPanelVertical] && streetName.text.length == 0)
+                if (_isPanelVertical && streetName.text.length == 0)
                     streetName.text = [info.directionInfo getDescriptionRoutePart];
                 turnType = info.directionInfo.turnType;
                 nextTurnDistance = info.distanceTo;
@@ -705,7 +716,7 @@
         }
     }
     
-    if ([self isPanelVertical])
+    if (_isPanelVertical)
     {
         [self setStreetName:streetName];
         if (streetName.shields.count != 0)

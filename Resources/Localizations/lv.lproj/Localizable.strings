@@ -1483,3 +1483,7 @@
 "poi_filter_fuel" = "Degviela";
 "dd_mm_mmm_format" = "GG°MM.MMM′";
 "online_photos" = "Tiešsaistes fotoattēli";
+"average" = "Vidēji";
+"trace_rendering" = "Renderēšanas atkļūdošanas info";
+"trace_rendering_descr" = "Rādīt renderēšanas veiktspēju";
+"shared_string_other" = "Citi";

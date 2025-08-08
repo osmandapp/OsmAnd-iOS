@@ -245,6 +245,11 @@ static NSString * const kGpxImportDir = @"import";
     }
 }
 
+- (OASAltitudeMetrics * _Nullable)getAltitudeMetric __attribute__((swift_name("getAltitudeMetric()")))
+{
+    return [OASAltitudeMetricsCompanion.companion fromMetricsConstantMc:[self getMetricSystem]];
+}
+
 - (BOOL)isGpxFileVisiblePath:(NSString *)path __attribute__((swift_name("isGpxFileVisible(path:)")))
 {
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:path];

@@ -2,6 +2,9 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnullability-completeness"
+
 // Helpers
 #import "OAAppSettings.h"
 #import "OAColors.h"
@@ -273,3 +276,5 @@
 #import "OAUnsupportedAction.h"
 #import "OAMapillaryImageCardWrapper.h"
 #import "OAOBDConnector.h"
+
+#pragma clang diagnostic pop

@@ -174,6 +174,7 @@ static NSString * const autoZoomMapScaleKey = @"autoZoomMapScale";
 static NSString * const keepInformingKey = @"keepInforming";
 static NSString * const speedSystemKey = @"speedSystem";
 static NSString * const volumeSystemKey = @"volumeSystem";
+static NSString * const temperatureSystemKey = @"temperatureSystem";
 static NSString * const fuelTankCapacityKey = @"fuelTankCapacity";
 static NSString * const angularUnitsKey = @"angularUnits";
 static NSString * const speedLimitExceedKey = @"speedLimitExceed";
@@ -233,6 +234,7 @@ static NSString * const saveHeadingToGpxKey = @"saveHeadingToGpx";
 
 static NSString * const rulerModeKey = @"rulerMode";
 static NSString * const showDistanceRulerKey = @"showDistanceRuler";
+static NSString * const distanceByTapTextSizeKey = @"distanceByTapTextSize";
 static NSString * const showElevationProfileWidgetKey = @"show_elevation_profile_widget";
 static NSString * const showSlopesOnElevationWidget = @"show_slopes_on_elevation_widget";
 static NSString * const customWidgetKeys = @"custom_widgets_keys";
@@ -676,6 +678,60 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         return OALocalizedString(@"us_gallons_unit");
     else
         return OALocalizedString(@"liter");
+}
+
+@end
+
+@interface OATemperatureConstant ()
+
+@property (nonatomic) EOATemperatureConstant volume;
+@property (nonatomic) NSString *key;
+@property (nonatomic) NSString *descr;
+
+@end
+
+@implementation OATemperatureConstant
+
++ (instancetype)withVolumeConstant:(EOATemperatureConstant)volume
+{
+    OATemperatureConstant *obj = [[OATemperatureConstant alloc] init];
+    if (obj)
+    {
+        obj.volume = volume;
+        obj.key = [self.class toHumanString:volume];
+        obj.descr = [self.class getUnitSymbol:volume];
+    }
+    return obj;
+}
+
++ (NSString *)toHumanString:(EOATemperatureConstant)volume
+{
+    switch (volume)
+    {
+        case SYSTEM_DEFAULT:
+            return OALocalizedString(@"device_settings");
+        case CELSIUS:
+            return OALocalizedString(@"weather_temperature_celsius");
+        case FAHRENHEIT:
+            return OALocalizedString(@"weather_temperature_fahrenheit");
+        default:
+            return OALocalizedString(@"device_settings");
+    }
+}
+
++ (NSString *)getUnitSymbol:(EOATemperatureConstant)volume
+{
+    switch (volume)
+    {
+        case SYSTEM_DEFAULT:
+            return [NSUnitTemperature current].displaySymbol;
+        case CELSIUS:
+            return @"°C";
+        case FAHRENHEIT:
+            return @"°F";
+        default:
+            return [NSUnitTemperature current].displaySymbol;
+    }
 }
 
 @end
@@ -1377,6 +1433,40 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @end
 
+@interface OADistanceByTapTextSizeConstant ()
+
+@property (nonatomic) EOADistanceByTapTextSizeConstant textSize;
+@property (nonatomic) NSString *key;
+@property (nonatomic) float textSizeFactor;
+
+@end
+
+@implementation OADistanceByTapTextSizeConstant
+
++ (instancetype)withDistanceByTapTextSizeConstant:(EOADistanceByTapTextSizeConstant)textSize
+{
+    OADistanceByTapTextSizeConstant *obj = [[OADistanceByTapTextSizeConstant alloc] init];
+    if (obj)
+    {
+        obj.textSize = textSize;
+        obj.key = [self.class toHumanString:textSize];
+        obj.textSizeFactor = [self.class getTextSizeFactor:textSize];
+    }
+    return obj;
+}
+
++ (NSString *)toHumanString:(EOADistanceByTapTextSizeConstant)textSize
+{
+    return OALocalizedString(textSize == LARGE ? @"shared_string_large" : @"shared_string_normal");
+}
+
++ (float)getTextSizeFactor:(EOADistanceByTapTextSizeConstant)textSize
+{
+    return textSize == LARGE ? 1.5 : 1.0;
+}
+
+@end
+
 @interface OACommonPreference ()
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
@@ -1998,6 +2088,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
     [self set:strValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    return string;
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2729,6 +2824,88 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
             return @"US_GALLONS";
         default:
             return @"LITRES";
+    }
+}
+
+@end
+
+@implementation OACommonTemperatureConstant
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOATemperatureConstant)defValue {
+    OACommonTemperatureConstant *obj = [[OACommonTemperatureConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOATemperatureConstant)get
+{
+    return [super get];
+}
+
+- (EOATemperatureConstant)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOATemperatureConstant)volumeConstant
+{
+    [super set:volumeConstant];
+}
+
+- (void)set:(EOATemperatureConstant)volumeConstant mode:(OAApplicationMode *)mode
+{
+    [super set:volumeConstant mode:mode];
+}
+
+- (void)resetToDefault
+{
+    EOATemperatureConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOATemperatureConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *volumeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        volumeMap = @{
+            @"SYSTEM_DEFAULT": @(SYSTEM_DEFAULT),
+            @"CELSIUS": @(CELSIUS),
+            @"FAHRENHEIT": @(FAHRENHEIT)
+        };
+    });
+    return volumeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case SYSTEM_DEFAULT:
+            return @"SYSTEM_DEFAULT";
+        case CELSIUS:
+            return @"CELSIUS";
+        case FAHRENHEIT:
+            return @"FAHRENHEIT";
+        default:
+            return @"SYSTEM_DEFAULT";
     }
 }
 
@@ -4198,6 +4375,77 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 @end
 
+@implementation OACommonDistanceByTapTextSizeConstant
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOADistanceByTapTextSizeConstant)defValue {
+    OACommonDistanceByTapTextSizeConstant *obj = [[OACommonDistanceByTapTextSizeConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOADistanceByTapTextSizeConstant)get
+{
+    return [super get];
+}
+
+- (EOADistanceByTapTextSizeConstant)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant
+{
+    [super set:distanceByTapTextSizeConstant];
+}
+
+- (void)set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant mode:(OAApplicationMode *)mode
+{
+    [super set:distanceByTapTextSizeConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOADistanceByTapTextSizeConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOADistanceByTapTextSizeConstant)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *textSizeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        textSizeMap = @{
+            @"NORMAL": @(NORMAL),
+            @"LARGE": @(LARGE)
+        };
+    });
+    return textSizeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self get:mode] == LARGE ? @"LARGE" : @"NORMAL";
+}
+
+@end
+
 @implementation OACommonWidgetDefaultView
 
 static NSString *kArrivalTimeKey = @"ARRIVAL_TIME";
@@ -5031,6 +5279,9 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
         
+        _distanceByTapTextSize = [OACommonDistanceByTapTextSizeConstant withKey:distanceByTapTextSizeKey defValue:NORMAL];
+        [_profilePreferences setObject:_distanceByTapTextSize forKey:@"distance_by_tap_text_size"];
+        
         _showElevationProfileWidget = [OACommonBoolean withKey:showElevationProfileWidgetKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:showElevationProfileWidgetKey];
         _showSlopesOnElevationWidget = [OACommonBoolean withKey:showSlopesOnElevationWidget defValue:NO];
@@ -5177,6 +5428,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_profilePreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _volumeUnits = [OACommonVolumeConstant withKey:volumeSystemKey defValue:LITRES];
+        _temperatureUnits = [OACommonTemperatureConstant withKey:temperatureSystemKey defValue:SYSTEM_DEFAULT];
         _fuelTankCapacity = [OACommonDouble withKey:fuelTankCapacityKey defValue:OASOBDDataComputer.shared.DEFAULT_FUEL_TANK_CAPACITY];
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
@@ -5185,6 +5437,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_profilePreferences setObject:_speedSystem forKey:@"default_speed_system"];
         [_profilePreferences setObject:_volumeUnits forKey:@"unit_of_volume"];
+        [_profilePreferences setObject:_temperatureUnits forKey:@"unit_of_temperature"];
         [_profilePreferences setObject:_fuelTankCapacity forKey:@"fuel_tank_capacity"];
         
         _preciseDistanceNumbers = [OACommonBoolean withKey:preciseDistanceNumbersKey defValue:YES];
@@ -5571,6 +5824,15 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _currentTrackVisualization3dWallColorType = [[[OACommonInteger withKey:currentTrackVisualization3dWallColorTypeKey defValue:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient] makeGlobal] makeShared];
         _currentTrackVisualization3dPositionType = [[[OACommonInteger withKey:currentTrackVisualization3dPositionTypeKey defValue:EOAGPX3DLineVisualizationPositionTypeTop] makeGlobal] makeShared];
         _currentTrackRouteActivity = [[OACommonString withKey:currentTrackRouteActivityKey defValue:@""] makeProfile];
+        [_currentTrackRouteActivity setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
+        [_currentTrackRouteActivity setModeDefaultValue:@"road_cycling" mode:OAApplicationMode.BICYCLE];
+        [_currentTrackRouteActivity setModeDefaultValue:@"walking" mode:OAApplicationMode.PEDESTRIAN];
+        [_currentTrackRouteActivity setModeDefaultValue:@"train_riding" mode:OAApplicationMode.TRAIN];
+        [_currentTrackRouteActivity setModeDefaultValue:@"motorboat" mode:OAApplicationMode.BOAT];
+        [_currentTrackRouteActivity setModeDefaultValue:@"skiing" mode:OAApplicationMode.SKI];
+        [_currentTrackRouteActivity setModeDefaultValue:@"horse_riding" mode:OAApplicationMode.HORSE];
+        [_currentTrackRouteActivity setModeDefaultValue:@"motor_scooter" mode:OAApplicationMode.MOPED];
+        [_currentTrackRouteActivity setModeDefaultValue:@"truck_hgv" mode:OAApplicationMode.TRUCK];
         
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
         _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
@@ -5894,6 +6156,26 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     OACommonWidgetDisplayPriority *p = [OACommonWidgetDisplayPriority withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
+}
+
+- (EOATemperatureConstant)getTemperatureUnit
+{
+    return [self getTemperatureUnitForMode:[_applicationMode get]];
+}
+
+- (EOATemperatureConstant)getTemperatureUnitForMode:(OAApplicationMode *)mode
+{
+    EOATemperatureConstant stored = [_temperatureUnits get:mode];
+    if (stored == SYSTEM_DEFAULT)
+    {
+        NSUnitTemperature *sysUnit = [NSUnitTemperature current];
+        if ([sysUnit.symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
+            return FAHRENHEIT;
+        else
+            return CELSIUS;
+    }
+    
+    return stored;
 }
 
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode

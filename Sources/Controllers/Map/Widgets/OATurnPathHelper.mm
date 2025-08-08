@@ -582,7 +582,7 @@
 {
     CGFloat coef = size.width / 72.0;
     UIBezierPath *path = [UIBezierPath bezierPath];
-    path.lineWidth = 1.f;
+    path.lineWidth = 2.f;
     [self.class calcTurnPath:path outlay:nil turnType:TurnType::ptrValueOf(turnResource.turnType, turnResource.leftSide) transform:CGAffineTransformMakeScale(coef, coef) center:nil mini:NO shortArrow:turnResource.shortArrow noOverlap:turnResource.noOverlap smallArrow:smallArrow];
     
     return path;

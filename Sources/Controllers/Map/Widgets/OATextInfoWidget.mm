@@ -247,7 +247,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     ]];
     
     // Create the name label ("SPEED")
-    self.nameLabel = [UILabel new];
+    self.nameLabel = [[OutlineLabel alloc] init];
     self.nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.nameLabel.allowsDefaultTighteningForTruncation = YES;
     self.nameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -272,7 +272,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     self.unitView.hidden = _subtext.length == 0;
     
     // Create the unit label ("KM/H")
-    self.unitLabel = [UILabel new];
+    self.unitLabel = [[OutlineLabel alloc] init];
     self.unitLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.unitLabel.font = [UIFont scaledSystemFontOfSize:[OAWidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
     self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
@@ -324,7 +324,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     [_contentStackViewSimpleWidget addArrangedSubview:valueUnitOrEmptyView];
     
     // Create the unit label ("150")
-    self.valueLabel = [UILabel new];
+    self.valueLabel = [[OutlineLabel alloc] init];
     self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.valueLabel.adjustsFontSizeToFitWidth = YES;
     self.valueLabel.minimumScaleFactor = 0.3;
@@ -339,7 +339,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     _contentUnitStackViewSimpleWidget.distribution = UIStackViewDistributionEqualSpacing;
     [valueUnitOrEmptyView addSubview:_contentUnitStackViewSimpleWidget];
     
-    self.titleOrEmptyLabel = [UILabel new];
+    self.titleOrEmptyLabel = [[OutlineLabel alloc] init];
     self.titleOrEmptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.titleOrEmptyLabel.allowsDefaultTighteningForTruncation = YES;
     self.titleOrEmptyLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
@@ -347,7 +347,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     [_contentUnitStackViewSimpleWidget addArrangedSubview:self.titleOrEmptyLabel];
     
     // Create the unitOrEmptyLabel ("KM/H")
-    self.unitOrEmptyLabel = [UILabel new];
+    self.unitOrEmptyLabel = [[OutlineLabel alloc] init];
     self.unitOrEmptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.unitOrEmptyLabel.allowsDefaultTighteningForTruncation = YES;
     self.unitOrEmptyLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
@@ -616,8 +616,10 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     self.titleOrEmptyLabel.textColor = _unitsColor;
     
     self.valueLabel.text = _text;
+    [self applyOutlineIfNeededToLabel:self.valueLabel];
  
     self.nameLabel.text = [_contentTitle upperCase];
+    [self applyOutlineIfNeededToLabel:self.nameLabel];
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == EOAWidgetSizeStyleSmall;
 
     _verticalStackViewSimpleWidgetTopConstraint.constant = [OAWidgetSizeStyleObjWrapper getTopPaddingWithType:self.widgetSizeStyle];
@@ -662,9 +664,12 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
             self.unitView.hidden = NO;
             self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:unitsFontSize label:self.unitLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
             self.unitLabel.textAlignment = NSTextAlignmentRight;
+            [self applyOutlineIfNeededToLabel:self.unitLabel];
         }
     }
     
+    [self applyOutlineIfNeededToLabel:self.unitOrEmptyLabel];
+    [self applyOutlineIfNeededToLabel:self.titleOrEmptyLabel];
     if (self.isFullRow)
     {
         _contentStackViewSimpleWidget.spacing = 0;
@@ -936,6 +941,19 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     
     [self updatesSeparatorsColor:state.dividerColor];
     [self refreshLabel];
+}
+
+- (void)applyOutlineIfNeededToLabel:(UILabel *)label
+{
+    if (![label isKindOfClass:[OutlineLabel class]])
+        return;
+    
+    NSString *txt = label.attributedText ? label.attributedText.string : label.text;
+    BOOL enable = _primaryOutlineColor  && _textOutlineWidth > 0.0 && txt.length > 0;
+    
+    OutlineLabel *outlineLabel = (OutlineLabel *)label;
+    outlineLabel.outlineColor = enable ? _primaryOutlineColor : nil;
+    outlineLabel.outlineWidth = enable ? _textOutlineWidth : 0.0;
 }
 
 - (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams

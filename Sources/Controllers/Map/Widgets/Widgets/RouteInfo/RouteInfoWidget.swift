@@ -8,10 +8,10 @@
 
 @objcMembers
 final class RouteInfoWidget: OASimpleWidget {
-    @IBOutlet private var firstLineLeftLabel: UILabel!
-    @IBOutlet private var secondLineLeftLabel: UILabel!
-    @IBOutlet private var firstLineRightLabel: UILabel!
-    @IBOutlet private var secondLineRightLabel: UILabel!
+    @IBOutlet private var firstLineLeftLabel: OutlineLabel!
+    @IBOutlet private var secondLineLeftLabel: OutlineLabel!
+    @IBOutlet private var firstLineRightLabel: OutlineLabel!
+    @IBOutlet private var secondLineRightLabel: OutlineLabel!
     @IBOutlet private var secondaryBlockStackView: UIStackView!
     @IBOutlet private var secondaryDividerView: UIView!
     @IBOutlet private var navigationButtonView: UIView!
@@ -146,7 +146,7 @@ final class RouteInfoWidget: OASimpleWidget {
     
     override func updateColors(_ textState: OATextState) {
         super.updateColors(textState)
-        
+        updateTextWitState(textState)
         let valueTextColor = valueTextColor
         firstLineRightLabel.textColor = valueTextColor
         secondLineRightLabel.textColor = valueTextColor
@@ -296,6 +296,9 @@ final class RouteInfoWidget: OASimpleWidget {
         if !secondLineLeftLabel.isHidden {
             secondLineLeftLabel.attributedText = secondLineLeftString
         }
+        
+        applyOutlineIfNeeded(to: firstLineLeftLabel)
+        applyOutlineIfNeeded(to: secondLineLeftLabel)
     }
     
     private func updateSecondaryBlockWith(destinationInfo: DestinationInfo?, displayValues: [RouteInfoDisplayValue]) {
@@ -303,6 +306,8 @@ final class RouteInfoWidget: OASimpleWidget {
         let data = destinationInfo.flatMap { prepareDisplayData(info: $0) }
         firstLineRightLabel.text = data?[displayValues[0]] ?? ""
         secondLineRightLabel.text = data?[displayValues[1]] ?? ""
+        applyOutlineIfNeeded(to: firstLineRightLabel)
+        applyOutlineIfNeeded(to: secondLineRightLabel)
     }
     
     private func isUpdateNeeded(for routeInfo: [DestinationInfo]) -> Bool {

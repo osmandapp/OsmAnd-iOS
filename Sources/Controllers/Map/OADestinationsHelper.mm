@@ -102,6 +102,7 @@
 {
     @synchronized(_syncObj)
     {
+        BOOL destinationsChanged = NO;
         NSMutableArray<OADestination *> *newDestinations = [NSMutableArray new];
         for (OADestinationItem *item in reorderedDestinations)
         {
@@ -116,12 +117,14 @@
                     _dynamic2ndRowDestination = nil;
                 [_app.data.destinations removeObject:item];
                 [_app.data.destinationRemoveObservable notifyEventWithKey:item];
+                destinationsChanged = YES;
             }
         }
         _sortedDestinations = newDestinations;
         [self refreshDestinationIndexes];
         [_app.data.destinationsChangeObservable notifyEvent];
-        [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
+        if (destinationsChanged)
+            [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
     }
 }
 
@@ -201,7 +204,8 @@
     }
     
     [_app.data.destinationsChangeObservable notifyEvent];
-    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
+    if (wasSelected)
+        [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (void) apply2ndRowAutoSelection
@@ -258,7 +262,6 @@
 
     if (wasSelected)
         [_app.data.destinationsChangeObservable notifyEvent];
-    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (UIColor *) generateColorForDestination:(OADestination *)destination

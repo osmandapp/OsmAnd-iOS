@@ -3710,7 +3710,7 @@
 "vehicle_metrics_obd_ii" = "Metriche Veicolo (OBD-II)";
 "connect_obd_instructions_title" = "OsmAnd supporta le connessioni Bluetooth agli scanner OBD-II.";
 "obd_how_to_connect" = "Come connettersi:";
-"connect_obd_instructions_step" = "1. Connettere lo scanner alla porta OBD-II del veicolo.\n\n2. Avviare il motore del veicolo\n\n3. Abilitare il Bluetooth sul dispositivo\n\n4. Premere \'%@\' e selezionare lo scanner dalla lista.";
+"connect_obd_instructions_step" = "1. Connettere lo scanner alla porta OBD-II del veicolo.\n\n2. Avviare il motore del veicolo\n\n3. Abilitare il Bluetooth sul dispositivo\n\n4. Premere '%@' e selezionare lo scanner dalla lista.";
 "obd_bluetooth_off_description" = "Attivare il Bluetooth per trovare e collegare gli scanner.";
 "obd_searching_text_description" = "Per favore tieni il tuo dispositivo vicino allo scanner. Assicurati che il motore del veicolo sia acceso.";
 "obd_searching_text" = "Ricerca di scanner";

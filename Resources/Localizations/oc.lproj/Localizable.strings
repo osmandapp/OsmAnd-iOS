@@ -2598,7 +2598,7 @@
 "shared_string_travel_guides" = "Viatge";
 "ant_plus_bluetooth_off_description" = "Activatz lo Bluetooth per recercar e apariar de captadors.";
 "activity_type_winter_name" = "Ivèrn";
-"delete_history_items" = "Eliminar leis elements de l\'istoric %@?";
+"delete_history_items" = "Eliminar leis elements de l'istoric %@?";
 "quick_action_coordinates_widget_descr" = "Una bascula per mostrar ò amagar lei vinhetas dei Coordenadas sus la mapa.";
 "weather_update_disabled" = "Desactivat";
 "activity_type_cycling_name" = "Bicicleta";

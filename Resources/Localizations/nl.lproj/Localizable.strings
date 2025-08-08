@@ -1089,7 +1089,7 @@
 "base_profile_descr_boat" = "Boot, roeien, zeilen";
 "base_profile_descr_public_transport" = "Types openbaar vervoer";
 "base_profile_descr_pedestrian" = "Wandelen, trektocht, joggen";
-"base_profile_descr_bicycle" = "Mountainbike, brommer, paard";
+"base_profile_descr_bicycle" = "Mountainbike, bromfiets, paard";
 "base_profile_descr_car" = "Auto, vrachtauto, motor";
 "new_profile" = "Nieuw profiel";
 "screen_alerts" = "Visuele waarschuwingen";
@@ -1547,7 +1547,7 @@
 "purchases_feature_desc_monthly_map_updates" = "Krijg toegang tot maandelijkse updates voor offline kaarten.";
 "purchases_feature_desc_nautical" = "Verkrijg toegang tot zeediepte informatie";
 "purchases_feature_desc_unlimited_map_download" = "Krijg onbeperkte offline kaart downloads voor alle continenten en regio\'s.";
-"purchases_feature_desc_terrain" = "Hoogtelijnen van het terrein, volledige reliëfschaduwkaarten met donkere tinten en hellingskaarten waarin kleuren worden gebruikt om toppen en laaglanden te onderscheiden.";
+"purchases_feature_desc_terrain" = "Hoogtelijnen, grijswaarden-schaduwwerking en kleurenschema voor hellingsindicatie, om toppen en laaggelegen gebieden te kunnen onderscheiden.";
 "osmand_development_plugin_description" = "Deze plug-in toont de instellingen voor ontwikkel- en debug-opties, zoals routetest en -simulatie, schermweergave-prestaties, en spraaksturing. Deze instellingen zijn bedoeld voor programmeurs die OsmAnd willen verbeteren en zijn niet nodig voor normaal gebruik.";
 "restore_purchases" = "Aankopen herstellen";
 "purchases_feature_desc_combined_wiki" = "Verken Wikipedia artikelen onderweg zonder een internet connectie. De offline gegevens zijn verdeeld over de landen en zijn beschikbaar in alle talen.";
@@ -2469,11 +2469,11 @@
 "help_article_navigation_guidance_voice_navigation_name" = "Stemaanwijzingen / Notificaties";
 "help_article_navigation_routing_name" = "Routeparameters";
 "help_article_navigation_routing_bicycle_based_routing_name" = "Fietsroutes (MTB)";
-"help_article_navigation_routing_boat_navigation_name" = "Botenroutes";
+"help_article_navigation_routing_boat_navigation_name" = "Bootroutes";
 "help_article_navigation_routing_car_based_routing_name" = "Autoroutes (Vrachtwagen, Motor)";
 "help_article_navigation_routing_direct_to_point_routing_name" = "Recht-naar-puntroutes (boot)";
 "help_article_navigation_routing_horse_routing_name" = "Paardrijroutes";
-"help_article_navigation_routing_moped_routing_name" = "Moped-routes";
+"help_article_navigation_routing_moped_routing_name" = "Bromfietsroutes";
 "help_article_navigation_routing_online_routing_name" = "Online routezoeken";
 "help_article_navigation_routing_osmand_routing_name" = "Over OsmAnd routes";
 "help_article_navigation_routing_public_transport_navigation_name" = "Routes voor openbaar vervoer";
@@ -2520,7 +2520,7 @@
 "help_article_navigation_setup_markers_navigation_name" = "Navigeer met markeringen";
 "help_article_purchases_giveaway_name" = "Weggevertje";
 "help_article_search_search_poi_name" = "Zoek interessepunt (POI)";
-"help_article_troubleshooting_crash_logs_name" = "Vastloper-logs";
+"help_article_troubleshooting_crash_logs_name" = "Crashlogboeken";
 "help_article_widgets_map_buttons_name" = "Kaart-knoppen";
 "help_article_widgets_radius_ruler_name" = "Straal-meetlat en meetlat";
 "shared_string_all_colors" = "Alle kleuren";
@@ -2786,3 +2786,12 @@
 "add_widget_to_the_right" = "Widget rechts toevoegen";
 "add_widget_to_the_left" = "Widget links toevoegen";
 "obd_fuel_type_gasoline" = "Benzine";
+"obd_fuel_type_propane" = "Propaan";
+"obd_fuel_type_electric" = "Elektrisch";
+"obd_fuel_type_hydrogen" = "Waterstof";
+"obd_fuel_type_unknown" = "Type brandstof onbekend";
+"obd_widget_group" = "Voertuigmetingen";
+"shared_string_source" = "Bron";
+"type_of_activity" = "Soort activiteit";
+"change_activity" = "Verander activiteit";
+"obd_fuel_type_not_provided" = "Geen brandstof-type aangegeven";

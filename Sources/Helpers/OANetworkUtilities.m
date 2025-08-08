@@ -14,6 +14,8 @@
 
 #define BOUNDARY @"CowMooCowMooCowCowCow"
 
+#define DEBUG_NETWORK_OPERATIONS 0  // 1 — on, 0 — off
+
 @implementation OANetworkRequest
 
 @end
@@ -111,7 +113,7 @@
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
-#ifdef DEBUG
+#if DEBUG_NETWORK_OPERATIONS
 static NSString *prettyJSONStringFromData(NSData *data)
 {
     if (!data) return nil;
@@ -183,8 +185,8 @@ authorizationHeader:(NSString *)authorizationHeader
     [postData appendData:data];
     [postData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", BOUNDARY] dataUsingEncoding:NSUTF8StringEncoding]];
     [request setHTTPBody:postData];
-
-#ifdef DEBUG
+    
+#if DEBUG_NETWORK_OPERATIONS
     NSLog(@"[OANetworkUtilities] [Upload Request]"
           "\nURL: %@"
           "\nParams: %@"
@@ -204,31 +206,30 @@ authorizationHeader:(NSString *)authorizationHeader
     NSURLSessionDataTask *uploadTask = [urlSession dataTaskWithRequest:request
                                                      completionHandler:^(NSData * _Nullable data,
                                                                          NSURLResponse * _Nullable response,
-                                                                         NSError * _Nullable error)
-    {
+                                                                         NSError * _Nullable error) {
         hasFinished = YES;
-#ifdef DEBUG
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        NSString *bodyLog = prettyJSONStringFromData(data);
-        if (!bodyLog)
-        {
-            NSString *bodyString = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"<no body>";
-            if (bodyString.length > 2000)
+#if DEBUG_NETWORK_OPERATIONS
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+            NSString *bodyLog = prettyJSONStringFromData(data);
+            if (!bodyLog)
             {
-                bodyString = [[bodyString substringToIndex:2000] stringByAppendingString:@"... [truncated]"];
+                NSString *bodyString = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"<no body>";
+                if (bodyString.length > 2000)
+                {
+                    bodyString = [[bodyString substringToIndex:2000] stringByAppendingString:@"... [truncated]"];
+                }
+                bodyLog = bodyString;
             }
-            bodyLog = bodyString;
-        }
-        
-        NSLog(@"[OANetworkUtilities] [Upload Response]"
-              "\nURL: %@"
-              "\nStatus: %ld"
-              "\nError: %@"
-              "\nBody:\n%@",
-              urlObj.absoluteString,
-              (long)httpResponse.statusCode,
-              error ?: @"none",
-              bodyLog);
+            
+            NSLog(@"[OANetworkUtilities] [Upload Response]"
+                  "\nURL: %@"
+                  "\nStatus: %ld"
+                  "\nError: %@"
+                  "\nBody:\n%@",
+                  urlObj.absoluteString,
+                  (long)httpResponse.statusCode,
+                  error ?: @"none",
+                  bodyLog);
 #endif
         if (onComplete)
             onComplete(data, response, error);

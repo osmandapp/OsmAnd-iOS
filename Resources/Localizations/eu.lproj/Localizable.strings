@@ -2602,3 +2602,5 @@
 "obd_nothing_found_text" = "Ez da eskanerrik aurkitu";
 "obd_how_to_connect" = "Nola konektatu:";
 "manage_purchases" = "Kudeatu erosketak";
+"apply_to_all_points" = "Aplikatu puntu guztiei";
+"shared_string_road_exit" = "Irten";

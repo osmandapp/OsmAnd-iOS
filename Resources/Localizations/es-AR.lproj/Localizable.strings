@@ -3829,7 +3829,7 @@
 "obd_fuel_type_hybrid_hydrogen" = "Híbrido a hidrógeno";
 "obd_fuel_type_hydrogen" = "Hidrógeno";
 "obd_fuel_type_unknown" = "Combustible desconocido";
-"distance_by_tap_use_description" = "Pulsá en el mapa para ver la distancia entre tu posición actual y el punto pulsado.\n\nPulsá con dos dedos en el mapa para ver la distancia entre los dos puntos tocados.";
+"distance_by_tap_use_description" = "Pulsá en el mapa para ver la distancia entre tu posición actual y el punto pulsado.\nPulsá con 2 dedos en el mapa para ver la distancia entre los dos puntos tocados";
 "shared_string_normal" = "Normal";
 "shared_string_large" = "Grande";
 "unit_of_temperature_description" = "Las unidades elegidas se aplicarán a todos los datos relacionados con la temperatura del perfil actual.";

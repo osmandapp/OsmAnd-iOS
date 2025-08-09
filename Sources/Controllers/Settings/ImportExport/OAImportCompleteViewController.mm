@@ -171,7 +171,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             tileSourcesCount += settings.count;
         else if (type == OAExportSettingsType.CUSTOM_RENDER_STYLE)
             renderFilesCount += settings.count;
-        else if (type == OAExportSettingsType.OFFLINE_MAPS)
+        else if (type == OAExportSettingsType.STANDARD_MAPS)
             mapsCount += settings.count;
         else if (type == OAExportSettingsType.CUSTOM_ROUTING)
             routingFilesCount += settings.count;
@@ -195,7 +195,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             navigationHistoryCount += settings.count;
         else if (type == OAExportSettingsType.GLOBAL)
             globalCount += settings.count;
-        else if (type == OAExportSettingsType.COLOR_DATA)
+        else if (type == OAExportSettingsType.COLOR_PALETTE)
             colorPaletteCount += settings.count;
     }];
 

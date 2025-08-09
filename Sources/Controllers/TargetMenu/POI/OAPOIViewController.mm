@@ -41,8 +41,6 @@
 #define US_MAPS_RECREATION_AREA @"us_maps_recreation_area"
 #define OTHER_MAP_CATEGORY @"Other"
 
-static const NSInteger AMENITY_ID_RIGHT_SHIFT = 1;
-static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
 static const NSInteger WAY_MODULO_REMAINDER = 1;
 
 @interface OAPOIViewController ()
@@ -662,6 +660,9 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             else
                 rowIcon = [OATargetInfoViewController getIcon:iconId size:iconSize];
 
+            if (!rowIcon && NSStringIsEmpty(textPrefix) && NSStringIsEmpty(vl))
+                continue;
+            
             row = [[OARowInfo alloc] initWithKey:convertedKey
                                             icon:rowIcon
                                       textPrefix:textPrefix

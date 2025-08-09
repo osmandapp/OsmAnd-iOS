@@ -7,7 +7,6 @@
 //
 
 #import "OATurnDrawable.h"
-#import "OATurnDrawable+cpp.h"
 #import "OATurnPathHelper.h"
 #import "OAUtilities.h"
 #import "GeneratedAssetSymbols.h"

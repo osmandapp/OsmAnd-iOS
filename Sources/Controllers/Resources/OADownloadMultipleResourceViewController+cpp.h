@@ -7,8 +7,8 @@
 //
 
 #import "OADownloadMultipleResourceViewController.h"
-#import "OAResourcesUIHelper.h"
-#import <OsmAndCore/ResourcesManager.h>
+
+@class OAMultipleResourceItem;
 
 @interface OADownloadMultipleResourceViewController(cpp)
 

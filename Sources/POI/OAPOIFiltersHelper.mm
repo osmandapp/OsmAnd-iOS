@@ -571,7 +571,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         OAPOIBaseType *tp = [_poiHelper getAnyPoiTypeByName:typeId];
         if (tp)
         {
-            OAPOIUIFilter *lf = [[OAPOIUIFilter alloc] initWithBasePoiType:tp idSuffix:@""];;
+            OAPOIUIFilter *lf = [[OAPOIUIFilter alloc] initWithBasePoiType:tp idSuffix:@""];
             NSMutableArray<OAPOIUIFilter *> *copy = _cacheTopStandardFilters ? [NSMutableArray arrayWithArray:_cacheTopStandardFilters] : [NSMutableArray new];
             [copy addObject:lf];
             [copy sortUsingComparator:[OAPOIUIFilter getComparator]];
@@ -581,7 +581,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         OAPOIBaseType *lt = [_poiHelper getAnyPoiAdditionalTypeByKey:typeId];
         if (lt)
         {
-            OAPOIUIFilter *lf = [[OAPOIUIFilter alloc] initWithBasePoiType:lt idSuffix:@""];;
+            OAPOIUIFilter *lf = [[OAPOIUIFilter alloc] initWithBasePoiType:lt idSuffix:@""];
             NSMutableArray<OAPOIUIFilter *> *copy = _cacheTopStandardFilters ? [NSMutableArray arrayWithArray:_cacheTopStandardFilters] : [NSMutableArray new];
             [copy addObject:lf];
             [copy sortUsingComparator:[OAPOIUIFilter getComparator]];

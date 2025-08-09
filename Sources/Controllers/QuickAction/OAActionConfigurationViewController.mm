@@ -689,7 +689,7 @@
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    return [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]];;
+    return [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]];
 }
 
 #pragma mark - UITableViewDelegate

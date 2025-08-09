@@ -3300,7 +3300,7 @@
 "shared_string_class" = "Flokkur";
 "shared_string_always" = "Alltaf";
 "add_button" = "Bæta við hnappi";
-"osm_id" = "OSM-auðkenni";
+"shared_string_osm_id" = "OSM-auðkenni";
 "calculate_online" = "Reikna á netinu";
 "avoid_pt_types_descr" = "Veldu tegundir almenningssamgangna sem á að forðast við leiðsögn:";
 "shared_string_item" = "Atriði";

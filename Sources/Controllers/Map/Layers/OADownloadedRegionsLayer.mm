@@ -23,7 +23,10 @@
 #import "OADownloadsManager.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWeatherToolbar.h"
+#import "OAPointDescription.h"
 #import "OAAppSettings.h"
+#import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -407,16 +410,62 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
+    if (excludeUntouchableObjects)
+        return;
+    
+    OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:result.point];
+    const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
+    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    
     NSMutableArray<OADownloadMapObject *> *downloadObjects = [NSMutableArray array];
-    [self getWorldRegionFromPoint:point dataObjects:downloadObjects];
+    [self getWorldRegionFromPoint:location dataObjects:downloadObjects];
     for (OADownloadMapObject *obj in downloadObjects)
     {
-        OATargetPoint *pnt = [self getTargetPoint:obj];
-        if (pnt)
-            [found addObject:pnt];
+        [result collect:obj provider:self];
     }
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return YES;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OADownloadMapObject.class])
+    {
+        OADownloadMapObject *mapObject = (OADownloadMapObject *)obj;
+        CLLocationCoordinate2D center = [mapObject.worldRegion regionCenter];
+        return [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OADownloadMapObject.class])
+    {
+        OADownloadMapObject *mapObject = obj;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_WORLD_REGION typeName:OALocalizedString(@"shared_string_map") name:[mapObject.worldRegion localizedName]];
+    }
+    return [[OAPointDescription alloc] initWithType:POINT_TYPE_WORLD_REGION typeName:OALocalizedString(@"shared_string_map") name:@""];
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 @end

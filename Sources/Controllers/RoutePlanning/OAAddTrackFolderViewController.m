@@ -157,7 +157,7 @@
         _newFolderName = text;
         _doneButtonEnabled = YES;
     }
-    [self changeButtonAvailability:_doneBarButton isEnabled:_doneButtonEnabled];;
+    [self changeButtonAvailability:_doneBarButton isEnabled:_doneButtonEnabled];
 }
 
 - (BOOL)isFolderExist:(NSString *)name

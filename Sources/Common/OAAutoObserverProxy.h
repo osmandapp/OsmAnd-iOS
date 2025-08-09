@@ -16,7 +16,7 @@
 - (instancetype)initWith:(id<OAObserverProtocol>)owner;
 - (instancetype)initWith:(id<OAObserverProtocol>)owner andObserve:(id<OAObservableProtocol>)observable;
 - (instancetype)initWith:(id)owner withHandler:(SEL)selector;
-- (instancetype)initWith:(id)owner withHandler:(SEL)selector andObserve:(id<OAObservableProtocol>)observable;;
+- (instancetype)initWith:(id)owner withHandler:(SEL)selector andObserve:(id<OAObservableProtocol>)observable;
 
 @property(weak, readonly) id owner;
 @property(readonly) SEL handler;

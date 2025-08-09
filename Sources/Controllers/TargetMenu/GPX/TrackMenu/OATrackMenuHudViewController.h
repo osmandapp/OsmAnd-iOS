@@ -116,6 +116,7 @@
 @property (nonatomic, assign) BOOL openedFromMap;
 @property (nonatomic, assign) BOOL openedFromTracksList;
 @property (nonatomic, assign) BOOL openedFromTrackMenu;
+@property (nonatomic, assign) BOOL forceAdjustCentering;
 @property (nonatomic, assign) NSInteger scrollToSectionIndex;
 
 

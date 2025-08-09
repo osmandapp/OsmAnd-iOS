@@ -3548,7 +3548,7 @@
 "shared_string_minute_lowercase" = "min";
 "rendering_category_transport" = "Transport";
 "app_mode_taxi" = "Taxi";
-"osm_id" = "OSM ID";
+"shared_string_osm_id" = "OSM ID";
 "shared_string_speedometer" = "Speedometer";
 "weather_online_cache" = "Online cache";
 "lang_ml" = "Malayalam";

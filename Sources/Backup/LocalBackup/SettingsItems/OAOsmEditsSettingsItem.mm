@@ -142,7 +142,7 @@
         NSDictionary *tagMap = entityJson[kTAGS_KEY];
         NSString *action = entityJson[kACTION_KEY];
         OAEntity *entity;
-        if ([entityJson[kTYPE_KEY] isEqualToString: [OAEntity stringType:NODE]])
+        if ([entityJson[kTYPE_KEY] isEqualToString: [OAEntity stringType:EOAEntityTypeNode]])
         {
             entity = [[OANode alloc] initWithId:iD latitude:lat longitude:lon];
         }

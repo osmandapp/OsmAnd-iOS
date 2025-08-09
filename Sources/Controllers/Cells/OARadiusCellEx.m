@@ -52,7 +52,7 @@
     BOOL res = [super needsUpdateConstraints];
     if (!res)
     {
-        BOOL hasButtonRight = !self.buttonRight.hidden;;
+        BOOL hasButtonRight = !self.buttonRight.hidden;
 
         res = res || self.buttonLeftWithButtonRightConstraint.active != hasButtonRight;
         res = res || self.buttonLeftNoButtonRightConstraint.active != !hasButtonRight;

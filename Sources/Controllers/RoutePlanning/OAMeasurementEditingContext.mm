@@ -399,7 +399,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 - (void) setPoints:(NSArray<OASWptPt *> *)points
 {
-    _before.points =  [points mutableCopy];;
+    _before.points =  [points mutableCopy];
 }
 
 - (OASWptPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad

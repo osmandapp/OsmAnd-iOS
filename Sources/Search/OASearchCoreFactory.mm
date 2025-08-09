@@ -25,6 +25,8 @@
 #import "OAPOICategory.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
+#import "OAAmenitySearcher.h"
+#import "OAAmenitySearcher+cpp.h"
 #import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OAPOI.h"
@@ -785,7 +787,7 @@
                                       return false;
                                   
                                   OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-                                  OAPOI *object = [OAPOIHelper parsePOIByAmenity:amenity];
+                                  OAPOI *object = [OAAmenitySearcher parsePOIByAmenity:amenity];
                                   sr.object = object;
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
                                   sr.localeName = amenity->getName(lang, false).toNSString();
@@ -1536,7 +1538,7 @@
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
             const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-            OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
+            OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:amenity];
             if (poi)
             {
                 _currentAmenity = amenity;

@@ -52,7 +52,7 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.layoutMargins = UIEdgeInsetsMake(0, 20, 0, 20);
     self.buttonsView.layoutMargins = UIEdgeInsetsMake(0, 20, 0, 20);
-    self.buttonsSectionDividerView.backgroundColor = UIColor.clearColor;;
+    self.buttonsSectionDividerView.backgroundColor = UIColor.clearColor;
 
     [self.rightButton removeFromSuperview];
     self.closeButton.hidden = YES;
@@ -90,7 +90,7 @@
     
     width -= 2 * kHorizontalMargin;
     CGFloat headerHeight = self.headerView.frame.size.height;
-    NSString *description = [OALocalizedString(@"delete_tracks_bottom_sheet_description_regular_part") stringByAppendingString:[NSString stringWithFormat:OALocalizedString(@"delete_tracks_bottom_sheet_description_bold_part"), self.deletingTracksCount]];;
+    NSString *description = [OALocalizedString(@"delete_tracks_bottom_sheet_description_regular_part") stringByAppendingString:[NSString stringWithFormat:OALocalizedString(@"delete_tracks_bottom_sheet_description_bold_part"), self.deletingTracksCount]];
     CGFloat textHeight = [OAUtilities calculateTextBounds:description width:width font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height + kLabelVerticalMargin * 2;
     CGFloat contentHeight = textHeight + 1 * kButtonHeight + 1 * kButtonsVerticalMargin;
     CGFloat buttonsHeight = [self buttonsViewHeight];

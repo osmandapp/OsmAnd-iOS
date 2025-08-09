@@ -1639,7 +1639,7 @@
         _segments = segments;
         _simulatedLocations = [NSMutableArray array];
         _listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
-        [self.class calculateIntermediateIndexes:_locations intermediates:intermediates localDirections:computeDirections intermediatePoints:_intermediatePoints];;
+        [self.class calculateIntermediateIndexes:_locations intermediates:intermediates localDirections:computeDirections intermediatePoints:_intermediatePoints];
         [self.class updateListDistanceTime:_listDistance locations:_locations];
         _appMode = mode;
         

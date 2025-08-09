@@ -7,10 +7,13 @@
 //
 
 #import "OARenderedObject.h"
-#import "OARenderedObject+cpp.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/PointsAndAreas.h>
+#include <OsmAndCore/Data/ObfMapObject.h>
+#include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/Utilities.h>
 
@@ -53,7 +56,7 @@
         }
         double lat = OsmAnd::Utilities::get31LatitudeY(obfMapObject->getLabelCoordinateY());
         double lon = OsmAnd::Utilities::get31LongitudeX(obfMapObject->getLabelCoordinateX());
-        [renderedObject setLabelLatLon:CLLocationCoordinate2DMake(lat, lon)];
+        [renderedObject setLabelLatLon:[[CLLocation alloc] initWithLatitude:lat longitude:lon]];
         
         if (symbolInfo)
         {

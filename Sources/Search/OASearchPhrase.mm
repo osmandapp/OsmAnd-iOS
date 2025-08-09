@@ -275,7 +275,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
             break;
         }
     }
-    return [self createNewSearchPhrase:settings fullText:text foundWords:foundWords textToSearch:textToSearch];;
+    return [self createNewSearchPhrase:settings fullText:text foundWords:foundWords textToSearch:textToSearch];
 }
 
 - (NSString *) normalizeSearchText:(NSString *)s

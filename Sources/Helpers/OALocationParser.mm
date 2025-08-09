@@ -388,7 +388,7 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
                         [all addObject:str];
                         [strings addObject:str];
                     }
-                    [all addObject:[s substringWithRange:NSMakeRange(i, 1)]];;
+                    [all addObject:[s substringWithRange:NSMakeRange(i, 1)]];
                     [strings addObject:[s substringWithRange:NSMakeRange(i, 1)]];
                     word = -1;
                 }

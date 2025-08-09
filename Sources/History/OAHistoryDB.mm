@@ -369,7 +369,7 @@
                                 skipDisabledResult = YES;
                         }
                         if (!skipDisabledResult)
-                            skipDisabledResult = type == OAHistoryTypePOI && ![OAPOIHelper findPOIByName:name lat:lat lon:lon];
+                            skipDisabledResult = type == OAHistoryTypePOI && ![OAAmenitySearcher findPOIByName:name lat:lat lon:lon];
                     }
                     if (!skipDisabledResult)
                     {

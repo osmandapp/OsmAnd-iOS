@@ -34,6 +34,8 @@
 #import "OAObservable.h"
 #import "OAColoringType.h"
 #import "OAConcurrentCollections.h"
+#import "OAPointDescription.h"
+#import "OASymbolMapLayer+cpp.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
@@ -46,6 +48,7 @@
 
 static const CGFloat kSpeedToHeightScale = 10.0;
 static const CGFloat kTemperatureToHeightOffset = 100.0;
+static const int START_ZOOM = 7;
 
 @interface OAGPXLayer ()
 
@@ -1552,22 +1555,6 @@ colorizationScheme:(int)colorizationScheme
         cachedTrack[@"gpx"] = [self getGpxItem:QString::fromNSString(filePath)];
 }
 
-- (int) getDefaultRadiusPoi
-{
-    int r;
-    double zoom = self.mapView.zoom;
-    if (zoom <= 15) {
-        r = 10;
-    } else if (zoom <= 16) {
-        r = 14;
-    } else if (zoom <= 17) {
-        r = 16;
-    } else {
-        r = 18;
-    }
-    return (int) (r * self.mapView.displayDensityFactor);
-}
-
 - (void) getTracksFromPoint:(CLLocationCoordinate2D)point res:(NSMutableArray<OATargetPoint *> *)res
 {
     double textSize = [OAAppSettings.sharedManager.textSize get];
@@ -1640,6 +1627,75 @@ colorizationScheme:(int)colorizationScheme
         }
     }
 }
+
+- (void) getTracksFromPoint:(CLLocationCoordinate2D)point result:(MapSelectionResult *)result
+{
+    double textSize = [OAAppSettings.sharedManager.textSize get];
+    textSize = textSize < 1. ? 1. : textSize;
+    int r = [self getDefaultRadiusPoi] * textSize;
+    NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
+    OASGpxFile *currentTrackGpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
+    if (currentTrackGpxFile)
+        activeGpx[kCurrentTrack] = currentTrackGpxFile;
+    
+    for (NSString *key in activeGpx.allKeys) {
+        OASGpxFile *gpxFile = activeGpx[key];
+
+        BOOL isCurrentTrack = currentTrackGpxFile && gpxFile == currentTrackGpxFile;
+
+        OASGpxFile *document = nil;
+        NSString *filePath = isCurrentTrack ? kCurrentTrack : key;
+        if ([_cachedTracks.allKeys containsObject:filePath])
+        {
+            document = _cachedTracks[filePath][@"gpxFile"];
+        }
+        else if (gpxFile)
+        {
+            document = isCurrentTrack
+                    ? currentTrackGpxFile
+                    : gpxFile;
+        }
+
+        if (!document)
+            continue;
+
+        BOOL isJointSegments = NO;
+        OASGpxDataItem *gpxDataItem;
+        if (isCurrentTrack)
+        {
+            isJointSegments = [[OAAppSettings sharedManager].currentTrackIsJoinSegments get];
+        }
+        else
+        {
+            if ([_cachedTracks.allKeys containsObject:filePath]) {
+                gpxDataItem = _cachedTracks[filePath][@"gpx"];
+            }
+            else
+            {
+                gpxDataItem = [self getGpxItem:QString::fromNSString(key)];
+            }
+            if (gpxDataItem)
+            {
+                isJointSegments = gpxDataItem.joinSegments;
+            }
+        }
+        // NOTE: The old logic called processPoints during each initialization of the document (OAGPXDocument -> OASGpxFile). This was necessary for the correct recalculation for getPointsToDisplay. Now this is handled by recalculateProcessPoint. If recalculation is needed, call [document recalculateProcessPoint
+        [document recalculateProcessPoint];
+        NSArray<OASWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplayWithIsJoinSegments:isJointSegments] radius:r point:point];
+        if (points != nil)
+        {
+            CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
+                                                                                                longitude:point.longitude]
+                                                        fromLocation:[[CLLocation alloc] initWithLatitude:points.firstObject.position.latitude
+                                                                                                longitude:points.firstObject.position.longitude]
+                                                          toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
+                                                                                                longitude:points.lastObject.position.longitude]];
+            
+            [result collect:gpxDataItem ? gpxDataItem : [OASavingTrackHelper sharedInstance].currentTrack provider:self];
+        }
+    }
+}
+
 
 - (NSArray<OASWptPt *> *)findPointsNearSegments:(NSArray<OASTrkSegment *> *)segments radius:(int)radius point:(CLLocationCoordinate2D)point
 {
@@ -1817,6 +1873,18 @@ colorizationScheme:(int)colorizationScheme
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
+    else if ([obj isKindOfClass:[OASWptPt class]])
+    {
+        OASWptPt *item = (OASWptPt *)obj;
+        NSArray *foundWptGroups = self.mapViewController.foundWptGroups;
+        NSString *foundWptDocPath = self.mapViewController.foundWptDocPath;
+        
+        OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
+        wptItem.point = item;
+        wptItem.groups = foundWptGroups;
+        wptItem.docPath = foundWptDocPath;
+        return [self getTargetPoint:wptItem];
+    }
     return nil;
 }
 
@@ -1825,32 +1893,136 @@ colorizationScheme:(int)colorizationScheme
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    OAMapViewController *mapViewController = self.mapViewController;
-    if (!symbolInfo && !unknownLocation)
+    if ([self.mapViewController getMapZoom] < START_ZOOM)
+        return;
+    
+    [self collectWptFromPoint:result unknownLocation:unknownLocation excludeUntouchableObjects:excludeUntouchableObjects];
+    if (!excludeUntouchableObjects)
+        [self collectTracksFromPoint:result showTrackPointMenu:NO];
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (void) collectWptFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    CGPoint point = result.point;
+    int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+    
+    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+    if (touchPolygon31 == OsmAnd::AreaI())
+        return;
+    
+    NSArray<OASGpxFile *> *visibleGpxFiles = [[OASelectedGPXHelper instance] getSelectedGPXFiles];
+    for (OASGpxFile *g in visibleGpxFiles)
     {
-        [self getTracksFromPoint:point res:found];
-    }
-    else if (symbolInfo)
-    {
-        if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr) && [mapViewController findWpt:point])
+        NSArray<OASWptPt *> *pts = [self getSelectedFilePoints:g];
+        for (OASWptPt *waypoint in pts)
         {
-            OASWptPt *wpt = mapViewController.foundWpt;
-            NSArray *foundWptGroups = mapViewController.foundWptGroups;
-            NSString *foundWptDocPath = mapViewController.foundWptDocPath;
-
-            OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
-            item.point = wpt;
-            item.groups = foundWptGroups;
-            item.docPath = foundWptDocPath;
-
-            OATargetPoint *targetPoint = [self getTargetPoint:item];
-            if (![found containsObject:targetPoint])
-                [found addObject:targetPoint];
+            if ([self isPointHidden:g point:waypoint])
+                continue;
+            
+            double lat = [waypoint lat];
+            double lon = [waypoint lon];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+            if (shouldAdd)
+                [result collect:waypoint provider:self];
         }
     }
 }
+
+- (void) collectTracksFromPoint:(MapSelectionResult *)result showTrackPointMenu:(BOOL)showTrackPointMenu
+{
+    CGPoint point = result.point;
+    OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:point];
+    const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
+    [self getTracksFromPoint:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude) result:result];
+}
+
+- (BOOL) isGpxFileVisible:(OASGpxFile *)selectedGpxFile
+{
+    OASKQuadRect *gpxFileBounds = [selectedGpxFile getRect];
+    OsmAnd::AreaI gpxFileBbox = OsmAnd::AreaI(gpxFileBounds.top, gpxFileBounds.left, gpxFileBounds.bottom, gpxFileBounds.right);
+    
+    OsmAnd::AreaI screenBbox = self.mapView.getVisibleBBox31;
+    return screenBbox.contains(gpxFileBbox);
+}
+
+- (NSArray<OASWptPt *> *) getSelectedFilePoints:(OASGpxFile *)g
+{
+    return [g getPointsList];
+}
+
+- (BOOL) isPointHidden:(OASGpxFile *)selectedGpxFile point:(OASWptPt *)point
+{
+    NSString *name = point.category;
+    OASGpxUtilitiesPointsGroup *pointsGroup = [selectedGpxFile pointsGroups][name ? name : @""];
+    return pointsGroup && pointsGroup.isHidden;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OASWptPt.class])
+    {
+        OASWptPt *wpt = (OASWptPt *)obj;
+        return [[CLLocation alloc] initWithLatitude:[wpt getLatitude] longitude:[wpt getLongitude]];
+    }
+    else if ([obj isKindOfClass:SelectedGpxPoint.class])
+    {
+        SelectedGpxPoint *selectedGpxPoint = (SelectedGpxPoint *)obj;
+        OASWptPt *point = selectedGpxPoint.selectedPoint;
+        return [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OASWptPt.class])
+    {
+        OASWptPt *wpt = obj;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:[wpt name]];
+    }
+    else if ([obj isKindOfClass:SelectedGpxPoint.class])
+    {
+        OASGpxFile *selectedGpxFile = ((SelectedGpxPoint *)obj).selectedGpxFile;
+        NSString *name;
+        if ([selectedGpxFile showCurrentTrack])
+        {
+            name = OALocalizedString(@"shared_string_currently_recording_track");
+        }
+        else if (NSStringIsEmpty([selectedGpxFile getArticleTitle]))
+        {
+            name = [selectedGpxFile getArticleTitle];
+        }
+        else
+        {
+            name = [[selectedGpxFile.path lastPathComponent] stringByDeletingPathExtension];
+        }
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX name:name];
+    }
+    return nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
 
 #pragma mark - OAMoveObjectProvider
 

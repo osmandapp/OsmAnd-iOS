@@ -91,6 +91,7 @@
 #import "OARouteKey.h"
 #import "OAContextMenuProvider.h"
 #import "EOAEntityType.h"
+#import "OAAmenitySearcher.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

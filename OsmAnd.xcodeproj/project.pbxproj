@@ -511,9 +511,9 @@
 		32EAF9FB2AE0241F00646807 /* TravelGuidesSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EAF9FA2AE0241F00646807 /* TravelGuidesSettingsViewController.swift */; };
 		32EAF9FF2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */; };
 		32EAFA012AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EAFA002AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift */; };
+		32EB34492E462D6A004F7C75 /* OAAmenitySearcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB34482E462D68004F7C75 /* OAAmenitySearcher.mm */; };
 		32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */; };
 		32EEB6322E286525002216B0 /* OATravelSelectionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EEB6312E286521002216B0 /* OATravelSelectionLayer.mm */; };
-		32EEB6452E2ABA3C002216B0 /* AmenitySearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EEB6442E2ABA35002216B0 /* AmenitySearcher.swift */; };
 		32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */; };
 		32F3A6AC2D5E1A43008AE4CA /* IconsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */; };
 		32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */; };
@@ -4001,14 +4001,16 @@
 		32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManagerWrapper.h; sourceTree = "<group>"; };
 		32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AFNetworkReachabilityManagerWrapper.m; sourceTree = "<group>"; };
 		32EAFA002AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesSettingsDownloadViewController.swift; sourceTree = "<group>"; };
+		32EB34472E462D58004F7C75 /* OAAmenitySearcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAmenitySearcher.h; sourceTree = "<group>"; };
+		32EB34482E462D68004F7C75 /* OAAmenitySearcher.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAmenitySearcher.mm; sourceTree = "<group>"; };
 		32EB3DEF2AC3256B0018D9B8 /* OATravelLocalDataDbHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelLocalDataDbHelper.h; sourceTree = "<group>"; };
 		32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelLocalDataDbHelper.mm; sourceTree = "<group>"; };
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		32EEB6302E28651B002216B0 /* OATravelSelectionLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelSelectionLayer.h; sourceTree = "<group>"; };
 		32EEB6312E286521002216B0 /* OATravelSelectionLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelSelectionLayer.mm; sourceTree = "<group>"; };
-		32EEB6442E2ABA35002216B0 /* AmenitySearcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenitySearcher.swift; sourceTree = "<group>"; };
 		32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiIconCollectionHandler.swift; sourceTree = "<group>"; };
 		32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsAppearanceCategory.swift; sourceTree = "<group>"; };
+		32F6B3902E47A842007F3902 /* OAAmenitySearcher+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAAmenitySearcher+cpp.h"; sourceTree = "<group>"; };
 		32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXImportUIHelper.h; sourceTree = "<group>"; };
 		32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXImportUIHelper.mm; sourceTree = "<group>"; };
 		32FEF47C2D071ED7005E8B55 /* OAPOIHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAPOIHelper+cpp.h"; sourceTree = "<group>"; };
@@ -13353,7 +13355,6 @@
 			children = (
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
-				32EEB6442E2ABA35002216B0 /* AmenitySearcher.swift */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
 				325DAE652DFFF07E002CB022 /* AsyncTask */,
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
@@ -13377,6 +13378,9 @@
 				32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */,
 				DA5A80B326C563A600F274C7 /* NSData+CRC32.h */,
 				DA5A80DD26C563A600F274C7 /* NSData+CRC32.m */,
+				32EB34472E462D58004F7C75 /* OAAmenitySearcher.h */,
+				32EB34482E462D68004F7C75 /* OAAmenitySearcher.mm */,
+				32F6B3902E47A842007F3902 /* OAAmenitySearcher+cpp.h */,
 				DA5A80E026C563A600F274C7 /* OAAppSettings.h */,
 				DA5A80B226C563A600F274C7 /* OAAppSettings.m */,
 				2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */,
@@ -17301,6 +17305,7 @@
 				46BD939B2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift in Sources */,
 				DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */,
 				DA5A831826C563A800F274C7 /* OATargetInfoViewCell.m in Sources */,
+				32EB34492E462D6A004F7C75 /* OAAmenitySearcher.mm in Sources */,
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
 				C5DF39B52DBB6CA800332496 /* OACoordinatesGridLayer.mm in Sources */,
 				DA4ABEEC2876DA5D00B996EF /* OAExportSettingsType.mm in Sources */,
@@ -17461,7 +17466,6 @@
 				DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */,
 				DA5A837126C563A800F274C7 /* OARoutingInfoCell.mm in Sources */,
 				DA653CD9288ACEDF00AB623C /* OATitleIconProgressbarCell.mm in Sources */,
-				32EEB6452E2ABA3C002216B0 /* AmenitySearcher.swift in Sources */,
 				DA5A844526C563A900F274C7 /* UIViewController+OARootViewController.m in Sources */,
 				271A62052E3CA8CD00B34CB1 /* DistanceByTapViewController.swift in Sources */,
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,

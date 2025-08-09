@@ -28,11 +28,14 @@
 #import "OAClickableWayHelper+cpp.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
+#import "OAAmenitySearcher.h"
+#import "OAAmenitySearcher+cpp.h"
 #import "OARouteKey.h"
 #import "OARouteKey+cpp.h" 
 #import "OATravelGuidesHelper+cpp.h"
 #import "OAClickableWayMenuProvider.h"
 #import "OATravelSelectionLayer.h"
+#import "OAAmenitySearcher.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
@@ -132,7 +135,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         
         BOOL osmRoutesAlreadyAdded = NO;
         const auto& symbols = [rendererView getSymbolsIn:area strict:NO];
-        AmenitySearcher *amenitySearcher = [[AmenitySearcher alloc] init];
+        OAAmenitySearcher *amenitySearcher = [[OAAmenitySearcher alloc] init];
         
         for (const auto symbolInfo : symbols)
         {
@@ -188,7 +191,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 [requestAmenity setLatitude:result.objectLatLon.coordinate.latitude];
                 [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
                 
-                AmenitySearcherRequest *request = [[AmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:names];
+                OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:names];
                 detailsObject = [amenitySearcher searchDetailedObject:request];
             }
             else
@@ -250,7 +253,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                                     }
                                     else
                                     {
-                                        AmenitySearcherRequest *request = [[AmenitySearcherRequest alloc] initWithMapObject:renderedObject];
+                                        OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:renderedObject];
                                         detailsObject = [amenitySearcher searchDetailedObject:request];
                                         if (detailsObject)
                                         {
@@ -704,7 +707,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     OsmAnd::AreaI rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, point31);
     
     BOOL (^nilBlock)(OAPOI *poi) = nil;
-    NSArray<OAPOI *> *amenities = [OAPOIHelper findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nilBlock];
+    NSArray<OAPOI *> *amenities = [OAAmenitySearcher findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nilBlock];
     OAPOI *amenity = [self findAmenityByOsmId:amenities obfId:osmId point:latLon];
     
     if (!amenity && names.count > 0)
@@ -719,7 +722,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude));
     OsmAnd::AreaI rect = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(AMENITY_SEARCH_RADIUS, point31);
     BOOL (^nilBlock)(OAPOI *poi) = nil;
-    return [OAPOIHelper findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nilBlock];
+    return [OAAmenitySearcher findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil bbox31:rect currentLocation:point31 includeTravel:YES matcher:nil publish:nilBlock];
 }
 
 + (OAPOI *)findAmenityByOsmId:(CLLocation *)latLon obfId:(uint64_t)obfId

@@ -55,6 +55,7 @@
 #import "OATopIndexFilter.h"
 #import "OAResourcesUIHelper.h"
 #import "OAMapSelectionHelper.h"
+#import "OAAmenitySearcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -192,7 +193,7 @@
     BOOL originFound = NO;
     if (item.hType == OAHistoryTypePOI)
     {
-        OAPOI *poi = [OAPOIHelper findPOIByName:item.name lat:item.latitude lon:item.longitude];
+        OAPOI *poi = [OAAmenitySearcher findPOIByName:item.name lat:item.latitude lon:item.longitude];
         if (poi)
         {
             [self.class goToPoint:poi searchResult:nil preferredZoom:preferredZoom];

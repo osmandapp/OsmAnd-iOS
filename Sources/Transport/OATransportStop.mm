@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OAPOIHelper.h"
 #import "OAPOI.h"
+#import "OAAmenitySearcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -82,7 +83,7 @@
 {
     if (!_wasSearchedPoi)
     {
-        OAPOI *poi = [OAPOIHelper findPOIByName:self.name lat:self.latitude lon:self.longitude];
+        OAPOI *poi = [OAAmenitySearcher findPOIByName:self.name lat:self.latitude lon:self.longitude];
         [self setupWithPOI:poi];
     }
 }

@@ -19,6 +19,8 @@
 #import "OAAmenityExtendedNameFilter.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
+#import "OAAmenitySearcher.h"
+#import "OAAmenitySearcher+cpp.h"
 #import "OATargetPoint.h"
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
@@ -217,7 +219,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                         OAAmenityExtendedNameFilter *poiUiNameFilter = weakPoiUiNameFilter;
                         OAPOIUIFilter *poiUiFilter = weakPoiUiFilter;
 
-                        OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:amenity];
+                        OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
                         QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
                         
                         BOOL check = !wikiUiNameFilter && !wikiUiFilter && poiUiNameFilter

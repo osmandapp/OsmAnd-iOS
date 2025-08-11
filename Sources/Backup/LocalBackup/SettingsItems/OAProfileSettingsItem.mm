@@ -375,6 +375,10 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         if ([formattedKey hasPrefix:registeredKey])
             return [registered objectForKey:registeredKey];
     }
+    // NOTE: during import, the CommonWidgetSizeStyle preference may be missing, so we will create a new instance
+    if ([key hasPrefix:kSizeStylePref])
+        return [OACommonWidgetSizeStyle withKey:kSizeStylePref defValue:EOAWidgetSizeStyleMedium];
+    
     return nil;
 }
 

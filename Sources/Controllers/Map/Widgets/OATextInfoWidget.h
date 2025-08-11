@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAWidgetType, OutlineLabel, OACommonWidgetSizeStyle, OAWidgetsPanel, OATextState, OAMapWidgetInfo;
 
+extern NSString * const kSizeStylePref;
+
 @interface OATextInfoWidget : OABaseWidgetView
 
 @property (nonatomic, readonly) UIFont *primaryFont;

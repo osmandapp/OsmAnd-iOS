@@ -146,7 +146,6 @@ extension OATextInfoWidget {
         }
         return widgetSizePref?.get(appMode) ?? .medium
     }
-    
 }
 
 extension Array where Element == OATextInfoWidget {

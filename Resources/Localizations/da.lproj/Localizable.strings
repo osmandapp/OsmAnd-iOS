@@ -2277,10 +2277,10 @@
 "simulation_constant_mode_title" = "Fast hastighed";
 "simulation_preview_mode_title" = "Hurtig forhåndsvisningstilstand";
 "speed_mode" = "Hastighedstilstand";
-"altitude_ascent" = "Opstigning";
+"altitude_ascent" = "Op ad bakke";
 "simulation_preview_mode_desc" = "Hastigheden i simuleringen er maksimal på lige strækninger og sænkes kun ved kryds.";
 "shared_string_capacity" = "Kapacitet";
-"altitude_descent" = "Nedstigning";
+"altitude_descent" = "Ned ad bakke";
 "copy_address" = "Kopiér adresse";
 "copy_poi_name" = "Kopier IP-navn";
 "copy_coordinates" = "Kopiér koordinater";
@@ -2710,10 +2710,10 @@
 "app_mode_moped" = "Knallert";
 "press_again_to_change_the_map_orientation" = "Tryk igen for at ændre kortets orientering";
 "speak_route_deviation" = "Meddel afvigelse fra ruten";
-"map_widget_trip_recording_uphill" = "Opstigning";
+"map_widget_trip_recording_uphill" = "Op ad bakke";
 "map_widget_trip_recording_duration" = "Varighed";
 "shared_string_app_profile" = "App-profil";
-"map_widget_trip_recording_downhill" = "Nedstigning";
+"map_widget_trip_recording_downhill" = "Ned ad bakke";
 "map_widget_trip_recording_distance" = "Afstand";
 "altitude_widget_desc" = "Viser højden over havets overflade for den aktuelle geografiske placering.";
 "map_widget_altitude_map_center" = "Højde: kortcentrum";

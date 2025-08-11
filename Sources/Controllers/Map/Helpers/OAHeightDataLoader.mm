@@ -128,7 +128,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
 {
     int loaded = 0;
     std::unordered_set<int64_t> deletedIds;
-    std::map<int64_t, std::shared_ptr<RoutingIndex>> usedIds;
+    std::map<int64_t, QString> usedIds;
     
     uint32_t left = x << ZOOM_TO_LOAD_TILES_SHIFT_R;
     uint32_t top = y << ZOOM_TO_LOAD_TILES_SHIFT_R;
@@ -183,11 +183,13 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
                 deletedIds.insert(objId);
                 continue;
             }
-
-            //if (usedIds.containsKey(obj.id) && usedIds.get(obj.id) != obj.region) {
-            //    // live-update, changed tags
-            //    continue;
-            //}
+            
+            QString regionName = object->section->name;
+            if (usedIds[objId] != nil && usedIds[objId] != regionName)
+            {
+                // live-update, changed tags
+                continue;
+            }
             
             int64_t shiftedId = objId >> SHIFT_ID;
             BOOL valueExisted = results.count(shiftedId) > 0;
@@ -195,7 +197,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
                 loaded += 1;
             
             results[shiftedId] = object;
-            //usedIds[objId] = object->region;
+            usedIds[objId] = regionName;
         }
     }
     return loaded;

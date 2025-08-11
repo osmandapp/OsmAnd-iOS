@@ -216,7 +216,7 @@
                 regionData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
                 regionData[@"region"] = region;
                 regionData[@"description"] = [NSByteCountFormatter stringFromByteCount:[_weatherHelper getOfflineForecastSize:region forUpdate:NO]
-                                                                            countStyle:NSByteCountFormatterCountStyleFile];;
+                                                                            countStyle:NSByteCountFormatterCountStyleFile];
                 [countryCells addObject:regionData];
             }
         }

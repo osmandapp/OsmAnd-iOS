@@ -27,6 +27,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OASelectedGPXHelper.h"
+#import "OAAmenitySearcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -66,7 +67,7 @@
 {
     NSString *originName = _wpt.getAmenityOriginName;
     if (originName && originName.length > 0)
-        _originObject = [OAPOIHelper findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
+        _originObject = [OAAmenitySearcher findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
     if (!_originObject)
         _originObject = [_wpt getAmenity];
 }

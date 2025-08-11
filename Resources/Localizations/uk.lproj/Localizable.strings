@@ -3597,7 +3597,7 @@
 "help_article_navigation_auto_car_name" = "Android Auto";
 "mapillary_item" = "OsmAnd + Mapillary";
 "navigate_point_olc_short" = "OLC";
-"osm_id" = "OSM ID";
+"shared_string_osm_id" = "OSM ID";
 "battery_widget_level_privacy_ios_desc" = "З міркувань конфіденційності iOS віджет може відображати рівень заряду акумулятора лише з кроком у 5%, наприклад 35%, 60% або 85%";
 "ask_every_time" = "Запитуйте кожен раз";
 "attach_roads_descr" = "Прив’яжіть свій трек до доріг, щоб отримати детальну інформацію про маршрут, включаючи покрокові інструкції та атрибути дороги.";

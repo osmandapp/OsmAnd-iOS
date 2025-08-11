@@ -3316,6 +3316,7 @@
 "osmand_depelopment_use_old_routing" = "Usar navegación antigua (A*)";
 "edit_tilesource_maxzoom" = "Zum máximo";
 "edit_tilesource_minzoom" = "Zum mínimo";
+"shared_string_osm_id" = "ID de OSM";
 "step_by_step" = "Navegación paso a paso";
 "osm_id" = "ID de OSM";
 "shared_string_item" = "Elemento";

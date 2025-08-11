@@ -42,6 +42,18 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
     return UIColorFromARGB(rgbValue);
 }
 
+static inline BOOL NSStringIsEmpty(NSString * _Nullable string) {
+    return !string || string.length == 0;
+}
+
+static inline BOOL NSArrayIsEmpty(NSArray * _Nullable array) {
+    return !array || array.count == 0;
+}
+
+static inline BOOL NSDictionaryIsEmpty(NSDictionary * _Nullable dictionary) {
+    return !dictionary || dictionary.count == 0;
+}
+
 static inline void executeOnMainThread(dispatch_block_t block)
 {
     if ([NSThread isMainThread])
@@ -395,6 +407,8 @@ static inline void executeOnMainThread(dispatch_block_t block)
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor;
 
 + (NSString *) createNewFileName:(NSString *)oldName;
++ (NSString *) simplifyFileName:(NSString *)filename;
++ (NSString *)convertToPermittedFileName:(NSString *)filename;
 
 + (natural_t) get_free_memory;
 

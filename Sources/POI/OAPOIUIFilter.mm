@@ -23,6 +23,7 @@
 #import "OANameStringMatcher.h"
 #import "OAOsmAndFormatter.h"
 #import "OASvgHelper.h"
+#import "OAAmenitySearcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -402,12 +403,12 @@
 
 - (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius
 {
-    return [OAPOIHelper searchPOIsOnThePath:locs radius:poiSearchDeviationRadius filter:self matcher:[self wrapResultMatcher:nil]];
+    return [OAAmenitySearcher searchPOIsOnThePath:locs radius:poiSearchDeviationRadius filter:self matcher:[self wrapResultMatcher:nil]];
 }
 
 - (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat lon:(double)lon topLatitude:(double)topLatitude bottomLatitude:(double)bottomLatitude leftLongitude:(double)leftLongitude rightLongitude:(double)rightLongitude zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
-    return [OAPOIHelper findPOIsByFilter:self topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:[self wrapResultMatcher:matcher]];
+    return [OAAmenitySearcher findPOIsByFilter:self topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:[self wrapResultMatcher:matcher]];
 }
 
 - (OAAmenityNameFilter *) getNameFilter:(NSString *)filter
@@ -595,7 +596,7 @@
     OANameStringMatcher *sm = [[OANameStringMatcher alloc] initWithNamePart:[nameFilter trim] mode:CHECK_STARTS_FROM_SPACE];
     
     
-    NSString *name = amenity->nativeName.toNSString();;
+    NSString *name = amenity->nativeName.toNSString();
     NSString *typeName = [[OAPOIHelper sharedInstance] getPhrase:type];
     NSString *poiStringWithoutType;
     

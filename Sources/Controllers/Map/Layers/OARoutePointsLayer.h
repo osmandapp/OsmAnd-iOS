@@ -21,3 +21,10 @@
 - (void) setIntermediateMarkerVisibility:(CLLocationCoordinate2D)location hidden:(BOOL)hidden;
 
 @end
+
+
+@interface OAMapMarkerWrapper : NSObject
+
+@property (nonatomic) std::shared_ptr<OsmAnd::MapMarker> marker;
+
+@end

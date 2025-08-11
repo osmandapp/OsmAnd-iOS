@@ -22,6 +22,7 @@
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAppData.h"
+#import "OASymbolMapLayer+cpp.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>

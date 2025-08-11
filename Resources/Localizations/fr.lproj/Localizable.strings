@@ -3223,7 +3223,7 @@
 "shared_string_top" = "En haut";
 "track_3d_empty_view_title" = "Vue des traces en 3D";
 "track_3d_empty_view_description" = "Explorez la trace en 3D interactif ! Visualisez directement sur la carte : hauteur, vitesse et bien plus.";
-"osm_id" = "ID OSM";
+"shared_string_osm_id" = "ID OSM";
 "shared_string_millimeters" = "Millimètres";
 "shared_string_speedometer" = "Compteur de vitesse";
 "edit_tilesource_minzoom" = "Zoom minimum";

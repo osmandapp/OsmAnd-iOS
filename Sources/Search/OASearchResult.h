@@ -17,6 +17,13 @@
 // MAX_PHRASE_WEIGHT_TOTAL should be  > getSumPhraseMatchWeight
 #define MAX_PHRASE_WEIGHT_TOTAL MAX_TYPES_BASE_10 * MAX_TYPES_BASE_10
 
+typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
+    EOASearchResultResourceDetailed,
+    EOASearchResultResourceWikipedia,
+    EOASearchResultResourceBasemap,
+    EOASearchResultResourceTravel
+};
+
 @interface CheckWordsMatchCount : NSObject
 
 @property BOOL allWordsEqual;

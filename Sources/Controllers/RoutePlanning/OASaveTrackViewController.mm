@@ -590,7 +590,7 @@
 - (CGFloat)getModalPresentationOffset:(BOOL)keyboardShown
 {
     // accounts for additional top offset in modal presentation
-    CGFloat modalOffset = modalOffset = keyboardShown ? 6. : 10.;;
+    CGFloat modalOffset = modalOffset = keyboardShown ? 6. : 10.;
 
     return modalOffset;
 }

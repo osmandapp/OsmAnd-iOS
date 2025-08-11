@@ -68,6 +68,12 @@
 
     _gpxRecMapLayer = [[OAGPXRecLayer alloc] initWithMapViewController:_mapViewController baseOrder:-110000];
     [self addLayer:_gpxRecMapLayer];
+    
+    _networkRouteSelectionLayer = [[OANetworkRouteSelectionLayer alloc] initWithMapViewController:_mapViewController baseOrder:190000];
+    [self addLayer:_networkRouteSelectionLayer];
+    
+    _travelSelectionLayer = [[OATravelSelectionLayer alloc] initWithMapViewController:_mapViewController baseOrder:190000];
+    [self addLayer:_travelSelectionLayer];
 
     _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:200000 pointsOrder:-150000];
     [self addLayer:_routeMapLayer];

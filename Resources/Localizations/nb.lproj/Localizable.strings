@@ -2663,7 +2663,7 @@
 "navigation_position" = "Navigasjonsposisjon";
 "navigate_point_olc" = "Open Location Code (OLC)";
 "map_widget_gps_info" = "GPS-info";
-"osm_id" = "OSM-ID";
+"shared_string_osm_id" = "OSM-ID";
 "of" = "%d av %d";
 "downloaded_bytes" = "%@ av %@";
 "quick_action_terrain_color_scheme" = "Terrengfargeskjema";

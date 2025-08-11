@@ -3285,7 +3285,7 @@
 "vertical_exaggeration_description" = "Al cambiar el valor de la escala, puede enfatizar el relieve en 3D.";
 "shared_string_scale" = "Escala";
 "missing_or_outdated_maps_title" = "Mapas que faltan o anticuados";
-"osm_id" = "ID de OSM";
+"shared_string_osm_id" = "ID de OSM";
 "osmand_depelopment_use_old_routing" = "Utilizar la ruta antigua (A*)";
 "routing_algorithm" = "Algoritmo de ruta";
 "auto_zoom" = "Zum automático";

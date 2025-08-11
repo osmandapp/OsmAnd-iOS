@@ -3296,7 +3296,7 @@
 "track_3d_empty_view_description" = "Explore a trilha em 3D interativa! Visualize altura, velocidade e muito mais diretamente no mapa.";
 "missing_or_outdated_maps_description" = "Alguns mapas off-line necessários para esta rota estão faltando ou não estão atualizados. Baixe ou atualize esses mapas.";
 "calculate_online_title" = "A lista de mapas ausentes é baseada na rota em linha reta. Para obter uma lista precisa de mapas, o OsmAnd pode pré-calcular sua rota online";
-"osm_id" = "ID do OSM";
+"shared_string_osm_id" = "ID do OSM";
 "getting_list_required_maps" = "Obtendo uma lista de mapas necessários...";
 "visualization_3d_wall_color" = "Cor das paredes";
 "visualization_3d_track_line" = "Linha da trilha";

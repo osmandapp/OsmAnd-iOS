@@ -86,6 +86,12 @@
 #import "OAResultMatcher.h"
 #import "OASearchResult.h"
 #import "OAWikiWebViewController.h"
+#import "OATransportStop.h"
+#import "OAHeightDataLoader.h"
+#import "OARouteKey.h"
+#import "OAContextMenuProvider.h"
+#import "EOAEntityType.h"
+#import "OAAmenitySearcher.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -131,6 +137,7 @@
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAPOILayer.h"
 #import "OABaseNavbarViewController.h"
 #import "OABaseButtonsViewController.h"
 #import "OABaseNavbarSubviewViewController.h"

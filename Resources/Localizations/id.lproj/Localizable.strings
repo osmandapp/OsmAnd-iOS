@@ -2439,7 +2439,7 @@
 "location_radius_description" = "Menunjukkan seberapa luas lingkaran yang menunjukkan keakuratan lokasi Anda saat ini";
 "quick_action_toggle_preference" = "Sebuah alihan untuk mengubah preferensi.";
 "location_radius" = "Radius lokasi";
-"osm_id" = "ID OSM";
+"shared_string_osm_id" = "ID OSM";
 "of" = "%d dari %d";
 "downloaded_bytes" = "%@ / %@";
 "daynight_mode_night_summary" = "Selalu tampilkan aplikasi dalam tema gelap. Tema ini cocok digunakan saat malam hari atau saat cahaya sedang redup.";

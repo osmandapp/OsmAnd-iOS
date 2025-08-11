@@ -19,18 +19,22 @@
 #import "OAAmenityExtendedNameFilter.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
+#import "OAAmenitySearcher.h"
+#import "OAAmenitySearcher+cpp.h"
 #import "OATargetPoint.h"
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OARouteKey.h"
+#import "OARouteKey+cpp.h"
 #import "OANetworkRouteDrawable.h"
 #import "OAPluginsHelper.h"
 #import "OAAppSettings.h"
 #import "OsmAndSharedWrapper.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
+#import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
@@ -48,6 +52,8 @@
 #define kPoiSearchRadius 50 // AMENITY_SEARCH_RADIUS
 #define kPoiSearchRadiusForRelation 500 // AMENITY_SEARCH_RADIUS_FOR_RELATION
 #define kTrackSearchDelta 40
+
+static const int START_ZOOM = 5;
 
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
@@ -67,6 +73,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     NSString *_prefLang;
     
     OAPOIFiltersHelper *_filtersHelper;
+    
+    NSMutableDictionary<NSNumber *, OAPOI *> *_topPlaces;
     
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _wikiSymbolsProvider;
@@ -211,7 +219,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                         OAAmenityExtendedNameFilter *poiUiNameFilter = weakPoiUiNameFilter;
                         OAPOIUIFilter *poiUiFilter = weakPoiUiFilter;
 
-                        OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:amenity];
+                        OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
                         QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
                         
                         BOOL check = !wikiUiNameFilter && !wikiUiFilter && poiUiNameFilter
@@ -410,7 +418,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     point.targetObj = key;
     OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:key];
     point.icon = drawable.getIcon;
-    point.title = key.routeKey.getRouteName().toNSString();
+    point.title = [key getRouteName];
     NSArray *areaPoints = @[@(area.topLeft.x), @(area.topLeft.y), @(area.bottomRight.x), @(area.bottomRight.y)];
     point.values = @{ @"area": areaPoints };
 
@@ -420,19 +428,58 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         [points addObject:point];
 }
 
+- (OAPOI *) getAmenity:(id)object
+{
+    if ([object isKindOfClass:SelectedMapObject.class])
+    {
+        SelectedMapObject *obj = object;
+        object = obj.object;
+    }
+    if ([object isKindOfClass:OAPOI.class])
+    {
+        return (OAPOI *)object;
+    }
+    else if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *baseDetailsObject = object;
+        return (baseDetailsObject).syntheticAmenity;
+    }
+    return nil;
+}
+
+- (NSString *) getAmenityName:(OAPOI *)amemity
+{
+    NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    if ([amemity.type.category isWiki])
+    {
+        if (!locale || NSStringIsEmpty(locale))
+            locale = @"";
+        
+        locale = [OAPluginsHelper onGetMapObjectsLocale:amemity preferredLocale:locale];
+    }
+    
+    return [amemity getName:locale transliterate:[OAAppSettings sharedManager].settingMapLanguageTranslit.get];
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
     if ([obj isKindOfClass:OAPOI.class])
-        return [self getTargetPoint:obj renderedObject:nil];
-    else
-        return [self getTargetPoint:nil renderedObject:obj];
+        return [self getTargetPoint:obj renderedObject:nil placeDetailsObject:nil];
+    else if ([obj isKindOfClass:OARenderedObject.class])
+        return [self getTargetPoint:nil renderedObject:obj placeDetailsObject:nil];
+    else if ([obj isKindOfClass:BaseDetailsObject.class])
+        return [self getTargetPoint:nil renderedObject:nil placeDetailsObject:obj];
+    return nil;
 }
 
-- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject
+- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject placeDetailsObject:(BaseDetailsObject *)placeDetailsObject
 {
-    if (!renderedObject)
+    if (placeDetailsObject)
+        poi = placeDetailsObject.syntheticAmenity;
+    
+    if (poi)
     {
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         if (poi.type)
@@ -461,7 +508,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         }
         
         targetPoint.location = CLLocationCoordinate2DMake(poi.latitude, poi.longitude);
-        targetPoint.title = poi.nameLocalized;
+        targetPoint.title = poi.nameLocalized ? poi.nameLocalized : poi.name;
         targetPoint.icon = [poi.type icon];
         
         targetPoint.values = poi.values;
@@ -474,11 +521,11 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
-    else
+    else if (renderedObject)
     {
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetLocation;
-        targetPoint.location = CLLocationCoordinate2DMake(renderedObject.labelLatLon.latitude, renderedObject.labelLatLon.longitude);
+        targetPoint.location = CLLocationCoordinate2DMake(renderedObject.labelLatLon.coordinate.latitude, renderedObject.labelLatLon.coordinate.longitude);
         targetPoint.values = renderedObject.tags;
         targetPoint.obfId = renderedObject.obfId;
         targetPoint.targetObj = renderedObject;
@@ -498,6 +545,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         }
         return targetPoint;
     }
+    
     return nil;
 }
 
@@ -506,116 +554,89 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (BOOL) showMenuAction:(id)object
 {
-    auto onPathSymbol = std::dynamic_pointer_cast<const OsmAnd::IOnPathMapSymbol>(symbolInfo->mapSymbol);
-    if (onPathSymbol != nullptr)
-        return;
-    
-    OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
-    OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup* amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
-    const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup != nullptr ? objSymbolGroup->mapObject : nullptr;
-    OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
-    
-    OARenderedObject *renderedObject;
-    
-    OAPOI *poi = [[OAPOI alloc] init];
-    poi.latitude = point.latitude;
-    poi.longitude = point.longitude;
-    if (amenitySymbolGroup != nullptr)
+    OAPOI *amenity = [self getAmenity:object];
+    if (amenity && ([amenity.type.name isEqualToString:ROUTES] || [amenity.type.name hasPrefix:ROUTES]))
     {
-        const auto amenity = amenitySymbolGroup->amenity;
-        [self processAmenity:amenity mapObject:mapObject poi:poi];
-    }
-    else if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr)
-    {
-        if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(objSymbolGroup->mapObject))
+        if ([amenity.subType isEqualToString:ROUTE_ARTICLE])
         {
-            std::shared_ptr<const OsmAnd::Amenity> amenity;
-            const auto& obfsDataInterface = self.app.resourcesManager->obfsCollection->obtainDataInterface();
-            
-            auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.latitude, point.longitude));
-            const auto tags = obfMapObject->getResolvedAttributes();
-            if (tags.contains(TAG_POI_LAT_LON))
-            {
-                const LatLon l = [self parsePoiLatLon:tags[TAG_POI_LAT_LON]];
-                point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(l.lat, l.lon));
-            }
-            int searchRadius = obfMapObject->id.isIdFromRelation() ? kPoiSearchRadiusForRelation : kPoiSearchRadius;
-            auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(searchRadius, point31);
-            BOOL amenityFound = obfsDataInterface->findAmenityByObfMapObject(obfMapObject, &amenity, &bbox31);
-
-            bool isRoute = !OsmAnd::NetworkRouteKey::getRouteKeys(tags).isEmpty();
-
-            if (isRoute)
-                [self addRoute:found touchPoint:touchPoint mapObj:mapObject];
-
-            bool allowRenderedObjects = !isRoute && !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags(tags);
-
-            if (amenityFound)
-            {
-                [self processAmenity:amenity mapObject:objSymbolGroup->mapObject poi:poi];
-            }
-            else if (allowRenderedObjects)
-            {
-                renderedObject = [OARenderedObject parse:mapObject symbolInfo:symbolInfo];
-                if (renderedObject.name && renderedObject.name.length > 0)
-                    poi.name = renderedObject.name;
-                if (renderedObject.nameLocalized && renderedObject.nameLocalized.length > 0)
-                    poi.nameLocalized = renderedObject.nameLocalized;
-            }
-            else if (!unknownLocation)
-            {
-                return;
-            }
-
-            if (!poi.type)
-            {
-                for (const auto& ruleId : mapObject->attributeIds)
-                {
-                    const auto& rule = *mapObject->attributeMapping->decodeMap.getRef(ruleId);
-                    if (rule.tag == QString("contour") /*|| (rule.tag == QString("highway") && rule.value != QString("bus_stop"))*/)
-                        return;
-                    
-                    if (rule.tag == QString("place"))
-                        poi.isPlace = YES;
-                    
-                    if (rule.tag == QString("addr:housenumber"))
-                    {
-                        poi.buildingNumber = mapObject->captions.value(ruleId).toNSString();
-                        continue;
-                    }
-                    
-                    if (!poi.type)
-                    {
-                        OAPOIType *poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
-                        if (poiType)
-                        {
-                            poi.latitude = point.latitude;
-                            poi.longitude = point.longitude;
-                            poi.type = poiType;
-                            if (poi.name.length == 0 && poi.type)
-                                poi.name = poiType.name;
-                            if (poi.nameLocalized.length == 0 && poi.type)
-                                poi.nameLocalized = poiType.nameLocalized;
-                            if (poi.nameLocalized.length == 0)
-                                poi.nameLocalized = poi.name;
-                        }
-                    }
-                }
-            }
+            NSString *lang = [OAPluginsHelper onGetMapObjectsLocale:amenity preferredLocale:[OAUtilities preferredLang]];
+            lang = [amenity getContentLanguage:DESCRIPTION_TAG lang:lang defLang:@"en"];
+            NSString *name = [amenity getGpxFileName:lang];
+            OATravelArticle *article = [OATravelObfHelper.shared getArticleByTitleWithTitle:name lang:lang readGpx:YES callback:nil];
+            if (!article)
+                return YES;
+            [OATravelObfHelper.shared openTrackMenuWithArticle:article gpxFileName:name latLon:[amenity getLocation] adjustMapPosition:NO];
+            return YES;
+        }
+        else if ([amenity isRouteTrack])
+        {
+            OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:amenity];
+            [OATravelObfHelper.shared openTrackMenuWithArticle:travelGpx gpxFileName:[amenity getGpxFileName:nil] latLon:[amenity getLocation] adjustMapPosition:NO];
+            return YES;
         }
     }
+    return NO;
+}
 
-    OATargetPoint *targetPoint = [self getTargetPoint:poi renderedObject:renderedObject];
-    if (![found containsObject:targetPoint])
-        [found addObject:targetPoint];
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    if ([self isTopPlace:selectedObject])
+        return [self getTopPlaceBaseOrder];
+    else
+        return 0;
+}
+
+- (BOOL) isTopPlace:(id)object
+{
+    if (_topPlaces)
+    {
+        int64_t placeId = -1;
+        if ([object isKindOfClass:OAPOI.class])
+            placeId = ((OAPOI *)object).obfId;
+        else if ([object isKindOfClass:BaseDetailsObject.class])
+            placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId;
+        
+        return placeId != -1 && _topPlaces[@(placeId)];
+    }
+    
+    return NO;
+}
+
+- (int64_t) getTopPlaceBaseOrder
+{
+    return [self pointsOrder] - 100;
 }
 
 - (LatLon) parsePoiLatLon:(QString)value
 {
     OASKGeoParsedPoint * p = [OASKMapUtils.shared decodeShortLinkStringS:value.toNSString()];
     return LatLon(p.getLatitude, p.getLongitude);
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    OAPOI *amenity = [self getAmenity:obj];
+    return amenity ? [amenity getLocation] : nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    OAPOI *amenity = [self getAmenity:obj];
+    if (amenity)
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_POI name:[self getAmenityName:amenity]];
+    return nil;
 }
 
 @end

@@ -470,7 +470,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (_isSearchLoggingDisabled)
-        return  nil;
+        return nil;
     else
         return _headerViews[section];
 }

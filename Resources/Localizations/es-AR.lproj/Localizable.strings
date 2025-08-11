@@ -3292,7 +3292,7 @@
 "missing_or_outdated_maps_description" = "Algunos mapas sin conexión necesarios para esta ruta desaparecieron o están desactualizados. Descarga o actualiza estos mapas.";
 "osmand_depelopment_use_old_routing" = "Usar navegación antigua (A*)";
 "average_vertical_speed" = "Velocidad media vertical";
-"osm_id" = "ID de OSM";
+"shared_string_osm_id" = "ID de OSM";
 "routing_algorithm" = "Algoritmo de navegación";
 "auto_zoom" = "Zum automático";
 "shared_string_development" = "Desarrollo";

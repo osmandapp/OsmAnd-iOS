@@ -3370,7 +3370,7 @@
 "resting_position" = "Ruheposition";
 "resting_navigation_position" = "Ruhe- und Navigationsposition";
 "location_radius_description" = "Zeigt den kreisförmigen Bereich an, der die Genauigkeit Ihres aktuellen Standorts darstellt";
-"osm_id" = "OSM-ID";
+"shared_string_osm_id" = "OSM-ID";
 "offline_wikivoyage" = "Wikivoyage offline";
 "of" = "%d von %d";
 "downloaded_bytes" = "%@ von %@";

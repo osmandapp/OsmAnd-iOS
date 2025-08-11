@@ -24,7 +24,7 @@ static const CGFloat minWidgetHeight = 34.0;
 static const CGFloat unitOrEmptyLabelSmallModeWidth = 130;
 
 static NSString * _Nonnull const kShowIconPref = @"simple_widget_show_icon";
-static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
+NSString * const kSizeStylePref = @"simple_widget_size";
 
 @implementation OATextInfoWidget
 {

@@ -337,25 +337,6 @@ extension TracksSearchFilter {
         
         return FormattedValue(valueSrc: 0, value: "0", unit: "")
     }
-
-    static func mapEOAMetricsConstantToMetricsConstants(_ eoaConstant: EOAMetricsConstant) -> MetricsConstants {
-        switch eoaConstant {
-        case .KILOMETERS_AND_METERS:
-            return .kilometersAndMeters
-        case .MILES_AND_FEET:
-            return .milesAndFeet
-        case .MILES_AND_YARDS:
-            return .milesAndYards
-        case .MILES_AND_METERS:
-            return .milesAndMeters
-        case .NAUTICAL_MILES_AND_METERS:
-            return .nauticalMilesAndMeters
-        case .NAUTICAL_MILES_AND_FEET:
-            return .nauticalMilesAndFeet
-        @unknown default:
-            return .kilometersAndMeters
-        }
-    }
     
     static func setRootFolder(_ folder: TrackFolder) {
         rootFolder = folder

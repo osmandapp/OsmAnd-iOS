@@ -391,7 +391,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [_downloadingListHelper hasDownloads] ? 3 : 2;;
+    return [_downloadingListHelper hasDownloads] ? 3 : 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

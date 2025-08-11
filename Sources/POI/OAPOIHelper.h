@@ -10,18 +10,17 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAResultMatcher.h"
 
-#define OSM_WIKI_CATEGORY @"osmwiki"
-#define SPEED_CAMERA @"speed_camera"
-#define WIKI_LANG @"wiki_lang"
-#define WIKI_PLACE @"wiki_place"
-#define ROUTE_ARTICLE @"route_article"
-#define ROUTE_ARTICLE_POINT @"route_article_point"
+extern NSString * const OSM_WIKI_CATEGORY;
+extern NSString * const SPEED_CAMERA ;
+extern NSString * const WIKI_LANG;
+extern NSString * const WIKI_PLACE;
+extern NSString * const ROUTE_ARTICLE_POINT;
 
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @class OAPOI, OAPOIType, OAPOIBaseType, OAPOICategory, OAPOIFilter;
-@class OASearchPoiTypeFilter, OAPOIUIFilter;
+@class OASearchPoiTypeFilter, OAPOIUIFilter, OATopIndexFilter;
 
 @protocol OAPOISearchDelegate
 
@@ -32,9 +31,6 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @interface OAPOIHelper : NSObject
 
-@property (nonatomic, readonly) BOOL isSearchDone;
-@property (nonatomic, assign) int searchLimit;
-
 @property (nonatomic, readonly) NSArray<OAPOIType *> *poiTypes;
 @property (nonatomic, readonly) NSMapTable<NSString *, OAPOIType *> *poiTypesByName;
 @property (nonatomic, readonly) NSArray<OAPOICategory *> *poiCategories;
@@ -42,9 +38,6 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 @property (nonatomic, readonly) OAPOICategory *otherPoiCategory;
 @property (nonatomic, readonly) OAPOICategory *otherMapCategory;
 @property (nonatomic, readonly) NSArray<OAPOIFilter *> *poiFilters;
-
-@property (weak, nonatomic) id<OAPOISearchDelegate> delegate;
-@property (weak, nonatomic) id<OAPOISearchDelegate> tempDelegate;
 
 + (OAPOIHelper *) sharedInstance;
 
@@ -86,24 +79,14 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (NSArray<NSString *> *)getAllAvailableWikiLocales;
 - (NSString *) getAllLanguagesTranslationSuffix;
 
-- (void) findPOIsByKeyword:(NSString *)keyword;
-- (void) findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
-- (void) findPOIsByFilter:(OAPOIUIFilter *)filter radiusIndex:(int *)radiusIndex;
 - (OAPOIType *) getDefaultOtherCategoryType;
+- (NSMutableArray<NSString *> *) getPublicTransportTypes;
 
 -(NSDictionary<NSString *, OAPOIType *> *)getAllTranslatedNames:(BOOL)skipNonEditable;
 - (NSString *) getTranslation:(NSString *)keyName;
 
-+ (NSArray<OAPOI *> *) findPOIsByFilter:(OASearchPoiTypeFilter *)filter topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
-+ (NSArray<OAPOI *> *) findPOIsByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
-+ (NSArray<OAPOI *> *) searchPOIsOnThePath:(NSArray<CLLocation *> *)locations radius:(double)radius filter:(OASearchPoiTypeFilter *)filter matcher:(OAResultMatcher<OAPOI *> *)matcher;
 + (UIImage *)getCustomFilterIcon:(OAPOIUIFilter *) filter;
 
-- (BOOL) breakSearch;
 - (BOOL) isNameTag:(NSString *)tag;
-
-+ (OAPOI *) findPOIByOsmId:(long long)osmId lat:(double)lat lon:(double)lon;
-+ (OAPOI *) findPOIByName:(NSString *)name lat:(double)lat lon:(double)lon;
-+ (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon;
 
 @end

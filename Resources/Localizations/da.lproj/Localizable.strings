@@ -693,7 +693,7 @@
 "shared_string_options" = "Mere";
 "intermediate_items_sort_by_distance" = "Sorter fra dør til dør";
 "switch_start_finish" = "Byt om på startpunkt og destination";
-"clear_all_intermediates" = "Ryd alle mellemliggende punkter";
+"clear_all_intermediates" = "Ryd alle mellemliggende destinationer";
 "transport_Routes" = "Ruter";
 "transport_nearby_routes_within" = "Nærliggende ruter indenfor";
 "transport_nearby_routes" = "Indenfor";
@@ -1126,7 +1126,7 @@
 "select_map_marker" = "Vælg kortmarkør";
 "parking_place" = "Parkeringsplads";
 "route_add_start_point" = "Tilføj udgangspunkt";
-"add_intermediate" = "Tilføj mellemliggende punkt";
+"add_intermediate" = "Tilføj mellemliggende destination";
 "add_home" = "Tilføj hjem";
 "add_work" = "Tilføj arbejdssted";
 "favorite_home_category" = "Hjem";
@@ -2673,7 +2673,7 @@
 "history_actions_footer_text" = "Du kan eksportere historik til en fil. Du kan slette alle historikposter, der er registreret indtil nu.";
 "navigation_history" = "Navigationshistorik";
 "ltr_or_rtl_combine_via_of" = "%ld af %ld";
-"delete_history_items" = "Slet %@ historikelementer\?";
+"delete_history_items" = "Slet %@ historikelement(er)?";
 "confirm_history_item_delete" = "Er du sikker på, at du vil slette (%ld) historikelementer?";
 "search_favorites" = "Søg i Favoritter";
 "rotate_map_manual_opt" = "Manuelt roteret";
@@ -2766,7 +2766,7 @@
 "current_speed_widget_desc" = "Viser din aktuelle hastighed registreret via GPS.";
 "time_to_go_desc" = "Tid i minutter eller timer for at nå din destination.";
 "arrival_time_widget_desc" = "Tidspunkt for ankomst til destinationsstedet.";
-"lanes_widgets_desc" = "Viser det aktuelle vejbane-layout og fremhæver de vejbaner, der skal benyttes under vejvisning.";
+"lanes_widgets_desc" = "Viser det aktuelle vejbane-layout og fremhæver de vejbaner, der skal benyttes under navigation.";
 "map_markers_bar_widget_desc" = "Det øverste bjælkemodul viser afstanden og retningen til den næste kortmarkør fra din aktuelle placering. Modulet kan konfigureres til at vise 1 eller 2 markører.";
 "street_name_widget_desc" = "Gadenavn-modulet viser det aktuelle gadenavn med en lige placeringspil eller det næste gadenavn med en pil, der angiver et kommende sving.";
 "coordinates_widget_desc" = "Viser de geografiske koordinater for den aktuelle geografiske placering.";
@@ -3548,7 +3548,7 @@
 "shared_string_minute_lowercase" = "min";
 "rendering_category_transport" = "Transport";
 "app_mode_taxi" = "Taxi";
-"osm_id" = "OSM ID";
+"shared_string_osm_id" = "OSM ID";
 "shared_string_speedometer" = "Speedometer";
 "weather_online_cache" = "Online cache";
 "lang_ml" = "Malayalam";
@@ -3703,16 +3703,16 @@
 "routing_attr_allow_ferries_description" = "Tillad ruteberegning via færgeruter";
 "route_roundabout_exit" = "Tag %d afkørsel";
 "purchase_feature_desc_vehicle_metrics_obd_ii" = "Følg vigtige køretøjsdata ved hjælp af OBD-II-protokollen. Overvåg nøgletal som hastighed, motoromdrejninger, brændstofforbrug og meget mere.";
-"obd_plugin_description" = "Overvåg vigtige køretøjsmålinger ved hjælp af OBD-II-protokollen. Få adgang til data, herunder:\n• Motorhastighed, motorens driftstid, beregnet motorbelastning \n• Brændstofforbrug, Brændstoftryk, Resterende brændstof\n• Indsugningstemperatur, omgivelsestemperatur, kølevæsketemperatur, motorolietemperatur\n• Køretøjets hastighed, gasspjældets position, batterispænding";
+"obd_plugin_description" = "Overvåg vigtige køretøjsmålinger ved hjælp af OBD-II-protokollen. Få adgang til data, herunder:\n • Motoromdrejningshastighed, motorens driftstid, beregnet motorbelastning \n • Brændstofforbrug, brændstoftryk, resterende brændstof\n • Indtagstemperatur, omgivelsestemperatur, kølevæskes temperatur, motoroliens temperatur\n • Køretøjets hastighed, gasspjældets position, batterispænding\n";
 "vehicle_metrics_obd_ii" = "Køretøjets målinger (OBD-II)";
 "connect_obd_instructions_title" = "OsmAnd understøtter Bluetooth-forbindelser til OBD-II-scannere.";
 "obd_how_to_connect" = "Sådan skaber du forbindelse:";
-"connect_obd_instructions_step" = "1. Tilslut scanneren til køretøjets OBD-II-port.\n\n2. Tænd for køretøjets motor\n\n3. Aktivér Bluetooth på din enhed\n\n4. Tryk på '%@' og vælg din scanner fra listen.";
+"connect_obd_instructions_step" = "1. Tilslut scanneren til bilens OBD-II-indgang.\n\n 2. Tænd for køretøjets motor\n\n 3. Aktivér Bluetooth på din enhed\n\n 4. Tryk på \'%@\' og vælg din scanner fra listen.";
 "obd_bluetooth_off_description" = "Slå Bluetooth til for at finde og forbinde scannere.";
 "obd_searching_text_description" = "Hold din enhed tæt på scanneren. Sørg for, at køretøjets motor kører.";
 "obd_searching_text" = "Søger efter scannere";
 "obd_nothing_found_text" = "Ingen scannere fundet";
-"obd_nothing_found_description" = "Tjek venligst følgende:\n– Sørg for, at Bluetooth er slået til\n– Køretøjets motor kører\n– Sørg for, at din enhed er inden for scannerens rækkevidde.";
+"obd_nothing_found_description" = "Tjek venligst følgende:\n – Sørg for, at Bluetooth er slået til\n – Køretøjets motor er i gang\n – Sørg for, at din enhed er inden for scannerens rækkevidde.";
 "obd_vin" = "VIN";
 "obd_vin_desc" = "VIN-kode over OBD";
 "obd_vehicle_info" = "Info om køretøjet";
@@ -3720,7 +3720,7 @@
 "route_guidance_desc" = "Giver rutevejledning i realtid, herunder afstand til næste sving, vejnavn, aktuelt gadenavn og oplysninger om vognbane. Moduler er aktive under navigation.";
 "route_guidance" = "Rutevejledning";
 "shared_string_road_exit" = "Afkørsel";
-"ltr_or_rtl_combine_via_per" = "%@ per %@";
+"ltr_or_rtl_combine_via_per" = "%@ pr. %@";
 "ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 "obd_speed_desc" = "Viser hastighed fra køretøjets hastighedssensor (VSS).";
 "obd_widget_engine_speed" = "Motorhastighed";
@@ -3821,3 +3821,6 @@
 "obd_fuel_type_hydrogen" = "Brint";
 "obd_fuel_type_unknown" = "Ukendt brændstoftype";
 "unit_of_temperature_description" = "De valgte enheder anvendes på alle temperaturrelaterede data i den aktuelle profil.";
+"distance_by_tap_use_description" = "Tryk på kortet for at få vist afstanden mellem din nuværende placering og det punkt, du har trykket på. \nTryk med 2 fingre på kortet for at få vist afstanden mellem de klikkede punkter";
+"shared_string_normal" = "Normal";
+"shared_string_large" = "Stor";

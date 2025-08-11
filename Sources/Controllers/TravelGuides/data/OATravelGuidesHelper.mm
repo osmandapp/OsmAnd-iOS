@@ -10,6 +10,8 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
+#import "OAAmenitySearcher.h"
+#import "OAAmenitySearcher+cpp.h"
 #import "OsmAndApp.h"
 #import "OAAppData.h"
 #import "OAPOI.h"
@@ -75,7 +77,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
         bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
     }
-    [OAPOIHelper findTravelGuides:searchFilters location:locI bbox31:bbox31 reader:reader publish:publish];
+    [OAAmenitySearcher findTravelGuides:searchFilters currentLocation:locI bbox31:bbox31 reader:reader publish:publish];
 }
 
 + (void) searchAmenity:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom  reader:(NSString *)reader searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish
@@ -84,7 +86,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     OsmAnd::PointI topLeft = OsmAnd::PointI(left, top);
     OsmAnd::PointI bottomRight = OsmAnd::PointI(right, bottom);
     OsmAnd::AreaI bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
-    [OAPOIHelper findTravelGuides:searchFilters location:location bbox31:bbox31 reader:reader publish:publish];
+    [OAAmenitySearcher findTravelGuides:searchFilters currentLocation:location bbox31:bbox31 reader:reader publish:publish];
 }
 
 + (void) searchAmenity:(NSString *)searchQuery x:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom reader:(NSString *)reader searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish
@@ -94,7 +96,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     OsmAnd::PointI bottomRight = OsmAnd::PointI(right, bottom);
     OsmAnd::AreaI bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
     OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(0, 0));
-    [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:searchQuery categoryNames:searchFilters poiTypeName:nil location:locI bbox31:bbox31 reader:reader publish:publish];
+    [OAAmenitySearcher.sharedInstance findTravelGuidesByKeyword:searchQuery categoryNames:searchFilters poiTypeName:nil currentLocation:locI bbox31:bbox31 reader:reader publish:publish];
 }
 
 + (void) searchAmenity:(NSString *)searchQuery categoryNames:(NSArray<NSString *> *)categoryNames radius:(int)radius lat:(double)lat lon:(double)lon reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
@@ -114,7 +116,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         if (lat != -1 && lon != -1)
             locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
     }
-    [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:searchQuery categoryNames:categoryNames poiTypeName:nil location:locI bbox31:bbox31 reader:reader publish:publish];
+    [OAAmenitySearcher.sharedInstance findTravelGuidesByKeyword:searchQuery categoryNames:categoryNames poiTypeName:nil currentLocation:locI bbox31:bbox31 reader:reader publish:publish];
 }
 
 + (void) showContextMenuWithLatitude:(double)latitude longitude:(double)longitude
@@ -252,7 +254,8 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
 
         if ([article isKindOfClass:OATravelGpx.class])
         {
-            segmentList = [self.class searchGpxMapObject:article];
+            OsmAnd::AreaI emptyArea;
+            segmentList = [self.class searchGpxMapObject:article bbox31:emptyArea reader:reader];
         }
         
         //publish function
@@ -288,11 +291,11 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         
         if (article.title && article.title.length > 0)
         {
-            [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:article.title categoryNames:@[[article getPointFilterString]] poiTypeName:nil location:location bbox31:bbox31 reader:reader publish:publish];
+            [OAAmenitySearcher.sharedInstance findTravelGuidesByKeyword:article.title categoryNames:@[[article getPointFilterString]] poiTypeName:nil currentLocation:location bbox31:bbox31 reader:reader publish:publish];
         }
         else
         {
-            [OAPOIHelper findTravelGuides:@[[article getPointFilterString]] location:location bbox31:bbox31 reader:reader publish:publish];
+            [OAAmenitySearcher findTravelGuides:@[[article getPointFilterString]] currentLocation:location bbox31:bbox31 reader:reader publish:publish];
         }
         
         if (segmentList.size() > 0)
@@ -390,10 +393,13 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
                 gpxFile.metadata.link = [[OASLink alloc] initWithHref:link];
             }
         }
-        for (OAPOI *wayPoint in pointList)
+        if (pointList.count > 1)
         {
-            OASWptPt *wpt = [self.class createWptPt:wayPoint lang:article.lang];
-            [gpxFile addPointPoint:wpt];
+            for (OAPOI *wayPoint in pointList)
+            {
+                OASWptPt *wpt = [self.class createWptPt:wayPoint lang:article.lang];
+                [gpxFile addPointPoint:wpt];
+            }
         }
     }
     OAGPXDocumentAdapter *gpxAdapter = [[OAGPXDocumentAdapter alloc] init];
@@ -437,29 +443,64 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     return [OASelectedGPXHelper.instance getSelectedGPXFilePath:fileName];
 }
 
-+ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx
++ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader
 {
     OsmAndAppInstance app = OsmAndApp.instance;
     QList< std::shared_ptr<const OsmAnd::ObfFile> > files = app.resourcesManager->obfsCollection->getObfFiles();
     std::shared_ptr<const OsmAnd::ObfFile> res;
-    for (const auto& file : files)
+    QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > result;
+    
+    NSArray<NSString *> *travelObfNames = [self.class getTravelGuidesObfList];
+    
+    NSString *filename = travelGpx.file;
+        if (!NSStringIsEmpty(filename) || !NSStringIsEmpty(reader))
     {
-        NSString *path = file->filePath.toNSString();
-        if ([path hasSuffix:travelGpx.file])
+        for (const auto& file : files)
         {
-            res = file;
-            break;
+            NSString *path = [file->filePath.toNSString() lowercaseString];
+            if (filename && [[path lowercaseString] hasSuffix:[filename lowercaseString]] ||
+                reader && [[path lowercaseString] hasSuffix:[reader lowercaseString]])
+            {
+                const auto found = [self.class searchGpxMapObject:travelGpx res:file bbox31:bbox31];
+                result.append(found);
+            }
         }
     }
-    const auto& obfsDataInterface = app.resourcesManager->obfsCollection->obtainDataInterface(res);
+    else
+    {
+        for (const auto& file : files)
+        {
+            NSString *path = [file->filePath.toNSString() lowercaseString];
+            for (NSString *travelObfName in travelObfNames)
+            {
+                if ([path hasSuffix:travelObfName])
+                {
+                    const auto found =  [self.class searchGpxMapObject:travelGpx res:file bbox31:bbox31];
+                    if (found.size() > 0)
+                    {
+                        result.append(found);
+                        return found;
+                    }
+                }
+            }
+        }
+    }
+    return result;
+}
+
++ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx res:(std::shared_ptr<const OsmAnd::ObfFile>)res bbox31:(OsmAnd::AreaI)bbox31
+{
+    if (bbox31.isEmpty())
+    {
+        OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
+        OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
+        bbox31 = OsmAnd::AreaI(topLeft, bottomRight);
+    }
+    const auto& obfsDataInterface = OsmAndApp.instance.resourcesManager->obfsCollection->obtainDataInterface(res);
     
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > loadedBinaryMapObjects;
     QList< std::shared_ptr<const OsmAnd::Road> > loadedRoads;
     auto tileSurfaceType = OsmAnd::MapSurfaceType::Undefined;
-    
-    OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
-    OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
-    OsmAnd::AreaI bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
     
     obfsDataInterface->loadMapObjects(&loadedBinaryMapObjects, &loadedRoads, &tileSurfaceType, nullptr, OsmAnd::ZoomLevel15, &bbox31);
     
@@ -475,20 +516,111 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         {
             QString tag = binaryMapObject->attributeMapping->decodeMap[captionAttributeId].tag;
             const auto& value = OsmAnd::constOf(binaryMapObject->captions)[captionAttributeId];
+            NSString *stringValue = [value.toNSString() lowercaseString];
+            
             if (tag == QStringLiteral("ref"))
-                ref = value.toNSString();
+                ref = stringValue;
             if (tag == QStringLiteral("route_id"))
-                routeId = value.toNSString();
+                routeId = stringValue;
             if (tag == QStringLiteral("name"))
-                name = value.toNSString();
+                name = stringValue;
         }
-        
-        if ((ref == travelGpx.ref && routeId == travelGpx.routeId) || name == travelGpx.title)
+        if ((travelGpx.ref && travelGpx.routeId && [ref isEqualToString:[travelGpx.ref lowercaseString]] && [routeId isEqualToString:[travelGpx.routeId lowercaseString]]) ||
+            (travelGpx.routeId && [routeId isEqualToString:[travelGpx.routeId lowercaseString]]) ||
+            (travelGpx.ref && [ref isEqualToString:[travelGpx.ref lowercaseString]]) ||
+            (travelGpx.title && [name isEqualToString:[travelGpx.title lowercaseString]]))
         {
             segmentList.append(binaryMapObject);
         }
     }
     return segmentList;
+}
+
++ (OATravelGpx *)searchTravelGpx:(CLLocation *)location routeId:(NSString *)routeId
+{
+    if (NSStringIsEmpty(routeId))
+        return nil;
+    
+    OATravelObfHelper *helper = OATravelObfHelper.shared;
+    NSArray<NSString *> *readers = [helper getReaders];
+    CLLocation *currentLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
+    const auto currentLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude));
+    
+    NSMutableArray<OAFoundAmenity *> *foundAmenities = [NSMutableArray new];
+    NSInteger searchRadius = helper.TRAVEL_GPX_SEARCH_RADIUS;
+    OATravelGpx *travelGpx;
+    
+    while (!travelGpx && searchRadius < helper.MAX_SEARCH_RADIUS)
+    {
+        for (NSString *reader in readers)
+        {
+            int previousFoundSize = foundAmenities.count;
+            BOOL firstSearchCycle = searchRadius == helper.TRAVEL_GPX_SEARCH_RADIUS;
+            if (firstSearchCycle)
+            {
+                [self searchTravelGpxAmenityByRouteId:foundAmenities repo:reader routeId:routeId location:location searchRadius:searchRadius currentLocationI:currentLocationI];
+            }
+            
+            BOOL nothingFound = previousFoundSize == foundAmenities.count;
+            if (nothingFound)
+            {
+                // fallback to non-indexed route_id (compatibility with old files)
+                [self searchAmenity:location.coordinate.latitude lon:location.coordinate.longitude reader:reader radius:searchRadius searchFilters:@[ROUTE_TRACK] publish:^BOOL(OAPOI *poi) {
+                    
+                    OAFoundAmenity *foundAmenity = [[OAFoundAmenity alloc] initWithFile:reader amenity:poi];
+                    [foundAmenities addObject:foundAmenity];
+                    return YES;
+                }];
+            }
+        }
+        
+        for (OAFoundAmenity *foundAmenity in foundAmenities)
+        {
+            NSString *aRouteId = [foundAmenity.amenity getRouteId];
+            NSString *lcRouteId = aRouteId ? [aRouteId lowercaseString] : nil;
+            if ([[routeId lowercaseString] isEqualToString:lcRouteId])
+            {
+                travelGpx = [self getTravelGpx:foundAmenity.file amenity:foundAmenity.amenity];
+                break;
+            }
+            
+        }
+        searchRadius *= 2;
+    }
+    
+    if (!travelGpx)
+    {
+        NSLog(@"searchTravelGpx(%f %f, %@) failed", location.coordinate.latitude, location.coordinate.longitude, routeId);
+    }
+ 
+    return travelGpx;
+}
+
++ (OATravelGpx *)getTravelGpx:(NSString *)file amenity:(OAPOI *)amenity
+{
+    OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:amenity];
+    travelGpx.file = file;
+    return travelGpx;
+}
+
++ (void)searchTravelGpxAmenityByRouteId:(NSMutableArray<OAFoundAmenity *> *)amenitiesList repo:(NSString *)repo routeId:(NSString *)routeId location:(CLLocation *)location searchRadius:(NSInteger)searchRadius currentLocationI:(OsmAnd::PointI)currentLocationI
+{
+    
+    OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(searchRadius, OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
+    
+    [OAAmenitySearcher findTravelGuides:@[ROUTE_TRACK] currentLocation:currentLocationI bbox31:bbox31 reader:repo publish:^BOOL(OAPOI * _Nonnull poi) {
+        
+        if ([poi.subType hasPrefix:ROUTES_PREFIX] || [poi.subType isEqualToString:ROUTE_TRACK])
+        {
+            if ([poi.values[@"route_id"] isEqualToString:routeId])
+            {
+                OAFoundAmenity *foundAmenity = [[OAFoundAmenity alloc] initWithFile:repo amenity:poi];
+                [amenitiesList addObject:foundAmenity];
+                return YES;
+            }
+        }
+        return NO;
+    }];
 }
 
 @end

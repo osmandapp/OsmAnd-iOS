@@ -30,7 +30,6 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
         if createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
             if let selectedAppMode {
@@ -381,7 +380,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         guard let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode,
                                                                 panel: widgetPanel,
                                                                 filterModes: enabledWidgetsFilter),
-              let widget = widgetInfo.widget as? OATextInfoWidget else {
+              let widget = mapWidgetInfo.widget as? OATextInfoWidget else {
             return
         }
         
@@ -394,7 +393,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 .updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
             return
         }
-        
+
         pagedWidgets
             .compactMap { $0.array as? [MapWidgetInfo] }
             .first { $0.contains { $0.key == mapWidgetInfo.key } }?
@@ -492,6 +491,7 @@ extension WidgetConfigurationViewController {
                                                                    addToNext: addToNext)
                 if let info = newWidgetsInfos.first, info.widgetPanel.isPanelVertical {
                     updateWidgetStyleForRow(with: info)
+                    OARootViewController.instance().mapPanel.recreateControls()
                 }
             }
             navigationController.dismiss(animated: true)

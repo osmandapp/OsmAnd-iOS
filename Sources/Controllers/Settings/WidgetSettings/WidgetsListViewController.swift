@@ -189,7 +189,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
             widgetParametersForAddition = updatedParams
             createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()), params: widgetParametersForAddition)
         } else {
-            widgetStyleForRow = updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData)
+            widgetStyleForRow = updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData, params: params)
             if var params {
                 params["id"] = newWidget.key
                 if let widgetStyleForRow, !editMode {
@@ -799,31 +799,27 @@ extension WidgetsListViewController {
     }
     
     private func updateWidgetStyleForRowsInLastPage(_ newWidget: MapWidgetInfo,
-                                                    _ sectionData: OATableSectionData) -> EOAWidgetSizeStyle? {
+                                                    _ sectionData: OATableSectionData,
+                                                    params: [String: Any]?) -> EOAWidgetSizeStyle? {
         guard widgetPanel.isPanelVertical else { return nil }
-        let addWidgetSizeStyle = (newWidget.widget as? OATextInfoWidget)?.widgetSizeStyle ?? .medium
+        let addWidgetSizeStyle = (params?["widgetSizeStyle"] as? Int)
+            .flatMap(EOAWidgetSizeStyle.init) ?? .medium
+        
         let lastWidgetInRow = sectionData.getRow(sectionData.rowCount() - 1)
         guard let simpleWidget = (lastWidgetInRow.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget else {
             return nil
         }
         
         if simpleWidget.widgetSizeStyle != addWidgetSizeStyle {
-            if addWidgetSizeStyle != .medium {
-                // Apply the current style of widget for all rows in page
-                var dataArray = [OATableRowData]()
-                for row in 0..<sectionData.rowCount() {
-                    dataArray.append(sectionData.getRow(row))
+            var dataArray = [OATableRowData]()
+            for row in 0..<sectionData.rowCount() {
+                dataArray.append(sectionData.getRow(row))
+            }
+            let itemsInLastPage = getRowsInLastPage(dataArray: dataArray)
+            itemsInLastPage.forEach {
+                if let widgetInRow = ($0.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget {
+                    widgetInRow.updateWith(style: addWidgetSizeStyle, appMode: selectedAppMode)
                 }
-                let itemsInLastPage = getRowsInLastPage(dataArray: dataArray)
-                itemsInLastPage.forEach {
-                    if let widgetInRow = ($0.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget {
-                        widgetInRow.updateWith(style: addWidgetSizeStyle, appMode: selectedAppMode)
-                    }
-                }
-            } else {
-                // Apply row style for the added widget
-                (newWidget.widget as? OATextInfoWidget)?.updateWith(style: simpleWidget.widgetSizeStyle, appMode: selectedAppMode)
-                return simpleWidget.widgetSizeStyle
             }
         }
         return nil

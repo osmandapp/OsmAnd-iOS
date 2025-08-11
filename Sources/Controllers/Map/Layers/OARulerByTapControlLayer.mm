@@ -22,6 +22,7 @@
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAppData.h"
+#import "OASymbolMapLayer+cpp.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -33,7 +34,7 @@
 #include <OsmAndCore/SingleSkImage.h>
 
 #define DRAW_TIME 2
-#define LABEL_OFFSET 4
+#define LABEL_OFFSET 6
 #define kDefaultLineWidth 5.0
 
 @protocol OALineDrawingDelegate <NSObject>
@@ -204,7 +205,8 @@
         builder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
         builder.addOnMapSurfaceIcon(iconKey, icon);
         
-        builder.buildAndAddToCollection(_lineEndsMarkersCollection);
+        std::shared_ptr<OsmAnd::MapMarker> marker = builder.buildAndAddToCollection(_lineEndsMarkersCollection);
+        marker->setUpdateAfterCreated(true);
     }
 }
 
@@ -221,6 +223,7 @@
     
     std::shared_ptr<OsmAnd::MapMarker> marker = distanceMarkerBuilder.buildAndAddToCollection(_lineEndsMarkersCollection);
     marker->setOffsetFromLine(LABEL_OFFSET);
+    marker->setUpdateAfterCreated(true);
     _rullerLine->attachMarker(marker);
 }
 

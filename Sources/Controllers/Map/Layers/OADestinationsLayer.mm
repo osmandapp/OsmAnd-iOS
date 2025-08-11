@@ -26,13 +26,19 @@
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
 #import "OAAppData.h"
+#import "OAPOI.h"
+#import "OAFavoritesHelper.h"
+#import "OASelectedGPXHelper.h"
+#import "OAMapSelectionHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OASymbolMapLayer+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/SingleSkImage.h>
 
-#define kLabelOffset 4
+#define kLabelOffset 6
 
 @interface OADestinationsLayer () <OAStateChangedListener>
 
@@ -64,7 +70,8 @@
 
     BOOL _showCaptionsCache;
     double _textSize;
-    int _myPositionLayerBaseOrder;
+
+    NSMutableArray<OAPOI *> *_amenities;
 
     BOOL _reconstructMarker;
 }
@@ -108,8 +115,7 @@
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _distanceMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
-    _myPositionLayerBaseOrder = self.mapViewController.mapLayers.myPositionLayer.baseOrder;
-        
+
     [self.app.data.mapLayersConfiguration setLayer:self.layerId Visibility:YES];
     
     _targetPoints = [OATargetPointsHelper sharedInstance];
@@ -119,6 +125,8 @@
     [self.mapView addSubview:_destinationLayerWidget];
 
     [self refreshDestinationsMarkersCollection];
+
+    _amenities = [NSMutableArray new];
 
     _reconstructMarker = false;
 }
@@ -245,7 +253,7 @@
 
     OsmAnd::MapMarkerBuilder builder;
     builder.setIsAccuracyCircleSupported(false)
-    .setBaseOrder(self.pointsOrder)
+    .setBaseOrder(self.baseOrder)
     .setIsHidden(false)
     .setPinIcon(OsmAnd::SingleSkImage(markerIcon))
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
@@ -260,7 +268,8 @@
         builder.setCaptionTopSpace(self.captionTopSpace);
     }
     
-    builder.buildAndAddToCollection(_destinationsMarkersCollection);
+    std::shared_ptr<OsmAnd::MapMarker> marker = builder.buildAndAddToCollection(_destinationsMarkersCollection);
+    marker->setUpdateAfterCreated(true);
 }
 
 - (void) removeDestinationPin:(double)latitude longitude:(double)longitude;
@@ -439,11 +448,11 @@
     if (line == nullptr || outline == nullptr)
     {
         OsmAnd::VectorLineBuilder outlineBuilder;
-        outlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + 1);
+        outlineBuilder.setBaseOrder(self.baseOrder + 1);
         outline = outlineBuilder.buildAndAddToCollection(_linesCollection);
 
         OsmAnd::VectorLineBuilder inlineBuilder;
-        inlineBuilder.setBaseOrder(_myPositionLayerBaseOrder);
+        inlineBuilder.setBaseOrder(self.baseOrder);
         line = inlineBuilder.buildAndAddToCollection(_linesCollection);
     }
 
@@ -486,9 +495,31 @@
         // We need to recreate marker each time as new caption needs new symbol
         marker = distanceMarkerBuilder.buildAndAddToCollection(_distanceMarkersCollection);
         marker->setOffsetFromLine(kLabelOffset);
+        marker->setUpdateAfterCreated(true);
 
         outline->attachMarker(marker);
     }
+}
+
+- (BOOL) isMarkerOnWaypoint:(OADestination *)marker
+{
+    return marker && [OASelectedGPXHelper.instance getVisibleWayPointByLat:marker.latitude lon:marker.longitude];
+}
+
+- (BOOL) isMarkerOnFavorite:(OADestination *)marker
+{
+    return marker && [OAFavoritesHelper getVisibleFavByLat:marker.latitude lon:marker.longitude];
+}
+
+- (OAPOI *)getMapObjectByMarker:(OADestination *)marker
+{
+    if (!NSStringIsEmpty(marker.mapObjectName) && marker.latitude != 0 && marker.longitude != 0)
+    {
+        NSString *mapObjName = [marker.mapObjectName componentsSeparatedByString:@"_"][0];
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:marker.latitude longitude:marker.longitude];
+        return [OAMapSelectionHelper findAmenity:location names:@[mapObjName] obfId:-1 radius:15];
+    }
+    return nil;
 }
 
 #pragma mark - OAStateChangedListener
@@ -551,29 +582,102 @@
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    NSMutableArray<OADestination *> *mapMarkers = self.app.data.destinations;
+    if (excludeUntouchableObjects || NSArrayIsEmpty(mapMarkers))
+        return;
+    
+    [_amenities removeAllObjects];
+    CGPoint pixel = result.point;
+    int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+ 
+    CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 2));
+    CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 4));
+    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+    
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    BOOL selectMarkerOnSingleTap = OAAppSettings.sharedManager.selectMarkerOnSingleTap;
+    
+    for (OADestination *marker in mapMarkers)
     {
-        for (const auto& dest : _destinationsMarkersCollection->getMarkers())
+        if (!unknownLocation && selectMarkerOnSingleTap)
         {
-            if (markerGroup->getMapMarker() == dest.get())
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:marker.latitude lon:marker.longitude polygon31:touchPolygon31];
+            if (shouldAdd)
             {
-                double lat = OsmAnd::Utilities::get31LatitudeY(dest->getPosition().y);
-                double lon = OsmAnd::Utilities::get31LongitudeX(dest->getPosition().x);
-                
-                for (OADestination *destination in self.app.data.destinations)
+                if (!unknownLocation && selectMarkerOnSingleTap)
                 {
-                    if ([OAUtilities isCoordEqual:destination.latitude srcLon:destination.longitude destLat:lat destLon:lon])
+                    [result collect:marker provider:self];
+                }
+                else
+                {
+                    if (([self isMarkerOnFavorite:marker] && settings.mapSettingShowFavorites) ||
+                        ([self isMarkerOnWaypoint:marker] && settings.showGpxWpt))
                     {
-                        OATargetPoint *targetPoint = [self getTargetPoint:destination];                        
-                        if (![found containsObject:targetPoint])
-                            [found addObject:targetPoint];
+                        continue;
+                    }
+                    
+                    OAPOI *mapObj = [self getMapObjectByMarker:marker];
+                    if (mapObj)
+                    {
+                        [_amenities addObject:mapObj];
+                        [result collect:mapObj provider:self];
+                    }
+                    else
+                    {
+                        [result collect:marker provider:self];
                     }
                 }
             }
+        
         }
     }
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OADestination.class])
+    {
+        OADestination *point = (OADestination *)obj;
+        return [[CLLocation alloc] initWithLatitude:[point latitude] longitude:[point longitude]];
+    }
+    else if ([obj isKindOfClass:OAPOI.class] && [_amenities containsObject:obj])
+    {
+        OAPOI *amenity = (OAPOI *)obj;
+        return [amenity getLocation];
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OADestination.class])
+    {
+        OADestination *point = (OADestination *)obj;
+        return [point getPointDescription];
+    }
+    return nil;
 }
 
 #pragma mark - OAMoveObjectProvider

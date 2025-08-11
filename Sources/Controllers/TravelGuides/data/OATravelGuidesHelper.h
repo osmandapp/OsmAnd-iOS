@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OATravelSearchResult, OAPOI, OATravelArticle, OAGPXDocumentAdapter, OASWptPt, OASGpxDataItem, OATravelGpx;
+@class OATravelSearchResult, OAPOI, OATravelArticle, OAGPXDocumentAdapter, OASWptPt, OASGpxDataItem, OATravelGpx, MapSelectionResult;
 
 @interface OAFoundAmenity : NSObject
 
@@ -29,6 +29,8 @@
 + (void) searchAmenity:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom  reader:(NSString *)reader searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish;
 
 + (void) searchAmenity:(NSString *)searchQuery x:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom reader:(NSString *)reader searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish;
+
++ (OATravelGpx *)searchTravelGpx:(CLLocation *)location routeId:(NSString *)routeId;
 
 + (void) showContextMenuWithLatitude:(double)latitude longitude:(double)longitude;
 

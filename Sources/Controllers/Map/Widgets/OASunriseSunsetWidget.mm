@@ -432,7 +432,7 @@ static const double locationChangeAccuracy = 0.0001;
 - (NSString *)getFormattedTime:(NSTimeInterval)timeInterval
 {
     NSString *formattedDuration = [self formatMinutesDuration:timeInterval / 60];
-    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), formattedDuration, OALocalizedString(@"int_hour")];;
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), formattedDuration, OALocalizedString(@"int_hour")];
 }
 
 - (NSString *)formatMinutesDuration:(int)minutes

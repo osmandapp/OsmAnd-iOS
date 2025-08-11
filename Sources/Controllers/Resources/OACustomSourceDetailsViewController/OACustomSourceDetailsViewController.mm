@@ -288,7 +288,7 @@
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImagesTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAImagesTableViewCell *)[nib objectAtIndex:0];;
+            cell = (OAImagesTableViewCell *)[nib objectAtIndex:0];
         }
         if (cell)
         {

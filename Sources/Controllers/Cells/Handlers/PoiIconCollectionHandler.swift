@@ -45,7 +45,6 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private func setup() {
         initIconCategories()
         setScrollDirection(.horizontal)
-        setSelectedIndexPath(IndexPath(row: 0, section: 0))
         selectCategory(categoriesByKeyName.keys.contains(LAST_USED_KEY) ? LAST_USED_KEY : SPECIAL_KEY)
     }
     
@@ -77,7 +76,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     func setIconName(_ iconName: String) {
         guard !iconName.isEmpty else { return }
         for category in categories {
-            if isFavoriteList && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
+            if allIconsVCDelegate == nil && isFavoriteList && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
                 setSelectedIndexPath(IndexPath(row: 0, section: 0))
                 selectCategory(category.key)
                 return

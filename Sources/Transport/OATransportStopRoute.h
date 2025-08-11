@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OATransportStopType.h"
+#import "OATransportStop.h"
 #import "OACommonTypes.h"
 
 #include <OsmAndCore.h>
@@ -19,11 +20,11 @@ UIKIT_EXTERN NSString *const OATransportStopRouteArrow;
 
 @interface OATransportStopRoute : NSObject
 
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::TransportStop> refStop;
+@property (nonatomic, assign) OATransportStop *refStop;
 @property (nonatomic) OATransportStopType *type;
 @property (nonatomic) NSString *desc;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::TransportRoute> route;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::TransportStop> stop;
+@property (nonatomic, assign) OATransportStop * stop;
 @property (nonatomic) int stopIndex;
 @property (nonatomic) int distance;
 @property (nonatomic) BOOL showWholeRoute;

@@ -1391,7 +1391,7 @@
 "announcement_time_title" = "Elan edilmə vaxtı";
 "upload_poi" = "POI yüklə";
 "quick_action_coordinates_widget_descr" = "Xəritədə Koordinatlar vidcetini göstərmək və ya gizlətmək üçün düymə.";
-"delete_history_items" = "%@ tarixçə elementi silinsin\?";
+"delete_history_items" = "%@ tarixçə elementi silinsin?";
 "troubleshooting" = "Problem həlli";
 "map_orientation_default" = "Cihaz ilə eyni";
 "map_settings_topography" = "Kontur xətləri";
@@ -1523,3 +1523,7 @@
 "shared_string_view_all" = "Hamısına bax";
 "default_appearance" = "Standart görünüş";
 "shared_string_items" = "Elementlər";
+"average" = "Orta";
+"shared_string_large" = "Böyük";
+"distance_by_tap_use_description" = "Xəritəyə toxunaraq hazırkı məkanınız və toxunduğunuz nöqtə arasındakı məsafəni görün. \nXəritəyə 2 barmağınızla toxunaraq toxunulan nöqtələr arasındakı məsafəni görün.";
+"shared_string_other" = "Digər";

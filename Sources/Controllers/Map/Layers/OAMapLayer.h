@@ -10,6 +10,9 @@
 #import "OsmAndApp.h"
 #import "OAMapLayersConfiguration.h"
 
+static const float ICON_VISIBLE_PART_RATIO = 0.45;
+static const float TOUCH_RADIUS_MULTIPLIER = 1.5;
+
 @class OAMapViewController, OAMapRendererView;
 
 @interface OAMapLayer : NSObject
@@ -43,6 +46,9 @@
 - (void) didReceiveMemoryWarning;
 
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint;
+
+- (int) getScaledTouchRadius:(int)radiusPoi;
+- (int) getDefaultRadiusPoi;
 
 - (BOOL) isVisible;
 

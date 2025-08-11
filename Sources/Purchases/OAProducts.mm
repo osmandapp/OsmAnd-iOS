@@ -376,7 +376,7 @@
         periodPriceStr = OALocalizedString(@"price_free");
     
     if (!periodPriceStr)
-        return [[NSAttributedString alloc] initWithString:@""];;
+        return [[NSAttributedString alloc] initWithString:@""];
     BOOL isPlural = originalNumberOfUnits > 1 || self.numberOfPeriods > 1;
     NSString *mainPart = [NSString stringWithFormat:OALocalizedString(isPlural ? @"get_discount_first_few_parts" : @"get_discount_first_part"), periodPriceStr, [self getDisountPeriodString:unitStr totalPeriods:totalPeriods]];
     NSString *thenPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_second_part"), originalPricePeriod];

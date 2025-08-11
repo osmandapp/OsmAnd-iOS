@@ -16,6 +16,7 @@
 #import "OARouteStatisticsHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OATransportStopType.h"
+#import "OATransportStop.h"
 #import "OARouteDirectionInfo.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
@@ -30,6 +31,7 @@
 #import "OAColoringType.h"
 #import "OAObservable.h"
 #import "OAConcurrentCollections.h"
+#import "OAPointDescription.h"
 #import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -1351,6 +1353,41 @@ struct DrawPathData
 {
     if (_routingHelper && ![_routingHelper isPublicTransportMode])
         [self drawRouteWithSync:NO forceRedraw:NO];
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OATransportStop.class])
+    {
+        OATransportStop *transportStop = (OATransportStop *)obj;
+        return [[CLLocation alloc] initWithLatitude:transportStop.latitude longitude:transportStop.longitude];
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OATransportStop.class])
+    {
+        OATransportStop *transportStop = (OATransportStop *)obj;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_TRANSPORT_STOP typeName:OALocalizedString(@"transport_Stop") name:[transportStop name]];
+    }
+    return nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 @end

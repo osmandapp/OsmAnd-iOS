@@ -24,6 +24,8 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OASavingTrackHelper.h"
+#import "OANetworkRouteDrawable.h"
+#import "OARouteKey.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppVersion.h"
 
@@ -388,7 +390,7 @@
         return NO;
     } getTypesFunction:nil];
 
-    NSArray<OAPOI *> *amenities = [OAPOIHelper findPOIsByFilter:filter topLatitude:top leftLongitude:left bottomLatitude:bottom rightLongitude:right matcher:nil];
+    NSArray<OAPOI *> *amenities = [OAAmenitySearcher findPOIsByFilter:filter topLatitude:top leftLongitude:left bottomLatitude:bottom rightLongitude:right matcher:nil];
     return amenities.count > 0 ? [self sortAmenities:amenities cityTypes:cityTypes latLon:latLon].firstObject : nil;
 }
 
@@ -746,6 +748,59 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     [viewController presentViewController:alert animated:YES completion:nil];
 }
 
++ (void) saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(OARouteKey *)routeKey
+{
+    [self.class saveAndOpenGpx:name filepath:filepath gpxFile:gpxFile selectedPoint:selectedPoint analysis:analysis routeKey:routeKey forceAdjustCentering:NO];
+}
+
++ (void) saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(OARouteKey *)routeKey forceAdjustCentering:(BOOL)forceAdjustCentering
+{
+    // Force hiding opened context menu. (With deleting Temp gpx folder)
+    [OARootViewController.instance.mapPanel hideScrollableHudViewController];
+    
+    NSString *folderPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:@"Temp"];
+    filepath = [folderPath stringByAppendingPathComponent:filepath];
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if (![manager fileExistsAtPath:folderPath])
+        [manager createDirectoryAtPath:folderPath withIntermediateDirectories:NO attributes:nil error:nil];
+    gpxFile.path = filepath;
+    gpxFile.metadata.name = name;
+    
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFile.path];
+    [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+    [OARootViewController.instance.mapPanel.mapViewController showTempGpxTrackFromGpxFile:gpxFile];
+    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+    OASGpxDataItem *gpx = [gpxDb getGPXItem:filepath];
+    if (!gpx)
+        gpx = [gpxDb addGPXFileToDBIfNeeded:filepath];
+    
+    OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:file];
+    trackItem.dataItem = gpx;
+    [trackItem resetAppearanceToOriginal];
+    OASGpxTrackAnalysis *trackAnalysis = analysis?: [gpx getAnalysis];
+    
+    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:CLLocationCoordinate2DMake(selectedPoint.lat, selectedPoint.lon) openedFromMap:NO];
+    state.forceAdjustCentering = forceAdjustCentering;
+    
+    if (!routeKey)
+        routeKey = [OARouteKey fromGpxFile:gpxFile];
+    
+    if (routeKey)
+    {
+        OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:routeKey];
+        state.trackIcon = drawable.getIcon;
+    }
+    
+    // Hide old context menu and open a new one.
+    // If old context menu already closed, then "hideAndDeleteAllTempGpx()" will not run.
+    
+    [OARootViewController.instance.mapPanel openTargetViewWithGPX:trackItem
+                              items:nil
+                       routeKey:routeKey
+                   trackHudMode:EOATrackMenuHudMode
+                              state:state
+                             analysis:trackAnalysis];
+}
 
 #pragma mark - UIDocumentInteractionControllerDelegate
 

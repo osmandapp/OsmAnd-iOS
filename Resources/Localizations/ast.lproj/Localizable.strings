@@ -845,3 +845,7 @@
 "poi_filter_fuel" = "Combustible";
 "shared_string_items" = "Elementos";
 "online_photos" = "Semeyes en llinia";
+"trace_rendering" = "Rendering debug info";
+"rendering_attr_hideWaterPolygons_name" = "Hide water";
+"trace_rendering_descr" = "Amuesa\'l rindimientu de la renderización.";
+"rendering_attr_pisteRoutes_name" = "Ski slopes";

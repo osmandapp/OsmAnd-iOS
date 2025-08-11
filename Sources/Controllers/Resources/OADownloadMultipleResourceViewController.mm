@@ -7,7 +7,6 @@
 //
 
 #import "OADownloadMultipleResourceViewController.h"
-#import "OADownloadMultipleResourceViewController+cpp.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASimpleTableViewCell.h"
@@ -15,8 +14,11 @@
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
 #import "OAResourcesUISwiftHelper.h"
+#import "OAResourcesUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+
+#import <OsmAndCore/ResourcesManager.h>
 
 @interface OADownloadMultipleResourceViewController () <OATableViewCellDelegate>
 

@@ -79,7 +79,7 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
             if (!type)
                 continue;
             
-            auto iconId = isSmallIcon ? QStringLiteral("small_ic") : QString::fromNSString(type.name) + QString("_%1").arg(textScaleFactor, 0, 'f', 2);;
+            auto iconId = isSmallIcon ? QStringLiteral("small_ic") : QString::fromNSString(type.name) + QString("_%1").arg(textScaleFactor, 0, 'f', 2);
             sk_sp<SkImage> bitmap;
             bool isNew = false;
             {

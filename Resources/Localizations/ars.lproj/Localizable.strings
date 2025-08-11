@@ -3483,3 +3483,10 @@
 "shared_string_items" = "العناصر";
 "default_appearance" = "المظهر الافتراضي";
 "auto_25_chars_route_tr_kl" = "انعطف يمينا واستمر في اليسار";
+"distance_by_tap_use_description" = "اضغط على الخريطة لعرض المسافة بين موقعك الحالي والنقطة التي تم النقر عليها. \nاضغط بإصبعين على الخريطة لعرض المسافة بين النقاط التي تم النقر عليها";
+"average" = "المتوسط";
+"trace_rendering_descr" = "إظهار أداء العرض والتنقل.";
+"shared_string_large" = "كبير";
+"trace_rendering" = "معلومات تصحيح الأداء";
+"shared_string_normal" = "عادي";
+"shared_string_other" = "أخرى";

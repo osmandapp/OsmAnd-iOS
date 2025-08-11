@@ -25,14 +25,29 @@ final class ObfConstants: NSObject {
     static private let AMENITY_ID_RIGHT_SHIFT = 1
     static private let WAY_MODULO_REMAINDER = 1
     
-    static private let NODE = "node"
-    static private let WAY = "way"
-    static private let RELATION = "relation"
+    static private let NODE = kEntityTypeNode
+    static private let WAY = kEntityTypeWay
+    static private let RELATION = kEntityTypeRelation
     
     static func getOsmUrlForId(_ object: OAMapObject) -> String {
         guard let type = getOsmEntityType(object) else { return "" }
         let osmId = getOsmObjectId(object)
         return "https://www.openstreetmap.org/\(type)/\(osmId)"
+    }
+    
+    static func createMapObjectIdFromOsmId(_ osmId: Int64, type: String?) -> Int64 {
+        guard let type else { return osmId }
+        
+        switch type {
+        case NODE:
+            return osmId << AMENITY_ID_RIGHT_SHIFT
+        case WAY:
+            return (osmId << AMENITY_ID_RIGHT_SHIFT) + 1
+        case RELATION:
+            return RELATION_BIT + ((osmId << SHIFT_ID) << DUPLICATE_SPLIT)
+        default:
+            return osmId
+        }
     }
     
     static func getOsmObjectId(_ object: OAMapObject) -> Int64 {

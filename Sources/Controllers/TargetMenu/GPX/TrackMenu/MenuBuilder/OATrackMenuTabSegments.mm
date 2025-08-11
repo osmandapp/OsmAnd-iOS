@@ -81,8 +81,8 @@
     }
 
     for (NSInteger index = 0; index < segments.count; index++)
-    {        
-        OASGpxTrackAnalysis *analysis = [TrackChartHelper getAnalysisFor:segments[index] joinSegments:self.trackMenuDelegate.isJoinSegments];
+    {
+        OASGpxTrackAnalysis *analysis = generalSegment ? [TrackChartHelper getAnalysisFor:segments[index] joinSegments:self.trackMenuDelegate.isJoinSegments] : [self.trackMenuDelegate getGeneralAnalysis];
         if (analysis)
         {
             [self generateSegmentSectionData:segments[index]

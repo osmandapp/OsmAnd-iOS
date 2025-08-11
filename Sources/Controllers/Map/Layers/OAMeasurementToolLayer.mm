@@ -14,8 +14,10 @@
 #import "OANativeUtilities.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAAppSettings.h"
+#import "OAPointDescription.h"
 #import "CLLocation+Extension.h"
 #import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -169,6 +171,7 @@
         
         auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
         marker->setPosition(position);
+        marker->setUpdateAfterCreated(true);
         return marker;
     }
     else
@@ -349,6 +352,7 @@
                 {
                     auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
                     marker->setPosition(p);
+                    marker->setUpdateAfterCreated(true);
                     currentDist = 0;
                 }
             }
@@ -360,6 +364,7 @@
         {
             auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
             marker->setPosition(p);
+            marker->setUpdateAfterCreated(true);
         }
     }
 }
@@ -504,6 +509,16 @@
         auto point31 = [OANativeUtilities convertFromPointI:point];
         [self.mapViewController goToPosition:point31 animated:YES];
     }
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    return nil;
 }
 
 @end

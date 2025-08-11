@@ -1346,7 +1346,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     if (_terrainType == EOATerrainSettingsTypePalette)
     {
-        _currentPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];;
+        _currentPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];
         _isValueChange = _basePaletteColorItem != _currentPaletteColorItem;
         [self setPaletteColorItem:_currentPaletteColorItem];
         NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];

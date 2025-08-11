@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OARouteCalculationResult, OAPOI, OASTrkSegment, OASGpxFile, OASTrack, OASGpxDataItem, OASTrackItem;
+@class OARouteCalculationResult, OAPOI, OASTrkSegment, OASGpxFile, OASTrack, OASGpxDataItem, OASTrackItem, OASWptPt, OASGpxTrackAnalysis, OARouteKey;
 
 @protocol OATrackSavingHelperUpdatableDelegate <NSObject>
 
@@ -75,7 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
                  doc:(nullable OASGpxFile *)doc
              newName:(nullable NSString *)newName
               hostVC:(UIViewController*)hostVC
-    updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;;
+    updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;
 
 + (NSString *)buildTrackSegmentName:(OASGpxFile *)gpxFile
                               track:(OASTrack *)track
@@ -86,6 +86,9 @@ NS_ASSUME_NONNULL_BEGIN
                          totalDistance:(float)totalDistance
                               timeSpan:(NSInteger)timeSpan
                              wptPoints:(int)wptPoints;
+
++ (void) saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(nullable OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(nullable OARouteKey *)routeKey;
++ (void) saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(nullable OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(nullable OARouteKey *)routeKey forceAdjustCentering:(BOOL)forceAdjustCentering;
 
 
 @end

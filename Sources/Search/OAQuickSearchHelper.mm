@@ -128,7 +128,7 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
 
 - (NSString *)titleForObject:(OASearchResult *)obj
 {
-    return ((OARepositoryResourceItem *)obj.relatedObject).title ?: @"";;
+    return ((OARepositoryResourceItem *)obj.relatedObject).title ?: @"";
 }
 
 - (void)processGroups:(OAWorldRegion *)group

@@ -12,6 +12,10 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OATargetPointsHelper.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
+#import "OAContextMenuLayer.h"
+#import "OAMapLayers.h"
 #import "OAUtilities.h"
 #import "Localization.h"
 
@@ -108,6 +112,7 @@
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATargetPoint *targetPoint = self.targetPoints[indexPath.row];
+    
     if (_activeTargetType == OATargetRouteIntermediateSelection)
     {
         [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:targetPoint.pointDescription];
@@ -117,7 +122,16 @@
     }
     else
     {
-        [[[OARootViewController instance] mapPanel] showContextMenu:targetPoint];
+        if (_selectedMapObjects && _selectedMapObjects.count > indexPath.row)
+        {
+            SelectedMapObject *selectedObject = _selectedMapObjects[indexPath.row];
+            OAContextMenuLayer *contextLayer = [OARootViewController instance].mapPanel.mapViewController.mapLayers.contextMenuLayer;
+            [contextLayer showContextMenu:_touchPoint object:selectedObject];
+        }
+        else
+        {
+            [[[OARootViewController instance] mapPanel] showContextMenu:targetPoint];
+        }
     }
 }
 

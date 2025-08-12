@@ -427,8 +427,6 @@ extension WidgetsListViewController {
                 editingComplexWidget = mapWidgetInfo
                 return sourceIndexPath
             }
-        } else {
-            editingComplexWidget = nil
         }
         
         let sectionCount = tableData.sectionCount()
@@ -451,8 +449,6 @@ extension WidgetsListViewController {
            WidgetType.isComplexWidget(mapWidgetInfo.key) || (isComplexWidgetSource && destinationItem.obj(forKey: kWidgetsInfoKey) != nil) {
             editingComplexWidget = mapWidgetInfo
             return sourceIndexPath
-        } else {
-            editingComplexWidget = nil
         }
         if destinationItem.key == kPageKey {
             if !self.tableView(tableView, canMoveRowAt: correctedIndexPath), self.tableView(tableView, canEditRowAt: correctedIndexPath), tableData.rowCount(UInt(correctedIndexPath.section)) > correctedIndexPath.row + 1 {
@@ -464,7 +460,6 @@ extension WidgetsListViewController {
                             if sourceIndexPath.row < correctedIndexPath.row {
                                 correctedIndexPath = IndexPath(row: correctedIndexPath.row - 1, section: correctedIndexPath.section)
                             }
-                            editingComplexWidget = nil
                         } else {
                             editingComplexWidget = mapWidgetInfo
                             return sourceIndexPath
@@ -473,8 +468,6 @@ extension WidgetsListViewController {
                         editingComplexWidget = mapWidgetInfo
                         return sourceIndexPath
                     }
-                } else {
-                    editingComplexWidget = nil
                 }
             }
             let prevDestinationItem = tableData.item(for: IndexPath(row: correctedIndexPath.row - 1, section: correctedIndexPath.section))
@@ -488,22 +481,15 @@ extension WidgetsListViewController {
                     if nextToDestinationItem?.obj(forKey: kWidgetsInfoKey) is MapWidgetInfo {
                         editingComplexWidget = mapWidgetInfo
                         return sourceIndexPath
-                    } else {
-                        editingComplexWidget = nil
                     }
                 } else {
                     if let nextToMapWidgetInfo = nextToDestinationItem?.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(nextToMapWidgetInfo.key) {
                         editingComplexWidget = mapWidgetInfo
                         return sourceIndexPath
-                    } else {
-                        if sourceIndexPath.row > correctedIndexPath.row {
-                            correctedIndexPath = IndexPath(row: correctedIndexPath.row + 1, section: correctedIndexPath.section)
-                        }
-                        editingComplexWidget = nil
+                    } else if sourceIndexPath.row > correctedIndexPath.row {
+                        correctedIndexPath = IndexPath(row: correctedIndexPath.row + 1, section: correctedIndexPath.section)
                     }
                 }
-            } else {
-                editingComplexWidget = nil
             }
             
             if let nextToMapWidgetInfo = nextToDestinationItem?.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo,
@@ -511,25 +497,18 @@ extension WidgetsListViewController {
                isComplexWidgetSource && !nextToMapWidgetInfo.isEqual(sourceMapWidgetInfo) {
                 editingComplexWidget = nextToMapWidgetInfo
                 return sourceIndexPath
-            } else {
-                editingComplexWidget = nil
             }
             
-            // When ypu try to add complex widget to an empty row it can be added to a row with other widgets. This code fix it
+            // When you try to add complex widget to an empty row it can be added to a row with other widgets. This code fix it
             if let prevMapWidgetInfo = prevDestinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo,
                let sourceMapWidgetInfo = sourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo,
                isComplexWidgetSource && !prevMapWidgetInfo.isEqual(sourceMapWidgetInfo) {
                 if nextToDestinationItem?.obj(forKey: kWidgetsInfoKey) is MapWidgetInfo {
                     editingComplexWidget = sourceMapWidgetInfo
                     return sourceIndexPath
-                } else {
-                    if nextToDestinationItem?.key == kPageKey && sourceIndexPath.row > correctedIndexPath.row {
-                        correctedIndexPath = IndexPath(row: correctedIndexPath.row + 1, section: correctedIndexPath.section)
-                    }
-                    editingComplexWidget = nil
+                } else if nextToDestinationItem?.key == kPageKey && sourceIndexPath.row > correctedIndexPath.row  {
+                    correctedIndexPath = IndexPath(row: correctedIndexPath.row + 1, section: correctedIndexPath.section)
                 }
-            } else {
-                editingComplexWidget = nil
             }
         }
         
@@ -546,6 +525,7 @@ extension WidgetsListViewController {
             }
             return indexPath
         }
+        editingComplexWidget = nil
         return correctedIndexPath
     }
     

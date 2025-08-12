@@ -17,7 +17,7 @@
 @property (nonatomic) float miniCoeff;
 @property (nonatomic) BOOL leftSide;
 @property (nonatomic) BOOL imminent;
-@property (nonatomic) BOOL bigStrokeSize;
+@property (nonatomic) BOOL boldStroke;
 
 @property (nonatomic, readonly) CGFloat height;
 @property (nonatomic, readonly) CGFloat width;

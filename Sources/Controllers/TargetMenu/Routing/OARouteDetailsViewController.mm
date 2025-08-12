@@ -179,7 +179,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     if (lanes.size() > 0)
     {
         OALanesDrawable *_lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
-        _lanesDrawable.bigStrokeSize = NO;
+        _lanesDrawable.boldStroke = NO;
         [_lanesDrawable setLanes:lanes];
         [_lanesDrawable updateBounds];
         _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);

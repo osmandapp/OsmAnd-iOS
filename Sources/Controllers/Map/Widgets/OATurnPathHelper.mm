@@ -520,7 +520,7 @@
         [pathForTurn applyTransform:transform];
 }
 
-+ (UIBezierPath *)getPathFromTurnType:(NSMapTable<OATurnResource *, UIBezierPath *> *)cache firstTurn:(int)firstTurn secondTurn:(int)secondTurn thirdTurn:(int)thirdTurn turnIndex:(int)turnIndex coef:(float)coef leftSide:(BOOL)leftSide smallArrow:(BOOL)smallArrow bigStrokeSize:(BOOL)bigStrokeSize
++ (UIBezierPath *)getPathFromTurnType:(NSMapTable<OATurnResource *, UIBezierPath *> *)cache firstTurn:(int)firstTurn secondTurn:(int)secondTurn thirdTurn:(int)thirdTurn turnIndex:(int)turnIndex coef:(float)coef leftSide:(BOOL)leftSide smallArrow:(BOOL)smallArrow boldStroke:(BOOL)boldStroke
 {
     int firstTurnType = TurnType::valueOf(firstTurn, leftSide).getValue();
     int secondTurnType = TurnType::valueOf(secondTurn, leftSide).getValue();
@@ -572,17 +572,17 @@
     UIBezierPath *path = [cache objectForKey:turnResource];
     if (!path)
     {
-        path = [self.class getPathFromTurnResource:turnResource withSize:{LANE_IMG_SIZE, LANE_IMG_SIZE} smallArrow:smallArrow bigStrokeSize:bigStrokeSize];
+        path = [self.class getPathFromTurnResource:turnResource withSize:{LANE_IMG_SIZE, LANE_IMG_SIZE} smallArrow:smallArrow boldStroke:boldStroke];
         [cache setObject:path forKey:turnResource];
     }    
     return path;
 }
 
-+ (UIBezierPath *) getPathFromTurnResource:(OATurnResource *)turnResource withSize:(CGSize)size smallArrow:(BOOL)smallArrow  bigStrokeSize:(BOOL)bigStrokeSize
++ (UIBezierPath *) getPathFromTurnResource:(OATurnResource *)turnResource withSize:(CGSize)size smallArrow:(BOOL)smallArrow  boldStroke:(BOOL)boldStroke
 {
     CGFloat coef = size.width / 72.0;
     UIBezierPath *path = [UIBezierPath bezierPath];
-    path.lineWidth = bigStrokeSize ? 2.f : 1.f;
+    path.lineWidth = boldStroke ? 2.f : 1.f;
     [self.class calcTurnPath:path outlay:nil turnType:TurnType::ptrValueOf(turnResource.turnType, turnResource.leftSide) transform:CGAffineTransformMakeScale(coef, coef) center:nil mini:NO shortArrow:turnResource.shortArrow noOverlap:turnResource.noOverlap smallArrow:smallArrow];
     
     return path;

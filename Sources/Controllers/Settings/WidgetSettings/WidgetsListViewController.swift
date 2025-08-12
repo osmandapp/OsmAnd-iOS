@@ -446,7 +446,7 @@ extension WidgetsListViewController {
         let isComplexWidgetSource = (sourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo).flatMap { WidgetType.isComplexWidget($0.key) } == true
         let destinationItem = tableData.item(for: correctedIndexPath)
         if let mapWidgetInfo = destinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo,
-           WidgetType.isComplexWidget(mapWidgetInfo.key) || (isComplexWidgetSource && destinationItem.obj(forKey: kWidgetsInfoKey) != nil) {
+           WidgetType.isComplexWidget(mapWidgetInfo.key) || isComplexWidgetSource {
             editingComplexWidget = mapWidgetInfo
             return sourceIndexPath
         }

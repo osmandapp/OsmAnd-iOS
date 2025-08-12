@@ -173,6 +173,12 @@
                     return subtype;
                 break;
             }
+            case EOAFileSettingsItemFileSubtypeTravel:
+            {
+                if ([name hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT])
+                    return subtype;
+                break;
+            }
             case EOAFileSettingsItemFileSubtypeObfMap:
             {
                 // android has additions check:

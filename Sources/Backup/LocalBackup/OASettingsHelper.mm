@@ -515,6 +515,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     terrainTypes << OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion;
     terrainTypes << OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
     terrainTypes << OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
+    terrainTypes << OsmAnd::ResourcesManager::ResourceType::GeoTiffRegion;
     NSArray<NSString *> *terrainFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:terrainTypes includeHidden:NO];
     if (terrainFiles.count > 0)
     {

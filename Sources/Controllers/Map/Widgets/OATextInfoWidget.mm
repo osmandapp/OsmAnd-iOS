@@ -948,7 +948,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 - (void)applyOutlineIfNeededToLabel:(OutlineLabel *)label
 {
     NSString *txt = label.attributedText ? label.attributedText.string : label.text;
-    BOOL enable = _primaryOutlineColor  && _textOutlineWidth > 0.0 && txt.length > 0;
+    BOOL enable = _primaryOutlineColor && _textOutlineWidth > 0.0 && txt.length > 0;
     label.outlineColor = enable ? _primaryOutlineColor : nil;
     label.outlineWidth = enable ? _textOutlineWidth : 0.0;
 }

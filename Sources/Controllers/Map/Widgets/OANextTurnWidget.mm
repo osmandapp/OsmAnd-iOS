@@ -45,9 +45,9 @@
 @property (nonatomic) IBOutlet UIView *exitView;
 @property (nonatomic) IBOutlet UIView *leftArrowView;
 @property (nonatomic) IBOutlet UIImageView *shieldImage;
-@property (nonatomic) IBOutlet UILabel *exitLabel;
-@property (nonatomic) IBOutlet UILabel *distanceLabel;
-@property (nonatomic) IBOutlet UILabel *streetLabel;
+@property (nonatomic) IBOutlet OutlineLabel *exitLabel;
+@property (nonatomic) IBOutlet OutlineLabel *distanceLabel;
+@property (nonatomic) IBOutlet OutlineLabel *streetLabel;
 @property (nonatomic) IBOutlet UIButton *showButton;
 @property (nonatomic) IBOutlet UIStackView *shieldStackView;
 @property (nonatomic) IBOutlet UIStackView *distanceStackView;
@@ -244,6 +244,7 @@
     [self setExit:streetName];
     
     _streetLabel.text = streetName.text.length == 0 ? @"" : streetName.text;
+    [self applyOutlineIfNeededToLabel:_streetLabel];
 }
 
 - (CGFloat)getWidthFor:(UIImage *)image
@@ -323,6 +324,7 @@
     {
         NSString *exitViewText = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"shared_string_road_exit"), exitNumber];
         _exitLabel.text = exitViewText;
+        [self applyOutlineIfNeededToLabel:_exitLabel];
         [_exitView setHidden:NO];
     }
     else
@@ -598,7 +600,9 @@
     if (_isPanelVertical)
     {
         if (text.length == 0 && subtext.length == 0)
+        {
             _distanceLabel.text = self.isSimpleLayout ? nil : @"";
+        }
         else
         {
             _distanceLabel.text = [NSString stringWithFormat:@"%@ %@", text, subtext];
@@ -607,9 +611,13 @@
             if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall && (!_exitView.hidden || _streetLabel.text.length != 0 || !_shieldStackView.hidden))
                 _distanceLabel.text = [text stringByAppendingString:@","];
         }
+        
+        [self applyOutlineIfNeededToLabel:_distanceLabel];
     }
     else
+    {
         [super setTextNoUpdateVisibility:text subtext:subtext];
+    }
 }
 
 - (void) updateDistance
@@ -644,6 +652,10 @@
     _exitLabel.textColor = valueTextColor;
     _exitLabel.borderColor = self.isNightMode ? borderColor.dark : borderColor.light;
     _streetLabel.textColor = self.isNightMode ? textColorSecondary.dark : textColorSecondary.light;
+    [self updateTextWitState:textState];
+    [self applyOutlineIfNeededToLabel:_distanceLabel];
+    [self applyOutlineIfNeededToLabel:_exitLabel];
+    [self applyOutlineIfNeededToLabel:_streetLabel];
 }
 
 - (BOOL) updateInfo

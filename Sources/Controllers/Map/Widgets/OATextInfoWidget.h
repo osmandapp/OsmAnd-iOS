@@ -36,13 +36,13 @@ extern NSString * const kSizeStylePref;
 
 // Simple Widget Layout
 @property (nonatomic, strong, nullable) UIStackView *topNameUnitStackView;
-@property (nonatomic, strong, nullable) UILabel *nameLabel;
-@property (nonatomic, strong, nullable) UILabel *unitLabel;
+@property (nonatomic, strong, nullable) OutlineLabel *nameLabel;
+@property (nonatomic, strong, nullable) OutlineLabel *unitLabel;
 @property (nonatomic, strong, nullable) UIView *unitView;
 @property (nonatomic, strong, nullable) UIView *emptyViewRightPlaceholderFullRow;
-@property (nonatomic, strong, nullable) UILabel *titleOrEmptyLabel;
-@property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
-@property (nonatomic, strong, nullable) UILabel *valueLabel;
+@property (nonatomic, strong, nullable) OutlineLabel *titleOrEmptyLabel;
+@property (nonatomic, strong, nullable) OutlineLabel *unitOrEmptyLabel;
+@property (nonatomic, strong, nullable) OutlineLabel *valueLabel;
 @property (nonatomic, strong, nullable) UIView *iconWidgetView;
 @property (nonatomic, nullable) OACommonWidgetSizeStyle *widgetSizePref;
 
@@ -82,6 +82,7 @@ extern NSString * const kSizeStylePref;
 - (void)setNightMode:(BOOL)night;
 
 - (void)updateTextWitState:(OATextState *)state;
+- (void)applyOutlineIfNeededToLabel:(OutlineLabel *)label;
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;

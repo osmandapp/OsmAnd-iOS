@@ -458,8 +458,21 @@ extension WidgetsListViewController {
             if !self.tableView(tableView, canMoveRowAt: correctedIndexPath), self.tableView(tableView, canEditRowAt: correctedIndexPath), tableData.rowCount(UInt(correctedIndexPath.section)) > correctedIndexPath.row + 1 {
                 let destinationComplexItem = tableData.item(for: IndexPath(row: correctedIndexPath.row + 1, section: correctedIndexPath.section))
                 if let mapWidgetInfo = destinationComplexItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
-                    editingComplexWidget = mapWidgetInfo
-                    return sourceIndexPath
+                    if correctedIndexPath.row > 0 {
+                        let prevDestinationItem = tableData.item(for: IndexPath(row: correctedIndexPath.row - 1, section: correctedIndexPath.section))
+                        if prevDestinationItem.key == kPageKey {
+                            if sourceIndexPath.row < correctedIndexPath.row {
+                                correctedIndexPath = IndexPath(row: correctedIndexPath.row - 1, section: correctedIndexPath.section)
+                            }
+                            editingComplexWidget = nil
+                        } else {
+                            editingComplexWidget = mapWidgetInfo
+                            return sourceIndexPath
+                        }
+                    } else {
+                        editingComplexWidget = mapWidgetInfo
+                        return sourceIndexPath
+                    }
                 } else {
                     editingComplexWidget = nil
                 }
@@ -479,15 +492,24 @@ extension WidgetsListViewController {
                         editingComplexWidget = nil
                     }
                 } else {
-                    editingComplexWidget = mapWidgetInfo
-                    return sourceIndexPath
+                    if let nextToMapWidgetInfo = nextToDestinationItem?.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(nextToMapWidgetInfo.key) {
+                        editingComplexWidget = mapWidgetInfo
+                        return sourceIndexPath
+                    } else {
+                        if sourceIndexPath.row > correctedIndexPath.row {
+                            correctedIndexPath = IndexPath(row: correctedIndexPath.row + 1, section: correctedIndexPath.section)
+                        }
+                        editingComplexWidget = nil
+                    }
                 }
             } else {
                 editingComplexWidget = nil
             }
             
-            if let mapWidgetInfo = nextToDestinationItem?.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, isComplexWidgetSource {
-                editingComplexWidget = mapWidgetInfo
+            if let nextToMapWidgetInfo = nextToDestinationItem?.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo,
+               let sourceMapWidgetInfo = sourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo,
+               isComplexWidgetSource && !nextToMapWidgetInfo.isEqual(sourceMapWidgetInfo) {
+                editingComplexWidget = nextToMapWidgetInfo
                 return sourceIndexPath
             } else {
                 editingComplexWidget = nil

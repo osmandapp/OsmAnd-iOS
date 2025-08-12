@@ -647,7 +647,6 @@
 - (void)updateColors:(OATextState *)textState
 {
     [super updateColors:textState];
-    [self updateTextWitState:textState];
     UIColor *valueTextColor = self.valueTextColor;
     UIColor *textColorSecondary = [UIColor colorNamed:ACColorNameTextColorSecondary];
     UIColor *borderColor = [UIColor colorNamed:ACColorNameWidgetSeparatorColor];
@@ -655,6 +654,10 @@
     _exitLabel.textColor = valueTextColor;
     _exitLabel.borderColor = self.isNightMode ? borderColor.dark : borderColor.light;
     _streetLabel.textColor = self.isNightMode ? textColorSecondary.dark : textColorSecondary.light;
+    [self updateTextWitState:textState];
+    [self applyOutlineIfNeededToLabel:_distanceLabel];
+    [self applyOutlineIfNeededToLabel:_exitLabel];
+    [self applyOutlineIfNeededToLabel:_streetLabel];
 }
 
 - (BOOL) updateInfo

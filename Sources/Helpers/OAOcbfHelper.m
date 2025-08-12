@@ -13,7 +13,7 @@
 
 + (void) downloadOcbfIfUpdated:(void (^)(void))completionHandler
 {
-    NSString *urlString = @"https://creator.osmand.net/basemap/regions.ocbf";
+    NSString *urlString = @"https://builder.osmand.net/basemap/regions.ocbf";
     
     OALog(@"Downloading HTTP header from: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];

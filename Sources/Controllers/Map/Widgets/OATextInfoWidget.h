@@ -80,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setNightMode:(BOOL)night;
 
 - (void)updateTextWitState:(OATextState *)state;
-- (void)applyOutlineIfNeededToLabel:(OutlineLabel *)label apply:(BOOL)apply;
+- (void)applyOutlineIfNeededToLabel:(OutlineLabel *)label;
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;

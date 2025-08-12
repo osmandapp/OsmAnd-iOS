@@ -589,9 +589,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 - (void)configureVerticalStackImageTitleSubtitleLayout
 {
     self.valueLabel.text = _text;
-    [self applyOutlineIfNeededToLabel:self.valueLabel apply:NO];
+    [self resetOutlineForLabel:self.valueLabel];
     self.unitLabel.text = _subtext;
-    [self applyOutlineIfNeededToLabel:self.unitLabel apply:NO];
+    [self resetOutlineForLabel:self.unitLabel];
     [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameCustomSeparator]];
 }
 
@@ -618,10 +618,10 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     self.titleOrEmptyLabel.textColor = _unitsColor;
     
     self.valueLabel.text = _text;
-    [self applyOutlineIfNeededToLabel:self.valueLabel apply:YES];
+    [self applyOutlineIfNeededToLabel:self.valueLabel];
  
     self.nameLabel.text = [_contentTitle upperCase];
-    [self applyOutlineIfNeededToLabel:self.nameLabel apply:YES];
+    [self applyOutlineIfNeededToLabel:self.nameLabel];
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == EOAWidgetSizeStyleSmall;
 
     _verticalStackViewSimpleWidgetTopConstraint.constant = [OAWidgetSizeStyleObjWrapper getTopPaddingWithType:self.widgetSizeStyle];
@@ -666,12 +666,12 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
             self.unitView.hidden = NO;
             self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:unitsFontSize label:self.unitLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
             self.unitLabel.textAlignment = NSTextAlignmentRight;
-            [self applyOutlineIfNeededToLabel:self.unitLabel apply:YES];
+            [self applyOutlineIfNeededToLabel:self.unitLabel];
         }
     }
     
-    [self applyOutlineIfNeededToLabel:self.unitOrEmptyLabel apply:YES];
-    [self applyOutlineIfNeededToLabel:self.titleOrEmptyLabel apply:YES];
+    [self applyOutlineIfNeededToLabel:self.unitOrEmptyLabel];
+    [self applyOutlineIfNeededToLabel:self.titleOrEmptyLabel];
     if (self.isFullRow)
     {
         _contentStackViewSimpleWidget.spacing = 0;
@@ -945,19 +945,18 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     [self refreshLabel];
 }
 
-- (void)applyOutlineIfNeededToLabel:(OutlineLabel *)label apply:(BOOL)apply
+- (void)applyOutlineIfNeededToLabel:(OutlineLabel *)label
 {
-    if (!apply)
-    {
-        label.outlineColor = nil;
-        label.outlineWidth = 0.0;
-        return;
-    }
-    
     NSString *txt = label.attributedText ? label.attributedText.string : label.text;
     BOOL enable = _primaryOutlineColor  && _textOutlineWidth > 0.0 && txt.length > 0;
     label.outlineColor = enable ? _primaryOutlineColor : nil;
     label.outlineWidth = enable ? _textOutlineWidth : 0.0;
+}
+
+- (void)resetOutlineForLabel:(OutlineLabel *)label
+{
+    label.outlineColor = nil;
+    label.outlineWidth = 0.0;
 }
 
 - (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams

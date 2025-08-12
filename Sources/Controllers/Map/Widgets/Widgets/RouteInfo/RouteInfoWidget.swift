@@ -297,8 +297,8 @@ final class RouteInfoWidget: OASimpleWidget {
             secondLineLeftLabel.attributedText = secondLineLeftString
         }
         
-        applyOutlineIfNeeded(to: firstLineLeftLabel, apply: true)
-        applyOutlineIfNeeded(to: secondLineLeftLabel, apply: true)
+        applyOutlineIfNeeded(to: firstLineLeftLabel)
+        applyOutlineIfNeeded(to: secondLineLeftLabel)
     }
     
     private func updateSecondaryBlockWith(destinationInfo: DestinationInfo?, displayValues: [RouteInfoDisplayValue]) {
@@ -306,8 +306,8 @@ final class RouteInfoWidget: OASimpleWidget {
         let data = destinationInfo.flatMap { prepareDisplayData(info: $0) }
         firstLineRightLabel.text = data?[displayValues[0]] ?? ""
         secondLineRightLabel.text = data?[displayValues[1]] ?? ""
-        applyOutlineIfNeeded(to: firstLineRightLabel, apply: true)
-        applyOutlineIfNeeded(to: secondLineRightLabel, apply: true)
+        applyOutlineIfNeeded(to: firstLineRightLabel)
+        applyOutlineIfNeeded(to: secondLineRightLabel)
     }
     
     private func isUpdateNeeded(for routeInfo: [DestinationInfo]) -> Bool {

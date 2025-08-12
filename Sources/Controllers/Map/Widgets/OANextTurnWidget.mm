@@ -244,7 +244,7 @@
     [self setExit:streetName];
     
     _streetLabel.text = streetName.text.length == 0 ? @"" : streetName.text;
-    [self applyOutlineIfNeededToLabel:_streetLabel];
+    [self applyOutlineIfNeededToLabel:_streetLabel apply:YES];
 }
 
 - (CGFloat)getWidthFor:(UIImage *)image
@@ -324,7 +324,7 @@
     {
         NSString *exitViewText = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"shared_string_road_exit"), exitNumber];
         _exitLabel.text = exitViewText;
-        [self applyOutlineIfNeededToLabel:_exitLabel];
+        [self applyOutlineIfNeededToLabel:_exitLabel apply:YES];
         [_exitView setHidden:NO];
     }
     else
@@ -614,7 +614,7 @@
                 _distanceLabel.text = [text substringToIndex:text.length - 1];
         }
         
-        [self applyOutlineIfNeededToLabel:_distanceLabel];
+        [self applyOutlineIfNeededToLabel:_distanceLabel apply:YES];
     }
     else
     {

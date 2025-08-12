@@ -159,7 +159,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     verticalNameUnitStackView.distribution = UIStackViewDistributionEqualSpacing;
     [verticalStackView addArrangedSubview:verticalNameUnitStackView];
     
-    self.valueLabel = [UILabel new];
+    self.valueLabel = [[OutlineLabel alloc] init];
     self.valueLabel.text = @"-";
     self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.valueLabel.textAlignment = NSTextAlignmentCenter;
@@ -171,7 +171,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         [self.valueLabel.heightAnchor constraintEqualToConstant:24],
     ]];
     
-    self.unitLabel = [UILabel new];
+    self.unitLabel = [[OutlineLabel alloc] init];
     self.unitLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.unitLabel.textAlignment = NSTextAlignmentCenter;
     self.unitLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
@@ -589,7 +589,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 - (void)configureVerticalStackImageTitleSubtitleLayout
 {
     self.valueLabel.text = _text;
+    [self applyOutlineIfNeededToLabel:self.valueLabel apply:NO];
     self.unitLabel.text = _subtext;
+    [self applyOutlineIfNeededToLabel:self.unitLabel apply:NO];
     [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameCustomSeparator]];
 }
 
@@ -616,10 +618,10 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     self.titleOrEmptyLabel.textColor = _unitsColor;
     
     self.valueLabel.text = _text;
-    [self applyOutlineIfNeededToLabel:self.valueLabel];
+    [self applyOutlineIfNeededToLabel:self.valueLabel apply:YES];
  
     self.nameLabel.text = [_contentTitle upperCase];
-    [self applyOutlineIfNeededToLabel:self.nameLabel];
+    [self applyOutlineIfNeededToLabel:self.nameLabel apply:YES];
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == EOAWidgetSizeStyleSmall;
 
     _verticalStackViewSimpleWidgetTopConstraint.constant = [OAWidgetSizeStyleObjWrapper getTopPaddingWithType:self.widgetSizeStyle];
@@ -664,12 +666,12 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
             self.unitView.hidden = NO;
             self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:unitsFontSize label:self.unitLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
             self.unitLabel.textAlignment = NSTextAlignmentRight;
-            [self applyOutlineIfNeededToLabel:self.unitLabel];
+            [self applyOutlineIfNeededToLabel:self.unitLabel apply:YES];
         }
     }
     
-    [self applyOutlineIfNeededToLabel:self.unitOrEmptyLabel];
-    [self applyOutlineIfNeededToLabel:self.titleOrEmptyLabel];
+    [self applyOutlineIfNeededToLabel:self.unitOrEmptyLabel apply:YES];
+    [self applyOutlineIfNeededToLabel:self.titleOrEmptyLabel apply:YES];
     if (self.isFullRow)
     {
         _contentStackViewSimpleWidget.spacing = 0;
@@ -943,17 +945,19 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     [self refreshLabel];
 }
 
-- (void)applyOutlineIfNeededToLabel:(UILabel *)label
+- (void)applyOutlineIfNeededToLabel:(OutlineLabel *)label apply:(BOOL)apply
 {
-    if (![label isKindOfClass:[OutlineLabel class]])
+    if (!apply)
+    {
+        label.outlineColor = nil;
+        label.outlineWidth = 0.0;
         return;
+    }
     
     NSString *txt = label.attributedText ? label.attributedText.string : label.text;
     BOOL enable = _primaryOutlineColor  && _textOutlineWidth > 0.0 && txt.length > 0;
-    
-    OutlineLabel *outlineLabel = (OutlineLabel *)label;
-    outlineLabel.outlineColor = enable ? _primaryOutlineColor : nil;
-    outlineLabel.outlineWidth = enable ? _textOutlineWidth : 0.0;
+    label.outlineColor = enable ? _primaryOutlineColor : nil;
+    label.outlineWidth = enable ? _textOutlineWidth : 0.0;
 }
 
 - (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams

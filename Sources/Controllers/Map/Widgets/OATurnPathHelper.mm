@@ -578,7 +578,7 @@
     return path;
 }
 
-+ (UIBezierPath *) getPathFromTurnResource:(OATurnResource *)turnResource withSize:(CGSize)size smallArrow:(BOOL)smallArrow  boldStroke:(BOOL)boldStroke
++ (UIBezierPath *)getPathFromTurnResource:(OATurnResource *)turnResource withSize:(CGSize)size smallArrow:(BOOL)smallArrow  boldStroke:(BOOL)boldStroke
 {
     CGFloat coef = size.width / 72.0;
     UIBezierPath *path = [UIBezierPath bezierPath];

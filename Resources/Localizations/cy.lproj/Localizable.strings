@@ -1954,7 +1954,7 @@
 "map_widget_trip_recording_uphill" = "Ar i fyny";
 "shared_string_move" = "Symud";
 "global_settings" = "Gosodiadau Byd-eang";
-"delete_history_items" = "Dileu %@ eitem hanes\?";
+"delete_history_items" = "Dileu %@ eitem hanes?";
 "shared_string_mode" = "Modd";
 "shared_string_travel_guides" = "Canllawiau teithio";
 "angular_measeurement_descr" = "Newidiwch yr hyn y mae azimuth yn cael ei fesur ynddo.";
@@ -2026,3 +2026,6 @@
 "poi_filter_fuel" = "Tanwydd";
 "shared_string_pause" = "Oedi";
 "dd_ddddd_format" = "GG.GGGG°";
+"average" = "Cyfartaledd";
+"trace_rendering" = "Gwybodaeth dadfygio rendro";
+"shared_string_other" = "Arall";

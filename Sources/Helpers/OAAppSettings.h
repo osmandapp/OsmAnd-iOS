@@ -176,6 +176,23 @@ typedef NS_ENUM(NSInteger, EOAVolumeConstant)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOATemperatureConstant)
+{
+    SYSTEM_DEFAULT = 0,
+    CELSIUS,
+    FAHRENHEIT
+};
+
+@interface OATemperatureConstant : NSObject
+
+@property (nonatomic, readonly) EOATemperatureConstant volume;
+
++ (instancetype)withVolumeConstant:(EOATemperatureConstant)volume;
++ (NSString *)toHumanString:(EOATemperatureConstant)volume;
++ (NSString *)getUnitSymbol:(EOATemperatureConstant)volume;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOAAngularConstant)
 {
     DEGREES = 0,
@@ -357,6 +374,23 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
+{
+    NORMAL = 0,
+    LARGE
+};
+
+@interface OADistanceByTapTextSizeConstant : NSObject
+
+@property (nonatomic, readonly) EOADistanceByTapTextSizeConstant textSize;
+
++ (instancetype)withDistanceByTapTextSizeConstant:(EOADistanceByTapTextSizeConstant)textSize;
+
++ (NSString *)toHumanString:(EOADistanceByTapTextSizeConstant)textSize;
++ (float)getTextSizeFactor:(EOADistanceByTapTextSizeConstant)textSize;
+
+@end
+
 @interface OACommonPreference : NSObject
 
 @property (nonatomic, readonly) NSString *key;
@@ -381,6 +415,7 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
 
 - (BOOL)isSetForMode:(OAApplicationMode *)mode;
+- (nullable NSNumber *)valueFromString:(nonnull NSString *)string appMode:(nonnull OAApplicationMode *)mode;
 
 @end
 
@@ -573,6 +608,16 @@ typedef NS_ENUM(NSInteger, EOASpeedLimitWarningState)
 
 @end
 
+@interface OACommonTemperatureConstant : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOATemperatureConstant)defValue;
+- (EOATemperatureConstant) get;
+- (EOATemperatureConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOATemperatureConstant)volumeConstant;
+- (void) set:(EOATemperatureConstant)volumeConstant mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonAngularConstant : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue;
@@ -719,6 +764,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (OADownloadMode *) get:(OAApplicationMode *)mode;
 - (void) set:(OADownloadMode *)downloadMode;
 - (void) set:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
+- (OADownloadMode *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode;
 
 @end
 
@@ -733,6 +779,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (OAColoringType *) get:(OAApplicationMode *)mode;
 - (void) set:(OAColoringType *)coordinateInputFormats;
 - (void) set:(OAColoringType *)coordinateInputFormats mode:(OAApplicationMode *)mode;
+- (OAColoringType *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode;
 
 @end
 
@@ -744,6 +791,23 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (EOAWidgetSizeStyle) get:(OAApplicationMode *)mode;
 - (void) set:(EOAWidgetSizeStyle)widgetSizeStyle;
 - (void) set:(EOAWidgetSizeStyle)widgetSizeStyle mode:(OAApplicationMode *)mode;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOASunPositionMode) {
+    EOASunPositionModeSunPositionMode,
+    EOASunPositionModeSunsetMode,
+    EOASunPositionModeSunriseMode
+};
+
+@interface OACommonSunPositionMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(EOASunPositionMode)defValue;
+
+- (EOASunPositionMode)get;
+- (EOASunPositionMode)get:(OAApplicationMode *)mode;
+- (void)set:(EOASunPositionMode)positionMode;
+- (void)set:(EOASunPositionMode)positionMode mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -762,6 +826,17 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 - (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode;
 - (void)set:(EOAWidgetZoomLevelType)type;
 - (void)set:(EOAWidgetZoomLevelType)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonDistanceByTapTextSizeConstant : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADistanceByTapTextSizeConstant)defValue;
+
+- (EOADistanceByTapTextSizeConstant) get;
+- (EOADistanceByTapTextSizeConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant;
+- (void) set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -996,6 +1071,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *keepInforming;
 @property (nonatomic) OACommonSpeedConstant *speedSystem;
 @property (nonatomic) OACommonVolumeConstant *volumeUnits;
+@property (nonatomic) OACommonTemperatureConstant *temperatureUnits;
 @property (nonatomic) OACommonDouble *fuelTankCapacity;
 @property (nonatomic) OACommonAngularConstant *angularUnits;
 @property (nonatomic) OACommonDouble *speedLimitExceedKmh;
@@ -1007,6 +1083,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonString *routeInfoAttribute;
 @property (nonatomic) OACommonString *routeLineWidth;
 @property (nonatomic) OACommonBoolean *routeShowTurnArrows;
+@property (nonatomic) OACommonDistanceByTapTextSizeConstant *distanceByTapTextSize;
 
 @property (nonatomic) OACommonBoolean *showScreenAlerts;
 @property (nonatomic) OACommonBoolean *showTrafficWarnings;
@@ -1171,6 +1248,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 - (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue;
 - (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue;
+- (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue;
+- (EOATemperatureConstant)getTemperatureUnit;
 
 // Direction Appearance
 
@@ -1182,6 +1261,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 @property (nonatomic) OACommonBoolean *wikiArticleShowImagesAsked;
 @property (nonatomic) OACommonWikiArticleShowImages *wikivoyageShowImgs;
+
+@property (nonatomic) OACommonBoolean *selectMarkerOnSingleTap;
 
 @property (nonatomic) OACommonBoolean *coordsInputUseRightSide;
 @property (nonatomic) OACommonCoordinateInputFormats *coordsInputFormat;
@@ -1336,6 +1417,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 @property (nonatomic) OACommonBoolean *useOldRouting;
 @property (assign, nonatomic) BOOL ignoreMissingMaps;
+
+// Developer plugin
+@property (nonatomic) OACommonBoolean *simulateOBDData;
 
 - (long) getLastGloblalSettingsModifiedTime;
 - (void) setLastGlobalModifiedTime:(long)timestamp;

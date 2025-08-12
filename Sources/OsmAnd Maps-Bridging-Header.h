@@ -2,6 +2,9 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnullability-completeness"
+
 // Helpers
 #import "OAAppSettings.h"
 #import "OAColors.h"
@@ -83,6 +86,12 @@
 #import "OAResultMatcher.h"
 #import "OASearchResult.h"
 #import "OAWikiWebViewController.h"
+#import "OATransportStop.h"
+#import "OAHeightDataLoader.h"
+#import "OARouteKey.h"
+#import "OAContextMenuProvider.h"
+#import "EOAEntityType.h"
+#import "OAAmenitySearcher.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -128,6 +137,7 @@
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAPOILayer.h"
 #import "OABaseNavbarViewController.h"
 #import "OABaseButtonsViewController.h"
 #import "OABaseNavbarSubviewViewController.h"
@@ -267,3 +277,5 @@
 #import "OAUnsupportedAction.h"
 #import "OAMapillaryImageCardWrapper.h"
 #import "OAOBDConnector.h"
+
+#pragma clang diagnostic pop

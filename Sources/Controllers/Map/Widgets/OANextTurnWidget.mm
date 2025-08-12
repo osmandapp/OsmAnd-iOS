@@ -59,6 +59,7 @@
 @property (nonatomic) IBOutlet NSLayoutConstraint *firstLineHeightConstraint;
 @property (nonatomic) IBOutlet NSLayoutConstraint *secondLineHeightConstraint;
 @property (nonatomic) IBOutlet NSLayoutConstraint *shieldHeightConstraint;
+@property (nonatomic) IBOutlet NSLayoutConstraint *shieldWidthConstraint;
 @property (nonatomic) IBOutlet NSLayoutConstraint *exitLabelViewHeightConstraint;
 @property (nonatomic) IBOutlet NSLayoutConstraint *exitLabelViewRightEqualConstraint;
 @property (nonatomic) IBOutlet NSLayoutConstraint *exitLabelViewRightGreaterConstraint;
@@ -78,6 +79,7 @@
     OsmAndAppInstance _app;
     
     BOOL _nextNext;
+    BOOL _isPanelVertical;
     OANextDirectionInfo *_calc1;
     UIView *_widgetView;
     NSArray<RoadShield *> *_cachedRoadShields;
@@ -111,10 +113,14 @@
         _horisontalMini = horisontalMini;
         _nextNext = nextNext;
         _calc1 = [[OANextDirectionInfo alloc] init];
-        _turnDrawable = [[OATurnDrawable alloc] initWithMini:horisontalMini themeColor:EOATurnDrawableThemeColorMap];
+        
+        OAWidgetsPanel *panel = [type getPanel:customId ?: type.id appMode:appMode];
+        _isPanelVertical = [panel isPanelVertical];
+        
+        _turnDrawable = [[OATurnDrawable alloc] initWithMini:!_isPanelVertical && horisontalMini themeColor:EOATurnDrawableThemeColorMap];
         _textRasterizer = OsmAnd::TextRasterizer::getDefault();
         
-        if ([self isPanelVertical])
+        if (_isPanelVertical)
         {
             [self layoutWidget];
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
@@ -164,6 +170,13 @@
     return self;
 }
 
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    if (_isPanelVertical && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
+        [self updateNextTurnInfo];
+}
+
 - (UIView *)widgetView
 {
     if (!_widgetView)
@@ -209,6 +222,8 @@
     if (streetName.text.length == 0)
         streetName.text = [self removeSymbol:streetName.text];
     
+    streetName.text = [self removeRoundaboutSubstring:streetName.text];
+    
     NSArray<RoadShield *> *shields = streetName.shields;
     
     if (shields.count != 0)
@@ -231,9 +246,67 @@
     _streetLabel.text = streetName.text.length == 0 ? @"" : streetName.text;
 }
 
+- (CGFloat)getWidthFor:(UIImage *)image
+{
+    if (!image)
+        return 0;
+    
+    CGFloat sizeRatio = _shieldHeightConstraint.constant / image.size.height;
+    return sizeRatio * image.size.width;
+}
+
 - (NSString *)removeSymbol:(NSString *)input
 {
-    return [input hasPrefix:@"» "] ? [input stringByReplacingOccurrencesOfString:@"» " withString:@""] : input;
+    return [self removePrefix:@"» " from:input];
+}
+
+- (NSString *)removeRoundaboutSubstring:(NSString *)input
+{
+    return [self removePrefix:@"Roundabout: " from:input];
+}
+
+- (NSString *)removePrefix:(NSString *)prefix from:(NSString *)input
+{
+    return [input hasPrefix:prefix] ? [input stringByReplacingOccurrencesOfString:prefix withString:@""] : input;
+}
+
+- (void)checkShieldOverflow
+{
+    if (_isPanelVertical && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
+    {
+        CGFloat containerWidth = self.frame.size.width - _leftArrowView.frame.size.width - _mainStackView.spacing;
+        CGFloat usedWidth = 0;
+        int addedCount = 0;
+        
+        for (NSInteger i = 0; i < _shieldStackView.subviews.count; i++)
+        {
+            UIView *shieldView = _shieldStackView.subviews[i];
+            UIImageView *view = shieldView.subviews.firstObject;
+            
+            if (![view isKindOfClass:[UIImageView class]])
+                continue;
+            
+            CGFloat totalWidth = 0;
+            CGFloat width = [self getWidthFor:view.image];
+            
+            totalWidth += width;
+            if (i < _shieldStackView.subviews.count - 1)
+                totalWidth += _shieldStackView.spacing;
+            
+            if (usedWidth + totalWidth <= containerWidth - 3 * width)
+            {
+                shieldView.hidden = NO;
+                usedWidth += totalWidth;
+                addedCount++;
+            }
+            else
+            {
+                shieldView.hidden = YES;
+            }
+        }
+        
+        [_shieldStackView setHidden:addedCount == 0];
+    }
 }
 
 - (void)setExit:(OACurrentStreetName *)streetName
@@ -267,7 +340,7 @@
         
         if (_shieldStackView.subviews.count > 1)
         {
-            for (NSInteger i = 1; i < maxShields; i++)
+            for (NSInteger i = 1; i < _shieldStackView.subviews.count; i++)
                 [_shieldStackView.subviews[i] removeFromSuperview];
         }
         
@@ -282,7 +355,7 @@
                 [shieldView addSubview:shieldImageView];
                 [_shieldStackView addArrangedSubview:shieldView];
                 shieldImageView.translatesAutoresizingMaskIntoConstraints = NO;
-                shieldImageView.contentMode = UIViewContentModeCenter;
+                shieldImageView.contentMode = UIViewContentModeScaleAspectFit;
                 shieldImageView.clipsToBounds = YES;
                 [shieldImageView setContentHuggingPriority:[_shieldImage contentHuggingPriorityForAxis:UILayoutConstraintAxisHorizontal] forAxis:UILayoutConstraintAxisHorizontal];
                 [shieldView setContentHuggingPriority:[_shieldView contentHuggingPriorityForAxis:UILayoutConstraintAxisHorizontal] forAxis:UILayoutConstraintAxisHorizontal];
@@ -293,14 +366,18 @@
                     [shieldImageView.centerYAnchor constraintEqualToAnchor:shieldView.centerYAnchor]
                 ]];
                 isShieldSet |= [self setRoadShield:shieldImageView shield:shield];
+                NSLayoutConstraint *widthConstraint = [shieldImageView.widthAnchor constraintEqualToConstant:[self getWidthFor:shieldImageView.image]];
+                widthConstraint.active = YES;
             }
             else
             {
                 isShieldSet |= [self setRoadShield:view shield:shield];
+                _shieldWidthConstraint.constant = [self getWidthFor:view.image];
             }
         }
     }
-    [_shieldStackView setHidden:isShieldSet];
+    [_shieldStackView setHidden:!isShieldSet];
+    [self checkShieldOverflow];
 }
 
 - (BOOL) setRoadShield:(UIImageView *)view shield:(RoadShield *)shield
@@ -455,17 +532,21 @@
 {
     BOOL vis = [self updateVisibility:turnType != nullptr];
     if ([_turnDrawable setTurnType:turnType]
-        || ([self isPanelVertical] && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
+        || (_isPanelVertical && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
         || vis)
     {
-        _turnDrawable.textFont = self.primaryFont;
-        if ([self isPanelVertical])
+        if (_isPanelVertical)
+        {
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
+        }
         else
+        {
+            _turnDrawable.textFont = self.primaryFont;
             if (_horisontalMini)
                 [self setTurnDrawable:_turnDrawable gone:false];
             else
                 [self setTopTurnDrawable:_turnDrawable];
+        }  
     }
 }
 
@@ -502,24 +583,19 @@
     self.frame = rect;
 }
 
-- (BOOL)isPanelVertical
-{
-    return [[self getWidgetPanel] isPanelVertical];
-}
-
 - (BOOL)isEnabledTextInfoComponents
 {
-    return ![self isPanelVertical];
+    return !_isPanelVertical;
 }
 
-- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel
+- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> *)widgetConfigurationParams
 {
     return false;
 }
 
 - (void) setTextNoUpdateVisibility:(NSString *)text subtext:(NSString *)subtext
 {
-    if ([self isPanelVertical])
+    if (_isPanelVertical)
     {
         if (text.length == 0 && subtext.length == 0)
             _distanceLabel.text = self.isSimpleLayout ? nil : @"";
@@ -530,8 +606,6 @@
             NSString *text = [_distanceLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall && (!_exitView.hidden || _streetLabel.text.length != 0 || !_shieldStackView.hidden))
                 _distanceLabel.text = [text stringByAppendingString:@","];
-            else
-                _distanceLabel.text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
         }
     }
     else
@@ -589,13 +663,12 @@
     int nextTurnDistance = 0;
     OACurrentStreetName *streetName = nil;
     
-    if ([self isPanelVertical])
+    if (_isPanelVertical)
     {
         OAStreetNameWidgetParams *params = [[OAStreetNameWidgetParams alloc] initWithTurnDrawable:_turnDrawable calc1:_calc1];
         streetName = params.streetName;
     }
     
-    NSArray<RoadShield *> *shields = streetName.shields;
     if (routingHelper && [routingHelper isRouteCalculated] && followingMode)
     {
         deviatedFromRoute = [OARoutingHelper isDeviatedFromRoute];
@@ -613,8 +686,7 @@
                 if (info && info.distanceTo >= 0 && info.directionInfo)
                 {
                     streetName = [[OACurrentStreetName alloc] initWithStreetName:info useDestination:true];
-                    streetName.shields = shields;
-                    if ([self isPanelVertical] && streetName.text.length == 0)
+                    if (_isPanelVertical && streetName.text.length == 0)
                         streetName.text = [info.directionInfo getDescriptionRoutePart];
                     turnType = info.directionInfo.turnType;
                     nextTurnDistance = info.distanceTo;
@@ -633,8 +705,7 @@
             if (info && info.distanceTo > 0 && info.directionInfo)
             {
                 streetName = [[OACurrentStreetName alloc] initWithStreetName:info useDestination:true];
-                streetName.shields = shields;
-                if ([self isPanelVertical] && streetName.text.length == 0)
+                if (_isPanelVertical && streetName.text.length == 0)
                     streetName.text = [info.directionInfo getDescriptionRoutePart];
                 turnType = info.directionInfo.turnType;
                 nextTurnDistance = info.distanceTo;
@@ -643,9 +714,11 @@
         }
     }
     
-    if ([self isPanelVertical])
+    if (_isPanelVertical)
     {
         [self setStreetName:streetName];
+        if (streetName.shields.count != 0)
+            [self checkShieldOverflow];
         [self applySuitableTextFont];
         [self applySuitableLayout];
         [self replaceComponentsIfNeeded];

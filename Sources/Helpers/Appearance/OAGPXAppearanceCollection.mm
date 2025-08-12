@@ -310,7 +310,8 @@
 
 - (void)regenerateSortedPositionAfter:(NSInteger)position increment:(BOOL)increment
 {
-    for (OAColorItem *item in _availableColors)
+    NSArray<OAColorItem *> *colorsCopy = [_availableColors copy];
+    for (OAColorItem *item in colorsCopy)
     {
         if (item.sortedPosition > position)
         {
@@ -492,7 +493,20 @@
 
     [self regenerateSortedPositionAfter:-1 increment:YES];
     OAColorItem *colorItem = [[OAColorItem alloc] initWithHexColor:newHexColor];
-    [_availableColors insertObject:colorItem atIndex:_defaultColorValues.count];
+    
+    NSUInteger indexToInsert = _defaultColorValues.count;
+    
+    if (indexToInsert <= _availableColors.count)
+    {
+        [_availableColors insertObject:colorItem atIndex:indexToInsert];
+    }
+    else
+    {
+        NSLog(@"[WARNING] addNewSelectedColor: index %lu is out of bounds for _availableColors.count = %lu, appending to end",
+              (unsigned long)indexToInsert,
+              (unsigned long)_availableColors.count);
+        [_availableColors addObject:colorItem];
+    }
     colorItem.sortedPosition = 0;
     [colorItem generateId];
     return colorItem;

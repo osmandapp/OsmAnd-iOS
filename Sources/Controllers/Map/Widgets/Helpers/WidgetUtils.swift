@@ -6,7 +6,8 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-final class WidgetUtils {
+@objcMembers
+final class WidgetUtils: NSObject {
     
     static func reorderWidgets(orderedWidgetPages: [[String]],
                                panel: WidgetsPanel,
@@ -330,5 +331,25 @@ extension WidgetUtils {
     
     private static func getNewNextPageIndex(pages: [Int]) -> Int {
         pages.max() ?? 0
+    }
+}
+
+extension WidgetUtils {
+    static func applyMostFrequentStyleForPagedWidgets(appMode: OAApplicationMode,
+                                                      filterModes: Int,
+                                                      panels: [WidgetsPanel] = [WidgetsPanel.topPanel, WidgetsPanel.bottomPanel]) {
+        for panel in panels {
+            let pagedWidgets: [[MapWidgetInfo]] = OAMapWidgetRegistry.sharedInstance()
+                .getPagedWidgets(forPanel: appMode,
+                                 panel: panel,
+                                 filterModes: filterModes)
+                .compactMap { $0.array as? [MapWidgetInfo] }
+            
+            for pageWidgets in pagedWidgets {
+                let textWidgets = pageWidgets.compactMap { $0.widget as? OATextInfoWidget }
+                guard textWidgets.count > 1 else { continue }
+                textWidgets.updateWithMostFrequentStyle(with: appMode)
+            }
+        }
     }
 }

@@ -204,7 +204,7 @@
 "osm_edit_close_note" = "OSM ᱠᱷᱟᱴᱚ ᱚᱞ ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
 "change_folder" = "ᱯᱚᱴᱚᱢ ᱵᱚᱫᱚᱞ ᱢᱮ";
 "restore_from_file" = "ᱨᱮᱫ ᱠᱷᱚᱱ ᱫᱚᱦᱲᱟ ᱡᱚᱜᱟᱣ ᱢᱮ";
-"delete_history_items" = "%@ ᱱᱟᱜᱟᱢ ᱡᱤᱱᱤᱥ ᱠᱚ ᱢᱮᱴᱟᱣ ᱢᱟ\?";
+"delete_history_items" = "%@ ᱱᱟᱜᱟᱢ ᱡᱤᱱᱤᱥ ᱠᱚ ᱢᱮᱴᱟᱣ ᱢᱟ?";
 "map_magnifier" = "ᱱᱚᱠᱥᱟ ᱢᱟᱨᱟᱝ ᱨᱮᱱᱟᱜ";
 "reorder_profiles" = "ᱢᱚᱦᱲᱟ ᱞᱤᱥᱴᱤ ᱥᱟᱯᱲᱟᱣ ᱢᱮ";
 "sign_in_with_open_street_map" = "OpenStreetMap ᱥᱟᱣᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ";
@@ -539,3 +539,4 @@
 "poi_filter_fuel" = "ᱥᱩᱱᱩᱢ";
 "map_widget_distance" = "ᱥᱟᱺᱜᱤᱧ";
 "default_appearance" = "ᱢᱩᱞ ᱧᱮᱞᱚᱜᱟᱜ";
+"shared_string_other" = "ᱮᱴᱟᱜᱼᱟ";

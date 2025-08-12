@@ -180,9 +180,11 @@
                 <outlet property="textCustomMarginTopStackView" destination="kKL-Xr-Rbt" id="8b7-n3-JO3"/>
                 <outlet property="textStackView" destination="cg3-NR-OYx" id="HmV-rs-mNc"/>
                 <outlet property="titleLabel" destination="f1L-rN-XiG" id="buz-tl-eCo"/>
+                <outlet property="titleWidthConstraint" destination="8qC-Rq-OXb" id="H77-qb-Mhd"/>
                 <outlet property="topContentSpaceView" destination="oBc-Dx-kEA" id="Hls-Re-f9U"/>
                 <outlet property="valueLabel" destination="32H-RA-OLd" id="Fcs-Xj-qQc"/>
                 <outlet property="valueStackView" destination="68V-3N-ZFk" id="vmm-Oc-kZp"/>
+                <outlet property="valueWidthConstraint" destination="de9-fR-zct" id="Sln-9S-CgV"/>
             </connections>
             <point key="canvasLocation" x="88" y="27"/>
         </tableViewCell>

@@ -24,6 +24,7 @@
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 #import "OAModel3dHelper+cpp.h"
+#import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -907,25 +908,63 @@ typedef enum {
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    OAMapRendererView *mapView = self.mapView;
     CLLocation* myLocation = _lastLocation;
-    if (myLocation)
+    if (!myLocation)
+        return;
+    
+    if ([self.mapViewController getMapZoom] >= 3 && !excludeUntouchableObjects)
     {
-        CGPoint myLocationScreen;
-        OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude));
-        [mapView convert:&myLocationI toScreen:&myLocationScreen];
-        myLocationScreen.x *= mapView.contentScaleFactor;
-        myLocationScreen.y *= mapView.contentScaleFactor;
+        CGPoint point = result.point;
+        int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+        if (touchPolygon31 == OsmAnd::AreaI())
+            return;
         
-        if (fabs(myLocationScreen.x - touchPoint.x) < kDefaultSearchRadiusOnMap && fabs(myLocationScreen.y - touchPoint.y) < kDefaultSearchRadiusOnMap)
-        {
-            OATargetPoint *targetPoint = [self getTargetPoint:myLocation];
-            if (![found containsObject:targetPoint])
-                [found addObject:targetPoint];
-        }
+        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:myLocation.coordinate.latitude lon:myLocation.coordinate.longitude polygon31:touchPolygon31];
+        if (shouldAdd)
+            [result collect:myLocation provider:self];
     }
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OATargetPoint.class])
+    {
+        OATargetPoint *targetPoint = (OATargetPoint *)obj;
+        return  [[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude];
+    }
+    else
+    {
+        return _lastLocation;
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    return [[OAPointDescription alloc] initWithType:POINT_TYPE_MY_LOCATION name:OALocalizedString(@"my_location")];
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 @end

@@ -99,7 +99,7 @@
     
     auto locale = std::string([lang UTF8String]);
     BOOL transliterate = settings.settingMapLanguageTranslit.get;
-    NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];;
+    NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
     NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
     NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];
     return [OARoutingHelperUtils formatStreetName:nm ref:includeRef ? rf : nil destination:dn towards:@"»"];

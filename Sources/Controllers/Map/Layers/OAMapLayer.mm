@@ -118,6 +118,30 @@
     return CLLocationCoordinate2DMake(lat, lon);
 }
 
+- (int) getScaledTouchRadius:(int)radiusPoi
+{
+    double textSize = [[OAAppSettings.sharedManager textSize] get];
+    if (textSize < 1)
+        textSize = 1;
+    return ((int) textSize * radiusPoi);
+}
+
+- (int) getDefaultRadiusPoi
+{
+    int r;
+    double zoom = self.mapView.zoom;
+    if (zoom <= 15) {
+        r = 10;
+    } else if (zoom <= 16) {
+        r = 14;
+    } else if (zoom <= 17) {
+        r = 16;
+    } else {
+        r = 18;
+    }
+    return (int) (r * self.mapView.displayDensityFactor);
+}
+
 - (int) pointsOrder
 {
     return _pointsOrder != 0 ? _pointsOrder : _baseOrder;

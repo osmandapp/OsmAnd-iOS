@@ -94,8 +94,16 @@
 
 - (void)main
 {
-    __strong id<OAOnDownloadFileListener> listener = _onDownloadFileListener;
-    _error = [OABackupHelper.sharedInstance downloadFile:_filePath remoteFile:_remoteFile listener:listener];
+    @try
+    {
+        __strong id<OAOnDownloadFileListener> listener = _onDownloadFileListener;
+        _error = [OABackupHelper.sharedInstance downloadFile:_filePath remoteFile:_remoteFile listener:listener];
+    }
+    @catch (NSException *exception)
+    {
+        _error = exception.reason;
+        NSLog(@"Error in OAFileDownloadTask.main(): %@", exception.reason);
+    }
 }
 
 @end

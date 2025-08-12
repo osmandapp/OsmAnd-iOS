@@ -971,6 +971,7 @@ static const NSInteger kColorsSection = 1;
         [weakSelf selectColorType:OAColoringType.ALTITUDE];
     }];
     altitudeAction.state = [_selectedItem.coloringType isAltitude] ? UIMenuElementStateOn : UIMenuElementStateOff;
+    altitudeAction.attributes = [self shouldAvailableItem:OAColoringType.ALTITUDE] ? 0 : UIMenuElementAttributesDisabled;
     
     UIAction *speedAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_speed", nil)
                                                 image:nil
@@ -979,6 +980,7 @@ static const NSInteger kColorsSection = 1;
         [weakSelf selectColorType:OAColoringType.SPEED];
     }];
     speedAction.state = [_selectedItem.coloringType isSpeed] ? UIMenuElementStateOn : UIMenuElementStateOff;
+    speedAction.attributes = [self shouldAvailableItem:OAColoringType.SPEED] ? 0 : UIMenuElementAttributesDisabled;
     
     UIAction *slopeAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope", nil)
                                                 image:nil
@@ -987,6 +989,7 @@ static const NSInteger kColorsSection = 1;
         [weakSelf selectColorType:OAColoringType.SLOPE];
     }];
     slopeAction.state = [_selectedItem.coloringType isSlope] ? UIMenuElementStateOn : UIMenuElementStateOff;
+    slopeAction.attributes = [self shouldAvailableItem:OAColoringType.SLOPE] ? 0 : UIMenuElementAttributesDisabled;
 
     NSMutableArray<UIAction *> *proColorActions = [NSMutableArray array];
     for (NSString *attribute in OASColoringType.routeStatisticsAttributesStrings)
@@ -1028,8 +1031,27 @@ static const NSInteger kColorsSection = 1;
     }];
     
     action.state = isRouteInfoAttribute && [_selectedRouteAttributesString isEqualToString:selectedString] ? UIMenuElementStateOn : UIMenuElementStateOff;
+    action.attributes = [self shouldAvailableItem:OAColoringType.ATTRIBUTE attributeName:selectedString] ? 0 : UIMenuElementAttributesDisabled;
 
     return action;
+}
+
+- (BOOL)shouldAvailableItem:(OAColoringType *)type
+{
+    return [self shouldAvailableItem:type attributeName:nil];
+}
+
+- (BOOL)shouldAvailableItem:(OAColoringType *)type attributeName:(NSString *)attributeName
+{
+    for (OATrackAppearanceItem *item in _availableColoringTypes)
+    {
+        if (![item.coloringType.name isEqualToString:type.name])
+            continue;
+        
+        if (![item.coloringType isRouteInfoAttribute] || [item.attrName isEqualToString:attributeName])
+            return item.isEnabled;
+    }
+    return NO;
 }
 
 - (UIMenu *)createChevronMenu:(NSString *)title
@@ -1640,7 +1662,11 @@ static const NSInteger kColorsSection = 1;
 
 - (void)configureGPXWith:(OASGpxFile *)gpxFile
 {
-    [gpxFile setWidthWidth:self.gpx.width];
+    if (self.gpx.width.length > 0)
+    {
+        [gpxFile setWidthWidth:self.gpx.width];
+    }
+    
     [gpxFile setShowArrowsShowArrows:self.gpx.showArrows];
     [gpxFile setShowStartFinishShowStartFinish:self.gpx.showStartFinish];
     // setVerticalExaggerationScale -> setAdditionalExaggerationAdditionalExaggeration (SharedLib)
@@ -1649,13 +1675,24 @@ static const NSInteger kColorsSection = 1;
     [gpxFile set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)self.gpx.visualization3dByType]];
     [gpxFile set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)_backupGpxItem.visualization3dWallColorType]];
     [gpxFile set3DLinePositionTypeTrackLinePositionType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)self.gpx.visualization3dPositionType]];
-    [gpxFile setColoringTypeColoringType:self.gpx.coloringType];
-    OASInt *color = [[OASInt alloc] initWithInt:(int)self.gpx.color];
-    [gpxFile setColorColor:color];
+    if (self.gpx.coloringType.length > 0)
+    {
+        [gpxFile setColoringTypeColoringType:self.gpx.coloringType];
+    }
+   
+    if (self.gpx.color != 0)
+    {
+        OASInt *color = [[OASInt alloc] initWithInt:(int)self.gpx.color];
+        [gpxFile setColorColor:color];
+    }
     
     [gpxFile setSplitIntervalSplitInterval:self.gpx.splitInterval];
     [gpxFile setSplitTypeGpxSplitType:[OAGPXDatabase splitTypeNameByValue:self.gpx.splitType]];
     [gpxFile setJoinSegmentIsJoinSegment:self.gpx.joinSegments];
+    
+    if (self.gpx.gradientPaletteName && self.gpx.gradientPaletteName.length > 0) {
+        [gpxFile setGradientColorPaletteGradientColorPaletteName:self.gpx.gradientPaletteName];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -1755,7 +1792,6 @@ static const NSInteger kColorsSection = 1;
     {
         OACollectionSingleLineTableViewCell *cell =
             [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-        cell.separatorInset = UIEdgeInsetsZero;
         BOOL isRightActionButtonVisible = [self isSelectedTypeSolid];
         [cell rightActionButtonVisibility:isRightActionButtonVisible];
         [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil
@@ -1963,6 +1999,18 @@ static const NSInteger kColorsSection = 1;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell leftIconVisibility:NO];
             cell.leftIconView.image = nil;
+            if ([cellData.key isEqualToString:@"color_title"])
+            {
+                if (![self isSelectedTypeAttribute])
+                {
+                    [cell setCustomLeftSeparatorInset:YES];
+                    cell.separatorInset = UIEdgeInsetsMake(0., tableView.bounds.size.width, 0., 0.);
+                }
+                else
+                {
+                    [cell setCustomLeftSeparatorInset:NO];
+                }
+            }
             [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
             cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
@@ -2623,7 +2671,7 @@ static const NSInteger kColorsSection = 1;
         if (![item.coloringType.name isEqualToString:selectedColoringType.name])
             continue;
         
-        if (![item.coloringType.name isEqualToString:OAColoringType.ATTRIBUTE.name] ||
+        if (![item.coloringType isRouteInfoAttribute] ||
             [item.attrName isEqualToString:_selectedRouteAttributesString])
         {
             selectedItem = item;

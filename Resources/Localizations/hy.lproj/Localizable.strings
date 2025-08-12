@@ -1237,3 +1237,6 @@
 "shared_string_items" = "Տարրեր";
 "poi_filter_fuel" = "Լիցքավորման կետեր";
 "shared_string_pause" = "Դադար";
+"trace_rendering_descr" = "Ցուցադրում մատուցման կատարողականը։";
+"trace_rendering" = "Տրամադրել տեղեկություն խնդիրների վերաբերյալ";
+"average" = "Միջին";

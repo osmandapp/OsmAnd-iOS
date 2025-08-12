@@ -45,7 +45,7 @@
     _oldPoints = [NSMutableArray arrayWithArray:editingCtx.getPoints];
     _oldRoadSegmentData = [NSMutableDictionary dictionaryWithDictionary:editingCtx.roadSegmentData];
     _newPoints = [NSMutableArray arrayWithCapacity:_oldPoints.count];
-    _newRoadSegmentData = [NSMutableDictionary dictionaryWithDictionary:_oldRoadSegmentData];;
+    _newRoadSegmentData = [NSMutableDictionary dictionaryWithDictionary:_oldRoadSegmentData];
     if (_oldPoints.count > 0)
     {
         [_newPoints addObjectsFromArray:_oldPoints];

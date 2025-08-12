@@ -180,7 +180,7 @@
     {
         [UIView performWithoutAnimation:^{
             [cell.btnPrice removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-            cell.btnPrice.tag = indexPath.section << 10 | indexPath.row;;
+            cell.btnPrice.tag = indexPath.section << 10 | indexPath.row;
             [cell.btnPrice addTarget:self action:@selector(buttonPurchaseClicked:) forControlEvents:UIControlEventTouchUpInside];
             
             BOOL purchased = NO;

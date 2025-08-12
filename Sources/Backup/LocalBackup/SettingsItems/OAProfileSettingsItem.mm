@@ -221,9 +221,165 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         }
         else
         {
-            [app.data setSettingValue:value forKey:key mode:_appMode];
+            __weak __typeof(self) weakSelf = self;
+            [app.data setSettingValue:value forKey:key mode:_appMode notHandled:^(NSString *value, NSString *key, OAApplicationMode *mode) {
+                [weakSelf configureStringValue:value forKey:key mode:_appMode];
+            }];
         }
     }
+}
+
+- (void)configureStringValue:(NSString *)strValue
+                      forKey:(NSString *)key
+                        mode:(OAApplicationMode *)mode
+{
+    NSString *modeKey = [NSString stringWithFormat:@"%@_%@", key, mode.stringKey];
+
+    if (strValue.length == 0)
+    {
+        NSLog(@"[WARNING] Empty value for key: %@", modeKey);
+        return;
+    }
+    
+    NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+
+    NSString *lowerStr = strValue.lowercaseString;
+    
+    // === Bool ===
+    if ([lowerStr isEqualToString:@"true"]) {
+        [defaults setBool:YES forKey:modeKey];
+        return;
+    }
+    if ([lowerStr isEqualToString:@"false"]) {
+        [defaults setBool:NO forKey:modeKey];
+        return;
+    }
+
+    // === Integer ===
+    NSInteger intValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:strValue];
+    if ([scanner scanInteger:&intValue] && scanner.isAtEnd) {
+        [defaults setInteger:intValue forKey:modeKey];
+        return;
+    }
+
+    // === Double ===
+    double doubleValue = 0.0;
+    scanner = [NSScanner scannerWithString:strValue];
+    if ([scanner scanDouble:&doubleValue] && scanner.isAtEnd) {
+        [defaults setDouble:doubleValue forKey:modeKey];
+        return;
+    }
+
+    // === Nested Array ("a,b;c,d") ===
+    if ([strValue containsString:@";"]) {
+        NSMutableArray<NSArray<NSString *> *> *nestedArray = [NSMutableArray array];
+        for (NSString *subStr in [strValue componentsSeparatedByString:@";"]) {
+            if (subStr.length > 0) {
+                [nestedArray addObject:[subStr componentsSeparatedByString:@","]];
+            }
+        }
+        [defaults setObject:nestedArray forKey:modeKey];
+        return;
+    }
+
+    // === Flat Array ("a,b,c") ===
+    if ([strValue containsString:@","]) {
+        NSArray<NSString *> *array = [strValue componentsSeparatedByString:@","];
+        [defaults setObject:array forKey:modeKey];
+        return;
+    }
+
+    // === Preferences ===
+    OACommonPreference *preference = [self findPreferenceForImportedKey:modeKey];
+    if (preference && !preference.global)
+    {
+        if ([preference isKindOfClass:[OACommonUnit class]])
+        {
+            NSUnit *unit = [NSUnit unitFromString:strValue];
+            if (unit)
+            {
+                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit
+                                                    requiringSecureCoding:NO
+                                                                    error:nil];
+                [defaults setObject:data forKey:modeKey];
+
+                [[NSNotificationQueue defaultQueue] enqueueNotification:
+                 [NSNotification notificationWithName:kNotificationSetProfileSetting
+                                               object:self
+                                             userInfo:nil]
+                                                           postingStyle:NSPostASAP
+                                                           coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender)
+                                                               forModes:nil];
+            }
+            else
+            {
+                NSLog(@"[WARNING] Invalid UNIT for %@", modeKey);
+            }
+        } else if ([preference isMemberOfClass:[OACommonDownloadMode class]])
+        {
+            OACommonDownloadMode *commonDownloadMode = (OACommonDownloadMode *)preference;
+            if (commonDownloadMode)
+            {
+                OADownloadMode *value = [commonDownloadMode valueFromString:strValue appMode:mode];
+                NSUInteger idx = [commonDownloadMode.values indexOfObject:value];
+                [defaults setInteger:(idx != NSNotFound ? idx : 0) forKey:modeKey];
+            }
+        } else if ([preference isMemberOfClass:[OACommonColoringType class]])
+        {
+            OACommonColoringType *commonColoringType = (OACommonColoringType *)preference;
+            if (commonColoringType)
+            {
+                OAColoringType *value = [commonColoringType valueFromString:strValue appMode:mode];
+                NSUInteger idx = [commonColoringType.values indexOfObject:value];
+                [defaults setInteger:(idx != NSNotFound ? idx : 0) forKey:modeKey];
+            }
+        }
+        else if ([preference isMemberOfClass:[OACommonString class]])
+        {
+            NSNumber *value = [preference valueFromString:strValue appMode:mode];
+            if (value)
+                [defaults setObject:value.stringValue forKey:modeKey];
+            else
+                NSLog(@"[WARNING] Invalid value for preference %@", modeKey);
+        }
+        else if ([preference isMemberOfClass:[OACommonInteger class]])
+        {
+            NSLog(@"[WARNING] Enum not implemented for %@", modeKey);
+        }
+        else
+        {
+            NSNumber *value = [preference valueFromString:strValue appMode:mode];
+            if (value)
+                [defaults setInteger:value.integerValue forKey:modeKey];
+            else
+                NSLog(@"[WARNING] Invalid value for preference %@", modeKey);
+        }
+    }
+    else
+        NSLog(@"[WARNING] No preference found for %@", modeKey);
+}
+
+- (nullable OACommonPreference *)findPreferenceForImportedKey:(NSString *)key {
+    NSString *formattedKey = [key componentsSeparatedByString:@"__"].firstObject;
+    
+    NSMapTable<NSString *, OACommonPreference *> *registered = [OAAppSettings.sharedManager getRegisteredPreferences];
+    
+    OACommonPreference *pref = [registered objectForKey:formattedKey];
+    if (pref)
+        return pref;
+    
+    NSArray *keys = registered.keyEnumerator.allObjects;
+    for (NSString *registeredKey in keys)
+    {
+        if ([formattedKey hasPrefix:registeredKey])
+            return [registered objectForKey:registeredKey];
+    }
+    // NOTE: during import, the CommonWidgetSizeStyle preference may be missing, so we will create a new instance
+    if ([key hasPrefix:kSizeStylePref])
+        return [OACommonWidgetSizeStyle withKey:kSizeStylePref defValue:EOAWidgetSizeStyleMedium];
+    
+    return nil;
 }
 
 - (void) renameProfile
@@ -297,59 +453,6 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
     }
     return YES;
 }
-
-//public void applyAdditionalPrefs() {
-//    if (additionalPrefsJson != null) {
-//        updatePluginResPrefs();
-//
-//        SettingsItemReader reader = getReader();
-//        if (reader instanceof OsmandSettingsItemReader) {
-//            ((OsmandSettingsItemReader) reader).readPreferencesFromJson(additionalPrefsJson);
-//        }
-//    }
-//}
-//
-//private void updatePluginResPrefs() {
-//    String pluginId = getPluginId();
-//    if (Algorithms.isEmpty(pluginId)) {
-//        return;
-//    }
-//    OsmandPlugin plugin = OsmandPlugin.getPlugin(pluginId);
-//    if (plugin instanceof CustomOsmandPlugin) {
-//        CustomOsmandPlugin customPlugin = (CustomOsmandPlugin) plugin;
-//        String resDirPath = IndexConstants.PLUGINS_DIR + pluginId + "/" + customPlugin.getResourceDirName();
-//
-//        for (Iterator<String> it = additionalPrefsJson.keys(); it.hasNext(); ) {
-//            try {
-//                String prefId = it.next();
-//                Object value = additionalPrefsJson.get(prefId);
-//                if (value instanceof JSONObject) {
-//                    JSONObject jsonObject = (JSONObject) value;
-//                    for (Iterator<String> iterator = jsonObject.keys(); iterator.hasNext(); ) {
-//                        String key = iterator.next();
-//                        Object val = jsonObject.get(key);
-//                        if (val instanceof String) {
-//                            val = checkPluginResPath((String) val, resDirPath);
-//                        }
-//                        jsonObject.put(key, val);
-//                    }
-//                } else if (value instanceof String) {
-//                    value = checkPluginResPath((String) value, resDirPath);
-//                    additionalPrefsJson.put(prefId, value);
-//                }
-//            } catch (JSONException e) {
-//                LOG.error(e);
-//            }
-//        }
-//    }
-//}
-//
-//private String checkPluginResPath(String path, String resDirPath) {
-//    if (path.startsWith("@")) {
-//        return resDirPath + "/" + path.substring(1);
-//    }
-//    return path;
-//}
 
 - (void) writeToJson:(id)json
 {

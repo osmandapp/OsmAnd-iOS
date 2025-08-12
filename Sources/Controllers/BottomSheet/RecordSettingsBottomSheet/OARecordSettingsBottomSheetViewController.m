@@ -88,7 +88,7 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.layoutMargins = UIEdgeInsetsMake(0, 20, 0, 20);
     self.buttonsView.layoutMargins = UIEdgeInsetsMake(0, 20, 0, 20);
-    self.buttonsSectionDividerView.backgroundColor = UIColor.clearColor;;
+    self.buttonsSectionDividerView.backgroundColor = UIColor.clearColor;
 
     self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
     self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];

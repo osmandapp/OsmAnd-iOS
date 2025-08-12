@@ -20,6 +20,7 @@
 #import "OALocationParser.h"
 #import "OAAbbreviations.h"
 #import "OAMapUtils.h"
+#import "OAArabicNormalizer.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -274,7 +275,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
             break;
         }
     }
-    return [self createNewSearchPhrase:settings fullText:text foundWords:foundWords textToSearch:textToSearch];;
+    return [self createNewSearchPhrase:settings fullText:text foundWords:foundWords textToSearch:textToSearch];
 }
 
 - (NSString *) normalizeSearchText:(NSString *)s
@@ -407,6 +408,9 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
                 }
                 break;
             }
+        }
+        if ([OAArabicNormalizer isSpecialArabic:_mainUnknownWordToSearch]) {
+            _mainUnknownWordToSearch = [OAArabicNormalizer normalize:_mainUnknownWordToSearch] ?: _mainUnknownWordToSearch;
         }
     }
 }

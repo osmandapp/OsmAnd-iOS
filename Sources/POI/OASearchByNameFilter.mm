@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAPOIHelper.h"
+#import "OAAmenitySearcher.h"
 #import "OAMapUtils.h"
 #import "OAResultMatcher.h"
 
@@ -52,7 +53,7 @@ static NSString* const FILTER_ID = BY_NAME_FILTER_ID;
     if ([self.filterByName trim].length > 0)
     {
         BOOL __block elimit = NO;
-        result = [OAPOIHelper findPOIsByName:self.filterByName topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:[[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *object) {
+        result = [OAAmenitySearcher findPOIsByName:self.filterByName topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:[[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *object) {
 
             if (limit != -1 && currentSearchResult.count > limit)
                 elimit = YES;

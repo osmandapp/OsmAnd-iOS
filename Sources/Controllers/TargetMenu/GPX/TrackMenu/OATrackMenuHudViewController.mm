@@ -196,7 +196,7 @@
                 _reopeningState.routeKey = routeKey;
             _isNewRoute = _reopeningState.routeKey != nil
                 && [[self.doc.path stringByDeletingLastPathComponent].lastPathComponent isEqualToString:@"Temp"];
-            _routeKey = _reopeningState.routeKey ?: [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
+            _routeKey = _reopeningState.routeKey ?: [OARouteKey fromGpxFile:self.doc];
             if (_routeKey && !_reopeningState.trackIcon)
             {
                 OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:_routeKey];
@@ -599,7 +599,7 @@
 
 - (BOOL)adjustCentering
 {
-    return ![self openedFromMap] && !_wasFirstOpening;
+    return (![self openedFromMap] && !_wasFirstOpening) || (_reopeningState.forceAdjustCentering);
 }
 
 - (BOOL)stopChangingHeight:(UIView *)view
@@ -1619,7 +1619,7 @@
     self.gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
     self.gpx.dataItem = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.path];
 
-    _routeKey = [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
+    _routeKey = [OARouteKey fromGpxFile:self.doc];
     _isNewRoute = NO;
     [self.mapViewController hideTempGpxTrack];
     self.isShown = NO;
@@ -1875,7 +1875,7 @@
                 NSString *newNameToChange = newName;
                 if ([newName hasSuffix:fileExtension])
                 {
-                    newNameToChange = [newName substringToIndex:newName.length - fileExtension.length];;
+                    newNameToChange = [newName substringToIndex:newName.length - fileExtension.length];
                 }
                 __weak __typeof(self) weakSelf = self;
                 [weakSelf.gpxUIHelper renameTrack:weakSelf.gpx.dataItem
@@ -2162,7 +2162,7 @@
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];;
+            cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         outCell = cell;
     }

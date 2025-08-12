@@ -11,7 +11,7 @@
 
 @interface OARenderedObject : OAMapObject
 
-@property (nonatomic) OrderedDictionary<NSString *, NSString *> *tags;
+@property (nonatomic) MutableOrderedDictionary<NSString *, NSString *> *tags;
 
 @property (nonatomic) NSInteger bboxLeft;
 @property (nonatomic) NSInteger bboxTop;
@@ -24,7 +24,7 @@
 @property (nonatomic) BOOL visible;
 @property (nonatomic) BOOL drawOnPath;
 
-@property (nonatomic) CLLocationCoordinate2D labelLatLon;
+@property (nonatomic) CLLocation *labelLatLon;
 @property (nonatomic) NSInteger labelX;
 @property (nonatomic) NSInteger labelY;
 

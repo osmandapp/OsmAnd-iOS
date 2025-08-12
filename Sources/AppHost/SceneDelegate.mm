@@ -283,6 +283,7 @@
     NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
     BOOL hasNavigationDestination = NO;
     NSString *startLatLonParam;
+    NSString *intermediatePointsParam;
     NSString *endLatLonParam;
     NSString *appModeKeyParam;
     for (NSURLQueryItem *queryItem in queryItems)
@@ -299,6 +300,10 @@
         else if ([queryItem.name.lowercaseString isEqualToString:@"profile"])
         {
             appModeKeyParam = queryItem.value;
+        }
+        else if ([queryItem.name.lowercaseString isEqualToString:@"via"])
+        {
+            intermediatePointsParam = queryItem.value;
         }
     }
 
@@ -324,8 +329,10 @@
         OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:appModeKeyParam def:nil];
         if (appModeKeyParam && appModeKeyParam.length > 0 && !appMode)
             OALog(@"App mode with specified key not available, using default navigation app mode");
+        
+        NSArray<CLLocation *> *points = [self parseIntermediatePoints:intermediatePointsParam];
 
-        [_rootViewController.mapPanel buildRoute:startLatLon end:endLatLon appMode:appMode];
+        [_rootViewController.mapPanel buildRoute:startLatLon end:endLatLon appMode:appMode points:points];
         return YES;
     }
     return NO;
@@ -471,6 +478,42 @@
         _rootViewController.token = tokenParam;
     }
     return YES;
+}
+
+- (nullable NSArray<CLLocation *> *)parseIntermediatePoints:(nullable NSString *)parameter
+{
+    if (parameter.length == 0)
+        return nil;
+    
+    NSArray<NSString *> *params = [parameter componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",;"]];
+    
+    NSUInteger count = params.count;
+    if (count < 2 || count % 2 != 0)
+    {
+        NSLog(@"Malformed OsmAnd navigation URL: corrupted intermediate points");
+        return nil;
+    }
+    
+    NSMutableArray<CLLocation *> *points = [NSMutableArray arrayWithCapacity:count / 2];
+    
+    for (NSUInteger i = 0; i < count; i += 2)
+    {
+        double lat = params[i].doubleValue;
+        double lon = params[i + 1].doubleValue;
+        
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(lat, lon);
+        if (!CLLocationCoordinate2DIsValid(coordinate))
+        {
+            NSLog(@"Malformed OsmAnd navigation URL: corrupted intermediate point (%@, %@)",
+                  params[i], params[i + 1]);
+            continue;
+        }
+        
+        [points addObject:[[CLLocation alloc] initWithLatitude:coordinate.latitude
+                                                     longitude:coordinate.longitude]];
+    }
+    
+    return points.count > 0 ? points : nil;
 }
 
 - (void)moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title

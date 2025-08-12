@@ -47,7 +47,7 @@ final class RenderedObjectViewController: OAPOIViewController {
     }
     
     private func searchAmenity() async throws -> OAPOI? {
-        OAPOIHelper.findPOI(byOsmId: ObfConstants.getOsmObjectId(renderedObject), lat: poi.latitude, lon: poi.longitude)
+        OAAmenitySearcher.findPOI(byOsmId: ObfConstants.getOsmObjectId(renderedObject), lat: poi.latitude, lon: poi.longitude)
     }
     
     override func getTypeStr() -> String? {

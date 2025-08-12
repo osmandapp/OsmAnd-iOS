@@ -17,6 +17,8 @@
 #import "Localization.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
+#import "OAAmenitySearcher.h"
+#import "OAAmenitySearcher+cpp.h"
 #import "OAPOI.h"
 #import "OAPOIType.h"
 #import "OALocationServices.h"
@@ -557,7 +559,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
     while (osmwiki.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
     {
-        osmwiki = [[OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil radius:radius] mutableCopy];
+        osmwiki = [[OAAmenitySearcher findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil radius:radius] mutableCopy];
         [osmwiki removeObject:poi];
 
         if (![wikiPlugin isShowAllLanguages] && [wikiPlugin hasLanguagesFilter])
@@ -1074,7 +1076,7 @@ static const CGFloat kTextMaxHeight = 150.0;
         cell.backgroundColor = _contentColor;
         cell.webView.backgroundColor = _contentColor;
         cell.iconView.image = info.icon;
-        [cell.webView loadHTMLString:[kViewPortHtml stringByAppendingString:info.text]  baseURL:nil];
+        [cell.webView loadHTMLString:[kViewPortHtml stringByAppendingString:info.text ?: @""]  baseURL:nil];
         
         return cell;
     }

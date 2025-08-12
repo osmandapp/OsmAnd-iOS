@@ -2027,7 +2027,7 @@
 "duration_moment_ago" = "לפני רגע קט";
 "help_article_navigation_routing_ski_routing_name" = "ניווט לסקי";
 "shared_string_expires" = "תפוגה";
-"delete_history_items" = "למחוק %@ פריטי היסטוריה\?";
+"delete_history_items" = "למחוק %@ פריטי היסטוריה?";
 "help_article_navigation_guidance_name" = "הנחיות ניווט";
 "help_article_navigation_routing_train_routing_name" = "ניווט לרכבת";
 "shared_string_format" = "עיצוב";
@@ -2283,3 +2283,11 @@
 "poi_filter_fuel" = "דלק";
 "online_photos" = "תמונות מקוונות";
 "shared_string_items" = "פריטים";
+"obd_how_to_connect" = "איך להתחבר:";
+"obd_vehicle_info" = "פרטי כלי הרכב";
+"trace_rendering" = "נתוני ניפוי שגיאות של ביצועים";
+"trace_rendering_descr" = "הצגת ביצועי עיבוד תמונה וניווט.";
+"shared_string_other" = "אחר";
+"shared_string_normal" = "רגיל";
+"average" = "ממוצע";
+"shared_string_large" = "גדול";

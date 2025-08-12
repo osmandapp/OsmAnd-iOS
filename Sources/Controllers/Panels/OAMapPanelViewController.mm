@@ -114,6 +114,7 @@
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
 #import "OASelectedGPXHelper.h"
+#import "OAContextMenuLayer+cpp.h"
 
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
@@ -199,7 +200,6 @@ typedef enum
     BOOL _isNewContextMenuStillEnabled;
 
     MBProgressHUD *_gpxProgress;
-    OANetworkRouteSelectionTask *_gpxNetworkTask;
 }
 
 - (instancetype) init
@@ -1335,32 +1335,52 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
+    [self showContextMenuWithPoints:targetPoints selectedObjects:nil touchPointLatLon:nil];
+}
+
+- (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(CLLocation *)touchPointLatLon
+{
     if (_activeTargetType == OATargetGPX && _scrollableHudViewController)
         [_scrollableHudViewController forceHide];
 
     if (self.isNewContextMenuDisabled)
         return;
+    
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OAContextMenuLayer *contextLayer = mapPanel.mapViewController.mapLayers.contextMenuLayer;
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
 
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
+    NSMutableArray<SelectedMapObject *> *validSelectedObjects = [NSMutableArray array];
         
     if (_activeTargetType == OATargetRouteIntermediateSelection && targetPoints.count > 1)
     {
         [validPoints addObjectsFromArray:targetPoints];
+        if (selectedObjects)
+            [validSelectedObjects addObjectsFromArray:selectedObjects];
     }
     else
     {
-        for (OATargetPoint *targetPoint in targetPoints)
+        for (int i = 0; i < targetPoints.count; i++)
         {
+            OATargetPoint *targetPoint = targetPoints[i];
             if ([self processTargetPoint:targetPoint])
+            {
                 [validPoints addObject:targetPoint];
+                if (selectedObjects)
+                    [validSelectedObjects addObject:selectedObjects[i]];
+            }
         }
     }
     
     if (validPoints.count == 0)
     {
         return;
+    }
+    if (selectedObjects.count == 1)
+    {
+        [contextLayer showContextMenu:touchPointLatLon object:selectedObjects[0]];
     }
     else if (validPoints.count == 1)
     {
@@ -1371,13 +1391,16 @@ typedef enum
         for (OATargetPoint *targetPoint in validPoints)
             [self applyTargetPointController:targetPoint];
 
-        [self showMultiContextMenu:validPoints];
+        if (validSelectedObjects && validSelectedObjects.count != validPoints.count)
+            validSelectedObjects = nil;
+        
+        [self showMultiContextMenu:touchPointLatLon points:validPoints selectedObjects:validSelectedObjects];
     }
 }
 
-- (void) showMultiContextMenu:(NSArray<OATargetPoint *> *)points
+- (void) showMultiContextMenu:(CLLocation *)touchPointLatLon points:(NSArray<OATargetPoint *> *)points selectedObjects:(NSMutableArray<SelectedMapObject *> *)selectedObjects
 {
-    [self showMultiPointMenu:points onComplete:^{
+    [self showMultiPointMenu:touchPointLatLon points:points selectedObjects:selectedObjects onComplete:^{
         
     }];
 }
@@ -1472,6 +1495,14 @@ typedef enum
     [_gpxProgress addGestureRecognizer:tap];
 }
 
+- (void) showProgress
+{
+    if (!_gpxProgress)
+        [self setupNetworkGpxProgress];
+    
+    [_gpxProgress show:YES];
+}
+
 - (void)hideProgress
 {
     [_gpxProgress hide:YES];
@@ -1481,9 +1512,8 @@ typedef enum
 
 - (void) onCancelNetworkGPX
 {
-    [_gpxNetworkTask setCancelled:YES];
-    _gpxNetworkTask = nil;
-    [self hideProgress];
+    OANetworkRouteSelectionLayer *networkRouteSelectionLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.networkRouteSelectionLayer;
+    [networkRouteSelectionLayer onCancelNetworkGPX];
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint
@@ -1491,15 +1521,24 @@ typedef enum
     if (targetPoint.type == OATargetGPX)
     {
         OASTrackItem *trackItem;
-        if ([targetPoint.targetObj isKindOfClass:[OASGpxDataItem class]]) {
+        if ([targetPoint.targetObj isKindOfClass:[OASGpxDataItem class]])
+        {
             OASGpxDataItem *dataItem = (OASGpxDataItem *)targetPoint.targetObj;
             trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
             trackItem.dataItem = dataItem;
+            trackItem.color;
         }
         else if ([targetPoint.targetObj isKindOfClass:[OASGpxFile class]])
         {
             OASGpxFile *gpxFile = (OASGpxFile *)targetPoint.targetObj;
             trackItem = [[OASTrackItem alloc] initWithGpxFile:gpxFile];
+        }
+        else if ([targetPoint.targetObj isKindOfClass:[OATravelGpx class]])
+        {
+            OATravelGpx *travelGPX = (OATravelGpx *)targetPoint.targetObj;
+            CLLocation *latLon = [[CLLocation alloc] initWithLatitude:travelGPX.lat longitude:travelGPX.lon];
+            [OATravelObfHelper.shared openTrackMenuWithArticle:travelGPX gpxFileName:[travelGPX getGpxFileName] latLon:latLon adjustMapPosition:YES];
+            return;
         }
         if (trackItem)
         {
@@ -1514,50 +1553,13 @@ typedef enum
     }
     else if (targetPoint.type == OATargetNetworkGPX)
     {
-        [self setupNetworkGpxProgress];
-        [_gpxProgress show:YES];
-        __weak OAMapPanelViewController *weakSelf = self;
-        _gpxNetworkTask = [[OANetworkRouteSelectionTask alloc] initWithRouteKey:targetPoint.targetObj area:targetPoint.values[@"area"]];
-        [_gpxNetworkTask execute:^(OASGpxFile *gpxFile) {
-            [weakSelf hideProgress];
-            if (!gpxFile)
-                return;
-
-            OARouteKey *key = (OARouteKey *)targetPoint.targetObj;
-            NSString *name = key.routeKey.getRouteName().toNSString();
-            name = name.length == 0 ? OALocalizedString(@"layer_route") : name;
-            NSString *folderPath = [_app.gpxPath stringByAppendingPathComponent:@"Temp"];
-            NSFileManager *manager = NSFileManager.defaultManager;
-            if (![manager fileExistsAtPath:folderPath])
-                [manager createDirectoryAtPath:folderPath withIntermediateDirectories:NO attributes:nil error:nil];
-            NSString *path = [[folderPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
-            gpxFile.path = path;
-            gpxFile.metadata.name = targetPoint.title;
-            
-            OASRouteActivity *activity = [[OASRouteActivityHelper shared] findActivityByTagTag:key.routeKey.getTag().toNSString()];
-            if (activity)
-                [gpxFile.metadata setRouteActivityActivity:activity];
-            
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFile.path];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-            [weakSelf.mapViewController showTempGpxTrackFromGpxFile:gpxFile];
-            OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-            OASGpxDataItem *gpx = [gpxDb getGPXItem:path];
-            if (!gpx)
-                gpx = [gpxDb addGPXFileToDBIfNeeded:path];
-            OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:file];
-            trackItem.dataItem = gpx;
-
-            OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:targetPoint.location
-                                                                                      openedFromMap:YES];
-            state.trackIcon = targetPoint.icon;
-            [weakSelf openTargetViewWithGPX:trackItem
-                                      items:nil
-                               routeKey:targetPoint.targetObj
-                           trackHudMode:EOATrackMenuHudMode
-                                      state:state
-                                   analysis:nil];
-        }];
+        OANetworkRouteSelectionLayer *networkRouteSelectionLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.networkRouteSelectionLayer;
+        
+        NSArray<NSNumber *> *area31 = targetPoint.values[@"area"];
+        OsmAnd::LatLon topLeft = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[0].integerValue, area31[1].integerValue)];
+        OsmAnd::LatLon bottomRight = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[2].integerValue, area31[3].integerValue)];
+        OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
+        [networkRouteSelectionLayer showMenuAction:@[targetPoint.targetObj, rect]];
     }
     else
     {
@@ -2457,7 +2459,7 @@ typedef enum
     }];
 }
 
-- (void) showMultiPointMenu:(NSArray<OATargetPoint *> *)points onComplete:(void (^)(void))onComplete
+- (void) showMultiPointMenu:(CLLocation *)touchPointLatLon points:(NSArray<OATargetPoint *> *)points selectedObjects:(NSMutableArray<SelectedMapObject *> *)selectedObjects onComplete:(void (^)(void))onComplete
 {
     if (_dashboard)
         [self closeDashboard];
@@ -2475,6 +2477,8 @@ typedef enum
     
     [self.targetMultiMenuView setActiveTargetType:_activeTargetType];
     [self.targetMultiMenuView setTargetPoints:points];
+    [self.targetMultiMenuView setSelectedMapObjects:selectedObjects];
+    [self.targetMultiMenuView setTouchPoint:touchPointLatLon];
     
     [self.view addSubview:self.targetMultiMenuView];
     
@@ -3249,9 +3253,7 @@ typedef enum
     if (gpxFile)
     {
         OASTrkSegment *segment = [gpxFile getGeneralSegment];
-        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment
-            ? [TrackChartHelper getAnalysisFor:segment joinSegments:trackItem.joinSegments]
-            : [gpxFile getAnalysisFileTimestamp:0];
+        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment ? [TrackChartHelper getAnalysisFor:segment joinSegments:trackItem.joinSegments] : [gpxFile getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         if (!segment)
@@ -4007,19 +4009,36 @@ typedef enum
     [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0 animated:NO];
 }
 
-- (void) buildRoute:(CLLocation *)start end:(CLLocation *)end appMode:(OAApplicationMode *)appMode
+- (void)buildRoute:(CLLocation *)start
+               end:(CLLocation *)end
+           appMode:(OAApplicationMode *)appMode
+            points:(NSArray<CLLocation *> *)points
 {
-   if (appMode)
-       [[OARoutingHelper sharedInstance] setAppMode:appMode];
-
-   [[OATargetPointsHelper sharedInstance] navigateToPoint:end updateRoute:YES intermediate:-1];
-   [self.mapActions enterRoutePlanningModeGivenGpx:nil
-                                           appMode:appMode
-                                              path:nil
-                                              from:start
-                                          fromName:nil
-                    useIntermediatePointsByDefault:NO
-                                        showDialog:YES];
+    if (appMode)
+        [[OARoutingHelper sharedInstance] setAppMode:appMode];
+    
+    [[OATargetPointsHelper sharedInstance] navigateToPoint:end updateRoute:YES intermediate:-1];
+    
+    BOOL hasIntermediatePoints = points.count > 0;
+    
+    if (hasIntermediatePoints)
+    {
+        [[OsmAndApp instance].data clearIntermediatePoints];
+        
+        for (CLLocation *point in points)
+        {
+            [[OsmAndApp instance].data insertIntermediatePoint:[OARTargetPoint create:point name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""]] index:(int)[[OsmAndApp instance].data intermediatePoints].count];
+        }
+    }
+    
+    
+    [self.mapActions enterRoutePlanningModeGivenGpx:nil
+                                            appMode:appMode
+                                               path:nil
+                                               from:start
+                                           fromName:nil
+                     useIntermediatePointsByDefault:hasIntermediatePoints
+                                         showDialog:YES];
 }
 
 - (void) onNavigationClick:(BOOL)hasTargets

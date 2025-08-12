@@ -2015,3 +2015,10 @@
 "auto_25_chars_route_tu_kr" = "دور بزنید و به راست برانید";
 "ask_every_time" = "همیشه بپرس";
 "online_photos" = "تصاویر آنلاین";
+"driving_region_uk" = "انگلستان یا مشابه آن";
+"shared_string_large" = "بزرگ";
+"trace_rendering_descr" = "عملکرد رندرگیری را نمایش می‌دهد.";
+"average" = "میانگین";
+"trace_rendering" = "اطلاعات عیب‌یابی رندرگیری";
+"shared_string_other" = "سایر";
+"shared_string_normal" = "عادی";

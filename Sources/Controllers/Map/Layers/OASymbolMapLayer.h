@@ -8,14 +8,12 @@
 
 #import "OAMapLayer.h"
 
-#import <OsmAndCore/TextRasterizer.h>
-
 @interface OASymbolMapLayer : OAMapLayer
 
 @property (nonatomic, readonly) BOOL showCaptions;
-@property (nonatomic, readonly) OsmAnd::TextRasterizer::Style captionStyle;
 @property (nonatomic, readonly) double captionTopSpace;
 
-- (void) updateCaptionStyle;
+- (void)updateCaptionStyle;
+- (float)getNormalCaptionSize;
 
 @end

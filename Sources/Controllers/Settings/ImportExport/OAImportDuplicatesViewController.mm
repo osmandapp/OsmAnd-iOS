@@ -415,7 +415,7 @@
         }
         if (cell)
         {
-            cell.titleView.text = item[@"label"];;
+            cell.titleView.text = item[@"label"];
             cell.activityIndicatorView.hidden = NO;
             [cell.activityIndicatorView startAnimating];
         }

@@ -26,14 +26,14 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTP-2O-fC4">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="0.0"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" name="groupBg"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="z2K-Ka-zv1"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cb8-0r-VeY">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="9"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" name="groupBg"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="9" id="bEJ-bz-fGM"/>
                                         </constraints>
@@ -75,7 +75,7 @@
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="srt-yt-shI">
                                 <rect key="frame" x="0.0" y="39" width="393" height="12"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="groupBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="12" id="5HT-4R-TiN"/>
                                 </constraints>
@@ -103,7 +103,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qjd-Sp-5Ko">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="14"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" name="groupBg"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="14" id="lO0-is-kOv"/>
                                         </constraints>
@@ -113,7 +113,7 @@
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dPz-FR-pOJ">
                                                 <rect key="frame" x="0.0" y="0.0" width="0.0" height="1"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" name="groupBg"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" id="S8O-9z-rpL"/>
                                                 </constraints>
@@ -129,7 +129,7 @@
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UC7-iw-mHb">
                                         <rect key="frame" x="0.0" y="15" width="393" height="9"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" name="groupBg"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="9" id="fDS-fO-Avj"/>
                                         </constraints>
@@ -186,14 +186,14 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DwP-ib-F70">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="9"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" name="groupBg"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="9" id="tUh-U2-X2o"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WUB-aI-9oi">
                                         <rect key="frame" x="0.0" y="9" width="393" height="0.0"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" name="groupBg"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="7QX-O0-SZC"/>
                                         </constraints>
@@ -201,8 +201,10 @@
                                 </subviews>
                             </stackView>
                         </subviews>
+                        <color key="backgroundColor" name="groupBg"/>
                     </stackView>
                 </subviews>
+                <color key="backgroundColor" name="groupBg"/>
                 <constraints>
                     <constraint firstItem="Pde-Gp-UrD" firstAttribute="top" secondItem="Mm8-Rd-v2K" secondAttribute="top" id="8Bg-s9-TzB"/>
                     <constraint firstAttribute="trailing" secondItem="NS9-5f-FoA" secondAttribute="trailing" id="A2I-fH-mJ5"/>
@@ -249,9 +251,6 @@
         </namedColor>
         <systemColor name="separatorColor">
             <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

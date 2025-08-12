@@ -35,10 +35,13 @@ struct RunningCharacteristic {
             return Measurement(value: Double(strideLengthValue), unit: .centimeters)
         }() : nil
         
-        totalDistance = try Flag.isAvailable(bits: bitFlags, flag: .totalDistance) ? {
+        totalDistance = try {
+            guard Flag.isAvailable(bits: bitFlags, flag: .totalDistance) else {
+                return nil
+            }
             let offset = Flag.isAvailable(bits: bitFlags, flag: .strideLength) ? 6 : 4
             let totalDistanceValue: UInt32 = try data.read(fromOffset: offset)
-            return Measurement(value: Double(Double(totalDistanceValue)), unit: .decameters)
-        }() : nil
+            return Measurement(value: Double(totalDistanceValue), unit: .decameters)
+        }()
     }
 }

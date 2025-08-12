@@ -25,6 +25,8 @@
 #import "OAPOICategory.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
+#import "OAAmenitySearcher.h"
+#import "OAAmenitySearcher+cpp.h"
 #import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OAPOI.h"
@@ -39,7 +41,6 @@
 #import "OAResultMatcher.h"
 #import "OATopIndexFilter.h"
 #import "OACollatorStringMatcher.h"
-#import "OAArabicNormalizer.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
@@ -481,9 +482,6 @@
     if ([phrase getRadiusLevel] > 1 || [phrase getUnknownWordToSearch].length > 3 || [phrase hasMoreThanOneUnknownSearchWord] || [phrase isSearchTypeAllowed:EOAObjectTypePostcode exclusive:YES])
     {
         NSString *wordToSearch = [phrase getUnknownWordToSearch];
-        if ([OAArabicNormalizer isSpecialArabic:wordToSearch]) {
-            wordToSearch = [OAArabicNormalizer normalize:wordToSearch] ?: wordToSearch;
-        }
 
         if (wordToSearch.length == 0)
             return;
@@ -728,9 +726,6 @@
     NSMutableSet<NSString *> *ids = [NSMutableSet new];
 
     NSString *searchWord = [phrase getUnknownWordToSearch];
-    if ([OAArabicNormalizer isSpecialArabic:searchWord]) {
-        searchWord = [OAArabicNormalizer normalize:searchWord] ?: searchWord;
-    }
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
     
     QuadRect *bbox = [phrase getFileId] != nil ? [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_POI_IN_CITY] : [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_INSIDE];
@@ -792,7 +787,7 @@
                                       return false;
                                   
                                   OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-                                  OAPOI *object = [OAPOIHelper parsePOIByAmenity:amenity];
+                                  OAPOI *object = [OAAmenitySearcher parsePOIByAmenity:amenity];
                                   sr.object = object;
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
                                   sr.localeName = amenity->getName(lang, false).toNSString();
@@ -1543,7 +1538,7 @@
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
             const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-            OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
+            OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:amenity];
             if (poi)
             {
                 _currentAmenity = amenity;

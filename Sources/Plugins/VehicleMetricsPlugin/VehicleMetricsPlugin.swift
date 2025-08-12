@@ -10,6 +10,7 @@
 final class VehicleMetricsPlugin: OAPlugin {
     
     let TRIP_RECORDING_VEHICLE_METRICS: OACommonStringList = OAAppSettings.sharedManager().registerStringListPreference("trip_recording_vehicle_metrics", defValue: nil).makeProfile().makeShared()
+    var isOBDSimulatorConnected = false
     
     override func getId() -> String? {
         kInAppId_Addon_Vehicle_Metrics
@@ -27,6 +28,7 @@ final class VehicleMetricsPlugin: OAPlugin {
         super.disable()
 
         DeviceHelper.shared.disconnectDevices(only: .OBD_VEHICLE_METRICS, reason: .pluginOff)
+        DeviceHelper.shared.disconnectOBDSimulator()
     }
     
     override func update(_ location: CLLocation) {
@@ -59,7 +61,7 @@ final class VehicleMetricsPlugin: OAPlugin {
                 .temperatureIntake,
                 .engineOilTemperature,
                 .temperatureAmbient:
-            return getTemperatureUnit()
+            return OATemperatureConstant.getUnitSymbol(getTemperatureUnit())
         case .batteryVoltage:
             return localizedString("unit_volt")
         case .fuelType, .engineRuntime, .vin:
@@ -178,10 +180,8 @@ extension VehicleMetricsPlugin {
         }
     }
     
-    private func getTemperatureUnit() -> String {
-        let formatter = MeasurementFormatter()
-        formatter.locale = .autoupdatingCurrent
-        return formatter.string(from: UnitTemperature.current())
+    private func getTemperatureUnit() -> EOATemperatureConstant {
+        OAAppSettings.sharedManager().getTemperatureUnit()
     }
     
     private func getFormatVolumePerHourUnit() -> String? {
@@ -232,10 +232,13 @@ extension VehicleMetricsPlugin {
     
     private func getConvertedTemperature(data: Float) -> Float {
         let temperature = data
-        if UnitTemperature.current() == .celsius {
+        switch getTemperatureUnit() {
+        case .CELSIUS, .SYSTEM_DEFAULT:
             return temperature
-        } else {
+        case .FAHRENHEIT:
             return temperature * 1.8 + 32
+        default:
+            return temperature
         }
     }
     

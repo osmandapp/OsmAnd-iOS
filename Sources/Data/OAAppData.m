@@ -54,8 +54,6 @@
 #define kWeatherUseOfflineDataKey @"weatherUseOfflineData"
 #define kWeatherTempKey @"weatherTemp"
 #define kWeatherTempToolbarKey @"weatherTempToolbar"
-#define kWeatherTempUnitKey @"weatherTempUnit"
-#define kWeatherTempUnitAutoKey @"weatherTempUnitAuto"
 #define kWeatherTempAlphaKey @"weatherTempAlpha"
 #define kWeatherTempToolbarAlphaKey @"weatherTempToolbarAlpha"
 #define kWeatherPressureKey @"weatherPressure"
@@ -119,8 +117,6 @@
     OACommonBoolean *_weatherUseOfflineDataProfile;
     OACommonBoolean *_weatherTempProfile;
     OACommonBoolean *_weatherTempToolbarProfile;
-    OACommonUnit *_weatherTempUnitProfile;
-    OACommonBoolean *_weatherTempUnitAutoProfile;
     OACommonDouble *_weatherTempAlphaProfile;
     OACommonDouble *_weatherTempToolbarAlphaProfile;
     OACommonBoolean *_weatherPressureProfile;
@@ -178,7 +174,10 @@
     return self;
 }
 
-- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode
+- (void)setSettingValue:(NSString *)value
+                 forKey:(NSString *)key
+                   mode:(OAApplicationMode *)mode
+             notHandled:(void (^)(NSString *value, NSString *key, OAApplicationMode *mode))notHandled
 {
     @synchronized (_lock)
     {
@@ -205,37 +204,63 @@
         else if ([key isEqualToString:@"travelGuidesImagesDownloadMode"])
         {
             [_travelGuidesImagesDownloadModeProfile setValueFromString:value appMode:mode];
+        } else {
+            if (notHandled)
+                notHandled(value, key, mode);
         }
     }
 }
 
-- (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode
+- (void)addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode
 {
     @synchronized (_lock)
     {
-        if ([_verticalExaggerationScaleProfile isSetForMode:mode])
-        {
-            prefs[@"vertical_exaggeration_scale"] = [NSString stringWithFormat:@"%f", ([_verticalExaggerationScaleProfile get:mode])];
+        if ([_verticalExaggerationScaleProfile isSetForMode:mode]) {
+            prefs[@"vertical_exaggeration_scale"] =
+                [NSString stringWithFormat:@"%f", [_verticalExaggerationScaleProfile get:mode]];
         }
-        if ([_mapillaryProfile isSetForMode:mode])
+
+        NSDictionary *profiles = @{
+            @"show_mapillary": _mapillaryProfile,
+            @"global_wikipedia_poi_enabled": _wikipediaGlobalProfile,
+            @"wikipedia_poi_enabled_languages": _wikipediaLanguagesProfile,
+            @"wikipedia_images_download_mode": _wikipediaImagesDownloadModeProfile,
+            kTravelGuidesImagesDownloadModeKey: _travelGuidesImagesDownloadModeProfile,
+            kWeatherSourceKey: _weatherSourceProfile,
+            kWeatherTempKey: _weatherTempProfile,
+            kWeatherPressureKey: _weatherPressureProfile,
+            kWeatherWindKey: _weatherWindProfile,
+            kWeatherWindAnimationKey: _weatherWindAnimationProfile,
+            kWeatherCloudKey: _weatherCloudProfile,
+            kWeatherPrecipKey: _weatherPrecipProfile,
+            // TODO: Settings with units have a different format compared to Android; will need to be fixed.
+            // https://github.com/osmandapp/OsmAnd-Issues/issues/2776#issuecomment-3088962795
+           // kWeatherPressureUnitKey: _weatherPressureUnitProfile,
+           // kWeatherWindUnitKey: _weatherWindUnitProfile,
+           // kWeatherWindAnimationWindUnitKey: _weatherWindAnimationUnitProfile,
+           // kWeatherCloudUnitKey: _weatherCloudUnitProfile,
+           // kWeatherPrecipUnitKey: _weatherPrecipUnitProfile,
+            kWeatherTempAlphaKey: _weatherTempAlphaProfile,
+            kWeatherPressureAlphaKey: _weatherPressureAlphaProfile,
+            kWeatherWindAlphaKey: _weatherWindAlphaProfile,
+            kWeatherWindToolbarAlphaKey: _weatherWindToolbarAlphaProfile,
+            kWeatherCloudAlphaKey: _weatherCloudAlphaProfile,
+            kWeatherPrecipAlphaKey: _weatherPrecipAlphaProfile,
+            kWeatherPressureUnitAutoKey: _weatherPressureUnitAutoProfile,
+            kWeatherWindUnitAutoKey: _weatherWindUnitAutoProfile,
+            kWeatherWindAnimationUnitAutoKey: _weatherWindAnimationUnitAutoProfile,
+            kWeatherCloudUnitAutoKey: _weatherCloudUnitAutoProfile,
+            kWeatherPrecipUnitAutoKey: _weatherPrecipUnitAutoProfile
+        };
+
+        for (NSString *key in profiles)
         {
-            prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
-        }
-        if ([_wikipediaGlobalProfile isSetForMode:mode])
-        {
-            prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
-        }
-        if ([_wikipediaLanguagesProfile isSetForMode:mode])
-        {
-            prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
-        }
-        if ([_wikipediaImagesDownloadModeProfile isSetForMode:mode])
-        {
-            prefs[@"wikipedia_images_download_mode"] = [_wikipediaImagesDownloadModeProfile toStringValue:mode];
-        }
-        if ([_travelGuidesImagesDownloadModeProfile isSetForMode:mode])
-        {
-            prefs[@"travelGuidesImagesDownloadMode"] = [_travelGuidesImagesDownloadModeProfile toStringValue:mode];
+            id profile = profiles[key];
+            if ([profile isSetForMode:mode])
+            {
+                // NOTE: The value 0.67 is saved as 70 (similar to Android).  "weatherTempAlpha" : "0.7",
+                prefs[key] = [profile toStringValue:mode];
+            }
         }
     }
 }
@@ -309,8 +334,6 @@
     _weatherUseOfflineDataProfile = [OACommonBoolean withKey:kWeatherUseOfflineDataKey defValue:NO];
     _weatherTempProfile = [OACommonBoolean withKey:kWeatherTempKey defValue:NO];
     _weatherTempToolbarProfile = [OACommonBoolean withKey:kWeatherTempToolbarKey defValue:NO];
-    _weatherTempUnitProfile = [OACommonUnit withKey:kWeatherTempUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_TEMPERATURE]];
-    _weatherTempUnitAutoProfile = [OACommonBoolean withKey:kWeatherTempUnitAutoKey defValue:YES];
     _weatherTempAlphaProfile = [OACommonDouble withKey:kWeatherTempAlphaKey defValue:0.5];
     _weatherTempToolbarAlphaProfile = [OACommonDouble withKey:kWeatherTempToolbarAlphaKey defValue:0.5];
     _weatherPressureProfile = [OACommonBoolean withKey:kWeatherPressureKey defValue:NO];
@@ -323,8 +346,8 @@
     _weatherWindToolbarProfile = [OACommonBoolean withKey:kWeatherWindToolbarKey defValue:NO];
     _weatherWindUnitProfile = [OACommonUnit withKey:kWeatherWindUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_SPEED]];
     _weatherWindUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindUnitAutoKey defValue:YES];
-    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
-    _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
     _weatherCloudProfile = [OACommonBoolean withKey:kWeatherCloudKey defValue:NO];
     _weatherCloudToolbarProfile = [OACommonBoolean withKey:kWeatherCloudToolbarKey defValue:NO];
     _weatherCloudUnitProfile = [OACommonUnit withKey:kWeatherCloudUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_CLOUD]];
@@ -352,7 +375,6 @@
     _weatherChangeObservable = [[OAObservable alloc] init];
     _weatherUseOfflineDataChangeObservable = [[OAObservable alloc] init];
     _weatherTempChangeObservable = [[OAObservable alloc] init];
-    _weatherTempUnitChangeObservable = [[OAObservable alloc] init];
     _weatherPressureChangeObservable = [[OAObservable alloc] init];
     _weatherPressureUnitChangeObservable = [[OAObservable alloc] init];
     _weatherWindChangeObservable = [[OAObservable alloc] init];
@@ -389,8 +411,6 @@
     [_registeredPreferences setObject:_weatherUseOfflineDataProfile forKey:@"show_weather_offline_data"];
     [_registeredPreferences setObject:_weatherTempProfile forKey:@"show_weather_temp"];
     [_registeredPreferences setObject:_weatherTempToolbarProfile forKey:@"show_weather_temp_toolbar"];
-    [_registeredPreferences setObject:_weatherTempUnitProfile forKey:@"show_weather_temp_unit"];
-    [_registeredPreferences setObject:_weatherTempUnitAutoProfile forKey:@"show_weather_temp_unit_auto"];
     [_registeredPreferences setObject:_weatherTempAlphaProfile forKey:@"weather_temp_transparency"];
     [_registeredPreferences setObject:_weatherTempToolbarAlphaProfile forKey:@"weather_temp_transparency_toolbar"];
     [_registeredPreferences setObject:_weatherPressureProfile forKey:@"show_weather_pressure"];
@@ -610,7 +630,6 @@
 @synthesize weatherChangeObservable = _weatherChangeObservable;
 @synthesize weatherUseOfflineDataChangeObservable = _weatherUseOfflineDataChangeObservable;
 @synthesize weatherTempChangeObservable = _weatherTempChangeObservable;
-@synthesize weatherTempUnitChangeObservable = _weatherTempUnitChangeObservable;
 @synthesize weatherTempAlphaChangeObservable = _weatherTempAlphaChangeObservable;
 @synthesize weatherPressureChangeObservable = _weatherPressureChangeObservable;
 @synthesize weatherPressureUnitChangeObservable = _weatherPressureUnitChangeObservable;
@@ -673,55 +692,6 @@
     {
         _weatherToolbarActive ? [_weatherTempToolbarProfile set:weatherTemp] : [_weatherTempProfile set:weatherTemp];
         [_weatherPrecipChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:@(self.weatherTemp)];
-    }
-}
-
-- (NSUnitTemperature *) weatherTempUnit
-{
-    @synchronized(_lock)
-    {
-        NSUnitTemperature *unit = (NSUnitTemperature *)[_weatherTempUnitProfile get];
-        if (self.weatherTempUnitAuto)
-        {
-            NSUnitTemperature *current = [NSUnitTemperature current];
-            if (![unit.symbol isEqualToString:current.symbol])
-            {
-                unit = current;
-                [self setWeatherTempUnit:unit];
-            }
-        }
-        return unit;
-    }
-}
-
-- (void) setWeatherTempUnit:(NSUnitTemperature *)weatherTempUnit
-{
-    @synchronized(_lock)
-    {
-        [_weatherTempUnitProfile set:weatherTempUnit];
-        [_weatherTempUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:self.weatherTempUnit];
-    }
-}
-
-- (BOOL) weatherTempUnitAuto
-{
-    @synchronized(_lock)
-    {
-        return [_weatherTempUnitAutoProfile get];
-    }
-}
-
-- (void) setWeatherTempUnitAuto:(BOOL)weatherTempUnitAuto
-{
-    @synchronized(_lock)
-    {
-        [_weatherTempUnitAutoProfile set:weatherTempUnitAuto];
-        if (weatherTempUnitAuto)
-        {
-            NSUnitTemperature *current = [NSUnitTemperature current];
-            if ([_weatherTempUnitProfile get] != current)
-                [self setWeatherTempUnit:current];
-        }
     }
 }
 
@@ -1177,8 +1147,6 @@
         
         [_weatherTempProfile resetToDefault];
         [_weatherTempToolbarProfile resetToDefault];
-        [_weatherTempUnitProfile resetToDefault];
-        [_weatherTempUnitAutoProfile resetToDefault];
         [_weatherTempAlphaProfile resetToDefault];
         [_weatherTempToolbarAlphaProfile resetToDefault];
         
@@ -1802,8 +1770,6 @@
     [_weatherUseOfflineDataProfile set:[_weatherUseOfflineDataProfile get:sourceMode] mode:targetMode];
     [_weatherTempProfile set:[_weatherTempProfile get:sourceMode] mode:targetMode];
     [_weatherTempToolbarProfile set:[_weatherTempToolbarProfile get:sourceMode] mode:targetMode];
-    [_weatherTempUnitProfile set:[_weatherTempUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherTempUnitAutoProfile set:[_weatherTempUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherTempAlphaProfile set:[_weatherTempAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherTempToolbarAlphaProfile set:[_weatherTempToolbarAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherPressureProfile set:[_weatherPressureProfile get:sourceMode] mode:targetMode];

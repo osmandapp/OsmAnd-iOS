@@ -22,6 +22,7 @@
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAppData.h"
+#import "OASymbolMapLayer+cpp.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -33,7 +34,7 @@
 #include <OsmAndCore/SingleSkImage.h>
 
 #define DRAW_TIME 2
-#define LABEL_OFFSET 4
+#define LABEL_OFFSET 6
 #define kDefaultLineWidth 5.0
 
 @protocol OALineDrawingDelegate <NSObject>
@@ -58,6 +59,8 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _lineEndsMarkersCollection;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _linesCollection;
     OARulerByTapView *_rulerByTapView;
+    OAAppSettings *_settings;
+    OAApplicationMode *_appMode;
     
     BOOL _showingLine;
     
@@ -85,6 +88,9 @@
     _rulerByTapView = [[OARulerByTapView alloc] initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, DeviceScreenHeight)];
     _rulerByTapView.lineDrawingDelegate = self;
     _rulerByTapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    _settings = [OAAppSettings sharedManager];
+    _appMode = [_settings.applicationMode get];
     
     _linesCollection.reset(new OsmAnd::VectorLinesCollection());
     _lineEndsMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
@@ -142,7 +148,7 @@
         [self drawDistanceMarker:distance];
         
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
-        [self.mapView addKeyedSymbolsProvider:_lineEndsMarkersCollection];
+        [self.mapView addKeyedSymbolsProvider:kRulerByTapSymbolSection provider:_lineEndsMarkersCollection];
         _showingLine = YES;
     }
 }
@@ -199,20 +205,25 @@
         builder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
         builder.addOnMapSurfaceIcon(iconKey, icon);
         
-        builder.buildAndAddToCollection(_lineEndsMarkersCollection);
+        std::shared_ptr<OsmAnd::MapMarker> marker = builder.buildAndAddToCollection(_lineEndsMarkersCollection);
+        marker->setUpdateAfterCreated(true);
     }
 }
 
 - (void) drawDistanceMarker:(NSString *)distance
 {
+    float textSizeFactor = [OADistanceByTapTextSizeConstant getTextSizeFactor:[_settings.distanceByTapTextSize get:_appMode]];
+    OsmAnd::TextRasterizer::Style newCaptionStyle = self.captionStyle;
+    newCaptionStyle.setSize([self getNormalCaptionSize] * textSizeFactor);
     OsmAnd::MapMarkerBuilder distanceMarkerBuilder;
     distanceMarkerBuilder.setIsHidden(false);
     distanceMarkerBuilder.setBaseOrder(self.baseOrder - 1);
     distanceMarkerBuilder.setCaption([distance UTF8String]);
-    distanceMarkerBuilder.setCaptionStyle(self.captionStyle);
+    distanceMarkerBuilder.setCaptionStyle(newCaptionStyle);
     
     std::shared_ptr<OsmAnd::MapMarker> marker = distanceMarkerBuilder.buildAndAddToCollection(_lineEndsMarkersCollection);
     marker->setOffsetFromLine(LABEL_OFFSET);
+    marker->setUpdateAfterCreated(true);
     _rullerLine->attachMarker(marker);
 }
 
@@ -352,7 +363,10 @@
                     NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
                     _rulerDistance = distance;
                     if (self.lineDrawingDelegate)
+                    {
                         [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue) distance:distance];
+                        _mapViewController.mapView.renderer->updateSubsection(kRulerByTapSymbolSection);
+                    }
                 }
             }
         }
@@ -369,7 +383,10 @@
                 NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
                 _rulerDistance = distance;
                 if (self.lineDrawingDelegate)
+                {
                     [self.lineDrawingDelegate onDrawNewLine:fromI to:toI color:OsmAnd::ColorARGB(colorAttr.intValue) distance:distance];
+                    _mapViewController.mapView.renderer->updateSubsection(kRulerByTapSymbolSection);
+                }
             }
         }
     }

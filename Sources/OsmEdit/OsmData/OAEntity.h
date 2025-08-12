@@ -11,6 +11,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OAOSMSettings.h"
+#import "EOAEntityType.h"
 
 static const int MODIFY_UNKNOWN = 0;
 static const int MODIFY_DELETED = -1;
@@ -20,15 +21,6 @@ static const int MODIFY_CREATED = 2;
 NS_ASSUME_NONNULL_BEGIN
 @class OAEntityId;
 @class OAEntity;
-
-typedef NS_ENUM(NSInteger, EOAEntityType)
-{
-    UNDEFINED = -1,
-    NODE,
-    WAY,
-    RELATION,
-    WAY_BOUNDARY
-};
 
 @protocol OAEntityProtocol <NSObject>
 

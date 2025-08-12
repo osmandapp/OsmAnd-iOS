@@ -47,8 +47,6 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (nonatomic) BOOL weather;
 @property (nonatomic) BOOL weatherUseOfflineData;
 @property (nonatomic) BOOL weatherTemp;
-@property (nonatomic) NSUnitTemperature *weatherTempUnit;
-@property (nonatomic) BOOL weatherTempUnitAuto;
 @property (nonatomic) double weatherTempAlpha;
 @property (nonatomic) BOOL weatherPressure;
 @property (nonatomic) NSUnitPressure *weatherPressureUnit;
@@ -79,8 +77,6 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (readonly) OAObservable* weatherUseOfflineDataChangeObservable;
 @property (readonly) OAObservable* weatherTempChangeObservable;
 @property (readonly) OAObservable* weatherTempToolbarChangeObservable;
-@property (readonly) OAObservable* weatherTempUnitChangeObservable;
-@property (readonly) OAObservable* weatherTempUnitToolbarChangeObservable;
 @property (readonly) OAObservable* weatherTempAlphaChangeObservable;
 @property (readonly) OAObservable* weatherTempAlphaToolbarChangeObservable;
 @property (readonly) OAObservable* weatherPressureChangeObservable;
@@ -187,7 +183,10 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 
 - (void)resetVerticalExaggerationScale;
 
-- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode;
+- (void)setSettingValue:(NSString *)value
+                 forKey:(NSString *)key
+                   mode:(OAApplicationMode *)mode
+             notHandled:(void (^)(NSString *value, NSString *key, OAApplicationMode *mode))notHandled;
 - (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode;
 
 - (void) resetProfileSettingsForMode:(OAApplicationMode *)mode;

@@ -181,15 +181,9 @@
 {
     _hasChangesBeenMade = YES;
     OAEditProfileItem *item = [self getItem:sourceIndexPath];
-    // Deferr the data update until the animation is complete
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        [self.tableView reloadData];
-    }];
     [_appProfiles removeObjectAtIndex:sourceIndexPath.row];
     [_appProfiles insertObject:item atIndex:destinationIndexPath.row];
     [self updateProfileIndexes];
-    [CATransaction commit];
 }
 
 #pragma mark - UITableViewDelegate

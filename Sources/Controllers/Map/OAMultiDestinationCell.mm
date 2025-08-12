@@ -215,7 +215,7 @@
                 _distanceLabel2.frame = CGRectMake(text2LeftOffset, 7.0, textWidth - self.infoLabelWidth, 21.0);
                 _distanceLabel2.hidden = NO;
                 _infoLabel2.frame = CGRectMake(_distanceLabel2.frame.origin.x + _distanceLabel2.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
-                _infoLabel2.textAlignment = [self.contentView isDirectionRTL] ? NSTextAlignmentLeft : NSTextAlignmentRight;;
+                _infoLabel2.textAlignment = [self.contentView isDirectionRTL] ? NSTextAlignmentLeft : NSTextAlignmentRight;
                 _infoLabel2.hidden = NO;
                 _descLabel2.frame = CGRectMake(text2LeftOffset, 24.0, textWidth, 21.0);
                 _descLabel2.hidden = NO;

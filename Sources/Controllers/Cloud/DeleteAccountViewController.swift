@@ -281,9 +281,12 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
             status = .running
             updateUIAnimated { _ in
                 self.updateProgress(0)
-                self.backupHelper?.deleteAccount(OAAppSettings.sharedManager().backupUserEmail.get(), token: self.token)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    self.updateProgress(0.3)
+                if let error = self.backupHelper?.deleteAccount(OAAppSettings.sharedManager().backupUserEmail.get(), token: self.token) {
+                    self.updateProgress(1)
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        self.updateProgress(0.3)
+                    }
                 }
             }
         }

@@ -199,7 +199,7 @@
 
 - (NSInteger)sectionsCount
 {
-    return _data.sectionCount;;
+    return _data.sectionCount;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section

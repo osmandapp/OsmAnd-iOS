@@ -854,7 +854,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     [wikiFilesList addObject:fileItem];
                 else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeNauticalDepth)
                     [nauticalFilesList addObject:fileItem];
-                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeSrtmMap)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeSrtmMap || fileItem.subtype == EOAFileSettingsItemFileSubtypeTerrainMap)
                     [terrainFilesList addObject:fileItem];
                 else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
                     [mapFilesList addObject:fileItem];

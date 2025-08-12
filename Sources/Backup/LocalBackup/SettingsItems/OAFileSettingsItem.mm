@@ -230,10 +230,13 @@
         case EOAFileSettingsItemFileSubtypeObfMap:
         case EOAFileSettingsItemFileSubtypeTilesMap:
         case EOAFileSettingsItemFileSubtypeRoadMap:
-        case EOAFileSettingsItemFileSubtypeNauticalDepth:
             return @"ic_custom_map";
         case EOAFileSettingsItemFileSubtypeSrtmMap:
             return @"ic_custom_contour_lines";
+        case EOAFileSettingsItemFileSubtypeTerrainMap:
+            return @"ic_custom_terrain";
+        case EOAFileSettingsItemFileSubtypeNauticalDepth:
+            return @"ic_custom_nautical_depth";
         case EOAFileSettingsItemFileSubtypeWikiMap:
             return @"ic_custom_wikipedia";
         case EOAFileSettingsItemFileSubtypeGpx:

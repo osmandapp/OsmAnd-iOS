@@ -61,6 +61,10 @@ class Device: NSObject {
         peripheral.state == .connecting
     }
     
+    var isDisconnected: Bool {
+        peripheral.state == .disconnected
+    }
+    
     var state: DeviceState {
         DeviceState(rawValue: peripheral.state.rawValue) ?? .disconnected
     }

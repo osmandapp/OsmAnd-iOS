@@ -313,7 +313,7 @@
 "no_underlay" = "Χωρίς υπόστρωμα";
 "int_min" = "λεπτ.";
 "gpx_tags_txt" = "Ετικέτες";
-"hide_contour_lines" = "Απόκρυψη ισοϋψών γραμμών";
+"hide_contour_lines" = "Απόκρυψη ισοϋψών καμπυλών";
 "shared_string_collapse" = "Σύμπτυξη";
 "daynight_mode_auto" = "Ανατολή/δύση";
 "add_gpx_waypoint" = "Προσθήκη σημείου διαδρομής GPX";
@@ -331,7 +331,7 @@
 "quick_action_resume_pause_navigation" = "Παύση/συνέχιση πλοήγησης";
 "upload_osm_note" = "Ανέβασμα σημείωσης OSM";
 "weeks_5" = "Εβδομάδες";
-"map_widget_renderer" = "Μορφή χάρτη";
+"map_widget_renderer" = "Στυλ χάρτη";
 "add_home" = "Προσθήκη κατοικίας";
 "show_lanes" = "Λωρίδες";
 "osm_edit_deleted_poi" = "Διαγραμμένο ΣΕ OSM";
@@ -533,7 +533,7 @@
 "tunnel_warning" = "Προσέγγιση σήραγγας";
 "shared_string_edit" = "Επεξεργασία";
 "features_menu_group" = "Χαρακτηριστικά";
-"quick_action_map_styles" = "Τύποι χάρτη";
+"quick_action_map_styles" = "Στυλ χάρτη";
 "shared_string_widgets" = "Γραφικά στοιχεία";
 "speak_poi" = "ΣΕ σε κοντινή απόσταση";
 "keep_informing_descr" = "Επανάληψη οδηγιών πλοήγησης σε τακτά χρονικά διαστήματα.";
@@ -564,7 +564,7 @@
 "rendering_value_americanRoadAtlas_name" = "Αμερικάνικος άτλαντας δρόμων";
 "routing_attr_relief_smoothness_factor_plains_name" = "Λιγότερο λοφώδης";
 "rendering_attr_surface_concrete_name" = "Μπετόν";
-"rendering_attr_contourLines_name" = "Εμφάνιση ισοϋψών γραμμών";
+"rendering_attr_contourLines_name" = "Εμφάνιση ισοϋψών καμπυλών";
 "rendering_value_translucent_purple_name" = "Ημιδιαφανές μοβ";
 "rendering_attr_depthContours_description" = "Εμφάνιση ισοβαθών καμπυλών και σημείων.";
 "rendering_attr_busRoutes_name" = "Διαδρομές λεωφορείων";
@@ -585,7 +585,7 @@
 "rendering_attr_hideHouseNumbers_name" = "Αριθμοί κτηρίων";
 "rendering_attr_highway_class_track_grade2_name" = "Βαθμίδα 2";
 "rendering_attr_piste_difficulty_advanced_name" = "Προχωρημένη";
-"rendering_attr_contourDensity_name" = "Πυκνότητα ισοϋψών γραμμών";
+"rendering_attr_contourDensity_name" = "Πυκνότητα ισοϋψών καμπυλών";
 "routing_attr_prefer_unpaved_description" = "Να προτιμώνται μη στρωμένοι δρόμοι.";
 "rendering_value_translucent_red_name" = "Ημιδιαφανές κόκκινο";
 "rendering_value_translucent_blue_name" = "Ημιδιαφανές μπλε";
@@ -600,7 +600,7 @@
 "rendering_attr_surface_salt_name" = "Αλάτι";
 "rendering_attr_surface_sett_name" = "Πλακόστρωση";
 "rendering_attr_tracktype_grade4_name" = "Κυρίως μαλακός";
-"rendering_attr_contourLines_description" = "Εμφάνιση από το επίπεδο εστίασης (χρειάζεται αρχείο ισοϋψών γραμμών):";
+"rendering_attr_contourLines_description" = "Εμφάνιση από το επίπεδο εστίασης (χρειάζεται αρχείο ισοϋψών καμπυλών):";
 "routing_attr_no_new_routing_description" = "Να μην χρησιμοποιηθούν οι κανόνες δρομολόγησης που εισήχθησαν στην έκδοση 1.9.";
 "routing_attr_avoid_ferry_name" = "Χωρίς πορθμεία";
 "rendering_value_defaultTranslucentCyan_name" = "Προεπιλογή (ημιδιαφανές κυανό)";
@@ -615,7 +615,7 @@
 "rendering_attr_hideOverground_name" = "Υπέργεια αντικείμενα";
 "routing_attr_width_description" = "Καθορίστε το επιτρεπόμενο όριο πλάτους οχήματος στους δρόμους.";
 "rendering_attr_highway_class_street_name" = "Οδός";
-"rendering_attr_contourDensity_description" = "Πυκνότητα ισοϋψών γραμμών";
+"rendering_attr_contourDensity_description" = "Πυκνότητα ισοϋψών καμπυλών";
 "routing_attr_difficulty_preference_name" = "Προτιμώμενη δυσκολία";
 "routing_attr_prefer_motorway_name" = "Προτίμηση αυτοκινητόδρομων";
 "routing_attr_short_way_description" = "Βελτιστοποιημένη συντομότερη διαδρομή (εξοικονόμηση ενέργειας)";
@@ -630,7 +630,7 @@
 "rendering_value_white_name" = "Λευκό";
 "rendering_attr_shareTaxiRoutes_name" = "Διαδρομές αγοραίου";
 "rendering_attr_surface_grass_name" = "Χορτάρι";
-"rendering_attr_contourColorScheme_description" = "Χρωματικοί συνδυασμοί ισοϋψών γραμμών";
+"rendering_attr_contourColorScheme_description" = "Χρωματικοί συνδυασμοί ισοϋψών καμπυλών";
 "rendering_attr_piste_type_sled_name" = "Έλκηθρο κατάβασης";
 "routing_attr_allow_skating_only_name" = "Να επιτρέπονται μόνο διαδρομές με πατίνια";
 "routing_attr_weight_description" = "Καθορίσετε το επιτρεπόμενο όριο βάρους του οχήματος στις διαδρομές.";
@@ -731,7 +731,7 @@
 "routing_attr_avoid_ice_roads_fords_name" = "Χωρίς δρόμους με πάγο ή περάσματα";
 "routing_attr_allow_expert_description" = "Πολύ δύσκολες διαδρομές, με επικίνδυνα εμπόδια και περιβάλλον.";
 "rendering_attr_piste_type_connection_name" = "Σύνδεση";
-"rendering_attr_contourWidth_description" = "Πλάτος ισοϋψών γραμμών";
+"rendering_attr_contourWidth_description" = "Πλάτος ισοϋψών καμπυλών";
 "routing_attr_avoid_motorway_description" = "Απέφυγε αυτοκινητόδρομους";
 "rendering_attr_trainLightrailRoutes_name" = "Διαδρομές τρένου";
 "routing_attr_piste_type_nordic_description" = "Πίστες για σκανδιναβική ή εκτός δρόμου χιονοδρομία.";
@@ -744,7 +744,7 @@
 "routing_attr_allow_classic_only_name" = "Να επιτρέπονται μόνο κλασικές διαδρομές";
 "routing_attr_weight_name" = "Βάρος";
 "rendering_value_bold_name" = "Παχιά";
-"rendering_attr_contourWidth_name" = "Πλάτος ισοϋψών γραμμών";
+"rendering_attr_contourWidth_name" = "Πλάτος ισοϋψών καμπυλών";
 "rendering_attr_highway_class_track_grade4_name" = "Βαθμίδα 4";
 "rendering_attr_roadStyle_description" = "Μορφή δρόμου";
 "routing_attr_avoid_toll_name" = "Δρόμοι χωρίς διόδια";
@@ -835,7 +835,7 @@
 "rendering_attr_showRoadMaps_description" = "Επιλέξτε πότε θα εμφανίζονται μόνο-οδικοί χάρτες:";
 "rendering_value_thin_name" = "Λεπτή";
 "switch_start_finish" = "Αντιστροφή αρχικού σημείου & προορισμού";
-"contour_lines_hillshade_maps" = "Χάρτες ισοϋψών γραμμών&σκίασης αναγλύφου";
+"contour_lines_hillshade_maps" = "Χάρτες ισοϋψών καμπυλών&σκίασης αναγλύφου";
 "app_mode_horse" = "Άλογο";
 "app_mode_wagon" = "Οικογενειακό αυτοκίνητο";
 "app_mode_taxi" = "Ταξί";
@@ -1432,7 +1432,7 @@
 "route_between_points_add_track_desc" = "Επιλέξτε ένα αρχείο ίχνους στο οποίο θα προστεθεί νέο τμήμα.";
 "donation_to_osm" = "Δωρεά στην κοινότητα OSM";
 "fav_point_emoticons_message" = "Το αγαπημενο μετονομάστηκε σε \'%@\' για να προφυλάξει την συμβολοσειρά που περιέχει emoticons σε αρχείο.";
-"quick_action_contour_lines_descr" = "Πλήκτρο εμφάνισης ή απόκρυψης ισοϋψών γραμμών στον χάρτη.";
+"quick_action_contour_lines_descr" = "Πλήκτρο εμφάνισης ή απόκρυψης ισοϋψών καμπυλών στον χάρτη.";
 "empty_route_calculated" = "Η υπολογισμένη διαδρομή είναι κενή.";
 "recalc_angle_dialog_title" = "Ελάχιστη γωνία μεταξύ της θέσης και της διαδρομής μου";
 "recalculate_route" = "Επαναυπολογισμός διαδρομής";
@@ -1484,7 +1484,7 @@
 "shared_string_rendering_style" = "Τεχνοτροπία απόδοσης";
 "impassable_road" = "Αποφυγή δρόμων…";
 "show_warnings_descr" = "Ρύθμιση κυκλοφοριακών προειδοποιήσεων (όρια ταχύτητας, αναγκαστικές στάσεις, σαμαράκια, σήραγγες) προειδοποιήσεις καμερών ταχύτητας και πληροφορίες λωρίδων.";
-"get_osmand_live" = "Εγγραφείτε στο OsmAnd Live για να ξεκλειδώσετε όλα τα χαρακτηριστικά: Ημερήσιες ενημερώσεις χαρτών με απεριόριστες λήψεις, όλα πληρωμένα και χωρίς πρόσθετα, βικιπαίδεια, βικιταξίδια και πολλά άλλα.";
+"get_osmand_live" = "Εγγραφείτε στο OsmAnd Live για να ξεκλειδώσετε όλα τα χαρακτηριστικά: Ημερήσιες ενημερώσεις χαρτών με απεριόριστες λήψεις, όλα πληρωμένα και χωρίς πρόσθετα, Βικιπαίδεια, Βικιταξίδια και πολλά άλλα.";
 "login_account" = "Λογαριασμός";
 "units_and_formats" = "Μονάδες μέτρησης & μορφές";
 "profile_settings" = "Ειδικές Ρυθμίσεις Προφίλ";
@@ -1536,7 +1536,7 @@
 "quick_action_auto_zoom" = "Αυτόματη εστίαση χάρτη";
 "osm_edit_reopened_note" = "Ξανανοιγμένη σημείωση OSM";
 "plugin_ski_name" = "Προβολή χάρτη χιονοδρομιών";
-"quick_action_map_style_action" = "Προσθήκη τύπου χάρτη";
+"quick_action_map_style_action" = "Προσθήκη στυλ χάρτη";
 "move_marker_bottom_sheet_title" = "Μετακινήστε τον χάρτη για να αλλάξει η θέση του δείκτη";
 "quick_action_navigation_voice_on" = "Σίγαση φωνής";
 "osm_editing_plugin_description" = "Κάντε συνεισφορές στο OpenStreetMap, μια παγκόσμια κοινότητα που συντηρεί έναν περιεκτικό χάρτη του κόσμου και που προσφέρει ενημερωμένα δεδομένα ανοιχτού κώδικα σε κάθε χρήστη. \n \nΜπορείτε να βρείτε πληροφορίες για το πως να επεξεργαστείτε τον χάρτη στον ιστότοπο μας %@.";
@@ -2036,7 +2036,7 @@
 "nautical_depth_points" = "Σημεία ναυτικού βάθους";
 "routing_attr_goods_restrictions_yes_desc" = "Οι δρόμοι που είναι κλειστοί για παράδοση αγαθών δεν θα αποφεύγονται.";
 "grey_color_undefined" = "Κομμάτια χωρίς δεδομένα είναι γκρι.";
-"osmand_cloud_create_account_descr" = "Παρακαλώ εισάγετε την διεύθυνση e-mail σας, \nένα κωδικός επιβεβαίωσης θα σας σταλθεί εκεί και όλα τα δεδομένα σας θα συνδεθούν με αυτό.";
+"osmand_cloud_create_account_descr" = "Παρακαλώ εισάγετε την διεύθυνση e-mail σας, \nένα κωδικός επαλήθευσης θα σας σταλθεί εκεί και όλα τα δεδομένα σας θα συνδεθούν με αυτό.";
 "nautical_depth" = "Ναυτικό βάθος";
 "cloud_create_account" = "Δημιουργία λογαριασμού";
 "recalculate_wrong_dir" = "Επαναυπολογισμός διαδρομής σε περίπτωση αντιστροφής κατεύθυνσης";
@@ -2075,7 +2075,7 @@
 "map_settings_install_maps" = "Επιλέξτε χάρτες για εγκατάσταση ή ενημέρωση";
 "rendering_attr_showRunningRoutes_name" = "Διαδρομές τρεξίματος";
 "rendering_attr_showRunningRoutes_description" = "Εμφάνιση διαδρομών τρεξίματος";
-"map_settings_type" = "Τύπος χάρτη";
+"map_settings_type" = "Είδος χάρτη";
 "map_settings_offline" = "Στυλ για χάρτες εκτός σύνδεσης";
 "map_settings_install_more" = "Εγκατάσταση περισσότερων…";
 "rendering_attr_alpineHiking_name" = "Βαθμός δυσκολίας μονοπατιών πεζοπορίας";
@@ -2499,7 +2499,7 @@
 "product_desc_europe" = "Απεριόριστες λήψεις χαρτών για την Ευρώπη";
 "product_desc_antarctica" = "Απεριόριστες λήψεις χαρτών για την Ανταρκτική";
 "verification" = "Επαλήθευση";
-"verify_email_address_descr" = "Ο κωδικός επαλήθευσης στάλθηκε στο %@. Παρακαλώ εισάγεται τον στο πεδίο.";
+"verify_email_address_descr" = "Ο κωδικός επαλήθευσης στάλθηκε στο %@. Παρακαλούμε εισάγετε τον στο πεδίο παρακάτω.";
 "verification_code_placeholder" = "Κωδικός";
 "deleted_file" = "Διαγραμμένο αρχείο";
 "import_gpx" = "Ίχνος GPX";
@@ -2647,7 +2647,7 @@
 "arrows_on_map" = "Βέλη στον χάρτη";
 "hist_select_remove" = "Επιλέξτε στοιχεία από το ιστορικό για αφαίρεση";
 "osmand_pro_tagline" = "Αποκτήστε πλήρες δυνατότητες";
-"external_sensors_plugin_description" = "Αποκτά πρόσβαση σε εξωτερικούς αισθητήρες για να διαβάζει, π.χ., τον καρδιακό σας ρυθμό, την ταχύτητα ποδηλάτου, την ισχύ ποδηλασίας ή το βήμα. Απαιτεί σύνδεση της συσκευής σας με τους αντίστοιχους αισθητήρες μέσω του προσωπικού δικτύου ασύρματου πρωτοκόλλου ANT+.";
+"external_sensors_plugin_description" = "Αποκτά πρόσβαση σε εξωτερικούς αισθητήρες για να διαβάζει, π.χ., τον καρδιακό σας ρυθμό, την ταχύτητα ποδηλάτου, την ισχύ ποδηλασίας ή το βήμα. Απαιτεί σύνδεση της συσκευής σας με τους αντίστοιχους αισθητήρες μέσω του πρωτοκόλλου προσωπικού ασύρματου δικτύου ANT+.";
 "product_desc_mapillary" = "Εικόνες σε επίπεδο δρόμου για να δείτε το χώρο τριγύρω";
 "osmand_maps_plus_tagline" = "Αποκτήστε περισσότερες δυνατότητες";
 "grid_color" = "Πλέγμα χρωμάτων";
@@ -2687,7 +2687,7 @@
 "routing_attr_allow_private_for_truck_description" = "Να επιτρέπεται η πρόσβαση σε ιδιωτικές περιοχές για φορτηγά.";
 "routing_attr_motor_type_diesel_name" = "Ντίζελ";
 "rendering_value_access_name" = "Κατά είδος πρόσβασης";
-"shared_string_interval" = "Εσωτερικά";
+"shared_string_interval" = "Μεσοδιάστημα";
 "routing_attr_carriage_restrictions_name" = "Περιορισμοί άμαξας";
 "routing_attr_avoid_fords_description" = "Αποφεύγει περάσματα νερού";
 "routing_attr_difficulty_preference_beginner_name" = "Αρχάρια";
@@ -3149,7 +3149,7 @@
 "pedestrian" = "Πεζός";
 "change_object_posiotion" = "Αλλαγή θέσης αντικειμένου";
 "default_speed_descr" = "Εκτιμά τον χρόνο άφιξης για δρόμους αγνώστου είδους και άγνωστες ταχύτητες για όλους τους δρόμους (ίσως επηρεάσει την δρομολόγηση)";
-"plugin_popup_ski_desc" = "Για να ενεργοποιήσετε το στυλ <b>χάρτη Σκι</b>, παρακαλούμε πηγαίνετε στις <b>Ρυθμίσεις Χάρτη</b> > <b>Είδος χάρτη</b>";
+"plugin_popup_ski_desc" = "Για να ενεργοποιήσετε το στυλ <b>χάρτη Σκι</b>, παρακαλούμε πηγαίνετε στις <b>Ρυθμίσεις χάρτη</b> > <b>Στυλ χάρτη</b>";
 "plugin_popup_osm_editing_ask" = "Παρακαλούμε ενεργοποιήστε το πρόσθετο Επεξεργασία OpenStreetMap για να προσθέσετε και να διαχειριστείτε επεξεργασίες χάρτη και σημειώσεις";
 "weather_temperature_celsius" = "Κελσίου";
 "weather_temperature_fahrenheit" = "Φαρενάιτ";
@@ -3479,3 +3479,35 @@
 "help_first_use_descr" = "Πώς να κατεβάσετε χάρτες και να φτιάξετε βασικές ρυθμίσεις";
 "gpx_cannot_import" = "Δεν είναι δυνατή η εισαγωγή του συγκεκριμένου GPX αρχείου";
 "gpx_import_desc" = "Για να κάνετε εισαγωγή των GPX αρχείων (κοινή μορφή δεδομένων GPS) από Dropbox, Email, ή οποιαδήποτε άλλη πηγή χρησιμοποιήστε την επιλογή \"Αντιγραφή σε Χάρτες OsmAnd\"";
+"srtm_download_list_help_message" = "Το OsmAnd παρέχει δεδομένα των ισοϋψών καμπυλών σε μέτρα και πόδια. Θα χρειαστεί να κατεβάσετε ξανά το αρχείο για να αλλάξετε την μορφή.";
+"srtm_unit_format" = "Παραλλαγή μονάδας ισοϋψών καμπυλών";
+"q_clear_weather_cache" = "Θέλετε να καθαρίσετε την κρυφή μνήμη του καιρού;";
+"backup_delete_old_data_warning" = "Θα σβήσετε το ιστορικό αλλαγών για τα προηγουμένως φορτωμένα δεδομένα.\n\nΗ τρέχουσα έκδοση των δεδομένων θα αποθηκευτεί στο διακομιστή, αλλά δεν θα μπορείτε να κάνετε αναίρεση στις προηγούμενες αλλαγές.";
+"backup_delete_all_data_warning" = "Θα σβήσσετε όλα τα δεδομένα που είχαν ανέβει προηγουμένως στο OsmAnd Cloud, συμπεριλαμβανομένου το ιστορικό έκδοσης.\n\nΔεν θα μπορείτε να ανακτήσετε διαγραμμένα δεδομένα.";
+"make_backup_descr" = "Υπάρχουν πολλές αλλαγές σε αυτήν τη συσκευή, παρακαλούμε δημιουργήστε ένα αντίγραφο ασφαλείας των δεδομένων σας για να μην τα χάσετε.";
+"purchases_feature_desc_osmand_cloud" = "Αποκτήστε το OsmAnd Cloud για να αποθηκεύετε όλα τα OsmAnd δεδομένα σας στο διαδίκτυο. Κανένα χαμένο δεδομένο μετά την επανεγκατάσταση. Κάντε αντίγραφο ασφαλείας και επαναφορά όλων των πληροφοριών εύκολα.";
+"depth_contours" = "Ισοϋψείς βάθους";
+"plugin_popup_nautical_desc" = "Παρακαλούμε κατεβάστε πρώτα τους Ναυτικούς χάρτες.\nΈπειτα πηγαίνετε στις <b>Ρυθμίσεις χάρτη</b> > <b>Είδος χάρτη</b> και ενεργοποιήστε το <b>Ναυτικό</b> στυλ";
+"res_zoom_levels_desc" = "Αυτές οι παράμετροι θα επηρεάζουν την προβολή του χάρτη όταν χρησιμοποιείται ως είδος χάρτη ή ως επικάλυψη/υπόστρωμα.\n\nΕίδος χάρτη: ο χάρτης θα περιορίζεται στις επιλεγμένες μεγεθύνσεις.\n\nΕπικάλυψη / Υπόστρωμα: Τα επίπεδα μεγέθυνσεις κατά τα οποία τα πλακίδια θα είναι ορατά. Βελτίωση ή υποβάθμιση θα γίνεται πάνω ή κάτω από τις ορισμένες τιμές.";
+"res_confirmation_clear_cache" = "Σίγουρα θέλετε να καθαρίσετε την κρυφή μνήμη για %@;";
+"res_uninst_unmanaged_q" = "Θα διαγράψετε το %@. Δεν είναι από τον κατάλογο, οπότε σιγουρευτείτε ότι έχετε αντίγραφο ασφαλείας εάν χρειαστεί.";
+"srtm_download_single_help_message" = "Επιλέξτε την παραλλαγή. Θα χρειαστεί να κατεβάσετε ξανά το αρχείο για να αλλάξει η μορφή.";
+"plugin_popup_srtm_desc" = "Για να ξεκινήσετε να χρησιμοποιείτε το χαρακτηριστικό Τοπογραφία, κατεβάστε τις Ισοϋψείς καμπύλες μιας περιοχής πρώτα";
+"plugin_popup_srtm_ask" = "Για να κατεβάσετε τις Ισοϋψείς καμπύλες πρέπει να ενεργοποιήσετε το πρόσθετο: <b>Τοπογραφία</b>";
+"test_heightmap" = "Δοκιμή χάρτη ύψους";
+"generate_slope_from_3d_maps" = "Παραγωγή raster χαρτών κλίσης εδάφους από 3D χάρτες";
+"generate_hillshade_from_3d_maps" = "Παραγωγή raster χαρτών σκίασης ανάγλυφου από 3D χάρτες";
+"disable_vertex_hillshade_3d" = "Απενεργοποίηση κορυφών σκίασης ανάγλυφου σε 3D";
+"use_heightmap_setting" = "Χρήση χάρτη ύψους με 3D ανάγλυφο";
+"import_raster_map_success" = "Ο raster χάρτης έχει εισαχθεί. Ανοίξτε τις Ρυθμίσεις χάρτη και ενεργοποιήστε τον με Επικάλυψη/Υπόστρωμα";
+"import_raster_map_failed" = "Απέτυχε η εισαγωγή του raster χάρτη";
+"hist_remove_q" = "Θέλετε να αφαιρέσετε αντικείμενα του ιστορικού;";
+"online_raster_map" = "Raster χάρτης με σύνδεση";
+"offline_raster_map" = "Raster χάρτης χωρίς σύνδεση";
+"offline_raster_maps" = "Raster χάρτες χωρίς σύνδεση";
+"online_raster_maps" = "Raster χάρτες με σύνδεση";
+"sqlitedb_import_title" = "Εισαγωγή αρχείου raster χάρτη";
+"res_import_unsupported" = "Ακατάλληλος τύπος αρχείου. Μόνο αρχεία routing.xml και *.render.xml υποστηρίζονται.";
+"routing_import_please_restart" = "Για να χρησιμοποιήσετε το νέο routing.xml κάντε επανεκκίνηση της εφαρμογής.";
+"restore_backup_descr" = "Επαναφέρετε δεδομένα στη συσκευή χρησιμοποιώντας αντίγραφα ασφαλείας στο Διαδίκτυο";
+"all_world_popup_desc" = "Κατεβάστε τον βασικό παγκόσμιο χάρτη για να δείτε τις ονομασίες κρατών, σύνορα και άλλες πληροφορίες";

@@ -13,7 +13,6 @@
 #import "OALog.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
 #import "OAMapViewController.h"
 #import "OACollapsableWaypointsView.h"
 #import "OAPOI.h"
@@ -24,14 +23,14 @@
 #import "OAPOIHelper.h"
 #import "OANativeUtilities.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAMapPanelViewController.h"
+#import "Localization.h"
+#import "OARootViewController.h"
+#import "OASelectedGPXHelper.h"
+#import "OAAmenitySearcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/GpxDocument.h>
-#include "Localization.h"
-#include "OARootViewController.h"
-#include "OASelectedGPXHelper.h"
-
 
 @implementation OAGPXWptViewController
 {
@@ -52,8 +51,10 @@
             wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
         }
         self.wpt = wpt;
-        OAGpxExtension *openingHoursExt = [self.wpt.point getExtensionByKey:[PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG]];
-        _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt.value ? openingHoursExt.value.UTF8String : "");
+        NSDictionary<NSString *, NSString *> *extensions = [self.wpt.point getExtensionsToRead];
+        NSString *key = [PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG];
+        NSString *openingHoursExt = extensions[key];
+        _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt ? openingHoursExt.UTF8String : "");
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
@@ -64,7 +65,9 @@
 
 - (void) acquireOriginObject
 {
-    _originObject = [OAPOIHelper findPOIByOriginName:_wpt.getAmenityOriginName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
+    NSString *originName = _wpt.getAmenityOriginName;
+    if (originName && originName.length > 0)
+        _originObject = [OAAmenitySearcher findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
     if (!_originObject)
         _originObject = [_wpt getAmenity];
 }
@@ -97,22 +100,20 @@
     {
         [self buildCommentRow:rows comment:self.wpt.point.comment];
     }
-    if (self.wpt.point.links && self.wpt.point.links.count > 0)
+    
+    if (self.wpt.point.link && self.wpt.point.link.href && self.wpt.point.link.href.length > 0)
     {
-        for (OALink *link in self.wpt.point.links)
-        {
-            [rows addObject:[[OARowInfo alloc] initWithKey:nil
-                                                      icon:[OATargetInfoViewController getIcon:@"mx_website"]
-                                                textPrefix:link.text
-                                                      text:link.url.absoluteString
-                                                 textColor:UIColorFromRGB(kHyperlinkColor)
-                                                    isText:NO
-                                                 needLinks:YES
-                                                     order:2
-                                                  typeName:@""
-                                             isPhoneNumber:NO
-                                                     isUrl:YES]];
-        }
+        [rows addObject:[[OARowInfo alloc] initWithKey:nil
+                                                  icon:[OATargetInfoViewController getIcon:@"mx_website"]
+                                            textPrefix:nil
+                                                  text:self.wpt.point.link.href
+                                             textColor:UIColorFromRGB(kHyperlinkColor)
+                                                isText:NO
+                                             needLinks:YES
+                                                 order:2
+                                              typeName:@""
+                                         isPhoneNumber:NO
+                                                 isUrl:YES]];
     }
     
     //TODO: add extra fields
@@ -123,7 +124,7 @@
     if ( _originObject && [ _originObject isKindOfClass:OAPOI.class])
     {
         OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
-        builder.location = CLLocationCoordinate2DMake(_wpt.point.position.latitude, _wpt.point.position.longitude);
+        builder.location = CLLocationCoordinate2DMake(_wpt.point.lat, _wpt.point.lon);
         NSMutableArray<OARowInfo *> *internalRows = [NSMutableArray array];
         [builder buildRowsInternal:internalRows];
         [rows addObjectsFromArray:internalRows];
@@ -232,7 +233,7 @@
 
 - (NSString *) getItemGroup
 {
-    return (self.wpt.point.type ? self.wpt.point.type : @"");
+    return (self.wpt.point.category ? self.wpt.point.category : @"");
 }
 
 - (NSArray *) getItemGroups
@@ -249,17 +250,22 @@
 {
     long timestamp = self.wpt.point.time;
     if (timestamp > 0)
-        return [NSDate dateWithTimeIntervalSince1970:timestamp];
+        return [NSDate dateWithTimeIntervalSince1970:timestamp / 1000.0];
     else
         return nil;
 }
 
 - (void) leftControlButtonPressed
 {
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     [mapPanel targetHideMenu:0 backButtonClicked:YES onComplete:^{
-        [mapPanel openTargetViewWithGPX:gpx selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+        if (gpx)
+        {
+            auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+            trackItem.dataItem = gpx;
+            [mapPanel openTargetViewWithGPX:trackItem selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+        }
     }];
 }
 

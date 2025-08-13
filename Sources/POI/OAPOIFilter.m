@@ -9,6 +9,7 @@
 #import "OAPOIFilter.h"
 #import "OAUtilities.h"
 #import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OAAppSettings.h"
 
 @implementation OAPOIFilter

@@ -8,6 +8,7 @@
 
 #import "OACarPlayActiveViewController.h"
 #import "OAColors.h"
+#import "OAObservable.h"
 #import "OADayNightHelper.h"
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"

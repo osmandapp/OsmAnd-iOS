@@ -24,7 +24,7 @@
     {
         _baseZoom = baseZoom;
         _zoomFloatPart = zoomFloatPart;
-        _minZoom = minZoom;
+        _minZoom = MAX([self.class getMinValidZoom], minZoom);
         _maxZoom = maxZoom;
     }
     return self;
@@ -178,7 +178,7 @@
     float startZoomFloatPart = startZoom - startIntZoom;
     double startDistanceIntZoom = startDistance * [self.class floatPartToVisual:startZoomFloatPart];
     double log2 = log(startDistanceIntZoom / endDistance) / log(2);
-    int intZoomDelta = ((int) log(2));
+    int intZoomDelta = (int) log2;
     double startDistanceIntZoomed = intZoomDelta >= 0
         ? startDistanceIntZoom / (1 << intZoomDelta)
         : startDistanceIntZoom * (1 << -intZoomDelta);
@@ -198,6 +198,23 @@
     return visualZoom >= 1.0
         ? visualZoom - 1.0
         : (visualZoom - 1.0) * 2.0;
+}
+
++ (int) getMinValidZoom
+{
+    return MAX(ceil(log(ceil([OAUtilities calculateScreenHeight] / 256))), 1);
+}
+
+- (float) getValidZoomStep:(float)step
+{
+    float newZoomStep = step;
+    float currentZoom = [self getBaseZoom] + [self getZoomFloatPart];
+    float nextZoom = currentZoom + step;
+    float minZoom = [OAZoom getMinValidZoom];
+    
+    if (nextZoom < minZoom)
+        newZoomStep = - (currentZoom - minZoom);
+    return newZoomStep;
 }
 
 @end
@@ -243,6 +260,5 @@
         return [[OAComplexZoom alloc] initWithZoom:zoom];
     }
 }
-
 
 @end

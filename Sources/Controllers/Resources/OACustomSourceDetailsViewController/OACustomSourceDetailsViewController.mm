@@ -9,6 +9,7 @@
 #import "OACustomSourceDetailsViewController.h"
 #import "OADownloadDescriptionInfo.h"
 #import "OACustomRegion.h"
+#import "OADownloadsManager.h"
 #import "OAResourcesUIHelper.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OASimpleTableViewCell.h"
@@ -61,9 +62,30 @@
     self.titleView.text = _item.getVisibleName;
 }
 
+- (void)querySize
+{
+    if (_item.sizePkg == 0 && AFNetworkReachabilityManager.sharedManager.isReachable)
+    {
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_item.downloadUrl]];
+        [request setHTTPMethod:@"HEAD"];
+        [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+            NSInteger responseCode = httpResponse.statusCode;
+            if (!error && (responseCode >= 200 && responseCode < 300))
+            {
+                _item.sizePkg = [response expectedContentLength];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self generateData];
+                    [self.tableView reloadData];
+                });
+            }
+        }] resume];
+    }
+}
+
 - (void)queryImage
 {
-    if (_item.descriptionInfo.imageUrls.count > 0 && !_queriedImages)
+    if (_item.descriptionInfo.imageUrls.count > 0 && !_queriedImages && AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [_downloadedImages removeAllObjects];
         NSURLSession *imageDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -134,6 +156,7 @@
     self.actionButton.layer.cornerRadius = 9.;
     self.navBarView.backgroundColor = _region.headerColor;
     
+    [self querySize];
     [self queryImage];
     [self setupActionButtons];
 }
@@ -195,8 +218,7 @@
     {
         [OAResourcesUIHelper startDownloadOfCustomItem:_item onTaskCreated:^(id<OADownloadTask> task) {
             [self.navigationController popViewControllerAnimated:YES];
-        } onTaskResumed:^(id<OADownloadTask> task) {
-        }];
+        } onTaskResumed:nil];
     }
 }
 
@@ -266,7 +288,7 @@
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImagesTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAImagesTableViewCell *)[nib objectAtIndex:0];;
+            cell = (OAImagesTableViewCell *)[nib objectAtIndex:0];
         }
         if (cell)
         {

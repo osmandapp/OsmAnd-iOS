@@ -9,15 +9,15 @@
 #import "OASelectMapSourceViewController.h"
 #import "OAMapSource.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OASimpleTableViewCell.h"
 #import "OAMapCreatorHelper.h"
 #import "OASQLiteTileSource.h"
 #import "OAResourcesUIHelper.h"
+#import "Localization.h"
+#import "OASizes.h"
 
-#include "Localization.h"
-#include "OASizes.h"
 #include <QSet>
-
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 

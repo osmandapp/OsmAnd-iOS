@@ -52,10 +52,11 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.layoutMargins = UIEdgeInsetsMake(0, 20, 0, 20);
     self.buttonsView.layoutMargins = UIEdgeInsetsMake(0, 20, 0, 20);
-    self.buttonsSectionDividerView.backgroundColor = UIColor.clearColor;;
+    self.buttonsSectionDividerView.backgroundColor = UIColor.clearColor;
 
     [self.rightButton removeFromSuperview];
-    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
+    self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
+    self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
     
     self.exitButton.layer.cornerRadius = 9.;
     self.saveButton.layer.cornerRadius = 9.;
@@ -137,9 +138,10 @@
 
 - (void) saveButtonPressed
 {
-    [self hide:YES];
-    if (_delegate)
-        [_delegate onSaveResultPressed];
+    [self hide:YES completion:^{
+        if (_delegate)
+            [_delegate onSaveResultPressed];
+    }];
 }
 
 #pragma mark - UITableViewDataSource

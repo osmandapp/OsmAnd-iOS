@@ -10,10 +10,20 @@
 #import "OANativeUtilities.h"
 
 #include <OsmAndCore/SkiaUtilities.h>
+#include <QReadWriteLock>
 
 const static float kDefaultIconSize = 24.0f;
+static NSString * const kMapIconsSvgFolderName = @"map-icons-svg";
+
+static NSMutableDictionary<NSString *, NSString *> *resourcesPaths = [NSMutableDictionary dictionary];
+static QReadWriteLock resourcesPathsLock;
 
 @implementation OASvgHelper
+
++ (BOOL)hasMxMapImageNamed:(NSString *)name
+{
+    return name && ([self mapImageResourcePathNamed:[name hasPrefix:@"mx_"] ? name : [@"mx_" stringByAppendingString:name] resourceDir:kMapIconsSvgFolderName]) != nil;
+}
 
 + (nullable UIImage *) mapImageNamed:(NSString *)name
 {
@@ -29,38 +39,51 @@ const static float kDefaultIconSize = 24.0f;
     return [self.class mapImageFromSvgResource:name width:scaledSize height:scaledSize];
 }
 
-+ (nullable UIImage *) imageNamed:(NSString *)path
++ (nullable UIImage *)imageNamed:(NSString *)path
 {
-    NSString *resourceName = [path lastPathComponent];
-    NSString *subpath = [path stringByDeletingLastPathComponent];
-    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
-                                                              ofType:@"svg"
-                                                         inDirectory:subpath];
-    if (resourcePath == nil)
+    NSString *resourcePath = [self mapImageResourcePathNamed:[path lastPathComponent] resourceDir:[path stringByDeletingLastPathComponent]];
+    if (!resourcePath)
         return nil;
 
-    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
-    float scaledSize = kDefaultIconSize * scaleFactor;
+    float scaledSize = kDefaultIconSize * UIScreen.mainScreen.scale;
     return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath width:scaledSize height:scaledSize]];
 }
 
-+ (UIImage *) mapImageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height
++ (nullable NSString *)mapImageResourcePathNamed:(NSString *)resourceName resourceDir:(NSString *)resourceDir
 {
-    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
-                                                              ofType:@"svg"
-                                                         inDirectory:@"map-icons-svg"];
-    if (resourcePath == nil)
+    NSString *path;
+    {
+        QReadLocker scopedLocker(&resourcesPathsLock);
+
+        path = resourcesPaths[resourceName];
+        if (path)
+            return path.length > 0 ? path : nil;
+    }
+
+    path = [[NSBundle mainBundle] pathForResource:resourceName
+                                           ofType:@"svg"
+                                      inDirectory:resourceDir];
+    {
+        QWriteLocker scopedLocker(&resourcesPathsLock);
+
+        resourcesPaths[resourceName] = path ? path : @"";
+    }
+    return path;
+}
+
++ (nullable UIImage *)mapImageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height
+{
+    NSString *resourcePath = [self mapImageResourcePathNamed:resourceName resourceDir:kMapIconsSvgFolderName];
+    if (!resourcePath)
         return nil;
 
     return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath width:width height:height]];
 }
 
-+ (UIImage *) mapImageFromSvgResource:(NSString *)resourceName scale:(float)scale
++ (nullable UIImage *)mapImageFromSvgResource:(NSString *)resourceName scale:(float)scale
 {
-    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
-                                                              ofType:@"svg"
-                                                         inDirectory:@"map-icons-svg"];
-    if (resourcePath == nil)
+    NSString *resourcePath = [self mapImageResourcePathNamed:resourceName resourceDir:kMapIconsSvgFolderName];
+    if (!resourcePath)
         return nil;
 
     return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath scale:scale]];

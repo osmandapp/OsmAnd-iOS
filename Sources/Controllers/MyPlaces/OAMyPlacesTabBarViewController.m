@@ -8,6 +8,7 @@
 
 #import "OAMyPlacesTabBarViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"

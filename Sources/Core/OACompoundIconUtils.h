@@ -10,14 +10,20 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CommonTypes.h>
-#include <OsmAndCore/GpxDocument.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/SkiaUtilities.h>
 
+@class OASWptPt;
+
 @interface OACompoundIconUtils : NSObject
 
-+ (sk_sp<SkImage>) createCompositeBitmapFromWpt:(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &)point isFullSize:(BOOL)isFullSize scale:(float)scale;
++ (sk_sp<SkImage>) createCompositeBitmapFromWpt:(OASWptPt *)point isFullSize:(BOOL)isFullSize scale:(float)scale;
 + (sk_sp<SkImage>) createCompositeBitmapFromFavorite:(const std::shared_ptr<OsmAnd::IFavoriteLocation> &)fav isFullSize:(BOOL)isFullSize scale:(float)scale;
 + (sk_sp<SkImage>) createCompositeIconWithcolor:(UIColor *)color shapeName:(NSString *)shapeName iconName:(NSString *)iconName isFullSize:(BOOL)isFullSize icon:(UIImage *)icon scale:(float)scale;
 
++ (sk_sp<SkImage>)getScaledIcon:(NSString *)resourceName scale:(CGFloat)scale;
++ (sk_sp<SkImage>)getScaledIcon:(NSString *)resourceName
+            defaultResourceName:(NSString *)defaultResourceName
+                          scale:(CGFloat)scale
+                          color:(UIColor *)color;
 @end

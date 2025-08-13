@@ -1,5 +1,5 @@
 //
-//  OADebugSettings.h
+//  OAAppSettings.h
 //  OsmAnd
 //
 //  Created by AntonRogachevskiy on 10/16/14.
@@ -8,16 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "OAApplicationMode.h"
-#import "OAColorizationType.h"
-#import "OAColoringType.h"
-#import "OADownloadMode.h"
-#import "OAMap3DModeVisibilityType.h"
+
+@class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
 static NSString * const VOICE_PROVIDER_NOT_USE = @"VOICE_PROVIDER_NOT_USE";
 
-static NSString * const settingAppModeKey = @"settingAppModeKey";
 static NSString * const appearanceProfileThemeKey = @"appearanceProfileThemeKey";
 
 static NSString * const mapDensityKey = @"mapDensity";
@@ -29,10 +25,6 @@ static const double kReceiptValidationMinPeriod = 60.0 * 60.0 * 24.0 * 1.0; // 1
 static const double kReceiptValidationMaxPeriod = 60.0 * 60.0 * 24.0 * 30.0; // 30 days
 
 static const double kSimMinSpeed = 5 / 3.6f;
-
-static const NSInteger APPEARANCE_MODE_DAY = 0;
-static const NSInteger APPEARANCE_MODE_NIGHT = 1;
-static const NSInteger APPEARANCE_MODE_AUTO = 2;
 
 static const NSInteger MAP_ARROWS_LOCATION = 0;
 static const NSInteger MAP_ARROWS_MAP_CENTER = 1;
@@ -61,7 +53,6 @@ static const NSInteger GENERIC_EXTERNAL_DEVICE = 1;
 static const NSInteger WUNDERLINQ_EXTERNAL_DEVICE = 2;
 
 static const double MAGNIFIER_DEFAULT_VALUE = 1.0;
-static const double MAGNIFIER_DEFAULT_CAR = 1.5;
 static const double MAGNIFIER_DEFAULT_CAR_TEXT = 1.25;
 
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY = 0;
@@ -69,8 +60,6 @@ static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY = 1;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF = 2;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED = 3;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL = 4;
-
-@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
 typedef NS_ENUM(NSInteger, EOAWidgetSizeStyle)
 {
@@ -86,6 +75,12 @@ typedef NS_ENUM(NSInteger, EOAScreenOrientation)
     EOAScreenOrientationLandscape = 6 //ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 };
 
+typedef NS_ENUM(NSInteger, EOATrackApproximationType)
+{
+    EOATrackApproximationManual = 0,
+    EOATrackApproximationAutomatic = 1
+};
+
 typedef NS_ENUM(NSInteger, EOAPositionPlacement)
 {
     EOAPositionPlacementAuto = 0,
@@ -93,43 +88,16 @@ typedef NS_ENUM(NSInteger, EOAPositionPlacement)
     EOAPositionPlacementBottom
 };
 
-typedef NS_ENUM(NSInteger, EOACompassMode)
-{
-    EOACompassVisible = 0,
-    EOACompassHidden,
-    EOACompassRotated
-};
-
-@interface OACompassMode : NSObject
-
-+ (NSString *) getTitle:(EOACompassMode)cm;
-+ (NSString *) getDescription:(EOACompassMode)cm;
-+ (NSString *) getIconName:(EOACompassMode)cm;
-
-@end
-
-typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
-{
-    EOAMap3DModeVisibilityHidden = 0,
-    EOAMap3DModeVisibilityVisible,
-    EOAMap3DModeVisibilityVisibleIn3DMode
-};
-
-@interface OAMap3DModeVisibility : NSObject
-
-@property (nonatomic) EOAMap3DModeVisibility mode;
-
-+ (instancetype) withModeConstant:(EOAMap3DModeVisibility)mode;
-+ (NSString *) getTitle:(EOAMap3DModeVisibility)mode;
-+ (NSString *) getIconName:(EOAMap3DModeVisibility)mode;
-
-@end
-
-
 typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
 {
     EOASunriseSunsetNext = 0,
     EOASunriseSunsetTimeLeft = 1
+};
+
+typedef NS_ENUM(NSInteger, EOAExternalSensorVisualizationMode)
+{
+    EOAExternalSensorVisualizationSensorData = 0,
+    EOAExternalSensorVisualizationBatteryLevel = 1
 };
 
 typedef NS_ENUM(NSInteger, EOARouteService)
@@ -190,6 +158,41 @@ typedef NS_ENUM(NSInteger, EOASpeedConstant)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOAVolumeConstant)
+{
+    LITRES = 0,
+    IMPERIAL_GALLONS,
+    US_GALLONS
+};
+
+@interface OAVolumeConstant : NSObject
+
+@property (nonatomic, readonly) EOAVolumeConstant volume;
+
++ (instancetype) withVolumeConstant:(EOAVolumeConstant)volume;
+
++ (NSString *) toHumanString:(EOAVolumeConstant)volume;
++ (NSString *) getUnitSymbol:(EOAVolumeConstant)volume;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOATemperatureConstant)
+{
+    SYSTEM_DEFAULT = 0,
+    CELSIUS,
+    FAHRENHEIT
+};
+
+@interface OATemperatureConstant : NSObject
+
+@property (nonatomic, readonly) EOATemperatureConstant volume;
+
++ (instancetype)withVolumeConstant:(EOATemperatureConstant)volume;
++ (NSString *)toHumanString:(EOATemperatureConstant)volume;
++ (NSString *)getUnitSymbol:(EOATemperatureConstant)volume;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOAAngularConstant)
 {
     DEGREES = 0,
@@ -218,6 +221,7 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
     DR_CANADA,
     DR_UK_AND_OTHERS,
     DR_JAPAN,
+    DR_INDIA,
     DR_AUSTRALIA
 };
 
@@ -232,6 +236,7 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 + (BOOL) isLeftHandDriving:(EOADrivingRegion)region;
 + (BOOL) isAmericanSigns:(EOADrivingRegion)region;
 + (EOAMetricsConstant) getDefMetrics:(EOADrivingRegion)region;
++ (EOAVolumeConstant) getDefVolume:(EOADrivingRegion)region;
 + (NSString *) getName:(EOADrivingRegion)region;
 + (NSString *) getDescription:(EOADrivingRegion)region;
 
@@ -299,7 +304,7 @@ typedef NS_ENUM(NSInteger, EOAGradientScaleType)
 + (NSString *) toTypeName:(EOAGradientScaleType)gst;
 + (NSString *) toColorTypeName:(EOAGradientScaleType)gst;
 
-- (EOAColorizationType) toColorizationType;
+- (NSInteger)toColorizationType;
 
 @end
 
@@ -369,6 +374,23 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
+{
+    NORMAL = 0,
+    LARGE
+};
+
+@interface OADistanceByTapTextSizeConstant : NSObject
+
+@property (nonatomic, readonly) EOADistanceByTapTextSizeConstant textSize;
+
++ (instancetype)withDistanceByTapTextSizeConstant:(EOADistanceByTapTextSizeConstant)textSize;
+
++ (NSString *)toHumanString:(EOADistanceByTapTextSizeConstant)textSize;
++ (float)getTextSizeFactor:(EOADistanceByTapTextSizeConstant)textSize;
+
+@end
+
 @interface OACommonPreference : NSObject
 
 @property (nonatomic, readonly) NSString *key;
@@ -377,18 +399,23 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @property (nonatomic, assign) BOOL lastModifiedTimeStored;
 @property (nonatomic) long lastModifiedTime;
 
-- (id) makeGlobal;
-- (id) makeProfile;
-- (id) makeShared;
+- (instancetype) makeGlobal;
+- (instancetype) makeProfile;
+- (instancetype) makeShared;
+- (instancetype) storeLastModifiedTime;
 
-- (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
-- (void) resetModeToDefault:(OAApplicationMode *)mode;
-- (void) resetToDefault;
-- (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
-- (NSString *) toStringValue:(OAApplicationMode *)mode;
-- (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
+- (NSObject *)getPrefValue;
+- (NSObject *)getPrefValue:(OAApplicationMode *)mode;
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode;
+- (void)resetModeToDefault:(OAApplicationMode *)mode;
+- (void)resetToDefault;
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
+- (NSString *)toStringValue:(OAApplicationMode *)mode;
+- (NSString *)toStringFromValue:(id)value;
+- (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
 
-- (BOOL) isSetForMode:(OAApplicationMode *)mode;
+- (BOOL)isSetForMode:(OAApplicationMode *)mode;
+- (nullable NSNumber *)valueFromString:(nonnull NSString *)string appMode:(nonnull OAApplicationMode *)mode;
 
 @end
 
@@ -405,6 +432,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @interface OACommonBoolean : OACommonPreference
 
+@property (nonatomic, readonly) BOOL defValue;
+
 + (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue;
 
 - (BOOL) get;
@@ -415,6 +444,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @end
 
 @interface OACommonInteger : OACommonPreference
+
+@property (nonatomic, readonly) int defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(int)defValue;
 
@@ -427,6 +458,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @interface OACommonLong : OACommonPreference
 
+@property (nonatomic, readonly) long defValue;
+
 + (instancetype) withKey:(NSString *)key defValue:(long)defValue;
 
 - (long) get;
@@ -437,6 +470,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @end
 
 @interface OACommonString : OACommonPreference
+
+@property (nonatomic, readonly) NSString *defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue;
 
@@ -499,12 +534,13 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @interface OACommonMapSource : OACommonPreference
 
-+ (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue;
++ (instancetype)withKey:(NSString *)key defValue:(OAMapSource *)defValue;
 
-- (OAMapSource *) get;
-- (OAMapSource *) get:(OAApplicationMode *)mode;
-- (void) set:(OAMapSource *)mapSource;
-- (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
+- (OAMapSource *)get;
+- (OAMapSource *)get:(OAApplicationMode *)mode;
+- (void)set:(OAMapSource *)mapSource;
+- (void)set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
+- (void)setModeDefaultValue:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -516,24 +552,6 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (void) set:(NSUnit *)string;
 - (NSUnit *) get:(OAApplicationMode *)mode;
 - (void) set:(NSUnit *)string mode:(OAApplicationMode *)mode;
-
-@end
-
-typedef NS_ENUM(NSInteger, EOATerrainType)
-{
-    EOATerrainTypeDisabled = 0,
-    EOATerrainTypeHillshade,
-    EOATerrainTypeSlope
-};
-
-@interface OACommonTerrain : OACommonInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue;
-
-- (EOATerrainType) get;
-- (EOATerrainType) get:(OAApplicationMode *)mode;
-- (void) set:(EOATerrainType)autoZoomMap;
-- (void) set:(EOATerrainType)autoZoomMap mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -576,6 +594,27 @@ typedef NS_ENUM(NSInteger, EOASpeedLimitWarningState)
 - (EOASpeedConstant) get:(OAApplicationMode *)mode;
 - (void) set:(EOASpeedConstant)speedConstant;
 - (void) set:(EOASpeedConstant)speedConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonVolumeConstant : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAVolumeConstant)defValue;
+
+- (EOAVolumeConstant) get;
+- (EOAVolumeConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAVolumeConstant)volumeConstant;
+- (void) set:(EOAVolumeConstant)volumeConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonTemperatureConstant : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOATemperatureConstant)defValue;
+- (EOATemperatureConstant) get;
+- (EOATemperatureConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOATemperatureConstant)volumeConstant;
+- (void) set:(EOATemperatureConstant)volumeConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -646,19 +685,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (void) set:(EOARulerWidgetMode)rulerWidgetMode mode:(OAApplicationMode *)mode;
 
 + (NSString *) rulerWidgetModeToString:(EOARulerWidgetMode)rulerMode;
-
-@end
-
-@interface OACommonMap3dMode : OACommonInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAMap3DModeVisibility)defValue;
-
-- (EOAMap3DModeVisibility) get;
-- (EOAMap3DModeVisibility) get:(OAApplicationMode *)mode;
-- (void) set:(EOAMap3DModeVisibility)map3dMode;
-- (void) set:(EOAMap3DModeVisibility)map3dMode mode:(OAApplicationMode *)mode;
-
-+ (NSString *) rulerWidgetModeToString:(EOAMap3DModeVisibility)map3dMode;
 
 @end
 
@@ -738,6 +764,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (OADownloadMode *) get:(OAApplicationMode *)mode;
 - (void) set:(OADownloadMode *)downloadMode;
 - (void) set:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
+- (OADownloadMode *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode;
 
 @end
 
@@ -752,6 +779,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (OAColoringType *) get:(OAApplicationMode *)mode;
 - (void) set:(OAColoringType *)coordinateInputFormats;
 - (void) set:(OAColoringType *)coordinateInputFormats mode:(OAApplicationMode *)mode;
+- (OAColoringType *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode;
 
 @end
 
@@ -763,6 +791,86 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (EOAWidgetSizeStyle) get:(OAApplicationMode *)mode;
 - (void) set:(EOAWidgetSizeStyle)widgetSizeStyle;
 - (void) set:(EOAWidgetSizeStyle)widgetSizeStyle mode:(OAApplicationMode *)mode;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOASunPositionMode) {
+    EOASunPositionModeSunPositionMode,
+    EOASunPositionModeSunsetMode,
+    EOASunPositionModeSunriseMode
+};
+
+@interface OACommonSunPositionMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(EOASunPositionMode)defValue;
+
+- (EOASunPositionMode)get;
+- (EOASunPositionMode)get:(OAApplicationMode *)mode;
+- (void)set:(EOASunPositionMode)positionMode;
+- (void)set:(EOASunPositionMode)positionMode mode:(OAApplicationMode *)mode;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
+{
+    EOAWidgetZoom,
+    EOAWidgetMapScale
+};
+
+
+@interface OACommonWidgetZoomLevelType : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
+
+- (EOAWidgetZoomLevelType)get;
+- (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode;
+- (void)set:(EOAWidgetZoomLevelType)type;
+- (void)set:(EOAWidgetZoomLevelType)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonDistanceByTapTextSizeConstant : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADistanceByTapTextSizeConstant)defValue;
+
+- (EOADistanceByTapTextSizeConstant) get;
+- (EOADistanceByTapTextSizeConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant;
+- (void) set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonWidgetDefaultView : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue;
+
+- (int)get;
+- (int)get:(OAApplicationMode *)mode;
+- (void)set:(int)type;
+- (void)set:(int)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonWidgetDisplayPriority : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue;
+
+- (int)get;
+- (int)get:(OAApplicationMode *)mode;
+- (void)set:(int)type;
+- (void)set:(int)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonDayNightMode : OACommonInteger
+
+@end
+
+@interface OACommonGridFormat : OACommonInteger
+
+@end
+
+@interface OACommonGridLabelsPosition : OACommonInteger
 
 @end
 
@@ -784,7 +892,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic, readonly) NSArray *rtlLanguages;
 
 
-@property (nonatomic) OACommonInteger *appearanceMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (nonatomic) OACommonDayNightMode *appearanceMode;
 @property (nonatomic) OACommonInteger *appearanceProfileTheme; // 0 - System; 1 - Light; 2 - Dark
 @property (nonatomic) OACommonDouble *mapManuallyRotatingAngle;
 @property (readonly, nonatomic) BOOL nightMode;
@@ -796,7 +904,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
 @property (nonatomic) OACommonInteger *mapScreenOrientation;
-
+@property (nonatomic) OACommonInteger *detailedTrackGuidance;
+@property (nonatomic) OACommonInteger *gpxApproximationDistance;
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
 
@@ -805,6 +914,13 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *mapSettingShowBordersOfDownloadedMaps;
 @property (nonatomic) OACommonBoolean *mapSettingShowOfflineEdits;
 @property (nonatomic) OACommonBoolean *mapSettingShowOnlineNotes;
+@property (nonatomic) OACommonBoolean *mapSettingShowCoordinatesGrid;
+@property (nonatomic) OACommonGridFormat *coordinateGridFormat;
+@property (nonatomic) OACommonInteger *coordinateGridMinZoom;
+@property (nonatomic) OACommonInteger *coordinateGridMaxZoom;
+@property (nonatomic) OACommonGridLabelsPosition *coordinatesGridLabelsPosition;
+@property (nonatomic) OACommonInteger *coordinatesGridColorDay;
+@property (nonatomic) OACommonInteger *coordinatesGridColorNight;
 @property (nonatomic) OACommonStringList *mapSettingVisibleGpx;
 @property (nonatomic) OACommonInteger *layerTransparencySeekbarMode; // 0 - overlay, 1 - underlay, 2 - off, 3 - undefined, 4 - overlay&underlay
 - (BOOL) getOverlayOpacitySliderVisibility;
@@ -835,6 +951,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) NSDate* lastReceiptValidationDate; //global ?
 @property (nonatomic, assign) BOOL eligibleForIntroductoryPrice; //global ?
 @property (nonatomic, assign) BOOL eligibleForSubscriptionOffer; //global ?
+@property (nonatomic, assign) BOOL requireUploadPurchases;
 
 // Track recording settings
 @property (nonatomic) OACommonBoolean *saveTrackToGPX;
@@ -887,18 +1004,22 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *isCarPlayModeDefault;
 @property (nonatomic) OAApplicationMode *lastRoutingApplicationMode;
 @property (nonatomic) OACommonInteger *rotateMap;
-@property (nonatomic) OACommonInteger *compassMode;
 @property (nonatomic) OACommonInteger *sunriseMode;
 @property (nonatomic) OACommonInteger *sunsetMode;
 
 // Application mode related settings
 @property (nonatomic) OACommonString *profileIconName;
 @property (nonatomic) OACommonInteger *profileIconColor;
+@property (nonatomic) OACommonInteger *profileCustomIconColor;
 @property (nonatomic) OACommonString *userProfileName;
 @property (nonatomic) OACommonString *parentAppMode;
-@property (nonatomic) OACommonInteger *navigationIcon;
-@property (nonatomic) OACommonInteger *locationIcon;
+@property (nonatomic) OACommonString *navigationIcon;
+@property (nonatomic) OACommonString *locationIcon;
+@property (nonatomic) OACommonBoolean *use3dIconsByDefault;
+@property (nonatomic) OACommonBoolean *batterySavingMode;
 @property (nonatomic) OACommonInteger *appModeOrder;
+@property (nonatomic) OACommonInteger *viewAngleVisibility;
+@property (nonatomic) OACommonInteger *locationRadiusVisibility;
 
 @property (nonatomic) OACommonDouble *defaultSpeed;
 @property (nonatomic) OACommonDouble *minSpeed;
@@ -941,6 +1062,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *voiceMute;
 @property (nonatomic) OACommonString *voiceProvider;
 @property (nonatomic) OACommonBoolean *interruptMusic;
+@property (nonatomic) OACommonBoolean *previewNextTurn;
 @property (nonatomic) OACommonBoolean *snapToRoad;
 @property (nonatomic) OACommonInteger *autoFollowRoute;
 @property (nonatomic) OACommonBoolean *autoZoomMap;
@@ -948,15 +1070,20 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonAutoZoomMap *autoZoomMapScale;
 @property (nonatomic) OACommonInteger *keepInforming;
 @property (nonatomic) OACommonSpeedConstant *speedSystem;
+@property (nonatomic) OACommonVolumeConstant *volumeUnits;
+@property (nonatomic) OACommonTemperatureConstant *temperatureUnits;
+@property (nonatomic) OACommonDouble *fuelTankCapacity;
 @property (nonatomic) OACommonAngularConstant *angularUnits;
 @property (nonatomic) OACommonDouble *speedLimitExceedKmh;
 @property (nonatomic) OACommonDouble *routeRecalculationDistance;
 @property (nonatomic) OACommonInteger *customRouteColorDay;
 @property (nonatomic) OACommonInteger *customRouteColorNight;
 @property (nonatomic) OACommonColoringType *routeColoringType;
+@property (nonatomic) OACommonString *routeGradientPalette;
 @property (nonatomic) OACommonString *routeInfoAttribute;
 @property (nonatomic) OACommonString *routeLineWidth;
 @property (nonatomic) OACommonBoolean *routeShowTurnArrows;
+@property (nonatomic) OACommonDistanceByTapTextSizeConstant *distanceByTapTextSize;
 
 @property (nonatomic) OACommonBoolean *showScreenAlerts;
 @property (nonatomic) OACommonBoolean *showTrafficWarnings;
@@ -964,7 +1091,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *showSpeedLimitWarnings;
 @property (nonatomic) OACommonBoolean *showCameras;
 @property (nonatomic) OACommonBoolean *showTunnels;
-@property (nonatomic) OACommonBoolean *showLanes;
 @property (nonatomic) OACommonBoolean *showArrivalTime;
 @property (nonatomic) OACommonBoolean *showIntermediateArrivalTime;
 @property (nonatomic) OACommonBoolean *showRelativeBearing;
@@ -990,12 +1116,13 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *showNearbyPoi;
 
 @property (nonatomic) OACommonBoolean *transparentMapTheme;
-@property (nonatomic) OACommonBoolean *showStreetName;
 @property (nonatomic) OACommonInteger *positionPlacementOnMap;
 @property (nonatomic) OACommonBoolean *showDistanceRuler;
 @property (nonatomic) OACommonBoolean *showElevationProfileWidget;
 @property (nonatomic) OACommonBoolean *showSlopesOnElevationWidget;
 @property (nonatomic) OACommonStringList *customWidgetKeys;
+@property (nonatomic) OACommonStringList *tracksSortModes;
+@property (nonatomic) OACommonString *searchTracksSortModes;
 
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;
@@ -1008,6 +1135,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonStringList *poiFiltersOrder;
 @property (nonatomic) OACommonStringList *inactivePoiFilters;
+
+@property (nonatomic) OACommonInteger *contextGallerySpanGridCount;
+@property (nonatomic) OACommonInteger *contextGallerySpanGridCountLandscape;
 
 // Widgets
 
@@ -1024,8 +1154,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonSpeedLimitWarningState *showSpeedLimitWarning;
 
 // OSM Editing
-@property (nonatomic) OACommonString *osmUserName;
-@property (nonatomic) OACommonString *osmUserPassword;
 @property (nonatomic) OACommonString *osmUserAccessToken;
 @property (nonatomic) OACommonString *osmUserAccessTokenSecret;
 @property (nonatomic) OACommonString *oprAccessToken;
@@ -1040,6 +1168,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Mapillary
 @property (nonatomic) OACommonBoolean *showMapillary;
 @property (nonatomic) OACommonBoolean *onlinePhotosRowCollapsed;
+@property (nonatomic) OACommonBoolean *mapillaryPhotosRowCollapsed;
 @property (nonatomic) OACommonBoolean *mapillaryFirstDialogShown;
 
 @property (nonatomic) OACommonBoolean *useMapillaryFilter;
@@ -1050,22 +1179,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *mapillaryFilterPano;
 
 // Quick Action
-@property (nonatomic) OACommonBoolean *quickActionIsOn;
-@property (nonatomic) OACommonString *quickActionsList;
 @property (nonatomic) OACommonBoolean *isQuickActionTutorialShown;
-
-@property (nonatomic, readonly) OACommonDouble *quickActionLandscapeX;
-@property (nonatomic, readonly) OACommonDouble *quickActionLandscapeY;
-@property (nonatomic, readonly) OACommonDouble *quickActionPortraitX;
-@property (nonatomic, readonly) OACommonDouble *quickActionPortraitY;
-
-// Map 3d mode
-
-@property (nonatomic) OACommonMap3dMode *map3dMode;
-@property (nonatomic, readonly) OACommonDouble *map3dModeLandscapeX;
-@property (nonatomic, readonly) OACommonDouble *map3dModeLandscapeY;
-@property (nonatomic, readonly) OACommonDouble *map3dModePortraitX;
-@property (nonatomic, readonly) OACommonDouble *map3dModePortraitY;
+@property (nonatomic) OACommonStringList *quickActionButtons;
 
 // Contour Lines
 @property (nonatomic) OACommonString *contourLinesZoom;
@@ -1079,9 +1194,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
-
-- (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
-- (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
 
 - (void) setShowOnlineNotes:(BOOL)mapSettingShowOnlineNotes;
 - (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits;
@@ -1102,8 +1214,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void) hideGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update;
 - (void) hideRemovedGpx;
 
+- (void)saveTracksSortModes:(NSDictionary<NSString *, NSString *> *)tabsSortModes;
+- (NSDictionary<NSString *, NSString *> *)getTracksSortModes;
+
 - (NSString *) getFormattedTrackInterval:(int)value;
-- (NSString *) getDefaultVoiceProvider;
 
 - (NSSet<NSString *> *) getEnabledPlugins;
 - (NSSet<NSString *> *) getPlugins;
@@ -1128,7 +1242,14 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue;
 - (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue;
 - (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue;
+
+- (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
+
+- (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue;
+- (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue;
+- (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue;
+- (EOATemperatureConstant)getTemperatureUnit;
 
 // Direction Appearance
 
@@ -1140,6 +1261,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonBoolean *wikiArticleShowImagesAsked;
 @property (nonatomic) OACommonWikiArticleShowImages *wikivoyageShowImgs;
+
+@property (nonatomic) OACommonBoolean *selectMarkerOnSingleTap;
 
 @property (nonatomic) OACommonBoolean *coordsInputUseRightSide;
 @property (nonatomic) OACommonCoordinateInputFormats *coordsInputFormat;
@@ -1188,6 +1311,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonLong *backupFreePlanRegistrationTime;
 
 @property (nonatomic) OACommonString *backupPromocode;
+@property (nonatomic) OACommonString *backupPurchaseSku;
 @property (nonatomic) OACommonBoolean *backupPurchaseActive;
 @property (nonatomic) OACommonLong *backupPurchaseStartTime;
 @property (nonatomic) OACommonLong *backupPurchaseExpireTime;
@@ -1201,8 +1325,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonLong *backupLastUploadedTime;
 
 @property (nonatomic) OACommonString *userIosId;
-
-@property (nonatomic) OACommonString *userOsmBugName;
 
 @property (nonatomic) OACommonInteger *delayToStartNavigation;
 
@@ -1224,14 +1346,18 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *currentTrackWidth;
 @property (nonatomic) OACommonBoolean *currentTrackShowArrows;
 @property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
+@property (nonatomic) OACommonBoolean *currentTrackIsJoinSegments;
 @property (nonatomic) OACommonDouble *currentTrackVerticalExaggerationScale;
+@property (nonatomic) OACommonInteger *currentTrackElevationMeters;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dByType;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dWallColorType;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;
+@property (nonatomic) OACommonString *currentTrackRouteActivity;
 
 @property (nonatomic) OACommonStringList *customTrackColors;
 @property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;
+@property (nonatomic) OACommonString *gradientPalettes;
 
 @property (nonatomic) OACommonString *gpsStatusApp;
 
@@ -1290,6 +1416,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonLong *lastUUIDChangeTimestamp;
 
 @property (nonatomic) OACommonBoolean *useOldRouting;
+@property (assign, nonatomic) BOOL ignoreMissingMaps;
+
+// Developer plugin
+@property (nonatomic) OACommonBoolean *simulateOBDData;
 
 - (long) getLastGloblalSettingsModifiedTime;
 - (void) setLastGlobalModifiedTime:(long)timestamp;

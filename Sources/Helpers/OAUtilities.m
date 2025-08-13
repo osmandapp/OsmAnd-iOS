@@ -17,32 +17,34 @@
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
 #import "OASvgHelper.h"
-
 #import <UIKit/UIDevice.h>
 #import "OAIndexConstants.h"
 #import <MBProgressHUD.h>
 #import "OALinks.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import <mach/mach.h>
 #import <mach/mach_host.h>
-#include <CommonCrypto/CommonDigest.h>
 #import <CocoaSecurity.h>
 #import <sys/utsname.h>
-
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
-#define kBlurViewTag -999
-#define kSpinnerViewTag -998
+#include <CommonCrypto/CommonDigest.h>
 
-#define kNavItemStackViewWithSubtitleTag -997
-#define kTitleInNavItemStackViewTag -996
-#define kSubtitleInNavItemStackViewTag -995
+static NSInteger const kBlurViewTag = -999;
+static NSInteger const kSpinnerViewTag = -998;
 
-#define kNavItemStackViewWithCenterIconTag -994
-#define kCenterIconInNavItemStackViewTag -993
+static NSInteger const kNavItemStackViewWithSubtitleTag = -997;
+static NSInteger const kTitleInNavItemStackViewTag = -996;
+static NSInteger const kSubtitleInNavItemStackViewTag = -995;
 
-#define kShadowViewTag -992
+static NSInteger const kNavItemStackViewWithCenterIconTag = -994;
+static NSInteger const kCenterIconInNavItemStackViewTag = -993;
+
+static NSInteger const kShadowViewTag = -992;
+
+static NSInteger const kQuickActionButtonTag = -991;
+static NSInteger const kMap3DModeButtonTag = -990;
 
 @implementation UIBezierPath (util)
 
@@ -208,7 +210,7 @@
 {
     UIImage *img = [OASvgHelper mapImageNamed:name];
     if (img)
-        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+        img = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
     return img;
 }
@@ -217,7 +219,7 @@
 {
     UIImage *img = [OASvgHelper mapImageNamed:name scale:scale];
     if (img)
-        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+        img = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
     return img;
 }
@@ -227,7 +229,7 @@
     CGFloat scale = [[UIScreen mainScreen] scale];
     UIImage *img = [OASvgHelper mapImageFromSvgResource:name width:width * scale height:height * scale];
     if (img)
-        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+        img = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
     return img;
 }
@@ -511,25 +513,6 @@
     }
 }
 
-- (int) lastIndexOf:(NSString *)text
-{
-    int i = 0;
-    int res = -1;
-    for (;;)
-    {
-        int a = [self indexOf:text start:i];
-        if (a != -1)
-        {
-            res = a;
-            i = a + 1;
-        }
-
-        if (a == -1 || a >= text.length - 1)
-            break;
-    }
-    return res;
-}
-
 - (NSString *) add:(NSString *)str
 {
     return [self stringByAppendingString:str];
@@ -575,7 +558,28 @@
 
 - (NSString *) sanitizeFileName
 {
-    return [[[self componentsSeparatedByCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]] componentsJoinedByString:@"_"];
+    if (self.length == 0)
+        return @"";
+    
+    NSMutableString *sanitized = [self mutableCopy];
+
+    NSArray<NSString *> *toReplaceWithUnderscore = @[
+        @"/", @"\\", @":", @";", @"*", @"?", @"`", @"'", @"\"", @"<", @">", @"|", @"&", @"\0", @"\n", @"\r"
+    ];
+
+    for (NSString *symbol in toReplaceWithUnderscore) {
+        [sanitized replaceOccurrencesOfString:symbol
+                                   withString:@"_"
+                                      options:0
+                                        range:NSMakeRange(0, sanitized.length)];
+    }
+
+    [sanitized replaceOccurrencesOfString:@"\t"
+                               withString:@" "
+                                  options:0
+                                    range:NSMakeRange(0, sanitized.length)];
+
+    return [sanitized stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 - (NSString *) xmlStringToString
@@ -818,7 +822,8 @@
     else
     {
         blurView = [[UIView alloc] init];
-        blurView.backgroundColor = UIColorFromRGB(color_dialog_transparent_bg_argb_light);
+        UIColor *color = [UIColor colorNamed:ACColorNameGroupBgColorSecondary];
+        blurView.backgroundColor = light ? color.light : color.dark;
     }
     blurView.tag = kBlurViewTag;
     blurView.userInteractionEnabled = NO;
@@ -929,16 +934,23 @@
         shadowView.hidden = !show;
 }
 
-- (UIImage *) toUIImage
-{
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-
-    UIGraphicsEndImageContext();
-
-    return img;
+- (UIImage *)toUIImage {
+    // Ensure the view has a valid layout
+    [self layoutIfNeeded];
+    
+    // Check for valid bounds
+    CGRect bounds = self.bounds;
+    if (CGRectIsEmpty(bounds) || CGRectIsInfinite(bounds)) {
+        NSLog(@"Invalid view bounds: %@", NSStringFromCGRect(bounds));
+        return nil;
+    }
+    
+    // Use the modern image renderer API
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
+    
+    return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull context) {
+        [self.layer renderInContext:context.CGContext];
+    }];
 }
 
 @end
@@ -1216,6 +1228,16 @@ static NSUnitCloud * _percent;
 @implementation OAUtilities
 
 static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
+
++ (NSInteger)getQuickActionButtonTag
+{
+    return kQuickActionButtonTag;
+}
+
++ (NSInteger)getMap3DModeButtonTag
+{
+    return kMap3DModeButtonTag;
+}
 
 + (BOOL) getAccessToFile:(NSString *)filePath
 {
@@ -1684,7 +1706,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     }
 }
 
-+ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top
++ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top scaleFactor:(CGFloat)scaleFactor
 {
     @autoreleasepool
     {
@@ -1693,24 +1715,26 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
             size = center.size;
         if (size.width < top.size.width || size.height < top.size.height)
             size = top.size;
-
-        UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+        
+        CGSize scaledSize = CGSizeMake(size.width * scaleFactor, size.height * scaleFactor);
+        
+        UIGraphicsBeginImageContextWithOptions(scaledSize, NO, [UIScreen mainScreen].scale);
         
         CGContextRef context = UIGraphicsGetCurrentContext();
         
-        CGContextTranslateCTM(context, 0, size.height);
+        CGContextTranslateCTM(context, 0, scaledSize.height);
         CGContextScaleCTM(context, 1.0, -1.0);
         
         CGContextSetBlendMode(context, kCGBlendModeNormal);
-        CGRect rect = CGRectMake(size.width / 2.0 - bottom.size.width / 2.0, size.height / 2.0 - bottom.size.height / 2.0, bottom.size.width, bottom.size.height);
+        CGRect rect = CGRectMake((scaledSize.width - bottom.size.width * scaleFactor) / 2, (scaledSize.height - bottom.size.height * scaleFactor) / 2, bottom.size.width * scaleFactor, bottom.size.height * scaleFactor);
         CGContextDrawImage(context, rect, bottom.CGImage);
 
         center = [self imageWithTintColor:color image:center];
         
-        rect = CGRectMake(size.width / 2.0 - center.size.width / 2.0, size.height / 2.0 - center.size.height / 2.0, center.size.width, center.size.height);
+        rect = CGRectMake((scaledSize.width - center.size.width * scaleFactor) / 2, (scaledSize.height - center.size.height * scaleFactor) / 2, center.size.width * scaleFactor, center.size.height * scaleFactor);
         CGContextDrawImage(context, rect, center.CGImage);
         
-        rect = CGRectMake(size.width / 2.0 - top.size.width / 2.0, size.height / 2.0 - top.size.height / 2.0, top.size.width, top.size.height);
+        rect = CGRectMake((scaledSize.width - top.size.width * scaleFactor) / 2, (scaledSize.height - top.size.height * scaleFactor) / 2, top.size.width * scaleFactor, top.size.height * scaleFactor);
         CGContextDrawImage(context, rect, top.CGImage);
 
         UIImage *res = UIGraphicsGetImageFromCurrentImageContext();
@@ -1863,9 +1887,16 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         return -1;
 }
 
++ (NSString *) displayNameForLang:(NSString *)lang
+{
+    if ([lang isEqualToString:@"hu-formal"] || [lang isEqualToString:@"hu_formal"])
+        return OALocalizedString(@"lang_hu_formal");
+    return [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang];
+}
+
 + (NSString *) translatedLangName:(NSString *)lang
 {
-    NSString *langName = [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang];
+    NSString *langName = [self.class displayNameForLang:lang];
     if (!langName)
         langName = lang;
     return langName;
@@ -2627,6 +2658,11 @@ static const double d180PI = 180.0 / M_PI_2;
 + (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddRootTracksFolder
 {
     NSMutableArray<NSString *> *flattenedFilePaths = [self.class getFlattenedFileList:OsmAndApp.instance.gpxPath];
+    return [self.class getGpxFoldersListSorted:flattenedFilePaths shouldSort:shouldSort shouldAddRootTracksFolder:shouldAddRootTracksFolder];
+}
+
++ (NSArray<NSString *> *) getGpxFoldersListSorted:(NSArray<NSString *> *)flattenedFilePaths shouldSort:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddRootTracksFolder
+{
     NSMutableArray<NSString *> *flattenedRelativeFilePaths = [NSMutableArray array];
     for (NSString *path in flattenedFilePaths)
     {
@@ -2756,6 +2792,42 @@ static const double d180PI = 180.0 / M_PI_2;
     return newName;
 }
 
+// Example: "Asia_wikivoyage_2.travel.obf" -> "asia_wikivoyage_00_00_00"
++ (NSString *) simplifyFileName:(NSString *)filename
+{
+    NSString *lc = [filename lowercaseString];
+    
+    NSRange dotRange = [lc rangeOfString:@"."];
+    if (dotRange.location != NSNotFound) {
+        lc = [lc substringToIndex:dotRange.location];
+    }
+    
+    if ([lc hasSuffix:@"_2"]) {
+        lc = [lc substringToIndex:lc.length - @"_2".length];
+    }
+    
+    NSCharacterSet *decimalSet = [NSCharacterSet decimalDigitCharacterSet];
+    BOOL hasTimestampEnd = [lc rangeOfCharacterFromSet:decimalSet].location != NSNotFound;
+
+    if (!hasTimestampEnd) {
+        lc = [lc stringByAppendingString:@"_00_00_00"];
+    }
+    
+    return lc;
+}
+
++ (NSString *)convertToPermittedFileName:(NSString *)filename {
+    static NSCharacterSet *forbiddenCharacters = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        forbiddenCharacters = [NSCharacterSet characterSetWithCharactersInString:@"\"*/:<>?\\|"];
+    });
+
+    NSArray<NSString *> *components = [filename componentsSeparatedByCharactersInSet:forbiddenCharacters];
+    NSString *sanitized = [components componentsJoinedByString:@"~"];
+    return sanitized;
+}
+
 + (natural_t) get_free_memory
 {
     mach_port_t host_port;
@@ -2868,6 +2940,11 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view
 {
+    [self showToast:title details:details duration:duration verticalOffset:100 inView:view];
+}
+
++ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration verticalOffset:(CGFloat)verticalOffset inView:(UIView *)view
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray *allHUDs = [MBProgressHUD allHUDsForView:view];
         for (MBProgressHUD *hudView in allHUDs)
@@ -2879,7 +2956,7 @@ static const double d180PI = 180.0 / M_PI_2;
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
         hud.mode = MBProgressHUDModeText;
         hud.margin = 10.f;
-        hud.yOffset = view.frame.size.height / 2 - 100;
+        hud.yOffset = view.frame.size.height / 2 - verticalOffset;
         hud.cornerRadius = 18.f;
         hud.removeFromSuperViewOnHide = YES;
         hud.userInteractionEnabled = NO;
@@ -2940,7 +3017,7 @@ static const double d180PI = 180.0 / M_PI_2;
         dist *= iteration % 2 == 1 ? mult1 : mult2;
     }
     
-    return dist;;
+    return dist;
 }
 
 + (BOOL) isValidFileName:(NSString *)name
@@ -2965,6 +3042,13 @@ static const double d180PI = 180.0 / M_PI_2;
 + (BOOL) isReleaseVersion
 {
     return ![kDocsLatestVersion containsString:@"future-ios"];
+}
+
++ (NSString *) generateCurrentDateFilename
+{
+    NSDateFormatter *objDateFormatter = [[NSDateFormatter alloc] init];
+    [objDateFormatter setDateFormat:@"EEE dd MMM yyyy"];
+    return [objDateFormatter stringFromDate:[NSDate date]];
 }
 
 @end

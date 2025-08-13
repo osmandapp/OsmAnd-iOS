@@ -11,12 +11,15 @@
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OAAppModeCell.h"
+#import "OALocationServices.h"
+#import "OAAppData.h"
 #import "OARoutingTargetCell.h"
-#import "OALineChartCell.h"
 #import "OARTargetPoint.h"
 #import "OAPointDescription.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OsmAndApp.h"
 #import "OACommonTypes.h"
 #import "OAApplicationMode.h"
@@ -28,7 +31,6 @@
 #import "OAUtilities.h"
 #import "OAWaypointUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
-#import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
 #import "OAAppModeView.h"
 #import "OAColors.h"
@@ -58,12 +60,17 @@
 #import "OAOsmAndFormatter.h"
 #import "OALinks.h"
 #import "OASimpleTableViewCell.h"
+#import "OAApplicationMode.h"
 #import "OARouteBaseViewController.h"
 #import "OAEmissionHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"
 #import "OARequiredMapsResourceViewController.h"
 #import "OAResourcesUIHelper.h"
+#import "OsmAndSharedWrapper.h"
+#import "OASnapTrackWarningViewController.h"
+#import "OAGpxData.h"
+#import "OAMeasurementEditingContext.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -118,11 +125,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     int _historyItemsLimit;
     
-    OALineChartCell *_routeStatsCell;
+    ElevationChartCell *_routeStatsCell;
     UIProgressView *_progressBarView;
-    
-    OAGPXTrackAnalysis *_trackAnalysis;
-    OAGPXDocument *_gpx;
+    OASGpxTrackAnalysis *_trackAnalysis;
+    OASGpxFile *_gpx;
     BOOL _needChartUpdate;
     
     BOOL _hasEmptyTransportRoute;
@@ -197,15 +203,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_tableView setShowsHorizontalScrollIndicator:NO];
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-    _routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
+    _routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
+    _routeStatsCell.heightConstraint.constant = 90;
+    [_tableView registerNib:[UINib nibWithNibName:AttachRoadsBannerCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:AttachRoadsBannerCell.reuseIdentifier];
 
-    [GpxUIHelper setupGPXChartWithChartView:_routeStatsCell.lineChartView
-                               yLabelsCount:4
-                                  topOffset:20
-                               bottomOffset:4
-                        useGesturesAndScale:NO
-    ];
+    [GpxUIHelper setupElevationChartWithChartView:_routeStatsCell.chartView
+                                        topOffset:10
+                                     bottomOffset:4
+                              useGesturesAndScale:NO];
 
     self.sliderView.layer.cornerRadius = 2.;
     
@@ -321,21 +327,20 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     OASelectedGPXHelper *helper = [OASelectedGPXHelper instance];
     OAGPXDatabase *dbHelper = [OAGPXDatabase sharedDb];
-    NSMutableArray<OAGPXDocument *> *visibleGpxDocs = [NSMutableArray array];
-    NSMutableArray<OAGPX *> *visibleGpx = [NSMutableArray array];
+    NSMutableArray<OASGpxFile *> *visibleGpxDocs = [NSMutableArray array];
+    NSMutableArray<OASGpxDataItem *> *visibleGpx = [NSMutableArray array];
     
-    auto activeGpx = helper.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-    {
-        NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
-        OAGPX *gpx = [dbHelper getGPXItem:gpxFilePath];
-        if (gpx)
-        {
-            const auto& doc = it.value();
-            if (doc != nullptr && (doc->hasRtePt() || doc->hasTrkPt()))
-            {
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = helper.activeGpx;
+
+    for (NSString *key in activeGpx.allKeys) {
+        OASGpxDataItem *gpx = [dbHelper getGPXItem:key];
+
+        if (gpx) {
+            OASGpxFile *gpxFile = activeGpx[key];
+
+            if (gpxFile && (gpxFile.hasRtePt || gpxFile.hasTrkPt)) {
                 [visibleGpx addObject:gpx];
-                [visibleGpxDocs addObject:[[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(doc)]];
+                [visibleGpxDocs addObject:gpxFile];
             }
         }
     }
@@ -350,17 +355,17 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     for (NSInteger i = 0; i < visibleGpx.count; i++)
     {
-        OAGPX *gpx = visibleGpx[i];
-        OAGPXDocument *doc = visibleGpxDocs[i];
-        if (gpx && doc)
+        OASGpxDataItem *gpx = visibleGpx[i];
+        OASGpxFile *gpxFile = visibleGpxDocs[i];
+        if (gpx && gpxFile)
         {
-            doc.path = gpx.absolutePath;
+            gpxFile.path = gpx.file.absolutePath;
             [section addObject:@{
                 @"cell" : [OARightIconTableViewCell getCellIdentifier],
-                @"title" : gpx.getNiceTitle,
+                @"title" : gpx.gpxFileNameWithoutExtension,
                 @"descr" : [OAGPXUIHelper getDescription:gpx],
                 @"img" : @"ic_custom_trip",
-                @"item" : doc
+                @"item" : gpxFile
             }];
         }
         
@@ -646,6 +651,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [section addObject:@{
                 @"cell" : kCellReuseIdentifier
             }];
+            if ([self shouldShowAttachRoadsOption])
+            {
+                [section addObject:@{
+                    @"cell" : AttachRoadsBannerCell.reuseIdentifier,
+                    @"title" : OALocalizedString(@"attach_roads_descr"),
+                    @"buttonTitle" : OALocalizedString(@"attach_to_the_roads"),
+                    @"key" : @"attach_roads"
+                }];
+            }
             [section addObject:@{
                 @"cell" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_details"),
@@ -657,17 +671,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             }];
             [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
             
-            OAGPXTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
+            OASGpxTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
             if (_needChartUpdate)
             {
-                OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
-                BOOL calcWithoutGaps = !gpx.joinSegments && (_gpx.tracks.count > 0 && _gpx.tracks.firstObject.generalTrack);
-                [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.lineChartView
+                OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
+                [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.chartView
                                                   analysis:trackAnalysis
-                                       useGesturesAndScale:NO
                                                  firstType:GPXDataSetTypeAltitude
                                                 secondType:GPXDataSetTypeSlope
-                                           calcWithoutGaps:calcWithoutGaps];
+                                                  axisType:GPXDataSetAxisTypeDistance
+                                           calcWithoutGaps:[GpxUtils calcWithoutGaps:_gpx gpxDataItem:gpx]];
                 _needChartUpdate = NO;
             }
         }
@@ -736,6 +749,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (BOOL) isGpxTrackFollowingMode
 {
     return _routingHelper.getCurrentGPXRoute != nil;
+}
+
+- (BOOL) shouldShowAttachRoadsOption
+{
+    OASGpxFile *gpx = _routingHelper.getCurrentGPXRoute.file;
+    return gpx && ![gpx isAttachedToRoads] && [self isGpxTrackFollowingMode] && [_settings.detailedTrackGuidance get:[_routingHelper getAppMode]] == EOATrackApproximationManual;
 }
 
 - (NSAttributedString *) getFirstLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
@@ -1015,7 +1034,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) editDestinationsPressed:(id)sender
 {
-    [[OARootViewController instance].mapPanel showWaypoints];
+    [[OARootViewController instance].mapPanel showWaypoints:NO];
 }
 
 - (void) addDestinationPressed:(id)sender
@@ -1029,6 +1048,20 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) openRouteDetails
 {
     [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:_gpx analysis:_trackAnalysis];
+}
+
+- (void) openAttachToTheRoadsScreen
+{
+    if (_gpx)
+    {
+        OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:_gpx];
+        OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
+        editingContext.gpxData = gpxData;
+        editingContext.appMode = OARoutingHelper.sharedInstance.getAppMode;
+        editingContext.selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment.get;
+        [[OARootViewController instance].mapPanel closeRouteInfo];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext followTrackMode:YES showSnapWarning:YES]];
+    }
 }
 
 - (void) calcPedestrianRoute
@@ -1241,13 +1274,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [self show:NO fullMenu:YES onComplete:nil];
 }
 
-- (OAGPXTrackAnalysis *) getTrackAnalysis
+- (OASGpxTrackAnalysis *) getTrackAnalysis
 {
-    OAGPXTrackAnalysis *trackAnalysis = _trackAnalysis;
+    OASGpxTrackAnalysis *trackAnalysis = _trackAnalysis;
     if (!trackAnalysis)
     {
         _gpx = [OAGPXUIHelper makeGpxFromRoute:_routingHelper.getRoute];
-        trackAnalysis = [_gpx getAnalysis:0];
+        trackAnalysis = [_gpx getAnalysisFileTimestamp:0];
         _trackAnalysis = trackAnalysis;
         _needChartUpdate = YES;
     }
@@ -1393,19 +1426,18 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             {
                 cell.finishPoint = NO;
                 [cell setDividerVisibility:NO];
+                
                 NSArray<OARTargetPoint *> *points = [_pointsHelper getIntermediatePoints];
-                NSMutableString *via = [NSMutableString string];
+                NSMutableArray<NSString *> *names = [NSMutableArray arrayWithCapacity:points.count];
+
                 for (OARTargetPoint *point in points)
                 {
-                    if (via.length > 0)
-                        [via appendString:@" "];
-                    
-                    NSString *description = [point getOnlyName];
-                    [via appendString:description];
+                    NSString *name = [point getOnlyName];
+                    [names addObject:(name.length > 0 ? name : OALocalizedString(@"map_no_address"))];
                 }
                 [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_intermediate"]];
                 cell.titleLabel.text = OALocalizedString(@"route_via");
-                cell.addressLabel.text = via;
+                cell.addressLabel.text = [names componentsJoinedByString:@" "];
                 [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
                 [self setupButtonLayout:cell.routingCellButton];
                 [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -1419,7 +1451,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             else if ([type isEqualToString:@"gpx_route"])
             {
                 OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
-                OAGPXDocument *gpx = gpxParams.file;
+                OASGpxFile *gpx = gpxParams.file;
                 NSString *fileName = @"";
                 if (gpx.path.length > 0)
                     fileName = [gpx.path.lastPathComponent stringByDeletingPathExtension];
@@ -1521,6 +1553,19 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
     {
         return _routeStatsCell;
+    }
+    else if ([item[@"cell"] isEqualToString:AttachRoadsBannerCell.reuseIdentifier])
+    {
+        AttachRoadsBannerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:AttachRoadsBannerCell.reuseIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.contentContainer.layer.cornerRadius = 6;
+        cell.contentContainer.layer.borderWidth = 1;
+        cell.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        cell.label.text = item[@"title"];
+        [cell.button setTitle:item[@"buttonTitle"] forState:UIControlStateNormal];
+        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.button addTarget:self action:@selector(openAttachToTheRoadsScreen) forControlEvents:UIControlEventTouchUpInside];
+        return cell;
     }
     else if ([item[@"cell"] isEqualToString:[OAFilledButtonCell getCellIdentifier]])
     {
@@ -1772,11 +1817,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [self updateData];
             [_tableView reloadData];
         }
-        else if ([obj isKindOfClass:OAGPXDocument.class])
+        else if ([obj isKindOfClass:OASGpxFile.class])
         {
-            OAGPXDocument *gpx = (OAGPXDocument *) obj;
+            OASGpxFile *gpx = (OASGpxFile *) obj;
             
-            OAApplicationMode *mode = [gpx getRouteProfile];
+            OAApplicationMode *mode = [self getRouteProfile:gpx];
             if (mode)
             {
                 [_routingHelper setAppMode:mode];
@@ -1804,6 +1849,18 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [_tableView reloadData];
         }
     }
+}
+
+- (OAApplicationMode *)getRouteProfile:(OASGpxFile *)gpxFile
+{
+    NSArray<OASWptPt *> *points = [gpxFile getRoutePoints];
+    if (points && points.count > 0)
+    {
+        OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:[points[0] getProfileType] def:nil];
+        if (mode)
+            return mode;
+    }
+    return nil;
 }
 
 #pragma mark - OAWaypointSelectionDialogDelegate
@@ -2287,7 +2344,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 #pragma mark - OASegmentSelectionDelegate
 
-- (void) onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
+- (void) onSegmentSelected:(NSInteger)position gpx:(OASGpxFile *)gpx
 {
     [OAAppSettings.sharedManager.gpxRouteSegment set:position];
     

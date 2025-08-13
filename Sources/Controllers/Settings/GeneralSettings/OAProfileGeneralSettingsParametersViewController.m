@@ -8,12 +8,12 @@
 
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OAAppSettings.h"
-#import "OAAppSettings.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
+#import "OAApplicationMode.h"
 #import "OASimpleTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
@@ -77,10 +77,16 @@
             _title = OALocalizedString(@"driving_region");
             break;
         case EOAProfileGeneralSettingsUnitsOfLenght:
-            _title = OALocalizedString(@"unit_of_length");
+            _title = OALocalizedString(@"routing_attr_length_name");
             break;
         case EOAProfileGeneralSettingsUnitsOfSpeed:
-            _title = OALocalizedString(@"units_of_speed");
+            _title = OALocalizedString(@"shared_string_speed");
+            break;
+        case EOAProfileGeneralSettingsUnitsOfVolume:
+            _title = OALocalizedString(@"shared_string_volume");
+            break;
+        case EOAProfileGeneralSettingsUnitsOfTemp:
+            _title = OALocalizedString(@"map_settings_weather_temp");
             break;
         case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             _title = OALocalizedString(@"angular_measurment_units");
@@ -117,14 +123,24 @@
 
 - (NSString *)getSubtitle
 {
-    return (_settingsType == EOAProfileGeneralSettingsMapOrientation && _openFromMap) || _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation || _settingsType == EOAProfileGeneralSettingsDisplayPosition ? @"" : [self.appMode toHumanString];
+    switch (_settingsType)
+    {
+        case EOAProfileGeneralSettingsMapOrientation:
+            return _openFromMap ? @"" : [self.appMode toHumanString];
+        case EOAProfileGeneralSettingsAppTheme:
+        case EOAProfileGeneralSettingsDistanceDuringNavigation:
+        case EOAProfileGeneralSettingsDisplayPosition:
+        case EOAProfileGeneralSettingsUnitsOfVolume:
+        case EOAProfileGeneralSettingsUnitsOfTemp:
+            return @"";
+        default:
+            return [self.appMode toHumanString];
+    }
 }
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    if (_settingsType == EOAProfileGeneralSettingsAppTheme)
-        return NO;
-    return !_openFromMap;
+    return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp ? NO : !_openFromMap;
 }
 
 - (BOOL)useCustomTableViewHeader
@@ -151,7 +167,14 @@
 
 - (NSString *)getTableHeaderDescription
 {
-    return _settingsType == EOAProfileGeneralSettingsMapOrientation ? OALocalizedString(@"compass_click_desc") : @"";
+    if (_settingsType == EOAProfileGeneralSettingsMapOrientation)
+        return OALocalizedString(@"compass_click_desc");
+    else if (_settingsType == EOAProfileGeneralSettingsUnitsOfVolume)
+        return OALocalizedString(@"unit_of_volume_description");
+    else if (_settingsType == EOAProfileGeneralSettingsUnitsOfTemp)
+        return OALocalizedString(@"unit_of_temperature_description");
+    else
+        return @"";
 }
 
 - (NSString *)getLeftNavbarButtonTitle
@@ -176,6 +199,8 @@
     NSInteger drivingRegion = [_settings.drivingRegion get:self.appMode];
     NSInteger metricSystem = [_settings.metricSystem get:self.appMode];
     NSInteger speedSystem = [_settings.speedSystem get:self.appMode];
+    NSInteger volumeSystem = [_settings.volumeUnits get:self.appMode];
+    NSInteger tempSystem = [_settings.temperatureUnits get:self.appMode];
     NSInteger externamlInputDevices = [_settings.settingExternalInputDevice get:self.appMode];
     if (automatic)
         drivingRegion = -1;
@@ -208,11 +233,11 @@
             
         case EOAProfileGeneralSettingsMapOrientation:
             [dataArr addObject:@{
-                @"name" : @"none",
-                @"title" : OALocalizedString(@"rotate_map_north_opt"),
-                @"selected" : @(rotateMap == ROTATE_MAP_NONE),
-                @"icon" : @"ic_custom_direction_north_day",
-                @"type" : [OASimpleTableViewCell getCellIdentifier],
+               @"name" : @"manually",
+               @"title" : OALocalizedString(@"rotate_map_manual_opt"),
+               @"selected" : @(rotateMap == ROTATE_MAP_MANUAL),
+               @"icon" : @"ic_custom_direction_manual_day",
+               @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"bearing",
@@ -229,11 +254,11 @@
                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
-               @"name" : @"manually",
-               @"title" : OALocalizedString(@"rotate_map_manual_opt"),
-               @"selected" : @(rotateMap == ROTATE_MAP_MANUAL),
-               @"icon" : @"ic_custom_direction_manual_day",
-               @"type" : [OASimpleTableViewCell getCellIdentifier],
+                @"name" : @"none",
+                @"title" : OALocalizedString(@"rotate_map_north_opt"),
+                @"selected" : @(rotateMap == ROTATE_MAP_NONE),
+                @"icon" : @"ic_custom_direction_north_day",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -333,6 +358,13 @@
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
+                @"name" : @"DR_INDIA",
+                @"title" : [OADrivingRegion getName:DR_INDIA],
+                @"description" : [OADrivingRegion getDescription:DR_INDIA],
+                @"selected" : @(drivingRegion == DR_INDIA),
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
                 @"name" : @"DR_AUSTRALIA",
                 @"title" : [OADrivingRegion getName:DR_AUSTRALIA],
                 @"description" : [OADrivingRegion getDescription:DR_AUSTRALIA],
@@ -419,6 +451,54 @@
             }];
             break;
             
+        case EOAProfileGeneralSettingsUnitsOfVolume:
+            [dataArr addObject:@{
+                @"name" : @"litres",
+                @"title" : OALocalizedString(@"litres"),
+                @"selected" : @(volumeSystem == LITRES),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+                @"name" : @"imperial_gallons",
+                @"title" : OALocalizedString(@"imperial_gallons"),
+                @"selected" : @(volumeSystem == IMPERIAL_GALLONS),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+                @"name" : @"us_gallons",
+                @"title" : OALocalizedString(@"us_gallons"),
+                @"selected" : @(volumeSystem == US_GALLONS),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            break;
+            
+        case EOAProfileGeneralSettingsUnitsOfTemp:
+            [dataArr addObject:@{
+                @"name" : @"deviceSettings",
+                @"title" : [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"device_settings"), [[NSUnitTemperature current] displaySymbol]],
+                @"selected" : @(tempSystem == SYSTEM_DEFAULT),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier]
+            }];
+            [dataArr addObject:@{
+                @"name" : @"celsius",
+                @"title" : [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"weather_temperature_celsius"), @"°C"],
+                @"selected" : @(tempSystem == CELSIUS),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier]
+            }];
+            [dataArr addObject:@{
+                @"name" : @"fahrenheit",
+                @"title" : [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"weather_temperature_fahrenheit"), @"°F"],
+                @"selected" : @(tempSystem == FAHRENHEIT),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier]
+            }];
+            break;
+
         case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             [dataArr addObject:@{
                 @"name" : @"degrees_180",
@@ -486,7 +566,7 @@
 
 - (BOOL) hideFirstHeader
 {
-    return _settingsType == EOAProfileGeneralSettingsMapOrientation || _settingsType == EOAProfileGeneralSettingsDisplayPosition;
+    return [@[@(EOAProfileGeneralSettingsMapOrientation), @(EOAProfileGeneralSettingsDisplayPosition), @(EOAProfileGeneralSettingsUnitsOfVolume), @(EOAProfileGeneralSettingsUnitsOfTemp)] containsObject:@(_settingsType)];
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section
@@ -523,20 +603,20 @@
             [cell leftIconVisibility:item[@"icon"] != nil];
             cell.titleLabel.text = item[@"title"];
             cell.descriptionLabel.text = item[@"description"];
-            if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation)
+            if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp)
             {
                 cell.leftIconView.image = [item[@"selected"] boolValue] ? [UIImage templateImageNamed:item[@"icon"]] : nil;
             }
             else if (_settingsType != EOAProfileGeneralSettingsMapOrientation)
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? self.appMode.getProfileColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
             }
             else
             {
                 cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
             }
-            cell.accessoryType = [item[@"selected"] boolValue] && (_settingsType != EOAProfileGeneralSettingsAppTheme && _settingsType != EOAProfileGeneralSettingsScreenOrientation && _settingsType != EOAProfileGeneralSettingsDistanceDuringNavigation) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = [item[@"selected"] boolValue] && _settingsType != EOAProfileGeneralSettingsAppTheme && _settingsType != EOAProfileGeneralSettingsScreenOrientation && _settingsType != EOAProfileGeneralSettingsDistanceDuringNavigation && _settingsType != EOAProfileGeneralSettingsUnitsOfVolume && _settingsType != EOAProfileGeneralSettingsUnitsOfTemp ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -578,6 +658,12 @@
             break;
         case EOAProfileGeneralSettingsUnitsOfSpeed:
             [self selectSpeedSystem:name];
+            break;
+        case EOAProfileGeneralSettingsUnitsOfVolume:
+            [self selectSettingVolumeUnits:name];
+            break;
+        case EOAProfileGeneralSettingsUnitsOfTemp:
+            [self selectSettingTemperatureUnits:name];
             break;
         case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             [self selectSettingAngularUnits:name];
@@ -664,6 +750,8 @@
             drivingRegion = DR_UK_AND_OTHERS;
         else if ([name isEqualToString:@"DR_JAPAN"])
             drivingRegion = DR_JAPAN;
+        else if ([name isEqualToString:@"DR_INDIA"])
+            drivingRegion = DR_INDIA;
         else if ([name isEqualToString:@"DR_AUSTRALIA"])
             drivingRegion = DR_AUSTRALIA;
         else
@@ -688,6 +776,8 @@
     else if ([name isEqualToString:@"NAUTICAL_MILES_AND_FEET"])
         [_settings.metricSystem set:NAUTICAL_MILES_AND_FEET mode:self.appMode];
     [_settings.metricSystemChangedManually set:YES mode:self.appMode];
+
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void) selectSpeedSystem:(NSString *)name
@@ -704,6 +794,28 @@
         [_settings.speedSystem set:(MINUTES_PER_KILOMETER) mode:self.appMode];
     else if ([name isEqualToString:@"NAUTICALMILES_PER_HOUR"])
         [_settings.speedSystem set:(NAUTICALMILES_PER_HOUR) mode:self.appMode];
+}
+
+- (void) selectSettingVolumeUnits:(NSString *)name
+{
+    if ([name isEqualToString:@"litres"])
+        [_settings.volumeUnits set:LITRES mode:self.appMode];
+    else if ([name isEqualToString:@"imperial_gallons"])
+        [_settings.volumeUnits set:IMPERIAL_GALLONS mode:self.appMode];
+    else if ([name isEqualToString:@"us_gallons"])
+        [_settings.volumeUnits set:US_GALLONS mode:self.appMode];
+}
+
+- (void) selectSettingTemperatureUnits:(NSString *)name
+{
+    if ([name isEqualToString:@"deviceSettings"])
+        [_settings.temperatureUnits set:SYSTEM_DEFAULT mode:self.appMode];
+    else if ([name isEqualToString:@"celsius"])
+        [_settings.temperatureUnits set:CELSIUS mode:self.appMode];
+    else if ([name isEqualToString:@"fahrenheit"])
+        [_settings.temperatureUnits set:FAHRENHEIT mode:self.appMode];
+    
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void) selectSettingAngularUnits:(NSString *)name

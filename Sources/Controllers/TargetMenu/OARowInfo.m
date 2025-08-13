@@ -7,6 +7,7 @@
 //
 
 #import "OARowInfo.h"
+#import "OACollapsableView.h"
 
 @implementation OARowInfo
 
@@ -27,6 +28,7 @@
         _typeName = typeName;
         _isPhoneNumber = isPhoneNumber;
         _isUrl = isUrl;
+        _detailsArray = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -62,6 +64,11 @@
         return [_text isEqualToString:item.text];
     }
     return NO;
+}
+
+- (void)setDetailsArray:(NSMutableArray<NSDictionary *> *)detailsArray
+{
+    _detailsArray = [detailsArray mutableCopy];
 }
 
 @end

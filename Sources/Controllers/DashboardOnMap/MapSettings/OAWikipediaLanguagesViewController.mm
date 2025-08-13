@@ -16,6 +16,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OAPluginsHelper.h"
+#import "OAApplicationMode.h"
 
 typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 {

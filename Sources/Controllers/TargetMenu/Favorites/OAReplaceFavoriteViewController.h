@@ -10,7 +10,7 @@
 #import "OAFavoriteItem.h"
 #import "OAGpxWptItem.h"
 
-@class OAGPXDocument;
+@class OASGpxFile;
 
 typedef NS_ENUM(NSInteger, EOAReplacePointType) {
     EOAReplacePointTypeFavorite = 0,
@@ -28,6 +28,6 @@ typedef NS_ENUM(NSInteger, EOAReplacePointType) {
 
 @property (nonatomic, weak) id<OAReplacePointDelegate> delegate;
 
-- (instancetype)initWithItemType:(EOAReplacePointType)replaceItemType gpxDocument:(OAGPXDocument *)gpxDocument;
+- (instancetype)initWithItemType:(EOAReplacePointType)replaceItemType gpxDocument:(OASGpxFile *)gpxDocument;
 
 @end

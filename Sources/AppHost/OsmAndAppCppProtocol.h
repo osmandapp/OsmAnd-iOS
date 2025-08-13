@@ -7,22 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "OAMapViewState.h"
 
 #include <OsmAndCore/QtExtensions.h>
 #include <QDir>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/FavoriteLocationsGpxCollection.h>
-#include <OsmAndCore/GpxDocument.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
-
 #include <routingConfiguration.h>
 
 @protocol OsmAndAppCppProtocol <NSObject>
 @required
+
+@property(nonatomic, assign) bool performanceMetricsEnabled;
 
 @property(nonatomic, readonly) QDir dataDir;
 @property(nonatomic, readonly) QDir documentsDir;

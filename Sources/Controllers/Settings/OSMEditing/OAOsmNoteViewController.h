@@ -10,8 +10,9 @@
 #import "OABaseButtonsViewController.h"
 #import "OAOsmEditingViewController.h"
 
-@class OAOsmPoint;
-@class OAOsmEditingPlugin;
+@class OAOsmPoint, OAOsmEditingPlugin;
+
+@protocol OAOsmEditingBottomSheetDelegate;
 
 typedef NS_ENUM(NSInteger, EOAOSMNoteScreenType)
 {

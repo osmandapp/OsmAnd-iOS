@@ -9,7 +9,6 @@
 #import "OAMapLayer.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
-#import <MBProgressHUD.h>
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -22,9 +21,6 @@
 @end
 
 @implementation OAMapLayer
-{
-    MBProgressHUD *_progressHUD;
-}
 
 @synthesize pointsOrder = _pointsOrder;
 
@@ -78,8 +74,14 @@
 
 - (BOOL) updateLayer
 {
+    if (OsmAndApp.instance.isInBackground)
+    {
+        self.invalidated = YES;
+        return NO;
+    }
     _nightMode = OAAppSettings.sharedManager.nightMode;
-    return NO;
+    self.invalidated = NO;
+    return YES;
 }
 
 - (void) show
@@ -107,35 +109,6 @@
     return YES;
 }
 
-- (void) showProgressHUD
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        BOOL wasVisible = NO;
-        if (_progressHUD)
-        {
-            wasVisible = YES;
-            [_progressHUD hide:NO];
-        }
-        UIView *topView = [UIApplication sharedApplication].mainWindow;
-        _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
-        _progressHUD.minShowTime = .5f;
-        [topView addSubview:_progressHUD];
-        
-        [_progressHUD show:!wasVisible];
-    });
-}
-
-- (void) hideProgressHUD
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_progressHUD)
-        {
-            [_progressHUD hide:YES];
-            _progressHUD = nil;
-        }
-    });
-}
-
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint
 {
     OsmAnd::PointI touchLocation;
@@ -143,6 +116,30 @@
     double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
     return CLLocationCoordinate2DMake(lat, lon);
+}
+
+- (int) getScaledTouchRadius:(int)radiusPoi
+{
+    double textSize = [[OAAppSettings.sharedManager textSize] get];
+    if (textSize < 1)
+        textSize = 1;
+    return ((int) textSize * radiusPoi);
+}
+
+- (int) getDefaultRadiusPoi
+{
+    int r;
+    double zoom = self.mapView.zoom;
+    if (zoom <= 15) {
+        r = 10;
+    } else if (zoom <= 16) {
+        r = 14;
+    } else if (zoom <= 17) {
+        r = 16;
+    } else {
+        r = 18;
+    }
+    return (int) (r * self.mapView.displayDensityFactor);
 }
 
 - (int) pointsOrder

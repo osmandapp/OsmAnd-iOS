@@ -13,13 +13,15 @@
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore/ignore_warnings_on_external_includes.h>
+#include <QReadWriteLock>
 #include <QHash>
 #include <QList>
 #include <OsmAndCore/restore_internal_warnings.h>
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CommonTypes.h>
-#include <OsmAndCore/GpxDocument.h>
+
+@class NSArray, OASWptPt;
 
 class OAWaypointsMapLayerProvider
     : public std::enable_shared_from_this<OAWaypointsMapLayerProvider>
@@ -27,15 +29,16 @@ class OAWaypointsMapLayerProvider
 {
 public:
 private:
-    QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> _wptPtPoints;
+    NSArray<OASWptPt *> *_wptPoints;
     QList<OsmAnd::PointI> _points;
+    mutable QReadWriteLock _iconsCacheLock;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
     float _symbolsScaleFactor;
-    sk_sp<SkImage> getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize);
+    sk_sp<SkImage> getBitmapByWaypoint(OASWptPt *point, bool isFullSize);
     QString backgroundImageNameByType(const QString& type) const;
 protected:
 public:
-    OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>>& wptPtPoints_,
+    OAWaypointsMapLayerProvider(NSArray<OASWptPt *> *wptPoints_,
                                 const int baseOrder,
                                 const QList<OsmAnd::PointI>& hiddenPoints,
                                 const bool showCaptions,

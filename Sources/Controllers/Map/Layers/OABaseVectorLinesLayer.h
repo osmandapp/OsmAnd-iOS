@@ -23,8 +23,9 @@
 #define kOutlineColor OsmAnd::ColorARGB(150, 0, 0, 0)
 #define kOutlineWidth 10
 #define kWidthCorrectionValue 4
+#define kPathIconStepCoef 4.0f
 
-@class OAGPXDocument, OATrkSegment, OATrackChartPoints;
+@class OASTrkSegment, TrackChartPoints;
 
 struct RouteSegmentResult;
 
@@ -34,13 +35,15 @@ struct RouteSegmentResult;
 
 - (sk_sp<SkImage>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName;
 - (sk_sp<SkImage>) specialBitmapWithColor:(OsmAnd::ColorARGB)color;
+- (sk_sp<SkImage>) walkBitmapWithColor:(OsmAnd::ColorARGB)color lineWidth:(CGFloat)lineWidth;
 
 - (void)calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
                       attrName:(NSString *)attrName
                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
                      locations:(NSArray<CLLocation *> *)locations;
 
-- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints;
+- (void) showCurrentHighlitedLocation:(TrackChartPoints *)trackPoints;
+- (void) showCurrentStatisticsLocation:(TrackChartPoints *)trackPoints;
 - (void) hideCurrentStatisticsLocation;
 
 @end

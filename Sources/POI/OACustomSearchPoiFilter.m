@@ -8,6 +8,7 @@
 
 #import "OACustomSearchPoiFilter.h"
 #import "OAPOI.h"
+#import "OAResultMatcher.h"
 
 @implementation OACustomSearchPoiFilter
 

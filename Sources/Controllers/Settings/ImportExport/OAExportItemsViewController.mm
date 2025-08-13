@@ -11,6 +11,7 @@
 #import "OAExportSettingsType.h"
 #import "Localization.h"
 #import "OAProgressTitleCell.h"
+#import "OAApplicationMode.h"
 #import "OAColors.h"
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"

@@ -11,13 +11,13 @@
 #import <Foundation/Foundation.h>
 #import "OACommonTypes.h"
 
-@class OAGPXMutableDocument;
+@class OASGpxFile;
 
 @interface OAGpxData : NSObject
 
-@property (nonatomic, readonly) OAGPXMutableDocument *gpxFile;
+@property (nonatomic, readonly) OASGpxFile *gpxFile;
 @property (nonatomic, readonly) OAGpxBounds rect;
 
-- (instancetype) initWithFile:(OAGPXMutableDocument *)gpxFile;
+- (instancetype) initWithFile:(OASGpxFile *)gpxFile;
 
 @end

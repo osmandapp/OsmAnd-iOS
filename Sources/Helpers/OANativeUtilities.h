@@ -31,7 +31,10 @@
 
 @interface UIColor (nsColorNative)
 
+- (OsmAnd::FColorRGB) toFColorRGB;
 - (OsmAnd::FColorARGB) toFColorARGB;
+- (OsmAnd::ColorRGB) toColorRGB;
+- (OsmAnd::ColorARGB) toColorARGB;
 
 @end
 
@@ -74,11 +77,18 @@
 + (float)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint;
 + (OsmAnd::PointI)get31FromElevatedPixel:(OsmAnd::PointI)screenPoint;
 + (float) getLocationHeightOrZero:(OsmAnd::PointI)location31;
++ (OsmAnd::LatLon) getLanlonFromPoint31:(OsmAnd::PointI)point31;
 + (OsmAnd::PointI) getPoint31FromLatLon:(OsmAnd::LatLon)latLon;
 + (OsmAnd::PointI) getPoint31FromLatLon:(double)lat lon:(double)lon;
 + (OsmAnd::PointF) getPixelFromLatLon:(double)lat lon:(double)lon;
 + (CGPoint) getScreenPointFromLatLon:(double)lat lon:(double)lon;
 + (OsmAnd::PointI) calculateTarget31:(double)latitude longitude:(double)longitude applyNewTarget:(BOOL)applyNewTarget;
+
++ (OsmAnd::PointI) getPoint31From:(CGPoint)screenPoint;
++ (OsmAnd::AreaI) getPolygon31FromPixelAndRadius:(CGPoint)pixel radius:(float)radiusPixels;
++ (OsmAnd::AreaI) getPolygon31FromScreenArea:(CGPoint)topLeft bottomRight:(CGPoint)bottomRight;
++ (BOOL) isPointInsidePolygon:(double)lat lon:(double)lon polygon31:(OsmAnd::AreaI)polygon31;
++ (BOOL) isPointInsidePolygon:(OsmAnd::PointI)point31 polygon31:(OsmAnd::AreaI)polygon31;
 
 + (BOOL) containsLatLon:(CLLocation *)location;
 + (BOOL) containsLatLon:(double)lat lon:(double)lon;

@@ -12,10 +12,12 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAOsmAndFormatter.h"
-#import "OAGPXTrackAnalysis.h"
+#import "OALocationServices.h"
 #import "OAWikiArticleHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAGPXUIHelper.h"
+#import "OAButton.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kTitleHeightMax 44.
 #define kTitleHeightMin 30.
@@ -88,10 +90,14 @@
     BOOL hasStatistics = !self.statisticsCollectionView.hidden;
     BOOL hasLocation = !self.locationContainerView.hidden;
     BOOL hasDirection = !self.directionContainerView.hidden;
+    BOOL hasGpxActivity = !self.gpxActivityContainerView.hidden;
 
     self.locationWithStatisticsTopConstraint.active = hasLocation && hasStatistics;
-    self.regionDirectionConstraint.active = hasDirection;
-    self.regionNoDirectionConstraint.active = !hasDirection;
+    self.regionActivityConstraint.active = hasGpxActivity;
+    self.activityDirectionConstraint.active = hasDirection;
+    self.activityNoDirectionConstraint.active = !hasDirection;
+    self.regionNoActivityConstraint.active = !hasGpxActivity;
+    self.regionNoDirectionNoActivityConstraint.active = !hasDirection && !hasGpxActivity;
 
     [super updateConstraints];
 }
@@ -104,10 +110,14 @@
         BOOL hasStatistics = !self.statisticsCollectionView.hidden;
         BOOL hasLocation = !self.locationContainerView.hidden;
         BOOL hasDirection = !self.directionContainerView.hidden;
+        BOOL hasGpxActivity = !self.gpxActivityContainerView.hidden;
 
         res = res || self.locationWithStatisticsTopConstraint.active != (hasLocation && hasStatistics);
-        res = res || self.regionDirectionConstraint.active != hasDirection;
-        res = res || self.regionNoDirectionConstraint.active != !hasDirection;
+        res = res || self.regionActivityConstraint.active != hasGpxActivity;
+        res = res || self.activityDirectionConstraint.active != hasDirection;
+        res = res || self.activityNoDirectionConstraint.active != !hasDirection;
+        res = res || self.regionNoActivityConstraint.active != !hasGpxActivity;
+        res = res || self.regionNoDirectionNoActivityConstraint.active != (!hasDirection && !hasGpxActivity);
     }
     return res;
 }
@@ -160,6 +170,8 @@
             self.directionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             self.directionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
+        
+        [self updateGpxActivityContainerView];
 
         if (nearestCity.length > 0)
         {
@@ -248,13 +260,28 @@
         [self updateConstraints];
 }
 
-- (void)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
+- (void)updateGpxActivityContainerView
+{
+    OASRouteActivity *activity = [self.trackMenuDelegate getGpxActivity];
+    [self setGpxActivity:activity.label];
+    if (!self.gpxActivityContainerView.hidden)
+    {
+        self.gpxActivityIconView.image = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", activity.iconName]] ?: [UIImage templateImageNamed:@"ic_custom_info_outlined"];
+        self.gpxActivityIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+        self.gpxActivityTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    }
+    
+    if ([self needsUpdateConstraints])
+        [self updateConstraints];
+}
+
+- (void)generateGpxBlockStatistics:(OASGpxTrackAnalysis *)analysis
                        withoutGaps:(BOOL)withoutGaps
 {
     [self setStatisticsCollection:[self.class generateGpxBlockStatistics:analysis withoutGaps:withoutGaps]];
 }
 
-+ (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
++ (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OASGpxTrackAnalysis *)analysis
                        withoutGaps:(BOOL)withoutGaps
 {
     NSMutableArray<OAGPXTableCellData *> *statisticCells = [NSMutableArray array];
@@ -328,7 +355,7 @@
             long timeSpan = withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
-                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
+                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan / 1000 shortFormat:YES],
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"total_time"),
@@ -341,7 +368,7 @@
             long timeMoving = withoutGaps ? analysis.timeMovingWithoutGaps : analysis.timeMoving;
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
-                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
+                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving / 1000 shortFormat:YES],
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"moving_time"),
@@ -354,16 +381,17 @@
 
 - (void)updateShowHideButton:(BOOL)shownTrack
 {
+    __weak __typeof(self) weakSelf = self;
     [UIView transitionWithView:self.showHideButton
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
                     animations:^(void) {
-                        [self.showHideButton setTitle:shownTrack
-                                        ? OALocalizedString(@"shared_string_hide") : OALocalizedString(@"recording_context_menu_show")
-                                             forState:UIControlStateNormal];
-                        [self.showHideButton setImage:[UIImage templateImageNamed:shownTrack
-                                        ? @"ic_custom_hide" : @"ic_custom_show"]
-                                             forState:UIControlStateNormal];
+                        [weakSelf.showHideButton setTitle:shownTrack
+                            ? OALocalizedString(@"shared_string_hide") : OALocalizedString(@"recording_context_menu_show")
+                                                 forState:UIControlStateNormal];
+                        [weakSelf.showHideButton setImage:[UIImage templateImageNamed:shownTrack
+                                                           ? @"ic_custom_hide" : @"ic_custom_show"]
+                                                 forState:UIControlStateNormal];
                     }
                     completion:nil];
 }
@@ -461,6 +489,14 @@
     [self.directionTextView setText:direction];
     self.directionContainerView.hidden = !hasDirection;
     self.locationSeparatorView.hidden = !hasDirection;
+}
+
+- (void)setGpxActivity:(NSString *)activityType
+{
+    BOOL hasActivity = activityType && activityType.length > 0;
+    [self.gpxActivityTextView setText:activityType];
+    self.gpxActivityContainerView.hidden = !hasActivity;
+    self.gpxActivitySeparatorView.hidden = !hasActivity;
 }
 
 - (void)setDescription

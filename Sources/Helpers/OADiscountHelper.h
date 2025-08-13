@@ -24,6 +24,10 @@
 
 @end
 
+@interface OANotPurchasedFeatureCondition : OAPurchaseCondition
+
+@end
+
 @interface OANotPurchasedSubscriptionCondition : OAPurchaseCondition
 
 @end

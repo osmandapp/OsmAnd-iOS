@@ -12,14 +12,18 @@
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
+#import "OAPOIFilter.h"
 #import "OAResultMatcher.h"
 #import "OAMapUtils.h"
 #import "OAUtilities.h"
 #import "OANameStringMatcher.h"
 #import "OAOsmAndFormatter.h"
+#import "OASvgHelper.h"
+#import "OAAmenitySearcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -170,6 +174,33 @@
         poiAdditionals = filter.poiAdditionals;
         _filterByName = filter.filterByName;
         _savedFilterByName = filter.savedFilterByName;
+        [self updateAcceptedTypeOrigins];
+    }
+    return self;
+}
+
+- (instancetype)initWithTopIndexFilter:(OATopIndexFilter *)filter acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes
+{
+    self = [self init];
+    if (self)
+    {
+        isStandardFilter = YES;
+        standardIconId = [filter getIconResource];
+        filterId = [filter getFilterId];
+        name = [filter getName];
+        if (!accTypes)
+        {
+            [self initSearchAll];
+        }
+        else
+        {
+            NSEnumerator<OAPOICategory *> *e = accTypes.keyEnumerator;
+            for (OAPOICategory *c in e)
+            {
+                [acceptedTypes setObject:[accTypes objectForKey:c] forKey:c];
+            }
+        }
+        [self updatePoiAdditionals];
         [self updateAcceptedTypeOrigins];
     }
     return self;
@@ -372,12 +403,12 @@
 
 - (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius
 {
-    return [OAPOIHelper searchPOIsOnThePath:locs radius:poiSearchDeviationRadius filter:self matcher:[self wrapResultMatcher:nil]];
+    return [OAAmenitySearcher searchPOIsOnThePath:locs radius:poiSearchDeviationRadius filter:self matcher:[self wrapResultMatcher:nil]];
 }
 
 - (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat lon:(double)lon topLatitude:(double)topLatitude bottomLatitude:(double)bottomLatitude leftLongitude:(double)leftLongitude rightLongitude:(double)rightLongitude zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
-    return [OAPOIHelper findPOIsByFilter:self topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:[self wrapResultMatcher:matcher]];
+    return [OAAmenitySearcher findPOIsByFilter:self topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:[self wrapResultMatcher:matcher]];
 }
 
 - (OAAmenityNameFilter *) getNameFilter:(NSString *)filter
@@ -386,6 +417,13 @@
     {
         return [[OAAmenityNameFilter alloc] initWithAcceptFunc:^BOOL(OAPOI *poi) {
             return YES;
+        }];
+    }
+    if (_filterByKey.length > 0)
+    {
+        return [[OAAmenityNameFilter alloc] initWithAcceptFunc:^BOOL(OAPOI *poi) {
+            NSString * val = [poi getAdditionalInfo:_filterByKey];
+            return val != nil && [val isEqualToString:_filterByName];
         }];
     }
     NSMutableArray<NSString *> *unknownFilters = [NSMutableArray array];
@@ -510,20 +548,16 @@
 {
     return [[OAAmenityExtendedNameFilter alloc] initWithAcceptAmenityFunc:^BOOL(std::shared_ptr<const OsmAnd::Amenity> amenity, QHash<QString, QString> values, OAPOIType *type) {
         
-        QString openingHours = nullptr;
-        openingHours = values[QString::fromNSString(OPENING_HOURS_TAG)];
-        
+        auto openingHours = values[QString::fromNSString(OPENING_HOURS_TAG)];
         if (allTime)
         {
-            if (openingHours == nullptr  || (openingHours != QString("24/7") && openingHours != QString("Mo-Su 00:00-24:00")) )
-            {
+            if (openingHours.isNull() || (openingHours != QStringLiteral("24/7") && openingHours != QStringLiteral("Mo-Su 00:00-24:00")) )
                 return NO;
-            }
         }
         
         if (open)
         {
-            if (openingHours == nullptr)
+            if (openingHours.isNull())
             {
                 return NO;
             }
@@ -559,13 +593,13 @@
     if (nameFilter.length == 0)
         return YES;
     
-    OANameStringMatcher *sm = [[OANameStringMatcher alloc] initWithNamePart:[nameFilter trim] mode:CHECK_CONTAINS];
+    OANameStringMatcher *sm = [[OANameStringMatcher alloc] initWithNamePart:[nameFilter trim] mode:CHECK_STARTS_FROM_SPACE];
     
     
-    NSString *name = amenity->nativeName.toNSString();;
+    NSString *name = amenity->nativeName.toNSString();
     NSString *typeName = [[OAPOIHelper sharedInstance] getPhrase:type];
     NSString *poiStringWithoutType;
-
+    
     if (typeName && [name indexOf:typeName] != -1)
     {
         poiStringWithoutType = name;
@@ -573,13 +607,28 @@
     if (name.length == 0)
         poiStringWithoutType = typeName;
     poiStringWithoutType = [NSString stringWithFormat:@"%@ %@", typeName, name];
-
+    
+    QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
     NSMutableArray *names = [NSMutableArray array];
+    [names addObject:OsmAnd::ICU::transliterateToLatin(amenity->nativeName).toNSString()];
+    for (auto i = decodedValues.cbegin(), end = decodedValues.cend(); i != end; ++i)
+    {
+        // check indexed poi fields
+        if (i.key().startsWith(QStringLiteral("name"))
+            || i.key().contains(QStringLiteral("_name"))
+            || i.key() == QStringLiteral("wikidata")
+            || i.key() == QStringLiteral("route_members_ids")
+            || i.key() == QStringLiteral("route_id"))
+        {
+            [names addObject:[NSString stringWithFormat:@"%@ %@", typeName, i.value().toNSString()]];
+        }
+    }
+    
     for (const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
     {
         [names addObject:entry.value().toNSString()];
     }
-
+    
     return [sm matches:poiStringWithoutType] || [sm matchesMap:names];
 }
 
@@ -607,7 +656,7 @@
         return @"";
     
     NSMutableString *nameFilter = [NSMutableString string];
-    NSMutableDictionary *additionalInfo = [NSMutableDictionary dictionary];
+    MutableOrderedDictionary *additionalInfo = [MutableOrderedDictionary dictionary];
     [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:nil values:additionalInfo];
     for (NSString *filter in unknownFilters)
     {
@@ -763,7 +812,7 @@
     if (filterValue == nullptr || filterValue.size() == 0)
         return NO;
     
-    QStringList items = filterValue.split( ";" );
+    QStringList items = filterValue.split(";");
     QString val = QString::fromNSString([[filter getOsmValue] trim].lowercaseString);
     for (int i = 0; i < items.length(); i++)
     {
@@ -1071,12 +1120,20 @@
 
 - (NSString *) getIconId
 {
+    NSString *iconName;
     if ([filterId hasPrefix:STD_PREFIX])
-        return standardIconId;
+        iconName = standardIconId;
     else if ([filterId hasPrefix:USER_PREFIX])
-        return [[filterId substringFromIndex:USER_PREFIX.length] lowerCase];
-
-    return filterId;
+        iconName = [[filterId substringFromIndex:USER_PREFIX.length] lowerCase];
+    if ([OASvgHelper hasMxMapImageNamed:iconName])
+    {
+        return iconName;
+    }
+    else
+    {
+        iconName = [self.class getCustomFilterIconName:self];
+        return iconName && [OASvgHelper hasMxMapImageNamed:iconName] ? iconName : filterId;
+    }
 }
 
 - (BOOL) accept:(OAPOICategory *)type subcategory:(NSString *)subcategory
@@ -1131,15 +1188,18 @@
     return nil;
 }
 
-+ (NSString *) getPoiTypeIconName:(OAPOIBaseType *)abstractPoiType
++ (NSString *)getPoiTypeIconName:(OAPOIBaseType *)abstractPoiType
 {
-    if (abstractPoiType != nil && abstractPoiType.iconName) {
+    if (abstractPoiType != nil && [OASvgHelper hasMxMapImageNamed:abstractPoiType.iconName])
+    {
         return abstractPoiType.iconName;
-    } else if ([abstractPoiType isKindOfClass:OAPOIType.class]) {
+    }
+    else if ([abstractPoiType isKindOfClass:OAPOIType.class])
+    {
         OAPOIType *poiType = (OAPOIType *) abstractPoiType;
         NSString *iconId = [NSString stringWithFormat:@"%@_%@", poiType.getOsmTag, poiType.getOsmValue];
-        if (poiType.iconName.length > 0)
-            return poiType.iconName;
+        if ([OASvgHelper hasMxMapImageNamed:iconId])
+            return iconId;
         else if (poiType.parent != nil)
             return [self getPoiTypeIconName:poiType.parent.type];
     }
@@ -1193,6 +1253,11 @@
         }
     }
     acceptedTypesOrigin = newAcceptedTypesOrigin;
+}
+
+- (void) setFilterByKey:(NSString *)key
+{
+    _filterByKey = key;
 }
 
 @end

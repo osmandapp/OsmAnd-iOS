@@ -10,11 +10,6 @@
 
 @implementation OASwitchableAction
 
-- (instancetype)initWithAction:(OAQuickAction *)action
-{
-    return [super initWithAction:action];
-}
-
 - (void)executeWithParams:(NSArray<NSString *> *)params
 {
 }

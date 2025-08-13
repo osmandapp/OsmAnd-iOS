@@ -14,9 +14,11 @@
 #import "OARightIconTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 #import "OASizes.h"
 #import "OAUtilities.h"
+#import "OAApplicationMode.h"
+#import "OAOsmAndFormatter.h"
 
 #define kDot @"."
 #define kComma @","
@@ -31,6 +33,7 @@
     NSDictionary *_vehicleParameter;
     OAAppSettings *_settings;
     BOOL _isMotorType;
+    BOOL _isFuelTankCapacity;
     
     NSArray<NSString *> *_measurementRangeStringArr;
     NSArray<NSNumber *> *_measurementRangeValuesArr;
@@ -61,6 +64,7 @@
     if (_vehicleParameter)
     {
         _isMotorType = [_vehicleParameter[@"name"] isEqualToString:@"motor_type"];
+        _isFuelTankCapacity = [_vehicleParameter[@"name"] isEqualToString:@"fuel_tank_capacity"];
 
         _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
         NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
@@ -69,6 +73,7 @@
         _measurementRangeStringArr = [NSArray arrayWithArray:arr];
         _selectedParameter = _vehicleParameter[@"selectedItem"];
         NSString *valueString = _vehicleParameter[@"value"];
+        
         if ([_selectedParameter intValue] != -1)
         {
             double vl = floorf(_measurementRangeValuesArr[_selectedParameter.intValue].doubleValue * 100 + 0.5) / 100;
@@ -79,6 +84,11 @@
             formatter.maximumFractionDigits = 1;
             formatter.decimalSeparator = kDot;
             _measurementValue = [formatter stringFromNumber:@(vl)];
+        }
+        else if (_isFuelTankCapacity)
+        {
+            NSString *textUnit = [OAVolumeConstant getUnitSymbol:[_settings.volumeUnits get:self.appMode]];
+            _measurementValue = [valueString substringToIndex:valueString.length - textUnit.length];
         }
         else
         {
@@ -103,6 +113,11 @@
     return _vehicleParameter[@"title"];
 }
 
+- (NSString *)getSubtitle
+{
+    return _isFuelTankCapacity ? nil : [super getSubtitle];
+}
+
 - (NSString *)getLeftNavbarButtonTitle
 {
     return OALocalizedString(@"shared_string_cancel");
@@ -110,7 +125,7 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    return _isMotorType ? nil : @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+    return _isMotorType ? nil : @[[self createRightNavbarButton:OALocalizedString(@"shared_string_apply")
                                                        iconName:nil
                                                          action:@selector(onRightNavbarButtonPressed)
                                                            menu:nil]];
@@ -130,46 +145,63 @@
     else
     {
         NSString *text = [self getTableHeaderDescription];
-        CGFloat textWidth = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
+        UIImage *image = [UIImage imageNamed:[self getParameterImage:_vehicleParameter[@"name"]]];
+        if (!image && (!text || text.length == 0))
+            return;
+        
+        CGFloat textWidth = self.tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
         CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
         
-        UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, .5)];
-        topImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+        UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, .5)];
+        topImageDivider.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         
-        UIImage *image = [UIImage imageNamed:[self getParameterImage:_vehicleParameter[@"name"]]];
-        CGFloat aspectRatio = MIN(DeviceScreenWidth, DeviceScreenHeight) / image.size.width;
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, image.size.height * aspectRatio)];
-        imageView.image = image;
-        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        UIImageView *imageView = nil;
+        UIView *imageBackgroundView = nil;
+        if (image)
+        {
+            CGFloat aspectRatio = MIN(self.tableView.frame.size.width, self.tableView.frame.size.height) / image.size.width;
+            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, image.size.height * aspectRatio)];
+            imageView.image = image;
+            imageView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, self.tableView.frame.size.width, imageView.frame.size.height)];
+            imageBackgroundView.backgroundColor = UIColor.whiteColor;
+        }
+        else
+        {
+            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, 0)];
+            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, self.tableView.frame.size.width, 0)];
+        }
         
-        UIView *imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, imageView.frame.size.height)];
-        imageBackgroundView.backgroundColor = UIColor.whiteColor;
-        
-        UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, DeviceScreenWidth, .5)];
-        bottomImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+        UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, self.tableView.frame.size.width, .5)];
+        bottomImageDivider.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kPaddingOnSideOfContent + [OAUtilities getLeftMargin], imageView.frame.size.height + 13., textWidth, textHeight)];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.minimumLineHeight = 17.;
         label.attributedText = [[NSAttributedString alloc] initWithString:text
                                                                attributes:@{ NSParagraphStyleAttributeName : style,
-                                                                             NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
+                                                                             NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary],
                                                                              NSFontAttributeName : kHeaderDescriptionFontSmall,
                                                                              NSBackgroundColorAttributeName : UIColor.clearColor }];
         label.numberOfLines = 0;
         label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
         CGFloat headerHeight = label.frame.origin.y + label.frame.size.height + 26.;
-        UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];
-        [tableHeaderView addSubview:imageBackgroundView];
-        [tableHeaderView addSubview:imageView];
-        [tableHeaderView addSubview:topImageDivider];
+        UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, headerHeight)];
+        if (image)
+        {
+            [tableHeaderView addSubview:imageBackgroundView];
+            [tableHeaderView addSubview:imageView];
+            [tableHeaderView addSubview:topImageDivider];
+        }
         [tableHeaderView addSubview:bottomImageDivider];
         [tableHeaderView addSubview:label];
         tableHeaderView.backgroundColor = UIColor.clearColor;
         self.tableView.tableHeaderView = tableHeaderView;
     }
 }
+
 #pragma mark - UIViewContoller
 
 - (void) viewDidLoad
@@ -211,12 +243,14 @@
     _data = tableData;
 }
 
-- (NSString *) getMeasurementUnit:(NSString *)parameter
+- (NSString *)getMeasurementUnit:(NSString *)parameter
 {
     if ([parameter isEqualToString:@"weight"])
         return OALocalizedString(@"shared_string_tones");
     else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
         return OALocalizedString(@"shared_string_meters");
+    else if ([parameter isEqualToString:@"fuel_tank_capacity"])
+        return [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     return @"";
 }
 
@@ -246,7 +280,7 @@
             [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
-            cell.inputField.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.inputField.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.inputField.delegate = self;
 //            cell.inputField.userInteractionEnabled = NO;
         }
@@ -348,6 +382,8 @@
         return OALocalizedString(@"lenght_limit_description");
     else if ([parameter isEqualToString:@"motor_type"])
         return OALocalizedString(@"routing_attr_motor_type_description");
+    else if ([parameter isEqualToString:@"fuel_tank_capacity"])
+        return OALocalizedString(@"fuel_tank_capacity_description");
     return @"";
 }
 
@@ -398,8 +434,18 @@
     }
     if (_selectedParameter.intValue != -1)
         _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].doubleValue];
-    OACommonString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
-    [property set:_measurementValue mode:self.appMode];
+    if (_isFuelTankCapacity)
+    {
+        double value = [OAOsmAndFormatter prepareFuelTankCapacityToSave:[_settings.volumeUnits get:self.appMode] value:[_measurementValue doubleValue]];
+        OACommonDouble *property = [[OAAppSettings sharedManager] fuelTankCapacity];
+        [property set:value mode:self.appMode];
+    }
+    else
+    {
+        OACommonString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
+        [property set:_measurementValue mode:self.appMode];
+    }
+        
     [self dismissViewController];
     if (self.delegate)
         [self.delegate onSettingsChanged];

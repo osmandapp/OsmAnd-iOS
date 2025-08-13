@@ -15,6 +15,7 @@
 #import "OALocationConvert.h"
 #import "OrderedDictionary.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OsmAnd_Maps-Swift.h"

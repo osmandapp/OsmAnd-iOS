@@ -8,14 +8,18 @@
 
 #import "OASettingsImporter.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
 #import "OAOsmNotesSettingsItem.h"
 #import "OAOsmEditsSettingsItem.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapWidgetRegistry.h"
-
+#import "OAMapLayers.h"
+#import "OARouteLayer.h"
 #import "OASettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
 #import "OAMapSourcesSettingsItem.h"
@@ -39,11 +43,13 @@
 #import "OAResourcesSettingsItem.h"
 #import "OASuggestedDownloadsItem.h"
 #import "OAExportAsyncTask.h"
+#import "OAApplicationMode.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 
-#define kTmpProfileFolder @"tmpProfileData"
+#define kTmpProfileFolder @"tmpProfileDataImport"
 
 @interface OAImportItemsAsyncTask()
 
@@ -66,7 +72,8 @@
 - (instancetype) init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _app = [OsmAndApp instance];
         _tmpFilesDir = NSTemporaryDirectory();
         _tmpFilesDir = [_tmpFilesDir stringByAppendingPathComponent:kTmpProfileFolder];
@@ -219,7 +226,8 @@
 - (instancetype) initWithJSON:(NSString *)jsonStr
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonItit];
         [self collectItems:jsonStr];
     }
@@ -229,7 +237,8 @@
 - (instancetype) initWithJSONData:(NSData *)jsonUtf8Data;
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonItit];
         [self collectItemsFromData:jsonUtf8Data];
     }
@@ -239,7 +248,8 @@
 - (instancetype) initWithParsedJSON:(NSDictionary *)json
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonItit];
         [self collectItemsFromDictioanry:json];
     }
@@ -269,9 +279,10 @@
         if (![itemJSON[@"type"] isEqualToString:@"DATA"])
         {
             OASettingsItem *item = [self createItem:itemJSON];
-            if (item)
-                [_items addObject:item];
-            
+            if (!item)
+                continue;
+
+            [_items addObject:item];
             NSString *pluginId = item.pluginId;
             if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
             {
@@ -280,7 +291,8 @@
                 {
                     [items addObject:item];
                 }
-                else {
+                else
+                {
                     items = [NSMutableArray new];
                     [items addObject:item];
                     pluginItems[pluginId] = items;
@@ -524,11 +536,15 @@
  
 - (NSArray<OASettingsItem *> *) doInBackground
 {
-    switch (_importType) {
+    switch (_importType)
+    {
         case EOAImportTypeCollect:
-            @try {
+            @try
+            {
                 return [_importer collectItems:_filePath];
-            } @catch (NSException *exception) {
+            }
+            @catch (NSException *exception)
+            {
                 NSLog(@"Failed to collect items from: %@ %@", _filePath, exception);
             }
             break;
@@ -547,7 +563,8 @@
         _items = items;
     else
         _selectedItems = items;
-    switch (_importType) {
+    switch (_importType)
+    {
         case EOAImportTypeCollect:
             _importDone = YES;
             if (_delegate)
@@ -629,6 +646,10 @@
             if ([item exists])
                 [duplicateItems addObject:item.fileName];
         }
+        else if ([item isKindOfClass:OAQuickActionsSettingsItem.class] && [item exists])
+        {
+            [duplicateItems addObject:[((OAQuickActionsSettingsItem *) item) getButtonState]];
+        }
     }
     return duplicateItems;
 }
@@ -646,7 +667,8 @@
 - (instancetype) initWithFile:(NSString *)file items:(NSArray<OASettingsItem *> *)items
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _importer = [[OASettingsImporter alloc] init];
         _settingsHelper = [OASettingsHelper sharedInstance];
         _file = file;
@@ -678,48 +700,19 @@
         {
             NSString *backupPath = [[tempDir stringByAppendingPathComponent:((OAProfileSettingsItem *)item).appMode.stringKey] stringByAppendingPathExtension:@"osf"];
             if ([[NSFileManager defaultManager] fileExistsAtPath:backupPath])
-            {
                 [[NSFileManager defaultManager] removeItemAtPath:backupPath error:nil];
-            }
             OAExportAsyncTask *backupTask = [[OAExportAsyncTask alloc] initWithFile:backupPath items:@[item] exportItemFiles:YES extensionsFilter:nil];
             [backupTask execute];
         }
     }
     return YES;
 }
- 
-- (void)updateDataIfNeeded
-{
-    OsmAndAppInstance app = OsmAndApp.instance;
-    BOOL updateRoutingFiles = NO;
-    BOOL updateResources = NO;
-    for (OASettingsItem *item in _items)
-    {
-        if ([item isKindOfClass:OAFileSettingsItem.class])
-        {
-            OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
-            updateResources = updateResources || fileItem.subtype != EOASettingsItemFileSubtypeUnknown;
-            updateRoutingFiles = updateRoutingFiles || fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig;
-            
-            if (updateResources && updateRoutingFiles)
-                break;
-        }
-    }
-    
-    if (updateRoutingFiles)
-        [app loadRoutingFiles];
-    if (updateResources)
-    {
-        app.resourcesManager->rescanUnmanagedStoragePaths(true);
-        [app.localResourcesChangedObservable notifyEvent];
-    }
-    [[OARootViewController instance].mapPanel recreateAllControls];
-}
 
 - (void) onPostExecute:(BOOL)success
 {
-    [self updateDataIfNeeded];
-    
+    [BackupUtils updateCacheForItems:_items];
+    [[OARootViewController instance].mapPanel recreateAllControls];
+
     if (_delegate)
         [_delegate onSettingsImportFinished:success items:_items];
     if (self.onImportComplete)

@@ -8,8 +8,12 @@
 
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "Localization.h"
+#import "OAObservable.h"
+#import "OAWorldRegion.h"
 #import "OsmAndApp.h"
 #import "OAResourcesUIHelper.h"
 #import "OAPluginsViewController.h"
@@ -397,6 +401,18 @@ static NSMutableArray *activePopups;
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         iconName = @"ic_custom_sensor";
         popup.okButton.tag = EOAFeatureSensors;
+
+        [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else if ([kInAppId_Addon_Vehicle_Metrics isEqualToString:productIdentifier])
+    {
+        needShow = YES;
+        title = OALocalizedString(@"vehicle_metrics_obd_ii");
+        descText = OALocalizedString(@"purchase_feature_desc_vehicle_metrics_obd_ii");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        iconName = @"ic_custom_vehicle_metrics_colored";
+        popup.okButton.tag = EOAFeatureVehicleMetrics;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
     }

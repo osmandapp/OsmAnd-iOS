@@ -9,6 +9,7 @@
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
 #import "OALocationConvert.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <GeographicLib/GeoCoords.hpp>
 
@@ -29,6 +30,8 @@ static NSString * const _unitsMinMi = OALocalizedString(@"min_mile");
 static NSString * const _unitsmps = OALocalizedString(@"m_s");
 static NSString * const _unitsfts = OALocalizedString(@"ft_s");
 static NSArray<NSNumber *> *roundingBounds = nil;
+
+static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 
 + (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
 {
@@ -67,34 +70,12 @@ static NSArray<NSNumber *> *roundingBounds = nil;
         intervalInUnits = interval / 60.0;
     }
     
-    NSString *formattedInterval = [NSString stringWithFormat:@"%d", (int)intervalInUnits];
+    NSString *formattedInterval = floor(intervalInUnits) == intervalInUnits
+        ? [NSString stringWithFormat:@"%ld", (long)intervalInUnits]
+        : [NSString stringWithFormat:@"%@", @(intervalInUnits)];
     return withUnit
-    	? [NSString stringWithFormat:@"%@ %@", formattedInterval, unitsStr]
-    	: formattedInterval;
-
-}
-
-+ (NSString *) getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def
-{
-    if (time > 0)
-    {
-        NSTimeInterval duration = (NSDate.date.timeIntervalSince1970 - time);
-        if (duration > MIN_DURATION_FOR_DATE_FORMAT)
-        {
-            return [self getFormattedDate:time];
-        }
-        else
-        {
-            NSString *formattedDuration;
-            if (duration < 60)
-                formattedDuration = [NSString stringWithFormat:@"< 1 %@", OALocalizedString(@"int_min")];
-            else
-                formattedDuration = [self getFormattedTimeInterval:duration];
-            
-            return [NSString stringWithFormat:OALocalizedString(@"duration_ago"), formattedDuration];
-        }
-    }
-    return def;
+        ? [NSString stringWithFormat:@"%@ %@", formattedInterval, unitsStr]
+        : formattedInterval;
 }
 
 + (NSString *) getFormattedDate:(NSTimeInterval)time
@@ -148,6 +129,14 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     return time;
 }
 
++ (NSString *)getFormattedTimeRuntime:(NSInteger)seconds
+{
+    NSInteger totalMinutes = seconds / 60;
+    NSInteger hours = totalMinutes / 60;
+    NSInteger minutes = totalMinutes % 60;
+    return [NSString stringWithFormat:@"%ld:%02ld", (long)hours, (long)minutes];
+}
+
 + (NSString *) getFormattedAlarmInfoDistance:(float)meters
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
@@ -187,26 +176,24 @@ static NSArray<NSNumber *> *roundingBounds = nil;
 
 + (NSString *) getFormattedDistance:(float)meters
 {
-    return [self getFormattedDistance:meters forceTrailingZeroes:YES];
+    return [self getFormattedDistance:meters withParams:nil];
 }
 
-+ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes
++ (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params
 {
-    return [self getFormattedDistance:meters forceTrailingZeroes:YES roundUp:NO valueUnitArray:nil];
+    return [self getFormattedDistance:meters withParams:params valueUnitArray:nil];
 }
 
-+ (NSString *) getFormattedDistance:(float)meters roundUp:(BOOL)isRoundUp
-{
-    return [self getFormattedDistance:meters forceTrailingZeroes:YES roundUp:isRoundUp valueUnitArray:nil];
-}
-
-+ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes roundUp:(BOOL)isRoundUp valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
++ (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     EOAMetricsConstant mc = [settings.metricSystem get];
     
     NSString *mainUnitStr;
     float mainUnitInMeters;
+    if (!params || ([params isUseLowerBound] && [settings.preciseDistanceNumbers get]))
+        params = [OsmAndFormatterParams defaultParams];
+    
     if (mc == KILOMETERS_AND_METERS)
     {
         mainUnitStr = _unitsKm;
@@ -224,58 +211,65 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     }
 
     float floatDistance = meters / mainUnitInMeters;
-    if (isRoundUp)
-        floatDistance = [self roundedDistanceValueForUnit:floatDistance];
-
-    if (meters >= 100 * mainUnitInMeters)
+    BOOL forceTrailingZeroes = params.forceTrailingZerosInDecimalMainUnit;
+    int decimalPrecision = params.extraDecimalPrecision;
+    if (params.forcePreciseValue)
+    {
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:decimalPrecision valueUnitArray:valueUnitArray];
+    }
+    else if (meters >= 100 * mainUnitInMeters)
     {
         return [self formatValue:(int) (meters / mainUnitInMeters + 0.5) unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }
     else if (meters > 9.99f * mainUnitInMeters)
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (meters > 0.999f * mainUnitInMeters && (mc != NAUTICAL_MILES_AND_METERS || mc != NAUTICAL_MILES_AND_FEET))
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (mc == MILES_AND_FEET && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:FEET_IN_ONE_METER])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (mc == MILES_AND_METERS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (mc == MILES_AND_YARDS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:YARDS_IN_ONE_METER])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (mc == NAUTICAL_MILES_AND_METERS && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (mc == NAUTICAL_MILES_AND_FEET && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else
     {
-        if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS || mc == NAUTICAL_MILES_AND_METERS)
+        if (mc == MILES_AND_FEET || mc == NAUTICAL_MILES_AND_FEET)
         {
-            return [self formatValue:isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters + 0.5)] : (int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
-        }
-        else if (mc == MILES_AND_FEET || mc == NAUTICAL_MILES_AND_FEET)
-        {
-            int feet = isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters * FEET_IN_ONE_METER + 0.5)] : (int) (meters * FEET_IN_ONE_METER + 0.5);
+            int feet = (int) (meters * FEET_IN_ONE_METER + 0.5);
+            if ([params isUseLowerBound])
+                feet = [self lowerTo10BaseRoundingBounds:feet withRoundRange:[self generate10BaseRoundingBoundsWithMax:100 multCoef:5]];
             return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
         else if (mc == MILES_AND_YARDS)
         {
-            int yards = isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters * YARDS_IN_ONE_METER + 0.5)] : (int) (meters * YARDS_IN_ONE_METER + 0.5);
+            int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
+            if ([params isUseLowerBound])
+                yards = [self lowerTo10BaseRoundingBounds:yards withRoundRange:[self generate10BaseRoundingBoundsWithMax:100 multCoef:5]];
             return [self formatValue:yards unit:_unitsYd forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
-        return [self formatValue:isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters + 0.5)] : (int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
+        
+        int m = (int) (meters + 0.5);
+        if ([params isUseLowerBound])
+            m = [self lowerTo10BaseRoundingBounds:m withRoundRange:[self generate10BaseRoundingBoundsWithMax:100 multCoef:5]];
+        return [self formatValue:m unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }
 }
 
@@ -293,9 +287,19 @@ static NSArray<NSNumber *> *roundingBounds = nil;
       decimalPlacesNumber:(NSInteger)decimalPlacesNumber
            valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    
+    static NSNumberFormatter *numberFormatter = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        numberFormatter = [NSNumberFormatter new];
+        [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        numberFormatter.groupingSeparator = @" ";
+        NSString *preferredLocale = OAUtilities.currentLang;
+        NSLocale *locale = [NSLocale localeWithLocaleIdentifier:preferredLocale];
+        numberFormatter.locale = locale;
+    });
 
     NSMutableString *pattern = [NSMutableString string];
     [pattern appendString:@"0"];
@@ -309,12 +313,6 @@ static NSArray<NSNumber *> *roundingBounds = nil;
         }
     }
     numberFormatter.positiveFormat = pattern;
-
-    NSString *preferredLocale = OAUtilities.currentLang;
-    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:preferredLocale];
-
-    numberFormatter.locale = locale;
-    numberFormatter.groupingSeparator = @" ";
 
     BOOL fiveOrMoreDigits = ABS(value) >= 10000;
     numberFormatter.usesGroupingSeparator = fiveOrMoreDigits;
@@ -595,23 +593,15 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     }
     else if (outputFormat == FORMAT_DEGREES || outputFormat == FORMAT_MINUTES || outputFormat == FORMAT_SECONDS)
     {
-        BOOL isLeftToRight = UIApplication.sharedApplication.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionLeftToRight;
-        NSString *rtlCoordinates = isLeftToRight ? @"" : @"\u200f";
-        NSString *rtlCoordinatesPunctuation = isLeftToRight ? @", " : @" ,";
-        [result appendString:rtlCoordinates];
+        [result appendString:kLTRMark];
         [result appendString:[self formatCoordinate:lat outputType:outputFormat]];
-        [result appendString:rtlCoordinates];
         [result appendString:@" "];
-        [result appendString:rtlCoordinates];
         [result appendString:lat > 0 ? NORTH : SOUTH];
-        [result appendString:rtlCoordinates];
-        [result appendString:rtlCoordinatesPunctuation];
-        [result appendString:rtlCoordinates];
+        [result appendString:@", "];
         [result appendString:[self formatCoordinate:lon outputType:outputFormat]];
-        [result appendString:rtlCoordinates];
         [result appendString:@" "];
-        [result appendString:rtlCoordinates];
         [result appendString:lon > 0 ? EAST : WEST];
+        [result appendString:kLTRMark];
     }
     else if (outputFormat == FORMAT_UTM)
     {
@@ -706,10 +696,10 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     return coordinate;
 }
 
-+ (NSString *) getFormattedDistanceInterval:(double)interval
++ (NSString *) getFormattedDistanceInterval:(double)interval withParams:(OsmAndFormatterParams *)params
 {
     double roundedDist = [self.class calculateRoundedDist:interval];
-    return [self.class getFormattedDistance:(float) roundedDist];
+    return [self.class getFormattedDistance:(float) roundedDist withParams:params];
 }
 
 + (NSString *) getFormattedOsmTagValue:(NSString *)tagValue
@@ -747,32 +737,99 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     NSInteger hours = secondsInt / (60 * 60);
     NSInteger minutes = (secondsInt / 60) % 60;
     
+    NSString *minFormat = OALocalizedString(@"int_min");
     if (hours > 0)
     {
         NSString *durationString = [NSString stringWithFormat:@"%ld %@", hours, OALocalizedString(@"int_hour")];
         if (minutes > 0)
-            durationString = [durationString stringByAppendingFormat:@" %ld %@", minutes, OALocalizedString(@"int_min")];
+            durationString = [durationString stringByAppendingFormat:@" %ld %@", minutes, minFormat];
         return durationString;
     }
     else if (minutes > 0)
     {
-        return [NSString stringWithFormat:@"%ld %@", minutes, OALocalizedString(@"int_min")];
+        return [NSString stringWithFormat:@"%ld %@", minutes, minFormat];
     }
     else
     {
-        return [NSString stringWithFormat:@"<1 %@", OALocalizedString(@"int_min")];
+        return [NSString stringWithFormat:@"<1 %@", minFormat];
     }
 }
 
-+ (float)roundedDistanceValueForUnit:(float)value
++ (NSString *)getFormattedFuelCapacity:(EOAVolumeConstant)volumeUnit mode:(OAApplicationMode *)mode value:(double)value
 {
-    if (roundingBounds == nil)
-        roundingBounds = [self generate10BaseRoundingBoundsWithMax:100 multCoef:5];
+    OAAppSettings* settings = [OAAppSettings sharedManager];
     
-    if (value >= 1)
-        return [self lowerTo10BaseRoundingBounds:value withRoundRange:roundingBounds];
+    if (value == 0.0f)
+        return OALocalizedString(@"shared_string_none");
     else
+    {
+        NSString *textValue;
+        NSString *textUnit;
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
+        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        formatter.minimumIntegerDigits = 1;
+        formatter.minimumFractionDigits = 0;
+        formatter.maximumFractionDigits = 2;
+        
+        textValue = [formatter stringFromNumber:@(value)];
+        textUnit = [OAVolumeConstant getUnitSymbol:[settings.volumeUnits get:mode]];
+        
+        return [NSString stringWithFormat:@"%@ %@", textValue, textUnit];
+    }
+}
+
++ (double)readSavedFuelTankCapacity:(EOAVolumeConstant)volumeUnit mode:(OAApplicationMode *)mode value:(double)value
+{
+    if (value == 0.0f)
         return value;
+    
+    if (volumeUnit == US_GALLONS)
+    {
+        return value / US_GALLONS_IN_LITER;
+    }
+    else if (volumeUnit == IMPERIAL_GALLONS)
+    {
+        return value / IMPERIAL_GALLONS_IN_LITER;
+    }
+    else
+    {
+        return value;
+    }
+}
+
++ (double)prepareFuelTankCapacityToSave:(EOAVolumeConstant)volumeUnit value:(double)value
+{
+    double preparedValueToSave = 0;
+    if (value != 0.0f)
+    {
+        if (volumeUnit == US_GALLONS)
+        {
+            preparedValueToSave = value * US_GALLONS_IN_LITER;
+        }
+        else if (volumeUnit == IMPERIAL_GALLONS)
+        {
+            preparedValueToSave = value * IMPERIAL_GALLONS_IN_LITER;
+        }
+        else
+        {
+            preparedValueToSave = value;
+        }
+    }
+    return preparedValueToSave;
+}
+
++ (float)convertLiterToVolumeUnitWithVolumeUnit:(EOAVolumeConstant)volumeUnit value:(float)value
+{
+    switch (volumeUnit) {
+        case US_GALLONS:
+            return value / (float)US_GALLONS_IN_LITER;
+        case IMPERIAL_GALLONS:
+            return value / (float)IMPERIAL_GALLONS_IN_LITER;
+        case LITRES:
+        default:
+            return value;
+    }
 }
 
 + (NSArray<NSNumber *> *)generate10BaseRoundingBoundsWithMax:(int)max multCoef:(int)multCoef
@@ -836,6 +893,23 @@ static NSArray<NSNumber *> *roundingBounds = nil;
         return (num / [roundRange[k - 1] intValue]) * [roundRange[k - 1] intValue];
     
     return num;
+}
+
++ (NSTimeInterval) getStartOfDayForTime:(NSTimeInterval)timestamp
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+    [components setHour:0];
+    [components setMinute:0];
+    [components setSecond:0];
+    [components setNanosecond:0];
+    NSDate *formattedDate = [calendar dateFromComponents:components];
+    return [formattedDate timeIntervalSince1970];
+}
+
++ (NSTimeInterval) getStartOfToday
+{
+    return [self.class getStartOfDayForTime:[[NSDate now] timeIntervalSince1970]];
 }
 
 @end

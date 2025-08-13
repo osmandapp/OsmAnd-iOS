@@ -184,8 +184,6 @@
 		<true/>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Advertisement would like to use bluetooth.</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>OsmAnd needs Bluetooth to find and connect to Bluetooth LE sensors.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>OsmAnd would like to create a calendar event for vehicle pick-up notification.</string>
@@ -243,6 +241,7 @@
 		<string>audio</string>
 		<string>bluetooth-central</string>
 		<string>bluetooth-peripheral</string>
+		<string>fetch</string>
 		<string>location</string>
 		<string>processing</string>
 	</array>

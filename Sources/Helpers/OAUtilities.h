@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
 
 //RGB color macro
 #define UIColorFromRGB(rgbValue) [UIColor \
@@ -41,6 +42,26 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
     return UIColorFromARGB(rgbValue);
 }
 
+static inline BOOL NSStringIsEmpty(NSString * _Nullable string) {
+    return !string || string.length == 0;
+}
+
+static inline BOOL NSArrayIsEmpty(NSArray * _Nullable array) {
+    return !array || array.count == 0;
+}
+
+static inline BOOL NSDictionaryIsEmpty(NSDictionary * _Nullable dictionary) {
+    return !dictionary || dictionary.count == 0;
+}
+
+static inline void executeOnMainThread(dispatch_block_t block)
+{
+    if ([NSThread isMainThread])
+        block();
+    else
+        dispatch_async(dispatch_get_main_queue(), block);
+}
+
 @interface UIBezierPath (util)
 
 - (void) cubicToX:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 x3:(float)x3 y3:(float)y3;
@@ -62,7 +83,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 - (int) indexOf:(NSString *)text;
 - (int) indexOf:(NSString *)text start:(NSInteger)start;
-- (int) lastIndexOf:(NSString *)text;
 - (NSString *) add:(NSString *)str;
 - (NSString *) trim;
 - (NSString *) lowerCase;
@@ -254,6 +274,9 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 @interface OAUtilities : NSObject
 
++ (NSInteger)getQuickActionButtonTag;
++ (NSInteger)getMap3DModeButtonTag;
+
 + (BOOL) getAccessToFile:(NSString *)filePath;
 + (void) denyAccessToFile:(NSString *)filePath removeFromInbox:(BOOL)remove;
 
@@ -280,6 +303,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (void) layoutComplexButton:(UIButton*)button;
 
 + (UIImage *) imageWithColor:(UIColor *)color;
++ (UIImage *) imageWithTintColor:(UIColor *)color image:(UIImage *)image;
 
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners;
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners radius:(CGFloat)radius;
@@ -304,7 +328,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (UIImage *) getTintableImage:(UIImage *)image;
 + (UIImage *) getTintableImageNamed:(NSString *)name;
 + (UIImage *) tintImageWithColor:(UIImage *)source color:(UIColor *)color;
-+ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top;
++ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top scaleFactor:(CGFloat)scaleFactor;
 
 + (BOOL) doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination;
 + (BOOL) isCoordEqual:(CLLocationCoordinate2D)srcLatLon destLat:(CLLocationCoordinate2D)desLatLon;
@@ -316,6 +340,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSString *) preferredLang;
 + (NSString *) currentLang;
 + (NSString *) capitalizeFirstLetter:(NSString *)s;
++ (NSString *) displayNameForLang:(NSString *)lang;
 + (NSString *) translatedLangName:(NSString *)lang;
 + (NSInteger) findFirstNumberEndIndex:(NSString *)value;
 
@@ -376,11 +401,14 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSString *) getGpxShortPath:(NSString *)fullFilePath;
 
 + (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddTracksFolder;
++ (NSArray<NSString *> *) getGpxFoldersListSorted:(NSArray<NSString *> *)flattenedFilePaths shouldSort:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddRootTracksFolder;
 + (NSMutableArray<NSString *> *) getFlattenedFileList:(NSString *)path;
 
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor;
 
 + (NSString *) createNewFileName:(NSString *)oldName;
++ (NSString *) simplifyFileName:(NSString *)filename;
++ (NSString *)convertToPermittedFileName:(NSString *)filename;
 
 + (natural_t) get_free_memory;
 
@@ -398,6 +426,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom;
 
 + (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
++ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration verticalOffset:(CGFloat)verticalOffset inView:(UIView *)view;
 + (NSString *) formatWarnings:(NSArray<NSString *> *)warnings;
 
 + (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate;
@@ -409,5 +438,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (BOOL) isValidFileName:(NSString *)name;
 
 + (BOOL) isReleaseVersion;
+
++ (NSString *) generateCurrentDateFilename;
 
 @end

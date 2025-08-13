@@ -112,7 +112,7 @@
 
 - (void) clearAllData
 {
-    _sectionData.removeAllObjects;
+    [_sectionData removeAllObjects];
 }
 
 - (BOOL) hasChanged

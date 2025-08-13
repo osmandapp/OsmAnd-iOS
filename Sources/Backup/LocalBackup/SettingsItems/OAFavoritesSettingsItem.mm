@@ -8,7 +8,6 @@
 
 #import "OAFavoritesSettingsItem.h"
 #import "OAAppSettings.h"
-#import "OAGPXDocument.h"
 #import "OASelectedGPXHelper.h"
 #import "OsmAndApp.h"
 #import "OAFavoriteItem.h"
@@ -17,6 +16,8 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
+#import "Localization.h"
+#import "OsmAndSharedWrapper.h"
 
 #define APPROXIMATE_FAVOURITE_SIZE_BYTES 470
 
@@ -109,7 +110,7 @@
     {
         NSError *err = nil;
         NSDictionary *attrs = [manager attributesOfItemAtPath:groupFilePath error:&err];
-        return !err ? attrs.fileModificationDate.timeIntervalSince1970 : 0;
+        return !err ? (attrs.fileModificationDate.timeIntervalSince1970 * 1000) : 0;
     }
     
     NSString *favPath = OsmAndApp.instance.favoritesLegacyStorageFilename;
@@ -118,7 +119,7 @@
         NSError *err = nil;
         NSDictionary *attrs = [manager attributesOfItemAtPath:favPath error:&err];
         if (!err)
-            return attrs.fileModificationDate.timeIntervalSince1970;
+            return attrs.fileModificationDate.timeIntervalSince1970 * 1000;
     }
     return 0;
 }
@@ -130,13 +131,13 @@
     NSFileManager *manager = NSFileManager.defaultManager;
     if (groupFilePath && [manager fileExistsAtPath:groupFilePath])
     {
-        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:groupFilePath error:nil];
+        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime / 1000] } ofItemAtPath:groupFilePath error:nil];
     }
     else
     {
         NSString *favPath = OsmAndApp.instance.favoritesLegacyStorageFilename;
         if ([manager fileExistsAtPath:favPath])
-            [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:favPath error:nil];
+            [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime / 1000] } ofItemAtPath:favPath error:nil];
     }
 }
 
@@ -181,9 +182,12 @@
             {
                 [OAFavoritesHelper addFavorites:group.points
                                   lookupAddress:NO
-                                    sortAndSave:group == self.appliedItems.lastObject
+                                    sortAndSave:NO
                                     pointsGroup:[group toPointsGroup]];
             }
+            [OAFavoritesHelper sortAll];
+            [OAFavoritesHelper saveCurrentPointsIntoFile:NO];
+            [OAFavoritesHelper loadFavorites];
         }
     }
 }
@@ -264,8 +268,8 @@
 
 - (OASettingsItemWriter *)getWriter
 {
-    OAGPXMutableDocument *doc = [OAFavoritesHelper asGpxFile:self.items];
-    return [self getGpxWriter:(OAGPXDocument *) doc];
+    OASGpxFile *gpxFile = [OAFavoritesHelper asGpxFile:self.items];
+    return [self getGpxWriter:gpxFile];
 }
 
 @end
@@ -284,11 +288,12 @@
         return NO;
     }
 
-    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
     if (gpxFile)
     {
         NSMutableDictionary<NSString *, OAFavoriteGroup *> *flatGroups = [NSMutableDictionary dictionary];
-        NSArray<OAFavoriteItem *> *favorites = [OAFavoritesHelper wptAsFavorites:gpxFile.points defaultCategory:@""];
+        NSArray<OAFavoriteItem *> *favorites = [OAFavoritesHelper wptAsFavorites:gpxFile.getPointsList defaultCategory:@""];
         for (OAFavoriteItem *point in favorites)
         {
             OAFavoriteGroup *group = flatGroups[[point getCategory]];
@@ -306,13 +311,13 @@
     return YES;
 }
 
-- (OAFavoriteGroup *)createFavoriteGroup:(OAGPXDocument *)gpxFile point:(OAFavoriteItem *)point
+- (OAFavoriteGroup *)createFavoriteGroup:(OASGpxFile *)gpxFile point:(OAFavoriteItem *)point
 {
     OAFavoriteGroup *favoriteGroup = [[OAFavoriteGroup alloc] initWithPoint:point];
-    OAPointsGroup *pointsGroup = gpxFile.pointsGroups[favoriteGroup.name];
+    OASGpxUtilitiesPointsGroup *pointsGroup = gpxFile.pointsGroups[favoriteGroup.name];
     if (pointsGroup)
     {
-        favoriteGroup.color = pointsGroup.color;
+        favoriteGroup.color = UIColorFromRGB(pointsGroup.color);
         favoriteGroup.iconName = pointsGroup.iconName;
         favoriteGroup.backgroundType = pointsGroup.backgroundType;
     }

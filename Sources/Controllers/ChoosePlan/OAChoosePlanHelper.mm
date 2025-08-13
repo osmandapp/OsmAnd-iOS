@@ -9,6 +9,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAChoosePlanViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "Localization.h"
 
 static OAFeature * OSMAND_CLOUD;
@@ -26,9 +27,9 @@ static OAFeature * TERRAIN;
 static OAFeature * NAUTICAL;
 static OAFeature * WEATHER;
 static OAFeature * SENSORS;
+static OAFeature * VEHICLEMETRICS;
 
 static NSArray<OAFeature *> * OSMAND_PRO_FEATURES;
-static NSArray<OAFeature *> * OSMAND_PRO_PREVIEW_FEATURES;
 static NSArray<OAFeature *> * MAPS_PLUS_FEATURES;
 static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 
@@ -57,6 +58,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"pro_features");
         case EOAFeatureSensors:
             return OALocalizedString(@"external_sensors_support");
+        case EOAFeatureVehicleMetrics:
+            return OALocalizedString(@"vehicle_metrics_obd_ii");
         case EOAFeatureHourlyMapUpdates:
             return OALocalizedString(@"daily_map_updates");
         case EOAFeatureCrossBuy:
@@ -123,6 +126,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"purchases_feature_desc_pro_widgets");
         case EOAFeatureSensors:
             return OALocalizedString(@"purchases_feature_desc_external_sensors");
+        case EOAFeatureVehicleMetrics:
+            return OALocalizedString(@"purchase_feature_desc_vehicle_metrics_obd_ii");
         case EOAFeatureHourlyMapUpdates:
             return OALocalizedString(@"purchases_feature_desc_hourly_map_updates");
         case EOAFeatureCrossBuy:
@@ -162,6 +167,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return [UIImage imageNamed:@"ic_custom_pro_features_colored"];
         case EOAFeatureSensors:
             return [UIImage imageNamed:@"ic_custom_external_sensor_colored"];
+        case EOAFeatureVehicleMetrics:
+            return [UIImage imageNamed:@"ic_custom_vehicle_metrics_colored"];
         case EOAFeatureHourlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_map_updates_colored"];
         case EOAFeatureCrossBuy:
@@ -209,6 +216,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return [UIImage imageNamed:@"ic_custom_pro_features_colored_big"];
         case EOAFeatureSensors:
             return [UIImage imageNamed:@"ic_custom_external_sensor_colored"];
+        case EOAFeatureVehicleMetrics:
+            return [UIImage imageNamed:@"ic_custom_vehicle_metrics_colored"];
         case EOAFeatureHourlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_map_updates_colored"];
         case EOAFeatureCrossBuy:
@@ -361,48 +370,36 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     return SENSORS;
 }
 
++ (OAFeature *)VEHICLEMETRICS {
+    if (!VEHICLEMETRICS)
+        VEHICLEMETRICS = [[OAFeature alloc] initWithFeature:EOAFeatureVehicleMetrics];
+    return VEHICLEMETRICS;
+}
+
 + (NSArray<OAFeature *> *)OSMAND_PRO_FEATURES
 {
     if (!OSMAND_PRO_FEATURES)
     {
         OSMAND_PRO_FEATURES = @[
                 OAFeature.OSMAND_CLOUD,
-//                OAFeature.ADVANCED_WIDGETS,
+                OAFeature.ADVANCED_WIDGETS,
                 OAFeature.WEATHER,
-                OAFeature.SENSORS,
                 OAFeature.HOURLY_MAP_UPDATES,
                 OAFeature.CROSS_BUY,
                 OAFeature.RELIEF_3D,
+                OAFeature.VEHICLEMETRICS,
                 OAFeature.MONTHLY_MAP_UPDATES,
                 OAFeature.UNLIMITED_MAP_DOWNLOADS,
                 OAFeature.CARPLAY,
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.WIKIPEDIA,
                 OAFeature.WIKIVOYAGE,
+                OAFeature.SENSORS,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL,
         ];
     }
     return OSMAND_PRO_FEATURES;
-}
-
-+ (NSArray<OAFeature *> *)OSMAND_PRO_PREVIEW_FEATURES
-{
-    if (!OSMAND_PRO_PREVIEW_FEATURES)
-    {
-        OSMAND_PRO_PREVIEW_FEATURES = @[
-                OAFeature.OSMAND_CLOUD,
-//                OAFeature.ADVANCED_WIDGETS,
-                OAFeature.WEATHER,
-                OAFeature.HOURLY_MAP_UPDATES,
-                OAFeature.UNLIMITED_MAP_DOWNLOADS,
-                OAFeature.CARPLAY,
-//                OAFeature.COMBINED_WIKI,
-                OAFeature.TERRAIN,
-                OAFeature.NAUTICAL
-        ];
-    }
-    return OSMAND_PRO_PREVIEW_FEATURES;
 }
 
 + (NSArray<OAFeature *> *)MAPS_PLUS_FEATURES
@@ -416,6 +413,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.WIKIPEDIA,
                 OAFeature.WIKIVOYAGE,
+                OAFeature.SENSORS,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL
         ];
@@ -431,6 +429,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.MONTHLY_MAP_UPDATES,
                 OAFeature.UNLIMITED_MAP_DOWNLOADS,
                 OAFeature.CARPLAY,
+                OAFeature.SENSORS,
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL
@@ -449,6 +448,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OAFeature.ADVANCED_WIDGETS;
         case EOAFeatureSensors:
             return OAFeature.SENSORS;
+        case EOAFeatureVehicleMetrics:
+            return OAFeature.VEHICLEMETRICS;
         case EOAFeatureHourlyMapUpdates:
             return OAFeature.HOURLY_MAP_UPDATES;
         case EOAFeatureCrossBuy:
@@ -517,7 +518,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 + (void) showChoosePlanScreenWithFeature:(OAFeature * _Nullable)feature navController:(UINavigationController *)navController
 {
     OAChoosePlanViewController *choosePlanViewController =
-            [[OAChoosePlanViewController alloc] initWithFeature:feature ? feature : OAFeature.OSMAND_PRO_FEATURES.firstObject];
+            [[OAChoosePlanViewController alloc] initWithFeature:feature ?: OAFeature.OSMAND_PRO_FEATURES.firstObject];
     [self showImpl:choosePlanViewController navController:navController];
 }
 

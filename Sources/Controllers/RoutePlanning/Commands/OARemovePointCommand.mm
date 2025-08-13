@@ -13,7 +13,7 @@
 @implementation OARemovePointCommand
 {
     NSInteger _position;
-    OAWptPt *_point;
+    OASWptPt *_point;
 }
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer position:(NSInteger)position

@@ -205,7 +205,7 @@
     vector<int> loclanes;
     int dist = 0;
     // TurnType primary = null;
-    if ((![_rh isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_rh getCurrentGPXRoute]) && [_trackingUtilities isMapLinkedToLocation] && [_settings.showLanes get])
+    if ((![_rh isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_rh getCurrentGPXRoute]) && [_trackingUtilities isMapLinkedToLocation])
     {
         CLLocation *lp = _locationProvider.lastKnownLocation;
         std::shared_ptr<RouteDataObject> ro = nullptr;
@@ -223,7 +223,7 @@
     }
     else if ([_rh isRouteCalculated])
     {
-        if ([_rh isFollowingMode] && [_settings.showLanes get])
+        if ([_rh isFollowingMode])
         {
             OANextDirectionInfo *r = [_rh getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:false];
             if (r && r.directionInfo && r.directionInfo.turnType)
@@ -276,7 +276,7 @@
             if (dist == 0)
                 [self refreshLabel:@""];
             else
-                [self refreshLabel:[OAOsmAndFormatter getFormattedDistance:dist roundUp:![[OAAppSettings sharedManager].preciseDistanceNumbers get]]];
+                [self refreshLabel:[OAOsmAndFormatter getFormattedDistance:dist withParams:[OsmAndFormatterParams useLowerBounds]]];
             
             _textView.hidden = _textView.text.length == 0;
             _textShadowView.hidden = _textShadowView.text.length == 0;

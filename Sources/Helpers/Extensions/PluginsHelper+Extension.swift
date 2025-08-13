@@ -7,19 +7,23 @@
 //
 
 import Foundation
-import Charts
+import DGCharts
 
 extension OAPluginsHelper {
 
     static func getOrderedLineDataSet(chart: LineChartView,
-                                      analysis: OAGPXTrackAnalysis,
+                                      analysis: GpxTrackAnalysis,
                                       graphType: GPXDataSetType,
                                       axisType: GPXDataSetAxisType,
                                       calcWithoutGaps: Bool,
                                       useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
         for plugin in Self.getAvailablePlugins() {
-            let dataSet: GpxUIHelper.OrderedLineDataSet? = plugin.getOrderedLineDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
-            if let dataSet {
+            if let dataSet = plugin.getOrderedLineDataSet(chart: chart,
+                                                          analysis: analysis,
+                                                          graphType: graphType,
+                                                          axisType: axisType,
+                                                          calcWithoutGaps: calcWithoutGaps,
+                                                          useRightAxis: useRightAxis) {
                 return dataSet
             }
         }

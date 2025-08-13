@@ -26,7 +26,6 @@ class TravelArticle: NSObject {
     var imageTitle: String?
     var gpxFile: OAGPXDocumentAdapter?;
     var routeId: String?
-    var routeRadius = -1
     var ref: String?
     var routeSource: String?
     var originalId: UInt64 = 0 //long
@@ -38,6 +37,37 @@ class TravelArticle: NSObject {
     var lastModified: TimeInterval = 0 //long
     var gpxFileReading: Bool = false
     var gpxFileRead: Bool = false
+    
+    var routeRadius = -1
+    var bbox31: KQuadRect?
+    
+    func getGpxFileName() -> String {
+        var gpxFileName = routeId
+        if let title, !title.isEmpty {
+            gpxFileName = title
+        }
+        if let gpxFileName {
+            return gpxFileName.sanitizeFileName()
+        } else {
+            debugPrint("Empty travel article in " + (file ?? "EmptyFileName"))
+            return "Travel Article File"
+        }
+    }
+    
+    func initShortLinkTiles(shortLinkTiles: String) {
+        bbox31 = KQuadRect()
+        let mapUtils = KMapUtils.shared
+        let compoinents = shortLinkTiles.components(separatedBy: ",")
+        
+        for shortLink in compoinents {
+            let bbox = mapUtils.decodeShortLinkToQuadRect(shortLink: shortLink)
+            let left = Double(mapUtils.get31TileNumberX(longitude: bbox.left))
+            let top = Double(mapUtils.get31TileNumberY(latitude: bbox.top))
+            let right = Double(mapUtils.get31TileNumberX(longitude: bbox.right))
+            let bottom = Double(mapUtils.get31TileNumberY(latitude: bbox.bottom))
+            bbox31?.expand(left: left, top: top, right: right, bottom: bottom)
+        }
+    }
     
     func generateIdentifier() -> TravelArticleIdentifier {
         TravelArticleIdentifier(article: self)
@@ -68,7 +98,8 @@ class TravelArticle: NSObject {
         if aggregatedPartOf == nil || aggregatedPartOf?.length == 0 {
             return nil
         }
-        
+        // "Сочи,Черноморское побережье Краснодарского края,Краснодарский край и Адыгея,Юг России,Россия,Европа,en:Destinations"
+        // FIXME: en:Destinations ?
         if let parts = aggregatedPartOf?.components(separatedBy: ",") {
             if !parts.isEmpty {
                 var res = ""
@@ -100,8 +131,8 @@ class TravelArticle: NSObject {
     func getPointFilterString() -> String {
         "route_article_point"
     }
-    
-    func getAnalysis() -> OAGPXTrackAnalysis? {
+
+    func getAnalysis() -> GpxTrackAnalysis? {
         nil
     }
     

@@ -20,7 +20,10 @@
 #import "OAPOICategory.h"
 #import "OAMapUtils.h"
 #import "OASearchCoreFactory.h"
+#import "OAArabicNormalizer.h"
 
+#include <OsmAndCore/Data/Amenity.h>
+#include <OsmAndCore/IFavoriteLocation.h>
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <OsmAndCore/ICU.h>
@@ -37,6 +40,8 @@
 @implementation OASearchResult
 {
     double _unknownPhraseMatchWeight;
+    std::shared_ptr<const OsmAnd::Amenity> _amenity;
+    std::shared_ptr<const OsmAnd::IFavoriteLocation> _favorite;
 }
 
 - (instancetype) initWithPhrase:(OASearchPhrase *)sp
@@ -69,22 +74,26 @@
     {
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
     }
-    else if (_objectType == POI_TYPE)
+    else if (_objectType == EOAObjectTypePoiType)
     {
         
     }
     else
     {
         CheckWordsMatchCount *completeMatchRes = [[CheckWordsMatchCount alloc] init];
-        if ([self allWordsMatched:_localeName cnt:completeMatchRes])
+        bool matched = [self allWordsMatched:_localeName cnt:completeMatchRes];
+        if (!matched && _alternateName != nil && [_alternateName isEqualToString:_cityName])
         {
-            // ignore other names
+            bool matched = [self allWordsMatched:_alternateName cnt:completeMatchRes];
         }
-        else if (_otherNames != nil)
+        if (!matched && _otherNames != nil)
         {
             for (NSString *otherName : _otherNames) {
                 if ([self allWordsMatched:otherName cnt:completeMatchRes])
+                {
+                    matched = true;
                     break;
+                }
             }
         }
         // if all words from search phrase match (<) the search result words - we prioritize it higher
@@ -105,7 +114,7 @@
         if (completeMatchRes.allWordsEqual)
         {
             BOOL closeDistance = [OAMapUtils getDistance:([_requiredSearchPhrase getLastTokenLocation]).coordinate second:_location.coordinate] <= NEAREST_METERS_LIMIT;
-            if (_objectType == CITY || _objectType == VILLAGE || closeDistance)
+            if (_objectType == EOAObjectTypeCity || _objectType == EOAObjectTypeVillage || closeDistance)
                 res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10 + MAX_PHRASE_WEIGHT_TOTAL / 2;
         }
         return res;
@@ -116,7 +125,12 @@
     NSMutableArray<NSString *> *searchPhraseNamesArray = [self getSearchPhraseNames];
     QStringList searchPhraseNames;
     for (NSString *searchPhraseName : searchPhraseNamesArray)
+    {
+        if ([OAArabicNormalizer isSpecialArabic:searchPhraseName]) {
+            searchPhraseName = [OAArabicNormalizer normalize:searchPhraseName] ?: searchPhraseName;
+        }
         searchPhraseNames.append(QString::fromNSString(searchPhraseName));
+    }
 
     NSMutableArray<NSString *> *localResultNamesArray;
     if (![[_requiredSearchPhrase getFullSearchPhrase] containsString:@HYPHEN])
@@ -141,7 +155,13 @@
         wordMatched = NO;
         for (int i = idxMatchedWord + 1; i < localResultNames.size(); i++)
         {
-            int r = OsmAnd::ICU::ccompare(searchPhraseName, localResultNames.at(i));
+            QString localQString = localResultNames.at(i);
+            NSString * localString = localQString.toNSString();
+            if ([OAArabicNormalizer isSpecialArabic:localString]) {
+                localString = [OAArabicNormalizer normalize:localString] ?: localString;
+                localQString = QString::fromNSString(localString);
+            }
+            int r = OsmAnd::ICU::ccompare(searchPhraseName, localQString);
             if (r == 0)
             {
                 wordMatched = YES;
@@ -266,6 +286,25 @@
     OASearchResult *prev = _parentSearchResult;
     _parentSearchResult = parentSearchResult;
     return prev;
+}
+
+- (std::shared_ptr<const OsmAnd::Amenity>) amenity
+{
+    return _amenity;
+}
+
+- (void) setAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity
+{
+    _amenity = amenity;
+}
+
+- (std::shared_ptr<const OsmAnd::IFavoriteLocation>) favorite
+{
+    return _favorite;
+}
+- (void) setFavorite:(std::shared_ptr<const OsmAnd::IFavoriteLocation>)favorite
+{
+    _favorite = favorite;
 }
 
 - (NSString *) toString

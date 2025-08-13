@@ -11,10 +11,20 @@
 #import "OAPointDescription.h"
 #import "OAAutoObserverProxy.h"
 #import "OrderedDictionary.h"
+#import "OAObservable.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OAWeatherBand.h"
 #import "OAPluginsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "OAAppSettings.h"
+#import "OAMapLayersConfiguration.h"
+#import "OAMapSource.h"
+#import "OAApplicationMode.h"
+#import "OADownloadMode.h"
+#import "OAMapViewState.h"
+#import "OARTargetPoint.h"
+#import "OAZoom.h"
 
 #define kLastMapSourceKey @"lastMapSource"
 #define kOverlaySourceKey @"overlayMapSource"
@@ -33,13 +43,7 @@
 
 #define kTerrainTypeKey @"terrainType"
 #define kLastTerrainTypeKey @"lastTerrainType"
-#define kHillshadeAlphaKey @"hillshadeAlpha"
-#define kSlopeAlphaKey @"slopeAlpha"
 #define kVerticalExaggerationKey @"verticalExaggeration"
-#define kHillshadeMinZoomKey @"hillshadeMinZoom"
-#define kHillshadeMaxZoomKey @"hillshadeMaxZoom"
-#define kSlopeMinZoomKey @"slopeMinZoom"
-#define kSlopeMaxZoomKey @"slopeMaxZoom"
 #define kMapillaryKey @"mapillary"
 #define kWikipediaLanguagesKey @"wikipediaLanguages"
 #define kWikipediaGlobalKey @"wikipediaGlobal"
@@ -49,42 +53,39 @@
 #define kWeatherKey @"weather"
 #define kWeatherUseOfflineDataKey @"weatherUseOfflineData"
 #define kWeatherTempKey @"weatherTemp"
-#define kWeatherTempUnitKey @"weatherTempUnit"
-#define kWeatherTempUnitAutoKey @"weatherTempUnitAuto"
+#define kWeatherTempToolbarKey @"weatherTempToolbar"
 #define kWeatherTempAlphaKey @"weatherTempAlpha"
 #define kWeatherTempToolbarAlphaKey @"weatherTempToolbarAlpha"
 #define kWeatherPressureKey @"weatherPressure"
 #define kWeatherPressureToolbarKey @"weatherPressureToolbar"
 #define kWeatherPressureUnitKey @"weatherPressureUnit"
-#define kWeatherPressureToolbarUnitKey @"weatherPressureToolbarUnit"
 #define kWeatherPressureUnitAutoKey @"weatherPressureUnitAuto"
-#define kWeatherPressureToolbarUnitAutoKey @"weatherPressureToolbarUnitAuto"
 #define kWeatherPressureAlphaKey @"weatherPressureAlpha"
 #define kWeatherPressureToolbarAlphaKey @"weatherPressureToolbarAlpha"
 #define kWeatherWindKey @"weatherWind"
 #define kWeatherWindToolbarKey @"weatherWindToolbar"
 #define kWeatherWindUnitKey @"weatherWindUnit"
-#define kWeatherWindToolbarUnitKey @"weatherWindToolbarUnit"
 #define kWeatherWindUnitAutoKey @"weatherWindUnitAuto"
-#define kWeatherWindToolbarUnitAutoKey @"weatherWindToolbarUnitAuto"
 #define kWeatherWindAlphaKey @"weatherWindAlpha"
 #define kWeatherWindToolbarAlphaKey @"weatherWindToolbarAlpha"
 #define kWeatherCloudKey @"weatherCloud"
 #define kWeatherCloudToolbarKey @"weatherCloudToolbar"
 #define kWeatherCloudUnitKey @"weatherCloudUnit"
-#define kWeatherCloudToolbarUnitKey @"weatherCloudToolbarUnit"
 #define kWeatherCloudUnitAutoKey @"weatherCloudUnitAuto"
-#define kWeatherCloudToolbarUnitAutoKey @"weatherCloudToolbarUnitAuto"
 #define kWeatherCloudAlphaKey @"weatherCloudAlpha"
 #define kWeatherCloudToolbarAlphaKey @"weatherCloudToolbarAlpha"
 #define kWeatherPrecipKey @"weatherPrecip"
 #define kWeatherPrecipToolbarKey @"weatherPrecipToolbar"
 #define kWeatherPrecipUnitKey @"weatherPrecipUnit"
-#define kWeatherPrecipToolbarUnitKey @"weatherPrecipToolbarUnit"
 #define kWeatherPrecipUnitAutoKey @"weatherPrecipUnitAuto"
-#define kWeatherPrecipToolbarUnitAutoKey @"weatherPrecipToolbarUnitAuto"
 #define kWeatherPrecipAlphaKey @"weatherPrecipAlpha"
 #define kWeatherPrecipToolbarAlphaKey @"weatherPrecipToolbarAlpha"
+#define kWeatherSourceKey @"weatherSource"
+#define kWeatherWindAnimationKey @"weatherWindAnimation"
+#define kWeatherWindToolbarAnimationKey @"weatherWindToolbarAnimation"
+#define kWeatherWindAnimationWindUnitKey @"weatherWindAnimationUnit"
+#define kWeatherWindAnimationToolbarAlphaKey @"weatherWindAnimationToolbarAlpha"
+#define kWeatherWindAnimationUnitAutoKey @"weatherWindAnimationUnitAuto"
 
 @implementation OAAppData
 {
@@ -102,14 +103,6 @@
     OACommonMapSource  *_lastUnderlayMapSourceProfile;
     OACommonDouble *_overlayAlphaProfile;
     OACommonDouble *_underlayAlphaProfile;
-    OACommonTerrain *_terrainTypeProfile;
-    OACommonTerrain *_lastTerrainTypeProfile;
-    OACommonDouble *_hillshadeAlphaProfile;
-    OACommonInteger *_hillshadeMinZoomProfile;
-    OACommonInteger *_hillshadeMaxZoomProfile;
-    OACommonDouble *_slopeAlphaProfile;
-    OACommonInteger *_slopeMinZoomProfile;
-    OACommonInteger *_slopeMaxZoomProfile;
     OACommonDouble *_verticalExaggerationScaleProfile;
     OACommonBoolean *_mapillaryProfile;
     OACommonBoolean *_wikipediaGlobalProfile;
@@ -123,40 +116,31 @@
     OACommonBoolean *_weatherProfile;
     OACommonBoolean *_weatherUseOfflineDataProfile;
     OACommonBoolean *_weatherTempProfile;
-    OACommonUnit *_weatherTempUnitProfile;
-    OACommonBoolean *_weatherTempUnitAutoProfile;
+    OACommonBoolean *_weatherTempToolbarProfile;
     OACommonDouble *_weatherTempAlphaProfile;
     OACommonDouble *_weatherTempToolbarAlphaProfile;
     OACommonBoolean *_weatherPressureProfile;
     OACommonBoolean *_weatherPressureToolbarProfile;
     OACommonUnit *_weatherPressureUnitProfile;
-    OACommonUnit *_weatherPressureToolbarUnitProfile;
     OACommonBoolean *_weatherPressureUnitAutoProfile;
-    OACommonBoolean *_weatherPressureToolbarUnitAutoProfile;
     OACommonDouble *_weatherPressureAlphaProfile;
     OACommonDouble *_weatherPressureToolbarAlphaProfile;
     OACommonBoolean *_weatherWindProfile;
     OACommonBoolean *_weatherWindToolbarProfile;
     OACommonUnit *_weatherWindUnitProfile;
-    OACommonUnit *_weatherWindToolbarUnitProfile;
     OACommonBoolean *_weatherWindUnitAutoProfile;
-    OACommonBoolean *_weatherWindToolbarUnitAutoProfile;
     OACommonDouble *_weatherWindAlphaProfile;
     OACommonDouble *_weatherWindToolbarAlphaProfile;
     OACommonBoolean *_weatherCloudProfile;
     OACommonBoolean *_weatherCloudToolbarProfile;
     OACommonUnit *_weatherCloudUnitProfile;
-    OACommonUnit *_weatherCloudToolbarUnitProfile;
     OACommonBoolean *_weatherCloudUnitAutoProfile;
-    OACommonBoolean *_weatherCloudToolbarUnitAutoProfile;
     OACommonDouble *_weatherCloudAlphaProfile;
     OACommonDouble *_weatherCloudToolbarAlphaProfile;
     OACommonBoolean *_weatherPrecipProfile;
     OACommonBoolean *_weatherPrecipToolbarProfile;
     OACommonUnit *_weatherPrecipUnitProfile;
-    OACommonUnit *_weatherPrecipToolbarUnitProfile;
     OACommonBoolean *_weatherPrecipUnitAutoProfile;
-    OACommonBoolean *_weatherPrecipToolbarUnitAutoProfile;
     OACommonDouble *_weatherPrecipAlphaProfile;
     OACommonDouble *_weatherPrecipToolbarAlphaProfile;
     
@@ -166,11 +150,18 @@
     OACommonString *_contourNameLastUsedToolbarProfile;
     OACommonDouble *_contoursAlphaProfile;
     OACommonDouble *_contoursAlphaToolbarProfile;
-
+    
     NSMapTable<NSString *, OACommonPreference *> *_registeredPreferences;
+    
+    OACommonString *_weatherSourceProfile;
+    OACommonBoolean *_weatherWindAnimationProfile;
+    OACommonBoolean *_weatherWindAnimationToolbarProfile;
+    OACommonUnit *_weatherWindAnimationUnitProfile;
+    OACommonDouble *_weatherWindAnimationAlphaProfile;
+    OACommonBoolean *_weatherWindAnimationUnitAutoProfile;
 }
 
-@synthesize applicationModeChangedObservable = _applicationModeChangedObservable, mapLayersConfiguration = _mapLayersConfiguration, weatherSettingsChangeObservable = _weatherSettingsChangeObservable;
+@synthesize mapLayersConfiguration = _mapLayersConfiguration, weatherSettingsChangeObservable = _weatherSettingsChangeObservable;
 
 - (instancetype) init
 {
@@ -183,41 +174,14 @@
     return self;
 }
 
-- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode
+- (void)setSettingValue:(NSString *)value
+                 forKey:(NSString *)key
+                   mode:(OAApplicationMode *)mode
+             notHandled:(void (^)(NSString *value, NSString *key, OAApplicationMode *mode))notHandled
 {
     @synchronized (_lock)
     {
-        if ([key isEqualToString:@"terrain_mode"])
-        {
-            [_lastTerrainTypeProfile setValueFromString:value appMode:mode];
-        }
-        else if ([key isEqualToString:@"hillshade_min_zoom"])
-        {
-            [_hillshadeMinZoomProfile setValueFromString:value appMode:mode];
-        }
-        else if ([key isEqualToString:@"hillshade_max_zoom"])
-        {
-            [_hillshadeMaxZoomProfile setValueFromString:value appMode:mode];
-        }
-        else if ([key isEqualToString:@"hillshade_transparency"])
-        {
-            double alpha = [value doubleValue] / 100;
-            [_hillshadeAlphaProfile set:alpha mode:mode];
-        }
-        else if ([key isEqualToString:@"slope_transparency"])
-        {
-            double alpha = [value doubleValue] / 100;
-            [_slopeAlphaProfile set:alpha mode:mode];
-        }
-        else if ([key isEqualToString:@"slope_min_zoom"])
-        {
-            [_slopeMinZoomProfile setValueFromString:value appMode:mode];
-        }
-        else if ([key isEqualToString:@"slope_max_zoom"])
-        {
-            [_slopeMaxZoomProfile setValueFromString:value appMode:mode];
-        }
-        else if ([key isEqualToString:@"vertical_exaggeration_scale"])
+        if ([key isEqualToString:@"vertical_exaggeration_scale"])
         {
             [_verticalExaggerationScaleProfile set:[value doubleValue] mode:mode];
         }
@@ -240,27 +204,64 @@
         else if ([key isEqualToString:@"travelGuidesImagesDownloadMode"])
         {
             [_travelGuidesImagesDownloadModeProfile setValueFromString:value appMode:mode];
+        } else {
+            if (notHandled)
+                notHandled(value, key, mode);
         }
     }
 }
 
-- (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode
+- (void)addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode
 {
     @synchronized (_lock)
     {
-        prefs[@"terrain_mode"] = [_lastTerrainTypeProfile toStringValue:mode];
-        prefs[@"hillshade_min_zoom"] = [_hillshadeMinZoomProfile toStringValue:mode];
-        prefs[@"hillshade_max_zoom"] = [_hillshadeMaxZoomProfile toStringValue:mode];
-        prefs[@"hillshade_transparency"] = [NSString stringWithFormat:@"%d", (int) ([_hillshadeAlphaProfile get:mode] * 100)];
-        prefs[@"slope_transparency"] = [NSString stringWithFormat:@"%d", (int) ([_slopeAlphaProfile get:mode] * 100)];
-        prefs[@"slope_min_zoom"] = [_slopeMinZoomProfile toStringValue:mode];
-        prefs[@"slope_max_zoom"] = [_slopeMaxZoomProfile toStringValue:mode];
-        prefs[@"vertical_exaggeration_scale"] = [NSString stringWithFormat:@"%f", ([_verticalExaggerationScaleProfile get:mode])];
-        prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
-        prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
-        prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
-        prefs[@"wikipedia_images_download_mode"] = [_wikipediaImagesDownloadModeProfile toStringValue:mode];
-        prefs[@"travelGuidesImagesDownloadMode"] = [_travelGuidesImagesDownloadModeProfile toStringValue:mode];
+        if ([_verticalExaggerationScaleProfile isSetForMode:mode]) {
+            prefs[@"vertical_exaggeration_scale"] =
+                [NSString stringWithFormat:@"%f", [_verticalExaggerationScaleProfile get:mode]];
+        }
+
+        NSDictionary *profiles = @{
+            @"show_mapillary": _mapillaryProfile,
+            @"global_wikipedia_poi_enabled": _wikipediaGlobalProfile,
+            @"wikipedia_poi_enabled_languages": _wikipediaLanguagesProfile,
+            @"wikipedia_images_download_mode": _wikipediaImagesDownloadModeProfile,
+            kTravelGuidesImagesDownloadModeKey: _travelGuidesImagesDownloadModeProfile,
+            kWeatherSourceKey: _weatherSourceProfile,
+            kWeatherTempKey: _weatherTempProfile,
+            kWeatherPressureKey: _weatherPressureProfile,
+            kWeatherWindKey: _weatherWindProfile,
+            kWeatherWindAnimationKey: _weatherWindAnimationProfile,
+            kWeatherCloudKey: _weatherCloudProfile,
+            kWeatherPrecipKey: _weatherPrecipProfile,
+            // TODO: Settings with units have a different format compared to Android; will need to be fixed.
+            // https://github.com/osmandapp/OsmAnd-Issues/issues/2776#issuecomment-3088962795
+           // kWeatherPressureUnitKey: _weatherPressureUnitProfile,
+           // kWeatherWindUnitKey: _weatherWindUnitProfile,
+           // kWeatherWindAnimationWindUnitKey: _weatherWindAnimationUnitProfile,
+           // kWeatherCloudUnitKey: _weatherCloudUnitProfile,
+           // kWeatherPrecipUnitKey: _weatherPrecipUnitProfile,
+            kWeatherTempAlphaKey: _weatherTempAlphaProfile,
+            kWeatherPressureAlphaKey: _weatherPressureAlphaProfile,
+            kWeatherWindAlphaKey: _weatherWindAlphaProfile,
+            kWeatherWindToolbarAlphaKey: _weatherWindToolbarAlphaProfile,
+            kWeatherCloudAlphaKey: _weatherCloudAlphaProfile,
+            kWeatherPrecipAlphaKey: _weatherPrecipAlphaProfile,
+            kWeatherPressureUnitAutoKey: _weatherPressureUnitAutoProfile,
+            kWeatherWindUnitAutoKey: _weatherWindUnitAutoProfile,
+            kWeatherWindAnimationUnitAutoKey: _weatherWindAnimationUnitAutoProfile,
+            kWeatherCloudUnitAutoKey: _weatherCloudUnitAutoProfile,
+            kWeatherPrecipUnitAutoKey: _weatherPrecipUnitAutoProfile
+        };
+
+        for (NSString *key in profiles)
+        {
+            id profile = profiles[key];
+            if ([profile isSetForMode:mode])
+            {
+                // NOTE: The value 0.67 is saved as 70 (similar to Android).  "weatherTempAlpha" : "0.7",
+                prefs[key] = [profile toStringValue:mode];
+            }
+        }
     }
 }
 
@@ -275,12 +276,17 @@
     _underlayAlphaChangeObservable = [[OAObservable alloc] init];
     _contourNameChangeObservable = [[OAObservable alloc] init];
     _contoursAlphaChangeObservable = [[OAObservable alloc] init];
-    _terrainChangeObservable = [[OAObservable alloc] init];
     _terrainResourcesChangeObservable = [[OAObservable alloc] init];
-    _terrainAlphaChangeObservable = [[OAObservable alloc] init];
     _verticalExaggerationScaleChangeObservable = [[OAObservable alloc] init];
     _mapLayerChangeObservable = [[OAObservable alloc] init];
     _mapillaryChangeObservable = [[OAObservable alloc] init];
+    
+    
+    _weatherSourceChangeObservable = [[OAObservable alloc] init];
+    _weatherWindAnimationChangeObservable = [[OAObservable alloc] init];
+    _weatherWindAnimationUnitChangeObservable = [[OAObservable alloc] init];
+    _weatherWindAnimationAlphaChangeObservable = [[OAObservable alloc] init];
+    _weatherWindAnimationUnitAutoChangeObservable = [[OAObservable alloc] init];
 
     _destinationsChangeObservable = [[OAObservable alloc] init];
     _destinationAddObservable = [[OAObservable alloc] init];
@@ -291,14 +297,14 @@
 
     _wikipediaChangeObservable = [[OAObservable alloc] init];
 
-    _applicationModeChangedObservable = [[OAObservable alloc] init];
-    _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                           withHandler:@selector(onAppModeChanged)
-                                                            andObserve:_applicationModeChangedObservable];
     _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     // Profile settings
     _lastMapSourceProfile = [OACommonMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
-                                                                                                             andVariant:@"type_default"]];
+                                                                                                             andVariant:@"LAYER_OSM_VECTOR"]];
+    OAMapSource *boatDefaultMapSource = [[OAMapSource alloc] initWithResource:[[NAUTICAL_RENDER lowercaseString] stringByAppendingString:RENDERER_INDEX_EXT]
+                                                                   andVariant:OAApplicationMode.BOAT.variantKey
+                                                                         name:NAUTICAL_RENDER];
+    [_lastMapSourceProfile setModeDefaultValue:boatDefaultMapSource mode:OAApplicationMode.BOAT];
     _overlayMapSourceProfile = [OACommonMapSource withKey:kOverlaySourceKey defValue:nil];
     _underlayMapSourceProfile = [OACommonMapSource withKey:kUnderlaySourceKey defValue:nil];
     _lastOverlayMapSourceProfile = [OACommonMapSource withKey:kLastOverlayKey defValue:nil];
@@ -311,16 +317,8 @@
     _contourNameLastUsedToolbarProfile = [OACommonString withKey:kContourNameLastUsedToolbarKey defValue:@""];
     _contoursAlphaProfile = [OACommonDouble withKey:kContoursAlphaKey defValue:1.];
     _contoursAlphaToolbarProfile = [OACommonDouble withKey:kContoursAlphaToolbarKey defValue:1.];
-    _terrainTypeProfile = [OACommonTerrain withKey:kTerrainTypeKey defValue:EOATerrainTypeDisabled];
-    _lastTerrainTypeProfile = [OACommonTerrain withKey:kLastTerrainTypeKey defValue:EOATerrainTypeHillshade];
-    _hillshadeAlphaProfile = [OACommonDouble withKey:kHillshadeAlphaKey defValue:kHillshadeDefAlpha];
-    _slopeAlphaProfile = [OACommonDouble withKey:kSlopeAlphaKey defValue:kSlopeDefAlpha];
     _verticalExaggerationScaleProfile = [OACommonDouble withKey:kVerticalExaggerationKey defValue:kExaggerationDefScale];
-    
-    _hillshadeMinZoomProfile = [OACommonInteger withKey:kHillshadeMinZoomKey defValue:kHillshadeDefMinZoom];
-    _hillshadeMaxZoomProfile = [OACommonInteger withKey:kHillshadeMaxZoomKey defValue:kHillshadeDefMaxZoom];
-    _slopeMinZoomProfile = [OACommonInteger withKey:kSlopeMinZoomKey defValue:kSlopeDefMinZoom];
-    _slopeMaxZoomProfile = [OACommonInteger withKey:kSlopeMaxZoomKey defValue:kSlopeDefMaxZoom];
+
     _mapillaryProfile = [OACommonBoolean withKey:kMapillaryKey defValue:NO];
     _wikipediaGlobalProfile = [OACommonBoolean withKey:kWikipediaGlobalKey defValue:NO];
     _wikipediaLanguagesProfile = [OACommonStringList withKey:kWikipediaLanguagesKey defValue:@[]];
@@ -335,47 +333,48 @@
     _weatherProfile = [OACommonBoolean withKey:kWeatherKey defValue:NO];
     _weatherUseOfflineDataProfile = [OACommonBoolean withKey:kWeatherUseOfflineDataKey defValue:NO];
     _weatherTempProfile = [OACommonBoolean withKey:kWeatherTempKey defValue:NO];
-    _weatherTempUnitProfile = [OACommonUnit withKey:kWeatherTempUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_TEMPERATURE]];
-    _weatherTempUnitAutoProfile = [OACommonBoolean withKey:kWeatherTempUnitAutoKey defValue:YES];
+    _weatherTempToolbarProfile = [OACommonBoolean withKey:kWeatherTempToolbarKey defValue:NO];
     _weatherTempAlphaProfile = [OACommonDouble withKey:kWeatherTempAlphaKey defValue:0.5];
     _weatherTempToolbarAlphaProfile = [OACommonDouble withKey:kWeatherTempToolbarAlphaKey defValue:0.5];
     _weatherPressureProfile = [OACommonBoolean withKey:kWeatherPressureKey defValue:NO];
     _weatherPressureToolbarProfile = [OACommonBoolean withKey:kWeatherPressureToolbarKey defValue:NO];
     _weatherPressureUnitProfile = [OACommonUnit withKey:kWeatherPressureUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_PRESSURE]];
-    _weatherPressureToolbarUnitProfile = [OACommonUnit withKey:kWeatherPressureToolbarUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_PRESSURE]];
     _weatherPressureUnitAutoProfile = [OACommonBoolean withKey:kWeatherPressureUnitAutoKey defValue:YES];
-    _weatherPressureToolbarUnitAutoProfile = [OACommonBoolean withKey:kWeatherPressureToolbarUnitAutoKey defValue:YES];
     _weatherPressureAlphaProfile = [OACommonDouble withKey:kWeatherPressureAlphaKey defValue:0.6];
     _weatherPressureToolbarAlphaProfile = [OACommonDouble withKey:kWeatherPressureToolbarAlphaKey defValue:0.6];
     _weatherWindProfile = [OACommonBoolean withKey:kWeatherWindKey defValue:NO];
     _weatherWindToolbarProfile = [OACommonBoolean withKey:kWeatherWindToolbarKey defValue:NO];
     _weatherWindUnitProfile = [OACommonUnit withKey:kWeatherWindUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_SPEED]];
-    _weatherWindToolbarUnitProfile = [OACommonUnit withKey:kWeatherWindToolbarUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_SPEED]];
     _weatherWindUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindUnitAutoKey defValue:YES];
-    _weatherWindToolbarUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindToolbarUnitAutoKey defValue:YES];
-    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
-    _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
     _weatherCloudProfile = [OACommonBoolean withKey:kWeatherCloudKey defValue:NO];
     _weatherCloudToolbarProfile = [OACommonBoolean withKey:kWeatherCloudToolbarKey defValue:NO];
     _weatherCloudUnitProfile = [OACommonUnit withKey:kWeatherCloudUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_CLOUD]];
-    _weatherCloudToolbarUnitProfile = [OACommonUnit withKey:kWeatherCloudToolbarUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_CLOUD]];
     _weatherCloudUnitAutoProfile = [OACommonBoolean withKey:kWeatherCloudUnitAutoKey defValue:YES];
-    _weatherCloudToolbarUnitAutoProfile = [OACommonBoolean withKey:kWeatherCloudToolbarUnitAutoKey defValue:YES];
+    
+    WeatherSource getDefaultSource = WeatherSourceObjWrapper.getDefaultSource;
+    
+    _weatherSourceProfile = [OACommonString withKey:kWeatherSourceKey defValue:[WeatherSourceObjWrapper getSettingValueForType:getDefaultSource]];
+    _weatherWindAnimationProfile = [OACommonBoolean withKey:kWeatherWindAnimationKey defValue:NO];
+    _weatherWindAnimationToolbarProfile = [OACommonBoolean withKey:kWeatherWindToolbarAnimationKey defValue:NO];
+    _weatherWindAnimationUnitProfile = [OACommonUnit withKey:kWeatherWindAnimationWindUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_ANIMATION]];
+    _weatherWindAnimationAlphaProfile = [OACommonDouble withKey:kWeatherWindAnimationToolbarAlphaKey defValue:0.6];
+    
+    _weatherWindAnimationUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindAnimationUnitAutoKey defValue:YES];
+    
     _weatherCloudAlphaProfile = [OACommonDouble withKey:kWeatherCloudAlphaKey defValue:0.5];
     _weatherCloudToolbarAlphaProfile = [OACommonDouble withKey:kWeatherCloudToolbarAlphaKey defValue:0.5];
     _weatherPrecipProfile = [OACommonBoolean withKey:kWeatherPrecipKey defValue:NO];
     _weatherPrecipToolbarProfile = [OACommonBoolean withKey:kWeatherPrecipToolbarKey defValue:NO];
     _weatherPrecipUnitProfile = [OACommonUnit withKey:kWeatherPrecipUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_PRECIPITATION]];
-    _weatherPrecipToolbarUnitProfile = [OACommonUnit withKey:kWeatherPrecipToolbarUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_PRECIPITATION]];
     _weatherPrecipUnitAutoProfile = [OACommonBoolean withKey:kWeatherPrecipUnitAutoKey defValue:YES];
-    _weatherPrecipToolbarUnitAutoProfile = [OACommonBoolean withKey:kWeatherPrecipToolbarUnitAutoKey defValue:YES];
     _weatherPrecipAlphaProfile = [OACommonDouble withKey:kWeatherPrecipAlphaKey defValue:0.7];
     _weatherPrecipToolbarAlphaProfile = [OACommonDouble withKey:kWeatherPrecipToolbarAlphaKey defValue:0.7];
 
     _weatherChangeObservable = [[OAObservable alloc] init];
     _weatherUseOfflineDataChangeObservable = [[OAObservable alloc] init];
     _weatherTempChangeObservable = [[OAObservable alloc] init];
-    _weatherTempUnitChangeObservable = [[OAObservable alloc] init];
     _weatherPressureChangeObservable = [[OAObservable alloc] init];
     _weatherPressureUnitChangeObservable = [[OAObservable alloc] init];
     _weatherWindChangeObservable = [[OAObservable alloc] init];
@@ -401,16 +400,8 @@
     [_registeredPreferences setObject:_contourNameLastUsedToolbarProfile forKey:@"contour_name_last_used_toolbar"];
     [_registeredPreferences setObject:_contoursAlphaProfile forKey:@"contours_alpha"];
     [_registeredPreferences setObject:_contoursAlphaToolbarProfile forKey:@"contours_alpha_toolbar"];
-    [_registeredPreferences setObject:_lastTerrainTypeProfile forKey:@"terrain_mode"];
-    [_registeredPreferences setObject:_hillshadeAlphaProfile forKey:@"hillshade_transparency"];
-    [_registeredPreferences setObject:_slopeAlphaProfile forKey:@"slope_transparency"];
     [_registeredPreferences setObject:_verticalExaggerationScaleProfile forKey:@"vertical_exaggeration_scale"];
-    [_registeredPreferences setObject:_hillshadeMinZoomProfile forKey:@"hillshade_min_zoom"];
-    [_registeredPreferences setObject:_hillshadeMaxZoomProfile forKey:@"hillshade_max_zoom"];
-    [_registeredPreferences setObject:_slopeMinZoomProfile forKey:@"slope_min_zoom"];
-    [_registeredPreferences setObject:_slopeMaxZoomProfile forKey:@"slope_max_zoom"];
     [_registeredPreferences setObject:_mapillaryProfile forKey:@"show_mapillary"];
-    [_registeredPreferences setObject:_terrainTypeProfile forKey:@"terrain_mode"];
     [_registeredPreferences setObject:_wikipediaGlobalProfile forKey:@"global_wikipedia_poi_enabled"];
     [_registeredPreferences setObject:_wikipediaLanguagesProfile forKey:@"wikipedia_poi_enabled_languages"];
     [_registeredPreferences setObject:_wikipediaImagesDownloadModeProfile forKey:@"wikipedia_images_download_mode"];
@@ -419,42 +410,40 @@
     [_registeredPreferences setObject:_weatherProfile forKey:@"show_weather"];
     [_registeredPreferences setObject:_weatherUseOfflineDataProfile forKey:@"show_weather_offline_data"];
     [_registeredPreferences setObject:_weatherTempProfile forKey:@"show_weather_temp"];
-    [_registeredPreferences setObject:_weatherTempUnitProfile forKey:@"show_weather_temp_unit"];
-    [_registeredPreferences setObject:_weatherTempUnitAutoProfile forKey:@"show_weather_temp_unit_auto"];
+    [_registeredPreferences setObject:_weatherTempToolbarProfile forKey:@"show_weather_temp_toolbar"];
     [_registeredPreferences setObject:_weatherTempAlphaProfile forKey:@"weather_temp_transparency"];
     [_registeredPreferences setObject:_weatherTempToolbarAlphaProfile forKey:@"weather_temp_transparency_toolbar"];
     [_registeredPreferences setObject:_weatherPressureProfile forKey:@"show_weather_pressure"];
     [_registeredPreferences setObject:_weatherPressureToolbarProfile forKey:@"show_weather_pressure_toolbar"];
     [_registeredPreferences setObject:_weatherPressureUnitProfile forKey:@"show_weather_pressure_unit"];
-    [_registeredPreferences setObject:_weatherPressureToolbarUnitProfile forKey:@"show_weather_pressure_unit_toolbar"];
     [_registeredPreferences setObject:_weatherPressureUnitAutoProfile forKey:@"show_weather_pressure_unit_auto"];
-    [_registeredPreferences setObject:_weatherPressureToolbarUnitAutoProfile forKey:@"show_weather_pressure_unit_auto_toolbar"];
     [_registeredPreferences setObject:_weatherPressureAlphaProfile forKey:@"weather_pressure_transparency"];
     [_registeredPreferences setObject:_weatherPressureToolbarAlphaProfile forKey:@"weather_pressure_transparency_toolbar"];
     [_registeredPreferences setObject:_weatherWindProfile forKey:@"show_weather_wind"];
     [_registeredPreferences setObject:_weatherWindToolbarProfile forKey:@"show_weather_wind_toolbar"];
     [_registeredPreferences setObject:_weatherWindUnitProfile forKey:@"show_weather_wind_unit"];
-    [_registeredPreferences setObject:_weatherWindToolbarUnitProfile forKey:@"show_weather_wind_unit_toolbar"];
     [_registeredPreferences setObject:_weatherWindUnitAutoProfile forKey:@"show_weather_wind_unit_auto"];
-    [_registeredPreferences setObject:_weatherWindToolbarUnitAutoProfile forKey:@"show_weather_wind_unit_auto_toolbar"];
     [_registeredPreferences setObject:_weatherWindAlphaProfile forKey:@"weather_wind_transparency"];
     [_registeredPreferences setObject:_weatherWindToolbarAlphaProfile forKey:@"weather_wind_transparency_toolbar"];
     [_registeredPreferences setObject:_weatherCloudProfile forKey:@"show_weather_cloud"];
     [_registeredPreferences setObject:_weatherCloudToolbarProfile forKey:@"show_weather_cloud_toolbar"];
     [_registeredPreferences setObject:_weatherCloudUnitProfile forKey:@"show_weather_cloud_unit"];
-    [_registeredPreferences setObject:_weatherCloudToolbarUnitProfile forKey:@"show_weather_cloud_unit_toolbar"];
     [_registeredPreferences setObject:_weatherCloudUnitAutoProfile forKey:@"show_weather_cloud_unit_auto"];
-    [_registeredPreferences setObject:_weatherCloudToolbarUnitAutoProfile forKey:@"show_weather_cloud_unit_auto_toolbar"];
     [_registeredPreferences setObject:_weatherCloudAlphaProfile forKey:@"weather_cloud_transparency"];
     [_registeredPreferences setObject:_weatherCloudToolbarAlphaProfile forKey:@"weather_cloud_transparency_toolbar"];
     [_registeredPreferences setObject:_weatherPrecipProfile forKey:@"show_weather_precip"];
     [_registeredPreferences setObject:_weatherPrecipToolbarProfile forKey:@"show_weather_precip_toolbar"];
     [_registeredPreferences setObject:_weatherPrecipUnitProfile forKey:@"show_weather_precip_unit"];
-    [_registeredPreferences setObject:_weatherPrecipToolbarUnitProfile forKey:@"show_weather_precip_unit_toolbar"];
     [_registeredPreferences setObject:_weatherPrecipUnitAutoProfile forKey:@"show_weather_precip_unit_auto"];
-    [_registeredPreferences setObject:_weatherPrecipToolbarUnitAutoProfile forKey:@"show_weather_precip_unit_auto_toolbar"];
     [_registeredPreferences setObject:_weatherPrecipAlphaProfile forKey:@"weather_precip_transparency"];
     [_registeredPreferences setObject:_weatherPrecipToolbarAlphaProfile forKey:@"weather_precip_transparency_toolbar"];
+
+    [_registeredPreferences setObject:_weatherSourceProfile forKey:@"weather_source"];
+    [_registeredPreferences setObject:_weatherWindAnimationProfile forKey:@"weather_wind_animation"];
+    [_registeredPreferences setObject:_weatherWindAnimationToolbarProfile forKey:@"weather_wind_animation_toolbar"];
+    [_registeredPreferences setObject:_weatherWindAnimationUnitProfile forKey:@"show_weather_wind_animation_unit"];
+    [_registeredPreferences setObject:_weatherWindAnimationAlphaProfile forKey:@"weather_wind_animation_alpha"];
+    [_registeredPreferences setObject:_weatherWindAnimationUnitAutoProfile forKey:@"weather_wind_animation_unit_auto"];
 }
 
 - (void) dealloc
@@ -471,6 +460,16 @@
     }
 }
 
+- (void) postInit
+{
+    if (!_applicationModeChangedObserver)
+    {
+        _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(onAppModeChanged)
+                                                                     andObserve:OsmAndApp.instance.applicationModeChangedObservable];
+    }
+}
+
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -479,12 +478,6 @@
         [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
         [_contourNameChangeObservable notifyEventWithKey:self andValue:self.contourName];
         [_contoursAlphaChangeObservable notifyEventWithKey:self andValue:@(self.contoursAlpha)];
-        [_terrainChangeObservable notifyEventWithKey:self andValue:@YES];
-        if (self.terrainType != EOATerrainTypeDisabled)
-        {
-            [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:self.terrainType == EOATerrainTypeHillshade ? @(self.hillshadeAlpha) : @(self.slopeAlpha)];
-            [_verticalExaggerationScaleChangeObservable notifyEventWithKey:self andValue:@(self.verticalExaggerationScale)];
-        }
         [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:self.lastMapSource];
         [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(self.wikipedia)];
         [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.get.variantKey];
@@ -529,6 +522,9 @@
         _mapLastViewedState.zoom = 3.0f;
     }
     
+    int minValidZoom = [OAZoom getMinValidZoom];
+    if (_mapLastViewedState.zoom < minValidZoom)
+        _mapLastViewedState.zoom = minValidZoom;
 }
 
 - (OAMapSource*) lastMapSource
@@ -625,9 +621,7 @@
 @synthesize destinationsChangeObservable = _destinationsChangeObservable;
 @synthesize destinationAddObservable = _destinationAddObservable;
 @synthesize destinationRemoveObservable = _destinationRemoveObservable;
-@synthesize terrainChangeObservable = _terrainChangeObservable;
 @synthesize terrainResourcesChangeObservable = _terrainResourcesChangeObservable;
-@synthesize terrainAlphaChangeObservable = _terrainAlphaChangeObservable;
 @synthesize verticalExaggerationScale = _verticalExaggerationScale;
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 @synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
@@ -636,7 +630,6 @@
 @synthesize weatherChangeObservable = _weatherChangeObservable;
 @synthesize weatherUseOfflineDataChangeObservable = _weatherUseOfflineDataChangeObservable;
 @synthesize weatherTempChangeObservable = _weatherTempChangeObservable;
-@synthesize weatherTempUnitChangeObservable = _weatherTempUnitChangeObservable;
 @synthesize weatherTempAlphaChangeObservable = _weatherTempAlphaChangeObservable;
 @synthesize weatherPressureChangeObservable = _weatherPressureChangeObservable;
 @synthesize weatherPressureUnitChangeObservable = _weatherPressureUnitChangeObservable;
@@ -689,7 +682,7 @@
 {
     @synchronized(_lock)
     {
-        return [_weatherTempProfile get];
+        return _weatherToolbarActive ? [_weatherTempToolbarProfile get] : [_weatherTempProfile get];
     }
 }
 
@@ -697,57 +690,8 @@
 {
     @synchronized(_lock)
     {
-        [_weatherTempProfile set:weatherTemp];
-        [_weatherTempChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:@(self.weatherTemp)];
-    }
-}
-
-- (NSUnitTemperature *) weatherTempUnit
-{
-    @synchronized(_lock)
-    {
-        NSUnitTemperature *unit = (NSUnitTemperature *)[_weatherTempUnitProfile get];
-        if (self.weatherTempUnitAuto)
-        {
-            NSUnitTemperature *current = [NSUnitTemperature current];
-            if (![unit.symbol isEqualToString:current.symbol])
-            {
-                unit = current;
-                [self setWeatherTempUnit:unit];
-            }
-        }
-        return unit;
-    }
-}
-
-- (void) setWeatherTempUnit:(NSUnitTemperature *)weatherTempUnit
-{
-    @synchronized(_lock)
-    {
-        [_weatherTempUnitProfile set:weatherTempUnit];
-        [_weatherTempUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:self.weatherTempUnit];
-    }
-}
-
-- (BOOL) weatherTempUnitAuto
-{
-    @synchronized(_lock)
-    {
-        return [_weatherTempUnitAutoProfile get];
-    }
-}
-
-- (void) setWeatherTempUnitAuto:(BOOL)weatherTempUnitAuto
-{
-    @synchronized(_lock)
-    {
-        [_weatherTempUnitAutoProfile set:weatherTempUnitAuto];
-        if (weatherTempUnitAuto)
-        {
-            NSUnitTemperature *current = [NSUnitTemperature current];
-            if ([_weatherTempUnitProfile get] != current)
-                [self setWeatherTempUnit:current];
-        }
+        _weatherToolbarActive ? [_weatherTempToolbarProfile set:weatherTemp] : [_weatherTempProfile set:weatherTemp];
+        [_weatherPrecipChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:@(self.weatherTemp)];
     }
 }
 
@@ -789,7 +733,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitPressure *unit = (NSUnitPressure *) (_weatherToolbarActive ? [_weatherPressureToolbarUnitProfile get] : [_weatherPressureUnitProfile get]);
+        NSUnitPressure *unit = (NSUnitPressure *)[_weatherPressureUnitProfile get];
         if (self.weatherPressureUnitAuto)
         {
             NSUnitPressure *current = [NSUnitPressure current];
@@ -807,7 +751,7 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherPressureToolbarUnitProfile set:weatherPressureUnit] : [_weatherPressureUnitProfile set:weatherPressureUnit];
+        [_weatherPressureUnitProfile set:weatherPressureUnit];
         [_weatherPressureUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRESSURE) andValue:self.weatherPressureUnit];
     }
 }
@@ -816,7 +760,7 @@
 {
     @synchronized(_lock)
     {
-        return _weatherToolbarActive ? [_weatherPressureToolbarUnitAutoProfile get] : [_weatherPressureUnitAutoProfile get];
+        return [_weatherPressureUnitAutoProfile get];
     }
 }
 
@@ -824,11 +768,11 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherPressureToolbarUnitAutoProfile set:weatherPressureUnitAuto] : [_weatherPressureUnitAutoProfile set:weatherPressureUnitAuto];
+        [_weatherPressureUnitAutoProfile set:weatherPressureUnitAuto];
         if (weatherPressureUnitAuto)
         {
             NSUnitPressure *current = [NSUnitPressure current];
-            if ((_weatherToolbarActive ? [_weatherPressureToolbarUnitProfile get] : [_weatherPressureUnitProfile get]) != current)
+            if ([_weatherPressureUnitProfile get] != current)
                 [self setWeatherPressureUnit:current];
         }
     }
@@ -872,7 +816,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitSpeed *unit = (NSUnitSpeed *) (_weatherToolbarActive ? [_weatherWindToolbarUnitProfile get] : [_weatherWindUnitProfile get]);
+        NSUnitSpeed *unit = (NSUnitSpeed *)[_weatherWindUnitProfile get];
         if (self.weatherWindUnitAuto)
         {
             NSUnitSpeed *current = [NSUnitSpeed current];
@@ -890,8 +834,35 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherWindToolbarUnitProfile set:weatherWindUnit] : [_weatherWindUnitProfile set:weatherWindUnit];
+        [_weatherWindUnitProfile set:weatherWindUnit];
         [_weatherWindUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_SPEED) andValue:self.weatherWindUnit];
+    }
+}
+
+- (NSUnitSpeed *)weatherWindAnimationUnit
+{
+    @synchronized(_lock)
+    {
+        NSUnitSpeed *unit = (NSUnitSpeed *)[_weatherWindAnimationUnitProfile get];
+        if (self.weatherWindUnitAuto)
+        {
+            NSUnitSpeed *current = [NSUnitSpeed current];
+            if (![unit.symbol isEqualToString:current.symbol])
+            {
+                unit = current;
+                [self setWeatherWindAnimationUnit:unit];
+            }
+        }
+        return unit;
+    }
+}
+
+- (void)setWeatherWindAnimationUnit:(NSUnitSpeed *)weatherWindAnimationUnit
+{
+    @synchronized(_lock)
+    {
+        [_weatherWindAnimationUnitProfile set:weatherWindAnimationUnit];
+        [_weatherWindAnimationUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_ANIMATION) andValue:self.weatherWindAnimationUnit];
     }
 }
 
@@ -899,7 +870,7 @@
 {
     @synchronized(_lock)
     {
-        return _weatherToolbarActive ? [_weatherWindToolbarUnitAutoProfile get] : [_weatherWindUnitAutoProfile get];
+        return [_weatherWindUnitAutoProfile get];
     }
 }
 
@@ -907,13 +878,30 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherWindToolbarUnitAutoProfile set:weatherWindUnitAuto] : [_weatherWindUnitAutoProfile set:weatherWindUnitAuto];
+        [_weatherWindUnitAutoProfile set:weatherWindUnitAuto];
         if (weatherWindUnitAuto)
         {
             NSUnitSpeed *current = [NSUnitSpeed current];
-            if ((_weatherToolbarActive ? [_weatherWindToolbarUnitProfile get] : [_weatherWindUnitProfile get]) != current)
+            if ([_weatherWindUnitProfile get] != current)
                 [self setWeatherWindUnit:current];
         }
+    }
+}
+
+- (double)weatherWindAnimationAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_weatherWindAnimationAlphaProfile get];
+    }
+}
+
+- (void)setWeatherWindAnimationAlpha:(double)weatherWindAnimationAlpha
+{
+    @synchronized(_lock)
+    {
+        [_weatherWindAnimationAlphaProfile set:weatherWindAnimationAlpha];
+        [_weatherWindAnimationAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_ANIMATION) andValue:@(self.weatherWindAnimationAlpha)];
     }
 }
 
@@ -955,7 +943,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitCloud *unit = (NSUnitCloud *) (_weatherToolbarActive ? [_weatherCloudToolbarUnitProfile get] : [_weatherCloudUnitProfile get]);
+        NSUnitCloud *unit = (NSUnitCloud *)[_weatherCloudUnitProfile get];
         if (self.weatherCloudUnitAuto)
         {
             NSUnitCloud *current = [NSUnitCloud current];
@@ -973,7 +961,7 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherCloudToolbarUnitProfile set:weatherCloudUnit] : [_weatherCloudUnitProfile set:weatherCloudUnit];
+        [_weatherCloudUnitProfile set:weatherCloudUnit];
         [_weatherCloudUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_CLOUD) andValue:self.weatherCloudUnit];
     }
 }
@@ -982,7 +970,7 @@
 {
     @synchronized(_lock)
     {
-        return _weatherToolbarActive ? [_weatherCloudToolbarUnitAutoProfile get] : [_weatherCloudUnitAutoProfile get];
+        return [_weatherCloudUnitAutoProfile get];
     }
 }
 
@@ -990,13 +978,64 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherCloudToolbarUnitAutoProfile set:weatherCloudUnitAuto] : [_weatherCloudUnitAutoProfile set:weatherCloudUnitAuto];
+        [_weatherCloudUnitAutoProfile set:weatherCloudUnitAuto];
         if (weatherCloudUnitAuto)
         {
             NSUnitCloud *current = [NSUnitCloud current];
-            if ((_weatherToolbarActive ? [_weatherCloudToolbarUnitProfile get] : [_weatherCloudUnitProfile get]) != current)
+            if ([_weatherCloudUnitProfile get] != current)
                 [self setWeatherCloudUnit:current];
         }
+    }
+}
+
+- (NSString *)weatherSource
+{
+    @synchronized (_lock)
+    {
+        return [_weatherSourceProfile get];
+    }
+}
+
+- (void)setWeatherSource:(NSString *)weatherSource
+{
+    @synchronized(_lock)
+    {
+        [_weatherSourceProfile set:weatherSource];
+        [_weatherSourceChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_ANIMATION) andValue:self.weatherSource];
+    }
+}
+
+- (BOOL) weatherWindAnimation
+{
+    @synchronized(_lock)
+    {
+        return _weatherToolbarActive ? [_weatherWindAnimationToolbarProfile get] : [_weatherWindAnimationProfile get];
+    }
+}
+
+- (void) setWeatherWindAnimation:(BOOL)weatherWindAnimation
+{
+    @synchronized(_lock)
+    {
+        _weatherToolbarActive ? [_weatherWindAnimationToolbarProfile set:weatherWindAnimation] : [_weatherWindAnimationProfile set:weatherWindAnimation];
+        [_weatherPrecipChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_ANIMATION) andValue:@(self.weatherWindAnimation)];
+    }
+}
+
+- (BOOL)weatherWindAnimationUnitAuto
+{
+    @synchronized(_lock)
+    {
+        return [_weatherWindAnimationUnitAutoProfile get];
+    }
+}
+
+- (void)setWeatherWindAnimationUnitAuto:(BOOL)weatherWindAnimationUnitAuto
+{
+    @synchronized(_lock)
+    {
+        [_weatherWindAnimationUnitAutoProfile set:weatherWindAnimationUnitAuto];
+        [_weatherWindAnimationUnitAutoChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_ANIMATION) andValue:@(self.weatherWindAnimationUnitAuto)];
     }
 }
 
@@ -1038,7 +1077,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitLength *unit = (NSUnitLength *) (_weatherToolbarActive ? [_weatherPrecipToolbarUnitProfile get] : [_weatherPrecipUnitProfile get]);
+        NSUnitLength *unit = (NSUnitLength *)[_weatherPrecipUnitProfile get];
         if (self.weatherPrecipUnitAuto)
         {
             NSUnitLength *current = [NSUnitLength current];
@@ -1056,7 +1095,7 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherPrecipToolbarUnitProfile set:weatherPrecipUnit] : [_weatherPrecipUnitProfile set:weatherPrecipUnit];
+        [_weatherPrecipUnitProfile set:weatherPrecipUnit];
         [_weatherPrecipUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRECIPITATION) andValue:self.weatherPrecipUnit];
     }
 }
@@ -1065,7 +1104,7 @@
 {
     @synchronized(_lock)
     {
-        return _weatherToolbarActive ? [_weatherPrecipToolbarUnitAutoProfile get] : [_weatherPrecipUnitAutoProfile get];
+        return [_weatherPrecipUnitAutoProfile get];
     }
 }
 
@@ -1073,11 +1112,11 @@
 {
     @synchronized(_lock)
     {
-        _weatherToolbarActive ? [_weatherPrecipToolbarUnitAutoProfile set:weatherPrecipUnitAuto] : [_weatherPrecipUnitAutoProfile set:weatherPrecipUnitAuto];
+        [_weatherPrecipUnitAutoProfile set:weatherPrecipUnitAuto];
         if (weatherPrecipUnitAuto)
         {
             NSUnitLength *current = [NSUnitLength current];
-            if ((_weatherToolbarActive ? [_weatherPrecipToolbarUnitProfile get] : [_weatherPrecipUnitProfile get]) != current)
+            if ([_weatherPrecipUnitProfile get] != current)
                 [self setWeatherPrecipUnit:current];
         }
     }
@@ -1107,44 +1146,42 @@
         [_weatherUseOfflineDataProfile resetToDefault];
         
         [_weatherTempProfile resetToDefault];
-        [_weatherTempUnitProfile resetToDefault];
-        [_weatherTempUnitAutoProfile resetToDefault];
+        [_weatherTempToolbarProfile resetToDefault];
         [_weatherTempAlphaProfile resetToDefault];
         [_weatherTempToolbarAlphaProfile resetToDefault];
         
         [_weatherPressureProfile resetToDefault];
         [_weatherPressureToolbarProfile resetToDefault];
         [_weatherPressureUnitProfile resetToDefault];
-        [_weatherPressureToolbarUnitProfile resetToDefault];
         [_weatherPressureUnitAutoProfile resetToDefault];
-        [_weatherPressureToolbarUnitAutoProfile resetToDefault];
         [_weatherPressureAlphaProfile resetToDefault];
         [_weatherPressureToolbarAlphaProfile resetToDefault];
         
         [_weatherWindProfile resetToDefault];
         [_weatherWindToolbarProfile resetToDefault];
         [_weatherWindUnitProfile resetToDefault];
-        [_weatherWindToolbarUnitProfile resetToDefault];
         [_weatherWindUnitAutoProfile resetToDefault];
-        [_weatherWindToolbarUnitAutoProfile resetToDefault];
         [_weatherWindAlphaProfile resetToDefault];
         [_weatherWindToolbarAlphaProfile resetToDefault];
         
         [_weatherCloudProfile resetToDefault];
         [_weatherCloudToolbarProfile resetToDefault];
         [_weatherCloudUnitProfile resetToDefault];
-        [_weatherCloudToolbarUnitProfile resetToDefault];
         [_weatherCloudUnitAutoProfile resetToDefault];
-        [_weatherCloudToolbarUnitAutoProfile resetToDefault];
         [_weatherCloudAlphaProfile resetToDefault];
         [_weatherCloudToolbarAlphaProfile resetToDefault];
+        
+        [_weatherSourceProfile resetToDefault];
+        [_weatherWindAnimationProfile resetToDefault];
+        [_weatherWindAnimationToolbarProfile resetToDefault];
+        [_weatherWindAnimationUnitProfile resetToDefault];
+        [_weatherWindAnimationAlphaProfile resetToDefault];
+        [_weatherWindAnimationUnitAutoProfile resetToDefault];
         
         [_weatherPrecipProfile resetToDefault];
         [_weatherPrecipToolbarProfile resetToDefault];
         [_weatherPrecipUnitProfile resetToDefault];
-        [_weatherPrecipToolbarUnitProfile resetToDefault];
         [_weatherPrecipUnitAutoProfile resetToDefault];
-        [_weatherPrecipToolbarUnitAutoProfile resetToDefault];
         [_weatherPrecipAlphaProfile resetToDefault];
         [_weatherPrecipToolbarAlphaProfile resetToDefault];
     }
@@ -1306,207 +1343,6 @@
         _weatherToolbarActive ? [_contoursAlphaToolbarProfile set:contoursAlpha] : [_contoursAlphaProfile set:contoursAlpha];
         [_contoursAlphaChangeObservable notifyEventWithKey:self andValue:@(self.contoursAlpha)];
     }
-}
-
-- (NSInteger) hillshadeMinZoom
-{
-    @synchronized(_lock)
-    {
-        return [_hillshadeMinZoomProfile get];
-    }
-}
-
-- (void) setHillshadeMinZoom:(NSInteger)hillshadeMinZoom
-{
-    @synchronized(_lock)
-    {
-        [_hillshadeMinZoomProfile set:(int)hillshadeMinZoom];
-        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
-    }
-}
-
-- (void) resetHillshadeMinZoom
-{
-    [self setHillshadeMinZoom:kHillshadeDefMinZoom];
-}
-
-- (NSInteger) hillshadeMaxZoom
-{
-    @synchronized(_lock)
-    {
-        return [_hillshadeMaxZoomProfile get];
-    }
-}
-
-- (void) setHillshadeMaxZoom:(NSInteger)hillshadeMaxZoom
-{
-    @synchronized(_lock)
-    {
-        [_hillshadeMaxZoomProfile set:(int)hillshadeMaxZoom];
-        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
-    }
-}
-
-- (void) resetHillshadeMaxZoom
-{
-    [self setHillshadeMaxZoom:kHillshadeDefMaxZoom];
-}
-
-- (NSInteger) slopeMinZoom
-{
-    @synchronized(_lock)
-    {
-        return [_slopeMinZoomProfile get];
-    }
-}
-
-- (void) setSlopeMinZoom:(NSInteger)slopeMinZoom
-{
-    @synchronized(_lock)
-    {
-        [_slopeMinZoomProfile set:(int)slopeMinZoom];
-        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
-    }
-}
-
-- (void) resetSlopeMinZoom
-{
-    [self setSlopeMinZoom:kSlopeDefMinZoom];
-}
-
-- (NSInteger) slopeMaxZoom
-{
-    @synchronized(_lock)
-    {
-        return [_slopeMaxZoomProfile get];
-    }
-}
-
-- (void) setSlopeMaxZoom:(NSInteger)slopeMaxZoom
-{
-    @synchronized(_lock)
-    {
-        [_slopeMaxZoomProfile set:(int)slopeMaxZoom];
-        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
-    }
-}
-
-- (void) resetSlopeMaxZoom
-{
-    [self setSlopeMaxZoom:kSlopeDefMaxZoom];
-}
-
-- (EOATerrainType) terrainType
-{
-    @synchronized(_lock)
-    {
-        return [_terrainTypeProfile get];
-    }
-}
-
-- (void) setTerrainType:(EOATerrainType)terrainType
-{
-    @synchronized(_lock)
-    {
-        [_terrainTypeProfile set:terrainType];
-        if (terrainType == EOATerrainTypeHillshade || terrainType == EOATerrainTypeSlope)
-            [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
-        else
-            [_terrainChangeObservable notifyEventWithKey:self andValue:@(NO)];
-    }
-}
-
-- (EOATerrainType) getTerrainType:(OAApplicationMode *)mode
-{
-    @synchronized (_lock)
-    {
-        return [_terrainTypeProfile get:mode];
-    }
-}
-
-- (void) setTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode
-{
-    @synchronized (_lock)
-    {
-        [_terrainTypeProfile set:terrainType mode:mode];
-    }
-}
-
-- (EOATerrainType) getLastTerrainType:(OAApplicationMode *)mode
-{
-    @synchronized (_lock)
-    {
-        return [_lastTerrainTypeProfile get:mode];
-    }
-}
-
-- (void) setLastTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode
-{
-    @synchronized (_lock)
-    {
-        [_lastTerrainTypeProfile set:terrainType mode:mode];
-    }
-}
-
-- (EOATerrainType) lastTerrainType
-{
-    @synchronized(_lock)
-    {
-        return [_lastTerrainTypeProfile get];
-    }
-}
-
-- (void) setLastTerrainType:(EOATerrainType)lastTerrainType
-{
-    @synchronized(_lock)
-    {
-        [_lastTerrainTypeProfile set:lastTerrainType];
-    }
-}
-
-
-- (double)hillshadeAlpha
-{
-    @synchronized (_lock)
-    {
-        return [_hillshadeAlphaProfile get];
-    }
-}
-
-- (void) setHillshadeAlpha:(double)hillshadeAlpha
-{
-    @synchronized(_lock)
-    {
-        [_hillshadeAlphaProfile set:hillshadeAlpha];
-        [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:self.hillshadeAlpha]];
-    }
-}
-
-- (void) resetHillshadeAlpha
-{
-    [self setHillshadeAlpha:kHillshadeDefAlpha];
-}
-
-- (double)slopeAlpha
-{
-    @synchronized (_lock)
-    {
-        return [_slopeAlphaProfile get];
-    }
-}
-
-- (void) setSlopeAlpha:(double)slopeAlpha
-{
-    @synchronized(_lock)
-    {
-        [_slopeAlphaProfile set:slopeAlpha];
-        [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:self.slopeAlpha]];
-    }
-}
-
-- (void) resetSlopeAlpha
-{
-    [self setSlopeAlpha:kSlopeDefAlpha];
 }
 
 - (double)verticalExaggerationScale
@@ -1728,6 +1564,7 @@
 
 - (BOOL) restorePointToStart
 {
+    _pointToStart = _pointToStartBackup;
     return (_pointToStartBackup != nil);
 }
 
@@ -1840,7 +1677,7 @@
 + (OAMapSource *) defaultMapSource
 {
     return [[OAMapSource alloc] initWithResource:@"default.render.xml"
-                                      andVariant:@"type_default"];
+                                      andVariant:@"LAYER_OSM_VECTOR"];
 }
 
 #pragma mark - NSCoding
@@ -1922,15 +1759,7 @@
     [_contourNameLastUsedToolbarProfile set:[_contourNameLastUsedToolbarProfile get:sourceMode] mode:targetMode];
     [_contoursAlphaProfile set:[_contoursAlphaProfile get:sourceMode] mode:targetMode];
     [_contoursAlphaToolbarProfile set:[_contoursAlphaToolbarProfile get:sourceMode] mode:targetMode];
-    [_terrainTypeProfile set:[_terrainTypeProfile get:sourceMode] mode:targetMode];
-    [_lastTerrainTypeProfile set:[_lastTerrainTypeProfile get:sourceMode] mode:targetMode];
-    [_hillshadeAlphaProfile set:[_hillshadeAlphaProfile get:sourceMode] mode:targetMode];
-    [_slopeAlphaProfile set:[_slopeAlphaProfile get:sourceMode] mode:targetMode];
     [_verticalExaggerationScaleProfile set:[_verticalExaggerationScaleProfile get:sourceMode] mode:targetMode];
-    [_hillshadeMinZoomProfile set:[_hillshadeMinZoomProfile get:sourceMode] mode:targetMode];
-    [_hillshadeMaxZoomProfile set:[_hillshadeMaxZoomProfile get:sourceMode] mode:targetMode];
-    [_slopeMinZoomProfile set:[_slopeMinZoomProfile get:sourceMode] mode:targetMode];
-    [_slopeMaxZoomProfile set:[_slopeMaxZoomProfile get:sourceMode] mode:targetMode];
     [_mapillaryProfile set:[_mapillaryProfile get:sourceMode] mode:targetMode];
     [_wikipediaGlobalProfile set:[_wikipediaGlobalProfile get:sourceMode] mode:targetMode];
     [_wikipediaLanguagesProfile set:[_wikipediaLanguagesProfile get:sourceMode] mode:targetMode];
@@ -1940,42 +1769,41 @@
     [_weatherProfile set:[_weatherProfile get:sourceMode] mode:targetMode];
     [_weatherUseOfflineDataProfile set:[_weatherUseOfflineDataProfile get:sourceMode] mode:targetMode];
     [_weatherTempProfile set:[_weatherTempProfile get:sourceMode] mode:targetMode];
-    [_weatherTempUnitProfile set:[_weatherTempUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherTempUnitAutoProfile set:[_weatherTempUnitAutoProfile get:sourceMode] mode:targetMode];
+    [_weatherTempToolbarProfile set:[_weatherTempToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherTempAlphaProfile set:[_weatherTempAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherTempToolbarAlphaProfile set:[_weatherTempToolbarAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherPressureProfile set:[_weatherPressureProfile get:sourceMode] mode:targetMode];
     [_weatherPressureToolbarProfile set:[_weatherPressureToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherPressureUnitProfile set:[_weatherPressureUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherPressureToolbarUnitProfile set:[_weatherPressureToolbarUnitProfile get:sourceMode] mode:targetMode];
     [_weatherPressureUnitAutoProfile set:[_weatherPressureUnitAutoProfile get:sourceMode] mode:targetMode];
-    [_weatherPressureToolbarUnitAutoProfile set:[_weatherPressureToolbarUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherPressureAlphaProfile set:[_weatherPressureAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherPressureToolbarAlphaProfile set:[_weatherPressureToolbarAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherWindProfile set:[_weatherWindProfile get:sourceMode] mode:targetMode];
     [_weatherWindToolbarProfile set:[_weatherWindToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherWindUnitProfile set:[_weatherWindUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherWindToolbarUnitProfile set:[_weatherWindToolbarUnitProfile get:sourceMode] mode:targetMode];
     [_weatherWindUnitAutoProfile set:[_weatherWindUnitAutoProfile get:sourceMode] mode:targetMode];
-    [_weatherWindToolbarUnitAutoProfile set:[_weatherWindToolbarUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherWindAlphaProfile set:[_weatherWindAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherWindToolbarAlphaProfile set:[_weatherWindToolbarAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherCloudProfile set:[_weatherCloudProfile get:sourceMode] mode:targetMode];
     [_weatherCloudToolbarProfile set:[_weatherCloudToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherCloudUnitProfile set:[_weatherCloudUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherCloudToolbarUnitProfile set:[_weatherCloudToolbarUnitProfile get:sourceMode] mode:targetMode];
     [_weatherCloudUnitAutoProfile set:[_weatherCloudUnitAutoProfile get:sourceMode] mode:targetMode];
-    [_weatherCloudToolbarUnitAutoProfile set:[_weatherCloudToolbarUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherCloudAlphaProfile set:[_weatherCloudAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherCloudToolbarAlphaProfile set:[_weatherCloudToolbarAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipProfile set:[_weatherPrecipProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipToolbarProfile set:[_weatherPrecipToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipUnitProfile set:[_weatherPrecipUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherPrecipToolbarUnitProfile set:[_weatherPrecipToolbarUnitProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipUnitAutoProfile set:[_weatherPrecipUnitAutoProfile get:sourceMode] mode:targetMode];
-    [_weatherPrecipToolbarUnitAutoProfile set:[_weatherPrecipToolbarUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipAlphaProfile set:[_weatherPrecipAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipToolbarAlphaProfile set:[_weatherPrecipToolbarAlphaProfile get:sourceMode] mode:targetMode];
+    
+    [_weatherSourceProfile set:[_weatherSourceProfile get:sourceMode] mode:targetMode];
+    [_weatherWindAnimationProfile set:[_weatherWindAnimationProfile get:sourceMode] mode:targetMode];
+    [_weatherWindAnimationToolbarProfile set:[_weatherWindAnimationToolbarProfile get:sourceMode] mode:targetMode];
+    [_weatherWindAnimationUnitProfile set:[_weatherWindAnimationUnitProfile get:sourceMode] mode:targetMode];
+    [_weatherWindAnimationAlphaProfile set:[_weatherWindAnimationAlphaProfile get:sourceMode] mode:targetMode];
+    [_weatherWindAnimationUnitAutoProfile set:[_weatherWindAnimationUnitAutoProfile get:sourceMode] mode:targetMode];
+    
 }
 
 @end

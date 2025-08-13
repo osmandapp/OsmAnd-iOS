@@ -13,29 +13,34 @@
 #import "OAUtilities.h"
 #import "OATargetPoint.h"
 #import "OATransportStop.h"
+#import "OATransportStop+cpp.h"
 #import "OAMapStyleSettings.h"
 #import "OATransportStopRoute.h"
 #import "OATransportStopAggregated.h"
 #import "OAPOI.h"
+#import "OAPointDescription.h"
+#import "Localization.h"
+#import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesTransportRouteIconProvider.h"
-
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Data/TransportStop.h>
-#include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/TransportStopSymbolsProvider.h>
-
+#include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
 
+static const int START_ZOOM_SELECTED_TRANSPORT_ROUTE = 10;
+static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
 
 @implementation OATransportStopsLayer
 {
@@ -74,8 +79,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
     OAMapStyleParameter *param = [styleSettings getParameter:@"transportStops"];
     _showStopsOnMap = [param.value boolValue];
@@ -175,7 +181,7 @@
         
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetTransportStop;
-        targetPoint.location = item.location;        
+        targetPoint.location = [item getLocation].coordinate;
         targetPoint.targetObj = item;
         if (item.transportStopAggregated && item.transportStopAggregated.localTransportStops.count == 0 && item.poi)
         {
@@ -195,16 +201,81 @@
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (BOOL)isSecondaryProvider
 {
-    OsmAnd::TransportStopSymbolsProvider::TransportStopSymbolsGroup* transportStopSymbolGroup = dynamic_cast<OsmAnd::TransportStopSymbolsProvider::TransportStopSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
-    if (transportStopSymbolGroup != nullptr)
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OATransportStop.class])
     {
-        const auto transportStop = transportStopSymbolGroup->transportStop;
-        OATargetPoint *targetPoint = [self getTargetPoint:[[OATransportStop alloc] initWithStop:transportStop]];
-        if (![found containsObject:targetPoint])
-            [found addObject:targetPoint];
+        OATransportStop *transportStop = (OATransportStop *)obj;
+        return [[CLLocation alloc] initWithLatitude:transportStop.latitude longitude:transportStop.longitude];
     }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OATransportStop.class])
+    {
+        OATransportStop *transportStop = (OATransportStop *)obj;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_TRANSPORT_STOP typeName:OALocalizedString(@"transport_Stop") name:[transportStop name]];
+    }
+    return nil;
+}
+
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
+{
+    if ([self.mapViewController getMapZoom] < START_ZOOM_ALL_TRANSPORT_STOPS)
+           return;
+    
+    [self collectTransportStopsFromPoint:result];
+}
+
+- (void)collectTransportStopsFromPoint:(MapSelectionResult *)result
+{
+    NSMutableArray<NSString *> *addedTransportStops = [NSMutableArray new];
+    CGPoint point = result.point;
+    int delta = 20;
+    OsmAnd::PointI tl = OsmAnd::PointI(point.x - delta, point.y - delta);
+    OsmAnd::PointI br = OsmAnd::PointI(point.x + delta, point.y + delta);
+    OsmAnd::AreaI touchPolygon31(tl, br);
+    
+    const auto& symbolInfos = [self.mapView getSymbolsIn:touchPolygon31 strict:NO];
+    for (const auto symbolInfo : symbolInfos)
+    {
+        OsmAnd::TransportStopSymbolsProvider::TransportStopSymbolsGroup* transportStopSymbolGroup = dynamic_cast<OsmAnd::TransportStopSymbolsProvider::TransportStopSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
+        if (transportStopSymbolGroup != nullptr)
+        {
+            const auto transportStopObject = transportStopSymbolGroup->transportStop;
+            if (transportStopObject != nullptr)
+            {
+                OATransportStop *transportStop = [[OATransportStop alloc] initWithStop:transportStopObject];
+                if (transportStop && ![addedTransportStops containsObject:transportStop.name])
+                {
+                    [addedTransportStops addObject:transportStop.name];
+                    [result collect:transportStop provider:self];
+                }
+            }
+        }
+    }
+}
+
+- (int64_t)getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
+- (BOOL)runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (BOOL)showMenuAction:(id)object
+{
+    return NO;
 }
 
 @end

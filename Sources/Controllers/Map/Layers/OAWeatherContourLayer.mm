@@ -10,6 +10,7 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OAWeatherHelper.h"
@@ -19,6 +20,8 @@
 #import "OAWeatherToolbar.h"
 #import "OAMapLayers.h"
 #import "OAPluginsHelper.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/GeoTileObjectsProvider.h>
@@ -117,61 +120,73 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         NSString *parameterName = self.app.data.contourName;
-        OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
-
+        OsmAnd::BandIndex band = WEATHER_BAND_NOTHING;
+        
         OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
         OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
         OAMapStyleParameter *cloudContourLinesParam = [_styleSettings getParameter:WEATHER_CLOUD_CONTOURS_LINES_ATTR];
         OAMapStyleParameter *windContourLinesParam = [_styleSettings getParameter:WEATHER_WIND_CONTOURS_LINES_ATTR];
         OAMapStyleParameter *precipContourLinesParam = [_styleSettings getParameter:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR];
-
+        
         if (tempContourLinesParam && [parameterName isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+        {
             band = WEATHER_BAND_TEMPERATURE;
+        }
         else if (pressureContourLinesParam && [parameterName isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+        {
             band = WEATHER_BAND_PRESSURE;
+        }
         else if (cloudContourLinesParam && [parameterName isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+        {
             band = WEATHER_BAND_CLOUD;
+        }
         else if (windContourLinesParam && [parameterName isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
+        {
             band = WEATHER_BAND_WIND_SPEED;
+        }
         else if (precipContourLinesParam && [parameterName isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+        {
             band = WEATHER_BAND_PRECIPITATION;
-
+        }
+        
         BOOL needUpdateStyleSettings = (tempContourLinesParam && ![tempContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_TEMPERATURE)
-            || (pressureContourLinesParam && ![pressureContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_PRESSURE)
-            || (cloudContourLinesParam && ![cloudContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_CLOUD)
-            || (windContourLinesParam && ![windContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_WIND_SPEED)
-            || (precipContourLinesParam && ![precipContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_PRECIPITATION);
-
+        || (pressureContourLinesParam && ![pressureContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_PRESSURE)
+        || (cloudContourLinesParam && ![cloudContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_CLOUD)
+        || (windContourLinesParam && ![windContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_WIND_SPEED)
+        || (precipContourLinesParam && ![precipContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_PRECIPITATION);
+        
         if (needUpdateStyleSettings)
         {
             [_styleSettings setWeatherContourLinesEnabled:YES weatherContourLinesAttr:parameterName];
             return NO;
         }
-        else if ([_styleSettings isAnyWeatherContourLinesEnabled] && band == WEATHER_BAND_UNDEFINED)
+        else if ([_styleSettings isAnyWeatherContourLinesEnabled] && band == WEATHER_BAND_NOTHING)
         {
             [_styleSettings setWeatherContourLinesEnabled:NO weatherContourLinesAttr:parameterName];
             return NO;
         }
-
+        
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor(self.app.data.contoursAlpha);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-
-        if ((!self.app.data.weather && !_needsSettingsForToolbar) || band == WEATHER_BAND_UNDEFINED)
+        
+        if (!self.app.data.weather && !_needsSettingsForToolbar)
             return NO;
-
-        //[self showProgressHUD];
-
-        [self initProviders:_date band:band];
-
-        //[self hideProgressHUD];
-
-        return YES;
+        if (band == WEATHER_BAND_TEMPERATURE
+            || band == WEATHER_BAND_PRESSURE
+            || band == WEATHER_BAND_CLOUD
+            || band == WEATHER_BAND_WIND_SPEED
+            || band == WEATHER_BAND_PRECIPITATION)
+        {
+            [self initProviders:_date band:band];
+            return YES;
+        }
     }
     return NO;
 }
@@ -250,6 +265,11 @@
             [self updateWeatherLayer];
         }];
     });
+}
+
+- (void) setDateTime:(NSTimeInterval)dateTime
+{
+    _date = [NSDate dateWithTimeIntervalSince1970:dateTime];
 }
 
 - (void) onWeatherLayerChanged

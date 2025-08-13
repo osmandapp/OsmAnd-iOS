@@ -8,7 +8,11 @@
 
 #import "OACollapsableNearestPoiWikiView.h"
 #import "OAPOI.h"
+#import "OAWorldRegion.h"
 #import "OARootViewController.h"
+#import "OADownloadsManager.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "Localization.h"
@@ -16,6 +20,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAIAPHelper.h"
 #import "OAInAppCell.h"
+#import "OAProducts.h"
 #import "OAPluginDetailsViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWikiArticleHelper.h"
@@ -23,9 +28,10 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
-#import "OsmAnd_Maps-Swift.h"
-#import "GeneratedAssetSymbols.h"
+#import "OAButton.h"
 #import "OAPluginsHelper.h"
+#import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define kButtonHeight 36.0
@@ -68,7 +74,7 @@
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        [self buildViews];
+        [self updateButtonBorderColor];
 }
 
 - (void)setData:(NSArray<OAPOI *> *)nearestItems hasItems:(BOOL)hasItems latitude:(double)latitude longitude:(double)longitude filter:(OAPOIUIFilter *)filter
@@ -249,6 +255,17 @@
     _bannerButton.frame = priceFrame;
 }
 
+- (void) updateButtonBorderColor
+{
+    if (_buttons)
+    {
+        for (OAButton *btn in _buttons)
+        {
+            btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        }
+    }
+}
+
 - (void) updateLayout:(CGFloat)width
 {
     CGFloat y = 0;
@@ -337,7 +354,7 @@
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+    return action == @selector(copy:);
 }
 
 - (void)copy:(id)sender

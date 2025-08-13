@@ -7,11 +7,13 @@
 //
 
 #import "OASunriseSunsetWidget.h"
-#import "Localization.h"
+#import "OASunriseSunsetWidgetState.h"
 #import "SunriseSunset.h"
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAResourcesUIHelper.h"
 
@@ -141,13 +143,18 @@ static const double locationChangeAccuracy = 0.0001;
 }
 
 - (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+            widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
+                             isCreate:(BOOL)isCreate
 {
     OAWidgetType *type = [_state getWidgetType];
     
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];
     section.headerText = OALocalizedString(@"shared_string_settings");
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get:appMode];
+    
+    EOASunPositionMode currentValue = type == OAWidgetType.sunPosition
+    ? (EOASunPositionMode)[_state getSunPositionPreference].defValue
+    : (EOASunPositionMode)[[_state getSunPositionPreference] get:appMode];
 
     if (type == OAWidgetType.sunPosition)
     {
@@ -158,7 +165,21 @@ static const double locationChangeAccuracy = 0.0001;
         row.descr = OALocalizedString(@"shared_string_mode");
         [row setObj:_state.getSunPositionPreference forKey:@"pref"];
         
-        [row setObj:[self getTitleForSunPositionMode:sunPositionMode] forKey:@"value"];
+        if (widgetConfigurationParams)
+        {
+            NSString *key = [self findKeyWithPrefixInParams:widgetConfigurationParams prefix:@"sun_position_widget_mode"];
+            if (key != nil)
+            {
+                NSNumber *widgetValue = widgetConfigurationParams[key];
+                if (widgetValue != nil)
+                    currentValue = (EOASunPositionMode)widgetValue.intValue;
+            }
+        }
+        else if (!isCreate)
+        {
+            currentValue = (EOASunPositionMode)[[_state getSunPositionPreference] get:appMode];
+        }
+        [row setObj:[self getTitleForSunPositionMode:currentValue] forKey:@"value"];
         [row setObj:self.getPossibleFormatValues forKey:@"possible_values"];
     }
     
@@ -171,10 +192,40 @@ static const double locationChangeAccuracy = 0.0001;
     row.descr = title;
 
     [row setObj:_state.getPreference forKey:@"pref"];
-    [row setObj:[self getTitle:(EOASunriseSunsetMode)[_state.getPreference get:appMode] sunPositionMode:sunPositionMode] forKey:@"value"];
-    [row setObj:self.getPossibleValues forKey:@"possible_values"];
+    
+    EOASunriseSunsetMode currentSunriseSunsetMode = (EOASunriseSunsetMode)_state.getPreference.defValue;
+    
+    if (widgetConfigurationParams)
+    {
+        NSString *key = [self findKeyWithPrefixInParams:widgetConfigurationParams prefix:[_state getPrefId]];
+        if (key != nil)
+        {
+            NSNumber *widgetValue = widgetConfigurationParams[key];
+            if (widgetValue != nil)
+                currentSunriseSunsetMode = (EOASunriseSunsetMode)widgetValue.intValue;
+        }
+    }
+    else if (!isCreate)
+    {
+        currentSunriseSunsetMode = (EOASunriseSunsetMode)[_state.getPreference get:appMode];
+    }
+    
+    [row setObj:[self getTitle:currentSunriseSunsetMode sunPositionMode:currentValue] forKey:@"value"];
+    [row setObj:[self getPossibleValuesWithSunPositionMode:currentValue] forKey:@"possible_values"];
    
     return data;
+}
+
+- (NSString *)findKeyWithPrefixInParams:(NSDictionary *)widgetConfigurationParams prefix:(NSString *)prefix
+{
+    for (NSString *paramKey in widgetConfigurationParams)
+    {
+        if ([paramKey hasPrefix:prefix])
+        {
+            return paramKey;
+        }
+    }
+    return nil;
 }
 
 - (NSArray<OATableRowData *> *)getPossibleFormatValues
@@ -182,9 +233,9 @@ static const double locationChangeAccuracy = 0.0001;
     NSMutableArray<OATableRowData *> *res = [NSMutableArray array];
     
     NSDictionary *dict = @{
-        @(SunPositionModeSunPositionMode):OALocalizedString(@"shared_string_next_event"),
-        @(SunPositionModeSunsetMode):OALocalizedString(@"map_widget_sunset"),
-        @(SunPositionModeSunriseMode):OALocalizedString(@"map_widget_sunrise")
+        @(EOASunPositionModeSunPositionMode):OALocalizedString(@"shared_string_next_event"),
+        @(EOASunPositionModeSunsetMode):OALocalizedString(@"map_widget_sunset"),
+        @(EOASunPositionModeSunriseMode):OALocalizedString(@"map_widget_sunrise")
     };
     
     for (NSNumber *key in dict)
@@ -199,11 +250,10 @@ static const double locationChangeAccuracy = 0.0001;
     return res;
 }
 
-- (NSArray<OATableRowData *> *) getPossibleValues
+- (NSArray<OATableRowData *> *) getPossibleValuesWithSunPositionMode:(EOASunPositionMode)sunPositionMode
 {
     NSMutableArray<OATableRowData *> *res = [NSMutableArray array];
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
-
+    
     OATableRowData *row = [[OATableRowData alloc] init];
     row.cellType = OASimpleTableViewCell.getCellIdentifier;
     [row setObj:@(EOASunriseSunsetTimeLeft) forKey:@"value"];
@@ -222,15 +272,15 @@ static const double locationChangeAccuracy = 0.0001;
 }
 
 - (NSString *)getWidgetName {
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
+    EOASunPositionMode sunPositionMode = (EOASunPositionMode)[[_state getSunPositionPreference] get];
     
     NSString *sunsetStringId = OALocalizedString(@"map_widget_sunset");
     NSString *sunriseStringId = OALocalizedString(@"map_widget_sunrise");
     NSMutableString *result = [NSMutableString string];
     
-    if (OAWidgetType.sunset == self.widgetType || (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunsetMode)) {
+    if (OAWidgetType.sunset == self.widgetType || (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == EOASunPositionModeSunsetMode)) {
         [result appendString:sunsetStringId];
-    } else if (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunPositionMode) {
+    } else if (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == EOASunPositionModeSunPositionMode) {
         [result appendString:_state.lastIsDayTime ? sunsetStringId : sunriseStringId];
     } else {
         [result appendString:sunriseStringId];
@@ -249,19 +299,19 @@ static const double locationChangeAccuracy = 0.0001;
     return result;
 }
 
-- (NSString *)getTitleForSunPositionMode:(SunPositionMode)mode {
+- (NSString *)getTitleForSunPositionMode:(EOASunPositionMode)mode {
     switch (mode)
     {
-        case SunPositionModeSunPositionMode:
+        case EOASunPositionModeSunPositionMode:
             return OALocalizedString(@"shared_string_next_event");
-        case SunPositionModeSunsetMode:
+        case EOASunPositionModeSunsetMode:
             return OALocalizedString(@"map_widget_sunset");
-        case SunPositionModeSunriseMode:
+        case EOASunPositionModeSunriseMode:
             return OALocalizedString(@"map_widget_sunrise");
     }
 }
 
-- (NSString *)getTitle:(EOASunriseSunsetMode)ssm sunPositionMode:(SunPositionMode)sunPositionMode
+- (NSString *)getTitle:(EOASunriseSunsetMode)ssm sunPositionMode:(EOASunPositionMode)sunPositionMode
 {
     switch (ssm)
     {
@@ -274,7 +324,7 @@ static const double locationChangeAccuracy = 0.0001;
     }
 }
 
-- (NSString *)getNextEventString:(SunPositionMode)sunPositionMode {
+- (NSString *)getNextEventString:(EOASunPositionMode)sunPositionMode {
     OAWidgetType *type = [_state getWidgetType];
     NSString *eventString = @"";
     
@@ -282,10 +332,10 @@ static const double locationChangeAccuracy = 0.0001;
     {
         switch (sunPositionMode)
         {
-            case SunPositionModeSunriseMode:
+            case EOASunPositionModeSunriseMode:
                 eventString = @"map_widget_next_sunrise";
                 break;
-            case SunPositionModeSunsetMode:
+            case EOASunPositionModeSunsetMode:
                 eventString = @"map_widget_next_sunset";
                 break;
             default:
@@ -334,13 +384,13 @@ static const double locationChangeAccuracy = 0.0001;
     NSDate *sunrise = [sunriseSunset getSunrise];
     NSDate *sunset = [sunriseSunset getSunset];
     NSDate *nextTimeDate;
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
+    EOASunPositionMode sunPositionMode = (EOASunPositionMode)[[_state getSunPositionPreference] get];
     OAWidgetType *type = [_state getWidgetType];
-    if (OAWidgetType.sunset == type || (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunsetMode))
+    if (OAWidgetType.sunset == type || (OAWidgetType.sunPosition == type && sunPositionMode == EOASunPositionModeSunsetMode))
     {
         nextTimeDate = sunset;
     }
-    else if (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunPositionMode)
+    else if (OAWidgetType.sunPosition == type && sunPositionMode == EOASunPositionModeSunPositionMode)
     {
         _state.lastIsDayTime = [sunriseSunset isDaytime];
         nextTimeDate = _state.lastIsDayTime ? sunset : sunrise;
@@ -379,24 +429,18 @@ static const double locationChangeAccuracy = 0.0001;
     return [self getFormattedTime:timeLeft];
 }
 
-- (NSString*) getFormattedTime:(NSTimeInterval)timeInterval
+- (NSString *)getFormattedTime:(NSTimeInterval)timeInterval
 {
-    int hours, minutes, seconds;
-    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
-    
-    NSMutableString *time = [NSMutableString string];
-    NSString *unitStr = OALocalizedString(@"int_hour");
-    if (hours > 0)
-        [time appendFormat:@"%02d:", hours];
-    [time appendFormat:@"%02d", minutes];
-    if (hours == 0)
-    {
-        [time appendFormat:@":%02d", seconds];
-        unitStr = OALocalizedString(@"short_min");
-    }
-    [time appendFormat:@" %@", unitStr];
-    
-    return time;
+    NSString *formattedDuration = [self formatMinutesDuration:timeInterval / 60];
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), formattedDuration, OALocalizedString(@"int_hour")];
+}
+
+- (NSString *)formatMinutesDuration:(int)minutes
+{
+    int min = minutes % 60;
+    int hours = minutes / 60;
+   
+    return [NSString stringWithFormat:@"%02d:%02d", hours, min];
 }
 
 - (NSString *) formatNextTime:(NSTimeInterval)nextTime

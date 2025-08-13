@@ -9,12 +9,12 @@
 #import "OASimpleTableViewCell.h"
 #import "OASizes.h"
 #import "UITableViewCell+getTableView.h"
+#import "Localization.h"
 
 @interface OASimpleTableViewCell () <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginTopStackView;
-@property (weak, nonatomic) IBOutlet UIStackView *contentInsideStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginBottomStackView;
 
 @end
@@ -98,6 +98,23 @@
     self.contentOutsideStackViewVertical.spacing = hidden ? 3 : 4;
 }
 
+- (void)configureAccessibilityWithTitle:(nullable NSString *)title selected:(BOOL)isSelected
+{
+    self.isAccessibilityElement = YES;
+    self.accessibilityLabel = title;
+    self.accessibilityTraits = UIAccessibilityTraitButton;
+    
+    if (isSelected)
+    {
+        self.accessibilityTraits |= UIAccessibilityTraitSelected;
+        self.accessibilityValue = OALocalizedString(@"shared_string_selected");
+    }
+    else
+    {
+        self.accessibilityValue = OALocalizedString(@"shared_string_not_selected");
+    }
+}
+
 - (BOOL)checkSubviewsToUpdateMargins
 {
     return !self.leftIconView.hidden;
@@ -132,6 +149,12 @@
     {
         self.contentInsideStackView.alignment = UIStackViewAlignmentTop;
     }
+}
+
+- (void)hideTopSpace
+{
+    self.textCustomMarginTopStackView.hidden = YES;
+    self.topContentSpaceView.hidden = YES;
 }
 
 #pragma mark - Selectors

@@ -10,8 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class LineChartView;
-
 @interface OARouteInfoAltitudeCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *avgAltitudeTitle;

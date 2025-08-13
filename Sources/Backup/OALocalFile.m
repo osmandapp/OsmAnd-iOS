@@ -9,6 +9,7 @@
 #import "OALocalFile.h"
 #import "OASettingsItem.h"
 #import "OASettingsItemType.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OALocalFile
 {
@@ -37,11 +38,9 @@
 
 - (NSString *) formatName:(NSString *)name
 {
-    int ext = [name lastIndexOf:@"."];
+    NSInteger ext = [name lastIndexOf:@"."];
     if (ext != -1)
-    {
         name = [name substringWithRange:NSMakeRange(0, ext)];
-    }
     return [name stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 }
 

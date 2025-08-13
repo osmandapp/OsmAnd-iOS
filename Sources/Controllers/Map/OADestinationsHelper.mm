@@ -10,15 +10,20 @@
 #import "OsmAndApp.h"
 #import "OADestination.h"
 #import "OAUtilities.h"
+#import "OALocationServices.h"
+#import "OAObservable.h"
 #import "OALog.h"
 #import "Localization.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OADestinationItem.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAAppVersion.h"
 #import "OAColors.h"
+#import "OAAppData.h"
+#import "OAAppSettings.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kMarkersChanged @"markers_modified_time"
 
@@ -97,6 +102,7 @@
 {
     @synchronized(_syncObj)
     {
+        BOOL destinationsChanged = NO;
         NSMutableArray<OADestination *> *newDestinations = [NSMutableArray new];
         for (OADestinationItem *item in reorderedDestinations)
         {
@@ -111,12 +117,14 @@
                     _dynamic2ndRowDestination = nil;
                 [_app.data.destinations removeObject:item];
                 [_app.data.destinationRemoveObservable notifyEventWithKey:item];
+                destinationsChanged = YES;
             }
         }
         _sortedDestinations = newDestinations;
         [self refreshDestinationIndexes];
         [_app.data.destinationsChangeObservable notifyEvent];
-        [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
+        if (destinationsChanged)
+            [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
     }
 }
 
@@ -180,9 +188,7 @@
 {
     @synchronized(_syncObj)
     {
-        NSUInteger newIndex = 0;
-        OADestination *firstDestination = [_sortedDestinations firstObject];
-        
+        NSUInteger newIndex = 0;       
         [_sortedDestinations removeObject:destination];
         [_sortedDestinations insertObject:destination atIndex:newIndex];
         
@@ -198,7 +204,8 @@
     }
     
     [_app.data.destinationsChangeObservable notifyEvent];
-    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
+    if (wasSelected)
+        [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (void) apply2ndRowAutoSelection
@@ -255,7 +262,6 @@
 
     if (wasSelected)
         [_app.data.destinationsChangeObservable notifyEvent];
-    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (UIColor *) generateColorForDestination:(OADestination *)destination
@@ -382,24 +388,22 @@
     }
 }
 
-- (OAGPXDocument *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup
+- (OASGpxFile *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup
 {
-    OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
+    OASGpxFile *gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
     for (OADestination *marker in markers)
     {
-        OAWptPt *wpt = [[OAWptPt alloc] init];
+        OASWptPt *wpt = [[OASWptPt alloc] init];
         wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
         wpt.name = marker.desc;
-        [wpt setColor:[marker.color toARGBNumber]];
-
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = @"creation_date";
-
+        OASInt *color = [[OASInt alloc] initWithInt:[marker.color toARGBNumber]];
+        [wpt setColorColor:color];
+        
+        OASMutableDictionary *exts = wpt.getExtensionsToWrite;
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
-        e.value = [dateFormatter stringFromDate:marker.creationDate];;
-
-        wpt.extensions = @[e];
+        
+        exts[@"creation_date"] = [dateFormatter stringFromDate:marker.creationDate];
 
 //        if (completeBackup)
 //        {
@@ -410,9 +414,9 @@
 //                wpt.getExtensionsToWrite().put(VISITED_DATE, format.format(new Date(marker.visitedDate)));
 //            }
 //        }
-        [doc addWpt:wpt];
+        [gpxFile addPointPoint:wpt];
     }
-    return doc;
+    return gpxFile;
 }
 
 - (int) getFreeColorIndex

@@ -110,7 +110,7 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
                 continue
             }
             
-            let title = MenuHelpDataService.shared.getArticleName(from: article.url)
+            let title = MenuHelpDataService.shared.getArticleName(from: article)
             let url = article.url
             let articleRow = childArticlesSection.createNewRow()
             articleRow.cellType = OASimpleTableViewCell.getIdentifier()

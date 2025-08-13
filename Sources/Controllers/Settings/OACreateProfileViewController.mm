@@ -75,7 +75,7 @@
         OAApplicationMode *am = _profileList[indexPath.row];
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.leftIconView.tintColor = UIColorFromRGB(am.getIconColor);
+        cell.leftIconView.tintColor = am.getProfileColor;
         cell.titleLabel.text = _profileList[indexPath.row].toHumanString;
         cell.descriptionLabel.text = _profileList[indexPath.row].getProfileDescription;
     }

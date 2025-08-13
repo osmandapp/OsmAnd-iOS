@@ -7,22 +7,18 @@
 //
 
 #import <XCTest/XCTest.h>
-
 #import "OARouteProvider.h"
 #import "OARouteCalculationParams.h"
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
-
 #import <CoreLocation/CoreLocation.h>
 
 #include <OsmAndCore/QtExtensions.h>
-
 #include <routePlannerFrontEnd.h>
 #include <routingContext.h>
 #include <routeSegmentResult.h>
 #include <turnType.h>
 #include <binaryRead.h>
-
 #include <vector>
 
 @interface OARouteResultPreparationTest : XCTestCase

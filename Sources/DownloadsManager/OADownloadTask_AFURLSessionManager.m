@@ -7,9 +7,10 @@
 //
 
 #import "OADownloadTask_AFURLSessionManager.h"
-
+#import "OADownloadTask.h"
 #import "OADownloadsManager.h"
 #import "OADownloadsManager_Private.h"
+#import "OAObservable.h"
 #import "OALog.h"
 
 @implementation OADownloadTask_AFURLSessionManager
@@ -47,6 +48,8 @@
                                    [self onCompletedWith:response andStoredAt:filePath withError:error];
                                }];
         
+        _creationTime = [NSDate now];
+        
         _progress = progress;
         [_progress addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
@@ -73,6 +76,7 @@
         _key = [key copy];
         _name = [name copy];
         _hidden = hidden;
+        _creationTime = [NSDate now];
 
         NSProgress* progress;
         NSURLSessionDownloadTask* task = [manager downloadTaskWithResumeData:resumeData
@@ -220,6 +224,11 @@
 @synthesize key = _key;
 @synthesize name = _name;
 @synthesize hidden = _hidden;
+
+- (NSString *)title
+{
+    return _title ?: _name;
+}
 
 - (OADownloadTaskState)state
 {

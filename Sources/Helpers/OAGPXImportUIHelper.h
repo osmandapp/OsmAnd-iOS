@@ -6,23 +6,24 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@protocol OAGPXImportUIHelperDelegate <NSObject>
+NS_ASSUME_NONNULL_BEGIN
 
-- (void) updateDelegateVCData;
-
-@end
-
+/// Sent when the GPX file has been fully imported.
+FOUNDATION_EXPORT NSNotificationName const OAGPXImportUIHelperDidFinishImportNotification;
 
 @interface OAGPXImportUIHelper : NSObject
 
-@property (nonatomic, weak) id<OAGPXImportUIHelperDelegate> delegate;
+- (instancetype)initWithHostViewController:(UIViewController *)hostVC;
 
-- (instancetype) initWithHostViewController:(UIViewController *)hostVC;
+- (void)onImportClicked;
+- (void)onImportClickedWithDestinationFolderPath:(NSString *_Nullable)destPath;
+- (void)prepareProcessUrl:(NSURL *)url
+               showAlerts:(BOOL)showAlerts
+              openGpxView:(BOOL)openGpxView
+               completion:(void (^ _Nullable)(BOOL success))completion;
 
-- (void) onImportClicked;
-- (void) onImportClickedWithDestinationFolderPath:(NSString *)destPath;
-- (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView completion:(void (^)(BOOL success))completion;
+NS_ASSUME_NONNULL_END
 
 @end

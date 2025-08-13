@@ -20,12 +20,13 @@
 #import "OARouteDirectionInfo.h"
 #import "Localization.h"
 #import "OAExitInfo.h"
+#import "OAApplicationMode.h"
 #import "OAAnnounceTimeDistances.h"
 #import "OARoutingHelper+cpp.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "OsmAndSharedWrapper.h"
 
 #include <routeSegmentResult.h>
-
 
 @implementation OAVoiceRouter
 {
@@ -312,7 +313,7 @@ std::string preferredLanguage;
             if (exitInfo != nil && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
             {
                 NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
-                [play takeExit:tParam dist:dist exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo includeDest:YES]];
+                [play takeExit:tParam dist:dist exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo]];
             }
             else
             {
@@ -415,7 +416,7 @@ std::string preferredLanguage;
         if (tParam && exitInfo && exitInfo.ref && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
         {
             NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
-            [[p then] takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo includeDest:YES]];
+            [[p then] takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo]];
         }
     }
 }
@@ -442,7 +443,7 @@ std::string preferredLanguage;
             if (exitInfo != nil && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
             {
                 NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
-                [play takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:nextInfo exitInfo:exitInfo includeDest:!suppressDest]];
+                [play takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:nextInfo exitInfo:exitInfo]];
             }
             else
             {
@@ -664,12 +665,12 @@ std::string preferredLanguage;
     if (next == nil || ![_settings.speakStreetNames get:_settings.applicationMode.get]) {
         return result;
     }
-    if (player != nil) {
+    if (player != nil && [player supportsStructuredStreetNames]) {
         // Issue 2377: Play Dest here only if not already previously announced, to avoid repetition
         if (includeDest == YES) {
             result[@"toRef"] = [self getSpeakablePointName:next.ref];
             result[@"toStreetName"] = [self getSpeakablePointName:next.streetName];
-            result[@"toDest"] = [self getSpeakablePointName:next.destinationName];
+            result[@"toDest"] = [self getSpeakablePointName:[next getDestinationRefAndName]];
         } else {
             result[@"toRef"] = [self getSpeakablePointName:next.ref];
             result[@"toStreetName"] = [self getSpeakablePointName:next.streetName];
@@ -698,23 +699,16 @@ std::string preferredLanguage;
     }
 }
 
-- (NSDictionary *) getSpeakableExitName:(OARouteDirectionInfo *)routeInfo exitInfo:(OAExitInfo *)exitInfo includeDest:(BOOL)includeDest
+- (NSDictionary *) getSpeakableExitName:(OARouteDirectionInfo *)routeInfo exitInfo:(OAExitInfo *)exitInfo
 {
     NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
-    if (![_settings.speakStreetNames get])
+    if (!exitInfo || ![_settings.speakStreetNames get])
         return result;
-    if (player != nil && player.supportsStructuredStreetNames)
-    {
-        result[@"toRef"] = [self getSpeakablePointName:exitInfo.ref];
-        result[@"toStreetName"] = [self getSpeakablePointName:exitInfo.exitStreetName];
-        result[@"toDest"] = includeDest ? [self getSpeakablePointName:routeInfo.ref] : @"";
-    }
-    else
-    {
-        result[@"toRef"] = [self getSpeakablePointName:exitInfo.ref];
-        result[@"toStreetName"] = [self getSpeakablePointName:exitInfo.exitStreetName];
-        result[@"toDest"] = @"";
-    }
+    
+    result[@"toRef"] = [self getNonNilString:[self getSpeakablePointName:exitInfo.ref]];
+    NSString *destination = [self getSpeakablePointName:[self cutLongDestination:[routeInfo getDestinationRefAndName]]];
+    result[@"toDest"] = [self getNonNilString:destination];
+    result[@"toStreetName"] = @"";
     return result;
 }
 
@@ -728,6 +722,23 @@ std::string preferredLanguage;
 {
     NSCharacterSet *numericSet = [NSCharacterSet letterCharacterSet];
     return [numericSet characterIsMember:ch];
+}
+
+- (NSString *) getNonNilString:(NSString *)speakablePointName
+{
+    return speakablePointName ?: @"";
+}
+
+- (NSString *) cutLongDestination:(NSString *)destination
+{
+    if (!destination)
+        return nil;
+    
+    NSArray *words = [destination componentsSeparatedByString:@";"];
+    if ([words count] > 3)
+        return [NSString stringWithFormat:@"%@;%@;%@", words[0], words[1], words[2]];
+    
+    return destination;
 }
 
 - (NSString *) getSpeakableExitRef:(NSString *)exit
@@ -960,7 +971,21 @@ std::string preferredLanguage;
         {
             text = [text stringByAppendingString:@", "];
         }
-        text = [text stringByAppendingString:[OAPointDescription getSimpleName:point.point]];
+        
+        if (point && [point.point isKindOfClass:[OASWptPt class]])
+        {
+            OASWptPt *wptPt = (OASWptPt *)point.point;
+            OAPointDescription *pd = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:wptPt.name];
+            NSString *simpleName = [pd getSimpleName:YES];
+            if (simpleName)
+                text = [text stringByAppendingString:simpleName];
+        }
+        else
+        {
+            NSString *simpleName = [OAPointDescription getSimpleName:point.point];
+            if (simpleName)
+                text = [text stringByAppendingString:simpleName];
+        }
     }
     return text;
 }

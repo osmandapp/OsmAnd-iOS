@@ -405,7 +405,7 @@
     NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
     UIImage *leftNavbarButtonCustomIcon = [self getCustomIconForLeftNavbarButton];
     if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon)
-        leftNavbarButtonCustomIcon = [UIImage templateImageNamed:@"ic_navbar_chevron"];
+        leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
 
     CGFloat freeSpaceForTitle = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
     CGFloat freeSpaceForNavbarButton = freeSpaceForTitle;
@@ -421,8 +421,8 @@
 
     UIImage *centerIcon = [self getCenterIconAboveTitle];
     CGFloat titleWidth = centerIcon
-        ? centerIcon.size.width
-        : [OAUtilities calculateTextBounds:[[NSAttributedString alloc] initWithString:self.title attributes:titleAttributes] width:freeSpaceForTitle].width;
+    ? centerIcon.size.width
+    : [OAUtilities calculateTextBounds:[[NSAttributedString alloc] initWithString:self.title ?: @"" attributes:titleAttributes] width:freeSpaceForTitle].width;
     freeSpaceForNavbarButton -= titleWidth;
     freeSpaceForNavbarButton /= 2;
     freeSpaceForNavbarButton -= 12.;
@@ -444,7 +444,7 @@
         [leftButton setTitle:isLongTitle ? nil : leftButtonTitle forState:UIControlStateNormal];
         if (isLongTitle && !leftNavbarButtonCustomIcon)
         {
-            leftNavbarButtonCustomIcon = [UIImage templateImageNamed:@"ic_navbar_chevron"];
+            leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
             freeSpaceForNavbarButton = 30.;
         }
         [leftButton setImage:leftNavbarButtonCustomIcon forState:UIControlStateNormal];

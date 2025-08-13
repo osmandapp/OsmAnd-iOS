@@ -15,25 +15,29 @@ final class TravelObfHelper : NSObject {
     static let shared = TravelObfHelper()
     
     let WORLD_WIKIVOYAGE_FILE_NAME = "World_wikivoyage.travel.obf"
-    let DEFAULT_WIKIVOYAGE_TRAVEL_OBF = "Default_wikivoyage.travel.obf"
     let ARTICLE_SEARCH_RADIUS = 50 * 1000
     let SAVED_ARTICLE_SEARCH_RADIUS = 30 * 1000
     let MAX_SEARCH_RADIUS = 800 * 1000
+    let TRAVEL_GPX_SEARCH_RADIUS = 10 * 1000 // Ref: POI_SEARCH_POINTS_INTERVAL_M in tools
     
     let TRAVEL_GPX_CONVERT_FIRST_LETTER: Character = "A"
     let TRAVEL_GPX_CONVERT_FIRST_DIST = 5000
     let TRAVEL_GPX_CONVERT_MULT_1 = 2
     let TRAVEL_GPX_CONVERT_MULT_2 = 5
     
-    private var popularArticles = PopularArticles()
-    private let cachedArticles = ConcurrentDictionary<Int, [String:TravelArticle]>()
+    private let MAX_ALLOWED_RADIUS = Int(Int32.max)
+    
+    private let cachedArticles = ConcurrentDictionary<Int, [String: TravelArticle]>()
     private let localDataHelper: TravelLocalDataHelper
+    
+    private var popularArticles = PopularArticles()
     private var searchRadius: Int
     private var foundAmenitiesIndex: Int = 0
     private var foundAmenities: [OAFoundAmenity] = []
+    private let lock = NSLock()
     
     private override init() {
-        localDataHelper = TravelLocalDataHelper.shared;
+        localDataHelper = TravelLocalDataHelper.shared
         searchRadius = ARTICLE_SEARCH_RADIUS
     }
     
@@ -46,17 +50,21 @@ final class TravelObfHelper : NSObject {
     }
     
     func initializeDataToDisplay(resetData: Bool) {
+        lock.lock()
         if resetData {
             foundAmenities.removeAll()
             foundAmenitiesIndex = 0
             popularArticles.clear()
             searchRadius = ARTICLE_SEARCH_RADIUS
         }
-        localDataHelper.refreshCachedData();
+        localDataHelper.refreshCachedData()
+        lock.unlock()
         loadPopularArticles()
     }
     
-    func loadPopularArticles() -> PopularArticles {
+    func loadPopularArticles() {
+        defer { lock.unlock() }
+        lock.lock()
         let lang = OAUtilities.currentLang()
         let popularArticles = PopularArticles(artcles: popularArticles)
         if isAnyTravelBookPresent() {
@@ -66,11 +74,13 @@ final class TravelObfHelper : NSObject {
                     guard let location = OATravelGuidesHelper.getMapCenter() else {continue}
                     
                     for reader in getReaders() {
-                        foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius, zoom: -1, searchFilter: ROUTE_ARTICLE, lang: lang!) )
+                        if let lang {
+                            foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius, zoom: -1, searchFilter: ROUTE_ARTICLE, lang: lang) )
+                        }
                         foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius / 5, zoom: 15, searchFilter: ROUTE_TRACK, lang: nil) )
                     }
                     
-                    if !foundAmenities.isEmpty {
+                    if foundAmenities.isEmpty {
                         // In rare cases, amenity could be nil
                         foundAmenities.removeAll { $0.amenity == nil }
                         foundAmenities.sort { a, b in
@@ -80,15 +90,14 @@ final class TravelObfHelper : NSObject {
                         }
                     }
                 }
-                searchRadius *= 2
+                searchRadius = min(searchRadius * 2, MAX_ALLOWED_RADIUS)
                 while foundAmenitiesIndex < foundAmenities.count - 1 {
                     let fileAmenity = foundAmenities[foundAmenitiesIndex]
                     if let file = fileAmenity.file {
-                        let amenity = fileAmenity.amenity!
-                        if let name = amenity.getName(lang, transliterate: false), name.length > 0 {
-                            let routeId = amenity.getAdditionalInfo()[ROUTE_ID] ?? ""
+                        if let amenity = fileAmenity.amenity, let name = amenity.getName(lang, transliterate: false), name.length > 0 {
+                            let routeId = amenity.getAdditionalInfo(ROUTE_ID) ?? ""
                             if !popularArticles.containsByRouteId(routeId: routeId) {
-                                if let article = cacheTravelArticles(file: file, amenity: amenity, lang: lang!, readPoints: false, callback: nil) {
+                                if let lang, let article = cacheTravelArticles(file: file, amenity: amenity, lang: lang, readPoints: false, callback: nil) {
                                     if !popularArticles.contains(article: article) {
                                         if !popularArticles.add(article: article) {
                                             articlesLimitReached = true
@@ -104,7 +113,10 @@ final class TravelObfHelper : NSObject {
             } while (!articlesLimitReached && searchRadius < MAX_SEARCH_RADIUS)
         }
         self.popularArticles = popularArticles
-        return popularArticles
+    }
+    
+    func isTravelGpxTags(_ tags: [String: String]) -> Bool {
+        return tags[ROUTE_ID] != nil && tags[ROUTE_TAG] == "segment" || tags[TravelGpx.ROUTE_TYPE] != nil
     }
     
     func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {
@@ -126,7 +138,7 @@ final class TravelObfHelper : NSObject {
                         if amenity.getRouteId() == filter ||
                             amenity.name == filter ||
                             amenity.getRef() == ref {
-                            travelGpx = getTravelGpx(file:foundGpx.file!, amenity: amenity)
+                            travelGpx = getTravelGpx(file: foundGpx.file!, amenity: amenity)
                             break
                         }
                     }
@@ -138,6 +150,10 @@ final class TravelObfHelper : NSObject {
     }
     
     func searchAmenity(lat: Double, lon: Double, reader: String, searchRadius: Int, zoom: Int, searchFilter: String, lang: String?) -> [OAFoundAmenity] {
+        guard let safeRadius = Int32(exactly: searchRadius) else {
+            NSLog("Invalid radius: \(searchRadius)")
+            return []
+        }
         
         var results: [OAFoundAmenity] = []
         func publish(poi: OAPOI?) -> Bool {
@@ -152,15 +168,25 @@ final class TravelObfHelper : NSObject {
             return false
         }
         
-        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(searchRadius), searchFilters: [searchFilter], publish:publish)
+        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: safeRadius, searchFilters: [searchFilter], publish: publish)
         return results
+    }
+    
+    func searchFilterShouldAccept(_ subcategory: String?, filterSubcategories: [String]?) -> Bool {
+        guard let subcategory, let filterSubcategories else { return false }
+    
+        return filterSubcategories.contains {
+            // include routes:routes_xxx with routes:route_track filter
+            $0 == subcategory ||
+            ($0 == ROUTE_TRACK && subcategory.hasPrefix(ROUTES_PREFIX))
+        }
     }
     
     func cacheTravelArticles(file: String?, amenity: OAPOI, lang: String?, readPoints: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
         var articles: [String: TravelArticle]? = [:]
         guard let file else {return nil}
-        if amenity.subType == ROUTE_TRACK {
+        if amenity.isRouteTrack() {
             articles = readRoutePoint(file: file, amenity: amenity)
         } else {
             articles = readArticles(file: file, amenity: amenity)
@@ -184,7 +210,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func getTravelGpx(file: String?, amenity: OAPOI) -> TravelGpx {
-        var travelGpx = TravelGpx()
+        let travelGpx = TravelGpx(amenity: amenity)
         travelGpx.file = file
         let title = amenity.name
         
@@ -194,7 +220,7 @@ final class TravelObfHelper : NSObject {
 
         travelGpx.routeId = amenity.getTagContent(ROUTE_ID)
         travelGpx.user = amenity.getTagContent(TravelGpx.USER)
-        travelGpx.activityType = amenity.getTagContent(TravelGpx.ACTIVITY_TYPE)
+        travelGpx.activityType = amenity.getTagContent(TravelGpx.ROUTE_ACTIVITY_TYPE)
         travelGpx.ref = amenity.getRef()
         
         travelGpx.totalDistance = Float(amenity.getTagContent(TravelGpx.DISTANCE)) ?? 0
@@ -204,9 +230,8 @@ final class TravelObfHelper : NSObject {
         travelGpx.minElevation = Double(amenity.getTagContent(TravelGpx.MIN_ELEVATION)) ?? 0
         travelGpx.avgElevation = Double(amenity.getTagContent(TravelGpx.AVERAGE_ELEVATION)) ?? 0
         
-        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_RADIUS) {
+        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_BBOX_RADIUS) {
             OAUtilities.convertChar(toDist: String(radius[0]), firstLetter: String(TRAVEL_GPX_CONVERT_FIRST_LETTER), firstDist: Int32(TRAVEL_GPX_CONVERT_MULT_1), mult1: 0, mult2: Int32(TRAVEL_GPX_CONVERT_MULT_2))
-            
         }
         return travelGpx
     }
@@ -262,15 +287,6 @@ final class TravelObfHelper : NSObject {
     
     func isAnyTravelBookPresent() -> Bool {
         !getReaders().isEmpty
-    }
-    
-    func isOnlyDefaultTravelBookPresent() -> Bool {
-        let books = TravelObfHelper.shared.getReaders()
-        if books.isEmpty ||
-            books.count == 1 && books[0].lowercased() == DEFAULT_WIKIVOYAGE_TRAVEL_OBF.lowercased() {
-            return true
-        }
-        return false
     }
     
     func search(searchQuery: String) -> [TravelSearchResult] {
@@ -341,7 +357,7 @@ final class TravelObfHelper : NSObject {
         var langs: Set<String> = []
         let descrStart = DESCRIPTION_TAG + ":"
         let partStart = IS_PART + ":"
-        for infoTag in amenity.getAdditionalInfo().keys {
+        for case let infoTag as String in amenity.getAdditionalInfo().allKeys {
             if infoTag.hasPrefix(descrStart) {
                 if infoTag.length > descrStart.length {
                     langs.insert( infoTag.substring(from: descrStart.length) )
@@ -415,9 +431,9 @@ final class TravelObfHelper : NSObject {
             parts = []
         }
         
-        var navMap = [String : [TravelSearchResult]]()
+        var navMap = [String: [TravelSearchResult]]()
         var headers = [String]()
-        var headerObjs = [String : TravelSearchResult]()
+        var headerObjs = [String: TravelSearchResult]()
         if !parts.isEmpty {
             headers.append(contentsOf: parts)
             if let isParentOf = article.isParentOf, !isParentOf.isEmpty {
@@ -425,9 +441,10 @@ final class TravelObfHelper : NSObject {
             }
         }
         
-        for header in headers {
-            
-            guard let parentArticle = getParentArticleByTitle(title: header, lang: lang, lat: article.lat, lon: article.lon) else {continue}
+        for var header in headers {
+            let parentLang = header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) ? "en" : lang
+            header = TravelGuidesUtils.getTitleWithoutPrefix(title: header)
+            guard let parentArticle = getParentArticleByTitle(title: header, lang: parentLang, lat: article.lat, lon: article.lon) else {continue}
 
             navMap[header] = [TravelSearchResult]()
             if let unseparatedText = parentArticle.isParentOf {
@@ -435,7 +452,7 @@ final class TravelObfHelper : NSObject {
                 for childSubsequence in isParentOf {
                     let childTitle = String(childSubsequence)
                     if !childTitle.isEmpty {
-                        let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [lang])
+                        let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [parentLang])
                         var resultList = navMap[header]
                         if resultList == nil {
                             resultList = []
@@ -450,13 +467,15 @@ final class TravelObfHelper : NSObject {
             }
         }
         
-        var res: [TravelSearchResult : [TravelSearchResult]] = [:]
-        for header in headers {
+        var res: [TravelSearchResult: [TravelSearchResult]] = [:]
+        for var header in headers {
+            let parentLang = header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) ? "en" : lang
+            header = TravelGuidesUtils.getTitleWithoutPrefix(title: header)
             var searchResult = headerObjs[header]
             var results = navMap[header]
             if results != nil {
                 results = sortSearchResults(results: results!, searchQuery: header)
-                let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: nil)
+                let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: [parentLang])
                 searchResult = searchResult != nil ? searchResult : emptyResult
                 res[searchResult!] = results
             }
@@ -856,8 +875,31 @@ final class TravelObfHelper : NSObject {
         OAUtilities.capitalizeFirstLetter(name)
     }
     
+    func openTrackMenu(article: TravelArticle, gpxFileName: String, latLon: CLLocation, adjustMapPosition: Bool) {
+        let callback = OpenTrackMenuDelegate()
+        callback.gpxFileName = gpxFileName
+        callback.latLon = latLon
+        readGpxFile(article: article, callback: callback)
+    }
 }
 
+final private class OpenTrackMenuDelegate: GpxReadDelegate {
+    
+    var isGpxReading: Bool = false
+    var latLon: CLLocation?
+    var gpxFileName: String?
+    
+    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
+        guard let latLon, let gpxFileName, let gpxFile, let file = gpxFile.object, let analysis = article.getAnalysis() else { return }
+
+        var wptPt = WptPt()
+        wptPt.lat = latLon.coordinate.latitude
+        wptPt.lon = latLon.coordinate.longitude
+        let safeFileName = gpxFileName.appending(GPX_FILE_EXT)
+                
+        OAGPXUIHelper.saveAndOpenGpx(gpxFileName, filepath: safeFileName, gpxFile: file, selectedPoint: wptPt, analysis: analysis, routeKey: nil, forceAdjustCentering: true)
+    }
+}
 
 final class GpxFileReader {
     
@@ -883,6 +925,7 @@ final class GpxFileReader {
     
     func onPreExecute() {
         if let callback {
+            OARootViewController.instance().view.addSpinner(inCenterOfCurrentView: true)
             callback.onGpxFileReading?()
         }
     }
@@ -902,5 +945,6 @@ final class GpxFileReader {
                 callback.onGpxFileRead(gpxFile: gpxFile, article: article)
             }
         }
+        OARootViewController.instance().view.removeSpinner()
     }
 }

@@ -10,6 +10,7 @@
 #import "OACurrentPositionHelper.h"
 #import "OsmAndApp.h"
 #import "OAOsmAndFormatter.h"
+#import "OALocationServices.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 

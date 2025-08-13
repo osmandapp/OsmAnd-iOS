@@ -7,9 +7,8 @@
 //
 
 #import "OATargetMenuViewController.h"
-#import "OACollapsableView.h"
 
-@class OARowInfo;
+@class OARowInfo, OACollapsableView;
 
 @protocol OARowInfoDelegate <NSObject>
 
@@ -38,6 +37,7 @@
 
 @property (nonatomic) int height;
 @property (nonatomic) BOOL moreText;
+@property (nonatomic, strong, readonly) NSMutableArray<NSDictionary *> *detailsArray;
 
 @property (weak, nonatomic) id<OARowInfoDelegate> delegate;
 
@@ -45,5 +45,6 @@
 
 - (int) getRawHeight;
 - (UIFont *) getFont;
+- (void)setDetailsArray:(nonnull NSMutableArray<NSDictionary *> *)detailsArray;
 
 @end

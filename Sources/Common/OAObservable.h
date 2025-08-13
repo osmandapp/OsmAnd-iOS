@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "OAObservableProtocol.h"
 
 @interface OAObservable : NSObject <OAObservableProtocol>

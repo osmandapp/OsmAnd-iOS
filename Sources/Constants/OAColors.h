@@ -20,6 +20,8 @@
 #define color_myloc_distance 0x0080FF
 #define color_osmand_orange 0xff8f00
 
+#define color_osmand_orange_argb 0xffff8f00
+
 #define color_map_widget_stroke_argb 0x4c000000
 #define color_widgettext_shadow_night_argb 0xdc262626
 #define color_widgettext_shadow_day_argb 0xffffffff
@@ -75,7 +77,6 @@
 #define color_disabled_light 0xdadbdf
 #define color_card_divider_light 0xf0f0f0
 
-#define color_dialog_transparent_bg_argb_light 0xeaf0f0f0
 #define color_dialog_title_color_light 0x212121
 #define color_dialog_title_color_dark 0xcccccc
 #define color_dialog_description_color_light 0x212121
@@ -202,15 +203,18 @@
 #define color_place_open 0x2BBE31
 #define color_place_closed 0xDA3A3A
 
-#define resource_installed_icon_color 0x1FB38D
-
 #define unselected_tab_icon 0x898198
 
 #define kDefaultRouteLineDayColor 0x882a4bd1
 #define kDefaultRouteLineNightColor 0xffffdf3d
 
+#define kDefaultCoordinatesGridDayColor 0xFF1A00CC
+#define kDefaultCoordinatesGridNightColor 0xFF1A00CC
+
 #define kDefaultTurnArrowsDayColor 0xffffde5b
 #define kDefaultTurnArrowsNightColor 0xff41a6d9
+
+#define kDefaultWalkingRouteLineColor 0xff407ef5
 
 #define color_purple_border 0x106c19ff
 

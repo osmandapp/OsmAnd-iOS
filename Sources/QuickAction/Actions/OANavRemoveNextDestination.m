@@ -7,17 +7,32 @@
 //
 
 #import "OANavRemoveNextDestination.h"
-#import "OAQuickActionType.h"
 #import "OATargetPointsHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavRemoveNextDestination
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavRemoveNextDestinationActionId
+                                             stringId:@"nav.destination.remove"
+                                                   cl:self.class]
+                name:OALocalizedString(@"quick_action_remove_next_destination")]
+               nameAction:OALocalizedString(@"shared_string_remove")]
+               iconName:@"ic_action_intermediate"]
+              secondaryIconName:@"ic_custom_compound_action_remove"] 
+             category:QuickActionTypeCategoryNavigation]
+            nonEditable];
 }
 
 - (void)execute
@@ -53,11 +68,8 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_remove_next_destination");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:34 stringId:@"nav.destination.remove" class:self.class name:OALocalizedString(@"quick_action_remove_next_destination") category:NAVIGATION iconName:@"ic_action_intermediate" secondaryIconName:@"ic_custom_compound_action_remove" editable:NO];
-    
     return TYPE;
 }
 

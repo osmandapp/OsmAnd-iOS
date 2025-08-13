@@ -7,18 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
 #import "OACommonTypes.h"
-#import "OAMapRendererViewProtocol.h"
-#import "OAObservable.h"
-#import "OAAppSettings.h"
-#import "OAPOIType.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
-static NSString *kNotificationMapGestureAction = @"kNotificationMapGestureAction";
-static NSString *kNotificationLayersConfigurationChanged = @"kNotificationLayersConfigurationChanged";
+static NSString * const kNotificationMapGestureAction = @"kNotificationMapGestureAction";
+static NSString * const kNotificationLayersConfigurationChanged = @"kNotificationLayersConfigurationChanged";
 
 static const float kCorrectionMinLeftSpace = 40.0;
 static const float kCorrectionMinBottomSpace = 40.0;
@@ -55,46 +52,37 @@ static const float kNavAnimatonTime = 1.0f;
 static const int CENTER_CONSTANT = 0;
 static const int BOTTOM_CONSTANT = 1;
 
-@class OAGPX;
-@class OAWptPt;
-@class OAMetadata;
-@class OAPOIUIFilter;
-@class OASearchWptAPI;
-@class OAMapRendererView;
-@class OAMapLayers;
-@class OAWorldRegion;
-@class OAMapRendererEnvironment;
-@class OAMapPresentationEnvironment;
-@class OAGPXDocument;
+@protocol OAMapRendererViewProtocol;
+
+@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property (nonatomic, readonly) OAMapRendererView *mapView;
-@property (weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
+@property (weak, readonly, nullable) id<OAMapRendererViewProtocol> mapRendererView;
 @property (nonatomic, readonly) OAMapLayers *mapLayers;
 @property unsigned int referenceTileSizeRasterOrigInPixels;
 
-@property (readonly) OAObservable* stateObservable;
-@property (readonly) OAObservable* settingsObservable;
+@property (readonly) OAObservable *stateObservable;
+@property (readonly) OAObservable *settingsObservable;
 
-@property (readonly) OAObservable* azimuthObservable;
-@property (readonly) OAObservable* zoomObservable;
-@property (readonly) OAObservable* elevationAngleObservable;
-@property (readonly) OAObservable* mapObservable;
-@property (readonly) OAObservable* mapSourceUpdatedObservable;
+@property (readonly) OAObservable *azimuthObservable;
+@property (readonly) OAObservable *zoomObservable;
+@property (readonly) OAObservable *elevationAngleObservable;
+@property (readonly) OAObservable *mapObservable;
+@property (readonly) OAObservable *mapSourceUpdatedObservable;
+@property (readonly) OAObservable *gpxTracksRefreshedObservable;
 
-@property (nonatomic) OAWptPt *foundWpt;
-@property (nonatomic) NSArray *foundWptGroups;
-@property (nonatomic) NSString *foundWptDocPath;
+@property (nonatomic, nullable) OASWptPt *foundWpt;
+@property (nonatomic, nullable) NSArray *foundWptGroups;
+@property (nonatomic, nullable) NSString *foundWptDocPath;
 
 @property (nonatomic) int mapPosition;
 @property (nonatomic) int mapPositionX;
 
 @property(readonly) CGFloat displayDensityFactor;
 
-@property(readonly) OAObservable* framePreparedObservable;
-@property(readonly) OAObservable* frameDisplayedObservable;
-@property(readonly) OAObservable* idleObservable;
+@property(readonly) OAObservable *framePreparedObservable;
 
 @property(nonatomic, assign) BOOL minimap;
 
@@ -114,6 +102,7 @@ static const int BOTTOM_CONSTANT = 1;
 @property (nonatomic, assign) BOOL isCarPlayDashboardActive;
 
 - (CLLocation *) getMapLocation;
+
 - (float) getMapZoom;
 - (float)getMap3DModeElevationAngle;
 - (void) refreshMap;
@@ -124,8 +113,8 @@ static const int BOTTOM_CONSTANT = 1;
 - (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly;
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
-- (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(NSString *)gpxFileName;
-- (NSArray<OAWptPt *> * _Nonnull)getPointsOf:(NSString * _Nullable)gpxFileName groupName:(NSString * _Nonnull)groupName;
+- (BOOL) addNewWpt:(OASWptPt *)wpt gpxFileName:(nullable NSString *)gpxFileName;
+- (NSArray<OASWptPt *> *)getPointsOf:(nullable NSString *)gpxFileName groupName:(NSString *)groupName;
 
 - (BOOL) canZoomIn;
 - (void) zoomIn;
@@ -168,20 +157,20 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (BOOL) isMyLocationVisible;
 - (BOOL) isLocationVisible:(double)latitude longitude:(double)longitude;
-- (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
+- (void) updateLocation:(nullable CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
 - (CGFloat) screensToFly:(Point31)position31;
 
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;
 
 - (void) highlightRegion:(OAWorldRegion *)region;
-- (void) hideRegionHighlight;
+- (void) hidePolygonHighlight;
 
-- (BOOL) simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
+- (BOOL) simulateContextMenuPress:(UIGestureRecognizer *)recognizer;
 
 - (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update;
 - (void) showTempGpxTrack:(NSString *)filePath;
-- (void) showTempGpxTrackFromDocument:(OAGPXDocument *)doc;
+- (void) showTempGpxTrackFromGpxFile:(OASGpxFile *)doc;
 - (void) hideTempGpxTrack:(BOOL)update;
 - (void) hideTempGpxTrack;
 - (void) keepTempGpxTrackVisible;
@@ -190,21 +179,22 @@ static const int BOTTOM_CONSTANT = 1;
 - (void) hideRecGpxTrack;
 
 - (void) updatePoiLayer;
+- (OAPOILayer *) getMapPoiLayer;
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
-- (BOOL) updateMetadata:(OAMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
+- (BOOL) updateMetadata:(nullable OASMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;
 
-- (void) runWithRenderSync:(void (^)(void))runnable;
+- (void) runWithRenderSync:(nullable void (^)(void))runnable;
 - (void) updateLayer:(NSString *)layerId;
 
-- (UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
-- (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
+- (nullable UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
+- (nullable NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
 - (NSDictionary<NSString *, NSNumber *> *) getGpxColors;
 - (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth;
-- (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings;
+- (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(nullable NSDictionary<NSString *, NSString*> *) additionalSettings;
 
 - (void) showProgressHUD;
 - (void) showProgressHUDWithMessage:(NSString *)message;
@@ -220,7 +210,20 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (void) updateTapRulerLayer;
 
-- (void)getAltitudeForMapCenter:(void (^ _Nonnull)(float height))callback;
-- (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^ _Nonnull)(float height))callback;
+- (void)getAltitudeForMapCenter:(void (^)(float height))callback;
+- (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^)(float height))callback;
+
+- (CLLocation *) getLatLonFromElevatedPixel:(CGFloat)x y:(CGFloat)y;
+
+- (void)fitTrackOnMap:(LineChartView *)lineChartView
+             startPos:(double)startPos
+               endPos:(double)endPos
+             location:(CLLocationCoordinate2D)location
+             forceFit:(BOOL)forceFit
+             analysis:(OASGpxTrackAnalysis *)analysis
+              segment:(nullable OASTrkSegment *)segment
+     trackChartHelper:(TrackChartHelper *)trackChartHelper;
 
 @end
+
+NS_ASSUME_NONNULL_END

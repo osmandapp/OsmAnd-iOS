@@ -7,13 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 
 @protocol OACommandPlayer;
 
 @interface OACommandBuilder : NSObject
 
-- (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player jsContext:(JSContext *) context;
+- (nullable instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player voiceProvider:(NSString *)voiceProvider;
 
 - (void) setParameters:(NSString *) metricConstant mode:(BOOL) tts;
 

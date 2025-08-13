@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OAObservable.h"
-
 typedef NS_ENUM(NSInteger, OADownloadTaskState) {
     OADownloadTaskStateUnknown = -1,
     OADownloadTaskStateRunning = 0,
@@ -17,6 +15,8 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
     OADownloadTaskStateStopping = 2,
     OADownloadTaskStateFinished = 3,
 };
+
+@class OAObservable;
 
 @protocol OADownloadTask <NSObject>
 
@@ -29,9 +29,13 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
 @property(readonly) NSString* targetPath;
 @property(readonly) NSString* key;
 @property(readonly) NSString* name;
+@property(nonatomic) NSString *title;
 @property(readonly) BOOL hidden;
 @property(readonly) NSTimeInterval downloadTime;
 @property(readonly) CGFloat fileSize; // in MB
+
+@property(nonatomic) id resourceItem;
+@property(nonatomic) NSDate *creationTime;
 
 @property(readonly) OADownloadTaskState state;
 - (void)resume;

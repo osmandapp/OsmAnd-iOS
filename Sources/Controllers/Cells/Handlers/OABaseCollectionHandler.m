@@ -40,9 +40,24 @@
     return CGSizeMake(48., 48.);
 }
 
+- (CGFloat)getSpacing
+{
+    return 9;
+}
+
+- (CGSize)calculateItemSizeForIndexPath:(NSIndexPath *)indexPath
+{
+    return [self getItemSize];
+}
+
 - (UICollectionView *)getCollectionView
 {
     return _collectionView;
+}
+
+- (void)setCollectionView:(UICollectionView *)collectionView
+{
+    _collectionView = collectionView;
 }
 
 - (UICollectionViewScrollDirection)getScrollDirection
@@ -67,19 +82,42 @@
     return nil;
 }
 
+- (NSIndexPath *)getDefaultIndexPath
+{
+    return nil;
+}
+
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath
 {
+}
+
+- (id)getSelectedItem
+{
+    return nil;
+}
+
+- (UIMenu *)buildTopButtonContextMenu
+{
+    return nil;
 }
 
 - (void)generateData:(NSArray<NSArray *> *)data
 {
 }
 
-- (void)addItem:(NSIndexPath *)indexPath newItem:(id)newItem
+- (void)insertItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (void)replaceItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath
 {
 }
 
 - (void)removeItem:(NSIndexPath *)indexPath
+{
+}
+
+- (void)removeItems:(NSArray<NSIndexPath *> *)indexPaths
 {
 }
 
@@ -102,9 +140,10 @@
 {
     NSIndexPath *prevSelectedColorIndex = [self getSelectedIndexPath];
     [self setSelectedIndexPath:indexPath];
-    [collectionView reloadItemsAtIndexPaths:prevSelectedColorIndex ? @[prevSelectedColorIndex, indexPath] : @[indexPath]];
+    id selectedItem = [self getSelectedItem];
+    [collectionView reloadData];
     if (self.delegate)
-        [self.delegate onCollectionItemSelected:indexPath];
+        [self.delegate onCollectionItemSelected:indexPath selectedItem:selectedItem collectionView:collectionView shouldDismiss:YES];
 }
 
 @end

@@ -10,10 +10,13 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
 #import "OAFavoritesHelper.h"
+#import "OAPOI.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAGpxWptItem
 
-+ (instancetype)withGpxWpt:(OAWptPt *)gpxWpt
++ (instancetype)withGpxWpt:(OASWptPt *)gpxWpt
 {
     OAGpxWptItem *gpxWptItem = [[OAGpxWptItem alloc] init];
     if (gpxWptItem)
@@ -23,25 +26,31 @@
     return gpxWptItem;
 }
 
-- (void) setPoint:(OAWptPt *)point
+- (void)setPoint:(OASWptPt *)point
 {
     _point = point;
     [self acquireColor];
 }
 
-- (void) setColor:(UIColor *)color
+- (void)setColor:(UIColor *)color
 {
     _color = color;
     [self applyColor];
 }
 
-- (OAPOI *) getAmenity
+- (OAPOI *)getAmenity
 {
-    return [_point getAmenity];
+    NSDictionary<NSString *, NSString *> *extensions = [_point getExtensionsToRead];
+    if (extensions.count > 0)
+    {
+        return [OAPOI fromTagValue:extensions privatePrefix:@"amenity_" osmPrefix:@"osm_tag_"];
+    }
+    return nil;
 }
+
 - (void) setAmenity:(OAPOI *)amenity
 {
-    [_point setAmenity:amenity];
+     [_point setAmenity:amenity];
 }
 
 - (NSString *) getAmenityOriginName
@@ -51,20 +60,20 @@
 
 - (void) setAmenityOriginName:(NSString *)originName
 {
-    [_point setAmenityOriginName:originName];
+    [_point setAmenityOriginNameOriginName:originName];
 }
 
 - (void) applyColor
 {
     if (!self.point)
         return;
-    
-    [self.point setColor:[self.color toARGBNumber]];
+    OASInt *color = [[OASInt alloc] initWithInt:[self.color toARGBNumber]];
+    [self.point setColorColor:color];
 }
 
 - (void) acquireColor
 {
-    self.color = [self.point getColor];
+    self.color = UIColorFromARGB(self.point.getColor);
 }
 
 - (BOOL) isEqual:(id)o
@@ -103,7 +112,9 @@
 
 - (UIImage *) getCompositeIcon
 {
-    return [OAFavoritesHelper getCompositeIcon:_point.getIcon backgroundIcon:_point.getBackgroundIcon color:_point.getColor];
+    NSString *iconName = _point.getIconName ?: DEFAULT_ICON_NAME_KEY;
+    NSString *backgroundIconName = _point.getBackgroundType ?: DEFAULT_ICON_SHAPE_KEY;
+    return [OAFavoritesHelper getCompositeIcon:iconName backgroundIcon:backgroundIconName color:UIColorFromARGB([_point getColor])];
 }
 
 @end

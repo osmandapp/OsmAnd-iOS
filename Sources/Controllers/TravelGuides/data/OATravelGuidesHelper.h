@@ -6,10 +6,9 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OAPOI.h"
+#import <Foundation/Foundation.h>
 
-@class OATravelSearchResult, OAPOI, OATravelArticle, OAGPXDocumentAdapter, OAWptPt, OAGPX, OATravelGpx;
-
+@class OATravelSearchResult, OAPOI, OATravelArticle, OAGPXDocumentAdapter, OASWptPt, OASGpxDataItem, OATravelGpx, MapSelectionResult;
 
 @interface OAFoundAmenity : NSObject
 
@@ -31,9 +30,11 @@
 
 + (void) searchAmenity:(NSString *)searchQuery x:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom reader:(NSString *)reader searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish;
 
++ (OATravelGpx *)searchTravelGpx:(CLLocation *)location routeId:(NSString *)routeId;
+
 + (void) showContextMenuWithLatitude:(double)latitude longitude:(double)longitude;
 
-+ (OAWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang;
++ (OASWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang;
 
 + (NSArray<NSString *> *) getTravelGuidesObfList;
 
@@ -47,7 +48,7 @@
 
 + (OAGPXDocumentAdapter *) buildGpxFile:(NSArray<NSString *> *)readers article:(OATravelArticle *)article;
 
-+ (OAGPX *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document;
++ (OASGpxDataItem *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document;
 
 + (NSString *) getSelectedGPXFilePath:(NSString *)fileName;
 

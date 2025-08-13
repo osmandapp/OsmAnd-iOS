@@ -12,11 +12,11 @@
 #import "OAMapRendererView.h"
 #import "OAUtilities.h"
 #import "OAAutoObserverProxy.h"
-#import "OAGPXDocument.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteImporter.h"
 #import "OARouteStatistics.h"
 #import "OARootViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -29,11 +29,9 @@
 #include <OsmAndCore/Map/MapStylesCollection.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/SingleSkImage.h>
-
 #include <SkCanvas.h>
 
 #define kZoomDelta 0.1
-
 
 @implementation OABaseVectorLinesLayer
 {
@@ -98,7 +96,6 @@
 {
     [self hide];
     _vectorLinesArrowsProvider.reset();
-    _vectorLinesCollection.reset();
     [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
     
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
@@ -108,8 +105,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     return YES;
 }
 
@@ -121,6 +119,9 @@
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection sync:(BOOL)sync
 {
     QWriteLocker scopedLocker(&_lock);
+
+    if (_vectorLinesArrowsProvider)
+        [self.mapView removeKeyedSymbolsProvider:_vectorLinesArrowsProvider];
 
     _vectorLinesCollection = collection;
     _vectorLinesArrowsProvider = _vectorLinesCollection->getVectorLineArrowsProvider();
@@ -174,6 +175,63 @@
                         (bitmapSize - arrowImage->width()) / 2.0f,
                         (bitmapSize - arrowImage->height()) / 2.0f);
 
+    canvas.flush();
+    return bitmap.asImage();
+}
+
+- (sk_sp<SkImage>) walkBitmapWithColor:(OsmAnd::ColorARGB)color lineWidth:(CGFloat)lineWidth
+{
+    SkBitmap bitmap;
+    CGFloat walkCircleH = lineWidth / VECTOR_LINE_SCALE_COEF * 1.33f;
+    CGFloat walkCircleW = lineWidth / VECTOR_LINE_SCALE_COEF;
+    CGFloat strokeWidth = 1.0 * UIScreen.mainScreen.scale;
+
+    CGFloat density = UIScreen.mainScreen.scale;
+    CGFloat margin = 1.5 * density;
+
+    // create walk arrow bitmap
+    CGFloat width = walkCircleW - margin * 2.0;
+    CGFloat height = walkCircleH - margin * 2.0;
+    CGFloat walkCircleRadius = (width - margin) / 2.0;
+
+    if (!bitmap.tryAllocPixels(SkImageInfo::MakeN32Premul(width, height)))
+    {
+        LogPrintf(OsmAnd::LogSeverityLevel::Error, "Failed to allocate walk bitmap of size %dx%d", width, height);
+        return nullptr;
+    }
+
+    bitmap.eraseColor(SK_ColorTRANSPARENT);
+
+    SkRRect rrect;
+    rrect.setNinePatch(SkRect::MakeLTRB(margin, margin, width - margin, height - margin), walkCircleRadius, walkCircleRadius, walkCircleRadius, walkCircleRadius);
+    
+    SkCanvas canvas(bitmap);
+    SkPaint paint;
+    paint.setStyle(SkPaint::Style::kFill_Style);
+    paint.setColor(SkColorSetARGB(color.a, color.r, color.g, color.b));
+    canvas.drawRRect(rrect, paint);
+
+    paint.reset();
+    paint.setStyle(SkPaint::Style::kStroke_Style);
+    paint.setColor(SkColorSetARGB(0x66, 0x00, 0x00, 0x00));
+    paint.setStrokeWidth(strokeWidth);
+    canvas.drawRRect(rrect, paint);
+
+    const auto arrowImage = [OANativeUtilities skImageFromPngResource:@"map_direction_arrow"];
+    if (arrowImage)
+    {
+        SkScalar imageHeight = arrowImage->height();
+        SkScalar targetWidth = width * 0.6f;
+        SkScalar scaleFactor = targetWidth / imageHeight;
+        SkScalar targetHeight = imageHeight * scaleFactor;
+        
+        SkScalar left = (width - targetWidth) / 2.0f;
+        SkScalar top = (height - targetHeight) / 2.0f;
+        SkScalar right = left + targetWidth;
+        SkScalar bottom = top + targetHeight;
+        
+        canvas.drawImageRect(arrowImage, SkRect::MakeLTRB(left, top, right, bottom), SkSamplingOptions(SkCubicResampler::Mitchell()));
+    }
     canvas.flush();
     return bitmap.asImage();
 }
@@ -240,14 +298,22 @@
     return locationsIdx == locations.count ? 0 : locationsIdx;
 }
 
-- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints
+- (void)showCurrentHighlitedLocation:(TrackChartPoints *)trackPoints
 {
-    if (_locationMarker && CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint))
+    BOOL hasHighlitedPoint = CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint);
+    if (_locationMarker)
     {
-        _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(
-                OsmAnd::LatLon(trackPoints.highlightedPoint.latitude, trackPoints.highlightedPoint.longitude)));
-        _locationMarker->setIsHidden(false);
+        if (hasHighlitedPoint)
+        {
+            _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(trackPoints.highlightedPoint.latitude,
+                                                                                             trackPoints.highlightedPoint.longitude)));
+        }
+        _locationMarker->setIsHidden(!hasHighlitedPoint);
     }
+}
+
+- (void)showCurrentStatisticsLocation:(TrackChartPoints *)trackPoints
+{
     OsmAnd::MapMarkerBuilder xAxisMarkerBuilder;
     xAxisMarkerBuilder.setIsAccuracyCircleSupported(false);
     xAxisMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
@@ -260,12 +326,12 @@
         for (CLLocation *location in trackPoints.xAxisPoints)
         {
             if (_xAxisLocationIcon)
-            	xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey, OsmAnd::SingleSkImage(_xAxisLocationIcon));
+                xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey, OsmAnd::SingleSkImage(_xAxisLocationIcon));
             const auto& marker = xAxisMarkerBuilder.buildAndAddToCollection(_currentGraphXAxisPositions);
             marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
         }
         [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
-        trackPoints.axisPointsInvalidated = NO;
+        trackPoints.axisPointsInvalidated = false;
     }
 }
 

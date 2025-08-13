@@ -6,15 +6,9 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
-extension Notification.Name {
-    static let SimpleWidgetStyleUpdated = NSNotification.Name("SimpleWidgetStyleUpdated")
-}
-
-@objc(OAWidgetConfigurationViewController)
-@objcMembers
-class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
+final class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
+    
+    private static let excludedUISettingsWidgetKeys: Set<String> = [WidgetType.nextTurn.id, WidgetType.secondNextTurn.id, WidgetType.smallNextTurn.id]
     
     var widgetInfo: MapWidgetInfo!
     var widgetPanel: WidgetsPanel!
@@ -25,34 +19,48 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var widgetConfigurationParams: [String: Any]?
     var isFirstGenerateData = true
     var onWidgetStateChangedAction: (() -> Void)?
+    var addToNext: Bool?
+    var selectedWidget: String?
     
-    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
+    var isCreateNewAndSimilarAlreadyExist: Bool {
+        createNew && similarAlreadyExist
+    }
+    
+    private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
-        if isCreateNewAndSimilarAlreadyExist || (createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "")) {
-            widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
+        if createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+            if let selectedAppMode {
+                widgetConfigurationParams = ["selectedAppMode": selectedAppMode]
+            }
+        } else {
+            widgetConfigurationParams = [:]
         }
+        configureNavigationButtons()
     }
-
+    
     override func registerCells() {
-        addCell(SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
+        addCell(OASimpleTableViewCell.reuseIdentifier)
+        addCell(OASwitchTableViewCell.reuseIdentifier)
+        addCell(OAValueTableViewCell.reuseIdentifier)
+        addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
+        addCell(OAButtonTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
         tableData.clearAllData()
         // Add section for simple widgets
-        if !WidgetType.isComplexWidget(widgetInfo.key), widgetPanel == .topPanel || widgetPanel == .bottomPanel {
-            if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode) {
+        if !WidgetType.isComplexWidget(widgetInfo.key) && (!Self.excludedUISettingsWidgetKeys.contains(widgetInfo.key) || widgetPanel.isPanelVertical) {
+            if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode, widgetsPanel: widgetPanel, widgetConfigurationParams) {
                 for i in 0 ..< settingsData.sectionCount() {
                     tableData.addSection(settingsData.sectionData(for: i))
                 }
             }
         }
         
-        if let settingsData = widgetInfo.getSettingsData(selectedAppMode) {
+        if let settingsData = widgetInfo.getSettingsData(selectedAppMode, widgetConfigurationParams, isCreate: createNew) {
             for i in 0 ..< settingsData.sectionCount() {
                 tableData.addSection(settingsData.sectionData(for: i))
             }
@@ -67,188 +75,219 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         }
     }
     
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell!
-        if item.cellType == OASimpleTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OASimpleTableViewCell
-            }
-            if let cell = cell {
-                let hasDescr = item.descr != nil && !item.descr!.isEmpty
-                let hasIcon = item.iconName != nil
-                cell.descriptionVisibility(hasDescr)
-                cell.leftIconVisibility(hasIcon)
-                cell.titleLabel.textColor = hasIcon ? .textColorPrimary : .buttonBgColorDisruptive
-                cell.titleLabel.text = item.title
-                cell.leftIconView.image = UIImage(named: item.iconName ?? "")
-            }
+        if item.cellType == OASimpleTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
+            let hasDescr = item.descr != nil && !item.descr!.isEmpty
+            let hasIcon = item.iconName != nil
+            cell.descriptionVisibility(hasDescr)
+            cell.leftIconVisibility(hasIcon)
+            cell.titleLabel.textColor = hasIcon ? .textColorPrimary : .buttonBgColorDisruptive
+            cell.titleLabel.text = item.title
+            cell.leftIconView.image = UIImage(named: item.iconName ?? "")
             outCell = cell
-        } else if item.cellType == OASwitchTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.getIdentifier()) as? OASwitchTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASwitchTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OASwitchTableViewCell
-                cell?.descriptionVisibility(false)
-            }
-            if let cell {
-                let pref = item.obj(forKey: "pref") as? OACommonBoolean
-                let hasIcon = item.iconName != nil
-                cell.titleLabel.text = item.title
-                cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
-                var selected = pref?.get(selectedAppMode) ?? false
-                if isCreateNewAndSimilarAlreadyExist {
-                    if widgetKey == WidgetType.averageSpeed.id {
-                        if isFirstGenerateData {
-                            widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = selected
-                        } else {
-                            selected = widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] as? Bool ?? false
-                        }
+        } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier, for: indexPath) as! OASwitchTableViewCell
+            cell.descriptionVisibility(false)
+            let hasIcon = item.iconName != nil
+            cell.titleLabel.text = item.title
+            cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
+            var selected = false
+            if let pref = item.obj(forKey: "pref") as? OACommonBoolean {
+                if !createNew {
+                    selected = pref.get(selectedAppMode)
+                } else {
+                    if let prefKey = pref.key,
+                       let value = widgetConfigurationParams?[prefKey] as? Bool {
+                        selected = value
                     } else {
-                        fatalError("You need implement value handler for widgetKey")
+                        selected = pref.defValue
                     }
                 }
-                if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+                
+                if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? ""), pref.key.hasPrefix("simple_widget_show_icon") {
                     widgetConfigurationParams?["isVisibleIcon"] = selected
                 }
-                cell.switchView.isOn = selected
-                cell.leftIconVisibility(hasIcon)
-                cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
-                cell.leftIconView.tintColor = selected ? UIColor(rgb: Int(selectedAppMode.getIconColor())) : UIColor.iconColorDisabled
-
-                cell.switchView.tag = indexPath.section << 10 | indexPath.row
-                cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
-                
-                outCell = cell
             }
-        } else if item.cellType == OAValueTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.getIdentifier()) as? OAValueTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OAValueTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OAValueTableViewCell
-                cell?.accessoryType = .disclosureIndicator
-                cell?.leftIconView.tintColor = UIColor(rgb: Int(selectedAppMode.getIconColor()))
+            
+            cell.switchView.isOn = selected
+            cell.leftIconVisibility(hasIcon)
+            cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
+            cell.leftIconView.tintColor = selected ? selectedAppMode.getProfileColor() : UIColor.iconColorDisabled
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row
+            cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
+            outCell = cell
+        } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as! OAValueTableViewCell
+            cell.accessoryType = .disclosureIndicator
+            cell.leftIconView.tintColor = selectedAppMode.getProfileColor()
+            if item.key == "external_sensor_key" {
+                cell.descriptionLabel.text = item.descr
+                cell.valueVisibility(false)
+                cell.descriptionVisibility(true)
+            } else {
+                cell.valueVisibility(true)
+                cell.descriptionVisibility(false)
             }
-            if let cell {
-                if item.key == "external_sensor_key" {
-                    cell.descriptionLabel.text = item.descr
-                    cell.valueVisibility(false)
-                    cell.descriptionVisibility(true)
+            
+            cell.valueLabel.text = item.string(forKey: "value")
+            if let iconName = item.iconName, !iconName.isEmpty {
+                cell.leftIconVisibility(true)
+                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            } else {
+                cell.leftIconVisibility(false)
+            }
+            cell.titleLabel.text = item.title
+            outCell = cell
+        } else if item.cellType == SegmentImagesWithRightLabelTableViewCell.getIdentifier() {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
+            cell.selectionStyle = .none
+            if let icons = item.obj(forKey: "values") as? [UIImage],
+               let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle {
+                var widgetSizeStyle: EOAWidgetSizeStyle = .medium
+                if !createNew {
+                    widgetSizeStyle = pref.get(selectedAppMode)
                 } else {
-                    cell.descriptionVisibility(false)
-                }
-                if isCreateNewAndSimilarAlreadyExist {
-                    var value: String
-                    if isFirstGenerateData {
-                        guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
-                              let prefLong = pref as? OACommonLong else {
-                            return nil
-                        }
-                        let param = String(prefLong.get(selectedAppMode))
-                        value = item.string(forKey: "value")!
-                        if widgetKey == WidgetType.averageSpeed.id {
-                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = param
-                        } else if widgetKey == WidgetType.glideAverage.id {
-                            widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] = param
-                        } else {
-                            fatalError("You need implement value handler for widgetKey")
-                        }
+                    if let rawValue = widgetConfigurationParams?["widgetSizeStyle"] as? Int,
+                       let style = EOAWidgetSizeStyle(rawValue: rawValue) {
+                        widgetSizeStyle = style
                     } else {
-                        var _value = ""
-                        if widgetKey == WidgetType.averageSpeed.id {
-                            _value = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? "0"
-                            value = AverageSpeedWidget.getIntervalTitle(Int(_value)!)
-                        } else if widgetKey == WidgetType.glideAverage.id {
-                            _value = widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] as? String ?? "0"
-                            value = GlideAverageWidget.getIntervalTitle(Int(_value)!)
+                        if let widgetsPanel = item.obj(forKey: "widgetsPanel") as? WidgetsPanel, !widgetsPanel.isPanelVertical {
+                            widgetSizeStyle = .small
                         } else {
-                            fatalError("You need implement value handler for widgetKey")
+                            widgetSizeStyle = .medium
                         }
                     }
-                    cell.valueLabel.text = value
-                } else {
-                    cell.valueLabel.text = item.string(forKey: "value")
                 }
-                if let iconName = item.iconName, !iconName.isEmpty {
-                    cell.leftIconVisibility(true)
-                    cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-                } else {
-                    cell.leftIconVisibility(false)
-                }
-                cell.titleLabel.text = item.title
-            }
-            outCell = cell
-        } else if item.cellType == SegmentImagesWithRightLableTableViewCell.getIdentifier() {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLableTableViewCell
-            cell.selectionStyle = .none
-            if let icons = item.obj(forKey: "values") as? [String],
-               let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle {
-                let widgetSizeStyle = pref.get(selectedAppMode)
+                
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = widgetSizeStyle.rawValue
                 }
-                cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
+                cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
             }
+            
             if let title = item.string(forKey: "title") {
                 cell.configureTitle(title: title)
             }
             cell.didSelectSegmentIndex = { [weak self] index in
-                guard let self,
-                      let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle else { return }
-                pref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: selectedAppMode)
+                guard let self, let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle else { return }
+                if !createNew {
+                    pref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: selectedAppMode)
+                }
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = index
                 }
-                if item.string(forKey: "behaviour") == "simpleWidget" {
-                    NotificationCenter.default.post(name: .SimpleWidgetStyleUpdated,
-                                                    object: widgetInfo,
-                                                    userInfo: nil)
+                if item.string(forKey: "behaviour") == "simpleWidget", !createNew {
+                    updateWidgetStyleForRow(with: widgetInfo)
+                    OARootViewController.instance().mapPanel.recreateControls()
+                }
+                if !widgetPanel.isPanelVertical {
+                    generateData()
+                    tableView.reloadData()
                 }
             }
+            outCell = cell
+        } else if item.cellType == OAButtonTableViewCell.getIdentifier() {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.reuseIdentifier) as! OAButtonTableViewCell
+            let value = item.obj(forKey: "value") as? String
+            if cell.contentHeightConstraint == nil {
+                let constraint = cell.contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
+                constraint.isActive = true
+                cell.contentHeightConstraint = constraint
+            }
+            cell.selectionStyle = .none
+            cell.leftIconVisibility(item.key != "average_obd_mode_key" && item.key != "fuel_consumption_mode_key")
+            cell.descriptionVisibility(false)
+            cell.titleLabel.text = item.title
+            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.leftIconView.tintColor = selectedAppMode.getProfileColor()
+            var config = UIButton.Configuration.plain()
+            config.baseForegroundColor = .textColorActive
+            config.contentInsets = .zero
+            cell.button.configuration = config
+            if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = RouteInfoDisplayPriority(rawValue: pref.defValue)?.key {
+                cell.button.menu = createDisplayPriorityMenuWith(value: value ?? defValue, pref: pref, indexPath: indexPath)
+            } else if let boolPref = item.obj(forKey: "pref") as? OACommonBoolean, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
+                cell.button.menu = createBooleanMenuWith(currentValue: value, pref: boolPref, options: options, indexPath: indexPath)
+            } else if item.key == "fuel_consumption_mode_key", let pref = item.obj(forKey: "pref") as? OACommonString, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
+                cell.button.menu = createStringMenuWith(currentValue: value, pref: pref, options: options, indexPath: indexPath)
+            }
+            cell.button.showsMenuAsPrimaryAction = true
+            cell.button.changesSelectionAsPrimaryAction = true
+            cell.button.setContentHuggingPriority(.required, for: .horizontal)
+            cell.button.setContentCompressionResistancePriority(.required, for: .horizontal)
             outCell = cell
         }
         return outCell
     }
     
-    var isCreateNewAndSimilarAlreadyExist: Bool {
-        createNew && similarAlreadyExist
-    }
-    
-    @objc func onSwitchClick(_ sender: Any) -> Bool {
-        guard let sw = sender as? UISwitch else {
-            return false
-        }
-        
-        let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
-        let data = tableData!.item(for: indexPath)
-        
-        if isCreateNewAndSimilarAlreadyExist {
-            if widgetKey == WidgetType.averageSpeed.id {
-                widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = sw.isOn
-            } else {
-                fatalError("You need implement value handler for widgetKey")
-            }
-        } else {
-            let pref = data.obj(forKey: "pref") as! OACommonBoolean
-            pref.set(sw.isOn, mode: selectedAppMode)
-        }
-        if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
-            widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
-        }
-        if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
-            UIView.animate(withDuration: 0.2) {
-                cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))
-                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(self.selectedAppMode.getIconColor())) : UIColor.iconColorDisabled
+    private func createDisplayPriorityMenuWith(value: String, pref: OACommonWidgetDisplayPriority, indexPath: IndexPath) -> UIMenu {
+        let actions = RouteInfoDisplayPriority.allCases.map { displayPriority in
+            UIAction(title: displayPriority.title,
+                     image: UIImage.templateImageNamed(displayPriority.iconName),
+                     state: displayPriority.key == value ? .on : .off) { [weak self] _ in
+                guard let self else { return }
+                
+                if createNew {
+                    widgetConfigurationParams?[pref.key] = displayPriority.key
+                } else {
+                    pref.setValueFrom(displayPriority.key, appMode: selectedAppMode)
+                }
+                generateData()
+                onWidgetStateChangedAction?()
+                tableView.reloadData()
             }
         }
-        
-        return false
+        return UIMenu(options: .singleSelection, children: actions)
     }
     
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    private func createBooleanMenuWith(currentValue: String, pref: OACommonBoolean, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
+        let actions = options.compactMap { row -> UIAction? in
+            guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
+            let state: UIMenuElement.State = title == currentValue ? .on : .off
+            return UIAction(title: title, image: UIImage.templateImageNamed(row.iconName), state: state) { [weak self] _ in
+                guard let self else { return }
+                let newBool = ((row.obj(forKey: "value") as? Int) ?? 0) == 1
+                if self.createNew {
+                    self.widgetConfigurationParams?[pref.key] = newBool
+                } else {
+                    pref.set(newBool)
+                }
+                
+                self.onWidgetStateChanged()
+            }
+        }
+        
+        return UIMenu(options: .singleSelection, children: actions)
+    }
+        
+    private func createStringMenuWith(currentValue: String, pref: OACommonString, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
+        let actions = options.compactMap { row -> UIAction? in
+            guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
+            let raw = row.obj(forKey: "value") as? String ?? ""
+            let state: UIMenuElement.State = raw == currentValue ? .on : .off
+            return UIAction(title: title, state: state) { [weak self] _ in
+                guard let self else { return }
+                if self.createNew {
+                    self.widgetConfigurationParams?[pref.key] = raw
+                } else {
+                    pref.set(raw)
+                }
+                
+                self.onWidgetStateChanged()
+            }
+        }
+        
+        return UIMenu(options: .singleSelection, children: actions)
+    }
+    
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
+        if widgetInfo.handleRowSelected(item, viewController: self) {
+            return
+        }
         if item.key == "delete_widget_key" {
             onWidgetDeleted()
             dismiss()
@@ -257,48 +296,23 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             if let possibleValues {
                 let vc = WidgetParameterViewController()
                 vc.delegate = self
+                vc.isCreateNew = createNew
                 let section = vc.tableData.createNewSection()
                 section.addRows(possibleValues)
                 section.footerText = (item.obj(forKey: "footer") as? String) ?? ""
                 vc.appMode = selectedAppMode
                 vc.screenTitle = item.descr ?? item.title
-                if isCreateNewAndSimilarAlreadyExist {
-                    guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
-                          let prefLong = pref as? OACommonLong else {
-                        return
-                    }
-                    var value: Int?
-                    if isFirstGenerateData {
-                        value = Int(prefLong.get(selectedAppMode))
-                        if widgetKey == WidgetType.averageSpeed.id {
-                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = String(value ?? 0)
-                        } else if widgetKey == WidgetType.glideAverage.id {
-                            widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] = String(value ?? 0)
-                        } else {
-                            fatalError("You need implement value handler for widgetKey")
-                        }
-                    }
-                    if widgetKey == WidgetType.averageSpeed.id {
-                        vc.widgetConfigurationSelectedValue = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? ""
-                    } else if widgetKey == WidgetType.glideAverage.id {
-                        vc.widgetConfigurationSelectedValue = widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] as? String ?? ""
-                    } else {
-                        fatalError("You need implement value handler for widgetKey")
-                    }
-                    vc.onWidgetConfigurationParamsAction = { [weak self] result in
-                        guard let self else { return }
-                        if widgetKey == WidgetType.averageSpeed.id {
-                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = result ?? ""
-                        } else if widgetKey == WidgetType.glideAverage.id {
-                            widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] = result ?? ""
-                        } else {
-                            fatalError("You need implement value handler for widgetKey")
-                        }
-                    }
+                vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                if let widgetConfigurationParams, let pref = vc.pref, let value = widgetConfigurationParams[pref.key] {
+                    vc.widgetConfigurationParams = [pref.key: value]
                 } else {
-                    vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                    vc.widgetConfigurationParams = [:]
                 }
-                
+                vc.onWidgetChangeParamsAction = { [weak self] params in
+                    guard let self,
+                          let result = params.first else { return }
+                    widgetConfigurationParams?[result.key] = result.value
+                }
                 showMediumSheetViewController(vc, isLargeAvailable: false)
             }
         } else if item.key == "external_sensor_key" {
@@ -312,26 +326,21 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 }
                 controller.onSelectDeviceAction = { [weak self] device in
                     guard let self else { return }
-                    if isCreateNewAndSimilarAlreadyExist {
+                    if createNew {
                         // Pairing widget with selected device
                         widgetConfigurationParams?[SensorTextWidget.externalDeviceIdConst] = device.id
                     }
-                    self.generateData()
+                    generateData()
                     tableView.reloadData()
                 }
                 controller.onSelectCommonOptionsAction = { [weak self] in
                     guard let self else { return }
-                    self.generateData()
+                    generateData()
                     tableView.reloadData()
                 }
                 navigationController?.pushViewController(controller, animated: true)
             }
         }
-    }
-    
-    private func onWidgetDeleted() {
-        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
-        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
     }
     
     func onWidgetStateChanged() {
@@ -340,18 +349,102 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             OsmAndApp.swiftInstance().data.destinationsChangeObservable.notifyEvent()
         } else if widgetInfo.key == WidgetType.radiusRuler.id || widgetInfo.key.hasPrefix(WidgetType.radiusRuler.id + MapWidgetInfo.DELIMITER) {
             (widgetInfo.widget as? RulerDistanceWidget)?.updateRulerObservable.notifyEvent()
+        } else if let textWidget = self.widgetInfo.widget as? OBDTextWidget {
+            textWidget.updatePrefs(prefsChanged: true)
         }
         generateData()
         onWidgetStateChangedAction?()
         tableView.reloadData()
+    }
+    
+    private func configureNavigationButtons() {
+        if navigationController?.viewControllers.count == 1 {
+            navigationItem.setLeftBarButton(nil, animated: false)
+            navigationItem.setRightBarButton(UIBarButtonItem(title: localizedString("shared_string_done"),
+                                                             style: .plain,
+                                                             target: self,
+                                                             action: #selector(onRightNavbarButtonPressed)),
+                                             animated: false)
+        } else {
+            navigationItem.setRightBarButton(nil, animated: false)
+        }
+    }
+    
+    private func onWidgetDeleted() {
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: false, recreateControls: true)
+    }
+    
+    private func updateWidgetStyleForRow(with mapWidgetInfo: MapWidgetInfo) {
+        let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
+        guard let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode,
+                                                                panel: widgetPanel,
+                                                                filterModes: enabledWidgetsFilter),
+              let widget = mapWidgetInfo.widget as? OATextInfoWidget else {
+            return
+        }
+        
+        guard widgetPanel.isPanelVertical else {
+            (pagedWidgets
+                .compactMap { $0.array as? [MapWidgetInfo] }
+                .first { $0.contains { $0.key == mapWidgetInfo.key } }?
+                .first { $0.key == mapWidgetInfo.key }?
+                .widget as? OATextInfoWidget)?
+                .updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
+            return
+        }
+
+        pagedWidgets
+            .compactMap { $0.array as? [MapWidgetInfo] }
+            .first { $0.contains { $0.key == mapWidgetInfo.key } }?
+            .compactMap { $0.widget as? OATextInfoWidget }
+            .forEach { $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode) }
+    }
+    
+    @objc private func onSwitchClick(_ sender: Any) -> Bool {
+        guard let sw = sender as? UISwitch else {
+            return false
+        }
+        
+        let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
+        let data = tableData.item(for: indexPath)
+        
+        let pref = data.obj(forKey: "pref") as! OACommonBoolean
+        if !createNew {
+            pref.set(sw.isOn, mode: selectedAppMode)
+        }
+        widgetConfigurationParams?[pref.key] = sw.isOn
+        
+        if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? ""), pref.key.hasPrefix("simple_widget_show_icon") {
+            widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
+        }
+        
+        if let textInfoWidget = widgetInfo.widget as? OATextInfoWidget {
+            textInfoWidget.configureSimpleLayout()
+        }
+
+        if let cell = tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
+            UIView.animate(withDuration: 0.2) {
+                cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))
+                cell.leftIconView.tintColor = sw.isOn ? self.selectedAppMode.getProfileColor() : UIColor.iconColorDisabled
+            }
+        }
+        
+        return false
     }
 }
 
 // MARK: Appearance
 extension WidgetConfigurationViewController {
     
-    override func getTitle() -> String! {
-        widgetInfo.getTitle()
+    override func getTitle() -> String {
+        if createNew {
+            let widgetType = widgetInfo.widget.widgetType
+            if widgetType == .sideMarker1 || widgetType == .sideMarker2 {
+                return widgetInfo.getWidgetDefaultTitle()
+            }
+        }
+        return widgetInfo.getTitle()
     }
     
     override func getNavbarStyle() -> EOABaseNavbarStyle {
@@ -362,7 +455,7 @@ extension WidgetConfigurationViewController {
         false
     }
     
-    override func getTableHeaderDescriptionAttr() -> NSAttributedString! {
+    override func getTableHeaderDescriptionAttr() -> NSAttributedString {
         guard let widgetType = widgetInfo.getWidgetType() else { return NSAttributedString(string: "") }
         let attrStr = NSMutableAttributedString(string: widgetType.descr)
         // Set font attribute
@@ -383,21 +476,29 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
-        NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
-                                        object: self.widgetInfo,
-                                        userInfo: self.widgetConfigurationParams)
-        if let viewControllers = self.navigationController?.viewControllers {
-            for viewController in viewControllers {
-                if let targetViewController = viewController as? WidgetsListViewController {
-                    self.navigationController?.popToViewController(targetViewController, animated: true)
-                    break
+        guard let navigationController else { return }
+        
+        if let targetViewController = navigationController.viewControllers.compactMap({ $0 as? WidgetsListViewController }).first {
+            targetViewController.addWidget(newWidget: widgetInfo, params: widgetConfigurationParams)
+            navigationController.popToViewController(targetViewController, animated: true)
+        } else {
+            if let addToNext, let selectedWidget {
+                let newWidgetsInfos = WidgetUtils.createNewWidgets(widgetsIds: [widgetInfo.key],
+                                                                   panel: widgetPanel,
+                                                                   appMode: selectedAppMode,
+                                                                   selectedWidget: selectedWidget,
+                                                                   widgetParams: widgetConfigurationParams,
+                                                                   addToNext: addToNext)
+                if let info = newWidgetsInfos.first, info.widgetPanel.isPanelVertical {
+                    updateWidgetStyleForRow(with: info)
+                    OARootViewController.instance().mapPanel.recreateControls()
                 }
             }
+            navigationController.dismiss(animated: true)
         }
     }
 
-    override func getBottomButtonTitleAttr() -> NSAttributedString! {
-        
+    override func getBottomButtonTitleAttr() -> NSAttributedString? {
         guard createNew else { return nil }
         // Create the attributed string with the desired text and attributes
         let text = "  " + localizedString("add_widget")
@@ -430,5 +531,4 @@ extension WidgetConfigurationViewController {
         
         return attributedString
     }
-    
 }

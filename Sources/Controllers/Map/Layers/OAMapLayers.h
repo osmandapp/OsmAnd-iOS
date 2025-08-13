@@ -26,12 +26,14 @@
 #import "OAPreviewRouteLineLayer.h"
 #import "OADownloadedRegionsLayer.h"
 #import "OARulerByTapControlLayer.h"
-
+#import "OACoordinatesGridLayer.h"
 #import "OATerrainMapLayer.h"
 #import "OAOverlayMapLayer.h"
 #import "OAUnderlayMapLayer.h"
 #import "OAWeatherRasterLayer.h"
 #import "OAWeatherContourLayer.h"
+#import "OANetworkRouteSelectionLayer.h"
+#import "OATravelSelectionLayer.h"
 
 @class OAMapViewController;
 
@@ -46,10 +48,13 @@
 @property (nonatomic, readonly) OARoutePointsLayer *routePointsLayer;
 @property (nonatomic, readonly) OAImpassableRoadsLayer *impassableRoadsLayer;
 @property (nonatomic, readonly) OATransportStopsLayer *transportStopsLayer;
+@property (nonatomic, readonly) OACoordinatesGridLayer *coordinatesGridLayer;
 @property (nonatomic, readonly) OAOsmEditsLayer *osmEditsLayer;
 @property (nonatomic, readonly) OAOsmBugsLayer *osmBugsLayer;
 @property (nonatomic, readonly) OAMapillaryLayer *mapillaryLayer;
 @property (nonatomic, readonly) OARulerByTapControlLayer *rulerByTapControlLayer;
+@property (nonatomic, readonly) OANetworkRouteSelectionLayer *networkRouteSelectionLayer;
+@property (nonatomic, readonly) OATravelSelectionLayer *travelSelectionLayer;
 
 @property (nonatomic) NSDate *weatherDate;
 @property (nonatomic, readonly) OAWeatherRasterLayer *weatherLayerLow;
@@ -77,6 +82,7 @@
 - (void) updateLayers;
 
 - (void) updateWeatherDate:(NSDate *)date;
+- (void) updateWeatherLayers;
 
 - (void) showLayer:(NSString *)layerId;
 - (void) hideLayer:(NSString *)layerId;

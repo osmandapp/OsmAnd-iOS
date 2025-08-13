@@ -15,6 +15,7 @@
 #import "OsmAndApp.h"
 #import "OAPOIType.h"
 #import "OAPOI.h"
+#import "OAObservable.h"
 #import "OAPOIHelper.h"
 #import "OAEditPOIData.h"
 #import "OATargetPoint.h"
@@ -24,9 +25,6 @@
 #include <OsmAndCore/Utilities.h>
 
 #define WAY_MODULO_REMAINDER 1;
-
-static const int AMENITY_ID_RIGHT_SHIFT = 1;
-static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
 
 @implementation OAOpenStreetMapLocalUtil
 

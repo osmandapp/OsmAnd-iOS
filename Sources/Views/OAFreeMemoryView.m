@@ -21,6 +21,9 @@
     double _freeVal;
 
     unsigned long long _localResourcesSize;
+
+    OsmAndAppInstance _app;
+    OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame localResourcesSize:(unsigned long long)localResourcesSize
@@ -55,7 +58,7 @@
     
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
     _titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-    _titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];;
+    _titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];
     _titleLabel.adjustsFontForContentSizeCategory = YES;
     _titleLabel.numberOfLines = 1;
     _titleLabel.text = OALocalizedString(@"device_memory");
@@ -63,27 +66,26 @@
     
     _freeMemLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
     _freeMemLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-    _freeMemLabel.font = [UIFont scaledSystemFontOfSize:14.0];;
+    _freeMemLabel.font = [UIFont scaledSystemFontOfSize:14.0];
     _freeMemLabel.adjustsFontForContentSizeCategory = YES;
     _freeMemLabel.numberOfLines = 1;
     [self addSubview:_freeMemLabel];
     
     [self update];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(memInfoDidChange:) name:@"DiskUsageChangedNotification" object:nil];
+
+    _app = [OsmAndApp instance];
+    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                                andObserve:_app.localResourcesChangedObservable];
 }
 
 - (void) dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"DiskUsageChangedNotification" object:nil];
-}
-
-- (void) memInfoDidChange:(NSNotification*)notification
-{
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self update];
-        [self setNeedsDisplay];
-    });
+    if (_localResourcesChangedObserver)
+    {
+        [_localResourcesChangedObserver detach];
+        _localResourcesChangedObserver = nil;
+    }
 }
 
 - (void) setLocalResourcesSize:(unsigned long long)size
@@ -147,6 +149,7 @@
     }
     NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
     _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
+    [_freeMemLabel sizeToFit];
 }
 
 - (void) drawRect:(CGRect)rect
@@ -277,6 +280,14 @@
     CGGradientRelease(glossGradientApp);
     CGGradientRelease(glossGradientFree);
     CGColorSpaceRelease(rgbColorspace);
+}
+
+- (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self update];
+        [self setNeedsDisplay];
+    });
 }
 
 @end

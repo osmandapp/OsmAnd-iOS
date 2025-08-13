@@ -66,6 +66,7 @@
 
     self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
 }
 
 #pragma mark - Base UI

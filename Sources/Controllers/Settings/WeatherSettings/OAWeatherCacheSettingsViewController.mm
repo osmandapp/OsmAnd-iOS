@@ -13,6 +13,7 @@
 #import "OAValueTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAWeatherHelper.h"
+#import "OAWorldRegion.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
@@ -215,7 +216,7 @@
                 regionData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
                 regionData[@"region"] = region;
                 regionData[@"description"] = [NSByteCountFormatter stringFromByteCount:[_weatherHelper getOfflineForecastSize:region forUpdate:NO]
-                                                                            countStyle:NSByteCountFormatterCountStyleFile];;
+                                                                            countStyle:NSByteCountFormatterCountStyleFile];
                 [countryCells addObject:regionData];
             }
         }

@@ -17,34 +17,45 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
     
     var customId: String?
     
-    init(customId: String?, intermediate: Bool) {
+    init(customId: String?, intermediate: Bool, widgetParams: ([String: Any])?) {
         self.customId = customId
         self.intermediate = intermediate
-        self.arrivalTimeOrTimeToGo = TimeToNavigationPointWidgetState.registerTimeTypePref(customId: customId, intermediate: intermediate)
+        self.arrivalTimeOrTimeToGo = TimeToNavigationPointWidgetState.registerTimeTypePref(customId: customId, intermediate: intermediate, widgetParams: widgetParams)
     }
     
     func isIntermediate() -> Bool {
-        return intermediate
+        intermediate
     }
     
     func getPreference() -> OACommonBoolean {
-        return arrivalTimeOrTimeToGo
+        arrivalTimeOrTimeToGo
     }
     
     override func getMenuTitle() -> String {
-        return TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getTitle()
+        TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getTitle()
     }
     
     override func getWidgetTitle() -> String? {
         TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getWidgetTitle()
     }
     
-    func getPrefValue() -> String {
-        TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).title
+    func getPrefValue(widgetConfigurationParams: [String: Any]?,
+                      isCreate: Bool) -> String {
+        var currentValue = arrivalTimeOrTimeToGo.defValue
+        if let widgetConfigurationParams,
+           let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix("showArrivalTime") || $0.hasPrefix("showIntermediateArrivalTime") }),
+           let value = widgetConfigurationParams[key] as? String,
+           let widgetValue = Bool(value) {
+            currentValue = widgetValue
+        } else if !isCreate {
+            currentValue = arrivalTimeOrTimeToGo.get()
+        }
+        
+        return TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: currentValue).title
     }
     
     override func getSettingsIconId(_ nightMode: Bool) -> String {
-        return TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).iconName
+        TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).iconName
     }
     
     override func changeToNextState() {
@@ -55,12 +66,20 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
         TimeToNavigationPointWidgetState.registerTimeTypePref(customId: customId, intermediate: intermediate).set(arrivalTimeOrTimeToGo.get(appMode), mode: appMode)
     }
     
-    private static func registerTimeTypePref(customId: String?, intermediate: Bool) -> OACommonBoolean {
+    private static func registerTimeTypePref(customId: String?,
+                                             intermediate: Bool,
+                                             widgetParams: ([String: Any])? = nil) -> OACommonBoolean {
         var prefId = intermediate ? "show_arrival_time" : "show_intermediate_arrival_time"
         if let customId, !customId.isEmpty {
             prefId += customId
         }
-        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true)
+        
+        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true)!
+        
+        if let string = widgetParams?["showArrivalTime"] as? String ?? widgetParams?["showIntermediateArrivalTime"] as? String, let widgetValue = Bool(string) {
+            preference.set(widgetValue)
+        }
+        return preference
     }
 }
 

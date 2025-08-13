@@ -15,7 +15,6 @@ extension Notification.Name {
 @objcMembers
 final class ThemeManager: NSObject {
     static let shared = ThemeManager()
-    private override init() {}
     
     var currentTheme: Theme {
         let appMode = OAAppSettings.sharedManager().currentMode
@@ -25,6 +24,8 @@ final class ThemeManager: NSObject {
         }
         return theme
     }
+    
+    private override init() {}
     
     func configure(appMode: OAApplicationMode) {
         let savedTheme = OAAppSettings.sharedManager().appearanceProfileTheme.get(appMode)
@@ -67,4 +68,3 @@ final class ThemeManager: NSObject {
         }
     }
 }
-

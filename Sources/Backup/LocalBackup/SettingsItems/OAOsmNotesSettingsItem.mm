@@ -12,6 +12,7 @@
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmNotePoint.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 
 #define kTEXT_KEY @"text"
 #define kLAT_KEY @"lat"
@@ -47,7 +48,7 @@
 
 - (long)localModifiedTime
 {
-    return [OAOsmBugsDBHelper sharedDatabase].getLastModifiedTime;
+    return [[OAOsmBugsDBHelper sharedDatabase] getLastModifiedTime];
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime

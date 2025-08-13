@@ -43,5 +43,11 @@ class ConcurrentDictionary<Key: Hashable, Value> {
         defer { pthread_rwlock_unlock(&rwlock) }
         return Array(dictionary.values)
     }
+
+    func getAllKeys() -> [Key] {
+        pthread_rwlock_rdlock(&rwlock)
+        defer { pthread_rwlock_unlock(&rwlock) }
+        return Array(dictionary.keys)
+    }
 }
 

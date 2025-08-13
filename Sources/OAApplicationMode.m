@@ -12,6 +12,8 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OALocationIcon.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kBackgroundDistanceSlow 5
@@ -36,6 +38,8 @@ static NSMapTable<NSString *, NSMutableSet<OAApplicationMode *> *> *_widgetsAvai
 static NSMutableArray<OAApplicationMode *> *_defaultValues;
 static NSMutableArray<OAApplicationMode *> *_values;
 static NSMutableArray<OAApplicationMode *> *_cachedFilteredValues;
+static NSObject *_cachedFilteredValuesLock;
+
 static NSString *_cachedAvailableApplicationModes;
 static OAAutoObserverProxy* _listener;
 
@@ -65,6 +69,7 @@ static int PROFILE_TRUCK = 1000;
     _defaultValues = [NSMutableArray array];
     _cachedFilteredValues = [NSMutableArray array];
     _cachedAvailableApplicationModes = @"";
+    _cachedFilteredValuesLock = [NSObject new];
 
     _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"rendering_value_browse_map_name") stringKey:@"default"];
     _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
@@ -205,6 +210,7 @@ static int PROFILE_TRUCK = 1000;
     [builder setUserProfileName:modeBean.userProfileName];
     [builder setIconResName:modeBean.iconName];
     [builder setIconColor:modeBean.iconColor];
+    [builder setCustomIconColor:modeBean.customIconColor];
     [builder setRoutingProfile:modeBean.routingProfile];
     [builder setDerivedProfile:modeBean.derivedProfile];
     [builder setRouteService:modeBean.routeService];
@@ -228,31 +234,37 @@ static int PROFILE_TRUCK = 1000;
 
 + (NSArray<OAApplicationMode *> *) values
 {
-    NSString *available = OAAppSettings.sharedManager.availableApplicationModes.get;
-    if (_cachedFilteredValues.count == 0 || ![_cachedAvailableApplicationModes isEqualToString:available])
-    {
-        if (!_listener)
-        {
-            _listener = [[OAAutoObserverProxy alloc] initWith:self
-                                                  withHandler:@selector(onAvailableAppModesChanged)
-                                                   andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
-        }
-        _cachedFilteredValues = [NSMutableArray array];
-        _cachedAvailableApplicationModes = available;
-        for (OAApplicationMode *v in _values)
-        {
-            if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
-                [_cachedFilteredValues addObject:v];
-        }
+    @synchronized (_cachedFilteredValuesLock) {
+        NSString *available = OAAppSettings.sharedManager.availableApplicationModes.get;
+        if (_cachedFilteredValues.count > 0 && [_cachedAvailableApplicationModes isEqualToString:available])
+            return [_cachedFilteredValues copy];
     }
-    return [NSArray arrayWithArray:_cachedFilteredValues];
+    
+    if (!_listener)
+        _listener = [[OAAutoObserverProxy alloc] initWith:self
+                                              withHandler:@selector(onAvailableAppModesChanged)
+                                               andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
+
+    NSMutableArray<OAApplicationMode *> *newFilteredValues = [NSMutableArray array];
+    NSString *available = OAAppSettings.sharedManager.availableApplicationModes.get;
+    for (OAApplicationMode *v in [_values copy])
+        if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
+            [newFilteredValues addObject:v];
+
+    @synchronized (_cachedFilteredValuesLock) {
+        _cachedFilteredValues = newFilteredValues;
+        _cachedAvailableApplicationModes = available;
+    }
+
+    return [newFilteredValues copy];
 }
+
 
 + (void) onAvailableAppModesChanged
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    @synchronized (_cachedFilteredValuesLock) {
         _cachedFilteredValues = [NSMutableArray array];
-    });
+    }
 }
 
 + (OAApplicationMode *) getFirstAvailableNavigationMode
@@ -286,15 +298,27 @@ static int PROFILE_TRUCK = 1000;
         @"stringKey" : self.stringKey,
         @"userProfileName" : self.getUserProfileName,
         @"iconColor" : self.getIconColorName,
+        @"customIconColor" : @([self getColorToExport]),
         @"iconName" : self.getIconName,
         @"parent" : self.parent ? self.parent.stringKey : @"",
         @"routeService" : self.getRouterServiceName,
         @"derivedProfile" : self.getDerivedProfile,
         @"routingProfile" : self.getRoutingProfile,
-        @"locIcon" : self.getLocationIconName,
-        @"navIcon" : self.getNavigationIconName,
+        @"locIcon" : [self.getLocationIcon name],
+        @"navIcon" : [self.getNavigationIcon name],
         @"order" : @(self.getOrder)
     };
+}
+
+- (int) getColorToExport
+{
+    int customColor = [self getCustomIconColor];
+    if (customColor == -1)
+    {
+        UIColor *color = UIColorFromRGB([self getIconColor]);
+        return [color toARGBNumber];
+    }
+    return customColor;
 }
 
 - (BOOL) hasFastSpeed
@@ -352,7 +376,9 @@ static int PROFILE_TRUCK = 1000;
 - (void) setParent:(OAApplicationMode *)parent
 {
     _parent = parent;
-    [OAAppSettings.sharedManager.parentAppMode set:parent.stringKey mode:self];
+    if (_parent != nil && ![[OAAppSettings.sharedManager.parentAppMode get:self] isEqualToString:parent.stringKey]) {
+        [OAAppSettings.sharedManager.parentAppMode set:parent.stringKey mode:self];
+    }
 }
 
 - (UIImage *) getIcon
@@ -473,54 +499,48 @@ static int PROFILE_TRUCK = 1000;
     [OAAppSettings.sharedManager.routerService set:(int) routerService mode:self];
 }
 
-- (NSString *) getNavigationIconName
+- (OALocationIcon *) getNavigationIcon
 {
-    switch (self.getNavigationIcon)
-    {
-        case NAVIGATION_ICON_DEFAULT:
-            return @"DEFAULT";
-        case NAVIGATION_ICON_NAUTICAL:
-            return @"NAUTICAL";
-        case NAVIGATION_ICON_CAR:
-            return @"CAR";
-        default:
-            return @"DEFAULT";
-    }
+    NSString *savedName = [OAAppSettings.sharedManager.navigationIcon get:self];
+    OALocationIcon *icon = [OALocationIcon locationIconWithName:savedName];
+    return icon ? icon : [OALocationIcon MOVEMENT_DEFAULT];
 }
 
-- (EOANavigationIcon) getNavigationIcon
+- (void) setNavigationIconName:(NSString *) navIcon
 {
-    return [OAAppSettings.sharedManager.navigationIcon get:self];
+    [OAAppSettings.sharedManager.navigationIcon set:navIcon mode:self];
 }
 
-- (void) setNavigationIcon:(EOANavigationIcon) navIcon
+- (OALocationIcon *) getLocationIcon
 {
-    [OAAppSettings.sharedManager.navigationIcon set:(int)navIcon mode:self];
+    NSString *savedName = [OAAppSettings.sharedManager.locationIcon get:self];
+    OALocationIcon *icon = [OALocationIcon locationIconWithName:savedName];
+    return icon ? icon : [OALocationIcon DEFAULT];
 }
 
-- (NSString *) getLocationIconName
+- (void) setLocationIconName:(NSString *) locIcon
 {
-    switch (self.getLocationIcon)
-    {
-        case LOCATION_ICON_DEFAULT:
-            return @"DEFAULT";
-        case LOCATION_ICON_CAR:
-            return @"CAR";
-        case LOCATION_ICON_BICYCLE:
-            return @"BICYCLE";
-        default:
-            return @"DEFAULT";
-    }
+    [OAAppSettings.sharedManager.locationIcon set:locIcon mode:self];
 }
 
-- (EOALocationIcon) getLocationIcon
+- (NSInteger) getViewAngleVisibility
 {
-    return [OAAppSettings.sharedManager.locationIcon get:self];
+    return [OAAppSettings.sharedManager.viewAngleVisibility get:self];
 }
 
-- (void) setLocationIcon:(EOALocationIcon) locIcon
+- (void) setViewAngleVisibility:(NSInteger) viewAngle
 {
-    [OAAppSettings.sharedManager.locationIcon set:(int)locIcon mode:self];
+    [OAAppSettings.sharedManager.viewAngleVisibility set:viewAngle mode:self];
+}
+
+- (NSInteger) getLocationRadiusVisibility
+{
+    return [OAAppSettings.sharedManager.locationRadiusVisibility get:self];
+}
+
+- (void) setLocationRadiusVisibility:(NSInteger) locationRadius
+{
+    [OAAppSettings.sharedManager.locationRadiusVisibility set:locationRadius mode:self];
 }
 
 - (NSString *) getIconColorName
@@ -554,6 +574,24 @@ static int PROFILE_TRUCK = 1000;
 - (void) setIconColor:(int)iconColor
 {
     [OAAppSettings.sharedManager.profileIconColor set:iconColor mode:self];
+}
+
+- (int) getCustomIconColor
+{
+    return [OAAppSettings.sharedManager.profileCustomIconColor get:self];
+}
+
+- (void) setCustomIconColor:(int)iconColor
+{
+    [OAAppSettings.sharedManager.profileCustomIconColor set:iconColor mode:self];
+}
+
+- (UIColor *) getProfileColor
+{
+    int customProfileColor = [self getCustomIconColor];
+    if (customProfileColor != -1)
+        return UIColorFromARGB(customProfileColor);
+    return UIColorFromRGB([self getIconColor]);
 }
 
 - (int) getOrder
@@ -593,7 +631,7 @@ static int PROFILE_TRUCK = 1000;
 + (void) initModesParents
 {
     // We can't set parent profiles directly in initialize() method. Because it creates infinity loop on app initialisation:
-    // OAAppSetttings.init() -> OAApplicationMode.init() -> OAAppSetttings.init() -> OAApplicationMode...
+    // OAAppSettings.init() -> OAApplicationMode.init() -> OAAppSettings.init() -> OAApplicationMode...
     [_TRUCK setParent:_CAR];
     [_MOTORCYCLE setParent:_CAR];
     [_MOPED setParent:_BICYCLE];
@@ -602,19 +640,26 @@ static int PROFILE_TRUCK = 1000;
 + (void) initModesParams
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    if ([settings.appModeOrder isSetForMode:_PUBLIC_TRANSPORT] && ![settings.appModeOrder isSetForMode:_TRAIN])
+    
+    if ([self hasValueForMode:_PUBLIC_TRANSPORT setting:settings.appModeOrder] && ![self hasValueForMode:_TRAIN setting:settings.appModeOrder])
         [_TRAIN setOrder:_PUBLIC_TRANSPORT.getOrder + 1];
-    if ([settings.appModeOrder isSetForMode:_PEDESTRIAN])
+    if ([self hasValueForMode:_PEDESTRIAN setting:settings.appModeOrder])
     {
-        if (![settings.appModeOrder isSetForMode:_TRUCK])
+        if (![self hasValueForMode:_TRUCK setting:settings.appModeOrder])
             [_TRUCK setOrder:_PEDESTRIAN.getOrder + 1];
-        if (![settings.appModeOrder isSetForMode:_MOTORCYCLE])
+        if (![self hasValueForMode:_MOTORCYCLE setting:settings.appModeOrder])
             [_MOTORCYCLE setOrder:_PEDESTRIAN.getOrder + 1];
-        if (![settings.appModeOrder isSetForMode:_MOPED])
+        if (![self hasValueForMode:_MOPED setting:settings.appModeOrder])
             [_MOPED setOrder:_MOTORCYCLE.getOrder + 1];
     }
-    if ([settings.appModeOrder isSetForMode:_SKI] && ![settings.appModeOrder isSetForMode:_HORSE])
+    if ([self hasValueForMode:_SKI setting:settings.appModeOrder] && ![self hasValueForMode:_HORSE setting:settings.appModeOrder])
         [_HORSE setOrder:_SKI.getOrder + 1];
+}
+
++ (BOOL)hasValueForMode:(OAApplicationMode *)mode
+               setting:(OACommonPreference *)setting
+{
+    return [setting getPrefValue:mode] != nil;
 }
 
 + (void) initCustomModes
@@ -643,10 +688,11 @@ static int PROFILE_TRUCK = 1000;
     [_defaultValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
         return [self compareModes:obj1 obj2:obj2];
     }];
-    [_cachedFilteredValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
-        return [self compareModes:obj1 obj2:obj2];
-    }];
-
+    @synchronized (_cachedFilteredValuesLock) {
+        [_cachedFilteredValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
+            return [self compareModes:obj1 obj2:obj2];
+        }];
+    }
     [self updateAppModesOrder];
 }
 
@@ -698,8 +744,11 @@ static int PROFILE_TRUCK = 1000;
         [mode setDerivedProfile:builder.derivedProfile];
         [mode setRouterService:builder.routeService];
         [mode setIconColor:(int)builder.iconColor];
-        [mode setLocationIcon:builder.locationIcon];
-        [mode setNavigationIcon:builder.navigationIcon];
+        [mode setCustomIconColor:(int)builder.customIconColor];
+        [mode setLocationIconName:builder.locationIcon];
+        [mode setNavigationIconName:builder.navigationIcon];
+        [mode setViewAngleVisibility:builder.viewAngleVisibility];
+        [mode setLocationRadiusVisibility:builder.locationRadiusVisibility];
         [mode setOrder:(int)builder.order];
     }
     else if (![_values containsObject:mode])
@@ -729,7 +778,9 @@ static int PROFILE_TRUCK = 1000;
     OAAppSettings *settings = OAAppSettings.sharedManager;
     if ([modes containsObject:settings.applicationMode.get])
         [settings setApplicationModePref:_DEFAULT];
-    [_cachedFilteredValues removeObjectsInArray:modes];
+    @synchronized (_cachedFilteredValuesLock) {
+        [_cachedFilteredValues removeObjectsInArray:modes];
+    }
     [self saveCustomAppModesToSettings];
     
     for (OAApplicationMode *mode in modes) {
@@ -780,7 +831,7 @@ static int PROFILE_TRUCK = 1000;
 
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def
 {
-    for (OAApplicationMode *p in _values)
+    for (OAApplicationMode *p in [_values copy])
     {
         if ([p.stringKey isEqualToString:key])
             return p;
@@ -899,9 +950,10 @@ static int PROFILE_TRUCK = 1000;
     OAApplicationModeBean *res = [[OAApplicationModeBean alloc] init];
     res.userProfileName = jsonData[@"userProfileName"];
     res.iconColor = [self parseColor:jsonData[@"iconColor"]];
+    res.customIconColor = [self parseCustomColor:jsonData[@"customIconColor"]];
     res.iconName = [self parseProfileIcon:jsonData[@"iconName"]];
-    res.locIcon = [self parseLocationIcon:jsonData[@"locIcon"]];
-    res.navIcon = [self parseNavIcon:jsonData[@"navIcon"]];
+    res.locIcon = [[OALocationIcon locationIconWithName:jsonData[@"locIcon"]] name];
+    res.navIcon = [[OALocationIcon locationIconWithName:jsonData[@"navIcon"]] name];
     res.order = [jsonData[@"order"] intValue];
     NSInteger routerService = [self.class parseRouterService:jsonData[@"routeService"]];
     res.routeService = routerService;
@@ -914,31 +966,7 @@ static int PROFILE_TRUCK = 1000;
 
 + (NSString *)parseProfileIcon:(NSString *)iconName
 {
-    if ([iconName isEqualToString:@"ic_action_truck_dark"])
-        return @"ic_action_truck";
     return iconName;
-}
-
-+ (EOANavigationIcon) parseNavIcon:(NSString *)locIcon
-{
-    if ([locIcon isEqualToString:@"DEFAULT"])
-        return NAVIGATION_ICON_DEFAULT;
-    else if ([locIcon isEqualToString:@"NAUTICAL"])
-        return NAVIGATION_ICON_NAUTICAL;
-    else if ([locIcon isEqualToString:@"CAR"])
-        return NAVIGATION_ICON_CAR;
-    return NAVIGATION_ICON_DEFAULT;
-}
-
-+ (EOALocationIcon) parseLocationIcon:(NSString *)locIcon
-{
-    if ([locIcon isEqualToString:@"DEFAULT"])
-        return LOCATION_ICON_DEFAULT;
-    else if ([locIcon isEqualToString:@"CAR"])
-        return LOCATION_ICON_CAR;
-    else if ([locIcon isEqualToString:@"BICYCLE"])
-        return LOCATION_ICON_BICYCLE;
-    return LOCATION_ICON_DEFAULT;
 }
 
 + (NSInteger) parseRouterService:(NSString *)routerService
@@ -972,6 +1000,25 @@ static int PROFILE_TRUCK = 1000;
     return profile_icon_color_blue_light_default;
 }
 
++ (int) parseCustomColor:(id)value
+{
+    if (value)
+    {
+        if ([value isKindOfClass:NSString.class])
+            return [[UIColor colorFromString:((NSString *)value)] toARGBNumber];
+        else if ([value isKindOfClass:NSNumber.class])
+            return ((NSNumber *) value).intValue;
+    }
+    return -1;
+}
+
+- (UIColor *) getProfileColor
+{
+    if (_customIconColor != -1)
+        return UIColorFromARGB(_customIconColor);
+    return UIColorFromRGB(_iconColor);
+}
+
 @end
 
 @implementation OAApplicationModeBuilder
@@ -987,8 +1034,11 @@ static int PROFILE_TRUCK = 1000;
     [_am setRoutingProfile:_routingProfile];
     [_am setRouterService:_routeService];
     [_am setIconColor:(int)_iconColor];
-    [_am setLocationIcon:_locationIcon];
-    [_am setNavigationIcon:_navigationIcon];
+    [_am setCustomIconColor:(int)_customIconColor];
+    [_am setLocationIconName:_locationIcon];
+    [_am setNavigationIconName:_navigationIcon];
+    [_am setViewAngleVisibility:_viewAngleVisibility];
+    [_am setLocationRadiusVisibility:_locationRadiusVisibility];
     [_am setOrder:_order ? (int)_order : (int)OAApplicationMode.values.count];
     
     return _am;

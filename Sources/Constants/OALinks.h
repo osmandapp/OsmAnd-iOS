@@ -18,8 +18,8 @@
 #define kOsmAndGoPathPrefix @"/go"
 #define kOsmAndMapPathPrefix @"/map"
 
-//#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-3-released"
-#define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios"
+//#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-9-released"
+#define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios/"
 #define kBlogGuideline  @"https://osmand.net/blog/guideline-pt"
 
 #define kSupportEmail @"support@osmand.net"
@@ -46,8 +46,9 @@ static NSString * const kOsmRelation = @"https://openstreetmap.org/relation/";
 static NSString * const k_docs_plugin_trip_recording = @"https://osmand.net/docs/user/plugins/trip-recording";
 static NSString * const k_docs_plugin_nautical = @"https://osmand.net/docs/user/plugins/nautical-charts";
 static NSString * const k_docs_plugin_osm = @"https://osmand.net/docs/user/plugins/osm-editing";
-static NSString * const k_docs_plugin_srtm = @"https://osmand.net/docs/user/plugins/contour-lines";
+static NSString * const k_docs_plugin_srtm = @"https://osmand.net/docs/user/plugins/topography";
 static NSString * const k_weather_global_forecast_system = @"https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast";
+static NSString * const kFastSpringManage = @"https://osmand.onfastspring.com/account";
 
 #define kDocsAddOnlineMaps  @"https://docs.osmand.net/docs/user/map/raster-maps#add-new-online-raster-map-source"
 #define kDocsWidgets  @"https://docs.osmand.net/docs/user/widgets/"
@@ -102,7 +103,7 @@ static NSString * const k_weather_global_forecast_system = @"https://www.ncei.no
 
 #define kOsmAndPoll  @"https://osmand.net/ios-poll.html"
 #define kOsmAndFeatures  @"https://osmand.net/docs/user/plugins"
-#define kOsmAndFeaturesContourLinesPlugin  @"https://osmand.net/docs/user/plugins/contour-lines"
+#define kOsmAndFeaturesContourLinesPlugin  @"https://osmand.net/docs/user/plugins/topography"
 #define kOsmAndTermsOfUse  @"https://osmand.net/docs/legal/terms-of-use"
 #define kOsmAndPrivacyPolicy  @"https://osmand.net/docs/legal/privacy-policy"
 #define kOsmAndGiveaway  @"https://osmand.net/giveaway"
@@ -134,6 +135,10 @@ static NSString * const k_weather_global_forecast_system = @"https://www.ncei.no
 #define docs_widget_mapillary @"https://docs.osmand.net/docs/user/widgets/info-widgets/#-mapillary-widget"
 #define docs_widget_parking @"https://docs.osmand.net/docs/user/widgets/info-widgets/#-parking-widget"
 #define docs_widget_distance_by_tap @"https://docs.osmand.net/docs/user/widgets/radius-ruler#distance-by-tap-tool"
-#define docs_external_sensors @"https://docs.osmand.net/docs/user/plugins/external-sensors"
+
+static NSString * const docsExternalSensorsURL = @"https://docs.osmand.net/docs/user/plugins/external-sensors";
+static NSString * const docsVehicleMetricsURL = @"https://docs.osmand.net/docs/user/plugins/vehicle-metrics";
+
+
 
 #endif /* OALinks_h */

@@ -10,7 +10,7 @@
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
 #import "OARootViewController.h"
-#import "OAGPXDocument.h"
+#import "OAMapPanelViewController.h"
 #import "OAKml2Gpx.h"
 #import "OAIndexConstants.h"
 #import "Localization.h"
@@ -29,6 +29,7 @@
 
 #define kImportFolderName @"import"
 
+NSNotificationName const OAGPXImportUIHelperDidFinishImportNotification = @"OAGPXImportUIHelperDidFinishImporNotification";
 
 @interface OAGPXImportUIHelper () <UIDocumentPickerDelegate>
 @end
@@ -41,8 +42,7 @@
     
     NSURL *_importUrl;
     NSString *_importGpxPath;
-    NSString *_importGpxRelativePath;
-    OAGPXDocument *_doc;
+    OASGpxFile *_doc;
     NSString *_newGpxName;
 }
 
@@ -56,7 +56,6 @@ static UIViewController *parentController;
         _hostVC = hostVC;
         _app = [OsmAndApp instance];
         _importGpxPath = [_app.gpxPath stringByAppendingPathComponent:kImportFolderName];
-        _importGpxRelativePath = kImportFolderName;
     }
     return self;
 }
@@ -68,19 +67,7 @@ static UIViewController *parentController;
 
 - (void) onImportClickedWithDestinationFolderPath:(NSString *)destPath
 {
-    if (destPath)
-    {
-        NSString *trimmedDestPath = [self trim:destPath];
-        _importGpxPath = [_app.gpxPath stringByAppendingPathComponent:trimmedDestPath];
-        _importGpxRelativePath = trimmedDestPath;
-    }
-    else
-    {
-        _importGpxPath = [_app.gpxPath stringByAppendingPathComponent:kImportFolderName];
-        _importGpxRelativePath = kImportFolderName;
-    }
-    
-    
+    _importGpxPath = [_app.gpxPath stringByAppendingPathComponent:destPath ? [self trim:destPath] : kImportFolderName];
     NSArray<UTType *> *contentTypes = @[[UTType importedTypeWithIdentifier:@"com.topografix.gpx" conformingToType:UTTypeXML],
                                         [UTType importedTypeWithIdentifier:@"com.google.earth.kmz" conformingToType:UTTypeXML],
                                         [UTType importedTypeWithIdentifier:@"com.google.earth.kml" conformingToType:UTTypeXML]];
@@ -139,6 +126,7 @@ static UIViewController *parentController;
         UIView *topView = [UIApplication sharedApplication].mainWindow;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = .5f;
+        _progressHUD.removeFromSuperViewOnHide = YES;
         [topView addSubview:_progressHUD];
         
         [_progressHUD show:!wasVisible];
@@ -169,7 +157,8 @@ static UIViewController *parentController;
                 NSFileManager *fileMan = [NSFileManager defaultManager];
                 NSString *ext = [_importUrl.path pathExtension];
                 NSString *newName;
-                for (int i = 2; i < 100000; i++) {
+                for (int i = 2; i < 100000; i++)
+                {
                     newName = [[NSString stringWithFormat:@"%@_%d", [[_importUrl.path lastPathComponent] stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
                     if (![fileMan fileExistsAtPath:[_importGpxPath stringByAppendingPathComponent:newName]])
                         break;
@@ -177,12 +166,9 @@ static UIViewController *parentController;
                 
                 _newGpxName = [newName copy];
 
-                OAGPX *gpx = [self doImport:YES];
-                if (openGpxView)
-                {
-                    [self doPush];
-                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
-                }
+                OASGpxDataItem *gpx = [self doImport];
+                if (gpx && openGpxView)
+                    [self applyTrackItemWith:gpx];
             });
         };
         
@@ -191,12 +177,9 @@ static UIViewController *parentController;
                 _newGpxName = nil;
                 [self removeFromDB];
 
-                OAGPX *gpx = [self doImport:YES];
-                if (openGpxView)
-                {
-                    [self doPush];
-                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
-                }
+                OASGpxDataItem *gpx = [self doImport];
+                if (openGpxView && gpx)
+                    [self applyTrackItemWith:gpx];
             });
         };
         
@@ -284,23 +267,26 @@ static UIViewController *parentController;
 - (void) processUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
 {
     _importUrl = [url copy];
-    OAGPX *item;
+    OASGpxDataItem *item;
     
     if ([_importUrl.pathExtension isEqualToString:KML_EXT])
         [self handleKmlImport:[NSData dataWithContentsOfURL:_importUrl]];
     else if ([_importUrl.pathExtension isEqualToString:KMZ_EXT])
         [self handleKmzImport];
     
-    // improt failed
+    // import failed
     if (!_importUrl)
         return;
     
     // Try to import gpx
-    _doc = [[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
+    __block OASKFile *file = [[OASKFile alloc] initWithFilePath:_importUrl.path];
+    _doc = [OASGpxUtilities.shared loadGpxFileFile:file];
     if (_doc)
     {
+        // _2024-07-30_.gpx
         NSString *fileName = [_importUrl.path lastPathComponent];
-        NSString *importDestFilepath = [_importGpxRelativePath stringByAppendingPathComponent:fileName];
+        // 123/_2024-07-30_.gpx
+        NSString *importDestFilepath = [_importGpxPath stringByAppendingPathComponent:fileName];
         if ([[OAGPXDatabase sharedDb] containsGPXItem:importDestFilepath])
         {
             if (showAlerts)
@@ -314,7 +300,7 @@ static UIViewController *parentController;
         }
         else
         {
-            item = [self doImport:YES];
+            item = [self doImport];
         }
     }
     else
@@ -335,19 +321,26 @@ static UIViewController *parentController;
     if (item && openGpxView)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self doPush];
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item];
+            [self applyTrackItemWith:item];
         });
     }
 }
 
+- (void)applyTrackItemWith:(OASGpxDataItem *)dataItem
+{
+    [self doPush];
+    auto trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
+    trackItem.dataItem = dataItem;
+    [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
+}
+
 - (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView completion:(void (^)(BOOL success))completion {
-    if ([url isFileURL]) {
+    if ([url isFileURL])
+    {
         [self prepareProcessUrl:^{
             [self processUrl:url showAlerts:showAlerts openGpxView:openGpxView];
-            if (completion) {
+            if (completion)
                 completion(YES);
-            }
         }];
     }
 }
@@ -362,35 +355,26 @@ static UIViewController *parentController;
     });
 }
 
--(OAGPX *)doImport:(BOOL)doRefresh
+- (OASGpxDataItem *)doImport
 {
-    OAGPX *item;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:_importGpxPath])
         [fileManager createDirectoryAtPath:_importGpxPath withIntermediateDirectories:YES attributes:nil error:nil];
-    if (_newGpxName)
+    NSString *gpxPath = _newGpxName
+        ? [_importGpxPath stringByAppendingPathComponent:_newGpxName]
+        : [_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]];
+    
+    NSError *copyError = nil;
+    BOOL copySuccess = [fileManager copyItemAtPath:_importUrl.path toPath:gpxPath error:&copyError];
+    if (!copySuccess)
     {
-        [fileManager copyItemAtPath:_importUrl.path toPath:[_importGpxPath stringByAppendingPathComponent:_newGpxName] error:nil];
+        NSLog(@"Failed to copy file: %@", copyError.localizedDescription);
+        return nil;
     }
-    else
-    {
-        [fileManager copyItemAtPath:_importUrl.path
-                             toPath:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]]
-                              error:nil];
-    }
-
-    if (_newGpxName)
-    {
-        NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:_newGpxName];
-        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
-    }
-    else
-    {
-        NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
-        NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:name];
-        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
-    }
-    [[OAGPXDatabase sharedDb] save];
+    
+    OASGpxDataItem *item = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:gpxPath];
+    [item updateAppearance];
+    
     if (item.color != 0)
         [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:item.color];
 
@@ -400,9 +384,9 @@ static UIViewController *parentController;
     _importUrl = nil;
     _newGpxName = nil;
 
-    if (doRefresh && _delegate) {
-        [_delegate updateDelegateVCData];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:OAGPXImportUIHelperDidFinishImportNotification object:nil userInfo:nil];
+    });
     return item;
 }
 
@@ -417,9 +401,14 @@ static UIViewController *parentController;
 - (void) removeFromDB
 {
     NSString *gpxFilePath = [_importUrl.path hasPrefix:_app.gpxPath]
-            ? [OAUtilities getGpxShortPath:_importUrl.path]
-            : [_importUrl.path lastPathComponent];
-    [[OAGPXDatabase sharedDb] removeGpxItem:gpxFilePath];
+        ? [OAUtilities getGpxShortPath:_importUrl.path]
+        : [_importUrl.path lastPathComponent];
+
+    OASGpxDataItem *item = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFilePath];
+    if (item)
+        [[OAGPXDatabase sharedDb] removeGpxItem:item withLocalRemove:YES];
+    else
+        NSLog(@"[OAGPXImportUIHelper] -> [ERROR] -> removeFromDB");
 }
 
 #pragma mark - OAGPXImportDelegate
@@ -428,8 +417,6 @@ static UIViewController *parentController;
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hideProgressHUD];
-        if (_delegate)
-            [_delegate updateDelegateVCData];
     });
 }
 
@@ -448,19 +435,7 @@ static UIViewController *parentController;
         || [ext isEqualToString:KMZ_EXT])
     {
         [self processUrl:url showAlerts:YES openGpxView:NO];
-        if (_delegate)
-            [_delegate updateDelegateVCData];
     }
-}
-
-#pragma mark - NewTracksFetched Notification
-
-- (void) onNewTracksFetched
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_delegate)
-            [_delegate updateDelegateVCData];
-    });
 }
 
 @end

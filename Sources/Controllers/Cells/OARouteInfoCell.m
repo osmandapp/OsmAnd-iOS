@@ -8,7 +8,7 @@
 
 #import "OARouteInfoCell.h"
 #import "OsmAnd_Maps-Swift.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 #import "GeneratedAssetSymbols.h"
 
 @implementation OARouteInfoCell
@@ -20,7 +20,7 @@
     [super awakeFromNib];
     // Initialization code
     _showLegend = NO;
-    [_expandImageView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_down.png"]];
+    [_expandImageView setImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowDown]];
     [_expandImageView setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
 }
 
@@ -34,7 +34,7 @@
 {
     _showLegend = !_showLegend;
     
-    [_expandImageView setImage:[UIImage templateImageNamed:(_showLegend ? @"ic_custom_arrow_up.png" : @"ic_custom_arrow_down.png")]];
+    [_expandImageView setImage:[UIImage templateImageNamed:(_showLegend ? @"ic_custom_arrow_up.png" : ACImageNameIcCustomArrowDown)]];
 }
 
 

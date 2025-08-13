@@ -10,7 +10,7 @@
 #import "OAClearPointsCommand.h"
 #import "OAInfoBottomView.h"
 
-@class OAWptPt, OAMeasurementEditingContext;
+@class OASWptPt, OAMeasurementEditingContext;
 
 @protocol OAPointOptionsBottmSheetDelegate <NSObject>
 
@@ -34,6 +34,6 @@
 
 @property (nonatomic, weak) id<OAPointOptionsBottmSheetDelegate> delegate;
 
-- (instancetype) initWithPoint:(OAWptPt *)point index:(NSInteger)pointIndex editingContext:(OAMeasurementEditingContext *)editingContext;
+- (instancetype) initWithPoint:(OASWptPt *)point index:(NSInteger)pointIndex editingContext:(OAMeasurementEditingContext *)editingContext;
 
 @end

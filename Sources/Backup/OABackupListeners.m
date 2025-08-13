@@ -21,7 +21,8 @@
 - (instancetype) init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _deleteFilesListeners = [NSMutableArray array];
         _registerUserListeners = [NSMutableArray array];
         _registerDeviceListeners = [NSMutableArray array];

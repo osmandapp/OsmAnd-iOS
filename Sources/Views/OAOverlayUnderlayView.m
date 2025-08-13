@@ -9,6 +9,7 @@
 #import "OAOverlayUnderlayView.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OAAppSettings.h"
 
 @implementation OAOverlayUnderlayView

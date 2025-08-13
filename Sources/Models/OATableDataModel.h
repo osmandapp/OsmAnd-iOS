@@ -8,26 +8,28 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OATableSectionData, OATableRowData;
 
 @interface OATableDataModel : NSObject
 
-+ (instancetype _Nonnull ) model;
++ (instancetype) model;
 
-@property (nonatomic) NSString * _Nullable tableHeaderText;
-@property (nonatomic) NSString * _Nullable tableFooterText;
+@property (nonatomic, nullable) NSString *tableHeaderText;
+@property (nonatomic, nullable) NSString *tableFooterText;
 @property (nonatomic, readonly) BOOL hasChanged;
 
-- (OATableSectionData * _Nonnull) createNewSection;
-- (void) addSection:(OATableSectionData *_Nonnull)sectionData;
-- (void) addSection:(OATableSectionData *_Nonnull)sectionData atIndex:(NSInteger)index;
-- (void) addRowAtIndexPath:(NSIndexPath *_Nonnull)indexPath row:(OATableRowData *_Nonnull)row;
-- (void) removeRowAt:(NSIndexPath *_Nonnull)indexPath;
+- (OATableSectionData *) createNewSection;
+- (void) addSection:(OATableSectionData *)sectionData;
+- (void) addSection:(OATableSectionData *)sectionData atIndex:(NSInteger)index;
+- (void) addRowAtIndexPath:(NSIndexPath *)indexPath row:(OATableRowData *)row;
+- (void) removeRowAt:(NSIndexPath *)indexPath;
 - (void) removeSection:(NSUInteger)section;
-- (void) removeItemsAtIndexPaths:(NSArray<NSIndexPath *> *_Nonnull)indexPaths;
+- (void) removeItemsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths;
 
-- (OATableSectionData *_Nonnull)sectionDataForIndex:(NSUInteger)index;
-- (OATableRowData *_Nonnull) itemForIndexPath:(NSIndexPath *_Nonnull)indexPath;
+- (OATableSectionData *)sectionDataForIndex:(NSUInteger)index;
+- (OATableRowData *) itemForIndexPath:(NSIndexPath *)indexPath;
 
 - (NSUInteger) sectionCount;
 - (NSUInteger) rowCount:(NSUInteger)section;
@@ -36,3 +38,5 @@
 - (void) resetChanges;
 
 @end
+
+NS_ASSUME_NONNULL_END

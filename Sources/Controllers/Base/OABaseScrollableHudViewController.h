@@ -35,6 +35,7 @@ typedef NS_ENUM(NSUInteger, EOAScrollableMenuHudMode)
 @property (nonatomic, readonly) EOADraggableMenuState currentState;
 
 @property (nonatomic, readonly) BOOL supportsFullScreen;
+@property (nonatomic, readonly) BOOL useGestureRecognizer;
 
 - (void) show:(BOOL)animated state:(EOADraggableMenuState)state onComplete:(void (^)(void))onComplete;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;

@@ -9,7 +9,6 @@
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
 #import "OAOsmEditsListViewController.h"
-#import "OABenefitsOsmContributorsViewController.h"
 #import "OAMappersViewController.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
@@ -108,17 +107,36 @@
 
     OATableSectionData *credentialSection = [_data createNewSection];
     credentialSection.headerText = OALocalizedString(@"login_account");
-    NSString *userName = [OAOsmOAuthHelper isOAuthAuthorised] ? [_settings.osmUserDisplayName get] : [_settings.osmUserName get];
-    [credentialSection addRowFromDictionary:@{
-        kCellKeyKey : @"edit_credentials",
-        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-        kCellTitleKey : _isAuthorised ? userName : OALocalizedString(@"login_open_street_map_org"),
-        kCellIconNameKey : @"ic_custom_user_profile",
-        kCellAccessoryType : _isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone),
-        @"titleColor" : _isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorActive],
-        @"titleFont" : [UIFont scaledSystemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]
-    }];
+    
+    if ([OAOsmOAuthHelper isOAuthAllowed])
+    {
+        _isAuthorised = [OAOsmOAuthHelper isAuthorised];
+        [credentialSection addRowFromDictionary:@{
+            kCellKeyKey : @"edit_credentials",
+            kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+            kCellTitleKey : _isAuthorised ? [_settings.osmUserDisplayName get] : OALocalizedString(@"login_open_street_map_org"),
+            kCellIconNameKey : @"ic_custom_user_profile",
+            kCellAccessoryType : _isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone),
+            @"titleColor" : _isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorActive],
+            @"titleFont" : [UIFont scaledSystemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]
+        }];
+    }
+    else
+    {
+        [credentialSection addRowFromDictionary:@{
+            kCellKeyKey : @"edit_credentials",
+            kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"shared_string_update_required"),
+            kCellDescrKey : OALocalizedString(@"osm_login_needs_ios_16_4"),
+            kCellIconNameKey : @"ic_custom_alert",
+            kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorSelected],
+            kCellAccessoryType : @(UITableViewCellAccessoryNone),
+            @"titleColor" : [UIColor colorNamed:ACColorNameTextColorPrimary],
+            @"titleFont" : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightRegular]
+        }];
+    }
     _credentialIndexPath = [NSIndexPath indexPathForRow:[credentialSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+    
 
     OATableSectionData *offlieneEditingSection = [_data createNewSection];
     offlieneEditingSection.footerText = OALocalizedString(@"offline_edition_descr");
@@ -204,7 +222,6 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
         {
@@ -218,6 +235,12 @@
             BOOL hasLeftIcon = item.iconName && item.iconName.length > 0;
             [cell leftIconVisibility:hasLeftIcon];
             cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item.iconName] : nil;
+            
+            UIColor *iconColor = [item objForKey:kCellIconTintColor];
+            if (iconColor)
+                cell.leftIconView.tintColor = iconColor;
+            else
+                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 
             NSString *description = item.descr;
             NSAttributedString *descriptionAttributed = [item objForKey:@"descriptionAttributed"];
@@ -304,15 +327,18 @@
     }
     else if ([item.key isEqualToString:@"edit_credentials"])
     {
-        if (_isAuthorised)
+        if ([OAOsmOAuthHelper isOAuthAllowed])
         {
-            OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
-            accountSettings.accountDelegate = self;
-            [self showModalViewController:accountSettings];
-        }
-        else
-        {
-            [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+            if (_isAuthorised)
+            {
+                OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
+                accountSettings.accountDelegate = self;
+                [self showModalViewController:accountSettings];
+            }
+            else
+            {
+                [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
+            }
         }
     }
     else if ([item.key isEqualToString:@"updates_for_mappers"])
@@ -324,9 +350,7 @@
         }
         else
         {
-            OABenefitsOsmContributorsViewController *benefitsViewController = [[OABenefitsOsmContributorsViewController alloc] init];
-            benefitsViewController.accountDelegate = self;
-            [self showModalViewController:benefitsViewController];
+            [OAOsmOAuthHelper showBenefitsIntroScreenWithHostVC:self];
         }
     }
 }

@@ -7,13 +7,13 @@
 //
 
 #import "SceneDelegate.h"
-
 #import <UIKit/UIKit.h>
 #import <BackgroundTasks/BackgroundTasks.h>
-
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OANavigationController.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
@@ -23,7 +23,6 @@
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
 #import "OAMapViewState.h"
-#import "OACarPlayMapViewController.h"
 #import "OACarPlayPurchaseViewController.h"
 #import "OACarPlayDashboardInterfaceController.h"
 #import "OAIAPHelper.h"
@@ -37,24 +36,22 @@
 #import "OADiscountHelper.h"
 #import "OALinks.h"
 #import "OABackupHelper.h"
+#import "OAApplicationMode.h"
 #import "OAFetchBackgroundDataOperation.h"
 #import "OACloudAccountVerificationViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-
 #import "OAAppDelegate.h"
+#import "OAFirstUsageWizardController.h"
+#import "StartupLogging.h"
 
 #include <QDir>
 #include <QFile>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/IncrementalChangesManager.h>
 #include <OsmAndCore/Logging.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QIODeviceLogSink.h>
 #include <OsmAndCore/FunctorLogSink.h>
-
-#import "OAFirstUsageWizardController.h"
-#import "OsmAnd_Maps-Swift.h"
 
 #define kCheckUpdatesInterval 3600
 
@@ -78,44 +75,64 @@
     }
     return self;
 }
+
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
 {
-    NSLog(@"SceneDelegate willConnectToSession");
+    LogStartup(@"scene willConnectToSession");
+    
     _windowScene = (UIWindowScene *)scene;
-    if (!_windowScene) {
-        NSLog(@"SceneDelegate _windowScene in nil");
+    if (!_windowScene)
+    {
+        LogStartup(@"windowScene is nil — abort");
         return;
     }
     
     _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
+    LogStartup(@"UIWindow created");
     
     OAAppDelegate *appDelegate = [self appDelegate];
     [appDelegate initialize];
-
-    _rootViewController = appDelegate.rootViewController;
-
-    [self configureServices];
+    LogStartup(@"appDelegate initialize called");
     
-    if (connectionOptions.URLContexts.count > 0) {
-        NSURL *url = [connectionOptions.URLContexts allObjects].firstObject.URL;
+    _rootViewController = appDelegate.rootViewController;
+    LogStartup(@"rootViewController assigned");
+    
+    [self configureServices];
+    LogStartup(@"services configured");
+    
+    if (connectionOptions.URLContexts.count > 0)
+    {
+        NSURL *url = [connectionOptions.URLContexts.allObjects.firstObject URL];
         [self openURL:url];
+        NSString *handledMessage = [NSString stringWithFormat:@"Handled URL context: %@", url];
+        LogStartup(handledMessage);
     }
     
-    if (connectionOptions.userActivities.count > 0) {
-        NSUserActivity *userActivity = [connectionOptions.userActivities allObjects].firstObject;
-        if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+    if (connectionOptions.userActivities.count > 0)
+    {
+        NSUserActivity *userActivity = connectionOptions.userActivities.allObjects.firstObject;
+        if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb])
+        {
             NSURL *webpageURL = userActivity.webpageURL;
-            if ([[UIApplication sharedApplication] canOpenURL:webpageURL]) {
+            if ([[UIApplication sharedApplication] canOpenURL:webpageURL])
+            {
                 [self openURL:webpageURL];
+                NSString *handlingMessage = [NSString stringWithFormat:@"Handling Universal Link: %@", webpageURL];
+                LogStartup(handlingMessage);
             }
         }
     }
+    
     [self configureSceneState:appDelegate.appLaunchEvent];
+    LogStartup(@"scene state configured");
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(launchUpdateStateNotification:)
-                                                     name:OALaunchUpdateStateNotification object:nil];
+                                             selector:@selector(launchUpdateStateNotification:)
+                                                 name:OALaunchUpdateStateNotification
+                                               object:nil];
+    LogStartup(@"scene setup complete");
 }
+
 
 - (void)sceneDidBecomeActive:(UIScene *)scene
 {
@@ -266,6 +283,7 @@
     NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
     BOOL hasNavigationDestination = NO;
     NSString *startLatLonParam;
+    NSString *intermediatePointsParam;
     NSString *endLatLonParam;
     NSString *appModeKeyParam;
     for (NSURLQueryItem *queryItem in queryItems)
@@ -282,6 +300,10 @@
         else if ([queryItem.name.lowercaseString isEqualToString:@"profile"])
         {
             appModeKeyParam = queryItem.value;
+        }
+        else if ([queryItem.name.lowercaseString isEqualToString:@"via"])
+        {
+            intermediatePointsParam = queryItem.value;
         }
     }
 
@@ -307,8 +329,10 @@
         OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:appModeKeyParam def:nil];
         if (appModeKeyParam && appModeKeyParam.length > 0 && !appMode)
             OALog(@"App mode with specified key not available, using default navigation app mode");
+        
+        NSArray<CLLocation *> *points = [self parseIntermediatePoints:intermediatePointsParam];
 
-        [_rootViewController.mapPanel buildRoute:startLatLon end:endLatLon appMode:appMode];
+        [_rootViewController.mapPanel buildRoute:startLatLon end:endLatLon appMode:appMode points:points];
         return YES;
     }
     return NO;
@@ -438,7 +462,7 @@
     
     if ([vc isKindOfClass:OACloudAccountVerificationViewController.class])
     {
-        if ([OABackupHelper isTokenValid:tokenParam])
+        if ([BackupUtils isTokenValid:tokenParam])
         {
             [OABackupHelper.sharedInstance registerDevice:tokenParam];
         }
@@ -454,6 +478,42 @@
         _rootViewController.token = tokenParam;
     }
     return YES;
+}
+
+- (nullable NSArray<CLLocation *> *)parseIntermediatePoints:(nullable NSString *)parameter
+{
+    if (parameter.length == 0)
+        return nil;
+    
+    NSArray<NSString *> *params = [parameter componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",;"]];
+    
+    NSUInteger count = params.count;
+    if (count < 2 || count % 2 != 0)
+    {
+        NSLog(@"Malformed OsmAnd navigation URL: corrupted intermediate points");
+        return nil;
+    }
+    
+    NSMutableArray<CLLocation *> *points = [NSMutableArray arrayWithCapacity:count / 2];
+    
+    for (NSUInteger i = 0; i < count; i += 2)
+    {
+        double lat = params[i].doubleValue;
+        double lon = params[i + 1].doubleValue;
+        
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(lat, lon);
+        if (!CLLocationCoordinate2DIsValid(coordinate))
+        {
+            NSLog(@"Malformed OsmAnd navigation URL: corrupted intermediate point (%@, %@)",
+                  params[i], params[i + 1]);
+            continue;
+        }
+        
+        [points addObject:[[CLLocation alloc] initWithLatitude:coordinate.latitude
+                                                     longitude:coordinate.longitude]];
+    }
+    
+    return points.count > 0 ? points : nil;
 }
 
 - (void)moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title

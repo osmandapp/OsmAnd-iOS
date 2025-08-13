@@ -7,12 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
-#import "OAApplicationMode.h"
 #import "OACommonTypes.h"
-#import "OAResultMatcher.h"
 
-@class OAWorldRegion;
+@class OAWorldRegion, OAApplicationMode, OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OASGpxTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OAObservable, OACurrentStreetName, OASGpxFile, OASKQuadRect;
 
 @protocol OARouteInformationListener <NSObject>
 
@@ -38,8 +35,6 @@
 - (void) finish;
 
 @end
-
-@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation, OAGPXDocument, OAObservable, OACurrentStreetName;
 
 struct GpxPoint;
 struct GpxRouteApproximation;
@@ -82,11 +77,14 @@ struct RouteSegmentResult;
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;
 - (OARouteCalculationResult *) getRoute;
 - (void) setRoute:(OARouteCalculationResult *)route;
-- (OAGPXTrackAnalysis *) getTrackAnalysis;
+- (OASGpxTrackAnalysis *) getTrackAnalysis;
 - (int) getLeftDistance;
 - (int) getLeftDistanceNextIntermediate;
+- (int)getLeftDistanceNextIntermediateWith:(int)intermediateIndexOffset;
 - (long) getLeftTime;
+- (long) getLeftTimeNextTurn;
 - (long) getLeftTimeNextIntermediate;
+- (long)getLeftTimeNextIntermediateWith:(int)intermediateIndexOffset;
 - (NSArray<OARouteDirectionInfo *> *) getRouteDirections;
 - (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i;
 - (CLLocation *) getLastProjection;
@@ -116,7 +114,7 @@ struct RouteSegmentResult;
 
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end;
 
-- (OAGPXDocument *) generateGPXFileWithRoute:(NSString *)name;
+- (OASGpxFile *) generateGPXFileWithRoute:(NSString *)name;
 
 + (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode;
 
@@ -127,5 +125,6 @@ struct RouteSegmentResult;
 + (double) getPosTolerance:(double)accuracy;
 
 - (double) getMaxAllowedProjectDist:(CLLocation *)location;
+- (BOOL) isTunnelLocationSimulated:(CLLocation *)location;
 
 @end

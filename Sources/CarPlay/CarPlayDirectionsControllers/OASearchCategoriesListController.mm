@@ -15,6 +15,7 @@
 #import "OAPOICategory.h"
 #import "OAQuickSearchTableController.h"
 #import "OACarPlayCategoryResultListController.h"
+#import "OASearchResult.h"
 #import "Localization.h"
 
 #import <CarPlay/CarPlay.h>
@@ -71,7 +72,7 @@
             icon = [OAUtilities getMxIcon:iconName];
         }
         if (!icon)
-            icon = [OAUtilities getMxIcon:@"user_defined"];
+            icon = [OAUtilities getMxIcon:@"mx_special_custom_category"];
         
         listItem = [[CPListItem alloc] initWithText:name detailText:nil image:icon accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
     }

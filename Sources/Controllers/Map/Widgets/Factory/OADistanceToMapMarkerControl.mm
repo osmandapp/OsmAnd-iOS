@@ -11,6 +11,8 @@
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OALocationServices.h"
 #import "OADestination.h"
 #import "OADestinationsHelper.h"
 #import "OAColors.h"

@@ -8,21 +8,25 @@
 
 #import "OAWidgetState.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
-@class OACommonInteger, OAWidgetType;
+@class OACommonInteger, OAWidgetType, OACommonSunPositionMode;
 
 @interface OASunriseSunsetWidgetState : OAWidgetState
 
 @property (nonatomic, strong, nullable) NSString *customId;
 @property (nonatomic, assign) BOOL lastIsDayTime;
 
-- (instancetype _Nonnull)initWithWidgetType:(OAWidgetType *_Nonnull)widgetType
-                                   customId:(NSString *_Nullable)customId;
+- (instancetype)initWithWidgetType:(OAWidgetType *)widgetType
+                          customId:(nullable NSString *)customId
+                      widgetParams:(nullable NSDictionary *)widgetParams;
 
-- (OAWidgetType *_Nonnull)getWidgetType;
-
-- (NSString *_Nonnull)getWidgetIconName;
+- (OAWidgetType *)getWidgetType;
+- (NSString *)getWidgetIconName;
 - (OACommonInteger *)getPreference;
-- (OACommonInteger *_Nonnull)getSunPositionPreference;
+- (OACommonSunPositionMode *)getSunPositionPreference;
+- (NSString *)getPrefId;
 
 @end
+
+NS_ASSUME_NONNULL_END

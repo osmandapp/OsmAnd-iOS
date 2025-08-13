@@ -12,13 +12,14 @@
 #import "OARoadSegmentData.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAMeasurementToolLayer.h"
+#import "OsmAndSharedWrapper.h"
 
 @implementation OAChangeRouteModeCommand
 {
-    NSMutableArray<OAWptPt *> *_oldPoints;
-    NSMutableArray<OAWptPt *> *_newPoints;
-    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
-    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_newRoadSegmentData;
+    NSMutableArray<OASWptPt *> *_oldPoints;
+    NSMutableArray<OASWptPt *> *_newPoints;
+    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
+    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_newRoadSegmentData;
     OAApplicationMode *_oldMode;
     OAApplicationMode *_newMode;
     EOAChangeRouteType _changeRouteType;
@@ -44,7 +45,7 @@
     _oldPoints = [NSMutableArray arrayWithArray:editingCtx.getPoints];
     _oldRoadSegmentData = [NSMutableDictionary dictionaryWithDictionary:editingCtx.roadSegmentData];
     _newPoints = [NSMutableArray arrayWithCapacity:_oldPoints.count];
-    _newRoadSegmentData = [NSMutableDictionary dictionaryWithDictionary:_oldRoadSegmentData];;
+    _newRoadSegmentData = [NSMutableDictionary dictionaryWithDictionary:_oldRoadSegmentData];
     if (_oldPoints.count > 0)
     {
         [_newPoints addObjectsFromArray:_oldPoints];
@@ -59,7 +60,7 @@
             }
             case EOAChangeRouteWhole:
             {
-                for (OAWptPt *pt in _newPoints)
+                for (OASWptPt *pt in _newPoints)
                 {
                     [self updateProfileType:pt];
                 }
@@ -130,13 +131,13 @@
     return CHANGE_ROUTE_MODE;
 }
 
-- (NSArray<OAWptPt *> *) getPairAt:(NSInteger)pointIndex
+- (NSArray<OASWptPt *> *) getPairAt:(NSInteger)pointIndex
 {
-    NSMutableArray<OAWptPt *> *res = [NSMutableArray array];
-    OAWptPt *first = pointIndex >= 0 && pointIndex < _newPoints.count ? _newPoints[pointIndex] : nil;
+    NSMutableArray<OASWptPt *> *res = [NSMutableArray array];
+    OASWptPt *first = pointIndex >= 0 && pointIndex < _newPoints.count ? _newPoints[pointIndex] : nil;
     if (first)
         [res addObject:first];
-    OAWptPt *second = pointIndex >= 0 && pointIndex < _newPoints.count - 1 ? _newPoints[pointIndex + 1] : nil;
+    OASWptPt *second = pointIndex >= 0 && pointIndex < _newPoints.count - 1 ? _newPoints[pointIndex + 1] : nil;
     if (second)
         [res addObject:second];
 
@@ -154,8 +155,11 @@
     }
     else
     {
-        OAWptPt *lastPoint = _newPoints[_newPoints.count - 1];
-        editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
+        OASWptPt *lastPoint = _newPoints[_newPoints.count - 1];
+        if (lastPoint.isGap)
+            editingCtx.appMode = _newMode;
+        else
+            editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     }
     if (_newRoadSegmentData != nil)
         editingCtx.roadSegmentData = _newRoadSegmentData;
@@ -163,12 +167,12 @@
     [self refreshMap];
 }
 
-- (void) updateProfileType:(OAWptPt *)pt
+- (void) updateProfileType:(OASWptPt *)pt
 {
     if (!pt.isGap)
     {
         if (_newMode != nil && _newMode != OAApplicationMode.DEFAULT)
-            [pt setProfileType:_newMode.stringKey];
+            [pt setProfileTypeProfileType:_newMode.stringKey];
         else
             [pt removeProfileType];
     }

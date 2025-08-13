@@ -15,6 +15,9 @@
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
+#import "OACompoundIconUtils.h"
+#import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapPrimitiviser.h>
@@ -23,8 +26,9 @@
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/SingleSkImage.h>
-
 #include <binaryRead.h>
+
+static const int START_ZOOM = 10;
 
 @interface OAImpassableRoadsLayer () <OAStateChangedListener>
 
@@ -33,7 +37,7 @@
 @implementation OAImpassableRoadsLayer
 {
     OAAvoidSpecificRoads *_avoidRoads;
-    
+    double _textSize;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _markersCollection;
 }
 
@@ -45,7 +49,8 @@
 - (void) initLayer
 {
     [super initLayer];
-    
+    _textSize = [[OAAppSettings sharedManager].textSize get];
+
     _avoidRoads = [OAAvoidSpecificRoads instance];
     [self updatePoints];
     [_avoidRoads addListener:self];
@@ -56,6 +61,15 @@
     [super deinitLayer];
     
     [_avoidRoads removeListener:self];
+}
+
+- (BOOL)updateLayer
+{
+    if (![super updateLayer])
+        return NO;
+        
+    _textSize = [[OAAppSettings sharedManager].textSize get];
+    return YES;
 }
 
 - (void) resetPoints
@@ -74,12 +88,16 @@
         CLLocation *location = [_avoidRoads getLocation:roadInfo.roadId];
         if (location)
         {
+            auto avoidIcon = [OACompoundIconUtils getScaledIcon:@"map_pin_avoid_road" scale:_textSize];
+            if (!avoidIcon)
+                return;
+
             const OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
             std::shared_ptr<OsmAnd::MapMarker> mapMarker = OsmAnd::MapMarkerBuilder()
             .setIsAccuracyCircleSupported(false)
             .setBaseOrder(self.pointsOrder + 1)
             .setIsHidden(false)
-            .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_pin_avoid_road"]))
+            .setPinIcon(OsmAnd::SingleSkImage(avoidIcon))
             .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
             .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
             .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
@@ -140,31 +158,67 @@
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    NSArray<OAAvoidRoadInfo *> *impassableRoads = [[OAAvoidSpecificRoads instance] getImpassableRoads];
+    
+    if ([self.mapViewController getMapZoom] >= START_ZOOM && !excludeUntouchableObjects && !NSArrayIsEmpty(impassableRoads))
     {
-        for (const auto& r : _markersCollection->getMarkers())
+        int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+        CGPoint pixel = result.point;
+        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 2));
+        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 3));
+        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+        if (touchPolygon31 == OsmAnd::AreaI())
+            return;
+        
+        for (OAAvoidRoadInfo *road in impassableRoads)
         {
-            if (markerGroup->getMapMarker() == r.get())
-            {
-                double lat = OsmAnd::Utilities::get31LatitudeY(r->getPosition().y);
-                double lon = OsmAnd::Utilities::get31LongitudeX(r->getPosition().x);
-                OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
-                NSArray<OAAvoidRoadInfo *> *roads = [avoidRoads getImpassableRoads];
-                for (OAAvoidRoadInfo *roadInfo in roads)
-                {
-                    CLLocation *location = [avoidRoads getLocation:roadInfo.roadId];
-                    if (location && [OAUtilities isCoordEqual:location.coordinate.latitude srcLon:location.coordinate.longitude destLat:lat destLon:lon])
-                    {
-                        OATargetPoint *targetPoint = [self getTargetPoint:roadInfo];
-                        if (![found containsObject:targetPoint])
-                            [found addObject:targetPoint];
-                    }
-                }
-            }
+            CLLocation *latLon = [[OAAvoidSpecificRoads instance] getLocation:road.roadId];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:latLon.coordinate.latitude lon:latLon.coordinate.longitude polygon31:touchPolygon31];
+            if (shouldAdd)
+                [result collect:road provider:self];
         }
     }
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OAAvoidRoadInfo.class])
+    {
+        return ((OAAvoidRoadInfo *)obj).location;
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OAAvoidRoadInfo.class])
+    {
+        OAAvoidRoadInfo *route = obj;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_BLOCKED_ROAD name:[route name]];
+    }
+    return nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 #pragma mark - OAMoveObjectProvider

@@ -15,20 +15,20 @@
 #import "OANativeUtilities.h"
 #import "OAFavoritesHelper.h"
 #import "OAUtilities.h"
-#import "OACollapsableView.h"
 #import "OACollapsableWaypointsView.h"
 #import "OAPOI.h"
 #import "OAPOIViewController.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OAPOIHelper.h"
+#import "OAAmenitySearcher.h"
+#import "Localization.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
-#include "Localization.h"
 
 @implementation OAFavoriteViewController
 {
@@ -56,7 +56,9 @@
 
 - (void) acquireOriginObject
 {
-    _originObject = [OAPOIHelper findPOIByOriginName:_favorite.getAmenityOriginName lat:_favorite.getLatitude lon:_favorite.getLongitude];
+    NSString *originName = _favorite.getAmenityOriginName;
+    if (originName && originName.length > 0)
+        _originObject = [OAAmenitySearcher findPOIByOriginName:_favorite.getAmenityOriginName lat:_favorite.getLatitude lon:_favorite.getLongitude];
     if (!_originObject)
         _originObject = [_favorite getAmenity];
 }

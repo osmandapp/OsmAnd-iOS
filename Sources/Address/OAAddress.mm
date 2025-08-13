@@ -8,9 +8,9 @@
 
 #import "OAAddress.h"
 #import "Localization.h"
+
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
-
 
 @implementation OAAddress
 

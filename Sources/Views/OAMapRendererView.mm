@@ -9,6 +9,8 @@
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
 #import "OANativeUtilities.h"
+#import "OAObservable.h"
+#import "OALog.h"
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -25,8 +27,6 @@
 #include <OsmAndCore/Map/IAtlasMapRenderer.h>
 #include <OsmAndCore/Map/AtlasMapRendererConfiguration.h>
 #include <OsmAndCore/Map/AtlasMapRenderer_Metrics.h>
-
-#import "OALog.h"
 
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]
@@ -48,6 +48,7 @@
     GLuint _colorRenderBuffer;
     GLuint _framebuffer;
     CADisplayLink* _displayLink;
+    BOOL _limitFrameRate;
 
     OsmAnd::PointI _viewSize;
     CGFloat _topOffset;
@@ -61,6 +62,7 @@
     CGRect prevBounds;
     int _frameId;
     NSTimeInterval _lastUpdateTime;
+    CGPoint _lastImmediateTouchPoint;
 }
 
 + (Class) layerClass
@@ -103,6 +105,7 @@
     _colorRenderBuffer = 0;
     _framebuffer = 0;
     _displayLink = nil;
+    _lastImmediateTouchPoint = CGPointZero;
 
     _viewportXScale = kViewportScale;
     _viewportYScale = kViewportScale;
@@ -136,6 +139,9 @@
         {
             [targetChangedObservalbe notifyEvent];
         });
+
+    _renderer->setMinZoomLevel(OsmAnd::ZoomLevel1);
+    _renderer->setMaxZoomLevel(OsmAnd::ZoomLevel22);
 
     // Create animator for that map
     _mapAnimator.reset(new OsmAnd::MapAnimator());
@@ -251,6 +257,11 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->addSymbolsProvider(provider);
 }
 
+- (void)addKeyedSymbolsProvider:(int)subsectionIndex provider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider
+{
+    _renderer->addSymbolsProvider(subsectionIndex, provider);
+}
+
 - (bool)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
 {
     return _renderer->removeSymbolsProvider(provider);
@@ -347,6 +358,16 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setMyLocationRadiusInMeters(radiusInMeters);
 }
 
+- (void)setMyLocationSectorDirection:(float)directionAngle
+{
+    _renderer->setMyDirection(directionAngle);
+}
+
+- (void)setMyLocationSectorRadius:(float)radius
+{
+    _renderer->setMyDirectionRadius(radius);
+}
+
 - (OsmAnd::PointI)target31
 {
     auto fixedPixel = _renderer->getState().fixedPixel;
@@ -420,12 +441,12 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (float)minZoom
 {
-    return OsmAnd::ZoomLevel1;//_renderer->getMinZoomLevel();
+    return _renderer->getMinZoomLevel();
 }
 
 - (float)maxZoom
 {
-    return OsmAnd::ZoomLevel22;//_renderer->getMaxZoomLevel();
+    return _renderer->getMaxZoomLevel();
 }
 
 @synthesize stateObservable = _stateObservable;
@@ -575,6 +596,11 @@ forcedUpdate:(BOOL)forcedUpdate
 - (int) getFrameId
 {
     return _frameId;
+}
+
+- (BOOL)isPositionVisible:(double)lat lon:(double)lon
+{
+    return YES;
 }
 
 - (BOOL)isPositionVisible:(OsmAnd::PointI)pos
@@ -1064,6 +1090,8 @@ forcedUpdate:(BOOL)forcedUpdate
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
                        forMode:NSRunLoopCommonModes];
 
+    [self updateFrameRefreshRate];
+
     // Resume GPU worker
     _renderer->resumeGpuWorker();
 
@@ -1139,6 +1167,11 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setDateTime(dateTime);
 }
 
+- (void) changeTimePeriod
+{
+    _renderer->changeTimePeriod();
+}
+
 - (void)setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration
 {
     _renderer->setSymbolSubsectionConfiguration(subsectionIndex, configuration);
@@ -1152,6 +1185,37 @@ forcedUpdate:(BOOL)forcedUpdate
 - (float)getLocationHeightInMeters:(OsmAnd::PointI)location31
 {
     return _renderer->getLocationHeightInMeters(location31);
+}
+
+- (void)limitFrameRefreshRate
+{
+    _limitFrameRate = YES;
+    [self updateFrameRefreshRate];
+}
+
+- (void)restoreFrameRefreshRate
+{
+    _limitFrameRate = NO;
+    [self updateFrameRefreshRate];
+}
+
+- (void)updateFrameRefreshRate
+{
+    if (_limitFrameRate)
+    	_displayLink.preferredFrameRateRange = CAFrameRateRangeMake(20.0f, 20.0f, 20.0f);
+    else
+        _displayLink.preferredFrameRateRange = CAFrameRateRangeDefault;
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    _lastImmediateTouchPoint = [touch locationInView:self];
+}
+
+- (CGPoint)lastImmediateTouchPoint
+{
+    return _lastImmediateTouchPoint;
 }
 
 @end

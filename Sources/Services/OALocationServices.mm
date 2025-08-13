@@ -7,11 +7,11 @@
 //
 
 #import "OALocationServices.h"
-
 #import <UIKit/UIKit.h>
-
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
+#import "OAObservable.h"
 #import "OAUtilities.h"
 #import "OALog.h"
 #import "Localization.h"
@@ -588,7 +588,7 @@
 
 - (void) startLocationSimulation:(CLLocation *)location
 {
-    const auto& tunnel = [_routingHelper getUpcomingTunnel:1000];
+    const auto& tunnel = [_routingHelper getUpcomingTunnel:250];
     if (!tunnel.empty())
     {
         _simulatePosition = [[OASimulationProvider alloc] init];
@@ -607,10 +607,10 @@
 {
     if (_simulatePosition)
     {
-        CLLocation *loc = [_simulatePosition getSimulatedLocation];
+        OALocation *loc = [_simulatePosition getSimulatedLocationForTunnel];
         if (loc)
         {
-            [self setLocation:loc];
+            [self setLocation:loc simulated:YES];
             [self simulatePosition];
         }
         else
@@ -626,15 +626,19 @@
     {
         if ([_routingHelper isFollowingMode] && [_routingHelper getLeftDistance] > 0 && !_simulatePosition)
         {
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startLocationSimulation:) object:_locationStartSim];
-            _locationStartSim = [location copy];
-            [self performSelector:@selector(startLocationSimulation:) withObject:_locationStartSim afterDelay:START_LOCATION_SIMULATION_DELAY];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startLocationSimulation:) object:_locationStartSim];
+                _locationStartSim = [location copy];
+                [self performSelector:@selector(startLocationSimulation:) withObject:_locationStartSim afterDelay:START_LOCATION_SIMULATION_DELAY];
+            });
         }
     }
 }
 
 - (void) setLocationFromSimulation:(CLLocation *)location
 {
+    _lastHeading = location.course;
+    _lastMagneticHeading = location.course;
     [self setLocation:location];
 }
 
@@ -645,11 +649,19 @@
 
 - (void) setLocation:(CLLocation *)location
 {
+    [self setLocation:location simulated:NO];
+}
+
+- (void) setLocation:(CLLocation *)location simulated:(BOOL)simulated
+{
     if (location)
     {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onLocationLost) object:nil];
+        if (!simulated && _simulatePosition && location.speed <= 0)
+            return;
 
-        _simulatePosition = nil;
+        if (!simulated)
+            _simulatePosition = nil;
+        
         if (_gpsSignalLost)
         {
             _gpsSignalLost = NO;
@@ -663,7 +675,7 @@
     if (location)
     {
         [OASavingTrackHelper.sharedInstance updateLocation:location heading:_lastHeading];
-        [OAAverageSpeedComputer.sharedInstance updateLocation:location];
+        [AverageSpeedComputerService.shared updateLocation:location];
         [[OAAverageGlideComputer shared] updateLocation:location];
         //OsmandPlugin.updateLocationPlugins(location);
     }

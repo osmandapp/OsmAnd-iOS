@@ -14,11 +14,12 @@
 #import "OAColors.h"
 #import "OAFavoritesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPOI.h"
 #import "OAPluginsHelper.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -154,17 +155,17 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     return self;
 }
 
-- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)category altitude:(double)altitude timestamp:(int)timestamp
+- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)category altitude:(double)altitude timestamp:(long)timestamp
 {
     self = [super init];
     if (self) {
-        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:altitude timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp] name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil visible:YES];
-        
+        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:altitude timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp / 1000.0] name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil visible:YES];
+
         if (!name)
             [self setName:name];
         
         if (timestamp > 0)
-            [self setTimestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+            [self setTimestamp:[NSDate dateWithTimeIntervalSince1970:timestamp / 1000.0]];
         else
             [self setTimestamp:[NSDate date]];
         
@@ -379,6 +380,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     _address = nil;
 }
 
+- (NSString *) getInternalIcon
+{
+    if (!self.favorite->getIcon().isNull())
+        return self.favorite->getIcon().toNSString();
+    return nil;
+}
+
 - (NSString *) getIcon
 {
     if (_icon)
@@ -387,7 +395,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (!self.favorite->getIcon().isNull())
         _icon = self.favorite->getIcon().toNSString();
     else
-        _icon = @"special_star";
+        _icon = DEFAULT_ICON_NAME_KEY;
     return _icon;
 }
 
@@ -395,6 +403,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     self.favorite->setIcon(QString::fromNSString(icon));
     _icon = nil;
+}
+
+- (NSString *) getInternalBackgroundIcon
+{
+    if (!self.favorite->getBackground().isNull())
+        return self.favorite->getBackground().toNSString();
+    return nil;
 }
 
 - (NSString *) getBackgroundIcon
@@ -410,7 +425,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
             return _backgroundIcon;
         }
     }
-    _backgroundIcon = @"circle";
+    _backgroundIcon = DEFAULT_ICON_SHAPE_KEY;
     return _backgroundIcon;
 }
 
@@ -418,6 +433,16 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     self.favorite->setBackground(QString::fromNSString(backgroundIcon));
     _backgroundIcon = nil;
+}
+
+- (UIColor *) getInternalColor
+{
+    const auto color = self.favorite->getColor();
+    if (color.argb != 0)
+    {
+        _color = [UIColor colorWithRed:color.r/255.0 green:color.g/255.0 blue:color.b/255.0 alpha:color.a/255.0];
+    }
+    return nil;
 }
 
 - (UIColor *) getColor
@@ -503,7 +528,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         for (const auto& extension : OsmAnd::rangeOf(extensionsToRead))
             extensions[extension.key().toNSString()] = extension.value().toNSString();
 
-        _amenity = [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        _amenity = [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
         return _amenity;
     }
     return nil;
@@ -513,11 +538,19 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     if (amenity)
     {
-        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
         [extensions enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
             self.favorite->setExtension(QString::fromNSString(key), QString::fromNSString(value));
         }];
     }
+    _amenity = nil;
+}
+
+- (void) setExtensions:(NSDictionary<NSString *, NSString *> *)extensions
+{
+    [extensions enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+        self.favorite->setExtension(QString::fromNSString(key), QString::fromNSString(value));
+    }];
     _amenity = nil;
 }
 
@@ -600,10 +633,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (!self.favorite->getTime().isNull())
     {
         NSString *timeString = self.favorite->getTime().toNSString();
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        _timestamp = [dateFormat dateFromString:timeString];
+        _timestamp = [[OAFavoriteItem ISO8601DateFormatter] dateFromString:timeString];
         return _timestamp;
     }
     else
@@ -631,10 +661,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (!self.favorite->getPickupTime().isNull())
     {
         NSString *timeString = self.favorite->getPickupTime().toNSString();
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        _pickupTime = [dateFormat dateFromString:timeString];
+        _pickupTime = [[OAFavoriteItem ISO8601DateFormatter] dateFromString:timeString];
         return _pickupTime;
     }
     else
@@ -663,141 +690,115 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self.favorite->setCalendarEvent(calendarEvent);
 }
 
-- (OAWptPt *) toWpt
+- (OASWptPt *) toWpt
 {
-    OAWptPt *pt = [[OAWptPt alloc] init];
-    pt.position = CLLocationCoordinate2DMake(self.getLatitude, self.getLongitude);
+    OASWptPt *pt = [[OASWptPt alloc] initWithLat:self.getLatitude lon:self.getLongitude];
     if (self.getAltitude > 0)
-        pt.elevation = self.getAltitude;
-    pt.time = self.getTimestamp ? self.getTimestamp.timeIntervalSince1970 : 0;
-    NSMutableArray<OAGpxExtension *> *exts = [pt.extensions mutableCopy];
+        pt.ele = self.getAltitude;
+
+    pt.time = (long)(self.getTimestamp ? self.getTimestamp.timeIntervalSince1970 * 1000.0 : 0.0);
+
+    OASMutableDictionary *exts = pt.getExtensionsToWrite;
     if (!self.isVisible)
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = EXTENSION_HIDDEN;
-        e.value = @"true";
-        [exts addObject:e];
-    }
+        exts[EXTENSION_HIDDEN] = @"true";
+
     if (self.isAddressSpecified)
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = ADDRESS_EXTENSION;
-        e.value = self.getAddress;
-        [exts addObject:e];
-    }
+        exts[ADDRESS_EXTENSION_KEY] = self.getAddress;
+
     if (self.getPickupTime)
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = PICKUP_DATE_EXTENSION;
-        e.value = self.favorite->getPickupTime().toNSString();
-        [exts addObject:e];
-    }
+        exts[PICKUP_DATE_EXTENSION] = self.favorite->getPickupTime().toNSString();
+
     if (self.getIcon)
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = ICON_NAME_EXTENSION;
-        e.value = self.getIcon;
-        [exts addObject:e];
-    }
+        exts[ICON_NAME_EXTENSION_KEY] = self.getIcon;
+
     if (self.getBackgroundIcon)
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = BACKGROUND_TYPE_EXTENSION;
-        e.value = self.getBackgroundIcon;
-        [exts addObject:e];
-    }
+        exts[BACKGROUND_TYPE_EXTENSION_KEY] = self.getBackgroundIcon;
+
     if (self.getColor)
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = @"color";
-        e.value = [self.getColor toHexARGBString].lowercaseString;
-        [exts addObject:e];
-    }
+        exts[COLOR_NAME_EXTENSION_KEY] = [self.getColor toHexARGBString].lowercaseString;
+
     if (self.getCalendarEvent)
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = CALENDAR_EXTENSION;
-        e.value = @"true";
-        [exts addObject:e];
-    }
-    pt.extensions = exts;
+        exts[CALENDAR_EXTENSION] = @"true";
+
     [pt setAmenity:[self getAmenity]];
+
     pt.name = self.getName;
     pt.desc = self.getDescription;
     if (self.getCategory.length > 0)
-        pt.type = self.getCategory;
+        pt.category = self.getCategory;
+
     if (self.getAmenityOriginName.length > 0)
-        [pt setAmenityOriginName:self.getAmenityOriginName];
+        [pt setAmenityOriginNameOriginName:self.getAmenityOriginName];
+
     return pt;
 }
 
-+ (OAFavoriteItem *)fromWpt:(OAWptPt *)pt category:(NSString *)category
++ (OAFavoriteItem *)fromWpt:(OASWptPt *)pt category:(NSString *)category
 {
     NSString *name = pt.name;
-    NSString *categoryName = category != nil ? category : (pt.type != nil ? pt.type : @"");
+    NSString *categoryName = category != nil ? category : (pt.category != nil ? pt.category : @"");
     if (!name)
         name = @"";
     OAFavoriteItem *fp = [[OAFavoriteItem alloc] initWithLat:pt.position.latitude
                                                          lon:pt.position.longitude
                                                         name:name
                                                     category:categoryName
-                                                    altitude:pt.elevation
+                                                    altitude:pt.ele
                                                    timestamp:pt.time];
     [fp setDescription:pt.desc];
     [fp setComment:pt.comment];
     [fp setAmenityOriginName:pt.getAmenityOriginName];
-    [fp setAmenity:[pt getAmenity]];
+    NSDictionary<NSString *, NSString *> *extensions = [pt getExtensionsToRead];
+    if (extensions.count > 0)
+        [fp setExtensions:extensions];
     
     // TODO: sync with Android
 
-//    OAGpxExtension *visitedDateExt = [pt getExtensionByKey:VISITED_TIME_EXTENSION];
+//    NSString *visitedDateExt = [pt getExtensionsToRead][VISITED_TIME_EXTENSION];
 //    if (visitedDateExt)
 //    {
 //        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 //        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
 //        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-//
-//        NSString *time = visitedDateExt.value;
-//        [fp setVisitedTime:[dateFormatter dateFromString:time]];
+//        [fp setVisitedTime:[dateFormatter dateFromString:visitedDateExt]];
 //    }
 
-    OAGpxExtension *creationDateExt = [pt getExtensionByKey:CREATION_TIME_EXTENSION];
+    NSString *creationDateExt = extensions[CREATION_TIME_EXTENSION];
     if (creationDateExt)
     {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-
-        NSString *time = creationDateExt.value;
-        [fp setPickupTime:[dateFormatter dateFromString:time]];
+        [fp setPickupTime:[[OAFavoriteItem ISO8601DateFormatter] dateFromString:creationDateExt]];
     }
 
-    OAGpxExtension *calendarExt = [pt getExtensionByKey:CALENDAR_EXTENSION];
+    NSString *calendarExt = extensions[CALENDAR_EXTENSION];
     if (calendarExt)
-        [fp setCalendarEvent:[calendarExt.value isEqualToString:@"true"]];
+        [fp setCalendarEvent:[calendarExt isEqualToString:@"true"]];
 
-    [fp setColor:UIColorFromARGB([pt getColor:0])];
-
-    OAGpxExtension *hiddenExt = [pt getExtensionByKey:EXTENSION_HIDDEN];
-    [fp setVisible:hiddenExt ? [hiddenExt.value isEqualToString:@"true"] : YES];
+    [fp setColor:UIColorFromARGB([pt getColor])];
+    NSString *hiddenExt = extensions[EXTENSION_HIDDEN];
+    [fp setVisible:hiddenExt ? ![hiddenExt isEqualToString:@"true"] : YES];
 
     [fp setAddress:[pt getAddress]];
-    [fp setIcon:[pt getIcon]];
-    [fp setBackgroundIcon:[pt getBackgroundIcon]];
+    [fp setIcon:[pt getIconName]];
+    [fp setBackgroundIcon:[pt getBackgroundType]];
 
     return fp;
 }
 
-+ (NSString *) toStringDate:(NSDate *)date
++ (NSISO8601DateFormatter *)ISO8601DateFormatter {
+    static NSISO8601DateFormatter *isoFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        isoFormatter = [NSISO8601DateFormatter new];
+        isoFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    });
+    return isoFormatter;
+}
+
++ (NSString *)toStringDate:(NSDate *)date
 {
     if (!date || [date timeIntervalSince1970] <= 0)
         return nil;
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd_HH:mm:ss"];
-    NSString *dateString = [dateFormatter stringFromDate:date];
-    dateString = [dateString stringByReplacingOccurrencesOfString:@"_" withString:@"T"];
-    return  [dateString stringByAppendingString:@"Z"];
+    return [[self ISO8601DateFormatter] stringFromDate:date];
 }
 
 - (UIImage *) getCompositeIcon

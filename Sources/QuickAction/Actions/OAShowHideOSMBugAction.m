@@ -8,26 +8,46 @@
 
 #import "OAShowHideOSMBugAction.h"
 #import "OAAppSettings.h"
-#import "OAQuickActionType.h"
+#import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHideOSMBugAction
+{
+    OAAppSettings *_settings;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideOsmBugActionId
+                                            stringId:@"osmbug.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"osm_notes")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
+              iconName:@"ic_action_osm_note"]
+             category:QuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+}
+
 - (void)execute
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setShowOnlineNotes:![settings.mapSettingShowOnlineNotes get]];
+    [_settings setShowOnlineNotes:![_settings.mapSettingShowOnlineNotes get]];
 }
 
 - (BOOL)isActionWithSlash
 {
-    return [[OAAppSettings sharedManager].mapSettingShowOnlineNotes get];
+    return [_settings.mapSettingShowOnlineNotes get];
 }
 
 - (NSString *)getActionText
@@ -40,11 +60,8 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"hide_notes") : OALocalizedString(@"show_notes");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:24 stringId:@"osmbug.showhide" class:self.class name:OALocalizedString(@"toggle_online_notes") category:CONFIGURE_MAP iconName:@"ic_action_osm_note" secondaryIconName:nil editable:NO];
-       
     return TYPE;
 }
 

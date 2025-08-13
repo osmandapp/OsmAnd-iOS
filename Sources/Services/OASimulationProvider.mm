@@ -20,7 +20,10 @@
     std::pair<int, int> _currentPoint;
     CLLocation *_startLocation;
     vector<std::shared_ptr<RouteSegmentResult>> _roads;
+    float _minOfMaxSpeedInTunnel;
 }
+
+static const float MAX_SPEED_TUNNELS = 27.0f; // 27 m/s, 97.2 kmh, 60.4 mph
 
 - (void) startSimulation:(std::vector<std::shared_ptr<RouteSegmentResult>>)roads currentLocation:(CLLocation *)currentLocation
 {
@@ -33,14 +36,21 @@
         _startLocation = [[CLLocation alloc] initWithCoordinate:_startLocation.coordinate altitude:_startLocation.altitude horizontalAccuracy:_startLocation.horizontalAccuracy verticalAccuracy:_startLocation.verticalAccuracy course:_startLocation.course speed:_startLocation.speed timestamp:d];
     }
     _currentRoad = -1;
+    _minOfMaxSpeedInTunnel = MAX_SPEED_TUNNELS;
     auto px = OsmAnd::Utilities::get31TileNumberX(currentLocation.coordinate.longitude);
     auto py = OsmAnd::Utilities::get31TileNumberY(currentLocation.coordinate.latitude);
     double dist = 1000;
     for (int i = 0; i < roads.size(); i++)
     {
         auto road = roads[i];
-        BOOL plus = road->getStartPointIndex() < road->getEndPointIndex();
-        for (int j = road->getStartPointIndex() + 1; j <= road->getEndPointIndex(); )
+        float tunnelSpeed = road->object->getMaximumSpeed(road->isForwardDirection());
+        if (tunnelSpeed > 0)
+        {
+            _minOfMaxSpeedInTunnel = MIN(_minOfMaxSpeedInTunnel, tunnelSpeed);
+        }
+        int startPointIndex = MIN(road->getStartPointIndex(), road->getEndPointIndex());
+        int endPointIndex = MAX(road->getEndPointIndex(), road->getStartPointIndex());
+        for (int j = startPointIndex + 1; j <= endPointIndex; j++)
         {
             auto obj = road->object;
             auto proj = getProjectionPoint(px, py, obj->pointsX[j-1], obj->pointsY[j-1], obj->pointsX[j], obj->pointsY[j]);
@@ -52,27 +62,49 @@
                 _currentSegment = j;
                 _currentPoint = proj;
             }
-            j += plus ? 1 : -1;
         }
     }
+    NSLog(@"Start simulation road=%d segment=%d time=%ld lat=%.5f lon=%.5f",
+          _currentRoad, _currentSegment, (long)([_startLocation.timestamp timeIntervalSince1970]),
+          _startLocation.coordinate.latitude, _startLocation.coordinate.longitude);
 }
 
-- (float) proceedMeters:(float)meters l:(CLLocation **)l
+- (double) proceedMetersFromStartLocation:(float)meters l:(CLLocation **)l
 {
+    // Location tried to be precise, but can be overshot for last segment
+    // return how many meters overshot for the last point
+    if (_currentRoad == -1)
+    {
+        return -1;
+    }
     for (int i = _currentRoad; i < _roads.size(); i++)
     {
         auto road = _roads[i];
         BOOL firstRoad = i == _currentRoad;
         BOOL plus = road->getStartPointIndex() < road->getEndPointIndex();
-        for (int j = firstRoad ? _currentSegment : road->getStartPointIndex() + 1; j <= road->getEndPointIndex(); )
+        int increment = plus ? +1 : -1;
+        int start = road->getStartPointIndex();
+        if (firstRoad)
+        {
+                // first segment is [currentSegment - 1, currentSegment]
+                if (plus)
+                {
+                        start = _currentSegment - increment;
+                }
+                else
+                {
+                        start = _currentSegment;
+                }
+        }
+        for (int j = start; j != road->getEndPointIndex(); j += increment)
         {
             auto obj = road->object;
-            int st31x = obj->pointsX[j - 1];
-            int st31y = obj->pointsY[j - 1];
-            int end31x = obj->pointsX[j];
-            int end31y = obj->pointsY[j];
-            BOOL last = i == _roads.size() - 1 && j == road->getEndPointIndex();
-            BOOL first = firstRoad && j == _currentSegment;
+            int st31x = obj->getPoint31XTile(j);
+            int st31y = obj->getPoint31YTile(j);
+            int end31x = obj->getPoint31XTile(j + increment);
+            int end31y = obj->getPoint31YTile(j + increment);
+            BOOL last = i == _roads.size() - 1 && j == road->getEndPointIndex() - increment;
+            BOOL first = firstRoad && j == start;
             if (first)
             {
                 st31x = _currentPoint.first;
@@ -83,15 +115,23 @@
             {
                 meters -= dd;
             }
-            else
+            else if (dd > 0)
             {
                 int prx = (int) (st31x + (end31x - st31x) * (meters / dd));
                 int pry = (int) (st31y + (end31y - st31y) * (meters / dd));
-                
+                if (prx == 0 || pry == 0)
+                {
+                    NSLog(@"proceedMeters zero x or y (%d,%d) (%s)", prx, pry, road->toString().c_str());
+                    return -1;
+                }
                 *l = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(OsmAnd::Utilities::get31LatitudeY(pry), OsmAnd::Utilities::get31LongitudeX(prx)) altitude:(*l).altitude horizontalAccuracy:0 verticalAccuracy:(*l).verticalAccuracy course:(*l).course speed:(*l).speed timestamp:(*l).timestamp];
-                return (float) MAX(meters - dd, 0);
+                return MAX(meters - dd, 0);
             }
-            j += plus ? 1 : -1;
+            else
+            {
+                NSLog(@"proceedMeters break at the end of the road (sx=%d, sy=%d) (%s)", st31x, st31y, road->toString().c_str());
+                break;
+            }
         }
     }
     return -1;
@@ -100,18 +140,24 @@
 /**
  * @return null if it is not available of far from boundaries
  */
-- (CLLocation *) getSimulatedLocation
+- (OALocation *) getSimulatedLocationForTunnel
 {
     if (![self isSimulatedDataAvailable])
         return nil;
-    
-    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(0, 0) altitude:_startLocation.altitude horizontalAccuracy:-1 verticalAccuracy:0 course:0 speed:_startLocation.speed timestamp:[NSDate date]];
-    float meters = _startLocation.speed * (([[NSDate date] timeIntervalSince1970] - [_startLocation.timestamp timeIntervalSince1970]) / 1000);
-    float proc = [self proceedMeters:meters l:&loc];
-    if (proc < 0 || proc >= 100) {
-        return nil;
+    float spd = MIN(_minOfMaxSpeedInTunnel, _startLocation.speed);
+    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(0, 0) altitude:_startLocation.altitude horizontalAccuracy:-1 verticalAccuracy:0 course:0 speed:spd timestamp:[NSDate date]];
+    // here we can decrease speed - startLocation.getSpeed() or we can real speed BLE sensor
+    double metersToPass = spd * ([[NSDate date] timeIntervalSince1970] - [_startLocation.timestamp timeIntervalSince1970]);
+    double metersSimLocationFromDesiredLocation = [self proceedMetersFromStartLocation:metersToPass l:&loc];
+    if (metersSimLocationFromDesiredLocation < 0)
+    {
+        return nil; // error simulation
     }
-    return [[CLLocation alloc] initWithCoordinate:loc.coordinate altitude:loc.altitude horizontalAccuracy:loc.horizontalAccuracy verticalAccuracy:loc.verticalAccuracy course:loc.course speed:loc.speed timestamp:loc.timestamp];
+    if (metersSimLocationFromDesiredLocation >= 100)
+    {
+        return nil; // limit 100m if we overpass tunnel
+    }
+    return [[OALocation alloc] initWithProvider:@"TUNNEL" location:loc];
 }
 
 - (BOOL) isSimulatedDataAvailable

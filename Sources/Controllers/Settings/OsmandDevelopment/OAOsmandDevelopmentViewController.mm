@@ -8,6 +8,7 @@
 
 #import "OAOsmandDevelopmentViewController.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OALocationSimulation.h"
@@ -22,8 +23,14 @@
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
+#import "OASwitchTableViewCell.h"
+#import "OAObservable.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
 
@@ -36,7 +43,12 @@
     OAOsmandDevelopmentPlugin *_plugin;
 }
 
+NSString *const kCellSwitchIsOnKey = @"kCellSwitchIsOnKey";
+NSString *const kUse3dIconsKey = @"kUse3dIconsKey";
+NSString *const kBatterySavingModeKey = @"kBatterySavingModeKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
+NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
+NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 
 #pragma mark - Initialization
 
@@ -55,7 +67,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 - (NSString *)getTitle
 {
-    return OALocalizedString(@"debugging_and_development");;
+    return OALocalizedString(@"debugging_and_development");
 }
 
 - (NSString *)getTableHeaderDescription
@@ -84,7 +96,41 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         kCellDescrKey : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
         @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];
+    
+    [simulationSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kSimulateOBDDataKey,
+        kCellTitleKey : OALocalizedString(@"simulate_obd"),
+        @"isOn" : @([[OAAppSettings sharedManager].simulateOBDData get])
+    }];
+    
     [_data addSection:simulationSection];
+    
+    OATableSectionData *renderingSection = [OATableSectionData sectionData];
+    renderingSection.headerText = OALocalizedString(@"shared_string_appearance");
+    [renderingSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kUse3dIconsKey,
+        kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_3d_icons"),
+        @"isOn" : @([[OAAppSettings sharedManager].use3dIconsByDefault get])
+    }];
+    [renderingSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kBatterySavingModeKey,
+        kCellTitleKey : OALocalizedString(@"battery_saving_mode"),
+        @"isOn" : @([[OAAppSettings sharedManager].batterySavingMode get])
+    }];
+    [_data addSection:renderingSection];
+    
+    OATableSectionData *renderingDebugSection = [OATableSectionData sectionData];
+    renderingDebugSection.headerText = OALocalizedString(@"map_text");
+    [renderingDebugSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kTraceRenderingKey,
+        kCellTitleKey : OALocalizedString(@"trace_rendering"),
+        @"isOn" : @([[OAAppSettings sharedManager].debugRenderingInfo get])
+    }];
+    [_data addSection:renderingDebugSection];
 }
 
 - (NSInteger)sectionsCount
@@ -125,7 +171,57 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         }
         return cell;
     }
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    {
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item.title;
+            cell.switchView.on = [item boolForKey:@"isOn"];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
+        }
+        return cell;
+    }
     return nil;
+}
+
+- (void)onSwitchPressed:(UISwitch *)sender
+{
+    UISwitch *switchView = (UISwitch *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    
+    if ([item.key isEqualToString:kUse3dIconsKey])
+    {
+        [[OAAppSettings sharedManager].use3dIconsByDefault set:sender.isOn];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    }
+    else if ([item.key isEqualToString:kBatterySavingModeKey])
+    {
+        [[OAAppSettings sharedManager].batterySavingMode set:sender.isOn];
+        if (sender.isOn)
+            [OARootViewController.instance.mapPanel.mapViewController.mapView limitFrameRefreshRate];
+        else
+            [OARootViewController.instance.mapPanel.mapViewController.mapView restoreFrameRefreshRate];
+    } else if ([item.key isEqualToString:kSimulateOBDDataKey]) {
+        [[OAAppSettings sharedManager].simulateOBDData set:sender.isOn];
+        if (!sender.isOn)
+            [[DeviceHelper shared] disconnectOBDSimulator];
+    }
+    else if ([item.key isEqualToString:kTraceRenderingKey])
+    {
+        [[OAAppSettings sharedManager].debugRenderingInfo set:sender.isOn];
+        _app.performanceMetricsEnabled = sender.isOn;
+    }
 }
 
 - (void)onRowSelected:(NSIndexPath *)indexPath

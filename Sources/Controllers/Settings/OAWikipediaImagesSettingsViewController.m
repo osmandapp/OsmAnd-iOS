@@ -15,6 +15,7 @@
 #import "OADownloadMode.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OAAppData.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
@@ -91,7 +92,7 @@
 
             BOOL isSelected = [downloadMode isEqual:[_app.data getWikipediaImagesDownloadMode:self.appMode]];
             cell.accessoryType = isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-            cell.leftIconView.tintColor = isSelected ? UIColorFromRGB([self.appMode getIconColor]) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = isSelected ? [self.appMode getProfileColor] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
         return cell;
     }

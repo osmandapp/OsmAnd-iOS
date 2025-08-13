@@ -10,6 +10,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OAExitInfo.h"
+
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <turnType.h>
@@ -38,6 +39,7 @@
 @property (nonatomic) NSString* destinationName;
 @property (nonatomic) std::shared_ptr<RouteDataObject> routeDataObject;
 @property (nonatomic) OAExitInfo *exitInfo;
+@property (nonatomic) NSString* destinationRef;
 
 - (instancetype)initWithAverageSpeed:(float)averageSpeed turnType:(std::shared_ptr<TurnType>)turnType;
 
@@ -45,6 +47,7 @@
 - (NSString *) getDescriptionRoutePart;
 - (NSString *) getDescriptionRoute:(int)collectedDistance;
 - (void) setDescriptionRoute:(NSString *)descriptionRoute;
+- (NSString *) getDestinationRefAndName;
 
 - (long) getExpectedTime;
 

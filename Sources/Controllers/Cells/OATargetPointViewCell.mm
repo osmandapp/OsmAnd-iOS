@@ -58,12 +58,18 @@
     }
     else
     {
+        UIImage *image;
         if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
-            _iconView.image = [((OAFavoriteItem *)_targetPoint.targetObj) getCompositeIcon];
+            image = [((OAFavoriteItem *)_targetPoint.targetObj) getCompositeIcon];
         else if ([_targetPoint.targetObj isKindOfClass:OATransportStop.class])
-            _iconView.image = ((OATransportStop *)_targetPoint.targetObj).poi.icon;
+            image = ((OATransportStop *)_targetPoint.targetObj).poi.icon;
         else
-            _iconView.image = _targetPoint.icon;
+            image = _targetPoint.icon;
+        
+        _iconView.image = image;
+        
+        if ([_targetPoint.targetObj isKindOfClass:OAMapObject.class])
+            _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         
         NSString *t;
         if (_targetPoint.titleSecond)
@@ -81,6 +87,12 @@
                 if (h > 41.0)
                     t = _targetPoint.title;
             }
+        }
+        else if (_targetPoint.type == OATargetNetworkGPX)
+        {
+            OARouteKey *routeKey = (OARouteKey *)_targetPoint.targetObj;
+            NSString *localizedTitle = routeKey ? routeKey.localizedTitle : @"";
+            t = localizedTitle.length > 0 ? localizedTitle : _targetPoint.title;
         }
         else
         {
@@ -106,7 +118,10 @@
         NSString *typeStr = _targetPoint.ctrlTypeStr;
         if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
         {
-            typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
+            if (typeStr.length > 0)
+                typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
+            else
+                typeStr = _targetPoint.titleAddress;
         }
         descriptionStr = typeStr;
     }
@@ -115,24 +130,11 @@
         OARouteKey *key = (OARouteKey *)_targetPoint.targetObj;
         if (key)
         {
-            descriptionStr = [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"layer_route"), OALocalizedString([self tagToActivity:key.routeKey.getTag().toNSString()])];
+            descriptionStr = [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"layer_route"), key.getActivityTypeTitle];
         }
     }
     [_descriptionView setText:descriptionStr];
     [_descriptionView setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
-}
-
-- (NSString *)tagToActivity:(NSString *)tag
-{
-    if ([tag isEqualToString:@"bicycle"])
-        return @"activity_type_cycling_name";
-    else if ([tag isEqualToString:@"mtb"])
-        return @"activity_type_mountainbike_name";
-    else if ([tag isEqualToString:@"horse"])
-        return @"app_mode_horse";
-    else if ([tag isEqualToString:@"hiking"])
-        return @"activity_type_hiking_name";
-    return @"";
 }
 
 @end

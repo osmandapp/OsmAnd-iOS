@@ -1,17 +1,14 @@
 //
-//  OAPOI.h
+//  OAPOIType.h
 //  OsmAnd
 //
 //  Created by Alexey Kulish on 18/03/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "OAPOIBaseType.h"
-#import "OAPOICategory.h"
-#import "OAPOIFilter.h"
 
-@class OAPOI;
+@class OAPOI, OAPOIFilter, OAPOICategory;
 
 @interface OAPOIType : OAPOIBaseType
 
@@ -30,14 +27,13 @@
 @property (nonatomic, assign) BOOL reference;
 @property (nonatomic, assign) BOOL mapOnly;
 @property (nonatomic, assign) BOOL filterOnly;
-
 @property (nonatomic, assign) int order;
+@property (nonatomic, assign) BOOL isHidden;
 
 @property (nonatomic) OAPOIBaseType *parentType;
 @property (nonatomic) OAPOIType *referenceType;
 
 @property (weak, nonatomic) OAPOI *parent;
-@property (nonatomic) NSString *poiAdditionalCategory;
 @property (nonatomic) NSString *poiAdditionalCategoryLocalized;
 
 - (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category;

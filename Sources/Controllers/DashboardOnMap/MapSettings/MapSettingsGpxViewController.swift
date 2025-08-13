@@ -8,72 +8,10 @@
 
 import UIKit
 import UniformTypeIdentifiers
-
-private enum TrackSortType {
-    case nearest
-    case lastModified
-    case nameAZ
-    case nameZA
-    case newestDateFirst
-    case oldestDateFirst
-    case longestDistanceFirst
-    case shortestDistanceFirst
-    case longestDurationFirst
-    case shorterDurationFirst
-    
-    var title: String {
-        switch self {
-        case .nearest:
-            return localizedString("shared_string_nearest")
-        case .lastModified:
-            return localizedString("sort_last_modified")
-        case .nameAZ:
-            return localizedString("track_sort_az")
-        case .nameZA:
-            return localizedString("track_sort_za")
-        case .newestDateFirst:
-            return localizedString("newest_date_first")
-        case .oldestDateFirst:
-            return localizedString("oldest_date_first")
-        case .longestDistanceFirst:
-            return localizedString("longest_distance_first")
-        case .shortestDistanceFirst:
-            return localizedString("shortest_distance_first")
-        case .longestDurationFirst:
-            return localizedString("longest_duration_first")
-        case .shorterDurationFirst:
-            return localizedString("shorter_duration_first")
-        }
-    }
-    
-    var image: UIImage? {
-        switch self {
-        case .nearest:
-            return .icCustomNearby
-        case .lastModified:
-            return .icCustomLastModified
-        case .nameAZ:
-            return .icCustomSortNameAscending
-        case .nameZA:
-            return .icCustomSortNameDescending
-        case .newestDateFirst:
-            return .icCustomSortDateNewest
-        case .oldestDateFirst:
-            return .icCustomSortDateOldest
-        case .longestDistanceFirst:
-            return .icCustomSortLongToShort
-        case .shortestDistanceFirst:
-            return .icCustomSortShortToLong
-        case .longestDurationFirst:
-            return .icCustomSortDurationLongToShort
-        case .shorterDurationFirst:
-            return .icCustomSortDurationShortToLong
-        }
-    }
-}
+import OsmAndShared
 
 @objc(OAMapSettingsGpxViewControllerDelegate)
-protocol MapSettingsGpxViewControllerDelegate: AnyObject  {
+protocol MapSettingsGpxViewControllerDelegate: AnyObject {
     func onVisibleTracksUpdate()
 }
 
@@ -84,15 +22,16 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var searchController: UISearchController?
     private var segmentedControl: UISegmentedControl?
     private var lastUpdate: TimeInterval?
-    private var currentSortType: TrackSortType = .lastModified
-    private var sortTypeForAllTracks: TrackSortType = .lastModified
-    private var sortTypeForVisibleTracks: TrackSortType = .lastModified
-    private var sortTypeForSearch: TrackSortType = .nameAZ
-    private var allGpxList: [OAGPX] = []
-    private var visibleGpxList: [OAGPX] = []
-    private var recentlyVisibleGpxList: [OAGPX] = []
-    private var filteredGpxList: [OAGPX] = []
-    private var selectedGpxTracks: [OAGPX] = []
+    private var currentSortMode: TracksSortMode = .lastModified
+    private var sortModeForAllTracks: TracksSortMode = .lastModified
+    private var sortModeForVisibleTracks: TracksSortMode = .lastModified
+    private var sortModeForSearch: TracksSortMode = .nameAZ
+    private var allGpxList: [GpxDataItem] = []
+    private var visibleGpxList: [GpxDataItem] = []
+    private var recentlyVisibleGpxList: [GpxDataItem] = []
+    private var filteredGpxList: [GpxDataItem] = []
+    private var selectedGpxTracks: [GpxDataItem] = []
+    private var selectedTrack: GpxDataItem?
     private var previousSelectedSegmentIndex: Int = 0
     private var isShowingVisibleTracks = true
     private var isSearchActive = false
@@ -100,6 +39,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
     private var importHelper: OAGPXImportUIHelper?
+    private var rootVC: OARootViewController?
+    private var routingHelper: OARoutingHelper?
+    private var gpxHelper: OAGPXUIHelper?
+    private var gpxDB: OAGPXDatabase?
+    private var app: OsmAndAppProtocol?
+    private var settings: OAAppSettings?
     private let lock = NSLock()
     weak var delegate: MapSettingsGpxViewControllerDelegate?
 
@@ -117,18 +62,23 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         return button
     }()
 
-    
     override func commonInit() {
+        settings = OAAppSettings.sharedManager()
+        importHelper = OAGPXImportUIHelper(hostViewController: self)
+        rootVC = OARootViewController.instance()
+        routingHelper = OARoutingHelper.sharedInstance()
+        gpxHelper = OAGPXUIHelper()
+        gpxDB = OAGPXDatabase.sharedDb()
+        app = OsmAndApp.swiftInstance()
         loadGpxTracks()
         loadVisibleTracks()
         loadRecentlyVisibleTracks()
-        importHelper = OAGPXImportUIHelper(hostViewController: self)
-        importHelper?.delegate = self
     }
     
     override func registerNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        addNotification(NSNotification.Name.OAGPXImportUIHelperDidFinishImport, selector: #selector(didFinishImport))
     }
     
     override func registerObservers() {
@@ -153,11 +103,22 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         updateSelectedRows()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateContent()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let searchController, searchController.isActive {
             searchController.isActive = false
             navigationItem.searchController = nil
+            isSearchActive = false
+            isSearchFilteringActive = false
+            updateNavbar()
+            guard let segmentedControl else { return }
+            segmentedControl.selectedSegmentIndex = previousSelectedSegmentIndex
+            segmentChanged(segmentedControl)
         }
     }
     
@@ -241,12 +202,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 noVisibleTracksRow.iconTintColor = UIColor.iconColorDefault
                 noVisibleTracksRow.setObj(localizedString("show_all_tracks"), forKey: "buttonTitle")
             } else {
-                let visibleGpxFilePaths = OAAppSettings.sharedManager()?.mapSettingVisibleGpx.get() ?? []
+                let visibleGpxFilePaths = settings?.mapSettingVisibleGpx.get() ?? []
                 let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
                 for gpx in gpxListToShow {
                     let gpxRow = tracksSection.createNewRow()
                     gpxRow.cellType = OASimpleTableViewCell.getIdentifier()
-                    gpxRow.title = gpx.getNiceTitle()
+                    gpxRow.title = gpx.gpxFileNameWithoutExtension
                     gpxRow.setObj(gpx, forKey: "gpx")
                     gpxRow.iconName = "ic_custom_trip"
                     gpxRow.iconTintColor = visibleGpxFilePaths.contains(gpx.gpxFilePath) ? .iconColorActive : .iconColorDisabled
@@ -258,7 +219,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 for gpx in recentlyVisibleGpxList {
                     let gpxRow = recentlyVisibleSection.createNewRow()
                     gpxRow.cellType = OASimpleTableViewCell.getIdentifier()
-                    gpxRow.title = gpx.getNiceTitle()
+                    gpxRow.title = gpx.gpxFileNameWithoutExtension
                     gpxRow.setObj(gpx, forKey: "gpx")
                     gpxRow.iconName = "ic_custom_trip"
                     gpxRow.iconTintColor = .iconColorDisabled
@@ -285,8 +246,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             cell.selectedBackgroundView = UIView()
             cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
             cell.titleLabel.text = item.title
-            if let gpx = item.obj(forKey: "gpx") as? OAGPX {
-                cell.descriptionLabel.attributedText = getDescriptionAttributedText(with: getFormattedData(for: gpx))
+            if let gpx = item.obj(forKey: "gpx") as? GpxDataItem {
+                cell.descriptionLabel.attributedText = TracksSortModeHelper.getTrackDescription(track: gpx, sortMode: currentSortMode, includeFolderInfo: true)
             }
             
             let iconName = item.iconName ?? "ic_custom_trip"
@@ -339,6 +300,63 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         return !(item.key == "noVisibleTracks" || item.key == "noTracks")
     }
     
+    override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let item = tableData.item(for: indexPath)
+        let gpx = item.obj(forKey: "gpx") as! GpxDataItem
+        let trackItem = TrackItem(file: gpx.file)
+        trackItem.dataItem = gpx
+      
+        let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
+            guard let self else { return nil }
+            let openAction = UIAction(title: localizedString("shared_string_open_track"), image: .icCustomOverview) { _ in
+                self.onTrackOpenClicked(track: trackItem)
+            }
+            let appearenceAction = UIAction(title: localizedString("shared_string_appearance"), image: .icCustomAppearanceOutlined) { _ in
+                self.onTrackAppearenceClicked(track: trackItem)
+            }
+            let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { _ in
+                self.onTrackNavigationClicked(track: trackItem)
+            }
+            let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [openAction, appearenceAction, navigationAction])
+            
+            let analyzeAction = UIAction(title: localizedString("gpx_analyze"), image: .icCustomGraph) { _ in
+                self.onTrackAnalyzeClicked(track: trackItem)
+            }
+            let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [analyzeAction])
+            
+            let shareAction = UIAction(title: localizedString("shared_string_share"), image: .icCustomExportOutlined) { _ in
+                let cellScreenArea = self.view.convert(self.tableView.rectForRow(at: indexPath), from: self.tableView)
+                self.onTrackShareClicked(track: trackItem, touchPointArea: cellScreenArea)
+            }
+            let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined) { _ in
+                self.onTrackUploadToOsmClicked(track: trackItem)
+            }
+            let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [shareAction, uploadToOsmAction])
+            
+            let editAction = UIAction(title: localizedString("shared_string_edit"), image: .icCustomTrackEdit) { _ in
+                self.onTrackEditClicked(track: trackItem)
+            }
+            let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: .icCustomCopy) { _ in
+                self.onTrackDuplicateClicked(track: trackItem)
+            }
+            let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { _ in
+                self.onTrackRenameClicked(track: trackItem)
+            }
+            let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { _ in
+                self.onTrackMoveClicked(track: trackItem)
+            }
+            let fourthButtonsSection = UIMenu(title: "", options: .displayInline, children: [editAction, duplicateAction, renameAction, moveAction])
+            
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { _ in
+                self.onTrackDeleteClicked(track: trackItem)
+            }
+            let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
+            return UIMenu(title: "", image: nil, children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, fourthButtonsSection, lastButtonsSection])
+        }
+        
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
+    }
+    
     override func onLeftNavbarButtonPressed() {
         if hasSelectionChanged() {
             showActionSheet()
@@ -360,7 +378,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func handleSelectDeselectAllTracks() {
         guard isTracksAvailable else { return }
         let isSelectAll = !areAllTracksSelected()
-        let gpxListToShow: [OAGPX]
+        let gpxListToShow: [GpxDataItem]
         if isSearchActive {
             gpxListToShow = filteredGpxList
         } else if isShowingVisibleTracks {
@@ -404,13 +422,161 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             
             let hiddenTracksPaths = recentlyVisibleGpxList.map { $0.gpxFilePath }
             UserDefaults.standard.set(hiddenTracksPaths, forKey: previouslyVisibleTracksKey)
-            OAAppSettings.sharedManager()?.showGpx(tracksToShow)
-            OAAppSettings.sharedManager()?.hideGpx(tracksToHide)
+            settings?.showGpx(tracksToShow)
+            settings?.hideGpx(tracksToHide)
             
             if let delegate {
                 delegate.onVisibleTracksUpdate()
             }
         }
+    }
+    
+    private func onTrackOpenClicked(track: TrackItem) {
+        guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
+        rootVC?.mapPanel.openTargetViewWithGPX(fromTracksList: track, navControllerHistory: newCurrentHistory, fromTrackMenu: false, selectedTab: .overviewTab)
+    }
+    
+    private func onTrackAppearenceClicked(track: TrackItem) {
+        guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
+        let state = OATrackMenuViewControllerState()
+        state.openedFromTracksList = true
+        state.gpxFilePath = track.gpxFilePath
+        state.navControllerHistory = newCurrentHistory
+        rootVC?.mapPanel.openTargetView(withGPX: track, trackHudMode: .appearanceHudMode, state: state)
+    }
+    
+    private func onTrackNavigationClicked(track: TrackItem) {
+        if track.totalTracks > 1 {
+            if let vc = OATrackSegmentsViewController(filepath: track.dataItem?.file.absolutePath(), isCurrentTrack: false) {
+                vc.startNavigationOnSelect = true
+                rootVC?.mapPanel.closeDashboardLastScreen()
+                navigationController?.popToRootViewController(animated: true)
+                rootVC?.present(vc, animated: true)
+            }
+        } else {
+            if let isFollowing = routingHelper?.isFollowingMode(), isFollowing {
+                rootVC?.mapPanel.mapActions.stopNavigationActionConfirm()
+            }
+            
+            rootVC?.mapPanel.mapActions.enterRoutePlanningMode(givenGpx: track, useIntermediatePointsByDefault: true, showDialog: true)
+            rootVC?.mapPanel.closeDashboardLastScreen()
+            navigationController?.popToRootViewController(animated: true)
+        }
+    }
+    
+    private func onTrackAnalyzeClicked(track: TrackItem) {
+        guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
+        let state = OATrackMenuViewControllerState()
+        state.navControllerHistory = newCurrentHistory
+        state.openedFromTracksList = true
+        state.selectedStatisticsTab = .overviewTab
+        navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        rootVC?.mapPanel.openNewTargetViewFromTracksList(withRouteDetailsGraph: track, state: state)
+    }
+    
+    private func onTrackShareClicked(track: TrackItem, touchPointArea: CGRect) {
+        guard let file = track.getFile() else { return }
+        gpxHelper?.openExport(forTrack: track.dataItem, gpxDoc: GpxUtilities.shared.loadGpxFile(file: file), isCurrentTrack: false, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
+    }
+    
+    private func onTrackUploadToOsmClicked(track: TrackItem) {
+        show(OAOsmUploadGPXViewConroller(gpxItems: [track]))
+    }
+    
+    private func onTrackEditClicked(track: TrackItem) {
+        guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
+        let state = OATrackMenuViewControllerState()
+        state.openedFromTracksList = true
+        state.gpxFilePath = track.gpxFilePath
+        state.navControllerHistory = newCurrentHistory
+        if let vc = OARoutePlanningHudViewController(fileName: track.gpxFilePath, targetMenuState: state, adjustMapPosition: true) {
+            rootVC?.mapPanel.closeDashboardLastScreen()
+            rootVC?.mapPanel.showScrollableHudViewController(vc)
+        }
+    }
+    
+    private func onTrackDuplicateClicked(track: TrackItem) {
+        gpxHelper?.copyGPX(toNewFolder: track.gpxFolderName,
+                           renameToNewName: track.gpxFileName,
+                           deleteOriginalFile: false,
+                           openTrack: false,
+                           trackItem: track)
+        updateContent()
+        updateBottomButtons()
+        delegate?.onVisibleTracksUpdate()
+    }
+    
+    private func updateContent() {
+        loadGpxTracks()
+        loadVisibleTracks()
+        loadRecentlyVisibleTracks()
+        sortTracks()
+        updateData()
+    }
+    
+    private func onTrackRenameClicked(track: TrackItem) {
+        let gpxFilename = track.gpxFilePath.lastPathComponent().deletingPathExtension()
+        let message = localizedString("gpx_enter_new_name") + " " + gpxFilename
+        let alert = UIAlertController(title: localizedString("rename_track"), message: message, preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.text = gpxFilename
+        }
+
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
+            guard let self else { return }
+            guard let text = alert.textFields?.first?.text else { return }
+            let newName = text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            if !newName.isEmpty {
+                let fileExtension = ".gpx"
+                let newNameToChange = newName.hasSuffix(fileExtension)
+                ? String(newName.dropLast(fileExtension.count))
+                : newName
+                gpxHelper?.renameTrack(track.dataItem, newName: newNameToChange, hostVC: self)
+                updateContent()
+                delegate?.onVisibleTracksUpdate()
+            } else {
+                gpxHelper?.renameTrack(nil, doc: nil, newName: nil, hostVC: self)
+            }
+        })
+
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        present(alert, animated: true)
+    }
+    
+    private func onTrackMoveClicked(track: TrackItem) {
+        selectedTrack = track.dataItem
+        if let vc = OASelectTrackFolderViewController(gpx: track) {
+            vc.delegate = self
+            present(UINavigationController(rootViewController: vc), animated: true)
+        }
+    }
+    
+    private func onTrackDeleteClicked(track: TrackItem) {
+        let message = localizedString("gpx_remove")
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in
+            guard let self else { return }
+            guard let dataItem = track.dataItem else { return }
+            let isVisible = settings?.mapSettingVisibleGpx.contains(track.gpxFilePath) ?? false
+            if isVisible {
+                settings?.hideGpx([track.gpxFilePath])
+            }
+
+            self.gpxDB?.removeGpxItem(dataItem, withLocalRemove: true)
+            updateContent()
+            delegate?.onVisibleTracksUpdate()
+        })
+
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_no"), style: .cancel))
+        present(alert, animated: true)
+    }
+    
+    private func updateData() {
+        generateData()
+        tableView.reloadData()
+        updateSelectedRows()
     }
     
     private func showActionSheet() {
@@ -431,20 +597,13 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func loadGpxTracks() {
-        if let gpxDatabase = OAGPXDatabase.sharedDb() {
-            allGpxList = gpxDatabase.gpxList.compactMap { $0 as? OAGPX }
-                .sorted {
-                    guard let date1 = $0.importDate, let date2 = $1.importDate else { return false }
-                    return date1 > date2
-                }
-            isTracksAvailable = !allGpxList.isEmpty
-        } else {
-            isTracksAvailable = false
-        }
+        allGpxList = OAGPXDatabase.sharedDb().getDataItems()
+            .sorted { $0.fileLastUploadedTime > $1.fileLastUploadedTime }
+        isTracksAvailable = !allGpxList.isEmpty
     }
     
     private func loadVisibleTracks() {
-        guard let visibleGpxFilePaths = OAAppSettings.sharedManager()?.mapSettingVisibleGpx.get() else { return }
+        guard let visibleGpxFilePaths = settings?.mapSettingVisibleGpx.get() else { return }
         visibleGpxList = allGpxList.filter { visibleGpxFilePaths.contains($0.gpxFilePath) }
         isVisibleTracksAvailable = !visibleGpxList.isEmpty
         selectedGpxTracks = visibleGpxList
@@ -457,7 +616,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             return
         }
         
-        guard let visibleGpxFilePaths = OAAppSettings.sharedManager()?.mapSettingVisibleGpx.get() else { return }
+        guard let visibleGpxFilePaths = settings?.mapSettingVisibleGpx.get() else { return }
         let previouslyHiddenTrackPaths = UserDefaults.standard.stringArray(forKey: previouslyVisibleTracksKey) ?? []
         let recentlyVisibleTracks = allGpxList.filter {
             previouslyHiddenTrackPaths.contains($0.gpxFilePath) && !visibleGpxFilePaths.contains($0.gpxFilePath)
@@ -470,7 +629,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         !isTracksAvailable || (isShowingVisibleTracks && !isVisibleTracksAvailable && recentlyVisibleGpxList.isEmpty)
     }
     
-    private func getGpxForSelectedRow(at indexPath: IndexPath) -> OAGPX? {
+    private func getGpxForSelectedRow(at indexPath: IndexPath) -> GpxDataItem? {
         if isSearchActive {
             return filteredGpxList[indexPath.row]
         } else {
@@ -541,219 +700,21 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         return headerView
     }
     
-    private func createSortMenu() -> UIMenu {
-        let sortingOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nearest),
-            createAction(for: .lastModified)
-        ])
-        let alphabeticalOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nameAZ),
-            createAction(for: .nameZA)
-        ])
-        let dateOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .newestDateFirst),
-            createAction(for: .oldestDateFirst)
-        ])
-        let distanceOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .longestDistanceFirst),
-            createAction(for: .shortestDistanceFirst)
-        ])
-        let durationOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .longestDurationFirst),
-            createAction(for: .shorterDurationFirst)
-        ])
-        
-        return UIMenu(title: "", children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
-    }
-    
-    private func createAction(for sortType: TrackSortType) -> UIAction {
-        let isCurrentSortType: Bool
-        if isSearchActive {
-            isCurrentSortType = sortType == sortTypeForSearch
-        } else if isShowingVisibleTracks {
-            isCurrentSortType = sortType == sortTypeForVisibleTracks
-        } else {
-            isCurrentSortType = sortType == sortTypeForAllTracks
-        }
-        
-        let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
-        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
-            guard let self else { return }
-            if self.isSearchActive {
-                self.sortTypeForSearch = sortType
-            } else if self.isShowingVisibleTracks {
-                self.sortTypeForVisibleTracks = sortType
-            } else {
-                self.sortTypeForAllTracks = sortType
-            }
-            
-            self.currentSortType = sortType
-            self.sortButton.setImage(self.currentSortType.image, for: .normal)
-            self.sortTracks()
-            self.generateData()
-            self.tableView.reloadData()
-            self.updateSelectedRows()
-        }
-    }
-    
-    private func updateSortButtonAndMenu() {
-        sortButton.setImage(currentSortType.image, for: .normal)
-        sortButton.menu = createSortMenu()
-    }
-    
     private func sortTracks() {
-        func sortList(_ list: inout [OAGPX], by sortType: TrackSortType) {
-            switch sortType {
-            case .nearest:
-                list.sort { distanceToGPX(gpx: $0) < distanceToGPX(gpx: $1) }
-            case .lastModified:
-                list.sort { $0.importDate ?? Date.distantPast > $1.importDate ?? Date.distantPast }
-            case .nameAZ:
-                list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedAscending }
-            case .nameZA:
-                list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedDescending }
-            case .newestDateFirst:
-                list.sort { $0.creationDate ?? Date.distantPast > $1.creationDate ?? Date.distantPast }
-            case .oldestDateFirst:
-                list.sort { $0.creationDate ?? Date.distantPast < $1.creationDate ?? Date.distantPast }
-            case .longestDistanceFirst:
-                list.sort { $0.totalDistance > $1.totalDistance }
-            case .shortestDistanceFirst:
-                list.sort { $0.totalDistance < $1.totalDistance }
-            case .longestDurationFirst:
-                list.sort { $0.timeSpan > $1.timeSpan }
-            case .shorterDurationFirst:
-                list.sort { $0.timeSpan < $1.timeSpan }
-            }
-        }
-        
         if isSearchActive {
-            sortList(&filteredGpxList, by: sortTypeForSearch)
+            filteredGpxList = TracksSortModeHelper.sortTracksWithMode(filteredGpxList, mode: sortModeForSearch)
         } else if isShowingVisibleTracks {
-            sortList(&visibleGpxList, by: sortTypeForVisibleTracks)
-            sortList(&recentlyVisibleGpxList, by: sortTypeForVisibleTracks)
+            visibleGpxList = TracksSortModeHelper.sortTracksWithMode(visibleGpxList, mode: sortModeForVisibleTracks)
+            recentlyVisibleGpxList = TracksSortModeHelper.sortTracksWithMode(recentlyVisibleGpxList, mode: sortModeForVisibleTracks)
         } else {
-            sortList(&allGpxList, by: sortTypeForAllTracks)
+            allGpxList = TracksSortModeHelper.sortTracksWithMode(allGpxList, mode: sortModeForAllTracks)
         }
-    }
-    
-    private func getFormattedData(for gpx: OAGPX) -> (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat, creationDate: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
-        let creationDate = gpx.creationDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
-        let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? localizedString("shared_string_not_available")
-        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? localizedString("shared_string_not_available")
-        let waypointCount = "\(gpx.wptPoints)"
-        let folderName: String
-        if let capitalizedFolderName = OAUtilities.capitalizeFirstLetter(gpx.gpxFolderName), !capitalizedFolderName.isEmpty {
-            folderName = capitalizedFolderName
-        } else {
-            folderName = localizedString("shared_string_gpx_tracks")
-        }
-        
-        let distanceToTrack: String
-        let calculatedDistance = distanceToGPX(gpx: gpx)
-        if calculatedDistance != CGFloat.greatestFiniteMagnitude {
-            distanceToTrack = OAOsmAndFormatter.getFormattedDistance(Float(calculatedDistance))
-        } else {
-            distanceToTrack = localizedString("shared_string_not_available")
-        }
-        
-        let regionName: String
-        let gpxLocation = gpx.bounds.center
-        if gpxLocation.latitude != Double.greatestFiniteMagnitude,
-           let worldRegion = OsmAndApp.swiftInstance().worldRegion.find(atLat: gpxLocation.latitude, lon: gpxLocation.longitude) {
-            regionName = worldRegion.localizedName ?? worldRegion.nativeName ?? localizedString("shared_string_not_available")
-        } else {
-            regionName = localizedString("shared_string_not_available")
-        }
-        
-        let directionAngle = OADistanceAndDirectionsUpdater.getDirectionAngle(from: OsmAndApp.swiftInstance().locationServices?.lastKnownLocation, toDestinationLatitude: gpxLocation.latitude, destinationLongitude: gpxLocation.longitude)
-        return (date, distance, time, waypointCount, folderName, distanceToTrack, regionName, directionAngle, creationDate)
-    }
-    
-    private func getDescriptionAttributedText(with formattedData: (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat, creationDate: String)) -> NSAttributedString {
-        let fullString = NSMutableAttributedString()
-        let defaultAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.textColorSecondary]
-        let detailsText = "\(formattedData.distance) • \(formattedData.time) • \(formattedData.waypointCount)"
-        let detailsString = NSAttributedString(string: detailsText, attributes: defaultAttributes)
-        switch currentSortType {
-        case .nearest:
-            if let locationAttributedString = createImageAttributedString(named: "location.north.fill", tintColor: UIColor.iconColorActive, defaultAttributes: defaultAttributes, rotate: true, rotationAngle: formattedData.directionAngle) {
-                fullString.append(locationAttributedString)
-                fullString.append(NSAttributedString(string: " "))
-            }
-            
-            let directionString = formattedData.distanceToTrack + ", "
-            let directionAttributedString = NSAttributedString(string: directionString, attributes: [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.iconColorActive])
-            let regionString = NSAttributedString(string: "\(formattedData.regionName) | ", attributes: defaultAttributes)
-            fullString.append(directionAttributedString)
-            fullString.append(regionString)
-            fullString.append(detailsString)
-        case .lastModified:
-            let dateString = NSAttributedString(string: "\(formattedData.date) | ", attributes: defaultAttributes)
-            fullString.append(dateString)
-            fullString.append(detailsString)
-        case .nameAZ, .nameZA:
-            fullString.append(detailsString)
-            fullString.append(NSAttributedString(string: " | ", attributes: defaultAttributes))
-            if let folderAttributedString = createImageAttributedString(named: "folder", tintColor: UIColor.textColorSecondary, defaultAttributes: defaultAttributes, rotate: false) {
-                fullString.append(folderAttributedString)
-                fullString.append(NSAttributedString(string: " \(formattedData.folderName)", attributes: defaultAttributes))
-            }
-            
-        case .newestDateFirst, .oldestDateFirst:
-            let dateString = NSAttributedString(string: "\(formattedData.creationDate) | ", attributes: defaultAttributes)
-            fullString.append(dateString)
-            fullString.append(detailsString)
-        case .longestDistanceFirst, .shortestDistanceFirst:
-            fullString.append(detailsString)
-        case .longestDurationFirst, .shorterDurationFirst:
-            let durationFirstDetailsString = NSAttributedString(string: "\(formattedData.time) • \(formattedData.distance) • \(formattedData.waypointCount)", attributes: defaultAttributes)
-            fullString.append(durationFirstDetailsString)
-        }
-        
-        return fullString
-    }
-    
-    private func createImageAttributedString(named imageName: String,
-                                                                                                               tintColor: UIColor,
-                                                                                                               defaultAttributes: [NSAttributedString.Key: Any],
-                                                                                                               rotate: Bool = false,
-                                                                                                               rotationAngle: CGFloat = 0) -> NSAttributedString? {
-        guard let image = UIImage(systemName: imageName)?.withTintColor(tintColor, renderingMode: .alwaysTemplate) else { return nil }
-        let attachment = NSTextAttachment()
-        var finalImage = image
-        if rotate {
-            finalImage = image.rotateWithDiagonalSize(radians: rotationAngle) ?? image
-        }
-        
-        attachment.image = finalImage
-        if let font = defaultAttributes[.font] as? UIFont {
-            let fontHeight = font.capHeight
-            let scaleFactor: CGFloat = 1.2
-            let adjustedHeight = fontHeight * scaleFactor
-            let adjustedYPosition = (fontHeight - adjustedHeight) / 2
-            attachment.bounds = CGRect(x: 0, y: adjustedYPosition, width: adjustedHeight + 2, height: rotate ? adjustedHeight + 2 : adjustedHeight)
-        }
-        
-        return NSAttributedString(attachment: attachment)
-    }
-    
-    private func distanceToGPX(gpx: OAGPX) -> CGFloat {
-        guard let currentLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation,
-              CLLocationCoordinate2DIsValid(gpx.bounds.center) else {
-            return CGFloat.greatestFiniteMagnitude
-        }
-        
-        return OADistanceAndDirectionsUpdater.getDistanceFrom(currentLocation, toDestinationLatitude: gpx.bounds.center.latitude, destinationLongitude: gpx.bounds.center.longitude)
     }
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         lock.lock()
         
-        guard isTracksAvailable, currentSortType == .nearest, forceUpdate 
+        guard isTracksAvailable, currentSortMode == .nearest, forceUpdate
                 || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5
         else {
             lock.unlock()
@@ -775,8 +736,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     @objc private func segmentChanged(_ control: UISegmentedControl) {
         isShowingVisibleTracks = control.selectedSegmentIndex == 0
-        currentSortType = isShowingVisibleTracks ? sortTypeForVisibleTracks : sortTypeForAllTracks
+        currentSortMode = isShowingVisibleTracks ? sortModeForVisibleTracks : sortModeForAllTracks
         updateSortButtonAndMenu()
+        sortTracks()
         generateData()
         tableView.reloadData()
         if isTracksAvailable {
@@ -789,8 +751,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         isSearchActive = true
         isShowingVisibleTracks = false
         previousSelectedSegmentIndex = segmentedControl?.selectedSegmentIndex ?? 0
-        currentSortType = .nameAZ
-        sortTypeForSearch = .nameAZ
+        currentSortMode = .nameAZ
+        sortModeForSearch = .nameAZ
         filteredGpxList = allGpxList
         sortTracks()
         DispatchQueue.main.async {
@@ -800,14 +762,18 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             self.navigationItem.searchController = self.navigationItem.searchController ?? self.searchController
             self.navigationItem.hidesSearchBarWhenScrolling = false
             self.searchController?.isActive = true
-            self.generateData()
-            self.tableView.reloadData()
-            self.updateSelectedRows()
+            self.updateData()
         }
     }
     
     @objc private func onImportButtonClicked() {
         importHelper?.onImportClicked()
+    }
+    
+    @objc private func didFinishImport() {
+        loadGpxTracks()
+        updateData()
+        updateBottomButtons()
     }
     
     @objc private func onCellButtonClicked(sender: UIButton) {
@@ -862,40 +828,24 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
         isSearchActive = false
         isSearchFilteringActive = false
         filteredGpxList.removeAll()
-        currentSortType = segmentedControl?.selectedSegmentIndex == 0 ? sortTypeForVisibleTracks : sortTypeForAllTracks
+        currentSortMode = segmentedControl?.selectedSegmentIndex == 0 ? sortModeForVisibleTracks : sortModeForAllTracks
         updateNavbar()
         guard let segmentedControl else { return }
         segmentedControl.selectedSegmentIndex = previousSelectedSegmentIndex
         segmentChanged(segmentedControl)
-        generateData()
-        tableView.reloadData()
-        updateSelectedRows()
+        updateData()
         updateBottomButtons()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         isSearchFilteringActive = !searchText.isEmpty
         filteredGpxList = searchText.isEmpty ? allGpxList : allGpxList.filter {
-            $0.getNiceTitle().localizedCaseInsensitiveContains(searchText)
+            $0.gpxFileNameWithoutExtension.localizedCaseInsensitiveContains(searchText)
         }
         
         sortTracks()
-        generateData()
-        tableView.reloadData()
-        updateSelectedRows()
+        updateData()
         updateBottomButtons()
-    }
-}
-
-extension MapSettingsGpxViewController: OAGPXImportUIHelperDelegate {
-    func updateVCData() {
-        DispatchQueue.main.async {
-            self.loadGpxTracks()
-            self.generateData()
-            self.tableView.reloadData()
-            self.updateSelectedRows()
-            self.updateBottomButtons()
-        }
     }
 }
 
@@ -909,5 +859,105 @@ extension MapSettingsGpxViewController: UISearchControllerDelegate {
                 searchController.searchBar.becomeFirstResponder()
             }
         }
+    }
+}
+
+extension MapSettingsGpxViewController: OATrackSavingHelperUpdatableDelegate {
+    func onNeedUpdateHostData() {
+        updateData()
+    }
+}
+
+extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
+    func onFolderSelected(_ selectedFolderName: String?) {
+        if let selectedFolderName {
+            if let selectedTrack {
+                let trackItem = TrackItem(file: selectedTrack.file)
+                trackItem.dataItem = selectedTrack
+                
+                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, trackItem: trackItem)
+                updateContent()
+                delegate?.onVisibleTracksUpdate()
+            }
+        }
+        
+        onFolderSelectCancelled()
+    }
+    
+    func onFolderAdded(_ addedFolderName: String) {
+        if let newFolderPath = app?.gpxPath.appendingPathComponent(addedFolderName), !FileManager.default.fileExists(atPath: newFolderPath) {
+            do {
+                try FileManager.default.createDirectory(atPath: newFolderPath, withIntermediateDirectories: true)
+                onFolderSelected(addedFolderName)
+                updateData()
+                delegate?.onVisibleTracksUpdate()
+            } catch let error {
+                debugPrint(error)
+            }
+        }
+    }
+    
+    func onFolderSelectCancelled() {
+        selectedTrack = nil
+    }
+}
+
+extension MapSettingsGpxViewController {
+    private func createSortMenu() -> UIMenu {
+        let sortingOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nearest),
+            createAction(for: .lastModified)
+        ])
+        let alphabeticalOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nameAZ),
+            createAction(for: .nameZA)
+        ])
+        let dateOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .newestDateFirst),
+            createAction(for: .oldestDateFirst)
+        ])
+        let distanceOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .longestDistanceFirst),
+            createAction(for: .shortestDistanceFirst)
+        ])
+        let durationOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .longestDurationFirst),
+            createAction(for: .shorterDurationFirst)
+        ])
+        
+        return UIMenu(title: "", children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+    }
+    
+    private func createAction(for sortType: TracksSortMode) -> UIAction {
+        let isCurrentSortType: Bool
+        if isSearchActive {
+            isCurrentSortType = sortType == sortModeForSearch
+        } else if isShowingVisibleTracks {
+            isCurrentSortType = sortType == sortModeForVisibleTracks
+        } else {
+            isCurrentSortType = sortType == sortModeForAllTracks
+        }
+        
+        let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
+        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
+            guard let self else { return }
+            if self.isSearchActive {
+                self.sortModeForSearch = sortType
+            } else if self.isShowingVisibleTracks {
+                self.sortModeForVisibleTracks = sortType
+            } else {
+                self.sortModeForAllTracks = sortType
+            }
+            
+            self.currentSortMode = sortType
+            self.sortButton.setImage(self.currentSortMode.image, for: .normal)
+            self.sortTracks()
+            self.updateData()
+        }
+    }
+    
+    private func updateSortButtonAndMenu() {
+        sortButton.setImage(currentSortMode.image, for: .normal)
+        sortButton.menu = createSortMenu()
     }
 }

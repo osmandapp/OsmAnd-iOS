@@ -8,13 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OARoutingHelper.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <transportRouteResult.h>
 #include <transportRouteResultSegment.h>
-
-#import "OARoutingHelper.h"
 
 @protocol OATransportRouteCalculationProgressCallback <NSObject>
 
@@ -26,8 +25,7 @@
 
 @end
 
-@class OARouteCalculationResult;
-@class OAApplicationMode;
+@class OARouteCalculationResult, OAApplicationMode;
 
 @interface OATransportRouteResultSegment : NSObject
 @property (nonatomic, assign) std::shared_ptr<TransportRouteResultSegment> segment;

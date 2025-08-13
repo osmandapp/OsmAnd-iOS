@@ -9,14 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "OAAppSettings.h"
 
+@class OsmAndFormatterParams;
+
+static const NSInteger METERS_IN_KILOMETER = 1000;
+static const CGFloat METERS_IN_ONE_MILE = 1609.344f;
+static const CGFloat METERS_IN_ONE_NAUTICALMILE = 1852.f;
+static const CGFloat YARDS_IN_ONE_METER = 1.0936f;
+static const CGFloat FEET_IN_ONE_METER = YARDS_IN_ONE_METER * 3;
+
+static const CGFloat IMPERIAL_GALLONS_IN_LITER = 4.54609f;
+static const CGFloat US_GALLONS_IN_LITER = 3.78541f;
+
 @interface OAOsmAndFormatter : NSObject
-
-#define METERS_IN_KILOMETER 1000
-#define METERS_IN_ONE_MILE 1609.344f // 1609.344
-#define METERS_IN_ONE_NAUTICALMILE 1852.f // 1852
-
-#define YARDS_IN_ONE_METER 1.0936f
-#define FEET_IN_ONE_METER (YARDS_IN_ONE_METER * 3)
 
 #define MILS_IN_DEGREE 17.777778f
 
@@ -40,16 +44,15 @@
 #define EAST @"E"
 
 + (double)calculateRoundedDist:(double)baseMetersDist;
-+ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes roundUp:(BOOL)isRoundUp valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
++ (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedDistance:(float)meters;
-+ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes;
-+ (NSString *)getFormattedDistance:(float)meters roundUp:(BOOL)isRoundUp;
++ (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params;
 + (NSString *)getFormattedAlarmInfoDistance:(float)meters;
 + (NSString *)getFormattedAzimuth:(float)bearing;
 + (NSString *)getFormattedTimeHM:(NSTimeInterval)timeInterval;
 + (NSString *)getFormattedTimeInterval:(NSTimeInterval)interval;
 + (NSString *)getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
-+ (NSString *)getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def;
++ (NSString *)getFormattedTimeRuntime:(NSInteger)seconds;
 + (NSString *)getFormattedDateTime:(NSTimeInterval)time;
 + (NSString *)getFormattedDate:(NSTimeInterval)time;
 + (NSString *)getFormattedSpeed:(float)metersperseconds;
@@ -59,9 +62,20 @@
 + (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc;
 + (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
-+ (NSString *)getFormattedDistanceInterval:(double)interval;
++ (NSString *)getFormattedDistanceInterval:(double)interval withParams:(OsmAndFormatterParams *)params;
 + (NSString *)getFormattedOsmTagValue:(NSString *)tagValue;
 + (NSString *)getFormattedDurationShort:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
 + (NSString *)getFormattedDuration:(NSTimeInterval)seconds;
++ (NSString *)getFormattedFuelCapacity:(EOAVolumeConstant)volumeUnit mode:(OAApplicationMode *)mode value:(double)value;
++ (double)readSavedFuelTankCapacity:(EOAVolumeConstant)volumeUnit mode:(OAApplicationMode *)mode value:(double)value;
++ (double)prepareFuelTankCapacityToSave:(EOAVolumeConstant)volumeUnit value:(double)value;
++ (NSTimeInterval)getStartOfDayForTime:(NSTimeInterval)timestamp;
++ (NSTimeInterval)getStartOfToday;
++ (NSString *)formatValue:(float)value
+                     unit:(NSString *)unit
+      forceTrailingZeroes:(BOOL)forceTrailingZeroes
+      decimalPlacesNumber:(NSInteger)decimalPlacesNumber
+           valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
++ (float)convertLiterToVolumeUnitWithVolumeUnit:(EOAVolumeConstant)volumeUnit value:(float)value;
 
 @end

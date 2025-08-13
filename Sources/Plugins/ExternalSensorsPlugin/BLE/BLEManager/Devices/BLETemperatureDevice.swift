@@ -18,8 +18,12 @@ final class BLETemperatureDevice: Device {
         GattAttributes.SERVICE_TEMPERATURE
     }
     
-    override var getServiceConnectedImage: UIImage {
-        UIImage(named: "widget_weather_temperature")!
+    override var getServiceConnectedImage: UIImage? {
+        UIImage(named: "widget_weather_temperature")
+    }
+    
+    override var getServiceDisconnectedImage: UIImage? {
+        UIImage(named: "ic_custom_sensor_thermometer")
     }
     
     override var getDataFields: [[String: String]]? {
@@ -45,7 +49,7 @@ final class BLETemperatureDevice: Device {
         [.temperature]
     }
     
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+    override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }
 }

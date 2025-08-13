@@ -14,7 +14,7 @@
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
-
+#import "OAMapSource.h"
 #import "OAMapSettingsMainScreen.h"
 #import "OAMapSettingsMapTypeScreen.h"
 #import "OAMapSettingsCategoryScreen.h"
@@ -28,6 +28,7 @@
 #import "OAMapSettingsOnlineSourcesScreen.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAAppData.h"
 #import "OAMapSettingsContourLinesScreen.h"
 #import "OAMapSettingsTerrainScreen.h"
 #import "OAMapSettingsWikipediaScreen.h"
@@ -35,6 +36,7 @@
 #import "OAMapStyleSettings.h"
 #import "OAMapSettingsWeatherScreen.h"
 #import "OAMapSettingsNauticalDepthScreen.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <QtMath>
 #include <QStandardPaths>
@@ -176,6 +178,10 @@
         case EMapSettingsScreenNauticalDepth:
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsNauticalDepthScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
+        case EMapSettingsScreenCoordinatesGrid:
+            if (!self.screenObj)
+                self.screenObj = [[MapSettingsCoordinatesGridScreen alloc] initWithTable:self.tableView viewController:self];
             break;
         default:
             break;

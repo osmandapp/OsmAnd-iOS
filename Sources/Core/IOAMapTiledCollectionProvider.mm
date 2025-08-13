@@ -161,7 +161,7 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> IOAMapTiledCollectionProvider::b
     QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> mapSymbolsGroups;
     for (const auto& marker : collection->getMarkers())
     {
-        const auto mapSymbolGroup = marker->createSymbolsGroup();
+        const auto mapSymbolGroup = marker->createSymbolsGroup(collection->subsection);
         mapSymbolsGroups.push_back(qMove(mapSymbolGroup));
     }
     return mapSymbolsGroups;

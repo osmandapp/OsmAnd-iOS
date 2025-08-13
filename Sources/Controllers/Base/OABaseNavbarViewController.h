@@ -6,7 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "OASuperViewController.h"
 
 typedef NS_ENUM(NSInteger, EOABaseNavbarColorScheme)
@@ -88,6 +87,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)addCell:(NSString *)cellIdentifier;
 - (void)generateData;
 - (BOOL)hideFirstHeader;
+- (BOOL)refreshOnAppear;
 - (NSString *)getTitleForHeader:(NSInteger)section;
 - (NSString *)getTitleForFooter:(NSInteger)section;
 - (NSInteger)rowsCount:(NSInteger)section;

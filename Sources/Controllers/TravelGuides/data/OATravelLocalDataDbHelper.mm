@@ -8,12 +8,12 @@
 
 #import "OATravelLocalDataDbHelper.h"
 #import "OsmAndApp.h"
-#import "OAGPXDocument.h"
-#include <OsmAndCore/ArchiveReader.h>
-#include <OsmAndCore/ArchiveWriter.h>
-
 #import "OsmAnd_Maps-Swift.h"
 #import <sqlite3.h>
+#import "OsmAndSharedWrapper.h"
+
+#include <OsmAndCore/ArchiveReader.h>
+#include <OsmAndCore/ArchiveWriter.h>
 
 #define kTravlGuidesDbName @"travel_guides.db"
 #define DB_VERSION 9
@@ -47,8 +47,6 @@
 #define BOOKMARKS_COL_LAST_MODIFIED @"last_modified"
 #define BOOKMARKS_COL_GPX_GZ @"gpx_gz"
 
-
-
 @interface OAAddArticleGpxReader : NSObject <OAGpxReadDelegate>
 
 @property (nonatomic) dispatch_queue_t dbQueue;
@@ -79,7 +77,7 @@
     if (!travelBook)
         return;
 
-    OAGPXDocument *gpx = (OAGPXDocument *) article.gpxFile.object;
+    OASGpxFile *gpx = (OASGpxFile *) article.gpxFile.object;
     NSString *tmpFilePath = [_tmpDir stringByAppendingPathComponent:TEMP_GPX_FILE_NAME];
     if (gpx)
     {
@@ -612,10 +610,11 @@
                             if (!stringContent.isEmpty())
                             {
                                 OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
-                                OAGPXDocument *document = [[OAGPXDocument alloc] init];
-                                QXmlStreamReader xmlReader(stringContent);
-                                [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
-                                adapter.object = document;
+                                
+                                OASOkioBuffer *buffer = [[OASOkioBuffer alloc] init];
+                                [buffer writeUtf8String:stringContent.toNSString()];
+                                OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileSource:buffer];
+                                adapter.object = gpxFile;
                                 dbArticle.gpxFile = adapter;
                             }
                         }

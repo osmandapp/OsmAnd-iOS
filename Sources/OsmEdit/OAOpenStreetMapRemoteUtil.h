@@ -10,16 +10,18 @@
 
 #import <Foundation/Foundation.h>
 #import "OAOpenStreetMapUtilsProtocol.h"
-#import "OABackupListeners.h"
 
 NS_ASSUME_NONNULL_BEGIN
-@class OAGPX;
+
+@protocol OAOnUploadFileListener;
+
+@class OASTrackItem, OAEntity, OAEntityInfo;
 
 @interface OAOpenStreetMapRemoteUtil : NSObject <OAOpenStreetMapUtilsProtocol, NSURLSessionDelegate>
 
 -(OAEntityInfo *)loadEntityFromEntity:(OAEntity *)entity;
 -(long) openChangeSet:(NSString *)comment;
--(void)uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OAGPX *)document listener:(id<OAOnUploadFileListener>)listener;
+-(void)uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OASTrackItem *)document listener:(id<OAOnUploadFileListener>)listener;
 
 @end
 

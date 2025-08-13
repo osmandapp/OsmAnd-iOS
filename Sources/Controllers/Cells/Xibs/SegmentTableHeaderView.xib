@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="aRy-9S-EwN" customClass="SegmentTableHeaderView" customModule="OsmAnd_Maps" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="434" height="48"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gZ3-J7-e2l">
+                    <rect key="frame" x="0.0" y="0.0" width="434" height="48"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v2R-vL-QuM">
+                            <rect key="frame" x="0.0" y="47" width="434" height="1"/>
+                            <color key="backgroundColor" systemColor="separatorColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="RQ3-ee-TxE"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" name="groupBg"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="v2R-vL-QuM" secondAttribute="bottom" id="W3p-4f-vFh"/>
+                        <constraint firstItem="v2R-vL-QuM" firstAttribute="leading" secondItem="gZ3-J7-e2l" secondAttribute="leading" id="jWl-qV-dEF"/>
+                        <constraint firstAttribute="trailing" secondItem="v2R-vL-QuM" secondAttribute="trailing" id="jXr-f9-Ug9"/>
+                    </constraints>
+                </view>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="rec-Lf-5Zo">
+                    <rect key="frame" x="20" y="8" width="394" height="32"/>
+                    <segments>
+                        <segment title="First"/>
+                        <segment title="Second"/>
+                    </segments>
+                </segmentedControl>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="Kpv-1l-lTd"/>
+            <color key="backgroundColor" name="groupBg"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="gZ3-J7-e2l" secondAttribute="bottom" id="KsE-zy-pMN"/>
+                <constraint firstItem="rec-Lf-5Zo" firstAttribute="top" secondItem="aRy-9S-EwN" secondAttribute="top" constant="8" id="Ofm-xe-sRH"/>
+                <constraint firstItem="rec-Lf-5Zo" firstAttribute="trailing" secondItem="aRy-9S-EwN" secondAttribute="trailingMargin" id="UF7-zK-hZe"/>
+                <constraint firstAttribute="trailing" secondItem="gZ3-J7-e2l" secondAttribute="trailing" id="X2T-uV-tD1"/>
+                <constraint firstItem="gZ3-J7-e2l" firstAttribute="top" secondItem="aRy-9S-EwN" secondAttribute="top" id="bzc-SN-s9Q"/>
+                <constraint firstItem="rec-Lf-5Zo" firstAttribute="leading" secondItem="aRy-9S-EwN" secondAttribute="leadingMargin" id="c6U-n3-Pmj"/>
+                <constraint firstItem="gZ3-J7-e2l" firstAttribute="leading" secondItem="aRy-9S-EwN" secondAttribute="leading" id="eeA-gb-NCJ"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="segmentControl" destination="rec-Lf-5Zo" id="Npk-Ui-w6w"/>
+                <outlet property="separatorViewHeight" destination="RQ3-ee-TxE" id="X2U-Oy-C3j"/>
+            </connections>
+            <point key="canvasLocation" x="-115.94202898550725" y="-256.47321428571428"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="groupBg">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="separatorColor">
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

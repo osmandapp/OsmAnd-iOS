@@ -12,6 +12,7 @@
 #import "OABackupListeners.h"
 #import "OANetworkUtilities.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
 #import "OAOperationLog.h"
 
 #define kUserOperation @"Register user"
@@ -52,6 +53,13 @@
         params[@"orderid"] = orderId;
     NSString *deviceId = OsmAndApp.instance.getUserIosId;
     params[@"deviceid"] = deviceId;
+    NSString *userId = OAAppSettings.sharedManager.billingUserId.get;
+    NSString *userToken = OAAppSettings.sharedManager.billingUserToken.get;
+    if (userId.length > 0 && userToken.length > 0)
+    {
+        [params setObject:userId forKey:@"userId"];
+        [params setObject:userToken forKey:@"userToken"];
+    }
     [OANetworkUtilities sendRequestWithUrl:OABackupHelper.USER_REGISTER_URL params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         int status;
         NSString *message;

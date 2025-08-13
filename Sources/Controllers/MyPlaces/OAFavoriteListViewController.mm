@@ -12,7 +12,9 @@
 #import "OASimpleTableViewCell.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
+#import "OALocationServices.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
@@ -24,6 +26,7 @@
 #import "OAFavoriteGroupEditorViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
+#import "OAObservable.h"
 #import "OAOsmAndFormatter.h"
 #import "OAIndexConstants.h"
 #import "OAGPXAppearanceCollection.h"
@@ -70,9 +73,10 @@ static const NSInteger _exportButtonIndex = 1;
 
 @interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, OAEditorDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, UIDocumentPickerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
 
-@property (strong, nonatomic) NSArray*  menuItems;
-@property (strong, nonatomic) NSMutableArray*  sortedFavoriteItems;
+@property (strong, nonatomic) NSArray *menuItems;
+@property (strong, nonatomic) NSMutableArray *sortedFavoriteItems;
 @property NSUInteger sortingType;
+@property CFTimeInterval lastUpdate;
 
 @end
 
@@ -102,6 +106,11 @@ static const NSInteger _exportButtonIndex = 1;
     BOOL _isSearchActive;
     BOOL _isFiltered;
     OAGPXAppearanceCollection *_appearanceCollection;
+    BOOL _contextMenuVisible;
+    
+    UIFont *_originalGroupFont;
+    UIFont *_italicGroupFont;
+    dispatch_queue_t _favoritesQueue;
 }
 
 static UIViewController *parentController;
@@ -119,6 +128,7 @@ static UIViewController *parentController;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _favoritesQueue = dispatch_queue_create("com.osmand.favorites", DISPATCH_QUEUE_SERIAL);
 
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     _decelerating = NO;
@@ -287,113 +297,127 @@ static UIViewController *parentController;
 
 - (void)updateDistanceAndDirection
 {
-    [self updateDistanceAndDirection:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateDistanceAndDirection:NO];
+    });
 }
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.favoriteTableView isEditing])
+    if ([self.favoriteTableView isEditing])
+        return;
+    
+    CFTimeInterval currentTime = CACurrentMediaTime();
+    if (currentTime - self.lastUpdate < 0.3 && !forceUpdate)
+        return;
+    self.lastUpdate = currentTime;
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    // Obtain fresh location and heading
+    CLLocation *newLocation = app.locationServices.lastKnownLocation;
+    if (!newLocation)
+        return;
+    
+    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+    CLLocationDirection newDirection =
+    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+    ? newLocation.course
+    : newHeading;
+    
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(_favoritesQueue, ^{
+        __strong __typeof(self) strongSelf = weakSelf;
+        if (!strongSelf) {
             return;
-
-        if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !forceUpdate)
-            return;
-        self.lastUpdate = [[NSDate date] timeIntervalSince1970];
-
-        OsmAndAppInstance app = [OsmAndApp instance];
-        // Obtain fresh location and heading
-        CLLocation* newLocation = app.locationServices.lastKnownLocation;
-        if (!newLocation)
-            return;
-
-        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-        CLLocationDirection newDirection =
-        (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-        ? newLocation.course
-        : newHeading;
-
-        [self.sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
+        }
+        NSMutableArray *itemsToProcess = strongSelf->_isFiltered
+        ? strongSelf->_filteredItems
+        : strongSelf.sortedFavoriteItems;
+        
+        [itemsToProcess enumerateObjectsUsingBlock:^(OAFavoriteItem *itemData, NSUInteger idx, BOOL *stop) {
             const auto& favoritePosition31 = itemData.favorite->getPosition31();
             const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
             const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
-
             const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                                newLocation.coordinate.latitude,
-                                                                favoriteLon, favoriteLat);
-
-
-
+                                                              newLocation.coordinate.latitude,
+                                                              favoriteLon, favoriteLat);
+            
             itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
             itemData.distanceMeters = distance;
             CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
             itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-
-         }];
-
-        if (self.sortingType == 1 && [self.sortedFavoriteItems count] > 0)
+        }];
+        
+        if (strongSelf.sortingType == 1 && [itemsToProcess count] > 0)
         {
-            NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2){
-                return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
-            }];
-            [self.sortedFavoriteItems setArray:sortedArray];
+            [strongSelf sortItemsByDistance:itemsToProcess];
         }
-
-        if (_decelerating)
-            return;
-
-        [self refreshVisibleRows];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(self) strongSelf = weakSelf;
+            if (!strongSelf) {
+                return;
+            }
+            if (strongSelf->_decelerating || strongSelf->_contextMenuVisible)
+                return;
+            [strongSelf refreshVisibleRows];
+        });
     });
+}
+
+- (void)sortItemsByDistance:(NSMutableArray<OAFavoriteItem *> *)items
+{
+    NSArray *sortedArray = [items sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem *obj1, OAFavoriteItem *obj2) {
+        return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending :
+               (obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame);
+    }];
+    [items setArray:sortedArray];
 }
 
 - (void)refreshVisibleRows
 {
     if ([self.favoriteTableView isEditing])
         return;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-
-        [self.favoriteTableView beginUpdates];
-        NSArray *visibleIndexPaths = [self.favoriteTableView indexPathsForVisibleRows];
-        for (NSIndexPath *i in visibleIndexPaths)
+    
+    NSArray *visibleIndexPaths = [self.favoriteTableView indexPathsForVisibleRows];
+    for (NSIndexPath *i in visibleIndexPaths)
+    {
+        UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:i];
+        if ([cell isKindOfClass:[OAPointTableViewCell class]])
         {
-            UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:i];
-            if ([cell isKindOfClass:[OAPointTableViewCell class]])
+            OAFavoriteItem* item;
+            if (_directionButton.tag == 1)
             {
-                OAFavoriteItem* item;
-                if (_directionButton.tag == 1)
+                if (i.section == 0)
+                    item = [_isFiltered ? _filteredItems : self.sortedFavoriteItems objectAtIndex:i.row];
+            }
+            else
+            {
+                NSDictionary *groupData = _data[i.section][0];
+                NSString *cellType = groupData[@"type"];
+                if ([cellType isEqualToString:@"group"])
                 {
-                    if (i.section == 0)
-                        item = [self.sortedFavoriteItems objectAtIndex:i.row];
-                }
-                else
-                {
-                    NSDictionary *groupData = _data[i.section][0];
-                    NSString *cellType = groupData[@"type"];
-                    if ([cellType isEqualToString:@"group"])
-                    {
-                        FavoriteTableGroup *group = groupData[@"group"];
+                    FavoriteTableGroup *group = groupData[@"group"];
+                    if (group.favoriteGroup.points != nil && [group.favoriteGroup.points count] > (i.row - 1)) {
                         item = [group.favoriteGroup.points objectAtIndex:i.row - 1];
                     }
                 }
-
-                if (item)
-                {
-                    OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
-
-                    [c.titleView setText:[item getDisplayName]];
-                    c = [self setupPoiIconForCell:c withFavaoriteItem:item];
-
-                    [c.distanceView setText:item.distance];
-                    c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-                }
+            }
+            
+            if (item)
+            {
+                OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
+                
+                [c.titleView setText:[item getDisplayName]];
+                c = [self setupPoiIconForCell:c withFavoriteItem:item];
+                
+                [c.distanceView setText:item.distance];
+                c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
             }
         }
-        [self.favoriteTableView endUpdates];
-
-        //NSArray *visibleIndexPaths = [self.favoriteTableView indexPathsForVisibleRows];
-        //[self.favoriteTableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
-
-    });
+    }
+    
+    [self.favoriteTableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -470,14 +494,19 @@ static UIViewController *parentController;
     NSMutableArray *headerViews = [NSMutableArray array];
     NSMutableArray *tableData = [NSMutableArray array];
 
-    NSArray *favorites = [NSMutableArray arrayWithArray:[OAFavoritesHelper getFavoriteGroups]];
-    for (OAFavoriteGroup *group in favorites)
+    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getFavoriteGroups];
+    for (OAFavoriteGroup *group in favoriteGroups)
     {
         FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
         itemData.favoriteGroup = group;
 
         // Sort items
         NSArray *sortedArrayItems = [itemData.favoriteGroup.points sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+            BOOL obj1Visible = obj1.isVisible;
+            BOOL obj2Visible = obj2.isVisible;
+            if (obj1Visible != obj2Visible)
+                return obj1Visible ? NSOrderedAscending : NSOrderedDescending;
+            
             return [[[obj1 getDisplayName] lowercaseString] compare:[[obj2 getDisplayName] lowercaseString]];
         }];
         [itemData.favoriteGroup.points setArray:sortedArrayItems];
@@ -486,6 +515,14 @@ static UIViewController *parentController;
             [self.sortedFavoriteItems addObject:item];
         [allGroups addObject:itemData];
     }
+    [allGroups sortUsingComparator:^NSComparisonResult(FavoriteTableGroup * _Nonnull obj1, FavoriteTableGroup * _Nonnull obj2) {
+        BOOL group1Visible = [obj1.favoriteGroup isVisible];
+        BOOL group2Visible = [obj2.favoriteGroup isVisible];
+        return group1Visible == group2Visible
+            ? NSOrderedSame
+            : group1Visible ? NSOrderedAscending : NSOrderedDescending;
+    }];
+    
     if (!_isSearchActive)
     {
         NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
@@ -573,6 +610,16 @@ static UIViewController *parentController;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)alertTextFieldDidChange:(UITextField *)textField
+{
+    UIAlertController *alert = (UIAlertController *)self.presentedViewController;
+    if (alert)
+    {
+        UIAlertAction *applyAction = alert.actions.firstObject;
+        applyAction.enabled = [OAFavoritesHelper isGroupNameValidWithText:[textField.text trim]];
+    }
 }
 
 #pragma mark - Actions
@@ -893,6 +940,17 @@ static UIViewController *parentController;
         if (!group)
         {
             group = [[OAFavoriteGroup alloc] initWithPoint:point];
+            for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper getFavoriteGroups])
+            {
+                if ([favoriteGroup.name isEqualToString:group.name])
+                {
+                    group.color = favoriteGroup.color;
+                    group.isVisible = favoriteGroup.isVisible;
+                    group.iconName = favoriteGroup.iconName;
+                    group.backgroundType = favoriteGroup.backgroundType;
+                    break;
+                }
+            }
             groups[[point getCategory]] = group;
         }
         [group.points addObject:point];
@@ -902,7 +960,7 @@ static UIViewController *parentController;
     NSString *filename = app.favoritesFilePrefix;
     if (groups.count == 1)
     {
-        NSString *groupName = groups.allKeys.firstObject;
+        NSString *groupName = [OsmAndApp.instance getGroupFileName:groups.allKeys.firstObject];
         filename = [NSString stringWithFormat:@"%@%@%@",
                     filename,
                     groupName.length > 0 ? app.favoritesGroupNameSeparator : @"",
@@ -944,9 +1002,6 @@ static UIViewController *parentController;
     [OAFavoritesHelper saveFile:[OAFavoritesHelper getFavoriteGroups] file:fullFilename];
 
     NSURL *favoritesUrl = [NSURL fileURLWithPath:fullFilename];
-    UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl]
-                                      applicationActivities:nil];
     
     //export button is on last section, last row
     NSIndexPath *exportButtonIndex = [NSIndexPath indexPathForRow:_exportButtonIndex inSection:_data.count - 1];
@@ -1052,7 +1107,37 @@ static UIViewController *parentController;
     {
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
 
-        UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance")
+        FavoriteTableGroup *groupData = item[@"group"];
+        NSString *showHideCaption = groupData.favoriteGroup.isVisible
+            ? OALocalizedString(@"shared_string_hide_from_map")
+            : OALocalizedString(@"shared_string_show_on_map");
+        NSString *showHideImage = groupData.favoriteGroup.isVisible
+            ? @"ic_custom_hide_outlined" : @"ic_custom_show_outlined";
+        UIAction *showHideAction = [UIAction actionWithTitle:showHideCaption
+                                                       image:[UIImage imageNamed:showHideImage]
+                                                  identifier:nil
+                                                     handler:^(__kindof UIAction * _Nonnull action) {
+            FavoriteTableGroup *groupData = item[@"group"];
+            [OAFavoritesHelper updateGroup:groupData.favoriteGroup visible:!groupData.favoriteGroup.isVisible saveImmediately:YES];
+            [self generateData];
+        }];
+        showHideAction.accessibilityLabel = showHideCaption;
+        
+        UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
+                                                       image:[UIImage imageNamed:@"ic_custom_edit"]
+                                                  identifier:nil
+                                                     handler:^(__kindof UIAction * _Nonnull action) {
+            [self openRenameAlertWith:groupData.favoriteGroup];
+        }];
+        renameAction.accessibilityLabel = OALocalizedString(@"shared_string_rename");
+        [menuElements addObject:[UIMenu menuWithTitle:@""
+                                           image:nil
+                                      identifier:nil
+                                         options:UIMenuOptionsDisplayInline
+                                        children:@[showHideAction, renameAction]]];
+        
+        NSString *appearanceName = OALocalizedString(@"default_appearance");
+        UIAction *appearanceAction = [UIAction actionWithTitle:appearanceName
                                                          image:[UIImage systemImageNamed:@"paintpalette"]
                                                     identifier:nil
                                                        handler:^(__kindof UIAction * _Nonnull action) {
@@ -1060,9 +1145,9 @@ static UIViewController *parentController;
             OAFavoriteGroupEditorViewController *viewController =
                 [[OAFavoriteGroupEditorViewController alloc] initWithGroup:[groupData.favoriteGroup toPointsGroup]];
             viewController.delegate = self;
-            [self showModalViewController:viewController];
+            [self.navigationController pushViewController:viewController animated:YES];
         }];
-        appearanceAction.accessibilityLabel = OALocalizedString(@"change_appearance");
+        appearanceAction.accessibilityLabel = appearanceName;
         [menuElements addObject:appearanceAction];
 
         UIAction *shareAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_share")
@@ -1132,11 +1217,61 @@ static UIViewController *parentController;
     return nil;
 }
 
+- (UITargetedPreview *)tableView:(UITableView *)tableView previewForHighlightingContextMenuWithConfiguration:(UIContextMenuConfiguration *)configuration
+{
+    _contextMenuVisible = YES;
+    return nil;
+}
+
+- (void)tableView:(UITableView *)tableView willEndContextMenuInteractionWithConfiguration:(UIContextMenuConfiguration *)configuration animator:(id<UIContextMenuInteractionAnimating>)animator
+{
+    [animator addCompletion:^{
+        _contextMenuVisible = NO;
+    }];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_directionButton.tag == 1)
         return [self getSortedcellForRowAtIndexPath:indexPath];
     return [self getUnsortedcellForRowAtIndexPath:indexPath];
+}
+
+- (void)openRenameAlertWith:(OAFavoriteGroup *)favoriteGroup
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_rename")
+                                                                   message:OALocalizedString(@"enter_new_name")
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *applyAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_apply")
+                                                         style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * _Nonnull action) {
+        NSString *name = [alert.textFields.firstObject.text trim];
+        if (name.length > 0)
+        {
+            [OAFavoritesHelper updateGroup:favoriteGroup
+                                   newName:name
+                           saveImmediately:YES];
+            [self generateData];
+        }
+    }];
+    [alert addAction:applyAction];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                              style:UIAlertActionStyleCancel
+                                            handler:nil]];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = OALocalizedString(@"enter_new_name");
+        textField.text = favoriteGroup.name;
+        
+        applyAction.enabled = textField.text.length > 0;
+        [textField addTarget:self
+                      action:@selector(alertTextFieldDidChange:)
+            forControlEvents:UIControlEventEditingChanged];
+    }];
+
+    [alert setPreferredAction:applyAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(UITableViewCell*)getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1155,7 +1290,7 @@ static UIViewController *parentController;
         {
             OAFavoriteItem* item = _isFiltered ? [_filteredItems objectAtIndex:indexPath.row] : [self.sortedFavoriteItems objectAtIndex:indexPath.row];
             [cell.titleView setText:[item getDisplayName]];
-            cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];
+            cell = [self setupPoiIconForCell:cell withFavoriteItem:item];
 
             [cell.distanceView setText:item.distance];
             cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
@@ -1212,14 +1347,30 @@ static UIViewController *parentController;
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointHeaderTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointHeaderTableViewCell *)[nib objectAtIndex:0];
-        cell.folderIcon.image = [UIImage templateImageNamed:@"ic_custom_folder"];
+        _originalGroupFont = cell.groupTitle.font;
+        UIFontDescriptor * italicDescriptor = [cell.groupTitle.font.fontDescriptor fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
+        _italicGroupFont = [UIFont fontWithDescriptor:italicDescriptor size:0];
         [cell.valueLabel setHidden:YES];
     }
     if (cell)
     {
         OAFavoriteGroup* group = groupData.favoriteGroup;
         [cell.groupTitle setText:[OAFavoriteGroup getDisplayName:group.name]];
-        cell.folderIcon.tintColor = groupData.favoriteGroup.color;
+        BOOL visible = group.isVisible;
+        if (visible)
+        {
+            cell.groupTitle.font = _originalGroupFont;
+            cell.groupTitle.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.folderIcon.image = [UIImage templateImageNamed:@"ic_custom_folder"];
+            cell.folderIcon.tintColor = groupData.favoriteGroup.color;
+        }
+        else
+        {
+            cell.groupTitle.font = _italicGroupFont;
+            cell.groupTitle.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.folderIcon.image = [UIImage templateImageNamed:@"ic_custom_folder_hidden_outlined"];
+            cell.folderIcon.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+        }
 
         cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
         [cell.openCloseGroupButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
@@ -1231,7 +1382,7 @@ static UIViewController *parentController;
 
         if (groupData.isOpen)
         {
-            cell.arrowImage.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
+            cell.arrowImage.image = [UIImage templateImageNamed:ACImageNameIcCustomArrowDown];
         }
         else
         {
@@ -1268,7 +1419,7 @@ static UIViewController *parentController;
         }
         OAFavoriteItem* item = [groupData.favoriteGroup.points objectAtIndex:dataIndex];
         [cell.titleView setText:[item getDisplayName]];
-        cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];
+        cell = [self setupPoiIconForCell:cell withFavoriteItem:item];
 
         [cell.distanceView setText:item.distance];
 
@@ -1278,7 +1429,7 @@ static UIViewController *parentController;
     return cell;
 }
 
-- (OAPointTableViewCell *) setupPoiIconForCell:(OAPointTableViewCell *)cell withFavaoriteItem:(OAFavoriteItem*)item
+- (OAPointTableViewCell *) setupPoiIconForCell:(OAPointTableViewCell *)cell withFavoriteItem:(OAFavoriteItem*)item
 {
     cell.titleIcon.image = [item getCompositeIcon];
     return cell;

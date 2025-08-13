@@ -9,9 +9,14 @@
 #import "OAFirstUsageWizardController.h"
 #import "OAManageResourcesViewController.h"
 #import "OsmAndApp.h"
+#import "OADownloadsManager.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
+#import "OALocationServices.h"
 #import "OAResourcesUIHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAOcbfHelper.h"
+#import "OADownloadTask.h"
 #import "OAWorldRegion.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -24,11 +29,12 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAUtilities.h"
 #import "OAAppVersion.h"
+#import "OAResourcesUISwiftHelper.h"
+#import "StartupLogging.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
-const static int PROGRESS_ON_MARGIN = 29;
 const static int PROGRESS_OFF_MARGIN = 8;
 
 typedef enum
@@ -118,6 +124,7 @@ typedef enum
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    LogStartup(@"viewDidLoad");
     
     _app = [OsmAndApp instance];
 
@@ -159,7 +166,7 @@ typedef enum
     [_btnDownload setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 
     // Init progress view
-    [_btnGoToMap setTitle:OALocalizedString(@"show_region_on_map_go") forState:UIControlStateNormal];
+    [self setDownloadingButtonTitle:OALocalizedString(@"show_region_on_map_go")];
     
     _bottomTextView.textContainerInset = UIEdgeInsetsZero;
     _bottomTextView.textContainer.lineFragmentPadding = 0;
@@ -200,13 +207,20 @@ typedef enum
     
     [self startWizard];
     [self configureToolbar];
-    [self configureUI];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self configureUI];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    LogStartup(@"viewDidAppear");
+    MarkStartupFinished();
 }
 
 - (void)configureUI
@@ -306,6 +320,13 @@ typedef enum
     }
 }
 
+- (void) setDownloadingButtonTitle:(NSString *)title
+{
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:title];
+    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont monospacedFontAt:15 withTextStyle:UIFontTextStyleBody] range:NSMakeRange(0, attributedTitle.string.length)];
+    [_btnGoToMap setAttributedTitle:attributedTitle forState:UIControlStateNormal];
+}
+
 - (void)showCard:(UIView *)cardView
 {
     [self clearSubViews];
@@ -327,6 +348,7 @@ typedef enum
         ? [OACloudBackupViewController new]
         : [OACloudIntroductionViewController new];
         [weakSelf.navigationController pushViewController:controller animated:YES completion:^{
+            [weakSelf.navigationController setToolbarHidden:YES];
             [weakSelf removeFromParentViewController];
         }];
     }];
@@ -340,7 +362,7 @@ typedef enum
     return [UIMenu menuWithTitle:@""
                            image:nil
                       identifier:nil
-                         options:UIMenuOptionsDisplayInline children:@[restoreCloudAction, restoreFileAction]];;
+                         options:UIMenuOptionsDisplayInline children:@[restoreCloudAction, restoreFileAction]];
 }
 
 - (void)onRestoreFromFilePressed
@@ -411,8 +433,9 @@ typedef enum
     [self onLocationServicesFirstTimeUpdate];
 }
 
-- (void)closeWizard
+- (IBAction)closeWizard
 {
+    [self.navigationController setToolbarHidden:YES];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -517,8 +540,7 @@ typedef enum
                 OARepositoryResourceItem *item = _indexItems[0];
                 _lbMapName1.text = item.title;
                 
-                [_btnGoToMap setTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]] forState:UIControlStateNormal];
-
+                [self setDownloadingButtonTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]]];
                 if (_mapDownloadCancelled)
                 {
                     _progress1.hidden = YES;
@@ -812,6 +834,7 @@ typedef enum
 {
     OAManageResourcesViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
     resourcesViewController.openFromSplash = YES;
+    [self.navigationController setToolbarHidden:YES];
     [self.navigationController pushViewController:resourcesViewController animated:YES];
 }
 
@@ -889,12 +912,11 @@ typedef enum
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_indexItems.count > 0 && [_indexItems[0].resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
-            NSMutableString *progressStr = [NSMutableString string];
             uint64_t size = _indexItems[0].size;
-            [progressStr appendString:[self.byteCountFormatter stringFromByteCount:(size * [value floatValue])]];
-            [progressStr appendString:@"/"];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
-            [_btnGoToMap setTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", progressStr] forState:UIControlStateNormal];
+            float progress = [value floatValue];
+            NSString *progressStr = [OAResourcesUISwiftHelper formatedDownloadingProgressString:size progress:progress addZero:YES combineViaSlash:YES];
+            [self setDownloadingButtonTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", progressStr]];
+            
             [_progress1 setProgress:[value floatValue]];
         }
     });
@@ -912,7 +934,7 @@ typedef enum
         
         if (_indexItems.count > 0)
         {
-            [_btnGoToMap setTitle:OALocalizedString(@"show_region_on_map_go") forState:UIControlStateNormal];
+            [self setDownloadingButtonTitle:OALocalizedString(@"show_region_on_map_go")];
         }
 
         if (task.progressCompleted < 1.0)

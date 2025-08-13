@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
+#import "OAAppData.h"
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
 #import "GeneratedAssetSymbols.h"
@@ -105,6 +106,9 @@
     NSMutableArray<NSDictionary *> *measurementCells = [NSMutableArray array];
     for (OAWeatherBand *band in _weatherHelper.bands)
     {
+        if (band.bandIndex == WEATHER_BAND_TEMPERATURE)
+            continue;
+
         [measurementCells addObject:@{
                 @"key": [@"band_" stringByAppendingString:[band getMeasurementName]],
                 @"band": band,

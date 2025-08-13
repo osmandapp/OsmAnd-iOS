@@ -8,7 +8,7 @@
 
 #import "OARouteInfoLegendCell.h"
 #import "OAColors.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 
 @implementation OARouteInfoLegendCell
 

@@ -17,6 +17,7 @@
 @property (nonatomic) BOOL isSelected;
 @property (nonatomic, readonly) BOOL isEnabled;
 @property (nonatomic) int iconColor;
+@property (nonatomic) int customIconColor;
 
 - (instancetype) initWithStringKey:(NSString *)stringKey name:(NSString *)name descr:(NSString *)descr iconName:(NSString *)iconName isSelected:(BOOL)isSelected;
 

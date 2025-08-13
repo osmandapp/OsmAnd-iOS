@@ -9,6 +9,7 @@
 #import "OAImpassableRoadSelectionViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAvoidSpecificRoads.h"
@@ -16,7 +17,6 @@
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"
 #import "GeneratedAssetSymbols.h"
@@ -116,7 +116,7 @@
         else
         {
             _routeInfoLabel.attributedText = [self.class getFormattedDistTimeString];
-            OAGPXTrackAnalysis *trackAnalysis = self.routingHelper.getTrackAnalysis;
+            OASGpxTrackAnalysis *trackAnalysis = self.routingHelper.getTrackAnalysis;
             if (trackAnalysis)
             {
                 _elevationLabel.text = [OAOsmAndFormatter getFormattedAlt:trackAnalysis.maxElevation];

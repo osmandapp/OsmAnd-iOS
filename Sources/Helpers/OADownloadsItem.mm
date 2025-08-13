@@ -10,6 +10,7 @@
 #import "OAWorldRegion.h"
 #import "OACustomRegion.h"
 #import "OACustomPlugin.h"
+#import "Localization.h"
 
 #define APPROXIMATE_DOWNLOAD_ITEM_SIZE_BYTES 2048
 

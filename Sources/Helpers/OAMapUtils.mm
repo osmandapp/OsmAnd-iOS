@@ -136,34 +136,34 @@
 
 + (double) checkLatitude:(double) latitude
 {
-    if (latitude >= MIN_LATITUDE && latitude <= MAX_LATITUDE) {
+    if (latitude >= MIN_LATITUDE_KEY && latitude <= MAX_LATITUDE_KEY) {
         return latitude;
     }
     while (latitude < -90 || latitude > 90) {
         if (latitude < 0) {
-            latitude += LATITUDE_TURN;
+            latitude += LATITUDE_TURN_KEY;
         } else {
-            latitude -= LATITUDE_TURN;
+            latitude -= LATITUDE_TURN_KEY;
         }
     }
-    if (latitude < MIN_LATITUDE) {
-        return MIN_LATITUDE;
-    } else if (latitude > MAX_LATITUDE) {
-        return MAX_LATITUDE;
+    if (latitude < MIN_LATITUDE_KEY) {
+        return MIN_LATITUDE_KEY;
+    } else if (latitude > MAX_LATITUDE_KEY) {
+        return MAX_LATITUDE_KEY;
     }
     return latitude;
 }
 
 + (double) checkLongitude:(double) longitude
 {
-    if (longitude >= MIN_LONGITUDE && longitude <= MAX_LONGITUDE) {
+    if (longitude >= MIN_LONGITUDE_KEY && longitude <= MAX_LONGITUDE_KEY) {
         return longitude;
     }
-    while (longitude <= MIN_LONGITUDE || longitude > MAX_LONGITUDE) {
+    while (longitude <= MIN_LONGITUDE_KEY || longitude > MAX_LONGITUDE_KEY) {
         if (longitude < 0) {
-            longitude += LONGITUDE_TURN;
+            longitude += LONGITUDE_TURN_KEY;
         } else {
-            longitude -= LONGITUDE_TURN;
+            longitude -= LONGITUDE_TURN_KEY;
         }
     }
     return longitude;
@@ -394,6 +394,42 @@
     BOOL latEqual = (isnan(lat1) && isnan(lat2)) || (abs(lat1 - lat2) < 0.00001);
     BOOL lonEqual = (isnan(lon1) && isnan(lon2)) || (abs(lon1 - lon2) < 0.00001);
     return latEqual && lonEqual;
+}
+
++ (BOOL)isFirstPolygonInsideSecond:(QVector< OsmAnd::PointI >)firstPolygon secondPolygon:(QVector<OsmAnd::PointI>)secondPolygon
+{
+    for (OsmAnd::PointI pointI : firstPolygon)
+    {
+        if (![self.class isPointInsidePolygon:pointI polygon:secondPolygon])
+        {
+            // if at least one point is not inside the boundary, return false
+            return NO;
+        }
+    }
+    return YES;
+}
+
++ (BOOL)isPointInsidePolygon:(OsmAnd::PointI)point polygon:(QVector<OsmAnd::PointI>)polygon
+{
+    double px = point.x;
+    double py = point.y;
+    BOOL oddNodes = NO;
+
+    for (int i = 0, j = polygon.size() - 1; i < polygon.size(); j = i++)
+    {
+        double x1 = polygon.at(i).x;
+        double y1 = polygon.at(i).y;
+        double x2 = polygon.at(j).x;
+        double y2 = polygon.at(j).y;
+        if (((y1 < py && y2 >= py)
+                || (y2 < py && y1 >= py))
+                && (x1 <= px || x2 <= px))
+        {
+            if (x1 + (py - y1) / (y2 - y1) * (x2 - x1) < px)
+                oddNodes = !oddNodes;
+        }
+    }
+    return oddNodes;
 }
 
 @end

@@ -10,21 +10,17 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAResultMatcher.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Data/Amenity.h>
-
-#define OSM_WIKI_CATEGORY @"osmwiki"
-#define SPEED_CAMERA @"speed_camera"
-#define WIKI_LANG @"wiki_lang"
-#define WIKI_PLACE @"wiki_place"
-#define ROUTE_ARTICLE @"route_article"
-#define ROUTE_ARTICLE_POINT @"route_article_point"
+extern NSString * const OSM_WIKI_CATEGORY;
+extern NSString * const SPEED_CAMERA ;
+extern NSString * const WIKI_LANG;
+extern NSString * const WIKI_PLACE;
+extern NSString * const ROUTE_ARTICLE_POINT;
 
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @class OAPOI, OAPOIType, OAPOIBaseType, OAPOICategory, OAPOIFilter;
-@class OASearchPoiTypeFilter, OAPOIUIFilter;
+@class OASearchPoiTypeFilter, OAPOIUIFilter, OATopIndexFilter;
 
 @protocol OAPOISearchDelegate
 
@@ -35,9 +31,6 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @interface OAPOIHelper : NSObject
 
-@property (nonatomic, readonly) BOOL isSearchDone;
-@property (nonatomic, assign) int searchLimit;
-
 @property (nonatomic, readonly) NSArray<OAPOIType *> *poiTypes;
 @property (nonatomic, readonly) NSMapTable<NSString *, OAPOIType *> *poiTypesByName;
 @property (nonatomic, readonly) NSArray<OAPOICategory *> *poiCategories;
@@ -45,11 +38,6 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 @property (nonatomic, readonly) OAPOICategory *otherPoiCategory;
 @property (nonatomic, readonly) OAPOICategory *otherMapCategory;
 @property (nonatomic, readonly) NSArray<OAPOIFilter *> *poiFilters;
-
-@property (nonatomic) OsmAnd::PointI myLocation;
-
-@property (weak, nonatomic) id<OAPOISearchDelegate> delegate;
-@property (weak, nonatomic) id<OAPOISearchDelegate> tempDelegate;
 
 + (OAPOIHelper *) sharedInstance;
 
@@ -68,16 +56,19 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (OAPOIType *) getPoiTypeByKeyInCategory:(OAPOICategory *)category name:(NSString *)name;
 - (OAPOIBaseType *) getAnyPoiAdditionalTypeByKey:(NSString *)name;
 - (OAPOIType *) getTextPoiAdditionalByKey:(NSString *)name;
+- (NSString *) getPoiTypeOptionalIcon:(NSString *)type;
 - (NSString *) getPoiAdditionalCategoryIcon:(NSString *)category;
 - (NSString *) replaceDeprecatedSubtype:(NSString *)subtype;
 
 - (NSString *) getPhraseByName:(NSString *)name;
+- (NSString *) getPhraseByName:(NSString *)name withDefatultValue:(BOOL)withDefatultValue;
 - (NSString *) getPhraseENByName:(NSString *)name;
 - (NSString *) getSynonymsByName:(NSString *)name;
 - (NSString *) getPhrase:(OAPOIBaseType *)type;
 - (NSString *) getPhraseEN:(OAPOIBaseType *)type;
 
 -(NSString *)getPoiStringWithoutType:(OAPOI *)poi;
+-(NSString *)getFormattedOpeningHours:(OAPOI *)poi;
 
 - (NSArray<OAPOICategory *> *) getCategories:(BOOL)includeMapCategory;
 - (OAPOICategory *) getPoiCategoryByName:(NSString *)name;
@@ -88,33 +79,14 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (NSArray<NSString *> *)getAllAvailableWikiLocales;
 - (NSString *) getAllLanguagesTranslationSuffix;
 
-- (void) setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
-
-- (void) findPOIsByKeyword:(NSString *)keyword;
-- (void) findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
-- (void) findPOIsByFilter:(OAPOIUIFilter *)filter radiusIndex:(int *)radiusIndex;
-- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryNames:(NSArray<NSString *> *)categoryNames poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish;
 - (OAPOIType *) getDefaultOtherCategoryType;
+- (NSMutableArray<NSString *> *) getPublicTransportTypes;
 
 -(NSDictionary<NSString *, OAPOIType *> *)getAllTranslatedNames:(BOOL)skipNonEditable;
+- (NSString *) getTranslation:(NSString *)keyName;
 
-+ (NSArray<OAPOI *> *) findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius;
-+ (NSArray<OAPOI *> *) findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName bboxTopLeft:(CLLocationCoordinate2D)bboxTopLeft bboxBottomRight:(CLLocationCoordinate2D)bboxBottomRight;
-+ (NSArray<OAPOI *> *) findPOIsByFilter:(OASearchPoiTypeFilter *)filter topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
-+ (NSArray<OAPOI *> *) findPOIsByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
-+ (NSArray<OAPOI *> *) searchPOIsOnThePath:(NSArray<CLLocation *> *)locations radius:(double)radius filter:(OASearchPoiTypeFilter *)filter matcher:(OAResultMatcher<OAPOI *> *)matcher;
 + (UIImage *)getCustomFilterIcon:(OAPOIUIFilter *) filter;
-+ (void) fetchValuesContentPOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity poi:(OAPOI *)poi;
 
-+ (NSArray<OAPOI *> *) findTravelGuides:(NSArray<NSString *> *)categoryNames location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish;
+- (BOOL) isNameTag:(NSString *)tag;
 
-- (BOOL) breakSearch;
-
-+ (OAPOI *) parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
-+ (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
-+ (OAPOI *) findPOIByName:(NSString *)name lat:(double)lat lon:(double)lon;
-+ (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon;
-
-+ (NSString *) processLocalizedNames:(const QHash<QString, QString> &)localizedNames nativeName:(const QString &)nativeName names:(NSMutableDictionary *)names;
-+ (void) processDecodedValues:(const QList<OsmAnd::Amenity::DecodedValue> &)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values;
 @end

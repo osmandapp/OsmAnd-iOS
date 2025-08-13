@@ -19,8 +19,15 @@
 #import "OAIndexConstants.h"
 #import "OARoutePreferencesParameters.h"
 #import "OAMapWidgetRegistry.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OAAppData.h"
+#import "OsmAnd_Maps-Swift.h"
+
+static NSDictionary *platformCompatibilityKeysDictionary = @{
+    @"widget_top_panel_order": @"top_widget_panel_order",
+    @"widget_bottom_panel_order": @"bottom_widget_panel_order"
+};
 
 @implementation OAProfileSettingsItem
 {
@@ -77,12 +84,12 @@
 
 - (long)localModifiedTime
 {
-    return [OAAppSettings.sharedManager getLastProfileSettingsModifiedTime:_appMode];
+    return [OAAppSettings.sharedManager getLastProfileSettingsModifiedTime:_appMode] * 1000;
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
 {
-    [OAAppSettings.sharedManager setLastProfileModifiedTime:localModifiedTime mode:_appMode];
+    [OAAppSettings.sharedManager setLastProfileModifiedTime:localModifiedTime / 1000 mode:_appMode];
 }
 
 - (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
@@ -112,7 +119,7 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     OAAppData *appData = app.data;
     NSString *renderer = [[OAAppSettings sharedManager].renderer get:_appMode];
-    if ([renderer isEqualToString:@"OsmAnd (online tiles)"])
+    if ([renderer isEqualToString:ONLINE_TILES_DIR])
         return;
     NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
 
@@ -151,7 +158,11 @@
     OAAppSettings *settings = OAAppSettings.sharedManager;
     const auto& params = router->getParameters();
     [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
+        NSString *paramName = key;
+        if ([key hasPrefix:kRoutingPreferencePrefix])
+        {
+            paramName = [key substringFromIndex:kRoutingPreferencePrefix.length];
+        }
         const auto& param = params.find(std::string([paramName UTF8String]));
         if (param != params.end())
         {
@@ -184,7 +195,7 @@
                 [setting setValueFromString:[value stringByReplacingOccurrencesOfString:@"-tts" withString:@""] appMode:_appMode];
                 [[OsmAndApp instance] initVoiceCommandPlayer:_appMode warningNoneProvider:NO showDialog:NO force:NO];
             }
-            else
+            else if (!setting.global)
             {
                 [setting setValueFromString:value appMode:_appMode];
                 if ([key isEqualToString:@"voice_mute"])
@@ -208,23 +219,167 @@
                 }
             }
         }
-        else if ([key isEqualToString:@"terrain_layer"])
+        else
         {
-            if ([value isEqualToString:@"true"])
+            __weak __typeof(self) weakSelf = self;
+            [app.data setSettingValue:value forKey:key mode:_appMode notHandled:^(NSString *value, NSString *key, OAApplicationMode *mode) {
+                [weakSelf configureStringValue:value forKey:key mode:_appMode];
+            }];
+        }
+    }
+}
+
+- (void)configureStringValue:(NSString *)strValue
+                      forKey:(NSString *)key
+                        mode:(OAApplicationMode *)mode
+{
+    NSString *modeKey = [NSString stringWithFormat:@"%@_%@", key, mode.stringKey];
+
+    if (strValue.length == 0)
+    {
+        NSLog(@"[WARNING] Empty value for key: %@", modeKey);
+        return;
+    }
+    
+    NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+
+    NSString *lowerStr = strValue.lowercaseString;
+    
+    // === Bool ===
+    if ([lowerStr isEqualToString:@"true"]) {
+        [defaults setBool:YES forKey:modeKey];
+        return;
+    }
+    if ([lowerStr isEqualToString:@"false"]) {
+        [defaults setBool:NO forKey:modeKey];
+        return;
+    }
+
+    // === Integer ===
+    NSInteger intValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:strValue];
+    if ([scanner scanInteger:&intValue] && scanner.isAtEnd) {
+        [defaults setInteger:intValue forKey:modeKey];
+        return;
+    }
+
+    // === Double ===
+    double doubleValue = 0.0;
+    scanner = [NSScanner scannerWithString:strValue];
+    if ([scanner scanDouble:&doubleValue] && scanner.isAtEnd) {
+        [defaults setDouble:doubleValue forKey:modeKey];
+        return;
+    }
+
+    // === Nested Array ("a,b;c,d") ===
+    if ([strValue containsString:@";"]) {
+        NSMutableArray<NSArray<NSString *> *> *nestedArray = [NSMutableArray array];
+        for (NSString *subStr in [strValue componentsSeparatedByString:@";"]) {
+            if (subStr.length > 0) {
+                [nestedArray addObject:[subStr componentsSeparatedByString:@","]];
+            }
+        }
+        [defaults setObject:nestedArray forKey:modeKey];
+        return;
+    }
+
+    // === Flat Array ("a,b,c") ===
+    if ([strValue containsString:@","]) {
+        NSArray<NSString *> *array = [strValue componentsSeparatedByString:@","];
+        [defaults setObject:array forKey:modeKey];
+        return;
+    }
+
+    // === Preferences ===
+    OACommonPreference *preference = [self findPreferenceForImportedKey:modeKey];
+    if (preference && !preference.global)
+    {
+        if ([preference isKindOfClass:[OACommonUnit class]])
+        {
+            NSUnit *unit = [NSUnit unitFromString:strValue];
+            if (unit)
             {
-                [app.data setTerrainType:[app.data getLastTerrainType:_appMode] mode:_appMode];
+                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit
+                                                    requiringSecureCoding:NO
+                                                                    error:nil];
+                [defaults setObject:data forKey:modeKey];
+
+                [[NSNotificationQueue defaultQueue] enqueueNotification:
+                 [NSNotification notificationWithName:kNotificationSetProfileSetting
+                                               object:self
+                                             userInfo:nil]
+                                                           postingStyle:NSPostASAP
+                                                           coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender)
+                                                               forModes:nil];
             }
             else
             {
-                [app.data setLastTerrainType:[app.data getTerrainType:_appMode] mode:_appMode];
-                [app.data setLastTerrainType:EOATerrainTypeDisabled mode:_appMode];
+                NSLog(@"[WARNING] Invalid UNIT for %@", modeKey);
             }
+        } else if ([preference isMemberOfClass:[OACommonDownloadMode class]])
+        {
+            OACommonDownloadMode *commonDownloadMode = (OACommonDownloadMode *)preference;
+            if (commonDownloadMode)
+            {
+                OADownloadMode *value = [commonDownloadMode valueFromString:strValue appMode:mode];
+                NSUInteger idx = [commonDownloadMode.values indexOfObject:value];
+                [defaults setInteger:(idx != NSNotFound ? idx : 0) forKey:modeKey];
+            }
+        } else if ([preference isMemberOfClass:[OACommonColoringType class]])
+        {
+            OACommonColoringType *commonColoringType = (OACommonColoringType *)preference;
+            if (commonColoringType)
+            {
+                OAColoringType *value = [commonColoringType valueFromString:strValue appMode:mode];
+                NSUInteger idx = [commonColoringType.values indexOfObject:value];
+                [defaults setInteger:(idx != NSNotFound ? idx : 0) forKey:modeKey];
+            }
+        }
+        else if ([preference isMemberOfClass:[OACommonString class]])
+        {
+            NSNumber *value = [preference valueFromString:strValue appMode:mode];
+            if (value)
+                [defaults setObject:value.stringValue forKey:modeKey];
+            else
+                NSLog(@"[WARNING] Invalid value for preference %@", modeKey);
+        }
+        else if ([preference isMemberOfClass:[OACommonInteger class]])
+        {
+            NSLog(@"[WARNING] Enum not implemented for %@", modeKey);
         }
         else
         {
-            [app.data setSettingValue:value forKey:key mode:_appMode];
+            NSNumber *value = [preference valueFromString:strValue appMode:mode];
+            if (value)
+                [defaults setInteger:value.integerValue forKey:modeKey];
+            else
+                NSLog(@"[WARNING] Invalid value for preference %@", modeKey);
         }
     }
+    else
+        NSLog(@"[WARNING] No preference found for %@", modeKey);
+}
+
+- (nullable OACommonPreference *)findPreferenceForImportedKey:(NSString *)key {
+    NSString *formattedKey = [key componentsSeparatedByString:@"__"].firstObject;
+    
+    NSMapTable<NSString *, OACommonPreference *> *registered = [OAAppSettings.sharedManager getRegisteredPreferences];
+    
+    OACommonPreference *pref = [registered objectForKey:formattedKey];
+    if (pref)
+        return pref;
+    
+    NSArray *keys = registered.keyEnumerator.allObjects;
+    for (NSString *registeredKey in keys)
+    {
+        if ([formattedKey hasPrefix:registeredKey])
+            return [registered objectForKey:registeredKey];
+    }
+    // NOTE: during import, the CommonWidgetSizeStyle preference may be missing, so we will create a new instance
+    if ([key hasPrefix:kSizeStylePref])
+        return [OACommonWidgetSizeStyle withKey:kSizeStylePref defValue:EOAWidgetSizeStyleMedium];
+    
+    return nil;
 }
 
 - (void) renameProfile
@@ -268,6 +423,7 @@
             [builder setRoutingProfile:_modeBean.routingProfile];
             [builder setRouteService:_modeBean.routeService];
             [builder setIconColor:_modeBean.iconColor];
+            [builder setCustomIconColor:_modeBean.customIconColor];
             [builder setLocationIcon:_modeBean.locIcon];
             [builder setNavigationIcon:_modeBean.navIcon];
             //        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
@@ -298,63 +454,25 @@
     return YES;
 }
 
-//public void applyAdditionalPrefs() {
-//    if (additionalPrefsJson != null) {
-//        updatePluginResPrefs();
-//
-//        SettingsItemReader reader = getReader();
-//        if (reader instanceof OsmandSettingsItemReader) {
-//            ((OsmandSettingsItemReader) reader).readPreferencesFromJson(additionalPrefsJson);
-//        }
-//    }
-//}
-//
-//private void updatePluginResPrefs() {
-//    String pluginId = getPluginId();
-//    if (Algorithms.isEmpty(pluginId)) {
-//        return;
-//    }
-//    OsmandPlugin plugin = OsmandPlugin.getPlugin(pluginId);
-//    if (plugin instanceof CustomOsmandPlugin) {
-//        CustomOsmandPlugin customPlugin = (CustomOsmandPlugin) plugin;
-//        String resDirPath = IndexConstants.PLUGINS_DIR + pluginId + "/" + customPlugin.getResourceDirName();
-//
-//        for (Iterator<String> it = additionalPrefsJson.keys(); it.hasNext(); ) {
-//            try {
-//                String prefId = it.next();
-//                Object value = additionalPrefsJson.get(prefId);
-//                if (value instanceof JSONObject) {
-//                    JSONObject jsonObject = (JSONObject) value;
-//                    for (Iterator<String> iterator = jsonObject.keys(); iterator.hasNext(); ) {
-//                        String key = iterator.next();
-//                        Object val = jsonObject.get(key);
-//                        if (val instanceof String) {
-//                            val = checkPluginResPath((String) val, resDirPath);
-//                        }
-//                        jsonObject.put(key, val);
-//                    }
-//                } else if (value instanceof String) {
-//                    value = checkPluginResPath((String) value, resDirPath);
-//                    additionalPrefsJson.put(prefId, value);
-//                }
-//            } catch (JSONException e) {
-//                LOG.error(e);
-//            }
-//        }
-//    }
-//}
-//
-//private String checkPluginResPath(String path, String resDirPath) {
-//    if (path.startsWith("@")) {
-//        return resDirPath + "/" + path.substring(1);
-//    }
-//    return path;
-//}
-
 - (void) writeToJson:(id)json
 {
     [super writeToJson:json];
     json[@"appMode"] = [_appMode toJson];
+}
+
+// Due to different configuration keys in iOS and Android, they need to be standardized. This has been done on our side.
+// For internal use, we use the keys 'widget_top_panel_order' from platformCompatibilityKeysDictionary for exporting as @"top_widget_panel_order", etc."
+- (BOOL)updateJSONWithPlatformCompatibilityKeys:(NSMutableDictionary *)json
+                                   key:(NSString *)key
+                                  value:(NSString *)value
+{
+    NSString *newKey = platformCompatibilityKeysDictionary[key];
+    if (newKey)
+    {
+        json[newKey] = value;
+        return YES;
+    }
+    return NO;
 }
 
 - (void)writeItemsToJson:(id)json
@@ -366,41 +484,51 @@
     {
         if ([appModeBeanPrefsIds containsObject:key])
             continue;
-
+        
         OACommonPreference *setting = [prefs objectForKey:key];
-        if (setting)
+        if (setting && !setting.global && [setting isSetForMode:self.appMode])
         {
             NSString *stringValue = [setting toStringValue:self.appMode];
             if (stringValue)
             {
-                if ([setting.key isEqualToString:@"voice_provider"])
-                    json[key] = [stringValue stringByAppendingString:@"-tts"];
-                else
+                if (![self updateJSONWithPlatformCompatibilityKeys:json key:key value:stringValue])
+                {
+                    if (([key isEqualToString:@"voice_provider"] || [setting.key isEqualToString:@"voice_provider"]) && ![stringValue hasSuffix:@"-tts"])
+                    {
+                        stringValue = [stringValue stringByAppendingString:@"-tts"];
+                    }
                     json[key] = stringValue;
+                }
             }
         }
     }
     
     [OsmAndApp.instance.data addPreferenceValuesToDictionary:json mode:self.appMode];
-    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
-    NSMutableString *enabledTransport = [NSMutableString new];
+    OAMapStyleSettings *styleSettings = [self getMapStyleSettingsForMode:self.appMode];
     if ([styleSettings isCategoryEnabled:TRANSPORT_CATEGORY])
     {
+        NSMutableString *enabledTransport = [NSMutableString new];
         NSArray<OAMapStyleParameter *> *transportParams = [styleSettings getParameters:TRANSPORT_CATEGORY];
         for (OAMapStyleParameter *p in transportParams)
         {
-            if ([p.value isEqualToString:@"true"])
+            if ([p.value isEqualToString:@"true"] && ![p.defaultValue isEqualToString:p.value])
             {
                 [enabledTransport appendString:[@"nrenderer_" stringByAppendingString:p.name]];
                 [enabledTransport appendString:@","];
             }
         }
+        if (enabledTransport.length > 0)
+        {
+            json[@"displayed_transport_settings"] = enabledTransport;
+        }
     }
-    json[@"displayed_transport_settings"] = enabledTransport;
     
     for (OAMapStyleParameter *param in [styleSettings getAllParameters])
     {
-        json[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
+        if (param.value.length > 0 && ![param.defaultValue isEqualToString:param.value])
+        {
+            json[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
+        }
     }
     
     const auto router = [OsmAndApp.instance getRouter:self.appMode];
@@ -412,19 +540,39 @@
             if (p.type == RoutingParameterType::BOOLEAN)
             {
                 OACommonBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
-                json[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [boolSetting toStringValue:self.appMode];
+                
+                NSString *paramDefaultString = boolSetting.defValue ? @"true" : @"false";
+                NSString *stringValue = [boolSetting toStringValue:self.appMode];
+                if (![paramDefaultString isEqualToString:stringValue])
+                {
+                    json[[kRoutingPreferencePrefix stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = stringValue;
+                }
             }
             else
             {
                 OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
-                json[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [stringSetting get:self.appMode];
-                
+                NSString *stringValue = [stringSetting toStringValue:self.appMode];
+                if (![stringSetting.defValue isEqualToString:stringValue])
+                {
+                    json[[kRoutingPreferencePrefix stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = stringValue;
+                }
             }
         }
     }
-    NSString *renderer = [[OAAppSettings sharedManager].renderer get:_appMode];
+    
+    if ([[OAAppSettings sharedManager].renderer isSetForMode:self.appMode])
+    {
+        NSString *renderer = [[OAAppSettings sharedManager].renderer get:self.appMode];
+        NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
+        json[@"renderer"] = mapStyleInfo[@"title"];
+    }
+}
+
+- (OAMapStyleSettings *)getMapStyleSettingsForMode:(OAApplicationMode *)mode
+{
+    NSString *renderer = [OAAppSettings.sharedManager.renderer get:mode];
     NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
-    json[@"renderer"] = mapStyleInfo[@"title"];
+    return [[OAMapStyleSettings alloc] initWithStyleName:mapStyleInfo[@"id"] mapPresetName:mode.variantKey];
 }
 
 - (OASettingsItemReader *) getReader

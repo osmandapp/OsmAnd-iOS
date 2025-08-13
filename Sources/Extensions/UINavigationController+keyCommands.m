@@ -9,6 +9,7 @@
 #import "UINavigationController+keyCommands.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapInfoController.h"
 #import "OASuperViewController.h"
 #import "OABaseBottomSheetViewController.h"
@@ -50,7 +51,7 @@
             else if ([rvc.mapPanel isRouteInfoVisible])
                 [rvc.mapPanel closeRouteInfo];
             else if ([rvc.mapPanel.hudViewController.floatingButtonsController isActionSheetVisible])
-                [rvc.mapPanel.hudViewController.floatingButtonsController hideActionsSheetAnimated];
+                [rvc.mapPanel.hudViewController.floatingButtonsController hideActionsSheetAnimated:nil];
             else if ([rvc.mapPanel.hudViewController.mapInfoController weatherToolbarVisible])
                 [rvc.mapPanel.hudViewController hideWeatherToolbarIfNeeded];
             else if ([rvc.mapPanel isContextMenuVisible])

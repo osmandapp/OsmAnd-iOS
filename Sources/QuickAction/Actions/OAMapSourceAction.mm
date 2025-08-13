@@ -13,16 +13,17 @@
 #import "Localization.h"
 #import "OAAppData.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
-#import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OrderedDictionary.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#define LAYER_OSM_VECTOR @"type_default"
-#define KEY_SOURCE @"source"
+static NSString * const kLayerOsmVector = @"LAYER_OSM_VECTOR";
+static NSString * const kSource = @"source";
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAMapSourceAction
 {
@@ -31,12 +32,24 @@ static OAQuickActionType *TYPE;
 
 - (instancetype) init
 {
-    self = [super initWithActionType:self.class.TYPE];
-    if (self)
-    {
-        _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
-    }
-    return self;
+    return [super initWithActionType:self.class.TYPE];
+}
+
+- (void)commonInit
+{
+    _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapSourceActionId
+                                           stringId:@"mapsource.change"
+                                                 cl:self.class]
+                name:OALocalizedString(@"map_source")]
+               nameAction:OALocalizedString(@"shared_string_change")]
+              iconName:@"ic_custom_show_on_map"]
+             secondaryIconName:@"ic_custom_compound_action_change"]
+            category:QuickActionTypeCategoryConfigureMap];
 }
 
 - (void)execute
@@ -44,33 +57,17 @@ static OAQuickActionType *TYPE;
     NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
     if (sources.count > 0)
     {
-        BOOL showBottomSheetStyles = [self.getParams[KEY_DIALOG] boolValue];
+        BOOL showBottomSheetStyles = [self.getParams[kDialog] boolValue];
         if (showBottomSheetStyles)
         {
-            OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeSource];
+            OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAQASelectionTypeSource];
             [bottomSheet show];
             return;
         }
         
-        OsmAndAppInstance app = [OsmAndApp instance];
-        OAMapSource *currSource = app.data.lastMapSource;
-        NSInteger index = -1;
-        for (NSInteger idx = 0; idx < sources.count; idx++)
-        {
-            NSArray *source = sources[idx];
-            if ([source[source.count - 1] isEqualToString:currSource.name] || ([source.firstObject isEqualToString:currSource.variant] && currSource.variant.length > 0))
-            {
-                index = idx;
-                break;
-            }
-        }
-        
-        NSArray<NSString *> *nextSource = sources[0];
-        
-        if (index >= 0 && index < sources.count - 1)
-            nextSource = sources[index + 1];
-        
-        [self executeWithParams:nextSource];
+        NSArray<NSString *> *nextSource = [self nextMapSourceFrom:sources];
+        if (nextSource)
+            [self executeWithParams:nextSource];
     }
 }
 
@@ -79,7 +76,7 @@ static OAQuickActionType *TYPE;
     OsmAndAppInstance app = [OsmAndApp instance];
     NSString *variant = params.firstObject;
     NSString *name = params.count > 1 ? params[params.count - 1] : @"";
-    if ([variant isEqualToString:LAYER_OSM_VECTOR])
+    if ([variant isEqualToString:kLayerOsmVector])
     {
         OAMapSource *mapSource = app.data.prevOfflineSource;
         if (!mapSource)
@@ -102,12 +99,50 @@ static OAQuickActionType *TYPE;
         }
         app.data.lastMapSource = newMapSource;
     }
-//     indicate change with toast?
+}
+
+- (NSArray<NSString *> *)nextMapSourceFrom:(NSArray<NSArray<NSString *> *> *)sources
+{
+    if (sources.count == 0)
+        return nil;
+    
+    OAMapSource *currSource = [OsmAndApp instance].data.lastMapSource;
+    if (sources.count == 1)
+        return [sources.firstObject.firstObject isEqualToString:currSource.variant] ? @[kLayerOsmVector, OALocalizedString(@"vector_data")] : sources.firstObject;
+
+    NSInteger index = -1;
+    for (NSInteger idx = 0; idx < sources.count; idx++)
+    {
+        NSArray<NSString *> *source = sources[idx];
+        BOOL matchByName = [source.lastObject isEqualToString:currSource.name];
+        BOOL matchByVariant = ([source.firstObject isEqualToString:currSource.variant] && currSource.variant.length > 0);
+        if (matchByName || matchByVariant)
+        {
+            index = idx;
+            break;
+        }
+    }
+    
+    NSArray<NSString *> *nextSource = sources.firstObject;
+    if (index >= 0 && index < sources.count - 1)
+        nextSource = sources[index + 1];
+    
+    return nextSource;
+}
+
+- (NSString *)getActionStateName
+{
+    NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
+    NSArray<NSString *> *nextSource = [self nextMapSourceFrom:sources];
+    if (nextSource.count > 0)
+        return nextSource.lastObject;
+    
+    return [self getName];
 }
 
 - (NSString *)getTranslatedItemName:(NSString *)item
 {
-    if ([item isEqualToString:LAYER_OSM_VECTOR])
+    if ([item isEqualToString:kLayerOsmVector])
         return OALocalizedString(@"vector_data");
     else
         return item;
@@ -131,7 +166,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getListKey
 {
-    return KEY_SOURCE;
+    return kSource;
 }
 
 - (OrderedDictionary *)getUIModel
@@ -139,9 +174,9 @@ static OAQuickActionType *TYPE;
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
-                          @"key" : KEY_DIALOG,
+                          @"key" : kDialog,
                           @"title" : OALocalizedString(@"quick_action_interim_dialog"),
-                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          @"value" : @([self.getParams[kDialog] boolValue]),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
@@ -175,28 +210,25 @@ static OAQuickActionType *TYPE;
     {
         for (NSDictionary *item in arr)
         {
-            if ([item[@"key"] isEqualToString:KEY_DIALOG])
-                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            if ([item[@"key"] isEqualToString:kDialog])
+                [params setValue:item[@"value"] forKey:kDialog];
             else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
                 [sources addObject:@[item[@"value"], item[@"title"]]];
         }
     }
-    [params setObject:sources forKey:KEY_SOURCE];
+    [params setObject:sources forKey:kSource];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return sources.count > 0;
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:17 stringId:@"mapsource.change" class:self.class name:OALocalizedString(@"quick_action_map_source") category:CONFIGURE_MAP iconName:@"ic_custom_show_on_map" secondaryIconName:nil];
-       
     return TYPE;
 }
 
 - (NSArray *)loadListFromParams
 {
-    return self.getParams[self.getListKey];
+    return [self getParams][[self getListKey]];
 }
 
 @end

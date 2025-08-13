@@ -21,7 +21,7 @@
 #import "OAResourcesUIHelper.h"
 #import "GeneratedAssetSymbols.h"
 
-#include "Localization.h"
+#import "Localization.h"
 
 @interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource, OATilesEditingViewControllerDelegate>
 {

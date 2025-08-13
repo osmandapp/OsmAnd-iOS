@@ -7,16 +7,14 @@
 //
 
 #import "OARouteDetailsGraphViewController.h"
-#import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASizes.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
-#import "OALineChartCell.h"
 #import "OsmAndApp.h"
-#import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
 #import "OAMapLayers.h"
 #import "OARouteLayer.h"
@@ -31,9 +29,9 @@
 #import "OARouteStatisticsModeCell.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAGPXDatabase.h"
+#import "OASelectedGPXHelper.h"
 #import "GeneratedAssetSymbols.h"
-
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 
 #include <OsmAndCore/Utilities.h>
 
@@ -57,10 +55,13 @@
     CGFloat _cachedYViewPort;
     OAMapRendererView *_mapView;
     OATrackMenuViewControllerState *_trackMenuControlState;
+    
+    OAAutoObserverProxy *_gpxTracksRefreshedObserver;
+    BOOL _tempGpx;
 }
 
 - (instancetype)initWithGpxData:(NSDictionary *)data
-          trackMenuControlState:(OATargetMenuViewControllerState *)trackMenuControlState
+          trackMenuControlState:(OATrackMenuViewControllerState *)trackMenuControlState
 {
     self = [super initWithGpxData:data];
     if (self)
@@ -68,38 +69,42 @@
         if (data)
         {
             _trackMenuControlState = trackMenuControlState;
+            _gpxTracksRefreshedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(gpxTracksRefreshedHandler)
+                                                                     andObserve:[OARootViewController instance].mapPanel.mapViewController.gpxTracksRefreshedObservable];
         }
     }
     return self;
 }
 
+- (void)gpxTracksRefreshedHandler
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.dismissed)
+            [self refreshChart];
+    });
+}
+
 - (NSArray *) getMainGraphSectionData
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-    OALineChartCell *routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
+    ElevationChartCell *routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
-    routeStatsCell.lineChartView.delegate = self;
+    routeStatsCell.chartView.delegate = self;
 
-    [GpxUIHelper setupGPXChartWithChartView:routeStatsCell.lineChartView
-                               yLabelsCount:4
-                                  topOffset:20
-                               bottomOffset:4
-                        useGesturesAndScale:YES
-    ];
-
-    
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
-    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView
+    [GpxUIHelper setupElevationChartWithChartView:routeStatsCell.chartView
+                                        topOffset:20
+                                     bottomOffset:4
+                              useGesturesAndScale:YES];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
+    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
-                           useGesturesAndScale:YES
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
-                               calcWithoutGaps:calcWithoutGaps];
+                                      axisType:GPXDataSetAxisTypeDistance
+                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx]];
 
-    BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
-    
-    self.statisticsChart = routeStatsCell.lineChartView;
+    self.statisticsChart = routeStatsCell.chartView;
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
     {
         if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
@@ -108,7 +113,8 @@
         }
         [recognizer addTarget:self action:@selector(onChartGesture:)];
     }
-    
+
+    BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     if (hasSlope)
     {
         nib = [[NSBundle mainBundle] loadNibNamed:[OARouteStatisticsModeCell getCellIdentifier] owner:self options:nil];
@@ -133,7 +139,7 @@
     if (!self.gpx || !self.analysis)
     {
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
-        self.analysis = [self.gpx getAnalysis:0];
+        self.analysis = [self.gpx getAnalysisFileTimestamp:0];
     }
     _types = _trackMenuControlState ? _trackMenuControlState.routeStatistics : @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
@@ -192,6 +198,13 @@
 {
     [super viewDidLoad];
     
+    BOOL gpxVisible = self.trackItem ? [OASelectedGPXHelper.instance containsGpxFileWith:self.trackItem.path] : YES;
+    if (!gpxVisible)
+    {
+        [[OARootViewController instance].mapPanel.mapViewController showTempGpxTrackFromGpxFile:self.gpx];
+        _tempGpx = YES;
+    }
+
     [self setupRouteInfo];
     
     [self generateData];
@@ -203,16 +216,25 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 125.;
 
-    if (!self.trackChartPoints)
+    if (gpxVisible)
     {
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                           analysis:self.analysis];
+        [self refreshChart];
+        [self updateRouteStatisticsGraph];
     }
-    [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints
-                                            analysis:self.analysis];
-    [self updateRouteStatisticsGraph];
+}
+
+- (void)refreshChart
+{
+    if (self.analysis && self.segment)
+    {
+        [self.trackChartHelper updateTrackChartPointsWithInvalidate:YES];
+        [self.trackChartHelper refreshChart:self.statisticsChart
+                                       fitTrack:YES
+                                       forceFit:NO
+                               recalculateXAxis:YES
+                                       analysis:self.analysis
+                                        segment:self.segment];
+    }
 }
 
 - (BOOL)isLandscapeIPadAware
@@ -305,6 +327,16 @@
 
 - (void)onMenuShown
 {
+    if (_trackMenuControlState && !_trackMenuControlState.openedFromTrackMenu)
+        [super onMenuShown];
+}
+
+- (void)onMenuDismissed
+{
+    [super onMenuDismissed];
+    
+    if (_tempGpx)
+        [[OARootViewController instance].mapPanel.mapViewController hideTempGpxTrack];
 }
 
 - (ETopToolbarType) topToolbarType
@@ -350,18 +382,19 @@
             _highlightDrawX = -1;
     }
     else if (([recognizer isKindOfClass:UIPinchGestureRecognizer.class] ||
-              ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
+              ([recognizer isKindOfClass:UITapGestureRecognizer.class]
+               && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        if (!self.trackChartPoints)
+        if (self.analysis && self.segment)
         {
-            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                               analysis:self.analysis];
+            [self.trackChartHelper refreshChart:self.statisticsChart
+                                           fitTrack:YES
+                                           forceFit:NO
+                                   recalculateXAxis:YES
+                                           analysis:self.analysis
+                                            segment:self.segment];
         }
-        [self.routeLineChartHelper refreshHighlightOnMap:YES
-                                           lineChartView:self.statisticsChart
-                                        trackChartPoints:self.trackChartPoints
-                                                analysis:self.analysis];
     }
 }
 
@@ -400,8 +433,19 @@
     if (_highlightDrawX != -1)
     {
         ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
-        if (h != nil)
-            [self.statisticsChart highlightValue:h callDelegate:true];
+        if (h)
+        {
+            [self.statisticsChart highlightValue:h callDelegate:YES];
+            if (self.analysis && self.segment)
+            {
+                [self.trackChartHelper refreshChart:self.statisticsChart
+                                               fitTrack:YES
+                                               forceFit:NO
+                                       recalculateXAxis:NO
+                                               analysis:self.analysis
+                                                segment:self.segment];
+            }
+        }
     }
 }
 
@@ -423,10 +467,19 @@
         else
         {
             _trackMenuControlState.openedFromTrackMenu = NO;
+            __weak __typeof(self) weakSelf = self;
             [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-                [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_trackMenuControlState.gpxFilePath]
-                                                                   trackHudMode:EOATrackMenuHudMode
-                                                                          state:_trackMenuControlState];
+                
+                if (weakSelf.trackItem)
+                {
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:weakSelf.trackItem
+                                                                       trackHudMode:EOATrackMenuHudMode
+                                                                              state:_trackMenuControlState];
+                }
+                else
+                {
+                    NSLog(@"trackItem is empty");
+                }
             }];
         }
     }
@@ -482,15 +535,16 @@
 
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
 {
-    if (!self.trackChartPoints)
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                           analysis:self.analysis];
-    [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints
-                                            analysis:self.analysis];
+    if (self.analysis && self.segment)
+    {
+        [self.trackChartHelper refreshChart:self.statisticsChart
+                                       fitTrack:YES
+                                       forceFit:NO
+                               recalculateXAxis:NO
+                                       analysis:self.analysis
+                                        segment:self.segment];
+    }
 }
-
 
 #pragma mark - OAStatisticsSelectionDelegate
 
@@ -505,14 +559,13 @@
     if (_data.count > 1)
     {
         OARouteStatisticsModeCell *statsModeCell = _data[0];
-        OALineChartCell *graphCell = _data[1];
+        ElevationChartCell *graphCell = _data[1];
 
-        [self.routeLineChartHelper changeChartTypes:_types
-                                              chart:graphCell.lineChartView
+        [self.trackChartHelper changeChartTypes:_types
+                                              chart:graphCell.chartView
                                            analysis:self.analysis
-                                           modeCell:statsModeCell];
+                                      statsModeCell:statsModeCell];
     }
 }
-
 
 @end

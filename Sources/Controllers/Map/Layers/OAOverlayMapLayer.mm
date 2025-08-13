@@ -12,6 +12,10 @@
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapSource.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -68,14 +72,13 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     [self updateOpacitySliderVisibility];
     
     if (self.app.data.overlayMapSource)
     {
-        [self showProgressHUD];
-        
         NSString *mapCreatorFilePath = [OAMapCreatorHelper sharedInstance].files[self.app.data.overlayMapSource.resourceId];
         if (mapCreatorFilePath)
         {
@@ -109,8 +112,6 @@
                 }
             }
         }
-
-        [self hideProgressHUD];
         
         return YES;
     }

@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OADestination.h"
+
+@class OADestination;
 
 @interface OADestinationItem : NSObject
 

@@ -20,12 +20,22 @@
 #import "OAOsmNotesMapLayerProvider.h"
 #import "OAOnlineOsmNoteWrapper.h"
 #import "OAPluginsHelper.h"
+#import "OAAppSettings.h"
+#import "OAAppData.h"
+#import "OAOsmEditsDBHelper.h"
+#import "OAOsmNotePoint.h"
+#import "OAOsmEditsLayer.h"
+#import "Localization.h"
+#import "OAPointDescription.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 
 #define kMaxZoom 11
+
+static const int START_ZOOM = 8;
 
 static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
@@ -75,7 +85,8 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     CGFloat textSize = [[OAAppSettings sharedManager].textSize get];
     if (_textSize != textSize)
@@ -127,7 +138,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
-    return nil;
+    return [OAOsmEditsLayer getTargetPointFromPoint:obj];
 }
 
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj
@@ -150,20 +161,78 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    OAOsmNotesMapLayerProvider::NotesSymbolsGroup* notesSymbolGroup = dynamic_cast<OAOsmNotesMapLayerProvider::NotesSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
-    if (notesSymbolGroup != nullptr)
+    float zoom = [self.mapViewController getMapZoom];
+    NSArray<OAOpenStreetMapPoint *> *objects = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
+    
+    if (zoom >= START_ZOOM && !NSArrayIsEmpty(objects))
     {
-        std::shared_ptr<const OAOnlineOsmNote> note = notesSymbolGroup->note;
-        if (note != nullptr)
+        CGPoint pixel = result.point;
+        int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+        
+        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));
+        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
+        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+        
+        for (OAOsmNotePoint *note in objects)
         {
-            OATargetPoint *targetPoint = [self getTargetPointCpp:note.get()];
-            targetPoint.targetObj = [[OAOnlineOsmNoteWrapper alloc] initWithNote:note];
-            if (![found containsObject:targetPoint])
-                [found addObject:targetPoint];
+            // Android has extra settings check here. 
+            //boolean showClosed = plugin.SHOW_CLOSED_OSM_BUGS.get();
+            //if (!note.isOpened() && !showClosed) {
+            //    continue;
+            //}
+            
+            double lat = [note getLatitude];
+            double lon = [note getLongitude];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+            
+            if (shouldAdd)
+                [result collect:note provider:self];
         }
     }
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OAOnlineOsmNoteWrapper.class])
+    {
+        OAOnlineOsmNoteWrapper *note = (OAOnlineOsmNoteWrapper *)obj;
+        return  [[CLLocation alloc] initWithLatitude:note.latitude longitude:note.longitude];
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OAOnlineOsmNoteWrapper.class])
+    {
+        OAOnlineOsmNoteWrapper *note = (OAOnlineOsmNoteWrapper *)obj;
+        NSString *name = note.description ?: @"";
+        NSString *typeName = note.typeName ?: OALocalizedString(@"osn_bug_name");
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_OSM_NOTE typeName:typeName name:name];
+    }
+    return nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 @end

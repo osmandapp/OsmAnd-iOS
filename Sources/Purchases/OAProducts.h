@@ -49,6 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_Advanced_Widgets @"net.osmand.maps.inapp.addon.advanced_widgets"
 #define kInAppId_Addon_OsmandDevelopment @"net.osmand.maps.inapp.addon.development"
 #define kInAppId_Addon_External_Sensors @"net.osmand.maps.inapp.addon.external_sensors"
+#define kInAppId_Addon_Vehicle_Metrics @"net.osmand.maps.inapp.addon.vehicle_metrics"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0
@@ -60,6 +61,12 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInApp_Addon_OsmEditing_Default_Price 0.0
 #define kInApp_Addon_Mapillary_Default_Price 0.0
 #define kInApp_Addon_OsmandDevelopment_Default_Price 0.0
+
+// Addons internal ids
+#define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
+#define kId_Addon_TrackRecording_Edit_Waypoint @"addon.track_recording.edit_waypoint"
+#define kId_Addon_Parking_Set @"addon.parking.set"
+#define kId_Addon_OsmEditing_Edit_POI @"addon.osm_editing.edit_poi"
 
 // Subscriptions ids
 #define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.monthly"
@@ -84,12 +91,6 @@ NS_ASSUME_NONNULL_BEGIN
 #define kSubscription_Pro_Annual_Price 29.99
 #define kSubscription_Maps_Annual_Price 9.99
 #define kInApp_Maps_Full_Price 24.99
-
-// Addons internal ids
-#define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
-#define kId_Addon_TrackRecording_Edit_Waypoint @"addon.track_recording.edit_waypoint"
-#define kId_Addon_Parking_Set @"addon.parking.set"
-#define kId_Addon_OsmEditing_Edit_POI @"addon.osm_editing.edit_poi"
 
 @class SKProduct, OAFeature;
 
@@ -211,7 +212,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 
 @property (nonatomic) SKProduct *skProduct;
 
-- (instancetype) initWithSkProduct:(SKProduct * _Nonnull)skProduct;
+- (instancetype) initWithSkProduct:(SKProduct *)skProduct;
 - (instancetype) initWithIdentifier:(NSString *)productIdentifier title:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale;
 - (instancetype) initWithIdentifier:(NSString *)productIdentifier;
 
@@ -223,6 +224,13 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 - (NSAttributedString *) getDescription:(CGFloat)fontSize;
 - (NSString *) productIconName;
 - (NSString *) productScreenshotName;
+
+- (BOOL) isFullVersion;
+- (BOOL) isNautical;
+- (BOOL) isContourLines;
+- (BOOL) isLiveUpdates;
+- (BOOL) isOsmAndPro;
+- (BOOL) isMaps;
 
 @end
 
@@ -253,9 +261,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 - (NSArray<OASubscription *> *) getAllSubscriptions;
 - (NSArray<OASubscription *> *) getVisibleSubscriptions;
 - (NSArray<OASubscription *> *) getPurchasedSubscriptions;
-- (OASubscription * _Nullable) getSubscriptionByIdentifier:(NSString * _Nonnull)identifier;
-- (BOOL) containsIdentifier:(NSString * _Nonnull)identifier;
-- (OASubscription * _Nullable) upgradeSubscription:(NSString *)identifier;
+- (nullable OASubscription *) getSubscriptionByIdentifier:(NSString *)identifier;
+- (BOOL) containsIdentifier:(NSString *)identifier;
+- (nullable OASubscription *) upgradeSubscription:(NSString *)identifier;
 
 @end
 
@@ -295,6 +303,18 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 
 @end
 
+@interface OAExternalSubscription : OASubscription
+
++ (OAExternalSubscription *) buildFromJson:(NSDictionary *)json;
+
+@end
+
+@interface OAExternalProduct : OAProduct
+
++ (OAExternalProduct *) buildFromJson:(NSDictionary *)json;
+
+@end
+
 @interface OAMapsFullProduct : OAProduct
 @end
 
@@ -328,6 +348,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @end
 
 @interface OAExternalSensorsProduct : OAProduct
+@end
+
+@interface OAVehicleMetricsProduct : OAProduct
 @end
 
 @interface OACarPlayProduct : OAProduct
@@ -383,6 +406,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) OAProduct *mapillary;
 @property (nonatomic, readonly) OAProduct *weather;
 @property (nonatomic, readonly) OAProduct *sensors;
+@property (nonatomic, readonly) OAProduct *vehicleMetrics;
 @property (nonatomic, readonly) OAProduct *carplay;
 @property (nonatomic, readonly) OAProduct *osmandDevelopment;
 
@@ -411,7 +435,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddonsPurchased;
 
 @property (nonatomic, readonly) NSArray<OAFunctionalAddon *> *functionalAddons;
-@property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
+@property (nonatomic, readonly, nullable) OAFunctionalAddon *singleAddon;
 
 @property (nonatomic, readonly) OASubscription *monthlyLiveUpdates;
 @property (nonatomic, readonly) OASubscription *proMonthly;
@@ -423,9 +447,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 + (NSSet<NSString *> *) getProductIdentifiers:(NSArray<OAProduct *> *)products;
 - (OAProduct *) getProduct:(NSString *)productIdentifier;
 - (BOOL) updateProduct:(SKProduct *)skProduct;
-- (BOOL) setPurchased:(NSString * _Nonnull)productIdentifier;
-- (BOOL) setExpired:(NSString * _Nonnull)productIdentifier;
-- (BOOL) setExpirationDate:(NSString * _Nonnull)productIdentifier expirationDate:(NSDate * _Nullable)expirationDate;
+- (BOOL) setPurchased:(NSString *)productIdentifier;
+- (BOOL) setExpired:(NSString *)productIdentifier;
+- (BOOL) setExpirationDate:(NSString *)productIdentifier expirationDate:(nullable NSDate *)expirationDate;
 - (void) disableProduct:(OAProduct *)product;
 - (void) enableProduct:(OAProduct *)product;
 

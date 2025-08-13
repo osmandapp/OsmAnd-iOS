@@ -16,27 +16,28 @@
 #import "OAEditDescriptionViewController.h"
 #import "Localization.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
+#import "OAAmenitySearcher.h"
+#import "OAAmenitySearcher+cpp.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OALocationServices.h"
+#import "OAPOICategory.h"
 #import "OATransportStop.h"
 #import "OACollapsableNearestPoiWikiView.h"
 #import "OATransportStopRoute.h"
 #import "OACollapsableTransportStopRoutesView.h"
-#import "OACollapsableCardsView.h"
-#import "OANoImagesCard.h"
-#import "OAMapillaryImageCard.h"
-#import "OAMapillaryContributeCard.h"
-#import "OAUrlImageCard.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAPointDescription.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
 #import "OAWikiArticleHelper.h"
 #import "OAColors.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAMapUtils.h"
 #import "OAWikiImageHelper.h"
-#import "OAWikiImageCard.h"
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
 #import "OASimpleTableViewCell.h"
@@ -47,21 +48,51 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OACollapsableView.h"
+#import "OAMapRendererEnvironment.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
+#import "OAMapLayers.h"
+#import "OrderedDictionary.h"
+#import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
 
 #include <OsmAndCore/Utilities.h>
 
-#define kWikiLink @".wikipedia.org/w"
-#define kWhatsAppLink @"https://wa.me/%@"
-#define kViberLink @"viber://contact?number=%@"
-#define kSkypeLink @"skype:%@"
-#define kMailLink @"mailto:%@"
-#define kViewPortHtml @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>"
-#define kNearbyPoiMaxCount 10
-#define kNearbyPoiMinRadius 250
-#define kNearbyPoiMaxRadius 1000
-#define kNearbyPoiSearchFactory 2
+// Links
+static NSString *kWikiLink = @".wikipedia.org/w";
+static NSString *kWhatsAppLink = @"https://wa.me/%@";
+static NSString *kViberLink = @"viber://contact?number=%@";
+static NSString *kSkypeLink = @"skype:%@";
+static NSString *kMailLink = @"mailto:%@";
+static NSString *kInstagramLink = @"https://www.instagram.com/%@";
+static NSString *kFacebookLink = @"https://www.facebook.com/%@";
 
-@interface OATargetInfoViewController() <OACollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
+NSString * const TYPE_MAPILLARY_PHOTO = @"mapillary-photo";
+NSString * const TYPE_MAPILLARY_CONTRIBUTE = @"mapillary-contribute";
+NSString * const TYPE_MAPILLARY_EMPTY = @"mapillary-empty";
+NSString * const TYPE_URL_PHOTO = @"url-photo";
+NSString * const TYPE_WIKIMEDIA_PHOTO = @"wikimedia-photo";
+NSString * const TYPE_WIKIDATA_PHOTO = @"wikidata-photo";
+
+static NSString *WITHIN_POLYGONS_ROW_KEY = @"within_polygons";
+
+// HTML for ViewPort
+static NSString *const kViewPortHtml = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>";
+
+// Constants for Nearby POI
+static const NSInteger kNearbyPoiMaxCount = 10;
+static const NSInteger kNearbyPoiMinRadius = 250;
+static const NSInteger kNearbyPoiMaxRadius = 1000;
+static const NSInteger kNearbyPoiSearchFactory = 2;
+
+static const CGFloat kBackButtonOffsetLeftFromFrame = 6.0;
+
+static const CGFloat kTextMaxHeight = 150.0;
+
+@interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
 @property (nonatomic) BOOL wikiCardsReady;
 
@@ -77,7 +108,9 @@
     BOOL _hasOsmWiki;
     CGFloat _calculatedWidth;
     
-    OARowInfo *_nearbyImagesRowInfo;
+    OARowInfo *_onlinePhotoCardsRowInfo;
+    OARowInfo *_mapillaryCardsRowInfo;
+
     BOOL _otherCardsReady;
 }
 
@@ -182,13 +215,15 @@
     
     [self appdendDetailsButtonRow:_rows];
     
+    [self buildWithinRow];
+    
     [self buildRows:_rows];
 
     if (self.additionalRows)
     {
         [_rows addObjectsFromArray:self.additionalRows];
     }
-
+    
     if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class])
         [self buildRowsPoi:YES];
 
@@ -206,9 +241,114 @@
 
     [self buildCoordinateRows:rows];
     [self addNearbyImagesIfNeeded];
+    [self addMapillaryCardsRowInfoIfNeeded];
+    
+    [self startLoadingImages];
 
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
+}
+
+- (void)buildWithinRow
+{
+    if (![[self getTargetObj] isKindOfClass:OAMapObject.class])
+        return;
+    
+    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+    NSArray<OARenderedObject *> *polygons = [mapViewController.mapLayers.contextMenuLayer retrievePolygonsAroundMapObject:self.location.latitude lon:self.location.longitude mapObject:[self getTargetObj]];
+    
+    polygons = [polygons sortedArrayUsingComparator:^NSComparisonResult(OARenderedObject *obj1, OARenderedObject *obj2) {
+        long area1 = [obj1 estimatedArea];
+        long area2 = [obj2 estimatedArea];
+        if (area1 > area2)
+            return NSOrderedDescending;
+        else if (area1 < area2)
+            return NSOrderedAscending;
+        return NSOrderedSame;
+    }];
+    
+    if (polygons.count > 0)
+    {
+        NSString *title = OALocalizedString(@"transport_nearby_routes");
+        
+        NSMutableArray<NSString *> *names = [NSMutableArray new];
+        for (OARenderedObject *polygon in polygons)
+        {
+            OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:polygon];
+            NSString *name = [OAUtilities capitalizeFirstLetter:[RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:polygon]];
+            [names addObject:name];
+        }
+        NSString *rowSummary = [self getMenuObjectsNamesByComma:names];
+        
+        NSMutableArray *detailsArray = [self getWithinCollapsableContent:polygons];
+        
+        OARowInfo *row = [[OARowInfo alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
+                                        icon:[UIImage templateImageNamed:@"ic_custom_pin_location"]
+                                  textPrefix:title
+                                        text:rowSummary
+                                   textColor:nil
+                                      isText:YES
+                                   needLinks:YES
+                                       order:-1
+                                    typeName:WITHIN_POLYGONS_ROW_KEY
+                               isPhoneNumber:NO
+                                       isUrl:NO];
+        
+        [row setDetailsArray:detailsArray];
+        row.collapsable = NO;
+        row.collapsed = YES;
+        row.collapsableView = nil;
+        [_rows addObject:row];
+    }
+}
+
+- (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<OARenderedObject *> *)renderedObjects
+{
+    NSMutableArray<NSDictionary<NSString *, NSString *> *> *array = [NSMutableArray new];
+    NSString *sectionHeader = OALocalizedString(@"transport_nearby_routes");
+    
+    for (int i = 0; i < renderedObjects.count; i++)
+    {
+        OARenderedObject *renderedObject = renderedObjects[i];
+        OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:renderedObject];
+
+        NSString *key;
+        NSString *translatedType = [RenderedObjectHelper getTranslatedTypeWithRenderedObject:renderedObject];
+        NSString *value = [RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:renderedObject];
+
+        if ([translatedType containsString:@":"] && (value.length == 0 || [translatedType isEqualToString:value]))
+        {
+            int firstCommaIndex = [translatedType indexOf:@":"];
+            key = [translatedType substringToIndex:firstCommaIndex];
+            value = [[[translatedType substringFromIndex:firstCommaIndex + 1] trim] capitalizedString];
+        }
+        else
+        {
+            key = translatedType.length > 0 ? translatedType : syntheticAmenity.type.nameLocalized;
+            if (value.length == 0)
+            {
+                value = key;
+                key = OALocalizedString(@"shared_string_location");
+            }
+            if ([[key lowercaseString] isEqualToString:[value lowercaseString]])
+            {
+                key = OALocalizedString(@"shared_string_location");
+            }
+        }
+        
+        [array addObject:@{
+            @"key": [NSString stringWithFormat:@"within:%@:%@", key, value],
+            @"value": value,
+            @"localizedTitle": sectionHeader,
+            @"renderedObject": renderedObject
+        }];
+    }
+    return array;
+}
+
+- (NSString *) getMenuObjectsNamesByComma:(NSArray<NSString *> *)menuObjects
+{
+    return menuObjects.count == 0 ? @"" : [menuObjects componentsJoinedByString:@", "];
 }
 
 - (void)buildRowsPoi:(BOOL)isWiki
@@ -298,7 +438,7 @@
         {
             NSString *text = row.textPrefix.length == 0 ? row.text : [NSString stringWithFormat:@"%@: %@", row.textPrefix, row.text];
             CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[row getFont]];
-            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[row getFont]];
+            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:kTextMaxHeight font:[row getFont]];
             
             rowHeight = MAX(bounds.height, 28.0) + 11.0 + 11.0;
             row.height = rowHeight;
@@ -334,6 +474,11 @@
     _contentHeight = h;
 }
 
+- (void)cancelPressed
+{
+    [self.delegate btnCancelPressed];
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -355,6 +500,36 @@
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak __typeof(self) weakSelf = self;
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [weakSelf.tableView reloadData];
+    } completion:nil];
+}
+
+- (void)updateNavBarSubviewsLayout
+{
+    [super updateNavBarSubviewsLayout];
+    [self adjustCancelButtonPosition];
+    [self adjustTitleViewPosition];
+}
+
+- (void)adjustCancelButtonPosition
+{
+    CGRect buttonFrame = self.buttonCancel.frame;
+    buttonFrame.origin.x = [OAUtilities isLandscape] ? kBackButtonOffsetLeftFromFrame + [OAUtilities getLeftMargin] : 0.0;
+    self.buttonCancel.frame = buttonFrame;
+}
+
+- (void)adjustTitleViewPosition
+{
+    CGRect frame = self.titleView.frame;
+    frame.origin.x = self.buttonCancel.frame.origin.x + self.buttonCancel.frame.size.width;
+    frame.size.width = self.navBar.frame.size.width - frame.origin.x;
+    self.titleView.frame = frame;
 }
 
 - (void) setContentBackgroundColor:(UIColor *)color
@@ -384,7 +559,7 @@
 
     while (osmwiki.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
     {
-        osmwiki = [[OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil radius:radius] mutableCopy];
+        osmwiki = [[OAAmenitySearcher findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil radius:radius] mutableCopy];
         [osmwiki removeObject:poi];
 
         if (![wikiPlugin isShowAllLanguages] && [wikiPlugin hasLanguagesFilter])
@@ -421,10 +596,18 @@
             const auto bottom = OsmAnd::Utilities::get31LatitudeY(rect.bottom());
             const auto right = OsmAnd::Utilities::get31LongitudeX(rect.right());
             amenities = [[filter searchAmenities:top left:left bottom:bottom right:right zoom:-1 matcher:nil] mutableCopy];
-            [amenities removeObject:poi];
             radius *= kNearbyPoiSearchFactory;
         }
-        amenities = [[OAMapUtils sortPOI:amenities lat:self.location.latitude lon:self.location.longitude] mutableCopy];
+    
+        NSMutableArray<OAPOI *> *filterdAmenities = [NSMutableArray new];
+        NSInteger osmObfId = [ObfConstants getOsmObjectId:poi];
+        for (OAPOI *amenity in amenities)
+        {
+            if ([ObfConstants getOsmObjectId:amenity] != osmObfId)
+                [filterdAmenities addObject:amenity];
+        }
+
+        amenities = [[OAMapUtils sortPOI:filterdAmenities lat:self.location.latitude lon:self.location.longitude] mutableCopy];
     }
     _nearestPoi = amenities.count > 0 ? [NSArray arrayWithArray:[amenities subarrayWithRange:NSMakeRange(0, MIN(kNearbyPoiMaxCount, amenities.count))]] : [NSArray new];
 }
@@ -454,9 +637,9 @@
     return nearby ? self.nearbyRoutes : self.localRoutes;
 }
 
-- (void)sendNearbyOtherImagesRequest:(NSMutableArray <OAAbstractCard *> *)cards
+- (void)sendNearbyOtherImagesRequest:(NSMutableArray <AbstractCard *> *)cards
 {
-    if (!_nearbyImagesRowInfo)
+    if (!_onlinePhotoCardsRowInfo)
         return;
 
     NSString *openPlaceReviewsTagContent = nil;
@@ -471,11 +654,11 @@
     }
     
     _otherCardsReady = NO;
-    [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_nearbyImagesRowInfo];
+    [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_onlinePhotoCardsRowInfo];
 }
 
 - (void)getCard:(NSDictionary *)feature
-     onComplete:(void (^)(OAAbstractCard *card))onComplete
+     onComplete:(void (^)(AbstractCard *card))onComplete
 {
     NSString *type = feature[@"type"];
 
@@ -483,21 +666,28 @@
 
     if ([TYPE_MAPILLARY_PHOTO isEqualToString:type] && isMaplillaryEnabled)
     {
-        [OAMapillaryOsmTagHelper downloadImageByKey:feature[@"key"]
-                                   onDataDownloaded:^(NSDictionary *result) {
-            if (result && onComplete)
-                onComplete([[OAMapillaryImageCard alloc] initWithData:result]);
-        }];
+        if ([feature[@"imageUrl"] length] == 0 || [feature[@"imageHiresUrl"] length] == 0) {
+            [OAMapillaryOsmTagHelper downloadImageByKey:feature[@"key"]
+                                       onDataDownloaded:^(NSDictionary *result) {
+                if (result && onComplete)
+                    onComplete([[MapillaryImageCard alloc] initWithData:result]);
+            }];
+        }
+        else
+        {
+            if (onComplete)
+                onComplete([[MapillaryImageCard alloc] initWithData:feature]);
+        }
     }
     else if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type] && isMaplillaryEnabled)
     {
         if (onComplete)
-            onComplete([[OAMapillaryContributeCard alloc] init]);
+            onComplete([[MapillaryContributeCard alloc] init]);
     }
     else if ([TYPE_URL_PHOTO isEqualToString:type])
     {
         if (onComplete)
-            onComplete([[OAUrlImageCard alloc] initWithData:feature]);
+            onComplete([[UrlImageCard alloc] initWithData:feature]);
     }
     else
     {
@@ -506,7 +696,7 @@
     }
 }
 
-- (void)addOtherCards:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
+- (void)addOtherCards:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent cards:(NSMutableArray<AbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
     CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
     OAAppSettings *settings = [OAAppSettings sharedManager];
@@ -532,7 +722,7 @@
     NSInteger cardsCount = cards.count;
     NSURL *urlObj = [[NSURL alloc] initWithString:[[urlString stringByReplacingOccurrencesOfString:@" "  withString:@"_"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    NSMutableArray<OAAbstractCard *> *newCards = [NSMutableArray arrayWithArray:cards];
+    NSMutableArray<AbstractCard *> *newCards = [NSMutableArray arrayWithArray:cards];
     [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200)
         {
@@ -556,7 +746,7 @@
                         for (NSDictionary *dict in images)
                         {
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                [self getCard:dict onComplete:^(OAAbstractCard *card) {
+                                [self getCard:dict onComplete:^(AbstractCard *card) {
                                     if (card)
                                     {
                                         [newCards addObject:card];
@@ -579,89 +769,122 @@
     }] resume];
 }
 
-- (void)onOtherCardsReady:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
+- (void)onOtherCardsReady:(NSMutableArray<AbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
     _otherCardsReady = YES;
-    [self updateDisplayingCards:cards rowInfo:nearbyImagesRowInfo];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateDisplayingCards:cards rowInfo:nearbyImagesRowInfo];
+    });
 }
 
-- (void)updateDisplayingCards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
+- (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
     if (_otherCardsReady && _wikiCardsReady)
     {
-        if (cards.count == 0)
-            [cards addObject:[[OANoImagesCard alloc] init]];
-        else if (cards.count > 1)
-            [self removeDuplicatesFromCards:cards];
-
+        if (cards.count > 1)
+            [self reorderCards:cards];
+        
+        // After forming the list of cards, fill the collection
         if (nearbyImagesRowInfo)
-            [((OACollapsableCardsView *) nearbyImagesRowInfo.collapsableView) setCards:cards];
+        {
+            CollapsableCardsView *collapsableView = (CollapsableCardsView *)nearbyImagesRowInfo.collapsableView;
+            collapsableView.isLoading = NO;
+            collapsableView.placeholderImage = [self targetImage];
+            [collapsableView setCards:cards];
+        }
+        if (_mapillaryCardsRowInfo)
+        {
+            CollapsableCardsView *collapsableView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
+            collapsableView.isLoading = NO;
+            collapsableView.placeholderImage = [self targetImage];
+            [collapsableView setCards:cards];
+        }
         
         _otherCardsReady = _wikiCardsReady = NO;
     }
 }
 
-- (void)removeDuplicatesFromCards:(NSMutableArray<OAAbstractCard *> *)cards
-{
+- (void)reorderCards:(NSMutableArray<AbstractCard *> *)cards {
     NSMutableArray *openPlaceCards = [NSMutableArray new];
     NSMutableArray *wikimediaCards = [NSMutableArray new];
     NSMutableArray *mapilaryCards = [NSMutableArray new];
-    OAMapillaryContributeCard *mapilaryContributeCard = nil;
-    
-    for (OAAbstractCard *card in cards)
-    {
-        if ([card isKindOfClass:OAWikiImageCard.class])
-            [wikimediaCards addObject:card];
-        if ([card isKindOfClass:OAMapillaryImageCard.class])
-            [mapilaryCards addObject:card];
-        else if ([card isKindOfClass:OAMapillaryContributeCard.class])
-            mapilaryContributeCard = (OAMapillaryContributeCard *)card;
-    }
-    if (wikimediaCards.count > 0)
-    {
-        NSArray *sortedWikimediaCards = [wikimediaCards sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-            NSString *first = [(OAWikiImageCard *)a imageHiresUrl];
-            NSString *second = [(OAWikiImageCard *)b imageHiresUrl];
-            return [first compare:second];
-        }];
+    MapillaryContributeCard *mapilaryContributeCard = nil;
 
-        [wikimediaCards removeAllObjects];
-        [wikimediaCards addObject:sortedWikimediaCards.firstObject];
-        OAWikiImageCard *previousCard = sortedWikimediaCards.firstObject;
-        for (int i = 1; i < sortedWikimediaCards.count; i++)
-        {
-            OAWikiImageCard *card = sortedWikimediaCards[i];
-            if (![card.imageHiresUrl isEqualToString:previousCard.imageHiresUrl])
-            {
-                [wikimediaCards addObject:card];
-                previousCard = card;
-            }
-        }
+    for (AbstractCard *card in cards) {
+        if ([card isKindOfClass:WikiImageCard.class])
+            [wikimediaCards addObject:card];
+        else if ([card isKindOfClass:MapillaryImageCard.class])
+            [mapilaryCards addObject:card];
+        else if ([card isKindOfClass:MapillaryContributeCard.class])
+            mapilaryContributeCard = (MapillaryContributeCard *)card;
+        else if ([card isKindOfClass:UrlImageCard.class])
+            [openPlaceCards addObject:card];
     }
-    [cards removeAllObjects];
-    [cards addObjectsFromArray:openPlaceCards];
-    [cards addObjectsFromArray:wikimediaCards];
-    [cards addObjectsFromArray:mapilaryCards];
+
+    NSMutableArray *orderedCards = [NSMutableArray array];
+    [orderedCards addObjectsFromArray:openPlaceCards];
+    [orderedCards addObjectsFromArray:wikimediaCards];
+    [orderedCards addObjectsFromArray:mapilaryCards];
+    
     if (mapilaryContributeCard)
-        [cards addObject:mapilaryContributeCard];
+        [orderedCards addObject:mapilaryContributeCard];
+
+    NSOrderedSet *uniqueOrderedSet = [NSOrderedSet orderedSetWithArray:orderedCards];
+    [cards setArray:uniqueOrderedSet.array];
 }
 
-- (void) addNearbyImagesIfNeeded
+- (void)addNearbyImagesIfNeeded
 {
-    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
-        return;
+    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
 
-    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-
-    OACollapsableCardsView *cardView = [[OACollapsableCardsView alloc] init];
+    CollapsableCardsView *cardView = [CollapsableCardsView new];
+    cardView.contentType = CollapsableCardsTypeOnlinePhoto;
     cardView.delegate = self;
     nearbyImagesRowInfo.collapsable = YES;
     nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed.get;
     nearbyImagesRowInfo.collapsableView = cardView;
-    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
+    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 170);
     [_rows addObject:nearbyImagesRowInfo];
     
-    _nearbyImagesRowInfo = nearbyImagesRowInfo;
+    _onlinePhotoCardsRowInfo = nearbyImagesRowInfo;
+}
+
+- (void)addMapillaryCardsRowInfoIfNeeded
+{
+    OAMapillaryPlugin *plagin = (OAMapillaryPlugin *) [OAPluginsHelper getPlugin:OAMapillaryPlugin.class];
+    if ([plagin isEnabled])
+    {
+        OARowInfo *mapillaryCardsRowInfo = [[OARowInfo alloc] initWithKey:nil
+                                                                     icon:[UIImage imageNamed:@"ic_custom_photo_street"]
+                                                               textPrefix:nil
+                                                                     text:OALocalizedString(@"street_level_imagery")
+                                                                textColor:nil
+                                                                   isText:NO
+                                                                needLinks:NO
+                                                                    order:0
+                                                                 typeName:@""
+                                                            isPhoneNumber:NO isUrl:NO];
+
+        CollapsableCardsView *cardView = [CollapsableCardsView new];
+        cardView.contentType = CollapsableCardsTypeMapillary;
+        cardView.delegate = self;
+        mapillaryCardsRowInfo.collapsable = YES;
+        mapillaryCardsRowInfo.collapsed = [OAAppSettings sharedManager].mapillaryPhotosRowCollapsed.get;
+        mapillaryCardsRowInfo.collapsableView = cardView;
+        mapillaryCardsRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 170);
+        [_rows addObject:mapillaryCardsRowInfo];
+        
+        _mapillaryCardsRowInfo = mapillaryCardsRowInfo;
+    }
+}
+
+- (void)showPOITagsDetails:(OARowInfo *)info
+{
+    POITagsDetailsViewController *tagsDetailsController = [[POITagsDetailsViewController alloc] initWithTags:info.detailsArray];
+    tagsDetailsController.tagTitle = info.textPrefix;
+
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
+    [self.navController presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -795,7 +1018,10 @@
             cell.textView.textColor = info.textColor;
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
             [cell setDescription:nil];
-
+            
+            [cell.textView sizeToFit];
+            info.height = cell.textView.frame.size.height + 33.0;
+            
             cell.collapsableView = info.collapsableView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
 
@@ -825,6 +1051,7 @@
             cell.textView.textColor = info.textColor;
             cell.textView.font = [info getFont];
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
+            cell.accessoryType = info.detailsArray.count > 0 ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 
             return cell;
         }
@@ -849,7 +1076,7 @@
         cell.backgroundColor = _contentColor;
         cell.webView.backgroundColor = _contentColor;
         cell.iconView.image = info.icon;
-        [cell.webView loadHTMLString:[kViewPortHtml stringByAppendingString:info.text]  baseURL:nil];
+        [cell.webView loadHTMLString:[kViewPortHtml stringByAppendingString:info.text ?: @""]  baseURL:nil];
         
         return cell;
     }
@@ -901,7 +1128,12 @@
     else if (info.collapsable)
     {
         info.collapsed = !info.collapsed;
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [UIView transitionWithView:tableView
+                          duration:0.3
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+            [tableView reloadData];
+        } completion:nil];
         [self calculateContentHeight];
         if (self.delegate)
             [self.delegate contentHeightChanged:0];
@@ -950,6 +1182,14 @@
         {
             [OAUtilities callUrl:[NSString stringWithFormat:kMailLink, info.text]];
         }
+        else if ([info.key isEqual:@"facebook"] && ![info.text hasPrefix:@"http"])
+        {
+            [OAUtilities callUrl:[NSString stringWithFormat:kFacebookLink, info.text]];
+        }
+        else if ([info.key isEqual:@"instagram"] && ![info.text hasPrefix:@"http"])
+        {
+            [OAUtilities callUrl:[NSString stringWithFormat:kInstagramLink, info.text]];
+        }
         else
         {
             [OAUtilities callUrl:info.text];
@@ -957,8 +1197,15 @@
     }
     else if (info.isText && info.moreText)
     {
-        OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
-        [self.navController pushViewController:_editDescController animated:YES];
+        if (info.detailsArray.count > 0)
+        {
+            [self showPOITagsDetails:info];
+        }
+        else
+        {
+            OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
+            [self.navController pushViewController:_editDescController animated:YES];
+        }
     }
     else if ([info.typeName isEqualToString:kCollapseDetailsRowType])
     {
@@ -974,6 +1221,10 @@
         OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO isComment:[info.typeName isEqualToString:kCommentRowType] readOnly:YES];
         editDescController.delegate = self;
         [self.navController pushViewController:editDescController animated:YES];
+    }
+    else if (info.detailsArray.count > 0)
+    {
+        [self showPOITagsDetails:info];
     }
 }
 
@@ -1004,20 +1255,54 @@
 
 #pragma mark - OACollapsableCardViewDelegate
 
-- (void)onViewExpanded
+- (void)onRecalculateHeight {
+    [self.tableView reloadData];
+    [self calculateContentHeight];
+    if (self.delegate)
+        [self.delegate contentHeightChanged:0];
+}
+
+- (void)startLoadingImages
 {
     _wikiCardsReady = NO;
-    if (_nearbyImagesRowInfo)
+    CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
+    CollapsableCardsView *mapillaryCardsView;
+    if (_mapillaryCardsRowInfo)
     {
-        OACollapsableCardsView *cardsView = (OACollapsableCardsView *) _nearbyImagesRowInfo.collapsableView;
-        [cardsView setCards:@[[[OAImageCard alloc] initWithData:@{@"key": @"loading"}]]];
+        mapillaryCardsView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
     }
-
-    __weak OATargetInfoViewController *selfWeak = self;
-    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_nearbyImagesRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <OAAbstractCard *> *cards) {
-        selfWeak.wikiCardsReady = YES;
-        [selfWeak sendNearbyOtherImagesRequest:cards];
-    }];
+    
+    __weak __typeof(self) weakSelf = self;
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
+    {
+        onlinePhotoCardsView.isLoading = YES;
+        if ([self.getTargetObj isKindOfClass:OAPOI.class])
+        {
+            OAPOI *poi = self.getTargetObj;
+            onlinePhotoCardsView.title = poi.nameLocalized;
+        }
+       
+        mapillaryCardsView.isLoading = YES;
+        [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
+            weakSelf.wikiCardsReady = YES;
+            [weakSelf sendNearbyOtherImagesRequest:cards];
+        }];
+    }
+    else
+    {
+        NoInternetCard *noInternetCard = [NoInternetCard new];
+        noInternetCard.onTryAgainAction = ^{
+            if (AFNetworkReachabilityManager.sharedManager.isReachable)
+            {
+                [weakSelf startLoadingImages];
+            }
+        };
+        [onlinePhotoCardsView setCards:@[noInternetCard]];
+        if (mapillaryCardsView)
+        {
+            [mapillaryCardsView setCards:@[noInternetCard]];
+        }
+    }
 }
 
 #pragma mark - OAEditDescriptionViewControllerDelegate

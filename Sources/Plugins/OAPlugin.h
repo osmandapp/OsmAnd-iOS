@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 
-@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType, OAGPXTrackAnalysis, OAPointAttributes, OACommonPreference, OACommonString;
+NS_ASSUME_NONNULL_BEGIN
+
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, QuickActionType, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OABaseWidgetView, OAWidgetType, OASGpxTrackAnalysis, OASPointAttributes, OACommonPreference, OACommonString, OACommonBoolean;
 
 @protocol OAWidgetRegistrationDelegate;
 
@@ -25,15 +26,15 @@
 - (OAMapViewController *) getMapViewController;
 - (OAMapInfoController *) getMapInfoController;
 
-- (NSString *) getId;
+- (nullable NSString *) getId;
 - (NSString *) getDescription;
 - (NSString *) getName;
-- (NSString *) getLogoResourceId;
-- (NSString *) getAssetResourceName;
-- (UIImage *) getAssetResourceImage;
-- (UIImage *) getLogoResource;
+- (nullable NSString *) getLogoResourceId;
+- (nullable NSString *) getAssetResourceName;
+- (nullable UIImage *) getAssetResourceImage;
+- (nullable UIImage *) getLogoResource;
 
-- (UIViewController *) getSettingsController;
+- (nullable UIViewController *) getSettingsController;
 - (NSString *) getVersion;
 
 - (NSArray<OAWorldRegion *> *) getDownloadMaps;
@@ -41,28 +42,28 @@
 - (NSArray<OAApplicationMode *> *) getAddedAppModes;
 - (NSArray<NSString *> *) getWidgetIds;
 
-- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams;
-- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode  widgetParams:(NSDictionary *)widgetParams;
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(nullable NSDictionary *)widgetParams;
+- (nullable OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(nullable NSString *)customId appMode:(OAApplicationMode *)appMode  widgetParams:(nullable NSDictionary *)widgetParams;
 
-- (NSArray<OACommonPreference *> * _Nonnull)getPreferences;
-- (OACommonString * _Nonnull)registerStringPreference:(NSString * _Nonnull)prefId defValue:(NSString * _Nullable)defValue;
+- (NSArray<OACommonPreference *> *)getPreferences;
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)prefId defValue:(BOOL)defValue;
+- (OACommonString *)registerStringPreference:(NSString *)prefId defValue:(nullable NSString *)defValue;
 
-- (BOOL) initPlugin;
-- (void) setEnabled:(BOOL)enabled;
-- (BOOL) isEnabled;
-- (BOOL) isVisible;
-- (BOOL) isEnableByDefault;
-- (void) disable;
-- (void) install:(id<OAPluginInstallListener> _Nullable)callback;
+- (BOOL)initPlugin;
+- (void)setEnabled:(BOOL)enabled;
+- (BOOL)isEnabled;
+- (BOOL)isVisible;
+- (BOOL)isEnableByDefault;
+- (void)disable;
+- (void)install:(nullable id<OAPluginInstallListener>)callback;
 
-- (NSString *) getHelpFileName;
-- (NSArray<OAQuickActionType *> *) getQuickActionTypes;
+- (nullable NSString *) getHelpFileName;
+- (NSArray<QuickActionType *> *) getQuickActionTypes;
 
 - (NSString *)getMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale;
 - (NSArray<OAPOIUIFilter *> *)getCustomPoiFilters;
 - (void)prepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters;
-- (void)onAnalysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute;
-- (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
+- (void)getAvailableGPXDataSetTypes:(OASGpxTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes;
 
 - (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
@@ -75,3 +76,5 @@
 - (void) showInstalledScreen;
 
 @end
+
+NS_ASSUME_NONNULL_END

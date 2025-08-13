@@ -21,15 +21,12 @@
 #import "OAValueTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
-#import "OAGPXDocument.h"
-#import "OARoutingHelper.h"
 #import "OARoutePreferencesParameters.h"
 #import "OARouteProvider.h"
-#import "OAGPXMutableDocument.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAGpxData.h"
-#import "OAGpxInfo.h"
 #import "OAGPXUIHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OAMapActions.h"
@@ -42,10 +39,10 @@
 
 @implementation OAFollowTrackBottomSheetViewController
 {
-    OAWptPt *_point;
+    OASWptPt *_point;
     NSArray<NSArray<NSDictionary *> *> *_data;
     
-    OAGPXDocument *_gpx;
+    OASGpxFile *_gpx;
     
     UITapGestureRecognizer *_buttonTapRecognizer;
     UILongPressGestureRecognizer *_buttonLongTapRecognizer;
@@ -60,7 +57,7 @@
     BOOL _openGpxSelection;
 }
 
-- (instancetype) initWithFile:(OAGPXDocument *)gpx
+- (instancetype) initWithFile:(OASGpxFile *)gpx
 {
     self = [super init];
     if (self)
@@ -151,7 +148,7 @@
     
     OAGPXRouteParamsBuilder *params = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    OAGPX *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:fileName]];
+    OASGpxDataItem *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:fileName]];
     
     NSString *title = [fileName.lastPathComponent stringByDeletingPathExtension];
     BOOL isSegment = _gpx.getNonEmptySegmentsCount > 1 && params != nil && params.selectedSegment != -1;
@@ -161,10 +158,10 @@
     }
     
     NSString *distance = gpxData ? [OAOsmAndFormatter getFormattedDistance:gpxData.totalDistance] : @"";
-    NSString *time = gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"";
+    NSString *time = gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan / 1000 shortFormat:YES] : @"";
     if (isSegment)
     {
-        OATrkSegment *seg = params.selectedSegment < _gpx.getNonEmptySegmentsCount ? [_gpx getNonEmptyTrkSegments:NO][params.selectedSegment] : nil;
+        OASTrkSegment *seg = params.selectedSegment < _gpx.getNonEmptySegmentsCount ? [_gpx getNonEmptyTrkSegmentsRoutesOnly:NO][params.selectedSegment] : nil;
         if (seg)
         {
             distance = [OAOsmAndFormatter getFormattedDistance:[OAGPXUIHelper getSegmentDistance:seg]];
@@ -269,11 +266,7 @@
 {
     if (_gpx)
     {
-        OAGPXMutableDocument *mutableGpx = nil;
-        if (_gpx.path && _gpx.path.length > 0)
-            mutableGpx = [[OAGPXMutableDocument alloc] initWithGpxFile:_gpx.path];
-        else if ([_gpx isKindOfClass:OAGPXMutableDocument.class])
-            mutableGpx = (OAGPXMutableDocument *) _gpx;
+        OASGpxFile *mutableGpx = _gpx;
         OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:mutableGpx];
         OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
         editingContext.gpxData = gpxData;
@@ -528,8 +521,7 @@
 
 - (void)onFileSelected:(NSString *)gpxFilePath
 {
-    OAGPXDocument *document = OARoutingHelper.sharedInstance.getCurrentGPXRoute.file;
-    [self setGpxRouteIfNeeded:document];
+    [self setGpxRouteIfNeeded:OARoutingHelper.sharedInstance.getCurrentGPXRoute.file];
     
     [self generateData];
     [self.tableView reloadData];
@@ -544,7 +536,7 @@
         [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)setGpxRouteIfNeeded:(OAGPXDocument *)gpx
+- (void)setGpxRouteIfNeeded:(OASGpxFile *)gpx
 {
     if (!_gpx || gpx != _gpx)
     {
@@ -555,7 +547,7 @@
     }
 }
 
-- (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
+- (void)onSegmentSelected:(NSInteger)position gpx:(OASGpxFile *)gpx
 {
     [OAAppSettings.sharedManager.gpxRouteSegment set:position];
     

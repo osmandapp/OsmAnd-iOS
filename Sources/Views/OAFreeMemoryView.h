@@ -12,7 +12,4 @@
 
 - (instancetype) initWithFrame:(CGRect)frame localResourcesSize:(unsigned long long)localResourcesSize;
 
-- (void) update;
-- (void) setLocalResourcesSize:(unsigned long long)size;
-
 @end

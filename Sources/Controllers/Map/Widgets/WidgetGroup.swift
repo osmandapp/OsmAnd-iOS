@@ -24,8 +24,10 @@ class WidgetGroup: NSObject {
     static let sunriseSunset = WidgetGroup(title: localizedString("map_widget_sun_position"), descr: localizedString("map_widget_group_sunrise_sunset_desc"), iconName: "widget_sunset")
     static let externalSensors = WidgetGroup(title: localizedString("external_sensors_plugin_name"), descr: localizedString("external_sensors_plugin_description"), iconName: "widget_sensor_external")
     static let glide = WidgetGroup(title: localizedString("map_widget_group_glide_ratio"), descr: localizedString("map_widget_group_glide_desc"), iconName: "widget_glide_ratio_to_target")
-    
-    static let values = [routeManeuvers, navigationPoints, coordinatesWidget, mapMarkers, bearing, tripRecording, developerOptions, altitude, weather, sunriseSunset, externalSensors]
+    static let routeGuidance = WidgetGroup(title: localizedString("route_guidance"), descr: localizedString("route_guidance_desc"), iconName: "widget_lanes", docsUrl: docs_widget_route_maneuvers)
+    static let vehicleMetrics = WidgetGroup(title: localizedString("obd_widget_group"), descr: localizedString("purchase_feature_desc_vehicle_metrics_obd_ii"), iconName: "widget_obd_vehicle_info")
+        
+    static let values = [routeManeuvers, navigationPoints, coordinatesWidget, mapMarkers, bearing, tripRecording, developerOptions, altitude, weather, sunriseSunset, externalSensors, routeGuidance, vehicleMetrics]
     
     let title: String
     let descr: String?
@@ -43,25 +45,25 @@ class WidgetGroup: NSObject {
         fatalError("Widget group initialization is not permitted")
     }
     
-    @objc func getWidgets() -> [WidgetType] {
-        var widgets = [WidgetType]()
-        for widget in WidgetType.values {
-            if self == widget.group {
-                widgets.append(widget)
-            }
-        }
-        return widgets
+    func getWidgets() -> [WidgetType] {
+        getWidgets(withPanel: nil)
     }
     
-    @objc func getWidgetsIds() -> [String] {
-        var widgetsIds = [String]()
-        for widget in getWidgets() {
-            widgetsIds.append(widget.id)
+    func getWidgets(withPanel panel: WidgetsPanel?) -> [WidgetType] {
+        guard let appMode = OAAppSettings.sharedManager().applicationMode.get() else { return [] }
+        return WidgetType.values.filter {
+            isRelatedWidget($0, panel: panel) && WidgetsAvailabilityHelper.isWidgetAvailable(widgetId: $0.id, appMode: appMode)
         }
-        return widgetsIds
     }
     
-    @objc func getSecondaryDescription() -> String? {
+    private func isRelatedWidget(_ widget: WidgetType, panel: WidgetsPanel?) -> Bool {
+        if let panel {
+            return self == widget.getGroup(withPanel: panel)
+        }
+        return self == widget.getGroup() || self == widget.getVerticalGroup()
+    }
+    
+    func getSecondaryDescription() -> String? {
         switch self {
         case .bearing:
             let configureProfile = localizedString("configure_profile")
@@ -93,7 +95,7 @@ class WidgetGroup: NSObject {
 //        }
     }
     
-    @objc func getSecondaryIconName() -> String {
+    func getSecondaryIconName() -> String {
         if self == .bearing || self == .coordinatesWidget {
             return "ic_action_help"
         } else if (self == .tripRecording /*|| self == AUDIO_VIDEO_NOTES*/ || self == .developerOptions
@@ -103,8 +105,8 @@ class WidgetGroup: NSObject {
         return ""
     }
     
-    @objc func getOrder() -> Int {
-        getWidgets().first!.ordinal;
+    func getOrder(withPanel panel: WidgetsPanel) -> Int {
+        getWidgets(withPanel: panel).first?.ordinal ?? 0
     }
     
     override func isEqual(_ object: Any?) -> Bool {

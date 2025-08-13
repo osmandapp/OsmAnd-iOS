@@ -66,26 +66,12 @@
             if (globalRecord)
             {
                 //indicates global recording (+background recording)
-                if (liveMonitoringEnabled)
-                {
-                    d = @"widget_live_monitoring_rec_big";
-                }
-                else
-                {
-                    d = @"widget_monitoring_rec_big";
-                }
+                d = liveMonitoringEnabled ? @"widget_live_monitoring_rec_big" : @"widget_monitoring_rec_big";
             }
             else if (isRecording)
             {
                 //indicates (profile-based, configured in settings) recording (looks like is only active during nav in follow mode)
-                if (liveMonitoringEnabled)
-                {
-                    d = @"widget_live_monitoring_rec_small";
-                }
-                else
-                {
-                    d = @"widget_monitoring_rec_small";
-                }
+                d = liveMonitoringEnabled ? @"widget_live_monitoring_rec_small" : @"widget_monitoring_rec_small";
             }
             else
             {
@@ -109,29 +95,10 @@
                 [distanceWidgetWeak setIcon:d];
                 
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    NSString *dn;
-                    NSString *d;
-                    if (globalRecord)
-                    {
-                        if (liveMonitoringEnabled)
-                        {
-                            d = @"widget_live_monitoring_rec_big";
-                        } else
-                        {
-                            d = @"widget_monitoring_rec_big";
-                        }
-                    }
-                    else
-                    {
-                        if (liveMonitoringEnabled)
-                        {
-                            d = @"widget_live_monitoring_rec_small";
-                        }
-                        else
-                        {
-                            d = @"widget_monitoring_rec_small";
-                        }
-                    }
+                    NSString *d = globalRecord
+                        ? (liveMonitoringEnabled ? @"widget_live_monitoring_rec_big" : @"widget_monitoring_rec_big")
+                        : (liveMonitoringEnabled ? @"widget_live_monitoring_rec_small" : @"widget_monitoring_rec_small");
+
                     [distanceWidgetWeak setIcon:d];
                 });
             }
@@ -141,7 +108,7 @@
         [self updateInfo];
         
         self.onClickFunction = ^(id sender) {
-            [pluginWeak showTripRecordingDialog:true];
+            [pluginWeak showTripRecordingDialog];
         };
     }
     return self;

@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *button;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightContainerConstraint;
+@property (strong, nonatomic, nullable) NSLayoutConstraint *contentHeightConstraint;
 
 - (void)buttonVisibility:(BOOL)show;
 

@@ -16,6 +16,9 @@
 #define SEPARATOR @"+"
 #define SEPARATOR_POSITION 8
 
+static NSString *kLTRMark = @"\u200e";  // left-to-right mark
+static NSString *kRTLMark = @"\u200f";  // right-to-right mark
+
 @implementation OAParsedOpenLocationCode
 {
     
@@ -103,6 +106,8 @@
 {
     // detect MGRS
     //get rid of all the whitespaces
+    s = [s stringByReplacingOccurrencesOfString:kLTRMark withString:@""];
+    s = [s stringByReplacingOccurrencesOfString:kRTLMark withString:@""];
     NSArray<NSString *> *mgrsSplit = [s componentsSeparatedByString:@" "];
     NSMutableString *mgrsStr = [NSMutableString stringWithString:@""];
     for (NSString *i in mgrsSplit)
@@ -142,6 +147,8 @@
     }
     if (!valid)
         return nil;
+
+    s = [self prepareLatLonWithDecimalCommas:s];
 
     NSMutableArray<NSNumber *> *d = [NSMutableArray array];
     NSMutableArray *all = [NSMutableArray array];
@@ -381,7 +388,7 @@
                         [all addObject:str];
                         [strings addObject:str];
                     }
-                    [all addObject:[s substringWithRange:NSMakeRange(i, 1)]];;
+                    [all addObject:[s substringWithRange:NSMakeRange(i, 1)]];
                     [strings addObject:[s substringWithRange:NSMakeRange(i, 1)]];
                     word = -1;
                 }
@@ -431,16 +438,17 @@
 
 + (BOOL) isValidLocPhrase:(NSString *)s
 {
-    if (s.length == 0
-        || !([s characterAtIndex:0] == '-'
-             || [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[s characterAtIndex:0]]
-             || [s characterAtIndex:0] == 'S' || [s characterAtIndex:0] == 's'
-             || [s characterAtIndex:0] == 'N' || [s characterAtIndex:0] == 'n'
-             || [s indexOf:@"://"] != -1))
+    if (s.length > 0)
     {
-        return false;
+        NSString *lower = [s lowercaseString];
+        unichar ch = [lower characterAtIndex:0];
+        if (ch == '(' && s.length > 1)
+            ch = [lower characterAtIndex:1]; // (0.1234,5.6789)
+        if (ch == '-' || [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:ch]
+            || ch == 's' || ch == 'n' || [s containsString:@"://"])
+            return YES;
     }
-    return true;
+    return NO;
 }
 
 + (double) parse1Coordinate:(NSMutableArray *)all begin:(int)begin end:(int)end
@@ -506,6 +514,43 @@
         return [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
     else
         return nil;
+}
+
++ (NSString *)prepareLatLonWithDecimalCommas:(NSString *)ll
+{
+    static const int DIGITS_BEFORE_COMMA = 1, DIGITS_AFTER_COMMA = 3;
+    if (ll.length < DIGITS_BEFORE_COMMA + DIGITS_AFTER_COMMA + 1)
+      return ll;
+
+    for (int i = DIGITS_BEFORE_COMMA, first = -1; i < (int) ll.length - DIGITS_AFTER_COMMA; i++)
+    {
+        int length = (int) ll.length;
+        if (length > i && [ll characterAtIndex:i] == ',')
+        {
+            int before = 0, after = 0;
+            for (int j = i - 1; j >= i - DIGITS_BEFORE_COMMA && j >= 0; j--)
+            {
+                if (j >= 0 && j < length && [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[ll characterAtIndex:j]])
+                    before++;
+            }
+            for (int j = i + 1; j <= i + DIGITS_AFTER_COMMA && j < length && before >= DIGITS_BEFORE_COMMA; j++)
+            {
+                if (j >= 0 && j < length && [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[ll characterAtIndex:j]])
+                    after++;
+            }
+            if (before >= DIGITS_BEFORE_COMMA && after >= DIGITS_AFTER_COMMA)
+            {
+                if (first != -1)
+                    return [NSString stringWithFormat:@"%@.%@.%@",
+                            [ll substringToIndex:first],
+                            [ll substringWithRange:NSMakeRange(first + 1, i - first - 1)],
+                            [ll substringFromIndex:i + 1]];
+                else
+                    first = i;
+            }
+        }
+    }
+    return ll;
 }
 
 @end

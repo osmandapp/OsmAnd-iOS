@@ -10,6 +10,7 @@
 #import "OAMapSettingsViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
@@ -19,6 +20,7 @@
 #import "OAMapHudViewController.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAAppData.h"
 
 #define kLayersSection 1
 #define kContoursSection 2
@@ -121,6 +123,13 @@
             @"title" : OALocalizedString(@"map_settings_weather_precip"),
             @"value" : @(_app.data.weatherPrecip),
             @"image" : @"ic_custom_precipitation"
+        },
+        @{
+            @"type"  : [OAValueTableViewCell getCellIdentifier],
+            @"name"  : kWeatherWindAnimation,
+            @"title" : OALocalizedString(@"map_settings_weather_wind_animation"),
+            @"value" : @(_app.data.weatherWindAnimation),
+            @"image" : @"ic_custom_wind"
         }];
 
     NSString *selectedContourLinesName = OALocalizedString(@"shared_string_none");
@@ -302,6 +311,8 @@
         return EOAWeatherLayerTypeCloud;
     else if ([type isEqualToString:kWeatherPrecip])
         return EOAWeatherLayerTypePrecipitation;
+    else if ([type isEqualToString:kWeatherWindAnimation])
+        return EOAWeatherLayerTypeWindAnimation;
     else
         return EOAWeatherLayerTypeContours;
 }

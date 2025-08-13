@@ -34,9 +34,13 @@ final class GlideTargetWidget: GlideBaseWidget {
             forceUpdate = true
             self.widgetState?.changeToNextState()
             updateInfo()
-            setContentTitle(getWidgetName())
+            if let contentTitle = getWidgetName() {
+                setContentTitle(contentTitle)
+            }
         }
-        setContentTitle(getWidgetName())
+        if let contentTitle = getWidgetName() {
+            setContentTitle(contentTitle)
+        }
         setIcon("widget_glide_ratio_to_target")
     }
 
@@ -57,7 +61,9 @@ final class GlideTargetWidget: GlideBaseWidget {
         return true
     }
 
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+    override func getSettingsData(_ appMode: OAApplicationMode,
+                                  widgetConfigurationParams: [String: Any]?,
+                                  isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")
@@ -69,7 +75,17 @@ final class GlideTargetWidget: GlideBaseWidget {
             settingRow.key = "value_pref"
             settingRow.title = localizedString("shared_string_mode")
             settingRow.setObj(preference, forKey: "pref")
-            settingRow.setObj(getWidgetName() ?? localizedString("glide_ratio_to_target"), forKey: "value")
+            
+            if let string = widgetConfigurationParams?[GlideTargetWidgetState.prefBaseId] as? String,
+               let widgetValue = Bool(string) {
+                settingRow.setObj(localizedString(widgetValue ? "target_elevation" : "glide_ratio_to_target"), forKey: "value")
+            } else {
+                var currentValue = preference.defValue ? "target_elevation" : "glide_ratio_to_target"
+                if !isCreate {
+                    currentValue = preference.get(appMode) ? "target_elevation" : "glide_ratio_to_target"
+                }
+                settingRow.setObj(localizedString(currentValue), forKey: "value")
+            }
             settingRow.setObj(getPossibleValues(), forKey: "possible_values")
         }
         return data

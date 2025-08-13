@@ -7,6 +7,7 @@
 //
 
 #import "OABackupHelper.h"
+#import "OAExportBackupTask.h"
 #import "OsmAndApp.h"
 #import "OAExportSettingsType.h"
 #import "OASettingsItem.h"
@@ -16,11 +17,12 @@
 #import "OALocalFile.h"
 #import "OARemoteFile.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OANetworkUtilities.h"
 #import "OABackupError.h"
 #import "OABackupDbHelper.h"
 #import "OACollectLocalFilesTask.h"
-#import "OABackupInfoGenerationTask.h"
+#import "OAGenerateBackupInfoTask.h"
 #import "OACollectionSettingsItem.h"
 #import "OADeleteFilesCommand.h"
 #import "OAWebClient.h"
@@ -30,6 +32,8 @@
 #import "OADeleteOldFilesCommand.h"
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
+#import "OABackupListeners.h"
+#import "OAPrepareBackupTask.h"
 #import "OAURLSessionProgress.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -50,9 +54,8 @@ static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingString:@
 static NSString *ACCOUNT_DELETE_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-account"];
 static NSString *SEND_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/send-code"];
 static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/auth/confirm-code"];
+static NSCharacterSet* URL_PATH_CHARACTER_SET;
 
-static NSString *BACKUP_TYPE_PREFIX = @"backup_type_";
-static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 @interface OABackupHelper () <OAOnPrepareBackupListener, NSURLSessionDelegate>
 
@@ -114,189 +117,6 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     return CHECK_CODE_URL;
 }
 
-+ (BOOL) isTokenValid:(NSString *)token
-{
-    return [token isMatchedByRegex:@"[0-9]+"];
-}
-
-+ (NSArray<OASettingsItem *> *) getItemsForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems
-{
-    NSMutableArray<OASettingsItem *> *itemsForRestore = [NSMutableArray array];
-    if (info != nil)
-    {
-        NSDictionary<OARemoteFile *, OASettingsItem *> *restoreItems = [self getRemoteFilesSettingsItems:settingsItems remoteFiles:info.filteredFilesToDownload infoFiles:NO];
-        for (OASettingsItem *restoreItem in restoreItems.allValues)
-        {
-            if ([restoreItem isKindOfClass:OACollectionSettingsItem.class])
-            {
-                OACollectionSettingsItem *settingsItem = (OACollectionSettingsItem *) restoreItem;
-                [settingsItem processDuplicateItems];
-                settingsItem.shouldReplace = YES;
-            }
-            if (restoreItem != nil)
-                [itemsForRestore addObject:restoreItem];
-        }
-    }
-    return itemsForRestore;
-}
-
-+ (NSDictionary<OARemoteFile *, OASettingsItem *> *) getItemsMapForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems
-{
-    NSMutableDictionary<OARemoteFile *, OASettingsItem *> *itemsForRestore = [NSMutableDictionary dictionary];
-    if (info != nil)
-    {
-        [itemsForRestore addEntriesFromDictionary:[self getRemoteFilesSettingsItems:settingsItems remoteFiles:info.filteredFilesToDownload infoFiles:NO]];
-    }
-    return itemsForRestore;
-}
-
-+ (NSDictionary<OARemoteFile *, OASettingsItem *> *) getRemoteFilesSettingsItems:(NSArray<OASettingsItem *> *)items
-                                                                            remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
-                                                                            infoFiles:(BOOL)infoFiles
-{
-    NSMutableDictionary<OARemoteFile *, OASettingsItem *> *res = [NSMutableDictionary dictionary];
-    NSMutableArray<OARemoteFile *> *files = [NSMutableArray arrayWithArray:remoteFiles];
-    for (OASettingsItem *item in items)
-    {
-        NSMutableArray<OARemoteFile *> *processedFiles = [NSMutableArray array];
-        for (OARemoteFile *file in files)
-        {
-            NSString *type = file.type;
-            NSString *name = file.name;
-            if (infoFiles && [name.pathExtension isEqualToString:INFO_EXT])
-                name = [name stringByDeletingPathExtension];
-            
-            if ([self applyItem:item type:type name:name])
-            {
-                res[file] = item;
-                [processedFiles addObject:file];
-            }
-        }
-        [files removeObjectsInArray:processedFiles];
-    }
-    return res;
-}
-
-+ (OASettingsItem *) getRestoreItem:(NSArray<OASettingsItem *> *)items remoteFile:(OARemoteFile *)remoteFile
-{
-    for (OASettingsItem *item in items)
-    {
-        if ([self.class applyItem:item type:remoteFile.type name:remoteFile.name])
-            return item;
-    }
-    return nil;
-}
-
-+ (BOOL) applyItem:(OASettingsItem *)item type:(NSString *)type name:(NSString *)name
-{
-    NSString *itemFileName = [self getItemFileName:item];
-    NSString *itemTypeName = [OASettingsItemType typeName:item.type];
-    if ([itemTypeName isEqualToString:type])
-    {
-        if ([name isEqualToString:itemFileName])
-        {
-            return YES;
-        }
-        else if ([item isKindOfClass:OAFileSettingsItem.class])
-        {
-            OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
-            NSString *subfolder = [OAFileSettingsItemFileSubtype getSubtypeFolderName:fileItem.subtype];
-            if ([name hasPrefix:subfolder] || subfolder.length == 0)
-            {
-                if (fileItem.filePath.pathExtension.length == 0 && ![itemFileName hasSuffix:@"/"])
-                {
-                    return [name hasPrefix:[itemFileName stringByAppendingString:@"/"]];
-                }
-                else
-                {
-                    return [name hasPrefix:itemFileName];
-                }
-            }
-        }
-    }
-    return false;
-}
-
-+ (NSString *) getItemFileName:(OASettingsItem *)item
-{
-    NSString *fileName;
-    if ([item isKindOfClass:OAFileSettingsItem.class])
-    {
-        OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
-        fileName = [self getFileItemName:fileItem];
-    }
-    else
-    {
-        fileName = item.fileName;
-        if (fileName.length == 0)
-            fileName = item.defaultFileName;
-    }
-    if (fileName.length > 0 && [fileName characterAtIndex:0] == '/')
-    {
-        fileName = [fileName substringFromIndex:1];
-    }
-    return fileName;
-}
-
-
-+ (NSString *) getFileItemName:(OAFileSettingsItem *)fileSettingsItem
-{
-    return [self getFileItemName:nil fileSettingsItem:fileSettingsItem];
-}
-
-+ (NSString *)getFileItemName:(NSString *)filePath fileSettingsItem:(OAFileSettingsItem *)fileSettingsItem
-{
-    NSString *subtypeFolder = [OAFileSettingsItemFileSubtype getSubtypeFolder:fileSettingsItem.subtype];
-    NSString *fileName;
-    if (!filePath)
-        filePath = fileSettingsItem.filePath;
-    
-    if (subtypeFolder.length == 0)
-    {
-        fileName = filePath.lastPathComponent;
-    }
-    else if (fileSettingsItem.subtype == EOASettingsItemFileSubtypeGpx)
-    {
-        fileName = [filePath stringByReplacingOccurrencesOfString:[subtypeFolder stringByAppendingString:@"/"] withString:@""];
-    }
-    else if ([OAFileSettingsItemFileSubtype isMap:fileSettingsItem.subtype])
-    {
-        fileName = filePath.lastPathComponent;
-    }
-    else
-    {
-        int index = [filePath indexOf:subtypeFolder.lastPathComponent];
-        if (index >= 0)
-            fileName = [filePath substringFromIndex:index];
-        else
-            fileName = filePath.lastPathComponent;
-    }
-    
-    if (fileName.length > 0 && [fileName characterAtIndex:0] == '/')
-        fileName = [fileName substringFromIndex:1];
-    
-    return fileName;
-}
-
-+ (BOOL) isLimitedFilesCollectionItem:(OAFileSettingsItem *)item
-{
-    return item.subtype == EOASettingsItemFileSubtypeVoice;
-}
-
-+ (void) setLastModifiedTime:(NSString *)name
-{
-    [self setLastModifiedTime:name lastModifiedTime:NSDate.date.timeIntervalSince1970];
-}
-
-+ (void) setLastModifiedTime:(NSString *)name lastModifiedTime:(long)lastModifiedTime
-{
-    [OABackupDbHelper.sharedDatabase setLastModifiedTime:name lastModifiedTime:lastModifiedTime];
-}
-
-+ (long) getLastModifiedTime:(NSString *)name
-{
-    return [OABackupDbHelper.sharedDatabase getLastModifiedTime:name];
-}
 
 + (OABackupHelper *)sharedInstance
 {
@@ -311,6 +131,9 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 - (instancetype)init
 {
     self = [super init];
+    NSMutableCharacterSet *mutableSet = [NSCharacterSet.URLQueryAllowedCharacterSet mutableCopy];
+    [mutableSet removeCharactersInString:@";/?:@&=+$, "];
+    URL_PATH_CHARACTER_SET = [mutableSet copy];
     if (self)
     {
         _app = [OsmAndApp instance];
@@ -376,9 +199,9 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         throw [NSException exceptionWithName:@"UserNotRegisteredException" reason:@"User is not registered" userInfo:nil];
 }
 
-- (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)updateTime
+- (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)uploadTime
 {
-    [_dbHelper updateFileUploadTime:type name:fileName updateTime:updateTime];
+    [_dbHelper updateFileUploadTime:type name:fileName updateTime:uploadTime];
 }
 
 - (void) updateFileMd5Digest:(NSString *)type fileName:(NSString *)fileName md5Hex:(NSString *)md5Hex
@@ -398,21 +221,11 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     [_settings.backupAccessToken resetToDefault];
 }
 
-- (OACommonBoolean *) getBackupTypePref:(OAExportSettingsType *)type
-{
-    return [[[OACommonBoolean withKey:[NSString stringWithFormat:@"%@%@", BACKUP_TYPE_PREFIX, type.name] defValue:YES] makeGlobal] makeShared];
-}
-
-- (OACommonBoolean *) getVersionHistoryTypePref:(OAExportSettingsType *)type
-{
-    return [[[OACommonBoolean withKey:[NSString stringWithFormat:@"%@%@", VERSION_HISTORY_PREFIX, type.name] defValue:YES] makeGlobal] makeShared];
-}
-
 - (NSArray<NSString *> *) collectItemFilesForUpload:(OAFileSettingsItem *)item
 {
     NSMutableArray<NSString *> *filesToUpload = [NSMutableArray array];
     OABackupInfo *info = self.backup.backupInfo;
-    if (![self.class isLimitedFilesCollectionItem:item]
+    if (![BackupUtils isLimitedFilesCollectionItem:item]
         && info != nil && (info.filesToUpload.count > 0 || info.filesToMerge.count > 0 || info.filesToDownload.count > 0))
     {
         for (OALocalFile *localFile in info.filesToUpload)
@@ -434,9 +247,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             {
                 NSString *fileName = remoteFile.item.fileName;
                 if (fileName != nil && [item applyFileName:fileName])
-                {
                     [filesToUpload addObject:((OAFileSettingsItem *) remoteFile.item).filePath];
-                }
             }
         }
     }
@@ -464,7 +275,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     NSString *error = @"";
     try
     {
-        subscriptionActive = [OAIAPHelper.sharedInstance checkBackupSubscriptions];;
+        subscriptionActive = [OAIAPHelper.sharedInstance checkBackupSubscriptions];
     }
     catch (NSException *e)
     {
@@ -486,9 +297,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 {
     NSString *orderId = [self getOrderId];
     if (orderId.length == 0)
-    {
         return;
-    }
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"email"] = [self getEmail];
     params[@"orderid"] = orderId;
@@ -629,10 +438,21 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     [_executor addOperation:[[OADeleteOldFilesCommand alloc] initWithTypes:types listener:listener]];
 }
 
-- (void)deleteAccount:(NSString *)email token:(NSString *)token
+- (NSError *)deleteAccount:(NSString *)email token:(NSString *)token
 {
-    [self checkRegistered];
-    [_executor addOperation:[[OADeleteAccountCommand alloc] initWith:email token:token]];
+    @try
+    {
+        [self checkRegistered];
+        [_executor addOperation:[[OADeleteAccountCommand alloc] initWith:email token:token]];
+        return nil;
+    }
+    @catch (NSException *exception)
+    {
+        NSString *errorMessage = [NSString stringWithFormat:@"Error deleteAccount(): %@", exception.reason];
+        NSLog(@"%@", errorMessage);
+        NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedStringFromTable(errorMessage, @"OABackupHelper", nil)};
+        return [[NSError alloc] initWithDomain:@"OABackupHelper" code:0 userInfo:userInfo];
+    }
 }
 
 - (void)checkCode:(NSString *)email token:(NSString *)token
@@ -649,7 +469,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (NSInteger)calculateFileSize:(OARemoteFile *)remoteFile
 {
-    NSInteger sz = remoteFile.filesize / 1024;
+    NSInteger sz = remoteFile.filesize;
     if (remoteFile.item.type == EOASettingsItemTypeFile)
     {
         OAFileSettingsItem *flItem = (OAFileSettingsItem *) remoteFile.item;
@@ -658,12 +478,10 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             NSString *mapId = flItem.fileName.lowerCase;
             const auto res = _app.resourcesManager->getResourceInRepository(QString::fromNSString(mapId));
             if (res)
-            {
-                sz = res->size / 1024;
-            }
+                sz = res->size;
         }
     }
-    return sz;
+    return (sz + APPROXIMATE_FILE_SIZE_BYTES) / 1024;
 }
 
 - (NSString *)downloadFile:(NSString *)filePath
@@ -688,7 +506,8 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     NSMutableString *builder = [NSMutableString stringWithString:DOWNLOAD_FILE_URL];
     __block BOOL firstParam = YES;
     [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        [builder appendString:[NSString stringWithFormat:@"%@%@=%@", firstParam ? @"?" : @"&", key, [obj stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
+        NSString* encodedValue = [obj stringByAddingPercentEncodingWithAllowedCharacters:URL_PATH_CHARACTER_SET];
+        [builder appendString:[NSString stringWithFormat:@"%@%@=%@", firstParam ? @"?" : @"&", key, encodedValue]];
         firstParam = NO;
     }];
     
@@ -698,51 +517,17 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     [progress setOnProgress:^(int progress, int64_t deltaWork) {
         work += deltaWork;
         int prog = ((double)work / (double)sz) * 100;
-        [listener onFileDownloadProgress:type fileName:fileName progress:prog deltaWork:deltaWork itemFileName:nil];
+        if (listener)
+            [listener onFileDownloadProgress:type fileName:fileName progress:prog deltaWork:deltaWork itemFileName:nil];
     }];
     
     bool sucseess = [OANetworkUtilities downloadFile:filePath url:builder progress:progress];
     if (!sucseess)
         error = [NSString stringWithFormat:@"Could not download remote file:%@", fileName];
-    
-//    IProgress progress = new AbstractProgress() {
-//
-//        private int work = 0;
-//        private int progress = 0;
-//        private int deltaProgress = 0;
-//
-//        @Override
-//        public void startWork(int work) {
-//            if (listener != null) {
-//                this.work = work > 0 ? work : 1;
-//                listener.onFileDownloadStarted(type, fileName, work);
-//            }
-//        }
-//
-//        @Override
-//        public void progress(int deltaWork) {
-//            if (listener != null) {
-//                deltaProgress += deltaWork;
-//                if ((deltaProgress > (work / 100)) || ((progress + deltaProgress) >= work)) {
-//                    progress += deltaProgress;
-//                    listener.onFileDownloadProgress(type, fileName, progress, deltaProgress);
-//                    deltaProgress = 0;
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public boolean isInterrupted() {
-//            if (listener != null) {
-//                return listener.isDownloadCancelled();
-//            }
-//            return super.isInterrupted();
-//        }
-//    };
-//    progress.startWork((int) (remoteFile.getFilesize() / 1024));
+
     
     if (listener)
-        [listener onFileDownloadDone:type fileName:fileName error:error];
+        [listener onFileDownloadDone:type fileName:fileName estSize:sz error:error];
     [operationLog finishOperation];
     return error;
 }
@@ -752,7 +537,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
          deletedRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
                  onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete
 {
-    OABackupInfoGenerationTask *task = [[OABackupInfoGenerationTask alloc] initWithLocalFiles:localFiles uniqueRemoteFiles:uniqueRemoteFiles deletedRemoteFiles:deletedRemoteFiles onComplete:onComplete];
+    OAGenerateBackupInfoTask *task = [[OAGenerateBackupInfoTask alloc] initWithLocalFiles:localFiles uniqueRemoteFiles:uniqueRemoteFiles deletedRemoteFiles:deletedRemoteFiles onComplete:onComplete];
     [_executor addOperation:task];
 }
 
@@ -826,7 +611,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     __block NSData *resp = nil;
     __block NSString *error = nil;
     [listener onFileUploadStarted:type fileName:fileName work:hasSize ? size : data.length];
-    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES autorizationHeader:nil progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
+    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES authorizationHeader:nil progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
         if (((NSHTTPURLResponse *)response).statusCode != 200)
             error = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
         else
@@ -851,22 +636,18 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         }
     }
     if (error == nil && [status isEqualToString:@"ok"])
-    {
         [self updateFileUploadTime:type fileName:fileName uploadTime:uploadTime];
-    }
     if (listener != nil)
-    {
         [listener onFileUploadDone:type fileName:fileName uploadTime:uploadTime error:error];
-    }
     [operationLog finishOperation:[NSString stringWithFormat:@"%@ %@ %@", type, fileName, (error ? [NSString stringWithFormat:@"Error: %@", [[OABackupError alloc] initWithError:error].getLocalizedError] : @"OK")]];
     return error;
 }
 
 - (void) deleteFilesSync:(NSArray<OARemoteFile *> *)remoteFiles byVersion:(BOOL)byVersion listener:(id<OAOnDeleteFilesListener>)listener
 {
-    [self checkRegistered];
     @try
     {
+        [self checkRegistered];
         OADeleteFilesCommand *command = [[OADeleteFilesCommand alloc] initWithVersion:byVersion listener:listener remoteFiles:remoteFiles];
         NSOperationQueue *executor = [[NSOperationQueue alloc] init];
         [executor addOperations:@[command] waitUntilFinished:YES];
@@ -882,67 +663,23 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     }
 }
 
-- (BOOL) isObfMapExistsOnServer:(NSString *)name
-{
-    __block BOOL exists = NO;
-    
-    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
-    params[@"name"] = name;
-    params[@"type"] = @"file";
-    
-    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"isObfMapExistsOnServer" debug:BACKUP_TYPE_PREFIX];
-    [operationLog startOperation:name];
-    
-    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/userdata/check-file-on-server" params:params post:NO async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        int status;
-        NSString *message;
-        NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
-        if (((NSHTTPURLResponse *)response).statusCode != 200)
-        {
-            OABackupError *backupError = [[OABackupError alloc] initWithError:result];
-            message = [NSString stringWithFormat:@"Check obf map on server error: %@", backupError.toString];
-            status = STATUS_SERVER_ERROR;
-        }
-        else if (result.length > 0)
-        {
-            NSError *jsonParsingError = nil;
-            NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
-            if (!jsonParsingError)
-            {
-                NSString *fileStatus = resultJson[@"status"];
-                exists = [fileStatus isEqualToString:@"present"];
-                status = STATUS_SUCCESS;
-                message = [NSString stringWithFormat:@"%@ exists: %@", name, exists ? @"true" : @"false"];
-            }
-            else
-            {
-                message = @"Check obf map on server error: json parsing";
-                status = STATUS_PARSE_JSON_ERROR;
-            }
-        }
-        else
-        {
-            status = STATUS_EMPTY_RESPONSE_ERROR;
-            message = @"Check obf map on server error: empty response";
-        }
-        [operationLog finishOperation:[NSString stringWithFormat:@"(%d): %@", status, message]];
-    }];
-    return exists;
-}
-
 // MARK: OAOnPrepareBackupListener
 
 - (void)onBackupPreparing
 {
     for (id<OAOnPrepareBackupListener> listener in _prepareBackupListeners)
+    {
         [listener onBackupPreparing];
+    }
 }
 
 - (void)onBackupPrepared:(OAPrepareBackupResult *)backupResult
 {
     _prepareBackupTask = nil;
     for (id<OAOnPrepareBackupListener> listener in _prepareBackupListeners)
+    {
         [listener onBackupPrepared:backupResult];
+    }
 }
 
 @end

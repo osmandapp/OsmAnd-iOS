@@ -396,7 +396,7 @@
         }
         if (cell)
         {
-            [cell setValues:item[@"values"] sizes:nil colors:nil addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+            [cell setValues:item[@"values"] sizes:nil colors:nil hidden:nil addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
         _selectedFolderIndexPath = indexPath;
         return cell;
@@ -590,7 +590,7 @@
 - (CGFloat)getModalPresentationOffset:(BOOL)keyboardShown
 {
     // accounts for additional top offset in modal presentation
-    CGFloat modalOffset = modalOffset = keyboardShown ? 6. : 10.;;
+    CGFloat modalOffset = modalOffset = keyboardShown ? 6. : 10.;
 
     return modalOffset;
 }

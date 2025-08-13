@@ -11,11 +11,11 @@
 #import <MBProgressHUD.h>
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
+#import "OALocationServices.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OAOutdatedResourcesViewController.h"
 #import "OAOcbfHelper.h"
 #import "OASubscriptionBannerCardView.h"
-#import "OAInAppCell.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAFreeMemoryView.h"
@@ -30,11 +30,16 @@
 #import "OADownloadDescriptionInfo.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OAColors.h"
+#import "OAWorldRegion.h"
 #import "OANauticalMapsPlugin.h"
 #import "Localization.h"
 #import "OAResourcesInstaller.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
+#import "OAInAppCell.h"
 #import "OADownloadMultipleResourceViewController.h"
+#import "OADownloadMultipleResourceViewController+cpp.h"
+#import "OAResourcesUISwiftHelper.h"
 #import "OASearchResult.h"
 #import "OAQuickSearchHelper.h"
 #import "OAWeatherHelper.h"
@@ -63,7 +68,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, UISearchBarDelegate, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, UISearchBarDelegate, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails, DownloadingCellResourceHelperDelegate>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -83,6 +88,9 @@ struct RegionResources
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAWeatherHelper *_weatherHelper;
+    DownloadingListHelper *_downloadingListHelper;
+    DownloadingCellResourceHelper *_downloadingCellResourceHelper;
+    DownloadingCellMultipleResourceHelper * _downloadingCellMultipleResourceHelper;
 
     NSObject *_dataLock;
 
@@ -237,6 +245,11 @@ static BOOL _repositoryUpdated = NO;
     return self;
 }
 
+- (void)registerCells
+{
+    [self.tableView registerNib:[UINib nibWithNibName:DownloadingCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:DownloadingCell.reuseIdentifier];
+}
+
 - (void)setupWithRegion:(OAWorldRegion *)region
     andWorldRegionItems:(NSArray *)worldRegionItems
                andScope:(NSInteger)scope
@@ -259,7 +272,7 @@ static BOOL _repositoryUpdated = NO;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-
+    
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
     
@@ -269,6 +282,9 @@ static BOOL _repositoryUpdated = NO;
         self.navigationItem.title = OALocalizedString(@"download_tab_local");
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 52.;
+
+    [self registerCells];
+    [self setupDownloadingCellHelper];
 
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_refreshRepositoryProgressHUD];
@@ -358,6 +374,12 @@ static BOOL _repositoryUpdated = NO;
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
 
     [self applySafeAreaMargins];
+    
+    [self.tableView reloadData];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper refreshCellSpinners];
+    if (_downloadingCellMultipleResourceHelper)
+        [_downloadingCellMultipleResourceHelper refreshCellSpinners];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -402,6 +424,11 @@ static BOOL _repositoryUpdated = NO;
         [_weatherSizeCalculatedObserver detach];
         _weatherSizeCalculatedObserver = nil;
     }
+    
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper cleanCellCache];
+    if (_downloadingCellMultipleResourceHelper)
+        [_downloadingCellMultipleResourceHelper cleanCellCache];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
@@ -423,6 +450,25 @@ static BOOL _repositoryUpdated = NO;
         _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
         [self.tableView reloadData];
     }
+}
+
+- (void) setupDownloadingCellHelper
+{
+    __weak OAManageResourcesViewController *weakSelf = self;
+    _downloadingListHelper = [DownloadingListHelper new];
+    _downloadingListHelper.hostDelegate = self;
+    
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
+    _downloadingCellResourceHelper.isDownloadedLeftIconRecolored = YES;
+    _downloadingCellResourceHelper.leftIconColor = [UIColor colorNamed:ACColorNameIconColorGreen];
+    
+    _downloadingCellMultipleResourceHelper  = [DownloadingCellMultipleResourceHelper new];
+    [_downloadingCellMultipleResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellMultipleResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
+    _downloadingCellMultipleResourceHelper.isDownloadedLeftIconRecolored = YES;
+    _downloadingCellMultipleResourceHelper.leftIconColor = [UIColor colorNamed:ACColorNameIconColorGreen];
 }
 
 - (UIView *) getMiddleView
@@ -634,7 +680,8 @@ static BOOL _repositoryUpdated = NO;
         if (_doDataUpdate || _resourcesByRegions.count() == 0 || _lackOfResources)
             [OAManageResourcesViewController prepareData];
 
-        [self collectSubregionsDataAndItems];
+        if (![self.region isKindOfClass:OACustomRegion.class])
+            [self collectSubregionsDataAndItems];
         [self collectResourcesDataAndItems];
 
         _doDataUpdate = NO;
@@ -851,7 +898,8 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) collectCustomItems
 {
-    _customRegions = self.region.flattenedSubregions;
+    _customRegions = self.region.subregions;
+    
     for (OAResourceItem *item in ((OACustomRegion *) self.region).loadIndexItems)
     {
         item.downloadTask = [self getDownloadTaskFor:item.resourceId.toNSString()];
@@ -873,7 +921,6 @@ static BOOL _repositoryUpdated = NO;
     NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
 
-    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPluginsHelper getPlugin:OAOsmandDevelopmentPlugin.class];
     for (const auto& resource_ : regionResources.allResources)
     {
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
@@ -1245,7 +1292,7 @@ static BOOL _repositoryUpdated = NO;
         if (match)
             item.downloadTask = [self getDownloadTaskFor:localResource->id.toNSString()];
         item.size = localResource->size;
-        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];;
+        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
         item.worldRegion = match;
         NSString *localResourcePath = localResource->localPath.toNSString();
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
@@ -1412,76 +1459,10 @@ static BOOL _repositoryUpdated = NO;
     }
 }
 
-- (void) refreshDownloadingContent:(NSString *)downloadTaskKey
-{
-    @synchronized(_dataLock)
-    {
-        if (_searchController.isActive)
-        {
-            for (int i = 0; i < _searchResults.count; i++)
-            {
-                if ([_searchResults[i] isKindOfClass:[OAWorldRegion class]])
-                    continue;
-
-                id searchResult = _searchResults[i];
-                OAResourceItem *item = (OAResourceItem *) ([searchResult isKindOfClass:OASearchResult.class] ? ((OASearchResult *) searchResult).relatedObject : searchResult);
-
-                if ([[item.downloadTask key] isEqualToString:downloadTaskKey])
-                {
-                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-                    return;
-                }
-            }
-            return;
-        }
-
-        NSMutableArray *resourceItems = [self getResourceItems];
-        for (int i = 0; i < resourceItems.count; i++)
-        {
-            if ([resourceItems[i] isKindOfClass:[OAWorldRegion class]])
-                continue;
-            OAResourceItem *item = resourceItems[i];
-            if ([[item.downloadTask key] isEqualToString:downloadTaskKey])
-            {
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_resourcesSection]];
-                break;
-            }
-        }
-        
-        NSMutableArray *regionMapItems = [self getRegionMapItems];
-        for (int i = 0; i < regionMapItems.count; i++)
-        {
-            OAResourceItem *item = regionMapItems[i];
-            if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
-            {
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_regionMapSection]];
-            }
-            else if ([item isKindOfClass:OAMultipleResourceItem.class])
-            {
-                BOOL hasTask = NO;
-                OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *) item;
-                for (OAResourceItem *resourceItem in multipleItem.items)
-                {
-                    if ([resourceItem.downloadTask.key isEqualToString:downloadTaskKey])
-                    {
-                        hasTask = YES;
-                        break;
-                    }
-                }
-                if (hasTask)
-                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_regionMapSection]];
-            }
-        }
-
-    }
-}
-
 - (void) updateTableLayout
 {
     CGRect frame = self.tableView.frame;
     CGFloat h = self.view.bounds.size.height - frame.origin.y;
-    if (self.downloadView.superview)
-        h -= self.downloadView.bounds.size.height;
     
     [UIView animateWithDuration:.2 animations:^{
         self.tableView.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
@@ -1492,9 +1473,10 @@ static BOOL _repositoryUpdated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast && self.region == item.worldRegion)
     {
+        __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
-            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            if (weakSelf.tableView)
+                [weakSelf.tableView reloadData];
         });
     }
 }
@@ -1566,9 +1548,7 @@ static BOOL _repositoryUpdated = NO;
             return;
         }
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.view addSpinner];
-        });
+        [self.view addSpinner];
 
         // Select where to look
         NSArray<OAWorldRegion *> *searchableContent = _searchableWorldwideRegionItems;
@@ -1604,20 +1584,23 @@ static BOOL _repositoryUpdated = NO;
         }
         [regionsOnlyContains sortUsingComparator:regionComparator];
 
-        // Assemble all regions all togather
+        // Assemble all regions all together
         NSArray *regions = [regionsStartsWith arrayByAddingObjectsFromArray:regionsOnlyContains];
         NSArray *resultByContains = [self createSearchResult:regions byMapRegion:NO];
         _searchResults = resultByContains;
         [_tableView reloadData];
-
-        [self.view addSpinner];
-        [OAQuickSearchHelper.instance searchCityLocations:searchString
-                                       searchLocation:_app.locationServices.lastKnownLocation
-                                         searchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]
-                                         allowedTypes:@[@"city", @"town"]
-                                                limit:kSearchCityLimit
-                                           onComplete:^(NSArray<OASearchResult *> *searchResults)
-         {
+        
+        if (searchString.length < 3)
+        {
+            [self.view removeSpinner];
+            return;
+        }
+        
+        [OAQuickSearchHelper.instance searchCities:searchString
+                                    searchLocation:_app.locationServices.lastKnownLocation
+                                      allowedTypes:@[@"city", @"town"]
+                                         cityLimit:kSearchCityLimit
+                                        onComplete:^(NSMutableArray *searchResults) {
             NSMutableArray *regionsByCity = [NSMutableArray array];
             for (OASearchResult *amenity in searchResults)
             {
@@ -1638,12 +1621,49 @@ static BOOL _repositoryUpdated = NO;
             }
             if (regionsByCity.count > 0)
             {
+                [regionsByCity sortUsingComparator:^NSComparisonResult(id a, id b) {
+                    NSString *titleA = [self titleForObject:a];
+                    NSString *titleB = [self titleForObject:b];
+                    
+                    NSComparisonResult titleCompare = [titleA localizedCaseInsensitiveCompare:titleB];
+                    if (titleCompare == NSOrderedSame)
+                        return [[self subtitleForObject:a] localizedCaseInsensitiveCompare:[self subtitleForObject:b]];
+                    
+                    return titleCompare;
+                }];
                 _searchResults = [resultByContains arrayByAddingObjectsFromArray:regionsByCity];
                 [_tableView reloadData];
             }
             [self.view removeSpinner];
         }];
     }
+}
+
+- (NSString *)titleForObject:(id)obj
+{
+    if ([obj isKindOfClass:[OAResourceItem class]])
+    {
+        return ((OAResourceItem *)obj).title ?: @"";
+    }
+    else if ([obj isKindOfClass:[OAWorldRegion class]])
+    {
+        return ((OAWorldRegion *)obj).localizedName ?: @"";
+    }
+    else if ([obj isKindOfClass:[OASearchResult class]])
+    {
+        return ((OASearchResult *)obj).localeName;
+    }
+    return @"";
+}
+
+- (NSString *)subtitleForObject:(id)obj
+{
+    if ([obj isKindOfClass:[OASearchResult class]])
+    {
+        id relatedObject = ((OASearchResult *)obj).relatedObject;
+        return ((OARepositoryResourceItem *)relatedObject).title ?: @"";
+    }
+    return @"";
 }
 
 - (OAResourceItem *)createResourceItemResult:(std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource_
@@ -1979,7 +1999,7 @@ static BOOL _repositoryUpdated = NO;
     if (section == _subscriptionBannerSection)
         return 0;
     if (section == _freeMemorySection)
-        return 0;
+        return [_downloadingListHelper hasDownloads] ? 1 : 0;
     if (section == _freeMapsBannerSection)
         return 1;
     if (section == _extraMapsSection)
@@ -2079,91 +2099,6 @@ static BOOL _repositoryUpdated = NO;
     return nil;
 }
 
-- (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
-    
-    static NSString * const downloadingResourceCell = @"downloadingResourceCell";
-    
-    NSString *cellTypeId = nil;
-    id item_ = nil;
-    if ([self isFiltering])
-    {
-        item_ = _searchResults[indexPath.row];
-        
-        if (![item_ isKindOfClass:[OAWorldRegion class]])
-        {
-            OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
-            if (item.downloadTask != nil)
-                cellTypeId = downloadingResourceCell;
-        }
-    }
-    else
-    {
-        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
-        {
-            item_ = [self getResourceItems][indexPath.row];
-            
-            if (![item_ isKindOfClass:[OAWorldRegion class]])
-            {
-                OAResourceItem *item = (OAResourceItem *) item_;
-
-                if (item.downloadTask != nil)
-                    cellTypeId = downloadingResourceCell;
-            }
-        }
-        else if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
-        {
-            item_ = [self getRegionMapItems][indexPath.row];
-            if ([item_ isKindOfClass:OAMultipleResourceItem.class])
-            {
-                OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *) item_;
-                for (OAResourceItem *resourceItem in multipleItem.items)
-                {
-                    if (resourceItem.downloadTask != nil)
-                    {
-                        item_ = resourceItem;
-                        break;
-                    }
-                }
-            }
-            OAResourceItem *item = (OAResourceItem *) item_;
-
-            if (item.downloadTask != nil)
-                cellTypeId = downloadingResourceCell;
-        }
-    }
-    
-    if ([cellTypeId isEqualToString:downloadingResourceCell])
-    {
-        OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
-        FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-
-        float progressCompleted = item.downloadTask.progressCompleted;
-        if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
-        {
-            progressView.iconPath = nil;
-            if (progressView.isSpinning)
-                [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = progressCompleted - 0.001;
-        }
-        else if (item.downloadTask.state == OADownloadTaskStateFinished)
-        {
-            progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
-            progressView.progress = 0.0f;
-        }
-        else
-        {
-            progressView.iconPath = [UIBezierPath bezierPath];
-            progressView.progress = 0.0;
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
-        }
-    }
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString * const subregionCell = @"subregionCell";
@@ -2173,6 +2108,7 @@ static BOOL _repositoryUpdated = NO;
     static NSString * const downloadingResourceCell = @"downloadingResourceCell";
     static NSString * const outdatedResourcesSubmenuCell = @"outdatedResourcesSubmenuCell";
     static NSString * const installedResourcesSubmenuCell = @"installedResourcesSubmenuCell";
+    static NSString * const allDownloadingsCell = @"allDownloadingsCell";
 
     NSString *cellTypeId = nil;
     NSString *title = nil;
@@ -2182,6 +2118,7 @@ static BOOL _repositoryUpdated = NO;
     OAResourceItem *downloadingMultipleItem = nil;
 
     id item_ = nil;
+    OALocalResourceItem *localItem = nil;
     if ([self isFiltering])
     {
         item_ = _searchResults[indexPath.row];
@@ -2266,6 +2203,10 @@ static BOOL _repositoryUpdated = NO;
                                                                countStyle:NSByteCountFormatterCountStyleFile]]
                         : OALocalizedString(@"all_maps_are_up_to_date");
             }
+        }
+        else if (indexPath.section == _freeMemorySection)
+        {
+            cellTypeId = allDownloadingsCell;
         }
         else if (indexPath.section == _extraMapsSection)
         {
@@ -2571,16 +2512,16 @@ static BOOL _repositoryUpdated = NO;
         else if (indexPath.section == _localSqliteSection)
         {
             OASqliteDbResourceItem *item = _localSqliteItems[indexPath.row];
+            localItem = item;
             cellTypeId = localResourceCell;
-            
             title = item.title;
             subtitle = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
         }
         else if (indexPath.section == _localOnlineTileSourcesSection)
         {
             OALocalResourceItem *item = _localOnlineTileSources[indexPath.row];
+            localItem = item;
             cellTypeId = localResourceCell;
-            
             title = item.title;
             if ([item isKindOfClass:OASqliteDbResourceItem.class])
                 subtitle = [NSString stringWithFormat:@"%@ • %@", OALocalizedString(@"online_map"), [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
@@ -2590,6 +2531,7 @@ static BOOL _repositoryUpdated = NO;
         else if (indexPath.section == _localTravelSection)
         {
             OALocalResourceItem *item = _localTravelItems[indexPath.row];
+            localItem = item;
             cellTypeId = localResourceCell;
             title = item.title;
             if (item.size > 0)
@@ -2644,6 +2586,10 @@ static BOOL _repositoryUpdated = NO;
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
+        else if ([cellTypeId isEqualToString:allDownloadingsCell])
+        {
+            return [_downloadingListHelper buildAllDownloadingsCell];
+        }
         else if ([cellTypeId isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
@@ -2683,21 +2629,6 @@ static BOOL _repositoryUpdated = NO;
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
             }
-        }
-        else if ([cellTypeId isEqualToString:downloadingResourceCell])
-        {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                          reuseIdentifier:cellTypeId];
-
-            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-
-            FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-            progressView.iconView = [[UIView alloc] init];
-            progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-
-            cell.accessoryView = progressView;
         }
     }
 
@@ -2766,34 +2697,50 @@ static BOOL _repositoryUpdated = NO;
             }
         }
     }
+    
+    if ([cellTypeId isEqualToString:localResourceCell])
+    {
+        cell.textLabel.text = title;
+        if (cell.detailTextLabel != nil)
+            cell.detailTextLabel.text = subtitle;
+        if (localItem)
+        {
+            cell.imageView.image = [OAResourceType getIcon:localItem.resourceType templated:YES];
+            cell.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorGreen];
+        }
+    }
 
     if ([item_ isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || ((OAResourceItem *) item_).resourceType == OsmAndResourceType::SrtmMapRegion))
     {
+        DownloadingCell *downloadingCell = [tableView dequeueReusableCellWithIdentifier:DownloadingCell.reuseIdentifier];
         OAMultipleResourceItem *item = (OAMultipleResourceItem *) item_;
-        UIColor *color = [UIColor colorNamed:ACColorNameIconColorDisabled];
-        NSArray<OAResourceItem *> *items = [self.region hasGroupItems] ? [self.region.groupItem getItems:item.resourceType] : item.items;
-        for (OAResourceItem *resourceItem in items)
-        {
-            if (_app.resourcesManager->isResourceInstalled(resourceItem.resourceId))
-            {
-                color = UIColorFromRGB(resource_installed_icon_color);
-                break;
-            }
-        }
-        cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
-        cell.imageView.tintColor = color;
+
+        OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:item];
+        
+        [_downloadingCellMultipleResourceHelper configureWithResourceItem:mapItem cell:downloadingCell];
+        
+        downloadingCell.titleLabel.text = title;
+        downloadingCell.descriptionLabel.text = subtitle;
+        return downloadingCell;
     }
     else if ([item_ isKindOfClass:OAResourceItem.class] || [item_ isKindOfClass:OASearchResult.class])
     {
+        DownloadingCell *downloadingCell = [tableView dequeueReusableCellWithIdentifier:DownloadingCell.reuseIdentifier];
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
-        UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? UIColorFromRGB(resource_installed_icon_color) : [UIColor colorNamed:ACColorNameIconColorDisabled];
-        cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
-        cell.imageView.tintColor = color;
-    }
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
+     
+        [_downloadingCellResourceHelper configureWithResourceItem:mapItem cell:downloadingCell];
 
-    cell.textLabel.text = title;
-    if (cell.detailTextLabel != nil)
-        cell.detailTextLabel.text = subtitle;
+        downloadingCell.titleLabel.text = title;
+        downloadingCell.descriptionLabel.text = subtitle;
+        return downloadingCell;
+    }
+    else
+    {
+        cell.textLabel.text = title;
+        if (cell.detailTextLabel != nil)
+            cell.detailTextLabel.text = subtitle;
+    }
 
     if ([cellTypeId isEqualToString:subregionCell])
     {
@@ -2847,50 +2794,6 @@ static BOOL _repositoryUpdated = NO;
                     break;
                 }
             }
-        }
-    }
-    else if ([cellTypeId isEqualToString:downloadingResourceCell])
-    {
-        OAResourceItem *item = [item_ isKindOfClass:OAMultipleResourceItem.class] && downloadingMultipleItem
-                ? downloadingMultipleItem
-                : (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
-
-        if (item.resourceType != OsmAndResourceType::WeatherForecast)
-        {
-            FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-
-            float progressCompleted = item.downloadTask.progressCompleted;
-            if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
-            {
-                progressView.iconPath = nil;
-                if (progressView.isSpinning)
-                    [progressView stopSpinProgressBackgroundLayer];
-                progressView.progress = progressCompleted - 0.001;
-            }
-            else if (item.downloadTask.state == OADownloadTaskStateFinished)
-            {
-                progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-                progressView.progress = 0.0f;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
-            }
-            else
-            {
-                progressView.iconPath = [UIBezierPath bezierPath];
-                progressView.progress = 0.0;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
-                [progressView setNeedsDisplay];
-            }
-        }
-        else
-        {
-            FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-            progressView.iconPath = [UIBezierPath bezierPath];
-            progressView.progress = 0.0;
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
-            [progressView setNeedsDisplay];
         }
     }
     else if ([cellTypeId isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
@@ -2958,25 +2861,27 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    id item;
-    if ([self isFiltering])
-        item = _searchResults[indexPath.row];
-    else
-        item = [self getItemByIndexPath:indexPath];
-
-    if (item == nil)
-        return;
-
-    [self onItemClicked:item];
+    [self onCellClicked:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self onCellClicked:indexPath];
+    [tableView deselectRowAtIndexPath:indexPath animated:true];
+}
+
+- (void) onCellClicked:(NSIndexPath *)indexPath
 {
     id item = nil;
     if ([self isFiltering])
     {
         if (_searchResults.count > 0)
             item = _searchResults[indexPath.row];
+    }
+    else if (indexPath.section == _freeMemorySection)
+    {
+        if (indexPath.row == 0)
+            [self showModalViewController:[_downloadingListHelper getListViewController]];
     }
     else if (indexPath.section == _downloadDescriptionSection)
     {
@@ -3006,7 +2911,10 @@ static BOOL _repositoryUpdated = NO;
         }
         else if ([item isKindOfClass:OACustomResourceItem.class])
         {
-            [self showDetailsOfCustomItem:item];
+            if (((OACustomResourceItem *) item).downloadTask != nil)
+                [self onItemClicked:item];
+            else
+                [self showDetailsOfCustomItem:item];
         }
         else if (![item isKindOfClass:[OALocalResourceItem class]])
         {
@@ -3016,9 +2924,12 @@ static BOOL _repositoryUpdated = NO;
         {
             [self showDetailsOf:item];
         }
+        else if ([item isKindOfClass:OALocalResourceItem.class])
+        {
+            if (![item isKindOfClass:OASqliteDbResourceItem.class] && ![item isKindOfClass:OAOnlineTilesResourceItem.class])
+                [self showDetailsOf:item];
+        }
     }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -3071,7 +2982,19 @@ static BOOL _repositoryUpdated = NO;
 
     if ([item isKindOfClass:[OALocalResourceItem class]])
     {
-        [self offerDeleteResourceOf:item];
+        __weak __typeof(self) weakSelf = self;
+        [self offerDeleteResourceOf:item executeAfterSuccess:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (strongSelf) {
+                    if (strongSelf->_downloadingCellResourceHelper)
+                        [strongSelf->_downloadingCellResourceHelper cleanCellCache];
+                    if (strongSelf->_downloadingCellMultipleResourceHelper)
+                        [strongSelf->_downloadingCellMultipleResourceHelper cleanCellCache];
+                    [tableView reloadData];
+                }
+            });
+        }];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
@@ -3100,14 +3023,14 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    _lastSearchString = searchText;
-    _lastSearchScope = searchBar.selectedScopeButtonIndex;
-    [self performSearchForSearchString:_lastSearchString
-                        andSearchScope:_lastSearchScope];
-    if (searchText.length > 0)
-        [self setupSearchControllerWithFilter:YES];
-    else
-        [self setupSearchControllerWithFilter:NO];
+    if (![searchText isEqualToString:_lastSearchString])
+    {
+        _lastSearchString = searchText;
+        _lastSearchScope = searchBar.selectedScopeButtonIndex;
+        [self performSearchForSearchString:_lastSearchString
+                            andSearchScope:_lastSearchScope];
+        [self setupSearchControllerWithFilter:searchText.length > 0];
+    }
 }
 
 #pragma mark - Navigation
@@ -3396,24 +3319,27 @@ static BOOL _repositoryUpdated = NO;
     });
 }
 
-#pragma mark - OADownloadMultipleResourceDelegate
+#pragma mark - DownloadMultipleResourceDelegate
 
-- (void)downloadResources:(OAMultipleResourceItem *)item selectedItems:(NSArray<OAResourceItem *> *)selectedItems;
+- (void)downloadResources:(OAMultipleResourceSwiftItem *)item selectedItems:(NSArray<OAResourceSwiftItem *> *)selectedItems;
 {
-    _multipleItems = selectedItems;
-    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item selectedItems:selectedItems onTaskCreated:^(id<OADownloadTask> task) {
+    NSMutableArray<OAResourceItem *> *selectedResourceItems = [NSMutableArray array];
+    for (OAResourceSwiftItem *i in selectedItems)
+        [selectedResourceItems addObject:i.objcResourceItem];
+
+    _multipleItems = selectedResourceItems;
+    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item.objcResourceItem selectedItems:selectedResourceItems onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
-    } onTaskResumed:^(id<OADownloadTask> task) {
-        [self showDownloadViewForTask:task];
-    }];
+    } onTaskResumed:nil];
 }
 
-- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceItem *> *)itemsToCheck
+- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck
 {
     NSMutableArray<OALocalResourceItem *> *itemsToRemove = [NSMutableArray new];
     OAResourceItem *prevItem;
-    for (OAResourceItem *itemToCheck in itemsToCheck)
+    for (OAResourceSwiftItem *item in itemsToCheck)
     {
+        OAResourceItem *itemToCheck = item.objcResourceItem;
         QString srtmMapName = itemToCheck.resourceId.remove(QLatin1String([OAResourceType isSRTMF:itemToCheck] ? ".srtmf.obf" : ".srtm.obf"));
         if (prevItem && prevItem.resourceId.startsWith(srtmMapName))
         {
@@ -3439,9 +3365,9 @@ static BOOL _repositoryUpdated = NO;
     _multipleItems = nil;
 }
 
-- (void)onDetailsSelected:(OALocalResourceItem *)item
+- (void)onDetailsSelected:(OAResourceSwiftItem *)item
 {
-    [self showDetailsOf:item];
+    [self showDetailsOf:(OALocalResourceItem *)item.objcResourceItem];
 }
 
 #pragma mark - OAWeatherForecastDetails
@@ -3468,6 +3394,17 @@ static BOOL _repositoryUpdated = NO;
     {
         [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
     }
+}
+
+#pragma mark - DownloadingCellResourceHelperDelegate
+
+- (void)onDownloadingCellResourceNeedUpdate:(id<OADownloadTask>)task
+{
+    [self updateContent];
+}
+
+- (void)onStopDownload:(OAResourceSwiftItem *)resourceItem
+{
 }
 
 @end

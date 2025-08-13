@@ -20,6 +20,7 @@
 #import "OAPrepareBackupResult.h"
 #import "OARootViewController.h"
 #import "OALog.h"
+#import "Localization.h"
 
 @implementation OANetworkSettingsHelper
 {
@@ -39,7 +40,8 @@
 - (instancetype) init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _backupHelper = [OABackupHelper sharedInstance];
         _importAsyncTasks = [NSMutableDictionary dictionary];
         _exportAsyncTasks = [NSMutableDictionary dictionary];
@@ -97,7 +99,9 @@
 {
     BOOL cancelled = YES;
     for (OASyncBackupTask *syncTask in self.syncBackupTasks.allValues)
+    {
         [syncTask cancel];
+    }
     [self.syncBackupTasks removeAllObjects];
     return cancelled;
 }
@@ -135,7 +139,9 @@
 - (void) updateImportListener:(id<OAImportListener>)listener
 {
     for (OAImportBackupTask *importTask in self.importAsyncTasks.allValues)
+    {
         importTask.importListener = listener;
+    }
 }
 
 - (void) finishImport:(id<OAImportListener>)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items
@@ -151,7 +157,9 @@
 {
     NSMutableArray<NSString *> *warnings = [NSMutableArray array];
     for (OASettingsItem *item in items)
+    {
         [warnings addObjectsFromArray:item.warnings];
+    }
     NSString *error = nil;
     if (warnings.count > 0)
         error = [OAUtilities formatWarnings:warnings];
@@ -242,22 +250,28 @@
         {
             case EOABackupSyncOperationDelete:
             {
-                if (remoteFile)
-                    [syncTask deleteItem:remoteFile.item];
+                if (remoteFile && ![remoteFile isDeleted])
+                {
+                    if (remoteFile.item)
+                        [syncTask deleteItem:remoteFile.item];
+                }
                 else if (localFile)
-                    [syncTask deleteLocalItem:localFile.item];
+                {
+                    if (localFile.item)
+                        [syncTask deleteLocalItem:localFile.item];
+                }
                 break;
             }
             case EOABackupSyncOperationUpload:
             {
-                if (localFile)
+                if (localFile && localFile.item)
                     [syncTask uploadLocalItem:localFile.item];
                 break;
             }
             case EOABackupSyncOperationDownload:
             {
-                if (remoteFile)
-                    [syncTask downloadRemoteVersion:remoteFile.item filesType:filesType shouldReplace:shouldReplace restoreDeleted:restoreDeleted];
+                if (remoteFile && remoteFile.item)
+                    [syncTask downloadItem:remoteFile.item type:filesType shouldReplace:shouldReplace restoreDeleted:restoreDeleted];
                 break;
             }
             default:

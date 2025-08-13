@@ -11,16 +11,18 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OAObjectType.h"
-#import "OAGPXDocument.h"
-
-#include <OsmAndCore/Data/Amenity.h>
-#include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/GpxDocument.h>
 
 // MAX_TYPES_BASE_10 should be > ObjectType.getTypeWeight(objectType) = 5
 #define MAX_TYPES_BASE_10 10
 // MAX_PHRASE_WEIGHT_TOTAL should be  > getSumPhraseMatchWeight
 #define MAX_PHRASE_WEIGHT_TOTAL MAX_TYPES_BASE_10 * MAX_TYPES_BASE_10
+
+typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
+    EOASearchResultResourceDetailed,
+    EOASearchResultResourceWikipedia,
+    EOASearchResultResourceBasemap,
+    EOASearchResultResourceTravel
+};
 
 @interface CheckWordsMatchCount : NSObject
 
@@ -29,7 +31,7 @@
 
 @end
 
-@class OASearchPhrase;
+@class OASearchPhrase, OASWptPt, OASGpxFile;
 
 @interface OASearchResult : NSObject
 
@@ -42,9 +44,7 @@
 @property (nonatomic) BOOL firstUnknownWordMatches;
 
 @property (nonatomic) NSObject *object;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::Amenity> amenity;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::IFavoriteLocation> favorite;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::GpxDocument::WptPt> wpt;
+@property (nonatomic, assign) OASWptPt *wpt;
 
 @property (nonatomic) EOAObjectType objectType;
 @property (nonatomic) NSString *resourceId;
@@ -59,13 +59,14 @@
 @property (nonatomic) int preferredZoom;
 @property (nonatomic) NSString *localeName;
 @property (nonatomic) NSString *alternateName;
+@property (nonatomic) NSString *cityName;
 
 @property (nonatomic) NSMutableArray<NSString *> *otherNames;
 
 @property (nonatomic) NSString *localeRelatedObjectName;
 @property (nonatomic) NSObject *relatedObject;
 @property (nonatomic) NSString *relatedResourceId;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::GpxDocument> relatedGpx;
+@property (nonatomic, assign) OASGpxFile *relatedGpx;
 @property (nonatomic) double distRelatedObjectName;
 
 

@@ -11,7 +11,7 @@
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
 #import "OAInputTableViewCell.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OASwitchTableViewCell.h"
@@ -23,6 +23,7 @@
 #import "OsmAndApp.h"
 #import "OASimpleTableViewCell.h"
 #import "OAButtonTableViewCell.h"
+#import "MaterialTextFields.h"
 #import "OAActionAddCategoryViewController.h"
 #import "OAQuickSearchListItem.h"
 #import "OAPOIUIFilter.h"
@@ -48,7 +49,7 @@
 
 #define KEY_MESSAGE @"message"
 
-@interface OAActionConfigurationViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate, OAKeyboardHintBarDelegate>
+@interface OAActionConfigurationViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate, OAKeyboardHintBarDelegate, ActionAddTerrainColorSchemeDelegate>
 
 @end
 
@@ -58,7 +59,8 @@
     MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *_data;
     NSString *_originalName;
     
-    OAQuickActionRegistry *_actionRegistry;
+    OAMapButtonsHelper *_mapButtonsHelper;
+    QuickActionButtonState *_buttonState;
     
     BOOL _isNew;
 
@@ -74,6 +76,30 @@
 
 #pragma mark - Initialization
 
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState typeId:(NSInteger)typeId
+{
+    self = [super init];
+    if (self)
+    {
+        _buttonState = buttonState;
+        _isNew = YES;
+        _action = [OAMapButtonsHelper produceAction:[_mapButtonsHelper newActionByType:typeId]];
+    }
+    return self;
+}
+
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState action:(OAQuickAction *)action
+{
+    self = [super init];
+    if (self)
+    {
+        _buttonState = buttonState;
+        _isNew = action.id == 0;
+        _action = _isNew ? [OAMapButtonsHelper produceAction:[_mapButtonsHelper newActionByType:action.id]] : action;
+    }
+    return self;
+}
+
 - (instancetype)initWithAction:(OAQuickAction *)action isNew:(BOOL)isNew
 {
     self = [super init];
@@ -81,9 +107,13 @@
     {
         _action = action;
         _isNew = isNew;
-        _actionRegistry = [OAQuickActionRegistry sharedInstance];
     }
     return self;
+}
+
+- (void)commonInit
+{
+    _mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
 }
 
 - (void)registerNotifications
@@ -120,7 +150,7 @@
 
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
-    return [UIImage templateImageNamed:@"ic_navbar_chevron"];
+    return [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
 }
 
 - (NSString *)getTableHeaderDescription
@@ -158,10 +188,14 @@
 - (MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *)generateDataAction
 {
     MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
-    [dataModel setObject:@[@{
-        @"type" : [OAInputTableViewCell getCellIdentifier],
-        @"title" : _action.getName
-    }] forKey:OALocalizedString(@"shared_string_action_name")];
+    NSString *actionName = [_action getExtendedName];
+    if (actionName)
+    {
+        [dataModel setObject:@[@{
+            @"type" : [OAInputTableViewCell getCellIdentifier],
+            @"title" : actionName
+        }] forKey:OALocalizedString(@"shared_string_action_name")];
+    }
     
     OrderedDictionary *actionSpecific = _action.getUIModel;
     [dataModel addEntriesFromDictionary:actionSpecific];
@@ -474,14 +508,37 @@
         if (cell)
         {
             [cell.textView setText:item[@"title"]];
-            cell.descView.hidden = YES;
-            if (item[@"iconColor"])
+            cell.descView.hidden = ![item.allKeys containsObject:@"desc"];
+            cell.descView.text = [item[@"desc"] stringValue];
+
+            if ([item.allKeys containsObject:@"colorPalette"]
+                && [item[@"colorPalette"] isKindOfClass:ColorPalette.class])
             {
-                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
-                cell.iconView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
+                cell.descView.numberOfLines = 1;
+                cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+                cell.descView.lineBreakMode = NSLineBreakByTruncatingTail;
+                cell.iconView.layer.cornerRadius = 3;
+                ColorPalette *colorPalette = (ColorPalette *) item[@"colorPalette"];
+                [PaletteCollectionHandler applyGradientTo:cell.iconView
+                                                     with:colorPalette];
             }
             else
-                [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            {
+                cell.descView.numberOfLines = 0;
+                cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+                cell.descView.lineBreakMode = NSLineBreakByWordWrapping;
+                if (item[@"iconColor"])
+                {
+                    cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+                    cell.iconView.tintColor = item[@"iconColor"];
+                }
+                else
+                {
+                    cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+                    cell.iconView.tintColor = nil;
+                }
+            }
+
             if (cell.iconView.subviews.count > 0)
                 [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             cell.delegate = self;
@@ -632,7 +689,7 @@
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    return [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]];;
+    return [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]];
 }
 
 #pragma mark - UITableViewDelegate
@@ -720,6 +777,14 @@
     [self.navigationController pushViewController:profilesScreen animated:YES];
 }
 
+- (void)addTerrain
+{
+    NSArray *arr = [_action getParams][[_action getListKey]];
+    ActionAddTerrainColorSchemeViewController *viewController = [[ActionAddTerrainColorSchemeViewController alloc] initWithPalettes:arr];
+    viewController.delegate = self;
+    [self showViewController:viewController];
+}
+
 - (NSArray *)getTitles:(NSArray *)items {
     NSMutableArray *titles = [NSMutableArray new];
     for (NSDictionary *item in items)
@@ -728,6 +793,13 @@
             [titles addObject:item[@"title"]];
     }
     return [NSArray arrayWithArray:titles];
+}
+
+- (NSString *)getOldTitle
+{
+    NSString *listKey = [_action getListKey];
+    id params = [_action getParams][listKey];
+    return params ? [_action getTitle:params] : [_action getName];
 }
 
 #pragma mark - Selectors
@@ -801,14 +873,14 @@
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    
-    if ([_actionRegistry isNameUnique:_action])
+
+    NSArray<OAQuickAction *> *actions = _buttonState.quickActions;
+    if ([_mapButtonsHelper isActionNameUnique:actions quickAction:_action])
     {
         if (_isNew)
-            [_actionRegistry addQuickAction:_action];
+            [_mapButtonsHelper addQuickAction:_buttonState action:_action];
         else
-            [_actionRegistry updateQuickAction:_action];
-        [_actionRegistry.quickActionListChangedObservable notifyEvent];
+            [_mapButtonsHelper updateQuickAction:_buttonState action:_action];
         for (UIViewController *controller in self.navigationController.viewControllers)
         {
             if ([controller isKindOfClass:[OAQuickActionListViewController class]])
@@ -823,14 +895,13 @@
     }
     else
     {
-        _action = [_actionRegistry generateUniqueName:_action];
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"quick_action_name_alert"), _action.getName] preferredStyle:UIAlertControllerStyleAlert];
+        _action = [_mapButtonsHelper generateUniqueActionName:actions action:_action];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"quick_action_name_alert"), [_action getName]] preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             if (_isNew)
-                [_actionRegistry addQuickAction:_action];
+                [_mapButtonsHelper addQuickAction:_buttonState action:_action];
             else
-                [_actionRegistry updateQuickAction:_action];
-            [_actionRegistry.quickActionListChangedObservable notifyEvent];
+                [_mapButtonsHelper updateQuickAction:_buttonState action:_action];
             for (UIViewController *controller in self.navigationController.viewControllers)
             {
                 if ([controller isKindOfClass:[OAQuickActionListViewController class]])
@@ -987,9 +1058,10 @@
 {
     NSString *nameKey = OALocalizedString(@"shared_string_action_name");
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[nameKey].firstObject];
-    NSString *defaultName = [_action getDefaultName];
+    NSString *name = [_action getName];
     
-    if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
+    if ([actionName[@"title"] isEqualToString:name]
+        || [actionName[@"title"] isEqualToString:oldTitle])
     {
         NSString *newTitle = [_action getTitle:titles];
         [actionName setObject:newTitle forKey:@"title"];
@@ -1033,7 +1105,7 @@
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    [self renameAction:titles oldTitle:[_action getTitle:_action.getParams[_action.getListKey]]];
+    [self renameAction:titles oldTitle:[self getOldTitle]];
     [self.tableView reloadData];
 }
 
@@ -1059,10 +1131,9 @@
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"shared_string_action_name")].firstObject];
     NSString *nameKey = OALocalizedString(@"shared_string_action_name");
-    NSString *oldTitle = [_action getTitle:_action.getParams[_action.getListKey]];
     NSString *defaultName = [_action getDefaultName];
     
-    if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
+    if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:[self getOldTitle]])
     {
         NSString *newTitle = [_action getTitle:titles];
         [actionName setObject:newTitle forKey:@"title"];
@@ -1093,7 +1164,7 @@
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    [self renameAction:titles oldTitle:[_action getTitle:_action.getParams[_action.getListKey]]];
+    [self renameAction:titles oldTitle:[self getOldTitle]];
     [self.tableView reloadData];
 }
 
@@ -1119,7 +1190,33 @@
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    [self renameAction:titles oldTitle:[_action getTitle:_action.getParams[_action.getListKey]]];
+    [self renameAction:titles oldTitle:[self getOldTitle]];
+    [self.tableView reloadData];
+}
+
+#pragma mark - ActionAddTerrainColorSchemeDelegate
+
+- (void)onTerrainsSelected:(NSArray<NSDictionary<NSString *, id> *> *)items
+{
+    NSString *key = _data.allKeys.lastObject;
+    NSArray *rows = _data[key];
+    NSDictionary *button = rows.lastObject;
+    NSMutableArray *newItems = [NSMutableArray array];
+    NSMutableArray *titles = [NSMutableArray array];
+    for (NSDictionary *item in items)
+    {
+        [newItems addObject:@{
+            @"type" : [OATitleDescrDraggableCell getCellIdentifier],
+            @"title" : item[@"title"],
+            @"desc" : item[@"desc"],
+            @"colorPalette" : item[@"colorPalette"],
+            @"palette" : item[@"palette"]
+        }];
+        [titles addObject:item[@"title"]];
+    }
+    [newItems addObject:button];
+    [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
+    [self renameAction:titles oldTitle:[self getOldTitle]];
     [self.tableView reloadData];
 }
 

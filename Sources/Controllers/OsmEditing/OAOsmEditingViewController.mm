@@ -10,18 +10,22 @@
 #import "OABasicEditingViewController.h"
 #import "OAAdvancedEditingViewController.h"
 #import "OAUploadOsmPointsAsyncTask.h"
+#import "OAOsmUploadPOIViewController.h"
 #import "OASizes.h"
 #import "OAEditPOIData.h"
 #import "OAEntity.h"
 #import "OANode.h"
 #import "OAWay.h"
 #import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOpenStreetMapRemoteUtil.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAMapLayers.h"
 #import "Localization.h"
@@ -160,7 +164,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
-    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] style:UIBarButtonItemStylePlain target:self action:@selector(onBackPressed)];
+    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] style:UIBarButtonItemStylePlain target:self action:@selector(onBackPressed)];
     [self.navigationController.navigationBar.topItem setLeftBarButtonItem:_backButton animated:YES];
     
     self.segmentContainerView.backgroundColor = [self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor colorWithAlphaComponent:1.];
@@ -274,15 +278,34 @@ typedef NS_ENUM(NSInteger, EditingTab)
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_delete_confirmation_descr") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingUtil changedTags:nil callback:^(OAEntity * entity){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
-                [[OARootViewController instance].mapPanel targetHide];
-            });
-        }];
+        [self deletePoi];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
-    
+}
+
+- (void)deletePoi
+{
+    if ([self.class isOfflineEditing:_editingUtil])
+    {
+        __weak __typeof(self) weakSelf = self;
+        [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingUtil changedTags:nil callback:^(OAEntity * entity) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+                [weakSelf.class showContextMenu];
+            });
+        }];
+    }
+    else
+    {
+        OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
+        [p setEntity:_editPoiData.getEntity];
+        [p setAction:DELETE];
+        [p setComment:@""];
+        
+        OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:@[p]];
+        dialog.delegate = self.delegate;
+        [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
+    }
 }
 
 - (IBAction)applyPressed:(id)sender
@@ -292,6 +315,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void) trySaving
 {
+    BOOL offlineEdit = [self.class isOfflineEditing:_editingUtil];
     NSString *tagWithExceedingValue = [self isTextLengthInRange];
     if (tagWithExceedingValue.length > 0)
     {
@@ -307,7 +331,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
         }
         else
         {
-            [self.navigationController popViewControllerAnimated:YES];
+            if (offlineEdit)
+                [self.navigationController popViewControllerAnimated:YES];
             [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
         }
     }
@@ -317,7 +342,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
     }
     else
     {
-        [self.navigationController popViewControllerAnimated:YES];
+        if (offlineEdit)
+            [self.navigationController popViewControllerAnimated:YES];
         [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
     }
 }
@@ -356,14 +382,16 @@ typedef NS_ENUM(NSInteger, EditingTab)
     return @"";
 }
 
-- (void) showAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle hasPositiveButton:(BOOL)hasPositiveButton {
+- (void)showAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle hasPositiveButton:(BOOL)hasPositiveButton
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
         if (hasPositiveButton)
         {
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
+                if ([self.class isOfflineEditing:_editingUtil])
+                    [self.navigationController popViewControllerAnimated:YES];
                 [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
             }]];
         }
@@ -372,11 +400,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
     });
 }
 
-+ (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset editingDelegate:(id<OAOsmEditingBottomSheetDelegate>)editingDelegate
++ (void)savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset editingDelegate:(id<OAOsmEditingBottomSheetDelegate>)editingDelegate
 {
     OAEntity *original = poiData.getEntity;
     
-    BOOL offlineEdit = [editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
+    BOOL offlineEdit = [self.class isOfflineEditing:editingUtil];
     OAEntity *entity;
     if ([original isKindOfClass:OANode.class])
         entity = [[OANode alloc] initWithId:original.getId latitude:original.getLatitude longitude:original.getLongitude];
@@ -412,7 +440,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
             if (category)
                 [entity putTagNoLC:category.tag value:poiTypeTag];
         }
-        if (offlineEdit && poiTypeTag.length > 0)
+        if (poiTypeTag.length > 0)
             [entity putTagNoLC:POI_TYPE_TAG value:poiTypeTag];
         
         comment = comment ? comment : @"";
@@ -420,23 +448,13 @@ typedef NS_ENUM(NSInteger, EditingTab)
     EOAAction action = original.getId <= 0 ? CREATE : MODIFY;
     if (offlineEdit)
     {
+        __weak __typeof(self) weakSelf = self;
         [OAOsmEditingViewController commitEntity:action entity:entity entityInfo:[editingUtil getEntityInfo:poiData.getEntity.getId] comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:^(OAEntity *result) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (editingDelegate)
-                {
                     [editingDelegate refreshData];
-                }
                 else if (result)
-                {
-                    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                    NSArray<OAOpenStreetMapPoint *> *points = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
-                    if (points.count > 0)
-                    {
-                        OAOsmPoint *p = points[points.count - 1];
-                        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
-                        [mapPanel showContextMenu:newTarget];
-                    }
-                }
+                    [weakSelf showContextMenu];
             });
         }];
     }
@@ -446,8 +464,10 @@ typedef NS_ENUM(NSInteger, EditingTab)
         [p setEntity:entity];
         [p setAction:action];
         [p setComment:comment];
-        OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] points:@[p] closeChangeset:closeChangeset anonymous:NO comment:comment];
-        [uploadTask uploadPoints];
+        
+        OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:@[p]];
+        dialog.delegate = editingDelegate;
+        [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
     }
 }
 
@@ -456,6 +476,22 @@ typedef NS_ENUM(NSInteger, EditingTab)
     [self savePoi:comment poiData:poiData editingUtil:editingUtil closeChangeSet:closeChangeset editingDelegate:nil];
 }
 
++ (BOOL)isOfflineEditing:(id<OAOpenStreetMapUtilsProtocol>)editingUtil
+{
+    return [editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class] && [[OAAppSettings sharedManager].offlineEditing get];
+}
+
++ (void)showContextMenu
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    NSArray<OAOpenStreetMapPoint *> *points = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
+    if (points.count > 0)
+    {
+        OAOsmPoint *p = points[points.count - 1];
+        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
+        [mapPanel showContextMenu:newTarget];
+    }
+}
 
 #pragma mark - UIPageViewControllerDataSource
 

@@ -22,7 +22,14 @@ final class DeviceFactory {
             if BLERunningSCDDevice.getServiceUUID.contains(uuid) {
                 return BLERunningSCDDevice()
             }
+            if OBDVehicleMetricsDevice.getServicesUUID.contains(where: { $0.lowercased() == uuid.lowercased() }) {
+                return OBDVehicleMetricsDevice()
+            }
         }
         return nil
+    }
+    
+    static func makeOBDSimulatorDevice() -> OBDSimulatorVehicleMetricsDevice {
+        OBDSimulatorVehicleMetricsDevice()
     }
 }

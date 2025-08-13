@@ -40,6 +40,7 @@
 @implementation OAWaypointsViewController
 {
     OsmAndAppInstance _app;
+    BOOL _isShowAlong;
 }
 
 @dynamic screenObj;
@@ -62,9 +63,11 @@ static OAWaypointsViewControllerRequest *request = nil;
     request = nil;
 }
 
-- (instancetype) init
+- (instancetype) initWithShowAlongType:(BOOL)isShowAlong
 {
-    return [super initWithScreenType:EWaypointsScreenMain];
+    _isShowAlong = isShowAlong;
+    self = [super initWithScreenType:EWaypointsScreenMain];
+    return self;
 }
 
 - (instancetype) initWithWaypointsScreen:(EWaypointsScreen)waypointsScreen
@@ -104,7 +107,7 @@ static OAWaypointsViewControllerRequest *request = nil;
         case EWaypointsScreenMain:
         {
             if (!self.screenObj)
-                self.screenObj = [[OAWaypointsMainScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
+                self.screenObj = [[OAWaypointsMainScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam isShowAlong:_isShowAlong];
             
             break;
         }

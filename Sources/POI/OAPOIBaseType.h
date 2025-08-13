@@ -27,6 +27,7 @@
 @property (nonatomic) NSArray<OAPOIType *> *poiAdditionals;
 @property (nonatomic) NSArray<OAPOIType *> *poiAdditionalsCategorized;
 @property (nonatomic) NSArray<NSString *> *excludedPoiAdditionalCategories;
+@property (nonatomic) NSString *poiAdditionalCategory;
 
 - (instancetype)initWithName:(NSString *)name;
 

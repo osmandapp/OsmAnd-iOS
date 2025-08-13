@@ -8,6 +8,7 @@
 
 #import "OAAutocompleteManager.h"
 #import "OsmAndApp.h"
+#import "OAWorldRegion.h"
 
 static OAAutocompleteManager *sharedManager;
 

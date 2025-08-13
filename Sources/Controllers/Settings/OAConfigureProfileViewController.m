@@ -16,6 +16,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAPlugin.h"
+#import "OAAppData.h"
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditingSettingsViewController.h"
@@ -28,9 +29,9 @@
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAProfileAppearanceViewController.h"
 #import "OACopyProfileBottomSheetViewControler.h"
-#import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OARendererRegistry.h"
@@ -46,11 +47,27 @@
 #import "OAChoosePlanHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OAObservable.h"
 
-#define kSidePadding 16.
-#define BACKUP_INDEX_DIR @"backup"
-#define OSMAND_SETTINGS_FILE_EXT @"osf"
-#define kWasClosedFreeBackupSettingsBannerKey @"wasClosedFreeBackupSettingsBanner"
+static const CGFloat kSidePadding = 16.0;
+
+static NSString * const kBackupIndexDir = @"backup";
+static NSString * const kOsmandSettingsFileExt = @"osf";
+static NSString * const kWasClosedFreeBackupSettingsBannerKey = @"wasClosedFreeBackupSettingsBanner";
+
+NSString * const kNavigationSettings = @"nav_settings";
+
+static NSString * const kGeneralSettings              = @"general_settings";
+static NSString * const kProfileAppearanceSettings    = @"profile_appearance";
+static NSString * const kExportProfileSettings        = @"export_profile";
+static NSString * const kTrackRecordingSettings       = @"trip_rec";
+static NSString * const kOsmEditsSettings             = @"osm_edits";
+static NSString * const kOsmandDevelopmentSettings    = @"osmand_development";
+static NSString * const kWeatherSettings              = @"weather";
+static NSString * const kWikipediaSettings            = @"wikipedia";
+static NSString * const kExternalSensors              = @"externalSensors";
+static NSString * const kVehicleMetrics               = @"vehicleMetrics";
 
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeNone = 0,
@@ -58,7 +75,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate, OASettingsImportExportDelegate>
+@interface OAConfigureProfileViewController () <OACopyProfileBottomSheetDelegate, OASettingsImportExportDelegate>
 
 @end
 
@@ -74,7 +91,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     OAAutoObserverProxy* _appModeChangeObserver;
     
     EOADashboardScreenType _screenToOpen;
-    UIView *_cpyProfileViewUnderlay;
     NSString *_importedFileName;
     NSString *_targetScreenKey;
     FreeBackupBanner *_freeBackupBanner;
@@ -148,7 +164,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (UIColor *)getRightIconTintColorLargeTitle
 {
-    return UIColorFromRGB([_appMode getIconColor]);
+    return [_appMode getProfileColor];
 }
 
 - (EOABaseNavbarStyle)getNavbarStyle
@@ -303,6 +319,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"title" : externalSensors.getName,
             @"img" : @"ic_custom_sensor",
             @"key" : kExternalSensors
+        }];
+    }
+    
+    OAPlugin *vehicleMetrics = [OAPluginsHelper getEnabledPlugin:VehicleMetricsPlugin.class];
+    if (vehicleMetrics)
+    {
+        [plugins addObject:@{
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"obd_plugin_name"),
+            @"img" : @"ic_custom_car_info",
+            @"key" : kVehicleMetrics
         }];
     }
     
@@ -576,23 +603,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
 }
 
-- (void) addUnderlay
-{
-    _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
-    [_cpyProfileViewUnderlay setBackgroundColor:[UIColor colorNamed:ACColorNameViewBg]];
-    [_cpyProfileViewUnderlay setAlpha:0.2];
-    
-    UITapGestureRecognizer *underlayTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUnderlayTapped)];
-    [_cpyProfileViewUnderlay addGestureRecognizer:underlayTap];
-    [self.view addSubview:_cpyProfileViewUnderlay];
-}
-
-
-- (void) onUnderlayTapped
-{
-    
-}
-
 - (void)openTargetSettingsScreen:(NSString *)targetScreenKey
 {
     if ([targetScreenKey isEqualToString:@"configure_map"])
@@ -633,10 +643,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
     else if ([targetScreenKey isEqualToString:@"delete_profile"])
     {
-        OADeleteProfileBottomSheetViewController *bottomSheet = [[OADeleteProfileBottomSheetViewController alloc] initWithMode:_appMode];
-        bottomSheet.delegate = self;
-        [self addUnderlay];
-        [bottomSheet show];
+        [self showDeleteProfileAlert];
     }
     else
     {
@@ -661,6 +668,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             settingsScreen = [[OAWikipediaSettingsViewController alloc] initWithAppMode:_appMode];
         else if ([targetScreenKey isEqualToString:kExternalSensors])
             settingsScreen = [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
+        else if ([targetScreenKey isEqualToString:kVehicleMetrics])
+            settingsScreen = [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];
     }
@@ -671,18 +680,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) onCopyProfileCompleted
 {
     [self updateView];
-}
-
-- (void) onCopyProfileDismissed
-{
-    [_cpyProfileViewUnderlay removeFromSuperview];
-}
-
-#pragma mark - OADeleteProfileBottomSheetDelegate
-
-- (void) onDeleteProfileDismissed
-{
-    [_cpyProfileViewUnderlay removeFromSuperview];
 }
 
 - (void) resetAppModePrefs:(OAApplicationMode *)appMode
@@ -738,7 +735,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [[OARootViewController instance].mapPanel recreateAllControls];
     [OAMapStyleSettings.sharedInstance loadParameters];
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
-    [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:nil];
+    [OsmAndApp.instance.applicationModeChangedObservable notifyEventWithKey:nil];
     [self updateView];
 }
 
@@ -769,6 +766,29 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
     [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showDeleteProfileAlert
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@?", OALocalizedString(@"profile_alert_delete_title")]
+                                                                   message:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString]
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:nil
+    ];
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete")
+                                                          style:UIAlertActionStyleDestructive
+                                                        handler:^(UIAlertAction * _Nonnull action) {
+        [OAApplicationMode deleteCustomModes:@[_appMode]];
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    
+    [alert addAction:cancelAction];
+    [alert addAction:deleteAction];
+    alert.preferredAction = deleteAction;
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - OASettingsImportExportDelegate

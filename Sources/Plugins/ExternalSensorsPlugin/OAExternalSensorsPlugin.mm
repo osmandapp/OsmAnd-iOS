@@ -15,9 +15,11 @@
 #import "OAMapWidgetRegInfo.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #define PLUGIN_ID kInAppId_Addon_External_Sensors
 
@@ -41,10 +43,10 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
     {
         _lastUsedSensor = [OACommonBoolean withKey:kLastUsedExternalSensorKey defValue:NO];
 
-        _speedSensorWriteToTrackDeviceID = [self registerStringPreference:@"speed_sensor_write_to_track_device" defValue:@""];
-        _cadenceSensorWriteToTrackDeviceID = [self registerStringPreference:@"cadence_sensor_write_to_track_device" defValue:@""];
-        _heartSensorWriteToTrackDeviceID = [self registerStringPreference:@"heart_rate_sensor_write_to_track_device" defValue:@""];
-        _temperatureSensorWriteToTrackDeviceID = [self registerStringPreference:@"temperature_sensor_write_to_track_device" defValue:@""];
+        _speedSensorWriteToTrackDeviceID = [[self registerStringPreference:@"speed_sensor_write_to_track_device" defValue:@""] makeProfile];
+        _cadenceSensorWriteToTrackDeviceID = [[self registerStringPreference:@"cadence_sensor_write_to_track_device" defValue:@""] makeProfile];
+        _heartSensorWriteToTrackDeviceID = [[self registerStringPreference:@"heart_rate_sensor_write_to_track_device" defValue:@""] makeProfile];
+        _temperatureSensorWriteToTrackDeviceID = [[self registerStringPreference:@"temperature_sensor_write_to_track_device" defValue:@""] makeProfile];
 
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.heartRate appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.bicycleCadence appModes:@[]];
@@ -63,13 +65,17 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 - (void)disable
 {
     [super disable];
-    [[OADeviceHelper shared] disconnectAllDevicesWithReason:DisconnectDeviceReasonPluginOff];
+
+    [[DeviceHelper shared] disconnectAllSensorDevicesWithReason:DisconnectDeviceReasonPluginOff];
 }
 
 - (void)setEnabled:(BOOL)enabled
 {
     [super setEnabled:enabled];
-    [[OARootViewController instance] updateLeftPanelMenu];
+    if (OsmAndApp.instance.initialized)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[OARootViewController instance] updateLeftPanelMenu];
+        });
 }
 
 - (BOOL)isEnabled
@@ -97,6 +103,38 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
              OAWidgetType.bicycleCadence,
              OAWidgetType.bicycleSpeed,
              OAWidgetType.temperature];
+}
+
+- (NSString *)batteryOutlinedIconNameForWidgetType:(OAWidgetType *)widgetType {
+    if (widgetType == OAWidgetType.heartRate) {
+        return @"ic_custom_sensor_heart_rate_battery_outlined";
+    } else if (widgetType == OAWidgetType.bicycleCadence) {
+        return @"ic_custom_sensor_cadence_battery_outlined";
+    } else if (widgetType == OAWidgetType.bicycleSpeed) {
+        return @"ic_custom_sensor_speed_battery_outlined";
+    } else if (widgetType == OAWidgetType.bicycleDistance) {
+        return @"ic_custom_sensor_distance_battery_outlined";
+    } else if (widgetType == OAWidgetType.temperature) {
+        return @"ic_custom_sensor_temperature_battery_outlined";
+    } else {
+        return @"";
+    }
+}
+
+- (NSString *)batteryIconNameForWidgetType:(OAWidgetType *)widgetType {
+    if (widgetType == OAWidgetType.heartRate) {
+        return @"widget_sensor_heart_rate_battery";
+    } else if (widgetType == OAWidgetType.bicycleCadence) {
+        return @"widget_sensor_cadence_battery";
+    } else if (widgetType == OAWidgetType.bicycleSpeed) {
+        return @"widget_sensor_speed_battery";
+    } else if (widgetType == OAWidgetType.bicycleDistance) {
+        return @"widget_sensor_distance_battery";
+    } else if (widgetType == OAWidgetType.temperature) {
+        return @"widget_sensor_temperature_battery";
+    } else {
+        return @"";
+    }
 }
 
 - (NSString *)getAnyConnectedDeviceId
@@ -142,18 +180,25 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
                                        appMode:(OAApplicationMode *)appMode
                                   widgetParams:(NSDictionary *)widgetParams
 {
-    if (widgetType == OAWidgetType.heartRate)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.heartRate appMode:appMode widgetParams:widgetParams];
-    else if (widgetType == OAWidgetType.bicycleCadence)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleCadence appMode:appMode widgetParams:widgetParams];
-    else if (widgetType == OAWidgetType.bicycleSpeed)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleSpeed appMode:appMode widgetParams:widgetParams];
-    else if (widgetType == OAWidgetType.bicycleDistance)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleDistance appMode:appMode widgetParams:widgetParams];
-    else if (widgetType == OAWidgetType.temperature)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.temperature appMode:appMode widgetParams:widgetParams];
+    NSSet<OAWidgetType *> *sensorTypes = [NSSet setWithArray:@[
+        OAWidgetType.heartRate,
+        OAWidgetType.bicycleCadence,
+        OAWidgetType.bicycleSpeed,
+        OAWidgetType.bicycleDistance,
+        OAWidgetType.temperature
+    ]];
+    
+    if ([sensorTypes containsObject:widgetType])
+    {
+        return [[SensorTextWidget alloc] initWithCustomId:customId
+                                               widgetType:widgetType
+                                                  appMode:appMode
+                                             widgetParams:widgetParams];
+    }
+    
     return nil;
 }
+
 
 - (NSString *) getName
 {
@@ -184,9 +229,9 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
         {
             OADevice *device = nil;
             if ([deviceId isEqualToString:[self getAnyConnectedDeviceId]])
-                device = [[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject;
+                device = [[DeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject;
             else
-                device = [[OADeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId];
+                device = [[DeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId];
             
             if (device)
                 [device writeSensorDataToJsonWithJson:json widgetDataFieldType:widgetType];
@@ -230,49 +275,10 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
     return nil;
 }
 
-- (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
+- (void)getAvailableGPXDataSetTypes:(OASGpxTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes
 {
     [OASensorAttributesUtils getAvailableGPXDataSetTypesWithAnalysis:analysis availableTypes:availableTypes];
-}
-
-- (void)onAnalysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
-{
-    if ([point isKindOfClass:OAWptPt.class])
-    {
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        numberFormatter.decimalSeparator = @".";
-        for (NSString *tag in OASensorAttributesUtils.sensorGpxTags)
-        {
-            CGFloat value = ([OAPointAttributes.sensorTagTemperatureW isEqualToString:tag] || [OAPointAttributes.sensorTagTemperatureA isEqualToString:tag]) ? NAN : 0;
-            NSNumber *val = nil;
-            BOOL isSpeedSensorTag = [tag isEqualToString:@"speed_sensor"];
-            OAGpxExtension *trackpointextension = [((OAWptPt *) point) getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
-            if (trackpointextension)
-            {
-                if (isSpeedSensorTag)
-                {
-                    val = [numberFormatter numberFromString:trackpointextension.value];
-                }
-                else
-                {
-                    for (OAGpxExtension *subextension in trackpointextension.subextensions)
-                    {
-                        if ([subextension.name isEqualToString:tag])
-                        {
-                            val = [numberFormatter numberFromString:subextension.value];
-                        }
-                    }
-                }
-            }
-            
-            value = val ? val.floatValue : value;
-            [attribute setAttributeValueFor:tag value:value];
-            
-            if (![analysis hasData:tag] && [attribute hasValidValueFor:tag] && analysis.totalDistance > 0)
-                [analysis setTag:tag hasData:YES];
-        }
-    }
 }
 
 @end

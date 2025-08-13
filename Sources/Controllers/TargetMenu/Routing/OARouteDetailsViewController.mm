@@ -9,19 +9,18 @@
 #import "OARouteDetailsViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
-#import "OAGPXTrackAnalysis.h"
-#import "OALineChartCell.h"
 #import "OARouteInfoCell.h"
-#import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
 #import "OAMapLayers.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteCalculationResult.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OARouteStatistics.h"
 #import "OARouteInfoAltitudeCell.h"
 #import "OAMapRendererView.h"
@@ -32,14 +31,54 @@
 #import "OASaveGpxToTripsActivity.h"
 #import "OAOsmAndFormatter.h"
 #import "OAEmissionHelper.h"
-#import <Charts/Charts-Swift.h>
+#import "OASegmentTableViewCell.h"
+#import "OARouteDirectionInfo.h"
+#import "OALanesDrawable.h"
+#import "OATurnDrawable.h"
+#import "OATurnDrawable+cpp.h"
+#import <DGCharts/DGCharts-Swift.h>
 #import "GeneratedAssetSymbols.h"
+#import "CLLocation+Extension.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kStatsSection 0
 #define kAdditionalRouteDetailsOffset 184.0
 
 #define VIEWPORT_FULL_SCALE 0.6f
 #define VIEWPORT_MINIMIZED_SCALE 0.2f
+
+typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
+{
+    EOAOARouteDetailsViewControllerModeInstructions = 0,
+    EOAOARouteDetailsViewControllerModeAnalysis
+};
+
+@implementation OACumulativeInfo
+
++ (OACumulativeInfo *) getRouteDirectionCumulativeInfo:(NSInteger)position routeDirections:(NSArray<OARouteDirectionInfo *> *)routeDirections
+{
+    OACumulativeInfo *cumulativeInfo = [[OACumulativeInfo alloc] init];
+    if (position >= routeDirections.count)
+        return cumulativeInfo;
+    
+    for (int i = 0; i < position; i++)
+    {
+        OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
+        cumulativeInfo.time += [routeDirectionInfo getExpectedTime];
+        cumulativeInfo.distance += routeDirectionInfo.distance;
+    }
+    return cumulativeInfo;
+}
+
++ (NSString *) getTimeDescription:(OARouteDirectionInfo *)model
+{
+    long timeInSeconds = [model getExpectedTime];
+    return [OAOsmAndFormatter getFormattedDuration:timeInSeconds];
+}
+
+@end
+
 
 @interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate, OAEmissionHelperListener>
 
@@ -48,7 +87,10 @@
 @implementation OARouteDetailsViewController
 {
     NSDictionary *_data;
+    NSMutableDictionary *_instructionsTabData;
+    NSMutableDictionary *_analysisTabData;
     
+    EOAOARouteDetailsViewControllerMode _selectedTab;
     NSMutableSet<NSNumber *> *_expandedSections;
     
     NSArray<NSNumber *> *_types;
@@ -63,48 +105,204 @@
     NSString *_emission;
 }
 
+- (void)registerCells
+{
+    [self.tableView registerNib:[UINib nibWithNibName:@"SegmentTableHeaderView" bundle:nil] forHeaderFooterViewReuseIdentifier:@"SegmentTableHeaderView"];
+    [self.tableView registerNib:[UINib nibWithNibName:[OAFilledButtonCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAFilledButtonCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[ElevationChartCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[ElevationChartCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteStatisticsModeCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteStatisticsModeCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoAltitudeCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoAltitudeCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoLegendCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoLegendCell reuseIdentifier]];
+}
+
 - (UITableViewCell *) getAnalyzeButtonCell
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
-    OAFilledButtonCell* cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
-    
-    if (cell)
-    {
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell.button setTitle:OALocalizedString(@"gpx_analyze") forState:UIControlStateNormal];
-        [cell.button addTarget:self action:@selector(openRouteDetailsGraph) forControlEvents:UIControlEventTouchUpInside];
-        cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
-        [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forState:UIControlStateNormal];
-    }
+    OAFilledButtonCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell reuseIdentifier]];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell.button setTitle:OALocalizedString(@"gpx_analyze") forState:UIControlStateNormal];
+    [cell.button addTarget:self action:@selector(openRouteDetailsGraph) forControlEvents:UIControlEventTouchUpInside];
+    cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
+    [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forState:UIControlStateNormal];
     return cell;
 }
 
-- (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-    OALineChartCell *routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
+- (SegmentTableHeaderView *) getTabSelectorView
+{
+    SegmentTableHeaderView *headerView = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:@"SegmentTableHeaderView"];
+    UIFont *font = [UIFont scaledSystemFontOfSize:14. weight:UIFontWeightSemibold];
+    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateSelected];
+    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateNormal];
+    [headerView.segmentControl setTitle:OALocalizedString(@"shared_string_instructions") forSegmentAtIndex:0];
+    [headerView.segmentControl setTitle:OALocalizedString(@"shared_string_analysis") forSegmentAtIndex:1];
+    [headerView.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+    [headerView.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
+    [headerView.segmentControl setSelectedSegmentIndex:_selectedTab == EOAOARouteDetailsViewControllerModeInstructions ? 0 : 1];
+    return headerView;
+}
+
+- (void) populateInstructionsTabCells:(NSInteger &)section
+{
+    _instructionsTabData = [NSMutableDictionary dictionary];
+    NSMutableArray<UITableViewCell *> *cells = [NSMutableArray array];
+    
+    NSArray<OARouteDirectionInfo *> *routeDirections = [self.routingHelper getRouteDirections];
+    for (NSInteger i = 0; i < routeDirections.count; i++)
+    {
+        OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
+        UITableViewCell *cell = [self getRouteDirectionCell:i model:routeDirectionInfo directionsInfo:routeDirections];
+        [cells addObject:cell];
+    }
+
+    [_instructionsTabData setObject:cells forKey:@(section++)];
+}
+
+- (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
+{
+    RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorSystem];
+    const auto turnType = model.turnType;
+    [turnDrawable setTurnType:turnType];
+    turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
+    
+    CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
+                       turnDrawable.pathForTurn.bounds.origin.y + turnDrawable.pathForTurn.bounds.size.height);
+    turnDrawable.frame = CGRectMake(0, 0, size, size);
+    [turnDrawable setClr:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+    [turnDrawable setNeedsDisplay];
+    [cell setLeftTurnIconDrawable:turnDrawable];
+    [cell setLeftImageViewWithImage:turnDrawable.toUIImage];
+    
+    vector<int> lanes = model.turnType->getLanes();
+    if (lanes.size() > 0)
+    {
+        OALanesDrawable *_lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
+        _lanesDrawable.boldStroke = NO;
+        [_lanesDrawable setLanes:lanes];
+        [_lanesDrawable updateBounds];
+        _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);
+        [_lanesDrawable setNeedsDisplay];
+        [cell setBottomLanesImageWithImage:_lanesDrawable.toUIImage];
+    }
+    else
+    {
+        [cell setBottomLanesImageWithImage:nil];
+    }
+    
+    NSString *segmentDescription = [model getDescriptionRoutePart];
+    [cell setBottomLabelWithText:segmentDescription];
+    
+    if (model.distance > 0)
+    {
+        NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance withParams:[OsmAndFormatterParams useLowerBounds]];
+        [cell setTopLeftLabelWithText:segmentDistanceLabelText];
+        [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
+        
+        OACumulativeInfo *cumulativeInfo = [OACumulativeInfo getRouteDirectionCumulativeInfo:directionInfoIndex + 1 routeDirections:directionsInfo];
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distance withParams:[OsmAndFormatterParams useLowerBounds]];
+        NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.time shortFormat:YES];
+        [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];
+    }
+    else
+    {
+        if (!segmentDescription || segmentDescription.length == 0)
+        {
+            BOOL isLastCell = directionInfoIndex == (directionsInfo.count - 1);
+            if (isLastCell)
+            {
+                RouteInfoSector routeInfoSector = RouteInfoSectorStraight;
+                RouteInfoDestinationSector *routeInfoDestinationSector = [[RouteInfoDestinationSector alloc] initWithSector:routeInfoSector distance:model.distance];
+                
+                NSArray<CLLocation *> *locationPoints = [OARoutingHelper sharedInstance].getRoute.getRouteLocations;
+                if (locationPoints.count > 1)
+                {
+                    CLLocation *prevPrevLocation = locationPoints[locationPoints.count - 2];
+                    CLLocation *prevLocation = locationPoints[locationPoints.count - 1];
+                    CLLocation *destinationLocation = [[OARoutingHelper sharedInstance] getFinalLocation];
+                    
+                    double distanceToDestination = [prevLocation distanceFromLocation:destinationLocation];
+                    routeInfoDestinationSector.distance = distanceToDestination;
+                    if (distanceToDestination > 3.0)
+                    {
+                        double routeBearing = [prevPrevLocation bearingTo:prevLocation];
+                        double bearing = [prevLocation bearingTo:destinationLocation];
+                        double diff = -degreesDiff(routeBearing, bearing);
+                        routeInfoSector = [self determineSectorForBearing:diff];
+                    }
+                    else
+                    {
+                        routeInfoSector = [self determineSectorForBearing:0];
+                    }
+                    routeInfoDestinationSector.sector = routeInfoSector;
+                }
+                [cell setLeftImageViewWithImage:routeInfoDestinationSector.getImage];
+                [cell setTopLeftLabelWithText:routeInfoDestinationSector.getTitle];
+                [cell setBottomLabelWithText:routeInfoDestinationSector.getDescriptionRoute];
+                [cell setBottomLanesImageWithImage:nil];
+                [cell setLeftTurnIconDrawable:nil];
+            }
+            else
+            {
+                [cell setTopLeftLabelWithText:OALocalizedString(@"arrived_at_intermediate_point")];
+            }
+            [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
+            [cell setTopRightLabelWithText:@""];
+        } else {
+            [cell setBottomLabelWithText:@""];
+        }
+    }
+    
+    return cell;
+}
+
+- (RouteInfoSector)determineSectorForBearing:(double)bearing
+{
+    if (bearing >= -180 && bearing < -60)
+    {
+        return RouteInfoSectorLeft;
+    }
+    else if (bearing >= 60 && bearing <= 180)
+    {
+        return RouteInfoSectorRight;
+    }
+    // bearing >= -60 && bearing < 60 is Straight
+    return RouteInfoSectorStraight;
+}
+
+- (void) populateAnalysisTabCells:(NSInteger &)section
+{
+    _analysisTabData = [NSMutableDictionary dictionary];
+    [self populateMainGraphSection:_analysisTabData section:section];
+    [self populateElevationSection:_analysisTabData section:section];
+    [self populateStatistics:_analysisTabData section:section];
+}
+
+- (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section 
+{
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
+    ElevationChartCell *routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
-    routeStatsCell.lineChartView.delegate = self;
+    routeStatsCell.chartView.delegate = self;
 
-    [GpxUIHelper setupGPXChartWithChartView:routeStatsCell.lineChartView
-                               yLabelsCount:4
-                                  topOffset:20
-                               bottomOffset:4
-                        useGesturesAndScale:YES
-    ];
+    [GpxUIHelper setupElevationChartWithChartView:routeStatsCell.chartView
+                                        topOffset:20
+                                     bottomOffset:4
+                              useGesturesAndScale:YES];
 
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
-    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
+    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
-                           useGesturesAndScale:YES
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
-                               calcWithoutGaps:calcWithoutGaps];
+                                      axisType:GPXDataSetAxisTypeDistance
+                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx]];
     
-    BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
+    BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     
-    self.statisticsChart = routeStatsCell.lineChartView;
+    self.statisticsChart = routeStatsCell.chartView;
     UITableViewCell *analyzeBtnCell = [self getAnalyzeButtonCell];
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
     {
@@ -117,8 +315,7 @@
     
     if (hasSlope)
     {
-        nib = [[NSBundle mainBundle] loadNibNamed:[OARouteStatisticsModeCell getCellIdentifier] owner:self options:nil];
-        OARouteStatisticsModeCell *modeCell = (OARouteStatisticsModeCell *)[nib objectAtIndex:0];
+        OARouteStatisticsModeCell *modeCell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteStatisticsModeCell reuseIdentifier]];
         modeCell.selectionStyle = UITableViewCellSelectionStyleNone;
         [modeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_slope")] forState:UIControlStateNormal];
         [modeCell.modeButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -135,8 +332,7 @@
 }
 
 - (void)populateElevationSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoAltitudeCell getCellIdentifier] owner:self options:nil];
-    OARouteInfoAltitudeCell *altCell = (OARouteInfoAltitudeCell *)[nib objectAtIndex:0];
+    OARouteInfoAltitudeCell *altCell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoAltitudeCell reuseIdentifier]];
     altCell.avgAltitudeTitle.text = OALocalizedString(@"average_altitude");
     altCell.altRangeTitle.text = OALocalizedString(@"altitude_range");
     altCell.ascentTitle.text = OALocalizedString(@"gpx_ascent");
@@ -158,8 +354,7 @@
         
         for (OARouteStatistics *stat in routeInfo)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoCell getCellIdentifier] owner:self options:nil];
-            OARouteInfoCell *cell = (OARouteInfoCell *)[nib objectAtIndex:0];
+            OARouteInfoCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoCell reuseIdentifier]];
             cell.detailsButton.tag = section;
             [cell.detailsButton addTarget:self action:@selector(detailsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.titleView.text = [OAUtilities getLocalizedRouteInfoProperty:stat.name];
@@ -179,8 +374,7 @@
             
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             
-            nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoLegendCell getCellIdentifier] owner:self options:nil];
-            OARouteInfoLegendCell *legend = (OARouteInfoLegendCell *)[nib objectAtIndex:0];
+            OARouteInfoLegendCell *legend = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoLegendCell reuseIdentifier]];
             
             for (NSString *key in stat.partition)
             {
@@ -199,9 +393,8 @@
     if (!self.gpx || !self.analysis)
     {
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
-        self.analysis = [self.gpx getAnalysis:0];
+        self.analysis = [self.gpx getAnalysisFileTimestamp:0];
     }
-    _expandedSections = [NSMutableSet new];
     _types = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
@@ -210,12 +403,22 @@
     NSMutableDictionary *dataArr = [NSMutableDictionary new];
     NSInteger section = 0;
     
-    [self populateMainGraphSection:dataArr section:section];
+    // this first cell with tab selector was added as a view to the tableview header to avoid showing the first tableview separator above it.
+    self.tableView.tableHeaderView = [self getTabSelectorView];
     
-    [self populateElevationSection:dataArr section:section];
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeInstructions)
+    {
+        if (!_instructionsTabData)
+            [self populateInstructionsTabCells:section];
+        [dataArr addEntriesFromDictionary:_instructionsTabData];
+    }
+    else if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis)
+    {
+        if (!_analysisTabData)
+            [self populateAnalysisTabCells:section];
+        [dataArr addEntriesFromDictionary:_analysisTabData];
+    }
 
-    [self populateStatistics:dataArr section:section];
-    
     _data = [NSDictionary dictionaryWithDictionary:dataArr];
 }
 
@@ -287,7 +490,11 @@
     
     [self setupRouteInfo];
     
+    _selectedTab = EOAOARouteDetailsViewControllerModeInstructions;
+    _expandedSections = [NSMutableSet new];
+    [self registerCells];
     [self generateData];
+    
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
@@ -352,6 +559,9 @@
 
 - (void)refreshContent
 {
+    NSInteger contentSectionNumber = 1;
+    [self populateInstructionsTabCells:contentSectionNumber];
+    [self populateAnalysisTabCells:contentSectionNumber];
     [self generateData];
     [self.tableView reloadData];
 }
@@ -384,6 +594,11 @@
 - (CGFloat)additionalContentOffset
 {
     return [self isLandscapeIPadAware] ? 0.0 : kAdditionalRouteDetailsOffset;
+}
+
+- (BOOL) showTopViewInFullscreen
+{
+    return YES;
 }
 
 - (BOOL) hasTopToolbar
@@ -460,18 +675,21 @@
     NSArray *sectionData = _data[@(indexPath.section)];
     OARouteInfoCell *cell = sectionData[indexPath.row];
     [cell onDetailsPressed];
-    if ([_expandedSections containsObject:@(indexPath.section)])
-    {
-        [_expandedSections removeObject:@(indexPath.section)];
-        [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    else
-    {
-        [_expandedSections addObject:@(indexPath.section)];
-        [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-    [self.delegate contentHeightChanged:_tableView.contentSize.height];
+    [_tableView performBatchUpdates:^{
+        if ([_expandedSections containsObject:@(indexPath.section)])
+        {
+            [_expandedSections removeObject:@(indexPath.section)];
+            [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        else
+        {
+            [_expandedSections addObject:@(indexPath.section)];
+            [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    } completion:^(BOOL finished) {
+        self.tableView.tableHeaderView = [self getTabSelectorView];
+        [self.delegate contentHeightChanged:_tableView.contentSize.height];
+    }];
 }
 
 - (void) detailsButtonPressed:(id)sender
@@ -498,9 +716,23 @@
 
 - (void) openRouteDetailsGraph
 {
-    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx
-                                                                         analysis:self.analysis
-                                                                 menuControlState:nil];
+    if (self.trackItem)
+    {
+        [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx
+                                                                            trackItem:self.trackItem
+                                                                             analysis:self.analysis
+                                                                              segment:self.segment
+                                                                     menuControlState:nil];
+    }
+    else
+    {
+        [[OARootViewController instance].mapPanel openNewTargetViewWithRouteDetailsGraph:self.gpx
+                                                                                analysis:self.analysis
+                                                                                 segment:self.segment
+                                                                        menuControlState:nil
+                                                                                 isRoute:YES];
+    }
+  
 }
 
 - (void) onBarChartTapped:(UITapGestureRecognizer *)recognizer
@@ -556,15 +788,15 @@
               ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        if (!self.trackChartPoints)
+        if (self.analysis && self.segment)
         {
-            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                               analysis:self.analysis];
+            [self.trackChartHelper refreshChart:self.statisticsChart
+                                           fitTrack:YES
+                                           forceFit:NO
+                                   recalculateXAxis:YES
+                                           analysis:self.analysis
+                                            segment:self.segment];
         }
-        [self.routeLineChartHelper refreshHighlightOnMap:YES
-                                           lineChartView:self.statisticsChart
-                                        trackChartPoints:self.trackChartPoints
-                                                analysis:self.analysis];
     }
 }
 
@@ -596,12 +828,15 @@
     NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:title];
     [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
     [formatter setDateFormat:@"yyyy-MM-dd_HH-mm_EEE"];
-    OAGPXDocument *doc = [OARoutingHelper.sharedInstance generateGPXFileWithRoute:[formatter stringFromDate:[NSDate date]]];
-    if (!doc)
+    OASGpxFile *gpxFile = [OARoutingHelper.sharedInstance generateGPXFileWithRoute:[formatter stringFromDate:[NSDate date]]];
+    if (!gpxFile)
         return;
     
-    doc.tracks.firstObject.name = [formatter stringFromDate:[NSDate date]];
-    [doc saveTo:path];
+    gpxFile.tracks.firstObject.name = [formatter stringFromDate:[NSDate date]];
+    
+    OASKFile *filePathToSaveGPX = [[OASKFile alloc] initWithFilePath:path];
+    // save to disk
+    [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:gpxFile];
     NSURL* url = [NSURL fileURLWithPath:path];
     
     UIActivityViewController *activityViewController =
@@ -623,6 +858,17 @@
     [mapPanel stopNavigation];
 }
 
+- (void) segmentChanged:(id)sender
+{
+    UISegmentedControl *segment = (UISegmentedControl*)sender;
+    if (segment)
+    {
+        _selectedTab = (EOAOARouteDetailsViewControllerMode) segment.selectedSegmentIndex;
+        [self generateData];
+        [self.tableView reloadData];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -632,16 +878,23 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section > 1)
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && section > 1)
     {
         return ((NSArray *)_data[@(section)]).count - ([_expandedSections containsObject:@(section)] ? 0 : 1);
     }
     return ((NSArray *)_data[@(section)]).count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? 0.001 : 16.0;
+    return 0.001;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeInstructions && section == 0)
+        return OALocalizedString(@"step_by_step");
+    return @" ";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -654,7 +907,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section > 1 && indexPath.row == 0)
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && indexPath.section > 1 && indexPath.row == 0)
         [self onSectionPressed:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -701,16 +954,15 @@
             }
         }
     }
-
-    if (!self.trackChartPoints)
+    if (self.analysis && self.segment)
     {
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                           analysis:self.analysis];
+        [self.trackChartHelper refreshChart:self.statisticsChart
+                                       fitTrack:YES
+                                       forceFit:NO
+                               recalculateXAxis:NO
+                                       analysis:self.analysis
+                                        segment:self.segment];
     }
-    [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints
-                                            analysis:self.analysis];
 }
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
@@ -725,8 +977,19 @@
     if (_highlightDrawX != -1)
     {
         ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
-        if (h != nil)
-            [self.statisticsChart highlightValue:h callDelegate:true];
+        if (h)
+        {
+            [self.statisticsChart highlightValue:h callDelegate:YES];
+            if (self.analysis && self.segment)
+            {
+                [self.trackChartHelper refreshChart:self.statisticsChart
+                                               fitTrack:YES
+                                               forceFit:NO
+                                       recalculateXAxis:NO
+                                               analysis:self.analysis
+                                                segment:self.segment];
+            }
+        }
     }
 }
 
@@ -741,11 +1004,10 @@
                 OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
                 [routeCell.barChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:routeCell.barChartView invalidate:YES];
             }
-            else if ([cell isKindOfClass:OALineChartCell.class])
+            else if ([cell isKindOfClass:ElevationChartCell.class])
             {
-                OALineChartCell *chartCell = (OALineChartCell *) cell;
-
-                [chartCell.lineChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:chartCell.lineChartView invalidate:YES];
+                ElevationChartCell *chartCell = (ElevationChartCell *) cell;
+                [chartCell.chartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:chartCell.chartView invalidate:YES];
             }
         }
     }
@@ -765,12 +1027,11 @@
     if (statsSection.count > 1)
     {
         OARouteStatisticsModeCell *statsModeCell = statsSection[0];
-        OALineChartCell *graphCell = statsSection[1];
-
-        [self.routeLineChartHelper changeChartTypes:_types
-                                              chart:graphCell.lineChartView
+        ElevationChartCell *graphCell = statsSection[1];
+        [self.trackChartHelper changeChartTypes:_types
+                                              chart:graphCell.chartView
                                            analysis:self.analysis
-                                           modeCell:statsModeCell];
+                                        statsModeCell:statsModeCell];
     }
 }
 

@@ -1,0 +1,16 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_custom_sensor_speed_battery_outlined.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
+  }
+}

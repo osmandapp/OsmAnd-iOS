@@ -12,34 +12,35 @@
 
 typedef NS_ENUM(NSInteger, EOAObjectType)
 {
-    UNDEFINED = -1,
-    CITY = 0,
-    VILLAGE,
-    POSTCODE,
-    STREET,
-    HOUSE,
-    STREET_INTERSECTION,
+    EOAObjectTypeUndefined = -1,            // Undefined state
+    EOAObjectTypeCity = 0,                  // Represents a city
+    EOAObjectTypeVillage,                   // Represents a village
+    EOAObjectTypePostcode,                  // Represents a postcode
+    EOAObjectTypeStreet,                    // Represents a street
+    EOAObjectTypeHouse,                     // Represents a house
+    EOAObjectTypeStreetIntersection,        // Represents a street intersection
     // POI
-    POI_TYPE,
-    POI,
+    EOAObjectTypePoiType,                   // Represents a POI type
+    EOAObjectTypePoi,                       // Represents a POI
     // LOCATION
-    LOCATION,
-    PARTIAL_LOCATION,
+    EOAObjectTypeLocation,                  // Represents a location
+    EOAObjectTypePartialLocation,           // Represents a partial location
     // UI OBJECTS
-    FAVORITE,
-    FAVORITE_GROUP,
-    WPT,
-    RECENT_OBJ,
-    GPX_TRACK,
+    EOAObjectTypeFavorite,                  // Represents a favorite
+    EOAObjectTypeFavoriteGroup,             // Represents a favorite froup
+    EOAObjectTypeWpt,                       // Represents a waypoint
+    EOAObjectTypeRecentObj,                 // Represents a recent object
+    EOAObjectTypeGpxTrack,                  // Represents a track
 
-    REGION,
+    EOAObjectTypeRegion,                    // Represents a region
     
-    SEARCH_STARTED,
-    SEARCH_FINISHED,
-    FILTER_FINISHED,
-    SEARCH_API_FINISHED,
-    SEARCH_API_REGION_FINISHED,
-    UNKNOWN_NAME_FILTER
+    EOAObjectTypeSearchStarted,             // Represents a search started message
+    EOAObjectTypeSearchFinished,            // Represents a search finished message
+    EOAObjectTypeFilterFinished,            // Represents a filter finished message
+    EOAObjectTypeSearchApiFinished,         // Represents a search api finished message
+    EOAObjectTypeSearchApiRegionFinished,   // Represents a search api region finished message
+    EOAObjectTypeUnknownNameFilter,         // Represents an unknown name filter
+    EOAObjectTypeIndexItem                  // Represents a resource item (region, city, etc.)
 };
 
 @interface OAObjectType : NSObject

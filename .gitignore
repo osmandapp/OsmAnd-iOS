@@ -11,6 +11,7 @@ xcuserdata
 # Dependencies via CocoaPods
 /Podfile.lock
 /Pods
+/Libraries/Charts/build
 
 *.xcscmblueprint
 /build

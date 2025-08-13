@@ -21,7 +21,9 @@
 @property (nonatomic) CGFloat splitInterval;
 @property (nonatomic) BOOL showArrows;
 @property (nonatomic) BOOL showStartFinish;
+@property (nonatomic) BOOL isJoinSegments;
 @property (nonatomic) CGFloat verticalExaggerationScale;
+@property (nonatomic) NSInteger elevationMeters;
 @property (nonatomic) EOAGPX3DLineVisualizationByType visualization3dByType;
 @property (nonatomic) EOAGPX3DLineVisualizationWallColorType visualization3dWallColorType;
 @property (nonatomic) EOAGPX3DLineVisualizationPositionType visualization3dPositionType;
@@ -30,7 +32,7 @@
 @property (nonatomic) NSInteger wptPoints;
 @property (nonatomic) CGFloat totalDistance;
 
-- (instancetype) initWithItem:(OAGPX *)dataItem;
+- (instancetype) initWithItem:(OASGpxDataItem *)dataItem;
 - (void) toJson:(id)json;
 
 + (OAGpxAppearanceInfo *) fromJson:(id)json;

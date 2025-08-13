@@ -10,10 +10,13 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAMapRendererView.h"
+#import "OALocationServices.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
+#import "OAWorldRegion.h"
 #import "Localization.h"
 #import "OATargetPointView.h"
 #import "OARootViewController.h"
@@ -25,9 +28,10 @@
 #import "OAMapUtils.h"
 #import "OARoutingHelperUtils.h"
 #import "OAMapLayers.h"
+#import "OAObservable.h"
+#import "CLLocation+Extension.h"
 
 #include <commonOsmAndCore.h>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -126,12 +130,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                                                            withHandler:@selector(onHeadingUpdate)
                                                             andObserve:_app.locationServices.updateHeadingObserver];
 
-        //addTargetPointListener(app);
-        //addMapMarkersListener(app);
-        //[[OARoutingHelper sharedInstance] addListener:self];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     }
     return self;
@@ -142,6 +140,8 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_mapViewController || ![_mapViewController isViewLoaded])
             return;
+        
+        [self resetDrivingRegionUpdate];
         
         _startChangingMapModeTime = CACurrentMediaTime();
         
@@ -162,7 +162,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
             case OAMapModeFree:
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self setMapLinkedToLocation:NO];
+                    [self checkMapLinkedToLocation];
                 });
                 break;
             }
@@ -237,7 +237,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     return ceil([OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle) == kDefaultElevationAngle;
 }
 
-- (void)startTilting:(float)elevationAngle
+- (void)startTilting:(float)elevationAngle timePeriod:(float)timePeriod
 {
     float initialElevationAngle = [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle;
     float elevationAngleDiff = elevationAngle - initialElevationAngle;
@@ -254,7 +254,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::ElevationAngle);
     }
     _mapView.mapAnimator->animateElevationAngleTo(elevationAngle,
-                                                  duration,
+                                                  timePeriod > 0.0f ? timePeriod : duration,
                                                   OsmAnd::MapAnimator::TimingFunction::Linear,
                                                   kUserInteractionAnimationKey);
     _mapView.mapAnimator->resume();
@@ -264,7 +264,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 {
     BOOL defaultElevationAngle = [self isDefaultElevationAngle];
     float tiltAngle = defaultElevationAngle ? [self getElevationAngle:floor(_mapView.zoom)] : kDefaultElevationAngle;
-    [self startTilting:tiltAngle];
+    [self startTilting:tiltAngle timePeriod:0.0f];
 }
 
 - (float) getElevationAngle:(int)zoom
@@ -321,7 +321,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         if (location)
         {
             if (_myLocation && ![_myLocation hasBearing])
-                _myLocation = [_myLocation locationWithBearing:_app.locationServices.lastKnownHeading];
+                _myLocation = [_myLocation locationWithCourse:_app.locationServices.lastKnownHeading];
             
             OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
             if ([_settings.drivingRegionAutomatic get] && !_drivingRegionUpdated && ![appDelegate isAppInitializing])
@@ -340,9 +340,8 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 double rotation = NAN;
                 BOOL pendingRotation = NO;
                 int currentMapRotation = [_settings.rotateMap get];
-                BOOL smallSpeedForCompass = [self isSmallSpeedForCompass:location];
                 
-                showViewAngle = (![location hasBearing] || smallSpeedForCompass) && [OANativeUtilities containsLatLon:location];
+                showViewAngle = [OANativeUtilities containsLatLon:location];
                 if (currentMapRotation == ROTATE_MAP_BEARING)
                 {
                     // special case when bearing equals to zero (we don't change anything)
@@ -378,7 +377,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
             }
             else if (location)
             {
-                showViewAngle = (![location hasBearing] || [self isSmallSpeedForCompass:location]) && [OANativeUtilities containsLatLon:location];
+                showViewAngle = [OANativeUtilities containsLatLon:location];
             }
             
             _showViewAngle = showViewAngle;
@@ -469,28 +468,11 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 _mapView.mapAnimator->pause();
 
                 CLLocationDirection direction = [self calculateDirectionWithLocation:newLocation heading:newHeading applyViewAngleVisibility:YES];
-
-                const auto azimuthAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
 
-                NSTimeInterval timeSinceLasGestureRotating = [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970;
-
-                if (direction >= 0 && timeSinceLasGestureRotating > 1)
-                {
-                    if (azimuthAnimation)
-                    {
-                        _mapView.mapAnimator->cancelAnimation(azimuthAnimation);
-                        _mapView.mapAnimator->animateAzimuthTo(direction, azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(), OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
-                    }
-                    else
-                    {
-                        _mapView.mapAnimator->animateAzimuthTo(direction,
-                                                            kOneSecondAnimatonTime,
-                                                            OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                            kLocationServicesAnimationKey);
-                    }
-                }
-
+                if (direction >= 0 && [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970 > 1)
+                    _mapView.mapAnimator->animateAzimuthTo(direction, kOneSecondAnimatonTime, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
+                
                 _mapView.mapAnimator->resume();
             }
             [_mapViewController.mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
@@ -547,7 +529,9 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         const auto targetAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
         auto zoomAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
         
-        animator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
+        auto userZoomAnimation = animator->getCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
+        if (userZoomAnimation)
+            animateZoom = NO;
         
         if (!animateZoom)
             zoomAnimation = nullptr;
@@ -660,27 +644,11 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                     zoomAnimation = nullptr;
                 if (zoomAnimation)
                     _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
-                
-                const auto azimuthAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+
                 _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 
-                NSTimeInterval timeSinceLasGestureRotating = [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970;
-                
-                if (direction >= 0 && timeSinceLasGestureRotating > 1)
-                {
-                    if (azimuthAnimation)
-                    {
-                        _mapView.mapAnimator->cancelAnimation(azimuthAnimation);
-                        _mapView.mapAnimator->animateAzimuthTo(direction, azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(), OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
-                    }
-                    else
-                    {
-                        _mapView.mapAnimator->animateAzimuthTo(direction,
-                                                            kOneSecondAnimatonTime,
-                                                            OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                            kLocationServicesAnimationKey);
-                    }
-                }
+                if (direction >= 0 && [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970 > 1)
+                    _mapView.mapAnimator->animateAzimuthTo(direction, kOneSecondAnimatonTime, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
                 
                 BOOL freeMapCenterMode = [_settings.rotateMap get] == ROTATE_MAP_COMPASS && !(_app.mapMode == OAMapModePositionTrack);
                 
@@ -907,7 +875,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     {
         if (![self isMapLinkedToLocation])
         {
-            [self setMapLinkedToLocation:YES];
+            [self checkMapLinkedToLocation];
             
             /*
             CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
@@ -964,18 +932,19 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     return _app.mapMode != OAMapModeFree;
 }
 
-- (void) setMapLinkedToLocation:(BOOL)isMapLinkedToLocation
+- (void)checkMapLinkedToLocation
 {
     if (![self isMapLinkedToLocation])
     {
-        int autoFollow = [_settings.autoFollowRoute get];
-        if (autoFollow > 0 && [[OARoutingHelper sharedInstance] isFollowingMode] && !_routePlanningMode)
-            [self backToLocationWithDelay:autoFollow];
+        [self backToLocationWithConditions];
     }
 }
 
-- (void) onMapGestureAction:(NSNotification *)notification
+- (void)backToLocationWithConditions
 {
+    int autoFollow = [_settings.autoFollowRoute get];
+    if (autoFollow > 0 && [[OARoutingHelper sharedInstance] isFollowingMode] && !_routePlanningMode)
+        [self backToLocationWithDelay:autoFollow];
 }
 
 - (void) setMapViewController:(OAMapViewController *)mapViewController

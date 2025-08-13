@@ -10,21 +10,11 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXDocument.h"
+#import "OAObservable.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kBackupSuffix @"_osmand_backup"
-
-@interface OAGpxLoader : NSObject
-
-@property (nonatomic) QString path;
-@property (nonatomic) std::shared_ptr<const OsmAnd::GpxDocument> document;
-
-@end
-
-@implementation OAGpxLoader
-
-@end
-
 
 @implementation OASelectedGPXHelper
 {
@@ -32,6 +22,9 @@
     OsmAndAppInstance _app;
     
     NSMutableArray *_selectedGPXFilesBackup;
+    NSMutableArray *_loadingGPXPaths;
+    NSMutableDictionary<NSString *, OASGpxFile *> *_activeGpx;
+    NSOperationQueue *_operationQueue;
 }
 
 + (OASelectedGPXHelper *)instance
@@ -52,74 +45,142 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _selectedGPXFilesBackup = [NSMutableArray new];
+        _activeGpx = [NSMutableDictionary dictionary];
+        _loadingGPXPaths = [NSMutableArray new];
+        _operationQueue = [[NSOperationQueue alloc] init];
+        _operationQueue.maxConcurrentOperationCount = 4;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didReceiveMemoryWarning:)
+                                                     name:UIApplicationDidReceiveMemoryWarningNotification
+                                                   object:nil];
     }
     return self;
 }
 
-- (void) markTrackForReload:(NSString *)filePath
+- (NSDictionary<NSString *, OASGpxFile *> *)activeGpx
 {
-    QString qPath = QString::fromNSString(filePath);
-    _activeGpx.remove(qPath);
+    return [_activeGpx copy];
 }
 
-- (BOOL) buildGpxList
+- (void)removeGpxFileWith:(NSString *)path {
+    [_activeGpx removeObjectForKey:path];
+}
+
+- (void)addGpxFile:(OASGpxFile *)file for:(NSString *)path
 {
-    BOOL loading = NO;
+    _activeGpx[path] = file;
+}
+
+- (nullable OASGpxFile *)getGpxFileFor:(NSString *)path
+{
+    return _activeGpx[path];
+}
+
+- (BOOL)containsGpxFileWith:(NSString *)path
+{
+    return (_activeGpx[path] != nil);
+}
+
+- (void)markTrackForReload:(NSString *)filePath
+{
+    [self removeGpxFileWith:filePath];
+}
+
+- (BOOL)buildGpxList
+{
     [_settings hideRemovedGpx];
-
-    for (NSString *filePath in _settings.mapSettingVisibleGpx.get)
-    {
-        if ([filePath hasSuffix:kBackupSuffix])
-        {
-            [_selectedGPXFilesBackup addObject:filePath];
-            continue;
-        }
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
-        NSString __block *path = gpx.absolutePath;
-        QString qPath = QString::fromNSString(path);
-        if ([[NSFileManager defaultManager] fileExistsAtPath:path] && !_activeGpx.contains(qPath))
-        {
-            OAGpxLoader __block *loader = [[OAGpxLoader alloc] init];
-            loader.path = qPath;
     
-            _activeGpx[qPath] = nullptr;
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                loader.document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path));
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    _activeGpx[loader.path] = loader.document;
-                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
-                });
-            });
-            loading = YES;
+    NSSet<NSString *> *mapSettingVisibleGpx = [NSSet setWithArray:[_settings.mapSettingVisibleGpx get]];
+    
+    if (_loadingGPXPaths.count > 0)
+    {
+        [self removeInactiveGpxFiles:mapSettingVisibleGpx];
+        return YES;
+    }
+    
+    NSMutableArray<GpxLoadOperation *> *gpxLoadOperations = [NSMutableArray array];
+    __weak __typeof(self) weakSelf = self;
+    
+    for (NSString *filePath in mapSettingVisibleGpx)
+    {
+        @autoreleasepool {
+            if ([filePath hasSuffix:kBackupSuffix])
+            {
+                [_selectedGPXFilesBackup addObject:filePath];
+                continue;
+            }
+            NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filePath];
+            if ([self shouldLoadFileAtPath:absoluteGpxFilepath])
+            {
+                [_loadingGPXPaths addObject:absoluteGpxFilepath];
+                GpxLoadOperation *loadOperation = [[GpxLoadOperation alloc] initWithFilePath:absoluteGpxFilepath];
+                loadOperation.completeHandler =^(NSString *absoluteFilePath, OASGpxFile *gpxFile) {
+                    [weakSelf completeTrackLoadingForFilePath:absoluteFilePath gpxFile:gpxFile];
+                };
+                loadOperation.cancelledHandler = ^(NSString *absoluteFilePath) {
+                    [weakSelf removeFilePathFromLoadingQueue:absoluteFilePath];
+                };
+                [gpxLoadOperations addObject:loadOperation];
+            }
         }
     }
-    NSArray<NSString *> *mapSettingVisibleGpx = [_settings.mapSettingVisibleGpx get];
-    for (auto it = _activeGpx.begin(); it != _activeGpx.end(); )
-    {
-        NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
-        if (![mapSettingVisibleGpx containsObject:gpxFilePath])
-            it = _activeGpx.erase(it);
-        else
-            ++it;
-    }
-    return loading;
+    if (gpxLoadOperations.count > 0)
+        [_operationQueue addOperations:gpxLoadOperations waitUntilFinished:NO];
+    
+    [self removeInactiveGpxFiles:mapSettingVisibleGpx];
+    
+    return _loadingGPXPaths.count > 0;
 }
 
-- (OAGPXDocument *)getSelectedGpx:(OAWptPt *)gpxWpt
+- (void)removeInactiveGpxFiles:(NSSet<NSString *> *)mapSettingVisibleGpx
 {
-    for (auto it = _activeGpx.begin(); it != _activeGpx.end(); ++it)
+    NSMutableArray<NSString *> *keysToRemove = [NSMutableArray array];
+    
+    for (NSString *key in _activeGpx.allKeys)
     {
-        OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:it.key().toNSString()];
-        if ([[gpxDoc points] containsObject:gpxWpt])
-            return gpxDoc;
+        NSString *gpxFilePath = [OAUtilities getGpxShortPath:key];
+        
+        if (![mapSettingVisibleGpx containsObject:gpxFilePath])
+            [keysToRemove addObject:key];
+    }
+    
+    if (keysToRemove.count > 0)
+        [_activeGpx removeObjectsForKeys:keysToRemove];
+}
+
+- (BOOL)shouldLoadFileAtPath:(NSString *)filePath
+{
+    return [[NSFileManager defaultManager] fileExistsAtPath:filePath]
+           && ![self containsGpxFileWith:filePath]
+           && ![_loadingGPXPaths containsObject:filePath];
+}
+
+- (void)removeFilePathFromLoadingQueue:(NSString *)filePath
+{
+    [_loadingGPXPaths removeObject:filePath];
+}
+
+- (void)completeTrackLoadingForFilePath:(NSString *)absoluteFilePath
+                                gpxFile:(OASGpxFile *)gpxFile
+{
+    _activeGpx[absoluteFilePath] = gpxFile;
+    [self removeFilePathFromLoadingQueue:absoluteFilePath];
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+}
+
+- (OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt {
+    for (OASGpxFile *gpxFile in _activeGpx.allValues) {
+        if ([[gpxFile getPointsList] containsObject:gpxWpt]) {
+            return gpxFile;
+        }
     }
     return nil;
 }
 
 -(BOOL) isShowingAnyGpxFiles
 {
-    return _activeGpx.count() > 0;
+    return _activeGpx.count > 0;
 }
 
 -(void) clearAllGpxFilesToShow:(BOOL) backupSelection
@@ -133,7 +194,7 @@
             [backedUp addObject:[filePath stringByAppendingString:kBackupSuffix]];
         }
     }
-    _activeGpx.clear();
+    [_activeGpx removeAllObjects];
     [_settings.mapSettingVisibleGpx set:[NSArray arrayWithArray:backedUp]];
     [_selectedGPXFilesBackup removeAllObjects];
     [_selectedGPXFilesBackup addObjectsFromArray:backedUp];
@@ -184,6 +245,37 @@
         }
     }
     return nil;
+}
+
+- (NSMutableDictionary<NSString *,OASGpxFile *> *) getSelectedGPXFiles
+{
+    return _activeGpx;
+}
+
+- (OASWptPt *) getVisibleWayPointByLat:(double)lat lon:(double)lon
+{
+    CLLocationCoordinate2D markerLatLon = CLLocationCoordinate2DMake(lat, lon);
+    if (CLLocationCoordinate2DIsValid(markerLatLon))
+    {
+        for (OASGpxFile *selectedGpx in _activeGpx)
+        {
+            for (OASWptPt *point in [selectedGpx getPointsList])
+            {
+                CLLocationCoordinate2D pointLatLon = CLLocationCoordinate2DMake(point.lat, point.lon);
+                if (CLLocationCoordinate2DIsValid(pointLatLon) &&
+                    [OAUtilities isCoordEqual:markerLatLon destLat:pointLatLon])
+                    return point;
+            }
+        }
+    }
+    return nil;
+}
+
+- (void)didReceiveMemoryWarning:(NSNotification *)notification
+{
+    // cancel all operations download GPX
+    [_operationQueue cancelAllOperations];
+    [_loadingGPXPaths removeAllObjects];
 }
 
 @end

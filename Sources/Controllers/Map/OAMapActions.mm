@@ -13,6 +13,8 @@
 #import "OAGPXDatabase.h"
 #import "OAAlertBottomSheetViewController.h"
 #import "Localization.h"
+#import "OAObservable.h"
+#import "OALocationServices.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
@@ -22,13 +24,17 @@
 #import "OARouteProvider.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OARootViewController.h"
-#import "OAGPXDocument.h"
+#import "OAMapPanelViewController.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
 #import "OATargetPoint.h"
 #import "OAWaypointHelper.h"
+#import "OAAppData.h"
 #import "OAAddWaypointBottomSheetViewController.h"
 #import "OAUninstallSpeedCamerasViewController.h"
+#import "OAGpxApproximationParams.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define START_TRACK_POINT_MY_LOCATION_RADIUS_METERS 50 * 1000
 
@@ -56,44 +62,63 @@
 
 - (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName
 {
-    [self enterRoutePlanningMode:from fromName:fromName checkDisplayedGpx:YES];
+    [self enterRoutePlanningModeGivenGpx:nil
+                                    from:from
+                                fromName:fromName
+          useIntermediatePointsByDefault:YES
+                              showDialog:YES];
 }
 
-- (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName checkDisplayedGpx:(BOOL)shouldCheck
+- (void) enterRoutePlanningModeGivenGpx:(OASTrackItem *)trackItem useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
 {
-    BOOL useIntermediatePointsByDefault = true;
-    
-    [self enterRoutePlanningModeGivenGpx:nil from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:YES];
+    [self enterRoutePlanningModeGivenGpx:[self getGpxFileByTrackItem:trackItem] path:trackItem.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
 }
 
-- (void) enterRoutePlanningModeGivenGpx:(OAGPX *)gpxFile useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
+- (void) enterRoutePlanningModeGivenGpx:(OASTrackItem *)gpxFile
+                                   from:(CLLocation *)from
+                               fromName:(OAPointDescription *)fromName
+         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
+                             showDialog:(BOOL)showDialog
 {
-    [self enterRoutePlanningModeGivenGpx:[self getGpxDocumentByGpx:gpxFile] path:gpxFile.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
+    [self enterRoutePlanningModeGivenGpx:[self getGpxFileByTrackItem:gpxFile] path:gpxFile.gpxFilePath from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
 }
 
-- (void) enterRoutePlanningModeGivenGpx:(OAGPX *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
-         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
-{
-    [self enterRoutePlanningModeGivenGpx:[self getGpxDocumentByGpx:gpxFile] path:gpxFile.gpxFilePath from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
-}
-
-- (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+- (void) enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
 {
     [self enterRoutePlanningModeGivenGpx:gpxFile appMode:nil path:path from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
 }
 
-- (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile appMode:(OAApplicationMode *)appMode path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
-         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
+- (OAApplicationMode *)getRouteProfile:(OASGpxFile *)gpxFile
+{
+    NSArray<OASWptPt *> *points = [gpxFile getRoutePoints];
+    if (points && points.count > 0)
+    {
+        OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:[points[0] getProfileType] def:nil];
+        if (mode)
+            return mode;
+    }
+    return nil;
+}
+
+- (void) enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile
+                                appMode:(OAApplicationMode *)appMode
+                                   path:(NSString *)path
+                                   from:(CLLocation *)from
+                               fromName:(OAPointDescription *)fromName
+         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
+                             showDialog:(BOOL)showDialog
 {
     [_settings.useIntermediatePointsNavigation set:useIntermediatePointsByDefault];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     
-    OAApplicationMode *mode = appMode ? appMode : [gpxFile getRouteProfile];
+    OAApplicationMode *mode = appMode ?: [self getRouteProfile:gpxFile];
     if (!mode)
-        mode = appMode ? appMode : [self getRouteMode];
+        mode = appMode ?: [self getRouteMode];
     
     [_routingHelper setAppMode:mode];
+    [_settings setApplicationModePref:mode markAsLastUsed:NO];
+    
     [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
     // save application mode controls
     [_settings.followTheRoute set:NO];
@@ -110,10 +135,10 @@
     [_trackingUtils switchToRoutePlanningMode];
     [[OARootViewController instance].mapPanel refreshMap];
     if (showDialog)
-        [[OARootViewController instance].mapPanel showRouteInfo];
+        [[OARootViewController instance].mapPanel showRouteInfo:NO];
 
     if ([targets hasTooLongDistanceToNavigate])
-        [_app showToastMessage:OALocalizedString(@"route_is_too_long_v2")];
+        [OAUtilities showToast:OALocalizedString(@"route_is_too_long_v2") details:nil duration:10 inView:OARootViewController.instance.view];
 
     if (![_settings.speedCamerasAlertShown get])
     {
@@ -123,7 +148,7 @@
     }
 }
 
-- (void) setGPXRouteParamsWithDocument:(OAGPXDocument *)doc path:(NSString *)path
+- (void) setGPXRouteParamsWithDocument:(OASGpxFile *)doc path:(NSString *)path
 {
     if (!doc)
     {
@@ -142,6 +167,16 @@
         [params setUseIntermediatePointsRTE:_settings.gpxCalculateRtept.get];
         [params setCalculateOsmAndRoute:_settings.gpxRouteCalc.get];
         [params setSelectedSegment:_settings.gpxRouteSegment.get];
+        
+        OAApplicationMode *appMode = [_routingHelper getAppMode];
+        if (![doc isAttachedToRoads] && [_settings.detailedTrackGuidance get:appMode] == EOATrackApproximationAutomatic)
+        {
+            OAGpxApproximationParams *approximationParams = [[OAGpxApproximationParams alloc] init];
+            [approximationParams setAppMode:appMode];
+            [approximationParams setDistanceThreshold:[_settings.gpxApproximationDistance get:[_routingHelper getAppMode]]];
+            [params setApproximationParams:approximationParams];
+        }
+        
         NSArray<CLLocation *> *ps = [params getPoints];
         [_routingHelper setGpxParams:params];
         [_settings.followTheGpxRoute set:path];
@@ -167,28 +202,50 @@
     }
 }
 
-- (OAGPXDocument *) getGpxDocumentByGpx:(OAGPX *)gpx
+- (OASGpxFile *)getGpxFileByTrackItem:(OASTrackItem *)trackItem
 {
-    OAGPXDocument* document = nil;
-    const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
-    NSString * path = gpx.absolutePath;
-    QString qPath = QString::fromNSString(path);
-    if (gpxMap.contains(qPath) && gpxMap[qPath] != nullptr)
+    if (!trackItem)
     {
-        document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(gpxMap[qPath])];
-        document.path = path;
+        return nil;
+    }
+    OASGpxFile *gpxFile = nil;
+    NSDictionary<NSString *, OASGpxFile *> *gpxMap = [[OASelectedGPXHelper instance].activeGpx copy];
+    
+    if ([trackItem isShowCurrentTrack])
+    {
+        gpxFile = [OASavingTrackHelper.sharedInstance currentTrack];
     }
     else
     {
-        document = [[OAGPXDocument alloc] initWithGpxFile:path];
+        OASGpxDataItem *dataItem = trackItem.dataItem;
+        if (dataItem)
+        {
+            NSString *path = dataItem.file.absolutePath;
+            if ([gpxMap objectForKey:path])
+            {
+                gpxFile = gpxMap[path];
+                gpxFile.path = path;
+            }
+            else
+            {
+                if (path.length > 0)
+                {
+                    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+                }
+            }
+        }
     }
-    return document;
+
+    return gpxFile;
 }
 
-- (void) setGPXRouteParams:(OAGPX *)result
+- (void) setGPXRouteParams:(OASGpxDataItem *)result
 {
-    OAGPXDocument* doc = [self getGpxDocumentByGpx:result];
-    [self setGPXRouteParamsWithDocument:doc path:doc.path];
+    OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:result.file];
+    trackItem.dataItem = result;
+    OASGpxFile *gpxFile = [self getGpxFileByTrackItem:trackItem];
+    [self setGPXRouteParamsWithDocument:gpxFile path:gpxFile.path];
 }
 
 - (OAApplicationMode *) getRouteMode

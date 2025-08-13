@@ -9,7 +9,6 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OARootViewController.h"
 #import "OAEditPointViewController.h"
-#import "Localization.h"
 #import "OAMapStyleSettings.h"
 #import "OAOsmAndFormatter.h"
 #import "OAFavoritesHelper.h"
@@ -139,7 +138,7 @@
 
     for (NSNumber *customValue in customValues)
     {
-        [titles addObject:[OAOsmAndFormatter getFormattedDistanceInterval:customValue.intValue]];
+        [titles addObject:[OAOsmAndFormatter getFormattedDistanceInterval:customValue.intValue withParams:[OsmAndFormatterParams noTrailingZeros]]];
         [values addObject:@([OAOsmAndFormatter calculateRoundedDist:customValue.intValue])];
     }
     self.titles = titles;
@@ -311,7 +310,8 @@
 
 - (void)regenerateSortedPositionAfter:(NSInteger)position increment:(BOOL)increment
 {
-    for (OAColorItem *item in _availableColors)
+    NSArray<OAColorItem *> *colorsCopy = [_availableColors copy];
+    for (OAColorItem *item in colorsCopy)
     {
         if (item.sortedPosition > position)
         {
@@ -397,7 +397,7 @@
         [colorItem generateId];
     }
 
-    BOOL result;
+    BOOL result = NO;
     if (![customTrackColors containsObject:hexColor])
     {
         [customTrackColors addObject:hexColor];
@@ -493,7 +493,20 @@
 
     [self regenerateSortedPositionAfter:-1 increment:YES];
     OAColorItem *colorItem = [[OAColorItem alloc] initWithHexColor:newHexColor];
-    [_availableColors insertObject:colorItem atIndex:_defaultColorValues.count];
+    
+    NSUInteger indexToInsert = _defaultColorValues.count;
+    
+    if (indexToInsert <= _availableColors.count)
+    {
+        [_availableColors insertObject:colorItem atIndex:indexToInsert];
+    }
+    else
+    {
+        NSLog(@"[WARNING] addNewSelectedColor: index %lu is out of bounds for _availableColors.count = %lu, appending to end",
+              (unsigned long)indexToInsert,
+              (unsigned long)_availableColors.count);
+        [_availableColors addObject:colorItem];
+    }
     colorItem.sortedPosition = 0;
     [colorItem generateId];
     return colorItem;
@@ -510,13 +523,17 @@
     else
         [customTrackColors insertObject:hexColor atIndex:indexOfColorItem - _defaultColorValues.count + 1];
     [_settings.customTrackColors set:customTrackColors];
-
+    
+    NSInteger insertingIndex = colorItem.sortedPosition + 1;
     NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
-    [customTrackColorsLastUsed insertObject:hexColor atIndex:colorItem.sortedPosition + 1];
+    if (customTrackColorsLastUsed.count >= insertingIndex)
+        [customTrackColorsLastUsed insertObject:hexColor atIndex:insertingIndex];
+    else
+        [customTrackColorsLastUsed addObject:hexColor];
     [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
 
     OAColorItem *duplicatedColorItem = [[OAColorItem alloc] initWithHexColor:hexColor];
-    duplicatedColorItem.sortedPosition = colorItem.sortedPosition + 1;
+    duplicatedColorItem.sortedPosition = insertingIndex;
     [self regenerateSortedPositionAfter:colorItem.sortedPosition increment:YES];
     if (colorItem.isDefault)
         [_availableColors addObject:duplicatedColorItem];
@@ -529,11 +546,30 @@
 - (void)deleteColor:(OAColorItem *)colorItem
 {
     NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
-    [customTrackColorsLastUsed removeObjectAtIndex:colorItem.sortedPosition];
+    if (customTrackColorsLastUsed.count > colorItem.sortedPosition)
+    {
+        [customTrackColorsLastUsed removeObjectAtIndex:colorItem.sortedPosition];
+    }
+    else
+    {
+        NSUInteger index = [customTrackColorsLastUsed indexOfObject:[colorItem getHexColor]];
+        if (index != NSNotFound)
+            [customTrackColorsLastUsed removeObjectAtIndex:index];
+    }
     [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
 
     NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
-    [customTrackColors removeObjectAtIndex:[_availableColors indexOfObject:colorItem] - _defaultColorValues.count];
+    NSUInteger relativeIndex = [_availableColors indexOfObject:colorItem] - _defaultColorValues.count;
+    if (customTrackColors.count > relativeIndex)
+    {
+        [customTrackColors removeObjectAtIndex:relativeIndex];
+    }
+    else
+    {
+        NSUInteger index = [customTrackColors indexOfObject:[colorItem getHexColor]];
+        if (index != NSNotFound)
+            [customTrackColors removeObjectAtIndex:[customTrackColors indexOfObject:[colorItem getHexColor]]];
+    }
     [_settings.customTrackColors set:customTrackColors];
 
     [_availableColors removeObject:colorItem];
@@ -573,7 +609,7 @@
 {
     for (OAColorItem *colorItem in _availableColors)
     {
-        if (colorItem.value == value)
+        if (((int)colorItem.value) == value)
             return colorItem;
     }
 

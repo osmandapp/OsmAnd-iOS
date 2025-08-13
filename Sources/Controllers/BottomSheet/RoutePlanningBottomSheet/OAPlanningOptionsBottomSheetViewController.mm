@@ -51,7 +51,8 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     
     [self.rightButton removeFromSuperview];
-    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
+    self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
+    self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
 }
 
 - (void) applyLocalization
@@ -217,7 +218,7 @@
             cell.titleView.text = item[@"title"];
             cell.descrView.text = item[@"descr"];
             
-            UIColor *tintColor = _routeAppMode && _routeAppMode != OAApplicationMode.DEFAULT ? UIColorFromRGB(_routeAppMode.getIconColor) : [UIColor colorNamed:ACColorNameIconColorSelected];
+            UIColor *tintColor = _routeAppMode && _routeAppMode != OAApplicationMode.DEFAULT ? _routeAppMode.getProfileColor : [UIColor colorNamed:ACColorNameIconColorSelected];
             if (tintColor)
             {
                 cell.iconColorNormal = tintColor;
@@ -246,7 +247,7 @@
 }
 
 
-#pragma mark - UItableViewDelegate
+#pragma mark - UITableViewDelegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -9,6 +9,7 @@
 #import "OAResourcesSettingsItem.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "Localization.h"
 
 @interface OAResourcesSettingsItem()
 

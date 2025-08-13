@@ -57,8 +57,10 @@
     if (_items.count > 0)
     {
         for (id item in _items)
+        {
             if ([self isDuplicate:item])
                 [_duplicateItems addObject:item];
+        }
     }
     return _duplicateItems;
 }

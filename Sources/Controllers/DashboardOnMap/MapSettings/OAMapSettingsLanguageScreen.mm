@@ -10,10 +10,11 @@
 #import "OAMapSettingsViewController.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#include "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "Localization.h"
+#import "OAObservable.h"
+#import "OsmAndApp.h"
 #import "GeneratedAssetSymbols.h"
-
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAMapSettingsLanguageScreen
 {
@@ -63,7 +64,7 @@
 {
     _prefLangId = _settings.settingPrefMapLanguage.get;
     if (_prefLangId)
-        _prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:_prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
+        _prefLang = [[OAUtilities displayNameForLang:_prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
     else
         _prefLang = OALocalizedString(@"local_map_names");
     

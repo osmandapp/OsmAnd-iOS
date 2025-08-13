@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
 @property (weak, nonatomic) IBOutlet UIView *topContentSpaceView;
 @property (weak, nonatomic) IBOutlet UIImageView *leftIconView;
 @property (weak, nonatomic) IBOutlet UIStackView *textStackView;
+@property (weak, nonatomic) IBOutlet UIStackView *contentInsideStackView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIView *bottomContentSpaceView;
@@ -48,5 +49,8 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
 - (void)textIndentsStyle:(EOATableViewCellTextIndentsStyle)style;
 - (void)anchorContent:(EOATableViewCellContentStyle)style;
 - (void)anchorContentTextStackView:(EOATableViewCellContentStyle)style;
+- (void)configureAccessibilityWithTitle:(nullable NSString *)title selected:(BOOL)isSelected;
+
+- (void)hideTopSpace;
 
 @end

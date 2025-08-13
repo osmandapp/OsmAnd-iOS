@@ -8,7 +8,8 @@
 
 #import "OAMapAlgorithms.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAMapUtils.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAMapAlgorithms : NSObject
 
@@ -42,20 +43,20 @@
     return res;
 }
 
-+ (OATrkSegment *) augmentTrkSegmentWithAltitudes:(OATrkSegment *)sgm decodedSteps:(const QList<int> &)decodedSteps startEle:(double)startEle
++ (OASTrkSegment *) augmentTrkSegmentWithAltitudes:(OASTrkSegment *)sgm decodedSteps:(const QList<int> &)decodedSteps startEle:(double)startEle
 {
-    OATrkSegment *segment = sgm;
-    NSMutableArray<OAWptPt *> *points = [NSMutableArray arrayWithArray:sgm.points];
+    OASTrkSegment *segment = sgm;
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray arrayWithArray:sgm.points];
     
     int stepDist = decodedSteps[0];
     int stepHNextInd = 1;
     double prevHDistX = 0;
-    points[0].elevation = startEle;
+    points[0].ele = startEle;
     
     for (NSInteger i = 1; i < points.count; ++i)
     {
-        OAWptPt *prev = points[i - 1];
-        OAWptPt *cur = points[i];
+        OASWptPt *prev = points[i - 1];
+        OASWptPt *cur = points[i];
         double origHDistX = prevHDistX;
         double len = [OAMapUtils getDistance:prev.position.latitude lon1:prev.position.longitude lat2:cur.position.latitude lon2:cur.position.longitude] / stepDist;
         double curHDistX = len + prevHDistX;
@@ -69,11 +70,11 @@
                 if (stepHNextInd - prevHDistX > 0.5)
                 {
                     double fraction = (stepHNextInd - prevHDistX) / (curHDistX - origHDistX);
-                    OAWptPt *newPt = [[OAWptPt alloc] init];
+                    OASWptPt *newPt = [[OASWptPt alloc] init];
                     double lat = prev.position.latitude + fraction * (cur.position.latitude - prev.position.latitude);
                     double lon = prev.position.longitude + fraction * (cur.position.longitude - prev.position.longitude);
                     newPt.position = CLLocationCoordinate2DMake(lat, lon);
-                    newPt.elevation = prev.elevation + hInc;
+                    newPt.ele = prev.ele + hInc;
                     [points insertObject:newPt atIndex:i];
                     ++i;
                 }
@@ -87,7 +88,7 @@
             hInc += (curHDistX - prevHDistX) * decodedSteps[stepHNextInd];
         }
 
-        cur.elevation = prev.elevation + hInc;
+        cur.ele = prev.ele + hInc;
         prevHDistX = curHDistX;
         
         points[i - 1] = prev;

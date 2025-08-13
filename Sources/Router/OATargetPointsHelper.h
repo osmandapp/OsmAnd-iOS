@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 
 @class OAPointDescription, OARTargetPoint;
 
@@ -31,6 +30,7 @@
 - (NSArray<OARTargetPoint *> *) getAllPoints;
 - (NSArray<OARTargetPoint *> *) getIntermediatePointsWithTarget;
 - (OARTargetPoint *) getFirstIntermediatePoint;
+- (OARTargetPoint *)getIntermediatePoint:(int)intermediatePointIndex;
 
 - (void) lookupAllAddresses;
 

@@ -9,16 +9,22 @@
 #import "OAQuickSearchHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAWorldRegion.h"
 #import "OASearchUICore.h"
+#import "OALocationServices.h"
 #import "OASearchPhrase.h"
+#import "OAObservable.h"
 #import "OASearchSettings.h"
 #import "OASearchResultMatcher.h"
+#import "OASearchResult+cpp.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OASearchWord.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
@@ -27,20 +33,257 @@
 #import "OAPOIHelper.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OAPOIType.h"
+#import "OAResultMatcher.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "OAResourcesUIHelper.h"
+#import "OAManageResourcesViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 
-static const int SEARCH_FAVORITE_API_PRIORITY = 50;
-static const int SEARCH_FAVORITE_API_CATEGORY_PRIORITY = 50;
-static const int SEARCH_FAVORITE_OBJECT_PRIORITY = 50;
-static const int SEARCH_FAVORITE_CATEGORY_PRIORITY = 51;
-static const int SEARCH_WPT_API_PRIORITY = 50;
-static const int SEARCH_WPT_OBJECT_PRIORITY = 52;
-static const int SEARCH_HISTORY_API_PRIORITY = 50;
-static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
-static const int SEARCH_TRACK_API_PRIORITY = 50;
-static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
+static const int SEARCH_FAVORITE_API_PRIORITY = 150;
+static const int SEARCH_FAVORITE_API_CATEGORY_PRIORITY = 150;
+static const int SEARCH_FAVORITE_OBJECT_PRIORITY = 150;
+static const int SEARCH_FAVORITE_CATEGORY_PRIORITY = 151;
+static const int SEARCH_WPT_API_PRIORITY = 150;
+static const int SEARCH_WPT_OBJECT_PRIORITY = 152;
+static const int SEARCH_HISTORY_API_PRIORITY = 150;
+static const int SEARCH_HISTORY_OBJECT_PRIORITY = 154;
+static const int SEARCH_TRACK_API_PRIORITY = 150;
+static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
+static const int SEARCH_INDEX_ITEM_API_PRIORITY = 150;
+// NOTE: Android uses 150, but sometimes the values of ITEM_PRIORITY are mixed. (search: "den")
+static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
+
+@implementation SearchIndexItemAPI
+
+- (BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    OAWorldRegion *worldRegion = [[OsmAndApp instance] worldRegion];
+    [self processGroups:worldRegion search:phrase resultMatcher:resultMatcher];
+    NSString *fullSearchPhrase = [phrase getFullSearchPhrase];
+    
+    if (fullSearchPhrase.length > 3)
+    {
+        [OAQuickSearchHelper.instance cancelSearchCities];
+        __weak __typeof(self) weakSelf = self;
+        [OAQuickSearchHelper.instance searchCities:fullSearchPhrase
+                                    searchLocation:[OsmAndApp instance].locationServices.lastKnownLocation
+                                      allowedTypes:@[@"city", @"town"]
+                                         cityLimit:10000
+                                        onComplete:^(NSMutableArray *searchResults) {
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+
+            for (OASearchResult *amenity in searchResults)
+            {
+                OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:amenity.location.coordinate.latitude
+                                                                                lon:amenity.location.coordinate.longitude];
+                if (!region || ![region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
+                    continue;
+
+                NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
+                if (ids.count > 0)
+                {
+                    OARepositoryResourceItem *item = [strongSelf getUninstalledMapRegionResourceFromIds:ids
+                                                                                                   region:region
+                                                                                                    title:amenity.localeName];
+                    if (item)
+                    {
+                        OASearchResult *result = [strongSelf createSearchResultWithPhrase:phrase item:item localeName:item.title];
+                        
+                        [self addResultIfNotExists:result
+                                   existingResults:[resultMatcher getRequestResults]
+                                     resultMatcher:resultMatcher];
+                    }
+                }
+            }
+        }];
+    }
+
+    return YES;
+}
+
+- (void)addResultIfNotExists:(OASearchResult *)result
+             existingResults:(NSArray<OASearchResult *> *)existingResults
+               resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    if (!result || !result.resourceId)
+    {
+        return;
+    }
+    
+    for (OASearchResult *existing in existingResults)
+    {
+        if (existing.resourceId && [existing.resourceId isEqualToString:result.resourceId])
+        {
+            return;
+        }
+    }
+    
+    [resultMatcher publish:result];
+}
+
+- (NSString *)titleForObject:(OASearchResult *)obj
+{
+    return ((OARepositoryResourceItem *)obj.relatedObject).title ?: @"";
+}
+
+- (void)processGroups:(OAWorldRegion *)group
+               search:(OASearchPhrase *)phrase
+        resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    OARepositoryResourceItem *indexItem = nil;
+    NSString *name = nil;
+    OAWorldRegion *region = group;
+    if (region)
+    {
+        name = [[region.allNames componentsJoinedByString:@" "] ?: group.name lowerCase];
+    }
+    
+    if (group.superregion
+        && group.superregion.superregion
+        && group.superregion.superregion.resourceTypes
+        && [self isMatch:phrase text:name]
+        && [group.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
+    {
+        NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:group];
+        if (ids.count > 0)
+        {
+            indexItem = [self getUninstalledMapRegionResourceFromIds:ids region:region title:nil];
+        }
+    }
+    
+    if (indexItem)
+    {
+        [resultMatcher publish:[self createSearchResultWithPhrase:phrase item:indexItem localeName:indexItem.title]];
+    }
+    
+    if (group.subregions)
+    {
+        for (OAWorldRegion *subregion in group.subregions)
+        {
+            [self processGroups:subregion search:phrase resultMatcher:resultMatcher];
+        }
+    }
+}
+
+- (nullable OARepositoryResourceItem *)getUninstalledMapRegionResourceFromIds:(NSArray<NSString *> *)ids
+                                                              region:(OAWorldRegion *)region
+                                                               title:(nullable NSString *)title
+{
+    for (NSString *resourceId in ids)
+    {
+        const auto& resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+        if (resource && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        {
+            BOOL isInstalled = [OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId));
+            if (!isInstalled)
+            {
+                NSString *composeTitle;
+                if (!title)
+                {
+                    NSString *regionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                  inRegion:region
+                                                            withRegionName:YES
+                                                          withResourceType:NO];
+                    
+                    NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                  inRegion:region.superregion
+                                                            withRegionName:YES
+                                                          withResourceType:NO];
+                    composeTitle = [self composeTitleWithPart:regionTitle andPart:superregionTitle];
+                }
+                else
+                {
+                    // for city/town
+                    
+                    NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                  inRegion:region
+                                                            withRegionName:YES
+                                                          withResourceType:NO];
+                    
+                    composeTitle = [self composeTitleWithPart:title andPart:superregionTitle];
+                }
+                return [self createRepositoryResourceItemWithResource:resource region:region title:composeTitle];
+            }
+        }
+    }
+    return nil;
+}
+
+- (NSString *)composeTitleWithPart:(nullable NSString *)part1 andPart:(nullable NSString *)part2
+{
+    if (part1.length > 0 && part2.length > 0)
+    {
+        return [NSString stringWithFormat:@"%@, %@", part1, part2];
+    }
+    return part1.length > 0 ? part1 : part2;
+}
+
+- (OARepositoryResourceItem *)createRepositoryResourceItemWithResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource
+                                                                region:(OAWorldRegion *)region
+                                                                 title:(NSString *)title
+{
+    OARepositoryResourceItem *item = [OARepositoryResourceItem new];
+    item.resourceId = resource->id;
+    item.resourceType = resource->type;
+    item.title = title;
+    item.resource = resource;
+    NSString *downloadKey = [@"resource:" stringByAppendingString:resource->id.toNSString()];
+    item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:downloadKey] firstObject];
+    item.size = resource->size;
+    item.sizePkg = resource->packageSize;
+    item.worldRegion = region;
+    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+    return item;
+}
+
+- (OASearchResult *)createSearchResultWithPhrase:(OASearchPhrase *)phrase
+                                            item:(OARepositoryResourceItem *)item
+                                      localeName:(NSString *)localeName
+{
+    OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+    sr.localeName = localeName;
+    // NOTE: for duplicate detection, if regions/subregions and city search return the same results
+    sr.resourceId = item.resourceId.toNSString();
+    // NOTE: skip the EOAUnknownPhraseMatchWeight search stage
+     sr.unknownPhraseMatchWeight = -1;
+    sr.priority = SEARCH_INDEX_ITEM_PRIORITY;
+    sr.objectType = EOAObjectTypeIndexItem;
+    sr.relatedObject = item;
+    sr.preferredZoom = 17;
+
+    return sr;
+}
+
+- (BOOL)isMatch:(OASearchPhrase *)phrase text:(NSString *)text
+{
+    if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
+    {
+        return YES;
+    }
+    OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_EQUALS_FROM_SPACE];
+    return [matcher matches:text];
+}
+
+- (int)getSearchPriority:(OASearchPhrase *)phrase
+{
+    if (![phrase isNoSelectedType])
+    {
+        return -1;
+    }
+    return SEARCH_INDEX_ITEM_API_PRIORITY;
+}
+
+- (BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return NO;
+}
+
+@end
 
 
 @implementation OASearchFavoritesAPI
@@ -58,7 +301,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         sr.localeName = [point getName];
         sr.favorite = point.favorite;
         sr.priority = SEARCH_FAVORITE_OBJECT_PRIORITY;
-        sr.objectType = FAVORITE;
+        sr.objectType = EOAObjectTypeFavorite;
         sr.location = [[CLLocation alloc] initWithLatitude:point.favorite->getLatLon().latitude
                                                  longitude:point.favorite->getLatLon().longitude];
         sr.preferredZoom = PREFERRED_FAVORITE_ZOOM;
@@ -102,7 +345,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         sr.localeName = [point getName];
         sr.favorite = point.favorite;
         sr.priority = SEARCH_FAVORITE_CATEGORY_PRIORITY;
-        sr.objectType = FAVORITE;
+        sr.objectType = EOAObjectTypeFavorite;
         sr.location = [[CLLocation alloc] initWithLatitude:point.favorite->getLatLon().latitude
                                                  longitude:point.favorite->getLatLon().longitude];
         sr.preferredZoom = PREFERRED_FAVORITES_GROUP_ZOOM;
@@ -132,16 +375,18 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    for (OAGPX *gpxInfo : [[OAGPXDatabase sharedDb] gpxList])
+    for (OASGpxDataItem *dataItem in OAGPXDatabase.sharedDb.getDataItems)
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.objectType = GPX_TRACK;
-        sr.localeName = gpxInfo.gpxTitle;
-        sr.relatedObject = gpxInfo;
+        sr.objectType = EOAObjectTypeGpxTrack;
+        sr.localeName = [dataItem gpxFileName];
+        sr.relatedObject = dataItem;
         sr.priority = SEARCH_TRACK_OBJECT_PRIORITY;
         sr.preferredZoom = PREFERRED_GPX_FILE_ZOOM;
         if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
+        {
             [resultMatcher publish:sr];
+        }
         else
         {
             OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_CONTAINS];
@@ -157,7 +402,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     if (![p isNoSelectedType] || ![p isUnknownSearchWordPresent])
         return -1;
     
-    return SEARCH_TRACK_OBJECT_PRIORITY;
+    return SEARCH_TRACK_API_PRIORITY;
 }
 
 @end
@@ -165,19 +410,19 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 
 @implementation OASearchWptAPI
 {
-    QList<std::shared_ptr<const OsmAnd::GpxDocument>> _geoDocList;
+    NSArray<OASGpxFile *> *_geoDocList;
     NSArray *_paths;
 }
 
-- (void) setWptData:(QList<std::shared_ptr<const OsmAnd::GpxDocument>>&)geoDocList paths:(NSArray *)paths
+- (void)setWptData:(NSArray<OASGpxFile *> *)geoDocList paths:(NSArray *)paths
 {
-    _geoDocList.append(geoDocList);
-    _paths = [NSArray arrayWithArray:paths];
+    _geoDocList = geoDocList;
+    _paths = paths;
 }
 
 - (void) resetWptData
 {
-    _geoDocList.clear();
+    _geoDocList = nil;
     _paths = nil;
 }
 
@@ -201,26 +446,23 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         dispatch_sync(dispatch_get_main_queue(), onMain);
 
     int i = 0;
-    for (auto gpxIt = _geoDocList.begin(); gpxIt != _geoDocList.end(); ++gpxIt)
+    for (OASGpxFile *gpx in _geoDocList)
     {
-        const auto gpx = *gpxIt;
-        if (!gpx || gpx->points.isEmpty())
+        if (!gpx || gpx.getPointsList.count == 0)
         {
             i++;
             continue;
         }
+        
+        for (OASWptPt *point in gpx.getPointsList) {
 
-        for (auto it = gpx->points.begin(); it != gpx->points.end(); ++it)
-        {
-            const auto& point = *it;
             OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-            sr.localeName = point->name.toNSString();
+            sr.localeName = point.name;
             sr.wpt = point;
-
-            sr.object = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(sr.wpt)];
+            sr.object = sr.wpt;
             sr.priority = SEARCH_WPT_OBJECT_PRIORITY;
-            sr.objectType = WPT;
-            sr.location = [[CLLocation alloc] initWithLatitude:point->position.latitude longitude:point->position.longitude];
+            sr.objectType = EOAObjectTypeWpt;
+            sr.location = [[CLLocation alloc] initWithLatitude:point.position.latitude longitude:point.position.longitude];
             //sr.localeRelatedObjectName = app.getRegions().getCountryName(sr.location);
             sr.localeRelatedObjectName = i < _paths.count ? [_paths[i] lastPathComponent] : OALocalizedString(@"shared_string_currently_recording_track");
             sr.relatedGpx = gpx;
@@ -286,7 +528,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
                 sr.object = pt;
                 sr.relatedObject = point;
                 sr.priorityDistance = 0;
-                sr.objectType = POI_TYPE;
+                sr.objectType = EOAObjectTypePoiType;
                 publish = YES;
             }
         }
@@ -298,19 +540,19 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
                 sr.localeName = filter.name;
                 sr.object = filter;
                 sr.relatedObject = point;
-                sr.objectType = POI_TYPE;
+                sr.objectType = EOAObjectTypePoiType;
                 publish = YES;
             }
         }
         else if ([pd isGpxFile])
         {
-            OAGPX *gpxInfo = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
-            if (gpxInfo)
+            OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
+            if (dataItem)
             {
-                sr.localeName = [gpxInfo gpxFileName];
+                sr.localeName = [dataItem gpxFileName];
                 sr.object = point;
-                sr.objectType = GPX_TRACK;
-                sr.relatedObject = gpxInfo;
+                sr.objectType = EOAObjectTypeGpxTrack;
+                sr.relatedObject = dataItem;
                 publish = YES;
             }
         }
@@ -318,7 +560,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         {
             sr.localeName = pd.name;
             sr.object = point;
-            sr.objectType = RECENT_OBJ;
+            sr.objectType = EOAObjectTypeRecentObj;
             sr.location = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
             sr.preferredZoom = PREFERRED_DEFAULT_RECENT_ZOOM;
             publish = YES;
@@ -355,6 +597,9 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     dispatch_queue_t _searchCitiesSerialQueue;
     dispatch_group_t _searchCitiesGroup;
     NSInteger _searchRequestsCount;
+    
+    BOOL _resourcesInvalidated;
+    OAAutoObserverProxy *_backgroundStateObserver;
 }
 
 + (OAQuickSearchHelper *) instance
@@ -381,11 +626,29 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         _searchCitiesGroup = dispatch_group_create();
         _searchRequestsCount = 0;
 
+        _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onBackgroundStateChanged)
+                                                              andObserve:OsmAndApp.instance.backgroundStateObservable];
+
         _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                    withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                     andObserve:[OsmAndApp instance].localResourcesChangedObservable];
     }
     return self;
+}
+
+- (void) dealloc
+{
+    if (_localResourcesChangedObserver)
+    {
+        [_localResourcesChangedObserver detach];
+        _localResourcesChangedObserver = nil;
+    }
+    if (_backgroundStateObserver)
+    {
+        [_backgroundStateObserver detach];
+        _backgroundStateObserver = nil;
+    }
 }
 
 - (OASearchUICore *) getCore
@@ -407,6 +670,8 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 {
     [self setResourcesForSearchUICore];
     [_core initApi];
+    // Register map search api
+    [_core registerAPI:[[SearchIndexItemAPI alloc] init]];
     
     // Register favorites search api
     [_core registerAPI:[[OASearchFavoritesAPI alloc] init]];
@@ -488,8 +753,25 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     [[_core getSearchSettings] setRegions:app.worldRegion];
 }
 
+- (void) onBackgroundStateChanged
+{
+    if (!OsmAndApp.instance.isInBackground && _resourcesInvalidated)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setResourcesForSearchUICore];
+            _resourcesInvalidated = NO;
+        });
+    }
+}
+
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
+    if (OsmAndApp.instance.isInBackground)
+    {
+        _resourcesInvalidated = YES;
+        return;
+    }
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setResourcesForSearchUICore];
     });
@@ -509,21 +791,37 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     NSInteger searchRequestsCount = ++_searchRequestsCount;
     dispatch_block_t searchCitiesFunc = ^{
         dispatch_group_enter(_searchCitiesGroup);
-
+        
         OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
         NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
         BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
         NSMutableArray *amenities = [NSMutableArray array];
-
+        
         OAQuickSearchHelper *searchHelper = [OAQuickSearchHelper instance];
         OASearchUICore *searchUICore = [searchHelper getCore];
-        OASearchSettings *settings = [[searchUICore getSearchSettings] setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation];
-        settings = [settings setLang:lang ? lang : @"" transliterateIfMissing:transliterate];
+        OASearchSettings *settings = [[OASearchSettings alloc] initWithSettings:[searchUICore getSearchSettings]];
+        NSMutableArray<NSString *> *resIds = [NSMutableArray array];
+        
+        for (const auto& resource : OsmAndApp.instance.resourcesManager->getLocalResources())
+        {
+            if (resource->id.compare(QString(kWorldBasemapKey)) == 0)
+            {
+                [resIds addObject:resource->id.toNSString()];
+                break;
+            }
+        }
+        
+        if (resIds.count == 0)
+            [resIds addObject:[kWorldMiniBasemapKey lowerCase]];
+        
+        [settings setOfflineIndexes:[resIds copy]];
+        settings = [settings setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation];
+        settings = [settings setLang:lang ?: @"" transliterateIfMissing:transliterate];
         settings = [settings setSortByName:NO];
         settings = [settings setAddressSearch:YES];
         settings = [settings setEmptyQueryAllowed:YES];
         settings = [settings setOriginalLocation:searchLocation];
-        [searchUICore updateSettings:settings];
+        settings = [settings setSearchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]];
 
         int __block count = 0;
 
@@ -549,7 +847,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
             return NO;
         } cancelledFunc:^BOOL{
             return count > cityLimit || _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0;
-        }] resortAll:YES removeDuplicates:YES];
+        }] resortAll:YES removeDuplicates:YES searchSettings:settings];
 
         if (_searchRequestsCount == searchRequestsCount)
         {
@@ -591,7 +889,6 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         settings = [settings setEmptyQueryAllowed:YES];
         settings = [settings setOriginalLocation:searchLocation];
         settings = [settings setSearchBBox31:searchBBox31];
-        [searchUICore updateSettings:settings];
 
         int __block count = 0;
         [searchUICore shallowSearch:OASearchLocationAndUrlAPI.class
@@ -609,7 +906,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
             return NO;
         } cancelledFunc:^BOOL{
             return count > limit || _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0;
-        }] resortAll:YES removeDuplicates:YES];
+        }] resortAll:YES removeDuplicates:YES searchSettings:settings];
 
         if (_searchRequestsCount == searchRequestsCount)
         {

@@ -6,7 +6,6 @@
 //  Copyright (c) 2018 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "OASuperViewController.h"
 
 @interface OACompoundViewController : OASuperViewController

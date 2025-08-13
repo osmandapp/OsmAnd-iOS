@@ -22,8 +22,9 @@
 #define kWidgetRegisteredNotification @"onWidgetRegistered"
 #define kWidgetVisibilityChangedMotification @"onWidgetVisibilityChanged"
 #define kWidgetsCleared @"onWidgetsCleared"
+#define kWidgetsPanelsDidLayoutNotification @"kWidgetsPanelsDidLayoutNotification"
 
-@class OAApplicationMode, OATextInfoWidget, OAWidgetState, OAMapWidgetInfo, OAWidgetsPanel, OAWidgetType, OAWidgetPanelViewController;
+@class OAApplicationMode, OATextInfoWidget, OAMapWidgetInfo, OAWidgetsPanel, OAWidgetType, OAWidgetPanelViewController;
 
 @interface OAMapWidgetRegistry : NSObject
 
@@ -57,7 +58,7 @@
 - (BOOL) isWidgetVisible:(NSString *)widgetId;
 - (void) clearWidgets;
 - (void) reorderWidgets;
-
+- (void) notifyWidgetsPanelsDidLayout;
 - (BOOL) isAnyWeatherWidgetVisible;
 
 @end

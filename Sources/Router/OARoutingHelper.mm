@@ -7,12 +7,13 @@
 //
 
 #import "OARoutingHelper.h"
-#import "OARoutingHelper+cpp.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OARouteProvider.h"
 #import "OARouteCalculationResult.h"
 #import "OAAppSettings.h"
 #import "OAVoiceRouter.h"
+#import "OAObservable.h"
 #import "OAMapUtils.h"
 #import "Localization.h"
 #import "OATargetPointsHelper.h"
@@ -21,24 +22,27 @@
 #import "OARouteDirectionInfo.h"
 #import "OATTSCommandPlayerImpl.h"
 #import "OAGPXUIHelper.h"
-#import "OAGPXTrackAnalysis.h"
-#import "OAGPXDocument.h"
 #import "OARouteExporter.h"
 #import "OATransportRoutingHelper.h"
 #import "OAGpxRouteApproximation.h"
 #import "OACurrentStreetName.h"
 #import "OARouteRecalculationHelper.h"
 #import "OARoutingHelperUtils.h"
-
+#import "OARTargetPoint.h"
+#import "OAResultMatcher.h"
+#import "OAApplicationMode.h"
+#import "CLLocation+Extension.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <OsmAndCore/Utilities.h>
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <routeSegmentResult.h>
 
 #define DEFAULT_GPS_TOLERANCE 12
 #define POSITION_TOLERANCE 60
 #define POS_TOLERANCE_DEVIATION_MULTIPLIER 2
-#define MAX_POSSIBLE_SPEED 140 // 504 km/h
+#define MAX_POSSIBLE_SPEED 340 // ~ 1 Mach
 
 static NSInteger GPS_TOLERANCE = DEFAULT_GPS_TOLERANCE;
 static double ARRIVAL_DISTANCE_FACTOR = 1;
@@ -318,6 +322,7 @@ static BOOL _isDeviatedFromRoute = false;
     {
         OARouteCalculationResult *previousRoute = _route;
         [self clearCurrentRoute:finalLocation newIntermediatePoints:intermediatePoints];
+        [OARoutingHelperUtils updateDrivingRegionIfNeeded:currentLocation force:NO];
         // to update route
         [self setCurrentLocation:currentLocation returnUpdatedLocation:NO previousRoute:previousRoute targetPointsChanged:YES];
     }
@@ -647,7 +652,7 @@ static BOOL _isDeviatedFromRoute = false;
         NSTimeInterval time = [currentLocation.timestamp timeIntervalSinceDate:_lastGoodRouteLocation.timestamp];
         CLLocationDistance dist = [currentLocation distanceFromLocation:_lastGoodRouteLocation];
         if (time > 0) {
-            double speed = dist / (time / 1000);
+            double speed = dist / (time / 1000.0);
             return speed > MAX_POSSIBLE_SPEED;
         }
     }
@@ -727,7 +732,12 @@ static BOOL _isDeviatedFromRoute = false;
             // 4. Identify if UTurn is needed
             if ([self identifyUTurnIsNeeded:currentLocation posTolerance:posTolerance])
                 _isDeviatedFromRoute = true;
-            
+            // 4.5. Disable recalculation in tunnels (tunnel locations are simulated)
+            if ([self isTunnelLocationSimulated:currentLocation])
+            {
+                _isDeviatedFromRoute = false;
+                calculateRoute = false;
+            }
             // 5. Update Voice router
             // Do not update in route planning mode
             BOOL inRecalc = calculateRoute || [self isRouteBeingCalculated];
@@ -755,7 +765,8 @@ static BOOL _isDeviatedFromRoute = false;
                 if ([_settings.snapToRoad get] && currentRoute + 1 < routeNodes.count)
                 {
                     CLLocation *nextRouteLocation = routeNodes[currentRoute + 1];
-                    locationProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:locationProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
+                    BOOL previewNextTurn = _settings.previewNextTurn.get;
+                    locationProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:locationProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation previewNextTurn:previewNextTurn];
                 }
                 else if ([_settings.snapToRoad get])
                 {
@@ -768,6 +779,9 @@ static BOOL _isDeviatedFromRoute = false;
         }
         _lastFixedLocation = currentLocation;
         _lastProjection = locationProjection;
+        if (![_route isEmpty]) {
+            _lastGoodRouteLocation = currentLocation;
+        }
     }
     
     if (calculateRoute)
@@ -802,7 +816,7 @@ static BOOL _isDeviatedFromRoute = false;
 - (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)next
 {
     @synchronized (self) {
-        return [OACurrentStreetName getCurrentName:next];
+        return [[OACurrentStreetName alloc] initWithStreetName:self info:next];
     }
 }
 
@@ -826,10 +840,10 @@ static BOOL _isDeviatedFromRoute = false;
     _route = route;
 }
 
-- (OAGPXTrackAnalysis *) getTrackAnalysis
+- (OASGpxTrackAnalysis *) getTrackAnalysis
 {
-    OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:_route];
-    return [gpx getAnalysis:0];
+    OASGpxFile *gpx = [OAGPXUIHelper makeGpxFromRoute:_route];
+    return [gpx getAnalysisFileTimestamp:0];
 }
 
 - (int) getLeftDistance
@@ -842,14 +856,29 @@ static BOOL _isDeviatedFromRoute = false;
     return [_route getDistanceToNextIntermediate:_lastFixedLocation];
 }
 
+- (int) getLeftDistanceNextIntermediateWith:(int)intermediateIndexOffset
+{
+    return [_route getDistanceToNextIntermediate:_lastFixedLocation intermediateIndexOffset:intermediateIndexOffset];
+}
+
 - (long) getLeftTime
 {
     return [_route getLeftTime:_lastFixedLocation];
 }
 
+- (long) getLeftTimeNextTurn
+{
+    return [_route getLeftTimeToNextTurn:_lastFixedLocation];
+}
+
 - (long) getLeftTimeNextIntermediate
 {
-    return [_route getLeftTimeToNextIntermediate:_lastFixedLocation];
+    return [self getLeftTimeNextIntermediateWith:0];
+}
+
+- (long) getLeftTimeNextIntermediateWith:(int)intermediateIndexOffset
+{
+    return [_route getLeftTimeToNextIntermediate:_lastFixedLocation intermediateIndexOffset:intermediateIndexOffset];
 }
 
 - (NSArray<OARouteDirectionInfo *> *) getRouteDirections
@@ -892,6 +921,7 @@ static BOOL _isDeviatedFromRoute = false;
             }
         });
         _finalLocation = newFinalLocation;
+        _lastGoodRouteLocation = nil;
         _intermediatePoints = newIntermediatePoints ? [NSMutableArray arrayWithArray:newIntermediatePoints] : nil;
 
         [_recalcHelper stopCalculation];
@@ -1017,19 +1047,19 @@ static BOOL _isDeviatedFromRoute = false;
     [_recalcHelper startRouteCalculationThread:params paramsChanged:paramsChanged updateProgress:updateProgress];
 }
 
-- (OAGPXDocument *) generateGPXFileWithRoute:(NSString *)name
+- (OASGpxFile *) generateGPXFileWithRoute:(NSString *)name
 {
     return [self generateGPXFileWithRoute:_route name:name];
 }
 
-- (OAGPXDocument *) generateGPXFileWithRoute:(OARouteCalculationResult *)route name:(NSString *)name
+- (OASGpxFile *) generateGPXFileWithRoute:(OARouteCalculationResult *)route name:(NSString *)name
 {
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
-    NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
     NSArray<OARTargetPoint *> *ps = targets.getIntermediatePointsWithTarget;
     for (NSInteger k = 0; k < ps.count; k++)
     {
-        OAWptPt *pt = [[OAWptPt alloc] init];
+        OASWptPt *pt = [[OASWptPt alloc] init];
         pt.position = CLLocationCoordinate2DMake(ps[k].getLatitude, ps[k].getLongitude);
         if (k < ps.count)
         {
@@ -1111,6 +1141,16 @@ static BOOL _isDeviatedFromRoute = false;
 {
     double posTolerance = [self.class getPosTolerance:location.horizontalAccuracy];
     return _mode && _mode.hasFastSpeed ? posTolerance : posTolerance / 2;
+}
+
+- (BOOL) isTunnelLocationSimulated:(CLLocation *)location
+{
+    if ([location isKindOfClass:OALocation.class])
+    {
+        OALocation *loc = (OALocation *) location;
+        return [loc.provider isEqualToString:@"TUNNEL"];
+    }
+    return false;
 }
 
 @end

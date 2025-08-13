@@ -7,8 +7,7 @@
 //
 
 #import "OATableViewCellWithButton.h"
-
-#include "OALog.h"
+#import "OALog.h"
 
 #define _(name) OATableViewCellWithButton__##name
 #define inflate _(inflate)

@@ -21,20 +21,24 @@
 #import "OAChoosePlanHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAGPXDatabase.h"
+#import "OAObservable.h"
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
 #import "OAIAPHelper.h"
+#import "OAAppData.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIHelper.h"
+#import "OAProducts.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAWikipediaPlugin.h"
 #import "OAWeatherPlugin.h"
 #import "OAAutoObserverProxy.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -63,6 +67,7 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAIAPHelper *_iapHelper;
+    OACoordinatesGridSettings *_coordinatesGridSettings;
 
     OAMapStyleSettings *_styleSettings;
     NSArray<OAMapStyleParameter *> *_filteredTopLevelParams;
@@ -90,6 +95,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
+        _coordinatesGridSettings = [[OACoordinatesGridSettings alloc] init];
         _styleSettings = [OAMapStyleSettings sharedInstance];
 
         title = OALocalizedString(@"configure_map");
@@ -115,7 +121,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onApplicationModeChanged)
-                                                          andObserve:_app.data.applicationModeChangedObservable];
+                                                          andObserve:_app.applicationModeChangedObservable];
 }
 
 - (void)deinitView
@@ -134,6 +140,7 @@
     BOOL hasWiki = [_iapHelper.wiki isPurchased];
     BOOL hasSRTM = [_iapHelper.srtm isPurchased];
     BOOL hasWeather = [_iapHelper.weather isPurchased];
+    BOOL hasCoordinatesGrid = [_coordinatesGridSettings isEnabled];
 
     [data addObject:@{
             @"group_name": @"",
@@ -200,6 +207,14 @@
             @"image": @"ic_custom_download_map",
             @"type": [OASwitchTableViewCell getCellIdentifier],
             @"key": @"show_borders_of_downloaded_maps"
+    }];
+    
+    [showSectionData addObject:@{
+        @"name": OALocalizedString(@"layer_coordinates_grid"),
+        @"image": hasCoordinatesGrid ? @"ic_custom_coordinates_grid" : @"ic_custom_coordinates_grid_disabled",
+        @"value": OALocalizedString(hasCoordinatesGrid ? @"shared_string_on" : @"shared_string_off"),
+        @"type": [OAValueTableViewCell getCellIdentifier],
+        @"key": @"coordinates_grid"
     }];
 
     [data addObject:@{
@@ -369,23 +384,14 @@
 
     if (!isOnlineMapSource)
     {
-        NSString *modeStr;
-        if ([_settings.appearanceMode get] == APPEARANCE_MODE_DAY)
-            modeStr = OALocalizedString(@"day");
-        else if ([_settings.appearanceMode get] == APPEARANCE_MODE_NIGHT)
-            modeStr = OALocalizedString(@"daynight_mode_night");
-        else if ([_settings.appearanceMode get] == APPEARANCE_MODE_AUTO)
-            modeStr = OALocalizedString(@"daynight_mode_auto");
-        else
-            modeStr = OALocalizedString(@"-");
-
+        DayNightMode dayNightMode = (DayNightMode) [_settings.appearanceMode get];
         NSMutableArray *mapStyleSectionData = [NSMutableArray array];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_mode"),
-                @"value": modeStr,
+                @"value": [DayNightModeWrapper getTitleForType:dayNightMode],
                 @"image": @"ic_custom_sun",
                 @"type": [OAValueTableViewCell getCellIdentifier],
-                @"key": @"map_mode"
+                @"key": @"mapMode"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_magnifier"),
@@ -628,7 +634,7 @@
 - (NSString *)getMapLangValueStr
 {
     NSString *prefLangId = _settings.settingPrefMapLanguage.get;
-    NSString *prefLang = prefLangId.length > 0 ? [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]] : OALocalizedString(@"local_map_names");
+    NSString *prefLang = prefLangId.length > 0 ? [[OAUtilities displayNameForLang:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]] : OALocalizedString(@"local_map_names");
     switch (_settings.settingMapLanguage.get)
     {
         case 0: // NativeOnly
@@ -712,6 +718,10 @@
         return @"ic_custom_hide";
     else if([paramName isEqualToString:TRANSPORT_CATEGORY])
         return @"ic_custom_transport_bus";
+    else if([paramName isEqualToString:DIRTBIKE_ROUTES_ATTR])
+        return @"ic_action_dirt_motorcycle";
+    else if([paramName isEqualToString:CLIMBING_ROUTES])
+        return @"ic_action_hill_climbing";
 
     return @"";
 }
@@ -736,12 +746,14 @@
         return _app.data.mapillary;
     else if ([key isEqualToString:@"tracks"])
         return _settings.mapSettingVisibleGpx.get.count > 0;
+    else if ([key isEqualToString:@"coordinates_grid"])
+        return [_coordinatesGridSettings isEnabled];
     else if ([key isEqualToString:@"category_transport"])
         return ![_styleSettings isCategoryDisabled:TRANSPORT_CATEGORY];
     else if ([key isEqualToString:@"contour_lines_layer"])
         return ![[_styleSettings getParameter:CONTOUR_LINES].value isEqualToString:@"disabled"];
     else if ([key isEqualToString:@"terrain_layer"])
-        return _app.data.terrainType != EOATerrainTypeDisabled;
+        return [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) isTerrainLayerEnabled];
     else if ([key isEqualToString:@"overlay_layer"])
         return _app.data.overlayMapSource != nil;
     else if ([key isEqualToString:@"underlay_layer"])
@@ -1123,7 +1135,7 @@
                 cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
 
             cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            cell.rightIconView.image = [UIImage templateImageNamed:group.isOpen ? @"ic_custom_arrow_up" : @"ic_custom_arrow_down"];
+            cell.rightIconView.image = [UIImage templateImageNamed:group.isOpen ? @"ic_custom_arrow_up" : ACImageNameIcCustomArrowDown];
             if (!group.isOpen && [cell isDirectionRTL])
                 cell.rightIconView.image = cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection;
         }
@@ -1173,8 +1185,6 @@
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapillaryFilter];
     else if ([item[@"key"] isEqualToString:@"wikipedia_layer"] && !isPromoButton)
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWikipedia];
-    else if ([item[@"key"] isEqualToString:@"map_mode"])
-        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
     else if ([item[@"key"] isEqualToString:@"map_magnifier"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:mapDensityKey];
     else if ([item[@"key"] isEqualToString:@"text_size"])
@@ -1193,6 +1203,8 @@
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWeather];
     else if ([item[@"key"] isEqualToString:@"nautical_depth"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenNauticalDepth];
+    else if ([item[@"key"] isEqualToString:@"coordinates_grid"])
+        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCoordinatesGrid];
 
     if ([item[@"key"] hasPrefix:@"routes_"])
     {
@@ -1231,6 +1243,14 @@
     
     if ([item[@"key"] isEqualToString:@"tracks"])
         [self.vwController.navigationController pushViewController:[OAMapSettingsGpxViewController new] animated:YES];
+
+    if ([item[@"key"] isEqualToString:@"mapMode"])
+    {
+        [self.vwController hide:YES animated:YES];
+
+        MapSettingsMapModeParametersViewController *vc = [[MapSettingsMapModeParametersViewController alloc] init];
+        [OARootViewController.instance.mapPanel showScrollableHudViewController:vc];
+    }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -1331,16 +1351,7 @@
 
 - (void)terrainChanged:(BOOL)isOn
 {
-    if (isOn)
-    {
-        EOATerrainType lastType = _app.data.lastTerrainType;
-        _app.data.terrainType = lastType != EOATerrainTypeDisabled ? lastType : EOATerrainTypeHillshade;
-    }
-    else
-    {
-        _app.data.lastTerrainType = _app.data.terrainType;
-        _app.data.terrainType = EOATerrainTypeDisabled;
-    }
+    [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) setTerrainLayerEnabled:isOn];
 }
 
 - (void)nauticalDepthChanged:(BOOL)isOn

@@ -19,15 +19,19 @@ final class BLERunningSCDDevice: Device {
         GattAttributes.SERVICE_RUNNING_SPEED_AND_CADENCE
     }
     
-    override var getServiceConnectedImage: UIImage {
-        UIImage(named: "widget_sensor_speed")!
+    override var getServiceConnectedImage: UIImage? {
+        UIImage(named: "widget_sensor_speed")
+    }
+    
+    override var getServiceDisconnectedImage: UIImage? {
+        UIImage(named: "ic_custom_sensor_speed_outlined")
     }
     
     override var getDataFields: [[String: String]]? {
         if let sensor = sensors.first(where: { $0 is BLERunningSensor }) as? BLERunningSensor {
             var result = [[String: String]]()
             if let lastRunningCadenceData = sensor.lastRunningCadenceData {
-                result.append([localizedString("external_device_characteristic_cadence"): String(lastRunningCadenceData.cadence)])
+                result.append([localizedString("external_device_characteristic_cadence"): String(lastRunningCadenceData.cadence) + " " + localizedString("revolutions_per_minute_unit")])
             }
             if let lastRunningSpeedData = sensor.lastRunningSpeedData {
                 if let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastRunningSpeedData.speed.value)) {
@@ -36,14 +40,13 @@ final class BLERunningSCDDevice: Device {
             }
             if let lastRunningDistanceData = sensor.lastRunningDistanceData {
                 let distanceMeters = lastRunningDistanceData.totalDistance.value / 10
-                if let distance = OAOsmAndFormatter.getFormattedDistance(Float(distanceMeters), forceTrailingZeroes: false) {
+                if let distance = OAOsmAndFormatter.getFormattedDistance(Float(distanceMeters), with: OsmAndFormatterParams.noTrailingZeros) {
                     result.append([localizedString("external_device_characteristic_total_distance"): String(distance)])
                 }
             }
             if let lastRunningStrideLengthData = sensor.lastRunningStrideLengthData {
                 let strideLengthMeters = lastRunningStrideLengthData.strideLength.value / 100
-               
-                if let strideLength = OAOsmAndFormatter.getFormattedDistance(Float(strideLengthMeters), forceTrailingZeroes: false) {
+                if let strideLength = OAOsmAndFormatter.getFormattedDistance(Float(strideLengthMeters), with: OsmAndFormatterParams.noTrailingZeros) {
                     result.append([localizedString("external_device_characteristic_stride_length"): String(strideLength)])
                 }
             }
@@ -61,7 +64,7 @@ final class BLERunningSCDDevice: Device {
         [.bicycleSpeed, .bicycleCadence, .bicycleDistance]
     }
     
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+    override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }
 }

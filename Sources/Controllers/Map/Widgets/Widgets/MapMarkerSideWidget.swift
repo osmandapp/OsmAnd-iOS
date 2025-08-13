@@ -6,12 +6,11 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
 import CoreLocation
 
 @objc(OAMapMarkerSideWidget)
 @objcMembers
-class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
+final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     private static let DASH = "—"
     
     private var mapMarkersHelper: OADestinationsHelper = OADestinationsHelper.instance()!
@@ -39,6 +38,9 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         self.markerClickBehaviourPref = widgetState.markerClickBehaviourPref
         self.cachedNightMode = isNightMode()
         self.cachedMode = SideMarkerMode.markerModeByName(markerModePref.get())
+        if let computerID = speedComputerId() {
+            AverageSpeedComputerService.shared.addComputer(for: computerID)
+        }
         
         setText(nil, subtext: nil)
         
@@ -52,7 +54,7 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     }
     
     override init(frame: CGRect) {
-        let widgetState = MapMarkerSideWidgetState(customId: "", firstMarker: true)
+        let widgetState = MapMarkerSideWidgetState(customId: "", firstMarker: true, widgetParams: nil)
         self.widgetState = widgetState
         self.markerModePref = widgetState.mapMarkerModePref
         self.averageSpeedIntervalPref = widgetState.averageSpeedIntervalPref
@@ -73,6 +75,10 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         MarkerWidgetsHelper.showMarkerOnMap(widgetState.isFirstMarker() ? 0 : 1)
     }
     
+    private func speedComputerId() -> String? {
+        widgetState.customId ?? widgetType?.id
+    }
+    
     override func getWidgetState() -> OAWidgetState {
         return widgetState
     }
@@ -83,7 +89,7 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     
     override func updateInfo() -> Bool {
         let routingHelper = OARoutingHelper.sharedInstance()!
-        guard let marker = getMarker(), !routingHelper.isRoutePlanningMode(), !routingHelper.isFollowingMode() else {
+        guard let marker = getMarker() else {
             cachedMeters = 0
             lastUpdatedTime = 0
             setText(nil, subtext: nil)
@@ -129,19 +135,36 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     private func updateArrivalTime(distance: Int, currentTime: TimeInterval) {
         cachedMeters = distance
         lastUpdatedTime = currentTime
-        
-        let averageSpeedComputer = OAAverageSpeedComputer.sharedInstance()
+
         let interval = widgetState.averageSpeedIntervalPref.get()
-        let averageSpeed = averageSpeedComputer.getAverageSpeed(interval, skipLowSpeed: false)
-        
-        if averageSpeed.isNaN || averageSpeed == 0 {
-            setText(Self.DASH, subtext: nil)
-            return
+        var averageSpeed: Float?
+        if let computerID = speedComputerId(), let computer = AverageSpeedComputerService.shared.getComputer(for: computerID) {
+            averageSpeed = computer.getAverageSpeed(interval, skipLowSpeed: false)
         }
         
-        let estimatedLeftSeconds = Int(Double(distance) / Double(averageSpeed))
-        let estimatedArrivalTime = currentTime + TimeInterval(estimatedLeftSeconds)
-        setTimeText(estimatedArrivalTime)
+        if let speed = averageSpeed, !speed.isNaN, speed != 0 {
+            let estimatedLeftSeconds = Int(Double(distance) / Double(speed))
+            updateArrivalTime(estimatedLeftSeconds)
+        } else {
+            setText(Self.DASH, subtext: nil)
+        }
+    }
+
+    private func updateArrivalTime(_ leftSeconds: Int) -> Bool {
+        let toFindTime = Date().timeIntervalSince1970 + TimeInterval(leftSeconds)
+        let dateFormatter = DateFormatter()
+        let toFindDate = Date(timeIntervalSince1970: toFindTime)
+        if !OAUtilities.is12HourTimeFormat() {
+            dateFormatter.dateFormat = "HH:mm"
+            setText(dateFormatter.string(from: toFindDate), subtext: nil)
+        } else {
+            dateFormatter.dateFormat = "h:mm"
+            let timeStr = dateFormatter.string(from: toFindDate)
+            dateFormatter.dateFormat = "a"
+            let aStr = dateFormatter.string(from: toFindDate)
+            setText(timeStr, subtext: aStr)
+        }
+        return true
     }
     
     private func updateIconIfNeeded(marker: OADestination, newMode: SideMarkerMode, modeChanged: Bool) {
@@ -184,20 +207,22 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     private func getMarker() -> OADestination? {
         let destinatoins = mapMarkersHelper.sortedDestinationsWithoutParking()
         if let markers = destinatoins, !markers.isEmpty {
-            if (widgetState.isFirstMarker()) {
+            if widgetState.isFirstMarker() {
                 return markers[0]
-            } else if (markers.count > 1) {
+            } else if markers.count > 1 {
                 return markers[1]
             }
         }
-        return nil;
+        return nil
     }
     
     override func isMetricSystemDepended() -> Bool {
-        return true
+        true
     }
 
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+    override func getSettingsData(_ appMode: OAApplicationMode,
+                                  widgetConfigurationParams: [String: Any]?,
+                                  isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")
@@ -209,10 +234,20 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         showRow.descr = localizedString("recording_context_menu_show")
         showRow.iconName = markerModePref.get(appMode) == SideMarkerMode.distance.name ? "widget_marker" : "widget_marker_eta"
         showRow.setObj(markerModePref, forKey: "pref")
-        showRow.setObj(getModeTitle(markerModePref, appMode), forKey: "value")
+        showRow.setObj(getModeTitle(markerModePref, appMode, widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate), forKey: "value")
         showRow.setObj(getPossibleValues(markerModePref, appMode), forKey: "possible_values")
-
-        if markerModePref.get(appMode) == SideMarkerMode.estimatedArrivalTime.name {
+        
+        var shouldAddIntervalRow = true
+        if !isCreate {
+            shouldAddIntervalRow = markerModePref.get(appMode) == SideMarkerMode.estimatedArrivalTime.name
+        } else {
+            let firstMode = widgetConfigurationParams?["first_map_marker_mode"] as? String
+            let secondMode = widgetConfigurationParams?["second_map_marker_mode"] as? String
+            
+            shouldAddIntervalRow = firstMode == SideMarkerMode.estimatedArrivalTime.name || secondMode == SideMarkerMode.estimatedArrivalTime.name
+        }
+       
+        if shouldAddIntervalRow {
             let intervalRow = section.createNewRow()
             intervalRow.cellType = OAValueTableViewCell.getIdentifier()
             intervalRow.key = "value_pref"
@@ -220,7 +255,8 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
             intervalRow.descr = localizedString("shared_string_interval")
             intervalRow.iconName = "ic_small_time_interval"
             intervalRow.setObj(averageSpeedIntervalPref, forKey: "pref")
-            intervalRow.setObj(getModeTitle(averageSpeedIntervalPref, appMode), forKey: "value")
+            intervalRow.setObj(getModeTitle(averageSpeedIntervalPref, appMode, widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate), forKey: "value")
+            
             intervalRow.setObj(getPossibleValues(averageSpeedIntervalPref, appMode), forKey: "possible_values")
             intervalRow.setObj(localizedString("map_marker_interval_dialog_desc"), forKey: "footer")
         }
@@ -232,7 +268,7 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         clickRow.descr = localizedString("click_on_widget")
         clickRow.iconName = "ic_custom_quick_action"
         clickRow.setObj(markerClickBehaviourPref, forKey: "pref")
-        clickRow.setObj(getModeTitle(markerClickBehaviourPref, appMode), forKey: "value")
+        clickRow.setObj(getModeTitle(markerClickBehaviourPref, appMode, widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate), forKey: "value")
         clickRow.setObj(getPossibleValues(markerClickBehaviourPref, appMode), forKey: "possible_values")
 
         return data
@@ -267,19 +303,40 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         return rows
     }
 
-    private func getModeTitle(_ pref: OACommonPreference, _ appMode: OAApplicationMode) -> String {
+    private func getModeTitle(_ pref: OACommonPreference,
+                              _ appMode: OAApplicationMode,
+                              widgetConfigurationParams: [String: Any]?,
+                              isCreate: Bool) -> String {
         if let prefStr = pref as? OACommonString {
+            var currentValue = prefStr.defValue!
+            if let widgetConfigurationParams,
+               let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix(prefStr.key) }),
+               let value = widgetConfigurationParams[key] as? String {
+                currentValue = value
+            } else if !isCreate{
+                currentValue = prefStr.get(appMode)
+            }
             if prefStr.key == "first_map_marker_mode" || prefStr.key == "second_map_marker_mode" {
-                return SideMarkerMode.markerModeByName(prefStr.get(appMode))?.title ?? ""
+                return SideMarkerMode.markerModeByName(currentValue)?.title ?? ""
             } else if prefStr.key == "first_map_marker_click_behaviour" || prefStr.key == "second_map_marker_click_behaviour" {
-                return MarkerClickBehaviour.behaviorByName(prefStr.get(appMode))?.title ?? ""
+                return MarkerClickBehaviour.behaviorByName(currentValue)?.title ?? ""
             }
         } else if let prefLong = pref as? OACommonLong {
             if prefLong.key == "first_map_marker_interval" || prefLong.key == "second_map_marker_interval" {
-                return MapMarkerSideWidgetState.availableIntervals[prefLong.get(appMode)] ?? ""
+                var currentValue = prefLong.defValue
+            
+                if let widgetConfigurationParams,
+                   let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix(prefLong.key) }),
+                   let value = widgetConfigurationParams[key] as? String,
+                   let widgetValue = Int(value) {
+                    currentValue = widgetValue
+                } else if  !isCreate {
+                    currentValue = prefLong.get(appMode)
+                }
+                
+                return MapMarkerSideWidgetState.availableIntervals[currentValue] ?? ""
             }
         }
         return ""
     }
-
 }

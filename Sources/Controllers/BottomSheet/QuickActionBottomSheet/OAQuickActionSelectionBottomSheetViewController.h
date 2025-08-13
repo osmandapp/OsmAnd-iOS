@@ -9,12 +9,13 @@
 #import "OABottomSheetViewController.h"
 #import "OABottomSheetTwoButtonsViewController.h"
 
-typedef NS_ENUM(NSInteger, EOAMapSourceType)
+typedef NS_ENUM(NSInteger, EOAQASelectionType)
 {
-    EOAMapSourceTypeStyle = 0,
-    EOAMapSourceTypeSource,
-    EOAMapSourceTypeOverlay,
-    EOAMapSourceTypeUnderlay
+    EOAQASelectionTypeStyle = 0,
+    EOAQASelectionTypeSource,
+    EOAQASelectionTypeOverlay,
+    EOAQASelectionTypeUnderlay,
+    EOAQASelectionTypeTerrainScheme
 };
 
 @class OASwitchableAction;
@@ -29,9 +30,9 @@ typedef NS_ENUM(NSInteger, EOAMapSourceType)
 
 @interface OAQuickActionSelectionBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
-@property (nonatomic, readonly) EOAMapSourceType type;
+@property (nonatomic, readonly) EOAQASelectionType type;
 
-- (id) initWithAction:(OASwitchableAction *)action type:(EOAMapSourceType)type;
+- (id) initWithAction:(OASwitchableAction *)action type:(EOAQASelectionType)type;
 
 @end
 

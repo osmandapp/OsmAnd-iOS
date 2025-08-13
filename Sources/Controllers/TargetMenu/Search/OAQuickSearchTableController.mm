@@ -13,6 +13,7 @@
 #import "OAQuickSearchHeaderListItem.h"
 #import "OAQuickSearchEmptyResultListItem.h"
 #import "OASearchResult.h"
+#import "OASearchResult+cpp.h"
 #import "OASearchPhrase.h"
 #import "OASearchSettings.h"
 #import "OAMapLayers.h"
@@ -20,6 +21,8 @@
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "OAHistoryItem.h"
@@ -31,7 +34,6 @@
 #import "OAStreet.h"
 #import "OACity.h"
 #import "OAStreetIntersection.h"
-#import "OAGPXDocument.h"
 #import "OAGpxWptItem.h"
 #import "Localization.h"
 #import "OADistanceDirection.h"
@@ -50,6 +52,10 @@
 #import "OAEmptySearchCell.h"
 #import "OARightIconTableViewCell.h"
 #import "GeneratedAssetSymbols.h"
+#import "OATopIndexFilter.h"
+#import "OAResourcesUIHelper.h"
+#import "OAMapSelectionHelper.h"
+#import "OAAmenitySearcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -63,9 +69,14 @@
 
 #define kDefaultZoomOnShow 16.0f
 
+@interface OAQuickSearchTableController() <DownloadingCellResourceHelperDelegate>
+
+@end
+
 @implementation OAQuickSearchTableController
 {
     NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *_dataGroups;
+    SearchDownloadingCellResourceHelper *_downloadingCellResourceHelper;
     BOOL _decelerating;
     
     BOOL _showResult;
@@ -83,8 +94,68 @@
         _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
         _tableView.estimatedRowHeight = 48.0;
         _tableView.rowHeight = UITableViewAutomaticDimension;
+        [self registerCels];
+        [self setupDownloadingCellHelper];
     }
     return self;
+}
+
+- (void)registerCels
+{
+    [self.tableView registerNib:[UINib nibWithNibName:DownloadingCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:DownloadingCell.reuseIdentifier];
+}
+
+- (void)setupDownloadingCellHelper
+{
+    __weak OAQuickSearchTableController *weakSelf = self;
+    _downloadingCellResourceHelper = [SearchDownloadingCellResourceHelper new];
+    _downloadingCellResourceHelper.hostViewController = OARootViewController.instance.navigationController;
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
+}
+
+#pragma mark - DownloadingCellResourceHelperDelegate
+
+- (void)onDownloadTaskFinishedWithResourceId:(NSString *)resourceId
+{
+    BOOL shouldReloadTable = NO;
+    for (NSMutableArray<OAQuickSearchListItem *> *items in _dataGroups)
+    {
+        for (OAQuickSearchListItem *it in items)
+        {
+            if ([it isKindOfClass:[OAQuickSearchMoreListItem class]])
+                continue;
+            
+            OASearchResult *res = [it getSearchResult];
+            if (res.objectType == EOAObjectTypeIndexItem)
+            {
+                [items removeObject:it];
+                
+                shouldReloadTable = YES;
+                break;
+            }
+        }
+        
+        if (shouldReloadTable)
+        {
+            break;
+        }
+    }
+    
+    if (shouldReloadTable)
+    {
+        [_downloadingCellResourceHelper cleanCellCache];
+        [self.tableView reloadData];
+    }
+}
+
+- (void)onDownloadingCellResourceNeedUpdate:(id<OADownloadTask>)task
+{
+}
+
+- (void)onStopDownload:(OAResourceSwiftItem *)resourceItem
+{
 }
 
 - (void) updateDistanceAndDirection
@@ -101,8 +172,13 @@
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO preferredZoom:preferredZoom];
 }
 
-+ (void)goToPoint:(OAPOI *)poi preferredZoom:(float)preferredZoom
++ (void)goToPoint:(OAPOI *)poi searchResult:(OASearchResult *)searchResult preferredZoom:(float)preferredZoom
 {
+    OAMapSelectionHelper *mapSelectionHelper = [[OAMapSelectionHelper alloc] init];
+    BOOL routeFound = [mapSelectionHelper showContextMenuForSearchResult:poi filename:searchResult ? searchResult.resourceId : nil];
+    if (routeFound)
+        return;
+    
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
     targetPoint.centerMap = YES;
@@ -117,10 +193,10 @@
     BOOL originFound = NO;
     if (item.hType == OAHistoryTypePOI)
     {
-        OAPOI *poi = [OAPOIHelper findPOIByName:item.name lat:item.latitude lon:item.longitude];
+        OAPOI *poi = [OAAmenitySearcher findPOIByName:item.name lat:item.latitude lon:item.longitude];
         if (poi)
         {
-            [self.class goToPoint:poi preferredZoom:preferredZoom];
+            [self.class goToPoint:poi searchResult:nil preferredZoom:preferredZoom];
             originFound = YES;
         }
     }
@@ -144,7 +220,7 @@
         OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
         if ([mapVC findWpt:point])
         {
-            OAWptPt *wpt = mapVC.foundWpt;
+            OASWptPt *wpt = mapVC.foundWpt;
             NSArray *foundWptGroups = mapVC.foundWptGroups;
             NSString *foundWptDocPath = mapVC.foundWptDocPath;
             
@@ -247,12 +323,12 @@
         
         switch (searchResult.objectType)
         {
-            case POI:
+            case EOAObjectTypePoi:
             {
                 OAPOI *poi = (OAPOI *)searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
-                    [self.class goToPoint:poi preferredZoom:searchResult.preferredZoom];
+                    [self.class goToPoint:poi searchResult:searchResult preferredZoom:searchResult.preferredZoom];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
@@ -262,7 +338,7 @@
                 }
                 break;
             }
-            case RECENT_OBJ:
+            case EOAObjectTypeRecentObj:
             {
                 OAHistoryItem *item = (OAHistoryItem *) searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)
@@ -279,7 +355,7 @@
                 }
                 break;
             }
-            case FAVORITE:
+            case EOAObjectTypeFavorite:
             {
                 auto favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
                 OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
@@ -296,9 +372,9 @@
                 }
                 break;
             }
-            case CITY:
-            case STREET:
-            case VILLAGE:
+            case EOAObjectTypeCity:
+            case EOAObjectTypeStreet:
+            case EOAObjectTypeVillage:
             {
                 OAAddress *address = (OAAddress *)searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)
@@ -313,7 +389,7 @@
                 }
                 break;
             }
-            case HOUSE:
+            case EOAObjectTypeHouse:
             {
                 OABuilding *building = (OABuilding *)searchResult.object;
                 NSString *typeNameHouse;
@@ -347,7 +423,7 @@
                 }
                 break;
             }
-            case STREET_INTERSECTION:
+            case EOAObjectTypeStreetIntersection:
             {
                 OAStreetIntersection *streetIntersection = (OAStreetIntersection *)searchResult.object;
                 NSString *typeNameIntersection = [OAQuickSearchListItem getTypeName:searchResult];
@@ -366,7 +442,7 @@
                 }
                 break;
             }
-            case LOCATION:
+            case EOAObjectTypeLocation:
             {
                 if (searchResult.location)
                 {
@@ -383,11 +459,11 @@
                 }
                 break;
             }
-            case WPT:
+            case EOAObjectTypeWpt:
             {
                 if (searchResult.wpt)
                 {
-                    OAWptPt *wpt = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(searchResult.wpt)];
+                    OASWptPt *wpt = searchResult.wpt;
                     OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
                     wptItem.point = wpt;
 
@@ -399,7 +475,7 @@
                     {
                         latitude = wpt.position.latitude;
                         longitude = wpt.position.longitude;
-                        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT typeName:wpt.type name:wpt.name];
+                        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT typeName:wpt.category name:wpt.name];
                     }
                 }
                 break;
@@ -424,6 +500,22 @@
         {
             [[OATargetPointsHelper sharedInstance] setWorkPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:pointDescription];
             [[OARootViewController instance].mapPanel updateRouteInfo];
+        }
+    }
+    else
+    {
+        if (searchResult.objectType == EOAObjectTypeGpxTrack)
+        {
+            OASGpxDataItem *dataItem = (OASGpxDataItem *)searchResult.relatedObject;
+            if (dataItem)
+            {
+                auto trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
+                trackItem.dataItem = dataItem;
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
+                
+                if (delegate)
+                    [delegate didShowOnMap:searchResult];
+            }
         }
     }
 }
@@ -459,7 +551,7 @@
 
 + (OASimpleTableViewCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon
 {
-    OASimpleTableViewCell* cell;
+    OASimpleTableViewCell *cell;
     cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
@@ -491,7 +583,7 @@
     NSInteger count = 0;
     for (OAQuickSearchListItem *res in dataArray)
     {
-        if (res.getSearchResult.objectType == POI_TYPE)
+        if (res.getSearchResult.objectType == EOAObjectTypePoiType)
             count++;
     }
     return count;
@@ -539,17 +631,58 @@
     {
         switch (res.objectType)
         {
-            case LOCATION:
-            case GPX_TRACK:
+            case EOAObjectTypeLocation:
+            case EOAObjectTypeGpxTrack:
             {
-                OAPointDescCell* cell = [self getPointDescCell];
-                if (cell)
+                OASGpxDataItem *dataItem = (OASGpxDataItem *)res.relatedObject;
+                if (dataItem)
                 {
-                    //TODO: add ui for gpx
-                    cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
+                    OASimpleTableViewCell *cell;
+                    cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+                    if (cell == nil)
+                    {
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                        [cell descriptionVisibility:YES];
+                    }
+                    if (cell)
+                    {
+                        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                        [cell.titleLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+                        [cell.titleLabel setText:[item getName]];
+                        cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
+                        
+                    }
+                    cell.descriptionLabel.text = [OAQuickSearchListItem getTypeName:res];
+                    BOOL isVisible = [[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:dataItem.gpxFilePath];
+                    cell.leftIconView.tintColor = [UIColor colorNamed:isVisible ? ACColorNameIconColorActive : ACColorNameIconColorDefault];
+                    return cell;
+                }
+                else
+                {
+                    OAPointDescCell *cell = [self getPointDescCell];
+                    if (cell)
+                    {
+                        [cell.titleView setText:[item getName]];
+                        cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
+                        [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
+                        cell.openingHoursView.hidden = YES;
+                        cell.timeIcon.hidden = YES;
+                        
+                        [self setCellDistanceDirection:cell item:item];
+                    }
+                    return cell;
                 }
             }
-            case PARTIAL_LOCATION:
+            case EOAObjectTypeIndexItem: {
+                DownloadingCell *downloadingCell = [tableView dequeueReusableCellWithIdentifier:DownloadingCell.reuseIdentifier];
+                OAResourceItem *obj = (OAResourceItem *)res.relatedObject;
+                OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:obj];
+                [_downloadingCellResourceHelper configureWithResourceItem:mapItem cell:downloadingCell];
+
+                return downloadingCell;
+            }
+            case EOAObjectTypePartialLocation:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -564,7 +697,7 @@
                 }
                 return cell;
             }
-            case FAVORITE:
+            case EOAObjectTypeFavorite:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -581,7 +714,7 @@
                 }
                 return cell;
             }
-            case WPT:
+            case EOAObjectTypeWpt:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -591,19 +724,19 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OAWptPt *wpt = (OAWptPt *) res.object;
+                    OASWptPt *wpt = (OASWptPt *) res.object;
                     OAGpxWptItem *wptItem = [OAGpxWptItem withGpxWpt:wpt];
                     cell.titleIcon.image = [wptItem getCompositeIcon];
                     [self setCellDistanceDirection:cell item:item];
                 }
                 return cell;
             }
-            case CITY:
-            case VILLAGE:
-            case POSTCODE:
-            case STREET:
-            case HOUSE:
-            case STREET_INTERSECTION:
+            case EOAObjectTypeCity:
+            case EOAObjectTypeVillage:
+            case EOAObjectTypePostcode:
+            case EOAObjectTypeStreet:
+            case EOAObjectTypeHouse:
+            case EOAObjectTypeStreetIntersection:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -619,7 +752,7 @@
                 }
                 return cell;
             }
-            case POI:
+            case EOAObjectTypePoi:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -632,7 +765,7 @@
                     {
                         [cell.openingHoursView setText:poi.openingHours];
                         cell.timeIcon.hidden = NO;
-                        [cell updateOpeningTimeInfo];
+                        [cell updateOpeningTimeInfo:poi];
                     }
                     else
                     {
@@ -644,7 +777,7 @@
                 }
                 return cell;
             }
-            case RECENT_OBJ:
+            case EOAObjectTypeRecentObj:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -660,7 +793,7 @@
                 }
                 return cell;
             }
-            case POI_TYPE:
+            case EOAObjectTypePoiType:
             {
                 BOOL isLast = [dataArray indexOfObject:item] == [self getPoiFiltersCount:dataArray] - 1;
                 if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
@@ -686,6 +819,16 @@
                     NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
                     UIImage *icon = [((OAPOIBaseType *)res.object) icon];
                     
+                    OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
+                    cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+                    
+                    return cell;
+                }
+                else if ([res.object isKindOfClass:[OATopIndexFilter class]])
+                {
+                    NSString *name = [item getName];
+                    NSString *typeName = [((OATopIndexFilter *)res.object) getName];
+                    UIImage *icon = [UIImage imageNamed:[((OATopIndexFilter *)res.object) getIconResource]];
                     OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
                     return cell;
                 }
@@ -896,23 +1039,29 @@
             {
                 OASearchResult *sr = [item getSearchResult];
                 
-                if (sr.objectType == POI
-                    || sr.objectType == LOCATION
-                    || sr.objectType == HOUSE
-                    || sr.objectType == FAVORITE
-                    || sr.objectType == RECENT_OBJ
-                    || sr.objectType == WPT
-                    || sr.objectType == STREET_INTERSECTION)
+                if (sr.objectType == EOAObjectTypePoi
+                    || sr.objectType == EOAObjectTypeLocation
+                    || sr.objectType == EOAObjectTypeHouse
+                    || sr.objectType == EOAObjectTypeFavorite
+                    || sr.objectType == EOAObjectTypeRecentObj
+                    || sr.objectType == EOAObjectTypeWpt
+                    || sr.objectType == EOAObjectTypeGpxTrack
+                    || sr.objectType == EOAObjectTypeStreetIntersection)
                 {
                     [self showOnMap:sr searchType:self.searchType delegate:self.delegate];
                 }
-                else if (sr.objectType == PARTIAL_LOCATION)
+                else if (sr.objectType == EOAObjectTypePartialLocation)
                 {
                     // nothing
                 }
+                else if (sr.objectType == EOAObjectTypeIndexItem)
+                {
+                    OAResourceItem *resourceItem = (OAResourceItem *)sr.relatedObject;
+                    [_downloadingCellResourceHelper onCellClicked:resourceItem.resourceId.toNSString()];
+                }
                 else
                 {
-                    if (sr.objectType == CITY || sr.objectType == VILLAGE || sr.objectType == STREET)
+                    if (sr.objectType == EOAObjectTypeCity || sr.objectType == EOAObjectTypeVillage || sr.objectType == EOAObjectTypeStreet)
                         _showResult = YES;
                     [self.delegate didSelectResult:[item getSearchResult]];
                 }

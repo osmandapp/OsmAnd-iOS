@@ -14,6 +14,8 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -448,12 +450,12 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     
     [self updateNavbarBackground];
 
-    [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage imageNamed:ACImageNameIcNavbarChevron].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
 
     _okButton.hidden = YES;
     
     CGRect navbarFrame = [self navbarViewFrame];
-    [self.navbarView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+    [self.navbarView addBlurEffect:UIAccessibilityIsReduceTransparencyEnabled() ? NO : [ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
 
     self.tableView = (OATableView *)self.view;
     self.tableView.oaDelegate = self;

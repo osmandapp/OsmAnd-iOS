@@ -9,7 +9,10 @@
 #import "OADayNightHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAObservable.h"
 #import "SunriseSunset.h"
+#import "OALocationServices.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OADayNightHelper
 {
@@ -17,6 +20,7 @@
     BOOL _lastNightMode;
     BOOL _firstCall;
     NSTimeInterval _recalcInterval;
+    NSNumber *_tempMode;
 }
 
 - (instancetype) init
@@ -35,7 +39,6 @@
     static dispatch_once_t once;
     static OADayNightHelper * instance;
     dispatch_once(&once, ^{
-        
         instance = [[self alloc] init];
     });
     return instance;
@@ -51,19 +54,24 @@
  * @return null if could not be determined (in case of error)
  * @return true if day is supposed to be
  */
-- (BOOL) isNightMode
+- (BOOL)isNightMode
 {
+    NSInteger dayNightMode;
+    if (_tempMode)
+        dayNightMode = _tempMode.integerValue;
+    else
+        dayNightMode = [[OAAppSettings sharedManager].appearanceMode get];
+
     BOOL nightMode = _lastNightMode;
-    int dayNightMode = [[OAAppSettings sharedManager].appearanceMode get];
-    if (dayNightMode == APPEARANCE_MODE_DAY)
+    if (dayNightMode == DayNightModeDay)
     {
         nightMode = NO;
     }
-    else if (dayNightMode == APPEARANCE_MODE_NIGHT)
+    else if (dayNightMode == DayNightModeNight)
     {
         nightMode = YES;
     }
-    else if (dayNightMode == APPEARANCE_MODE_AUTO)
+    else if (dayNightMode == DayNightModeAuto)
     {
         NSTimeInterval currentTime = CACurrentMediaTime();
         // allow recalculation each 60 seconds
@@ -78,6 +86,10 @@
                 nightMode = !daytime;
             }
         }
+    }
+    else if (dayNightMode == DayNightModeAppTheme)
+    {
+        nightMode = ![[ThemeManager shared] isLightTheme];
     }
     else
     {
@@ -96,6 +108,20 @@
         _firstCall = NO;
 
     return nightMode;
+}
+
+- (BOOL)setTempMode:(NSInteger)dayNightMode
+{
+    _tempMode = @(dayNightMode);
+    [self forceUpdate];
+    return _lastNightMode;
+}
+
+- (BOOL)resetTempMode
+{
+    _tempMode = nil;
+    [self forceUpdate];
+    return _lastNightMode;
 }
 
 - (SunriseSunset *) getSunriseSunset

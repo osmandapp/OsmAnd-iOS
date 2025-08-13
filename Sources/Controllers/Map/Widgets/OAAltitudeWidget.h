@@ -7,6 +7,8 @@
 //
 #import "OASimpleWidget.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define ALTITUDE_MAP_CENTER @"altitude_map_center"
 
 typedef NS_ENUM(NSInteger, EOAAltitudeWidgetType) {
@@ -17,8 +19,10 @@ typedef NS_ENUM(NSInteger, EOAAltitudeWidgetType) {
 @interface OAAltitudeWidget : OASimpleWidget
 
 - (instancetype _Nonnull)initWithType:(EOAAltitudeWidgetType)widgetType
-                    customId:(NSString *_Nullable)customId
-                     appMode:(OAApplicationMode * _Nonnull)appMode
-                widgetParams:(NSDictionary * _Nullable)widgetParams;
+                    customId:(nullable NSString *)customId
+                     appMode:(OAApplicationMode *)appMode
+                widgetParams:(nullable NSDictionary *)widgetParams;
 
 @end
+
+NS_ASSUME_NONNULL_END

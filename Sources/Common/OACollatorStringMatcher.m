@@ -8,6 +8,7 @@
 
 #import "OACollatorStringMatcher.h"
 #import "OAUtilities.h"
+#import "OAArabicNormalizer.h"
 
 static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWidthInsensitiveSearch | NSDiacriticInsensitiveSearch;
 
@@ -46,6 +47,13 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
 
 + (BOOL) cmatches:(NSString *)fullName part:(NSString *)part mode:(StringMatcherMode)mode
 {
+    if ([OAArabicNormalizer isSpecialArabic:fullName]) {
+        fullName = [OAArabicNormalizer normalize:fullName] ?: fullName;
+    }
+
+    if ([OAArabicNormalizer isSpecialArabic:part]) {
+        part = [OAArabicNormalizer normalize:part] ?: part;
+    }
     switch (mode)
     {
         case CHECK_CONTAINS:

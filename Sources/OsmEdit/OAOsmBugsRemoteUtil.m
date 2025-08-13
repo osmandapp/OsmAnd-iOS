@@ -112,27 +112,4 @@ static const NSString* USERS_API_BASE_URL = @"https://api.openstreetmap.org/api/
         _displayName = [attributeDict objectForKey:@"display_name"];
 }
 
-- (void)URLSession:(NSURLSession *)session
-              task:(NSURLSessionTask *)task
-didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
- completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler {
-    if (!_anonymous)
-    {
-        if (challenge.previousFailureCount > 1)
-        {
-            completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
-        }
-        else
-        {
-            OAAppSettings *settings = [OAAppSettings sharedManager];
-            NSURLCredential *credential = [NSURLCredential credentialWithUser:settings.osmUserName.get
-                                                                     password:settings.osmUserPassword.get
-                                                                  persistence:NSURLCredentialPersistenceForSession];
-            completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
-        }
-    }
-    else
-        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
-}
-
 @end

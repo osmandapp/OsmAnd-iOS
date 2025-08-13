@@ -1,0 +1,26 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_payment_label_pro_light.svg",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "ic_payment_label_pro_dark.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "compression-type" : "automatic",
+    "preserves-vector-representation" : true
+  }
+}

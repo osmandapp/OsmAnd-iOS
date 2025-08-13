@@ -12,10 +12,12 @@
 #import "OATargetPointsHelper.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAMapPanelViewController.h"
+#import "OAAppData.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAPlugin.h"
@@ -27,6 +29,7 @@
 #import "OAOsmEditingViewController.h"
 #import "OAOsmNoteViewController.h"
 #import "OAPOI.h"
+#import "OAObservable.h"
 #import "OAMapLayers.h"
 #import "OAContextMenuLayer.h"
 #import "OADownloadMapViewController.h"
@@ -38,6 +41,9 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 

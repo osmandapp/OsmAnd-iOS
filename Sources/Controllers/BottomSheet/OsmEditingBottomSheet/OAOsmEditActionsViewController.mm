@@ -14,11 +14,13 @@
 #import "OAColors.h"
 #import "OAPlugin.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
+#import "OAObservable.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmNotePoint.h"
@@ -227,7 +229,7 @@
     }
     else if ([item[@"key"] isEqualToString:@"poi_modify"])
     {
-        if (_point.getGroup == POI)
+        if (_point.getGroup == EOAGroupPoi)
         {
             OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithEntity:((OAOpenStreetMapPoint *)_point).getEntity];
             editingScreen.delegate = vwController.delegate;
@@ -245,7 +247,7 @@
     }
     else if ([item[@"key"] isEqualToString:@"edit_delete"])
     {
-        if (_point.getGroup == POI)
+        if (_point.getGroup == EOAGroupPoi)
             [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_point];
         else
             [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)_point];
@@ -259,13 +261,13 @@
 
 -(void)uploadPoint
 {
-    if (_point.getGroup == POI)
+    if (_point.getGroup == EOAGroupPoi)
     {
         OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:[NSArray arrayWithObject:_point]];
         dialog.delegate = vwController.delegate;
         [[OARootViewController instance].mapPanel.navigationController pushViewController:dialog animated:YES];
     }
-    else if (_point.getGroup == BUG)
+    else if (_point.getGroup == EOAGroupBug)
     {
         OAOsmNoteViewController *dialog = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_plugin points:[NSArray arrayWithObject:_point] type:EOAOsmNoteViewConrollerModeUpload];
         dialog.delegate = vwController.delegate;

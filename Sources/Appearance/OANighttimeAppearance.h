@@ -7,7 +7,6 @@
 //
 
 #import "OAAppearance.h"
-
 #import "OAAppearanceProtocol.h"
 
 @interface OANighttimeAppearance : OAAppearance <OAAppearanceProtocol>

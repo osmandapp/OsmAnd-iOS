@@ -13,7 +13,7 @@
 #define kDefaultCategoryKey @"favorites_item"
 #define kPersonalCategory @"personal"
 
-@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OAGPXDocument, OAGPXMutableDocument, OAPointsGroup, OAWptPt;
+@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OASGpxFile, OASGpxUtilitiesPointsGroup, OASWptPt;
 
 @interface OAFavoritesHelper : NSObject
 
@@ -23,8 +23,8 @@
 
 + (void)loadFileGroups:(NSString *)file
                 groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups;
-+ (OAGPXDocument *)loadGpxFile:(NSString *)file;
-+ (void)importFavoritesFromGpx:(OAGPXDocument *)gpxFile;
++ (OASGpxFile *)loadGpxFile:(NSString *)file;
++ (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile;
 
 + (OAFavoriteItem *) getSpecialPoint:(OASpecialPointType *)specialType;
 + (void) setSpecialPoint:(OASpecialPointType *)specialType lat:(double)lat lon:(double)lon address:(NSString *)address;
@@ -43,12 +43,15 @@
 + (BOOL)addFavorites:(NSArray<OAFavoriteItem *> *)favorites
        lookupAddress:(BOOL)lookupAddress
          sortAndSave:(BOOL)sortAndSave
-         pointsGroup:(OAPointsGroup *)pointsGroup;
+         pointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup;
 
 + (BOOL) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address;
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon;
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon description:(NSString *)description;
 + (void) saveCurrentPointsIntoFile;
++ (void) saveCurrentPointsIntoFile:(BOOL)async;
+
++ (BOOL)isGroupNameValidWithText:(NSString *)text;
 
 + (void)updateGroup:(OAFavoriteGroup *)group
             newName:(NSString *)newName
@@ -57,16 +60,23 @@
 + (void)updateGroup:(OAFavoriteGroup *)group
            iconName:(NSString *)iconName
        updatePoints:(BOOL)updatePoints
+    updateGroupIcon:(BOOL)updateGroupIcon
     saveImmediately:(BOOL)saveImmediately;
 
 + (void)updateGroup:(OAFavoriteGroup *)group
               color:(UIColor *)color
        updatePoints:(BOOL)updatePoints
+   updateGroupColor:(BOOL)updateGroupColor
     saveImmediately:(BOOL)saveImmediately;
 
 + (void)updateGroup:(OAFavoriteGroup *)group
  backgroundIconName:(NSString *)backgroundIconName
        updatePoints:(BOOL)updatePoints
+   updateGroupShape:(BOOL)updateGroupShape
+    saveImmediately:(BOOL)saveImmediately;
+
++ (void)updateGroup:(OAFavoriteGroup *)group
+            visible:(BOOL)visible
     saveImmediately:(BOOL)saveImmediately;
 
 + (NSMutableArray<OAFavoriteGroup *> *) getFavoriteGroups;
@@ -80,26 +90,27 @@
 
 + (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item;
 + (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item
-                          pointsGroup:(OAPointsGroup *)pointsGroup;
+                          pointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup;
 + (BOOL) deleteNewFavoriteItem:(OAFavoriteItem *)favoritesItem;
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems;
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems isNewFavorite:(BOOL)isNewFavorite;
 
 + (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point;
 + (void) sortAll;
++ (void) loadFavorites;
 + (void) recalculateCachedFavPoints;
 
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList;
 + (NSArray<NSString *> *) getFlatBackgroundContourIconNamesList;
 
-+ (OAGPXMutableDocument *) asGpxFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
++ (OASGpxFile *)asGpxFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
 
 + (void) addParkingReminderToCalendar;
 + (void) removeParkingReminderFromCalendar;
 
 + (UIImage *) getCompositeIcon:(NSString *)icon backgroundIcon:(NSString *)backgroundIcon color:(UIColor *)color;
 + (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location;
-+ (NSArray<OAFavoriteItem *> *)wptAsFavorites:(NSArray<OAWptPt *> *)points
++ (NSArray<OAFavoriteItem *> *)wptAsFavorites:(NSArray<OASWptPt *> *)points
                               defaultCategory:(NSString *)defaultCategory;
 
 + (void) saveFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups file:(NSString *)file;
@@ -127,7 +138,8 @@
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name;
 + (NSString *) getDisplayName:(NSString *)name;
 + (NSString *) convertDisplayNameToGroupIdName:(NSString *)name;
-- (OAPointsGroup *)toPointsGroup;
-+ (OAFavoriteGroup *)fromPointsGroup:(OAPointsGroup *)pointsGroup;
+- (OASGpxUtilitiesPointsGroup *)toPointsGroup;
++ (OAFavoriteGroup *)fromPointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup;
+- (BOOL)isEqual:(id)object;
 
 @end

@@ -9,6 +9,7 @@
 #import "OAFPSTextInfoWidget.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
 

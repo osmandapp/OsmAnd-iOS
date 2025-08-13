@@ -7,7 +7,8 @@
 //
 
 #import "OABaseNavbarViewController.h"
-#import "OAGPXDatabase.h"
+
+@class OASTrackItem;
 
 @protocol OASelectTrackFolderDelegate <NSObject>
 
@@ -23,8 +24,9 @@
 
 @property (nonatomic, weak) id<OASelectTrackFolderDelegate> delegate;
 
-- (instancetype) initWithGPX:(OAGPX *)gpx;
+- (instancetype) initWithGPX:(OASTrackItem *)gpx;
 - (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
 - (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPath:(NSString *)excludedSubfolderPath;
+- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPaths:(NSArray<NSString *> *)excludedSubfolderPaths;
 
 @end

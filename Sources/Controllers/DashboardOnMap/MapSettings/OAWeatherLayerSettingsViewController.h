@@ -17,7 +17,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherLayerType)
     EOAWeatherLayerTypeWind,
     EOAWeatherLayerTypeCloud,
     EOAWeatherLayerTypePrecipitation,
-    EOAWeatherLayerTypeContours
+    EOAWeatherLayerTypeContours,
+    EOAWeatherLayerTypeWindAnimation
 };
 
 @protocol OAWeatherLayerSettingsDelegate

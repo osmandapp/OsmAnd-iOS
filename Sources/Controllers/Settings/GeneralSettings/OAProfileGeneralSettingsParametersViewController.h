@@ -8,7 +8,8 @@
 
 #import "OABaseSettingsViewController.h"
 #import "OAProfileGeneralSettingsViewController.h"
-#import "OAApplicationMode.h"
+
+@class OAApplicationMode;
 
 @interface OAProfileGeneralSettingsParametersViewController : OABaseSettingsViewController
 

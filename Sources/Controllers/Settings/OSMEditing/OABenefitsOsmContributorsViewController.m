@@ -121,21 +121,23 @@
                     @"left_icon": @"ic_custom_unlimited_downloads_colored",
                     @"right_icon": @"img_openstreetmap_logo"
             },
-            /*@{
+            @{
+                    @"type" : [OADividerCell getCellIdentifier]
+            },
+            @{
+                    @"type" : [OASimpleTableViewCell getCellIdentifier],
+                    @"title" : OALocalizedString(@"shared_string_update_required"),
+                    @"descr" : OALocalizedString(@"osm_login_needs_ios_16_4"),
+                    @"left_icon": @"ic_custom_alert",
+                    @"left_icon_tint" : [UIColor colorNamed:ACColorNameIconColorSelected]
+            },
+            @{
                     @"key" : @"oauth_login_button",
                     @"type" : [OAFilledButtonCell getCellIdentifier],
                     @"title" : OALocalizedString(@"sign_in_with_open_street_map"),
-                    @"icon": @"ic_action_openstreetmap_logo",
-                    @"background_color": UIColorFromRGB(color_primary_purple),
-                    @"tint_color": UIColor.whiteColor,
-                    @"top_margin": @(9.)
-            },*/
-            @{
-                    @"key" : @"email_login_button",
-                    @"type" : [OAFilledButtonCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"use_login_and_password"),
                     @"background_color": [UIColor colorNamed:ACColorNameButtonBgColorDisabled],
-                    @"tint_color": [UIColor colorNamed:ACColorNameButtonTextColorSecondary],
+                    @"tint_color": [UIColor colorNamed:ACColorNameTextColorTertiary],
+                    @"icon" : @"ic_action_openstreetmap_logo",
                     @"top_margin": @(16.),
                     @"bottom_margin": @(20.)
             },
@@ -246,8 +248,44 @@
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.button addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            
+            cell.userInteractionEnabled = NO;
         }
         outCell = cell;
+    }
+    else if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell titleVisibility:YES];
+            [cell descriptionVisibility:YES];
+            [cell leftIconVisibility:YES];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.descriptionLabel.text = item[@"descr"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"left_icon"]];
+            cell.leftIconView.tintColor = item[@"left_icon_tint"];
+            
+        }
+        return cell;
+    }
+    else if ([type isEqualToString:[OADividerCell getCellIdentifier]])
+    {
+        OADividerCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
+            cell = (OADividerCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.clearColor;
+            cell.dividerColor = UIColor.clearColor;
+        }
+        return cell;
     }
 
     if ([outCell needsUpdateConstraints])
@@ -304,12 +342,8 @@
         NSString *key = item[@"key"];
         if ([key isEqualToString:@"oauth_login_button"])
         {
-        }
-        else if ([key isEqualToString:@"email_login_button"])
-        {
-            OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
-            accountSettings.accountDelegate = self;
-            [self showModalViewController:accountSettings];
+            OAOsmOAuthHelper.delegate = self;
+            [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
         }
     }
 }

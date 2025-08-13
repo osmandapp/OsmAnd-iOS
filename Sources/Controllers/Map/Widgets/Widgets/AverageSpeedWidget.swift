@@ -17,11 +17,9 @@ final class AverageSpeedWidget: OASimpleWidget {
     private static let UPDATE_INTERVAL_MILLIS = 1000
     private static let DASH = "—"
     
-    private let averageSpeedComputer = OAAverageSpeedComputer.sharedInstance()
-    
     private var measuredIntervalPref: OACommonLong
     private var skipStopsPref: OACommonBoolean
-    private var customId: String? = nil
+    private var customId: String?
 
     private var lastUpdateTime = 0
 
@@ -36,16 +34,10 @@ final class AverageSpeedWidget: OASimpleWidget {
         
         self.customId = customId
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
-        measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
-        skipStopsPref = Self.registerSkipStopsPref(customId)
-        
-        if let widgetParams, let mode = widgetParams["selectedAppMode"] as? OAApplicationMode {
-            if let param = widgetParams[Self.MEASURED_INTERVAL_PREF_ID] as? String, let interval = Int(param)  {
-                measuredIntervalPref.set(interval, mode: mode)
-            }
-            if let skipStop = widgetParams[Self.SKIP_STOPS_PREF_ID] as? Bool {
-                skipStopsPref.set(skipStop, mode: mode)
-            }
+        measuredIntervalPref = Self.registerMeasuredIntervalPref(customId, appMode: appMode, widgetParams: widgetParams)
+        skipStopsPref = Self.registerSkipStopsPref(customId, appMode: appMode, widgetParams: widgetParams)
+        if let computerID = speedComputerId() {
+            AverageSpeedComputerService.shared.addComputer(for: computerID)
         }
     }
     
@@ -68,24 +60,56 @@ final class AverageSpeedWidget: OASimpleWidget {
     }
     
     func shouldSkipStops(_ appMode: OAApplicationMode) -> Bool {
-        return skipStopsPref.get(appMode)
+        skipStopsPref.get(appMode)
     }
     
     func setShouldSkipStops(_ appMode: OAApplicationMode, skipStops: Bool) {
         skipStopsPref.set(skipStops, mode: appMode)
     }
     
+    func reset() {
+        // Reset the average speed computer
+        if let computerID = speedComputerId() {
+            AverageSpeedComputerService.shared.resetComputer(for: computerID)
+        }
+
+        // Update the widget to reflect the reset value
+        updateAverageSpeed()
+    }
+    
+    override func configureContextMenu(addGroup: UIMenu, settingsGroup: UIMenu, deleteGroup: UIMenu) -> UIMenu {
+        let resetAction = UIAction(title: localizedString("reset_average_speed"), image: .icCustomReset) { [weak self] _ in
+            self?.reset()
+        }
+        // Create a mutable copy of the children
+        var updatedChildren = settingsGroup.children
+        updatedChildren.insert(resetAction, at: 0)
+        let updatedSettingsGroup = settingsGroup.replacingChildren(updatedChildren)
+        return UIMenu(title: "", children: [addGroup, updatedSettingsGroup, deleteGroup])
+    }
+    
+    override func handleRowSelected(_ item: OATableRowData, viewController: WidgetConfigurationViewController) -> Bool {
+        if item.key == "reset_avg_speed" {
+            reset()
+            viewController.dismiss()
+            return true
+        }
+        return false
+    }
+    
     override func updateInfo() -> Bool {
         let time = Int(Date.now.timeIntervalSince1970 * 1000)
-        if (isUpdateNeeded() || time - lastUpdateTime > Self.UPDATE_INTERVAL_MILLIS) {
+        if isUpdateNeeded() || time - lastUpdateTime > Self.UPDATE_INTERVAL_MILLIS {
             lastUpdateTime = time
             updateAverageSpeed()
             return true
         }
         return false
     }
-
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+    
+    override func getSettingsData(_ appMode: OAApplicationMode,
+                                  widgetConfigurationParams: [String: Any]?,
+                                  isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")
@@ -95,19 +119,34 @@ final class AverageSpeedWidget: OASimpleWidget {
         settingRow.key = "value_pref"
         settingRow.title = localizedString("shared_string_interval")
         settingRow.setObj(measuredIntervalPref, forKey: "pref")
-        settingRow.setObj(Self.getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
-        settingRow.setObj(getPossibleValues(measuredIntervalPref), forKey: "possible_values")
+        
+        var currentValue = OAAverageSpeedComputer.default_INTERVAL_MILLIS()
+        if let widgetConfigurationParams,
+           let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix(Self.MEASURED_INTERVAL_PREF_ID) }),
+           let value = widgetConfigurationParams[key] as? String,
+           let widgetValue = Int(value) {
+            currentValue = widgetValue
+        } else if !isCreate {
+            currentValue = measuredIntervalPref.get(appMode)
+        }
+        settingRow.setObj(Self.getIntervalTitle(currentValue), forKey: "value")
+        
+        settingRow.setObj(getPossibleValues(), forKey: "possible_values")
         settingRow.setObj(localizedString("average_speed_time_interval_desc"), forKey: "footer")
 
         let compassRow = section.createNewRow()
         compassRow.cellType = OASwitchTableViewCell.getIdentifier()
         compassRow.title = localizedString("average_speed_skip_stops")
         compassRow.setObj(skipStopsPref, forKey: "pref")
-
+        
+        let resetAverageSpeedRow = section.createNewRow()
+        resetAverageSpeedRow.cellType = OASimpleTableViewCell.getIdentifier()
+        resetAverageSpeedRow.key = "reset_avg_speed"
+        resetAverageSpeedRow.title = localizedString("reset_average_speed")
         return data
     }
 
-    private func getPossibleValues(_ pref: OACommonPreference) -> [OATableRowData] {
+    private func getPossibleValues() -> [OATableRowData] {
         var rows = [OATableRowData]()
         let valuesRow = OATableRowData()
         valuesRow.key = "values"
@@ -117,13 +156,17 @@ final class AverageSpeedWidget: OASimpleWidget {
         rows.append(valuesRow)
         return rows
     }
+    
+    private func speedComputerId() -> String? {
+        customId ?? widgetType?.id
+    }
 
     static func getIntervalTitle(_ intervalValue: Int) -> String {
-        return availableIntervals[intervalValue] ?? "-"
+        availableIntervals[intervalValue] ?? "-"
     }
 
     private static func getAvailableIntervals() -> [Int: String] {
-        var intervals =  [Int: String]()
+        var intervals = [Int: String]()
         for intervalNum in OAAverageSpeedComputer.measured_INTERVALS() {
             let interval = intervalNum.intValue
             let seconds = interval < 60 * 1000
@@ -138,12 +181,16 @@ final class AverageSpeedWidget: OASimpleWidget {
     func updateAverageSpeed() {
         let measuredInterval = measuredIntervalPref.get()
         let skipLowSpeed = skipStopsPref.get()
-        let averageSpeed = averageSpeedComputer.getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
-        if (averageSpeed.isNaN) {
-            setText(Self.DASH, subtext: nil)
-        } else {
-            let formattedAverageSpeed = OAOsmAndFormatter.getFormattedSpeed(averageSpeed).components(separatedBy: " ")
+        var averageSpeed: Float?
+        if let computerID = speedComputerId(), let computer = AverageSpeedComputerService.shared.getComputer(for: computerID) {
+            averageSpeed = computer.getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
+        }
+        
+        if let speed = averageSpeed, !speed.isNaN {
+            let formattedAverageSpeed = OAOsmAndFormatter.getFormattedSpeed(speed).components(separatedBy: " ")
             setText(formattedAverageSpeed.first, subtext: formattedAverageSpeed.count > 1 ? formattedAverageSpeed.last : nil)
+        } else {
+            setText(Self.DASH, subtext: nil)
         }
     }
     
@@ -152,17 +199,29 @@ final class AverageSpeedWidget: OASimpleWidget {
         Self.registerSkipStopsPref(customId).set(skipStopsPref.get(appMode), mode: appMode)
     }
     
-    static func registerMeasuredIntervalPref(_ customId: String?) -> OACommonLong {
+    static func registerMeasuredIntervalPref(_ customId: String?,
+                                             appMode: OAApplicationMode? = nil,
+                                             widgetParams: ([String: Any])? = nil) -> OACommonLong {
         let settings = OAAppSettings.sharedManager()!
         let prefId = customId == nil || customId!.isEmpty
         ? Self.MEASURED_INTERVAL_PREF_ID
         : Self.MEASURED_INTERVAL_PREF_ID + customId!
-        return settings.registerLongPreference(prefId, defValue: OAAverageSpeedComputer.default_INTERVAL_MILLIS())
+        
+        let preference = settings.registerLongPreference(prefId, defValue: OAAverageSpeedComputer.default_INTERVAL_MILLIS())!
+        if let appMode, let string = widgetParams?[Self.MEASURED_INTERVAL_PREF_ID] as? String, let widgetValue = Int(string) {
+            preference.set(widgetValue, mode: appMode)
+        }
+        return preference
     }
     
-    static func registerSkipStopsPref(_ customId: String?) -> OACommonBoolean {
+    static func registerSkipStopsPref(_ customId: String?, appMode: OAApplicationMode? = nil, widgetParams: ([String: Any])? = nil) -> OACommonBoolean {
         let settings = OAAppSettings.sharedManager()!
         let prefId = customId == nil || customId!.isEmpty ? Self.SKIP_STOPS_PREF_ID : Self.SKIP_STOPS_PREF_ID + customId!
-        return settings.registerBooleanPreference(prefId, defValue: true)
+        
+        let preference = settings.registerBooleanPreference(prefId, defValue: true)!
+        if let appMode, let widgetValue = widgetParams?[Self.SKIP_STOPS_PREF_ID] as? Bool {
+            preference.set(widgetValue, mode: appMode)
+        }
+        return preference
     }
 }

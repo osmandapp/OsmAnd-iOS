@@ -16,6 +16,7 @@
 @property (nonatomic, assign) NSInteger customColorNight;
 @property (nonatomic) OAColoringType *coloringType;
 @property (nonatomic) NSString *routeInfoAttribute;
+@property (nonatomic) NSString *gradientPalette;
 @property (nonatomic) NSString *width;
 @property (nonatomic, assign) BOOL showTurnArrows;
 
@@ -24,6 +25,7 @@
                           coloringType:(OAColoringType *)coloringType
                     routeInfoAttribute:(NSString *)routeInfoAttribute
                                  width:(NSString *)width
+                       gradientPalette:(NSString *)gradientPalette
                         showTurnArrows:(BOOL)showTurnArrows;
 
 - (void)setCustomColor:(NSInteger)color nightMode:(BOOL)nightMode;

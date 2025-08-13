@@ -9,7 +9,10 @@
 #import "OAMapInfoController.h"
 #import "OAMapHudViewController.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARoutingHelper.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
@@ -28,7 +31,6 @@
 #import "OATimeWidgetState.h"
 #import "OABearingWidgetState.h"
 #import "OACompassRulerWidgetState.h"
-#import "OAUserInteractionPassThroughView.h"
 #import "OAToolbarViewController.h"
 #import "OADownloadMapWidget.h"
 #import "OAWeatherToolbar.h"
@@ -41,9 +43,13 @@
 #import "OASunriseSunsetWidgetState.h"
 #import "OAAltitudeWidget.h"
 #import "OAMapRendererView.h"
-
+#import "OAApplicationMode.h"
+#import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAWeatherHelper.h"
+#import "OAMapStyleSettings.h"
+#import "OAObservable.h"
 
 #define kWidgetsTopPadding 10.0
 
@@ -51,6 +57,10 @@
 @end
 
 @interface OAMapInfoController () <OAWeatherLayerSettingsDelegate, OAWidgetPanelDelegate>
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *speedometerTopConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *speedometerLeftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *speedometerHeightConstraint;
 
 @end
 
@@ -63,8 +73,11 @@
     BOOL _isBordersOfDownloadedMaps;
     OADownloadMapWidget *_downloadMapWidget;
     OAWeatherToolbar *_weatherToolbar;
+    WeatherNavigationBarView *_weatherNavigationBarView;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
+    
+    SpeedometerView *_speedometerView;
 
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
@@ -396,6 +409,24 @@
     view.direction = [_settings.transparentMapTheme get] ? ShadowPathDirectionClear : direction;
 }
 
+- (void)viewWillTransition:(CGSize)size
+{
+    [self layoutWidgets];
+    
+    if (!_weatherNavigationBarView.isHidden && [OAUtilities isiOSAppOnMac])
+    {
+        CGRect weatherNavigationBarViewRect = _weatherNavigationBarView.frame;
+        weatherNavigationBarViewRect.origin.x = 0;
+        weatherNavigationBarViewRect.origin.y = 0;
+        weatherNavigationBarViewRect.size.width = size.width;
+        _weatherNavigationBarView.frame = weatherNavigationBarViewRect;
+        
+        CGRect weatherToolbarRect = _weatherToolbar.frame;
+        weatherToolbarRect.size.width = _weatherNavigationBarView.frame.size.width;
+        _weatherToolbar.frame = weatherToolbarRect;
+    }
+}
+
 - (void) layoutWidgets
 {
     BOOL portrait = ![OAUtilities isLandscape];
@@ -406,11 +437,25 @@
     BOOL hasBottomWidgets = [_bottomPanelController hasWidgets];
     BOOL hasRightWidgets = [_rightPanelController hasWidgets];
     [self configureLayerWidgets:hasTopWidgets];
-
+    CGFloat _speedometerViewYPosition = 0.0;
+    if (_speedometerView && _speedometerView.superview && !_speedometerView.hidden)
+    {
+        self.speedometerHeightConstraint.constant = _speedometerView.intrinsicContentSize.height;
+        CGFloat optionsMenuButtonOffsetY = _mapHudViewController.optionsMenuButton.frame.origin.y;
+        self.speedometerTopConstraint.constant = optionsMenuButtonOffsetY - _speedometerView.intrinsicContentSize.height - 16;
+        // NOTE: when opened context menu optionsMenuButton.frame.origin.x has value -34. Perhaps, by this method, the 'menu' button is hidden from the screen.
+        CGFloat optionsMenuButtonOffsetX = _mapHudViewController.optionsMenuButton.frame.origin.x;
+        if (optionsMenuButtonOffsetX < 0)
+            self.speedometerLeftConstraint.constant = _mapHudViewController.optionsMenuButton.frame.origin.x - _speedometerView.intrinsicContentSize.width;
+        else
+            self.speedometerLeftConstraint.constant = _mapHudViewController.optionsMenuButton.frame.origin.x;
+        _speedometerViewYPosition = self.speedometerTopConstraint.constant;
+    }
+    
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
     {
-        CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
-        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin], optionsButtonFrame.origin.y - _alarmControl.bounds.size.height / 2);
+        CGFloat positionY = _speedometerViewYPosition != 0.0 ? _speedometerViewYPosition :  _mapHudViewController.optionsMenuButton.frame.origin.y;
+        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin] + 6, positionY - _alarmControl.bounds.size.height / 2);
     }
 
     if (_rulerControl && _rulerControl.superview && !_rulerControl.hidden)
@@ -485,8 +530,14 @@
         topOffset += _mapHudViewController.statusBarViewHeightConstraint.constant;
     if (bottomOffset > 0)
         bottomOffset += _mapHudViewController.bottomBarViewHeightConstraint.constant;
-    [mapView setTopOffsetOfViewSize:topOffset bottomOffset:bottomOffset];
-
+    
+    OAMapViewController* mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    if (!mapViewController.isCarPlayActive && !mapViewController.isCarPlayDashboardActive)
+    {
+        // map render in CarPlay shouldn't take into account topOffset and bottomOffset, which are used in the main app for (top/bottom widget, context menu, etc.). For _renderer->setMapTarget"
+        [mapView setTopOffsetOfViewSize:topOffset bottomOffset:bottomOffset];
+    }
+   
     if (hasRightWidgets)
     {
         CGSize rightSize = [_rightPanelController calculateContentSize];
@@ -535,6 +586,7 @@
         [self updateWeatherToolbarVisible];
 
     [self.delegate widgetsLayoutDidChange:YES];
+    [_mapWidgetRegistry notifyWidgetsPanelsDidLayout];   
 }
 
 - (void)updateWeatherToolbarVisible
@@ -561,6 +613,9 @@
     {
         [_weatherToolbar moveOutOfScreen];
         _weatherToolbar.hidden = NO;
+        _weatherNavigationBarView.hidden = NO;
+        CGFloat top = [OAUtilities isLandscape] ? [OAUtilities getTopMargin] : 44 + [OAUtilities getTopMargin];
+        _weatherNavigationBarView.frame = CGRectMake(0, 0, _weatherToolbar.frame.size.width, top);
         [_mapHudViewController updateWeatherButtonVisibility];
     }
 
@@ -577,6 +632,24 @@
         [_mapHudViewController.floatingButtonsController updateViewVisibility];
         [self recreateControls];
     }];
+    _weatherNavigationBarView.frame = CGRectMake(0, 0, _weatherToolbar.frame.size.width, 44 + [OAUtilities getTopMargin]);
+}
+
+- (void)showWeatherDataSourceViewController {
+    auto weatherDataSourceViewController = [WeatherDataSourceViewController new];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:weatherDataSourceViewController];
+    
+    navigationController.modalPresentationStyle = UIModalPresentationPageSheet;
+    
+    UISheetPresentationController *sheet = navigationController.sheetPresentationController;
+    if (sheet)
+    {
+        sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent];
+        sheet.preferredCornerRadius = 20;
+        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = YES;
+    }
+    
+    [OARootViewController.instance.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)hideWeatherToolbar
@@ -597,7 +670,9 @@
     }
 
     _weatherToolbar.hidden = YES;
+    _weatherNavigationBarView.hidden = YES;
     [_mapHudViewController updateWeatherButtonVisibility];
+    
     [UIView animateWithDuration:.3 animations: ^{
         [_weatherToolbar moveOutOfScreen];
     }                completion:^(BOOL finished) {
@@ -619,11 +694,23 @@
     [self registerAllControls];
     //[_mapWidgetRegistry reorderWidgets];
     [self recreateControls:NO];
+    
+    // After import, widgets on the top and bottom panels may have different sizes
+    // (from a different application mode), since these panels already contained widgets of other sizes.
+    // We will normalize them to a single size: all widgets will adopt the size
+    // that occurs most frequently in the row.
+    [WidgetUtils applyMostFrequentStyleForPagedWidgetsWithAppMode:[[OAAppSettings sharedManager].applicationMode get]
+                                                      filterModes:KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]];
 }
 
 - (void) recreateControls
 {
     [self recreateControls:YES];
+}
+
+- (void)updateWidgetsInfo
+{
+    [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
 }
 
 - (void) recreateControls:(BOOL)registerWidgets
@@ -634,7 +721,7 @@
     OAApplicationMode *appMode = _settings.applicationMode.get;
 
     [_mapHudViewController setDownloadMapWidget:_downloadMapWidget];
-    [_mapHudViewController setWeatherToolbarMapWidget:_weatherToolbar];
+    [_mapHudViewController setWeatherToolbarMapWidget:_weatherToolbar navBar:_weatherNavigationBarView];
 
     [_rulerControl removeFromSuperview];
     [[OARootViewController instance].mapPanel.mapViewController.view insertSubview:_rulerControl atIndex:0];
@@ -643,8 +730,30 @@
     [_alarmControl removeFromSuperview];
     _alarmControl.delegate = self;
     [_mapHudViewController.view addSubview:_alarmControl];
+    
+    [_speedometerView removeFromSuperview];
+    _speedometerView.delegate = self;
+    
+    [_mapHudViewController.view addSubview:_speedometerView];
+    if (!self.speedometerHeightConstraint)
+    {
+        self.speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:[_speedometerView getCurrentSpeedViewMaxHeightWidth]];
+        self.speedometerHeightConstraint.active = YES;
+    }
 
-    [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
+    if (!self.speedometerLeftConstraint)
+    {
+    self.speedometerLeftConstraint = [_speedometerView.leftAnchor constraintEqualToAnchor:_mapHudViewController.view.leftAnchor constant:16];
+    }
+    self.speedometerLeftConstraint.active = YES;
+    if (!self.speedometerTopConstraint)
+    {
+        self.speedometerTopConstraint = [_speedometerView.topAnchor constraintEqualToAnchor:_mapHudViewController.view.topAnchor];
+    }
+    self.speedometerTopConstraint.active = YES;
+    [_speedometerView configure];
+
+    [self updateWidgetsInfo];
 
     [self recreateWidgetsPanel:_topPanelController panel:OAWidgetsPanel.topPanel appMode:appMode];
     [self recreateWidgetsPanel:_bottomPanelController panel:OAWidgetsPanel.bottomPanel appMode:appMode];
@@ -737,16 +846,48 @@
 - (void) registerAllControls
 {
     NSMutableArray<OABaseWidgetView *> *widgetsToUpdate = [NSMutableArray array];
+    
+    if (_alarmControl)
+        [_alarmControl removeFromSuperview];
 
     _alarmControl = [[OAAlarmWidget alloc] init];
     _alarmControl.delegate = self;
     [widgetsToUpdate addObject:_alarmControl];
+    
+    if (_speedometerView)
+    {
+        [_speedometerView removeFromSuperview];
+        [NSLayoutConstraint deactivateConstraints:@[self.speedometerHeightConstraint, self.speedometerTopConstraint, self.speedometerLeftConstraint]];
+        self.speedometerHeightConstraint = nil;
+        self.speedometerTopConstraint = nil;
+        self.speedometerLeftConstraint = nil;
+    }
+    
+    _speedometerView = [SpeedometerView initView];
+    __weak OAMapInfoController *weakSelf = self;
+    _speedometerView.didChangeIsVisible = ^{
+        [weakSelf layoutWidgets];
+    };
+    _speedometerView.translatesAutoresizingMaskIntoConstraints = NO;
+    _speedometerView.hidden = YES;
+    _speedometerView.delegate = self;
+    [widgetsToUpdate addObject:_speedometerView];
 
     _downloadMapWidget = [[OADownloadMapWidget alloc] init];
     _downloadMapWidget.delegate = self;
     [widgetsToUpdate addObject:_downloadMapWidget];
 
     _weatherToolbar = [[OAWeatherToolbar alloc] init];
+    _weatherNavigationBarView = [WeatherNavigationBarView initView];
+    _weatherNavigationBarView.title = OALocalizedString(@"shared_string_weather");
+    _weatherNavigationBarView.onLeftButtonAction = ^{
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        [mapPanel.hudViewController changeWeatherToolbarVisible];
+    };
+    _weatherNavigationBarView.onRightButtonAction = ^{
+        [weakSelf showWeatherDataSourceViewController];
+    };
+    _weatherNavigationBarView.hidden = YES;
     _weatherToolbar.delegate = self;
     [widgetsToUpdate addObject:_weatherToolbar];
 
@@ -767,12 +908,26 @@
     [self updateRuler];
 }
 
+- (void)onFrameAnimatorsUpdated
+{
+    if (_weatherToolbar && !_weatherToolbar.hidden)
+        [_weatherToolbar onFrameAnimatorsUpdated];
+}
+
 #pragma mark - OAWidgetListener
 
 - (void) widgetChanged:(OABaseWidgetView *)widget
 {
     if (widget.isTopText || widget.isTextInfo)
+    {
         [self layoutWidgets];
+    }
+    else if ([widget isKindOfClass:[SpeedometerView class]])
+    {
+        [_speedometerView configure];
+        [self layoutWidgets];
+    }
+    [[UIApplication sharedApplication].carPlaySceneDelegate widgetChanged:widget];
 }
 
 - (void) widgetVisibilityChanged:(OABaseWidgetView *)widget visible:(BOOL)visible

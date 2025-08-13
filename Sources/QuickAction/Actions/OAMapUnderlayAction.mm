@@ -8,21 +8,23 @@
 
 #import "OAMapUnderlayAction.h"
 #import "OAAppSettings.h"
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAMapSource.h"
 #import "Localization.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OrderedDictionary.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#define KEY_UNDERLAYS @"underlays"
-#define KEY_NO_UNDERLAY @"no_underlay"
+static NSString * const kUnderlays = @"underlays";
+static NSString * const kNoUnderlay = @"no_underlay";
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAMapUnderlayAction
 {
@@ -33,15 +35,26 @@ static OAQuickActionType *TYPE;
 
 - (instancetype) init
 {
-    self = [super initWithActionType:self.class.TYPE];
-    if (self)
-    {
-        _styleSettings = [OAMapStyleSettings sharedInstance];
-        _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+    return [super initWithActionType:self.class.TYPE];
+}
 
-        _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
-    }
-    return self;
+- (void)commonInit
+{
+    _styleSettings = [OAMapStyleSettings sharedInstance];
+    _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+    _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapUnderlayActionId
+                                           stringId:@"mapunderlay.change"
+                                                 cl:self.class]
+                name:OALocalizedString(@"quick_action_map_underlay")]
+               nameAction:OALocalizedString(@"shared_string_change")]
+              iconName:@"ic_custom_underlay_map"]
+             secondaryIconName:@"ic_custom_compound_action_change"]
+            category:QuickActionTypeCategoryConfigureMap];
 }
 
 - (void) execute
@@ -49,35 +62,17 @@ static OAQuickActionType *TYPE;
     NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
     if (sources.count > 0)
     {
-        BOOL showBottomSheetStyles = [self.getParams[KEY_DIALOG] boolValue];
+        BOOL showBottomSheetStyles = [self.getParams[kDialog] boolValue];
         if (showBottomSheetStyles)
         {
-            OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeUnderlay];
+            OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAQASelectionTypeUnderlay];
             [bottomSheet show];
             return;
         }
         
-        NSInteger index = -1;
-        OAMapSource *currSource = [OsmAndApp instance].data.underlayMapSource;
-        NSString *currentSource = currSource.name ? currSource.name : KEY_NO_UNDERLAY;
-        BOOL noUnderlay = currSource.name == nil;
-        
-        for (NSInteger idx = 0; idx < sources.count; idx++)
-        {
-            NSArray *source = sources[idx];
-            if ([source[source.count - 1] isEqualToString:currentSource] || ([source.firstObject isEqualToString:currentSource] && noUnderlay))
-            {
-                index = idx;
-                break;
-            }
-        }
-        
-        NSArray<NSString *> *nextSource = sources[0];
-        
-        if (index >= 0 && index < sources.count - 1)
-            nextSource = sources[index + 1];
-        
-        [self executeWithParams:nextSource];
+        NSArray<NSString *> *nextSource = [self nextUnderlaySourceFrom:sources];
+        if (nextSource)
+            [self executeWithParams:nextSource];
     }
 }
 
@@ -86,7 +81,7 @@ static OAQuickActionType *TYPE;
     OsmAndAppInstance app = [OsmAndApp instance];
     NSString *variant = params.firstObject;
     NSString *name = params.count > 1 ? params[params.count - 1] : @"";
-    BOOL hasUnderlay = ![variant isEqualToString:KEY_NO_UNDERLAY];
+    BOOL hasUnderlay = ![variant isEqualToString:kNoUnderlay];
     if (hasUnderlay)
     {
         OAMapSource *newMapSource = nil;
@@ -119,9 +114,50 @@ static OAQuickActionType *TYPE;
     }
 }
 
+- (NSArray<NSString *> *)nextUnderlaySourceFrom:(NSArray<NSArray<NSString *> *> *)sources
+{
+    if (sources.count == 0)
+        return nil;
+    
+    OAMapSource *currSource = [OsmAndApp instance].data.underlayMapSource;
+    if (sources.count == 1)
+        return !currSource ? sources.firstObject : @[kNoUnderlay, OALocalizedString(@"no_underlay")];
+
+    NSString *currentSource = currSource.name ?: kNoUnderlay;
+    BOOL noUnderlay = !currSource.name;
+    NSInteger index = -1;
+    for (NSInteger idx = 0; idx < sources.count; idx++)
+    {
+        NSArray<NSString *> *source = sources[idx];
+        BOOL matchByName = [source.lastObject isEqualToString:currentSource];
+        BOOL matchByVariantAndNoUnderlay = ([source.firstObject isEqualToString:currentSource] && noUnderlay);
+        if (matchByName || matchByVariantAndNoUnderlay)
+        {
+            index = idx;
+            break;
+        }
+    }
+    
+    NSArray<NSString *> *nextSource = sources.firstObject;
+    if (index >= 0 && index < sources.count - 1)
+        nextSource = sources[index + 1];
+    
+    return nextSource;
+}
+
+- (NSString *)getActionStateName
+{
+    NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
+    NSArray<NSString *> *nextSource = [self nextUnderlaySourceFrom:sources];
+    if (nextSource.count > 0)
+        return nextSource.lastObject;
+    
+    return [self getName];
+}
+
 - (NSString *) getTranslatedItemName:(NSString *)item
 {
-    if ([item isEqualToString:KEY_NO_UNDERLAY])
+    if ([item isEqualToString:kNoUnderlay])
         return OALocalizedString(@"no_underlay");
     else
         return item;
@@ -144,7 +180,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *) getListKey
 {
-    return KEY_UNDERLAYS;
+    return kUnderlays;
 }
 
 - (OrderedDictionary *) getUIModel
@@ -152,9 +188,9 @@ static OAQuickActionType *TYPE;
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
-                          @"key" : KEY_DIALOG,
+                          @"key" : kDialog,
                           @"title" : OALocalizedString(@"quick_action_interim_dialog"),
-                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          @"value" : @([self.getParams[kDialog] boolValue]),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
@@ -188,28 +224,25 @@ static OAQuickActionType *TYPE;
     {
         for (NSDictionary *item in arr)
         {
-            if ([item[@"key"] isEqualToString:KEY_DIALOG])
-                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            if ([item[@"key"] isEqualToString:kDialog])
+                [params setValue:item[@"value"] forKey:kDialog];
             else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
                 [sources addObject:@[item[@"value"], item[@"title"]]];
         }
     }
-    [params setObject:sources forKey:KEY_UNDERLAYS];
+    [params setObject:sources forKey:kUnderlays];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return sources.count > 0;
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:16 stringId:@"mapunderlay.change" class:self.class name:OALocalizedString(@"quick_action_map_underlay") category:CONFIGURE_MAP iconName:@"ic_custom_underlay_map" secondaryIconName:nil];
-       
     return TYPE;
 }
 
 - (NSArray *)loadListFromParams
 {
-    return self.getParams[self.getListKey];
+    return [self getParams][[self getListKey]];
 }
 
 @end

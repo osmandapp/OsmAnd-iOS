@@ -8,15 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "OAMapModeHeaders.h"
-#import "OAHudButton.h"
 
-@class OAFloatingButtonsHudViewController;
-@class OAToolbarViewController;
-@class OAMapRulerView;
-@class OAMapInfoController;
-@class OADownloadMapWidget;
-@class OAWeatherToolbar;
-@class OAObservable;
+@class OAFloatingButtonsHudViewController, OAToolbarViewController, OAMapRulerView, OAMapInfoController, OADownloadMapWidget, OAWeatherToolbar, OAHudButton, WeatherNavigationBarView, WeatherContoursButton;
 
 @interface OAMapHudViewController : UIViewController
 
@@ -33,7 +26,8 @@
 @property (weak, nonatomic) IBOutlet OAHudButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
 
-@property (weak, nonatomic) IBOutlet OAHudButton *weatherButton;
+@property (weak, nonatomic) IBOutlet WeatherContoursButton *weatherContoursButton;
+@property (weak, nonatomic) IBOutlet OAHudButton *weatherLayersButton;
 
 @property (weak, nonatomic) IBOutlet UIView *widgetsView;
 @property (weak, nonatomic) IBOutlet UIView *topWidgetsView;
@@ -98,7 +92,7 @@
 - (void) removeToolbar;
 
 - (void) setDownloadMapWidget:(OADownloadMapWidget *)widget;
-- (void) setWeatherToolbarMapWidget:(OAWeatherToolbar *)widget;
+- (void)setWeatherToolbarMapWidget:(OAWeatherToolbar *)widget navBar:(WeatherNavigationBarView *)navBar;
 
 - (BOOL) isOverlayUnderlayViewVisible;
 - (void) updateOverlayUnderlayView;

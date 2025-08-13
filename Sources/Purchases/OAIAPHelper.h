@@ -7,9 +7,11 @@
 //
 
 #import <StoreKit/StoreKit.h>
-#import "OAProducts.h"
 
 #define kFreeMapsAvailableTotal 7
+
+@class OAProduct, OASubscription, OASubscriptionList, OAFunctionalAddon, OAExportSettingsType, OAExternalSubscription, OAExternalProduct;
+@class OAWidgetType;
 
 UIKIT_EXTERN NSString *const OAIAPProductsRequestSucceedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductsRequestFailedNotification;
@@ -41,13 +43,14 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 @end
 
-typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
-    EOASubscriptionOriginUndefined = -1,
-    EOASubscriptionOriginAndroid,
-    EOASubscriptionOriginPromo,
-    EOASubscriptionOriginIOS,
-    EOASubscriptionOriginAmazon,
-    EOASubscriptionOriginHuawei
+typedef NS_ENUM(NSInteger, EOAPurchaseOrigin) {
+    EOAPurchaseOriginUndefined = -1,
+    EOAPurchaseOriginAndroid,
+    EOAPurchaseOriginPromo,
+    EOAPurchaseOriginIOS,
+    EOAPurchaseOriginAmazon,
+    EOAPurchaseOriginHuawei,
+    EOAPurchaseOriginFastSpring
 };
 
 typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
@@ -60,11 +63,24 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 
 @interface OASubscriptionStateHolder : NSObject
 
+@property (nonatomic) NSString *sku;
 @property (nonatomic) OASubscriptionState *state;
 @property (nonatomic, assign) long startTime;
 @property (nonatomic, assign) long expireTime;
-@property (nonatomic, assign) EOASubscriptionOrigin origin;
+@property (nonatomic, assign) EOAPurchaseOrigin origin;
 @property (nonatomic, assign) EOASubscriptionDuration duration;
+@property (nonatomic) OAExternalSubscription *linkedSubscription;
+
+@end
+
+@interface OAInAppStateHolder : NSObject
+
+@property (nonatomic) NSString *sku;
+@property (nonatomic, assign) EOAPurchaseOrigin origin;
+@property (nonatomic) NSString *platform;
+@property (nonatomic, assign) long purchaseTime;
+@property (nonatomic, assign) long expireTime;
+@property (nonatomic) OAExternalProduct *linkedProduct;
 
 @end
 
@@ -80,6 +96,8 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 @property (nonatomic, readonly) OAProduct *mapillary;
 @property (nonatomic, readonly) OAProduct *weather;
 @property (nonatomic, readonly) OAProduct *sensors;
+@property (nonatomic, readonly) OAProduct *vehicleMetrics;
+
 @property (nonatomic, readonly) OAProduct *carplay;
 @property (nonatomic, readonly) OAProduct *osmandDevelopment;
 
@@ -119,53 +137,65 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 @property (nonatomic, readonly) NSArray<OAFunctionalAddon *> *functionalAddons;
 @property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
 
-- (void) resetTestPurchases;
-- (void) requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
-- (void) buyProduct:(OAProduct *)product;
-- (void) restoreCompletedTransactions;
+- (void)resetTestPurchases;
+- (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
+- (void)buyProduct:(OAProduct *)product;
+- (void)restoreCompletedTransactions;
 
-- (void) enableProduct:(NSString *)productIdentifier;
-- (void) disableProduct:(NSString *)productIdentifier;
-- (OAProduct *) product:(NSString *)productIdentifier;
-- (OASubscription *) getCheapestMonthlySubscription;
-- (NSArray<OASubscription *> *) getEverMadeSubscriptions;
-- (NSArray<OAProduct *> *) getEverMadeMainPurchases;
+- (void)enableProduct:(NSString *)productIdentifier;
+- (void)disableProduct:(NSString *)productIdentifier;
+- (OAProduct *)product:(NSString *)productIdentifier;
+- (OASubscription *)getCheapestMonthlySubscription;
+- (NSArray<OASubscription *> *)getEverMadeSubscriptions;
+- (NSArray<OAProduct *> *)getEverMadeMainPurchases;
+- (NSArray<OASubscriptionStateHolder *> *)getExternalSubscriptions;
+- (NSArray<OAInAppStateHolder *> *)getExternalInApps;
+- (NSNumber *)getInAppPurchaseTime:(NSString *)sku;
++ (BOOL)isWidgetPurchased:(OAWidgetType *)widgetType;
+- (NSNumber *)getInAppExpireTime:(NSString *)sku;
 
-- (BOOL) productsLoaded;
+- (BOOL)productsLoaded;
 
-- (NSArray *) getSubscriptionStateByOrderId:(NSString *)orderId;
-- (NSString *) getOrderIdByDeviceIdAndToken;
-- (OASubscription *) getAnyPurchasedOsmAndProSubscription;
-- (BOOL) checkBackupSubscriptions;
+- (NSArray *)getSubscriptionStateByOrderId:(NSString *)orderId;
+- (NSString *)getOrderIdByDeviceIdAndToken;
+- (OASubscription *)getAnyPurchasedOsmAndProSubscription;
+- (BOOL)checkBackupSubscriptions;
 
-- (void) onBackupPurchaseRequested;
-- (void) checkBackupPurchase:(void(^)(BOOL))onComplete;
-- (void) checkBackupPurchase;
+- (void)onBackupPurchaseRequested;
+- (void)checkBackupPurchase:(void(^)(BOOL))onComplete;
+- (void)checkBackupPurchase;
 
-- (BOOL) isCarPlayAvailable;
+- (BOOL)isCarPlayAvailable;
 
-+ (int) freeMapsAvailable;
-+ (void) increaseFreeMapsCount:(int)count;
-+ (void) decreaseFreeMapsCount;
++ (int)freeMapsAvailable;
++ (void)increaseFreeMapsCount:(int)count;
++ (void)decreaseFreeMapsCount;
 
-+ (BOOL) isPaidVersion;
++ (BOOL)isPaidVersion;
 
-+ (BOOL) isSubscribedToMaps;
-+ (BOOL) isSubscribedToLiveUpdates;
-+ (BOOL) isSubscribedToOsmAndPro;
-+ (BOOL) isSubscribedCrossPlatform;
-+ (BOOL) isSubscribedToMapperUpdates;
-+ (BOOL) isOsmAndProAvailable;
++ (BOOL)isSubscribedToMaps;
++ (BOOL)isSubscribedToLiveUpdates;
++ (BOOL)isSubscribedToOsmAndPro;
++ (BOOL)isSubscribedCrossPlatform;
++ (BOOL)isSubscribedToMapperUpdates;
++ (BOOL)isOsmAndProAvailable;
++ (BOOL)isMapsPlusAvailable;
++ (BOOL)isExportTypeAvailable:(OAExportSettingsType *)exportType;
++ (BOOL)isBackupAvailable;
 
-+ (BOOL) isFullVersionPurchased;
-+ (BOOL) isDepthContoursPurchased;
-+ (BOOL) isContourLinesPurchased;
-+ (BOOL) isWikipediaPurchased;
-+ (BOOL) isSensorPurchased;
++ (BOOL)isFullVersionPurchased;
++ (BOOL)isDepthContoursPurchased;
++ (BOOL)isContourLinesPurchased;
++ (BOOL)isWikipediaPurchased;
++ (BOOL)isSensorPurchased;
 
-+ (BOOL) isLiveUpdatesSubscription:(OASubscription *)subscription;
-+ (BOOL) isOsmAndProSubscription:(OASubscription *)subscription;
-+ (BOOL) isMapsSubscription:(OASubscription *)subscription;
-+ (BOOL) isFullVersion:(OAProduct *)product;
++ (BOOL)isLiveUpdatesSubscription:(OASubscription *)subscription;
++ (BOOL)isOsmAndProSubscription:(OASubscription *)subscription;
++ (BOOL)isMapsSubscription:(OASubscription *)subscription;
++ (BOOL)isFullVersion:(OAProduct *)product;
++ (BOOL)isVehicleMetricsPurchased;
++ (BOOL)isVehicleMetricsAvailable;
+
++ (EOAPurchaseOrigin)getPurchaseOriginByPlatform:(NSString *)platform;
 
 @end

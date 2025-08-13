@@ -223,17 +223,17 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         article.gpxFile = gpxFile
         let filename = TravelObfHelper.shared.createGpxFile(article: article)
         OATravelGuidesHelper.createGpxFile(article, fileName: filename)
-        let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile)
-        
         view.removeSpinner()
-        if gpx == nil || gpx?.wptPoints == 0 {
+
+        guard let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile), gpx.wptPoints != 0 else {
             OAUtilities.showToast(nil, details: localizedString("article_has_no_points"), duration: 4, in: self.view)
             return
         }
 
         OAAppSettings.sharedManager().showGpx([filename], update: true)
         if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
+            let trackItem = TrackItem(file: gpx.file)
+            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: trackItem,
                                                                            navControllerHistory: newCurrentHistory,
                                                                            fromTrackMenu: false,
                                                                            selectedTab: .pointsTab)

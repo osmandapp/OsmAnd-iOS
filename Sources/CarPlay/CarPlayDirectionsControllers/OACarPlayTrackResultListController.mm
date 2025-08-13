@@ -8,34 +8,35 @@
 
 #import "OACarPlayTrackResultListController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARoutingHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OAApplicationMode.h"
 #import "OAMapActions.h"
-#import "OAGpxInfo.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAGPXDatabase.h"
 #import "Localization.h"
 #import <CarPlay/CarPlay.h>
-
-#include <OsmAndCore/GpxDocument.h>
+#import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 @implementation OACarPlayTrackResultListController
 {
     NSString *_folderName;
-    NSArray<OAGpxInfo *> *_gpxList;
+    NSArray<OASTrackItem *> *_trackItems;
 }
 
 - (instancetype)initWithInterfaceController:(CPInterfaceController *)interfaceController
                                  folderName:(NSString *)folderName
-                                    gpxList:(NSArray<OAGpxInfo *> *)gpxList
+                                    trackItems:(NSArray<OASTrackItem *> *)trackItems
 {
     self = [super initWithInterfaceController:interfaceController];
     if (self)
     {
         _folderName = folderName;
-        _gpxList = gpxList;
+        _trackItems = trackItems;
     }
     return self;
 }
@@ -47,21 +48,21 @@
 
 - (NSArray<CPListSection *> *)generateSections
 {
-    if (_gpxList.count > 0)
+    if (_trackItems.count > 0)
     {
         NSInteger maximumItemCount = CPListTemplate.maximumItemCount;
         NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];
-        for (OAGpxInfo *gpxInfo in _gpxList)
+        for (OASTrackItem *trackItem in _trackItems)
         {
             if (listItems.count >= maximumItemCount)
                 break;
 
-            CPListItem *listItem = [[CPListItem alloc] initWithText:[gpxInfo.gpx getNiceTitle]
-                                                         detailText:[self getTrackDescription:gpxInfo.gpx]
+            CPListItem *listItem = [[CPListItem alloc] initWithText:trackItem.gpxFileNameWithoutExtension
+                                                         detailText:[self getTrackDescription:trackItem]
                                                               image:[UIImage imageNamed:@"ic_custom_trip"]
                                                      accessoryImage:nil
                                                       accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
-            listItem.userInfo = gpxInfo;
+            listItem.userInfo = trackItem;
             listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
                 [self onItemSelected:item completionHandler:completionBlock];
             };
@@ -75,8 +76,9 @@
     }
 }
 
-- (NSString *)getTrackDescription:(OAGPX *)gpx
+- (NSString *)getTrackDescription:(OASTrackItem *)trackItem
 {
+    OASGpxDataItem *gpx = trackItem.dataItem;
     NSMutableString *res = [NSMutableString new];
     BOOL needsSeparator = NO;
     if (!isnan(gpx.totalDistance) && gpx.totalDistance > 0)
@@ -88,7 +90,7 @@
     {
         if (needsSeparator)
             [res appendString:@" • "];
-        [res appendString:[OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES]];
+        [res appendString:[OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan / 1000 shortFormat:YES]];
         needsSeparator = YES;
     }
     if (gpx.wptPoints > 0)
@@ -102,23 +104,29 @@
 
 - (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(dispatch_block_t)completionBlock
 {
-    OAGpxInfo *info = item.userInfo;
-    if (!info)
+    OASTrackItem *trackItem = item.userInfo;
+    if (!trackItem)
     {
         if (completionBlock)
             completionBlock();
         return;
     }
-    const auto& activeGpx = [OASelectedGPXHelper instance].activeGpx;
-    if (activeGpx.find(QString::fromNSString(info.gpx.gpxFilePath)) == activeGpx.end())
-        [OAAppSettings.sharedManager showGpx:@[info.gpx.gpxFilePath]];
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper instance].activeGpx;
+    
+    NSString *gpxFilePath = [trackItem gpxFilePath];
+    if (![activeGpx objectForKey:gpxFilePath]) {
+        [OAAppSettings.sharedManager showGpx:@[gpxFilePath]];
+    }
     
     [[OARoutingHelper sharedInstance] setAppMode:OAApplicationMode.CAR];
-    [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:info.gpx];
-    CLLocation *loc = [[CLLocation alloc] initWithLatitude:[info.gpx.locationEnd getLatitude]
-                                                 longitude:[info.gpx.locationEnd getLongitude]];
+    [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:trackItem.dataItem];
+    OASGpxTrackAnalysis *analysis = trackItem.dataItem.getAnalysis;
+
+    CLLocation *loc = [[CLLocation alloc] initWithLatitude:analysis.locationEnd.getLatitude
+                                                 longitude:analysis.locationEnd.getLongitude];
     [[OATargetPointsHelper sharedInstance] navigateToPoint:loc updateRoute:YES intermediate:-1];
-    [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:info.gpx
+        
+    [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:trackItem
                                                                                  from:nil
                                                                              fromName:nil
                                                        useIntermediatePointsByDefault:NO

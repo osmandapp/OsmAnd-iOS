@@ -10,6 +10,7 @@
 #import "OAFavoriteItem.h"
 #import "OADefaultFavorite.h"
 #import "OAFavoritesHelper.h"
+#import "OAPOI.h"
 #import "OsmAndApp.h"
 
 #include <OsmAndCore.h>
@@ -59,7 +60,10 @@
         [_favorite setIcon:_iconName];
         [_favorite setColor:favCol.color];
         [_favorite setAmenity:poi];
-        [_favorite setAmenityOriginName:poi.toStringEn];
+        
+        NSString *originName = poi.toStringEn;
+        if (originName.length > 0)
+            [_favorite setAmenityOriginName:originName];
     }
     return self;
 }

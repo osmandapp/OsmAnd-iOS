@@ -230,7 +230,7 @@
     {
         QByteArray data;
         int64_t time;
-        if (_db->obtainTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom, data, timeHolder && _timeSupported ? &time : nullptr))
+        if (_db->retrieveTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom, data, timeHolder && _timeSupported ? &time : nullptr))
         {
             res = [NSData dataWithBytes:data.constData() length:data.length()];
         }

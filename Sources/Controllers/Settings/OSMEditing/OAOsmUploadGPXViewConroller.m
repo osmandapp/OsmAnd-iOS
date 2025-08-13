@@ -51,12 +51,13 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 @implementation OAOsmUploadGPXViewConroller
 {
     OAAppSettings *_settings;
-    NSArray<OAGPX *> *_gpxItemsToUpload;
+    NSArray<OASTrackItem *> *_gpxItemsToUpload;
     OATableDataModel *_data;
     NSString *_descriptionText;
     NSString *_tagsText;
     EOAOsmUploadGPXVisibility _selectedVisibility;
     BOOL _isAuthorised;
+    BOOL _isOAuthAllowed;
     OAProgressBarCell *_progressBarCell;
     OAValueTableViewCell *_progressValueCell;
     OAUploadGPXFilesTask *_uploadTask;
@@ -68,12 +69,13 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 #pragma mark - Initialization
 
-- (instancetype)initWithGPXItems:(NSArray<OAGPX *> *)gpxItemsToUpload
+- (instancetype)initWithGPXItems:(NSArray<OASTrackItem *> *)gpxItemsToUpload
 {
     self = [super init];
     if (self)
     {
         _gpxItemsToUpload = gpxItemsToUpload;
+        [self commonInit];
     }
     return self;
 }
@@ -84,8 +86,9 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     _mode = EOAOsmUploadGPXViewConrollerModeInitial;
     _selectedVisibility = EOAOsmUploadGPXVisibilityPublic;
     _descriptionText = @"";
-    _tagsText = kDefaultTag;
+    _tagsText = [self tagsTextWithDefaultActivity];
     _isAuthorised = [OAOsmOAuthHelper isAuthorised];
+    _isOAuthAllowed = [OAOsmOAuthHelper isOAuthAllowed];
 }
 
 #pragma mark - UIViewController
@@ -102,8 +105,8 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 {
     [super viewDidAppear:animated];
     _isAuthorised = [OAOsmOAuthHelper isAuthorised];
-    if (!_isAuthorised)
-        [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+    if (!_isAuthorised && _isOAuthAllowed)
+        [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
 }
 
 #pragma mark - Base UI
@@ -141,6 +144,9 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 - (EOABaseButtonColorScheme)getBottomButtonColorScheme
 {
+    if (!_isAuthorised || !_isOAuthAllowed)
+        return EOABaseButtonColorSchemeInactive;
+    
     switch (_mode)
     {
         case EOAOsmUploadGPXViewConrollerModeUploading:
@@ -195,13 +201,27 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         OATableSectionData *accountSection = [_data createNewSection];
         accountSection.headerText = OALocalizedString(@"login_account");
         OATableRowData *accountCell = [accountSection createNewRow];
-        [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
-        [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];
-        [accountCell setIconName:@"ic_custom_user_profile"];
-        [accountCell setObj:(_isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorActive]) forKey:@"title_color"];
-        [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
-        [accountCell setObj:(_isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
-        [accountCell setObj: (^void(){ [weakSelf onAccountButtonPressed]; }) forKey:@"actionBlock"];
+        if (_isOAuthAllowed)
+        {
+            [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
+            [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];
+            [accountCell setIconName:@"ic_custom_user_profile"];
+            [accountCell setObj:(_isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorActive]) forKey:@"title_color"];
+            [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
+            [accountCell setObj:(_isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
+            [accountCell setObj: (^void(){ [weakSelf onAccountButtonPressed]; }) forKey:@"actionBlock"];
+        }
+        else
+        {
+            [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
+            [accountCell setTitle: OALocalizedString(@"shared_string_update_required")];
+            [accountCell setDescr: OALocalizedString(@"osm_login_needs_ios_16_4")];
+            [accountCell setIconName:@"ic_custom_alert"];
+            [accountCell setIconTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+            [accountCell setObj:[UIColor colorNamed:ACColorNameTextColorPrimary] forKey:@"title_color"];
+            [accountCell setObj:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightRegular] forKey:@"title_font"];
+            [accountCell setObj:@(UITableViewCellAccessoryNone) forKey:@"accessory_type"];
+        }
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
     {
@@ -377,7 +397,6 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             [cell leftIconVisibility:YES];
-            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
@@ -386,8 +405,13 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             cell.titleLabel.text = title;
             cell.titleLabel.textColor = [item objForKey:@"title_color"];
             cell.titleLabel.font = [item objForKey:@"title_font"];
+            [cell descriptionVisibility:item.descr];
+            cell.descriptionLabel.text = item.descr;
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            if (item.iconTintColor)
+                cell.leftIconView.tintColor = item.iconTintColor;
+            else
+                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.accessoryType = (UITableViewCellAccessoryType) [item integerForKey:@"accessory_type"];
             cell.accessibilityTraits = UIAccessibilityTraitButton;
         }
@@ -439,6 +463,44 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     return UITableViewAutomaticDimension;
 }
 
+#pragma mark - Additions
+
+- (NSString *)tagsTextWithDefaultActivity
+{
+    NSString *baseTag = kDefaultTag;
+    NSString *activityTag = [self defaultActivityFromItems:_gpxItemsToUpload];
+    if (activityTag.length > 0)
+        return [NSString stringWithFormat:@"%@, %@", baseTag, activityTag];
+    
+    return baseTag;
+}
+
+- (nullable NSString *)defaultActivityFromItems:(NSArray<OASTrackItem *> *)items
+{
+    for (OASTrackItem *track in items)
+    {
+        OASGpxDataItem *item = [[OASGpxDbHelper shared] getItemFile:[[OASKFile alloc] initWithFilePath:track.path]];
+        NSString *activity = item ? [item getParameterParameter:OASGpxParameter.activityType] : nil;
+        if (activity.length > 0)
+            return activity;
+    }
+    
+    return nil;
+}
+
+- (NSOrderedSet<NSString *> *)orderedTagsFromString:(NSString *)tagsString
+{
+    NSMutableOrderedSet<NSString *> *set = [NSMutableOrderedSet orderedSet];
+    for (NSString *comp in [tagsString componentsSeparatedByString:@","])
+    {
+        NSString *tag = [comp stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+        if (tag.length > 0)
+            [set addObject:tag];
+    }
+    
+    return [set copy];
+}
+
 #pragma mark - Selectors
 
 - (void)onLeftNavbarButtonPressed
@@ -477,7 +539,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             return;
         }
         
-        if (_isAuthorised)
+        if (_isAuthorised && _isOAuthAllowed)
         {
             [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeUploading];
             [self generateData];
@@ -489,9 +551,11 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             
             _filesUploadingProgress = [NSMutableDictionary dictionary];
             _failedFileNames = [NSMutableArray array];
+            NSOrderedSet<NSString *> *tagsSet = [self orderedTagsFromString:_tagsText];
+            NSString *defaultActivity = [self defaultActivityFromItems:_gpxItemsToUpload];
             
             OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *)[OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
-            _uploadTask = [[OAUploadGPXFilesTask alloc] initWithPlugin:plugin gpxItemsToUpload:_gpxItemsToUpload tags:_tagsText visibility:visibility description:_descriptionText listener:self];
+            _uploadTask = [[OAUploadGPXFilesTask alloc] initWithPlugin:plugin gpxItemsToUpload:_gpxItemsToUpload tags:tagsSet defaultActivity:defaultActivity visibility:visibility description:_descriptionText listener:self];
             [_uploadTask uploadTracks];
         }
     }
@@ -542,7 +606,8 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
     else
     {
-        [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+        if (_isOAuthAllowed)
+            [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
     }
 }
 
@@ -614,6 +679,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         _isAuthorised = [OAOsmOAuthHelper isAuthorised];
         [self generateData];
         [self.tableView reloadData];
+        [self setupBottomButtons];
     });
 }
 
@@ -640,16 +706,16 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         [_failedFileNames addObject:fileName];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self setProgress: 100 fileName:fileName];
+        [self setProgress:100 fileName:fileName];
     });
 }
 
-- (NSArray<OAGPX *> *) getFailedFiles
+- (NSArray<OASTrackItem *> *) getFailedFiles
 {
-    NSMutableArray<OAGPX *> *failledFiles = [NSMutableArray array];
+    NSMutableArray<OASTrackItem *> *failledFiles = [NSMutableArray array];
     for (NSString *fileName in _failedFileNames)
     {
-        for (OAGPX *gpx in _gpxItemsToUpload)
+        for (OASTrackItem *gpx in _gpxItemsToUpload)
         {
             if ([gpx.gpxFileName isEqualToString:fileName])
                 [failledFiles addObject:gpx];

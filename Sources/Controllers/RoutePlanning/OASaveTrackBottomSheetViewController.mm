@@ -8,6 +8,8 @@
 
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
@@ -92,9 +94,13 @@
 {
     [self hide:YES];
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_fileName];
-    OAGPX *gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxFilePath];
+    OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxFilePath];
     if (gpx)
-        [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+    {
+        auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+        trackItem.dataItem = gpx;
+        [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
+    }
 }
 
 - (IBAction)createNewTrackButtonPressed:(id)sender

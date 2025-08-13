@@ -7,13 +7,12 @@
 //
 
 #import "OABaseEditorViewController.h"
-#import "OACollectionSingleLineTableViewCell.h"
-#import "OAColorCollectionViewController.h"
+#import "OAColorsPaletteCell.h"
 #import "OATextInputFloatingCell.h"
-#import "OAPoiTableViewCell.h"
 #import "OAShapesTableViewCell.h"
 #import "OAColorCollectionHandler.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "MaterialTextFields.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -24,18 +23,14 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAFavoriteItem.h"
 
-#define kIllegalFileNameCharacters [NSCharacterSet characterSetWithCharactersInString:@"\\?%*|\"<>:;.,"]
+static NSString * const kInputNameKey = @"kInputNameKey";
+static NSString * const kLastUsedIconsKey = @"kLastUsedIconsKey";
+static NSString * const kIconsKey = @"kIconsKey";
+static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
-#define kInputNameKey @"kInputNameKey"
-#define kLastUsedIconsKey @"kLastUsedIconsKey"
-#define kIconsKey @"kIconsKey"
-#define kBackgroundsKey @"kBackgroundsKey"
-
-#define kCategoryCellIndex 0
-#define kPoiCellIndex 1
-
-@interface OABaseEditorViewController () <UIColorPickerViewControllerDelegate, UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAColorCollectionDelegate, OAColorsCollectionCellDelegate, OACollectionTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate>
+@interface OABaseEditorViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAShapesTableViewCellDelegate, OACollectionCellDelegate, OABaseCollectionHandlerDelegate>
 
 @property(nonatomic) NSString *originalName;
 @property(nonatomic) NSString *editName;
@@ -44,25 +39,25 @@
 @property(nonatomic) NSString *editBackgroundIconName;
 @property(nonatomic) BOOL isNewItem;
 @property(nonatomic) BOOL wasChanged;
+@property(nonatomic) BOOL isTextViewNameValid;
+
 @property(nonatomic) OAGPXAppearanceCollection *appearanceCollection;
 
 @end
 
 @implementation OABaseEditorViewController
 {
-    MutableOrderedDictionary<NSString *, NSArray<NSString *> *> *_iconCategories;
-    NSArray<NSString *> *_currentCategoryIcons;
-    NSArray<NSString *> *_lastUsedIcons;
-    NSArray<NSDictionary<NSString *, NSString *> *> *_poiCategories;
-    NSString *_selectedIconCategoryName;
-    NSString *_selectedIconName;
-    OACollectionViewCellState *_scrollCellsState;
     NSMutableArray<MDCTextInputControllerUnderline *> *_floatingTextFieldControllers;
+   
+    PoiIconCollectionHandler *_poiIconCollectionHandler;
+    NSString *_selectedIconName;
 
+    OAColorCollectionHandler *_colorCollectionHandler;
     NSMutableArray<OAColorItem *> *_sortedColorItems;
     OAColorItem *_selectedColorItem;
     BOOL _needToScrollToSelectedColor;
 
+    ShapesCollectionHandler *_shapesCollectionHandler;
     NSArray<NSString *> *_backgroundIcons;
     NSArray<NSString *> *_backgroundIconNames;
     NSArray<NSString *> *_backgroundContourIconNames;
@@ -101,13 +96,13 @@
     self.editBackgroundIconName = @"";
     _wasChanged = NO;
     _needToScrollToSelectedColor = YES;
-    _scrollCellsState = [[OACollectionViewCellState alloc] init];
     _floatingTextFieldControllers = [NSMutableArray array];
 }
 
 - (void)postInit
 {
-    [self setupIcons];
+    [self setupIconHandler];
+    [self setupBackgroundIcons];
     [self setupColors];
 }
 
@@ -121,7 +116,7 @@
 
 - (NSString *)getTitle
 {
-    return _isNewItem ? OALocalizedString(@"fav_add_new_group") : OALocalizedString(@"change_appearance");
+    return _isNewItem ? OALocalizedString(@"fav_add_new_group") : OALocalizedString(@"default_appearance");
 }
 
 - (NSString *)getLeftNavbarButtonTitle
@@ -131,7 +126,7 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    _saveBarButton = [self createRightNavbarButton:OALocalizedString(@"shared_string_save")
+    _saveBarButton = [self createRightNavbarButton:OALocalizedString(@"shared_string_done")
                                           iconName:nil
                                             action:@selector(onRightNavbarButtonPressed)
                                               menu:nil];
@@ -139,14 +134,29 @@
     return @[_saveBarButton];
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+}
+
 #pragma mark - Table data
 
 - (void)generateData
 {
-    [self generateDescriptionSection];
+    if (self.isNewItem)
+        [self generateDescriptionSection];
     [self generateGroupSection];
-    [self generateIconSection];
-    [self generateColorSection];
+    if (self.isNewItem)
+    {
+        [self generateIconSection];
+        [self generateColorSection];
+    }
+    else
+    {
+        [self generateColorSection];
+        [self generateIconSection];
+    }
     [self generateShapeSection];
     [self generateActionSection];
 }
@@ -162,17 +172,12 @@
 - (void)generateIconSection
 {
     OATableSectionData *iconSection = [self.tableData createNewSection];
-    iconSection.headerText = OALocalizedString(@"shared_string_appearance");
-
     OATableRowData *iconRow = [iconSection createNewRow];
     iconRow.key = kIconsKey;
-    iconRow.cellType = [OAPoiTableViewCell getCellIdentifier];
+    iconRow.cellType = [OAIconsPaletteCell getCellIdentifier];
     iconRow.title = OALocalizedString(@"shared_string_icon");
+    iconRow.descr = OALocalizedString(@"shared_string_all_icons");
     [iconRow setObj:@"" forKey:@"value"];
-    [iconRow setObj:_selectedIconCategoryName forKey:@"selectedCategoryName"];
-    [iconRow setObj:_poiCategories forKey:@"categotyData"];
-    [iconRow setObj:_selectedIconName forKey:@"selectedIconName"];
-    [iconRow setObj:_currentCategoryIcons forKey:@"poiData"];
     _iconIndexPath = [NSIndexPath indexPathForRow:[iconSection rowCount] - 1
                                         inSection:[self.tableData sectionCount] - 1];
 }
@@ -181,32 +186,18 @@
 {
     OATableSectionData *colorSection = [self.tableData createNewSection];
     NSInteger appearenceSectionIndex = [self.tableData sectionCount] - 1;
-
     OATableRowData *colorTitleRow = [colorSection createNewRow];
-    colorTitleRow.key = @"colorTitle";
-    colorTitleRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+    colorTitleRow.key = @"color_cell";
+    colorTitleRow.cellType = [OAColorsPaletteCell getCellIdentifier];
     colorTitleRow.title = OALocalizedString(@"shared_string_coloring");
-
-    OATableRowData *gridRow = [colorSection createNewRow];
-    gridRow.key = @"colorGrid";
-    gridRow.cellType = [OACollectionSingleLineTableViewCell getCellIdentifier];
-    _colorGridIndexPath = [NSIndexPath indexPathForRow:[colorSection rowCount] - 1
-                                             inSection:appearenceSectionIndex];
-
-    OATableRowData *allColorsRow = [colorSection createNewRow];
-    allColorsRow.key = @"allColors";
-    allColorsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
-    allColorsRow.title = OALocalizedString(@"shared_string_all_colors");
-    [allColorsRow setObj:[UIColor colorNamed:ACColorNameTextColorActive] forKey:@"titleTintColor"];
-    _allColorsIndexPath = [NSIndexPath indexPathForRow:[colorSection rowCount] - 1
-                                             inSection:appearenceSectionIndex];
+    colorTitleRow.descr = OALocalizedString(@"shared_string_all_colors");
+    _colorGridIndexPath = [NSIndexPath indexPathForRow:0
+                                                 inSection:appearenceSectionIndex];
 }
 
 - (void)generateShapeSection
 {
     OATableSectionData *shapeSection = [self.tableData createNewSection];
-    shapeSection.headerText = OALocalizedString(@"shared_string_appearance");
-
     OATableRowData *shapeRow = [shapeSection createNewRow];
     shapeRow.key = kBackgroundsKey;
     shapeRow.cellType = [OAShapesTableViewCell getCellIdentifier];
@@ -253,39 +244,41 @@
         }
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAColorsPaletteCell getCellIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        OAColorsPaletteCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAColorsPaletteCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
-                                                         owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsPaletteCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
-            colorHandler.delegate = self;
-            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
-            if (selectedIndexPath.row == NSNotFound)
-                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultPointColorItem]] inSection:0];
-            [colorHandler setSelectedIndexPath:selectedIndexPath];
-            [cell setCollectionHandler:colorHandler];
-            cell.separatorInset = UIEdgeInsetsZero;
-            cell.rightActionButton.accessibilityLabel = OALocalizedString(@"shared_string_add_color");
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"]
-                                    forState:UIControlStateNormal];
-            cell.delegate = self;
+            cell.disableAnimationsOnStart = YES;
         }
         if (cell)
         {
+            [_colorCollectionHandler setCollectionView:cell.collectionView];
+            [cell setCollectionHandler:_colorCollectionHandler];
+            _colorCollectionHandler.hostVCOpenColorPickerButton = cell.rightActionButton;
+            cell.hostVC = self;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
+            if (selectedIndexPath.row == NSNotFound)
+                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultPointColorItem]] inSection:0];
+            [_colorCollectionHandler setSelectedIndexPath:selectedIndexPath];
+            [_colorCollectionHandler updateHostCellIfNeeded];
+            cell.topLabel.text = item.title;
+            [cell topButtonVisibility:!_isNewItem];
+            cell.descriptionLabel.text = OALocalizedString(@"original_color_description");
+            [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
-            [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-            [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
-
+            
             if (_needToScrollToSelectedColor)
             {
                 NSIndexPath *selectedIndexPath = [[cell getCollectionHandler] getSelectedIndexPath];
-                if (selectedIndexPath.row != NSNotFound && ![cell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+                if (selectedIndexPath.row != NSNotFound
+                    && indexPath.section < [cell.collectionView numberOfSections]
+                    && selectedIndexPath.row < [cell.collectionView numberOfItemsInSection:indexPath.section]
+                    && ![cell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
                 {
                     [cell.collectionView scrollToItemAtIndexPath:selectedIndexPath
                                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
@@ -300,33 +293,30 @@
     {
         return [item objForKey:@"cell"];
     }
-    else if ([item.cellType isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAIconsPaletteCell getCellIdentifier]])
     {
-        OAPoiTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPoiTableViewCell getCellIdentifier]];
+        OAIconsPaletteCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconsPaletteCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPoiTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconsPaletteCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.delegate = self;
-            cell.cellIndex = indexPath;
-            cell.state = _scrollCellsState;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsZero;
+            cell.useMultyLines = NO;
+            cell.forceScrollOnStart = YES;
+            cell.disableAnimationsOnStart = YES;
+            cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
-        if (cell)
-        {
-            cell.categoriesCollectionView.tag = kCategoryCellIndex;
-            cell.currentCategory = [item objForKey:@"selectedCategoryName"];
-            cell.categoryDataArray = [item objForKey:@"categotyData"];
-            cell.collectionView.tag = kPoiCellIndex;
-            cell.poiData = [item objForKey:@"poiData"];
-            cell.titleLabel.text = [item objForKey:@"title"];
-            cell.currentColor = _selectedColorItem.value;
-            cell.currentIcon = [item objForKey:@"selectedIconName"];
-            [cell.collectionView reloadData];
-            [cell.categoriesCollectionView reloadData];
-            [cell layoutIfNeeded];
-        }
+        cell.hostVC = self;
+        _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+        [_poiIconCollectionHandler setCollectionView:cell.collectionView];
+        [cell setCollectionHandler:_poiIconCollectionHandler];
+        [_poiIconCollectionHandler updateHostCellIfNeeded];
+        cell.topLabel.text = item.title;
+        cell.descriptionLabel.text = OALocalizedString(@"original_icon_description");
+        [cell topButtonVisibility:YES];
+        [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
+        [cell.collectionView reloadData];
+        [cell layoutIfNeeded];
         return cell;
     }
     else if ([item.cellType isEqualToString:[OAShapesTableViewCell getCellIdentifier]])
@@ -336,16 +326,21 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAShapesTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.delegate = self;
+            cell.shapesDelegate = self;
+            cell.disableAnimationsOnStart = YES;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
             cell.valueLabel.hidden = NO;
         }
         if (cell)
         {
+            [_shapesCollectionHandler setCollectionView:cell.collectionView];
+            [cell setCollectionHandler:_shapesCollectionHandler];
+            [_shapesCollectionHandler updateHostCellIfNeeded];
             cell.iconNames = [item objForKey:@"icons"];
             cell.contourIconNames = [item objForKey:@"contourIcons"];
             cell.titleLabel.text = item.title;
+            cell.descriptionLabel.text = OALocalizedString(@"original_shape_description");
             cell.valueLabel.text = [item objForKey:@"value"];
             cell.currentColor = _selectedColorItem.value;
             cell.currentIcon = [item integerForKey:@"index"];
@@ -356,29 +351,6 @@
     }
 
     return nil;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
- {
-     OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
-     if ([item.cellType isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
-     {
-         OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *) cell;
-         [poiCell updateContentOffsetForce:NO];
-     }
- }
-
-- (void)onRowSelected:(NSIndexPath *)indexPath
-{
-    OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
-    if ([item.key isEqualToString:@"allColors"])
-    {
-        OAColorCollectionViewController *colorCollectionViewController =
-            [[OAColorCollectionViewController alloc] initWithColorItems:[_appearanceCollection getAvailableColorsSortingByKey]
-                                                      selectedColorItem:_selectedColorItem];
-        colorCollectionViewController.delegate = self;
-        [self showViewController:colorCollectionViewController];
-    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -393,11 +365,6 @@
 }
 
 #pragma mark - Selecors
-
-- (void)onCellButtonPressed:(UIButton *)sender
-{
-    [self onRightActionButtonPressed:sender.tag];
-}
 
 - (void)clearButtonPressed:(UIButton *)sender
 {
@@ -424,48 +391,62 @@
 {
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[self.editColor toARGBNumber]];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
+    _colorCollectionHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] isFavoriteList:!_isNewItem];
+    _colorCollectionHandler.delegate = self;
+    _colorCollectionHandler.handlerDelegate = self;
+    _colorCollectionHandler.hostVC = self;
+    
+    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:self.editName];
+    if (group)
+    {
+        NSMutableArray *colors = [NSMutableArray array];
+        for (OAFavoriteItem *item in group.points)
+        {
+            [colors addObject:[item getColor]];
+        }
+        _colorCollectionHandler.groupColors = [colors copy];
+    }
+    [_colorCollectionHandler setupDefaultCategory];
 }
 
-- (void)setupIcons
+- (void) setupIconHandler
 {
-    [self createIconSelector];
-    NSString *preselectedIconName = self.editIconName;
-    if (!preselectedIconName)
-        preselectedIconName = [self getDefaultIconName];
-    _selectedIconName = preselectedIconName;
-
-    NSMutableArray<NSDictionary<NSString *, NSString *> *> *categoriesData = [NSMutableArray array];
-    for (NSString *category in _iconCategories)
+    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] initWithIsFavoriteList:!self.isNewItem];
+    _poiIconCollectionHandler.delegate = self;
+    _poiIconCollectionHandler.handlerDelegate = self;
+    _poiIconCollectionHandler.hostVC = self;
+    _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
+    _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+    
+    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:self.editName];
+    if (group)
     {
-        if ([category isEqualToString:kLastUsedIconsKey])
+        NSMutableArray *iconNames = [NSMutableArray array];
+        for (OAFavoriteItem *item in group.points)
         {
-            [categoriesData addObject: @{
-                @"title" : @"",
-                @"categoryName" : kLastUsedIconsKey,
-                @"img" : @"ic_custom_history",
-            }];
+            [iconNames addObject:[item getIcon]];
         }
-        else
-        {
-            [categoriesData addObject: @{
-                @"title" : OALocalizedString(category),
-                @"categoryName" : category,
-                @"img" : @"",
-            }];
-        }
+        _poiIconCollectionHandler.groupIcons = [iconNames copy];
     }
-
-    _poiCategories = categoriesData;
-
-    if (!_selectedIconName || _selectedIconName.length == 0)
+    
+    [_poiIconCollectionHandler setItemSizeWithSize:48];
+    [_poiIconCollectionHandler setIconBackgroundSizeWithSize:36];
+    [_poiIconCollectionHandler setIconSizeWithSize:24];
+    [_poiIconCollectionHandler setSpacingWithSpacing:9];
+    
+    if (!_isNewItem && self.editIconName)
+        _selectedIconName = self.editIconName;
+    else
     {
-        _selectedIconName = DEFAULT_ICON_NAME;
+        _selectedIconName = [self getDefaultIconName];
         self.editIconName = _selectedIconName;
     }
+    [_poiIconCollectionHandler setIconName:_selectedIconName];
+}
 
-    if (!_selectedIconCategoryName || _selectedIconCategoryName.length == 0)
-        _selectedIconCategoryName = @"special";
-
+- (void)setupBackgroundIcons
+{
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
 
@@ -481,6 +462,28 @@
         _selectedBackgroundIndex = 0;
         self.editBackgroundIconName = _backgroundIconNames.firstObject;
     }
+    _shapesCollectionHandler = [[ShapesCollectionHandler alloc] initWithBackgroundIconNames:_backgroundIconNames isFavoriteList:!self.isNewItem];
+    _shapesCollectionHandler.handlerDelegate = self;
+    _shapesCollectionHandler.hostVC = self;
+    
+    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:self.editName];
+    if (group)
+    {
+        NSMutableArray *backgroundIconNames = [NSMutableArray array];
+        for (OAFavoriteItem *item in group.points)
+        {
+            [backgroundIconNames addObject:[item getBackgroundIcon]];
+        }
+        _shapesCollectionHandler.groupShapes = [backgroundIconNames copy];
+    }
+    
+    _shapesCollectionHandler.selectedCatagoryKey = _backgroundIconNames[_selectedBackgroundIndex];
+    [_shapesCollectionHandler setupDefaultCategory];
+}
+
+- (NSString *)getPreselectedIconName
+{
+    return (!_isNewItem) ? nil : self.editIconName;
 }
 
 - (NSString *)getDefaultIconName
@@ -488,31 +491,11 @@
     NSString *preselectedIconName = [self getPreselectedIconName];
     if (preselectedIconName && preselectedIconName.length > 0)
         return preselectedIconName;
-    else if (_lastUsedIcons && _lastUsedIcons.count > 0)
-        return _lastUsedIcons[0];
-    return DEFAULT_ICON_NAME;
-}
-
-- (void)createIconSelector
-{
-    _iconCategories = [MutableOrderedDictionary dictionary];
-    // update last used icons
-    if (_lastUsedIcons && _lastUsedIcons.count > 0)
-        _iconCategories[kLastUsedIconsKey] = _lastUsedIcons;
-
-    OrderedDictionary<NSString *, NSArray<NSString *> *> *categories = [self loadOrderedJSON];
-    if (categories)
-    {
-        for (int i = 0; i < [categories allKeys].count; i++)
-        {
-            NSString *name = [categories allKeys][i];
-            NSArray *icons = categories[name];
-            NSString *translatedName = OALocalizedString([NSString stringWithFormat:@"icon_group_%@", name]);
-            _iconCategories[translatedName] = icons;
-        }
-    }
-    _selectedIconCategoryName = [self getInitCategory];
-    [self createIconList];
+    else if (self.editIconName && self.editIconName.length > 0)
+        return self.editIconName;
+    else if (_poiIconCollectionHandler.lastUsedIcons && _poiIconCollectionHandler.lastUsedIcons.count > 0)
+        return _poiIconCollectionHandler.lastUsedIcons[0];
+    return DEFAULT_ICON_NAME_KEY;
 }
 
 - (OrderedDictionary<NSString *, NSArray<NSString *> *> *)loadOrderedJSON
@@ -549,46 +532,6 @@
         }
     }
     return nil;
-}
-
-- (NSString *)getInitCategory
-{
-    for (int j = 0; j < _iconCategories.allKeys.count; j ++)
-    {
-        NSArray<NSString *> *iconsArray = _iconCategories[[_iconCategories allKeys][j]];
-        for (int i = 0; i < iconsArray.count; i ++)
-        {
-            if ([iconsArray[i] isEqualToString:self.editIconName])
-                return [_iconCategories allKeys][j];
-        }
-    }
-    return [_iconCategories allKeys][0];
-}
-
-- (void)createIconList
-{
-    NSMutableArray<NSString *> *iconNameList = [NSMutableArray array];
-    [iconNameList addObjectsFromArray:_iconCategories[_selectedIconCategoryName]];
-    NSString *preselectedIconName = [self getPreselectedIconName];
-    if (preselectedIconName && preselectedIconName.length > 0 && [_selectedIconCategoryName isEqualToString:kLastUsedIconsKey])
-    {
-        [iconNameList removeObject:preselectedIconName];
-        [iconNameList insertObject:preselectedIconName atIndex:0];
-    }
-    _currentCategoryIcons = iconNameList;
-}
-
-- (NSString *)getPreselectedIconName
-{
-    return (!_isNewItem) ? nil : self.editIconName;
-}
-
-- (void)openColorPickerWithColor:(OAColorItem *)colorItem
-{
-    UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
-    colorViewController.delegate = self;
-    colorViewController.selectedColor = [colorItem getColor];
-    [self presentViewController:colorViewController animated:YES completion:nil];
 }
 
 - (OATextInputFloatingCell *) getInputCellWithHint:(NSString *)hint
@@ -629,37 +572,29 @@
     return resultCell;
 }
 
-#pragma mark - OAPoiTableViewCellDelegate
-
-- (void)onPoiCategorySelected:(NSString *)category index:(NSInteger)index
+- (BOOL)isValidText
 {
-    _selectedIconCategoryName = category;
-    [self createIconList];
-    [self applyLocalization];
-    OATableRowData *iconRow = [self.tableData itemForIndexPath:_iconIndexPath];
-    [iconRow setObj:_selectedIconCategoryName forKey:@"selectedCategoryName"];
-    [iconRow setObj:_currentCategoryIcons forKey:@"poiData"];
-    OAPoiTableViewCell *cell = [self.tableView cellForRowAtIndexPath:_iconIndexPath];
-    [cell updateIconsList:_currentCategoryIcons];
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
+    return !_isNewItem || _isTextViewNameValid;
 }
 
-- (void)onPoiSelected:(NSString *)poiName;
+- (BOOL)isAppearanceChanged
 {
-    _wasChanged = YES;
-    _selectedIconName = poiName;
-    self.editIconName = _selectedIconName;
-    [self applyLocalization];
-    OATableRowData *iconRow = [self.tableData itemForIndexPath:_iconIndexPath];
-    [iconRow setObj:_selectedIconName forKey:@"selectedIconName"];
-
     OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
+    return !groupExist
+            || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
+            || ![self.editIconName isEqual:groupExist.iconName]
+            || ![self.editColor isEqual:groupExist.color];
+}
+
+- (void)changeSaveButtonAvailabilityWithGroup
+{
     [self changeButtonAvailability:_saveBarButton
-                         isEnabled:!groupExist
-     || ![self.editIconName isEqual:groupExist.iconName]
-     || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
-     || ![self.editColor isEqual:groupExist.color]];
+                         isEnabled:[self isValidText] && [self isAppearanceChanged]];
+}
+
+- (PoiIconCollectionHandler *) getPoiIconCollectionHandler
+{
+    return _poiIconCollectionHandler;
 }
 
 #pragma mark - OAShapesTableViewCellDelegate
@@ -678,164 +613,88 @@
     [self.tableView reloadRowsAtIndexPaths:@[_shapeIndexPath]
                           withRowAnimation:UITableViewRowAnimationNone];
 
-    OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
-    [self changeButtonAvailability:_saveBarButton
-                         isEnabled:!groupExist
-        || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
-        || ![self.editIconName isEqual:groupExist.iconName]
-        || ![self.editColor isEqual:groupExist.color]];
-}
-
-#pragma mark - OACollectionTableViewCellDelegate
-
-- (void)onRightActionButtonPressed:(NSInteger)tag
-{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag & 0x3FF inSection:tag >> 10];
-    OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
-    if ([item.key isEqualToString:@"colorGrid"])
-        [self openColorPickerWithColor:_selectedColorItem];
-}
-
-#pragma mark - OAColorCollectionDelegate
-
-- (void)selectColorItem:(OAColorItem *)colorItem
-{
-    _needToScrollToSelectedColor = YES;
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0]];
-    [self.tableView reloadRowsAtIndexPaths:@[_colorGridIndexPath, _shapeIndexPath]
-                          withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
-{
-    if (self.delegate)
-    {
-        OAColorItem *newColorItem = [self.delegate addAndGetNewColorItem:color];
-        [_sortedColorItems insertObject:newColorItem atIndex:0];
-        return newColorItem;
-    }
-    return nil;
-}
-
-- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
-{
-    if (self.delegate)
-        [self.delegate changeColorItem:colorItem withColor:color];
-}
-
-- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
-{
-    if (self.delegate && _colorGridIndexPath)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
-        OAColorItem *duplicatedColorItem = [self.delegate duplicateColorItem:colorItem];
-        [_sortedColorItems insertObject:duplicatedColorItem atIndex:indexPath.row + 1];
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorGridIndexPath];
-        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
-        [colorHandler addColor:newIndexPath newItem:duplicatedColorItem];
-        return duplicatedColorItem;
-    }
-    return nil;
-}
-
-- (void)deleteColorItem:(OAColorItem *)colorItem
-{
-    if (self.delegate && _colorGridIndexPath)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
-        OAColorItem *colorItem = _sortedColorItems[indexPath.row];
-        [_sortedColorItems removeObjectAtIndex:indexPath.row];
-        [self.delegate deleteColorItem:colorItem];
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorGridIndexPath];
-        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        [colorHandler removeColor:indexPath];
-    }
+    [self changeSaveButtonAvailabilityWithGroup];
 }
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss
 {
-    _selectedColorItem = _sortedColorItems[indexPath.row];
-    self.editColor = [_selectedColorItem getColor];
     _wasChanged = YES;
+    if (collectionView == [_poiIconCollectionHandler getCollectionView])
+    {
+        NSString *iconName = [_poiIconCollectionHandler getSelectedItem];
+        if (iconName)
+            _selectedIconName = iconName;
+        self.editIconName = _selectedIconName;
+    }
+    else if (collectionView == [_colorCollectionHandler getCollectionView])
+    {
+        _selectedColorItem = [_colorCollectionHandler getData][indexPath.section][indexPath.row];
+        self.editColor = [_selectedColorItem getColor];
+        
+        _needToScrollToSelectedColor = YES;
+        [self.tableView reloadRowsAtIndexPaths:@[_iconIndexPath, _shapeIndexPath]
+                              withRowAnimation:UITableViewRowAnimationNone];
+    }
+    
     [self applyLocalization];
-    [self.tableView reloadRowsAtIndexPaths:@[_iconIndexPath, _shapeIndexPath]
-                          withRowAnimation:UITableViewRowAnimationNone];
-
-    OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
-    [self changeButtonAvailability:_saveBarButton
-                         isEnabled:!groupExist
-     || ![self.editColor isEqual:groupExist.color]
-     || ![self.editIconName isEqual:groupExist.iconName]
-     || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]];
+    [self changeSaveButtonAvailabilityWithGroup];
 }
 
 - (void)reloadCollectionData
 {
+    [self.tableView reloadRowsAtIndexPaths:@[_colorGridIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark - OAColorsCollectionCellDelegate
+#pragma mark - OABaseCollectionHandlerDelegate
 
-- (void)onContextMenuItemEdit:(NSIndexPath *)indexPath
+- (void)onCategorySelected:(NSString *)category with:(OAIconsPaletteCell *)cell
 {
-    _editColorIndexPath = indexPath;
-    [self openColorPickerWithColor:_sortedColorItems[indexPath.row]];
-}
-
-- (void)duplicateItemFromContextMenu:(NSIndexPath *)indexPath
-{
-    [self duplicateColorItem:_sortedColorItems[indexPath.row]];
-}
-
-- (void)deleteItemFromContextMenu:(NSIndexPath *)indexPath
-{
-    [self deleteColorItem:_sortedColorItems[indexPath.row]];
-}
-
-#pragma mark - UIColorPickerViewControllerDelegate
-
-- (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
-{
-    OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorGridIndexPath];
-    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-    if (_editColorIndexPath)
+    if (_isNewItem)
+        return;
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath)
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    if ([category isEqualToString: @"original"])
     {
-        if (![[_sortedColorItems[_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
+        OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
+        if (groupExist)
         {
-            [self changeColorItem:_sortedColorItems[_editColorIndexPath.row] withColor:viewController.selectedColor];
-            [colorHandler replaceOldColor:_editColorIndexPath];
+            _selectedIconName = groupExist.iconName;
+            self.editIconName = _selectedIconName;
         }
-        _editColorIndexPath = nil;
     }
-    else
-    {
-        OAColorItem *newColorItem = [self addAndGetNewColorItem:viewController.selectedColor];
-        [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0] newItem:newColorItem];
-    }
+    [self changeSaveButtonAvailabilityWithGroup];
+}
+
+- (void)onCategorySelectedWith:(OACollectionSingleLineTableViewCell *)cell
+{
+    if (_isNewItem)
+        return;
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath)
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self changeSaveButtonAvailabilityWithGroup];
 }
 
 #pragma mark - UITextViewDelegate
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    BOOL isEnabled = YES;
+    _isTextViewNameValid = YES;
     _wasChanged = YES;
     NSIndexPath *indexPath = [self indexPathForCellContainingView:textView inTableView:self.tableView];
     OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
     if ([item.key isEqualToString:kInputNameKey])
     {
         OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:textView.text];
-        isEnabled = textView.text.length > 0
-            && [textView.text rangeOfCharacterFromSet:kIllegalFileNameCharacters].length == 0
-            && ![textView.text isEqualToString:OALocalizedString(@"favorites_item")]
-            && ![textView.text isEqualToString:OALocalizedString(@"personal_category_name")]
-            && ![textView.text isEqualToString:kPersonalCategory]
-            && !groupExist;
-        if (!isEnabled && groupExist)
+        _isTextViewNameValid = [OAFavoritesHelper isGroupNameValidWithText:textView.text] && !groupExist;
+        if (!_isTextViewNameValid && groupExist)
         {
-            isEnabled = textView.text.length > 0
+            _isTextViewNameValid = textView.text.length > 0
                 && (![groupExist.iconName isEqualToString:self.editIconName]
                 || ![groupExist.backgroundType isEqualToString:self.editBackgroundIconName]
                 || ![groupExist.color isEqual:self.editColor]);
@@ -844,7 +703,7 @@
     }
 
     [self applyLocalization];
-    [self changeButtonAvailability:_saveBarButton isEnabled:isEnabled];
+    [self changeButtonAvailability:_saveBarButton isEnabled:_isTextViewNameValid];
 }
 
 #pragma mark - MDCMultilineTextInputLayoutDelegate

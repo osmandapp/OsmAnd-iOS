@@ -10,7 +10,9 @@
 #import "OAResourcesUIHelper.h"
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
-#include "Localization.h"
+#import "Localization.h"
+#import "OAObservable.h"
+#import "OsmAndApp.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define kLiveUpdatesOnPrefix @"live_updates_on_"
@@ -128,14 +130,14 @@
     }
 }
 
-+ (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager
++ (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager checkUpdatesAsync:(BOOL)checkUpdatesAsync forceUpdate:(BOOL)forceUpdate
 {
     if (![OAAppSettings sharedManager].settingOsmAndLiveEnabled.get || ![OAIAPHelper isSubscribedToLiveUpdates])
         return;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    void (^downloadUpdatesBlock)(void) = ^{
         NSString *regionNameStr = regionName.toNSString();
-        if ([OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])
+        if (forceUpdate || [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])
         {
             AFNetworkReachabilityStatus status = AFNetworkReachabilityManager.sharedManager.networkReachabilityStatus;
             BOOL downloadOnlyViaWiFi = [OAOsmAndLiveHelper getPreferenceWifiForLocalIndex:regionNameStr];
@@ -147,7 +149,7 @@
             NSDate *lastUpdateDate = [NSDate dateWithTimeIntervalSince1970:updateTime];
             int seconds = -[lastUpdateDate timeIntervalSinceNow];
             int secondsRequired = updateFrequency == ELiveUpdateFrequencyHourly ? kLiveUpdateFrequencyHour : updateFrequency == ELiveUpdateFrequencyDaily ? kLiveUpdateFrequencyDay : kLiveUpdateFrequencyWeek;
-            if (seconds > secondsRequired || updateTime == -1.0)
+            if (seconds > secondsRequired || updateTime == -1.0 || forceUpdate)
             {
                 const auto& lst = resourcesManager->changesManager->getUpdatesByMonth(regionName);
                 for (const auto& res : lst->getItemsForUpdate())
@@ -158,7 +160,12 @@
                 [[OsmAndApp instance].osmAndLiveUpdatedObservable notifyEvent];
             }
         }
-    });
+    };
+
+    if (checkUpdatesAsync)
+    	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), downloadUpdatesBlock);
+    else
+        downloadUpdatesBlock();
 }
 
 @end

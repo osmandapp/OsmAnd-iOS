@@ -71,6 +71,11 @@
     _separatorBottomView.backgroundColor = _separatorRightView.backgroundColor = color;
 }
 
+- (BOOL)handleRowSelected:(OATableRowData *)item viewController:(WidgetConfigurationViewController *)viewController {
+    return NO;
+}
+
+
 - (void)replaceHeightConstraintWithRelation:(NSLayoutRelation)relation constant:(CGFloat)constant priority:(UILayoutPriority)priority
 {
     if (_heightConstraint)
@@ -140,21 +145,23 @@
         [widgetState copyPrefs:appMode customId:customId];
 }
 
-- (OAWidgetState *) getWidgetState {
+- (OAWidgetState *)getWidgetState {
     return nil;
 }
 
-- (BOOL) isExternal
+- (BOOL)isExternal
 {
     return self.widgetType == nil;
 }
 
-- (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+- (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode *)appMode
+                     widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams
+                                      isCreate:(BOOL)isCreate
 {
     return nil;
 }
 
-- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode * _Nonnull)appMode
+- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams
 {
     return nil;
 }

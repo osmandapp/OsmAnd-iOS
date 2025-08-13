@@ -16,8 +16,10 @@
 #import "OAMenuViewControllerProtocol.h"
 #import "OAFavoriteImportViewController.h"
 #import "OAOptionsPanelBlackViewController.h"
+#import "OAApplicationMode.h"
 #import "OAMapCreatorHelper.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OADonationSettingsViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAFileImportHelper.h"
@@ -28,11 +30,13 @@
 #import "OABackupHelper.h"
 #import "OACloudAccountVerificationViewController.h"
 #import "SceneDelegate.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OANavigationController.h"
+#import "StartupLogging.h"
 
 #define _(name) OARootViewController__##name
 #define commonInit _(commonInit)
-#define deinit _(deinit)
 
 #define TEST_LOCAL_PURCHASE NO
 
@@ -112,8 +116,9 @@ typedef enum : NSUInteger {
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    LogStartup(@"viewDidLoad");
     
-    // 80% of smallest device width in portait mode (320 points)
+    // 80% of smallest device width in portrait mode (320 points)
     self.leftFixedWidth = kDrawerWidth;
     self.rightFixedWidth = kDrawerWidth;
     self.shouldResizeLeftPanel = NO;
@@ -145,6 +150,7 @@ typedef enum : NSUInteger {
         [self handleOsmAndCloudVerification:self.token];
         self.token = nil;
     }
+    LogStartup(@"viewDidAppear");
 }
 
 - (BOOL) prefersStatusBarHidden
@@ -243,7 +249,7 @@ typedef enum : NSUInteger {
     OACloudAccountVerificationViewController *verificationVC = [[OACloudAccountVerificationViewController alloc] initWithEmail:OAAppSettings.sharedManager.backupUserEmail.get sourceType:EOACloudScreenSourceTypeSignIn];
     [self.navigationController pushViewController:verificationVC animated:NO];
     
-    if ([OABackupHelper isTokenValid:tokenParam])
+    if ([BackupUtils isTokenValid:tokenParam])
     {
         [OABackupHelper.sharedInstance registerDevice:tokenParam];
     }
@@ -883,6 +889,7 @@ typedef enum : NSUInteger {
         [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
         [UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap)],
         [UIKeyCommand keyCommandWithInput:@"c" modifierFlags:0 action:@selector(recenterMap)],
+        [UIKeyCommand keyCommandWithInput:@"l" modifierFlags:0 action:@selector(recenterMap)],
         [UIKeyCommand keyCommandWithInput:@"d" modifierFlags:0 action:@selector(changeMapOrienation)],
         [UIKeyCommand keyCommandWithInput:@"n" modifierFlags:0 action:@selector(showRouteInfo)],
         [UIKeyCommand keyCommandWithInput:@"o" modifierFlags:0 action:@selector(changeAppModeToPrev)],

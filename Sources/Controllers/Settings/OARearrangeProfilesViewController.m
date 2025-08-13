@@ -148,7 +148,7 @@
     {
         cell.titleLabel.text = mode.toHumanString;
         cell.leftIconView.image = [UIImage templateImageNamed:[mode getIconName]];
-        cell.leftIconView.tintColor = UIColorFromRGB([mode getIconColor]);
+        cell.leftIconView.tintColor = [mode getProfileColor];
 
         NSString *imageName = !isAllProfiles ? @"ic_custom_undo_button" : [mode isCustomProfile] ? @"ic_custom_delete" : @"ic_custom_delete_disable";
         [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
@@ -181,15 +181,9 @@
 {
     _hasChangesBeenMade = YES;
     OAEditProfileItem *item = [self getItem:sourceIndexPath];
-    // Deferr the data update until the animation is complete
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        [self.tableView reloadData];
-    }];
     [_appProfiles removeObjectAtIndex:sourceIndexPath.row];
     [_appProfiles insertObject:item atIndex:destinationIndexPath.row];
     [self updateProfileIndexes];
-    [CATransaction commit];
 }
 
 #pragma mark - UITableViewDelegate

@@ -10,32 +10,34 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAGPXDatabase.h"
 #import "OARightIconTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OAAddTrackFolderViewController.h"
 #import "OsmAndApp.h"
-#import "OALoadGpxTask.h"
 #import "OATableViewCustomHeaderView.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kAddNewFolderSection 0
 #define kFoldersListSection 1
 
-@interface OASelectTrackFolderViewController() <OAAddTrackFolderDelegate>
+@interface OASelectTrackFolderViewController() <OAAddTrackFolderDelegate, OASTrackFolderLoaderTaskLoadTracksListener>
 
 @end
 
 @implementation OASelectTrackFolderViewController
 {
-    OAGPX *_gpx;
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSString *_selectedFolderName;
     NSString *_excludedSubfolderPath;
+    NSArray<NSString *> *_excludedSubfolderPaths;
+    OASTrackFolderLoaderTask *_folderLoaderTask;
 }
 
 #pragma mark - Initialization
 
-- (instancetype)initWithGPX:(OAGPX *)gpx
+- (instancetype)initWithGPX:(OASTrackItem *)gpx
 {
     self = [super init];
     if (self)
@@ -43,10 +45,10 @@
         _selectedFolderName = gpx.gpxFolderName;
         if ([_selectedFolderName isEqualToString:@""])
             _selectedFolderName = OALocalizedString(@"shared_string_gpx_tracks");
-        [self reloadData];
     }
     return self;
 }
+
 
 - (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName;
 {
@@ -54,7 +56,6 @@
     if (self)
     {
         _selectedFolderName = selectedFolderName;
-        [self reloadData];
     }
     return self;
 }
@@ -66,7 +67,17 @@
     {
         _selectedFolderName = selectedFolderName;
         _excludedSubfolderPath = excludedSubfolderPath;
-        [self reloadData];
+    }
+    return self;
+}
+
+- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPaths:(NSArray<NSString *> *)excludedSubfolderPaths
+{
+    self = [super init];
+    if (self)
+    {
+        _selectedFolderName = selectedFolderName;
+        _excludedSubfolderPaths = excludedSubfolderPaths;
     }
     return self;
 }
@@ -80,10 +91,15 @@
     self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+
+    [self reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    if (_folderLoaderTask)
+        [_folderLoaderTask cancel];
+
     if (_delegate && [_delegate respondsToSelector:@selector(onFolderSelectCancelled)])
         [_delegate onFolderSelectCancelled];
     [super viewWillDisappear:animated];
@@ -103,7 +119,7 @@
 
 #pragma mark - Table data
 
-- (void)generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
+- (void)generateData:(NSArray<NSString *> *)allFolderNames folders:(NSDictionary<NSString *, OASTrackFolder *> *)folders
 {
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
@@ -120,14 +136,30 @@
         if (_excludedSubfolderPath && [folderName hasPrefix:_excludedSubfolderPath])
             continue;
         
-        NSArray *folderItems = foldersData[folderName];
-        int tracksCount = folderItems ? folderItems.count : 0;
+        if (_excludedSubfolderPaths && _excludedSubfolderPaths.count > 0)
+        {
+            BOOL skip = NO;
+            for (NSString *excludedPath in _excludedSubfolderPaths)
+            {
+                NSString *slashPath = [excludedPath stringByAppendingString:@"/"];
+                if ([folderName isEqualToString:excludedPath] || [folderName hasPrefix:slashPath])
+                {
+                    skip = YES;
+                    break;
+                }
+            }
+            if (skip)
+                continue;
+        }
+        
+        NSArray<OASTrackItem *> *folderItems = folders[folderName].getTrackItems;
+        int tracksCount = folderItems ? (int) folderItems.count : 0;
         NSString *selectedFolderName = _selectedFolderName.length == 0 ? OALocalizedString(@"shared_string_gpx_tracks") : _selectedFolderName;
         [cellFoldersData addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"header" : OALocalizedString(@"plan_route_folder"),
             @"title" : folderName,
-            @"description" : [NSString stringWithFormat:@"%i", tracksCount],
+            @"description" : [NSString stringWithFormat:@"%d", tracksCount],
             @"isSelected" : [NSNumber numberWithBool:[folderName isEqualToString: selectedFolderName]],
             @"img" : @"ic_custom_folder"
         }];
@@ -139,13 +171,16 @@
 
 - (void)reloadData
 {
-    NSArray<NSString *> *allFoldersNames = [OAUtilities getGpxFoldersListSorted:YES shouldAddRootTracksFolder:YES];
-        
-    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
-    [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
-        [self generateData:allFoldersNames foldersData:gpxFolders];
-        [self.tableView reloadData];
+    if (_folderLoaderTask)
+        [_folderLoaderTask cancel];
+
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:OsmAndApp.instance.gpxPath];
+    OASTrackFolder *rootFolder = [[OASTrackFolder alloc] initWithDirFile:file parentFolder:nil];
+    _folderLoaderTask = [[OASTrackFolderLoaderTask alloc] initWithFolder:rootFolder listener:self forceLoad:NO];
+    OASKotlinArray<OASKotlinUnit *> *emptyArray = [OASKotlinArray<OASKotlinUnit *> arrayWithSize:0 init:^OASKotlinUnit *(OASInt *index) {
+        return nil;
     }];
+    [_folderLoaderTask executeParams:emptyArray];
 }
 
 - (NSInteger)sectionsCount
@@ -249,14 +284,48 @@
 
 #pragma mark - OAAddTrackFolderDelegate
 
-- (void)onTrackFolderAdded:(NSString *)folderName 
+- (void)onTrackFolderAdded:(NSString *)folderName
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIViewController *controllerToDismiss = self.presentingViewController ?: self;
-        [controllerToDismiss dismissViewControllerAnimated:YES completion:^{
-            [_delegate onFolderAdded:folderName];
-        }];
-    });
+    [_delegate onFolderAdded:folderName];
+    UIViewController *controllerToDismiss = self.presentingViewController ?: self;
+    [controllerToDismiss dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - OASTrackFolderLoaderTaskLoadTracksListener
+
+- (void)deferredLoadTracksFinishedFolder:(OASTrackFolder *)folder __attribute__((swift_name("deferredLoadTracksFinished(folder:)")))
+{
+}
+
+- (void)loadTracksFinishedFolder:(OASTrackFolder *)folder __attribute__((swift_name("loadTracksFinished(folder:)")))
+{
+    NSString *gpxPath = OsmAndApp.instance.gpxPath;
+    NSMutableDictionary<NSString *, OASTrackFolder *> *folders = [NSMutableDictionary dictionary];
+    NSMutableArray<NSString *> *flattenedFilePaths = [NSMutableArray array];
+    folders[OALocalizedString(@"shared_string_gpx_tracks")] = folder;
+    NSString *pathToDelete = [gpxPath stringByAppendingString:@"/"];
+    for (OASTrackFolder *subFolder in folder.getFlattenedSubFolders)
+    {
+        NSString *path = subFolder.getDirFile.absolutePath;
+        folders[[path stringByReplacingOccurrencesOfString:pathToDelete withString:@""]] = subFolder;
+        [flattenedFilePaths addObject:path];
+    }
+    NSArray<NSString *> *allFoldersNames = [OAUtilities getGpxFoldersListSorted:flattenedFilePaths shouldSort:YES shouldAddRootTracksFolder:YES];
+
+    [self generateData:allFoldersNames folders:folders];
+    [self.tableView reloadData];
+}
+
+- (void)loadTracksProgressItems:(OASKotlinArray<OASTrackItem *> *)items __attribute__((swift_name("loadTracksProgress(items:)")))
+{
+}
+
+- (void)loadTracksStarted __attribute__((swift_name("loadTracksStarted()")))
+{
+}
+
+- (void)tracksLoadedFolder:(OASTrackFolder *)folder __attribute__((swift_name("tracksLoaded(folder:)")))
+{
 }
 
 @end

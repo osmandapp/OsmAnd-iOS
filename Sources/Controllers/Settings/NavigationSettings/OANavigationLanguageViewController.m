@@ -10,9 +10,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OAVoicePromptsViewController.h"
 #import "OAAppSettings.h"
-
 #import "OsmAndApp.h"
-#import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 
 #import "Localization.h"

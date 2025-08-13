@@ -8,10 +8,10 @@
 
 #import "OABaseButtonsViewController.h"
 
-@class OAGPX;
+@class OASTrackItem;
 
 @interface OAOsmUploadGPXViewConroller : OABaseButtonsViewController
 
-- (instancetype)initWithGPXItems:(NSArray<OAGPX *> *)gpxItemsToUpload;
+- (instancetype)initWithGPXItems:(NSArray<OASTrackItem *> *)gpxItemsToUpload;
 
 @end

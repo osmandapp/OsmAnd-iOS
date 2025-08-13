@@ -6,20 +6,21 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OASettingsHelper.h"
+#import <Foundation/Foundation.h>
 #import "OASettingsItemReader.h"
 #import "OASettingsItemWriter.h"
 #import "OASettingsItemType.h"
-#import "Localization.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 #define APPROXIMATE_PREFERENCE_SIZE_BYTES 60
 
+FOUNDATION_EXPORT NSString * _Nonnull const kRoutingPreferencePrefix;
+
 FOUNDATION_EXTERN NSString *const kSettingsItemErrorDomain;
 FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 
-@class OAGPXDocument;
+@class OASGpxFile;
 
 @interface OASettingsItem : NSObject
 
@@ -37,7 +38,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 @property (nonatomic, assign) BOOL shouldReplace;
 @property (nonatomic, assign) BOOL read;
 
-- (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error;
+- (nullable instancetype) initWithJson:(id)json error:(NSError * _Nullable *)error;
 - (instancetype) initWithBaseItem:(OASettingsItem *)baseItem;
 - (void) initialization;
 
@@ -63,7 +64,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 - (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs;
 - (OASettingsItemReader *) getJsonReader;
 - (OASettingsItemWriter *) getJsonWriter;
-- (OASettingsItemWriter *) getGpxWriter:(OAGPXDocument *)gpxFile;
+- (OASettingsItemWriter *) getGpxWriter:(OASGpxFile *)gpxFile;
 
 @end
 
@@ -77,7 +78,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 
 @interface OASettingsItemGpxWriter : OASettingsItemWriter<OASettingsItem *>
 
-- (instancetype) initWithItem:(OASettingsItem *)item gpxDocument:(OAGPXDocument *)gpxFile;
+- (instancetype) initWithItem:(OASettingsItem *)item gpxDocument:(OASGpxFile *)gpxFile;
 
 @end
 

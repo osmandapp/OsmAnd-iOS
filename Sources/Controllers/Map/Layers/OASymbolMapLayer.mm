@@ -10,6 +10,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAColors.h"
+#import "OAAppSettings.h"
 
 #import <OsmAndCore/TextRasterizer.h>
 
@@ -35,18 +36,18 @@ const static float kTextSize = 13.0f;
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     [self updateCaptionStyle];
     
     return YES;
 }
 
-- (void) updateCaptionStyle
+- (void)updateCaptionStyle
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     _showCaptions = settings.mapSettingShowPoiLabel.get;
-    float textSize = settings.textSize.get;
     
     _captionStyle
         .setWrapWidth(20)
@@ -54,9 +55,16 @@ const static float kTextSize = 13.0f;
         .setBold(false)
         .setItalic(false)
         .setColor(OsmAnd::ColorARGB(self.nightMode ? color_widgettext_night_argb : color_widgettext_day_argb))
-        .setSize(textSize * kTextSize * self.displayDensityFactor)
+        .setSize([self getNormalCaptionSize])
         .setHaloColor(OsmAnd::ColorARGB(self.nightMode ? color_widgettext_shadow_night_argb : color_widgettext_shadow_day_argb))
         .setHaloRadius(5);
+}
+
+- (float)getNormalCaptionSize
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    float textSize = settings.textSize.get;
+    return textSize * kTextSize * self.displayDensityFactor;
 }
 
 @end

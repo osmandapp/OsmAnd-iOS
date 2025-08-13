@@ -9,12 +9,15 @@
 #import "OACoordinatesFormatViewController.h"
 #import "OASimpleTableViewCell.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OALinks.h"
+#import "OALocationServices.h"
 #import "OsmAndApp.h"
 #import "OALocationConvert.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAOsmAndFormatter.h"
-
+#import "OAObservable.h"
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -195,6 +198,7 @@
     [self selectSettingGeoCode:item[@"name"]];
     [self generateData];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+    [self.delegate onSettingsChanged];
     [self dismissViewController];
 }
 

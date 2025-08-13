@@ -41,7 +41,7 @@ function download
 
 mkdir -p "$source_dir/"
 
-download "https://creator.osmand.net/dependencies-mirror/libxslt-1.1.34.tar.xz" "$source_dir/libxslt-1.1.34.tar.xz"
+download "https://builder.osmand.net/dependencies-mirror/libxslt-1.1.34.tar.xz" "$source_dir/libxslt-1.1.34.tar.xz"
 
 # source_dir
 echo "source_dir archive..."

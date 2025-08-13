@@ -10,6 +10,9 @@
 #import "OsmAndApp.h"
 #import "OAMapLayersConfiguration.h"
 
+static const float ICON_VISIBLE_PART_RATIO = 0.45;
+static const float TOUCH_RADIUS_MULTIPLIER = 1.5;
+
 @class OAMapViewController, OAMapRendererView;
 
 @interface OAMapLayer : NSObject
@@ -23,6 +26,7 @@
 @property (nonatomic, readonly) CGFloat displayDensityFactor;
 @property (nonatomic, readonly) int baseOrder;
 @property (nonatomic) int pointsOrder;
+@property (nonatomic) BOOL invalidated;
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController;
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder;
@@ -41,10 +45,10 @@
 - (void) onMapFrameRendered;
 - (void) didReceiveMemoryWarning;
 
-- (void) showProgressHUD;
-- (void) hideProgressHUD;
-
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint;
+
+- (int) getScaledTouchRadius:(int)radiusPoi;
+- (int) getDefaultRadiusPoi;
 
 - (BOOL) isVisible;
 

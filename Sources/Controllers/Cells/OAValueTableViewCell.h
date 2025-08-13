@@ -11,7 +11,11 @@
 @interface OAValueTableViewCell : OASimpleTableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
+@property (weak, nonatomic) IBOutlet UIButton *proButton;
 
 - (void)valueVisibility:(BOOL)show;
+- (void)showProButton:(BOOL)show;
+- (void)setupValueLabelFlexible;
+- (void)resetValueLabelToDefault;
 
 @end

@@ -112,6 +112,9 @@
                                             <state key="normal" title="Skip">
                                                 <color key="titleColor" name="textColorActive"/>
                                             </state>
+                                            <connections>
+                                                <action selector="closeWizard" destination="-1" eventType="touchUpInside" id="cjm-96-b8r"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -12,11 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAAverageSpeedComputer : NSObject
 
-+ (instancetype) sharedInstance;
-
 + (NSArray<NSNumber *> *) MEASURED_INTERVALS;
 + (long) DEFAULT_INTERVAL_MILLIS;
 
+- (void)reset;
 - (void)updateLocation:(nullable CLLocation *)location;
 - (float)getAverageSpeed:(long)measuredInterval skipLowSpeed:(BOOL)skipLowSpeed;
 

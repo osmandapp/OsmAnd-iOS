@@ -16,6 +16,7 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAPOIViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -64,7 +65,7 @@
 
 - (NSString *) getTypeStr;
 {
-    return OALocalizedString(@"shared_string_control_stop");
+    return OALocalizedString(@"transport_stop");
 }
 
 - (id) getTargetObj
@@ -141,7 +142,7 @@
 {
     if (ref)
     {
-        int charPos = [ref lastIndexOf:@":"];
+        NSInteger charPos = [ref lastIndexOf:@":"];
         if (charPos != -1)
             ref = [ref substringToIndex:charPos];
         

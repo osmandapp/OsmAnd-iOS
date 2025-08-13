@@ -174,8 +174,9 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 
 - (void) onPreExecute
 {
-    if (_listener)
-        [_backupHelper.backupListeners addDeleteFilesListener:_listener];
+    __strong id<OAOnDeleteFilesListener> listener = _listener;
+    if (listener)
+        [_backupHelper.backupListeners addDeleteFilesListener:listener];
 }
 
 - (NSArray<id<OAOnDeleteFilesListener>> *)getListeners
@@ -183,14 +184,22 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     return _backupHelper.backupListeners.getDeleteFilesListeners;
 }
 
-- (void) publishProgress:(id)object
+- (void)publishProgress:(id)object
 {
-    for (id<OAOnDeleteFilesListener> listener in [self getListeners]) {
+    for (id<OAOnDeleteFilesListener> listener in [self getListeners])
+    {
         if ([object isKindOfClass:OADeleteRemoteFileTask.class])
         {
             OARemoteFile *remoteFile = ((OADeleteRemoteFileTask *) object).remoteFile;
-            [_itemsProgress addObject:remoteFile];
-            [listener onFileDeleteProgress:remoteFile progress:_itemsProgress.count];
+            if (remoteFile != nil)
+            {
+                [_itemsProgress addObject:remoteFile];
+                [listener onFileDeleteProgress:remoteFile progress:_itemsProgress.count];
+            }
+            else
+            {
+                NSLog(@"Error: remoteFile is nil, cannot add to _itemsProgress.");
+            }
         }
     }
 }
@@ -234,8 +243,9 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
             [listener onFilesDeleteDone:errors];
         }
     }
-    if (_listener != nil)
-        [_backupHelper.backupListeners removeDeleteFilesListener:_listener];
+    __strong id<OAOnDeleteFilesListener> listener = _listener;
+    if (listener)
+        [_backupHelper.backupListeners removeDeleteFilesListener:listener];
 }
 
 @end

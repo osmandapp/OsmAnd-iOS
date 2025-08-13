@@ -9,7 +9,6 @@
 #import "OAOpenStreetMapRemoteUtil.h"
 #import "OAEntityInfo.h"
 #import "OAEntity.h"
-#import "OAGPXDocument.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OANode.h"
@@ -19,6 +18,8 @@
 #import "OATargetPoint.h"
 #import "OAOsmMapUtils.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OAOsmBaseStorage.h"
 #import "OATransportStop.h"
 #import "OAPOILocationType.h"
@@ -34,8 +35,6 @@
 #include <OsmAndCore/ArchiveWriter.h>
 
 #define WAY_MODULO_REMAINDER 1;
-static const int AMENITY_ID_RIGHT_SHIFT = 1;
-static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
 
 static const long NO_CHANGESET_ID = -1;
 static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
@@ -66,7 +65,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     return self;
 }
 
-- (void) uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OAGPX *)gpx listener:(id<OAOnUploadFileListener>)listener
+- (void) uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OASTrackItem *)gpx listener:(id<OAOnUploadFileListener>)listener
 {
     NSString *url = [BASE_URL stringByAppendingString:@"api/0.6/gpx/create"];
     NSDictionary<NSString *, NSString *> *additionalData = @{
@@ -76,7 +75,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     };
     
     NSString *fileName = gpx.gpxFileName;
-    NSString *origFilePath = gpx.gpxFilePath;
+    NSString *origFilePath = gpx.isShowCurrentTrack ? fileName : gpx.gpxFilePath;
     origFilePath = [_app.gpxPath stringByAppendingPathComponent:origFilePath];
     QString archiveFilePath = QString::fromNSString([[_tmpDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:@"gz"]);
     
@@ -98,7 +97,8 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
                 [listener onFileUploadProgress:nil fileName:fileName progress:progress deltaWork:deltaWork];
         }];
         
-        [OANetworkUtilities uploadFile:url fileName:fileName params:additionalData headers:@{} data:data gzip:YES autorizationHeader:[OAOsmOAuthHelper getAutorizationHeader] progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        [OANetworkUtilities uploadFile:url fileName:fileName params:additionalData headers:@{} data:data gzip:YES authorizationHeader:[OAOsmOAuthHelper getAutorizationHeader] progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             if (listener)
             {
                 NSString *err = nil;
@@ -150,23 +150,6 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     return responseString;
 }
 
-- (void)URLSession:(NSURLSession *)session
-              task:(NSURLSessionTask *)task
-didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
- completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler {
-    if (challenge.previousFailureCount > 1)
-    {
-        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
-    }
-    else
-    {
-        NSURLCredential *credential = [NSURLCredential credentialWithUser:_settings.osmUserName.get
-                                                                 password:_settings.osmUserPassword.get
-                                                              persistence:NSURLCredentialPersistenceForSession];
-        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
-    }
-}
-
 - (NSString *)createOpenChangesetRequestString:(NSString *)comment {
     QString endXml;
     QXmlStreamWriter xmlWriter(&endXml);
@@ -215,7 +198,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     return [NSString stringWithFormat:@"%@ %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"], OAAppVersion.getVersion];
 }
 
--(void)writeNode:(OANode *)node entityInfo:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId user:(NSString *)user
+-(void)writeNode:(OANode *)node entityInfo:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId
 {
     xmlWriter.writeStartElement(QLatin1String("node"));
     xmlWriter.writeAttribute(QStringLiteral("id"), QString::number([node getId]));
@@ -233,7 +216,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     xmlWriter.writeEndElement();
 }
 
--(void)writeWay:(OAWay *)way info:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId user:(NSString *)user
+-(void)writeWay:(OAWay *)way info:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId
 {
     xmlWriter.writeStartElement(QLatin1String("way"));
     xmlWriter.writeAttribute(QStringLiteral("id"), QString::number([way getId]));
@@ -316,9 +299,9 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     xmlWriter.writeAttribute(QStringLiteral("version"), QStringLiteral("0.6"));
     xmlWriter.writeAttribute(QStringLiteral("generator"), QString::fromNSString([self getAppFullName]));
     if ([entity isKindOfClass:OANode.class])
-        [self writeNode:(OANode *)entity entityInfo:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName.get];
+        [self writeNode:(OANode *)entity entityInfo:info xmlWriter:xmlWriter changesetId:_changeSetId];
     else if ([entity isKindOfClass:OAWay.class])
-        [self writeWay:(OAWay *)entity info:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName.get];
+        [self writeWay:(OAWay *)entity info:info xmlWriter:xmlWriter changesetId:_changeSetId];
     // </action>
     xmlWriter.writeEndElement();
     // </osmChange>
@@ -398,7 +381,17 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     if (!poi)
         return nil;
     
-    BOOL isAmenity = poi.type && ![poi.type isKindOfClass:[OAPOILocationType class]];
+    BOOL isAmenity = NO;
+    if ([poi isKindOfClass:OARenderedObject.class])
+    {
+        poi.latitude = targetPoint.location.latitude;
+        poi.longitude = targetPoint.location.longitude;
+    }
+    else
+    {
+        isAmenity = poi.type && ![poi.type isKindOfClass:[OAPOILocationType class]];
+    }
+    
     unsigned long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
     
     NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
@@ -410,7 +403,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         OAOsmBaseStorage *baseStorage = [[OAOsmBaseStorage alloc] init];
         [baseStorage setConvertTagsToLC:NO];
         [baseStorage parseResponseSync:res];
-        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? WAY : NODE) identifier:entityId];
+        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? EOAEntityTypeWay : EOAEntityTypeNode) identifier:entityId];
         OAEntity *entity = [baseStorage getRegisteredEntities][enId];
         _entityInfo = [baseStorage getRegisteredEntityInfo][enId];
         _entityInfoId = enId;
@@ -473,7 +466,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         OAOsmBaseStorage *baseStorage = [[OAOsmBaseStorage alloc] init];
         [baseStorage setConvertTagsToLC:NO];
         [baseStorage parseResponseSync:res];
-        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? WAY : NODE) identifier:entityId];
+        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? EOAEntityTypeWay : EOAEntityTypeNode) identifier:entityId];
         OAEntity *downloadedEntity = [baseStorage getRegisteredEntities][enId];
         NSMutableDictionary<NSString *, NSString *> *updatedTags = [NSMutableDictionary new];
         for (NSString *tagKey in [entity getTagKeySet]) {

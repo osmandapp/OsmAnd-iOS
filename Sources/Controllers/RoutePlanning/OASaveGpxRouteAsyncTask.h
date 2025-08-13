@@ -8,12 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-@class OARoutePlanningHudViewController, OAGPXDocument;
+@class OARoutePlanningHudViewController, OASGpxFile;
 
 @interface OASaveGpxRouteAsyncTask : NSObject
 
-- (instancetype) initWithHudController:(OARoutePlanningHudViewController * __weak)hudRef outFile:(NSString *)outFile gpxFile:(OAGPXDocument *)gpx simplified:(BOOL)simplified addToTrack:(BOOL)addToTrack showOnMap:(BOOL)showOnMap;
+- (instancetype)initWithHudController:(OARoutePlanningHudViewController * __weak)hudRef
+                               outFile:(NSString *)outFile
+                               gpxFile:(OASGpxFile *)gpx
+                            simplified:(BOOL)simplified
+                            addToTrack:(BOOL)addToTrack
+                             showOnMap:(BOOL)showOnMap;
 
-- (void) execute:(void(^)(OAGPXDocument *, NSString *))onComplete;
+- (void) execute:(void(^)(OASGpxFile *, NSString *))onComplete;
 
 @end

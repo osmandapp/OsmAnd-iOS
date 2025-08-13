@@ -11,6 +11,8 @@
 #import "OAEntity.h"
 #import "OAPOIHelper.h"
 #import "OAPOIType.h"
+#import "OAPOICategory.h"
+#import "OAPOIFilter.h"
 #import "OAObservable.h"
 #import "Localization.h"
 

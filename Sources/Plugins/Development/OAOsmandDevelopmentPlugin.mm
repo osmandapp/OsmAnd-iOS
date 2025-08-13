@@ -20,6 +20,7 @@
 #import "OAAltitudeWidget.h"
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAIAPHelper.h"
 #import "OAResourcesBaseViewController.h"
 
@@ -56,6 +57,11 @@
 - (NSString *) getId
 {
     return PLUGIN_ID;
+}
+
+- (void)disable {
+    [super disable];
+    [[DeviceHelper shared] disconnectOBDSimulator];
 }
 
 - (BOOL) isEnableByDefault
@@ -105,7 +111,8 @@
     } else if (widgetType == OAWidgetType.devCameraDistance) {
         return [[OACameraDistanceWidget alloc]initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
     } else if (widgetType == OAWidgetType.devZoomLevel) {
-        return [[OAZoomLevelWidget alloc] initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
+        ZoomLevelWidgetState *zoomLevelWidgetState = [[ZoomLevelWidgetState alloc] initWithCustomId:customId widgetType:widgetType widgetParams:widgetParams];
+        return [[OAZoomLevelWidget alloc] initWithСustomId:customId appMode:appMode widgetState:zoomLevelWidgetState widgetParams:widgetParams];
     } else if (widgetType == OAWidgetType.devTargetDistance) {
         return [[OATargetDistanceWidget alloc]initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
     }

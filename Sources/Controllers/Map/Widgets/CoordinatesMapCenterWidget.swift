@@ -6,11 +6,9 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objc(OACoordinatesMapCenterWidget)
 @objcMembers
-class CoordinatesMapCenterWidget: CoordinatesBaseWidget {
+final class CoordinatesMapCenterWidget: CoordinatesBaseWidget {
 
     init() {
         super.init(type: .coordinatesMapCenter)
@@ -36,7 +34,6 @@ class CoordinatesMapCenterWidget: CoordinatesBaseWidget {
     }
 
     override func getCoordinateIcon() -> UIImage {
-        let iconId = "widget_coordinates_map_center"
-        return UIImage.init(named: iconId)!
+        UIImage.widgetCoordinatesMapCenter
     }
 }

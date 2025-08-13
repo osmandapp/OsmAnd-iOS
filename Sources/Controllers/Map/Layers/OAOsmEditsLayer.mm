@@ -30,6 +30,14 @@
 #import "OAColors.h"
 #import "OACompoundIconUtils.h"
 #import "OAPluginsHelper.h"
+#import "OAAppSettings.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
+#import "OAOsmNotePoint.h"
+#import "Localization.h"
+#import "OAPointDescription.h"
+#import "OASymbolMapLayer+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -37,14 +45,18 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 #include <OsmAndCore/SingleSkImage.h>
+#include <QReadWriteLock>
+
+static const int START_ZOOM = 10;
 
 @implementation OAOsmEditsLayer
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _osmEditsCollection;
     OAOsmEditingPlugin *_plugin;
     
+    QReadWriteLock _iconsCacheLock;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
-    
+
     OAAutoObserverProxy *_editsChangedObserver;
     
     BOOL _showCaptionsCache;
@@ -93,8 +105,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     CGFloat textSize = [[OAAppSettings sharedManager].textSize get];
     BOOL textSizeChanged = _textSize != textSize;
     if (self.showCaptions != _showCaptionsCache || textSizeChanged)
@@ -104,7 +117,10 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [self hide];
             if (textSizeChanged)
+            {
+                QWriteLocker scopedLocker(&_iconsCacheLock);
                 _iconsCache.clear();
+            }
             [self refreshOsmEditsCollection];
             [self show];
         });
@@ -157,27 +173,34 @@
             if (type)
             {
                 auto iconId = QString::fromNSString(type.name);
-                const auto bitmapIt = _iconsCache.find(iconId);
-                if (bitmapIt == _iconsCache.end())
+                bool isNew = false;
+                {
+                    QReadLocker scopedLocker(&_iconsCacheLock);
+                    const auto bitmapIt = _iconsCache.find(iconId);
+                    isNew = bitmapIt == _iconsCache.end();
+                    if (!isNew)
+                    {
+                        bitmap = bitmapIt.value();
+                    }
+                }
+                if (isNew)
                 {
                     bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit)
-                                                                     shapeName:@"circle"
+                                                                     shapeName:DEFAULT_ICON_SHAPE_KEY
                                                                       iconName:type.name
                                                                     isFullSize:YES
                                                                           icon:type.icon
                                                                          scale:_textSize];
+
+                    QWriteLocker scopedLocker(&_iconsCacheLock);
                     _iconsCache[iconId] = bitmap;
-                }
-                else
-                {
-                    bitmap = bitmapIt.value();
                 }
             }
         }
         if (!bitmap)
         {
             bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) 
-                                                             shapeName:@"circle"
+                                                             shapeName:DEFAULT_ICON_SHAPE_KEY
                                                               iconName:@"ic_custom_poi"
                                                             isFullSize:YES
                                                                   icon:[UIImage imageNamed:@"ic_custom_poi"]
@@ -187,15 +210,21 @@
     else
     {
         auto iconId = QStringLiteral("osm_note");
-        const auto bitmapIt = _iconsCache.find(iconId);
-        if (bitmapIt == _iconsCache.end())
+        bool isNew = false;
+        {
+            QReadLocker scopedLocker(&_iconsCacheLock);
+            const auto bitmapIt = _iconsCache.find(iconId);
+            isNew = bitmapIt == _iconsCache.end();
+            if (!isNew)
+            {
+                bitmap = bitmapIt.value();
+            }
+        }
+        if (isNew)
         {
             [self getOsmNoteBitmap:bitmap];
+            QWriteLocker scopedLocker(&_iconsCacheLock);
             _iconsCache[iconId] = bitmap;
-        }
-        else
-        {
-            bitmap = bitmapIt.value();
         }
     }
 
@@ -238,7 +267,13 @@
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *)getTargetPointFromPoint:(OAOsmPoint *)point {
+- (OATargetPoint *)getTargetPointFromPoint:(OAOsmPoint *)point
+{
+    return [self.class getTargetPointFromPoint:point];
+}
+
++ (OATargetPoint *)getTargetPointFromPoint:(OAOsmPoint *)point
+{
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     targetPoint.location = CLLocationCoordinate2DMake(point.getLatitude, point.getLongitude);
     NSString *title = point.getName;
@@ -247,7 +282,7 @@
     targetPoint.values = point.getTags;
     targetPoint.icon = [self getUIImageForPoint:point];
     
-    targetPoint.type = point.getGroup == POI ? OATargetOsmEdit : OATargetOsmNote;
+    targetPoint.type = point.getGroup == EOAGroupPoi ? OATargetOsmEdit : OATargetOsmNote;
     
     targetPoint.targetObj = point;
     
@@ -255,9 +290,9 @@
     return targetPoint;
 }
 
--(UIImage *)getUIImageForPoint:(OAOsmPoint *)point
++ (UIImage *)getUIImageForPoint:(OAOsmPoint *)point
 {
-    if (point.getGroup == POI)
+    if (point.getGroup == EOAGroupPoi)
     {
         OAOpenStreetMapPoint *osmP = (OAOpenStreetMapPoint *) point;
         NSString *poiTranslation = [osmP.getEntity getTagFromString:POI_TYPE_TAG];
@@ -294,29 +329,107 @@
     return [NSArray arrayWithArray:data];
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    if (![[OAAppSettings sharedManager].mapSettingShowOfflineEdits get])
+    CGPoint pixel = result.point;
+    if ([self.mapViewController getMapZoom] < START_ZOOM)
         return;
-    for (const auto& edit : _osmEditsCollection->getMarkers())
+    
+    int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+    
+    NSArray<OAOsmNotePoint *> *osmBugs = [[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints];
+    [self collectOsmEdits:osmBugs result:result pixel:pixel radiusPixels:radiusPixels];
+    
+    NSArray<OAOpenStreetMapPoint *> *osmEdits = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
+    [self collectOsmEdits:osmEdits result:result pixel:pixel radiusPixels:radiusPixels];
+}
+
+- (void)collectOsmEdits:(NSArray<OAOsmPoint *> *)osmEdits result:(MapSelectionResult *)result pixel:(CGPoint)pixel radiusPixels:(int)radiusPixels
+{
+    if (!NSArrayIsEmpty(osmEdits))
     {
-        double lat = OsmAnd::Utilities::get31LatitudeY(edit->getPosition().y);
-        double lon = OsmAnd::Utilities::get31LongitudeX(edit->getPosition().x);
-        NSArray * data = [self getAllPoints];
-        for (OAOsmPoint *osmPoint in data)
-        {
-            double pointLat = osmPoint.getLatitude;
-            double pointLon = osmPoint.getLongitude;
-            if ([OAUtilities isCoordEqual:pointLat srcLon:pointLon destLat:lat destLon:lon])
-            {
-                if (OsmAnd::Utilities::distance(pointLon, pointLat, point.longitude, point.latitude) < 15) {
-                    OATargetPoint *targetPoint = [self getTargetPoint:osmPoint];
-                    if (![found containsObject:targetPoint])
-                        [found addObject:targetPoint];
-                }
-            }
-        }
+        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));
+        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
+        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+        [self collectOsmEditsFromScreenArea:osmEdits screenArea:touchPolygon31 result:result];
     }
+}
+
+- (void) collectOsmEditsFromScreenArea:(NSArray<OAOsmPoint *> *)osmEdits screenArea:(OsmAnd::AreaI)screenArea result:(MapSelectionResult *)result
+{
+    for (OAOsmPoint *osmEdit in osmEdits)
+    {
+        double lat = [osmEdit getLatitude];
+        double lon = [osmEdit getLongitude];
+        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:screenArea];
+        if (shouldAdd)
+            [result collect:osmEdit provider:self];
+    }
+}
+
+- (int) getDefaultRadiusPoi
+{
+    int r;
+    double zoom = self.mapView.zoom;
+    if (zoom <= START_ZOOM) {
+        r = 0;
+    } else {
+        r = 15;
+    }
+    return (int) (r * self.mapView.displayDensityFactor);
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OAOsmPoint.class])
+    {
+        OAOsmPoint *point = (OAOsmPoint *)obj;
+        return  [[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]];
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OAOsmPoint.class])
+    {
+        OAOsmPoint *point = (OAOsmPoint *)obj;
+        NSString *name = @"";
+        NSString *type = @"";
+        
+        if ([point getGroup] == EOAGroupPoi)
+        {
+            name = [point getName];
+            type = POINT_TYPE_OSM_NOTE;
+        }
+        else if ([point getGroup] == EOAGroupBug)
+        {
+            name = [((OAOsmNotePoint *) point) getText];
+            type = POINT_TYPE_OSM_BUG;
+        }
+        return [[OAPointDescription alloc] initWithType:type name:name];
+    }
+    return nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 #pragma mark - OAMoveObjectProvider
@@ -348,7 +461,7 @@
 - (void)getOsmNoteBitmap:(sk_sp<SkImage> &)bitmap
 {
     UIImage *img = [UIImage mapSvgImageNamed:@"mx_special_information"];
-    bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"special_information" isFullSize:YES icon:img scale:_textSize];
+    bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:DEFAULT_ICON_SHAPE_KEY iconName:@"special_information" isFullSize:YES icon:img scale:_textSize];
 }
 
 - (UIImage *) getPointIcon:(id)point

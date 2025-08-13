@@ -7,9 +7,11 @@
 //
 
 #import "OASettingsItem.h"
-#import "OAGPXDocument.h"
 #import "OrderedDictionary.h"
+#import "OASettingsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+
+NSString *const kRoutingPreferencePrefix = @"prouting_";
 
 NSString *const kSettingsItemErrorDomain = @"SettingsItem";
 NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
@@ -108,12 +110,21 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 - (void)setLastModifiedTime:(long)lastModifiedTime
 {
-    _lastModifiedTime = lastModifiedTime;
+    _lastModifiedTime = lastModifiedTime / 1000;
 }
 
 - (BOOL) applyFileName:(NSString *)fileName
 {
-    return self.fileName && ([self.fileName hasSuffix:fileName] || [fileName hasPrefix:[self.fileName stringByAppendingString:@"/"]]);
+    if (self.fileName) {
+        NSString* fName = self.fileName;
+        if([fName hasPrefix:@"/"]) {
+            fName = [fName substringFromIndex:1];
+        }
+        return [fName isEqualToString: fileName] ||
+        [fileName hasPrefix:[fName stringByAppendingString:@"/"]];
+        
+    }
+    return NO;
 }
 
 - (BOOL) exists
@@ -230,7 +241,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     return [[OASettingsItemJsonWriter alloc] initWithItem:self];
 }
 
-- (OASettingsItemWriter *) getGpxWriter:(OAGPXDocument *)gpxFile
+- (OASettingsItemWriter *) getGpxWriter:(OASGpxFile *)gpxFile
 {
     return [[OASettingsItemGpxWriter alloc] initWithItem:self gpxDocument:gpxFile];
 }
@@ -316,17 +327,14 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     }
 
     NSDictionary<NSString *, NSString *> *settings;
-    if ([[OASettingsHelper sharedInstance] getCurrentBackupVersion] == OAMigrationManager.importExportVersionMigration1)
-        settings = [[OAMigrationManager shared] changeJsonMigration:json];
-    else
-        settings = json;
+    settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
 
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
     [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         if ([key hasPrefix:@"nrenderer_"] || [key isEqualToString:@"displayed_transport_settings"])
             [rendererSettings setObject:obj forKey:key];
-        else if ([key hasPrefix:@"prouting_"])
+        else if ([key hasPrefix:kRoutingPreferencePrefix])
             [routingSettings setObject:obj forKey:key];
         else
             [self.item readPreferenceFromJson:key value:obj];
@@ -344,47 +352,40 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 @implementation OASettingsItemJsonWriter
 
-- (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
+- (BOOL)writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
     MutableOrderedDictionary *json = [MutableOrderedDictionary dictionary];
     [self.item writeItemsToJson:json];
-    if (json.count > 0)
+
+    NSError *writeJsonError;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&writeJsonError];
+    if (writeJsonError)
     {
-        
-        NSError *writeJsonError;
-        NSData *data = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&writeJsonError];
-        if (writeJsonError)
-        {
-            if (error)
-                *error = writeJsonError;
-            return NO;
-        }
-        
-        NSError *writeError;
-        [data writeToFile:filePath options:NSDataWritingAtomic error:&writeError];
-        if (writeError)
-        {
-            if (error)
-                *error = writeError;
-            return NO;
-        }
-        
-        return YES;
+        if (error)
+            *error = writeJsonError;
+        return NO;
     }
-    if (error)
-        *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeEmptyJson userInfo:nil];
     
-    return NO;
+    NSError *writeError;
+    BOOL success = [data writeToFile:filePath options:NSDataWritingAtomic error:&writeError];
+    if (!success)
+    {
+        if (error)
+            *error = writeError;
+        return NO;
+    }
+    
+    return YES;
 }
 
 @end
 
 @implementation OASettingsItemGpxWriter
 {
-    OAGPXDocument *_gpxFile;
+    OASGpxFile *_gpxFile;
 }
 
-- (instancetype) initWithItem:(OASettingsItem *)item gpxDocument:(OAGPXDocument *)gpxFile
+- (instancetype) initWithItem:(OASettingsItem *)item gpxDocument:(OASGpxFile *)gpxFile
 {
     self = [super initWithItem:item];
     if (self) {
@@ -397,7 +398,8 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 {
     if (_gpxFile)
     {
-        [_gpxFile saveTo:filePath];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:_gpxFile];
         return YES;
     }
     return NO;

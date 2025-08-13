@@ -8,10 +8,13 @@
 
 #import "OATransportStopsBaseController.h"
 
-@class OAPOI;
+@class OAPOI, OARenderedObject, OAMapObject;
 
 @interface OAPOIViewController : OATransportStopsBaseController
 
 - (id) initWithPOI:(OAPOI *)poi;
+
+- (void) setup:(OAPOI *)poi;
+- (NSString *) getOsmUrl;
 
 @end

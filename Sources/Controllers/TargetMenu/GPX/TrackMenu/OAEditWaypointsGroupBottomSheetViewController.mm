@@ -28,6 +28,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
 @interface OAEditWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, OAEditWaypointsGroupOptionsDelegate>
 
+@property(nonatomic) NSString *groupName;
+@property(nonatomic) OASTrkSegment *segment;
+
 @end
 
 @implementation OAEditWaypointsGroupBottomSheetViewController
@@ -38,11 +41,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     EOAEditTrackScreenMode _mode;
 
     BOOL _isShown;
-    NSString *_groupName;
     UIColor *_groupColor;
 
-    OAGPXTrackAnalysis *_analysis;
-    OATrkSegment *_segment;
+    OASGpxTrackAnalysis *_analysis;
 }
 
 - (instancetype)initWithWaypointsGroupName:(NSString *)groupName
@@ -58,7 +59,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     return self;
 }
 
-- (instancetype)initWithSegment:(OATrkSegment *)segment analysis:(OAGPXTrackAnalysis *)analysis
+- (instancetype)initWithSegment:(OASTrkSegment *)segment analysis:(OASGpxTrackAnalysis *)analysis
 
 {
     self = [super init];
@@ -264,7 +265,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 - (void)updateColor
 {
     _groupColor = self.trackMenuDelegate
-            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:_groupName])
+            ? UIColorFromARGB([self.trackMenuDelegate getWaypointsGroupColor:_groupName])
             : [OADefaultFavorite getDefaultColor];
 }
 
@@ -340,7 +341,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     }
     else if ([tableData.key isEqualToString:@"analyze_on_map"] && self.trackMenuDelegate)
     {
-        [self.trackMenuDelegate openAnalysis:_analysis withTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]];
+        [self.trackMenuDelegate openAnalysis:_analysis
+                                     segment:self.segment
+                                   withTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]];
     }
     else if ([tableData.key isEqualToString:@"edit"] && self.trackMenuDelegate)
     {
@@ -348,9 +351,12 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     }
     else if ([tableData.key isEqualToString:@"delete"] && self.trackMenuDelegate)
     {
+        __weak __typeof(self) weakSelf = self;
         if (_mode == EOAEditTrackScreenWaypointsMode)
         {
-            [self hide:YES completion:^{ [self.trackMenuDelegate openConfirmDeleteWaypointsScreen:_groupName]; }];
+            [self hide:YES completion:^{
+                [weakSelf.trackMenuDelegate openConfirmDeleteWaypointsScreen:weakSelf.groupName];
+            }];
         }
         else
         {
@@ -366,10 +372,11 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes")
                                                                        style:UIAlertActionStyleDefault
                                                                      handler:^(UIAlertAction * _Nonnull action)
-                                                                     {
-                                                                         [self hide:YES completion:^{ [self.trackMenuDelegate deleteAndSaveSegment:_segment]; }];
-                                                                     }
-            ];
+                                           {
+                [weakSelf hide:YES completion:^{
+                    [weakSelf.trackMenuDelegate deleteAndSaveSegment:weakSelf.segment];
+                }];
+            }];
 
             [alert addAction:cancelAction];
             [alert addAction:deleteAction];

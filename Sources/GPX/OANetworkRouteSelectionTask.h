@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAGPXDocument, OARouteKey;
+@class OASGpxFile, OARouteKey;
 
 @interface OANetworkRouteSelectionTask : NSObject
 
@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) initWithRouteKey:(OARouteKey *)key area:(NSArray *)area;
 
-- (void) execute:(void(^)(OAGPXDocument *gpxFile))onComplete;
+- (void) execute:(void(^)(OASGpxFile *gpxFile))onComplete;
 
 @end
 

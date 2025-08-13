@@ -44,12 +44,10 @@ open class LineRadarRenderer: LineScatterCandleRadarRenderer
         context.addPath(path)
         
         // filled is usually drawn with less alpha
-        //context.setAlpha(fillAlpha)
+        context.setAlpha(fillAlpha)
         
-        context.setFillColor(fillColor.withAlphaComponent(fillAlpha).cgColor)
-        context.setStrokeColor(fillColor.cgColor)
-        //context.fillPath()
-        context.drawPath(using: CGPathDrawingMode.fillStroke)
+        context.setFillColor(fillColor.cgColor)
+        context.fillPath()
         
         context.restoreGState()
     }

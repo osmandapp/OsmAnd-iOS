@@ -8,9 +8,11 @@
 
 #import "OATransportStopRoute.h"
 #import "OsmAndApp.h"
+#import "OATransportStop.h"
 #import "OATransportStopType.h"
 #import "OAPOIHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAColors.h"
 #import "OAUtilities.h"
@@ -46,11 +48,16 @@ NSString *const OATransportStopRouteArrow = @" → ";
 - (NSString *) getDescription:(BOOL)useDistance
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    auto lang = QStringLiteral("");
+    NSString *lang = @"";
     if (useDistance && self.distance > 0) {
         NSString *nm = [OAOsmAndFormatter getFormattedDistance:self.distance];
-        if (_refStop && _refStop->getName(lang, false) != _stop->getName(lang, false))
-            nm = [NSString stringWithFormat:@"%@, %@", _refStop->getName(lang, false).toNSString(), nm];
+        if (_refStop)
+        {
+            NSString *stopName = [_stop getStopObjectName:lang transliterate:NO];
+            NSString *refStopName = [_refStop getStopObjectName:lang transliterate:NO];
+            if (![refStopName isEqualToString:stopName])
+                nm = [NSString stringWithFormat:@"%@, %@", refStopName, nm];
+        }
         
         return [NSString stringWithFormat:@"%@ (%@)", self.desc, nm];
     }
@@ -195,7 +202,7 @@ NSString *const OATransportStopRouteArrow = @" → ";
     for (int i = 0; i < stops.size(); i++)
     {
         auto stop = stops[i];
-        if (_stop->id == stop->id)
+        if (_stop.stopId == stop->id)
         {
             _stopIndex = i;
             break;

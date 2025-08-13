@@ -16,15 +16,17 @@
 #import "OARoutingHelper.h"
 #import "OARoutingHelperUtils.h"
 #import "OAUtilities.h"
+#import "OAApplicationMode.h"
 #import "QuadRect.h"
 #import "OAExitInfo.h"
 #import "OAMapUtils.h"
+#import "CLLocation+Extension.h"
 
 #include <routeSegmentResult.h>
 
 #define distanceClosestToIntermediate 3000.0
 #define distanceThresholdToIntermediate 25
-#define distanceThresholdToIntroduceFirstAndLastPoints 50
+#define distanceThresholdToIntroduceFirstAndLastPoints 15
 
 @implementation OANextDirectionInfo
 
@@ -265,6 +267,31 @@
 - (int) getNextIntermediate
 {
     return _nextIntermediate;
+}
+
+- (int)getCurrentRouteForLocation:(CLLocation *)location
+{
+    int currentRoute = _currentRoute;
+    if (currentRoute == 0)
+        return 0;
+    
+    CLLocation *previousRouteLocation = _locations[currentRoute - 1];
+    CLLocation *currentRouteLocation = _locations[currentRoute];
+    
+    while (currentRoute > 1)
+    {
+        double projCoeff = [OAMapUtils getProjectionCoeff:location
+                                             fromLocation:previousRouteLocation
+                                               toLocation:currentRouteLocation];
+        if (projCoeff != 0)
+            break;
+        
+        currentRoute--;
+        previousRouteLocation = _locations[currentRoute - 1];
+        currentRouteLocation = _locations[currentRoute];
+    }
+    
+    return currentRoute;
 }
 
 - (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i
@@ -522,16 +549,22 @@
 
 - (int) getDistanceToNextIntermediate:(CLLocation *)fromLoc
 {
+    return [self getDistanceToNextIntermediate:fromLoc intermediateIndexOffset:0];
+}
+
+- (int) getDistanceToNextIntermediate:(CLLocation *)fromLoc intermediateIndexOffset:(int)intermediateIndexOffset
+{
+    int targetIntermediateIndex = _nextIntermediate + intermediateIndexOffset;
     int dist = [self getDistanceToFinish:fromLoc];
     if (_listDistance && _currentRoute < _listDistance.count)
     {
-        if (_nextIntermediate >= _intermediatePoints.count)
+        if (targetIntermediateIndex >= _intermediatePoints.count)
         {
             return 0;
         }
         else
         {
-            int directionInd = _intermediatePoints[_nextIntermediate].intValue;
+            int directionInd = _intermediatePoints[targetIntermediateIndex].intValue;
             return dist - [self getListDistance:_directions[directionInd].routePointOffset];
         }
     }
@@ -573,7 +606,6 @@
     long time = 0;
     if (_currentDirectionInfo < _directions.count)
     {
-        OARouteDirectionInfo *current = _directions[_currentDirectionInfo];
         // Locate next direction of interest
         int nextInd = _currentDirectionInfo + 1;
         while (nextInd < _directions.count)
@@ -611,17 +643,18 @@
     return 0;
 }
 
-- (long) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc
+- (long) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc intermediateIndexOffset:(int)intermediateIndexOffset
 {
-    if (_nextIntermediate >= _intermediatePoints.count)
+    int targetIntermediateIndex = _nextIntermediate + intermediateIndexOffset;
+    if (targetIntermediateIndex >= _intermediatePoints.count)
         return 0;
     
-    return [self getLeftTime:fromLoc] - _directions[_intermediatePoints[_nextIntermediate].intValue].afterLeftTime;
+    return [self getLeftTime:fromLoc] - _directions[_intermediatePoints[targetIntermediateIndex].intValue].afterLeftTime;
 }
 
 - (NSArray<CLLocation *> *) getImmutableAllLocations
 {
-    return [NSArray arrayWithArray:_locations];
+    return _locations;
 }
 
 - (NSArray<OASimulatedLocation *> *)getImmutableSimulatedLocations
@@ -709,7 +742,7 @@
  * PREPARATION
  * Check points for duplicates (it is very bad for routing) - cloudmade could return it
  */
-+ (void) checkForDuplicatePoints:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions
+- (void) checkForDuplicatePoints:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions
 {
     for (int i = 0; i < (int) locations.count - 1;)
     {
@@ -1009,12 +1042,17 @@
  * If beginning is too far from start point, then introduce GO Ahead
  * @param end
  */
-+ (void) introduceFirstPointAndLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segs:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start end:(CLLocation *)end
+- (void) introduceFirstPointAndLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segs:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start end:(CLLocation *)end
 {
-    BOOL firstPointIntroduced = [self.class introduceFirstPoint:locations directions:directions segments:segs start:start];
-    BOOL lastPointIntroduced = [self.class introduceLastPoint:locations directions:directions segments:segs end:end];
-    if (firstPointIntroduced || lastPointIntroduced)
-        [self.class checkForDuplicatePoints:locations directions:directions];
+    _firstIntroducedPoint = [self introduceFirstPoint:locations directions:directions segments:segs start:start];
+    _lastIntroducedPoint = [self introduceLastPoint:locations directions:directions segments:segs end:end];
+    if (_firstIntroducedPoint || _lastIntroducedPoint)
+        [self checkForDuplicatePoints:locations directions:directions];
+    
+    if (_firstIntroducedPoint)
+        _firstIntroducedPoint = locations[0];
+    if (_lastIntroducedPoint)
+        _lastIntroducedPoint = locations[locations.count - 1];
     
     OARouteDirectionInfo *lastDirInf = directions.count > 0 ? directions[directions.count - 1] : nil;
     if ((!lastDirInf || lastDirInf.routePointOffset < locations.count - 1) && locations.count - 1 > 0)
@@ -1056,7 +1094,7 @@
     }
 }
 
-+ (BOOL) introduceFirstPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start
+- (CLLocation *) introduceFirstPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start
 {
     if (locations.count > 0 && [locations[0] distanceFromLocation:start] > distanceThresholdToIntroduceFirstAndLastPoints)
     {
@@ -1082,12 +1120,12 @@
             // info.setDescriptionRoute(ctx.getString( R.string.route_head));//; //$NON-NLS-1$
             [directions insertObject:info atIndex:0];
         }
-        return YES;
+        return start;
     }
-    return NO;
+    return nil;
 }
 
-+ (double) getFirstValidAltitude:(NSMutableArray<CLLocation *> *)locations
+- (double) getFirstValidAltitude:(NSMutableArray<CLLocation *> *)locations
 {
     for (CLLocation *location in locations)
     {
@@ -1097,7 +1135,7 @@
     return NAN;
 }
 
-+ (BOOL) introduceLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs end:(CLLocation *)end
+- (CLLocation *) introduceLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs end:(CLLocation *)end
 {
     if (locations.count > 0)
     {
@@ -1140,10 +1178,10 @@
             {
                 segs.push_back(segs[segs.size() - 1]);
             }
-            return YES;
+            return endLocation;
         }
     }
-    return NO;
+    return nil;
 }
 
 /**
@@ -1446,7 +1484,8 @@
                 BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
                 
                 info.streetName = [NSString stringWithUTF8String:current->getStreetName(locale, transliterate, list, routeInd).c_str()];
-                info.destinationName = [NSString stringWithUTF8String:current->getDestinationName(locale, transliterate, list, routeInd).c_str()];
+                info.destinationName = [NSString stringWithUTF8String:current->getDestinationName(locale, transliterate, list, routeInd, false).c_str()];
+                info.destinationRef = [NSString stringWithUTF8String:current->object->getDestinationRef(current->isForwardDirection()).c_str()];
                 
                 std::shared_ptr<RouteDataObject> rdoWithShield = nullptr;
                 std::shared_ptr<RouteDataObject> rdoWithoutShield = nullptr;
@@ -1459,7 +1498,7 @@
                     exitInfo.ref = exitInfo.ref.length > 0 ? exitInfo.ref : nil;
                     exitInfo.exitStreetName = exitInfo.exitStreetName.length > 0 ? exitInfo.ref : nil;
                     info.exitInfo = exitInfo;
-                    if (routeInd > 0 && (exitInfo.ref || exitInfo.exitStreetName))
+                    if (![exitInfo isEmpty] && info.destinationRef == nil && routeInd > 0)
                     {
                         // set ref and road name (or shield icon) from previous segment because exit point is not consist of highway ref
                         std::shared_ptr<RouteSegmentResult> previous;
@@ -1496,7 +1535,7 @@
                 }
             }
             
-            NSString *description = [[NSString stringWithFormat:@"%@ %@", [self.class toString:turn shortName:false], [OARoutingHelperUtils formatStreetName:info.streetName ref:info.ref destination:info.destinationName towards:OALocalizedString(@"towards")]] trim];
+            NSString *description = [[NSString stringWithFormat:@"%@ %@", [self.class toString:turn shortName:false], [OARoutingHelperUtils formatStreetName:info.streetName ref:info.ref destination:[info getDestinationRefAndName] towards:OALocalizedString(@"towards")]] trim];
                         
             if (s->object->pointNames.size() > s->getStartPointIndex())
             {
@@ -1543,7 +1582,7 @@
         NSMutableArray<CLLocation *> *locations = [NSMutableArray arrayWithArray:list];
         NSMutableArray<OARouteDirectionInfo *> *localDirections = [NSMutableArray arrayWithArray:directions];
         if (locations.count > 0)
-            [self.class checkForDuplicatePoints:locations directions:localDirections];
+            [self checkForDuplicatePoints:locations directions:localDirections];
         
         if (waypoints)
         {
@@ -1555,7 +1594,7 @@
             [self.class addMissingTurnsToRoute:locations originalDirections:localDirections mode:params.mode leftSide:params.leftSide useLocationTime:(params.gpxRoute && params.gpxRoute.calculatedRouteTimeSpeed)];
             // if there is no closest points to start - add it
             std::vector<std::shared_ptr<RouteSegmentResult>> segs;
-            [self.class introduceFirstPointAndLastPoint:locations directions:localDirections segs:segs start:params.start end:params.end];
+            [self introduceFirstPointAndLastPoint:locations directions:localDirections segs:segs start:params.start end:params.end];
         }
         _appMode = params.mode;
         _locations = locations;
@@ -1594,17 +1633,18 @@
         NSMutableArray<OAAlarmInfo *> *alarms = [NSMutableArray array];
         std::vector<std::shared_ptr<RouteSegmentResult>> segments = [self.class convertVectorResult:computeDirections locations:locations list:list alarms:alarms];
         if (calculateFirstAndLastPoint)
-            [self.class introduceFirstPointAndLastPoint:locations directions:computeDirections segs:segments start:start end:end];
+            [self introduceFirstPointAndLastPoint:locations directions:computeDirections segs:segments start:start end:end];
         
         _locations = locations;
         _segments = segments;
         _simulatedLocations = [NSMutableArray array];
         _listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
-        [self.class calculateIntermediateIndexes:_locations intermediates:intermediates localDirections:computeDirections intermediatePoints:_intermediatePoints];;
+        [self.class calculateIntermediateIndexes:_locations intermediates:intermediates localDirections:computeDirections intermediatePoints:_intermediatePoints];
         [self.class updateListDistanceTime:_listDistance locations:_locations];
         _appMode = mode;
         
         _directions = computeDirections;
+
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
         _alarmInfo = alarms;
         _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];

@@ -7,6 +7,7 @@
 //
 
 #import "OAPOIFiltersHelper.h"
+#import "OAAppData.h"
 #import "OAPOIUIFilter.h"
 #import "OASearchByNameFilter.h"
 #import "Localization.h"
@@ -15,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import <sqlite3.h>
 #import "OALog.h"
 #import "OAAppSettings.h"
@@ -23,6 +25,8 @@
 #import "OAApplicationMode.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPluginsHelper.h"
+#import "OAObservable.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -179,6 +183,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             }
             
             sqlite3_close(filtersDB);
+            [self updateLastModifiedTime];
         }
     });
     return YES;
@@ -355,6 +360,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             sqlite3_finalize(statement);
             
             sqlite3_close(filtersDB);
+            [self updateLastModifiedTime];
         }
     });
     return YES;
@@ -362,18 +368,24 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (long)getLastModifiedTime
 {
-    long lastModifiedTime = [OABackupHelper getLastModifiedTime:FILTERS_LAST_MODIFIED_NAME];
+    long lastModifiedTime = [BackupUtils getLastModifiedTime:FILTERS_LAST_MODIFIED_NAME];
     if (lastModifiedTime == 0)
     {
         lastModifiedTime = [self getDBLastModifiedTime];
-        [OABackupHelper setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
+        [BackupUtils setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
     }
-    return lastModifiedTime;
+    return lastModifiedTime * 1000;
 }
 
 - (void) setLastModifiedTime:(long)lastModified
 {
-    [OABackupHelper setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
+    [BackupUtils setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModified / 1000];
+}
+
+- (void)updateLastModifiedTime
+{
+    [BackupUtils setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME
+                    lastModifiedTime:(long) NSDate.now.timeIntervalSince1970];
 }
 
 - (long) getDBLastModifiedTime
@@ -431,7 +443,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         
         _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onApplicationModeChanged)
-                                                              andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
+                                                              andObserve:OsmAndApp.instance.applicationModeChangedObservable];
     }
     return self;
 }
@@ -559,7 +571,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         OAPOIBaseType *tp = [_poiHelper getAnyPoiTypeByName:typeId];
         if (tp)
         {
-            OAPOIUIFilter *lf = [[OAPOIUIFilter alloc] initWithBasePoiType:tp idSuffix:@""];;
+            OAPOIUIFilter *lf = [[OAPOIUIFilter alloc] initWithBasePoiType:tp idSuffix:@""];
             NSMutableArray<OAPOIUIFilter *> *copy = _cacheTopStandardFilters ? [NSMutableArray arrayWithArray:_cacheTopStandardFilters] : [NSMutableArray new];
             [copy addObject:lf];
             [copy sortUsingComparator:[OAPOIUIFilter getComparator]];
@@ -569,7 +581,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         OAPOIBaseType *lt = [_poiHelper getAnyPoiAdditionalTypeByKey:typeId];
         if (lt)
         {
-            OAPOIUIFilter *lf = [[OAPOIUIFilter alloc] initWithBasePoiType:lt idSuffix:@""];;
+            OAPOIUIFilter *lf = [[OAPOIUIFilter alloc] initWithBasePoiType:lt idSuffix:@""];
             NSMutableArray<OAPOIUIFilter *> *copy = _cacheTopStandardFilters ? [NSMutableArray arrayWithArray:_cacheTopStandardFilters] : [NSMutableArray new];
             [copy addObject:lf];
             [copy sortUsingComparator:[OAPOIUIFilter getComparator]];
@@ -578,6 +590,11 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         }
     }
     return nil;
+}
+
+- (OAPOIUIFilter *)getFilter:(OATopIndexFilter *)topIndexFilter acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes
+{
+    return [[OAPOIUIFilter alloc] initWithTopIndexFilter:topIndexFilter acceptedTypes:acceptedTypes];
 }
 
 - (void) reloadAllPoiFilters
@@ -881,8 +898,11 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (void) removeSelectedPoiFilter:(OAPOIUIFilter *)filter
 {
-    [_selectedPoiFilters removeObject:filter];
-    [self saveSelectedPoiFilters];
+    if ([_selectedPoiFilters containsObject:filter])
+    {
+        [_selectedPoiFilters removeObject:filter];
+        [self saveSelectedPoiFilters];
+    }
 }
 
 - (BOOL) isShowingAnyPoi

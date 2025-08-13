@@ -11,7 +11,7 @@
 #import "OAGPXUIHelper.h"
 #import "OsmAndApp.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OAGPXDocument.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAGpxSettingsItem()
 
@@ -94,11 +94,30 @@
             *error = readError;
         return;
     }
+    // NOTE: example
+    /*
+     {
+     file = "tracks/3041434.gpx";
+     type = GPX;
+     }
+     */
     _appearanceInfo = [OAGpxAppearanceInfo fromJson:json];
 }
 
 - (NSString *)fileNameWithFolder
 {
+    NSString *gpxPath = [self.filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.documentsPath withString:@""];
+
+    if ([gpxPath hasPrefix:@"/GPX"])
+    {
+        gpxPath = [@"/tracks" stringByAppendingString:[gpxPath substringFromIndex:4]];
+    }
+    
+    if ([gpxPath isEqualToString:self.fileName])
+    {
+        return self.fileName;
+    }
+
     NSString *folderName = @"";
     NSArray<NSString *> *pathComponents = self.filePath.pathComponents;
     if (pathComponents.count > 1)
@@ -130,39 +149,81 @@
 - (void)applyAdditionalParams:(NSString *)filePath
 {
     if (_appearanceInfo)
-        [self updateGpxParams:filePath];
+        [self updateGpxParams];
 }
 
-- (void)updateGpxParams:(NSString *)filePath
+- (void)updateGpxParams
 {
-    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    OAGPX *gpx = [gpxDb getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
-    if (!gpx)
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:self.filePath];
+    OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
+    BOOL readItem = [gpxDbHelper hasGpxDataItemFile:file];
+    OASGpxDataItem *dataItem = nil;
+    if (!readItem)
     {
-        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:filePath];
-        gpx = [gpxDb addGpxItem:filePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
+        dataItem = [[OASGpxDataItem alloc] initWithFile:file];
+        readItem = ![gpxDbHelper addItem:dataItem];
     }
-    gpx.color = _appearanceInfo.color;
-    gpx.coloringType = _appearanceInfo.coloringType;
-    gpx.width = _appearanceInfo.width;
-    gpx.showArrows = _appearanceInfo.showArrows;
-    gpx.showStartFinish = _appearanceInfo.showStartFinish;
-    gpx.verticalExaggerationScale = _appearanceInfo.verticalExaggerationScale;
-    gpx.visualization3dByType = _appearanceInfo.visualization3dByType;
-    gpx.visualization3dWallColorType = _appearanceInfo.visualization3dWallColorType;
-    gpx.visualization3dPositionType = _appearanceInfo.visualization3dPositionType;
-    gpx.splitType = _appearanceInfo.splitType;
-    gpx.splitInterval = _appearanceInfo.splitInterval;
-    [gpxDb save];
-    if (gpx.color != 0)
-        [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:gpx.color];
+    if (readItem)
+    {
+        __weak __typeof(self) weakSelf = self;
+        GpxDataItemHandler *handler = [GpxDataItemHandler new];
+        handler.onGpxDataItemReady = ^(OASGpxDataItem *item) {
+            [weakSelf updateParamsForGpxDataItem:item];
+        };
+        dataItem = [gpxDbHelper getItemFile:file callback:handler];
+    }
+    if (dataItem)
+    {
+        [self updateParamsForGpxDataItem:dataItem];
+    }
 }
 
-- (void) createGpxAppearanceInfo
+- (void)updateParamsForGpxDataItem:(OASGpxDataItem *)gpx
 {
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
     if (gpx)
-        _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:gpx];
+    {
+        gpx.color = _appearanceInfo.color;
+        gpx.coloringType = _appearanceInfo.coloringType;
+        gpx.width = _appearanceInfo.width;
+        gpx.showArrows = _appearanceInfo.showArrows;
+        gpx.showStartFinish = _appearanceInfo.showStartFinish;
+        gpx.joinSegments = _appearanceInfo.isJoinSegments;
+        gpx.verticalExaggerationScale = _appearanceInfo.verticalExaggerationScale;
+        gpx.elevationMeters = _appearanceInfo.elevationMeters;
+        gpx.visualization3dByType = _appearanceInfo.visualization3dByType;
+        gpx.visualization3dWallColorType = _appearanceInfo.visualization3dWallColorType;
+        gpx.visualization3dPositionType = _appearanceInfo.visualization3dPositionType;
+        gpx.splitType = _appearanceInfo.splitType;
+        gpx.splitInterval = _appearanceInfo.splitInterval;
+        
+        [[OAGPXDatabase sharedDb] updateDataItem:gpx];
+        if (gpx.color != 0)
+            [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:gpx.color];
+    }
+    else
+    {
+        NSLog(@"[ERROR] -> OAGpxSettingsItem -> gpx for self.filePath: %@ is empty", self.filePath);
+    }
+}
+
+- (void)configureGpxAppearanceInfo:(OASGpxDataItem *)dataItem
+{
+    if (dataItem)
+        _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:dataItem];
+}
+
+- (void)createGpxAppearanceInfo
+{
+    GpxDataItemHandler *handler = [GpxDataItemHandler new];
+    __weak __typeof(self) weakSelf = self;
+    handler.onGpxDataItemReady = ^(OASGpxDataItem *item) {
+        [weakSelf configureGpxAppearanceInfo:item];
+    };
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:self.filePath];
+    OASGpxDataItem *dataItem = [[OASGpxDbHelper shared] getItemFile:file callback:handler];
+    
+    if (dataItem)
+        _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:dataItem];
 }
 
 

@@ -10,10 +10,13 @@
 #import "OATransportStopRoute.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OAOsmPoint.h"
+#import "OAObservable.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAColors.h"
+#import "OAPOIType.h"
 #import "OAPOIHelper.h"
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
@@ -71,9 +74,9 @@
 
 - (void) leftControlButtonPressed
 {
-    if (_osmPoint.getGroup == BUG)
+    if (_osmPoint.getGroup == EOAGroupBug)
         [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)_osmPoint];
-    else if (_osmPoint.getGroup == POI)
+    else if (_osmPoint.getGroup == EOAGroupPoi)
         [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_osmPoint];
     [_app.osmEditsChangeObservable notifyEvent];
     [[OARootViewController instance].mapPanel targetHide];
@@ -81,13 +84,13 @@
 
 - (void) rightControlButtonPressed
 {
-    if (_osmPoint.getGroup == POI)
+    if (_osmPoint.getGroup == EOAGroupPoi)
     {
         OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:[NSArray arrayWithObject:_osmPoint]];
         dialog.delegate = self;
         [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
     }
-    else if (_osmPoint.getGroup == BUG)
+    else if (_osmPoint.getGroup == EOAGroupBug)
     {
         OAOsmNoteViewController *dialog = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_editingPlugin points:[NSArray arrayWithObject:_osmPoint] type:EOAOsmNoteViewConrollerModeUpload];
         dialog.delegate = self;
@@ -111,11 +114,11 @@
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
     UIColor *colorOpen = UIColorFromRGB(color_ctx_menu_amenity_opened_text);
     UIColor *colorClosed = UIColorFromRGB(color_ctx_menu_amenity_closed_text);
-    if (_osmPoint.getGroup == BUG)
+    if (_osmPoint.getGroup == EOAGroupBug)
     {
         [str appendAttributedString:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_edit_created_note")]];
     }
-    else if (_osmPoint.getGroup == POI)
+    else if (_osmPoint.getGroup == EOAGroupPoi)
     {
         [str appendAttributedString:[[NSAttributedString alloc] initWithString:_osmPoint.getAction == MODIFY ? OALocalizedString(@"osm_edit_modified_poi") : _osmPoint.getAction == DELETE ? OALocalizedString(@"osm_edit_deleted_poi") : OALocalizedString(@"osm_edit_created_poi")]];
     }

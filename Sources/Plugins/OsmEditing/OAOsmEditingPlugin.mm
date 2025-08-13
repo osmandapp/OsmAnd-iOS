@@ -7,12 +7,13 @@
 //
 
 #import "OAOsmEditingPlugin.h"
-
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OATextInfoWidget.h"
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapInfoController.h"
@@ -21,7 +22,6 @@
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
 #import "OARoutingHelper.h"
-#import "OAMapViewController.h"
 #import "OANativeUtilities.h"
 #import "OAOsmEditsLayer.h"
 #import "OAOsmEditsDBHelper.h"
@@ -44,6 +44,8 @@
 #import "OAShowHideOSMBugAction.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OALinks.h"
+#import "OsmAnd_Maps-Swift.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
@@ -168,11 +170,11 @@
 
 + (NSString *) getName:(OAOsmPoint *)point
 {
-    if ([point getGroup] == POI)
+    if ([point getGroup] == EOAGroupPoi)
     {
         return [((OAOpenStreetMapPoint *)point) getName];
     }
-    else if ([point getGroup] == BUG)
+    else if ([point getGroup] == EOAGroupBug)
     {
         return [((OAOsmNotePoint *)point) getText];
     }
@@ -185,18 +187,18 @@
 + (NSString *) getCategory:(OAOsmPoint *)point
 {
     NSString *category = @"";
-    if (point.getGroup == POI)
+    if (point.getGroup == EOAGroupPoi)
     {
         OAEditPOIData *data = [[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *) point).getEntity];
         category = data.getLocalizedTypeString;
     }
-    else if (point.getGroup == BUG)
+    else if (point.getGroup == EOAGroupBug)
         category = OALocalizedString(@"osn_bug_name");
     
     return category;
 }
 
-- (NSArray *)getQuickActionTypes
+- (NSArray<QuickActionType *> *)getQuickActionTypes
 {
     return @[OAAddPOIAction.TYPE, OAAddOSMBugAction.TYPE, OAShowHideOSMBugAction.TYPE, OAShowHideLocalOSMChanges.TYPE];
 }
@@ -209,7 +211,7 @@
 - (NSString *) getDescription
 {
     //return OALocalizedString(@"osm_editing_plugin_description");
-    return [NSString stringWithFormat:NSLocalizedString(@"osm_editing_plugin_description", nil), k_docs_plugin_osm];
+    return [NSString stringWithFormat:OALocalizedString(@"osm_editing_plugin_description"), k_docs_plugin_osm];
 }
 
 @end

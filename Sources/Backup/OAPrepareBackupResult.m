@@ -20,7 +20,8 @@
 
 - (NSDictionary<NSString *, OARemoteFile *> *) getRemoteFiles:(EOARemoteFilesType)type
 {
-    switch (type) {
+    switch (type)
+    {
         case EOARemoteFilesTypeUnique:
             return _uniqueRemoteFiles;
         case EOARemoteFilesTypeUniqueInfo:
@@ -58,10 +59,11 @@
     }
     NSMutableDictionary<NSString *, OARemoteFile *> *uniqueRemoteFiles = [NSMutableDictionary dictionary];
     NSMutableDictionary<NSString *, OARemoteFile *> *uniqueInfoRemoteFiles = [NSMutableDictionary dictionary];
-    NSMutableDictionary<NSString *, OARemoteFile *> *deletedRemoteFiles = [NSMutableDictionary dictionary];;
+    NSMutableDictionary<NSString *, OARemoteFile *> *deletedRemoteFiles = [NSMutableDictionary dictionary];
     NSMutableSet<NSString *> *uniqueFileIds = [NSMutableSet set];
     [remoteFilesMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull fileId, OARemoteFile * _Nonnull file, BOOL * _Nonnull stop) {
-        if (![uniqueFileIds containsObject:fileId]) {
+        if (![uniqueFileIds containsObject:fileId])
+        {
             [uniqueFileIds addObject:fileId];
             if (file.isInfoFile)
                 uniqueInfoRemoteFiles[fileId] = file;
@@ -82,7 +84,9 @@
 {
     NSMutableDictionary<NSString *, OALocalFile *> *localFileMap = [NSMutableDictionary dictionary];
     for (OALocalFile *localFile in localFiles)
+    {
         localFileMap[localFile.getTypeFileName] = localFile;
+    }
     _localFiles = localFileMap;
 }
 

@@ -13,7 +13,7 @@
 
 #define EXTENSION_HIDDEN @"hidden"
 
-@class OAWptPt, OAPOI;
+@class OASWptPt, OAPOI;
 
 @interface OASpecialPointType : NSObject
 
@@ -41,7 +41,7 @@
 
 - (instancetype)initWithFavorite:(std::shared_ptr<OsmAnd::IFavoriteLocation>)favorite;
 - (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)catagory;
-- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)category altitude:(double)altitude timestamp:(int)timestamp;
+- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)category altitude:(double)altitude timestamp:(long)timestamp;
 
 - (void) initPersonalType;
 - (BOOL) isSpecialPoint;
@@ -63,16 +63,20 @@
 - (void) setAddress:(NSString *)address;
 
 - (NSString *) getIcon;
+- (NSString *) getInternalIcon;
 - (void) setIcon:(NSString *)icon;
 
 - (NSString *) getBackgroundIcon;
+- (NSString *) getInternalBackgroundIcon;
 - (void) setBackgroundIcon:(NSString *)backgroundIcon;
 
+- (UIColor *) getInternalColor;
 - (UIColor *) getColor;
 - (void) setColor:(UIColor *)color;
 
 - (OAPOI *) getAmenity;
 - (void) setAmenity:(OAPOI *)amenity;
+- (void) setExtensions:(NSDictionary<NSString *, NSString *> *)extensions;
 
 - (BOOL) isVisible;
 - (void) setVisible:(BOOL)isVisible;
@@ -99,9 +103,10 @@
 
 + (NSString *) toStringDate:(NSDate *)date;
 
-- (OAWptPt *) toWpt;
-+ (OAFavoriteItem *)fromWpt:(OAWptPt *)pt category:(NSString *)category;
+- (OASWptPt *) toWpt;
++ (OAFavoriteItem *)fromWpt:(OASWptPt *)pt category:(NSString *)category;
 
 - (UIImage *) getCompositeIcon;
+- (BOOL)isEqual:(id)object;
 
 @end

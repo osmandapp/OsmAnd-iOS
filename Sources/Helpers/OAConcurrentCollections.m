@@ -38,6 +38,39 @@
     }
 }
 
+- (void)addObjectsSync:(NSArray *)anArray
+{
+    @synchronized (_lock)
+    {
+        [_array addObjectsFromArray:anArray];
+    }
+}
+
+- (void)insertObjectSync:(id)anObject atIndex:(NSUInteger)index
+{
+    @synchronized (_lock)
+    {
+        [_array insertObject:anObject atIndex:index];
+    }
+}
+
+- (void)replaceObjectAtIndexSync:(NSUInteger)index withObject:(id)anObject
+{
+    @synchronized (_lock)
+    {
+        [_array replaceObjectAtIndex:index withObject:anObject];
+    }
+}
+
+- (void)replaceAllWithObjectsSync:(NSArray *)anArray
+{
+    @synchronized (_lock)
+    {
+        [_array removeAllObjects];
+        [_array addObjectsFromArray:anArray];
+    }
+}
+
 - (void)removeObjectSync:(id)anObject
 {
     @synchronized (_lock)
@@ -67,6 +100,14 @@
     @synchronized (_lock)
     {
         return [_array objectAtIndex:index];
+    }
+}
+
+- (NSUInteger)indexOfObjectSync:(id)anObject
+{
+    @synchronized (_lock)
+    {
+        return [_array indexOfObject:anObject];
     }
 }
 
@@ -225,7 +266,10 @@
 
 - (NSDictionary *)asDictionary
 {
-    return [NSDictionary dictionaryWithDictionary:_dictionary];
+    @synchronized (_lock)
+    {
+        return _dictionary ? [_dictionary copy] : @{};
+    }
 }
 
 @end

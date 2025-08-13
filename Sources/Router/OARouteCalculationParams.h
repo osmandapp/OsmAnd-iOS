@@ -18,8 +18,7 @@
 #include <OsmAndCore.h>
 #include <routeCalculationProgress.h>
 
-@class OARouteCalculationResult;
-@class OAWalkingRouteSegment;
+@class OARouteCalculationResult, OAWalkingRouteSegment, OAApplicationMode;
 
 @protocol OARouteCalculationResultListener <NSObject>
 

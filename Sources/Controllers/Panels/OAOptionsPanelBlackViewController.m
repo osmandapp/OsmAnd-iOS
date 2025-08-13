@@ -9,13 +9,17 @@
 #import "OAOptionsPanelBlackViewController.h"
 #import "OAMapSettingsViewController.h"
 #import "OAMainSettingsViewController.h"
-#import "OAFavoriteListViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
 #import "OAHelpViewController.h"
 #import "OAPluginsViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OANavigationController.h"
 #import "OAWeatherPlugin.h"
 #import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"
@@ -89,6 +93,17 @@
                                                         andObserve:[OsmAndApp instance].data.weatherChangeObservable];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    if (_weatherChangeObserver)
+    {
+        [_weatherChangeObserver detach];
+        _weatherChangeObserver = nil;
+    }
+}
+
 - (void)onWeatherChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -103,6 +118,9 @@
 
 - (void) updateLayout
 {
+    if (!self.isViewLoaded)
+        return;
+
     CGFloat topY = [OAUtilities getStatusBarHeight];
     CGFloat buttonHeight = 50.0;
     CGFloat width = kDrawerWidth;
@@ -206,7 +224,8 @@
     CGFloat divW = width - 60;
     CGFloat divH = 0.5;
     
-    for (CALayer *item in _menuButtonDivArray) {
+    for (CALayer *item in _menuButtonDivArray)
+    {
         item.frame = CGRectMake(divX, divY, divW, divH);
     }
 }
@@ -342,7 +361,7 @@
     [_menuButtonSettings setImage:[UIImage templateImageNamed:@"left_menu_icon_settings.png"] forState:UIControlStateNormal];
     [_menuButtonHelp setImage:[UIImage templateImageNamed:@"left_menu_icon_about.png"] forState:UIControlStateNormal];
     [_menuButtonNavigation setImage:[UIImage templateImageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
-    [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:@"ic_custom_routes.png"] forState:UIControlStateNormal];
+    [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:ACImageNameIcCustomRoutes] forState:UIControlStateNormal];
     [_menuButtonWeather setImage:[UIImage templateImageNamed:@"ic_custom_umbrella.png"] forState:UIControlStateNormal];
     [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
     [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"ic_custom_backpack"] forState:UIControlStateNormal];

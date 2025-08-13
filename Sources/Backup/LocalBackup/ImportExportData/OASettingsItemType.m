@@ -54,6 +54,8 @@
             return @"NAVIGATION_HISTORY";
         case EOASettingsItemTypeDownloads:
             return @"DOWNLOADS";
+        case EOASettingsItemTypeColorPalette:
+            return @"COLOR_DATA";
         default:
             return nil;
     }
@@ -101,6 +103,8 @@
         return EOASettingsItemTypeNavigationHistory;
     if ([typeName isEqualToString:@"DOWNLOADS"])
         return EOASettingsItemTypeDownloads;
+    if ([typeName isEqualToString:@"COLOR_DATA"])
+        return EOASettingsItemTypeColorPalette;
     
     return EOASettingsItemTypeUnknown;
 }

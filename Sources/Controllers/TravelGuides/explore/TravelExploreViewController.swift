@@ -28,7 +28,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
   
     var searchController: UISearchController!
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
-    var downloadingCellHelper: OADownloadingCellHelper = OADownloadingCellHelper()
+    var downloadingCellResourceHelper: DownloadingCellResourceHelper = DownloadingCellResourceHelper()
     var dataLock: NSObject = NSObject()
     var downloadingResources: [OAResourceSwiftItem] = []
     var lastSelectedIndexPath: IndexPath?
@@ -70,6 +70,8 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         setupSearchControllerWithFilter(false)
         tableView.keyboardDismissMode = .onDrag
         isInited = true
+        addObserver(OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable))
+        addObserver(OAAutoObserverProxy(self, withHandler: #selector(populateAndUpdate), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable))
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -77,11 +79,17 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         navigationItem.leftItemsSupplementBackButton = true
         navigationController?.navigationBar.topItem?.backButtonTitle = localizedString("shared_string_back")
         screenMode = .popularArticles
+        downloadingCellResourceHelper.refreshCellSpinners()
     }
     
-    override func registerObservers() {
-        addObserver(OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable))
-        addObserver(OAAutoObserverProxy(self, withHandler: #selector(populateAndUpdate), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable))
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unregisterNotificationsAndObservers()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        downloadingCellResourceHelper.cleanCellCache()
     }
 
     // MARK: Data
@@ -113,9 +121,9 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             
             guard isInited  else { return }
             
-            downloadingCellHelper.fetchResourcesBlock()
+            fetchResources()
             
-            if TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() {
+            if !TravelObfHelper.shared.isAnyTravelBookPresent() {
                 
                 let downloadSection = tableData.createNewSection()
                 
@@ -177,7 +185,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                             articleRow.setObj(item, forKey: "article")
                             articleRow.setObj(item.lang, forKey: "lang")
                             if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
-                                articleRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
+                                articleRow.iconName = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: false)
                             }
                         }
                     }
@@ -206,7 +214,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             
             let section = tableData.createNewSection()
             
-            if TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() {
+            if !TravelObfHelper.shared.isAnyTravelBookPresent() {
                 let headerTitleRow = section.createNewRow()
                 headerTitleRow.cellType = OARightIconTableViewCell.getIdentifier()
                 headerTitleRow.title = localizedString("no_travel_guides_data_title")
@@ -223,8 +231,9 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                     let resultRow = section.createNewRow()
                     resultRow.cellType = SearchTravelCell.getIdentifier()
                     resultRow.title = item.articleTitle
-                    resultRow.descr = item.isPartOf
+                    resultRow.descr = TravelGuidesUtils.getTitleWithoutPrefix(title: item.isPartOf)
                     resultRow.setObj("ic_custom_history", forKey: "noImageIcon")
+                    resultRow.setObj(item.lang, forKey: "lang")
                     if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
                         resultRow.iconName = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: true)
                     }
@@ -238,7 +247,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             
             let section = tableData.createNewSection()
             
-            if TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() {
+            if !TravelObfHelper.shared.isAnyTravelBookPresent() {
                 let headerTitleRow = section.createNewRow()
                 headerTitleRow.cellType = OARightIconTableViewCell.getIdentifier()
                 headerTitleRow.title = localizedString("no_travel_guides_data_title")
@@ -268,38 +277,31 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         }
     }
     
-    func setupDownloadingCellHelper() {
-        downloadingCellHelper = OADownloadingCellHelper()
-        downloadingCellHelper.hostViewController = self
-        downloadingCellHelper.hostTableView = self.tableView
-        downloadingCellHelper.hostDataLock = dataLock
-        
-        downloadingCellHelper.fetchResourcesBlock = { [weak self] in
-            guard let self else { return }
-            if var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"]) {
-                downloadingResouces.sort(by: { a, b in
-                    a.title() < b.title()
-                })
-                self.downloadingResources = downloadingResouces
+    private func fetchResources() {
+        if var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"]) {
+            downloadingResouces.sort { $0.title() < $1.title() }
+            self.downloadingResources = downloadingResouces
+        }
+    }
+    
+    private func getSwiftResourceByIndex(indexPath: IndexPath?) -> OAResourceSwiftItem? {
+        let headerCellsCountInResourcesSection = headerCellsCountInResourcesSection()
+        if let indexPath, indexPath.row >= headerCellsCountInResourcesSection {
+            let index = indexPath.row - headerCellsCountInResourcesSection
+            if downloadingResources.count > index {
+                return downloadingResources[index]
             }
         }
-        
-        downloadingCellHelper.getSwiftResourceByIndexBlock = { [weak self] (indexPath: IndexPath?) -> OAResourceSwiftItem? in
-            guard let self else { return nil }
-            let headerCellsCountInResourcesSection = self.headerCellsCountInResourcesSection()
-            if let indexPath, indexPath.row >= headerCellsCountInResourcesSection {
-                let index = indexPath.row - headerCellsCountInResourcesSection
-                if self.downloadingResources.count > index {
-                    return self.downloadingResources[index]
-                }
-            }
-            return nil
-        }
-        
-        downloadingCellHelper.getTableDataModelBlock = { [weak self] in
-            guard let self else { return nil }
-            return self.tableData
-        }
+        return nil
+    }
+    
+    private func setupDownloadingCellHelper() {
+        downloadingCellResourceHelper = DownloadingCellResourceHelper()
+        downloadingCellResourceHelper.hostViewController = self
+        downloadingCellResourceHelper.setHostTableView(tableView)
+        downloadingCellResourceHelper.rightIconStyle = .hideIconAfterDownloading
+        downloadingCellResourceHelper.isDownloadedLeftIconRecolored = true
+        downloadingCellResourceHelper.stopWithAlertMessage = false
     }
     
     func headerCellsCountInResourcesSection() -> Int {
@@ -316,6 +318,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     @objc func update() {
         DispatchQueue.main.async {
             self.generateData()
+            self.downloadingCellResourceHelper.cleanCellCache()
             self.tableView.reloadData()
         }
     }
@@ -373,8 +376,10 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         var outCell: UITableViewCell? = nil
         
         if item.cellType == "kDownloadCellKey" {
-            let resource = downloadingCellHelper.getSwiftResourceByIndexBlock(indexPath)
-            outCell = downloadingCellHelper.setupSwiftCell(resource, indexPath: indexPath)
+            if let resource = getSwiftResourceByIndex(indexPath: indexPath) {
+                outCell = downloadingCellResourceHelper.getOrCreateCell(resource.resourceId(), swiftResourceItem: resource)
+            }
+            
         } else if item.cellType == OAFilledButtonCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OAFilledButtonCell.getIdentifier()) as? OAFilledButtonCell
             if cell == nil {
@@ -572,22 +577,21 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         let item = tableData.item(for: indexPath)
         lastSelectedIndexPath = indexPath
         if item.cellType == "kDownloadCellKey" {
-            downloadingCellHelper.onItemClicked(indexPath)
-            
+            let resource = getSwiftResourceByIndex(indexPath: indexPath)
+            downloadingCellResourceHelper.onCellClicked(resource?.resourceId() ?? "")     
         } else if item.cellType == ArticleTravelCell.getIdentifier() || item.cellType == GpxTravelCell.getIdentifier()  {
             if let article = item.obj(forKey: "article") as? TravelArticle {
                 let lang = item.string(forKey: "lang") ?? ""
                 openArticle(article: article, lang: lang)
             }
-            
         } else if item.cellType == SearchTravelCell.getIdentifier() {
             var articleId = item.obj(forKey: "articleId") as? TravelArticleIdentifier
-            let lang = OAUtilities.currentLang() ?? ""
+            let lang = item.obj(forKey: "lang") as? String ?? OAUtilities.currentLang() ?? ""
             if articleId == nil {
                 articleId = TravelObfHelper.shared.getArticleId(title: item.title ?? "", lang: lang)
             }
             if let articleId {
-                let language = lang == "" ? "eng" : lang
+                let language = lang.isEmpty ? "en" : lang
                 if let article = TravelObfHelper.shared.getArticleById(articleId: articleId, lang: language, readGpx: false, callback: nil) {
                     TravelObfHelper.shared.getBookmarksHelper().addToHistory(article: article)
                     openArticle(article: article, lang: lang)
@@ -643,6 +647,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             guard let self else { return }
             self.isDataLoaded = true
             self.generateData()
+            self.downloadingCellResourceHelper.cleanCellCache()
             self.tableView.reloadData()
             self.view.removeSpinner()
         }
@@ -659,28 +664,36 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         // Open TravelGpx track
         article.gpxFile = gpxFile
         let filename = TravelObfHelper.shared.createGpxFile(article: article)
-        OATravelGuidesHelper.createGpxFile(article, fileName: filename)
-        let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile)
-        
         view.removeSpinner()
-        if isPointsReadingMode && (gpx == nil || gpx?.wptPoints == 0) {
-            OAUtilities.showToast(nil, details: localizedString("article_has_no_points"), duration: 4, in: self.view)
-            return
+        var hasPoints = false
+        if let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile) {
+            hasPoints = isPointsReadingMode && gpx.wptPoints > 0
+            var hasTravelGpxTracks = false
+            if let gpxFile, article is TravelGpx {
+                hasTravelGpxTracks = gpxFile.object.tracks.count > 0
+            }
+            
+            if hasPoints || hasTravelGpxTracks {
+                OAAppSettings.sharedManager().showGpx([filename], update: true)
+                if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+                    let trackItem = TrackItem(file: gpx.file)
+                    trackItem.dataItem = gpx
+                    OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: trackItem,
+                                                                                   navControllerHistory: newCurrentHistory,
+                                                                                   fromTrackMenu: false,
+                                                                                   selectedTab: hasPoints ? .pointsTab : .overviewTab)
+                }
+            }
         }
-
-        OAAppSettings.sharedManager().showGpx([filename], update: true)
-        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
-                                                                           navControllerHistory: newCurrentHistory,
-                                                                           fromTrackMenu: false,
-                                                                           selectedTab: .pointsTab)
+        if !hasPoints {
+            OAUtilities.showToast(nil, details: localizedString("article_has_no_points"), duration: 4, in: self.view)
         }
     }
     
     // MARK: Search
     
     func shouldShowSearch() -> Bool {
-        !TravelObfHelper.shared.isOnlyDefaultTravelBookPresent()
+        TravelObfHelper.shared.isAnyTravelBookPresent()
     }
     
     private func setupSearchControllerWithFilter(_ isFiltered: Bool) {

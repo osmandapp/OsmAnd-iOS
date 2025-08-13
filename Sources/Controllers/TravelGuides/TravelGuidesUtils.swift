@@ -13,6 +13,7 @@ final class TravelGuidesUtils {
     static let GEO_PARAMS = "?lat="
     static let ARTICLE_TITLE = "article_title"
     static let ARTICLE_LANG = "article_lang"
+    static let EN_LANG_PREFIX = "en:"
     
     static func processWikivoyageDomain(url: String, delegate: TravelArticleDialogProtocol) {
         guard let lang = OAWikiArticleHelper.getLang(url), 
@@ -24,7 +25,6 @@ final class TravelGuidesUtils {
             OAWikiArticleHelper.warnAboutExternalLoad(url, sourceView: delegate.getWebView())
         }
     }
-
 
     static func processWikipediaDomain(defaultLocation: CLLocation, url: String, delegate: TravelArticleDialogProtocol) {
         var articleUrl = url
@@ -49,7 +49,7 @@ final class TravelGuidesUtils {
             let secondGeoPart = geoPart.substring(from: firstValueEnd)
             let secondValueStart = Int(secondGeoPart.index(of: "="))
             
-            if fristValueStart != -1 && firstValueEnd != -1 && secondValueStart != -1  && firstValueEnd > fristValueStart {
+            if fristValueStart != -1 && firstValueEnd != -1 && secondValueStart != -1 && firstValueEnd > fristValueStart {
                 let lat = geoPart.substring(from: fristValueStart + 1, to: firstValueEnd)
                 let lon = secondGeoPart.substring(from: fristValueStart)
                 if let doubleLat = Double(lat), let doubleLon = Double(lon) {
@@ -58,5 +58,9 @@ final class TravelGuidesUtils {
             }
         }
         return nil
+    }
+    
+    static func getTitleWithoutPrefix(title: String) -> String {
+        title.hasPrefix(EN_LANG_PREFIX) ? String(title.dropFirst(EN_LANG_PREFIX.count)) : title
     }
 }

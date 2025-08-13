@@ -1,5 +1,5 @@
 //
-//  OADebugSettings.m
+//  OAAppSettings.m
 //  OsmAnd
 //
 //  Created by AntonRogachevskiy on 10/16/14.
@@ -8,14 +8,24 @@
 
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "Localization.h"
 #import "OADayNightHelper.h"
 #import "OAColors.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
 #import "OAIAPHelper.h"
+#import "OADownloadMode.h"
+#import "OAColoringType.h"
+#import "OAMapWidgetRegistry.h"
+#import "OAObservable.h"
+#import "OAMapSource.h"
+#import "OAApplicationMode.h"
+#import "OAMapLayersConfiguration.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
+static NSString * const settingAppModeKey = @"settingAppModeKey";
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
 static NSString * const metricSystemKey = @"settingMetricSystemKey";
 static NSString * const drivingRegionAutomaticKey = @"drivingRegionAutomatic";
@@ -38,6 +48,13 @@ static NSString * const mapSettingShowPoiLabelKey = @"mapSettingShowPoiLabelKey"
 static NSString * const mapSettingShowBordersOfDownloadedMapsKey = @"mapSettingShowBordersOfDownloadedMapsKey";
 static NSString * const mapSettingShowOfflineEditsKey = @"mapSettingShowOfflineEditsKey";
 static NSString * const mapSettingShowOnlineNotesKey = @"mapSettingShowOnlineNotesKey";
+static NSString * const mapSettingShowCoordinatesGridKey = @"mapSettingShowCoordinatesGridKey";
+static NSString * const coordinateGridFormatKey = @"coordinateGridFormatKey";
+static NSString * const coordinateGridMinZoomKey = @"coordinateGridMinZoomKey";
+static NSString * const coordinateGridMaxZoomKey = @"coordinateGridMaxZoomKey";
+static NSString * const coordinatesGridLabelsPositionKey = @"coordinatesGridLabelsPositionKey";
+static NSString * const coordinatesGridColorDayKey = @"coordinatesGridColorDayKey";
+static NSString * const coordinatesGridColorNightKey = @"coordinatesGridColorNightKey";
 static NSString * const layerTransparencySeekbarModeKey = @"layerTransparencySeekbarModeKey";
 static NSString * const mapSettingVisibleGpxKey = @"selected_gpx";
 
@@ -106,10 +123,8 @@ static NSString * const customAppModesKey = @"customAppModes";
 
 static NSString * const mapInfoControlsKey = @"mapInfoControls";
 static NSString * const transparentMapThemeKey = @"transparentMapTheme";
-static NSString * const showStreetNameKey = @"showStreetName";
 static NSString * const positionPlacementOnMapKey = @"positionPlacementOnMap";
 static NSString * const rotateMapKey = @"rotateMap";
-static NSString * const compassModeKey = @"compassMode";
 static NSString * const firstMapIsDownloadedKey = @"firstMapIsDownloaded";
 
 // App profiles
@@ -118,12 +133,17 @@ static NSString * const routingProfileKey = @"routingProfile";
 static NSString * const derivedProfileKey = @"derivedProfile";
 static NSString * const profileIconNameKey = @"profileIconName";
 static NSString * const profileIconColorKey = @"profileIconColor";
+static NSString * const profileCustomIconColorKey = @"profileCustomIconColor";
 static NSString * const userProfileNameKey = @"userProfileName";
 static NSString * const parentAppModeKey = @"parentAppMode";
 static NSString * const routeServiceKey = @"routeService";
 static NSString * const navigationIconKey = @"navigationIcon";
 static NSString * const locationIconKey = @"locationIcon";
+static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
+static NSString * const batterySavingModeKey = @"batterySavingMode";
 static NSString * const appModeOrderKey = @"appModeOrder";
+static NSString * const viewAngleVisibilityKey = @"viewAngleVisibility";
+static NSString * const locationRadiusVisibilityKey = @"locationRadiusVisibility";
 static NSString * const defaultSpeedKey = @"defaultSpeed";
 static NSString * const minSpeedKey = @"minSpeed";
 static NSString * const maxSpeedKey = @"maxSpeed";
@@ -145,6 +165,7 @@ static NSString * const disableOffrouteRecalcKey = @"disableOffrouteRecalc";
 static NSString * const disableWrongDirectionRecalcKey = @"disableWrongDirectionRecalc";
 static NSString * const hazmatTransportingEnabledKey = @"hazmatTransportingEnabled";
 static NSString * const routerServiceKey = @"routerService";
+static NSString * const previewNextTurnKey = @"previewNextTurn";
 static NSString * const snapToRoadKey = @"snapToRoad";
 static NSString * const autoFollowRouteKey = @"autoFollowRoute";
 static NSString * const autoZoomMapKey = @"autoZoomMap";
@@ -152,6 +173,9 @@ static NSString * const useV1AutoZoomKey = @"useV1AutoZoom";
 static NSString * const autoZoomMapScaleKey = @"autoZoomMapScale";
 static NSString * const keepInformingKey = @"keepInforming";
 static NSString * const speedSystemKey = @"speedSystem";
+static NSString * const volumeSystemKey = @"volumeSystem";
+static NSString * const temperatureSystemKey = @"temperatureSystem";
+static NSString * const fuelTankCapacityKey = @"fuelTankCapacity";
 static NSString * const angularUnitsKey = @"angularUnits";
 static NSString * const speedLimitExceedKey = @"speedLimitExceed";
 static NSString * const showArrivalTimeKey = @"showArrivalTime";
@@ -161,16 +185,16 @@ static NSString * const routeRecalculationDistanceKey = @"routeRecalculationDist
 static NSString * const customRouteColorDayKey = @"customRouteColorDay";
 static NSString * const customRouteColorNightKey = @"customRouteColorNight";
 static NSString * const routeColoringTypeKey = @"routeColoringType";
+static NSString * const routeGradientPaletteKey = @"route_gradient_palette";
 static NSString * const routeInfoAttributeKey = @"routeInfoAttribute";
 static NSString * const routeLineWidthKey = @"routeLineWidth";
 static NSString * const routeShowTurnArrowsKey = @"routeShowTurnArrows";
 static NSString * const showCompassControlRulerKey = @"showCompassRuler";
 static NSString * const showTrafficWarningsKey = @"showTrafficWarnings";
 static NSString * const showPedestrianKey = @"showPedestrian";
-static NSString * const showSpeedLimitWarningsKey = @"show_speed_limit_warnings";
+static NSString * const showSpeedLimitWarningsKey = @"showSpeedLimitWarnings";
 static NSString * const showCamerasKey = @"showCameras";
 static NSString * const showTunnelsKey = @"showTunnels";
-static NSString * const showLanesKey = @"showLanes";
 static NSString * const showGpxWptKey = @"showGpxWpt";
 static NSString * const showNearbyFavoritesKey = @"showNearbyFavorites";
 static NSString * const showNearbyPoiKey = @"showNearbyPoi";
@@ -210,16 +234,16 @@ static NSString * const saveHeadingToGpxKey = @"saveHeadingToGpx";
 
 static NSString * const rulerModeKey = @"rulerMode";
 static NSString * const showDistanceRulerKey = @"showDistanceRuler";
+static NSString * const distanceByTapTextSizeKey = @"distanceByTapTextSize";
 static NSString * const showElevationProfileWidgetKey = @"show_elevation_profile_widget";
 static NSString * const showSlopesOnElevationWidget = @"show_slopes_on_elevation_widget";
 static NSString * const customWidgetKeys = @"custom_widgets_keys";
+static NSString * const tracksSortModesKey = @"tracks_tabs_sort_modes";
+static NSString * const searchTracksSortModesKey = @"search_tracks_sort_mode";
 static NSString * const showSpeedometerKey = @"show_speedometer";
 static NSString * const speedometerSizeKey = @"speedometer_size";
 static NSString * const showSpeedLimitWarningKey = @"show_speed_limit_warning";
 
-static NSString * const osmUserNameKey = @"osm_user_name";
-static NSString * const userOsmBugNameKey = @"userOsmBugName";
-static NSString * const osmPasswordKey = @"osm_pass";
 static NSString * const osmUserAccessTokenKey = @"osm_user_access_token";
 static NSString * const osmUserAccessTokenSecretKey = @"osm_user_access_token_secret";
 static NSString * const oprAccessTokenKey = @"opr_access_token";
@@ -232,6 +256,7 @@ static NSString * const mapperLiveUpdatesExpireTimeKey = @"mapper_live_updates_e
 
 static NSString * const showMapillaryKey = @"show_mapillary";
 static NSString * const onlinePhotosRowCollapsedKey = @"onlinePhotosRowCollapsed";
+static NSString * const mapillaryPhotosRowCollapsedKey = @"mapillaryPhotosRowCollapsed";
 static NSString * const mapillaryFirstDialogShownKey = @"mapillaryFirstDialogShown";
 static NSString * const useMapillaryFilterKey = @"useMapillaryFilter";
 static NSString * const mapillaryFilterUserKeyKey = @"mapillaryFilterUserKey";
@@ -240,20 +265,8 @@ static NSString * const mapillaryFilterStartDateKey = @"mapillaryFilterStartDate
 static NSString * const mapillaryFilterEndDateKey = @"mapillaryFilterEndDate";
 static NSString * const mapillaryFilterPanoKey = @"mapillaryFilterPano";
 
-static NSString * const quickActionIsOnKey = @"qiuckActionIsOn";
-static NSString * const quickActionsListKey = @"quickActionsList";
 static NSString * const isQuickActionTutorialShownKey = @"isQuickActionTutorialShown";
-
-static NSString * const quickActionLandscapeXKey = @"quickActionLandscapeX";
-static NSString * const quickActionLandscapeYKey = @"quickActionLandscapeY";
-static NSString * const quickActionPortraitXKey = @"quickActionPortraitX";
-static NSString * const quickActionPortraitYKey = @"quickActionPortraitY";
-
-static NSString * const map3dModeLandscapeXKey = @"map3dModeLandscapeX";
-static NSString * const map3dModeLandscapeYKey = @"map3dModeLandscapeY";
-static NSString * const map3dModePortraitXKey = @"map3dModePortraitX";
-static NSString * const map3dModePortraitYKey = @"map3dModePortraitY";
-static NSString * const map3dModeVisibilityKey = @"map_3d_mode_visibility";
+static NSString * const quickActionButtonsKey = @"quick_action_buttons";
 
 static NSString * const contourLinesZoomKey = @"contourLinesZoom";
 static NSString * const hikingRoutesParameterKey = @"hikingRoutesParameter";
@@ -261,10 +274,10 @@ static NSString * const cycleRoutesParameterKey = @"cycleRoutesParameter";
 static NSString * const mountainBikeRoutesParameterKey = @"mountainBikeRoutesParameter";
 static NSString * const mapManuallyRotatingAngleKey = @"mapManuallyRotatingAngle";
 static NSString * const mapScreenOrientationKey = @"mapScreenOrientation";
-
+static NSString * const detailedTrackGuidanceKey = @"detailedTrackGuidance";
+static NSString * const gpxApproximationDistanceKey = @"gpxApproximationDistance";
 static NSString * const activeMarkerKey = @"activeMarkerKey";
 static NSString * const mapDistanceIndicationVisabilityKey = @"mapDistanceIndicationVisabilityKey";
-static NSString * const mapDistanceIndicationKey = @"mapDistanceIndicationKey";
 static NSString * const mapArrowsOnMapKey = @"mapArrowsOnMapKey";
 static NSString * const mapDirectionLinesKey = @"mapDirectionLinesKey";
 
@@ -277,6 +290,8 @@ static NSString * const customPluginsJsonKey = @"customPluginsJson";
 
 static NSString * const wikiArticleShowImagesAskedKey = @"wikivoyageShowImagesAsked";
 static NSString * const wikivoyageShowImgsKey = @"wikivoyageShowImgs";
+
+static NSString * const selectMarkerOnSingleTapKey = @"select_marker_on_single_tap";
 
 static NSString * const coordsInputUseRightSideKey = @"coordsInputUseRightSide";
 static NSString * const coordsInputFormatKey = @"coordsInputFormat";
@@ -359,14 +374,19 @@ static NSString * const currentTrackSlopeGradientPaletteKey = @"currentTrackSlop
 static NSString * const currentTrackWidthKey = @"currentTrackWidth";
 static NSString * const currentTrackShowArrowsKey = @"currentTrackShowArrows";
 static NSString * const currentTrackShowStartFinishKey = @"currentTrackShowStartFinish";
+static NSString * const currentTrackIsJoinSegmentsKey = @"currentTrackIsJoinSegments";
+
 static NSString * const currentTrackVerticalExaggerationScaleKey = @"currentTrackVerticalExaggerationScale";
+static NSString * const currentTrackElevationMetersKey = @"currentTrackElevationMeters";
 static NSString * const currentTrackVisualization3dByTypeKey = @"currentTrackVisualization3dByType";
 static NSString * const currentTrackVisualization3dWallColorTypeKey = @"currentTrackVisualization3dWallColorType";
 static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTrackVisualization3dPositionType";
+static NSString * const currentTrackRouteActivityKey = @"currentTrackRouteActivityKey";
 
 static NSString * const customTrackColorsKey = @"customTrackColors";
 static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
 static NSString * const lastUsedFavIconsKey = @"lastUsedFavIcons";
+static NSString * const gradientPalettesKey = @"gradient_color_palettes";
 
 static NSString * const gpsStatusAppKey = @"gpsStatusApp";
 
@@ -431,6 +451,9 @@ static NSString * const lastUUIDChangeTimestampKey = @"lastUUIDChangeTimestamp";
 
 static NSString * const kShowHeightmapsKey = @"showHeightmaps";
 
+static NSString * const kContextGallerySpanGridCountKey = @"contextGallerySpanGridCount";
+static NSString * const kContextGallerySpanGridCountLandscapeKey = @"contextGallerySpanGridCountLandscape";
+
 // Widgets
 static NSString * const leftWidgetPanelOrderKey = @"left_widget_panel_order";
 static NSString * const rightWidgetPanelOrderKey = @"right_widget_panel_order";
@@ -441,83 +464,7 @@ static NSString * const topWidgetPanelOrderOldKey = @"top_widget_panel_order";
 static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_order";
 
 static NSString * const useOldRoutingKey = @"useOldRoutingKey";
-
-@implementation OACompassMode
-
-+ (NSString *) getTitle:(EOACompassMode)cm
-{
-    switch (cm)
-    {
-        case EOACompassVisible:
-            return OALocalizedString(@"compass_always_visible");
-        case EOACompassHidden:
-            return OALocalizedString(@"compass_always_hidden");
-        default:
-            return OALocalizedString(@"compass_visible_if_map_rotated");
-    }
-}
-
-+ (NSString *) getDescription:(EOACompassMode)cm
-{
-    switch (cm)
-    {
-        case EOACompassRotated:
-            return OALocalizedString(@"compass_visible_in_rotated_mode_descr");
-        default:
-            return @"";
-    }
-}
-
-+ (NSString *) getIconName:(EOACompassMode)cm
-{
-    switch (cm)
-    {
-        case EOACompassVisible:
-            return @"ic_custom_compass_north";
-        case EOACompassHidden:
-            return @"ic_custom_compass_hidden";
-        default:
-            return @"ic_custom_compass_rotated";
-    }
-}
-
-@end
-
-@implementation OAMap3DModeVisibility
-
-+ (instancetype) withModeConstant:(EOAMap3DModeVisibility)mode;
-{
-    OAMap3DModeVisibility *obj = [[OAMap3DModeVisibility alloc] init];
-    if (obj)
-        obj.mode = mode;
-    return obj;
-}
-
-+ (NSString *) getTitle:(EOAMap3DModeVisibility)mode
-{
-    switch (mode)
-    {
-        case EOAMap3DModeVisibilityHidden:
-            return OALocalizedString(@"shared_string_hidden");
-        case EOAMap3DModeVisibilityVisible:
-            return OALocalizedString(@"shared_string_visible");
-        default:
-            return OALocalizedString(@"visible_in_3d_mode");
-    }
-}
-
-+ (NSString *) getIconName:(EOAMap3DModeVisibility)mode
-{
-    switch (mode)
-    {
-        case EOAMap3DModeVisibilityHidden:
-            return @"ic_custom_button_3d_off";
-        default:
-            return @"ic_custom_button_3d";
-    }
-}
-
-@end
+static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @interface OAMetricsConstant()
 
@@ -688,6 +635,107 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @end
 
+@interface OAVolumeConstant ()
+
+@property (nonatomic) EOAVolumeConstant volume;
+@property (nonatomic) NSString *key;
+@property (nonatomic) NSString *descr;
+
+@end
+
+@implementation OAVolumeConstant
+
++ (instancetype)withVolumeConstant:(EOAVolumeConstant)volume
+{
+    OAVolumeConstant *obj = [[OAVolumeConstant alloc] init];
+    if (obj)
+    {
+        obj.volume = volume;
+        obj.key = [self.class toHumanString:volume];
+        obj.descr = [self.class getUnitSymbol:volume];
+    }
+    return obj;
+}
+
++ (NSString *)toHumanString:(EOAVolumeConstant)volume
+{
+    switch (volume)
+    {
+        case LITRES:
+            return OALocalizedString(@"litres");
+        case IMPERIAL_GALLONS:
+            return OALocalizedString(@"imperial_gallons");
+        case US_GALLONS:
+            return OALocalizedString(@"us_gallons");
+        default:
+            return OALocalizedString(@"litres");
+    }
+}
+
++ (NSString *)getUnitSymbol:(EOAVolumeConstant)volume
+{
+    if (volume == IMPERIAL_GALLONS || volume == US_GALLONS)
+        return OALocalizedString(@"us_gallons_unit");
+    else
+        return OALocalizedString(@"liter");
+}
+
+@end
+
+@interface OATemperatureConstant ()
+
+@property (nonatomic) EOATemperatureConstant volume;
+@property (nonatomic) NSString *key;
+@property (nonatomic) NSString *descr;
+
+@end
+
+@implementation OATemperatureConstant
+
++ (instancetype)withVolumeConstant:(EOATemperatureConstant)volume
+{
+    OATemperatureConstant *obj = [[OATemperatureConstant alloc] init];
+    if (obj)
+    {
+        obj.volume = volume;
+        obj.key = [self.class toHumanString:volume];
+        obj.descr = [self.class getUnitSymbol:volume];
+    }
+    return obj;
+}
+
++ (NSString *)toHumanString:(EOATemperatureConstant)volume
+{
+    switch (volume)
+    {
+        case SYSTEM_DEFAULT:
+            return OALocalizedString(@"device_settings");
+        case CELSIUS:
+            return OALocalizedString(@"weather_temperature_celsius");
+        case FAHRENHEIT:
+            return OALocalizedString(@"weather_temperature_fahrenheit");
+        default:
+            return OALocalizedString(@"device_settings");
+    }
+}
+
++ (NSString *)getUnitSymbol:(EOATemperatureConstant)volume
+{
+    switch (volume)
+    {
+        case SYSTEM_DEFAULT:
+            return [NSUnitTemperature current].displaySymbol;
+        case CELSIUS:
+            return @"°C";
+        case FAHRENHEIT:
+            return @"°F";
+        default:
+            return [NSUnitTemperature current].displaySymbol;
+    }
+}
+
+@end
+
 @interface OAAngularConstant ()
 
 @property (nonatomic) EOAAngularConstant ac;
@@ -704,6 +752,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     if (obj)
     {
         obj.ac = ac;
+        // FIXME: - Check this part of code
         obj.key = [self.class toShortString:ac];
         obj.descr = [self.class getUnitSymbol:ac];
     }
@@ -772,12 +821,13 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
               [OADrivingRegion withRegion:DR_CANADA],
               [OADrivingRegion withRegion:DR_UK_AND_OTHERS],
               [OADrivingRegion withRegion:DR_JAPAN],
+              [OADrivingRegion withRegion:DR_INDIA],
               [OADrivingRegion withRegion:DR_AUSTRALIA] ];
 }
 
 + (BOOL) isLeftHandDriving:(EOADrivingRegion)region
 {
-    return region == DR_UK_AND_OTHERS || region == DR_JAPAN || region == DR_AUSTRALIA;
+    return region == DR_UK_AND_OTHERS || region == DR_JAPAN || region == DR_INDIA || region == DR_AUSTRALIA;
 }
 
 + (BOOL) isAmericanSigns:(EOADrivingRegion)region
@@ -799,11 +849,26 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
             return MILES_AND_METERS;
         case DR_JAPAN:
             return KILOMETERS_AND_METERS;
+        case DR_INDIA:
+            return KILOMETERS_AND_METERS;
         case DR_AUSTRALIA:
             return KILOMETERS_AND_METERS;
 
         default:
             return KILOMETERS_AND_METERS;
+    }
+}
+
++ (EOAVolumeConstant)getDefVolume:(EOADrivingRegion)region
+{
+    switch (region)
+    {
+        case DR_US:
+            return US_GALLONS;
+        case DR_UK_AND_OTHERS:
+            return IMPERIAL_GALLONS;
+        default:
+            return LITRES;
     }
 }
 
@@ -820,6 +885,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
             return OALocalizedString(@"driving_region_uk");
         case DR_JAPAN:
             return OALocalizedString(@"driving_region_japan");
+        case DR_INDIA:
+            return OALocalizedString(@"driving_region_india");
         case DR_AUSTRALIA:
             return OALocalizedString(@"driving_region_australia");
 
@@ -849,6 +916,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         return DR_CANADA;
     } else if ([countryCode isEqualToString:@"jp"]) {
         return DR_JAPAN;
+    } else if ([countryCode isEqualToString:@"in"]) {
+        return DR_INDIA;
     } else if ([countryCode isEqualToString:@"au"]) {
         return DR_AUSTRALIA;
     } else if (!isMetricSystem) {
@@ -1052,16 +1121,16 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     }
 }
 
-- (EOAColorizationType) toColorizationType
+- (NSInteger)toColorizationType
 {
     if (self.gst == EOAGradientScaleTypeSpeed)
-        return EOAColorizationTypeSpeed;
+        return ColorizationTypeSpeed;
     else if (self.gst == EOAGradientScaleTypeAltitude)
-        return EOAColorizationTypeElevation;
+        return ColorizationTypeElevation;
     else if (self.gst == EOAGradientScaleTypeSlope)
-        return EOAColorizationTypeSlope;
+        return ColorizationTypeSlope;
     else
-        return EOAColorizationTypeNone;
+        return ColorizationTypeNone;
 }
 
 @end
@@ -1364,6 +1433,40 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @end
 
+@interface OADistanceByTapTextSizeConstant ()
+
+@property (nonatomic) EOADistanceByTapTextSizeConstant textSize;
+@property (nonatomic) NSString *key;
+@property (nonatomic) float textSizeFactor;
+
+@end
+
+@implementation OADistanceByTapTextSizeConstant
+
++ (instancetype)withDistanceByTapTextSizeConstant:(EOADistanceByTapTextSizeConstant)textSize
+{
+    OADistanceByTapTextSizeConstant *obj = [[OADistanceByTapTextSizeConstant alloc] init];
+    if (obj)
+    {
+        obj.textSize = textSize;
+        obj.key = [self.class toHumanString:textSize];
+        obj.textSizeFactor = [self.class getTextSizeFactor:textSize];
+    }
+    return obj;
+}
+
++ (NSString *)toHumanString:(EOADistanceByTapTextSizeConstant)textSize
+{
+    return OALocalizedString(textSize == LARGE ? @"shared_string_large" : @"shared_string_normal");
+}
+
++ (float)getTextSizeFactor:(EOADistanceByTapTextSizeConstant)textSize
+{
+    return textSize == LARGE ? 1.5 : 1.0;
+}
+
+@end
+
 @interface OACommonPreference ()
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
@@ -1378,7 +1481,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (NSObject *) getValue:(OAApplicationMode *)mode;
 - (void) setValue:(NSObject *)value;
 - (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode;
-- (void) setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
+- (void)setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -1397,21 +1500,27 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return obj;
 }
 
-- (id)makeGlobal
+- (instancetype)makeGlobal
 {
     _global = YES;
     return self;
 }
 
-- (id)makeProfile
+- (instancetype)makeProfile
 {
     _global = NO;
     return self;
 }
 
-- (id)makeShared
+- (instancetype)makeShared
 {
     _shared = YES;
+    return self;
+}
+
+- (instancetype)storeLastModifiedTime
+{
+    _lastModifiedTimeStored = YES;
     return self;
 }
 
@@ -1423,6 +1532,16 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (NSString *)getKey:(OAApplicationMode *)mode
 {
     return self.global ? self.key : [NSString stringWithFormat:@"%@_%@", self.key, mode.stringKey];
+}
+
+- (NSObject *) getPrefValue
+{
+    return [self getValue];
+}
+
+- (NSObject *) getPrefValue:(OAApplicationMode *)mode
+{
+    return [self getValue:mode];
 }
 
 - (NSObject *)getValue
@@ -1477,14 +1596,28 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     }
     if (self.lastModifiedTimeStored)
        [self setLastModifiedTime:NSDate.date.timeIntervalSince1970];
-
+    
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getKey:mode]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
+    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
 }
 
-- (BOOL) isSetForMode:(OAApplicationMode *)mode
+- (BOOL)isSetForMode:(OAApplicationMode *)mode
 {
-    return [self getValue:mode] != nil;
+    id value = [self getValue:mode];
+    BOOL hasValue = value != nil;
+    
+    if (hasValue)
+    {
+        NSObject *defValue = [self getProfileDefaultValue:mode];
+        if (!defValue)
+            return YES;
+        
+        NSString *valueAsString = [value description];
+        NSString *defaultValueAsString = [defValue description];
+        return ![valueAsString isEqualToString:defaultValueAsString];
+    }
+    return NO;
 }
 
 - (long)lastModifiedTime
@@ -1575,6 +1708,18 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return @"";
 }
 
+- (NSString *)toStringFromValue:(id)value
+{
+    NSAssert(NO, @"toStringFromValue method is not implemented");
+    return @"";
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    NSAssert(NO, @"valueFromString method is not implemented");
+    return @(0);
+}
+
 - (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode
 {
     [self setValue:[self getValue:sourceAppMode] mode:targetAppMode];
@@ -1641,7 +1786,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         [self.cachedValues setObject:appMode forKey:mode];
 
     [[NSUserDefaults standardUserDefaults] setObject:appMode.stringKey forKey:[self getKey:mode]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
+    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
 }
 
 - (void)resetToDefault
@@ -1675,7 +1821,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonBoolean ()
 
-@property (nonatomic) BOOL defValue;
+@property (nonatomic, readwrite) BOOL defValue;
 
 @end
 
@@ -1747,7 +1893,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonInteger ()
 
-@property (nonatomic) int defValue;
+@property (nonatomic, readwrite) int defValue;
 
 @end
 
@@ -1823,7 +1969,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonLong ()
 
-@property (nonatomic) long defValue;
+@property (nonatomic, readwrite) long defValue;
 
 @end
 
@@ -1888,7 +2034,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonString ()
 
-@property (nonatomic) NSString *defValue;
+@property (nonatomic, readwrite) NSString *defValue;
 
 @end
 
@@ -1942,6 +2088,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
     [self set:strValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    return string;
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2276,6 +2427,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     [self setValue:[mapSource toDictionary] mode:mode];
 }
 
+- (void)setModeDefaultValue:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode
+{
+    [super setModeDefaultValue:[mapSource toDictionary] mode:mode];
+}
+
 - (void) resetToDefault
 {
     OAMapSource *defaultValue = self.defValue;
@@ -2284,74 +2440,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         defaultValue = (OAMapSource *) pDefault;
 
     [self set:defaultValue];
-}
-
-@end
-
-@implementation OACommonTerrain
-
-@dynamic defValue;
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue
-{
-    OACommonTerrain *obj = [[OACommonTerrain alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOATerrainType) get
-{
-    return [super get];
-}
-
-- (EOATerrainType) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOATerrainType)terrainType
-{
-    [super set:(int)terrainType];
-}
-
-- (void) set:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode
-{
-    [super set:(int)terrainType mode:mode];
-}
-
-- (void) resetToDefault
-{
-    EOATerrainType defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOATerrainType)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
-}
-
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
-{
-    if ([strValue isEqualToString:@"HILLSHADE"])
-        return [self set:EOATerrainTypeHillshade mode:mode];
-    else if ([strValue isEqualToString:@"SLOPE"])
-        return [self set:EOATerrainTypeSlope mode:mode];
-}
-
-- (NSString *)toStringValue:(OAApplicationMode *)mode
-{
-    switch ([self get:mode])
-    {
-        case EOATerrainTypeHillshade:
-            return @"HILLSHADE";
-        case EOATerrainTypeSlope:
-            return @"SLOPE";
-        default:
-            return @"HILLSHADE";
-    }
 }
 
 @end
@@ -2406,10 +2494,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:kStateAlwaysKey])
-        return [self set:EOASpeedLimitWarningStateAlways mode:mode];
-    else if ([strValue isEqualToString:kWhenExceededKey])
-        return [self set:EOASpeedLimitWarningStateWhenExceeded mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *stateMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        stateMap = @{
+            kStateAlwaysKey: @(EOASpeedLimitWarningStateAlways),
+            kWhenExceededKey: @(EOASpeedLimitWarningStateWhenExceeded)
+        };
+    });
+
+    return stateMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2497,12 +2598,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"FARTHEST"])
-        return [self set:AUTO_ZOOM_MAP_FARTHEST mode:mode];
-    else if ([strValue isEqualToString:@"FAR"])
-        return [self set:AUTO_ZOOM_MAP_FAR mode:mode];
-    else if ([strValue isEqualToString:@"CLOSE"])
-        return [self set:AUTO_ZOOM_MAP_CLOSE mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *zoomMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        zoomMap = @{
+            @"FARTHEST": @(AUTO_ZOOM_MAP_FARTHEST),
+            @"FAR": @(AUTO_ZOOM_MAP_FAR),
+            @"CLOSE": @(AUTO_ZOOM_MAP_CLOSE)
+        };
+    });
+    return zoomMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2590,18 +2702,25 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"KILOMETERS_PER_HOUR"])
-        return [self set:KILOMETERS_PER_HOUR mode:mode];
-    else if ([strValue isEqualToString:@"MILES_PER_HOUR"])
-        return [self set:MILES_PER_HOUR mode:mode];
-    else if ([strValue isEqualToString:@"METERS_PER_SECOND"])
-        return [self set:METERS_PER_SECOND mode:mode];
-    else if ([strValue isEqualToString:@"MINUTES_PER_MILE"])
-        return [self set:MINUTES_PER_MILE mode:mode];
-    else if ([strValue isEqualToString:@"MINUTES_PER_KILOMETER"])
-        return [self set:MINUTES_PER_KILOMETER mode:mode];
-    else if ([strValue isEqualToString:@"NAUTICALMILES_PER_HOUR"])
-        return [self set:NAUTICALMILES_PER_HOUR mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode {
+    static NSDictionary<NSString *, NSNumber *> *speedMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        speedMap = @{
+            @"KILOMETERS_PER_HOUR": @(KILOMETERS_PER_HOUR),
+            @"MILES_PER_HOUR": @(MILES_PER_HOUR),
+            @"METERS_PER_SECOND": @(METERS_PER_SECOND),
+            @"MINUTES_PER_MILE": @(MINUTES_PER_MILE),
+            @"MINUTES_PER_KILOMETER": @(MINUTES_PER_KILOMETER),
+            @"NAUTICALMILES_PER_HOUR": @(NAUTICALMILES_PER_HOUR)
+        };
+    });
+    return speedMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2622,6 +2741,171 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
             return @"NAUTICALMILES_PER_HOUR";
         default:
             return @"KILOMETERS_PER_HOUR";
+    }
+}
+
+@end
+
+@implementation OACommonVolumeConstant
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAVolumeConstant)defValue {
+    OACommonVolumeConstant *obj = [[OACommonVolumeConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAVolumeConstant)get
+{
+    return [super get];
+}
+
+- (EOAVolumeConstant)get:(OAApplicationMode *)mode
+{
+    EOADrivingRegion drivingRegion = [[OAAppSettings sharedManager].drivingRegion get:mode];
+    return [self getValue:mode] ? [super get:mode] : [OADrivingRegion getDefVolume:drivingRegion];
+}
+
+- (void)set:(EOAVolumeConstant)volumeConstant
+{
+    [super set:volumeConstant];
+}
+
+- (void)set:(EOAVolumeConstant)volumeConstant mode:(OAApplicationMode *)mode
+{
+    [super set:volumeConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOAVolumeConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAVolumeConstant)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *volumeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        volumeMap = @{
+            @"LITRES": @(LITRES),
+            @"IMPERIAL_GALLONS": @(IMPERIAL_GALLONS),
+            @"US_GALLONS": @(US_GALLONS)
+        };
+    });
+    return volumeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case LITRES:
+            return @"LITRES";
+        case IMPERIAL_GALLONS:
+            return @"IMPERIAL_GALLONS";
+        case US_GALLONS:
+            return @"US_GALLONS";
+        default:
+            return @"LITRES";
+    }
+}
+
+@end
+
+@implementation OACommonTemperatureConstant
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOATemperatureConstant)defValue {
+    OACommonTemperatureConstant *obj = [[OACommonTemperatureConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOATemperatureConstant)get
+{
+    return [super get];
+}
+
+- (EOATemperatureConstant)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOATemperatureConstant)volumeConstant
+{
+    [super set:volumeConstant];
+}
+
+- (void)set:(EOATemperatureConstant)volumeConstant mode:(OAApplicationMode *)mode
+{
+    [super set:volumeConstant mode:mode];
+}
+
+- (void)resetToDefault
+{
+    EOATemperatureConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOATemperatureConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *volumeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        volumeMap = @{
+            @"SYSTEM_DEFAULT": @(SYSTEM_DEFAULT),
+            @"CELSIUS": @(CELSIUS),
+            @"FAHRENHEIT": @(FAHRENHEIT)
+        };
+    });
+    return volumeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case SYSTEM_DEFAULT:
+            return @"SYSTEM_DEFAULT";
+        case CELSIUS:
+            return @"CELSIUS";
+        case FAHRENHEIT:
+            return @"FAHRENHEIT";
+        default:
+            return @"SYSTEM_DEFAULT";
     }
 }
 
@@ -2674,12 +2958,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"DEGREES"])
-        return [self set:DEGREES mode:mode];
-    else if ([strValue isEqualToString:@"DEGREES360"])
-        return [self set:DEGREES360 mode:mode];
-    else if ([strValue isEqualToString:@"MILLIRADS"])
-        return [self set:MILLIRADS mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *angleMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        angleMap = @{
+            @"DEGREES": @(DEGREES),
+            @"DEGREES360": @(DEGREES360),
+            @"MILLIRADS": @(MILLIRADS)
+        };
+    });
+    return angleMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2746,20 +3041,38 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    switch (strValue.intValue) {
-        case 1:
-            [self set:ONE_ACTIVE_MARKER mode:mode];
-            break;
-        case 2:
-            [self set:TWO_ACTIVE_MARKERS mode:mode];
-        default:
-            break;
-    }
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSNumber *, NSNumber *> *markerMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        markerMap = @{
+            @1: @(ONE_ACTIVE_MARKER),
+            @2: @(TWO_ACTIVE_MARKERS)
+        };
+    });
+    return markerMap[@(string.intValue)];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    switch ([self get:mode])
+    EOAActiveMarkerConstant type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    EOAActiveMarkerConstant type = [value integerValue];
+    
+    switch (type)
     {
         case ONE_ACTIVE_MARKER:
             return @"1";
@@ -2811,18 +3124,27 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"EUROPE_ASIA"])
-        return [self set:DR_EUROPE_ASIA mode:mode];
-    else if ([strValue isEqualToString:@"US"])
-        return [self set:DR_US mode:mode];
-    else if ([strValue isEqualToString:@"CANADA"])
-        return [self set:DR_CANADA mode:mode];
-    else if ([strValue isEqualToString:@"UK_AND_OTHERS"])
-        return [self set:DR_UK_AND_OTHERS mode:mode];
-    else if ([strValue isEqualToString:@"JAPAN"])
-        return [self set:DR_JAPAN mode:mode];
-    else if ([strValue isEqualToString:@"AUSTRALIA"])
-        return [self set:DR_AUSTRALIA mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *regionMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        regionMap = @{
+            @"EUROPE_ASIA": @(DR_EUROPE_ASIA),
+            @"US": @(DR_US),
+            @"CANADA": @(DR_CANADA),
+            @"UK_AND_OTHERS": @(DR_UK_AND_OTHERS),
+            @"JAPAN": @(DR_JAPAN),
+            @"INDIA": @(DR_INDIA),
+            @"AUSTRALIA": @(DR_AUSTRALIA)
+        };
+    });
+    return regionMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2839,6 +3161,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
             return @"UK_AND_OTHERS";
         case DR_JAPAN:
             return @"JAPAN";
+        case DR_INDIA:
+            return @"INDIA";
         case DR_AUSTRALIA:
             return @"AUSTRALIA";
         default:
@@ -2895,18 +3219,26 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"KILOMETERS_AND_METERS"])
-        return [self set:KILOMETERS_AND_METERS mode:mode];
-    else if ([strValue isEqualToString:@"MILES_AND_FEET"])
-        return [self set:MILES_AND_FEET mode:mode];
-    else if ([strValue isEqualToString:@"MILES_AND_METERS"])
-        return [self set:MILES_AND_METERS mode:mode];
-    else if ([strValue isEqualToString:@"MILES_AND_YARDS"])
-        return [self set:MILES_AND_YARDS mode:mode];
-    else if ([strValue isEqualToString:@"NAUTICAL_MILES_AND_METERS"])
-        return [self set:NAUTICAL_MILES_AND_METERS mode:mode];
-    else if ([strValue isEqualToString:@"NAUTICAL_MILES_AND_FEET"])
-        return [self set:NAUTICAL_MILES_AND_FEET mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *distanceMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        distanceMap = @{
+            @"KILOMETERS_AND_METERS": @(KILOMETERS_AND_METERS),
+            @"MILES_AND_FEET": @(MILES_AND_FEET),
+            @"MILES_AND_METERS": @(MILES_AND_METERS),
+            @"MILES_AND_YARDS": @(MILES_AND_YARDS),
+            @"NAUTICAL_MILES_AND_METERS": @(NAUTICAL_MILES_AND_METERS),
+            @"NAUTICAL_MILES_AND_FEET": @(NAUTICAL_MILES_AND_FEET)
+        };
+    });
+    return distanceMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2979,12 +3311,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"FIRST"])
-        return [self set:RULER_MODE_DARK mode:mode];
-    else if ([strValue isEqualToString:@"SECOND"])
-        return [self set:RULER_MODE_LIGHT mode:mode];
-    else if ([strValue isEqualToString:@"EMPTY"])
-        return [self set:RULER_MODE_NO_CIRCLES mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *rulerModeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        rulerModeMap = @{
+            @"FIRST": @(RULER_MODE_DARK),
+            @"SECOND": @(RULER_MODE_LIGHT),
+            @"EMPTY": @(RULER_MODE_NO_CIRCLES)
+        };
+    });
+    return rulerModeMap[string];
 }
 
 + (NSString *) rulerWidgetModeToString:(EOARulerWidgetMode)rulerMode
@@ -3006,88 +3349,21 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     return [self.class rulerWidgetModeToString:[self get:mode]];
 }
 
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    EOARulerWidgetMode mode = [value integerValue];
+    return [self.class rulerWidgetModeToString:mode];
+}
+
 - (void) resetToDefault
 {
     EOARulerWidgetMode defaultValue = self.defValue;
     NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOARulerWidgetMode)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
-}
-
-@end
-
-@implementation OACommonMap3dMode
-
-@dynamic defValue;
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAMap3DModeVisibility)defValue
-{
-    OACommonRulerWidgetMode *obj = [[OACommonRulerWidgetMode alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOAMap3DModeVisibility) get
-{
-    return [super get];
-}
-
-- (void) set:(EOAMap3DModeVisibility)map3dMode
-{
-    [super set:map3dMode];
-}
-
-- (EOAMap3DModeVisibility) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAMap3DModeVisibility)map3dMode mode:(OAApplicationMode *)mode
-{
-    [super set:map3dMode mode:mode];
-}
-
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
-{
-    if ([strValue isEqualToString:@"Hidden"])
-        return [self set:EOAMap3DModeVisibilityHidden mode:mode];
-    else if ([strValue isEqualToString:@"Visible"])
-        return [self set:EOAMap3DModeVisibilityVisible mode:mode];
-    else if ([strValue isEqualToString:@"VisibleIn3DMode"])
-        return [self set:EOAMap3DModeVisibilityVisibleIn3DMode mode:mode];
-}
-
-+ (NSString *) rulerWidgetModeToString:(EOAMap3DModeVisibility)map3dMode
-{
-    switch (map3dMode) {
-        case EOAMap3DModeVisibilityHidden:
-            return @"Hidden";
-        case EOAMap3DModeVisibilityVisible:
-            return @"Visible";
-        case EOAMap3DModeVisibilityVisibleIn3DMode:
-            return @"VisibleIn3DMode";
-        default:
-            return @"VisibleIn3DMode";
-    }
-}
-
-- (NSString *)toStringValue:(OAApplicationMode *)mode
-{
-    return [self.class rulerWidgetModeToString:[self get:mode]];
-}
-
-- (void) resetToDefault
-{
-    EOAMap3DModeVisibility defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAMap3DModeVisibility)((NSNumber *)pDefault).intValue;
 
     [self set:defaultValue];
 }
@@ -3131,12 +3407,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"ON"])
-        return [self set:EOAWikiArticleShowConstantOn mode:mode];
-    else if ([strValue isEqualToString:@"OFF"])
-        return [self set:EOAWikiArticleShowConstantOff mode:mode];
-    else if ([strValue isEqualToString:@"WIFI"])
-        return [self set:EOAWikiArticleShowConstantWiFi mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *wikiArticleMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        wikiArticleMap = @{
+            @"ON": @(EOAWikiArticleShowConstantOn),
+            @"OFF": @(EOAWikiArticleShowConstantOff),
+            @"WIFI": @(EOAWikiArticleShowConstantWiFi)
+        };
+    });
+    return wikiArticleMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3203,19 +3490,26 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"INITIAL_STATE"])
-        return [self set:EOARateUsStateInitialState mode:mode];
-    else if ([strValue isEqualToString:@"IGNORED"])
-        return [self set:EOARateUsStateIgnored mode:mode];
-    else if ([strValue isEqualToString:@"LIKED"])
-        return [self set:EOARateUsStateLiked mode:mode];
-    else if ([strValue isEqualToString:@"DISLIKED_WITH_MESSAGE"])
-        return [self set:EOARateUsStateDislikedWithMessage mode:mode];
-    else if ([strValue isEqualToString:@"DISLIKED_WITHOUT_MESSAGE"])
-        return [self set:EOARateUsStateDislikedWithoutMessage mode:mode];
-    else if ([strValue isEqualToString:@"DISLIKED_OR_IGNORED_AGAIN"])
-        return [self set:EOARateUsStateDislikedOrIgnoredAgain mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
 
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *rateUsStateMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        rateUsStateMap = @{
+            @"INITIAL_STATE": @(EOARateUsStateInitialState),
+            @"IGNORED": @(EOARateUsStateIgnored),
+            @"LIKED": @(EOARateUsStateLiked),
+            @"DISLIKED_WITH_MESSAGE": @(EOARateUsStateDislikedWithMessage),
+            @"DISLIKED_WITHOUT_MESSAGE": @(EOARateUsStateDislikedWithoutMessage),
+            @"DISLIKED_OR_IGNORED_AGAIN": @(EOARateUsStateDislikedOrIgnoredAgain)
+        };
+    });
+    return rateUsStateMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3288,12 +3582,22 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"SPEED"])
-        return [self set:EOAGradientScaleTypeSpeed mode:mode];
-    else if ([strValue isEqualToString:@"ALTITUDE"])
-        return [self set:EOAGradientScaleTypeAltitude mode:mode];
-    else if ([strValue isEqualToString:@"SLOPE"])
-        return [self set:EOAGradientScaleTypeSlope mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode {
+    static NSDictionary<NSString *, NSNumber *> *gradientScaleMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        gradientScaleMap = @{
+            @"SPEED": @(EOAGradientScaleTypeSpeed),
+            @"ALTITUDE": @(EOAGradientScaleTypeAltitude),
+            @"SLOPE": @(EOAGradientScaleTypeSlope)
+        };
+    });
+    return gradientScaleMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3360,14 +3664,24 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"PUBLIC"])
-        return [self set:EOAUploadVisibilityPublic mode:mode];
-    else if ([strValue isEqualToString:@"IDENTIFIABLE"])
-        return [self set:EOAUploadVisibilityIdentifiable mode:mode];
-    else if ([strValue isEqualToString:@"TRACKABLE"])
-        return [self set:EOAUploadVisibilityTrackable mode:mode];
-    else if ([strValue isEqualToString:@"PRIVATE"])
-        return [self set:EOAUploadVisibilityPrivate mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *uploadVisibilityMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        uploadVisibilityMap = @{
+            @"PUBLIC": @(EOAUploadVisibilityPublic),
+            @"IDENTIFIABLE": @(EOAUploadVisibilityIdentifiable),
+            @"TRACKABLE": @(EOAUploadVisibilityTrackable),
+            @"PRIVATE": @(EOAUploadVisibilityPrivate)
+        };
+    });
+    return uploadVisibilityMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3436,16 +3750,24 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"DD_MM_MMM"])
-        return [self set:EOACoordinateInputFormatsDdMmMmm mode:mode];
-    else if ([strValue isEqualToString:@"DD_MM_MMMM"])
-        return [self set:EOACoordinateInputFormatsDdMmMmmm mode:mode];
-    else if ([strValue isEqualToString:@"DD_DDDDD"])
-        return [self set:EOACoordinateInputFormatsDdDdddd mode:mode];
-    else if ([strValue isEqualToString:@"DD_DDDDDD"])
-        return [self set:EOACoordinateInputFormatsDdDddddd mode:mode];
-    else if ([strValue isEqualToString:@"DD_MM_SS"])
-        return [self set:EOACoordinateInputFormatsDdMmSs mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode {
+    static NSDictionary<NSString *, NSNumber *> *coordinateFormatMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        coordinateFormatMap = @{
+            @"DD_MM_MMM": @(EOACoordinateInputFormatsDdMmMmm),
+            @"DD_MM_MMMM": @(EOACoordinateInputFormatsDdMmMmmm),
+            @"DD_DDDDD": @(EOACoordinateInputFormatsDdDdddd),
+            @"DD_DDDDDD": @(EOACoordinateInputFormatsDdDddddd),
+            @"DD_MM_SS": @(EOACoordinateInputFormatsDdMmSs)
+        };
+    });
+    return coordinateFormatMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3537,13 +3859,23 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"none"])
-        return [self set:OADownloadMode.NONE mode:mode];
-    else if ([strValue isEqualToString:@"wifi"])
-        return [self set:OADownloadMode.WIFI_ONLY mode:mode];
-    else if ([strValue isEqualToString:@"wifi"])
-        return [self set:OADownloadMode.ANY_NETWORK mode:mode];
-    
+    OADownloadMode *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [self set:value mode:mode];
+}
+
+- (OADownloadMode *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, OADownloadMode *> *downloadModeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        downloadModeMap = @{
+            @"none": OADownloadMode.NONE,
+            @"wifi": OADownloadMode.WIFI_ONLY,
+            @"any": OADownloadMode.ANY_NETWORK
+        };
+    });
+    return downloadModeMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3625,20 +3957,27 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"default"])
-        return [self set:OAColoringType.DEFAULT mode:mode];
-    else if ([strValue isEqualToString:@"custom_color"])
-        return [self set:OAColoringType.CUSTOM_COLOR mode:mode];
-    else if ([strValue isEqualToString:@"solid"])
-        return [self set:OAColoringType.TRACK_SOLID mode:mode];
-    else if ([strValue isEqualToString:@"speed"])
-        return [self set:OAColoringType.SPEED mode:mode];
-    else if ([strValue isEqualToString:@"altitude"])
-        return [self set:OAColoringType.ALTITUDE mode:mode];
-    else if ([strValue isEqualToString:@"slope"])
-        return [self set:OAColoringType.SLOPE mode:mode];
-    else if ([strValue isEqualToString:@"attribute"])
-        return [self set:OAColoringType.ATTRIBUTE mode:mode];
+    OAColoringType *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [self set:value mode:mode];
+}
+
+- (OAColoringType *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, OAColoringType *> *coloringTypeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        coloringTypeMap = @{
+            @"default": OAColoringType.DEFAULT,
+            @"custom_color": OAColoringType.CUSTOM_COLOR,
+            @"solid": OAColoringType.TRACK_SOLID,
+            @"speed": OAColoringType.SPEED,
+            @"altitude": OAColoringType.ALTITUDE,
+            @"slope": OAColoringType.SLOPE,
+            @"attribute": OAColoringType.ATTRIBUTE
+        };
+    });
+    return coloringTypeMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3751,7 +4090,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit requiringSecureCoding:NO error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:[self getKey:mode]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
+    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
 }
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
@@ -3773,6 +4113,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 }
 
 @end
+
 
 @implementation OACommonWidgetSizeStyle
 
@@ -3796,7 +4137,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void) set:(EOAWidgetSizeStyle)widgetSizeStyle
 {
-    [super set:widgetSizeStyle];
+    [super set:(int)widgetSizeStyle];
 }
 
 - (EOAWidgetSizeStyle) get:(OAApplicationMode *)mode
@@ -3806,17 +4147,30 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (void) set:(EOAWidgetSizeStyle)widgetSizeStyle mode:(OAApplicationMode *)mode
 {
-    [super set:widgetSizeStyle mode:mode];
+    [super set:(int)widgetSizeStyle mode:mode];
 }
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"SMALL"])
-        return [self set:EOAWidgetSizeStyleSmall mode:mode];
-    else if ([strValue isEqualToString:@"MEDIUM"])
-        return [self set:EOAWidgetSizeStyleMedium mode:mode];
-    else if ([strValue isEqualToString:@"LARGE"])
-        return [self set:EOAWidgetSizeStyleLarge mode:mode];
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.intValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string
+                               appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *styleMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        styleMap = @{
+            @"SMALL": @(EOAWidgetSizeStyleSmall),
+            @"MEDIUM": @(EOAWidgetSizeStyleMedium),
+            @"LARGE": @(EOAWidgetSizeStyleLarge)
+        };
+    });
+    
+    return styleMap[string];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3839,6 +4193,699 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     if (pDefault)
         defaultValue = (EOAWidgetSizeStyle) ((NSNumber *) pDefault).intValue;
 
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OACommonSunPositionMode
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOASunPositionMode)defValue
+{
+    OACommonSunPositionMode *obj = [[OACommonSunPositionMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOASunPositionMode)get
+{
+    return [super get];
+}
+
+- (void)set:(EOASunPositionMode)positionMode
+{
+    [super set:(int)positionMode];
+}
+
+- (EOASunPositionMode)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOASunPositionMode)positionMode mode:(OAApplicationMode *)mode
+{
+    [super set:(int)positionMode mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.intValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string
+                      appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *modeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        modeMap = @{
+            @"SUN_POSITION_MODE": @(EOASunPositionModeSunPositionMode),
+            @"SUNSET_MODE": @(EOASunPositionModeSunsetMode),
+            @"SUNRISE_MODE": @(EOASunPositionModeSunriseMode)
+        };
+    });
+    
+    return modeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOASunPositionModeSunPositionMode:
+            return @"SUN_POSITION_MODE";
+        case EOASunPositionModeSunsetMode:
+            return @"SUNSET_MODE";
+        default:
+            return @"SUNRISE_MODE";
+    }
+}
+
+- (void)resetToDefault
+{
+    EOASunPositionMode defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOASunPositionMode)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OACommonWidgetZoomLevelType
+
+static NSString *kZoomKey = @"ZOOM";
+static NSString *kMapScaleKey = @"MAP_SCALE";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
+{
+    OACommonWidgetZoomLevelType *obj = [[OACommonWidgetZoomLevelType alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (EOAWidgetZoomLevelType)get
+{
+    return [super get];
+}
+
+- (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOAWidgetZoomLevelType)type
+{
+    [super set:(int)type];
+}
+
+- (void)set:(EOAWidgetZoomLevelType)type mode:(OAApplicationMode *)mode
+{
+    [super set:(int)type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    EOAWidgetZoomLevelType defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAWidgetZoomLevelType)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kZoomKey: @(EOAWidgetZoom),
+            kMapScaleKey: @(EOAWidgetMapScale)
+        };
+    });
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    EOAWidgetZoomLevelType type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    EOAWidgetZoomLevelType type = [value integerValue];
+    
+    switch (type)
+    {
+        case EOAWidgetZoom:
+            return kZoomKey;
+        case EOAWidgetMapScale:
+            return kMapScaleKey;
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@implementation OACommonDistanceByTapTextSizeConstant
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOADistanceByTapTextSizeConstant)defValue {
+    OACommonDistanceByTapTextSizeConstant *obj = [[OACommonDistanceByTapTextSizeConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOADistanceByTapTextSizeConstant)get
+{
+    return [super get];
+}
+
+- (EOADistanceByTapTextSizeConstant)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant
+{
+    [super set:distanceByTapTextSizeConstant];
+}
+
+- (void)set:(EOADistanceByTapTextSizeConstant)distanceByTapTextSizeConstant mode:(OAApplicationMode *)mode
+{
+    [super set:distanceByTapTextSizeConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOADistanceByTapTextSizeConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOADistanceByTapTextSizeConstant)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *textSizeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        textSizeMap = @{
+            @"NORMAL": @(NORMAL),
+            @"LARGE": @(LARGE)
+        };
+    });
+    return textSizeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self get:mode] == LARGE ? @"LARGE" : @"NORMAL";
+}
+
+@end
+
+@implementation OACommonWidgetDefaultView
+
+static NSString *kArrivalTimeKey = @"ARRIVAL_TIME";
+static NSString *kTimeToGoKey = @"TIME_TO_GO";
+static NSString *kDistanceKey = @"DISTANCE";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonWidgetDefaultView *obj = [[OACommonWidgetDefaultView alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)type
+{
+    [super set:type];
+}
+
+- (void)set:(int)type mode:(OAApplicationMode *)mode
+{
+    [super set:type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    RouteInfoDisplayValue defaultValue = self.defValue;
+    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    if ([pDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (RouteInfoDisplayValue)pDefault.intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kArrivalTimeKey: @(RouteInfoDisplayValueArrivalTime),
+            kTimeToGoKey: @(RouteInfoDisplayValueTimeToGo),
+            kDistanceKey: @(RouteInfoDisplayValueDistance)
+        };
+    });
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    RouteInfoDisplayValue type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    RouteInfoDisplayValue type = (RouteInfoDisplayValue)[value intValue];
+    
+    switch (type)
+    {
+        case RouteInfoDisplayValueArrivalTime:
+            return kArrivalTimeKey;
+        case RouteInfoDisplayValueTimeToGo:
+            return kTimeToGoKey;
+        case RouteInfoDisplayValueDistance:
+            return kDistanceKey;
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@implementation OACommonWidgetDisplayPriority
+
+static NSString *kIntermediateFirstKey = @"INTERMEDIATE_FIRST";
+static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonWidgetDisplayPriority *obj = [[OACommonWidgetDisplayPriority alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)type
+{
+    [super set:type];
+}
+
+- (void)set:(int)type mode:(OAApplicationMode *)mode
+{
+    [super set:type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    RouteInfoDisplayPriority defaultValue = self.defValue;
+    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    if ([pDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (RouteInfoDisplayPriority)pDefault.intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode {
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kIntermediateFirstKey: @(RouteInfoDisplayPriorityIntermediateFirst),
+            kDestinationFirstKey: @(RouteInfoDisplayPriorityDestinationFirst)
+        };
+    });
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    RouteInfoDisplayPriority type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    RouteInfoDisplayPriority type = (RouteInfoDisplayPriority)[value intValue];
+    
+    switch (type)
+    {
+        case RouteInfoDisplayPriorityIntermediateFirst:
+            return kIntermediateFirstKey;
+        case RouteInfoDisplayPriorityDestinationFirst:
+            return kDestinationFirstKey;
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@implementation OACommonDayNightMode
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonDayNightMode *obj = [[OACommonDayNightMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (void)set:(int)dayNightMode
+{
+    [super set:dayNightMode];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)dayNightMode mode:(OAApplicationMode *)mode
+{
+    [super set:dayNightMode mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            @"DAY": @(DayNightModeDay),
+            @"NIGHT": @(DayNightModeNight),
+            @"APP_THEME": @(DayNightModeAppTheme),
+            @"AUTO": @(DayNightModeAuto)
+        };
+    });
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case DayNightModeDay:
+            return @"DAY";
+        case DayNightModeNight:
+            return @"NIGHT";
+        case DayNightModeAppTheme:
+            return @"APP_THEME";
+        default:
+            return @"AUTO";
+    }
+}
+
+- (void)resetToDefault
+{
+    DayNightMode defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (DayNightMode) ((NSNumber *) pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OACommonGridFormat
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonGridFormat *obj = [[OACommonGridFormat alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (void)set:(int)gridFormat
+{
+    [super set:gridFormat];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)gridFormat mode:(OAApplicationMode *)mode
+{
+    [super set:gridFormat mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            @"DD_MM_SS": @(GridFormatDms),
+            @"DD_MM_MMM": @(GridFormatDm),
+            @"DD_DDDDD": @(GridFormatDigital),
+            @"UTM": @(GridFormatUtm),
+            @"MGRS": @(GridFormatMgrs)
+        };
+    });
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case GridFormatDms:
+            return @"DD_MM_SS";
+        case GridFormatDm:
+            return @"DD_MM_MMM";
+        case GridFormatDigital:
+            return @"DD_DDDDD";
+        case GridFormatUtm:
+            return @"UTM";
+        case GridFormatMgrs:
+            return @"MGRS";
+        default:
+            return @"DD_MM_SS";
+    }
+}
+
+- (void)resetToDefault
+{
+    GridFormat defaultValue = self.defValue;
+    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    if ([pDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (GridFormat)pDefault.intValue;
+    
+    [self set:defaultValue];
+}
+
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+{
+    int geoFormatId = [[OAAppSettings sharedManager].settingGeoFormat get:mode];
+    return [GridFormatWrapper gridFormatRawForGeoFormat:(int32_t)geoFormatId];
+}
+
+@end
+
+@implementation OACommonGridLabelsPosition
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonGridLabelsPosition *obj = [[OACommonGridLabelsPosition alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (void)set:(int)gridLabelsPosition
+{
+    [super set:gridLabelsPosition];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)gridLabelsPosition mode:(OAApplicationMode *)mode
+{
+    [super set:gridLabelsPosition mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode {
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            @"EDGES": @(GridLabelsPositionEdges),
+            @"CENTER": @(GridLabelsPositionCenter)
+        };
+    });
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case GridLabelsPositionEdges:
+            return @"EDGES";
+        case GridLabelsPositionCenter:
+            return @"CENTER";
+        default:
+            return @"EDGES";
+    }
+}
+
+- (void)resetToDefault
+{
+    GridLabelsPosition defaultValue = self.defValue;
+    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    if ([pDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (GridLabelsPosition)pDefault.intValue;
+    
     [self set:defaultValue];
 }
 
@@ -3896,7 +4943,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
         
-        _ttsAvailableVoices = @[@"ar", @"bg", @"cs", @"ca", @"da", @"de", @"el", @"en-gb", @"en", @"es-ar", @"es", @"et", @"fa", @"fi", @"fr", @"hi", @"hr", @"hu-formal", @"hu", @"id", @"it", @"ja", @"ko", @"nb", @"nl", @"pl", @"pt-br", @"pt", @"ro", @"ru", @"sk", @"sl", @"sv", @"tr", @"uk", @"zh-hk", @"zh"];
+        _ttsAvailableVoices = @[@"ar", @"bg", @"cs", @"ca", @"da", @"de", @"el", @"en-gb", @"en", @"es-ar", @"es", @"et", @"fa", @"fi", @"fr", @"he", @"hi", @"hr", @"hu-formal", @"hu", @"id", @"it", @"ja", @"ko", @"nb", @"nl", @"pl", @"pt-br", @"pt", @"ro", @"ru", @"sk", @"sl", @"sv", @"tr", @"uk", @"vi", @"zh-hk", @"zh"];
         
         // Common Settings
         _settingMapLanguage = [[[OACommonInteger withKey:settingMapLanguageKey defValue:0] makeGlobal] makeShared];
@@ -3909,10 +4956,10 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_settingMapLanguageTranslit forKey:@"map_transliterate_names"];
         
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
-        _appearanceMode = [OACommonInteger withKey:settingAppModeKey defValue:APPEARANCE_MODE_DAY];
-        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.CAR];
-        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.BICYCLE];
-        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_DAY) mode:OAApplicationMode.PEDESTRIAN];
+        _appearanceMode = [OACommonDayNightMode withKey:settingAppModeKey defValue:DayNightModeDay];
+        [_appearanceMode setModeDefaultValue:@(DayNightModeAuto) mode:OAApplicationMode.CAR];
+        [_appearanceMode setModeDefaultValue:@(DayNightModeAuto) mode:OAApplicationMode.BICYCLE];
+        [_appearanceMode setModeDefaultValue:@(DayNightModeDay) mode:OAApplicationMode.PEDESTRIAN];
         [_profilePreferences setObject:_appearanceMode forKey:@"daynight_mode"];
         
         _appearanceProfileTheme = [OACommonInteger withKey:appearanceProfileThemeKey defValue:0];
@@ -3933,10 +4980,10 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_settingUseAnalytics forKey:@"use_analytics"];
         [_globalPreferences setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
         
-        _animateMyLocation = [OACommonBoolean withKey:animateMyLocationKey defValue:YES];
-        _doNotUseAnimations = [OACommonBoolean withKey:doNotUseAnimationsKey defValue:NO];
+        _animateMyLocation = [[OACommonBoolean withKey:animateMyLocationKey defValue:YES] makeProfile];
+        _doNotUseAnimations = [[OACommonBoolean withKey:doNotUseAnimationsKey defValue:NO] makeProfile];
         [_profilePreferences setObject:_animateMyLocation forKey:@"animate_my_location"];
-        [_profilePreferences setObject:_animateMyLocation forKey:@"do_not_use_animations"];
+        [_profilePreferences setObject:_doNotUseAnimations forKey:@"do_not_use_animations"];
         
         _liveUpdatesPurchased = [[OACommonBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
         _settingOsmAndLiveEnabled = [[[OACommonBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
@@ -4015,6 +5062,13 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _mapSettingShowBordersOfDownloadedMaps = [OACommonBoolean withKey:mapSettingShowBordersOfDownloadedMapsKey defValue:YES];
         _mapSettingShowOfflineEdits = [OACommonBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
         _mapSettingShowOnlineNotes = [OACommonBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
+        _mapSettingShowCoordinatesGrid = [[OACommonBoolean withKey:mapSettingShowCoordinatesGridKey defValue:NO] makeProfile];
+        _coordinateGridFormat = [[OACommonGridFormat withKey:coordinateGridFormatKey defValue:GridFormatDms] makeProfile];
+        _coordinateGridMinZoom = [[OACommonInteger withKey:coordinateGridMinZoomKey defValue:0] makeProfile];
+        _coordinateGridMaxZoom = [[OACommonInteger withKey:coordinateGridMaxZoomKey defValue:31] makeProfile];
+        _coordinatesGridLabelsPosition = [[OACommonGridLabelsPosition withKey:coordinatesGridLabelsPositionKey defValue:GridLabelsPositionEdges] makeProfile];
+        _coordinatesGridColorDay = [[OACommonInteger withKey:coordinatesGridColorDayKey defValue:[UIColorFromARGB(kDefaultCoordinatesGridDayColor) toARGBNumber]] makeProfile];
+        _coordinatesGridColorNight = [[OACommonInteger withKey:coordinatesGridColorNightKey defValue:[UIColorFromARGB(kDefaultCoordinatesGridNightColor) toARGBNumber]] makeProfile];
         _layerTransparencySeekbarMode = [OACommonInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED];
 
         [_profilePreferences setObject:_mapSettingShowFavorites forKey:@"show_favorites"];
@@ -4022,6 +5076,13 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_mapSettingShowBordersOfDownloadedMaps forKey:@"show_downloaded_borders"];
         [_profilePreferences setObject:_mapSettingShowOfflineEdits forKey:@"show_osm_edits"];
         [_profilePreferences setObject:_mapSettingShowOnlineNotes forKey:@"show_osm_bugs"];
+        [_profilePreferences setObject:_mapSettingShowCoordinatesGrid forKey:@"show_coordinates_grid"];
+        [_profilePreferences setObject:_coordinateGridFormat forKey:@"coordinates_grid_format"];
+        [_profilePreferences setObject:_coordinateGridMinZoom forKey:@"coordinate_grid_min_zoom"];
+        [_profilePreferences setObject:_coordinateGridMaxZoom forKey:@"coordinate_grid_max_zoom"];
+        [_profilePreferences setObject:_coordinatesGridLabelsPosition forKey:@"coordinates_grid_labels_position"];
+        [_profilePreferences setObject:_coordinatesGridColorDay forKey:@"coordinates_grid_color_day"];
+        [_profilePreferences setObject:_coordinatesGridColorNight forKey:@"coordinates_grid_color_night"];
         [_profilePreferences setObject:_layerTransparencySeekbarMode forKey:@"layer_transparency_seekbar_mode"];
 
         _mapSettingVisibleGpx = [[[OACommonStringList withKey:mapSettingVisibleGpxKey defValue:@[]] makeGlobal] makeShared];
@@ -4079,6 +5140,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _appModeBeanPrefsIds = [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] :
         @[
             @"app_mode_icon_color",
+            @"custom_icon_color",
             @"user_profile_name",
             @"parent_app_mode",
             @"routing_profile",
@@ -4135,12 +5197,13 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profileIconName setModeDefaultValue:@"ic_action_sail_boat_dark" mode:OAApplicationMode.BOAT];
         [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
-        [_profileIconName setModeDefaultValue:@"ic_action_truck" mode:OAApplicationMode.TRUCK];
+        [_profileIconName setModeDefaultValue:@"ic_action_truck_dark" mode:OAApplicationMode.TRUCK];
         [_profileIconName setModeDefaultValue:@"ic_action_motorcycle_dark" mode:OAApplicationMode.MOTORCYCLE];
         [_profileIconName setModeDefaultValue:@"ic_action_motor_scooter" mode:OAApplicationMode.MOPED];
         [_profileIconName setModeDefaultValue:@"ic_action_horse" mode:OAApplicationMode.HORSE];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
+        _profileCustomIconColor = [OACommonInteger withKey:profileCustomIconColorKey defValue:-1];
         _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];
         _parentAppMode = [OACommonString withKey:parentAppModeKey defValue:nil];
 
@@ -4152,21 +5215,45 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_routerService set:2 mode:OAApplicationMode.DEFAULT];
 
         [_profilePreferences setObject:_routerService forKey:@"route_service"];
-        _navigationIcon = [OACommonInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
-        [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
+        _navigationIcon = [OACommonString withKey:navigationIconKey defValue:[[OALocationIcon MOVEMENT_DEFAULT] name]];
+        [_navigationIcon setModeDefaultValue:[[OALocationIcon MOVEMENT_NAUTICAL] name] mode:OAApplicationMode.BOAT];
         [_profilePreferences setObject:_navigationIcon forKey:@"navigation_icon"];
 
-        _locationIcon = [OACommonInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_DEFAULT) mode:OAApplicationMode.BOAT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.HORSE];
+        _locationIcon = [OACommonString withKey:locationIconKey defValue:[[OALocationIcon DEFAULT] name]];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon CAR] name] mode:OAApplicationMode.CAR];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.BICYCLE];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon DEFAULT] name] mode:OAApplicationMode.BOAT];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon CAR] name] mode:OAApplicationMode.AIRCRAFT];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.SKI];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
+        NSArray *modes = @[
+            OAApplicationMode.DEFAULT,
+            OAApplicationMode.CAR,
+            OAApplicationMode.BICYCLE,
+            OAApplicationMode.PEDESTRIAN,
+            OAApplicationMode.TRUCK,
+            OAApplicationMode.MOTORCYCLE,
+            OAApplicationMode.MOPED,
+            OAApplicationMode.PUBLIC_TRANSPORT,
+            OAApplicationMode.TRAIN,
+            OAApplicationMode.BOAT,
+            OAApplicationMode.AIRCRAFT,
+            OAApplicationMode.SKI,
+            OAApplicationMode.HORSE
+        ];
+        for (NSInteger i = 0; i < modes.count; i++)
+        {
+            [_appModeOrder setModeDefaultValue:@(i) mode:modes[i]];
+        }
         [_profilePreferences setObject:_appModeOrder forKey:@"app_mode_order"];
+        
+        _viewAngleVisibility = [[[OACommonInteger withKey:viewAngleVisibilityKey defValue:[MarkerDisplayOptionWrapper resting]] makeProfile] makeShared];
+        _locationRadiusVisibility = [[[OACommonInteger withKey:locationRadiusVisibilityKey defValue:[MarkerDisplayOptionWrapper restingNavigation]] makeProfile] makeShared];
+        [_profilePreferences setObject:_viewAngleVisibility forKey:@"view_angle_visibility"];
+        [_profilePreferences setObject:_locationRadiusVisibility forKey:@"location_radius_visibility"];
 
         _defaultSpeed = [OACommonDouble withKey:defaultSpeedKey defValue:10.];
         [_defaultSpeed setModeDefaultValue:@1.5 mode:OAApplicationMode.DEFAULT];
@@ -4189,15 +5276,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _transparentMapTheme = [OACommonBoolean withKey:transparentMapThemeKey defValue:NO];
         [_profilePreferences setObject:_transparentMapTheme forKey:@"transparent_map_theme"];
 
-        _showStreetName = [OACommonBoolean withKey:showStreetNameKey defValue:NO];
-        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode DEFAULT]];
-        [_showStreetName setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
-        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
-        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
-        [_profilePreferences setObject:_showStreetName forKey:@"show_street_name"];
-
         _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
+        
+        _distanceByTapTextSize = [OACommonDistanceByTapTextSizeConstant withKey:distanceByTapTextSizeKey defValue:NORMAL];
+        [_profilePreferences setObject:_distanceByTapTextSize forKey:@"distance_by_tap_text_size"];
         
         _showElevationProfileWidget = [OACommonBoolean withKey:showElevationProfileWidgetKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:showElevationProfileWidgetKey];
@@ -4206,6 +5289,12 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         
         _customWidgetKeys = [OACommonStringList withKey:customWidgetKeys defValue:@[]];
         [_profilePreferences setObject:_customWidgetKeys forKey:customWidgetKeys];
+        
+        _tracksSortModes = [[[OACommonStringList withKey:tracksSortModesKey defValue:@[]] makeGlobal] makeShared];
+        [_globalPreferences setObject:_tracksSortModes forKey:tracksSortModesKey];
+        
+        _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper getDefaultSortModeTitleFor:nil]];
+        [_globalPreferences setObject:_searchTracksSortModes forKey:searchTracksSortModesKey];
 
         _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
@@ -4219,18 +5308,21 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         _positionPlacementOnMap = [OACommonInteger withKey:positionPlacementOnMapKey defValue:EOAPositionPlacementAuto];
         [_profilePreferences setObject:_positionPlacementOnMap forKey:@"position_placement_on_map"];
+        
+        _contextGallerySpanGridCount = [[OACommonInteger withKey:kContextGallerySpanGridCountKey defValue:3] makeProfile];
+        [_profilePreferences setObject:_contextGallerySpanGridCount forKey:@"context_gallery_span_grid_count"];
+        
+        _contextGallerySpanGridCountLandscape = [[OACommonInteger withKey:kContextGallerySpanGridCountLandscapeKey defValue:7] makeProfile];
+        [_profilePreferences setObject:_contextGallerySpanGridCountLandscape forKey:@"context_gallery_span_grid_count_landscape"];
 
-        _rotateMap = [OACommonInteger withKey:rotateMapKey defValue:ROTATE_MAP_NONE];
+        _rotateMap = [OACommonInteger withKey:rotateMapKey defValue:ROTATE_MAP_MANUAL];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode CAR]];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode BICYCLE]];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_rotateMap forKey:@"rotate_map"];
 
-        _compassMode = [OACommonInteger withKey:compassModeKey defValue:EOACompassRotated];
-        [_profilePreferences setObject:_compassMode forKey:@"compass_mode"];
-
         _mapDensity = [OACommonDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
-        [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR) mode:[OAApplicationMode CAR]];
+        [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode CAR]];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode BICYCLE]];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_mapDensity forKey:@"map_density_n"];
@@ -4242,6 +5334,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_textSize forKey:@"text_scale"];
 
         _renderer = [OACommonString withKey:rendererKey defValue:@"OsmAnd"];
+        [_renderer setModeDefaultValue:NAUTICAL_RENDER mode:OAApplicationMode.BOAT];
         [_profilePreferences setObject:_renderer forKey:@"renderer"];
 
         _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;
@@ -4323,23 +5416,29 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _drivingRegion = [OACommonDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
         _metricSystem = [OACommonMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
         _metricSystemChangedManually = [OACommonBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
+        
         _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:GENERIC_EXTERNAL_DEVICE];
-
-        [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"shared_string_automatic"];
+        
+        [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
         [_profilePreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
         [_profilePreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_profilePreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
-
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
+        _volumeUnits = [OACommonVolumeConstant withKey:volumeSystemKey defValue:LITRES];
+        _temperatureUnits = [OACommonTemperatureConstant withKey:temperatureSystemKey defValue:SYSTEM_DEFAULT];
+        _fuelTankCapacity = [OACommonDouble withKey:fuelTankCapacityKey defValue:OASOBDDataComputer.shared.DEFAULT_FUEL_TANK_CAPACITY];
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
 
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_profilePreferences setObject:_speedSystem forKey:@"default_speed_system"];
+        [_profilePreferences setObject:_volumeUnits forKey:@"unit_of_volume"];
+        [_profilePreferences setObject:_temperatureUnits forKey:@"unit_of_temperature"];
+        [_profilePreferences setObject:_fuelTankCapacity forKey:@"fuel_tank_capacity"];
         
         _preciseDistanceNumbers = [OACommonBoolean withKey:preciseDistanceNumbersKey defValue:YES];
         [_preciseDistanceNumbers setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];
@@ -4356,6 +5455,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT values:[OAColoringType getRouteColoringTypes]];
         [_profilePreferences setObject:_routeColoringType forKey:@"route_line_coloring_type"];
+
+        _routeGradientPalette = [OACommonString withKey:routeGradientPaletteKey defValue:PaletteGradientColor.defaultName];
+        [_profilePreferences setObject:_routeGradientPalette forKey:routeGradientPaletteKey];
 
         _routeInfoAttribute = [OACommonString withKey:routeInfoAttributeKey defValue:nil];
         [_profilePreferences setObject:_routeInfoAttribute forKey:@"route_info_attribute"];
@@ -4375,18 +5477,13 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_showPedestrian forKey:@"show_pedestrian"];
 
         _showSpeedLimitWarnings = [OACommonBoolean withKey:showSpeedLimitWarningsKey defValue:NO];
-        [_profilePreferences setObject:_showSpeedLimitWarnings forKey:showSpeedLimitWarningsKey];
+        [_profilePreferences setObject:_showSpeedLimitWarnings forKey:@"show_speed_limit_warnings"];
 
         _showCameras = [OACommonBoolean withKey:showCamerasKey defValue:NO];
         [_profilePreferences setObject:_showCameras forKey:@"show_cameras"];
         _showTunnels = [OACommonBoolean withKey:showTunnelsKey defValue:NO];
         [_showTunnels setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_profilePreferences setObject:_showTunnels forKey:@"show_tunnels"];
-
-        _showLanes = [OACommonBoolean withKey:showLanesKey defValue:NO];
-        [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
-        [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
-        [_profilePreferences setObject:_showLanes forKey:@"show_lanes"];
 
         _speakStreetNames = [OACommonBoolean withKey:speakStreetNamesKey defValue:YES];
         _speakTrafficWarnings = [OACommonBoolean withKey:speakTrafficWarningsKey defValue:YES];
@@ -4415,7 +5512,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
         [_profilePreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 
-        _voiceProvider = [OACommonString withKey:voiceProviderKey defValue:@""];
+        _voiceProvider = [OACommonString withKey:voiceProviderKey defValue:[self getDefaultVoiceProvider]];
         _announceWpt = [OACommonBoolean withKey:announceWptKey defValue:YES];
         _showScreenAlerts = [OACommonBoolean withKey:showScreenAlertsKey defValue:YES];
 
@@ -4449,6 +5546,10 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         _interruptMusic = [OACommonBoolean withKey:interruptMusicKey defValue:NO];
         [_profilePreferences setObject:_interruptMusic forKey:@"interrupt_music"];
+
+        _previewNextTurn = [OACommonBoolean withKey:previewNextTurnKey defValue:YES];
+        [_profilePreferences setObject:_previewNextTurn forKey:@"preview_next_turn"];
+
         _snapToRoad = [OACommonBoolean withKey:snapToRoadKey defValue:NO];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
@@ -4463,11 +5564,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _rulerMode = [[[OACommonRulerWidgetMode withKey:rulerModeKey defValue:RULER_MODE_DARK] makeGlobal] makeShared];
         [_globalPreferences setObject:_rulerMode forKey:@"ruler_mode"];
 
-        _osmUserName = [[[OACommonString withKey:osmUserNameKey defValue:@""] makeGlobal] makeShared];
         _osmUserDisplayName = [[[OACommonString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
         _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityPublic] makeGlobal] makeShared];
-        _userOsmBugName = [[[OACommonString withKey:userOsmBugNameKey defValue:@"NoName/OsmAnd"] makeGlobal] makeShared];
-        _osmUserPassword = [[[OACommonString withKey:osmPasswordKey defValue:@""] makeGlobal] makeShared];
         _osmUserAccessToken = [[OACommonString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
         _osmUserAccessTokenSecret = [[OACommonString withKey:osmUserAccessTokenSecretKey defValue:@""] makeGlobal];
         _oprAccessToken = [[OACommonString withKey:oprAccessTokenKey defValue:@""] makeGlobal];
@@ -4477,11 +5575,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _offlineEditing = [[[OACommonBoolean withKey:offlineEditingKey defValue:YES] makeGlobal] makeShared];
         _osmUseDevUrl = [[[OACommonBoolean withKey:osmUseDevUrlKey defValue:NO] makeGlobal] makeShared];
 
-        [_globalPreferences setObject:_osmUserName forKey:@"user_name"];
         [_globalPreferences setObject:_osmUserDisplayName forKey:@"user_display_name"];
         [_globalPreferences setObject:_osmUploadVisibility forKey:@"upload_visibility"];
-        [_globalPreferences setObject:_userOsmBugName forKey:@"user_osm_bug_name"];
-        [_globalPreferences setObject:_osmUserPassword forKey:@"user_password"];
         [_globalPreferences setObject:_osmUserAccessToken forKey:@"user_access_token"];
         [_globalPreferences setObject:_osmUserAccessTokenSecret forKey:@"user_access_token_secret"];
         [_globalPreferences setObject:_oprAccessToken forKey:@"opr_user_access_token_secret"];
@@ -4493,7 +5588,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         _showMapillary = [[[OACommonBoolean withKey:showMapillaryKey defValue:YES] makeGlobal] makeShared];
         _mapillaryFirstDialogShown = [[OACommonBoolean withKey:mapillaryFirstDialogShownKey defValue:NO] makeGlobal];
+        
         _onlinePhotosRowCollapsed = [[[OACommonBoolean withKey:onlinePhotosRowCollapsedKey defValue:YES] makeGlobal] makeShared];
+        
+        _mapillaryPhotosRowCollapsed = [[[OACommonBoolean withKey:mapillaryPhotosRowCollapsedKey defValue:YES] makeGlobal] makeShared];
+        
         _useMapillaryFilter = [[[OACommonBoolean withKey:useMapillaryFilterKey defValue:NO] makeGlobal] makeShared];
         _mapillaryFilterUserKey = [[[OACommonString withKey:mapillaryFilterUserKeyKey defValue:@""] makeGlobal] makeShared];
         _mapillaryFilterUserName = [[[OACommonString withKey:mapillaryFilterUserNameKey defValue:@""] makeGlobal] makeShared];
@@ -4503,7 +5602,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         [_globalPreferences setObject:_showMapillary forKey:@"show_mapillary"];
         [_globalPreferences setObject:_mapillaryFirstDialogShown forKey:@"mapillary_first_dialog_shown"];
-        [_globalPreferences setObject:_onlinePhotosRowCollapsed forKey:@"mapillary_menu_collapsed"];
+        [_globalPreferences setObject:_onlinePhotosRowCollapsed forKey:@"online_photos_menu_collapsed"];
+        [_globalPreferences setObject:_mapillaryPhotosRowCollapsed forKey:@"mapillary_menu_collapsed"];
+        
         [_globalPreferences setObject:_useMapillaryFilter forKey:@"use_mapillary_filters"];
         [_globalPreferences setObject:_mapillaryFilterUserKey forKey:@"mapillary_filter_user_key"];
         [_globalPreferences setObject:_mapillaryFilterUserName forKey:@"mapillary_filter_username"];
@@ -4511,22 +5612,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_mapillaryFilterEndDate forKey:@"mapillary_filter_to_date"];
         [_globalPreferences setObject:_mapillaryFilterPano forKey:@"mapillary_filter_pano"];
 
-        _quickActionIsOn = [OACommonBoolean withKey:quickActionIsOnKey defValue:NO];
-        _quickActionsList = [[[OACommonString withKey:quickActionsListKey defValue:@""] makeGlobal] makeShared];
         _isQuickActionTutorialShown = [[[OACommonBoolean withKey:isQuickActionTutorialShownKey defValue:NO] makeGlobal] makeShared];
+        _quickActionButtons = [[[[OACommonStringList withKey:quickActionButtonsKey defValue:@[QuickActionButtonState.defaultButtonId]] makeGlobal] makeShared] storeLastModifiedTime];
 
-        [_profilePreferences setObject:_quickActionIsOn forKey:@"quick_action_state"];
-        [_globalPreferences setObject:_quickActionsList forKey:@"quick_action_list"];
         [_globalPreferences setObject:_isQuickActionTutorialShown forKey:@"quick_action_tutorial"];
-
-        _quickActionPortraitX = [OACommonDouble withKey:quickActionPortraitXKey defValue:0];
-        _quickActionPortraitY = [OACommonDouble withKey:quickActionPortraitYKey defValue:0];
-        _quickActionLandscapeX = [OACommonDouble withKey:quickActionLandscapeXKey defValue:0];
-        _quickActionLandscapeY = [OACommonDouble withKey:quickActionLandscapeYKey defValue:0];
-        [_profilePreferences setObject:_quickActionPortraitX forKey:@"quick_fab_margin_x_portrait_margin"];
-        [_profilePreferences setObject:_quickActionPortraitY forKey:@"quick_fab_margin_y_portrait_margin"];
-        [_profilePreferences setObject:_quickActionLandscapeX forKey:@"quick_fab_margin_x_landscape_margin"];
-        [_profilePreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
+        [_globalPreferences setObject:_quickActionButtons forKey:quickActionButtonsKey];
         
         _showSpeedometer = [OACommonBoolean withKey:showSpeedometerKey defValue:NO];
         [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.CAR];
@@ -4536,22 +5626,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_showSpeedometer forKey:@"show_speedometer"];
         
         _speedometerSize = [OACommonWidgetSizeStyle withKey:speedometerSizeKey defValue:EOAWidgetSizeStyleMedium];
-        [_speedometerSize setModeDefaultValue:EOAWidgetSizeStyleSmall mode:OAApplicationMode.CAR];
+        [_speedometerSize setModeDefaultValue:@(EOAWidgetSizeStyleSmall) mode:OAApplicationMode.CAR];
         [self registerPreference:_speedometerSize forKey:speedometerSizeKey];
         
         _showSpeedLimitWarning = [OACommonSpeedLimitWarningState withKey:showSpeedLimitWarningKey defValue:EOASpeedLimitWarningStateWhenExceeded];
         [self registerPreference:_showSpeedLimitWarning forKey:showSpeedLimitWarningKey];
-        
-        _map3dMode = [[OACommonMap3dMode withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisible] makeShared];
-        _map3dModePortraitX = [OACommonDouble withKey:map3dModePortraitXKey defValue:0];
-        _map3dModePortraitY = [OACommonDouble withKey:map3dModePortraitYKey defValue:0];
-        _map3dModeLandscapeX = [OACommonDouble withKey:map3dModeLandscapeXKey defValue:0];
-        _map3dModeLandscapeY = [OACommonDouble withKey:map3dModeLandscapeYKey defValue:0];
-        [_profilePreferences setObject:_map3dMode forKey:map3dModeVisibilityKey];
-        [_profilePreferences setObject:_map3dModePortraitX forKey:@"3dmode_fab_margin_x_portrait_margin"];
-        [_profilePreferences setObject:_map3dModePortraitY forKey:@"3dmode_fab_margin_y_portrait_margin"];
-        [_profilePreferences setObject:_map3dModeLandscapeX forKey:@"3dmode_fab_margin_x_landscape_margin"];
-        [_profilePreferences setObject:_map3dModeLandscapeY forKey:@"3dmode_fab_margin_y_landscape_margin"];
         
         _contourLinesZoom = [OACommonString withKey:contourLinesZoomKey defValue:@""];
         [_profilePreferences setObject:_contourLinesZoom forKey:@"contour_lines_zoom"];
@@ -4583,6 +5662,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         [_globalPreferences setObject:_wikiArticleShowImagesAsked forKey:@"wikivoyage_show_images_asked"];
         [_globalPreferences setObject:_wikivoyageShowImgs forKey:@"wikivoyage_show_imgs"];
+        
+        _selectMarkerOnSingleTap = [[OACommonBoolean withKey:selectMarkerOnSingleTapKey defValue:NO] makeProfile];
+        [_globalPreferences setObject:_selectMarkerOnSingleTap forKey:@"select_marker_on_single_tap"];
 
         _coordsInputUseRightSide = [[[OACommonBoolean withKey:coordsInputUseRightSideKey defValue:YES] makeGlobal] makeShared];
         _coordsInputFormat = [[[OACommonCoordinateInputFormats withKey:coordsInputFormatKey defValue:EOACoordinateInputFormatsDdMmMmm] makeGlobal] makeShared];
@@ -4676,6 +5758,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_backupFreePlanRegistrationTime forKey:backupFreePlanRegistrationTime];
         
         _backupPromocode = [[OACommonString withKey:backupPromocodeKey defValue:@""] makeGlobal];
+        _backupPurchaseSku = [[OACommonString withKey:backupPromocodeKey defValue:nil] makeGlobal];
         _backupPurchaseActive = [[OACommonBoolean withKey:backupPurchaseActiveKey defValue:NO] makeGlobal];
         _backupPurchaseStartTime = [[OACommonLong withKey:backupPurchaseStartTimeKey defValue:0] makeGlobal];
         _backupPurchaseExpireTime = [[OACommonLong withKey:backupPurchaseExpireTimeKey defValue:0] makeGlobal];
@@ -4732,15 +5815,29 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         
         _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
         
-        _currentTrackVerticalExaggerationScale = [[[OACommonDouble withKey:currentTrackVerticalExaggerationScaleKey defValue:1.0] makeGlobal] makeShared];
+        _currentTrackIsJoinSegments = [[[OACommonBoolean withKey:currentTrackIsJoinSegmentsKey defValue:NO] makeGlobal] makeShared];
+        
+        _currentTrackVerticalExaggerationScale = [[[OACommonDouble withKey:currentTrackVerticalExaggerationScaleKey defValue:0.25] makeGlobal] makeShared];
+        _currentTrackElevationMeters = [[[OACommonInteger withKey:currentTrackElevationMetersKey defValue:kElevationDefMeters] makeGlobal] makeShared];
         _currentTrackVisualization3dByType = [[[OACommonInteger withKey:currentTrackVisualization3dByTypeKey defValue:EOAGPX3DLineVisualizationByTypeNone] makeGlobal] makeShared];
         
         _currentTrackVisualization3dWallColorType = [[[OACommonInteger withKey:currentTrackVisualization3dWallColorTypeKey defValue:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient] makeGlobal] makeShared];
         _currentTrackVisualization3dPositionType = [[[OACommonInteger withKey:currentTrackVisualization3dPositionTypeKey defValue:EOAGPX3DLineVisualizationPositionTypeTop] makeGlobal] makeShared];
+        _currentTrackRouteActivity = [[OACommonString withKey:currentTrackRouteActivityKey defValue:@""] makeProfile];
+        [_currentTrackRouteActivity setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
+        [_currentTrackRouteActivity setModeDefaultValue:@"road_cycling" mode:OAApplicationMode.BICYCLE];
+        [_currentTrackRouteActivity setModeDefaultValue:@"walking" mode:OAApplicationMode.PEDESTRIAN];
+        [_currentTrackRouteActivity setModeDefaultValue:@"train_riding" mode:OAApplicationMode.TRAIN];
+        [_currentTrackRouteActivity setModeDefaultValue:@"motorboat" mode:OAApplicationMode.BOAT];
+        [_currentTrackRouteActivity setModeDefaultValue:@"skiing" mode:OAApplicationMode.SKI];
+        [_currentTrackRouteActivity setModeDefaultValue:@"horse_riding" mode:OAApplicationMode.HORSE];
+        [_currentTrackRouteActivity setModeDefaultValue:@"motor_scooter" mode:OAApplicationMode.MOPED];
+        [_currentTrackRouteActivity setModeDefaultValue:@"truck_hgv" mode:OAApplicationMode.TRUCK];
         
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
         _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
+        _gradientPalettes = [[[OACommonString withKey:gradientPalettesKey defValue:nil] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
         [_globalPreferences setObject:_currentTrackColoringType forKey:@"current_track_coloring_type"];
@@ -4751,14 +5848,19 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_currentTrackShowArrows forKey:@"current_track_show_arrows"];
         [_globalPreferences setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
         
+        [_globalPreferences setObject:_currentTrackIsJoinSegments forKey:@"current_track_is_join_segments"];
+        
         [_globalPreferences setObject:_currentTrackVerticalExaggerationScale forKey:@"current_track_vertical_exaggeration_scale"];
+        [_globalPreferences setObject:_currentTrackElevationMeters forKey:@"current_track_elevation_meters"];
         [_globalPreferences setObject:_currentTrackVisualization3dByType forKey:@"current_track_visualization_3d_by_type"];
         [_globalPreferences setObject:_currentTrackVisualization3dWallColorType forKey:@"current_track_visualization_3d_wall_color_type"];
         [_globalPreferences setObject:_currentTrackVisualization3dPositionType forKey:@"current_track_visualization_3d_position_type"];
+        [_profilePreferences setObject:_currentTrackRouteActivity forKey:@"current_track_route_activity"];
         
         [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
         [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
         [_globalPreferences setObject:_lastUsedFavIcons forKey:@"last_used_favorite_icons"];
+        [_globalPreferences setObject:_gradientPalettes forKey:gradientPalettesKey];
 
         _gpsStatusApp = [[[OACommonString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];
         [_globalPreferences setObject:_gpsStatusApp forKey:@"gps_status_app"];
@@ -4766,7 +5868,13 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _debugRenderingInfo = [[[OACommonBoolean withKey:debugRenderingInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_debugRenderingInfo forKey:@"debug_rendering"];
 
-        _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
+        _use3dIconsByDefault = [[[OACommonBoolean withKey:use3dIconsByDefaultKey defValue:YES] makeGlobal] makeShared];
+        [_globalPreferences setObject:_use3dIconsByDefault forKey:@"_use3dIconsByDefault"];
+
+        _batterySavingMode = [[[OACommonBoolean withKey:batterySavingModeKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_batterySavingMode forKey:@"battery_saving"];
+
+        _levelToSwitchVectorRaster = [[OACommonInteger withKey:levelToSwitchVectorRasterKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
 
         // For now this can be changed only in TestVoiceActivity
@@ -4862,8 +5970,17 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
         
+        _detailedTrackGuidance = [[OACommonInteger withKey:detailedTrackGuidanceKey defValue:EOATrackApproximationManual] makeShared];
+        [_profilePreferences setObject:_detailedTrackGuidance forKey:@"detailed_track_guidance"];
+        
+        _gpxApproximationDistance = [[OACommonInteger withKey:gpxApproximationDistanceKey defValue:50] makeShared];
+        [_profilePreferences setObject:_gpxApproximationDistance forKey:@"gpx_approximation_distance"];
+        
         _useOldRouting = [[[OACommonBoolean withKey:useOldRoutingKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_useOldRouting forKey:@"use_old_routing"];
+        
+        _simulateOBDData = [[[OACommonBoolean withKey:simulateOBDDataKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_simulateOBDData forKey:@"simulate_obd_data"];
 
         [self fetchImpassableRoads];
 
@@ -5001,21 +6118,77 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     return p;
 }
 
+- (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonSunPositionMode *) [_registeredPreferences objectForKey:key];
+    
+    OACommonSunPositionMode *p = [OACommonSunPositionMode withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetZoomLevelType *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetZoomLevelType *p = [OACommonWidgetZoomLevelType withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetDefaultView *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetDefaultView *p = [OACommonWidgetDefaultView withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetDisplayPriority *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetDisplayPriority *p = [OACommonWidgetDisplayPriority withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (EOATemperatureConstant)getTemperatureUnit
+{
+    return [self getTemperatureUnitForMode:[_applicationMode get]];
+}
+
+- (EOATemperatureConstant)getTemperatureUnitForMode:(OAApplicationMode *)mode
+{
+    EOATemperatureConstant stored = [_temperatureUnits get:mode];
+    if (stored == SYSTEM_DEFAULT)
+    {
+        NSUnitTemperature *sysUnit = [NSUnitTemperature current];
+        if ([sysUnit.symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
+            return FAHRENHEIT;
+        else
+            return CELSIUS;
+    }
+    
+    return stored;
+}
+
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode
 {
-    for (OACommonPreference *value in [_profilePreferences objectEnumerator].allObjects)//todo
+    NSArray<NSMapTable<NSString *, OACommonPreference *> *> *preferencesCollections = @[
+        _profilePreferences,
+        _registeredPreferences,
+        _customBooleanRoutingProps,
+        _customRoutingProps
+    ];
+    for (NSMapTable<NSString *, OACommonPreference *> *item in preferencesCollections)
     {
-        [value resetModeToDefault:mode];
-    }
-
-    for (OACommonBoolean *value in [_customBooleanRoutingProps objectEnumerator].allObjects)
-    {
-        [value resetModeToDefault:mode];
-    }
-
-    for (OACommonString *value in [_customRoutingProps objectEnumerator].allObjects)
-    {
-        [value resetModeToDefault:mode];
+        [self resetProfilePreferences:mode profilePreferences:[item objectEnumerator].allObjects];
     }
 
     if (!mode.isCustomProfile)
@@ -5023,10 +6196,26 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [self.userProfileName resetModeToDefault:mode];
         [self.profileIconName resetModeToDefault:mode];
         [self.profileIconColor resetModeToDefault:mode];
+        [self.profileCustomIconColor resetModeToDefault:mode];
     }
 
     [OAAppData.defaults resetProfileSettingsForMode:mode];
     [NSNotificationCenter.defaultCenter postNotificationName:kWidgetVisibilityChangedMotification object:nil];
+}
+
+- (void)resetProfilePreferences:(OAApplicationMode *)mode
+             profilePreferences:(NSArray<OACommonPreference *> *)profilePreferences
+{
+    for (OACommonPreference *pref in profilePreferences)
+    {
+        if ([self prefCanBeCopiedOrReset:pref])
+            [pref resetModeToDefault:mode];
+    }
+}
+
+- (BOOL)prefCanBeCopiedOrReset:(OACommonPreference *)pref
+{
+    return !pref.global && ![_appModeOrder.key isEqualToString:pref.key];
 }
 
 // Common Settings
@@ -5179,6 +6368,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     _mapSettingTrackRecording = mapSettingTrackRecording;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingTrackRecording forKey:mapSettingTrackRecordingKey];
     [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
+    [[OAMapButtonsHelper sharedInstance] refreshQuickActionButtons];
 }
 
 - (NSSet<NSString *> *) getEnabledPlugins
@@ -5256,8 +6446,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         if (markAsLastUsed)
             [_lastUsedApplicationMode set:applicationMode.stringKey];
         [[ThemeManager shared] configureWithAppMode: applicationMode];
-        [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
-        [[OAScreenOrientationHelper sharedInstance] updateSettings];
+        [OsmAndApp.instance.applicationModeChangedObservable notifyEventWithKey:prevAppMode];
     }
 }
 
@@ -5350,7 +6539,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     NSMutableArray *arrToDelete = [NSMutableArray array];
     for (NSString *filepath in arr)
     {
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filepath];
+        NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filepath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:absoluteGpxFilepath];
         NSString *fileName = filepath.lastPathComponent;
         NSString *filenameWithoutPrefix = nil;
         if ([fileName hasSuffix:@"_osmand_backup"])
@@ -5388,7 +6578,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         OACommonBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
         if (!value)
         {
-            value = [OACommonBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+            value = [OACommonBoolean withKey:[NSString stringWithFormat:@"%@%@", kRoutingPreferencePrefix, attrName] defValue:defaultValue];
             [_customBooleanRoutingProps setObject:value forKey:attrName];
         }
         return value;
@@ -5402,13 +6592,52 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         OACommonString *value = [_customRoutingProps objectForKey:attrName];
         if (!value)
         {
-            value = [OACommonString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+            value = [OACommonString withKey:[NSString stringWithFormat:@"%@%@", kRoutingPreferencePrefix, attrName] defValue:defaultValue];
             [_customRoutingProps setObject:value forKey:attrName];
         }
         return value;
     }
 }
 
+- (NSDictionary<NSString *, NSString *> *)getTracksSortModes
+{
+    return [self getTrackSortModesWithArray:[_tracksSortModes get]];
+}
+
+- (NSDictionary<NSString *, NSString *> *)getTrackSortModesWithArray:(NSArray<NSString *> *)modes
+{
+    NSMutableDictionary<NSString *, NSString *> *sortModes = [NSMutableDictionary dictionary];
+    if (modes != nil && modes.count > 0)
+    {
+        for (NSString *sortMode in modes)
+        {
+            NSArray<NSString *> *parts = [sortMode componentsSeparatedByString:@",,"];
+            if (parts.count == 2)
+                sortModes[parts[0]] = parts[1];
+        }
+    }
+    
+    return [sortModes copy];
+}
+
+- (void)saveTracksSortModes:(NSDictionary<NSString *, NSString *> *)tabsSortModes
+{
+    NSArray<NSString *> *sortModes = [self getPlainSortModesFromDictionary:tabsSortModes];
+    [_tracksSortModes set:sortModes];
+}
+
+- (NSArray<NSString *> *)getPlainSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)tabsSortModes
+{
+    NSMutableArray<NSString *> *sortTypes = [NSMutableArray array];
+    for (NSString *key in tabsSortModes.allKeys)
+    {
+        NSString *value = tabsSortModes[key];
+        NSString *combined = [NSString stringWithFormat:@"%@,,%@", key, value];
+        [sortTypes addObject:combined];
+    }
+    
+    return [sortTypes copy];
+}
 
 // navigation settings
 - (void) setUseFastRecalculation:(BOOL)useFastRecalculation
@@ -5439,18 +6668,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 {
     _customPluginsJson = customPluginsJson;
     [[NSUserDefaults standardUserDefaults] setObject:_customPluginsJson forKey:customPluginsJsonKey];
-}
-
-- (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y
-{
-    [_quickActionPortraitX set:x];
-    [_quickActionPortraitY set:y];
-}
-
-- (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y
-{
-    [_quickActionLandscapeX set:x];
-    [_quickActionLandscapeY set:y];
 }
 
 - (NSString *) getDefaultVoiceProvider

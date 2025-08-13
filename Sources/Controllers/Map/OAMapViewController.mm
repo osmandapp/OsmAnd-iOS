@@ -7,20 +7,17 @@
 //
 
 #import "OAMapViewController.h"
-
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
-
 #import <UIViewController+JASidePanel.h>
 #import <MBProgressHUD.h>
-
 #import "OAAppData.h"
 #import "OAMapRendererView.h"
-
 #import "OAIndexConstants.h"
 #import "OAAutoObserverProxy.h"
 #import "OANavigationController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAResourcesBaseViewController.h"
@@ -28,7 +25,6 @@
 #import "OAPOIHelper.h"
 #import "OAPOIFiltersHelper.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
@@ -36,6 +32,7 @@
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAMapCreatorHelper.h"
 #import "OAPOI.h"
 #import "OAMapSettingsPOIScreen.h"
@@ -61,7 +58,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAZoom.h"
-
+#import "OAMapSource.h"
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OAPointDescription.h"
@@ -69,24 +66,26 @@
 #import "OATargetPointsHelper.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAPluginsHelper.h"
-
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
+#import "OAApplicationMode.h"
 #import "OAAppVersion.h"
+#import "OALocationServices.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OANativeUtilities.h"
+#import "OALog.h"
+#import "OAObservable.h"
+#import "Localization.h"
+#import "OsmAndSharedWrapper.h"
 
+//#include "OAMapMarkersCollection.h"
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
 #include <OsmAndCore/IWebClient.h>
-
-//#include "OAMapMarkersCollection.h"
-
 #include <OpenGLES/ES2/gl.h>
-
 #include <QtMath>
 #include <QStandardPaths>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -112,18 +111,12 @@
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
-
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
-
 #include <OsmAndCore/QKeyValueIterator.h>
-
-#import "OANativeUtilities.h"
-#import "OALog.h"
-#include "Localization.h"
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
@@ -175,13 +168,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     OAAutoObserverProxy* _trackRecordingObserver;
     
-    NSString *_gpxDocFileTemp;
-
-    // Temp gpx
-    QList< std::shared_ptr<const OsmAnd::GpxDocument> > _gpxDocsTemp;
-    // Currently recording gpx
-    QList< std::shared_ptr<const OsmAnd::GpxDocument> > _gpxDocsRec;
-
+    NSString *_gpxFilePathTemp;
+    
+    NSMutableArray *_gpxFilesTemp;
+    NSMutableArray *_gpxFilesRec;
+    
     OASelectedGPXHelper *_selectedGpxHelper;
     
     BOOL _tempTrackShowing;
@@ -237,6 +228,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     UIPanGestureRecognizer* _grElevation;
     UITapGestureRecognizer* _grSymbolContextMenu;
     UILongPressGestureRecognizer* _grPointContextMenu;
+    UIPanGestureRecognizer* _grMouseWheelScroll;
+
     BOOL _startRotating;
     BOOL _startZooming;
     float _startAzimuth;
@@ -291,6 +284,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _moveTouchLocations = [NSMutableArray array];
     _zoomTouchLocations = [NSMutableArray array];
     _rotateTouchLocations = [NSMutableArray array];
+    
+    _gpxFilesRec = [NSMutableArray array];
+    _gpxFilesTemp = [NSMutableArray array];
 
     _mapLayerChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onMapLayerChanged)
@@ -342,7 +338,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _mapObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
     _mapSourceUpdatedObservable = [[OAObservable alloc] init];
-    
+    _gpxTracksRefreshedObservable = [[OAObservable alloc] init];
+
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                withHandler:@selector(onMapRendererStateChanged:withKey:)];
     _settingsObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -357,7 +354,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
-                                                            andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+                                                            andObserve:[OsmAndApp instance].applicationModeChangedObservable];
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
@@ -408,7 +405,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _grRotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self
                                                              action:@selector(zoomAndRotateGestureDetected:)];
     _grRotate.delegate = self;
-    
+
     // - Zoom-in gesture
     _grZoomIn = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                         action:@selector(zoomInGestureDetected:)];
@@ -422,7 +419,18 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _grZoomOut.delegate = self;
     _grZoomOut.numberOfTapsRequired = 2;
     _grZoomOut.numberOfTouchesRequired = 2;
-    
+
+    // - MouseWheelScroll gesture (run under MacOS)
+    if ([OAUtilities isiOSAppOnMac]) {
+        _grMouseWheelScroll = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                      action:@selector(mouseWheelScrollGuestureDetected:)];
+        _grMouseWheelScroll.delegate = self;
+        _grMouseWheelScroll.allowedScrollTypesMask = UIScrollTypeMaskAll;
+        _grMouseWheelScroll.minimumNumberOfTouches = 0;
+        _grMouseWheelScroll.maximumNumberOfTouches = 0;
+        _grMouseWheelScroll.cancelsTouchesInView = NO;
+    }
+
     // - Elevation gesture
     _grElevation = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                            action:@selector(elevationGestureDetected:)];
@@ -474,13 +482,42 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _contentScaleFactor = [[UIScreen mainScreen] scale];
     _mapView.contentScaleFactor = _contentScaleFactor;
+
+    // Tell view to create context
+    _mapView.displayDensityFactor = self.displayDensityFactor;
+    [_mapView createContext];
+
+    // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
+    if (_app.initialURLMapState)
+    {
+        _mapView.target31 = OsmAnd::PointI(_app.initialURLMapState.target31.x,
+                                           _app.initialURLMapState.target31.y);
+        float zoom = _app.initialURLMapState.zoom;
+        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
+        float azimuth = _app.initialURLMapState.azimuth;
+        _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
+    }
+    else
+    {
+        _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
+                                           _app.data.mapLastViewedState.target31.y);
+
+        float zoom = MAX([OAZoom getMinValidZoom], _app.data.mapLastViewedState.zoom);
+        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
+        float azimuth = _app.data.mapLastViewedState.azimuth;
+        _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
+        float elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+        _mapView.elevationAngle = isnan(elevationAngle) ? kDefaultElevationAngle : elevationAngle;
+        _map3DModeElevationAngle = kDefaultElevationAngle;
+    }
+
     [_stateObserver observe:_mapView.stateObservable];
     [_settingsObserver observe:_mapView.settingsObservable];
     [_framePreparedObserver observe:_mapView.framePreparedObservable];
     _mapView.rendererDelegate = self;
-    
+
     self.mapViewLoaded = YES;
-    
+
     // Create map layers
     [_mapLayers createLayers];
 }
@@ -497,12 +534,19 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return self.parentViewController != OARootViewController.instance.mapPanel;
 }
 
+- (BOOL) isMapHidden
+{
+    return self.view.window == nil && !_app.carPlayActive;
+}
+
 #pragma mark - OAMapRendererDelegate
 
 - (void) frameAnimatorsUpdated
 {
     if (_mapLayers)
         [_mapLayers onMapFrameAnimatorsUpdated];
+
+    [[OARootViewController instance].mapPanel.hudViewController.mapInfoController onFrameAnimatorsUpdated];
 }
 
 - (void) frameUpdated
@@ -518,34 +562,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-
-    // Tell view to create context
-    _mapView.displayDensityFactor = self.displayDensityFactor;
-    [_mapView createContext];
-    
-    // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
-    if (_app.initialURLMapState)
-    {
-        _mapView.target31 = OsmAnd::PointI(_app.initialURLMapState.target31.x,
-                                           _app.initialURLMapState.target31.y);
-        float zoom = _app.initialURLMapState.zoom;
-        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
-        float azimuth = _app.initialURLMapState.azimuth;
-        _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
-    }
-    else
-    {
-        _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
-                                           _app.data.mapLastViewedState.target31.y);
-
-        float zoom = _app.data.mapLastViewedState.zoom;
-        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
-        float azimuth = _app.data.mapLastViewedState.azimuth;
-        _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
-        float elevationAngle = _app.data.mapLastViewedState.elevationAngle;
-        _mapView.elevationAngle = isnan(elevationAngle) ? kDefaultElevationAngle : elevationAngle;
-        _map3DModeElevationAngle = kDefaultElevationAngle;
-    }
     
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;
@@ -557,7 +573,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     // Update map source (if needed)
     if (_mapSourceInvalidated)
     {
@@ -581,7 +597,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (void) showWhatsNewDialogIfNeeded
 {
-    if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen)
+    if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen && !_isCarPlayActive && !_isCarPlayDashboardActive)
     {
         OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];
         [bottomSheet presentInViewController:self];
@@ -592,7 +608,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
+
     if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
@@ -631,6 +647,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     [_mapView addGestureRecognizer:_grElevation];
     [_mapView addGestureRecognizer:_grSymbolContextMenu];
     [_mapView addGestureRecognizer:_grPointContextMenu];
+
+    if ([OAUtilities isiOSAppOnMac])
+        [_mapView addGestureRecognizer:_grMouseWheelScroll];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication*)application
@@ -670,6 +689,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if (self.mapViewLoaded)
     {
+        self.mapViewLoaded = NO;
         [_mapView suspendSymbolsUpdate];
         [_mapView releaseContext:YES];
         [_mapView removeFromSuperview];
@@ -712,6 +732,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = 1.0f;
         _progressHUD.labelText = message;
+        _progressHUD.removeFromSuperViewOnHide = YES;
         [topView addSubview:_progressHUD];
         
         [_progressHUD show:!wasVisible];
@@ -750,6 +771,18 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         _cachedMapLocation = mapLocation;
         return mapLocation;
     }
+}
+
+- (CLLocation *) getLatLonFromElevatedPixel:(CGFloat)x y:(CGFloat)y
+{
+    return [self getLatLonFromElevatedPixel: OsmAnd::PointI(x, y)];
+}
+
+- (CLLocation *) getLatLonFromElevatedPixel:(OsmAnd::PointI)pixel
+{
+    OsmAnd::PointI elevated31 = [OANativeUtilities get31FromElevatedPixel:pixel];
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(elevated31);
+    return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
 }
 
 - (float) getMapZoom
@@ -1090,6 +1123,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (!CGPointEqualToPoint(firstPoint, CGPointZero) && _moveTouchLocations.count > 0 && !_rotatingByGesture && !_zoomingByGesture)
         {
             _app.mapMode = OAMapModeFree;
+            [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
             OATouchLocation *firstTouch = _moveTouchLocations[0];
             OsmAnd::PointI touchLocation31 = [OANativeUtilities convertFromPoint31:firstTouch.touchLocation31];
             [_mapView setMapTarget:OsmAnd::PointI((int)firstPoint.x, (int)firstPoint.y) location31:touchLocation31];
@@ -1182,6 +1216,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     if (state == UIGestureRecognizerStateChanged && _carPlayMapTouchLocation)
     {
+        _app.mapMode = OAMapModeFree;
+        [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
         _carPlayScreenPoint = OsmAnd::PointI(_carPlayScreenPoint.x + translation.x * _mapView.contentScaleFactor, _carPlayScreenPoint.y + translation.y * _mapView.contentScaleFactor);
         auto touchLocation31 = [OANativeUtilities convertFromPoint31:_carPlayMapTouchLocation.touchLocation31];
         [_mapView setMapTarget:_carPlayScreenPoint location31:touchLocation31];
@@ -1252,6 +1288,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     UIPanGestureRecognizer *panRecognizer = [recognizer isKindOfClass:UIPanGestureRecognizer.class] ? (UIPanGestureRecognizer *) recognizer : nil;
 
     if (_rotationAnd3DViewDisabled && rotationRecognizer)
+        return;
+
+    if (rotationRecognizer && [[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_NONE)
         return;
 
     // If gesture has just began, just capture current zoom
@@ -1345,6 +1384,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                     auto angle = zoomAndRotation.y;
                     if (!isnan(zoom) && !isnan(angle))
                     {
+                        _app.mapMode = OAMapModeFree;
+                        [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
+
+                        OAZoom *zoomObject = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:_mapView.minZoom maxZoom:_mapView.maxZoom];
+                        float nextZoomStep = [zoomObject getValidZoomStep:zoom];
+                        zoom = nextZoomStep;
+                        
                         float newZoom = _mapView.zoom + (float)zoom;
                         float newAzimuth = _mapView.azimuth + (float)angle;
                         if (pinchRecognizer)
@@ -1379,6 +1425,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
         else if (panRecognizer)
         {
+            _app.mapMode = OAMapModeFree;
+            [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
             // Change zoom
             CGFloat gestureScale = ([panRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
             CGFloat scale = 1 - gestureScale;
@@ -1458,6 +1506,15 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return ABS(angle) >= ZONE_1_ANGLE_THRESHOLD;
 }
 
+- (void) mouseWheelScrollGuestureDetected:(UIPanGestureRecognizer *)recognizer
+{
+    CGPoint delta = [recognizer translationInView:self.view];
+    if (delta.y > 0)
+        [self zoomInGestureDetected:(UITapGestureRecognizer*)recognizer];
+    else if (delta.y < 0)
+        [self zoomOutGestureDetected:(UITapGestureRecognizer*)recognizer];
+}
+
 - (void) zoomInGestureDetected:(UITapGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
@@ -1473,25 +1530,28 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
-
-    // Put tap location to center of screen
-    CGPoint centerPoint = [self getTouchPoint:recognizer touchIndex:0];
-    OsmAnd::PointI centerLocation;
-    [_mapView convert:centerPoint toLocation:&centerLocation];
-
-    OsmAnd::PointI destLocation(_mapView.target31.x / 2.0 + centerLocation.x / 2.0, _mapView.target31.y / 2.0 + centerLocation.y / 2.0);
-    
-    _mapView.mapAnimator->animateTargetTo(destLocation,
-                                      kQuickAnimationTime,
-                                      OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomIn,
-                                      kUserInteractionAnimationKey);
-    
+       
     // Increate zoom by 1
     zoomDelta += 1.0f;
-    _mapView.mapAnimator->animateZoomBy(zoomDelta,
-                                    kQuickAnimationTime,
-                                    OsmAnd::MapAnimator::TimingFunction::Linear,
-                                    kUserInteractionAnimationKey);
+    
+    _app.mapMode = OAMapModeFree;
+    [[OAMapViewTrackingUtilities instance] checkMapLinkedToLocation];
+    
+    CGPoint centerPoint;
+    if (recognizer.numberOfTouches > 0)
+        centerPoint = [self getTouchPoint:recognizer touchIndex:0];
+    else
+        centerPoint = [recognizer locationInView:self.view]; // MouseWheelScroll
+
+    OsmAnd::PointI centerLocation;
+    [_mapView convert:centerPoint toLocation:&centerLocation];
+    OsmAnd::PointI destLocation(_mapView.target31.x / 2.0 + centerLocation.x / 2.0, _mapView.target31.y / 2.0 + centerLocation.y / 2.0);
+
+    // Zoom and move to target animation
+    _mapView.mapAnimator->animateZoomToAndPan(_mapView.zoomLevel + zoomDelta,
+                                              destLocation,
+                                              kQuickAnimationTime,
+                                              OsmAnd::MapAnimator::TimingFunction::Linear);
     
     // Launch animation
     _mapView.mapAnimator->resume();
@@ -1514,18 +1574,28 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     float zoomDelta = [self currentZoomOutDelta];
 
     // Put tap location to center of screen
-    CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
-    for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+    CGPoint centerPoint;
+    if (recognizer.numberOfTouches > 0)
+        centerPoint = [recognizer locationOfTouch:0 inView:self.view];
+    else
+        centerPoint = [recognizer locationInView:self.view]; // MouseWheelScroll
+
+    if (recognizer.numberOfTouches > 0)
     {
-        CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
-        
-        centerPoint.x += touchPoint.x;
-        centerPoint.y += touchPoint.y;
+        for (NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+        {
+            CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
+
+            centerPoint.x += touchPoint.x;
+            centerPoint.y += touchPoint.y;
+        }
+        centerPoint.x /= recognizer.numberOfTouches;
+        centerPoint.y /= recognizer.numberOfTouches;
     }
-    centerPoint.x /= recognizer.numberOfTouches;
-    centerPoint.y /= recognizer.numberOfTouches;
+
     centerPoint.x *= _mapView.contentScaleFactor;
     centerPoint.y *= _mapView.contentScaleFactor;
+
     OsmAnd::PointI centerLocation;
     [_mapView convert:centerPoint toLocation:&centerLocation];
     
@@ -1589,8 +1659,19 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!self.mapViewLoaded)
         return NO;
 
+    BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
+
     // Get location of the gesture
-    CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
+    CGPoint touchPoint;
+    if (!longPress && !CGPointEqualToPoint(_mapView.lastImmediateTouchPoint, CGPointZero))
+    {
+        touchPoint = _mapView.lastImmediateTouchPoint;
+    }
+    else
+    {
+        touchPoint = [recognizer locationOfTouch:0 inView:self.view];
+    }
+    
     touchPoint.x *= _mapView.contentScaleFactor;
     touchPoint.y *= _mapView.contentScaleFactor;
     OsmAnd::PointI touchLocation;
@@ -1613,14 +1694,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         while (![_mapView resumeSymbolsUpdate]);
     }
     
-    BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
     BOOL accepted = longPress && recognizer.state == UIGestureRecognizerStateBegan;
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)
     {
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
-        [quickAction hideActionsSheetAnimated];
+        [quickAction hideActionsSheetAnimated:nil];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
         // Handle route planning touch events
@@ -1650,6 +1730,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 @synthesize azimuthObservable = _azimuthObservable;
 @synthesize mapSourceUpdatedObservable = _mapSourceUpdatedObservable;
+
+@synthesize gpxTracksRefreshedObservable = _gpxTracksRefreshedObservable;
 
 - (void) onMapRendererStateChanged:(id)observer withKey:(id)key
 {
@@ -1763,11 +1845,16 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
+    
+    [[OAMapViewTrackingUtilities instance] backToLocationWithConditions];
 
     // Animate zoom-in by +1
     zoomDelta += 1.0f;
     _mapView.mapAnimator->pause();
-    _mapView.mapAnimator->cancelAllAnimations();
+    
+    for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
+        if (animation->getAnimatedValue() == OsmAnd::Animator::AnimatedValue::Zoom)
+            _mapView.mapAnimator->cancelAnimation(animation);
     
     _mapView.mapAnimator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
@@ -1799,12 +1886,17 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
+    
+    [[OAMapViewTrackingUtilities instance] backToLocationWithConditions];
 
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;
     _mapView.mapAnimator->pause();
-    _mapView.mapAnimator->cancelAllAnimations();
-    
+
+    for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
+        if (animation->getAnimatedValue() == OsmAnd::Animator::AnimatedValue::Zoom)
+            _mapView.mapAnimator->cancelAnimation(animation);
+
     _mapView.mapAnimator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
@@ -1832,26 +1924,35 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if (!self.mapViewLoaded)
         return;
-    
+
     OAZoom *zoom = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:_mapView.minZoom maxZoom:_mapView.maxZoom];
-    
-    if (zoomStep > 0 && ![zoom isZoomInAllowed])
+    int previousZoom = [zoom getBaseZoom];
+
+    // Get base zoom delta
+    float zoomDelta = [self currentZoomInDelta] + [self currentZoomOutDelta];
+    float newZoomStep = zoomStep + zoomDelta;
+    if (newZoomStep > 0 && ![zoom isZoomInAllowed])
     {
         [OAUtilities showToast:nil details:OALocalizedString(@"edit_tilesource_maxzoom") duration:4 inView:self.view];
         return;
     }
-    else if (zoomStep < 0 && ![zoom isZoomOutAllowed])
+    else if (newZoomStep < 0 && ![zoom isZoomOutAllowed])
     {
         [OAUtilities showToast:nil details:OALocalizedString(@"edit_tilesource_minzoom") duration:4 inView:self.view];
         return;
     }
-    
-    [zoom changeZoom:zoomStep];
-    
+    [[OAMapViewTrackingUtilities instance] backToLocationWithConditions];
+
+    float nextZoomStep = [zoom getValidZoomStep:newZoomStep];
+    [zoom changeZoom:nextZoomStep];
+
     _mapView.mapAnimator->pause();
-    _mapView.mapAnimator->cancelAllAnimations();
-    
-    _mapView.mapAnimator->animateZoomBy(zoomStep,
+
+    for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
+        if (animation->getAnimatedValue() == OsmAnd::Animator::AnimatedValue::Zoom)
+            _mapView.mapAnimator->cancelAnimation(animation);
+
+    _mapView.mapAnimator->animateZoomBy(nextZoomStep,
                                         kQuickAnimationTime,
                                         OsmAnd::MapAnimator::TimingFunction::Linear,
                                         kUserInteractionAnimationKey);
@@ -1860,21 +1961,28 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     if (adjustTiltAngle)
     {
-        [self adjustTiltAngle:zoom];
+        [self adjustTiltAngle:zoom previousZoom:previousZoom];
     }
 }
 
-- (void) adjustTiltAngle:(OAZoom *)zoom
+- (void) adjustTiltAngle:(OAZoom *)zoom previousZoom:(int)previousZoom
 {
     int baseZoom = [zoom getBaseZoom];
     if (baseZoom >= kMinZoomLevelToAjustCameraTilt && baseZoom <= kMaxZoomLimit)
     {
-        int angle = 90 - (baseZoom - 2) * 5;
-        if (angle >= kMinAllowedElevationAngle && angle < kDefaultElevationAngle)
+        float previousAngle = _mapView.elevationAngle;
+        int angle = [self getAdjustedTiltAngle:baseZoom];
+        if (baseZoom >= previousZoom || angle >= previousAngle)
         {
-            [[OAMapViewTrackingUtilities instance] startTilting:angle];
+            [[OAMapViewTrackingUtilities instance] startTilting:angle timePeriod:kQuickAnimationTime];
         }
     }
+}
+
+- (int) getAdjustedTiltAngle:(int)baseZoom
+{
+    int angle = 90 - (baseZoom - 2) * 5;
+    return MAX(kMinAllowedElevationAngle, MIN(angle, kDefaultElevationAngle));
 }
 
 - (void) animatedPanUp
@@ -1971,22 +2079,22 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) hideContextPinMarker
 {
     [_mapLayers.contextMenuLayer hideContextPinMarker];
-    [_mapLayers.downloadedRegionsLayer hideRegionHighlight];
+    [self hidePolygonHighlight];
 }
 
 - (void) highlightRegion:(OAWorldRegion *)region
 {
     [_mapLayers.downloadedRegionsLayer highlightRegion:region];
 }
-
-- (void) hideRegionHighlight
+- (void) hidePolygonHighlight
 {
     [_mapLayers.downloadedRegionsLayer hideRegionHighlight];
+    [_mapLayers.contextMenuLayer hideRegionHighlight];
 }
 
 - (float) currentZoomOutDelta
 {
-    if (!self.mapViewLoaded)
+    if (!self.mapViewLoaded || !_mapView || !_mapView.mapAnimator)
         return 0.0f;
 
     const auto currentZoomAnimation = _mapView.mapAnimator->getCurrentAnimation(kUserInteractionAnimationKey,
@@ -2018,7 +2126,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2033,14 +2141,15 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+        if (self.mapRendererView)
+            self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     });
 }
 
 - (void) onMapSettingsChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2055,7 +2164,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onUpdateGpxTracks
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2068,7 +2177,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onUpdateRecTrack
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2087,7 +2196,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2103,7 +2212,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onMapLayerChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || _app.isInBackground || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2118,14 +2227,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onLastMapSourceChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
         }
-
+        [_mapLayers.myPositionLayer updateMyLocationCourseProvider];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [_mapLayers.myPositionLayer updateMyLocationCourseProvider];
             [self updateCurrentMapSource];
         });
         [[OAMapViewTrackingUtilities instance] updateSettings];
@@ -2135,7 +2243,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onLanguageSettingsChange
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2150,7 +2258,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onLocalResourcesChanged:(const QList< QString >&)ids
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [self isMapHidden])
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2253,6 +2361,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * mapDensity);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
+		if ([settings.batterySavingMode get])
+            [_mapView limitFrameRefreshRate];
+        else
+            [_mapView restoreFrameRefreshRate];
+
         // Set reference tile size on the screen
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
         self.referenceTileSizeRasterOrigInPixels = rasterTileSizeOrig;
@@ -2272,10 +2385,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             [_mapView removeTiledSymbolsProvider:_obfMapSymbolsProvider];
         _obfMapSymbolsProvider.reset();
 
-        if (!_gpxDocFileTemp)
-            _gpxDocsTemp.clear();
+        if (!_gpxFilePathTemp)
+            [_gpxFilesTemp removeAllObjects];
 
-        _gpxDocsRec.clear();
+        [_gpxFilesRec removeAllObjects];
         
         [self recreateHeightmapProvider];
         [self updateElevationConfiguration];
@@ -2297,7 +2410,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
             OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
 
-            _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
+            _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection, OsmAnd::ObfMapObjectsProvider::Mode::BinaryMapObjectsAndRoads, 2));
 
             NSLog(@"%@", [OAUtilities currentLang]);
             
@@ -2383,6 +2496,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 BOOL useDepthContours = [iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
                 for (OAMapStyleParameter *param in params)
                 {
+                    if ([param.name isEqualToString:ELEVATION_UNITS_ATTR])
+                    {
+                        BOOL useFeet = settings.metricSystem.get == MILES_AND_FEET;
+                        newSettings[QString::fromNSString(ELEVATION_UNITS_ATTR)] = useFeet
+                            ? QString::fromNSString(ELEVATION_UNITS_FEET_VALUE)
+                            : QString::fromNSString(ELEVATION_UNITS_METERS_VALUE);
+                        continue;
+                    }
                     if ([param.name isEqualToString:CONTOUR_LINES] && !useContours)
                     {
                         newSettings[QString::fromNSString(param.name)] = QStringLiteral("disabled");
@@ -2515,11 +2636,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
         [_mapLayers updateLayers];
 
-        if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
+        if (!_gpxFilePathTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
             [self showRecGpxTrack:YES];
 
         [_selectedGpxHelper buildGpxList];
-        if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
+        if (_selectedGpxHelper.activeGpx.allKeys.count != 0 || _gpxFilesTemp.count != 0)
             [self initRendererWithGpxTracks];
 
         //[self hideProgressHUD];
@@ -2541,7 +2662,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) recreateHeightmapProvider
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
+    if (!plugin || ![plugin is3DMapsEnabled] || ![plugin isTerrainLayerEnabled])
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];
@@ -2555,7 +2676,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) updateElevationConfiguration
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled;
+    BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || ![plugin isTerrainLayerEnabled];
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (disableVertexHillshade)
     {
@@ -2594,6 +2715,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) updatePoiLayer
 {
     [_mapLayers.poiLayer updateLayer];
+}
+
+- (OAPOILayer *) getMapPoiLayer
+{
+    return _mapLayers.poiLayer;
 }
 
 - (void) onLayersConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
@@ -2806,19 +2932,22 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         if ([settings.mapSettingVisibleGpx.get containsObject:filePath]) {
-            _gpxDocsTemp.clear();
-            _gpxDocFileTemp = nil;
+            [_gpxFilesTemp removeAllObjects];
+            _gpxFilePathTemp = nil;
             return;
         }
         
         _tempTrackShowing = YES;
 
-        if (![_gpxDocFileTemp isEqualToString:filePath] || _gpxDocsTemp.isEmpty()) {
-            _gpxDocsTemp.clear();
-            _gpxDocFileTemp = [filePath copy];
-            OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
-            NSString *path = gpx.absolutePath;
-            _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
+        if (![_gpxFilePathTemp isEqualToString:filePath] || _gpxFilesTemp.count == 0) {
+            [_gpxFilesTemp removeAllObjects];
+            _gpxFilePathTemp = [filePath copy];
+            OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
+            NSString *path = gpx.file.absolutePath;
+            
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+            [_gpxFilesTemp addObject:gpxFile];
         }
         
         if (update)
@@ -2826,7 +2955,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
 }
 
-- (void) showTempGpxTrackFromDocument:(OAGPXDocument *)doc
+- (void) showTempGpxTrackFromGpxFile:(OASGpxFile *)doc
 {
     if (_recTrackShowing)
         [self hideRecGpxTrack];
@@ -2836,17 +2965,21 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         if ([settings.mapSettingVisibleGpx.get containsObject:filePath]) {
-            _gpxDocsTemp.clear();
-            _gpxDocFileTemp = nil;
+            [_gpxFilesTemp removeAllObjects];
+            _gpxFilePathTemp = nil;
             return;
         }
         
         _tempTrackShowing = YES;
 
-        if (![_gpxDocFileTemp isEqualToString:filePath] || _gpxDocsTemp.isEmpty()) {
-            _gpxDocsTemp.clear();
-            _gpxDocFileTemp = [filePath copy];
-            _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filePath)));
+        if (![_gpxFilePathTemp isEqualToString:filePath] || _gpxFilesTemp.count == 0) {
+            [_gpxFilesTemp removeAllObjects];
+            _gpxFilePathTemp = [filePath copy];
+            
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+            
+            [_gpxFilesTemp addObject:gpxFile];
         }
         
         [[_app updateGpxTracksOnMapObservable] notifyEvent];
@@ -2860,11 +2993,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         BOOL wasTempTrackShowing = _tempTrackShowing;
         _tempTrackShowing = NO;
         
-        _gpxDocsTemp.clear();
-        NSString *folderParh = [_gpxDocFileTemp stringByDeletingLastPathComponent];
+        [_gpxFilesTemp removeAllObjects];
+        NSString *folderParh = [_gpxFilePathTemp stringByDeletingLastPathComponent];
         if ([folderParh.lastPathComponent isEqualToString:@"Temp"])
             [NSFileManager.defaultManager removeItemAtPath:folderParh error:nil];
-        _gpxDocFileTemp = nil;
+        _gpxFilePathTemp = nil;
         
         if (wasTempTrackShowing && update)
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
@@ -2888,18 +3021,17 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             [_mapLayers.gpxRecMapLayer resetLayer];
         
         [helper runSyncBlock:^{
-            
-            const auto& doc = [helper.currentTrack getDocument];
-            if (doc != nullptr && [helper hasData])
+            OASGpxFile *gpxFile = helper.currentTrack;
+            if (gpxFile && [helper hasData])
             {
                 _recTrackShowing = YES;
                 
-                _gpxDocsRec.clear();
-                _gpxDocsRec << doc;
+                [_gpxFilesRec removeAllObjects];
+                [_gpxFilesRec addObject:gpxFile];
 
-                QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;
-                gpxDocs[QString::fromNSString(kCurrentTrack)] = doc;
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO];
+                NSMutableDictionary<NSString *, OASGpxFile *> *gpxFilesDic = [NSMutableDictionary dictionary];
+                gpxFilesDic[kCurrentTrack] = gpxFile;
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:[gpxFilesDic copy] reset:NO];
             }
         }];
     }
@@ -2911,60 +3043,67 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     {
         _recTrackShowing = NO;
         [_mapLayers.gpxRecMapLayer resetLayer];
-        _gpxDocsRec.clear();
+        [_gpxFilesRec removeAllObjects];
     }
 }
 
 
 - (void) keepTempGpxTrackVisible
 {
-    if (!_gpxDocFileTemp || _gpxDocsTemp.isEmpty())
+    if (!_gpxFilePathTemp || _gpxFilesTemp.count == 0)
         return;
 
-    std::shared_ptr<const OsmAnd::GpxDocument> doc = _gpxDocsTemp.first();
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxDocFileTemp];
-    NSString *path = gpx.absolutePath;
-    QString qPath = QString::fromNSString(path);
-    if (![[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:_gpxDocFileTemp])
+    OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxFilePathTemp];
+    NSString *path = gpx.file.absolutePath;
+    if (![[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:_gpxFilePathTemp])
     {
-        _selectedGpxHelper.activeGpx[qPath] = doc;
+        [_selectedGpxHelper addGpxFile:gpxFile for:path];
 
-        NSString *gpxDocFileTemp = _gpxDocFileTemp;
+        NSString *gpxGpxFilePathTemp = _gpxFilePathTemp;
         @synchronized(_rendererSync)
         {
             _tempTrackShowing = NO;
-            _gpxDocsTemp.clear();
-            _gpxDocFileTemp = nil;
+            [_gpxFilesTemp removeAllObjects];
+            _gpxFilePathTemp = nil;
         }
 
-        [[OAAppSettings sharedManager] showGpx:@[gpxDocFileTemp] update:NO];
+        [[OAAppSettings sharedManager] showGpx:@[gpxGpxFilePathTemp] update:NO];
     }
 }
 
-- (void) setWptData:(OASearchWptAPI *)wptApi
-{
+- (void)setWptData:(OASearchWptAPI *)wptApi {
     NSMutableArray *paths = [NSMutableArray array];
-    QList< std::shared_ptr<const OsmAnd::GpxDocument> > list;
-    auto activeGpx = _selectedGpxHelper.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-    {
-        if (it.value() == nullptr)
-            continue;
+    NSMutableArray *gpxDocs = [NSMutableArray array];
 
-        [paths addObject:it.key().toNSString()];
-        list << it.value();
+    for (NSString *key in _selectedGpxHelper.activeGpx.allKeys)
+    {
+        id value = _selectedGpxHelper.activeGpx[key];
+        if (value == nil)
+        {
+            continue;
+        }
+        
+        [paths addObject:key];
+        
+        [gpxDocs addObject:value];
     }
-    list << _gpxDocsRec;
-    [wptApi setWptData:list paths:paths];
+    
+    if (_gpxFilesRec && _gpxFilesRec.count > 0)
+    {
+        [gpxDocs addObjectsFromArray:_gpxFilesRec];
+    }
+    
+    [wptApi setWptData:[gpxDocs copy] paths:paths];
 }
 
-- (BOOL) hasWptAt:(CLLocationCoordinate2D)location
+- (BOOL)hasWptAt:(CLLocationCoordinate2D)location
 {
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     
     BOOL found = NO;
     
-    for (OAWptPt *wptItem in helper.currentTrack.points)
+    for (OASWptPt *wptItem in helper.currentTrack.getPointsList)
     {
         if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
         {
@@ -2976,34 +3115,37 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return YES;
     
     int i = 0;
-    auto activeGpx = _selectedGpxHelper.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
+    for (id key in activeGpx.allKeys)
     {
-		if (it.value() == nullptr)
-            continue;
-
-        const auto& doc = it.value();
-        for (auto& loc : doc->points)
+        OASGpxFile *value = activeGpx[key];
+        
+        if (value == nil)
         {
-            if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
-            {
-                found = YES;
-            }
+            continue;
         }
-        
-        if (found)
-            return YES;
-        
-        i++;
+        for (OASWptPt *pt in value.getPointsList) {
+            {
+                if ([OAUtilities isCoordEqual:pt.position.latitude srcLon:pt.position.longitude destLat:location.latitude destLon:location.longitude])
+                {
+                    found = YES;
+                }
+            }
+            
+            if (found)
+                return YES;
+            
+            i++;
+        }
     }
     
-    if (!_gpxDocsTemp.isEmpty())
+    if (_gpxFilesTemp.count != 0)
     {
-        const auto& doc = _gpxDocsTemp.first();
+        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
         
-        for (auto& loc : doc->points)
+        for (OASWptPt *loc in gpxFile.getPointsList)
         {
-            if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
+            if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
                 found = YES;
             }
@@ -3021,22 +3163,22 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return [self findWpt:location currentTrackOnly:NO];
 }
 
-- (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly
+- (BOOL)findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly
 {
-    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-
     BOOL found = NO;
+
+    OASGpxFile *currentTrack = OASavingTrackHelper.sharedInstance.currentTrack;
     NSMutableSet *groupSet = [NSMutableSet set];
-    QSet<QString> groups;
-    
-    for (OAWptPt *wptItem in helper.currentTrack.points)
+    NSMutableSet<NSString *> *groups = [NSMutableSet set];
+    for (OASWptPt *wptItem in currentTrack.getPointsList)
     {
-        if ([[[OASavingTrackHelper sharedInstance] getCurrentGPX].hiddenGroups containsObject:wptItem.type])
+        OASGpxUtilitiesPointsGroup *group = currentTrack.pointsGroups[wptItem.category];
+        if (group.isHidden)
             continue;
 
-        if (wptItem.type.length > 0)
-            [groupSet addObject:wptItem.type];
-        
+        if (wptItem.category.length > 0)
+            [groupSet addObject:wptItem.category];
+
         if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
         {
             self.foundWpt = wptItem;
@@ -3059,36 +3201,26 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (currentTrackOnly)
         return NO;
     
-    auto activeGpx = _selectedGpxHelper.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-    {
-        const auto& doc = it.value();
-        if (!doc || doc->points.isEmpty())
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
+    for (NSString *key in activeGpx.allKeys) {
+        OASGpxFile * doc = activeGpx[key];
+        
+        if (!doc || [doc getPointsList].count == 0) {
             continue;
+        }
 
-        NSString *gpxFilePath = [it.key().toNSString()
-                stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
-                                          withString:@""];
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
-        for (auto locIt = doc->points.begin(); locIt != doc->points.end(); ++locIt)
-        {
-            auto loc = *locIt;
-            if ([gpx.hiddenGroups containsObject:loc->type.toNSString()])
+        for (OASWptPt *loc in [doc getPointsList]) {
+            OASGpxUtilitiesPointsGroup *group = loc.category ? doc.pointsGroups[loc.category] : nil;
+            if (group && group.hidden)
                 continue;
 
-            if (!loc->type.isEmpty())
-                groups.insert(loc->type);
+            if (loc.category)
+                [groups addObject:loc.category];
 
-            if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
+            if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
-                OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
-                const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
-
-                OAWptPt *wptItem = [OAGPXDocument fetchWpt:w];
-                wptItem.wpt = w;
-                
-                self.foundWpt = wptItem;
-                self.foundWptDocPath = it.key().toNSString();
+                self.foundWpt = loc ? [[OASWptPt alloc] initWithWptPt:loc] : [[OASWptPt alloc] init];
+                self.foundWptDocPath = key;
                 
                 found = YES;
             }
@@ -3097,44 +3229,36 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (found)
         {
             NSMutableArray *groupList = [NSMutableArray array];
-            for (const auto& s : groups)
-                [groupList addObject:s.toNSString()];
+            for (NSString *s in groups)
+            {
+                [groupList addObject:s];
+            }
 
             self.foundWptGroups = groupList;
             return YES;
         }
         else
         {
-            groups.clear();
+            [groups removeAllObjects];
         }
     }
     
-    if (!_gpxDocsTemp.isEmpty())
+    if (_gpxFilesTemp.count != 0)
     {
-        const auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
-        OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:doc];
-        NSString *gpxFilePath = [document.path
-                stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
-                                          withString:@""];
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
-        for (auto& loc : doc->points)
-        {
-            if ([gpx.hiddenGroups containsObject:loc->type.toNSString()])
+        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
+        for (OASWptPt *loc in [gpxFile getPointsList]) {
+            NSString *locType = loc.category;
+            OASGpxUtilitiesPointsGroup *group = locType ? gpxFile.pointsGroups[locType] : nil;
+            if (group && group.hidden)
                 continue;
 
-            if (!loc->type.isEmpty())
-                groups.insert(loc->type);
-            
-            if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
+            if (locType)
+                [groups addObject:loc.category];
+
+            if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
-                OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
-                const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
-                
-                OAWptPt *wptItem = [OAGPXDocument fetchWpt:w];
-                wptItem.wpt = w;
-                
-                self.foundWpt = wptItem;
-                self.foundWptDocPath = _gpxDocFileTemp;
+                self.foundWpt = loc ? [[OASWptPt alloc] initWithWptPt:loc] : [[OASWptPt alloc] init];
+                self.foundWptDocPath = _gpxFilePathTemp;
                 
                 found = YES;
             }
@@ -3143,15 +3267,17 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (found)
         {
             NSMutableArray *groupList = [NSMutableArray array];
-            for (const auto& s : groups)
-                [groupList addObject:s.toNSString()];
+            for (NSString *s in groups)
+            {
+                [groupList addObject:s];
+            }
 
             self.foundWptGroups = groupList;
             return YES;
         }
         else
         {
-            groups.clear();
+            [groups removeAllObjects];
         }
     }
     
@@ -3166,7 +3292,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        
         [helper deleteWpt:self.foundWpt];
         
         // update map
@@ -3180,33 +3305,38 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
     else
     {
-        auto activeGpx = _selectedGpxHelper.activeGpx;
-        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-        {
-            if (it.value() == nullptr)
+        NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
+        for (NSString *key in activeGpx) {
+            OASGpxFile *value = activeGpx[key];
+            if (value == nil)
                 continue;
 
-            NSString *path = it.key().toNSString();
+            NSString *path = key;
             if ([path isEqualToString:self.foundWptDocPath])
             {
-                auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
+                OASGpxFile *gpxFile = value;
+                BOOL removed = [gpxFile deleteWptPtPoint:_foundWpt];
+                if (!removed)
+                {
+                      for (NSInteger i = 0; i < gpxFile.getPointsList.count; i++)
+                      {
+                          OASWptPt *w = gpxFile.getPointsList[i];
+                          if ([OAUtilities doublesEqualUpToDigits:5
+                                                          source:w.position.latitude
+                                                      destination:w.position.latitude] &&
+                              [OAUtilities doublesEqualUpToDigits:5
+                                                          source:w.position.longitude
+                                                      destination:w.position.longitude])
+                          {
+                              [gpxFile deleteWptPtPoint:w];
+                              break;
+                          }
+                      }
+                  }
                 
-                if (!doc->points.removeOne(_foundWpt.wpt))
-                    for (int i = 0; i < doc->points.count(); i++)
-                    {
-                        const auto& w = doc->points[i];
-                        if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:_foundWpt.wpt->position.latitude] &&
-                            [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:_foundWpt.wpt->position.longitude])
-                        {
-                            doc->points.removeAt(i);
-                            break;
-                        }
-                    }
-                
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-                
-                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
-                [[OAGPXDatabase sharedDb] save];
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:self.foundWptDocPath];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3230,7 +3360,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        
         [helper saveWpt:self.foundWpt];
 
         // update map
@@ -3242,33 +3371,35 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
     else
     {
-        auto activeGpx = _selectedGpxHelper.activeGpx;
-        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-        {
-            if (it.value() == nullptr)
-                continue;
+        NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
+        for (NSString *key in activeGpx) {
+            OASGpxFile *value = activeGpx[key];
 
-            NSString *path = it.key().toNSString();
+            if (value == nil)
+            {
+                continue;
+            }
+
+            NSString *path = key;
             if ([path isEqualToString:self.foundWptDocPath])
             {
-                auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
-
-                for (const auto& loc : doc->points)
-                {
-                    OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
-                    const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
-
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:self.foundWpt.position.latitude] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:self.foundWpt.position.longitude])
+                OASGpxFile *gpxFile = value;
+                for (NSInteger i = 0; i < gpxFile.getPointsList.count; i++) {
+                    OASWptPt *w = gpxFile.getPointsList[i];
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:self.foundWpt.lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:self.foundWpt.lon])
                     {
-                        [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
-                        [OAGPXDocument fillPointsGroup:self.foundWpt wptPtPtr:w doc:doc];
+                        OASWptPt *w = self.foundWpt ? [[OASWptPt alloc] initWithWptPt:self.foundWpt] : [[OASWptPt alloc] init];
+                        [gpxFile addPointPoint:w];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor:0]]];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor]]];
                         break;
                     }
                 }
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+                
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:self.foundWptDocPath];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3281,21 +3412,20 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return NO;
 }
 
-- (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(NSString *)gpxFileName
+- (BOOL) addNewWpt:(OASWptPt *)wpt gpxFileName:(NSString *)gpxFileName
 {
     if (!gpxFileName)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-
         [helper addWpt:wpt];
         self.foundWpt = wpt;
         self.foundWptDocPath = nil;
         
         NSMutableSet *groups = [NSMutableSet set];
-        for (OAWptPt *wptItem in helper.currentTrack.points)
+        for (OASWptPt *wptItem in helper.currentTrack.getPointsList)
         {
-            if (wptItem.type.length > 0)
-                [groups addObject:wptItem.type];
+            if (wptItem.category.length > 0)
+                [groups addObject:wptItem.category];
         }
         
         self.foundWptGroups = [groups allObjects];
@@ -3309,36 +3439,40 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
     else
     {
-        auto activeGpx = _selectedGpxHelper.activeGpx;
-        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-        {
-            if (it.value() == nullptr)
-                continue;
+        NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
+        for (NSString *key in activeGpx) {
+            OASGpxFile *value = activeGpx[key];
 
-            NSString *path = it.key().toNSString();
+            if (value == nil)
+            {
+                continue;
+            }
+
+            NSString *path = key;
             if ([path isEqualToString:gpxFileName])
             {
-                auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
-
-                std::shared_ptr<OsmAnd::GpxDocument::WptPt> w(new OsmAnd::GpxDocument::WptPt());
-                [OAGPXDocument fillWpt:w usingWpt:wpt];
-                [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
+                OASGpxFile *gpxFile = value;
+                
+                OASWptPt *w = wpt ? [[OASWptPt alloc] initWithWptPt:wpt] : [[OASWptPt alloc] init];
+                [gpxFile addPointPoint:w];
+                
                 OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
-                [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor:0]]];
-
-                doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+                [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
+                
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
 
                 self.foundWpt = wpt;
                 self.foundWptDocPath = gpxFileName;
-
-                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
-                [[OAGPXDatabase sharedDb] save];
                 
                 NSMutableSet *groups = [NSMutableSet set];
-                for (auto& loc : doc->points)
+                for (OASWptPt *loc in gpxFile.getPointsList)
                 {
-                    if (!loc->type.isEmpty())
-                        [groups addObject:loc->type.toNSString()];
+                    if (loc.category != nil)
+                    {
+                        [groups addObject:loc.category];
+                    }
                 }
                 
                 self.foundWptGroups = [groups allObjects];
@@ -3352,26 +3486,27 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             }
         }
         
-        if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
+        if ([_gpxFilePathTemp isEqualToString:[gpxFileName lastPathComponent]])
         {
-            auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
+            OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
+            
+            OASWptPt *w = wpt ? [[OASWptPt alloc] initWithWptPt:wpt] : [[OASWptPt alloc] init];
+            [gpxFile addPointPoint:w];
 
-            std::shared_ptr<OsmAnd::GpxDocument::WptPt> w(new OsmAnd::GpxDocument::WptPt());
-            [OAGPXDocument fillWpt:w usingWpt:wpt];
-            [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
             OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor:0]]];
-
-            doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-
-            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
-            [[OAGPXDatabase sharedDb] save];
+            [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
+            
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
+            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
             NSMutableSet *groups = [NSMutableSet set];
-            for (auto& loc : doc->points)
+            for (OASWptPt *loc in gpxFile.getPointsList)
             {
-                if (!loc->type.isEmpty())
-                    [groups addObject:loc->type.toNSString()];
+                if (loc.category != nil)
+                {
+                    [groups addObject:loc.category];
+                }
             }
             
             self.foundWptGroups = [groups allObjects];
@@ -3383,36 +3518,41 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return YES;
 }
 
-- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName groupName:(NSString *)groupName
+- (NSArray<OASWptPt *> *)getPointsOf:(NSString *)gpxFileName groupName:(NSString *)groupName
 {
-    OAGPXDocument *gpxDocument;
+    OASGpxFile *gpxDocument;
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     if (!gpxFileName)
     {
         gpxDocument = helper.currentTrack;
     }
-    else if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
+    else if ([_gpxFilePathTemp isEqualToString:[gpxFileName lastPathComponent]])
     {
-        gpxDocument = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first())];
+        gpxDocument = _gpxFilesTemp.firstObject;
     }
     else
     {
-        auto activeGpx = _selectedGpxHelper.activeGpx;
-        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-        {
-            if (it.value() == nullptr)
-                continue;
+        NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
+        for (NSString *key in activeGpx) {
+            OASGpxFile *value = activeGpx[key];
 
-            NSString *path = it.key().toNSString();
+            if (value == nil)
+            {
+                continue;
+            }
+
+
+            NSString *path = key;
+            
             if ([path isEqualToString:gpxFileName])
             {
-                gpxDocument = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
+                gpxDocument = value;
                 break;
             }
         }
     }
     if (gpxDocument)
-        return [gpxDocument.pointsGroups.allKeys containsObject:groupName] ? gpxDocument.pointsGroups[groupName].points : gpxDocument.points;
+        return [gpxDocument.pointsGroups.allKeys containsObject:groupName] ? gpxDocument.pointsGroups[groupName].points : gpxDocument.getPointsList;
     else
         return @[];
 }
@@ -3423,31 +3563,33 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return NO;
 
     BOOL found = NO;
-    auto activeGpx = _selectedGpxHelper.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-    {
-        if (it.value() == nullptr)
-            continue;
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
+    for (NSString *key in activeGpx) {
+        OASGpxFile *value = activeGpx[key];
 
-        NSString *path = it.key().toNSString();
+        if (value == nil)
+        {
+            continue;
+        }
+
+
+        NSString *path = key;
         if ([path isEqualToString:docPath])
         {
-            auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
+            OASGpxFile *gpxFile = value;
 
             for (OAGpxWptItem *item in items)
             {
-                for (const auto& loc : doc->points)
+                for (OASWptPt *loc in gpxFile.getPointsList)
                 {
-                    OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
-                    const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
-                    
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
                     {
-                        [OAGPXDocument fillWpt:w usingWpt:item.point];
-                        [OAGPXDocument fillPointsGroup:item.point wptPtPtr:w doc:doc];
+                        OASWptPt *w = [[OASWptPt alloc] initWithWptPt:item.point];
+                        [gpxFile addPointPoint:w];
+                        
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[item.point getColor:0]]];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
                         found = YES;
                         break;
                     }
@@ -3456,7 +3598,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             
             if (found)
             {
-                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
                 // update map
                 if (updateMap)
@@ -3471,24 +3615,23 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
     }
     
-    if (!_gpxDocsTemp.isEmpty())
+    if (_gpxFilesTemp.count != 0)
     {
-        auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
+        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
 
         for (OAGpxWptItem *item in items)
         {
-            for (const auto& loc : doc->points)
+            for (OASWptPt *loc in gpxFile.getPointsList)
             {
-                OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
-                const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
-                
-                if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
-                    [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
+                if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
+                    [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
                 {
-                    [OAGPXDocument fillWpt:w usingWpt:item.point];
-                    [OAGPXDocument fillPointsGroup:item.point wptPtPtr:w doc:doc];
+                    
+                    OASWptPt *w = [[OASWptPt alloc] initWithWptPt:item.point];
+                    [gpxFile addPointPoint:w];
+                    
                     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[item.point getColor:0]]];
+                    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
                     found = YES;
                     break;
                 }
@@ -3497,7 +3640,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         if (found)
         {
-            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
             // update map
             if (updateMap)
@@ -3511,57 +3656,48 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return found;
 }
 
-- (BOOL)updateMetadata:(OAMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath
+- (BOOL)updateMetadata:(OASMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath
 {
     if (!metadata)
         return NO;
     
-    auto activeGpx = _selectedGpxHelper.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-    {
-        if (it.value() == nullptr)
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
+    for (NSString *key in activeGpx) {
+        OASGpxFile *gpxFile = activeGpx[key];
+
+        if (gpxFile == nil)
             continue;
 
-        NSString *path = it.key().toNSString();
+        NSString *path = key;
         if ([path isEqualToString:oldPath])
         {
-            auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
-            OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *_meta = (OsmAnd::Ref<OsmAnd::GpxDocument::Metadata>*)&doc->metadata;
-            std::shared_ptr<OsmAnd::GpxDocument::Metadata> m = _meta->shared_ptr();
-            
-            if (m == nullptr)
-            {
-                m.reset(new OsmAnd::GpxDocument::Metadata());
-                doc->metadata = m;
-            }
-            
-            [OAGPXDocument fillMetadata:m usingMetadata:metadata];
+            gpxFile.metadata = [[OASMetadata alloc] initWithSource:metadata];
 
-            _selectedGpxHelper.activeGpx.remove(QString::fromNSString(oldPath));
-            _selectedGpxHelper.activeGpx[QString::fromNSString(docPath)] = doc;
-            
-            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-            
+            [_selectedGpxHelper removeGpxFileWith:oldPath];
+            [_selectedGpxHelper addGpxFile:gpxFile for:docPath];
+
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+            if (!exception) {
+                NSLog(@"writeGpxFileFile is true");
+            } else {
+                NSLog(@"writeGpxFileFile is false");
+            }
+
             return YES;
         }
     }
     
-    if (!_gpxDocsTemp.isEmpty())
+    if (_gpxFilesTemp.count != 0)
     {
-        auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
-        OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *_meta = (OsmAnd::Ref<OsmAnd::GpxDocument::Metadata>*)&doc->metadata;
-        std::shared_ptr<OsmAnd::GpxDocument::Metadata> m = _meta->shared_ptr();
-        
-        if (m == nullptr)
-        {
-            m.reset(new OsmAnd::GpxDocument::Metadata());
-            doc->metadata = m;
-        }
+        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
+        gpxFile.metadata = [[OASMetadata alloc] initWithSource:metadata];
 
-        [OAGPXDocument fillMetadata:m usingMetadata:metadata];
-        
-        doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-        
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+        gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+
         return YES;
     }
     
@@ -3586,26 +3722,30 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
 
     BOOL found = NO;
-    auto activeGpx = _selectedGpxHelper.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-    {
-        if (it.value() == nullptr)
-            continue;
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
+    for (NSString *key in activeGpx) {
+        OASGpxFile *value = activeGpx[key];
 
-        NSString *path = it.key().toNSString();
+        if (value == nil)
+        {
+            continue;
+        }
+
+
+        NSString *path = key;
         if ([path isEqualToString:docPath])
         {
-            auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
+            OASGpxFile *gpxFile = value;
 
             for (OAGpxWptItem *item in items)
             {
-                for (int i = 0; i < doc->points.count(); i++)
+                for (int i = 0; i < gpxFile.getPointsList.count; i++)
                 {
-                    const auto& w = doc->points[i];
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
+                    OASWptPt *w = gpxFile.getPointsList[i];
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:item.point.lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:item.point.lon])
                     {
-                        doc->points.removeAt(i);
+                        [gpxFile deleteWptPtPoint:w];
                         found = YES;
                         break;
                     }
@@ -3614,10 +3754,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             
             if (found)
             {
-                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-
-                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
-                [[OAGPXDatabase sharedDb] save];
+                
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3629,19 +3769,19 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
     }
 
-    if (!_gpxDocsTemp.isEmpty())
+    if (_gpxFilesTemp.count != 0)
     {
-        auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
+        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
 
         for (OAGpxWptItem *item in items)
         {
-            for (int i = 0; i < doc->points.count(); i++)
+            for (int i = 0; i < gpxFile.getPointsList.count; i++)
             {
-                const auto& w = doc->points[i];
-                if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
-                    [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
+                OASWptPt *w = gpxFile.getPointsList[i];
+                if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:item.point.lat] &&
+                    [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:item.point.lon])
                 {
-                    doc->points.removeAt(i);
+                    [gpxFile deleteWptPtPoint:w];
                     found = YES;
                     break;
                 }
@@ -3650,10 +3790,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         if (found)
         {
-            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-
-            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
-            [[OAGPXDatabase sharedDb] save];
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
             // update map
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -3669,22 +3808,28 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (void) initRendererWithGpxTracks
 {
-    QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
-    if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
+    NSMutableDictionary<NSString *, OASGpxFile *> *gpxFilesDic = [NSMutableDictionary dictionary];
+    if (_selectedGpxHelper.activeGpx.allKeys.count > 0 || _gpxFilesTemp.count > 0)
     {
-        auto activeGpx = _selectedGpxHelper.activeGpx;
-        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-        {
-            if (it.value())
-                docs[it.key()] = it.value();
+        NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [_selectedGpxHelper.activeGpx mutableCopy];
+        for (NSString *key in activeGpx.allKeys) {
+            OASGpxFile *gpxFile = activeGpx[key];
+            if (gpxFile)
+            {
+                gpxFilesDic[key] = gpxFile;
+            }
         }
-        if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
-            docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
+        if (_gpxFilePathTemp && _gpxFilesTemp.count > 0)
+        {
+            gpxFilesDic[_gpxFilePathTemp] = _gpxFilesTemp.firstObject;
+        }
     }
-    [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
+    [_mapLayers.gpxMapLayer refreshGpxTracks:gpxFilesDic reset:YES];
+    
+    [_gpxTracksRefreshedObservable notifyEvent];
 }
 
-- (void) refreshGpxTracks
+- (void)refreshGpxTracks
 {
     @synchronized(_rendererSync)
     {
@@ -3705,7 +3850,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (NSDictionary<NSString *, NSNumber *> *) getGpxColors
 {
     const auto &gpxColorsMap = _mapPresentationEnvironment->getGpxColors();
-    NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary dictionary];
     QHashIterator<QString, int> it(gpxColorsMap);
     while (it.hasNext()) {
         it.next();
@@ -3721,7 +3866,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     auto gpxWidthMap = _mapPresentationEnvironment->getGpxWidth();
     if (gpxWidthMap.isEmpty())
         gpxWidthMap = _app.defaultRenderer->getGpxWidth();
-    NSMutableDictionary<NSString *, NSArray<NSNumber *> *> *result = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, NSArray<NSNumber *> *> *result = [NSMutableDictionary dictionary];
     QHashIterator<QString, QList<int>> it(gpxWidthMap);
     while (it.hasNext()) {
         it.next();
@@ -3739,24 +3884,24 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName
 {
-    if (_mapPresentationEnvironment)
-    {
-        NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
-        QHash<QString, int> renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
-        QHashIterator<QString, int> it(renderingAttrs);
-        while (it.hasNext()) {
-            it.next();
-            NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
-            NSNumber *value = @(it.value());
-            if (value.intValue == -1)
-                continue;
-            
-            [result setObject:value forKey:key];
+    @synchronized(_rendererSync) {
+        if (_mapPresentationEnvironment)
+        {
+            NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
+            QHash<QString, int> renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
+            QHashIterator<QString, int> it(renderingAttrs);
+            while (it.hasNext()) {
+                it.next();
+                NSString *key = 0 == it.key().length() ? @"" : it.key().toNSString();
+                NSNumber *value = @(it.value());
+                
+                [result setObject:value forKey:key];
+            }
+            return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];
         }
-        return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];
+        else
+            return nil;
     }
-    else
-        return nil;
 }
 
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings
@@ -3792,7 +3937,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
     if (!OARoutingHelper.sharedInstance.isPublicTransportMode)
-        [_mapLayers.routeMapLayer refreshRoute];
+        [_mapLayers.routeMapLayer refreshRoute:NO];
 }
 
 #pragma mark - OARouteInformationListener
@@ -3820,26 +3965,27 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (!helper.isPublicTransportMode)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error preferredStyle:UIAlertControllerStyleAlert];
-                [alertController addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-                [self presentViewController:alertController animated:YES completion:nil];
+                if (_isCarPlayActive)
+                {
+                    [[UIApplication sharedApplication].carPlaySceneDelegate showAlertWithTitle:error];
+                }
+                else
+                {
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error preferredStyle:UIAlertControllerStyleAlert];
+                    [alertController addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+                    [self presentViewController:alertController animated:YES completion:nil];
+                }
             });
         }
     }
     
-    @synchronized(_rendererSync)
-    {
+    dispatch_async(dispatch_get_main_queue(), ^{
         [_mapLayers.routeMapLayer refreshRoute];
-    }
-    if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (![self isDisplayedInCarPlay])
-            {
-                [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) animated:NO];
-            }
-        });
-    }
+        if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
+            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) 
+                                                                      bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
+                                                                         animated:NO];
+    });
 }
 
 - (void) routeWasUpdated
@@ -3920,6 +4066,41 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     QList<float> heights;
     _geoTiffCollection->calculateHeights(OsmAnd::ZoomLevel14, _mapView.elevationDataTileSize, points, heights);
     return heights;
+}
+
+- (void)fitTrackOnMap:(LineChartView *)lineChartView
+             startPos:(double)startPos
+               endPos:(double)endPos
+             location:(CLLocationCoordinate2D)location
+             forceFit:(BOOL)forceFit
+             analysis:(OASGpxTrackAnalysis *)analysis
+              segment:(OASTrkSegment *)segment
+     trackChartHelper:(TrackChartHelper *)trackChartHelper
+{
+    OASKQuadRect *rect = [trackChartHelper getRect:lineChartView
+                                          startPos:startPos
+                                            endPos:endPos
+                                          analysis:analysis
+                                           segment:segment];
+    if (rect.left != 0 && rect.right != 0)
+    {
+        auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
+        CGPoint mapPoint;
+        [self.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
+
+        if (forceFit && trackChartHelper.delegate)
+        {
+            [trackChartHelper.delegate centerMapOnBBox:rect];
+        }
+        else if (CLLocationCoordinate2DIsValid(location)
+                 && !CGRectContainsPoint(trackChartHelper.screenBBox, mapPoint))
+        {
+            if (!trackChartHelper.isLandscape && trackChartHelper.delegate)
+                [trackChartHelper.delegate adjustViewPort:trackChartHelper.isLandscape];
+            [self goToPosition:[OANativeUtilities convertFromPointI:point]
+                      animated:YES];
+        }
+    }
 }
 
 @end

@@ -9,8 +9,9 @@
 #import "OAMapSettingsPreferredLanguageScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OAValueTableViewCell.h"
-#include "Localization.h"
-
+#import "Localization.h"
+#import "OAObservable.h"
+#import "OsmAndApp.h"
 
 @implementation OAMapSettingsPreferredLanguageScreen
 {
@@ -81,7 +82,7 @@
 
     NSString *lang = @"en";
     BOOL isSelected = (prefLang && [prefLang isEqualToString:lang]);
-    NSString *langName = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang] capitalizedStringWithLocale:[NSLocale currentLocale]];
+    NSString *langName = [[OAUtilities displayNameForLang:lang] capitalizedStringWithLocale:[NSLocale currentLocale]];
     [arr insertObject:@{@"name": langName, @"value": lang, @"img": (isSelected ? @"menu_cell_selected.png" : @"")} atIndex:1];
 
     _data = [NSArray arrayWithArray:arr];

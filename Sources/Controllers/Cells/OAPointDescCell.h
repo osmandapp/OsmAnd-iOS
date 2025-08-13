@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAPOI.h"
 
 @interface OAPointDescCell : UITableViewCell
 
@@ -20,6 +21,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *timeIcon;
 @property (nonatomic) IBOutlet NSLayoutConstraint *distanceViewLeadingOutlet;
 
-- (void) updateOpeningTimeInfo;
+- (void) updateOpeningTimeInfo:(OAPOI *)poi;
 
 @end

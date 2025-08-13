@@ -10,6 +10,7 @@
 #import "OAPOI.h"
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <openingHoursParser.h>

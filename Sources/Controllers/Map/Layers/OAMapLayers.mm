@@ -7,11 +7,13 @@
 //
 
 #import "OAMapLayers.h"
-
+#import "OAObservable.h"
+#import "OsmAndApp.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAPlugin.h"
 #import "OAPluginsHelper.h"
+#import "OAAutoObserverProxy.h"
 
 @implementation OAMapLayers
 {
@@ -19,6 +21,7 @@
     OAMapRendererView *_mapView;
     
     NSMapTable<NSString *, OAMapLayer *> *_layers;
+    OAAutoObserverProxy *_backgroundStateObserver;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController
@@ -42,7 +45,7 @@
     _myPositionLayer = [[OAMyPositionLayer alloc] initWithMapViewController:_mapViewController baseOrder:-206000];
     [self addLayer:_myPositionLayer];
 
-    _destinationsLayer = [[OADestinationsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-207000];
+    _destinationsLayer = [[OADestinationsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-205000];
     [self addLayer:_destinationsLayer];
 
     _contextMenuLayer = [[OAContextMenuLayer alloc] initWithMapViewController:_mapViewController baseOrder:-210000];
@@ -65,6 +68,12 @@
 
     _gpxRecMapLayer = [[OAGPXRecLayer alloc] initWithMapViewController:_mapViewController baseOrder:-110000];
     [self addLayer:_gpxRecMapLayer];
+    
+    _networkRouteSelectionLayer = [[OANetworkRouteSelectionLayer alloc] initWithMapViewController:_mapViewController baseOrder:190000];
+    [self addLayer:_networkRouteSelectionLayer];
+    
+    _travelSelectionLayer = [[OATravelSelectionLayer alloc] initWithMapViewController:_mapViewController baseOrder:190000];
+    [self addLayer:_travelSelectionLayer];
 
     _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:200000 pointsOrder:-150000];
     [self addLayer:_routeMapLayer];
@@ -108,15 +117,36 @@
     _weatherContourLayer = [[OAWeatherContourLayer alloc] initWithMapViewController:_mapViewController layerIndex:30 date:_weatherDate];
     [self addLayer:_weatherContourLayer];
     
+    _coordinatesGridLayer = [[OACoordinatesGridLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
+    [self addLayer:_coordinatesGridLayer];
+    
     [OAPluginsHelper createLayers];
+
+    _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onBackgroundStateChanged)
+                                                          andObserve:OsmAndApp.instance.backgroundStateObservable];
 }
 
 - (void) destroyLayers
 {
+    if (_backgroundStateObserver)
+    {
+        [_backgroundStateObserver detach];
+        _backgroundStateObserver = nil;
+    }
+
     for (OAMapLayer *layer in _layers.objectEnumerator)
         [layer deinitLayer];
 
     [_layers removeAllObjects];
+}
+
+- (void) onBackgroundStateChanged
+{
+    if (!OsmAndApp.instance.isInBackground)
+        for (OAMapLayer *layer in _layers.objectEnumerator)
+            if (layer.invalidated)
+                [layer updateLayer];
 }
 
 - (NSArray<OAMapLayer *> *) getLayers
@@ -148,6 +178,15 @@
     [_weatherLayerLow updateDate:date];
     [_weatherLayerHigh updateDate:date];
     [_weatherContourLayer updateDate:date];
+}
+
+- (void) updateWeatherLayers
+{
+    [_weatherLayerLow updateWeatherLayer];
+    [_weatherLayerHigh updateWeatherLayer];
+    [_mapViewController runWithRenderSync:^{
+        [_weatherContourLayer updateLayer];
+    }];
 }
 
 - (void) addLayer:(OAMapLayer *)layer

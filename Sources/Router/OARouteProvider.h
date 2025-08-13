@@ -18,10 +18,11 @@
 #import "OAResultMatcher.h"
 #import "OALocationSimulation.h"
 #import "MissingMapsCalculator.h"
+#import "OAGpxApproximationParams.h"
 
 #include <OsmAndCore.h>
 
-@class OAGPXDocument, OARouteCalculationResult, OAApplicationMode, OALocationsHolder, OAGpxRouteApproximation;
+@class OASGpxFile, OARouteCalculationResult, OAApplicationMode, OALocationsHolder, OAGpxRouteApproximation;
 struct RoutingConfiguration;
 struct RoutingConfigurationBuilder;
 struct GeneralRouter;
@@ -55,7 +56,7 @@ struct PrecalculatedRouteDirection;
 
 @end
 
-@class OAWptPt, OARouteDirectionInfo, OARouteCalculationParams;
+@class OASWptPt, OARouteDirectionInfo, OARouteCalculationParams;
 
 struct RouteSegmentResult;
 
@@ -70,10 +71,12 @@ struct RouteSegmentResult;
 @property (nonatomic) BOOL useIntermediatePointsRTE;
 @property (nonatomic) BOOL connectPointsStraightly;
 @property (nonatomic) BOOL reverse;
+@property (nonatomic) OASGpxFile *gpxFile;
+@property (nonatomic) OAGpxApproximationParams *approximationParams;
 @property (nonatomic) NSArray<id<OALocationPoint>> *wpt;
 @property (nonatomic, readonly) NSArray<CLLocation *> *segmentEndPoints;
 @property (nonatomic) std::vector<std::shared_ptr<RouteSegmentResult>> route;
-@property (nonatomic, readonly) NSArray<OAWptPt *> *routePoints;
+@property (nonatomic, readonly) NSArray<OASWptPt *> *routePoints;
     
 @property (nonatomic) BOOL addMissingTurns;
     
@@ -81,7 +84,7 @@ struct RouteSegmentResult;
 
 @interface OAGPXRouteParamsBuilder : NSObject
 
-@property (nonatomic, readonly) OAGPXDocument *file;
+@property (nonatomic, readonly) OASGpxFile *file;
 
 @property (nonatomic) BOOL calculateOsmAndRoute;
 @property (nonatomic) BOOL reverse;
@@ -91,25 +94,29 @@ struct RouteSegmentResult;
 @property (nonatomic) BOOL useIntermediatePointsRTE;
 @property (nonatomic) BOOL connectPointsStraightly;
 @property (nonatomic) NSInteger selectedSegment;
+@property (nonatomic) OAGpxApproximationParams *approximationParams;
 
-- (instancetype)initWithDoc:(OAGPXDocument *)document;
+- (instancetype)initWithDoc:(OASGpxFile *)document;
+- (instancetype)initWithFile:(OASGpxFile *)gpxFile params:(OAGPXRouteParams *)params;
 
 - (OAGPXRouteParams *) build:(CLLocation *)start;
 - (NSArray<CLLocation *> *) getPoints;
 - (NSArray<OASimulatedLocation *> *)getSimulatedLocations;
+- (void)setApproximationParams:(OAGpxApproximationParams *)approximationParams;
 
 @end
 
 @interface OARouteProvider : NSObject
 
-+ (CLLocation *) createLocation:(OAWptPt *)pt;
-+ (NSArray<CLLocation *> *) locationsFromWpts:(NSArray<OAWptPt *> *)wpts;
++ (CLLocation *) createLocation:(OASWptPt *)pt;
++ (NSArray<CLLocation *> *) locationsFromWpts:(NSArray<OASWptPt *> *)wpts;
 
 - (OARouteCalculationResult *) calculateRouteImpl:(OARouteCalculationParams *)params;
 - (OARouteCalculationResult *) recalculatePartOfflineRoute:(OARouteCalculationResult *)res params:(OARouteCalculationParams *)params;
 
+- (void) runSyncWithNativeRouting:(void (^)(void))runBlock;
+
 - (void) checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY;
-- (void)checkInitializedForZoomLevelWithEmptyRect:(OsmAnd::ZoomLevel)zoomLevel;
 
 - (std::shared_ptr<RoutingConfiguration>) initOsmAndRoutingConfig:(std::shared_ptr<RoutingConfigurationBuilder>)config params:(OARouteCalculationParams *)params generalRouter:(std::shared_ptr<GeneralRouter>)generalRouter;
 
@@ -122,7 +129,7 @@ struct RouteSegmentResult;
 												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
 + (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
-                                                                 gpxFile:(OAGPXDocument *)gpxFile
+                                                                 gpxFile:(OASGpxFile *)gpxFile
                                                         segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
                                                          selectedSegment:(NSInteger)selectedSegment;
 

@@ -45,16 +45,19 @@
     
     OABackupHelper *_backupHelper;
     OANetworkSettingsHelper *_settingsHelper;
-    
+    float _syncProgress;
+
     EOARecentChangesType _startType;
     NSInteger _prevTab;
 }
 
-- (instancetype) initWithType:(EOARecentChangesType)type
+- (instancetype) initWithType:(EOARecentChangesType)type syncProgress:(float)syncProgress
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _startType = type;
+        _syncProgress = syncProgress;
         _settingsHelper = [OANetworkSettingsHelper sharedInstance];
         _backupHelper = OABackupHelper.sharedInstance;
         [self setupNotificationListeners];
@@ -100,7 +103,7 @@
     _controllers = [NSMutableArray array];
     for (EOARecentChangesType i = 0; i <= EOARecentChangesConflicts; i++)
     {
-        [_controllers addObject:[[OAStatusBackupTableViewController alloc] initWithTableType:i]];
+        [_controllers addObject:[[OAStatusBackupTableViewController alloc] initWithTableType:i syncProgress:_syncProgress]];
     }
     [self setupPageController];
     _segmentControl.selectedSegmentIndex = _startType;
@@ -226,15 +229,9 @@
 - (NSString *)generateTimeString:(long)timeMs summary:(NSString *)summary
 {
     if (timeMs != -1)
-    {
-        NSString *time = [OAOsmAndFormatter getFormattedPassedTime:(timeMs / 1000)
-                                                               def:OALocalizedString(@"shared_string_never")];
-        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, time];
-    }
+        return [OABackupUiUtils generateTimeStringWithSummary:summary time:timeMs / 1000];
     else
-    {
         return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, OALocalizedString(@"shared_string_never")];
-    }
 }
 
 - (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary

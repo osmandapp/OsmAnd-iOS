@@ -13,6 +13,7 @@
 #import "OASearchPhrase.h"
 #import "OASearchWord.h"
 #import "OASearchSettings.h"
+#import "OASearchResult+cpp.h"
 #import "OAAtomicInteger.h"
 #import "OASearchCoreAPI.h"
 #import "OAPOIHelper.h"
@@ -22,6 +23,7 @@
 #import "OACustomSearchPoiFilter.h"
 #import "OAPOIBaseType.h"
 #import "OAStreet.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -84,7 +86,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         __weak OASearchResultComparator *weakSelf = self;
         _comparator = ^NSComparisonResult(OASearchResult * _Nonnull o1, OASearchResult * _Nonnull o2)
         {
-            for(NSNumber *stepN in compareStepValues)
+            for (NSNumber *stepN in compareStepValues)
             {
                 EOAResultCompareStep step = (EOAResultCompareStep) stepN.integerValue;
                 NSComparisonResult r = [weakSelf compare:o1 o2:o2 comparator:weakSelf step:step];
@@ -98,7 +100,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 }
 
 // -1 - means 1st is less (higher) than 2nd
--(NSComparisonResult) compare:(OASearchResult *)o1 o2:(OASearchResult *)o2 comparator:(OASearchResultComparator *)c step:(EOAResultCompareStep)step
+- (NSComparisonResult) compare:(OASearchResult *)o1 o2:(OASearchResult *)o2 comparator:(OASearchResultComparator *)c step:(EOAResultCompareStep)step
 {
     switch(step)
     {
@@ -192,11 +194,11 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         {
             NSString *localeName1 = o1.localeName == nil ? @"" : o1.localeName;
             NSString *localeName2 = o2.localeName == nil ? @"" : o2.localeName;
-
+            
             int cmp = OsmAnd::ICU::ccompare(QString::fromNSString(localeName1), QString::fromNSString(localeName2));
             if (cmp != 0)
                 return (NSComparisonResult)cmp;
-
+            
             break;
         }
         case EOACompareByDistance:
@@ -279,7 +281,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 - (OASearchResultCollection *) combineWithCollection:(OASearchResultCollection *)collection resort:(BOOL)resort removeDuplicates:(BOOL)removeDuplicates
 {
     OASearchResultCollection *src = [[OASearchResultCollection alloc] initWithPhrase:_phrase];
-    [src addSearchResults:_searchResults resortAll:false removeDuplicates:false];
+    [src addSearchResults:_searchResults resortAll:NO removeDuplicates:NO];
     [src addSearchResults:[collection getSearchResults] resortAll:resort removeDuplicates:removeDuplicates];
     return src;
 }
@@ -401,11 +403,33 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     [lst removeObjectsInArray:remove];
 }
 
++ (long) getOsmId:(std::shared_ptr<const OsmAnd::Amenity>)amenity
+{
+    OsmAnd::ObfObjectId initAmenityId = amenity->id;
+    uint64_t amenityId;
+    if (initAmenityId.isShiftedID())
+        return initAmenityId.getOsmId();
+    else
+        return initAmenityId.makeAmenityRightShift();
+}
+
++ (QString)getAdditionalInfo:(std::shared_ptr<const OsmAnd::Amenity>)amenity key:(QString)key
+{
+    QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
+    return decodedValues.value(key); // Returns empty QString if not found
+}
+
 - (BOOL) sameSearchResult:(OASearchResult *)r1 r2:(OASearchResult *)r2
 {
+    BOOL isSameType = r1.objectType == r2.objectType;
+    if (isSameType)
+    {
+        if (r1.objectType == EOAObjectTypeIndexItem || r1.objectType == EOAObjectTypeGpxTrack)
+            return [r1.localeName isEqualToString:r2.localeName];
+    }
     if (r1.location && r2.location && ![OAObjectType isTopVisible:r1.objectType] && ![OAObjectType isTopVisible:r2.objectType])
     {
-        if (r1.objectType == r2.objectType && r1.objectType == STREET)
+        if (r1.objectType == r2.objectType && r1.objectType == EOAObjectTypeStreet)
         {
             OAStreet *st1 = (OAStreet *) r1.object;
             OAStreet *st2 = (OAStreet *) r2.object;
@@ -413,11 +437,11 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             return fabs(st1.latitude - st2.latitude) < 0.00001 && fabs(st1.longitude - st2.longitude) < 0.00001;
         }
         std::shared_ptr<const OsmAnd::Amenity> a1;
-        if (r1.objectType == POI)
+        if (r1.objectType == EOAObjectTypePoi)
             a1 = r1.amenity;
 
         std::shared_ptr<const OsmAnd::Amenity> a2;
-        if (r2.objectType == POI)
+        if (r2.objectType == EOAObjectTypePoi)
             a2 = r2.amenity;
 
         if ([r1.localeName isEqualToString:r2.localeName])
@@ -426,7 +450,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             if (a1 && a2)
             {
                 // here 2 points are amenity
-                BOOL isEqualId = a1->id.id == a2->id.id;
+                BOOL isEqualId = [OASearchResultCollection getOsmId:a1] == [OASearchResultCollection getOsmId:a2];
                 if (isEqualId && ([FILTER_DUPLICATE_POI_SUBTYPE containsObject:a1->subType.toNSString()] || [FILTER_DUPLICATE_POI_SUBTYPE containsObject:a2->subType.toNSString()]))
                     return true;
                 else if (a1->type != a2->type)
@@ -443,6 +467,10 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
                     {
                         similarityRadius = 50000;
                     }
+                    QString routeId = [OASearchResultCollection getAdditionalInfo:a1 key:"route_id"];
+                    if (!routeId.isEmpty() && routeId == [OASearchResultCollection getAdditionalInfo:a2 key:"route_id"]) {
+                        similarityRadius = 1000000;
+                    }
                 }
             }
             else if([OAObjectType isAddress:r1.objectType] && [OAObjectType isAddress:r2.objectType])
@@ -454,7 +482,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     }
     else if (r1.object && r2.object)
     {
-        return r1.object == r2.object;
+        return [r1.object isEqual:r2.object];
     }
     return false;
 }

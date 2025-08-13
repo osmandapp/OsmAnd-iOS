@@ -9,6 +9,7 @@
 #import "OARouteTargetViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapActions.h"
 #import "OARTargetPoint.h"
 #import "OAPointDescription.h"

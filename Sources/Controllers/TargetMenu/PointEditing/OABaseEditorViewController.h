@@ -8,7 +8,7 @@
 
 #import "OABaseNavbarSubviewViewController.h"
 
-@class OAGPXAppearanceCollection, OATextInputFloatingCell, OAColorItem;
+@class OAGPXAppearanceCollection, OATextInputFloatingCell, OAColorItem, PoiIconCollectionHandler;
 
 @protocol OAEditorDelegate <NSObject>
 
@@ -44,5 +44,8 @@
 - (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint
                                              text:(NSString *)text
                                               tag:(NSInteger)tag;
+- (BOOL)isAppearanceChanged;
+
+- (PoiIconCollectionHandler *) getPoiIconCollectionHandler;
 
 @end

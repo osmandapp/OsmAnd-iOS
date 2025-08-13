@@ -41,6 +41,7 @@ unsigned int OAWeatherHttpRequestResult::getHttpStatusCode() const
 
 OAWeatherWebClient::OAWeatherWebClient()
 {
+    _activeRequestsCounter = [[OAAtomicInteger alloc] initWithInteger:0];
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     sessionConfiguration.timeoutIntervalForRequest = 300.0;
     sessionConfiguration.timeoutIntervalForResource = 600.0;
@@ -95,11 +96,13 @@ long long OAWeatherWebClient::downloadFile(
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         NSURLSessionDataTask *task = [_urlSession dataTaskWithRequest:request completionHandler:^(NSData *_data, NSURLResponse *_response, NSError *_error)
                 {
+                    [NSNotificationCenter.defaultCenter postNotificationName:kOAWeatherWebClientNotificationKey object:@([_activeRequestsCounter decrementAndGet])];
                     response = _response;
                     error = _error;
                     dispatch_semaphore_signal(semaphore);
                 }
         ];
+        [NSNotificationCenter.defaultCenter postNotificationName:kOAWeatherWebClientNotificationKey object:@([_activeRequestsCounter incrementAndGet])];
         [task resume];
 
         if (dataRequest.queryController)
@@ -156,12 +159,15 @@ long long OAWeatherWebClient::downloadFile(
         semaphore = dispatch_semaphore_create(0);
         task = [_urlSession dataTaskWithRequest:request completionHandler:^(NSData *_data, NSURLResponse *_response, NSError *_error)
                 {
+                    [NSNotificationCenter.defaultCenter postNotificationName:kOAWeatherWebClientNotificationKey object:@([_activeRequestsCounter decrementAndGet])];
                     response = _response;
                     data = _data;
                     error = _error;
                     dispatch_semaphore_signal(semaphore);
                 }
         ];
+        
+        [NSNotificationCenter.defaultCenter postNotificationName:kOAWeatherWebClientNotificationKey object:@([_activeRequestsCounter incrementAndGet])];
         [task resume];
 
         if (dataRequest.queryController)

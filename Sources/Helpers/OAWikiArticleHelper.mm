@@ -8,13 +8,18 @@
 
 #import "OAWikiArticleHelper.h"
 #import "OAWikiArticleHelper+cpp.h"
+#import "OADownloadsManager.h"
 #import "OAWorldRegion.h"
 #import "OsmAndApp.h"
 #import "OAManageResourcesViewController.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
+#import "OAAmenitySearcher.h"
+#import "OAAmenitySearcher+cpp.h"
 #import "OAPOI.h"
 #import "OAWikiWebViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAWikiLanguagesWebViewContoller.h"
@@ -92,7 +97,7 @@
                     if (app.resourcesManager->isResourceInstalled(repository.resourceId))
                     {
                         OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
-                        NSArray<OAPOI *> *wikiPoints = [OAPOIHelper findPOIsByTagName:nil name:_name location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil bboxTopLeft:worldRegion.bboxTopLeft bboxBottomRight:worldRegion.bboxBottomRight];
+                        NSArray<OAPOI *> *wikiPoints = [OAAmenitySearcher findPOIsByTagName:nil name:_name location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil bboxTopLeft:worldRegion.bboxTopLeft bboxBottomRight:worldRegion.bboxBottomRight];
                         
                         [results addObjectsFromArray:wikiPoints];
                         if (results.count > 0)

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -30,6 +31,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="3tn-RM-SyI"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="473" y="30"/>
         </view>
@@ -43,14 +45,14 @@
                     <color key="backgroundColor" name="navBarBgColorPrimary"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GyD-G4-fRJ">
-                    <rect key="frame" x="8" y="20" width="44" height="44"/>
+                    <rect key="frame" x="4" y="20" width="44" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="44" id="Y5G-s2-Lsx"/>
                         <constraint firstAttribute="height" constant="44" id="qVh-1y-ilE"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <color key="tintColor" name="navBarTextColorPrimary"/>
-                    <state key="normal" image="ic_navbar_chevron.png">
+                    <state key="normal" image="ic_navbar_chevron">
                         <color key="titleColor" name="navBarTextColorPrimary"/>
                     </state>
                     <connections>
@@ -58,7 +60,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9PD-kS-B6G">
-                    <rect key="frame" x="256" y="20" width="64" height="44"/>
+                    <rect key="frame" x="252" y="20" width="64" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="64" identifier="buttonWidth" id="XQw-1X-Kaf"/>
                         <constraint firstAttribute="height" constant="44" id="lAG-0H-7i4"/>
@@ -73,7 +75,7 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Map" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ouI-Rn-ohE">
-                    <rect key="frame" x="52" y="20" width="204" height="44"/>
+                    <rect key="frame" x="48" y="20" width="204" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="JWV-1H-Kw9"/>
                     </constraints>
@@ -82,13 +84,14 @@
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="NyU-rs-st6"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="9PD-kS-B6G" secondAttribute="trailing" id="03w-Pz-ewY"/>
+                <constraint firstItem="NyU-rs-st6" firstAttribute="trailing" secondItem="9PD-kS-B6G" secondAttribute="trailing" constant="4" id="03w-Pz-ewY"/>
                 <constraint firstAttribute="bottom" secondItem="ouI-Rn-ohE" secondAttribute="bottom" id="7R6-W6-eIs"/>
                 <constraint firstAttribute="bottom" secondItem="GyD-G4-fRJ" secondAttribute="bottom" id="Jrf-0T-c97"/>
                 <constraint firstItem="ouI-Rn-ohE" firstAttribute="leading" secondItem="GyD-G4-fRJ" secondAttribute="trailing" id="UiA-x0-qUO"/>
                 <constraint firstItem="9PD-kS-B6G" firstAttribute="leading" secondItem="ouI-Rn-ohE" secondAttribute="trailing" id="YcT-2Q-SBT"/>
-                <constraint firstItem="GyD-G4-fRJ" firstAttribute="leading" secondItem="ykD-3k-wDP" secondAttribute="leading" constant="8" id="hGJ-o0-ouV"/>
+                <constraint firstItem="GyD-G4-fRJ" firstAttribute="leading" secondItem="NyU-rs-st6" secondAttribute="leading" constant="4" id="hGJ-o0-ouV"/>
                 <constraint firstAttribute="bottom" secondItem="9PD-kS-B6G" secondAttribute="bottom" id="sTw-3O-jRK"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -97,6 +100,7 @@
         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" bouncesZoom="NO" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="NFu-cK-8cV" customClass="OATableView">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <viewLayoutGuide key="safeArea" id="9MD-hm-4nJ"/>
             <color key="backgroundColor" name="viewBg"/>
             <color key="tintColor" name="iconColorActive"/>
             <color key="separatorColor" name="customSeparator"/>
@@ -105,7 +109,7 @@
     </objects>
     <resources>
         <image name="bg_title.png" width="320" height="64"/>
-        <image name="ic_navbar_chevron.png" width="28" height="28"/>
+        <image name="ic_navbar_chevron" width="28" height="28"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

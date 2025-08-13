@@ -10,6 +10,7 @@
 #import "OAMapSettingsViewController.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OATableViewCustomFooterView.h"
 #import "OASwitchTableViewCell.h"
 #import "OARightIconTableViewCell.h"

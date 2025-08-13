@@ -11,6 +11,7 @@
 
 #import "OAUploadOsmPointsAsyncTask.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
@@ -61,7 +62,7 @@
                 break;
             
             OAOsmPoint *osmPoint = _points[i];
-            if (osmPoint.getGroup == POI)
+            if (osmPoint.getGroup == EOAGroupPoi)
             {
                 OAOpenStreetMapRemoteUtil *editsUtil = (OAOpenStreetMapRemoteUtil *)_plugin.getPoiModificationRemoteUtil;
                 OAEntityInfo *entityInfo = nil;
@@ -79,7 +80,7 @@
                 else
                     [failedUploads addObject:osmPoint];
             }
-            else if (osmPoint.getGroup == BUG)
+            else if (osmPoint.getGroup == EOAGroupBug)
             {
                 OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getOsmNotesRemoteUtil];
                 OAOsmNotePoint *p = (OAOsmNotePoint *) osmPoint;

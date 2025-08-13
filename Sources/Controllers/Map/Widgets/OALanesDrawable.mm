@@ -33,6 +33,7 @@
     {
         _pathsCache = [NSMapTable strongToStrongObjectsMapTable];
         _imminent = NO;
+        _boldStroke = YES;
         _scaleCoefficient = scaleCoefficient;
         _miniCoeff = 2.f;
         _leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
@@ -74,17 +75,17 @@
             
             if (thirdTurnType > 0)
             {
-                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:THIRD_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:THIRD_TURN coef:coef leftSide:_leftSide smallArrow:YES boldStroke:_boldStroke];
                 if (!p.empty)
                     imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
             }
             if (secondTurnType > 0)
             {
-                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:SECOND_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:SECOND_TURN coef:coef leftSide:_leftSide smallArrow:YES boldStroke:_boldStroke];
                 if (!p.empty)
                     imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
             }
-            UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:FIRST_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+            UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:FIRST_TURN coef:coef leftSide:_leftSide smallArrow:YES boldStroke:_boldStroke];
             if (!p.empty)
                 imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
 
@@ -159,7 +160,7 @@
             
             if (thirdTurnType > 0)
             {
-                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:THIRD_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:THIRD_TURN coef:coef leftSide:_leftSide smallArrow:YES boldStroke:_boldStroke];
                 if (!p.empty)
                 {
                     imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
@@ -168,14 +169,14 @@
             }
             if (secondTurnType > 0)
             {
-                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:SECOND_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:SECOND_TURN coef:coef leftSide:_leftSide smallArrow:YES boldStroke:_boldStroke];
                 if (!p.empty)
                 {
                     imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
                     secondTurnPath = p;
                 }
             }
-            UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:FIRST_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+            UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:FIRST_TURN coef:coef leftSide:_leftSide smallArrow:YES boldStroke:_boldStroke];
             if (!p.empty)
             {
                 imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);

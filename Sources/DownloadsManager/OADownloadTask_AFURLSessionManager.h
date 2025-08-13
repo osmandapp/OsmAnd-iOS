@@ -34,5 +34,8 @@
                        andHidden:(BOOL)hidden;
 
 @property(readonly) NSURLSessionDownloadTask* task;
+@property(nonatomic) NSString *title;
+@property(nonatomic) id resourceItem;
+@property(nonatomic) NSDate *creationTime;
 
 @end

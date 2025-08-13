@@ -8,7 +8,7 @@
 
 #import "OAPlugin.h"
 
-@class CLLocation, OAFavoriteItem;
+@class OAFavoriteItem;
 
 @interface OAParkingPositionPlugin : OAPlugin
 

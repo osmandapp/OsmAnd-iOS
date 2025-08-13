@@ -30,7 +30,7 @@ final class BLERunningSensor: Sensor {
         [.bicycleCadence, .bicycleSpeed, .bicycleDistance]
     }
     
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+    override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
             return
         }
@@ -68,7 +68,7 @@ final class BLERunningSensor: Sensor {
         var widgetFields: [SensorWidgetDataField]? {
             [SensorWidgetDataField(fieldType: .bicycleCadence,
                                    nameId: localizedString("external_device_characteristic_cadence"),
-                                   unitNameId: "",
+                                   unitNameId: localizedString("revolutions_per_minute_unit"),
                                    numberValue: nil,
                                    stringValue: String(cadence))]
         }

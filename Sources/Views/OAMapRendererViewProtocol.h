@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OAObservable.h"
+@class OAObservable;
 
 @protocol OAMapRendererViewProtocol <NSObject>
 

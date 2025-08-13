@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 
 @class OAMapViewController;
 
@@ -18,32 +17,35 @@
 
 + (OAMapViewTrackingUtilities *)instance;
 
-+ (BOOL) isSmallSpeedForCompass:(CLLocation *)location;
-+ (BOOL) isSmallSpeedForAnimation:(CLLocation *)location;
++ (BOOL)isSmallSpeedForCompass:(CLLocation *)location;
++ (BOOL)isSmallSpeedForAnimation:(CLLocation *)location;
 
-- (BOOL) is3DMode;
-- (void) switchMap3dMode;
+- (BOOL)is3DMode;
+- (void)switchMap3dMode;
 
-- (BOOL) isMapLinkedToLocation;
-- (void) setMapLinkedToLocation:(BOOL)isMapLinkedToLocation;
-- (void) backToLocationImpl;
-- (void) backToLocationImpl:(int)zoom forceZoom:(BOOL)forceZoom;
+- (BOOL)isMapLinkedToLocation;
+- (void)checkMapLinkedToLocation;
+- (void)backToLocationWithConditions;
+- (void)backToLocationImpl;
+- (void)backToLocationImpl:(int)zoom forceZoom:(BOOL)forceZoom;
 
-- (void) setMapViewController:(OAMapViewController *)mapViewController;
-- (void) switchToRoutePlanningMode;
-- (void) resetDrivingRegionUpdate;
-- (void) detectDrivingRegion:(CLLocation *)location;
-- (void) switchRotateMapMode;
-- (void) refreshLocation;
-- (void) updateSettings;
+- (void)setMapViewController:(OAMapViewController *)mapViewController;
+- (void)switchToRoutePlanningMode;
+- (void)resetDrivingRegionUpdate;
+- (void)detectDrivingRegion:(CLLocation *)location;
+- (void)switchRotateMapMode;
+- (void)refreshLocation;
+- (void)updateSettings;
+- (void)animatedAlignAzimuthToNorth;
 
-- (void) setRotationNoneToManual;
+- (void)setRotationNoneToManual;
 
-- (CLLocation *) getDefaultLocation;
+- (CLLocation *)getDefaultLocation;
+- (CLLocation *)getMapLocation;
 
-- (CGPoint) projectRatioToVisibleMapRect:(CGPoint)ratio;
-- (void) setZoomTime:(NSTimeInterval)time;
+- (CGPoint)projectRatioToVisibleMapRect:(CGPoint)ratio;
+- (void)setZoomTime:(NSTimeInterval)time;
 
-- (void)startTilting:(float)elevationAngle;
+- (void)startTilting:(float)elevationAngle timePeriod:(float)timePeriod;
 
 @end

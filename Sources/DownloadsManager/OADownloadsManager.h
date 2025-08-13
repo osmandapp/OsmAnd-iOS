@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OADownloadTask.h"
+@class OAObservable;
+
+@protocol OADownloadTask;
 
 @interface OADownloadsManager : NSObject
 
@@ -27,11 +29,14 @@
 
 - (NSArray*)downloadTasksWithKey:(NSString*)key;
 - (NSArray*)downloadTasksWithKeyPrefix:(NSString*)prefix;
+- (NSArray*)downloadTasksWithKeySuffix:(NSString*)suffix;
 - (NSArray*)activeDownloadTasksWithKey:(NSString*)key;
 - (NSArray*)activeDownloadTasksWithKeyPrefix:(NSString*)prefix;
+- (NSArray*)activeDownloadTasksWithKeySuffix:(NSString*)suffix;
 
 - (NSUInteger)numberOfDownloadTasksWithKey:(NSString*)key;
 - (NSUInteger)numberOfDownloadTasksWithKeyPrefix:(NSString*)prefix;
+- (NSUInteger)numberOfDownloadTasksWithKeySuffix:(NSString*)suffix;
 - (NSUInteger)numberOfActiveDownloadTasksWithKey:(NSString*)key;
 - (NSUInteger)numberOfActiveDownloadTasksWithKeyPrefix:(NSString*)prefix;
 
@@ -50,11 +55,14 @@
                                       andName:(NSString*)name
                                     andHidden:(BOOL)hidden;
 
+- (void)cancelDownloadTasks;
+- (void)pauseDownloadTasks;
+
 @property(readonly) OAObservable* tasksCollectionChangedObservable;
 @property(readonly) OAObservable* activeTasksCollectionChangedObservable;
 @property(readonly) OAObservable* progressCompletedObservable;
 @property(readonly) OAObservable* completedObservable;
-
-@property(readonly) BOOL allowScreenTurnOff;
+@property(readonly) OAObservable* backgroundDownloadCanceledObservable;
+@property(readonly) BOOL backgroundDownloadTaskActive;
 
 @end

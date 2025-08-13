@@ -9,12 +9,12 @@
 #import "OACollectionSingleLineTableViewCell.h"
 #import "OASizes.h"
 #import "UITableViewCell+getTableView.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OACollectionSingleLineTableViewCell () <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *topMarginStackView;
-@property (weak, nonatomic) IBOutlet UIStackView *collectionStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *bottomMarginStackView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
@@ -35,7 +35,7 @@
 
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    self.collectionView.contentInset = UIEdgeInsetsMake(0., kPaddingOnSideOfContent , 0., 0.);
+    self.collectionView.contentInset = UIEdgeInsetsMake(0., kPaddingOnSideOfContent , 0., kPaddingOnSideOfContent);
 
     _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onRightActionButtonPressed:)];
     [self addGestureRecognizer:_tapRecognizer];
@@ -59,22 +59,47 @@
 {
     _collectionHandler = collectionHandler;
 
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = [_collectionHandler getScrollDirection];
-    layout.itemSize = [_collectionHandler getItemSize];
-    [self.collectionView setCollectionViewLayout:layout animated:YES];
-
     NSString *cellIdentifier = [_collectionHandler getCellIdentifier];
-    [self.collectionView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil] forCellWithReuseIdentifier:cellIdentifier];
-    NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
-    if (selectedIndexPath.row != NSNotFound)
+    if (cellIdentifier)
     {
-        [self.collectionView scrollToItemAtIndexPath:selectedIndexPath
-                                    atScrollPosition:layout.scrollDirection == UICollectionViewScrollDirectionHorizontal
-                                                        ? UICollectionViewScrollPositionCenteredHorizontally
-                                                        : UICollectionViewScrollPositionCenteredVertically
-                                            animated:YES];
+        [self.collectionView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil]
+              forCellWithReuseIdentifier:cellIdentifier];
     }
+
+    [self.collectionView reloadData];
+    UICollectionViewScrollDirection scrollDirection = [_collectionHandler getScrollDirection];
+    BOOL isHorizontal = scrollDirection == UICollectionViewScrollDirectionHorizontal;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.scrollDirection = scrollDirection;
+        CGSize itemSize = [_collectionHandler getItemSize];
+        if (itemSize.width == 0) {
+            layout.estimatedItemSize = CGSizeMake(50, itemSize.height);
+            layout.itemSize = UICollectionViewFlowLayoutAutomaticSize;
+        } else {
+            layout.itemSize = itemSize;
+        }
+        CGFloat spacing = [_collectionHandler getSpacing];
+        layout.minimumLineSpacing = spacing;
+        layout.minimumInteritemSpacing = spacing;
+        
+        [self.collectionView setCollectionViewLayout:layout animated:!_disableAnimationsOnStart];
+
+        NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
+        if (selectedIndexPath.row != NSNotFound
+            && (_forceScrollOnStart || ![self.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+            && selectedIndexPath.section < [collectionHandler sectionsCount]
+            && selectedIndexPath.row < [collectionHandler itemsCount:selectedIndexPath.section])
+        {
+            [self.collectionView scrollToItemAtIndexPath:selectedIndexPath
+                                        atScrollPosition:isHorizontal
+                ? UICollectionViewScrollPositionCenteredHorizontally
+                : UICollectionViewScrollPositionCenteredVertically
+                                                animated:!_disableAnimationsOnStart];
+        }
+    });
 }
 
 - (CGFloat)getLeftInsetToView:(UIView *)view
@@ -88,6 +113,7 @@
 - (void)rightActionButtonVisibility:(BOOL)show
 {
     self.rightActionButton.hidden = !show;
+    self.rightActionButtonRigthPaddingView.hidden = !show;
 
     if (show)
     {
@@ -100,6 +126,11 @@
         [self removeGestureRecognizer:_tapRecognizer];
         _tapRecognizer = nil;
     }
+}
+
+- (void)collectionStackViewVisibility:(BOOL)show
+{
+    self.collectionStackView.hidden = !show;
 }
 
 - (void)anchorContent:(EOATableViewCellContentStyle)style
@@ -116,6 +147,16 @@
     }
 }
 
+- (void)configureTopOffset:(CGFloat)top
+{
+    self.topMarginStackView.spacing = top;
+}
+
+- (void)configureBottomOffset:(CGFloat)bottom
+{
+    self.bottomMarginStackView.spacing = bottom;
+}
+
 #pragma mark - UIView
 
 - (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize
@@ -124,15 +165,39 @@
 {
     self.contentView.frame = self.bounds;
     [self.contentView layoutIfNeeded];
+    self.collectionViewHeight.constant = [self calculateContentHeight];
+    return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+}
+
+- (CGFloat) calculateContentHeight
+{
     CGFloat height = self.collectionView.contentSize.height;
     if (_collectionHandler)
     {
+        CGFloat spacing = [_collectionHandler getSpacing];
         CGSize itemSize = [_collectionHandler getItemSize];
-        if (height < itemSize.height)
-            height = itemSize.height;
+        height = itemSize.height;
+        
+        if (_useMultyLines)
+        {
+            CGFloat width = self.collectionView.frame.size.width;
+            int rowsPerLine = width / (itemSize.width + spacing);
+            int rowsCount = ceil((double)[_collectionHandler itemsCount:0] / (double)rowsPerLine);
+            if (rowsCount > 1)
+                height = rowsCount * (height + spacing) - spacing;
+        }
     }
-    self.collectionViewHeight.constant = height;
-    return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    return height;
+}
+
+- (BOOL) needUpdateHeight
+{
+    return [self calculateContentHeight] != self.collectionViewHeight.constant;
+}
+
+- (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [_collectionHandler calculateItemSizeForIndexPath:indexPath];
 }
 
 - (UIContextMenuConfiguration *)collectionView:(UICollectionView *)collectionView

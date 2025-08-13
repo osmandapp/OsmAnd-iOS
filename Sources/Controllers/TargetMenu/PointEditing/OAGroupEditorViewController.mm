@@ -36,7 +36,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithGroup:(OAPointsGroup *)group
+- (instancetype)initWithGroup:(OASGpxUtilitiesPointsGroup *)group
 {
     self = [super init];
     if (self)
@@ -54,7 +54,7 @@
         self.originalName = _group.name;
         self.editName = _group.name;
         self.editIconName = _group.iconName;
-        self.editColor = _group.color;
+        self.editColor = UIColorFromRGB(_group.color);
         self.editBackgroundIconName = _group.backgroundType;
     }
 
@@ -62,10 +62,10 @@
 
     if (self.isNewItem)
     {
-        _group = [[OAPointsGroup alloc] initWithName:self.editName
+        _group = [[OASGpxUtilitiesPointsGroup alloc] initWithName:self.editName
                                             iconName:self.editIconName
                                       backgroundType:self.editBackgroundIconName
-                                               color:self.editColor];
+                                               color:_group.color];
     }
 
     _nameTextField = [self getInputCellWithHint:OALocalizedString(@"shared_string_name")

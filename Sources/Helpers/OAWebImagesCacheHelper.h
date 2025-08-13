@@ -6,6 +6,8 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 @class OADownloadMode;
 
 @interface OAWebImagesCacheHelper : NSObject

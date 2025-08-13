@@ -11,9 +11,8 @@ import SafariServices
 
 @objc(OAWidgetsListViewController)
 @objcMembers
-class WidgetsListViewController: OABaseNavbarSubviewViewController {
+final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
-    static let kWidgetAddedNotification = "onWidgetAdded"
     private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
     
     private let kPageKey = "page_"
@@ -21,10 +20,11 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private let kNoWidgetsKey = "noWidgets"
     private let kWidgetsInfoKey = "widget_info"
     private let kIsLastWidgetInSection = "isLastWidgetInSection"
+    private let kWidgetAddParamsKey = "widget_add_params"
+    
+    private let panels = WidgetsPanel.values
     
     private var editingComplexWidget: MapWidgetInfo?
-    
-    let panels = WidgetsPanel.values
     
     private var widgetPanel: WidgetsPanel! {
         didSet {
@@ -52,8 +52,8 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
     }
     
-    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
-    lazy private var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode)
+    private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+    private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode)
     
     // MARK: - Initialization
     
@@ -68,20 +68,6 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
     override func registerNotifications() {
         addNotification(NSNotification.Name(kWidgetVisibilityChangedMotification), selector: #selector(onWidgetStateChanged))
-        addNotification(NSNotification.Name(Self.kWidgetAddedNotification), selector: #selector(onWidgetAdded(notification:)))
-        addNotification(.SimpleWidgetStyleUpdated, selector: #selector(onSimpleWidgetStyleUpdated))
-    }
-    
-    @objc private func onSimpleWidgetStyleUpdated(notification: Notification) {
-        guard let widgetInfo = notification.object as? MapWidgetInfo,
-              let widget = widgetInfo.widget as? OATextInfoWidget else { return }
-        guard let rows = getRowsInPageFor(key: widgetInfo.key) else { return }
-        
-        rows.lazy
-            .compactMap { $0.widget as? OATextInfoWidget }
-            .forEach { 
-                $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
-            }
     }
     
     // MARK: - Base setup UI
@@ -157,6 +143,8 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     override func onTopButtonPressed() {
         let vc = WidgetGroupListViewController()
         vc.widgetPanel = widgetPanel
+        vc.addToNext = nil
+        vc.selectedWidget = nil
         show(vc)
     }
     
@@ -179,10 +167,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         OAUtilities.showToast("", details: String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), duration: 4, in: view)
     }
     
-    @objc private func onWidgetAdded(notification: NSNotification) {
-        guard let newWidget = notification.object as? MapWidgetInfo else {
-            return
-        }
+    func addWidget(newWidget: MapWidgetInfo, params: [String: Any]?) {
         let lastSection = tableData.sectionCount() - 1
         let lastSectionData = tableData.sectionData(for: lastSection)
         var createNewSection: Bool = false
@@ -194,21 +179,36 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
                 createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
             }
         }
+        
+        var widgetParametersForAddition: [String: Any]?
+        var widgetStyleForRow: EOAWidgetSizeStyle?
+        
         if createNewSection {
-            createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()))
+            var updatedParams = params
+            updatedParams?["id"] = newWidget.key
+            widgetParametersForAddition = updatedParams
+            createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()), params: widgetParametersForAddition)
         } else {
-            updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData)
-            createWidgetItem(newWidget, lastSectionData)
+            widgetStyleForRow = updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData, params: params)
+            if var params {
+                params["id"] = newWidget.key
+                if let widgetStyleForRow, !editMode {
+                    params["widgetSizeStyle"] = widgetStyleForRow.rawValue
+                }
+                widgetParametersForAddition = params
+            }
+            createWidgetItem(newWidget, lastSectionData, params: widgetParametersForAddition)
             configureWidgetsSeparator()
         }
+        
         if editMode {
             DispatchQueue.main.async { [weak self] in
                 self?.tableView.reloadData()
                 self?.updateBottomButtons()
             }
         } else {
-            if let userInfo = notification.userInfo as? [String: Any] {
-                reorderWidgets(with: userInfo)
+            if let widgetParametersForAddition {
+                reorderWidgets(with: [widgetParametersForAddition])
             } else {
                 reorderWidgets()
             }
@@ -232,9 +232,10 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
     // MARK: - Additions
     
-    private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
+    private func reorderWidgets(with widgetParamsArray: [[String: Any]]? = nil) {
         var orders = [[String]]()
         var currPage = [String]()
+        var addWidgetsParamsArray = widgetParamsArray
         for i in 0..<tableData.sectionData(for: 0).rowCount() {
             let rowData = tableData.sectionData(for: 0).getRow(i)
             
@@ -246,13 +247,20 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             if let row = rowData.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
                 currPage.append(row.key)
             }
+            if editMode, let params = rowData.obj(forKey: kWidgetAddParamsKey) as? [String: Any] {
+                if addWidgetsParamsArray == nil {
+                    addWidgetsParamsArray = [[String: Any]]()
+                }
+                addWidgetsParamsArray?.append(params)
+                rowData.removeObject(forKey: kWidgetAddParamsKey)
+            }
         }
         orders.append(currPage)
         
         WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
                                    panel: widgetPanel,
                                    selectedAppMode: selectedAppMode,
-                                   widgetParams: widgetParams)
+                                   widgetParamsArray: widgetParamsArray ?? addWidgetsParamsArray)
     }
 }
 
@@ -499,13 +507,13 @@ extension WidgetsListViewController {
             tableData.clearAllData()
             tableData.createNewSection()
             for i in 0..<pagedWidgets.count {
-                createWidgetItems(pagedWidgets[i], i)
+                createWidgetItems(pagedWidgets[i], i, params: nil)
             }
             configureWidgetsSeparator()
         }
     }
     
-    private func createWidgetItems(_ widgets: NSOrderedSet, _ pageIndex: Int) {
+    private func createWidgetItems(_ widgets: NSOrderedSet, _ pageIndex: Int, params: [String: Any]?) {
         let section = tableData.sectionData(for: 0)
         let row = section.createNewRow()
         row.key = kPageKey
@@ -514,11 +522,11 @@ extension WidgetsListViewController {
         
         let sortedWidgets = (widgets.array as! [MapWidgetInfo]).sorted { $0.priority < $1.priority }
         for widget in sortedWidgets {
-            createWidgetItem(widget, section)
+            createWidgetItem(widget, section, params: params)
         }
     }
     
-    private func createWidgetItem(_ widget: MapWidgetInfo, _ section: OATableSectionData) {
+    private func createWidgetItem(_ widget: MapWidgetInfo, _ section: OATableSectionData, params: [String: Any]?) {
         if section.rowCount() > 0 && section.getRow(0).key != kPageKey {
             section.addRow(OATableRowData(), position: 0)
             let row = section.getRow(0)
@@ -528,6 +536,9 @@ extension WidgetsListViewController {
         
         let row = section.createNewRow()
         row.setObj(widget, forKey: kWidgetsInfoKey)
+        if let params {
+            row.setObj(params, forKey: kWidgetAddParamsKey)
+        }
         if widget.widget.widgetType == .sunPosition,
            let sunPositionWidgetState = widget.getWidgetState() as? OASunriseSunsetWidgetState {
             row.iconName = sunPositionWidgetState.getWidgetIconName()
@@ -708,6 +719,7 @@ extension WidgetsListViewController {
     }
     
     private func applyRowStyle() {
+        guard widgetPanel.isPanelVertical else { return }
         for widgets in getPagesWithMapWidgetInfo() {
             var widgetsInfoInRow = [OATextInfoWidget]()
             for widget in widgets {
@@ -741,36 +753,30 @@ extension WidgetsListViewController {
     }
     
     private func updateWidgetStyleForRowsInLastPage(_ newWidget: MapWidgetInfo,
-                                                    _ sectionData: OATableSectionData) {
-        let addWidgetSizeStyle = (newWidget.widget as? OATextInfoWidget)?.widgetSizeStyle ?? .medium
+                                                    _ sectionData: OATableSectionData,
+                                                    params: [String: Any]?) -> EOAWidgetSizeStyle? {
+        guard widgetPanel.isPanelVertical else { return nil }
+        let addWidgetSizeStyle = (params?["widgetSizeStyle"] as? Int)
+            .flatMap(EOAWidgetSizeStyle.init) ?? .medium
         
         let lastWidgetInRow = sectionData.getRow(sectionData.rowCount() - 1)
         guard let simpleWidget = (lastWidgetInRow.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget else {
-            return
+            return nil
         }
         
         if simpleWidget.widgetSizeStyle != addWidgetSizeStyle {
-            if addWidgetSizeStyle != .medium {
-                // Apply the current style of widget for all rows in page
-                var dataArray = [OATableRowData]()
-                for row in 0..<sectionData.rowCount() {
-                    dataArray.append(sectionData.getRow(row))
+            var dataArray = [OATableRowData]()
+            for row in 0..<sectionData.rowCount() {
+                dataArray.append(sectionData.getRow(row))
+            }
+            let itemsInLastPage = getRowsInLastPage(dataArray: dataArray)
+            itemsInLastPage.forEach {
+                if let widgetInRow = ($0.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget {
+                    widgetInRow.updateWith(style: addWidgetSizeStyle, appMode: selectedAppMode)
                 }
-                let itemsInLastPage = getRowsInLastPage(dataArray: dataArray)
-                itemsInLastPage.forEach {
-                    if let widgetInRow = ($0.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget {
-                        widgetInRow.updateWith(style: addWidgetSizeStyle, appMode: selectedAppMode)
-                    }
-                }
-            } else {
-                // Apply row style for the added widget
-                (newWidget.widget as? OATextInfoWidget)?.updateWith(style: simpleWidget.widgetSizeStyle, appMode: selectedAppMode)
             }
         }
-    }
-    
-    private func getRowsInPageFor(key: String) -> [MapWidgetInfo]? {
-        getPagesWithMapWidgetInfo().first { $0.contains { $0.key == key } }
+        return nil
     }
     
     private func getPagesWithMapWidgetInfo() -> [[MapWidgetInfo]] {

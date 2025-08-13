@@ -23,13 +23,13 @@
 
 @interface OADeleteWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
+@property(nonatomic) NSString *groupName;
+
 @end
 
 @implementation OADeleteWaypointsGroupBottomSheetViewController
 {
     NSArray<OAGPXTableSectionData *> *_tableData;
-
-    NSString *_groupName;
 }
 
 - (instancetype)init
@@ -143,9 +143,10 @@
 {
     if ([tableData.key isEqualToString:@"delete"] && self.trackMenuDelegate)
     {
+        __weak __typeof(self) weakSelf = self;
         [self hide:YES completion:^{
-            [self.trackMenuDelegate deleteWaypointsGroup:_groupName selectedWaypoints:nil];
-            [self.trackMenuDelegate refreshLocationServices];
+            [weakSelf.trackMenuDelegate deleteWaypointsGroup:weakSelf.groupName selectedWaypoints:nil];
+            [weakSelf.trackMenuDelegate refreshLocationServices];
         }];
     }
 }

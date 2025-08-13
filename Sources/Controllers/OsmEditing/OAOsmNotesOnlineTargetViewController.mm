@@ -11,6 +11,7 @@
 #import "OATransportStopRoute.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"

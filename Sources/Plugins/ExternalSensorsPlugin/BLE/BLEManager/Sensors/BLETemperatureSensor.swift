@@ -40,7 +40,7 @@ final class BLETemperatureSensor: Sensor {
         return [lastTemperatureData].compactMap { $0 }
     }
     
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+    override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
             return
         }
@@ -76,7 +76,7 @@ final class BLETemperatureSensor: Sensor {
     override func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
         if let lastTemperatureData {
             do {
-                let data = try JSONEncoder().encode([PointAttributes.sensorTagTemperatureW: String(lastTemperatureData.temperature)])
+                let data = try JSONEncoder().encode([PointAttributes.sensorTagTemperatureA: String(lastTemperatureData.temperature)])
                 json.append(data)
             } catch {
                 debugPrint("BLE failed writeSensorDataToJson: temperature - \(lastTemperatureData.temperature) | error: \(error.localizedDescription)")

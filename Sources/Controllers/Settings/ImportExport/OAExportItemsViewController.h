@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAApplicationMode;
+@class OAApplicationMode, OAExportSettingsType;
 
 @interface OAExportItemsViewController : OABaseSettingsListViewController
 

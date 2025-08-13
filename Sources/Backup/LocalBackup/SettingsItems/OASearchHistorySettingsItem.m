@@ -97,7 +97,7 @@
 
 - (long)localModifiedTime
 {
-    return _searchHistoryHelper.getMarkersHistoryLastModifiedTime;
+    return [_searchHistoryHelper getMarkersHistoryLastModifiedTime];
 }
 
 - (void)setLocalModifiedTime:(long)lastModifiedTime
@@ -123,9 +123,7 @@
             }
         }
         // TODO: Sync search history with Android and replace existing items in history!
-//        [_searchHistoryHelper addItemsToHistory:self.appliedItems];
-        for (OAHistoryItem *item in self.appliedItems)
-             [_searchHistoryHelper addPoint:item];
+        [_searchHistoryHelper importBackupPoints:self.appliedItems];
     }
 }
 

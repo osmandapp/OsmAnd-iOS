@@ -6,7 +6,6 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
 #import "OABottomSheetScreen.h"
 #import "OATableView.h"
 

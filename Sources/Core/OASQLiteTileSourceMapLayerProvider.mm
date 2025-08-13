@@ -8,21 +8,19 @@
 
 #import "OASQLiteTileSourceMapLayerProvider.h"
 #import "OANativeUtilities.h"
+#import "OAWebClient.h"
+#import "OAMapCreatorDbHelper.h"
 
 #include <SkImageEncoder.h>
 #include <SkStream.h>
 #include <SkData.h>
 #include <SkImage.h>
-
 #include <OsmAndCore/WebClient.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
 #include <OsmAndCore/Logging.h>
-
-#import "OAWebClient.h"
-#import "OAMapCreatorDbHelper.h"
 
 OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QString& fileName)
 : _webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OAWebClient()))
@@ -202,7 +200,7 @@ const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(con
     const auto& db = getDatabase();
     QByteArray dataNext;
     int64_t timeNext;
-    bool ok = db && db->open() && db->obtainTileData(tileIdNext, zoom, dataNext, &timeNext);
+    bool ok = db && db->open() && db->retrieveTileData(tileIdNext, zoom, dataNext, &timeNext);
     if (ok && !expired(timeNext))
     {
         const auto shiftedTile = createShiftedTileBitmap(data, dataNext, offsetY);
@@ -259,7 +257,7 @@ sk_sp<const SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAn
     const auto& db = getDatabase();
     QByteArray data;
     int64_t time;
-    bool ok = db && db->open() && db->obtainTileData(tileId, zoom, data, &time);
+    bool ok = db && db->open() && db->retrieveTileData(tileId, zoom, data, &time);
     if (ok && !data.isEmpty() && !expired(time))
     {
         if (shiftedTile)

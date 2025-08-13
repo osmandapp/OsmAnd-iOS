@@ -8,28 +8,23 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OAObservable.h"
-#import "OAMapViewState.h"
-#import "OAMapSource.h"
-#import "OAMapLayersConfiguration.h"
-#import "OARTargetPoint.h"
-#import "OAAppSettings.h"
-
-#define kWeatherSettingsChanging @"weather_settings_changing"
-#define kWeatherSettingsChanged @"weather_settings_changed"
-#define kWeatherSettingsReseting @"weather_settings_reseting"
-#define kWeatherSettingsReset @"weather_settings_reset"
+static NSString * const kWeatherSettingsChanging = @"weather_settings_changing";
+static NSString * const kWeatherSettingsChanged = @"weather_settings_changed";
+static NSString * const kWeatherSettingsReseting = @"weather_settings_reseting";
+static NSString * const kWeatherSettingsReset = @"weather_settings_reset";
 
 static const double kHillshadeDefAlpha = 0.45;
 static const double kSlopeDefAlpha = 0.35;
 static const double kExaggerationDefScale = 1.0;
+static const double kGpxExaggerationDefScale = 0.25;
+static const NSInteger kElevationDefMeters = 1000;
 
 static const NSInteger kHillshadeDefMinZoom = 3;
 static const NSInteger kHillshadeDefMaxZoom = 16;
 static const NSInteger kSlopeDefMinZoom = 3;
 static const NSInteger kSlopeDefMaxZoom = 16;
 
-@class MutableOrderedDictionary, NSUnitCloud;
+@class MutableOrderedDictionary, NSUnitCloud, OADownloadMode, OAApplicationMode, OARTargetPoint, OAMapLayersConfiguration, OAMapSource, OAMapViewState, OAObservable;
 
 @interface OAAppData : NSObject <NSCoding>
 
@@ -52,8 +47,6 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (nonatomic) BOOL weather;
 @property (nonatomic) BOOL weatherUseOfflineData;
 @property (nonatomic) BOOL weatherTemp;
-@property (nonatomic) NSUnitTemperature *weatherTempUnit;
-@property (nonatomic) BOOL weatherTempUnitAuto;
 @property (nonatomic) double weatherTempAlpha;
 @property (nonatomic) BOOL weatherPressure;
 @property (nonatomic) NSUnitPressure *weatherPressureUnit;
@@ -72,14 +65,18 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (nonatomic) BOOL weatherPrecipUnitAuto;
 @property (nonatomic) double weatherPrecipAlpha;
 
+@property (nonatomic) NSString *weatherSource;
+@property (nonatomic) BOOL weatherWindAnimation;
+@property (nonatomic) NSUnitSpeed *weatherWindAnimationUnit;
+@property (nonatomic) double weatherWindAnimationAlpha;
+@property (nonatomic) BOOL weatherWindAnimationUnitAuto;
+
 @property (readonly) OAObservable *weatherSettingsChangeObservable;
 
 @property (readonly) OAObservable* weatherChangeObservable;
 @property (readonly) OAObservable* weatherUseOfflineDataChangeObservable;
 @property (readonly) OAObservable* weatherTempChangeObservable;
 @property (readonly) OAObservable* weatherTempToolbarChangeObservable;
-@property (readonly) OAObservable* weatherTempUnitChangeObservable;
-@property (readonly) OAObservable* weatherTempUnitToolbarChangeObservable;
 @property (readonly) OAObservable* weatherTempAlphaChangeObservable;
 @property (readonly) OAObservable* weatherTempAlphaToolbarChangeObservable;
 @property (readonly) OAObservable* weatherPressureChangeObservable;
@@ -107,6 +104,12 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (readonly) OAObservable* weatherPrecipAlphaChangeObservable;
 @property (readonly) OAObservable* weatherPrecipAlphaToolbarChangeObservable;
 
+@property (nonatomic) OAObservable *weatherSourceChangeObservable;
+@property (nonatomic) OAObservable *weatherWindAnimationChangeObservable;
+@property (nonatomic) OAObservable *weatherWindAnimationUnitChangeObservable;
+@property (nonatomic) OAObservable *weatherWindAnimationAlphaChangeObservable;
+@property (nonatomic) OAObservable *weatherWindAnimationUnitAutoChangeObservable;
+
 @property (nonatomic) NSString *contourName;
 @property (nonatomic) NSString *contourNameLastUsed;
 @property (nonatomic) double contoursAlpha;
@@ -115,19 +118,9 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 
-@property (nonatomic) EOATerrainType terrainType;
-@property (nonatomic) EOATerrainType lastTerrainType;
-@property (nonatomic) double hillshadeAlpha;
-@property (nonatomic) NSInteger hillshadeMinZoom;
-@property (nonatomic) NSInteger hillshadeMaxZoom;
-@property (nonatomic) double slopeAlpha;
-@property (nonatomic) NSInteger slopeMinZoom;
-@property (nonatomic) NSInteger slopeMaxZoom;
 @property (nonatomic) double verticalExaggerationScale;
 
-@property (readonly) OAObservable* terrainChangeObservable;
 @property (readonly) OAObservable* terrainResourcesChangeObservable;
-@property (readonly) OAObservable* terrainAlphaChangeObservable;
 @property (readonly) OAObservable* verticalExaggerationScaleChangeObservable;
 
 @property (nonatomic) BOOL mapillary;
@@ -161,7 +154,7 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (nonatomic) OARTargetPoint *pointToNavigateBackup;
 @property (nonatomic) NSMutableArray<OARTargetPoint *> *intermediatePointsBackup;
 
-@property (readonly) OAObservable* applicationModeChangedObservable;
+- (void) postInit;
 
 - (void) clearPointToStart;
 - (void) clearPointToNavigate;
@@ -188,21 +181,12 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 - (OAMapSource *) getLastMapSource:(OAApplicationMode *)mode;
 - (void) setLastMapSource:(OAMapSource *)lastMapSource mode:(OAApplicationMode *)mode;
 
-- (EOATerrainType) getTerrainType:(OAApplicationMode *)mode;
-- (void) setTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode;
-
-- (void) resetHillshadeAlpha;
-- (void) resetSlopeAlpha;
-- (void) resetHillshadeMinZoom;
-- (void) resetHillshadeMaxZoom;
-- (void) resetSlopeMinZoom;
-- (void) resetSlopeMaxZoom;
 - (void)resetVerticalExaggerationScale;
 
-- (EOATerrainType) getLastTerrainType:(OAApplicationMode *)mode;
-- (void) setLastTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode;
-
-- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode;
+- (void)setSettingValue:(NSString *)value
+                 forKey:(NSString *)key
+                   mode:(OAApplicationMode *)mode
+             notHandled:(void (^)(NSString *value, NSString *key, OAApplicationMode *mode))notHandled;
 - (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode;
 
 - (void) resetProfileSettingsForMode:(OAApplicationMode *)mode;

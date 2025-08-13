@@ -7,28 +7,29 @@
 //
 
 #import "OABaseTrackMenuHudViewController.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
-#import "OAMapPanelViewController.h"
+#import "OABaseScrollableHudViewController.h"
+#import "OATargetMenuViewController.h"
 #import "OATrackMenuHudViewControllerConstants.h"
+#import "OsmAndSharedWrapper.h"
 
-@class LineChartView;
-@class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OATravelArticleIdentifier;
+@class ElevationChart, TrackChartHelper, OASTrack, OASTrkSegment, OARouteKey, OASMetadata, OALink, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTableData;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
 @required
 
 - (void)openAnalysis:(NSArray<NSNumber *> *)types;
-- (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
+- (void)openAnalysis:(OASGpxTrackAnalysis *)analysis
+             segment:(OASTrkSegment *)segment
             withTypes:(NSArray<NSNumber *> *)types;
-- (OAGPXTrackAnalysis *)getGeneralAnalysis;
+- (OASGpxTrackAnalysis *)getGeneralAnalysis;
 
-- (OATrkSegment *)getGeneralSegment;
-- (NSArray<OATrkSegment *> *)getSegments;
+- (OASTrkSegment *)getGeneralSegment;
+- (NSArray<OASTrkSegment *> *)getSegments;
 - (void)editSegment;
-- (void)deleteAndSaveSegment:(OATrkSegment *)segment;
-- (void)openEditSegmentScreen:(OATrkSegment *)segment
-                     analysis:(OAGPXTrackAnalysis *)analysis;
+- (void)deleteAndSaveSegment:(OASTrkSegment *)segment;
+- (void)openEditSegmentScreen:(OASTrkSegment *)segment
+                     analysis:(OASGpxTrackAnalysis *)analysis;
 
 - (void)refreshLocationServices;
 - (NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *)getWaypointsData;
@@ -46,20 +47,22 @@
 - (void)openDeleteWaypointsScreen:(OAGPXTableData *)tableData;
 - (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
 - (void)openNewWaypointScreen;
+- (NSString *)getGpxName;
 - (NSString *)checkGroupName:(NSString *)groupName;
 - (BOOL)isDefaultGroup:(NSString *)groupName;
 - (BOOL)isRteGroup:(NSString *)groupName;
 
-- (void)updateChartHighlightValue:(LineChartView *)chart
-                          segment:(OATrkSegment *)segment;
-- (OARouteLineChartHelper *)getLineChartHelper;
-- (OATrack *)getTrack:(OATrkSegment *)segment;
-- (NSString *)getTrackSegmentTitle:(OATrkSegment *)segment;
+- (void)updateChartHighlightValue:(ElevationChart *)chart
+                          segment:(OASTrkSegment *)segment;
+- (TrackChartHelper *)getLineChartHelper;
+- (OASTrack *)getTrack:(OASTrkSegment *)segment;
+- (NSString *)getTrackSegmentTitle:(OASTrkSegment *)segment;
 - (NSString *)getDirName;
 - (NSString *)getGpxFileSize;
-- (OAAuthor *)getAuthor;
-- (OACopyright *)getCopyright;
-- (OAMetadata *)getMetadata;
+- (OASAuthor *)getAuthor;
+- (OASCopyright *)getCopyright;
+- (OASMetadata *)getMetadata;
+- (OASRouteActivity *)getGpxActivity;
 - (NSString *)getKeywords;
 - (NSArray<OALink *> *)getLinks;
 - (NSString *)getCreatedOn;
@@ -78,6 +81,8 @@
 - (void)openDescription;
 - (void)openDescriptionEditor;
 - (void)openDescriptionReadOnly:(NSString *)description;
+- (void)openNameTagsScreenWith:(NSArray<NSDictionary *> *)tagsArray;
+- (void)openSelectRouteActivityScreen;
 - (void)openDuplicateTrack;
 - (void)openMoveTrack;
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem;
@@ -102,6 +107,7 @@
 
 @property (nonatomic, assign) EOATrackMenuHudTab lastSelectedTab;
 @property (nonatomic, assign) EOATrackMenuHudSegmentsStatisticsTab selectedStatisticsTab;
+@property (nonatomic, assign) OARouteKey *routeKey;
 @property (nonatomic, assign) NSArray<NSNumber *> *routeStatistics;
 @property (nonatomic) UIImage *trackIcon;
 @property (nonatomic) NSString *gpxFilePath;
@@ -110,17 +116,18 @@
 @property (nonatomic, assign) BOOL openedFromMap;
 @property (nonatomic, assign) BOOL openedFromTracksList;
 @property (nonatomic, assign) BOOL openedFromTrackMenu;
+@property (nonatomic, assign) BOOL forceAdjustCentering;
 @property (nonatomic, assign) NSInteger scrollToSectionIndex;
 
 
 // Uses for reopening previous screens (with all NavController history) after opening track on map from MyPlaces
-@property (nonatomic, nullable) NSArray<UIViewController *> *navControllerHistory;
+@property (nonatomic) NSArray<UIViewController *> *navControllerHistory;
 
 @end
 
 @interface OATrackMenuHudViewController : OABaseTrackMenuHudViewController
 
-- (instancetype)initWithGpx:(OAGPX *)gpx tab:(EOATrackMenuHudTab)tab;
-- (instancetype)initWithGpx:(OAGPX *)gpx routeKey:(OARouteKey *)routeKey state:(OATargetMenuViewControllerState *)state;
+- (instancetype)initWithGpx:(OASTrackItem *)gpx tab:(EOATrackMenuHudTab)tab;
+- (instancetype)initWithGpx:(OASTrackItem *)gpx routeKey:(OARouteKey *)routeKey state:(OATargetMenuViewControllerState *)state analysis:(OASGpxTrackAnalysis *)analysis;
 
 @end

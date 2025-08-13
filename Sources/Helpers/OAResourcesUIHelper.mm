@@ -10,28 +10,37 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <MBProgressHUD.h>
 #import "OALog.h"
+#import "OADownloadsManager.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAManageResourcesViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OASQLiteTileSource.h"
 #import "OAChoosePlanHelper.h"
 #import "OAJsonHelper.h"
 #import "OATileSource.h"
+#import "OAWorldRegion.h"
 #import "OAIndexConstants.h"
 #import "OAResourcesInstaller.h"
 #import "OAPlugin.h"
 #import "OAWeatherHelper.h"
+#import "OAApplicationMode.h"
+#import "OADownloadTask.h"
 #import "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAWeatherPlugin.h"
 #import "OAPluginsHelper.h"
 #import "OAAppVersion.h"
+#import "OAAppData.h"
 #import "OARouteCalculationResult.h"
+#import "OAMapSource.h"
+#import "OAObservable.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/WorldRegions.h>
-
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
@@ -66,7 +75,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     {
         case OsmAndResourceType::MapRegion:
         case OsmAndResourceType::DepthContourRegion:
-            return OALocalizedString(@"shared_string_map");
+            return OALocalizedString(@"download_regular_maps");
         case OsmAndResourceType::DepthMapRegion:
             return OALocalizedString(@"nautical_depth");
         case OsmAndResourceType::SrtmMapRegion:
@@ -81,7 +90,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"weather_forecast");
         case OsmAndResourceType::HeightmapRegionLegacy:
         case OsmAndResourceType::GeoTiffRegion:
-            return OALocalizedString(@"download_heightmap_maps");
+            return OALocalizedString(@"terrain_map");
         case OsmAndResourceType::Travel:
             return OALocalizedString(@"shared_string_wikivoyage");
         default:
@@ -89,7 +98,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated
++ (NSString *)getIconName:(OsmAndResourceType)type
 {
     NSString *imageNamed;
     switch (type)
@@ -136,6 +145,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             imageNamed = @"ic_custom_map";
             break;
     }
+    return imageNamed;
+}
+
++ (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated
+{
+    NSString *imageNamed = [self.class getIconName:type];
     return templated ? [UIImage templateImageNamed:imageNamed] : [UIImage imageNamed:imageNamed];
 }
 
@@ -251,6 +266,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::RoadMapRegion],
             [self.class toValue:OsmAndResourceType::SrtmMapRegion],
             [self.class toValue:OsmAndResourceType::WikiMapRegion],
+            [self.class toValue:OsmAndResourceType::GeoTiffRegion],
+            [self.class toValue:OsmAndResourceType::HeightmapRegionLegacy],
             [self.class toValue:OsmAndResourceType::WeatherForecast]
     ];
 }
@@ -549,6 +566,32 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             downloadedCount++;
     }
     return downloadedCount == items.count;
+}
+
+- (OAResourceItem *) getActiveItem:(BOOL)useDefautValue
+{
+    if (_items && _items.count > 0)
+    {
+        for (OAResourceItem *item in _items)
+        {
+            if (item.downloadTask != nil)
+                return item;
+        }
+        if (useDefautValue)
+            return _items[0];
+    }
+    return nil;
+}
+
+- (NSString *) getResourceId
+{
+    if (_items && _items.count > 0)
+    {
+        OAResourceItem *firstItem = _items[0];
+        NSString *resourceId = firstItem.resourceId.toNSString();
+        return [resourceId stringByReplacingOccurrencesOfString:@"srtmf" withString:@"srtm"];
+    }
+    return nil;
 }
 
 @end
@@ -1246,17 +1289,22 @@ includeHidden:(BOOL)includeHidden
 
 + (BOOL) checkIfUpdateEnabled:(OAWorldRegion *)region
 {
-    if (region.regionId == nil || [region isInPurchasedArea])
+    return region.regionId == nil || [region isInPurchasedArea];
+}
+
++ (BOOL) isInOutdatedResourcesList:(NSString *)resourceId
+{
+    OsmAndAppInstance _app = [OsmAndApp instance];
+    const auto outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
+    for (const auto& outdatedResource : outdatedResources)
     {
-        return YES;
+        NSString *outdatedResourceId = outdatedResource->id.toNSString();
+        if ([outdatedResourceId isEqualToString:resourceId])
+        {
+            return YES;
+        }
     }
-    else
-    {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_updates_exp") preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-        return NO;
-    }
+    return NO;
 }
 
 + (void) startDownloadOfCustomItem:(OACustomResourceItem *)item
@@ -1265,9 +1313,13 @@ includeHidden:(BOOL)includeHidden
 {
     if (item.downloadUrl)
     {
-        NSString *name = item.title;
+        NSString *fileName = item.title;
         if (item.subfolder && item.subfolder.length > 0)
-            name = [item.subfolder stringByAppendingPathComponent:name];
+            fileName = [item.subfolder stringByAppendingPathComponent:fileName];
+        
+        NSString *taskTitle = [item getVisibleName];
+        if (!taskTitle)
+            taskTitle = fileName;
 
         if ([item.downloadUrl hasPrefix:@"@"])
         {
@@ -1276,7 +1328,7 @@ includeHidden:(BOOL)includeHidden
             if (pluginPath.length > 0 && relPath.length > 0)
             {
                 NSString *srcFilePath = [pluginPath stringByAppendingPathComponent:relPath];
-                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath resourceId:srcFilePath.lastPathComponent fileName:name hidden:item.hidden];
+                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath resourceId:srcFilePath.lastPathComponent fileName:fileName hidden:item.hidden];
                 if (!failed)
                     [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
             }
@@ -1292,8 +1344,12 @@ includeHidden:(BOOL)includeHidden
             OsmAndAppInstance app = [OsmAndApp instance];
             id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
                                                                              andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
-                                                                            andName:name
+                                                                            andName:fileName
                                                                           andHidden:item.hidden];
+            
+            task.title = taskTitle;
+            task.resourceItem = item;
+            
             if (onTaskCreated)
                 onTaskCreated(task);
 
@@ -1366,10 +1422,10 @@ includeHidden:(BOOL)includeHidden
 
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 {
-    [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:nil];
+    [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:nil silent:NO];
 }
 
-+ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler
++ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler silent:(BOOL)silent
 {
     if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
         return;
@@ -1404,13 +1460,14 @@ includeHidden:(BOOL)includeHidden
     
     if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
-        [self showNoInternetAlert];
+        if (!silent)
+        	[self showNoInternetAlert];
     }
     else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
         [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }
-    else
+    else if (!silent)
     {
         NSString *message = [self messageResourceStartDownload:resourceName stringifiedSize:stringifiedSize isOutdated:NO];
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -1422,8 +1479,17 @@ includeHidden:(BOOL)includeHidden
         if (completionHandler)
             completionHandler(alert);
         else
-            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+            [self presentAlert:alert];
     }
+}
+
++ (void)presentAlert:(UIAlertController *)alert
+{
+    auto rootController = OARootViewController.instance;
+    [rootController canPresentAlertController:alert completion:^(BOOL canPresent) {
+        if (canPresent)
+            [rootController presentViewController:alert animated:YES completion:nil];
+    }];
 }
 
 + (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem
@@ -1499,7 +1565,7 @@ includeHidden:(BOOL)includeHidden
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto resourceInRepository = app.resourcesManager->getResourceInRepository(item.resourceId);
-    BOOL isFree = resourceInRepository && resourceInRepository->free;
+    BOOL isFree = resourceInRepository && (resourceInRepository->free || resourceInRepository->type == OsmAnd::ResourcesManager::ResourceType::MapRegion);
     if (!isFree && ![self.class checkIfUpdateEnabled:item.worldRegion])
         return;
 
@@ -1515,7 +1581,7 @@ includeHidden:(BOOL)includeHidden
     }
     else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
-        [self.class startDownloadOf:resourceInRepository resourceName:resourceName onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        [self.class startDownloadOf:resourceInRepository resourceName:resourceName resourceItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }
     else
     {
@@ -1524,7 +1590,7 @@ includeHidden:(BOOL)includeHidden
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_update") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self.class startDownloadOf:resourceInRepository resourceName:resourceName onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+            [self.class startDownloadOf:resourceInRepository resourceName:resourceName resourceItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
         }]];
         [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
     }
@@ -1535,7 +1601,7 @@ includeHidden:(BOOL)includeHidden
     NSString *message = OALocalizedString(@"alert_inet_needed");
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    [self presentAlert:alert];
 }
 
 + (void)startDownloadOfItem:(OARepositoryResourceItem *)item
@@ -1574,11 +1640,17 @@ includeHidden:(BOOL)includeHidden
         OsmAndAppInstance app = [OsmAndApp instance];
         id<OADownloadTask> task;
         if (!item.downloadTask)
+        {
             item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request
-                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] andName:name
+                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]]
+                                                                             andName:name
                                                                            andHidden:item.hidden];
+        }
         else
+        {
             task = item.downloadTask;
+        }
+        item.downloadTask.resourceItem = item;
 
         if (onTaskCreated)
             onTaskCreated(task);
@@ -1614,6 +1686,8 @@ includeHidden:(BOOL)includeHidden
             item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()] andName:name andHidden:item.hidden];
         else
             task = item.downloadTask;
+        
+        item.downloadTask.resourceItem = item;
 
         if (onTaskCreated)
             onTaskCreated(task);
@@ -1654,6 +1728,7 @@ includeHidden:(BOOL)includeHidden
 
 + (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
             resourceName:(NSString *)name
+            resourceItem:(OAResourceItem *)resourceItem
            onTaskCreated:(OADownloadTaskCallback)onTaskCreated
            onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
@@ -1672,6 +1747,7 @@ includeHidden:(BOOL)includeHidden
                                                                      andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
                                                                     andName:name
                                                                   andHidden:NO];
+    task.resourceItem = resourceItem;
 
     if (onTaskCreated)
         onTaskCreated(task);
@@ -1709,6 +1785,11 @@ includeHidden:(BOOL)includeHidden
     {
         OARepositoryResourceItem* item = (OARepositoryResourceItem*)item_;
         resourceName = [self.class titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES withResourceType:YES];
+    }
+    else if ([item_ isKindOfClass:[OACustomResourceItem class]])
+    {
+        OACustomResourceItem* item = (OACustomResourceItem*)item_;
+        resourceName = [item getVisibleName];
     }
 
     if (!resourceName)
@@ -2250,7 +2331,7 @@ includeHidden:(BOOL)includeHidden
                                                            withRegionName:YES
                                                          withResourceType:NO];
                         item.resource = resource;
-                        item.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];;
+                        item.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
                         item.worldRegion = region;
                         item.resourceType = resource->type;
                         
@@ -2287,7 +2368,7 @@ includeHidden:(BOOL)includeHidden
     
     NSString *routeMode = @"car";
     GeneralRouterProfile profile = routeCalculationResult.missingMapsRoutingContext->config->router->getProfile();
-    if (profile == GeneralRouterProfile::BICYCLE)
+    if (profile == GeneralRouterProfile::BICYCLE || profile == GeneralRouterProfile::PEDESTRIAN)
     {
         routeMode = @"bicycle";
     }

@@ -18,6 +18,7 @@
 #import "OAPOIType.h"
 #import "OAAddress.h"
 #import "OAPOI.h"
+#import "OAPOIHelper.h"
 #import "Localization.h"
 #import "OADistanceDirection.h"
 #import "OAPointDescription.h"
@@ -99,7 +100,7 @@
                 _searchResult.object = custom;
                 _searchResult.priority = SEARCH_AMENITY_TYPE_PRIORITY;
                 _searchResult.priorityDistance = 0;
-                _searchResult.objectType = POI_TYPE;
+                _searchResult.objectType = EOAObjectTypePoiType;
             }
         }
     }
@@ -159,7 +160,7 @@
     {
         switch (res.objectType)
         {
-            case POI:
+            case EOAObjectTypePoi:
             {
                 OAPOI *poi = (OAPOI *)res.object;
                 CPListItem *listItem = [[CPListItem alloc] initWithText:item.getName
@@ -203,9 +204,13 @@
     }
     if (poi.hasOpeningHours)
     {
-        if (needsSeparator)
-            [res appendString:@" • "];
-        [res appendString:poi.openingHours];
+        NSString *formattedOpeningHours = [[OAPOIHelper sharedInstance] getFormattedOpeningHours:poi];
+        if (formattedOpeningHours.length > 0)
+        {
+            if (needsSeparator)
+                [res appendString:@" • "];
+            [res appendString:formattedOpeningHours];
+        }
     }
     
     return res;

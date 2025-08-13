@@ -8,12 +8,12 @@
 
 #import "OABaseCarPlayListController.h"
 
-@class OAGpxInfo;
+@class OASTrackItem;
 
 @interface OACarPlayTrackResultListController : OABaseCarPlayListController
 
 - (instancetype)initWithInterfaceController:(CPInterfaceController *)interfaceController
                                  folderName:(NSString *)folderName
-                                    gpxList:(NSArray<OAGpxInfo *> *)gpxList;
+                                    trackItems:(NSArray<OASTrackItem *> *)trackItems;
 
 @end

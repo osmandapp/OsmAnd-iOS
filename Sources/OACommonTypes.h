@@ -10,7 +10,6 @@
 #define OsmAnd_OACommonTypes_h
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 
 @protocol OsmAndAppProtocol;
 @protocol OsmAndAppCppProtocol;

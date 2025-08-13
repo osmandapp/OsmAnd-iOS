@@ -12,12 +12,14 @@ static NSString * const HORSE_ROUTES_ATTR = @"horseRoutes";
 static NSString * const PISTE_ROUTES_ATTR = @"pisteRoutes";
 static NSString * const ALPINE_HIKING_ATTR = @"alpineHiking";
 static NSString * const SHOW_CYCLE_ROUTES_ATTR = @"showCycleRoutes";
+static NSString * const DIRTBIKE_ROUTES_ATTR = @"showDirtbikeTrails";
 static NSString * const WHITE_WATER_SPORTS_ATTR = @"whiteWaterSports";
 static NSString * const HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
 static NSString * const CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";
 static NSString * const TRAVEL_ROUTES = @"travel_routes";
 static NSString * const SHOW_FITNESS_TRAILS_ATTR = @"showFitnessTrails";
 static NSString * const SHOW_RUNNING_ROUTES_ATTR = @"showRunningRoutes";
+static NSString * const CLIMBING_ROUTES = @"showClimbingRoutes";
 
 static NSString * const SHOW_MTB_ROUTES = @"showMtbRoutes";
 static NSString * const SHOW_MTB_SCALE = @"showMtbScale";
@@ -43,6 +45,10 @@ static NSString * const CONTOUR_LINES = @"contourLines";
 static NSString * const CONTOUR_DENSITY_ATTR = @"contourDensity";
 static NSString * const CONTOUR_WIDTH_ATTR = @"contourWidth";
 static NSString * const CONTOUR_COLOR_SCHEME_ATTR = @"contourColorScheme";
+
+static NSString * const ELEVATION_UNITS_ATTR = @"eleUnits";
+static NSString * const ELEVATION_UNITS_FEET_VALUE = @"feet";
+static NSString * const ELEVATION_UNITS_METERS_VALUE = @"meters";
 
 static NSString * const NAUTICAL_DEPTH_CONTOURS = @"depthContours";
 static NSString * const NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR = @"depthContourWidth";

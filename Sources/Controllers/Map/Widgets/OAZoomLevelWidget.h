@@ -8,10 +8,13 @@
 
 #import "OASimpleWidget.h"
 
+@class ZoomLevelWidgetState;
+
 @interface OAZoomLevelWidget : OASimpleWidget
 
 - (instancetype _Nonnull)initWithСustomId:(NSString *_Nullable)customId
                                   appMode:(OAApplicationMode * _Nonnull)appMode
+                     widgetState:(ZoomLevelWidgetState *_Nonnull)widgetState
                              widgetParams:(NSDictionary * _Nullable)widgetParams;
 
 @end

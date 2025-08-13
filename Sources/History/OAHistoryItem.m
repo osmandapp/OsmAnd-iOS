@@ -77,7 +77,11 @@
         if (self.hType == OAHistoryTypePOI)
             img = [UIImage mapSvgImageNamed:self.iconName];
 
-        if (!img)
+        if (img)
+        {
+            return img;
+        }
+        else
         {
             img = [UIImage imageNamed:self.iconName];
             if (img)

@@ -8,11 +8,6 @@
 
 #import "OASwitchableAction.h"
 
-#define kSwitchProfileStringKeys @"stringKeys"
-#define kSwitchProfileNames @"names"
-#define kSwitchProfileIconNames @"iconsNames"
-#define kSwitchProfileIconColors @"iconsColors"
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OASwitchProfileAction : OASwitchableAction

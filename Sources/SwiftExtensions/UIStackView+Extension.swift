@@ -27,4 +27,14 @@ extension UIStackView {
             }
         }
     }
+    
+    @objc @discardableResult func removeAllArrangedSubviews() -> [UIView] {
+        let removedSubviews = arrangedSubviews.reduce([]) { (removedSubviews, subview) -> [UIView] in
+            removeArrangedSubview(subview)
+            NSLayoutConstraint.deactivate(subview.constraints)
+            subview.removeFromSuperview()
+            return removedSubviews + [subview]
+        }
+        return removedSubviews
+    }
 }

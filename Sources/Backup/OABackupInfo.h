@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) NSMutableArray<OASettingsItem *> *itemsToUpload;
 @property (nonatomic) NSMutableArray<OASettingsItem *> *itemsToDelete;
-@property (nonatomic) NSMutableArray<OASettingsItem *> *localItemsToDelete;
+@property (nonatomic) NSMutableArray<OASettingsItem *> *itemsToLocalDelete;
 @property (nonatomic) NSMutableArray<OARemoteFile *> *filteredFilesToDownload;
 @property (nonatomic) NSMutableArray<OALocalFile *> *filteredFilesToUpload;
 @property (nonatomic) NSMutableArray<OARemoteFile *> *filteredFilesToDelete;
@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSMutableArray<NSArray *> *filteredFilesToMerge;
 
 - (void) createItemCollections;
+
+- (NSString *) toString;
 
 @end
 

@@ -6,11 +6,8 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
-#import "OACommonTypes.h"
 #import "OADashboardViewController.h"
 #import "OAMapSettingsScreen.h"
-
 
 @interface OAMapSettingsViewController : OADashboardViewController
 

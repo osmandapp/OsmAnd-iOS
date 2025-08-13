@@ -11,6 +11,7 @@
 #import "OAPlanTypeCardRow.h"
 #import "OAChoosePlanHelper.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"

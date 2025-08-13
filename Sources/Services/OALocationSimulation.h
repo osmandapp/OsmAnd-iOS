@@ -21,6 +21,18 @@
 
 - (instancetype)initWithSimulatedLocation:(OASimulatedLocation *)location;
 - (instancetype)initWithLocation:(CLLocation *)location;
+- (instancetype)initWithCoordinate:(CLLocationCoordinate2D)coordinate
+    altitude:(CLLocationDistance)altitude
+    horizontalAccuracy:(CLLocationAccuracy)hAccuracy
+    verticalAccuracy:(CLLocationAccuracy)vAccuracy
+    course:(CLLocationDirection)course
+    courseAccuracy:(CLLocationDirectionAccuracy)courseAccuracy
+    speed:(CLLocationSpeed)speed
+    timestamp:(NSDate *)timestamp
+    trafficLight:(BOOL)trafficLight
+    highwayType:(NSString *)highwayType
+    speedLimit:(float)speedLimit;
+
 - (BOOL)isTrafficLight;
 - (void)setTrafficLight:(BOOL)trafficLight;
 - (CLLocationDistance)distanceFromLocation:(OASimulatedLocation *)location;
@@ -28,6 +40,15 @@
 - (void)setHighwayType:(NSString *)highwayType;
 - (float)getSpeedLimit;
 - (void)setSpeedLimit:(float)speedLimit;
+
+- (OASimulatedLocation *) locationWithCoordinate:(CLLocationCoordinate2D)coordinate;
+- (OASimulatedLocation *) locationWithAltitude:(CLLocationDistance)altitude;
+- (OASimulatedLocation *) locationWithHorizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy;
+- (OASimulatedLocation *) locationWithVerticalAccuracy:(CLLocationAccuracy)verticalAccuracy;
+- (OASimulatedLocation *) locationWithCourse:(CLLocationDirection)course;
+- (OASimulatedLocation *) locationWithCourseAccuracy:(CLLocationDirectionAccuracy)courseAccuracy;
+- (OASimulatedLocation *) locationWithSpeed:(CLLocationSpeed)speed;
+- (OASimulatedLocation *) locationWithTimestamp:(NSDate *)timestamp;
 
 @end
 

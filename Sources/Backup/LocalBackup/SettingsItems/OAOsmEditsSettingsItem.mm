@@ -13,6 +13,7 @@
 #import "OAOsmNotePoint.h"
 #import "OAEntity.h"
 #import "OANode.h"
+#import "OAObservable.h"
 #import "OAWay.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OsmAndApp.h"
@@ -56,7 +57,7 @@
 
 - (long)localModifiedTime
 {
-    return [OAOsmEditsDBHelper sharedDatabase].getLastModifiedTime;
+    return [[OAOsmEditsDBHelper sharedDatabase] getLastModifiedTime];
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
@@ -141,7 +142,7 @@
         NSDictionary *tagMap = entityJson[kTAGS_KEY];
         NSString *action = entityJson[kACTION_KEY];
         OAEntity *entity;
-        if ([entityJson[kTYPE_KEY] isEqualToString: [OAEntity stringType:NODE]])
+        if ([entityJson[kTYPE_KEY] isEqualToString: [OAEntity stringType:EOAEntityTypeNode]])
         {
             entity = [[OANode alloc] initWithId:iD latitude:lat longitude:lon];
         }

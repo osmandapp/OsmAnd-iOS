@@ -14,6 +14,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OATileSource.h"
+#import "Localization.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -99,7 +100,7 @@
             }
         }
     }
-    return lastModifiedTime;
+    return lastModifiedTime * 1000;
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
@@ -122,8 +123,8 @@
             NSDictionary *attrs = [fileManager attributesOfItemAtPath:filePath error:&err];
             if (!err)
             {
-                if (attrs.fileModificationDate.timeIntervalSince1970 > localModifiedTime)
-                    [fileManager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime]} ofItemAtPath:filePath error:nil];
+                if (attrs.fileModificationDate.timeIntervalSince1970 > localModifiedTime / 1000)
+                    [fileManager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime / 1000] } ofItemAtPath:filePath error:nil];
             }
         }
     }

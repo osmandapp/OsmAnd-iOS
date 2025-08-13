@@ -9,6 +9,7 @@
 #import "OAPurchasesViewController.h"
 #import "OAPurchaseDetailsViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"
@@ -123,6 +124,10 @@ static BOOL _purchasesUpdated;
     {
         NSArray<OAProduct *> *mainPurchases = [_iapHelper getEverMadeMainPurchases];
         NSMutableArray<OAProduct *> *activeProducts = [NSMutableArray array];
+        NSMutableArray<OAProduct *> *externalActiveProducts = [NSMutableArray array];
+        NSMutableArray<OAInAppStateHolder *> *externalActiveProductHolders = [NSMutableArray array];
+        NSMutableArray<OASubscription *> *externalActiveSubscriptions = [NSMutableArray array];
+        NSMutableArray<OASubscriptionStateHolder *> *externalActiveSubscriptionHolders = [NSMutableArray array];
         NSMutableArray<OAProduct *> *expiredProducts = [NSMutableArray array];
         for (OAProduct *product in mainPurchases)
         {
@@ -140,10 +145,30 @@ static BOOL _purchasesUpdated;
             else if (product.purchaseState == PSTATE_NOT_PURCHASED)
                 [expiredProducts addObject:product];
         }
+        NSArray<OAInAppStateHolder *> *externalInApps = _iapHelper.getExternalInApps;
+        for (OAInAppStateHolder *holder in externalInApps)
+        {
+            OAProduct *product = holder.linkedProduct;
+            if (product)
+            {
+                [externalActiveProducts addObject:product];
+                [externalActiveProductHolders addObject:holder];
+            }
+        }
+        NSArray<OASubscriptionStateHolder *> *externalSubscriptions = _iapHelper.getExternalSubscriptions;
+        for (OASubscriptionStateHolder *holder in externalSubscriptions)
+        {
+            OASubscription *subscription = holder.linkedSubscription;
+            if (subscription)
+            {
+                [externalActiveSubscriptions addObject:subscription];
+                [externalActiveSubscriptionHolders addObject:holder];
+            }
+        }
 
         OAAppSettings *settings = OAAppSettings.sharedManager;
         BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
-        if (activeProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
+        if (activeProducts.count == 0 && externalActiveProducts.count == 0 && externalActiveSubscriptions.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
         {
             if (OABackupHelper.sharedInstance.isRegistered)
             {
@@ -159,7 +184,7 @@ static BOOL _purchasesUpdated;
                     kCellTitleKey : OALocalizedString(@"no_purchases"),
                     kCellDescrKey : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
                 }];
-
+                
                 OATableSectionData *osmAndProSection = [_data createNewSection];
                 [osmAndProSection addRowFromDictionary:@{
                     kCellKeyKey : @"get_osmand_pro",
@@ -175,7 +200,7 @@ static BOOL _purchasesUpdated;
         }
         else
         {
-            if (activeProducts.count > 0 || isProSubscriptionAvailable)
+            if (activeProducts.count > 0 || externalActiveProducts.count > 0 || externalActiveSubscriptions.count > 0 || isProSubscriptionAvailable)
             {
                 OATableSectionData *activeSection = [_data createNewSection];
                 activeSection.headerText = OALocalizedString(@"osm_live_active");
@@ -186,7 +211,7 @@ static BOOL _purchasesUpdated;
                     NSString *dateString = @"";
                     NSString *datePattern = @"";
                     OASubscriptionState *state = [settings.backupPurchaseState get];
-                    BOOL isPromo = ((EOASubscriptionOrigin) [settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
+                    BOOL isPromo = ((EOAPurchaseOrigin) [settings.proSubscriptionOrigin get]) == EOAPurchaseOriginPromo;
                     if (state != OASubscriptionState.EXPIRED)
                         datePattern = OALocalizedString(@"shared_string_expires");
                     else
@@ -209,10 +234,50 @@ static BOOL _purchasesUpdated;
                 for (NSInteger i = 0; i < activeProducts.count; i++)
                 {
                     OAProduct *product = activeProducts[i];
+                    NSNumber *purchaseTime = [_iapHelper getInAppPurchaseTime:product.productIdentifier];
+                    NSNumber *expireTime = [_iapHelper getInAppExpireTime:product.productIdentifier];
+                    if (!purchaseTime)
+                        purchaseTime = @(0);
+                    if (!expireTime)
+                        expireTime = @(0);
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-                        @"product" : product
+                        @"product" : product,
+                        @"purchaseTime" : purchaseTime,
+                        @"expireTime" : expireTime
+                    }];
+                }
+                for (NSInteger i = 0; i < externalActiveSubscriptions.count; i++)
+                {
+                    NSString *sku = externalActiveSubscriptionHolders[i].sku;
+                    if (isProSubscriptionAvailable && [sku isEqualToString:[settings.backupPurchaseSku get]])
+                        continue;
+                    
+                    OASubscription *subscription = externalActiveSubscriptions[i];
+                    NSNumber *origin = @(externalActiveSubscriptionHolders[i].origin);
+                    NSNumber *expireTime = @(externalActiveSubscriptionHolders[i].expireTime);
+                    [activeSection addRowFromDictionary:@{
+                        kCellKeyKey : [@"product_" stringByAppendingString:subscription.productIdentifier],
+                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+                        @"product" : subscription,
+                        @"origin" : origin,
+                        @"expireTime" : expireTime
+                    }];
+                }
+                for (NSInteger i = 0; i < externalActiveProducts.count; i++)
+                {
+                    OAProduct *product = externalActiveProducts[i];
+                    NSNumber *origin = @(externalActiveProductHolders[i].origin);
+                    NSNumber *purchaseTime = @(externalActiveProductHolders[i].purchaseTime);
+                    NSNumber *expireTime = @(externalActiveProductHolders[i].expireTime);
+                    [activeSection addRowFromDictionary:@{
+                        kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
+                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+                        @"product" : product,
+                        @"origin" : origin,
+                        @"purchaseTime" : purchaseTime,
+                        @"expireTime" : expireTime
                     }];
                 }
             }
@@ -363,7 +428,7 @@ static BOOL _purchasesUpdated;
                                 range:NSMakeRange(0, buttonTitle.string.length)];
             [cell.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
 
-            [cell.buttonView setImage:[UIImage templateImageNamed:[item stringForKey:@"button_icon_name"]] forState:UIControlStateNormal];
+            [cell.buttonView setImage:[UIImage templateImageNamed:[item stringForKey:@"button_icon_name"]].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
             cell.buttonView.tintColor = [item objForKey:@"button_icon_color"];
 
             cell.buttonView.tag = indexPath.section << 10 | indexPath.row;
@@ -407,9 +472,9 @@ static BOOL _purchasesUpdated;
                 cell.titleLabel.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
                         ? OALocalizedString(@"rendering_attr_depthContours_name")
                         : product.localizedTitle;
-                cell.leftIconView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
+                cell.leftIconView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product] || [product isKindOfClass:OAExternalProduct.class]
                         ? [UIImage imageNamed:product.productIconName]
-                        : [product.feature getIcon];
+                        : (product.feature ? [product.feature getIcon] : nil);
 
                 NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[self getStatus:product]];
                 NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -459,7 +524,24 @@ static BOOL _purchasesUpdated;
     else if ([key isEqualToString:@"product_osmand_start"])
         [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initForFreeStartSubscription]];
     else if ([key hasPrefix:@"product_"])
-        [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"]]];
+    {
+        EOAPurchaseOrigin origin = EOAPurchaseOriginUndefined;
+        id originObj = [item objForKey:@"origin"];
+        if (originObj && [originObj isKindOfClass:NSNumber.class])
+            origin = (EOAPurchaseOrigin) ((NSNumber *)originObj).intValue;
+        NSDate *purchaseDate = nil;
+        id purchaseTimeObj = [item objForKey:@"purchaseTime"];
+        if (purchaseTimeObj && [purchaseTimeObj isKindOfClass:NSNumber.class] && ((NSNumber *)purchaseTimeObj).longValue > 0)
+            purchaseDate = [NSDate dateWithTimeIntervalSince1970:((NSNumber *)purchaseTimeObj).doubleValue];
+        NSDate *expireDate = nil;
+        id expireTimeObj = [item objForKey:@"expireTime"];
+        if (expireTimeObj && [expireTimeObj isKindOfClass:NSNumber.class] && ((NSNumber *)expireTimeObj).longValue > 0)
+            expireDate = [NSDate dateWithTimeIntervalSince1970:((NSNumber *)expireTimeObj).doubleValue];
+        if (origin == EOAPurchaseOriginUndefined)
+            origin = EOAPurchaseOriginIOS;
+        
+        [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"] origin:origin purchaseDate:purchaseDate expireDate:expireDate]];
+    }
 }
 
 #pragma mark - UITableViewDelegate

@@ -88,9 +88,9 @@
     [self applySafeAreaMargins];
 }
 
--(void)viewDidDisappear:(BOOL)animated
+-(void)viewWillDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self unregisterKeyboardNotifications];
@@ -196,7 +196,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleLightContent;
+    return [[ThemeManager shared] isLightTheme] ? UIStatusBarStyleDarkContent : UIStatusBarStyleLightContent;
 }
 
 // keyboard notifications register+process

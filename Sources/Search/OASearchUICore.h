@@ -9,10 +9,9 @@
 //  git revision 9ea32a8fb553ba22e188f6a7896b4868593ca808
 
 #import <Foundation/Foundation.h>
-#import "OASearchResult.h"
 #import "OAResultMatcher.h"
 
-@class OASearchPhrase, OASearchCoreAPI, OACustomSearchPoiFilter, OASearchSettings, OAPOIBaseType, OASearchResultMatcher;
+@class OASearchPhrase, OASearchCoreAPI, OACustomSearchPoiFilter, OASearchSettings, OAPOIBaseType, OASearchResultMatcher, OASearchResult;
 
 @interface OASearchResultCollection : NSObject
 

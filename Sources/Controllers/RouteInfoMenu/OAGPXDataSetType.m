@@ -30,8 +30,10 @@
             return OALocalizedString(@"map_widget_ant_bicycle_power");
         case GPXDataSetTypeSensorBikeCadence:
             return OALocalizedString(@"map_widget_ant_bicycle_cadence");
-        case GPXDataSetTypeSensorTemperature:
-            return OALocalizedString(@"map_settings_weather_temp");
+        case GPXDataSetTypeSensorTemperatureA:
+            return OALocalizedString(@"map_settings_weather_temp_air");
+        case GPXDataSetTypeSensorTemperatureW:
+            return OALocalizedString(@"map_settings_weather_temp_water");
         default:
             return @"";
     }
@@ -46,7 +48,7 @@
         case GPXDataSetTypeSpeed:
             return @"ic_action_speed";
         case GPXDataSetTypeSlope:
-            return @"ic_custom_ascent";
+            return ACImageNameIcCustomAscent;
         case GPXDataSetTypeSensorSpeed:
             return @"ic_custom_sensor_speed_outlined";
         case GPXDataSetTypeSensorHeartRate:
@@ -55,7 +57,8 @@
             return @"ic_custom_sensor_bicycle_power_outlined";
         case GPXDataSetTypeSensorBikeCadence:
             return @"ic_custom_sensor_cadence_outlined";
-        case GPXDataSetTypeSensorTemperature:
+        case GPXDataSetTypeSensorTemperatureA:
+        case GPXDataSetTypeSensorTemperatureW:
             return @"ic_custom_sensor_thermometer";
         default:
             return @"";
@@ -67,21 +70,23 @@
     switch (type)
     {
         case GPXDataSetTypeAltitude:
-            return OAPointAttributes.pointElevation;
+            return OASPointAttributes.pointElevation;
         case GPXDataSetTypeSpeed:
-            return OAPointAttributes.pointSpeed;
+            return OASPointAttributes.pointSpeed;
         case GPXDataSetTypeSlope:
-            return OAPointAttributes.pointElevation;
+            return OASPointAttributes.pointElevation;
         case GPXDataSetTypeSensorSpeed:
-            return OAPointAttributes.sensorTagSpeed;
+            return OASPointAttributes.sensorTagSpeed;
         case GPXDataSetTypeSensorHeartRate:
-            return OAPointAttributes.sensorTagHeartRate;
+            return OASPointAttributes.sensorTagHeartRate;
         case GPXDataSetTypeSensorBikePower:
-            return OAPointAttributes.sensorTagBikePower;
+            return OASPointAttributes.sensorTagBikePower;
         case GPXDataSetTypeSensorBikeCadence:
-            return OAPointAttributes.sensorTagCadence;
-        case GPXDataSetTypeSensorTemperature:
-            return OAPointAttributes.sensorTagTemperature;
+            return OASPointAttributes.sensorTagCadence;
+        case GPXDataSetTypeSensorTemperatureA:
+            return OASPointAttributes.sensorTagTemperatureA;
+        case GPXDataSetTypeSensorTemperatureW:
+            return OASPointAttributes.sensorTagTemperatureW;
         default:
             return @"";
     }
@@ -105,7 +110,8 @@
             return [UIColor colorNamed:ACColorNameChartTextColorBicyclePower];
         case GPXDataSetTypeSensorBikeCadence:
             return [UIColor colorNamed:ACColorNameChartTextColorBicycleCadence];
-        case GPXDataSetTypeSensorTemperature:
+        case GPXDataSetTypeSensorTemperatureA:
+        case GPXDataSetTypeSensorTemperatureW:
             return [UIColor colorNamed:ACColorNameChartTextColorTemperature];
         default:
             return nil;
@@ -130,7 +136,8 @@
             return [UIColor colorNamed:ACColorNameChartLineColorBicyclePower];
         case GPXDataSetTypeSensorBikeCadence:
             return [UIColor colorNamed:ACColorNameChartLineColorBicycleCadence];
-        case GPXDataSetTypeSensorTemperature:
+        case GPXDataSetTypeSensorTemperatureA:
+        case GPXDataSetTypeSensorTemperatureW:
             return [UIColor colorNamed:ACColorNameChartLineColorTemperature];
         default:
             return nil;
@@ -157,8 +164,9 @@
             return OALocalizedString(@"power_watts_unit");
         case GPXDataSetTypeSensorBikeCadence:
             return OALocalizedString(@"revolutions_per_minute_unit");
-        case GPXDataSetTypeSensorTemperature:
-            return @"";
+        case GPXDataSetTypeSensorTemperatureA:
+        case GPXDataSetTypeSensorTemperatureW:
+            return @"°";
         default:
             return @"";
     }

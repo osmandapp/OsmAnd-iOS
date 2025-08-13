@@ -9,6 +9,8 @@
 #import "OADestinationsLayer.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
+#import "OALocationServices.h"
+#import "OAObservable.h"
 #import "OAMapRendererView.h"
 #import "OADestination.h"
 #import "OAAutoObserverProxy.h"
@@ -20,15 +22,23 @@
 #import "OAReverseGeocoder.h"
 #import "OAPointDescription.h"
 #import "OAMapLayers.h"
+#import "OACompoundIconUtils.h"
+#import "OARTargetPoint.h"
+#import "OAAppSettings.h"
+#import "OAAppData.h"
+#import "OAPOI.h"
+#import "OAFavoritesHelper.h"
+#import "OASelectedGPXHelper.h"
+#import "OAMapSelectionHelper.h"
+#import "OAOsmAndFormatter.h"
+#import "OASymbolMapLayer+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/SingleSkImage.h>
 
-#define firstLineId 11
-#define firstOutlineId 10
-#define secondLineId 21
-#define secondOutlineId 20
+#define kLabelOffset 6
 
 @interface OADestinationsLayer () <OAStateChangedListener>
 
@@ -37,7 +47,16 @@
 @implementation OADestinationsLayer
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _destinationsMarkersCollection;
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _distanceMarkersCollection;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _linesCollection;
+
+    std::shared_ptr<OsmAnd::MapMarker> _firstDistanceMarker;
+    std::shared_ptr<OsmAnd::VectorLine> _firstLine;
+    std::shared_ptr<OsmAnd::VectorLine> _firstOutline;
+
+    std::shared_ptr<OsmAnd::MapMarker> _secondDistanceMarker;
+    std::shared_ptr<OsmAnd::VectorLine> _secondLine;
+    std::shared_ptr<OsmAnd::VectorLine> _secondOutline;
 
     OAAutoObserverProxy* _destinationAddObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
@@ -51,7 +70,10 @@
 
     BOOL _showCaptionsCache;
     double _textSize;
-    int _myPositionLayerBaseOrder;
+
+    NSMutableArray<OAPOI *> *_amenities;
+
+    BOOL _reconstructMarker;
 }
 
 - (NSString *) layerId
@@ -92,8 +114,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
-    _myPositionLayerBaseOrder = self.mapViewController.mapLayers.myPositionLayer.baseOrder;
-        
+    _distanceMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+
     [self.app.data.mapLayersConfiguration setLayer:self.layerId Visibility:YES];
     
     _targetPoints = [OATargetPointsHelper sharedInstance];
@@ -103,12 +125,17 @@
     [self.mapView addSubview:_destinationLayerWidget];
 
     [self refreshDestinationsMarkersCollection];
+
+    _amenities = [NSMutableArray new];
+
+    _reconstructMarker = false;
 }
 
 - (void) onMapFrameRendered
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_destinationLayerWidget drawLayer];
+        self.mapViewController.mapView.renderer->updateSubsection(kDystanceMarkersSymbolSection);
     });
 }
 
@@ -171,13 +198,17 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
+
     BOOL widgetUpdated = [_destinationLayerWidget updateLayer];
     BOOL attributesChanged = [_destinationLayerWidget areAttributesChanged];
     if (widgetUpdated || self.showCaptions != _showCaptionsCache || _textSize != OAAppSettings.sharedManager.textSize.get || attributesChanged)
     {
         _showCaptionsCache = self.showCaptions;
         _textSize = OAAppSettings.sharedManager.textSize.get;
+        [self updateCaptionStyle];
+        _reconstructMarker = true;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self hide];
             [self refreshDestinationsMarkersCollection];
@@ -211,14 +242,20 @@
     CGFloat r,g,b,a;
     [color getRed:&r green:&g blue:&b alpha:&a];
     OsmAnd::FColorRGB col(r, g, b);
-    
     const OsmAnd::LatLon latLon(latitude, longitude);
-    
+
+    auto markerIcon = [OACompoundIconUtils getScaledIcon:markerResourceName
+                                     defaultResourceName:@"ic_destination_pin_1"
+                                                   scale:_textSize
+                                                   color:nil];
+    if (!markerIcon)
+        return;
+
     OsmAnd::MapMarkerBuilder builder;
     builder.setIsAccuracyCircleSupported(false)
-    .setBaseOrder(self.pointsOrder)
+    .setBaseOrder(self.baseOrder)
     .setIsHidden(false)
-    .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:markerResourceName]))
+    .setPinIcon(OsmAnd::SingleSkImage(markerIcon))
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
@@ -231,7 +268,8 @@
         builder.setCaptionTopSpace(self.captionTopSpace);
     }
     
-    builder.buildAndAddToCollection(_destinationsMarkersCollection);
+    std::shared_ptr<OsmAnd::MapMarker> marker = builder.buildAndAddToCollection(_destinationsMarkersCollection);
+    marker->setUpdateAfterCreated(true);
 }
 
 - (void) removeDestinationPin:(double)latitude longitude:(double)longitude;
@@ -251,7 +289,8 @@
 - (void) show
 {
     [self.mapViewController runWithRenderSync:^{
-        [self.mapView addKeyedSymbolsProvider:_destinationsMarkersCollection];
+        [self.mapView addKeyedSymbolsProvider:kDystanceMarkersSymbolSection provider:_destinationsMarkersCollection];
+        [self.mapView addKeyedSymbolsProvider:kDystanceMarkersSymbolSection provider:_distanceMarkersCollection];
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }];
 }
@@ -260,6 +299,7 @@
 {
     [self.mapViewController runWithRenderSync:^{
         [self.mapView removeKeyedSymbolsProvider:_destinationsMarkersCollection];
+        [self.mapView removeKeyedSymbolsProvider:_distanceMarkersCollection];
         [self.mapView removeKeyedSymbolsProvider:_linesCollection];
     }];
 }
@@ -346,26 +386,47 @@
         if (currLoc)
         {
             if (firstMarkerDestination)
-                [self drawLine:firstMarkerDestination fromLocation:currLoc lineId:firstLineId outlineId:firstOutlineId];
-            
+                [self drawLine:firstMarkerDestination fromLocation:currLoc vectorLine:_firstLine vectorLine:_firstOutline mapMarker:_firstDistanceMarker];
+
             if (secondMarkerDestination && [settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
             {
-                [self drawLine:secondMarkerDestination fromLocation:currLoc lineId:secondLineId outlineId:secondOutlineId];
+                [self drawLine:secondMarkerDestination fromLocation:currLoc vectorLine:_secondLine vectorLine:_secondOutline mapMarker:_secondDistanceMarker];
             }
             else
             {
-                _linesCollection->removeLine([self getLine:secondOutlineId]);
-                _linesCollection->removeLine([self getLine:secondLineId]);
+                [self clearLine:_secondLine vectorLine:_secondOutline mapMarker:_secondDistanceMarker];
             }
         }
     }
     else
     {
+        [self clearLine:_firstLine vectorLine:_firstOutline mapMarker:_firstDistanceMarker];
+        [self clearLine:_secondLine vectorLine:_secondOutline mapMarker:_secondDistanceMarker];
+        _distanceMarkersCollection->removeAllMarkers();
         _linesCollection->removeAllLines();
     }
 }
 
-- (void) drawLine:(OADestination *)destination fromLocation:(CLLocation *)currLoc lineId:(int)lineId outlineId:(int)outlineId
+- (void) clearLine:(std::shared_ptr<OsmAnd::VectorLine>&)line
+        vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)outline
+        mapMarker:(std::shared_ptr<OsmAnd::MapMarker>&)marker
+{
+    _linesCollection->removeLine(outline);
+    _linesCollection->removeLine(line);
+
+    _distanceMarkersCollection->removeMarker(marker);
+
+    outline->detachMarker(marker);
+
+    outline.reset();
+    line.reset();
+    marker.reset();
+}
+
+- (void) drawLine:(OADestination *)destination fromLocation:(CLLocation *)currLoc
+        vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)line
+        vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)outline
+        mapMarker:(std::shared_ptr<OsmAnd::MapMarker>&)marker
 {
     QVector<OsmAnd::PointI> points;
     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(destination.latitude, destination.longitude)));
@@ -384,55 +445,81 @@
 
     const auto color = [destination.color toFColorARGB];
     const auto outlineColor = OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0);
-    const auto& line = [self getLine:lineId];
-    const auto& outline = [self getLine:outlineId];
     if (line == nullptr || outline == nullptr)
     {
         OsmAnd::VectorLineBuilder outlineBuilder;
-        outlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId + 1)
-        .setIsHidden(false)
-        .setLineId(outlineId)
-        .setLineWidth(strokeWidth * 1.5)
-        .setLineDash(outlinePattern)
-        .setPoints(points)
-        .setFillColor(outlineColor);
-        outlineBuilder.buildAndAddToCollection(_linesCollection);
-        
+        outlineBuilder.setBaseOrder(self.baseOrder + 1);
+        outline = outlineBuilder.buildAndAddToCollection(_linesCollection);
+
         OsmAnd::VectorLineBuilder inlineBuilder;
-        inlineBuilder.setBaseOrder(_myPositionLayerBaseOrder + lineId)
-        .setIsHidden(false)
-        .setLineId(lineId)
-        .setLineWidth(strokeWidth)
-        .setLineDash(inlinePattern)
-        .setPoints(points)
-        .setFillColor(color);
-        inlineBuilder.buildAndAddToCollection(_linesCollection);
+        inlineBuilder.setBaseOrder(self.baseOrder);
+        line = inlineBuilder.buildAndAddToCollection(_linesCollection);
     }
-    else
+
+    outline->setIsHidden(false);
+    outline->setLineWidth(strokeWidth * 1.5);
+    outline->setLineDash(outlinePattern);
+    outline->setFillColor(outlineColor);
+
+    line->setIsHidden(false);
+    line->setLineWidth(strokeWidth);
+    line->setLineDash(inlinePattern);
+    line->setFillColor(color);
+
+    if (_reconstructMarker)
     {
-        outline->setIsHidden(false);
-        outline->setLineWidth(strokeWidth * 1.5);
-        outline->setLineDash(outlinePattern);
+        // set empty points to trigger _hasUnappliedChanges
+        outline->setPoints(QVector<OsmAnd::PointI>());
+        _reconstructMarker = false;
+    }
+
+    if (points != outline->getPoints())
+    {
         outline->setPoints(points);
-        outline->setFillColor(outlineColor);
-        
-        line->setIsHidden(false);
-        line->setLineWidth(strokeWidth);
-        line->setLineDash(inlinePattern);
+        outline->detachMarker(marker);
+
         line->setPoints(points);
-        line->setFillColor(color);
+
+        _distanceMarkersCollection->removeMarker(marker);
+
+        const auto dist = OsmAnd::Utilities::distance(destination.longitude, destination.latitude,
+              currLoc.coordinate.longitude, currLoc.coordinate.latitude);
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
+
+        OsmAnd::MapMarkerBuilder distanceMarkerBuilder;
+        distanceMarkerBuilder.setIsHidden(false);
+        distanceMarkerBuilder.setBaseOrder(self.baseOrder - 1);
+        distanceMarkerBuilder.setCaption([distance UTF8String]);
+        distanceMarkerBuilder.setCaptionStyle(self.captionStyle);
+
+        // We need to recreate marker each time as new caption needs new symbol
+        marker = distanceMarkerBuilder.buildAndAddToCollection(_distanceMarkersCollection);
+        marker->setOffsetFromLine(kLabelOffset);
+        marker->setUpdateAfterCreated(true);
+
+        outline->attachMarker(marker);
     }
 }
 
-- (const std::shared_ptr<OsmAnd::VectorLine>) getLine:(int)lineId
+- (BOOL) isMarkerOnWaypoint:(OADestination *)marker
 {
-    const auto& lines = _linesCollection->getLines();
-    for (auto it = lines.begin(); it != lines.end(); ++it)
+    return marker && [OASelectedGPXHelper.instance getVisibleWayPointByLat:marker.latitude lon:marker.longitude];
+}
+
+- (BOOL) isMarkerOnFavorite:(OADestination *)marker
+{
+    return marker && [OAFavoritesHelper getVisibleFavByLat:marker.latitude lon:marker.longitude];
+}
+
+- (OAPOI *)getMapObjectByMarker:(OADestination *)marker
+{
+    if (!NSStringIsEmpty(marker.mapObjectName) && marker.latitude != 0 && marker.longitude != 0)
     {
-        if ((*it)->lineId == lineId)
-            return *it;
+        NSString *mapObjName = [marker.mapObjectName componentsSeparatedByString:@"_"][0];
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:marker.latitude longitude:marker.longitude];
+        return [OAMapSelectionHelper findAmenity:location names:@[mapObjName] obfId:-1 radius:15];
     }
-    return nullptr;
+    return nil;
 }
 
 #pragma mark - OAStateChangedListener
@@ -495,29 +582,102 @@
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    NSMutableArray<OADestination *> *mapMarkers = self.app.data.destinations;
+    if (excludeUntouchableObjects || NSArrayIsEmpty(mapMarkers))
+        return;
+    
+    [_amenities removeAllObjects];
+    CGPoint pixel = result.point;
+    int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+ 
+    CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 2));
+    CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 4));
+    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+    
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    BOOL selectMarkerOnSingleTap = OAAppSettings.sharedManager.selectMarkerOnSingleTap;
+    
+    for (OADestination *marker in mapMarkers)
     {
-        for (const auto& dest : _destinationsMarkersCollection->getMarkers())
+        if (!unknownLocation && selectMarkerOnSingleTap)
         {
-            if (markerGroup->getMapMarker() == dest.get())
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:marker.latitude lon:marker.longitude polygon31:touchPolygon31];
+            if (shouldAdd)
             {
-                double lat = OsmAnd::Utilities::get31LatitudeY(dest->getPosition().y);
-                double lon = OsmAnd::Utilities::get31LongitudeX(dest->getPosition().x);
-                
-                for (OADestination *destination in self.app.data.destinations)
+                if (!unknownLocation && selectMarkerOnSingleTap)
                 {
-                    if ([OAUtilities isCoordEqual:destination.latitude srcLon:destination.longitude destLat:lat destLon:lon])
+                    [result collect:marker provider:self];
+                }
+                else
+                {
+                    if (([self isMarkerOnFavorite:marker] && settings.mapSettingShowFavorites) ||
+                        ([self isMarkerOnWaypoint:marker] && settings.showGpxWpt))
                     {
-                        OATargetPoint *targetPoint = [self getTargetPoint:destination];                        
-                        if (![found containsObject:targetPoint])
-                            [found addObject:targetPoint];
+                        continue;
+                    }
+                    
+                    OAPOI *mapObj = [self getMapObjectByMarker:marker];
+                    if (mapObj)
+                    {
+                        [_amenities addObject:mapObj];
+                        [result collect:mapObj provider:self];
+                    }
+                    else
+                    {
+                        [result collect:marker provider:self];
                     }
                 }
             }
+        
         }
     }
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OADestination.class])
+    {
+        OADestination *point = (OADestination *)obj;
+        return [[CLLocation alloc] initWithLatitude:[point latitude] longitude:[point longitude]];
+    }
+    else if ([obj isKindOfClass:OAPOI.class] && [_amenities containsObject:obj])
+    {
+        OAPOI *amenity = (OAPOI *)obj;
+        return [amenity getLocation];
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OADestination.class])
+    {
+        OADestination *point = (OADestination *)obj;
+        return [point getPointDescription];
+    }
+    return nil;
 }
 
 #pragma mark - OAMoveObjectProvider

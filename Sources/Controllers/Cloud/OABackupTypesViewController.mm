@@ -23,6 +23,7 @@
 #import "OAButtonTableViewCell.h"
 #import "OAIAPHelper.h"
 #import "OAChoosePlanHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OABackupTypesViewController
 {
@@ -130,7 +131,7 @@
             }
             else
             {
-                if (type.isAllowedInFreeVersion)
+                if (type.isAvailableInFreeVersion)
                 {
                     itemData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
                 }
@@ -206,7 +207,7 @@
 - (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected view:(UIView *)view
 {
     [super onTypeSelected:type selected:selected view:view];
-    [[_backupHelper getBackupTypePref:type] set:selected];
+    [[BackupUtils getBackupTypePref:type] set:selected];
     [_backupHelper.backup.backupInfo createItemCollections];
 }
 
@@ -225,7 +226,14 @@
                                                            style:UIAlertActionStyleDestructive
                                                          handler:^(UIAlertAction * _Nonnull action)
                                                          {
-                                                             [_backupHelper deleteAllFiles:@[type] listener:self];
+                                                            @try
+                                                            {
+                                                                [_backupHelper deleteAllFiles:@[type] listener:self];
+                                                            }
+                                                            @catch (NSException *exception)
+                                                            {
+                                                                NSLog(@"Error in showClearTypeScreen() -> deleteAllFiles(): %@", exception.reason);
+                                                            }
                                                          }
     ];
 
@@ -261,7 +269,7 @@
     NSMutableDictionary<OAExportSettingsType *, NSArray *> *selectedItemsMap = [NSMutableDictionary dictionary];
     for (OAExportSettingsType *type in [OAExportSettingsType getAllValues])
     {
-        if ([[_backupHelper getBackupTypePref:type] get])
+        if ([[BackupUtils getBackupTypePref:type] get])
             selectedItemsMap[type] = [self getItemsForType:type];
     }
     return selectedItemsMap;

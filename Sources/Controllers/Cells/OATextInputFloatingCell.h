@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MaterialTextFields.h"
+
+@class MDCMultilineTextField;
 
 @interface OATextInputFloatingCell : UITableViewCell
 

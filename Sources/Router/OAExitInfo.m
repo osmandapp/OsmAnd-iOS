@@ -10,4 +10,9 @@
 
 @implementation OAExitInfo
 
+- (BOOL) isEmpty
+{
+    return _ref == nil && _exitStreetName == nil;
+}
+
 @end

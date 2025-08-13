@@ -12,6 +12,8 @@
 #import "OAValueTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OALocationServices.h"
+#import "OAWorldRegion.h"
 #import "OAOsmAndFormatter.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -77,7 +79,7 @@
                 (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
                         ? newLocation.course : newHeading;
 
-        OsmAnd::LatLon latLon(waypoint.point.position.latitude, waypoint.point.position.longitude);
+        OsmAnd::LatLon latLon(waypoint.point.lat, waypoint.point.lon);
         const auto &wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
         CLLocation *location = [[CLLocation alloc] initWithLatitude:OsmAnd::Utilities::get31LatitudeY(wptPosition31.y)
                                                           longitude:OsmAnd::Utilities::get31LongitudeX(wptPosition31.x)];
@@ -94,10 +96,10 @@
 
         QuadRect *pointRect = [cellData.values.allKeys containsObject:@"quad_rect_value_point_area"]
                 ? cellData.values[@"quad_rect_value_point_area"]
-                : [[QuadRect alloc] initWithLeft:waypoint.point.position.longitude
-                                             top:waypoint.point.position.latitude
-                                           right:waypoint.point.position.longitude
-                                          bottom:waypoint.point.position.latitude];
+                : [[QuadRect alloc] initWithLeft:waypoint.point.lon
+                                             top:waypoint.point.lat
+                                           right:waypoint.point.lon
+                                          bottom:waypoint.point.lat];
 
         cellData.values[@"quad_rect_value_point_area"] = pointRect;
         cellData.values[@"string_value_distance"] = waypoint.distance ? waypoint.distance : [OAOsmAndFormatter getFormattedDistance:0];
@@ -126,7 +128,7 @@
             waypointsSectionData.values[@"tint_color"] = [waypointsSectionData.values[@"is_hidden"] boolValue]
                     ? [UIColor colorNamed:ACColorNameIconColorDisabled]
                     : self.trackMenuDelegate
-                            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:groupName])
+                            ? UIColorFromARGB([self.trackMenuDelegate getWaypointsGroupColor:groupName])
                             : [OADefaultFavorite getDefaultColor];
             [self.tableData.subjects addObject:waypointsSectionData];
 
@@ -200,27 +202,29 @@
                 ? [self.trackMenuDelegate getCenterGpxLocation] : kCLLocationCoordinate2DInvalid;
         OAWorldRegion *worldRegion = gpxLocation.latitude != DBL_MAX
                 ? [app.worldRegion findAtLat:gpxLocation.latitude lon:gpxLocation.longitude] : nil;
-
         NSString *name = !isRte
                 ? waypoint.point.name
                 : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"plugin_distance_point"),
                         [waypoints indexOfObject:waypoint] + 1];
+        name = name ?: @"";
+        NSString *description = worldRegion != nil
+        ? (worldRegion.localizedName ?: worldRegion.nativeName)
+        : @"";
+        description = description ?: @"";
         OAGPXTableCellData *waypointCellData = [OAGPXTableCellData withData:@{
                 kTableKey: [NSString stringWithFormat:@"waypoint_%@", name],
                 kCellType: [OAPointWithRegionTableViewCell getCellIdentifier],
                 kCellTitle: name,
-                kCellDesc: worldRegion != nil
-                        ? (worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName)
-                        : @"",
+                kCellDesc: description,
                 kCellLeftIcon: !isRte ? [waypoint getCompositeIcon]
                         : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
                                                     color:[UIColor colorNamed:ACColorNameIconColorDisabled]],
                 kTableValues: @{
                         @"waypoint": waypoint,
-                        @"quad_rect_value_point_area": [[QuadRect alloc] initWithLeft:waypoint.point.position.longitude
-                                                                                  top:waypoint.point.position.latitude
-                                                                                right:waypoint.point.position.longitude
-                                                                               bottom:waypoint.point.position.latitude]
+                        @"quad_rect_value_point_area": [[QuadRect alloc] initWithLeft:waypoint.point.lon
+                                                                                  top:waypoint.point.lat
+                                                                                right:waypoint.point.lon
+                                                                               bottom:waypoint.point.lat]
                 }
         }];
         [waypointsCells addObject:waypointCellData];
@@ -291,7 +295,7 @@
             sectionData.values[@"tint_color"] = [sectionData.values[@"is_hidden"] boolValue]
                     ? [UIColor colorNamed:ACColorNameIconColorDisabled]
                     : self.trackMenuDelegate
-                            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:cellData.title])
+                            ? UIColorFromARGB([self.trackMenuDelegate getWaypointsGroupColor:cellData.title])
                             : [OADefaultFavorite getDefaultColor];
 
             [cellData setData:@{

@@ -7,12 +7,13 @@
 //
 
 #import "OAPlugin.h"
-#import "OAOpenStreetMapUtilsProtocol.h"
-#import "OAOsmBugsUtilsProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAOsmBugsDBHelper, OAOsmEditsDBHelper;
+@protocol OAOpenStreetMapUtilsProtocol;
+@protocol OAOsmBugsUtilsProtocol;
+
+@class OAOsmBugsDBHelper, OAOsmEditsDBHelper, OAOsmPoint;
 
 @interface OAOsmEditingPlugin : OAPlugin
 

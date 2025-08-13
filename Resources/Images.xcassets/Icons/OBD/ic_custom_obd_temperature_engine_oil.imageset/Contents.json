@@ -1,0 +1,16 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_custom_obd_temperature_engine_oil.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
+  }
+}

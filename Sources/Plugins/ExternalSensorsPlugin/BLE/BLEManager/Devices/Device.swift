@@ -9,8 +9,8 @@ import CoreBluetooth
 import UIKit
 
 extension Notification.Name {
-    static let DeviceRSSIUpdated = NSNotification.Name("DeviceRSSIUpdated")
-    static let DeviceDisconnected = NSNotification.Name("DeviceDisconnected")
+    static let deviceRSSIUpdated = Notification.Name("DeviceRSSIUpdated")
+    static let deviceDisconnected = Notification.Name("DeviceDisconnected")
 }
 
 enum DeviceState: Int {
@@ -29,7 +29,10 @@ enum DeviceState: Int {
 @objc(OADevice)
 @objcMembers
 class Device: NSObject {
+    // swiftlint:disable all
     static let identifier = "identifier"
+    
+    class var getServiceUUID: String { "" }
     
     var deviceType: DeviceType!
     var rssi = -1
@@ -37,10 +40,10 @@ class Device: NSObject {
     var didChangeCharacteristic: (() -> Void)?
     var didDisconnect: (() -> Void)?
     var isSelected = false
+    var isSimulator = false
     
-    private(set) var peripheral: Peripheral!
-    
-    private var RSSIUpdateTimer: Timer?
+    var sensors = [Sensor]()
+    var sections = [String: Any]()
     
     var deviceServiceName: String {
         ""
@@ -58,24 +61,33 @@ class Device: NSObject {
         peripheral.state == .connecting
     }
     
-    var sensors = [Sensor]()
-    var sections = [String: Any]()
-    
-    class var getServiceUUID: String {
-        ""
+    var state: DeviceState {
+        DeviceState(rawValue: peripheral.state.rawValue) ?? .disconnected
     }
     
-    var getServiceConnectedImage: UIImage {
-        UIImage()
+    var getServiceConnectedImage: UIImage? {
+        nil
+    }
+    
+    var getServiceDisconnectedImage: UIImage? {
+        nil
     }
     
     var getDataFields: [[String: String]]? {
-        return nil
+        nil
     }
     
     var getSettingsFields: [String: Any]? {
-        return nil
+        nil
     }
+    
+    private(set) var peripheral: Peripheral!
+    
+    private var RSSIUpdateTimer: Timer?
+    
+    // swiftlint:enable all
+    
+    // MARK: - Initializer
     
     init(deviceType: DeviceType!,
          rssi: Int = 1,
@@ -95,12 +107,13 @@ class Device: NSObject {
         return nil
     }
     
-    func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) { }
+    func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) { }
     
     func configure() {}
     
     func addObservers() {
         NotificationCenter.default.removeObserver(self)
+        
         NotificationCenter.default.addObserver(forName: Peripheral.PeripheralCharacteristicValueUpdate,
                                                object: peripheral,
                                                queue: nil) { [weak self] notification in
@@ -114,28 +127,6 @@ class Device: NSObject {
             if let identifier = notification.userInfo?["identifier"] as? UUID, identifier.uuidString == self.id {
                 DeviceHelper.shared.removeDisconnected(device: self)
                 didDisconnectDevice()
-            }
-        }
-    }
-    
-    func didDisconnectDevice() {
-        NotificationCenter.default.post(name: .DeviceDisconnected,
-                                        object: nil,
-                                        userInfo: [Self.identifier: self.id])
-        didDisconnect?()
-    }
-    
-    func peripheralCharacteristicValueUpdate(notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              notification.userInfo?["error"] as? SBError == nil else {
-            return
-        }
-        guard let characteristic = userInfo["characteristic"] as? CBCharacteristic else {
-            return
-        }
-        update(with: characteristic) { [weak self] result in
-            if case .success = result {
-                self?.didChangeCharacteristic?()
             }
         }
     }
@@ -164,39 +155,13 @@ class Device: NSObject {
      - 0 : Device Information
      - 1 : Heart Rate
      */
-
+    
     func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
         for sensor in sensors {
             if let widgetTypes = sensor.getSupportedWidgetDataFieldTypes(), widgetTypes.contains(widgetDataFieldType) {
                 sensor.writeSensorDataToJson(json: json, widgetDataFieldType: widgetDataFieldType)
             }
         }
-    }
-
-}
-
-extension Device {
-    
-    var state: DeviceState {
-        DeviceState(rawValue: peripheral.state.rawValue) ?? .disconnected
-    }
-    
-    func setPeripheral(peripheral: Peripheral) {
-        self.peripheral = peripheral
-    }
-    
-    func connect(withTimeout timeout: TimeInterval?, completion: @escaping ConnectPeripheralCallback) {
-        peripheral.connect(withTimeout: timeout, completion: completion)
-    }
-    
-    func disconnect(completion: @escaping DisconnectPeripheralCallback) {
-        peripheral.disconnect(completion: completion)
-    }
-    
-    func discoverServices(withUUIDs serviceUUIDs: [CBUUIDConvertible]? = nil,
-                          completion: @escaping ServiceRequestCallback) {
-        peripheral.discoverServices(withUUIDs: serviceUUIDs,
-                                    completion: completion)
     }
     
     func discoverCharacteristics(withUUIDs characteristicUUIDs: [CBUUIDConvertible]? = nil,
@@ -207,6 +172,50 @@ extension Device {
                                            completion: completion)
     }
     
+    func disconnect(completion: @escaping DisconnectPeripheralCallback) {
+        peripheral.disconnect(completion: completion)
+    }
+    
+    func didDisconnectDevice() {
+        debugPrint("didDisconnectDevice | \(deviceServiceName) | \(deviceName)")
+        NotificationCenter.default.post(name: .deviceDisconnected,
+                                        object: nil,
+                                        userInfo: [Self.identifier: self.id])
+        didDisconnect?()
+    }
+    
+    func connect(withTimeout timeout: TimeInterval?, completion: @escaping ConnectPeripheralCallback) {
+        peripheral.connect(withTimeout: timeout, completion: completion)
+    }
+    
+    private func peripheralCharacteristicValueUpdate(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+              notification.userInfo?["error"] as? SBError == nil else {
+            return
+        }
+        guard let characteristic = userInfo["characteristic"] as? CBCharacteristic else {
+            return
+        }
+        update(with: characteristic) { [weak self] result in
+            if case .success = result {
+                self?.didChangeCharacteristic?()
+            }
+        }
+    }
+}
+
+extension Device {
+    
+    func setPeripheral(peripheral: Peripheral) {
+        self.peripheral = peripheral
+    }
+    
+    func discoverServices(withUUIDs serviceUUIDs: [CBUUIDConvertible]? = nil,
+                          completion: @escaping ServiceRequestCallback) {
+        peripheral.discoverServices(withUUIDs: serviceUUIDs,
+                                    completion: completion)
+    }
+    
     func setNotifyValue(toEnabled enabled: Bool,
                         ofCharac charac: CBCharacteristic,
                         completion: @escaping UpdateNotificationStateCallback) {
@@ -215,9 +224,20 @@ extension Device {
                                   ofServiceWithUUID: charac.service!,
                                   completion: completion)
     }
+    
+    func writeValue(ofDescriptorWithUUID descriptorUUID: CBUUIDConvertible,
+                    fromCharacWithUUID characUUID: CBUUIDConvertible,
+                    ofServiceWithUUID serviceUUID: CBUUIDConvertible,
+                    value: Data,
+                    completion: @escaping WriteRequestCallback) {
+        peripheral.writeValue(ofCharacWithUUID: characUUID,
+                              fromServiceWithUUID: serviceUUID,
+                              value: value,
+                              completion: completion)
+    }
 }
 
-// RSSI
+// MARK: - RSSI
 extension Device {
     func notifyRSSI() {
         disableRSSI()
@@ -241,7 +261,7 @@ extension Device {
             if case .success(let RSSI) = result {
                 if rssi != RSSI {
                     rssi = RSSI
-                    NotificationCenter.default.post(name: .DeviceRSSIUpdated, object: nil)
+                    NotificationCenter.default.post(name: .deviceRSSIUpdated, object: nil)
                 }
                 debugPrint(self.rssi)
             }

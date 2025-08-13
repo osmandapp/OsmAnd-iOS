@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OANetworkSettingsHelper.h"
+#import "OAPrepareBackupResult.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,10 +28,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) execute;
 - (void)uploadLocalItem:(OASettingsItem *)item;
 
-- (void)downloadRemoteVersion:(OASettingsItem *)item
-                    filesType:(EOARemoteFilesType)filesType
-                shouldReplace:(BOOL)shouldReplace
-               restoreDeleted:(BOOL)restoreDeleted;
+- (void)downloadItem:(OASettingsItem *)item
+                type:(EOARemoteFilesType)filesType
+       shouldReplace:(BOOL)shouldReplace
+      restoreDeleted:(BOOL)restoreDeleted;
 
 - (void)deleteItem:(OASettingsItem *)item;
 - (void)deleteLocalItem:(OASettingsItem *)item;

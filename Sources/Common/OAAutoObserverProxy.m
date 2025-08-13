@@ -7,6 +7,7 @@
 //
 
 #import "OAAutoObserverProxy.h"
+#import "OAObservableProtocol.h"
 
 #include <objc/message.h>
 

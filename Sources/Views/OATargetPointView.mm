@@ -7,10 +7,12 @@
 //
 
 #import "OATargetPointView.h"
+#import "OALocationServices.h"
 #import "OsmAndApp.h"
 #import "OAMapRendererView.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"
+#import "OAObservable.h"
 #import "OADestinationCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -22,6 +24,8 @@
 #import "OAMoreOptionsBottomSheetViewController.h"
 #import "OATransportStopRoute.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapLayers.h"
 #import "OANativeUtilities.h"
@@ -36,22 +40,24 @@
 #import "OAPOI.h"
 #import "OAWikiMenuViewController.h"
 #import "OAGPXWptViewController.h"
-#import "OsmAnd_Maps-Swift.h"
-#import "GeneratedAssetSymbols.h"
+#import "OAButton.h"
 #import "OAPluginsHelper.h"
+#import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#define kMargin 16.0
-#define kButtonsViewHeight 44.0
-#define kDefaultMapRulerMarginBottom 0
+static const CGFloat kMargin = 16.0;
+static const CGFloat kButtonsViewHeight = 44.0;
+static const CGFloat kDefaultMapRulerMarginBottom = 0;
 
-#define kButtonsTopMargin 1.0
-#define kButtonsBottomMargin 10.0
-#define kButtonsSideMargin 6.0
-#define kButtonsIconSize 30.0
-#define kButtonsIconTopMargin 7.0
-#define kButtonsLabelTopMargin 38.0
-#define kButtonsLabelSideMargin 4.0
-#define kButtonsLabelHeight 30.0
+static const CGFloat kButtonsTopMargin = 1.0;
+static const CGFloat kButtonsBottomMargin = 10.0;
+static const CGFloat kButtonsSideMargin = 6.0;
+static const CGFloat kButtonsIconSize = 30.0;
+static const CGFloat kButtonsIconTopMargin = 7.0;
+static const CGFloat kButtonsLabelTopMargin = 38.0;
+static const CGFloat kButtonsLabelSideMargin = 4.0;
+static const CGFloat kButtonsLabelHeight = 30.0;
+static const CGFloat kTopViewCornerRadius = 10.0;
 
 @interface OATargetPointView() <UIScrollViewDelegate, OAScrollViewDelegate, OAShareMenuDelegate>
 
@@ -61,7 +67,6 @@
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;
@@ -408,9 +413,9 @@ static const NSInteger _buttonsCount = 4;
     }
 }
 
-- (void) showTopToolbar:(BOOL)animated
+- (void) showTopToolbarWithAnimation:(BOOL)animated forceToShowIfTypeFloating:(BOOL)forceToShowIfTypeFloating
 {
-    if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden || (self.customController.topToolbarType == ETopToolbarTypeFloating && [self isLandscape]))
+    if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden || (self.customController.topToolbarType == ETopToolbarTypeFloating && [self isLandscape] && !forceToShowIfTypeFloating))
         return;
 
     [self updateToolbarGradientWithAlpha:[self getTopToolbarAlpha]];
@@ -444,7 +449,7 @@ static const NSInteger _buttonsCount = 4;
         if ((self.customController.topToolbarType == ETopToolbarTypeFloating || self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton) && self.customController.buttonBack)
         {
             self.customController.buttonBack.alpha = self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton ? 1.0 : [self getMiddleToolbarAlpha];
-            self.customController.buttonBack.hidden = NO;
+            self.customController.buttonBack.hidden = self.customController.buttonBack.alpha == 0.0;
             [self.parentView insertSubview:self.customController.buttonBack belowSubview:self.customController.navBar];
         }
         if (!showTopControls)
@@ -603,7 +608,7 @@ static const NSInteger _buttonsCount = 4;
     
     if ([self.customController hasTopToolbar] && ([self.customController shouldShowToolbar] || self.targetPoint.toolbarNeeded))
     {
-        [self showTopToolbar:YES];
+        [self showTopToolbarWithAnimation:YES forceToShowIfTypeFloating:NO];
     }
 }
 
@@ -624,7 +629,7 @@ static const NSInteger _buttonsCount = 4;
 {
     if ([self isLandscapeSupported] && [OAUtilities isLandscape:toInterfaceOrientation])
     {
-        [self showTopToolbar:NO];
+        [self showTopToolbarWithAnimation:NO forceToShowIfTypeFloating:NO];
         [self showBottomToolbar:NO];
     }
 }
@@ -714,7 +719,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (self.activeTargetType == OATargetGPX)
     {
-        if (_targetPoint.type == OATargetWpt && ![self newItem])
+        if (_targetPoint.type == OATargetWpt)
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"edit_waypoint_short");
             _buttonFavorite.accessibilityLabel = OALocalizedString(@"edit_waypoint_short");
@@ -729,7 +734,7 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        if (_targetPoint.type == OATargetFavorite && ![self newItem])
+        if (_targetPoint.type == OATargetFavorite)
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_edit_fav");
             _buttonFavorite.accessibilityLabel = OALocalizedString(@"ctx_mnu_edit_fav");
@@ -764,27 +769,6 @@ static const NSInteger _buttonsCount = 4;
     [self updateDirectionButton];
     [self updateTransportView];
     [self updateDescriptionLabel];
-}
-
-- (BOOL) newItem
-{
-    id targetObj = _targetPoint.targetObj;
-    if (!targetObj)
-        return NO;
-    
-    switch (_targetPoint.type)
-    {
-        case OATargetFavorite:
-            return NO;
-            break;
-        case OATargetGPX:
-            return ((OAGPX *)targetObj).newGpx;
-            break;
-            
-        default:
-            return NO;
-            break;
-    }
 }
 
 - (BOOL) hasInfo
@@ -866,7 +850,7 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController && [self.customController hasTopToolbar])
     {
         if ([self.customController shouldShowToolbar] || self.targetPoint.toolbarNeeded)
-            [self showTopToolbar:YES];
+            [self showTopToolbarWithAnimation:YES forceToShowIfTypeFloating:[self isLandscape]];
     }
     if (self.customController && [self.customController hasBottomToolbar])
     {
@@ -1306,7 +1290,10 @@ static const NSInteger _buttonsCount = 4;
     _fullOffset = [self getFullOffset];
     
     _fullScreenHeight = _headerHeight + contentViewHeight;
-    _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
+    if (self.customController.showTopViewInFullscreen)
+        _fullScreenOffset = _headerY + kTopViewCornerRadius - toolBarHeight;
+    else
+        _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
     
     CGFloat contentHeight = _headerY + _fullScreenHeight;
     
@@ -1643,7 +1630,7 @@ static const NSInteger _buttonsCount = 4;
     }
     
     if (self.activeTargetType == OATargetGPX)
-        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt) || (_targetPoint.type == OATargetWpt && ![self newItem]);
+        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt) || (_targetPoint.type == OATargetWpt);
     //else
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
     
@@ -1673,9 +1660,15 @@ static const NSInteger _buttonsCount = 4;
             if (!icon)
             {
                 if ([_targetPoint.targetObj isKindOfClass:OAPOI.class])
+                {
                     icon = [((OAPOI *)_targetPoint.targetObj) icon];
+                    if (!icon)
+                        icon = _targetPoint.icon;
+                }
                 else
+                {
                     icon = _targetPoint.icon;
+                }
             }
             _imageView.image = icon;
             _imageView.hidden = NO;
@@ -1686,6 +1679,8 @@ static const NSInteger _buttonsCount = 4;
         _imageView.image = _targetPoint.icon;
         _imageView.hidden = NO;
     }
+    
+    [_customController setTargetImage:_imageView.image];
 }
 
 - (void) updateAddressLabel
@@ -1703,6 +1698,8 @@ static const NSInteger _buttonsCount = 4;
         else
         {
             NSString *typeStr = [self.customController getTypeStr];
+            if (!typeStr || typeStr.length == 0)
+                typeStr = [self.customController getCommonTypeStr];
             NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] init];
             if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
             {
@@ -1724,7 +1721,6 @@ static const NSInteger _buttonsCount = 4;
             }
             else if (typeStr)
             {
-                typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, OALocalizedString(@"no_address_found")];
                 [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:typeStr]];
                 [attributedStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
             }
@@ -2097,15 +2093,6 @@ static const NSInteger _buttonsCount = 4;
 
     OAShareMenuActivity *shareGeo = [[OAShareMenuActivity alloc] initWithType:OAShareMenuActivityGeo];
     shareGeo.delegate = self;
-
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:items
-                                                                                         applicationActivities:@[
-                                                                                                 shareClipboard,
-                                                                                                 shareAddress,
-                                                                                                 sharePOIName,
-                                                                                                 shareCoordinates,
-                                                                                                 shareGeo]
-    ];
     
     UIButton *button = (UIButton *)sender;
     
@@ -2386,6 +2373,7 @@ static const NSInteger _buttonsCount = 4;
     
     [_downloadProgressBar setProgress:0.];
     _downloadProgressLabel.text = OALocalizedString(@"download_pending");
+    _downloadProgressLabel.font = [UIFont monospacedFontAt:15 withTextStyle:UIFontTextStyleBody];
     
     [self doLayoutSubviews:YES];
 }

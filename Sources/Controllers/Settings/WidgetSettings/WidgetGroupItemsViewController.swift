@@ -14,20 +14,31 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
     
     var widgetGroup: WidgetGroup!
     var widgetPanel: WidgetsPanel!
+    var addToNext: Bool?
+    var selectedWidget: String?
     
-    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
+    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
     override func generateData() {
         let section = tableData.createNewSection()
-        let sortedWidgets = widgetGroup.getWidgets().sorted { $0.ordinal < $1.ordinal }
+        let sortedWidgets = widgetGroup.getWidgets(withPanel: widgetPanel).sorted { $0.ordinal < $1.ordinal }
         for widget in sortedWidgets {
             let widgetInfo = widgetRegistry.getWidgetInfo(for: widget)
             guard let widgetInfo else { continue }
             let row = section.createNewRow()
             row.cellType = OASimpleTableViewCell.getIdentifier()
-            row.title = widget == .sunPosition ? widgetInfo.getStateIndependentTitle() : widgetInfo.getTitle()
+            var title = widgetInfo.getTitle()
+            switch widget {
+            case .sunPosition:
+                title = widgetInfo.getStateIndependentTitle()
+            case .sideMarker1, .sideMarker2:
+                title = widgetInfo.getWidgetDefaultTitle()
+            default: break
+            }
+            row.title = title
             row.iconName = widgetInfo.widget.widgetType?.iconName
             row.setObj(widgetInfo, forKey: "widget_info")
+            row.setObj(widget, forKey: "widget_type")
         }
     }
     
@@ -45,21 +56,33 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
             if let cell {
                 cell.titleLabel.text = item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
+                
+                cell.accessoryView = nil
+                if let widgetType = item.obj(forKey: "widget_type") as? WidgetType, !widgetType.isPurchased() {
+                    cell.accessoryView = UIImageView(image: .icPaymentLabelPro)
+                }
             }
             outCell = cell
         }
         return outCell
     }
     
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        if let widgetInfo = item.obj(forKey: "widget_info") as? MapWidgetInfo {
-            let vc = WidgetConfigurationViewController()!
-            vc.selectedAppMode = OAAppSettings.sharedManager()!.applicationMode.get()
+        guard let widgetInfo = item.obj(forKey: "widget_info") as? MapWidgetInfo, let widgetType = item.obj(forKey: "widget_type") as? WidgetType, let navigationController else { return }
+        if widgetType.isPurchased() {
+            guard let vc = WidgetConfigurationViewController() else { return }
+            vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
             vc.widgetInfo = widgetInfo
             vc.widgetPanel = widgetPanel
+            vc.addToNext = addToNext
+            vc.selectedWidget = selectedWidget
             vc.createNew = true
-            show(vc)
+            navigationController.pushViewController(vc, animated: true)
+        } else if widgetType == .altitudeMapCenter {
+            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
+        } else if widgetType.isOBDWidget() && widgetType != .OBDSpeed && widgetType != .OBDRpm {
+            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.vehiclemetrics(), navController: navigationController)
         }
     }
 }
@@ -67,7 +90,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
 // MARK: Appearance
 extension WidgetGroupItemsViewController {
     
-    override func getTitle() -> String! {
+    override func getTitle() -> String {
         widgetGroup.title
     }
     
@@ -79,16 +102,14 @@ extension WidgetGroupItemsViewController {
         false
     }
     
-    override func getTableHeaderDescriptionAttr() -> NSAttributedString! {
+    override func getTableHeaderDescriptionAttr() -> NSAttributedString {
         let attrStr = NSMutableAttributedString(string: widgetGroup.descr ?? "")
         // Set font attribute
         let font = UIFont.systemFont(ofSize: 17)
         attrStr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attrStr.length))
 
         // Set color attribute
-        let color = UIColor.buttonBgColorDisruptive
         attrStr.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
-    
 }

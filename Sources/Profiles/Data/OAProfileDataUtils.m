@@ -24,6 +24,7 @@
         
         OAProfileDataObject *profile = [[OAProfileDataObject alloc] initWithStringKey:mode.stringKey name:[mode toHumanString] descr:description iconName:mode.getIconName isSelected:NO];
         profile.iconColor = mode.getIconColor;
+        profile.customIconColor = mode.getCustomIconColor;
         [profiles addObject:profile];
     }
     return profiles;

@@ -10,9 +10,11 @@
 #import "OAImportDuplicatesViewController.h"
 #import "OAImportCompleteViewController.h"
 #import "OASettingsImporter.h"
+#import "OASettingsHelper.h"
 #import "OsmAndApp.h"
 #import "OAProgressTitleCell.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -178,6 +180,7 @@
 {
     if (succeed)
     {
+        [BackupUtils updateCacheForItems:items];
         [self.tableView reloadData];
         OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:_file.lastPathComponent];
         [self showViewController:importCompleteVC];

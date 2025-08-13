@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -149,12 +149,23 @@
                             </stackView>
                         </subviews>
                     </stackView>
+                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tya-RY-7Oh">
+                        <rect key="frame" x="324" y="11" width="70" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="5gP-Be-o3O"/>
+                            <constraint firstAttribute="width" constant="70" id="VWd-0m-kX2"/>
+                        </constraints>
+                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                        <state key="normal" image="ic_payment_label_pro"/>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="EJn-Ks-d3x" secondAttribute="trailing" id="9av-SZ-Fdx"/>
                     <constraint firstAttribute="bottom" secondItem="EJn-Ks-d3x" secondAttribute="bottom" id="WXV-Wr-BGz"/>
                     <constraint firstItem="EJn-Ks-d3x" firstAttribute="leading" secondItem="dlV-Jg-Tod" secondAttribute="leadingMargin" id="d3X-KJ-f2v"/>
                     <constraint firstItem="EJn-Ks-d3x" firstAttribute="top" secondItem="dlV-Jg-Tod" secondAttribute="top" id="muV-8z-Nga"/>
+                    <constraint firstItem="tya-RY-7Oh" firstAttribute="centerY" secondItem="dlV-Jg-Tod" secondAttribute="centerY" id="qZE-Yk-0d6"/>
+                    <constraint firstItem="EJn-Ks-d3x" firstAttribute="trailing" secondItem="tya-RY-7Oh" secondAttribute="trailing" id="tnb-c5-FdK"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" name="groupBg"/>
@@ -164,19 +175,23 @@
                 <outlet property="descriptionLabel" destination="RAZ-Y1-CfK" id="Dzm-Yu-ub1"/>
                 <outlet property="leftEditButton" destination="2je-Rn-N1k" id="C5W-mi-s9O"/>
                 <outlet property="leftIconView" destination="ZcW-nx-ZHb" id="XGq-lo-uUm"/>
+                <outlet property="proButton" destination="tya-RY-7Oh" id="y7q-Ei-8e6"/>
                 <outlet property="textCustomMarginBottomStackView" destination="z5T-L5-iVs" id="r8F-bk-lMq"/>
                 <outlet property="textCustomMarginTopStackView" destination="kKL-Xr-Rbt" id="8b7-n3-JO3"/>
                 <outlet property="textStackView" destination="cg3-NR-OYx" id="HmV-rs-mNc"/>
                 <outlet property="titleLabel" destination="f1L-rN-XiG" id="buz-tl-eCo"/>
+                <outlet property="titleWidthConstraint" destination="8qC-Rq-OXb" id="H77-qb-Mhd"/>
                 <outlet property="topContentSpaceView" destination="oBc-Dx-kEA" id="Hls-Re-f9U"/>
                 <outlet property="valueLabel" destination="32H-RA-OLd" id="Fcs-Xj-qQc"/>
                 <outlet property="valueStackView" destination="68V-3N-ZFk" id="vmm-Oc-kZp"/>
+                <outlet property="valueWidthConstraint" destination="de9-fR-zct" id="Sln-9S-CgV"/>
             </connections>
             <point key="canvasLocation" x="88" y="27"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="ic_custom_delete.png" width="30" height="30"/>
+        <image name="ic_payment_label_pro" width="70" height="44"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

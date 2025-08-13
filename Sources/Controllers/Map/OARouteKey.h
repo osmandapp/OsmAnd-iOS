@@ -7,14 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <OsmAndCore/NetworkRouteContext.h>
 
-@interface OARouteKey : NSObject
+@class OASGpxFile;
 
-@property (nonatomic, readonly) OsmAnd::NetworkRouteKey routeKey;
+@interface OARouteKey : NSObject <NSCopying>
 
-+ (OARouteKey *) fromGpx:(NSDictionary<NSString *, NSString *> *)gpx;
+@property (nonatomic, readonly) NSString *localizedTitle;
 
-- (instancetype) initWithKey:(const OsmAnd::NetworkRouteKey &)key;
++ (OARouteKey *)fromGpxFile:(OASGpxFile *)gpxFile;
+- (NSString *)getActivityTypeTitle;
+
+- (NSString *)getRouteName;
+- (NSString *)getRouteTag;
+- (NSArray<NSString *> *)getRouteMapAllKeys;
+- (NSString *)getRouteValue:(NSString *)key;
 
 @end

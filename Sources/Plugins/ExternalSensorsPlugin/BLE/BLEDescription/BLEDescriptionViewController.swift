@@ -42,7 +42,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
 
         configureHeader()
         headerView.configure(device: device)
-        headerView.didPaireDeviceAction = { [weak self] in
+        headerView.didPairedDeviceAction = { [weak self] in
             guard let self else { return }
             generateData()
             tableView.reloadData()
@@ -65,7 +65,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         tableData.clearAllData()
         if DeviceHelper.shared.isPairedDevice(id: device.id) {
             // Information
-            if let sensor = device.sensors.first(where: { $0 is BLEBatterySensor }) as? BLEBatterySensor {
+            if let sensor = device.sensors.compactMap({ $0 as? BLEBatterySensor }).first {
                 let infoSection = tableData.createNewSection()
                 infoSection.headerText = localizedString("external_device_details_information").uppercased()
                 infoSection.key = "information"
@@ -208,7 +208,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceRSSIUpdated),
-                                               name: .DeviceRSSIUpdated,
+                                               name: .deviceRSSIUpdated,
                                                object: nil)
     }
     

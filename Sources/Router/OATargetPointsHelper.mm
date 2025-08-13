@@ -10,6 +10,9 @@
 #import "OAPointDescription.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
+#import "OALocationServices.h"
+#import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OARTargetPoint.h"
@@ -41,6 +44,7 @@
     BOOL _isSearchingStart;
     BOOL _isSearchingDestination;
     BOOL _isSearchingMyLocation;
+    dispatch_queue_t _locationQueue;
 }
 
 + (OATargetPointsHelper *) sharedInstance
@@ -63,6 +67,7 @@
         _settings = [OAAppSettings sharedManager];
         _listeners = [NSMutableArray array];
         _routingHelper = [OARoutingHelper sharedInstance];
+        _locationQueue = dispatch_queue_create("com.osmand.targetpoints.location", DISPATCH_QUEUE_SERIAL);
         [self readFromSettings];
     }
     return self;
@@ -205,12 +210,14 @@
     return res;
 }
 
-- (OARTargetPoint *) getFirstIntermediatePoint
+- (OARTargetPoint *)getFirstIntermediatePoint
 {
-    if (_intermediatePoints.count > 0)
-        return _intermediatePoints[0];
-    
-    return nil;
+    return [self getIntermediatePoint:0];
+}
+
+- (OARTargetPoint *)getIntermediatePoint:(int)intermediatePointIndex
+{
+    return intermediatePointIndex < _intermediatePoints.count ? _intermediatePoints[intermediatePointIndex] : nil;
 }
 
 - (void) restoreTargetPoints:(BOOL)updateRoute
@@ -607,7 +614,7 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             NSString *pointName = [self getLocationName:_myLocationToStart.point];
             [_myLocationToStart.pointDescription setName:pointName];
-            [_app.data setMyLocationToStart:_myLocationToStart];;
+            [_app.data setMyLocationToStart:_myLocationToStart];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateRouteAndRefresh:NO];
                 _isSearchingMyLocation = NO;
@@ -647,30 +654,35 @@
     }
 }
 
-- (NSString *) getLocationName:(CLLocation *)location
+- (NSString *)getLocationName:(CLLocation *)location
 {
-    NSString *addressString = nil;
-    BOOL isAddressFound = NO;
-    NSString *formattedTargetName = nil;
-    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
-    if (!roadTitle || roadTitle.length == 0)
-    {
-        addressString = OALocalizedString(@"map_no_address");
-    }
-    else
-    {
-        addressString = roadTitle;
-        isAddressFound = YES;
-    }
+    __block NSString *formattedTargetName = nil;
     
-    if (isAddressFound || addressString)
-    {
-        formattedTargetName = addressString;
-    }
-    else
-    {
-        formattedTargetName = [OAPointDescription getLocationName:location.coordinate.latitude lon:location.coordinate.longitude sh:NO];
-    }
+    dispatch_sync(_locationQueue, ^{
+        NSString *addressString = nil;
+        BOOL isAddressFound = NO;
+        NSString *roadTitle = nil;
+        if (location && CLLocationCoordinate2DIsValid(location.coordinate))
+            roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
+        if (!roadTitle || roadTitle.length == 0)
+        {
+            addressString = OALocalizedString(@"map_no_address");
+        }
+        else
+        {
+            addressString = roadTitle;
+            isAddressFound = YES;
+        }
+        
+        if (isAddressFound || addressString)
+        {
+            formattedTargetName = addressString;
+        }
+        else
+        {
+            formattedTargetName = [OAPointDescription getLocationName:location.coordinate.latitude lon:location.coordinate.longitude sh:NO];
+        }
+    });
     return formattedTargetName;
 }
 
@@ -679,10 +691,18 @@
     OAApplicationMode *mode = _settings.applicationMode.get;
     if ([_settings.routerService get:mode] != EOARouteService::OSMAND)
         return false;
-    
+    bool hhRouting = ![_settings.useOldRouting get];
+    if (hhRouting &&
+        ([[OAApplicationMode DEFAULT] isDerivedRoutingFrom:[_routingHelper getAppMode]]
+         || [[OAApplicationMode CAR] isDerivedRoutingFrom:[_routingHelper getAppMode]]
+         || [[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]]))
+    {
+        return false;
+    }
+
     CLLocation *current = [_routingHelper getLastProjection];
     double dist = 400000;
-    if ([[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]] && [[_settings getCustomRoutingBooleanProperty:kRouteParamIdHeightObstacles defaultValue:false] get:[_routingHelper getAppMode]])
+    if ([[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]] && [[_settings getCustomRoutingBooleanProperty:kRouteParamHeightObstacles defaultValue:false] get:[_routingHelper getAppMode]])
     {
         dist = 50000;
     }

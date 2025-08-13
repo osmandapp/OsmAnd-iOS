@@ -12,6 +12,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapActions.h"
+#import "OAApplicationMode.h"
 #import <CarPlay/CarPlay.h>
 
 @implementation OABaseCarPlayInterfaceController
@@ -36,7 +37,7 @@
     // override
 }
 
-- (void) startNavigationGivenLocation:(CLLocation *)loc historyName:(OAPointDescription *)historyName
+- (void) startNavigationGivenLocation:(CLLocation *)loc historyName:(nullable OAPointDescription *)historyName
 {
     if (loc)
     {

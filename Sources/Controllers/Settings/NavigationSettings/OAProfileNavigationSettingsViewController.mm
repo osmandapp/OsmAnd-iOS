@@ -23,6 +23,7 @@
 #import "OARoutingProfilesHolder.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
@@ -66,15 +67,18 @@
     NSString *selectedProfileName = self.appMode.getRoutingProfile;
     NSString *derivedProfile = self.appMode.getDerivedProfile;
     OARoutingDataObject *routingData = [_routingDataObjects get:selectedProfileName derivedProfile:derivedProfile];
+    NSInteger trackGuidanceValue = [_settings.detailedTrackGuidance get:self.appMode];
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *navigationArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
+    NSMutableArray *detailedTrackArr = [NSMutableArray array];
     [navigationArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"nav_type_hint"),
         @"value" : routingData ? routingData.name : @"",
         @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
+        @"tintColor" : [UIColor colorNamed:ACColorNameIconColorDefault],
         @"key" : @"navigationType",
     }];
     [navigationArr addObject:@{
@@ -112,13 +116,18 @@
         @"title" : OALocalizedString(@"map_during_navigation"),
         @"key" : @"mapBehavior",
     }];
+    [detailedTrackArr addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"detailed_track_guidance"),
+        @"value" : OALocalizedString(trackGuidanceValue == EOATrackApproximationManual ? @"ask_every_time" : @"shared_string_always"),
+        @"icon" : @"ic_custom_attach_track",
+        @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
+        @"key" : @"detailedTrackGuidance",
+    }];
     [tableData addObject:navigationArr];
     [tableData addObject:otherArr];
-    [tableData addObject:@[@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"animate_my_location")
-    }]];
-    
+    [tableData addObject:detailedTrackArr];
+
     _data = [NSArray arrayWithArray:tableData];
 }
 
@@ -141,8 +150,6 @@
     {
         case 1:
             return OALocalizedString(@"change_map_behavior");
-        case 2:
-            return OALocalizedString(@"animate_my_location_descr");
         default:
             return @"";
     }
@@ -173,6 +180,7 @@
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.tintColor = item[@"tintColor"];
         }
         return cell;
     }
@@ -195,27 +203,7 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-
-            cell.switchView.on = [_settings.animateMyLocation get:self.appMode];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
-    }
+    
     return nil;
 }
 
@@ -261,19 +249,14 @@
             settingsViewController = [[OAVehicleParametersViewController alloc] initWithAppMode:self.appMode];
         else if ([itemKey isEqualToString:@"mapBehavior"])
             settingsViewController = [[OAMapBehaviorViewController alloc] initWithAppMode:self.appMode];
+        else if ([itemKey isEqualToString:@"detailedTrackGuidance"])
+            settingsViewController = [[DetailedTrackGuidanceViewController alloc] initWithAppMode:self.appMode];
         if (settingsViewController)
         {
             settingsViewController.delegate = self;
             [self showViewController:settingsViewController];
         }
     }
-}
-
-#pragma mark - Selectors
-
-- (void)applyParameter:(UISwitch *)sender
-{
-    [_settings.animateMyLocation set:sender.isOn mode:self.appMode];
 }
 
 #pragma mark - OASettingsDataDelegate

@@ -14,7 +14,8 @@
 @interface OAHistoryDB : NSObject
 
 - (void)addPoint:(OAHistoryItem *)item;
-- (void)deletePoint:(int64_t)id;
+- (void)importBackupPoints:(NSArray<OAHistoryItem *> *)items;
+- (void)deletePoint:(OAHistoryItem *)item;
 
 - (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation;
 - (NSArray<OAHistoryItem *> *)getPoints:(NSString *)selectPostfix limit:(int)limit;
@@ -26,7 +27,9 @@
 - (NSArray<OAHistoryItem *> *)getPointsFromNavigation:(int)limit;
 - (NSInteger)getPointsCountFromNavigation;
 
-- (long) getMarkersHistoryLastModifiedTime;
-- (void) setMarkersHistoryLastModifiedTime:(long)lastModified;
+- (long)getMarkersHistoryLastModifiedTime;
+- (void)setMarkersHistoryLastModifiedTime:(long)lastModified;
+- (long)getHistoryLastModifiedTime;
+- (void)setHistoryLastModifiedTime:(long)lastModified;
 
 @end

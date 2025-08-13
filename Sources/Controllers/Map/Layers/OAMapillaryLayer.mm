@@ -14,6 +14,12 @@
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
 #import "OANativeUtilities.h"
+#import "OAAppSettings.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
+#import "OAMapUtils.h"
+#import "OAPointDescription.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include "OAMapillaryTilesProvider.h"
 #include <OsmAndCore/Utilities.h>
@@ -26,6 +32,8 @@
 #define kMapillaryOpacity 1.0f
 #define kSearchRadius 100
 #define EXTENT 4096.0
+
+static int MIN_POINTS_ZOOM = 17;
 
 @implementation OAMapillaryLayer
 {
@@ -84,7 +92,8 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     if (self.app.data.mapillary)
     {
@@ -227,66 +236,131 @@
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    const auto zoom = self.mapView.zoomLevel;
-    auto mapillaryMapProvider = _mapillaryMapProvider;
-    if (mapillaryMapProvider && zoom >= mapillaryMapProvider->getPointsZoom() && !symbolInfo)
-    {
-        const auto tileZoom = mapillaryMapProvider->getVectorTileZoom();
-        const auto tileId = OsmAnd::TileId::fromXY(OsmAnd::Utilities::getTileNumberX(tileZoom, point.longitude), OsmAnd::Utilities::getTileNumberY(tileZoom, point.latitude));
-        const auto& geometryTile = mapillaryMapProvider->readGeometry(tileId);
-        if (geometryTile != nullptr && !geometryTile->empty())
-        {
-            int dzoom = zoom - tileZoom;
-            double mult = (int) pow(2.0, dzoom);
-            const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - zoom));
-            const auto zoomShift = OsmAnd::ZoomLevel::MaxZoomLevel - zoom;
-            const auto touchLatLon = OsmAnd::LatLon(point.latitude, point.longitude);
-            const auto point31 = OsmAnd::Utilities::convertLatLonTo31(touchLatLon);
-            double searchRadius = MAX(5.0, kSearchRadius / mult);
-            const auto searchAreaBBox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(searchRadius, point31);
+    if (!_mapillaryMapProvider || [self.mapViewController getMapZoom] < MIN_POINTS_ZOOM)
+        return;
+    
+    CGPoint pixel = result.point;
+    OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:pixel];
+    const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
 
-            double minDist = DBL_MAX;
-            OAMapillaryImage *image = nil;
-            for (const auto& pnt : geometryTile->getGeometry())
+    int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+    const auto touchPolygon31 = [self getMapillaryTouchPolygon:pixel radius:radius];
+    if (touchPolygon31 == OsmAnd::AreaI())
+        return;
+    
+    const auto zoom = self.mapView.zoomLevel;
+    const auto tileZoom = _mapillaryMapProvider->getVectorTileZoom();
+    const auto tileId = OsmAnd::TileId::fromXY(OsmAnd::Utilities::getTileNumberX(tileZoom, latLon.longitude), OsmAnd::Utilities::getTileNumberY(tileZoom, latLon.latitude));
+    
+    const auto& geometryTile = _mapillaryMapProvider->readGeometry(tileId);
+    if (geometryTile != nullptr && !geometryTile->empty())
+    {
+        int dzoom = zoom - tileZoom;
+        double mult = (int) pow(2.0, dzoom);
+        const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - zoom));
+        const auto zoomShift = OsmAnd::ZoomLevel::MaxZoomLevel - zoom;
+        
+        double minDistance = DBL_MAX;
+        OAMapillaryImage *closestImage = nil;
+        
+        for (const auto& pnt : geometryTile->getGeometry())
+        {
+            if (pnt == nullptr || pnt->getType() != OsmAnd::MvtReader::GeomType::POINT)
+                continue;
+            
+            const auto& p = std::dynamic_pointer_cast<const OsmAnd::MvtReader::Point>(pnt);
+            
+            double px = p->getCoordinate().x / EXTENT;
+            double py = p->getCoordinate().y / EXTENT;
+            double tileX = ((tileId.x << zoomShift) + (tileSize31 * px)) * mult;
+            double tileY = ((tileId.y << zoomShift) + (tileSize31 * py)) * mult;
+            auto pointLatLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(tileX, tileY));
+            
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:pointLatLon.latitude lon:pointLatLon.longitude polygon31:touchPolygon31];
+            if (shouldAdd)
             {
-                if (pnt == nullptr || pnt->getType() != OsmAnd::MvtReader::GeomType::POINT)
-                    continue;
-                
-                double px, py;
-                const auto& p = std::dynamic_pointer_cast<const OsmAnd::MvtReader::Point>(pnt);
-                OsmAnd::PointI coordinate = p->getCoordinate();
-                px = coordinate.x / EXTENT;
-                py = coordinate.y / EXTENT;
-                
-                double tileX = ((tileId.x << zoomShift) + (tileSize31 * px)) * mult;
-                double tileY = ((tileId.y << zoomShift) + (tileSize31 * py)) * mult;
-                
-                if (searchAreaBBox31.contains(tileX, tileY))
+                OAMapillaryImage *newImage = [[OAMapillaryImage alloc] initWithLatitude:pointLatLon.latitude longitude:pointLatLon.longitude];
+                if ([newImage setData:pnt->getUserData() geometryTile:geometryTile])
                 {
-                    if ([OAAppSettings sharedManager].useMapillaryFilter.get && mapillaryMapProvider->filtered(p->getUserData(), geometryTile))
-                            continue;
-                    
-                    auto latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(tileX, tileY));
-                    double dist = OsmAnd::Utilities::distance(latLon, touchLatLon);
-                    if (dist < minDist)
+                    double distance = OsmAnd::Utilities::distance(latLon, pointLatLon);
+                    if (!closestImage || distance < minDistance)
                     {
-                        minDist = dist;
-                        image = [[OAMapillaryImage alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
-                        if (![image setData:pnt->getUserData() geometryTile:geometryTile])
-                            image = nil;
+                        minDistance = distance;
+                        closestImage = newImage;
                     }
                 }
             }
-            if (image)
-            {
-                OATargetPoint *targetPoint = [self getTargetPoint:image];
-                if (![found containsObject:targetPoint])
-                    [found addObject:targetPoint];
-            }
+        }
+        
+        if (closestImage)
+        {
+            [result collect:closestImage provider:self];
         }
     }
+}
+
+- (OsmAnd::AreaI) getMapillaryTouchPolygon:(CGPoint)pixel radius:(int)radius
+{
+    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:pixel radius:radius];
+    if (touchPolygon31 == OsmAnd::AreaI())
+        return OsmAnd::AreaI();
+    
+    int32_t minX31 = INT32_MAX;
+    int32_t minY31 = INT32_MAX;
+    int32_t maxX31 = INT32_MIN;
+    int32_t maxY31 = INT32_MIN;
+    
+    QVector<OsmAnd::PointI> touchPolygonList = {touchPolygon31.topLeft, touchPolygon31.bottomRight};
+    for (auto point31 : touchPolygonList)
+    {
+        minX31 = min(minX31, point31.x);
+        minY31 = min(minY31, point31.y);
+        maxX31 = max(maxX31, point31.x);
+        maxY31 = max(maxY31, point31.y);
+    }
+    
+    return OsmAnd::AreaI(minY31, minX31, maxY31, maxX31);
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return NO;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OAMapillaryImage.class])
+    {
+        OAMapillaryImage * image = (OAMapillaryImage *)obj;
+        return [[CLLocation alloc] initWithLatitude:image.latitude longitude:image.longitude];
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OAMapillaryImage.class])
+    {
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_MAPILLARY_IMAGE name:OALocalizedString(@"mapillary_image")];
+    }
+    return nil;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import "OADestinationCell.h"
 #import "OADestination.h"
+#import "OALocationServices.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAUtilities.h"

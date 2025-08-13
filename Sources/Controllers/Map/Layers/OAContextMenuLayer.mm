@@ -15,15 +15,29 @@
 #import "OAMapLayers.h"
 #import "OAContextMenuProvider.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOILocationType.h"
+#import "OAMapObject+cpp.h"
 #import "OAPOI.h"
+#import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
+#import "OAPOIFilter.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OATransportStop.h"
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OATransportStopsBaseController.h"
+#import "OAMapRendererEnvironment.h"
+#import "OAColors.h"
+#import "OAMapUtils+cpp.h"
+#import "OAMapSelectionHelper.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -34,6 +48,7 @@
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/SingleSkImage.h>
+#include <OsmAndCore/Map/VectorLineBuilder.h>
 
 @interface OAContextMenuLayer () <CAAnimationDelegate>
 @end
@@ -43,6 +58,8 @@
     // Context pin marker
     std::shared_ptr<OsmAnd::MapMarkersCollection> _contextPinMarkersCollection;
     std::shared_ptr<OsmAnd::MapMarker> _contextPinMarker;
+    
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _outlineCollection;
     
     UIImageView *_animatedPin;
     BOOL _animationDone;
@@ -60,6 +77,8 @@
     NSArray<OAMapLayer *> *_pointLayers;
     
     CGPoint _cachedTargetPoint;
+    
+    OAMapSelectionHelper *_mapSelectionHelper;
 }
 
 - (NSString *) layerId
@@ -79,8 +98,12 @@
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
     .buildAndAddToCollection(_contextPinMarkersCollection);
+    
+    _outlineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
 
     _initDone = YES;
+    
+    _mapSelectionHelper = [[OAMapSelectionHelper alloc] init];
 
     // Add context pin markers
     [self.mapViewController runWithRenderSync:^{
@@ -356,228 +379,9 @@
     return nil;
 }
 
-- (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
+- (BOOL) isSecondaryProvider
 {
-    OAMapRendererView *mapView = self.mapView;
-    OAMapViewController *mapViewController = self.mapViewController;
-    NSMutableArray<OATargetPoint *> *found = [NSMutableArray array];
-    
-    CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
-    double lat = coord.latitude;
-    double lon = coord.longitude;
-    double latTap = lat;
-    double lonTap = lon;
-    NSString *mapIconName = nil;
-    
-    CLLocationCoordinate2D objectCoord = kCLLocationCoordinate2DInvalid;
-    CGFloat delta = 10.0;
-    OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
-
-    const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
-    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
-
-    if (!_pointLayers)
-    {
-        _pointLayers = @[self.mapViewController.mapLayers.myPositionLayer,
-                         self.mapViewController.mapLayers.mapillaryLayer,
-                         self.mapViewController.mapLayers.downloadedRegionsLayer,
-                         self.mapViewController.mapLayers.gpxMapLayer];
-    }
-    for (OAMapLayer *layer in _pointLayers)
-    {
-        if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
-           [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
-    }
-    NSMutableArray<OAMapLayer *> *layers = [[mapViewController.mapLayers getLayers] mutableCopy];
-    [layers removeObjectsInArray:@[self.mapViewController.mapLayers.myPositionLayer,
-                                   self.mapViewController.mapLayers.mapillaryLayer,
-                                   self.mapViewController.mapLayers.downloadedRegionsLayer]];
-
-    for (const auto symbolInfo : symbolInfos)
-    {
-        if (!showUnknownLocation)
-        {
-            if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
-            {
-                lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
-                lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
-                
-                if (const auto billboardAdditionalParams = std::dynamic_pointer_cast<const OsmAnd::MapSymbolsGroup::AdditionalBillboardSymbolInstanceParameters>(symbolInfo.instanceParameters))
-                {
-                    if (billboardAdditionalParams->overridesPosition31)
-                    {
-                        lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x);
-                        lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
-                    }
-                }
-                objectCoord = CLLocationCoordinate2DMake(lat, lon);
-            }
-        }
-        if (symbolInfo.mapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Icon)
-        {
-            if (const auto billboardRasterMapSymbol = std::static_pointer_cast<const OsmAnd::BillboardRasterMapSymbol>(symbolInfo.mapSymbol))
-            {
-                mapIconName = billboardRasterMapSymbol->content.toNSString();
-            }
-        }
-        if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
-        {
-            if (markerGroup->getMapMarker() == _contextPinMarker.get())
-            {
-                OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-                targetPoint.type = OATargetContext;
-                return @[targetPoint];
-            }
-        }
-        
-        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(lat, lon);
-        for (OAMapLayer *layer in layers)
-        {
-            if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
-            {
-                NSMutableArray<OATargetPoint *> *currentFound = [NSMutableArray array];
-                [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:&symbolInfo found:currentFound unknownLocation:showUnknownLocation];
-               
-                for (OATargetPoint *point in currentFound)
-                {
-                    if ([point.targetObj isKindOfClass:OAPOI.class])
-                        ((OAPOI *)point.targetObj).mapIconName = mapIconName;
-                }
-                [found addObjectsFromArray:currentFound];
-            }
-        }
-    }
-    
-    if (found.count > 0)
-    {
-        if (found.count > 1)
-        {
-            // Sometimes there appears two copy of one point. We decided to filter it right here (in UI).
-            // https://github.com/osmandapp/OsmAnd-Issues/issues/533
-            
-            NSMutableSet<OATargetPoint *> *filtredPointsSet = [NSMutableSet new];
-            for (OATargetPoint *point in found)
-                [filtredPointsSet addObject:point];
-            found = [NSMutableArray arrayWithArray:filtredPointsSet.allObjects];
-        }
-        
-        NSMutableArray *existingPoints = [NSMutableArray array];
-        for (OATargetPoint *targetPoint in found)
-        {
-            NSString *formattedTargetName = nil;
-            NSString *addressString = nil;
-            OAPOI *poi = [targetPoint.targetObj isKindOfClass:[OAPOI class]] ? (OAPOI *)targetPoint.targetObj : nil;
-            if (poi)
-            {
-                for (OATargetPoint *targetPoint in found)
-                {
-                    OATransportStop *transportStop = [targetPoint.targetObj isKindOfClass:[OATransportStop class]] ? (OATransportStop *)targetPoint.targetObj : nil;
-                    if (transportStop && [poi.name isEqualToString:transportStop.name])
-                    {
-                        transportStop.poi = poi;
-                        [existingPoints addObject:targetPoint];
-                        break;
-                    }
-                }
-            }
-            
-            OAPOIType *poiType = poi ? poi.type : nil;
-            NSString *buildingNumber = poi ? poi.buildingNumber : nil;
-            BOOL needAddress = YES;
-            BOOL isAddressFound = NO;
-            if (poiType)
-                needAddress = ![@"place" isEqualToString:poiType.tag];
-
-            NSString *caption = targetPoint.title;
-            if (caption.length == 0 && (targetPoint.type == OATargetLocation || targetPoint.type == OATargetPOI))
-            {
-                if (!roadTitle || roadTitle.length == 0)
-                {
-                    if (buildingNumber.length > 0)
-                    {
-                        addressString = buildingNumber;
-                        isAddressFound = YES;
-                    }
-                    else
-                    {
-                        addressString = OALocalizedString(@"map_no_address");
-                    }
-                }
-                else
-                {
-                    addressString = roadTitle;
-                    isAddressFound = YES;
-                }
-            }
-            else if (caption.length > 0)
-            {
-                isAddressFound = YES;
-                addressString = caption;
-            }
-            
-            if (isAddressFound || addressString)
-            {
-                formattedTargetName = addressString;
-            }
-            else if (poiType)
-            {
-                isAddressFound = YES;
-                formattedTargetName = poiType.nameLocalized;
-            }
-            else if (buildingNumber.length > 0)
-            {
-                isAddressFound = YES;
-                formattedTargetName = buildingNumber;
-            }
-            else
-            {
-                formattedTargetName = [OAPointDescription getLocationName:targetPoint.location.latitude lon:targetPoint.location.longitude sh:NO];
-            }
-
-            if (poi && poi.nameLocalized.length == 0)
-                poi.nameLocalized = formattedTargetName;
-            
-            targetPoint.title = formattedTargetName;
-            targetPoint.addressFound = isAddressFound;
-            targetPoint.titleAddress = needAddress ? roadTitle : nil;
-        }
-        if (existingPoints.count > 0)
-            [found removeObjectsInArray:existingPoints];
-        
-        [self processTransportStops:found coord:coord];
-
-        BOOL gpxModeActive = [[OARootViewController instance].mapPanel gpxModeActive];
-        [found sortUsingComparator:^NSComparisonResult(OATargetPoint *obj1, OATargetPoint *obj2) {
-            
-            double dist1 = OsmAnd::Utilities::distance(lonTap, latTap, obj1.location.longitude, obj1.location.latitude);
-            double dist2 = OsmAnd::Utilities::distance(lonTap, latTap, obj2.location.longitude, obj2.location.latitude);
-            
-            NSInteger index1 = obj1.sortIndex;
-            if (gpxModeActive && obj1.type == OATargetWpt)
-                index1 = 0;
-            
-            NSInteger index2 = obj2.sortIndex;
-            if (gpxModeActive && obj2.type == OATargetWpt)
-                index2 = 0;
-            
-            if (index1 == index2)
-            {
-                if (dist1 == dist2)
-                    return NSOrderedSame;
-                else
-                    return dist1 < dist2 ? NSOrderedAscending : NSOrderedDescending;
-            }
-            else
-            {
-                return index1 < index2 ? NSOrderedAscending : NSOrderedDescending;
-            }
-        }];
-    }
-    
-    if (found.count == 1 && CLLocationCoordinate2DIsValid(objectCoord) && found.firstObject.type != OATargetGPX)
-        found[0].location = objectCoord;
-    
-    return found;
+    return NO;
 }
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude
@@ -632,16 +436,80 @@
     return targetPoint;
 }
 
-- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
+- (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
-    NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
-    if (selectedObjects.count > 0)
+    MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
+    CLLocation *pointLatLon = result.pointLatLon;
+    NSMutableArray<SelectedMapObject *> *selectedObjects = [result getProcessedObjects];
+    
+    int64_t objectSelectionThreshold = 0;
+    for (SelectedMapObject *selectedObject in selectedObjects)
     {
-        [OsmAndApp instance].mapMode = OAMapModeFree;
-        if (selectedObjects[0].type == OATargetContext)
-            [[OARootViewController instance].mapPanel reopenContextMenu];
-        else
-            [[OARootViewController instance].mapPanel showContextMenuWithPoints:selectedObjects];
+        if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
+        {
+            id<OAContextMenuProvider> provider = selectedObject.provider;
+            int64_t selectionThreshold = [provider getSelectionPointOrder:selectedObject.object];
+            if (selectionThreshold <= objectSelectionThreshold)
+            {
+                objectSelectionThreshold = selectionThreshold;
+            }
+        }
+    }
+    NSMutableArray<SelectedMapObject *> *objectsAvailableForSelection = [NSMutableArray new];
+    
+    for (SelectedMapObject *selectedObject in selectedObjects)
+    {
+        if (objectSelectionThreshold < 0)
+        {
+            if (selectedObject.provider && [selectedObject.provider conformsToProtocol:@protocol(OAContextMenuProvider)])
+            {
+                id<OAContextMenuProvider> provider = selectedObject.provider;
+                if ([provider isKindOfClass:OAMapLayer.class])
+                {
+                    OAMapLayer *layer = provider;
+                    if ([layer pointsOrder] <= objectSelectionThreshold)
+                    {
+                        [objectsAvailableForSelection addObject:selectedObject];
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+        id<OAContextMenuProvider> provider = selectedObject.provider;
+        if (provider && [provider runExclusiveAction:selectedObject.object unknownLocation:showUnknownLocation])
+        {
+            return YES;
+        }
+    }
+    
+    if (objectSelectionThreshold < 0)
+    {
+        selectedObjects = objectsAvailableForSelection;
+    }
+    
+    if (selectedObjects.count == 1)
+    {
+        SelectedMapObject *selectedObject = selectedObjects[0];
+        CLLocation *latLon = [result objectLatLon];
+        if (!latLon || objectSelectionThreshold < 0 && selectedObject.provider)
+        {
+            id<OAContextMenuProvider> provider = selectedObject.provider;
+            latLon = [provider getObjectLocation:selectedObject];
+        }
+        if (!latLon)
+            latLon = pointLatLon;
+
+        [self showContextMenu:latLon object:selectedObject];
+        return YES;
+    }
+    else if (selectedObjects.count > 1)
+    {
+        [self showContextMenuForSelectedObjects:pointLatLon selectedObjects:selectedObjects];
+        return YES;
+        
     }
     else if (showUnknownLocation)
     {
@@ -649,105 +517,247 @@
         CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
         OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
         [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];
+        return YES;
+        
     }
-    else
-    {
-        CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
-        [[OARootViewController instance].mapPanel processNoSymbolFound:coord forceHide:forceHide];
-    }
+    CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
+    [[OARootViewController instance].mapPanel processNoSymbolFound:coord forceHide:forceHide];
+    return NO;
 }
 
-- (NSArray<NSString *> *) getPublicTransportTypes
+- (void) showContextMenuForSelectedObjects:(CLLocation *)touchPointLatLon selectedObjects:(NSArray<SelectedMapObject *> *)selectedObjects
 {
-    OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
-    if (!_publicTransportTypes)
+    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+    
+    // Android calls context menu without TargetPoint, but with SelectedMapObject directly
+    NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray new];
+    NSMutableArray<SelectedMapObject *> *filteredSelectedObjects = [NSMutableArray new];
+    for (SelectedMapObject *selectedObject in selectedObjects)
     {
-        OAPOICategory *category = [poiHelper getPoiCategoryByName:@"transportation"];
-        if (category)
+        id<OAContextMenuProvider> provider = selectedObject.provider;
+        if (!provider)
+            provider = self.mapViewController.mapLayers.poiLayer;
+        
+        if (provider)
         {
-            NSArray<OAPOIFilter *> *filters = category.poiFilters;
-            NSMutableArray *publicTransportTypes = [NSMutableArray array];
-            for (OAPOIFilter *poiFilter in filters)
+            OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object];
+            if (targetPoint)
             {
-                if ([poiFilter.name isEqualToString:@"public_transport"])
-                {
-                    for (OAPOIType *poiType in poiFilter.poiTypes)
-                    {
-                        [publicTransportTypes addObject:poiType.name];
-                        for (OAPOIType *poiAdditionalType in poiType.poiAdditionals)
-                            [publicTransportTypes addObject:poiAdditionalType.name];
-                    }
-                }
+                [filteredSelectedObjects addObject:selectedObject];
+                [targetPoints addObject:targetPoint];
             }
-            _publicTransportTypes = [NSArray arrayWithArray:publicTransportTypes];
         }
     }
-    return _publicTransportTypes;
+    if (!NSArrayIsEmpty(targetPoints))
+        [mapPanel showContextMenuWithPoints:targetPoints selectedObjects:filteredSelectedObjects touchPointLatLon:touchPointLatLon];
 }
 
-- (NSArray<OATransportStop *> *) findTransportStopsAt:(CLLocationCoordinate2D)coord
+- (void) showContextMenu:(CLLocation *)latLon object:(SelectedMapObject *)selectedObject
 {
-    NSMutableArray<OATransportStop *> *transportStops = [NSMutableArray array];
+    id selectedObj = selectedObject.object;
+    OAPointDescription *pointDescription;
     
-    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
-    const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(coord.latitude, coord.longitude));
-    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kShowStopsRadiusMeters, point31);
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
-    const auto& obfsCollection = app.resourcesManager->obfsCollection;
-    const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
-    search->performSearch(*searchCriteria,
-                          [self, transportStops]
-                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
-                          {
-                              const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
-                              [transportStops addObject:[[OATransportStop alloc] initWithStop:transportStop]];
-                          });
-    
-    return transportStops;
+    id<OAContextMenuProvider> provider = selectedObject.provider;
+    if (provider)
+    {
+        if (!latLon)
+        {
+            latLon = [provider getObjectLocation:selectedObject];
+        }
+        pointDescription = [provider getObjectName:selectedObj];
+    }
+    [self showContextMenu:latLon pointDescription:pointDescription object:selectedObject provider:provider];
 }
 
-- (void) sortTransportStops:(CLLocationCoordinate2D)coord transportStops:(NSMutableArray<OATransportStop *> *)transportStops
+- (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(SelectedMapObject *)object provider:(id<OAContextMenuProvider>)provider
 {
-    for (OATransportStop *transportStop in transportStops)
-        transportStop.distance = OsmAnd::Utilities::distance(coord.longitude, coord.latitude, transportStop.location.longitude, transportStop.location.latitude);
+    if (!provider || ![provider showMenuAction:object])
+    {
+        OATargetPoint *targetPoint;
+        if (provider)
+            targetPoint = [provider getTargetPoint:object.object];
+        else
+            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object.object];
+            
+        if (targetPoint)
+        {
+            [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint]];
+        }
+    }
+}
 
-    [transportStops sortUsingComparator:^NSComparisonResult(OATransportStop * _Nonnull s1, OATransportStop * _Nonnull s2) {
-        return [OAUtilities compareInt:s1.distance y:s2.distance];
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
+}
+
+- (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;
+{
+    if (_outlineCollection != nullptr)
+        [self hideRegionHighlight];
+
+    [self.mapViewController runWithRenderSync:^{
+        _outlineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+        OsmAnd::VectorLineBuilder builder;
+        builder.setPoints(points)
+            .setIsHidden(false)
+            .setLineId(1)
+            .setLineWidth(2 * kWidthCorrectionValue * [[UIScreen mainScreen] scale])
+            .setFillColor(OsmAnd::ColorARGB(color_osmand_orange_argb))
+            .setApproximationEnabled(false)
+            .setBaseOrder(self.pointsOrder + 1);
+        builder.buildAndAddToCollection(_outlineCollection);
+        [self.mapView addKeyedSymbolsProvider:_outlineCollection];
     }];
 }
 
-- (void) processTransportStops:(NSMutableArray<OATargetPoint *> *)selectedObjects coord:(CLLocationCoordinate2D)coord
+- (void) hideRegionHighlight
 {
-    NSArray<NSString *> *publicTransportTypes = [self getPublicTransportTypes];
-    if (publicTransportTypes)
+    [self.mapViewController runWithRenderSync:^{
+        [self.mapView removeKeyedSymbolsProvider:_outlineCollection];
+        _outlineCollection = nullptr;
+    }];
+}
+
+- (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(double)lat lon:(double)lon mapObject:(OAMapObject *)mapObject
+{
+    OAMapRendererView *mapView = (OAMapRendererView *)OARootViewController.instance.mapPanel.mapViewController.mapView;
+    OsmAnd::ZoomLevel zoomLevel = mapView.zoomLevel;
+    OsmAnd::PointI point(OsmAnd::Utilities::get31TileNumberX(lon), OsmAnd::Utilities::get31TileNumberY(lat));
+    return [self retrievePolygonsAroundMapObject:point mapObject:mapObject zoomLevel:zoomLevel];
+}
+
+- (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(OsmAnd::PointI)point mapObject:(OAMapObject *)mapObject zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
+{
+    NSMutableArray<OARenderedObject *> *res = [NSMutableArray new];
+    if (!mapObject)
+        return res;
+    
+    NSArray<OARenderedObject *> *rendPolygons = [self retrievePolygonsAroundPoint:point zoomLevel:zoomLevel];
+    QVector<OsmAnd::PointI> objectPolygon = [mapObject getPointsPolygon];
+    if (objectPolygon.size() > 0)
     {
-        NSMutableArray<OATargetPoint *> *transportStopAmenities = [NSMutableArray array];
-        for (OATargetPoint *point in selectedObjects)
+        for (OARenderedObject *r in rendPolygons)
         {
-            id object = point.targetObj;
-            if ([object isKindOfClass:[OAPOI class]])
+            if ([OAMapUtils isFirstPolygonInsideSecond:objectPolygon secondPolygon:[r getPointsPolygon]])
             {
-                OAPOI *amenity = (OAPOI *)object;
-                if (amenity.type.name.length > 0 && [publicTransportTypes containsObject:amenity.type.name])
-                    [transportStopAmenities addObject:point];
-            }
-        }
-        if (transportStopAmenities.count > 0)
-        {
-            for (OATargetPoint *point in transportStopAmenities)
-            {
-                OAPOI *amenity = (OAPOI *)point.targetObj;
-                OATransportStop *transportStop = [OATransportStopsBaseController findNearestTransportStopForAmenity:amenity];
-                if (transportStop && self.mapViewController.mapLayers.transportStopsLayer)
-                {
-                    [selectedObjects removeObject:point];
-                    transportStop.poi = point.targetObj;
-                    [selectedObjects addObject:[self.mapViewController.mapLayers.transportStopsLayer getTargetPoint:transportStop]];
-                }
+                [res addObject:r];
             }
         }
     }
+    else
+    {
+        [res addObjectsFromArray:rendPolygons];
+    }
+    return res;
+}
+
+- (NSArray<OARenderedObject *> *) retrievePolygonsAroundPoint:(OsmAnd::PointI)point zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
+{
+    NSMutableArray<OARenderedObject *> *res = [NSMutableArray new];
+    
+    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+    OAMapRendererEnvironment *menv = [mapViewController mapRendererEnv];
+    QList<std::shared_ptr<const OsmAnd::MapObject>> polygons = menv.mapPrimitivesProvider->retreivePolygons(point, zoomLevel);
+    if (!polygons.isEmpty())
+    {
+        for (int i = 0; i < polygons.size(); i++)
+        {
+            std::shared_ptr<const OsmAnd::MapObject> polygon = polygons[i];
+            OARenderedObject *renderedObject = [self createRenderedObjectForPolygon:polygon order:i];
+            if (renderedObject)
+                [res addObject:renderedObject];
+        }
+    }
+    return res;
+}
+
+- (OARenderedObject *)createRenderedObjectForPolygon:(std::shared_ptr<const OsmAnd::MapObject>)mapObject order:(int)order
+{
+    OARenderedObject *renderedObject = [OARenderedObject new];
+    QList<QPair<QString, QString>> tags = mapObject->getResolvedAttributesListPairs();
+    
+    MutableOrderedDictionary<NSString *, NSString *> *parsedTags = [MutableOrderedDictionary new];
+    for (int i = 0; i < tags.size(); i++)
+    {
+      QPair<QString, QString> tagPair = tags[i];
+      NSString *key = tagPair.first.toNSString();
+      NSString *value = tagPair.second.toNSString();
+      if ([key isEqualToString:@"osmand_change"] && [value isEqualToString:@"delete"])
+      {
+        return nil;
+      }
+      if (key && value)
+        parsedTags[key] = value;
+    }
+    renderedObject.tags = parsedTags;
+    
+    QHash<QString, QString> names = mapObject->getCaptionsInAllLanguages();
+    QList<QString> namesKeys = names.keys();
+    for (int i = 0; i < namesKeys.size(); i++)
+    {
+        NSString *key = namesKeys[i].toNSString();
+        NSString *value = names[namesKeys[i]].toNSString();
+        if ([key isEqualToString:@"osmand_change"] && [value isEqualToString:@"delete"])
+        {
+            return nil;
+        }
+        [renderedObject setName:key name:value];
+    }
+
+    QVector<OsmAnd::PointI> points31 = mapObject->points31;
+    OASKQuadRect *rect = [OASKQuadRect new];
+    for (int i = 0; i < points31.size(); i++)
+    {
+        OsmAnd::PointI p = points31[i];
+        [renderedObject addLocation:p.x y:p.y];
+        [rect expandLeft:p.x top:p.y right:p.x bottom:p.y];
+    }
+    [renderedObject setBBox:rect.left top:rect.top right:rect.right bottom:rect.bottom];
+    
+    const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(mapObject);
+    if (obfMapObject)
+    {
+        renderedObject.obfId = obfMapObject->id;
+    }
+    renderedObject.isPolygon = YES;
+    renderedObject.order = order;
+    renderedObject.labelX = mapObject->getLabelCoordinateX();
+    renderedObject.labelY = mapObject->getLabelCoordinateY();
+    double lat = OsmAnd::Utilities::get31LatitudeY(renderedObject.labelY);
+    double lon = OsmAnd::Utilities::get31LongitudeX(renderedObject.labelX);
+    [renderedObject setLabelLatLon:[[CLLocation alloc] initWithLatitude:lat longitude:lon]];
+    
+    if (!renderedObject.name || renderedObject.name.length == 0)
+    {
+        QString captionInNativeLanguage = mapObject->getCaptionInNativeLanguage();
+        if (!captionInNativeLanguage.isEmpty())
+        {
+            renderedObject.name = captionInNativeLanguage.toNSString();
+        }
+        else
+        {
+            if (renderedObject.localizedNames.count > 0)
+                renderedObject.name = renderedObject.localizedNames.allValues.firstObject;
+        }
+    }
+    
+    NSMutableDictionary *localizedNames = [NSMutableDictionary dictionary];
+    renderedObject.nameLocalized = [OAPOIHelper processLocalizedNames:obfMapObject->getCaptionsInAllLanguages() nativeName:obfMapObject->getCaptionInNativeLanguage() names:localizedNames];
+    if (!renderedObject.nameLocalized || renderedObject.nameLocalized.length == 0)
+        renderedObject.nameLocalized = renderedObject.name;
+    
+    return renderedObject;
 }
 
 #pragma  mark - CAAnimationDelegate

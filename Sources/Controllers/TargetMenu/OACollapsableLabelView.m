@@ -39,10 +39,11 @@
 
 - (void) adjustHeightForWidth:(CGFloat)width
 {
-    CGSize bounds = [OAUtilities calculateTextBounds:_label.text width:width - kMarginLeft - kMarginRight font:_label.font];
+    CGFloat leftMargin = OAUtilities.isLandscape && !OAUtilities.isIPad ? 2 * kMarginLeft : kMarginLeft;
+    CGSize bounds = [OAUtilities calculateTextBounds:_label.text width:width - leftMargin - kMarginRight font:_label.font];
     CGFloat viewHeight = MAX(bounds.height, 21.0) + 0.0 + 11.0;
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
-    _label.frame = CGRectMake(kMarginLeft, 0.0, width - kMarginLeft - kMarginRight, viewHeight - 0.0 - 11.0);
+    _label.frame = CGRectMake(leftMargin, 0.0, width - leftMargin - kMarginRight, viewHeight - 0.0 - 11.0);
 }
 
 - (BOOL)canBecomeFirstResponder
@@ -52,7 +53,7 @@
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+    return action == @selector(copy:);
 }
 
 - (void)copy:(id)sender

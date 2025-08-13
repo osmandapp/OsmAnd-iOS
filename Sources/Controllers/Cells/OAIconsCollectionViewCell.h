@@ -14,4 +14,13 @@
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 @property (weak, nonatomic) IBOutlet UIView *iconView;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *cellWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *cellHeightConstraint;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconBackgroundWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconBackgroundHeightConstraint;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconHeightConstraint;
+
 @end

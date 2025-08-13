@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -19,20 +19,20 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Pde-Gp-UrD" userLabel="Content Outside Stack View">
-                        <rect key="frame" x="0.0" y="0.0" width="373" height="60"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="60"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="AxO-VI-ivf" userLabel="Top Margin Stack View">
-                                <rect key="frame" x="0.0" y="0.0" width="373" height="3"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="AxO-VI-ivf" userLabel="Top Margin Stack View">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="6"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTP-2O-fC4">
-                                        <rect key="frame" x="0.0" y="0.0" width="373" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="z2K-Ka-zv1"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cb8-0r-VeY">
-                                        <rect key="frame" x="0.0" y="3" width="373" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="6" width="393" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="bEJ-bz-fGM"/>
@@ -41,10 +41,10 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="NS9-5f-FoA" userLabel="Collection Stack View">
-                                <rect key="frame" x="0.0" y="3" width="373" height="48"/>
+                                <rect key="frame" x="0.0" y="6" width="393" height="45"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="DOd-wT-r3R">
-                                        <rect key="frame" x="0.0" y="0.0" width="323" height="48"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="323" height="45"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" priority="750" constant="48" id="Ft8-45-Pf1"/>
@@ -57,7 +57,7 @@
                                         </collectionViewFlowLayout>
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W16-m3-jDw" userLabel="Right Action Button">
-                                        <rect key="frame" x="337" y="6" width="36" height="36"/>
+                                        <rect key="frame" x="337" y="4.6666666666666643" width="36" height="36"/>
                                         <color key="backgroundColor" name="buttonBgColorTertiary"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="Okc-Mp-aLZ"/>
@@ -79,20 +79,30 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sJ8-Pd-b5X">
+                                        <rect key="frame" x="387" y="0.0" width="6" height="45"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="6" id="FEF-jE-va0"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="W16-m3-jDw" secondAttribute="trailing" constant="20" id="vCq-Om-1Vm"/>
+                                </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="ao7-vZ-qL2" userLabel="Bottom Margin Stack View">
-                                <rect key="frame" x="0.0" y="51" width="373" height="9"/>
+                                <rect key="frame" x="0.0" y="51" width="393" height="9"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DwP-ib-F70">
-                                        <rect key="frame" x="0.0" y="0.0" width="373" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="tUh-U2-X2o"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WUB-aI-9oi">
-                                        <rect key="frame" x="0.0" y="9" width="373" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="9" width="393" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="7QX-O0-SZC"/>
@@ -106,7 +116,7 @@
                 <constraints>
                     <constraint firstItem="Pde-Gp-UrD" firstAttribute="top" secondItem="Mm8-Rd-v2K" secondAttribute="top" id="8Bg-s9-TzB"/>
                     <constraint firstItem="Pde-Gp-UrD" firstAttribute="leading" secondItem="Mm8-Rd-v2K" secondAttribute="leading" id="DAS-LY-bpg"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="Pde-Gp-UrD" secondAttribute="trailing" id="MLv-KW-x2y"/>
+                    <constraint firstAttribute="trailing" secondItem="Pde-Gp-UrD" secondAttribute="trailing" id="MLv-KW-x2y"/>
                     <constraint firstAttribute="bottom" secondItem="Pde-Gp-UrD" secondAttribute="bottom" id="lli-Jz-ss7"/>
                 </constraints>
             </tableViewCellContentView>
@@ -118,6 +128,7 @@
                 <outlet property="collectionViewHeight" destination="Ft8-45-Pf1" id="u9e-mm-AHH"/>
                 <outlet property="contentOutsideStackViewVertical" destination="Pde-Gp-UrD" id="xiC-Ve-Sf5"/>
                 <outlet property="rightActionButton" destination="W16-m3-jDw" id="Qgy-3m-aET"/>
+                <outlet property="rightActionButtonRigthPaddingView" destination="sJ8-Pd-b5X" id="ZQw-RT-2f9"/>
                 <outlet property="topMarginStackView" destination="AxO-VI-ivf" id="BE5-Ss-SJY"/>
             </connections>
             <point key="canvasLocation" x="69" y="-11"/>

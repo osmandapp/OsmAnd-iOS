@@ -7,16 +7,16 @@
 //
 
 #import "OANativeUtilities.h"
-
 #import <UIKit/UIKit.h>
 #import "OAColors.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
 
 #include <QString>
-
 #include <SkCGUtils.h>
 #include <SkCanvas.h>
 #include <OsmAndCore/SkiaUtilities.h>
@@ -24,7 +24,28 @@
 
 @implementation UIColor (nsColorNative)
 
+- (OsmAnd::FColorRGB) toFColorRGB
+{
+    CGFloat red, green, blue, alpha;
+    [self getRed:&red green:&green blue:&blue alpha:&alpha];
+    return OsmAnd::FColorRGB(red, green, blue);
+}
+
 - (OsmAnd::FColorARGB) toFColorARGB
+{
+    CGFloat red, green, blue, alpha;
+    [self getRed:&red green:&green blue:&blue alpha:&alpha];
+    return OsmAnd::FColorARGB(alpha, red, green, blue);
+}
+
+- (OsmAnd::ColorRGB) toColorRGB
+{
+    CGFloat red, green, blue, alpha;
+    [self getRed:&red green:&green blue:&blue alpha:&alpha];
+    return OsmAnd::ColorRGB(red * 255, green * 255, blue * 255);
+}
+
+- (OsmAnd::ColorARGB) toColorARGB
 {
     CGFloat red, green, blue, alpha;
     [self getRed:&red green:&green blue:&blue alpha:&alpha];
@@ -349,6 +370,13 @@
     return height > kMinAltitudeValue ? height : 0;
 }
 
++ (OsmAnd::LatLon) getLanlonFromPoint31:(OsmAnd::PointI)point31
+{
+    double lat = OsmAnd::Utilities::get31LatitudeY(point31.y);
+    double lon = OsmAnd::Utilities::get31LongitudeX(point31.x);
+    return OsmAnd::LatLon(lat, lon);
+}
+
 + (OsmAnd::PointI) getPoint31FromLatLon:(OsmAnd::LatLon)latLon
 {
     return [self.class getPoint31FromLatLon:latLon.latitude lon:latLon.longitude];
@@ -359,6 +387,39 @@
     int32_t x31 = OsmAnd::Utilities::get31TileNumberX(lon);
     int32_t y31 = OsmAnd::Utilities::get31TileNumberY(lat);
     return OsmAnd::PointI(x31, y31);
+}
+
++ (OsmAnd::PointI) getPoint31From:(CGPoint)screenPoint
+{
+    OsmAnd::PointI point31;
+    [OARootViewController.instance.mapPanel.mapViewController.mapView convert:screenPoint toLocation:&point31];
+    return point31;
+}
+
++ (OsmAnd::AreaI) getPolygon31FromPixelAndRadius:(CGPoint)pixel radius:(float)radiusPixels
+{
+    CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - radiusPixels);
+    CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + radiusPixels);
+    return [self.class getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+}
+
++ (OsmAnd::AreaI) getPolygon31FromScreenArea:(CGPoint)topLeft bottomRight:(CGPoint)bottomRight;
+{
+    OsmAnd::PointI topLeft31 = [self.class getPoint31From:topLeft];
+    OsmAnd::PointI bottomRight31 = [self.class getPoint31From:bottomRight];
+    return OsmAnd::AreaI(topLeft31, bottomRight31);
+}
+
++ (BOOL) isPointInsidePolygon:(double)lat lon:(double)lon polygon31:(OsmAnd::AreaI)polygon31
+{
+    OsmAnd::PointI point31 = [self.class getPoint31FromLatLon:lat lon:lon];
+    return [self.class isPointInsidePolygon:point31 polygon31:polygon31];
+}
+
++ (BOOL) isPointInsidePolygon:(OsmAnd::PointI)point31 polygon31:(OsmAnd::AreaI)polygon31
+{
+    //Android: MapAlgorithms.ray_intersect_x()
+    return polygon31.contains(point31);
 }
 
 + (BOOL) containsLatLon:(CLLocation *)location

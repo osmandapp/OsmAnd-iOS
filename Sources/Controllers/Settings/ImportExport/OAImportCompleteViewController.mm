@@ -8,10 +8,9 @@
 
 #import "OAImportCompleteViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OAMapSettingsViewController.h"
-#import "OAQuickActionListViewController.h"
-#import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAMapSettingsViewController.h"
 #import "OARoutingHelper.h"
@@ -26,6 +25,7 @@
 #import "OARightIconTableViewCell.h"
 #import "OAIndexConstants.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
 #import "OAOsmNotesSettingsItem.h"
 #import "OAOsmEditsSettingsItem.h"
@@ -64,7 +64,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeHistoryMarkers,
     EOAImportDataTypeSearchHistory,
     EOAImportDataTypeNavigationHistory,
-    EOAImportDataTypeGlobal
+    EOAImportDataTypeGlobal,
+    EOAImportDataTypeColorPalette
 };
 
 @implementation OAImportCompleteViewController
@@ -157,6 +158,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     __block NSInteger searchHistoryCount = 0;
     __block NSInteger navigationHistoryCount = 0;
     __block NSInteger globalCount = 0;
+    __block NSInteger colorPaletteCount = 0;
 
     [_itemsMap enumerateKeysAndObjectsUsingBlock:^(OAExportSettingsType * _Nonnull type, NSArray * _Nonnull settings, BOOL * _Nonnull stop) {
         if (type == OAExportSettingsType.PROFILE)
@@ -193,6 +195,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             navigationHistoryCount += settings.count;
         else if (type == OAExportSettingsType.GLOBAL)
             globalCount += settings.count;
+        else if (type == OAExportSettingsType.COLOR_DATA)
+            colorPaletteCount += settings.count;
     }];
 
     if (profilesCount > 0)
@@ -366,6 +370,15 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             }
          ];
     }
+    if (colorPaletteCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"shared_string_colors"),
+            @"iconName": @"ic_custom_file_color_palette",
+            @"count": [NSString stringWithFormat:@"%ld", colorPaletteCount],
+            @"category" : @(EOAImportDataTypeColorPalette)
+        }];
+    }
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -414,8 +427,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     }
     else if (dataType == EOAImportDataTypeQuickActions)
     {
-        OAQuickActionListViewController *actionsList = [[OAQuickActionListViewController alloc] init];
-        [rootController.navigationController pushViewController:actionsList animated:YES];
+        [rootController.navigationController pushViewController:[[CustomMapButtonsViewController alloc] init] animated:YES];
     }
     else if (dataType == EOAImportDataTypePoiFilters)
     {

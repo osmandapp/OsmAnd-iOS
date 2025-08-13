@@ -15,6 +15,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAPOIUIFilter.h"
 #import "OASearchResult.h"
+#import "OAResultMatcher.h"
 #import "OASearchUICore.h"
 #import "OASearchSettings.h"
 #import "OAQuickSearchHelper.h"
@@ -404,11 +405,11 @@
         _searchMode = YES;
         [self setupSearchControllerWithFilter:YES];
         _searchResult = [NSMutableArray new];
-        OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:POI_TYPE]]];
+        OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:EOAObjectTypePoiType]]];
         [_core updateSettings:searchSettings];
         [_core search:searchBar.text delayedExecution:YES matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
             OASearchResult *obj = *object;
-            if (obj.objectType == SEARCH_FINISHED)
+            if (obj.objectType == EOAObjectTypeSearchFinished)
             {
                 OASearchResultCollection *currentSearchResult = [_core getCurrentSearchResult];
                 NSMutableArray<OAPOIType *> *results = [NSMutableArray new];

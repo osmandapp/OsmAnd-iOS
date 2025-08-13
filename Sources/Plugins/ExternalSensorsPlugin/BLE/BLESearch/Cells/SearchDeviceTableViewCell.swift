@@ -35,7 +35,8 @@ class SearchDeviceTableViewCell: UITableViewCell {
             connectStatusLabel.text = localizedString("external_device_status_disconnected")
             signalIndicatorImageView.tintColor = UIColor.iconColorSecondary
             signalIndicatorImageView.image = UIImage(named: "ic_small_signal_not_found")
-            deviceImageView.image = item.getServiceConnectedImage.noir
+            deviceImageView.image = item.getServiceDisconnectedImage
+            deviceImageView.tintColor = .iconColorDefault
         }
     }
 }

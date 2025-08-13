@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="GradientChartCell" id="j8C-bR-ltY" userLabel="GradientChartCell" customClass="GradientChartCell" customModule="OsmAnd_Maps" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="140"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="j8C-bR-ltY" id="Qax-gP-rFe">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="140"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D4e-eF-QKC" customClass="GradientChart" customModule="DGCharts">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="140"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="999" constant="140" id="fcp-iJ-cjM"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="D4e-eF-QKC" secondAttribute="bottom" id="E0I-6A-9vd"/>
+                    <constraint firstItem="D4e-eF-QKC" firstAttribute="top" secondItem="Qax-gP-rFe" secondAttribute="top" id="SGL-gA-eYe"/>
+                    <constraint firstItem="D4e-eF-QKC" firstAttribute="leading" secondItem="Qax-gP-rFe" secondAttribute="leading" id="pJX-g5-igo"/>
+                    <constraint firstItem="D4e-eF-QKC" firstAttribute="centerX" secondItem="Qax-gP-rFe" secondAttribute="centerX" id="yuz-Bl-BBn"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="chartView" destination="D4e-eF-QKC" id="Qwm-0U-4J3"/>
+                <outlet property="heightConstraint" destination="fcp-iJ-cjM" id="G8c-2f-cdF"/>
+            </connections>
+            <point key="canvasLocation" x="112" y="-54"/>
+        </tableViewCell>
+    </objects>
+</document>

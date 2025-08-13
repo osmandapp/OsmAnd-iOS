@@ -10,13 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAMeasurementToolLayer, OAGpxRouteApproximation, OAWptPt, OAApplicationMode;
+@class OAMeasurementToolLayer, OAGpxRouteApproximation, OASWptPt, OAApplicationMode;
 
 @interface OAApplyGpxApproximationCommand : OAMeasurementModeCommand
 
-@property (nonatomic, readonly) NSArray<NSArray<OAWptPt *> *> *originalSegmentPointsList;
+@property (nonatomic, readonly) NSArray<NSArray<OASWptPt *> *> *originalSegmentPointsList;
 
-- (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer approximations:(NSArray<OAGpxRouteApproximation *> *)approximations segmentPointsList:(NSArray<NSArray<OAWptPt *> *> *)segmentPointsList appMode:(OAApplicationMode *)appMode;
+- (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer approximations:(NSArray<OAGpxRouteApproximation *> *)approximations segmentPointsList:(NSArray<NSArray<OASWptPt *> *> *)segmentPointsList appMode:(OAApplicationMode *)appMode;
 
 @end
 

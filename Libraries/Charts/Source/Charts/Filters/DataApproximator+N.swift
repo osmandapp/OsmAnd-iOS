@@ -67,7 +67,7 @@ extension LineAlt: Comparable {
 
 extension DataApproximator {
     /// uses the douglas peuker algorithm to reduce the given arraylist of entries to given number of points
-    /// More algorithm details here - https://psimpl.sourceforge.net/douglas-peucker.html
+    /// More algorithm details here - http://psimpl.sourceforge.net/douglas-peucker.html
     @objc open class func reduceWithDouglasPeukerN(_ points: [CGPoint], resultCount: Int) -> [CGPoint]
     {
         // if a shape has 2 or less points it cannot be reduced
@@ -78,12 +78,12 @@ extension DataApproximator {
         var keep = [Bool](repeating: false, count: points.count)
         
         // first and last always stay
-        keep[0] = true
-        keep[points.count - 1] = true
+        keep[points.startIndex] = true
+        keep[points.endIndex - 1] = true
         var currentStoredPoints = 2
         
         var queue = [LineAlt]()
-        let line = LineAlt(start: 0, end: points.count - 1, points: points)
+        let line = LineAlt(start: points.startIndex, end: points.endIndex - 1, points: points)
         queue.append(line)
         
         repeat {

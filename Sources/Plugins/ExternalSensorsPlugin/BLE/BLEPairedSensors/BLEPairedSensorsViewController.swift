@@ -41,7 +41,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         initTableData()
     }
     
-    // MARK: - Life circle
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +64,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
-                                               name: .DeviceDisconnected,
+                                               name: .deviceDisconnected,
                                                object: nil)
     }
     

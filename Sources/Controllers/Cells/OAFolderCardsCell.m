@@ -25,6 +25,9 @@
 {
     NSMutableArray *_data;
     NSInteger _selectedItemIndex;
+    
+    UIFont *_originalGroupFont;
+    UIFont *_italicGroupFont;
 }
 
 - (void) awakeFromNib
@@ -44,22 +47,28 @@
     _data = [NSMutableArray new];
 }
 
-- (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index
+- (void) setValues:(NSArray<NSString *> *)values sizes:(NSArray<NSNumber *> *)sizes colors:(NSArray<UIColor *> *)colors hidden:(NSArray<NSNumber *> *)hidden addButtonTitle:(NSString *)addButtonTitle withSelectedIndex:(int)index
 {
     _data = [NSMutableArray new];
     _selectedItemIndex = index;
+
     for (NSInteger i = 0; i < values.count; i++)
     {
         NSString *sizeString;
-        NSNumber *size = sizes[i];
+        NSNumber *size = (i < sizes.count && sizes[i]) ? sizes[i] : nil;
         sizeString = size ? [NSString stringWithFormat:@"%i", size.intValue] : @"";
-        UIColor *color = colors[i] ? colors[i] : [UIColor colorNamed:ACColorNameIconColorActive];
-            
+        UIColor *color = (i < colors.count && colors[i]) ? colors[i] : [UIColor colorNamed:ACColorNameIconColorActive];
+        BOOL visible = (i < hidden.count && hidden[i]) ? !hidden[i].boolValue : YES;
+        NSString *img = visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden_outlined";
+        if (!visible)
+            color = [UIColor colorNamed:ACColorNameIconColorSecondary];
+        
         [_data addObject:@{
             @"title" : values[i],
             @"size" : sizeString,
             @"color" : color,
-            @"img" : @"ic_custom_folder",
+            @"img" : img,
+            @"hidden" : @(!visible),
             @"key" : @"home"}];
     }
     
@@ -68,6 +77,7 @@
         @"size" : @"",
         @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
         @"img" : @"ic_custom_add",
+        @"hidden" : @(NO),
         @"key" : @"work"}];
 }
 
@@ -145,14 +155,22 @@
     if (cell && [cell isKindOfClass:OAFolderCardCollectionViewCell.class])
     {
         OAFolderCardCollectionViewCell *destCell = (OAFolderCardCollectionViewCell *) cell;
+        if (!_originalGroupFont)
+        {
+            _originalGroupFont = destCell.titleLabel.font;
+            UIFontDescriptor *italicDescriptor = [destCell.titleLabel.font.fontDescriptor fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
+            _italicGroupFont = [UIFont fontWithDescriptor:italicDescriptor size:0];
+        }
+        BOOL hidden = ((NSNumber *) item[@"hidden"]).boolValue;
         destCell.layer.cornerRadius = 9;
         destCell.titleLabel.text = item[@"title"];
         destCell.descLabel.text = item[@"size"];
         destCell.imageView.tintColor = item[@"color"];
         [destCell.imageView setImage:[UIImage templateImageNamed:item[@"img"]]];
         destCell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-        destCell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
-        
+        destCell.titleLabel.textColor = [UIColor colorNamed:hidden ? ACColorNameTextColorSecondary : ACColorNameTextColorActive];
+        destCell.titleLabel.font = hidden ? _italicGroupFont : _originalGroupFont;
+
         if (indexPath.row == _selectedItemIndex)
         {
             destCell.layer.borderWidth = 2;

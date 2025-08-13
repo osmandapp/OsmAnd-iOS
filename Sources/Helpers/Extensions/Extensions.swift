@@ -66,3 +66,11 @@ extension NSMutableAttributedString {
     }
 
 }
+
+extension NSString {
+    @objc func lastIndexOf(_ text: String) -> Int {
+        let string = String(self)
+        guard let index = string.range(of: text, options: .backwards) else { return -1 }
+        return string.distance(from: string.startIndex, to: index.lowerBound)
+    }
+}

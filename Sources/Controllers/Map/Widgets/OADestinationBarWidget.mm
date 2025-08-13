@@ -10,11 +10,15 @@
 #import "OADestination.h"
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
+#import "OALocationServices.h"
 #import "OAMultiDestinationCell.h"
+#import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "OALog.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OADestinationsHelper.h"
 #import "OAHistoryHelper.h"
 #import "OAHistoryItem.h"
@@ -25,6 +29,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @interface OADestinationBarWidget ()
@@ -266,6 +271,7 @@
 }
 
 - (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+            widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams isCreate:(BOOL)isCreate
 {
     OACommonActiveMarkerConstant *pref = _settings.activeMarkers;
     OATableDataModel *data = [OATableDataModel model];
@@ -278,7 +284,21 @@
     settingRow.key = @"value_pref";
     settingRow.title = OALocalizedString(@"active_markers");
     [settingRow setObj:pref forKey:@"pref"];
-    [settingRow setObj:[self getTitle:[pref get:appMode]] forKey: @"value"];
+    
+    EOAActiveMarkerConstant currentValue = (EOAActiveMarkerConstant)pref.defValue;
+    
+    NSNumber *activeMarkerKey = widgetConfigurationParams[@"activeMarkerKey"];
+    if (activeMarkerKey)
+    {
+        currentValue = (EOAActiveMarkerConstant)[activeMarkerKey intValue];
+        [pref set:currentValue mode:appMode];
+    }
+    else if (!isCreate)
+    {
+        currentValue = [pref get:appMode];
+    }
+    
+    [settingRow setObj:[self getTitle:currentValue] forKey: @"value"];
     [settingRow setObj:[self getPossibleValues] forKey: @"possible_values"];
 
     return data;

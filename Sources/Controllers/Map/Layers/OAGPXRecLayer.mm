@@ -17,7 +17,6 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXDatabase.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXMutableDocument.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -35,9 +34,24 @@
 
 #pragma mark - OAContextMenuProvider
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (BOOL)isSecondaryProvider
 {
-    // collected by parent layer
+    return NO;
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 #pragma mark - OAMoveObjectProvider

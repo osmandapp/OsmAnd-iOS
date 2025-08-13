@@ -14,8 +14,8 @@
 @implementation OASplitPointsCommand
 {
     BOOL _after;
-    NSArray<OAWptPt *> *_points;
-    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
+    NSArray<OASWptPt *> *_points;
+    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
     NSInteger _pointPosition;
 }
 

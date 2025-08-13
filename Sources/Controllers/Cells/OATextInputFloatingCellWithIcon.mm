@@ -7,7 +7,6 @@
 //
 
 #import "OATextInputFloatingCellWithIcon.h"
-#import "OAUtilities.h"
 
 @implementation OATextInputFloatingCellWithIcon
 

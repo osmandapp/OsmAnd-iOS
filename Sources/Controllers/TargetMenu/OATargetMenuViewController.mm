@@ -8,13 +8,14 @@
 
 #import "OATargetMenuViewController.h"
 #import "OAUtilities.h"
+#import "OADownloadsManager.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAPluginPopupViewController.h"
-#import "OAIAPHelper.h"
 #import "OAFavoriteViewController.h"
 #import "OATargetDestinationViewController.h"
 #import "OATargetHistoryItemViewController.h"
@@ -47,12 +48,15 @@
 #import "OAResourcesUIHelper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OADownloadMapViewController.h"
 #import "OAPlugin.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPOI.h"
+#import "OADownloadTask.h"
 #import "OAPOIHelper.h"
 #import "OAAddWaypointViewController.h"
 #import "OAObservable.h"
@@ -62,6 +66,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAResourcesUISwiftHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -81,11 +86,9 @@
 @implementation OATargetMenuViewController
 {
     OsmAndAppInstance _app;
-    
-    
-    
-    OAAutoObserverProxy* _downloadTaskProgressObserver;
-    OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    OAAutoObserverProxy *_downloadTaskProgressObserver;
+    OAAutoObserverProxy *_downloadTaskCompletedObserver;
+    UIImage *_targetImage;
 }
 
 + (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
@@ -152,6 +155,12 @@
         case OATargetPOI:
         {
             controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
+            break;
+        }
+            
+        case OATargetLocation:
+        {
+            controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
             break;
         }
             
@@ -294,8 +303,12 @@
             
         case OATargetRouteDetailsGraph:
         {
-            controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj
-                                                              trackMenuControlState:activeViewControllerState];
+            if (!activeViewControllerState)
+                controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj
+                                                                  trackMenuControlState:nil];
+            else if ([activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class])
+                controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj
+                                                                  trackMenuControlState:(OATrackMenuViewControllerState *)activeViewControllerState];
 
             break;
         }
@@ -528,21 +541,21 @@
         [self.navBar.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     }
     [self applySafeAreaMargins];
-    [self adjustBackButtonPosition];
+    [self updateNavBarSubviewsLayout];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applySafeAreaMargins];
-        [self adjustBackButtonPosition];
+        [self updateNavBarSubviewsLayout];
         // Refresh the offset on iPads to avoid broken animations
         if (self.delegate && OAUtilities.isIPad)
             [self.delegate contentChanged];
     } completion:nil];
 }
 
--(void) adjustBackButtonPosition
+-(void) updateNavBarSubviewsLayout
 {
     CGRect buttonFrame = self.buttonBack.frame;
     buttonFrame.origin.x = 16.0 + [OAUtilities getLeftMargin];
@@ -569,12 +582,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_localMapIndexItem && [_localMapIndexItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
-            NSMutableString *progressStr = [NSMutableString string];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:(_localMapIndexItem.sizePkg * [value floatValue]) countStyle:NSByteCountFormatterCountStyleFile]];
-            [progressStr appendString:@" "];
-            [progressStr appendString:OALocalizedString(@"shared_string_of")];
-            [progressStr appendString:@" "];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:_localMapIndexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+            NSString *progressStr = [OAResourcesUISwiftHelper formatedDownloadingProgressString:_localMapIndexItem.sizePkg progress:[value floatValue]];
             if (self.delegate && [self.delegate respondsToSelector:@selector(setDownloadProgress:text:)])
                 [self.delegate setDownloadProgress:[value floatValue] text:progressStr];
         }
@@ -585,8 +593,9 @@
 {
     if (_localMapIndexItem)
     {
+        NSString *resourceId = _localMapIndexItem.resourceId.toNSString();
         [OAResourcesUIHelper offerCancelDownloadOf:_localMapIndexItem onTaskStop:^(id<OADownloadTask>  _Nonnull task) {
-            if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:_localMapIndexItem.resourceId.toNSString()])
+            if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:resourceId])
             {
                 [self.delegate hideProgressBar];
                 _localMapIndexItem = nil;
@@ -678,6 +687,15 @@
     return 0.; //override
 }
 
+- (UIImage *)targetImage {
+    return _targetImage;
+}
+
+- (void)setTargetImage:(UIImage *)image
+{
+    _targetImage = image;
+}
+
 - (IBAction) buttonBackPressed:(id)sender
 {
     if (self.topToolbarType == ETopToolbarTypeFloating)
@@ -754,6 +772,11 @@
 - (BOOL) hasRouteButton
 {
     return YES;
+}
+
+- (BOOL) showTopViewInFullscreen
+{
+    return NO;
 }
 
 - (BOOL) showTopControls

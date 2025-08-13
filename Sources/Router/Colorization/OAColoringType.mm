@@ -10,13 +10,13 @@
 #import "Localization.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteCalculationResult.h"
-#import "OAGPXDocument.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAAppSettings.h"
 #import "OARouteExporter.h"
 #import "OARouteProvider.h"
 #import "OAIAPHelper.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -156,12 +156,27 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return [self isDefault] || [self isCustomColor] || [self isTrackSolid];
 }
 
-- (BOOL) isGradient
+- (BOOL)isGradient
 {
-    return self == self.class.SPEED || self == self.class.ALTITUDE || self == self.class.SLOPE;
+    return [self isSpeed] || [self isAltitude] || [self isSlope];
 }
 
-- (BOOL) isRouteInfoAttribute
+- (BOOL)isSpeed
+{
+    return self == self.class.SPEED;
+}
+
+- (BOOL)isAltitude
+{
+    return self == self.class.ALTITUDE;
+}
+
+- (BOOL)isSlope
+{
+    return self == self.class.SLOPE;
+}
+
+- (BOOL)isRouteInfoAttribute
 {
     return self == self.class.ATTRIBUTE;
 }
@@ -187,10 +202,23 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return YES;
 }
 
-- (BOOL) isAvailableForDrawingTrack:(OAGPXDocument *)selectedGpxFile attributeName:(NSString *)attributeName
+- (OASRouteColorizeColorizationType *)toSharedLibColorizationType {
+    if (self == self.class.SPEED)
+        return OASRouteColorizeColorizationType.speed;
+    else if (self == self.class.ALTITUDE)
+        return OASRouteColorizeColorizationType.elevation;
+    else if (self == self.class.SLOPE)
+        return OASRouteColorizeColorizationType.slope;
+    else
+        return OASRouteColorizeColorizationType.none;
+}
+
+- (BOOL) isAvailableForDrawingTrack:(OASGpxFile *)selectedGpxFile attributeName:(NSString *)attributeName
 {
     if ([self isGradient])
-        return [[selectedGpxFile getAnalysis:0] isColorizationTypeAvailable:[[self toGradientScaleType] toColorizationType]];
+    {
+        return [[selectedGpxFile getAnalysisFileTimestamp:0] isColorizationTypeAvailableColorizationType:[self toSharedLibColorizationType]];
+    }
     
     if ([self isRouteInfoAttribute])
     {
@@ -211,15 +239,15 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return YES;
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getRouteSegmentsInTrack:(OAGPXDocument *)gpxFile
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getRouteSegmentsInTrack:(OASGpxFile *)gpxFile
 {
-    if (![OSMAND_ROUTER_V2 isEqualToString:gpxFile.creator])
+    if (!gpxFile.isOsmAndOrigin)
         return {};
     
     std::vector<std::shared_ptr<RouteSegmentResult>> routeSegments;
-    for (NSInteger i = 0; i < [gpxFile getNonEmptyTrkSegments:NO].count; i++)
+    for (NSInteger i = 0; i < [gpxFile getNonEmptyTrkSegmentsRoutesOnly:NO].count; i++)
     {
-        OATrkSegment *segment = [gpxFile getNonEmptyTrkSegments:NO][i];
+        OASTrkSegment *segment = [gpxFile getNonEmptyTrkSegmentsRoutesOnly:NO][i];
         if (segment.hasRoute)
         {
             const auto rt = [OARouteProvider parseOsmAndGPXRoute:[NSMutableArray array] gpxFile:gpxFile segmentEndpoints:[NSMutableArray array] selectedSegment:i];
@@ -262,6 +290,18 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     else if (scaleType == EOAGradientScaleTypeSlope)
         return self.SLOPE;
     return nil;
+}
+
+- (NSInteger)toColorizationType
+{
+    if (self == self.class.SPEED)
+        return ColorizationTypeSpeed;
+    else if (self == self.class.ALTITUDE)
+        return ColorizationTypeElevation;
+    else if (self == self.class.SLOPE)
+        return ColorizationTypeSlope;
+    else
+        return ColorizationTypeNone;
 }
 
 + (NSString *) getRouteInfoAttribute:(NSString *)name

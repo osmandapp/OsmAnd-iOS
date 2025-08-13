@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 import JavaScriptCore
+import OsmAndShared
 
 protocol TravelArticleDialogProtocol : AnyObject {
     func getWebView() -> WKWebView
@@ -103,7 +104,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     var isDownloadNow = false
     
     var gpxFile: OAGPXDocumentAdapter?
-    var gpx: OAGPX?
+    var gpx: GpxDataItem?
     var isGpxReading = false
     
     var bottomView: UIView?
@@ -333,9 +334,11 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
             gpx = OATravelGuidesHelper.buildGpx(file, title: article.title, document: article.gpxFile)
         }
         OAAppSettings.sharedManager().showGpx([file], update: true)
-        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+        if let gpx, let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
             let fromTrackMenu = OARootViewController.instance().mapPanel.scrollableHudViewController != nil
-            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
+            let trackItem = TrackItem(file: gpx.file)
+            trackItem.dataItem = gpx
+            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: trackItem,
                                                                            navControllerHistory: newCurrentHistory,
                                                                            fromTrackMenu: fromTrackMenu,
                                                                            selectedTab: .pointsTab)
@@ -350,7 +353,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         let articleName = article.title ?? localizedString("shared_string_article")
         let message = isSaved ? localizedString("article_removed_from_bookmark") : localizedString("article_added_to_bookmark")
-        OAUtilities.showToast(nil, details: articleName + message , duration: 4, in: self.view)
+        OAUtilities.showToast(nil, details: articleName + message, duration: 4, in: self.view)
     }
     
     func shareArticle() {
@@ -432,7 +435,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         guard let aggregatedPartOf = article.aggregatedPartOf else { return "" }
         if !aggregatedPartOf.isEmpty {
-            let aggregatedPartOfArrayOrig = aggregatedPartOf.split(separator: ",")
+            let aggregatedPartOfArrayOrig = aggregatedPartOf.split(separator: ",").map { TravelGuidesUtils.getTitleWithoutPrefix(title: String($0)) }
             if !aggregatedPartOfArrayOrig.isEmpty {
                 let current = aggregatedPartOfArrayOrig[0]
                 sb += "<a href=\"#showNavigation\" style=\"text-decoration: none\"> <div class=\"nav-bar" + nightModeClass + "\">"
@@ -506,7 +509,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         }
     }
     
-    override func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    override func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping @MainActor @Sendable (WKNavigationActionPolicy) -> Void) {
         let newUrl = OATravelGuidesHelper.normalizeFileUrl(navigationAction.request.url?.absoluteString) ?? ""
         let isWebPage = newUrl.hasPrefix(PAGE_PREFIX_HTTP) || newUrl.hasPrefix(PAGE_PREFIX_HTTPS)
         let isPhoneNumber = newUrl.hasPrefix("tel:") || newUrl.rangeOfCharacter(from: CharacterSet(charactersIn: "-+()% 0123456789").inverted) == nil

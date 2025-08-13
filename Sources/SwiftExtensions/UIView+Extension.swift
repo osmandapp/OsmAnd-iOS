@@ -90,16 +90,11 @@ extension UIView {
     }
 }
 
-protocol ReuseIdentifier { }
-
-extension ReuseIdentifier {
-    static var reuseIdentifier: String {
-        String(describing: Self.self)
+extension UIView {
+    @objc static var reuseIdentifier: String {
+        String(describing: self)
     }
 }
-
-extension UITableViewCell: ReuseIdentifier { }
-extension UICollectionViewCell: ReuseIdentifier { }
 
 extension UIView {
     class func fromNib<T: UIView>() -> T {
@@ -121,7 +116,7 @@ extension UIView {
 }
 
 extension UIView {
-    var heightConstraint: NSLayoutConstraint? {
+    var heightGreaterThanOrEqualConstraint: NSLayoutConstraint? {
         get {
             constraints.first(where: {
                 $0.firstAttribute == .height && $0.relation == .greaterThanOrEqual
@@ -130,5 +125,79 @@ extension UIView {
         set {
             setNeedsLayout()
         }
+    }
+    
+    var heightEqualConstraint: NSLayoutConstraint? {
+        get {
+            constraints.first(where: {
+                $0.firstAttribute == .height && $0.relation == .equal
+            })
+        }
+        set {
+            setNeedsLayout()
+        }
+    }
+}
+
+extension UIView {
+    fileprivate enum Constants {
+        static let externalBorderName = "externalBorder"
+    }
+    
+    @discardableResult
+    func addExternalBorder(borderWidth: CGFloat = 2.0,
+                           borderColor: UIColor = .white,
+                           cornerRadius: CGFloat = 0) -> CALayer {
+        let externalBorder = CALayer()
+        externalBorder.frame = CGRect(x: -borderWidth, y: -borderWidth, width: frame.size.width + 2 * borderWidth, height: frame.size.height + 2 * borderWidth)
+        externalBorder.borderColor = borderColor.cgColor
+        externalBorder.borderWidth = borderWidth
+        if cornerRadius != 0 {
+            externalBorder.cornerRadius = cornerRadius
+        }
+        externalBorder.name = Constants.externalBorderName
+        
+        layer.insertSublayer(externalBorder, at: 0)
+        layer.masksToBounds = false
+        
+        return externalBorder
+    }
+    
+    func removeExternalBorders() {
+        layer.sublayers?.compactMap { $0 }
+            .filter { $0.name == Constants.externalBorderName }
+            .forEach { $0.removeFromSuperlayer() }
+    }
+    
+    func removeExternalBorder(externalBorder: CALayer) {
+        guard externalBorder.name == Constants.externalBorderName else { return }
+        externalBorder.removeFromSuperlayer()
+    }
+}
+
+extension UIView {
+    
+    func bindFrameToSuperview(top: CGFloat = 0,
+                              leading: CGFloat = 0,
+                              trailing: CGFloat = 0,
+                              bottom: CGFloat = 0) {
+        guard let superview else { return }
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: superview.topAnchor, constant: top),
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leading),
+            superview.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottom),
+            superview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: trailing)
+        ])
+    }
+    
+    func bindFrameToSuperview(margin: CGFloat) {
+        bindFrameToSuperview(top: margin, leading: margin, trailing: margin, bottom: margin)
+    }
+    
+    func frameRelativeToWindow() -> CGRect {
+        convert(bounds, to: nil)
     }
 }

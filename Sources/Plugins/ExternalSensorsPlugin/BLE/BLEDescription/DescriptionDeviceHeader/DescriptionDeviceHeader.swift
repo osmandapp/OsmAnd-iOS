@@ -18,7 +18,7 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectButton: UIButton!
     
     var onUpdateConnectStateAction: ((DeviceState) -> Void)?
-    var didPaireDeviceAction: (() -> Void)?
+    var didPairedDeviceAction: (() -> Void)?
     
     private var device: Device?
     
@@ -40,9 +40,14 @@ final class DescriptionDeviceHeader: UIView {
         deviceImageView.image = device.getServiceConnectedImage
     }
     
+    func showSignalIndicator(show: Bool) {
+        signalIndicatorImageView.isHidden = !show
+    }
+    
     private func changeDisconnectedState(device: Device) {
         configureConnectButtonTitle(with: .connected)
-        deviceImageView.image = device.getServiceConnectedImage.noir
+        deviceImageView.image = device.getServiceDisconnectedImage
+        deviceImageView.tintColor = .iconColorDefault
         connectActivityView.stopAnimating()
         configureStartStateActivityView(with: device.state)
     }
@@ -64,18 +69,19 @@ final class DescriptionDeviceHeader: UIView {
     private func configureConnectUI(device: Device) {
         if device.isConnected {
             connectStatusLabel.text = localizedString("external_device_status_connected")
-            signalIndicatorImageView.tintColor = UIColor.buttonBgColorPrimary
+            signalIndicatorImageView.tintColor = .buttonBgColorPrimary
             updateRSSI(with: device.rssi)
             deviceImageView.image = device.getServiceConnectedImage
             configureConnectButtonTitle(with: .disconnected)
-            imageContainerView.backgroundColor = UIColor.buttonBgColorTertiary
+            imageContainerView.backgroundColor = .buttonBgColorTertiary
         } else {
             connectStatusLabel.text = localizedString("external_device_status_disconnected")
-            signalIndicatorImageView.tintColor = UIColor.iconColorSecondary
-            signalIndicatorImageView.image = UIImage(named: "ic_small_signal_not_found")
-            deviceImageView.image = device.getServiceConnectedImage.noir
+            signalIndicatorImageView.tintColor = .iconColorSecondary
+            signalIndicatorImageView.image = .icSmallSignalNotFound
+            deviceImageView.image = device.getServiceDisconnectedImage
+            deviceImageView.tintColor = .iconColorDefault
             configureConnectButtonTitle(with: .connected)
-            imageContainerView.backgroundColor = UIColor.viewBg
+            imageContainerView.backgroundColor = .viewBg
         }
     }
     
@@ -91,15 +97,21 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success:
-                debugPrint("connect success")
+                NSLog("connect success | \(device.deviceServiceName) | \(device.deviceName)")
                 let isPairedDevice = DeviceHelper.shared.isPairedDevice(id: device.id)
                 DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
                 DeviceHelper.shared.addConnected(device: device)
                 if !isPairedDevice {
-                    didPaireDeviceAction?()
+                    didPairedDeviceAction?()
                 }
                 configureConnectButtonTitle(with: .disconnected)
-                discoverServices(serviceUUIDs: nil)
+                if !device.isSimulator {
+                    // On car sensor connect, stop simulator
+                    if device.deviceType == .OBD_VEHICLE_METRICS {
+                        DeviceHelper.shared.disconnectOBDSimulator()
+                    }
+                    discoverServices(serviceUUIDs: nil)
+                }
                 deviceImageView.image = device.getServiceConnectedImage
             case .failure(let error):
                 if let error = error as? SBError {
@@ -122,9 +134,10 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success(let services):
+                NSLog("discoverCharacteristics: success")
                 discoverCharacteristics(services: services)
             case .failure(let error):
-                debugPrint("discoverCharacteristics: \(error)")
+                NSLog("discoverCharacteristics: \(error)")
                 showErrorAlertWith(message: error.localizedDescription)
             }
         }
@@ -132,31 +145,51 @@ final class DescriptionDeviceHeader: UIView {
     
     private func discoverCharacteristics(services: [CBService]) {
         guard let device else { return }
+        
+        var completedCount = 0
+        let totalServices = services.count
+
         for service in services {
             device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
                 guard let self else { return }
+                
+                defer {
+                    completedCount += 1
+                    if completedCount == totalServices, device.deviceType == .OBD_VEHICLE_METRICS {
+                        OBDService.shared.startDispatcher()
+                    }
+                }
+                
                 switch result {
                 case .success(let characteristics):
                     for characteristic in characteristics {
                         debugPrint(characteristic)
+                        
                         if characteristic.properties.contains(.read) {
                             device.update(with: characteristic) { _ in }
                         }
+                        
                         if characteristic.properties.contains(.notify) {
-                            debugPrint("\(characteristic.uuid): properties contains .notify")
-                            device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { result in
-                                debugPrint(result)
+                            NSLog("[\(characteristic.uuid)] supports .notify, enabling...")
+                            device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { notifyResult in
+                                switch notifyResult {
+                                case .success(let isNotifying):
+                                    NSLog("Notifications enabled for [\(characteristic.uuid)]: \(isNotifying)")
+                                case .failure(let error):
+                                    NSLog("Failed to enable notifications for [\(characteristic.uuid)]: \(error.localizedDescription)")
+                                }
                             }
                         }
                     }
+                    
                 case .failure(let error):
-                    debugPrint("discoverCharacteristics: \(error)")
+                    NSLog("Failed to discover characteristics for service [\(service.uuid)]: \(error.localizedDescription)")
                     showErrorAlertWith(message: error.localizedDescription)
                 }
             }
         }
     }
-    
+
     private func disconnect() {
         guard let device else { return }
         configureConnectButtonTitle(with: .disconnecting)
@@ -168,7 +201,8 @@ final class DescriptionDeviceHeader: UIView {
             case .success:
                 DeviceHelper.shared.removeDisconnected(device: device)
                 configureConnectButtonTitle(with: .connected)
-                deviceImageView.image = device.getServiceConnectedImage.noir
+                deviceImageView.image = device.getServiceDisconnectedImage
+                deviceImageView.tintColor = .iconColorDefault
             case .failure(let error):
                 if let error = error as? SBError {
                     switch error {

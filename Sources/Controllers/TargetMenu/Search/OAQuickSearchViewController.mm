@@ -11,7 +11,10 @@
 #import "OsmAndApp.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OAResultMatcher.h"
 #import "OAPOI.h"
+#import "OALocationServices.h"
+#import "OAObservable.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"
@@ -37,7 +40,6 @@
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
 #import "OAOsmAndFormatter.h"
-
 #import "OASearchUICore.h"
 #import "OASearchCoreFactory.h"
 #import "OAQuickSearchHelper.h"
@@ -50,8 +52,8 @@
 #import "OADeleteCustomFiltersViewController.h"
 #import "OARearrangeCustomFiltersViewController.h"
 #import "QuadRect.h"
-
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OADefaultFavorite.h"
@@ -69,9 +71,10 @@
 #define kBarActionViewHeight 44.0
 #define kTabsHeight 40.0
 #define kBottomViewHeight 57.0
-
 #define kCancelButtonY 5.0
 #define kLeftImageButtonY -2.0
+
+static NSString *topIndexBrandPrefix = @"top_index_brand";
 
 typedef NS_ENUM(NSInteger, QuickSearchTab)
 {
@@ -152,6 +155,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OASearchToolbarViewController *_searchToolbarViewController;
 
     BarActionType _barActionType;
+
     BOOL _historyEditing;
 
     BOOL _bottomViewVisible;
@@ -247,7 +251,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [_tabs setTitle:OALocalizedString(@"shared_string_history") forSegmentAtIndex:0];
     [_tabs setTitle:OALocalizedString(@"search_categories") forSegmentAtIndex:1];
     [_tabs setTitle:OALocalizedString(@"shared_string_address") forSegmentAtIndex:2];
-    [_tabs setSelectedSegmentIndex:0];
     [_tabs setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
     [_tabs setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateSelected];
 
@@ -268,6 +271,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [_textField.leftView addSubview:_leftImgView];
     [_textField.leftView addSubview:_activityIndicatorView];
 
+    [self setTabIndex:_tabIndex];
     [self setupSearch];
     [self updateHint];
 
@@ -332,7 +336,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     [self stopAddressSearch];
     [self setResultCollection:nil];
-    [self.searchUICore resetPhrase];
+    if (self.searchQuery.length == 0)
+        [self.searchUICore resetPhrase];
 
     OASearchSettings *settings = [[self.searchUICore getSearchSettings] setOriginalLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude]];
     settings = [settings setLang:locale ? locale : @"" transliterateIfMissing:transliterate];
@@ -426,7 +431,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 
             [_barActionImageButton setImage:[UIImage imageNamed:@"ic_search_filter.png"] forState:UIControlStateNormal];
-            BOOL filterButtonVisible = word && word.getType == POI_TYPE;
+            BOOL filterButtonVisible = word && word.getType == EOAObjectTypePoiType;
             _barActionImageButton.hidden = !filterButtonVisible;
 
             break;
@@ -540,7 +545,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionShowOnMap:
         {
             OASearchPhrase *searchPhrase = [self.searchUICore getPhrase];
-            if ([searchPhrase isNoSelectedType] || [searchPhrase isLastWord:POI_TYPE])
+            if ([searchPhrase isNoSelectedType] || [searchPhrase isLastWord:EOAObjectTypePoiType])
             {
                 OAPOIUIFilter *filter;
                 if ([searchPhrase isNoSelectedType])
@@ -556,9 +561,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     else
                     {
                         filter = [[OAPOIFiltersHelper sharedInstance] getSearchByNamePOIFilter];
-                        if ([searchPhrase getFirstUnknownSearchWord].length > 0)
+                        NSString * searchWord = [searchPhrase getUnknownWordToSearch];
+                        if (searchWord != nil && searchWord.length > 0)
                         {
-                            [filter setFilterByName:[searchPhrase getFirstUnknownSearchWord]];
+                            [filter setFilterByName:searchWord];
                             [filter clearCurrentResults];
                         }
                     }
@@ -576,6 +582,20 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     }
                     if ([searchPhrase getFirstUnknownSearchWord].length > 0)
                         [filter setFilterByName:[searchPhrase getFirstUnknownSearchWord]];
+                }
+                else if ([[searchPhrase getLastSelectedWord].result.object isKindOfClass:[OATopIndexFilter class]])
+                {
+                    OATopIndexFilter *topIndexFilter = (OATopIndexFilter *) [searchPhrase getLastSelectedWord].result.object;
+                    filter = [self createPOIUIFilterWithTopIndexFilter:topIndexFilter];
+                    if (filter)
+                    {
+                        [filter setFilterByName:[topIndexFilter getValue]];
+                        [filter setFilterByKey:[topIndexFilter getTag]];
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
                 else
                 {
@@ -626,7 +646,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionShowOnMap:
         {
             OASearchPhrase *searchPhrase = [self.searchUICore getPhrase];
-            if ([searchPhrase isLastWord:POI_TYPE])
+            if ([searchPhrase isLastWord:EOAObjectTypePoiType])
             {
                 NSString *filterByName = [[searchPhrase getUnknownSearchPhrase] trim];
                 NSObject *object = [searchPhrase getLastSelectedWord].result.object;
@@ -651,6 +671,17 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                         [custom updateTypesToAccept:abstractPoiType];
 
                         OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:filterByName];
+                        filterViewController.delegate = self;
+                        [self.navigationController pushViewController:filterViewController animated:YES];
+                    }
+                }
+                else if ([object isKindOfClass:[OATopIndexFilter class]])
+                {
+                    OATopIndexFilter *topIndexFilter = (OATopIndexFilter *)object;
+                    OAPOIUIFilter *custom = [self createPOIUIFilterWithTopIndexFilter:topIndexFilter];
+                    if (custom)
+                    {
+                        OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:[topIndexFilter getValue]];
                         filterViewController.delegate = self;
                         [self.navigationController pushViewController:filterViewController animated:YES];
                     }
@@ -693,9 +724,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         _searchToolbarViewController.searchDelegate = self;
     }
     [_searchToolbarViewController setFilter:filter];
-    _searchToolbarViewController.toolbarTitle =
-            filter && ![filter.filterId isEqualToString:BY_NAME_FILTER_ID]
-                    ? filter.name : [_textField.text trim];
+    _searchToolbarViewController.toolbarTitle = (filter && ![filter.filterId isEqualToString:BY_NAME_FILTER_ID]) ? ([filter.filterId hasPrefix:topIndexBrandPrefix] ? filter.filterByName : filter.name) : [_textField.text trim];
     [[OARootViewController instance].mapPanel showToolbar:_searchToolbarViewController];
 }
 
@@ -718,7 +747,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         OASearchWord *word = [[self.searchUICore getPhrase] getLastSelectedWord];
         if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE || self.searchType == OAQuickSearchType::HOME || self.searchType == OAQuickSearchType::WORK)
         {
-            barActionButtonVisible = barActionButtonVisible && (word && word.result && word.getType != POI_TYPE);
+            barActionButtonVisible = barActionButtonVisible && (word && word.result && word.getType != EOAObjectTypePoiType);
         }
         if (barActionButtonVisible)
         {
@@ -986,7 +1015,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         NSDictionary *userInfo = [notification userInfo];
         CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
         keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
-        CGFloat keyboardHeight = keyboardRect.size.height;
         CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
         NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
 
@@ -1069,7 +1097,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                       setEmptyQueryAllowed:true]
                                      setAddressSearch:true]
                                     setSortByName:false]
-                                   setSearchTypes:@[[OAObjectType withType:CITY], [OAObjectType withType:VILLAGE], [OAObjectType withType:POSTCODE], [OAObjectType withType:HOUSE], [OAObjectType withType:STREET_INTERSECTION], [OAObjectType withType:STREET],[OAObjectType withType:LOCATION], [OAObjectType withType:PARTIAL_LOCATION]]]
+                                   setSearchTypes:@[[OAObjectType withType:EOAObjectTypeCity], [OAObjectType withType:EOAObjectTypeVillage], [OAObjectType withType:EOAObjectTypePostcode], [OAObjectType withType:EOAObjectTypeHouse], [OAObjectType withType:EOAObjectTypeStreetIntersection], [OAObjectType withType:EOAObjectTypeStreet],[OAObjectType withType:EOAObjectTypeLocation], [OAObjectType withType:EOAObjectTypePartialLocation]]]
                                   setRadiusLevel:1];
 
     [self.searchUICore updateSettings:settings];
@@ -1081,7 +1109,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                       setEmptyQueryAllowed:true]
                                      setAddressSearch:true]
                                     setSortByName:true]
-                                   setSearchTypes:@[[OAObjectType withType:CITY], [OAObjectType withType:VILLAGE]]]
+                                   setSearchTypes:@[[OAObjectType withType:EOAObjectTypeCity], [OAObjectType withType:EOAObjectTypeVillage]]]
                                   setRadiusLevel:1];
 
     [self.searchUICore updateSettings:settings];
@@ -1094,7 +1122,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                       setEmptyQueryAllowed:true]
                                      setAddressSearch:true]
                                     setSortByName:false]
-                                   setSearchTypes:@[[OAObjectType withType:CITY]]]
+                                   setSearchTypes:@[[OAObjectType withType:EOAObjectTypeCity]]]
                                   setRadiusLevel:1];
 
     [self.searchUICore updateSettings:settings];
@@ -1107,7 +1135,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     settings = [[[[[[settings setEmptyQueryAllowed:true]
                     setAddressSearch:true]
                    setSortByName:false]
-                  setSearchTypes:@[[OAObjectType withType:CITY]]]
+                  setSearchTypes:@[[OAObjectType withType:EOAObjectTypeCity]]]
                  setOriginalLocation:latLon]
                 setRadiusLevel:1];
 
@@ -1117,7 +1145,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) startPostcodeSearch
 {
     OASearchSettings *settings = [[[[[[self.searchUICore getSearchSettings]
-                                      setSearchTypes:@[[OAObjectType withType:POSTCODE]]]
+                                      setSearchTypes:@[[OAObjectType withType:EOAObjectTypePostcode]]]
                                      setEmptyQueryAllowed:false]
                                     setAddressSearch:true]
                                    setSortByName:true]
@@ -1168,7 +1196,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             unsigned long long lastCityId = settings.lastSearchedCity;
             for (OASearchResult *sr in [res getCurrentSearchResults])
             {
-                if (sr.objectType == CITY && ((OACity *) sr.object).addrId == lastCityId) {
+                if (sr.objectType == EOAObjectTypeCity && ((OACity *) sr.object).addrId == lastCityId) {
                     lastCity = sr;
                     break;
                 }
@@ -1200,7 +1228,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                             if (res) {
                                 for (OASearchResult *sr in [res getCurrentSearchResults])
                                 {
-                                    if (sr.objectType == CITY && ((OACity *) sr.object).addrId == lastCityId)
+                                    if (sr.objectType == EOAObjectTypeCity && ((OACity *) sr.object).addrId == lastCityId)
                                     {
                                         cityFound = YES;
                                         [selfWeak completeQueryWithObject:sr];
@@ -1332,28 +1360,28 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
         switch (searchResult.objectType)
         {
-            case POI:
+            case EOAObjectTypePoi:
                 h.hType = OAHistoryTypePOI;
                 break;
 
-            case FAVORITE:
+            case EOAObjectTypeFavorite:
                 h.hType = OAHistoryTypeFavorite;
                 break;
 
-            case WPT:
+            case EOAObjectTypeWpt:
                 h.hType = OAHistoryTypeWpt;
                 break;
 
-            case LOCATION:
+            case EOAObjectTypeLocation:
                 h.hType = OAHistoryTypeLocation;
                 break;
 
-            case CITY:
-            case VILLAGE:
-            case POSTCODE:
-            case STREET:
-            case HOUSE:
-            case STREET_INTERSECTION:
+            case EOAObjectTypeCity:
+            case EOAObjectTypeVillage:
+            case EOAObjectTypePostcode:
+            case EOAObjectTypeStreet:
+            case EOAObjectTypeHouse:
+            case EOAObjectTypeStreetIntersection:
                 h.hType = OAHistoryTypeAddress;
                 break;
 
@@ -1435,6 +1463,40 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 	    [self.view setNeedsLayout];
 }
 
+- (OAPOIUIFilter *) createPOIUIFilterWithTopIndexFilter:(OATopIndexFilter *)topIndexFilter
+{
+    OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:[topIndexFilter getFilterId]];
+    if (filter)
+    {
+        return filter;
+    }
+    else if ([self.searchHelper getResultCollection])
+    {
+        NSArray<OASearchResult *> *searchResults = [[self.searchHelper getResultCollection] getCurrentSearchResults];
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
+        for (OASearchResult *res in searchResults)
+        {
+            if ([res.object isKindOfClass:[OAPOI class]])
+            {
+                OAPOI *poi = (OAPOI *) res.object;
+                OAPOICategory *poiCategory = poi.type.category;
+                NSMutableSet<NSString *> *subtypes = [acceptedTypes objectForKey:poiCategory];
+                if (!subtypes)
+                {
+                    subtypes = [NSMutableSet set];
+                    [acceptedTypes setObject:subtypes forKey:poiCategory];
+                }
+                [subtypes addObject:poi.subType];
+            }
+        }
+        
+        filter = [[OAPOIFiltersHelper sharedInstance] getFilter:topIndexFilter acceptedTypes:acceptedTypes];
+        return filter;
+    }
+
+    return nil;
+}
+
 - (void) goToPoint:(double)latitude longitude:(double)longitude
 {
     OAPOI *poi = [[OAPOI alloc] init];
@@ -1503,7 +1565,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self.searchUICore search:text delayedExecution:updateResult matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
 
         OASearchResult *obj = *object;
-        if (obj.objectType == SEARCH_STARTED)
+        if (obj.objectType == EOAObjectTypeSearchStarted)
             self.cancelPrev = false;
 
         if (self.paused || self.cancelPrev)
@@ -1511,7 +1573,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
         switch (obj.objectType)
         {
-            case SEARCH_STARTED:
+            case EOAObjectTypeSearchStarted:
             {
                 if (onSearchStarted)
                 {
@@ -1521,14 +1583,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 }
                 break;
             }
-            case FILTER_FINISHED:
+            case EOAObjectTypeFilterFinished:
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self updateSearchResult:[self.searchUICore getCurrentSearchResult] append:NO];
                 });
                 break;
             }
-            case SEARCH_FINISHED:
+            case EOAObjectTypeSearchFinished:
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (self.paused)
@@ -1555,7 +1617,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 });
                 break;
             }
-            case SEARCH_API_FINISHED:
+            case EOAObjectTypeSearchApiFinished:
             {
                 OASearchCoreAPI *searchApi = (OASearchCoreAPI *) obj.object;
                 NSMutableArray<OASearchResult *> *apiResults;
@@ -1574,7 +1636,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 [self showApiResults:apiResults phrase:phrase hasRegionCollection:hasRegionCollection onPublish:onPublish];
                 break;
             }
-            case SEARCH_API_REGION_FINISHED:
+            case EOAObjectTypeSearchApiRegionFinished:
             {
                 regionResultApi = (OASearchCoreAPI *) obj.object;
                 OASearchPhrase *regionPhrase = obj.requiredSearchPhrase;
@@ -1582,7 +1644,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 [self showRegionResults:regionResultCollection onPublish:onPublish];
                 break;
             }
-            case PARTIAL_LOCATION:
+            case EOAObjectTypePartialLocation:
             {
                 // do not show
                 break;
@@ -1673,7 +1735,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 sr.object = custom;
                 sr.priority = SEARCH_AMENITY_TYPE_PRIORITY;
                 sr.priorityDistance = 0;
-                sr.objectType = POI_TYPE;
+                sr.objectType = EOAObjectTypePoiType;
             }
         }
     }
@@ -1681,7 +1743,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if (self.addressSearch)
     {
         [self startAddressSearch];
-        if (sr.objectType == CITY)
+        if (sr.objectType == EOAObjectTypeCity)
         {
             OAAppSettings *settings = [OAAppSettings sharedManager];
             OACity *city = (OACity *) sr.object;
@@ -1714,7 +1776,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) replaceQueryWithUiFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
 {
     OASearchPhrase *searchPhrase = [self.searchUICore getPhrase];
-    if ([searchPhrase isLastWord:POI_TYPE])
+    if ([searchPhrase isLastWord:EOAObjectTypePoiType])
     {
         self.poiFilterApplied = YES;
         OASearchResult *sr = [searchPhrase getLastSelectedWord].result;
@@ -1765,7 +1827,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         double rd = [OAOsmAndFormatter calculateRoundedDist:minimalSearchRadius];
         item.title = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nothing_found"),
-                [OAOsmAndFormatter getFormattedDistance:rd forceTrailingZeroes:NO]];
+                      [OAOsmAndFormatter getFormattedDistance:rd withParams:[OsmAndFormatterParams noTrailingZeros]]];
     }
 
     if (!_paused && !_cancelPrev)
@@ -2030,7 +2092,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     sr.localeName = [filter getName];
     sr.object = filter;
     sr.priority = 0;
-    sr.objectType = POI_TYPE;
+    sr.objectType = EOAObjectTypePoiType;
     [_searchUICore selectSearchResult:sr];
     [self setBottomViewVisible:!willSaved];
 

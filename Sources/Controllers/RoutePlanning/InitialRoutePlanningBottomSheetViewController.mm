@@ -8,6 +8,7 @@
 
 #import "InitialRoutePlanningBottomSheetViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OATitleIconRoundCell.h"
@@ -20,6 +21,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAMeasurementEditingContext.h"
 
 #define kVerticalMargin 18.
 #define kHorizontalMargin 20.
@@ -56,7 +58,8 @@
     _separatorHeight = 1.0 / [UIScreen mainScreen].scale;
     
     [self.rightButton removeFromSuperview];
-    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
+    self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
+    self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -72,7 +75,7 @@
 
 - (CGFloat) initialHeight
 {
-    int tracksCount = (int)[OAGPXDatabase sharedDb].gpxList.count;
+    int tracksCount = (int)[[OAGPXDatabase sharedDb] getDataItems].count;
     int maxHeight = DeviceScreenHeight / 3 * 2;
     
     int estimatedHeight = kApproximateEmptyMenuHeight + OAUtilities.getBottomMargin;
@@ -109,7 +112,7 @@
     [data addObject:actionSection];
 
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    NSArray *gpxList = [db.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
+    NSArray *gpxList = [[db getDataItems] sortedArrayUsingComparator:^NSComparisonResult(OASGpxDataItem *obj1, OASGpxDataItem *obj2) {
         NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.gpxFilePath];
         NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFilePath];
         return [time2 compare:time1];
@@ -125,14 +128,14 @@
             @"key" : @"header"
         }];
 
-        for (OAGPX *gpx in gpxTopList)
+        for (OASGpxDataItem *gpx in gpxTopList)
         {
             [existingTracksSection addObject:@{
                     @"type" : [OAGPXRouteRoundCell getCellIdentifier],
                     @"track" : gpx,
-                    @"title" : [gpx getNiceTitle],
+                    @"title" : gpx.gpxFileNameWithoutExtension,
                     @"distance" : [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance],
-                    @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
+                    @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan / 1000 shortFormat:YES],
                     @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
                     @"key" : @"gpx_route"
                 }];
@@ -146,6 +149,11 @@
 - (void) onRightButtonPressed
 {
     [super onRightButtonPressed];
+}
+
+- (BOOL)isTransportMode:(OAApplicationMode *)mode
+{
+    return [mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
 }
 
 #pragma mark - UITableViewDataSource
@@ -253,7 +261,10 @@
     if ([key isEqualToString:@"create_new_route"])
     {
         [self hide:YES];
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
+        OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
+        OAApplicationMode *mode = [[OAAppSettings sharedManager].applicationMode get];
+        editingContext.appMode = [self isTransportMode:mode] ? OAApplicationMode.DEFAULT : mode;
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext]];
         return;
     }
     else if ([key isEqualToString:@"open_track"])
@@ -266,7 +277,7 @@
     }
     else if ([key isEqualToString:@"gpx_route"])
     {
-        OAGPX* track = item[@"track"];
+        OASGpxDataItem *track = item[@"track"];
         [self hide:YES];
         [[OARootViewController instance].mapPanel showScrollableHudViewController:
                 [[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];

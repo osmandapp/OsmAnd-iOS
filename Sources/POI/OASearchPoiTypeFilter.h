@@ -10,15 +10,14 @@
 
 @class OAPOICategory;
 
+typedef BOOL(^OASearchPoiTypeFilterAccept)(OAPOICategory *type, NSString *subcategory);
+typedef BOOL(^OASearchPoiTypeFilterIsEmpty)();
+typedef NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *>* (^OASearchPoiTypeFilterGetTypes)();
+
 @interface OASearchPoiTypeFilter : NSObject
 
-typedef BOOL(^OASearchPoiTypeFilterAccept)(OAPOICategory *type, NSString *subcategory);
 @property (nonatomic) OASearchPoiTypeFilterAccept acceptFunction;
-
-typedef BOOL(^OASearchPoiTypeFilterIsEmpty)();
 @property (nonatomic) OASearchPoiTypeFilterIsEmpty emptyFunction;
-
-typedef NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *>* (^OASearchPoiTypeFilterGetTypes)();
 @property (nonatomic) OASearchPoiTypeFilterGetTypes getAcceptedTypesFunction;
 
 - (BOOL) accept:(OAPOICategory *)type subcategory:(NSString *)subcategory;
@@ -28,6 +27,7 @@ typedef NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *>* (^OASearchPoiTy
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes;
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypesOrigin;
 
++ (instancetype)acceptAllPoiTypeFilter;
 - (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction;
 
 

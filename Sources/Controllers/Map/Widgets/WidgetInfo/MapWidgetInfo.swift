@@ -52,8 +52,8 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     func getSettingsIconId(nightMode: Bool) -> String {
-        if let widgetState {
-            return widgetState.getSettingsIconId(nightMode)
+        if let widgetState, let settingsIconId = widgetState.getSettingsIconId(nightMode) {
+            return settingsIconId
         } else {
             return settingsIconId
         }
@@ -79,31 +79,35 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     func getWidgetType() -> WidgetType? {
-        return widget.widgetType
+        widget.widgetType
     }
     
     func isExternal() -> Bool {
-        return widget.isExternal()
+        widget.isExternal()
     }
     
     func getTitle() -> String {
-        return getMessage()
+        getMessage()
     }
     
     func getStateIndependentTitle() -> String {
-        return message
+        message
     }
     
     func getMessage() -> String {
-        return widgetState?.getMenuTitle() ?? message
+        widgetState?.getMenuTitle() ?? message
     }
     
     func getWidgetTitle() -> String {
         widgetState?.getWidgetTitle() ?? getMessage()
     }
     
+    func getWidgetDefaultTitle() -> String {
+        widgetState?.getWidgetDefaultTitle() ?? ""
+    }
+    
     func getExternalProviderPackage() -> String? {
-        return nil
+        nil
     }
     
     func getUpdatedPanel() -> WidgetsPanel {
@@ -120,12 +124,16 @@ class MapWidgetInfo: NSObject, Comparable {
         return WidgetsAvailabilityHelper.isWidgetVisibleByDefault(widgetId: key, appMode: appMode)
     }
     
-    func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
-        widget.getSettingsData(appMode)
+    func getSettingsData(_ appMode: OAApplicationMode, _ widgetConfigurationParams: [String: Any]?, isCreate: Bool) -> OATableDataModel? {
+        widget.getSettingsData(appMode, widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate)
     }
     
-    func getSettingsDataForSimpleWidget(_ appMode: OAApplicationMode) -> OATableDataModel? {
-        widget.getSettingsData(forSimpleWidget: appMode)
+    func getSettingsDataForSimpleWidget(_ appMode: OAApplicationMode, widgetsPanel: WidgetsPanel, _ widgetConfigurationParams: [String: Any]?) -> OATableDataModel? {
+        widget.getSettingsData(forSimpleWidget: appMode, widgetsPanel: widgetsPanel, widgetConfigurationParams: widgetConfigurationParams)
+    }
+    
+    func handleRowSelected(_ item: OATableRowData, viewController: WidgetConfigurationViewController) -> Bool {
+        return widget.handleRowSelected(item, viewController: viewController)
     }
     
     func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?) {
@@ -135,7 +143,7 @@ class MapWidgetInfo: NSObject, Comparable {
         widgetsVisibility.removeAll(where: { $0 == HIDE_PREFIX + key })
         widgetsVisibility.removeAll(where: { $0 == "" })
 
-        if let enabled = enabled, (!isCustomWidget() || enabled.boolValue) {
+        if let enabled, (!isCustomWidget() || enabled.boolValue) {
             widgetsVisibility.append(enabled.boolValue ? key : HIDE_PREFIX + key)
         }
 

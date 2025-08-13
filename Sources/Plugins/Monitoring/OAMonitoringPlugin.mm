@@ -12,6 +12,7 @@
 #import "OATextInfoWidget.h"
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OARoutingHelper.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
@@ -26,6 +27,8 @@
 #import "OATripRecordingDistanceWidget.h"
 #import "OATripRecordingTimeWidget.h"
 #import "OATripRecordingElevationWidget.h"
+#import "OALiveMonitoringHelper.h"
+#import "OASavingTrackHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording
@@ -139,7 +142,7 @@
     
 }
 
-- (void) showTripRecordingDialog:(BOOL)showTrackSelection
+- (void) showTripRecordingDialog
 {
     BOOL recOn = _settings.mapSettingTrackRecording;
     if (recOn)
@@ -323,6 +326,24 @@
     }
 }
 
+- (NSArray<QuickActionType *> *)getQuickActionTypes
+{
+    return @[TripRecordingAction.getQuickActionType, StartNewTripSegmentAction.getQuickActionType, SaveRecordedTripAndContinueAction.getQuickActionType, FinishTripRecordingAction.getQuickActionType];
+}
+
+- (void) pauseOrResumeRecording
+{
+    if ([self isRecordingTrack])
+    {
+        _settings.mapSettingTrackRecording = NO;
+    }
+    else
+    {
+        [_savingTrackHelper startNewSegment];
+        _settings.mapSettingTrackRecording = YES;
+    }
+}
+
 - (NSString *) getName
 {
     return OALocalizedString(@"record_plugin_name");
@@ -330,12 +351,22 @@
 
 - (NSString *) getDescription
 {
-    return [NSString stringWithFormat:NSLocalizedString(@"record_plugin_description", nil), k_docs_plugin_trip_recording];
+    return [NSString stringWithFormat:OALocalizedString(@"record_plugin_description"), k_docs_plugin_trip_recording];
 }
 
 - (BOOL) isLiveMonitoringEnabled
 {
     return [_liveMonitoringHelper isLiveMonitoringEnabled];
+}
+
+- (BOOL) isRecordingTrack
+{
+    return _settings.mapSettingTrackRecording;
+}
+
+- (BOOL) hasDataToSave
+{
+    return [_savingTrackHelper hasDataToSave];
 }
 
 @end

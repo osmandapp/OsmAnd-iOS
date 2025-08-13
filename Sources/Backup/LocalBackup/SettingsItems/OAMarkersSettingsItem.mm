@@ -9,9 +9,11 @@
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
 #import "OADestinationsHelper.h"
-#import "OAGPXDocument.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "Localization.h"
+#import "OsmAndSharedWrapper.h"
+
 
 #define APPROXIMATE_MARKER_SIZE_BYTES 240
 
@@ -73,12 +75,12 @@
 
 - (long)localModifiedTime
 {
-    return [_destinationsHelper getMarkersLastModifiedTime];
+    return [_destinationsHelper getMarkersLastModifiedTime] * 1000;
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
 {
-    [_destinationsHelper setMarkersLastModifiedTime:localModifiedTime];
+    [_destinationsHelper setMarkersLastModifiedTime:localModifiedTime / 1000];
 }
 
 - (void) apply
@@ -98,15 +100,11 @@
         }
         
         for (OADestination *marker in self.appliedItems)
-            [_destinationsHelper addDestination:marker];
+            [_destinationsHelper addDestinationWithNewColor:marker];
     }
     
 }
 
-- (BOOL) applyFileName:(NSString *)fileName
-{
-    return self.fileName ? ((![fileName isEqualToString:@"history_markers.gpx"] && [fileName hasSuffix:self.fileName]) || [fileName hasPrefix:[self.fileName stringByAppendingString:@"/"]] || [fileName isEqualToString:self.fileName]) : NO;
-}
 
 - (BOOL) isDuplicate:(OADestination *)mapMarker
 {
@@ -157,7 +155,7 @@
 
 - (OASettingsItemWriter *)getWriter
 {
-    OAGPXDocument *gpxFile = [_destinationsHelper generateGpx:self.items completeBackup:YES];
+    OASGpxFile *gpxFile = [_destinationsHelper generateGpx:self.items completeBackup:YES];
     return [self getGpxWriter:gpxFile];
 }
 
@@ -193,24 +191,26 @@
 
         return NO;
     }
+    
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
 
-   OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
     if (gpxFile)
     {
-        for (OAWptPt *wpt in gpxFile.points)
+        for (OASWptPt *wpt in gpxFile.getPointsList)
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
-            int color = [wpt getColor:0];
-            dest.color = color != 0 ? UIColorFromRGBA(color) : UIColorFromRGB(marker_pin_color_blue);
+            int color = [wpt getColor];
+            dest.color = color != 0 ? UIColorFromARGB(color) : UIColorFromRGB(marker_pin_color_blue);
             dest.markerResourceName = [self getResourceName:[dest.color.toHexString upperCase]];
-
-            for (OAGpxExtension *e in wpt.extensions)
+            NSDictionary<NSString *, NSString *> *extensions = [wpt getExtensionsToRead];
+            for (NSString *key in extensions.allKeys)
             {
-                if ([e.name isEqualToString:@"creation_date"])
+                if ([key isEqualToString:@"creation_date"])
                 {
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
-                    dest.creationDate = [dateFormatter dateFromString:e.value];
+                    dest.creationDate = [dateFormatter dateFromString:extensions[key]];
                 }
             }
             [self.item.items addObject:dest];

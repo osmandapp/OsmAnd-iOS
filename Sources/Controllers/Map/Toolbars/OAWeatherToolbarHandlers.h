@@ -9,15 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "OAFoldersCollectionView.h"
 
-typedef NS_ENUM(NSInteger, EOAWeatherToolbarDelegateType)
-{
-    EOAWeatherToolbarLayers = 0,
-    EOAWeatherToolbarDates,
-};
-
 @protocol OAWeatherToolbarDelegate
 
-- (void)updateData:(NSArray *)data type:(EOAWeatherToolbarDelegateType)type index:(NSInteger)index;
+- (void)updateData:(NSArray *)data index:(NSInteger)index;
 
 @end
 

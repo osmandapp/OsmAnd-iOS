@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OASegmentedSlider.h"
 
 @class OASegmentedSlider;
 

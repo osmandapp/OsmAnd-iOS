@@ -12,12 +12,17 @@
 #import "OAInputTableViewCell.h"
 #import "OAQuickSearchCoordinateFormatsViewController.h"
 #import "OAAppSettings.h"
+#import "OAObservable.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
+#import "OAWorldRegion.h"
 #import "OAPointDescription.h"
 #import "OALocationConvert.h"
 #import "OALocationParser.h"
 #import "OAMapUtils.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OANameStringMatcher.h"
 #import "OAPOIHelper.h"
 #import "OAPOI.h"
@@ -228,23 +233,21 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     {
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"navigate_point_northing"),
-            @"value" : _northingStr,
-            @"tag" : @(EOAQuickSearchCoordinatesTextFieldNorthing),
+            @"title" : OALocalizedString(@"navigate_point_zone"),
+            @"value" : _zoneStr,
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldZone),
         }];
-        
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_easting"),
             @"value" : _eastingStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldEasting),
         }];
-        
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"navigate_point_zone"),
-            @"value" : _zoneStr,
-            @"tag" : @(EOAQuickSearchCoordinatesTextFieldZone),
+            @"title" : OALocalizedString(@"navigate_point_northing"),
+            @"value" : _northingStr,
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldNorthing),
         }];
     }
     else if (_currentFormat == MAP_GEO_MGRS_FORMAT)
@@ -308,7 +311,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 {
     NSString *title = [OAPointDescription getLocationNamePlain:location.coordinate.latitude lon:location.coordinate.longitude];
     NSString *countryName = [_app.worldRegion getCountryNameAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
-    NSString *subTitle = countryName ? countryName : OALocalizedString(@"shared_string_location");
+    NSString *subTitle = countryName ?: OALocalizedString(@"shared_string_location");
     
     return @{
         @"type" : [OAQuickSearchResultTableViewCell getCellIdentifier],
@@ -814,7 +817,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
     OASearchPhrase *phrase = [searchUICore getPhrase];
     OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-    sr.objectType = LOCATION;
+    sr.objectType = EOAObjectTypeLocation;
     sr.location = location;
     sr.preferredZoom = PREFERRED_DEFAULT_ZOOM;
     sr.object = _searchLocation;

@@ -16,9 +16,8 @@
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
-
-#include "Localization.h"
-#include "OAColors.h"
+#import "Localization.h"
+#import "OAColors.h"
 
 #define kArrowsOnMap @"arrows"
 #define kLinesOnMap @"lines"

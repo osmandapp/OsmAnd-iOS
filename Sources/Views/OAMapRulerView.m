@@ -13,6 +13,8 @@
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
 #import "OAShapeLayer.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kAnimationDuration .2
 #define kBlurBackgroundTag -999
@@ -26,6 +28,7 @@
 @property UIView *rightBorder;
 
 @property UIVisualEffectView *blurView;
+@property UIBlurEffectStyle lastBlurEffectStyle;
 
 @end
 
@@ -36,6 +39,7 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        self.lastBlurEffectStyle = -1;
         [UIView animateWithDuration:kAnimationDuration animations:^{
             // Add a bottomBorder.
             self.bottomBorder = [[UIView alloc] init];
@@ -89,7 +93,8 @@
     else
     {
         blurView = [[UIView alloc] init];
-        blurView.backgroundColor = UIColorFromRGB(color_dialog_transparent_bg_argb_light);
+        UIColor *color = [UIColor colorNamed:ACColorNameGroupBgColorSecondary];
+        blurView.backgroundColor = light ? color.light : color.dark;
     }
     blurView.tag = kBlurBackgroundTag;
     blurView.userInteractionEnabled = NO;
@@ -127,7 +132,7 @@
 
 - (void) updateColors
 {
-    if([OAAppSettings sharedManager].nightMode)
+    if ([OAAppSettings sharedManager].nightMode)
         [self setNight];
     else
         [self setDay];
@@ -135,14 +140,18 @@
 
 - (void)setupRulerBlurView:(UIBlurEffectStyle)effect
 {
-    [self.blurView removeFromSuperview];
-    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:effect];
-    UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:blur];
-    UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
-    self.blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
-    self.blurView.layer.masksToBounds = YES;
-    [self.blurView.contentView addSubview:vibrancyView];
-    [self insertSubview:self.blurView atIndex:0];
+    if (self.lastBlurEffectStyle != effect)
+    {
+        self.lastBlurEffectStyle = effect;
+        [self.blurView removeFromSuperview];
+        UIBlurEffect *blur = [UIBlurEffect effectWithStyle:effect];
+        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:blur];
+        UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
+        self.blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
+        self.blurView.layer.masksToBounds = YES;
+        [self.blurView.contentView addSubview:vibrancyView];
+        [self insertSubview:self.blurView atIndex:0];
+    }
 }
 
 - (void) setDay
@@ -217,7 +226,7 @@
         if (rulerWidth < 0)
             rulerWidth = 0;
         else
-            vl = [OAOsmAndFormatter getFormattedDistance: roundedDist forceTrailingZeroes:NO];
+            vl = [OAOsmAndFormatter getFormattedDistance: roundedDist withParams:[OsmAndFormatterParams noTrailingZeros]];
     }
     CGRect frame = self.frame;
     self.hidden = rulerWidth == 0 ? true : false;

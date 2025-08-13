@@ -6,17 +6,16 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 final class DevicesSettingsCollection {
     
     private let storage = UserDefaults.standard
     
-    var hasPairedDevices: Bool {
-        if let deviceSettingsArray: [DeviceSettings] = storage[.deviceSettings], !deviceSettingsArray.isEmpty {
-           return true
-        }
-        return false
+    func hasPairedDevices(ofType deviceType: DeviceType) -> Bool {
+        getSettingsForPairedDevices()?.contains { $0.deviceType == deviceType } ?? false
+    }
+
+    func hasPairedDevices(excludingType deviceType: DeviceType) -> Bool {
+        getSettingsForPairedDevices()?.contains { $0.deviceType != deviceType } ?? false
     }
     
     func getSettingsForPairedDevices() -> [DeviceSettings]? {

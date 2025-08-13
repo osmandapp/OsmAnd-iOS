@@ -35,6 +35,8 @@
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
     vector<RoutingParameter> _otherParameters;
+    NSInteger _dimensionsSection;
+    NSInteger _fuelSection;
     NSInteger _otherSection;
 }
 
@@ -85,8 +87,8 @@
             NSString *group = [NSString stringWithUTF8String:p.group.c_str()];
             if (![param hasPrefix:@"avoid_"]
                     && ![param hasPrefix:@"prefer_"]
-                    && ![param isEqualToString:kRouteParamIdShortWay]
-                    && ![param isEqualToString:kRouteParamIdHazmatCategory]
+                    && ![param isEqualToString:kRouteParamShortWay]
+                    && ![param isEqualToString:kRouteParamHazmatCategory]
                     && ![group isEqualToString:kRouteParamGroupDrivingStyle])
                 _otherParameters.push_back(p);
         }
@@ -127,13 +129,18 @@
                      @"name" : paramId,
                      @"title" : title,
                      @"value" : value,
-                     @"selectedItem" : [NSNumber numberWithInt:index],
+                     @"selectedItem" : @(index),
                      @"icon" : [self getParameterIcon:paramId],
                      @"possibleValues" : possibleValues,
                      @"possibleValuesDescr" : valueDescriptions,
                      @"setting" : stringParam,
                      @"type" : [OAValueTableViewCell getCellIdentifier] }
                  ];
+                
+                if (isMotorType)
+                {
+                    [self setupFuelTankCapacity:exraParametersArr];
+                }
             }
         }
     }
@@ -144,15 +151,59 @@
         @"name" : @"defaultSpeed",
     }];
     if (parametersArr.count > 0)
+    {
         [tableData addObject:parametersArr];
+        _dimensionsSection = tableData.count - 1;
+    }
     if (exraParametersArr.count > 0)
+    {
         [tableData addObject:exraParametersArr];
+        _fuelSection = tableData.count - 1;
+    }
     if (defaultSpeedArr.count > 0)
     {
         [tableData addObject:defaultSpeedArr];
         _otherSection = tableData.count - 1;
     }
     _data = [NSArray arrayWithArray:tableData];
+}
+
+- (void) setupFuelTankCapacity:(NSMutableArray *)exraParametersArr
+{
+    OACommonDouble *doubleParam = [_settings fuelTankCapacity];
+    double value = [doubleParam get:self.appMode];
+    double convertedValue = [OAOsmAndFormatter readSavedFuelTankCapacity:[_settings.volumeUnits get:self.appMode] mode:self.appMode value:value];
+    NSString *stringValue = [OAOsmAndFormatter getFormattedFuelCapacity:[_settings.volumeUnits get:self.appMode] mode:self.appMode value:convertedValue];
+    int index = -1;
+    
+    NSMutableArray<NSNumber *> *possibleValues = [NSMutableArray new];
+    NSMutableArray<NSString *> *valueDescriptions = [NSMutableArray new];
+    
+    double d = stringValue ? floorf(stringValue.doubleValue * 100 + 0.5) / 100 : DBL_MAX;
+    
+    for (int i = 0; i <= 11; i++)
+    {
+        double fuelTankCapacityValue = i == 0 ? 0 : 10 * i;
+        double vl = floorf(fuelTankCapacityValue * 100 + 0.5) / 100;
+        [possibleValues addObject:@(vl)];
+        NSString *descr = fuelTankCapacityValue == 0 ? @"-" : [OAOsmAndFormatter getFormattedFuelCapacity:[_settings.volumeUnits get:self.appMode] mode:self.appMode value:fuelTankCapacityValue];
+        [valueDescriptions addObject:descr];
+        if (vl == d)
+            index = i;
+    }
+    
+    [exraParametersArr addObject:
+         @{
+        @"name" : @"fuel_tank_capacity",
+        @"title" : OALocalizedString(@"fuel_tank_capacity"),
+        @"value" : stringValue,
+        @"selectedItem" : @(index),
+        @"icon" : @"ic_custom_obd_fuel_tank",
+        @"possibleValues" : possibleValues,
+        @"possibleValuesDescr" : valueDescriptions,
+        @"setting" : doubleParam,
+        @"type" : [OAValueTableViewCell getCellIdentifier] }
+    ];
 }
 
 - (NSString *) getParameterIcon:(NSString *)parameterName
@@ -172,20 +223,24 @@
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
-    if (section == _otherSection)
+    if (section == _dimensionsSection)
+        return OALocalizedString(@"shared_strings_dimensions");
+    else if (section == _fuelSection)
+        return OALocalizedString(@"poi_filter_fuel");
+    else if (section == _otherSection)
         return OALocalizedString(@"other_location");
-
-    return nil;
+    else
+        return nil;
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section
 {
-    if (section == 0)
+    if (section == _dimensionsSection)
         return OALocalizedString(@"touting_specified_vehicle_parameters_descr");
     else if (section == _otherSection)
         return OALocalizedString(@"default_speed_descr");
-
-    return nil;
+    else
+        return nil;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -212,7 +267,7 @@
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [item[@"selectedItem"] intValue] == 0 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : UIColorFromRGB(self.appMode.getIconColor);
+            cell.leftIconView.tintColor = [item[@"selectedItem"] intValue] == 0 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : self.appMode.getProfileColor;
         }
         return cell;
     }
@@ -230,7 +285,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
+            cell.leftIconView.tintColor = self.appMode.getProfileColor;
         }
         return cell;
     }

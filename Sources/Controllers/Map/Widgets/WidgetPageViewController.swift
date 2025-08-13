@@ -16,8 +16,10 @@ final class WidgetPageViewController: UIViewController {
     var simpleWidgetViews: [[OABaseWidgetView]] = []
     var isHiddenPageControl = true
     
+    // swiftlint:disable force_unwrapping
     private var stackView: UIStackView!
     private var bottomStackViewConstraint: NSLayoutConstraint!
+    // swiftlint:enable force_unwrapping
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,9 +54,13 @@ final class WidgetPageViewController: UIViewController {
             }
         } else {
             for widgetView in widgetViews {
-                widgetView.isSimpleLayout = false
-                widgetView.adjustSize()
-                widgetView.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widgetView.frame.size.height, priority: .defaultHigh)
+                if let textWidget = widgetView as? OATextInfoWidget, textWidget.isSidePanelSimpleLayoutMode {
+                    configureSimple(widget: widgetView)
+                } else {
+                    widgetView.adjustSize()
+                    widgetView.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widgetView.frame.size.height, priority: .defaultHigh)
+                }
+
                 stackView.addArrangedSubview(widgetView)
             }
         }
@@ -86,24 +92,37 @@ final class WidgetPageViewController: UIViewController {
         } else {
             let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
             for widget in widgetViews {
-                widget.showBottomSeparator(widget != lastVisibleWidget)
-                widget.translatesAutoresizingMaskIntoConstraints = false
-                widget.adjustSize()
-                width = max(width, widget.frame.size.width)
-                if widget.frame.size.width < width {
-                    var rect = widget.frame
-                    rect.size.width = width
-                    widget.frame = rect
-                }
-                if !widget.isHidden {
-                    height += widget.frame.size.height
+                if widget.isSimpleLayout {
+                    // This block calculates sizes for side-panel medium and large layout widgets
+                    guard !widget.isHidden else { continue }
+                    if let textInfoWidget = widget as? OATextInfoWidget {
+                        textInfoWidget.configureSimpleLayout()
+                    }
+                    let fittingSize = widget.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                    height += fittingSize.height
+                    width = max(width, min(fittingSize.width, OARootViewController.instance().mapPanel.hasTopWidget() && OAUtilities.isLandscapeIpadAware() ? 120 : UIScreen.main.bounds.width * 0.45))
+                } else {
+                    // This block calculates sizes for side-panel small/default layout widgets
+                    widget.translatesAutoresizingMaskIntoConstraints = false
+                    widget.adjustSize()
+                    width = max(width, widget.frame.size.width)
+                    if widget.frame.size.width < width {
+                        var rect = widget.frame
+                        rect.size.width = width
+                        widget.frame = rect
+                    }
+                    if !widget.isHidden {
+                        height += widget.frame.size.height
+                    }
+                    
+                    if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
+                        widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: widget.frame.size.height, priority: .defaultHigh)
+                    } else {
+                        widget.updateHeightConstraint(with: .equal, constant: widget.frame.size.height, priority: .defaultHigh)
+                    }
                 }
                 
-                if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
-                    widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: widget.frame.size.height, priority: .defaultHigh)
-                } else {
-                    widget.updateHeightConstraint(with: .equal, constant: widget.frame.size.height, priority: .defaultHigh)
-                }
+                widget.showBottomSeparator(widget != lastVisibleWidget)
             }
         }
         return (width, height)
@@ -123,17 +142,18 @@ extension WidgetPageViewController {
     
     private func configureSimple(widget: OABaseWidgetView) {
         widget.translatesAutoresizingMaskIntoConstraints = false
-        let height: CGFloat
         if !WidgetType.isComplexWidget(widget.widgetType?.id ?? "") {
             widget.isSimpleLayout = true
             widget.updateSimpleLayout()
-            height = 44
+            if let textInfoWidget = widget as? OATextInfoWidget {
+                widget.updateHeightConstraint(with: .equal, constant: WidgetSizeStyleObjWrapper.getMaxWidgetHeightFor(type: textInfoWidget.widgetSizeStyle), priority: .defaultHigh)
+            }
         } else {
             widget.isSimpleLayout = false
-            // NOTE: not isComplex widget has static height (waiting redesign)
-            height = 50
+            // NOTE: isComplex widget has static height 50 (waiting redesign)
+            widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: 50, priority: .defaultHigh)
         }
-        widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: height, priority: .defaultHigh)
+
         widget.showBottomSeparator(false)
         widget.showRightSeparator(false)
     }
@@ -145,7 +165,7 @@ extension WidgetPageViewController {
                 // NOTE: use adjustSize for Complex widget
                 if WidgetType.isComplexWidget(firstWidget.widgetType?.id ?? "") {
                     firstWidget.adjustSize()
-                    firstWidget.heightConstraint?.constant = firstWidget.frame.height
+                    firstWidget.heightGreaterThanOrEqualConstraint?.constant = firstWidget.frame.height
                 }
                 firstWidget.isFullRow = true
                 if let widget = firstWidget as? OATextInfoWidget {

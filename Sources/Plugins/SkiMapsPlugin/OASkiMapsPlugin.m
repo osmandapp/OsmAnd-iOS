@@ -9,6 +9,7 @@
 #import "OASkiMapsPlugin.h"
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "Localization.h"
 
 #define PLUGIN_ID kInAppId_Addon_SkiMap

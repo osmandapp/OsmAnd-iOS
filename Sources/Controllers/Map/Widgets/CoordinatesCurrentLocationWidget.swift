@@ -6,11 +6,9 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objc(OACoordinatesCurrentLocationWidget)
 @objcMembers
-class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
+final class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
 
     init() {
         super.init(type: .coordinatesCurrentLocation)
@@ -38,7 +36,6 @@ class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
     }
 
     override func getCoordinateIcon() -> UIImage {
-        let iconId = "widget_coordinates_location"
-        return UIImage.init(named: iconId)!
+        UIImage.widgetCoordinatesLocation
     }
 }

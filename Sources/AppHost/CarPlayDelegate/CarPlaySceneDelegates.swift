@@ -1,12 +1,20 @@
 import CarPlay
 
+@objc
+protocol CarPlayActionDelegate: NSObjectProtocol {
+    func showAlertWith(title: String)
+}
+
 final class CarPlaySceneDelegate: UIResponder {
     
     private var carPlayMapController: OACarPlayMapViewController?
     private var carPlayDashboardController: OACarPlayDashboardInterfaceController?
     private var windowToAttach: CPWindow?
     private var carPlayInterfaceController: CPInterfaceController?
+    private var defaultAppMode: OAApplicationMode?
     private var isForegroundScene = false
+    /// Starting with iOS 18.5 (CarPlay simulator), a change in behavior was observed: sceneWillEnterForeground is now called before didConnect, whereas previously it was the other way around. To handle this, a variable isWaitingForConfiguration was introduced.
+    private var isWaitingForConfiguration = false
     
     func sceneWillEnterForeground(_ scene: UIScene) {
         NSLog("[CarPlay] CarPlaySceneDelegate sceneWillEnterForeground")
@@ -31,7 +39,10 @@ final class CarPlaySceneDelegate: UIResponder {
     
     private func configureScene() {
         NotificationCenter.default.removeObserver(self)
-        guard let carPlayInterfaceController, let windowToAttach else { return }
+        guard let carPlayInterfaceController, let windowToAttach else {
+            isWaitingForConfiguration = true
+            return
+        }
         guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
         appDelegate.initialize()
         
@@ -41,11 +52,7 @@ final class CarPlaySceneDelegate: UIResponder {
                 appDelegate.rootViewController = OARootViewController()
             }
             presentInCarPlay(interfaceController: carPlayInterfaceController, window: windowToAttach)
-            let carPlayMode = OAAppSettings.sharedManager()?.isCarPlayModeDefault.get() == true
-                ? OAApplicationMode.getFirstAvailableNavigation()
-                : OAAppSettings.sharedManager()?.carPlayMode.get()
-
-            OAAppSettings.sharedManager()?.setApplicationModePref(carPlayMode, markAsLastUsed: false)
+            configureCarPlayNavigationMode()
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
             NotificationCenter.default.addObserver(self, selector: #selector(appInitEventConfigureScene(notification:)), name: NSNotification.Name.OALaunchUpdateState, object: nil)
@@ -81,6 +88,40 @@ final class CarPlaySceneDelegate: UIResponder {
         }
     }
     
+    private func configureCarPlayNavigationMode() {
+        guard let settings = OAAppSettings.sharedManager(), let routingHelper = OARoutingHelper.sharedInstance() else { return }
+        if defaultAppMode == nil {
+            defaultAppMode = settings.applicationMode.get()
+        }
+        
+        guard let defaultAppMode = defaultAppMode else { return }
+        var appModeToSet: OAApplicationMode?
+        if settings.isCarPlayModeDefault.get() {
+            if !defaultAppMode.isDerivedRouting(from: OAApplicationMode.car()) {
+                let derivedMode = OAApplicationMode.values()?.first(where: { $0.isDerivedRouting(from: OAApplicationMode.car()) })
+                appModeToSet = derivedMode ?? defaultAppMode
+            } else {
+                appModeToSet = defaultAppMode
+            }
+        } else {
+            appModeToSet = settings.carPlayMode.get()
+        }
+        
+        if let appMode = appModeToSet {
+            let oldMode = settings.applicationMode.get()
+            settings.setApplicationModePref(appMode)
+            routingHelper.setAppMode(appMode)
+            if appMode != oldMode && isRoutingActive() {
+                routingHelper.recalculateRouteDueToSettingsChange()
+                OATargetPointsHelper.sharedInstance().updateRouteAndRefresh(true)
+            }
+        }
+    }
+    
+    private func isRoutingActive() -> Bool {
+        OAAppSettings.sharedManager().followTheRoute.get() || OARoutingHelper.sharedInstance().isRouteCalculated() || OARoutingHelper.sharedInstance().isRouteBeingCalculated()
+    }
+    
     @objc private func appInitEventConfigureScene(notification: Notification) {
         NSLog("[CarPlay] CarPlaySceneDelegate appInitEventConfigureScene")
         guard let userInfo = notification.userInfo,
@@ -101,14 +142,21 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         OsmAndApp.swiftInstance().carPlayActive = true
         windowToAttach = window
         carPlayInterfaceController = interfaceController
+        if isWaitingForConfiguration, isForegroundScene {
+            isWaitingForConfiguration = false
+            configureScene()
+        }
     }
     
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnect interfaceController: CPInterfaceController, from window: CPWindow) {
         NSLog("[CarPlay] CarPlaySceneDelegate didDisconnect")
         
         OsmAndApp.swiftInstance().carPlayActive = false
-        OAAppSettings.sharedManager().setApplicationModePref(OAAppSettings.sharedManager().defaultApplicationMode.get(), markAsLastUsed: false)
+        if defaultAppMode != nil && !isRoutingActive() {
+            OAAppSettings.sharedManager().setApplicationModePref(defaultAppMode)
+        }
         
+        defaultAppMode = nil
         guard let mapPanel = OARootViewController.instance()?.mapPanel else {
             NSLog("[CarPlay] CarPlaySceneDelegate rootViewController mapPanel is nil")
             return
@@ -124,6 +172,36 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
             carPlayMapController = nil
             windowToAttach = nil
             carPlayInterfaceController = nil
+        }
+    }
+}
+
+// MARK: - OAWidgetListener
+
+extension CarPlaySceneDelegate: OAWidgetListener {
+    func widgetChanged(_ widget: OABaseWidgetView?) {
+        if widget is SpeedometerView {
+            carPlayMapController?.configureSpeedometer()
+        }
+    }
+    
+    func widgetVisibilityChanged(_ widget: OABaseWidgetView, visible: Bool) { }
+    
+    func widgetClicked(_ widget: OABaseWidgetView) { }
+}
+
+extension CarPlaySceneDelegate: CarPlayActionDelegate {
+    func showAlertWith(title: String) {
+        guard let carPlayInterfaceController else {
+            return
+        }
+        let okAction = CPAlertAction(title: localizedString("shared_string_ok"), style: .default) { _ in
+            carPlayInterfaceController.dismissTemplate(animated: true, completion: nil)
+        }
+        let alertTemplate = CPAlertTemplate(titleVariants: [title], actions: [okAction])
+        
+        Task { @MainActor in
+            try await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
         }
     }
 }

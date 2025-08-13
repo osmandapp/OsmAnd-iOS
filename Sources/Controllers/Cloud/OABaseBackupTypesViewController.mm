@@ -272,8 +272,8 @@
     else
         [_selectedItems removeObjectForKey:type];
 
-    if (!selected && items.count > 0)
-        [self showClearTypeScreen:type view:view];
+//    if (!selected && items.count > 0)
+//        [self showClearTypeScreen:type view:view];
 
     if (_selectedIndexPath)
         [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -365,7 +365,14 @@
 
 - (void)onDeleteTypeData:(OAExportSettingsType *)settingsType
 {
-    [_backupHelper deleteAllFiles:@[settingsType] listener:self];
+    @try
+    {
+        [_backupHelper deleteAllFiles:@[settingsType] listener:self];
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"Error in onDeleteTypeData() -> deleteAllFiles(): %@", exception.reason);
+    }
 }
 
 #pragma mark - OABackupTypesDelegate

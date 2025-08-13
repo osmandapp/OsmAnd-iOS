@@ -9,12 +9,17 @@
 #import "OARoadSegmentData.h"
 #import "OAApplicationMode.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <routeSegmentResult.h>
 
 @implementation OARoadSegmentData
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode start:(OAWptPt *)start end:(OAWptPt *)end points:(NSArray<OAWptPt *> *)points segments:(std::vector<std::shared_ptr<RouteSegmentResult>>)segments
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+                           start:(OASWptPt *)start
+                             end:(OASWptPt *)end
+                          points:(NSArray<OASWptPt *> *)points
+                        segments:(std::vector<std::shared_ptr<RouteSegmentResult>>)segments
 {
     self = [super init];
     if (self)
@@ -45,7 +50,7 @@
     return self;
 }
 
-- (NSArray<OAWptPt *> *) points
+- (NSArray<OASWptPt *> *) points
 {
     return self.gpxPoints ? [NSArray arrayWithArray:self.gpxPoints] : nil;
 }

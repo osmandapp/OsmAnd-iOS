@@ -49,7 +49,7 @@
         return NO;
     }
     
-    [self.item readFromJson:json error:error];
+    [self.item readItemsFromJson:json error:error];
     if (error)
         return NO;
 

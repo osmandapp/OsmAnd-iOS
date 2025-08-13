@@ -21,13 +21,13 @@ typedef NS_ENUM(NSInteger, EOABearingType) {
 @interface OABearingWidget : OASimpleWidget
 
 - (instancetype _Nonnull)initWithBearingType:(EOABearingType)bearingType
-                           customId:(NSString *_Nullable)customId
-                            appMode:(OAApplicationMode * _Nonnull)appMode
-                       widgetParams:(NSDictionary * _Nullable)widgetParams;
+                           customId:(nullable NSString *)customId
+                            appMode:(OAApplicationMode *)appMode
+                       widgetParams:(nullable NSDictionary *)widgetParams;
 - (int)getBearing;
-- (CLLocation *) getDestinationLocation;
+- (nullable CLLocation *)getDestinationLocation;
 - (int)getRelativeBearing:(CLLocation *)myLocation magneticBearingToDest:(float)magneticBearingToDest;
-- (OAGeomagneticField *) getGeomagneticField:(CLLocation *)location;
+- (OAGeomagneticField *)getGeomagneticField:(CLLocation *)location;
 - (BOOL)isAngularUnitsDepended;
 
 @end

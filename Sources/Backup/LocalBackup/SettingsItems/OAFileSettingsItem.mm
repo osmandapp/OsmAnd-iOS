@@ -10,8 +10,6 @@
 #import "OASettingsHelper.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
-#import "OAGPXDocument.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OAGPXDatabase.h"
 #import "OAIndexConstants.h"
 #import "OASettingsItemReader.h"
@@ -19,6 +17,7 @@
 #import "OARendererRegistry.h"
 #import "OASelectedGPXHelper.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAFileSettingsItemFileSubtype
 
@@ -48,6 +47,8 @@
             return @"voice";
         case EOASettingsItemFileSubtypeTravel:
             return @"travel";
+        case EOASettingsItemFileSubtypeColorPalette:
+            return @"colors_palette";
         default:
             return @"";
     }
@@ -67,15 +68,17 @@
         case EOASettingsItemFileSubtypeTilesMap:
             return [documentsPath stringByAppendingPathComponent:RESOURCES_DIR];
         case EOASettingsItemFileSubtypeRenderingStyle:
-            return [documentsPath stringByAppendingPathComponent:@"rendering"];
+            return [documentsPath stringByAppendingPathComponent:RENDERERS_DIR];
         case EOASettingsItemFileSubtypeRoutingConfig:
-            return [documentsPath stringByAppendingPathComponent:@"routing"];
+            return [documentsPath stringByAppendingPathComponent:ROUTING_PROFILES_DIR];
         case EOASettingsItemFileSubtypeGpx:
             return OsmAndApp.instance.gpxPath;
             // unsupported
 //        case EOASettingsItemFileSubtypeTravel:
 //        case EOASettingsItemFileSubtypeVoice:
 //            return [documentsPath stringByAppendingPathComponent:@"Voice"];
+        case EOASettingsItemFileSubtypeColorPalette:
+            return [documentsPath stringByAppendingPathComponent:COLOR_PALETTE_DIR];
         default:
             return @"";
     }
@@ -95,6 +98,8 @@
 //        case EOASettingsItemFileSubtypeTravel:
 //        case EOASettingsItemFileSubtypeVoice:
 //            return [documentsPath stringByAppendingPathComponent:@"Voice"];
+        case EOASettingsItemFileSubtypeColorPalette:
+            return COLOR_PALETTE_DIR;
         default:
             return @"";
     }
@@ -190,6 +195,12 @@
                     return subtype;
                 break;
             }
+            case EOASettingsItemFileSubtypeColorPalette:
+            {
+                if ([name hasSuffix:TXT_EXT])
+                    return subtype;
+                break;
+            }
             default:
             {
                 NSString *subtypeFolder = [self.class getSubtypeFolder:subtype];
@@ -230,6 +241,8 @@
             return @"ic_custom_route";
         case EOASettingsItemFileSubtypeRenderingStyle:
             return @"ic_custom_map_style";
+        case EOASettingsItemFileSubtypeColorPalette:
+            return @"ic_custom_file_color_palette";
             
         default:
             return @"ic_custom_save_as_new_file";
@@ -270,7 +283,7 @@
             *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
             return nil;
         }
-            
+        
         self.filePath = filePath;
         _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
         if (self.subtype == EOASettingsItemFileSubtypeUnknown)
@@ -326,16 +339,12 @@
 {
     switch (_subtype)
     {
-        case EOASettingsItemFileSubtypeGpx:
-        {
-            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:destFilePath];
-            [doc saveTo:destFilePath];
-            OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
-            [[OAGPXDatabase sharedDb] save];
-            const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
-            if (activeGpx.find(QString::fromNSString(gpx.gpxFilePath)) != activeGpx.end())
-                [OAAppSettings.sharedManager showGpx:@[gpx.gpxFilePath]];
-
+        case EOASettingsItemFileSubtypeGpx: {
+            OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
+         
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:destFilePath];
+            if (![gpxDbHelper hasGpxDataItemFile:file])
+                [gpxDbHelper addItem:[[OASGpxDataItem alloc] initWithFile:file]];
             break;
         }
         case EOASettingsItemFileSubtypeRenderingStyle:
@@ -344,6 +353,7 @@
         case EOASettingsItemFileSubtypeWikiMap:
         case EOASettingsItemFileSubtypeSrtmMap:
         case EOASettingsItemFileSubtypeTilesMap:
+        case EOASettingsItemFileSubtypeColorPalette:
         {
             OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths(true);
             break;
@@ -361,7 +371,7 @@
         NSError *err = nil;
         NSDictionary *attrs = [manager attributesOfItemAtPath:self.filePath error:&err];
         if (!err)
-            return attrs.fileModificationDate.timeIntervalSince1970;
+            return attrs.fileModificationDate.timeIntervalSince1970 * 1000;
     }
     return 0;
 }
@@ -371,7 +381,7 @@
     NSFileManager *manager = NSFileManager.defaultManager;
     if ([manager fileExistsAtPath:self.filePath])
     {
-        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:self.filePath error:nil];
+        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime / 1000] } ofItemAtPath:self.filePath error:nil];
     }
 }
 
@@ -524,7 +534,9 @@
 
 - (BOOL) needMd5Digest
 {
-    return _subtype == EOASettingsItemFileSubtypeVoice || _subtype == EOASettingsItemFileSubtypeVoiceTTS;
+    return _subtype == EOASettingsItemFileSubtypeVoice
+        || _subtype == EOASettingsItemFileSubtypeVoiceTTS
+        || _subtype == EOASettingsItemFileSubtypeGpx;
 }
 
 @end
@@ -559,7 +571,7 @@
     else if (!exists)
     {
         NSString *directory = [destFilePath stringByDeletingLastPathComponent];
-        [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
+        [fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
     BOOL res = NO;

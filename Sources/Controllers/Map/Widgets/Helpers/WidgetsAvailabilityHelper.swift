@@ -11,6 +11,9 @@ import Foundation
 @objc(OAWidgetsAvailabilityHelper)
 @objcMembers
 class WidgetsAvailabilityHelper: NSObject {
+    // Mon Jan 01 2024
+    private static let routeWidgetsV2IntroTimeInSeconds: TimeInterval = 1704096000
+    
     private static var widgetsVisibilityMap = [String: Set<OAApplicationMode>]()
     private static var widgetsAvailabilityMap = [String: Set<OAApplicationMode>]()
     
@@ -32,11 +35,12 @@ class WidgetsAvailabilityHelper: NSObject {
     }
     
     static func initRegVisibility() {
-        let exceptDefault: [OAApplicationMode] = [.car(), .bicycle(), .pedestrian(), .public_TRANSPORT(), .boat(), .aircraft(), .ski(), .truck(), .motorcycle(), .horse(), .moped()]
+        let installDate = UserDefaults.standard.double(forKey: "kAppInstalledDate")
+        let exceptDefault: [OAApplicationMode] = [.car(), .bicycle(), .pedestrian(), .public_TRANSPORT(), .boat(), .aircraft(), .ski(), .truck(), .motorcycle(), .horse(), .moped(), .train()]
         
         // left
         let navigationSet1: [OAApplicationMode] = [.car(), .bicycle(), .boat(), .ski(), .truck(), .motorcycle(), .horse(), .moped()]
-        let navigationSet2: [OAApplicationMode] = [.pedestrian(), .public_TRANSPORT(), .aircraft()]
+        let navigationSet2: [OAApplicationMode] = [.pedestrian(), .public_TRANSPORT(), .aircraft(), .train()]
         
         regWidgetVisibility(widgetType: .nextTurn, appModes: navigationSet1)
         regWidgetVisibility(widgetType: .smallNextTurn, appModes: navigationSet2)
@@ -51,13 +55,19 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetVisibility(widgetType: .distanceToDestination)
         regWidgetVisibility(widgetType: .timeToIntermediate)
         regWidgetVisibility(widgetType: .timeToDestination)
-        regWidgetVisibility(widgetType: .currentSpeed, appModes: [.car(), .bicycle(), .boat(), .ski(), .public_TRANSPORT(), .aircraft(), .truck(), .motorcycle(), .horse(), .moped()])
-        regWidgetVisibility(widgetType: .maxSpeed, appModes: [.car(), .truck(), .motorcycle(), .moped()])
+        
+        if installDate >= Self.routeWidgetsV2IntroTimeInSeconds {
+            regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault)
+        }
+        
+        regWidgetVisibility(widgetType: .currentSpeed, appModes: [.bicycle(), .boat(), .ski(), .public_TRANSPORT(), .aircraft(), .horse(), .train()])
+        regWidgetVisibility(widgetType: .maxSpeed, appModes: [])
         regWidgetVisibility(widgetType: .altitudeMapCenter, appModes: [.pedestrian(), .bicycle()])
         regWidgetVisibility(widgetType: .altitudeMyLocation, appModes: [.pedestrian(), .bicycle()])
         
         regWidgetAvailability(widgetType: .intermediateDestination)
         regWidgetAvailability(widgetType: .distanceToDestination)
+        regWidgetAvailability(widgetType: .routeInfo)
         regWidgetAvailability(widgetType: .timeToIntermediate)
         regWidgetAvailability(widgetType: .timeToDestination)
         regWidgetAvailability(widgetType: .currentSpeed)

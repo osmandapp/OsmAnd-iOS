@@ -7,12 +7,14 @@
 //
 
 #import "OATurnDrawable.h"
+#import "OATurnPathHelper.h"
 #import "OAUtilities.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OATurnDrawable
 {
+    std::shared_ptr<TurnType> _turnType;
     BOOL _mini;
     EOATurnDrawableThemeColor _themeColor;
     UIColor *_routeDirectionColor;
@@ -50,6 +52,8 @@
             return color.light;
         case EOATurnDrawableThemeColorDark:
             return color.dark;
+        case EOATurnDrawableThemeColorSystem:
+            return [OARootViewController.instance isDarkMode] ? color.dark : color.light;
     }
 }
 
@@ -91,6 +95,11 @@
     [self setNeedsDisplay];
 }
 
+- (std::shared_ptr<TurnType>) turnType
+{
+    return _turnType;
+}
+
 - (BOOL) setTurnType:(std::shared_ptr<TurnType>)turnType
 {
     if (turnType != _turnType)
@@ -121,12 +130,15 @@
 
     if (_pathForTurnForDrawing)
     {
-        CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
+        if (_themeColor == EOATurnDrawableThemeColorSystem)
+            CGContextSetFillColorWithColor(context, [self getThemeColor:_routeDirectionColor].CGColor);
+        else
+            CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
         [_pathForTurnForDrawing fill];
         [_pathForTurnForDrawing stroke];
     }
 
-    if (_turnType && !_mini && _turnType->getExitOut() > 0)
+    if (_turnType && !_mini && _turnType->getExitOut() > 0 && _textFont)
     {
         NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
         attributes[NSForegroundColorAttributeName] = [self getThemeColor:[UIColor colorNamed:ACColorNameWidgetValueColor]];

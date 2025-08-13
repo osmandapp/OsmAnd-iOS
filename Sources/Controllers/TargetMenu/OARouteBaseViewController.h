@@ -7,73 +7,27 @@
 //
 
 #import "OATargetMenuViewController.h"
-#import "OACommonTypes.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
 
 #define kMapMargin 20.0
 
-@class OARoutingHelper;
-@class LineChartView;
-@class OAGPXDocument;
-@class OATrackChartPoints;
-@class OAGPXTrackAnalysis;
-@class OARouteStatisticsModeCell;
-@class OATrkSegment;
-@class OABaseVectorLinesLayer;
-
-@protocol OARouteLineChartHelperDelegate
-
-- (void)centerMapOnBBox:(const OABBox)rect;
-- (void)adjustViewPort:(BOOL)landscape;
-
-@end
-
-@interface OARouteLineChartHelper : NSObject
-
-@property (nonatomic) BOOL isLandscape;
-@property (nonatomic) CGRect screenBBox;
-
-- (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc layer:(OABaseVectorLinesLayer *)layer;
-
-@property (nonatomic, weak) id<OARouteLineChartHelperDelegate> delegate;
-
-- (void)changeChartTypes:(NSArray<NSNumber *> *)types
-                  chart:(LineChartView *)chart
-               analysis:(OAGPXTrackAnalysis *)analysis
-               modeCell:(OARouteStatisticsModeCell *)statsModeCell;
-
-- (void)refreshHighlightOnMap:(BOOL)forceFit
-                lineChartView:(LineChartView *)lineChartView
-             trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                     analysis:(OAGPXTrackAnalysis *)analysis;
-
-- (void)refreshHighlightOnMap:(BOOL)forceFit
-                lineChartView:(LineChartView *)lineChartView
-             trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                     segment:(OATrkSegment *)segment;
-
-- (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
-                                        analysis:(OAGPXTrackAnalysis *)analysis;
-
-- (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
-                                      startPoint:(CLLocationCoordinate2D)startPoint
-                                        segment:(OATrkSegment *)segment;
-
-@end
+@class OARoutingHelper, OASGpxTrackAnalysis, OARouteStatisticsModeCell, OASGpxFile, OASTrkSegment, OABaseVectorLinesLayer, LineChartView, ElevationChart, TrackChartHelper, OASTrackItem, OASKQuadRect;
 
 @interface OARouteBaseViewController : OATargetMenuViewController
 
 @property (nonatomic, readonly) OARoutingHelper *routingHelper;
-@property (nonatomic, readonly) OARouteLineChartHelper *routeLineChartHelper;
+@property (nonatomic, readonly) TrackChartHelper *trackChartHelper;
 
-@property (nonatomic) OAGPXDocument *gpx;
-@property (nonatomic) LineChartView *statisticsChart;
-@property (nonatomic) OATrackChartPoints *trackChartPoints;
-@property (nonatomic) OAGPXTrackAnalysis *analysis;
+@property (nonatomic) OASGpxFile *gpx;
+@property (nonatomic) OASTrackItem *trackItem;
+@property (nonatomic) ElevationChart *statisticsChart;
+@property (nonatomic) OASGpxTrackAnalysis *analysis;
+@property (nonatomic) OASTrkSegment *segment;
+
+@property (nonatomic, readonly) BOOL dismissed;
 
 - (instancetype) initWithGpxData:(NSDictionary *)data;
 
-+ (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis;
++ (NSAttributedString *) getFormattedElevationString:(OASGpxTrackAnalysis *)analysis;
 + (NSAttributedString *) getFormattedDistTimeString;
 
 - (void) setupRouteInfo;

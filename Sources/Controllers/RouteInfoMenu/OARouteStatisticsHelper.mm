@@ -16,6 +16,8 @@
 #import "OARouteStatistics.h"
 #import "OANativeUtilities.h"
 #import "OAApplicationMode.h"
+#import "OAMapSource.h"
+#import "OAAppData.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -38,10 +40,6 @@ static NSArray<NSNumber *> *_boundariesArray;
 static NSArray<NSString *> *_boundariesClass;
 
 @implementation OARouteSegmentWithIncline
-
-@end
-
-@implementation OATrackChartPoints
 
 @end
 

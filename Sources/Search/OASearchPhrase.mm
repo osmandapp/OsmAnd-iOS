@@ -20,6 +20,7 @@
 #import "OALocationParser.h"
 #import "OAAbbreviations.h"
 #import "OAMapUtils.h"
+#import "OAArabicNormalizer.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -274,7 +275,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
             break;
         }
     }
-    return [self createNewSearchPhrase:settings fullText:text foundWords:foundWords textToSearch:textToSearch];;
+    return [self createNewSearchPhrase:settings fullText:text foundWords:foundWords textToSearch:textToSearch];
 }
 
 - (NSString *) normalizeSearchText:(NSString *)s
@@ -407,6 +408,9 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
                 }
                 break;
             }
+        }
+        if ([OAArabicNormalizer isSpecialArabic:_mainUnknownWordToSearch]) {
+            _mainUnknownWordToSearch = [OAArabicNormalizer normalize:_mainUnknownWordToSearch] ?: _mainUnknownWordToSearch;
         }
     }
 }
@@ -680,7 +684,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         if ([sw getType] == p)
             return YES;
 
-        if ([sw getType] != UNKNOWN_NAME_FILTER)
+        if ([sw getType] != EOAObjectTypeUnknownNameFilter)
             return NO;
     }
     return NO;
@@ -753,16 +757,26 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         [w syncWordWithResult];
 }
 
-- (NSString *) getText:(BOOL)includeUnknownPart
+- (NSString *)getText:(BOOL)includeUnknownPart
 {
     NSMutableString *sb = [NSMutableString string];
     for (OASearchWord *s in self.words)
     {
-        [sb appendString:s.word];
+        if (s.word != nil)
+            [sb appendString:s.word];
+        else
+            NSLog(@"[OASearchPhrase] Warning: OASearchWord.word is nil for a word in words");
+        
         [sb appendString:DELIMITER];
     }
+    
     if (includeUnknownPart)
-        [sb appendString:_unknownSearchPhrase];
+    {
+        if (_unknownSearchPhrase != nil)
+            [sb appendString:_unknownSearchPhrase];
+        else
+            NSLog(@"[OASearchPhrase] Warning: _unknownSearchPhrase is nil");
+    }
     
     return [NSString stringWithString:sb];
 }
@@ -954,7 +968,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
             else
             {
                 OANameStringMatcher *ms = [self getUnknownNameStringMatcher:i];
-                if ([ms matches:localeName] || [ms matchesMap:otherNames])
+                if ([ms matches:localeName] || [ms matchesMap:otherNames] || [ms matches:sr.alternateName])
                 {
                     match = YES;
                 }
@@ -977,7 +991,8 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     {
         BOOL match = [localeName isEqualToString:_firstUnknownSearchWord]
             || [[self getFirstUnknownNameStringMatcher] matches:localeName]
-            || [[self getFirstUnknownNameStringMatcher] matchesMap:otherNames];
+            || [[self getFirstUnknownNameStringMatcher] matchesMap:otherNames]
+            || [[self getFirstUnknownNameStringMatcher] matches:sr.alternateName];
         if (match)
             r++;
         sr.firstUnknownWordMatches = match || sr.firstUnknownWordMatches;

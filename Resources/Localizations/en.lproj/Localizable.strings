@@ -22,11 +22,11 @@
 "years_2_4" = "Years";
 "years_5" = "Years";
 "months_3" = "Three months";
+"years_3" = "Three years";
 
 "price_free" = "Free";
 
 "get_discount_title" = "Get %d %@ at %@ off.";
-"get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
 "get_discount_first_part" = "%@ for the first %@";
 "get_discount_first_few_parts" = "%@ for first %@";
@@ -52,8 +52,8 @@
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
-"switch_start_finish" = "Reverse starting point&destination";
-"clear_all_intermediates" = "Clear all intermediate points";
+"switch_start_finish" = "Reverse starting point & destination";
+"clear_all_intermediates" = "Clear all intermediate destinations";
 
 "shared_string_options" = "Options";
 "new_destination_point_dialog" = "You have already set a destination:";
@@ -172,7 +172,7 @@
 "help_article_start_with_main_menu_name" = "Main menu";
 "help_article_troubleshooting_crash_logs_name" = "Crash logs";
 "help_article_troubleshooting_general_name" = "General";
-"help_article_troubleshooting_maps_data_name" = "Maps&Data";
+"help_article_troubleshooting_maps_data_name" = "Maps & Data";
 "help_article_troubleshooting_track_recording_issues_name" = "Track recording";
 "help_article_widgets_name" = "Map Widgets";
 "help_article_widgets_info_widgets_name" = "Informational widgets";
@@ -183,6 +183,16 @@
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
 "help_article_plugins_custom_name" = "Custom package";
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
+"help_article_map_tracks_name" = "Tracks";
+"help_article_map_tracks_track_context_menu_name" = "Track Context Menu";
+"help_article_map_tracks_appearance_name" = "Track Appearance";
+"help_article_map_routes_name" = "Routes";
+"help_article_personal_color_palette_schemes_name" = "Color Schemes";
+"help_article_personal_tracks_manage_tracks_name" = "Manage Tracks";
+"help_article_personal_tracks_smart_folder_name" = "Smart Folder (Filter)";
+"help_article_troubleshooting_resources_name" = "Resources and Customizations";
+"help_article_troubleshooting_video_tutorials_name" = "Video Tutorials and Guides";
+"obd_plugin_name" = "Vehicle Metrics";
 "global_settings" = "Global Settings";
 "shared_string_markers" = "Markers";
 "shared_string_setup_route" = "Setup a route";
@@ -229,7 +239,7 @@
 "rotate_map_bearing_opt" = "Movement direction";
 "rotate_map_north_opt" = "North is up";
 "rotate_map_manual_opt" = "Manually rotated";
-"compass_click_desc" = "Hint: Tap the compass button to switch the map orientation mode.";
+"compass_click_desc" = "Double tap the compass button to switch the map orientation mode.";
 "driving_region_descr" = "Select driving region: US, Europe, UK, Asia, and others.";
 "driving_region" = "Driving region";
 "shared_string_automatic" = "Automatic";
@@ -298,6 +308,7 @@
 "radius_rules_widget_desc" = "The radius-ruler tool displays distance circles around a selected point on the map.";
 "current_time_widget_desc" = "Shows the current time as taken from your device.";
 "battery_widget_desc" = "Shows the battery level of your device.";
+"battery_widget_level_privacy_ios_desc" = "Due to iOS privacy reasons, the widget can only display the battery level in 5% steps, such as 35%, 60%, or 85%";
 "gps_info_widget_desc" = "Shows the number of satellites currently visible and used.";
 "altitude_widget_desc" = "Shows the height above sea level of current geolocation.";
 "max_speed_widget_desc" = "Displays the speed limit for the currently driven road.";
@@ -306,6 +317,8 @@
 "time_to_go_desc" = "Time in minutes or hours needed to reach your destination.";
 "arrival_time_widget_desc" = "Time of arrival at the destination point.";
 "lanes_widgets_desc" = "Shows the current road lanes layout and highlights the ones to take while navigating.";
+"route_guidance_desc" = "Provides real-time route guidance, including distance to the next turn, road name, current street name, and lane information. Widgets are active during navigation.";
+"route_guidance" = "Route guidance";
 "map_markers_bar_widget_desc" = "The top bar widget displays the distance and direction to the next Map marker from your current location. The widget can be configured to show 1 or 2 markers.";
 "street_name_widget_desc" = "The Street name widget shows the current street name with a straight location arrow, or the next street name with an arrow indicating an upcoming turn.";
 "coordinates_widget_desc" = "Shows the geographic coordinates of current geolocation.";
@@ -322,11 +335,11 @@
 "weather_widget_group_desc" = "A set of widgets showing various weather information.";
 "map_widget_group_sunrise_sunset_desc" = "These widgets show information about the next sunrise and sunset.";
 "map_widget_group_sunrise_sunset" = "Sunrise, sunset";
-"bearing_secondary_desc" = "You can change the data format used in: %@– %@ – %@.";
+"bearing_secondary_desc" = "You can change the data format used in: %@ – %@ – %@.";
 "angular_measeurement" = "Angular unit";
 "angular_measeurement_descr" = "Change what azimuth is measured in.";
 "coordinates_format" = "Coordinate format";
-"coordinates_widget_secondary_desc" = "You can change the coordinate format in %@– %@ – %@.";
+"coordinates_widget_secondary_desc" = "You can change the coordinate format in %@ – %@ – %@.";
 "widget_secondary_desc_part_of" = "Part of \“%@\” plugin.";
 "weather_widgets_secondary_desc" = "Measurement units can be changed in the Weather plugin settings.";
 
@@ -366,6 +379,7 @@
 "map_widget_next_turn" = "Next turn";
 "map_widget_next_turn_small" = "Next turn (small)";
 "map_widget_next_next_turn" = "Second next turn";
+"shared_string_road_exit" = "Exit";
 "always_center_position_on_map" = "Position placement always in center";
 "position_on_map" = "Location position on screen";
 "position_on_map_center" = "Center";
@@ -397,6 +411,9 @@
 "show_compass_ruler" = "Show compass ruler";
 "hide_compass_ruler" = "Hide compass ruler";
 "map_widget_distance_by_tap" = "Distance by tap";
+"distance_by_tap_use_description" = "Tap on map to view distance between your current location and tapped point.\nTap with 2 fingers on the map to view distance between the clicked points";
+"shared_string_normal" = "Normal";
+"shared_string_large" = "Large";
 "map_widget_rendering_fps" = "Map rendering FPS";
 "map_widget_camera_tilt" = "Camera tilt";
 "map_widget_camera_distance" = "Camera elevation";
@@ -488,6 +505,10 @@
 "screen_alerts" = "Screen alerts";
 "vehicle_parameters" = "Vehicle parameters";
 "map_during_navigation" = "Map during navigation";
+"detailed_track_guidance" = "Detailed track guidance";
+"detailed_track_guidance_description" = "OsmAnd will match your track to nearby roads for enhanced turn-by-turn guidance.";
+"ask_every_time" = "Ask every time";
+"attach_roads_descr" = "Attach your track to roads to get detailed route information, including turn-by-turn instructions and road attributes.";
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
@@ -499,6 +520,7 @@
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route.";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr_" = "Avoid certain routes and road types";
+"avoid_pt_types_descr" = "Select public transport types to avoid for navigation:";
 "prefer_in_routing_title" = "Prefer…";
 "prefer_in_routing_descr" = "Prefer motorways.";
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly.";
@@ -507,6 +529,8 @@
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Auto zoom map";
 "auto_zoom_map_descr" = "Zoom level according to your speed (while map is synchronized with current position).";
+"preview_next_turn" = "Preview next turn";
+"preview_next_turn_descr" = "Automatically rotates the map to preview the next turn or maneuver";
 "snap_to_road" = "Snap to road";
 "snap_to_road_descr" = "Current position icon will snap to the current navigation route";
 "show_warnings_title" = "Show alerts…";
@@ -535,12 +559,18 @@
 "special_routing_type" = "Special routing";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route";
+"route_recalculation_dist_title" = "Minimal distance to recalculate route";
+"in_case_of_reverse_direction" = "In case of reverse direction";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "recalculate_route_distance_promo" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
 "select_distance_route_will_recalc" = "Select the distance after which the route will be recalculated.";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
+
+"download_persian_voice_alert_title" = "Download Persian voice file:";
+"download_persian_voice_alert_descr_ios" = "Settings -> Accessibility -> Spoken Content -> Voices -> Persian -> Dariush";
+"download_persian_voice_alert_descr_macos" = "Settings -> Accessibility -> Spoken Content -> System Voice -> Manage Voices -> Persian -> Dariush";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
@@ -567,6 +597,7 @@
 "turn_arrows" = "Turn Arrows";
 "turn_arrows_descr" = "Select whether turn arrows are indicated on the route line.";
 "impassable_road" = "Avoid roads…";
+"avoid_pt_types" = "Avoid transport types…";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
 "temporary_conditional_routing" = "Consider temporary limitations";
@@ -599,6 +630,9 @@
 "select_tracks_to_display" =  "Select tracks to display them on the map.";
 "show_all_tracks" = "Show all tracks";
 "recently_visible" = "Recently visible %@";
+"sort_subfolders_tracks" = "Sort subfolders";
+"shared_string_subfolders_in" = "Subfolders in";
+"shared_string_sorted_by" = "is sorted by:";
 "shared_string_nearest" = "Nearest";
 "track_sort_az" = "Name A - Z";
 "track_sort_za" = "Name Z - A";
@@ -632,6 +666,10 @@
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "arrived_at_destination" = "You have arrived.";
+"route_your_destination_is_on_left" = "Your destination is on the left";
+"route_your_destination_is_on_right" = "Your destination is on the right";
+"route_your_destination_is_on_ahead" = "Your destination is straight ahead";
+
 "route_preferred_terrain_any" = "The terrain profile is not taken into account when choosing a route.";
 "route_preferred_terrain_flat" = "Routes with a flat relief profile. The length may increase.";
 "route_preferred_terrain_less_hilly" = "Shorter, less hilly routes.";
@@ -670,7 +708,8 @@
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America, and similar";
-"driving_region_uk" = "UK, India, and similar";
+"driving_region_uk" = "UK and similar";
+"driving_region_india" = "India";
 "driving_region_australia" = "Australia";
 
 "left_side_navigation" = "Left-hand traffic";
@@ -690,6 +729,13 @@
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Nautical miles per hour (knots)";
 "shared_string_tones" = "tones";
+
+"unit_of_volume_description" = "Selected units will be applied to all volume-related data in the current profile.";
+"litres" = "Litres";
+"imperial_gallons" = "Imperial gallons";
+"us_gallons" = "US gallons";
+"liter" = "l";
+"us_gallons_unit" = "gal";
 
 "nothing_found" = "Nothing found";
 "nothing_found_descr" = "Change the search or increase its radius.";
@@ -719,6 +765,7 @@
 "in_grace_period" = "In grace period";
 "on_hold" = "On hold";
 "shared_string_paused" = "Paused";
+"shared_string_pause" = "Pause";
 
 "unsaved_changes" = "Unsaved changes";
 "unsaved_changes_will_be_lost_discard" = "Any unsaved changes will be lost. Discard changes?";
@@ -752,6 +799,8 @@
 "shared_string_move" = "Move";
 "shared_string_dismiss" = "Dismiss";
 "shared_string_add" = "Add";
+"shared_string_set" = "Set";
+"shared_string_replace" = "Replace";
 "buy" = "Buy";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "or";
@@ -766,6 +815,7 @@
 "time_of_day" = "Time of day";
 "shared_string_distance" = "Distance";
 "shared_string_time_span" = "Time span";
+"shared_string_estimated_time_span" = "Estimated time span";
 "shared_string_start_time" = "Start time";
 "shared_string_end_time" = "End time";
 "shared_string_time_moving" = "Time moving";
@@ -841,6 +891,9 @@
 "shared_string_contributions" = "Contributions";
 "shared_string_refresh" = "Refresh";
 "shared_string_changed" = "Changed";
+"shared_string_change" = "Change";
+"shared_string_favorite" = "Favorite";
+"shared_string_favorites" = "Favorites";
 "shared_string_profile" = "Profile";
 "shared_string_download_update" = "Download update";
 "shared_string_angle" = "Angle";
@@ -853,6 +906,7 @@
 "shared_string_external" = "External";
 "shared_string_coloring" = "Coloring";
 "shared_string_all_colors" = "All colors";
+"shared_string_all_icons" = "All icons";
 "shared_string_add_color" = "Add color";
 "shared_string_edit_color" = "Edit color";
 "shared_string_duplicate_color" = "Duplicate color";
@@ -872,7 +926,10 @@
 "shared_string_is_deleted" = "%@ is deleted.";
 "shared_string_deleting" = "Deleting";
 "shared_string_deleting_complete" = "Deleting complete";
+"shared_string_colors" = "Colors";
 
+"profile_icon" = "Profile icon";
+"profile_icons" = "Profile icon";
 "restart" = "Restart";
 
 "offline_maps" = "Offline Maps";
@@ -893,6 +950,10 @@
 "without_permission_my_position_value" = "OsmAnd doesn't have location permission";
 "with_permission_my_position_value" = "Move map to current location";
 "shared_string_location_unknown" = "Location unknown";
+"equator" = "Equator";
+"prime_meridian" = "Prime meridian";
+"meridian_180" = "180th meridian";
+"quick_action_showhide_coordinates_grid_descr" = "Action to control the visibility of the Coordinates grid on the map.";
 
 // HUD
 "hud_heading" = "Heading";
@@ -937,6 +998,8 @@
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
+"select_items" = "Select items";
+"shared_string_item" = "Item";
 "shared_string_icon" = "Icon";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Duplicate Favorite name specified";
@@ -959,6 +1022,7 @@
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
 "shared_string_hide" = "Hide";
+"shared_string_show" = "Show";
 
 // My Places
 "favorites_item" = "Favorites";
@@ -975,7 +1039,7 @@
 "gpx_selection_segment_title" = "Segment";
 "route_points" = "Route points";
 "copy_to_map_favorites" = "Copy to favorites";
-
+"not_specified" = "Not specified";
 "import_export" = "Import/export";
 
 "import_tracks" = "Import tracks";
@@ -1104,9 +1168,14 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 "press_again_to_change_the_map_orientation" = "Tap again to change map orientation";
+"trace_rendering" = "Performance debug info";
+"trace_rendering_descr" = "Display the rendering and navigation performance.";
+"map_text" = "Map Rendering";
 
 "shared_string_weather" = "Weather";
 "map_settings_weather_temp" = "Temperature";
+"map_settings_weather_temp_air" = "Air temperature";
+"map_settings_weather_temp_water" = "Water temperature";
 "map_settings_weather_pressure" = "Pressure";
 "map_settings_weather_wind" = "Wind";
 "map_settings_weather_cloud" = "Cloud";
@@ -1115,6 +1184,7 @@
 "map_settings_clear_raster_cache" = "Clear raster tiles";
 "shared_string_contours" = "Contours";
 "shared_string_layers" = "Layers";
+"unit_of_temperature_description" = "Selected units will be applied to all temperature related data in the current profile.";
 
 "weather_temp_enable_descr" = "Enable to view temperature layer on the map.";
 "weather_pressure_enable_descr" = "Enable to view pressure layer on the map.";
@@ -1122,6 +1192,7 @@
 "weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
 "weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
 "weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
+"weather_wind_animation_enable_descr" = "Enable to view wind animation layer on the map.";
 
 "screen_settings_weather_toolbar" = "Weather toolbar";
 
@@ -1129,16 +1200,17 @@
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
+"unit_of_volume" = "Unit of volume";
 "angular_measurment_units" = "Angular measurment units";
 "distance_during_navigation" = "Distance during navigation";
 "shared_string_precise" = "Precise";
 "shared_string_round_up" = "Round up";
 "distance_during_navigation_footer" = "Choose how distance information is displayed in navigation widgets (distance to point, next turn, lanes).\n\nChoose “Precise” for exact numbers, or “Round up” for easier readability.";
 "display_position_automatic_descr" = "Depends on Map orientation: bottom for movement direction, center for all others.";
-"units_and_formats" = "Units&formats";
+"units_and_formats" = "Units & formats";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";
-"backup_and_restore" = "Backup&Restore";
+"backup_and_restore" = "Backup & Restore";
 "global_settings_descr" = "Affect the entire application.";
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
@@ -1165,8 +1237,11 @@
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@\nLon %@";
 "navigate_point_format_D" = "DDD.DDDDD";
+"dd_ddddd_format" = "DD.DDDDD°";
 "navigate_point_format_DM" = "DDD MM.MMM";
+"dd_mm_mmm_format" = "DD°MM.MMM′";
 "navigate_point_format_DMS" = "DDD MM SS.S";
+"dd_mm_ss_format" = "DD°MM′SS″";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_mgrs" = "MGRS";
@@ -1372,11 +1447,18 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "ltr_or_rtl_combine_via_of" = "%ld of %ld";
+"ltr_or_rtl_combine_via_per" = "%@ per %@";
+"ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
+
+"of" = "%d of %d";
+"downloaded_bytes" = "%@ of %@";
+
+"shared_string_class" = "Class";
 
 "listed_exist" = "Listed %@, already exist in OsmAnd.";
 
@@ -1406,6 +1488,10 @@
 "select_icon_profile_dialog_title" = "Select icon";
 "select_map_icon" = "Position icon at rest";
 "select_navigation_icon" = "Position icon while moving";
+"resting_position_icon" = "Resting position icon";
+"navigation_position_icon" = "Navigation position icon";
+"resting_position_icon_summary" = "Icon displayed when you\'re not moving.";
+"navigation_position_icon_summary" = "Icon displayed while you\'re navigating or moving.";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Car, truck, motorcycle";
 "base_profile_descr_bicycle" = "Mountain bike, moped, horse";
@@ -1519,6 +1605,14 @@
 "select_folder" = "Select folder";
 "select_folder_descr" = "Select folder or add new one";
 "add_folder" = "Add folder";
+"add_smart_folder" = "Add smart folder";
+"save_as_smart_folder" = "Save as smart folder";
+"new_smart_folder" = "New smart folder";
+"no_matched_tracks" = "No matched tracks";
+"no_matched_tracks_descr" = "Your filter criteria didn't match any of your tracks";
+"empty_smart_folder_title" = "No matching track";
+"empty_smart_folder_descr" = "All matching tracks will automatically appear here.";
+"smart_folder_name_present" = "Such smart folder already present";
 "select_segment" = "Select segment";
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segments_count" = "Segment %d";
@@ -1566,6 +1660,7 @@
 "res_world_map" = "World map";
 "shared_string_world" = "World";
 "download_tab_updates" = "Updates";
+"download_tab_conflicts" = "Unresolved";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";
 "res_updates_avail" = "Updates available";
@@ -1626,6 +1721,7 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour line data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
+"shared_string_litres" = "litres";
 
 "test_heightmap" = "Test heightmap";
 "disable_vertex_hillshade_3d" = "Disable vertex hillshade in 3D";
@@ -1665,7 +1761,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
 "routing_algorithm" = "Routing algorithm";
-"auto_zoom" = "Auto-zoom";
+"auto_zoom" = "Autozoom";
 "shared_string_development" = "Development";
 "routing_algorithm_highway_hierarchies" = "Highway hierarchies";
 "routing_algorithm_a" = "A*";
@@ -1674,6 +1770,8 @@
 "osmand_depelopment_simulate_location_section" = "Simulate";
 "osmand_depelopment_use_old_routing" = "Use old routing (A*)";
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
+"osmand_depelopment_use_3d_icons" = "Use 3D location position icons";
+"battery_saving_mode" = "Battery saving mode";
 
 "simulate_in_progress" = "In progress";
 "simulate_your_location_gpx_descr" = "Simulate your position using a recorded GPX track.";
@@ -1777,6 +1875,7 @@
 "mapillary_menu_title_tile_cache" = "Tile cache";
 "shared_string_reload" = "Reload";
 "show_more" = "Show more";
+"shared_string_show_less" = "Show less";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";
@@ -1813,6 +1912,7 @@
 "quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
 "quick_action_add_create_items" = "Create items";
+"key_event_category_map_interactions" = "Map interactions";
 "configure_map" = "Configure map";
 "map_look_descr" = "Map appearance";
 "quick_action_add_marker" = "Add map marker";
@@ -1846,14 +1946,14 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Add POI";
-"quick_action_map_style" = "Change map style";
+"quick_action_map_style" = "Map style";
 "quick_action_map_source" = "Change map source";
-"quick_action_map_overlay" = "Change map overlay";
-"quick_action_map_underlay" = "Change map underlay";
+"quick_action_map_overlay" = "Overlay";
+"quick_action_map_underlay" = "Underlay";
 "quick_action_replace_destination" = "Replace destination";
 "add_destination" = "Add destination";
 "route_add_start_point" = "Add point of departure";
-"add_intermediate" = "Add intermediate point";
+"add_intermediate" = "Add intermediate destination";
 "add_home" = "Add home";
 "add_work" = "Add work";
 "favorite_home_category" = "Home";
@@ -1920,6 +2020,27 @@
 "quick_action_toggle_edits_descr" = "Tap this action button to show or hide offline OSM edits.";
 "quick_action_edit_list" = "Edit actions list";
 "quick_action_hillshade_descr" = "A button to show or hide hillshade on the map.";
+"quick_action_first_intermediate" = "First intermediate";
+"quick_action_track_waypoint" = "Track waypoint";
+"quick_action_directions_from" = "Start point";
+"quick_action_destination" = "Destination";
+"quick_action_parking_place" = "Parking place";
+"quick_action_verb_show_hide" = "Show / Hide";
+"quick_action_verb_turn_on_off" = "Turn On / Off";
+"quick_action_verb_pause_resume" = "Pause / Resume";
+"quick_action_verb_start_stop" = "Start / Stop";
+"quick_action_verb_start_pause" = "Start / Pause";
+"new_trip_segment" = "New trip segment";
+"quick_action_save_recorded_trip_and_continue" = "Recorded Trip & Continue";
+"map_source" = "Map source";
+"download_srtm_maps" = "Contour lines";
+"voices" = "Voice prompts";
+"temperature_layer" = "Temperature layer";
+"pressure_layer" = "Pressure layer";
+"wind_layer" = "Wind layer";
+"cloud_layer" = "Cloud layer";
+"precipitation_layer" = "Precipitation layer";
+"app_profile" = "App profile";
 "show_terrain" = "Show Terrain";
 "hide_terrain" = "Hide Terrain";
 "toggle_contour_lines" = "Show/Hide contour lines";
@@ -1939,7 +2060,7 @@
 "quick_action_showhide_mapillary_descr" = "A toggle to show or hide the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Delete next destination point";
+"quick_action_remove_next_destination" = "Next destination point";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
 "change_application_profile" = "Change app profile";
 "select_application_profile" = "Select application profile";
@@ -1951,6 +2072,9 @@
 "unsupported_action" = "Unsupported action";
 "unsupported_action_title" = "Unsupported action (%@)";
 "unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
+"quick_action_toggle_preference" = "A toggle to change preference.";
+"quick_action_terrain_color_scheme" = "Terrain color scheme";
+"quick_action_need_to_add_item_to_list" = "Add at least one item to the list in the \'Quick action\' settings";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -1973,6 +2097,7 @@
 "osb_comment_dialog_message" = "Message";
 "osn_add_dialog_title" = "Create note";
 "modify_poi" = "Modify the POI information";
+"shared_string_action" = "Action";
 "shared_string_actions" = "Actions";
 "time_limited" = "Time limited";
 "pickup_car" = "Pickup the car";
@@ -2009,6 +2134,7 @@
 "shared_string_sec" = "sec";
 "units_sec_short" = "s";
 "int_seconds" = "seconds";
+"shared_string_minute_lowercase" = "min";
 
 // Help
 "help_first_steps" = "First steps";
@@ -2190,7 +2316,7 @@
 "product_desc_wiki" = "Location based Wikipedia articles on the map";
 "purchases_feature_desc_wikipedia" = "Provides all place related Wikipedia articles offline, helping you to learn about the places you visit on your trip by simple taps on the map. Don\'t forget to download the Wikipedia map files for the respective regions.";
 "shared_string_all_languages" = "All languages";
-"select_wikipedia_article_langs" = "Select the languages forWikipedia articles on the map.​​ Switch to any available language while reading the article.";
+"select_wikipedia_article_langs" = "Select the languages for ​​Wikipedia articles on the map.​​ Switch to any available language while reading the article.";
 "wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
@@ -2273,9 +2399,11 @@
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
-
+"shared_string_unchanged" = "Unchanged";
 "osm_live_active" = "Active";
 "menu_all_trips" = "All Tracks";
+"each_favourite_point_own_icon" = "Each favourite point would keep its own icon.";
+"unchanged_parameter_summary" = "Each track will retain its own parameters.";
 
 "public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than public transport";
 "calc_pedestrian_route" = "Calculate pedestrian route";
@@ -2283,6 +2411,28 @@
 "public_transport_warning_descr_blog" = "Read more about OsmAnd routing on our blog.";
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
 "public_transport_try_change_settings" = "Try changing the settings.";
+
+"date_of_creation" = "Date of creation";
+"altitud_and_elevation" = "Altitude & Elevation";
+"max_altitude" = "Max altitude";
+"shared_string_sensors" = "Sensors";
+"max_sensor_speed" = "Sensor speed, max";
+"avg_sensor_speed" = "Sensor speed, average";
+"max_sensor_heartrate" = "Heart rate, max";
+"avg_sensor_heartrate" = "Heart rate, average";
+"max_sensor_cadence" = "Bicycle Cadence, max";
+"avg_sensor_cadence" = "Bicycle Cadence, average";
+"max_sensor_bycicle_power" = "Bicycle Power, max";
+"avg_sensor_bycicle_power" = "Bicycle Power, average";
+"max_sensor_temperature" = "Temperature, max";
+"avg_sensor_temperature" = "Temperature, average";
+"shared_string_visible_on_map" = "Visible on map";
+"with_waypoints" = "With waypoints";
+"shared_string_reset_all" = "Reset all";
+"shared_string_to" = "To";
+"discard_filter_changes_prompt" = "Reset all filters?";
+"power_watts_unit" = "Watts";
+"revolutions_per_minute_unit" = "RPM";
 
 "shared_string_total" = "Total";
 "shared_string_walk" = "Walk";
@@ -2305,7 +2455,9 @@
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Points";
 "shared_string_overview" = "Overview";
-"activity"= "Activity";
+"shared_string_activity" = "Activity";
+"change_activity" = "Change activity";
+"type_of_activity" = "Type of activity";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "local_indexes_cat_backup" = "Deactivated";
@@ -2373,7 +2525,7 @@
 "restore_purchases" = "Restore purchases";
 "restore_backup_descr" = "Restore data on the device unsing online backups";
 "backup_restore_data" = "Restore data";
-"syncing_progress" = "Syncing...";
+"cloud_sync_progress" = "Sync… %@";
 
 "no_statistics" = "No statistics";
 
@@ -2405,7 +2557,7 @@
 "yesterday" = "Yesterday";
 "tomorrow" = "Tomorrow";
 "hist_select_remove" = "Please select history items to remove";
-"delete_history_items" = "Delete %@ history items?";
+"delete_history_items" = "Delete %@ history item(s)?";
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Show map";
@@ -2440,7 +2592,7 @@
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 
-"wiki_around" = "Nearby Wikipedia articles";
+"wiki_around" = "Nearby popular places";
 "search_categories" = "Categories";
 "items_selected" = "%d selected";
 
@@ -2529,7 +2681,7 @@
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "download_wiki_region_placeholder" = "this region";
 
-"osm_live_plan_pricing" = "Plan&Pricing";
+"osm_live_plan_pricing" = "Plan & Pricing";
 "osm_live_payment_monthly_title" = "Monthly";
 "osm_live_payment_3_months_title" = "Every three months";
 "osm_live_payment_annual_title" = "Annually";
@@ -2541,6 +2693,7 @@
 "osm_live_payment_renews_monthly" = "Renews monthly";
 "osm_live_payment_renews_quarterly" = "Renews quarterly";
 "osm_live_payment_renews_annually" = "Renews annually";
+"osm_live_payment_renews_3_years" = "Renews every three years";
 "default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Payment interval:";
 "osm_live_payment_contribute_descr" = "Donations help fund OSM cartography.";
@@ -2765,7 +2918,7 @@
 "rendering_attr_surface_snow_name" = "Snow";
 "rendering_attr_highway_class_cycleway_name" = "Cycleway";
 "routing_attr_piste_type_downhill_description" = "Slopes for alpine or downhill skiing and access to ski lifts.";
-"rendering_attr_hideWaterPolygons_name" = "Hide water";
+"rendering_attr_hideWaterPolygons_name" = "Water";
 "routing_attr_avoid_stairs_name" = "No stairs";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_skitour_name" = "Skitour";
@@ -2779,7 +2932,7 @@
 "rendering_value_disabled_name" = "Disabled";
 "rendering_attr_contourColorScheme_name" = "Contour lines color scheme";
 "routing_attr_short_way_name" = "Fuel-efficient way";
-"rendering_attr_alpineHiking_name" = "Difficulty classification";
+"rendering_attr_alpineHiking_name" = "Hiking trails difficulty grade";
 "rendering_attr_showLez_name" = "Show Low Emission Zones";
 "rendering_value_green_name" = "Green";
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";
@@ -2841,7 +2994,7 @@
 "rendering_attr_smoothness_very_horrible_name" = "Very horrible";
 "routing_attr_allow_intermediate_name" = "Allow intermediate routes";
 "rendering_attr_trolleybusRoutes_name" = "Trolleybus routes";
-"rendering_attr_hideWaterPolygons_description" = "Water";
+"rendering_attr_hideWaterPolygons_description" = "Hide water";
 "rendering_attr_piste_difficulty_extreme_name" = "Extreme";
 "rendering_value_low_name" = "Low";
 "rendering_value_lightgreen_name" = "Light green";
@@ -2874,7 +3027,7 @@
 "rendering_attr_alpineHiking_description" = "Difficulty classification types for the routes.";
 "rendering_attr_highway_class_bridleway_name" = "Bridleway";
 "routing_attr_avoid_share_taxi_name" = "No share taxi";
-"rendering_attr_pisteRoutes_name" = "Ski slopes";
+"rendering_attr_pisteRoutes_name" = "Ski routes";
 "rendering_attr_piste_type_sled_name" = "Sled";
 "rendering_attr_noPolygons_description" = "Make all areal land features on map transparent.";
 "routing_attr_allow_classic_only_description" = "Routes groomed for classic style only without skating trails. This includes routes groomed by a smaller snowmobile with looser piste and tracks made manually by skiers.";
@@ -2946,6 +3099,7 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, we will use its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
+"transport_hazmat_title" = "Transporting of hazardous materials";
 "routing_attr_hazmat_category_name" = "Hazmat category";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (No restrictions)";
 "transport_hazmat_yes_desc" = "Select the applicable category.";
@@ -2959,6 +3113,10 @@
 "routing_attr_motor_type_electric_name" = "Electric";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
 "transport" = "Transport";
+"shared_strings_dimensions" = "Dimensions";
+"fuel_tank_capacity" = "Fuel tank capacity";
+"fuel_tank_capacity_description" = "Enter your tank capacity to accurately track fuel levels and consumption";
+"poi_filter_fuel" = "Fuel";
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
@@ -2972,6 +3130,7 @@
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
 "icon_group_education" = "Education";
+"shared_string_original" = "Original";
 
 "settings_item_read_error" = "Could not read from \'%@\'.";
 "app_mode_default" = "Browse map";
@@ -2984,7 +3143,7 @@
 "app_mode_horse" = "Horse";
 "app_mode_helicopter" = "Helicopter";
 "app_mode_skiing" = "Skiing";
-"horseback_riding" = "Riding";
+"horseback_riding" = "Horseback riding";
 "app_mode_personal_transporter" = "Personal transporter";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Scooter";
@@ -3139,8 +3298,10 @@
 "wikipedia_and_wikivoyage_offline" = "Wikipedia and Wikivoyage offline";
 "nautical_depth" = "Nautical depth";
 "terrain_maps" = "Terrain maps";
+"terrain_map" = "Terrain map (3D)";
 "shared_string_cross_buy" = "Cross-buy";
 "shared_string_relief_3d" = "3D Relief";
+"route_roundabout_exit" = "Take %d exit";
 
 "track_has_no_needed_data" = "The track is missing the respective data.";
 "select_another_colorization" = "Please select another type of coloring.";
@@ -3158,11 +3319,13 @@
 "purchases_feature_desc_terrain" = "Terrain contour lines, grayscale hillshade and color scale slope indication, to show peaks and lowlands.";
 "purchases_feature_desc_nautical" = "Get access to nautical depth information";
 "purchases_feature_weather" = "24h hourly forecast 7 days ahead coloured on the map";
-"you_can_get_feature_as_part_of_pattern" = "Get“%@” as part of the %@ plan. Comparison:";
+"you_can_get_feature_as_part_of_pattern" = "Get “%@” as part of the %@ plan. Comparison:";
 
 "monthly_subscription" = "Monthly subscription";
 "annual_subscription" = "Annual subscription";
 "quarterly_subscription" = "Quarterly subscription";
+"three_months_subscription" = "Three months subscription";
+"three_years_subscription" = "Three years subscription";
 
 "option_available_only_by_subscription" = "Available in subscription plans";
 "osm_live_subscriptions" = "Subscriptions";
@@ -3180,7 +3343,7 @@
 "osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
 
 "no_purchases" = "You don\'t have any purchases";
-"empty_purchases_description" = "If your purchases don\'t show up here, tap on“%@”, or contact our support team.";
+"empty_purchases_description" = "If your purchases don\'t show up here, tap on “%@”, or contact our support team.";
 "explore_osmnad_plans_to_find_suitable" = "Explore OsmAnd Plans to find one suitable for you.";
 "osm_live_banner_desc" = "Get unlimited map downloads, adding weekly, daily, or even hourly updates.";
 "redeem_promo_code" = "Redeem promo code";
@@ -3188,16 +3351,20 @@
 "expired" = "Expired";
 "shared_string_expires" = "Expires";
 "manage_subscription" = "Manage subscription";
+"manage_purchases" = "Manage purchases";
 "subscription" = "Subscription";
 "google_play" = "Google Play";
 "app_store" = "App Store";
 "amazon_appstore" = "Amazon Appstore";
 "huawei_appgallery" = "Huawei AppGallery";
+"osmand_web" = "OsmAnd Web (FastSpring)";
 "promo" = "Promo";
 "purchase_origin" = "Purchase origin";
 "contact_support" = "Contact support";
 "contact_support_description" = "If you have any questions, please contact us at %@.";
 "loading_purchase_information" = "Loading purchase information";
+"fastspring_subscription_desc" = "You can manage or cancel your subscription through FastSpring account management portal.";
+"fastspring_one_time_payment_desc" = "You can manage your purchases through FastSpring account management portal.";
 
 "shared_string_now" = "Now";
 
@@ -3259,6 +3426,11 @@
 "use_login_and_password" = "Use username and password";
 "perform_oauth_authorization" = "Log in via OAuth";
 "use_login_and_password_description" = "Use your email/login and password to log in to OpenStreetMap.org.";
+"layer_coordinates_grid" = "Coordinates grid";
+"shared_string_edges" = "Edges";
+"labels_position" = "Labels position";
+"grid_color" = "Grid color";
+"customize_grid_color" = "Customize grid color";
 "benefits_for_contributors" = "Benefits for active OSM contributors";
 "benefits_for_contributors_primary_descr" = "Active contributors to OpenStreetMap.org may be entitled to unlimited hourly map updates.";
 "benefits_for_contributors_secondary_descr" = "Sign in to OpenStreetMap to check if you are eligible for unlimited monthly and hourly map updates.";
@@ -3435,14 +3607,73 @@
 • Fixed status bar color for older iOS versions\n
 • Fixed rotate and pinch to zoom map gestures for the app running on macOS\n";
 
+"ios_release_4_8" = "• New \"Speedometer\" widget compatible with CarPlay\n
+• Added Turn-by-turn instructions to route details\n
+• Customize the map screen by adding multiple \"Quick Action\" buttons\n
+• 3D Track Improvements: new visualization and colorization options\n
+• Custom color palettes for terrain, tracks, and routes\n
+• Added improved multi-selection mode for Tracks\n
+• 3D variant for location position icons\n
+• Expanded selection of tourist routes on the map\n
+• Weather: UI refresh, added wind animation\n
+• Add smooth transitions while zooming in 3D mode\n
+• \"Location position on screen\" is now in Configure Screen\n
+• Change \"Wheel circumference\" in BLE sensor settings\n
+• Added separate \"Speed limit\" navigation alert\n
+• Fixed names for bearing widgets\n
+• Fixed \"Radius ruler\" visibility in all widget panels\n";
+
+"ios_release_4_9" = "• Modified compass behavior: a single tap rotates the map to North, while a double tap switches the orientation\n
+• Added search functionality for the most popular brand names\n
+• Improved graph appearance: Y-axis labels no longer overlap with the graph\n
+• Added total track statistics to each folder's footer\n
+• Grouped all tags with translations into a single item in the context menu\n
+• Fixed an issue where the POI category was missing from the context menu\n
+• Fixed an issue with the auto-detection of the voice prompt language\n
+• Fixed crash in Boat profile Route parameters\n
+• CarPlay improvements: resolved an issue where the main navigation widget didn't update after route recalculations, and fixed the size of the arrows in the next turn widget\n
+• Introduced a Map mode parameter that now follows the App theme\n
+• Improved UI for selection of location icon, added options to disable location radius and view angle\n
+• Add quick action to change \"Location position on screen\"\n";
+
+"ios_release_5_0" = "• Introduced Smart Folders for automatic track organization.\n
+• Added a full-screen gallery viewer for Wikimedia images.\n
+• Added support for Vietnamese and Hebrew Text-to-Speech (TTS) for navigation.\n
+• Added Quick Actions for controlling trip recording.\n
+• Added a \"Detailed track guidance\" option and an \"Attach to the roads\" suggestion dialog.\n
+• Made prominent peaks discoverable via map and search.\n
+• Added border highlighting for buildings and areas with detailed information.\n
+• Added an option to toggle visibility for separate favorite groups on the map.\n
+• Expanded icon options for Favorites by adding icons from all POI categories.\n
+• Added battery level display for external sensors.\n
+• Added an option to change the appearance of multiple tracks simultaneously.\n
+• Added a \"Reset\" action for the Average Speed widget.\n
+• CarPlay Search: Added the ability to select buildings.\n
+• Fixed the UTM coordinate input sequence.\n
+• Fixed an issue with track waypoint colors.\n
+• Fixed the missing \"Download all\" button for Terrain maps.\n
+• Fixed an issue where popular articles were sometimes missing in Travel Guides.\n";
+
+"ios_release_5_1" = "• Added support for web and cross-platform purchases\n\
+• New navigation widget combines turn arrow and navigation instructions\n\
+• Added a rename action for Favorite groups\n\
+• Added \"Unit of Volume\" and \"Fuel Tank Capacity\" options\n\
+• Added a \"Coordinates Grid\" overlay\n\
+• Widgets on the Left & Right panels now include a height option\n\
+• Added the ability to assign activities to tracks\n\
+• Fixed a crash on CarPlay with iOS 15\n\
+• Automatic resizing issues with widgets on the left and right panels have been resolved\n\
+• Incompatibility of travel guides has been fixed\n\
+• The issue with cross-platform purchases has been resolved\n\
+• Fixed the issue of a black screen on CarPlay after startup\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
-"rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
+"rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";
 "routing_attr_avoid_highway_description" = "Avoid highways";
 "routing_attr_prefer_hiking_routes_description" = "Prefer hiking routes";
 "rendering_attr_weatherWindSpeedContours_name" = "Wind speed isolines";
-"rendering_attr_hideMilitaryAreas_name" = "Hide military areas";
+"rendering_attr_hideMilitaryAreas_name" = "Military areas";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Show fixme tags";
 "rendering_attr_horse_scale_dangerous_name" = "Dangerous";
 "rendering_attr_seabedDetail_description" = "Additional text info on seabed surface_qualification, combined surface types, category and taxon of weed or seagrass";
@@ -3486,7 +3717,7 @@
 "rendering_attr_weatherTempContours_name" = "Temperature isolines";
 "rendering_attr_showTramRoutes_name" = "Tram routes";
 "routing_attr_hazmat_category_description" = "Hazardous materials category / Consider hazmat access permissions";
-"rendering_attr_showWaterwayTunnels_name" = "Waterway tunnels";
+"rendering_attr_showWaterwayTunnels_name" = "Increase visibility for waterway tunnels";
 "rendering_attr_seabedDetail_name" = "Seabed detail";
 "routing_attr_driving_style_description" = "Select driving purpose to get shorter, faster or safer route";
 "rendering_attr_weatherPrecipitationContours_name" = "Precipitation isolines";
@@ -3505,7 +3736,10 @@
 "routing_attr_avoid_4wd_only_description" = "Avoid roads only suitable for 4WD vehicles";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematic display of icons at low zooms";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
-
+"dangerous_goods" = "Dangerous goods";
+"dangerous_goods_description" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
+"show_along_the_route" = "Show along the route";
+    
 "exit_number" = "Exit number";
 "announce_when_exceeded" = "Announce when exceeded";
 "speak_gps_signal_status" = "Announce GPS signal loss and recovery";
@@ -3628,16 +3862,23 @@
 "map_screen_orientation" = "Screen orientation";
 
 "change_appearance" = "Change appearance";
+"default_appearance" = "Default appearance";
 "default_appearance_desc" = "Default color, icon and shape will apply to the added favorite points into the group.";
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
-"apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";
+"apply_to_all_points" = "Apply to all points";
+"save_favorite_default_appearance" = "Apply changes to the existing points in the folder or only to new ones?";
+"original_icon_description" = "Each point would keep its own icon.";
+"original_color_description" = "Each point would keep its own color.";
+"original_shape_description" = "Each point would keep its own shape.";
 
 "my_places_no_tracks_title_root" = "You don’t have track files";
 "my_places_no_tracks_descr_root" = "You can import, create or record track files using OsmAnd.";
 "my_places_no_tracks_title" = "Empty folder";
 "my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";
 "delete_folder" = "Delete folder";
+"root_folder" = "Root folder";
+"all_folders" = "All folders";
 "short_min" = "m";
 "remove_folder_with_files_descr" = "Are you sure you want to remove \"%@\" folder and all %d tracks?";
 "new_track" = "New track";
@@ -3675,6 +3916,7 @@
 "manage_subscriptions" = "Manage subscriptions.";
 "deleting_complete" = "Deletion complete";
 "osmand_cloud_delete_account_descr" = "Are you sure you want to delete OsmAnd Cloud account?";
+"osmand_cloud_delete_account_descr_with_email" = "Are you sure you want to delete OsmAnd Cloud account: %@?";
 "osmand_cloud_delete_account_confirmation" = "Delete account?";
 "osmand_cloud_deletion_all_data_warning" = "All data from OsmAnd Cloud will be %@. Data on the device remains untouched.";
 "osmand_cloud_deletion_account_warning" = "Your account and all account details will be %@";
@@ -3694,6 +3936,20 @@
 "map_widget_glide_average_desc" = "Shows the average glide ratio for the set interval.";
 "map_widget_glide_target_desc" = "Shows the glide ratio needed to reach the target point.";
 "map_widget_group_glide_ratio" = "Glide ratio";
+"obd_speed_desc" = "Shows speed from the Vehicle Speed Sensor (VSS).";
+"obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";
+"obd_fuel_pressure" = "Fuel pressure";
+"obd_air_intake_temp" = "Intake temperature";
+"obd_air_intake_temp_desc" = "Shows the temperature of the air entering the engine intake manifold.";
+"obd_engine_oil_temperature_desc" = "Shows the temperature of the engine oil.";
+"obd_ambient_air_temp" = "Ambient temperature";
+"obd_ambient_air_temp_desc" = "Shows the temperature outside the vehicle.";
+"obd_battery_voltage" = "Battery voltage";
+"obd_engine_coolant_temp" = "Coolant temperature";
+"remaining_fuel" = "Remaining fuel";
+"remaining_fuel_description" = "Shows the amount of fuel left in the vehicle\'s tank";
+"obd_fuel_consumption" = "Fuel consumption";
+"obd_fuel_consumption_desc" = "Shows the rate of fuel usage by the engine, calculated based on remaining fuel, tank size, and distance covered as determined by GPS.";
 "map_widget_group_glide_desc" = "Widgets show the glide ratio to the target or average glide ratio for the current trip.";
 "target_elevation" = "Target elevation";
 "average_glide_ratio_time_interval_desc" = "Shows the average glide ratio or vertical speed for the set interval.";
@@ -3734,23 +3990,27 @@
 "routing_attr_hazmat_category_usa_9_name" = "Miscellaneous";
 "rendering_value_sector2_name" = "Sector 2";
 "vertical_exaggeration" = "Vertical exaggeration";
+"wall_height" = "Wall height";
 "vertical_exaggeration_description" = "By changing the scale value, you can emphasise the 3D relief.";
 "shared_string_scale" = "Scale";
+"wall_height_description" = "By changing the height value, you can lift the track top line above the ground level.";
 
 "missing_or_outdated_maps_title" = "Missing or outdated maps";
 "missing_or_outdated_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
 "required_maps" = "Required Maps";
 "calculate_online" = "Calculate online";
-"calculate_online_title" = "The list of required maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
+"calculate_online_title" = "The list of missing maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
 "required_maps_list" = "Maps that will also be used: %@";
 "getting_list_required_maps" = "Getting a list of required maps...";
-"track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height";
+"missing_maps_ignore" = "Use downloaded maps";
+"missing_maps_ignore_details" = "Downloaded maps cover your route? Navigate with them if you\'re familiar with the area.";
 
+"track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height.";
 "visualization_3d_visualized_by" = "Visualized by";
 "visualization_3d_wall_color" = "Wall color";
 "visualization_3d_track_line" = "Track line";
 "track_3d" = "3d track";
-"fixed_height" = "Fixed Height";
+"fixed_height" = "Fixed height";
 "downward_gradient" = "Downward gradient";
 "upward_gradient" = "Upward gradient";
 "shared_string_top" = "Top";
@@ -3760,7 +4020,7 @@
 "track_3d_empty_view_title" = "3D Track view";
 "track_3d_empty_view_description" = "Explore the track in interactive 3D! Visualize height, speed, and more directly on the map.";
 
-"osm_id" = "OSM ID";
+"shared_string_osm_id" = "OSM ID";
 "shared_string_millimeters" = "Millimeters";
 
 "shared_string_speedometer" = "Speedometer";
@@ -3771,3 +4031,225 @@
 "edit_tilesource_maxzoom" = "Maximum zoom";
 "edit_tilesource_minzoom" = "Minimum zoom";
 "shared_string_millimeters_short" = "mm";
+
+"shared_string_instructions" = "Instructions";
+"shared_string_analysis" = "Analysis";
+"step_by_step" = "Turn-by-turn";
+
+"shared_string_limit" = "Limit";
+
+"custom_buttons" = "Custom buttons";
+"default_buttons" = "Default buttons";
+"add_button" = "Add button";
+"empty_name" = "Empty name";
+"custom_map_button_name_present" = "Such button already present";
+
+"data_source" = "Data Source";
+"weather_data_sources_prompt" = "OsmAnd provides weather data from two sources:";
+"weather_source_ecmwf_description" = "European Centre for Medium-Range Weather Forecasts";
+"weather_source_GFS_description" = "Global Forecast System from National Centers for Environmental Prediction";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "Wind animation";
+
+"routing_attr_avoid_cobblestone_description" = "Avoid cobblestone";
+"routing_attr_avoid_cobblestone_name" = "Avoid cobblestone";
+"rendering_value_dark_orange_name" = "Dark orange";
+"rendering_value_pale_name" = "Pale";
+
+"shared_string_update_required" = "Update Required";
+"osm_login_needs_ios_16_4" = "OpenStreetMap login needs iOS 16.4+";
+
+"view_angle" = "View angle";
+"location_radius" = "Location radius";
+"view_angle_description" = "Displays the cone-shaped area you\'re currently facing";
+"location_radius_description" = "Shows the circular area representing your current location accuracy";
+
+"resting_position" = "Resting position";
+"navigation_position" = "Navigation position";
+"resting_navigation_position" = "Rest & navigation position";
+
+"user_palette" = "User palette";
+"height_legend_description" = "Altitude color maps are used to visualize relief.";
+"shared_string_local" = "Local";
+
+"daynight_mode_app_theme_summary" = "The map\'s display aligns with the app\'s overall theme—day mode for a light theme and night mode for a dark theme";
+"daynight_mode_sunrise_sunset_summary" = "Automatically switches between day and night themes based on local sunrise and sunset times.";
+"daynight_mode_night_summary" = "Always displays the map in a dark theme, suited for nighttime or low-light conditions.";
+"daynight_mode_day_summary" = "Always displays the map in a light theme, ideal for daytime visibility.";
+
+"rendering_attr_showDirtbikeTrails_name" = "Dirt bike trails";
+"rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";
+"map_widget_map_scale" = "Map scale";
+"transport_stop" = "Stop";
+"lock_screen" = "Lock screen";
+"screen_is_locked_by_action_button" = "Touch screen is locked. Tap on button to unlock.";
+"screen_is_unlocked" = "Touch screen is unlocked.";
+"shared_string_interface" = "Interface";
+"lock_screen_description" = "Enables or disables touch screen functionality to prevent accidental taps";
+
+"add_widget_below" = "Add widget below";
+"add_widget_above" = "Add widget above";
+"add_widget_to_the_right" = "Add widget to the right";
+"add_widget_to_the_left" = "Add widget to the left";
+"delete_widget" = "Delete widget?";
+"delete_widget_description" = "This widget will be deleted. You can restore it later in Configure Screen.";
+"reset_average_speed" = "Reset average speed";
+
+"intermediate_first" = "Intermediate first";
+"destination_first" = "Destination first";
+"display_priority" = "Display priority";
+"shared_string_default_view" = "Default view";
+"map_widget_route_information" = "Route information";
+"map_widget_route_information_desc" = "Displays the estimated arrival time, remaining travel time, and distance for the current navigation route.";
+"map_widget_distance" = "Distance";
+
+"rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
+"rendering_attr_showClimbingRoutes_name" = "Climbing routes";
+
+"shared_string_view_all" = "View all";
+"no_internet_descr" = "Please check your connection and try again.";
+"no_photos_available" = "No photos available";
+"no_photos_available_descr" = "No user photos have been added to this location yet";
+"mapillary_action_descr" = "Share your street-level view via Mapillary.";
+"online_photos" = "Online photos";
+"wikimedia" = "Wikimedia";
+"open_in_browser" = "Open in browser";
+"shared_string_source" = "Source";
+"shared_string_items" = "Items";
+"download_failed" = "Download Failed";
+"download_successful" = "Image downloaded to Documents/Download.";
+
+"auto_25_chars_route_kl" = "Keep left";
+"auto_25_chars_route_kr" = "Keep right";
+"auto_25_chars_route_tr" = "Turn right";
+"auto_25_chars_route_tshr" = "Turn sharply right";
+"auto_25_chars_route_tslr" = "Turn slightly right";
+"auto_25_chars_route_tl" = "Turn left";
+"auto_25_chars_route_tshl" = "Turn sharply left";
+"auto_25_chars_route_tsll" = "Turn slightly left";
+"auto_25_chars_route_tu" = "Make U-turn";
+"auto_25_chars_route_tl_kl" = "Turn left and keep left";
+"auto_25_chars_route_tl_kr" = "Turn left and keep right";
+"auto_25_chars_route_tr_kl" = "Turn right and keep left";
+"auto_25_chars_route_tr_kr" = "Turn right and keep right";
+"auto_25_chars_route_tu_kl" = "Make U-turn and keep left";
+"auto_25_chars_route_tu_kr" = "Make U-turn and keep right";
+"auto_25_chars_route_roundabout_kl" = "Take the %d exit and keep left";
+"auto_25_chars_route_roundabout_kr" = "Take the %d exit and keep right";
+
+"sensor_data" = "Sensor data";
+"sensor_data_settings_description" = "show main data from sensor";
+"battery_level_settings_description" = "show sensor batter level as main value";
+"shared_string_date" = "Date";
+
+"add_hidden_group_info" = "The added point can be found in \"%@\". Unhide the selected group to show it on the map.";
+
+"purchase_feature_desc_vehicle_metrics_obd_ii" = "Track vital vehicle data using the OBD-II protocol. Monitor key metrics like speed, engine RPM, fuel consumption, and more.";
+
+"obd_plugin_description" = "Monitor key vehicle metrics using the OBD-II protocol. Access data including:\n     • Engine speed, Engine Runtime, Calculated Engine Load \n     • Fuel consumption, Fuel pressure, Remaining fuel\n     • Intake temperature, Ambient temperature, Coolant temperature, Engine Oil Temperature\n     • Vehicle speed, Throttle Position, Battery voltage\n";
+
+"vehicle_metrics_obd_ii" = "Vehicle Metrics (OBD-II)";
+"connect_obd_instructions_title" = "OsmAnd supports Bluetooth connections to OBD-II scanners.";
+"obd_how_to_connect" = "How to connect:";
+"connect_obd_instructions_step" = "1. Connect the scanner to your vehicle\'s OBD-II port.\n\n 2. Turn on your vehicle\'s engine\n\n 3. Enable Bluetooth on your device\n\n 4. Tap \'%@\' and select your scanner from the list.";
+"obd_bluetooth_off_description" = "Turn on Bluetooth to find and connect scanners.";
+"obd_searching_text_description" = "Please keep your device close to the scanner. Ensure the vehicle\'s engine is running.";
+"obd_searching_text" = "Searching for scanners";
+"obd_nothing_found_text" = "No scanners found";
+
+"obd_nothing_found_description" = "Please check the following:\n – Ensure Bluetooth is turned on\n – Vehicle engine is running\n – Make sure your device is within range of the scanner.";
+
+"obd_vin"= "VIN";
+"obd_vin_desc" = "VIN code over OBD";
+"obd_vehicle_info" = "Vehicle info";
+"obd_widget_vehicle_speed" = "Vehicle speed";
+"obd_widget_engine_speed" = "Engine speed";
+
+"obd_engine_runtime_desc" = "Shows shows how long the engine has been running since it was started.";
+"obd_engine_runtime" = "Engine Runtime";
+"obd_battery_voltage_desc" = "Shows the voltage level of the vehicle\'s battery";
+"obd_fuel_pressure_desc" = "Shows the pressure within the fuel system";
+"obd_throttle_position" = "Throttle Position";
+"obd_throttle_position_desc" = "Shows the angle of the throttle plate in the throttle body.";
+"obd_calculated_engine_load_desc" = "Shows the percentage of the engine’s available power being used at a given moment.";
+"obd_calculated_engine_load" = "Calculated Engine Load";
+"obd_engine_coolant_temp_desc" = "Shows the temperature of the engine’s coolant";
+"obd_engine_oil_temperature" = "Engine Oil Temperature";
+"obd_fuel_consumption_rate_sensor_type" = "Use selected units in name.";
+
+"reset_average_value" = "Reset average value";
+"current_temperature" = "Current temperature";
+"average_temperature" = "Average temperature";
+"shared_string_instant" = "Instant";
+"average" = "Average";
+"shared_string_hour" = "Hour";
+"shared_string_volume" = "Volume";
+
+"rpm_unit" = "rpm";
+"obd_fuel_level_desc" = "Shows vehicle fuel level over OBD sensor";
+"obd_fuel_left_distance_desc" = "Shows distance vehicle can drive on left fuel level over OBD sensor";
+"obd_fuel_type_desc" = "Shows vehicle fuel type over OBD sensor";
+"obd_fuel_level" = "Fuel Efficiency (%)";
+"obd_fuel_consumption_rate" = "Fuel consumption rate";
+"obd_fuel_consumption_rate_desc" = "Shows vehicle fuel consumption rate based on OBD an location";
+"obd_fuel_left_liters" = "Fuel left (liters)";
+"obd_fuel_type" = "Fuel type";
+
+"obd_fuel_consumption_rate_l_h" = "Fuel consumption rate (L/h)";
+"obd_fuel_consumption_rate_sensor" = "Fuel consumption rate (sensor)";
+"obd_fuel_consumption_rate_l_h_desc" = "Shows vehicle fuel consumption rate based on calculations (L/h)";
+"obd_fuel_consumption_rate_sensor_desc" = "Shows vehicle fuel consumption rate based on sensor (L/h)";
+
+"obd_fuel_level_liter" = "Fuel level (l)";
+"obd_fuel_level_percent" = "Fuel level (%)";
+"obd_fuel_left_km" = "Fuel left (km)";
+"obd_fuel_consumption_rate_scanner" = "Fuel consumption rate (obd)";
+"obd_fuel_consumption_rate_liter_hour" = "Fuel consumption rate";
+"obd_fuel_consumption_rate_percent_hour" = "Fuel consumption rate %/h";
+
+"obd_fuel_consumption_rate_l_km" = "Fuel consumption rate (L/100 km)";
+"obd_fuel_consumption_rate_l_km_desc" = "Shows vehicle fuel consumption rate based on calculations (L/100 km)";
+"simulate_obd" = "Simulate obd data";
+
+"kpa_unit" = "kPa";
+"percent_unit" = "%";
+"percent_hour" = "%/h";
+"liter_per_hour" = "L/h";
+
+"unit_volt" = "V";
+"obd_widget_group" = "Vehicle Metrics";
+"vehicle_metrics_recording_description" = "Select the parameters to be recorded in the GPX file.";
+"shared_string_other" = "Other";
+"shared_string_engine" = "Engine";
+
+"routing_attr_allow_ferries_description" = "Allow routing by ferry routes";
+"routing_attr_allow_ferries_name" = "Allow ferries";
+
+"obd_fuel_type_not_provided" = "No fuel type provided";
+"obd_fuel_type_gasoline" = "Gasoline";
+"obd_fuel_type_methanol" = "Methanol";
+"obd_fuel_type_ethanol" = "Ethanol";
+"obd_fuel_type_diesel" = "Diesel";
+"obd_fuel_type_lpg" = "LPG";
+"obd_fuel_type_cng" = "CNG";
+"obd_fuel_type_propane" = "Propane";
+"obd_fuel_type_electric" = "Electric";
+"obd_fuel_type_bifuel_gasoline" = "Bifuel running Gasoline";
+"obd_fuel_type_bifuel_methanol" = "Bifuel running Methanol";
+"obd_fuel_type_bifuel_ethanol" = "Bifuel running Ethanol";
+"obd_fuel_type_bifuel_lpg" = "Bifuel running LPG";
+"obd_fuel_type_bifuel_cng" = "Bifuel running CNG";
+"obd_fuel_type_bifuel_propane" = "Bifuel running Propane";
+"obd_fuel_type_bifuel_electricity" = "Bifuel running Electricity";
+"obd_fuel_type_bifuel_electric_combustion" = "Bifuel running Electric and Combustion Engine";
+"obd_fuel_type_hybrid_gasoline" = "Hybrid Gasoline";
+"obd_fuel_type_hybrid_ethanol" = "Hybrid Ethanol";
+"obd_fuel_type_hybrid_diesel" = "Hybrid Diesel";
+"obd_fuel_type_hybrid_electric" = "Hybrid Electric";
+"obd_fuel_type_hybrid_electric_combustion" = "Hybrid Electric and Combustion Engine";
+"obd_fuel_type_hybrid_regenerative" = "Hybrid Regenerative";
+"obd_fuel_type_bifuel_hydrogen" = "Bifuel running Hydrogen";
+"obd_fuel_type_hybrid_hydrogen" = "Hybrid Hydrogen";
+"obd_fuel_type_hydrogen" = "Hydrogen";
+"obd_fuel_type_unknown" = "Unknown Fuel Type";

@@ -11,6 +11,9 @@
 #import "OAColors.h"
 
 @implementation OAHudButton
+{
+    NSInteger _id;
+}
 
 - (instancetype)init
 {

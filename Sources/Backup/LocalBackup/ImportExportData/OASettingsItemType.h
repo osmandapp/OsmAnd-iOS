@@ -31,7 +31,8 @@ typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypeGpx,
     EOASettingsItemTypeSearchHistory,
     EOASettingsItemTypeNavigationHistory,
-    EOASettingsItemTypeDownloads
+    EOASettingsItemTypeDownloads,
+    EOASettingsItemTypeColorPalette
 };
 
 @interface OASettingsItemType : NSObject

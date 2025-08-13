@@ -8,10 +8,14 @@
 
 #import "OACollapsableNearestPoiTypeView.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "OATargetInfoViewController.h"
+#import "OAButton.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -57,7 +61,7 @@
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        [self buildViews];
+        [self updateButtonBorderColor];
 }
 
 - (void) buildViews
@@ -145,6 +149,17 @@
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 
+- (void) updateButtonBorderColor
+{
+    if (_buttons)
+    {
+        for (OAButton *btn in _buttons)
+        {
+            btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        }
+    }
+}
+
 - (void) showQuickSearch:(OAPOIUIFilter *)filter
 {
     [[OARootViewController instance].mapPanel hideContextMenu];
@@ -163,7 +178,7 @@
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+    return action == @selector(copy:);
 }
 
 - (void)copy:(id)sender

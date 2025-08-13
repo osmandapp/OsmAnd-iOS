@@ -22,6 +22,10 @@
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
+    int _sectionAppearance;
+    int _sectionUnitsAndFormats;
+    int _sectionOther;
+    int _sectionAnimateMyPosition;
 }
 
 #pragma mark - Initialization
@@ -29,6 +33,10 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _sectionAppearance = -1;
+    _sectionUnitsAndFormats = -1;
+    _sectionOther = -1;
+    _sectionAnimateMyPosition = -1;
 }
 
 #pragma mark - UIViewController
@@ -123,7 +131,7 @@
     else
         drivingRegionValue = [OADrivingRegion getName:[_settings.drivingRegion get:self.appMode]];
     
-    NSString* metricSystemValue;
+    NSString *metricSystemValue;
     switch ([_settings.metricSystem get:self.appMode]) {
         case KILOMETERS_AND_METERS:
             metricSystemValue = OALocalizedString(@"si_km_m");
@@ -148,7 +156,7 @@
             break;
     }
     
-    NSString* speedSystemValue;
+    NSString *speedSystemValue;
     switch ([_settings.speedSystem get:self.appMode]) {
         case KILOMETERS_PER_HOUR:
             speedSystemValue = OALocalizedString(@"si_kmh");
@@ -173,7 +181,10 @@
             break;
     }
     
-    NSString* geoFormatValue;
+    NSString *volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
+    NSString *tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
+    
+    NSString *geoFormatValue;
     switch ([_settings.settingGeoFormat get:self.appMode]) {
         case MAP_GEO_FORMAT_DEGREES:
             geoFormatValue = OALocalizedString(@"navigate_point_format_D");
@@ -198,7 +209,7 @@
             break;
     }
     
-    NSString* angularUnitsValue = @"";
+    NSString *angularUnitsValue = @"";
     switch ([_settings.angularUnits get:self.appMode])
     {
         case DEGREES360:
@@ -220,7 +231,7 @@
             break;
     }
     
-    NSString* externalInputDeviceValue;
+    NSString *externalInputDeviceValue;
     if ([_settings.settingExternalInputDevice get:self.appMode] == GENERIC_EXTERNAL_DEVICE)
         externalInputDeviceValue = OALocalizedString(@"sett_generic_ext_input");
     else if ([_settings.settingExternalInputDevice get:self.appMode] == WUNDERLINQ_EXTERNAL_DEVICE)
@@ -230,7 +241,9 @@
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *appearanceArr = [NSMutableArray array];
-    NSMutableArray *unitsAndFormatsArr = [NSMutableArray array];
+    NSMutableArray *regionsArr = [NSMutableArray array];
+    NSMutableArray *unitsArr = [NSMutableArray array];
+    NSMutableArray *formatsArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [appearanceArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
@@ -257,42 +270,56 @@
             @"key" : @"screenOrientation",
         }];
     }
-    [unitsAndFormatsArr addObject:@{
+    [regionsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"driving_region"),
         @"value" : drivingRegionValue,
         @"icon" : @"ic_profile_car",
         @"key" : @"drivingRegion",
     }];
-    [unitsAndFormatsArr addObject:@{
+    [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"unit_of_length"),
+        @"title" : OALocalizedString(@"routing_attr_length_name"),
         @"value" : metricSystemValue,
         @"icon" : @"ic_custom_ruler",
         @"key" : @"lengthUnits",
     }];
-    [unitsAndFormatsArr addObject:@{
+    [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"units_of_speed"),
+        @"title" : OALocalizedString(@"shared_string_speed"),
         @"value" : speedSystemValue,
         @"icon" : @"ic_action_speed",
         @"key" : @"speedUnits",
     }];
-    [unitsAndFormatsArr addObject:@{
+    [unitsArr addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"shared_string_volume"),
+        @"value" : volumeSystemValue,
+        @"icon" : @"ic_custom_obd_fuel_tank",
+        @"key" : @"volumeUnits",
+    }];
+    [unitsArr addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"map_settings_weather_temp"),
+        @"value" : tempSystemValue,
+        @"icon" : @"ic_custom_thermometer",
+        @"key" : @"tempUnits"
+    }];
+    [formatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"coords_format"),
         @"value" : geoFormatValue,
         @"icon" : @"ic_custom_coordinates",
         @"key" : @"coordsFormat",
     }];
-    [unitsAndFormatsArr addObject:@{
+    [formatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"angular_measurment_units"),
         @"value" : angularUnitsValue,
         @"icon" : @"ic_custom_angular_unit",
         @"key" : @"angulerMeasurmentUnits",
     }];
-    [unitsAndFormatsArr addObject:@{
+    [formatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"distance_during_navigation"),
         @"value" : OALocalizedString([_settings.preciseDistanceNumbers get:self.appMode] ? @"shared_string_precise" : @"shared_string_round_up"),
@@ -306,19 +333,43 @@
         @"key" : @"externalImputDevice",
     }];
     [tableData addObject:appearanceArr];
-    [tableData addObject:unitsAndFormatsArr];
+    _sectionAppearance = (int) tableData.count - 1;
+    [tableData addObject:regionsArr];
+    _sectionUnitsAndFormats = (int) tableData.count - 1;
+    [tableData addObject:unitsArr];
+    [tableData addObject:formatsArr];
+    
     [tableData addObject:otherArr];
+    _sectionOther = (int) tableData.count - 1;
+    [tableData addObject:@[@{
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"animate_my_location"),
+        @"isOn": [_settings.animateMyLocation get:self.appMode] ? @(YES) : @(NO),
+        @"key" : @"animateMyLocation",
+    }]];
+    _sectionAnimateMyPosition = (int) tableData.count - 1;
+
     _data = [NSArray arrayWithArray:tableData];
 }
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
-    if (section == 0)
+    if (section == _sectionAppearance)
         return OALocalizedString(@"shared_string_appearance");
-    else if (section == 1)
+    else if (section == _sectionUnitsAndFormats)
         return OALocalizedString(@"units_and_formats");
-    else
+    else if (section == _sectionOther)
         return OALocalizedString(@"other_location");
+    else
+        return @"";
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    if (section == _sectionAnimateMyPosition)
+        return OALocalizedString(@"animate_my_location_descr");
+    else
+        return @"";
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -336,16 +387,12 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon, 0., 0.);
-            cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
         }
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
 
             cell.switchView.on = [item[@"isOn"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -363,7 +410,7 @@
             cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
+            cell.leftIconView.tintColor = self.appMode.getProfileColor;
         }
         if (cell)
         {
@@ -409,6 +456,10 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfLenght applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"speedUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfSpeed applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"volumeUnits"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfVolume applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"tempUnits"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfTemp applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
         settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
@@ -420,7 +471,7 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"])
+        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else
             [self showModalViewController:settingsViewController];
@@ -441,12 +492,9 @@
         UISwitch *sw = (UISwitch *) sender;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
         NSDictionary *item = _data[indexPath.section][indexPath.row];
-        NSString *name = item[@"name"];
-        if (name)
-        {
-            [self generateData];
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-        }
+        NSString *key = item[@"key"];
+        if ([key isEqualToString:@"animateMyLocation"])
+            [_settings.animateMyLocation set:sw.isOn mode:self.appMode];
     }
 }
 

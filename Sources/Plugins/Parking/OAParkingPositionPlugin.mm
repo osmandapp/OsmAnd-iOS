@@ -12,6 +12,7 @@
 #import "OATextInfoWidget.h"
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapInfoController.h"
@@ -300,7 +301,7 @@
     return oldDist == 0 || ABS(oldDist - dist) > 30;
 }
 
-- (NSArray *)getQuickActionTypes
+- (NSArray<QuickActionType *> *)getQuickActionTypes
 {
     return @[OAParkingAction.TYPE];
 }

@@ -8,9 +8,7 @@
 
 #import "OASymbolMapLayer.h"
 
-#include <OsmAndCore/Map/MapMarker.h>
-
-@class OATargetPoint;
+@class OATargetPoint, OAMapObject, OARenderedObject, SelectedMapObject;
 
 @protocol OAChangePositionModeDelegate <NSObject>
 
@@ -25,17 +23,22 @@
 - (void) enterChangePositionMode:(id)targetObject;
 - (void) exitChangePositionMode:(id)targetObject applyNewPosition:(BOOL)applyNewPosition;
 - (BOOL) isObjectMovable:(id)object;
-
-- (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker;
+- (void) enterAddGpxPointMode;
+- (void) quitAddGpxPoint;
 
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;
 
-- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide;
+- (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide;
+- (void) showContextMenu:(CLLocation *)touchPointLatLon object:(SelectedMapObject *)selectedObject;
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
 
 - (OATargetPoint *) getTargetPoint:(id)obj;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
+
+- (void) hideRegionHighlight;
+
+- (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(double)lat lon:(double)lon mapObject:(OAMapObject *)mapObject;
 
 @end

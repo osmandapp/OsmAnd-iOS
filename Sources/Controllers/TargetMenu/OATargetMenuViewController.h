@@ -7,9 +7,7 @@
 //
 
 #import "OACompoundViewController.h"
-#import <CoreLocation/CoreLocation.h>
 #import "OATargetPoint.h"
-#import "OAHudButton.h"
 
 typedef NS_ENUM(NSInteger, ETopToolbarType)
 {
@@ -70,7 +68,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @end
 
-@class OATargetPoint, OATransportStopRoute, OARepositoryResourceItem;
+@class OATargetPoint, OATransportStopRoute, OARepositoryResourceItem, OAHudButton;
 
 @interface OATargetMenuViewController : OACompoundViewController
 
@@ -137,6 +135,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) goFull;
 - (void) goFullScreen;
 
+- (BOOL) showTopViewInFullscreen;
 - (BOOL) showTopControls;
 - (BOOL) supportMapInteraction;
 - (BOOL) supportsForceClose;
@@ -178,12 +177,13 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) okPressed;
 - (void) cancelPressed;
 
-- (BOOL) hasContent;
-- (CGFloat) contentHeight;
-- (CGFloat) contentHeight:(CGFloat)width;
-- (CGFloat) additionalContentOffset;
-- (void) setContentBackgroundColor:(UIColor *)color;
-- (void) refreshContent;
+- (BOOL)hasContent;
+- (CGFloat)contentHeight;
+- (CGFloat)contentHeight:(CGFloat)width;
+- (CGFloat)additionalContentOffset;
+- (void)setContentBackgroundColor:(UIColor *)color;
+- (void)refreshContent;
+- (void)updateNavBarSubviewsLayout;
 
 - (BOOL) hasInfoView;
 - (BOOL) hasInfoButton;
@@ -213,6 +213,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) addMapFrameLayer:(CGRect)mapFrame view:(UIView *)view;
 - (void) removeMapFrameLayer:(UIView *)view;
 - (CGFloat) mapHeightKoef;
+- (void)setTargetImage:(UIImage * _Nullable)image;
+- (UIImage *_Nullable)targetImage;
 
 @end
 

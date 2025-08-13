@@ -10,8 +10,11 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAObservable.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAUtilities.h"
+#import "OAWorldRegion.h"
 #import "OANativeUtilities.h"
 #import "OAColors.h"
 #import "OAPointIContainer.h"
@@ -20,6 +23,10 @@
 #import "OADownloadsManager.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWeatherToolbar.h"
+#import "OAPointDescription.h"
+#import "OAAppSettings.h"
+#import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -30,10 +37,11 @@
 
 #define ZOOM_TO_SHOW_MAP_NAMES 6
 #define ZOOM_AFTER_BASEMAP 12
-#define ZOOM_TO_SHOW_BORDERS_ST 4
-#define ZOOM_TO_SHOW_BORDERS 7
 #define ZOOM_TO_SHOW_SELECTION_ST 3
 #define ZOOM_TO_SHOW_SELECTION 8
+
+const static OsmAnd::ZoomLevel MIN_ZOOM_TO_SHOW = OsmAnd::ZoomLevel3;
+const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
 
 @implementation OADownloadMapObject
 
@@ -74,14 +82,14 @@
     _weatherToolbarStateChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
                                                                      withHandler:@selector(onWeatherToolbarStateChanged)
                                                                       andObserve:[OARootViewController instance].mapPanel.weatherToolbarStateChangeObservable];
-    _collection = std::make_shared<OsmAnd::PolygonsCollection>();
-    _selectedCollection = std::make_shared<OsmAnd::PolygonsCollection>();
+    _collection = [self createPolygonCollection];
+    _selectedCollection = [self createPolygonCollection];
     _initDone = YES;
     
     [self.mapView addKeyedSymbolsProvider:_collection];
 }
 
-- (void)deinitLayer
+- (void) deinitLayer
 {
     [super deinitLayer];
     if (_localResourcesChangedObserver)
@@ -99,13 +107,20 @@
 - (void) resetLayer
 {
     [self.mapView removeKeyedSymbolsProvider:_collection];
-    _collection = std::make_shared<OsmAnd::PolygonsCollection>();
-    _selectedCollection = std::make_shared<OsmAnd::PolygonsCollection>();
+    _collection = [self createPolygonCollection];
+    [self.mapView removeKeyedSymbolsProvider:_selectedCollection];
+    _selectedCollection = [self createPolygonCollection];
+}
+
+- (std::shared_ptr<OsmAnd::PolygonsCollection>) createPolygonCollection
+{
+    return std::make_shared<OsmAnd::PolygonsCollection>(MIN_ZOOM_TO_SHOW, MAX_ZOOM_TO_SHOW);
 }
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     [self refreshLayer];
     return YES;
@@ -143,7 +158,7 @@
         {
             [self.mapViewController runWithRenderSync:^{
                 [self.mapView removeKeyedSymbolsProvider:_collection];
-                _collection = std::make_shared<OsmAnd::PolygonsCollection>();
+                _collection = [self createPolygonCollection];
                 BOOL hasPoints = NO;
                 for (OAWorldRegion *r in mapRegions)
                 {
@@ -217,7 +232,7 @@
 {
     [self.mapViewController runWithRenderSync:^{
         [self.mapView removeKeyedSymbolsProvider:_selectedCollection];
-        _selectedCollection = std::make_shared<OsmAnd::PolygonsCollection>();
+        _selectedCollection = [self createPolygonCollection];
     }];
 }
 
@@ -345,11 +360,16 @@
 
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
+    if (OsmAndApp.instance.isInBackground)
+    {
+        self.invalidated = YES;
+        return;
+    }
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateLayer];
     });
 }
-
 
 - (void)onWeatherToolbarStateChanged
 {
@@ -374,7 +394,7 @@
         
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.location = mapObject.worldRegion.regionCenter;
-        targetPoint.title = mapObject.worldRegion.localizedName ? mapObject.worldRegion.localizedName : mapObject.worldRegion.nativeName;
+        targetPoint.title = mapObject.worldRegion.localizedName ?: mapObject.worldRegion.nativeName;
    
         targetPoint.icon = [OAResourceType getIcon:mapObject.indexItem.resourceType templated:NO];
         targetPoint.type = OATargetMapDownload;
@@ -390,16 +410,62 @@
     return nil;
 }
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
+    if (excludeUntouchableObjects)
+        return;
+    
+    OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:result.point];
+    const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
+    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    
     NSMutableArray<OADownloadMapObject *> *downloadObjects = [NSMutableArray array];
-    [self getWorldRegionFromPoint:point dataObjects:downloadObjects];
+    [self getWorldRegionFromPoint:location dataObjects:downloadObjects];
     for (OADownloadMapObject *obj in downloadObjects)
     {
-        OATargetPoint *pnt = [self getTargetPoint:obj];
-        if (pnt)
-            [found addObject:pnt];
+        [result collect:obj provider:self];
     }
+}
+
+- (BOOL)isSecondaryProvider
+{
+    return YES;
+}
+
+- (CLLocation *) getObjectLocation:(id)obj
+{
+    if ([obj isKindOfClass:OADownloadMapObject.class])
+    {
+        OADownloadMapObject *mapObject = (OADownloadMapObject *)obj;
+        CLLocationCoordinate2D center = [mapObject.worldRegion regionCenter];
+        return [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
+    }
+    return nil;
+}
+
+- (OAPointDescription *) getObjectName:(id)obj
+{
+    if ([obj isKindOfClass:OADownloadMapObject.class])
+    {
+        OADownloadMapObject *mapObject = obj;
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_WORLD_REGION typeName:OALocalizedString(@"shared_string_map") name:[mapObject.worldRegion localizedName]];
+    }
+    return [[OAPointDescription alloc] initWithType:POINT_TYPE_WORLD_REGION typeName:OALocalizedString(@"shared_string_map") name:@""];
+}
+
+- (BOOL) showMenuAction:(id)object
+{
+    return NO;
+}
+
+- (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
+{
+    return NO;
+}
+
+- (int64_t) getSelectionPointOrder:(id)selectedObject
+{
+    return 0;
 }
 
 @end

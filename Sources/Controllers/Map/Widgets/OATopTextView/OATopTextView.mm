@@ -278,7 +278,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     section.footerText = OALocalizedString(@"next_turn_information_desc");
 
     OATableRowData *settingRow = [section createNewRow];
-    settingRow.cellType = [OASwitchTableViewCell getCellIdentifier];
+    settingRow.cellType = [OASwitchTableViewCell reuseIdentifier];
     settingRow.key = @"value_pref";
     settingRow.title = OALocalizedString(@"next_turn_information");
     settingRow.iconName = @"ic_custom_next_turn";

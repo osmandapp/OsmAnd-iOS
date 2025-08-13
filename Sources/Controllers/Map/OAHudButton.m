@@ -9,6 +9,7 @@
 #import "OAHudButton.h"
 #import "OAAppSettings.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAHudButton
 {
@@ -80,6 +81,35 @@
     
     self.layer.borderColor = self.borderColor.CGColor;
     self.layer.borderWidth = isNight ? self.borderWidthNight : self.borderWidthDay;
+}
+
+- (void) setButtonState:(MapButtonState * _Nullable)buttonState
+{
+    self.buttonState = buttonState;
+    [self updatePositions];
+}
+
+- (void) updatePositions
+{
+    [self.buttonState updatePositions];
+}
+
+- (void) setUseCustomPosition:(BOOL)useCustomPosition
+{
+    _useCustomPosition = useCustomPosition;
+    if (self.buttonState && _useCustomPosition)
+        [self updatePositions];
+}
+
+- (void) savePosition
+{
+    if (self.buttonState && _useCustomPosition)
+        [self.buttonState savePosition];
+}
+
+- (nullable OASButtonPositionSize *) getDefaultPositionSize
+{
+    return self.buttonState ? [self.buttonState getDefaultPositionSize] : nil;
 }
 
 - (IBAction) onButtonTouched:(id)sender

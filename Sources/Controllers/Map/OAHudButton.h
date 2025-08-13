@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class MapButtonState, OASButtonPositionSize;
+
 @interface OAHudButton : UIButton
 
 @property (nonatomic) UIColor *unpressedColorDay;
@@ -23,8 +25,13 @@
 @property (nonatomic) CGFloat borderWidthDay;
 @property (nonatomic) CGFloat borderWidthNight;
 
-@property (nonatomic) id buttonState;
+@property (nonatomic, strong, nullable) MapButtonState *buttonState;
+@property (nonatomic, assign) BOOL useCustomPosition;
 
 - (void) updateColorsForPressedState:(BOOL)isPressed;
+- (void) updatePositions;
+- (void) setUseCustomPosition:(BOOL)useCustomPosition;
+- (void) savePosition;
+- (nullable OASButtonPositionSize *) getDefaultPositionSize;
 
 @end

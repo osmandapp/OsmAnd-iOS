@@ -34,6 +34,10 @@ final class Map3DButtonState: MapButtonState {
     override func getIcon() -> UIImage? {
         UIImage.templateImageNamed(getVisibility().iconName)
     }
+    
+    override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
+        setupButtonPosition(position, posH: ButtonPositionSize.Companion().POS_RIGHT, posV: ButtonPositionSize.Companion().POS_BOTTOM, xMove: true, yMove: true)
+    }
 
     func getVisibility() -> Map3DModeVisibility {
         Map3DModeVisibility(rawValue: visibilityPref.get())!

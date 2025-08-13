@@ -39,6 +39,14 @@ final class QuickActionButtonState: MapButtonState {
         let name = namePref.get() ?? defaultName
         return name.isEmpty ? defaultName : name
     }
+    
+    override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
+        let hash: Int32 = MapButtonState.javaCompatibleStringHash(of: id)
+        let mod: Int = (hash == Int32.min) ? 0 : abs(Int(hash % 3))
+        let xMove: Bool = (mod == 0 || mod == 2)
+        let yMove: Bool = (mod == 1 || mod == 2)
+        return setupButtonPosition(position, posH: ButtonPositionSize.Companion().POS_RIGHT, posV: ButtonPositionSize.Companion().POS_BOTTOM, xMove: xMove, yMove: yMove)
+    }
 
     func setEnabled(_ enabled: Bool) {
         statePref.set(enabled)
@@ -114,12 +122,14 @@ final class QuickActionButtonState: MapButtonState {
         return super.getIcon()
     }
 
-    func resetForMode(_ appMode: OAApplicationMode) {
+    override func resetForMode(_ appMode: OAApplicationMode) {
+        super.resetForMode(appMode)
         statePref.resetMode(toDefault: appMode)
         fabMarginPref.resetMode(toDefault: appMode)
     }
 
-    func copyForMode(fromMode: OAApplicationMode, toMode: OAApplicationMode) {
+    override func copyForMode(fromMode: OAApplicationMode, toMode: OAApplicationMode) {
+        super.copyForMode(fromMode: fromMode, toMode: toMode)
         statePref.set(statePref.get(fromMode), mode: toMode)
         fabMarginPref.copyForMode(fromMode: fromMode, toMode: toMode)
     }

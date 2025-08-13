@@ -31,6 +31,10 @@ final class CompassButtonState: MapButtonState {
     override func getIcon() -> UIImage? {
         UIImage.templateImageNamed(getVisibility().iconName)
     }
+    
+    override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
+        setupButtonPosition(position, posH: ButtonPositionSize.Companion().POS_LEFT, posV: ButtonPositionSize.Companion().POS_TOP, xMove: false, yMove: true)
+    }
 
     func getVisibility() -> CompassVisibility {
         CompassVisibility(rawValue: visibilityPref.get())!

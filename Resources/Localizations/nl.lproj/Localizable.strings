@@ -2844,3 +2844,4 @@
 "quick_action_track_waypoint" = "Track routepunt";
 "poi_categories" = "POI-categorieën";
 "offline_wikivoyage" = "Offline Wikivoyage";
+"disable_vertex_hillshade_3d" = "Deactiveer knooppunt heuvelschaduw in 3D";

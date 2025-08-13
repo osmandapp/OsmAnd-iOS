@@ -115,7 +115,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             cell.switchView.isOn = selected
             cell.leftIconVisibility(hasIcon)
             cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
-            cell.leftIconView.tintColor = selected ? selectedAppMode.getProfileColor() : UIColor.iconColorDisabled
+            cell.leftIconView.tintColor = selected || item.string(forKey: "enable_icon_tint_color") != nil ? selectedAppMode.getProfileColor() : UIColor.iconColorDisabled
             cell.switchView.tag = indexPath.section << 10 | indexPath.row
             cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
             outCell = cell

@@ -270,6 +270,24 @@ static int stackViewLeadingToRefViewPadding = 16;
     _waypointTextShadow.frame = _waypointText.frame;
 }
 
+- (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode widgetConfigurationParams:(NSDictionary<NSString *,id> *)widgetConfigurationParams isCreate:(BOOL)isCreate
+{
+    OATableDataModel *data = [OATableDataModel model];
+    OATableSectionData *section = [data createNewSection];
+    section.headerText = OALocalizedString(@"shared_string_settings");
+    section.footerText = OALocalizedString(@"next_turn_information_desc");
+
+    OATableRowData *settingRow = [section createNewRow];
+    settingRow.cellType = [OASwitchTableViewCell getCellIdentifier];
+    settingRow.key = @"value_pref";
+    settingRow.title = OALocalizedString(@"next_turn_information");
+    settingRow.iconName = @"ic_custom_next_turn";
+    [settingRow setObj:@"ic_custom_next_turn" forKey:@"hide_icon"];
+    [settingRow setObj:@(YES) forKey:@"enable_icon_tint_color"];
+
+    return data;
+}
+
 - (void) applyCorrectPositionToView:(UIView *)view prevX:(CGFloat)prevX
 {
     CGFloat h = self.bounds.size.height;

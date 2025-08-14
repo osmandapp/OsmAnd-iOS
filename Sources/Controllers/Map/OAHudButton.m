@@ -85,31 +85,31 @@
 
 - (void) setButtonState:(MapButtonState * _Nullable)buttonState
 {
-    self.buttonState = buttonState;
+    _buttonState = buttonState;
     [self updatePositions];
 }
 
 - (void) updatePositions
 {
-    [self.buttonState updatePositions];
+    [_buttonState updatePositions];
 }
 
 - (void) setUseCustomPosition:(BOOL)useCustomPosition
 {
     _useCustomPosition = useCustomPosition;
-    if (self.buttonState && _useCustomPosition)
+    if (_buttonState && _useCustomPosition)
         [self updatePositions];
 }
 
 - (void) savePosition
 {
-    if (self.buttonState && _useCustomPosition)
+    if (_buttonState && _useCustomPosition)
         [self.buttonState savePosition];
 }
 
 - (nullable OASButtonPositionSize *) getDefaultPositionSize
 {
-    return self.buttonState ? [self.buttonState getDefaultPositionSize] : nil;
+    return _buttonState ? [_buttonState getDefaultPositionSize] : nil;
 }
 
 - (IBAction) onButtonTouched:(id)sender

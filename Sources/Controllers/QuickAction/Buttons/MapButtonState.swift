@@ -11,13 +11,14 @@ import Foundation
 @objcMembers
 open class MapButtonState: NSObject {
     private static let originalValue: Int64 = -1
+    private static let defaultSizeDp: Int32 = 50
     
     private let settings: OAAppSettings = OAAppSettings.sharedManager()
     private let portraitPositionPref: OACommonLong
     private let landscapePositionPref: OACommonLong
     private let positionSize: ButtonPositionSize
     private let defaultPositionSize: ButtonPositionSize
-    private var portrait = !OAUtilities.isLandscape()
+    private var portrait = OAUtilities.isPortrait()
     
     let id: String
 
@@ -39,7 +40,7 @@ open class MapButtonState: NSObject {
             position.fromLongValue(v: Int64(value))
         }
         
-        var size = 50
+        var size = Self.defaultSizeDp
         size = (size / 8) + 1
         position.setSize(width8dp: Int32(size), height8dp: Int32(size))
     }

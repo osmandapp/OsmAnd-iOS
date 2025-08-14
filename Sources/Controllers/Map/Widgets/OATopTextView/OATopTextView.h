@@ -12,6 +12,7 @@ static const int MAX_SHIELDS_QUANTITY = 3;
 
 @interface OATopTextView : OABaseWidgetView
 
+- (instancetype)initWithCustomId:(nullable NSString *)customId;
 - (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius nightMode:(BOOL)nightMode;
 
 @end

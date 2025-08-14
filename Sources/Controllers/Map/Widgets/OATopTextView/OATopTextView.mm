@@ -101,12 +101,14 @@
 
     UIButton *_shadowButton;
     UIButton *_shadowWaypointButton;
+    
+    NSString *_customId;
 }
 
 static int stackViewLeadingDefaultValue = 2;
 static int stackViewLeadingToRefViewPadding = 16;
 
-- (instancetype) init
+- (instancetype)initWithCustomId:(NSString *)customId
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
@@ -121,7 +123,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     
     if (self)
         self.frame = CGRectMake(0, 0, DeviceScreenWidth, 32);
-    
+    _customId = customId;
     [self commonInit];
     
     return self;
@@ -189,6 +191,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onTopTextViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self configureShadowButtonMenu];
     [self insertSubview:_shadowButton belowSubview:_waypointInfoBar];
 
     _shadowWaypointButton = [[UIButton alloc] initWithFrame:self.frame];
@@ -299,6 +302,12 @@ static int stackViewLeadingToRefViewPadding = 16;
     return YES;
 }
 
+- (OAMapWidgetInfo *)getWidgetInfo
+{
+    NSString *widgetId = _customId ?: self.widgetType.id;
+    return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:widgetId];
+}
+
 - (BOOL) updateVisibility:(BOOL)visible
 {
     BOOL updated = [self updateVisibility:self visible:visible];
@@ -348,7 +357,12 @@ static int stackViewLeadingToRefViewPadding = 16;
     }
     _addressTextShadow.attributedText = stringShadow;
     _addressText.attributedText = string;
-
+    
+    if (!_shadowButton.menu)
+    {
+        [self configureShadowButtonMenu];
+    }
+    
     [self refreshLayout];
 }
 
@@ -516,6 +530,11 @@ static int stackViewLeadingToRefViewPadding = 16;
     [self setNeedsLayout];
     if (self.delegate)
         [self.delegate widgetChanged:self];
+}
+
+- (void)configureShadowButtonMenu
+{
+    _shadowButton.menu = [self configureContextWidgetMenu];
 }
 
 - (BOOL) updateInfo

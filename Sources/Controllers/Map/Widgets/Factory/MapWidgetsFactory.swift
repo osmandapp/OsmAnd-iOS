@@ -37,8 +37,8 @@ final class MapWidgetsFactory: NSObject {
             widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .streetName:
-            let widget = OATopTextView()
-            widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
+            let widget = OATopTextView(customId: customId)
+            widget?.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .markersTopBar:
             let widget = OADestinationBarWidget()

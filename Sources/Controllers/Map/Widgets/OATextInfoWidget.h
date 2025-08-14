@@ -93,7 +93,6 @@ extern NSString * const kSizeStylePref;
 - (void)configureShadowButtonMenu;
 - (nullable OAApplicationMode *)getAppMode;
 - (nullable OAWidgetsPanel *)getWidgetPanel;
-- (nullable OAMapWidgetInfo *)getWidgetInfo;
 
 @end
 

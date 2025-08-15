@@ -588,6 +588,18 @@
         {
             NSError *copyError;
             res = [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:destFilePath error:&copyError];
+            
+            if (res)
+            {
+                // Exclude map resources (.obf) from iCloud backup
+                if ([[destFilePath.pathExtension lowercaseString] isEqualToString:@"obf"])
+                    [destFilePath applyExcludedFromBackup];
+            }
+            else
+            {
+                NSLog(@"Failed to copy file from %@ to %@, error: %@", filePath, destFilePath, copyError);
+            }
+            
             if (error && copyError)
                 *error = copyError;
         }

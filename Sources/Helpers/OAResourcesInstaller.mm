@@ -328,12 +328,10 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
 
                     [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:task userInfo:nil];
 
-                    // Set NSURLIsExcludedFromBackupKey for installed resource
                     if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(_app.resourcesManager->getResource(resourceId)))
                     {
-                        NSURL *url = [NSURL fileURLWithPath:resource->localPath.toNSString()];
-                        BOOL res = [url setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
-                        OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), resource->localPath.toNSString());
+                        // Set NSURLIsExcludedFromBackupKey for installed resource
+                        [self applyExcludedFromBackupForResource:resource];
 
                         NSString *ext = [[resource->localPath.toNSString() pathExtension] lowercaseString];
                         NSString *type = [[[nsResourceId stringByDeletingPathExtension] pathExtension] lowercaseString];
@@ -414,6 +412,12 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
             }
             else
             {
+                const auto& resource = _app.resourcesManager->getResource(resourceId);
+                const auto localResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource);
+
+                // Set NSURLIsExcludedFromBackupKey for updated resource
+                [self applyExcludedFromBackupForResource:localResource];
+                
                 if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".tifsqlite"])
                 {
                     OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion
@@ -433,7 +437,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                     }
                 });
             }
-
         }
 
         // Remove downloaded file anyways
@@ -457,6 +460,24 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
             [nextTask resume];
         }
     }
+}
+
+- (void)applyExcludedFromBackupForResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource>&)resource
+{
+    if (!resource)
+    {
+        NSLog(@"Skipped setting NSURLIsExcludedFromBackupKey: resource is nil");
+        return;
+    }
+
+    NSString *localPath = resource->localPath.toNSString();
+    if (localPath.length == 0)
+    {
+        NSLog(@"Skipped setting NSURLIsExcludedFromBackupKey: empty localPath for resource %@", resource->id.toNSString());
+        return;
+    }
+    
+    [localPath applyExcludedFromBackup];
 }
 
 - (void) initSettingsFirstMap:(OAWorldRegion *)reg

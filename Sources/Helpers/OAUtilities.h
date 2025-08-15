@@ -96,6 +96,7 @@ static inline void executeOnMainThread(dispatch_block_t block)
 - (NSArray<NSString *> *) regexSplitInStringByPattern:(NSString *)pattern;
 - (BOOL)isMatchedByRegex:(NSString *)regexPattern;
 - (NSArray<NSString *> *)componentsSeparatedByRegex:(NSString *)regexPattern;
+- (void)applyExcludedFromBackup;
 
 @end
 

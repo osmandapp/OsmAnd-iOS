@@ -106,8 +106,8 @@
     }
 
     [OAUtilities denyAccessToFile:filePath removeFromInbox:YES];
-
-    [self applyExcludedFromBackup:path];
+    
+    [path applyExcludedFromBackup];
     
     if (error)
     {
@@ -136,7 +136,8 @@
     [dictionary removeObjectForKey:fileName];
     [dictionary setValue:newPath forKey:newName];
     _files = [NSDictionary dictionaryWithDictionary:dictionary];
-    [self applyExcludedFromBackup:newPath];
+    
+    [newPath applyExcludedFromBackup];
 
     [OAMapCreatorDbHelper.sharedInstance removeSqliteFile:path];
     [OAMapCreatorDbHelper.sharedInstance addSqliteFile:newPath];
@@ -177,13 +178,6 @@
     }
     
     return res;
-}
-
-- (void) applyExcludedFromBackup:(NSString *)localPath
-{
-    NSURL *url = [NSURL fileURLWithPath:localPath];
-    BOOL res = [url setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
-    OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), localPath);
 }
 
 @end

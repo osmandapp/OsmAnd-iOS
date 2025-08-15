@@ -1300,7 +1300,7 @@
 "routing_attr_allow_motorway_description" = "允許進高速公路。";
 "rendering_attr_contourColorScheme_name" = "等高線的顏色配置";
 "rendering_attr_piste_type_sleigh_name" = "雪橇道";
-"online_webpage_warning" = "此頁面僅在線上狀態提供。是否在網頁瀏覽器中開啟？";
+"online_webpage_warning" = "此頁面僅在在線狀態提供。是否在網頁瀏覽器中開啟？";
 "app_mode_pedestrian" = "走路";
 "app_mode_bicycle" = "腳踏車";
 "app_mode_car" = "開車";
@@ -2980,7 +2980,7 @@
 "help_article_map_interact_with_map_name" = "與地圖互動";
 "help_article_map_map_context_menu_name" = "快速動作選單";
 "help_article_map_point_layers_on_map_name" = "地圖上的點位";
-"help_article_map_raster_maps_name" = "點陣地圖 (線上/離線)";
+"help_article_map_raster_maps_name" = "點陣地圖 (在線/離線)";
 "help_article_map_legend_osmand_name" = "OsmAnd 地圖圖例";
 "help_article_map_legend_ski_map_name" = "滑雪地圖圖例";
 "help_article_map_track_context_menu_name" = "軌跡選單內容";

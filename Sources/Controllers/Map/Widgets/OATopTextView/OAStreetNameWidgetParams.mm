@@ -23,6 +23,8 @@
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
+static const double kMaxMarkerDistance = 50;
+
 @implementation OAStreetNameWidgetParams
 {
     OARoutingHelper *_routingHelper;
@@ -112,7 +114,7 @@
         if (_streetName.text.length > 0 && road)
         {
             double dist = [OACurrentPositionHelper getOrthogonalDistance:road loc:lastKnownLocation];
-            if (dist < 50)
+            if (dist < kMaxMarkerDistance)
                 _streetName.showMarker = YES;
             else
                 _streetName.text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_near"), _streetName.text];

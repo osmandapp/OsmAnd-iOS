@@ -6,12 +6,13 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-@objc(OATopTextViewState)
+@objc
 final class TopTextViewState: OAWidgetState {
     private static let showNextTurnPrefId = "show_next_turn_info"
     
-    private let widgetType: WidgetType = .streetName
     @objc let showNextTurnPref: OACommonBoolean
+    
+    private let widgetType: WidgetType = .streetName
     
     @objc
     init(customId: String?, widgetParams: ([String: Any])?) {
@@ -30,13 +31,13 @@ final class TopTextViewState: OAWidgetState {
         showNextTurnPref.set(!showNextTurnPref.get())
     }
     
+    override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
+        Self.registerShowNextTurnPreference(customId: customId).set(showNextTurnPref.get(appMode), mode: appMode)
+    }
+    
     @objc
     func isShowNextTurnEnabled(with appMode: OAApplicationMode) -> Bool {
         showNextTurnPref.get(appMode)
-    }
-    
-    override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
-        Self.registerShowNextTurnPreference(customId: customId).set(showNextTurnPref.get(appMode), mode: appMode)
     }
     
     private static func registerShowNextTurnPreference(customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonBoolean {

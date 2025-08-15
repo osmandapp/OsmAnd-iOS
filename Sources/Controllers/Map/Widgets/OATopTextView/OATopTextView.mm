@@ -77,7 +77,7 @@
     OAMapViewTrackingUtilities *_trackingUtilities;
     OACurrentPositionHelper *_currentPositionHelper;
     OAWaypointHelper *_waypointHelper;
-    OATopTextViewState *_widgetState;
+    TopTextViewState *_widgetState;
     OALocationPointWrapper *_lastPoint;
     OATurnDrawable *_turnDrawable;
     UIImageView *_imageView;
@@ -104,14 +104,13 @@
     UIButton *_shadowWaypointButton;
     
     NSString *_customId;
-    NSDictionary *_widgetParams;
     BOOL _prevShowNextTurn;
 }
 
 static int stackViewLeadingDefaultValue = 2;
 static int stackViewLeadingToRefViewPadding = 16;
 
-- (instancetype)initWithCustomId:(NSString *)customId widgetParams:(nullable NSDictionary *)widgetParams
+- (instancetype)initWithCustomId:(NSString *)customId widgetParams:(NSDictionary *)widgetParams
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
@@ -126,35 +125,13 @@ static int stackViewLeadingToRefViewPadding = 16;
     
     if (self)
         self.frame = CGRectMake(0, 0, DeviceScreenWidth, 32);
-    _customId = customId;
-    _widgetParams = widgetParams;
-    [self commonInit];
     
+    [self commonInitWithCustomId:customId widgetParams:widgetParams];
+   
     return self;
 }
 
-- (instancetype) initWithFrame:(CGRect)frame
-{
-    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    
-    for (UIView *v in bundle)
-    {
-        if ([v isKindOfClass:[OATopTextView class]])
-        {
-            self = (OATopTextView *)v;
-            break;
-        }
-    }
-    
-    if (self)
-        self.frame = frame;
-    
-    [self commonInit];
-    
-    return self;
-}
-
-- (void) commonInit
+- (void) commonInitWithCustomId:(NSString *)customId widgetParams:(NSDictionary *)widgetParams
 {
     self.widgetType = OAWidgetType.streetName;
     _app = [OsmAndApp instance];
@@ -165,9 +142,9 @@ static int stackViewLeadingToRefViewPadding = 16;
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _currentPositionHelper = [OACurrentPositionHelper instance];
     _calc1 = [[OANextDirectionInfo alloc] init];
-    _widgetState = [[OATopTextViewState alloc] initWithCustomId:_customId widgetParams:_widgetParams];
-    _prevShowNextTurn = [self isShowNextTurnEnabled:[_settings.applicationMode get]];
-    
+    _customId = customId;
+    _widgetState = [[TopTextViewState alloc] initWithCustomId:_customId widgetParams:widgetParams];
+    _prevShowNextTurn = [self isShowNextTurnEnabled];
     _textRasterizer = OsmAnd::TextRasterizer::getDefault();
     
     BOOL isNight = OADayNightHelper.instance.isNightMode;
@@ -293,7 +270,6 @@ static int stackViewLeadingToRefViewPadding = 16;
     settingRow.iconName = @"ic_custom_next_turn";
     [settingRow setObj:_widgetState.showNextTurnPref forKey:@"pref"];
     [settingRow setObj:@"ic_custom_next_turn" forKey:@"hide_icon"];
-    [settingRow setObj:@(YES) forKey:@"enable_icon_tint_color"];
 
     return data;
 }
@@ -553,8 +529,7 @@ static int stackViewLeadingToRefViewPadding = 16;
 {
     OACurrentStreetName *streetName = nil;
     BOOL showClosestWaypointFirstInAddress = YES;
-    OAApplicationMode *appMode = [_settings.applicationMode get];
-    BOOL showNextTurn = [self isShowNextTurnEnabled:appMode];
+    BOOL showNextTurn = [self isShowNextTurnEnabled];
     OAStreetNameWidgetParams *params = [[OAStreetNameWidgetParams alloc] initWithTurnDrawable:_turnDrawable calc1:_calc1 showNextTurn:showNextTurn];
     streetName = params.streetName;
     showClosestWaypointFirstInAddress = params.showClosestWaypointFirstInAddress;
@@ -594,7 +569,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     }
     else
     {
-        BOOL showNextTurn = [self isShowNextTurnEnabled:[_settings.applicationMode get]];
+        BOOL showNextTurn = [self isShowNextTurnEnabled];
         if ([streetName isEqual:_prevStreetName] && _prevShowNextTurn == showNextTurn)
             return YES;
 
@@ -816,9 +791,9 @@ static int stackViewLeadingToRefViewPadding = 16;
     return _widgetState;
 }
 
-- (BOOL)isShowNextTurnEnabled:(OAApplicationMode *)appMode
+- (BOOL)isShowNextTurnEnabled
 {
-    return [_widgetState isShowNextTurnEnabledWith:appMode];
+    return [_widgetState isShowNextTurnEnabledWith:[_settings.applicationMode get]];
 }
 
 @end

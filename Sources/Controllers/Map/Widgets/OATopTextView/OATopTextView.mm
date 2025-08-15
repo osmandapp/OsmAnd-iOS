@@ -541,7 +541,7 @@ static int stackViewLeadingToRefViewPadding = 16;
 
 - (void)configureShadowButtonMenu
 {
-    _shadowButton.menu = [self configureContextWidgetMenu];
+    _shadowButton.menu = [self configureContextWidgetMenuWithIsAddGroupSkipped:YES];
 }
 
 - (BOOL) updateInfo

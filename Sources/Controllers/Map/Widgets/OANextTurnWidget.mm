@@ -126,7 +126,7 @@
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
             [self setTopTurnDrawable:nil];
             [self updateHeightConstraint:_widgetHeightConstraint];
-            _showButton.menu = [self configureContextWidgetMenu];
+            _showButton.menu = [self configureContextWidgetMenuWithIsAddGroupSkipped:NO];
         }
         else
         {

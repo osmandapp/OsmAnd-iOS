@@ -623,6 +623,10 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     // Android has same code in contex menu UI init()
     
+    // TODO: make this code async in part of next task https://github.com/osmandapp/OsmAnd-iOS/issues/4594
+    // Step 1) ContextMenuLayer -> showContextMenu -> MapContextMenu.init() -> setSelectedObject(renderedObject)
+    // Step 2) RenderedObjectMenuBuilder -> build() -> searchAmenity() -> searchBaseDetailedObjectAsync() -> MapContextMenu.update() -> setSelectedObject(poi)
+    
     NSMutableArray<SelectedMapObject *> *selectedObjects = [result.allObjects mutableCopy];
     NSArray<NSString *> *publicTransportTypes = [self getPublicTransportTypes];
     if (publicTransportTypes)
@@ -633,9 +637,19 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         {
             if ([selectedObject.object isKindOfClass:[OARenderedObject class]])
             {
-                OAPOI *poi = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:(OARenderedObject *)selectedObject.object];
-                if (poi)
-                    selectedObject.object = poi;
+                OARenderedObject *renderedObject = selectedObject.object;
+                OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:renderedObject];
+                BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:request];
+                if (detailsObject)
+                {
+                    selectedObject.object = detailsObject.syntheticAmenity;
+                }
+                else
+                {
+                    OAPOI *poi = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:(OARenderedObject *)selectedObject.object];
+                    if (poi)
+                        selectedObject.object = poi;
+                }
             }
             if ([selectedObject.object isKindOfClass:[OAPOI class]])
             {

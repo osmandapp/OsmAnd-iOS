@@ -541,7 +541,16 @@ static int stackViewLeadingToRefViewPadding = 16;
 
 - (void)configureShadowButtonMenu
 {
-    _shadowButton.menu = [self configureContextWidgetMenuWithIsAddGroupSkipped:YES];
+    _shadowButton.menu = [self configureContextWidgetMenu];
+}
+
+- (UIMenu *)configureContextMenuWithAddGroup:(UIMenu *)addGroup settingsGroup:(UIMenu *)settingsGroup deleteGroup:(UIMenu *)deleteGroup
+{
+    return [UIMenu menuWithTitle:@""
+                           image:nil
+                      identifier:nil
+                         options:UIMenuOptionsDisplayInline
+                        children:@[settingsGroup, deleteGroup]];
 }
 
 - (BOOL) updateInfo

@@ -14,7 +14,7 @@ extension OABaseWidgetView {
     }
     
     @objc
-    func configureContextWidgetMenu(isAddGroupSkipped: Bool = false) -> UIMenu? {
+    func configureContextWidgetMenu() -> UIMenu? {
         enum ContextWidgetMenu {
             case addItemRight, addItemLeft, addItemAbove, addItemBelow, settings, delete
             
@@ -41,7 +41,7 @@ extension OABaseWidgetView {
             }
         }
         
-        func configureMenu(isAddGroupSkipped: Bool) -> UIMenu? {
+        func configureMenu() -> UIMenu? {
             guard let widgetInfo = getWidgetInfo() else {
                 return nil
             }
@@ -56,7 +56,7 @@ extension OABaseWidgetView {
             let deleteGroup = UIMenu(options: .displayInline, children: [
                 createAction(for: .delete, selectedWidget: widgetInfo.key)
             ])
-            return isAddGroupSkipped ? UIMenu(title: "", children: [settingsGroup, deleteGroup]) : configureContextMenu(addGroup: addGroup, settingsGroup: settingsGroup, deleteGroup: deleteGroup)
+            return configureContextMenu(addGroup: addGroup, settingsGroup: settingsGroup, deleteGroup: deleteGroup)
         }
         
         func createAction(for menuItem: ContextWidgetMenu, selectedWidget: String) -> UIAction {
@@ -74,7 +74,7 @@ extension OABaseWidgetView {
                 }
             }
         }
-        return configureMenu(isAddGroupSkipped: isAddGroupSkipped)
+        return configureMenu()
     }
     
     private func showAddWidgetController(addToNext: Bool, selectedWidget: String) {

@@ -779,7 +779,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 
 - (void)configureShadowButtonMenu
 {
-    _shadowButton.menu = [self configureContextWidgetMenuWithIsAddGroupSkipped:NO];
+    _shadowButton.menu = [self configureContextWidgetMenu];
 }
 
 - (void) addAccessibilityLabelsWithValue:(NSString *)value

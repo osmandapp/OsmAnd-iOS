@@ -197,6 +197,11 @@ static BOOL _isDeviatedFromRoute = false;
     _isRoutePlanningMode = isRoutePlanningMode;
 }
 
+- (BOOL)isOnRoute
+{
+    return [self isRouteCalculated] && ![self.class isDeviatedFromRoute];
+}
+
 - (BOOL) isRouteCalculated
 {
     return _route.isCalculated;
@@ -813,10 +818,10 @@ static BOOL _isDeviatedFromRoute = false;
     return [self setCurrentLocation:currentLocation returnUpdatedLocation:returnUpdatedLocation previousRoute:_route targetPointsChanged:false];
 }
 
-- (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)next
+- (OACurrentStreetName *)getCurrentName:(OANextDirectionInfo *)next showNextTurn:(BOOL)showNextTurn
 {
     @synchronized (self) {
-        return [[OACurrentStreetName alloc] initWithStreetName:self info:next];
+        return [[OACurrentStreetName alloc] initWithStreetName:self info:next showNextTurn:showNextTurn];
     }
 }
 

@@ -3366,6 +3366,9 @@
 "fastspring_subscription_desc" = "You can manage or cancel your subscription through FastSpring account management portal.";
 "fastspring_one_time_payment_desc" = "You can manage your purchases through FastSpring account management portal.";
 
+"next_turn_information" = "Next turn information";
+"next_turn_information_desc" = "Shows the upcoming turn direction and street name.";
+
 "shared_string_now" = "Now";
 
 "subscription_banner_free_maps_title" = "You can download %i maps for free.";

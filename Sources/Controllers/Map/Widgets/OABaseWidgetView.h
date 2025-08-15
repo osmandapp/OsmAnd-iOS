@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OABaseWidgetView, OAWidgetType, OAWidgetState, OAWidgetsPanel, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel, OATextState, OATableRowData, WidgetConfigurationViewController;
+@class OABaseWidgetView, OAWidgetType, OAWidgetState, OAWidgetsPanel, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel, OATextState, OATableRowData, WidgetConfigurationViewController, OAMapWidgetInfo;
 
 @protocol OAWidgetListener <NSObject>
 
@@ -52,6 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable OACommonPreference *) getWidgetSettingsPrefToReset:(OAApplicationMode *)appMode;
 - (void) copySettings:(OAApplicationMode *)appMode customId:(nullable NSString *)customId;
 - (nullable OAWidgetState *) getWidgetState;
+- (nullable OAMapWidgetInfo *)getWidgetInfo;
 - (BOOL)isExternal;
 
 - (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode *)appMode

@@ -63,6 +63,7 @@ struct RouteSegmentResult;
 - (void) setFollowingMode:(BOOL)follow;
 - (BOOL) isRoutePlanningMode;
 - (void) setRoutePlanningMode:(BOOL)isRoutePlanningMode;
+- (BOOL)isOnRoute;
 - (BOOL) isRouteCalculated;
 - (BOOL) isRouteBeingCalculated;
 - (OAVoiceRouter *) getVoiceRouter;
@@ -71,7 +72,7 @@ struct RouteSegmentResult;
 - (OANextDirectionInfo *) getNextRouteDirectionInfo:(OANextDirectionInfo *)info toSpeak:(BOOL)toSpeak;
 - (OANextDirectionInfo *) getNextRouteDirectionInfoAfter:(OANextDirectionInfo *)previous to:(OANextDirectionInfo *)to toSpeak:(BOOL)toSpeak;
 - (float) getCurrentMaxSpeed;
-- (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)next;
+- (OACurrentStreetName *)getCurrentName:(OANextDirectionInfo *)next showNextTurn:(BOOL)showNextTurn;
 - (OABBox) getBBox;
 
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;

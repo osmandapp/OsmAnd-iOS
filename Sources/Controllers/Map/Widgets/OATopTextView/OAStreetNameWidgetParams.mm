@@ -31,9 +31,10 @@
     OATurnDrawable *_turnDrawable;
     OANextDirectionInfo *_calc1;
     OACurrentPositionHelper *_currentPositionHelper;
+    BOOL _showNextTurn;
 }
 
-- (instancetype)initWithTurnDrawable:(OATurnDrawable *)turnDrawable calc1:(OANextDirectionInfo *)calc1
+- (instancetype)initWithTurnDrawable:(OATurnDrawable *)turnDrawable calc1:(OANextDirectionInfo *)calc1 showNextTurn:(BOOL)showNextTurn
 {
     self = [super init];
     if (self)
@@ -45,6 +46,7 @@
         _turnDrawable = turnDrawable;
         _showClosestWaypointFirstInAddress = YES;
         _calc1 = calc1;
+        _showNextTurn = showNextTurn;
         [self computeParams];
     }
     return self;
@@ -52,15 +54,13 @@
 
 - (void)computeParams
 {
-    BOOL isMapLinkedToLocation = [[OAMapViewTrackingUtilities instance] isMapLinkedToLocation];
     _showClosestWaypointFirstInAddress = YES;
     
-    if ([_routingHelper isRouteCalculated] && ![OARoutingHelper isDeviatedFromRoute])
+    if ([_routingHelper isOnRoute])
     {
         if ([_routingHelper isFollowingMode])
         {
-            OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
-            _streetName = [_routingHelper getCurrentName:nextDirInfo];
+            [self setupCurrentStreetName];
             _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
         }
         else
@@ -69,42 +69,53 @@
             if (di >= 0 && [OARouteInfoView isVisible] && di < [_routingHelper getRouteDirections].count)
             {
                 _showClosestWaypointFirstInAddress = NO;
-                _streetName = [_routingHelper getCurrentName:[_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES]];
+                [self setupCurrentStreetName];
                 _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
             }
         }
     }
-    else if (isMapLinkedToLocation)
+    else if ([[OAMapViewTrackingUtilities instance] isMapLinkedToLocation])
     {
-        _streetName = [[OACurrentStreetName alloc] init];
-        CLLocation *lastKnownLocation = _locationProvider.lastKnownLocation;
-        std::shared_ptr<RouteDataObject> road;
-        if (lastKnownLocation)
+        [self setupLastKnownStreetName];
+    }
+}
+
+- (void)setupCurrentStreetName
+{
+    OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
+    _streetName = [_routingHelper getCurrentName:nextDirInfo showNextTurn:_showNextTurn];
+}
+
+- (void)setupLastKnownStreetName
+{
+    _streetName = [[OACurrentStreetName alloc] init];
+    CLLocation *lastKnownLocation = _locationProvider.lastKnownLocation;
+    std::shared_ptr<RouteDataObject> road;
+    if (lastKnownLocation)
+    {
+        road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
+        if (road)
         {
-            road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
-            if (road)
-            {
-                string lang = _settings.settingPrefMapLanguage.get ? _settings.settingPrefMapLanguage.get.UTF8String : "";
-                bool transliterate = _settings.settingMapLanguageTranslit.get;
-                
-                string rStreetName = road->getName(lang, transliterate);
-                string rRefName = road->getRef(lang, transliterate, road->bearingVsRouteDirection(lastKnownLocation.course));
-                string rDestinationName = road->getDestinationName(lang, transliterate, true);
-                
-                NSString *strtName = [NSString stringWithUTF8String:rStreetName.c_str()];
-                NSString *refName = [NSString stringWithUTF8String:rRefName.c_str()];
-                NSString *destinationName = [NSString stringWithUTF8String:rDestinationName.c_str()];
-                
-                _streetName.text = [OARoutingHelperUtils formatStreetName:strtName ref:refName destination:destinationName towards:@"»"];
-            }
-            if (_streetName.text.length > 0 && road)
-            {
-                double dist = [OACurrentPositionHelper getOrthogonalDistance:road loc:lastKnownLocation];
-                if (dist < 50)
-                    _streetName.showMarker = YES;
-                else
-                    _streetName.text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_near"), _streetName.text];
-            }
+            string lang = _settings.settingPrefMapLanguage.get ? _settings.settingPrefMapLanguage.get.UTF8String : "";
+            bool transliterate = _settings.settingMapLanguageTranslit.get;
+            
+            string rStreetName = road->getName(lang, transliterate);
+            string rRefName = road->getRef(lang, transliterate, road->bearingVsRouteDirection(lastKnownLocation.course));
+            string rDestinationName = road->getDestinationName(lang, transliterate, true);
+            
+            NSString *strtName = [NSString stringWithUTF8String:rStreetName.c_str()];
+            NSString *refName = [NSString stringWithUTF8String:rRefName.c_str()];
+            NSString *destinationName = [NSString stringWithUTF8String:rDestinationName.c_str()];
+            
+            _streetName.text = [OARoutingHelperUtils formatStreetName:strtName ref:refName destination:destinationName towards:@"»"];
+        }
+        if (_streetName.text.length > 0 && road)
+        {
+            double dist = [OACurrentPositionHelper getOrthogonalDistance:road loc:lastKnownLocation];
+            if (dist < 50)
+                _streetName.showMarker = YES;
+            else
+                _streetName.text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_near"), _streetName.text];
         }
     }
 }

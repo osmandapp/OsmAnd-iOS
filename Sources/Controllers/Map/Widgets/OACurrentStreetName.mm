@@ -26,7 +26,7 @@
     self = [super init];
     if (self)
     {
-        [self setupStreetName:info];
+        [self setupNextTurnStreetName:info];
     }
     return self;
 }
@@ -37,22 +37,35 @@
     if (self)
     {
         _useDestination = useDestination;
-        [self setupStreetName:info];
+        [self setupNextTurnStreetName:info];
     }
     return self;
 }
 
-- (instancetype)initWithStreetName:(OARoutingHelper *)routingHelper info:(OANextDirectionInfo *)info
+- (instancetype)initWithStreetName:(OARoutingHelper *)routingHelper info:(OANextDirectionInfo *)info showNextTurn:(BOOL)showNextTurn
 {
     self = [super init];
     if (self)
     {
-        [self setupCurrentName:routingHelper info:info];
+        [self setupCurrentName:routingHelper info:info showNextTurn:showNextTurn];
     }
     return self;
 }
 
-- (BOOL)setupStreetName:(OANextDirectionInfo *)info
+- (BOOL)isTurnIsImminent:(OARoutingHelper *)routingHelper info:(OANextDirectionInfo *)info
+{
+    if (info.distanceTo > 0)
+    {
+        OAAnnounceTimeDistances *timeDistances = [[routingHelper getVoiceRouter] getAnnounceTimeDistances];
+        CLLocation *location = [routingHelper getLastFixedLocation];
+        float speed = [timeDistances getSpeed:location];
+        double increasedDistance = info.distanceTo * 1.3;
+        return [timeDistances isTurnStateActive:speed dist:increasedDistance turnType:kStatePrepareTurn];
+    }
+    return NO;
+}
+
+- (BOOL)setupNextTurnStreetName:(OANextDirectionInfo *)info
 {
     BOOL isSet = NO;
     if (info.directionInfo && !info.directionInfo.turnType->isSkipToSpeak()) {
@@ -90,59 +103,27 @@
     return isSet;
 }
 
-+ (NSString *) getRouteSegmentStreetName:(OARoutingHelper *)routingHelper rs:(const std::shared_ptr<RouteSegmentResult> &)rs includeRef:(BOOL)includeRef
+- (void)setupCurrentName:(OARoutingHelper *)routingHelper info:(OANextDirectionInfo *)info showNextTurn:(BOOL)showNextTurn
 {
-    OAAppSettings *settings = OAAppSettings.sharedManager;
-    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
-    if (!lang)
-        lang = [OAUtilities currentLang];
-    
-    auto locale = std::string([lang UTF8String]);
-    BOOL transliterate = settings.settingMapLanguageTranslit.get;
-    NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
-    NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
-    NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];
-    return [OARoutingHelperUtils formatStreetName:nm ref:includeRef ? rf : nil destination:dn towards:@"»"];
-}
-
-- (void) setupCurrentName:(OARoutingHelper *)routingHelper info:(OANextDirectionInfo *)info
-{
-    CLLocation *l = [routingHelper getLastFixedLocation];
-    OAAnnounceTimeDistances *adt = routingHelper.getVoiceRouter.getAnnounceTimeDistances;
     BOOL isSet = NO;
-    // 1. turn is imminent
-    if (info.distanceTo > 0 && [adt isTurnStateActive:[adt getSpeed:l] dist:info.distanceTo * 1.3 turnType:kStatePrepareTurn])
+    // 1. display next turn and turn is imminent
+    if (showNextTurn && [self isTurnIsImminent:routingHelper info:info])
     {
         _useDestination = YES;
-        isSet = [self setupStreetName:info];
+        isSet = [self setupNextTurnStreetName:info];
     }
     // 2. display current road street name
     if (!isSet)
     {
         _useDestination = NO;
-        const auto& rs = routingHelper.getCurrentSegmentResult;
-        if (rs)
-        {
-            _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:NO];
-            _showMarker = YES;
-            _shields = [RoadShield createShields:rs->object];
-            if (_text.length == 0 && _shields.count == 0)
-                _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:YES];
-            
-            isSet = _text.length > 0 || _shields.count > 0;
-        }
+        isSet = [self setupCurrentRoadStreetName:routingHelper];
     }
     // 3. display next road street name if this one empty
     if (!isSet)
-    {
-        const auto& rs = routingHelper.getNextStreetSegmentResult;
-        if (rs)
-        {
-            _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:NO];
-            _turnType = TurnType::ptrValueOf(TurnType::C, false);
-            _shields = [RoadShield createShields:rs->object];
-        }
-    }
+        [self setupNextRoadStreetName:routingHelper];
+    
+    if (!showNextTurn)
+        _turnType = nullptr;
     if (!_turnType)
         _showMarker = YES;
 }
@@ -177,6 +158,48 @@
     result = 31 * result + [self.shields hash];
     result = 31 * result + [self.exitRef hash];
     return result;
+}
+
+- (BOOL)setupCurrentRoadStreetName:(OARoutingHelper *)routingHelper
+{
+    const auto& rs = [routingHelper getCurrentSegmentResult];
+    if (rs)
+    {
+        _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:NO];
+        _showMarker = YES;
+        _shields = [RoadShield createShields:rs->object];
+        if (_text.length == 0 && _shields.count == 0)
+            _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:YES];
+        
+        return _text.length > 0 || _shields.count > 0;
+    }
+    return NO;
+}
+
+- (void)setupNextRoadStreetName:(OARoutingHelper *)routingHelper
+{
+    const auto& rs = [routingHelper getNextStreetSegmentResult];
+    if (rs)
+    {
+        _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:NO];
+        _turnType = TurnType::ptrValueOf(TurnType::C, false);
+        _shields = [RoadShield createShields:rs->object];
+    }
+}
+
++ (NSString *)getRouteSegmentStreetName:(OARoutingHelper *)routingHelper rs:(const std::shared_ptr<RouteSegmentResult> &)rs includeRef:(BOOL)includeRef
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    if (!lang)
+        lang = [OAUtilities currentLang];
+    
+    auto locale = std::string([lang UTF8String]);
+    BOOL transliterate = settings.settingMapLanguageTranslit.get;
+    NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
+    NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
+    NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];
+    return [OARoutingHelperUtils formatStreetName:nm ref:includeRef ? rf : nil destination:dn towards:@"»"];
 }
 
 @end

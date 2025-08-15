@@ -277,7 +277,7 @@ final class BaseDetailsObject: NSObject {
                     let osmId = ObfConstants.getOsmObjectId(renderedObject)
                     let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
                     
-                    if syntheticAmenity.obfId == -1 && objectId > 0 {
+                    if syntheticAmenity.obfId >= 0 && objectId > 0 {
                         syntheticAmenity.obfId = objectId
                     }
                 }
@@ -313,7 +313,7 @@ final class BaseDetailsObject: NSObject {
     
     private func processId(_ object: OAMapObject?) {
         guard let object else { return }
-        if syntheticAmenity.obfId == -1 && ObfConstants.isOsmUrlAvailable(object) {
+        if (syntheticAmenity.obfId >= 0) && ObfConstants.isOsmUrlAvailable(object) {
             syntheticAmenity.obfId = object.obfId
         }
     }

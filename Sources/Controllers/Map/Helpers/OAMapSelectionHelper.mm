@@ -642,6 +642,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:request];
                 if (detailsObject)
                 {
+//                    [detailsObject combineData];
                     selectedObject.object = detailsObject.syntheticAmenity;
                 }
                 else

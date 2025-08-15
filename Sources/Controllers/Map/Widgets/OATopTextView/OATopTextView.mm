@@ -546,11 +546,7 @@ static int stackViewLeadingToRefViewPadding = 16;
 
 - (UIMenu *)configureContextMenuWithAddGroup:(UIMenu *)addGroup settingsGroup:(UIMenu *)settingsGroup deleteGroup:(UIMenu *)deleteGroup
 {
-    return [UIMenu menuWithTitle:@""
-                           image:nil
-                      identifier:nil
-                         options:UIMenuOptionsDisplayInline
-                        children:@[settingsGroup, deleteGroup]];
+    return [UIMenu menuWithTitle:@"" children:@[settingsGroup, deleteGroup]];
 }
 
 - (BOOL) updateInfo

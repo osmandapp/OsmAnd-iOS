@@ -273,7 +273,7 @@
                 else if ([currentItem isKindOfClass:NSString.class])
                 {
                     NSString *file = (NSString *)currentItem;
-                    EOASettingsItemFileSubtype type = [OAFileSettingsItemFileSubtype getSubtypeByFileName:file];
+                    EOAFileSettingsItemFileSubtype type = [OAFileSettingsItemFileSubtype getSubtypeByFileName:file];
                     NSString *fileName = [[[file lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     if ([file hasSuffix:RENDERER_INDEX_EXT])
                     {
@@ -290,12 +290,12 @@
                         item[@"label"] = fileName;
                         item[@"icon"] = [UIImage imageNamed:@"ic_custom_trip"];
                     }
-                    else if (type == EOASettingsItemFileSubtypeWikiMap)
+                    else if (type == EOAFileSettingsItemFileSubtypeWikiMap)
                     {
                         item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
                         item[@"icon"] = [UIImage imageNamed:@"ic_custom_wikipedia"];
                     }
-                    else if (type == EOASettingsItemFileSubtypeSrtmMap)
+                    else if (type == EOAFileSettingsItemFileSubtypeSrtmMap)
                     {
                         item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
                         item[@"icon"] = [UIImage imageNamed:@"ic_custom_contour_lines"];
@@ -500,7 +500,7 @@
         else if ([object isKindOfClass:NSString.class])
         {
             NSString *file = (NSString *)object;
-            EOASettingsItemFileSubtype subType = [OAFileSettingsItemFileSubtype getSubtypeByFileName:file];
+            EOAFileSettingsItemFileSubtype subType = [OAFileSettingsItemFileSubtype getSubtypeByFileName:file];
             if ([file hasSuffix:RENDERER_INDEX_EXT])
                 [renderFilesList addObject:file];
             else if ([file hasSuffix:ROUTING_FILE_EXT])

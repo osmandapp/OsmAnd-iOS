@@ -341,7 +341,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 NSComparisonResult r = [[ColorsPaletteUtils getPaletteTypeName:item1] compare:[ColorsPaletteUtils getPaletteTypeName:item2]];
                 return r == NSOrderedSame ? [[ColorsPaletteUtils getPaletteName:item1] compare:[ColorsPaletteUtils getPaletteName:item2]] : r;
             }];
-            settingsItems[OAExportSettingsType.COLOR_DATA] = items;
+            settingsItems[OAExportSettingsType.COLOR_PALETTE] = items;
         }
     }
 
@@ -478,20 +478,53 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         resourcesItems[OAExportSettingsType.MAP_SOURCES] = tileSources;
     
     QSet<OsmAnd::ResourcesManager::ResourceType> types;
-    types << OsmAnd::ResourcesManager::ResourceType::MapRegion
-    << OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion
-    << OsmAnd::ResourcesManager::ResourceType::HillshadeRegion
-    << OsmAnd::ResourcesManager::ResourceType::SlopeRegion
-    << OsmAnd::ResourcesManager::ResourceType::WikiMapRegion
-    << OsmAnd::ResourcesManager::ResourceType::DepthMapRegion;
+    types << OsmAnd::ResourcesManager::ResourceType::MapRegion;
     NSArray<NSString *> *localIndexFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:types includeHidden:NO];
     if (localIndexFiles.count > 0)
     {
         NSArray<NSString *> *sortedFiles = [localIndexFiles sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
             return [[OAFileNameTranslationHelper getMapName:obj1.lastPathComponent] compare:[OAFileNameTranslationHelper getMapName:obj2.lastPathComponent]];
         }];
-        resourcesItems[OAExportSettingsType.OFFLINE_MAPS] = sortedFiles;
+        resourcesItems[OAExportSettingsType.STANDARD_MAPS] = sortedFiles;
     }
+    
+    QSet<OsmAnd::ResourcesManager::ResourceType> wikiTypes;
+    wikiTypes << OsmAnd::ResourcesManager::ResourceType::WikiMapRegion;
+    wikiTypes << OsmAnd::ResourcesManager::ResourceType::Travel;
+    NSArray<NSString *> *wikiFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:wikiTypes includeHidden:NO];
+    if (wikiFiles.count > 0)
+    {
+        NSArray<NSString *> *sortedFiles = [wikiFiles sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            return [[OAFileNameTranslationHelper getMapName:obj1.lastPathComponent] compare:[OAFileNameTranslationHelper getMapName:obj2.lastPathComponent]];
+        }];
+        resourcesItems[OAExportSettingsType.WIKI_AND_TRAVEL] = sortedFiles;
+    }
+
+    QSet<OsmAnd::ResourcesManager::ResourceType> nauticalTypes;
+    nauticalTypes << OsmAnd::ResourcesManager::ResourceType::DepthMapRegion;
+    NSArray<NSString *> *nauticalFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:nauticalTypes includeHidden:NO];
+    if (nauticalFiles.count > 0)
+    {
+        NSArray<NSString *> *sortedFiles = [nauticalFiles sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            return [[OAFileNameTranslationHelper getMapName:obj1.lastPathComponent] compare:[OAFileNameTranslationHelper getMapName:obj2.lastPathComponent]];
+        }];
+        resourcesItems[OAExportSettingsType.DEPTH_DATA] = sortedFiles;
+    }
+
+    QSet<OsmAnd::ResourcesManager::ResourceType> terrainTypes;
+    terrainTypes << OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion;
+    terrainTypes << OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
+    terrainTypes << OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
+    terrainTypes << OsmAnd::ResourcesManager::ResourceType::GeoTiffRegion;
+    NSArray<NSString *> *terrainFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:terrainTypes includeHidden:NO];
+    if (terrainFiles.count > 0)
+    {
+        NSArray<NSString *> *sortedFiles = [terrainFiles sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            return [[OAFileNameTranslationHelper getMapName:obj1.lastPathComponent] compare:[OAFileNameTranslationHelper getMapName:obj2.lastPathComponent]];
+        }];
+        resourcesItems[OAExportSettingsType.TERRAIN_DATA] = sortedFiles;
+    }
+    
 //    files = getFilesByType(localIndexInfoList, LocalIndexType.TTS_VOICE_DATA);
 //    if (!files.isEmpty()) {
 //        resourcesItems.put(ExportSettingsType.TTS_VOICE, files);
@@ -788,6 +821,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<NSString *> *colorPaletteFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *tracksFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
+    NSMutableArray<OAFileSettingsItem *> *wikiFilesList = [NSMutableArray array];
+    NSMutableArray<OAFileSettingsItem *> *nauticalFilesList = [NSMutableArray array];
+    NSMutableArray<OAFileSettingsItem *> *terrainFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
     NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
@@ -809,12 +845,18 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             case EOASettingsItemTypeFile:
             {
                 OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
-                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
+                if (fileItem.subtype == EOAFileSettingsItemFileSubtypeRenderingStyle)
                     [renderFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeRoutingConfig)
                     [routingFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeColorPalette)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeColorPalette)
                     [colorPaletteFilesList addObject:fileItem.filePath];
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeWikiMap || fileItem.subtype == EOAFileSettingsItemFileSubtypeTravel)
+                    [wikiFilesList addObject:fileItem];
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeNauticalDepth)
+                    [nauticalFilesList addObject:fileItem];
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeSrtmMap || fileItem.subtype == EOAFileSettingsItemFileSubtypeTerrainMap)
+                    [terrainFilesList addObject:fileItem];
                 else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
                     [mapFilesList addObject:fileItem];
                 break;
@@ -933,11 +975,17 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (routingFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.CUSTOM_ROUTING] = routingFilesList;
     if (colorPaletteFilesList.count > 0 || addEmptyItems)
-        settingsToOperate[OAExportSettingsType.COLOR_DATA] = colorPaletteFilesList;
+        settingsToOperate[OAExportSettingsType.COLOR_PALETTE] = colorPaletteFilesList;
     if (tracksFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.TRACKS] = tracksFilesList;
     if (mapFilesList.count > 0 || addEmptyItems)
-        settingsToOperate[OAExportSettingsType.OFFLINE_MAPS] = mapFilesList;
+        settingsToOperate[OAExportSettingsType.STANDARD_MAPS] = mapFilesList;
+    if (wikiFilesList.count > 0 || addEmptyItems)
+        settingsToOperate[OAExportSettingsType.WIKI_AND_TRAVEL] = wikiFilesList;
+    if (nauticalFilesList.count > 0 || addEmptyItems)
+        settingsToOperate[OAExportSettingsType.DEPTH_DATA] = nauticalFilesList;
+    if (terrainFilesList.count > 0 || addEmptyItems)
+        settingsToOperate[OAExportSettingsType.TERRAIN_DATA] = terrainFilesList;
     if (avoidRoads.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.AVOID_ROADS] = avoidRoads;
     if (favorites.count > 0 || addEmptyItems)

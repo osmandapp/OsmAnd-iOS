@@ -44,9 +44,9 @@
     return EOASettingsItemTypeResources;
 }
 
-- (EOASettingsItemFileSubtype)subtype
+- (EOAFileSettingsItemFileSubtype)subtype
 {
-    return EOASettingsItemFileSubtypeOther;
+    return EOAFileSettingsItemFileSubtypeOther;
 }
 
 - (NSString *)getPublicName

@@ -1581,7 +1581,7 @@
 "turn_arrows" = "Стрелки за посоката";
 "shared_string_hide_all" = "Скриване всичко";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Пиктограми при малко увеличение";
-"rendering_attr_natureReserves_description" = "Показват се природни резервати, защитени територии и национални паркове.";
+"rendering_attr_natureReserves_description" = "Показват се природни резервати, защитени месности и национални паркове.";
 "routing_attr_only_permitted_streets_name" = "Изрично разрешени улици";
 "routing_attr_allow_gate_description" = "Използване на порти";
 "routeInfo_roadClass_description" = "Оцветяване на маршрутите или трасетата в зависимост от класификацията на пътя.";

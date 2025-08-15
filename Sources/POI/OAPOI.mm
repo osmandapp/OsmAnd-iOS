@@ -508,7 +508,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         _values[tag] = value;
         
         if ([tag isEqualToString:OPENING_HOURS_TAG])
+        {
             self.openingHours = value;
+            self.hasOpeningHours = YES;
+        }
     }
 }
 
@@ -793,7 +796,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             if (subType)
                 amenity.subType = subType;
             if (openingHours)
+            {
                 amenity.openingHours = openingHours;
+                amenity.hasOpeningHours = YES;
+            }
             [amenity setValues:additionalInfo];
         }
     }

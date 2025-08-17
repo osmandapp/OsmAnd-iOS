@@ -623,7 +623,7 @@
 "shared_string_finish" = "Финал";
 "copy_from_other_profile" = "Копиране от друг профил";
 "profile_alert_delete_title" = "Премахване на профила";
-"profile_alert_delete_msg" = "Премахване на профила „%@“?";
+"profile_alert_delete_msg" = "Изтриване на профил „%@“";
 "profile_type_custom_string" = "Потребителски профил";
 "new_profile" = "Нов профил";
 "configure_profile" = "Настройки на профила";
@@ -2327,3 +2327,4 @@
 "vehicle_metrics_recording_description" = "Изберете параметрите, които да бъдат записани в GPX файл.";
 "obd_fuel_type_bifuel_hydrogen" = "Двугоривен: водорпд";
 "rpm_unit" = "об/мин";
+"OsmAnd Maps" = "OsmAnd Карти";

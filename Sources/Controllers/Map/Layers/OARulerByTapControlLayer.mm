@@ -34,7 +34,6 @@
 #include <OsmAndCore/SingleSkImage.h>
 
 #define DRAW_TIME 2
-#define LABEL_OFFSET 6
 #define kDefaultLineWidth 5.0
 
 @protocol OALineDrawingDelegate <NSObject>
@@ -222,7 +221,7 @@
     distanceMarkerBuilder.setCaptionStyle(newCaptionStyle);
     
     std::shared_ptr<OsmAnd::MapMarker> marker = distanceMarkerBuilder.buildAndAddToCollection(_lineEndsMarkersCollection);
-    marker->setOffsetFromLine(LABEL_OFFSET);
+    marker->setOffsetFromLine(newCaptionStyle.size / 2);
     marker->setUpdateAfterCreated(true);
     _rullerLine->attachMarker(marker);
 }

@@ -57,6 +57,10 @@ final class CardsViewController: UIView {
         }
     }
     
+    func clearDataSource() {
+        dataSource.apply(Snapshot(), animatingDifferences: false)
+    }
+    
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { [weak self] sectionNumber, _ -> NSCollectionLayoutSection? in
             guard let self else { return nil }
@@ -105,10 +109,6 @@ final class CardsViewController: UIView {
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-    }
-    
-    private func clearDataSource() {
-        dataSource.apply(Snapshot(), animatingDifferences: false)
     }
     
     private func configureContentInset(isEmpty: Bool) {

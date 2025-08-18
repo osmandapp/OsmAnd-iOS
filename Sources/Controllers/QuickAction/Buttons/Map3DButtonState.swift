@@ -11,7 +11,7 @@ import UIKit
 @objcMembers
 final class Map3DButtonState: MapButtonState {
 
-    static let map3DHudId = "map_3d"
+    static let map3DHudId = "map.view.map_3d"
 
     let visibilityPref: OACommonInteger
     let fabMarginPref: FabMarginPreference

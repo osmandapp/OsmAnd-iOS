@@ -11,7 +11,7 @@ import UIKit
 @objcMembers
 final class CompassButtonState: MapButtonState {
 
-    static let compassHudId = "compass"
+    static let compassHudId = "map.view.compass"
 
     let visibilityPref: OACommonInteger
 

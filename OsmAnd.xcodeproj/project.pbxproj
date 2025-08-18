@@ -1438,6 +1438,7 @@
 		C5BC8DD72E0408D400CF0815 /* OBDRemainingFuelWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */; };
 		C5C81F822E4CE087009D3439 /* MapHudLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F812E4CE087009D3439 /* MapHudLayout.swift */; };
 		C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */; };
+		C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */; };
 		C5C9BB912DF9A087003B7550 /* OBDTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */; };
 		C5CD4CF029EFE6AC00B35C3D /* ic_navbar_trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */; };
 		C5CD4CF129EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */; };
@@ -5179,6 +5180,7 @@
 		C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDRemainingFuelWidget.swift; sourceTree = "<group>"; };
 		C5C81F812E4CE087009D3439 /* MapHudLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapHudLayout.swift; sourceTree = "<group>"; };
 		C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsButtonState.swift; sourceTree = "<group>"; };
+		C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButtonState.swift; sourceTree = "<group>"; };
 		C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDTextWidget.swift; sourceTree = "<group>"; };
 		C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@2x.png"; path = "Resources/Icons/ic_navbar_trash@2x.png"; sourceTree = "<group>"; };
 		C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_upload_to_openstreetmap_outlined@3x.png"; path = "Resources/Icons/ic_navbar_upload_to_openstreetmap_outlined@3x.png"; sourceTree = "<group>"; };
@@ -9724,6 +9726,7 @@
 				468D9C6B2C00FE0600ED368A /* MapButtonState.swift */,
 				468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */,
 				C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */,
+				C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -17516,6 +17519,7 @@
 				DA5A823026C563A700F274C7 /* OAImportDuplicatesViewController.mm in Sources */,
 				FA359EF12ADFD5310001C11D /* DeviceHelper.swift in Sources */,
 				32FF4C2B2C18425900246B36 /* SegmentTableHeaderView.swift in Sources */,
+				C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */,
 				DA5A812B26C563A700F274C7 /* OAMapMarker.mm in Sources */,
 				FAA650582ADD42C50020DCEA /* GattAttributes.swift in Sources */,
 				DA5A855C26C563A900F274C7 /* OARoutingHelper.mm in Sources */,

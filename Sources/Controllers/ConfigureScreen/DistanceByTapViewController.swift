@@ -104,9 +104,7 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
             config.baseForegroundColor = .textColorActive
             config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0)
             cell.button.configuration = config
-            if let key = item.key {
-                cell.button.menu = createTextSizeMenu()
-            }
+            cell.button.menu = createTextSizeMenu()
             cell.button.showsMenuAsPrimaryAction = true
             cell.button.changesSelectionAsPrimaryAction = true
             cell.button.setContentHuggingPriority(.required, for: .horizontal)

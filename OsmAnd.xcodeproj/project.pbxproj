@@ -1443,6 +1443,7 @@
 		C5C81F8C2E532EBD009D3439 /* ZoomInButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F8B2E532EBD009D3439 /* ZoomInButtonState.swift */; };
 		C5C81F8E2E5340CB009D3439 /* MyLocationButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F8D2E5340CA009D3439 /* MyLocationButtonState.swift */; };
 		C5C81F902E534595009D3439 /* OptionsMenuButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F8F2E534595009D3439 /* OptionsMenuButtonState.swift */; };
+		C5C81F922E535061009D3439 /* DriveModeButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F912E535061009D3439 /* DriveModeButtonState.swift */; };
 		C5C9BB912DF9A087003B7550 /* OBDTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */; };
 		C5CD4CF029EFE6AC00B35C3D /* ic_navbar_trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */; };
 		C5CD4CF129EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */; };
@@ -5189,6 +5190,7 @@
 		C5C81F8B2E532EBD009D3439 /* ZoomInButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomInButtonState.swift; sourceTree = "<group>"; };
 		C5C81F8D2E5340CA009D3439 /* MyLocationButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLocationButtonState.swift; sourceTree = "<group>"; };
 		C5C81F8F2E534595009D3439 /* OptionsMenuButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsMenuButtonState.swift; sourceTree = "<group>"; };
+		C5C81F912E535061009D3439 /* DriveModeButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveModeButtonState.swift; sourceTree = "<group>"; };
 		C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDTextWidget.swift; sourceTree = "<group>"; };
 		C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@2x.png"; path = "Resources/Icons/ic_navbar_trash@2x.png"; sourceTree = "<group>"; };
 		C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_upload_to_openstreetmap_outlined@3x.png"; path = "Resources/Icons/ic_navbar_upload_to_openstreetmap_outlined@3x.png"; sourceTree = "<group>"; };
@@ -9739,6 +9741,7 @@
 				C5C81F8B2E532EBD009D3439 /* ZoomInButtonState.swift */,
 				C5C81F8D2E5340CA009D3439 /* MyLocationButtonState.swift */,
 				C5C81F8F2E534595009D3439 /* OptionsMenuButtonState.swift */,
+				C5C81F912E535061009D3439 /* DriveModeButtonState.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -16689,6 +16692,7 @@
 				DA5A817826C563A700F274C7 /* MGSwipeButton.m in Sources */,
 				DA5A853726C563A900F274C7 /* OADefaultFavorite.m in Sources */,
 				DA5A846E26C563A900F274C7 /* OAWidgetState.m in Sources */,
+				C5C81F922E535061009D3439 /* DriveModeButtonState.swift in Sources */,
 				FA64086B2D3E6EA5005FD12D /* CollapsableCardsView.swift in Sources */,
 				DA5A849726C563A900F274C7 /* OAGpxData.mm in Sources */,
 				464BF4A92C0517E7000D6908 /* Map3DModeVisibility.swift in Sources */,

@@ -119,11 +119,6 @@
     return YES;
 }
 
-- (BOOL) isVisible
-{
-    return [[OAAppSettings sharedManager].showDistanceRuler get];
-}
-
 - (void) onMapFrameRendered
 {
     dispatch_async(dispatch_get_main_queue(), ^{

@@ -111,8 +111,6 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     
     ((OAUserInteractionPassThroughView *)self.view).delegate = self;
 
-    [self createQuickActionButtons];
-    
     _map3dModeFloatingButton.useCustomPosition = YES;
     _map3dModeFloatingButton.buttonState = _map3DButtonState;
     [_mapHudController.mapHudLayout addMapButton:_map3dModeFloatingButton];
@@ -123,6 +121,8 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     _map3dModeButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onMap3dModeButtonDragged:)];
     [_map3dModeButtonDragRecognizer setMinimumPressDuration:0.5];
     [_map3dModeFloatingButton addGestureRecognizer:_map3dModeButtonDragRecognizer];
+    
+    [self createQuickActionButtons];
     
     _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)
@@ -223,9 +223,14 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
             UIEdgeInsets insets = hostView.safeAreaInsets;
             CGFloat halfW = button.bounds.size.width * 0.5;
             CGFloat halfH = button.bounds.size.height * 0.5;
+            CGFloat topBaseline = [OAUtilities getStatusBarHeight];
+            CGFloat minX = insets.left + halfW;
+            CGFloat maxX = hostView.bounds.size.width  - insets.right  - halfW;
+            CGFloat minY = topBaseline + halfH;
+            CGFloat maxY = hostView.bounds.size.height - insets.bottom - halfH;
             CGPoint p = [recognizer locationInView:hostView];
-            p.x = MIN(MAX(p.x, insets.left + halfW), hostView.bounds.size.width - insets.right - halfW);
-            p.y = MIN(MAX(p.y, insets.top  + halfH), hostView.bounds.size.height - insets.bottom - halfH);
+            p.x = MIN(MAX(p.x, minX), maxX);
+            p.y = MIN(MAX(p.y, minY), maxY);
             button.center = p;
             break;
         }

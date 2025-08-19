@@ -28,8 +28,6 @@ import UIKit
     var bottomMargin: CGFloat { get set }
 }
 
-@objc protocol RulerWidgetProtocol {}
-
 @objcMembers
 final class MapHudLayout: NSObject {
     private static let uiRefreshInterval: TimeInterval = 0.1
@@ -125,7 +123,7 @@ final class MapHudLayout: NSObject {
             position.setMoveDescendantsVertical()
             position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
             position.setPositionHorizontal(posH: side.isRightSide ? ButtonPositionSize.Companion().POS_RIGHT : ButtonPositionSize.Companion().POS_LEFT)
-        } else if view is RulerWidgetProtocol {
+        } else if view is OAMapRulerView {
             position.setMoveHorizontal()
             position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_BOTTOM)
             position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_LEFT)
@@ -143,8 +141,8 @@ final class MapHudLayout: NSObject {
     
     @discardableResult private func updateWidgetPosition(_ view: UIView, _ position: ButtonPositionSize) -> ButtonPositionSize {
         let cell = CGFloat(ButtonPositionSize.Companion().CELL_SIZE_DP)
-        let width8 = Int32(round(view.bounds.width / dpToPx / cell))
-        let height8 = Int32(round(view.bounds.height / dpToPx / cell))
+        let width8 = Int32(max(1, Int(view.bounds.width / dpToPx / cell)))
+        let height8 = Int32(max(1, Int(view.bounds.height / dpToPx / cell)))
         position.setSize(width8dp: width8, height8dp: height8)
         if view is SideWidgetsPanelProtocol || (view is VerticalWidgetPanelProtocol && shouldCenterVerticalPanels()) {
             let parentW = Int(containerView.bounds.width)
@@ -158,7 +156,7 @@ final class MapHudLayout: NSObject {
                 let yPixels = Int(round(yRaw))
                 position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
             }
-        } else if view is RulerWidgetProtocol {
+        } else if view is OAMapRulerView {
             position.marginX = 0
             position.marginY = 0
         }
@@ -319,7 +317,7 @@ final class MapHudLayout: NSObject {
         
         let positionMap = getButtonPositionSizes()
         for (view, pos) in positionMap {
-            if view is OAHudButton || view is RulerWidgetProtocol {
+            if view is OAHudButton || view is OAMapRulerView {
                 updatePositionParams(for: view, with: pos)
             }
         }

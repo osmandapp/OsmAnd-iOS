@@ -14,7 +14,7 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
     private static let distanceByTapKey = "distanceByTapKey"
     private static let textSizeKey = "textSizeKey"
     
-    weak var delegate: WidgetStateDelegate?
+    weak var delegate: OASettingsDataDelegate?
     private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
     
@@ -102,11 +102,9 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
             cell.titleLabel.text = item.title
             var config = UIButton.Configuration.plain()
             config.baseForegroundColor = .textColorActive
-            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0)
+            config.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 0)
             cell.button.configuration = config
-            if let key = item.key {
-                cell.button.menu = createTextSizeMenu()
-            }
+            cell.button.menu = createTextSizeMenu()
             cell.button.showsMenuAsPrimaryAction = true
             cell.button.changesSelectionAsPrimaryAction = true
             cell.button.setContentHuggingPriority(.required, for: .horizontal)
@@ -119,7 +117,6 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
     private func createTextSizeMenu() -> UIMenu {
         var actions: [UIAction] = []
         for textSize in [EOADistanceByTapTextSizeConstant.NORMAL, EOADistanceByTapTextSizeConstant.LARGE] {
-            let distanceByTapTextSizeConstant = OADistanceByTapTextSizeConstant.withDistanceByTapTextSizeConstant(textSize)
             let action = UIAction(title: OADistanceByTapTextSizeConstant.toHumanString(textSize), state: settings.distanceByTapTextSize.get() == textSize ? .on : .off) { [weak self] _ in
                 guard let self else { return }
                 self.settings.distanceByTapTextSize.set(textSize, mode: self.appMode)
@@ -138,7 +135,8 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
         if data.key == Self.distanceByTapKey {
             settings.showDistanceRuler.set(sw.isOn)
             reloadDataWith(animated: true, completion: nil)
-            delegate?.onWidgetStateChanged()
+            OARootViewController.instance().mapPanel.mapViewController.updateTapRulerLayer()
+            delegate?.onSettingsChanged()
         }
         return false
     }

@@ -2272,7 +2272,7 @@
 "routing_attr_avoid_tunnels_description" = "Unikaj tuneli";
 "transport_hazmat_yes_desc" = "Wybierz odpowiednią kategorię.";
 "transport_hazmat_no_desc" = "Drogi i tunele mogą ograniczać transport materiałów niebezpiecznych.";
-"purchases_feature_desc_terrain" = "Poziomice terenu, pełna mapa cieniowana w ciemnych odcieniach oraz mapy nachylenia z kolorami pokazującymi szczyty i niziny.";
+"purchases_feature_desc_terrain" = "Poziomice terenu, cieniowanie wzgórz w skali szarości i wskazanie nachylenia w skali kolorów, umożliwiające prezentację szczytów i nizin.";
 "shared_string_capacity" = "Pojemność";
 "osm_live_subscriptions" = "Subskrypcje";
 "manage_subscription" = "Zarządzaj subskrypcją";
@@ -2518,7 +2518,7 @@
 "routing_attr_allow_intermittent_name" = "Zezwalaj na przerywane drogi wodne";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Tagi Fixme";
 "routing_attr_difficulty_preference_advanced_name" = "Zaawansowany";
-"rendering_attr_showWaterwayTunnels_description" = "Nie ukrywaj tuneli dróg wodnych";
+"rendering_attr_showWaterwayTunnels_description" = "Zwiększenie widoczności tuneli wodnych";
 "routing_attr_avoid_4wd_only_description" = "Unikaj dróg nadających się dla pojazdów z napędem na 4 koła";
 "routing_attr_allow_streams_description" = "Zezwalaj na strumienie i dreny";
 "routing_attr_carriage_restrictions_description" = "Rozważ uprawnienia dostępu dla pojazdów ciągniętych przez konie";

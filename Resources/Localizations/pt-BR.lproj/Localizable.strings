@@ -3820,3 +3820,8 @@
 "obd_fuel_type_ethanol" = "Etanol";
 "obd_fuel_type_hybrid_regenerative" = "Híbrido regenerativo";
 "obd_fuel_type_hybrid_electric_combustion" = "Híbrido elétrico e motor a combustão";
+"shared_string_normal" = "Normal";
+"osmand_web" = "OsmAnd Web (FastSpring)";
+"fastspring_subscription_desc" = "Você pode gerenciar ou cancelar sua assinatura através do portal de gerenciamento de contas FastSpring.";
+"fastspring_one_time_payment_desc" = "Você pode gerenciar suas compras através do portal de gerenciamento de contas FastSpring.";
+"obd_fuel_type_diesel" = "Diesel";

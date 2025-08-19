@@ -2608,7 +2608,7 @@
 "position_on_map_center" = "Centro";
 "position_on_map_bottom" = "Abajo";
 "routing_attr_motor_type_description" = "Elegí el tipo de combustible del motor, necesario para estimar las emisiones de CO₂.";
-"routing_attr_motor_type_petrol_name" = "Gasolina, Nafta, Bencina";
+"routing_attr_motor_type_petrol_name" = "Gasolina (nafta)";
 "routing_attr_motor_type_gas_name" = "Gas natural comprimido (GNC)";
 "routing_attr_motor_type_electric_name" = "Eléctrico";
 "routing_attr_motor_type_hybrid_name" = "Híbrido";
@@ -3288,7 +3288,7 @@
 "calculate_online_title" = "La lista de mapas faltantes, se basa en la ruta en línea recta. Para obtener una lista precisa de mapas, OsmAnd puede volver a calcular en línea esta ruta";
 "required_maps_list" = "Mapas extras a usar: %@";
 "getting_list_required_maps" = "Obteniendo una lista de mapas necesarios…";
-"vertical_exaggeration_description" = "Al cambiar el valor de la escala, puede enfatizar el relieve en 3D.";
+"vertical_exaggeration_description" = "Al cambiar el valor de la escala, puedes enfatizar el relieve en 3D.";
 "missing_or_outdated_maps_description" = "Algunos mapas sin conexión necesarios para esta ruta desaparecieron o están desactualizados. Descarga o actualiza estos mapas.";
 "osmand_depelopment_use_old_routing" = "Usar navegación antigua (A*)";
 "average_vertical_speed" = "Velocidad media vertical";
@@ -3803,7 +3803,7 @@
 "fastspring_subscription_desc" = "Podés gestionar o cancelar su suscripción a través del portal de gestión de cuentas FastSpring.";
 "fastspring_one_time_payment_desc" = "Podés gestionar tus compras a través del portal de gestión de cuentas FastSpring.";
 "obd_fuel_type_not_provided" = "No se indica el tipo de combustible";
-"obd_fuel_type_gasoline" = "Nafta, Gasolina, Bencina";
+"obd_fuel_type_gasoline" = "Gasolina (nafta)";
 "obd_fuel_type_methanol" = "Metanol";
 "obd_fuel_type_ethanol" = "Etanol";
 "obd_fuel_type_diesel" = "Diésel";
@@ -3829,7 +3829,7 @@
 "obd_fuel_type_hybrid_hydrogen" = "Híbrido a hidrógeno";
 "obd_fuel_type_hydrogen" = "Hidrógeno";
 "obd_fuel_type_unknown" = "Combustible desconocido";
-"distance_by_tap_use_description" = "Pulsá en el mapa para ver la distancia entre tu ubicación actual y el punto pulsado.\nPulsá con 2 dedos en el mapa para ver la distancia entre los dos puntos pulsados";
+"distance_by_tap_use_description" = "Pulsá en el mapa para ver la distancia entre tu ubicación actual y el punto pulsado.\nPulsá con 2 dedos en el mapa para ver la distancia entre los puntos pulsados";
 "shared_string_normal" = "Normal";
 "shared_string_large" = "Grande";
 "unit_of_temperature_description" = "Las unidades elegidas se aplicarán a todos los datos relacionados con la temperatura del perfil actual.";

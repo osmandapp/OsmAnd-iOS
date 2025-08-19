@@ -281,7 +281,7 @@ final class BaseDetailsObject: NSObject {
                     let osmId = ObfConstants.getOsmObjectId(renderedObject)
                     let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
                     
-                    if syntheticAmenity.obfId <= -1 && objectId > 0 {
+                    if syntheticAmenity.obfId >= 0 && objectId > 0 {
                         syntheticAmenity.obfId = objectId
                     }
                 }

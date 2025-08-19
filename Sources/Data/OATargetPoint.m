@@ -9,10 +9,47 @@
 #import "OATargetPoint.h"
 #import "OAPointDescription.h"
 #import "OAUtilities.h"
+#import "OAReverseGeocoder.h"
+#import "Localization.h"
+#import "OAPOI.h"
 
 @implementation OATargetPoint
 {
     OAPointDescription *_pd;
+}
+
+- (void)initAdderssIfNeeded
+{
+    if (self.addressFound)
+        return;
+    
+    NSString *addressString = nil;
+    BOOL isAddressFound = NO;
+    NSString *formattedTargetName = nil;
+    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:_location.latitude lon:_location.longitude];
+    if (!roadTitle || roadTitle.length == 0)
+    {
+        addressString = OALocalizedString(@"map_no_address");
+    }
+    else
+    {
+        addressString = roadTitle;
+        isAddressFound = YES;
+    }
+    
+    if (isAddressFound || addressString)
+    {
+        formattedTargetName = addressString;
+    }
+    else
+    {
+        formattedTargetName = [OAPointDescription getLocationName:_location.latitude lon:_location.longitude sh:NO];
+    }
+    
+    if (NSStringIsEmpty(_title))
+        _title = formattedTargetName;
+    _titleAddress = roadTitle;
+    _addressFound = isAddressFound;
 }
 
 - (OAPointDescription *) pointDescription

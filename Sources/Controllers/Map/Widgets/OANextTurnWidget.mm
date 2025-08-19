@@ -159,7 +159,7 @@
         {
             self.onClickFunction = ^(id sender) {
                 OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-                if ([routingHelper isRouteCalculated] && ![OARoutingHelper isDeviatedFromRoute])
+                if ([routingHelper isOnRoute])
                 {
                     [[routingHelper getVoiceRouter] announceCurrentDirection:nil];
                 }
@@ -677,7 +677,7 @@
     
     if (_isPanelVertical)
     {
-        OAStreetNameWidgetParams *params = [[OAStreetNameWidgetParams alloc] initWithTurnDrawable:_turnDrawable calc1:_calc1];
+        OAStreetNameWidgetParams *params = [[OAStreetNameWidgetParams alloc] initWithTurnDrawable:_turnDrawable calc1:_calc1 showNextTurn:YES];
         streetName = params.streetName;
     }
     

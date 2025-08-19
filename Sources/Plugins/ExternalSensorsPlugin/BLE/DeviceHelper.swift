@@ -13,11 +13,6 @@ import OSLog
 final class DeviceHelper: NSObject {
     static let shared = DeviceHelper()
     
-    private static let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier ?? "OsmAnd",
-        category: String(describing: DeviceHelper.self)
-    )
-    
     let devicesSettingsCollection = DevicesSettingsCollection()
     
     private(set) var connectedDevices = [Device]()
@@ -85,10 +80,6 @@ final class DeviceHelper: NSObject {
         let supportedDevices = devices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
         
         return supportedDevices.isEmpty ? nil : supportedDevices
-    }
-    
-    func getConnectedAndDisconnectedDevicesForWidget(type: WidgetType) -> [Device]? {
-        connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
     }
     
     func getSettingsForPairedDevices(matching type: DeviceType) -> [DeviceSettings]? {
@@ -298,7 +289,7 @@ extension DeviceHelper {
                     guard let self else { return }
                     switch result {
                     case .success:
-                        debugPrint("updateConnected success | \(device.deviceServiceName) | \(device.deviceName)")
+                        NSLog("[DeviceHelper] -> updateConnected success | \(device.deviceServiceName) | \(device.deviceName)")
                         device.addObservers()
                         device.notifyRSSI()
 
@@ -312,9 +303,11 @@ extension DeviceHelper {
                             discoverServices(device: device)
                         }
                     case .failure(let error):
-                        Self.logger.error("updateConnected failure: \(String(describing: error.localizedDescription))")
+                        NSLog("[DeviceHelper] -> updateConnected failure: \(error.localizedDescription)")
                     }
                 }
+            } else {
+                NSLog("[DeviceHelper] -> connectedDevices don't contain device with id: \(device.id)")
             }
         }
     }
@@ -346,7 +339,7 @@ extension DeviceHelper {
             case .success(let services):
                 discoverCharacteristics(device: device, services: services)
             case .failure(let error):
-                Self.logger.error("discoverServices: \(String(describing: error.localizedDescription))")
+                NSLog("[DeviceHelper] -> discoverServices failure: \(error.localizedDescription)")
             }
         }
     }
@@ -374,7 +367,7 @@ extension DeviceHelper {
                         }
                     }
                 case .failure(let error):
-                    Self.logger.error("discoverCharacteristics: \(error.localizedDescription)")
+                    NSLog("[DeviceHelper] -> discoverCharacteristics failure: \(error.localizedDescription)")
                 }
             }
         }

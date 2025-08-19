@@ -581,6 +581,7 @@
             
         if (targetPoint)
         {
+            [targetPoint initAdderssIfNeeded];
             [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint]];
         }
     }

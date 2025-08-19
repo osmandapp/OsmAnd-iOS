@@ -370,7 +370,7 @@
 "shared_string_all" = "Ĉiuj";
 "shared_string_from" = "el";
 "shared_string_time" = "Tempo";
-"time_of_day" = "Tagtempo";
+"time_of_day" = "Tempo (horo)";
 "shared_string_distance" = "Distanco";
 "shared_string_time_span" = "Variejo de tempo";
 "shared_string_start_time" = "Komenca tempo";

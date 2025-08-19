@@ -661,6 +661,36 @@ static NSInteger const kMap3DModeButtonTag = -990;
     return [components copy];
 }
 
+- (void)applyExcludedFromBackup
+{
+    if (self.length == 0)
+    {
+        NSLog(@"Skipped setting NSURLIsExcludedFromBackupKey: empty path");
+        return;
+    }
+
+    NSURL *url = [NSURL fileURLWithPath:self];
+    
+    id flag = nil;
+    NSError *error = nil;
+    if ([url getResourceValue:&flag forKey:NSURLIsExcludedFromBackupKey error:&error])
+    {
+        NSLog(@"NSURLIsExcludedFromBackupKey = %@ for %@", flag, self);
+        if (!flag || [flag boolValue] == NO)
+        {
+            BOOL res = [url setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:&error];
+            NSLog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", res ? @"OK" : @"FAILED", self);
+            if (!res && error)
+            {
+                NSLog(@"Error details: %@", error);
+            }
+        }
+    }
+    else
+    {
+        NSLog(@"Failed to read NSURLIsExcludedFromBackupKey for %@, error: %@", self, error);
+    }
+}
 
 @end
 

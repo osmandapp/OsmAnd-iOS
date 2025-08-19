@@ -77,6 +77,7 @@
     OAMapViewTrackingUtilities *_trackingUtilities;
     OACurrentPositionHelper *_currentPositionHelper;
     OAWaypointHelper *_waypointHelper;
+    TopTextViewState *_widgetState;
     OALocationPointWrapper *_lastPoint;
     OATurnDrawable *_turnDrawable;
     UIImageView *_imageView;
@@ -101,12 +102,15 @@
 
     UIButton *_shadowButton;
     UIButton *_shadowWaypointButton;
+    
+    NSString *_customId;
+    BOOL _prevShowNextTurn;
 }
 
 static int stackViewLeadingDefaultValue = 2;
 static int stackViewLeadingToRefViewPadding = 16;
 
-- (instancetype) init
+- (instancetype)initWithCustomId:(NSString *)customId widgetParams:(NSDictionary *)widgetParams
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
@@ -122,33 +126,12 @@ static int stackViewLeadingToRefViewPadding = 16;
     if (self)
         self.frame = CGRectMake(0, 0, DeviceScreenWidth, 32);
     
-    [self commonInit];
-    
+    [self commonInitWithCustomId:customId widgetParams:widgetParams];
+   
     return self;
 }
 
-- (instancetype) initWithFrame:(CGRect)frame
-{
-    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    
-    for (UIView *v in bundle)
-    {
-        if ([v isKindOfClass:[OATopTextView class]])
-        {
-            self = (OATopTextView *)v;
-            break;
-        }
-    }
-    
-    if (self)
-        self.frame = frame;
-    
-    [self commonInit];
-    
-    return self;
-}
-
-- (void) commonInit
+- (void) commonInitWithCustomId:(NSString *)customId widgetParams:(NSDictionary *)widgetParams
 {
     self.widgetType = OAWidgetType.streetName;
     _app = [OsmAndApp instance];
@@ -159,7 +142,9 @@ static int stackViewLeadingToRefViewPadding = 16;
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _currentPositionHelper = [OACurrentPositionHelper instance];
     _calc1 = [[OANextDirectionInfo alloc] init];
-    
+    _customId = customId;
+    _widgetState = [[TopTextViewState alloc] initWithCustomId:_customId widgetParams:widgetParams];
+    _prevShowNextTurn = [self isShowNextTurnEnabled];
     _textRasterizer = OsmAnd::TextRasterizer::getDefault();
     
     BOOL isNight = OADayNightHelper.instance.isNightMode;
@@ -189,6 +174,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onTopTextViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self configureShadowButtonMenu];
     [self insertSubview:_shadowButton belowSubview:_waypointInfoBar];
 
     _shadowWaypointButton = [[UIButton alloc] initWithFrame:self.frame];
@@ -270,6 +256,24 @@ static int stackViewLeadingToRefViewPadding = 16;
     _waypointTextShadow.frame = _waypointText.frame;
 }
 
+- (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode widgetConfigurationParams:(NSDictionary<NSString *,id> *)widgetConfigurationParams isCreate:(BOOL)isCreate
+{
+    OATableDataModel *data = [OATableDataModel model];
+    OATableSectionData *section = [data createNewSection];
+    section.headerText = OALocalizedString(@"shared_string_settings");
+    section.footerText = OALocalizedString(@"next_turn_information_desc");
+
+    OATableRowData *settingRow = [section createNewRow];
+    settingRow.cellType = [OASwitchTableViewCell reuseIdentifier];
+    settingRow.key = @"value_pref";
+    settingRow.title = OALocalizedString(@"next_turn_information");
+    settingRow.iconName = @"ic_custom_next_turn";
+    [settingRow setObj:_widgetState.showNextTurnPref forKey:@"pref"];
+    [settingRow setObj:@"ic_custom_next_turn" forKey:@"hide_icon"];
+
+    return data;
+}
+
 - (void) applyCorrectPositionToView:(UIView *)view prevX:(CGFloat)prevX
 {
     CGFloat h = self.bounds.size.height;
@@ -279,6 +283,12 @@ static int stackViewLeadingToRefViewPadding = 16;
 - (BOOL)isTopText
 {
     return YES;
+}
+
+- (OAMapWidgetInfo *)getWidgetInfo
+{
+    NSString *widgetId = _customId ?: self.widgetType.id;
+    return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:widgetId];
 }
 
 - (BOOL) updateVisibility:(BOOL)visible
@@ -330,7 +340,12 @@ static int stackViewLeadingToRefViewPadding = 16;
     }
     _addressTextShadow.attributedText = stringShadow;
     _addressText.attributedText = string;
-
+    
+    if (!_shadowButton.menu)
+    {
+        [self configureShadowButtonMenu];
+    }
+    
     [self refreshLayout];
 }
 
@@ -500,11 +515,22 @@ static int stackViewLeadingToRefViewPadding = 16;
         [self.delegate widgetChanged:self];
 }
 
+- (void)configureShadowButtonMenu
+{
+    _shadowButton.menu = [self configureContextWidgetMenu];
+}
+
+- (UIMenu *)configureContextMenuWithAddGroup:(UIMenu *)addGroup settingsGroup:(UIMenu *)settingsGroup deleteGroup:(UIMenu *)deleteGroup
+{
+    return [UIMenu menuWithTitle:@"" children:@[settingsGroup, deleteGroup]];
+}
+
 - (BOOL) updateInfo
 {
     OACurrentStreetName *streetName = nil;
     BOOL showClosestWaypointFirstInAddress = YES;
-    OAStreetNameWidgetParams *params = [[OAStreetNameWidgetParams alloc] initWithTurnDrawable:_turnDrawable calc1:_calc1];
+    BOOL showNextTurn = [self isShowNextTurnEnabled];
+    OAStreetNameWidgetParams *params = [[OAStreetNameWidgetParams alloc] initWithTurnDrawable:_turnDrawable calc1:_calc1 showNextTurn:showNextTurn];
     streetName = params.streetName;
     showClosestWaypointFirstInAddress = params.showClosestWaypointFirstInAddress;
     
@@ -528,7 +554,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     _shadowButton.accessibilityLabel =  OALocalizedString(@"map_widget_top_text");
     _shadowButton.accessibilityValue = streetName.text;
     
-    if ([[OARootViewController instance].mapPanel isTopToolbarActive])
+    if ([[OARootViewController instance].mapPanel isTopToolbarActive] || !streetName)
     {
         [self updateVisibility:NO];
     }
@@ -541,13 +567,10 @@ static int stackViewLeadingToRefViewPadding = 16;
         [self updateVisibility:_shieldIcon visible:NO];
         [self updateVisibility:_exitRefTextContainer visible:NO];
     }
-    else if (!streetName)
-    {
-        [self updateVisibility:NO];
-    }
     else
     {
-        if ([streetName isEqual:_prevStreetName])
+        BOOL showNextTurn = [self isShowNextTurnEnabled];
+        if ([streetName isEqual:_prevStreetName] && _prevShowNextTurn == showNextTurn)
             return YES;
 
         [self updateVisibility:YES];
@@ -555,6 +578,7 @@ static int stackViewLeadingToRefViewPadding = 16;
         [self updateVisibility:_addressText visible:YES];
         [self updateVisibility:_addressTextShadow visible:_shadowRadius > 0];
         _prevStreetName = streetName;
+        _prevShowNextTurn = showNextTurn;
         NSArray<RoadShield *> *shields = streetName.shields;
         if (shields.count != 0 && ![shields isEqual:cachedRoadShields])
         {
@@ -567,7 +591,7 @@ static int stackViewLeadingToRefViewPadding = 16;
             }
             cachedRoadShields = shields;
         }
-        else
+        else if (shields.count == 0)
         {
             _shieldIcon.hidden = YES;
             cachedRoadShields = nil;
@@ -760,6 +784,16 @@ static int stackViewLeadingToRefViewPadding = 16;
         [_waypointHelper removeVisibleLocationPoint:_lastPoint];
         [[OARootViewController instance].mapPanel refreshMap];
     }
+}
+
+- (OAWidgetState *)getWidgetState
+{
+    return _widgetState;
+}
+
+- (BOOL)isShowNextTurnEnabled
+{
+    return [_widgetState isShowNextTurnEnabledWith:[_settings.applicationMode get]];
 }
 
 @end

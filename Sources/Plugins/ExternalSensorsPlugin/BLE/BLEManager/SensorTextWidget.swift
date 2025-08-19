@@ -32,7 +32,9 @@ final class SensorTextWidget: OASimpleWidget {
         self.widgetType = widgetType
         self.appMode = appMode
         onClickFunction = { [weak self] _ in
-            self?.changeNextMode()
+            guard let self else { return }
+            changeNextMode()
+            reconnectIfNeeded()
         }
         plugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
@@ -56,6 +58,7 @@ final class SensorTextWidget: OASimpleWidget {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @discardableResult
     override func updateInfo() -> Bool {
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
             applyDeviceId()
@@ -160,6 +163,32 @@ final class SensorTextWidget: OASimpleWidget {
         updateInfo()
     }
     
+    private func reconnectIfNeeded() {
+        guard let widgetType else { return }
+        guard let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices(excluding: .OBD_VEHICLE_METRICS) else { return }
+
+        let disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices).filter { $0.deviceType != .OBD_VEHICLE_METRICS }
+        
+        guard !disconnectedDevices.isEmpty else { return }
+
+        let matchingDevices = disconnectedDevices.filter {
+            $0.getSupportedWidgetDataFieldTypes()?.contains(widgetType) ?? false
+        }
+
+        var device: Device?
+        if shouldUseAnyConnectedDevice {
+            device = matchingDevices.first
+        } else if let externalDeviceId {
+            device = matchingDevices.first(where: { $0.id == externalDeviceId })
+        }
+
+        if let device, device.isDisconnected {
+            DeviceHelper.shared.updateConnected(devices: [device])
+        } else {
+            NSLog("No matching disconnected devices found for \(widgetType)")
+        }
+    }
+
     private func getPossibleValues(mode: EOAExternalSensorVisualizationMode) -> [OATableRowData] {
         var rows = [OATableRowData]()
         

@@ -14,6 +14,6 @@
 @property (nonatomic) OACurrentStreetName *streetName;
 @property (nonatomic) BOOL showClosestWaypointFirstInAddress;
 
-- (instancetype)initWithTurnDrawable:(OATurnDrawable *)turnDrawable calc1:(OANextDirectionInfo *)calc1;
+- (instancetype)initWithTurnDrawable:(OATurnDrawable *)turnDrawable calc1:(OANextDirectionInfo *)calc1 showNextTurn:(BOOL)showNextTurn;
 
 @end

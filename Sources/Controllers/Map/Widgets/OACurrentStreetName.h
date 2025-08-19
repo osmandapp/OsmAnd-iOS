@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithStreetName:(OANextDirectionInfo *)info;
 - (instancetype)initWithStreetName:(OANextDirectionInfo *)info useDestination:(BOOL)useDestination;
-- (instancetype)initWithStreetName:(OARoutingHelper *)routingHelper info:(OANextDirectionInfo *)info;
+- (instancetype)initWithStreetName:(OARoutingHelper *)routingHelper info:(OANextDirectionInfo *)info showNextTurn:(BOOL)showNextTurn;
 
 @end
 

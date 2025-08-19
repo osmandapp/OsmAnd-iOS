@@ -37,15 +37,17 @@ final class MapHudLayout: NSObject {
     
     private let containerView: UIView
     private let dpToPx: CGFloat = 1.0
-    private let panelsMargin: CGFloat
     private let tablet: Bool
     
     private var statusBarHeight: CGFloat
+    private var panelsMargin: CGFloat
     private var portrait: Bool
     private var lastWidth: CGFloat = 0
     private var mapButtons: [OAHudButton] = []
     private var widgetPositions: [UIView: ButtonPositionSize] = [:]
     private var additionalWidgetPositions: [UIView: ButtonPositionSize] = [:]
+    private var widgetOrder: [UIView] = []
+    private var additionalOrder: [UIView] = []
     private var updateButtonsWorkItem: DispatchWorkItem?
     private var updateVerticalPanelsWorkItem: DispatchWorkItem?
     private var updateAlarmsWorkItem: DispatchWorkItem?
@@ -56,19 +58,13 @@ final class MapHudLayout: NSObject {
     private weak var rightWidgetsPanel: UIView?
     private weak var bottomWidgetsPanel: UIView?
     
-    init(containerView: UIView, alarmsContainer: UIView?, leftWidgetsPanel: UIView?, rightWidgetsPanel: UIView?, topBarPanelContainer: UIView?, bottomWidgetsPanel: UIView?, userPanelsMargin: CGFloat? = nil) {
+    init(containerView: UIView) {
         self.containerView = containerView
-        self.alarmsContainer = alarmsContainer
-        self.leftWidgetsPanel = leftWidgetsPanel
-        self.rightWidgetsPanel = rightWidgetsPanel
-        self.topBarPanelContainer = topBarPanelContainer
-        self.bottomWidgetsPanel = bottomWidgetsPanel
         self.tablet = OAUtilities.isIPad()
         self.portrait = OAUtilities.isPortrait()
-        self.panelsMargin = userPanelsMargin ?? 16
-        self.statusBarHeight = containerView.safeAreaInsets.top
+        self.panelsMargin = 16
+        self.statusBarHeight = OAUtilities.getStatusBarHeight()
         super.init()
-        setupInitialPositions()
     }
     
     deinit {
@@ -80,17 +76,12 @@ final class MapHudLayout: NSObject {
         updateAlarmsWorkItem = nil
     }
     
-    private func setupInitialPositions() {
-        addPosition(topBarPanelContainer)
-        addPosition(leftWidgetsPanel)
-        addPosition(rightWidgetsPanel)
-        addPosition(bottomWidgetsPanel)
-        refresh()
-    }
-    
     private func addPosition(_ view: UIView?, callback: (() -> Void)? = nil) {
         guard let view else { return }
         widgetPositions[view] = createWidgetPosition(view)
+        if !widgetOrder.contains(view) {
+            widgetOrder.append(view)
+        }
     }
     
     private func refresh() {
@@ -112,10 +103,15 @@ final class MapHudLayout: NSObject {
     }
     
     private func getButtonPositionSizes() -> [UIView: ButtonPositionSize] {
-        var map = collectPositions()
+        let pairs = collectPositionsOrdered()
         let gridW = Int(round(containerView.bounds.width / dpToPx / CGFloat(ButtonPositionSize.Companion().CELL_SIZE_DP)))
         let gridH = Int(round(getAdjustedHeight() / dpToPx / CGFloat(ButtonPositionSize.Companion().CELL_SIZE_DP)))
-        ButtonPositionSize.Companion().computeNonOverlap(space: 1, buttons: Array(map.values), totalWidth: Int32(gridW), totalHeight: Int32(gridH))
+        ButtonPositionSize.Companion().computeNonOverlap(space: 1, buttons: pairs.map { $0.1 }, totalWidth: Int32(gridW), totalHeight: Int32(gridH))
+        var map: [UIView: ButtonPositionSize] = [:]
+        for (v, p) in pairs {
+            map[v] = p
+        }
+        
         return map
     }
     
@@ -171,13 +167,16 @@ final class MapHudLayout: NSObject {
     }
     
     @discardableResult private func updateButtonParams(for view: UIView, with position: ButtonPositionSize) -> Bool {
-        let marginX = CGFloat(position.getXStartPix(dpToPix: Float(dpToPx)))
-        let marginY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx)))
+        let baseOffsetDp: CGFloat = 16.0
+        let defMarginDp: CGFloat = CGFloat(ButtonPositionSize.Companion().DEF_MARGIN_DP)
+        let cellFixPx: CGFloat = max(0, (baseOffsetDp - defMarginDp) * dpToPx)
+        let startX = CGFloat(position.getXStartPix(dpToPix: Float(dpToPx))) + cellFixPx
+        let startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let insets = containerView.safeAreaInsets
         let containerW = containerView.bounds.width
         let containerH = getAdjustedHeight()
-        let newX: CGFloat = position.isLeft ? insets.left + marginX : containerW - insets.right - view.bounds.width - marginX
-        let newY: CGFloat = position.isTop ? statusBarHeight + marginY : statusBarHeight + containerH - view.bounds.height - marginY
+        let newX: CGFloat = position.isLeft ? insets.left + startX : containerW - insets.right - view.bounds.width - startX
+        let newY: CGFloat = position.isTop ? statusBarHeight + startY : statusBarHeight + containerH - view.bounds.height - startY
         let newOrigin = CGPoint(x: newX, y: newY)
         if view.frame.origin != newOrigin {
             view.frame.origin = newOrigin
@@ -188,16 +187,7 @@ final class MapHudLayout: NSObject {
     }
     
     private func updatePositionParams(for view: UIView, with position: ButtonPositionSize) {
-        let containerW = containerView.bounds.width
-        let containerH = getAdjustedHeight()
-        let marginX = CGFloat(position.getXStartPix(dpToPix: Float(dpToPx)))
-        let marginY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx)))
-        let newX: CGFloat = position.isLeft ? containerView.safeAreaInsets.left + marginX : containerW - view.bounds.width - containerView.safeAreaInsets.right - marginX
-        let newY: CGFloat = position.isTop ? statusBarHeight + marginY : statusBarHeight + containerH - view.bounds.height - marginY
-        let origin = CGPoint(x: newX, y: newY)
-        if origin != view.frame.origin {
-            view.frame.origin = origin
-        }
+        updateButtonParams(for: view, with: position)
     }
     
     private func updateHorizontalMargins(target: UIView, leftPanel: UIView, rightPanel: UIView) {
@@ -215,7 +205,7 @@ final class MapHudLayout: NSObject {
             newRightMargin = max(defaultMargin, rightWidth > 0 ? rightWidth + panelsMargin : 0)
         }
         
-        if var updatable = target as? UIViewMarginUpdatable {
+        if let updatable = target as? UIViewMarginUpdatable {
             if updatable.leftMargin != newLeftMargin || updatable.rightMargin != newRightMargin {
                 updatable.leftMargin = newLeftMargin
                 updatable.rightMargin = newRightMargin
@@ -242,13 +232,39 @@ final class MapHudLayout: NSObject {
         return (left, top, right, bottom)
     }
     
+    func configure(alarmsContainer: UIView?, leftWidgetsPanel: UIView?, rightWidgetsPanel: UIView?, topBarPanelContainer: UIView?, bottomWidgetsPanel: UIView?, userPanelsMargin: NSNumber?) {
+        self.alarmsContainer = alarmsContainer
+        self.leftWidgetsPanel = leftWidgetsPanel
+        self.rightWidgetsPanel = rightWidgetsPanel
+        self.topBarPanelContainer = topBarPanelContainer
+        self.bottomWidgetsPanel = bottomWidgetsPanel
+        if let userPanelsMargin {
+            self.panelsMargin = CGFloat(truncating: userPanelsMargin)
+        }
+        
+        containerView.layoutIfNeeded()
+        widgetPositions.removeAll()
+        widgetOrder.removeAll()
+        addPosition(topBarPanelContainer)
+        addPosition(leftWidgetsPanel)
+        addPosition(rightWidgetsPanel)
+        addPosition(bottomWidgetsPanel)
+        updateVerticalPanels()
+        updateAlarmsContainer()
+        refresh()
+    }
+    
     func addMapButton(_ button: OAHudButton) {
         DispatchQueue.main.async {
-            self.containerView.addSubview(button)
+            if button.superview !== self.containerView {
+                self.containerView.addSubview(button)
+            }
+            
             if button.bounds.size == .zero {
                 button.sizeToFit()
             }
             
+            button.buttonState?.updatePositions()
             let position = button.buttonState?.getDefaultPositionSize() ?? ButtonPositionSize(id: self.getViewName(button))
             self.updateButtonParams(for: button, with: position)
             self.mapButtons.append(button)
@@ -266,6 +282,10 @@ final class MapHudLayout: NSObject {
             let position = self.createWidgetPosition(view)
             self.updateButtonParams(for: view, with: position)
             self.additionalWidgetPositions[view] = position
+            if !self.additionalOrder.contains(view) {
+                self.additionalOrder.append(view)
+            }
+            
             self.refresh()
         }
     }
@@ -273,6 +293,10 @@ final class MapHudLayout: NSObject {
     func removeWidget(_ view: UIView) {
         DispatchQueue.main.async {
             self.additionalWidgetPositions.removeValue(forKey: view)
+            if let i = self.additionalOrder.firstIndex(of: view) {
+                self.additionalOrder.remove(at: i)
+            }
+            
             self.refresh()
         }
     }
@@ -332,6 +356,38 @@ final class MapHudLayout: NSObject {
         return map
     }
     
+    private func collectPositionsOrdered() -> [(UIView, ButtonPositionSize)] {
+        var result: [(UIView, ButtonPositionSize)] = []
+        for v in widgetOrder where !v.isHidden {
+            let pos = createWidgetPosition(v)
+            if pos.width > 0 && pos.height > 0 {
+                result.append((v, pos))
+            }
+        }
+        
+        for btn in mapButtons where !btn.isHidden {
+            if let pos = btn.buttonState?.getDefaultPositionSize(), pos.width > 0, pos.height > 0 {
+                result.append((btn, pos))
+            }
+        }
+        
+        var updatedAdditional = additionalWidgetPositions
+        for v in additionalOrder where !v.isHidden {
+            if let saved = additionalWidgetPositions[v] {
+                let pos = updateWidgetPosition(v, saved)
+                if pos.width > 0 && pos.height > 0 {
+                    result.append((v, pos))
+                    updatedAdditional[v] = pos
+                } else {
+                    updatedAdditional.removeValue(forKey: v)
+                }
+            }
+        }
+        
+        additionalWidgetPositions = updatedAdditional
+        return result
+    }
+    
     func updateButton(_ button: OAHudButton, save: Bool) {
         DispatchQueue.main.async {
             guard let state = button.buttonState else {
@@ -351,11 +407,12 @@ final class MapHudLayout: NSObject {
             let leftAligned = pos.isLeft
             let topAligned = pos.isTop
             let xRaw = leftAligned ? (m.left - insets.left) : (m.right - insets.right)
-            let yRaw = topAligned ? (m.top - self.statusBarHeight) : (m.bottom - self.statusBarHeight)
+            let yRaw = topAligned ? (m.top - self.statusBarHeight) : (m.bottom - insets.bottom)
             let xPixels = Int(round(max(0, xRaw)))
             let yPixels = Int(round(max(0, yRaw)))
             pos.calcGridPositionFromPixel(dpToPix: Float(self.dpToPx), widthPx: Int32(width), heightPx: Int32(height), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
             state.getPositionSize().fromLongValue(v: pos.toLongValue())
+            self.updatePositionParams(for: button, with: pos)
             if save {
                 button.savePosition()
             }
@@ -365,7 +422,7 @@ final class MapHudLayout: NSObject {
     }
     
     func getAdjustedHeight() -> CGFloat {
-        containerView.bounds.height - statusBarHeight
+        containerView.bounds.height - statusBarHeight - containerView.safeAreaInsets.bottom
     }
     
     func shouldCenterVerticalPanels() -> Bool {
@@ -374,7 +431,11 @@ final class MapHudLayout: NSObject {
     
     func onContainerSizeChanged() {
         portrait = OAUtilities.isPortrait()
-        statusBarHeight = containerView.safeAreaInsets.top
+        statusBarHeight = OAUtilities.getStatusBarHeight()
+        for b in mapButtons {
+            b.buttonState?.updatePositions()
+        }
+        
         let w = containerView.bounds.width
         if w > 0, abs(w - lastWidth) > 0.1 {
             lastWidth = w
@@ -383,6 +444,8 @@ final class MapHudLayout: NSObject {
                 updateAlarmsContainer()
             }
         }
+        
+        updateButtons()
     }
     
     func updateVerticalPanels() {
@@ -430,7 +493,7 @@ final class MapHudLayout: NSObject {
             }
             
             let bottomMargin = max(baseMargin, panelOffset) + self.containerView.safeAreaInsets.bottom
-            if var updatable = alarms as? UIViewMarginUpdatable {
+            if let updatable = alarms as? UIViewMarginUpdatable {
                 if updatable.bottomMargin != bottomMargin {
                     updatable.bottomMargin = bottomMargin
                 }

@@ -430,6 +430,7 @@
 		3296B49327F8790800108AF7 /* ic_navbar_pencil@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46327F8790200108AF7 /* ic_navbar_pencil@2x.png */; };
 		3296B4A227F8790800108AF7 /* ic_custom_terrain_flat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47227F8790500108AF7 /* ic_custom_terrain_flat@2x.png */; };
 		329989B0298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 329989AF298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m */; };
+		329B392A2E3BB663006A774B /* OALocalItemType.m in Sources */ = {isa = PBXBuildFile; fileRef = 329B39292E3BB65F006A774B /* OALocalItemType.m */; };
 		329E56B62C7BB45F00DC7B7C /* OAIconsPaletteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 322B53962C78DD5A006B48B0 /* OAIconsPaletteCell.xib */; };
 		329E56BA2C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329E56B92C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift */; };
 		32A001A026131FEA00ABE0D2 /* ic_custom_clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */; };
@@ -3901,6 +3902,8 @@
 		3296B47A27F8790700108AF7 /* ic_custom_clouds@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clouds@2x.png"; path = "Resources/Icons/ic_custom_clouds@2x.png"; sourceTree = "<group>"; };
 		329989AE298A90D1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmUploadGPXVisibilityViewConroller.h; sourceTree = "<group>"; };
 		329989AF298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmUploadGPXVisibilityViewConroller.m; sourceTree = "<group>"; };
+		329B39282E3BB648006A774B /* OALocalItemType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OALocalItemType.h; sourceTree = "<group>"; };
+		329B39292E3BB65F006A774B /* OALocalItemType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OALocalItemType.m; sourceTree = "<group>"; };
 		329E56B92C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceViewAngleViewController.swift; sourceTree = "<group>"; };
 		32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@2x.png"; path = "Resources/Icons/ic_custom_clipboard@2x.png"; sourceTree = "<group>"; };
 		32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@3x.png"; path = "Resources/Icons/ic_custom_clipboard@3x.png"; sourceTree = "<group>"; };
@@ -10506,17 +10509,19 @@
 		DA4ABED32876DA5D00B996EF /* ImportExportData */ = {
 			isa = PBXGroup;
 			children = (
-				DA4ABED52876DA5D00B996EF /* ReadWrite */,
 				DA4ABEE12876DA5D00B996EF /* OAExportSettingsCategory.h */,
 				DA4ABED42876DA5D00B996EF /* OAExportSettingsCategory.m */,
 				DA4ABEDF2876DA5D00B996EF /* OAExportSettingsType.h */,
 				DA4ABEE42876DA5D00B996EF /* OAExportSettingsType.mm */,
 				DA4ABEDE2876DA5D00B996EF /* OAImportExportSettingsConverter.h */,
 				DA4ABEE22876DA5D00B996EF /* OAImportExportSettingsConverter.m */,
+				329B39282E3BB648006A774B /* OALocalItemType.h */,
+				329B39292E3BB65F006A774B /* OALocalItemType.m */,
 				DA4ABEDD2876DA5D00B996EF /* OASettingsCategoryItems.h */,
 				DA4ABEE32876DA5D00B996EF /* OASettingsCategoryItems.m */,
 				DA4ABEE02876DA5D00B996EF /* OASettingsItemType.h */,
 				DA4ABEDC2876DA5D00B996EF /* OASettingsItemType.m */,
+				DA4ABED52876DA5D00B996EF /* ReadWrite */,
 			);
 			path = ImportExportData;
 			sourceTree = "<group>";
@@ -17482,6 +17487,7 @@
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,
 				DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */,
 				32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */,
+				329B392A2E3BB663006A774B /* OALocalItemType.m in Sources */,
 				DA5A818F26C563A700F274C7 /* OAShowHidePoiAction.m in Sources */,
 				DABC7F2227B65FD6005C76E2 /* OARoutingHelperUtils.mm in Sources */,
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,

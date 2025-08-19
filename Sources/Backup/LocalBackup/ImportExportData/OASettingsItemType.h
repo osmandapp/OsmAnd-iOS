@@ -18,21 +18,23 @@ typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypeData,
     EOASettingsItemTypeFile,
     EOASettingsItemTypeResources,
+    EOASettingsItemTypeGpx,
     EOASettingsItemTypeQuickActions,
     EOASettingsItemTypePoiUIFilters,
     EOASettingsItemTypeMapSources,
     EOASettingsItemTypeAvoidRoads,
     EOASettingsItemTypeSuggestedDownloads,
-    EOASettingsItemTypeFavorites,
+    EOASettingsItemTypeDownloads,
     EOASettingsItemTypeOsmNotes,
     EOASettingsItemTypeOsmEdits,
+    EOASettingsItemTypeFavorites,
     EOASettingsItemTypeActiveMarkers,
     EOASettingsItemTypeHistoryMarkers,
-    EOASettingsItemTypeGpx,
     EOASettingsItemTypeSearchHistory,
     EOASettingsItemTypeNavigationHistory,
-    EOASettingsItemTypeDownloads,
-    EOASettingsItemTypeColorPalette
+    EOASettingsItemTypeColorPalette     //don't exist in android
+    //ONLINE_ROUTING_ENGINES
+    //ITINERARY_GROUPS
 };
 
 @interface OASettingsItemType : NSObject

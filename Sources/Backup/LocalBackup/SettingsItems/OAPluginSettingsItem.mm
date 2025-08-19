@@ -68,11 +68,11 @@
             if ([item isKindOfClass:OAFileSettingsItem.class])
             {
                 OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
-                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
+                if (fileItem.subtype == EOAFileSettingsItemFileSubtypeRenderingStyle)
                     [_plugin addRenderer:fileItem.name];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeRoutingConfig)
                     [_plugin addRouter:fileItem.name];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeOther)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeOther)
                     _plugin.resourceDirName = item.fileName;
             }
             else if ([item isKindOfClass:OASuggestedDownloadsItem.class])

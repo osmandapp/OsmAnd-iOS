@@ -67,7 +67,7 @@
                         continue;
                     }
                     // TODO: support voice imports
-                    else if (fileItem.subtype == EOASettingsItemFileSubtypeVoice)
+                    else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeVoice)
                     {
                         
                         continue;
@@ -87,7 +87,7 @@
 //                            continue;
 //                        }
 //                    }
-                    else if (fileItem.subtype == EOASettingsItemFileSubtypeTilesMap)
+                    else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeTilesMap)
                     {
                         continue;
                     }
@@ -119,7 +119,7 @@
                     }
                     [_operationLog log:[NSString stringWithFormat:@"collectDirs %@ END", filePath.lastPathComponent]];
                 }
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeTilesMap)
+                else if (fileItem.subtype == EOAFileSettingsItemFileSubtypeTilesMap)
                 {
                     if ([filePath.pathExtension.lowerCase isEqualToString:@"sqlitedb"])
                     {

@@ -60,9 +60,9 @@
     return EOASettingsItemTypeGpx;
 }
 
-- (EOASettingsItemFileSubtype)subtype
+- (EOAFileSettingsItemFileSubtype)subtype
 {
-    return EOASettingsItemFileSubtypeGpx;
+    return EOAFileSettingsItemFileSubtypeGpx;
 }
 
 - (NSString *)getPublicName
@@ -135,7 +135,7 @@
 {
     json[@"type"] = [OASettingsItemType typeName:self.type];
     json[@"file"] = self.fileNameWithFolder;
-    if (self.subtype != EOASettingsItemFileSubtypeUnknown)
+    if (self.subtype != EOAFileSettingsItemFileSubtypeUnknown)
         json[@"subtype"] = [OAFileSettingsItemFileSubtype getSubtypeName:self.subtype];
     if (_appearanceInfo)
         [_appearanceInfo toJson:json];

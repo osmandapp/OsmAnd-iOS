@@ -17,9 +17,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
     private static let speedLimitWarningRowKey = "speedLimitWarningRow"
     private static let previewSpeedometerRowKey = "previewSpeedometerRow"
     
-    // swiftlint:disable force_unwrapping
-    lazy var settings = OAAppSettings.sharedManager()!
-    // swiftlint:enable force_unwrapping
+    lazy var settings = OAAppSettings.sharedManager()
     
     private var speedometerPreviewHeightConstraint: NSLayoutConstraint?
     private var speedometerView: SpeedometerView?

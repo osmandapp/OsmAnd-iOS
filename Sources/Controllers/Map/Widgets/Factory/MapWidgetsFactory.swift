@@ -20,7 +20,7 @@ final class MapWidgetsFactory: NSObject {
     }
     
     private func createMapWidgetImpl(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) -> OABaseWidgetView? {
-        let appMode = OAAppSettings.sharedManager().applicationMode.get()!
+        let appMode = OAAppSettings.sharedManager().applicationMode.get()
         switch widgetType {
         case .nextTurn:
             return OANextTurnWidget(horisontalMini: false, nextNext: false, customId: customId, appMode: appMode, widgetParams: widgetParams)
@@ -38,7 +38,7 @@ final class MapWidgetsFactory: NSObject {
             return widget
         case .streetName:
             let widget = OATopTextView(customId: customId, widgetParams: widgetParams)
-            widget?.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .markersTopBar:
             let widget = OADestinationBarWidget()

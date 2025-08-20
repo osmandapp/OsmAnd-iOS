@@ -8,6 +8,8 @@
 
 #import "OATableViewCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef void(^OAUpdateValueCallback)(float value);
 
 @interface OATitleSliderTableViewCell : OATableViewCell
@@ -15,9 +17,10 @@ typedef void(^OAUpdateValueCallback)(float value);
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *sliderView;
-
 @property (nonatomic, copy, nullable) OAUpdateValueCallback updateValueCallback;
 
-
 @end
+
+NS_ASSUME_NONNULL_END
+
 

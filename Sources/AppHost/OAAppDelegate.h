@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, AppLaunchEvent) {
     AppLaunchEventNone,
@@ -16,11 +16,12 @@ typedef NS_ENUM(NSInteger, AppLaunchEvent) {
     AppLaunchEventSetupRoot
 };
 
-FOUNDATION_EXPORT NSNotificationName _Nonnull const OALaunchUpdateStateNotification;
+FOUNDATION_EXPORT NSNotificationName const OALaunchUpdateStateNotification;
 
 @class OARootViewController;
 
 @interface OAAppDelegate : UIResponder <UIApplicationDelegate>
+
 @property (strong, nonatomic, nullable) OARootViewController *rootViewController;
 @property (nonatomic, assign) AppLaunchEvent appLaunchEvent;
 @property (nonatomic, assign) UIInterfaceOrientation interfaceOrientation;
@@ -36,3 +37,5 @@ FOUNDATION_EXPORT NSNotificationName _Nonnull const OALaunchUpdateStateNotificat
 - (void)applicationWillResignActive;
 
 @end
+
+NS_ASSUME_NONNULL_END

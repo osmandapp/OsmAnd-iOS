@@ -48,7 +48,7 @@ final class GlideAverageWidgetState: OAWidgetState {
             prefId += "_\(customId)"
         }
         
-        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false)!
+        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false)
         if let string = widgetParams?[Self.prefBaseId] as? String, let widgetValue = Bool(string) {
             preference.set(widgetValue)
         }

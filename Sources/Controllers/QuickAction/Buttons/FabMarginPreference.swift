@@ -19,7 +19,7 @@ final class FabMarginPreference: NSObject {
     let fabMarginXLandscape: OACommonInteger
     let fabMarginYLandscape: OACommonInteger
 
-    private let settings = OAAppSettings.sharedManager()!
+    private let settings = OAAppSettings.sharedManager()
 
     init(_ prefix: String) {
         fabMarginXPortrait = settings.registerIntPreference(prefix + FabMarginPreference.kXPortraitMargin, defValue: 0).makeProfile()

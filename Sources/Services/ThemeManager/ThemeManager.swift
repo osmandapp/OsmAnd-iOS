@@ -36,7 +36,7 @@ final class ThemeManager: NSObject {
     }
 
     func apply(_ theme: Theme, appMode: OAApplicationMode, withNotification: Bool = false) {
-        guard Theme(rawValue: Int(OAAppSettings.sharedManager()!.appearanceProfileTheme.get(appMode))) != theme else {
+        guard Theme(rawValue: Int(OAAppSettings.sharedManager().appearanceProfileTheme.get(appMode))) != theme else {
             return
         }
         let currentAppMode = OAAppSettings.sharedManager().currentMode

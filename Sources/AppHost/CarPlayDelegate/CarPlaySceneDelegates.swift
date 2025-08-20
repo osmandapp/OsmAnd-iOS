@@ -89,7 +89,8 @@ final class CarPlaySceneDelegate: UIResponder {
     }
     
     private func configureCarPlayNavigationMode() {
-        guard let settings = OAAppSettings.sharedManager(), let routingHelper = OARoutingHelper.sharedInstance() else { return }
+        let settings = OAAppSettings.sharedManager()
+        guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
         if defaultAppMode == nil {
             defaultAppMode = settings.applicationMode.get()
         }
@@ -152,7 +153,7 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         NSLog("[CarPlay] CarPlaySceneDelegate didDisconnect")
         
         OsmAndApp.swiftInstance().carPlayActive = false
-        if defaultAppMode != nil && !isRoutingActive() {
+        if let defaultAppMode, !isRoutingActive() {
             OAAppSettings.sharedManager().setApplicationModePref(defaultAppMode)
         }
         

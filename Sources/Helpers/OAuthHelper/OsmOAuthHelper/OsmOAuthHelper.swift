@@ -26,7 +26,7 @@ class OsmOAuthHelper: BaseOAuthHelper {
     
     override class var token: String? {
         get { return OAAppSettings.sharedManager().osmUserAccessToken.get(OAApplicationMode.default()) }
-        set { OAAppSettings.sharedManager().osmUserAccessToken.set(newValue, mode: OAApplicationMode.default()) }
+        set { OAAppSettings.sharedManager().osmUserAccessToken.set(newValue ?? "", mode: OAApplicationMode.default()) }
     }
     
     static let notificationKey = "OsmOAuthTokenKey"

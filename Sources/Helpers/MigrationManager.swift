@@ -77,48 +77,47 @@ final class MigrationManager: NSObject {
             }
         }
     }
-
+    
     private func changeWidgetIdsMigration1() {
-        if let settings = OAAppSettings.sharedManager() {
-            let externalPlugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
-            let externalSensorsPluginPrefs: [OACommonPreference]? = externalPlugin?.getPreferences()
-            let changeWidgetIds = [
-                "heartRate": "ant_heart_rate",
-                "bicycleCadence": "ant_bicycle_cadence",
-                "bicycleDistance": "ant_bicycle_distance",
-                "bicycleSpeed": "ant_bicycle_speed",
-                "temperature": "temperature_sensor"
-            ]
-            for mode in OAApplicationMode.allPossibleValues() {
-                updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds,
-                                        panelPreference: settings.topWidgetPanelOrderOld,
-                                        newPanelPreference: settings.topWidgetPanelOrder)
-
-                updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds,
-                                        panelPreference: settings.bottomWidgetPanelOrderOld,
-                                        newPanelPreference: settings.bottomWidgetPanelOrder)
-
-                updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds,
-                                        panelPreference: settings.leftWidgetPanelOrder)
-
-                updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds,
-                                        panelPreference: settings.rightWidgetPanelOrder)
-
-                updateCustomWidgetKeys(mode, changeWidgetIds: changeWidgetIds)
-                updateMapInfoControls(mode, changeWidgetIds: changeWidgetIds)
-
-                if let externalPlugin, let externalSensorsPluginPrefs {
-                    for pref in externalSensorsPluginPrefs {
-                        if let value = pref.toStringValue(mode) {
-                            if value == "OATrackRecordingNone" {
-                                pref.setValueFrom("", appMode: mode)
-                            } else if value == "OATrackRecordingAnyConnected" {
-                                pref.setValueFrom(externalPlugin.getAnyConnectedDeviceId(), appMode: mode)
-                            }
+        let settings = OAAppSettings.sharedManager()
+        let externalPlugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
+        let externalSensorsPluginPrefs: [OACommonPreference]? = externalPlugin?.getPreferences()
+        let changeWidgetIds = [
+            "heartRate": "ant_heart_rate",
+            "bicycleCadence": "ant_bicycle_cadence",
+            "bicycleDistance": "ant_bicycle_distance",
+            "bicycleSpeed": "ant_bicycle_speed",
+            "temperature": "temperature_sensor"
+        ]
+        for mode in OAApplicationMode.allPossibleValues() {
+            updateExistingWidgetIds(mode,
+                                    changeWidgetIds: changeWidgetIds,
+                                    panelPreference: settings.topWidgetPanelOrderOld,
+                                    newPanelPreference: settings.topWidgetPanelOrder)
+            
+            updateExistingWidgetIds(mode,
+                                    changeWidgetIds: changeWidgetIds,
+                                    panelPreference: settings.bottomWidgetPanelOrderOld,
+                                    newPanelPreference: settings.bottomWidgetPanelOrder)
+            
+            updateExistingWidgetIds(mode,
+                                    changeWidgetIds: changeWidgetIds,
+                                    panelPreference: settings.leftWidgetPanelOrder)
+            
+            updateExistingWidgetIds(mode,
+                                    changeWidgetIds: changeWidgetIds,
+                                    panelPreference: settings.rightWidgetPanelOrder)
+            
+            updateCustomWidgetKeys(mode, changeWidgetIds: changeWidgetIds)
+            updateMapInfoControls(mode, changeWidgetIds: changeWidgetIds)
+            
+            if let externalPlugin, let externalSensorsPluginPrefs {
+                for pref in externalSensorsPluginPrefs {
+                    if let value = pref.toStringValue(mode) {
+                        if value == "OATrackRecordingNone" {
+                            pref.setValueFrom("", appMode: mode)
+                        } else if value == "OATrackRecordingAnyConnected" {
+                            pref.setValueFrom(externalPlugin.getAnyConnectedDeviceId(), appMode: mode)
                         }
                     }
                 }

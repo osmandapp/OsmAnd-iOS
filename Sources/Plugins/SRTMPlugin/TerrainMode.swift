@@ -73,7 +73,7 @@ final class TerrainMode: NSObject {
         self.type = type
         self.translateName = translateName
 
-        let settings = OAAppSettings.sharedManager()!
+        let settings = OAAppSettings.sharedManager()
         minZoomPref = settings.registerIntPreference(type.name + "_min_zoom", defValue: Int32(terrainMinSupportedZoom)).makeProfile()
         maxZoomPref = settings.registerIntPreference(type.name + "_max_zoom", defValue: Int32(terrainMaxSupportedZoom)).makeProfile()
         transparencyPref = settings.registerIntPreference(type.name + "_transparency", defValue: Int32(type == .hillshade ? hillshadeDefaultTrasparency : defaultTrasparency)).makeProfile()

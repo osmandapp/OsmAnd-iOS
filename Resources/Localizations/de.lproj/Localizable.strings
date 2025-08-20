@@ -2461,7 +2461,7 @@
 "backup_delete_old_data_warning" = "Sie sind im Begriff, den Änderungsverlauf für die zuvor geladenen Daten zu löschen. \n \nDie aktuelle Version der Daten wird auf dem Server gespeichert, aber Sie können nicht zu den zuvor vorgenommenen Änderungen zurückkehren.";
 "delete_all_confirmation" = "Ja, alle löschen";
 "shared_string_delete_data" = "Daten löschen";
-"manage_storage" = "Speicher verwalten";
+"manage_storage" = "Speicherung verwalten";
 "backup_delete_data_type_description" = "Dadurch werden alle %@ Daten aus der OsmAnd Cloud gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.";
 "cloud_storage_used" = "%@ von %@ verwendet";
 "backup_delete_types_descr" = "Alle Daten für veraltete Datentypen aus der OsmAnd Cloud löschen\?";
@@ -3837,3 +3837,14 @@
 "obd_fuel_type_bifuel_electric_combustion" = "Bifuel mit Elektro- und Verbrennungsmotor";
 "obd_fuel_type_bifuel_hydrogen" = "Bifuel mit Wasserstoff";
 "obd_fuel_type_hybrid_electric_combustion" = "Hybrid aus Elektro- und Verbrennungsmotor";
+"standard_maps" = "Standardkarten";
+"wikipedia_and_travel_maps" = "Wikipedia und Reisekarten";
+"topography_maps" = "Topografische Karten";
+"download_live_updates" = "Live-Aktualisierungen";
+"local_indexes_cat_tts" = "Sprachansagen (TTS)";
+"local_indexes_cat_voice" = "Sprachansagen (aufgezeichnet)";
+"rendering_styles" = "Rendering-Stile";
+"next_turn_information" = "Nächste Abbiegeinformation";
+"next_turn_information_desc" = "Zeigt die bevorstehende Abbiegerichtung und den Straßennamen an.";
+"obd_fuel_type_hybrid_ethanol" = "Hybrid-Ethanol";
+"obd_fuel_type_hybrid_diesel" = "Hybrid-Diesel";

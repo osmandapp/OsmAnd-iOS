@@ -11,7 +11,7 @@ final class LocaleHelper: NSObject {
     
     static func getPreferredPlacesLanguage() -> String {
         let locale = OAAppSettings.sharedManager().settingPrefMapLanguage.get()
-        if let locale, !locale.isEmpty {
+        if !locale.isEmpty {
             return locale
         } else {
             return OAUtilities.currentLang()

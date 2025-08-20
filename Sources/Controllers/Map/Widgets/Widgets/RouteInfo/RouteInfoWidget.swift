@@ -170,7 +170,7 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private func updateRouteInformation() {
-        guard let appMode = settings.applicationMode.get() else { return }
+        let appMode = settings.applicationMode.get()
         
         let priority = widgetState.getDisplayPriority(with: appMode)
         let routeInfo = calculator.calculateRouteInformationWith(priority)

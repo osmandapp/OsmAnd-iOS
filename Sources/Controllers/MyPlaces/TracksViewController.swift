@@ -665,7 +665,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func getSearchTracksSortMode() -> TracksSortMode {
-        guard let searchSortModeTitle = settings.searchTracksSortModes.get() else { return .lastModified }
+        let searchSortModeTitle = settings.searchTracksSortModes.get()
         return TracksSortMode.getByTitle(searchSortModeTitle)
     }
     
@@ -1720,7 +1720,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func renameVisibleTracks(oldPath: String, newPath: String) {
-        guard var visibleGpx = settings.mapSettingVisibleGpx.get() else { return }
+        var visibleGpx = settings.mapSettingVisibleGpx.get()
         
         for i in 0..<visibleGpx.count where visibleGpx[i].hasPrefix(oldPath) {
             let newPathCount = oldPath.count
@@ -1763,7 +1763,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func renameSortModeKey(from oldBasePath: String, to newBasePath: String) {
-        guard let sortModes = settings.getTracksSortModes() else { return }
+        let sortModes = settings.getTracksSortModes()
         var updatedSortModes = [String: String]()
         for (key, value) in sortModes {
             if key.hasPrefix(oldBasePath) {
@@ -1779,7 +1779,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func removeSortMode(forFolderPath folderPath: String) {
-        guard let sortModes = settings.getTracksSortModes() else { return }
+        let sortModes = settings.getTracksSortModes()
         var updatedSortModes = [String: String]()
         for (key, value) in sortModes where !key.hasPrefix(folderPath) {
             updatedSortModes[key] = value

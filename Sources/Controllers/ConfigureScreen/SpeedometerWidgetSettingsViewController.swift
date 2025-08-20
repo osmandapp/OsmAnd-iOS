@@ -64,9 +64,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
             
             selectSizeRow.title = localizedString("shared_string_size")
             selectSizeRow.setObj([UIImage.icCustom20HeightS, UIImage.icCustom20HeightM, UIImage.icCustom20HeightL], forKey: Self.valuesKey)
-            if let size = settings.speedometerSize {
-                selectSizeRow.setObj(size, forKey: Self.widgetSizeKey)
-            }
+            selectSizeRow.setObj(settings.speedometerSize, forKey: Self.widgetSizeKey)
             let settingsSection = tableData.createNewSection()
             settingsSection.headerText = localizedString("shared_string_settings")
             
@@ -74,7 +72,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
             speedLimitWarningRow.cellType = OAValueTableViewCell.reuseIdentifier
             speedLimitWarningRow.key = Self.speedLimitWarningRowKey
             speedLimitWarningRow.title = localizedString("speed_limit_warning")
-            speedLimitWarningRow.descr = settings.showSpeedLimitWarning?.toHumanString()
+            speedLimitWarningRow.descr = settings.showSpeedLimitWarning.toHumanString()
             speedLimitWarningRow.accessibilityLabel = speedLimitWarningRow.title
             speedLimitWarningRow.accessibilityValue = speedLimitWarningRow.descr
         }

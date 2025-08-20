@@ -52,6 +52,6 @@ final class PaletteGradientColor: PaletteColor {
     }
 
     override func toHumanString() -> String {
-        OAUtilities.capitalizeFirstLetter(paletteName.replacingOccurrences(of: ColorPaletteHelper.gradientIdSplitter, with: " "))
+        OAUtilities.capitalizeFirstLetter(paletteName.replacingOccurrences(of: ColorPaletteHelper.gradientIdSplitter, with: " ")) ?? ""
     }
 }

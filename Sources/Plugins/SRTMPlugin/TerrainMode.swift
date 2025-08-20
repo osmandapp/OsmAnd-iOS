@@ -155,9 +155,9 @@ final class TerrainMode: NSObject {
     private static func getTerrainMode(by file: String, prefix: Pair<String, TerrainType>) -> TerrainMode? {
         if file.hasPrefix(prefix.first) {
             let key = String(file.substring(from: prefix.first.length).dropLast(TXT_EXT.length))
-            let name = OAUtilities.capitalizeFirstLetter(key).replacingOccurrences(of: "_", with: " ")
+            let name = OAUtilities.capitalizeFirstLetter(key)?.replacingOccurrences(of: "_", with: " ")
             if key != defaultKey {
-                return TerrainMode(key, type: prefix.second, translateName: name)
+                return TerrainMode(key, type: prefix.second, translateName: name ?? "")
             }
         }
         return nil

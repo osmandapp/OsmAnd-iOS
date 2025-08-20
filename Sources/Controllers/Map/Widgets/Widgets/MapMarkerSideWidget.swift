@@ -170,11 +170,11 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     private func updateIconIfNeeded(marker: OADestination, newMode: SideMarkerMode, modeChanged: Bool) {
         let colorChanged = marker.color != cachedMarkerColor || cachedNightMode != isNightMode()
         if colorChanged || modeChanged {
-            let iconName = newMode.iconName
             cachedMarkerColor = marker.color
             cachedNightMode = isNightMode()
-            if let cachedMarkerColor = cachedMarkerColor {
-                setImage(UIImage.templateImageNamed(iconName), with: cachedMarkerColor, iconName: iconName)
+            let iconName = newMode.iconName
+            if let cachedMarkerColor, let image = UIImage.templateImageNamed(iconName) {
+                setImage(image, with: cachedMarkerColor, iconName: iconName)
             }
         }
     }

@@ -193,11 +193,15 @@ static NSInteger const kMap3DModeButtonTag = -990;
 
 + (UIImage *) templateImageNamed:(NSString *)imageName
 {
+    if (!imageName)
+        return nil;
     return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 + (UIImage *) rtlImageNamed:(NSString *)imageName
 {
+    if (!imageName)
+        return nil;
     return [UIImage imageNamed:imageName].imageFlippedForRightToLeftLayoutDirection;
 }
 

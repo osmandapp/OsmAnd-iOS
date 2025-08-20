@@ -8,6 +8,8 @@
 
 #import "OASimpleWidget.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OATripRecordingElevationWidget : OASimpleWidget
 
 - (instancetype _Nonnull)initWithСustomId:(NSString *_Nullable)customId
@@ -29,3 +31,5 @@
 @interface OATripRecordingDownhillWidget : OATripRecordingElevationWidget
 
 @end
+
+NS_ASSUME_NONNULL_END

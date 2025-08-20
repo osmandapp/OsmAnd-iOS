@@ -53,7 +53,7 @@ final class TravelGpx : TravelArticle {
         amenitySubType = amenity.subType
         amenityRegionName = amenity.regionName
         let enTitle = amenity.enName
-        title = !amenity.name.isEmpty ? amenity.name : enTitle
+        title = (amenity.name?.isEmpty == false ? amenity.name : nil) ?? enTitle
 
         lat = amenity.latitude
         lon = amenity.longitude

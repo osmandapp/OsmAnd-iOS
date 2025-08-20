@@ -182,7 +182,7 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
     }
 
     private func getImagesFromModes(_ selected: Bool) -> [UIImage] {
-        DayNightMode.allCases.map({
+        DayNightMode.allCases.compactMap({
             if let image = UIImage(named: selected ? $0.selectedIconName : $0.iconName) {
                 return OAUtilities.resize(image, newSize: CGSize(width: 20, height: 20))
             }

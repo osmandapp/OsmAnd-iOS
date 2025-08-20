@@ -675,17 +675,16 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             return
         }
         
-        if let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: UIFont.preferredFont(forTextStyle: .footnote), textColor: UIColor.textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width) {
-            footer.backgroundColor = .groupBg
-            for subview in footer.subviews {
-                if let label = subview as? UILabel {
-                    label.textAlignment = .center
-                    label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                }
+        let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: UIFont.preferredFont(forTextStyle: .footnote), textColor: UIColor.textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width)
+        footer.backgroundColor = .groupBg
+        for subview in footer.subviews {
+            if let label = subview as? UILabel {
+                label.textAlignment = .center
+                label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             }
-            
-            tableView.tableFooterView = footer
         }
+        
+        tableView.tableFooterView = footer
     }
     
     @objc private func filterButtonTapped() {
@@ -1963,7 +1962,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     cell.descriptionLabel.text = item.descr
                 }
                 cell.accessoryType = tableView.isEditing ? .none : .disclosureIndicator
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+                if let iconName = item.iconName {
+                    cell.leftIconView.image = UIImage.templateImageNamed(iconName)
+                }
                 if let color = item.obj(forKey: colorKey) as? UIColor {
                     cell.leftIconView.tintColor = color
                 }
@@ -1986,7 +1987,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 cell.showButton(item.key != emptyFilterFolderKey)
                 cell.titleLabel?.text = item.title
                 cell.descriptionLabel?.text = item.descr
-                cell.cellImageView?.image = UIImage.templateImageNamed(item.iconName)
+                if let iconName = item.iconName {
+                    cell.cellImageView?.image = UIImage.templateImageNamed(iconName)
+                }
+                
                 cell.cellImageView?.tintColor = item.iconTintColor
                 cell.button?.setTitle(item.obj(forKey: buttonTitleKey) as? String, for: .normal)
                 cell.button?.removeTarget(nil, action: nil, for: .allEvents)

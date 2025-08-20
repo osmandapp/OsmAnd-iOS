@@ -14,7 +14,7 @@ final class LocaleHelper: NSObject {
         if !locale.isEmpty {
             return locale
         } else {
-            return OAUtilities.currentLang()
+            return OAUtilities.currentLang() ?? ""
         }
     }
 }

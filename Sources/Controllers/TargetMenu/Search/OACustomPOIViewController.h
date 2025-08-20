@@ -14,11 +14,16 @@
 @protocol OAPOIFilterViewDelegate;
 @protocol OAPOIFilterRefreshDelegate;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OACustomPOIViewController : OABaseButtonsViewController
 
 @property (weak, nonatomic) id<OAPOIFilterViewDelegate> delegate;
-@property (weak, nonatomic) id<OAPOIFilterRefreshDelegate> _Nullable refreshDelegate;
+@property (weak, nonatomic, nullable) id<OAPOIFilterRefreshDelegate> refreshDelegate;
 
 - (instancetype)initWithFilter:(OAPOIUIFilter *)filter;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

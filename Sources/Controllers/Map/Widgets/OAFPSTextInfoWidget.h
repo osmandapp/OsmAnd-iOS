@@ -8,11 +8,15 @@
 
 #import "OASimpleWidget.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAFPSTextInfoWidget : OASimpleWidget
 
-- (instancetype _Nonnull)initWithСustomId:(NSString *_Nullable)customId
-                                  appMode:(OAApplicationMode * _Nonnull)appMode
-                             widgetParams:(NSDictionary * _Nullable)widgetParams;
-
+- (instancetype)initWithСustomId:(NSString * _Nullable)customId
+                          appMode:(OAApplicationMode *)appMode
+                     widgetParams:(NSDictionary * _Nullable)widgetParams;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

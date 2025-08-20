@@ -9,6 +9,8 @@
 #import "OACompoundViewController.h"
 #import "OATargetPoint.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, ETopToolbarType)
 {
     ETopToolbarTypeFixed = 0,
@@ -113,10 +115,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (id) getTargetObj;
 
-- (UIImage *) getIcon;
+- (nullable UIImage *) getIcon;
 
 - (BOOL) needAddress;
-- (NSString *) getTypeStr;
+- (nullable NSString *) getTypeStr;
 - (NSString *) getCommonTypeStr;
 - (NSAttributedString *) getAttributedTypeStr;
 - (NSAttributedString *) getAttributedCommonTypeStr;
@@ -218,3 +220,4 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @end
 
+NS_ASSUME_NONNULL_END

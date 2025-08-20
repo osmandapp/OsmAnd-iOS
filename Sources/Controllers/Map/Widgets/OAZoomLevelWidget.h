@@ -10,11 +10,16 @@
 
 @class ZoomLevelWidgetState;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAZoomLevelWidget : OASimpleWidget
 
-- (instancetype _Nonnull)initWithСustomId:(NSString *_Nullable)customId
-                                  appMode:(OAApplicationMode * _Nonnull)appMode
-                     widgetState:(ZoomLevelWidgetState *_Nonnull)widgetState
-                             widgetParams:(NSDictionary * _Nullable)widgetParams;
+- (instancetype)initWithСustomId:(NSString * _Nullable)customId
+                         appMode:(OAApplicationMode *)appMode
+                     widgetState:(ZoomLevelWidgetState *)widgetState
+                    widgetParams:(NSDictionary * _Nullable)widgetParams;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

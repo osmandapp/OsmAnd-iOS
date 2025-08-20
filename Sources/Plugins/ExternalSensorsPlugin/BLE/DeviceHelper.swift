@@ -332,7 +332,7 @@ extension DeviceHelper {
         connectedDevices.removeAll { idsToRemove.contains($0.id) }
     }
     
-    private func discoverServices(device: Device, serviceUUIDs: [CBUUID]? = nil) {
+    private func discoverServices(device: Device) {
         device.discoverServices(withUUIDs: nil) { [weak self] result in
             guard let self else { return }
             switch result {

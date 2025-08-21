@@ -109,7 +109,6 @@
 - (void) targetViewOnAppear:(CGFloat)height animated:(BOOL)animated;
 - (void) targetUpdateControlsLayout:(BOOL)customStatusBarStyleNeeded customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle;
 - (void) targetStatusBarChanged;
-- (void) targetResetRulerPosition;
 - (void) targetOpenAvoidRoad;
 
 - (void) targetViewEnableMapInteraction;

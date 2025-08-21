@@ -139,7 +139,7 @@ final class MapHudLayout: NSObject {
             if m.left >= 0, m.top >= 0, m.right >= 0, m.bottom >= 0 {
                 let isRTL = containerView.isDirectionRTL()
                 let startInset = isRTL ? insets.right : insets.left
-                let endInset = isRTL ? insets.left  : insets.right
+                let endInset = isRTL ? insets.left : insets.right
                 let leftAligned = position.isLeft
                 let topAligned = position.isTop
                 let xRaw = leftAligned ? m.left - startInset : m.right - endInset

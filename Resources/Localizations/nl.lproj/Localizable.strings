@@ -2849,3 +2849,4 @@
 "generate_hillshade_from_3d_maps" = "Genereer heuvelschaduw-rasterkaarten van 3D-kaarten";
 "rendering_attr_lightDetail_description" = "Standaard: betonningsnaam (lichtkarakter.groep.periode), selecteer aanvullende informatie over sectoren 1 t/m 3 of sectoren 1,2,3,4,5 lichtkarakter";
 "help_article_navigation_routing_brouter_name" = "BRouter";
+"manage_storage" = "Opslag beheren";

@@ -8,6 +8,8 @@
 
 #import "OASimpleWidget.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OAMonitoringPlugin;
 
 @interface OATripRecordingDistanceWidget : OASimpleWidget
@@ -20,3 +22,5 @@
 + (NSString *) getName;
 
 @end
+
+NS_ASSUME_NONNULL_END

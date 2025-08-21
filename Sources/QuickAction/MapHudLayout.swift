@@ -8,20 +8,6 @@
 
 import UIKit
 
-@objc protocol MapHudLayoutInput: AnyObject {
-    func viewDidChangeLayout(_ view: UIView)
-    func viewDidChangeVisibility(_ view: UIView)
-    func registerObservedView(_ view: UIView)
-}
-
-@objc protocol SideWidgetsPanelProtocol {
-    var isRightSide: Bool { get }
-}
-
-@objc protocol VerticalWidgetPanelProtocol {
-    var isTopPanel: Bool { get }
-}
-
 @objc protocol UIViewMarginUpdatable {
     var leftMargin: CGFloat { get set }
     var rightMargin: CGFloat { get set }
@@ -35,10 +21,10 @@ final class MapHudLayout: NSObject {
     
     private let containerView: UIView
     private let dpToPx: CGFloat = 1.0
+    private let hudBasePaddingDp: CGFloat = 16.0
     private let tablet: Bool
     
     private var statusBarHeight: CGFloat
-    private var panelsMargin: CGFloat
     private var portrait: Bool
     private var lastWidth: CGFloat = 0
     private var mapButtons: [OAHudButton] = []
@@ -46,9 +32,6 @@ final class MapHudLayout: NSObject {
     private var additionalWidgetPositions: [UIView: ButtonPositionSize] = [:]
     private var widgetOrder: [UIView] = []
     private var additionalOrder: [UIView] = []
-    private var updateButtonsWorkItem: DispatchWorkItem?
-    private var updateVerticalPanelsWorkItem: DispatchWorkItem?
-    private var updateAlarmsWorkItem: DispatchWorkItem?
     
     private weak var alarmsContainer: UIView?
     private weak var topBarPanelContainer: UIView?
@@ -60,21 +43,11 @@ final class MapHudLayout: NSObject {
         self.containerView = containerView
         self.tablet = OAUtilities.isIPad()
         self.portrait = OAUtilities.isPortrait()
-        self.panelsMargin = 16
         self.statusBarHeight = OAUtilities.getStatusBarHeight()
         super.init()
     }
     
-    deinit {
-        updateButtonsWorkItem?.cancel()
-        updateButtonsWorkItem = nil
-        updateVerticalPanelsWorkItem?.cancel()
-        updateVerticalPanelsWorkItem = nil
-        updateAlarmsWorkItem?.cancel()
-        updateAlarmsWorkItem = nil
-    }
-    
-    private func addPosition(_ view: UIView?, callback: (() -> Void)? = nil) {
+    private func addPosition(_ view: UIView?) {
         guard let view else { return }
         widgetPositions[view] = createWidgetPosition(view)
         if !widgetOrder.contains(view) {
@@ -83,46 +56,56 @@ final class MapHudLayout: NSObject {
     }
     
     private func refresh() {
-        guard Thread.isMainThread else {
+        if Thread.isMainThread {
+            updateButtons()
+        } else {
             DispatchQueue.main.async { [weak self] in
-                self?.refresh()
+                self?.updateButtons()
             }
-            
-            return
         }
-        
-        updateButtonsWorkItem?.cancel()
-        let work = DispatchWorkItem { [weak self] in
-            self?.updateButtons()
-        }
-        
-        updateButtonsWorkItem = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiRefreshInterval, execute: work)
     }
     
     private func getButtonPositionSizes() -> [UIView: ButtonPositionSize] {
-        let pairs = collectPositionsOrdered()
-        let gridW = Int(round(containerView.bounds.width / dpToPx / CGFloat(ButtonPositionSize.Companion().CELL_SIZE_DP)))
-        let gridH = Int(round(getAdjustedHeight() / dpToPx / CGFloat(ButtonPositionSize.Companion().CELL_SIZE_DP)))
-        ButtonPositionSize.Companion().computeNonOverlap(space: 1, buttons: pairs.map { $0.1 }, totalWidth: Int32(gridW), totalHeight: Int32(gridH))
-        var map: [UIView: ButtonPositionSize] = [:]
-        for (v, p) in pairs {
-            map[v] = p
+        let panels = [topBarPanelContainer, leftWidgetsPanel, rightWidgetsPanel, bottomWidgetsPanel]
+        let filtered = collectPositionsOrdered().filter { (v, _) in
+            guard panels.contains(where: { $0 === v }) else { return true }
+            return !v.isHidden && v.alpha > 0.01 && v.bounds.width > 0 && v.bounds.height > 0
         }
         
-        return map
+        let insets = containerView.safeAreaInsets
+        let cell = CGFloat(ButtonPositionSize.Companion().CELL_SIZE_DP)
+        let w = Int32(max(1, floor((containerView.bounds.width - insets.left - insets.right) / dpToPx / cell)))
+        let h = Int32(max(1, floor(getAdjustedHeight() / dpToPx / cell)))
+        ButtonPositionSize.Companion().computeNonOverlap(space: 1, buttons: filtered.map { $0.1 }, totalWidth: w, totalHeight: h)
+        return Dictionary(uniqueKeysWithValues: filtered)
     }
     
     private func createWidgetPosition(_ view: UIView) -> ButtonPositionSize {
         let position = ButtonPositionSize(id: getViewName(view))
-        if let vertical = view as? VerticalWidgetPanelProtocol {
-            position.setMoveDescendantsVertical()
-            position.setPositionVertical(posV: vertical.isTopPanel ? ButtonPositionSize.Companion().POS_TOP : ButtonPositionSize.Companion().POS_BOTTOM)
-            position.setPositionHorizontal(posH: shouldCenterVerticalPanels() ? ButtonPositionSize.Companion().POS_LEFT : ButtonPositionSize.Companion().POS_FULL_WIDTH)
-        } else if let side = view as? SideWidgetsPanelProtocol {
+        if view === topBarPanelContainer {
             position.setMoveDescendantsVertical()
             position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
-            position.setPositionHorizontal(posH: side.isRightSide ? ButtonPositionSize.Companion().POS_RIGHT : ButtonPositionSize.Companion().POS_LEFT)
+            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_FULL_WIDTH)
+        } else if view === leftWidgetsPanel {
+            position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
+            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_LEFT)
+            if OAUtilities.isPortrait() {
+                position.setMoveDescendantsVertical()
+            } else {
+                position.setMoveDescendantsHorizontal()
+            }
+        } else if view === rightWidgetsPanel {
+            position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
+            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_RIGHT)
+            if OAUtilities.isPortrait() {
+                position.setMoveDescendantsVertical()
+            } else {
+                position.setMoveDescendantsHorizontal()
+            }
+        } else if view === bottomWidgetsPanel {
+            position.setMoveDescendantsVertical()
+            position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_BOTTOM)
+            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_FULL_WIDTH)
         } else if view is OAMapRulerView {
             position.setMoveHorizontal()
             position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_BOTTOM)
@@ -139,21 +122,27 @@ final class MapHudLayout: NSObject {
         view.accessibilityIdentifier ?? view.restorationIdentifier ?? String(describing: type(of: view))
     }
     
+    private func updatePositionParams(for view: UIView, with position: ButtonPositionSize) {
+        updateButtonParams(for: view, with: position)
+    }
+    
     @discardableResult private func updateWidgetPosition(_ view: UIView, _ position: ButtonPositionSize) -> ButtonPositionSize {
         let cell = CGFloat(ButtonPositionSize.Companion().CELL_SIZE_DP)
         let width8 = Int32(max(1, Int(view.bounds.width / dpToPx / cell)))
         let height8 = Int32(max(1, Int(view.bounds.height / dpToPx / cell)))
         position.setSize(width8dp: width8, height8dp: height8)
-        if view is SideWidgetsPanelProtocol || (view is VerticalWidgetPanelProtocol && shouldCenterVerticalPanels()) {
-            let parentW = Int(containerView.bounds.width)
+        if view === leftWidgetsPanel || view === rightWidgetsPanel {
+            let insets = containerView.safeAreaInsets
+            let parentW = Int(containerView.bounds.width - insets.left - insets.right)
             let parentH = Int(getAdjustedHeight())
-            let m = getRelativeMargins(in: containerView, for: view)
+            let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
             if m.left >= 0, m.top >= 0, m.right >= 0, m.bottom >= 0 {
-                let topAligned = position.isTop
                 let leftAligned = position.isLeft
-                let xPixels = Int(round(leftAligned ? m.left : m.right))
-                let yRaw = topAligned ? m.top - statusBarHeight : m.bottom - statusBarHeight
-                let yPixels = Int(round(yRaw))
+                let topAligned = position.isTop
+                let xRaw = leftAligned ? (m.left - insets.left) : (m.right - insets.right)
+                let yRaw = topAligned ? (m.top - statusBarHeight) : (m.bottom - insets.bottom)
+                let xPixels = Int(round(max(0, xRaw)))
+                let yPixels = Int(round(max(0, yRaw)))
                 position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
             }
         } else if view is OAMapRulerView {
@@ -165,16 +154,12 @@ final class MapHudLayout: NSObject {
     }
     
     @discardableResult private func updateButtonParams(for view: UIView, with position: ButtonPositionSize) -> Bool {
-        let baseOffsetDp: CGFloat = 16.0
-        let defMarginDp: CGFloat = CGFloat(ButtonPositionSize.Companion().DEF_MARGIN_DP)
-        let cellFixPx: CGFloat = max(0, (baseOffsetDp - defMarginDp) * dpToPx)
+        let cellFixPx: CGFloat = max(0, (hudBasePaddingDp - CGFloat(ButtonPositionSize.Companion().DEF_MARGIN_DP)) * dpToPx)
         let startX = CGFloat(position.getXStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let insets = containerView.safeAreaInsets
-        let containerW = containerView.bounds.width
-        let containerH = getAdjustedHeight()
-        let newX: CGFloat = position.isLeft ? insets.left + startX : containerW - insets.right - view.bounds.width - startX
-        let newY: CGFloat = position.isTop ? statusBarHeight + startY : statusBarHeight + containerH - view.bounds.height - startY
+        let newX: CGFloat = position.isLeft ? insets.left + startX : containerView.bounds.width - insets.right - view.bounds.width - startX
+        let newY: CGFloat = position.isTop ? statusBarHeight + startY : statusBarHeight + getAdjustedHeight() - view.bounds.height - startY
         let newOrigin = CGPoint(x: newX, y: newY)
         if view.frame.origin != newOrigin {
             view.frame.origin = newOrigin
@@ -184,137 +169,74 @@ final class MapHudLayout: NSObject {
         return false
     }
     
-    private func updatePositionParams(for view: UIView, with position: ButtonPositionSize) {
-        updateButtonParams(for: view, with: position)
-    }
-    
-    private func updateHorizontalMargins(target: UIView, leftPanel: UIView, rightPanel: UIView) {
-        let safeInsets = containerView.safeAreaInsets
-        let totalWidth = containerView.bounds.width - safeInsets.left - safeInsets.right
-        guard totalWidth > 0 else { return }
-        var newLeftMargin: CGFloat = 0
-        var newRightMargin: CGFloat = 0
-        if shouldCenterVerticalPanels() {
-            let defaultWidth = totalWidth * Self.topBarMaxWidthPercentage
-            let defaultMargin = (totalWidth - defaultWidth) / 2.0
-            let leftWidth = leftPanel.isHidden ? 0 : leftPanel.bounds.width
-            let rightWidth = rightPanel.isHidden ? 0 : rightPanel.bounds.width
-            newLeftMargin = max(defaultMargin, leftWidth > 0 ? leftWidth + panelsMargin : 0)
-            newRightMargin = max(defaultMargin, rightWidth > 0 ? rightWidth + panelsMargin : 0)
-        }
-        
-        if let updatable = target as? UIViewMarginUpdatable {
-            if updatable.leftMargin != newLeftMargin || updatable.rightMargin != newRightMargin {
-                updatable.leftMargin = newLeftMargin
-                updatable.rightMargin = newRightMargin
-            }
-        }
-        
-        if target.translatesAutoresizingMaskIntoConstraints {
-            let x = safeInsets.left + newLeftMargin
-            let width = totalWidth - newLeftMargin - newRightMargin
-            if target.frame.origin.x != x || abs(target.frame.width - width) > .ulpOfOne {
-                target.frame.origin.x = x
-                target.frame.size.width = width
-            }
-        }
-    }
-    
-    private func getRelativeMargins(in container: UIView, for subview: UIView) -> (left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) {
-        container.layoutIfNeeded()
-        let frameInContainer = subview.convert(subview.bounds, to: container)
-        let left = frameInContainer.minX
-        let top = frameInContainer.minY
-        let right = container.bounds.width - frameInContainer.maxX
-        let bottom = container.bounds.height - frameInContainer.maxY
-        return (left, top, right, bottom)
-    }
-    
-    func configure(alarmsContainer: UIView?, leftWidgetsPanel: UIView?, rightWidgetsPanel: UIView?, topBarPanelContainer: UIView?, bottomWidgetsPanel: UIView?, userPanelsMargin: NSNumber?) {
+    func configure(alarmsContainer: UIView?, leftWidgetsPanel: UIView?, rightWidgetsPanel: UIView?, topBarPanelContainer: UIView?, bottomWidgetsPanel: UIView?) {
         self.alarmsContainer = alarmsContainer
         self.leftWidgetsPanel = leftWidgetsPanel
         self.rightWidgetsPanel = rightWidgetsPanel
         self.topBarPanelContainer = topBarPanelContainer
         self.bottomWidgetsPanel = bottomWidgetsPanel
-        if let userPanelsMargin {
-            self.panelsMargin = CGFloat(truncating: userPanelsMargin)
-        }
-        
         containerView.layoutIfNeeded()
         widgetPositions.removeAll()
         widgetOrder.removeAll()
-        addPosition(topBarPanelContainer)
-        addPosition(leftWidgetsPanel)
-        addPosition(rightWidgetsPanel)
-        addPosition(bottomWidgetsPanel)
+        [topBarPanelContainer, leftWidgetsPanel, rightWidgetsPanel, bottomWidgetsPanel].forEach { addPosition($0) }
         updateVerticalPanels()
-        updateAlarmsContainer()
-        refresh()
     }
     
     func addMapButton(_ button: OAHudButton) {
-        DispatchQueue.main.async {
-            if button.superview !== self.containerView {
-                self.containerView.addSubview(button)
-            }
-            
-            if button.bounds.size == .zero {
-                button.sizeToFit()
-            }
-            
-            button.buttonState?.updatePositions()
-            let position = button.buttonState?.getDefaultPositionSize() ?? ButtonPositionSize(id: self.getViewName(button))
-            self.updateButtonParams(for: button, with: position)
-            self.mapButtons.append(button)
-            self.refresh()
+        if button.superview !== containerView {
+            containerView.addSubview(button)
         }
+        
+        if button.bounds.size == .zero {
+            button.sizeToFit()
+        }
+        
+        button.buttonState?.updatePositions()
+        let position = button.buttonState?.getDefaultPositionSize() ?? ButtonPositionSize(id: getViewName(button))
+        updateButtonParams(for: button, with: position)
+        mapButtons.append(button)
+        refresh()
     }
     
     func addWidget(_ view: UIView) {
-        DispatchQueue.main.async {
-            self.containerView.addSubview(view)
-            if view.bounds.size == .zero {
-                view.sizeToFit()
-            }
-            
-            let position = self.createWidgetPosition(view)
-            self.updateButtonParams(for: view, with: position)
-            self.additionalWidgetPositions[view] = position
-            if !self.additionalOrder.contains(view) {
-                self.additionalOrder.append(view)
-            }
-            
-            self.refresh()
+        if view.superview !== containerView {
+            containerView.addSubview(view)
         }
+        
+        if view.bounds.size == .zero {
+            view.sizeToFit()
+        }
+        
+        let position = createWidgetPosition(view)
+        updateButtonParams(for: view, with: position)
+        additionalWidgetPositions[view] = position
+        if !additionalOrder.contains(view) {
+            additionalOrder.append(view)
+        }
+        
+        refresh()
     }
     
     func removeWidget(_ view: UIView) {
-        DispatchQueue.main.async {
-            self.additionalWidgetPositions.removeValue(forKey: view)
-            if let i = self.additionalOrder.firstIndex(of: view) {
-                self.additionalOrder.remove(at: i)
-            }
-            
-            self.refresh()
+        additionalWidgetPositions.removeValue(forKey: view)
+        if let i = additionalOrder.firstIndex(of: view) {
+            additionalOrder.remove(at: i)
         }
+        
+        refresh()
     }
     
     func removeMapButton(_ button: OAHudButton) {
-        DispatchQueue.main.async {
-            if let idx = self.mapButtons.firstIndex(of: button) {
-                self.mapButtons.remove(at: idx)
-            }
-            
-            button.removeFromSuperview()
-            self.refresh()
+        button.removeFromSuperview()
+        if let idx = mapButtons.firstIndex(of: button) {
+            mapButtons.remove(at: idx)
         }
+        
+        refresh()
     }
     
     func updateButtons() {
-        if containerView.bounds.width <= 0 && containerView.bounds.height <= 0 && containerView.isHidden {
-            return
-        }
-        
+        guard containerView.bounds.width > 0 || containerView.bounds.height > 0 || !containerView.isHidden else { return }
         let positionMap = getButtonPositionSizes()
         for (view, pos) in positionMap {
             if view is OAHudButton || view is OAMapRulerView {
@@ -387,44 +309,38 @@ final class MapHudLayout: NSObject {
     }
     
     func updateButton(_ button: OAHudButton, save: Bool) {
-        DispatchQueue.main.async {
-            guard let state = button.buttonState else {
-                if save {
-                    button.savePosition()
-                }
-                
-                self.refresh()
-                return
-            }
-            
-            let pos = state.getPositionSize()
-            let insets = self.containerView.safeAreaInsets
-            let width = Int(self.containerView.bounds.width - insets.left - insets.right)
-            let height = Int(self.getAdjustedHeight())
-            let m = self.getRelativeMargins(in: self.containerView, for: button)
-            let leftAligned = pos.isLeft
-            let topAligned = pos.isTop
-            let xRaw = leftAligned ? (m.left - insets.left) : (m.right - insets.right)
-            let yRaw = topAligned ? (m.top - self.statusBarHeight) : (m.bottom - insets.bottom)
-            let xPixels = Int(round(max(0, xRaw)))
-            let yPixels = Int(round(max(0, yRaw)))
-            pos.calcGridPositionFromPixel(dpToPix: Float(self.dpToPx), widthPx: Int32(width), heightPx: Int32(height), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
-            state.getPositionSize().fromLongValue(v: pos.toLongValue())
-            self.updatePositionParams(for: button, with: pos)
+        guard let state = button.buttonState else {
             if save {
                 button.savePosition()
             }
             
-            self.refresh()
+            refresh()
+            return
         }
+        
+        let pos = state.getPositionSize()
+        let insets = containerView.safeAreaInsets
+        let width = Int(containerView.bounds.width - insets.left - insets.right)
+        let height = Int(getAdjustedHeight())
+        let m = OAUtilities.relativeMargins(for: button, inParent: containerView)
+        let leftAligned = pos.isLeft
+        let topAligned = pos.isTop
+        let xRaw = leftAligned ? (m.left - insets.left) : (m.right - insets.right)
+        let yRaw = topAligned ? (m.top - statusBarHeight) : (m.bottom - insets.bottom)
+        let xPixels = Int(round(max(0, xRaw)))
+        let yPixels = Int(round(max(0, yRaw)))
+        pos.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(width), heightPx: Int32(height), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
+        state.getPositionSize().fromLongValue(v: pos.toLongValue())
+        updatePositionParams(for: button, with: pos)
+        if save {
+            button.savePosition()
+        }
+        
+        refresh()
     }
     
     func getAdjustedHeight() -> CGFloat {
         containerView.bounds.height - statusBarHeight - containerView.safeAreaInsets.bottom
-    }
-    
-    func shouldCenterVerticalPanels() -> Bool {
-        !portrait || tablet
     }
     
     func onContainerSizeChanged() {
@@ -438,7 +354,7 @@ final class MapHudLayout: NSObject {
         if w > 0, abs(w - lastWidth) > 0.1 {
             lastWidth = w
             updateVerticalPanels()
-            if shouldCenterVerticalPanels() {
+            if !portrait || tablet {
                 updateAlarmsContainer()
             }
         }
@@ -447,73 +363,36 @@ final class MapHudLayout: NSObject {
     }
     
     func updateVerticalPanels() {
-        if !Thread.isMainThread {
-            DispatchQueue.main.async { [weak self] in
-                self?.updateVerticalPanels()
-            }
-            
-            return
+        containerView.layoutIfNeeded()
+        if !portrait || tablet {
+            updateAlarmsContainer()
         }
         
-        updateVerticalPanelsWorkItem?.cancel()
-        let work = DispatchWorkItem { [weak self] in
-            guard let self, let left = self.leftWidgetsPanel, let right = self.rightWidgetsPanel, self.containerView.bounds.width > 0 else { return }
-            if let top = self.topBarPanelContainer {
-                self.updateHorizontalMargins(target: top, leftPanel: left, rightPanel: right)
-            }
-            
-            if let bottom = self.bottomWidgetsPanel {
-                self.updateHorizontalMargins(target: bottom, leftPanel: left, rightPanel: right)
-            }
-        }
-        
-        updateVerticalPanelsWorkItem = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiRefreshInterval, execute: work)
+        refresh()
     }
     
     func updateAlarmsContainer() {
-        if !Thread.isMainThread {
-            DispatchQueue.main.async { [weak self] in
-                self?.updateAlarmsContainer()
-            }
-            
-            return
+        guard let alarmsContainer else { return }
+        containerView.layoutIfNeeded()
+        let baseMargin: CGFloat = 20.0
+        var panelOffset: CGFloat = 0.0
+        if !portrait || tablet, let bottom = bottomWidgetsPanel, !bottom.isHidden {
+            panelOffset = bottom.bounds.height
         }
         
-        updateAlarmsWorkItem?.cancel()
-        let work = DispatchWorkItem { [weak self] in
-            guard let self, let alarms = self.alarmsContainer else { return }
-            self.containerView.layoutIfNeeded()
-            let baseMargin: CGFloat = 20.0
-            var panelOffset: CGFloat = 0.0
-            if self.shouldCenterVerticalPanels(), let bottomPanel = self.bottomWidgetsPanel, !bottomPanel.isHidden {
-                panelOffset = bottomPanel.bounds.height
-            }
-            
-            let bottomMargin = max(baseMargin, panelOffset) + self.containerView.safeAreaInsets.bottom
-            if let updatable = alarms as? UIViewMarginUpdatable {
-                if updatable.bottomMargin != bottomMargin {
-                    updatable.bottomMargin = bottomMargin
-                }
-            }
-            
-            if alarms.translatesAutoresizingMaskIntoConstraints {
-                let newY = self.containerView.bounds.height - bottomMargin - alarms.bounds.height
-                if abs(alarms.frame.origin.y - newY) > .ulpOfOne {
-                    alarms.frame.origin.y = newY
-                }
+        let bottomMargin = max(baseMargin, panelOffset) + containerView.safeAreaInsets.bottom
+        if let updatable = alarmsContainer as? UIViewMarginUpdatable {
+            if updatable.bottomMargin != bottomMargin {
+                updatable.bottomMargin = bottomMargin
             }
         }
         
-        updateAlarmsWorkItem = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiRefreshInterval, execute: work)
-    }
-}
-
-extension MapHudLayout: MapHudLayoutInput {
-    func registerObservedView(_ view: UIView) {
-        addPosition(view)
-        refresh()
+        if alarmsContainer.translatesAutoresizingMaskIntoConstraints {
+            let newY = containerView.bounds.height - bottomMargin - alarmsContainer.bounds.height
+            if abs(alarmsContainer.frame.origin.y - newY) > .ulpOfOne {
+                alarmsContainer.frame.origin.y = newY
+            }
+        }
     }
     
     func viewDidChangeLayout(_ view: UIView) {
@@ -525,18 +404,6 @@ extension MapHudLayout: MapHudLayoutInput {
         if view === leftWidgetsPanel || view === rightWidgetsPanel {
             updateVerticalPanels()
         }
-        if view === bottomWidgetsPanel {
-            updateAlarmsContainer()
-        }
-        
-        refresh()
-    }
-    
-    func viewDidChangeVisibility(_ view: UIView) {
-        if view === leftWidgetsPanel || view === rightWidgetsPanel {
-            updateVerticalPanels()
-        }
-        
         if view === bottomWidgetsPanel {
             updateAlarmsContainer()
         }

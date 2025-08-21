@@ -3826,3 +3826,12 @@
 "shared_string_large" = "Велико";
 "distance_by_tap_use_description" = "Тапните на карту ради прегледа свог тренутног положаја и кликнуте тачке. \nТапније на карту са 2 прста ради прегледа размака између кликнутих тачака";
 "shared_string_normal" = "Нормално";
+"standard_maps" = "Стандардне мапе";
+"wikipedia_and_travel_maps" = "Википедија и Туристичке мапе";
+"topography_maps" = "Топографске мапе";
+"download_live_updates" = "Надоградње уживо";
+"local_indexes_cat_tts" = "Гласовна навођења (ТТС)";
+"local_indexes_cat_voice" = "Гласовна навођења (снимљена)";
+"rendering_styles" = "Стилови приказивања";
+"next_turn_information" = "Информација о следећем скретању";
+"next_turn_information_desc" = "Приказује смер надолазећег скретања и назив улице.";

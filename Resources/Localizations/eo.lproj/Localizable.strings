@@ -1483,7 +1483,7 @@
 "routing_attr_allow_motorway_description" = "Uzi aŭtoŝoseojn.";
 "rendering_attr_hmRendered_name" = "Montri pli map-detalojn";
 "rendering_attr_roadColors_name" = "Skemkoloro de vojoj";
-"weight_limit_description" = "Enigu pezon de via veturilo, iuj vojaj limigoj aplikiĝas al pezaj veturiloj.";
+"weight_limit_description" = "Enigu mason de via veturilo, iuj vojaj limigoj aplikiĝas al pezaj veturiloj.";
 "height_limit_description" = "Enigu alton de via veturilo, iuj vojaj limigoj aplikiĝas al altaj veturiloj.";
 "lenght_limit_description" = "Enigu longon de via veturilo, iuj vojaj limigoj aplikiĝas al longaj veturiloj.";
 "width_limit_description" = "Enigu larĝon de via veturilo, iuj vojaj limigoj aplikiĝas al larĝaj veturiloj.";
@@ -2752,3 +2752,4 @@
 "obd_battery_voltage" = "Tensio de baterio";
 "obd_vehicle_info" = "Informoj pri veturilo";
 "purchase_feature_desc_vehicle_metrics_obd_ii" = "Spuru bazajn datumojn via veturilo per la protokolo OBD-II. Observu bazajn parametrojn: rapidon, rivoluan rapidon de motoro, konsumon de brulaĵo kaj pli.";
+"manage_storage" = "Administri datumojn";

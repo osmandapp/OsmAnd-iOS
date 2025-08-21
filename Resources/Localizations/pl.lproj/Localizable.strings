@@ -642,7 +642,7 @@
 "cancel_navigation" = "Zakończ nawigację";
 "intermediate_items_sort_by_distance" = "Posortuj wg odległości";
 "switch_start_finish" = "Zamień punkt początkowy z celem trasy";
-"clear_all_intermediates" = "Wyczyść wszystkie punkty pośrednie";
+"clear_all_intermediates" = "Wyczyść wszystkie miejsca docelowe pośrednie";
 "shared_string_options" = "Opcje";
 "shared_string_previous" = "Poprzedni";
 "route_stops_before" = "Za %@ przystanków";
@@ -1054,7 +1054,7 @@
 "quick_action_replace_destination" = "Zastąp cel trasy";
 "add_destination" = "Dodaj cel trasy";
 "quick_action_add_first_intermediate" = "Dodaj pierwszy pośredni cel trasy";
-"quick_action_auto_zoom" = "Przełącz automatyczne przybliżanie";
+"quick_action_auto_zoom" = "Mapa z automatycznym powiększeniem";
 "quick_action_resume_pause_navigation" = "Wstrzymaj/wznów nawigację";
 "quick_action_start_stop_navigation" = "Rozpocznij/zakończ nawigację";
 "toggle_day_night" = "Zmień tryb dzienny/nocny";
@@ -1140,7 +1140,7 @@
 "select_map_marker" = "Wybierz znacznik mapy";
 "parking_place" = "Miejsce parkingowe";
 "route_add_start_point" = "Dodawanie punktu początkowego";
-"add_intermediate" = "Dodaj punkt pośredni";
+"add_intermediate" = "Dodaj cel pośredni";
 "add_home" = "Dodaj dom";
 "add_work" = "Dodaj pracę";
 "favorite_home_category" = "Dom";
@@ -1316,7 +1316,7 @@
 "rendering_value_red_name" = "Czerwony";
 "rendering_value_translucent_red_name" = "Przezroczysty czerwony";
 "rendering_value_darkyellow_name" = "Ciemnożółty";
-"rendering_attr_pisteRoutes_name" = "Stoki narciarskie";
+"rendering_attr_pisteRoutes_name" = "Trasy narciarskie";
 "rendering_value_translucent_lightblue_name" = "Przezroczysty jasnoniebieski";
 "rendering_value_disabled_name" = "Wyłączenie";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Płaski";
@@ -1326,7 +1326,7 @@
 "routing_attr_avoid_ferry_name" = "Bez promów";
 "rendering_attr_smoothness_very_bad_name" = "Bardzo zła";
 "rendering_attr_smoothness_good_name" = "Dobra";
-"rendering_attr_contourLines_description" = "Wyświetl od stopnia przybliżenia (wymaga danych poziomic):";
+"rendering_attr_contourLines_description" = "Wyświetlanie z poziomu powiększenia (wymaga danych linii konturowej):";
 "rendering_attr_showSurfaceGrade_name" = "Jakość dróg";
 "rendering_attr_surface_pebblestone_name" = "Tłuczeń żwirowy";
 "routeInfo_smoothness_name" = "Gładkość";
@@ -1497,7 +1497,7 @@
 "toggle_hillshade" = "Pokaż/ukryj teren";
 "hide_hillshade" = "Ukryj cieniowanie terenu";
 "show_hillshade" = "Pokaż cieniowanie terenu";
-"quick_action_hillshade_descr" = "Przycisk do pokazywania lub ukrywania cieniowania na mapie.";
+"quick_action_hillshade_descr" = "Przycisk umożliwiający pokazywanie lub ukrywanie cieniowania wzniesień na mapie.";
 "clear_tiles_warning" = "Zastosowanie tych zmian wyczyści dane z pamięci podręcznej dla tego źródła kafelków";
 "res_offlineSQL_URL_warning" = "Nieobsługiwany dla tego typu mapy";
 "res_zoom_invalid_value" = "Wartości powiększenia powinny być w przedziale 1-22";
@@ -3520,3 +3520,4 @@
 "obd_engine_oil_temperature_desc" = "Pokazuje temperaturę oleju silnikowego.";
 "map_text" = "Renderowanie mapy";
 "manage_purchases" = "Zarządzaj zakupami";
+"manage_storage" = "Zarządzaj przechowywaniem";

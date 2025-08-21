@@ -119,7 +119,7 @@ final class MapHudLayout: NSObject {
     }
     
     private func getViewName(_ view: UIView) -> String {
-        view.accessibilityIdentifier ?? view.restorationIdentifier ?? String(describing: type(of: view))
+        (view as? OAHudButton)?.buttonState?.id ?? view.accessibilityIdentifier ?? view.restorationIdentifier ?? String(describing: type(of: view))
     }
     
     private func updatePositionParams(for view: UIView, with position: ButtonPositionSize) {
@@ -137,10 +137,13 @@ final class MapHudLayout: NSObject {
             let parentH = Int(getAdjustedHeight())
             let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
             if m.left >= 0, m.top >= 0, m.right >= 0, m.bottom >= 0 {
+                let isRTL = containerView.isDirectionRTL()
+                let startInset = isRTL ? insets.right : insets.left
+                let endInset = isRTL ? insets.left  : insets.right
                 let leftAligned = position.isLeft
                 let topAligned = position.isTop
-                let xRaw = leftAligned ? (m.left - insets.left) : (m.right - insets.right)
-                let yRaw = topAligned ? (m.top - statusBarHeight) : (m.bottom - insets.bottom)
+                let xRaw = leftAligned ? m.left - startInset : m.right - endInset
+                let yRaw = topAligned ? m.top - statusBarHeight : m.bottom - insets.bottom
                 let xPixels = Int(round(max(0, xRaw)))
                 let yPixels = Int(round(max(0, yRaw)))
                 position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
@@ -324,10 +327,13 @@ final class MapHudLayout: NSObject {
         let width = Int(containerView.bounds.width - insets.left - insets.right)
         let height = Int(getAdjustedHeight())
         let m = OAUtilities.relativeMargins(for: button, inParent: containerView)
+        let isRTL = containerView.isDirectionRTL()
+        let startInset = isRTL ? insets.right : insets.left
+        let endInset = isRTL ? insets.left : insets.right
         let leftAligned = pos.isLeft
         let topAligned = pos.isTop
-        let xRaw = leftAligned ? (m.left - insets.left) : (m.right - insets.right)
-        let yRaw = topAligned ? (m.top - statusBarHeight) : (m.bottom - insets.bottom)
+        let xRaw = leftAligned ? m.left - startInset : m.right - endInset
+        let yRaw = topAligned ? m.top - statusBarHeight : m.bottom - insets.bottom
         let xPixels = Int(round(max(0, xRaw)))
         let yPixels = Int(round(max(0, yRaw)))
         pos.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(width), heightPx: Int32(height), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))

@@ -428,7 +428,15 @@
         [_tagValues removeObjectForKey:_currentPoiType.getEditOsmTag];
         [_tagValues removeObjectForKey:_currentPoiType.getOsmTag2];
         [_tagValues removeObjectForKey:_currentPoiType.getEditOsmTag2];
-        [_changedTags minusSet:[NSSet setWithObjects:_currentPoiType.getEditOsmTag, _currentPoiType.getOsmTag2, _currentPoiType.getEditOsmTag2, nil]];
+        
+        NSMutableArray *osmTags = [NSMutableArray array];
+        if (_currentPoiType.getEditOsmTag)
+            [osmTags addObject:_currentPoiType.getEditOsmTag];
+        if (_currentPoiType.getOsmTag2)
+            [osmTags addObject:_currentPoiType.getOsmTag2];
+        if (_currentPoiType.getEditOsmTag2)
+            [osmTags addObject:_currentPoiType.getEditOsmTag2];
+        [_changedTags minusSet:[NSSet setWithArray:osmTags]];
     }
 }
 

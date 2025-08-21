@@ -158,7 +158,8 @@ final class MapHudLayout: NSObject {
         let startX = CGFloat(position.getXStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let insets = containerView.safeAreaInsets
-        let newX: CGFloat = position.isLeft ? insets.left + startX : containerView.bounds.width - insets.right - view.bounds.width - startX
+        let placeOnLeft = containerView.isDirectionRTL() ? !position.isLeft : position.isLeft
+        let newX: CGFloat = placeOnLeft ? insets.left + startX : containerView.bounds.width - insets.right - view.bounds.width - startX
         let newY: CGFloat = position.isTop ? statusBarHeight + startY : statusBarHeight + getAdjustedHeight() - view.bounds.height - startY
         let newOrigin = CGPoint(x: newX, y: newY)
         if view.frame.origin != newOrigin {

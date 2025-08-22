@@ -2328,3 +2328,6 @@
 "obd_fuel_type_bifuel_hydrogen" = "Двугоривен: водорпд";
 "rpm_unit" = "об/мин";
 "OsmAnd Maps" = "OsmAnd Карти";
+"download_depth_countours" = "Контури на морски дълбочини";
+"day_short" = "ден";
+"week_short" = "Седм.";

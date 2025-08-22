@@ -54,18 +54,21 @@ final class ImageCarouselViewController: UIPageViewController {
         view.backgroundColor = .black
         navigationItem.title = titleString
         
-        configureNavigationBar()
+        configureNavigationBarAppearance()
         configureContentMetadataView()
         downloadMetadataIfNeeded()
         prefetchAdjacentItems()
-        
-        dataSource = self
         
         if let imageDatasource {
             let initialVC: ImageViewerController = .init(index: initialIndex,
                                                          imageItem: imageDatasource.imageItem(at: initialIndex))
             initialVC.placeholderImage = imageDatasource.placeholderImage
             setViewControllers([initialVC], direction: .forward, animated: true)
+            
+            if imageDatasource.count() > 1 {
+                dataSource = self
+            }
+            configureNavigationBarButtons()
         }
     }
     
@@ -125,40 +128,47 @@ final class ImageCarouselViewController: UIPageViewController {
             UIColor.black.cgColor
         ]
         
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        gradientLayer.startPoint = .init(x: 0.5, y: 0)
+        gradientLayer.endPoint = .init(x: 0.5, y: 1)
         
         view.layer.insertSublayer(gradientLayer, below: metadataContainerView.layer)
     }
     
-    private func configureNavigationBar() {
+    private func configureNavigationBarAppearance() {
         navigationController?.setDefaultNavigationBarAppearance()
-        
+    }
+    
+    private func configureNavigationLeftBarButtonItemButtons() {
         let closeBarButton = createNavbarButton(title: localizedString("shared_string_close"),
                                                 icon: nil,
                                                 color: .iconColorActive,
                                                 action: #selector(onCloseBarButtonActon),
                                                 target: self,
                                                 menu: nil)
-        
         navigationItem.leftBarButtonItem = closeBarButton
+    }
+    
+    private func configureNavigationRightBarButtonItemButtons() {
+        guard let card = getCardForIndex(currentIndex) else {
+            return
+        }
         
         var firstSectionItems = [UIAction]()
-        let detailsAction = UIAction(title: localizedString("shared_string_details"), image: .icCustomInfoOutlined) { [weak self] _ in
-            guard let self,
-                  let card = getCardForIndex(currentIndex),
-                  let parent else { return }
-            GalleryContextMenuProvider.openDetailsController(card: card, rootController: parent)
+        if card is WikiImageCard {
+            let detailsAction = UIAction(title: localizedString("shared_string_details"), image: .icCustomInfoOutlined) { [weak self] _ in
+                guard let self,
+                      let card = getCardForIndex(currentIndex),
+                      let parent else { return }
+                GalleryContextMenuProvider.openDetailsController(card: card, rootController: parent)
+            }
+            detailsAction.accessibilityLabel = localizedString("shared_string_details")
+            firstSectionItems.append(detailsAction)
         }
-        detailsAction.accessibilityLabel = localizedString("shared_string_details")
-        firstSectionItems.append(detailsAction)
         
         let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: .icCustomExternalLink) { [weak self] _ in
             guard let self, let card = getCardForIndex(currentIndex) else { return }
-            guard let url = URL(string: card.urlWithCommonAttributions) else { return }
-            let safariViewController = SFSafariViewController(url: url)
-            safariViewController.preferredControlTintColor = .iconColorActive
-            parent?.present(safariViewController, animated: true, completion: nil)
+            
+            SafariPresenter.present(from: self, card: card)
         }
         openInBrowserAction.accessibilityLabel = localizedString("open_in_browser")
         
@@ -180,12 +190,20 @@ final class ImageCarouselViewController: UIPageViewController {
         navigationItem.rightBarButtonItems = [detailsBarButton, sharedBarButton]
     }
     
+    private func configureNavigationBarButtons() {
+        configureNavigationLeftBarButtonItemButtons()
+        configureNavigationRightBarButtonItemButtons()
+    }
+
     private func updateMetaData(with pageIndex: Int) {
-        guard let card = getCardForIndex(pageIndex) else { return }
+        guard let card = getCardForIndex(pageIndex) as? WikiImageCard else {
+            contentMetadataView.updateMetadata(with: nil, imageName: "")
+            return
+        }
         contentMetadataView.updateMetadata(with: card.metadata, imageName: card.topIcon)
     }
     
-    private func getCardForIndex(_ index: Int) -> WikiImageCard? {
+    private func getCardForIndex(_ index: Int) -> ImageCard? {
         guard let imageDatasource else { return nil }
         
         if case .card(let card) = imageDatasource.imageItem(at: index) {
@@ -199,7 +217,7 @@ final class ImageCarouselViewController: UIPageViewController {
         guard let datasource = imageDatasource as? SimpleImageDatasource else { return }
         let wikiImageCards = datasource.imageItems.compactMap { item in
             if case .card(let card) = item {
-                return card
+                return card as? WikiImageCard
             }
             return nil
         }
@@ -247,7 +265,7 @@ final class ImageCarouselViewController: UIPageViewController {
 
         let cardsForPrefetch = indicesForPrefetch.compactMap { index -> WikiImageCard? in
             guard index >= 0 && index < imageDatasource.count() else { return nil }
-            guard let card = getCardForIndex(index),
+            guard let card = getCardForIndex(index) as? WikiImageCard,
                   let metadata = card.metadata else { return nil }
             
             let isMetadataMissing = [
@@ -290,13 +308,29 @@ final class ImageCarouselViewController: UIPageViewController {
     }
     
     @objc private func onSharedBarButtonActon(_ sender: UIBarButtonItem) {
-        guard let obj = getCardForIndex(currentIndex) else { return }
-        guard let encodedURLString = obj.urlWithCommonAttributions.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: encodedURLString) else {
-            NSLog("Error: Encoding failed or invalid URL: \( obj.urlWithCommonAttributions)")
+        guard let card = getCardForIndex(currentIndex) else { return }
+
+        let url: URL
+
+        switch card {
+        case let wikiCard as WikiImageCard:
+            guard let encoded = wikiCard.urlWithCommonAttributions
+                .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                  let encodedURL = URL(string: encoded) else {
+                NSLog("Error: Invalid encoded URL: \(wikiCard.urlWithCommonAttributions)")
+                return
+            }
+            url = encodedURL
+        case let urlCard as UrlImageCard:
+            guard let imageURL = URL(string: urlCard.imageUrl) else {
+                NSLog("Error: Invalid URL: \(urlCard.imageUrl)")
+                return
+            }
+            url = imageURL
+        default:
             return
         }
-        
+
         showActivity([url], sourceView: view, barButtonItem: sender)
     }
 }
@@ -349,6 +383,7 @@ extension ImageCarouselViewController: UIPageViewControllerDelegate {
            let vc = viewControllers?.first as? ImageViewerController {
             currentIndex = vc.index
             updatePage(index: currentIndex)
+            configureNavigationRightBarButtonItemButtons()
         }
     }
     

@@ -1,5 +1,5 @@
 enum ImageItem {
-    case card(WikiImageCard)
+    case card(ImageCard)
 }
 
 final class SimpleImageDatasource: ImageDataSource {

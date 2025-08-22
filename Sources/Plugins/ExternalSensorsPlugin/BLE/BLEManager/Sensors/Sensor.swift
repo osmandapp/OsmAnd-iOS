@@ -35,21 +35,12 @@ class Sensor {
 }
 
 protocol SensorData {
-    var dataFields: [SensorDataField] { get }
-    var extraDataFields: [SensorDataField] { get }
     var widgetFields: [SensorWidgetDataField]? { get }
     
     func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField?
 }
 
 extension SensorData {
-    var dataFields: [SensorDataField] {
-        return []
-    }
-    
-    var extraDataFields: [SensorDataField] {
-        return []
-    }
     
     var widgetFields: [SensorWidgetDataField]? {
         return nil

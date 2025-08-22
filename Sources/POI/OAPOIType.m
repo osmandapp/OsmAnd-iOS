@@ -167,6 +167,16 @@
     return _editValue;
 }
 
+- (NSString *)getEditOsmTag2
+{
+    return self.reference ? [_referenceType getEditOsmTag2] : _editTag2;
+}
+
+- (NSString *)getEditOsmValue2
+{
+    return self.reference ? [_referenceType getEditOsmValue2] : _editValue2;
+}
+
 -(NSString *) getOsmValue
 {
     if(self.reference)

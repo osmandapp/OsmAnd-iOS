@@ -92,6 +92,8 @@
         [entity putTagNoLC:POI_TYPE_TAG value:[poiType.name stringByReplacingOccurrencesOfString:@"_" withString:@" "]];
         if (poiType.getOsmTag2)
             [entity putTagNoLC:poiType.getOsmTag2 value:poiType.getOsmValue2];
+        if (poiType.getEditOsmTag2)
+            [entity putTagNoLC:poiType.getEditOsmTag2 value:poiType.getEditOsmValue2];
     }
     
     NSString *name = poi.name;

@@ -433,6 +433,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
                 [entity putTagNoLC:poiType.getOsmTag2 value:poiType.getOsmValue2];
                 [entity removeTag:[REMOVE_TAG_PREFIX stringByAppendingString:poiType.getOsmTag2]];
             }
+            if (poiType.getEditOsmTag2)
+            {
+                [entity putTagNoLC:poiType.getEditOsmTag2 value:poiType.getEditOsmValue2];
+                [entity removeTag:[REMOVE_TAG_PREFIX stringByAppendingString:poiType.getEditOsmTag2]];
+            }
         }
         else if (poiTypeTag.length > 0)
         {

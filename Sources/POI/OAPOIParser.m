@@ -278,6 +278,10 @@ static const char *kEditTagAttributeName = "edit_tag";
 static NSUInteger kEditTagAttributeNameLength = 9;
 static const char *kEditValueAttributeName = "edit_value";
 static NSUInteger kEditValueAttributeNameLength = 11;
+static const char *kEditTag2AttributeName = "edit_tag2";
+static NSUInteger kEditTag2AttributeNameLength = 10;
+static const char *kEditValue2AttributeName = "edit_value2";
+static NSUInteger kEditValue2AttributeNameLength = 12;
 static const char *kTopAttributeName = "top";
 static NSUInteger kTopAttributeNameLength = 4;
 static const char *kMapAttributeName = "map";
@@ -631,6 +635,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     NSString *value2 = nil;
     NSString *editTag = nil;
     NSString *editValue = nil;
+    NSString *editTag2 = nil;
+    NSString *editValue2 = nil;
     BOOL nonEditable = NO;
     BOOL top = NO;
     BOOL isHidden = NO;
@@ -707,6 +713,22 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         {
             int length = (int) (attributes[i].end - attributes[i].value);
             editValue = [[NSString alloc] initWithBytes:attributes[i].value
+                                              length:length
+                                            encoding:NSUTF8StringEncoding];
+        }
+        else if (0 == strncmp((const char*)attributes[i].localname, kEditTag2AttributeName,
+                              kEditTag2AttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            editTag2 = [[NSString alloc] initWithBytes:attributes[i].value
+                                            length:length
+                                          encoding:NSUTF8StringEncoding];
+        }
+        else if (0 == strncmp((const char*)attributes[i].localname, kEditValue2AttributeName,
+                              kEditValue2AttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            editValue2 = [[NSString alloc] initWithBytes:attributes[i].value
                                               length:length
                                             encoding:NSUTF8StringEncoding];
         }
@@ -816,6 +838,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         poiType.top = top;
         poiType.editTag = editTag;
         poiType.editValue = editValue;
+        poiType.editTag2 = editTag2;
+        poiType.editValue2 = editValue2;
         poiType.reference = reference;
         poiType.mapOnly = mapOnly;
         poiType.isHidden = isHidden;

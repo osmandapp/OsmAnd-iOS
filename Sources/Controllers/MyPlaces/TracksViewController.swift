@@ -1964,6 +1964,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 cell.accessoryType = tableView.isEditing ? .none : .disclosureIndicator
                 if let iconName = item.iconName {
                     cell.leftIconView.image = UIImage.templateImageNamed(iconName)
+                } else {
+                    cell.leftIconView.image = nil
                 }
                 if let color = item.obj(forKey: colorKey) as? UIColor {
                     cell.leftIconView.tintColor = color
@@ -1989,6 +1991,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 cell.descriptionLabel?.text = item.descr
                 if let iconName = item.iconName {
                     cell.cellImageView?.image = UIImage.templateImageNamed(iconName)
+                } else {
+                    cell.cellImageView?.image = nil
                 }
                 
                 cell.cellImageView?.tintColor = item.iconTintColor

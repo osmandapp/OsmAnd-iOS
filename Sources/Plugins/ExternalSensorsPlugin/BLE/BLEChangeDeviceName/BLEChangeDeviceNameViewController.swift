@@ -111,11 +111,6 @@ extension BLEChangeDeviceNameViewController: UITextViewDelegate {
         return true;
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
     private func updateFileNameFromEditText(name: String) {
         let text = name.trimmingCharacters(in: .whitespacesAndNewlines)
         navigationItem.setRightBarButtonItems(isEnabled: false, with: .buttonBgColorDisabled)

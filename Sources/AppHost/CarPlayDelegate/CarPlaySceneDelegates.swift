@@ -89,8 +89,9 @@ final class CarPlaySceneDelegate: UIResponder {
     }
     
     private func configureCarPlayNavigationMode() {
-        let settings = OAAppSettings.sharedManager()
         guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
+        
+        let settings = OAAppSettings.sharedManager()
         if defaultAppMode == nil {
             defaultAppMode = settings.applicationMode.get()
         }

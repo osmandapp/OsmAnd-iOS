@@ -13,8 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OACameraDistanceWidget : OASimpleWidget
 
 - (instancetype)initWithСustomId:(NSString * _Nullable)customId
-                          appMode:(OAApplicationMode *)appMode
-                     widgetParams:(NSDictionary * _Nullable)widgetParams;
+                         appMode:(OAApplicationMode *)appMode
+                    widgetParams:(NSDictionary * _Nullable)widgetParams;
 
 @end
 

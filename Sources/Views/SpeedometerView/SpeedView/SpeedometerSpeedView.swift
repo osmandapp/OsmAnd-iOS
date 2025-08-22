@@ -24,7 +24,6 @@ final class SpeedometerSpeedView: UIView {
     private let previewValueDefault: Int = 85
     
     private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
-    private let UNDEFINED_SPEED = -1.0
     private var cachedSpeed = -1.0
     private var cachedMetricSystem = -1
     

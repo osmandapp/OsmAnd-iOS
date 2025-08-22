@@ -5,6 +5,7 @@
 //  Created by Max Kojin on 14/02/24.
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
+
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -29,8 +30,8 @@ const static int kZoomDurationMillis = 1500;
 
 - (OAComplexZoom * _Nullable)calculateZoomBySpeedToAnimate:(OAMapRendererView *)mapRenderer
                                                 myLocation:(CLLocation *)myLocation
-                                          rotationToAnimate:(float)rotationToAnimate
-                                                 nextTurn:(OANextDirectionInfo *)nextTurn;
+                                         rotationToAnimate:(float)rotationToAnimate
+                                                  nextTurn:(OANextDirectionInfo *)nextTurn;
 
 - (OAAutoZoomDTO * _Nullable)getAnimatedZoomParamsForChart:(OAMapRendererView *)mapRenderer
                                                currentZoom:(float)currentZoom
@@ -43,11 +44,11 @@ const static int kZoomDurationMillis = 1500;
                                                  currentZoom:(float)currentZoom
                                                          lat:(double)lat
                                                          lon:(double)lon
-                                                      rotation:(float)rotation
-                                                         speed:(float)speed;
+                                                    rotation:(float)rotation
+                                                       speed:(float)speed;
 
 - (OAAutoZoomDTO * _Nullable)getAutoZoomParams:(float)currentZoom
-                                     autoZoom:(OAComplexZoom *)autoZoom
+                                      autoZoom:(OAComplexZoom *)autoZoom
                            fixedDurationMillis:(float)fixedDurationMillis;
 
 - (void)onManualZoomChange;

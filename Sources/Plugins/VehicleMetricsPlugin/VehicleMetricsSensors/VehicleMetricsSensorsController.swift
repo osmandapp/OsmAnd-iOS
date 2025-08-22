@@ -491,12 +491,6 @@ extension VehicleMetricsSensorsController {
         navigationController?.present(UINavigationController(rootViewController: nameVC), animated: true)
     }
     
-    private func showDescriptionViewController(device: Device) {
-        let controller = VehicleMetricsDescriptionViewController()
-        controller.device = device
-        navigationController?.pushViewController(controller, animated: true)
-    }
-    
     private func showDescriptionViewController(device: Device, startBehavior: VehicleMetricsDescriptionViewController.TableViewStartBehavior) {
         let controller = VehicleMetricsDescriptionViewController()
         controller.device = device

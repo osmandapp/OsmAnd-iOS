@@ -22,5 +22,3 @@ typedef void(^OAUpdateValueCallback)(float value);
 @end
 
 NS_ASSUME_NONNULL_END
-
-

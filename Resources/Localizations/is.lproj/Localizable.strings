@@ -1155,7 +1155,7 @@
 "select_map_marker" = "Veldu kortamerki";
 "parking_place" = "Bílastæði";
 "route_add_start_point" = "Bæta við upphafspunkti";
-"add_intermediate" = "Bæta við millipunkti";
+"add_intermediate" = "Bæta við milliáfanga";
 "add_home" = "Bæta við \"Heima\"";
 "add_work" = "Bæta við \"Vinna\"";
 "favorite_home_category" = "Heima";
@@ -3792,3 +3792,8 @@
 "obd_searching_text_description" = "Haltu tækinu þínu nálægt skynjaranum. Gakktu úr skugga um að vélin sé í gangi.";
 "connect_obd_instructions_title" = "OsmAnd styður Bluetooth-tengingar við OBD-II skynjara.";
 "connect_obd_instructions_step" = "1. Tengdu skynjarann í OBD-II gátt farartækisins.\n\n 2. Kveiktu á vél farartækisins\n\n 3. Virkjaðu Bluetooth á tækinu þínu\n\n 4. Ýttu á \'%@\' og veldu skynjarann þinn úr listanum.";
+"next_turn_information" = "Upplýsingar um næstu beygju";
+"manage_purchases" = "Sýsla með innkaup";
+"osm_live_payment_renews_3_years" = "Endurnýjast á þriggja ára fresti";
+"years_3" = "Þrjú ár";
+"next_turn_information_desc" = "Birtir komandi beygjuleiðbeiningar og götuheiti.";

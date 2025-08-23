@@ -3833,3 +3833,12 @@
 "shared_string_normal" = "Normal";
 "shared_string_large" = "Grande";
 "unit_of_temperature_description" = "Las unidades elegidas se aplicarán a todos los datos relacionados con la temperatura del perfil actual.";
+"standard_maps" = "Mapas estándar";
+"wikipedia_and_travel_maps" = "Wikipedia y mapas turísticos";
+"topography_maps" = "Mapas topográficos";
+"download_live_updates" = "Actualizaciones en vivo";
+"local_indexes_cat_tts" = "Indicaciones por voz (TTS)";
+"local_indexes_cat_voice" = "Indicaciones por voz (grabadas)";
+"rendering_styles" = "Estilos de representación";
+"next_turn_information" = "Información del siguiente giro";
+"next_turn_information_desc" = "Indica la dirección del siguiente giro y el nombre de la calle.";

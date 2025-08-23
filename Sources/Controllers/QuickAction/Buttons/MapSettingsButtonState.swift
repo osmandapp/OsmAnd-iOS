@@ -10,7 +10,7 @@ import Foundation
 
 @objcMembers
 final class MapSettingsButtonState: MapButtonState {
-    private static let hudId = "map.view.layers"
+    static let hudId = "map.view.layers"
     
     init() {
         super.init(withId: Self.hudId)

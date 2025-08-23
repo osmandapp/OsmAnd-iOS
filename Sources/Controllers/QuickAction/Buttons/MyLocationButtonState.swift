@@ -10,7 +10,7 @@ import Foundation
 
 @objcMembers
 final class MyLocationButtonState: MapButtonState {
-    private static let hudId = "map.view.back_to_loc"
+    static let hudId = "map.view.back_to_loc"
     
     init() {
         super.init(withId: Self.hudId)

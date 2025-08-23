@@ -10,7 +10,7 @@ import Foundation
 
 @objcMembers
 final class SearchButtonState: MapButtonState {
-    private static let hudId = "map.view.quick_search"
+    static let hudId = "map.view.quick_search"
     
     init() {
         super.init(withId: Self.hudId)

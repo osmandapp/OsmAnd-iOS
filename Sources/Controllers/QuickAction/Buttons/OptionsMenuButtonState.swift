@@ -10,7 +10,7 @@ import Foundation
 
 @objcMembers
 final class OptionsMenuButtonState: MapButtonState {
-    private static let hudId = "map.view.menu"
+    static let hudId = "map.view.menu"
     
     init() {
         super.init(withId: Self.hudId)

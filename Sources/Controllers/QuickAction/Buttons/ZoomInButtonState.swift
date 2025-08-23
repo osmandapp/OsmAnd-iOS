@@ -10,7 +10,7 @@ import Foundation
 
 @objcMembers
 final class ZoomInButtonState: MapButtonState {
-    private static let hudId = "map.view.zoom_id"
+    static let hudId = "map.view.zoom_id"
     
     init() {
         super.init(withId: Self.hudId)

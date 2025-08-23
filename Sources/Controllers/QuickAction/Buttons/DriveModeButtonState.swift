@@ -10,7 +10,7 @@ import Foundation
 
 @objcMembers
 final class DriveModeButtonState: MapButtonState {
-    private static let hudId = "map.view.route_planning"
+    static let hudId = "map.view.route_planning"
     
     init() {
         super.init(withId: Self.hudId)

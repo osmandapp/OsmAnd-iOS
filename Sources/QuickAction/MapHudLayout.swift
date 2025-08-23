@@ -8,12 +8,6 @@
 
 import UIKit
 
-@objc protocol UIViewMarginUpdatable {
-    var leftMargin: CGFloat { get set }
-    var rightMargin: CGFloat { get set }
-    var bottomMargin: CGFloat { get set }
-}
-
 @objcMembers
 final class MapHudLayout: NSObject {
     private static let uiRefreshInterval: TimeInterval = 0.1
@@ -33,7 +27,6 @@ final class MapHudLayout: NSObject {
     private var widgetOrder: [UIView] = []
     private var additionalOrder: [UIView] = []
     
-    private weak var alarmsContainer: UIView?
     private weak var topBarPanelContainer: UIView?
     private weak var leftWidgetsPanel: UIView?
     private weak var rightWidgetsPanel: UIView?
@@ -126,6 +119,11 @@ final class MapHudLayout: NSObject {
         updateButtonParams(for: view, with: position)
     }
     
+    private func isBottomPanelVisible() -> Bool {
+        guard let bottomWidgetsPanel else { return false }
+        return !bottomWidgetsPanel.isHidden && bottomWidgetsPanel.alpha > 0.01 && bottomWidgetsPanel.bounds.width > 0 && bottomWidgetsPanel.bounds.height > 0
+    }
+    
     @discardableResult private func updateWidgetPosition(_ view: UIView, _ position: ButtonPositionSize) -> ButtonPositionSize {
         let cell = CGFloat(ButtonPositionSize.Companion().CELL_SIZE_DP)
         let width8 = Int32(max(1, Int(view.bounds.width / dpToPx / cell)))
@@ -173,8 +171,7 @@ final class MapHudLayout: NSObject {
         return false
     }
     
-    func configure(alarmsContainer: UIView?, leftWidgetsPanel: UIView?, rightWidgetsPanel: UIView?, topBarPanelContainer: UIView?, bottomWidgetsPanel: UIView?) {
-        self.alarmsContainer = alarmsContainer
+    func configure(leftWidgetsPanel: UIView?, rightWidgetsPanel: UIView?, topBarPanelContainer: UIView?, bottomWidgetsPanel: UIView?) {
         self.leftWidgetsPanel = leftWidgetsPanel
         self.rightWidgetsPanel = rightWidgetsPanel
         self.topBarPanelContainer = topBarPanelContainer
@@ -289,10 +286,36 @@ final class MapHudLayout: NSObject {
             }
         }
         
+        var posById: [String: ButtonPositionSize] = [:]
         for btn in mapButtons where !btn.isHidden {
-            if let pos = btn.buttonState?.getDefaultPositionSize(), pos.width > 0, pos.height > 0 {
-                result.append((btn, pos))
+            guard let state = btn.buttonState else { continue }
+            let defPosition = state.getDefaultPositionSize()
+            guard defPosition.width > 0 && defPosition.height > 0 else { continue }
+            posById[state.id] = defPosition
+        }
+        
+        var rightX: Int32 = 0
+        var leftX: Int32 = 0
+        var applyFix = false
+        if isBottomPanelVisible(), let baseZoom = posById[ZoomInButtonState.hudId] ?? posById[ZoomOutButtonState.hudId], let ml = posById[MyLocationButtonState.hudId], let m3 = posById[Map3DButtonState.map3DHudId], ml.posH == ButtonPositionSize.Companion().POS_RIGHT, ml.posV == ButtonPositionSize.Companion().POS_BOTTOM, ml.marginX == baseZoom.marginX, m3.posH == ButtonPositionSize.Companion().POS_RIGHT, m3.posV == ButtonPositionSize.Companion().POS_BOTTOM, m3.marginX == baseZoom.marginX {
+            rightX = baseZoom.marginX
+            leftX = rightX + baseZoom.width + 1
+            applyFix = true
+        }
+        
+        for btn in mapButtons where !btn.isHidden {
+            guard let state = btn.buttonState, let p = posById[state.id] else { continue }
+            if applyFix {
+                switch state.id {
+                case ZoomInButtonState.hudId, ZoomOutButtonState.hudId:
+                    p.marginX = rightX; p.xMove = false; p.yMove = true
+                case MyLocationButtonState.hudId, Map3DButtonState.map3DHudId:
+                    p.marginX = leftX;  p.xMove = false; p.yMove = true
+                default: break
+                }
             }
+            
+            result.append((btn, p))
         }
         
         var updatedAdditional = additionalWidgetPositions
@@ -361,45 +384,14 @@ final class MapHudLayout: NSObject {
         if w > 0, abs(w - lastWidth) > 0.1 {
             lastWidth = w
             updateVerticalPanels()
-            if !portrait || tablet {
-                updateAlarmsContainer()
-            }
+        } else {
+            updateButtons()
         }
-        
-        updateButtons()
     }
     
     func updateVerticalPanels() {
         containerView.layoutIfNeeded()
-        if !portrait || tablet {
-            updateAlarmsContainer()
-        }
-        
         refresh()
-    }
-    
-    func updateAlarmsContainer() {
-        guard let alarmsContainer else { return }
-        containerView.layoutIfNeeded()
-        let baseMargin: CGFloat = 20.0
-        var panelOffset: CGFloat = 0.0
-        if !portrait || tablet, let bottom = bottomWidgetsPanel, !bottom.isHidden {
-            panelOffset = bottom.bounds.height
-        }
-        
-        let bottomMargin = max(baseMargin, panelOffset) + containerView.safeAreaInsets.bottom
-        if let updatable = alarmsContainer as? UIViewMarginUpdatable {
-            if updatable.bottomMargin != bottomMargin {
-                updatable.bottomMargin = bottomMargin
-            }
-        }
-        
-        if alarmsContainer.translatesAutoresizingMaskIntoConstraints {
-            let newY = containerView.bounds.height - bottomMargin - alarmsContainer.bounds.height
-            if abs(alarmsContainer.frame.origin.y - newY) > .ulpOfOne {
-                alarmsContainer.frame.origin.y = newY
-            }
-        }
     }
     
     func viewDidChangeLayout(_ view: UIView) {
@@ -410,9 +402,7 @@ final class MapHudLayout: NSObject {
         
         if view === leftWidgetsPanel || view === rightWidgetsPanel {
             updateVerticalPanels()
-        }
-        if view === bottomWidgetsPanel {
-            updateAlarmsContainer()
+            return
         }
         
         refresh()

@@ -408,8 +408,8 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
                 let mappedConstant = TracksSearchFilter.mapEOAMetricsConstantToMetricsConstants(OAAppSettings.sharedManager().metricSystem.get())
                 let minValue = Float(TracksSearchFilter.getDisplayValueFrom(filter: filter))
                 let maxValue = Float(TracksSearchFilter.getDisplayValueTo(filter: filter))
-                row.descr = filter.isValid() ? "\(decimalFormatter.string(from: NSNumber(value: minValue)) ?? "") - \(decimalFormatter.string(from: NSNumber(value: maxValue)) ?? "") \(filter.trackFilterType.measureUnitType.getFilterUnitText(mc: mappedConstant))" : ""
-                row.setObj(filter.isValid(), forKey: Self.isValidFilterKey)
+//                row.descr = filter.isValid() ? "\(decimalFormatter.string(from: NSNumber(value: minValue)) ?? "") - \(decimalFormatter.string(from: NSNumber(value: maxValue)) ?? "") \(filter.trackFilterType.measureUnitType.getFilterUnitText(mc: mappedConstant))" : ""
+//                row.setObj(filter.isValid(), forKey: Self.isValidFilterKey)
             }
         }
     }

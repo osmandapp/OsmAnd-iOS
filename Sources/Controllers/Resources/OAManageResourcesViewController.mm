@@ -953,9 +953,9 @@ static BOOL _repositoryUpdated = NO;
 
     NSString *northAmericaRegionId = OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString();
     NSString *russiaRegionId = OsmAnd::WorldRegions::RussiaRegionId.toNSString();
-    NSString *australiaAndOceaniaRegionId = OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString();
+    NSString *australiaAndOceaniaRegionId = [NSString stringWithFormat:@"%@_australia", OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()];
     NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
-
+    
     if ([self.region hasGroupItems] && (([self.region getLevel] > 1 && _regionMapItems.count > 0) || [self.region.superregion.regionId hasPrefix:northAmericaRegionId] || [self.region.regionId hasPrefix:russiaRegionId] || [self.region.regionId hasPrefix:unitedKingdomRegionId] || [self.region.regionId hasPrefix:australiaAndOceaniaRegionId]))
     {
         NSMutableArray<NSNumber *> *regionMapItemsTypes = [NSMutableArray new];

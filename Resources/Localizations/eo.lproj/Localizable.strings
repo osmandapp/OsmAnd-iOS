@@ -2498,7 +2498,7 @@
 "shared_string_min" = "Min.";
 "daynight_mode_day_summary" = "Ĉiam vidigas mapon en taga map-reĝimo, kiu plej taŭgas por uzi tage.";
 "daynight_mode_night_summary" = "Ĉiam vidigas la mapon en nokta map-reĝimo, kiu taŭgas por uzi nokte kaj mallume.";
-"daynight_mode_sunrise_sunset_summary" = "Aŭtomate baskulas inter taga kaj nokta map-reĝimoj surbaze de tempoj de sunleviĝo kaj sunsubiro.";
+"daynight_mode_sunrise_sunset_summary" = "Aŭtomate baskuligas inter taga kaj nokta map-reĝimoj surbaze de tempoj de sunleviĝo kaj sunsubiro.";
 "of" = "%d el %d";
 "downloaded_bytes" = "%@ el %@";
 "daynight_mode_app_theme_summary" = "La map-reĝimo agordiĝas laŭ etoso de la aplikaĵo – taga reĝimo por hela etoso kaj nokta reĝimo por malhela etoso.";

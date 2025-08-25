@@ -30,7 +30,7 @@ final class ObfConstants: NSObject {
     static private let RELATION = kEntityTypeRelation
     
     static func getOsmUrlForId(_ object: OAMapObject) -> String {
-        guard let type = getOsmEntityType(object) else { return "" }
+        guard let type = getOsmEntityType(object)?.lowercased() else { return "" }
         let osmId = getOsmObjectId(object)
         return "https://www.openstreetmap.org/\(type)/\(osmId)"
     }

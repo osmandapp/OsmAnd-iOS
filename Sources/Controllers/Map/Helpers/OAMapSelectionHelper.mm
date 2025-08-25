@@ -648,7 +648,16 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 {
                     OAPOI *poi = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:(OARenderedObject *)selectedObject.object];
                     if (poi)
+                    {
+                        NSString *type = [ObfConstants getOsmEntityType:selectedObject.object];
+                        if (type)
+                        {
+                            int64_t osmId = [ObfConstants getOsmObjectId:selectedObject.object];
+                            int64_t poiObjectId = [ObfConstants createMapObjectIdFromOsmId:osmId type:type];
+                            poi.obfId = poiObjectId;
+                        }
                         selectedObject.object = poi;
+                    }
                 }
             }
             if ([selectedObject.object isKindOfClass:[OAPOI class]])

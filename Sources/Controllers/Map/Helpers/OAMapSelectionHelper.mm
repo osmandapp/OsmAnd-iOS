@@ -818,7 +818,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     }
     OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(50, OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude)));
     
-    const auto foundBinaryMapObjects = [OATravelGuidesHelper searchGpxMapObject:travelGpx bbox31:bbox31 reader:nil];
+    const auto foundBinaryMapObjects = [OATravelGuidesHelper searchGpxMapObject:travelGpx bbox31:bbox31 reader:nil useAllObfFiles:YES];
     
     BOOL osmRoutesAlreadyAdded = NO;
     for (const auto obfMapObject : foundBinaryMapObjects)

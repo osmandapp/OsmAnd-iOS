@@ -29,6 +29,12 @@
 
     self.descriptionWithButtonConstraint.active = hasButton;
     self.descriptionNoButtonConstraint.active = !hasButton;
+    
+    BOOL hasTitle = !self.titleLabel.hidden;
+
+    self.descriptionWithTitleConstraint.active = hasTitle;
+    self.titleWithImageConstraint.active = hasTitle;
+    self.descriptionNoTitleConstraint.active = !hasTitle;
 
     [super updateConstraints];
 }
@@ -42,6 +48,12 @@
 
         res = res || self.descriptionWithButtonConstraint.active != hasButton;
         res = res || self.descriptionNoButtonConstraint.active != !hasButton;
+        
+        BOOL hasTitle = !self.titleLabel.hidden;
+
+        res = res || self.descriptionWithTitleConstraint.active != hasButton;
+        res = res || self.titleWithImageConstraint.active != hasButton;
+        res = res || self.descriptionNoTitleConstraint.active != !hasButton;
     }
     return res;
 }
@@ -49,6 +61,11 @@
 - (void)showButton:(BOOL)show
 {
     self.button.hidden = !show;
+}
+
+- (void)showTitle:(BOOL)show
+{
+    self.titleLabel.hidden = !show;
 }
 
 @end

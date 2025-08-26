@@ -1065,7 +1065,7 @@ struct DrawPathData
                 ? [previousRouteLocation bearingTo:currentRouteLocation]
                 : [previousRouteLocation bearingTo:currentLocation];
             lastProj = [lastProj locationWithCourse:[OAMapUtils normalizeDegrees360:calcbearing]];
-            if ([currentLocation distanceFromLocation:lastProj] > [_routingHelper getMaxAllowedProjectDist:currentLocation])
+            if ([currentLocation haversineDistanceInMetersTo:lastProj] > [_routingHelper getMaxAllowedProjectDist:currentLocation])
             {
                 lastProj = nil;
             }
@@ -1181,7 +1181,7 @@ struct DrawPathData
                     OsmAnd::Utilities::get31TileNumberX(locations[i + 1].coordinate.longitude),
                     OsmAnd::Utilities::get31TileNumberY(locations[i + 1].coordinate.latitude)));
                 firstWalkingPointsData.distances.push_back(0.0);
-                firstWalkingPointsData.distances.push_back([location distanceFromLocation:locations[i + 1]]);
+                firstWalkingPointsData.distances.push_back([location haversineDistanceInMetersTo:locations[i + 1]]);
             }
             else if (location == route.lastIntroducedPoint && i > 0)
             {
@@ -1194,14 +1194,14 @@ struct DrawPathData
                     OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
                     OsmAnd::Utilities::get31TileNumberY(location.coordinate.latitude)));
                 lastWalkingPointsData.distances.push_back(0.0);
-                lastWalkingPointsData.distances.push_back([location distanceFromLocation:locations[i - 1]]);
+                lastWalkingPointsData.distances.push_back([location haversineDistanceInMetersTo:locations[i - 1]]);
             }
             else
             {
                 if (pointsData.points.isEmpty())
                     pointsData.distances.push_back(0.0);
                 else
-                    pointsData.distances.push_back([locations[i] distanceFromLocation:locations[i - 1]]);
+                    pointsData.distances.push_back([locations[i] haversineDistanceInMetersTo:locations[i - 1]]);
 
                 pointsData.indexes.push_back(i);
                 pointsData.points.push_back(OsmAnd::PointI(

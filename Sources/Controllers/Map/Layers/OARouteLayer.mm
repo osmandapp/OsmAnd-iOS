@@ -151,7 +151,6 @@ struct DrawPathData
     _сoloringTypeAvailabilityCache = [[NSCache alloc] init];
     
     _initDone = YES;
-    
     [self.mapView addKeyedSymbolsProvider:_collection];
     [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
 
@@ -924,10 +923,10 @@ struct DrawPathData
     }
     if (!_routeAttributes || !_walkAttributes || !_walkPTAttributes)
         return;
-
+    
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OARouteCalculationResult *route = [_routingHelper getRoute];
-
+    
     // Draw public transport route
     if ([_routingHelper isPublicTransportMode])
     {
@@ -943,7 +942,7 @@ struct DrawPathData
         [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
         _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
         _transportRouteMarkers->setPriority(_linesPriority);
-
+        
         NSInteger currentRoute = _transportHelper.currentRoute;
         const auto routes = [_transportHelper getRoutes];
         const auto route = currentRoute != -1 && routes.size() > currentRoute ? routes[currentRoute] : nullptr;
@@ -971,7 +970,7 @@ struct DrawPathData
         }
         return;
     }
-        
+    
     // Draw regular route
     if ([_routingHelper getFinalLocation] && route && [route isCalculated])
     {
@@ -981,13 +980,13 @@ struct DrawPathData
         [self updateRouteColors:isNight];
         _prevRouteColoringType = _routeColoringType;
         _prevRouteInfoAttribute = _routeInfoAttribute;
-
+        
         OAColoringType *routeColoringType = _routeColoringType;
         if (![self isColoringAvailable:route routeColoringType:routeColoringType attributeName:_routeInfoAttribute])
             routeColoringType = OAColoringType.DEFAULT;
         
         BOOL routeUpdated = shouldRedraw || _route != route;
-
+        
         BOOL gradientRoute = [routeColoringType isGradient];
         NSString *colorPaletteFile = @"";
         if (gradientRoute)
@@ -995,14 +994,14 @@ struct DrawPathData
             colorPaletteFile = [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [routeColoringType toColorizationType]
                                                        gradientPaletteName:_routeGradientPalette];
             routeUpdated = routeUpdated || prevRouteColoringType != routeColoringType
-                || _colorizationScheme != COLORIZATION_GRADIENT || [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile];
+            || _colorizationScheme != COLORIZATION_GRADIENT || [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile];
         }
-
+        
         BOOL attributedRoute = [routeColoringType isRouteInfoAttribute];
         if (attributedRoute)
             routeUpdated = routeUpdated || ![prevRouteInfoAttribute isEqualToString:_routeInfoAttribute]
-                || _colorizationScheme != COLORIZATION_SOLID;
-
+            || _colorizationScheme != COLORIZATION_SOLID;
+        
         BOOL solidColorRoute = [routeColoringType isSolidSingleColor];
         if (solidColorRoute)
             routeUpdated = routeUpdated || _colorizationScheme != COLORIZATION_NONE || _colors.count() > 0;
@@ -1022,11 +1021,11 @@ struct DrawPathData
                 return;
             
             OARouteColorize *colorizationHelper =
-                [[OARouteColorize alloc] initWithGpxFile:gpx
-                                                analysis:[gpx getAnalysisFileTimestamp:0]
-                                                    type:[routeColoringType toColorizationType]
-                                                 palette:colorPalette
-                                         maxProfileSpeed:0
+            [[OARouteColorize alloc] initWithGpxFile:gpx
+                                            analysis:[gpx getAnalysisFileTimestamp:0]
+                                                type:[routeColoringType toColorizationType]
+                                             palette:colorPalette
+                                     maxProfileSpeed:0
             ];
             _colorizationScheme = COLORIZATION_GRADIENT;
             _colors.clear();
@@ -1049,26 +1048,31 @@ struct DrawPathData
             _colors.clear();
         }
         _route = route;
-
+        
         CLLocation *lastProj = nil;
         CLLocationCoordinate2D coord = self.mapViewController.mapLayers.myPositionLayer.getActiveMarkerLocation;
         CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude];
         int currentRoute = [route getCurrentRouteForLocation:currentLocation];
+        
         EOARouteService routeService = (EOARouteService)_routingHelper.getAppMode.getRouterService;
         BOOL directToActive = routeService == DIRECT_TO;
         if (currentRoute > 0)
         {
             CLLocation *previousRouteLocation = locations[currentRoute - 1];
             CLLocation *currentRouteLocation = locations[currentRoute];
-            lastProj = [OAMapUtils getProjection:currentLocation fromLocation:previousRouteLocation toLocation:currentRouteLocation];
-            float calcbearing = ![OAMapUtils areLatLonEqual:previousRouteLocation.coordinate l2:currentRouteLocation.coordinate]
-                ? [previousRouteLocation bearingTo:currentRouteLocation]
-                : [previousRouteLocation bearingTo:currentLocation];
-            lastProj = [lastProj locationWithCourse:[OAMapUtils normalizeDegrees360:calcbearing]];
-            if ([currentLocation distanceFromLocation:lastProj] > [_routingHelper getMaxAllowedProjectDist:currentLocation])
-            {
+            lastProj = [self getProject:currentLocation from:previousRouteLocation to:currentRouteLocation];
+            
+            BOOL result = [OASKMapUtils.shared areLatLonEqualL1:[[OASKLatLon alloc]
+                                                                 initWithLatitude:previousRouteLocation.coordinate.latitude longitude:previousRouteLocation.coordinate.longitude]
+                                                             l2:[[OASKLatLon alloc]
+                                                                 initWithLatitude:currentRouteLocation.coordinate.latitude longitude:currentRouteLocation.coordinate.longitude]];
+            
+            float calcbearing = !result
+            ? [previousRouteLocation bearingTo:currentRouteLocation]
+            : [previousRouteLocation bearingTo:currentLocation];
+            lastProj = [lastProj locationWithCourse:[OASKMapUtils.shared normalizeDegrees360Degrees:calcbearing]];
+            if ([currentLocation haversineDistanceInMetersTo:lastProj] > [_routingHelper getMaxAllowedProjectDist:currentLocation])
                 lastProj = nil;
-            }
         } else {
             lastProj = nil;
         }
@@ -1138,9 +1142,7 @@ struct DrawPathData
                             if (passedLineId != pathData.lineId)
                                 passedDist = pathData.distances[i];
                             else
-                                passedDist += i > 0
-                                    ? pathData.distances[i]
-                                    : lastPathDist;
+                                passedDist += i > 0 ? pathData.distances[i] : lastPathDist;
                             
                             passedLineId = pathData.lineId;
                             lastPathDist = pathData.distances[pathData.distances.size() - 1];
@@ -1149,17 +1151,22 @@ struct DrawPathData
                 }
             }
             
-            if (lastProj && lastX31 != 0 && lastY31 != 0)
-                passedDist += OsmAnd::Utilities::measuredDist31(
-                    OsmAnd::Utilities::get31TileNumberX(lastProj.coordinate.longitude),
-                    OsmAnd::Utilities::get31TileNumberY(lastProj.coordinate.latitude),
-                    lastX31, lastY31);
+            if (lastProj && lastX31 != 0 && lastY31 != 0) {
+                double dist = [OASKMapUtils.shared measuredDist31X1:
+                               [OASKMapUtils.shared get31TileNumberXLongitude:lastProj.coordinate.longitude]
+                                                                 y1:[OASKMapUtils.shared get31TileNumberYLatitude:lastProj.coordinate.latitude]
+                                                                 x2:lastX31
+                                                                 y2:lastY31];
+                
+                passedDist += dist;
+                
+            }
             
             if (passedLineId > 0)
                 [self updateRouteSegment:passedLineId startingDistance:passedDist];
-
+            
             [self buildActionArrows:currentRouteChanged];
-
+            
             return;
         }
         
@@ -1174,39 +1181,39 @@ struct DrawPathData
             {
                 firstWalkingPointsData.indexes.push_back(i);
                 firstWalkingPointsData.points.push_back(OsmAnd::PointI(
-                    OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
-                    OsmAnd::Utilities::get31TileNumberY(location.coordinate.latitude)));
+                                                                       OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
+                                                                       OsmAnd::Utilities::get31TileNumberY(location.coordinate.latitude)));
                 firstWalkingPointsData.indexes.push_back(i + 1);
                 firstWalkingPointsData.points.push_back(OsmAnd::PointI(
-                    OsmAnd::Utilities::get31TileNumberX(locations[i + 1].coordinate.longitude),
-                    OsmAnd::Utilities::get31TileNumberY(locations[i + 1].coordinate.latitude)));
+                                                                       OsmAnd::Utilities::get31TileNumberX(locations[i + 1].coordinate.longitude),
+                                                                       OsmAnd::Utilities::get31TileNumberY(locations[i + 1].coordinate.latitude)));
                 firstWalkingPointsData.distances.push_back(0.0);
-                firstWalkingPointsData.distances.push_back([location distanceFromLocation:locations[i + 1]]);
+                firstWalkingPointsData.distances.push_back([location haversineDistanceInMetersTo:locations[i + 1]]);
             }
             else if (location == route.lastIntroducedPoint && i > 0)
             {
                 lastWalkingPointsData.indexes.push_back(i - 1);
                 lastWalkingPointsData.points.push_back(OsmAnd::PointI(
-                    OsmAnd::Utilities::get31TileNumberX(locations[i - 1].coordinate.longitude),
-                    OsmAnd::Utilities::get31TileNumberY(locations[i - 1].coordinate.latitude)));
+                                                                      OsmAnd::Utilities::get31TileNumberX(locations[i - 1].coordinate.longitude),
+                                                                      OsmAnd::Utilities::get31TileNumberY(locations[i - 1].coordinate.latitude)));
                 lastWalkingPointsData.indexes.push_back(i);
                 lastWalkingPointsData.points.push_back(OsmAnd::PointI(
-                    OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
-                    OsmAnd::Utilities::get31TileNumberY(location.coordinate.latitude)));
+                                                                      OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
+                                                                      OsmAnd::Utilities::get31TileNumberY(location.coordinate.latitude)));
                 lastWalkingPointsData.distances.push_back(0.0);
-                lastWalkingPointsData.distances.push_back([location distanceFromLocation:locations[i - 1]]);
+                lastWalkingPointsData.distances.push_back([location haversineDistanceInMetersTo:locations[i - 1]]);
             }
             else
             {
                 if (pointsData.points.isEmpty())
                     pointsData.distances.push_back(0.0);
                 else
-                    pointsData.distances.push_back([locations[i] distanceFromLocation:locations[i - 1]]);
-
+                    pointsData.distances.push_back([locations[i] haversineDistanceInMetersTo:locations[i - 1]]);
+                
                 pointsData.indexes.push_back(i);
                 pointsData.points.push_back(OsmAnd::PointI(
-                    OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
-                    OsmAnd::Utilities::get31TileNumberY(location.coordinate.latitude)));
+                                                           OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
+                                                           OsmAnd::Utilities::get31TileNumberY(location.coordinate.latitude)));
             }
         }
         
@@ -1221,13 +1228,13 @@ struct DrawPathData
                     firstWalkingPointsData.lineId = lineId;
                     pathsData.push_back(firstWalkingPointsData);
                 }
-
+                
                 {
                     int lineId = [self drawRouteSegment:pointsData.points walk:NO sync:sync];
                     pointsData.lineId = lineId;
                     pathsData.push_back(pointsData);
                 }
-                                
+                
                 if (!lastWalkingPointsData.points.isEmpty())
                 {
                     int lineId = [self drawRouteSegment:lastWalkingPointsData.points walk:YES sync:sync];
@@ -1253,14 +1260,14 @@ struct DrawPathData
             QList<OsmAnd::FColorARGB> segmentColors;
             if (pointsData.points.size() > 1 && !_colors.isEmpty() && segStartIndex < _colors.size() && segStartIndex + pointsData.points.size() - 1 < _colors.size())
                 segmentColors = _colors.mid(segStartIndex, pointsData.points.size());
-
+            
             if (!segmentColors.isEmpty())
             {
                 int lineId = [self drawRouteSegment:pointsData.points
-                                colors:segmentColors
-                    colorizationScheme:_colorizationScheme
-                                  walk:NO
-                                  sync:sync];
+                                             colors:segmentColors
+                                 colorizationScheme:_colorizationScheme
+                                               walk:NO
+                                               sync:sync];
                 pointsData.lineId = lineId;
                 pathsData.push_back(pointsData);
                 
@@ -1274,16 +1281,33 @@ struct DrawPathData
                 pathsData.push_back(lastWalkingPointsData);
             }
         }
-
+        
         if (routeUpdated)
         {
             [self.mapView addKeyedSymbolsProvider:_collection];
             [self setVectorLineProvider:_collection sync:sync];
             [self buildActionArrows:YES];
         }
-
+        
         _pathsDataCache = pathsData;
     }
+}
+
+- (CLLocation *)getProject:(CLLocation *)loc
+                      from:(CLLocation *)from
+                        to:(CLLocation *)to
+{
+    OASKLatLon *project = [OASKMapUtils.shared getProjectionLat:loc.coordinate.latitude
+                                                            lon:loc.coordinate.longitude
+                                                        fromLat:from.coordinate.latitude
+                                                        fromLon:from.coordinate.longitude
+                                                          toLat:to.coordinate.latitude
+                                                          toLon:to.coordinate.longitude];
+    
+    CLLocation *locationProjection = [[CLLocation alloc] initWithLatitude:project.latitude
+                                                                longitude:project.longitude];
+    
+    return locationProjection;
 }
 
 - (CLLocationCoordinate2D)calculateProjectionOnRoutePoint

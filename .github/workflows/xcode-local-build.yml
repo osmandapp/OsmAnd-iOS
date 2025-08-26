@@ -58,7 +58,7 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/route_line_is_shown_too_far_in_front
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-iOS
         path: ios
         clean: true

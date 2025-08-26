@@ -386,6 +386,7 @@ typedef enum {
 - (OsmAnd::PointI) getPosition
 {
     std::shared_ptr<OsmAnd::MapMarker> marker = [self getActiveMarker];
+    OsmAnd::MapMarker::OnSurfaceIconKey iconKey = [self getActiveIconKey];
     return marker ? marker->getPosition() : OsmAnd::PointI();
 }
 @end
@@ -759,17 +760,8 @@ typedef enum {
                            OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
 
     float animationDuration = 0;
-    
-    BOOL result = [OASKMapUtils.shared areLatLonEqualL1:[[OASKLatLon alloc]
-                                                         initWithLatitude:newLocation.coordinate.latitude
-                                                         longitude:newLocation.coordinate.longitude]
-                                                     l2:[[OASKLatLon alloc]
-                                                         initWithLatitude:prevLocation.coordinate.latitude
-                                                         longitude:prevLocation.coordinate.longitude]
-                                              precision:0.000001];
-    
     if (OAAppSettings.sharedManager.animateMyLocation.get && prevLocation
-        && !result)
+        && ![OAMapUtils areLatLonEqual:newLocation.coordinate coordinate2:prevLocation.coordinate precision:0.000001])
     {
         animationDuration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
         if (animationDuration > 5)

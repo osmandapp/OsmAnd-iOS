@@ -467,12 +467,14 @@
     else if ([itemKey isEqualToString:@"distanceDuringNavigation"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDistanceDuringNavigation applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
-        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsExternalInputDevices applicationMode:self.appMode];
+        settingsViewController = [[ExternalInputDeviceViewController alloc] initWithAppMode:self.appMode];
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
         if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
+        else if ([itemKey isEqualToString:@"externalImputDevice"])
+            [self showViewController:settingsViewController];
         else
             [self showModalViewController:settingsViewController];
     }

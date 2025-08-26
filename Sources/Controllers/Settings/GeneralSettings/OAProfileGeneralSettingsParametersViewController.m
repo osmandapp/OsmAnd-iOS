@@ -95,7 +95,7 @@
             _title = OALocalizedString(@"distance_during_navigation");
             break;
         case EOAProfileGeneralSettingsExternalInputDevices:
-            _title = OALocalizedString(@"external_input_device");
+            _title = OALocalizedString(@"device");
             break;
         case EOAProfileGeneralSettingsAppTheme:
             _title = OALocalizedString(@"settings_app_theme");

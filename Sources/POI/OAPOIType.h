@@ -19,6 +19,8 @@
 
 @property (nonatomic) NSString *editTag;
 @property (nonatomic) NSString *editValue;
+@property (nonatomic) NSString *editTag2;
+@property (nonatomic) NSString *editValue2;
 
 @property (nonatomic) OAPOICategory *category;
 @property (nonatomic) OAPOIFilter *filter;
@@ -41,12 +43,14 @@
 
 - (void)setAdditional:(OAPOIBaseType *)parentType;
 
-- (NSString *) getEditOsmTag;
--(NSString *) getEditOsmValue;
--(NSString *) getOsmValue;
--(NSString *) getOsmValue2;
--(NSString *) getOsmTag;
--(NSString *) getOsmTag2;
+- (NSString *)getEditOsmTag;
+- (NSString *)getEditOsmValue;
+- (NSString *)getEditOsmTag2;
+- (NSString *)getEditOsmValue2;
+- (NSString *)getOsmValue;
+- (NSString *)getOsmValue2;
+- (NSString *)getOsmTag;
+- (NSString *)getOsmTag2;
 
 - (BOOL) isReference;
 

@@ -224,10 +224,12 @@ extension CardsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let card = dataSource.itemIdentifier(for: indexPath) else { return }
         
-        if card is WikiImageCard {
-            let wikiCards = dataSource.snapshot().itemIdentifiers.compactMap { $0 as? WikiImageCard }
-            guard let initialIndex = wikiCards.firstIndex(where: { $0 === card }) else { return }
-            let imageDataSource = SimpleImageDatasource(imageItems: wikiCards.compactMap { ImageItem.card($0) }, placeholderImage: placeholderImage)
+        if card is WikiImageCard || card is UrlImageCard {
+            let cards = dataSource.snapshot().itemIdentifiers
+                .filter { $0 is WikiImageCard || $0 is UrlImageCard }
+                .compactMap { $0 as? ImageCard }
+            guard let initialIndex = cards.firstIndex(where: { $0 === card }) else { return }
+            let imageDataSource = SimpleImageDatasource(imageItems: cards.compactMap { ImageItem.card($0) }, placeholderImage: placeholderImage)
             let imageCarouselController = ImageCarouselViewController(imageDataSource: imageDataSource, title: title, initialIndex: initialIndex)
             
             let navController = UINavigationController(rootViewController: imageCarouselController)

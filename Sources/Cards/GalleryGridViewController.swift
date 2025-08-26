@@ -121,10 +121,13 @@ extension GalleryGridViewController: UICollectionViewDataSource {
 extension GalleryGridViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let card = cards[indexPath.row] as? WikiImageCard else { return }
-        let wikiCards = cards.compactMap { $0 as? WikiImageCard }
-        guard let initialIndex = wikiCards.firstIndex(where: { $0 === card }) else { return }
-        let imageDataSource = SimpleImageDatasource(imageItems: wikiCards.compactMap { ImageItem.card($0) }, placeholderImage: placeholderImage)
+        let itemsCards = cards.compactMap { $0 as? ImageCard }
+        guard indexPath.row < itemsCards.count else { return }
+
+        let card = itemsCards[indexPath.row]
+        
+        guard let initialIndex = itemsCards.firstIndex(where: { $0 === card }) else { return }
+        let imageDataSource = SimpleImageDatasource(imageItems: itemsCards.compactMap { ImageItem.card($0) }, placeholderImage: placeholderImage)
         let imageCarouselController = ImageCarouselViewController(imageDataSource: imageDataSource, title: titleString, initialIndex: initialIndex)
         
         let navController = UINavigationController(rootViewController: imageCarouselController)
@@ -153,22 +156,14 @@ extension GalleryGridViewController: UICollectionViewDelegate {
             }
   
             let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: .icCustomExternalLink) { _ in
-                if let item = card as? WikiImageCard {
-                    guard let url = URL(string: item.urlWithCommonAttributions) else { return }
-                    let safariViewController = SFSafariViewController(url: url)
-                    safariViewController.preferredControlTintColor = .iconColorActive
-                    self.present(safariViewController, animated: true, completion: nil)
-                } else {
-                    guard let item = card as? ImageCard else { return }
-                    GalleryContextMenuProvider.openURLIfValid(urlString: item.imageUrl)
-                }
+                SafariPresenter.present(from: self, card: card)
             }
             openInBrowserAction.accessibilityLabel = localizedString("open_in_browser")
             
             firstSectionItems.append(openInBrowserAction)
             
             let firstSection = UIMenu(title: "", options: .displayInline, children: firstSectionItems)
-            let downloadAction = UIAction(title: localizedString("shared_string_download"), image: UIImage.icCustomDownload) { _ in
+            let downloadAction = UIAction(title: localizedString("shared_string_download"), image: .icCustomDownload) { _ in
                 guard let item = card as? ImageCard,
                       !item.imageUrl.isEmpty else { return }
                 GalleryContextMenuProvider.downloadImage(urlString: item.imageUrl, view: self.view)

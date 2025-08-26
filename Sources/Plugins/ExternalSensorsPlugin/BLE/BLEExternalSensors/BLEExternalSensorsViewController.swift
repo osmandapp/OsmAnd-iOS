@@ -78,8 +78,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         let add = UIBarButtonItem(barButtonSystemItem: .add,
                                   target: self,
                                   action: #selector(onRightNavbarButtonPressed))
-        // NOTE: test github action build
-        add.tintColor = .red//.iconColorActive
+        add.tintColor = .iconColorActive
         return [add]
     }
     

@@ -565,23 +565,6 @@
     _mapHudViewController.leftWidgetsViewTopConstraint.constant =
     _mapHudViewController.rightWidgetsViewTopConstraint.constant = leftRightWidgetsViewTopConstraintConstant;
 
-    if (_downloadMapWidget && _downloadMapWidget.superview && !_downloadMapWidget.hidden)
-    {
-        if (_lastUpdateTime == 0)
-            [[OARootViewController instance].mapPanel updateToolbar];
-        
-        if (portrait)
-        {
-            _downloadMapWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 155.);
-        }
-        else
-        {
-            CGFloat widgetWidth = DeviceScreenWidth / 2;
-            CGFloat leftOffset = widgetWidth / 2 - [OAUtilities getLeftMargin];
-            _downloadMapWidget.frame = CGRectMake(leftOffset, _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 155.);
-        }
-    }
-
     if (_weatherToolbar && _weatherToolbar.superview)
         [self updateWeatherToolbarVisible];
 

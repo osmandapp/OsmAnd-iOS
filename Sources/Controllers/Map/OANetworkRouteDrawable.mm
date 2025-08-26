@@ -84,6 +84,9 @@
             layers << shield;
     }
     
+    if (background.isEmpty() && foreground.isEmpty() && text.isEmpty())
+        return nil;
+    
     textStyle.backgroundImage = OsmAnd::SkiaUtilities::mergeImages(layers);
 
     int textColor = 0xff000000;

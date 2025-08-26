@@ -12,7 +12,6 @@
 @interface CLLocation (util)
 
 - (double) bearingTo:(CLLocation *)location;
-- (double)haversineDistanceInMetersTo:(CLLocation *)location;
 - (BOOL) hasBearing;
 - (BOOL) hasSpeed;
 - (BOOL) hasAccuracy;

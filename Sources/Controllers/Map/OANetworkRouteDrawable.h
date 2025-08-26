@@ -10,13 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OARouteKey;
+@class OARouteKey, OAPOI;
 
 @interface OANetworkRouteDrawable : NSObject
 
 - (instancetype)initWithRouteKey:(OARouteKey *)routeKey;
 
 - (UIImage *) getIcon;
+
++ (UIImage *) getIconByAmenityShieldTags:(OAPOI *)amenity;
 
 @end
 

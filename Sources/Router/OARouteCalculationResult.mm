@@ -21,6 +21,7 @@
 #import "OAExitInfo.h"
 #import "OAMapUtils.h"
 #import "CLLocation+Extension.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <routeSegmentResult.h>
 
@@ -280,9 +281,8 @@
     
     while (currentRoute > 1)
     {
-        double projCoeff = [OAMapUtils getProjectionCoeff:location
-                                             fromLocation:previousRouteLocation
-                                               toLocation:currentRouteLocation];
+        double projCoeff = [OASKMapUtils.shared getProjectionCoeffLat:location.coordinate.latitude lon:location.coordinate.longitude fromLat:previousRouteLocation.coordinate.latitude fromLon:previousRouteLocation.coordinate.longitude toLat:currentRouteLocation.coordinate.latitude toLon:currentRouteLocation.coordinate.longitude];
+        
         if (projCoeff != 0)
             break;
         

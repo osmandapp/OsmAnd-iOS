@@ -2681,6 +2681,9 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "device" = "Device";
 "select_to_use_an_external_input_device" = "To use an external input device with OsmAnd, select one from the list above or add a new one";
+"no_assigned_keys_desc" = "Select an action and assign a key by tapping the \'Add\' button.";
+"no_assigned_keys" = "No assigned keys";
+"new_key_assignment" = "New key assignment";
 
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";

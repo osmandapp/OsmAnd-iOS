@@ -467,7 +467,7 @@
     else if ([itemKey isEqualToString:@"distanceDuringNavigation"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDistanceDuringNavigation applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
-        settingsViewController = [[ExternalInputDeviceViewController alloc] initWithAppMode:self.appMode];
+        settingsViewController = [[MainExternalInputDeviceViewController alloc] initWithAppMode:self.appMode];
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;

@@ -1,5 +1,5 @@
 //
-//  ExternalInputDeviceViewController.swift
+//  MainExternalInputDeviceViewController.swift
 //  OsmAnd Maps
 //
 //  Created by Vladyslav Lysenko on 25.08.2025.
@@ -7,9 +7,13 @@
 //
 
 @objcMembers
-final class ExternalInputDeviceViewController: OABaseSettingsViewController {
+final class MainExternalInputDeviceViewController: OABaseSettingsViewController {
     private static let deviceRowKey = "deviceRowKey"
     private static let emptyStateRowKey = "emptyStateRowKey"
+    private static let noExternalDeviceKey = "noExternalDeviceKey"
+    private static let buttonTitleKey = "buttonTitleKey"
+    
+    private var keyAssignments: [KeyAssignment] = []
     
     override func registerCells() {
         addCell(OAValueTableViewCell.reuseIdentifier)
@@ -32,7 +36,7 @@ final class ExternalInputDeviceViewController: OABaseSettingsViewController {
         } else {
             externalInputDeviceValue = localizedString("shared_string_none")
         }
-
+        
         let deviceSection = tableData.createNewSection()
         let deviceRow = deviceSection.createNewRow()
         deviceRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -40,14 +44,19 @@ final class ExternalInputDeviceViewController: OABaseSettingsViewController {
         deviceRow.title = localizedString("device")
         deviceRow.descr = externalInputDeviceValue
         
-        if settingExternalInputDevice == NO_EXTERNAL_DEVICE {
+        if keyAssignments.isEmpty || settingExternalInputDevice == NO_EXTERNAL_DEVICE {
             let noExternalDeviceSection = tableData.createNewSection()
             let noExternalDeviceRow = noExternalDeviceSection.createNewRow()
             noExternalDeviceRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
             noExternalDeviceRow.key = Self.emptyStateRowKey
-            noExternalDeviceRow.iconName = "ic_custom_keyboard"
+            noExternalDeviceRow.title = settingExternalInputDevice == NO_EXTERNAL_DEVICE ? nil : localizedString("no_assigned_keys")
+            noExternalDeviceRow.iconName = settingExternalInputDevice == NO_EXTERNAL_DEVICE ? "ic_custom_keyboard" : "ic_custom_keyboard_disabled"
             noExternalDeviceRow.iconTintColor = UIColor.iconColorDefault
-            noExternalDeviceRow.descr = localizedString("select_to_use_an_external_input_device")
+            noExternalDeviceRow.descr = localizedString(settingExternalInputDevice == NO_EXTERNAL_DEVICE ? "select_to_use_an_external_input_device" : "no_assigned_keys_desc")
+            noExternalDeviceRow.setObj(settingExternalInputDevice == NO_EXTERNAL_DEVICE, forKey: Self.noExternalDeviceKey)
+            if settingExternalInputDevice != NO_EXTERNAL_DEVICE {
+                noExternalDeviceRow.setObj(localizedString("shared_string_add"), forKey: Self.buttonTitleKey)
+            }
         }
     }
     
@@ -64,18 +73,26 @@ final class ExternalInputDeviceViewController: OABaseSettingsViewController {
             return cell
         } else if item.cellType == OALargeImageTitleDescrTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier, for: indexPath) as! OALargeImageTitleDescrTableViewCell
+            let noExternalDevice = (item.obj(forKey: Self.noExternalDeviceKey) as? Bool) ?? false
             cell.selectionStyle = .none
-            cell.showButton(false)
-            cell.showTitle(false)
+            cell.showButton(!noExternalDevice)
+            cell.showTitle(!noExternalDevice)
             cell.cellImageView?.image = UIImage.templateImageNamed(item.iconName)
             cell.cellImageView?.tintColor = item.iconTintColor
             cell.titleLabel?.text = item.title
             cell.titleLabel?.accessibilityLabel = item.title
-            cell.titleLabel?.isHidden = item.title == nil || item.title?.isEmpty == true
+            cell.titleLabel?.isHidden = noExternalDevice
             cell.descriptionLabel?.text = item.descr
             cell.descriptionLabel?.accessibilityLabel = item.descr
             if cell.needsUpdateConstraints() {
                 cell.setNeedsUpdateConstraints()
+            }
+            if !noExternalDevice {
+                cell.button?.setTitle(item.obj(forKey: Self.buttonTitleKey) as? String, for: .normal)
+                cell.button?.accessibilityLabel = item.obj(forKey: Self.buttonTitleKey) as? String
+                cell.button?.removeTarget(nil, action: nil, for: .allEvents)
+                cell.button?.tag = indexPath.section << 10 | indexPath.row
+                cell.button?.addTarget(self, action: #selector(onAddButtonClicked(sender:)), for: .touchUpInside)
             }
             return cell
         }
@@ -96,5 +113,11 @@ final class ExternalInputDeviceViewController: OABaseSettingsViewController {
     override func onSettingsChanged() {
         super.onSettingsChanged()
         reloadDataWith(animated: true, completion: nil)
+    }
+    
+    @objc private func onAddButtonClicked(sender: UIButton) {
+        let vc = EditKeyAssignmentController()
+        vc.delegate = self
+        show(vc)
     }
 }

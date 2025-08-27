@@ -24,7 +24,9 @@ final class MapHudLayout: NSObject {
     private var widgetOrder: [UIView] = []
     private var additionalOrder: [UIView] = []
     private var externalTopOverlayPx: CGFloat = 0
+    private var externalBottomOverlayPx: CGFloat = 0
     private var ignoreTopSidePanels: Bool = false
+    private var ignoreBottomSidePanels: Bool = false
     
     private weak var topBarPanelContainer: UIView?
     private weak var leftWidgetsPanel: UIView?
@@ -69,16 +71,22 @@ final class MapHudLayout: NSObject {
         }
         
         if ignoreTopSidePanels {
-            if let v = topBarPanelContainer {
-                filtered.removeAll { $0.0 === v }
+            if let topBarPanelContainer {
+                filtered.removeAll { $0.0 === topBarPanelContainer }
             }
             
-            if let v = leftWidgetsPanel {
-                filtered.removeAll { $0.0 === v }
+            if let leftWidgetsPanel {
+                filtered.removeAll { $0.0 === leftWidgetsPanel }
             }
             
-            if let v = rightWidgetsPanel {
-                filtered.removeAll { $0.0 === v }
+            if let rightWidgetsPanel {
+                filtered.removeAll { $0.0 === rightWidgetsPanel }
+            }
+        }
+        
+        if ignoreBottomSidePanels {
+            if let bottomBarPanelContainer {
+                filtered.removeAll { $0.0 === bottomBarPanelContainer }
             }
         }
         
@@ -217,8 +225,9 @@ final class MapHudLayout: NSObject {
         let insets = containerView.safeAreaInsets
         let placeOnLeft = containerView.isDirectionRTL() ? !position.isLeft : position.isLeft
         let extraTop = position.isTop ? externalTopOverlayPx : 0.0
+        let extraBottom = position.isBottom ? externalBottomOverlayPx : 0.0
         let newX: CGFloat = placeOnLeft ? insets.left + startX : containerView.bounds.width - insets.right - view.bounds.width - startX
-        let newY: CGFloat = position.isTop ? statusBarHeight + startY + extraTop : statusBarHeight + getAdjustedHeight() - view.bounds.height - startY
+        let newY: CGFloat = position.isTop ? statusBarHeight + startY + extraTop : statusBarHeight + getAdjustedHeight() - view.bounds.height - startY - extraBottom
         let newOrigin = CGPoint(x: newX, y: newY)
         if view.frame.origin != newOrigin {
             view.frame.origin = newOrigin
@@ -303,6 +312,24 @@ final class MapHudLayout: NSObject {
         
         if ignoreTopSidePanels != ignorePanels {
             ignoreTopSidePanels = ignorePanels
+            changed = true
+        }
+        
+        if changed {
+            refresh()
+        }
+    }
+    
+    func setExternalBottomOverlay(_ pixels: CGFloat, ignorePanels: Bool) {
+        let px = max(0, pixels)
+        var changed = false
+        if abs(px - externalBottomOverlayPx) > 0.0 {
+            externalBottomOverlayPx = px
+            changed = true
+        }
+        
+        if ignoreBottomSidePanels != ignorePanels {
+            ignoreBottomSidePanels = ignorePanels
             changed = true
         }
         
@@ -396,7 +423,7 @@ final class MapHudLayout: NSObject {
         var rightX: Int32 = 0
         var leftX: Int32 = 0
         var applyFix = false
-        if isBottomPanelVisible(), let baseZoom = posById[ZoomInButtonState.hudId] ?? posById[ZoomOutButtonState.hudId], let ml = posById[MyLocationButtonState.hudId], let m3 = posById[Map3DButtonState.map3DHudId], ml.posH == ButtonPositionSize.Companion().POS_RIGHT, ml.posV == ButtonPositionSize.Companion().POS_BOTTOM, ml.marginX == baseZoom.marginX, m3.posH == ButtonPositionSize.Companion().POS_RIGHT, m3.posV == ButtonPositionSize.Companion().POS_BOTTOM, m3.marginX == baseZoom.marginX {
+        if !ignoreBottomSidePanels, isBottomPanelVisible(), let baseZoom = posById[ZoomInButtonState.hudId] ?? posById[ZoomOutButtonState.hudId], let ml = posById[MyLocationButtonState.hudId], let m3 = posById[Map3DButtonState.map3DHudId], ml.posH == ButtonPositionSize.Companion().POS_RIGHT, ml.posV == ButtonPositionSize.Companion().POS_BOTTOM, ml.marginX == baseZoom.marginX, m3.posH == ButtonPositionSize.Companion().POS_RIGHT, m3.posV == ButtonPositionSize.Companion().POS_BOTTOM, m3.marginX == baseZoom.marginX {
             rightX = baseZoom.marginX
             leftX = rightX + baseZoom.width + 1
             applyFix = true

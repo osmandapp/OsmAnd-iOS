@@ -10,9 +10,6 @@ import UIKit
 
 @objcMembers
 final class MapHudLayout: NSObject {
-    private static let uiRefreshInterval: TimeInterval = 0.1
-    private static let topBarMaxWidthPercentage: CGFloat = 0.6
-    
     private let containerView: UIView
     private let dpToPx: CGFloat = 1.0
     private let hudBasePaddingDp: CGFloat = 16.0
@@ -26,6 +23,8 @@ final class MapHudLayout: NSObject {
     private var additionalWidgetPositions: [UIView: ButtonPositionSize] = [:]
     private var widgetOrder: [UIView] = []
     private var additionalOrder: [UIView] = []
+    private var externalTopOverlayPx: CGFloat = 0
+    private var ignoreTopSidePanels: Bool = false
     
     private weak var topBarPanelContainer: UIView?
     private weak var leftWidgetsPanel: UIView?
@@ -67,6 +66,20 @@ final class MapHudLayout: NSObject {
         
         if filtered.contains(where: { $0.0 is OADownloadMapWidget }), let topBarPanelContainer {
             filtered.removeAll { (v, _) in v === topBarPanelContainer }
+        }
+        
+        if ignoreTopSidePanels {
+            if let v = topBarPanelContainer {
+                filtered.removeAll { $0.0 === v }
+            }
+            
+            if let v = leftWidgetsPanel {
+                filtered.removeAll { $0.0 === v }
+            }
+            
+            if let v = rightWidgetsPanel {
+                filtered.removeAll { $0.0 === v }
+            }
         }
         
         let insets = containerView.safeAreaInsets
@@ -203,8 +216,9 @@ final class MapHudLayout: NSObject {
         let startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let insets = containerView.safeAreaInsets
         let placeOnLeft = containerView.isDirectionRTL() ? !position.isLeft : position.isLeft
+        let extraTop = position.isTop ? externalTopOverlayPx : 0.0
         let newX: CGFloat = placeOnLeft ? insets.left + startX : containerView.bounds.width - insets.right - view.bounds.width - startX
-        let newY: CGFloat = position.isTop ? statusBarHeight + startY : statusBarHeight + getAdjustedHeight() - view.bounds.height - startY
+        let newY: CGFloat = position.isTop ? statusBarHeight + startY + extraTop : statusBarHeight + getAdjustedHeight() - view.bounds.height - startY
         let newOrigin = CGPoint(x: newX, y: newY)
         if view.frame.origin != newOrigin {
             view.frame.origin = newOrigin
@@ -279,6 +293,24 @@ final class MapHudLayout: NSObject {
         refresh()
     }
     
+    func setExternalTopOverlay(_ pixels: CGFloat, ignorePanels: Bool) {
+        let px = max(0, pixels)
+        var changed = false
+        if abs(px - externalTopOverlayPx) > 0.0 {
+            externalTopOverlayPx = px
+            changed = true
+        }
+        
+        if ignoreTopSidePanels != ignorePanels {
+            ignoreTopSidePanels = ignorePanels
+            changed = true
+        }
+        
+        if changed {
+            refresh()
+        }
+    }
+    
     func updateButtons() {
         guard containerView.bounds.width > 0 || containerView.bounds.height > 0 || !containerView.isHidden else { return }
         let positionMap = getButtonPositionSizes()
@@ -323,6 +355,7 @@ final class MapHudLayout: NSObject {
     private func collectPositionsOrdered() -> [(UIView, ButtonPositionSize)] {
         var result: [(UIView, ButtonPositionSize)] = []
         var updatedAdditional = additionalWidgetPositions
+        var hasBanner = false
         if let banner = additionalOrder.first(where: { !$0.isHidden && ($0 is OADownloadMapWidget) }) {
             let pos: ButtonPositionSize
             if let saved = additionalWidgetPositions[banner] {
@@ -334,15 +367,21 @@ final class MapHudLayout: NSObject {
             if pos.width > 0 && pos.height > 0 {
                 result.append((banner, pos))
                 updatedAdditional[banner] = pos
+                hasBanner = true
             } else {
                 updatedAdditional.removeValue(forKey: banner)
             }
         }
         
+        var pendingSidePanels: [(UIView, ButtonPositionSize)] = []
         for v in widgetOrder where !v.isHidden {
             let pos = createWidgetPosition(v)
             if pos.width > 0 && pos.height > 0 {
-                result.append((v, pos))
+                if hasBanner && (v === leftWidgetsPanel || v === rightWidgetsPanel) {
+                    pendingSidePanels.append((v, pos))
+                } else {
+                    result.append((v, pos))
+                }
             }
         }
         
@@ -376,6 +415,10 @@ final class MapHudLayout: NSObject {
             }
             
             result.append((btn, p))
+        }
+        
+        if hasBanner {
+            result.append(contentsOf: pendingSidePanels)
         }
         
         for v in additionalOrder where !v.isHidden && !(v is OADownloadMapWidget) {

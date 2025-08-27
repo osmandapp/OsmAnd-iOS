@@ -1351,9 +1351,9 @@
 "default_speed_dialog_msg" = "估計未知道路類型的到達時間，並限制所有道路的速度（可能會影響路徑）";
 "selected_profile" = "選定的設定檔";
 "profile_appearance" = "設定檔外觀";
-"width_limit_description" = "提供您的車輛寬度，因為某些路徑的限制可能適用於超寬車輛。";
-"height_limit_description" = "提供您的車輛高度，因為某些路徑的限制可能適用於超高車輛。";
-"weight_limit_description" = "提供您的車輛重量，因為某些路徑的限制可能適用於重型車輛。";
+"width_limit_description" = "請提供你的車輛寬度，因為某些路徑的限制可能適用於超寬車輛。";
+"height_limit_description" = "請提供你的車輛高度，因為某些路徑的限制可能適用於超高車輛。";
+"weight_limit_description" = "請提供你的車輛重量，因為某些路徑的限制可能適用於重型車輛。";
 "profile_type_base_string" = "基本設定檔";
 "profile_type_custom_string" = "自訂設定檔";
 "shared_string_copy" = "複製";
@@ -2046,7 +2046,7 @@
 "weather_precip_inches" = "英吋";
 "recalc_angle_dialog_title" = "我的位置語錄線間的最小角度";
 "profile_alert_delete_msg" = "刪除「%@」設定檔";
-"lenght_limit_description" = "提供您的車輛長度，某些路徑限制可能適用於較長的車輛。";
+"lenght_limit_description" = "請提供你的車輛長度，某些路徑限制可能適用於較長的車輛。";
 "shared_string_rendering_style" = "算繪樣式";
 "shared_string_angle_param" = "角度：%@°";
 "public_transport_ped_route_title" = "步行路線約 %@，可能比大眾運輸還快";

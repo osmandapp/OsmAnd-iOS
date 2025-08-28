@@ -2502,6 +2502,11 @@ typedef enum
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
+- (void) targetResetRulerPosition
+{
+    [self.hudViewController resetToDefaultRulerLayout];
+}
+
 - (void) targetOpenAvoidRoad
 {
     [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:_targetLatitude longitude:_targetLongitude] skipWritingSettings:NO appModeKey:nil];

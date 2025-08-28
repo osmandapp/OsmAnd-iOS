@@ -975,6 +975,10 @@ static const NSInteger _buttonsCount = 4;
             } completion:^(BOOL finished) {
                 
                 [self removeFromSuperview];
+
+                if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
+                    [self.menuViewDelegate targetResetRulerPosition];
+
                 [self clearCustomControllerIfNeeded];
                 [self restoreTargetType];
 
@@ -990,6 +994,10 @@ static const NSInteger _buttonsCount = 4;
             self.frame = frame;
             
             [self removeFromSuperview];
+            
+            if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
+                [self.menuViewDelegate targetResetRulerPosition];
+            
             [self clearCustomControllerIfNeeded];
             [self restoreTargetType];
 
@@ -2620,6 +2628,7 @@ static const NSInteger _buttonsCount = 4;
         if (self.customController && self.customController.needsMapRuler)
         {
             CGFloat rulerHeight = 25.0;
+            [self.menuViewDelegate targetResetRulerPosition];
         }
         if (self.customController && self.customController.additionalAccessoryView)
         {

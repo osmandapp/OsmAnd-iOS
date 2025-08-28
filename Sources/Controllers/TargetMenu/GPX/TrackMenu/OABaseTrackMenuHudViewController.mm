@@ -393,6 +393,7 @@
     [_mapViewController hideContextPinMarker];
     __weak __typeof(self) weakSelf = self;
     [super hide:YES duration:duration onComplete:^{
+        [weakSelf.mapPanelViewController.hudViewController resetToDefaultRulerLayout];
         [weakSelf.mapPanelViewController hideScrollableHudViewController];
         if (onComplete)
             onComplete();

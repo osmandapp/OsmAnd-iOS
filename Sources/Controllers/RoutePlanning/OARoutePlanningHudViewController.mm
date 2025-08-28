@@ -725,6 +725,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)dismiss
 {
     [self hide:YES duration:.2 onComplete:^{
+        [_mapPanel.hudViewController resetToDefaultRulerLayout];
         [self restoreMapViewPort];
         [_mapPanel hideScrollableHudViewController];
         _layer.editingCtx = nil;
@@ -1182,6 +1183,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             {
                 [_editingContext setChangesSaved];
                 [self hide:NO duration:.2 onComplete:^{
+                    [_mapPanel.hudViewController resetToDefaultRulerLayout];
                     [self restoreMapViewPort];
                     [_mapPanel hideScrollableHudViewController];
                     _layer.editingCtx = nil;

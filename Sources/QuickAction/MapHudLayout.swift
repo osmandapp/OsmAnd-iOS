@@ -25,6 +25,7 @@ final class MapHudLayout: NSObject {
     private var additionalOrder: [UIView] = []
     private var externalTopOverlayPx: CGFloat = 0
     private var externalBottomOverlayPx: CGFloat = 0
+    private var externalRulerLeftOffsetPx: CGFloat = 0
     private var ignoreTopSidePanels: Bool = false
     private var ignoreBottomSidePanels: Bool = false
     
@@ -226,7 +227,8 @@ final class MapHudLayout: NSObject {
         let placeOnLeft = containerView.isDirectionRTL() ? !position.isLeft : position.isLeft
         let extraTop = position.isTop ? externalTopOverlayPx : 0.0
         let extraBottom = position.isBottom ? externalBottomOverlayPx : 0.0
-        let newX: CGFloat = placeOnLeft ? insets.left + startX : containerView.bounds.width - insets.right - view.bounds.width - startX
+        let rulerExtraX = view is OAMapRulerView && externalRulerLeftOffsetPx > 0 && placeOnLeft ? max(0, externalRulerLeftOffsetPx - startX) : 0.0
+        let newX: CGFloat = (placeOnLeft ? insets.left + startX : containerView.bounds.width - insets.right - view.bounds.width - startX) + rulerExtraX
         let newY: CGFloat = position.isTop ? statusBarHeight + startY + extraTop : statusBarHeight + getAdjustedHeight() - view.bounds.height - startY - extraBottom
         let newOrigin = CGPoint(x: newX, y: newY)
         if view.frame.origin != newOrigin {
@@ -330,6 +332,19 @@ final class MapHudLayout: NSObject {
         
         if ignoreBottomSidePanels != ignorePanels {
             ignoreBottomSidePanels = ignorePanels
+            changed = true
+        }
+        
+        if changed {
+            refresh()
+        }
+    }
+    
+    func setExternalRulerLeftOffset(_ pixels: CGFloat) {
+        let px = max(0, pixels)
+        var changed = false
+        if abs(px - externalRulerLeftOffsetPx) > 0 {
+            externalRulerLeftOffsetPx = px
             changed = true
         }
         

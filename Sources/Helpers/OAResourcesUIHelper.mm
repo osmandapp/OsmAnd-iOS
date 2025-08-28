@@ -1069,7 +1069,7 @@ includeHidden:(BOOL)includeHidden
     {
         OsmAndResourceType type = [OAResourceType toResourceType:resourceType isGroup:isGroup];
         if (type != [OAResourceType unknownType])
-            [resources addObjectsFromArray:[OAResourcesUIHelper requestMapDownloadInfo:kCLLocationCoordinate2DInvalid resourceType:type subregions:subregions checkForMissed:YES]];
+            [resources addObjectsFromArray:[OAResourcesUIHelper requestMapDownloadInfo:kCLLocationCoordinate2DInvalid resourceType:type subregions:subregions]];
     }
     return [NSArray arrayWithArray:resources];
 }
@@ -1091,14 +1091,6 @@ includeHidden:(BOOL)includeHidden
                                          resourceType:(OsmAndResourceType)resourceType
                                            subregions:(NSArray<OAWorldRegion *> *)subregions
 {
-    return [self requestMapDownloadInfo:coordinate resourceType:resourceType subregions:subregions checkForMissed:NO];
-}
-
-+ (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
-                                         resourceType:(OsmAndResourceType)resourceType
-                                           subregions:(NSArray<OAWorldRegion *> *)subregions
-                                       checkForMissed:(BOOL)checkForMissed
-{
     NSMutableArray<OAResourceItem *> *res = [NSMutableArray new];
     NSArray *sortedSelectedRegions;
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -1114,7 +1106,17 @@ includeHidden:(BOOL)includeHidden
             }];
         }
     }
-
+    
+    NSMutableArray<OAWorldRegion *> *newMapRegions = [NSMutableArray new];
+    for (OAWorldRegion *region in mapRegions)
+    {
+        if (![region.resourceTypes containsObject:[OAResourceType toValue:resourceType]]
+            && region.subregions.count > 0
+            && [region getLevel] > 2)
+            [newMapRegions addObjectsFromArray:region.subregions];
+    }
+    [mapRegions addObjectsFromArray:newMapRegions];
+    
     if (mapRegions.count > 0)
     {
         sortedSelectedRegions = [mapRegions sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
@@ -1125,7 +1127,6 @@ includeHidden:(BOOL)includeHidden
 
         for (OAWorldRegion *region in sortedSelectedRegions)
         {
-            BOOL found = NO;
             NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
             if (ids.count > 0)
             {
@@ -1153,7 +1154,6 @@ includeHidden:(BOOL)includeHidden
                                 item.resource = localResource;
                                 item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
 
-                                found = YES;
                                 [res addObject:item];
                             }
                             continue;
@@ -1178,7 +1178,6 @@ includeHidden:(BOOL)includeHidden
                             item.resource = localResource;
                             item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
 
-                            found = YES;
                             [res addObject:item];
                         }
                         else
@@ -1197,15 +1196,11 @@ includeHidden:(BOOL)includeHidden
                             item.worldRegion = region;
                             item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
 
-                            found = YES;
                             [res addObject:item];
                         }
                     }
                 }
             }
-            
-            if (!found && checkForMissed)
-                return nil;
         }
     }
     return [NSArray arrayWithArray:res];

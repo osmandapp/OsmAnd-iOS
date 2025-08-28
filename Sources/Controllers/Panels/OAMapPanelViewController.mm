@@ -2755,6 +2755,7 @@ typedef enum
     targetPoint.targetObj = address;
     
     [_targetMenuView setTargetPoint:targetPoint];
+    [self enterContextMenuMode];
     
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         [self goToTargetPointWithZoom:preferredZoom];

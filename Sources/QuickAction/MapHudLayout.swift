@@ -62,7 +62,7 @@ final class MapHudLayout: NSObject {
     
     private func getButtonPositionSizes() -> [UIView: ButtonPositionSize] {
         let panels = [topBarPanelContainer, leftWidgetsPanel, rightWidgetsPanel, bottomBarPanelContainer]
-        var filtered = collectPositionsOrdered().filter { (v, _) in
+        var filtered = collectPositions().filter { (v, _) in
             guard panels.contains(where: { $0 === v }) else { return true }
             return !v.isHidden && v.alpha > 0.01 && v.bounds.width > 0 && v.bounds.height > 0
         }
@@ -142,13 +142,98 @@ final class MapHudLayout: NSObject {
         (view as? OAHudButton)?.buttonState?.id ?? view.accessibilityIdentifier ?? view.restorationIdentifier ?? String(describing: type(of: view))
     }
     
-    private func updatePositionParams(for view: UIView, with position: ButtonPositionSize) {
-        updateButtonParams(for: view, with: position)
-    }
-    
     private func isBottomPanelVisible() -> Bool {
         guard let bottomBarPanelContainer else { return false }
         return !bottomBarPanelContainer.isHidden && bottomBarPanelContainer.alpha > 0.01 && bottomBarPanelContainer.bounds.width > 0 && bottomBarPanelContainer.bounds.height > 0
+    }
+    
+    private func getAdjustedHeight() -> CGFloat {
+        containerView.bounds.height - statusBarHeight - containerView.safeAreaInsets.bottom
+    }
+    
+    private func collectPositions() -> [(UIView, ButtonPositionSize)] {
+        var result: [(UIView, ButtonPositionSize)] = []
+        var updatedAdditional = additionalWidgetPositions
+        var hasBanner = false
+        if let banner = additionalOrder.first(where: { !$0.isHidden && ($0 is OADownloadMapWidget) }) {
+            let pos: ButtonPositionSize
+            if let saved = additionalWidgetPositions[banner] {
+                pos = updateWidgetPosition(banner, saved)
+            } else {
+                pos = createWidgetPosition(banner)
+            }
+            
+            if pos.width > 0 && pos.height > 0 {
+                result.append((banner, pos))
+                updatedAdditional[banner] = pos
+                hasBanner = true
+            } else {
+                updatedAdditional.removeValue(forKey: banner)
+            }
+        }
+        
+        var pendingSidePanels: [(UIView, ButtonPositionSize)] = []
+        for v in widgetOrder where !v.isHidden {
+            let pos = createWidgetPosition(v)
+            if pos.width > 0 && pos.height > 0 {
+                if hasBanner && (v === leftWidgetsPanel || v === rightWidgetsPanel) {
+                    pendingSidePanels.append((v, pos))
+                } else {
+                    result.append((v, pos))
+                }
+            }
+        }
+        
+        var posById: [String: ButtonPositionSize] = [:]
+        for btn in mapButtons where !btn.isHidden {
+            guard let state = btn.buttonState else { continue }
+            let defPosition = state.getDefaultPositionSize()
+            guard defPosition.width > 0 && defPosition.height > 0 else { continue }
+            posById[state.id] = defPosition
+        }
+        
+        var rightX: Int32 = 0
+        var leftX: Int32 = 0
+        var applyFix = false
+        if !ignoreBottomSidePanels, isBottomPanelVisible(), let baseZoom = posById[ZoomInButtonState.hudId] ?? posById[ZoomOutButtonState.hudId], let ml = posById[MyLocationButtonState.hudId], let m3 = posById[Map3DButtonState.map3DHudId], ml.posH == ButtonPositionSize.Companion().POS_RIGHT, ml.posV == ButtonPositionSize.Companion().POS_BOTTOM, ml.marginX == baseZoom.marginX, m3.posH == ButtonPositionSize.Companion().POS_RIGHT, m3.posV == ButtonPositionSize.Companion().POS_BOTTOM, m3.marginX == baseZoom.marginX {
+            rightX = baseZoom.marginX
+            leftX = rightX + baseZoom.width + 1
+            applyFix = true
+        }
+        
+        for btn in mapButtons where !btn.isHidden {
+            guard let state = btn.buttonState, let p = posById[state.id] else { continue }
+            if applyFix {
+                switch state.id {
+                case ZoomInButtonState.hudId, ZoomOutButtonState.hudId:
+                    p.marginX = rightX; p.xMove = false; p.yMove = true
+                case MyLocationButtonState.hudId, Map3DButtonState.map3DHudId:
+                    p.marginX = leftX;  p.xMove = false; p.yMove = true
+                default: break
+                }
+            }
+            
+            result.append((btn, p))
+        }
+        
+        if hasBanner {
+            result.append(contentsOf: pendingSidePanels)
+        }
+        
+        for v in additionalOrder where !v.isHidden && !(v is OADownloadMapWidget) {
+            if let saved = additionalWidgetPositions[v] {
+                let pos = updateWidgetPosition(v, saved)
+                if pos.width > 0 && pos.height > 0 {
+                    result.append((v, pos))
+                    updatedAdditional[v] = pos
+                } else {
+                    updatedAdditional.removeValue(forKey: v)
+                }
+            }
+        }
+        
+        additionalWidgetPositions = updatedAdditional
+        return result
     }
     
     @discardableResult private func updateWidgetPosition(_ view: UIView, _ position: ButtonPositionSize) -> ButtonPositionSize {
@@ -275,7 +360,7 @@ final class MapHudLayout: NSObject {
         widgetPositions.removeAll()
         widgetOrder.removeAll()
         [topBarPanelContainer, leftWidgetsPanel, rightWidgetsPanel, bottomBarPanelContainer].forEach { addPosition($0) }
-        updateVerticalPanels()
+        refresh()
     }
     
     func addMapButton(_ button: OAHudButton) {
@@ -385,125 +470,9 @@ final class MapHudLayout: NSObject {
         let positionMap = getButtonPositionSizes()
         for (view, pos) in positionMap {
             if view is OAHudButton || view is OAMapRulerView || view is OADownloadMapWidget {
-                updatePositionParams(for: view, with: pos)
+                updateButtonParams(for: view, with: pos)
             }
         }
-    }
-    
-    func collectPositions() -> [UIView: ButtonPositionSize] {
-        var map: [UIView: ButtonPositionSize] = [:]
-        for (view, _) in widgetPositions where !view.isHidden {
-            let pos = createWidgetPosition(view)
-            if pos.width > 0 && pos.height > 0 {
-                map[view] = pos
-            }
-        }
-        
-        for btn in mapButtons where !btn.isHidden {
-            if let pos = btn.buttonState?.getDefaultPositionSize(),
-               pos.width > 0, pos.height > 0 {
-                map[btn] = pos
-            }
-        }
-        
-        var updatedAdditional: [UIView: ButtonPositionSize] = additionalWidgetPositions
-        for (view, saved) in additionalWidgetPositions where !view.isHidden {
-            let pos = updateWidgetPosition(view, saved)
-            if pos.width > 0 && pos.height > 0 {
-                map[view] = pos
-                updatedAdditional[view] = pos
-            } else {
-                updatedAdditional.removeValue(forKey: view)
-            }
-        }
-        
-        additionalWidgetPositions = updatedAdditional
-        return map
-    }
-    
-    private func collectPositionsOrdered() -> [(UIView, ButtonPositionSize)] {
-        var result: [(UIView, ButtonPositionSize)] = []
-        var updatedAdditional = additionalWidgetPositions
-        var hasBanner = false
-        if let banner = additionalOrder.first(where: { !$0.isHidden && ($0 is OADownloadMapWidget) }) {
-            let pos: ButtonPositionSize
-            if let saved = additionalWidgetPositions[banner] {
-                pos = updateWidgetPosition(banner, saved)
-            } else {
-                pos = createWidgetPosition(banner)
-            }
-            
-            if pos.width > 0 && pos.height > 0 {
-                result.append((banner, pos))
-                updatedAdditional[banner] = pos
-                hasBanner = true
-            } else {
-                updatedAdditional.removeValue(forKey: banner)
-            }
-        }
-        
-        var pendingSidePanels: [(UIView, ButtonPositionSize)] = []
-        for v in widgetOrder where !v.isHidden {
-            let pos = createWidgetPosition(v)
-            if pos.width > 0 && pos.height > 0 {
-                if hasBanner && (v === leftWidgetsPanel || v === rightWidgetsPanel) {
-                    pendingSidePanels.append((v, pos))
-                } else {
-                    result.append((v, pos))
-                }
-            }
-        }
-        
-        var posById: [String: ButtonPositionSize] = [:]
-        for btn in mapButtons where !btn.isHidden {
-            guard let state = btn.buttonState else { continue }
-            let defPosition = state.getDefaultPositionSize()
-            guard defPosition.width > 0 && defPosition.height > 0 else { continue }
-            posById[state.id] = defPosition
-        }
-        
-        var rightX: Int32 = 0
-        var leftX: Int32 = 0
-        var applyFix = false
-        if !ignoreBottomSidePanels, isBottomPanelVisible(), let baseZoom = posById[ZoomInButtonState.hudId] ?? posById[ZoomOutButtonState.hudId], let ml = posById[MyLocationButtonState.hudId], let m3 = posById[Map3DButtonState.map3DHudId], ml.posH == ButtonPositionSize.Companion().POS_RIGHT, ml.posV == ButtonPositionSize.Companion().POS_BOTTOM, ml.marginX == baseZoom.marginX, m3.posH == ButtonPositionSize.Companion().POS_RIGHT, m3.posV == ButtonPositionSize.Companion().POS_BOTTOM, m3.marginX == baseZoom.marginX {
-            rightX = baseZoom.marginX
-            leftX = rightX + baseZoom.width + 1
-            applyFix = true
-        }
-        
-        for btn in mapButtons where !btn.isHidden {
-            guard let state = btn.buttonState, let p = posById[state.id] else { continue }
-            if applyFix {
-                switch state.id {
-                case ZoomInButtonState.hudId, ZoomOutButtonState.hudId:
-                    p.marginX = rightX; p.xMove = false; p.yMove = true
-                case MyLocationButtonState.hudId, Map3DButtonState.map3DHudId:
-                    p.marginX = leftX;  p.xMove = false; p.yMove = true
-                default: break
-                }
-            }
-            
-            result.append((btn, p))
-        }
-        
-        if hasBanner {
-            result.append(contentsOf: pendingSidePanels)
-        }
-        
-        for v in additionalOrder where !v.isHidden && !(v is OADownloadMapWidget) {
-            if let saved = additionalWidgetPositions[v] {
-                let pos = updateWidgetPosition(v, saved)
-                if pos.width > 0 && pos.height > 0 {
-                    result.append((v, pos))
-                    updatedAdditional[v] = pos
-                } else {
-                    updatedAdditional.removeValue(forKey: v)
-                }
-            }
-        }
-        
-        additionalWidgetPositions = updatedAdditional
-        return result
     }
     
     func updateButton(_ button: OAHudButton, save: Bool) {
@@ -532,16 +501,12 @@ final class MapHudLayout: NSObject {
         let yPixels = Int(round(max(0, yRaw)))
         pos.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(width), heightPx: Int32(height), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
         state.getPositionSize().fromLongValue(v: pos.toLongValue())
-        updatePositionParams(for: button, with: pos)
+        updateButtonParams(for: button, with: pos)
         if save {
             button.savePosition()
         }
         
         refresh()
-    }
-    
-    func getAdjustedHeight() -> CGFloat {
-        containerView.bounds.height - statusBarHeight - containerView.safeAreaInsets.bottom
     }
     
     func onContainerSizeChanged() {
@@ -554,28 +519,9 @@ final class MapHudLayout: NSObject {
         let w = containerView.bounds.width
         if w > 0, abs(w - lastWidth) > 0.1 {
             lastWidth = w
-            updateVerticalPanels()
+            refresh()
         } else {
             updateButtons()
         }
-    }
-    
-    func updateVerticalPanels() {
-        containerView.layoutIfNeeded()
-        refresh()
-    }
-    
-    func viewDidChangeLayout(_ view: UIView) {
-        if let pos = widgetPositions[view] {
-            let newPos = updateWidgetPosition(view, pos)
-            widgetPositions[view] = newPos
-        }
-        
-        if view === leftWidgetsPanel || view === rightWidgetsPanel {
-            updateVerticalPanels()
-            return
-        }
-        
-        refresh()
     }
 }

@@ -109,31 +109,23 @@ final class MapHudLayout: NSObject {
         if view === topBarPanelContainer {
             position.setMoveDescendantsVertical()
             position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
-            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_FULL_WIDTH)
+            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.Companion().POS_LEFT : ButtonPositionSize.Companion().POS_FULL_WIDTH)
         } else if view is OADownloadMapWidget {
             position.setMoveDescendantsVertical()
             position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
-            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_FULL_WIDTH)
+            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.Companion().POS_LEFT : ButtonPositionSize.Companion().POS_FULL_WIDTH)
         } else if view === leftWidgetsPanel {
             position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
             position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_LEFT)
-            if OAUtilities.isPortrait() {
-                position.setMoveDescendantsVertical()
-            } else {
-                position.setMoveDescendantsHorizontal()
-            }
+            position.setMoveDescendantsVertical()
         } else if view === rightWidgetsPanel {
             position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
             position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_RIGHT)
-            if OAUtilities.isPortrait() {
-                position.setMoveDescendantsVertical()
-            } else {
-                position.setMoveDescendantsHorizontal()
-            }
+            position.setMoveDescendantsVertical()
         } else if view === bottomBarPanelContainer {
             position.setMoveDescendantsVertical()
             position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_BOTTOM)
-            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_FULL_WIDTH)
+            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.Companion().POS_LEFT : ButtonPositionSize.Companion().POS_FULL_WIDTH)
         } else if view is OAMapRulerView {
             position.setMoveHorizontal()
             position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_BOTTOM)
@@ -170,6 +162,24 @@ final class MapHudLayout: NSObject {
             position.setSize(width8dp: width8, height8dp: height8)
             position.marginX = 0
             position.marginY = 0
+            if !portrait || tablet {
+                let parentW = Int(containerView.bounds.width - insets.left - insets.right)
+                let parentH = Int(getAdjustedHeight())
+                let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
+                if m.left >= 0, m.top >= 0, m.right >= 0, m.bottom >= 0 {
+                    let isRTL = containerView.isDirectionRTL()
+                    let startInset = isRTL ? insets.right : insets.left
+                    let endInset = isRTL ? insets.left : insets.right
+                    let leftAligned = position.isLeft
+                    let topAligned = position.isTop
+                    let xRaw = leftAligned ? m.left - startInset : m.right - endInset
+                    let yRaw = topAligned ? m.top - statusBarHeight : m.bottom - insets.bottom
+                    let xPixels = Int(round(max(0, xRaw)))
+                    let yPixels = Int(round(max(0, yRaw)))
+                    position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
+                }
+            }
+            
             return position
         }
         
@@ -177,6 +187,23 @@ final class MapHudLayout: NSObject {
         let height8 = Int32(max(1, Int(view.bounds.height / dpToPx / cell)))
         position.setSize(width8dp: width8, height8dp: height8)
         if view === leftWidgetsPanel || view === rightWidgetsPanel {
+            let insets = containerView.safeAreaInsets
+            let parentW = Int(containerView.bounds.width - insets.left - insets.right)
+            let parentH = Int(getAdjustedHeight())
+            let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
+            if m.left >= 0, m.top >= 0, m.right >= 0, m.bottom >= 0 {
+                let isRTL = containerView.isDirectionRTL()
+                let startInset = isRTL ? insets.right : insets.left
+                let endInset = isRTL ? insets.left : insets.right
+                let leftAligned = position.isLeft
+                let topAligned = position.isTop
+                let xRaw = leftAligned ? m.left - startInset : m.right - endInset
+                let yRaw = topAligned ? m.top - statusBarHeight : m.bottom - insets.bottom
+                let xPixels = Int(round(max(0, xRaw)))
+                let yPixels = Int(round(max(0, yRaw)))
+                position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
+            }
+        } else if (view === topBarPanelContainer || view === bottomBarPanelContainer), !portrait || tablet {
             let insets = containerView.safeAreaInsets
             let parentW = Int(containerView.bounds.width - insets.left - insets.right)
             let parentH = Int(getAdjustedHeight())

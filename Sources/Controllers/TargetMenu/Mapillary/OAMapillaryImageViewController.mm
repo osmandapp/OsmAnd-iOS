@@ -111,7 +111,7 @@
     CGFloat width = isLandscape ? DeviceScreenWidth / 2 + [OAUtilities getLeftMargin] : DeviceScreenWidth;
     return CGRectMake(0., navBarHeight, width, height);
 }
- 
+
 - (void) initWebView
 {
     CGRect frame = [self getWebViewFrame:[OAUtilities isLandscape]];

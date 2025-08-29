@@ -233,7 +233,6 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         }, completion: nil)
     }
     
-
     @objc func keyboardWillHide(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? CGFloat,

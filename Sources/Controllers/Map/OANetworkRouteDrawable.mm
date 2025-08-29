@@ -14,6 +14,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererEnvironment.h"
 #import "OANativeUtilities.h"
+#import "OAPOI.h"
 
 #include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/Map/MapStyleEvaluator.h>
@@ -83,6 +84,9 @@
             layers << shield;
     }
     
+    if (background.isEmpty() && foreground.isEmpty() && text.isEmpty())
+        return nil;
+    
     textStyle.backgroundImage = OsmAnd::SkiaUtilities::mergeImages(layers);
 
     int textColor = 0xff000000;
@@ -102,6 +106,23 @@
     if (textImage)
     {
         return [OANativeUtilities skImageToUIImage:textImage];
+    }
+    return nil;
+}
+
++ (UIImage *) getIconByAmenityShieldTags:(OAPOI *)amenity
+{
+    NSMutableDictionary<NSString *, NSString *> *shieldTags = [NSMutableDictionary new];
+    for (NSString *tag in amenity.values.allKeys)
+    {
+        NSString *value = amenity.values[tag];
+        shieldTags[tag] = value;
+    }
+    OARouteKey *shieldRouteKey = [OARouteKey fromShieldTags:shieldTags];
+    if (shieldRouteKey)
+    {
+        OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:shieldRouteKey];
+        return drawable.getIcon;
     }
     return nil;
 }

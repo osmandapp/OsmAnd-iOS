@@ -659,6 +659,26 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     return (isOpenedNow ? [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"will_close_at"), timeStr] : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"time_will_open"), timeStr]);
 }
 
+- (NSString *) getAmenityDistanceFormatted:(OAPOI *)amenity
+{
+    NSString *distanceTag = amenity.values[OATravelGpx.DISTANCE];
+    if (!NSStringIsEmpty(distanceTag))
+    {
+        float km = [distanceTag floatValue];
+        if (km > 0)
+        {
+            if (![distanceTag containsString:@"."])
+            {
+                // Before 1 Apr 2025 distance format was MMMMM (meters, no fractional part).
+                // Since 1 Apr 2025 format has been fixed to KM.D (km, 1 fractional digit).
+                km /= 1000;
+            }
+        }
+        return [OAOsmAndFormatter getFormattedDistance:km * 1000 withParams:[OsmAndFormatterParams noTrailingZeros]];
+    }
+    return nil;
+}
+
 - (OAPOIType *) getTextPoiAdditionalByKey:(NSString *)name
 {
     for (OAPOIType *pt in _textPoiAdditionals)

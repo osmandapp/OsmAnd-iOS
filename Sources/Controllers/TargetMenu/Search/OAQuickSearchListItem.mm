@@ -347,18 +347,30 @@
         }
         case EOAObjectTypePoi:
         {
+            NSString *result = @"";
             OAPOI *poi = (OAPOI *) searchResult.object;
-            NSString * subType = [poi getSubTypeStr];
-            NSString * alternateName = searchResult.alternateName;
-            NSString * city = poi.cityName;
-            if ([alternateName length] > 0)
+            
+            NSString *typeName = [poi getSubTypeStr];
+            NSString *alternateName = searchResult.alternateName;
+            NSString *city = poi.cityName;
+            NSString *distance = @"";
+            
+            if ([poi isRouteTrack])
             {
-                subType = [subType stringByAppendingFormat:@" • %@", alternateName];
-            } else if ([city length] > 0)
-            {
-                subType = [subType stringByAppendingFormat:@" • %@", city];
+                typeName = [poi getRouteActivityType];
+                distance = [OAPOIHelper.sharedInstance getAmenityDistanceFormatted:poi];
             }
-            return [[self.class getName:searchResult] isEqualToString:subType] ? @"" : subType;
+        
+            result = typeName;
+            if (!NSStringIsEmpty(distance))
+                result = [result stringByAppendingFormat:@" • %@", distance];
+            
+            if (!NSStringIsEmpty(alternateName))
+                result = [result stringByAppendingFormat:@" • %@", alternateName];
+            else if (!NSStringIsEmpty(city))
+                result = [result stringByAppendingFormat:@" • %@", city];
+            
+            return [[self.class getName:searchResult] isEqualToString:result] ? @"" : result;
         }
         case EOAObjectTypeLocation:
         {

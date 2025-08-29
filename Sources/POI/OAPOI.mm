@@ -635,6 +635,23 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return typeStr;
 }
 
+- (NSString *)getRouteActivityType
+{
+    if (![self isRouteTrack] && ![self isSuperRoute])
+        return @"";
+    
+    NSString *routeActivityPrefix = [NSString stringWithFormat:@"%@_", OATravelGpx.ROUTE_ACTIVITY_TYPE];
+    for (NSString *key in _values.allKeys)
+    {
+        if ([key hasPrefix:routeActivityPrefix])
+        {
+            OAPOIBaseType *type = [OAPOIHelper.sharedInstance getAnyPoiAdditionalTypeByKey:key];
+            return [type nameLocalized];
+        }
+    }
+    return @"";
+}
+
 - (NSString *)toStringEn
 {
     NSString *nameEn = self.localizedNames[@"en"] ? self.localizedNames[@"en"] : @"";

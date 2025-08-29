@@ -184,10 +184,24 @@ static const float kDistanceMeters = 100.0;
 
     self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
+    
+    _topWidgetsView.accessibilityIdentifier = @"top_widgets_panel";
+    _leftWidgetsView.accessibilityIdentifier = @"map_left_widgets_panel";
+    _rightWidgetsView.accessibilityIdentifier = @"map_right_widgets_panel";
+    _bottomWidgetsView.accessibilityIdentifier = @"map_bottom_widgets_panel";
+
+    _mapHudLayout = [[MapHudLayout alloc] initWithContainerView:self.view];
+    [_mapHudLayout configureWithLeftWidgetsPanel:_leftWidgetsView rightWidgetsPanel:_rightWidgetsView topBarPanelContainer:_topWidgetsView bottomBarPanelContainer:_bottomWidgetsView];
+    [self setupMapHudButtonsPosition];
+    
+    [_compassImage removeFromSuperview];
+    [_compassButton addSubview:_compassImage];
+    _compassImage.translatesAutoresizingMaskIntoConstraints = YES;
+    _compassImage.frame = CGRectMake(10.0, 10.0, 30.0, 30.0);
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
-    _compassBox.alpha = ([self shouldShowCompass] ? 1.0 : 0.0);
-    _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
+    _compassButton.alpha = [self shouldShowCompass] ? 1.0 : 0.0;
+    _compassButton.userInteractionEnabled = _compassButton.alpha > 0.0;
 
     [self updateWeatherButtonVisibility];
 
@@ -205,19 +219,9 @@ static const float kDistanceMeters = 100.0;
     self.weatherLayersButton.alpha = 0.;
 
     // IOS-218
-    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(120, DeviceScreenHeight - 42, kMapRulerMinWidth, 25)];
-    self.rulerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:self.rulerLabel];
-
-    // Constraints
-    _bottomRulerConstraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-17.0f];
-    [self.view addConstraint:_bottomRulerConstraint];
-
-    _leftRulerConstraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:148.0f];
-    [self.view addConstraint:_leftRulerConstraint];
-
-    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
-    [self.view addConstraint:constraint];
+    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(0, 0, kMapRulerMinWidth, 25)];
+    self.rulerLabel.translatesAutoresizingMaskIntoConstraints = YES;
+    [_mapHudLayout addWidget:self.rulerLabel];
     self.rulerLabel.hidden = YES;
     self.rulerLabel.userInteractionEnabled = NO;
 
@@ -353,8 +357,7 @@ static const float kDistanceMeters = 100.0;
         else
         {
             CGFloat x1 = _driveModeButton.frame.origin.x;
-            CGFloat x2 = _zoomButtonsView.frame.origin.x - 8.0;
-            
+            CGFloat x2 = MIN(_zoomInButton.frame.origin.x, _zoomOutButton.frame.origin.x) - 8.0;
             CGFloat w = x2 - x1;
             CGFloat h = [_overlayUnderlayView getHeight:w];
             _overlayUnderlayView.frame = CGRectMake(x1, CGRectGetMinY(_driveModeButton.frame) - 16. - h, w, h);
@@ -370,6 +373,7 @@ static const float kDistanceMeters = 100.0;
         if (_mapInfoController.weatherToolbarVisible)
             [_mapInfoController updateWeatherToolbarVisible];
         [_mapInfoController viewWillTransition:size];
+        [self resetToDefaultRulerLayout];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self updateControlsLayout:YES];
         [self updateMapRulerData];
@@ -381,6 +385,7 @@ static const float kDistanceMeters = 100.0;
     [super viewSafeAreaInsetsDidChange];
     self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
+    [_mapHudLayout onContainerSizeChanged];
 }
 
 -(void) addAccessibilityLabels
@@ -397,44 +402,86 @@ static const float kDistanceMeters = 100.0;
     self.weatherLayersButton.accessibilityLabel = OALocalizedString(@"shared_string_layers");
 }
 
-- (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left
+- (void) setupMapHudButtonsPosition
 {
-    _bottomRulerConstraint.constant = bottom;
-    _leftRulerConstraint.constant = left;
-    [self.rulerLabel layoutIfNeeded];
+    [self registerMapButton:_mapSettingsButton stateClass:[MapSettingsButtonState class]];
+    [self registerMapButton:_searchButton stateClass:[SearchButtonState class]];
+    [self registerMapButton:_compassButton stateClass:[CompassButtonState class]];
+    [self registerMapButton:_zoomOutButton stateClass:[ZoomOutButtonState class]];
+    [self registerMapButton:_zoomInButton stateClass:[ZoomInButtonState class]];
+    [self registerMapButton:_mapModeButton stateClass:[MyLocationButtonState class]];
+    [self registerMapButton:_optionsMenuButton stateClass:[OptionsMenuButtonState class]];
+    [self registerMapButton:_driveModeButton stateClass:[DriveModeButtonState class]];
+}
+
+- (void) registerMapButton:(OAHudButton *)button stateClass:(Class)stateClass
+{
+    button.useCustomPosition = NO;
+    button.buttonState = [[stateClass alloc] init];
+    [_mapHudLayout addMapButton:button];
 }
 
 - (void) resetToDefaultRulerLayout
 {
     BOOL isLandscape = [OAUtilities isLandscape];
     BOOL isIPad = [OAUtilities isIPad];
-
-    BOOL isTrackMenuVisible = _mapPanelViewController.activeTargetType == OATargetGPX;
-    BOOL isPlanRouteVisible = _mapPanelViewController.activeTargetType == OATargetRoutePlanning;
+    OATargetPointType t = _mapPanelViewController.activeTargetType;
+    BOOL isTrackMenuVisible = t == OATargetGPX;
+    BOOL isPlanRouteVisible = t == OATargetRoutePlanning;
     BOOL isWeatherVisible = _mapInfoController.weatherToolbarVisible;
-    BOOL isBottomWidgetsVisible = _mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets];
-
-    CGFloat bottomOffset = DeviceScreenHeight - ((isLandscape || isIPad) && isBottomWidgetsVisible ? (_optionsMenuButton.frame.origin.y - kButtonOffset) : [self getBottomHudOffset]);
+    BOOL hasHUD = _mapPanelViewController.scrollableHudViewController != nil;
     CGFloat leftOffset = kButtonOffset;
-
-    if (isPlanRouteVisible && (isLandscape || isIPad))
-        bottomOffset = kButtonOffset + [_mapPanelViewController.scrollableHudViewController getToolbarHeight] + OAUtilities.getBottomMargin;
-
-    if ([_mapPanelViewController isTargetMapRulerNeeds])
-        leftOffset += isLandscape ? [_mapPanelViewController getTargetContainerWidth] : 0.;
-    else if (isPlanRouteVisible)
-        leftOffset += kButtonWidth + kButtonOffset + (isLandscape ? [_mapPanelViewController.scrollableHudViewController getLandscapeViewWidth] : 0.);
-    else if (isWeatherVisible)
+    BOOL shouldApply = NO;
+    if (isLandscape)
     {
-        leftOffset += isLandscape ? self.weatherToolbar.frame.size.width + 70: (kButtonWidth + kButtonOffset) + 50;
-        
-        bottomOffset = isLandscape ?  OAUtilities.getBottomMargin + 25 : self.weatherToolbar.frame.size.height + 25;
-    } else if (!self.contextMenuMode)
-        leftOffset += (isLandscape || isIPad) && isBottomWidgetsVisible ? _optionsMenuButton.frame.size.width : (_driveModeButton.frame.origin.x + _driveModeButton.frame.size.width);
-    else if (isTrackMenuVisible && isLandscape)
-        leftOffset += isLandscape ? [_mapPanelViewController.scrollableHudViewController getLandscapeViewWidth] : 0.;
-
-    [self updateRulerPosition:-bottomOffset left:leftOffset];
+        if ([_mapPanelViewController isTargetMapRulerNeeds])
+        {
+            leftOffset += [_mapPanelViewController getTargetContainerWidth];
+            shouldApply = YES;
+        }
+        else if (isPlanRouteVisible)
+        {
+            leftOffset += kButtonWidth + kButtonOffset;
+            if (hasHUD)
+            {
+                leftOffset += [_mapPanelViewController.scrollableHudViewController getLandscapeViewWidth];
+                shouldApply = YES;
+            }
+        }
+        else if (isWeatherVisible)
+        {
+            leftOffset += self.weatherToolbar.frame.size.width + 70.f;
+            shouldApply = YES;
+        }
+        else if (isTrackMenuVisible)
+        {
+            if (hasHUD)
+            {
+                leftOffset += [_mapPanelViewController.scrollableHudViewController getLandscapeViewWidth];
+                shouldApply = YES;
+            }
+        }
+    }
+    
+    if (!isLandscape && isIPad && isTrackMenuVisible && hasHUD && !shouldApply)
+    {
+        leftOffset += [_mapPanelViewController.scrollableHudViewController getLandscapeViewWidth];
+        shouldApply = YES;
+    }
+    
+    static BOOL  sCacheValid = NO;
+    static CGFloat sLastRulerLeftAbs = 0.0f;
+    static __weak id sLastLayoutRef = nil;
+    CGFloat applied = shouldApply ? leftOffset : 0.0f;
+    BOOL layoutChanged = sLastLayoutRef != self.mapHudLayout;
+    BOOL needUpdate = !sCacheValid || layoutChanged || fabs(sLastRulerLeftAbs - applied) > 0.0f;
+    if (self.mapHudLayout && needUpdate)
+    {
+        sCacheValid = YES;
+        sLastLayoutRef = self.mapHudLayout;
+        sLastRulerLeftAbs = applied;
+        [self.mapHudLayout setExternalRulerLeftOffset:applied];
+    }
 }
 
 - (void)updateMapRulerData
@@ -847,8 +894,8 @@ static const float kDistanceMeters = 100.0;
 
 - (void) updateCompassVisibility:(BOOL)showCompass
 {
-    BOOL needShow = _compassBox.alpha == 0.0 && showCompass && _mapSettingsButton.alpha == 1.0;
-    BOOL needHide = _compassBox.alpha == 1.0 && !showCompass;
+    BOOL needShow = _compassButton.alpha == 0.0 && showCompass && _mapSettingsButton.alpha == 1.0;
+    BOOL needHide = _compassButton.alpha == 1.0 && !showCompass;
     if (needShow)
         [self showCompass];
     else if (needHide)
@@ -866,9 +913,9 @@ static const float kDistanceMeters = 100.0;
 - (void) showCompass
 {
     [UIView animateWithDuration:.25 animations:^{
-        _compassBox.alpha = 1.0;
+        _compassButton.alpha = 1.0;
     } completion:^(BOOL finished) {
-        _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
+        _compassButton.userInteractionEnabled = _compassButton.alpha > 0.0;
     }];
 }
 
@@ -902,9 +949,9 @@ static const float kDistanceMeters = 100.0;
 - (void) hideCompassImpl
 {
     [UIView animateWithDuration:.25 animations:^{
-        _compassBox.alpha = 0.0;
+        _compassButton.alpha = 0.0;
     } completion:^(BOOL finished) {
-        _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
+        _compassButton.userInteractionEnabled = _compassButton.alpha > 0.0;
     }];
 }
 
@@ -988,14 +1035,17 @@ static const float kDistanceMeters = 100.0;
 - (void) setDownloadMapWidget:(OADownloadMapWidget *)widget
 {
     if (_downloadMapWidget.superview)
+    {
+        [self.mapHudLayout removeWidget:_downloadMapWidget];
         [_downloadMapWidget removeFromSuperview];
+    }
 
     _downloadMapWidget = widget;
-
     if (![self.view.subviews containsObject:_downloadMapWidget])
     {
         [self.view addSubview:_downloadMapWidget];
         [self.view insertSubview:_downloadMapWidget aboveSubview:_toolbarViewController.view];
+        [self.mapHudLayout addWidget:_downloadMapWidget];
     }
 }
 
@@ -1056,23 +1106,69 @@ static const float kDistanceMeters = 100.0;
 
 - (void) updateTopButtonsLayoutY
 {
-    CGFloat y = [self getHudTopOffset];
-    CGFloat x = [self getExtraScreenOffset];
-    CGRect frame = _compassBox.frame;
-    CGFloat msX = [self getExtraScreenOffset];
-    CGRect msFrame = _mapSettingsButton.frame;
-    CGFloat sX = [self getExtraScreenOffset] + kButtonWidth + kButtonOffset;
-    CGRect sFrame = _searchButton.frame;
-    CGFloat buttonsY = y + kButtonOffset;
-    if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, buttonsY, frame.size.width, frame.size.height)))
+    BOOL isPhoneLandscape = [OAUtilities isLandscape] && ![OAUtilities isIPad];
+    BOOL contextMenuMode = self.contextMenuMode;
+    BOOL isTargetMode = _mapPanelViewController.activeTargetType == OATargetChangePosition;
+    CGFloat baseMin = self.statusBarViewHeightConstraint.constant;
+    CGFloat ctxToolbarH = 0.0;
+    if (_mapPanelViewController.scrollableHudViewController)
+        ctxToolbarH = [_mapPanelViewController.scrollableHudViewController getNavbarHeight];
+    else if ([_mapPanelViewController isTopToolbarActive])
+        ctxToolbarH = [_mapPanelViewController getTargetToolbarHeight];
+    
+    BOOL isToolbarVisible = !_mapInfoController.weatherToolbarVisible && _toolbarViewController && _toolbarViewController.view.superview;
+    BOOL isAllowToolbarsVisible = isToolbarVisible && ([_mapPanelViewController isTopToolbarSearchVisible] || [_mapPanelViewController isTopToolbarDiscountVisible]);
+    CGFloat classicToolbarH = 0.0;
+    if (isAllowToolbarsVisible)
+        classicToolbarH = _toolbarViewController.view.frame.size.height;
+    
+    BOOL isBannerVisible = self.downloadMapWidget && [self.downloadMapWidget isVisible] && self.downloadMapWidget.alpha > 0.0;
+    CGFloat bannerH = 0.0;
+    if (isBannerVisible)
+        bannerH = self.downloadMapWidget.frame.size.height + self.downloadMapWidget.shadowOffset;
+    
+    BOOL ignoreTopSidePanels = !isPhoneLandscape && (contextMenuMode || isTargetMode || isAllowToolbarsVisible || (ctxToolbarH > baseMin));
+    CGFloat extraTop = 0.0;
+    if (!isPhoneLandscape)
     {
-        _compassBox.frame = CGRectMake(x, buttonsY + kButtonOffset + kButtonWidth, frame.size.width, frame.size.height);
-        _mapSettingsButton.frame = CGRectMake(msX, buttonsY, msFrame.size.width, msFrame.size.height);
-        _searchButton.frame = CGRectMake(sX, buttonsY, sFrame.size.width, sFrame.size.height);
+        if (contextMenuMode || isTargetMode)
+        {
+            if (ctxToolbarH > baseMin)
+                extraTop += ctxToolbarH - baseMin;
+            if (isBannerVisible)
+                extraTop += bannerH;
+        }
+        else if (isAllowToolbarsVisible)
+        {
+            extraTop += isBannerVisible ? bannerH : classicToolbarH;
+        }
+        else if (ctxToolbarH > baseMin)
+        {
+            extraTop += (ctxToolbarH - baseMin);
+        }
+    }
+    
+    if (self.mapHudLayout)
+    {
+        static BOOL sCacheValid = NO;
+        static BOOL sLastIgnoreAllPanels = NO;
+        static CGFloat sLastExtraTop = 0.0;
+        static __weak id sLastLayoutRef = nil;
+        BOOL layoutChanged = sLastLayoutRef != self.mapHudLayout;
+        BOOL needUpdate = !sCacheValid || layoutChanged || (ignoreTopSidePanels != sLastIgnoreAllPanels) || (extraTop != sLastExtraTop);
+        if (needUpdate)
+        {
+            sCacheValid = YES;
+            sLastLayoutRef = self.mapHudLayout;
+            sLastIgnoreAllPanels = ignoreTopSidePanels;
+            sLastExtraTop = extraTop;
+            [self.mapHudLayout setExternalTopOverlay:extraTop ignorePanels:ignoreTopSidePanels];
+        }
     }
 }
 
-- (BOOL)hasTopWidget {
+- (BOOL)hasTopWidget
+{
     return [_mapInfoController.topPanelController hasWidgets];
 }
 
@@ -1088,14 +1184,64 @@ static const float kDistanceMeters = 100.0;
 
 - (void) updateBottomButtonsLayout
 {
-    CGFloat x = [self getExtraScreenOffset];
-    CGFloat origButtonsY = DeviceScreenHeight - [self getHudMinBottomOffset] - kButtonOffset - kButtonHeight;
-    CGFloat buttonsY = DeviceScreenHeight - [self getHudBottomOffset] - kButtonOffset - kButtonHeight;
-    CGRect frame = _optionsMenuButton.frame;
-    BOOL hasWidgets = _mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets];
-    if ((hasWidgets && !CGRectEqualToRect(_optionsMenuButton.frame, CGRectMake(x, buttonsY, frame.size.width, frame.size.height)))
-     || (!hasWidgets && !CGRectEqualToRect(_optionsMenuButton.frame, CGRectMake(x, origButtonsY, frame.size.width, frame.size.height))))
-        [self updateBottomContolMarginsForHeight];
+    BOOL isIpad = [OAUtilities isIPad];
+    BOOL isLandscape = [OAUtilities isLandscape];
+    BOOL contextMenu = self.contextMenuMode;
+    OATargetPointType t = _mapPanelViewController.activeTargetType;
+    BOOL isPlanRoute = t == OATargetRoutePlanning;
+    BOOL hasScrollableHudVisible = _mapPanelViewController.scrollableHudViewController && _mapPanelViewController.scrollableHudViewController.view.superview;
+    CGFloat viewHeight = 0.0;
+    CGFloat toolbarHeight = 0.0;
+    if (hasScrollableHudVisible)
+    {
+        viewHeight = [_mapPanelViewController.scrollableHudViewController getViewHeight];
+        toolbarHeight = [_mapPanelViewController.scrollableHudViewController getToolbarHeight];
+    }
+    
+    BOOL weatherVisible = _mapInfoController.weatherToolbarVisible;
+    CGFloat bottomInset = self.view.safeAreaInsets.bottom;
+    CGFloat extraBottom = 0.0;
+    BOOL contextAffectsBottom = contextMenu && (!isLandscape || isPlanRoute);
+    if (contextAffectsBottom)
+    {
+        if (!isIpad || isPlanRoute)
+        {
+            if (hasScrollableHudVisible)
+            {
+                if (isPlanRoute && isLandscape)
+                    extraBottom += toolbarHeight;
+                else
+                    extraBottom += MAX(0.f, viewHeight - bottomInset);
+            }
+            else
+            {
+                CGFloat targetH = [_mapPanelViewController getTargetMenuHeight];
+                extraBottom += MAX(0.f, targetH - bottomInset);
+            }
+        }
+    }
+    else
+    {
+        if (weatherVisible && !isLandscape)
+            extraBottom += MAX(0.f, self.weatherToolbar.frame.size.height - bottomInset);
+    }
+    
+    BOOL ignoreBottomSidePanels = contextMenu || weatherVisible;
+    static BOOL sCacheValid = NO;
+    static BOOL sLastIgnoreBottomSidePanels = NO;
+    static CGFloat sLastExtraBottom = 0.0;
+    static __weak id sLastLayoutRef = nil;
+    BOOL layoutChanged = sLastLayoutRef != self.mapHudLayout;
+    BOOL needUpdate = !sCacheValid || layoutChanged || (ignoreBottomSidePanels != sLastIgnoreBottomSidePanels) || (fabs(sLastExtraBottom - extraBottom) > 0.0);
+    if (self.mapHudLayout && needUpdate)
+    {
+        sCacheValid = YES;
+        sLastLayoutRef = self.mapHudLayout;
+        sLastIgnoreBottomSidePanels = ignoreBottomSidePanels;
+        sLastExtraBottom = extraBottom;
+        [self.mapHudLayout setExternalBottomOverlay:extraBottom ignorePanels:ignoreBottomSidePanels];
+        [self resetToDefaultRulerLayout];
+    }
 }
 
 - (CGFloat) getHudMinTopOffset
@@ -1313,7 +1459,7 @@ static const float kDistanceMeters = 100.0;
     void (^mainBlock)(void) = ^{
         _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;
         _mapSettingsButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
-        _compassBox.alpha = ([self shouldShowCompass] && isButtonsVisible ? 1. : 0.);
+        _compassButton.alpha = [self shouldShowCompass] && isButtonsVisible ? 1. : 0.;
         _searchButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _downloadView.alpha = isButtonsVisible ? 1. : 0.;
         
@@ -1345,7 +1491,7 @@ static const float kDistanceMeters = 100.0;
 
         _statusBarView.userInteractionEnabled = _statusBarView.alpha > 0.;
         _mapSettingsButton.userInteractionEnabled = _mapSettingsButton.alpha > 0.;
-        _compassBox.userInteractionEnabled = _compassBox.alpha > 0.;
+        _compassButton.userInteractionEnabled = _compassButton.alpha > 0.;
         _searchButton.userInteractionEnabled = _searchButton.alpha > 0.;
         _downloadView.userInteractionEnabled = _downloadView.alpha > 0.;
 
@@ -1396,7 +1542,8 @@ static const float kDistanceMeters = 100.0;
         BOOL optionsMenuButtonVisible = visible;
         _optionsMenuButton.alpha = optionsMenuButtonVisible ? 1. : 0.;
         BOOL zoomButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
-        _zoomButtonsView.alpha = zoomButtonsVisible ? 1. : 0.;
+        _zoomInButton.alpha = zoomButtonsVisible ? 1. : 0.;
+        _zoomOutButton.alpha = zoomButtonsVisible ? 1. : 0.;
         BOOL mapModeButtonVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
         _mapModeButton.alpha = mapModeButtonVisible ? 1. : 0.;
         BOOL driveModeButtonVisible = visible;
@@ -1409,21 +1556,30 @@ static const float kDistanceMeters = 100.0;
 
         CGFloat offsetValue = 50;
         if (!optionsMenuButtonVisible)
+        {
             [self addOffsetToView:_optionsMenuButton x:-offsetValue y:0.];
+        }
         if (!driveModeButtonVisible)
+        {
             [self addOffsetToView:_driveModeButton x:-offsetValue y:0.];
+        }
         if (!mapModeButtonVisible)
+        {
             [self addOffsetToView:_mapModeButton x:offsetValue y:0.];
+        }
         if (!zoomButtonsVisible)
-            [self addOffsetToView:_zoomButtonsView x:offsetValue y:0.];
-
+        {
+            [self addOffsetToView:_zoomInButton  x:offsetValue y:0.];
+            [self addOffsetToView:_zoomOutButton x:offsetValue y:0.];
+        }
     };
 
     void (^completionBlock)(BOOL) = ^(BOOL finished) {
 
         _bottomBarView.userInteractionEnabled = _bottomBarView.alpha > 0.;
         _optionsMenuButton.userInteractionEnabled = _optionsMenuButton.alpha > 0.;
-        _zoomButtonsView.userInteractionEnabled = _zoomButtonsView.alpha > 0.;
+        _zoomInButton.userInteractionEnabled = _zoomInButton.alpha > 0.;
+        _zoomOutButton.userInteractionEnabled = _zoomOutButton.alpha > 0.;
         _mapModeButton.userInteractionEnabled = _mapModeButton.alpha > 0.;
         _driveModeButton.userInteractionEnabled = _driveModeButton.alpha > 0.;
 
@@ -1446,23 +1602,22 @@ static const float kDistanceMeters = 100.0;
 - (void) updateBottomContolMarginsForHeight
 {
     CGFloat bottomOffset = [self getBottomHudOffset];
-
-    if ([OAUtilities isLandscape]) {
+    BOOL isRTL = [self.view isDirectionRTL];
+    
+    if ([OAUtilities isLandscape])
+    {
         _weatherLayersButton.frame = CGRectMake(CGRectGetMaxX(_weatherToolbar.frame) + 20, bottomOffset - _weatherLayersButton.bounds.size.height, _weatherLayersButton.bounds.size.width, _weatherLayersButton.bounds.size.height);
         
-        _weatherContoursButton.frame = CGRectMake(CGRectGetMaxX(_weatherToolbar.frame) + 20, CGRectGetMinY(_weatherLayersButton.frame) - 70, _weatherContoursButton.bounds.size.width, _weatherContoursButton.bounds.size.height);
-    } else {
-        _weatherLayersButton.frame = CGRectMake([self getExtraScreenOffset], bottomOffset - _weatherLayersButton.bounds.size.height - (_mapInfoController.weatherToolbarVisible ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherLayersButton.bounds.size.width, _weatherLayersButton.bounds.size.height);
-        
-        _weatherContoursButton.frame = CGRectMake([self getExtraScreenOffset], bottomOffset - _weatherLayersButton.bounds.size.height - 70 - (_mapInfoController.weatherToolbarVisible ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherContoursButton.bounds.size.width, _weatherContoursButton.bounds.size.height);
+        _weatherContoursButton.frame = CGRectMake(CGRectGetMaxX(_weatherToolbar.frame) + 20, CGRectGetMinY(_weatherLayersButton.frame) - 64, _weatherContoursButton.bounds.size.width, _weatherContoursButton.bounds.size.height);
     }
-
-    _optionsMenuButton.frame = CGRectMake([self getExtraScreenOffset], bottomOffset - _optionsMenuButton.bounds.size.height, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
-    _driveModeButton.frame = CGRectMake([self getExtraScreenOffset] + kButtonWidth + kButtonOffset, bottomOffset - _driveModeButton.bounds.size.height, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
-    _mapModeButton.frame = CGRectMake(self.view.bounds.size.width - 2 * kButtonWidth - kButtonOffset - [self getExtraScreenOffset], bottomOffset - _mapModeButton.bounds.size.height, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
-    _zoomButtonsView.frame = CGRectMake(self.view.bounds.size.width - kButtonWidth - [self getExtraScreenOffset], bottomOffset - _zoomButtonsView.bounds.size.height, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+    else
+    {
+        _weatherLayersButton.frame = CGRectMake((isRTL && ![OAUtilities isIPad]) ? self.view.bounds.size.width - [self getExtraScreenOffset] - _weatherLayersButton.bounds.size.width : [self getExtraScreenOffset], bottomOffset - _weatherLayersButton.bounds.size.height - (_mapInfoController.weatherToolbarVisible ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherLayersButton.bounds.size.width, _weatherLayersButton.bounds.size.height);
+        
+        _weatherContoursButton.frame = CGRectMake((isRTL && ![OAUtilities isIPad]) ? self.view.bounds.size.width - [self getExtraScreenOffset] - _weatherContoursButton.bounds.size.width : [self getExtraScreenOffset], bottomOffset - _weatherLayersButton.bounds.size.height - 64 - (_mapInfoController.weatherToolbarVisible ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherContoursButton.bounds.size.width, _weatherContoursButton.bounds.size.height);
+    }
     
-    [self resetToDefaultRulerLayout];
+    [self updateBottomButtonsLayout];
 }
 
 - (CGFloat) getBottomHudOffset
@@ -1619,21 +1774,21 @@ static const float kDistanceMeters = 100.0;
 {
     if (followingMode)
     {
-        [_driveModeButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] forState:UIControlStateNormal];
+        [_driveModeButton setImage:[[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
         _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
         _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
         _driveModeButton.accessibilityValue = OALocalizedString(@"simulate_in_progress");
     }
     else if (routePlanningMode)
     {
-        [_driveModeButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation"] forState:UIControlStateNormal];
+        [_driveModeButton setImage:[[UIImage templateImageNamed:@"ic_custom_navigation"] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
         _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
         _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
         _driveModeButton.accessibilityValue = OALocalizedString(@"simulate_in_progress");
     }
     else
     {
-        [_driveModeButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation"] forState:UIControlStateNormal];
+        [_driveModeButton setImage:[[UIImage templateImageNamed:@"ic_custom_navigation"] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
         _driveModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
         _driveModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
         _driveModeButton.accessibilityValue = nil;

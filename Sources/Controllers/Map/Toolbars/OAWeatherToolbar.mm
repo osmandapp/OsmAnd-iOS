@@ -405,7 +405,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 - (void) updatePlayForecastButton
 {
     NSString *iconName = _animationState == EOAWeatherToolbarAnimationStateIdle ? @"ic_custom_play" : @"ic_custom_pause";
-    [_playButton setImage:[UIImage templateImageNamed:iconName] forState:UIControlStateNormal];
+    [_playButton setImage:[[UIImage templateImageNamed:iconName] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
 }
 
 - (void) scheduleAnimationStart

@@ -473,7 +473,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     else
     {
-        buttonsFrame.origin = CGPointMake(0., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
+        buttonsFrame.origin = CGPointMake((![OAUtilities isIPad] && ![OAUtilities isLandscape] && [self.view isDirectionRTL]) ? (DeviceScreenWidth - buttonsFrame.size.width) : 0., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
     }
     _actionButtonsContainer.frame = buttonsFrame;
 }

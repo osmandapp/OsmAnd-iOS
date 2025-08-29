@@ -336,7 +336,7 @@ final class MapHudLayout: NSObject {
         let startX = CGFloat(position.getXStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let insets = containerView.safeAreaInsets
-        let placeOnLeft = containerView.isDirectionRTL() ? !position.isLeft : position.isLeft
+        let placeOnLeft = (containerView.isDirectionRTL() && !(ignoreBottomSidePanels && (!portrait || tablet))) ? !position.isLeft : position.isLeft
         let extraTop = position.isTop ? externalTopOverlayPx : 0.0
         let extraBottom = position.isBottom ? externalBottomOverlayPx : 0.0
         let rulerExtraX = view is OAMapRulerView && externalRulerLeftOffsetPx > 0 && placeOnLeft ? max(0, externalRulerLeftOffsetPx - startX) : 0.0

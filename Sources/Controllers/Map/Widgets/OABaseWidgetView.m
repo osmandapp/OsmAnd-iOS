@@ -149,6 +149,11 @@
     return nil;
 }
 
+- (OAMapWidgetInfo *)getWidgetInfo
+{
+    return nil;
+}
+
 - (BOOL)isExternal
 {
     return self.widgetType == nil;

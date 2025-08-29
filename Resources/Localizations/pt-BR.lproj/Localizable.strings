@@ -3820,3 +3820,17 @@
 "obd_fuel_type_ethanol" = "Etanol";
 "obd_fuel_type_hybrid_regenerative" = "Híbrido regenerativo";
 "obd_fuel_type_hybrid_electric_combustion" = "Híbrido elétrico e motor a combustão";
+"shared_string_normal" = "Normal";
+"osmand_web" = "OsmAnd Web (FastSpring)";
+"fastspring_subscription_desc" = "Você pode gerenciar ou cancelar sua assinatura através do portal de gerenciamento de contas FastSpring.";
+"fastspring_one_time_payment_desc" = "Você pode gerenciar suas compras através do portal de gerenciamento de contas FastSpring.";
+"obd_fuel_type_diesel" = "Diesel";
+"standard_maps" = "Mapas padrão";
+"wikipedia_and_travel_maps" = "Wikipédia e mapas de viagens";
+"topography_maps" = "Mapas topográficos";
+"download_live_updates" = "Atualizações ao vivo";
+"local_indexes_cat_tts" = "Comandos de voz (TTS)";
+"local_indexes_cat_voice" = "Comandos de voz (gravados)";
+"rendering_styles" = "Estilos de renderização";
+"next_turn_information" = "Informações sobre a próxima curva";
+"next_turn_information_desc" = "Mostra a direção da próxima curva e o nome da rua.";

@@ -15,16 +15,18 @@
 #include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Data/TransportRoute.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 UIKIT_EXTERN NSArray<NSString *> *const OATransportStopRouteArrowChars;
 UIKIT_EXTERN NSString *const OATransportStopRouteArrow;
 
 @interface OATransportStopRoute : NSObject
 
-@property (nonatomic, assign) OATransportStop *refStop;
+@property (nonatomic, strong, nullable) OATransportStop *refStop;
 @property (nonatomic) OATransportStopType *type;
 @property (nonatomic) NSString *desc;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::TransportRoute> route;
-@property (nonatomic, assign) OATransportStop * stop;
+@property (nonatomic, strong, nullable) OATransportStop *stop;
 @property (nonatomic) int stopIndex;
 @property (nonatomic) int distance;
 @property (nonatomic) BOOL showWholeRoute;
@@ -41,3 +43,5 @@ UIKIT_EXTERN NSString *const OATransportStopRouteArrow;
 - (OATransportStopRoute *) clone;
 
 @end
+
+NS_ASSUME_NONNULL_END

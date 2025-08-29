@@ -2156,7 +2156,7 @@
 "fav_point_dublicate_message" = "A duplikálódás elkerülése érdekében a Kedvenc hely át lett nevezve erre: %@.";
 "copy_poi_name" = "Érdekes pont nevének másolása";
 "turn_arrows_descr" = "Adja meg, hogy a kanyarodást jelző nyilak látszódjanak-e az útvonalon.";
-"map_updates_for_mappers" = "Térképfrissítések térképészeknek";
+"map_updates_for_mappers" = "Térképfrissítések térképszerkesztőknek";
 "verification_code_missing_description" = "Ez 10 akár perc is lehet. Ha nincs a spam mappában, használja az alábbi gombot.";
 "sign_in_with_open_street_map" = "Bejelentkezés OpenStreetMap-fiókkal";
 "osm_live_payment_desc" = "Az előfizetési díj a kiválasztott időnként lesz felszámítva. Az előfizetést bármikor lemondhatja a Google Play-en.";
@@ -2268,7 +2268,7 @@
 "rendering_attr_horse_scale_common_name" = "Könnyű";
 "rendering_attr_showTrolleybusRoutes_name" = "Trolibuszvonalak";
 "rendering_attr_depthContourColorScheme_description" = "Mélységvonalak színsémája";
-"rendering_attr_OSMMapperAssistantNote_description" = "Note (térképészeknek szóló megjegyzés) címkék megjelenítése";
+"rendering_attr_OSMMapperAssistantNote_description" = "Note (térképszerkesztői megjegyzés) címkék megjelenítése";
 "routing_attr_avoid_4wd_only_description" = "A csak összkerék-meghajtású járművel használható utak elkerülése";
 "rendering_value_all_name" = "Minden";
 "rendering_attr_weatherPressureContours_name" = "Légnyomás izobár vonalak";
@@ -3166,3 +3166,4 @@
 "unit_of_temperature_description" = "Az aktuális profil összes hőmérsékleti adata a kiválasztott mértékegységben fog megjelenni.";
 "obd_bluetooth_off_description" = "Kapcsolja be a Bluetooth-t az OBD-olvasó megkereséséhez és csatlakoztatásához.";
 "route_guidance" = "Útvonalvezetés";
+"manage_storage" = "Tárhely kezelése";

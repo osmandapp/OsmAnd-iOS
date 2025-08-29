@@ -797,7 +797,8 @@ static int PROFILE_TRUCK = 1000;
 
 + (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected
 {
-    NSMutableSet<OAApplicationMode *> *selectedModes = [NSMutableSet setWithArray:self.values];
+    NSMutableOrderedSet<OAApplicationMode *> *selectedModes =
+        [NSMutableOrderedSet orderedSetWithArray:self.values];
     NSMutableString *str = [[NSMutableString alloc] initWithFormat:@"%@,", _DEFAULT.stringKey];
     if ([OAApplicationMode.allPossibleValues containsObject:mode])
     {

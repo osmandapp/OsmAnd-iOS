@@ -173,7 +173,7 @@ NSString *const kXmlColon = @"_-_";
         _dataDir = QDir(QString::fromNSString(_dataPath));
         _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
-        _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
+        _gpxPath = [_documentsPath stringByAppendingPathComponent:GPX_DIR];
         _models3dPath = [_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR];
         _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
@@ -516,14 +516,14 @@ NSString *const kXmlColon = @"_-_";
         if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
         {
             NSString *localPath = resource->localPath.toNSString();
-            [self applyExcludedFromBackup:localPath];
+            [localPath applyExcludedFromBackup];
         }
     }
     LogStartup(@"excludedFromBackup applied to local resources");
 
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
     {
-        [self applyExcludedFromBackup:filePath];
+        [filePath applyExcludedFromBackup];
     }
     LogStartup(@"excludedFromBackup applied to map creator files");
 
@@ -646,7 +646,7 @@ NSString *const kXmlColon = @"_-_";
             NSLog(@"Error copying file: %@ to %@ - %@", ocbfPathBundle, ocbfPathLib, [error localizedDescription]);
         LogStartup(@"regions.ocbf copied");
     }
-    [self applyExcludedFromBackup:ocbfPathLib];
+    [ocbfPathLib applyExcludedFromBackup];
     LogStartup(@"excludedFromBackup applied to regions.ocbf");
 
     // Copy proj.db to Library/Application Support/proj
@@ -670,7 +670,7 @@ NSString *const kXmlColon = @"_-_";
             NSLog(@"Error copying file: %@ to %@ - %@", projDbPathBundle, projDbPathLib, [error localizedDescription]);
         LogStartup(@"proj.db copied");
     }
-    [self applyExcludedFromBackup:projDbPathLib];
+    [projDbPathLib applyExcludedFromBackup];
     LogStartup(@"excludedFromBackup applied to proj.db");
 
     if (_terminating)
@@ -1163,26 +1163,6 @@ NSString *const kXmlColon = @"_-_";
 {
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
     _worldRegion = [OAWorldRegion loadFrom:ocbfPathLib];
-}
-
-- (void) applyExcludedFromBackup:(NSString *)localPath
-{
-    NSURL *url = [NSURL fileURLWithPath:localPath];
-    
-    id flag = nil;
-    if ([url getResourceValue:&flag forKey:NSURLIsExcludedFromBackupKey error: nil])
-    {
-        OALog(@"NSURLIsExcludedFromBackupKey = %@ for %@", flag, localPath);
-        if (!flag || [flag boolValue] == NO)
-        {
-            BOOL res = [url setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
-            OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), localPath);
-        }
-    }
-    else
-    {
-        OALog(@"NSURLIsExcludedFromBackupKey = %@ for %@", flag, localPath);
-    }
 }
 
 - (void) shutdown

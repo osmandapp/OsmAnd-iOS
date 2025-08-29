@@ -654,7 +654,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     }
     
     _otherCardsReady = NO;
-    [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_onlinePhotoCardsRowInfo];
+    [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards];
 }
 
 - (void)getCard:(NSDictionary *)feature
@@ -696,7 +696,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     }
 }
 
-- (void)addOtherCards:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent cards:(NSMutableArray<AbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
+- (void)addOtherCards:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent cards:(NSMutableArray<AbstractCard *> *)cards
 {
     CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
     OAAppSettings *settings = [OAAppSettings sharedManager];
@@ -737,7 +737,7 @@ static const CGFloat kTextMaxHeight = 150.0;
                     if (images.count == 0)
                     {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+                            [self onOtherCardsReady:newCards];
                         });
                     }
                     else
@@ -751,13 +751,13 @@ static const CGFloat kTextMaxHeight = 150.0;
                                     {
                                         [newCards addObject:card];
                                         if (newCards.count == count + cardsCount)
-                                            [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+                                            [self onOtherCardsReady:newCards];
                                     }
                                     else
                                     {
                                         count--;
                                         if (newCards.count == count + cardsCount)
-                                            [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+                                            [self onOtherCardsReady:newCards];
                                     }
                                 }];
                             });
@@ -769,15 +769,15 @@ static const CGFloat kTextMaxHeight = 150.0;
     }] resume];
 }
 
-- (void)onOtherCardsReady:(NSMutableArray<AbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
+- (void)onOtherCardsReady:(NSMutableArray<AbstractCard *> *)cards
 {
     _otherCardsReady = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateDisplayingCards:cards rowInfo:nearbyImagesRowInfo];
+        [self updateDisplayingCards:cards];
     });
 }
 
-- (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
+- (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards
 {
     if (_otherCardsReady && _wikiCardsReady)
     {
@@ -785,9 +785,9 @@ static const CGFloat kTextMaxHeight = 150.0;
             [self reorderCards:cards];
         
         // After forming the list of cards, fill the collection
-        if (nearbyImagesRowInfo)
+        if (_onlinePhotoCardsRowInfo)
         {
-            CollapsableCardsView *collapsableView = (CollapsableCardsView *)nearbyImagesRowInfo.collapsableView;
+            CollapsableCardsView *collapsableView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
             collapsableView.isLoading = NO;
             collapsableView.placeholderImage = [self targetImage];
             [collapsableView setCards:cards];
@@ -845,7 +845,8 @@ static const CGFloat kTextMaxHeight = 150.0;
     nearbyImagesRowInfo.collapsableView = cardView;
     nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 170);
     [_rows addObject:nearbyImagesRowInfo];
-    
+
+    [self clearContentForRowInfo:_onlinePhotoCardsRowInfo];
     _onlinePhotoCardsRowInfo = nearbyImagesRowInfo;
 }
 
@@ -873,8 +874,19 @@ static const CGFloat kTextMaxHeight = 150.0;
         mapillaryCardsRowInfo.collapsableView = cardView;
         mapillaryCardsRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 170);
         [_rows addObject:mapillaryCardsRowInfo];
-        
+
+        [self clearContentForRowInfo:_mapillaryCardsRowInfo];
         _mapillaryCardsRowInfo = mapillaryCardsRowInfo;
+    }
+}
+
+- (void)clearContentForRowInfo:(OARowInfo *)rowInfo
+{
+    CollapsableCardsView *cardsView = (CollapsableCardsView *)[rowInfo collapsableView];
+    if (cardsView)
+    {
+        [cardsView clearContent];
+        [cardsView removeFromSuperview];
     }
 }
 

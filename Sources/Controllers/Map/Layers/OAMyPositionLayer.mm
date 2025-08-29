@@ -386,7 +386,6 @@ typedef enum {
 - (OsmAnd::PointI) getPosition
 {
     std::shared_ptr<OsmAnd::MapMarker> marker = [self getActiveMarker];
-    OsmAnd::MapMarker::OnSurfaceIconKey iconKey = [self getActiveIconKey];
     return marker ? marker->getPosition() : OsmAnd::PointI();
 }
 @end

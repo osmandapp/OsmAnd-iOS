@@ -24,8 +24,6 @@ final class CollapsableCardsView: OACollapsableView {
         }
     }
     
-    weak var delegate: CollapsableCardViewDelegate?
-    
     var contentType: CollapsableCardsType = .onlinePhoto {
         didSet {
             cardsViewController.contentType = contentType
@@ -43,6 +41,8 @@ final class CollapsableCardsView: OACollapsableView {
             updateSpinner()
         }
     }
+    
+    weak var delegate: CollapsableCardViewDelegate?
     
     override var collapsed: Bool {
         didSet {
@@ -118,11 +118,16 @@ final class CollapsableCardsView: OACollapsableView {
     func setCards(_ cards: [AbstractCard]) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            
             сardsFilter = CardsFilter(cards: cards)
             cardsViewController.сardsFilter = сardsFilter
             configureBottomButton()
         }
+    }
+    
+    func clearContent() {
+        cardsViewController.clearDataSource()
+        cardsViewController.showSpinner(show: false)
+        bottomButton?.removeFromSuperview()
     }
     
     private func updateSpinner() {

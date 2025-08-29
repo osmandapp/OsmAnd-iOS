@@ -3122,3 +3122,6 @@
 "obd_fuel_pressure" = "Tlak paliva";
 "obd_bluetooth_off_description" = "Zapnite Bluetooth pre hľadanie a pripojenie skenerov.";
 "obd_fuel_type_not_provided" = "Nezadaný druh paliva";
+"next_turn_information" = "Informácia o ďalšom zabočení";
+"next_turn_information_desc" = "Zobrazí smer ďalšieho zabočenia a názov ulice.";
+"manage_purchases" = "Spravovať nákupy";

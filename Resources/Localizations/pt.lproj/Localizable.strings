@@ -315,7 +315,7 @@
 "apply_filters" = "Aplicar filtros";
 "transport_nearby_routes_within" = "Rotas próximas a menos de";
 "transport_nearby_routes" = "A menos de";
-"clear_all_intermediates" = "Limpar todos os pontos intermédios";
+"clear_all_intermediates" = "Limpar todos os destinos intermédios";
 "shared_string_options" = "Opções";
 "replace_destination_point" = "Substituir o ponto de destino";
 "shared_string_current" = "Atual";
@@ -1146,7 +1146,7 @@
 "select_map_marker" = "Selecione o marcador do mapa";
 "parking_place" = "Lugar de estacionamento";
 "route_add_start_point" = "Adicionar ponto de partida";
-"add_intermediate" = "Adicionar ponto intermédio";
+"add_intermediate" = "Adicionar destino intermediário";
 "add_home" = "Adicionar morada de casa";
 "add_work" = "Adicionar morada do trabalho";
 "favorite_home_category" = "Casa";
@@ -3792,3 +3792,5 @@
 "obd_fuel_type_bifuel_electricity" = "Funcionamento bicombustível a eletricidade";
 "obd_fuel_consumption_rate_l_km" = "Consumo de combustível (L/100 km)";
 "average_temperature" = "Temperatura média";
+"manage_purchases" = "Gerir compras";
+"sensor_data" = "Dados do sensor";

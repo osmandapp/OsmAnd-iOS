@@ -1887,6 +1887,7 @@ static OASubscriptionState *EXPIRED;
                                  _settings.eligibleForIntroductoryPrice = YES;
                                  _settings.eligibleForSubscriptionOffer = NO;
                                  _settings.lastReceiptValidationDate = [[NSDate alloc] init];
+                                 products = [NSMutableArray array];
                              }
                          }
                      }

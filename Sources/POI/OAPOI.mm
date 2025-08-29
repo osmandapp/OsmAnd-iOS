@@ -508,7 +508,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         _values[tag] = value;
         
         if ([tag isEqualToString:OPENING_HOURS_TAG])
+        {
             self.openingHours = value;
+            self.hasOpeningHours = YES;
+        }
     }
 }
 
@@ -630,6 +633,23 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         }
     }
     return typeStr;
+}
+
+- (NSString *)getRouteActivityType
+{
+    if (![self isRouteTrack] && ![self isSuperRoute])
+        return @"";
+    
+    NSString *routeActivityPrefix = [NSString stringWithFormat:@"%@_", OATravelGpx.ROUTE_ACTIVITY_TYPE];
+    for (NSString *key in _values.allKeys)
+    {
+        if ([key hasPrefix:routeActivityPrefix])
+        {
+            OAPOIBaseType *type = [OAPOIHelper.sharedInstance getAnyPoiAdditionalTypeByKey:key];
+            return [type nameLocalized];
+        }
+    }
+    return @"";
 }
 
 - (NSString *)toStringEn
@@ -793,7 +813,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             if (subType)
                 amenity.subType = subType;
             if (openingHours)
+            {
                 amenity.openingHours = openingHours;
+                amenity.hasOpeningHours = YES;
+            }
             [amenity setValues:additionalInfo];
         }
     }

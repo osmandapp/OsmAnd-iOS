@@ -15,6 +15,7 @@
 - (BOOL) hasBearing;
 - (BOOL) hasSpeed;
 - (BOOL) hasAccuracy;
+- (double)haversineDistanceInMetersTo:(CLLocation *)location;
 
 - (CLLocation *) locationWithCoordinate:(CLLocationCoordinate2D)coordinate;
 - (CLLocation *) locationWithAltitude:(CLLocationDistance)altitude;

@@ -955,6 +955,10 @@
 "meridian_180" = "180th meridian";
 "quick_action_showhide_coordinates_grid_descr" = "Action to control the visibility of the Coordinates grid on the map.";
 
+"standard_maps" = "Standard maps";
+"wikipedia_and_travel_maps" = "Wikipedia and Travel maps";
+"topography_maps" = "Topography maps";
+
 // HUD
 "hud_heading" = "Heading";
 "hud_no_movement" = "No movement";
@@ -1636,6 +1640,11 @@
 "osmand_live_server_date" = "Last server update: %@";
 "update_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
+
+"download_live_updates" = "Live updates";
+"local_indexes_cat_tts" = "Voice prompts (TTS)";
+"local_indexes_cat_voice" = "Voice prompts (recorded)";
+"rendering_styles" = "Rendering styles";
 
 "weather_update_disabled" = "Disabled";
 "weather_update_over_wifi_only" = "Over WIFI only";
@@ -3365,6 +3374,9 @@
 "loading_purchase_information" = "Loading purchase information";
 "fastspring_subscription_desc" = "You can manage or cancel your subscription through FastSpring account management portal.";
 "fastspring_one_time_payment_desc" = "You can manage your purchases through FastSpring account management portal.";
+
+"next_turn_information" = "Next turn information";
+"next_turn_information_desc" = "Shows the upcoming turn direction and street name.";
 
 "shared_string_now" = "Now";
 

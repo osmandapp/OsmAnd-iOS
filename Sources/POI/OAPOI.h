@@ -146,6 +146,8 @@ static int DEFAULT_ELO = 900;
 
 - (NSString *) getSubTypeStr;
 
+- (NSString *)getRouteActivityType;
+
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 + (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 - (NSString *)getTagSuffix:(NSString *)tagPrefix;

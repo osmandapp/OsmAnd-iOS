@@ -623,7 +623,7 @@
 "shared_string_finish" = "Финал";
 "copy_from_other_profile" = "Копиране от друг профил";
 "profile_alert_delete_title" = "Премахване на профила";
-"profile_alert_delete_msg" = "Премахване на профила „%@“?";
+"profile_alert_delete_msg" = "Изтриване на профил „%@“";
 "profile_type_custom_string" = "Потребителски профил";
 "new_profile" = "Нов профил";
 "configure_profile" = "Настройки на профила";
@@ -1581,7 +1581,7 @@
 "turn_arrows" = "Стрелки за посоката";
 "shared_string_hide_all" = "Скриване всичко";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Пиктограми при малко увеличение";
-"rendering_attr_natureReserves_description" = "Показват се природни резервати, защитени територии и национални паркове.";
+"rendering_attr_natureReserves_description" = "Показват се природни резервати, защитени месности и национални паркове.";
 "routing_attr_only_permitted_streets_name" = "Изрично разрешени улици";
 "routing_attr_allow_gate_description" = "Използване на порти";
 "routeInfo_roadClass_description" = "Оцветяване на маршрутите или трасетата в зависимост от класификацията на пътя.";
@@ -2327,3 +2327,7 @@
 "vehicle_metrics_recording_description" = "Изберете параметрите, които да бъдат записани в GPX файл.";
 "obd_fuel_type_bifuel_hydrogen" = "Двугоривен: водорпд";
 "rpm_unit" = "об/мин";
+"OsmAnd Maps" = "OsmAnd Карти";
+"download_depth_countours" = "Контури на морски дълбочини";
+"day_short" = "ден";
+"week_short" = "Седм.";

@@ -215,6 +215,8 @@
 		2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */; };
 		2717D3D22DC8D8A600B7BD22 /* BaseAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */; };
 		271A62052E3CA8CD00B34CB1 /* DistanceByTapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */; };
+		274167472E4DD3660051DD4B /* BaseWidgetView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */; };
+		274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167482E4DF5840051DD4B /* TopTextViewState.swift */; };
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
 		274C43F12DEDBA7100585952 /* OANextTurnWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */; };
 		27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */; };
@@ -428,6 +430,7 @@
 		3296B49327F8790800108AF7 /* ic_navbar_pencil@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46327F8790200108AF7 /* ic_navbar_pencil@2x.png */; };
 		3296B4A227F8790800108AF7 /* ic_custom_terrain_flat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47227F8790500108AF7 /* ic_custom_terrain_flat@2x.png */; };
 		329989B0298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 329989AF298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m */; };
+		329B392A2E3BB663006A774B /* OALocalItemType.m in Sources */ = {isa = PBXBuildFile; fileRef = 329B39292E3BB65F006A774B /* OALocalItemType.m */; };
 		329E56B62C7BB45F00DC7B7C /* OAIconsPaletteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 322B53962C78DD5A006B48B0 /* OAIconsPaletteCell.xib */; };
 		329E56BA2C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329E56B92C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift */; };
 		32A001A026131FEA00ABE0D2 /* ic_custom_clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */; };
@@ -866,6 +869,7 @@
 		780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */; };
 		78AC698C23AB7BE1006C3DDE /* left_menu_configure_screen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC698823AB7BDF006C3DDE /* left_menu_configure_screen@3x.png */; };
 		78AC698E23AB7BE1006C3DDE /* left_menu_configure_screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC698923AB7BE0006C3DDE /* left_menu_configure_screen@2x.png */; };
+		818F239B2C04EBF100A488C9 /* marine.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 818F239A2C04EBF000A488C9 /* marine.render.xml */; };
 		81AE516126298A3600BDF947 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */; };
 		81E0C9432D37DE5B00BC7D85 /* bundled_assets.json in Resources */ = {isa = PBXBuildFile; fileRef = 81E0C9422D37DE5A00BC7D85 /* bundled_assets.json */; };
 		81E0C9462D37DFCD00BC7D85 /* OABundledAsetts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E0C9452D37DFC700BC7D85 /* OABundledAsetts.swift */; };
@@ -3116,6 +3120,7 @@
 		FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */; };
 		FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */; };
 		FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */; };
+		FA051A6D2E3B768400BB8E95 /* SafariPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */; };
 		FA069C542B9AF61B0007E4DE /* OutlineLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */; };
 		FA069C692B9F13160007E4DE /* ShadowPathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C682B9F13160007E4DE /* ShadowPathView.swift */; };
 		FA069C6B2B9F65750007E4DE /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */; };
@@ -3577,6 +3582,8 @@
 		2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesCollectionHandler.swift; sourceTree = "<group>"; };
 		2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceCategory.swift; sourceTree = "<group>"; };
 		271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceByTapViewController.swift; sourceTree = "<group>"; };
+		274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseWidgetView+Extension.swift"; sourceTree = "<group>"; };
+		274167482E4DF5840051DD4B /* TopTextViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTextViewState.swift; sourceTree = "<group>"; };
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
 		274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OANextTurnWidget.xib; sourceTree = "<group>"; };
 		27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NextTurnWidget+Extension.swift"; sourceTree = "<group>"; };
@@ -3904,6 +3911,8 @@
 		3296B47A27F8790700108AF7 /* ic_custom_clouds@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clouds@2x.png"; path = "Resources/Icons/ic_custom_clouds@2x.png"; sourceTree = "<group>"; };
 		329989AE298A90D1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmUploadGPXVisibilityViewConroller.h; sourceTree = "<group>"; };
 		329989AF298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmUploadGPXVisibilityViewConroller.m; sourceTree = "<group>"; };
+		329B39282E3BB648006A774B /* OALocalItemType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OALocalItemType.h; sourceTree = "<group>"; };
+		329B39292E3BB65F006A774B /* OALocalItemType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OALocalItemType.m; sourceTree = "<group>"; };
 		329E56B92C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceViewAngleViewController.swift; sourceTree = "<group>"; };
 		32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@2x.png"; path = "Resources/Icons/ic_custom_clipboard@2x.png"; sourceTree = "<group>"; };
 		32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@3x.png"; path = "Resources/Icons/ic_custom_clipboard@3x.png"; sourceTree = "<group>"; };
@@ -4422,6 +4431,7 @@
 		780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_empty_state_contour_lines@3x.png"; path = "Resources/Icons/img_empty_state_contour_lines@3x.png"; sourceTree = "<group>"; };
 		78AC698823AB7BDF006C3DDE /* left_menu_configure_screen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_configure_screen@3x.png"; path = "Resources/Icons/left_menu_configure_screen@3x.png"; sourceTree = "<group>"; };
 		78AC698923AB7BE0006C3DDE /* left_menu_configure_screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_configure_screen@2x.png"; path = "Resources/Icons/left_menu_configure_screen@2x.png"; sourceTree = "<group>"; };
+		818F239A2C04EBF000A488C9 /* marine.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = marine.render.xml; path = ../resources/rendering_styles/marine.render.xml; sourceTree = "<group>"; };
 		81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGeographicLib_STATIC.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E0C9422D37DE5A00BC7D85 /* bundled_assets.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = bundled_assets.json; path = ../resources/bundled_assets.json; sourceTree = "<group>"; };
 		81E0C9452D37DFC700BC7D85 /* OABundledAsetts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OABundledAsetts.swift; sourceTree = "<group>"; };
@@ -7751,6 +7761,7 @@
 		FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesWithRightLabelTableViewCell.swift; sourceTree = "<group>"; };
 		FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesWithRightLabelTableViewCell.xib; sourceTree = "<group>"; };
+		FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariPresenter.swift; sourceTree = "<group>"; };
 		FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLabel.swift; sourceTree = "<group>"; };
 		FA069C682B9F13160007E4DE /* ShadowPathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowPathView.swift; sourceTree = "<group>"; };
 		FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
@@ -8065,6 +8076,7 @@
 				27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */,
 				DA5A7F4626C563A400F274C7 /* OATopTextView.h */,
 				DA5A7F3B26C563A400F274C7 /* OATopTextView.mm */,
+				274167482E4DF5840051DD4B /* TopTextViewState.swift */,
 			);
 			path = OATopTextView;
 			sourceTree = "<group>";
@@ -9892,6 +9904,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				818F239A2C04EBF000A488C9 /* marine.render.xml */,
 				DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */,
 				DAF50C6F299D111B006AAF2E /* osmassistant.addon.render.xml */,
 				DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */,
@@ -10521,17 +10534,19 @@
 		DA4ABED32876DA5D00B996EF /* ImportExportData */ = {
 			isa = PBXGroup;
 			children = (
-				DA4ABED52876DA5D00B996EF /* ReadWrite */,
 				DA4ABEE12876DA5D00B996EF /* OAExportSettingsCategory.h */,
 				DA4ABED42876DA5D00B996EF /* OAExportSettingsCategory.m */,
 				DA4ABEDF2876DA5D00B996EF /* OAExportSettingsType.h */,
 				DA4ABEE42876DA5D00B996EF /* OAExportSettingsType.mm */,
 				DA4ABEDE2876DA5D00B996EF /* OAImportExportSettingsConverter.h */,
 				DA4ABEE22876DA5D00B996EF /* OAImportExportSettingsConverter.m */,
+				329B39282E3BB648006A774B /* OALocalItemType.h */,
+				329B39292E3BB65F006A774B /* OALocalItemType.m */,
 				DA4ABEDD2876DA5D00B996EF /* OASettingsCategoryItems.h */,
 				DA4ABEE32876DA5D00B996EF /* OASettingsCategoryItems.m */,
 				DA4ABEE02876DA5D00B996EF /* OASettingsItemType.h */,
 				DA4ABEDC2876DA5D00B996EF /* OASettingsItemType.m */,
+				DA4ABED52876DA5D00B996EF /* ReadWrite */,
 			);
 			path = ImportExportData;
 			sourceTree = "<group>";
@@ -12782,6 +12797,7 @@
 				46B619DB29EFE97500950A20 /* OAAltitudeWidget.mm */,
 				DAECA4F826CFE62600241B0B /* OABaseWidgetView.h */,
 				DAECA4F926CFE62600241B0B /* OABaseWidgetView.m */,
+				274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */,
 				C56FAB4E29B226C60096192F /* OACameraDistanceWidget.h */,
 				C56FAB4F29B226C60096192F /* OACameraDistanceWidget.mm */,
 				C56FAB4929B226A40096192F /* OACameraTiltWidget.h */,
@@ -13379,6 +13395,7 @@
 			children = (
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
+				FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
 				325DAE652DFFF07E002CB022 /* AsyncTask */,
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
@@ -14921,6 +14938,7 @@
 				8A755A5321CBF92400E42699 /* ic_live_unlimited_downloads@2x.png in Resources */,
 				DA23424423477F33003911B8 /* ic_custom_route@3x.png in Resources */,
 				8431E78F1B383A190063C9AF /* ic_average_speed@3x.png in Resources */,
+				818F239B2C04EBF100A488C9 /* marine.render.xml in Resources */,
 				97BCFBEA287D9152003AFFB2 /* ic_custom_shop_bag_48@2x.png in Resources */,
 				DA22DC5E25C05F130070FFCA /* ic_custom_split_before@2x.png in Resources */,
 				DA5A827226C563A700F274C7 /* OAFilledButtonCell.xib in Resources */,
@@ -16579,7 +16597,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/usr/bin/env bash\n\n# Check for internet:\n# ping Google Public DNS  8.8.8.8  and wait for 0.5 sec.\nif ! ping -c 1 -W 0.5 8.8.8.8 > /dev/null; then\n    echo \"🔄 No internet. Stop redownloading regions.ocbf\"\n    exit 0\nfi\n\n\nset -euo pipefail\n\nREMOTE_URL=\"https://creator.osmand.net/basemap/regions.ocbf\"\nLOCAL_FILE=\"${SRCROOT}/Resources/Shipped/regions.ocbf\"\nTMP_FILE=\"$(mktemp \"${LOCAL_FILE}.download.XXXXXX\")\"\n\n# Ensure temp file is cleaned up no matter what\ntrap 'rm -f \"$TMP_FILE\"' EXIT\n\n# 1. If local missing → download unconditionally\nif [[ ! -f \"$LOCAL_FILE\" ]]; then\n  echo \"🔄 regions.ocbf missing → downloading fresh copy\"\n  curl --fail -R -S -o \"$TMP_FILE\" \"$REMOTE_URL\"\n  mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n  exit 0\nfi\n\n# 2. Fetch remote headers once\nread -r REMOTE_SIZE REMOTE_DATE <<< $(\n  curl -sI \"$REMOTE_URL\" \\\n    | awk '\n        /^Content-Length:/   { size=$2 }\n        /^Last-Modified:/    { $1=\"\"; sub(/^ +/, \"\"); date=$0 }\n        END                  { print size, date }\n      ' \\\n    | tr -d '\\r'\n)\n\n# 3. Compare size\nLOCAL_SIZE=$(stat -f %z \"$LOCAL_FILE\")\nif [[ \"$LOCAL_SIZE\" -ne \"$REMOTE_SIZE\" ]]; then\n  echo \"🔄 Size changed: local=$LOCAL_SIZE remote=$REMOTE_SIZE → redownloading\"\n  curl --fail -R -S -o \"$TMP_FILE\" \"$REMOTE_URL\"\n  mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n  exit 0\nfi\n\n# 4. Compare Last-Modified via conditional GET\nHTTP_CODE=$(\n  curl --silent --show-error --fail \\\n       -z \"$LOCAL_FILE\" \\\n       -w \"%{http_code}\" \\\n       -o \"$TMP_FILE\" \\\n       \"$REMOTE_URL\"\n)\n\ncase \"$HTTP_CODE\" in\n  200)\n    echo \"🔄 Server is newer (HTTP 200) → updated regions.ocbf\"\n    mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n    ;;\n  304)\n    echo \"✅ regions.ocbf is already up to date (HTTP 304)\"\n    ;;\n  *)\n    echo \"⚠️ Unexpected HTTP $HTTP_CODE\" >&2\n    exit 1\n    ;;\nesac\n\n# Clean up the trap now that we're done\ntrap - EXIT\n";
+			shellScript = "#!/usr/bin/env bash\n\n# Check for internet:\n# ping Google Public DNS  8.8.8.8  and wait for 0.5 sec.\nif ! ping -c 1 -W 0.5 8.8.8.8 > /dev/null; then\n    echo \"🔄 No internet. Stop redownloading regions.ocbf\"\n    exit 0\nfi\n\n\nset -euo pipefail\n\nREMOTE_URL=\"https://builder.osmand.net/basemap/regions.ocbf\"\nLOCAL_FILE=\"${SRCROOT}/Resources/Shipped/regions.ocbf\"\nTMP_FILE=\"$(mktemp \"${LOCAL_FILE}.download.XXXXXX\")\"\n\n# Ensure temp file is cleaned up no matter what\ntrap 'rm -f \"$TMP_FILE\"' EXIT\n\n# 1. If local missing → download unconditionally\nif [[ ! -f \"$LOCAL_FILE\" ]]; then\n  echo \"🔄 regions.ocbf missing → downloading fresh copy\"\n  curl --fail -R -S -o \"$TMP_FILE\" \"$REMOTE_URL\"\n  mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n  exit 0\nfi\n\n# 2. Fetch remote headers once\nread -r REMOTE_SIZE REMOTE_DATE <<< $(\n  curl -sI \"$REMOTE_URL\" \\\n    | awk '\n        /^Content-Length:/   { size=$2 }\n        /^Last-Modified:/    { $1=\"\"; sub(/^ +/, \"\"); date=$0 }\n        END                  { print size, date }\n      ' \\\n    | tr -d '\\r'\n)\n\n# 3. Compare size\nLOCAL_SIZE=$(stat -f %z \"$LOCAL_FILE\")\nif [[ \"$LOCAL_SIZE\" -ne \"$REMOTE_SIZE\" ]]; then\n  echo \"🔄 Size changed: local=$LOCAL_SIZE remote=$REMOTE_SIZE → redownloading\"\n  curl --fail -R -S -o \"$TMP_FILE\" \"$REMOTE_URL\"\n  mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n  exit 0\nfi\n\n# 4. Compare Last-Modified via conditional GET\nHTTP_CODE=$(\n  curl --silent --show-error --fail \\\n       -z \"$LOCAL_FILE\" \\\n       -w \"%{http_code}\" \\\n       -o \"$TMP_FILE\" \\\n       \"$REMOTE_URL\"\n)\n\ncase \"$HTTP_CODE\" in\n  200)\n    echo \"🔄 Server is newer (HTTP 200) → updated regions.ocbf\"\n    mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n    ;;\n  304)\n    echo \"✅ regions.ocbf is already up to date (HTTP 304)\"\n    ;;\n  *)\n    echo \"⚠️ Unexpected HTTP $HTTP_CODE\" >&2\n    exit 1\n    ;;\nesac\n\n# Clean up the trap now that we're done\ntrap - EXIT\n";
 		};
 		FA45668A2AFB839000B07165 /* Run Script: SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16959,6 +16977,7 @@
 				DA5A844626C563A900F274C7 /* OABaseScrollableHudViewController.mm in Sources */,
 				DA5A841826C563A800F274C7 /* OAGPXEditWptListViewController.mm in Sources */,
 				4609FAA22C5158F100B57F06 /* UIImageView+Extension.swift in Sources */,
+				274167472E4DD3660051DD4B /* BaseWidgetView+Extension.swift in Sources */,
 				DA5A852E26C563A900F274C7 /* OrderedDictionary.m in Sources */,
 				DA5A833A26C563A800F274C7 /* OAHomeWorkCell.mm in Sources */,
 				DA5A813226C563A700F274C7 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
@@ -17342,6 +17361,7 @@
 				DA5A856126C563A900F274C7 /* OAGpxRouteApproximation.mm in Sources */,
 				464BF4AB2C051909000D6908 /* Map3DButtonState.swift in Sources */,
 				DAECA4FA26CFE62600241B0B /* OABaseWidgetView.m in Sources */,
+				FA051A6D2E3B768400BB8E95 /* SafariPresenter.swift in Sources */,
 				4657490E2B6803710006046B /* TrashItem.swift in Sources */,
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
 				DA5A83F026C563A800F274C7 /* OAQuickSearchTableController.mm in Sources */,
@@ -17501,6 +17521,7 @@
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,
 				DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */,
 				32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */,
+				329B392A2E3BB663006A774B /* OALocalItemType.m in Sources */,
 				DA5A818F26C563A700F274C7 /* OAShowHidePoiAction.m in Sources */,
 				DABC7F2227B65FD6005C76E2 /* OARoutingHelperUtils.mm in Sources */,
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,
@@ -17951,6 +17972,7 @@
 				32A0CDF42C29B01D00FDD8E0 /* OAModel3dHelper.mm in Sources */,
 				CA4ED3D37A857AA9DE517533 /* OAPurchaseDetailsViewController.m in Sources */,
 				CA4EDD68D7B26540651A56EB /* OATitleDescriptionBigIconCell.mm in Sources */,
+				274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */,
 				328EECD629DC5FA7002922AA /* OATripRecordingElevationWidget.mm in Sources */,
 				CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */,
 				3274BDAD2AB486FD00AC5E34 /* OAMapAlgorithms.mm in Sources */,

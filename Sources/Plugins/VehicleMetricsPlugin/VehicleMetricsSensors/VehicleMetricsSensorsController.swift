@@ -494,7 +494,7 @@ extension VehicleMetricsSensorsController {
     private func showDescriptionViewController(device: Device, startBehavior: VehicleMetricsDescriptionViewController.TableViewStartBehavior) {
         let controller = VehicleMetricsDescriptionViewController()
         controller.device = device
-        controller.startBehavior = .scrollToSearch
+        controller.startBehavior = startBehavior
         navigationController?.pushViewController(controller, animated: true)
     }
 }

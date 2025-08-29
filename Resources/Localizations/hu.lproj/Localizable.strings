@@ -3166,3 +3166,4 @@
 "unit_of_temperature_description" = "Az aktuális profil összes hőmérsékleti adata a kiválasztott mértékegységben fog megjelenni.";
 "obd_bluetooth_off_description" = "Kapcsolja be a Bluetooth-t az OBD-olvasó megkereséséhez és csatlakoztatásához.";
 "route_guidance" = "Útvonalvezetés";
+"manage_storage" = "Tárhely kezelése";

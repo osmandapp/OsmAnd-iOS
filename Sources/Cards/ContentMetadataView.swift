@@ -61,10 +61,12 @@ final class ContentMetadataView: UIView {
         ])
     }
     
-    func updateMetadata(with metadata: Metadata?, imageName: String) {
+    func updateMetadata(with metadata: Metadata?, imageName: String?) {
         metadataStackView.updateMetadata(with: metadata)
-        if !imageName.isEmpty {
+        if let imageName, !imageName.isEmpty {
             logoImageView.image = UIImage(named: imageName)
+        } else {
+            logoImageView.image = nil
         }
     }
 }

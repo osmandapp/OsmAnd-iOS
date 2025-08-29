@@ -3824,3 +3824,12 @@
 "distance_by_tap_use_description" = "Tapni na mapu da bi video distancu od lokacije i odabrane tačke. \nTapni na mapu sa 2 prstada bi video distancu od između kliknutih tačaka";
 "shared_string_normal" = "Normalno";
 "shared_string_large" = "Veliko";
+"topography_maps" = "Topografske mape";
+"standard_maps" = "Standardne mape";
+"wikipedia_and_travel_maps" = "Vikipedija i mape putovanja";
+"rendering_styles" = "Stilovi renderinga";
+"local_indexes_cat_voice" = "Snimljena glasovna uputstva";
+"next_turn_information" = "Informacije o sledećem skretanju";
+"next_turn_information_desc" = "Prikazuje predstojeći pravac skretanja i ime ulice.";
+"download_live_updates" = "Ažuriranja uživo";
+"local_indexes_cat_tts" = "TTS glasovna uputstva";

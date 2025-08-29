@@ -66,7 +66,7 @@ class ImageCard: AbstractCard {
     
     func getGalleryFullSizeUrl() -> String? {
         guard !imageHiresUrl.isEmpty else {
-            return nil
+            return imageUrl
         }
         return imageHiresUrl + "?width=" + Self.GALLERY_FULL_SIZE_WIDTH
     }

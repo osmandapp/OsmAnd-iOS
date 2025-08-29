@@ -56,6 +56,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAMapSelectionHelper.h"
 #import "OAAmenitySearcher.h"
+#import "OANetworkRouteDrawable.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -760,6 +761,14 @@
                     OAPOI *poi = (OAPOI *)res.object;
                     [cell.titleView setText:[item getName]];
                     cell.titleIcon.image = [poi icon];
+                    
+                    if ([poi isRouteTrack])
+                    {
+                        UIImage *shieldIcon = [OANetworkRouteDrawable getIconByAmenityShieldTags:poi];
+                        if (shieldIcon)
+                            cell.titleIcon.image = shieldIcon;
+                    }
+                    
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     if (poi.hasOpeningHours)
                     {

@@ -1101,6 +1101,9 @@ static UIViewController *parentController;
 
 - (UIContextMenuConfiguration *)tableView:(UITableView *)tableView contextMenuConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath point:(CGPoint)point
 {
+    if (!(_data && indexPath.section >= 0 && indexPath.section < _data.count && [_data[indexPath.section] count] > 0))
+        return nil;
+
     NSDictionary *item = _data[indexPath.section][0];
     NSString *cellType = item[@"type"];
     if (indexPath.row == 0 &&[cellType isEqualToString:@"group"])
@@ -1108,44 +1111,36 @@ static UIViewController *parentController;
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
 
         FavoriteTableGroup *groupData = item[@"group"];
-        NSString *showHideCaption = groupData.favoriteGroup.isVisible
-            ? OALocalizedString(@"shared_string_hide_from_map")
-            : OALocalizedString(@"shared_string_show_on_map");
-        NSString *showHideImage = groupData.favoriteGroup.isVisible
-            ? @"ic_custom_hide_outlined" : @"ic_custom_show_outlined";
+        NSInteger section = indexPath.section;
+        __weak __typeof(self) weakSelf = self;
+        NSString *showHideCaption = groupData.favoriteGroup.isVisible ? OALocalizedString(@"shared_string_hide_from_map") : OALocalizedString(@"shared_string_show_on_map");
+        NSString *showHideImage = groupData.favoriteGroup.isVisible ? @"ic_custom_hide_outlined" : @"ic_custom_show_outlined";
         UIAction *showHideAction = [UIAction actionWithTitle:showHideCaption
                                                        image:[UIImage imageNamed:showHideImage]
                                                   identifier:nil
                                                      handler:^(__kindof UIAction * _Nonnull action) {
-            FavoriteTableGroup *groupData = item[@"group"];
             [OAFavoritesHelper updateGroup:groupData.favoriteGroup visible:!groupData.favoriteGroup.isVisible saveImmediately:YES];
-            [self generateData];
+            [weakSelf generateData];
         }];
         showHideAction.accessibilityLabel = showHideCaption;
         
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
-                                                       image:[UIImage imageNamed:@"ic_custom_edit"]
-                                                  identifier:nil
-                                                     handler:^(__kindof UIAction * _Nonnull action) {
-            [self openRenameAlertWith:groupData.favoriteGroup];
+                                                     image:[UIImage imageNamed:@"ic_custom_edit"]
+                                                identifier:nil
+                                                   handler:^(__kindof UIAction * _Nonnull action) {
+            [weakSelf openRenameAlertWith:groupData.favoriteGroup];
         }];
         renameAction.accessibilityLabel = OALocalizedString(@"shared_string_rename");
-        [menuElements addObject:[UIMenu menuWithTitle:@""
-                                           image:nil
-                                      identifier:nil
-                                         options:UIMenuOptionsDisplayInline
-                                        children:@[showHideAction, renameAction]]];
+        [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[showHideAction, renameAction]]];
         
         NSString *appearanceName = OALocalizedString(@"default_appearance");
         UIAction *appearanceAction = [UIAction actionWithTitle:appearanceName
                                                          image:[UIImage systemImageNamed:@"paintpalette"]
                                                     identifier:nil
                                                        handler:^(__kindof UIAction * _Nonnull action) {
-            FavoriteTableGroup *groupData = item[@"group"];
-            OAFavoriteGroupEditorViewController *viewController =
-                [[OAFavoriteGroupEditorViewController alloc] initWithGroup:[groupData.favoriteGroup toPointsGroup]];
-            viewController.delegate = self;
-            [self.navigationController pushViewController:viewController animated:YES];
+            OAFavoriteGroupEditorViewController *viewController = [[OAFavoriteGroupEditorViewController alloc] initWithGroup:[groupData.favoriteGroup toPointsGroup]];
+            viewController.delegate = weakSelf;
+            [weakSelf.navigationController pushViewController:viewController animated:YES];
         }];
         appearanceAction.accessibilityLabel = appearanceName;
         [menuElements addObject:appearanceAction];
@@ -1155,15 +1150,13 @@ static UIViewController *parentController;
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
             NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
-            NSDictionary *item = _data[indexPath.section][0];
-            FavoriteTableGroup *groupData = item[@"group"];
             for (NSInteger i = 0; i <= groupData.favoriteGroup.points.count; i++)
             {
-                [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+                [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:section]];
             }
             
-            UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:indexPath];
-            [self shareItems:indexPaths sounceItem:cell];
+            UITableViewCell *cell = [weakSelf.favoriteTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
+            [weakSelf shareItems:indexPaths sounceItem:(cell ?: weakSelf.view)];
         }];
         shareAction.accessibilityLabel = OALocalizedString(@"shared_string_share");
         [menuElements addObject:shareAction];
@@ -1182,34 +1175,23 @@ static UIViewController *parentController;
                                         actionWithTitle:OALocalizedString(@"shared_string_yes")
                                         style:UIAlertActionStyleDefault
                                         handler:^(UIAlertAction * _Nonnull action) {
-                NSDictionary *item = _data[indexPath.section][0];
-                FavoriteTableGroup *groupData = item[@"group"];
                 for (NSInteger i = 0; i <= groupData.favoriteGroup.points.count; i++)
                 {
-                    [self addIndexPathToSelectedCellsArray:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+                    [weakSelf addIndexPathToSelectedCellsArray:[NSIndexPath indexPathForRow:i inSection:section]];
                 }
-                [self removeFavoriteItems];
+                [weakSelf removeFavoriteItems];
             }];
-            UIAlertAction *cancelButton = [UIAlertAction
-                                     actionWithTitle:OALocalizedString(@"shared_string_no")
-                                     style:UIAlertActionStyleCancel
-                                     handler:nil];
+            UIAlertAction *cancelButton = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleCancel handler:nil];
             [alert addAction:yesButton];
             [alert addAction:cancelButton];
-            [self presentViewController:alert animated:YES completion:nil];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
         }];
         deleteAction.accessibilityLabel = OALocalizedString(@"shared_string_delete");
         deleteAction.attributes = UIMenuElementAttributesDestructive;
-        [menuElements addObject:[UIMenu menuWithTitle:@""
-                                           image:nil
-                                      identifier:nil
-                                         options:UIMenuOptionsDisplayInline
-                                        children:@[deleteAction]]];
+        [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[deleteAction]]];
 
         UIMenu *contextMenu = [UIMenu menuWithChildren:menuElements];
-        return [UIContextMenuConfiguration configurationWithIdentifier:nil
-                                                        previewProvider:nil
-                                                        actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
+        return [UIContextMenuConfiguration configurationWithIdentifier:nil previewProvider:nil actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
             return contextMenu;
         }];
     }

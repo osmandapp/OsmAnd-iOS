@@ -1631,7 +1631,7 @@
 
 - (instancetype) initWithSku:(NSString *)sku name:(NSString *)name feature:(OAFeature *)feature origin:(EOAPurchaseOrigin)origin defaultPrice:(double)defaultPrice monthlyDuration:(int)monthlyDuration featurePro:(BOOL)featurePro featureMaps:(BOOL)featureMaps featureLive:(BOOL)featureLive
 {
-    self = [super initWithIdentifierNoVersion:sku version:1];
+    self = [super initWithIdentifier:sku];
     _name = name;
     _feature = feature;
     _origin = origin;

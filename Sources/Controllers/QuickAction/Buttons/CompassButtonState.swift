@@ -41,7 +41,7 @@ final class CompassButtonState: MapButtonState {
     }
 
     private static func createVisibilityPref() -> OACommonInteger {
-        let settings = OAAppSettings.sharedManager()!
+        let settings = OAAppSettings.sharedManager()
         guard let preference = settings.getPreferenceByKey("compass_visibility") as? OACommonInteger else {
             let defaultValue = CompassVisibility.alwaysVisible.rawValue
             return settings.registerIntPreference("compass_visibility", defValue: defaultValue).makeProfile()

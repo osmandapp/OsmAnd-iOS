@@ -6,14 +6,13 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "OAMapHudViewController.h"
+@class QuickActionButtonState, OAMapHudViewController;
 
-@class QuickActionButtonState;
+NS_ASSUME_NONNULL_BEGIN
 
 @interface OAFloatingButtonsHudViewController : UIViewController
 
-- (instancetype _Nonnull)initWithMapHudViewController:(OAMapHudViewController * _Nonnull)mapHudController;
+- (instancetype)initWithMapHudViewController:(OAMapHudViewController *)mapHudController;
 
 - (void)updateViewVisibility;
 - (BOOL)isActionSheetVisible;
@@ -23,3 +22,6 @@
 - (QuickActionButtonState * _Nullable)getActiveButtonState;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

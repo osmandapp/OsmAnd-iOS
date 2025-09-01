@@ -314,17 +314,16 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         let fullText = "\(title)\n\n\(howTo)\n\(steps)"
         let fullAttributedText = NSMutableAttributedString(string: fullText)
         
-        if let boldFont = UIFont.scaledBoldSystemFont(ofSize: 17) {
-            let howToRange = (fullText as NSString).range(of: howTo)
-            if howToRange.location != NSNotFound {
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.paragraphSpacing = 12
-                
-                fullAttributedText.addAttributes([
-                    .font: boldFont,
-                    .paragraphStyle: paragraphStyle
-                ], range: howToRange)
-            }
+        let boldFont = UIFont.scaledBoldSystemFont(ofSize: 17)
+        let howToRange = (fullText as NSString).range(of: howTo)
+        if howToRange.location != NSNotFound {
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.paragraphSpacing = 12
+            
+            fullAttributedText.addAttributes([
+                .font: boldFont,
+                .paragraphStyle: paragraphStyle
+            ], range: howToRange)
         }
         
         return fullAttributedText

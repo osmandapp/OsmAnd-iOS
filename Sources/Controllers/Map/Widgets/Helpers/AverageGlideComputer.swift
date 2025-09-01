@@ -17,8 +17,8 @@ final class AverageGlideComputer: AverageValueComputer {
     private override init() {}
 
     override func isEnabled() -> Bool {
-        if let appMode = OAAppSettings.sharedManager().applicationMode?.get(),
-           let registry = OAMapWidgetRegistry.sharedInstance() {
+        if let registry = OAMapWidgetRegistry.sharedInstance() {
+            let appMode = OAAppSettings.sharedManager().applicationMode.get()
             for widgetInfo in registry.getAllWidgets() where widgetInfo.widget is GlideAverageWidget
                     && widgetInfo.isEnabledForAppMode(appMode)
                     && WidgetsAvailabilityHelper.isWidgetAvailable(widgetId: widgetInfo.key, appMode: appMode) {

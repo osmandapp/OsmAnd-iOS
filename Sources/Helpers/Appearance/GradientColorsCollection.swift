@@ -190,7 +190,7 @@ final class GradientColorsCollection: ColorsCollection {
         preference.resetToDefault()
         var res = [GradientData]()
 
-        if let jsonAsString, !jsonAsString.isEmpty {
+        if !jsonAsString.isEmpty {
             do {
                 if let data = jsonAsString.data(using: .utf8) {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
@@ -204,7 +204,7 @@ final class GradientColorsCollection: ColorsCollection {
     }
 
     private func isDefaultPaletteColor(_ paletteColor: PaletteGradientColor) -> Bool {
-        var defaultName = PaletteGradientColor.defaultName
+        let defaultName = PaletteGradientColor.defaultName
         if let terrainType = gradientType as? TerrainType {
             if paletteColor.typeName == paletteColor.paletteName {
                 return true
@@ -270,8 +270,7 @@ final class GradientColorsCollection: ColorsCollection {
         let savedGradientPreferences = preference.get()
         do {
             var jsonObject: [String: Any]
-            if let savedGradientPreferences,
-               !savedGradientPreferences.isEmpty,
+            if !savedGradientPreferences.isEmpty,
                let data = savedGradientPreferences.data(using: .utf8) {
                 jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
             } else {

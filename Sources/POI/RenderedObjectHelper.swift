@@ -86,13 +86,13 @@ final class RenderedObjectHelper: NSObject {
         
         poi.obfId = renderedObject.obfId
         poi.values = additionalInfo as? MutableOrderedDictionary
-        poi.localizedNames = localizedNames as? NSMutableDictionary
+        poi.localizedNames = NSMutableDictionary(dictionary: localizedNames) 
         poi.latitude = renderedObject.labelLatLon.coordinate.latitude
         poi.longitude = renderedObject.labelLatLon.coordinate.longitude
         poi.setXYPoints(renderedObject)
-        poi.name = poi.name != nil && poi.name.length > 0 ? poi.name : renderedObject.name
+        poi.name = (poi.name?.isEmpty == false) ? poi.name : renderedObject.name
 
-        if poi.name == nil || poi.name.isEmpty {
+        if poi.name == nil || poi.name!.isEmpty {
             poi.name = searchObjectNameByAmenityTags(for: poi)
         }
 

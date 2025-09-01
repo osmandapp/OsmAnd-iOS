@@ -125,13 +125,15 @@ final class DestinationsListViewController: OABaseButtonsViewController {
                     cell.descriptionVisibility(true)
                     let attributes: [NSAttributedString.Key: Any] = [
                         .font: UIFont.preferredFont(forTextStyle: .footnote),
-                        .foregroundColor: colorFromRGB(Int(color_text_footer)) ?? .gray
+                        .foregroundColor: colorFromRGB(Int(color_text_footer))
                     ]
                     let descriptionAttr = NSMutableAttributedString(string: " " + descriptionStr, attributes: attributes)
-                    var directionImage = UIImage.iconFavoriteDirection
-                    directionImage = OAUtilities.resize(directionImage, newSize:CGSize(width: 11, height: 11))
-                    directionImage = directionImage.rotate(radians: destinationItem.direction)
-                    descriptionAttr.attachImage(image: directionImage)
+       
+                    let baseImage = UIImage.iconFavoriteDirection
+                    if let resizedImage = OAUtilities.resize(baseImage, newSize: CGSize(width: 11, height: 11)) {
+                        let directionImage = resizedImage.rotate(radians: destinationItem.direction)
+                        descriptionAttr.attachImage(image: directionImage)
+                    }
                     cell.descriptionLabel.attributedText = descriptionAttr
                 } else {
                     cell.descriptionVisibility(false)

@@ -23,7 +23,7 @@ final class ColorsPaletteUtils: NSObject {
             break
         }
         fileName = fileName.replacingOccurrences(of: TXT_EXT, with: "")
-        return fileName.components(separatedBy: "_").map { OAUtilities.capitalizeFirstLetter($0) }.joined(separator: " ")
+        return fileName.components(separatedBy: "_").compactMap({ OAUtilities.capitalizeFirstLetter($0) }).joined(separator: " ")
     }
 
     static func getPaletteTypeName(_ filePath: String) -> String {

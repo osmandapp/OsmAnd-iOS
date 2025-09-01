@@ -24,7 +24,7 @@ private enum FuelConsumptionMode: String, CaseIterable {
     func getTitle(appMode: OAApplicationMode) -> String {
         let settings = OAAppSettings.sharedManager()
         let leftText: String
-        switch settings?.volumeUnits.get(appMode) {
+        switch settings.volumeUnits.get(appMode) {
         case .LITRES:
             leftText = localizedString("litres")
         case .IMPERIAL_GALLONS:
@@ -38,7 +38,7 @@ private enum FuelConsumptionMode: String, CaseIterable {
         let rightText: String
         if self == .volumePer100Units {
             let unitKey: String
-            switch settings?.metricSystem.get(appMode) {
+            switch settings.metricSystem.get(appMode) {
             case .KILOMETERS_AND_METERS:
                 unitKey = "km"
             case .NAUTICAL_MILES_AND_METERS, .NAUTICAL_MILES_AND_FEET:
@@ -164,7 +164,7 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
             prefId = Self.obdFuelConsumptionModeKey
         }
         
-        guard let pref = OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: FuelConsumptionMode.volumePer100Units.rawValue).makeProfile() else { fatalError("Failed to register preference \(prefId)") }
+        let pref = OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: FuelConsumptionMode.volumePer100Units.rawValue).makeProfile()
         if let widgetParams {
             if let raw = widgetParams[prefId] as? String, FuelConsumptionMode(rawValue: raw) != nil {
                 pref.set(raw, mode: appMode)

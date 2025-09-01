@@ -17,7 +17,7 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
     var delegate: AppModeSelectionDelegate?
     
     init() {
-        appMode = OAAppSettings.sharedManager()!.applicationMode.get()
+        appMode = OAAppSettings.sharedManager().applicationMode.get()
         super.init()
     }
     

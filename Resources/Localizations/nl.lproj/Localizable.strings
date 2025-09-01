@@ -178,7 +178,7 @@
 "shared_string_turn" = "Afslag";
 "stop_routing_confirm" = "Navigatie stoppen\?";
 "cancel_route" = "Annuleer route\?";
-"route_is_too_long_v2" = "Voor grote afstanden: voeg tussenpunten toe als binnen 10 minuten geen route berekend is.";
+"route_is_too_long_v2" = "Voor lange afstanden: voeg tussenstops toe als binnen tien minuten geen route wordt gevonden.";
 "navigation_over_track" = "Navigatie langs GPX-track starten\?";
 "use_displayed_track_for_navigation" = "De getoonde GPX-track gebruiken voor navigatie\?";
 "shared_string_select_on_map" = "Selecteer op de kaart";
@@ -227,7 +227,7 @@
 "driving_region_australia" = "Australië";
 "left_side_navigation" = "Linksrijdend verkeer";
 "right_side_navigation" = "Rechts rijdend";
-"si_mi_feet" = "Mijlen/voeten";
+"si_mi_feet" = "Mijlen/voet";
 "si_mi_yard" = "Mijlen/yards";
 "si_mi_meters" = "Mijl/meter";
 "si_km_m" = "Kilometer/meter";
@@ -825,7 +825,7 @@
 "rendering_attr_hideWaterPolygons_description" = "Watervlakten";
 "rendering_value_pedestrian_name" = "Te voet";
 "rendering_value_translucent_lightblue_name" = "Doorschijnend lichtblauw";
-"rendering_attr_contourLines_description" = "Hoogtelijnen tonen vanaf schaal (Kaart met Hoogtelijnen moet aanwezig zijn):";
+"rendering_attr_contourLines_description" = "Toon vanaf zoomniveau (vereist hoogtecontourgegevens):";
 "rendering_value_medium_w_name" = "Gemiddeld";
 "routing_attr_allow_private_name" = "Privé-wegen toestaan";
 "rendering_value_translucent_purple_name" = "Doorschijnend paars";
@@ -939,7 +939,7 @@
 "routeInfo_roadClass_name" = "Wegtype";
 "rendering_attr_surface_dirt_name" = "Onverhard";
 "routing_attr_avoid_tram_description" = "Vermijd trams";
-"routing_attr_avoid_sett_name" = "Geen straatkeien en kasseien";
+"routing_attr_avoid_sett_name" = "Geen kasseien";
 "rendering_attr_streetLighting_name" = "Straatverlichting";
 "routing_attr_avoid_ferries_name" = "Geen veerboten";
 "rendering_value_purple_name" = "Paars";
@@ -1281,7 +1281,7 @@
 "fav_points_not_exist" = "Er zijn geen favoriete punten";
 "select_group" = "Groep kiezen";
 "shared_string_wifi_only" = "Alleen met Wifi";
-"srtm_download_list_help_message" = "OsmAnd biedt gegevens van contourlijnen in meters en voet aan. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";
+"srtm_download_list_help_message" = "OsmAnd biedt contourlijngegevens in meters en voet aan. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";
 "shared_string_all_languages" = "Alle talen";
 "navigate_point_easting" = "Oostwaarde";
 "added_profiles" = "Profielen toegevoegd";
@@ -1409,7 +1409,7 @@
 "lang_sr_latn" = "Servisch (Latijns schrift)";
 "any_poi" = "Alle";
 "lang_jv" = "Javaans";
-"gpx_split_interval" = "Splits om de";
+"gpx_split_interval" = "Splits-interval";
 "lang_ku" = "Koerdisch";
 "lang_nds" = "Nederduits";
 "lang_sh" = "Servo-Kroatisch";
@@ -1548,7 +1548,7 @@
 "purchases_feature_desc_nautical" = "Verkrijg toegang tot zeediepte informatie";
 "purchases_feature_desc_unlimited_map_download" = "Krijg onbeperkte offline kaart downloads voor alle continenten en regio\'s.";
 "purchases_feature_desc_terrain" = "Hoogtelijnen, grijswaarden-schaduwwerking en kleurenschema voor hellingsindicatie, om toppen en laaggelegen gebieden te kunnen onderscheiden.";
-"osmand_development_plugin_description" = "Deze plug-in toont de instellingen voor ontwikkel- en debug-opties, zoals routetest en -simulatie, schermweergave-prestaties, en spraaksturing. Deze instellingen zijn bedoeld voor programmeurs die OsmAnd willen verbeteren en zijn niet nodig voor normaal gebruik.";
+"osmand_development_plugin_description" = "Biedt functionaliteit om OsmAnd te testen en te debuggen: navigatieroutes simuleren, de weergave op het scherm controleren, prestaties controleren, etc. Deze plug-in is niet vereist voor normaal gebruik van de app.";
 "restore_purchases" = "Aankopen herstellen";
 "purchases_feature_desc_combined_wiki" = "Verken Wikipedia artikelen onderweg zonder een internet connectie. De offline gegevens zijn verdeeld over de landen en zijn beschikbaar in alle talen.";
 "altitude_ascent" = "Bergopwaarts";
@@ -1797,7 +1797,7 @@
 "fav_point_dublicate_message" = "Favorietnaam veranderd in %@ om dubbel gebruik te voorkomen.";
 "turn_arrows_descr" = "Kies of Afslaan Pijlen zijn aangegeven op de route lijn.";
 "free_version_message" = "%@ kaarten te downloaden of updaten.";
-"quick_action_hillshade_descr" = "Knop om de reliëfschaduw al dan niet te tonen op de kaart.";
+"quick_action_hillshade_descr" = "Een knop om de reliëfschaduw al dan niet te tonen op de kaart.";
 "map_widget_rendering_fps" = "FPS van laad methode";
 "lenght_limit_description" = "Geef de voertuiglengte op, er zijn mogelijk routebeperkingen voor lange voertuigen.";
 "tts_title" = "TTS (Tekst-naar-spraak)";
@@ -2167,7 +2167,7 @@
 "shared_string_nearest" = "Dichtstbijzijnde";
 "shared_string_buttons" = "Knoppen";
 "map_3d_mode_description" = "Gebruik 2 vingers en beweeg ze naar boven en beneden om de oriëntatie van de kaart aan te passen.";
-"generate_slope_from_3d_maps" = "Genereer hellingrasterkaarten uit 3D-kaarten";
+"generate_slope_from_3d_maps" = "Genereer hellingsrasterkaarten uit 3D-kaarten";
 "external_sensors_source_of_data" = "Gegevensbron";
 "free_favorites_backup_description" = "Registreer voor OsmAnd Cloud om een gratis back-up te maken van favorieten en instellingen.";
 "announcement_time_descr" = "De timing van de aankondiging van de verschillende spraakprompts hangt af van het type prompt, de huidige navigatiesnelheid en de standaard navigatiesnelheid.";
@@ -2631,7 +2631,7 @@
 "shared_string_unchanged" = "Onveranderd";
 "dd_mm_mmm_format" = "GG°MM.MMM′";
 "smart_folder_name_present" = "Zo\'n slimme map bestaat al";
-"mapillary_action_descr" = "Deel je weergave op straatniveau via Mapillary.";
+"mapillary_action_descr" = "Deel je omgeving op straatniveau via Mapillary.";
 "unchanged_parameter_summary" = "Elke track behoudt zijn eigen parameters.";
 "auto_25_chars_route_tu_kl" = "U-bocht maken en links aanhouden";
 "auto_25_chars_route_tsll" = "Ga flauw naar links";

@@ -1063,8 +1063,35 @@ static OASubscriptionState *EXPIRED;
                 pro = YES;
                 break;
             }
-        
+
         NSMutableArray<OAProduct *> *purchased = [NSMutableArray array];
+        NSMutableArray<OASubscription *> *purchasedSubs = [NSMutableArray array];
+        for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
+            if (holder.linkedSubscription && holder.origin == EOAPurchaseOriginIOS && holder.state == OASubscriptionState.ACTIVE)
+            {
+                OAProduct *product = [_products getProduct:holder.linkedSubscription.productIdentifier];
+                if (product)
+                {
+                    BOOL wasPurchased = [product isPurchased];
+                    [_products setPurchased:product.productIdentifier];
+                    [purchasedSubs addObject:product];
+                    if (!wasPurchased)
+                        [purchased addObject:product];
+                }
+            }
+        for (OAInAppStateHolder *holder in _inAppStateMap.allValues)
+            if (holder.linkedProduct && holder.origin == EOAPurchaseOriginIOS)
+            {
+                OAProduct *product = [_products getProduct:holder.linkedProduct.productIdentifier];
+                if (product)
+                {
+                    BOOL wasPurchased = [product isPurchased];
+                    [_products setPurchased:product.productIdentifier];
+                    if (!wasPurchased)
+                        [purchased addObject:product];
+                }
+            }
+
         if (products)
         {
             [expirationDates enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull prodId, NSDate * _Nonnull expDate, BOOL * _Nonnull stop) {
@@ -1078,7 +1105,6 @@ static OASubscriptionState *EXPIRED;
                 //    [_products setExpired:product.productIdentifier];
             }
             
-            NSMutableArray<OASubscription *> *purchasedSubs = [NSMutableArray array];
             for (OAProduct *product in products)
             {
                 BOOL isSubscription = [product isKindOfClass:[OASubscription class]];

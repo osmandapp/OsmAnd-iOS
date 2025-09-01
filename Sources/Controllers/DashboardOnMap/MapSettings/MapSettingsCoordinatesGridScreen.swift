@@ -192,7 +192,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
                 cell.rightButton.accessibilityLabel = buttonTitle
             }
             if let buttonIconName = item.string(forKey: Constants.buttonIconKey) {
-                cell.rightButton.setImage(UIImage.templateImageNamed(buttonIconName).imageFlippedForRightToLeftLayoutDirection(), for: .normal)
+                cell.rightButton.setImage(UIImage.templateImageNamed(buttonIconName)?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
                 cell.rightButton.tintColor = UIColor.iconColorActive
             }
             cell.rightButton.removeTarget(nil, action: nil, for: .allEvents)

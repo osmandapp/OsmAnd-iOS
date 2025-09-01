@@ -62,10 +62,9 @@ final class RouteParameterHazmatUsa: OABaseSettingsViewController {
             row.title = parameterNames[i]
             let classNumber = parameterIds[i].replacingOccurrences(of: "hazmat_category_usa_", with: "")
             row.iconName = "ic_custom_placard_hazard_" + classNumber
-            if let param = OAAppSettings.sharedManager().getCustomRoutingBooleanProperty(row.key, defaultValue: false) {
-                row.setObj(param, forKey: paramsKey)
-                row.setObj(param.get(appMode), forKey: selectedKey)
-            }
+            let param = OAAppSettings.sharedManager().getCustomRoutingBooleanProperty(row.key ?? "", defaultValue: false)
+            row.setObj(param, forKey: paramsKey)
+            row.setObj(param.get(appMode), forKey: selectedKey)
         }
     }
     

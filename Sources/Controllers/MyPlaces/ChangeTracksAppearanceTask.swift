@@ -46,15 +46,16 @@ final class ChangeTracksAppearanceTask: NSObject {
     }
     
     private func updateCurrentTrackAppearance() {
-        guard let settings = OAAppSettings.sharedManager() else { return }
+        let settings = OAAppSettings.sharedManager()
         if let color: Int = data.getParameter(for: GpxParameter.color) {
             settings.currentTrackColor.set(Int32(color))
         }
         if let coloringType: String = data.getParameter(for: GpxParameter.coloringType) {
             let requiredValue = ColoringType.companion.requireValueOf(purpose: ColoringPurpose.track, name: coloringType)
             settings.currentTrackColoringType.set(Int32(requiredValue.ordinal))
-            let routeInfoAttribute = ColoringType.companion.getRouteInfoAttribute(name: coloringType)
-            settings.routeInfoAttribute.set(routeInfoAttribute)
+            if let routeInfoAttribute = ColoringType.companion.getRouteInfoAttribute(name: coloringType) {
+                settings.routeInfoAttribute.set(routeInfoAttribute)
+            }
         }
         if let width: String = data.getParameter(for: GpxParameter.width) {
             settings.currentTrackWidth.set(width)

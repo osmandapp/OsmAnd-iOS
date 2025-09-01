@@ -2085,6 +2085,35 @@
 "quick_action_terrain_color_scheme" = "Terrain color scheme";
 "quick_action_need_to_add_item_to_list" = "Add at least one item to the list in the \'Quick action\' settings";
 
+"quick_action_to_my_location" = "To My Location";
+"key_event_action_move_to_my_location" = "Move to My location";
+"quick_action_next_app_profile" = "App profile to next";
+"key_event_action_next_app_profile" = "Next app profile";
+"quick_action_previous_app_profile" = "App profile to previous";
+"key_event_action_previous_app_profile" = "Previous app profile";
+"selected_delayed_profile" = "Selected profile \"%@\"";
+"application_profile_changed" = "App profile changed to \"%@\"";
+"quick_action_move_map_up" = "Map up";
+"key_event_action_move_up" = "Move up";
+"quick_action_move_map_down" = "Map down";
+"key_event_action_move_down" = "Move down";
+"quick_action_move_map_left" = "Map to the left";
+"key_event_action_move_left" = "Move left";
+"quick_action_move_map_right" = "Map to the right";
+"key_event_action_move_right" = "Move right";
+"key_event_action_zoom_in" = "Zoom in";
+"key_event_action_zoom_out" = "Zoom out";
+"quick_action_navigation_view_title" = "Navigation view";
+"quick_action_navigation_view_desc" = "A toggle to open or close navigation view.";
+"quick_action_search_view_title" = "Search view";
+"quick_action_search_view_desc" = "A toggle to open or close search view.";
+"quick_action_drawer_title" = "Side menu";
+"quick_action_drawer_desc" = "A toggle to show or hide side menu.";
+"quick_action_previous_screen_title" = "Previous screen";
+"quick_action_verb_navigate" = "Navigate";
+"quick_action_previous_screen_desc" = "A toggle to navigate to the previous screen.";
+"wunderlinq_datagrid" = "Open WunderLINQ Datagrid";
+
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
@@ -2684,6 +2713,9 @@
 "no_assigned_keys_desc" = "Select an action and assign a key by tapping the \'Add\' button.";
 "no_assigned_keys" = "No assigned keys";
 "new_key_assignment" = "New key assignment";
+"key_assignments" = "Key assignments";
+"clear_all_key_shortcuts" = "Clear all key shortcuts";
+"clear_all_key_shortcuts_summary" = "All key assignments for the selected type will be removed.";
 
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";

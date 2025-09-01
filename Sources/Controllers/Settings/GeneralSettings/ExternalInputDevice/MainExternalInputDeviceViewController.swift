@@ -12,12 +12,30 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     private static let emptyStateRowKey = "emptyStateRowKey"
     private static let noExternalDeviceKey = "noExternalDeviceKey"
     private static let buttonTitleKey = "buttonTitleKey"
+    private static let keyAssignmentKey = "keyAssignmentKey"
     
-    private var keyAssignments: [KeyAssignment] = []
+    private var keyAssignments: [KeyAssignment] = [KeyAssignment(action: MapZoomOutAction(), inputs: ["l", "p"]), KeyAssignment(action: MapZoomOutAction(), inputs: ["l"])] // TODO
+    private var prevDefaultDevice: Bool = false
+    private var isEditMode: Bool = false {
+        didSet {
+            tableView.setEditing(isEditMode, animated: true)
+            updateUIAnimated(nil)
+        }
+    }
+    private lazy var settingExternalInputDevice: Int32 = OAAppSettings.sharedManager().settingExternalInputDevice.get(appMode)
+    
+    private var isDefaultDevice: Bool {
+        settingExternalInputDevice == NO_EXTERNAL_DEVICE || settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE || settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE
+    }
+    
+    private var showToolbar: Bool {
+        isDefaultDevice || keyAssignments.isEmpty
+    }
     
     override func registerCells() {
         addCell(OAValueTableViewCell.reuseIdentifier)
         addCell(OALargeImageTitleDescrTableViewCell.reuseIdentifier)
+        addCell(KeyAssignmentTableViewCell.reuseIdentifier)
     }
     
     override func getTitle() -> String? {
@@ -26,7 +44,11 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     
     override func generateData() {
         tableData.clearAllData()
-        let settingExternalInputDevice = OAAppSettings.sharedManager().settingExternalInputDevice.get(appMode)
+        settingExternalInputDevice = OAAppSettings.sharedManager().settingExternalInputDevice.get(appMode)
+        if prevDefaultDevice != isDefaultDevice {
+            setupBottomButtons()
+            prevDefaultDevice = isDefaultDevice
+        }
         
         var externalInputDeviceValue = ""
         if settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE {
@@ -37,12 +59,14 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             externalInputDeviceValue = localizedString("shared_string_none")
         }
         
-        let deviceSection = tableData.createNewSection()
-        let deviceRow = deviceSection.createNewRow()
-        deviceRow.cellType = OAValueTableViewCell.reuseIdentifier
-        deviceRow.key = Self.deviceRowKey
-        deviceRow.title = localizedString("device")
-        deviceRow.descr = externalInputDeviceValue
+        if !isEditMode {
+            let deviceSection = tableData.createNewSection()
+            let deviceRow = deviceSection.createNewRow()
+            deviceRow.cellType = OAValueTableViewCell.reuseIdentifier
+            deviceRow.key = Self.deviceRowKey
+            deviceRow.title = localizedString("device")
+            deviceRow.descr = externalInputDeviceValue
+        }
         
         if keyAssignments.isEmpty || settingExternalInputDevice == NO_EXTERNAL_DEVICE {
             let noExternalDeviceSection = tableData.createNewSection()
@@ -56,6 +80,20 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             noExternalDeviceRow.setObj(settingExternalInputDevice == NO_EXTERNAL_DEVICE, forKey: Self.noExternalDeviceKey)
             if settingExternalInputDevice != NO_EXTERNAL_DEVICE {
                 noExternalDeviceRow.setObj(localizedString("shared_string_add"), forKey: Self.buttonTitleKey)
+            }
+        } else {
+            let keyAssignmentsSection = tableData.createNewSection()
+            if !isEditMode {
+                keyAssignmentsSection.headerText = localizedString("key_assignments")
+            }
+            for keyAssignment in keyAssignments {
+                let keyAssignmentRow = keyAssignmentsSection.createNewRow()
+                keyAssignmentRow.cellType = KeyAssignmentTableViewCell.reuseIdentifier
+                keyAssignmentRow.key = keyAssignment.getId()
+                keyAssignmentRow.title = keyAssignment.getName()
+                keyAssignmentRow.iconName = keyAssignment.getIcon()
+                keyAssignmentRow.iconTintColor = appMode.getProfileColor()
+                keyAssignmentRow.setObj(keyAssignment.getInputs(), forKey: Self.keyAssignmentKey)
             }
         }
     }
@@ -95,6 +133,18 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
                 cell.button?.addTarget(self, action: #selector(onAddButtonClicked(sender:)), for: .touchUpInside)
             }
             return cell
+        } else if item.cellType == KeyAssignmentTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: KeyAssignmentTableViewCell.reuseIdentifier, for: indexPath) as! KeyAssignmentTableViewCell
+            cell.accessoryType = .disclosureIndicator
+            cell.descriptionVisibility(false)
+            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.leftIconView.tintColor = item.iconTintColor
+            cell.titleLabel.text = item.title
+            cell.titleLabel.accessibilityLabel = item.title
+            if let inputs = item.obj(forKey: Self.keyAssignmentKey) as? [String] {
+                cell.configure(inputs: inputs)
+            }
+            return cell
         }
         return nil
     }
@@ -107,7 +157,76 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
                 vc.delegate = self
                 show(vc)
             }
+        } else if keyAssignments.contains(where: { $0.getId() == item.key }) {
+            showKeyAssignment()
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        isEditMode
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard editingStyle == .delete else { return }
+        // TODO
+        keyAssignments.remove(at: indexPath.row)
+        tableData.removeRow(at: indexPath)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+        tableView.reloadData()
+        updateBottomButtons()
+        switchOffEditModeIfNoItems()
+    }
+    
+    override func onLeftNavbarButtonPressed() {
+        if isEditMode {
+            switchEditMode(to: false)
+        } else {
+            super.onLeftNavbarButtonPressed()
+        }
+    }
+    
+    override func onRightNavbarButtonPressed() {
+        switchEditMode(to: false)
+    }
+    
+    override func onTopButtonPressed() {
+        if isEditMode {
+            showClearAllAlert()
+        } else {
+            showKeyAssignment()
+        }
+    }
+    
+    override func onBottomButtonPressed() {
+        switchEditMode(to: true)
+    }
+    
+    override func getLeftNavbarButtonTitle() -> String! {
+        isEditMode ? localizedString("shared_string_cancel") : nil
+    }
+    
+    override func getRightNavbarButtons() -> [UIBarButtonItem] {
+        isEditMode ? [createRightNavbarButton(localizedString("shared_string_done"), iconName: nil, action: #selector(onRightNavbarButtonPressed), menu: nil)] : []
+    }
+    
+    override func getTopButtonTitle() -> String {
+        showToolbar ? "" : localizedString(isEditMode ? "shared_string_clear_all" : "shared_string_add")
+    }
+    
+    override func getBottomButtonTitle() -> String {
+        showToolbar || isEditMode ? "" : localizedString("shared_string_edit")
+    }
+    
+    override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
+        .graySimple
+    }
+    
+    override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
+        .graySimple
+    }
+    
+    override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
+        .horizontal
     }
     
     override func onSettingsChanged() {
@@ -116,8 +235,39 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     @objc private func onAddButtonClicked(sender: UIButton) {
-        let vc = EditKeyAssignmentController()
+        showKeyAssignment()
+    }
+    
+    private func showKeyAssignment() {
+        guard let vc = EditKeyAssignmentController() else { return }
         vc.delegate = self
         show(vc)
+    }
+    
+    private func switchEditMode(to on: Bool) {
+        isEditMode = on
+    }
+    
+    private func switchOffEditModeIfNoItems() {
+        guard keyAssignments.isEmpty else { return }
+        switchEditMode(to: false)
+    }
+    
+    private func showClearAllAlert() {
+        let alert = UIAlertController(title: localizedString("clear_all_key_shortcuts"), message: localizedString("clear_all_key_shortcuts_summary"), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_remove"), style: .destructive, handler: { _ in
+            self.clearAll()
+        }))
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.popoverPresentationController?.sourceView = view
+        present(alert, animated: true)
+    }
+    
+    private func clearAll() {
+        // TODO
+        keyAssignments.removeAll()
+        reloadDataWith(animated: true, completion: nil)
+        updateBottomButtons()
+        switchOffEditModeIfNoItems()
     }
 }

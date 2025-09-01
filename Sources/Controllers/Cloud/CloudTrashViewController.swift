@@ -48,7 +48,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         backupHelper = OABackupHelper.sharedInstance()
         settingsHelper = OANetworkSettingsHelper.sharedInstance()
         dateFormatter.dateFormat = "LLLL yyyy"
-        emptyTrashIcon = OAUtilities.resize(UIImage(named: "ic_custom_trash_outlined"), newSize: CGSize(width: 60.0, height: 60.0)).withRenderingMode(.alwaysTemplate)
+        emptyTrashIcon = OAUtilities.resize(UIImage(named: "ic_custom_trash_outlined"), newSize: CGSize(width: 60.0, height: 60.0))?.withRenderingMode(.alwaysTemplate)
     }
 
     override func registerNotifications() {

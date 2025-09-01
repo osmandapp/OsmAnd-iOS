@@ -74,7 +74,7 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
             prefId += customId
         }
         
-        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true)!
+        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true)
         
         if let string = widgetParams?["showArrivalTime"] as? String ?? widgetParams?["showIntermediateArrivalTime"] as? String, let widgetValue = Bool(string) {
             preference.set(widgetValue)

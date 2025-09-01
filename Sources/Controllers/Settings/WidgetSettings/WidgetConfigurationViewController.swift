@@ -99,8 +99,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 if !createNew {
                     selected = pref.get(selectedAppMode)
                 } else {
-                    if let prefKey = pref.key,
-                       let value = widgetConfigurationParams?[prefKey] as? Bool {
+                    if let value = widgetConfigurationParams?[pref.key] as? Bool {
                         selected = value
                     } else {
                         selected = pref.defValue

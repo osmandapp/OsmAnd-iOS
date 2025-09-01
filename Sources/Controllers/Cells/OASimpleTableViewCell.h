@@ -6,8 +6,6 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 typedef NS_ENUM(NSInteger, EOATableViewCellTextIndentsStyle) {
     EOATableViewCellTextNormalIndentsStyle = 0,
     EOATableViewCellTextIncreasedTopCenterIndentStyle
@@ -49,7 +47,7 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
 - (void)textIndentsStyle:(EOATableViewCellTextIndentsStyle)style;
 - (void)anchorContent:(EOATableViewCellContentStyle)style;
 - (void)anchorContentTextStackView:(EOATableViewCellContentStyle)style;
-- (void)configureAccessibilityWithTitle:(nullable NSString *)title selected:(BOOL)isSelected;
+- (void)configureAccessibilityWithTitle:(NSString *)title selected:(BOOL)isSelected;
 
 - (void)hideTopSpace;
 

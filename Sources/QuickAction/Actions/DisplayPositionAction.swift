@@ -21,7 +21,7 @@ final class DisplayPositionAction: OAQuickAction {
         .category(QuickActionTypeCategory.settings.rawValue)
         .nonEditable()
 
-    private let settings = OAAppSettings.sharedManager()!
+    private let settings = OAAppSettings.sharedManager()
 
     override init() {
         super.init(actionType: Self.type)

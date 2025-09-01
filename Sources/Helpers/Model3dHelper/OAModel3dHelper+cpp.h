@@ -7,13 +7,17 @@
 //
 
 #import "OAModel3dHelper.h"
-
 #include <OsmAndCore/ObjParser.h>
 #include "OsmAndCore/Map/Model3D.h"
 
-@interface OAModel3dWrapper(cpp)
+NS_ASSUME_NONNULL_BEGIN
+
+@interface OAModel3dWrapper (cpp)
 
 - (instancetype _Nullable)initWith:(std::shared_ptr<const OsmAnd::Model3D>)model;
-- (std::shared_ptr<const OsmAnd::Model3D>) model;
+- (std::shared_ptr<const OsmAnd::Model3D>)model;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

@@ -404,7 +404,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
                 cell.leftIconView.tintColor = .iconColorSelected
-                cell.leftIconView.image = OAUtilities.getMxIcon(item.iconName)
+                if let iconName = item.iconName {
+                    cell.leftIconView.image = OAUtilities.getMxIcon(iconName)
+                } else {
+                    cell.leftIconView.image = nil
+                }
                 return cell
             }
         } else if item.cellType == OADividerCell.reuseIdentifier {

@@ -186,9 +186,9 @@ final class BundledAssets: NSObject {
         var fileName = path.lastPathComponent() as String
         
         if fileName.hasSuffix(".map.obf") {
-            fileName = OAUtilities.capitalizeFirstLetter(fileName.replacingOccurrences(of: ".map.obf", with: ".obf"))
+            fileName = OAUtilities.capitalizeFirstLetter(fileName.replacingOccurrences(of: ".map.obf", with: ".obf")) ?? ""
         } else if fileName.hasSuffix(".obf") {
-            fileName = OAUtilities.capitalizeFirstLetter(fileName)
+            fileName = OAUtilities.capitalizeFirstLetter(fileName) ?? ""
         } else if fileName.hasSuffix(".sqlitedb") {
             if fileName.hasSuffix(".hillshade.sqlitedb") {
                 fileName = fileName.replacingOccurrences(of: ".hillshade.sqlitedb", with: ".sqlitedb")

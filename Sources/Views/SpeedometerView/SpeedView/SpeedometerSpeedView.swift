@@ -24,7 +24,6 @@ final class SpeedometerSpeedView: UIView {
     private let previewValueDefault: Int = 85
     
     private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
-    private let UNDEFINED_SPEED = -1.0
     private var cachedSpeed = -1.0
     private var cachedMetricSystem = -1
     
@@ -88,11 +87,10 @@ final class SpeedometerSpeedView: UIView {
     
     private func isUpdateNeeded() -> Bool {
         var res = false
-        if let metricSystem: EOAMetricsConstant = OAAppSettings.sharedManager()?.metricSystem.get() {
-            res = cachedMetricSystem != metricSystem.rawValue
-            if res {
-                cachedMetricSystem = metricSystem.rawValue
-            }
+        let metricSystem: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
+        res = cachedMetricSystem != metricSystem.rawValue
+        if res {
+            cachedMetricSystem = metricSystem.rawValue
         }
         return res
     }

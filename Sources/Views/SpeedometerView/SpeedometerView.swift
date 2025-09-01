@@ -38,9 +38,7 @@ final class SpeedometerView: OATextInfoWidget {
             speedLimitNAMView.isHidden = true
         }
     }
-    // swiftlint:disable force_unwrapping
-    let settings = OAAppSettings.sharedManager()!
-    // swiftlint:enable force_unwrapping
+    let settings = OAAppSettings.sharedManager()
 
     var sizeStyle: EOAWidgetSizeStyle = .medium
     var didChangeIsVisible: (() -> Void)?

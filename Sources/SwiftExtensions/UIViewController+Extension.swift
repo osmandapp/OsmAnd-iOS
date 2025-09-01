@@ -166,7 +166,7 @@ extension UINavigationController {
         // swiftlint:disable all
         appearance.titleTextAttributes = [
             .foregroundColor: UIColor.textColorPrimary,
-            .font: UIFont.scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)!
+            .font: UIFont.scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)
         ]
         // swiftlint:enable all
         

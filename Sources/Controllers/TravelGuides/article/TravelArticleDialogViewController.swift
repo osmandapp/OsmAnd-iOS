@@ -301,15 +301,16 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
             guard let self else { return }
             let navigationMap = TravelObfHelper.shared.getNavigationMap(article: article)
             DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
                 if navigationMap.isEmpty {
-                    OAUtilities.showToast(nil, details: localizedString("travel_guides_no_file_error"), duration: 4, in: self?.view)
+                    OAUtilities.showToast(nil, details: localizedString("travel_guides_no_file_error"), duration: 4, in: self.view)
                 } else {
                     let vc = TravelGuidesNavigationViewController()
                     vc.setupWith(article: article, selectedLang: selectedLang, navigationMap: navigationMap, regionsNames: [], selectedItem: nil)
                     vc.delegate = self
-                    self?.showModalViewController(vc)
+                    self.showModalViewController(vc)
                 }
-                self?.view.removeSpinner()
+                self.view.removeSpinner()
             }
         }
     }

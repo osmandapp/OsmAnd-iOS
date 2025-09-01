@@ -14,6 +14,8 @@
 
 #include <OsmAndCore.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 struct RouteDataObject;
 
 @class OARouteCalculationResult, OALocationPointWrapper, OAAlarmInfo;
@@ -61,3 +63,5 @@ struct RouteDataObject;
                                       whenExceeded:(BOOL)whenExceeded;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -86,7 +86,7 @@ final class RouteInfoWidgetState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += "_" + customId
         }
-        let preference = OAAppSettings.sharedManager().registerWidgetDefaultViewPreference(prefId, defValue: RouteInfoDisplayValue.arrivalTime.rawValue)!
+        let preference = OAAppSettings.sharedManager().registerWidgetDefaultViewPreference(prefId, defValue: RouteInfoDisplayValue.arrivalTime.rawValue)
         if let widgetValue = widgetParams?[Self.defaultViewId] as? String {
             switch widgetValue {
             case RouteInfoDisplayValue.arrivalTime.key:
@@ -107,7 +107,7 @@ final class RouteInfoWidgetState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += "_" + customId
         }
-        let preference = OAAppSettings.sharedManager().registerWidgetDisplayPriorityPreference(prefId, defValue: RouteInfoDisplayPriority.destinationFirst.rawValue)!
+        let preference = OAAppSettings.sharedManager().registerWidgetDisplayPriorityPreference(prefId, defValue: RouteInfoDisplayPriority.destinationFirst.rawValue)
         if let widgetValue = widgetParams?[Self.displayPriorityId] as? String {
             switch widgetValue {
             case RouteInfoDisplayPriority.intermediateFirst.key:

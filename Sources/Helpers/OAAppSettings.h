@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 @class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
@@ -1236,8 +1237,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key;
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
 - (OACommonBoolean *)registerBooleanPreference:(NSString *)key defValue:(BOOL)defValue;
-- (OACommonString *)registerStringPreference:(NSString *)key defValue:(NSString *)defValue;
-- (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
+- (OACommonString *)registerStringPreference:(NSString *)key defValue:(nullable NSString *)defValue;
+- (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(nullable NSArray<NSString *> *)defValue;
 - (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue;
 - (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue;
 - (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue;
@@ -1435,3 +1436,5 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 - (void) setLastStartPoint:(double)lat lon:(double)lon;
 
 @end
+
+NS_ASSUME_NONNULL_END

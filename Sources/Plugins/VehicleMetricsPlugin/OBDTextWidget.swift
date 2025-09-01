@@ -208,7 +208,7 @@ class OBDTextWidget: OASimpleWidget {
             prefId = Self.averageModePrefKey
         }
         
-        guard let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false).makeProfile() else { fatalError("Failed to register preference \(prefId)") }
+        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false).makeProfile()
         if let widgetParams {
             if let rawBool = widgetParams[prefId] as? Bool {
                 preference.set(rawBool, mode: appMode)
@@ -228,7 +228,7 @@ class OBDTextWidget: OASimpleWidget {
             prefId = Self.measuredIntervalPrefKey
         }
         
-        guard let preference = OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: Self.defaultIntervalMillis)?.makeProfile() else { fatalError("Failed to register preference \(prefId)") }
+        let preference = OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: Self.defaultIntervalMillis).makeProfile()
         if let widgetParams {
             if let rawString = widgetParams[prefId] as? String, let rawValue = Int(rawString) {
                 preference.set(rawValue, mode: appMode)

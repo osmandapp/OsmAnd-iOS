@@ -50,7 +50,7 @@ class WidgetGroup: NSObject {
     }
     
     func getWidgets(withPanel panel: WidgetsPanel?) -> [WidgetType] {
-        guard let appMode = OAAppSettings.sharedManager().applicationMode.get() else { return [] }
+        let appMode = OAAppSettings.sharedManager().applicationMode.get()
         return WidgetType.values.filter {
             isRelatedWidget($0, panel: panel) && WidgetsAvailabilityHelper.isWidgetAvailable(widgetId: $0.id, appMode: appMode)
         }

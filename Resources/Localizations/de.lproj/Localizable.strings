@@ -3848,3 +3848,5 @@
 "next_turn_information_desc" = "Zeigt die bevorstehende Abbiegerichtung und den Straßennamen an.";
 "obd_fuel_type_hybrid_ethanol" = "Hybrid-Ethanol";
 "obd_fuel_type_hybrid_diesel" = "Hybrid-Diesel";
+"fastspring_subscription_desc" = "Du kannst dein Abonnement über das FastSpring-Kontoverwaltungsportal verwalten oder kündigen.";
+"fastspring_one_time_payment_desc" = "Du kannst deine Einkäufe über das FastSpring-Kontoverwaltungsportal verwalten.";

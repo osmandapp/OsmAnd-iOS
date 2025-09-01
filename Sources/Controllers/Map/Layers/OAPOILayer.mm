@@ -78,6 +78,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _wikiSymbolsProvider;
+    std::shared_ptr<QHash<QString, QStringList>> _poiCategoriesFilter;
+    std::shared_ptr<QHash<QString, QStringList>> _wikiCategoriesFilter;
 }
 
 - (void)initLayer
@@ -98,12 +100,14 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     {
         [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
         _amenitySymbolsProvider.reset();
+        _poiCategoriesFilter.reset();
         _showPoiOnMap = NO;
     }
     if (_wikiSymbolsProvider)
     {
         [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
         _wikiSymbolsProvider.reset();
+        _wikiCategoriesFilter.reset();
         _showWikiOnMap = NO;
     }
 
@@ -116,6 +120,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         [self.mapViewController runWithRenderSync:^{
             [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
             _amenitySymbolsProvider.reset();
+            _poiCategoriesFilter.reset();
         }];
         _showPoiOnMap = NO;
     }
@@ -125,6 +130,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         [self.mapViewController runWithRenderSync:^{
             [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
             _wikiSymbolsProvider.reset();
+            _wikiCategoriesFilter.reset();
         }];
         _showWikiOnMap = NO;
     }
@@ -188,7 +194,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         void (^_generate)(OAPOIUIFilter *) = ^(OAPOIUIFilter *f) {
             BOOL isWiki = [f isWikiFilter];
 
-            auto categoriesFilter = QHash<QString, QStringList>();
+            auto& holder = isWiki ? _wikiCategoriesFilter : _poiCategoriesFilter;
+            auto& categoriesFilter = *(holder = std::make_shared<QHash<QString, QStringList>>());
             NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [f getAcceptedTypes];
             for (OAPOICategory *category in types.keyEnumerator)
             {
@@ -252,14 +259,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
             const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
             const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
-            if (categoriesFilter.count() > 0)
-            {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
-            }
-            else
-            {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
-            }
+            QHash<QString, QStringList>* rawCategories = categoriesFilter.count() > 0 ? holder.get() : nullptr;
+            (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, rawCategories, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
 
             [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];
         };
@@ -273,7 +274,6 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             _generate(_wikiUiFilter);
         else
             _wikiUiNameFilter = nil;
-
     }];
 }
 

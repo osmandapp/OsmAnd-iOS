@@ -6,10 +6,13 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface OAAnalyticsHelper : NSObject
 
 + (void)logEvent:(nonnull NSString *)name;
 
 @end
+
+NS_ASSUME_NONNULL_END

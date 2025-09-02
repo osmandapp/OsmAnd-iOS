@@ -77,49 +77,47 @@ final class MigrationManager: NSObject {
             }
         }
     }
-
+    
     private func changeWidgetIdsMigration1() {
-        if let settings = OAAppSettings.sharedManager() {
-            let externalPlugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
-            let externalSensorsPluginPrefs: [OACommonPreference]? = externalPlugin?.getPreferences()
-            let changeWidgetIds = [
-                "heartRate": "ant_heart_rate",
-                "bicycleCadence": "ant_bicycle_cadence",
-                "bicycleDistance": "ant_bicycle_distance",
-                "bicycleSpeed": "ant_bicycle_speed",
-                "temperature": "temperature_sensor"
-            ]
-            for mode in OAApplicationMode.allPossibleValues() {
-                updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds,
-                                        panelPreference: settings.topWidgetPanelOrderOld,
-                                        newPanelPreference: settings.topWidgetPanelOrder)
-
-                updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds,
-                                        panelPreference: settings.bottomWidgetPanelOrderOld,
-                                        newPanelPreference: settings.bottomWidgetPanelOrder)
-
-                updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds,
-                                        panelPreference: settings.leftWidgetPanelOrder)
-
-                updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds,
-                                        panelPreference: settings.rightWidgetPanelOrder)
-
-                updateCustomWidgetKeys(mode, changeWidgetIds: changeWidgetIds)
-                updateMapInfoControls(mode, changeWidgetIds: changeWidgetIds)
-
-                if let externalPlugin, let externalSensorsPluginPrefs {
-                    for pref in externalSensorsPluginPrefs {
-                        if let value = pref.toStringValue(mode) {
-                            if value == "OATrackRecordingNone" {
-                                pref.setValueFrom("", appMode: mode)
-                            } else if value == "OATrackRecordingAnyConnected" {
-                                pref.setValueFrom(externalPlugin.getAnyConnectedDeviceId(), appMode: mode)
-                            }
-                        }
+        let settings = OAAppSettings.sharedManager()
+        let externalPlugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
+        let externalSensorsPluginPrefs: [OACommonPreference]? = externalPlugin?.getPreferences()
+        let changeWidgetIds = [
+            "heartRate": "ant_heart_rate",
+            "bicycleCadence": "ant_bicycle_cadence",
+            "bicycleDistance": "ant_bicycle_distance",
+            "bicycleSpeed": "ant_bicycle_speed",
+            "temperature": "temperature_sensor"
+        ]
+        for mode in OAApplicationMode.allPossibleValues() {
+            updateExistingWidgetIds(mode,
+                                    changeWidgetIds: changeWidgetIds,
+                                    panelPreference: settings.topWidgetPanelOrderOld,
+                                    newPanelPreference: settings.topWidgetPanelOrder)
+            
+            updateExistingWidgetIds(mode,
+                                    changeWidgetIds: changeWidgetIds,
+                                    panelPreference: settings.bottomWidgetPanelOrderOld,
+                                    newPanelPreference: settings.bottomWidgetPanelOrder)
+            
+            updateExistingWidgetIds(mode,
+                                    changeWidgetIds: changeWidgetIds,
+                                    panelPreference: settings.leftWidgetPanelOrder)
+            
+            updateExistingWidgetIds(mode,
+                                    changeWidgetIds: changeWidgetIds,
+                                    panelPreference: settings.rightWidgetPanelOrder)
+            
+            updateCustomWidgetKeys(mode, changeWidgetIds: changeWidgetIds)
+            updateMapInfoControls(mode, changeWidgetIds: changeWidgetIds)
+            
+            if let externalPlugin, let externalSensorsPluginPrefs {
+                for pref in externalSensorsPluginPrefs {
+                    let value = pref.toStringValue(mode)
+                    if value == "OATrackRecordingNone" {
+                        pref.setValueFrom("", appMode: mode)
+                    } else if value == "OATrackRecordingAnyConnected" {
+                        pref.setValueFrom(externalPlugin.getAnyConnectedDeviceId(), appMode: mode)
                     }
                 }
             }
@@ -130,7 +128,7 @@ final class MigrationManager: NSObject {
                                          changeWidgetIds: [String: String],
                                          panelPreference: OACommonListOfStringList,
                                          newPanelPreference: OACommonListOfStringList? = nil) {
-        guard let pages = panelPreference.get(appMode) else { return }
+        let pages = panelPreference.get(appMode)
         if newPanelPreference == nil {
             guard (pages.flatMap({ $0 }).contains { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
         }
@@ -149,8 +147,8 @@ final class MigrationManager: NSObject {
 
     private func updateCustomWidgetKeys(_ appMode: OAApplicationMode, changeWidgetIds: [String: String]) {
         let customWidgetKeys: OACommonStringList = OAAppSettings.sharedManager().customWidgetKeys
-        guard let customIds = customWidgetKeys.get(appMode),
-              (customIds.contains { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
+        let customIds = customWidgetKeys.get(appMode)
+        guard (customIds.contains { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
 
         let newCustomIds = getUpdatedWidgetIds(customIds, changeWidgetIds: changeWidgetIds)
         if customIds != newCustomIds {
@@ -160,7 +158,7 @@ final class MigrationManager: NSObject {
 
     private func updateMapInfoControls(_ appMode: OAApplicationMode, changeWidgetIds: [String: String]) {
         let mapInfoControls: OACommonString = OAAppSettings.sharedManager().mapInfoControls
-        guard let widgetsVisibilityString: String = mapInfoControls.get(appMode) else { return }
+        let widgetsVisibilityString: String = mapInfoControls.get(appMode)
 
         let widgetsVisibility = widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR)
         if !widgetsVisibility.contains(where: { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) {
@@ -175,8 +173,8 @@ final class MigrationManager: NSObject {
     }
 
     private func changeWidgetPrefs1(_ appMode: OAApplicationMode, oldWidgetIds: [String], changeWidgetIds: [String: String]) {
-        if let settings = OAAppSettings.sharedManager(),
-           let plugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin {
+        if let plugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin {
+            let settings = OAAppSettings.sharedManager()
             for oldCustomWidgetId in oldWidgetIds {
                 let oldOriginalWidgetId = oldCustomWidgetId.substring(to: Int(oldCustomWidgetId.index(of: MapWidgetInfo.DELIMITER)))
                 if let newOriginalWidgetId = changeWidgetIds[oldOriginalWidgetId] {
@@ -337,32 +335,29 @@ final class MigrationManager: NSObject {
     }
     
     private func migrateLocationNavigationIcons() {
-        if let settings = OAAppSettings.sharedManager() {
-            for appMode in OAApplicationMode.allPossibleValues() {
-                if let oldLocationIconPref = OACommonInteger.withKey("locationIcon", defValue: 0).makeProfile() {
-                    switch oldLocationIconPref.get(appMode) {
-                    case 0:
-                        settings.locationIcon.set(OALocationIcon.default().name(), mode: appMode)
-                    case 1:
-                        settings.locationIcon.set(OALocationIcon.car().name(), mode: appMode)
-                    case 2:
-                        settings.locationIcon.set(OALocationIcon.bicycle().name(), mode: appMode)
-                    default:
-                        settings.locationIcon.set(OALocationIcon.default().name(), mode: appMode)
-                    }
-                }
-                if let oldNavigationIconPref = OACommonInteger.withKey("navigationIcon", defValue: 0).makeProfile() {
-                    switch oldNavigationIconPref.get(appMode) {
-                    case 0:
-                        settings.navigationIcon.set(OALocationIcon.movement_DEFAULT().name(), mode: appMode)
-                    case 1:
-                        settings.navigationIcon.set(OALocationIcon.movement_NAUTICAL().name(), mode: appMode)
-                    case 2:
-                        settings.navigationIcon.set(OALocationIcon.movement_CAR().name(), mode: appMode)
-                    default:
-                        settings.navigationIcon.set(OALocationIcon.movement_DEFAULT().name(), mode: appMode)
-                    }
-                }
+        let settings = OAAppSettings.sharedManager()
+        for appMode in OAApplicationMode.allPossibleValues() {
+            let oldLocationIconPref = OACommonInteger.withKey("locationIcon", defValue: 0).makeProfile()
+            switch oldLocationIconPref.get(appMode) {
+            case 0:
+                settings.locationIcon.set(OALocationIcon.default().name(), mode: appMode)
+            case 1:
+                settings.locationIcon.set(OALocationIcon.car().name(), mode: appMode)
+            case 2:
+                settings.locationIcon.set(OALocationIcon.bicycle().name(), mode: appMode)
+            default:
+                settings.locationIcon.set(OALocationIcon.default().name(), mode: appMode)
+            }
+            let oldNavigationIconPref = OACommonInteger.withKey("navigationIcon", defValue: 0).makeProfile()
+            switch oldNavigationIconPref.get(appMode) {
+            case 0:
+                settings.navigationIcon.set(OALocationIcon.movement_DEFAULT().name(), mode: appMode)
+            case 1:
+                settings.navigationIcon.set(OALocationIcon.movement_NAUTICAL().name(), mode: appMode)
+            case 2:
+                settings.navigationIcon.set(OALocationIcon.movement_CAR().name(), mode: appMode)
+            default:
+                settings.navigationIcon.set(OALocationIcon.movement_DEFAULT().name(), mode: appMode)
             }
         }
     }
@@ -373,11 +368,10 @@ final class MigrationManager: NSObject {
             return
         }
         
-        if let oldStatePref = OACommonBoolean.withKey("qiuckActionIsOn", defValue: false).makeProfile() {
-            for appMode in OAApplicationMode.allPossibleValues() {
-                buttonState.statePref.set(oldStatePref.get(appMode), mode: appMode)
-                settings?.quickActionButtons.set([QuickActionButtonState.defaultButtonId], mode: appMode)
-            }
+        let oldStatePref = OACommonBoolean.withKey("qiuckActionIsOn", defValue: false).makeProfile()
+        for appMode in OAApplicationMode.allPossibleValues() {
+            buttonState.statePref.set(oldStatePref.get(appMode), mode: appMode)
+            settings.quickActionButtons.set([QuickActionButtonState.defaultButtonId], mode: appMode)
         }
         
         if let value = defaults.string(forKey: "quickActionsList"), !value.isEmpty {
@@ -386,10 +380,10 @@ final class MigrationManager: NSObject {
             }
         }
         
-        if let oldQuickActionPortraitX = OACommonDouble.withKey("quickActionPortraitX", defValue: 0),
-           let oldQuickActionPortraitY = OACommonDouble.withKey("quickActionPortraitY", defValue: 0),
-           let oldQuickActionLandscapeX = OACommonDouble.withKey("quickActionLandscapeX", defValue: 0),
-           let oldQuickActionLandscapeY = OACommonDouble.withKey("quickActionLandscapeY", defValue: 0) {
+        let oldQuickActionPortraitX = OACommonDouble.withKey("quickActionPortraitX", defValue: 0)
+        let oldQuickActionPortraitY = OACommonDouble.withKey("quickActionPortraitY", defValue: 0)
+        let oldQuickActionLandscapeX = OACommonDouble.withKey("quickActionLandscapeX", defValue: 0)
+        let oldQuickActionLandscapeY = OACommonDouble.withKey("quickActionLandscapeY", defValue: 0)
             for appMode in OAApplicationMode.allPossibleValues() {
                 buttonState.fabMarginPref.setPortraitFabMargin(appMode,
                                                                x: Int32(oldQuickActionPortraitX.get(appMode)),
@@ -398,14 +392,14 @@ final class MigrationManager: NSObject {
                                                                 x: Int32(oldQuickActionLandscapeX.get(appMode)),
                                                                 y: Int32(oldQuickActionLandscapeY.get(appMode)))
             }
-        }
+
         helper.updateActiveActions()
 
         if let map3DModeState = helper.getMap3DButtonState() as Map3DButtonState? {
-            if let oldMap3DPortraitX = OACommonDouble.withKey("map3dModePortraitX", defValue: 0),
-               let oldMap3DPortraitY = OACommonDouble.withKey("map3dModePortraitY", defValue: 0),
-               let oldMap3DLandscapeX = OACommonDouble.withKey("map3dModeLandscapeX", defValue: 0),
-               let oldMap3DLandscapeY = OACommonDouble.withKey("map3dModeLandscapeY", defValue: 0) {
+            let oldMap3DPortraitX = OACommonDouble.withKey("map3dModePortraitX", defValue: 0)
+            let oldMap3DPortraitY = OACommonDouble.withKey("map3dModePortraitY", defValue: 0)
+            let oldMap3DLandscapeX = OACommonDouble.withKey("map3dModeLandscapeX", defValue: 0)
+            let oldMap3DLandscapeY = OACommonDouble.withKey("map3dModeLandscapeY", defValue: 0)
                 for appMode in OAApplicationMode.allPossibleValues() {
                     map3DModeState.fabMarginPref.setPortraitFabMargin(appMode,
                                                                       x: Int32(oldMap3DPortraitX.get(appMode)),
@@ -414,11 +408,10 @@ final class MigrationManager: NSObject {
                                                                        x: Int32(oldMap3DLandscapeX.get(appMode)),
                                                                        y: Int32(oldMap3DLandscapeY.get(appMode)))
                 }
-            }
         }
 
-        if let compassState = helper.getCompassButtonState() as CompassButtonState?,
-           let oldCompassMode = OACommonInteger.withKey("compassMode", defValue: CompassVisibility.visibleIfMapRotated.rawValue) {
+        if let compassState = helper.getCompassButtonState() as CompassButtonState? {
+            let oldCompassMode = OACommonInteger.withKey("compassMode", defValue: CompassVisibility.visibleIfMapRotated.rawValue)
             for appMode in OAApplicationMode.allPossibleValues() {
                 compassState.visibilityPref.set(oldCompassMode.get(appMode), mode: appMode)
             }
@@ -428,9 +421,11 @@ final class MigrationManager: NSObject {
     private func changeTerrainSettingsMigration1() {
         if let plugin = OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
             if let newTerrain = plugin.terrainEnabledPref,
-               let newTerrainMode = plugin.terrainModeTypePref,
-               let oldTerrainMode = OACommonInteger.withKey("terrainType", defValue: 0),
-               let oldLastTerrainMode = OACommonInteger.withKey("lastTerrainType", defValue: 1) {
+               let newTerrainMode = plugin.terrainModeTypePref {
+                
+                let oldTerrainMode = OACommonInteger.withKey("terrainType", defValue: 0)
+                let oldLastTerrainMode = OACommonInteger.withKey("lastTerrainType", defValue: 1)
+                
                 for appMode in OAApplicationMode.allPossibleValues() {
                     let oldValue = oldTerrainMode.get(appMode)
                     if oldValue == 0 {
@@ -454,31 +449,21 @@ final class MigrationManager: NSObject {
             let terrainMode = plugin.getTerrainMode()
             for appMode in OAApplicationMode.allPossibleValues() {
                 if plugin.terrainModeTypePref.get(appMode) == TerrainMode.TerrainType.hillshade.name {
-                    if let oldHillshadeMinZoom, let oldHillshadeMaxZoom {
-                        terrainMode?.setZoomValues(minZoom: oldHillshadeMinZoom.get(appMode), maxZoom: oldHillshadeMaxZoom.get(appMode), mode: appMode)
-                    }
-                    if let oldHillshadeAlpha {
-                        terrainMode?.setTransparency(Int32(oldHillshadeAlpha.get(appMode) / 0.01), mode: appMode)
-                    }
+                    terrainMode?.setZoomValues(minZoom: oldHillshadeMinZoom.get(appMode), maxZoom: oldHillshadeMaxZoom.get(appMode), mode: appMode)
+                    terrainMode?.setTransparency(Int32(oldHillshadeAlpha.get(appMode) / 0.01), mode: appMode)
                 } else {
-                    if let oldSlopeMinZoom, let oldSlopeMaxZoom {
-                        terrainMode?.setZoomValues(minZoom: oldSlopeMinZoom.get(appMode), maxZoom: oldSlopeMaxZoom.get(appMode), mode: appMode)
-                    }
-                    if let oldSlopeAlpha {
-                        terrainMode?.setTransparency(Int32(oldSlopeAlpha.get(appMode) / 0.01), mode: appMode)
-                    }
+                    terrainMode?.setZoomValues(minZoom: oldSlopeMinZoom.get(appMode), maxZoom: oldSlopeMaxZoom.get(appMode), mode: appMode)
+                    terrainMode?.setTransparency(Int32(oldSlopeAlpha.get(appMode) / 0.01), mode: appMode)
                 }
             }
         }
     }
 
     private func migrateTerrainModeDefaultPreferences() {
-        guard let settings = OAAppSettings.sharedManager(),
-              let oldDefaultMinZoomPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_min_zoom", defValue: 0),
-              let oldDefaultMaxZoomPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_max_zoom", defValue: 0),
-              let oldDefaultTransparencyPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_transparency", defValue: 0) else {
-            return
-        }
+        let settings = OAAppSettings.sharedManager()
+        let oldDefaultMinZoomPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_min_zoom", defValue: 0)
+        let oldDefaultMaxZoomPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_max_zoom", defValue: 0)
+        let oldDefaultTransparencyPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_transparency", defValue: 0)
 
         for mode in OAApplicationMode.allPossibleValues() {
             let oldMinZoom = oldDefaultMinZoomPref.get(mode)

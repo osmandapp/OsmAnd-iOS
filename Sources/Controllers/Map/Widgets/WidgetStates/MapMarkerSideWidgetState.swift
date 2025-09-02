@@ -13,7 +13,7 @@ import UIKit
 final class MapMarkerSideWidgetState: OAWidgetState {
     static let availableIntervals: [Int: String] = getAvailableIntervals()
     
-    let settings = OAAppSettings.sharedManager()!
+    let settings = OAAppSettings.sharedManager()
     let mapMarkerModePref: OACommonString
     let markerClickBehaviourPref: OACommonString
     let averageSpeedIntervalPref: OACommonLong
@@ -48,7 +48,7 @@ final class MapMarkerSideWidgetState: OAWidgetState {
             prefId += customId
         }
         
-        let preference = settings.registerStringPreference(prefId, defValue: SideMarkerMode.distance.name)!
+        let preference = settings.registerStringPreference(prefId, defValue: SideMarkerMode.distance.name)
         if let widgetValue = widgetParams?[prefIdKey] as? String {
             preference.set(widgetValue)
         }
@@ -65,7 +65,7 @@ final class MapMarkerSideWidgetState: OAWidgetState {
             prefId += customId
         }
         
-        let preference = settings.registerLongPreference(prefId, defValue:  OAAverageSpeedComputer.default_INTERVAL_MILLIS())!
+        let preference = settings.registerLongPreference(prefId, defValue:  OAAverageSpeedComputer.default_INTERVAL_MILLIS())
         if let string = widgetParams?[prefIdKey] as? String, let widgetValue = Int(string) {
             preference.set(widgetValue)
         }
@@ -82,7 +82,7 @@ final class MapMarkerSideWidgetState: OAWidgetState {
             prefId += customId
         }
         
-        let preference = settings.registerStringPreference(prefId, defValue: MarkerClickBehaviour.switchMode.name)!
+        let preference = settings.registerStringPreference(prefId, defValue: MarkerClickBehaviour.switchMode.name)
         if let widgetValue = widgetParams?[prefIdKey] as? String {
             preference.set(widgetValue)
         }
@@ -96,22 +96,22 @@ final class MapMarkerSideWidgetState: OAWidgetState {
         return String(format: localizedString("ltr_or_rtl_combine_via_colon"), title, subtitle)
     }
     
-    override func getMenuTitle() -> String! {
+    override func getMenuTitle() -> String {
         let widgetType = firstMarker ? WidgetType.sideMarker1 : WidgetType.sideMarker2
         let title = widgetType.title
-        let subtitle = SideMarkerMode.markerModeByName(mapMarkerModePref.get())!.title
-        return String(format: localizedString("ltr_or_rtl_combine_via_colon"), title, subtitle)
+        let subtitle = SideMarkerMode.markerModeByName(mapMarkerModePref.get())?.title
+        return String(format: localizedString("ltr_or_rtl_combine_via_colon"), title, subtitle ?? "")
     }
     
-    override func getSettingsIconId(_ nightMode: Bool) -> String! {
-        SideMarkerMode.markerModeByName(mapMarkerModePref.get())!.iconName
+    override func getSettingsIconId(_ nightMode: Bool) -> String? {
+        SideMarkerMode.markerModeByName(mapMarkerModePref.get())?.iconName
     }
     
     override func changeToNextState() {
         mapMarkerModePref.set(SideMarkerMode.markerModeByName(mapMarkerModePref.get())!.next().name)
     }
     
-    override func copyPrefs(_ appMode: OAApplicationMode!, customId: String!) {
+    override func copyPrefs(_ appMode: OAApplicationMode, customId: String!) {
         let _ = MapMarkerSideWidgetState.registerModePref(customId, settings: settings, firstMarker: firstMarker, widgetParams: nil)
         let _ = MapMarkerSideWidgetState.registerAverageSpeedIntervalPref(customId, settings: settings, firstMarker: firstMarker, widgetParams: nil)
     }

@@ -403,7 +403,7 @@ final class SensorTextWidget: OASimpleWidget {
         if let customId, !customId.isEmpty {
             prefId += "\(customId)"
         }
-        let preference = OAAppSettings.sharedManager().registerIntPreference(prefId, defValue: Int32(EOAExternalSensorVisualizationMode.sensorData.rawValue)).makeProfile()!
+        let preference = OAAppSettings.sharedManager().registerIntPreference(prefId, defValue: Int32(EOAExternalSensorVisualizationMode.sensorData.rawValue)).makeProfile()
         if let string = widgetParams?[visualizationMode] as? String, let value = Int(string) {
             preference.set(Int32(value))
         }

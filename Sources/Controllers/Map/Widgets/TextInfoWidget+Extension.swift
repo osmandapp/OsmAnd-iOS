@@ -11,7 +11,7 @@ extension OATextInfoWidget {
         guard widgetSizePref != nil else {
             return .medium
         }
-        return widgetSizePref?.get(OAAppSettings.sharedManager().applicationMode.get()!) ?? .medium
+        return widgetSizePref?.get(OAAppSettings.sharedManager().applicationMode.get()) ?? .medium
     }
     
     @objc var isSidePanelSimpleLayoutMode: Bool {

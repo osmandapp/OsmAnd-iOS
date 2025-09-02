@@ -86,7 +86,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
             let title1 = group1 != nil ? group1!.title : w1.title
             return title0 < title1
         })
-        let nightMode = OAAppSettings.sharedManager().nightMode
+
         for i in 0..<sortedWidgets.count {
             let widgetType = sortedWidgets[i]
             let widgetGroup = widgetType.getGroup(withPanel: widgetPanel)
@@ -232,7 +232,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
             self.tableView.scrollIndicatorInsets = insets
         }, completion: nil)
     }
-
+    
     @objc func keyboardWillHide(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? CGFloat,
@@ -261,7 +261,6 @@ extension WidgetGroupListViewController {
     override func getLeftNavbarButtonTitle() -> String! {
         localizedString("shared_string_cancel")
     }
-    
 }
 
 // MARK: TableView

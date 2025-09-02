@@ -164,7 +164,6 @@ class MapWidgetInfo: NSObject, Comparable {
     
     private func getWidgetsVisibility(_ appMode: OAApplicationMode) -> [String] {
         let widgetsVisibilityString = getVisibilityPreference().get(appMode)
-        guard let widgetsVisibilityString else { return [] }
         return widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR)
     }
     

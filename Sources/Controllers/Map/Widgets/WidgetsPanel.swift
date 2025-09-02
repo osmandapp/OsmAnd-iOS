@@ -76,7 +76,7 @@ class WidgetsPanel: NSObject, NSCopying {
     }
     
     func getWidgetPage(_ widgetId: String) -> Int {
-        getWidgetPage(widgetId, appMode: OAAppSettings.sharedManager().applicationMode.get()!)
+        getWidgetPage(widgetId, appMode: OAAppSettings.sharedManager().applicationMode.get())
     }
 
     func getWidgetPage(_ widgetId: String, appMode: OAApplicationMode) -> Int {
@@ -84,7 +84,7 @@ class WidgetsPanel: NSObject, NSCopying {
     }
     
     func getWidgetOrder(_ widgetId: String) -> Int {
-        return getWidgetOrder(widgetId, appMode: OAAppSettings.sharedManager().applicationMode.get()!)
+        return getWidgetOrder(widgetId, appMode: OAAppSettings.sharedManager().applicationMode.get())
     }
 
     func getWidgetOrder(_ widgetId: String, appMode: OAApplicationMode) -> Int {
@@ -120,12 +120,12 @@ class WidgetsPanel: NSObject, NSCopying {
         orderPreference.set(pagedOrder, mode: appMode)
     }
 
-    func contains(widgetId: String, appMode: OAApplicationMode = OAAppSettings.sharedManager().applicationMode.get()!) -> Bool {
+    func contains(widgetId: String, appMode: OAApplicationMode = OAAppSettings.sharedManager().applicationMode.get()) -> Bool {
         return getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
     }
 
     func getOrderPreference() -> OACommonListOfStringList {
-        let settings = OAAppSettings.sharedManager()!
+        let settings = OAAppSettings.sharedManager()
         if self == .leftPanel {
             return settings.leftWidgetPanelOrder
         } else if self == .rightPanel {

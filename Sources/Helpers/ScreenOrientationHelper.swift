@@ -76,7 +76,7 @@ class ScreenOrientationHelper: NSObject {
     }
 
     private func updateCachedUserInterfaceOrientationMask() {
-        let mapScreenOrientation: Int32 = settings?.mapScreenOrientation.get() ?? Int32(EOAScreenOrientation.system.rawValue)
+        let mapScreenOrientation: Int32 = settings.mapScreenOrientation.get() ?? Int32(EOAScreenOrientation.system.rawValue)
         cachedUserInterfaceOrientationMask =
             mapScreenOrientation == EOAScreenOrientation.portrait.rawValue ? .portrait
             : mapScreenOrientation == EOAScreenOrientation.landscape.rawValue ? .landscape
@@ -123,7 +123,7 @@ class ScreenOrientationHelper: NSObject {
     }
 
     @objc private func onProfileSettingDidChange(notification: Notification) {
-        if let obj = notification.object as? OACommonPreference, obj == settings?.mapScreenOrientation {
+        if let obj = notification.object as? OACommonPreference, obj == settings.mapScreenOrientation {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.updateCachedUserInterfaceOrientationMask()

@@ -208,7 +208,7 @@ final class GlideAverageWidget: GlideBaseWidget {
             prefId = Self.measuredIntervalPrefID
         }
         
-        let preference = OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: Int(AverageValueComputer.defaultIntervalMillis))!
+        let preference = OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: Int(AverageValueComputer.defaultIntervalMillis))
         if let string = widgetParams?[Self.measuredIntervalPrefID] as? String, let widgetValue = Int(string) {
             preference.set(widgetValue)
         }

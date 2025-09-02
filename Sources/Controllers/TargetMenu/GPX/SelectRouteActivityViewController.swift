@@ -152,8 +152,8 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         selectedActivity = item.obj(forKey: "routeActivity") as? RouteActivity
-        if isTripRecordingSettings {
-            settings?.currentTrackRouteActivity.set(selectedActivity?.id, mode: appMode)
+        if isTripRecordingSettings, let appMode {
+            settings?.currentTrackRouteActivity.set(selectedActivity?.id ?? "", mode: appMode)
         } else if let tracks {
             routeActivityHelper?.saveRouteActivity(trackItems: tracks, routeActivity: selectedActivity)
         } else if let gpxFile {
@@ -172,7 +172,7 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     }
     
     private func determineInitialActivity() -> RouteActivity? {
-        guard let routeActivityHelper else { return nil }
+        guard let routeActivityHelper, let appMode else { return nil }
         if isTripRecordingSettings {
             isCheckmarkAllowed = true
             return routeActivityHelper.findRouteActivity(id: settings?.currentTrackRouteActivity.get(appMode))

@@ -185,9 +185,7 @@ extension VehicleMetricsPlugin {
     }
     
     private func getFormatVolumePerHourUnit() -> String? {
-        guard let volumeUnit = OAVolumeConstant.getUnitSymbol(OAAppSettings.sharedManager().volumeUnits.get()) else {
-            return nil
-        }
+        let volumeUnit = OAVolumeConstant.getUnitSymbol(OAAppSettings.sharedManager().volumeUnits.get())
         
         return String(format: localizedString("ltr_or_rtl_combine_via_slash"),
                       volumeUnit,
@@ -195,7 +193,7 @@ extension VehicleMetricsPlugin {
     }
     
     private func getFormatVolumePerDistanceUnit() -> String {
-        let volumeUnit = OAVolumeConstant.getUnitSymbol(OAAppSettings.sharedManager().volumeUnits.get()) ?? ""
+        let volumeUnit = OAVolumeConstant.getUnitSymbol(OAAppSettings.sharedManager().volumeUnits.get())
         return String(format: localizedString("ltr_or_rtl_combine_via_slash"), volumeUnit, "100\(getDistanceUnit())")
     }
     

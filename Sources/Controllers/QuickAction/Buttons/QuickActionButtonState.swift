@@ -19,7 +19,7 @@ final class QuickActionButtonState: MapButtonState {
     let fabMarginPref: FabMarginPreference
 
     private let app = OsmAndApp.swiftInstance()
-    private let settings = OAAppSettings.sharedManager()!
+    private let settings = OAAppSettings.sharedManager()
     private(set) var quickActions = [OAQuickAction]()
 
     override init(withId id: String) {
@@ -53,10 +53,8 @@ final class QuickActionButtonState: MapButtonState {
     }
 
     func hasCustomName() -> Bool {
-        if let name = namePref.get() {
-            return !name.isEmpty
-        }
-        return false
+        let name = namePref.get()
+        return !name.isEmpty
     }
 
     func setName(_ name: String) {
@@ -136,15 +134,16 @@ final class QuickActionButtonState: MapButtonState {
 
     func saveActions(_ serializer: QuickActionSerializer) {
         do {
-            let jsonString = String(data: try serializer.serialize(quickActions), encoding: .utf8)
-            quickActionsPref.set(jsonString)
+            if let jsonString = String(data: try serializer.serialize(quickActions), encoding: .utf8) {
+                quickActionsPref.set(jsonString)
+            }
         } catch {
             print("Error encoding quickActions: \(error)")
         }
     }
 
     func parseQuickActions(_ serializer: QuickActionSerializer) throws {
-        if let json = quickActionsPref.get(), let data = json.data(using: .utf8) {
+        if let data = quickActionsPref.get().data(using: .utf8) {
             quickActions = try serializer.deserialize(data)
         }
     }

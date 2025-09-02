@@ -6,18 +6,19 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+NS_ASSUME_NONNULL_BEGIN
 
 @class OAPOI, OATransportStop;
-
 
 @interface OATransportStopAggregated : NSObject
 
 @property (nonatomic, nullable) OAPOI *amenity;
-@property (nonatomic, nonnull) NSMutableArray<OATransportStop *> *localTransportStops;
-@property (nonatomic, nonnull) NSMutableArray<OATransportStop *> *nearbyTransportStops;
+@property (nonatomic) NSMutableArray<OATransportStop *> *localTransportStops;
+@property (nonatomic) NSMutableArray<OATransportStop *> *nearbyTransportStops;
 
-- (void) addLocalTransportStop:(nonnull OATransportStop *)transportStop;
-- (void) addNearbyTransportStop:(nonnull OATransportStop *)transportStop;
+- (void) addLocalTransportStop:(OATransportStop *)transportStop;
+- (void) addNearbyTransportStop:(OATransportStop *)transportStop;
 
 @end
+
+NS_ASSUME_NONNULL_END

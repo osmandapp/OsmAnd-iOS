@@ -10,6 +10,8 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OAPOI, OATransportStopAggregated;
 
 @interface OATransportStop : OAMapObject
@@ -24,3 +26,5 @@
 - (NSString *)getStopObjectName:(NSString *)lang transliterate:(BOOL)transliterate;
 
 @end
+
+NS_ASSUME_NONNULL_END

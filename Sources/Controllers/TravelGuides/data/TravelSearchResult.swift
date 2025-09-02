@@ -54,7 +54,7 @@ final class TravelSearchResult : NSObject {
         var res = ""
         let limit = min(TravelSearchResult.SHOW_LANGS, langs.count)
         for i in 0..<limit {
-            res += OAUtilities.capitalizeFirstLetter(langs[i])
+            res += OAUtilities.capitalizeFirstLetter(langs[i]) ?? ""
             if i != limit - 1 {
                 res += ", "
             }

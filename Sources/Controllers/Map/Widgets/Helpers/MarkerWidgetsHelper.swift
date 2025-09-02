@@ -12,7 +12,7 @@ import CoreLocation
 @objc(OAMarkerWidgetsHelper)
 @objcMembers
 class MarkerWidgetsHelper: NSObject {
-    private let settings = OAAppSettings.sharedManager()!
+    private let settings = OAAppSettings.sharedManager()
     private let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
     private var barWidgets: Set<OABaseWidgetView> = []

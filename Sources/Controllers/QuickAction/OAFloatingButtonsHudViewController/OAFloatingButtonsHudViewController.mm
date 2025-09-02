@@ -490,7 +490,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         || [mapPanel isRouteInfoVisible]
         || mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
     
-    BOOL hiddenWillChange = (quickActionButton.hidden != hideQuickButton);
+    BOOL hiddenWillChange = quickActionButton.hidden != hideQuickButton;
     if (!hideQuickButton)
     {
         if (hiddenWillChange)

@@ -33,7 +33,7 @@ final class CompassButtonState: MapButtonState {
     }
     
     override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
-        setupButtonPosition(position, posH: ButtonPositionSize.Companion().POS_LEFT, posV: ButtonPositionSize.Companion().POS_TOP, xMove: false, yMove: true)
+        setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_LEFT, posV: ButtonPositionSize.companion.POS_TOP, xMove: false, yMove: true)
     }
 
     func getVisibility() -> CompassVisibility {

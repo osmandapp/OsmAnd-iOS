@@ -51,12 +51,8 @@ final class MapHudLayout: NSObject {
     }
     
     private func refresh() {
-        if Thread.isMainThread {
-            updateButtons()
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                self?.updateButtons()
-            }
+        executeOnMainThread { [weak self] in
+            self?.updateButtons()
         }
     }
     
@@ -72,16 +68,9 @@ final class MapHudLayout: NSObject {
         }
         
         if ignoreTopSidePanels {
-            if let topBarPanelContainer {
-                filtered.removeAll { $0.0 === topBarPanelContainer }
-            }
-            
-            if let leftWidgetsPanel {
-                filtered.removeAll { $0.0 === leftWidgetsPanel }
-            }
-            
-            if let rightWidgetsPanel {
-                filtered.removeAll { $0.0 === rightWidgetsPanel }
+            let topPanels = [topBarPanelContainer, leftWidgetsPanel, rightWidgetsPanel].compactMap { $0 }
+            filtered.removeAll { (v, _) in
+                topPanels.contains { $0 === v }
             }
         }
         
@@ -92,10 +81,10 @@ final class MapHudLayout: NSObject {
         }
         
         let insets = containerView.safeAreaInsets
-        let cell = CGFloat(ButtonPositionSize.Companion().CELL_SIZE_DP)
+        let cell = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP)
         let w = Int32(max(1, floor((containerView.bounds.width - insets.left - insets.right) / dpToPx / cell)))
         let h = Int32(max(1, floor(getAdjustedHeight() / dpToPx / cell)))
-        ButtonPositionSize.Companion().computeNonOverlap(space: 1, buttons: filtered.map { $0.1 }, totalWidth: w, totalHeight: h)
+        ButtonPositionSize.companion.computeNonOverlap(space: 1, buttons: filtered.map { $0.1 }, totalWidth: w, totalHeight: h)
         var map: [UIView: ButtonPositionSize] = [:]
         for (v, p) in filtered {
             map[v] = p
@@ -108,38 +97,38 @@ final class MapHudLayout: NSObject {
         let position = ButtonPositionSize(id: getViewName(view))
         if view === topBarPanelContainer {
             position.setMoveDescendantsVertical()
-            position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
-            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.Companion().POS_LEFT : ButtonPositionSize.Companion().POS_FULL_WIDTH)
+            position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
+            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
         } else if view is OADownloadMapWidget {
             position.setMoveDescendantsVertical()
-            position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
-            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.Companion().POS_LEFT : ButtonPositionSize.Companion().POS_FULL_WIDTH)
+            position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
+            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
         } else if view === leftWidgetsPanel {
-            position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
-            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_LEFT)
+            position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
+            position.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_LEFT)
             position.setMoveDescendantsVertical()
         } else if view === rightWidgetsPanel {
-            position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
-            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_RIGHT)
+            position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
+            position.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_RIGHT)
             position.setMoveDescendantsVertical()
         } else if view === bottomBarPanelContainer {
             position.setMoveDescendantsVertical()
-            position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_BOTTOM)
-            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.Companion().POS_LEFT : ButtonPositionSize.Companion().POS_FULL_WIDTH)
+            position.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
+            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
         } else if view is OAMapRulerView {
             position.setMoveHorizontal()
-            position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_BOTTOM)
-            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_LEFT)
+            position.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
+            position.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_LEFT)
         } else {
-            position.setPositionVertical(posV: ButtonPositionSize.Companion().POS_TOP)
-            position.setPositionHorizontal(posH: ButtonPositionSize.Companion().POS_LEFT)
+            position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
+            position.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_LEFT)
         }
         
         return updateWidgetPosition(view, position)
     }
     
     private func getViewName(_ view: UIView) -> String {
-        (view as? OAHudButton)?.buttonState?.id ?? view.accessibilityIdentifier ?? view.restorationIdentifier ?? String(describing: type(of: view))
+        (view as? OAHudButton)?.buttonState?.id ?? view.accessibilityIdentifier ?? String(describing: type(of: view))
     }
     
     private func isBottomPanelVisible() -> Bool {
@@ -195,7 +184,7 @@ final class MapHudLayout: NSObject {
         var rightX: Int32 = 0
         var leftX: Int32 = 0
         var applyFix = false
-        if !ignoreBottomSidePanels, isBottomPanelVisible(), let baseZoom = posById[ZoomInButtonState.hudId] ?? posById[ZoomOutButtonState.hudId], let ml = posById[MyLocationButtonState.hudId], let m3 = posById[Map3DButtonState.map3DHudId], ml.posH == ButtonPositionSize.Companion().POS_RIGHT, ml.posV == ButtonPositionSize.Companion().POS_BOTTOM, ml.marginX == baseZoom.marginX, m3.posH == ButtonPositionSize.Companion().POS_RIGHT, m3.posV == ButtonPositionSize.Companion().POS_BOTTOM, m3.marginX == baseZoom.marginX {
+        if !ignoreBottomSidePanels, isBottomPanelVisible(), let baseZoom = posById[ZoomInButtonState.hudId] ?? posById[ZoomOutButtonState.hudId], let ml = posById[MyLocationButtonState.hudId], let m3 = posById[Map3DButtonState.map3DHudId], ml.posH == ButtonPositionSize.companion.POS_RIGHT, ml.posV == ButtonPositionSize.companion.POS_BOTTOM, ml.marginX == baseZoom.marginX, m3.posH == ButtonPositionSize.companion.POS_RIGHT, m3.posV == ButtonPositionSize.companion.POS_BOTTOM, m3.marginX == baseZoom.marginX {
             rightX = baseZoom.marginX
             leftX = rightX + baseZoom.width + 1
             applyFix = true
@@ -237,7 +226,7 @@ final class MapHudLayout: NSObject {
     }
     
     @discardableResult private func updateWidgetPosition(_ view: UIView, _ position: ButtonPositionSize) -> ButtonPositionSize {
-        let cell = CGFloat(ButtonPositionSize.Companion().CELL_SIZE_DP)
+        let cell = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP)
         if view is OADownloadMapWidget {
             let insets = containerView.safeAreaInsets
             let fullWidth = max(0, containerView.bounds.width - insets.left - insets.right)
@@ -332,7 +321,7 @@ final class MapHudLayout: NSObject {
             return false
         }
         
-        let cellFixPx: CGFloat = max(0, (hudBasePaddingDp - CGFloat(ButtonPositionSize.Companion().DEF_MARGIN_DP)) * dpToPx)
+        let cellFixPx: CGFloat = max(0, (hudBasePaddingDp - CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP)) * dpToPx)
         let startX = CGFloat(position.getXStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let insets = containerView.safeAreaInsets

@@ -184,11 +184,6 @@ static const float kDistanceMeters = 100.0;
 
     self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
-    
-    _topWidgetsView.accessibilityIdentifier = @"top_widgets_panel";
-    _leftWidgetsView.accessibilityIdentifier = @"map_left_widgets_panel";
-    _rightWidgetsView.accessibilityIdentifier = @"map_right_widgets_panel";
-    _bottomWidgetsView.accessibilityIdentifier = @"map_bottom_widgets_panel";
 
     _mapHudLayout = [[MapHudLayout alloc] initWithContainerView:self.view];
     [_mapHudLayout configureWithLeftWidgetsPanel:_leftWidgetsView rightWidgetsPanel:_rightWidgetsView topBarPanelContainer:_topWidgetsView bottomBarPanelContainer:_bottomWidgetsView];
@@ -425,9 +420,9 @@ static const float kDistanceMeters = 100.0;
 {
     BOOL isLandscape = [OAUtilities isLandscape];
     BOOL isIPad = [OAUtilities isIPad];
-    OATargetPointType t = _mapPanelViewController.activeTargetType;
-    BOOL isTrackMenuVisible = t == OATargetGPX;
-    BOOL isPlanRouteVisible = t == OATargetRoutePlanning;
+    OATargetPointType target = _mapPanelViewController.activeTargetType;
+    BOOL isTrackMenuVisible = target == OATargetGPX;
+    BOOL isPlanRouteVisible = target == OATargetRoutePlanning;
     BOOL isWeatherVisible = _mapInfoController.weatherToolbarVisible;
     BOOL hasHUD = _mapPanelViewController.scrollableHudViewController != nil;
     CGFloat leftOffset = kButtonOffset;
@@ -1187,8 +1182,8 @@ static const float kDistanceMeters = 100.0;
     BOOL isIpad = [OAUtilities isIPad];
     BOOL isLandscape = [OAUtilities isLandscape];
     BOOL contextMenu = self.contextMenuMode;
-    OATargetPointType t = _mapPanelViewController.activeTargetType;
-    BOOL isPlanRoute = t == OATargetRoutePlanning;
+    OATargetPointType target = _mapPanelViewController.activeTargetType;
+    BOOL isPlanRoute = target == OATargetRoutePlanning;
     BOOL hasScrollableHudVisible = _mapPanelViewController.scrollableHudViewController && _mapPanelViewController.scrollableHudViewController.view.superview;
     CGFloat viewHeight = 0.0;
     CGFloat toolbarHeight = 0.0;
@@ -1202,28 +1197,24 @@ static const float kDistanceMeters = 100.0;
     CGFloat bottomInset = self.view.safeAreaInsets.bottom;
     CGFloat extraBottom = 0.0;
     BOOL contextAffectsBottom = contextMenu && (!isLandscape || isPlanRoute);
-    if (contextAffectsBottom)
+    if (contextAffectsBottom && (!isIpad || isPlanRoute))
     {
-        if (!isIpad || isPlanRoute)
+        if (hasScrollableHudVisible)
         {
-            if (hasScrollableHudVisible)
-            {
-                if (isPlanRoute && isLandscape)
-                    extraBottom += toolbarHeight;
-                else
-                    extraBottom += MAX(0.f, viewHeight - bottomInset);
-            }
+            if (isPlanRoute && isLandscape)
+                extraBottom += toolbarHeight;
             else
-            {
-                CGFloat targetH = [_mapPanelViewController getTargetMenuHeight];
-                extraBottom += MAX(0.f, targetH - bottomInset);
-            }
+                extraBottom += MAX(0.f, viewHeight - bottomInset);
+        }
+        else
+        {
+            CGFloat targetH = [_mapPanelViewController getTargetMenuHeight];
+            extraBottom += MAX(0.f, targetH - bottomInset);
         }
     }
-    else
+    else if (!contextAffectsBottom && weatherVisible && !isLandscape)
     {
-        if (weatherVisible && !isLandscape)
-            extraBottom += MAX(0.f, self.weatherToolbar.frame.size.height - bottomInset);
+        extraBottom += MAX(0.f, self.weatherToolbar.frame.size.height - bottomInset);
     }
     
     BOOL ignoreBottomSidePanels = contextMenu || weatherVisible;
@@ -1569,7 +1560,7 @@ static const float kDistanceMeters = 100.0;
         }
         if (!zoomButtonsVisible)
         {
-            [self addOffsetToView:_zoomInButton  x:offsetValue y:0.];
+            [self addOffsetToView:_zoomInButton x:offsetValue y:0.];
             [self addOffsetToView:_zoomOutButton x:offsetValue y:0.];
         }
     };

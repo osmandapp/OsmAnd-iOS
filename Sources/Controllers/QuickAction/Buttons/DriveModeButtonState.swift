@@ -21,6 +21,6 @@ final class DriveModeButtonState: MapButtonState {
     }
     
     @discardableResult override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
-        setupButtonPosition(position, posH: ButtonPositionSize.Companion().POS_LEFT, posV: ButtonPositionSize.Companion().POS_BOTTOM, xMove: true, yMove: false)
+        setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_LEFT, posV: ButtonPositionSize.companion.POS_BOTTOM, xMove: true, yMove: false)
     }
 }

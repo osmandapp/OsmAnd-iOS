@@ -45,7 +45,7 @@ final class QuickActionButtonState: MapButtonState {
         let mod: Int = (hash == Int32.min) ? 0 : abs(Int(hash % 3))
         let xMove: Bool = (mod == 0 || mod == 2)
         let yMove: Bool = (mod == 1 || mod == 2)
-        return setupButtonPosition(position, posH: ButtonPositionSize.Companion().POS_RIGHT, posV: ButtonPositionSize.Companion().POS_BOTTOM, xMove: xMove, yMove: yMove)
+        return setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_RIGHT, posV: ButtonPositionSize.companion.POS_BOTTOM, xMove: xMove, yMove: yMove)
     }
 
     func setEnabled(_ enabled: Bool) {

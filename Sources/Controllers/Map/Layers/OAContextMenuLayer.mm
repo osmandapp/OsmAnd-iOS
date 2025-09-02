@@ -269,7 +269,8 @@
         
         const OsmAnd::LatLon latLon(_latPin, _lonPin);
         _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
-        
+        _contextPinMarker->setUpdateAfterCreated(true);
+
         if (_animatedPin)
             [self hideAnimatedPin];
         

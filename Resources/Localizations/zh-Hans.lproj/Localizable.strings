@@ -2655,7 +2655,7 @@
 "add_smart_folder" = "添加智能文件夹";
 "shared_string_unchanged" = "未修改";
 "meridian_180" = "180 度经线";
-"routing_attr_allow_ferries_description" = "允许通过渡轮航线规划路线";
+"routing_attr_allow_ferries_description" = "允许通过轮渡规划路线";
 "auto_25_chars_route_tslr" = "稍向右转";
 "no_internet_descr" = "请检查您的连接并重试。";
 "map_widget_route_information_desc" = "显示预计到达时间、剩余旅行时间以及当前导航路线的距离。";
@@ -2842,3 +2842,7 @@
 "obd_fuel_type_bifuel_cng" = "双燃料压缩天然气";
 "shared_string_road_exit" = "出口";
 "route_guidance_desc" = "提供实时路线导航，包括到下一个转弯的距离、道路名称、当前街道名称和车道信息。小工具会在导航过程中启用。";
+"manage_storage" = "管理存储空间";
+"next_turn_information" = "下一转弯信息";
+"next_turn_information_desc" = "显示即将转弯的方向和街道名称。";
+"manage_purchases" = "管理购买";

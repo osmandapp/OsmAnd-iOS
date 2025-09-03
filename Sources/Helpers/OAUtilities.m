@@ -1469,7 +1469,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     [button setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
 }
 
-+ (UIEdgeInsets) relativeMarginsForView:(UIView *)view inParent:(UIView *)parent
++ (UIEdgeInsets)relativeMarginsForView:(UIView *)view inParent:(UIView *)parent
 {
     if (!view || !parent)
         return UIEdgeInsetsZero;

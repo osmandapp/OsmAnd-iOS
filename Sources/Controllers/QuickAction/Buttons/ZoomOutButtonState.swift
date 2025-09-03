@@ -6,8 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objcMembers
 final class ZoomOutButtonState: MapButtonState {
     static let hudId = "map.view.zoom_out"

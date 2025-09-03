@@ -6,8 +6,6 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objcMembers
 open class MapButtonState: NSObject {
     private static let originalValue: Int64 = -1
@@ -29,8 +27,8 @@ open class MapButtonState: NSObject {
         self.positionSize = ButtonPositionSize(id: id)
         self.defaultPositionSize = ButtonPositionSize(id: id)
         super.init()
-        setupButtonPosition(self.positionSize)
-        setupButtonPosition(self.defaultPositionSize)
+        setupButtonPosition(positionSize)
+        setupButtonPosition(defaultPositionSize)
     }
     
     private func updatePosition(_ position: ButtonPositionSize) {
@@ -97,7 +95,7 @@ open class MapButtonState: NSObject {
         landscapePositionPref.resetMode(toDefault: appMode)
     }
 
-    func copyForMode(fromMode: OAApplicationMode, toMode: OAApplicationMode) {
+    func copyForMode(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
         portraitPositionPref.set(portraitPositionPref.get(fromMode), mode: toMode)
         landscapePositionPref.set(landscapePositionPref.get(fromMode), mode: toMode)
     }

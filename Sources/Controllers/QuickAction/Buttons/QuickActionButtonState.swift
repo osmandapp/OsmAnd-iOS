@@ -6,8 +6,6 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objcMembers
 final class QuickActionButtonState: MapButtonState {
 
@@ -36,15 +34,15 @@ final class QuickActionButtonState: MapButtonState {
 
     override func getName() -> String {
         let defaultName = localizedString("configure_screen_quick_action")
-        let name = namePref.get() ?? defaultName
+        let name = namePref.get()
         return name.isEmpty ? defaultName : name
     }
     
     override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         let hash: Int32 = MapButtonState.javaCompatibleStringHash(of: id)
-        let mod: Int = (hash == Int32.min) ? 0 : abs(Int(hash % 3))
-        let xMove: Bool = (mod == 0 || mod == 2)
-        let yMove: Bool = (mod == 1 || mod == 2)
+        let mod: Int = hash == Int32.min ? 0 : abs(Int(hash % 3))
+        let xMove: Bool = mod == 0 || mod == 2
+        let yMove: Bool = mod == 1 || mod == 2
         return setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_RIGHT, posV: ButtonPositionSize.companion.POS_BOTTOM, xMove: xMove, yMove: yMove)
     }
 
@@ -126,8 +124,8 @@ final class QuickActionButtonState: MapButtonState {
         fabMarginPref.resetMode(toDefault: appMode)
     }
 
-    override func copyForMode(fromMode: OAApplicationMode, toMode: OAApplicationMode) {
-        super.copyForMode(fromMode: fromMode, toMode: toMode)
+    override func copyForMode(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        super.copyForMode(from: fromMode, to: toMode)
         statePref.set(statePref.get(fromMode), mode: toMode)
         fabMarginPref.copyForMode(fromMode: fromMode, toMode: toMode)
     }

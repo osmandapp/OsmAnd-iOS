@@ -303,7 +303,7 @@ static inline void executeOnMainThread(dispatch_block_t block)
 + (nullable UIImage *) resizeImage:(nullable UIImage *)image newSize:(CGSize)newSize;
 + (BOOL) hasMapImage:(NSString *)resId;
 + (void) layoutComplexButton:(UIButton*)button;
-+ (UIEdgeInsets) relativeMarginsForView:(UIView *)view inParent:(UIView *)parent;
++ (UIEdgeInsets)relativeMarginsForView:(UIView *)view inParent:(UIView *)parent;
 
 + (UIImage *) imageWithColor:(UIColor *)color;
 + (UIImage *) imageWithTintColor:(UIColor *)color image:(UIImage *)image;

@@ -6,8 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objcMembers
 final class MyLocationButtonState: MapButtonState {
     static let hudId = "map.view.back_to_loc"

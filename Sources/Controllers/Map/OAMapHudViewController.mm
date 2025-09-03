@@ -100,6 +100,20 @@ static const float kDistanceMeters = 100.0;
     CLLocation *_previousLocation;
     
     BOOL _cachedLocationAvailableState;
+    
+    CGFloat _lastRulerLeftAbs;
+    CGFloat _lastExtraTop;
+    CGFloat _lastExtraBottom;
+    
+    BOOL _isCacheValidForRuler;
+    BOOL _isCacheValidForTop;
+    BOOL _isCacheValidForBottom;
+    BOOL _lastIgnoreAllPanels;
+    BOOL _lastIgnoreBottomSidePanels;
+    
+    id _lastRulerLayoutRef;
+    id _lastTopLayoutRef;
+    id _lastBottomLayoutRef;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -464,17 +478,14 @@ static const float kDistanceMeters = 100.0;
         shouldApply = YES;
     }
     
-    static BOOL  sCacheValid = NO;
-    static CGFloat sLastRulerLeftAbs = 0.0f;
-    static __weak id sLastLayoutRef = nil;
     CGFloat applied = shouldApply ? leftOffset : 0.0f;
-    BOOL layoutChanged = sLastLayoutRef != self.mapHudLayout;
-    BOOL needUpdate = !sCacheValid || layoutChanged || fabs(sLastRulerLeftAbs - applied) > 0.0f;
+    BOOL layoutChanged = _lastRulerLayoutRef != self.mapHudLayout;
+    BOOL needUpdate = !_isCacheValidForRuler || layoutChanged || fabs(_lastRulerLeftAbs - applied) > 0.0f;
     if (self.mapHudLayout && needUpdate)
     {
-        sCacheValid = YES;
-        sLastLayoutRef = self.mapHudLayout;
-        sLastRulerLeftAbs = applied;
+        _isCacheValidForRuler = YES;
+        _lastRulerLayoutRef = self.mapHudLayout;
+        _lastRulerLeftAbs = applied;
         [self.mapHudLayout setExternalRulerLeftOffset:applied];
     }
 }
@@ -1145,18 +1156,14 @@ static const float kDistanceMeters = 100.0;
     
     if (self.mapHudLayout)
     {
-        static BOOL sCacheValid = NO;
-        static BOOL sLastIgnoreAllPanels = NO;
-        static CGFloat sLastExtraTop = 0.0;
-        static __weak id sLastLayoutRef = nil;
-        BOOL layoutChanged = sLastLayoutRef != self.mapHudLayout;
-        BOOL needUpdate = !sCacheValid || layoutChanged || (ignoreTopSidePanels != sLastIgnoreAllPanels) || (extraTop != sLastExtraTop);
+        BOOL layoutChanged = _lastTopLayoutRef != self.mapHudLayout;
+        BOOL needUpdate = !_isCacheValidForTop || layoutChanged || (ignoreTopSidePanels != _lastIgnoreAllPanels) || (extraTop != _lastExtraTop);
         if (needUpdate)
         {
-            sCacheValid = YES;
-            sLastLayoutRef = self.mapHudLayout;
-            sLastIgnoreAllPanels = ignoreTopSidePanels;
-            sLastExtraTop = extraTop;
+            _isCacheValidForTop = YES;
+            _lastTopLayoutRef = self.mapHudLayout;
+            _lastIgnoreAllPanels = ignoreTopSidePanels;
+            _lastExtraTop = extraTop;
             [self.mapHudLayout setExternalTopOverlay:extraTop ignorePanels:ignoreTopSidePanels];
         }
     }
@@ -1218,18 +1225,14 @@ static const float kDistanceMeters = 100.0;
     }
     
     BOOL ignoreBottomSidePanels = contextMenu || weatherVisible;
-    static BOOL sCacheValid = NO;
-    static BOOL sLastIgnoreBottomSidePanels = NO;
-    static CGFloat sLastExtraBottom = 0.0;
-    static __weak id sLastLayoutRef = nil;
-    BOOL layoutChanged = sLastLayoutRef != self.mapHudLayout;
-    BOOL needUpdate = !sCacheValid || layoutChanged || (ignoreBottomSidePanels != sLastIgnoreBottomSidePanels) || (fabs(sLastExtraBottom - extraBottom) > 0.0);
+    BOOL layoutChanged = _lastBottomLayoutRef != self.mapHudLayout;
+    BOOL needUpdate = !_isCacheValidForBottom || layoutChanged || (ignoreBottomSidePanels != _lastIgnoreBottomSidePanels) || (fabs(_lastExtraBottom - extraBottom) > 0.0);
     if (self.mapHudLayout && needUpdate)
     {
-        sCacheValid = YES;
-        sLastLayoutRef = self.mapHudLayout;
-        sLastIgnoreBottomSidePanels = ignoreBottomSidePanels;
-        sLastExtraBottom = extraBottom;
+        _isCacheValidForBottom = YES;
+        _lastBottomLayoutRef = self.mapHudLayout;
+        _lastIgnoreBottomSidePanels = ignoreBottomSidePanels;
+        _lastExtraBottom = extraBottom;
         [self.mapHudLayout setExternalBottomOverlay:extraBottom ignorePanels:ignoreBottomSidePanels];
         [self resetToDefaultRulerLayout];
     }

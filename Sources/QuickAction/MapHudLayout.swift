@@ -236,9 +236,8 @@ final class MapHudLayout: NSObject {
                 let parentH = Int(getAdjustedHeight())
                 let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
                 if m.left >= 0, m.top >= 0, m.right >= 0, m.bottom >= 0 {
-                    let isRTL = containerView.isDirectionRTL()
-                    let startInset = isRTL ? insets.right : insets.left
-                    let endInset = isRTL ? insets.left : insets.right
+                    let startInset = insets.left
+                    let endInset = insets.right
                     let leftAligned = position.isLeft
                     let topAligned = position.isTop
                     let xRaw = leftAligned ? m.left - startInset : m.right - endInset
@@ -261,9 +260,8 @@ final class MapHudLayout: NSObject {
             let parentH = Int(getAdjustedHeight())
             let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
             if m.left >= 0, m.top >= 0, m.right >= 0, m.bottom >= 0 {
-                let isRTL = containerView.isDirectionRTL()
-                let startInset = isRTL ? insets.right : insets.left
-                let endInset = isRTL ? insets.left : insets.right
+                let startInset = insets.left
+                let endInset = insets.right
                 let leftAligned = position.isLeft
                 let topAligned = position.isTop
                 let xRaw = leftAligned ? m.left - startInset : m.right - endInset
@@ -278,9 +276,8 @@ final class MapHudLayout: NSObject {
             let parentH = Int(getAdjustedHeight())
             let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
             if m.left >= 0, m.top >= 0, m.right >= 0, m.bottom >= 0 {
-                let isRTL = containerView.isDirectionRTL()
-                let startInset = isRTL ? insets.right : insets.left
-                let endInset = isRTL ? insets.left : insets.right
+                let startInset = insets.left
+                let endInset = insets.right
                 let leftAligned = position.isLeft
                 let topAligned = position.isTop
                 let xRaw = leftAligned ? m.left - startInset : m.right - endInset
@@ -320,7 +317,7 @@ final class MapHudLayout: NSObject {
         let startX = CGFloat(position.getXStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let insets = containerView.safeAreaInsets
-        let placeOnLeft = (containerView.isDirectionRTL() && !(ignoreBottomSidePanels && (!portrait || tablet))) ? !position.isLeft : position.isLeft
+        let placeOnLeft = position.isLeft
         let extraTop = position.isTop ? externalTopOverlayPx : 0.0
         let extraBottom = position.isBottom ? externalBottomOverlayPx : 0.0
         let rulerExtraX = view is OAMapRulerView && externalRulerLeftOffsetPx > 0 && placeOnLeft ? max(0, externalRulerLeftOffsetPx - startX) : 0.0
@@ -472,9 +469,8 @@ final class MapHudLayout: NSObject {
         let width = Int(containerView.bounds.width - insets.left - insets.right)
         let height = Int(getAdjustedHeight())
         let m = OAUtilities.relativeMargins(for: button, inParent: containerView)
-        let isRTL = containerView.isDirectionRTL()
-        let startInset = isRTL ? insets.right : insets.left
-        let endInset = isRTL ? insets.left : insets.right
+        let startInset = insets.left
+        let endInset = insets.right
         let leftAligned = pos.isLeft
         let topAligned = pos.isTop
         let xRaw = leftAligned ? m.left - startInset : m.right - endInset

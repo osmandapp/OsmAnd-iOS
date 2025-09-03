@@ -1596,8 +1596,6 @@ static const float kDistanceMeters = 100.0;
 - (void) updateBottomContolMarginsForHeight
 {
     CGFloat bottomOffset = [self getBottomHudOffset];
-    BOOL isRTL = [self.view isDirectionRTL];
-    
     if ([OAUtilities isLandscape])
     {
         _weatherLayersButton.frame = CGRectMake(CGRectGetMaxX(_weatherToolbar.frame) + 20, bottomOffset - _weatherLayersButton.bounds.size.height, _weatherLayersButton.bounds.size.width, _weatherLayersButton.bounds.size.height);
@@ -1606,9 +1604,9 @@ static const float kDistanceMeters = 100.0;
     }
     else
     {
-        _weatherLayersButton.frame = CGRectMake((isRTL && ![OAUtilities isIPad]) ? self.view.bounds.size.width - [self getExtraScreenOffset] - _weatherLayersButton.bounds.size.width : [self getExtraScreenOffset], bottomOffset - _weatherLayersButton.bounds.size.height - (_mapInfoController.weatherToolbarVisible ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherLayersButton.bounds.size.width, _weatherLayersButton.bounds.size.height);
+        _weatherLayersButton.frame = CGRectMake([self getExtraScreenOffset], bottomOffset - _weatherLayersButton.bounds.size.height - (_mapInfoController.weatherToolbarVisible ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherLayersButton.bounds.size.width, _weatherLayersButton.bounds.size.height);
         
-        _weatherContoursButton.frame = CGRectMake((isRTL && ![OAUtilities isIPad]) ? self.view.bounds.size.width - [self getExtraScreenOffset] - _weatherContoursButton.bounds.size.width : [self getExtraScreenOffset], bottomOffset - _weatherLayersButton.bounds.size.height - 64 - (_mapInfoController.weatherToolbarVisible ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherContoursButton.bounds.size.width, _weatherContoursButton.bounds.size.height);
+        _weatherContoursButton.frame = CGRectMake([self getExtraScreenOffset], bottomOffset - _weatherLayersButton.bounds.size.height - 64 - (_mapInfoController.weatherToolbarVisible ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherContoursButton.bounds.size.width, _weatherContoursButton.bounds.size.height);
     }
     
     [self updateBottomButtonsLayout];

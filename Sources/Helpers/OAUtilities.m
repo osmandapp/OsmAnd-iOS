@@ -1493,12 +1493,6 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         bottom = 0;
     
     UIEdgeInsets insets = UIEdgeInsetsMake(top, left, bottom, right);
-    if ([parent isDirectionRTL])
-    {
-        CGFloat t = insets.left;
-        insets.left = insets.right; insets.right = t;
-    }
-    
     return insets;
 }
 

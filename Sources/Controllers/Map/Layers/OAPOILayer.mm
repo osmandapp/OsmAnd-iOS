@@ -78,6 +78,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _wikiSymbolsProvider;
+    dispatch_queue_t _poiUpdateQueue;
 }
 
 - (void)initLayer
@@ -85,6 +86,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     [super initLayer];
 
     _filtersHelper = [OAPOIFiltersHelper sharedInstance];
+    _poiUpdateQueue = dispatch_queue_create("com.osmand.poiLayerUpdateQueue", DISPATCH_QUEUE_SERIAL);
 }
 
 - (NSString *) layerId
@@ -173,107 +175,112 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     if (noValidByName)
         [_filtersHelper removeSelectedPoiFilter:filters.allObjects.firstObject];
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self doShowPoiUiFilterOnMap];
+    __weak __typeof(self) weakSelf = self;
+    dispatch_sync(_poiUpdateQueue, ^{
+        [weakSelf doShowPoiUiFilterOnMap];
     });
 }
 
-- (void) doShowPoiUiFilterOnMap
+- (void)configureSymbolsProviderFor:(OAPOIUIFilter *)filter
+{
+    BOOL isWiki = [filter isWikiFilter];
+    
+    auto categoriesFilter = QHash<QString, QStringList>();
+    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [filter getAcceptedTypes];
+    for (OAPOICategory *category in types.keyEnumerator)
+    {
+        QStringList list = QStringList();
+        NSSet<NSString *> *subcategories = [types objectForKey:category];
+        if (subcategories != [OAPOIBaseType nullSet])
+        {
+            for (NSString *sub in subcategories)
+                list << QString::fromNSString(sub);
+        }
+        categoriesFilter.insert(QString::fromNSString(category.name), list);
+    }
+    
+    if (isWiki)
+        _wikiUiNameFilter = [filter getNameAmenityFilter:filter.filterByName];
+    else
+        _poiUiNameFilter = [filter getNameAmenityFilter:filter.filterByName];
+    
+    __weak OAAmenityExtendedNameFilter *weakWikiUiNameFilter = _wikiUiNameFilter;
+    __weak OAPOIUIFilter *weakWikiUiFilter = _wikiUiFilter;
+    __weak OAAmenityExtendedNameFilter *weakPoiUiNameFilter = _poiUiNameFilter;
+    __weak OAPOIUIFilter *weakPoiUiFilter = _poiUiFilter;
+    OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
+    [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
+    {
+        OAAmenityExtendedNameFilter *wikiUiNameFilter = weakWikiUiNameFilter;
+        OAPOIUIFilter *wikiUiFilter = weakWikiUiFilter;
+        OAAmenityExtendedNameFilter *poiUiNameFilter = weakPoiUiNameFilter;
+        OAPOIUIFilter *poiUiFilter = weakPoiUiFilter;
+        
+        OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
+        QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
+        
+        BOOL check = !wikiUiNameFilter && !wikiUiFilter && poiUiNameFilter
+        && poiUiFilter && poiUiFilter.filterByName && poiUiFilter.filterByName.length > 0;
+        BOOL accepted = poiUiNameFilter && [poiUiNameFilter acceptAmenity:amenity values:decodedValues type:type];
+        
+        if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
+            return check ? accepted : false;
+        
+        if ((check && accepted) || (isWiki ? wikiUiNameFilter && [wikiUiNameFilter acceptAmenity:amenity values:decodedValues type:type] : accepted))
+        {
+            BOOL isClosed = decodedValues[QString::fromNSString(OSM_DELETE_TAG)] == QString::fromNSString(OSM_DELETE_VALUE);
+            return !isClosed;
+        }
+        
+        return false;
+    };
+    
+    if (isWiki && _wikiSymbolsProvider)
+        [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
+    else if (!isWiki && _amenitySymbolsProvider)
+        [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+    
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    BOOL nightMode = settings.nightMode;
+    BOOL showLabels = settings.mapSettingShowPoiLabel.get;
+    NSString *lang = settings.settingPrefMapLanguage.get;
+    BOOL transliterate = settings.settingMapLanguageTranslit.get;
+    float textSize = settings.textSize.get;
+    
+    const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
+    const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
+    if (categoriesFilter.count() > 0)
+    {
+        (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
+    }
+    else
+    {
+        (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
+    }
+    
+    [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];
+}
+
+- (void)doShowPoiUiFilterOnMap
 {
     if (!_poiUiFilter && !_wikiUiFilter)
         return;
-
+    __weak __typeof(self) weakSelf = self;
     [self.mapViewController runWithRenderSync:^{
-
-        void (^_generate)(OAPOIUIFilter *) = ^(OAPOIUIFilter *f) {
-            BOOL isWiki = [f isWikiFilter];
-
-            auto categoriesFilter = QHash<QString, QStringList>();
-            NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [f getAcceptedTypes];
-            for (OAPOICategory *category in types.keyEnumerator)
-            {
-                QStringList list = QStringList();
-                NSSet<NSString *> *subcategories = [types objectForKey:category];
-                if (subcategories != [OAPOIBaseType nullSet])
-                {
-                    for (NSString *sub in subcategories)
-                        list << QString::fromNSString(sub);
-                }
-                categoriesFilter.insert(QString::fromNSString(category.name), list);
-            }
-
-            if (isWiki)
-                _wikiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
-            else
-                _poiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
-
-            __weak OAAmenityExtendedNameFilter *weakWikiUiNameFilter = _wikiUiNameFilter;
-            __weak OAPOIUIFilter *weakWikiUiFilter = _wikiUiFilter;
-            __weak OAAmenityExtendedNameFilter *weakPoiUiNameFilter = _poiUiNameFilter;
-            __weak OAPOIUIFilter *weakPoiUiFilter = _poiUiFilter;
-            OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
-                    [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
-                    {
-                        OAAmenityExtendedNameFilter *wikiUiNameFilter = weakWikiUiNameFilter;
-                        OAPOIUIFilter *wikiUiFilter = weakWikiUiFilter;
-                        OAAmenityExtendedNameFilter *poiUiNameFilter = weakPoiUiNameFilter;
-                        OAPOIUIFilter *poiUiFilter = weakPoiUiFilter;
-
-                        OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
-                        QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
-                        
-                        BOOL check = !wikiUiNameFilter && !wikiUiFilter && poiUiNameFilter
-                                && poiUiFilter && poiUiFilter.filterByName && poiUiFilter.filterByName.length > 0;
-                        BOOL accepted = poiUiNameFilter && [poiUiNameFilter acceptAmenity:amenity values:decodedValues type:type];
-
-                        if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
-                            return check ? accepted : false;
-                        
-                        if ((check && accepted) || (isWiki ? wikiUiNameFilter && [wikiUiNameFilter acceptAmenity:amenity values:decodedValues type:type] : accepted))
-                        {
-                            BOOL isClosed = decodedValues[QString::fromNSString(OSM_DELETE_TAG)] == QString::fromNSString(OSM_DELETE_VALUE);
-                            return !isClosed;
-                        }
-
-                        return false;
-                    };
-
-            if (isWiki && _wikiSymbolsProvider)
-                [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
-            else if (!isWiki && _amenitySymbolsProvider)
-                [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
-
-            OAAppSettings *settings = OAAppSettings.sharedManager;
-            BOOL nightMode = settings.nightMode;
-            BOOL showLabels = settings.mapSettingShowPoiLabel.get;
-            NSString *lang = settings.settingPrefMapLanguage.get;
-            BOOL transliterate = settings.settingMapLanguageTranslit.get;
-            float textSize = settings.textSize.get;
-
-            const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
-            const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
-            if (categoriesFilter.count() > 0)
-            {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
-            }
-            else
-            {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
-            }
-
-            [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];
-        };
-
-        if (_poiUiFilter)
-            _generate(_poiUiFilter);
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        if (!strongSelf->_poiUiFilter && !strongSelf->_wikiUiFilter)
+            return;
+        if (strongSelf->_poiUiFilter)
+            [strongSelf configureSymbolsProviderFor:strongSelf->_poiUiFilter];
         else
-            _poiUiNameFilter = nil;
-
-        if (_wikiUiFilter)
-            _generate(_wikiUiFilter);
+            strongSelf->_poiUiNameFilter = nil;
+        
+        if (strongSelf->_wikiUiFilter)
+            [strongSelf configureSymbolsProviderFor:strongSelf->_wikiUiFilter];
         else
-            _wikiUiNameFilter = nil;
-
+            strongSelf->_wikiUiNameFilter = nil;
     }];
 }
 

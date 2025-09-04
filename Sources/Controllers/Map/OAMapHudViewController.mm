@@ -111,9 +111,9 @@ static const float kDistanceMeters = 100.0;
     BOOL _lastIgnoreAllPanels;
     BOOL _lastIgnoreBottomSidePanels;
     
-    id _lastRulerLayoutRef;
-    id _lastTopLayoutRef;
-    id _lastBottomLayoutRef;
+    __weak MapHudLayout *_lastRulerLayoutRef;
+    __weak MapHudLayout *_lastTopLayoutRef;
+    __weak MapHudLayout *_lastBottomLayoutRef;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -920,6 +920,7 @@ static const float kDistanceMeters = 100.0;
 - (void) showCompass
 {
     [UIView animateWithDuration:.25 animations:^{
+        _compassButton.hidden = NO;
         _compassButton.alpha = 1.0;
     } completion:^(BOOL finished) {
         _compassButton.userInteractionEnabled = _compassButton.alpha > 0.0;
@@ -956,6 +957,7 @@ static const float kDistanceMeters = 100.0;
 - (void) hideCompassImpl
 {
     [UIView animateWithDuration:.25 animations:^{
+        _compassButton.hidden = YES;
         _compassButton.alpha = 0.0;
     } completion:^(BOOL finished) {
         _compassButton.userInteractionEnabled = _compassButton.alpha > 0.0;

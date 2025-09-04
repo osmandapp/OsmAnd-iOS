@@ -72,10 +72,8 @@ final class MapHudLayout: NSObject {
             filtered.removeAll { topPanels.contains($0.0) }
         }
         
-        if ignoreBottomSidePanels {
-            if let bottomBarPanelContainer {
-                filtered.removeAll { $0.0 === bottomBarPanelContainer }
-            }
+        if ignoreBottomSidePanels, let bottomBarPanelContainer {
+            filtered.removeAll { $0.0 === bottomBarPanelContainer }
         }
         
         let insets = containerView.safeAreaInsets
@@ -178,10 +176,18 @@ final class MapHudLayout: NSObject {
         var rightX: Int32 = 0
         var leftX: Int32 = 0
         var applyFix = false
-        if !ignoreBottomSidePanels, isBottomPanelVisible(), let baseZoom = posById[ZoomInButtonState.hudId] ?? posById[ZoomOutButtonState.hudId], let ml = posById[MyLocationButtonState.hudId], let m3 = posById[Map3DButtonState.map3DHudId], ml.posH == ButtonPositionSize.companion.POS_RIGHT, ml.posV == ButtonPositionSize.companion.POS_BOTTOM, ml.marginX == baseZoom.marginX, m3.posH == ButtonPositionSize.companion.POS_RIGHT, m3.posV == ButtonPositionSize.companion.POS_BOTTOM, m3.marginX == baseZoom.marginX {
-            rightX = baseZoom.marginX
-            leftX = rightX + baseZoom.width + 1
-            applyFix = true
+        let companion = ButtonPositionSize.companion
+        let canApplyFix = !ignoreBottomSidePanels && isBottomPanelVisible()
+        let baseZoom = posById[ZoomInButtonState.hudId] ?? posById[ZoomOutButtonState.hudId]
+        if canApplyFix, let baseZoom, let ml = posById[MyLocationButtonState.hudId], let m3 = posById[Map3DButtonState.map3DHudId] {
+            let mlRightBottom = (ml.posH == companion.POS_RIGHT && ml.posV == companion.POS_BOTTOM)
+            let m3RightBottom = (m3.posH == companion.POS_RIGHT && m3.posV == companion.POS_BOTTOM)
+            let sameColumnAsZoom = (ml.marginX == baseZoom.marginX && m3.marginX == baseZoom.marginX)
+            if mlRightBottom && m3RightBottom && sameColumnAsZoom {
+                rightX = baseZoom.marginX
+                leftX  = rightX + baseZoom.width + 1
+                applyFix = true
+            }
         }
         
         for btn in mapButtons where !btn.isHidden && btn.transform.isIdentity {
@@ -373,8 +379,8 @@ final class MapHudLayout: NSObject {
     
     func removeWidget(_ view: UIView) {
         additionalWidgetPositions.removeValue(forKey: view)
-        if let i = additionalOrder.firstIndex(of: view) {
-            additionalOrder.remove(at: i)
+        if let index = additionalOrder.firstIndex(of: view) {
+            additionalOrder.remove(at: index)
         }
         
         refresh()
@@ -439,7 +445,7 @@ final class MapHudLayout: NSObject {
     }
     
     func updateButtons() {
-        guard containerView.bounds.width > 0 || containerView.bounds.height > 0 || !containerView.isHidden else { return }
+        guard !containerView.isHidden || containerView.bounds.width > 0 || containerView.bounds.height > 0 else { return }
         let positionMap = getButtonPositionSizes()
         for (view, pos) in positionMap where view is OAHudButton || view is OAMapRulerView || view is OADownloadMapWidget {
             if let btn = view as? OAHudButton {
@@ -486,8 +492,8 @@ final class MapHudLayout: NSObject {
     func onContainerSizeChanged() {
         portrait = OAUtilities.isPortrait()
         statusBarHeight = OAUtilities.getStatusBarHeight()
-        for b in mapButtons {
-            b.buttonState?.updatePositions()
+        for button in mapButtons {
+            button.buttonState?.updatePositions()
         }
         
         let w = containerView.bounds.width

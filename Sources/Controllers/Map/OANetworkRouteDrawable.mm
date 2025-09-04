@@ -45,10 +45,9 @@
     if (!_routeKey)
         return nil;
     
-    if (!_env || !_env.mapPresentationEnvironment)
-        return nil;
-    
     const auto &env = _env.mapPresentationEnvironment;
+    if (!env)
+        return nil;
     
     const auto tag = QString::fromNSString([NSString stringWithFormat:@"route_%@", [_routeKey getRouteTag]]);
     const auto text = QString::fromNSString([_routeKey getRouteValue:@"osmc_text"]);

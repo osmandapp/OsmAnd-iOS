@@ -142,7 +142,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             if (symbolInfo.mapSymbol->ignoreClick)
                 continue;
             
-            OAPOI *amenity;
             std::shared_ptr<const OsmAnd::Amenity> cppAmenity;
             BaseDetailsObject *detailsObject;
             

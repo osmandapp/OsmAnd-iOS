@@ -292,7 +292,7 @@
 "res_updates_exp" = "Veuillez acheter le(s) continent(s) pour mettre à jour les cartes";
 "menu_my_directions" = "Mes itinéraires";
 // Menu
-"shared_string_my_places" = "Favoris";
+"shared_string_my_places" = "Mes Lieux";
 "add_parking" = "Ajouter comme position de stationnement";
 "add_waypoint" = "Ajouter une étape";
 "add_waypoint_short" = "Ajouter un point de passage";

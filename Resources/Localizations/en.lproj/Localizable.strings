@@ -2716,6 +2716,10 @@
 "key_assignments" = "Key assignments";
 "clear_all_key_shortcuts" = "Clear all key shortcuts";
 "clear_all_key_shortcuts_summary" = "All key assignments for the selected type will be removed.";
+"add_new_device" = "Add new device";
+"remove_device" = "Remove device";
+"remove_device_message" = "Are you sure you want to remove \"%@\" and all key assignments?";
+"added_devices" = "Added devices";
 
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";

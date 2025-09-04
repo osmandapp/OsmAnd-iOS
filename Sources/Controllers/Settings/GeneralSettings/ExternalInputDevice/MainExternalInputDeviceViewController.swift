@@ -22,10 +22,10 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             updateUIAnimated(nil)
         }
     }
-    private lazy var settingExternalInputDevice: Int32 = OAAppSettings.sharedManager().settingExternalInputDevice.get(appMode)
+    private lazy var settingExternalInputDevice: InputDeviceProfile? = InputDeviceHelper.shared.getSelectedDevice(with: appMode)
     
     private var isDefaultDevice: Bool {
-        settingExternalInputDevice == NO_EXTERNAL_DEVICE || settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE || settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE
+        settingExternalInputDevice?.getId() == NoneDeviceProfile.deviceId || settingExternalInputDevice?.getId() == KeyboardDeviceProfile.deviceId || settingExternalInputDevice?.getId() == WunderLINQDeviceProfile.deviceId
     }
     
     private var showToolbar: Bool {
@@ -43,21 +43,17 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     override func generateData() {
+        settingExternalInputDevice = InputDeviceHelper.shared.getSelectedDevice(with: appMode)
+        guard let settingExternalInputDevice else { return }
         tableData.clearAllData()
-        settingExternalInputDevice = OAAppSettings.sharedManager().settingExternalInputDevice.get(appMode)
+        
         if prevDefaultDevice != isDefaultDevice {
             setupBottomButtons()
             prevDefaultDevice = isDefaultDevice
         }
         
-        var externalInputDeviceValue = ""
-        if settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE {
-            externalInputDeviceValue = localizedString("sett_generic_ext_input")
-        } else if settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE {
-            externalInputDeviceValue = localizedString("sett_wunderlinq_ext_input")
-        } else {
-            externalInputDeviceValue = localizedString("shared_string_none")
-        }
+        let externalInputDeviceValue = settingExternalInputDevice.toHumanString()
+        let externalInputDeviceId = settingExternalInputDevice.getId()
         
         if !isEditMode {
             let deviceSection = tableData.createNewSection()
@@ -68,17 +64,17 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             deviceRow.descr = externalInputDeviceValue
         }
         
-        if keyAssignments.isEmpty || settingExternalInputDevice == NO_EXTERNAL_DEVICE {
+        if keyAssignments.isEmpty || externalInputDeviceId == NoneDeviceProfile.deviceId {
             let noExternalDeviceSection = tableData.createNewSection()
             let noExternalDeviceRow = noExternalDeviceSection.createNewRow()
             noExternalDeviceRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
             noExternalDeviceRow.key = Self.emptyStateRowKey
-            noExternalDeviceRow.title = settingExternalInputDevice == NO_EXTERNAL_DEVICE ? nil : localizedString("no_assigned_keys")
-            noExternalDeviceRow.iconName = settingExternalInputDevice == NO_EXTERNAL_DEVICE ? "ic_custom_keyboard" : "ic_custom_keyboard_disabled"
+            noExternalDeviceRow.title = externalInputDeviceId == NoneDeviceProfile.deviceId ? nil : localizedString("no_assigned_keys")
+            noExternalDeviceRow.iconName = externalInputDeviceId == NoneDeviceProfile.deviceId ? "ic_custom_keyboard" : "ic_custom_keyboard_disabled"
             noExternalDeviceRow.iconTintColor = UIColor.iconColorDefault
-            noExternalDeviceRow.descr = localizedString(settingExternalInputDevice == NO_EXTERNAL_DEVICE ? "select_to_use_an_external_input_device" : "no_assigned_keys_desc")
-            noExternalDeviceRow.setObj(settingExternalInputDevice == NO_EXTERNAL_DEVICE, forKey: Self.noExternalDeviceKey)
-            if settingExternalInputDevice != NO_EXTERNAL_DEVICE {
+            noExternalDeviceRow.descr = localizedString(externalInputDeviceId == NoneDeviceProfile.deviceId ? "select_to_use_an_external_input_device" : "no_assigned_keys_desc")
+            noExternalDeviceRow.setObj(externalInputDeviceId == NoneDeviceProfile.deviceId, forKey: Self.noExternalDeviceKey)
+            if externalInputDeviceId != NoneDeviceProfile.deviceId {
                 noExternalDeviceRow.setObj(localizedString("shared_string_add"), forKey: Self.buttonTitleKey)
             }
         } else {

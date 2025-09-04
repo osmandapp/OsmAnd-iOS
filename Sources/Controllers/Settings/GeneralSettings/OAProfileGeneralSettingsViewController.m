@@ -231,13 +231,7 @@
             break;
     }
     
-    NSString *externalInputDeviceValue;
-    if ([_settings.settingExternalInputDevice get:self.appMode] == GENERIC_EXTERNAL_DEVICE)
-        externalInputDeviceValue = OALocalizedString(@"sett_generic_ext_input");
-    else if ([_settings.settingExternalInputDevice get:self.appMode] == WUNDERLINQ_EXTERNAL_DEVICE)
-        externalInputDeviceValue = OALocalizedString(@"sett_wunderlinq_ext_input");
-    else
-        externalInputDeviceValue = OALocalizedString(@"shared_string_none");
+    NSString *externalInputDeviceValue = [[InputDeviceHelper.shared getSelectedDeviceWith:self.appMode] toHumanString];
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *appearanceArr = [NSMutableArray array];

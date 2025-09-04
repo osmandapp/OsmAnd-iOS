@@ -222,6 +222,19 @@
 		2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */; };
 		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
 		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
+		2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4352E66E6F700682723 /* InputDeviceProfile.swift */; };
+		2783B4382E66E81900682723 /* PredefinedInputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */; };
+		2783B43A2E66E8AB00682723 /* KeyboardDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */; };
+		2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */; };
+		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
+		27C768E42E6833F100540266 /* CustomInputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */; };
+		27C768E62E683A1700540266 /* InputDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E52E683A1700540266 /* InputDeviceHelper.swift */; };
+		27C768E82E688F6300540266 /* KeyBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E72E688F6300540266 /* KeyBinding.swift */; };
+		27C768EA2E6892CD00540266 /* KeySymbolMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E92E6892CD00540266 /* KeySymbolMapper.swift */; };
+		27C768ED2E689B9400540266 /* KeyEventCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768EC2E689B9400540266 /* KeyEventCommand.swift */; };
+		27C768EF2E689D2400540266 /* MapZoomCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768EE2E689D2400540266 /* MapZoomCommand.swift */; };
+		27C768F12E68C4B100540266 /* KeyEventCommandsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768F02E68C4B100540266 /* KeyEventCommandsCache.swift */; };
+		27C768F32E68C55E00540266 /* KeyEventCommandsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768F22E68C55E00540266 /* KeyEventCommandsFactory.swift */; };
 		27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */; };
 		27D6AE802E5F42BE00FC9094 /* KeyAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27D6AE7F2E5F42BE00FC9094 /* KeyAssignmentTableViewCell.xib */; };
 		27D6AE812E5F42BE00FC9094 /* KeyAssignmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6AE7E2E5F42BE00FC9094 /* KeyAssignmentTableViewCell.swift */; };
@@ -3605,6 +3618,19 @@
 		2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainExternalInputDeviceViewController.swift; sourceTree = "<group>"; };
 		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
 		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
+		2783B4352E66E6F700682723 /* InputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDeviceProfile.swift; sourceTree = "<group>"; };
+		2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredefinedInputDeviceProfile.swift; sourceTree = "<group>"; };
+		2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDeviceProfile.swift; sourceTree = "<group>"; };
+		2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WunderLINQDeviceProfile.swift; sourceTree = "<group>"; };
+		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
+		27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInputDeviceProfile.swift; sourceTree = "<group>"; };
+		27C768E52E683A1700540266 /* InputDeviceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDeviceHelper.swift; sourceTree = "<group>"; };
+		27C768E72E688F6300540266 /* KeyBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyBinding.swift; sourceTree = "<group>"; };
+		27C768E92E6892CD00540266 /* KeySymbolMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySymbolMapper.swift; sourceTree = "<group>"; };
+		27C768EC2E689B9400540266 /* KeyEventCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventCommand.swift; sourceTree = "<group>"; };
+		27C768EE2E689D2400540266 /* MapZoomCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapZoomCommand.swift; sourceTree = "<group>"; };
+		27C768F02E68C4B100540266 /* KeyEventCommandsCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventCommandsCache.swift; sourceTree = "<group>"; };
+		27C768F22E68C55E00540266 /* KeyEventCommandsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventCommandsFactory.swift; sourceTree = "<group>"; };
 		27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NextTurnWidget+Extension.swift"; sourceTree = "<group>"; };
 		27D6AE7E2E5F42BE00FC9094 /* KeyAssignmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignmentTableViewCell.swift; sourceTree = "<group>"; };
 		27D6AE7F2E5F42BE00FC9094 /* KeyAssignmentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyAssignmentTableViewCell.xib; sourceTree = "<group>"; };
@@ -8107,10 +8133,44 @@
 				2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */,
 				2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */,
 				2758DD582E5F05F000051096 /* KeyAssignment.swift */,
+				27C768E72E688F6300540266 /* KeyBinding.swift */,
 				27D6AEA82E61C76C00FC9094 /* KeyView.swift */,
 				27D6AEAA2E61C79600FC9094 /* KeyView.xib */,
 			);
 			path = ExternalInputDevice;
+			sourceTree = "<group>";
+		};
+		2783B4342E66E68F00682723 /* Devices */ = {
+			isa = PBXGroup;
+			children = (
+				2783B4352E66E6F700682723 /* InputDeviceProfile.swift */,
+				2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */,
+				27C242202E682F15000801B7 /* NoneDeviceProfile.swift */,
+				27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */,
+				2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */,
+				2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */,
+			);
+			path = Devices;
+			sourceTree = "<group>";
+		};
+		27C768EB2E689B8000540266 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				27C768EC2E689B9400540266 /* KeyEventCommand.swift */,
+				27C768EE2E689D2400540266 /* MapZoomCommand.swift */,
+			);
+			path = Commands;
+			sourceTree = "<group>";
+		};
+		27C768F42E68C58A00540266 /* Keyevent */ = {
+			isa = PBXGroup;
+			children = (
+				27C768E92E6892CD00540266 /* KeySymbolMapper.swift */,
+				27C768E52E683A1700540266 /* InputDeviceHelper.swift */,
+				27C768F02E68C4B100540266 /* KeyEventCommandsCache.swift */,
+				27C768F22E68C55E00540266 /* KeyEventCommandsFactory.swift */,
+			);
+			path = Keyevent;
 			sourceTree = "<group>";
 		};
 		27E3C1FC2DF0A0350053958E /* OATopTextView */ = {
@@ -10689,6 +10749,7 @@
 				DA5A7ADC26C563A100F274C7 /* OAWorldRegion.h */,
 				DA5A80F326C563A600F274C7 /* OAWorldRegion.mm */,
 				DA5A857126C5643000F274C7 /* OsmAnd Maps-Bridging-Header.h */,
+				27C768EB2E689B8000540266 /* Commands */,
 				DA5A792C26C5639F00F274C7 /* OsmEdit */,
 				DA5A797626C563A000F274C7 /* Plugins */,
 				DA5A7ACC26C563A100F274C7 /* PodsExtensions */,
@@ -13470,6 +13531,8 @@
 				32C41F582E15370800E9941C /* LocaleHelper.swift */,
 				FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */,
 				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
+				27C768F42E68C58A00540266 /* Keyevent */,
+				2783B4342E66E68F00682723 /* Devices */,
 				FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */,
 				32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */,
 				DA5A80B326C563A600F274C7 /* NSData+CRC32.h */,
@@ -16758,6 +16821,7 @@
 				DA5A81CD26C563A700F274C7 /* QuadTree.m in Sources */,
 				DA4ABF2F2876E4C200B996EF /* OAItemExporter.m in Sources */,
 				DA5A83B126C563A800F274C7 /* OAWebViewController.m in Sources */,
+				27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */,
 				FA30E6292DE9932400F09141 /* UIMenu+Extension.swift in Sources */,
 				DA5A825D26C563A700F274C7 /* OAFoldersCollectionViewCell.m in Sources */,
 				DA5A836D26C563A800F274C7 /* OAAppModeCell.mm in Sources */,
@@ -16781,6 +16845,7 @@
 				DA5A816026C563A700F274C7 /* OAParkingPositionPlugin.mm in Sources */,
 				2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */,
 				DA5A843226C563A800F274C7 /* OATransportDetailsTableViewController.mm in Sources */,
+				27C768F12E68C4B100540266 /* KeyEventCommandsCache.swift in Sources */,
 				DAC849B426CF967C00018091 /* OADownloadMapWidget.mm in Sources */,
 				322B53952C78DD14006B48B0 /* OAIconsPaletteCell.m in Sources */,
 				DA5A845626C563A900F274C7 /* OARulerByTapControlLayer.mm in Sources */,
@@ -16909,6 +16974,7 @@
 				B247455727E6470A00C18C3F /* OATwoFilledButtonsTableViewCell.m in Sources */,
 				FA2E95C32DDE0A6C00B0ACA0 /* OBDService.swift in Sources */,
 				DA5A812326C563A700F274C7 /* OATransportStop.mm in Sources */,
+				2783B43A2E66E8AB00682723 /* KeyboardDeviceProfile.swift in Sources */,
 				DA5A84BF26C563A900F274C7 /* OAPointOptionsBottomSheetViewController.mm in Sources */,
 				DA5A852D26C563A900F274C7 /* OASaveGpxToTripsActivity.mm in Sources */,
 				460767122A49F86400AF63F2 /* WikiAlgorithms.swift in Sources */,
@@ -16991,6 +17057,7 @@
 				DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */,
 				27D6AE952E60994700FC9094 /* MapScrollRightAction.swift in Sources */,
 				320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */,
+				27C768EA2E6892CD00540266 /* KeySymbolMapper.swift in Sources */,
 				4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */,
 				DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */,
 				DA5A834526C563A800F274C7 /* OAIconTextDescButtonCell.m in Sources */,
@@ -17176,6 +17243,7 @@
 				32CA13202AF1475200DD6EF5 /* WikipediaCacheSizeViewController.swift in Sources */,
 				DA5A837226C563A800F274C7 /* OARoutingSettingsCell.mm in Sources */,
 				DA5A833726C563A800F274C7 /* OATableViewCustomFooterView.m in Sources */,
+				27C768F32E68C55E00540266 /* KeyEventCommandsFactory.swift in Sources */,
 				461A3F0D29F6E859008EE079 /* OABaseCollectionHandler.m in Sources */,
 				DA4ABF162876DA6800B996EF /* OASettingsItem.mm in Sources */,
 				DA5A84E926C563A900F274C7 /* OADashboardViewController.mm in Sources */,
@@ -17359,6 +17427,7 @@
 				DA66796B27EDCABA00509932 /* OARegisterDeviceCommand.m in Sources */,
 				FA64087F2D3E8EDA005FD12D /* OAMapillaryImageCard.swift in Sources */,
 				DA4ABF232876DA6800B996EF /* OACollectionSettingsItem.mm in Sources */,
+				2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */,
 				DA5A838D26C563A800F274C7 /* OAPluginDetailsViewController.mm in Sources */,
 				DA5A818826C563A700F274C7 /* OANavAutoZoomMapAction.m in Sources */,
 				FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */,
@@ -17475,6 +17544,7 @@
 				C5B2AA5F2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift in Sources */,
 				32A46BC02C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm in Sources */,
 				DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */,
+				27C768E42E6833F100540266 /* CustomInputDeviceProfile.swift in Sources */,
 				DA5A817F26C563A700F274C7 /* OAUnsupportedAction.m in Sources */,
 				0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */,
 				32FE7AA72B65138800F82728 /* OAGPXImportUIHelper.mm in Sources */,
@@ -17532,6 +17602,7 @@
 				DA5A814826C563A700F274C7 /* OAOsmBugsRemoteUtil.m in Sources */,
 				27D6AE892E5F5CA000FC9094 /* BaseSwitchAppModeAction.swift in Sources */,
 				DA5A839326C563A800F274C7 /* OACustomSourceDetailsViewController.mm in Sources */,
+				27C768ED2E689B9400540266 /* KeyEventCommand.swift in Sources */,
 				32EAF9FB2AE0241F00646807 /* TravelGuidesSettingsViewController.swift in Sources */,
 				4686F94F2954F07C000FC204 /* OATextMultilineTableViewCell.m in Sources */,
 				320F713F2A867D930071C0E7 /* TravelSearchHistoryItem.swift in Sources */,
@@ -17692,6 +17763,7 @@
 				468443422B83D22A006B8E62 /* DeleteAccountViewController.swift in Sources */,
 				DA5A81B226C563A700F274C7 /* OADownloadDescriptionInfo.m in Sources */,
 				468C798D2B7F76A000DA64D0 /* SendCodeCommand.swift in Sources */,
+				2783B4382E66E81900682723 /* PredefinedInputDeviceProfile.swift in Sources */,
 				DA5A814126C563A700F274C7 /* OARelation.m in Sources */,
 				DA5A856326C563A900F274C7 /* OARouteCalculationResult.mm in Sources */,
 				DA5A834926C563A800F274C7 /* OAProgressBarCell.mm in Sources */,
@@ -17802,6 +17874,7 @@
 				327D68AA2A8FB8180076D1E0 /* ArticleTravelCell.swift in Sources */,
 				DA5A848A26C563A900F274C7 /* OARoadSegmentData.mm in Sources */,
 				46330AEF2C034C1100E60CA2 /* FabMarginPreference.swift in Sources */,
+				27C768E62E683A1700540266 /* InputDeviceHelper.swift in Sources */,
 				FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */,
 				464BF4A52C04F7D6000D6908 /* CompassButtonState.swift in Sources */,
 				DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */,
@@ -17986,6 +18059,7 @@
 				B0D6111153524EEE21E870E0 /* OAGpxStatBlockCollectionViewCell.mm in Sources */,
 				B0D61511780C648362077F37 /* OATrackMenuAppearanceHudViewController.mm in Sources */,
 				B0D6195E900EF69E053A5465 /* OABaseTrackMenuHudViewController.mm in Sources */,
+				27C768EF2E689D2400540266 /* MapZoomCommand.swift in Sources */,
 				DA9901B32918F14700A3C732 /* OASyncBackupTask.mm in Sources */,
 				B0D6159DC886AF2419676731 /* OATitleSwitchRoundCell.mm in Sources */,
 				B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */,
@@ -18080,9 +18154,11 @@
 				CA4EDDEA04A2683B2A8447AA /* OAManageStorageViewController.mm in Sources */,
 				46BCD1922C2DCA0F008749EC /* ColorPalette.swift in Sources */,
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,
+				2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */,
 				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
 				FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */,
+				27C768E82E688F6300540266 /* KeyBinding.swift in Sources */,
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,
 				CA4ED87EDFA076F9F7F63A4C /* OABenefitsOsmContributorsViewController.m in Sources */,
 				CA4EDCD265973B276DCF2FE8 /* OAMappersViewController.m in Sources */,

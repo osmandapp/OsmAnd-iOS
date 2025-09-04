@@ -438,7 +438,7 @@
 
 - (void)goBack
 {
-    if ([_settings.settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+    if ([[_settings.settingExternalInputDevice get] isEqualToString:WunderLINQDeviceProfile.deviceId])
     {
         //Launch WunderLINQ
         NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
@@ -446,7 +446,7 @@
         if (canOpenURL)
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
-    else if ([_settings.settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    else if ([[_settings.settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
     {
         [self dismiss];
     }

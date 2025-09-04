@@ -17,12 +17,13 @@
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAWeatherToolbar.h"
 #import "OALog.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation UINavigationController (keyCommands)
 
 - (void)goBack
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:WunderLINQDeviceProfile.deviceId])
     {
         //Launch WunderLINQ
         NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
@@ -30,7 +31,7 @@
         if (canOpenURL)
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
-    else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    else if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
     {
         UIViewController *vvc = self.visibleViewController;
         if ([vvc isKindOfClass:OASuperViewController.class])

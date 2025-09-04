@@ -22,12 +22,14 @@
 
 @implementation OAProfileGeneralSettingsParametersViewController
 {
-    NSArray<NSArray *> *_data;
+    NSArray<NSMutableArray *> *_data;
+    NSMutableArray<InputDeviceProfile *> *_devicesToRemove;
     OAAppSettings *_settings;
     EOAProfileGeneralSettingsParameter _settingsType;
     NSString *_title;
     UIView *_tableHeaderView;
     BOOL _openFromMap;
+    BOOL _isEditMode;
 }
 
 #pragma mark - Initialization
@@ -58,6 +60,7 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _devicesToRemove = [NSMutableArray array];
 }
 
 - (void)postInit
@@ -179,10 +182,48 @@
 
 - (NSString *)getLeftNavbarButtonTitle
 {
-    if (_openFromMap)
-        return OALocalizedString(@"shared_string_close");
+    if (_settingsType == EOAProfileGeneralSettingsExternalInputDevices)
+        return _isEditMode ? OALocalizedString(@"shared_string_cancel") : nil;
     else
-        return OALocalizedString(@"shared_string_cancel");
+        return OALocalizedString(_openFromMap ? @"shared_string_close" : @"shared_string_cancel");
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    if (_isEditMode)
+        return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                      iconName:nil
+                                        action:@selector(onRightNavbarButtonPressed)
+                                          menu:nil]];
+    else
+        return nil;
+}
+
+- (void)onLeftNavbarButtonPressed
+{
+    if (_isEditMode)
+    {
+        [self setIsEditMode:NO];
+        [_devicesToRemove removeAllObjects];
+    }
+    else
+    {
+        [super onLeftNavbarButtonPressed];
+    }
+}
+
+- (void)onRightNavbarButtonPressed
+{
+    for (InputDeviceProfile *device in _devicesToRemove)
+    {
+        if ([device getId])
+            [InputDeviceHelper.shared removeCustomDeviceWith:[device getId]];
+    }
+    [_devicesToRemove removeAllObjects];
+    [self reloadDataWithAnimated:YES completion:nil];
+    [self updateBottomButtons];
+    [self.delegate onSettingsChanged];
+    [self setIsEditMode:NO];
 }
 
 #pragma mark - Table data
@@ -201,7 +242,7 @@
     NSInteger speedSystem = [_settings.speedSystem get:self.appMode];
     NSInteger volumeSystem = [_settings.volumeUnits get:self.appMode];
     NSInteger tempSystem = [_settings.temperatureUnits get:self.appMode];
-    NSInteger externamlInputDevices = [_settings.settingExternalInputDevice get:self.appMode];
+    NSString *externamlInputDevices = [_settings.settingExternalInputDevice get:self.appMode];
     if (automatic)
         drivingRegion = -1;
     EOAAngularConstant angularUnits = [_settings.angularUnits get:self.appMode];
@@ -521,24 +562,19 @@
             break;
             
         case EOAProfileGeneralSettingsExternalInputDevices:
-            [dataArr addObject:@{
-                @"name" : @"sett_no_ext_input",
-                @"title" : OALocalizedString(@"shared_string_none"),
-                @"selected" : @(externamlInputDevices == NO_EXTERNAL_DEVICE),
-                @"type" : [OASimpleTableViewCell getCellIdentifier],
-            }];
-            [dataArr addObject:@{
-                @"name" : @"sett_generic_ext_input",
-                @"title" : OALocalizedString(@"sett_generic_ext_input"),
-                @"selected" : @(externamlInputDevices == GENERIC_EXTERNAL_DEVICE),
-                @"type" : [OASimpleTableViewCell getCellIdentifier],
-            }];
-            [dataArr addObject:@{
-                @"name" : @"sett_wunderlinq_ext_input",
-                @"title" : OALocalizedString(@"sett_wunderlinq_ext_input"),
-                @"selected" : @(externamlInputDevices == WUNDERLINQ_EXTERNAL_DEVICE),
-                @"type" : [OASimpleTableViewCell getCellIdentifier],
-            }];
+            for (InputDeviceProfile *device in [InputDeviceHelper.shared getAvailableDevices])
+            {
+                if (![InputDeviceHelper.shared isCustomDevice:device] && _isEditMode)
+                    continue;
+                
+                [dataArr addObject:@{
+                    @"name" : [device getId],
+                    @"title" : [device toHumanString],
+                    @"selected" : @([externamlInputDevices isEqualToString:[device getId]]),
+                    @"icon" : @"ic_checkmark_default",
+                    @"type" : [OASimpleTableViewCell reuseIdentifier],
+                }];
+            }
             break;
             
         case EOAProfileGeneralSettingsDistanceDuringNavigation:
@@ -567,6 +603,14 @@
 - (BOOL) hideFirstHeader
 {
     return [@[@(EOAProfileGeneralSettingsMapOrientation), @(EOAProfileGeneralSettingsDisplayPosition), @(EOAProfileGeneralSettingsUnitsOfVolume), @(EOAProfileGeneralSettingsUnitsOfTemp)] containsObject:@(_settingsType)];
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (_settingsType == EOAProfileGeneralSettingsExternalInputDevices)
+        return _isEditMode ? OALocalizedString(@"added_devices") : @"";
+    else
+        return nil;
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section
@@ -600,12 +644,21 @@
         if (cell)
         {
             [cell descriptionVisibility:item[@"description"] != nil];
-            [cell leftIconVisibility:item[@"icon"] != nil];
+            
+            if (_settingsType == EOAProfileGeneralSettingsExternalInputDevices)
+                [cell leftIconVisibility:item[@"icon"] != nil && !_isEditMode];
+            else
+                [cell leftIconVisibility:item[@"icon"] != nil];
+            
             cell.titleLabel.text = item[@"title"];
             cell.descriptionLabel.text = item[@"description"];
             if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp)
             {
                 cell.leftIconView.image = [item[@"selected"] boolValue] ? [UIImage templateImageNamed:item[@"icon"]] : nil;
+            }
+            else if (_settingsType == EOAProfileGeneralSettingsExternalInputDevices)
+            {
+                cell.leftIconView.image = [item[@"selected"] boolValue] && !_isEditMode ? [UIImage templateImageNamed:item[@"icon"]] : nil;
             }
             else if (_settingsType != EOAProfileGeneralSettingsMapOrientation)
             {
@@ -616,7 +669,16 @@
             {
                 cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
             }
-            cell.accessoryType = [item[@"selected"] boolValue] && _settingsType != EOAProfileGeneralSettingsAppTheme && _settingsType != EOAProfileGeneralSettingsScreenOrientation && _settingsType != EOAProfileGeneralSettingsDistanceDuringNavigation && _settingsType != EOAProfileGeneralSettingsUnitsOfVolume && _settingsType != EOAProfileGeneralSettingsUnitsOfTemp ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            
+            if (_settingsType == EOAProfileGeneralSettingsExternalInputDevices)
+            {
+                InputDeviceProfile *device = [InputDeviceHelper.shared getAvailableDevices][indexPath.row];
+                cell.accessoryType = [InputDeviceHelper.shared isCustomDevice:device] ? UITableViewCellAccessoryDetailButton : UITableViewCellAccessoryNone;
+            }
+            else
+            {
+                cell.accessoryType = [item[@"selected"] boolValue] && _settingsType != EOAProfileGeneralSettingsAppTheme && _settingsType != EOAProfileGeneralSettingsScreenOrientation && _settingsType != EOAProfileGeneralSettingsDistanceDuringNavigation && _settingsType != EOAProfileGeneralSettingsUnitsOfVolume && _settingsType != EOAProfileGeneralSettingsUnitsOfTemp ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            }
         }
         return cell;
     }
@@ -630,7 +692,7 @@
 
 - (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
-    return 17.;
+    return _settingsType == EOAProfileGeneralSettingsExternalInputDevices && _isEditMode ? 35. : 17.;
 }
 
 - (void)onRowSelected:(NSIndexPath *)indexPath
@@ -672,7 +734,7 @@
             [self selectDistanceDuringNavigationSetting:name];
             break;
         case EOAProfileGeneralSettingsExternalInputDevices:
-            [self selectSettingExternalInput:name];
+            [self selectSettingExternalInputId:name];
             break;
         default:
             break;
@@ -681,6 +743,27 @@
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
     [self.delegate onSettingsChanged];
     [self dismissViewController];
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    [self showCustomDeviceActionSheetByRow:indexPath.row];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        [_devicesToRemove addObject:[InputDeviceHelper.shared getCustomDevices][indexPath.row]];
+        [_data[indexPath.section] removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView reloadData];
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return _isEditMode;
 }
 
 #pragma mark - Selectors
@@ -833,14 +916,177 @@
     [_settings.preciseDistanceNumbers set:[name isEqualToString:@"preciseDistance"] mode:self.appMode];
 }
 
-- (void) selectSettingExternalInput:(NSString *)name
+- (void)selectSettingExternalInputId:(NSString *)deviceId
 {
-    if ([name isEqualToString:@"sett_no_ext_input"])
-        [_settings.settingExternalInputDevice set:NO_EXTERNAL_DEVICE mode:self.appMode];
-    else if ([name isEqualToString:@"sett_generic_ext_input"])
-        [_settings.settingExternalInputDevice set:GENERIC_EXTERNAL_DEVICE mode:self.appMode];
-    else if ([name isEqualToString:@"sett_wunderlinq_ext_input"])
-        [_settings.settingExternalInputDevice set:WUNDERLINQ_EXTERNAL_DEVICE mode:self.appMode];
+    [InputDeviceHelper.shared selectInputDeviceWith:self.appMode deviceId:deviceId];
+}
+
+- (void)removeDeviceByRow:(NSInteger)row
+{
+    InputDeviceProfile *device = [InputDeviceHelper.shared getAvailableDevices][row];
+    if ([device getId])
+    {
+        [InputDeviceHelper.shared removeCustomDeviceWith:[device getId]];
+        [self reloadDataWithAnimated:YES completion:nil];
+        [self updateBottomButtons];
+        [self.delegate onSettingsChanged];
+    }
+}
+
+- (void)duplicateDeviceByRow:(NSInteger)row
+{
+    InputDeviceProfile *device = [InputDeviceHelper.shared getAvailableDevices][row];
+    [InputDeviceHelper.shared createAndSaveDeviceDuplicateOf:device];
+    [self reloadDataWithAnimated:YES completion:nil];
+}
+
+- (void)setIsEditMode:(BOOL)isEditMode
+{
+    _isEditMode = isEditMode;
+    [self.tableView setEditing:isEditMode animated:YES];
+    [self updateUIAnimated:nil];
+}
+
+- (void)showAddNewDevicePromptAlert
+{
+    [self showPromptAlert:YES byRow:NSNotFound];
+}
+
+- (void)showRenameDevicePromptAlertByRow:(NSInteger)row
+{
+    [self showPromptAlert:NO byRow:row];
+}
+
+- (void)showPromptAlert:(BOOL)isNewDevice byRow:(NSInteger)row
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(isNewDevice ? @"add_new_device" : @"shared_string_rename") message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = isNewDevice || row == NSNotFound ? nil : [[InputDeviceHelper.shared getAvailableDevices][row] toHumanString];
+    }];
+
+    UIAlertAction *saveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString *name = [alert.textFields.firstObject.text trim];
+        if (name.length > 0)
+        {
+            if (isNewDevice)
+            {
+                [InputDeviceHelper.shared createAndSaveCustomDeviceWith:name];
+                [self reloadDataWithAnimated:true completion:nil];
+                [self updateBottomButtons];
+            }
+            else if (row != NSNotFound)
+            {
+                CustomInputDeviceProfile *device = [InputDeviceHelper.shared getAvailableDevices][row];
+                [InputDeviceHelper.shared renameCustomDevice:device with:name];
+                [self reloadDataWithAnimated:true completion:nil];
+                [self.delegate onSettingsChanged];
+            }
+        }
+    }];
+
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil];
+    
+    [alert addAction:cancelAction];
+    [alert addAction:saveAction];
+    
+    alert.preferredAction = saveAction;
+
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)removeDeviceAlertByRow:(NSInteger)row
+{
+    NSString *name = [[InputDeviceHelper.shared getAvailableDevices][row] toHumanString];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"remove_device")
+                                                                   message:[NSString stringWithFormat:OALocalizedString(@"remove_device_message"), name]
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+
+    UIAlertAction *removeAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_remove") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self removeDeviceByRow:row];
+    }];
+
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil];
+    
+    [alert addAction:cancelAction];
+    [alert addAction:removeAction];
+
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showCustomDeviceActionSheetByRow:(NSInteger)row
+{
+    NSString *title = [[InputDeviceHelper.shared getAvailableDevices][row] toHumanString];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *removeAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_remove")
+                                                           style:UIAlertActionStyleDestructive
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+        [self removeDeviceAlertByRow:row];
+    }];
+    
+    UIAlertAction *renameAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_rename")
+                                                          style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * _Nonnull action) {
+        [self showRenameDevicePromptAlertByRow:row];
+    }];
+    
+    UIAlertAction *duplicateAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_duplicate")
+                                                          style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * _Nonnull action) {
+        [self duplicateDeviceByRow:row];
+    }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
+    
+    [alert addAction:renameAction];
+    [alert addAction:duplicateAction];
+    [alert addAction:removeAction];
+    [alert addAction:cancelAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)onTopButtonPressed
+{
+    [self showAddNewDevicePromptAlert];
+}
+
+- (void)onBottomButtonPressed
+{
+    if ([InputDeviceHelper.shared isCustomDevicesEmpty])
+        return;
+    
+    [self setIsEditMode:YES];
+}
+
+- (NSString *)getTopButtonTitle
+{
+    return _settingsType == EOAProfileGeneralSettingsExternalInputDevices && !_isEditMode ? OALocalizedString(@"shared_string_add") : @"";
+}
+
+- (NSString *)getBottomButtonTitle
+{
+    return _settingsType == EOAProfileGeneralSettingsExternalInputDevices && !_isEditMode ? OALocalizedString(@"shared_string_edit") : @"";
+}
+
+- (EOABaseButtonColorScheme)getTopButtonColorScheme
+{
+    return EOABaseButtonColorSchemeGraySimple;
+}
+
+- (EOABaseButtonColorScheme)getBottomButtonColorScheme
+{
+    return [InputDeviceHelper.shared isCustomDevicesEmpty] ? EOABaseButtonColorSchemeInactive : EOABaseButtonColorSchemeGraySimple;
+}
+
+- (UILayoutConstraintAxis)getBottomAxisMode
+{
+    return UILayoutConstraintAxisHorizontal;
 }
 
 @end

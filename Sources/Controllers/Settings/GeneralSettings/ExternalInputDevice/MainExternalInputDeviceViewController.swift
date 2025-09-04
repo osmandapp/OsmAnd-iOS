@@ -15,6 +15,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     private static let keyAssignmentKey = "keyAssignmentKey"
     
     private var keyAssignments: [KeyAssignment] = [KeyAssignment(action: MapZoomOutAction(), inputs: ["l", "p"]), KeyAssignment(action: MapZoomOutAction(), inputs: ["l"])] // TODO
+    private var keyAssignmentsToRemove: [KeyAssignment] = []
     private var prevDefaultDevice: Bool = false
     private var isEditMode: Bool = false {
         didSet {
@@ -165,16 +166,16 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
         // TODO
-        keyAssignments.remove(at: indexPath.row)
+        
+        keyAssignmentsToRemove.append(keyAssignments[indexPath.row])
         tableData.removeRow(at: indexPath)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.reloadData()
-        updateBottomButtons()
-        switchOffEditModeIfNoItems()
     }
     
     override func onLeftNavbarButtonPressed() {
         if isEditMode {
+            keyAssignmentsToRemove.removeAll()
             switchEditMode(to: false)
         } else {
             super.onLeftNavbarButtonPressed()
@@ -182,6 +183,12 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     override func onRightNavbarButtonPressed() {
+        for keyAssignment in keyAssignmentsToRemove {
+            keyAssignments.removeAll(where: { $0.getId() == keyAssignment.getId() })
+        }
+        reloadDataWith(animated: true, completion: nil)
+        updateBottomButtons()
+        keyAssignmentsToRemove.removeAll()
         switchEditMode(to: false)
     }
     

@@ -829,11 +829,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     self.y = renderedObject.y;
 }
 
-- (int64_t) getOsmId
+- (uint64_t) getOsmId
 {
-    int64_t _osmId = self.obfId;
-    if (_osmId == -1)
-        return -1;
+    uint64_t _osmId = self.obfId;
+    if (_osmId <= 0)
+        return 0;
     
     if ([ObfConstants isShiftedID:_osmId])
         return [ObfConstants getOsmId:_osmId];

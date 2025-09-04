@@ -28,6 +28,8 @@
 
 @property (nonatomic, assign) OATargetPointType activeTargetType;
 
+@property (nonatomic) id selectedObject;
+
 @property (nonatomic, readonly) BOOL showFull;
 @property (nonatomic, readonly) BOOL showFullScreen;
 @property (nonatomic) BOOL skipOpenRouteSettings;

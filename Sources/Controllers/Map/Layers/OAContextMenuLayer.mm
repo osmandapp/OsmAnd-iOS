@@ -494,15 +494,11 @@
     {
         SelectedMapObject *selectedObject = selectedObjects[0];
         CLLocation *latLon = [result objectLatLon];
-        if (!latLon || objectSelectionThreshold < 0 && selectedObject.provider)
-        {
-            id<OAContextMenuProvider> provider = selectedObject.provider;
-            latLon = [provider getObjectLocation:selectedObject];
-        }
-        if (!latLon)
-            latLon = pointLatLon;
-
-        [self showContextMenu:latLon object:selectedObject];
+        
+        if (objectSelectionThreshold < 0)
+            latLon = nil;
+        
+        [self showContextMenuFor:selectedObject latLon:latLon touchPointLatLon:pointLatLon];
         return YES;
     }
     else if (selectedObjects.count > 1)
@@ -552,7 +548,12 @@
         [mapPanel showContextMenuWithPoints:targetPoints selectedObjects:filteredSelectedObjects touchPointLatLon:touchPointLatLon];
 }
 
-- (void) showContextMenu:(CLLocation *)latLon object:(SelectedMapObject *)selectedObject
+- (void) showContextMenuFor:(SelectedMapObject *)selectedObject latLon:(CLLocation *)latLon
+{
+    [self showContextMenuFor:selectedObject latLon:latLon touchPointLatLon:nil];
+}
+
+- (void) showContextMenuFor:(SelectedMapObject *)selectedObject latLon:(CLLocation *)latLon touchPointLatLon:(CLLocation *)pointLatLon
 {
     id selectedObj = selectedObject.object;
     OAPointDescription *pointDescription;
@@ -561,28 +562,34 @@
     if (provider)
     {
         if (!latLon)
-        {
-            latLon = [provider getObjectLocation:selectedObject];
-        }
+            latLon = [provider getObjectLocation:selectedObj];
+
         pointDescription = [provider getObjectName:selectedObj];
     }
-    [self showContextMenu:latLon pointDescription:pointDescription object:selectedObject provider:provider];
+    
+    if (!latLon)
+        latLon = pointLatLon;
+        
+    [self showContextMenu:latLon pointDescription:pointDescription object:selectedObj selectedObject:selectedObject provider:provider touchPointLatLon:pointLatLon];
 }
 
-- (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(SelectedMapObject *)object provider:(id<OAContextMenuProvider>)provider
+- (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(id)object selectedObject:(SelectedMapObject *)selectedObject provider:(id<OAContextMenuProvider>)provider touchPointLatLon:(CLLocation *)touchPointLatLon
 {
     if (!provider || ![provider showMenuAction:object])
     {
         OATargetPoint *targetPoint;
         if (provider)
-            targetPoint = [provider getTargetPoint:object.object];
+            targetPoint = [provider getTargetPoint:object];
         else
-            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object.object];
+            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object];
             
         if (targetPoint)
         {
+            targetPoint.location = latLon.coordinate;
             [targetPoint initAdderssIfNeeded];
-            [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint]];
+            [targetPoint initDetailsObjectIfNeeded:selectedObject.object];
+            
+            [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint] selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];
         }
     }
 }

@@ -77,6 +77,14 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return self;
 }
 
+- (void) setObject:(id)object
+{
+    if ([object isKindOfClass:OAPOI.class])
+    {
+        [self setup:object];
+    }
+}
+
 - (void) setup:(OAPOI *)poi
 {
     self.poi = poi;

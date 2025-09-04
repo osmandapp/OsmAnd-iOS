@@ -154,7 +154,7 @@ static int DEFAULT_ELO = 900;
 
 - (void) setXYPoints:(OARenderedObject *)renderedObject;
 
-- (int64_t) getOsmId;
+- (uint64_t) getOsmId;
 
 - (BOOL) strictEquals:(id)object;
 

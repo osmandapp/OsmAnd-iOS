@@ -30,7 +30,7 @@
 - (void) hideContextPinMarker;
 
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide;
-- (void) showContextMenu:(CLLocation *)touchPointLatLon object:(SelectedMapObject *)selectedObject;
+- (void) showContextMenuFor:(SelectedMapObject *)selectedObject latLon:(CLLocation *)latLon;
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
 

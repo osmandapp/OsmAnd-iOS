@@ -33,7 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (OAAmenitySearcher *) sharedInstance;
 
-- (nullable BaseDetailsObject *)searchDetailedObject:(OAAmenitySearcherRequest *)request;
+- (nullable BaseDetailsObject *)searchDetailedObject:(id)object;
+- (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request;
 
 
 - (BOOL) breakSearch;
@@ -43,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<OAPOI *> *) findPOIsByFilter:(OASearchPoiTypeFilter *)filter topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
 + (NSArray<OAPOI *> *) findPOIsByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
 + (NSArray<OAPOI *> *) searchPOIsOnThePath:(NSArray<CLLocation *> *)locations radius:(double)radius filter:(OASearchPoiTypeFilter *)filter matcher:(OAResultMatcher<OAPOI *> *)matcher;
-+ (OAPOI *) findPOIByOsmId:(long long)osmId lat:(double)lat lon:(double)lon;
++ (OAPOI *) findPOIByOsmId:(uint64_t)osmId lat:(double)lat lon:(double)lon;
 + (OAPOI *) findPOIByName:(NSString *)name lat:(double)lat lon:(double)lon;
 + (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon;
 + (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter *)additionalFilter lat:(double)lat lon:(double)lon radius:(int)radius includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> *)matcher publish:(BOOL(^)(OAPOI *poi))publish;

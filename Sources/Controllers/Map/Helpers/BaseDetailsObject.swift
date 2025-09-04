@@ -23,7 +23,7 @@ private enum ObjectCompleteness: UInt {
 @objcMembers
 final class BaseDetailsObject: NSObject {
     
-    var osmIds: Set<Int>
+    var osmIds: Set<UInt64>
     var wikidataIds: Set<String>
     var objects: Array<Any>
     var lang: String
@@ -35,7 +35,7 @@ final class BaseDetailsObject: NSObject {
     
     override init() {
         self.lang = "en"
-        self.osmIds = Set<Int>()
+        self.osmIds = Set<UInt64>()
         self.wikidataIds = Set<String>()
         self.objects = Array()
         self.syntheticAmenity = OAPOI()
@@ -97,8 +97,8 @@ final class BaseDetailsObject: NSObject {
             let osmId = getOsmId(object)
             let wikidata = getWikidata(object)
             
-            if osmId != -1 {
-                osmIds.insert(Int(osmId))
+            if osmId > 0 {
+                osmIds.insert(UInt64(osmId))
             }
             if let wikidata, !wikidata.isEmpty {
                 wikidataIds.insert(wikidata)
@@ -120,20 +120,20 @@ final class BaseDetailsObject: NSObject {
         return nil
     }
     
-    private func getOsmId(_ object: Any) -> Int64 {
+    private func getOsmId(_ object: Any) -> UInt64 {
         if let amenity = object as? OAPOI {
             return amenity.getOsmId()
         } else if let mapObject = object as? OAMapObject {
             return ObfConstants.getOsmObjectId(mapObject)
         }
-        return -1
+        return 0
     }
     
     func overlapsWith(_ object: Any) -> Bool {
         let osmId = getOsmId(object)
         let wikidata = getWikidata(object)
         
-        let osmIdEqual = osmId != -1 && osmIds.contains(Int(osmId))
+        let osmIdEqual = osmId > 0 && osmIds.contains(UInt64(osmId))
 
         var wikidataEqual = false
         if let wikidata, !wikidata.isEmpty, wikidataIds.contains(wikidata) {
@@ -230,7 +230,7 @@ final class BaseDetailsObject: NSObject {
         guard let transportStopPoi = transportStop.poi else { return }
         
         let osmId = ObfConstants.getOsmObjectId(transportStopPoi)
-        osmIds.insert(Int(osmId))
+        osmIds.insert(UInt64(osmId))
         
         if let amenity = transportStop.poi {
             if let wikidata = amenity.getWikidata() {
@@ -242,7 +242,7 @@ final class BaseDetailsObject: NSObject {
     
     private func mergeRenderedObject(_ renderedObject: OARenderedObject) {
         let osmId = ObfConstants.getOsmObjectId(renderedObject)
-        osmIds.insert(Int(osmId))
+        osmIds.insert(UInt64(osmId))
         
         if let wikidata = renderedObject.tags[WIKIDATA_TAG] as? String  {
             wikidataIds.insert(wikidata)
@@ -278,7 +278,7 @@ final class BaseDetailsObject: NSObject {
                     let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
                     
                     if syntheticAmenity.obfId >= 0 && objectId > 0 {
-                        syntheticAmenity.obfId = objectId
+                        syntheticAmenity.obfId = UInt64(objectId)
                     }
                 }
                 

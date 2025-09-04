@@ -885,9 +885,9 @@ static NSOperationQueue *_favQueue;
     }
 }
 
-+ (NSMutableArray<OAFavoriteGroup *> *) getFavoriteGroups
++ (NSArray<OAFavoriteGroup *> *)getFavoriteGroups
 {
-    return _favoriteGroups;
+    return [_favoriteGroups copy];
 }
 
 + (void) addFavoriteGroup:(NSString *)name

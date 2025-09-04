@@ -493,6 +493,7 @@ static const float kDistanceMeters = 100.0;
 - (void)updateMapRulerData
 {
     [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+    [_mapHudLayout updateButtons];
 }
 
 - (void)updateMapRulerDataWithDelay
@@ -1809,6 +1810,7 @@ static const float kDistanceMeters = 100.0;
 - (void) widgetsLayoutDidChange:(BOOL)animated
 {
     [self updateControlsLayout:animated];
+    [_mapHudLayout updateButtons];
 }
 
 #pragma mark - UIGestureRecognizerDelegate

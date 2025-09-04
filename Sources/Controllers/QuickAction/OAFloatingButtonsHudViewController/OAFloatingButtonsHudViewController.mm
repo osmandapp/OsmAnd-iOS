@@ -491,6 +491,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         || mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
     
     BOOL hiddenWillChange = quickActionButton.hidden != hideQuickButton;
+    CGFloat initialAlpha = quickActionButton.alpha;
     if (!hideQuickButton)
     {
         if (hiddenWillChange)
@@ -499,6 +500,9 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         quickActionButton.userInteractionEnabled = YES;
         [UIView animateWithDuration:.25 animations:^{
             quickActionButton.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            if (hiddenWillChange || initialAlpha <= 0.01)
+                [_mapHudController.mapHudLayout updateButtons];
         }];
     }
     else
@@ -509,10 +513,10 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
             quickActionButton.userInteractionEnabled = NO;
             if (hiddenWillChange)
                 quickActionButton.hidden = YES;
+            if (hiddenWillChange || initialAlpha > 0.01)
+                [_mapHudController.mapHudLayout updateButtons];
         }];
     }
-    
-    [_mapHudController.mapHudLayout updateButtons];
 }
 
 - (void)setupMap3dModeButtonVisibility
@@ -529,6 +533,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         || mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
     
     BOOL hiddenWillChange = _map3dModeFloatingButton.hidden != hideButton;
+    CGFloat initialAlpha = _map3dModeFloatingButton.alpha;
     if (!hideButton)
     {
         if (hiddenWillChange)
@@ -537,6 +542,9 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         _map3dModeFloatingButton.userInteractionEnabled = YES;
         [UIView animateWithDuration:.25 animations:^{
             _map3dModeFloatingButton.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            if (hiddenWillChange || initialAlpha <= 0.01)
+                [_mapHudController.mapHudLayout updateButtons];
         }];
     }
     else
@@ -547,10 +555,10 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
             _map3dModeFloatingButton.userInteractionEnabled = NO;
             if (hiddenWillChange)
                 _map3dModeFloatingButton.hidden = YES;
+            if (hiddenWillChange || initialAlpha > 0.01)
+                [_mapHudController.mapHudLayout updateButtons];
         }];
     }
-    
-    [_mapHudController.mapHudLayout updateButtons];
 }
 
 - (BOOL)isQuickActionButtonVisible

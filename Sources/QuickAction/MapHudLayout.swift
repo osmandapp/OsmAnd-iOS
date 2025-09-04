@@ -163,6 +163,10 @@ final class MapHudLayout: NSObject {
             }
         }
         
+        if hasBanner && !portrait {
+            result.append(contentsOf: pendingSidePanels)
+        }
+        
         var posById: [String: ButtonPositionSize] = [:]
         for btn in mapButtons where !btn.isHidden {
             guard let state = btn.buttonState else { continue }
@@ -180,7 +184,7 @@ final class MapHudLayout: NSObject {
             applyFix = true
         }
         
-        for btn in mapButtons where !btn.isHidden {
+        for btn in mapButtons where !btn.isHidden && btn.transform.isIdentity {
             guard let state = btn.buttonState, let p = posById[state.id] else { continue }
             if applyFix {
                 switch state.id {
@@ -199,11 +203,7 @@ final class MapHudLayout: NSObject {
             
             result.append((btn, p))
         }
-        
-        if hasBanner {
-            result.append(contentsOf: pendingSidePanels)
-        }
-        
+
         for v in additionalOrder where !v.isHidden && !(v is OADownloadMapWidget) {
             guard let saved = additionalWidgetPositions[v] else { continue }
             let pos = updateWidgetPosition(v, saved)
@@ -224,30 +224,22 @@ final class MapHudLayout: NSObject {
         let cell = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP)
         if view is OADownloadMapWidget {
             let insets = containerView.safeAreaInsets
-            let fullWidth = max(0, containerView.bounds.width - insets.left - insets.right)
+            let hostW = containerView.bounds.width
+            let available = max(0, hostW - insets.left - insets.right)
             let heightPx: CGFloat = view.bounds.height > 0 ? view.bounds.height : 155.0
-            let width8 = Int32(max(1, floor(fullWidth / dpToPx / cell)))
+            let desiredWidth = portrait ? available : min(available, hostW * 0.5)
+            let width8 = Int32(max(1, floor(desiredWidth / dpToPx / cell)))
             let height8 = Int32(max(1, ceil(heightPx / dpToPx / cell)))
             position.setSize(width8dp: width8, height8dp: height8)
             position.marginX = 0
             position.marginY = 0
-            if !portrait || tablet {
-                let parentW = Int(containerView.bounds.width - insets.left - insets.right)
-                let parentH = Int(getAdjustedHeight())
-                let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
-                if m.left >= 0, m.top >= 0, m.right >= 0, m.bottom >= 0 {
-                    let startInset = insets.left
-                    let endInset = insets.right
-                    let leftAligned = position.isLeft
-                    let topAligned = position.isTop
-                    let xRaw = leftAligned ? m.left - startInset : m.right - endInset
-                    let yRaw = topAligned ? m.top - statusBarHeight : m.bottom - insets.bottom
-                    let xPixels = Int(round(max(0, xRaw)))
-                    let yPixels = Int(round(max(0, yRaw)))
-                    position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
-                }
-            }
-            
+            let parentW = Int(available)
+            let parentH = Int(getAdjustedHeight())
+            let xPixelsPortrait: CGFloat = 0
+            let xPixelsLandscape: CGFloat = (available - desiredWidth) / 2.0
+            let xPixels = Int(round(max(0, portrait ? xPixelsPortrait : xPixelsLandscape)))
+            let yPixels = 0
+            position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: true, x: Int32(xPixels), gravTop: true, y: Int32(yPixels))
             return position
         }
         
@@ -450,6 +442,10 @@ final class MapHudLayout: NSObject {
         guard containerView.bounds.width > 0 || containerView.bounds.height > 0 || !containerView.isHidden else { return }
         let positionMap = getButtonPositionSizes()
         for (view, pos) in positionMap where view is OAHudButton || view is OAMapRulerView || view is OADownloadMapWidget {
+            if let btn = view as? OAHudButton {
+                guard btn.transform.isIdentity else { continue }
+            }
+
             updateButtonParams(for: view, with: pos)
         }
     }

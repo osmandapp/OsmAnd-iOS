@@ -88,6 +88,8 @@ class Device: NSObject {
     private(set) var peripheral: Peripheral!
     
     private var RSSIUpdateTimer: Timer?
+    private var characteristicObserver: NSObjectProtocol?
+    private var disconnectedObserver: NSObjectProtocol?
     
     // swiftlint:enable all
     
@@ -116,19 +118,20 @@ class Device: NSObject {
     func configure() {}
     
     func addObservers() {
-        NotificationCenter.default.removeObserver(self)
+        removeObservers()
         
-        NotificationCenter.default.addObserver(forName: Peripheral.PeripheralCharacteristicValueUpdate,
-                                               object: peripheral,
-                                               queue: nil) { [weak self] notification in
+        characteristicObserver = NotificationCenter.default.addObserver(forName: Peripheral.PeripheralCharacteristicValueUpdate,
+                                                                        object: peripheral,
+                                                                        queue: nil) { [weak self] notification in
             self?.peripheralCharacteristicValueUpdate(notification: notification as NSNotification)
         }
         
-        NotificationCenter.default.addObserver(forName: Peripheral.PeripheralDisconnected,
-                                               object: peripheral,
-                                               queue: nil) { [weak self] notification in
+        disconnectedObserver = NotificationCenter.default.addObserver(forName: Peripheral.PeripheralDisconnected,
+                                                                      object: peripheral,
+                                                                      queue: nil) { [weak self] notification in
             guard let self else { return }
-            if let identifier = notification.userInfo?["identifier"] as? UUID, identifier.uuidString == self.id {
+            if let identifier = notification.userInfo?["identifier"] as? UUID,
+               identifier.uuidString == self.id {
                 DeviceHelper.shared.removeDisconnected(device: self)
                 didDisconnectDevice()
             }
@@ -205,6 +208,21 @@ class Device: NSObject {
                 self?.didChangeCharacteristic?()
             }
         }
+    }
+    
+    private func removeObservers() {
+        if let obs = characteristicObserver {
+            NotificationCenter.default.removeObserver(obs)
+            characteristicObserver = nil
+        }
+        if let obs = disconnectedObserver {
+            NotificationCenter.default.removeObserver(obs)
+            disconnectedObserver = nil
+        }
+    }
+    
+    deinit {
+        removeObservers()
     }
 }
 

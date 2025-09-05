@@ -172,8 +172,9 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
     }
     
     private func determineInitialActivity() -> RouteActivity? {
-        guard let routeActivityHelper, let appMode else { return nil }
+        guard let routeActivityHelper else { return nil }
         if isTripRecordingSettings {
+            guard let appMode else { return nil }
             isCheckmarkAllowed = true
             return routeActivityHelper.findRouteActivity(id: settings?.currentTrackRouteActivity.get(appMode))
         }

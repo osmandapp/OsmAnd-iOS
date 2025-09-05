@@ -31,6 +31,7 @@
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
+#include <OsmAndCore/Map/WeatherCommonTypes.h>
 #include <OsmAndCore/FunctorQueryController.h>
 #include <OsmAndCore/WorldRegions.h>
 
@@ -52,6 +53,7 @@
     OsmAndAppInstance _app;
     std::shared_ptr<OsmAnd::WeatherTileResourcesManager> _weatherResourcesManager;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
+    OAAutoObserverProxy* _weatherSourceChangeObserver;
 }
 
 @synthesize weatherSizeCalculatedObserver = _weatherSizeCalculatedObserver;
@@ -86,6 +88,10 @@
 
         _weatherSizeCalculatedObserver = [[OAObservable alloc] init];
         _weatherForecastDownloadingObserver = [[OAObservable alloc] init];
+        
+        _weatherSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(onWeatherSourceChanged:withKey:andValue:)
+                                                 andObserve:_app.data.weatherSourceChangeObservable];
     }
     return self;
 }
@@ -837,6 +843,27 @@
 - (BOOL)isProcessingTiles
 {
     return _weatherResourcesManager != nil && _weatherResourcesManager->isProcessingTiles();
+}
+
+- (void)updateWeatherSource
+{
+    if (_weatherResourcesManager == nil)
+        return;
+    
+    NSString *weatherSourceString = _app.data.weatherSource;
+    OsmAnd::WeatherSource weatherSource = OsmAnd::WeatherSource::GFS;
+
+    if ([weatherSourceString isEqualToString:@"ecmwf"])
+    {
+        weatherSource = OsmAnd::WeatherSource::ECMWF;
+    }
+    
+    _weatherResourcesManager->setWeatherSource(weatherSource);
+}
+
+- (void)onWeatherSourceChanged:(id)observer withKey:(id)key andValue:(id)value
+{
+    [self updateWeatherSource];
 }
 
 @end

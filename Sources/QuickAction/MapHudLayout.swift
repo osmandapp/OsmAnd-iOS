@@ -116,7 +116,7 @@ final class MapHudLayout: NSObject {
     }
     
     private func getViewName(_ view: UIView) -> String {
-        (view as? OAHudButton)?.buttonState?.id ?? "\(type(of: view))-\(Unmanaged.passUnretained(view).toOpaque())"
+        (view as? OAHudButton)?.buttonState?.id ?? (view.accessibilityIdentifier ?? "\(Unmanaged.passUnretained(view).toOpaque())")
     }
     
     private func isBottomPanelVisible() -> Bool {

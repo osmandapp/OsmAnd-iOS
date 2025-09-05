@@ -111,9 +111,9 @@ static const float kDistanceMeters = 100.0;
     BOOL _lastIgnoreAllPanels;
     BOOL _lastIgnoreBottomSidePanels;
     
-    __weak MapHudLayout *_lastRulerLayoutRef;
-    __weak MapHudLayout *_lastTopLayoutRef;
-    __weak MapHudLayout *_lastBottomLayoutRef;
+    MapHudLayout *_lastRulerLayoutRef;
+    MapHudLayout *_lastTopLayoutRef;
+    MapHudLayout *_lastBottomLayoutRef;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -229,6 +229,7 @@ static const float kDistanceMeters = 100.0;
 
     // IOS-218
     self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(0, 0, kMapRulerMinWidth, 25)];
+    self.rulerLabel.accessibilityIdentifier = @"map_ruler_view";
     self.rulerLabel.translatesAutoresizingMaskIntoConstraints = YES;
     [_mapHudLayout addWidget:self.rulerLabel];
     self.rulerLabel.hidden = YES;
@@ -919,8 +920,8 @@ static const float kDistanceMeters = 100.0;
 
 - (void) showCompass
 {
+    _compassButton.hidden = NO;
     [UIView animateWithDuration:.25 animations:^{
-        _compassButton.hidden = NO;
         _compassButton.alpha = 1.0;
     } completion:^(BOOL finished) {
         _compassButton.userInteractionEnabled = _compassButton.alpha > 0.0;
@@ -956,11 +957,11 @@ static const float kDistanceMeters = 100.0;
 
 - (void) hideCompassImpl
 {
+    _compassButton.userInteractionEnabled = NO;
     [UIView animateWithDuration:.25 animations:^{
-        _compassButton.hidden = YES;
         _compassButton.alpha = 0.0;
     } completion:^(BOOL finished) {
-        _compassButton.userInteractionEnabled = _compassButton.alpha > 0.0;
+        _compassButton.hidden = YES;
     }];
 }
 

@@ -975,10 +975,10 @@ static const NSInteger _buttonsCount = 4;
             } completion:^(BOOL finished) {
                 
                 [self removeFromSuperview];
-                
+
                 if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
                     [self.menuViewDelegate targetResetRulerPosition];
-            
+
                 [self clearCustomControllerIfNeeded];
                 [self restoreTargetType];
 

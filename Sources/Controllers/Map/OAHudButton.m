@@ -9,6 +9,7 @@
 #import "OAHudButton.h"
 #import "OAAppSettings.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAHudButton
 {
@@ -42,7 +43,7 @@
     return self;
 }
 
-- (void) commonInit
+- (void)commonInit
 {
     self.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
     self.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
@@ -67,7 +68,7 @@
     [self addTarget:self action:@selector(onButtonReleased:) forControlEvents:UIControlEventTouchCancel];
 }
 
-- (void) updateColorsForPressedState:(BOOL)isPressed
+- (void)updateColorsForPressedState:(BOOL)isPressed
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
 
@@ -82,13 +83,42 @@
     self.layer.borderWidth = isNight ? self.borderWidthNight : self.borderWidthDay;
 }
 
-- (IBAction) onButtonTouched:(id)sender
+- (void)setButtonState:(MapButtonState *)buttonState
+{
+    _buttonState = buttonState;
+    [self updatePositions];
+}
+
+- (void)updatePositions
+{
+    [_buttonState updatePositions];
+}
+
+- (void)setUseCustomPosition:(BOOL)useCustomPosition
+{
+    _useCustomPosition = useCustomPosition;
+    if (_buttonState && _useCustomPosition)
+        [self updatePositions];
+}
+
+- (void)savePosition
+{
+    if (_buttonState && _useCustomPosition)
+        [self.buttonState savePosition];
+}
+
+- (nullable OASButtonPositionSize *)getDefaultPositionSize
+{
+    return _buttonState ? [_buttonState getDefaultPositionSize] : nil;
+}
+
+- (IBAction)onButtonTouched:(id)sender
 {
     if ([sender isKindOfClass:UIButton.class])
         [self updateColorsForPressedState:YES];
 }
 
-- (IBAction) onButtonReleased:(id)sender
+- (IBAction)onButtonReleased:(id)sender
 {
     if ([sender isKindOfClass:UIButton.class])
         [self updateColorsForPressedState:NO];

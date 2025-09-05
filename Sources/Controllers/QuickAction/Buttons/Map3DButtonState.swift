@@ -11,7 +11,7 @@ import UIKit
 @objcMembers
 final class Map3DButtonState: MapButtonState {
 
-    static let map3DHudId = "map_3d"
+    static let map3DHudId = "map.view.map_3d"
 
     let visibilityPref: OACommonInteger
     let fabMarginPref: FabMarginPreference
@@ -33,6 +33,10 @@ final class Map3DButtonState: MapButtonState {
 
     override func getIcon() -> UIImage? {
         UIImage.templateImageNamed(getVisibility().iconName)
+    }
+    
+    override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
+        setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_RIGHT, posV: ButtonPositionSize.companion.POS_BOTTOM, xMove: true, yMove: true)
     }
 
     func getVisibility() -> Map3DModeVisibility {

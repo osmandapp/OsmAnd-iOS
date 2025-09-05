@@ -26,9 +26,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAUserInteractionPassThroughView.h"
 
-static CGFloat const kHudButtonsOffset = 16.0;
 static CGFloat const kHudQuickActionButtonHeight = 50.0;
-
 static NSInteger const kQuickActionSlashTag = -1;
 static NSInteger const kQuickActionSlashBackgroundTag = -2;
 
@@ -113,17 +111,18 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     
     ((OAUserInteractionPassThroughView *)self.view).delegate = self;
 
-    [self createQuickActionButtons];
-
+    _map3dModeFloatingButton.useCustomPosition = YES;
+    _map3dModeFloatingButton.buttonState = _map3DButtonState;
+    [_mapHudController.mapHudLayout addMapButton:_map3dModeFloatingButton];
     _map3dModeFloatingButton.tag = [OAUtilities getMap3DModeButtonTag];
     _map3dModeFloatingButton.alpha = 0;
-    [_map3DButtonState.fabMarginPref restorePosition:_map3dModeFloatingButton];
-
     [self onMap3dModeUpdated];
     
     _map3dModeButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onMap3dModeButtonDragged:)];
     [_map3dModeButtonDragRecognizer setMinimumPressDuration:0.5];
     [_map3dModeFloatingButton addGestureRecognizer:_map3dModeButtonDragRecognizer];
+    
+    [self createQuickActionButtons];
     
     _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)
@@ -195,43 +194,56 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     {
         OAHudButton *quickActionButton = (OAHudButton *) recognizer.view;
         if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
-        {
-            [self onButtonDragged:recognizer
-                           button:quickActionButton
-              fabMarginPreference:((QuickActionButtonState *) quickActionButton.buttonState).fabMarginPref];
-        }
+            [self onButtonDragged:recognizer button:quickActionButton];
     }
 }
 
 - (void)onMap3dModeButtonDragged:(UILongPressGestureRecognizer *)recognizer
 {
-    [self onButtonDragged:recognizer
-                   button:_map3dModeFloatingButton
-      fabMarginPreference:_map3DButtonState.fabMarginPref];
+    [self onButtonDragged:recognizer button:_map3dModeFloatingButton];
 }
 
-- (void)onButtonDragged:(UILongPressGestureRecognizer *)recognizer
-                 button:(OAHudButton *)button
-    fabMarginPreference:(FabMarginPreference *)fabMarginPreference
+- (void)onButtonDragged:(UILongPressGestureRecognizer *)recognizer button:(OAHudButton *)button
 {
-    if (recognizer.state == UIGestureRecognizerStateBegan)
+    UIView *hostView = button.superview ?: self.view;
+    if (!hostView)
+        return;
+    
+    switch (recognizer.state)
     {
-        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-        button.transform = CGAffineTransformMakeScale(1.5, 1.5);
-    }
-    else
-    {
-        [fabMarginPreference moveToPoint:[recognizer locationInView:self.view]
-                                  button:button];
-        if (recognizer.state == UIGestureRecognizerStateEnded)
+        case UIGestureRecognizerStateBegan:
         {
-            button.transform = CGAffineTransformMakeScale(1.0, 1.0);
-            CGPoint pos = button.frame.origin;
-            if ([OAUtilities isLandscape])
-                [fabMarginPreference setLandscapeFabMarginWithX:pos.x y:pos.y];
-            else
-                [fabMarginPreference setPortraitFabMarginWithX:pos.x y:pos.y];
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+            [hostView bringSubviewToFront:button];
+            button.transform = CGAffineTransformMakeScale(1.5, 1.5);
+            break;
         }
+        case UIGestureRecognizerStateChanged:
+        {
+            UIEdgeInsets insets = hostView.safeAreaInsets;
+            CGFloat halfW = button.bounds.size.width * 0.5;
+            CGFloat halfH = button.bounds.size.height * 0.5;
+            CGFloat topBaseline = [OAUtilities getStatusBarHeight];
+            CGFloat minX = insets.left + halfW;
+            CGFloat maxX = hostView.bounds.size.width  - insets.right  - halfW;
+            CGFloat minY = topBaseline + halfH;
+            CGFloat maxY = hostView.bounds.size.height - insets.bottom - halfH;
+            CGPoint p = [recognizer locationInView:hostView];
+            p.x = MIN(MAX(p.x, minX), maxX);
+            p.y = MIN(MAX(p.y, minY), maxY);
+            button.center = p;
+            break;
+        }
+        case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
+        {
+            button.transform = CGAffineTransformIdentity;
+            [_mapHudController.mapHudLayout updateButton:button save:YES];
+            break;
+        }
+        default:
+            break;
     }
 }
 
@@ -282,7 +294,9 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
                                 [subview removeFromSuperview];
                         }
                         quickActionButton.buttonState = quickActionButtonState;
+                        [quickActionButton.buttonState updatePositions];
                         [self updateQuickActionButtonColors:quickActionButton];
+                        [_mapHudController.mapHudLayout updateButtons];
                         break;
                     }
                 }
@@ -312,6 +326,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
                 OAHudButton *button = [self createQuickActionFloatingButton:quickActionButtonState];
                 [self updateQuickActionButtonColors:button];
                 [self setupQuickActionBtnVisibility:button];
+                [_mapHudController.mapHudLayout updateButtons];
             }
             else
             {
@@ -321,7 +336,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
                     {
                         if ([((QuickActionButtonState *) button.buttonState).id isEqualToString:quickActionButtonState.id])
                         {
-                            [button removeFromSuperview];
+                            [_mapHudController.mapHudLayout removeMapButton:button];
                             [_quickActionFloatingButtons removeObject:button];
                             break;
                         }
@@ -422,10 +437,10 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 
 - (OAHudButton *)createQuickActionFloatingButton:(QuickActionButtonState *)quickActionButtonState
 {
-    OAHudButton *quickActionButton = [[OAHudButton alloc] initWithFrame:{346, 648, 50, 50}];
+    OAHudButton *quickActionButton = [[OAHudButton alloc] initWithFrame:{0, 0, kHudQuickActionButtonHeight, kHudQuickActionButtonHeight}];
     [_quickActionFloatingButtons addObject:quickActionButton];
-    [self.view addSubview:quickActionButton];
-
+    [_mapHudController.mapHudLayout addMapButton:quickActionButton];
+    quickActionButton.useCustomPosition = YES;
     quickActionButton.buttonState = quickActionButtonState;
     quickActionButton.tag = [OAUtilities getQuickActionButtonTag];
     quickActionButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
@@ -438,7 +453,6 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     UILongPressGestureRecognizer *quickActionsButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onQuickActionButtonDragged:)];
     [quickActionsButtonDragRecognizer setMinimumPressDuration:0.5];
     [quickActionButton addGestureRecognizer:quickActionsButtonDragRecognizer];
-    [quickActionButtonState.fabMarginPref restorePosition:quickActionButton];
     return quickActionButton;
 }
 
@@ -475,18 +489,39 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         || [mapPanel gpxModeActive]
         || [mapPanel isRouteInfoVisible]
         || mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
-
-    [UIView animateWithDuration:.25 animations:^{
-        quickActionButton.alpha = hideQuickButton ? 0 : 1;
-    } completion:^(BOOL finished) {
-        quickActionButton.userInteractionEnabled = !hideQuickButton;
-    }];
+    
+    BOOL hiddenWillChange = quickActionButton.hidden != hideQuickButton;
+    CGFloat initialAlpha = quickActionButton.alpha;
+    if (!hideQuickButton)
+    {
+        if (hiddenWillChange)
+            quickActionButton.hidden = NO;
+        
+        quickActionButton.userInteractionEnabled = YES;
+        [UIView animateWithDuration:.25 animations:^{
+            quickActionButton.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            if (hiddenWillChange || initialAlpha <= 0.01)
+                [_mapHudController.mapHudLayout updateButtons];
+        }];
+    }
+    else
+    {
+        [UIView animateWithDuration:.25 animations:^{
+            quickActionButton.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            quickActionButton.userInteractionEnabled = NO;
+            if (hiddenWillChange)
+                quickActionButton.hidden = YES;
+            if (hiddenWillChange || initialAlpha > 0.01)
+                [_mapHudController.mapHudLayout updateButtons];
+        }];
+    }
 }
 
 - (void)setupMap3dModeButtonVisibility
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-
     Map3DModeVisibility map3DMode = [_map3DButtonState getVisibility];
     BOOL hideButton = map3DMode == Map3DModeVisibilityHidden
         || (map3DMode == Map3DModeVisibilityVisibleIn3DMode
@@ -497,11 +532,33 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         || [mapPanel isRouteInfoVisible]
         || mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
     
-    [UIView animateWithDuration:.25 animations:^{
-        _map3dModeFloatingButton.alpha = hideButton ? 0 : 1;
-    } completion:^(BOOL finished) {
-        _map3dModeFloatingButton.userInteractionEnabled = !hideButton;
-    }];
+    BOOL hiddenWillChange = _map3dModeFloatingButton.hidden != hideButton;
+    CGFloat initialAlpha = _map3dModeFloatingButton.alpha;
+    if (!hideButton)
+    {
+        if (hiddenWillChange)
+            _map3dModeFloatingButton.hidden = NO;
+        
+        _map3dModeFloatingButton.userInteractionEnabled = YES;
+        [UIView animateWithDuration:.25 animations:^{
+            _map3dModeFloatingButton.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            if (hiddenWillChange || initialAlpha <= 0.01)
+                [_mapHudController.mapHudLayout updateButtons];
+        }];
+    }
+    else
+    {
+        [UIView animateWithDuration:.25 animations:^{
+            _map3dModeFloatingButton.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            _map3dModeFloatingButton.userInteractionEnabled = NO;
+            if (hiddenWillChange)
+                _map3dModeFloatingButton.hidden = YES;
+            if (hiddenWillChange || initialAlpha > 0.01)
+                [_mapHudController.mapHudLayout updateButtons];
+        }];
+    }
 }
 
 - (BOOL)isQuickActionButtonVisible
@@ -519,12 +576,10 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
     {
         if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
-        {
-            QuickActionButtonState *quickActionButtonState = ((QuickActionButtonState *) quickActionButton.buttonState);
-            [quickActionButtonState.fabMarginPref restorePosition:quickActionButton];
-        }
+            [quickActionButton.buttonState updatePositions];
     }
-    [_map3DButtonState.fabMarginPref restorePosition:_map3dModeFloatingButton];
+
+    [_mapHudController.mapHudLayout onContainerSizeChanged];
     [self restorePinPosition];
 }
 

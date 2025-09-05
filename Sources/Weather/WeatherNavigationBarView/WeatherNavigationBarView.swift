@@ -2,8 +2,9 @@
 final class WeatherNavigationBarView: UIView {
     @IBOutlet private weak var leftButton: UIButton! {
         didSet {
-            leftButton.setImage(UIImage.icNavbarChevron, for: .normal)
+            leftButton.setImage(UIImage.icNavbarChevron.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
             leftButton.tintColor = .iconColorActive
+            leftButton.setTitle(localizedString("shared_string_back"), for: .normal)
         }
     }
     @IBOutlet private weak var titleLabel: UILabel!
@@ -11,8 +12,6 @@ final class WeatherNavigationBarView: UIView {
         didSet {
             rightButton.setImage(UIImage.templateImageNamed("ic_navbar_settings"), for: .normal)
             rightButton.tintColor = .iconColorActive
-            
-            //temporarily hiding Data Source button
             rightButton.isHidden = true
             rightButton.isEnabled = false
         }

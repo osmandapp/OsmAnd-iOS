@@ -43,16 +43,26 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
     return UIColorFromARGB(rgbValue);
 }
 
-static inline BOOL NSStringIsEmpty(NSString * _Nullable string) {
+static inline BOOL NSStringIsEmpty(NSString * _Nullable string)
+{
     return !string || string.length == 0;
 }
 
-static inline BOOL NSArrayIsEmpty(NSArray * _Nullable array) {
+static inline BOOL NSArrayIsEmpty(NSArray * _Nullable array)
+{
     return !array || array.count == 0;
 }
 
-static inline BOOL NSDictionaryIsEmpty(NSDictionary * _Nullable dictionary) {
+static inline BOOL NSDictionaryIsEmpty(NSDictionary * _Nullable dictionary)
+{
     return !dictionary || dictionary.count == 0;
+}
+
+static inline BOOL NSStringsEqual(NSString * _Nullable a, NSString * _Nullable b)
+{
+    if (a == nil || b == nil)
+        return a == b;
+    return [a isEqualToString:b];
 }
 
 static inline void executeOnMainThread(dispatch_block_t block)

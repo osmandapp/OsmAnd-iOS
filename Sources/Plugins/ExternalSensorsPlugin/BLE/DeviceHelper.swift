@@ -102,7 +102,9 @@ final class DeviceHelper: NSObject {
                 device.deviceType = savedDevice.deviceType
                 device.setPeripheral(peripheral: peripheral)
                 device.configure()
-                device.addObservers()
+                executeOnMainThread({
+                    device.addObservers()
+                })
                 return device
             } else {
                 return nil

@@ -585,7 +585,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             [((OASearchAmenityTypesAPI *) capi) clearCustomFilters];
 }
 
-- (void) addCustomSearchPoiFilter:(OACustomSearchPoiFilter *)poiFilter  priority:(int)priority
+- (void) addCustomSearchPoiFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority
 {
     for (OASearchCoreAPI *capi in _apis)
         if ([capi isKindOfClass:[OASearchAmenityTypesAPI class]])

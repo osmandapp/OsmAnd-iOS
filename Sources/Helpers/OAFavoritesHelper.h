@@ -79,7 +79,7 @@
             visible:(BOOL)visible
     saveImmediately:(BOOL)saveImmediately;
 
-+ (NSMutableArray<OAFavoriteGroup *> *) getFavoriteGroups;
++ (NSArray<OAFavoriteGroup *> *)getFavoriteGroups;
 
 + (void) addFavoriteGroup:(NSString *)name
                     color:(UIColor *)color

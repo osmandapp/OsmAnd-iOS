@@ -971,9 +971,16 @@
 
 - (void) addCustomFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority
 {
+    NSString *filterId = [poiFilter getFilterId];
+    if (!filterId)
+    {
+        NSLog(@"[Error] -> OASearchAmenityTypesAPI -> poiFilter %@ returned nil filterId", poiFilter);
+        return;
+    }
+    
     [_customPoiFilters addObject:poiFilter];
     if (priority > 0)
-        [_activePoiFilters setObject:[NSNumber numberWithInt:priority] forKey:poiFilter.getFilterId];
+        [_activePoiFilters setObject:@(priority) forKey:filterId];
 }
 
 - (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrder

@@ -94,7 +94,7 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
                     {
                         OASearchResult *result = [strongSelf createSearchResultWithPhrase:phrase item:item localeName:item.title];
                         
-                        [self addResultIfNotExists:result
+                        [strongSelf addResultIfNotExists:result
                                    existingResults:[resultMatcher getRequestResults]
                                      resultMatcher:resultMatcher];
                     }

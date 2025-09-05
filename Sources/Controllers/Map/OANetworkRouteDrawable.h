@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithRouteKey:(OARouteKey *)routeKey;
 
-- (UIImage *) getIcon;
+- (nullable UIImage *) getIcon;
 
 + (UIImage *) getIconByAmenityShieldTags:(OAPOI *)amenity;
 

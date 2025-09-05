@@ -42,6 +42,7 @@ static NSString * const liveUpdatesPurchasedKey = @"liveUpdatesPurchasedKey";
 static NSString * const settingOsmAndLiveEnabledKey = @"settingOsmAndLiveEnabledKey";
 static NSString * const liveUpdatesRetriesKey = @"liveUpdatesRetriesKey";
 static NSString * const settingExternalInputDeviceKey = @"settingExternalInputDeviceKey";
+static NSString * const settingCustomExternalInputDeviceKey = @"settingCustomExternalInputDeviceKey";
 
 static NSString * const mapSettingShowFavoritesKey = @"mapSettingShowFavoritesKey";
 static NSString * const mapSettingShowPoiLabelKey = @"mapSettingShowPoiLabelKey";
@@ -5418,14 +5419,16 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _metricSystemChangedManually = [OACommonBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
         
         _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
-        _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:GENERIC_EXTERNAL_DEVICE];
+        _settingExternalInputDevice = [OACommonString withKey:settingExternalInputDeviceKey defValue:KeyboardDeviceProfile.deviceId];
+        _settingCustomExternalInputDevice = [OACommonString withKey:settingCustomExternalInputDeviceKey defValue:@""];
         
         [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
         [_profilePreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
         [_profilePreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
-        [_profilePreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
+        [_profilePreferences setObject:_settingExternalInputDevice forKey:@"selected_external_input_device"];
+        [_profilePreferences setObject:_settingCustomExternalInputDevice forKey:@"custom_external_input_devices"];
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _volumeUnits = [OACommonVolumeConstant withKey:volumeSystemKey defValue:LITRES];
         _temperatureUnits = [OACommonTemperatureConstant withKey:temperatureSystemKey defValue:SYSTEM_DEFAULT];
@@ -6430,6 +6433,18 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:lastSearchedPointLatKey];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:lastSearchedPointLonKey];
     }
+}
+
+- (OAApplicationMode *)getSwitchedAppMode:(OAApplicationMode *)selectedMode next:(BOOL)next
+{
+    NSArray<OAApplicationMode *> *enabledModes = [OAApplicationMode values];
+    int indexOfCurrent = [enabledModes indexOfObject:selectedMode];
+    int indexOfNext;
+    if (next)
+        indexOfNext = indexOfCurrent < enabledModes.count - 1 ? indexOfCurrent + 1 : 0;
+    else
+        indexOfNext = indexOfCurrent > 0 ? indexOfCurrent - 1 : enabledModes.count - 1;
+    return enabledModes[indexOfNext];
 }
 
 - (void)setApplicationModePref:(OAApplicationMode *)applicationMode

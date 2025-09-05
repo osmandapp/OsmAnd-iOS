@@ -5,7 +5,7 @@
 //  Created by Anna Bibyk on 25.06.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
-#import "OABaseNavbarViewController.h"
+#import "OABaseButtonsViewController.h"
 
 @class OAApplicationMode;
 
@@ -17,7 +17,7 @@
 
 @end
 
-@interface OABaseSettingsViewController : OABaseNavbarViewController<OASettingsDataDelegate>
+@interface OABaseSettingsViewController : OABaseButtonsViewController<OASettingsDataDelegate>
 
 @property (weak, nonatomic) id<OASettingsDataDelegate> delegate;
 @property (nonatomic) OAApplicationMode *appMode;

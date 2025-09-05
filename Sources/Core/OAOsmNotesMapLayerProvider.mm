@@ -80,6 +80,11 @@ bool OAOsmNotesMapLayerProvider::queryOsmNotes(const OsmAnd::AreaI &bbox31, cons
     return data.size() > 0 ? parseResponse(data, bbox31, zoom) : false;
 }
 
+QList<std::shared_ptr<const OAOnlineOsmNote>> OAOsmNotesMapLayerProvider::getNotesCache() const
+{
+    return _notesCache;
+}
+
 bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer,
                                                const OsmAnd::AreaI &bbox31,
                                                const OsmAnd::ZoomLevel &zoom)

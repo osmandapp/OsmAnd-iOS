@@ -106,5 +106,7 @@ public:
     virtual void obtainDataAsync(const IMapDataProvider::Request& request,
                                  const IMapDataProvider::ObtainDataAsyncCallback callback,
                                  const bool collectMetric = false) override;
+    
+    QList<std::shared_ptr<const OAOnlineOsmNote>> getNotesCache() const;
 };
 

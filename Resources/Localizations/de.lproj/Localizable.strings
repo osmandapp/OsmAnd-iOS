@@ -3669,7 +3669,7 @@
 "auto_25_chars_route_tslr" = "Leicht rechts abbiegen";
 "battery_level_settings_description" = "Den Batteriestand des Sensors als Hauptwert anzeigen";
 "litres" = "Liter";
-"imperial_gallons" = "Imperiale Gallonen";
+"imperial_gallons" = "Britische Gallonen";
 "us_gallons" = "US-Gallonen";
 "liter" = "l";
 "us_gallons_unit" = "gal";
@@ -3849,4 +3849,4 @@
 "obd_fuel_type_hybrid_ethanol" = "Hybrid-Ethanol";
 "obd_fuel_type_hybrid_diesel" = "Hybrid-Diesel";
 "fastspring_subscription_desc" = "Du kannst dein Abonnement über das FastSpring-Kontoverwaltungsportal verwalten oder kündigen.";
-"fastspring_one_time_payment_desc" = "Du kannst deine Einkäufe über das FastSpring-Kontoverwaltungsportal verwalten.";
+"fastspring_one_time_payment_desc" = "Sie können Ihre Einkäufe über das FastSpring-Kontoverwaltungsportal verwalten.";

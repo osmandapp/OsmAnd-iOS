@@ -544,7 +544,7 @@
 "shared_string_turn" = "轉彎";
 "stop_routing_confirm" = "停止導航？";
 "cancel_route" = "排除路徑？";
-"route_is_too_long_v2" = "對於較長的距離：如果在10分鐘內未找到路徑，請新增中轉目的地。";
+"route_is_too_long_v2" = "對於較長的距離：如果在10分鐘內未找到路徑，請加入中轉目的地。";
 "navigation_over_track" = "沿著軌跡開始導航嗎？";
 "use_displayed_track_for_navigation" = "使用顯示的軌跡用於導航嗎？";
 "select_route_start_on_map" = "選擇路線的起始點";
@@ -708,11 +708,11 @@
 "replace_destination_point" = "替換目的地";
 "shared_string_current" = "目前";
 "make_as_start_point" = "設定起點";
-"keep_and_add_destination_point" = "新增為後續目的地";
+"keep_and_add_destination_point" = "增設為後續目的地";
 "subsequent_dest_description" = "將目的地向上移動並替換為新的目的地";
-"add_as_first_destination_point" = "新增為第一個中途停靠點";
+"add_as_first_destination_point" = "加入為第一個中途停靠點";
 "first_intermediate_dest_description" = "插入到中轉站前";
-"add_as_last_destination_point" = "新增為最後一個中途停靠點";
+"add_as_last_destination_point" = "加入為最後一個中途停靠點";
 "last_intermediate_dest_description" = "插入到中轉站後";
 "shared_string_options" = "選項";
 "intermediate_items_sort_by_distance" = "依距離排序中途停靠點";
@@ -933,7 +933,7 @@
 "configure_map" = "設定地圖";
 "simulate_navigation" = "模擬導航";
 "select_map_marker" = "選擇地圖標記";
-"add_intermediate" = "新增中繼目的地";
+"add_intermediate" = "加入中繼目的地";
 "add_home" = "新增住家";
 "add_work" = "新增工作地點";
 "shared_string_clear_all" = "清除全部";
@@ -951,7 +951,7 @@
 "previous_route" = "上一個路線";
 "gpx_ascent" = "上坡";
 "mapillary_menu_title_pano" = "只顯示 360° 圖片";
-"quick_action_map_source_action" = "新增地圖來源";
+"quick_action_map_source_action" = "加入地圖來源";
 "time_of_day" = "一天中的時間";
 "quick_action_replace_destination" = "更換目的地";
 "quick_action_add_poi" = "增加 POI";
@@ -1487,7 +1487,7 @@
 "extra_maps_menu_group" = "額外地圖";
 "show_compass_ruler" = "顯示指南針與尺規";
 "select_another_track" = "選取其他軌跡";
-"new_plugin_added" = "已新增新的外掛程式";
+"new_plugin_added" = "已加入新的外掛程式";
 "sort_last_modified" = "最後修改時間";
 "custom_osmand_plugin" = "自訂 OsmAnd 外掛程式";
 "favorite_friends_category" = "朋友";
@@ -1776,7 +1776,7 @@
 "horseback_riding" = "騎馬";
 "customize_route_line" = "自訂路徑";
 "routing_attr_prefer_horse_routes_description" = "偏好騎馬路線";
-"add_description" = "新增描述";
+"add_description" = "添加描述";
 "rendering_attr_showFunicularRoutes_name" = "纜車路線";
 "osmand_cloud_login_descr" = "請輸入您註冊的電子郵件地址，拋棄式密碼將會傳送至該地址。";
 "rendering_attr_showFitnessTrails_name" = "健身路徑";
@@ -1960,7 +1960,7 @@
 "public_transport_warning_descr_blog" = "在我們的部落格上閱讀更多關於 OsmAnd 路徑規劃的資訊。";
 "backup_into_file" = "備份為檔案";
 "show_map_symbols" = "顯示地圖符號";
-"select_folder_descr" = "選取資料夾或新增";
+"select_folder_descr" = "選取或新增資料夾";
 "quick_action_hillshade_descr" = "在地圖上顯示或隱藏地形陰影的按鈕。";
 "shared_string_weather" = "天氣";
 "shared_string_progress" = "進度";
@@ -2196,7 +2196,7 @@
 "local_openstreetmap_uploading" = "正在上傳 …";
 "add_point_before" = "新增標點之前";
 "move_marker_bottom_sheet_title" = "移動地圖到要變更標記的位置";
-"route_add_start_point" = "新增出發地";
+"route_add_start_point" = "增設出發地";
 "quick_action_map_style_action" = "新增地圖樣式";
 "mgrs_format_descr" = "OsmAnd 使用 MGRS，其類似於 UTM NATO 格式。";
 "quick_action_add_marker_descr" = "在畫面中央新增地圖標記的按鈕。";
@@ -2683,7 +2683,7 @@
 "bearing_secondary_desc" = "您可以變更使用的資料格式：%@ – %@ – %@。";
 "shared_string_light" = "明亮";
 "shared_string_page_number" = "頁面 %d";
-"add_row" = "新增列";
+"add_row" = "加入列";
 "map_widget_time_to_destination" = "到目的地的時間";
 "map_marker_1st" = "第一個地圖標記";
 "map_marker_2nd" = "第二個地圖標記";
@@ -2795,7 +2795,7 @@
 "elevation_profile_widget_desc" = "顯示目前路線的海拔和坡度資訊。";
 "next_turn_widget_desc" = "小工具顯示有關您即將進行的下一個轉彎的圖片以及距離資訊。";
 "parking_widget_desc" = "顯示從螢幕中心到您的停車位的距離。";
-"mapillary_widget_desc" = "提供快速存取 Mapillary 應用程式以新增街道級別的圖像。";
+"mapillary_widget_desc" = "提供快速存取 Mapillary 應用程式以加入街道級別的圖像。";
 "current_speed_widget_desc" = "顯示透過 GPS 報告的您的目前速度。";
 "magnetic_bearing_widget_desc" = "從您的位置觀察到的磁北與目標點之間的角度。";
 "max_speed_widget_desc" = "顯示目前行駛道路的速度限制。";
@@ -3294,7 +3294,7 @@
 "speedometer_description" = "顯示目前速度（GPS）";
 "edit_tilesource_maxzoom" = "最大縮放等級";
 "step_by_step" = "步驟";
-"add_button" = "新增按鈕";
+"add_button" = "加入按鈕";
 "shared_string_always" = "總是";
 "shared_string_bottom" = "下面";
 "auto_zoom" = "自動縮放";
@@ -3432,7 +3432,7 @@
 "osmand_depelopment_use_old_routing" = "使用舊導航 (A*)";
 "osmand_depelopment_use_3d_icons" = "使用 3D 位置圖示";
 "shared_string_discard_changes" = "放棄變動";
-"article_added_to_bookmark" = " 新增到書篦。";
+"article_added_to_bookmark" = " 新增到書籤。";
 "no_track_files" = "你沒有軌跡檔案";
 "osmand_cloud" = "OsmAnd 雲端";
 "osmand_depelopment_use_discrete_autozoom" = "離散自動縮放 (舊版本)";
@@ -3517,10 +3517,10 @@
 "ios_release_4_8" = "* 新\"速度尺\"小工具能與CarPlay相容\n* 新增轉彎至轉彎指示到導航詳情\n* 藉由新增多個\"快速行動\"按鈕客製化地圖螢幕\n* 3D軌跡改進：新視覺化與上顏色選項\n* 為地貌、軌跡、路線客製化色盤\n* 新增改進的軌跡多重選擇模式\n* 3D變化的位置圖示\n* 地圖上的遊客路線延伸選擇\n* 天氣：介面重整，新增風向動畫\n* 新增當縮放到3D模式的平滑變化\n* \"螢幕上位置\"如今在設定螢幕上\n* 在BLE感測器設定改變\"輪胎周長\"\n* 新增分開的\"速限\"導航警告\n* 修正方向小工具的名稱\n* 在所有小工具平板中修正\"半徑尺度\"視覺化\n";
 "ios_release_4_9" = "* 改變羅盤行為：單點一下則會旋轉地圖朝北，而點兩下則會調整方向\n* 為有名的品牌新增搜尋功能\n* 改進圖表顯示功能：Y軸標籤不會蓋住圖表\n* 新增整體軌跡統計資料到資料夾註腳\n* 群組所有有翻譯的標籤到內容選單的單一物件\n* 修正興趣點分類在內容選單消失的問題\n* 修正自動偵測語音提示的語言的問題\n* 修正船隻情境導航參數導致當機狀況\n* CarPlay改進：修正主要導航小工具重新計算導航時沒有更新，並且修正下一轉彎小工具箭頭大小的問題\n* 新增加地圖模式參數跟隨App主題的功能\n* 改進介面選擇的位置圖示，新增關閉位置半徑與檢視角度的功能\n* 新增快速行動來改變\"位置的螢幕位置\"\n";
 "ios_release_4_7" = "* 強化頂部與底部小工具面版來安放所有小工具\n* 改進地圖上軌跡視覺化的管理功能\n* 更新\"在分析上分析\"，具備顯示感測器數據的能力\n* 新增加GPX的改進標籤支援：連結、作者、版權與關鍵字\n* 藉由使用者移動頁面與行改進小工具設定\n* 改進\"我的地點\"軌跡管理並增加次資料夾，與軌跡和資料夾的內容選單\n* 有出口編號的圓環如今在導航時會顯示在CarPlay上\n* 以新的\"垂直誇大\"選項控制3D浮雕，來突顯地景狀況\n* 以動態3D檢視來直接在地圖上視覺化軌跡\n* 新小工具：\"滑行角度\"與\"太陽位置\"\n* 客製化\"導航時的距離\"：選擇精確或是四捨五入的數字\n* App語言會採用全球總覽地圖的名稱而非當地語言\n* OsmAnd雲端：新增管理你資料的功能，包括恢復被刪除的檔案以及刪除你的帳號\n* 新增遊客路線額外的標籤支援\n* 修正\"座標\"小工具有時候會導致最後一位數會被忽略\n* 修正\"3D模式\"按鈕行為：按按鈕時不會儲存傾斜角度\n* 修正較舊的iOS版本狀態列顏色\n* 修正macOS的旋轉與捏合縮放地圖手勢\n";
-"add_widget_to_the_right" = "在右方新增小工具";
-"add_widget_below" = "在下方新增小工具";
-"add_widget_above" = "在上方新增小工具";
-"add_widget_to_the_left" = "在左方新增小工具";
+"add_widget_to_the_right" = "在右方加入小工具";
+"add_widget_below" = "在下方加入小工具";
+"add_widget_above" = "在上方加入小工具";
+"add_widget_to_the_left" = "在左方加入小工具";
 "delete_widget" = "刪除小工具？";
 "delete_widget_description" = "這個小工具將被刪除。您稍後可以在組態畫面中將其還原。";
 "rendering_attr_showClimbingRoutes_description" = "顯示攀登路線";

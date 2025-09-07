@@ -1757,7 +1757,7 @@
 "lang_sq" = "Albánčina";
 "shared_string_custom" = "Vlastné";
 "lang_no" = "Nórsky Bokmål";
-"lang_et" = "Estónsky";
+"lang_et" = "Estónčina";
 "routeInfo_smoothness_description" = "Klasifikácia manévrovateľnosti ciest/chodníkov pre kolesové vozidlá, najmä vzhľadom na pravidelnosť/rovnosť povrchu.";
 "lang_sh" = "Srbochorvátčina";
 "lang_is" = "Islandčina";
@@ -1773,7 +1773,7 @@
 "shared_string_start_time" = "Čas začiatku";
 "lang_lo" = "Laoština";
 "lang_os" = "Osetčina";
-"lang_gl" = "Galícijsky";
+"lang_gl" = "Galícijčina";
 "backup_error_user_is_already_registered" = "Táto emailová adresa je používaná iným účtom";
 "lang_sl" = "Slovinsky (Slovenščina)";
 "lang_ga" = "Írčina";
@@ -1898,7 +1898,7 @@
 "lang_fi" = "Fínsky (Suomalainen)";
 "lang_jv" = "Jávčina";
 "lang_nl" = "Holandsky (Denemarken)";
-"lang_ht" = "Haitsky";
+"lang_ht" = "Haitčina";
 "lang_lv" = "Lotyšsky (Latvijas)";
 "lang_hsb" = "Lužickosrbsky";
 "lang_hi" = "Hindsky (हिंदी)";

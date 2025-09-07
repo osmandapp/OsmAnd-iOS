@@ -131,14 +131,19 @@
 
         _mapHudViewController = mapHudViewController;
         _topPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES];
+        _topPanelController.view.accessibilityIdentifier = @"widgets_panel_top";
         _topPanelController.delegate = self;
         _topPanelController.specialPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES special:YES];
+        _topPanelController.specialPanelController.view.accessibilityIdentifier = @"widgets_panel_top_special";
         _topPanelController.specialPanelController.delegate = self;
         _leftPanelController = [[OAWidgetPanelViewController alloc] init];
+        _leftPanelController.view.accessibilityIdentifier = @"widgets_panel_left";
         _leftPanelController.delegate = self;
         _bottomPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES];
+        _bottomPanelController.view.accessibilityIdentifier = @"widgets_panel_bottom";
         _bottomPanelController.delegate = self;
         _rightPanelController = [[OAWidgetPanelViewController alloc] init];
+        _rightPanelController.view.accessibilityIdentifier = @"widgets_panel_right";
         _rightPanelController.delegate = self;
         _mapHudViewController.view.clipsToBounds = NO;
         
@@ -565,23 +570,6 @@
     _mapHudViewController.leftWidgetsViewTopConstraint.constant =
     _mapHudViewController.rightWidgetsViewTopConstraint.constant = leftRightWidgetsViewTopConstraintConstant;
 
-    if (_downloadMapWidget && _downloadMapWidget.superview && !_downloadMapWidget.hidden)
-    {
-        if (_lastUpdateTime == 0)
-            [[OARootViewController instance].mapPanel updateToolbar];
-        
-        if (portrait)
-        {
-            _downloadMapWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 155.);
-        }
-        else
-        {
-            CGFloat widgetWidth = DeviceScreenWidth / 2;
-            CGFloat leftOffset = widgetWidth / 2 - [OAUtilities getLeftMargin];
-            _downloadMapWidget.frame = CGRectMake(leftOffset, _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 155.);
-        }
-    }
-
     if (_weatherToolbar && _weatherToolbar.superview)
         [self updateWeatherToolbarVisible];
 
@@ -874,6 +862,7 @@
     [widgetsToUpdate addObject:_speedometerView];
 
     _downloadMapWidget = [[OADownloadMapWidget alloc] init];
+    _downloadMapWidget.accessibilityIdentifier = @"download_map_widget";
     _downloadMapWidget.delegate = self;
     [widgetsToUpdate addObject:_downloadMapWidget];
 

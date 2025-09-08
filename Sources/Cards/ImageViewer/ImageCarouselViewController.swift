@@ -28,6 +28,17 @@ final class ImageCarouselViewController: UIPageViewController {
         : .darkContent
     }
     
+    override var canBecomeFirstResponder: Bool {
+        true
+    }
+    
+    override var keyCommands: [UIKeyCommand]? {
+        [
+            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(didPressLeftArrow)),
+            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(didPressRightArrow))
+        ]
+    }
+    
     // MARK: - Init
     init(imageDataSource: ImageDataSource?,
          title: String,
@@ -87,7 +98,7 @@ final class ImageCarouselViewController: UIPageViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        
         let gradientHeight = 112 + view.safeAreaInsets.bottom
         
         gradientLayer.frame = CGRect(
@@ -262,7 +273,7 @@ final class ImageCarouselViewController: UIPageViewController {
             (currentIndex + 1) % imageDatasource.count(),
             (currentIndex + 2) % imageDatasource.count()
         ]
-
+        
         let cardsForPrefetch = indicesForPrefetch.compactMap { index -> WikiImageCard? in
             guard index >= 0 && index < imageDatasource.count() else { return nil }
             guard let card = getCardForIndex(index) as? WikiImageCard,
@@ -288,7 +299,7 @@ final class ImageCarouselViewController: UIPageViewController {
             debugPrint("No cards to prefetch metadata")
         }
     }
-
+    
     private func prefetchImages(with urls: [URL]) {
         guard !urls.isEmpty else { return }
         ImagePrefetcher(urls: urls, options: [.targetCache(.galleryHighResolutionDiskCache)]).start()
@@ -297,7 +308,7 @@ final class ImageCarouselViewController: UIPageViewController {
     @objc private func didDownloadMetadata(notification: Notification) {
         guard let cards = notification.userInfo?["cards"] as? [WikiImageCard] else { return }
         guard let obj = getCardForIndex(currentIndex) else { return }
-    
+        
         if cards.contains(where: { $0 === obj }) {
             updateMetaData(with: currentIndex)
         }
@@ -394,10 +405,47 @@ extension ImageCarouselViewController: UIPageViewControllerDelegate {
     }
 }
 
+// MARK: - KeyCommands
+
+extension ImageCarouselViewController {
+    
+    private func navigate(to direction: NavigationDirection) {
+        guard let currentVC = viewControllers?.first else { return }
+        
+        let targetVC: ImageViewerController? = {
+            switch direction {
+            case .forward:
+                return pageViewController(self, viewControllerAfter: currentVC) as? ImageViewerController
+            case .reverse:
+                return pageViewController(self, viewControllerBefore: currentVC) as? ImageViewerController
+            @unknown default:
+                assertionFailure("Unhandled navigation direction: \(direction)")
+                return nil
+            }
+        }()
+        
+        guard let targetVC else { return }
+        
+        setViewControllers([targetVC], direction: direction, animated: true) { [weak self] completed in
+            guard let self, completed else { return }
+            currentIndex = targetVC.index
+            updatePage(index: currentIndex)
+        }
+    }
+    
+    @objc private func didPressLeftArrow() {
+        navigate(to: .reverse)
+    }
+    
+    @objc private func didPressRightArrow() {
+        navigate(to: .forward)
+    }
+}
+
 extension ImageCarouselViewController {
     
     private func createNavbarButton(title: String?, icon: UIImage?, color: UIColor, action: Selector?, target: AnyObject?, menu: UIMenu?) -> UIBarButtonItem {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 30))
+        let button = UIButton(frame: .init(x: 0, y: 0, width: 44, height: 30))
         button.titleLabel?.lineBreakMode = .byTruncatingMiddle
         button.titleLabel?.numberOfLines = 1
         button.titleLabel?.adjustsFontForContentSizeCategory = true

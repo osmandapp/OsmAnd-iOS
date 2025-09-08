@@ -9,6 +9,10 @@
 import Kingfisher
 
 final class GalleryGridViewController: OABaseNavbarViewController {
+    enum Constants {
+        static let minColumnCount: CGFloat = 2
+        static let maxColumnCount: CGFloat = 6
+    }
     var cards: [AbstractCard] = []
     var titleString: String = ""
     var placeholderImage: UIImage?
@@ -17,8 +21,13 @@ final class GalleryGridViewController: OABaseNavbarViewController {
     private var collectionView: UICollectionView!
     // swiftlint:enable all
     
+    private var currentColumnCount: CGFloat = 3
+    private var initialPinchColumnCount: CGFloat = 3
+  
     override func viewDidLoad() {
         super.viewDidLoad()
+        currentColumnCount = 3
+        initialPinchColumnCount = 3
         configureCollectionView()
         downloadImageMetadataService.cards = cards.compactMap { $0 as? WikiImageCard }
         Task {
@@ -50,31 +59,62 @@ final class GalleryGridViewController: OABaseNavbarViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+        
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
+        collectionView.addGestureRecognizer(pinchGesture)
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
-        let columns = UIDevice.current.orientation.isLandscape
-        ? OAAppSettings.sharedManager().contextGallerySpanGridCountLandscape.get()
-        : OAAppSettings.sharedManager().contextGallerySpanGridCount.get()
+        let columns = max(Constants.minColumnCount, min(Constants.maxColumnCount, currentColumnCount))
         
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0 / CGFloat(columns)), heightDimension: .fractionalHeight(1.0))
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0 / columns),
+            heightDimension: .fractionalHeight(1.0)
+        )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = .init(top: 0, leading: 3, bottom: 6, trailing: 3)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(1.0 / CGFloat(columns)))
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(1.0 / columns)
+        )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
+
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 17, bottom: 0, trailing: 17)
-        
+
         section.boundarySupplementaryItems = [
             NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
                 elementKind: UICollectionView.elementKindSectionHeader,
                 alignment: .top)
         ]
-        
+
         return UICollectionViewCompositionalLayout(section: section)
+    }
+
+    @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            initialPinchColumnCount = currentColumnCount
+            
+        case .changed:
+            let newColumnCount = initialPinchColumnCount / gesture.scale
+            let clampedColumnCount = max(Constants.minColumnCount, min(Constants.maxColumnCount, newColumnCount))
+            
+            if abs(clampedColumnCount - currentColumnCount) >= 0.2 {
+                print("clampedColumnCount: \(clampedColumnCount)")
+                currentColumnCount = clampedColumnCount
+                collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: false)
+            }
+            
+        case .ended, .cancelled:
+            currentColumnCount = round(currentColumnCount)
+            collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: true)
+            
+        default:
+            break
+        }
     }
 }
 

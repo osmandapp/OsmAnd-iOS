@@ -3163,6 +3163,7 @@
 		FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF672A72F810000D2F5F /* SceneDelegate.mm */; };
 		FA44F8E22D0B215900334FDB /* GpxLoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */; };
 		FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */; };
+		FA4713D22E0E937500DC518F /* URLSessionConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
 		FA4C56FF2D48E84500438A5C /* NoInternetCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4C56FE2D48E84200438A5C /* NoInternetCard.swift */; };
@@ -3230,6 +3231,7 @@
 		FA9628E22AFCFB57004B7DEF /* SectionHeaderFooterButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */; };
 		FA9628E42AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */; };
 		FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */; };
+		FA99F8DE2E0E845E0004573B /* URLSessionConfiguration+Extension.swift in Resources */ = {isa = PBXBuildFile; fileRef = FA99F8DD2E0E845E0004573B /* URLSessionConfiguration+Extension.swift */; };
 		FAA055762E02C51400F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055752E02C51200F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift */; };
 		FAA0557A2E0301AA00F84EDF /* SelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055792E0301AA00F84EDF /* SelectionManager.swift */; };
 		FAA1CEAF2B174F9F00760545 /* OptionDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA1CEAE2B174F9F00760545 /* OptionDeviceTableViewCell.swift */; };
@@ -7807,6 +7809,7 @@
 		FA44BF682A72F810000D2F5F /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxLoadOperation.swift; sourceTree = "<group>"; };
 		FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemExtension.swift; sourceTree = "<group>"; };
+		FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionConfigProvider.swift; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
 		FA4C56FE2D48E84200438A5C /* NoInternetCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoInternetCard.swift; sourceTree = "<group>"; };
@@ -7878,6 +7881,7 @@
 		FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SectionHeaderFooterButton.xib; sourceTree = "<group>"; };
 		FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderFooterButton.swift; sourceTree = "<group>"; };
 		FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLETemperatureSensor.swift; sourceTree = "<group>"; };
+		FA99F8DD2E0E845E0004573B /* URLSessionConfiguration+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+Extension.swift"; sourceTree = "<group>"; };
 		FAA055752E02C51200F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsTripRecordingCommandsViewController.swift; sourceTree = "<group>"; };
 		FAA055792E0301AA00F84EDF /* SelectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionManager.swift; sourceTree = "<group>"; };
 		FAA1CEAE2B174F9F00760545 /* OptionDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionDeviceTableViewCell.swift; sourceTree = "<group>"; };
@@ -13396,6 +13400,7 @@
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
 				FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */,
+				FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
 				325DAE652DFFF07E002CB022 /* AsyncTask */,
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
@@ -13777,6 +13782,7 @@
 			isa = PBXGroup;
 			children = (
 				FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */,
+				FA99F8DD2E0E845E0004573B /* URLSessionConfiguration+Extension.swift */,
 				FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */,
 				FA9217112D5277310074E958 /* DateFormatter+Extension.swift */,
 				FAE446D52CD3C10300598BE3 /* UIScreen+Extension.swift */,
@@ -15421,6 +15427,7 @@
 				843E5D831AB341E000BE14BE /* menu_cell_selected@3x.png in Resources */,
 				DA1340C8243DC5A70039D214 /* map_action_bus_dark@3x.png in Resources */,
 				DA5A83D026C563A800F274C7 /* OATransportRouteController.xib in Resources */,
+				FA99F8DE2E0E845E0004573B /* URLSessionConfiguration+Extension.swift in Resources */,
 				84F4641E1B664D3B00C1D96F /* ic_popup_no_internet@2x.png in Resources */,
 				DA1340D6243DC5A80039D214 /* map_action_scooter@3x.png in Resources */,
 				DA5A844226C563A900F274C7 /* OAUsernameFilterViewController.xib in Resources */,
@@ -17227,6 +17234,7 @@
 				DA5A823226C563A700F274C7 /* OAGpxAppearanceInfo.mm in Sources */,
 				DA5A813C26C563A700F274C7 /* OAEntity.m in Sources */,
 				DA5A841026C563A800F274C7 /* OATargetAddressViewController.mm in Sources */,
+				FA4713D22E0E937500DC518F /* URLSessionConfigProvider.swift in Sources */,
 				FAC166262B21BEF900D63755 /* SBError.swift in Sources */,
 				DA5A825226C563A700F274C7 /* OANavigationTypeViewController.mm in Sources */,
 				DA5A830C26C563A800F274C7 /* OAEmptySearchCell.m in Sources */,

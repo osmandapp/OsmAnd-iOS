@@ -439,9 +439,9 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 {
     OAHudButton *quickActionButton = [[OAHudButton alloc] initWithFrame:{0, 0, kHudQuickActionButtonHeight, kHudQuickActionButtonHeight}];
     [_quickActionFloatingButtons addObject:quickActionButton];
-    [_mapHudController.mapHudLayout addMapButton:quickActionButton];
     quickActionButton.useCustomPosition = YES;
     quickActionButton.buttonState = quickActionButtonState;
+    [_mapHudController.mapHudLayout addMapButton:quickActionButton];
     quickActionButton.tag = [OAUtilities getQuickActionButtonTag];
     quickActionButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
     quickActionButton.alpha = [quickActionButtonState isEnabled] ? 1 : 0;

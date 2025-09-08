@@ -608,6 +608,8 @@
 
     mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar = NO;
     [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
+    
+    [[OAWeatherHelper sharedInstance] updateWeatherSource];
 
     if (_weatherToolbar.hidden)
     {

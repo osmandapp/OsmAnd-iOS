@@ -104,7 +104,7 @@
 "next_proceed" = "下一页";
 // Settings
 "map_locale" = "地图语言";
-"sett_km" = "千米";
+"sett_km" = "公里";
 "sett_ml" = "英里";
 "recording_context_menu_show" = "显示";
 "sett_deg" = "度";
@@ -141,8 +141,8 @@
 "mile" = "英里";
 "yard" = "码";
 "foot" = "英尺";
-"km_h" = "千米/时";
-"mile_per_hour" = "英里/时";
+"km_h" = "公里/小时";
+"mile_per_hour" = "英里/小时";
 "int_hour" = "小时";
 "int_min" = "分钟";
 "shared_string_sec" = "秒";
@@ -295,12 +295,12 @@
 "si_mi_feet" = "英里/英尺";
 "si_mi_yard" = "英里/码";
 "si_mi_meters" = "英里/米";
-"si_km_m" = "千米/米";
+"si_km_m" = "公里/米";
 "si_nm" = "海里";
-"si_kmh" = "千米每小时";
+"si_kmh" = "公里每小时";
 "si_mph" = "英里每小时";
 "si_m_s" = "米每秒";
-"si_min_km" = "分钟每千米";
+"si_min_km" = "分钟每公里";
 "si_min_m" = "分钟每英里";
 "si_nm_h" = "海里每小时（节）";
 "day_night_info_description" = "日出：%@ \n日落：%@";
@@ -665,7 +665,7 @@
 "filter_current_poiButton" = "筛选器";
 "unsaved_changes_will_be_lost" = "任何未保存的更改将会丢失。要继续吗？";
 "osn_add_dialog_title" = "创建注记";
-"min_km" = "分/千米";
+"min_km" = "分钟/公里";
 "instalation_troubleshooting_item" = "安装和疑难解答";
 "shared_string_io_error" = "I/O错误";
 "other_location" = "其他";
@@ -1475,7 +1475,7 @@
 "make_backup_descr" = "这台设备上有很多更改，请将这些数据备份以免丢失。";
 "icon_group_industrial" = "工业";
 "context_menu_edit_descr" = "编辑描述";
-"weather_wind_kilimeters_per_hour" = "千米每小时";
+"weather_wind_kilimeters_per_hour" = "公里每小时";
 "horseback_riding" = "骑马";
 "rendering_attr_showMonorailRoutes_name" = "单轨列车线路";
 "register_opr_create_new_account" = "创建新帐户";
@@ -1920,7 +1920,7 @@
 "mgrs_format_descr" = "OsmAnd使用MGRS，类似于UTM NATO格式。";
 "download_wikipedia_data" = "下载维基百科数据";
 "route_add_start_point" = "添加出发地";
-"km" = "千米";
+"km" = "公里";
 "weather_plugin_description" = "提供 \n- 24小时 x 7天 的天气预报，包括5个图层 \n- 基于位置的小工具 \n- 等温线/等压线 \n \n天气数据由全球预测系统（GFS，%@）提供。";
 "kg" = "千克";
 "m" = "米";
@@ -2650,7 +2650,7 @@
 "auto_25_chars_route_tr" = "右转";
 "dd_mm_mmm_format" = "度度°分分.分分分\'";
 "shared_string_items" = "项目";
-"litres" = "公升";
+"litres" = "升";
 "auto_25_chars_route_kr" = "保持在右侧";
 "add_smart_folder" = "添加智能文件夹";
 "shared_string_unchanged" = "未修改";

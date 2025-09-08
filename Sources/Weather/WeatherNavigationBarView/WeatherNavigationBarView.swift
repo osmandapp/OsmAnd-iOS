@@ -12,7 +12,6 @@ final class WeatherNavigationBarView: UIView {
             rightButton.setImage(UIImage.templateImageNamed("ic_navbar_settings"), for: .normal)
             rightButton.tintColor = .iconColorActive
             
-            //temporarily hiding Data Source button
             rightButton.isHidden = false
             rightButton.isEnabled = true
         }

@@ -8,12 +8,17 @@
 
 #import "OABaseNavbarViewController.h"
 
-FOUNDATION_EXPORT NSNotificationName _Nonnull const OAFavoriteImportViewControllerDidDismissNotification;
+NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification;
 
 @interface OAFavoriteImportViewController : OABaseNavbarViewController
 
 @property (nonatomic, readonly) BOOL handled;
 
-- (instancetype)initFor:(NSURL*)url;
+- (instancetype)initFor:(NSURL *)url;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

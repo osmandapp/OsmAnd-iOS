@@ -32,7 +32,7 @@ private enum RemainingFuelMode: String, CaseIterable {
         case .volume:
             let left = localizedString("shared_string_volume")
             let unitKey = {
-                switch settings?.volumeUnits.get(appMode) {
+                switch settings.volumeUnits.get(appMode) {
                 case .LITRES:
                     return "litres"
                 case .IMPERIAL_GALLONS:
@@ -49,7 +49,7 @@ private enum RemainingFuelMode: String, CaseIterable {
         case .distance:
             let left = localizedString("shared_string_distance")
             let unitKey = {
-                switch settings?.metricSystem.get(appMode) {
+                switch settings.metricSystem.get(appMode) {
                 case .KILOMETERS_AND_METERS:
                     return "km"
                 case .NAUTICAL_MILES_AND_METERS, .NAUTICAL_MILES_AND_FEET:
@@ -164,7 +164,7 @@ final class OBDRemainingFuelWidget: OBDTextWidget {
             prefId = Self.obdRemainingFuelModeKey
         }
         
-        guard let pref = OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: RemainingFuelMode.percent.rawValue).makeProfile() else { fatalError("Failed to register preference \(prefId)") }
+        let pref = OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: RemainingFuelMode.percent.rawValue).makeProfile()
         if let widgetParams {
             if let raw = widgetParams[prefId] as? String, RemainingFuelMode(rawValue: raw) != nil {
                 pref.set(raw, mode: appMode)

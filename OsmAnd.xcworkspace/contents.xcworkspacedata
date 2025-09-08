@@ -29,6 +29,9 @@
                               location = "group:SpeedConstants.kt">
                            </FileRef>
                            <FileRef
+                              location = "group:AltitudeMetrics.kt">
+                           </FileRef>
+                           <FileRef
                               location = "group:MetricsConstants.kt">
                            </FileRef>
                         </Group>
@@ -79,6 +82,13 @@
                      <FileRef
                         location = "group:IndexConstants.kt">
                      </FileRef>
+                     <Group
+                        location = "group:ble"
+                        name = "ble">
+                        <FileRef
+                           location = "group:BleDevice.kt">
+                        </FileRef>
+                     </Group>
                      <Group
                         location = "group:util"
                         name = "util">
@@ -418,6 +428,16 @@
                         <FileRef
                            location = "group:DataItem.kt">
                         </FileRef>
+                        <Group
+                           location = "group:helper"
+                           name = "helper">
+                           <FileRef
+                              location = "group:ImportHelper.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:ImportGpx.kt">
+                           </FileRef>
+                        </Group>
                         <FileRef
                            location = "group:TrackFolderLoaderTask.kt">
                         </FileRef>
@@ -471,6 +491,13 @@
                         </FileRef>
                         <FileRef
                            location = "group:KQuadRect.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:grid"
+                        name = "grid">
+                        <FileRef
+                           location = "group:ButtonPositionSize.kt">
                         </FileRef>
                      </Group>
                   </Group>
@@ -548,6 +575,13 @@
                         <FileRef
                            location = "group:GpxFormatter.kt">
                         </FileRef>
+                        <Group
+                           location = "group:helper"
+                           name = "helper">
+                           <FileRef
+                              location = "group:ImportHelper.kt">
+                           </FileRef>
+                        </Group>
                      </Group>
                      <Group
                         location = "group:api"

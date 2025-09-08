@@ -8,6 +8,8 @@
 
 #import "OATargetMenuViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OARowInfo, OACollapsableView;
 
 @protocol OARowInfoDelegate <NSObject>
@@ -45,6 +47,8 @@
 
 - (int) getRawHeight;
 - (UIFont *) getFont;
-- (void)setDetailsArray:(nonnull NSMutableArray<NSDictionary *> *)detailsArray;
+- (void)setDetailsArray:(NSMutableArray<NSDictionary *> *)detailsArray;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -881,6 +881,7 @@ static NSOperationQueue *_favQueue;
         favoriteGroup.color = UIColorFromRGB(pointsGroup.color) ;
         favoriteGroup.iconName = pointsGroup.iconName;
         favoriteGroup.backgroundType = pointsGroup.backgroundType;
+        favoriteGroup.isVisible = ![pointsGroup isHidden];
     }
 }
 
@@ -1294,8 +1295,7 @@ static NSOperationQueue *_favQueue;
 {
     NSString *mxPrefix = @"mx_";
     _iconName = [self removePrefix:mxPrefix fromValue:_iconName];
-    OASGpxUtilitiesPointsGroup *pointsGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:_name iconName:_iconName backgroundType:_backgroundType color:[self color].toARGBNumber];
-    pointsGroup.hidden = !_isVisible;
+    OASGpxUtilitiesPointsGroup *pointsGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:_name iconName:_iconName backgroundType:_backgroundType color:[self color].toARGBNumber hidden:!_isVisible];
     NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
     
     for (OAFavoriteItem *point in _points)

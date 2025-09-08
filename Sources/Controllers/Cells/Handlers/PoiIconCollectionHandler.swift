@@ -129,8 +129,8 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     private func initLastUsedCategory() {
-        guard !categories.contains(where: { $0.key == LAST_USED_KEY }), let icons = OAAppSettings.sharedManager().lastUsedFavIcons.get(), !icons.isEmpty else { return }
-        lastUsedIcons = icons
+        guard !categories.contains(where: { $0.key == LAST_USED_KEY }), !OAAppSettings.sharedManager().lastUsedFavIcons.get().isEmpty else { return }
+        lastUsedIcons = OAAppSettings.sharedManager().lastUsedFavIcons.get()
         let category = IconsAppearanceCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
         categories.append(category)
         categoriesByKeyName[LAST_USED_KEY] = category

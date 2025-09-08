@@ -45,7 +45,7 @@ final class TopTextViewState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += "_" + customId
         }
-        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false)!
+        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false)
         if let widgetValue = widgetParams?[showNextTurnPrefId] as? Bool {
             preference.set(widgetValue)
         }

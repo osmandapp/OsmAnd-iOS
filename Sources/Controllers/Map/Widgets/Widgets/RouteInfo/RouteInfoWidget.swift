@@ -39,8 +39,8 @@ final class RouteInfoWidget: OASimpleWidget {
     private var cachedMetricSystem: Int?
     private let calculator: RouteInfoCalculator
     private let updateIntervalSeconds = TimeInterval(TimeToNavigationPointWidget.UPDATE_INTERVAL_SECONDS)
+    private let settings = OAAppSettings.sharedManager()
     // swiftlint:disable force_unwrapping
-    private let settings = OAAppSettings.sharedManager()!
     private lazy var widgetView = Bundle.main.loadNibNamed("RouteInfoWidget", owner: self, options: nil)![0] as! UIView
     // swiftlint:enable force_unwrapping
     
@@ -170,7 +170,7 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private func updateRouteInformation() {
-        guard let appMode = settings.applicationMode.get() else { return }
+        let appMode = settings.applicationMode.get()
         
         let priority = widgetState.getDisplayPriority(with: appMode)
         let routeInfo = calculator.calculateRouteInformationWith(priority)
@@ -311,7 +311,7 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private func isUpdateNeeded(for routeInfo: [DestinationInfo]) -> Bool {
-        let metricSystem = OAAppSettings.sharedManager()?.metricSystem.get().rawValue
+        let metricSystem = OAAppSettings.sharedManager().metricSystem.get().rawValue
         let metricSystemChanged = cachedMetricSystem == nil || cachedMetricSystem != metricSystem
         cachedMetricSystem = metricSystem
         if metricSystemChanged {

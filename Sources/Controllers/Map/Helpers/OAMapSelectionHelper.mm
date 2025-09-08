@@ -648,7 +648,16 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 {
                     OAPOI *poi = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:(OARenderedObject *)selectedObject.object];
                     if (poi)
+                    {
+                        NSString *type = [ObfConstants getOsmEntityType:selectedObject.object];
+                        if (type)
+                        {
+                            int64_t osmId = [ObfConstants getOsmObjectId:selectedObject.object];
+                            int64_t poiObjectId = [ObfConstants createMapObjectIdFromOsmId:osmId type:type];
+                            poi.obfId = poiObjectId;
+                        }
                         selectedObject.object = poi;
+                    }
                 }
             }
             if ([selectedObject.object isKindOfClass:[OAPOI class]])
@@ -818,7 +827,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     }
     OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(50, OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude)));
     
-    const auto foundBinaryMapObjects = [OATravelGuidesHelper searchGpxMapObject:travelGpx bbox31:bbox31 reader:nil];
+    const auto foundBinaryMapObjects = [OATravelGuidesHelper searchGpxMapObject:travelGpx bbox31:bbox31 reader:nil useAllObfFiles:YES];
     
     BOOL osmRoutesAlreadyAdded = NO;
     for (const auto obfMapObject : foundBinaryMapObjects)

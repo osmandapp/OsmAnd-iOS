@@ -14,10 +14,6 @@ class SensorWidgetDataField: SensorDataField {
         super.init(nameId: nameId, unitNameId: unitNameId, numberValue: numberValue, stringValue: stringValue)
     }
     
-    func getFieldType() -> WidgetType {
-        fieldType
-    }
-    
     func getValueAndUnit(with valueUnitArray: NSMutableArray) -> (value: String, unit: String)? {
         guard valueUnitArray.count == 2,
               let value = valueUnitArray[0] as? String,

@@ -1483,7 +1483,7 @@
 "routing_attr_allow_motorway_description" = "Uzi aŭtoŝoseojn.";
 "rendering_attr_hmRendered_name" = "Montri pli map-detalojn";
 "rendering_attr_roadColors_name" = "Skemkoloro de vojoj";
-"weight_limit_description" = "Enigu pezon de via veturilo, iuj vojaj limigoj aplikiĝas al pezaj veturiloj.";
+"weight_limit_description" = "Enigu mason de via veturilo, iuj vojaj limigoj aplikiĝas al pezaj veturiloj.";
 "height_limit_description" = "Enigu alton de via veturilo, iuj vojaj limigoj aplikiĝas al altaj veturiloj.";
 "lenght_limit_description" = "Enigu longon de via veturilo, iuj vojaj limigoj aplikiĝas al longaj veturiloj.";
 "width_limit_description" = "Enigu larĝon de via veturilo, iuj vojaj limigoj aplikiĝas al larĝaj veturiloj.";
@@ -2498,7 +2498,7 @@
 "shared_string_min" = "Min.";
 "daynight_mode_day_summary" = "Ĉiam vidigas mapon en taga map-reĝimo, kiu plej taŭgas por uzi tage.";
 "daynight_mode_night_summary" = "Ĉiam vidigas la mapon en nokta map-reĝimo, kiu taŭgas por uzi nokte kaj mallume.";
-"daynight_mode_sunrise_sunset_summary" = "Aŭtomate baskulas inter taga kaj nokta map-reĝimoj surbaze de tempoj de sunleviĝo kaj sunsubiro.";
+"daynight_mode_sunrise_sunset_summary" = "Aŭtomate baskuligas inter taga kaj nokta map-reĝimoj surbaze de tempoj de sunleviĝo kaj sunsubiro.";
 "of" = "%d el %d";
 "downloaded_bytes" = "%@ el %@";
 "daynight_mode_app_theme_summary" = "La map-reĝimo agordiĝas laŭ etoso de la aplikaĵo – taga reĝimo por hela etoso kaj nokta reĝimo por malhela etoso.";
@@ -2752,3 +2752,4 @@
 "obd_battery_voltage" = "Tensio de baterio";
 "obd_vehicle_info" = "Informoj pri veturilo";
 "purchase_feature_desc_vehicle_metrics_obd_ii" = "Spuru bazajn datumojn via veturilo per la protokolo OBD-II. Observu bazajn parametrojn: rapidon, rivoluan rapidon de motoro, konsumon de brulaĵo kaj pli.";
+"manage_storage" = "Administri datumojn";

@@ -872,7 +872,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func createTitle(name: String) -> String {
-        OAUtilities.capitalizeFirstLetter(name)
+        OAUtilities.capitalizeFirstLetter(name) ?? ""
     }
     
     func openTrackMenu(article: TravelArticle, gpxFileName: String, latLon: CLLocation, adjustMapPosition: Bool) {

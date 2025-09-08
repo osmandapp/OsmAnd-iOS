@@ -314,17 +314,16 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         let fullText = "\(title)\n\n\(howTo)\n\(steps)"
         let fullAttributedText = NSMutableAttributedString(string: fullText)
         
-        if let boldFont = UIFont.scaledBoldSystemFont(ofSize: 17) {
-            let howToRange = (fullText as NSString).range(of: howTo)
-            if howToRange.location != NSNotFound {
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.paragraphSpacing = 12
-                
-                fullAttributedText.addAttributes([
-                    .font: boldFont,
-                    .paragraphStyle: paragraphStyle
-                ], range: howToRange)
-            }
+        let boldFont = UIFont.scaledBoldSystemFont(ofSize: 17)
+        let howToRange = (fullText as NSString).range(of: howTo)
+        if howToRange.location != NSNotFound {
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.paragraphSpacing = 12
+            
+            fullAttributedText.addAttributes([
+                .font: boldFont,
+                .paragraphStyle: paragraphStyle
+            ], range: howToRange)
         }
         
         return fullAttributedText
@@ -492,16 +491,10 @@ extension VehicleMetricsSensorsController {
         navigationController?.present(UINavigationController(rootViewController: nameVC), animated: true)
     }
     
-    private func showDescriptionViewController(device: Device) {
-        let controller = VehicleMetricsDescriptionViewController()
-        controller.device = device
-        navigationController?.pushViewController(controller, animated: true)
-    }
-    
     private func showDescriptionViewController(device: Device, startBehavior: VehicleMetricsDescriptionViewController.TableViewStartBehavior) {
         let controller = VehicleMetricsDescriptionViewController()
         controller.device = device
-        controller.startBehavior = .scrollToSearch
+        controller.startBehavior = startBehavior
         navigationController?.pushViewController(controller, animated: true)
     }
 }

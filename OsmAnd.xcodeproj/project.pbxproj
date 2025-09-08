@@ -1478,6 +1478,14 @@
 		C5B4AE5E2B1F51740019F357 /* MenuHelpDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */; };
 		C5BC8DD52E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */; };
 		C5BC8DD72E0408D400CF0815 /* OBDRemainingFuelWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */; };
+		C5C81F822E4CE087009D3439 /* MapHudLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F812E4CE087009D3439 /* MapHudLayout.swift */; };
+		C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */; };
+		C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */; };
+		C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */; };
+		C5C81F8C2E532EBD009D3439 /* ZoomInButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F8B2E532EBD009D3439 /* ZoomInButtonState.swift */; };
+		C5C81F8E2E5340CB009D3439 /* MyLocationButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F8D2E5340CA009D3439 /* MyLocationButtonState.swift */; };
+		C5C81F902E534595009D3439 /* OptionsMenuButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F8F2E534595009D3439 /* OptionsMenuButtonState.swift */; };
+		C5C81F922E535061009D3439 /* DriveModeButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F912E535061009D3439 /* DriveModeButtonState.swift */; };
 		C5C9BB912DF9A087003B7550 /* OBDTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */; };
 		C5CD4CF029EFE6AC00B35C3D /* ic_navbar_trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */; };
 		C5CD4CF129EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */; };
@@ -3150,6 +3158,7 @@
 		FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */; };
 		FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */; };
 		FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */; };
+		FA051A6D2E3B768400BB8E95 /* SafariPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */; };
 		FA069C542B9AF61B0007E4DE /* OutlineLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */; };
 		FA069C692B9F13160007E4DE /* ShadowPathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C682B9F13160007E4DE /* ShadowPathView.swift */; };
 		FA069C6B2B9F65750007E4DE /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */; };
@@ -5260,6 +5269,14 @@
 		C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHelpDataService.swift; sourceTree = "<group>"; };
 		C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDFuelConsumptionWidget.swift; sourceTree = "<group>"; };
 		C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDRemainingFuelWidget.swift; sourceTree = "<group>"; };
+		C5C81F812E4CE087009D3439 /* MapHudLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapHudLayout.swift; sourceTree = "<group>"; };
+		C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsButtonState.swift; sourceTree = "<group>"; };
+		C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButtonState.swift; sourceTree = "<group>"; };
+		C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomOutButtonState.swift; sourceTree = "<group>"; };
+		C5C81F8B2E532EBD009D3439 /* ZoomInButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomInButtonState.swift; sourceTree = "<group>"; };
+		C5C81F8D2E5340CA009D3439 /* MyLocationButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLocationButtonState.swift; sourceTree = "<group>"; };
+		C5C81F8F2E534595009D3439 /* OptionsMenuButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsMenuButtonState.swift; sourceTree = "<group>"; };
+		C5C81F912E535061009D3439 /* DriveModeButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveModeButtonState.swift; sourceTree = "<group>"; };
 		C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDTextWidget.swift; sourceTree = "<group>"; };
 		C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@2x.png"; path = "Resources/Icons/ic_navbar_trash@2x.png"; sourceTree = "<group>"; };
 		C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_upload_to_openstreetmap_outlined@3x.png"; path = "Resources/Icons/ic_navbar_upload_to_openstreetmap_outlined@3x.png"; sourceTree = "<group>"; };
@@ -7820,6 +7837,7 @@
 		FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesWithRightLabelTableViewCell.swift; sourceTree = "<group>"; };
 		FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesWithRightLabelTableViewCell.xib; sourceTree = "<group>"; };
+		FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariPresenter.swift; sourceTree = "<group>"; };
 		FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLabel.swift; sourceTree = "<group>"; };
 		FA069C682B9F13160007E4DE /* ShadowPathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowPathView.swift; sourceTree = "<group>"; };
 		FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
@@ -9851,6 +9869,13 @@
 				464BF4A82C0517E7000D6908 /* Map3DModeVisibility.swift */,
 				468D9C6B2C00FE0600ED368A /* MapButtonState.swift */,
 				468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */,
+				C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */,
+				C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */,
+				C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */,
+				C5C81F8B2E532EBD009D3439 /* ZoomInButtonState.swift */,
+				C5C81F8D2E5340CA009D3439 /* MyLocationButtonState.swift */,
+				C5C81F8F2E534595009D3439 /* OptionsMenuButtonState.swift */,
+				C5C81F912E535061009D3439 /* DriveModeButtonState.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -11179,6 +11204,7 @@
 				DA5A79D726C563A000F274C7 /* Actions */,
 				DA5A7A1F26C563A000F274C7 /* OAMapButtonsHelper.h */,
 				DA5A79D526C563A000F274C7 /* OAMapButtonsHelper.m */,
+				C5C81F812E4CE087009D3439 /* MapHudLayout.swift */,
 				460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */,
 				464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */,
 				466A017F2BFBA9B7008CC50E /* QuickActionType.swift */,
@@ -13512,6 +13538,7 @@
 			children = (
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
+				FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
 				325DAE652DFFF07E002CB022 /* AsyncTask */,
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
@@ -16775,6 +16802,7 @@
 				DA5A855F26C563A900F274C7 /* OALocationPointWrapper.mm in Sources */,
 				DA5A81AE26C563A700F274C7 /* OASearchResultMatcher.mm in Sources */,
 				46D38A9929C39545000AAE0C /* OARoutingDataObject.m in Sources */,
+				C5C81F8C2E532EBD009D3439 /* ZoomInButtonState.swift in Sources */,
 				DA5A83E526C563A800F274C7 /* OAEditDescriptionViewController.m in Sources */,
 				DA5A853F26C563A900F274C7 /* OASuggestedDownloadsItem.m in Sources */,
 				FACB02AC2D54F71C00EBE87F /* DownloadImageMetadataService.swift in Sources */,
@@ -16834,6 +16862,7 @@
 				DA5A817826C563A700F274C7 /* MGSwipeButton.m in Sources */,
 				DA5A853726C563A900F274C7 /* OADefaultFavorite.m in Sources */,
 				DA5A846E26C563A900F274C7 /* OAWidgetState.m in Sources */,
+				C5C81F922E535061009D3439 /* DriveModeButtonState.swift in Sources */,
 				FA64086B2D3E6EA5005FD12D /* CollapsableCardsView.swift in Sources */,
 				DA5A849726C563A900F274C7 /* OAGpxData.mm in Sources */,
 				464BF4A92C0517E7000D6908 /* Map3DModeVisibility.swift in Sources */,
@@ -16988,6 +17017,7 @@
 				462E13E82BFA36D40038BCCB /* CustomMapButtonsViewController.swift in Sources */,
 				DA5A849526C563A900F274C7 /* OARoutePlanningHudViewController.mm in Sources */,
 				DA5A849C26C563A900F274C7 /* OAMeasurementModeCommand.mm in Sources */,
+				C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */,
 				DA5A84C726C563A900F274C7 /* OAOsmEditActionsViewController.mm in Sources */,
 				DA5A81A626C563A700F274C7 /* OASearchCoreAPI.mm in Sources */,
 				46C8412B2C32F22B00E284B0 /* OAShowHideTemperatureAction.m in Sources */,
@@ -17366,6 +17396,7 @@
 				DA5A830C26C563A800F274C7 /* OAEmptySearchCell.m in Sources */,
 				DA5A850426C563A900F274C7 /* OATargetPointView.mm in Sources */,
 				FA69F2852A73948B0044CFCA /* main.m in Sources */,
+				C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */,
 				461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */,
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
@@ -17385,8 +17416,10 @@
 				DA5A830626C563A800F274C7 /* OAImagesTableViewCell.m in Sources */,
 				DA5A816426C563A700F274C7 /* OANighttimeAppearance.m in Sources */,
 				C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */,
+				C5C81F8E2E5340CB009D3439 /* MyLocationButtonState.swift in Sources */,
 				32414F012C454F9D000B4B79 /* OsmBenefitsOAuthView.swift in Sources */,
 				DA5A853626C563A900F274C7 /* OACustomRegion.mm in Sources */,
+				C5C81F902E534595009D3439 /* OptionsMenuButtonState.swift in Sources */,
 				FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */,
 				FA44F8E22D0B215900334FDB /* GpxLoadOperation.swift in Sources */,
 				DA5A814C26C563A700F274C7 /* OACarPlayCategoryResultListController.mm in Sources */,
@@ -17495,6 +17528,7 @@
 				DA5A856126C563A900F274C7 /* OAGpxRouteApproximation.mm in Sources */,
 				464BF4AB2C051909000D6908 /* Map3DButtonState.swift in Sources */,
 				DAECA4FA26CFE62600241B0B /* OABaseWidgetView.m in Sources */,
+				FA051A6D2E3B768400BB8E95 /* SafariPresenter.swift in Sources */,
 				4657490E2B6803710006046B /* TrashItem.swift in Sources */,
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
 				DA5A83F026C563A800F274C7 /* OAQuickSearchTableController.mm in Sources */,
@@ -17697,6 +17731,7 @@
 				DA5A823026C563A700F274C7 /* OAImportDuplicatesViewController.mm in Sources */,
 				FA359EF12ADFD5310001C11D /* DeviceHelper.swift in Sources */,
 				32FF4C2B2C18425900246B36 /* SegmentTableHeaderView.swift in Sources */,
+				C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */,
 				DA5A812B26C563A700F274C7 /* OAMapMarker.mm in Sources */,
 				FAA650582ADD42C50020DCEA /* GattAttributes.swift in Sources */,
 				DA5A855C26C563A900F274C7 /* OARoutingHelper.mm in Sources */,
@@ -18039,6 +18074,7 @@
 				46D38A9C29C398E1000AAE0C /* OARoutingDataUtils.mm in Sources */,
 				DA5A836226C563A800F274C7 /* OATitleDescriptionCollapsableCell.m in Sources */,
 				DA5A815826C563A700F274C7 /* OAOsmEditingPlugin.mm in Sources */,
+				C5C81F822E4CE087009D3439 /* MapHudLayout.swift in Sources */,
 				46BF38DC2CA44C090056D2C2 /* TerrainColorSchemeAction.swift in Sources */,
 				DA5A845A26C563A900F274C7 /* OAGPXRecLayer.mm in Sources */,
 				DA5A837826C563A800F274C7 /* OARouteSettingsBaseViewController.mm in Sources */,

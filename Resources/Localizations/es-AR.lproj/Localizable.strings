@@ -642,7 +642,7 @@
 "text_size" = "Tamaño del texto";
 "daynight_mode_night" = "Nocturno";
 "map_widget_renderer" = "Estilo del mapa";
-"map_settings_overunder" = "Superpuesta / Subyacente";
+"map_settings_overunder" = "Superposición / Subyacencia";
 "map_settings_over" = "Capa superpuesta";
 "map_settings_under" = "Capa subyacente";
 "map_settings_install_maps" = "Elige los mapas a instalar o actualizar";
@@ -2108,10 +2108,10 @@
 "routing_attr_allow_motorway_description" = "Permite usar autopistas.";
 "rendering_attr_hmRendered_name" = "Mostrar más detalle del mapa";
 "rendering_attr_roadColors_name" = "Esquema de color del camino";
-"weight_limit_description" = "Proporciona el peso del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos pesados.";
-"height_limit_description" = "Proporciona la altura del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos altos.";
-"lenght_limit_description" = "Proporciona la longitud del vehículo, se pueden aplicar algunas restricciones de rutas para vehículos largos.";
-"width_limit_description" = "Proporciona el ancho del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos anchos.";
+"weight_limit_description" = "Indica el peso del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos pesados.";
+"height_limit_description" = "Indica la altura del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos altos.";
+"lenght_limit_description" = "Indica la longitud del vehículo, se pueden aplicar algunas restricciones de rutas para vehículos largos.";
+"width_limit_description" = "Indica el ancho del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos anchos.";
 "vessel_height_limit_description" = "Definí la altura de la embarcación para evitar puentes bajos. Tené en cuenta que si el puente es móvil, usaremos su altura en estado abierto.";
 "vessel_width_limit_description" = "Definí el ancho de la embarcación para evitar puentes estrechos";
 "default_speed_dialog_msg" = "Estima el tiempo de llegada para los tipos de caminos desconocidos, y limita la velocidad para todos los caminos (puede afectar a la ruta)";
@@ -2186,7 +2186,7 @@
 "turn_arrows" = "Flechas de giro";
 "turn_arrows_descr" = "Elegí si se muestran las flechas de giro en la línea de ruta.";
 "shared_string_min_height" = "Altura mín.";
-"routeInfo_surface_description" = "Proporciona información sobre la superficie física de los caminos y senderos.";
+"routeInfo_surface_description" = "Provee información sobre la superficie física de los caminos y senderos.";
 "routeInfo_winter_ice_road_description" = "Colorea la ruta o el trazado de la vía según la clasificación del camino en invierno.";
 "routeInfo_roadClass_description" = "Colorea la ruta o el trazado de la vía según la clasificación del camino.";
 "route_line_use_map_style_width" = "Usa el ancho predefinido del estilo de mapa (%@).";
@@ -2831,7 +2831,7 @@
 "next_turn_widget_desc" = "Muestra información sobre el próximo giro con una imagen de la maniobra y la distancia hasta ella.";
 "average_speed_widget_desc" = "Muestra la velocidad media del viaje actual.";
 "parking_widget_desc" = "Muestra la distancia desde el centro de la pantalla hasta el lugar del estacionamiento.";
-"mapillary_widget_desc" = "Proporciona un acceso rápido a la aplicación Mapillary para agregar imágenes a nivel de calle.";
+"mapillary_widget_desc" = "Provee un acceso rápido a la aplicación Mapillary para agregar imágenes a nivel de calle.";
 "av_notes_choose_action_widget_desc" = "Elegir acción.";
 "radius_rules_widget_desc" = "La herramienta «Regla radial» muestra círculos de distancia alrededor del punto marcado en el mapa.";
 "current_time_widget_desc" = "Muestra la hora actual tomada del dispositivo.";
@@ -3781,7 +3781,7 @@
 "liter_per_hour" = "L/h";
 "unit_volt" = "V";
 "obd_widget_group" = "Estadísticas del vehículo";
-"route_guidance_desc" = "Proporciona orientación sobre la ruta en tiempo real, incluida la distancia hasta el próximo giro, el nombre de la ruta, la calle actual e información sobre el carril. Los widgets se activan al navegar.";
+"route_guidance_desc" = "Indica la orientación sobre la ruta en tiempo real, incluida la distancia hasta el próximo giro, el nombre de la ruta, la calle actual e información sobre el carril. Los widgets se activan al navegar.";
 "route_guidance" = "Guías de ruta";
 "shared_string_road_exit" = "Salida";
 "ltr_or_rtl_combine_via_per" = "%@ por %@";
@@ -3833,3 +3833,12 @@
 "shared_string_normal" = "Normal";
 "shared_string_large" = "Grande";
 "unit_of_temperature_description" = "Las unidades elegidas se aplicarán a todos los datos relacionados con la temperatura del perfil actual.";
+"standard_maps" = "Mapas estándar";
+"wikipedia_and_travel_maps" = "Wikipedia y mapas turísticos";
+"topography_maps" = "Mapas topográficos";
+"download_live_updates" = "Actualizaciones en vivo";
+"local_indexes_cat_tts" = "Indicaciones por voz (TTS)";
+"local_indexes_cat_voice" = "Indicaciones por voz (grabadas)";
+"rendering_styles" = "Estilos de representación";
+"next_turn_information" = "Información del siguiente giro";
+"next_turn_information_desc" = "Indica la dirección del siguiente giro y el nombre de la calle.";

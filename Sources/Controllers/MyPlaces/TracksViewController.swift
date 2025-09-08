@@ -665,7 +665,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func getSearchTracksSortMode() -> TracksSortMode {
-        guard let searchSortModeTitle = settings.searchTracksSortModes.get() else { return .lastModified }
+        let searchSortModeTitle = settings.searchTracksSortModes.get()
         return TracksSortMode.getByTitle(searchSortModeTitle)
     }
     
@@ -675,17 +675,16 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             return
         }
         
-        if let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: UIFont.preferredFont(forTextStyle: .footnote), textColor: UIColor.textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width) {
-            footer.backgroundColor = .groupBg
-            for subview in footer.subviews {
-                if let label = subview as? UILabel {
-                    label.textAlignment = .center
-                    label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                }
+        let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: UIFont.preferredFont(forTextStyle: .footnote), textColor: UIColor.textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width)
+        footer.backgroundColor = .groupBg
+        for subview in footer.subviews {
+            if let label = subview as? UILabel {
+                label.textAlignment = .center
+                label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             }
-            
-            tableView.tableFooterView = footer
         }
+        
+        tableView.tableFooterView = footer
     }
     
     @objc private func filterButtonTapped() {
@@ -1720,7 +1719,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func renameVisibleTracks(oldPath: String, newPath: String) {
-        guard var visibleGpx = settings.mapSettingVisibleGpx.get() else { return }
+        var visibleGpx = settings.mapSettingVisibleGpx.get()
         
         for i in 0..<visibleGpx.count where visibleGpx[i].hasPrefix(oldPath) {
             let newPathCount = oldPath.count
@@ -1763,7 +1762,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func renameSortModeKey(from oldBasePath: String, to newBasePath: String) {
-        guard let sortModes = settings.getTracksSortModes() else { return }
+        let sortModes = settings.getTracksSortModes()
         var updatedSortModes = [String: String]()
         for (key, value) in sortModes {
             if key.hasPrefix(oldBasePath) {
@@ -1779,7 +1778,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func removeSortMode(forFolderPath folderPath: String) {
-        guard let sortModes = settings.getTracksSortModes() else { return }
+        let sortModes = settings.getTracksSortModes()
         var updatedSortModes = [String: String]()
         for (key, value) in sortModes where !key.hasPrefix(folderPath) {
             updatedSortModes[key] = value
@@ -1963,7 +1962,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     cell.descriptionLabel.text = item.descr
                 }
                 cell.accessoryType = tableView.isEditing ? .none : .disclosureIndicator
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+                if let iconName = item.iconName {
+                    cell.leftIconView.image = UIImage.templateImageNamed(iconName)
+                } else {
+                    cell.leftIconView.image = nil
+                }
                 if let color = item.obj(forKey: colorKey) as? UIColor {
                     cell.leftIconView.tintColor = color
                 }
@@ -1986,7 +1989,12 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 cell.showButton(item.key != emptyFilterFolderKey)
                 cell.titleLabel?.text = item.title
                 cell.descriptionLabel?.text = item.descr
-                cell.cellImageView?.image = UIImage.templateImageNamed(item.iconName)
+                if let iconName = item.iconName {
+                    cell.cellImageView?.image = UIImage.templateImageNamed(iconName)
+                } else {
+                    cell.cellImageView?.image = nil
+                }
+                
                 cell.cellImageView?.tintColor = item.iconTintColor
                 cell.button?.setTitle(item.obj(forKey: buttonTitleKey) as? String, for: .normal)
                 cell.button?.removeTarget(nil, action: nil, for: .allEvents)

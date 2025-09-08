@@ -6,9 +6,10 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import <UIKit/UIKit.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 //RGB color macro
 #define UIColorFromRGB(rgbValue) [UIColor \
@@ -102,12 +103,12 @@ static inline void executeOnMainThread(dispatch_block_t block)
 
 @interface UIImage (util)
 
-+ (UIImage *) templateImageNamed:(NSString *)imageName;
-+ (UIImage *) rtlImageNamed:(NSString *)imageName;
-+ (UIImage *) svgImageNamed:(NSString *)path;
-+ (UIImage *) mapSvgImageNamed:(NSString *)name;
-+ (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale;
-+ (UIImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height;
++ (nullable UIImage *) templateImageNamed:(nullable NSString *)imageName;
++ (nullable UIImage *) rtlImageNamed:(nullable NSString *)imageName;
++ (nullable UIImage *) svgImageNamed:(NSString *)path;
++ (nullable UIImage *) mapSvgImageNamed:(NSString *)name;
++ (nullable UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale;
++ (nullable UIImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height;
 
 @end
 
@@ -299,9 +300,10 @@ static inline void executeOnMainThread(dispatch_block_t block)
 + (NSArray<NSString *> *) arrayOfSpeedValues:(NSArray<NSNumber *> *) values;
 
 + (UIImage *) getMxIcon:(NSString *)name;
-+ (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize;
++ (nullable UIImage *) resizeImage:(nullable UIImage *)image newSize:(CGSize)newSize;
 + (BOOL) hasMapImage:(NSString *)resId;
 + (void) layoutComplexButton:(UIButton*)button;
++ (UIEdgeInsets)relativeMarginsForView:(UIView *)view inParent:(UIView *)parent;
 
 + (UIImage *) imageWithColor:(UIColor *)color;
 + (UIImage *) imageWithTintColor:(UIColor *)color image:(UIImage *)image;
@@ -339,8 +341,8 @@ static inline void executeOnMainThread(dispatch_block_t block)
 + (void) roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius;
 
 + (NSString *) preferredLang;
-+ (NSString *) currentLang;
-+ (NSString *) capitalizeFirstLetter:(NSString *)s;
++ (nullable NSString *) currentLang;
++ (nullable NSString *) capitalizeFirstLetter:(NSString *)s;
 + (NSString *) displayNameForLang:(NSString *)lang;
 + (NSString *) translatedLangName:(NSString *)lang;
 + (NSInteger) findFirstNumberEndIndex:(NSString *)value;
@@ -417,7 +419,7 @@ static inline void executeOnMainThread(dispatch_block_t block)
 + (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
 + (NSString*) fileMD5:(NSString*)path;
 
-+ (NSString *) toMD5:(NSString *)text;
++ (nullable NSString *) toMD5:(NSString *)text;
 
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
 
@@ -426,8 +428,8 @@ static inline void executeOnMainThread(dispatch_block_t block)
 
 + (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom;
 
-+ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
-+ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration verticalOffset:(CGFloat)verticalOffset inView:(UIView *)view;
++ (void)showToast:(nullable NSString *)title details:(nullable NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
++ (void)showToast:(nullable NSString *)title details:(nullable NSString *)details duration:(NSTimeInterval)duration verticalOffset:(CGFloat)verticalOffset inView:(UIView *)view;
 + (NSString *) formatWarnings:(NSArray<NSString *> *)warnings;
 
 + (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate;
@@ -443,3 +445,5 @@ static inline void executeOnMainThread(dispatch_block_t block)
 + (NSString *) generateCurrentDateFilename;
 
 @end
+
+NS_ASSUME_NONNULL_END

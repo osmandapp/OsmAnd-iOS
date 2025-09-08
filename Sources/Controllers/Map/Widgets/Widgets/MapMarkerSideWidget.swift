@@ -96,7 +96,7 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
             return true
         }
         
-        let newModeStr = markerModePref.get()!
+        let newModeStr = markerModePref.get()
         let newMode = SideMarkerMode.markerModeByName(newModeStr)!
         let modeChanged = cachedMode != newMode
         if modeChanged {
@@ -170,11 +170,11 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     private func updateIconIfNeeded(marker: OADestination, newMode: SideMarkerMode, modeChanged: Bool) {
         let colorChanged = marker.color != cachedMarkerColor || cachedNightMode != isNightMode()
         if colorChanged || modeChanged {
-            let iconName = newMode.iconName
             cachedMarkerColor = marker.color
             cachedNightMode = isNightMode()
-            if let cachedMarkerColor = cachedMarkerColor {
-                setImage(UIImage.templateImageNamed(iconName), with: cachedMarkerColor, iconName: iconName)
+            let iconName = newMode.iconName
+            if let cachedMarkerColor, let image = UIImage.templateImageNamed(iconName) {
+                setImage(image, with: cachedMarkerColor, iconName: iconName)
             }
         }
     }
@@ -308,7 +308,7 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
                               widgetConfigurationParams: [String: Any]?,
                               isCreate: Bool) -> String {
         if let prefStr = pref as? OACommonString {
-            var currentValue = prefStr.defValue!
+            var currentValue = prefStr.defValue
             if let widgetConfigurationParams,
                let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix(prefStr.key) }),
                let value = widgetConfigurationParams[key] as? String {

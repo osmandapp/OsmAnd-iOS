@@ -193,11 +193,15 @@ static NSInteger const kMap3DModeButtonTag = -990;
 
 + (UIImage *) templateImageNamed:(NSString *)imageName
 {
+    if (!imageName)
+        return nil;
     return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 + (UIImage *) rtlImageNamed:(NSString *)imageName
 {
+    if (!imageName)
+        return nil;
     return [UIImage imageNamed:imageName].imageFlippedForRightToLeftLayoutDirection;
 }
 
@@ -1463,6 +1467,33 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     button.imageEdgeInsets = UIEdgeInsetsMake(
                                               - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
     [button setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
+}
+
++ (UIEdgeInsets)relativeMarginsForView:(UIView *)view inParent:(UIView *)parent
+{
+    if (!view || !parent)
+        return UIEdgeInsetsZero;
+    
+    [parent layoutIfNeeded];
+    UIView *ref = parent.window ?: parent;
+    CGRect child = [view convertRect:view.bounds toView:ref];
+    CGRect par = [parent convertRect:parent.bounds toView:ref];
+    CGFloat left = CGRectGetMinX(child) - CGRectGetMinX(par);
+    CGFloat top = CGRectGetMinY(child) - CGRectGetMinY(par);
+    CGFloat right = CGRectGetWidth(par) - left - CGRectGetWidth(child);
+    CGFloat bottom = CGRectGetHeight(par) - top - CGRectGetHeight(child);
+    CGFloat eps = 0.5;
+    if (left > -eps && left < 0)
+        left = 0;
+    if (top > -eps && top < 0)
+        top = 0;
+    if (right > -eps && right < 0)
+        right = 0;
+    if (bottom > -eps && bottom < 0)
+        bottom = 0;
+    
+    UIEdgeInsets insets = UIEdgeInsetsMake(top, left, bottom, right);
+    return insets;
 }
 
 + (CGSize) calculateTextBounds:(NSString *)text font:(UIFont *)font

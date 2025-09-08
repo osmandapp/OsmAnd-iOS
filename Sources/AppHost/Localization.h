@@ -11,6 +11,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 #pragma GCC diagnostic ignored "-Wformat-security"
 
 #define OALocalizedString(defaultValue, ...) \
@@ -28,7 +30,7 @@ _OALocalizedString(true, languageCode, defaultValue, ##__VA_ARGS__)
 static NSBundle * _Nullable enBundle = nil;
 static NSMutableDictionary<NSString *, NSBundle *> * _Nullable localeBundleCache = nil;
 
-static inline NSString * _Nonnull _OALocalizedString(BOOL upperCase, NSString * _Nullable languageCode, NSString * _Nullable defaultValue, ...)
+static inline NSString * _OALocalizedString(BOOL upperCase, NSString * _Nullable languageCode, NSString * _Nullable defaultValue, ...)
 {
     if (!enBundle)
     {
@@ -121,29 +123,21 @@ static inline NSString * _Nonnull _OALocalizedString(BOOL upperCase, NSString * 
     return res;
 }
 
-static inline NSString * _Nonnull localizedString(NSString * _Nullable defaultValue)
+static inline NSString *localizedString(NSString * _Nullable defaultValue)
 {
     return _OALocalizedString(false, nil, defaultValue);
 }
 
-static inline NSString * _Nonnull localizedStringWithLocale(NSString * _Nullable languageCode, NSString * _Nullable defaultValue)
+static inline NSString *localizedStringWithLocale(NSString * _Nullable languageCode, NSString * _Nullable defaultValue)
 {
     return _OALocalizedString(false, languageCode, defaultValue);
 }
 
-static inline NSString * _Nonnull localizedStringUpWithLocale(NSString * _Nullable languageCode, NSString * _Nullable defaultValue)
+static inline NSString *localizedStringUpWithLocale(NSString * _Nullable languageCode, NSString * _Nullable defaultValue)
 {
     return _OALocalizedString(true, languageCode, defaultValue);
 }
 
-/*
-#define OALocalizedString(defaultValue) \
-    _OALocalizedString(defaultValue, __FILE__, __LINE__, __PRETTY_FUNCTION__)
-inline NSString* _OALocalizedString(NSString* defaultValue, const char* file, unsigned int line, const char* prettyFunction)
-{
-    NSString* key = [NSString stringWithFormat:@"%s(%d):'%@'", prettyFunction, line, defaultValue];
-    NSString* comment = [NSString stringWithFormat:@"%s:%d:%s:'%@'", file, line, prettyFunction, defaultValue];
-    return NSLocalizedStringWithDefaultValue(key, nil, [NSBundle mainBundle], defaultValue, comment);
-}
-*/
+NS_ASSUME_NONNULL_END
+
 #endif

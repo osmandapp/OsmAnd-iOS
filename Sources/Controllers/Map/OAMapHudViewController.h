@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "OAMapModeHeaders.h"
 
-@class OAFloatingButtonsHudViewController, OAToolbarViewController, OAMapRulerView, OAMapInfoController, OADownloadMapWidget, OAWeatherToolbar, OAHudButton, WeatherNavigationBarView, WeatherContoursButton;
+@class OAFloatingButtonsHudViewController, OAToolbarViewController, OAMapRulerView, OAMapInfoController, OADownloadMapWidget, OAWeatherToolbar, OAHudButton, WeatherNavigationBarView, WeatherContoursButton, MapHudLayout;
 
 @interface OAMapHudViewController : UIViewController
 
@@ -22,7 +22,6 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *statusBarViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomBarViewHeightConstraint;
 
-@property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet OAHudButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
 
@@ -57,7 +56,6 @@
 @property (weak, nonatomic) IBOutlet OAHudButton *mapModeButton;
 @property (weak, nonatomic) IBOutlet OAHudButton *zoomInButton;
 @property (weak, nonatomic) IBOutlet OAHudButton *zoomOutButton;
-@property (weak, nonatomic) IBOutlet UIView *zoomButtonsView;
 
 @property (weak, nonatomic) IBOutlet OAHudButton *driveModeButton;
 @property (weak, nonatomic) IBOutlet UITextField *searchQueryTextfield;
@@ -69,12 +67,12 @@
 @property (nonatomic) OAMapInfoController *mapInfoController;
 @property (nonatomic) OADownloadMapWidget *downloadMapWidget;
 @property (nonatomic) OAWeatherToolbar *weatherToolbar;
+@property (nonatomic, strong, readonly) MapHudLayout *mapHudLayout;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
 
 - (void) enterContextMenuMode;
 - (void) restoreFromContextMenuMode;
-- (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left;
 - (void) resetToDefaultRulerLayout;
 - (void) updateMapRulerData;
 - (void) updateMapRulerDataWithDelay;

@@ -11,13 +11,15 @@
 static const NSInteger AMENITY_ID_RIGHT_SHIFT = 1;
 static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAMapObject : NSObject
 
 @property (nonatomic) long long obfId;
 
-@property (nonatomic) NSString *name;
+@property (nonatomic, nullable) NSString *name;
 @property (nonatomic) NSString *enName;
-@property (nonatomic) NSString *nameLocalized;
+@property (nonatomic, nullable) NSString *nameLocalized;
 @property (nonatomic) NSMutableDictionary<NSString *, NSString *> *localizedNames;
 
 @property (nonatomic, assign) double latitude;
@@ -27,14 +29,16 @@ static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
 
 - (CLLocation *) getLocation;
 
-- (void) addLocation:(int)x y:(int)y;
-- (void) setName:(NSString * _Nullable)lang name:(NSString * _Nonnull)name;
+- (void)addLocation:(int)x y:(int)y;
+- (void)setName:(NSString * _Nullable)lang name:(NSString * _Nonnull)name;
 
 - (void)copyNames:(NSString *)otherName otherEnName:(NSString *)otherEnName otherNames:(NSDictionary<NSString *, NSString *> *)otherNames overwrite:(BOOL)overwrite;
 - (void)copyNames:(NSString *)otherName otherEnName:(NSString *)otherEnName otherNames:(NSDictionary<NSString *, NSString *> *)otherNames;
 - (void)copyNames:(OAMapObject *)s copyName:(BOOL)copyName copyEnName:(BOOL)copyEnName overwrite:(BOOL)overwrite;
 - (void)copyNames:(OAMapObject *)s;
 
-+ (BOOL) isNameLangTag:(NSString *)tag;
++ (BOOL)isNameLangTag:(NSString *)tag;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -6,8 +6,6 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objcMembers
 final class QuickActionButtonState: MapButtonState {
 
@@ -19,7 +17,7 @@ final class QuickActionButtonState: MapButtonState {
     let fabMarginPref: FabMarginPreference
 
     private let app = OsmAndApp.swiftInstance()
-    private let settings = OAAppSettings.sharedManager()!
+    private let settings = OAAppSettings.sharedManager()
     private(set) var quickActions = [OAQuickAction]()
 
     override init(withId id: String) {
@@ -36,8 +34,16 @@ final class QuickActionButtonState: MapButtonState {
 
     override func getName() -> String {
         let defaultName = localizedString("configure_screen_quick_action")
-        let name = namePref.get() ?? defaultName
+        let name = namePref.get()
         return name.isEmpty ? defaultName : name
+    }
+    
+    override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
+        let hash: Int32 = MapButtonState.javaCompatibleStringHash(of: id)
+        let mod: Int = hash == Int32.min ? 0 : abs(Int(hash % 3))
+        let xMove: Bool = mod == 0 || mod == 2
+        let yMove: Bool = mod == 1 || mod == 2
+        return setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_RIGHT, posV: ButtonPositionSize.companion.POS_BOTTOM, xMove: xMove, yMove: yMove)
     }
 
     func setEnabled(_ enabled: Bool) {
@@ -45,10 +51,8 @@ final class QuickActionButtonState: MapButtonState {
     }
 
     func hasCustomName() -> Bool {
-        if let name = namePref.get() {
-            return !name.isEmpty
-        }
-        return false
+        let name = namePref.get()
+        return !name.isEmpty
     }
 
     func setName(_ name: String) {
@@ -114,27 +118,30 @@ final class QuickActionButtonState: MapButtonState {
         return super.getIcon()
     }
 
-    func resetForMode(_ appMode: OAApplicationMode) {
+    override func resetForMode(_ appMode: OAApplicationMode) {
+        super.resetForMode(appMode)
         statePref.resetMode(toDefault: appMode)
         fabMarginPref.resetMode(toDefault: appMode)
     }
 
-    func copyForMode(fromMode: OAApplicationMode, toMode: OAApplicationMode) {
+    override func copyForMode(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        super.copyForMode(from: fromMode, to: toMode)
         statePref.set(statePref.get(fromMode), mode: toMode)
         fabMarginPref.copyForMode(fromMode: fromMode, toMode: toMode)
     }
 
     func saveActions(_ serializer: QuickActionSerializer) {
         do {
-            let jsonString = String(data: try serializer.serialize(quickActions), encoding: .utf8)
-            quickActionsPref.set(jsonString)
+            if let jsonString = String(data: try serializer.serialize(quickActions), encoding: .utf8) {
+                quickActionsPref.set(jsonString)
+            }
         } catch {
             print("Error encoding quickActions: \(error)")
         }
     }
 
     func parseQuickActions(_ serializer: QuickActionSerializer) throws {
-        if let json = quickActionsPref.get(), let data = json.data(using: .utf8) {
+        if let data = quickActionsPref.get().data(using: .utf8) {
             quickActions = try serializer.deserialize(data)
         }
     }

@@ -81,9 +81,7 @@ final class DownloadImageMetadataService {
     
     private func buildUrlString() -> String {
         var urlString = osmandParseUrl
-        // swiftlint:disable all
-        let settings = OAAppSettings.sharedManager()!
-        // swiftlint:enable all
+        let settings = OAAppSettings.sharedManager()
         let languageCode = OsmAndApp.swiftInstance().getLanguageCode().addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         
         urlString += "&lang=" + languageCode

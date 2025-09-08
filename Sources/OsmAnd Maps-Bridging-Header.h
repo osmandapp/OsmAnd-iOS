@@ -112,6 +112,7 @@
 #import "OASunriseSunsetWidgetState.h"
 #import "OAAverageSpeedComputer.h"
 #import "OADestinationBarWidget.h"
+#import "OADownloadMapWidget.h"
 
 // Plugins
 #import "OAPlugin.h"
@@ -223,6 +224,7 @@
 #import "OATurnDrawable.h"
 #import "OAHudButton.h"
 #import "OACollapsableView.h"
+#import "OAMapRulerView.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

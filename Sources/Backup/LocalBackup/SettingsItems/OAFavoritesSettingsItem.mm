@@ -320,6 +320,7 @@
         favoriteGroup.color = UIColorFromRGB(pointsGroup.color);
         favoriteGroup.iconName = pointsGroup.iconName;
         favoriteGroup.backgroundType = pointsGroup.backgroundType;
+        favoriteGroup.isVisible = ![pointsGroup isHidden];
     }
     return favoriteGroup;
 }

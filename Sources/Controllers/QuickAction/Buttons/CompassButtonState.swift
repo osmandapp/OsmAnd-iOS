@@ -11,7 +11,7 @@ import UIKit
 @objcMembers
 final class CompassButtonState: MapButtonState {
 
-    static let compassHudId = "compass"
+    static let compassHudId = "map.view.compass"
 
     let visibilityPref: OACommonInteger
 
@@ -31,6 +31,10 @@ final class CompassButtonState: MapButtonState {
     override func getIcon() -> UIImage? {
         UIImage.templateImageNamed(getVisibility().iconName)
     }
+    
+    override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
+        setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_LEFT, posV: ButtonPositionSize.companion.POS_TOP, xMove: false, yMove: true)
+    }
 
     func getVisibility() -> CompassVisibility {
         CompassVisibility(rawValue: visibilityPref.get())!
@@ -41,7 +45,7 @@ final class CompassButtonState: MapButtonState {
     }
 
     private static func createVisibilityPref() -> OACommonInteger {
-        let settings = OAAppSettings.sharedManager()!
+        let settings = OAAppSettings.sharedManager()
         guard let preference = settings.getPreferenceByKey("compass_visibility") as? OACommonInteger else {
             let defaultValue = CompassVisibility.alwaysVisible.rawValue
             return settings.registerIntPreference("compass_visibility", defValue: defaultValue).makeProfile()

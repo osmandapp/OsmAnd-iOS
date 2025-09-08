@@ -387,7 +387,7 @@ static QuickActionType *TYPE_INTERFACE;
 {
     for (QuickActionButtonState *buttonState in [self getButtonsStates])
     {
-        [buttonState copyForModeFromMode:fromAppMode toMode:toAppMode];
+        [buttonState copyForModeFrom:fromAppMode to:toAppMode];
     }
     [self updateActionTypes];
 }

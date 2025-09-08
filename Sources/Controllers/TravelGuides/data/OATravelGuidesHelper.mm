@@ -172,6 +172,21 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     return wptPt;
 }
 
++ (NSArray<NSString *> *) getAllObfList
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    NSMutableArray<NSString *> *obfFilenames = [NSMutableArray array];
+    for (const auto& resource : app.resourcesManager->getLocalResources())
+    {
+        if (resource->type == OsmAnd::ResourcesManager::ResourceType::Travel ||
+            resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        {
+            [obfFilenames addObject:resource->id.toNSString()];
+        }
+    }
+    return obfFilenames;
+}
+
 + (NSArray<NSString *> *) getTravelGuidesObfList
 {
     OsmAndAppInstance app = OsmAndApp.instance;
@@ -445,12 +460,17 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
 
 + (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader
 {
+    return [self.class searchGpxMapObject:travelGpx bbox31:bbox31 reader:reader useAllObfFiles:NO];
+}
+
++ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader useAllObfFiles:(BOOL)useAllObfFiles
+{
     OsmAndAppInstance app = OsmAndApp.instance;
     QList< std::shared_ptr<const OsmAnd::ObfFile> > files = app.resourcesManager->obfsCollection->getObfFiles();
     std::shared_ptr<const OsmAnd::ObfFile> res;
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > result;
     
-    NSArray<NSString *> *travelObfNames = [self.class getTravelGuidesObfList];
+    NSArray<NSString *> *travelObfNames = useAllObfFiles ? [self.class getAllObfList] : [self.class getTravelGuidesObfList];
     
     NSString *filename = travelGpx.file;
         if (!NSStringIsEmpty(filename) || !NSStringIsEmpty(reader))

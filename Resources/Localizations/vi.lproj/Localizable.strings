@@ -2278,3 +2278,15 @@
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ / tháng";
 "obd_engine_runtime" = "Thời gian hoạt động của động cơ";
 "you_can_get_feature_as_part_of_pattern" = "Lấy \"%@\" như một phần của kế hoạch %@. So sánh:";
+"manage_storage" = "Quản lý dung lượng lưu trữ";
+"next_turn_information" = "Thông tin lối rẽ tiếp theo";
+"next_turn_information_desc" = "Hiện lối rẽ kế tiếp và tên đường.";
+"poi_filter_parking" = "Điểm đỗ xe";
+"show_lanes" = "Làn";
+"map_widget_parking" = "Điểm đỗ xe";
+"osmand_parking_warning" = "Cảnh báo";
+"gpxup_public" = "Công khai";
+"gpxup_identifiable" = "Xác định được";
+"gpxup_trackable" = "Có thể xem đường";
+"gpxup_private" = "Riêng tư";
+"gpx_tags_txt" = "Thẻ";

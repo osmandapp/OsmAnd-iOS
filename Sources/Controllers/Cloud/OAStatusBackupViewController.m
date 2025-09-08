@@ -114,8 +114,6 @@
                                animated:NO
                              completion:nil];
     
-    UINavigationBarAppearance *scrollEdgeAppearance = self.navigationController.navigationBar.scrollEdgeAppearance;
-    UIColor *navigationBarColor = [self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor colorWithAlphaComponent:1.];
     self.segmentContainerView.backgroundColor = [self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor colorWithAlphaComponent:1.];
 }
 

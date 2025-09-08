@@ -10,7 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
 @class ClickableWay, OARenderedObject, OAClickableWayMenuProvider;
 
 @interface OAClickableWayHelper : NSObject
@@ -21,6 +20,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isClickableWayTags:(NSString *)name tags:(NSDictionary<NSString *, NSString *> *)tags;
 
 @end
-
 
 NS_ASSUME_NONNULL_END

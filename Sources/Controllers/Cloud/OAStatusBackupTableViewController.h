@@ -10,6 +10,8 @@
 #import "OANetworkSettingsHelper.h"
 #import "OASettingsItemType.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OATableRowData;
 
 typedef NS_ENUM(NSInteger, EOARecentChangesType)
@@ -35,3 +37,5 @@ typedef NS_ENUM(NSInteger, EOARecentChangesType)
 - (BOOL) hasItems;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -138,7 +138,6 @@
 
 - (void)onItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    NSIndexPath *prevSelectedColorIndex = [self getSelectedIndexPath];
     [self setSelectedIndexPath:indexPath];
     id selectedItem = [self getSelectedItem];
     [collectionView reloadData];

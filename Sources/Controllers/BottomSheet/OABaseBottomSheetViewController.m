@@ -168,7 +168,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 - (void) adjustFrame
 {
     CGRect f = _bottomSheetView.frame;
-    CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if (OAUtilities.isLandscapeIpadAware)
     {
         f.size.height = [self getLandscapeHeight];

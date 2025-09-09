@@ -1808,7 +1808,7 @@
 "simulation_constant_mode_desc" = "A szimuláció egy kiválasztott állandó sebességgel történik.";
 "purchases_feature_desc_combined_wiki" = "Fedezze fel a Wikipédia szócikkeit útközben, internetkapcsolat nélkül. Offline adatok országok szerinti bontásban, minden nyelven.";
 "restore_purchases" = "Vásárlások visszaállítása";
-"purchases_feature_desc_terrain" = "Szintvonalak, szürkeárnyalatos domborzatárnyékolás és a lejtviszonyokat színskálával ábrázoló térképek a csúcsok és síkságok megjelenítéséhez.";
+"purchases_feature_desc_terrain" = "Szintvonalak, szürkeárnyalatos domborzatárnyékolás és a lejtési viszonyokat színskálával ábrázoló térképek a csúcsok és síkságok megjelenítéséhez.";
 "osmand_development_plugin_description" = "Funkciókat biztosít az OsmAnd teszteléshez: navigációs útvonalak szimulálása, a képernyőn való megjelenítés, a teljesítmény ellenőrzése stb. Ez a bővítmény az alkalmazás normál használatához nem szükséges.";
 "altitude_ascent" = "Emelkedő";
 "simulation_real_mode_title" = "Realisztikus szimuláció";

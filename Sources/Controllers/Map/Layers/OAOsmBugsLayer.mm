@@ -138,7 +138,23 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
-    return [OAOsmEditsLayer getTargetPointFromPoint:obj];
+    if ([obj isKindOfClass:OAOnlineOsmNoteWrapper.class])
+    {
+        OAOnlineOsmNoteWrapper *wrapper = obj;
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.targetObj = wrapper;
+        targetPoint.type = OATargetOsmOnlineNote;
+        targetPoint.location = CLLocationCoordinate2DMake(wrapper.latitude, wrapper.longitude);
+        
+        targetPoint.title = wrapper.descr;
+        UIImage *icon = [UIImage imageNamed:wrapper.opened ? @"ic_custom_osm_note_unresolved" : @"ic_custom_osm_note_resolved"];
+        targetPoint.icon = icon;
+        
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
+        return targetPoint;
+    }
+    
+    return nil;
 }
 
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj
@@ -161,12 +177,19 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     return nil;
 }
 
+- (OAOnlineOsmNoteWrapper *) parseOnlineNote:(std::shared_ptr<const OAOnlineOsmNote>)cppNote
+{
+    return [[OAOnlineOsmNoteWrapper alloc] initWithNote:cppNote];
+}
+
 - (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     float zoom = [self.mapViewController getMapZoom];
-    NSArray<OAOpenStreetMapPoint *> *objects = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
+    const auto objects = _notesMapProvider->getNotesCache();
     
-    if (zoom >= START_ZOOM && !NSArrayIsEmpty(objects))
+    BOOL showClosed = NO; // ios doesn't use SHOW_CLOSED_OSM_BUGS setting. use default value
+    
+    if (zoom >= START_ZOOM && !objects.isEmpty())
     {
         CGPoint pixel = result.point;
         int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
@@ -175,20 +198,20 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
         CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
         OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
         
-        for (OAOsmNotePoint *note in objects)
+        for (const auto note : objects)
         {
-            // Android has extra settings check here. 
-            //boolean showClosed = plugin.SHOW_CLOSED_OSM_BUGS.get();
-            //if (!note.isOpened() && !showClosed) {
-            //    continue;
-            //}
+            if (!note->isOpened() && !showClosed)
+                continue;
             
-            double lat = [note getLatitude];
-            double lon = [note getLongitude];
+            double lat = note->getLatitude();
+            double lon = note->getLongitude();
             BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
             
             if (shouldAdd)
-                [result collect:note provider:self];
+            {
+                OAOnlineOsmNoteWrapper *parsedNote = [self parseOnlineNote:note];
+                [result collect:parsedNote provider:self];
+            }
         }
     }
 }

@@ -101,11 +101,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     
     for (OAMapLayer *layer in layers)
     {
-        // Android doesn't have that layer here
-        if ([layer isKindOfClass:OAOsmBugsLayer.class] ||
-            [layer isKindOfClass:OAGPXRecLayer.class])
-            continue;
-        
         if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
             id<OAContextMenuProvider> provider = ((id<OAContextMenuProvider>)layer);

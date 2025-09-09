@@ -27,7 +27,6 @@
 #import "GeneratedAssetSymbols.h"
 #import <DGCharts/DGCharts-Swift.h>
 
-static const NSInteger kMaxMissingDataZoomShift = 5;
 static const NSInteger kMinZoomPickerRow = 1;
 static const NSInteger kMaxZoomPickerRow = 2;
 static const NSInteger kElevationMinMeters = 0;

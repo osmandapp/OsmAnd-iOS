@@ -76,7 +76,7 @@ class ScreenOrientationHelper: NSObject {
     }
 
     private func updateCachedUserInterfaceOrientationMask() {
-        let mapScreenOrientation: Int32 = settings.mapScreenOrientation.get() ?? Int32(EOAScreenOrientation.system.rawValue)
+        let mapScreenOrientation: Int32 = settings.mapScreenOrientation.get()
         cachedUserInterfaceOrientationMask =
             mapScreenOrientation == EOAScreenOrientation.portrait.rawValue ? .portrait
             : mapScreenOrientation == EOAScreenOrientation.landscape.rawValue ? .landscape

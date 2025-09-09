@@ -45,7 +45,7 @@
     if (!_routeKey)
         return nil;
     
-    const auto &env = _env.mapPresentationEnvironment;
+    const auto env = _env.mapPresentationEnvironment;
     if (!env)
         return nil;
     

@@ -27,7 +27,6 @@ open class MapButtonState: NSObject {
         self.positionSize = ButtonPositionSize(id: id)
         self.defaultPositionSize = ButtonPositionSize(id: id)
         super.init()
-        updatePortraitFlag()
         setupButtonPosition(positionSize)
         setupButtonPosition(defaultPositionSize)
     }
@@ -42,12 +41,6 @@ open class MapButtonState: NSObject {
         var size = Self.defaultSizeDp
         size = (size / 8) + 1
         position.setSize(width8dp: Int32(size), height8dp: Int32(size))
-    }
-    
-    private func updatePortraitFlag() {
-        executeOnMainThread { [weak self] in
-            self?.portrait = OAUtilities.isPortrait()
-        }
     }
     
     func getName() -> String {
@@ -87,7 +80,7 @@ open class MapButtonState: NSObject {
     }
 
     func updatePositions() {
-        portrait = !OAUtilities.isLandscape()
+        portrait = OAUtilities.isPortrait()
         updatePosition(positionSize)
         updatePosition(defaultPositionSize)
     }

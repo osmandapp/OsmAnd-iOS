@@ -112,6 +112,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     OARowInfo *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
+    BOOL _isLoadingImages;
 }
 
 - (void) setRows:(NSMutableArray<OARowInfo *> *)rows
@@ -197,7 +198,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     // implement in subclasses
 }
 
-- (void) appdendDetailsButtonRow:(NSMutableArray<OARowInfo *> *)rows
+- (void) appendDetailsButtonRow:(NSMutableArray<OARowInfo *> *)rows
 {
     if ([self showDetailsButton])
     {
@@ -213,7 +214,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
     [self buildTopRows:_rows];
     
-    [self appdendDetailsButtonRow:_rows];
+    [self appendDetailsButtonRow:_rows];
     
     [self buildWithinRow];
     
@@ -243,7 +244,13 @@ static const CGFloat kTextMaxHeight = 150.0;
     [self addNearbyImagesIfNeeded];
     [self addMapillaryCardsRowInfoIfNeeded];
     
-    [self startLoadingImages];
+    if (!_isLoadingImages)
+    {
+        __weak __typeof(self) weakSelf = self;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
+            [weakSelf startLoadingImages];
+        });
+    }
 
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
@@ -733,28 +740,51 @@ static const CGFloat kTextMaxHeight = 150.0;
 
     NSMutableArray<AbstractCard *> *newCards = [NSMutableArray arrayWithArray:cards];
     NSInteger existingCount = cards.count;
-
+    
+    __weak __typeof(self) weakSelf = self;
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
         NSData *effectiveData = data;
         NSURLResponse *effectiveResponse = response;
 
-        if (!data || !response) {
-            NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];
-            if (cached) {
+        // Create a copy of the request without the 'mloc' parameter for caching purposes
+        NSURLRequest *cacheRequest = request;
+        if ([request.URL.absoluteString containsString:@"mloc="]) {
+            NSURLComponents *components = [NSURLComponents componentsWithURL:request.URL resolvingAgainstBaseURL:NO];
+            components.queryItems = [components.queryItems filteredArrayUsingPredicate:
+                                     [NSPredicate predicateWithBlock:^BOOL(NSURLQueryItem *item, NSDictionary *bindings) {
+                return ![item.name isEqualToString:@"mloc"];
+            }]];
+            cacheRequest = [NSURLRequest requestWithURL:components.URL];
+        }
+
+        if ((!data || !response) && [self isInternetConnectionError:error])
+        {
+            NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:cacheRequest sessionKey:key];
+            if (cached)
+            {
                 effectiveData = cached.data;
                 effectiveResponse = cached.response;
-            } else {
-                if (onFailureNoCache) {
+            }
+            else
+            {
+                if (onFailureNoCache)
+                {
                     dispatch_async(dispatch_get_main_queue(), onFailureNoCache);
                 }
                 return;
             }
-        } else {
-            // Cache only if response is valid
+        }
+        else
+        {
             if ([response isKindOfClass:[NSHTTPURLResponse class]] &&
-                ((NSHTTPURLResponse *)response).statusCode == 200) {
-                [URLSessionManager storeResponse:response data:data for:request sessionKey:key];
+                ((NSHTTPURLResponse *)response).statusCode == 200)
+            {
+                [URLSessionManager storeResponse:response data:data for:cacheRequest sessionKey:key];
             }
         }
 
@@ -765,7 +795,7 @@ static const CGFloat kTextMaxHeight = 150.0;
         if (!jsonDict || ![jsonDict isKindOfClass:[NSDictionary class]]) {
             NSLog(@"JSON parse error: %@", jsonError ?: @"Unknown error");
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+                [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
             });
             return;
         }
@@ -774,7 +804,7 @@ static const CGFloat kTextMaxHeight = 150.0;
         if (images.count == 0)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+                [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
             });
         }
         else
@@ -783,15 +813,15 @@ static const CGFloat kTextMaxHeight = 150.0;
             for (NSDictionary *dict in images)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self getCard:dict onComplete:^(AbstractCard *card) {
+                    [strongSelf getCard:dict onComplete:^(AbstractCard *card) {
                         if (card)
                             [newCards addObject:card];
                         else
                             count--;
-                        
+
                         if (newCards.count == count + existingCount)
                         {
-                            [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+                            [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
                         }
                     }];
                 });
@@ -808,6 +838,14 @@ static const CGFloat kTextMaxHeight = 150.0;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateDisplayingCards:cards];
     });
+}
+
+- (BOOL)isInternetConnectionError:(NSError *)error
+{
+    if (!error) return NO;
+    if (![error.domain isEqualToString:NSURLErrorDomain]) return NO;
+
+    return error.code == NSURLErrorNotConnectedToInternet;
 }
 
 - (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards
@@ -1309,6 +1347,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
 - (void)startLoadingImages
 {
+    _isLoadingImages = YES;
     _wikiCardsReady = NO;
     CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
     CollapsableCardsView *mapillaryCardsView;
@@ -1353,6 +1392,11 @@ static const CGFloat kTextMaxHeight = 150.0;
 - (void) descriptionChanged:(NSString *)descr
 {
     [self.tableView reloadData];
+}
+
+- (void)dealloc
+{
+    NSLog(@"");
 }
 
 @end

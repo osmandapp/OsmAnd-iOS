@@ -165,7 +165,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
         NSData *effectiveData = data;
         NSURLResponse *effectiveResponse = response;
 
-        if (!data || !response) {
+        if ((!data || !response) && [self isInternetConnectionError:error])
+        {
             NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];
             if (cached)
             {
@@ -236,6 +237,15 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 
     [task resume];
 }
+
+- (BOOL)isInternetConnectionError:(NSError *)error
+{
+    if (!error) return NO;
+    if (![error.domain isEqualToString:NSURLErrorDomain]) return NO;
+
+    return error.code == NSURLErrorNotConnectedToInternet;
+}
+
 
 - (WikiImage *)getOsmandApiWikiImage:(NSString *)imageUrl
 {

@@ -3231,7 +3231,7 @@
 		FA9628E22AFCFB57004B7DEF /* SectionHeaderFooterButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */; };
 		FA9628E42AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */; };
 		FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */; };
-		FA99F8DE2E0E845E0004573B /* URLSessionConfiguration+Extension.swift in Resources */ = {isa = PBXBuildFile; fileRef = FA99F8DD2E0E845E0004573B /* URLSessionConfiguration+Extension.swift */; };
+		FA9F416F2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F416E2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift */; };
 		FAA055762E02C51400F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055752E02C51200F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift */; };
 		FAA0557A2E0301AA00F84EDF /* SelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055792E0301AA00F84EDF /* SelectionManager.swift */; };
 		FAA1CEAF2B174F9F00760545 /* OptionDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA1CEAE2B174F9F00760545 /* OptionDeviceTableViewCell.swift */; };
@@ -7881,7 +7881,7 @@
 		FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SectionHeaderFooterButton.xib; sourceTree = "<group>"; };
 		FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderFooterButton.swift; sourceTree = "<group>"; };
 		FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLETemperatureSensor.swift; sourceTree = "<group>"; };
-		FA99F8DD2E0E845E0004573B /* URLSessionConfiguration+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+Extension.swift"; sourceTree = "<group>"; };
+		FA9F416E2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheInfoViewController.swift; sourceTree = "<group>"; };
 		FAA055752E02C51200F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsTripRecordingCommandsViewController.swift; sourceTree = "<group>"; };
 		FAA055792E0301AA00F84EDF /* SelectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionManager.swift; sourceTree = "<group>"; };
 		FAA1CEAE2B174F9F00760545 /* OptionDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionDeviceTableViewCell.swift; sourceTree = "<group>"; };
@@ -8129,6 +8129,7 @@
 		32119B4D2847B4DF005E1E0C /* OsmandDevelopment */ = {
 			isa = PBXGroup;
 			children = (
+				FA9F416E2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift */,
 				32119B4E2847D7F7005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.h */,
 				32119B4F2847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm */,
 				32119B532848D910005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.h */,
@@ -13782,7 +13783,6 @@
 			isa = PBXGroup;
 			children = (
 				FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */,
-				FA99F8DD2E0E845E0004573B /* URLSessionConfiguration+Extension.swift */,
 				FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */,
 				FA9217112D5277310074E958 /* DateFormatter+Extension.swift */,
 				FAE446D52CD3C10300598BE3 /* UIScreen+Extension.swift */,
@@ -15427,7 +15427,6 @@
 				843E5D831AB341E000BE14BE /* menu_cell_selected@3x.png in Resources */,
 				DA1340C8243DC5A70039D214 /* map_action_bus_dark@3x.png in Resources */,
 				DA5A83D026C563A800F274C7 /* OATransportRouteController.xib in Resources */,
-				FA99F8DE2E0E845E0004573B /* URLSessionConfiguration+Extension.swift in Resources */,
 				84F4641E1B664D3B00C1D96F /* ic_popup_no_internet@2x.png in Resources */,
 				DA1340D6243DC5A80039D214 /* map_action_scooter@3x.png in Resources */,
 				DA5A844226C563A900F274C7 /* OAUsernameFilterViewController.xib in Resources */,
@@ -17484,6 +17483,7 @@
 				FAE0B7162AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift in Sources */,
 				DA5A82F326C563A800F274C7 /* OATargetPointViewCell.mm in Sources */,
 				DA5A845226C563A900F274C7 /* OAMapLayers.mm in Sources */,
+				FA9F416F2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift in Sources */,
 				DA4ABEEB2876DA5D00B996EF /* OASettingsCategoryItems.m in Sources */,
 				FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */,
 				C57693192D67148400E4F772 /* ChangeTracksAppearanceTask.swift in Sources */,

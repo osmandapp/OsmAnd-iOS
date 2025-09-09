@@ -110,7 +110,8 @@ final class ImageCarouselViewController: UIPageViewController {
     }
     
     deinit {
-        ImageCache.galleryHighResolutionDiskCache.clearMemoryCache()
+        ImageCache.onlinePhotoHighResolutionDiskCache.clearMemoryCache()
+        ImageCache.onlinePhotoDefaultCache.clearMemoryCache()
     }
     
     // MARK: - Private func
@@ -348,7 +349,7 @@ final class ImageCarouselViewController: UIPageViewController {
 
 extension ImageCarouselViewController: UIPageViewControllerDataSource {
     
-    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
         guard let vc = viewController as? ImageViewerController, let imageDatasource else {
             return nil
@@ -367,8 +368,7 @@ extension ImageCarouselViewController: UIPageViewControllerDataSource {
         return controller
     }
     
-    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let vc = viewController as? ImageViewerController, let imageDatasource else {
             return nil
         }
@@ -410,6 +410,7 @@ extension ImageCarouselViewController: UIPageViewControllerDelegate {
 extension ImageCarouselViewController {
     
     private func navigate(to direction: NavigationDirection) {
+        guard let imageDatasource, imageDatasource.count() > 1 else { return }
         guard let currentVC = viewControllers?.first else { return }
         
         let targetVC: ImageViewerController? = {
@@ -439,46 +440,5 @@ extension ImageCarouselViewController {
     
     @objc private func didPressRightArrow() {
         navigate(to: .forward)
-    }
-}
-
-extension ImageCarouselViewController {
-    
-    private func createNavbarButton(title: String?, icon: UIImage?, color: UIColor, action: Selector?, target: AnyObject?, menu: UIMenu?) -> UIBarButtonItem {
-        let button = UIButton(frame: .init(x: 0, y: 0, width: 44, height: 30))
-        button.titleLabel?.lineBreakMode = .byTruncatingMiddle
-        button.titleLabel?.numberOfLines = 1
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-        button.tintColor = color
-        button.setTitleColor(color, for: .normal)
-        button.setTitleColor(color.withAlphaComponent(0.3), for: .highlighted)
-        
-        if let title {
-            button.setTitle(title, for: .normal)
-        }
-        
-        if let icon {
-            button.setImage(icon, for: .normal)
-        }
-        
-        button.removeTarget(nil, action: nil, for: .allEvents)
-        if let action {
-            button.addTarget(target, action: action, for: .touchUpInside)
-        }
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        if let menu {
-            button.showsMenuAsPrimaryAction = true
-            button.menu = menu
-        }
-        
-        let rightNavbarButton = UIBarButtonItem(customView: button)
-        
-        if let title {
-            rightNavbarButton.accessibilityLabel = title
-        }
-        
-        return rightNavbarButton
     }
 }

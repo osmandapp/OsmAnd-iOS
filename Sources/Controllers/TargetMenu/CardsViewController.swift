@@ -328,6 +328,7 @@ fileprivate extension CardsViewController {
 
 fileprivate extension UICollectionView {
     func showActivityIndicator(show: Bool) {
+        print("UICollectionView frame size: \(self.frame.size)")
         if show {
             let indicator = UIActivityIndicatorView(style: .large)
             indicator.hidesWhenStopped = true

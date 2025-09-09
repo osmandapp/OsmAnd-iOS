@@ -198,6 +198,11 @@ static const float kDistanceMeters = 100.0;
 
     self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
+    
+    _topWidgetsView.accessibilityIdentifier = @"widgets_panel_top";
+    _leftWidgetsView.accessibilityIdentifier = @"widgets_panel_left";
+    _bottomWidgetsView.accessibilityIdentifier = @"widgets_panel_bottom";
+    _rightWidgetsView.accessibilityIdentifier = @"widgets_panel_right";
 
     _mapHudLayout = [[MapHudLayout alloc] initWithContainerView:self.view];
     [_mapHudLayout configureWithLeftWidgetsPanel:_leftWidgetsView rightWidgetsPanel:_rightWidgetsView topBarPanelContainer:_topWidgetsView bottomBarPanelContainer:_bottomWidgetsView];

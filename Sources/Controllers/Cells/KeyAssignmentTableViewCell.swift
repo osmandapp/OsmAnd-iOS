@@ -9,12 +9,27 @@
 final class KeyAssignmentTableViewCell: OASimpleTableViewCell {
     @IBOutlet private weak var keysStackView: UIStackView!
     
-    func configure(inputs: [String]) {
+    func configure(keyCodes: [UIKeyboardHIDUsage],
+                   horizontalSpace: CGFloat = 12,
+                   fontSize: CGFloat = 12,
+                   additionalVerticalSpace: CGFloat = 5,
+                   keySpacing: CGFloat = 6,
+                   isAlignedToLeading: Bool = false) {
         keysStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        for input in inputs {
+        keysStackView.isHidden = keyCodes.isEmpty
+        keysStackView.spacing = keySpacing
+        setAdditionalVerticalSpace(additionalVerticalSpace)
+        for keyCode in keyCodes {
             let keyView: KeyView = .fromNib()
-            keyView.configureWith(input: input, horizontalSpace: 12, fontSize: 12)
+            keyView.configureWith(keyCode: keyCode, horizontalSpace: horizontalSpace, fontSize: fontSize)
             keysStackView.addArrangedSubview(keyView)
+        }
+        
+        if isAlignedToLeading {
+            let spacer = UIView()
+            spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            spacer.setContentCompressionResistancePriority(.required, for: .horizontal)
+            keysStackView.addArrangedSubview(spacer)
         }
     }
 }

@@ -228,8 +228,6 @@
 		2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */; };
 		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
 		27C768E42E6833F100540266 /* CustomInputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */; };
-		27C768E62E683A1700540266 /* InputDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E52E683A1700540266 /* InputDeviceHelper.swift */; };
-		27C768E82E688F6300540266 /* KeyBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E72E688F6300540266 /* KeyBinding.swift */; };
 		27C768EA2E6892CD00540266 /* KeySymbolMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E92E6892CD00540266 /* KeySymbolMapper.swift */; };
 		27C768ED2E689B9400540266 /* KeyEventCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768EC2E689B9400540266 /* KeyEventCommand.swift */; };
 		27C768EF2E689D2400540266 /* MapZoomCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768EE2E689D2400540266 /* MapZoomCommand.swift */; };
@@ -258,6 +256,10 @@
 		27D6AEA72E60E05F00FC9094 /* OpenWunderLINQDatagridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6AEA62E60E05F00FC9094 /* OpenWunderLINQDatagridAction.swift */; };
 		27D6AEA92E61C76C00FC9094 /* KeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6AEA82E61C76C00FC9094 /* KeyView.swift */; };
 		27D6AEAB2E61C79600FC9094 /* KeyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27D6AEAA2E61C79600FC9094 /* KeyView.xib */; };
+		27E316642E6EEC97007172DA /* InputDevicesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316632E6EEC97007172DA /* InputDevicesHelper.swift */; };
+		27E316662E6EEDCC007172DA /* InputDevicesCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316652E6EEDCC007172DA /* InputDevicesCollection.swift */; };
+		27E3166A2E6EEDDA007172DA /* KeyAssignmentsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316692E6EEDDA007172DA /* KeyAssignmentsCollection.swift */; };
+		27E3166C2E6EF096007172DA /* DefaultInputDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E3166B2E6EF096007172DA /* DefaultInputDevices.swift */; };
 		27E3C2032DF1ADD40053958E /* OAStreetNameWidgetParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = 27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */; };
 		27F050912DD38E310058075F /* RouteInfoDisplayPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */; };
 		27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508F2DD38E310058075F /* RouteInfoWidget.swift */; };
@@ -3633,8 +3635,6 @@
 		2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WunderLINQDeviceProfile.swift; sourceTree = "<group>"; };
 		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
 		27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInputDeviceProfile.swift; sourceTree = "<group>"; };
-		27C768E52E683A1700540266 /* InputDeviceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDeviceHelper.swift; sourceTree = "<group>"; };
-		27C768E72E688F6300540266 /* KeyBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyBinding.swift; sourceTree = "<group>"; };
 		27C768E92E6892CD00540266 /* KeySymbolMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySymbolMapper.swift; sourceTree = "<group>"; };
 		27C768EC2E689B9400540266 /* KeyEventCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventCommand.swift; sourceTree = "<group>"; };
 		27C768EE2E689D2400540266 /* MapZoomCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapZoomCommand.swift; sourceTree = "<group>"; };
@@ -3663,6 +3663,10 @@
 		27D6AEA62E60E05F00FC9094 /* OpenWunderLINQDatagridAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWunderLINQDatagridAction.swift; sourceTree = "<group>"; };
 		27D6AEA82E61C76C00FC9094 /* KeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyView.swift; sourceTree = "<group>"; };
 		27D6AEAA2E61C79600FC9094 /* KeyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyView.xib; sourceTree = "<group>"; };
+		27E316632E6EEC97007172DA /* InputDevicesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevicesHelper.swift; sourceTree = "<group>"; };
+		27E316652E6EEDCC007172DA /* InputDevicesCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevicesCollection.swift; sourceTree = "<group>"; };
+		27E316692E6EEDDA007172DA /* KeyAssignmentsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignmentsCollection.swift; sourceTree = "<group>"; };
+		27E3166B2E6EF096007172DA /* DefaultInputDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultInputDevices.swift; sourceTree = "<group>"; };
 		27E3C1FF2DF1AD340053958E /* OAStreetNameWidgetParams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStreetNameWidgetParams.h; sourceTree = "<group>"; };
 		27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreetNameWidgetParams.mm; sourceTree = "<group>"; };
 		27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayPriority.swift; sourceTree = "<group>"; };
@@ -8151,7 +8155,6 @@
 				2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */,
 				2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */,
 				2758DD582E5F05F000051096 /* KeyAssignment.swift */,
-				27C768E72E688F6300540266 /* KeyBinding.swift */,
 				27D6AEA82E61C76C00FC9094 /* KeyView.swift */,
 				27D6AEAA2E61C79600FC9094 /* KeyView.xib */,
 			);
@@ -8163,6 +8166,7 @@
 			children = (
 				2783B4352E66E6F700682723 /* InputDeviceProfile.swift */,
 				2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */,
+				27E3166B2E6EF096007172DA /* DefaultInputDevices.swift */,
 				27C242202E682F15000801B7 /* NoneDeviceProfile.swift */,
 				27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */,
 				2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */,
@@ -8184,7 +8188,9 @@
 			isa = PBXGroup;
 			children = (
 				27C768E92E6892CD00540266 /* KeySymbolMapper.swift */,
-				27C768E52E683A1700540266 /* InputDeviceHelper.swift */,
+				27E316652E6EEDCC007172DA /* InputDevicesCollection.swift */,
+				27E316692E6EEDDA007172DA /* KeyAssignmentsCollection.swift */,
+				27E316632E6EEC97007172DA /* InputDevicesHelper.swift */,
 				27C768F02E68C4B100540266 /* KeyEventCommandsCache.swift */,
 				27C768F22E68C55E00540266 /* KeyEventCommandsFactory.swift */,
 			);
@@ -17047,6 +17053,7 @@
 				DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */,
 				DA5A850D26C563A900F274C7 /* OAScrollView.m in Sources */,
 				32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */,
+				27E3166A2E6EEDDA007172DA /* KeyAssignmentsCollection.swift in Sources */,
 				DA5A81CA26C563A700F274C7 /* OAAtomicInteger.m in Sources */,
 				DA5A81B326C563A700F274C7 /* OAPOIUIFilter.mm in Sources */,
 				46B8F5C22936C0D9001AA71A /* OAAngleStraightLineViewController.mm in Sources */,
@@ -17389,6 +17396,7 @@
 				DA5A813926C563A700F274C7 /* OAOnlineOsmNoteWrapper.mm in Sources */,
 				DA5A815126C563A700F274C7 /* OACarPlayTracksListController.m in Sources */,
 				DA5A823226C563A700F274C7 /* OAGpxAppearanceInfo.mm in Sources */,
+				27E316662E6EEDCC007172DA /* InputDevicesCollection.swift in Sources */,
 				DA5A813C26C563A700F274C7 /* OAEntity.m in Sources */,
 				DA5A841026C563A800F274C7 /* OATargetAddressViewController.mm in Sources */,
 				FAC166262B21BEF900D63755 /* SBError.swift in Sources */,
@@ -17813,6 +17821,7 @@
 				DA5A844826C563A900F274C7 /* OAMultiDestinationCell.mm in Sources */,
 				DA5A850526C563A900F274C7 /* OAMapRulerView.m in Sources */,
 				DA5A84BB26C563A900F274C7 /* OAPublicTransportOptionsBottomSheet.mm in Sources */,
+				27E3166C2E6EF096007172DA /* DefaultInputDevices.swift in Sources */,
 				DA5A832726C563A800F274C7 /* OARouteInfoAltitudeCell.m in Sources */,
 				DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */,
 				2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */,
@@ -17866,6 +17875,7 @@
 				DA5A854226C563A900F274C7 /* UIColor+RGB.swift in Sources */,
 				46C8413D2C32F39B00E284B0 /* OANavReplaceDestinationAction.m in Sources */,
 				DA5A832026C563A800F274C7 /* OAMultilineTextViewCell.m in Sources */,
+				27E316642E6EEC97007172DA /* InputDevicesHelper.swift in Sources */,
 				DA5A81D126C563A700F274C7 /* OATerrainLayer.mm in Sources */,
 				DA5A81B626C563A700F274C7 /* OASearchPoiTypeFilter.m in Sources */,
 				DA5A83B026C563A800F274C7 /* OASubscriptionCancelViewController.mm in Sources */,
@@ -17909,7 +17919,6 @@
 				327D68AA2A8FB8180076D1E0 /* ArticleTravelCell.swift in Sources */,
 				DA5A848A26C563A900F274C7 /* OARoadSegmentData.mm in Sources */,
 				46330AEF2C034C1100E60CA2 /* FabMarginPreference.swift in Sources */,
-				27C768E62E683A1700540266 /* InputDeviceHelper.swift in Sources */,
 				FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */,
 				464BF4A52C04F7D6000D6908 /* CompassButtonState.swift in Sources */,
 				DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */,
@@ -18194,7 +18203,6 @@
 				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
 				FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */,
-				27C768E82E688F6300540266 /* KeyBinding.swift in Sources */,
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,
 				CA4ED87EDFA076F9F7F63A4C /* OABenefitsOsmContributorsViewController.m in Sources */,
 				CA4EDCD265973B276DCF2FE8 /* OAMappersViewController.m in Sources */,

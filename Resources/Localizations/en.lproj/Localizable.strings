@@ -2720,6 +2720,9 @@
 "remove_device" = "Remove device";
 "remove_device_message" = "Are you sure you want to remove \"%@\" and all key assignments?";
 "added_devices" = "Added devices";
+"remove_key_assignment" = "Remove key assignment";
+"remove_key_assignment_summary" = "Key assignment for the selected action will be removed.";
+"assigned_keys" = "Assigned keys";
 
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";

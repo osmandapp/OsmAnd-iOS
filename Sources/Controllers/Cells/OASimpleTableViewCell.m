@@ -37,6 +37,12 @@
     _isCustomLeftSeparatorInset = isCustom;
 }
 
+- (void)setAdditionalVerticalSpace:(CGFloat)space
+{
+    _textCustomMarginTopStackView.spacing = space;
+    _textCustomMarginBottomStackView.spacing = space;
+}
+
 - (void)updateSeparatorInset
 {
     self.separatorInset = UIEdgeInsetsMake(0., [self getLeftInsetToView:self.titleLabel], 0., 0.);

@@ -203,6 +203,11 @@ static QuickActionType *TYPE_INTERFACE;
     return list;
 }
 
+- (QuickActionSerializer *)getSerializer
+{
+    return _serializer;
+}
+
 - (void)addQuickAction:(QuickActionButtonState *)buttonState action:(OAQuickAction *)action
 {
     [buttonState add:action];
@@ -301,12 +306,24 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:ShowHideCoordinatesGridAction.type];
     
     // interface
+    [allTypes addObject:OpenNavigationViewAction.type];
+    [allTypes addObject:OpenSearchViewAction.type];
+    [allTypes addObject:OpenWunderLINQDatagridAction.type];
+    [allTypes addObject:ShowHideDrawerAction.type];
+    [allTypes addObject:NavigatePreviousScreenAction.type];
     [allTypes addObject:LockScreenAction.type];
     
     // my places
     [allTypes addObject:OAFavoriteAction.TYPE];
     [allTypes addObject:OAGPXAction.TYPE];
     [allTypes addObject:OAMarkerAction.TYPE];
+    [allTypes addObject:MoveToMyLocationAction.type];
+    [allTypes addObject:[MapScrollUpAction getQuickActionType]];
+    [allTypes addObject:[MapScrollDownAction getQuickActionType]];
+    [allTypes addObject:[MapScrollLeftAction getQuickActionType]];
+    [allTypes addObject:[MapScrollRightAction getQuickActionType]];
+    [allTypes addObject:[MapZoomInAction getQuickActionType]];
+    [allTypes addObject:[MapZoomOutAction getQuickActionType]];
 
     // navigation
     [allTypes addObject:OANavStartStopAction.TYPE];
@@ -322,7 +339,8 @@ static QuickActionType *TYPE_INTERFACE;
     // settings
     [allTypes addObject:DisplayPositionAction.type];
     [allTypes addObject:OASwitchProfileAction.TYPE];
-    
+    [allTypes addObject:[NextAppProfileAction getQuickActionType]];
+    [allTypes addObject:[PreviousAppProfileAction getQuickActionType]];
 
     NSMutableArray<QuickActionType *> *enabledTypes = [NSMutableArray arrayWithArray:allTypes];
     [OAPluginsHelper registerQuickActionTypesPlugins:allTypes enabledTypes:enabledTypes];

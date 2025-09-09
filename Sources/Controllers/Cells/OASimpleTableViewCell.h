@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
 
 - (void)updateSeparatorInset;
 - (void)setCustomLeftSeparatorInset:(BOOL)isCustom;
+- (void)setAdditionalVerticalSpace:(CGFloat)space;
 
 - (void)leftEditButtonVisibility:(BOOL)show;
 - (void)leftIconVisibility:(BOOL)show;

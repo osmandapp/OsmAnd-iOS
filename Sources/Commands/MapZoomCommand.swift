@@ -8,6 +8,7 @@
 
 final class MapZoomCommand: KeyEventCommand {
     static let zoomInId = "zoom_in"
+    static let zoomOutId = "zoom_out"
     
     private let increment: Bool
     

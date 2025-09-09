@@ -6,6 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+@objcMembers
 final class MapZoomInAction: BaseMapZoomAction {
     static var type: QuickActionType?
     

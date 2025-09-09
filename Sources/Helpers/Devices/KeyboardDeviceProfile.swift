@@ -10,6 +10,13 @@
 final class KeyboardDeviceProfile: PredefinedInputDeviceProfile {
     static let deviceId = "keyboard"
     
+    override func collectAssignments() -> [KeyAssignment] {
+        var list: [KeyAssignment] = []
+        addAssignment(to: &list, with: MapZoomCommand.zoomInId, keyCodes: [.keypadPlus, .keyboardEqualSign])
+        addAssignment(to: &list, with: MapZoomCommand.zoomOutId, keyCodes: [.keyboardHyphen])
+        return list
+    }
+    
     override func getId() -> String {
         Self.deviceId
     }

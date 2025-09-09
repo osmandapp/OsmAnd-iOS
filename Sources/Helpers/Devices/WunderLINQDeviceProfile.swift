@@ -10,6 +10,13 @@
 final class WunderLINQDeviceProfile: PredefinedInputDeviceProfile {
     static let deviceId = "wunderlinq"
     
+    override func collectAssignments() -> [KeyAssignment] {
+        var list: [KeyAssignment] = []
+        addAssignment(to: &list, with: MapZoomCommand.zoomInId, keyCodes: [.keyboardUpArrow])
+        addAssignment(to: &list, with: MapZoomCommand.zoomOutId, keyCodes: [.keyboardDownArrow])
+        return list
+    }
+    
     override func getId() -> String {
         Self.deviceId
     }

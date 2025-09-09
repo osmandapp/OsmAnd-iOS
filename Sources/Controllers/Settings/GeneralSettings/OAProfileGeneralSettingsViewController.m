@@ -231,7 +231,7 @@
             break;
     }
     
-    NSString *externalInputDeviceValue = [[InputDeviceHelper.shared getSelectedDeviceWith:self.appMode] toHumanString];
+    NSString *externalInputDeviceValue = [[InputDevicesHelper.shared getSelectedDeviceWith:self.appMode] toHumanString];
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *appearanceArr = [NSMutableArray array];

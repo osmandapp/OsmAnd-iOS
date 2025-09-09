@@ -7,5 +7,16 @@
 //
 
 class PredefinedInputDeviceProfile: InputDeviceProfile {
-    // TODO
+    override init() {
+        super.init()
+        setAssignments(collectAssignments())
+    }
+    
+    func collectAssignments() -> [KeyAssignment] {
+        fatalError()
+    }
+    
+    func addAssignment(to assignments: inout [KeyAssignment], with commandId: String, keyCodes: [UIKeyboardHIDUsage]) {
+        assignments.append(KeyAssignment(commandId: commandId, keyCodes: keyCodes))
+    }
 }

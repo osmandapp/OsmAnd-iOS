@@ -488,7 +488,8 @@ final class MigrationManager: NSObject {
     }
     
     private func migrateExternalInputDevicePreferenceType() {
-        guard let settings = OAAppSettings.sharedManager(), let oldExternalInputDevicePref = OACommonInteger.withKey("settingExternalInputDeviceKey", defValue: 1) else { return }
+        let settings = OAAppSettings.sharedManager()
+        let oldExternalInputDevicePref = OACommonInteger.withKey("settingExternalInputDeviceKey", defValue: 1)
         
         for appMode in OAApplicationMode.allPossibleValues() {
             switch oldExternalInputDevicePref.get(appMode) {

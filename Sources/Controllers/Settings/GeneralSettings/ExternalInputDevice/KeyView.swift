@@ -11,9 +11,9 @@ final class KeyView: UIView {
     @IBOutlet private weak var leftConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightConstraint: NSLayoutConstraint!
     
-    func configureWith(input: String, horizontalSpace: CGFloat, fontSize: CGFloat) {
-        keyLabel.text = input.uppercased()
-        keyLabel.font = UIFont.systemFont(ofSize: fontSize, weight: .semibold)
+    func configureWith(keyCode: UIKeyboardHIDUsage, horizontalSpace: CGFloat, fontSize: CGFloat) {
+        keyLabel.text = KeySymbolMapper.getKeySymbol(for: keyCode).uppercased()
+        keyLabel.font = .systemFont(ofSize: fontSize, weight: .semibold)
         leftConstraint.constant = horizontalSpace
         rightConstraint.constant = horizontalSpace
     }

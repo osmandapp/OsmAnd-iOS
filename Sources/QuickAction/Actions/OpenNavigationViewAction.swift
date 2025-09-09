@@ -6,6 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+@objcMembers
 final class OpenNavigationViewAction: OAQuickAction {
     static let type = QuickActionType(id: QuickActionIds.openNavigationViewAction.rawValue, stringId: "navigation.view.showhide", cl: OpenNavigationViewAction.self)
         .name(localizedString("quick_action_navigation_view_title"))

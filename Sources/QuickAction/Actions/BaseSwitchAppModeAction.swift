@@ -43,16 +43,16 @@ class BaseSwitchAppModeAction: OAQuickAction {
     }
 
     func delayedSwitchAppMode() {
-        let settings = OAAppSettings.sharedManager()!
+        let settings = OAAppSettings.sharedManager()
         let appMode = settings.applicationMode.get()
         let next = shouldChangeForward()
         
         if delayedSwitchProfile == nil {
             delayedSwitchProfile = appMode
         }
-        delayedSwitchProfile = settings.getSwitchedAppMode(delayedSwitchProfile, next: next)
         let patternDelayedSwitch = localizedString("selected_delayed_profile")
         if let delayedSwitchProfile {
+            self.delayedSwitchProfile = settings.getSwitchedAppMode(delayedSwitchProfile, next: next)
             let messageDelayedSwitch = String(format: patternDelayedSwitch, delayedSwitchProfile.toHumanString())
             OAUtilities.showToast(messageDelayedSwitch, details: nil, duration: 4, in: OARootViewController.instance().view)
         }

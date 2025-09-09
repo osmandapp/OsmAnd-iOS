@@ -6,6 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+@objcMembers
 final class MoveToMyLocationAction: OAQuickAction {
     static let type = QuickActionType(id: QuickActionIds.moveToMyLocationActionId.rawValue, stringId: "map.move.my_location", cl: MoveToMyLocationAction.self)
         .name(localizedString("quick_action_to_my_location"))

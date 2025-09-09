@@ -6,6 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+@objcMembers
 final class NavigatePreviousScreenAction: OAQuickAction {
     static let type = QuickActionType(id: QuickActionIds.navigatePreviousScreenAction.rawValue, stringId: "navigate.previous.screen", cl: NavigatePreviousScreenAction.self)
         .name(localizedString("quick_action_previous_screen_title"))

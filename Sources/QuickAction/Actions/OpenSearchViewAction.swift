@@ -6,6 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+@objcMembers
 final class OpenSearchViewAction: OAQuickAction {
     static let type = QuickActionType(id: QuickActionIds.openSearchViewAction.rawValue, stringId: "search.view.showhide", cl: OpenSearchViewAction.self)
         .name(localizedString("quick_action_search_view_title"))

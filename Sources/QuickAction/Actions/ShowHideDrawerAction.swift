@@ -6,6 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+@objcMembers
 final class ShowHideDrawerAction: OAQuickAction {
     static let type = QuickActionType(id: QuickActionIds.showHideDrawerAction.rawValue, stringId: "drawer.showhide", cl: ShowHideDrawerAction.self)
         .name(localizedString("quick_action_drawer_title"))

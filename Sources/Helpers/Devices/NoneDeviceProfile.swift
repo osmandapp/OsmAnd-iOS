@@ -10,6 +10,10 @@
 final class NoneDeviceProfile: PredefinedInputDeviceProfile {
     static let deviceId = ""
     
+    override func collectAssignments() -> [KeyAssignment] {
+        []
+    }
+    
     override func getId() -> String {
         Self.deviceId
     }

@@ -6,6 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+@objcMembers
 final class NextAppProfileAction: BaseSwitchAppModeAction {
     static var type: QuickActionType?
     

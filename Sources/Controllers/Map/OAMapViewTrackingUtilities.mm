@@ -510,7 +510,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     {
         [_mapView setTarget31:[OANativeUtilities getPoint31FromLatLon:finalLat lon:finalLon]];
         [_mapView setZoom:zoom];
-        [_mapView setAzimuth:!isnan(finalRotation) ? -rotation : rotation];
+        [_mapView setAzimuth:-rotation];
         if (finishAnimationCallback)
             finishAnimationCallback();
 

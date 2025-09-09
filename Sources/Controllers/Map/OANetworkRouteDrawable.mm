@@ -42,9 +42,16 @@
 
 - (UIImage *)getIcon
 {
+    if (!_routeKey)
+        return nil;
+    
+    const auto env = _env.mapPresentationEnvironment;
+    if (!env)
+        return nil;
+    
     const auto tag = QString::fromNSString([NSString stringWithFormat:@"route_%@", [_routeKey getRouteTag]]);
     const auto text = QString::fromNSString([_routeKey getRouteValue:@"osmc_text"]);
-    const auto &env = _env.mapPresentationEnvironment;
+    
     OsmAnd::MapStyleEvaluator textEvaluator(env->mapStyle, env->displayDensityFactor);
     env->applyTo(textEvaluator);
     OsmAnd::MapStyleEvaluationResult evaluationResult(env->mapStyle->getValueDefinitionsCount());

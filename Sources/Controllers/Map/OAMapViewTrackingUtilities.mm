@@ -510,7 +510,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     {
         [_mapView setTarget31:[OANativeUtilities getPoint31FromLatLon:finalLat lon:finalLon]];
         [_mapView setZoom:zoom];
-        [_mapView setAzimuth:rotation];
+        [_mapView setAzimuth:-rotation];
         if (finishAnimationCallback)
             finishAnimationCallback();
 
@@ -573,7 +573,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
             [_mapView setZoom:zoom];
 
         if (!animateRotation && !isnan(finalRotation))
-            [_mapView setAzimuth:rotation];
+            [_mapView setAzimuth:-rotation];
 
         if (!animateTarget)
             [_mapView setTarget31:[OANativeUtilities getPoint31FromLatLon:finalLat lon:finalLon]];

@@ -6432,6 +6432,18 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     }
 }
 
+- (OAApplicationMode *)getSwitchedAppMode:(OAApplicationMode *)selectedMode next:(BOOL)next
+{
+    NSArray<OAApplicationMode *> *enabledModes = [OAApplicationMode values];
+    NSInteger indexOfCurrent = [enabledModes indexOfObject:selectedMode];
+    NSInteger indexOfNext;
+    if (next)
+        indexOfNext = indexOfCurrent < enabledModes.count - 1 ? indexOfCurrent + 1 : 0;
+    else
+        indexOfNext = indexOfCurrent > 0 ? indexOfCurrent - 1 : enabledModes.count - 1;
+    return enabledModes[indexOfNext];
+}
+
 - (void)setApplicationModePref:(OAApplicationMode *)applicationMode
 {
     [self setApplicationModePref:applicationMode markAsLastUsed:YES];

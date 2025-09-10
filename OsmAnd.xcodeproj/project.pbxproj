@@ -220,6 +220,9 @@
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
 		274C43F12DEDBA7100585952 /* OANextTurnWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */; };
 		27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */; };
+		27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */; };
+		27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316862E716901007172DA /* PreviousAppProfileAction.swift */; };
+		27E316892E716901007172DA /* NextAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316852E716901007172DA /* NextAppProfileAction.swift */; };
 		27E3C2032DF1ADD40053958E /* OAStreetNameWidgetParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = 27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */; };
 		27F050912DD38E310058075F /* RouteInfoDisplayPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */; };
 		27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508F2DD38E310058075F /* RouteInfoWidget.swift */; };
@@ -3587,6 +3590,9 @@
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
 		274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OANextTurnWidget.xib; sourceTree = "<group>"; };
 		27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NextTurnWidget+Extension.swift"; sourceTree = "<group>"; };
+		27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSwitchAppModeAction.swift; sourceTree = "<group>"; };
+		27E316852E716901007172DA /* NextAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextAppProfileAction.swift; sourceTree = "<group>"; };
+		27E316862E716901007172DA /* PreviousAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousAppProfileAction.swift; sourceTree = "<group>"; };
 		27E3C1FF2DF1AD340053958E /* OAStreetNameWidgetParams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStreetNameWidgetParams.h; sourceTree = "<group>"; };
 		27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreetNameWidgetParams.mm; sourceTree = "<group>"; };
 		27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayPriority.swift; sourceTree = "<group>"; };
@@ -11189,6 +11195,9 @@
 				46BF38DB2CA44C090056D2C2 /* TerrainColorSchemeAction.swift */,
 				FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */,
 				C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */,
+				27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */,
+				27E316852E716901007172DA /* NextAppProfileAction.swift */,
+				27E316862E716901007172DA /* PreviousAppProfileAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -16730,6 +16739,9 @@
 				DA5A840F26C563A800F274C7 /* OABasePointEditingHandler.m in Sources */,
 				DA5A832B26C563A800F274C7 /* OADirectionTableViewCell.m in Sources */,
 				DA5A817926C563A700F274C7 /* OAMapButtonsHelper.m in Sources */,
+				27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */,
+				27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */,
+				27E316892E716901007172DA /* NextAppProfileAction.swift in Sources */,
 				DA5A84B926C563A900F274C7 /* OABottomSheetTwoButtonsViewController.mm in Sources */,
 				DA5A83C026C563A800F274C7 /* OAActionAddMapSourceViewController.mm in Sources */,
 				DA5A854C26C563A900F274C7 /* OAWikiArticleHelper.mm in Sources */,

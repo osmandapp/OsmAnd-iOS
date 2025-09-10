@@ -2085,6 +2085,10 @@
 "quick_action_terrain_color_scheme" = "Terrain color scheme";
 "quick_action_need_to_add_item_to_list" = "Add at least one item to the list in the \'Quick action\' settings";
 
+"quick_action_next_app_profile" = "App profile to next";
+"key_event_action_next_app_profile" = "Next app profile";
+"quick_action_previous_app_profile" = "App profile to previous";
+"key_event_action_previous_app_profile" = "Previous app profile";
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";

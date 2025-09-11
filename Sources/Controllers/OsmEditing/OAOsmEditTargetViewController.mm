@@ -28,6 +28,8 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAPluginsHelper.h"
 
+static const NSInteger kOrderInternalRow = 0;
+
 @interface OAOsmEditTargetViewController () <OAOsmEditingBottomSheetDelegate>
 
 @end
@@ -147,7 +149,7 @@
     return NO;
 }
 
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
 {
     NSString *prefLang = [OAUtilities preferredLang];
     
@@ -158,7 +160,7 @@
         && ![type isKindOfClass:[OAPOIMyLocationType class]])
     {
         UIImage *icon = [type icon];
-        [rows addObject:[[OARowInfo alloc] initWithKey:type.name icon:icon textPrefix:nil text:[_osmPoint getSubType] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:type.name icon:icon textPrefix:nil text:[_osmPoint getSubType] textColor:nil isText:NO needLinks:NO order:kOrderInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
     [_osmPoint.getTags enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
@@ -189,7 +191,7 @@
         
         if (!skip)
         {
-            [descriptions addObject:[[OARowInfo alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:textPrefix text:[NSString stringWithFormat:@"%@=%@", key, value] textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+            [descriptions addObject:[[OARowInfo alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:textPrefix text:[NSString stringWithFormat:@"%@=%@", key, value] textColor:nil isText:YES needLinks:YES order:kOrderInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
 
         }
     }];

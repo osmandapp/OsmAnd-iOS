@@ -43,6 +43,10 @@
 
 static const NSInteger WAY_MODULO_REMAINDER = 1;
 
+static const NSInteger kOrderInternalRow = 0;
+static const NSInteger kOrderCollectedPoiTypesRow = 40;
+static const NSInteger kOrderOsmUrlRow = 10000;
+
 @interface OAPOIViewController ()
 
 @end
@@ -317,7 +321,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     }
 }
 
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
 {
     BOOL hasWiki = NO;
     NSString *preferredLang = [OAUtilities preferredLang];
@@ -653,7 +657,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                        textColor:nil
                                           isText:YES
                                        needLinks:YES
-                                           order:0
+                                           order:kOrderInternalRow
                                         typeName:@""
                                    isPhoneNumber:NO
                                            isUrl:NO];
@@ -789,7 +793,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                                   textColor:nil
                                                      isText:NO
                                                   needLinks:NO
-                                                      order:40
+                                                      order:kOrderCollectedPoiTypesRow
                                                    typeName:poiCategory.name
                                               isPhoneNumber:NO
                                                       isUrl:NO];
@@ -846,7 +850,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                              textColor:[UIColor colorNamed:ACColorNameTextColorActive]
                                                 isText:YES
                                              needLinks:YES
-                                                 order:10000
+                                                 order:kOrderOsmUrlRow
                                               typeName:nil
                                          isPhoneNumber:NO
                                                  isUrl:YES]];

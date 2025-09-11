@@ -258,56 +258,56 @@ final class BaseDetailsObject: NSObject {
         var contentLocales = Set<String>()
         
         for object in objects {
-            if let amenity = object as? OAPOI {
-                processAmenity(amenity, contentLocales: &contentLocales)
-            } else if let transportStop = object as? OATransportStop {
-                if let poi = transportStop.poi {
-                    processAmenity(poi, contentLocales: &contentLocales)
-                } else {
-                    processId(transportStop)
-                    syntheticAmenity.copyNames(transportStop)
-                    if syntheticAmenity.getLocation() == nil {
-                        syntheticAmenity.latitude = transportStop.latitude
-                        syntheticAmenity.longitude = transportStop.longitude
-                    }
-                }
-            } else if let renderedObject = object as? OARenderedObject {
-                let type = ObfConstants.getOsmEntityType(renderedObject)
-                if let type {
-                    let osmId = ObfConstants.getOsmObjectId(renderedObject)
-                    let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
-                    
-                    if syntheticAmenity.obfId >= 0 && objectId > 0 {
-                        syntheticAmenity.obfId = UInt64(objectId)
-                    }
-                }
-                
-                if syntheticAmenity.type == nil {
-                    syntheticAmenity.copyAdditionalInfo(withMap: renderedObject.tags, overwrite: false)
-                }
-                
-                syntheticAmenity.copyNames(renderedObject)
-                if syntheticAmenity.getLocation() == nil {
-                    syntheticAmenity.latitude = renderedObject.latitude
-                    syntheticAmenity.longitude = renderedObject.longitude
-                }
-                
-                processPolygonCoordinates(x: renderedObject.x, y: renderedObject.y)
-            }
+            mergeObject(object, contentLocales: &contentLocales)
         }
         
         if contentLocales.count > 0 {
             syntheticAmenity.updateContentLocales(contentLocales)
         }
         
-        if objectCompleteness != .full {
-            objectCompleteness = syntheticAmenity.type != nil ? .combined : .empty
+        if objectCompleteness.rawValue < ObjectCompleteness.full.rawValue {
+            objectCompleteness = syntheticAmenity.type == nil ? .empty : .combined
         }
         
         if syntheticAmenity.type == nil {
             syntheticAmenity.type = OAPOIHelper.sharedInstance().getDefaultOtherCategoryType()
             syntheticAmenity.subType = ""
             objectCompleteness = .empty
+        }
+    }
+    
+    private func mergeObject(_ object: Any, contentLocales: inout Set<String>) {
+        if let amenity = object as? OAPOI {
+            processAmenity(amenity, contentLocales: &contentLocales)
+        } else if let transportStop = object as? OATransportStop {
+            if let amenity = transportStop.poi {
+                processAmenity(amenity, contentLocales: &contentLocales)
+            } else {
+                processId(transportStop)
+                syntheticAmenity.copyNames(transportStop)
+                if syntheticAmenity.latitude == 0 && syntheticAmenity.longitude == 0 {
+                    syntheticAmenity.latitude = transportStop.latitude
+                    syntheticAmenity.longitude = transportStop.longitude
+                }
+            }
+        } else if let renderedObject = object as? OARenderedObject {
+            if let type = ObfConstants.getOsmEntityType(renderedObject) {
+                let osmId = ObfConstants.getOsmObjectId(renderedObject)
+                let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
+                
+                if syntheticAmenity.obfId <= 0 && objectId > 0 {
+                    syntheticAmenity.obfId = objectId
+                }
+            }
+            if syntheticAmenity.type == nil {
+                syntheticAmenity.copyAdditionalInfo(withMap: renderedObject.tags, overwrite: false)
+            }
+            syntheticAmenity.copyNames(renderedObject)
+            if syntheticAmenity.latitude == 0 && syntheticAmenity.longitude == 0 {
+                syntheticAmenity.latitude = renderedObject.latitude
+                syntheticAmenity.longitude = renderedObject.longitude
+            }
+            processPolygonCoordinates(x: renderedObject.x, y: renderedObject.y)
         }
     }
     
@@ -362,9 +362,9 @@ final class BaseDetailsObject: NSObject {
             syntheticAmenity.localizedContent = MutableOrderedDictionary<NSString, NSString>()
         }
         
-        if amenity.localizedContent.count > 0 {
+        if let amenityContent = amenity.localizedContent, amenityContent.count > 0 {
             let localizedContent = MutableOrderedDictionary<NSString, NSString>(dictionary: syntheticAmenity.localizedContent)
-            localizedContent.addEntries(from: amenity.localizedContent as! [NSString : NSString])
+            localizedContent.addEntries(from: amenityContent as! [NSString : NSString])
             syntheticAmenity.localizedContent = localizedContent
         }
         

@@ -13,6 +13,7 @@ final class ImageCardCell: UICollectionViewCell {
     @IBOutlet private weak var usernameLabel: UILabel!
     @IBOutlet private weak var usernameLabelShadow: UIView!
     @IBOutlet private weak var logoView: UIImageView!
+    @IBOutlet private weak var offlineCacheImageView: UIImageView!
     @IBOutlet private weak var loadingIndicatorView: UIActivityIndicatorView!
     @IBOutlet private weak var urlTextView: UILabel!
     
@@ -26,6 +27,7 @@ final class ImageCardCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
+        offlineCacheImageView.isHidden = true
     }
     
     func configure(item: ImageCard, showLogo: Bool) {
@@ -40,13 +42,15 @@ final class ImageCardCell: UICollectionViewCell {
                 logoView.image = nil
             }
         }
-
+        
         downloadImage()
     }
     
     func downloadImage() {
         guard !item.imageUrl.isEmpty,
-              let url = URL(string: item.imageUrl) else { return }
+              let url = URL(string: item.imageUrl) else {
+            return
+        }
         
         let height = isBigPhoto ? 156 : 72
         imageView.kf.indicatorType = .activity
@@ -54,10 +58,17 @@ final class ImageCardCell: UICollectionViewCell {
             with: url,
             placeholder: ImageCardPlaceholder(placeholderImage: placeholderImage),
             options: [
+                .targetCache(.onlinePhotoAndMapillaryDefaultCache),
                 .processor(DownsamplingImageProcessor(size: .init(width: height, height: height))),
                 .scaleFactor(UIScreen.main.scale),
-                .cacheOriginalImage
-            ])
+                .cacheOriginalImage]) { [weak self] result in
+                    switch result {
+                    case .success:
+                        self?.offlineCacheImageView.isHidden = AFNetworkReachabilityManagerWrapper.isReachable()
+                    case .failure:
+                        self?.offlineCacheImageView.isHidden = true
+                    }
+                }
     }
 }
 
@@ -72,7 +83,7 @@ final class ImageCardPlaceholder: Placeholder {
         self.height = height
         self.placeholderImage = placeholderImage
     }
-
+    
     func add(to imageView: KFCrossPlatformImageView) {
         placeholderImageView?.removeFromSuperview()
         let imageViewPlaceholder = UIImageView()

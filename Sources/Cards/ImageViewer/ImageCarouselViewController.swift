@@ -111,7 +111,6 @@ final class ImageCarouselViewController: UIPageViewController {
     
     deinit {
         ImageCache.onlinePhotoHighResolutionDiskCache.clearMemoryCache()
-        ImageCache.onlinePhotoDefaultCache.clearMemoryCache()
     }
     
     // MARK: - Private func
@@ -179,7 +178,6 @@ final class ImageCarouselViewController: UIPageViewController {
         
         let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: .icCustomExternalLink) { [weak self] _ in
             guard let self, let card = getCardForIndex(currentIndex) else { return }
-            
             SafariPresenter.present(from: self, card: card)
         }
         openInBrowserAction.accessibilityLabel = localizedString("open_in_browser")
@@ -188,8 +186,23 @@ final class ImageCarouselViewController: UIPageViewController {
         
         let firstSection = UIMenu(title: "", options: .displayInline, children: firstSectionItems)
         let downloadAction = UIAction(title: localizedString("shared_string_download"), image: .icCustomDownload) { [weak self] _ in
-            guard let self, let card = getCardForIndex(currentIndex), !card.imageUrl.isEmpty  else { return }
-            GalleryContextMenuProvider.downloadImage(urlString: card.imageUrl, view: view)
+            guard let self, let card = getCardForIndex(currentIndex) else { return }
+            guard let fullSizeUrl = card.getGalleryFullSizeUrl(), !fullSizeUrl.isEmpty else { return }
+            
+            let cache: ImageCache
+            let urlString: String
+            // Attempting to download the high-resolution image first
+            if ImageCache.onlinePhotoHighResolutionDiskCache.isCached(forKey: fullSizeUrl) {
+                cache = .onlinePhotoHighResolutionDiskCache
+                urlString = fullSizeUrl
+            } else {
+                guard !card.imageUrl.isEmpty else {
+                    return
+                }
+                cache = .onlinePhotoAndMapillaryDefaultCache
+                urlString = card.imageUrl
+            }
+            GalleryContextMenuProvider.downloadImage(urlString: urlString, view: view, cache: cache)
         }
         downloadAction.accessibilityLabel = localizedString("shared_string_download")
         let secondSection = UIMenu(title: "", options: .displayInline, children: [downloadAction])
@@ -303,7 +316,7 @@ final class ImageCarouselViewController: UIPageViewController {
     
     private func prefetchImages(with urls: [URL]) {
         guard !urls.isEmpty else { return }
-        ImagePrefetcher(urls: urls, options: [.targetCache(.galleryHighResolutionDiskCache)]).start()
+        ImagePrefetcher(urls: urls, options: [.targetCache(.onlinePhotoHighResolutionDiskCache)]).start()
     }
     
     @objc private func didDownloadMetadata(notification: Notification) {

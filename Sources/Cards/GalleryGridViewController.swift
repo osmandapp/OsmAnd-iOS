@@ -10,8 +10,8 @@ import Kingfisher
 
 final class GalleryGridViewController: OABaseNavbarViewController {
     enum Constants {
-        static let minColumnCount: CGFloat = 2
-        static let maxColumnCount: CGFloat = 6
+        static let minColumnCount: Int = 2
+        static let maxColumnCount: Int = 7
     }
     var cards: [AbstractCard] = []
     var titleString: String = ""
@@ -21,13 +21,23 @@ final class GalleryGridViewController: OABaseNavbarViewController {
     private var collectionView: UICollectionView!
     // swiftlint:enable all
     
-    private var currentColumnCount: CGFloat = 3
-    private var initialPinchColumnCount: CGFloat = 3
-  
+    private var initialPinchColumnCount: Int = 3
+    
+    private var currentColumnCount: Int = 3 {
+        didSet {
+            let value = Int32(currentColumnCount)
+            if OAUtilities.isLandscape() || OAUtilities.isiOSAppOnMac() {
+                OAAppSettings.sharedManager().contextGallerySpanGridCountLandscape.set(value)
+            } else {
+                OAAppSettings.sharedManager().contextGallerySpanGridCount.set(value)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        currentColumnCount = 3
-        initialPinchColumnCount = 3
+        currentColumnCount = columnCountForCurrentOrientation()
+        initialPinchColumnCount = currentColumnCount
         configureCollectionView()
         downloadImageMetadataService.cards = cards.compactMap { $0 as? WikiImageCard }
         Task {
@@ -35,12 +45,25 @@ final class GalleryGridViewController: OABaseNavbarViewController {
         }
     }
     
+    deinit {
+        ImageCache.onlinePhotoAndMapillaryDefaultCache.clearMemoryCache()
+    }
+    
     override func getTitle() -> String {
         titleString
     }
     
     override func onRotation() {
+        currentColumnCount = columnCountForCurrentOrientation()
         collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: true)
+    }
+    
+    private func columnCountForCurrentOrientation() -> Int {
+        if OAUtilities.isLandscape() || OAUtilities.isiOSAppOnMac() {
+            return Int(OAAppSettings.sharedManager().contextGallerySpanGridCountLandscape.get())
+        } else {
+            return Int(OAAppSettings.sharedManager().contextGallerySpanGridCount.get())
+        }
     }
     
     private func configureCollectionView() {
@@ -68,48 +91,45 @@ final class GalleryGridViewController: OABaseNavbarViewController {
         let columns = max(Constants.minColumnCount, min(Constants.maxColumnCount, currentColumnCount))
         
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0 / columns),
+            widthDimension: .fractionalWidth(1.0 / CGFloat(columns)),
             heightDimension: .fractionalHeight(1.0)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = .init(top: 0, leading: 3, bottom: 6, trailing: 3)
-
+        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalWidth(1.0 / columns)
+            heightDimension: .fractionalWidth(1.0 / CGFloat(columns))
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
+        
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 17, bottom: 0, trailing: 17)
-
+        
         section.boundarySupplementaryItems = [
             NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
                 elementKind: UICollectionView.elementKindSectionHeader,
                 alignment: .top)
         ]
-
+        
         return UICollectionViewCompositionalLayout(section: section)
     }
-
+    
     @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
         switch gesture.state {
         case .began:
             initialPinchColumnCount = currentColumnCount
-            
         case .changed:
-            let newColumnCount = initialPinchColumnCount / gesture.scale
-            let clampedColumnCount = max(Constants.minColumnCount, min(Constants.maxColumnCount, newColumnCount))
+            let newColumnCount = CGFloat(initialPinchColumnCount) / gesture.scale
+            let clampedColumnCount = CGFloat(max(Constants.minColumnCount, min(Constants.maxColumnCount, Int(newColumnCount))))
             
-            if abs(clampedColumnCount - currentColumnCount) >= 0.2 {
-                print("clampedColumnCount: \(clampedColumnCount)")
-                currentColumnCount = clampedColumnCount
+            if abs(clampedColumnCount - CGFloat(currentColumnCount)) > 0.2 {
+                currentColumnCount = Int(clampedColumnCount)
                 collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: false)
             }
-            
         case .ended, .cancelled:
-            currentColumnCount = round(currentColumnCount)
+            currentColumnCount = Int(currentColumnCount)
             collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: true)
             
         default:
@@ -163,7 +183,7 @@ extension GalleryGridViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let itemsCards = cards.compactMap { $0 as? ImageCard }
         guard indexPath.row < itemsCards.count else { return }
-
+        
         let card = itemsCards[indexPath.row]
         
         guard let initialIndex = itemsCards.firstIndex(where: { $0 === card }) else { return }
@@ -194,7 +214,7 @@ extension GalleryGridViewController: UICollectionViewDelegate {
                 detailsAction.accessibilityLabel = localizedString("shared_string_details")
                 firstSectionItems.append(detailsAction)
             }
-  
+            
             let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: .icCustomExternalLink) { _ in
                 SafariPresenter.present(from: self, card: card)
             }
@@ -206,7 +226,9 @@ extension GalleryGridViewController: UICollectionViewDelegate {
             let downloadAction = UIAction(title: localizedString("shared_string_download"), image: .icCustomDownload) { _ in
                 guard let item = card as? ImageCard,
                       !item.imageUrl.isEmpty else { return }
-                GalleryContextMenuProvider.downloadImage(urlString: item.imageUrl, view: self.view)
+                GalleryContextMenuProvider.downloadImage(urlString: item.imageUrl,
+                                                         view: self.view,
+                                                         cache: .onlinePhotoAndMapillaryDefaultCache)
             }
             downloadAction.accessibilityLabel = localizedString("shared_string_download")
             let secondSection = UIMenu(title: "", options: .displayInline, children: [downloadAction])
@@ -223,6 +245,7 @@ final private class GalleryCell: UICollectionViewCell {
     var placeholderImage: UIImage?
     
     private let imageView = UIImageView()
+    private let offlineCacheImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -234,11 +257,22 @@ final private class GalleryCell: UICollectionViewCell {
         
         contentView.addSubview(imageView)
         
+        offlineCacheImageView.image = .icCustomDownloadOfflineWithBg
+        offlineCacheImageView.translatesAutoresizingMaskIntoConstraints = false
+        offlineCacheImageView.contentMode = .scaleAspectFit
+        offlineCacheImageView.isHidden = true
+        contentView.addSubview(offlineCacheImageView)
+        
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            offlineCacheImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
+            offlineCacheImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
+            offlineCacheImageView.widthAnchor.constraint(equalToConstant: 30),
+            offlineCacheImageView.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
     
@@ -249,6 +283,7 @@ final private class GalleryCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
+        offlineCacheImageView.isHidden = true
     }
     
     func configure(with card: AbstractCard) {
@@ -261,10 +296,18 @@ final private class GalleryCell: UICollectionViewCell {
             with: url,
             placeholder: ImageCardPlaceholder(placeholderImage: placeholderImage),
             options: [
-                .processor(DownsamplingImageProcessor(size: imageView.bounds.size)),
+                .targetCache(.onlinePhotoAndMapillaryDefaultCache),
+                .processor(DownsamplingImageProcessor(size: bounds.size)),
                 .scaleFactor(UIScreen.main.scale),
                 .cacheOriginalImage
-            ])
+            ]) { [weak self] result in
+                switch result {
+                case .success:
+                    self?.offlineCacheImageView.isHidden = AFNetworkReachabilityManagerWrapper.isReachable()
+                case .failure:
+                    self?.offlineCacheImageView.isHidden = true
+                }
+            }
     }
     
     func cancelDownloadTask() {

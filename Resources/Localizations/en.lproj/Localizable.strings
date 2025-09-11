@@ -4265,5 +4265,5 @@
 "obd_fuel_type_hybrid_hydrogen" = "Hybrid Hydrogen";
 "obd_fuel_type_hydrogen" = "Hydrogen";
 "obd_fuel_type_unknown" = "Unknown Fuel Type";
-"image_cache_online_photo_high_res" = "Online photo High Res";
-"image_cache_online_photo_mapillary_default_cache" = "Online photo/Mapillary Default Cache";
+"image_cache_online_photo_high_res" = "Online photo high res cache";
+"image_cache_online_photo_mapillary_default_cache" = "Online photo/Mapillary default cache";

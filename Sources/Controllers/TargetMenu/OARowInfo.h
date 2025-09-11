@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) id<OARowInfoDelegate> delegate;
 
-- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(nullable NSString *)textPrefix text:(NSString *)text textColor:(nullable UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
+- (instancetype) initWithKey:(nullable NSString *)key icon:(nullable UIImage *)icon textPrefix:(nullable NSString *)textPrefix text:(NSString *)text textColor:(nullable UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
 
 - (int) getRawHeight;
 - (UIFont *) getFont;

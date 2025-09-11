@@ -711,8 +711,7 @@ static const CGFloat kTextMaxHeight = 150.0;
      onFailureNoCache:(void (^)(void))onFailureNoCache
 {
     CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *preferredLang = [settings.settingPrefMapLanguage get] ?: [OAUtilities currentLang];
+    NSString *preferredLang = [[OAAppSettings sharedManager].settingPrefMapLanguage get] ?: [OAUtilities currentLang];
 
     NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f&app=%@",
                            self.location.latitude,
@@ -751,19 +750,11 @@ static const CGFloat kTextMaxHeight = 150.0;
         NSData *effectiveData = data;
         NSURLResponse *effectiveResponse = response;
 
-        // Create a copy of the request without the 'mloc' parameter for caching purposes
-        NSURLRequest *cacheRequest = request;
-        if ([request.URL.absoluteString containsString:@"mloc="]) {
-            NSURLComponents *components = [NSURLComponents componentsWithURL:request.URL resolvingAgainstBaseURL:NO];
-            components.queryItems = [components.queryItems filteredArrayUsingPredicate:
-                                     [NSPredicate predicateWithBlock:^BOOL(NSURLQueryItem *item, NSDictionary *bindings) {
-                return ![item.name isEqualToString:@"mloc"];
-            }]];
-            cacheRequest = [NSURLRequest requestWithURL:components.URL];
-        }
+        NSURLRequest *cacheRequest;
 
-        if ((!data || !response) && [self isInternetConnectionError:error])
+        if ((!data || !response) && [strongSelf isInternetConnectionError:error])
         {
+            cacheRequest = [strongSelf filteredCacheRequestFromRequest:request];
             NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:cacheRequest sessionKey:key];
             if (cached)
             {
@@ -784,6 +775,7 @@ static const CGFloat kTextMaxHeight = 150.0;
             if ([response isKindOfClass:[NSHTTPURLResponse class]] &&
                 ((NSHTTPURLResponse *)response).statusCode == 200)
             {
+                cacheRequest = [strongSelf filteredCacheRequestFromRequest:request];
                 [URLSessionManager storeResponse:response data:data for:cacheRequest sessionKey:key];
             }
         }
@@ -838,6 +830,34 @@ static const CGFloat kTextMaxHeight = 150.0;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateDisplayingCards:cards];
     });
+}
+
+- (NSURLRequest *)filteredCacheRequestFromRequest:(NSURLRequest *)request
+{
+    NSArray<NSString *> *blockedParams = @[@"mloc", @"app", @"lang"];
+    NSString *urlString = request.URL.absoluteString;
+    
+    BOOL hasBlockedParam = NO;
+    for (NSString *param in blockedParams)
+    {
+        NSString *searchString = [param stringByAppendingString:@"="];
+        if ([urlString containsString:searchString])
+        {
+            hasBlockedParam = YES;
+            break;
+        }
+    }
+    
+    if (!hasBlockedParam)
+        return request;
+    
+    NSURLComponents *components = [NSURLComponents componentsWithURL:request.URL resolvingAgainstBaseURL:NO];
+    components.queryItems = [components.queryItems filteredArrayUsingPredicate:
+                             [NSPredicate predicateWithBlock:^BOOL(NSURLQueryItem *item, NSDictionary *bindings) {
+        return ![blockedParams containsObject:item.name];
+    }]];
+    
+    return [NSURLRequest requestWithURL:components.URL];
 }
 
 - (BOOL)isInternetConnectionError:(NSError *)error

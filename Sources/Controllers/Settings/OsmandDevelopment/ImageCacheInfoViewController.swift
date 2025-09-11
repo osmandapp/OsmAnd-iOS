@@ -9,7 +9,7 @@
 import Kingfisher
 
 /// Structure to describe a cache
-fileprivate struct CacheInfo {
+private struct CacheInfo {
     let title: String
     let cache: ImageCache
     let onClear: (() -> Void)?
@@ -20,7 +20,7 @@ final class ImageCacheInfoViewController: UITableViewController {
     /// List of caches to display
     private let caches: [CacheInfo] = [
         CacheInfo(title: localizedString("image_cache_online_photo_high_res"), cache: .onlinePhotoHighResolutionDiskCache, onClear: nil),
-        CacheInfo(title: localizedString("image_cache_online_photo_mapillary_default_cache"), cache: .default, onClear: {
+        CacheInfo(title: localizedString("image_cache_online_photo_mapillary_default_cache"), cache: .onlinePhotoAndMapillaryDefaultCache, onClear: {
             URLSessionManager.removeAllCachedResponses(for: URLSessionConfigProvider.onlineAndMapillaryPhotosAPIKey)
         })
     ]
@@ -30,7 +30,7 @@ final class ImageCacheInfoViewController: UITableViewController {
     private let byteFormatter: ByteCountFormatter = {
         let formatter = ByteCountFormatter()
         formatter.allowedUnits = [.useKB, .useMB, .useGB]
-        formatter.countStyle = .memory
+        formatter.countStyle = .file
         return formatter
     }()
     
@@ -73,7 +73,7 @@ final class ImageCacheInfoViewController: UITableViewController {
     
     private func presentClearCacheAlert(for index: Int) {
         let cacheInfo = caches[index]
-        let alertTitle = localizedString("shared_string_clear") + " " +  cacheInfo.title
+        let alertTitle = localizedString("shared_string_clear") + " " + cacheInfo.title
         let alert = UIAlertController(
             title: alertTitle,
             message: localizedString("remove_cache_alert"),
@@ -103,7 +103,6 @@ final class ImageCacheInfoViewController: UITableViewController {
         navigationItem.leftBarButtonItem = closeBarButton
     }
  
-
     @objc private func onCloseBarButtonActon(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
     }

@@ -10,7 +10,9 @@ import Kingfisher
 
 enum GalleryContextMenuProvider {
     
-    static func downloadImage(urlString: String, view: UIView) {
+    static func downloadImage(urlString: String,
+                              view: UIView,
+                              cache: ImageCache = .default) {
         guard let url = URL(string: urlString) else {
             NSLog("downloadImage -> Invalid URL.")
             return
@@ -18,7 +20,7 @@ enum GalleryContextMenuProvider {
         
         do {
             // Attempt to get data from the disk cache
-            if let data = try ImageCache.default.diskStorage.value(
+            if let data = try cache.diskStorage.value(
                 forKey: url.absoluteString,
                 forcedExtension: nil,
                 extendingExpiration: .cacheTime
@@ -79,7 +81,8 @@ enum GalleryContextMenuProvider {
         if !createDownloadDirectory(at: downloadDirectory) { return }
         
         // File URL in the Download directory
-        let fileURL = downloadDirectory.appendingPathComponent(url.lastPathComponent)
+        let fileName = fileNameWithWidth(for: url)
+        let fileURL = downloadDirectory.appendingPathComponent(fileName)
         
         do {
             try data.write(to: fileURL)
@@ -92,6 +95,20 @@ enum GalleryContextMenuProvider {
                 OAUtilities.showToast(localizedString("download_failed"), details: nil, duration: 4, in: view)
             }
             NSLog("Error saving file: \(error.localizedDescription)")
+        }
+    }
+    
+    private static func fileNameWithWidth(for url: URL) -> String {
+        let baseName = url.deletingPathExtension().lastPathComponent
+        let ext = url.pathExtension.isEmpty ? "dat" : url.pathExtension
+        
+        // Extract width query parameter
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        
+        if let width = components?.queryItems?.first(where: { $0.name.lowercased() == "width" })?.value {
+            return "\(baseName)_\(width).\(ext)"
+        } else {
+            return "\(baseName).\(ext)"
         }
     }
     

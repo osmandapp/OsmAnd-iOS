@@ -15,7 +15,7 @@ final class MigrationManager: NSObject {
     static let importExportVersionMigration1 = 1
     static let importExportVersionMigration2 = 2
 
-    enum MigrationKey: String, CaseIterable{
+    enum MigrationKey: String, CaseIterable {
         case migrationChangeWidgetIds1Key
         case migrationChangeQuickActionIds1Key
         case migrationLocationNavigationIconsKey
@@ -79,7 +79,6 @@ final class MigrationManager: NSObject {
     }
     
     private func changeWidgetIdsMigration1() {
-        let settings = OAAppSettings.sharedManager()
         let externalPlugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
         let externalSensorsPluginPrefs: [OACommonPreference]? = externalPlugin?.getPreferences()
         let changeWidgetIds = [
@@ -174,7 +173,6 @@ final class MigrationManager: NSObject {
 
     private func changeWidgetPrefs1(_ appMode: OAApplicationMode, oldWidgetIds: [String], changeWidgetIds: [String: String]) {
         if let plugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin {
-            let settings = OAAppSettings.sharedManager()
             for oldCustomWidgetId in oldWidgetIds {
                 let oldOriginalWidgetId = oldCustomWidgetId.substring(to: Int(oldCustomWidgetId.index(of: MapWidgetInfo.DELIMITER)))
                 if let newOriginalWidgetId = changeWidgetIds[oldOriginalWidgetId] {
@@ -335,7 +333,6 @@ final class MigrationManager: NSObject {
     }
     
     private func migrateLocationNavigationIcons() {
-        let settings = OAAppSettings.sharedManager()
         for appMode in OAApplicationMode.allPossibleValues() {
             let oldLocationIconPref = OACommonInteger.withKey("locationIcon", defValue: 0).makeProfile()
             switch oldLocationIconPref.get(appMode) {
@@ -460,7 +457,6 @@ final class MigrationManager: NSObject {
     }
 
     private func migrateTerrainModeDefaultPreferences() {
-        let settings = OAAppSettings.sharedManager()
         let oldDefaultMinZoomPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_min_zoom", defValue: 0)
         let oldDefaultMaxZoomPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_max_zoom", defValue: 0)
         let oldDefaultTransparencyPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_transparency", defValue: 0)

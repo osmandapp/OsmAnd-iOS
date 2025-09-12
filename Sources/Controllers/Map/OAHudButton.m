@@ -57,7 +57,6 @@
     
     [self updateColorsForPressedState:NO];
     
-    self.layer.cornerRadius = self.frame.size.width / 2;
     self.layer.shadowOpacity = 0.35;
     self.layer.shadowRadius = 5;
     self.layer.shadowOffset = CGSizeMake(0, 2);
@@ -122,6 +121,14 @@
 {
     if ([sender isKindOfClass:UIButton.class])
         [self updateColorsForPressedState:NO];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    CGFloat radius = self.cornerRadius > 0 ? self.cornerRadius : self.frame.size.width / 2.0;
+    self.layer.cornerRadius = radius;
+    self.layer.shadowPath = [UIBezierPath bezierPathWithOvalInRect:self.bounds].CGPath;
 }
 
 @end

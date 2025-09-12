@@ -263,23 +263,23 @@
             
         case OATargetRouteFinishSelection:
         {
-            controller = controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetRouteFinishSelection];
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetRouteFinishSelection];
             break;
         }
             
         case OATargetRouteIntermediateSelection:
         {
-            controller = controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetRouteIntermediateSelection];
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetRouteIntermediateSelection];
             break;
         }
         case OATargetHomeSelection:
         {
-            controller = controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetHomeSelection];
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetHomeSelection];
             break;
         }
         case OATargetWorkSelection:
         {
-            controller = controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetWorkSelection];
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetWorkSelection];
             break;
         }
         case OATargetImpassableRoad:

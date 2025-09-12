@@ -1414,9 +1414,4 @@ static const CGFloat kTextMaxHeight = 150.0;
     [self.tableView reloadData];
 }
 
-- (void)dealloc
-{
-    NSLog(@"");
-}
-
 @end

@@ -302,6 +302,11 @@ static QuickActionType *TYPE_INTERFACE;
     
     // interface
     [allTypes addObject:LockScreenAction.type];
+    [allTypes addObject:OpenNavigationViewAction.type];
+    [allTypes addObject:OpenSearchViewAction.type];
+    [allTypes addObject:ShowHideDrawerAction.type];
+    [allTypes addObject:NavigatePreviousScreenAction.type];
+    [allTypes addObject:OpenWunderLINQDatagridAction.type];
     
     // my places
     [allTypes addObject:OAFavoriteAction.TYPE];

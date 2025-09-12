@@ -220,6 +220,11 @@
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
 		274C43F12DEDBA7100585952 /* OANextTurnWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */; };
 		27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */; };
+		27D33B3F2E7432DD00AD4F70 /* OpenNavigationViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B3E2E7432DD00AD4F70 /* OpenNavigationViewAction.swift */; };
+		27D33B412E7436F100AD4F70 /* OpenSearchViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B402E7436F100AD4F70 /* OpenSearchViewAction.swift */; };
+		27D33B432E743A1A00AD4F70 /* ShowHideDrawerAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B422E743A1A00AD4F70 /* ShowHideDrawerAction.swift */; };
+		27D33B452E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B442E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift */; };
+		27D33B472E74476800AD4F70 /* OpenWunderLINQDatagridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B462E74476800AD4F70 /* OpenWunderLINQDatagridAction.swift */; };
 		27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */; };
 		27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316862E716901007172DA /* PreviousAppProfileAction.swift */; };
 		27E316892E716901007172DA /* NextAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316852E716901007172DA /* NextAppProfileAction.swift */; };
@@ -3592,6 +3597,11 @@
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
 		274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OANextTurnWidget.xib; sourceTree = "<group>"; };
 		27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NextTurnWidget+Extension.swift"; sourceTree = "<group>"; };
+		27D33B3E2E7432DD00AD4F70 /* OpenNavigationViewAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNavigationViewAction.swift; sourceTree = "<group>"; };
+		27D33B402E7436F100AD4F70 /* OpenSearchViewAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSearchViewAction.swift; sourceTree = "<group>"; };
+		27D33B422E743A1A00AD4F70 /* ShowHideDrawerAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideDrawerAction.swift; sourceTree = "<group>"; };
+		27D33B442E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatePreviousScreenAction.swift; sourceTree = "<group>"; };
+		27D33B462E74476800AD4F70 /* OpenWunderLINQDatagridAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWunderLINQDatagridAction.swift; sourceTree = "<group>"; };
 		27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSwitchAppModeAction.swift; sourceTree = "<group>"; };
 		27E316852E716901007172DA /* NextAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextAppProfileAction.swift; sourceTree = "<group>"; };
 		27E316862E716901007172DA /* PreviousAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousAppProfileAction.swift; sourceTree = "<group>"; };
@@ -11204,6 +11214,11 @@
 				27E316852E716901007172DA /* NextAppProfileAction.swift */,
 				27E316862E716901007172DA /* PreviousAppProfileAction.swift */,
 				27E3168C2E717CB6007172DA /* ChangeMapOrientationAction.swift */,
+				27D33B3E2E7432DD00AD4F70 /* OpenNavigationViewAction.swift */,
+				27D33B402E7436F100AD4F70 /* OpenSearchViewAction.swift */,
+				27D33B422E743A1A00AD4F70 /* ShowHideDrawerAction.swift */,
+				27D33B442E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift */,
+				27D33B462E74476800AD4F70 /* OpenWunderLINQDatagridAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -16762,6 +16777,7 @@
 				DA5A852C26C563A900F274C7 /* OAOcbfHelper.m in Sources */,
 				327A19862A98D57800F4A027 /* TravelJsonParser.swift in Sources */,
 				DA5A815426C563A700F274C7 /* OACarPlayMapViewController.mm in Sources */,
+				27D33B3F2E7432DD00AD4F70 /* OpenNavigationViewAction.swift in Sources */,
 				C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */,
 				32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */,
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,
@@ -16898,6 +16914,7 @@
 				FAE446C42CCFC82700598BE3 /* ZoomLevelWidgetState.swift in Sources */,
 				DAABE4EB2A16483300569F71 /* ConfigureScreenViewController.swift in Sources */,
 				DA5A84A526C563A900F274C7 /* OAMeasurementCommandManager.m in Sources */,
+				27D33B432E743A1A00AD4F70 /* ShowHideDrawerAction.swift in Sources */,
 				DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */,
 				32048FC52A25E70200AA4B71 /* BaseOAuthHelper.swift in Sources */,
 				DA5A820626C563A700F274C7 /* OAFeatureCardView.m in Sources */,
@@ -17204,6 +17221,7 @@
 				DAD3FD242A4ACB2E00BFA03A /* WidgetGroupListViewController.swift in Sources */,
 				FAA650532ADD42C50020DCEA /* Sensor.swift in Sources */,
 				FAC166282B21BEF900D63755 /* Central.swift in Sources */,
+				27D33B472E74476800AD4F70 /* OpenWunderLINQDatagridAction.swift in Sources */,
 				DA5A832626C563A800F274C7 /* OALineChartCell.m in Sources */,
 				DA5A842F26C563A800F274C7 /* OATargetTurnViewController.m in Sources */,
 				FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */,
@@ -17763,6 +17781,7 @@
 				DA5A817E26C563A700F274C7 /* OAMarkerAction.mm in Sources */,
 				DA5A824326C563A700F274C7 /* OARecalculateRouteViewController.mm in Sources */,
 				DA5A852926C563A900F274C7 /* OAUtilities.m in Sources */,
+				27D33B412E7436F100AD4F70 /* OpenSearchViewAction.swift in Sources */,
 				DA5A845326C563A900F274C7 /* OASymbolMapLayer.mm in Sources */,
 				DA5A82F226C563A800F274C7 /* OASegmentTableViewCell.m in Sources */,
 				46F0CA9829B0C4F50009C205 /* OAWikipediaSettingsViewController.m in Sources */,
@@ -18014,6 +18033,7 @@
 				CA4ED6FF8F7B115D3C5DC810 /* OAWeatherForecastViewController.mm in Sources */,
 				CA4EDA76E3361F7FEB8D4A1E /* OAWeatherForecastDetailsViewController.mm in Sources */,
 				CA4ED2FE0185FC36F0229614 /* OAWeatherFrequencySettingsViewController.mm in Sources */,
+				27D33B452E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift in Sources */,
 				CA4ED6AAA32538E21DD77883 /* OASettingsBackupViewController.mm in Sources */,
 				46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */,
 				CA4EDCD4B8149095B74FD700 /* OACloudAccountLogoutViewController.mm in Sources */,

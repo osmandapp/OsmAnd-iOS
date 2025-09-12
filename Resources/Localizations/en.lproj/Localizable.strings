@@ -2093,6 +2093,16 @@
 "key_event_action_next_app_profile" = "Next app profile";
 "quick_action_previous_app_profile" = "App profile to previous";
 "key_event_action_previous_app_profile" = "Previous app profile";
+"quick_action_navigation_view_title" = "Navigation view";
+"quick_action_navigation_view_desc" = "A toggle to open or close navigation view.";
+"quick_action_search_view_title" = "Search view";
+"quick_action_search_view_desc" = "A toggle to open or close search view.";
+"quick_action_drawer_title" = "Side menu";
+"quick_action_drawer_desc" = "A toggle to show or hide side menu.";
+"quick_action_previous_screen_title" = "Previous screen";
+"quick_action_previous_screen_desc" = "A toggle to navigate to the previous screen.";
+"quick_action_verb_navigate" = "Navigate";
+"wunderlinq_datagrid" = "WunderLINQ Datagrid";
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";

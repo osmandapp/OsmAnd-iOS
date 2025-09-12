@@ -2115,6 +2115,8 @@
 "key_event_action_move_up" = "Move up";
 "quick_action_move_map_down" = "Map down";
 "key_event_action_move_down" = "Move down";
+"weather_screen" = "Weather screen";
+"open_weather_action_description" = "Allows you to open a screen with detailed weather information.";
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";

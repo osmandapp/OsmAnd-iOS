@@ -705,6 +705,8 @@ forcedUpdate:(BOOL)forcedUpdate
 
     // Setup renderer
     OsmAnd::MapRendererSetupOptions rendererSetup;
+    rendererSetup.maxNumberOfRasterMapLayersInBatch = 8;
+    rendererSetup.pathToOpenGLShadersCache = QString::fromNSString(NSTemporaryDirectory());
     rendererSetup.gpuWorkerThreadEnabled = true;
     rendererSetup.displayDensityFactor = _displayDensityFactor;
     const auto capturedWorkerContext = _glWorkerContext;

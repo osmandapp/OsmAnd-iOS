@@ -324,6 +324,7 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:OASwitchProfileAction.TYPE];
     [allTypes addObject:NextAppProfileAction.getQuickActionType];
     [allTypes addObject:PreviousAppProfileAction.getQuickActionType];
+    [allTypes addObject:ChangeMapOrientationAction.type];
 
     NSMutableArray<QuickActionType *> *enabledTypes = [NSMutableArray arrayWithArray:allTypes];
     [OAPluginsHelper registerQuickActionTypesPlugins:allTypes enabledTypes:enabledTypes];

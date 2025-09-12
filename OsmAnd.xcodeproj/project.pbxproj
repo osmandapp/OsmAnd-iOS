@@ -223,6 +223,8 @@
 		27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */; };
 		27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316862E716901007172DA /* PreviousAppProfileAction.swift */; };
 		27E316892E716901007172DA /* NextAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316852E716901007172DA /* NextAppProfileAction.swift */; };
+		27E3168D2E717CB6007172DA /* ChangeMapOrientationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E3168C2E717CB6007172DA /* ChangeMapOrientationAction.swift */; };
+		27E316922E72F5CE007172DA /* CompassMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316912E72F5CE007172DA /* CompassMode.swift */; };
 		27E3C2032DF1ADD40053958E /* OAStreetNameWidgetParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = 27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */; };
 		27F050912DD38E310058075F /* RouteInfoDisplayPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */; };
 		27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508F2DD38E310058075F /* RouteInfoWidget.swift */; };
@@ -3593,6 +3595,8 @@
 		27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSwitchAppModeAction.swift; sourceTree = "<group>"; };
 		27E316852E716901007172DA /* NextAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextAppProfileAction.swift; sourceTree = "<group>"; };
 		27E316862E716901007172DA /* PreviousAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousAppProfileAction.swift; sourceTree = "<group>"; };
+		27E3168C2E717CB6007172DA /* ChangeMapOrientationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMapOrientationAction.swift; sourceTree = "<group>"; };
+		27E316912E72F5CE007172DA /* CompassMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassMode.swift; sourceTree = "<group>"; };
 		27E3C1FF2DF1AD340053958E /* OAStreetNameWidgetParams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStreetNameWidgetParams.h; sourceTree = "<group>"; };
 		27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreetNameWidgetParams.mm; sourceTree = "<group>"; };
 		27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayPriority.swift; sourceTree = "<group>"; };
@@ -9748,6 +9752,7 @@
 			children = (
 				464BF4A42C04F7D6000D6908 /* CompassButtonState.swift */,
 				464BF4A62C050189000D6908 /* CompassVisibility.swift */,
+				27E316912E72F5CE007172DA /* CompassMode.swift */,
 				46330AEE2C034C1100E60CA2 /* FabMarginPreference.swift */,
 				464BF4AA2C051909000D6908 /* Map3DButtonState.swift */,
 				464BF4A82C0517E7000D6908 /* Map3DModeVisibility.swift */,
@@ -11198,6 +11203,7 @@
 				27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */,
 				27E316852E716901007172DA /* NextAppProfileAction.swift */,
 				27E316862E716901007172DA /* PreviousAppProfileAction.swift */,
+				27E3168C2E717CB6007172DA /* ChangeMapOrientationAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -17358,6 +17364,7 @@
 				DA5A819026C563A700F274C7 /* OAShowHideGPXTracksAction.mm in Sources */,
 				DA5A82E526C563A800F274C7 /* OAPublicTransportShieldCell.mm in Sources */,
 				32FF4C312C19D59A00246B36 /* DownloadingCellResourceHelper.swift in Sources */,
+				27E3168D2E717CB6007172DA /* ChangeMapOrientationAction.swift in Sources */,
 				DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */,
 				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,
 				322C59792C90836C0087AB2F /* OAColorPickerViewController.swift in Sources */,
@@ -17490,6 +17497,7 @@
 				DA5A845226C563A900F274C7 /* OAMapLayers.mm in Sources */,
 				DA4ABEEB2876DA5D00B996EF /* OASettingsCategoryItems.m in Sources */,
 				FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */,
+				27E316922E72F5CE007172DA /* CompassMode.swift in Sources */,
 				C57693192D67148400E4F772 /* ChangeTracksAppearanceTask.swift in Sources */,
 				DA5A81DE26C563A700F274C7 /* OAStreet.mm in Sources */,
 				325CFBEB2B5052E000090DF2 /* TracksViewController.swift in Sources */,

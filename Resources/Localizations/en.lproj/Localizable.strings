@@ -1406,10 +1406,12 @@
 "select_map_source" = "Select map source";
 "select_overlay" = "Select overlay map";
 "select_underlay" = "Select underlay map";
+"select_map_orientation" = "Select map orientation";
 "select_manually" = "Select manually";
 "avoid_by_type" = "Avoid by type";
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
+"available" = "Available";
 
 "export_profile" = "Export profile";
 "shared_string_import" = "Import";
@@ -1998,6 +2000,8 @@
 "quick_action_add_actions_descr" = "Add actions to access them quickly from the map.";
 "quick_action_interim_dialog" = "Show an interim dialog";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
+"map_orientations_choose_description" = "Leave empty to switch between all available modes, or add only your preferred ones.";
+"map_orientations" = "Map orientations";
 "quick_action_template_name" = "Template name";
 "quick_action_fav_name_descr" = "Leave blank to use the address or place name.";
 "quick_action_select_group" = "Select the group to save the favorite in.";

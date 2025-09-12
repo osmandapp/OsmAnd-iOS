@@ -34,6 +34,7 @@
 - (void)resetDrivingRegionUpdate;
 - (void)detectDrivingRegion:(CLLocation *)location;
 - (void)switchRotateMapMode;
+- (void)switchRotateMapModeTo:(int)mode;
 - (void)refreshLocation;
 - (void)updateSettings;
 - (void)animatedAlignAzimuthToNorth;

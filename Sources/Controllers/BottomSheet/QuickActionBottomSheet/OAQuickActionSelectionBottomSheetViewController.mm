@@ -107,6 +107,19 @@
             }
         }
     }
+    else if (vwController.type == EOAQASelectionTypeOrientation)
+    {
+        for (NSString *key in params)
+        {
+            [arr addObject:@{
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+                @"title" : [CompassModeWrapper getTitleForKey:key],
+                @"value" : @([CompassModeWrapper getValueForKey:key]),
+                @"param" : @[key],
+                @"img" : [CompassModeWrapper getIconNameForKey:key]
+            }];
+        }
+    }
     else
     {
         for (NSArray *pair in params)
@@ -213,6 +226,12 @@
                 {
                     isActive = [_app.data.underlayMapSource.name isEqualToString:item[@"title"]]
                     || (_app.data.underlayMapSource == nil && [item[@"value"] isEqualToString:@"no_underlay"]);
+                    break;
+                }
+                case EOAQASelectionTypeOrientation:
+                {
+                    OAAppSettings *settings = [OAAppSettings sharedManager];
+                    isActive = [settings.rotateMap get] == [item[@"value"] integerValue];
                     break;
                 }
                 case EOAQASelectionTypeTerrainScheme:

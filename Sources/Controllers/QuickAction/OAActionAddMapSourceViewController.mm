@@ -17,6 +17,7 @@
 #import "OAAppSettings.h"
 #import "OAMapCreatorHelper.h"
 #import "OAResourcesUIHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
@@ -74,6 +75,8 @@
             return OALocalizedString(@"select_overlay");
         case EOAMapSourceTypeUnderlay:
             return OALocalizedString(@"select_underlay");
+        case EOAMapSourceTypeOrientation:
+            return OALocalizedString(@"select_map_orientation");
         default:
             return @"";
     }
@@ -96,10 +99,27 @@
 
 - (void)generateData
 {
-    _data = [OAResourcesUIHelper getSortedRasterMapSources:YES];
-    OAOnlineTilesResourceItem* itemNone = [[OAOnlineTilesResourceItem alloc] init];
-    itemNone.mapSource = [[OAMapSource alloc] initWithResource:nil andVariant:[self getNoSourceItemId] name:[self getNoSourceName]];
-    _data = [_data arrayByAddingObject:itemNone];
+    if (_type == EOAMapSourceTypeOrientation)
+    {
+        NSMutableArray *dataArr = [NSMutableArray array];
+        for (NSInteger value = 0; value < [CompassModeWrapper getAllValues].count; value++)
+        {
+            [dataArr addObject:@{
+                @"title" : [CompassModeWrapper getTitleForValue:value],
+                @"value" : [CompassModeWrapper getKeyForValue:value],
+                @"icon" : [CompassModeWrapper getIconNameForValue:value],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+        }
+        _data = dataArr;
+    }
+    else
+    {
+        _data = [OAResourcesUIHelper getSortedRasterMapSources:YES];
+        OAOnlineTilesResourceItem* itemNone = [[OAOnlineTilesResourceItem alloc] init];
+        itemNone.mapSource = [[OAMapSource alloc] initWithResource:nil andVariant:[self getNoSourceItemId] name:[self getNoSourceName]];
+        _data = [_data arrayByAddingObject:itemNone];
+    }
 }
 
 - (NSString *)getNoSourceItemId
@@ -142,7 +162,7 @@
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
-    return OALocalizedString(@"available_map_sources");
+    return OALocalizedString(_type == EOAMapSourceTypeOrientation ? @"available" : @"available_map_sources");
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -152,7 +172,6 @@
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    OAOnlineTilesResourceItem* item = [self getItem:indexPath];
     OASimpleTableViewCell* cell = nil;
     
     cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
@@ -164,15 +183,31 @@
     }
     if (cell)
     {
-        UIImage *img = nil;
-        img = [UIImage imageNamed:@"ic_custom_map_style"];
-        
-        cell.titleLabel.text = item.mapSource.name;
-        cell.leftIconView.image = img;
-        if ([_initialValues containsObject:item.mapSource.name])
+        if (_type == EOAMapSourceTypeOrientation)
         {
-            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-            [_initialValues removeObject:item.mapSource.name];
+            NSDictionary *item = _data[indexPath.row];
+            NSString *title = item[@"title"];
+            cell.titleLabel.text = title;
+            cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
+            if ([_initialValues containsObject:title])
+            {
+                [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+                [_initialValues removeObject:title];
+            }
+        }
+        else
+        {
+            OAOnlineTilesResourceItem* item = [self getItem:indexPath];
+            UIImage *img = nil;
+            img = [UIImage imageNamed:@"ic_custom_map_style"];
+            
+            cell.titleLabel.text = item.mapSource.name;
+            cell.leftIconView.image = img;
+            if ([_initialValues containsObject:item.mapSource.name])
+            {
+                [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+                [_initialValues removeObject:item.mapSource.name];
+            }
         }
     }
     return cell;
@@ -186,11 +221,19 @@
     NSMutableArray *arr = [NSMutableArray new];
     for (NSIndexPath *path in selectedItems)
     {
-        OAOnlineTilesResourceItem* source = [self getItem:path];
-        [arr addObject:@[source.mapSource.variant ,source.mapSource.name]];
+        if (_type == EOAMapSourceTypeOrientation)
+        {
+            NSDictionary *item = _data[path.row];
+            [arr addObject:item];
+        }
+        else
+        {
+            OAOnlineTilesResourceItem* source = [self getItem:path];
+            [arr addObject:@[source.mapSource.variant, source.mapSource.name]];
+        }
     }
     if (self.delegate)
-        [self.delegate onMapSourceSelected:[NSArray arrayWithArray:arr]];
+        [self.delegate onMapSourceSelected:[NSArray arrayWithArray:arr] mapSourceType:_type];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

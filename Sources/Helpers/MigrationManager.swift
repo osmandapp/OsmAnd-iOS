@@ -21,6 +21,7 @@ final class MigrationManager: NSObject {
         case migrationLocationNavigationIconsKey
         case migrationChangeTerrainIds1Key
         case migrationTerrainModeDefaultPreferences
+        case migrationHudButtonPositionsKey
     }
 
     static let shared = MigrationManager()
@@ -74,6 +75,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrationTerrainModeDefaultPreferences.rawValue) {
                 migrateTerrainModeDefaultPreferences()
                 defaults.set(true, forKey: MigrationKey.migrationTerrainModeDefaultPreferences.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrationHudButtonPositionsKey.rawValue) {
+                migrateHudButtonPositions()
+                defaults.set(true, forKey: MigrationKey.migrationHudButtonPositionsKey.rawValue)
             }
         }
     }
@@ -473,6 +478,70 @@ final class MigrationManager: NSObject {
                 }
                 if oldDefaultTransparencyPref.isSet(for: mode) {
                     terrainMode.setTransparency(oldTransparencyZoom)
+                }
+            }
+        }
+    }
+    
+    private func migrateHudButtonPositions() {
+        let helper = OAMapButtonsHelper.sharedInstance()
+        let screenWidth = CGFloat(OAUtilities.calculateScreenWidth())
+        let screenHeight = CGFloat(OAUtilities.calculateScreenHeight())
+        let portraitWidth = min(screenWidth, screenHeight)
+        let portraitHeight = max(screenWidth, screenHeight)
+        let landscapeWidth = max(screenWidth, screenHeight)
+        let landscapeHeight = min(screenWidth, screenHeight)
+        let cellSizePt = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP)
+        let buttonCells = Int32(50 / cellSizePt) + 1
+        let buttonSizePt = CGFloat(buttonCells) * cellSizePt
+        var items: [(id: String, fab: FabMarginPreference)] = []
+        let map3DState = helper.getMap3DButtonState()
+        items.append((id: Map3DButtonState.map3DHudId, fab: map3DState.fabMarginPref))
+        var quickIds = Set<String>()
+        for mode in OAApplicationMode.allPossibleValues() {
+            for qid in OAAppSettings.sharedManager().quickActionButtons.get(mode) {
+                quickIds.insert(qid)
+            }
+        }
+        
+        if quickIds.isEmpty {
+            quickIds.insert(QuickActionButtonState.defaultButtonId)
+        }
+        
+        for qid in quickIds {
+            if let quickState = helper.getButtonState(byId: qid) {
+                items.append((id: qid, fab: quickState.fabMarginPref))
+            }
+        }
+        
+        for (hudId, fabPref) in items {
+            let portraitPref = settings.registerLongPreference("\(hudId)_position_portrait", defValue: -1).makeProfile()
+            let landscapePref = settings.registerLongPreference("\(hudId)_position_landscape", defValue: -1).makeProfile()
+            for mode in OAApplicationMode.allPossibleValues() {
+                let needPortrait = portraitPref.get(mode) == -1
+                let needLandscape = landscapePref.get(mode) == -1
+                if !needPortrait && !needLandscape {
+                    continue
+                }
+                
+                let portMargin = fabPref.getPortraitFabMargin(mode)
+                let landMargin = fabPref.getLandscapeFabMargin(mode)
+                let portX = CGFloat(portMargin.first?.doubleValue ?? 0)
+                let portY = CGFloat(portMargin.last?.doubleValue ?? 0)
+                let landX = CGFloat(landMargin.first?.doubleValue ?? 0)
+                let landY = CGFloat(landMargin.last?.doubleValue ?? 0)
+                let scenarios: [(need: Bool, x: CGFloat, y: CGFloat, parentW: CGFloat, parentH: CGFloat, pref: OACommonLong)] = [(needPortrait, portX, portY, portraitWidth, portraitHeight, portraitPref), (needLandscape, landX, landY, landscapeWidth, landscapeHeight, landscapePref)]
+                for scn in scenarios where scn.need && scn.x > 0 && scn.y > 0 {
+                    let distRight = max(0, scn.parentW - scn.x - buttonSizePt)
+                    let distBottom = max(0, scn.parentH - scn.y - buttonSizePt)
+                    let pos = ButtonPositionSize(id: hudId)
+                    pos.setSize(width8dp: buttonCells, height8dp: buttonCells)
+                    pos.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_RIGHT)
+                    pos.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
+                    pos.setMoveHorizontal()
+                    pos.setMoveVertical()
+                    pos.calcGridPositionFromPixel(dpToPix: 1.0, widthPx: Int32(scn.parentW.rounded()), heightPx: Int32(scn.parentH.rounded()), gravLeft: false, x: Int32(max(0, distRight.rounded())), gravTop: false, y: Int32(max(0, distBottom.rounded())))
+                    scn.pref.set(Int(pos.toLongValue()), mode: mode)
                 }
             }
         }

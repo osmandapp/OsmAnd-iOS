@@ -175,14 +175,6 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
         // Main screen - groups list
         if (!_isFiltered)
         {
-            /*
-            OATableRowData *mapInteractionsRow = [section createNewRow];
-            mapInteractionsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
-            mapInteractionsRow.title = OALocalizedString(@"key_event_category_map_interactions");
-            mapInteractionsRow.iconName = @"ic_custom_show_on_map";
-            mapInteractionsRow.key = [OAMapButtonsHelper TYPE_MAP_INTERACTIONS].name;
-            */
-            
             OATableRowData *configureMapRow = [section createNewRow];
             configureMapRow.cellType = [OASimpleTableViewCell getCellIdentifier];
             configureMapRow.title = OALocalizedString(@"configure_map");
@@ -194,6 +186,12 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             interfaceRow.title = OALocalizedString(@"shared_string_interface");
             interfaceRow.iconName = @"ic_custom_ui_customization";
             interfaceRow.key = [OAMapButtonsHelper TYPE_INTERFACE].name;
+            
+            OATableRowData *mapInteractionsRow = [section createNewRow];
+            mapInteractionsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            mapInteractionsRow.title = OALocalizedString(@"key_event_category_map_interactions");
+            mapInteractionsRow.iconName = @"ic_custom_show_on_map";
+            mapInteractionsRow.key = [OAMapButtonsHelper TYPE_MAP_INTERACTIONS].name;
             
             OATableRowData *myPlacesRow = [section createNewRow];
             myPlacesRow.cellType = [OASimpleTableViewCell getCellIdentifier];
@@ -215,7 +213,6 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
         }
         else
         {
-            NSArray<QuickActionType *> *selectedGroupActions = _actions[_selectedGroup];
             for (QuickActionType *action in _filteredData)
             {
                 OATableRowData *row = [section createNewRow];

@@ -308,6 +308,15 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:NavigatePreviousScreenAction.type];
     [allTypes addObject:OpenWunderLINQDatagridAction.type];
     
+    // map interactions
+    [allTypes addObject:MapZoomInAction.getQuickActionType];
+    [allTypes addObject:MapZoomOutAction.getQuickActionType];
+    [allTypes addObject:MapScrollLeftAction.getQuickActionType];
+    [allTypes addObject:MapScrollRightAction.getQuickActionType];
+    [allTypes addObject:MoveToMyLocationAction.type];
+    [allTypes addObject:MapScrollUpAction.getQuickActionType];
+    [allTypes addObject:MapScrollDownAction.getQuickActionType];
+    
     // my places
     [allTypes addObject:OAFavoriteAction.TYPE];
     [allTypes addObject:OAGPXAction.TYPE];

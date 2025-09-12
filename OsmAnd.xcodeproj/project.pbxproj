@@ -225,6 +225,15 @@
 		27D33B432E743A1A00AD4F70 /* ShowHideDrawerAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B422E743A1A00AD4F70 /* ShowHideDrawerAction.swift */; };
 		27D33B452E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B442E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift */; };
 		27D33B472E74476800AD4F70 /* OpenWunderLINQDatagridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B462E74476800AD4F70 /* OpenWunderLINQDatagridAction.swift */; };
+		27D33B4B2E744D9100AD4F70 /* BaseMapZoomAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B4A2E744D9100AD4F70 /* BaseMapZoomAction.swift */; };
+		27D33B4D2E744E7200AD4F70 /* MapZoomInAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B4C2E744E7200AD4F70 /* MapZoomInAction.swift */; };
+		27D33B4F2E744F0D00AD4F70 /* MapZoomOutAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B4E2E744F0D00AD4F70 /* MapZoomOutAction.swift */; };
+		27D33B512E7454EA00AD4F70 /* BaseMapScrollAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B502E7454EA00AD4F70 /* BaseMapScrollAction.swift */; };
+		27D33B532E74567D00AD4F70 /* MapScrollLeftAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B522E74567D00AD4F70 /* MapScrollLeftAction.swift */; };
+		27D33B552E74587400AD4F70 /* MapScrollRightAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B542E74587400AD4F70 /* MapScrollRightAction.swift */; };
+		27D33B572E7459FA00AD4F70 /* MoveToMyLocationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B562E7459FA00AD4F70 /* MoveToMyLocationAction.swift */; };
+		27D33B592E745D3700AD4F70 /* MapScrollUpAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B582E745D3700AD4F70 /* MapScrollUpAction.swift */; };
+		27D33B5B2E745F6D00AD4F70 /* MapScrollDownAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */; };
 		27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */; };
 		27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316862E716901007172DA /* PreviousAppProfileAction.swift */; };
 		27E316892E716901007172DA /* NextAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316852E716901007172DA /* NextAppProfileAction.swift */; };
@@ -3602,6 +3611,15 @@
 		27D33B422E743A1A00AD4F70 /* ShowHideDrawerAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideDrawerAction.swift; sourceTree = "<group>"; };
 		27D33B442E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatePreviousScreenAction.swift; sourceTree = "<group>"; };
 		27D33B462E74476800AD4F70 /* OpenWunderLINQDatagridAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWunderLINQDatagridAction.swift; sourceTree = "<group>"; };
+		27D33B4A2E744D9100AD4F70 /* BaseMapZoomAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMapZoomAction.swift; sourceTree = "<group>"; };
+		27D33B4C2E744E7200AD4F70 /* MapZoomInAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapZoomInAction.swift; sourceTree = "<group>"; };
+		27D33B4E2E744F0D00AD4F70 /* MapZoomOutAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapZoomOutAction.swift; sourceTree = "<group>"; };
+		27D33B502E7454EA00AD4F70 /* BaseMapScrollAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMapScrollAction.swift; sourceTree = "<group>"; };
+		27D33B522E74567D00AD4F70 /* MapScrollLeftAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollLeftAction.swift; sourceTree = "<group>"; };
+		27D33B542E74587400AD4F70 /* MapScrollRightAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollRightAction.swift; sourceTree = "<group>"; };
+		27D33B562E7459FA00AD4F70 /* MoveToMyLocationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveToMyLocationAction.swift; sourceTree = "<group>"; };
+		27D33B582E745D3700AD4F70 /* MapScrollUpAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollUpAction.swift; sourceTree = "<group>"; };
+		27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollDownAction.swift; sourceTree = "<group>"; };
 		27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSwitchAppModeAction.swift; sourceTree = "<group>"; };
 		27E316852E716901007172DA /* NextAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextAppProfileAction.swift; sourceTree = "<group>"; };
 		27E316862E716901007172DA /* PreviousAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousAppProfileAction.swift; sourceTree = "<group>"; };
@@ -11211,6 +11229,8 @@
 				FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */,
 				C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */,
 				27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */,
+				27D33B4A2E744D9100AD4F70 /* BaseMapZoomAction.swift */,
+				27D33B502E7454EA00AD4F70 /* BaseMapScrollAction.swift */,
 				27E316852E716901007172DA /* NextAppProfileAction.swift */,
 				27E316862E716901007172DA /* PreviousAppProfileAction.swift */,
 				27E3168C2E717CB6007172DA /* ChangeMapOrientationAction.swift */,
@@ -11219,6 +11239,13 @@
 				27D33B422E743A1A00AD4F70 /* ShowHideDrawerAction.swift */,
 				27D33B442E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift */,
 				27D33B462E74476800AD4F70 /* OpenWunderLINQDatagridAction.swift */,
+				27D33B4C2E744E7200AD4F70 /* MapZoomInAction.swift */,
+				27D33B4E2E744F0D00AD4F70 /* MapZoomOutAction.swift */,
+				27D33B522E74567D00AD4F70 /* MapScrollLeftAction.swift */,
+				27D33B542E74587400AD4F70 /* MapScrollRightAction.swift */,
+				27D33B562E7459FA00AD4F70 /* MoveToMyLocationAction.swift */,
+				27D33B582E745D3700AD4F70 /* MapScrollUpAction.swift */,
+				27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -16899,6 +16926,7 @@
 				DA5A81A626C563A700F274C7 /* OASearchCoreAPI.mm in Sources */,
 				46C8412B2C32F22B00E284B0 /* OAShowHideTemperatureAction.m in Sources */,
 				DA5A855126C563A900F274C7 /* NSData+CRC32.m in Sources */,
+				27D33B4F2E744F0D00AD4F70 /* MapZoomOutAction.swift in Sources */,
 				DA5A835B26C563A800F274C7 /* OAInAppCell.m in Sources */,
 				DA5A846826C563A900F274C7 /* OAMapActions.mm in Sources */,
 				DA4ABEE52876DA5D00B996EF /* OAExportSettingsCategory.m in Sources */,
@@ -17015,6 +17043,7 @@
 				274167472E4DD3660051DD4B /* BaseWidgetView+Extension.swift in Sources */,
 				DA5A852E26C563A900F274C7 /* OrderedDictionary.m in Sources */,
 				DA5A833A26C563A800F274C7 /* OAHomeWorkCell.mm in Sources */,
+				27D33B5B2E745F6D00AD4F70 /* MapScrollDownAction.swift in Sources */,
 				DA5A813226C563A700F274C7 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
 				46AB58A729C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m in Sources */,
 				C588D1EF298D1ECE001FEDBD /* OASearchHistoryTableGroup.m in Sources */,
@@ -17105,6 +17134,7 @@
 				DA5A815226C563A700F274C7 /* OABaseCarPlayListController.m in Sources */,
 				DA5A855D26C563A900F274C7 /* OARouteDirectionInfo.mm in Sources */,
 				DA842ECD2A0B998E0030866E /* WidgetInfoCreator.swift in Sources */,
+				27D33B4B2E744D9100AD4F70 /* BaseMapZoomAction.swift in Sources */,
 				460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */,
 				323F04C82C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift in Sources */,
 				C57693172D66159200E4F772 /* AppearanceData.swift in Sources */,
@@ -17120,6 +17150,7 @@
 				DA5A830226C563A800F274C7 /* OADeviceScreenTableViewCell.m in Sources */,
 				468D9C6E2C01030400ED368A /* QuickActionButtonState.swift in Sources */,
 				DA5A830326C563A800F274C7 /* OAQuickActionCell.mm in Sources */,
+				27D33B4D2E744E7200AD4F70 /* MapZoomInAction.swift in Sources */,
 				DA5A812826C563A700F274C7 /* OAFavoritesMapLayerProvider.mm in Sources */,
 				FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */,
 				DA591EA928D9EAF20068CAC7 /* OATableDataModel.m in Sources */,
@@ -17146,6 +17177,7 @@
 				32CA13202AF1475200DD6EF5 /* WikipediaCacheSizeViewController.swift in Sources */,
 				DA5A837226C563A800F274C7 /* OARoutingSettingsCell.mm in Sources */,
 				DA5A833726C563A800F274C7 /* OATableViewCustomFooterView.m in Sources */,
+				27D33B532E74567D00AD4F70 /* MapScrollLeftAction.swift in Sources */,
 				461A3F0D29F6E859008EE079 /* OABaseCollectionHandler.m in Sources */,
 				DA4ABF162876DA6800B996EF /* OASettingsItem.mm in Sources */,
 				DA5A84E926C563A900F274C7 /* OADashboardViewController.mm in Sources */,
@@ -17495,6 +17527,7 @@
 				DA5A840126C563A800F274C7 /* OAQuickSearchButtonListItem.mm in Sources */,
 				FA327BFE2BB418F900CFADCF /* MissingMapsCalculator.mm in Sources */,
 				DA5A854426C563A900F274C7 /* OADownloadsItem.mm in Sources */,
+				27D33B512E7454EA00AD4F70 /* BaseMapScrollAction.swift in Sources */,
 				32CA48C02A5D50E900DE76FD /* Geomagnetism.swift in Sources */,
 				DA5A842E26C563A800F274C7 /* OARouteTargetViewController.mm in Sources */,
 				DA5A847426C563A900F274C7 /* OAMapWidgetRegistry.mm in Sources */,
@@ -17908,11 +17941,13 @@
 				DA5A83FB26C563A800F274C7 /* OAPOIFilterViewController.mm in Sources */,
 				FA7EBDD32D5A16F900121977 /* ContentMetadataView.swift in Sources */,
 				32CCE2992AD81AFE00AAADFA /* SearchTravelCell.swift in Sources */,
+				27D33B552E74587400AD4F70 /* MapScrollRightAction.swift in Sources */,
 				C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */,
 				DA5A846226C563A900F274C7 /* OAFavoritesLayer.mm in Sources */,
 				DA5A81A526C563A700F274C7 /* OASearchWord.mm in Sources */,
 				FA2778272B67B5F200D65926 /* TextInfoWidget+Extension.swift in Sources */,
 				DA5A83EA26C563A800F274C7 /* OACollapsableWaypointsView.mm in Sources */,
+				27D33B572E7459FA00AD4F70 /* MoveToMyLocationAction.swift in Sources */,
 				DA5A837D26C563A800F274C7 /* GpxUIHelper.swift in Sources */,
 				DA21F1BB29BA101E004985BA /* OANetworkRouteDrawable.mm in Sources */,
 				DA4ABF252876DA6800B996EF /* OAFileSettingsItem.mm in Sources */,
@@ -17999,6 +18034,7 @@
 				27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */,
 				27F050932DD38E310058075F /* RouteInfoDisplayValue.swift in Sources */,
 				FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */,
+				27D33B592E745D3700AD4F70 /* MapScrollUpAction.swift in Sources */,
 				323BFE6E2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift in Sources */,
 				CA4EDC32B17473A9290AE863 /* OALabel.m in Sources */,
 				2717D3B52DBBA2F800B7BD22 /* ShapesAppearanceCategory.swift in Sources */,

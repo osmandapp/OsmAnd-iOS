@@ -132,14 +132,6 @@ static const float ZONE_0_ZOOM_THRESHOLD = 0.15f;
 static const float ZONE_1_ZOOM_THRESHOLD = 0.6f;
 static const float ZONE_2_ZOOM_THRESHOLD = 1.5f;
 
-
-typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
-    EOAMapPanDirectionUp = 0,
-    EOAMapPanDirectionDown,
-    EOAMapPanDirectionLeft,
-    EOAMapPanDirectionRight
-};
-
 static const CGFloat kDistanceBetweenFingers = 50.0;
 static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 

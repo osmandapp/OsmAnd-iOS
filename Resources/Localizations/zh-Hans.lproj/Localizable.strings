@@ -1032,7 +1032,7 @@
 "pseudo_mercator_projection" = "球面正轴等角圆柱投影";
 "add_online_source" = "添加在线资源";
 "routing_profile_geocoding" = "地理编码";
-"public_transport_warning_title" = "公共交通导航目前处于测试阶段，可能出现错误和信息不准确。";
+"public_transport_warning_title" = "公共交通导航系统当前处于测试阶段，可能存在错误和不准确。";
 "exit_at" = "此站下车";
 "shared_string_deselect_all" = "全部取消";
 "avoid_road" = "避开道路";

@@ -763,7 +763,7 @@
 "rendering_attr_showRoadMaps_description" = "选择何时显示仅包含道路的地图：";
 "rendering_value_translucent_red_name" = "半透明红色";
 "rendering_value_translucent_green_name" = "半透明绿色";
-"routing_attr_allow_motorway_description" = "允许高速公路。";
+"routing_attr_allow_motorway_description" = "允许进入高速公路。";
 "rendering_value_translucent_pink_name" = "半透明粉红色";
 "routeInfo_roadClass_name" = "道路类型";
 "rendering_attr_contourLines_description" = "显示缩放级别（需要等高线数据）：";

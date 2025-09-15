@@ -771,7 +771,7 @@
 
 - (void)addMapOrientation
 {
-    NSMutableArray * arr = [self getItemNames];
+    NSMutableArray *arr = [self getItemNames];
     OAActionAddMapSourceViewController *mapSourceScreen = [[OAActionAddMapSourceViewController alloc] initWithNames:arr type:EOAMapSourceTypeOrientation];
     mapSourceScreen.delegate = self;
     [self.navigationController pushViewController:mapSourceScreen animated:YES];

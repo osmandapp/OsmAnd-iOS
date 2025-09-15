@@ -19,6 +19,10 @@ final class ChangeMapOrientationAction: OASwitchableAction {
         .category(QuickActionTypeCategory.settings.rawValue)
         .nonEditable()
     
+    private var showBottomSheetStyles: Bool {
+        getParams()[kDialog] as? Bool ?? ((getParams()[kDialog] as? String) == "true")
+    }
+    
     override init() {
         super.init(actionType: Self.type)
     }
@@ -40,23 +44,20 @@ final class ChangeMapOrientationAction: OASwitchableAction {
     }
     
     override func execute() {
-        guard let sources = loadListFromParams() as? [String] else { return }
-        if !sources.isEmpty {
-            let showBottomSheetStyles = getParams()[kDialog] as? Bool ?? ((getParams()[kDialog] as? String) == "true")
-            if showBottomSheetStyles {
-                let bottomSheet = OAQuickActionSelectionBottomSheetViewController(action: self, type: .orientation)
-                bottomSheet?.show()
-                return
-            }
-            
-            if let nextSource = nextOrientationFrom(sources: sources) {
-                execute(withParams: [nextSource])
-            }
+        guard let sources = loadListFromParams() as? [String], !sources.isEmpty else { return }
+        if showBottomSheetStyles {
+            let bottomSheet = OAQuickActionSelectionBottomSheetViewController(action: self, type: .orientation)
+            bottomSheet?.show()
+            return
+        }
+        
+        if let nextSource = nextOrientationFrom(sources: sources) {
+            execute(withParams: [nextSource])
         }
     }
     
     override func execute(withParams params: [String]) {
-        guard let param = params.first, let compassMode = CompassMode.getMode(forKey: param) else {
+        guard let param = params.first, let compassMode = CompassMode.mode(byKey: param) else {
             return
         }
         
@@ -72,7 +73,7 @@ final class ChangeMapOrientationAction: OASwitchableAction {
                 "type": OASwitchTableViewCell.reuseIdentifier,
                 "key": kDialog,
                 "title": localizedString("quick_action_interim_dialog"),
-                "value": NSNumber(value: getParams()[kDialog] as? Bool ?? ((getParams()[kDialog] as? String) == "true"))
+                "value": NSNumber(value: showBottomSheetStyles)
             ],
             [
                 "footer": localizedString("quick_action_dialog_descr")
@@ -83,7 +84,7 @@ final class ChangeMapOrientationAction: OASwitchableAction {
         var arr = [[String: Any]]()
         if let keys = getParams()[getListKey()] as? [String] {
             for key in keys {
-                guard let compassMode = CompassMode.getMode(forKey: key) else { continue }
+                guard let compassMode = CompassMode.mode(byKey: key) else { continue }
                 let title = compassMode.title
                 let img = compassMode.iconName
                 arr.append([
@@ -129,29 +130,27 @@ final class ChangeMapOrientationAction: OASwitchableAction {
     }
     
     override func loadListFromParams() -> [Any]? {
-        var list = getParams()[getListKey()] as? [String]
-        list?.removeAll(where: { CompassMode.getMode(forKey: $0) == nil })
-        return list
+        guard let keys = getParams()[getListKey()] as? [String] else { return nil }
+        return keys.compactMap { CompassMode.mode(byKey: $0) != nil ? $0 : nil }
     }
     
     override func getStateName() -> String? {
-        guard let title = CompassMode.getMode(forKey: getOrientation())?.title else { return getName() }
+        guard let title = CompassMode.mode(byKey: getOrientation())?.title else { return getName() }
         return title
     }
     
     override func getIcon() -> UIImage? {
-        guard let iconName = CompassMode.getMode(forKey: getOrientation())?.iconName else { return super.getIcon() }
+        guard let iconName = CompassMode.mode(byKey: getOrientation())?.iconName else { return super.getIcon() }
         return UIImage.templateImageNamed(iconName)
     }
     
     override func getIconResName() -> String? {
-        guard let iconName = CompassMode.getMode(forKey: getOrientation())?.iconName else { return super.getIconResName() }
+        guard let iconName = CompassMode.mode(byKey: getOrientation())?.iconName else { return super.getIconResName() }
         return iconName
     }
     
     private func getOrientation() -> String {
-        let settings = OAAppSettings.sharedManager()
-        return CompassMode.getByValue(Int(settings.rotateMap.get())).key
+        CompassMode.byValue(Int(OAAppSettings.sharedManager().rotateMap.get())).key
     }
     
     private func nextOrientationFrom(sources: [String]) -> String? {

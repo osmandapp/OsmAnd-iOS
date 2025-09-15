@@ -49,48 +49,42 @@ enum CompassMode: Int32, CaseIterable {
         }
     }
 
-    static func getByValue(_ value: Int) -> CompassMode {
-        for mode in Self.allCases {
-            if mode.value == value {
-                return mode
-            }
-        }
-        return .northIsUp
+    static func byValue(_ value: Int) -> CompassMode {
+        Self.allCases.first { $0.value == value } ?? .northIsUp
     }
 
-    static func getMode(forKey key: String?) -> CompassMode? {
-        guard let key = key else { return nil }
-        return Self.allCases.first { $0.key == key }
+    static func mode(byKey key: String?) -> CompassMode? {
+        Self.allCases.first { $0.key == key }
     }
 }
 
 @objcMembers
 final class CompassModeWrapper: NSObject {
-    static func getKeyFor(value: Int) -> String {
-        CompassMode.getByValue(value).key
+    static func key(byValue value: Int) -> String {
+        CompassMode.byValue(value).key
     }
     
-    static func getTitleFor(value: Int) -> String {
-        CompassMode.getByValue(value).title
+    static func title(byValue value: Int) -> String {
+        CompassMode.byValue(value).title
     }
 
-    static func getIconNameFor(value: Int) -> String {
-        CompassMode.getByValue(value).iconName
+    static func iconName(byValue value: Int) -> String {
+        CompassMode.byValue(value).iconName
     }
     
-    static func getTitleFor(key: String) -> String {
-        CompassMode.getMode(forKey: key)?.title ?? ""
+    static func title(byKey key: String) -> String {
+        CompassMode.mode(byKey: key)?.title ?? ""
     }
 
-    static func getIconNameFor(key: String) -> String {
-        CompassMode.getMode(forKey: key)?.iconName ?? ""
+    static func iconName(byKey key: String) -> String {
+        CompassMode.mode(byKey: key)?.iconName ?? ""
     }
     
-    static func getValueFor(key: String) -> Int {
-        CompassMode.getMode(forKey: key)?.value ?? CompassMode.northIsUp.value
+    static func value(byKey key: String) -> Int {
+        CompassMode.mode(byKey: key)?.value ?? CompassMode.northIsUp.value
     }
     
-    static func getValueCount() -> Int {
+    static func valueCount() -> Int {
         CompassMode.allCases.map(\.value).count
     }
 }

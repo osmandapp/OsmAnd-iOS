@@ -102,21 +102,21 @@
     if (_type == EOAMapSourceTypeOrientation)
     {
         NSMutableArray *dataArr = [NSMutableArray array];
-        for (NSInteger value = 0; value < [CompassModeWrapper getValueCount]; value++)
+        for (NSInteger value = 0; value < [CompassModeWrapper valueCount]; value++)
         {
             [dataArr addObject:@{
-                @"title" : [CompassModeWrapper getTitleForValue:value],
-                @"value" : [CompassModeWrapper getKeyForValue:value],
-                @"icon" : [CompassModeWrapper getIconNameForValue:value],
-                @"type" : [OASimpleTableViewCell getCellIdentifier],
+                @"title" : [CompassModeWrapper titleByValue:value],
+                @"value" : [CompassModeWrapper keyByValue:value],
+                @"icon" : [CompassModeWrapper iconNameByValue:value],
+                @"type" : [OASimpleTableViewCell reuseIdentifier],
             }];
         }
-        _data = dataArr;
+        _data = [dataArr copy];
     }
     else
     {
         _data = [OAResourcesUIHelper getSortedRasterMapSources:YES];
-        OAOnlineTilesResourceItem* itemNone = [[OAOnlineTilesResourceItem alloc] init];
+        OAOnlineTilesResourceItem *itemNone = [[OAOnlineTilesResourceItem alloc] init];
         itemNone.mapSource = [[OAMapSource alloc] initWithResource:nil andVariant:[self getNoSourceItemId] name:[self getNoSourceName]];
         _data = [_data arrayByAddingObject:itemNone];
     }
@@ -172,12 +172,12 @@
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    OASimpleTableViewCell* cell = nil;
+    OASimpleTableViewCell *cell = nil;
     
-    cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+    cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell reuseIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell reuseIdentifier] owner:self options:nil];
         cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
         [cell descriptionVisibility:NO];
     }
@@ -197,7 +197,7 @@
         }
         else
         {
-            OAOnlineTilesResourceItem* item = [self getItem:indexPath];
+            OAOnlineTilesResourceItem *item = [self getItem:indexPath];
             UIImage *img = nil;
             img = [UIImage imageNamed:@"ic_custom_map_style"];
             

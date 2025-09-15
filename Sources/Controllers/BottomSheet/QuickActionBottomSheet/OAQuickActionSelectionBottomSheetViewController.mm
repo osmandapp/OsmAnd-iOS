@@ -113,10 +113,10 @@
         {
             [arr addObject:@{
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
-                @"title" : [CompassModeWrapper getTitleForKey:key],
-                @"value" : @([CompassModeWrapper getValueForKey:key]),
+                @"title" : [CompassModeWrapper titleByKey:key],
+                @"value" : @([CompassModeWrapper valueByKey:key]),
                 @"param" : @[key],
-                @"img" : [CompassModeWrapper getIconNameForKey:key]
+                @"img" : [CompassModeWrapper iconNameByKey:key]
             }];
         }
     }
@@ -230,8 +230,7 @@
                 }
                 case EOAQASelectionTypeOrientation:
                 {
-                    OAAppSettings *settings = [OAAppSettings sharedManager];
-                    isActive = [settings.rotateMap get] == [item[@"value"] integerValue];
+                    isActive = [[OAAppSettings sharedManager].rotateMap get] == [item[@"value"] integerValue];
                     break;
                 }
                 case EOAQASelectionTypeTerrainScheme:

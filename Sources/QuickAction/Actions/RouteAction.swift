@@ -32,7 +32,6 @@ final class RouteAction: OAQuickAction {
     }
     
     override func execute() {
-        let routePlanningHudViewController = OARoutePlanningHudViewController()
-        OARootViewController.instance().mapPanel.showScrollableHudViewController(routePlanningHudViewController)
+        OARootViewController.instance().mapPanel.showScrollableHudViewController(OARoutePlanningHudViewController())
     }
 }

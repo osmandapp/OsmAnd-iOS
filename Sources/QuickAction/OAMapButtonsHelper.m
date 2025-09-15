@@ -322,6 +322,7 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:OAFavoriteAction.TYPE];
     [allTypes addObject:OAGPXAction.TYPE];
     [allTypes addObject:OAMarkerAction.TYPE];
+    [allTypes addObject:RouteAction.type];
 
     // navigation
     [allTypes addObject:OANavStartStopAction.TYPE];

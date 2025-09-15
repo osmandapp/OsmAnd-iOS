@@ -235,6 +235,7 @@
 		27D33B592E745D3700AD4F70 /* MapScrollUpAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B582E745D3700AD4F70 /* MapScrollUpAction.swift */; };
 		27D33B5B2E745F6D00AD4F70 /* MapScrollDownAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */; };
 		27D33B5F2E74622A00AD4F70 /* OpenWeatherAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */; };
+		27D33B612E7473A900AD4F70 /* RouteAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B602E7473A900AD4F70 /* RouteAction.swift */; };
 		27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */; };
 		27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316862E716901007172DA /* PreviousAppProfileAction.swift */; };
 		27E316892E716901007172DA /* NextAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316852E716901007172DA /* NextAppProfileAction.swift */; };
@@ -3622,6 +3623,7 @@
 		27D33B582E745D3700AD4F70 /* MapScrollUpAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollUpAction.swift; sourceTree = "<group>"; };
 		27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollDownAction.swift; sourceTree = "<group>"; };
 		27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherAction.swift; sourceTree = "<group>"; };
+		27D33B602E7473A900AD4F70 /* RouteAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteAction.swift; sourceTree = "<group>"; };
 		27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSwitchAppModeAction.swift; sourceTree = "<group>"; };
 		27E316852E716901007172DA /* NextAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextAppProfileAction.swift; sourceTree = "<group>"; };
 		27E316862E716901007172DA /* PreviousAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousAppProfileAction.swift; sourceTree = "<group>"; };
@@ -11249,6 +11251,7 @@
 				27D33B582E745D3700AD4F70 /* MapScrollUpAction.swift */,
 				27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */,
 				27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */,
+				27D33B602E7473A900AD4F70 /* RouteAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -17768,6 +17771,7 @@
 				46C8413D2C32F39B00E284B0 /* OANavReplaceDestinationAction.m in Sources */,
 				DA5A832026C563A800F274C7 /* OAMultilineTextViewCell.m in Sources */,
 				DA5A81D126C563A700F274C7 /* OATerrainLayer.mm in Sources */,
+				27D33B612E7473A900AD4F70 /* RouteAction.swift in Sources */,
 				DA5A81B626C563A700F274C7 /* OASearchPoiTypeFilter.m in Sources */,
 				DA5A83B026C563A800F274C7 /* OASubscriptionCancelViewController.mm in Sources */,
 				DA5A850E26C563A900F274C7 /* OAUserInteractionPassThroughView.m in Sources */,

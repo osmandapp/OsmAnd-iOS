@@ -310,13 +310,13 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:OpenWunderLINQDatagridAction.type];
     
     // map interactions
-    [allTypes addObject:MapZoomInAction.getQuickActionType];
-    [allTypes addObject:MapZoomOutAction.getQuickActionType];
-    [allTypes addObject:MapScrollLeftAction.getQuickActionType];
-    [allTypes addObject:MapScrollRightAction.getQuickActionType];
+    [allTypes addObject:MapZoomInAction.quickActionType];
+    [allTypes addObject:MapZoomOutAction.quickActionType];
+    [allTypes addObject:MapScrollLeftAction.quickActionType];
+    [allTypes addObject:MapScrollRightAction.quickActionType];
     [allTypes addObject:MoveToMyLocationAction.type];
-    [allTypes addObject:MapScrollUpAction.getQuickActionType];
-    [allTypes addObject:MapScrollDownAction.getQuickActionType];
+    [allTypes addObject:MapScrollUpAction.quickActionType];
+    [allTypes addObject:MapScrollDownAction.quickActionType];
     
     // my places
     [allTypes addObject:OAFavoriteAction.TYPE];
@@ -338,8 +338,8 @@ static QuickActionType *TYPE_INTERFACE;
     // settings
     [allTypes addObject:DisplayPositionAction.type];
     [allTypes addObject:OASwitchProfileAction.TYPE];
-    [allTypes addObject:NextAppProfileAction.getQuickActionType];
-    [allTypes addObject:PreviousAppProfileAction.getQuickActionType];
+    [allTypes addObject:NextAppProfileAction.quickActionType];
+    [allTypes addObject:PreviousAppProfileAction.quickActionType];
     [allTypes addObject:ChangeMapOrientationAction.type];
 
     NSMutableArray<QuickActionType *> *enabledTypes = [NSMutableArray arrayWithArray:allTypes];

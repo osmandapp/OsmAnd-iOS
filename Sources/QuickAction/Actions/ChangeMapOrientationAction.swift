@@ -135,27 +135,27 @@ final class ChangeMapOrientationAction: OASwitchableAction {
     }
     
     override func getStateName() -> String? {
-        guard let title = CompassMode.mode(byKey: getOrientation())?.title else { return getName() }
+        guard let title = CompassMode.mode(byKey: orientation())?.title else { return getName() }
         return title
     }
     
     override func getIcon() -> UIImage? {
-        guard let iconName = CompassMode.mode(byKey: getOrientation())?.iconName else { return super.getIcon() }
+        guard let iconName = CompassMode.mode(byKey: orientation())?.iconName else { return super.getIcon() }
         return UIImage.templateImageNamed(iconName)
     }
     
     override func getIconResName() -> String? {
-        guard let iconName = CompassMode.mode(byKey: getOrientation())?.iconName else { return super.getIconResName() }
+        guard let iconName = CompassMode.mode(byKey: orientation())?.iconName else { return super.getIconResName() }
         return iconName
     }
     
-    private func getOrientation() -> String {
+    private func orientation() -> String {
         CompassMode.byValue(Int(OAAppSettings.sharedManager().rotateMap.get())).key
     }
     
     private func nextOrientationFrom(sources: [String]) -> String? {
         if !sources.isEmpty {
-            let curStyle = getOrientation()
+            let curStyle = orientation()
             var nextStyle = sources.first
             if let index = sources.firstIndex(of: curStyle),
                index >= 0,

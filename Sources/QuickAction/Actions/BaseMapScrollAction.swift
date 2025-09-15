@@ -8,7 +8,7 @@
 
 class BaseMapScrollAction: OAQuickAction {
     override init() {
-        super.init(actionType: Self.getQuickActionType())
+        super.init(actionType: Self.quickActionType())
     }
     
     override init(actionType type: QuickActionType) {
@@ -21,7 +21,7 @@ class BaseMapScrollAction: OAQuickAction {
     
     override func execute() {
         let mapViewController = OARootViewController.instance().mapPanel.mapViewController
-        switch getScrollingDirection() {
+        switch scrollingDirection() {
         case .up:
             mapViewController.animatedPanUp()
         case .down:
@@ -36,18 +36,18 @@ class BaseMapScrollAction: OAQuickAction {
     }
     
     override func getText() -> String? {
-        localizedString(getQuickActionDescription())
+        localizedString(quickActionDescription())
     }
     
-    class func getQuickActionType() -> QuickActionType {
+    class func quickActionType() -> QuickActionType {
         fatalError("getQuickActionType() has not been implemented")
     }
     
-    func getScrollingDirection() -> EOAMapPanDirection {
+    func scrollingDirection() -> EOAMapPanDirection {
         fatalError("getScrollingDirection() has not been implemented")
     }
     
-    func getQuickActionDescription() -> String {
+    func quickActionDescription() -> String {
         fatalError("getQuickActionDescription() has not been implemented")
     }
 }

@@ -10,7 +10,7 @@
 final class MapZoomInAction: BaseMapZoomAction {
     static var type: QuickActionType?
     
-    override class func getQuickActionType() -> QuickActionType {
+    override class func quickActionType() -> QuickActionType {
         if type == nil {
             type = QuickActionType(id: QuickActionIds.mapZoomInActionId.rawValue, stringId: "map.zoom.in", cl: MapZoomInAction.self)
                 .name(localizedString("key_event_action_zoom_in"))
@@ -26,7 +26,7 @@ final class MapZoomInAction: BaseMapZoomAction {
         true
     }
     
-    override func getQuickActionDescription() -> String {
+    override func quickActionDescription() -> String {
         "key_event_action_zoom_in"
     }
 }

@@ -10,7 +10,7 @@
 final class NextAppProfileAction: BaseSwitchAppModeAction {
     static var type: QuickActionType?
     
-    override class func getQuickActionType() -> QuickActionType {
+    override class func quickActionType() -> QuickActionType {
         if type == nil {
             type = QuickActionType(id: QuickActionIds.nextProfileActionId.rawValue, stringId: "change.profile.next", cl: NextAppProfileAction.self)
                 .name(localizedString("quick_action_next_app_profile"))
@@ -26,7 +26,7 @@ final class NextAppProfileAction: BaseSwitchAppModeAction {
         true
     }
     
-    override func getQuickActionDescription() -> String {
+    override func quickActionDescription() -> String {
         "key_event_action_next_app_profile"
     }
 }

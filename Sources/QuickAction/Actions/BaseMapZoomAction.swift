@@ -8,7 +8,7 @@
 
 class BaseMapZoomAction: OAQuickAction {
     override init() {
-        super.init(actionType: Self.getQuickActionType())
+        super.init(actionType: Self.quickActionType())
     }
     
     override init(actionType type: QuickActionType) {
@@ -24,10 +24,10 @@ class BaseMapZoomAction: OAQuickAction {
     }
     
     override func getText() -> String? {
-        localizedString(getQuickActionDescription())
+        localizedString(quickActionDescription())
     }
     
-    class func getQuickActionType() -> QuickActionType {
+    class func quickActionType() -> QuickActionType {
         fatalError("getQuickActionType() has not been implemented")
     }
     
@@ -35,7 +35,7 @@ class BaseMapZoomAction: OAQuickAction {
         fatalError("shouldIncrement() has not been implemented")
     }
     
-    func getQuickActionDescription() -> String {
+    func quickActionDescription() -> String {
         fatalError("getQuickActionDescription() has not been implemented")
     }
 }

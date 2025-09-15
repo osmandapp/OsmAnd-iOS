@@ -10,7 +10,7 @@
 final class MapScrollUpAction: BaseMapScrollAction {
     static var type: QuickActionType?
     
-    override class func getQuickActionType() -> QuickActionType {
+    override class func quickActionType() -> QuickActionType {
         if type == nil {
             type = QuickActionType(id: QuickActionIds.mapScrollUpActionId.rawValue, stringId: "map.scroll.up", cl: MapScrollUpAction.self)
                 .name(localizedString("quick_action_move_map_up"))
@@ -22,11 +22,11 @@ final class MapScrollUpAction: BaseMapScrollAction {
         return type ?? super.type()
     }
     
-    override func getScrollingDirection() -> EOAMapPanDirection {
+    override func scrollingDirection() -> EOAMapPanDirection {
         .up
     }
     
-    override func getQuickActionDescription() -> String {
+    override func quickActionDescription() -> String {
         "key_event_action_move_up"
     }
 }

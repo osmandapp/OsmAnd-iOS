@@ -419,7 +419,6 @@ extension ImageCarouselViewController: UIPageViewControllerDelegate {
 }
 
 // MARK: - KeyCommands
-
 extension ImageCarouselViewController {
     
     private func navigate(to direction: NavigationDirection) {

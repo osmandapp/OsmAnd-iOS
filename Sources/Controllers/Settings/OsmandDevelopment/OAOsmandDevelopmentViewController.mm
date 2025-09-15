@@ -87,7 +87,7 @@ NSString *const kImageCacheKey = @"kImageCacheKey";
 {
     BOOL isRouteAnimating = [[OsmAndApp instance].locationServices.locationSimulation isRouteAnimating];
     _data = [OATableDataModel model];
-    __weak OAOsmandDevelopmentViewController *weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     OATableSectionData *simulationSection = [OATableSectionData sectionData];
     simulationSection.headerText = OALocalizedString(@"osmand_depelopment_simulate_location_section");
     [simulationSection addRowFromDictionary:@{
@@ -140,7 +140,7 @@ NSString *const kImageCacheKey = @"kImageCacheKey";
         kCellKeyKey : kImageCacheKey,
         kCellTitleKey : OALocalizedString(@"image_cache"),
         @"actionBlock" : (^void(){
-        [self showModalViewController:[ImageCacheInfoViewController new]];
+        [weakSelf showModalViewController:[ImageCacheInfoViewController new]];
     })
     }];
     [_data addSection:imageСacheSection];

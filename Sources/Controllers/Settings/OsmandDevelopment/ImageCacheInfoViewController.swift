@@ -27,13 +27,6 @@ final class ImageCacheInfoViewController: UITableViewController {
     
     private let cellIdentifier = "cacheCell"
     
-    private let byteFormatter: ByteCountFormatter = {
-        let formatter = ByteCountFormatter()
-        formatter.allowedUnits = [.useKB, .useMB, .useGB]
-        formatter.countStyle = .file
-        return formatter
-    }()
-    
     private var cacheSizes: [String] = []
     
     override func viewDidLoad() {
@@ -66,7 +59,7 @@ final class ImageCacheInfoViewController: UITableViewController {
     }
     
     private func formattedCacheSize(_ bytes: UInt) -> String {
-        byteFormatter.string(fromByteCount: Int64(bytes))
+        ByteCountFormatter.fileSizeFormatter.string(fromByteCount: Int64(bytes))
     }
     
     // MARK: - Alert for clearing cache

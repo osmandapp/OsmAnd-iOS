@@ -59,6 +59,7 @@ final class ImageCardCell: UICollectionViewCell {
             placeholder: ImageCardPlaceholder(placeholderImage: placeholderImage),
             options: [
                 .targetCache(.onlinePhotoAndMapillaryDefaultCache),
+                .requestModifier(ImageDownloadRequestModifier()),
                 .processor(DownsamplingImageProcessor(size: .init(width: height, height: height))),
                 .scaleFactor(UIScreen.main.scale),
                 .cacheOriginalImage]) { [weak self] result in
@@ -77,15 +78,22 @@ final class ImageCardPlaceholder: Placeholder {
     private var width: CGFloat
     private var height: CGFloat
     private var placeholderImage: UIImage?
+    private var shouldShowPlaceholder: Bool = true
     
-    init(width: CGFloat = 40.0, height: CGFloat = 30.0, placeholderImage: UIImage?) {
+    init(width: CGFloat = 40.0,
+         height: CGFloat = 30.0,
+         placeholderImage: UIImage?,
+         shouldShowPlaceholder: Bool = true) {
         self.width = width
         self.height = height
         self.placeholderImage = placeholderImage
+        self.shouldShowPlaceholder = shouldShowPlaceholder
     }
     
     func add(to imageView: KFCrossPlatformImageView) {
         placeholderImageView?.removeFromSuperview()
+        guard shouldShowPlaceholder else { return }
+        
         let imageViewPlaceholder = UIImageView()
         imageViewPlaceholder.image = placeholderImage ?? .icCustomLink
         imageViewPlaceholder.contentMode = .scaleAspectFill

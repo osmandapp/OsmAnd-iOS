@@ -89,7 +89,7 @@ final class ImageViewerController: UIViewController {
             return
         }
         
-        let placeholder = ImageCardPlaceholder(placeholderImage: self.placeholderImage)
+        let placeholder = ImageCardPlaceholder(placeholderImage: placeholderImage)
         placeholder.add(to: imageView)
         
         let highResCache = ImageCache.onlinePhotoHighResolutionDiskCache
@@ -119,7 +119,7 @@ final class ImageViewerController: UIViewController {
                             options: [
                                 .targetCache(highResCache),
                                 .lowDataMode(.network(lowResURL)),
-                                .requestModifier(RequestModifier())]) { [weak self] result in
+                                .requestModifier(ImageDownloadRequestModifier())]) { [weak self] result in
                                     switch result {
                                     case .success:
                                         self?.updateLayoutWithDelay()
@@ -328,14 +328,5 @@ extension ImageViewerController: UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateConstraintsForSize(view.bounds.size)
-    }
-}
-
-private struct RequestModifier: AsyncImageDownloadRequestModifier {
-    var onDownloadTaskStarted: (@Sendable (Kingfisher.DownloadTask?) -> Void)?
-    func modified(for request: URLRequest) -> URLRequest? {
-        var r = request
-        r.timeoutInterval = 30
-        return r
     }
 }

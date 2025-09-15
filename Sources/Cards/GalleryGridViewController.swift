@@ -12,6 +12,8 @@ final class GalleryGridViewController: OABaseNavbarViewController {
     enum Constants {
         static let minColumnCount: Int = 2
         static let maxColumnCount: Int = 7
+        static let pinchThreshold: CGFloat = 0.2
+        static let visibleCellsUpdateDelay: TimeInterval = 0.5
     }
     var cards: [AbstractCard] = []
     var titleString: String = ""
@@ -20,6 +22,8 @@ final class GalleryGridViewController: OABaseNavbarViewController {
     // swiftlint:disable all
     private var collectionView: UICollectionView!
     // swiftlint:enable all
+    
+    private var visibleCellsUpdateTimer: Timer?
     
     private var initialPinchColumnCount: Int = 3
     
@@ -55,7 +59,10 @@ final class GalleryGridViewController: OABaseNavbarViewController {
     
     override func onRotation() {
         currentColumnCount = columnCountForCurrentOrientation()
-        collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: true)
+        collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: true) { [weak self] finished in
+            guard finished else { return }
+            self?.updateVisibleCells()
+        }
     }
     
     private func columnCountForCurrentOrientation() -> Int {
@@ -83,8 +90,15 @@ final class GalleryGridViewController: OABaseNavbarViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
-        collectionView.addGestureRecognizer(pinchGesture)
+        collectionView.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:))))
+    }
+    
+    private func updateVisibleCells() {
+        collectionView.indexPathsForVisibleItems.forEach { indexPath in
+            guard indexPath.item < cards.count,
+                  let cell = collectionView.cellForItem(at: indexPath) as? GalleryCell else { return }
+            cell.configure(with: cards[indexPath.item])
+        }
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
@@ -120,18 +134,25 @@ final class GalleryGridViewController: OABaseNavbarViewController {
         switch gesture.state {
         case .began:
             initialPinchColumnCount = currentColumnCount
+            visibleCellsUpdateTimer?.invalidate()
+            
         case .changed:
             let newColumnCount = CGFloat(initialPinchColumnCount) / gesture.scale
-            let clampedColumnCount = CGFloat(max(Constants.minColumnCount, min(Constants.maxColumnCount, Int(newColumnCount))))
+            let clampedColumnCount = CGFloat(max(Constants.minColumnCount,
+                                                 min(Constants.maxColumnCount, Int(newColumnCount))))
             
-            if abs(clampedColumnCount - CGFloat(currentColumnCount)) > 0.2 {
+            if abs(clampedColumnCount - CGFloat(currentColumnCount)) > Constants.pinchThreshold {
                 currentColumnCount = Int(clampedColumnCount)
                 collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: false)
+                
+                visibleCellsUpdateTimer?.invalidate()
+                visibleCellsUpdateTimer = Timer.scheduledTimer(withTimeInterval: Constants.visibleCellsUpdateDelay, repeats: false) { [weak self] _ in
+                    self?.updateVisibleCells()
+                }
             }
         case .ended, .cancelled:
             currentColumnCount = Int(currentColumnCount)
             collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: true)
-            
         default:
             break
         }
@@ -162,7 +183,7 @@ extension GalleryGridViewController: UICollectionViewDataSource {
             
             guard let typedHeaderView = headerView as? TitleHeaderView else { return headerView }
             
-            let text = "\(cards.count)" + " " + localizedString("shared_string_items")
+            let text = "\(cards.count) \(localizedString("shared_string_items"))"
             typedHeaderView.configure(with: text)
             return typedHeaderView
         default:
@@ -254,12 +275,11 @@ final private class GalleryCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .viewBg
-        
         contentView.addSubview(imageView)
         
-        offlineCacheImageView.image = .icCustomDownloadOfflineWithBg
         offlineCacheImageView.translatesAutoresizingMaskIntoConstraints = false
         offlineCacheImageView.contentMode = .scaleAspectFit
+        offlineCacheImageView.image = .icCustomDownloadOfflineWithBg
         offlineCacheImageView.isHidden = true
         contentView.addSubview(offlineCacheImageView)
         
@@ -280,23 +300,33 @@ final private class GalleryCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - PrepareForReuse
+    
     override func prepareForReuse() {
         super.prepareForReuse()
+        imageView.kf.cancelDownloadTask()
         imageView.image = nil
         offlineCacheImageView.isHidden = true
     }
+    
+    // MARK: - Configure
     
     func configure(with card: AbstractCard) {
         guard let item = card as? ImageCard else { return }
         guard !item.imageUrl.isEmpty,
               let url = URL(string: item.imageUrl) else { return }
         
-        imageView.kf.indicatorType = .activity
+        let cache = ImageCache.onlinePhotoAndMapillaryDefaultCache
+        let isCached = cache.isCached(forKey: url.absoluteString)
+        let imageCardPlaceholder = ImageCardPlaceholder(placeholderImage: placeholderImage, shouldShowPlaceholder: !isCached)
+        
+        imageView.kf.indicatorType = isCached ? .none : .activity
         imageView.kf.setImage(
             with: url,
-            placeholder: ImageCardPlaceholder(placeholderImage: placeholderImage),
+            placeholder: imageCardPlaceholder,
             options: [
-                .targetCache(.onlinePhotoAndMapillaryDefaultCache),
+                .targetCache(cache),
+                .requestModifier(ImageDownloadRequestModifier()),
                 .processor(DownsamplingImageProcessor(size: bounds.size)),
                 .scaleFactor(UIScreen.main.scale),
                 .cacheOriginalImage

@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OAOsmPoint.h"
-#import "OAOsmBugsUtilsProtocol.h";
+#import "OAOsmBugsUtilsProtocol.h"
 
 @class OAOsmNotePoint, OAOsmBugResult;
 

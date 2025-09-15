@@ -21,7 +21,7 @@ class BaseSwitchAppModeAction: OAQuickAction {
     }
     
     override func execute() {
-        delayedSwitchAppMode()
+        switchAppMode()
     }
     
     override func getText() -> String? {
@@ -29,18 +29,18 @@ class BaseSwitchAppModeAction: OAQuickAction {
     }
     
     class func getQuickActionType() -> QuickActionType {
-        fatalError()
+        fatalError("getQuickActionType() has not been implemented")
     }
     
     func shouldChangeForward() -> Bool {
-        fatalError()
+        fatalError("shouldChangeForward() has not been implemented")
     }
     
     func getQuickActionDescription() -> String {
-        fatalError()
+        fatalError("getQuickActionDescription() has not been implemented")
     }
 
-    func delayedSwitchAppMode() {
+    private func switchAppMode() {
         let settings = OAAppSettings.sharedManager()
         let appMode = settings.applicationMode.get()
         let next = shouldChangeForward()

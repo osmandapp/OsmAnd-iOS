@@ -49,15 +49,6 @@ enum CompassMode: Int32, CaseIterable {
         }
     }
 
-    func next() -> CompassMode {
-        let all = Self.allCases
-        if let idx = all.firstIndex(of: self) {
-            let nextIdx = (idx + 1) % all.count
-            return all[nextIdx]
-        }
-        return .northIsUp
-    }
-
     static func getByValue(_ value: Int) -> CompassMode {
         for mode in Self.allCases {
             if mode.value == value {
@@ -99,7 +90,7 @@ final class CompassModeWrapper: NSObject {
         CompassMode.getMode(forKey: key)?.value ?? CompassMode.northIsUp.value
     }
     
-    static func getAllValues() -> [Int] {
-        CompassMode.allCases.map(\.value)
+    static func getValueCount() -> Int {
+        CompassMode.allCases.map(\.value).count
     }
 }

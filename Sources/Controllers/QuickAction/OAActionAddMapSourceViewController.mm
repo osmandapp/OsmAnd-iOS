@@ -102,7 +102,7 @@
     if (_type == EOAMapSourceTypeOrientation)
     {
         NSMutableArray *dataArr = [NSMutableArray array];
-        for (NSInteger value = 0; value < [CompassModeWrapper getAllValues].count; value++)
+        for (NSInteger value = 0; value < [CompassModeWrapper getValueCount]; value++)
         {
             [dataArr addObject:@{
                 @"title" : [CompassModeWrapper getTitleForValue:value],

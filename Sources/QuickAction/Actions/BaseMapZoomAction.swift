@@ -28,14 +28,14 @@ class BaseMapZoomAction: OAQuickAction {
     }
     
     class func getQuickActionType() -> QuickActionType {
-        fatalError()
+        fatalError("getQuickActionType() has not been implemented")
     }
     
     func shouldIncrement() -> Bool {
-        fatalError()
+        fatalError("shouldIncrement() has not been implemented")
     }
     
     func getQuickActionDescription() -> String {
-        fatalError()
+        fatalError("getQuickActionDescription() has not been implemented")
     }
 }

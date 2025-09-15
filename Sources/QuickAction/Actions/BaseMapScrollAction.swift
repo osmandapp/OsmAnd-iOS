@@ -40,14 +40,14 @@ class BaseMapScrollAction: OAQuickAction {
     }
     
     class func getQuickActionType() -> QuickActionType {
-        fatalError()
+        fatalError("getQuickActionType() has not been implemented")
     }
     
     func getScrollingDirection() -> EOAMapPanDirection {
-        fatalError()
+        fatalError("getScrollingDirection() has not been implemented")
     }
     
     func getQuickActionDescription() -> String {
-        fatalError()
+        fatalError("getQuickActionDescription() has not been implemented")
     }
 }

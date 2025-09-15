@@ -26,6 +26,7 @@
 {
     OARouteKey *_routeKey;
     BOOL _isNight;
+    float _textSize;
     OAMapRendererEnvironment *_env;
 }
 
@@ -35,9 +36,15 @@
     if (self) {
         _routeKey = routeKey;
         _isNight = OADayNightHelper.instance.isNightMode;
+        _textSize = 12;
         _env = OARootViewController.instance.mapPanel.mapViewController.mapRendererEnv;
     }
     return self;
+}
+
+- (void)setTextSize:(float)textSize
+{
+    _textSize = textSize;
 }
 
 - (UIImage *)getIcon
@@ -104,9 +111,8 @@
     evaluationResult.getBooleanValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_BOLD, bold);
     textStyle.setBold(bold);
 
-    float textSize = 12;
-    evaluationResult.getFloatValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SIZE, textSize);
-    textStyle.setSize(textSize);
+    evaluationResult.getFloatValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SIZE, _textSize);
+    textStyle.setSize(_textSize);
 
     const auto rasterizer = OsmAnd::TextRasterizer::getDefault();
     const auto textImage = rasterizer->rasterize(text, textStyle);
@@ -117,7 +123,7 @@
     return nil;
 }
 
-+ (UIImage *) getIconByAmenityShieldTags:(OAPOI *)amenity
++ (UIImage *) getIconByAmenityShieldTags:(OAPOI *)amenity textSize:(float)textSize
 {
     NSMutableDictionary<NSString *, NSString *> *shieldTags = [NSMutableDictionary new];
     for (NSString *tag in amenity.values.allKeys)
@@ -129,6 +135,7 @@
     if (shieldRouteKey)
     {
         OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:shieldRouteKey];
+        [drawable setTextSize:textSize];
         return drawable.getIcon;
     }
     return nil;

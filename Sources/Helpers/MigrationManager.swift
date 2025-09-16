@@ -23,6 +23,15 @@ final class MigrationManager: NSObject {
         case migrationTerrainModeDefaultPreferences
         case migrationHudButtonPositionsKey
     }
+    
+    private struct HudMigrationScenario {
+        let need: Bool
+        let x: CGFloat
+        let y: CGFloat
+        let parentWidth: CGFloat
+        let parentHeight: CGFloat
+        let pref: OACommonLong
+    }
 
     static let shared = MigrationManager()
     let defaults = UserDefaults.standard
@@ -530,17 +539,17 @@ final class MigrationManager: NSObject {
                 let portY = CGFloat(portMargin.last?.doubleValue ?? 0)
                 let landX = CGFloat(landMargin.first?.doubleValue ?? 0)
                 let landY = CGFloat(landMargin.last?.doubleValue ?? 0)
-                let scenarios: [(need: Bool, x: CGFloat, y: CGFloat, parentW: CGFloat, parentH: CGFloat, pref: OACommonLong)] = [(needPortrait, portX, portY, portraitWidth, portraitHeight, portraitPref), (needLandscape, landX, landY, landscapeWidth, landscapeHeight, landscapePref)]
+                let scenarios = [HudMigrationScenario(need: needPortrait, x: portX, y: portY, parentWidth: portraitWidth, parentHeight: portraitHeight, pref: portraitPref), HudMigrationScenario(need: needLandscape, x: landX, y: landY, parentWidth: landscapeWidth, parentHeight: landscapeHeight, pref: landscapePref)]
                 for scn in scenarios where scn.need && scn.x > 0 && scn.y > 0 {
-                    let distRight = max(0, scn.parentW - scn.x - buttonSizePt)
-                    let distBottom = max(0, scn.parentH - scn.y - buttonSizePt)
+                    let distRight = max(0, scn.parentWidth - scn.x - buttonSizePt)
+                    let distBottom = max(0, scn.parentHeight - scn.y - buttonSizePt)
                     let pos = ButtonPositionSize(id: hudId)
                     pos.setSize(width8dp: buttonCells, height8dp: buttonCells)
                     pos.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_RIGHT)
                     pos.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
                     pos.setMoveHorizontal()
                     pos.setMoveVertical()
-                    pos.calcGridPositionFromPixel(dpToPix: 1.0, widthPx: Int32(scn.parentW.rounded()), heightPx: Int32(scn.parentH.rounded()), gravLeft: false, x: Int32(max(0, distRight.rounded())), gravTop: false, y: Int32(max(0, distBottom.rounded())))
+                    pos.calcGridPositionFromPixel(dpToPix: 1.0, widthPx: Int32(scn.parentWidth.rounded()), heightPx: Int32(scn.parentHeight.rounded()), gravLeft: false, x: Int32(max(0, distRight.rounded())), gravTop: false, y: Int32(max(0, distBottom.rounded())))
                     scn.pref.set(Int(pos.toLongValue()), mode: mode)
                 }
             }

@@ -57,7 +57,7 @@ final class ChangeMapOrientationAction: OASwitchableAction {
     }
     
     override func execute(withParams params: [String]) {
-        guard let param = params.first, let compassMode = CompassMode.mode(byKey: param) else {
+        guard let param = params.first, let compassMode = CompassMode.mode(forKey: param) else {
             return
         }
         
@@ -84,7 +84,7 @@ final class ChangeMapOrientationAction: OASwitchableAction {
         var arr = [[String: Any]]()
         if let keys = getParams()[getListKey()] as? [String] {
             for key in keys {
-                guard let compassMode = CompassMode.mode(byKey: key) else { continue }
+                guard let compassMode = CompassMode.mode(forKey: key) else { continue }
                 let title = compassMode.title
                 let img = compassMode.iconName
                 arr.append([
@@ -131,21 +131,21 @@ final class ChangeMapOrientationAction: OASwitchableAction {
     
     override func loadListFromParams() -> [Any]? {
         guard let keys = getParams()[getListKey()] as? [String] else { return nil }
-        return keys.compactMap { CompassMode.mode(byKey: $0) != nil ? $0 : nil }
+        return keys.compactMap { CompassMode.mode(forKey: $0) != nil ? $0 : nil }
     }
     
     override func getStateName() -> String? {
-        guard let title = CompassMode.mode(byKey: orientation())?.title else { return getName() }
+        guard let title = CompassMode.mode(forKey: orientation())?.title else { return getName() }
         return title
     }
     
     override func getIcon() -> UIImage? {
-        guard let iconName = CompassMode.mode(byKey: orientation())?.iconName else { return super.getIcon() }
+        guard let iconName = CompassMode.mode(forKey: orientation())?.iconName else { return super.getIcon() }
         return UIImage.templateImageNamed(iconName)
     }
     
     override func getIconResName() -> String? {
-        guard let iconName = CompassMode.mode(byKey: orientation())?.iconName else { return super.getIconResName() }
+        guard let iconName = CompassMode.mode(forKey: orientation())?.iconName else { return super.getIconResName() }
         return iconName
     }
     

@@ -105,9 +105,9 @@
         for (NSInteger value = 0; value < [CompassModeWrapper valueCount]; value++)
         {
             [dataArr addObject:@{
-                @"title" : [CompassModeWrapper titleByValue:value],
-                @"value" : [CompassModeWrapper keyByValue:value],
-                @"icon" : [CompassModeWrapper iconNameByValue:value],
+                @"title" : [CompassModeWrapper titleForValue:value],
+                @"value" : [CompassModeWrapper keyForValue:value],
+                @"icon" : [CompassModeWrapper iconNameForValue:value],
                 @"type" : [OASimpleTableViewCell reuseIdentifier],
             }];
         }
@@ -228,7 +228,7 @@
         }
         else
         {
-            OAOnlineTilesResourceItem* source = [self getItem:path];
+            OAOnlineTilesResourceItem *source = [self getItem:path];
             [arr addObject:@[source.mapSource.variant, source.mapSource.name]];
         }
     }

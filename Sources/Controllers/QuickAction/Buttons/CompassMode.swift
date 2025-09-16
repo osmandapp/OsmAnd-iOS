@@ -53,35 +53,35 @@ enum CompassMode: Int32, CaseIterable {
         Self.allCases.first { $0.value == value } ?? .northIsUp
     }
 
-    static func mode(byKey key: String?) -> CompassMode? {
+    static func mode(forKey key: String?) -> CompassMode? {
         Self.allCases.first { $0.key == key }
     }
 }
 
 @objcMembers
 final class CompassModeWrapper: NSObject {
-    static func key(byValue value: Int) -> String {
+    static func key(forValue value: Int) -> String {
         CompassMode.byValue(value).key
     }
     
-    static func title(byValue value: Int) -> String {
+    static func title(forValue value: Int) -> String {
         CompassMode.byValue(value).title
     }
 
-    static func iconName(byValue value: Int) -> String {
+    static func iconName(forValue value: Int) -> String {
         CompassMode.byValue(value).iconName
     }
     
-    static func title(byKey key: String) -> String {
-        CompassMode.mode(byKey: key)?.title ?? ""
+    static func title(forKey key: String) -> String {
+        CompassMode.mode(forKey: key)?.title ?? ""
     }
 
-    static func iconName(byKey key: String) -> String {
-        CompassMode.mode(byKey: key)?.iconName ?? ""
+    static func iconName(forKey key: String) -> String {
+        CompassMode.mode(forKey: key)?.iconName ?? ""
     }
     
-    static func value(byKey key: String) -> Int {
-        CompassMode.mode(byKey: key)?.value ?? CompassMode.northIsUp.value
+    static func value(for key: String) -> Int {
+        CompassMode.mode(forKey: key)?.value ?? CompassMode.northIsUp.value
     }
     
     static func valueCount() -> Int {

@@ -50,7 +50,7 @@
 "shared_string_map" = "Kort";
 "shared_string_show_on_map" = "Vis på kort";
 "daynight_mode_night" = "Nat";
-"map_widget_renderer" = "Kortstilart";
+"map_widget_renderer" = "Kortstil";
 "map_settings_overunder" = "Over-/underlejring";
 "map_settings_under" = "Underlejring";
 "shared_string_none" = "Ingen";
@@ -339,7 +339,7 @@
 "plugins_menu_group" = "Udvidelser";
 "first_time_continue" = "Senere";
 "open_map_settings" = "Åbn indstillinger for kortet";
-"plugin_popup_ski_title" = "Aktiver Skikort format";
+"plugin_popup_ski_title" = "Aktivér Ski-kortstil";
 "plugin_popup_ski_desc" = "For at aktivere <b>Skikort</b> format, gå til <b>Indstillinger for kort</b> > <b>korttype</b>";
 "plugin_popup_wiki_title" = "Hent Wikipedia";
 "plugin_popup_wiki_desc" = "For at begynde at bruge Wikipedia udvidelsen, hent først Wikipedia data for en region";
@@ -1021,8 +1021,8 @@
 "quick_action_map_underlay_title" = "Kortunderlejring";
 "vector_data" = "Offline vektorkort";
 "quick_action_map_source_action" = "Tilføj en kortkilde";
-"quick_action_map_style_action" = "Tilføj en kortstilart";
-"quick_action_map_styles" = "Kortstilarter";
+"quick_action_map_style_action" = "Tilføj en kortstil";
+"quick_action_map_styles" = "Kortstile";
 "quick_action_new_action" = "Tilføj genvej";
 "quick_action_add_create_items" = "Opret elementer";
 "configure_map" = "Konfigurer kort";
@@ -1167,7 +1167,7 @@
 "gpx_descent" = "Nedstigning";
 "stats_select_graph_data" = "Vælg grafdata";
 "nautical_maps" = "Søkort";
-"available_map_styles" = "Tilgængelige kortstilarter";
+"available_map_styles" = "Tilgængelige kortstile";
 "available_map_sources" = "Tilgængelige kortkilder";
 "shared_string_clear_cache" = "Ryd cache";
 "res_confirmation_delete" = "Bekræft sletning af %@?";
@@ -2144,7 +2144,7 @@
 "routeInfo_smoothness_description" = "Klassificering af vej- og gangstiers fremkommelighed for hjulkøretøjer, navnligt med hensyn til overfladens regelmæssighed/fladhed.";
 "routeInfo_winter_ice_road_description" = "Farvelæg ruten eller sporlinjen efter dens vintervejklassificering.";
 "routeInfo_tracktype_description" = "Farvelæg ruten eller sporlinjen i henhold overfladesammensætning. Anvendes typisk, når vejnettet er overvejende ikke-asfalteret.";
-"route_line_use_map_style_width" = "Brug standardbredde for kortformat (%@).";
+"route_line_use_map_style_width" = "Brug standardbredde for kortstil (%@).";
 "turn_arrows" = "Svingpile";
 "turn_arrows_descr" = "Vælg om svingpile skal vises på rutelinjen.";
 "routeInfo_roadClass_description" = "Farvelæg ruten eller sporlinjen i henhold til vejklassificering.";
@@ -3031,7 +3031,7 @@
 "help_article_navigation_setup_markers_navigation_name" = "Naviger efter markører";
 "help_article_map_point_layers_on_map_name" = "Punkter på kortet";
 "help_article_plan_route_coordinate_input_name" = "Koordinatindtastning";
-"help_article_map_vector_maps_name" = "Vektorkort (kortstilarter)";
+"help_article_map_vector_maps_name" = "Vektorkort (kortstile)";
 "help_article_start_with_main_menu_name" = "Hovedmenu";
 "shared_string_accessibility" = "Tilgængelighed";
 "shared_string_author" = "Forfatter";

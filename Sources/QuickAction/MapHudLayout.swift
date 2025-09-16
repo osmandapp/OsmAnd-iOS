@@ -86,7 +86,7 @@ final class MapHudLayout: NSObject {
     }
     
     private func createWidgetPosition(_ view: UIView) -> ButtonPositionSize {
-        let position = ButtonPositionSize(id: getViewName(view))
+        let position = ButtonPositionSize(id: identifier(for: view))
         if view === topBarPanelContainer || view is OADownloadMapWidget {
             position.setMoveDescendantsVertical()
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
@@ -115,8 +115,9 @@ final class MapHudLayout: NSObject {
         return updateWidgetPosition(view, position)
     }
     
-    private func getViewName(_ view: UIView) -> String {
-        (view as? OAHudButton)?.buttonState?.id ?? view.accessibilityIdentifier ?? ""
+    private func identifier(for view: UIView) -> String {
+        guard let identifier = (view as? OAHudButton)?.buttonState?.id ?? view.accessibilityIdentifier else { fatalError("Identifier not found for view: \(view)") }
+        return identifier
     }
     
     private func isBottomPanelVisible() -> Bool {
@@ -352,7 +353,7 @@ final class MapHudLayout: NSObject {
         }
         
         button.buttonState?.updatePositions()
-        let position = button.buttonState?.getDefaultPositionSize() ?? ButtonPositionSize(id: getViewName(button))
+        let position = button.buttonState?.getDefaultPositionSize() ?? ButtonPositionSize(id: identifier(for: button))
         updateButtonParams(for: button, with: position)
         mapButtons.append(button)
         refresh()

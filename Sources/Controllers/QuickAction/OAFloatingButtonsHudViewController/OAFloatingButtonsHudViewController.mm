@@ -494,25 +494,22 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     CGFloat initialAlpha = quickActionButton.alpha;
     if (!hideQuickButton)
     {
-        if (hiddenWillChange)
-            quickActionButton.hidden = NO;
-        
-        quickActionButton.userInteractionEnabled = YES;
+        quickActionButton.hidden = NO;
+        if (hiddenWillChange || initialAlpha <= 0.01)
+            [_mapHudController.mapHudLayout updateButtons];
         [UIView animateWithDuration:.25 animations:^{
             quickActionButton.alpha = 1.0;
         } completion:^(BOOL finished) {
-            if (hiddenWillChange || initialAlpha <= 0.01)
-                [_mapHudController.mapHudLayout updateButtons];
+            quickActionButton.userInteractionEnabled = YES;
         }];
     }
     else
     {
+        quickActionButton.userInteractionEnabled = NO;
         [UIView animateWithDuration:.25 animations:^{
             quickActionButton.alpha = 0.0;
         } completion:^(BOOL finished) {
-            quickActionButton.userInteractionEnabled = NO;
-            if (hiddenWillChange)
-                quickActionButton.hidden = YES;
+            quickActionButton.hidden = YES;
             if (hiddenWillChange || initialAlpha > 0.01)
                 [_mapHudController.mapHudLayout updateButtons];
         }];
@@ -536,25 +533,22 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     CGFloat initialAlpha = _map3dModeFloatingButton.alpha;
     if (!hideButton)
     {
-        if (hiddenWillChange)
-            _map3dModeFloatingButton.hidden = NO;
-        
-        _map3dModeFloatingButton.userInteractionEnabled = YES;
+        _map3dModeFloatingButton.hidden = NO;
+        if (hiddenWillChange || initialAlpha <= 0.01)
+            [_mapHudController.mapHudLayout updateButtons];
         [UIView animateWithDuration:.25 animations:^{
             _map3dModeFloatingButton.alpha = 1.0;
         } completion:^(BOOL finished) {
-            if (hiddenWillChange || initialAlpha <= 0.01)
-                [_mapHudController.mapHudLayout updateButtons];
+            _map3dModeFloatingButton.userInteractionEnabled = YES;
         }];
     }
     else
     {
+        _map3dModeFloatingButton.userInteractionEnabled = NO;
         [UIView animateWithDuration:.25 animations:^{
             _map3dModeFloatingButton.alpha = 0.0;
         } completion:^(BOOL finished) {
-            _map3dModeFloatingButton.userInteractionEnabled = NO;
-            if (hiddenWillChange)
-                _map3dModeFloatingButton.hidden = YES;
+            _map3dModeFloatingButton.hidden = YES;
             if (hiddenWillChange || initialAlpha > 0.01)
                 [_mapHudController.mapHudLayout updateButtons];
         }];

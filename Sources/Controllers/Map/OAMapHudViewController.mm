@@ -1556,25 +1556,6 @@ static const float kDistanceMeters = 100.0;
         if (self.mapInfoController.bottomPanelController)
             self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
         [self updateBottomContolMarginsForHeight];
-
-        CGFloat offsetValue = 50;
-        if (!optionsMenuButtonVisible)
-        {
-            [self addOffsetToView:_optionsMenuButton x:-offsetValue y:0.];
-        }
-        if (!driveModeButtonVisible)
-        {
-            [self addOffsetToView:_driveModeButton x:-offsetValue y:0.];
-        }
-        if (!mapModeButtonVisible)
-        {
-            [self addOffsetToView:_mapModeButton x:offsetValue y:0.];
-        }
-        if (!zoomButtonsVisible)
-        {
-            [self addOffsetToView:_zoomInButton x:offsetValue y:0.];
-            [self addOffsetToView:_zoomOutButton x:offsetValue y:0.];
-        }
     };
 
     void (^completionBlock)(BOOL) = ^(BOOL finished) {
@@ -1658,11 +1639,6 @@ static const float kDistanceMeters = 100.0;
             bottomOffset -= [self getHudMinBottomOffset];
     }
     return bottomOffset;
-}
-
-- (void) addOffsetToView:(UIView *)view x:(CGFloat)x y:(CGFloat)y
-{
-    view.frame = CGRectMake(view.frame.origin.x + x, view.frame.origin.y + y, view.frame.size.width, view.frame.size.height);
 }
 
 - (void) onLastMapSourceChanged

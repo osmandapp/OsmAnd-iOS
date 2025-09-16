@@ -12,7 +12,8 @@ typedef NS_ENUM(NSInteger, EOAMapSourceType)
 {
     EOAMapSourceTypePrimary = 0,
     EOAMapSourceTypeOverlay,
-    EOAMapSourceTypeUnderlay
+    EOAMapSourceTypeUnderlay,
+    EOAMapSourceTypeOrientation
 };
 
 @class OAQuickSearchListItem;
@@ -21,7 +22,7 @@ typedef NS_ENUM(NSInteger, EOAMapSourceType)
 
 @required
 
-- (void) onMapSourceSelected:(NSArray *)items;
+- (void)onMapSourceSelected:(NSArray *)items mapSourceType:(EOAMapSourceType)mapSourceType;
 
 @end
 

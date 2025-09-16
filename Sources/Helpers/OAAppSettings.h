@@ -1193,6 +1193,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
 
+- (OAApplicationMode *)getSwitchedAppMode:(OAApplicationMode *)selectedMode next:(BOOL)next;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
 

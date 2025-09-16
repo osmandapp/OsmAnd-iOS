@@ -67,7 +67,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     NSArray *params = _action.loadListFromParams;
     [arr addObject:@{
-                     @"type" : [OABottomSheetHeaderCell getCellIdentifier],
+                     @"type" : [OABottomSheetHeaderCell reuseIdentifier],
                      @"title" : _action.getDescrTitle,
                      @"description" : @""
                      }];
@@ -82,7 +82,7 @@
                 if (!source)
                     continue;
                 [arr addObject:@{
-                    @"type" : [OASimpleTableViewCell getCellIdentifier],
+                    @"type" : [OASimpleTableViewCell reuseIdentifier],
                     @"title" : param,
                     @"source" : source,
                     @"img" : [NSString stringWithFormat:@"img_mapstyle_%@", [source.resourceId stringByReplacingOccurrencesOfString:RENDERER_INDEX_EXT withString:@""]]
@@ -99,7 +99,7 @@
             {
                 ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[mode getMainFile]];
                 [arr addObject:@{
-                    @"type": [OASimpleTableViewCell getCellIdentifier],
+                    @"type": [OASimpleTableViewCell reuseIdentifier],
                     @"title": [mode getDefaultDescription],
                     @"value": colorPalette,
                     @"param": @[palette]
@@ -107,12 +107,25 @@
             }
         }
     }
+    else if (vwController.type == EOAQASelectionTypeOrientation)
+    {
+        for (NSString *key in params)
+        {
+            [arr addObject:@{
+                @"type" : [OASimpleTableViewCell reuseIdentifier],
+                @"title" : [CompassModeWrapper titleForKey:key],
+                @"value" : @([CompassModeWrapper valueFor:key]),
+                @"param" : @[key],
+                @"img" : [CompassModeWrapper iconNameForKey:key]
+            }];
+        }
+    }
     else
     {
         for (NSArray *pair in params)
         {
             [arr addObject:@{
-                             @"type" : [OASimpleTableViewCell getCellIdentifier],
+                             @"type" : [OASimpleTableViewCell reuseIdentifier],
                              @"title" : pair.lastObject,
                              @"value" : pair.firstObject,
                              @"param" : pair,
@@ -143,12 +156,12 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell reuseIdentifier]])
     {
-        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderCell getCellIdentifier]];
+        OABottomSheetHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderCell reuseIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderCell reuseIdentifier] owner:self options:nil];
             cell = (OABottomSheetHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -161,13 +174,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell reuseIdentifier]])
     {
         OASimpleTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell reuseIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell reuseIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
         }
         
@@ -213,6 +226,11 @@
                 {
                     isActive = [_app.data.underlayMapSource.name isEqualToString:item[@"title"]]
                     || (_app.data.underlayMapSource == nil && [item[@"value"] isEqualToString:@"no_underlay"]);
+                    break;
+                }
+                case EOAQASelectionTypeOrientation:
+                {
+                    isActive = [[OAAppSettings sharedManager].rotateMap get] == [item[@"value"] integerValue];
                     break;
                 }
                 case EOAQASelectionTypeTerrainScheme:
@@ -265,7 +283,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
+    if (![item[@"type"] isEqualToString:[OABottomSheetHeaderCell reuseIdentifier]])
         return indexPath;
     else
         return nil;

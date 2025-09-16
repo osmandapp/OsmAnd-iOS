@@ -111,8 +111,9 @@
     evaluationResult.getBooleanValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_BOLD, bold);
     textStyle.setBold(bold);
 
-    evaluationResult.getFloatValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SIZE, _textSize);
-    textStyle.setSize(_textSize);
+    float scaledFontSize = [[UIFontMetrics metricsForTextStyle:UIFontTextStyleBody] scaledValueForValue:_textSize];
+    evaluationResult.getFloatValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SIZE, scaledFontSize);
+    textStyle.setSize(scaledFontSize);
 
     const auto rasterizer = OsmAnd::TextRasterizer::getDefault();
     const auto textImage = rasterizer->rasterize(text, textStyle);

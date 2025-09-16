@@ -3167,3 +3167,4 @@
 "obd_bluetooth_off_description" = "Kapcsolja be a Bluetooth-t az OBD-olvasó megkereséséhez és csatlakoztatásához.";
 "route_guidance" = "Útvonalvezetés";
 "manage_storage" = "Tárhely kezelése";
+"key_event_action_zoom_in" = "Nagyítás";

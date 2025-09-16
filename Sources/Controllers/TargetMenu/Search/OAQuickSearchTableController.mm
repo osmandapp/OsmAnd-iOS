@@ -764,7 +764,7 @@
                     
                     if ([poi isRouteTrack])
                     {
-                        UIImage *shieldIcon = [OANetworkRouteDrawable getIconByAmenityShieldTags:poi];
+                        UIImage *shieldIcon = [OANetworkRouteDrawable getIconByAmenityShieldTags:poi textSize:18];
                         if (shieldIcon)
                             cell.titleIcon.image = shieldIcon;
                     }

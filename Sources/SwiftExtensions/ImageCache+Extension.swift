@@ -16,6 +16,8 @@ extension ImageCache {
         cache.memoryStorage.config.countLimit = 0
         // Set disk cache size limit 1 Gb
         cache.diskStorage.config.sizeLimit = 1024 * 1024 * 1024
+        cache.diskStorage.config.expiration = .days(Int(URLSessionManager.cacheLifetime))
+        cache.cleanExpiredDiskCache()
         return cache
     }()
     
@@ -25,6 +27,8 @@ extension ImageCache {
         cache.memoryStorage.config.totalCostLimit = 100 * 1024 * 1024
         // 1 GB
         cache.diskStorage.config.sizeLimit = 1024 * 1024 * 1024
+        cache.diskStorage.config.expiration = .days(Int(URLSessionManager.cacheLifetime))
+        cache.cleanExpiredDiskCache()
         return cache
     }()
 }

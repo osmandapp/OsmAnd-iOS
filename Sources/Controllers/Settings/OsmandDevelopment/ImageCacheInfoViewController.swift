@@ -66,7 +66,7 @@ final class ImageCacheInfoViewController: UITableViewController {
     
     private func presentClearCacheAlert(for index: Int) {
         let cacheInfo = caches[index]
-        let alertTitle = localizedString("shared_string_clear") + " " + cacheInfo.title
+        let alertTitle = "\(localizedString("shared_string_clear")) \(cacheInfo.title)"
         let alert = UIAlertController(
             title: alertTitle,
             message: localizedString("remove_cache_alert"),

@@ -154,7 +154,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 {
     NSURL *urlObj = [NSURL URLWithString:url];
     NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
-    NSURLSession *session = [URLSessionManager sessionForKey:key];
+    NSURLSession *session = [URLSessionManager sessionFor:key];
 
     NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad

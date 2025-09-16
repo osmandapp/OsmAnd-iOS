@@ -9,7 +9,7 @@
 import Kingfisher
 
 final class GalleryGridViewController: OABaseNavbarViewController {
-    enum Constants {
+    private enum Constants {
         static let minColumnCount: Int = 2
         static let maxColumnCount: Int = 7
         static let pinchThreshold: CGFloat = 0.2
@@ -135,7 +135,6 @@ final class GalleryGridViewController: OABaseNavbarViewController {
         case .began:
             initialPinchColumnCount = currentColumnCount
             visibleCellsUpdateTimer?.invalidate()
-            
         case .changed:
             let newColumnCount = CGFloat(initialPinchColumnCount) / gesture.scale
             let clampedColumnCount = CGFloat(max(Constants.minColumnCount,

@@ -188,11 +188,14 @@ final class ImageCarouselViewController: UIPageViewController {
         let downloadAction = UIAction(title: localizedString("shared_string_download"), image: .icCustomDownload) { [weak self] _ in
             guard let self, let card = getCardForIndex(currentIndex) else { return }
             guard let fullSizeUrl = card.getGalleryFullSizeUrl(), !fullSizeUrl.isEmpty else { return }
+            guard let url = URL(string: fullSizeUrl) else {
+                return
+            }
             
             let cache: ImageCache
             let urlString: String
             // Attempting to download the high-resolution image first
-            if ImageCache.onlinePhotoHighResolutionDiskCache.isCached(forKey: fullSizeUrl) {
+            if ImageCache.onlinePhotoHighResolutionDiskCache.isCached(forKey: url.absoluteString) {
                 cache = .onlinePhotoHighResolutionDiskCache
                 urlString = fullSizeUrl
             } else {

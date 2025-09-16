@@ -95,7 +95,7 @@ final class ImageViewerController: UIViewController {
         let highResCache = ImageCache.onlinePhotoHighResolutionDiskCache
         
         // Try high-resolution image from cache
-        highResCache.retrieveImage(forKey: fullSizeUrlString) { [weak self] result in
+        highResCache.retrieveImage(forKey: highResURL.absoluteString) { [weak self] result in
             Task { @MainActor in
                 guard let self else { return }
                 
@@ -104,12 +104,12 @@ final class ImageViewerController: UIViewController {
                     self.imageView.image = image
                     self.updateLayoutWithDelay()
                 } else {
+                    guard let lowResURL = URL(string: item.imageUrl) else {
+                        debugPrint("Invalid lowRes URL")
+                        return
+                    }
                     // High-res not in cache
                     if AFNetworkReachabilityManagerWrapper.isReachable() {
-                        guard let lowResURL = URL(string: item.imageUrl) else {
-                            debugPrint("Invalid lowRes URL")
-                            return
-                        }
                         placeholder.remove(from: self.imageView)
                         self.imageView.kf.indicatorType = .activity
                         // Download high-res
@@ -129,7 +129,7 @@ final class ImageViewerController: UIViewController {
                                 }
                     } else {
                         // No internet: fallback to low-res cache
-                        ImageCache.onlinePhotoAndMapillaryDefaultCache.retrieveImage(forKey: item.imageUrl) { lowResult in
+                        ImageCache.onlinePhotoAndMapillaryDefaultCache.retrieveImage(forKey: lowResURL.absoluteString) { lowResult in
                             Task { @MainActor in
                                 if let lowImage = try? lowResult.get().image {
                                     placeholder.remove(from: self.imageView)

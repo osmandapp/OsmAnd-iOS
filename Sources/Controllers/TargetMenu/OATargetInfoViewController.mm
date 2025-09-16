@@ -732,7 +732,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
     NSURL *urlObj = [NSURL URLWithString:urlString];
     NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
-    NSURLSession *session = [URLSessionManager sessionForKey:key];
+    NSURLSession *session = [URLSessionManager sessionFor:key];
     NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
                                          timeoutInterval:30];

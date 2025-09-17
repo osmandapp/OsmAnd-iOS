@@ -299,14 +299,30 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:[ShowHideFitnessTrailsAction getQuickActionType]];
     [allTypes addObject:[ShowHideRunningRoutesAction getQuickActionType]];
     [allTypes addObject:ShowHideCoordinatesGridAction.type];
+    [allTypes addObject:OpenWeatherAction.type];
     
     // interface
     [allTypes addObject:LockScreenAction.type];
+    [allTypes addObject:OpenNavigationViewAction.type];
+    [allTypes addObject:OpenSearchViewAction.type];
+    [allTypes addObject:ShowHideDrawerAction.type];
+    [allTypes addObject:NavigatePreviousScreenAction.type];
+    [allTypes addObject:OpenWunderLINQDatagridAction.type];
+    
+    // map interactions
+    [allTypes addObject:MapZoomInAction.quickActionType];
+    [allTypes addObject:MapZoomOutAction.quickActionType];
+    [allTypes addObject:MapScrollLeftAction.quickActionType];
+    [allTypes addObject:MapScrollRightAction.quickActionType];
+    [allTypes addObject:MoveToMyLocationAction.type];
+    [allTypes addObject:MapScrollUpAction.quickActionType];
+    [allTypes addObject:MapScrollDownAction.quickActionType];
     
     // my places
     [allTypes addObject:OAFavoriteAction.TYPE];
     [allTypes addObject:OAGPXAction.TYPE];
     [allTypes addObject:OAMarkerAction.TYPE];
+    [allTypes addObject:RouteAction.type];
 
     // navigation
     [allTypes addObject:OANavStartStopAction.TYPE];
@@ -322,7 +338,9 @@ static QuickActionType *TYPE_INTERFACE;
     // settings
     [allTypes addObject:DisplayPositionAction.type];
     [allTypes addObject:OASwitchProfileAction.TYPE];
-    
+    [allTypes addObject:NextAppProfileAction.quickActionType];
+    [allTypes addObject:PreviousAppProfileAction.quickActionType];
+    [allTypes addObject:ChangeMapOrientationAction.type];
 
     NSMutableArray<QuickActionType *> *enabledTypes = [NSMutableArray arrayWithArray:allTypes];
     [OAPluginsHelper registerQuickActionTypesPlugins:allTypes enabledTypes:enabledTypes];

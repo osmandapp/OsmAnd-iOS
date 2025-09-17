@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable UIImage *) getIcon;
 
-+ (UIImage *) getIconByAmenityShieldTags:(OAPOI *)amenity;
++ (UIImage *) getIconByAmenityShieldTags:(OAPOI *)amenity textSize:(float)textSize;
 
 @end
 

@@ -967,7 +967,12 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 - (void) switchRotateMapModeImpl
 {
     int vl = ([_settings.rotateMap get] + 1) % 4;
-    [_settings.rotateMap set:vl];
+    [self switchRotateMapModeTo:vl];
+}
+
+- (void)switchRotateMapModeTo:(int)mode
+{
+    [_settings.rotateMap set:mode];
     [self onRotateMapModeChanged];
 }
 

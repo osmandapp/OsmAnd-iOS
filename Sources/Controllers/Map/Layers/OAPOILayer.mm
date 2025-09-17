@@ -53,8 +53,6 @@
 #define kPoiSearchRadiusForRelation 500 // AMENITY_SEARCH_RADIUS_FOR_RELATION
 #define kTrackSearchDelta 40
 
-static const int START_ZOOM = 5;
-
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 @implementation OAPOILayer

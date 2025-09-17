@@ -50,8 +50,6 @@
 #import "OAMapSource.h"
 #import "OAObservable.h"
 
-static const CGFloat kSidePadding = 16.0;
-
 static NSString * const kBackupIndexDir = @"backup";
 static NSString * const kOsmandSettingsFileExt = @"osf";
 static NSString * const kWasClosedFreeBackupSettingsBannerKey = @"wasClosedFreeBackupSettingsBanner";

@@ -47,6 +47,7 @@ class ClickableWayAsyncTask: OABaseLoadAsyncTask {
         return false
     }
     
+    @discardableResult
     private func openAsGpxFile(_ clickableWay: ClickableWay?) -> Bool {
         if let clickableWay {
             let gpxFile = clickableWay.gpxFile

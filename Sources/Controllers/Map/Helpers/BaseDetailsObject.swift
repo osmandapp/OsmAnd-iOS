@@ -84,7 +84,7 @@ final class BaseDetailsObject: NSObject {
         objectCompleteness == .empty
     }
     
-    
+    @discardableResult
     func addObject(_ object: Any) -> Bool {
         guard isSupportedObjectType(object) else { return false }
         

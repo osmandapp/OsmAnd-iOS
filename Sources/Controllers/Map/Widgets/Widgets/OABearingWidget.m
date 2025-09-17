@@ -13,8 +13,6 @@
 #import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static float MIN_SPEED_FOR_HEADING = 1.f;
-
 @implementation OABearingWidget
 {
     OALocationServices *_locationProvider;

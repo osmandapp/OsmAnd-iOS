@@ -529,7 +529,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)setupModeButton
 {
     UIImage *img;
-    UIColor *tint;
     if (_editingContext.appMode != OAApplicationMode.DEFAULT)
     {
         img = [_editingContext.appMode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

@@ -47,7 +47,6 @@ NSString *const OATransportStopRouteArrow = @" → ";
 
 - (NSString *) getDescription:(BOOL)useDistance
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
     NSString *lang = @"";
     if (useDistance && self.distance > 0) {
         NSString *nm = [OAOsmAndFormatter getFormattedDistance:self.distance];

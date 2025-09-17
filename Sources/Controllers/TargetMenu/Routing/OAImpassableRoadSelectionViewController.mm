@@ -105,7 +105,6 @@
 - (void) setupRouteInfo
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        OsmAndAppInstance app = [OsmAndApp instance];
         if (![self.routingHelper isRouteCalculated])
         {
             NSString *emptyEle = [NSString stringWithFormat:@"0 %@", OALocalizedString(@"m")];

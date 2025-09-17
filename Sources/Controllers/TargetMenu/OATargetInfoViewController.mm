@@ -1376,7 +1376,6 @@ static const CGFloat kTextMaxHeight = 150.0;
         mapillaryCardsView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
     }
     
-    __weak __typeof(self) weakSelf = self;
     onlinePhotoCardsView.isLoading = YES;
     if ([self.getTargetObj isKindOfClass:OAPOI.class])
     {
@@ -1384,6 +1383,7 @@ static const CGFloat kTextMaxHeight = 150.0;
         onlinePhotoCardsView.title = poi.nameLocalized;
     }
     
+    __weak __typeof(self) weakSelf = self;
     void (^onFailureNoCache)(void) = ^{
         onlinePhotoCardsView.isLoading = NO;
         NoInternetCard *noInternetCard = [NoInternetCard new];

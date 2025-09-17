@@ -14,8 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAAddQuickActionViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OAQuickActionListDelegate> delegate;
+@property (nonatomic, weak) id<OAEditKeyAssignmentDelegate> editKeyAssignmentdelegate;
 
 - (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState;
+- (instancetype)initWithKeyAssignmentFlow:(BOOL)keyAssignmentFlow;
 
 @end
 

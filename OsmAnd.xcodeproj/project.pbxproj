@@ -222,6 +222,8 @@
 		2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */; };
 		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
 		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
+		277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987A42E7947E700607516 /* AddKeyViewController.swift */; };
+		277987AC2E79A7A700607516 /* KeyAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */; };
 		2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4352E66E6F700682723 /* InputDeviceProfile.swift */; };
 		2783B4382E66E81900682723 /* PredefinedInputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */; };
 		2783B43A2E66E8AB00682723 /* KeyboardDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */; };
@@ -234,7 +236,6 @@
 		27C768F12E68C4B100540266 /* KeyEventCommandsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768F02E68C4B100540266 /* KeyEventCommandsCache.swift */; };
 		27C768F32E68C55E00540266 /* KeyEventCommandsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768F22E68C55E00540266 /* KeyEventCommandsFactory.swift */; };
 		27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */; };
-		27D6AE802E5F42BE00FC9094 /* KeyAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27D6AE7F2E5F42BE00FC9094 /* KeyAssignmentTableViewCell.xib */; };
 		27D6AE812E5F42BE00FC9094 /* KeyAssignmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6AE7E2E5F42BE00FC9094 /* KeyAssignmentTableViewCell.swift */; };
 		27D6AE832E5F53CB00FC9094 /* CommandToActionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6AE822E5F53CB00FC9094 /* CommandToActionConverter.swift */; };
 		27D6AE852E5F56B800FC9094 /* MoveToMyLocationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6AE842E5F56B800FC9094 /* MoveToMyLocationAction.swift */; };
@@ -3629,6 +3630,8 @@
 		2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainExternalInputDeviceViewController.swift; sourceTree = "<group>"; };
 		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
 		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
+		277987A42E7947E700607516 /* AddKeyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddKeyViewController.swift; sourceTree = "<group>"; };
+		277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyAssignmentTableViewCell.xib; sourceTree = "<group>"; };
 		2783B4352E66E6F700682723 /* InputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDeviceProfile.swift; sourceTree = "<group>"; };
 		2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredefinedInputDeviceProfile.swift; sourceTree = "<group>"; };
 		2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDeviceProfile.swift; sourceTree = "<group>"; };
@@ -3642,7 +3645,6 @@
 		27C768F22E68C55E00540266 /* KeyEventCommandsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventCommandsFactory.swift; sourceTree = "<group>"; };
 		27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NextTurnWidget+Extension.swift"; sourceTree = "<group>"; };
 		27D6AE7E2E5F42BE00FC9094 /* KeyAssignmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignmentTableViewCell.swift; sourceTree = "<group>"; };
-		27D6AE7F2E5F42BE00FC9094 /* KeyAssignmentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyAssignmentTableViewCell.xib; sourceTree = "<group>"; };
 		27D6AE822E5F53CB00FC9094 /* CommandToActionConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandToActionConverter.swift; sourceTree = "<group>"; };
 		27D6AE842E5F56B800FC9094 /* MoveToMyLocationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveToMyLocationAction.swift; sourceTree = "<group>"; };
 		27D6AE862E5F5B9200FC9094 /* NextAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextAppProfileAction.swift; sourceTree = "<group>"; };
@@ -8154,6 +8156,7 @@
 			children = (
 				2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */,
 				2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */,
+				277987A42E7947E700607516 /* AddKeyViewController.swift */,
 				2758DD582E5F05F000051096 /* KeyAssignment.swift */,
 				27D6AEA82E61C76C00FC9094 /* KeyView.swift */,
 				27D6AEAA2E61C79600FC9094 /* KeyView.xib */,
@@ -12098,7 +12101,7 @@
 		DA5A7BB626C563A100F274C7 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
-				27D6AE7F2E5F42BE00FC9094 /* KeyAssignmentTableViewCell.xib */,
+				277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */,
 				DA5A7C1126C563A200F274C7 /* OAActivityViewWithTitleCell.xib */,
 				C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */,
 				C5A466BD2D2E6B41008E0C87 /* ImageHeaderCell.xib */,
@@ -14844,7 +14847,6 @@
 				DA13415A243DC5A80039D214 /* map_action_personal_transporter@3x.png in Resources */,
 				DA2EC7D729FFB76A00ECEB37 /* ic_navbar_screen_side_top@3x.png in Resources */,
 				32119B41284776CF005E1E0C /* ic_custom_laptop@2x.png in Resources */,
-				27D6AE802E5F42BE00FC9094 /* KeyAssignmentTableViewCell.xib in Resources */,
 				0A7DAF93270C40380059238B /* ic_custom_trip_edit@2x.png in Resources */,
 				DA6D0782255173C5004FE017 /* ic_custom_trim_after@3x.png in Resources */,
 				DA83600223438512003374B5 /* ic_small_arrow_up@2x.png in Resources */,
@@ -16153,6 +16155,7 @@
 				32B50ABE26BBDA0D002E6C92 /* ic_custom_shop_bag@3x.png in Resources */,
 				0AA3BB9126EB540100A9885D /* ic_custom_appearance@2x.png in Resources */,
 				842432001AEFDD1900925821 /* ic_action_rec_stop@3x.png in Resources */,
+				277987AC2E79A7A700607516 /* KeyAssignmentTableViewCell.xib in Resources */,
 				DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */,
 				DA5A837326C563A800F274C7 /* OARouteSettingsBaseViewController.xib in Resources */,
 				84EE2DD91AFD149F007C9A94 /* img_purchase_banner_portrait@3x.png in Resources */,
@@ -17041,6 +17044,7 @@
 				DA9A2C3026FDB72800BEC681 /* OARouteColorize.mm in Sources */,
 				32A0D6B32A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift in Sources */,
 				FAE446C42CCFC82700598BE3 /* ZoomLevelWidgetState.swift in Sources */,
+				277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */,
 				DAABE4EB2A16483300569F71 /* ConfigureScreenViewController.swift in Sources */,
 				DA5A84A526C563A900F274C7 /* OAMeasurementCommandManager.m in Sources */,
 				DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */,

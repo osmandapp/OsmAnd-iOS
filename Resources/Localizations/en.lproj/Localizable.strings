@@ -2723,6 +2723,10 @@
 "remove_key_assignment" = "Remove key assignment";
 "remove_key_assignment_summary" = "Key assignment for the selected action will be removed.";
 "assigned_keys" = "Assigned keys";
+"key_assignment_add_action" = "Add action";
+"key_assignment_add_key" = "Add key";
+"add_button" = "Add button";
+"key_name_pattern" = "Key \"%@\"";
 
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";

@@ -134,11 +134,8 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             let cell = tableView.dequeueReusableCell(withIdentifier: KeyAssignmentTableViewCell.reuseIdentifier, for: indexPath) as! KeyAssignmentTableViewCell
             cell.selectionStyle = settingExternalInputDevice.isCustom() ? .default : .none
             cell.accessoryType = .disclosureIndicator
-            cell.descriptionVisibility(false)
-            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.leftIconView.tintColor = item.iconTintColor
-            cell.titleLabel.text = item.title
-            cell.titleLabel.accessibilityLabel = item.title
+            cell.setLeftIcon(item.iconName, tintColor: item.iconTintColor)
+            cell.setTitle(item.title)
             if let keyCodes = item.obj(forKey: Self.keyAssignmentKey) as? [UIKeyboardHIDUsage] {
                 cell.configure(keyCodes: keyCodes)
             }
@@ -248,6 +245,10 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
         vc.keyAssignment = keyAssignment
         vc.deviceId = settingExternalInputDevice.getId()
         vc.isAdd = isAdd
+        if let keyAssignment, !isAdd {
+            vc.action = keyAssignment.getAction()
+            vc.keyCodes = keyAssignment.getKeyCodes()
+        }
         vc.delegate = self
         show(vc)
     }

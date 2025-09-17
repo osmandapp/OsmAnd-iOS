@@ -307,11 +307,6 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:OpenWeatherAction.type];
     
     // interface
-//    [allTypes addObject:OpenNavigationViewAction.type];
-//    [allTypes addObject:OpenSearchViewAction.type];
-//    [allTypes addObject:OpenWunderLINQDatagridAction.type];
-//    [allTypes addObject:ShowHideDrawerAction.type];
-//    [allTypes addObject:NavigatePreviousScreenAction.type];
     [allTypes addObject:LockScreenAction.type];
     [allTypes addObject:OpenNavigationViewAction.type];
     [allTypes addObject:OpenSearchViewAction.type];

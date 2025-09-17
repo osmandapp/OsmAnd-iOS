@@ -29,7 +29,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     private var showToolbar: Bool {
-        isDefaultDevice || settingExternalInputDevice.getAssignments().isEmpty
+        isDefaultDevice || settingExternalInputDevice.getFilledAssignments().isEmpty
     }
     
     override func registerCells() {
@@ -44,7 +44,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     
     override func generateData() {
         settingExternalInputDevice = InputDevicesHelper.shared.getSelectedDevice(with: appMode)
-        let keyAssignments = settingExternalInputDevice.getAssignments()
+        let keyAssignments = settingExternalInputDevice.getFilledAssignments()
         
         tableData.clearAllData()
         
@@ -83,7 +83,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             if !isEditMode {
                 keyAssignmentsSection.headerText = localizedString("key_assignments")
             }
-            for keyAssignment in settingExternalInputDevice.getAssignments() {
+            for keyAssignment in settingExternalInputDevice.getFilledAssignments() {
                 let keyAssignmentRow = keyAssignmentsSection.createNewRow()
                 keyAssignmentRow.cellType = KeyAssignmentTableViewCell.reuseIdentifier
                 keyAssignmentRow.key = keyAssignment.getId()
@@ -152,8 +152,8 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
                 vc.delegate = self
                 show(vc)
             }
-        } else if settingExternalInputDevice.isCustom() && settingExternalInputDevice.getAssignments().contains(where: { $0.getId() == item.key }) {
-            showKeyAssignment(settingExternalInputDevice.getAssignments()[indexPath.row])
+        } else if settingExternalInputDevice.isCustom() && settingExternalInputDevice.getFilledAssignments().contains(where: { $0.getId() == item.key }) {
+            showKeyAssignment(settingExternalInputDevice.getFilledAssignments()[indexPath.row])
         }
     }
     
@@ -163,7 +163,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
-        keyAssignmentsToRemove.append(settingExternalInputDevice.getAssignments()[indexPath.row])
+        keyAssignmentsToRemove.append(settingExternalInputDevice.getFilledAssignments()[indexPath.row])
         tableData.removeRow(at: indexPath)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.reloadData()
@@ -258,7 +258,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     private func switchOffEditModeIfNoItems() {
-        guard settingExternalInputDevice.getAssignments().isEmpty else { return }
+        guard settingExternalInputDevice.getFilledAssignments().isEmpty else { return }
         switchEditMode(to: false)
     }
     

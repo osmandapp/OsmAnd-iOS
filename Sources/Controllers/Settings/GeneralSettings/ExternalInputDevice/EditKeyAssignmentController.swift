@@ -243,7 +243,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
             guard let self, let deviceId, let device = InputDevicesHelper.shared.getDeviceById(appMode, deviceId) else { return }
             
             let name = (alert?.textFields?.first?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-            let hasKeyAssignmentName = device.getAssignments().contains { $0.getName()?.trimmingCharacters(in: .whitespacesAndNewlines) == name }
+            let hasKeyAssignmentName = device.getFilledAssignments().contains { $0.getName()?.trimmingCharacters(in: .whitespacesAndNewlines) == name }
             
             guard !name.isEmpty, !hasKeyAssignmentName else { return }
             self.keyAssignment?.setCustomName(name)

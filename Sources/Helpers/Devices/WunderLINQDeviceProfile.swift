@@ -14,6 +14,7 @@ final class WunderLINQDeviceProfile: PredefinedInputDeviceProfile {
         var list: [KeyAssignment] = []
         addAssignment(to: &list, with: MapZoomCommand.zoomInId, keyCodes: [.keyboardUpArrow])
         addAssignment(to: &list, with: MapZoomCommand.zoomOutId, keyCodes: [.keyboardDownArrow])
+        addAssignment(to: &list, with: OpenWunderLINQDatagridCommand.id, keyCodes: [.keyboardEscape])
         return list
     }
     

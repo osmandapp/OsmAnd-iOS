@@ -2119,6 +2119,13 @@
 "open_weather_action_description" = "Allows you to open a screen with detailed weather information.";
 "quick_action_new_route" = "New route";
 "quick_action_add_route_descr" = "A button to start a route from the middle of the screen.";
+"key_event_action_open_wunderlinq_datagrid" = "Open WunderLINQ Datagrid";
+"key_event_action_change_map_orientation" = "Change Map orientation";
+"key_event_action_open_navigation_view" = "Open Navigation view";
+"key_event_action_open_search_view" = "Open Search view";
+"key_event_action_emit_navigation_hint" = "Emit navigation hint";
+"key_event_action_toggle_drower" = "Show/hide side menu";
+"key_event_action_activity_back_pressed" = "Activity back pressed";
 "shared_string_create" = "Create";
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

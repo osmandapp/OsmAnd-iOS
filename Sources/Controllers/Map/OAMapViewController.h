@@ -65,13 +65,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
-typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
-    EOAMapPanDirectionUp = 0,
-    EOAMapPanDirectionDown,
-    EOAMapPanDirectionLeft,
-    EOAMapPanDirectionRight
-};
-
 @property (nonatomic, readonly) OAMapRendererView *mapView;
 @property (weak, readonly, nullable) id<OAMapRendererViewProtocol> mapRendererView;
 @property (nonatomic, readonly) OAMapLayers *mapLayers;

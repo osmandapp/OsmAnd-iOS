@@ -174,40 +174,8 @@ final class MapHudLayout: NSObject {
             posById[state.id] = defPosition
         }
         
-        var rightX: Int32 = 0
-        var leftX: Int32 = 0
-        var applyFix = false
-        let companion = ButtonPositionSize.companion
-        let canApplyFix = !ignoreBottomSidePanels && isBottomPanelVisible()
-        let baseZoom = posById[ZoomInButtonState.hudId] ?? posById[ZoomOutButtonState.hudId]
-        if canApplyFix, let baseZoom, let ml = posById[MyLocationButtonState.hudId], let m3 = posById[Map3DButtonState.map3DHudId] {
-            let mlRightBottom = (ml.posH == companion.POS_RIGHT && ml.posV == companion.POS_BOTTOM)
-            let m3RightBottom = (m3.posH == companion.POS_RIGHT && m3.posV == companion.POS_BOTTOM)
-            let sameColumnAsZoom = (ml.marginX == baseZoom.marginX && m3.marginX == baseZoom.marginX)
-            if mlRightBottom && m3RightBottom && sameColumnAsZoom {
-                rightX = baseZoom.marginX
-                leftX  = rightX + baseZoom.width + 1
-                applyFix = true
-            }
-        }
-        
         for btn in mapButtons where !btn.isHidden && btn.transform.isIdentity {
             guard let state = btn.buttonState, let p = posById[state.id] else { continue }
-            if applyFix {
-                switch state.id {
-                case ZoomInButtonState.hudId, ZoomOutButtonState.hudId:
-                    p.marginX = rightX
-                    p.xMove = false
-                    p.yMove = true
-                case MyLocationButtonState.hudId, Map3DButtonState.map3DHudId:
-                    p.marginX = leftX
-                    p.xMove = false
-                    p.yMove = true
-                default:
-                    break
-                }
-            }
-            
             result.append((btn, p))
         }
 

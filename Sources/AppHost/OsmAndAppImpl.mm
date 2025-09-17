@@ -74,8 +74,6 @@
 #include <OsmAndCore/Map/MapRendererPerformanceMetrics.h>
 #include <openingHoursParser.h>
 
-#define k3MonthInSeconds 60 * 60 * 24 * 90
-
 #define MILS_IN_DEGREE 17.777778f
 
 #define VERSION_3_10 3.10
@@ -1392,19 +1390,31 @@ NSString *const kXmlColon = @"_-_";
         [[OAAppSettings sharedManager].drivingRegion set:drg.region];
 }
 
-- (NSString *) getUserIosId
-{
+- (NSString *)getUserIosId {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (![settings.sendAnonymousAppUsageData get])
         return @"";
-    long lastRotation = [settings.lastUUIDChangeTimestamp get];
-    BOOL needRotation = NSDate.date.timeIntervalSince1970 - lastRotation > k3MonthInSeconds;
-    NSString *userIosId = needRotation ? settings.userIosId.get : @"";
-    if (userIosId.length > 0)
-        return userIosId;
-    userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    [settings.userIosId set:userIosId];
+    NSString *userIosId = settings.userIosId.get;
+    
+    if (userIosId.length == 0 || [self isUserAndroidIdExpired])
+    {
+        userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        [settings.userIosId set:userIosId];
+        
+        NSDateComponents *components = [[NSDateComponents alloc] init];
+        components.month = 3;
+        NSDate *expireDate = [[NSCalendar currentCalendar] dateByAddingComponents:components
+                                                                           toDate:[NSDate date]
+                                                                          options:0];
+        NSTimeInterval expireTimeInterval = [expireDate timeIntervalSince1970];
+        [settings.userIosIdExpiredTime set:expireTimeInterval];
+    }
     return userIosId;
+}
+
+- (BOOL)isUserAndroidIdExpired {
+    double userIosIdExpiredTime = [[[OAAppSettings sharedManager] userIosIdExpiredTime] get];
+    return userIosIdExpiredTime <= [[NSDate date] timeIntervalSince1970];
 }
 
 - (int) getAppExecCount

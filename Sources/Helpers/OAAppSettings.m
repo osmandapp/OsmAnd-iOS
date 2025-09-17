@@ -448,7 +448,7 @@ static NSString * const doNotUseAnimationsKey = @"doNotUseAnimations";
 static NSString * const lastGlobalSettingsModifiedTimeKey = @"lastGlobalSettingsModifiedTime";
 static NSString * const lastProfileSettingsModifiedTimeKey = @"lastProfileSettingsModifiedTime";
 
-static NSString * const lastUUIDChangeTimestampKey = @"lastUUIDChangeTimestamp";
+static NSString * const userIosIdExpirationKey = @"userIosIdExpiration";
 
 static NSString * const kShowHeightmapsKey = @"showHeightmaps";
 
@@ -5713,9 +5713,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_globalPreferences setObject:_navigationHistory forKey:@"navigation_history"];
         [_globalPreferences setObject:_mapMarkersHistory forKey:@"map_markers_history"];
         
-        // TODO: not sure we need to override this setting with import/export
-        _userIosId = [[[OACommonString withKey:userIosIdKey defValue:@""] makeGlobal] makeShared];
-//        [_globalPreferences setObject:_userIosId forKey:@"user_android_id"];
+        _userIosId = [[OACommonString withKey:userIosIdKey defValue:@""] makeGlobal];
 
         _onlineRoutingEngines = [[OACommonString withKey:onlineRoutingEnginesKey defValue:nil] makeGlobal];
         [_globalPreferences setObject:_onlineRoutingEngines forKey:@"online_routing_engines"];
@@ -5968,7 +5966,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_globalPreferences setObject:_numberOfAppStartsOnDislikeMoment forKey:@"number_of_app_starts_on_dislike_moment"];
         [_globalPreferences setObject:_rateUsState forKey:@"rate_us_state"];
         
-        _lastUUIDChangeTimestamp = [[OACommonLong withKey:lastUUIDChangeTimestampKey defValue:0] makeGlobal];
+        _userIosIdExpiredTime = [[OACommonLong withKey:userIosIdExpirationKey defValue:0] makeGlobal];
         
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];

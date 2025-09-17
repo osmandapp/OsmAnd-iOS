@@ -56,6 +56,13 @@ static const int BOTTOM_CONSTANT = 1;
 
 @class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer;
 
+typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
+    EOAMapPanDirectionUp = 0,
+    EOAMapPanDirectionDown,
+    EOAMapPanDirectionLeft,
+    EOAMapPanDirectionRight
+};
+
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {

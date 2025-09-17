@@ -1406,10 +1406,12 @@
 "select_map_source" = "Select map source";
 "select_overlay" = "Select overlay map";
 "select_underlay" = "Select underlay map";
+"select_map_orientation" = "Select map orientation";
 "select_manually" = "Select manually";
 "avoid_by_type" = "Avoid by type";
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
+"available" = "Available";
 
 "export_profile" = "Export profile";
 "shared_string_import" = "Import";
@@ -1998,6 +2000,8 @@
 "quick_action_add_actions_descr" = "Add actions to access them quickly from the map.";
 "quick_action_interim_dialog" = "Show an interim dialog";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
+"map_orientations_choose_description" = "Leave empty to switch between all available modes, or add only your preferred ones.";
+"map_orientations" = "Map orientations";
 "quick_action_template_name" = "Template name";
 "quick_action_fav_name_descr" = "Leave blank to use the address or place name.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
@@ -2085,24 +2089,10 @@
 "quick_action_terrain_color_scheme" = "Terrain color scheme";
 "quick_action_need_to_add_item_to_list" = "Add at least one item to the list in the \'Quick action\' settings";
 
-"quick_action_to_my_location" = "To My Location";
-"key_event_action_move_to_my_location" = "Move to My location";
 "quick_action_next_app_profile" = "App profile to next";
 "key_event_action_next_app_profile" = "Next app profile";
 "quick_action_previous_app_profile" = "App profile to previous";
 "key_event_action_previous_app_profile" = "Previous app profile";
-"selected_delayed_profile" = "Selected profile \"%@\"";
-"application_profile_changed" = "App profile changed to \"%@\"";
-"quick_action_move_map_up" = "Map up";
-"key_event_action_move_up" = "Move up";
-"quick_action_move_map_down" = "Map down";
-"key_event_action_move_down" = "Move down";
-"quick_action_move_map_left" = "Map to the left";
-"key_event_action_move_left" = "Move left";
-"quick_action_move_map_right" = "Map to the right";
-"key_event_action_move_right" = "Move right";
-"key_event_action_zoom_in" = "Zoom in";
-"key_event_action_zoom_out" = "Zoom out";
 "quick_action_navigation_view_title" = "Navigation view";
 "quick_action_navigation_view_desc" = "A toggle to open or close navigation view.";
 "quick_action_search_view_title" = "Search view";
@@ -2110,10 +2100,26 @@
 "quick_action_drawer_title" = "Side menu";
 "quick_action_drawer_desc" = "A toggle to show or hide side menu.";
 "quick_action_previous_screen_title" = "Previous screen";
-"quick_action_verb_navigate" = "Navigate";
 "quick_action_previous_screen_desc" = "A toggle to navigate to the previous screen.";
-"wunderlinq_datagrid" = "Open WunderLINQ Datagrid";
-
+"quick_action_verb_navigate" = "Navigate";
+"wunderlinq_datagrid" = "WunderLINQ Datagrid";
+"key_event_action_zoom_in" = "Zoom in";
+"key_event_action_zoom_out" = "Zoom out";
+"quick_action_move_map_left" = "Map to the left";
+"key_event_action_move_left" = "Move left";
+"quick_action_move_map_right" = "Map to the right";
+"key_event_action_move_right" = "Move right";
+"quick_action_to_my_location" = "To My Location";
+"key_event_action_move_to_my_location" = "Move to My location";
+"quick_action_move_map_up" = "Map up";
+"key_event_action_move_up" = "Move up";
+"quick_action_move_map_down" = "Map down";
+"key_event_action_move_down" = "Move down";
+"weather_screen" = "Weather screen";
+"open_weather_action_description" = "Allows you to open a screen with detailed weather information.";
+"quick_action_new_route" = "New route";
+"quick_action_add_route_descr" = "A button to start a route from the middle of the screen.";
+"shared_string_create" = "Create";
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";

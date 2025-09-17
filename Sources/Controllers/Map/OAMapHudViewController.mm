@@ -198,6 +198,11 @@ static const float kDistanceMeters = 100.0;
 
     self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
+    
+    _topWidgetsView.accessibilityIdentifier = @"widgets_panel_top";
+    _leftWidgetsView.accessibilityIdentifier = @"widgets_panel_left";
+    _bottomWidgetsView.accessibilityIdentifier = @"widgets_panel_bottom";
+    _rightWidgetsView.accessibilityIdentifier = @"widgets_panel_right";
 
     _mapHudLayout = [[MapHudLayout alloc] initWithContainerView:self.view];
     [_mapHudLayout configureWithLeftWidgetsPanel:_leftWidgetsView rightWidgetsPanel:_rightWidgetsView topBarPanelContainer:_topWidgetsView bottomBarPanelContainer:_bottomWidgetsView];
@@ -1551,25 +1556,6 @@ static const float kDistanceMeters = 100.0;
         if (self.mapInfoController.bottomPanelController)
             self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
         [self updateBottomContolMarginsForHeight];
-
-        CGFloat offsetValue = 50;
-        if (!optionsMenuButtonVisible)
-        {
-            [self addOffsetToView:_optionsMenuButton x:-offsetValue y:0.];
-        }
-        if (!driveModeButtonVisible)
-        {
-            [self addOffsetToView:_driveModeButton x:-offsetValue y:0.];
-        }
-        if (!mapModeButtonVisible)
-        {
-            [self addOffsetToView:_mapModeButton x:offsetValue y:0.];
-        }
-        if (!zoomButtonsVisible)
-        {
-            [self addOffsetToView:_zoomInButton x:offsetValue y:0.];
-            [self addOffsetToView:_zoomOutButton x:offsetValue y:0.];
-        }
     };
 
     void (^completionBlock)(BOOL) = ^(BOOL finished) {
@@ -1653,11 +1639,6 @@ static const float kDistanceMeters = 100.0;
             bottomOffset -= [self getHudMinBottomOffset];
     }
     return bottomOffset;
-}
-
-- (void) addOffsetToView:(UIView *)view x:(CGFloat)x y:(CGFloat)y
-{
-    view.frame = CGRectMake(view.frame.origin.x + x, view.frame.origin.y + y, view.frame.size.width, view.frame.size.height);
 }
 
 - (void) onLastMapSourceChanged

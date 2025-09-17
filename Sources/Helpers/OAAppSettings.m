@@ -6438,13 +6438,10 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 - (OAApplicationMode *)getSwitchedAppMode:(OAApplicationMode *)selectedMode next:(BOOL)next
 {
     NSArray<OAApplicationMode *> *enabledModes = [OAApplicationMode values];
-    int indexOfCurrent = [enabledModes indexOfObject:selectedMode];
-    int indexOfNext;
-    if (next)
-        indexOfNext = indexOfCurrent < enabledModes.count - 1 ? indexOfCurrent + 1 : 0;
-    else
-        indexOfNext = indexOfCurrent > 0 ? indexOfCurrent - 1 : enabledModes.count - 1;
-    return enabledModes[indexOfNext];
+    NSInteger currentIndex = [enabledModes indexOfObject:selectedMode];
+    NSInteger count = enabledModes.count;
+    NSInteger nextIndex = (currentIndex + (next ? 1 : count - 1)) % count;
+    return enabledModes[nextIndex];
 }
 
 - (void)setApplicationModePref:(OAApplicationMode *)applicationMode

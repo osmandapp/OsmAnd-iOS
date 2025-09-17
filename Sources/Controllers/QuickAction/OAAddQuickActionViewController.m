@@ -199,51 +199,48 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
         // Main screen - groups list
         if (!_isFiltered)
         {
-            /*
-            OATableRowData *mapInteractionsRow = [section createNewRow];
-            mapInteractionsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
-            mapInteractionsRow.title = OALocalizedString(@"key_event_category_map_interactions");
-            mapInteractionsRow.iconName = @"ic_custom_show_on_map";
-            mapInteractionsRow.key = [OAMapButtonsHelper TYPE_MAP_INTERACTIONS].name;
-            */
-            
             OATableRowData *configureMapRow = [section createNewRow];
-            configureMapRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            configureMapRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             configureMapRow.title = OALocalizedString(@"configure_map");
             configureMapRow.iconName = @"ic_custom_overlay_map";
             configureMapRow.key = [OAMapButtonsHelper TYPE_CONFIGURE_MAP].name;
             
             OATableRowData *interfaceRow = [section createNewRow];
-            interfaceRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            interfaceRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             interfaceRow.title = OALocalizedString(@"shared_string_interface");
             interfaceRow.iconName = @"ic_custom_ui_customization";
             interfaceRow.key = [OAMapButtonsHelper TYPE_INTERFACE].name;
             
+            OATableRowData *mapInteractionsRow = [section createNewRow];
+            mapInteractionsRow.cellType = [OASimpleTableViewCell reuseIdentifier];
+            mapInteractionsRow.title = OALocalizedString(@"key_event_category_map_interactions");
+            mapInteractionsRow.iconName = @"ic_custom_show_on_map";
+            mapInteractionsRow.key = [OAMapButtonsHelper TYPE_MAP_INTERACTIONS].name;
+            
             OATableRowData *myPlacesRow = [section createNewRow];
-            myPlacesRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            myPlacesRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             myPlacesRow.title = OALocalizedString(@"shared_string_my_places");
             myPlacesRow.iconName = @"ic_custom_favorites";
             myPlacesRow.key = [OAMapButtonsHelper TYPE_MY_PLACES].name;
             
             OATableRowData *navigationRow = [section createNewRow];
-            navigationRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            navigationRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             navigationRow.title = OALocalizedString(@"shared_string_navigation");
             navigationRow.iconName = @"ic_custom_navigation";
             navigationRow.key = [OAMapButtonsHelper TYPE_NAVIGATION].name;
             
             OATableRowData *settingsRow = [section createNewRow];
-            settingsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            settingsRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             settingsRow.title = OALocalizedString(@"shared_string_settings");
             settingsRow.iconName = @"ic_custom_settings";
             settingsRow.key = [OAMapButtonsHelper TYPE_SETTINGS].name;
         }
         else
         {
-            NSArray<QuickActionType *> *selectedGroupActions = _actions[_selectedGroup];
             for (QuickActionType *action in _filteredData)
             {
                 OATableRowData *row = [section createNewRow];
-                row.cellType = [OAButtonTableViewCell getCellIdentifier];
+                row.cellType = [OAButtonTableViewCell reuseIdentifier];
                 row.title = action.nameAction;
                 row.descr = action.name;
                 row.icon = [self getQuickActionIcon:action.iconName];
@@ -258,7 +255,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
         for (QuickActionType *action in selectedGroupActions)
         {
             OATableRowData *row = [section createNewRow];
-            row.cellType = [OAButtonTableViewCell getCellIdentifier];
+            row.cellType = [OAButtonTableViewCell reuseIdentifier];
             row.title = action.nameAction;
             row.descr = action.name;
             row.icon = [self getQuickActionIcon:action.iconName];
@@ -289,13 +286,13 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    if ([item.cellType isEqualToString:[OASimpleTableViewCell reuseIdentifier]])
     {
         OASimpleTableViewCell* cell = nil;
-        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell reuseIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell reuseIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             [cell descriptionVisibility:NO];
             [cell leftIconVisibility:YES];
@@ -315,12 +312,12 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
         }
         return cell;
     }
-    if ([item.cellType isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
+    if ([item.cellType isEqualToString:[OAButtonTableViewCell reuseIdentifier]])
     {
-        OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell reuseIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell reuseIdentifier] owner:self options:nil];
             cell = (OAButtonTableViewCell *) nib[0];
             [cell descriptionVisibility:YES];
             [cell.button setTitle:nil forState:UIControlStateNormal];
@@ -365,7 +362,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    if ([item.cellType isEqualToString:[OASimpleTableViewCell reuseIdentifier]])
     {
         OAAddQuickActionViewController *groupContentVC;
         if (_keyAssignmentFlow)
@@ -380,7 +377,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
         }
         [self.navigationController pushViewController:groupContentVC animated:YES];
     }
-    else if ([item.cellType isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAButtonTableViewCell reuseIdentifier]])
     {
         QuickActionType *action = [item objForKey:_kActionObjectKey];
         if (action)

@@ -268,7 +268,7 @@
     NSMutableArray *arr = [NSMutableArray new];
     for (NSDictionary *item in _data[_data.allKeys.lastObject])
     {
-        if (![item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
+        if (![item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]] && item[@"title"])
             [arr addObject:item[@"title"]];
     }
     return arr;
@@ -782,6 +782,14 @@
     [self.navigationController pushViewController:mapSourceScreen animated:YES];
 }
 
+- (void)addMapOrientation
+{
+    NSMutableArray *arr = [self getItemNames];
+    OAActionAddMapSourceViewController *mapSourceScreen = [[OAActionAddMapSourceViewController alloc] initWithNames:arr type:EOAMapSourceTypeOrientation];
+    mapSourceScreen.delegate = self;
+    [self.navigationController pushViewController:mapSourceScreen animated:YES];
+}
+
 - (void)addProfile
 {
     NSArray *arr = [_action getParams][@"stringKeys"] ? [NSMutableArray arrayWithArray:(NSArray *)[_action getParams][@"stringKeys"]] : @[];
@@ -1175,26 +1183,47 @@
 
 #pragma mark - OAAddMapSourceDelegate
 
-- (void)onMapSourceSelected:(NSArray *)items
+- (void)onMapSourceSelected:(NSArray *)items mapSourceType:(EOAMapSourceType)mapSourceType
 {
     NSString *key = _data.allKeys.lastObject;
     NSArray *rows = _data[key];
-    NSDictionary *button = rows.lastObject;
+    NSDictionary *button;
     NSMutableArray *newItems = [NSMutableArray new];
-    NSMutableArray *titles = [NSMutableArray new];
-    for (NSArray *item in items)
+    
+    if (mapSourceType == EOAMapSourceTypeOrientation)
     {
-        [newItems addObject:@{
-            @"type" : [OATitleDescrDraggableCell getCellIdentifier],
-            @"title" : item.lastObject,
-            @"value" : item.firstObject,
-            @"img" : @"ic_custom_map_style"
-        }];
-        [titles addObject:item.lastObject];
+        button = rows[rows.count - 2];
+        NSDictionary *footer = rows.lastObject;
+        for (NSDictionary *item in items)
+        {
+            [newItems addObject:@{
+                @"type" : [OATitleDescrDraggableCell getCellIdentifier],
+                @"title" : item[@"title"],
+                @"img" : item[@"icon"],
+                @"value" : item[@"value"]
+            }];
+        }
+        [newItems addObject:button];
+        [newItems addObject:footer];
     }
-    [newItems addObject:button];
+    else
+    {
+        NSMutableArray *titles = [NSMutableArray new];
+        button = rows.lastObject;
+        for (NSArray *item in items)
+        {
+            [newItems addObject:@{
+                @"type" : [OATitleDescrDraggableCell getCellIdentifier],
+                @"title" : item.lastObject,
+                @"value" : item.firstObject,
+                @"img" : @"ic_custom_map_style"
+            }];
+            [titles addObject:item.lastObject];
+        }
+        [self renameAction:titles oldTitle:[self getOldTitle]];
+        [newItems addObject:button];
+    }
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    [self renameAction:titles oldTitle:[self getOldTitle]];
     [self.tableView reloadData];
 }
 

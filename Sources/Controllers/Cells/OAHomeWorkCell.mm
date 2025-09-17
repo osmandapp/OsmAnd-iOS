@@ -62,7 +62,6 @@
 
 - (void) generateData
 {
-    OAAppData *data = [OsmAndApp instance].data;
     OARTargetPoint *homePoint = [[OATargetPointsHelper sharedInstance] getHomePoint];
     OARTargetPoint *workPoint = [[OATargetPointsHelper sharedInstance] getWorkPoint];
     NSString *homeName = homePoint ? [homePoint.pointDescription getSimpleName:NO] : nil;

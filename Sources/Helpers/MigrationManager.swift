@@ -15,13 +15,23 @@ final class MigrationManager: NSObject {
     static let importExportVersionMigration1 = 1
     static let importExportVersionMigration2 = 2
 
-    enum MigrationKey: String, CaseIterable{
+    enum MigrationKey: String, CaseIterable {
         case migrationChangeWidgetIds1Key
         case migrationChangeQuickActionIds1Key
         case migrationLocationNavigationIconsKey
         case migrationChangeTerrainIds1Key
         case migrationTerrainModeDefaultPreferences
         case migrateExternalInputDevicePreferenceType
+        case migrationHudButtonPositionsKey
+    }
+    
+    private struct HudMigrationScenario {
+        let need: Bool
+        let x: CGFloat
+        let y: CGFloat
+        let parentWidth: CGFloat
+        let parentHeight: CGFloat
+        let pref: OACommonLong
     }
 
     static let shared = MigrationManager()
@@ -80,11 +90,14 @@ final class MigrationManager: NSObject {
                 migrateExternalInputDevicePreferenceType()
                 defaults.set(true, forKey: MigrationKey.migrateExternalInputDevicePreferenceType.rawValue)
             }
+            if !defaults.bool(forKey: MigrationKey.migrationHudButtonPositionsKey.rawValue) {
+                migrateHudButtonPositions()
+                defaults.set(true, forKey: MigrationKey.migrationHudButtonPositionsKey.rawValue)
+            }
         }
     }
     
     private func changeWidgetIdsMigration1() {
-        let settings = OAAppSettings.sharedManager()
         let externalPlugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
         let externalSensorsPluginPrefs: [OACommonPreference]? = externalPlugin?.getPreferences()
         let changeWidgetIds = [
@@ -179,7 +192,6 @@ final class MigrationManager: NSObject {
 
     private func changeWidgetPrefs1(_ appMode: OAApplicationMode, oldWidgetIds: [String], changeWidgetIds: [String: String]) {
         if let plugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin {
-            let settings = OAAppSettings.sharedManager()
             for oldCustomWidgetId in oldWidgetIds {
                 let oldOriginalWidgetId = oldCustomWidgetId.substring(to: Int(oldCustomWidgetId.index(of: MapWidgetInfo.DELIMITER)))
                 if let newOriginalWidgetId = changeWidgetIds[oldOriginalWidgetId] {
@@ -340,7 +352,6 @@ final class MigrationManager: NSObject {
     }
     
     private func migrateLocationNavigationIcons() {
-        let settings = OAAppSettings.sharedManager()
         for appMode in OAApplicationMode.allPossibleValues() {
             let oldLocationIconPref = OACommonInteger.withKey("locationIcon", defValue: 0).makeProfile()
             switch oldLocationIconPref.get(appMode) {
@@ -465,7 +476,6 @@ final class MigrationManager: NSObject {
     }
 
     private func migrateTerrainModeDefaultPreferences() {
-        let settings = OAAppSettings.sharedManager()
         let oldDefaultMinZoomPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_min_zoom", defValue: 0)
         let oldDefaultMaxZoomPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_max_zoom", defValue: 0)
         let oldDefaultTransparencyPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_transparency", defValue: 0)
@@ -501,6 +511,70 @@ final class MigrationManager: NSObject {
                 settings.settingExternalInputDevice.set(WunderLINQDeviceProfile.deviceId, mode: appMode)
             default:
                 settings.settingExternalInputDevice.set(KeyboardDeviceProfile.deviceId, mode: appMode)
+            }
+        }
+    }
+    
+    private func migrateHudButtonPositions() {
+        let helper = OAMapButtonsHelper.sharedInstance()
+        let screenWidth = CGFloat(OAUtilities.calculateScreenWidth())
+        let screenHeight = CGFloat(OAUtilities.calculateScreenHeight())
+        let portraitWidth = min(screenWidth, screenHeight)
+        let portraitHeight = max(screenWidth, screenHeight)
+        let landscapeWidth = max(screenWidth, screenHeight)
+        let landscapeHeight = min(screenWidth, screenHeight)
+        let cellSizePt = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP)
+        let buttonCells = Int32(50 / cellSizePt) + 1
+        let buttonSizePt = CGFloat(buttonCells) * cellSizePt
+        var items: [(id: String, fab: FabMarginPreference)] = []
+        let map3DState = helper.getMap3DButtonState()
+        items.append((id: Map3DButtonState.map3DHudId, fab: map3DState.fabMarginPref))
+        var quickIds = Set<String>()
+        for mode in OAApplicationMode.allPossibleValues() {
+            for qid in OAAppSettings.sharedManager().quickActionButtons.get(mode) {
+                quickIds.insert(qid)
+            }
+        }
+        
+        if quickIds.isEmpty {
+            quickIds.insert(QuickActionButtonState.defaultButtonId)
+        }
+        
+        for qid in quickIds {
+            if let quickState = helper.getButtonState(byId: qid) {
+                items.append((id: qid, fab: quickState.fabMarginPref))
+            }
+        }
+        
+        for (hudId, fabPref) in items {
+            let portraitPref = settings.registerLongPreference("\(hudId)_position_portrait", defValue: -1).makeProfile()
+            let landscapePref = settings.registerLongPreference("\(hudId)_position_landscape", defValue: -1).makeProfile()
+            for mode in OAApplicationMode.allPossibleValues() {
+                let needPortrait = portraitPref.get(mode) == -1
+                let needLandscape = landscapePref.get(mode) == -1
+                if !needPortrait && !needLandscape {
+                    continue
+                }
+                
+                let portMargin = fabPref.getPortraitFabMargin(mode)
+                let landMargin = fabPref.getLandscapeFabMargin(mode)
+                let portX = CGFloat(portMargin.first?.doubleValue ?? 0)
+                let portY = CGFloat(portMargin.last?.doubleValue ?? 0)
+                let landX = CGFloat(landMargin.first?.doubleValue ?? 0)
+                let landY = CGFloat(landMargin.last?.doubleValue ?? 0)
+                let scenarios = [HudMigrationScenario(need: needPortrait, x: portX, y: portY, parentWidth: portraitWidth, parentHeight: portraitHeight, pref: portraitPref), HudMigrationScenario(need: needLandscape, x: landX, y: landY, parentWidth: landscapeWidth, parentHeight: landscapeHeight, pref: landscapePref)]
+                for scn in scenarios where scn.need && scn.x > 0 && scn.y > 0 {
+                    let distRight = max(0, scn.parentWidth - scn.x - buttonSizePt)
+                    let distBottom = max(0, scn.parentHeight - scn.y - buttonSizePt)
+                    let pos = ButtonPositionSize(id: hudId)
+                    pos.setSize(width8dp: buttonCells, height8dp: buttonCells)
+                    pos.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_RIGHT)
+                    pos.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
+                    pos.setMoveHorizontal()
+                    pos.setMoveVertical()
+                    pos.calcGridPositionFromPixel(dpToPix: 1.0, widthPx: Int32(scn.parentWidth.rounded()), heightPx: Int32(scn.parentHeight.rounded()), gravLeft: false, x: Int32(max(0, distRight.rounded())), gravTop: false, y: Int32(max(0, distBottom.rounded())))
+                    scn.pref.set(Int(pos.toLongValue()), mode: mode)
+                }
             }
         }
     }

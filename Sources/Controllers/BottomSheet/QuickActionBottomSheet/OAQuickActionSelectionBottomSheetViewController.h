@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, EOAQASelectionType)
     EOAQASelectionTypeSource,
     EOAQASelectionTypeOverlay,
     EOAQASelectionTypeUnderlay,
+    EOAQASelectionTypeOrientation,
     EOAQASelectionTypeTerrainScheme
 };
 

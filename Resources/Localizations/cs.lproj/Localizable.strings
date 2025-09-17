@@ -399,7 +399,7 @@
 "shared_string_maps" = "Mapy";
 "purchases" = "Nákupy";
 // Purchases
-"prch_nau_q1" = "Zapněte prosím \"Námořní\" styl v Nastavení mapy a nainstalujte celosvětovou mapu námořních značek.";
+"prch_nau_q1" = "Zapněte prosím „Plavební“ styl v Nastavení mapy a nainstalujte celosvětovou mapu námořních značek.";
 "prch_nau_q2_cell" = "Stahování vyžaduje %@ přes mobilní síť.";
 "incur_high_charges" = "Mohou být účtovány vysoké poplatky.";
 "prch_nau_q2_wifi" = "Stahování vyžaduje %@ přes WiFi síť.";
@@ -511,7 +511,7 @@
 //inapps
 "plugin_nautical_name" = "Plavební mapový pohled";
 "product_desc_nautical" = "Vektorové mapy vhodné pro navigaci na vodních trasách";
-"plugin_nautical_descr" = "Obohatí vaši mapu o informace o plavebních trasách, navigačních světlech, nebezpečných námořních zónách, zónách s omezením plavby nebo kotvení atd. Pro použití si stáhněte příslušné námořní mapy a povolte styl \"Námořní mapa\" v \"Nastavení mapy\". \n \nDalší informace naleznete na adrese %@.";
+"plugin_nautical_descr" = "Obohatí vaši mapu o informace o plavebních trasách, navigačních světlech, nebezpečných námořních zónách, zónách s omezením plavby nebo kotvení atd. Pro použití si stáhněte příslušné námořní mapy a povolte styl „Plavební mapa“ v „Nastavení mapy“. \n \nDalší informace naleznete na adrese %@.";
 "osmand_parking_plugin_name" = "Parkovací místo";
 "product_desc_parking" = "Sledování doby parkování a polohy vašeho vozu";
 "osmand_parking_plugin_description" = "Označte si místo, kde máte zaparkované auto, a upozorněte kalendář, kdy končí platnost parkovacího automatu. Chcete-li umístit značku, vyberte místo na mapě, přejděte do části \"Akce\" a klepněte na možnost \"Přidat parkování\".";
@@ -603,7 +603,7 @@
 "plugin_popup_srtm_desc" = "Chcete-li začít používat funkci Topografie, stáhněte si prosím nejdříve vrstevnicová data pro daný region";
 "plugin_popup_srtm_ask" = "Pro stažení vrstevnicových dat musíte nejprve aktivovat modul: <b>Topografie</b>";
 "plugin_popup_nautical_title" = "Stáhnout Námořní mapy";
-"plugin_popup_nautical_desc" = "Nejdříve si prosím stáhněte námořní mapy.\nPak přejděte do <b>Nastavení mapy</b> > <b>Styl mapy</b> a zapněte <b>Námořní</b> styl";
+"plugin_popup_nautical_desc" = "Nejdříve si prosím stáhněte námořní mapy.\nPak přejděte do <b>Nastavení mapy</b> > <b>Styl mapy</b> a zapněte <b>Plavební</b> styl";
 "plugin_popup_trip_planning_ask" = "Pro spuštění plánování musíte aktivovat modul: <b>Plánování cesty</b>";
 "turn_on_plugin" = "Zapnout modul";
 "all_world_popup_desc" = "Stáhněte si základní mapu světa, abyste viděli názvy států, hranice a další informace";
@@ -3137,7 +3137,7 @@
 "ant_plus_pair_bluetooth_prompt" = "Se zařízením OsmAnd můžete spárovat senzory Bluetooth LE a ANT+.";
 "help_article_navigation_setup_gpx_navigation_name" = "Navigace podle stopy";
 "shared_string_markers" = "Značky";
-"help_article_map_legend_nautical_map_name" = "Styl námořní mapy";
+"help_article_map_legend_nautical_map_name" = "Plavební styl mapy";
 "shared_string_explore" = "Prozkoumat";
 "shared_string_accessibility" = "Usnadnění";
 "shared_string_travel" = "Cestování";

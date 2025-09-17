@@ -131,19 +131,14 @@
 
         _mapHudViewController = mapHudViewController;
         _topPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES];
-        _topPanelController.view.accessibilityIdentifier = @"widgets_panel_top";
         _topPanelController.delegate = self;
         _topPanelController.specialPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES special:YES];
-        _topPanelController.specialPanelController.view.accessibilityIdentifier = @"widgets_panel_top_special";
         _topPanelController.specialPanelController.delegate = self;
         _leftPanelController = [[OAWidgetPanelViewController alloc] init];
-        _leftPanelController.view.accessibilityIdentifier = @"widgets_panel_left";
         _leftPanelController.delegate = self;
         _bottomPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES];
-        _bottomPanelController.view.accessibilityIdentifier = @"widgets_panel_bottom";
         _bottomPanelController.delegate = self;
         _rightPanelController = [[OAWidgetPanelViewController alloc] init];
-        _rightPanelController.view.accessibilityIdentifier = @"widgets_panel_right";
         _rightPanelController.delegate = self;
         _mapHudViewController.view.clipsToBounds = NO;
         
@@ -596,6 +591,8 @@
 
     mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar = NO;
     [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
+    
+    [[OAWeatherHelper sharedInstance] updateWeatherSource];
 
     if (_weatherToolbar.hidden)
     {

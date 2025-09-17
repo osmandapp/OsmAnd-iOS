@@ -159,13 +159,17 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
     NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
                                          timeoutInterval:30];
-
+    __weak __typeof(self) weakSelf = self;
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                             completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
         NSData *effectiveData = data;
         NSURLResponse *effectiveResponse = response;
 
-        if ((!data || !response) && [self isInternetConnectionError:error])
+        if ((!data || !response) && [strongSelf isInternetConnectionError:error])
         {
             NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];
             if (cached)
@@ -204,7 +208,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
                 {
                     if ([dic isKindOfClass:[NSDictionary class]] && dic[@"image"])
                     {
-                        WikiImage *wikiImage = [self getOsmandApiWikiImage:dic[@"image"]];
+                        WikiImage *wikiImage = [strongSelf getOsmandApiWikiImage:dic[@"image"]];
                         [wikiImage parseMetaDataWith:dic];
                         if (wikiImage)
                         {
@@ -231,7 +235,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self runCallback:cards];
+            [strongSelf runCallback:cards];
         });
     }];
 

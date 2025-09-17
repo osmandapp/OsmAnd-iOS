@@ -630,7 +630,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func setTracksSortMode(_ sortMode: TracksSortMode, isSortingSubfolders: Bool) {
-        var sortModes = settings.getTracksSortModes() ?? [:]
+        var sortModes = settings.getTracksSortModes()
         if isSmartFolder, let smartFolder = smartFolder {
             sortModes[smartFolder.getId()] = sortMode.title
         } else if let folder = currentFolder {
@@ -652,7 +652,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func getTracksSortMode() -> TracksSortMode {
-        let sortModes = settings.getTracksSortModes() ?? [:]
+        let sortModes = settings.getTracksSortModes()
         if isSmartFolder, let smartFolder {
             if let sortModeTitle = sortModes[smartFolder.getId()] {
                 return TracksSortMode.getByTitle(sortModeTitle)

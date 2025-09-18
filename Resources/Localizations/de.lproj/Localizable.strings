@@ -3850,3 +3850,5 @@
 "obd_fuel_type_hybrid_diesel" = "Hybrid-Diesel";
 "fastspring_subscription_desc" = "Du kannst dein Abonnement über das FastSpring-Kontoverwaltungsportal verwalten oder kündigen.";
 "fastspring_one_time_payment_desc" = "Sie können Ihre Einkäufe über das FastSpring-Kontoverwaltungsportal verwalten.";
+"key_event_action_zoom_in" = "Hineinzoomen";
+"key_event_action_zoom_out" = "Herauszoomen";

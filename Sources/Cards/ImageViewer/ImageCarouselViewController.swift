@@ -28,6 +28,17 @@ final class ImageCarouselViewController: UIPageViewController {
         : .darkContent
     }
     
+    override var canBecomeFirstResponder: Bool {
+        true
+    }
+    
+    override var keyCommands: [UIKeyCommand]? {
+        [
+            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(didPressLeftArrow)),
+            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(didPressRightArrow))
+        ]
+    }
+    
     // MARK: - Init
     init(imageDataSource: ImageDataSource?,
          title: String,
@@ -87,7 +98,7 @@ final class ImageCarouselViewController: UIPageViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        
         let gradientHeight = 112 + view.safeAreaInsets.bottom
         
         gradientLayer.frame = CGRect(
@@ -99,7 +110,7 @@ final class ImageCarouselViewController: UIPageViewController {
     }
     
     deinit {
-        ImageCache.galleryHighResolutionDiskCache.clearMemoryCache()
+        ImageCache.onlinePhotoHighResolutionDiskCache.clearMemoryCache()
     }
     
     // MARK: - Private func
@@ -167,7 +178,6 @@ final class ImageCarouselViewController: UIPageViewController {
         
         let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: .icCustomExternalLink) { [weak self] _ in
             guard let self, let card = getCardForIndex(currentIndex) else { return }
-            
             SafariPresenter.present(from: self, card: card)
         }
         openInBrowserAction.accessibilityLabel = localizedString("open_in_browser")
@@ -176,8 +186,26 @@ final class ImageCarouselViewController: UIPageViewController {
         
         let firstSection = UIMenu(title: "", options: .displayInline, children: firstSectionItems)
         let downloadAction = UIAction(title: localizedString("shared_string_download"), image: .icCustomDownload) { [weak self] _ in
-            guard let self, let card = getCardForIndex(currentIndex), !card.imageUrl.isEmpty  else { return }
-            GalleryContextMenuProvider.downloadImage(urlString: card.imageUrl, view: view)
+            guard let self, let card = getCardForIndex(currentIndex) else { return }
+            guard let fullSizeUrl = card.getGalleryFullSizeUrl(), !fullSizeUrl.isEmpty else { return }
+            guard let url = URL(string: fullSizeUrl) else {
+                return
+            }
+            
+            let cache: ImageCache
+            let urlString: String
+            // Attempting to download the high-resolution image first
+            if ImageCache.onlinePhotoHighResolutionDiskCache.isCached(forKey: url.absoluteString) {
+                cache = .onlinePhotoHighResolutionDiskCache
+                urlString = fullSizeUrl
+            } else {
+                guard !card.imageUrl.isEmpty else {
+                    return
+                }
+                cache = .onlinePhotoAndMapillaryDefaultCache
+                urlString = card.imageUrl
+            }
+            GalleryContextMenuProvider.downloadImage(urlString: urlString, view: view, cache: cache)
         }
         downloadAction.accessibilityLabel = localizedString("shared_string_download")
         let secondSection = UIMenu(title: "", options: .displayInline, children: [downloadAction])
@@ -262,7 +290,7 @@ final class ImageCarouselViewController: UIPageViewController {
             (currentIndex + 1) % imageDatasource.count(),
             (currentIndex + 2) % imageDatasource.count()
         ]
-
+        
         let cardsForPrefetch = indicesForPrefetch.compactMap { index -> WikiImageCard? in
             guard index >= 0 && index < imageDatasource.count() else { return nil }
             guard let card = getCardForIndex(index) as? WikiImageCard,
@@ -288,16 +316,16 @@ final class ImageCarouselViewController: UIPageViewController {
             debugPrint("No cards to prefetch metadata")
         }
     }
-
+    
     private func prefetchImages(with urls: [URL]) {
         guard !urls.isEmpty else { return }
-        ImagePrefetcher(urls: urls, options: [.targetCache(.galleryHighResolutionDiskCache)]).start()
+        ImagePrefetcher(urls: urls, options: [.targetCache(.onlinePhotoHighResolutionDiskCache)]).start()
     }
     
     @objc private func didDownloadMetadata(notification: Notification) {
         guard let cards = notification.userInfo?["cards"] as? [WikiImageCard] else { return }
         guard let obj = getCardForIndex(currentIndex) else { return }
-    
+        
         if cards.contains(where: { $0 === obj }) {
             updateMetaData(with: currentIndex)
         }
@@ -337,7 +365,7 @@ final class ImageCarouselViewController: UIPageViewController {
 
 extension ImageCarouselViewController: UIPageViewControllerDataSource {
     
-    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
         guard let vc = viewController as? ImageViewerController, let imageDatasource else {
             return nil
@@ -356,8 +384,7 @@ extension ImageCarouselViewController: UIPageViewControllerDataSource {
         return controller
     }
     
-    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let vc = viewController as? ImageViewerController, let imageDatasource else {
             return nil
         }
@@ -394,43 +421,39 @@ extension ImageCarouselViewController: UIPageViewControllerDelegate {
     }
 }
 
+// MARK: - KeyCommands
 extension ImageCarouselViewController {
     
-    private func createNavbarButton(title: String?, icon: UIImage?, color: UIColor, action: Selector?, target: AnyObject?, menu: UIMenu?) -> UIBarButtonItem {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 30))
-        button.titleLabel?.lineBreakMode = .byTruncatingMiddle
-        button.titleLabel?.numberOfLines = 1
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-        button.tintColor = color
-        button.setTitleColor(color, for: .normal)
-        button.setTitleColor(color.withAlphaComponent(0.3), for: .highlighted)
+    private func navigate(to direction: NavigationDirection) {
+        guard let imageDatasource, imageDatasource.count() > 1 else { return }
+        guard let currentVC = viewControllers?.first else { return }
         
-        if let title {
-            button.setTitle(title, for: .normal)
+        let targetVC: ImageViewerController? = {
+            switch direction {
+            case .forward:
+                return pageViewController(self, viewControllerAfter: currentVC) as? ImageViewerController
+            case .reverse:
+                return pageViewController(self, viewControllerBefore: currentVC) as? ImageViewerController
+            @unknown default:
+                assertionFailure("Unhandled navigation direction: \(direction)")
+                return nil
+            }
+        }()
+        
+        guard let targetVC else { return }
+        
+        setViewControllers([targetVC], direction: direction, animated: true) { [weak self] completed in
+            guard let self, completed else { return }
+            currentIndex = targetVC.index
+            updatePage(index: currentIndex)
         }
-        
-        if let icon {
-            button.setImage(icon, for: .normal)
-        }
-        
-        button.removeTarget(nil, action: nil, for: .allEvents)
-        if let action {
-            button.addTarget(target, action: action, for: .touchUpInside)
-        }
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        if let menu {
-            button.showsMenuAsPrimaryAction = true
-            button.menu = menu
-        }
-        
-        let rightNavbarButton = UIBarButtonItem(customView: button)
-        
-        if let title {
-            rightNavbarButton.accessibilityLabel = title
-        }
-        
-        return rightNavbarButton
+    }
+    
+    @objc private func didPressLeftArrow() {
+        navigate(to: .reverse)
+    }
+    
+    @objc private func didPressRightArrow() {
+        navigate(to: .forward)
     }
 }

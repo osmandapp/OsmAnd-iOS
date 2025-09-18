@@ -631,7 +631,6 @@
 - (void)updateMapCenterArrow:(BOOL)arrow
 {
     for (int i = 0; i < [self destinationsCount]; i++) {
-        OADestination *destination = _destinations[i];
         switch (i) {
             case 0:
                 if (arrow)

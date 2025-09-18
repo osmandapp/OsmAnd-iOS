@@ -325,12 +325,10 @@ static NSString *foregroundImageKey = @"foregroundImage";
         if (_hazmatCategoryUSAParameters.size() > 0)
             [self setupHazmatUSACategoryPreference:tableSection];
         
-        NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
         for (NSInteger i = 0; i < _otherRoutingParameters.size(); i++)
         {
             const auto& p = _otherRoutingParameters[i];
             NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
-            NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
             
             if ([paramId isEqualToString:kRouteParamAllowViaFerrata])
                 [self setupViaFerrataPreference:tableSection param:p];

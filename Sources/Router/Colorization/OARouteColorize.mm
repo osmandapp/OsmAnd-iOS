@@ -16,10 +16,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OsmAndSharedWrapper.h"
 
-static CGFloat const defaultBase = 17.2;
 static CGFloat const maxCorrectElevationDistance = 100.0; // in meters
 static CGFloat const slopeRange = 150; //150 meters
-static CGFloat const minDifferenceSlope = 0.05; //5%
 
 @implementation OARouteColorizationPoint
 

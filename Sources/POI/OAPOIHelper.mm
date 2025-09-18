@@ -49,10 +49,6 @@
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/MapObject.h>
 
-int const kSearchLimitRaw = 5000;
-int const kRadiusKmToMetersKoef = 1200.0;
-int const kZoomToSearchPOI = 16.0;
-
 static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"nat_name", @"reg_name", @"loc_name", @"old_name", @"alt_name", @"short_name", @"official_name", @"lock_name"];
 
 NSString * const OSM_WIKI_CATEGORY = @"osmwiki";

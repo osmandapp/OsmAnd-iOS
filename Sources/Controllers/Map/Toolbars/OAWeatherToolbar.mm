@@ -34,7 +34,6 @@ static int kDefaultZoom = 10;
 
 static NSInteger kForecastMaxStepsCount = FORECAST_ANIMATION_DURATION_HOURS * [OAWeatherTimeSegmentedSlider getForecastStepsPerHour];
 
-static NSTimeInterval kAnimationStartDelaySec = 0.1;
 static NSTimeInterval kAnimationFrameDelaySec = 0.083;
 static NSTimeInterval kDownloadingCompleteDelaySec = 0.25;
 

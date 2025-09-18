@@ -831,6 +831,9 @@ NSString *const kXmlColon = @"_-_";
 
     [OAPluginsHelper initPlugins];
     LogStartup(@"plugins initialized");
+    
+    [URLSessionManager cleanupExpiredResponsesWithSessionKey:[URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey]];
+    LogStartup(@"cleanupExpiredResponses");
 
     [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
     LogStartup(@"migration manager migration checked/done");

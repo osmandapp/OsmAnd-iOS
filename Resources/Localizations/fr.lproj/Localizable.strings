@@ -3866,3 +3866,5 @@
 "quick_action_new_route" = "Nouvel itinéraire";
 "quick_action_add_route_descr" = "Un bouton pour démarrer un itinéraire depuis le milieu de l'écran.";
 "shared_string_create" = "Créer";
+"image_cache_online_photo_high_res" = "Cache de photos haute résolution en ligne";
+"image_cache_online_photo_mapillary_default_cache" = "Cache par défaut de photos/mapillary en ligne";

@@ -21,6 +21,7 @@ final class MigrationManager: NSObject {
         case migrationLocationNavigationIconsKey
         case migrationChangeTerrainIds1Key
         case migrationTerrainModeDefaultPreferences
+        case migrateExternalInputDevicePreferenceType
         case migrationHudButtonPositionsKey
     }
     
@@ -84,6 +85,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrationTerrainModeDefaultPreferences.rawValue) {
                 migrateTerrainModeDefaultPreferences()
                 defaults.set(true, forKey: MigrationKey.migrationTerrainModeDefaultPreferences.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateExternalInputDevicePreferenceType.rawValue) {
+                migrateExternalInputDevicePreferenceType()
+                defaults.set(true, forKey: MigrationKey.migrateExternalInputDevicePreferenceType.rawValue)
             }
             if !defaults.bool(forKey: MigrationKey.migrationHudButtonPositionsKey.rawValue) {
                 migrateHudButtonPositions()
@@ -492,6 +497,24 @@ final class MigrationManager: NSObject {
         }
     }
     
+    private func migrateExternalInputDevicePreferenceType() {
+        let settings = OAAppSettings.sharedManager()
+        let oldExternalInputDevicePref = OACommonInteger.withKey("settingExternalInputDeviceKey", defValue: 1)
+        
+        for appMode in OAApplicationMode.allPossibleValues() {
+            switch oldExternalInputDevicePref.get(appMode) {
+            case 0:
+                settings.settingExternalInputDevice.set(NoneDeviceProfile.deviceId, mode: appMode)
+            case 1:
+                settings.settingExternalInputDevice.set(KeyboardDeviceProfile.deviceId, mode: appMode)
+            case 2:
+                settings.settingExternalInputDevice.set(WunderLINQDeviceProfile.deviceId, mode: appMode)
+            default:
+                settings.settingExternalInputDevice.set(KeyboardDeviceProfile.deviceId, mode: appMode)
+            }
+        }
+    }
+    
     private func migrateHudButtonPositions() {
         let helper = OAMapButtonsHelper.sharedInstance()
         let screenWidth = CGFloat(OAUtilities.calculateScreenWidth())
@@ -565,7 +588,8 @@ final class MigrationManager: NSObject {
         let changeSettingKeys = [
             "top_widget_panel_order": "widget_top_panel_order",
             "bottom_widget_panel_order": "widget_bottom_panel_order",
-            "shared_string_automatic": "driving_region_automatic"
+            "shared_string_automatic": "driving_region_automatic",
+            "external_input_device": "selected_external_input_device"
         ]
 
         let changeWidgetIds = [

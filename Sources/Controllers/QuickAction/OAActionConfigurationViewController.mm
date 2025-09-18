@@ -72,6 +72,8 @@
     
     UITextView *_currentResponderView;
     OAEditPOIData *_poiData;
+    
+    BOOL _keyAssignmentFlow;
 }
 
 #pragma mark - Initialization
@@ -107,6 +109,17 @@
     {
         _action = action;
         _isNew = isNew;
+    }
+    return self;
+}
+
+- (instancetype)initWithKeyAssignmentFlow:(BOOL)keyAssignmentFlow typeId:(NSInteger)typeId
+{
+    self = [super init];
+    if (self)
+    {
+        _keyAssignmentFlow = keyAssignmentFlow;
+        _action = [OAMapButtonsHelper produceAction:[_mapButtonsHelper newActionByType:typeId]];
     }
     return self;
 }
@@ -882,20 +895,15 @@
         return;
     }
 
-    NSArray<OAQuickAction *> *actions = _buttonState.quickActions;
-    if ([_mapButtonsHelper isActionNameUnique:actions quickAction:_action])
+    if (_keyAssignmentFlow)
     {
-        if (_isNew)
-            [_mapButtonsHelper addQuickAction:_buttonState action:_action];
-        else
-            [_mapButtonsHelper updateQuickAction:_buttonState action:_action];
         for (UIViewController *controller in self.navigationController.viewControllers)
         {
-            if ([controller isKindOfClass:[OAQuickActionListViewController class]])
+            if ([controller isKindOfClass:[EditKeyAssignmentController class]])
             {
                 [self.navigationController popToViewController:controller animated:YES];
-                if (self.delegate)
-                    [self.delegate updateData];
+                if (self.editKeyAssignmentdelegate)
+                    [self.editKeyAssignmentdelegate setKeyAssignemntAction:_action];
                 return;
             }
         }
@@ -903,9 +911,9 @@
     }
     else
     {
-        _action = [_mapButtonsHelper generateUniqueActionName:actions action:_action];
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"quick_action_name_alert"), [_action getName]] preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        NSArray<OAQuickAction *> *actions = _buttonState.quickActions;
+        if ([_mapButtonsHelper isActionNameUnique:actions quickAction:_action])
+        {
             if (_isNew)
                 [_mapButtonsHelper addQuickAction:_buttonState action:_action];
             else
@@ -921,8 +929,30 @@
                 }
             }
             [self.navigationController popToRootViewControllerAnimated:YES];
-        }]];
-        [self presentViewController:alert animated:YES completion:nil];
+        }
+        else
+        {
+            _action = [_mapButtonsHelper generateUniqueActionName:actions action:_action];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"quick_action_name_alert"), [_action getName]] preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                if (_isNew)
+                    [_mapButtonsHelper addQuickAction:_buttonState action:_action];
+                else
+                    [_mapButtonsHelper updateQuickAction:_buttonState action:_action];
+                for (UIViewController *controller in self.navigationController.viewControllers)
+                {
+                    if ([controller isKindOfClass:[OAQuickActionListViewController class]])
+                    {
+                        [self.navigationController popToViewController:controller animated:YES];
+                        if (self.delegate)
+                            [self.delegate updateData];
+                        return;
+                    }
+                }
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     }
 }
 

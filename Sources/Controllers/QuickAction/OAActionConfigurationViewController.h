@@ -18,6 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAQuickAction, QuickActionButtonState;
 
+@protocol OAEditKeyAssignmentDelegate
+
+- (void)setKeyAssignemntAction:(OAQuickAction *)action;
+
+@end
+
 @interface OAActionConfigurationViewController : OABaseButtonsViewController
 
 - (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState typeId:(NSInteger)typeId;
@@ -25,7 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithAction:(OAQuickAction *)action isNew:(BOOL)isNew;
 
+- (instancetype)initWithKeyAssignmentFlow:(BOOL)keyAssignmentFlow typeId:(NSInteger)typeId;
+
 @property (nonatomic, weak) id<OAQuickActionListDelegate> delegate;
+@property (nonatomic, weak) id<OAEditKeyAssignmentDelegate> editKeyAssignmentdelegate;
 
 @end
 

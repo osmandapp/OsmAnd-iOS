@@ -182,6 +182,7 @@
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAPOIViewController.h"
 #import "OACoordinatesGridSettings.h"
+#import "OAAddQuickActionViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -225,6 +226,7 @@
 #import "OAHudButton.h"
 #import "OACollapsableView.h"
 #import "OAMapRulerView.h"
+#import "OARouteInfoView.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

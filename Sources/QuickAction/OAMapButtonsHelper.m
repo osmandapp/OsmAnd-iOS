@@ -203,6 +203,11 @@ static QuickActionType *TYPE_INTERFACE;
     return list;
 }
 
+- (QuickActionSerializer *)getSerializer
+{
+    return _serializer;
+}
+
 - (void)addQuickAction:(QuickActionButtonState *)buttonState action:(OAQuickAction *)action
 {
     [buttonState add:action];

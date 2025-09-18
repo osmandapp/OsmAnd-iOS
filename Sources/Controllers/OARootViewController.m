@@ -905,13 +905,13 @@ typedef enum : NSUInteger {
 
 - (void) changeMapOrienation
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
         [[OAMapViewTrackingUtilities instance] switchRotateMapMode];
 }
 
 - (void) showRouteInfo
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
     {
         if (!_isNavigationScreenOpened)
             [self.mapPanel showRouteInfo];
@@ -920,7 +920,7 @@ typedef enum : NSUInteger {
 
 - (void) openSearch
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
     {
         if (!_isSearchScreenOpened && !_isNavigationScreenOpened)
             [self.mapPanel openSearch];
@@ -929,35 +929,35 @@ typedef enum : NSUInteger {
 
 - (void) panUp
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:WunderLINQDeviceProfile.deviceId])
         [self.mapPanel.mapViewController zoomIn];
-    else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    else if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
         [self.mapPanel.mapViewController animatedPanUp];
 }
 
 - (void) panDown
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:WunderLINQDeviceProfile.deviceId])
         [self.mapPanel.mapViewController zoomOut];
-    else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    else if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
         [self.mapPanel.mapViewController animatedPanDown];
 }
 
 - (void) panLeft
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
         [self.mapPanel.mapViewController animatedPanLeft];
 }
 
 - (void) panRight
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
         [self.mapPanel.mapViewController animatedPanRight];
 }
 
 - (void) zoomOut
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
     {
         [self.mapPanel.mapViewController zoomOut];
         [self.mapPanel.mapViewController calculateMapRuler];
@@ -966,19 +966,19 @@ typedef enum : NSUInteger {
 
 - (void) zoomIn
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
         [self.mapPanel.mapViewController zoomIn];
 }
 
 - (void) recenterMap
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
         [[OAMapViewTrackingUtilities instance] backToLocationImpl];
 }
 
 - (void)changeAppModeToNext
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
     {
         OAApplicationMode *selectedMode = [[OAAppSettings sharedManager].applicationMode get];
         NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];
@@ -1000,7 +1000,7 @@ typedef enum : NSUInteger {
 
 - (void)changeAppModeToPrev
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
     {
         OAApplicationMode *selectedMode = [[OAAppSettings sharedManager].applicationMode get];
         NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];

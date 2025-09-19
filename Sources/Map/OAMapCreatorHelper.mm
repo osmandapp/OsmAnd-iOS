@@ -107,14 +107,13 @@
 
     [OAUtilities denyAccessToFile:filePath removeFromInbox:YES];
     
-    [path applyExcludedFromBackup];
-    
     if (error)
     {
         return NO;
     }
     else
     {
+        [path applyExcludedFromBackup];
         [_sqlitedbResourcesChangedObservable notifyEvent];
         return YES;
     }

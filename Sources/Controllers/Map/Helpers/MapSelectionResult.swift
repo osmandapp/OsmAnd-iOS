@@ -23,8 +23,8 @@ class MapSelectionResult: NSObject {
     
     private var poiProvider: OAContextMenuProvider
     
-    private(set) var allObjects: Array<SelectedMapObject>
-    private var processedObjects: Array<SelectedMapObject>
+    private(set) var allObjects: [SelectedMapObject]
+    private var processedObjects: [SelectedMapObject]
     
     init(point: CGPoint) {
         self.point = point
@@ -69,8 +69,8 @@ class MapSelectionResult: NSObject {
         processedObjects.append(contentsOf: other)
     }
     
-    private func processObjects(_ selectedObjects: Array<SelectedMapObject>, other: inout Array<SelectedMapObject>) -> Array<BaseDetailsObject> {
-        var detailsObjects = Array<BaseDetailsObject>()
+    private func processObjects(_ selectedObjects: [SelectedMapObject], other: inout [SelectedMapObject]) -> [BaseDetailsObject] {
+        var detailsObjects = [BaseDetailsObject]()
         for selectedObject in selectedObjects {
             let object = selectedObject.object
             var overlapped = collectOverlappedObjects(object, detailsObjects: detailsObjects)

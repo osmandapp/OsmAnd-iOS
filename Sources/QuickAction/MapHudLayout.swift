@@ -282,9 +282,26 @@ final class MapHudLayout: NSObject {
         
         let cellFixPx: CGFloat = max(0, (hudBasePaddingDp - CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP)) * dpToPx)
         let startX = CGFloat(position.getXStartPix(dpToPix: Float(dpToPx))) + cellFixPx
-        let startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
+        var startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let insets = containerView.safeAreaInsets
         let placeOnLeft = position.isLeft
+        if view is OAMapRulerView, position.isBottom, !ignoreBottomSidePanels, let bottom = bottomBarPanelContainer, !bottom.isHidden, bottom.alpha > 0.01, bottom.bounds.height > 0 {
+            var proposedX = placeOnLeft ? insets.left + startX : containerView.bounds.width - insets.right - view.bounds.width - startX
+            if placeOnLeft, externalRulerLeftOffsetPx > 0 {
+                proposedX += max(0, externalRulerLeftOffsetPx - startX)
+            }
+            
+            let bottomFrame = bottom.convert(bottom.bounds, to: containerView)
+            if (proposedX + view.bounds.width) > bottomFrame.minX && proposedX < bottomFrame.maxX {
+                let cellPx = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP) * dpToPx
+                let needed = ceil((bottomFrame.height + cellPx) / cellPx) * cellPx
+                let base = startY - cellFixPx
+                if base < needed {
+                    startY = needed + cellFixPx
+                }
+            }
+        }
+        
         let extraTop = position.isTop ? externalTopOverlayPx : 0.0
         let extraBottom = position.isBottom ? externalBottomOverlayPx : 0.0
         let rulerExtraX = view is OAMapRulerView && externalRulerLeftOffsetPx > 0 && placeOnLeft ? max(0, externalRulerLeftOffsetPx - startX) : 0.0

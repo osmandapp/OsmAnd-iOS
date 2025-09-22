@@ -18,7 +18,7 @@ final class WunderLINQDeviceProfile: PredefinedInputDeviceProfile {
         return list
     }
     
-    override func getId() -> String {
+    override func id() -> String {
         Self.deviceId
     }
     

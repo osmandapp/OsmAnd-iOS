@@ -50,7 +50,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
         } else if isAdd {
             return localizedString("new_key_assignment")
         } else {
-            return keyAssignment?.getName()
+            return keyAssignment?.name()
         }
     }
     
@@ -79,7 +79,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
             for keyCode in keyCodes {
                 let editAssignedKeysRow = assignedKeysSection.createNewRow()
                 editAssignedKeysRow.cellType = KeyAssignmentTableViewCell.reuseIdentifier
-                editAssignedKeysRow.title = String(format: localizedString("key_name_pattern"), KeySymbolMapper.getKeySymbol(for: keyCode))
+                editAssignedKeysRow.title = String(format: localizedString("key_name_pattern"), KeySymbolMapper.keySymbol(for: keyCode))
             }
             
             if keyCodes.count < 5 {
@@ -93,15 +93,15 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
             let assignedKeysRow = assignedKeysSection.createNewRow()
             assignedKeysRow.cellType = KeyAssignmentTableViewCell.reuseIdentifier
             assignedKeysRow.key = Self.assignedKeysRowKey
-            assignedKeysRow.setObj(keyAssignment.getKeyCodes(), forKey: Self.assignedKeysKey)
+            assignedKeysRow.setObj(keyAssignment.storedKeyCodes(), forKey: Self.assignedKeysKey)
         }
     }
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
         guard let indexPath else { return nil }
         let item = tableData.item(for: indexPath)
-        if item.cellType == KeyAssignmentTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: KeyAssignmentTableViewCell.reuseIdentifier, for: indexPath) as! KeyAssignmentTableViewCell
+        if item.cellType == KeyAssignmentTableViewCell.reuseIdentifier,
+           let cell = tableView.dequeueReusableCell(withIdentifier: KeyAssignmentTableViewCell.reuseIdentifier, for: indexPath) as? KeyAssignmentTableViewCell {
             cell.selectionStyle = .none
             cell.leftIconVisibility(false)
             if let keyCodes = item.obj(forKey: Self.assignedKeysKey) as? [UIKeyboardHIDUsage], !isAdd && !isEditMode {
@@ -113,8 +113,8 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
                 cell.setTitle(item.title)
             }
             return cell
-        } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
+        } else if item.cellType == OASimpleTableViewCell.reuseIdentifier,
+                  let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell {
             cell.descriptionVisibility(false)
             if item.key == Self.actionKey {
                 cell.selectionStyle = .none
@@ -185,7 +185,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
     
     override func onRightNavbarButtonPressed() {
         if let deviceId {
-            if isEditMode, let keyAssignmentId = keyAssignment?.getId(), let action {
+            if isEditMode, let keyAssignmentId = keyAssignment?.storedId(), let action {
                 InputDevicesHelper.shared.updateAssignment(with: appMode, deviceId: deviceId, assignmentId: keyAssignmentId, action: action, keyCodes: keyCodes)
                 actionToRemove = nil
                 originalKeyCodes = keyCodes
@@ -241,6 +241,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
         if !isEditMode && !isAdd {
             rightNavButton?.accessibilityLabel = localizedString("shared_string_options")
         } else {
+            rightNavButton?.accessibilityLabel = localizedString(isAdd ? "shared_string_save" : "shared_string_apply")
             changeRightNavButtonAvailability()
         }
         return rightNavButton.flatMap { [$0] } ?? []
@@ -258,17 +259,18 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
 
         alert.addTextField { [weak self] textField in
             guard let self else { return }
-            textField.placeholder = self.keyAssignment?.getName()
+            textField.placeholder = self.keyAssignment?.name()
         }
 
         let saveAction = UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak self, weak alert] _ in
-            guard let self, let deviceId, let device = InputDevicesHelper.shared.getDeviceById(appMode, deviceId) else { return }
+            guard let self, let deviceId, let device = InputDevicesHelper.shared.deviceById(appMode, deviceId) else { return }
             
             let name = (alert?.textFields?.first?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-            let hasKeyAssignmentName = device.getFilledAssignments().contains { $0.getName()?.trimmingCharacters(in: .whitespacesAndNewlines) == name }
+            let hasKeyAssignmentName = device.filledAssignments().contains { $0.name()?.trimmingCharacters(in: .whitespacesAndNewlines) == name }
             
-            guard !name.isEmpty, !hasKeyAssignmentName else { return }
-            self.renameKeyAssignment(with: name)
+            if !name.isEmpty, !hasKeyAssignmentName {
+                self.renameKeyAssignment(with: name)
+            }
         }
 
         let cancelAction = UIAlertAction(title: localizedString("shared_string_cancel"), style: .default, handler: nil)
@@ -301,7 +303,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
     }
     
     private func renameKeyAssignment(with name: String) {
-        guard let deviceId, let keyAssignmentId = keyAssignment?.getId() else { return }
+        guard let deviceId, let keyAssignmentId = keyAssignment?.storedId() else { return }
         keyAssignment?.setCustomName(name)
         InputDevicesHelper.shared.renameAssignment(with: appMode, deviceId: deviceId, assignmentId: keyAssignmentId, newName: name)
         delegate.onSettingsChanged()
@@ -309,7 +311,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
     }
     
     private func removeKeyAssignment() {
-        guard let deviceId, let keyAssignmentId = keyAssignment?.getId() else { return }
+        guard let deviceId, let keyAssignmentId = keyAssignment?.storedId() else { return }
         InputDevicesHelper.shared.removeKeyAssignmentCompletely(with: appMode, deviceId: deviceId, assignmentId: keyAssignmentId)
         delegate.onSettingsChanged()
         dismiss()

@@ -22,14 +22,14 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             updateUIAnimated(nil)
         }
     }
-    private lazy var settingExternalInputDevice: InputDeviceProfile = InputDevicesHelper.shared.getSelectedDevice(with: appMode)
+    private lazy var settingExternalInputDevice: InputDeviceProfile = InputDevicesHelper.shared.selectedDevice(with: appMode)
     
     private var isDefaultDevice: Bool {
-        settingExternalInputDevice.getId() == NoneDeviceProfile.deviceId || settingExternalInputDevice.getId() == KeyboardDeviceProfile.deviceId || settingExternalInputDevice.getId() == WunderLINQDeviceProfile.deviceId
+        settingExternalInputDevice.id() == NoneDeviceProfile.deviceId || settingExternalInputDevice.id() == KeyboardDeviceProfile.deviceId || settingExternalInputDevice.id() == WunderLINQDeviceProfile.deviceId
     }
     
     private var showToolbar: Bool {
-        isDefaultDevice || settingExternalInputDevice.getFilledAssignments().isEmpty
+        isDefaultDevice || settingExternalInputDevice.filledAssignments().isEmpty
     }
     
     override func registerCells() {
@@ -43,8 +43,8 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     override func generateData() {
-        settingExternalInputDevice = InputDevicesHelper.shared.getSelectedDevice(with: appMode)
-        let keyAssignments = settingExternalInputDevice.getFilledAssignments()
+        settingExternalInputDevice = InputDevicesHelper.shared.selectedDevice(with: appMode)
+        let keyAssignments = settingExternalInputDevice.filledAssignments()
         
         tableData.clearAllData()
         
@@ -54,7 +54,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
         }
         
         let externalInputDeviceValue = settingExternalInputDevice.toHumanString()
-        let externalInputDeviceId = settingExternalInputDevice.getId()
+        let externalInputDeviceId = settingExternalInputDevice.id()
         
         if !isEditMode {
             let deviceSection = tableData.createNewSection()
@@ -83,14 +83,14 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             if !isEditMode {
                 keyAssignmentsSection.headerText = localizedString("key_assignments")
             }
-            for keyAssignment in settingExternalInputDevice.getFilledAssignments() {
+            for keyAssignment in settingExternalInputDevice.filledAssignments() {
                 let keyAssignmentRow = keyAssignmentsSection.createNewRow()
                 keyAssignmentRow.cellType = KeyAssignmentTableViewCell.reuseIdentifier
-                keyAssignmentRow.key = keyAssignment.getId()
-                keyAssignmentRow.title = keyAssignment.getName()
-                keyAssignmentRow.iconName = keyAssignment.getIcon()
+                keyAssignmentRow.key = keyAssignment.storedId()
+                keyAssignmentRow.title = keyAssignment.name()
+                keyAssignmentRow.iconName = keyAssignment.icon()
                 keyAssignmentRow.iconTintColor = appMode.getProfileColor()
-                keyAssignmentRow.setObj(keyAssignment.getKeyCodes(), forKey: Self.keyAssignmentKey)
+                keyAssignmentRow.setObj(keyAssignment.storedKeyCodes(), forKey: Self.keyAssignmentKey)
             }
         }
     }
@@ -152,8 +152,8 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
                 vc.delegate = self
                 show(vc)
             }
-        } else if settingExternalInputDevice.isCustom() && settingExternalInputDevice.getFilledAssignments().contains(where: { $0.getId() == item.key }) {
-            showKeyAssignment(settingExternalInputDevice.getFilledAssignments()[indexPath.row])
+        } else if settingExternalInputDevice.isCustom() && settingExternalInputDevice.filledAssignments().contains(where: { $0.storedId() == item.key }) {
+            showKeyAssignment(settingExternalInputDevice.filledAssignments()[indexPath.row])
         }
     }
     
@@ -163,7 +163,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
-        keyAssignmentsToRemove.append(settingExternalInputDevice.getFilledAssignments()[indexPath.row])
+        keyAssignmentsToRemove.append(settingExternalInputDevice.filledAssignments()[indexPath.row])
         tableData.removeRow(at: indexPath)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.reloadData()
@@ -181,12 +181,11 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     override func onRightNavbarButtonPressed() {
         guard let settingExternalInputDevice = self.settingExternalInputDevice as? CustomInputDeviceProfile else { return }
         for keyAssignment in keyAssignmentsToRemove {
-            if let id = keyAssignment.getId() {
-                InputDevicesHelper.shared.removeKeyAssignmentCompletely(with: appMode, deviceId: settingExternalInputDevice.getId(), assignmentId: id)
+            if let id = keyAssignment.storedId() {
+                InputDevicesHelper.shared.removeKeyAssignmentCompletely(with: appMode, deviceId: settingExternalInputDevice.id(), assignmentId: id)
             }
         }
-        reloadDataWith(animated: true, completion: nil)
-        updateBottomButtons()
+        updateUIAnimated(nil)
         keyAssignmentsToRemove.removeAll()
         switchEditMode(to: false)
     }
@@ -243,11 +242,11 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     private func showKeyAssignment(_ keyAssignment: KeyAssignment? = nil, isAdd: Bool = false) {
         guard let vc = EditKeyAssignmentController(appMode: appMode) else { return }
         vc.keyAssignment = keyAssignment
-        vc.deviceId = settingExternalInputDevice.getId()
+        vc.deviceId = settingExternalInputDevice.id()
         vc.isAdd = isAdd
         if let keyAssignment, !isAdd {
-            vc.action = keyAssignment.getAction()
-            vc.keyCodes = keyAssignment.getKeyCodes()
+            vc.action = keyAssignment.storedAction()
+            vc.keyCodes = keyAssignment.storedKeyCodes()
         }
         vc.delegate = self
         show(vc)
@@ -258,7 +257,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     private func switchOffEditModeIfNoItems() {
-        guard settingExternalInputDevice.getFilledAssignments().isEmpty else { return }
+        guard settingExternalInputDevice.filledAssignments().isEmpty else { return }
         switchEditMode(to: false)
     }
     
@@ -273,9 +272,8 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     private func clearAll() {
-        InputDevicesHelper.shared.clearAllAssignments(with: appMode, deviceId: settingExternalInputDevice.getId())
-        reloadDataWith(animated: true, completion: nil)
-        updateBottomButtons()
+        InputDevicesHelper.shared.clearAllAssignments(with: appMode, deviceId: settingExternalInputDevice.id())
+        updateUIAnimated(nil)
         switchOffEditModeIfNoItems()
     }
 }

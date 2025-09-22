@@ -216,12 +216,11 @@
 {
     for (InputDeviceProfile *device in _devicesToRemove)
     {
-        if ([device getId])
-            [InputDevicesHelper.shared removeCustomDeviceWith:self.appMode deviceId:[device getId]];
+        if ([device id])
+            [InputDevicesHelper.shared removeCustomDeviceWith:self.appMode deviceId:[device id]];
     }
     [_devicesToRemove removeAllObjects];
-    [self reloadDataWithAnimated:YES completion:nil];
-    [self updateBottomButtons];
+    [self updateUIAnimated:nil];
     [self.delegate onSettingsChanged];
     [self setIsEditMode:NO];
 }
@@ -562,15 +561,15 @@
             break;
             
         case EOAProfileGeneralSettingsExternalInputDevices:
-            for (InputDeviceProfile *device in [InputDevicesHelper.shared getAllDevicesWith:self.appMode])
+            for (InputDeviceProfile *device in [InputDevicesHelper.shared allDevicesWith:self.appMode])
             {
                 if (![device isCustom] && _isEditMode)
                     continue;
                 
                 [dataArr addObject:@{
-                    @"name" : [device getId],
+                    @"name" : [device id],
                     @"title" : [device toHumanString],
-                    @"selected" : @([externamlInputDevices isEqualToString:[device getId]]),
+                    @"selected" : @([externamlInputDevices isEqualToString:[device id]]),
                     @"icon" : @"ic_checkmark_default",
                     @"type" : [OASimpleTableViewCell reuseIdentifier],
                 }];
@@ -672,7 +671,7 @@
             
             if (_settingsType == EOAProfileGeneralSettingsExternalInputDevices)
             {
-                InputDeviceProfile *device = [InputDevicesHelper.shared getAllDevicesWith:self.appMode][indexPath.row];
+                InputDeviceProfile *device = [InputDevicesHelper.shared allDevicesWith:self.appMode][indexPath.row];
                 cell.accessoryType = [device isCustom] ? UITableViewCellAccessoryDetailButton : UITableViewCellAccessoryNone;
             }
             else
@@ -754,7 +753,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        [_devicesToRemove addObject:[InputDevicesHelper.shared getCustomDevicesWith:self.appMode][indexPath.row]];
+        [_devicesToRemove addObject:[InputDevicesHelper.shared customDevicesWith:self.appMode][indexPath.row]];
         [_data[indexPath.section] removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tableView reloadData];
@@ -923,19 +922,18 @@
 
 - (void)removeDeviceByRow:(NSInteger)row
 {
-    InputDeviceProfile *device = [InputDevicesHelper.shared getAllDevicesWith:self.appMode][row];
-    if ([device getId])
+    InputDeviceProfile *device = [InputDevicesHelper.shared allDevicesWith:self.appMode][row];
+    if ([device id])
     {
-        [InputDevicesHelper.shared removeCustomDeviceWith:self.appMode deviceId:[device getId]];
-        [self reloadDataWithAnimated:YES completion:nil];
-        [self updateBottomButtons];
+        [InputDevicesHelper.shared removeCustomDeviceWith:self.appMode deviceId:[device id]];
+        [self updateUIAnimated:nil];
         [self.delegate onSettingsChanged];
     }
 }
 
 - (void)duplicateDeviceByRow:(NSInteger)row
 {
-    InputDeviceProfile *device = [InputDevicesHelper.shared getAllDevicesWith:self.appMode][row];
+    InputDeviceProfile *device = [InputDevicesHelper.shared allDevicesWith:self.appMode][row];
     [InputDevicesHelper.shared createAndSaveDeviceDuplicateWith:self.appMode device:device];
     [self reloadDataWithAnimated:YES completion:nil];
 }
@@ -962,14 +960,14 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(isNewDevice ? @"add_new_device" : @"shared_string_rename") message:nil preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = isNewDevice || row == NSNotFound ? nil : [[InputDevicesHelper.shared getAllDevicesWith:self.appMode][row] toHumanString];
+        textField.placeholder = isNewDevice || row == NSNotFound ? nil : [[InputDevicesHelper.shared allDevicesWith:self.appMode][row] toHumanString];
     }];
 
     UIAlertAction *saveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *name = [alert.textFields.firstObject.text trim];
         BOOL hasDeviceName;
         
-        for (InputDeviceProfile *device in [InputDevicesHelper.shared getAllDevicesWith:self.appMode])
+        for (InputDeviceProfile *device in [InputDevicesHelper.shared allDevicesWith:self.appMode])
         {
             if ([[device toHumanString] isEqualToString:name])
             {
@@ -983,13 +981,12 @@
             if (isNewDevice)
             {
                 [InputDevicesHelper.shared createAndSaveCustomDeviceWith:self.appMode newDeviceName:name];
-                [self reloadDataWithAnimated:true completion:nil];
-                [self updateBottomButtons];
+                [self updateUIAnimated:nil];
             }
             else if (row != NSNotFound)
             {
-                InputDeviceProfile *device = [InputDevicesHelper.shared getAllDevicesWith:self.appMode][row];
-                [InputDevicesHelper.shared renameCustomDeviceWith:self.appMode deviceId:[device getId] newName:name];
+                InputDeviceProfile *device = [InputDevicesHelper.shared allDevicesWith:self.appMode][row];
+                [InputDevicesHelper.shared renameCustomDeviceWith:self.appMode deviceId:[device id] newName:name];
                 [self reloadDataWithAnimated:true completion:nil];
                 [self.delegate onSettingsChanged];
             }
@@ -1008,7 +1005,7 @@
 
 - (void)removeDeviceAlertByRow:(NSInteger)row
 {
-    NSString *name = [[InputDevicesHelper.shared getAllDevicesWith:self.appMode][row] toHumanString];
+    NSString *name = [[InputDevicesHelper.shared allDevicesWith:self.appMode][row] toHumanString];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"remove_device")
                                                                    message:[NSString stringWithFormat:OALocalizedString(@"remove_device_message"), name]
                                                             preferredStyle:UIAlertControllerStyleAlert];
@@ -1027,7 +1024,7 @@
 
 - (void)showCustomDeviceActionSheetByRow:(NSInteger)row
 {
-    NSString *title = [[InputDevicesHelper.shared getAllDevicesWith:self.appMode][row] toHumanString];
+    NSString *title = [[InputDevicesHelper.shared allDevicesWith:self.appMode][row] toHumanString];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
                                                                    message:nil
                                                             preferredStyle:UIAlertControllerStyleActionSheet];

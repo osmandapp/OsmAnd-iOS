@@ -16,48 +16,40 @@ final class KeyAssignment {
     private var keyCodes: [UIKeyboardHIDUsage] = []
     
     init(action: OAQuickAction?, keyCodes: [UIKeyboardHIDUsage]) {
-        self.id = Self.generateUniqueId()
+        id = Self.generateUniqueId()
         self.action = action
         self.keyCodes = keyCodes
     }
     
     init(original: KeyAssignment) {
-        self.id = original.id
-        self.action = original.action
-        self.commandId = original.commandId
-        self.customName = original.customName
-        self.keyCodes = original.keyCodes
-    }
-    
-    init(action: OAQuickAction) {
-        self.action = action
-    }
-    
-    init(keyCodes: [UIKeyboardHIDUsage]) {
-        self.keyCodes = keyCodes
+        id = original.id
+        action = original.action
+        commandId = original.commandId
+        customName = original.customName
+        keyCodes = original.keyCodes
     }
     
     init(jsonObject: [String: Any]) {
         if let providedId = jsonObject["id"] as? String {
-            self.id = providedId
+            id = providedId
         } else {
-            self.id = Self.generateUniqueId()
+            id = Self.generateUniqueId()
         }
         
-        self.customName = jsonObject["customName"] as? String
+        customName = jsonObject["customName"] as? String
         
         if let actionArray = jsonObject["action"] as? [[String: Any]] {
             if let data = try? JSONSerialization.data(withJSONObject: actionArray, options: []),
                let actions = try? OAMapButtonsHelper.sharedInstance().getSerializer().deserialize(data) {
-                self.action = actions.first
+                action = actions.first
             } else {
-                self.action = nil
+                action = nil
             }
-        } else if let cmdId = jsonObject["commandId"] as? String {
-            self.commandId = cmdId
-            self.action = CommandToActionConverter.createQuickAction(with: cmdId)
+        } else if let commandId = jsonObject["commandId"] as? String {
+            self.commandId = commandId
+            action = CommandToActionConverter.createQuickAction(with: commandId)
         } else {
-            self.action = nil
+            action = nil
         }
         
         var collected = [UIKeyboardHIDUsage]()
@@ -70,7 +62,7 @@ final class KeyAssignment {
         } else if let singleRawValue = jsonObject["keycode"] as? CFIndex, let single = UIKeyboardHIDUsage(rawValue: singleRawValue) {
             collected.append(single)
         }
-        self.keyCodes = collected
+        keyCodes = collected
     }
     
     convenience init(commandId: String, keyCodes: [UIKeyboardHIDUsage]) {
@@ -104,15 +96,15 @@ final class KeyAssignment {
         keyCodes.remove(at: idx)
     }
     
-    func getId() -> String? {
+    func storedId() -> String? {
         id
     }
     
-    func getName() -> String? {
-        customName ?? getDefaultName()
+    func name() -> String? {
+        customName ?? defaultName()
     }
     
-    func getAction() -> OAQuickAction? {
+    func storedAction() -> OAQuickAction? {
         action
     }
     
@@ -124,11 +116,11 @@ final class KeyAssignment {
         hasKeyCodes() && action != nil
     }
     
-    func getKeyCodes() -> [UIKeyboardHIDUsage] {
+    func storedKeyCodes() -> [UIKeyboardHIDUsage] {
         keyCodes
     }
     
-    func getIcon() -> String? {
+    func icon() -> String? {
         guard let action else { return "ic_action_info_outlined" }
         return action.getIconResName()
     }
@@ -158,7 +150,7 @@ final class KeyAssignment {
         return obj
     }
     
-    private func getDefaultName() -> String? {
+    private func defaultName() -> String? {
         action?.getExtendedName() ?? commandId
     }
 }

@@ -32,7 +32,7 @@ final class KeyboardDeviceProfile: PredefinedInputDeviceProfile {
         return list
     }
     
-    override func getId() -> String {
+    override func id() -> String {
         Self.deviceId
     }
     

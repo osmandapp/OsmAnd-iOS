@@ -20,6 +20,7 @@ final class AddKeyViewController: OABaseSettingsViewController {
         true
     }
     
+    private let keyCornerRadius: CGFloat = 6
     private var saveButton: UIBarButtonItem?
     private var key: UIKeyboardHIDUsage?
     
@@ -39,19 +40,19 @@ final class AddKeyViewController: OABaseSettingsViewController {
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
-        guard let deviceId else { return nil }
+        guard let deviceId, let cell = tableView.dequeueReusableCell(withIdentifier: KeyTableViewCell.reuseIdentifier, for: indexPath) as? KeyTableViewCell else { return nil }
         let actionName = action?.getName()
-        let cell = tableView.dequeueReusableCell(withIdentifier: KeyTableViewCell.reuseIdentifier, for: indexPath) as! KeyTableViewCell
+        
         var existedKeyActionName: String?
         if let key {
-            if let foundAction = InputDevicesHelper.shared.getDeviceById(appMode, deviceId)?.findAction(with: key),
+            if let foundAction = InputDevicesHelper.shared.deviceById(appMode, deviceId)?.findAction(with: key),
                foundAction.getType() != action?.getType() {
                 existedKeyActionName = foundAction.getName()
             } else {
                 existedKeyActionName = keyCodes.first(where: { $0 == key }).flatMap { _ in actionName }
             }
         }
-        cell.configure(actionName: actionName, key: key, existedKeyActionName: existedKeyActionName, showDisableIfNeeded: existedKeyActionName != nil || keyCodes.contains(where: { $0 == key }), cornerRadius: 6)
+        cell.configure(actionName: actionName, key: key, existedKeyActionName: existedKeyActionName, showDisableIfNeeded: existedKeyActionName != nil || keyCodes.contains(where: { $0 == key }), cornerRadius: keyCornerRadius)
         return cell
     }
     
@@ -70,6 +71,7 @@ final class AddKeyViewController: OABaseSettingsViewController {
                                              iconName: nil,
                                              action: #selector(onRightNavbarButtonPressed),
                                              menu: nil)
+        saveButton?.accessibilityLabel = localizedString("shared_string_save")
         changeSaveButtonAvailability(isEnabled: false)
         return saveButton.flatMap { [$0] } ?? []
     }
@@ -79,7 +81,7 @@ final class AddKeyViewController: OABaseSettingsViewController {
             if let key = press.key, let deviceId, self.key != key.keyCode {
                 self.key = key.keyCode
                 reloadDataWith(animated: true, completion: nil)
-                if let foundAction = InputDevicesHelper.shared.getDeviceById(appMode, deviceId)?.findAction(with: key.keyCode),
+                if let foundAction = InputDevicesHelper.shared.deviceById(appMode, deviceId)?.findAction(with: key.keyCode),
                    foundAction.getType() != action?.getType() {
                     changeSaveButtonAvailability(isEnabled: false)
                 } else {

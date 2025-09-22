@@ -23,24 +23,22 @@ final class KeyAssignmentsCollection {
     }
     
     func addAssignment(_ assignment: KeyAssignment) {
-        guard let id = assignment.getId() else { return }
+        guard let id = assignment.storedId() else { return }
         assignments.append(assignment)
         assignmentById[id] = assignment
-        for code in assignment.getKeyCodes() {
-            assignmentByKeyCode[code] = assignment
-        }
+        assignment.storedKeyCodes().forEach { assignmentByKeyCode[$0] = assignment }
     }
     
-    func getAssignments() -> [KeyAssignment] {
+    func storedAssignments() -> [KeyAssignment] {
         assignments
     }
     
-    func getAssignmentsCopy() -> [KeyAssignment] {
+    func assignmentsCopy() -> [KeyAssignment] {
         assignments.map(KeyAssignment.init)
     }
     
     func hasNameDuplicate(with newName: String) -> Bool {
-        assignments.contains { $0.getName() == newName }
+        assignments.contains { $0.name() == newName }
     }
     
     func findById(_ id: String) -> KeyAssignment? {
@@ -54,12 +52,10 @@ final class KeyAssignmentsCollection {
     func syncCache() {
         var byId: [String: KeyAssignment] = [:]
         var byKey: [UIKeyboardHIDUsage: KeyAssignment] = [:]
-        for a in assignments {
-            guard let id = a.getId() else { continue }
-            byId[id] = a
-            for code in a.getKeyCodes() {
-                byKey[code] = a
-            }
+        for assignment in assignments {
+            guard let id = assignment.storedId() else { continue }
+            byId[id] = assignment
+            assignment.storedKeyCodes().forEach { byKey[$0] = assignment }
         }
         assignmentById = byId
         assignmentByKeyCode = byKey

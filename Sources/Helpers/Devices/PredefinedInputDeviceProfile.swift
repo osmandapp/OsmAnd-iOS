@@ -13,7 +13,7 @@ class PredefinedInputDeviceProfile: InputDeviceProfile {
     }
     
     func collectAssignments() -> [KeyAssignment] {
-        fatalError()
+        fatalError("collectAssignments() not implemented")
     }
     
     func addAssignment(to assignments: inout [KeyAssignment], with commandId: String, keyCodes: [UIKeyboardHIDUsage]) {

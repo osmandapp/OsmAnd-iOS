@@ -7,6 +7,11 @@
 //
 
 final class KeyAssignmentTableViewCell: UITableViewCell {
+    private static let defaultHorizontalSpace: CGFloat = 12
+    private static let defaultFontSize: CGFloat = 12
+    private static let defaultCellHeight: CGFloat = 48
+    private static let defaultKeySpacing: CGFloat = 6
+    
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var leftIconView: UIImageView!
     @IBOutlet private weak var keysStackView: UIStackView!
@@ -19,10 +24,10 @@ final class KeyAssignmentTableViewCell: UITableViewCell {
     }
     
     func configure(keyCodes: [UIKeyboardHIDUsage],
-                   horizontalSpace: CGFloat = 12,
-                   fontSize: CGFloat = 12,
-                   cellHeight: CGFloat = 48,
-                   keySpacing: CGFloat = 6,
+                   horizontalSpace: CGFloat = KeyAssignmentTableViewCell.defaultHorizontalSpace,
+                   fontSize: CGFloat = KeyAssignmentTableViewCell.defaultFontSize,
+                   cellHeight: CGFloat = KeyAssignmentTableViewCell.defaultCellHeight,
+                   keySpacing: CGFloat = KeyAssignmentTableViewCell.defaultKeySpacing,
                    isAlignedToLeading: Bool = false) {
         keysStackView.arrangedSubviews.forEach {
             keysStackView.removeArrangedSubview($0)

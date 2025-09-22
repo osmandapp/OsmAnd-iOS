@@ -14,16 +14,16 @@ class InputDeviceProfile: NSObject {
         assignmentsCollection = KeyAssignmentsCollection(assignments)
     }
     
-    func getFilledAssignments() -> [KeyAssignment] {
-        assignmentsCollection?.getAssignments().filter { $0.hasRequiredParameters() } ?? []
+    func filledAssignments() -> [KeyAssignment] {
+        assignmentsCollection?.storedAssignments().filter { $0.hasRequiredParameters() } ?? []
     }
     
-    func getAssignments() -> [KeyAssignment] {
-        assignmentsCollection?.getAssignments() ?? []
+    func assignments() -> [KeyAssignment] {
+        assignmentsCollection?.storedAssignments() ?? []
     }
     
-    func getAssignmentsCopy() -> [KeyAssignment] {
-        assignmentsCollection?.getAssignmentsCopy() ?? []
+    func assignmentsCopy() -> [KeyAssignment] {
+        assignmentsCollection?.assignmentsCopy() ?? []
     }
     
     func hasAssignmentNameDuplicate(with newName: String) -> Bool {
@@ -31,27 +31,15 @@ class InputDeviceProfile: NSObject {
     }
     
     func findAction(with keyCode: UIKeyboardHIDUsage) -> OAQuickAction? {
-        findAssignment(with: keyCode)?.getAction()
-    }
-    
-    func findAssignment(with keyCode: UIKeyboardHIDUsage) -> KeyAssignment? {
-        assignmentsCollection?.findByKeyCode(keyCode)
+        assignmentsCollection?.findByKeyCode(keyCode)?.storedAction()
     }
     
     func findAssignment(by assignmentId: String) -> KeyAssignment? {
         assignmentsCollection?.findById(assignmentId)
     }
     
-    func hasActiveAssignments() -> Bool {
-        getFilledAssignmentsCount() > 0
-    }
-    
-    func getFilledAssignmentsCount() -> Int {
-        getFilledAssignments().count
-    }
-    
-    func getId() -> String {
-        fatalError()
+    func id() -> String {
+        fatalError("id() not implemented")
     }
     
     func isCustom() -> Bool {
@@ -59,6 +47,6 @@ class InputDeviceProfile: NSObject {
     }
     
     func toHumanString() -> String {
-        fatalError()
+        fatalError("toHumanString() not implemented")
     }
 }

@@ -14,7 +14,7 @@ final class NoneDeviceProfile: PredefinedInputDeviceProfile {
         []
     }
     
-    override func getId() -> String {
+    override func id() -> String {
         Self.deviceId
     }
     

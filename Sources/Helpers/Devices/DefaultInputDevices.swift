@@ -13,7 +13,7 @@ final class DefaultInputDevices {
     static var devices: [InputDeviceProfile] = []
     
     static func values() -> [InputDeviceProfile] {
-        if devices.count == 0 {
+        if devices.isEmpty {
             devices.append(contentsOf: [none, keyboard, wunderlinq])
         }
         return devices

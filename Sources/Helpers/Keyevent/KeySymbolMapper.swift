@@ -9,7 +9,7 @@
 final class KeySymbolMapper {
     private static var keySymbolMap: [UIKeyboardHIDUsage: String] = [:]
     
-    static func getKeySymbol(for usage: UIKeyboardHIDUsage) -> String {
+    static func keySymbol(for usage: UIKeyboardHIDUsage) -> String {
         if keySymbolMap.isEmpty {
             load()
         }

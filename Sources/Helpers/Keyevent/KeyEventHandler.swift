@@ -38,7 +38,7 @@ final class KeyEventHelper: UIResponder {
             return nil
         }
         let appMode = settings.applicationMode.get()
-        return deviceHelper.getFunctionalityDevice(with: appMode).findAction(with: keyCode)
+        return deviceHelper.functionalityDevice(with: appMode).findAction(with: keyCode)
     }
     
     private func isLetterForbid(with keyCode: UIKeyboardHIDUsage) -> Bool {

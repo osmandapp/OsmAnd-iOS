@@ -63,133 +63,105 @@ final class InputDevicesHelper: NSObject {
     }
     
     func createAndSaveCustomDevice(with appMode: OAApplicationMode, newDeviceName: String) {
-        let devicesCollection = getCustomizationCollection(with: appMode)
+        let devicesCollection = customizationCollection(with: appMode)
         saveCustomDevice(makeCustomDevice(with: newDeviceName), in: devicesCollection)
     }
 
     func createAndSaveDeviceDuplicate(with appMode: OAApplicationMode, device: InputDeviceProfile) {
-        let devicesCollection = getCustomizationCollection(with: appMode)
+        let devicesCollection = customizationCollection(with: appMode)
         saveCustomDevice(makeCustomDeviceDuplicate(of: device, in: devicesCollection), in: devicesCollection)
     }
     
     func renameCustomDevice(with appMode: OAApplicationMode, deviceId: String, newName: String) {
-        let devicesCollection = getCustomizationCollection(with: appMode)
-        if let device = devicesCollection.getDeviceById(deviceId) as? CustomInputDeviceProfile {
+        let devicesCollection = customizationCollection(with: appMode)
+        if let device = devicesCollection.deviceById(deviceId) as? CustomInputDeviceProfile {
             device.setCustomName(newName)
             syncSettings(in: devicesCollection)
         }
     }
     
     func removeCustomDevice(with appMode: OAApplicationMode, deviceId: String) {
-        let devicesCollection = getCustomizationCollection(with: appMode)
+        let devicesCollection = customizationCollection(with: appMode)
         resetSelectedDeviceIfNeeded(with: appMode, removedDeviceId: deviceId)
         devicesCollection.removeCustomDevice(deviceId)
         syncSettings(in: devicesCollection)
     }
     
-    func hasDeviceNameDuplicate(with appMode: OAApplicationMode, newName: String) -> Bool {
-        let devicesCollection = getCustomizationCollection(with: appMode)
-        return devicesCollection.hasDeviceNameDuplicate(of: newName)
+    func allDevices(with appMode: OAApplicationMode) -> [InputDeviceProfile] {
+        customizationCollection(with: appMode).allDevices()
     }
     
-    func getAllDevices(with appMode: OAApplicationMode) -> [InputDeviceProfile] {
-        getCustomizationCollection(with: appMode).getAllDevices()
+    func functionalityDevice(with appMode: OAApplicationMode) -> InputDeviceProfile {
+        selectedDevice(with: Self.functionalityPurposeId, appMode: appMode)
     }
     
-    func getFunctionalityDevice(with appMode: OAApplicationMode) -> InputDeviceProfile {
-        getSelectedDevice(with: Self.functionalityPurposeId, appMode: appMode)
-    }
-    
-    func getCustomizationDevice(with appMode: OAApplicationMode) -> InputDeviceProfile {
-        getSelectedDevice(with: Self.customizationPurposeId, appMode: appMode)
-    }
-    
-    func getCustomDevices(with appMode: OAApplicationMode) -> [InputDeviceProfile] {
-        getCustomizationCollection(with: appMode).getCustomDevices()
+    func customDevices(with appMode: OAApplicationMode) -> [InputDeviceProfile] {
+        customizationCollection(with: appMode).storedCustomDevices()
     }
     
     func isCustomDevicesEmpty(with appMode: OAApplicationMode) -> Bool {
-        getCustomDevices(with: appMode).isEmpty
+        customDevices(with: appMode).isEmpty
     }
     
-    func getSelectedDevice(with appMode: OAApplicationMode) -> InputDeviceProfile {
-        getSelectedDevice(with: Self.customizationPurposeId, appMode: appMode)
+    func selectedDevice(with appMode: OAApplicationMode) -> InputDeviceProfile {
+        selectedDevice(with: Self.customizationPurposeId, appMode: appMode)
     }
     
-    func getDeviceById(_ appMode: OAApplicationMode, _ deviceId: String) -> InputDeviceProfile? {
-        getDeviceById(with: Self.customizationPurposeId, appMode: appMode, deviceId: deviceId)
+    func deviceById(_ appMode: OAApplicationMode, _ deviceId: String) -> InputDeviceProfile? {
+        deviceById(with: Self.customizationPurposeId, appMode: appMode, deviceId: deviceId)
     }
     
     func renameAssignment(with appMode: OAApplicationMode, deviceId: String, assignmentId: String, newName: String) {
-        let devicesCollection = getCustomizationCollection(with: appMode)
-        if let device = devicesCollection.getCustomDeviceById(deviceId) {
+        let devicesCollection = customizationCollection(with: appMode)
+        if let device = devicesCollection.customDeviceById(deviceId) {
             device.renameAssignment(assignmentId, with: newName)
             syncSettings(in: devicesCollection)
         }
     }
 
     func addAssignment(with appMode: OAApplicationMode, deviceId: String, assignment: KeyAssignment) {
-        let devicesCollection = getCustomizationCollection(with: appMode)
-        if let device = devicesCollection.getCustomDeviceById(deviceId) {
+        let devicesCollection = customizationCollection(with: appMode)
+        if let device = devicesCollection.customDeviceById(deviceId) {
             device.addAssignment(assignment)
             syncSettings(in: devicesCollection)
         }
     }
 
     func updateAssignment(with appMode: OAApplicationMode, deviceId: String, assignmentId: String, action: OAQuickAction, keyCodes: [UIKeyboardHIDUsage]) {
-        let devicesCollection = getCustomizationCollection(with: appMode)
-        if let device = devicesCollection.getCustomDeviceById(deviceId) {
+        let devicesCollection = customizationCollection(with: appMode)
+        if let device = devicesCollection.customDeviceById(deviceId) {
             device.updateAssignment(assignmentId, action: action, keyCodes: keyCodes)
             syncSettings(in: devicesCollection)
         }
     }
     
     func removeKeyAssignmentCompletely(with appMode: OAApplicationMode, deviceId: String, assignmentId: String) {
-        let devicesCollection = getCustomizationCollection(with: appMode)
-        if let device = devicesCollection.getCustomDeviceById(deviceId) {
+        let devicesCollection = customizationCollection(with: appMode)
+        if let device = devicesCollection.customDeviceById(deviceId) {
             device.removeKeyAssignmentCompletely(by: assignmentId)
             syncSettings(in: devicesCollection)
         }
     }
 
     func saveUpdatedAssignmentsList(with appMode: OAApplicationMode, deviceId: String, assignments: [KeyAssignment]) {
-        let devicesCollection = getCustomizationCollection(with: appMode)
-        if let device = devicesCollection.getCustomDeviceById(deviceId) {
+        let devicesCollection = customizationCollection(with: appMode)
+        if let device = devicesCollection.customDeviceById(deviceId) {
             device.saveUpdatedAssignmentsList(assignments)
             syncSettings(in: devicesCollection)
         }
     }
 
     func clearAllAssignments(with appMode: OAApplicationMode, deviceId: String) {
-        let devicesCollection = getCustomizationCollection(with: appMode)
-        if let device = devicesCollection.getCustomDeviceById(deviceId) {
+        let devicesCollection = customizationCollection(with: appMode)
+        if let device = devicesCollection.customDeviceById(deviceId) {
             device.clearAllAssignments()
             syncSettings(in: devicesCollection)
         }
     }
     
     func findAssignment(with appMode: OAApplicationMode, deviceId: String, assignmentId: String) -> KeyAssignment? {
-        let device = getDeviceById(with: Self.customizationPurposeId, appMode: appMode, deviceId: deviceId)
+        let device = deviceById(with: Self.customizationPurposeId, appMode: appMode, deviceId: deviceId)
         return device?.findAssignment(by: assignmentId)
-    }
-
-    func hasAssignmentNameDuplicate(with appMode: OAApplicationMode, deviceId: String, newName: String) -> Bool {
-        let devicesCollection = getCustomizationCollection(with: appMode)
-        if let device = devicesCollection.getDeviceById(deviceId) {
-            return device.hasAssignmentNameDuplicate(with: newName)
-        }
-        return false
-    }
-
-    func getFunctionalityAppMode() -> OAApplicationMode? {
-        if let collection = cachedDevicesCollections[Self.functionalityPurposeId] {
-            return collection.getAppMode()
-        }
-        return nil
-    }
-    
-    func releaseCustomizationCollection() {
-        cachedDevicesCollections.removeValue(forKey: Self.customizationPurposeId)
     }
     
     private func makeCustomDeviceDuplicate(of device: InputDeviceProfile, in devicesCollection: InputDevicesCollection) -> InputDeviceProfile {
@@ -220,35 +192,35 @@ final class InputDevicesHelper: NSObject {
         syncSettings(in: devicesCollection)
     }
     
-    private func getSelectedDevice(with cacheId: Int, appMode: OAApplicationMode) -> InputDeviceProfile {
-        let id = getSelectedDeviceId(with: appMode)
-        let device = id.flatMap { getDeviceById(with: cacheId, appMode: appMode, deviceId: $0) }
+    private func selectedDevice(with cacheId: Int, appMode: OAApplicationMode) -> InputDeviceProfile {
+        let id = selectedDeviceId(with: appMode)
+        let device = id.flatMap { deviceById(with: cacheId, appMode: appMode, deviceId: $0) }
         return device ?? Self.keyboard
     }
     
-    private func getSelectedDeviceId(with appMode: OAApplicationMode) -> String? {
+    private func selectedDeviceId(with appMode: OAApplicationMode) -> String? {
         settings.settingExternalInputDevice.get(appMode)
     }
     
-    private func getDeviceById(with cacheId: Int, appMode: OAApplicationMode, deviceId: String) -> InputDeviceProfile? {
-        getInputDevicesCollection(with: cacheId, appMode: appMode).getDeviceById(deviceId)
+    private func deviceById(with cacheId: Int, appMode: OAApplicationMode, deviceId: String) -> InputDeviceProfile? {
+        inputDevicesCollection(with: cacheId, appMode: appMode).deviceById(deviceId)
     }
     
-    private func getCustomizationCollection(with appMode: OAApplicationMode) -> InputDevicesCollection {
-        getInputDevicesCollection(with: Self.customizationPurposeId, appMode: appMode)
+    private func customizationCollection(with appMode: OAApplicationMode) -> InputDevicesCollection {
+        inputDevicesCollection(with: Self.customizationPurposeId, appMode: appMode)
     }
 
-    private func getInputDevicesCollection(with cacheId: Int, appMode: OAApplicationMode) -> InputDevicesCollection {
+    private func inputDevicesCollection(with cacheId: Int, appMode: OAApplicationMode) -> InputDevicesCollection {
         if let current = cachedDevicesCollections[cacheId],
-           current.getAppMode() == appMode {
+           current.currentAppMode() == appMode {
             return current
         }
         return reloadInputDevicesCollection(with: cacheId, appMode: appMode)
     }
     
     private func resetSelectedDeviceIfNeeded(with appMode: OAApplicationMode, removedDeviceId: String) {
-        let device = getSelectedDevice(with: appMode)
-        if device.getId() == removedDeviceId {
+        let device = selectedDevice(with: appMode)
+        if device.id() == removedDeviceId {
             settings.settingExternalInputDevice.resetMode(toDefault: appMode)
         }
     }
@@ -279,10 +251,10 @@ final class InputDevicesHelper: NSObject {
     }
     
     private func syncSettings(in devicesCollection: InputDevicesCollection) {
-        let appMode = devicesCollection.getAppMode()
+        let appMode = devicesCollection.currentAppMode()
         var json: [String: Any] = [:]
         do {
-            let items = devicesCollection.getCustomDevices()
+            let items = devicesCollection.storedCustomDevices()
             Self.writeToJson(&json, customDevices: items)
             let data = try JSONSerialization.data(withJSONObject: json, options: [])
             if let str = String(data: data, encoding: .utf8) {

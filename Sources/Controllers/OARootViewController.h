@@ -15,7 +15,7 @@ static NSString * kCommandSearchScreenClose = @"keyCommandSearchScreenClose";
 static NSString * kCommandNavigationScreenOpen = @"keyCommandNavigationScreenOpen";
 static NSString * kCommandNavigationScreenClose = @"keyCommandNavigationScreenClose";
 
-@class OAProduct, OAMapPanelViewController, OAAutoObserverProxy, OAMapViewController;
+@class OAProduct, OAMapPanelViewController, OAAutoObserverProxy;
 
 @interface OARootViewController : JASidePanelController
 
@@ -56,13 +56,5 @@ static NSString * kCommandNavigationScreenClose = @"keyCommandNavigationScreenCl
 - (void) openSafariWithURL:(NSString *)urlString;
 
 - (void)updateLeftPanelMenu;
-
-- (void)panUp;
-- (void)panDown;
-- (void)panLeft;
-- (void)panRight;
-
-- (void)zoomOut;
-- (void)zoomIn;
 
 @end

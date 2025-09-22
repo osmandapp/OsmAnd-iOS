@@ -3868,3 +3868,5 @@
 "key_event_action_zoom_out" = "Smanji prikaz";
 "quick_action_move_map_left" = "Mapa sa leve strane";
 "available" = "Dostupno";
+"image_cache_online_photo_mapillary_default_cache" = "Onlajn foto/Mapillary podrazumevani keš";
+"image_cache_online_photo_high_res" = "Onlajn keš memorija fotografija visoke rezolucije";

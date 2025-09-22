@@ -3849,3 +3849,5 @@
 "quick_action_new_route" = "Nová trasa";
 "quick_action_add_route_descr" = "Tlačítko pro spuštění trasy ze středu obrazovky.";
 "shared_string_create" = "Vytvořit";
+"image_cache_online_photo_high_res" = "Mezipaměť online fotek ve vysokém rozlišení";
+"image_cache_online_photo_mapillary_default_cache" = "Výchozí mezipaměť online fotek / Mapillary";

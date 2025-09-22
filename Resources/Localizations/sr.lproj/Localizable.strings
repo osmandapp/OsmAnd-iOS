@@ -3833,13 +3833,13 @@
 "local_indexes_cat_tts" = "Гласовна навођења (ТТС)";
 "local_indexes_cat_voice" = "Гласовна навођења (снимљена)";
 "rendering_styles" = "Стилови приказивања";
-"next_turn_information" = "Информација о следећем скретању";
+"next_turn_information" = "Обавештење о следећем скретању";
 "next_turn_information_desc" = "Приказује смер надолазећег скретања и назив улице.";
 "key_event_action_zoom_in" = "Повећај зум";
 "select_map_orientation" = "Изаберите оријентацију мапе";
 "available" = "Доступно";
 "map_orientations_choose_description" = "Оставите празним ради пребацивања између свих доступних начина, или додајте своје омиљене.";
-"map_orientations" = "Усмерења мапе";
+"map_orientations" = "Усмерења карте";
 "quick_action_next_app_profile" = "Додај профил следећем";
 "key_event_action_next_app_profile" = "Следећи профил апликације";
 "quick_action_previous_app_profile" = "Додај профил претходном";
@@ -3870,3 +3870,5 @@
 "quick_action_new_route" = "Нова рута";
 "quick_action_add_route_descr" = "Дугме за покретање руте од средине екрана.";
 "shared_string_create" = "Креирај";
+"image_cache_online_photo_high_res" = "Мрежна кеш меморија фотографија високе резолуције";
+"image_cache_online_photo_mapillary_default_cache" = "Мрежни фото/Мапилари подразумевани кеш";

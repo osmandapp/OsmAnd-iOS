@@ -169,7 +169,7 @@ class DownloadingCellBaseHelper: NSObject {
         if let leftIconName, !leftIconName.isEmpty {
             cell.leftIconVisibility(true)
             cell.leftIconView.image = UIImage.templateImageNamed(leftIconName)
-            if isInstalled(resourceId) && isDownloadedLeftIconRecolored {
+            if isFinished(resourceId) && isDownloadedLeftIconRecolored {
                 cell.leftIconView.tintColor = leftIconColor != nil ? leftIconColor : .iconColorActive
             } else {
                 cell.leftIconView.tintColor = .iconColorDefault

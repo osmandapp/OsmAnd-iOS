@@ -3877,3 +3877,5 @@
 "quick_action_new_route" = "Nueva ruta";
 "quick_action_add_route_descr" = "Un botón que inicia una ruta desde el centro de la pantalla.";
 "shared_string_create" = "Crear";
+"image_cache_online_photo_high_res" = "Caché de fotos en línea en alta resolución";
+"image_cache_online_photo_mapillary_default_cache" = "Caché predefinida de fotos en línea y Mapillary";

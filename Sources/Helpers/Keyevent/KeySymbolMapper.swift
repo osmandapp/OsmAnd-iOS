@@ -62,7 +62,7 @@ final class KeySymbolMapper {
         keySymbolMap[.keyboardDownArrow] = "↓"
         keySymbolMap[.keyboardLeftArrow] = "←"
         keySymbolMap[.keyboardRightArrow] = "→"
-        keySymbolMap[.keyboardEscape] = "⎋"
+        keySymbolMap[.keyboardEscape] = "Esc"
         keySymbolMap[.keyboardTab] = "⇥"
         keySymbolMap[.keyboardReturnOrEnter] = "↵"
         keySymbolMap[.keyboardDeleteOrBackspace] = "⌫"

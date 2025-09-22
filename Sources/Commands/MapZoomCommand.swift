@@ -17,6 +17,10 @@ final class MapZoomCommand: KeyEventCommand {
         super.init(commandId: commandId)
     }
     
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        increment ? OARootViewController.instance().mapPanel.mapViewController.zoomIn() : OARootViewController.instance().mapPanel.mapViewController.zoomOut()
+    }
+    
     override func toHumanString() -> String {
         localizedString(increment ? "key_event_action_zoom_in" : "key_event_action_zoom_out")
     }

@@ -21,17 +21,6 @@
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 #define kButtonsDividerTag 150
 
-@interface OABottomSheetViewStack : NSObject
-
-@property (nonatomic) NSMutableArray<OABottomSheetViewController *> *bottomSheetViews;
-
-+ (OABottomSheetViewStack *) sharedInstance;
-
-- (void) push:(OABottomSheetViewController *)bottomSheetView;
-- (void) pop:(OABottomSheetViewController *)bottomSheetView;
-
-@end
-
 @interface OABottomSheetViewController () <OATableViewDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic) UIWindow *bottomSheetWindow;
@@ -446,7 +435,7 @@
         if (canOpenURL)
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
-    else if ([[_settings.settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
+    else if (![[_settings.settingExternalInputDevice get] isEqualToString:NoneDeviceProfile.deviceId])
     {
         [self dismiss];
     }
@@ -454,11 +443,14 @@
 
 #pragma mark - UIResponder
 
-- (NSArray<UIKeyCommand *> *)keyCommands
+- (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
 {
-    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)];
-    command.wantsPriorityOverSystemBehavior = YES;
-    return @[command];
+    [KeyEventHelper.shared pressesBegan:presses withEvent:event];
+}
+
+- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+    [KeyEventHelper.shared pressesEnded:presses withEvent:event];
 }
 
 #pragma mark -  UIGestureRecognizerDelegate

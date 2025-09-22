@@ -6,7 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-class KeyEventCommand {
+class KeyEventCommand: UIResponder {
     private let commandId: String
     
     init(commandId: String) {

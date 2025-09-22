@@ -9,6 +9,10 @@
 final class OpenNavigationDialogCommand: KeyEventCommand {
     static let id = "open_navigation_dialog"
     
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        OARootViewController.instance().mapPanel.onNavigationClick(false)
+    }
+    
     override func toHumanString() -> String {
         localizedString("key_event_action_open_navigation_view")
     }

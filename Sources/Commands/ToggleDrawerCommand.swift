@@ -9,6 +9,10 @@
 final class ToggleDrawerCommand: KeyEventCommand {
     static let id = "toggle_drawer"
     
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        OARootViewController.instance().toggleLeftPanel(self)
+    }
+    
     override func toHumanString() -> String {
         localizedString("key_event_action_toggle_drower")
     }

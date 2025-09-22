@@ -6444,6 +6444,20 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     return enabledModes[nextIndex];
 }
 
+- (void)switchAppModeToNext:(BOOL)next
+{
+    OAApplicationMode *appMode = [_applicationMode get];
+    OAApplicationMode *nextAppMode = [self getSwitchedAppMode:appMode next:next];
+    if (appMode != nextAppMode)
+    {
+        [_applicationMode set:nextAppMode];
+        [OAUtilities showToast:[NSString stringWithFormat:OALocalizedString(@"application_profile_changed"), [nextAppMode toHumanString]]
+                       details:@""
+                      duration:4
+                        inView:OARootViewController.instance.view];
+    }
+}
+
 - (void)setApplicationModePref:(OAApplicationMode *)applicationMode
 {
     [self setApplicationModePref:applicationMode markAsLastUsed:YES];

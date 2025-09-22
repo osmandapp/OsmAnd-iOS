@@ -17,6 +17,10 @@ final class SwitchAppModeCommand: KeyEventCommand {
         super.init(commandId: commandId)
     }
     
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        OAAppSettings.sharedManager().switchAppMode(toNext: moveForward)
+    }
+    
     override func toHumanString() -> String {
         localizedString(moveForward ? "key_event_action_next_app_profile" : "key_event_action_previous_app_profile")
     }

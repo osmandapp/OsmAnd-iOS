@@ -242,6 +242,20 @@ static NSInteger SEQ = 0;
     return nil;
 }
 
+- (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+}
+
+- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+    [self actionSelected];
+}
+
+- (void)actionSelected
+{
+    [[OAMapButtonsHelper produceAction:self] execute];
+}
+
 - (BOOL)isEqual:(id)object
 {
     if (self == object)

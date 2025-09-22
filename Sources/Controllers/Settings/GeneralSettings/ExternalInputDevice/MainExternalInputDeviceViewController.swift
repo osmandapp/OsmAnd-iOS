@@ -39,7 +39,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     override func getTitle() -> String? {
-        localizedString("external_input_device")
+        localizedString(isEditMode ? "shared_string_edit" : "external_input_device")
     }
     
     override func generateData() {

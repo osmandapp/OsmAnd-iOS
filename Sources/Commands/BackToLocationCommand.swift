@@ -9,6 +9,10 @@
 final class BackToLocationCommand: KeyEventCommand {
     static let id = "back_to_location"
     
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        OAMapViewTrackingUtilities.instance().backToLocationImpl()
+    }
+    
     override func toHumanString() -> String {
         localizedString("key_event_action_move_to_my_location")
     }

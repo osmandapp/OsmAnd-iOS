@@ -21,6 +21,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
     
     private var rightNavButton: UIBarButtonItem?
     private var actionToRemove: OAQuickAction?
+    private var originalKeyCodes: [UIKeyboardHIDUsage] = []
     
     private var isEditMode: Bool = false {
         didSet {
@@ -32,6 +33,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.allowsSelectionDuringEditing = true
+        originalKeyCodes = keyCodes
         guard isAdd else { return }
         tableView.setEditing(true, animated: true)
         updateUIAnimated(nil)
@@ -68,7 +70,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
             addActionRow.cellType = OASimpleTableViewCell.reuseIdentifier
             addActionRow.key = Self.addActionKey
             addActionRow.title = localizedString("key_assignment_add_action")
-            addActionRow.iconName = "ic_custom_plus"
+            addActionRow.iconName = "ic_custom_key_plus"
         }
         
         let assignedKeysSection = tableData.createNewSection()
@@ -80,11 +82,13 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
                 editAssignedKeysRow.title = String(format: localizedString("key_name_pattern"), KeySymbolMapper.getKeySymbol(for: keyCode))
             }
             
-            let addKeyRow = assignedKeysSection.createNewRow()
-            addKeyRow.cellType = OASimpleTableViewCell.reuseIdentifier
-            addKeyRow.key = Self.addKeyKey
-            addKeyRow.title = localizedString("key_assignment_add_key")
-            addKeyRow.iconName = "ic_custom_plus"
+            if keyCodes.count < 5 {
+                let addKeyRow = assignedKeysSection.createNewRow()
+                addKeyRow.cellType = OASimpleTableViewCell.reuseIdentifier
+                addKeyRow.key = Self.addKeyKey
+                addKeyRow.title = localizedString("key_assignment_add_key")
+                addKeyRow.iconName = "ic_custom_key_plus"
+            }
         } else if let keyAssignment {
             let assignedKeysRow = assignedKeysSection.createNewRow()
             assignedKeysRow.cellType = KeyAssignmentTableViewCell.reuseIdentifier
@@ -119,6 +123,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
             } else {
                 cell.selectionStyle = .default
                 cell.leftIconView.image = item.iconName.flatMap(UIImage.init(named:))?.withRenderingMode(.alwaysOriginal)
+                cell.setLeftIconSize(24)
             }
             cell.titleLabel.text = item.title
             cell.titleLabel.accessibilityLabel = item.title
@@ -134,8 +139,13 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
             let addActionController = OAAddQuickActionViewController(keyAssignmentFlow: true)
             addActionController.editKeyAssignmentdelegate = self
             show(addActionController)
-        } else if item.key == Self.addKeyKey {
-            show(AddKeyViewController())
+        } else if item.key == Self.addKeyKey, let addKeyViewController = AddKeyViewController(appMode: appMode) {
+            addKeyViewController.deviceId = deviceId
+            addKeyViewController.action = action
+            addKeyViewController.keyCodes = keyCodes
+            addKeyViewController.delegate = self
+            addKeyViewController.addKeyDelegate = self
+            show(addKeyViewController)
         }
     }
     
@@ -149,14 +159,15 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
         guard editingStyle == .delete, let tableData else { return }
         let item = tableData.item(for: indexPath)
         if item.key == Self.actionKey {
-            if isAdd || actionToRemove != nil {
-                action = nil
-            } else if actionToRemove == nil {
+            if actionToRemove == nil {
                 actionToRemove = action
             }
-            changeRightNavButtonAvailability(isEnabled: false)
-            reloadDataWith(animated: true, completion: nil)
+            action = nil
+        } else if !keyCodes.isEmpty {
+            keyCodes.remove(at: indexPath.row)
         }
+        changeRightNavButtonAvailability()
+        reloadDataWith(animated: true, completion: nil)
     }
     
     override func onLeftNavbarButtonPressed() {
@@ -165,6 +176,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
                 action = actionToRemove
             }
             actionToRemove = nil
+            keyCodes = originalKeyCodes
             switchEditMode(to: false)
         } else {
             super.onLeftNavbarButtonPressed()
@@ -172,13 +184,18 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
     }
     
     override func onRightNavbarButtonPressed() {
-        if isEditMode, let deviceId, let keyAssignmentId = keyAssignment?.getId(), let action {
-            InputDevicesHelper.shared.updateAssignment(with: appMode, deviceId: deviceId, assignmentId: keyAssignmentId, action: action, keyCodes: keyCodes)
+        if let deviceId {
+            if isEditMode, let keyAssignmentId = keyAssignment?.getId(), let action {
+                InputDevicesHelper.shared.updateAssignment(with: appMode, deviceId: deviceId, assignmentId: keyAssignmentId, action: action, keyCodes: keyCodes)
+                actionToRemove = nil
+                originalKeyCodes = keyCodes
+                switchEditMode(to: false)
+            } else if isAdd {
+                let keyAssignment = KeyAssignment(action: action, keyCodes: keyCodes)
+                InputDevicesHelper.shared.addAssignment(with: appMode, deviceId: deviceId, assignment: keyAssignment)
+                dismiss()
+            }
             delegate.onSettingsChanged()
-            actionToRemove = nil
-            switchEditMode(to: false)
-        } else if isAdd {
-            dismiss()
         }
     }
     
@@ -224,9 +241,14 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
         if !isEditMode && !isAdd {
             rightNavButton?.accessibilityLabel = localizedString("shared_string_options")
         } else {
-            changeRightNavButtonAvailability(isEnabled: action != nil)
+            changeRightNavButtonAvailability()
         }
         return rightNavButton.flatMap { [$0] } ?? []
+    }
+    
+    override func onSettingsChanged() {
+        super.onSettingsChanged()
+        reloadDataWith(animated: true, completion: nil)
     }
     
     private func showRenameAlert() {
@@ -246,10 +268,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
             let hasKeyAssignmentName = device.getFilledAssignments().contains { $0.getName()?.trimmingCharacters(in: .whitespacesAndNewlines) == name }
             
             guard !name.isEmpty, !hasKeyAssignmentName else { return }
-            self.keyAssignment?.setCustomName(name)
-            self.title = getTitle()
             self.renameKeyAssignment(with: name)
-            updateAppearance()
         }
 
         let cancelAction = UIAlertAction(title: localizedString("shared_string_cancel"), style: .default, handler: nil)
@@ -283,8 +302,10 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
     
     private func renameKeyAssignment(with name: String) {
         guard let deviceId, let keyAssignmentId = keyAssignment?.getId() else { return }
+        keyAssignment?.setCustomName(name)
         InputDevicesHelper.shared.renameAssignment(with: appMode, deviceId: deviceId, assignmentId: keyAssignmentId, newName: name)
         delegate.onSettingsChanged()
+        refreshUI()
     }
     
     private func removeKeyAssignment() {
@@ -294,8 +315,8 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
         dismiss()
     }
     
-    private func changeRightNavButtonAvailability(isEnabled: Bool) {
-        changeButtonAvailability(rightNavButton, isEnabled: isEnabled)
+    private func changeRightNavButtonAvailability() {
+        changeButtonAvailability(rightNavButton, isEnabled: !keyCodes.isEmpty && action != nil)
     }
 }
 
@@ -303,6 +324,14 @@ extension EditKeyAssignmentController: OAEditKeyAssignmentDelegate {
     func setKeyAssignemntAction(_ action: OAQuickAction) {
         self.action = action
         reloadDataWith(animated: true, completion: nil)
-        changeRightNavButtonAvailability(isEnabled: true)
+        changeRightNavButtonAvailability()
+    }
+}
+
+extension EditKeyAssignmentController: AddKeyDelegate {
+    func setKey(_ keyCode: UIKeyboardHIDUsage) {
+        keyCodes.append(keyCode)
+        reloadDataWith(animated: true, completion: nil)
+        changeRightNavButtonAvailability()
     }
 }

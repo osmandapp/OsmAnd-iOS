@@ -12,6 +12,12 @@ final class KeyAssignmentTableViewCell: UITableViewCell {
     @IBOutlet private weak var keysStackView: UIStackView!
     @IBOutlet private weak var heightConstraint: NSLayoutConstraint!
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let viewFrame = titleLabel.convert(titleLabel.bounds, to: self)
+        separatorInset = UIEdgeInsets(top: 0, left: isDirectionRTL() ? getTableView().frame.size.width - (viewFrame.origin.x + viewFrame.size.width) : viewFrame.origin.x, bottom: 0, right: 0)
+    }
+    
     func configure(keyCodes: [UIKeyboardHIDUsage],
                    horizontalSpace: CGFloat = 12,
                    fontSize: CGFloat = 12,

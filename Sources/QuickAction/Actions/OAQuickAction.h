@@ -57,6 +57,10 @@ static NSString * const kDialog = @"dialog";
 - (nullable NSString *)getTitle:(NSArray *)filters;
 - (nullable NSString *)getListKey;
 
+- (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
+- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
+- (void)actionSelected;
+
 + (QuickActionType *)TYPE;
 
 @end

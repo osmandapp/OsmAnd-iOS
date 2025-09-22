@@ -9,6 +9,10 @@
 final class OpenQuickSearchDialogCommand: KeyEventCommand {
     static let id = "open_quick_search_dialog"
     
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        OARootViewController.instance().mapPanel.open(.REGULAR)
+    }
+    
     override func toHumanString() -> String {
         localizedString("key_event_action_open_search_view")
     }

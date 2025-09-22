@@ -874,35 +874,6 @@ typedef enum : NSUInteger {
     }
 }
 
-- (NSArray<UIKeyCommand *> *)keyCommands
-{
-    NSArray<UIKeyCommand *> *commands = @[
-        [UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(panDown)],
-        [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(panUp)],
-        [UIKeyCommand keyCommandWithInput:UIKeyInputLeftArrow modifierFlags:0 action:@selector(panLeft)],
-        [UIKeyCommand keyCommandWithInput:UIKeyInputRightArrow modifierFlags:0 action:@selector(panRight)],
-        [UIKeyCommand keyCommandWithInput:@"-" modifierFlags:0 action:@selector(zoomOut)],
-        [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:0 action:@selector(zoomIn)],
-        [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:0 action:@selector(zoomIn)],
-        [UIKeyCommand keyCommandWithInput:@"-" modifierFlags:UIKeyModifierCommand action:@selector(zoomOut)],
-        [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
-        [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
-        [UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap)],
-        [UIKeyCommand keyCommandWithInput:@"c" modifierFlags:0 action:@selector(recenterMap)],
-        [UIKeyCommand keyCommandWithInput:@"l" modifierFlags:0 action:@selector(recenterMap)],
-        [UIKeyCommand keyCommandWithInput:@"d" modifierFlags:0 action:@selector(changeMapOrienation)],
-        [UIKeyCommand keyCommandWithInput:@"n" modifierFlags:0 action:@selector(showRouteInfo)],
-        [UIKeyCommand keyCommandWithInput:@"o" modifierFlags:0 action:@selector(changeAppModeToPrev)],
-        [UIKeyCommand keyCommandWithInput:@"p" modifierFlags:0 action:@selector(changeAppModeToNext)],
-        [UIKeyCommand keyCommandWithInput:@"s" modifierFlags:0 action:@selector(openSearch)]
-    ];
-    for (UIKeyCommand *command in commands)
-    {
-        command.wantsPriorityOverSystemBehavior = YES;
-    }
-    return commands;
-}
-
 - (void) changeMapOrienation
 {
     if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:KeyboardDeviceProfile.deviceId])
@@ -1017,6 +988,18 @@ typedef enum : NSUInteger {
                       duration:4
                         inView:self.view];
     }
+}
+
+#pragma mark - UIResponder
+
+- (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+    [KeyEventHelper.shared pressesBegan:presses withEvent:event];
+}
+
+- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+    [KeyEventHelper.shared pressesEnded:presses withEvent:event];
 }
 
 #pragma mark SFSafariViewControllerDelegate

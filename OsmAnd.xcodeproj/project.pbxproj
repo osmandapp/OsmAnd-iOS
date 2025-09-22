@@ -232,7 +232,6 @@
 		277987BE2E7AB5F100607516 /* CommandToActionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987BD2E7AB5F100607516 /* CommandToActionConverter.swift */; };
 		277987C02E7AB6AB00607516 /* DefaultInputDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987BF2E7AB6AB00607516 /* DefaultInputDevices.swift */; };
 		277987C22E7AB7F500607516 /* InputDevicesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987C12E7AB7F500607516 /* InputDevicesHelper.swift */; };
-		277987C42E7AB87000607516 /* KeyEventCommandsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987C32E7AB87000607516 /* KeyEventCommandsFactory.swift */; };
 		277987C62E7ABB3100607516 /* OpenWunderLINQDatagridCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987C52E7ABB3100607516 /* OpenWunderLINQDatagridCommand.swift */; };
 		277987C82E7AD02200607516 /* BackToLocationCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987C72E7AD02200607516 /* BackToLocationCommand.swift */; };
 		277987CA2E7AD0B200607516 /* SwitchCompassCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987C92E7AD0B200607516 /* SwitchCompassCommand.swift */; };
@@ -240,7 +239,6 @@
 		277987CE2E7AD20900607516 /* OpenQuickSearchDialogCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987CD2E7AD20900607516 /* OpenQuickSearchDialogCommand.swift */; };
 		277987D02E7AD2A600607516 /* SwitchAppModeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987CF2E7AD2A600607516 /* SwitchAppModeCommand.swift */; };
 		277987D22E7AD40400607516 /* MapScrollCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987D12E7AD40400607516 /* MapScrollCommand.swift */; };
-		277987D42E7AD5AB00607516 /* EmitNavigationHintCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987D32E7AD5AB00607516 /* EmitNavigationHintCommand.swift */; };
 		277987D62E7AD66500607516 /* ToggleDrawerCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987D52E7AD66500607516 /* ToggleDrawerCommand.swift */; };
 		277987D82E7AD6AD00607516 /* ActivityBackPressedCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987D72E7AD6AD00607516 /* ActivityBackPressedCommand.swift */; };
 		2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4352E66E6F700682723 /* InputDeviceProfile.swift */; };
@@ -248,11 +246,13 @@
 		2783B43A2E66E8AB00682723 /* KeyboardDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */; };
 		2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */; };
 		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
+		27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */; };
+		27C6D5B12E7AE36600695D5B /* KeyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */; };
+		27C6D5B92E7D578C00695D5B /* KeyEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5B82E7D578C00695D5B /* KeyEventHandler.swift */; };
 		27C768E42E6833F100540266 /* CustomInputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */; };
 		27C768EA2E6892CD00540266 /* KeySymbolMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E92E6892CD00540266 /* KeySymbolMapper.swift */; };
 		27C768ED2E689B9400540266 /* KeyEventCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768EC2E689B9400540266 /* KeyEventCommand.swift */; };
 		27C768EF2E689D2400540266 /* MapZoomCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768EE2E689D2400540266 /* MapZoomCommand.swift */; };
-		27C768F12E68C4B100540266 /* KeyEventCommandsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768F02E68C4B100540266 /* KeyEventCommandsCache.swift */; };
 		27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */; };
 		27D33B3F2E7432DD00AD4F70 /* OpenNavigationViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B3E2E7432DD00AD4F70 /* OpenNavigationViewAction.swift */; };
 		27D33B412E7436F100AD4F70 /* OpenSearchViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B402E7436F100AD4F70 /* OpenSearchViewAction.swift */; };
@@ -3654,7 +3654,6 @@
 		277987BD2E7AB5F100607516 /* CommandToActionConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandToActionConverter.swift; sourceTree = "<group>"; };
 		277987BF2E7AB6AB00607516 /* DefaultInputDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultInputDevices.swift; sourceTree = "<group>"; };
 		277987C12E7AB7F500607516 /* InputDevicesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevicesHelper.swift; sourceTree = "<group>"; };
-		277987C32E7AB87000607516 /* KeyEventCommandsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventCommandsFactory.swift; sourceTree = "<group>"; };
 		277987C52E7ABB3100607516 /* OpenWunderLINQDatagridCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWunderLINQDatagridCommand.swift; sourceTree = "<group>"; };
 		277987C72E7AD02200607516 /* BackToLocationCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackToLocationCommand.swift; sourceTree = "<group>"; };
 		277987C92E7AD0B200607516 /* SwitchCompassCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchCompassCommand.swift; sourceTree = "<group>"; };
@@ -3662,7 +3661,6 @@
 		277987CD2E7AD20900607516 /* OpenQuickSearchDialogCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuickSearchDialogCommand.swift; sourceTree = "<group>"; };
 		277987CF2E7AD2A600607516 /* SwitchAppModeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchAppModeCommand.swift; sourceTree = "<group>"; };
 		277987D12E7AD40400607516 /* MapScrollCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollCommand.swift; sourceTree = "<group>"; };
-		277987D32E7AD5AB00607516 /* EmitNavigationHintCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmitNavigationHintCommand.swift; sourceTree = "<group>"; };
 		277987D52E7AD66500607516 /* ToggleDrawerCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleDrawerCommand.swift; sourceTree = "<group>"; };
 		277987D72E7AD6AD00607516 /* ActivityBackPressedCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityBackPressedCommand.swift; sourceTree = "<group>"; };
 		2783B4352E66E6F700682723 /* InputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDeviceProfile.swift; sourceTree = "<group>"; };
@@ -3670,11 +3668,13 @@
 		2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDeviceProfile.swift; sourceTree = "<group>"; };
 		2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WunderLINQDeviceProfile.swift; sourceTree = "<group>"; };
 		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
+		27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTableViewCell.swift; sourceTree = "<group>"; };
+		27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyTableViewCell.xib; sourceTree = "<group>"; };
+		27C6D5B82E7D578C00695D5B /* KeyEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventHandler.swift; sourceTree = "<group>"; };
 		27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInputDeviceProfile.swift; sourceTree = "<group>"; };
 		27C768E92E6892CD00540266 /* KeySymbolMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySymbolMapper.swift; sourceTree = "<group>"; };
 		27C768EC2E689B9400540266 /* KeyEventCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventCommand.swift; sourceTree = "<group>"; };
 		27C768EE2E689D2400540266 /* MapZoomCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapZoomCommand.swift; sourceTree = "<group>"; };
-		27C768F02E68C4B100540266 /* KeyEventCommandsCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventCommandsCache.swift; sourceTree = "<group>"; };
 		27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NextTurnWidget+Extension.swift"; sourceTree = "<group>"; };
 		27D33B3E2E7432DD00AD4F70 /* OpenNavigationViewAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNavigationViewAction.swift; sourceTree = "<group>"; };
 		27D33B402E7436F100AD4F70 /* OpenSearchViewAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSearchViewAction.swift; sourceTree = "<group>"; };
@@ -8218,7 +8218,6 @@
 				277987CD2E7AD20900607516 /* OpenQuickSearchDialogCommand.swift */,
 				277987CF2E7AD2A600607516 /* SwitchAppModeCommand.swift */,
 				277987D12E7AD40400607516 /* MapScrollCommand.swift */,
-				277987D32E7AD5AB00607516 /* EmitNavigationHintCommand.swift */,
 				277987D52E7AD66500607516 /* ToggleDrawerCommand.swift */,
 				277987D72E7AD6AD00607516 /* ActivityBackPressedCommand.swift */,
 			);
@@ -8232,8 +8231,7 @@
 				277987B12E7AB41600607516 /* InputDevicesCollection.swift */,
 				277987C12E7AB7F500607516 /* InputDevicesHelper.swift */,
 				27C768E92E6892CD00540266 /* KeySymbolMapper.swift */,
-				27C768F02E68C4B100540266 /* KeyEventCommandsCache.swift */,
-				277987C32E7AB87000607516 /* KeyEventCommandsFactory.swift */,
+				27C6D5B82E7D578C00695D5B /* KeyEventHandler.swift */,
 			);
 			path = Keyevent;
 			sourceTree = "<group>";
@@ -12133,6 +12131,7 @@
 				C508678A2D9D5E32000B7219 /* SegmentTextTableViewCell.swift */,
 				32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */,
 				277987B72E7AB48B00607516 /* KeyAssignmentTableViewCell.swift */,
+				27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
@@ -12143,6 +12142,7 @@
 		DA5A7BB626C563A100F274C7 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
+				27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */,
 				277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */,
 				DA5A7C1126C563A200F274C7 /* OAActivityViewWithTitleCell.xib */,
 				C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */,
@@ -16501,6 +16501,7 @@
 				DA69ED5D2A385B1B001022C7 /* OAWidgetPanelViewController.xib in Resources */,
 				15CD7E9F25B1C19900BCB36A /* ic_small_distance@2x.png in Resources */,
 				DA54AA8724EFEFBE001E6560 /* ic_custom_elevation@2x.png in Resources */,
+				27C6D5B12E7AE36600695D5B /* KeyTableViewCell.xib in Resources */,
 				DA68B3E1233B822F00F5ACCC /* ic_profile_bicycle@2x.png in Resources */,
 				157F3CE524A1FC85000A66F0 /* ic_checkmark_default@2x.png in Resources */,
 				DAB854AE23054C7C002566A6 /* ic_navbar_search@3x.png in Resources */,
@@ -16871,7 +16872,6 @@
 				DA5A84DA26C563A900F274C7 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				DA5A847526C563A900F274C7 /* OAFingerRulerDelegate.mm in Sources */,
 				DA66ACC026D91C5800D43299 /* OABaseVectorLinesLayer.mm in Sources */,
-				277987C42E7AB87000607516 /* KeyEventCommandsFactory.swift in Sources */,
 				465DB48629AF5BA3007F5989 /* OACarPlayTrackResultListController.mm in Sources */,
 				DA5A821326C563A700F274C7 /* OAPluginInstalledViewController.mm in Sources */,
 				461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */,
@@ -16924,7 +16924,6 @@
 				DA5A816026C563A700F274C7 /* OAParkingPositionPlugin.mm in Sources */,
 				2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */,
 				DA5A843226C563A800F274C7 /* OATransportDetailsTableViewController.mm in Sources */,
-				27C768F12E68C4B100540266 /* KeyEventCommandsCache.swift in Sources */,
 				DAC849B426CF967C00018091 /* OADownloadMapWidget.mm in Sources */,
 				322B53952C78DD14006B48B0 /* OAIconsPaletteCell.m in Sources */,
 				DA5A845626C563A900F274C7 /* OARulerByTapControlLayer.mm in Sources */,
@@ -17508,6 +17507,7 @@
 				FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */,
 				DAA61CBF2A02789D00AFF65D /* MapWidgetInfo.swift in Sources */,
 				DA5A817426C563A700F274C7 /* OAGpxWptItem.mm in Sources */,
+				27C6D5B92E7D578C00695D5B /* KeyEventHandler.swift in Sources */,
 				FA4C57052D491EB900438A5C /* CardsViewController.swift in Sources */,
 				32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */,
 				DA5A81C026C563A700F274C7 /* OASearchByNameFilter.mm in Sources */,
@@ -17869,7 +17869,6 @@
 				DA5A834926C563A800F274C7 /* OAProgressBarCell.mm in Sources */,
 				DA5A845D26C563A900F274C7 /* OAMapillaryLayer.mm in Sources */,
 				DA5A83B526C563A800F274C7 /* OAActionAddProfileViewController.m in Sources */,
-				277987D42E7AD5AB00607516 /* EmitNavigationHintCommand.swift in Sources */,
 				DA5A822F26C563A700F274C7 /* OABaseSettingsListViewController.mm in Sources */,
 				DA5A84D726C563A900F274C7 /* OAWikipediaLanguagesViewController.mm in Sources */,
 				DA5A82FB26C563A800F274C7 /* OAImageDescTableViewCell.m in Sources */,
@@ -18013,6 +18012,7 @@
 				DA5A82F126C563A800F274C7 /* OALocationIconsTableViewCell.m in Sources */,
 				DA5A844026C563A900F274C7 /* OAUsernameFilterViewController.mm in Sources */,
 				323F04BA2C6500E80058DD78 /* ShowHideCycleRoutesAction.swift in Sources */,
+				27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */,
 				DA5A84BC26C563A900F274C7 /* OABaseBottomSheetViewController.m in Sources */,
 				DA5A844C26C563A900F274C7 /* OADestinationCell.mm in Sources */,
 				DA5A856626C563A900F274C7 /* OALocationsHolder.mm in Sources */,

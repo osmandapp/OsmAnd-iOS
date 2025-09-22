@@ -27,6 +27,14 @@ class BaseMapZoomAction: OAQuickAction {
         localizedString(quickActionDescription())
     }
     
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent) {
+        actionSelected()
+    }
+    
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent) {
+        // Make nothing after unselecting key button
+    }
+    
     class func quickActionType() -> QuickActionType {
         fatalError("getQuickActionType() has not been implemented")
     }

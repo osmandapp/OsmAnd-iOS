@@ -9,6 +9,15 @@
 final class ActivityBackPressedCommand: KeyEventCommand {
     static let id = "activity_back_pressed"
     
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if OABottomSheetViewStack.sharedInstance().bottomSheetViews.count > 0,
+           let bottomSheetViewController = OABottomSheetViewStack.sharedInstance().bottomSheetViews.lastObject as? OABottomSheetViewController {
+            bottomSheetViewController.goBack()
+        } else {
+            OARootViewController.instance().mapPanel.navigationController?.goBack()
+        }
+    }
+    
     override func toHumanString() -> String {
         localizedString("key_event_action_activity_back_pressed")
     }

@@ -27,7 +27,6 @@ final class KeyboardDeviceProfile: PredefinedInputDeviceProfile {
         addAssignment(to: &list, with: MapZoomCommand.zoomInId, keyCodes: [.keypadPlus, .keyboardEqualSign])
         addAssignment(to: &list, with: MapZoomCommand.zoomOutId, keyCodes: [.keyboardHyphen])
         
-        addAssignment(to: &list, with: EmitNavigationHintCommand.id, keyCodes: [.keyboardReturnOrEnter])
         addAssignment(to: &list, with: ToggleDrawerCommand.id, keyCodes: [.keyboardM])
         addAssignment(to: &list, with: ActivityBackPressedCommand.id, keyCodes: [.keyboardEscape, .keyboardDeleteOrBackspace])
         return list

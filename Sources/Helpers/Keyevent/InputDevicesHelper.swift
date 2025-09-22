@@ -59,6 +59,7 @@ final class InputDevicesHelper: NSObject {
     
     func selectInputDevice(with appMode: OAApplicationMode, deviceId: String) {
         settings.settingExternalInputDevice.set(deviceId, mode: appMode)
+        reloadFunctionalityCollection(with: appMode)
     }
     
     func createAndSaveCustomDevice(with appMode: OAApplicationMode, newDeviceName: String) {
@@ -187,10 +188,6 @@ final class InputDevicesHelper: NSObject {
         return nil
     }
     
-    func reloadFunctionalityCollection(with appMode: OAApplicationMode) {
-        reloadInputDevicesCollection(with: Self.functionalityPurposeId, appMode: appMode)
-    }
-    
     func releaseCustomizationCollection() {
         cachedDevicesCollections.removeValue(forKey: Self.customizationPurposeId)
     }
@@ -263,6 +260,10 @@ final class InputDevicesHelper: NSObject {
         return collection
     }
     
+    private func reloadFunctionalityCollection(with appMode: OAApplicationMode) {
+        reloadInputDevicesCollection(with: Self.functionalityPurposeId, appMode: appMode)
+    }
+    
     private func loadCustomDevices(with appMode: OAApplicationMode) -> [InputDeviceProfile] {
         let json = settings.settingCustomExternalInputDevice.get(appMode)
         guard !json.isEmpty else { return [] }
@@ -287,6 +288,7 @@ final class InputDevicesHelper: NSObject {
             if let str = String(data: data, encoding: .utf8) {
                 settings.settingCustomExternalInputDevice.set(str, mode: appMode)
             }
+            reloadFunctionalityCollection(with: appMode)
         } catch {
             print("Error while writing custom devices to JSON \(error)")
         }

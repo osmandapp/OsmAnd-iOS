@@ -53,9 +53,12 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="bottomConstraint" destination="9aE-wG-kjN" id="4sF-3f-but"/>
+                <outlet property="keyContainerView" destination="dxs-tV-QGJ" id="udo-bg-elh"/>
                 <outlet property="keyLabel" destination="pnw-Wa-Phb" id="RNo-5k-Uyv"/>
                 <outlet property="leftConstraint" destination="cbc-0N-yVB" id="ZyT-69-dgK"/>
                 <outlet property="rightConstraint" destination="Yv6-Tn-XhR" id="HYQ-Xe-wHV"/>
+                <outlet property="topConstraint" destination="s4e-cN-6Sr" id="Ljd-JI-4LK"/>
             </connections>
             <point key="canvasLocation" x="-91.603053435114504" y="-265.84507042253523"/>
         </view>

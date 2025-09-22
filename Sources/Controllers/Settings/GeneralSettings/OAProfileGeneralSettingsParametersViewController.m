@@ -121,7 +121,7 @@
 
 - (NSString *)getTitle
 {
-    return _title;
+    return _isEditMode ? OALocalizedString(@"shared_string_edit") : _title;
 }
 
 - (NSString *)getSubtitle

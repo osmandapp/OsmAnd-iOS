@@ -19,6 +19,22 @@ final class MapScrollCommand: KeyEventCommand {
         super.init(commandId: commandId)
     }
     
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        switch direction {
+        case .up:
+            mapViewController.animatedPanUp()
+        case .down:
+            mapViewController.animatedPanDown()
+        case .left:
+            mapViewController.animatedPanLeft()
+        case .right:
+            mapViewController.animatedPanRight()
+        @unknown default:
+            return
+        }
+    }
+    
     override func toHumanString() -> String {
         switch direction {
         case .up: localizedString("key_event_action_move_up")

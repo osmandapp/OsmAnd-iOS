@@ -23,10 +23,8 @@ final class CommandToActionConverter {
         "zoom_in": MapZoomInAction.quickActionType(),
         "zoom_out": MapZoomOutAction.quickActionType(),
         
-        // "emit_navigation_hint": nil,
         "toggle_drawer": ShowHideDrawerAction.type,
         "activity_back_pressed": NavigatePreviousScreenAction.type,
-        // "take_media_note": nil,
         "open_wunderlinq_datagrid": OpenWunderLINQDatagridAction.type
     ]
 

@@ -112,6 +112,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     OARowInfo *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
+    BOOL _isLoadingImages;
 }
 
 - (void) setRows:(NSMutableArray<OARowInfo *> *)rows
@@ -197,7 +198,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     // implement in subclasses
 }
 
-- (void) appdendDetailsButtonRow:(NSMutableArray<OARowInfo *> *)rows
+- (void) appendDetailsButtonRow:(NSMutableArray<OARowInfo *> *)rows
 {
     if ([self showDetailsButton])
     {
@@ -213,7 +214,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
     [self buildTopRows:_rows];
     
-    [self appdendDetailsButtonRow:_rows];
+    [self appendDetailsButtonRow:_rows];
     
     [self buildWithinRow];
     
@@ -243,7 +244,13 @@ static const CGFloat kTextMaxHeight = 150.0;
     [self addNearbyImagesIfNeeded];
     [self addMapillaryCardsRowInfoIfNeeded];
     
-    [self startLoadingImages];
+    if (!_isLoadingImages)
+    {
+        __weak __typeof(self) weakSelf = self;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
+            [weakSelf startLoadingImages];
+        });
+    }
 
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
@@ -638,6 +645,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 }
 
 - (void)sendNearbyOtherImagesRequest:(NSMutableArray <AbstractCard *> *)cards
+                    onFailureNoCache:(void (^)(void))onFailureNoCache
 {
     if (!_onlinePhotoCardsRowInfo)
         return;
@@ -654,7 +662,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     }
     
     _otherCardsReady = NO;
-    [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards];
+    [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_onlinePhotoCardsRowInfo onFailureNoCache:onFailureNoCache];
 }
 
 - (void)getCard:(NSDictionary *)feature
@@ -696,85 +704,168 @@ static const CGFloat kTextMaxHeight = 150.0;
     }
 }
 
-- (void)addOtherCards:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent cards:(NSMutableArray<AbstractCard *> *)cards
+- (void)addOtherCards:(NSString *)imageTagContent
+            mapillary:(NSString *)mapillaryTagContent
+                cards:(NSMutableArray<AbstractCard *> *)cards
+              rowInfo:(OARowInfo *)nearbyImagesRowInfo
+     onFailureNoCache:(void (^)(void))onFailureNoCache
 {
     CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *preferredLang = [settings.settingPrefMapLanguage get];
-    if (!preferredLang)
-        preferredLang = [OAUtilities currentLang];
+    NSString *preferredLang = [[OAAppSettings sharedManager].settingPrefMapLanguage get] ?: [OAUtilities currentLang];
 
     NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f&app=%@",
                            self.location.latitude,
                            self.location.longitude,
                            [OAIAPHelper isPaidVersion] ? @"paid" : @"free"];
 
-    if (preferredLang && preferredLang.length > 0)
+    if (preferredLang.length > 0)
         urlString = [urlString stringByAppendingFormat:@"&lang=%@", preferredLang];
     if (myLocation)
         urlString = [urlString stringByAppendingFormat:@"&mloc=%f,%f", myLocation.coordinate.latitude, myLocation.coordinate.longitude];
-
     if (imageTagContent)
-        urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_image=%@", imageTagContent]];
+        urlString = [urlString stringByAppendingFormat:@"&osm_image=%@", imageTagContent];
     if (mapillaryTagContent)
-        urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&mapillary=%@", mapillaryTagContent]];
+        urlString = [urlString stringByAppendingFormat:@"&mapillary=%@", mapillaryTagContent];
 
-    NSInteger cardsCount = cards.count;
-    NSURL *urlObj = [[NSURL alloc] initWithString:[[urlString stringByReplacingOccurrencesOfString:@" "  withString:@"_"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
-    NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    urlString = [[[urlString stringByReplacingOccurrencesOfString:@" " withString:@"_"]
+                  stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]] copy];
+
+    NSURL *urlObj = [NSURL URLWithString:urlString];
+    NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
+    NSURLSession *session = [URLSessionManager sessionFor:key];
+    NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
+                                             cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                                         timeoutInterval:30];
+
     NSMutableArray<AbstractCard *> *newCards = [NSMutableArray arrayWithArray:cards];
-    [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (((NSHTTPURLResponse *)response).statusCode == 200)
+    NSInteger existingCount = cards.count;
+    
+    __weak __typeof(self) weakSelf = self;
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        NSData *effectiveData = data;
+        NSURLResponse *effectiveResponse = response;
+
+        NSURLRequest *cacheRequest;
+
+        if ((!data || !response) && [strongSelf isInternetConnectionError:error])
         {
-            if (data && !error)
+            cacheRequest = [strongSelf filteredCacheRequestFromRequest:request];
+            NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:cacheRequest sessionKey:key];
+            if (cached)
             {
-                NSString *safeCharsString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSData *safeCharsData = [safeCharsString dataUsingEncoding:NSUTF8StringEncoding];
-                NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:safeCharsData options:NSJSONReadingAllowFragments error:&error];
-                if (jsonDict)
+                effectiveData = cached.data;
+                effectiveResponse = cached.response;
+            }
+            else
+            {
+                if (onFailureNoCache)
                 {
-                    NSArray<NSDictionary *> *images = jsonDict[@"features"];
-                    if (images.count == 0)
-                    {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self onOtherCardsReady:newCards];
-                        });
-                    }
-                    else
-                    {
-                        NSInteger __block count = images.count;
-                        for (NSDictionary *dict in images)
-                        {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [self getCard:dict onComplete:^(AbstractCard *card) {
-                                    if (card)
-                                    {
-                                        [newCards addObject:card];
-                                        if (newCards.count == count + cardsCount)
-                                            [self onOtherCardsReady:newCards];
-                                    }
-                                    else
-                                    {
-                                        count--;
-                                        if (newCards.count == count + cardsCount)
-                                            [self onOtherCardsReady:newCards];
-                                    }
-                                }];
-                            });
-                        }
-                    }
+                    dispatch_async(dispatch_get_main_queue(), onFailureNoCache);
                 }
+                return;
             }
         }
-    }] resume];
+        else
+        {
+            if ([response isKindOfClass:[NSHTTPURLResponse class]] &&
+                ((NSHTTPURLResponse *)response).statusCode == 200)
+            {
+                cacheRequest = [strongSelf filteredCacheRequestFromRequest:request];
+                [URLSessionManager storeResponse:response data:data for:cacheRequest sessionKey:key];
+            }
+        }
+
+        NSError *jsonError = nil;
+        NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:effectiveData
+                                                                 options:NSJSONReadingAllowFragments
+                                                                   error:&jsonError];
+        if (!jsonDict || ![jsonDict isKindOfClass:[NSDictionary class]]) {
+            NSLog(@"JSON parse error: %@", jsonError ?: @"Unknown error");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+            });
+            return;
+        }
+
+        NSArray<NSDictionary *> *images = jsonDict[@"features"];
+        if (images.count == 0)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+            });
+        }
+        else
+        {
+            __block NSInteger count = images.count;
+            for (NSDictionary *dict in images)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf getCard:dict onComplete:^(AbstractCard *card) {
+                        if (card)
+                            [newCards addObject:card];
+                        else
+                            count--;
+
+                        if (newCards.count == count + existingCount)
+                        {
+                            [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+                        }
+                    }];
+                });
+            }
+        }
+    }];
+    [task resume];
 }
 
 - (void)onOtherCardsReady:(NSMutableArray<AbstractCard *> *)cards
+                rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
     _otherCardsReady = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateDisplayingCards:cards];
     });
+}
+
+- (NSURLRequest *)filteredCacheRequestFromRequest:(NSURLRequest *)request
+{
+    NSArray<NSString *> *blockedParams = @[@"mloc", @"app", @"lang"];
+    NSString *urlString = request.URL.absoluteString;
+    
+    BOOL hasBlockedParam = NO;
+    for (NSString *param in blockedParams)
+    {
+        NSString *searchString = [param stringByAppendingString:@"="];
+        if ([urlString containsString:searchString])
+        {
+            hasBlockedParam = YES;
+            break;
+        }
+    }
+    
+    if (!hasBlockedParam)
+        return request;
+    
+    NSURLComponents *components = [NSURLComponents componentsWithURL:request.URL resolvingAgainstBaseURL:NO];
+    components.queryItems = [components.queryItems filteredArrayUsingPredicate:
+                             [NSPredicate predicateWithBlock:^BOOL(NSURLQueryItem *item, NSDictionary *bindings) {
+        return ![blockedParams containsObject:item.name];
+    }]];
+    
+    return [NSURLRequest requestWithURL:components.URL];
+}
+
+- (BOOL)isInternetConnectionError:(NSError *)error
+{
+    if (!error) return NO;
+    if (![error.domain isEqualToString:NSURLErrorDomain]) return NO;
+
+    return error.code == NSURLErrorNotConnectedToInternet;
 }
 
 - (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards
@@ -1276,6 +1367,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
 - (void)startLoadingImages
 {
+    _isLoadingImages = YES;
     _wikiCardsReady = NO;
     CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
     CollapsableCardsView *mapillaryCardsView;
@@ -1284,24 +1376,16 @@ static const CGFloat kTextMaxHeight = 150.0;
         mapillaryCardsView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
     }
     
-    __weak __typeof(self) weakSelf = self;
-    if (AFNetworkReachabilityManager.sharedManager.isReachable)
+    onlinePhotoCardsView.isLoading = YES;
+    if ([self.getTargetObj isKindOfClass:OAPOI.class])
     {
-        onlinePhotoCardsView.isLoading = YES;
-        if ([self.getTargetObj isKindOfClass:OAPOI.class])
-        {
-            OAPOI *poi = self.getTargetObj;
-            onlinePhotoCardsView.title = poi.nameLocalized;
-        }
-       
-        mapillaryCardsView.isLoading = YES;
-        [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
-            weakSelf.wikiCardsReady = YES;
-            [weakSelf sendNearbyOtherImagesRequest:cards];
-        }];
+        OAPOI *poi = self.getTargetObj;
+        onlinePhotoCardsView.title = poi.nameLocalized;
     }
-    else
-    {
+    
+    __weak __typeof(self) weakSelf = self;
+    void (^onFailureNoCache)(void) = ^{
+        onlinePhotoCardsView.isLoading = NO;
         NoInternetCard *noInternetCard = [NoInternetCard new];
         noInternetCard.onTryAgainAction = ^{
             if (AFNetworkReachabilityManager.sharedManager.isReachable)
@@ -1314,7 +1398,13 @@ static const CGFloat kTextMaxHeight = 150.0;
         {
             [mapillaryCardsView setCards:@[noInternetCard]];
         }
-    }
+    };
+    
+    mapillaryCardsView.isLoading = YES;
+    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
+        weakSelf.wikiCardsReady = YES;
+        [weakSelf sendNearbyOtherImagesRequest:cards onFailureNoCache:onFailureNoCache];
+    } onFailureNoCache:onFailureNoCache];
 }
 
 #pragma mark - OAEditDescriptionViewControllerDelegate

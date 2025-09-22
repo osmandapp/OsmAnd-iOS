@@ -80,7 +80,6 @@ static const float LOCATION_TIMEOUT = 1.5;
 
 - (void) startAnimationThread:(NSArray<OASimulatedLocation *> *)directionsArray useLocationTime:(BOOL)useLocationTime coeff:(float)coeff
 {
-    NSTimeInterval time = 1.5f;
     float simSpeed = _settings.simulateNavigationSpeed;
     EOASimulationMode simulationMode = [OASimulationMode getMode:_settings.simulateNavigationMode];
     BOOL realistic = simulationMode == EOASimulationModeRealistic;

@@ -106,7 +106,6 @@
         if (pair.count > 1 && [pair[0] isKindOfClass:OATravelGpx.class] && [pair[1] isKindOfClass:SelectedGpxPoint.class])
         {
             OATravelGpx *travelGpx = pair[0];
-            SelectedGpxPoint *selectedGpxPoint = pair[1];
             OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
             targetPoint.type = OATargetGPX;
             targetPoint.targetObj = travelGpx;

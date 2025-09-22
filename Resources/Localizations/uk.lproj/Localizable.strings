@@ -3872,3 +3872,5 @@
 "quick_action_new_route" = "Новий маршрут";
 "quick_action_add_route_descr" = "Кнопка для початку маршруту з середини екрана.";
 "shared_string_create" = "Створити";
+"image_cache_online_photo_high_res" = "Кеш онлайн-фотографій високої роздільної здатності";
+"image_cache_online_photo_mapillary_default_cache" = "Кеш онлайн-фото/Mapillary за замовчуванням";

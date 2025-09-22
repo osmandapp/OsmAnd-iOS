@@ -124,7 +124,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     }
     
     if (self)
-        self.frame = CGRectMake(0, 0, DeviceScreenWidth, 32);
+        self.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self commonInitWithCustomId:customId widgetParams:widgetParams];
    
@@ -187,9 +187,12 @@ static int stackViewLeadingToRefViewPadding = 16;
 
 - (void) updateFrame
 {
-    CGRect f = self.frame;
-    f.size.height = _waypointInfoBar.hidden ? 32 : 50;
-    self.frame = f;
+    [self invalidateIntrinsicContentSize];
+}
+
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(UIViewNoIntrinsicMetric, _waypointInfoBar.hidden ? 32.0 : 50.0);
 }
 
 - (void) layoutSubviews

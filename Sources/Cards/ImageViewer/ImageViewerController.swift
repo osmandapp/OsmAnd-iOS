@@ -80,40 +80,73 @@ final class ImageViewerController: UIViewController {
         super.viewWillLayoutSubviews()
         layout()
     }
-
+    
     private func configureImageView() {
-        switch imageItem {
-        case .card(let item):
-            guard let fullSizeUrlString = item.getGalleryFullSizeUrl(),
-                  let url = URL(string: fullSizeUrlString) else {
-                debugPrint("Invalid full size URL string")
-                return
-            }
-            guard let lowResolutionURL = URL(string: item.imageUrl) else {
-                debugPrint("Invalid low resolution image URL")
-                return
-            }
-
-            imageView.kf.indicatorType = .activity
-            imageView.kf.setImage(
-                with: url,
-                placeholder: ImageCardPlaceholder(placeholderImage: placeholderImage),
-                options: [
-                    .lowDataMode(.network(lowResolutionURL)),
-                    .targetCache(.galleryHighResolutionDiskCache),
-                    .requestModifier(RequestModifier())
-                ]) { [weak self] result in
-                    switch result {
-                    case .success:
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                            self?.layout()
+        guard case let .card(item) = imageItem else { return }
+        guard let fullSizeUrlString = item.getGalleryFullSizeUrl(),
+              let highResURL = URL(string: fullSizeUrlString) else {
+            debugPrint("Invalid highRes URL")
+            return
+        }
+        
+        let placeholder = ImageCardPlaceholder(placeholderImage: placeholderImage)
+        placeholder.add(to: imageView)
+        
+        let highResCache = ImageCache.onlinePhotoHighResolutionDiskCache
+        
+        // Try high-resolution image from cache
+        highResCache.retrieveImage(forKey: highResURL.absoluteString) { [weak self] result in
+            Task { @MainActor in
+                guard let self else { return }
+                
+                if let image = try? result.get().image {
+                    placeholder.remove(from: self.imageView)
+                    self.imageView.image = image
+                    self.updateLayoutWithDelay()
+                } else {
+                    guard let lowResURL = URL(string: item.imageUrl) else {
+                        debugPrint("Invalid lowRes URL")
+                        return
+                    }
+                    // High-res not in cache
+                    if AFNetworkReachabilityManagerWrapper.isReachable() {
+                        placeholder.remove(from: self.imageView)
+                        self.imageView.kf.indicatorType = .activity
+                        // Download high-res
+                        self.imageView.kf.setImage(
+                            with: highResURL,
+                            placeholder: ImageCardPlaceholder(placeholderImage: self.placeholderImage),
+                            options: [
+                                .targetCache(highResCache),
+                                .lowDataMode(.network(lowResURL)),
+                                .requestModifier(ImageDownloadRequestModifier())]) { [weak self] result in
+                                    switch result {
+                                    case .success:
+                                        self?.updateLayoutWithDelay()
+                                    case .failure(let error):
+                                        debugPrint("download failed: url: \(highResURL) or \(lowResURL) | \(error.localizedDescription)")
+                                    }
+                                }
+                    } else {
+                        // No internet: fallback to low-res cache
+                        ImageCache.onlinePhotoAndMapillaryDefaultCache.retrieveImage(forKey: lowResURL.absoluteString) { lowResult in
+                            Task { @MainActor in
+                                if let lowImage = try? lowResult.get().image {
+                                    placeholder.remove(from: self.imageView)
+                                    self.imageView.image = lowImage
+                                    self.updateLayoutWithDelay()
+                                }
+                            }
                         }
-                    case .failure(let error):
-                        debugPrint("download failed: url: \(url) | \(error.localizedDescription)")
                     }
                 }
-        default:
-            break
+            }
+        }
+    }
+    
+    private func updateLayoutWithDelay() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            self.layout()
         }
     }
     
@@ -211,6 +244,7 @@ final class ImageViewerController: UIViewController {
 
 // MARK: - UIGestureRecognizerDelegate
 extension ImageViewerController: UIGestureRecognizerDelegate {
+    
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard scrollView.zoomScale == scrollView.minimumZoomScale,
               let panGesture = gestureRecognizer as? UIPanGestureRecognizer else { return false }
@@ -294,14 +328,5 @@ extension ImageViewerController: UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateConstraintsForSize(view.bounds.size)
-    }
-}
-
-private struct RequestModifier: AsyncImageDownloadRequestModifier {
-    var onDownloadTaskStarted: (@Sendable (Kingfisher.DownloadTask?) -> Void)?
-    func modified(for request: URLRequest) -> URLRequest? {
-        var r = request
-        r.timeoutInterval = 30
-        return r
     }
 }

@@ -101,7 +101,6 @@
     if (_pathToTmpGpx) {
         OsmAndAppInstance app = OsmAndApp.instance;
         NSString *shortPath = [fileName stringByAppendingPathExtension:kGpxFileExtension];
-        NSString *trackName = [fileName lastPathComponent];
         NSString *gpxPath = [app.gpxPath stringByAppendingPathComponent:shortPath];
         
         BOOL success = [NSFileManager.defaultManager moveItemAtPath:_pathToTmpGpx toPath:gpxPath error:nil];

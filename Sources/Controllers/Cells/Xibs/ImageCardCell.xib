@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,11 +20,18 @@
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pHC-aF-H9Q">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                     </imageView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_mapillary_color_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="OKS-FL-Rwe">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_mapillary_color_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="OKS-FL-Rwe" userLabel="Logo Image View">
                         <rect key="frame" x="10" y="10" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="21t-3F-9bX"/>
                             <constraint firstAttribute="height" constant="30" id="IpZ-9Q-MIA"/>
+                        </constraints>
+                    </imageView>
+                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_download_offline_with_bg" translatesAutoresizingMaskIntoConstraints="NO" id="sbQ-QP-WAu" userLabel="Offline Cache Image View">
+                        <rect key="frame" x="6" y="164" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="1q5-bJ-KsY"/>
+                            <constraint firstAttribute="width" constant="30" id="t4r-k7-rwt"/>
                         </constraints>
                     </imageView>
                 </subviews>
@@ -36,17 +43,21 @@
                 <constraint firstItem="pHC-aF-H9Q" firstAttribute="leading" secondItem="j5u-2X-hOB" secondAttribute="leading" id="IWQ-5J-HHC"/>
                 <constraint firstItem="OKS-FL-Rwe" firstAttribute="leading" secondItem="j5u-2X-hOB" secondAttribute="leading" constant="10" id="M6p-vh-A6W"/>
                 <constraint firstAttribute="trailing" secondItem="pHC-aF-H9Q" secondAttribute="trailing" id="YWG-o9-b8D"/>
+                <constraint firstAttribute="bottom" secondItem="sbQ-QP-WAu" secondAttribute="bottom" constant="6" id="vvG-Jv-847"/>
+                <constraint firstItem="sbQ-QP-WAu" firstAttribute="leading" secondItem="j5u-2X-hOB" secondAttribute="leading" constant="6" id="xRr-MZ-dMW"/>
                 <constraint firstAttribute="bottom" secondItem="pHC-aF-H9Q" secondAttribute="bottom" id="z2v-45-ORS"/>
             </constraints>
             <size key="customSize" width="391" height="191"/>
             <connections>
                 <outlet property="imageView" destination="pHC-aF-H9Q" id="S1K-3y-SKo"/>
                 <outlet property="logoView" destination="OKS-FL-Rwe" id="Dgg-fj-crp"/>
+                <outlet property="offlineCacheImageView" destination="sbQ-QP-WAu" id="7vh-iB-OZf"/>
             </connections>
             <point key="canvasLocation" x="124" y="97.151424287856074"/>
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="ic_custom_download_offline_with_bg" width="30" height="30"/>
         <image name="ic_custom_mapillary_color_logo.png" width="30" height="30"/>
         <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

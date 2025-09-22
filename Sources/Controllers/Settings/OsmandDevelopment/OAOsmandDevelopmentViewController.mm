@@ -49,6 +49,7 @@ NSString *const kBatterySavingModeKey = @"kBatterySavingModeKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
 NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
+NSString *const kImageCacheKey = @"kImageCacheKey";
 
 #pragma mark - Initialization
 
@@ -86,7 +87,7 @@ NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 {
     BOOL isRouteAnimating = [[OsmAndApp instance].locationServices.locationSimulation isRouteAnimating];
     _data = [OATableDataModel model];
-    __weak OAOsmandDevelopmentViewController *weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     OATableSectionData *simulationSection = [OATableSectionData sectionData];
     simulationSection.headerText = OALocalizedString(@"osmand_depelopment_simulate_location_section");
     [simulationSection addRowFromDictionary:@{
@@ -131,6 +132,18 @@ NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
         @"isOn" : @([[OAAppSettings sharedManager].debugRenderingInfo get])
     }];
     [_data addSection:renderingDebugSection];
+    
+    OATableSectionData *imageСacheSection = [OATableSectionData sectionData];
+    imageСacheSection.headerText = OALocalizedString(@"image_cache");
+    [imageСacheSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellKeyKey : kImageCacheKey,
+        kCellTitleKey : OALocalizedString(@"image_cache"),
+        @"actionBlock" : (^void(){
+        [weakSelf showModalViewController:[ImageCacheInfoViewController new]];
+    })
+    }];
+    [_data addSection:imageСacheSection];
 }
 
 - (NSInteger)sectionsCount

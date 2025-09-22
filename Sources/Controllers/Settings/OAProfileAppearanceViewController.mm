@@ -27,9 +27,6 @@
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static const int kIconsAtRestRow = 0;
-static const int kIconsWhileMovingRow = 1;
-
 static const int kNameSectionIndex = 0;
 static const int kColorSectionIndex = 1;
 static const int kColorRowIndex = 0;

@@ -119,7 +119,6 @@
 - (void) showTurnOnMap:(double)latitude longitude:(double)longitude title:(NSString *)title
 {
     const OsmAnd::LatLon latLon(latitude, longitude);
-    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     targetPoint.type = OATargetTurn;

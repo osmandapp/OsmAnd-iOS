@@ -268,7 +268,7 @@ static BOOL dataInvalidated = NO;
             resourceName:(NSString *)name
             resourceItem:(OAResourceItem *)resourceItem
 {
-    [OAResourcesUIHelper startDownloadOf:resource resourceName:name resourceItem:nil onTaskCreated:^(id<OADownloadTask> _Nonnull task) {
+    [OAResourcesUIHelper startDownloadOf:resource resourceName:name resourceItem:resourceItem onTaskCreated:^(id<OADownloadTask> _Nonnull task) {
         [self updateContent];
     } onTaskResumed:nil];
 }

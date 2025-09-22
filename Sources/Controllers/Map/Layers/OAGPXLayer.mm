@@ -1683,15 +1683,8 @@ colorizationScheme:(int)colorizationScheme
         [document recalculateProcessPoint];
         NSArray<OASWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplayWithIsJoinSegments:isJointSegments] radius:r point:point];
         if (points != nil)
-        {
-            CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
-                                                                                                longitude:point.longitude]
-                                                        fromLocation:[[CLLocation alloc] initWithLatitude:points.firstObject.position.latitude
-                                                                                                longitude:points.firstObject.position.longitude]
-                                                          toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
-                                                                                                longitude:points.lastObject.position.longitude]];
-            
-            [result collect:gpxDataItem ? gpxDataItem : [OASavingTrackHelper sharedInstance].currentTrack provider:self];
+        {            
+            [result collect:gpxDataItem ? : [OASavingTrackHelper sharedInstance].currentTrack provider:self];
         }
     }
 }

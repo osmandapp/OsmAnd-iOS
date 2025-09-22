@@ -3805,3 +3805,4 @@
 "percent_unit" = "%";
 "unit_volt" = "伏特";
 "preview_next_turn_descr" = "自動旋轉地圖來預纜下次轉彎或是動作";
+"key_event_action_zoom_in" = "放大";

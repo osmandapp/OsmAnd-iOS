@@ -406,7 +406,6 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 + (long) getOsmId:(std::shared_ptr<const OsmAnd::Amenity>)amenity
 {
     OsmAnd::ObfObjectId initAmenityId = amenity->id;
-    uint64_t amenityId;
     if (initAmenityId.isShiftedID())
         return initAmenityId.getOsmId();
     else

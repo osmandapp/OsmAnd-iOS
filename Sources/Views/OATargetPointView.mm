@@ -47,7 +47,6 @@
 
 static const CGFloat kMargin = 16.0;
 static const CGFloat kButtonsViewHeight = 44.0;
-static const CGFloat kDefaultMapRulerMarginBottom = 0;
 
 static const CGFloat kButtonsTopMargin = 1.0;
 static const CGFloat kButtonsBottomMargin = 10.0;
@@ -2627,7 +2626,6 @@ static const NSInteger _buttonsCount = 4;
         [self.menuViewDelegate targetStatusBarChanged];
         if (self.customController && self.customController.needsMapRuler)
         {
-            CGFloat rulerHeight = 25.0;
             [self.menuViewDelegate targetResetRulerPosition];
         }
         if (self.customController && self.customController.additionalAccessoryView)

@@ -16,7 +16,6 @@
 #import "GeneratedAssetSymbols.h"
 #import "OASegmentTableViewCell.h"
 
-static const CGFloat textHeight = 22.0;
 static const CGFloat imageSide = 30.0;
 static const CGFloat minTextWidth = 64.0;
 static const CGFloat fullTextWidth = 90.0;

@@ -12,23 +12,23 @@ final class KeyboardDeviceProfile: PredefinedInputDeviceProfile {
     
     override func collectAssignments() -> [KeyAssignment] {
         var list: [KeyAssignment] = []
-        addAssignment(to: &list, with: BackToLocationCommand.id, keyCodes: [.keyboardC])
-        addAssignment(to: &list, with: SwitchCompassCommand.id, keyCodes: [.keyboardD])
-        addAssignment(to: &list, with: OpenNavigationDialogCommand.id, keyCodes: [.keyboardN])
-        addAssignment(to: &list, with: OpenQuickSearchDialogCommand.id, keyCodes: [.keyboardS])
-        addAssignment(to: &list, with: SwitchAppModeCommand.switchToNextId, keyCodes: [.keyboardP])
-        addAssignment(to: &list, with: SwitchAppModeCommand.switchToPreviusId, keyCodes: [.keyboardO])
+        addAssignment(to: &list, with: KeyEventCommand.backToLocation.rawValue, keyCodes: [.keyboardC])
+        addAssignment(to: &list, with: KeyEventCommand.switchCompass.rawValue, keyCodes: [.keyboardD])
+        addAssignment(to: &list, with: KeyEventCommand.openNavigationDialog.rawValue, keyCodes: [.keyboardN])
+        addAssignment(to: &list, with: KeyEventCommand.openQuickSearchDialog.rawValue, keyCodes: [.keyboardS])
+        addAssignment(to: &list, with: KeyEventCommand.switchAppModeToNext.rawValue, keyCodes: [.keyboardP])
+        addAssignment(to: &list, with: KeyEventCommand.switchAppModeToPrevius.rawValue, keyCodes: [.keyboardO])
         
-        addAssignment(to: &list, with: MapScrollCommand.scrollUpId, keyCodes: [.keyboardUpArrow])
-        addAssignment(to: &list, with: MapScrollCommand.scrollDownId, keyCodes: [.keyboardDownArrow])
-        addAssignment(to: &list, with: MapScrollCommand.scrollLeftId, keyCodes: [.keyboardLeftArrow])
-        addAssignment(to: &list, with: MapScrollCommand.scrollRightId, keyCodes: [.keyboardRightArrow])
+        addAssignment(to: &list, with: KeyEventCommand.mapScrollUp.rawValue, keyCodes: [.keyboardUpArrow])
+        addAssignment(to: &list, with: KeyEventCommand.mapScrollDown.rawValue, keyCodes: [.keyboardDownArrow])
+        addAssignment(to: &list, with: KeyEventCommand.mapScrollLeft.rawValue, keyCodes: [.keyboardLeftArrow])
+        addAssignment(to: &list, with: KeyEventCommand.mapScrollRight.rawValue, keyCodes: [.keyboardRightArrow])
         
-        addAssignment(to: &list, with: MapZoomCommand.zoomInId, keyCodes: [.keypadPlus, .keyboardEqualSign])
-        addAssignment(to: &list, with: MapZoomCommand.zoomOutId, keyCodes: [.keyboardHyphen])
+        addAssignment(to: &list, with: KeyEventCommand.mapZoomIn.rawValue, keyCodes: [.keypadPlus, .keyboardEqualSign])
+        addAssignment(to: &list, with: KeyEventCommand.mapZoomOut.rawValue, keyCodes: [.keyboardHyphen])
         
-        addAssignment(to: &list, with: ToggleDrawerCommand.id, keyCodes: [.keyboardM])
-        addAssignment(to: &list, with: ActivityBackPressedCommand.id, keyCodes: [.keyboardEscape, .keyboardDeleteOrBackspace])
+        addAssignment(to: &list, with: KeyEventCommand.toggleDrawer.rawValue, keyCodes: [.keyboardM])
+        addAssignment(to: &list, with: KeyEventCommand.activityBackPressed.rawValue, keyCodes: [.keyboardEscape, .keyboardDeleteOrBackspace])
         return list
     }
     

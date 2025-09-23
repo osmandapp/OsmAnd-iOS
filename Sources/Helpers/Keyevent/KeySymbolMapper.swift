@@ -69,11 +69,19 @@ final class KeySymbolMapper {
         keySymbolMap[.keyboardDeleteForward] = "Forward Delete"
         keySymbolMap[.keyboardSpacebar] = "␣"
         keySymbolMap[.keyboardCapsLock] = "⇪"
-        keySymbolMap[.keyboardPageUp] = "⇞"
-        keySymbolMap[.keyboardPageDown] = "⇟"
+        keySymbolMap[.keyboardPageUp] = "Page Up ⇞"
+        keySymbolMap[.keyboardPageDown] = "Page Down ⇟"
         keySymbolMap[.keyboardHome] = "⇱"
         keySymbolMap[.keyboardEnd] = "⇲"
         keySymbolMap[.keyboardInsert] = "Ins"
+        keySymbolMap[.keyboardPause] = "Pause"
+        keySymbolMap[.keyboardScrollLock] = "Scroll lock"
+        keySymbolMap[.keyboardSysReqOrAttention] = "SysRq"
+        keySymbolMap[.keyboardVolumeUp] = "Vol Up"
+        keySymbolMap[.keyboardVolumeDown] = "Vol Down"
+        keySymbolMap[.keyboardMute] = "Mute"
+        keySymbolMap[.keyboardPower] = "Power"
+        keySymbolMap[.keyboardStop] = "Stop"
         
         // Punctuation / symbols
         keySymbolMap[.keyboardHyphen] = "-"
@@ -131,16 +139,5 @@ final class KeySymbolMapper {
         keySymbolMap[.keypadPeriod] = "Num ."
         keySymbolMap[.keypadEqualSign] = "Num ="
         keySymbolMap[.keypadComma] = "Num ,"
-        if let keypadLeftParenthesis: UIKeyboardHIDUsage = .keypadLeftParenthesis {
-            keySymbolMap[keypadLeftParenthesis] = "Num ("
-        }
-        if let keypadRightParenthesis: UIKeyboardHIDUsage = .keypadRightParenthesis {
-            keySymbolMap[keypadRightParenthesis] = "Num ("
-        }
     }
-}
-
-extension UIKeyboardHIDUsage {
-    static let keypadLeftParenthesis = UIKeyboardHIDUsage(rawValue: 0xB6)
-    static let keypadRightParenthesis = UIKeyboardHIDUsage(rawValue: 0xB7)
 }

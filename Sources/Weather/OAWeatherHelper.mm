@@ -859,6 +859,10 @@
     }
     
     _weatherResourcesManager->setWeatherSource(weatherSource);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_app.data.weatherChangeObservable notifyEventWithKey:self andValue:@(_app.data.weather)];
+    });
 }
 
 - (void)onWeatherSourceChanged:(id)observer withKey:(id)key andValue:(id)value

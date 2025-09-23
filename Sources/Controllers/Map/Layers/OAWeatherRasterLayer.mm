@@ -45,6 +45,7 @@
     OsmAnd::PointI _cachedCenterPixel;
     BOOL _cachedAnyWidgetVisible;
     BOOL _wasAlphaChanged;
+    BOOL _wasWeatherSourceChanged;
     NSTimeInterval _lastUpdateTime;
     
     int64_t _timePeriodStart;
@@ -86,6 +87,7 @@
                                                                       andObserve:self.app.data.weatherUseOfflineDataChangeObservable];
     _layerChangeObservers = [NSMutableArray array];
     _alphaChangeObservers = [NSMutableArray array];
+    _wasWeatherSourceChanged = YES;
     
     for (OAWeatherBand *band in [[OAWeatherHelper sharedInstance] bands])
     {
@@ -167,10 +169,11 @@
             _timePeriodEnd = _timePeriodStart;
         }
         
-        if (!_provider || wasBandsChanged || _wasAlphaChanged)
+        if (!_provider || wasBandsChanged || _wasAlphaChanged || _wasWeatherSourceChanged)
         {
             _requireTimePeriodChange = NO;
             _wasAlphaChanged = NO;
+            _wasWeatherSourceChanged = NO;
             
             _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, _timePeriodStart, _timePeriodEnd, _timePeriodStep, bands, self.app.data.weatherUseOfflineData);
             [self.mapView setProvider:_provider forLayer:self.layerIndex];
@@ -269,6 +272,7 @@
 
 - (void) onWeatherChanged
 {
+    _wasWeatherSourceChanged = YES;
     [self updateWeatherLayer];
 }
 

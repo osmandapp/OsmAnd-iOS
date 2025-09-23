@@ -7,7 +7,7 @@
 //
 
 @objcMembers
-final class RulerDistanceWidget: OATextInfoWidget {
+final class RulerDistanceWidget: OASimpleWidget {
 
     let updateRulerObservable = OAObservable()
     

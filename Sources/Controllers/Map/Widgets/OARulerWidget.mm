@@ -112,6 +112,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     UIImage *_centerIconDay;
     UIImage *_centerIconNight;
     BOOL _needUpdate;
+    OAMapWidgetRegistry *_widgetRegistry;
 }
 
 - (instancetype) init
@@ -158,6 +159,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _settings = [OAAppSettings sharedManager];
     _app = [OsmAndApp instance];
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    _widgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
 
     _mapDensity = _settings.mapDensity;
     _cachedMapDensity = [_mapDensity get];
@@ -892,28 +894,47 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         [self setNeedsDisplay];
 }
 
-- (BOOL)isRulerWidgetOn {
-    OAMapWidgetRegistry *widgetRegistry = OARootViewController.instance.mapPanel.mapWidgetRegistry;
-    NSArray<OAMapWidgetInfo *> *widgets = [widgetRegistry getWidgetInfosForType:OAWidgetType.radiusRuler];
-    if (widgets.count == 0)
-    {
-        return NO;
-    }
+- (BOOL)isRulerWidgetOn
+{
+    NSArray<OAMapWidgetInfo *> *widgets = [_widgetRegistry getWidgetInfosForType:OAWidgetType.radiusRuler];
+
     BOOL isWidgetVisible = NO;
-    OAMapHudViewController *mapHudViewController = [[OARootViewController instance] mapPanel].hudViewController;
     for (OAMapWidgetInfo *widget in widgets)
     {
-        if ([widgetRegistry isWidgetVisible:widget.key])
-        {
-            isWidgetVisible = widget.widgetPanel == OAWidgetsPanel.rightPanel
-            ? [mapHudViewController isRightPanelVisible]
-            : [mapHudViewController isLeftPanelVisible];
-        }
+        isWidgetVisible = [self isWidgetVisible:widget] && [self isPanelVisible:widget.widgetPanel];
         if (isWidgetVisible)
-            return YES;
+            break;
+    }
+    return isWidgetVisible;
+}
+
+- (BOOL)isWidgetVisible:(OAMapWidgetInfo *)widgetInfo
+{
+    return [_widgetRegistry isWidgetVisible:widgetInfo.key];
+}
+
+- (BOOL)isPanelVisible:(OAWidgetsPanel *)widgetsPanel
+{
+    BOOL isPanelVisible = NO;
+    OAMapHudViewController *mapHudViewController = [[OARootViewController instance] mapPanel].hudViewController;
+    if (widgetsPanel == OAWidgetsPanel.topPanel)
+    {
+        isPanelVisible = [mapHudViewController hasTopWidget];
+    }
+    else if (widgetsPanel == OAWidgetsPanel.bottomPanel)
+    {
+        isPanelVisible = [mapHudViewController hasBottomWidget];
+    }
+    else if (widgetsPanel == OAWidgetsPanel.leftPanel)
+    {
+        isPanelVisible = [mapHudViewController hasLeftWidget];
+    }
+    else if (widgetsPanel == OAWidgetsPanel.rightPanel)
+    {
+        isPanelVisible = [mapHudViewController hasRightWidget];
     }
     
-    return isWidgetVisible;
+    return isPanelVisible;
 }
 
 - (BOOL) updateVisibility:(BOOL)visible

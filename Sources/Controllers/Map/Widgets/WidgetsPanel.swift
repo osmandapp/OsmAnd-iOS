@@ -121,7 +121,7 @@ class WidgetsPanel: NSObject, NSCopying {
     }
 
     func contains(widgetId: String, appMode: OAApplicationMode = OAAppSettings.sharedManager().applicationMode.get()) -> Bool {
-        return getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
+         getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
     }
 
     func getOrderPreference() -> OACommonListOfStringList {

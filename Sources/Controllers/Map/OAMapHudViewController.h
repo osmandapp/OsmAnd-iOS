@@ -114,8 +114,10 @@
 - (void) updateInfo;
 
 - (void) updateCurrentLocationAddress;
+
 - (BOOL)hasTopWidget;
-- (BOOL)isRightPanelVisible;
-- (BOOL)isLeftPanelVisible;
+- (BOOL)hasBottomWidget;
+- (BOOL)hasLeftWidget;
+- (BOOL)hasRightWidget;
 
 @end

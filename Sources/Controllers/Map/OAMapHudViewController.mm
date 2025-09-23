@@ -1183,14 +1183,18 @@ static const float kDistanceMeters = 100.0;
     return [_mapInfoController.topPanelController hasWidgets];
 }
 
-- (BOOL)isRightPanelVisible
+- (BOOL)hasBottomWidget
 {
-    return _mapInfoController.rightPanelController && [_mapInfoController.rightPanelController hasWidgets];
+    return [_mapInfoController.bottomPanelController hasWidgets];
 }
 
-- (BOOL)isLeftPanelVisible
+- (BOOL)hasLeftWidget
 {
-    return _mapInfoController.leftPanelController && [_mapInfoController.leftPanelController hasWidgets];
+    return [_mapInfoController.leftPanelController hasWidgets];
+}
+- (BOOL)hasRightWidget
+{
+    return [_mapInfoController.rightPanelController hasWidgets];
 }
 
 - (void) updateBottomButtonsLayout
@@ -1441,8 +1445,8 @@ static const float kDistanceMeters = 100.0;
     BOOL isWeatherToolbarVisible = _mapInfoController.weatherToolbarVisible;
     BOOL isScrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
     BOOL isTopPanelVisible = _mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets];
-    BOOL isLeftPanelVisible = [self isLeftPanelVisible];
-    BOOL isRightPanelVisible = [self isRightPanelVisible];
+    BOOL isLeftPanelVisible = [self hasLeftWidget];
+    BOOL isRightPanelVisible = [self hasRightWidget];
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetGPX
         || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance

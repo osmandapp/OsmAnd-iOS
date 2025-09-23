@@ -98,16 +98,17 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
         guard let indexPath else { return nil }
         let item = tableData.item(for: indexPath)
-        if item.cellType == OAValueTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as! OAValueTableViewCell
+        if item.cellType == OAValueTableViewCell.reuseIdentifier,
+           let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as? OAValueTableViewCell {
             cell.descriptionVisibility(false)
             cell.accessoryType = .disclosureIndicator
             cell.leftIconVisibility(false)
             cell.titleLabel.text = item.title
             cell.valueLabel.text = item.descr
             return cell
-        } else if item.cellType == OALargeImageTitleDescrTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier, for: indexPath) as! OALargeImageTitleDescrTableViewCell
+        } else if item.cellType == OALargeImageTitleDescrTableViewCell.reuseIdentifier,
+                  let cell = tableView.dequeueReusableCell(withIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier, for: indexPath) as? OALargeImageTitleDescrTableViewCell {
+            
             let noExternalDevice = (item.obj(forKey: Self.noExternalDeviceKey) as? Bool) ?? false
             cell.selectionStyle = .none
             cell.showButton(!noExternalDevice)
@@ -130,8 +131,8 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
                 cell.button?.addTarget(self, action: #selector(onAddButtonClicked(sender:)), for: .touchUpInside)
             }
             return cell
-        } else if item.cellType == KeyAssignmentTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: KeyAssignmentTableViewCell.reuseIdentifier, for: indexPath) as! KeyAssignmentTableViewCell
+        } else if item.cellType == KeyAssignmentTableViewCell.reuseIdentifier,
+                  let cell = tableView.dequeueReusableCell(withIdentifier: KeyAssignmentTableViewCell.reuseIdentifier, for: indexPath) as? KeyAssignmentTableViewCell {
             cell.selectionStyle = settingExternalInputDevice.isCustom() ? .default : .none
             cell.accessoryType = .disclosureIndicator
             cell.setLeftIcon(item.iconName, tintColor: item.iconTintColor)

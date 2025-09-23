@@ -678,7 +678,14 @@ static const CGFloat kTextMaxHeight = 150.0;
             [OAMapillaryOsmTagHelper downloadImageByKey:feature[@"key"]
                                        onDataDownloaded:^(NSDictionary *result) {
                 if (result && onComplete)
+                {
                     onComplete([[MapillaryImageCard alloc] initWithData:result]);
+                }
+                else
+                {
+                    if (onComplete)
+                        onComplete(nil);
+                }
             }];
         }
         else
@@ -741,18 +748,18 @@ static const CGFloat kTextMaxHeight = 150.0;
     NSInteger existingCount = cards.count;
     
     __weak __typeof(self) weakSelf = self;
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    [[session dataTaskWithRequest:request
+                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
-
+        
         NSData *effectiveData = data;
         NSURLResponse *effectiveResponse = response;
 
         NSURLRequest *cacheRequest;
-
-        if ((!data || !response) && [strongSelf isInternetConnectionError:error])
+     
+        if ((!data || !response) && [ErrorHelper isInternetConnectionError:error])
         {
             cacheRequest = [strongSelf filteredCacheRequestFromRequest:request];
             NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:cacheRequest sessionKey:key];
@@ -773,7 +780,7 @@ static const CGFloat kTextMaxHeight = 150.0;
         else
         {
             if ([response isKindOfClass:[NSHTTPURLResponse class]] &&
-                ((NSHTTPURLResponse *)response).statusCode == 200)
+                ((NSHTTPURLResponse *)response).statusCode == 200 && data)
             {
                 cacheRequest = [strongSelf filteredCacheRequestFromRequest:request];
                 [URLSessionManager storeResponse:response data:data for:cacheRequest sessionKey:key];
@@ -819,8 +826,7 @@ static const CGFloat kTextMaxHeight = 150.0;
                 });
             }
         }
-    }];
-    [task resume];
+    }] resume];
 }
 
 - (void)onOtherCardsReady:(NSMutableArray<AbstractCard *> *)cards
@@ -858,14 +864,6 @@ static const CGFloat kTextMaxHeight = 150.0;
     }]];
     
     return [NSURLRequest requestWithURL:components.URL];
-}
-
-- (BOOL)isInternetConnectionError:(NSError *)error
-{
-    if (!error) return NO;
-    if (![error.domain isEqualToString:NSURLErrorDomain]) return NO;
-
-    return error.code == NSURLErrorNotConnectedToInternet;
 }
 
 - (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards
@@ -1380,7 +1378,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     if ([self.getTargetObj isKindOfClass:OAPOI.class])
     {
         OAPOI *poi = self.getTargetObj;
-        onlinePhotoCardsView.title = poi.nameLocalized;
+        onlinePhotoCardsView.title = poi.nameLocalized ?: poi.name;
     }
     
     __weak __typeof(self) weakSelf = self;

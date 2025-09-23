@@ -9,6 +9,7 @@
 #import "OAMapillaryOsmTagHelper.h"
 #import "OAMapillaryTilesProvider.h"
 #import "OAMapillaryImageViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define GRAPH_URL_ENDPOINT @"https://graph.mapillary.com/"
 #define PARAM_ACCESS_TOKEN [NSString stringWithFormat:@"access_token=%@", MAPILLARY_ACCESS_TOKEN]
@@ -89,10 +90,45 @@
 + (void)fetchFromUrl:(NSURL *)dataURL
         onDownloaded:(void (^)(NSData *data))onDownloaded
 {
-    NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    [[aSession dataTaskWithURL:dataURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (((NSHTTPURLResponse *) response).statusCode == 200 && data)
-            onDownloaded(data);
+    NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
+    NSURLSession *session = [URLSessionManager sessionFor:key];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:dataURL
+                                             cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                                         timeoutInterval:30];
+    
+    void (^completionHandler)(NSData * _Nullable) = ^(NSData * _Nullable result) {
+        if (onDownloaded)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                onDownloaded(result);
+            });
+        }
+    };
+    
+    [[session dataTaskWithRequest:request
+                completionHandler:^(NSData * _Nullable data,
+                                    NSURLResponse * _Nullable response,
+                                    NSError * _Nullable error) {
+        if ((!data || !response) && [ErrorHelper isInternetConnectionError:error])
+        {
+            NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];
+            if (cached)
+                completionHandler(cached.data);
+            else
+                completionHandler(nil);
+            return;
+        }
+        
+        if ([response isKindOfClass:[NSHTTPURLResponse class]] &&
+            ((NSHTTPURLResponse *)response).statusCode == 200 && data) {
+            [URLSessionManager storeResponse:response data:data for:request sessionKey:key];
+            completionHandler(data);
+            return;
+        }
+        
+        completionHandler(nil);
+        
     }] resume];
 }
 

@@ -1123,8 +1123,6 @@ int const kZoomToSearchPOI = 16.0;
 
 + (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter *)additionalFilter lat:(double)lat lon:(double)lon radius:(int)radius includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> *)matcher publish:(BOOL(^)(OAPOI *poi))publish
 {
-    CLLocation *currentLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
-    
     OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
     OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, point31);
     return [self findPOI:searchFilter additionalFilter:additionalFilter bbox31:bbox31 currentLocation:point31 includeTravel:includeTravel matcher:matcher publish:publish];

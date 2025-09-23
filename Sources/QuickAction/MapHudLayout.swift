@@ -282,12 +282,30 @@ final class MapHudLayout: NSObject {
         
         let cellFixPx: CGFloat = max(0, (hudBasePaddingDp - CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP)) * dpToPx)
         let startX = CGFloat(position.getXStartPix(dpToPix: Float(dpToPx))) + cellFixPx
-        let startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
+        var startY = CGFloat(position.getYStartPix(dpToPix: Float(dpToPx))) + cellFixPx
         let insets = containerView.safeAreaInsets
         let placeOnLeft = position.isLeft
+        let ruler = view as? OAMapRulerView
+        if let ruler, position.isBottom, !ignoreBottomSidePanels, let bottomBarPanelContainer, !bottomBarPanelContainer.isHidden, bottomBarPanelContainer.alpha > 0.01, bottomBarPanelContainer.bounds.height > 0 {
+            var proposedX = placeOnLeft ? insets.left + startX : containerView.bounds.width - insets.right - ruler.bounds.width - startX
+            if placeOnLeft, externalRulerLeftOffsetPx > 0 {
+                proposedX += max(0, externalRulerLeftOffsetPx - startX)
+            }
+            
+            let bottomFrame = bottomBarPanelContainer.convert(bottomBarPanelContainer.bounds, to: containerView)
+            if proposedX + ruler.bounds.width > bottomFrame.minX && proposedX < bottomFrame.maxX {
+                let cellPx = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP) * dpToPx
+                let needed = ceil((bottomFrame.height + cellPx) / cellPx) * cellPx
+                let base = startY - cellFixPx
+                if base < needed {
+                    startY = needed + cellFixPx
+                }
+            }
+        }
+        
         let extraTop = position.isTop ? externalTopOverlayPx : 0.0
         let extraBottom = position.isBottom ? externalBottomOverlayPx : 0.0
-        let rulerExtraX = view is OAMapRulerView && externalRulerLeftOffsetPx > 0 && placeOnLeft ? max(0, externalRulerLeftOffsetPx - startX) : 0.0
+        let rulerExtraX = ruler != nil && externalRulerLeftOffsetPx > 0 && placeOnLeft ? max(0, externalRulerLeftOffsetPx - startX) : 0.0
         let newX: CGFloat = (placeOnLeft ? insets.left + startX : containerView.bounds.width - insets.right - view.bounds.width - startX) + rulerExtraX
         let newY: CGFloat = position.isTop ? statusBarHeight + startY + extraTop : statusBarHeight + getAdjustedHeight() - view.bounds.height - startY - extraBottom
         let newOrigin = CGPoint(x: newX, y: newY)

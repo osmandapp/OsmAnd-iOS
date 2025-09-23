@@ -75,7 +75,7 @@ final class KeyAssignmentTableViewCell: UITableViewCell {
     private func addSpacer() {
         let spacer = UIView()
         spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        spacer.setContentCompressionResistancePriority(.required, for: .horizontal)
+        spacer.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         keysStackView.addArrangedSubview(spacer)
     }
 }

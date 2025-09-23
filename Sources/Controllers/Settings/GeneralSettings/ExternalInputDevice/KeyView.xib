@@ -14,10 +14,10 @@
             <rect key="frame" x="0.0" y="0.0" width="94" height="101"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dxs-tV-QGJ">
+                <view contentMode="scaleToFill" horizontalHuggingPriority="252" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="dxs-tV-QGJ">
                     <rect key="frame" x="0.0" y="0.0" width="94" height="101"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="P" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pnw-Wa-Phb">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="P" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pnw-Wa-Phb">
                             <rect key="frame" x="12" y="9" width="70" height="83"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
                             <color key="textColor" name="textColorActive"/>

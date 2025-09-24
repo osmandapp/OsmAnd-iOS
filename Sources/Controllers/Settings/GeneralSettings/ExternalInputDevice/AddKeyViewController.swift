@@ -89,7 +89,10 @@ final class AddKeyViewController: OABaseSettingsViewController {
                 }
             }
         }
-        super.pressesBegan(presses, with: event)
+    }
+    
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        // Make key pressing doesn't influence other places
     }
     
     private func changeSaveButtonAvailability(isEnabled: Bool) {

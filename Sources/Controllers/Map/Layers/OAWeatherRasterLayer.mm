@@ -36,6 +36,7 @@
     BOOL _needsSettingsForToolbar;
     OAAutoObserverProxy* _weatherChangeObserver;
     OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
+    OAAutoObserverProxy* _weatherSourceChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
     NSMutableArray<OAAutoObserverProxy *> *_alphaChangeObservers;
     
@@ -85,6 +86,10 @@
     _weatherUseOfflineDataChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                      withHandler:@selector(onWeatherLayerChanged)
                                                                       andObserve:self.app.data.weatherUseOfflineDataChangeObservable];
+    _weatherSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onWeatherSourceChanged:withKey:andValue:)
+                                                            andObserve:self.app.data.weatherSourceChangeObservable];
+
     _layerChangeObservers = [NSMutableArray array];
     _alphaChangeObservers = [NSMutableArray array];
     _wasWeatherSourceChanged = YES;
@@ -271,6 +276,12 @@
 }
 
 - (void) onWeatherChanged
+{
+    _wasWeatherSourceChanged = YES;
+    [self updateWeatherLayer];
+}
+
+- (void)onWeatherSourceChanged:(id)observer withKey:(id)key andValue:(id)value
 {
     _wasWeatherSourceChanged = YES;
     [self updateWeatherLayer];

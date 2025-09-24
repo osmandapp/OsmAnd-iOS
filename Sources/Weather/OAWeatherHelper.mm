@@ -859,16 +859,6 @@
     }
     
     _weatherResourcesManager->setWeatherSource(weatherSource);
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_app.data.weatherChangeObservable notifyEventWithKey:self andValue:@(_app.data.weather)];
-        
-        OAWeatherPlugin *weatherPlugin = [OAPluginsHelper getPlugin:OAWeatherPlugin.class];
-        if (weatherPlugin)
-        {
-            [weatherPlugin updateWidgetsInfo];
-        }
-    });
 }
 
 - (void)onWeatherSourceChanged:(id)observer withKey:(id)key andValue:(id)value

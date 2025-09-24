@@ -32,7 +32,7 @@ class BaseMapZoomAction: OAQuickAction {
     }
     
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent) {
-        // Make nothing after unselecting key button
+        // Reject base method execution
     }
     
     class func quickActionType() -> QuickActionType {

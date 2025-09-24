@@ -24,11 +24,11 @@ final class KeyboardDeviceProfile: PredefinedInputDeviceProfile {
         addAssignment(to: &list, with: KeyEventCommand.mapScrollLeft.rawValue, keyCodes: [.keyboardLeftArrow])
         addAssignment(to: &list, with: KeyEventCommand.mapScrollRight.rawValue, keyCodes: [.keyboardRightArrow])
         
-        addAssignment(to: &list, with: KeyEventCommand.mapZoomIn.rawValue, keyCodes: [.keypadPlus, .keyboardEqualSign])
+        addAssignment(to: &list, with: KeyEventCommand.mapZoomIn.rawValue, keyCodes: [.keyboardEqualSign])
         addAssignment(to: &list, with: KeyEventCommand.mapZoomOut.rawValue, keyCodes: [.keyboardHyphen])
         
         addAssignment(to: &list, with: KeyEventCommand.toggleDrawer.rawValue, keyCodes: [.keyboardM])
-        addAssignment(to: &list, with: KeyEventCommand.activityBackPressed.rawValue, keyCodes: [.keyboardEscape, .keyboardDeleteOrBackspace])
+        addAssignment(to: &list, with: KeyEventCommand.activityBackPressed.rawValue, keyCodes: [.keyboardEscape])
         return list
     }
     

@@ -55,11 +55,15 @@ final class KeyAssignment {
         var collected = [UIKeyboardHIDUsage]()
         if let keyCodesArray = jsonObject["keycodes"] as? [[String: Any]] {
             for item in keyCodesArray {
-                if let keyCodeRawValue = item["keycode"] as? CFIndex, let keyCode = UIKeyboardHIDUsage(rawValue: keyCodeRawValue) {
+                if let keyCodeRawValue = item["keycode"] as? CFIndex,
+                   let keyEvent = KeyEvent(rawValue: keyCodeRawValue),
+                   let keyCode = KeyEventMapper.keyEventToKeyboardHIDUsage(keyEvent) {
                     collected.append(keyCode)
                 }
             }
-        } else if let singleRawValue = jsonObject["keycode"] as? CFIndex, let single = UIKeyboardHIDUsage(rawValue: singleRawValue) {
+        } else if let singleRawValue = jsonObject["keycode"] as? CFIndex,
+                  let keyEvent = KeyEvent(rawValue: singleRawValue),
+                  let single = KeyEventMapper.keyEventToKeyboardHIDUsage(keyEvent) {
             collected.append(single)
         }
         keyCodes = collected
@@ -144,7 +148,7 @@ final class KeyAssignment {
         }
         
         if !keyCodes.isEmpty {
-            let arr = keyCodes.map { ["keycode": $0.rawValue] }
+            let arr = keyCodes.map { ["keycode": KeyEventMapper.keyboardHIDUsageToKeyEvent($0).rawValue] }
             obj["keycodes"] = arr
         }
         return obj

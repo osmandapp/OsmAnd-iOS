@@ -48,6 +48,8 @@ static NSString * const kDialog = @"dialog";
 - (nullable NSString *)getActionStateName;
 - (CLLocation *)getMapLocation;
 
+- (NSDictionary *)toDictionary;
+
 - (void)execute;
 - (void)drawUI;
 - (OrderedDictionary *)getUIModel;

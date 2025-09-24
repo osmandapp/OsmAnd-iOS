@@ -130,28 +130,27 @@ final class KeyAssignment {
     }
     
     func toJson() -> [String: Any] {
-        var obj: [String: Any] = [:]
-        obj["id"] = id
+        var jsonObject: [String: Any] = [:]
+        jsonObject["id"] = id
+        
         if let customName {
-            obj["customName"] = customName
+            jsonObject["customName"] = customName
         }
         
-        if let action {
-            if let data = try? OAMapButtonsHelper.sharedInstance().getSerializer().serialize([action]),
-               let arr = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
-                obj["action"] = arr
-            }
+        if let action, let actionJsonArray = OAMapButtonsHelper.sharedInstance().convertActions(toJson: [action]) as? [[String: Any]] {
+            jsonObject["action"] = actionJsonArray
         }
         
         if let commandId {
-            obj["commandId"] = commandId
+            jsonObject["commandId"] = commandId
         }
         
         if !keyCodes.isEmpty {
             let arr = keyCodes.map { ["keycode": KeyEventMapper.keyboardHIDUsageToKeyEvent($0).rawValue] }
-            obj["keycodes"] = arr
+            jsonObject["keycodes"] = arr
         }
-        return obj
+        
+        return jsonObject
     }
     
     private func defaultName() -> String? {

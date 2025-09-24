@@ -203,6 +203,24 @@ static NSInteger SEQ = 0;
     return [[OAMapViewTrackingUtilities instance] getMapLocation];
 }
 
+- (NSDictionary *)toDictionary
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    
+    [dict setObject:@(_id) forKey:@"id"];
+    
+    if (_name)
+        [dict setObject:_name forKey:@"name"];
+    
+    if (_actionType)
+        [dict setObject:_actionType.stringId forKey:@"actionType"];
+    
+    if (_params)
+        [dict setObject:_params forKey:@"params"];
+    
+    return [dict copy];
+}
+
 - (void)execute
 {
 }

@@ -42,6 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)onQuickActionsChanged:(QuickActionButtonState *)buttonState;
 - (void)refreshQuickActionButtons;
 
+- (NSArray<NSDictionary *> *)convertActionsToJson:(NSArray<OAQuickAction *> *)quickActions;
+
 - (BOOL)isActionNameUnique:(NSArray<OAQuickAction *> *)actions quickAction:(OAQuickAction *)quickAction;
 - (OAQuickAction *)generateUniqueActionName:(NSArray<OAQuickAction *> *)actions action:(OAQuickAction *)action;
 - (NSString *)generateUniqueButtonName:(NSString *)name;

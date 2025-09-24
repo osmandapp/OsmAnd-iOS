@@ -475,6 +475,18 @@ static QuickActionType *TYPE_INTERFACE;
     return nil;
 }
 
+- (NSArray<NSDictionary *> *)convertActionsToJson:(NSArray<OAQuickAction *> *)quickActions
+{
+    NSMutableArray *jsonArray = [NSMutableArray array];
+    for (OAQuickAction *action in quickActions)
+    {
+        NSDictionary *dict = [action toDictionary];
+        if (dict)
+            [jsonArray addObject:dict];
+    }
+    return jsonArray;
+}
+
 - (BOOL)isActionButtonNameUnique:(NSString *)name
 {
     return [self getButtonStateByName:name] == nil;

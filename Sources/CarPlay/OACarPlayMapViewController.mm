@@ -134,11 +134,9 @@
 {
     if (_mapVc.isCarPlayDashboardActive)
         return;
-
-    UIEdgeInsets insets = _window.safeAreaInsets;
-
-    CGFloat h = self.view.frame.size.height;
-    CGFloat heightOffset = insets.top / h;
+    
+    UIEdgeInsets insets = self.view.safeAreaInsets;
+    CGFloat heightOffset = [self heightOffsetForInsets:insets];
 
     BOOL isLeftSideDriving = [self isLeftSideDriving];
     
@@ -146,21 +144,46 @@
     EOAPositionPlacement placement = (EOAPositionPlacement) [[OAAppSettings sharedManager].positionPlacementOnMap get];
     double y;
     if (placement == EOAPositionPlacementAuto)
-        y = ([[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_BEARING && !isRoutePlanning ? 1.5 : 1.0);
+        y = ([[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_BEARING && !isRoutePlanning ? [self mapCenterBottomYWithInsets:insets] : 1.0 + heightOffset);
     else
-        y = (placement == EOAPositionPlacementCenter || isRoutePlanning ? 1.0 : 1.5);
+        y = (placement == EOAPositionPlacementCenter || isRoutePlanning ? 1.0 + heightOffset : [self mapCenterBottomYWithInsets:insets]);
     
     if (_isInNavigationMode)
     {
-        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.5 : 0.5 y:y + heightOffset];
+        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.5 : 0.5 y:y];
     }
     else
     {
-        CGFloat w = self.view.frame.size.width;
+        CGFloat w = MAX(self.view.frame.size.width, 1.0);
         CGFloat widthOffset = MAX(insets.right, insets.left) / w;
         
-        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset y:y + heightOffset];
+        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset y:y];
     }
+}
+
+- (CGFloat)heightOffsetForInsets:(UIEdgeInsets)insets
+{
+    CGFloat viewHeight = [self viewHeightSafe];
+    return (insets.top - insets.bottom) / viewHeight;
+}
+
+- (CGFloat)viewHeightSafe
+{
+    return MAX(self.view.frame.size.height, 1.0);
+}
+
+- (CGFloat)mapCenterBottomYWithInsets:(UIEdgeInsets)insets
+{
+    CGFloat viewHeight = [self viewHeightSafe];
+    
+    CGFloat bottomMargin = 60.0;
+    CGFloat totalBottomOffset = bottomMargin + (insets.bottom / 3.0);
+    CGFloat y = 2.0 - (totalBottomOffset / (viewHeight / 2.0));
+
+    CGFloat heightOffset = (insets.top - insets.bottom) / viewHeight;
+    y += heightOffset;
+
+    return y;
 }
 
 - (void)setupAlarmSpeedometerStackView

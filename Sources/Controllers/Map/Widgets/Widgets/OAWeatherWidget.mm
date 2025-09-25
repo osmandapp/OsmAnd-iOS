@@ -36,6 +36,7 @@
     OsmAnd::PointI _cachedMarkerCenterPixel;
     OsmAnd::ZoomLevel _cachedZoom;
     NSDate *_cachedDate;
+    NSString *_cachedWeatherSource;
     CGSize _cachedViewFrame;
     
     NSMeasurementFormatter *_formatter;
@@ -80,9 +81,20 @@
     CGSize viewFrame = mapCtrl.view.frame.size;
     BOOL frameChanged = !CGSizeEqualToSize(_cachedViewFrame, viewFrame);
     BOOL centerPixelChanged = _cachedCenterPixel != centerPixel;
+    NSString *currentWeatherSource = [OsmAndApp instance].data.weatherSource;
+    BOOL weatherSourceChanged = ![_cachedWeatherSource isEqualToString:currentWeatherSource];
 
-    if (_cachedTarget31 == target31 && _cachedFixedPixel == fixedPixel && !centerPixelChanged && _cachedZoom == zoom && !frameChanged && _cachedDate && [_cachedDate isEqualToDate:date] && !needToUpdate)
+    if (_cachedTarget31 == target31 && _cachedFixedPixel == fixedPixel && !centerPixelChanged && _cachedZoom == zoom && !frameChanged && _cachedDate && [_cachedDate isEqualToDate:date] && !needToUpdate && !weatherSourceChanged)
         return false;
+
+    if ([currentWeatherSource isEqualToString:@"ecmwf"])
+    {
+        if (_band == WEATHER_BAND_CLOUD || _band == WEATHER_BAND_WIND_SPEED)
+        {
+            [self setText:@"-" subtext:nil];
+            return NO;
+        }
+    }
 
     _cachedTarget31 = target31;
     _cachedFixedPixel = fixedPixel;
@@ -91,6 +103,7 @@
     _cachedDate = date;
     _cachedBandUnit = bandUnit;
     _cachedViewFrame = viewFrame;
+    _cachedWeatherSource = currentWeatherSource;
 
     OsmAnd::PointI elevated31 = [OANativeUtilities get31FromElevatedPixel:centerPixel];
 

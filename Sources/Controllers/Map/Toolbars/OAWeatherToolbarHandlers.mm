@@ -48,6 +48,16 @@
 - (void)updateData
 {
     NSMutableArray<NSMutableDictionary *> *layersData = [NSMutableArray array];
+    
+    BOOL isECMWF = [_app.data.weatherSource isEqualToString:@"ecmwf"];
+    
+    if (isECMWF)
+    {
+        if (_app.data.weatherWind)
+            _app.data.weatherWind = NO;
+        if (_app.data.weatherCloud)
+            _app.data.weatherCloud = NO;
+    }
 
     [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
         @"selected": @(_app.data.weatherTemp)
@@ -56,10 +66,12 @@
         @"selected": @(_app.data.weatherPressure)
     }]];
     [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-        @"selected": @(_app.data.weatherWind)
+        @"selected": @(_app.data.weatherWind && !isECMWF),
+        @"disabled": @(isECMWF)
     }]];
     [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-        @"selected": @(_app.data.weatherCloud)
+        @"selected": @(_app.data.weatherCloud && !isECMWF),
+        @"disabled": @(isECMWF)
     }]];
     [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
         @"selected": @(_app.data.weatherPrecip)

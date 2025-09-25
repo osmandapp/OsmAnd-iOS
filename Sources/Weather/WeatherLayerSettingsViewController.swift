@@ -63,15 +63,24 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
             cell.descriptionVisibility(false)
             cell.leftIconVisibility(true)
             let selected = item.bool(forKey: Self.selectedKey)
+            let isDisabled = item.bool(forKey: "disabled")
+            
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.leftIconView.tintColor = selected ? .iconColorActive : .iconColorDefault
+            cell.leftIconView.tintColor = isDisabled ? .iconColorDisabled : (selected ? .iconColorActive : .iconColorDefault)
             cell.titleLabel.text = item.title
+            cell.titleLabel.textColor = isDisabled ? .textColorSecondary : .textColorPrimary
             cell.accessibilityLabel = item.accessibilityLabel
             cell.accessibilityValue = item.accessibilityValue
+            
             cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
             cell.switchView.isOn = selected
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row
-            cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
+            cell.switchView.isEnabled = !isDisabled
+            cell.switchView.alpha = isDisabled ? 0.5 : 1.0
+            
+            if !isDisabled {
+                cell.switchView.tag = indexPath.section << 10 | indexPath.row
+                cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
+            }
             return cell
         }
         return nil
@@ -99,9 +108,14 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         row.title = item.getMeasurementName()
         row.iconName = item.getIcon()
         
-        let isVisible = item.isBandVisible()
+        let isECMWF = OsmAndApp.swiftInstance().data.weatherSource == "ecmwf"
+        let isWindOrCloud = item.bandIndex == .WEATHER_BAND_WIND_SPEED || item.bandIndex == .WEATHER_BAND_CLOUD
+        let isDisabled = isECMWF && isWindOrCloud
+        let isVisible = item.isBandVisible() && !isDisabled
+        
         row.setObj(isVisible, forKey: Self.selectedKey)
         row.setObj(item, forKey: "band")
+        row.setObj(isDisabled, forKey: "disabled")
         
         row.accessibilityLabel = row.title
         row.accessibilityValue = localizedString(isVisible ? "shared_string_on" : "shared_string_off")

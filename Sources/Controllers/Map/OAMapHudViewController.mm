@@ -91,6 +91,7 @@ static const float kDistanceMeters = 100.0;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
     OAAutoObserverProxy* _applicaionModeObserver;
     OAAutoObserverProxy *_weatherSettingsChangeObserver;
+    OAAutoObserverProxy *_weatherSourceChangeObserver;
 
     OAOverlayUnderlayView* _overlayUnderlayView;
     
@@ -175,6 +176,10 @@ static const float kDistanceMeters = 100.0;
     _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onWeatherSettingsChange:withKey:andValue:)
                                                          andObserve:[OsmAndApp instance].data.weatherSettingsChangeObservable];
+    
+    _weatherSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onWeatherSourceChanged:withKey:andValue:)
+                                                         andObserve:[OsmAndApp instance].data.weatherSourceChangeObservable];
     
     _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                         withHandler:@selector(onLocationServicesStatusChanged)
@@ -539,6 +544,13 @@ static const float kDistanceMeters = 100.0;
         NSString *operation = (NSString *) key;
         if ([operation isEqualToString:kWeatherSettingsChanged])
             [_weatherToolbar updateInfo];
+    });
+}
+
+- (void)onWeatherSourceChanged:(id)observer withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self configureWeatherContoursButton];
     });
 }
 

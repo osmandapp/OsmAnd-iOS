@@ -22,6 +22,8 @@ final class WeatherContoursButton: OAHudButton {
     }
     
     private func createContourMenu() -> UIMenu {
+        let isECMWF = app.data.weatherSource == "ecmwf"
+        
         let none = UIAction(title: localizedString("shared_string_none"),
                             image: UIImage(named: "ic_custom_contour_lines_disabled")?
                     .withTintColor(.mapButtonIconColorDefault)) { [weak self] _ in
@@ -57,7 +59,15 @@ final class WeatherContoursButton: OAHudButton {
                     .withTintColor(.mapButtonIconColorDefault)) { [weak self] _ in
             self?.updateContourLayer(WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR)
         }
-        
+
+        if isECMWF {
+            app.data.contourName = WEATHER_NONE_CONTOURS_LINES_VALUE
+            styleSettings.setWeatherContourLinesEnabled(false, weatherContourLinesAttr: WEATHER_CLOUD_CONTOURS_LINES_ATTR)
+            styleSettings.setWeatherContourLinesEnabled(false, weatherContourLinesAttr: WEATHER_WIND_CONTOURS_LINES_ATTR)
+            wind.attributes = .disabled
+            cloud.attributes = .disabled
+        }
+
         let contourName = app.data.contourName ?? ""
         let isEnabled = styleSettings.isAnyWeatherContourLinesEnabled() || !contourName.isEmpty
         

@@ -36,6 +36,7 @@
     BOOL _needsSettingsForToolbar;
     OAAutoObserverProxy* _weatherChangeObserver;
     OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
+    OAAutoObserverProxy* _weatherSourceChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
     NSMutableArray<OAAutoObserverProxy *> *_alphaChangeObservers;
     
@@ -45,6 +46,7 @@
     OsmAnd::PointI _cachedCenterPixel;
     BOOL _cachedAnyWidgetVisible;
     BOOL _wasAlphaChanged;
+    BOOL _wasWeatherSourceChanged;
     NSTimeInterval _lastUpdateTime;
     
     int64_t _timePeriodStart;
@@ -84,8 +86,13 @@
     _weatherUseOfflineDataChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                      withHandler:@selector(onWeatherLayerChanged)
                                                                       andObserve:self.app.data.weatherUseOfflineDataChangeObservable];
+    _weatherSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onWeatherSourceChanged:withKey:andValue:)
+                                                            andObserve:self.app.data.weatherSourceChangeObservable];
+
     _layerChangeObservers = [NSMutableArray array];
     _alphaChangeObservers = [NSMutableArray array];
+    _wasWeatherSourceChanged = YES;
     
     for (OAWeatherBand *band in [[OAWeatherHelper sharedInstance] bands])
     {
@@ -167,10 +174,11 @@
             _timePeriodEnd = _timePeriodStart;
         }
         
-        if (!_provider || wasBandsChanged || _wasAlphaChanged)
+        if (!_provider || wasBandsChanged || _wasAlphaChanged || _wasWeatherSourceChanged)
         {
             _requireTimePeriodChange = NO;
             _wasAlphaChanged = NO;
+            _wasWeatherSourceChanged = NO;
             
             _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, _timePeriodStart, _timePeriodEnd, _timePeriodStep, bands, self.app.data.weatherUseOfflineData);
             [self.mapView setProvider:_provider forLayer:self.layerIndex];
@@ -269,6 +277,13 @@
 
 - (void) onWeatherChanged
 {
+    _wasWeatherSourceChanged = YES;
+    [self updateWeatherLayer];
+}
+
+- (void)onWeatherSourceChanged:(id)observer withKey:(id)key andValue:(id)value
+{
+    _wasWeatherSourceChanged = YES;
     [self updateWeatherLayer];
 }
 

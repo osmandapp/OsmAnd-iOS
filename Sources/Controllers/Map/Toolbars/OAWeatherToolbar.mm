@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
     OAAutoObserverProxy *_contourNameChangeObserver;
     OAAutoObserverProxy *_mapSourceUpdatedObserver;
+    OAAutoObserverProxy *_weatherSourceChangeObserver;
 
     OAWeatherToolbarLayersHandler *_layersHandler;
     OAWeatherToolbarDatesHandler *_datesHandler;
@@ -143,6 +144,9 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(updateLayersHandlerData)
                                                   andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
+    _weatherSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                      withHandler:@selector(onWeatherSourceChanged:withKey:andValue:)
+                                                       andObserve:_app.data.weatherSourceChangeObservable];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(onDownloadStateChanged:)
@@ -209,6 +213,15 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_layersHandler updateData];
         [self configureWidgetControlsStackView];
+    });
+}
+
+- (void)onWeatherSourceChanged:(id)observer withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_plugin updateWidgetsInfo];
+        [self updateWidgetsInfo];
+        [_layersHandler updateData];
     });
 }
 

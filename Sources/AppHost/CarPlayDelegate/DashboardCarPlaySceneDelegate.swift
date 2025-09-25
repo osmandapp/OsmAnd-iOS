@@ -54,9 +54,9 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 let placement = settings.positionPlacementOnMap.get()
                 var y: Double
                 if placement == EOAPositionPlacement.auto.rawValue {
-                    y = settings.rotateMap.get() == ROTATE_MAP_BEARING && !isRoutePlanning ? 1.5 : 1.0
+                    y = settings.rotateMap.get() == ROTATE_MAP_BEARING && !isRoutePlanning ? mapCenterBottomY() : 1.0
                 } else {
-                    y = placement == EOAPositionPlacement.center.rawValue || isRoutePlanning ? 1.0 : 1.5
+                    y = placement == EOAPositionPlacement.center.rawValue || isRoutePlanning ? 1.0 : mapCenterBottomY()
                 }
                 mapVC.setViewportForCarPlayScaleX(1.0, y: y)
             }
@@ -64,6 +64,13 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
             NotificationCenter.default.addObserver(self, selector: #selector(appInitEventConfigureScene(notification:)), name: NSNotification.Name.OALaunchUpdateState, object: nil)
         }
+    }
+    
+    private func mapCenterBottomY(bottomMargin: CGFloat = 60.0) -> CGFloat {
+        guard let screenHeight = dashboardVC?.view.frame.height, screenHeight > 0 else {
+            return 1.5
+        }
+        return 2.0 - (bottomMargin / (screenHeight / 2.0))
     }
     
     @objc private func appInitEventConfigureScene(notification: Notification) {

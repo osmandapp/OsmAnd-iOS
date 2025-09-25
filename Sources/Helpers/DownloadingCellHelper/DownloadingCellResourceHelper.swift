@@ -214,6 +214,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     func getOrCreateCell(_ resourceId: String, swiftResourceItem: OAResourceSwiftItem?) -> DownloadingCell? {
         if let swiftResourceItem, swiftResourceItem.objcResourceItem != nil {
+            swiftResourceItem.refreshDownloadTask()
             if getResource(resourceId) == nil {
                 saveResource(resource: swiftResourceItem, resourceId: resourceId)
             }

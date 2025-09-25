@@ -441,7 +441,7 @@ int const kZoomToSearchPOI = 16.0;
         if (nameB)
             nameB = [OAUtilities simplifyFileName:[nameB lastPathComponent]];
         
-        return [nameA compare:nameB] == NSOrderedAscending;
+        return [nameA compare:nameB] == NSOrderedDescending;
     });
     
     for (const auto& file : obfFiles)
@@ -1135,6 +1135,7 @@ int const kZoomToSearchPOI = 16.0;
     NSMutableSet<NSNumber *> *openAmenities = [NSMutableSet new];
     NSMutableSet<NSNumber *> *closedAmenities = [NSMutableSet new];
     NSMutableArray<OAPOI *> *actualAmenities = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
     
     OASearchPoiTypeFilter *filter = searchFilter;
     BOOL done = false;
@@ -1174,15 +1175,16 @@ int const kZoomToSearchPOI = 16.0;
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
             
             search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
-                                              [&filter, &foundAmenities, &currentLocation, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                              [&filter, &foundAmenities, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
                 
                                         OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:am];
                                         BOOL accept = [filter accept:type.category subcategory:type.name];
                 
-                                        if (accept)
+                                        if (![processedPoi containsObject:@(am->id.id)] && accept)
                                         {
+                                            [processedPoi addObject:@(am->id.id)];
                                             OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:YES withContent:YES];
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
                                             

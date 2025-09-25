@@ -13,7 +13,14 @@ final class KeySymbolMapper {
         if keySymbolMap.isEmpty {
             load()
         }
-        return keySymbolMap[usage] ?? "\(usage.rawValue)"
+        if usage == .keyboardErrorRollOver {
+            return localizedString("shared_string_none")
+        }
+        if let symbol = keySymbolMap[usage] {
+            return symbol
+        } else {
+            return UnicodeScalar(usage.rawValue).flatMap(String.init) ?? String(usage.rawValue)
+        }
     }
     
     private static func load() {

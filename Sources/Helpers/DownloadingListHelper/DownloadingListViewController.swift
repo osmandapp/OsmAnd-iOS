@@ -18,6 +18,7 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDownloadingCellHelper()
+        fetchResources()
     }
 
     override func refreshOnAppear() -> Bool {

@@ -441,7 +441,7 @@ int const kZoomToSearchPOI = 16.0;
         if (nameB)
             nameB = [OAUtilities simplifyFileName:[nameB lastPathComponent]];
         
-        return [nameA compare:nameB] == NSOrderedAscending;
+        return [nameA compare:nameB] == NSOrderedDescending;
     });
     
     for (const auto& file : obfFiles)
@@ -1207,7 +1207,7 @@ int const kZoomToSearchPOI = 16.0;
                 {
                     [closedAmenities addObject:obfId];
                 }
-                else if (![closedAmenities containsObject:obfId] && ![openAmenities containsObject:obfId])
+                else if (![closedAmenities containsObject:obfId])
                 {
                     [openAmenities addObject:obfId];
                     [actualAmenities addObject:amenity];

@@ -221,6 +221,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_plugin updateWidgetsInfo];
         [self updateWidgetsInfo];
+        [_layersHandler updateData];
     });
 }
 

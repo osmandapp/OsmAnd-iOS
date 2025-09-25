@@ -87,6 +87,15 @@
     if (_cachedTarget31 == target31 && _cachedFixedPixel == fixedPixel && !centerPixelChanged && _cachedZoom == zoom && !frameChanged && _cachedDate && [_cachedDate isEqualToDate:date] && !needToUpdate && !weatherSourceChanged)
         return false;
 
+    if ([currentWeatherSource isEqualToString:@"ecmwf"])
+    {
+        if (_band == WEATHER_BAND_CLOUD || _band == WEATHER_BAND_WIND_SPEED)
+        {
+            [self setText:@"-" subtext:nil];
+            return NO;
+        }
+    }
+
     _cachedTarget31 = target31;
     _cachedFixedPixel = fixedPixel;
     _cachedCenterPixel = centerPixel;

@@ -1135,7 +1135,6 @@ int const kZoomToSearchPOI = 16.0;
     NSMutableSet<NSNumber *> *openAmenities = [NSMutableSet new];
     NSMutableSet<NSNumber *> *closedAmenities = [NSMutableSet new];
     NSMutableArray<OAPOI *> *actualAmenities = [NSMutableArray array];
-    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
     
     OASearchPoiTypeFilter *filter = searchFilter;
     BOOL done = false;
@@ -1175,16 +1174,15 @@ int const kZoomToSearchPOI = 16.0;
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
             
             search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
-                                              [&filter, &foundAmenities, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                              [&filter, &foundAmenities, &currentLocation, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
                 
                                         OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:am];
                                         BOOL accept = [filter accept:type.category subcategory:type.name];
                 
-                                        if (![processedPoi containsObject:@(am->id.id)] && accept)
+                                        if (accept)
                                         {
-                                            [processedPoi addObject:@(am->id.id)];
                                             OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:YES withContent:YES];
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
                                             
@@ -1207,7 +1205,7 @@ int const kZoomToSearchPOI = 16.0;
                 {
                     [closedAmenities addObject:obfId];
                 }
-                else if (![closedAmenities containsObject:obfId] && ![openAmenities containsObject:obfId])
+                else if (![closedAmenities containsObject:obfId])
                 {
                     [openAmenities addObject:obfId];
                     [actualAmenities addObject:amenity];

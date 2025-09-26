@@ -2888,7 +2888,7 @@
 "specify_number_of_dir_indicators_desc" = "Angiv antal retningsindikatorer.";
 "map_marker_interval_dialog_desc" = "Angiv det tidsinterval, hvor gennemsnitshastigheden skal måles for at beregne den forventede ankomsttid.";
 "ios_release_4_5" = "• Fuldstændig redesignet moduloplevelse: mulighed for at ændre modulposition, gruppering efter sider, én modulliste til venstre og højre panel\n• Redesignet konfigurationsskærm\n• Gratis sikkerhedskopiering af favoritter, indstillinger og OSM-redigeringer til OsmAnd Cloud\n• Tilføjet \"CAI\"-skala til \"Sværhedsklassificering af ruter\"\n• \"Konturlinje-udvidelse\" omdøbt til \"Topografi\", tilføjet understøttelse af det nye terrænkortformat\n• Tilføjet 3D-relief\n• Tilføjet OAuth-godkendelse til OpenStreetMap-redigeringsplugin\n• Tilføjet separat knap til at skifte mellem 2D- og 3D-tilstand\n• Ændret retning af vippebevægelse\n• Løst problem med eksport af favoritter, som kunne føre til tab af data\n";
-"shared_string_system_default" = "System standard";
+"shared_string_system_default" = "Systemstandard";
 "shared_string_ear_lobe" = "Øreflip";
 "ios_release_4_6" = "• Registrer og følg dine målinger med eksterne sensorer, herunder cykelhastighed, cykelkadence, cykeldistance, puls og temperatur.\n• Nu kan du se kort direkte på dit CarPlay-instrumentbræt\n• Tilføjet nattetema for en mere behagelig visningsoplevelse ved svage lysforhold\n• Udforsk rejseguider fra \"Wikivoyage\"\n• Forbedret dialoger til at tilføje noter og uploade noter og IP'er til OpenStreetMap\n• Gendan nemt dine udvidelsesindstillinger til installationsstandarderne med en ny \"Nulstil til standard\" mulighed\n• Tilføjet en \"Skærmretning\" til at indstille din foretrukne retning uden automatisk skift\n• Tilføjet en separat knap til at skifte 3D-tilstand direkte på CarPlay-skærmen\n• Minimum og maksimum højdeinformation er blevet tilføjet til navigationsruter ud over stigning- og nedstigning\n• Forbedret sporfarvning i hældningstilstand med ny symmetrisk gradient\n• Favoritmapper gemmer nu standardudseende, som automatisk anvendes på hvert tilføjet punkt.\n• Rettet \"Radiusmåler\"-midtpunktet, der ikke stemte overens med kortets midte\n• Tilføjet knappen \"Læs artikel\" til Wikipedia IP'ers kontekstmenu\n• Løst problem med import af GPX-fil til favoritter\n• Løst et problem med kalenderbegivenheden for parkeringsposition\n• Rettet nedbrud ved fjernelse af farve fra palet\n";
 "wheel_circumference" = "Hjulomkreds";
@@ -3868,3 +3868,5 @@
 "quick_action_new_route" = "Ny rute";
 "quick_action_add_route_descr" = "En knap til at starte en rute fra midten af skærmen.";
 "shared_string_create" = "Opret";
+"image_cache_online_photo_high_res" = "Online foto høj opløsning cache";
+"image_cache_online_photo_mapillary_default_cache" = "Online foto/Mapillary standard cache";

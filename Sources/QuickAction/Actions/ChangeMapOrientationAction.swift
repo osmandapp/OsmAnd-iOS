@@ -107,7 +107,7 @@ final class ChangeMapOrientationAction: OASwitchableAction {
         return data
     }
     
-    override func fillParams(_ model: [AnyHashable : Any]) -> Bool {
+    override func fillParams(_ model: [AnyHashable: Any]) -> Bool {
         var params = getParams()
         var sources: [String] = []
         
@@ -141,7 +141,7 @@ final class ChangeMapOrientationAction: OASwitchableAction {
     
     override func getIcon() -> UIImage? {
         guard let iconName = CompassMode.mode(forKey: orientation())?.iconName else { return super.getIcon() }
-        return UIImage.templateImageNamed(iconName)
+        return UIImage(named: iconName)?.withRenderingMode(.alwaysOriginal)
     }
     
     override func getIconResName() -> String? {

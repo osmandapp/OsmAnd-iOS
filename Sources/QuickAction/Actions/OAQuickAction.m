@@ -207,16 +207,16 @@ static NSInteger SEQ = 0;
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
-    [dict setObject:@(_id) forKey:@"id"];
+    dict[@"id"] = @(_id);
     
     if (_name)
-        [dict setObject:_name forKey:@"name"];
+        dict[@"name"] = _name;
     
     if (_actionType)
-        [dict setObject:_actionType.stringId forKey:@"actionType"];
+        dict[@"actionType"] = _actionType.stringId;
     
     if (_params)
-        [dict setObject:_params forKey:@"params"];
+        dict[@"params"] = _params;
     
     return [dict copy];
 }

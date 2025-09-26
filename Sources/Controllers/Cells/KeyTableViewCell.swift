@@ -35,11 +35,14 @@ final class KeyTableViewCell: UITableViewCell {
         
         setupTitleContainer(with: actionName)
         
-        keyView.configureWith(keySymbol: key.flatMap(KeySymbolMapper.keySymbol(for:)) ?? localizedString("shared_string_none"),
-                              horizontalSpace: horizontalSpace,
-                              verticalSpace: verticalSpace,
-                              fontSize: keyFontSize,
-                              cornerRadius: cornerRadius)
+        let params = KeyView.Params(
+            keySymbol: key.flatMap(KeySymbolMapper.keySymbol(for:)) ?? localizedString("shared_string_none"),
+            horizontalSpace: horizontalSpace,
+            verticalSpace: verticalSpace,
+            fontSize: keyFontSize,
+            cornerRadius: cornerRadius
+        )
+        keyView.configureWith(params: params)
         
         if let existedKeyActionName, let key {
             setupWarning(existedKeyActionName, with: key)

@@ -23,8 +23,4 @@ extension String {
         guard hasSuffix(suffix) else { return self }
         return String(dropLast(suffix.count))
     }
-    
-    func firstLetterUppercase() -> String {
-        prefix(1).uppercased() + dropFirst()
-    }
 }

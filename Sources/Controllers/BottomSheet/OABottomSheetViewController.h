@@ -48,11 +48,11 @@
 
 @interface OABottomSheetViewStack : NSObject
 
-@property (nonatomic) NSMutableArray<OABottomSheetViewController *> *bottomSheetViews;
-
 + (OABottomSheetViewStack *)sharedInstance;
 
 - (void)push:(OABottomSheetViewController *)bottomSheetView;
 - (void)pop:(OABottomSheetViewController *)bottomSheetView;
+- (NSInteger)count;
+- (OABottomSheetViewController *)lastObject;
 
 @end

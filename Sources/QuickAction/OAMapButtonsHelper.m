@@ -484,7 +484,7 @@ static QuickActionType *TYPE_INTERFACE;
         if (dict)
             [jsonArray addObject:dict];
     }
-    return jsonArray;
+    return [jsonArray copy];
 }
 
 - (BOOL)isActionButtonNameUnique:(NSString *)name

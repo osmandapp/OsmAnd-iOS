@@ -245,7 +245,7 @@ final class InputDevicesHelper: NSObject {
                 return Self.readFromJson(jsonObj)
             }
         } catch {
-            print("Error while reading custom devices from JSON \(error)")
+            debugPrint("Error while reading custom devices from JSON \(error)")
         }
         return []
     }
@@ -262,7 +262,7 @@ final class InputDevicesHelper: NSObject {
             }
             reloadFunctionalityCollection(with: appMode)
         } catch {
-            print("Error while writing custom devices to JSON \(error)")
+            debugPrint("Error while writing custom devices to JSON \(error)")
         }
     }
     
@@ -275,7 +275,7 @@ final class InputDevicesHelper: NSObject {
                 let dev = try CustomInputDeviceProfile(item)
                 res.append(dev)
             } catch {
-                print("Error while reading a custom device from JSON \(error)")
+                debugPrint("Error while reading a custom device from JSON \(error)")
             }
         }
         return res

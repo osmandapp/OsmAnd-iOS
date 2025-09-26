@@ -401,7 +401,7 @@
     _hiding = YES;
     self.visible = NO;
     
-    NSInteger viewsCount = [[[OABottomSheetViewStack sharedInstance] bottomSheetViews] count];
+    NSInteger viewsCount = [[OABottomSheetViewStack sharedInstance] count];
     CGRect contentFrame = self.contentView.frame;
     contentFrame.origin.y = contentFrame.size.height + 10.0;
     
@@ -527,6 +527,12 @@
 
 @end
 
+@interface OABottomSheetViewStack ()
+
+@property (nonatomic) NSMutableArray<OABottomSheetViewController *> *bottomSheetViews;
+
+@end
+
 @implementation OABottomSheetViewStack
 
 + (instancetype) sharedInstance
@@ -561,6 +567,16 @@
     OABottomSheetViewController *last = [self.bottomSheetViews lastObject];
     if (last && !last.view.superview)
         [last showInternal];
+}
+
+- (NSInteger)count
+{
+    return self.bottomSheetViews.count;
+}
+
+- (OABottomSheetViewController *)lastObject
+{
+    return self.bottomSheetViews.lastObject;
 }
 
 @end

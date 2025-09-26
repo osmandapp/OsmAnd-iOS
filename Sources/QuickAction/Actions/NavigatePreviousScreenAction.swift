@@ -32,8 +32,8 @@ final class NavigatePreviousScreenAction: OAQuickAction {
     }
     
     override func execute() {
-        if OABottomSheetViewStack.sharedInstance().bottomSheetViews.count > 0,
-           let bottomSheetViewController = OABottomSheetViewStack.sharedInstance().bottomSheetViews.lastObject as? OABottomSheetViewController {
+        if OABottomSheetViewStack.sharedInstance().count() > 0,
+           let bottomSheetViewController = OABottomSheetViewStack.sharedInstance().lastObject() {
             bottomSheetViewController.goBack()
         } else {
             OARootViewController.instance().mapPanel.navigationController?.goBack()

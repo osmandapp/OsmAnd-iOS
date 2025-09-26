@@ -7,6 +7,14 @@
 //
 
 final class KeyView: UIView {
+    struct Params {
+        let keySymbol: String
+        let horizontalSpace: CGFloat
+        let verticalSpace: CGFloat
+        let fontSize: CGFloat
+        let cornerRadius: CGFloat
+    }
+    
     @IBOutlet private weak var keyLabel: UILabel!
     @IBOutlet private weak var keyContainerView: UIView!
     @IBOutlet private weak var leftConstraint: NSLayoutConstraint!
@@ -15,20 +23,20 @@ final class KeyView: UIView {
     @IBOutlet private weak var bottomConstraint: NSLayoutConstraint!
     
     func configureWith(keyCode: UIKeyboardHIDUsage, horizontalSpace: CGFloat, fontSize: CGFloat) {
-        keyLabel.text = KeySymbolMapper.keySymbol(for: keyCode).firstLetterUppercase()
+        keyLabel.text = OAUtilities.capitalizeFirstLetter(KeySymbolMapper.keySymbol(for: keyCode))
         keyLabel.font = .systemFont(ofSize: fontSize, weight: .semibold)
         leftConstraint.constant = horizontalSpace
         rightConstraint.constant = horizontalSpace
     }
     
-    func configureWith(keySymbol: String, horizontalSpace: CGFloat, verticalSpace: CGFloat, fontSize: CGFloat, cornerRadius: CGFloat) {
-        keyLabel.text = keySymbol.firstLetterUppercase()
-        keyLabel.font = .systemFont(ofSize: fontSize, weight: .semibold)
-        leftConstraint.constant = horizontalSpace
-        rightConstraint.constant = horizontalSpace
-        topConstraint.constant = verticalSpace
-        bottomConstraint.constant = verticalSpace
-        keyContainerView.cornerRadius = cornerRadius
+    func configureWith(params: Params) {
+        keyLabel.text = OAUtilities.capitalizeFirstLetter(params.keySymbol)
+        keyLabel.font = .systemFont(ofSize: params.fontSize, weight: .semibold)
+        leftConstraint.constant = params.horizontalSpace
+        rightConstraint.constant = params.horizontalSpace
+        topConstraint.constant = params.verticalSpace
+        bottomConstraint.constant = params.verticalSpace
+        keyContainerView.cornerRadius = params.cornerRadius
     }
     
     func setKeyColor(borderColor: UIColor, backgroundColor: UIColor, textColor: UIColor) {

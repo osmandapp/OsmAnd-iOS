@@ -676,7 +676,14 @@
             }
             else
             {
-                cell.accessoryType = [item[@"selected"] boolValue] && _settingsType != EOAProfileGeneralSettingsAppTheme && _settingsType != EOAProfileGeneralSettingsScreenOrientation && _settingsType != EOAProfileGeneralSettingsDistanceDuringNavigation && _settingsType != EOAProfileGeneralSettingsUnitsOfVolume && _settingsType != EOAProfileGeneralSettingsUnitsOfTemp ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+                NSArray *excludedTypes = @[
+                    @(EOAProfileGeneralSettingsAppTheme),
+                    @(EOAProfileGeneralSettingsScreenOrientation),
+                    @(EOAProfileGeneralSettingsDistanceDuringNavigation),
+                    @(EOAProfileGeneralSettingsUnitsOfVolume),
+                    @(EOAProfileGeneralSettingsUnitsOfTemp)
+                ];
+                cell.accessoryType = [item[@"selected"] boolValue] && ![excludedTypes containsObject:@(_settingsType)] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             }
         }
         return cell;
@@ -756,7 +763,6 @@
         [_devicesToRemove addObject:[InputDevicesHelper.shared customDevicesWith:self.appMode][indexPath.row]];
         [_data[indexPath.section] removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tableView reloadData];
     }
 }
 

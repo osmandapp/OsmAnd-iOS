@@ -2153,6 +2153,9 @@
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
+
+"no_activity_for_intent" = "Install an app that can perform this action.";
+
 // Units
 "cubic_m" = "m³";
 "mile" = "mi";

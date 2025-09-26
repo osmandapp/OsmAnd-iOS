@@ -16,6 +16,7 @@ final class OpenWunderLINQDatagridAction: OAQuickAction {
         .category(QuickActionTypeCategory.interface.rawValue)
     
     private let appPath = "wunderlinq://datagrid"
+    private let appStorePath = "https://apps.apple.com/ua/app/wunderlinq/id1410462734"
     
     override init() {
         super.init(actionType: Self.type)
@@ -30,7 +31,12 @@ final class OpenWunderLINQDatagridAction: OAQuickAction {
     }
     
     override func execute() {
-        guard let url = URL(string: appPath), UIApplication.shared.canOpenURL(url) else { return }
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        if let url = [appPath, appStorePath]
+            .compactMap({ URL(string: $0) })
+            .first(where: { UIApplication.shared.canOpenURL($0) }) {
+            UIApplication.shared.open(url)
+        } else {
+            debugPrint(localizedString("no_activity_for_intent"))
+        }
     }
 }

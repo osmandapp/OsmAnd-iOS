@@ -444,11 +444,11 @@
             {
                 NSString *val = [parameter getValueTitle];
                 [mapStyleSectionData addObject:@{
-                        @"name": parameter.title,
-                        @"image": [self getImageForParameterOrCategory:parameter.name],
-                        @"value": val ? val : @"",
-                        @"type": [OAValueTableViewCell getCellIdentifier],
-                        @"key": [NSString stringWithFormat:@"filtered_%@", parameter.name]
+                    @"name": parameter.title,
+                    @"image": [self getImageForParameterOrCategory:parameter.name],
+                    @"value": val ? val : @"",
+                    @"type": parameter.dataType == OABoolean ? [OASwitchTableViewCell getCellIdentifier] : [OAValueTableViewCell getCellIdentifier],
+                    @"key": [NSString stringWithFormat:@"filtered_%@", parameter.name]
                 }];
             }
         }
@@ -775,6 +775,11 @@
         NSString *osmValue = _osmParameters[index - _osmSettingsCount].value;
         return osmValue.length > 0 ? [osmValue isEqualToString:@"true"] : NO;
     }
+    else if ([key hasPrefix:@"filtered_"])
+    {
+        OAMapStyleParameter *param = [_styleSettings getParameter:[key substringFromIndex:[@"filtered_" length]]];
+        return [param.value isEqualToString:@"true"];
+    }
 
     return YES;
 }
@@ -1013,6 +1018,7 @@
             
             NSString *iconName = item[@"image"];
             BOOL hasLeftIcon = iconName && iconName.length > 0;
+            [cell leftIconVisibility:hasLeftIcon];
             cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:iconName] : nil;
             cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
@@ -1033,8 +1039,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (isLastGroupIndex ? kPaddingOnSideOfContent : kPaddingToLeftOfContentWithIcon), 0., 0.);
             [cell dividerVisibility:![item[@"key"] isEqualToString:@"nautical_depth"] ? hasOptions : NO];
             cell.titleLabel.text = item[@"name"];
-
-            [cell leftIconVisibility:item[@"image"] != nil || item[@"has_empty_icon"]];
+            [cell leftIconVisibility:[item[@"image"] length] > 0 || item[@"has_empty_icon"]];
             if (item[@"has_empty_icon"])
             {
                 cell.leftIconView.image = nil;
@@ -1295,6 +1300,8 @@
         [self weatherChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"nautical_depth"])
         [self nauticalDepthChanged:switchView.isOn];
+    else if ([item[@"key"] hasPrefix:@"filtered_"])
+        [self filteredBooleanMapStyleParamChanged:switchView.isOn key:item[@"key"]];
 
     [tblView beginUpdates];
     [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -1362,6 +1369,13 @@
         parameter.value = isOn ? @"true" : @"false";
         [_styleSettings save:parameter];
     }
+}
+
+- (void)filteredBooleanMapStyleParamChanged:(BOOL)isOn key:(NSString *)key
+{
+    OAMapStyleParameter *param = [_styleSettings getParameter:[key substringFromIndex:[@"filtered_" length]]];
+    param.value = isOn ? @"true" : @"false";
+    [_styleSettings save:param];
 }
 
 - (void)overlayChanged:(BOOL)isOn
@@ -1511,6 +1525,12 @@
             _appModeCell.selectedMode = [_settings.applicationMode get];
         [self refreshMenu];
     });
+}
+
+#pragma mark - OADashboardScreen
+
+- (void)initData
+{
 }
 
 @end

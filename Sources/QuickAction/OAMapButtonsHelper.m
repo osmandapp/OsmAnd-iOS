@@ -203,6 +203,11 @@ static QuickActionType *TYPE_INTERFACE;
     return list;
 }
 
+- (QuickActionSerializer *)getSerializer
+{
+    return _serializer;
+}
+
 - (void)addQuickAction:(QuickActionButtonState *)buttonState action:(OAQuickAction *)action
 {
     [buttonState add:action];
@@ -468,6 +473,18 @@ static QuickActionType *TYPE_INTERFACE;
     if (quickActionType != nil)
         return [quickActionType createNew];
     return nil;
+}
+
+- (NSArray<NSDictionary *> *)convertActionsToJson:(NSArray<OAQuickAction *> *)quickActions
+{
+    NSMutableArray *jsonArray = [NSMutableArray array];
+    for (OAQuickAction *action in quickActions)
+    {
+        NSDictionary *dict = [action toDictionary];
+        if (dict)
+            [jsonArray addObject:dict];
+    }
+    return [jsonArray copy];
 }
 
 - (BOOL)isActionButtonNameUnique:(NSString *)name

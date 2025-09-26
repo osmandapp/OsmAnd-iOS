@@ -48,6 +48,8 @@ static NSString * const kDialog = @"dialog";
 - (nullable NSString *)getActionStateName;
 - (CLLocation *)getMapLocation;
 
+- (NSDictionary *)toDictionary;
+
 - (void)execute;
 - (void)drawUI;
 - (OrderedDictionary *)getUIModel;
@@ -56,6 +58,10 @@ static NSString * const kDialog = @"dialog";
 - (BOOL)hasInstanceInList:(NSArray<OAQuickAction *> *)active;
 - (nullable NSString *)getTitle:(NSArray *)filters;
 - (nullable NSString *)getListKey;
+
+- (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
+- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
+- (void)actionSelected;
 
 + (QuickActionType *)TYPE;
 

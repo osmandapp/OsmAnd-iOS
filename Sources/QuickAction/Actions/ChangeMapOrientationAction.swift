@@ -44,7 +44,10 @@ final class ChangeMapOrientationAction: OASwitchableAction {
     }
     
     override func execute() {
-        guard let sources = loadListFromParams() as? [String], !sources.isEmpty else { return }
+        guard let sources = loadListFromParams() as? [String], !sources.isEmpty else {
+            OAMapViewTrackingUtilities.instance().switchRotateMapMode()
+            return
+        }
         if showBottomSheetStyles {
             let bottomSheet = OAQuickActionSelectionBottomSheetViewController(action: self, type: .orientation)
             bottomSheet?.show()

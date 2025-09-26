@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginTopStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginBottomStackView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftIconHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftIconWidthConstraint;
 
 @end
 
@@ -35,6 +37,12 @@
 - (void)setCustomLeftSeparatorInset:(BOOL)isCustom
 {
     _isCustomLeftSeparatorInset = isCustom;
+}
+
+- (void)setLeftIconSize:(CGFloat)size
+{
+    _leftIconHeightConstraint.constant = size;
+    _leftIconWidthConstraint.constant = size;
 }
 
 - (void)updateSeparatorInset

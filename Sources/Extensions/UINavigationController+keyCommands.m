@@ -17,12 +17,13 @@
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAWeatherToolbar.h"
 #import "OALog.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation UINavigationController (keyCommands)
 
 - (void)goBack
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+    if ([[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:WunderLINQDeviceProfile.deviceId])
     {
         //Launch WunderLINQ
         NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
@@ -30,7 +31,7 @@
         if (canOpenURL)
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
-    else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    else if (![[[OAAppSettings sharedManager].settingExternalInputDevice get] isEqualToString:NoneDeviceProfile.deviceId])
     {
         UIViewController *vvc = self.visibleViewController;
         if ([vvc isKindOfClass:OASuperViewController.class])
@@ -73,11 +74,14 @@
 
 #pragma mark - UIResponder
 
-- (NSArray<UIKeyCommand *> *)keyCommands
+- (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
 {
-    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)];
-    command.wantsPriorityOverSystemBehavior = YES;
-    return @[command];
+    [KeyEventHelper.shared pressesBegan:presses withEvent:event];
+}
+
+- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+    [KeyEventHelper.shared pressesEnded:presses withEvent:event];
 }
 
 @end

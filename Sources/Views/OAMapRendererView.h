@@ -146,6 +146,8 @@ struct CLLocationCoordinate2D;
 
 @property(nonatomic, readonly) float currentPixelsToMetersScaleFactor;
 
+- (OsmAnd::MapState)getMapState;
+
 // Utilities:
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point;

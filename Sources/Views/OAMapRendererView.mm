@@ -323,6 +323,11 @@ forcedUpdate:(BOOL)forcedUpdate
     return _renderer->getMapState().metersPerPixel;
 }
 
+- (OsmAnd::MapState)getMapState
+{
+    return _renderer->getMapState();
+}
+
 - (double) normalizeElevationAngle:(double)elevationAngle
 {
     return elevationAngle > 90 ? 90 : MAX(kMinAllowedElevationAngle, elevationAngle);

@@ -100,11 +100,9 @@
     if (cell)
     {
         OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
-        [cell.titleLabel setText:value.title];
-        if ([parameter.value isEqualToString:value.name])
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        else
-            cell.accessoryType = UITableViewCellAccessoryNone;
+        [cell.titleLabel setText:value.title.length ? value.title : parameter.defaultValue.length ? parameter.defaultValue : value.name];
+        BOOL selected = [parameter.value isEqualToString:value.name] || (value.name.length == 0 && parameter.defaultValue.length && [parameter.value isEqualToString:parameter.defaultValue]);
+        cell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     }
     
     return cell;
@@ -120,11 +118,11 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
-    parameter.value = value.name;
+    parameter.value = value.name.length ? value.name : parameter.defaultValue;
     [styleSettings save:parameter];
     
     if ([parameterName isEqualToString:CONTOUR_LINES])
-        [[OAAppSettings sharedManager].contourLinesZoom set:value.name];
+        [[OAAppSettings sharedManager].contourLinesZoom set:parameter.value];
     
     [tableView reloadData];
 }

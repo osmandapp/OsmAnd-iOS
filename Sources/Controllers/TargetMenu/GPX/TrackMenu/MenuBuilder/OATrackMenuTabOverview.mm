@@ -222,9 +222,13 @@
             || ([routeTagKey isEqualToString:@"way_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
             || [routeTagKey isEqualToString:@"color"]
             || [routeTagKey hasPrefix:@"osmand"]
-            || [routeTagKey isEqualToString:@"type"])
+            || [routeTagKey isEqualToString:@"type"]
+            || [routeTagKey hasPrefix:@"shield_"]
+            || ([routeTagKey hasPrefix:@"route_"] && ![@"route_id" isEqualToString:@"name"])
+            ||  [routeTagKey hasPrefix:@"translucent"]
+            || [routeTagKey isEqualToString:@"width"])
             continue;
-        
+
         if ([routeTagKey containsString:@":"] && ![routeTagKey hasPrefix:@"name"] && ![routeTagKey hasPrefix:@"ref"])
         {
             NSString *mainTag = [routeTagKey componentsSeparatedByString:@":"][1];

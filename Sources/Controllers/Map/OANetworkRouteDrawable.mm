@@ -110,8 +110,9 @@
     bool bold = false;
     evaluationResult.getBooleanValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_BOLD, bold);
     textStyle.setBold(bold);
-
-    float scaledFontSize = [[UIFontMetrics metricsForTextStyle:UIFontTextStyleBody] scaledValueForValue:_textSize];
+    
+    UITraitCollection *traitCollection = UIScreen.mainScreen.traitCollection;
+    float scaledFontSize = [[UIFontMetrics metricsForTextStyle:UIFontTextStyleBody] scaledValueForValue:_textSize compatibleWithTraitCollection:traitCollection];
     evaluationResult.getFloatValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SIZE, scaledFontSize);
     textStyle.setSize(scaledFontSize);
 

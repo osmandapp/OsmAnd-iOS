@@ -257,7 +257,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
 }
 
 //In android function with this name works differently
-+ (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) fetchSegmentsAndPoints2:(NSArray<NSString *> *)readers article:(OATravelArticle *)article pointList:(NSMutableArray<OAPOI *> *)pointList gpxFileExtensions:(NSMutableDictionary<NSString *, NSString *> *)gpxFileExtensions
++ (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) fetchSegmentsAndPoints:(NSArray<NSString *> *)readers article:(OATravelArticle *)article pointList:(NSMutableArray<OAPOI *> *)pointList gpxFileExtensions:(NSMutableDictionary<NSString *, NSString *> *)gpxFileExtensions
 {
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > segmentList;
     
@@ -366,7 +366,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     NSMutableDictionary<NSString *, NSString *> *gpxFileExtensions = [NSMutableDictionary new];
     NSMutableArray<OAPOI *> *pointList = [NSMutableArray array];
 
-    segmentList = [self fetchSegmentsAndPoints2:readers article:article pointList:pointList gpxFileExtensions:gpxFileExtensions];
+    segmentList = [self fetchSegmentsAndPoints:readers article:article pointList:pointList gpxFileExtensions:gpxFileExtensions];
 
     OASGpxFile *gpxFile = nil;
     BOOL isSuperRoute = NO;

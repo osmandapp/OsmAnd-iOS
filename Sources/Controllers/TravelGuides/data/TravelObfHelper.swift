@@ -25,6 +25,12 @@ final class TravelObfHelper : NSObject {
     let TRAVEL_GPX_CONVERT_MULT_1 = 2
     let TRAVEL_GPX_CONVERT_MULT_2 = 5
     
+    static let TAG_URL = "url"
+    static let TAG_URL_TEXT = "url_text"
+    static let WPT_EXTRA_TAGS = "wpt_extra_tags"
+    static let METADATA_EXTRA_TAGS = "metadata_extra_tags"
+    static let EXTENSIONS_EXTRA_TAGS = "extensions_extra_tags"
+    
     private let MAX_ALLOWED_RADIUS = Int(Int32.max)
     
     private let cachedArticles = ConcurrentDictionary<Int, [String: TravelArticle]>()
@@ -545,7 +551,8 @@ final class TravelObfHelper : NSObject {
     func readGpxFile(article: TravelArticle, callback: GpxReadDelegate?) {
         if !article.gpxFileRead && callback != nil && callback!.isGpxReading == false   {
             callback?.isGpxReading = true
-            let task = GpxFileReader(article: article, callback: callback, readers: getReaders())
+            let readers = (article.routeId ?? "").isEmpty ? getReaders() : getAllReaders()
+            let task = GpxFileReader(article: article, callback: callback, readers: readers)
             task.execute()
         } else if callback != nil && article.gpxFileRead {
             callback?.isGpxReading = false
@@ -803,6 +810,10 @@ final class TravelObfHelper : NSObject {
         OATravelGuidesHelper.getTravelGuidesObfList()
     }
     
+    func getAllReaders() -> [String] {
+        OATravelGuidesHelper.getAllObfList()
+    }
+    
     func getArticleId(title: String, lang: String) -> TravelArticleIdentifier? {
         var a: TravelArticle? = nil
         for articles in cachedArticles.getAllValues() {
@@ -868,7 +879,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func buildGpxFile(readers: [String], article: TravelArticle) -> OAGPXDocumentAdapter {
-        OATravelGuidesHelper.buildGpxFile(getReaders(), article: article)
+        OATravelGuidesHelper.buildGpxFile(readers, article: article)
     }
     
     func createTitle(name: String) -> String {

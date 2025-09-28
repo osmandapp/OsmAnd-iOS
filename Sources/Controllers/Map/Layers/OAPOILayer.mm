@@ -48,6 +48,7 @@
 #include <OsmAndCore/NetworkRouteSelector.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/Map/IOnPathMapSymbol.h>
+#include <OsmAndCore/Map/IMapTiledSymbolsProvider.h>
 
 #define kPoiSearchRadius 50 // AMENITY_SEARCH_RADIUS
 #define kPoiSearchRadiusForRelation 500 // AMENITY_SEARCH_RADIUS_FOR_RELATION
@@ -286,104 +287,6 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
 }
 
-- (void) processAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity mapObject:(std::shared_ptr<const OsmAnd::MapObject>)mapObject poi:(OAPOI *)poi
-{
-    const auto& decodedCategories = amenity->getDecodedCategories();
-    if (!decodedCategories.isEmpty())
-    {
-        const auto& entry = decodedCategories.first();
-        poi.type = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:entry.category.toNSString() name:entry.subcategory.toNSString()];
-    }
-    
-    poi.obfId = amenity->id;
-    poi.name = amenity->nativeName.toNSString();
-    poi.subType = amenity->subType.toNSString();
-
-    NSMutableDictionary *names = [NSMutableDictionary dictionary];
-    NSString *nameLocalized = [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:amenity->nativeName names:names];
-    if (nameLocalized.length > 0)
-        poi.name = nameLocalized;
-    poi.nameLocalized = poi.name;
-    poi.localizedNames = names;
-    
-    if (poi.name.length == 0 && poi.type)
-        poi.name = poi.type.name;
-    if (poi.nameLocalized.length == 0 && poi.type)
-        poi.nameLocalized = poi.type.nameLocalized;
-    if (poi.nameLocalized.length == 0)
-        poi.nameLocalized = poi.name;
-    
-    const auto decodedValues = amenity->getDecodedValues();
-    [self processAmenityFields:poi decodedValues:decodedValues];
-    
-    if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(mapObject))
-    {
-        for (const OsmAnd::PointI pointI : obfMapObject->points31)
-        {
-            [poi addLocation:pointI.x y:pointI.y];
-        }
-    }
-}
-
-- (void) processAmenityFields:(OAPOI *)poi decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues
-{
-    MutableOrderedDictionary *content = [MutableOrderedDictionary new];
-    MutableOrderedDictionary *values = [MutableOrderedDictionary new];
-
-    for (const auto& entry : decodedValues)
-    {
-        if (entry.declaration->tagName.startsWith(QString("content")))
-        {
-            NSString *key = entry.declaration->tagName.toNSString();
-            NSString *loc;
-            if (key.length > 8)
-                loc = [[key substringFromIndex:8] lowercaseString];
-            else
-                loc = @"";
-            
-            [content setObject:entry.value.toNSString() forKey:loc];
-        }
-        else
-        {
-            [values setObject:entry.value.toNSString() forKey:entry.declaration->tagName.toNSString()];
-        }
-    }
-    
-    poi.values = values;
-    poi.localizedContent = content;
-}
-
-- (void) addRoute:(NSMutableArray<OATargetPoint *> *)points touchPoint:(CGPoint)touchPoint mapObj:(const std::shared_ptr<const OsmAnd::MapObject> &)mapObj
-{
-    CGPoint topLeft;
-    topLeft.x = touchPoint.x - kTrackSearchDelta;
-    topLeft.y = touchPoint.y - kTrackSearchDelta;
-    CGPoint bottomRight;
-    bottomRight.x = touchPoint.x + kTrackSearchDelta;
-    bottomRight.y = touchPoint.y + kTrackSearchDelta;
-    OsmAnd::PointI topLeft31;
-    OsmAnd::PointI bottomRight31;
-    [self.mapView convert:topLeft toLocation:&topLeft31];
-    [self.mapView convert:bottomRight toLocation:&bottomRight31];
-    
-    OsmAnd::AreaI area31(topLeft31, bottomRight31);
-    const auto center31 = area31.center();
-    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(center31);
-    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-    auto networkRouteSelector = std::make_shared<OsmAnd::NetworkRouteSelector>(self.app.resourcesManager->obfsCollection);
-    auto routes = networkRouteSelector->getRoutes(area31, false, nullptr);
-    NSMutableSet<OARouteKey *> *routeKeys = [NSMutableSet set];
-    for (auto it = routes.begin(); it != routes.end(); ++it)
-    {
-        OARouteKey *routeKey = [[OARouteKey alloc] initWithKey:it.key()];
-        if (![routeKeys containsObject:routeKey] && [self isRouteEnabledForKey:routeKey])
-        {
-            [routeKeys addObject:routeKey];
-            [self putRouteToSelected:routeKey location:coord mapObj:mapObj points:points area:area31];
-        }
-    }
-}
-
 - (BOOL)isRouteEnabledForKey:(OARouteKey *)routeKey
 {
     QString renderingPropertyAttr = routeKey.routeKey.type->renderingPropertyAttr;
@@ -567,6 +470,47 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         }
     }
     return NO;
+}
+
+- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    NSMutableArray<OAPOI *> *amenities = [self getDisplayedResults:result.pointLatLon.coordinate.latitude lon:result.pointLatLon.coordinate.longitude];
+    for (OAPOI *amenity in amenities)
+    {
+        [result collect:amenity provider:self];
+    }
+}
+
+- (NSMutableArray<OAPOI *> *) getDisplayedResults:(double)lat lon:(double)lon
+{
+    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
+    
+    const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    const auto tileId = OsmAnd::Utilities::getTileId(point31, self.mapView.zoomLevel);
+    
+    OsmAnd::IMapTiledSymbolsProvider::Request request;
+    request.tileId = tileId;
+    request.zoom = self.mapView.zoomLevel;
+    const auto& mapState = [self.mapView getMapState];
+    request.mapState = mapState;
+    
+    std::shared_ptr<OsmAnd::IMapDataProvider::Data> data;
+    QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
+    _amenitySymbolsProvider->obtainData(request, data, amenities, nullptr);
+    
+    if (!amenities.isEmpty())
+    {
+        for (const auto amenity : amenities)
+        {
+            OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:amenity];
+            if (poi)
+            {
+                [result addObject:poi];
+            }
+        }
+    }
+    
+    return result;
 }
 
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation

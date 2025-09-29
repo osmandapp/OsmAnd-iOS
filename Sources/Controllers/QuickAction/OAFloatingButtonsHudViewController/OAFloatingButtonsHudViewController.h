@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)hideActionsSheetAnimated:(void (^ _Nullable)(void))completion;
 - (void)updateColors;
 - (QuickActionButtonState * _Nullable)getActiveButtonState;
+- (void)rotateMapOrientationButtonIfExistsWith:(double)value;
 
 @end
 

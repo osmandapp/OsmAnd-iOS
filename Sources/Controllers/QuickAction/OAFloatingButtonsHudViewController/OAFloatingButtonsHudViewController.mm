@@ -139,6 +139,12 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     [self updateColors];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self rotateMapOrientationButtonIfExists];
+}
+
 - (void)viewWillLayoutSubviews
 {
     [self restoreControlsPosition];
@@ -238,8 +244,8 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateFailed:
         {
-            button.transform = CGAffineTransformIdentity;
             [_mapHudController.mapHudLayout updateButton:button save:YES];
+            [self setupButtonRotation:button];
             break;
         }
         default:
@@ -297,6 +303,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
                         [quickActionButton.buttonState updatePositions];
                         [self updateQuickActionButtonColors:quickActionButton];
                         [_mapHudController.mapHudLayout updateButtons];
+                        [self setupButtonRotation:quickActionButton];
                         break;
                     }
                 }
@@ -356,6 +363,34 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         return _actionsView.buttonState;
     }
     return nil;
+}
+
+- (void)rotateMapOrientationButtonIfExistsWith:(double)value
+{
+    for (OAHudButton *quickButton in _quickActionFloatingButtons)
+    {
+        if ([self isMapOrientationButton:quickButton])
+            quickButton.transform = CGAffineTransformMakeRotation(value);
+    }
+}
+
+- (void)rotateMapOrientationButtonIfExists
+{
+    [self rotateMapOrientationButtonIfExistsWith:(-[OARootViewController instance].mapPanel.mapViewController.mapRendererView.azimuth / 180.0f * M_PI)];
+}
+
+- (BOOL)isMapOrientationButton:(OAHudButton *)button
+{
+    QuickActionButtonState *state = (QuickActionButtonState *)button.buttonState;
+    return state && [[state.quickActions.firstObject getActionTypeId] isEqualToString:ChangeMapOrientationAction.type.stringId] && state.quickActions.count == 1;
+}
+
+- (void)setupButtonRotation:(OAHudButton *)button
+{
+    if ([self isMapOrientationButton:button])
+        [self rotateMapOrientationButtonIfExists];
+    else
+        button.transform = CGAffineTransformIdentity;
 }
 
 - (void)restorePinPosition

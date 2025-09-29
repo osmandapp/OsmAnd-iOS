@@ -11,6 +11,7 @@
 #import "OAMapStyleSettings.h"
 #import "OASimpleTableViewCell.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAMapSettingsParameterScreen
 {
@@ -69,6 +70,7 @@
     title = parameter.title;
     self.tblView.rowHeight = UITableViewAutomaticDimension;
     self.tblView.estimatedRowHeight = kEstimatedRowHeight;
+    [self.tblView registerNib:[UINib nibWithNibName:OASimpleTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OASimpleTableViewCell.reuseIdentifier];
 }
 
 #pragma mark - UITableViewDataSource
@@ -87,23 +89,17 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OASimpleTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
-        [cell leftIconVisibility:NO];
-        [cell descriptionVisibility:NO];
-    }
+    OASimpleTableViewCell *cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:OASimpleTableViewCell.reuseIdentifier forIndexPath:indexPath];
+    [cell leftIconVisibility:NO];
+    [cell descriptionVisibility:NO];
     
-    if (cell)
-    {
-        OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
-        [cell.titleLabel setText:value.title.length ? value.title : parameter.defaultValue.length ? parameter.defaultValue : value.name];
-        BOOL selected = [parameter.value isEqualToString:value.name] || (value.name.length == 0 && parameter.defaultValue.length && [parameter.value isEqualToString:parameter.defaultValue]);
-        cell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-    }
+    OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
+    NSString *title = value.title;
+    if (!title.length)
+        title = parameter.defaultValue.length ? parameter.defaultValue : value.name;
+    [cell.titleLabel setText:title];
+    BOOL selected = [parameter.value isEqualToString:value.name] || (value.name.length == 0 && parameter.defaultValue.length && [parameter.value isEqualToString:parameter.defaultValue]);
+    cell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     
     return cell;
 }

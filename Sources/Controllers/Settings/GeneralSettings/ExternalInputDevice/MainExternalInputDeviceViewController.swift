@@ -29,7 +29,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     private var showToolbar: Bool {
-        isDefaultDevice || settingExternalInputDevice.filledAssignments().isEmpty
+        !isDefaultDevice && !settingExternalInputDevice.filledAssignments().isEmpty
     }
     
     override func registerCells() {
@@ -210,11 +210,11 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     }
     
     override func getTopButtonTitle() -> String {
-        showToolbar ? "" : localizedString(isEditMode ? "shared_string_clear_all" : "shared_string_add")
+        showToolbar ? localizedString(isEditMode ? "shared_string_clear_all" : "shared_string_add") : ""
     }
     
     override func getBottomButtonTitle() -> String {
-        showToolbar || isEditMode ? "" : localizedString("shared_string_edit")
+        showToolbar && !isEditMode ? localizedString("shared_string_edit") : ""
     }
     
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
@@ -231,7 +231,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     
     override func onSettingsChanged() {
         super.onSettingsChanged()
-        reloadDataWith(animated: true, completion: nil)
+        updateUIAnimated(nil)
     }
     
     @objc private func onAddButtonClicked(sender: UIButton) {

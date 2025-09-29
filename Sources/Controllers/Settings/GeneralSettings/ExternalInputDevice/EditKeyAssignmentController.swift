@@ -22,6 +22,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
     private var rightNavButton: UIBarButtonItem?
     private var actionToRemove: OAQuickAction?
     private var originalKeyCodes: [UIKeyboardHIDUsage] = []
+    private let maxKeyCount = 5
     
     private var isEditMode: Bool = false {
         didSet {
@@ -82,7 +83,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
                 editAssignedKeysRow.title = String(format: localizedString("key_name_pattern"), KeySymbolMapper.keySymbol(for: keyCode))
             }
             
-            if keyCodes.count < 5 {
+            if keyCodes.count < maxKeyCount {
                 let addKeyRow = assignedKeysSection.createNewRow()
                 addKeyRow.cellType = OASimpleTableViewCell.reuseIdentifier
                 addKeyRow.key = Self.addKeyKey

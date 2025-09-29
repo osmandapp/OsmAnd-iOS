@@ -119,7 +119,6 @@ final class TravelGpx : TravelArticle {
         ROUTE_TRACK_POINT
     }
     
-    //TODO: test it
     func getRouteType() -> String? {
         if let amenitySubType, amenitySubType.hasPrefix(ROUTES_PREFIX) {
             return amenitySubType

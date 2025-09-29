@@ -246,7 +246,10 @@
         else if ([routeTagKey isEqualToString:@"distance"])
             routeTagValue = [NSString stringWithFormat:@"%@ %@", routeTagValue, OALocalizedString(@"km")];
         else if ([routeTagKey isEqualToString:@"network"])
-            routeTagValue = [OAPOIHelper.sharedInstance getPhraseByName:[NSString stringWithFormat:@"route_%@_%@_poi", tag, routeTagValue]];
+        {
+            NSString *network = routeTagValue = [OAPOIHelper.sharedInstance getPhraseByName:[NSString stringWithFormat:@"network_%@", routeTagValue]];
+            routeTagValue = NSStringIsEmpty(network) ? routeTagValue : network;
+        }
         else if ([routeTagKey isEqualToString:@"wikipedia"])
             routeTagValue = [OAWikiAlgorithms getWikiUrlWithText:routeTagValue];
 

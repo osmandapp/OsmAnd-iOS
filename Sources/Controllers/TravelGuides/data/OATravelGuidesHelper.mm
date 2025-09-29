@@ -473,32 +473,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
             [gpxFileExtensions removeObjectForKey:OASPointAttributes.ACTIVITY_TYPE];
         }
         
-        //TODO: add json support if needed
-        //Gson gson = new Gson();
-        //Type type = new TypeToken<Map<String, String>>() {}.getType();
-        if (gpxFileExtensions[OATravelObfHelper.EXTENSIONS_EXTRA_TAGS])
-        {
-            /*
-            //TODO: add json support if needed
-            Map<String, String> jsonMap = gson.fromJson(gpxFileExtensions.get(EXTENSIONS_EXTRA_TAGS), type);
-            if (jsonMap != null) {
-                gpxFile.getExtensionsToWrite().putAll(jsonMap);
-            }
-             */
-            [gpxFileExtensions removeObjectForKey:OATravelObfHelper.EXTENSIONS_EXTRA_TAGS];
-        }
-        
-        if (gpxFileExtensions[OATravelObfHelper.METADATA_EXTRA_TAGS])
-        {
-            /*
-            //TODO: add json support if needed
-            Map<String, String> jsonMap = gson.fromJson(gpxFileExtensions.get(METADATA_EXTRA_TAGS), type);
-            if (jsonMap != null) {
-                gpxFile.getMetadata().getExtensionsToWrite().putAll(jsonMap);
-            }
-             */
-            [gpxFileExtensions removeObjectForKey:OATravelObfHelper.METADATA_EXTRA_TAGS];
-        }
+        //TODO: implement if needed - android also has JSON parser here. For EXTENSIONS_EXTRA_TAGS & METADATA_EXTRA_TAGS keys.
         
         [[gpxFile getExtensionsToWrite] addEntriesFromDictionary:gpxFileExtensions];
     }

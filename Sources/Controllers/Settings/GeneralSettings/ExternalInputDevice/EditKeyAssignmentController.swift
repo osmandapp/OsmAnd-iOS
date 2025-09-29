@@ -257,13 +257,12 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
                                       message: nil,
                                       preferredStyle: .alert)
 
-        alert.addTextField { [weak self] textField in
-            guard let self else { return }
+        alert.addTextField { textField in
             textField.placeholder = self.keyAssignment?.name()
         }
 
-        let saveAction = UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak self, weak alert] _ in
-            guard let self, let deviceId, let device = InputDevicesHelper.shared.deviceById(appMode, deviceId) else { return }
+        let saveAction = UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak alert] _ in
+            guard let deviceId = self.deviceId, let device = InputDevicesHelper.shared.deviceById(self.appMode, deviceId) else { return }
             
             let name = (alert?.textFields?.first?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
             let hasKeyAssignmentName = device.filledAssignments().contains { $0.name()?.trimmingCharacters(in: .whitespacesAndNewlines) == name }
@@ -285,8 +284,7 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
     private func showRemoveAlert() {
         let alert = UIAlertController(title: localizedString("remove_key_assignment"), message: localizedString("remove_key_assignment_summary"), preferredStyle: .alert)
 
-        let removeAction = UIAlertAction(title: localizedString("shared_string_remove"), style: .destructive) { [weak self] _ in
-            guard let self else { return }
+        let removeAction = UIAlertAction(title: localizedString("shared_string_remove"), style: .destructive) { _ in
             self.removeKeyAssignment()
         }
 

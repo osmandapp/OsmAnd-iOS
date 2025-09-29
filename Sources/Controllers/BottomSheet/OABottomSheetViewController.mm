@@ -574,7 +574,7 @@
     return self.bottomSheetViews.count;
 }
 
-- (OABottomSheetViewController *)lastObject
+- (nullable OABottomSheetViewController *)lastObject
 {
     return self.bottomSheetViews.lastObject;
 }

@@ -44,10 +44,10 @@ final class KeyEventHelper: UIResponder {
     private func isLetterForbid(with keyCode: UIKeyboardHIDUsage) -> Bool {
         guard let mapPanel = OARootViewController.instance().mapPanel else { return true }
         let isMapVisible = mapPanel.view.window != nil
-        && mapPanel.children.last is OAMapillaryImageViewController
+        && mapPanel.presentedViewController == nil
+        && !mapPanel.isDashboardVisible()
         && !mapPanel.isRouteInfoVisible()
         && !mapPanel.isContextMenuVisible()
-        && mapPanel.presentedViewController == nil
         return isLetterKeyCode(keyCode) && !isMapVisible
     }
     

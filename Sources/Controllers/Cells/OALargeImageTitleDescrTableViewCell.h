@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showButton:(BOOL)show;
 - (void)showTitle:(BOOL)show;
 
+- (void)configConstraintsForTitle:(BOOL)active;
+- (void)configConstraintsForButton:(BOOL)active;
+
 @end
 
 NS_ASSUME_NONNULL_END

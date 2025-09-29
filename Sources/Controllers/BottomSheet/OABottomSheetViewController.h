@@ -53,6 +53,6 @@
 - (void)push:(OABottomSheetViewController *)bottomSheetView;
 - (void)pop:(OABottomSheetViewController *)bottomSheetView;
 - (NSInteger)count;
-- (OABottomSheetViewController *)lastObject;
+- (nullable OABottomSheetViewController *)lastObject;
 
 @end

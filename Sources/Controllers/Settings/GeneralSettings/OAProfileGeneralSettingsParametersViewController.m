@@ -98,7 +98,7 @@
             _title = OALocalizedString(@"distance_during_navigation");
             break;
         case EOAProfileGeneralSettingsExternalInputDevices:
-            _title = OALocalizedString(@"device");
+            _title = OALocalizedString(@"shared_string_device");
             break;
         case EOAProfileGeneralSettingsAppTheme:
             _title = OALocalizedString(@"settings_app_theme");
@@ -676,13 +676,13 @@
             }
             else
             {
-                NSArray *excludedTypes = @[
+                NSSet *excludedTypes = [NSSet setWithArray:@[
                     @(EOAProfileGeneralSettingsAppTheme),
                     @(EOAProfileGeneralSettingsScreenOrientation),
                     @(EOAProfileGeneralSettingsDistanceDuringNavigation),
                     @(EOAProfileGeneralSettingsUnitsOfVolume),
                     @(EOAProfileGeneralSettingsUnitsOfTemp)
-                ];
+                ]];
                 cell.accessoryType = [item[@"selected"] boolValue] && ![excludedTypes containsObject:@(_settingsType)] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             }
         }

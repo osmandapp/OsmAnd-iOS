@@ -25,7 +25,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
     private lazy var settingExternalInputDevice: InputDeviceProfile = InputDevicesHelper.shared.selectedDevice(with: appMode)
     
     private var isDefaultDevice: Bool {
-        settingExternalInputDevice.id() == NoneDeviceProfile.deviceId || settingExternalInputDevice.id() == KeyboardDeviceProfile.deviceId || settingExternalInputDevice.id() == WunderLINQDeviceProfile.deviceId
+        [NoneDeviceProfile.deviceId, KeyboardDeviceProfile.deviceId, WunderLINQDeviceProfile.deviceId].contains(where: { settingExternalInputDevice.id() == $0 })
     }
     
     private var showToolbar: Bool {
@@ -61,7 +61,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             let deviceRow = deviceSection.createNewRow()
             deviceRow.cellType = OAValueTableViewCell.reuseIdentifier
             deviceRow.key = Self.deviceRowKey
-            deviceRow.title = localizedString("device")
+            deviceRow.title = localizedString("shared_string_device")
             deviceRow.descr = externalInputDeviceValue
         }
         
@@ -120,9 +120,8 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             cell.titleLabel?.isHidden = noExternalDevice
             cell.descriptionLabel?.text = item.descr
             cell.descriptionLabel?.accessibilityLabel = item.descr
-            if cell.needsUpdateConstraints() {
-                cell.setNeedsUpdateConstraints()
-            }
+            cell.configConstraints(forTitle: !noExternalDevice)
+            cell.configConstraints(forButton: !noExternalDevice)
             if !noExternalDevice {
                 cell.button?.setTitle(item.obj(forKey: Self.buttonTitleKey) as? String, for: .normal)
                 cell.button?.accessibilityLabel = item.obj(forKey: Self.buttonTitleKey) as? String

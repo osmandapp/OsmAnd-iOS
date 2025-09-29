@@ -223,10 +223,7 @@
             || [routeTagKey isEqualToString:@"color"]
             || [routeTagKey hasPrefix:@"osmand"]
             || [routeTagKey isEqualToString:@"type"]
-            || [routeTagKey hasPrefix:@"shield_"]
-            || ([routeTagKey hasPrefix:@"route_"] && ![@"route_id" isEqualToString:@"name"])
-            ||  [routeTagKey hasPrefix:@"translucent"]
-            || [routeTagKey isEqualToString:@"width"])
+            || [routeTagKey hasPrefix:@"shield_"])
             continue;
 
         if ([routeTagKey containsString:@":"] && ![routeTagKey hasPrefix:@"name"] && ![routeTagKey hasPrefix:@"ref"])

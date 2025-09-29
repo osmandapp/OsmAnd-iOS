@@ -297,15 +297,17 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
                     NSString *key = qKey.toNSString();
                     NSString *value = tags[qKey].toNSString();
                     if (!NSStringIsEmpty(key) && !NSStringIsEmpty(value))
-                        gpxFileExtensions[key] = value;
-                }
-                
-                for (NSString *key in [gpxFileExtensions copy])
-                {
-                    if ([key hasPrefix:OATravelGpx.ROUTE_ACTIVITY_TYPE])
                     {
-                        NSString *activityType = gpxFileExtensions[OATravelGpx.ROUTE_ACTIVITY_TYPE];
-                        gpxFileExtensions[OASPointAttributes.ACTIVITY_TYPE] = activityType;
+                        if ([key hasPrefix:OATravelGpx.ROUTE_ACTIVITY_TYPE])
+                        {
+                            gpxFileExtensions[OASPointAttributes.ACTIVITY_TYPE] = value;
+                        }
+                        else if ([key hasPrefix:@"shield_"] ||
+                                 [key hasPrefix:@"osmc_"] ||
+                                 [key hasPrefix:@"network"])
+                        {
+                            gpxFileExtensions[key] = value;
+                        }
                     }
                 }
             }

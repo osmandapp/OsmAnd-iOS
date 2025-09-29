@@ -19,10 +19,10 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
     var keyCodes: [UIKeyboardHIDUsage] = []
     var isAdd = false
     
+    private let maxKeyCount = 5
     private var rightNavButton: UIBarButtonItem?
     private var actionToRemove: OAQuickAction?
     private var originalKeyCodes: [UIKeyboardHIDUsage] = []
-    private let maxKeyCount = 5
     
     private var isEditMode: Bool = false {
         didSet {

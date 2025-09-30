@@ -484,6 +484,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 - (NSMutableArray<OAPOI *> *) getDisplayedResults:(double)lat lon:(double)lon
 {
     NSMutableArray<OAPOI *> *result = [NSMutableArray new];
+    if (!_amenitySymbolsProvider)
+        return result;
     
     const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
     const auto tileId = OsmAnd::Utilities::getTileId(point31, self.mapView.zoomLevel);

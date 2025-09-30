@@ -256,7 +256,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     return filePath;
 }
 
-//In android function with this name works differently
+//In android function with this name works differently. Just moved most part of original code here.
 + (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) fetchSegmentsAndPoints:(NSArray<NSString *> *)readers article:(OATravelArticle *)article pointList:(NSMutableArray<OAPOI *> *)pointList gpxFileExtensions:(NSMutableDictionary<NSString *, NSString *> *)gpxFileExtensions
 {
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > segmentList;
@@ -450,11 +450,8 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         }
         
         gpxFile.tracks = [NSMutableArray new];
-        
-        
-        //TODO: implement ?
-        //gpxFile.getTracks().add(TravelObfGpxTrackOptimizer.mergeOverlappedSegmentsAtEdges(track));
         [gpxFile.tracks addObject:track];
+        //Android also uses extra helper class here: gpxFile.getTracks().add(TravelObfGpxTrackOptimizer.mergeOverlappedSegmentsAtEdges(track));
         
         if (![article isKindOfClass:OATravelGpx.class])
             [gpxFile setRefRef:article.ref];

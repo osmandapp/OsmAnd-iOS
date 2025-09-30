@@ -203,6 +203,24 @@ static NSInteger SEQ = 0;
     return [[OAMapViewTrackingUtilities instance] getMapLocation];
 }
 
+- (NSDictionary *)toDictionary
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    
+    dict[@"id"] = @(_id);
+    
+    if (_name)
+        dict[@"name"] = _name;
+    
+    if (_actionType)
+        dict[@"actionType"] = _actionType.stringId;
+    
+    if (_params)
+        dict[@"params"] = _params;
+    
+    return [dict copy];
+}
+
 - (void)execute
 {
 }
@@ -240,6 +258,20 @@ static NSInteger SEQ = 0;
 - (NSString *)getListKey
 {
     return nil;
+}
+
+- (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+}
+
+- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+    [self actionSelected];
+}
+
+- (void)actionSelected
+{
+    [[OAMapButtonsHelper produceAction:self] execute];
 }
 
 - (BOOL)isEqual:(id)object

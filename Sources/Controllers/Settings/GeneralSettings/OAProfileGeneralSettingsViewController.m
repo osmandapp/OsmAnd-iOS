@@ -231,13 +231,7 @@
             break;
     }
     
-    NSString *externalInputDeviceValue;
-    if ([_settings.settingExternalInputDevice get:self.appMode] == GENERIC_EXTERNAL_DEVICE)
-        externalInputDeviceValue = OALocalizedString(@"sett_generic_ext_input");
-    else if ([_settings.settingExternalInputDevice get:self.appMode] == WUNDERLINQ_EXTERNAL_DEVICE)
-        externalInputDeviceValue = OALocalizedString(@"sett_wunderlinq_ext_input");
-    else
-        externalInputDeviceValue = OALocalizedString(@"shared_string_none");
+    NSString *externalInputDeviceValue = [[InputDevicesHelper.shared selectedDeviceWith:self.appMode] toHumanString];
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *appearanceArr = [NSMutableArray array];
@@ -467,12 +461,14 @@
     else if ([itemKey isEqualToString:@"distanceDuringNavigation"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDistanceDuringNavigation applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
-        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsExternalInputDevices applicationMode:self.appMode];
+        settingsViewController = [[MainExternalInputDeviceViewController alloc] initWithAppMode:self.appMode];
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
         if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
+        else if ([itemKey isEqualToString:@"externalImputDevice"])
+            [self showViewController:settingsViewController];
         else
             [self showModalViewController:settingsViewController];
     }

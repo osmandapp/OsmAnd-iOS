@@ -92,6 +92,8 @@
 #import "OAContextMenuProvider.h"
 #import "EOAEntityType.h"
 #import "OAAmenitySearcher.h"
+#import "UITableViewCell+getTableView.h"
+#import "UINavigationController+keyCommands.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -182,6 +184,9 @@
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAPOIViewController.h"
 #import "OACoordinatesGridSettings.h"
+#import "OAAddQuickActionViewController.h"
+#import "OAMapillaryImageViewController.h"
+#import "OABottomSheetViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -225,6 +230,7 @@
 #import "OAHudButton.h"
 #import "OACollapsableView.h"
 #import "OAMapRulerView.h"
+#import "OARouteInfoView.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

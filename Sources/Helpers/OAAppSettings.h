@@ -49,10 +49,6 @@ static const NSInteger ROTATE_MAP_BEARING = 1;
 static const NSInteger ROTATE_MAP_COMPASS = 2;
 static const NSInteger ROTATE_MAP_MANUAL = 3;
 
-static const NSInteger NO_EXTERNAL_DEVICE = 0;
-static const NSInteger GENERIC_EXTERNAL_DEVICE = 1;
-static const NSInteger WUNDERLINQ_EXTERNAL_DEVICE = 2;
-
 static const double MAGNIFIER_DEFAULT_VALUE = 1.0;
 static const double MAGNIFIER_DEFAULT_CAR_TEXT = 1.25;
 
@@ -984,7 +980,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 @property (nonatomic) OACommonBoolean *settingDoNotShowPromotions;
 @property (nonatomic) OACommonBoolean *settingUseAnalytics;
-@property (nonatomic) OACommonInteger *settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
+@property (nonatomic) OACommonString *settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
+@property (nonatomic) OACommonString *settingCustomExternalInputDevice;
 
 @property (nonatomic) OACommonBoolean *liveUpdatesPurchased;
 @property (nonatomic) OACommonBoolean *settingOsmAndLiveEnabled;
@@ -1194,6 +1191,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) NSString *customPluginsJson;
 
 - (OAApplicationMode *)getSwitchedAppMode:(OAApplicationMode *)selectedMode next:(BOOL)next;
+- (void)switchAppModeToNext:(BOOL)next;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
 

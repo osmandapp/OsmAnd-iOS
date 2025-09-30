@@ -42,4 +42,17 @@
 
 - (void) setTapToDismissEnabled:(BOOL)enabled;
 
+- (void)goBack;
+
+@end
+
+@interface OABottomSheetViewStack : NSObject
+
++ (OABottomSheetViewStack *)sharedInstance;
+
+- (void)push:(OABottomSheetViewController *)bottomSheetView;
+- (void)pop:(OABottomSheetViewController *)bottomSheetView;
+- (NSInteger)count;
+- (nullable OABottomSheetViewController *)lastObject;
+
 @end

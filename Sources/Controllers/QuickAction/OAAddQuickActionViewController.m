@@ -36,6 +36,8 @@
 
     OAMapButtonsHelper *_mapButtonsHelper;
     QuickActionButtonState *_buttonState;
+    
+    BOOL _keyAssignmentFlow;
 }
 
 static NSString *_kActionObjectKey = @"actionObjectKey";
@@ -58,6 +60,28 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     if (self)
     {
         _buttonState = buttonState;
+        _selectedGroup = selectedGroup;
+        _actions = actions;
+    }
+    return self;
+}
+
+- (instancetype)initWithKeyAssignmentFlow:(BOOL)keyAssignmentFlow
+{
+    self = [super init];
+    if (self)
+    {
+        _keyAssignmentFlow = keyAssignmentFlow;
+    }
+    return self;
+}
+
+- (instancetype)initWithKeyAssignmentFlow:(BOOL)keyAssignmentFlow selectedGroup:(NSString *)selectedGroup actions:(OrderedDictionary<NSString *, NSArray<QuickActionType *> *> *)actions
+{
+    self = [super init];
+    if (self)
+    {
+        _keyAssignmentFlow = keyAssignmentFlow;
         _selectedGroup = selectedGroup;
         _actions = actions;
     }
@@ -340,8 +364,17 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OASimpleTableViewCell reuseIdentifier]])
     {
-        OAAddQuickActionViewController *groupContentVC = [[OAAddQuickActionViewController alloc] initWithButtonState:_buttonState selectedGroup:item.key actions:_actions];
-        groupContentVC.delegate = self.delegate;
+        OAAddQuickActionViewController *groupContentVC;
+        if (_keyAssignmentFlow)
+        {
+            groupContentVC = [[OAAddQuickActionViewController alloc] initWithKeyAssignmentFlow:_keyAssignmentFlow selectedGroup:item.key actions:_actions];
+            groupContentVC.editKeyAssignmentdelegate = self.editKeyAssignmentdelegate;
+        }
+        else
+        {
+            groupContentVC = [[OAAddQuickActionViewController alloc] initWithButtonState:_buttonState selectedGroup:item.key actions:_actions];
+            groupContentVC.delegate = self.delegate;
+        }
         [self.navigationController pushViewController:groupContentVC animated:YES];
     }
     else if ([item.cellType isEqualToString:[OAButtonTableViewCell reuseIdentifier]])
@@ -349,8 +382,17 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
         QuickActionType *action = [item objForKey:_kActionObjectKey];
         if (action)
         {
-            OAActionConfigurationViewController *actionSetupVC = [[OAActionConfigurationViewController alloc] initWithButtonState:_buttonState typeId:action.id];
-            actionSetupVC.delegate = self.delegate;
+            OAActionConfigurationViewController *actionSetupVC;
+            if (_keyAssignmentFlow)
+            {
+                actionSetupVC = [[OAActionConfigurationViewController alloc] initWithKeyAssignmentFlow:_keyAssignmentFlow typeId:action.id];
+                actionSetupVC.editKeyAssignmentdelegate = self.editKeyAssignmentdelegate;
+            }
+            else
+            {
+                actionSetupVC = [[OAActionConfigurationViewController alloc] initWithButtonState:_buttonState typeId:action.id];
+                actionSetupVC.delegate = self.delegate;
+            }
             [self.navigationController pushViewController:actionSetupVC animated:YES];
         }
     }

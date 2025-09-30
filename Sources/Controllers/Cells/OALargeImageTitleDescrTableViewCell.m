@@ -51,4 +51,22 @@
     self.button.hidden = !show;
 }
 
+- (void)showTitle:(BOOL)show
+{
+    self.titleLabel.hidden = !show;
+}
+
+- (void)configConstraintsForTitle:(BOOL)active
+{
+    self.descriptionWithTitleConstraint.active = active;
+    self.titleWithImageConstraint.active = active;
+    self.descriptionNoTitleConstraint.active = !active;
+}
+
+- (void)configConstraintsForButton:(BOOL)active
+{
+    self.descriptionWithButtonConstraint.active = active;
+    self.descriptionNoButtonConstraint.active = !active;
+}
+
 @end

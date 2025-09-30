@@ -219,6 +219,32 @@
 		274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167482E4DF5840051DD4B /* TopTextViewState.swift */; };
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
 		274C43F12DEDBA7100585952 /* OANextTurnWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */; };
+		2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */; };
+		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
+		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
+		277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987A42E7947E700607516 /* AddKeyViewController.swift */; };
+		277987AC2E79A7A700607516 /* KeyAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */; };
+		277987B22E7AB41600607516 /* InputDevicesCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987B12E7AB41600607516 /* InputDevicesCollection.swift */; };
+		277987B42E7AB42200607516 /* KeyAssignmentsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987B32E7AB42200607516 /* KeyAssignmentsCollection.swift */; };
+		277987B82E7AB48B00607516 /* KeyAssignmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987B72E7AB48B00607516 /* KeyAssignmentTableViewCell.swift */; };
+		277987BA2E7AB4A100607516 /* KeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987B92E7AB4A100607516 /* KeyView.swift */; };
+		277987BC2E7AB4A600607516 /* KeyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 277987BB2E7AB4A600607516 /* KeyView.xib */; };
+		277987BE2E7AB5F100607516 /* CommandToActionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987BD2E7AB5F100607516 /* CommandToActionConverter.swift */; };
+		277987C02E7AB6AB00607516 /* DefaultInputDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987BF2E7AB6AB00607516 /* DefaultInputDevices.swift */; };
+		277987C22E7AB7F500607516 /* InputDevicesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987C12E7AB7F500607516 /* InputDevicesHelper.swift */; };
+		2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4352E66E6F700682723 /* InputDeviceProfile.swift */; };
+		2783B4382E66E81900682723 /* PredefinedInputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */; };
+		2783B43A2E66E8AB00682723 /* KeyboardDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */; };
+		2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */; };
+		279322472E82EEF300B9FC81 /* KeyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279322462E82EEF300B9FC81 /* KeyEvent.swift */; };
+		279322492E82F4A400B9FC81 /* KeyEventMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279322482E82F4A400B9FC81 /* KeyEventMapper.swift */; };
+		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
+		27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */; };
+		27C6D5B12E7AE36600695D5B /* KeyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */; };
+		27C6D5B92E7D578C00695D5B /* KeyEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5B82E7D578C00695D5B /* KeyEventHandler.swift */; };
+		27C6D5BB2E81666300695D5B /* KeyEventCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5BA2E81666300695D5B /* KeyEventCommand.swift */; };
+		27C768E42E6833F100540266 /* CustomInputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */; };
+		27C768EA2E6892CD00540266 /* KeySymbolMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C768E92E6892CD00540266 /* KeySymbolMapper.swift */; };
 		27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */; };
 		27D33B3F2E7432DD00AD4F70 /* OpenNavigationViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B3E2E7432DD00AD4F70 /* OpenNavigationViewAction.swift */; };
 		27D33B412E7436F100AD4F70 /* OpenSearchViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B402E7436F100AD4F70 /* OpenSearchViewAction.swift */; };
@@ -3611,6 +3637,32 @@
 		274167482E4DF5840051DD4B /* TopTextViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTextViewState.swift; sourceTree = "<group>"; };
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
 		274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OANextTurnWidget.xib; sourceTree = "<group>"; };
+		2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainExternalInputDeviceViewController.swift; sourceTree = "<group>"; };
+		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
+		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
+		277987A42E7947E700607516 /* AddKeyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddKeyViewController.swift; sourceTree = "<group>"; };
+		277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyAssignmentTableViewCell.xib; sourceTree = "<group>"; };
+		277987B12E7AB41600607516 /* InputDevicesCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevicesCollection.swift; sourceTree = "<group>"; };
+		277987B32E7AB42200607516 /* KeyAssignmentsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignmentsCollection.swift; sourceTree = "<group>"; };
+		277987B72E7AB48B00607516 /* KeyAssignmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignmentTableViewCell.swift; sourceTree = "<group>"; };
+		277987B92E7AB4A100607516 /* KeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyView.swift; sourceTree = "<group>"; };
+		277987BB2E7AB4A600607516 /* KeyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyView.xib; sourceTree = "<group>"; };
+		277987BD2E7AB5F100607516 /* CommandToActionConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandToActionConverter.swift; sourceTree = "<group>"; };
+		277987BF2E7AB6AB00607516 /* DefaultInputDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultInputDevices.swift; sourceTree = "<group>"; };
+		277987C12E7AB7F500607516 /* InputDevicesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevicesHelper.swift; sourceTree = "<group>"; };
+		2783B4352E66E6F700682723 /* InputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDeviceProfile.swift; sourceTree = "<group>"; };
+		2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredefinedInputDeviceProfile.swift; sourceTree = "<group>"; };
+		2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDeviceProfile.swift; sourceTree = "<group>"; };
+		2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WunderLINQDeviceProfile.swift; sourceTree = "<group>"; };
+		279322462E82EEF300B9FC81 /* KeyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEvent.swift; sourceTree = "<group>"; };
+		279322482E82F4A400B9FC81 /* KeyEventMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventMapper.swift; sourceTree = "<group>"; };
+		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
+		27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTableViewCell.swift; sourceTree = "<group>"; };
+		27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyTableViewCell.xib; sourceTree = "<group>"; };
+		27C6D5B82E7D578C00695D5B /* KeyEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventHandler.swift; sourceTree = "<group>"; };
+		27C6D5BA2E81666300695D5B /* KeyEventCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventCommand.swift; sourceTree = "<group>"; };
+		27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInputDeviceProfile.swift; sourceTree = "<group>"; };
+		27C768E92E6892CD00540266 /* KeySymbolMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySymbolMapper.swift; sourceTree = "<group>"; };
 		27CE0CF12DF9D54300A3E627 /* NextTurnWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NextTurnWidget+Extension.swift"; sourceTree = "<group>"; };
 		27D33B3E2E7432DD00AD4F70 /* OpenNavigationViewAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNavigationViewAction.swift; sourceTree = "<group>"; };
 		27D33B402E7436F100AD4F70 /* OpenSearchViewAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSearchViewAction.swift; sourceTree = "<group>"; };
@@ -8119,6 +8171,48 @@
 			path = TrackMenu;
 			sourceTree = "<group>";
 		};
+		2758DD552E5EF7E000051096 /* ExternalInputDevice */ = {
+			isa = PBXGroup;
+			children = (
+				2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */,
+				2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */,
+				277987A42E7947E700607516 /* AddKeyViewController.swift */,
+				2758DD582E5F05F000051096 /* KeyAssignment.swift */,
+				277987B92E7AB4A100607516 /* KeyView.swift */,
+				277987BB2E7AB4A600607516 /* KeyView.xib */,
+			);
+			path = ExternalInputDevice;
+			sourceTree = "<group>";
+		};
+		2783B4342E66E68F00682723 /* Devices */ = {
+			isa = PBXGroup;
+			children = (
+				2783B4352E66E6F700682723 /* InputDeviceProfile.swift */,
+				2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */,
+				277987BF2E7AB6AB00607516 /* DefaultInputDevices.swift */,
+				27C242202E682F15000801B7 /* NoneDeviceProfile.swift */,
+				27C768E32E6833F100540266 /* CustomInputDeviceProfile.swift */,
+				2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */,
+				2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */,
+			);
+			path = Devices;
+			sourceTree = "<group>";
+		};
+		27C768F42E68C58A00540266 /* Keyevent */ = {
+			isa = PBXGroup;
+			children = (
+				277987B32E7AB42200607516 /* KeyAssignmentsCollection.swift */,
+				277987B12E7AB41600607516 /* InputDevicesCollection.swift */,
+				277987C12E7AB7F500607516 /* InputDevicesHelper.swift */,
+				27C768E92E6892CD00540266 /* KeySymbolMapper.swift */,
+				279322462E82EEF300B9FC81 /* KeyEvent.swift */,
+				279322482E82F4A400B9FC81 /* KeyEventMapper.swift */,
+				27C6D5B82E7D578C00695D5B /* KeyEventHandler.swift */,
+				27C6D5BA2E81666300695D5B /* KeyEventCommand.swift */,
+			);
+			path = Keyevent;
+			sourceTree = "<group>";
+		};
 		27E3C1FC2DF0A0350053958E /* OATopTextView */ = {
 			isa = PBXGroup;
 			children = (
@@ -11692,6 +11786,7 @@
 				DA5A7B0C26C563A100F274C7 /* OAProfileGeneralSettingsParametersViewController.m */,
 				DA5A7B0B26C563A100F274C7 /* OAProfileGeneralSettingsViewController.h */,
 				DA5A7B0D26C563A100F274C7 /* OAProfileGeneralSettingsViewController.m */,
+				2758DD552E5EF7E000051096 /* ExternalInputDevice */,
 			);
 			path = GeneralSettings;
 			sourceTree = "<group>";
@@ -12012,6 +12107,8 @@
 				C50867862D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift */,
 				C508678A2D9D5E32000B7219 /* SegmentTextTableViewCell.swift */,
 				32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */,
+				277987B72E7AB48B00607516 /* KeyAssignmentTableViewCell.swift */,
+				27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
@@ -12022,6 +12119,8 @@
 		DA5A7BB626C563A100F274C7 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
+				27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */,
+				277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */,
 				DA5A7C1126C563A200F274C7 /* OAActivityViewWithTitleCell.xib */,
 				C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */,
 				C5A466BD2D2E6B41008E0C87 /* ImageHeaderCell.xib */,
@@ -13482,6 +13581,7 @@
 				46DC808329B8884F00C477C3 /* Enums */,
 				46ED6C3C2B333A4600A5555F /* Extensions */,
 				C5484DC62CD21F03004C5F27 /* FormattedValue.swift */,
+				277987BD2E7AB5F100607516 /* CommandToActionConverter.swift */,
 				DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */,
 				C5B2AA602DB00700007FB854 /* GridFormat.swift */,
 				32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */,
@@ -13489,6 +13589,8 @@
 				32C41F582E15370800E9941C /* LocaleHelper.swift */,
 				FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */,
 				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
+				27C768F42E68C58A00540266 /* Keyevent */,
+				2783B4342E66E68F00682723 /* Devices */,
 				FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */,
 				32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */,
 				DA5A80B326C563A600F274C7 /* NSData+CRC32.h */,
@@ -15815,6 +15917,7 @@
 				DA5A842D26C563A800F274C7 /* OARouteTargetViewController.xib in Resources */,
 				DA98A035210A039500BB32D0 /* hu_tts.js in Resources */,
 				DA2EC6D629FBBE0300ECEB37 /* warnings_stop@3x.png in Resources */,
+				277987BC2E7AB4A600607516 /* KeyView.xib in Resources */,
 				844E07E01E4231C200EFC525 /* ic_action_street_name@3x.png in Resources */,
 				DAB854D3230586CC002566A6 /* ic_custom_underlay_map@2x.png in Resources */,
 				DA2EC79C29FBBE0400ECEB37 /* warnings_pedestrian_us@3x.png in Resources */,
@@ -16082,6 +16185,7 @@
 				32B50ABE26BBDA0D002E6C92 /* ic_custom_shop_bag@3x.png in Resources */,
 				0AA3BB9126EB540100A9885D /* ic_custom_appearance@2x.png in Resources */,
 				842432001AEFDD1900925821 /* ic_action_rec_stop@3x.png in Resources */,
+				277987AC2E79A7A700607516 /* KeyAssignmentTableViewCell.xib in Resources */,
 				DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */,
 				DA5A837326C563A800F274C7 /* OARouteSettingsBaseViewController.xib in Resources */,
 				84EE2DD91AFD149F007C9A94 /* img_purchase_banner_portrait@3x.png in Resources */,
@@ -16385,6 +16489,7 @@
 				DA69ED5D2A385B1B001022C7 /* OAWidgetPanelViewController.xib in Resources */,
 				15CD7E9F25B1C19900BCB36A /* ic_small_distance@2x.png in Resources */,
 				DA54AA8724EFEFBE001E6560 /* ic_custom_elevation@2x.png in Resources */,
+				27C6D5B12E7AE36600695D5B /* KeyTableViewCell.xib in Resources */,
 				DA68B3E1233B822F00F5ACCC /* ic_profile_bicycle@2x.png in Resources */,
 				157F3CE524A1FC85000A66F0 /* ic_checkmark_default@2x.png in Resources */,
 				DAB854AE23054C7C002566A6 /* ic_navbar_search@3x.png in Resources */,
@@ -16783,6 +16888,7 @@
 				DA5A81CD26C563A700F274C7 /* QuadTree.m in Sources */,
 				DA4ABF2F2876E4C200B996EF /* OAItemExporter.m in Sources */,
 				DA5A83B126C563A800F274C7 /* OAWebViewController.m in Sources */,
+				27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */,
 				FA30E6292DE9932400F09141 /* UIMenu+Extension.swift in Sources */,
 				DA5A825D26C563A700F274C7 /* OAFoldersCollectionViewCell.m in Sources */,
 				DA5A836D26C563A800F274C7 /* OAAppModeCell.mm in Sources */,
@@ -16811,6 +16917,7 @@
 				DA5A845626C563A900F274C7 /* OARulerByTapControlLayer.mm in Sources */,
 				32D253B127F336C200324717 /* OACloudAccountBaseViewController.m in Sources */,
 				DA5A81A726C563A700F274C7 /* OAObjectType.m in Sources */,
+				2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */,
 				DA5A840F26C563A800F274C7 /* OABasePointEditingHandler.m in Sources */,
 				DA5A832B26C563A800F274C7 /* OADirectionTableViewCell.m in Sources */,
 				DA5A817926C563A700F274C7 /* OAMapButtonsHelper.m in Sources */,
@@ -16840,12 +16947,14 @@
 				32FEF47F2D071FD7005E8B55 /* OAMapObject.mm in Sources */,
 				FAA6505C2ADD42C50020DCEA /* BLEExternalSensorsViewController.swift in Sources */,
 				FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */,
+				279322492E82F4A400B9FC81 /* KeyEventMapper.swift in Sources */,
 				DA5A83D626C563A800F274C7 /* OAReplaceFavoriteViewController.mm in Sources */,
 				DA5A815D26C563A700F274C7 /* OASRTMPlugin.mm in Sources */,
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,
 				32190FD82D4909940006E91C /* RenderedObjectHelper.swift in Sources */,
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,
+				2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */,
 				328EE35A2E171BA4003CDB48 /* SelectedMapObject.swift in Sources */,
 				328EE35B2E171BA4003CDB48 /* SelectedGpxPoint.swift in Sources */,
 				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
@@ -16935,6 +17044,7 @@
 				B247455727E6470A00C18C3F /* OATwoFilledButtonsTableViewCell.m in Sources */,
 				FA2E95C32DDE0A6C00B0ACA0 /* OBDService.swift in Sources */,
 				DA5A812326C563A700F274C7 /* OATransportStop.mm in Sources */,
+				2783B43A2E66E8AB00682723 /* KeyboardDeviceProfile.swift in Sources */,
 				DA5A84BF26C563A900F274C7 /* OAPointOptionsBottomSheetViewController.mm in Sources */,
 				DA5A852D26C563A900F274C7 /* OASaveGpxToTripsActivity.mm in Sources */,
 				460767122A49F86400AF63F2 /* WikiAlgorithms.swift in Sources */,
@@ -16967,6 +17077,7 @@
 				DA9A2C3026FDB72800BEC681 /* OARouteColorize.mm in Sources */,
 				32A0D6B32A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift in Sources */,
 				FAE446C42CCFC82700598BE3 /* ZoomLevelWidgetState.swift in Sources */,
+				277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */,
 				DAABE4EB2A16483300569F71 /* ConfigureScreenViewController.swift in Sources */,
 				DA5A84A526C563A900F274C7 /* OAMeasurementCommandManager.m in Sources */,
 				27D33B432E743A1A00AD4F70 /* ShowHideDrawerAction.swift in Sources */,
@@ -17018,6 +17129,7 @@
 				DA5A845126C563A900F274C7 /* OAMyPositionLayer.mm in Sources */,
 				DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */,
 				320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */,
+				27C768EA2E6892CD00540266 /* KeySymbolMapper.swift in Sources */,
 				4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */,
 				DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */,
 				DA5A834526C563A800F274C7 /* OAIconTextDescButtonCell.m in Sources */,
@@ -17115,12 +17227,14 @@
 				46132FB02C904D1A00C9F364 /* DisplayPositionAction.swift in Sources */,
 				323F04C22C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift in Sources */,
 				DA5A84A126C563A900F274C7 /* OAApplyGpxApproximationCommand.mm in Sources */,
+				277987C02E7AB6AB00607516 /* DefaultInputDevices.swift in Sources */,
 				DA5A841626C563A800F274C7 /* OAGPXWptViewController.mm in Sources */,
 				C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */,
 				C558DC462D453B1F007C0230 /* OAGpxApproximationParams.mm in Sources */,
 				C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */,
 				DA5A830026C563A800F274C7 /* OAPublicTransportRouteShieldCell.m in Sources */,
 				FA83EAA72BF6538B00DBF321 /* SpeedometerView.swift in Sources */,
+				277987BE2E7AB5F100607516 /* CommandToActionConverter.swift in Sources */,
 				325B6A0526D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m in Sources */,
 				462148722B6BEF44003DA10C /* CloudTrashViewController.swift in Sources */,
 				DA5A833426C563A800F274C7 /* OAShapesCollectionViewCell.m in Sources */,
@@ -17268,6 +17382,7 @@
 				C5BC8DD72E0408D400CF0815 /* OBDRemainingFuelWidget.swift in Sources */,
 				DA5A83AA26C563A800F274C7 /* OAAdvancedEditingViewController.mm in Sources */,
 				FAC346F52E052D3D002653CA /* VehicleMetricsItem.swift in Sources */,
+				27C6D5BB2E81666300695D5B /* KeyEventCommand.swift in Sources */,
 				464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */,
 				DA5A812526C563A700F274C7 /* OATransportStopType.m in Sources */,
 				C5BC8DD52E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift in Sources */,
@@ -17285,6 +17400,7 @@
 				DA5A842F26C563A800F274C7 /* OATargetTurnViewController.m in Sources */,
 				FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */,
 				DA5A856926C563A900F274C7 /* OARouteProvider.mm in Sources */,
+				277987B42E7AB42200607516 /* KeyAssignmentsCollection.swift in Sources */,
 				FA186E482BFCF15A007EE77D /* SpeedLimitWrapper.mm in Sources */,
 				DA5A848F26C563A900F274C7 /* OABaseTableViewController.m in Sources */,
 				DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */,
@@ -17304,6 +17420,7 @@
 				3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */,
 				FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */,
 				464BF4A72C050189000D6908 /* CompassVisibility.swift in Sources */,
+				279322472E82EEF300B9FC81 /* KeyEvent.swift in Sources */,
 				DA5A815B26C563A700F274C7 /* OACustomPlugin.mm in Sources */,
 				32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */,
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
@@ -17317,6 +17434,7 @@
 				DA5A81F026C563A700F274C7 /* OALocationIcon.m in Sources */,
 				DA5A81B526C563A700F274C7 /* OAPOIHelper.mm in Sources */,
 				DA5A824026C563A700F274C7 /* OATripRecordingSettingsViewController.mm in Sources */,
+				277987B22E7AB41600607516 /* InputDevicesCollection.swift in Sources */,
 				DA5A813926C563A700F274C7 /* OAOnlineOsmNoteWrapper.mm in Sources */,
 				DA5A815126C563A700F274C7 /* OACarPlayTracksListController.m in Sources */,
 				DA5A823226C563A700F274C7 /* OAGpxAppearanceInfo.mm in Sources */,
@@ -17378,6 +17496,7 @@
 				FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */,
 				DAA61CBF2A02789D00AFF65D /* MapWidgetInfo.swift in Sources */,
 				DA5A817426C563A700F274C7 /* OAGpxWptItem.mm in Sources */,
+				27C6D5B92E7D578C00695D5B /* KeyEventHandler.swift in Sources */,
 				FA4C57052D491EB900438A5C /* CardsViewController.swift in Sources */,
 				32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */,
 				DA5A81C026C563A700F274C7 /* OASearchByNameFilter.mm in Sources */,
@@ -17392,6 +17511,7 @@
 				DA66796B27EDCABA00509932 /* OARegisterDeviceCommand.m in Sources */,
 				FA64087F2D3E8EDA005FD12D /* OAMapillaryImageCard.swift in Sources */,
 				DA4ABF232876DA6800B996EF /* OACollectionSettingsItem.mm in Sources */,
+				2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */,
 				DA5A838D26C563A800F274C7 /* OAPluginDetailsViewController.mm in Sources */,
 				DA5A818826C563A700F274C7 /* OANavAutoZoomMapAction.m in Sources */,
 				FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */,
@@ -17438,6 +17558,7 @@
 				FAC166212B21BEF900D63755 /* Util.swift in Sources */,
 				DA5A849826C563A900F274C7 /* OAExitRoutePlanningBottomSheetViewController.m in Sources */,
 				46C841292C32F20D00E284B0 /* OAShowHidePrecipitationAction.m in Sources */,
+				277987B82E7AB48B00607516 /* KeyAssignmentTableViewCell.swift in Sources */,
 				4619604B2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift in Sources */,
 				DA5A853B26C563A900F274C7 /* OAFileNameTranslationHelper.m in Sources */,
 				DA5A819026C563A700F274C7 /* OAShowHideGPXTracksAction.mm in Sources */,
@@ -17508,6 +17629,7 @@
 				C5B2AA5F2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift in Sources */,
 				32A46BC02C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm in Sources */,
 				DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */,
+				27C768E42E6833F100540266 /* CustomInputDeviceProfile.swift in Sources */,
 				DA5A817F26C563A700F274C7 /* OAUnsupportedAction.m in Sources */,
 				0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */,
 				32FE7AA72B65138800F82728 /* OAGPXImportUIHelper.mm in Sources */,
@@ -17606,6 +17728,7 @@
 				FA9217102D525D600074E958 /* GalleryContextMenuProvider.swift in Sources */,
 				C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */,
 				46E8FFC729ED759000DB1EFE /* UINavigationController+keyCommands.m in Sources */,
+				277987C22E7AB7F500607516 /* InputDevicesHelper.swift in Sources */,
 				DA5A844E26C563A900F274C7 /* OATransportStopsLayer.mm in Sources */,
 				DA5A831426C563A800F274C7 /* OARouteInfoLegendCell.m in Sources */,
 				32C41F592E15370D00E9941C /* LocaleHelper.swift in Sources */,
@@ -17727,6 +17850,7 @@
 				468443422B83D22A006B8E62 /* DeleteAccountViewController.swift in Sources */,
 				DA5A81B226C563A700F274C7 /* OADownloadDescriptionInfo.m in Sources */,
 				468C798D2B7F76A000DA64D0 /* SendCodeCommand.swift in Sources */,
+				2783B4382E66E81900682723 /* PredefinedInputDeviceProfile.swift in Sources */,
 				DA5A814126C563A700F274C7 /* OARelation.m in Sources */,
 				DA5A856326C563A900F274C7 /* OARouteCalculationResult.mm in Sources */,
 				DA5A834926C563A800F274C7 /* OAProgressBarCell.mm in Sources */,
@@ -17743,6 +17867,7 @@
 				DA5A84BB26C563A900F274C7 /* OAPublicTransportOptionsBottomSheet.mm in Sources */,
 				DA5A832726C563A800F274C7 /* OARouteInfoAltitudeCell.m in Sources */,
 				DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */,
+				2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */,
 				27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */,
 				DA2483E72927916700189AF2 /* OAStatusBackupTableViewController.mm in Sources */,
 				FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */,
@@ -17873,6 +17998,7 @@
 				DA5A82F126C563A800F274C7 /* OALocationIconsTableViewCell.m in Sources */,
 				DA5A844026C563A900F274C7 /* OAUsernameFilterViewController.mm in Sources */,
 				323F04BA2C6500E80058DD78 /* ShowHideCycleRoutesAction.swift in Sources */,
+				27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */,
 				DA5A84BC26C563A900F274C7 /* OABaseBottomSheetViewController.m in Sources */,
 				DA5A844C26C563A900F274C7 /* OADestinationCell.mm in Sources */,
 				DA5A856626C563A900F274C7 /* OALocationsHolder.mm in Sources */,
@@ -17944,6 +18070,7 @@
 				DA5A824426C563A700F274C7 /* OAVehicleParametersSettingsViewController.mm in Sources */,
 				DA5A846D26C563A900F274C7 /* OASelectedGPXHelper.mm in Sources */,
 				FAF7920F2A780F2500CE5F79 /* UIViewController+Extension.swift in Sources */,
+				277987BA2E7AB4A100607516 /* KeyView.swift in Sources */,
 				DA5A834826C563A800F274C7 /* OARadiusCellEx.m in Sources */,
 				C56FAB4C29B226A40096192F /* OACameraTiltWidget.mm in Sources */,
 				DA5A84DB26C563A900F274C7 /* OAMapSettingsMainScreen.mm in Sources */,
@@ -18116,6 +18243,7 @@
 				CA4EDDEA04A2683B2A8447AA /* OAManageStorageViewController.mm in Sources */,
 				46BCD1922C2DCA0F008749EC /* ColorPalette.swift in Sources */,
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,
+				2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */,
 				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
 				FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */,

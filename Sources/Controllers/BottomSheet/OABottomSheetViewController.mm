@@ -21,17 +21,6 @@
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 #define kButtonsDividerTag 150
 
-@interface OABottomSheetViewStack : NSObject
-
-@property (nonatomic) NSMutableArray<OABottomSheetViewController *> *bottomSheetViews;
-
-+ (OABottomSheetViewStack *) sharedInstance;
-
-- (void) push:(OABottomSheetViewController *)bottomSheetView;
-- (void) pop:(OABottomSheetViewController *)bottomSheetView;
-
-@end
-
 @interface OABottomSheetViewController () <OATableViewDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic) UIWindow *bottomSheetWindow;
@@ -412,7 +401,7 @@
     _hiding = YES;
     self.visible = NO;
     
-    NSInteger viewsCount = [[[OABottomSheetViewStack sharedInstance] bottomSheetViews] count];
+    NSInteger viewsCount = [[OABottomSheetViewStack sharedInstance] count];
     CGRect contentFrame = self.contentView.frame;
     contentFrame.origin.y = contentFrame.size.height + 10.0;
     
@@ -438,7 +427,7 @@
 
 - (void)goBack
 {
-    if ([_settings.settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+    if ([[_settings.settingExternalInputDevice get] isEqualToString:WunderLINQDeviceProfile.deviceId])
     {
         //Launch WunderLINQ
         NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
@@ -446,7 +435,7 @@
         if (canOpenURL)
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
-    else if ([_settings.settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    else if (![[_settings.settingExternalInputDevice get] isEqualToString:NoneDeviceProfile.deviceId])
     {
         [self dismiss];
     }
@@ -454,11 +443,14 @@
 
 #pragma mark - UIResponder
 
-- (NSArray<UIKeyCommand *> *)keyCommands
+- (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
 {
-    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)];
-    command.wantsPriorityOverSystemBehavior = YES;
-    return @[command];
+    [KeyEventHelper.shared pressesBegan:presses withEvent:event];
+}
+
+- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+    [KeyEventHelper.shared pressesEnded:presses withEvent:event];
 }
 
 #pragma mark -  UIGestureRecognizerDelegate
@@ -535,6 +527,12 @@
 
 @end
 
+@interface OABottomSheetViewStack ()
+
+@property (nonatomic) NSMutableArray<OABottomSheetViewController *> *bottomSheetViews;
+
+@end
+
 @implementation OABottomSheetViewStack
 
 + (instancetype) sharedInstance
@@ -569,6 +567,16 @@
     OABottomSheetViewController *last = [self.bottomSheetViews lastObject];
     if (last && !last.view.superview)
         [last showInternal];
+}
+
+- (NSInteger)count
+{
+    return self.bottomSheetViews.count;
+}
+
+- (nullable OABottomSheetViewController *)lastObject
+{
+    return self.bottomSheetViews.lastObject;
 }
 
 @end

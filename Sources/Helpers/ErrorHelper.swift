@@ -1,5 +1,5 @@
 //
-//  NSErrorHelper.swift
+//  ErrorHelper.swift
 //  OsmAnd
 //
 //  Created by Oleksandr Panchenko on 22.09.2025.

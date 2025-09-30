@@ -170,9 +170,19 @@
         object.localeName = object.alternateName;
         object.alternateName = nil;
     }
-    if (object.alternateName.length == 0 && [object.object isKindOfClass:[OAPOI class]]) {
-        object.alternateName = object.cityName;
-    }
+//
+// TODO
+//
+// e23114828a74c2f81ef94d8ea03c6feb7a5ff513
+//
+// What is the source of this code in Java?
+// SearchResult.alternateName is never set from cityName in Android publish()
+// The only such case is found in createSearchResult() and seems to be never used in OBF search.
+//
+//    if (object.alternateName.length == 0 && [object.object isKindOfClass:[OAPOI class]]) {
+//        object.alternateName = object.cityName;
+//    }
+//
     object.parentSearchResult = _parentSearchResult;
     if (!_matcher || [_matcher publish:object])
     {

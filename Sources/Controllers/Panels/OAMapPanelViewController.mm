@@ -1127,6 +1127,11 @@ typedef enum
     [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:@"" object:object];
 }
 
+- (void) openSearch:(NSObject *)object location:(CLLocation *)location searchQuery:(NSString *)searchQuery
+{
+    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:searchQuery object:object];
+}
+
 - (void) openSearch:(OAQuickSearchType)searchType
 {
     [self openSearch:searchType location:nil tabIndex:-1];
@@ -1208,14 +1213,20 @@ typedef enum
 
         if ([object isKindOfClass:[OAPOICategory class]])
         {
-            objectLocalizedName = ((OAPOICategory *) object).nameLocalized;
+            if (NSStringIsEmpty(objectLocalizedName))
+            {
+                objectLocalizedName = ((OAPOICategory *) object).nameLocalized;
+            }
             phrase = [searchUICore resetPhrase:[NSString stringWithFormat:@"%@ ", objectLocalizedName]];
         }
         else if ([object isKindOfClass:[OAPOIUIFilter class]])
         {
             OAPOIUIFilter *filter = (OAPOIUIFilter *) object;
             filterByName = [filter.filterId isEqualToString:BY_NAME_FILTER_ID] || [filter.filterId hasPrefix:topIndexBrandPrefix];
-            objectLocalizedName = filterByName ? filter.filterByName : filter.name;
+            if (NSStringIsEmpty(objectLocalizedName))
+            {
+                objectLocalizedName = filterByName ? filter.filterByName : filter.name;
+            }
             phrase = [searchUICore resetPhrase];
         }
 
@@ -1229,9 +1240,12 @@ typedef enum
             sr.objectType = EOAObjectTypePoiType;
             [searchUICore selectSearchResult:sr];
         }
-
-        searchQuery = [NSString stringWithFormat:@"%@ ",
-                filterByName ? ((OAPOIUIFilter *) object).filterByName : objectLocalizedName.trim];
+        
+        if (NSStringIsEmpty(objectLocalizedName))
+        {
+            searchQuery = [NSString stringWithFormat:@"%@ ",
+                           filterByName ? ((OAPOIUIFilter *) object).filterByName : objectLocalizedName.trim];
+        }
     }
 
     if (searchQuery)

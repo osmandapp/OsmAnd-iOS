@@ -104,6 +104,7 @@
 
         vwController = viewController;
         tblView = tableView;
+        [self registerCells];
 
         _filteredTopLevelParams = [NSArray array];
         _allCategories = [NSArray array];
@@ -134,6 +135,16 @@
     }
 }
 
+- (void)registerCells
+{
+    [self.tblView registerNib:[UINib nibWithNibName:OASimpleTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OASimpleTableViewCell.reuseIdentifier];
+    [self.tblView registerNib:[UINib nibWithNibName:OAValueTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAValueTableViewCell.reuseIdentifier];
+    [self.tblView registerNib:[UINib nibWithNibName:OASwitchTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OASwitchTableViewCell.reuseIdentifier];
+    [self.tblView registerNib:[UINib nibWithNibName:OAButtonTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAButtonTableViewCell.reuseIdentifier];
+    [self.tblView registerNib:[UINib nibWithNibName:OARightIconTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OARightIconTableViewCell.reuseIdentifier];
+    [self.tblView registerNib:[UINib nibWithNibName:FreeBackupBannerCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:FreeBackupBannerCell.reuseIdentifier];
+}
+
 - (void)setupView
 {
     NSMutableArray *data = [NSMutableArray array];
@@ -153,7 +164,7 @@
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"favorites_item"),
             @"image": @"ic_custom_favorites",
-            @"type": [OASwitchTableViewCell getCellIdentifier],
+            @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"favorites"
     }];
 
@@ -161,14 +172,14 @@
             @"name": OALocalizedString(@"poi_overlay"),
             @"value": [self getPOIDescription],
             @"image": @"ic_custom_info",
-            @"type": [OAValueTableViewCell getCellIdentifier],
+            @"type": OAValueTableViewCell.reuseIdentifier,
             @"key": @"poi_layer"
     }];
 
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"layer_amenity_label"),
             @"image": @"ic_custom_point_labels",
-            @"type": [OASwitchTableViewCell getCellIdentifier],
+            @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"layer_amenity_label"
     }];
 
@@ -178,7 +189,7 @@
                 @"name": OALocalizedString(@"download_wikipedia_maps"),
                 @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
                 hasWiki ? @"has_options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
-                @"type": hasWiki ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
+                @"type": hasWiki ? OASwitchTableViewCell.reuseIdentifier : OAButtonTableViewCell.reuseIdentifier,
                 @"key": @"wikipedia_layer"
         }];
     }
@@ -189,7 +200,7 @@
                 @"name": OALocalizedString(@"street_level_imagery"),
                 @"image": @"ic_custom_mapillary_symbol",
                 @"has_options": @YES,
-                @"type": [OASwitchTableViewCell getCellIdentifier],
+                @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"mapillary_layer"
         }];
     }
@@ -198,14 +209,14 @@
         @"name": OALocalizedString(@"shared_string_gpx_tracks"),
         @"image": @"ic_custom_trip",
         @"value": [NSString stringWithFormat:@"%d", (int)_settings.mapSettingVisibleGpx.get.count],
-        @"type": [OAValueTableViewCell getCellIdentifier],
+        @"type": OAValueTableViewCell.reuseIdentifier,
         @"key": @"tracks"
     }];
     
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"show_borders_of_downloaded_maps"),
             @"image": @"ic_custom_download_map",
-            @"type": [OASwitchTableViewCell getCellIdentifier],
+            @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"show_borders_of_downloaded_maps"
     }];
     
@@ -213,7 +224,7 @@
         @"name": OALocalizedString(@"layer_coordinates_grid"),
         @"image": hasCoordinatesGrid ? @"ic_custom_coordinates_grid" : @"ic_custom_coordinates_grid_disabled",
         @"value": OALocalizedString(hasCoordinatesGrid ? @"shared_string_on" : @"shared_string_off"),
-        @"type": [OAValueTableViewCell getCellIdentifier],
+        @"type": OAValueTableViewCell.reuseIdentifier,
         @"key": @"coordinates_grid"
     }];
 
@@ -227,7 +238,7 @@
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.isOpen = [[NSUserDefaults standardUserDefaults] boolForKey:kOSMGroupOpen];
         group.groupName = OALocalizedString(@"shared_string_open_street_map");
-        group.type = [OARightIconTableViewCell getCellIdentifier];
+        group.type = OARightIconTableViewCell.reuseIdentifier;
         group.groupType = EOATableCollapsableGroupMapSettingsOSM;
 
         NSMutableArray<NSDictionary *> *osmCells = [NSMutableArray array];
@@ -235,13 +246,13 @@
         [group.groupItems addObject:@{
                 @"name": OALocalizedString(@"osm_edits_offline_layer"),
                 @"image": @"ic_action_openstreetmap_logo",
-                @"type": [OASwitchTableViewCell getCellIdentifier],
+                @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"osm_edits_offline_layer"
         }];
         [group.groupItems addObject:@{
                 @"name": OALocalizedString(@"osm_notes_online_layer"),
                 @"image": @"ic_action_osm_note",
-                @"type": [OASwitchTableViewCell getCellIdentifier],
+                @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"osm_notes_online_layer"
         }];
         _osmSettingsCount = group.groupItems.count + 1;
@@ -253,7 +264,7 @@
                 [group.groupItems addObject:@{
                         @"name": osmParameter.title,
                         @"has_empty_icon": @YES,
-                        @"type": [OASwitchTableViewCell getCellIdentifier],
+                        @"type": OASwitchTableViewCell.reuseIdentifier,
                         @"key": [NSString stringWithFormat:@"osm_%@", osmParameter.name]
                 }];
             }
@@ -284,7 +295,7 @@
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.isOpen = isOpen;
         group.groupName = OALocalizedString(group.isOpen ? @"shared_string_collapse" : @"shared_string_show_all");
-        group.type = [OARightIconTableViewCell getCellIdentifier];
+        group.type = OARightIconTableViewCell.reuseIdentifier;
         group.groupType = EOATableCollapsableGroupMapSettingsRoutes;
 
         NSMutableArray<NSDictionary *> *routeCells = [NSMutableArray array];
@@ -342,8 +353,8 @@
                     @"image": [self getImageForParameterOrCategory:routeParameter.name],
                     @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name],
                     @"type": [hasParameters containsObject:routeParameter.name]
-                                ? isMountainBike || isDifficultyClassification ? [OAValueTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier]
-                                : [OASwitchTableViewCell getCellIdentifier],
+                                ? isMountainBike || isDifficultyClassification ? OAValueTableViewCell.reuseIdentifier : OASimpleTableViewCell.reuseIdentifier
+                                : OASwitchTableViewCell.reuseIdentifier,
                     @"value": value
             };
 
@@ -377,7 +388,7 @@
                     @"name": OALocalizedString(@"map_settings_type"),
                     @"value": mapStyleName,
                     @"image": @"ic_custom_map_style",
-                    @"type": [OAValueTableViewCell getCellIdentifier],
+                    @"type": OAValueTableViewCell.reuseIdentifier,
                     @"key": @"map_type"
             }]
     }];
@@ -390,21 +401,21 @@
                 @"name": OALocalizedString(@"map_mode"),
                 @"value": [DayNightModeWrapper getTitleForType:dayNightMode],
                 @"image": @"ic_custom_sun",
-                @"type": [OAValueTableViewCell getCellIdentifier],
+                @"type": OAValueTableViewCell.reuseIdentifier,
                 @"key": @"mapMode"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_magnifier"),
                 @"value": [self getPercentString:[_settings.mapDensity get]],
                 @"image": @"ic_custom_magnifier",
-                @"type": [OAValueTableViewCell getCellIdentifier],
+                @"type": OAValueTableViewCell.reuseIdentifier,
                 @"key": @"map_magnifier"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"text_size"),
                 @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode.get]],
                 @"image": @"ic_custom_text_size",
-                @"type": [OAValueTableViewCell getCellIdentifier],
+                @"type": OAValueTableViewCell.reuseIdentifier,
                 @"key": @"text_size"
         }];
 
@@ -421,7 +432,7 @@
                             @"name": [_styleSettings getCategoryTitle:cName],
                             @"image": [self getImageForParameterOrCategory:cName],
                             @"key": [NSString stringWithFormat:@"category_%@", cName],
-                            @"type": [OASimpleTableViewCell getCellIdentifier],
+                            @"type": OASimpleTableViewCell.reuseIdentifier,
                             @"value": @""
                     }];
                 }
@@ -431,7 +442,7 @@
                         @"name": [_styleSettings getCategoryTitle:cName],
                         @"image": [self getImageForParameterOrCategory:cName],
                         @"key": [NSString stringWithFormat:@"category_%@", cName],
-                        @"type": isTransport ? [OASwitchTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier],
+                        @"type": isTransport ? OASwitchTableViewCell.reuseIdentifier : OASimpleTableViewCell.reuseIdentifier,
                         isTransport ? @"has_options" : @"value": isTransport ? @YES : @""
                 }];
             }
@@ -444,11 +455,11 @@
             {
                 NSString *val = [parameter getValueTitle];
                 [mapStyleSectionData addObject:@{
-                        @"name": parameter.title,
-                        @"image": [self getImageForParameterOrCategory:parameter.name],
-                        @"value": val ? val : @"",
-                        @"type": [OAValueTableViewCell getCellIdentifier],
-                        @"key": [NSString stringWithFormat:@"filtered_%@", parameter.name]
+                    @"name": parameter.title,
+                    @"image": [self getImageForParameterOrCategory:parameter.name],
+                    @"value": val ? val : @"",
+                    @"type": parameter.dataType == OABoolean ? OASwitchTableViewCell.reuseIdentifier : OAValueTableViewCell.reuseIdentifier,
+                    @"key": [NSString stringWithFormat:@"filtered_%@", parameter.name]
                 }];
             }
         }
@@ -463,7 +474,7 @@
     if (!hasSRTM)
     {
         [topographySectionData addObject:@{
-                @"type": [FreeBackupBannerCell getCellIdentifier],
+                @"type": FreeBackupBannerCell.reuseIdentifier,
                 @"key": @"terrain_layer"
         }];
     }
@@ -473,7 +484,7 @@
                 @"name": OALocalizedString(@"map_settings_topography"),
                 @"image": @"ic_custom_contour_lines",
                 @"has_options": @YES,
-                @"type": [OASwitchTableViewCell getCellIdentifier],
+                @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"contour_lines_layer"
         }];
     }
@@ -483,7 +494,7 @@
                 @"name": OALocalizedString(@"shared_string_terrain"),
                 @"image": @"ic_custom_terrain",
                 @"has_options": @YES,
-                @"type": [OASwitchTableViewCell getCellIdentifier],
+                @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"terrain_layer"
         }];
     }
@@ -497,7 +508,7 @@
                 @"name": OALocalizedString(@"nautical_depth"),
                 @"image": @"ic_custom_nautical_depth",
                 @"has_options": @YES,
-                @"type": [OASwitchTableViewCell getCellIdentifier],
+                @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"nautical_depth"
             }];
         }
@@ -517,14 +528,14 @@
             @"name": OALocalizedString(@"map_settings_over"),
             @"image": @"ic_custom_overlay_map",
             @"has_options": @YES,
-            @"type": [OASwitchTableViewCell getCellIdentifier],
+            @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"overlay_layer"
     }];
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_under"),
             @"image": @"ic_custom_underlay_map",
             @"has_options": @YES,
-            @"type": [OASwitchTableViewCell getCellIdentifier],
+            @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"underlay_layer"
     }];
 
@@ -534,7 +545,7 @@
                 @"name": OALocalizedString(@"shared_string_weather"),
                 @"image": @"ic_custom_umbrella",
                 hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"shared_string_weather"),
-                @"type": hasWeather ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
+                @"type": hasWeather ? OASwitchTableViewCell.reuseIdentifier : OAButtonTableViewCell.reuseIdentifier,
                 @"key": @"weather_layer"
         }];
     }
@@ -550,7 +561,7 @@
                     @"name": OALocalizedString(@"map_locale"),
                     @"value": [self getMapLangValueStr],
                     @"image": @"ic_custom_map_languge",
-                    @"type": [OAValueTableViewCell getCellIdentifier],
+                    @"type": OAValueTableViewCell.reuseIdentifier,
                     @"key": @"map_language"
             }]
     }];
@@ -775,6 +786,11 @@
         NSString *osmValue = _osmParameters[index - _osmSettingsCount].value;
         return osmValue.length > 0 ? [osmValue isEqualToString:@"true"] : NO;
     }
+    else if ([key hasPrefix:@"filtered_"])
+    {
+        OAMapStyleParameter *param = [_styleSettings getParameter:[key substringFromIndex:[@"filtered_" length]]];
+        return [param.value isEqualToString:@"true"];
+    }
 
     return YES;
 }
@@ -974,171 +990,126 @@
         }
         return _appModeCell;
     }
-    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:OASimpleTableViewCell.reuseIdentifier])
     {
-        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASimpleTableViewCell *) nib[0];
-            [cell descriptionVisibility:NO];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
-            cell.titleLabel.text = item[@"name"];
+        OASimpleTableViewCell *cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:OASimpleTableViewCell.reuseIdentifier forIndexPath:indexPath];
+        [cell descriptionVisibility:NO];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
+        cell.titleLabel.text = item[@"name"];
 
-            BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
-            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item[@"image"]] : nil;
-            cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
-        }
+        BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
+        cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item[@"image"]] : nil;
+        cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:OAValueTableViewCell.reuseIdentifier])
     {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OAValueTableViewCell *cell = (OAValueTableViewCell *)[tableView dequeueReusableCellWithIdentifier:OAValueTableViewCell.reuseIdentifier forIndexPath:indexPath];
+        [cell descriptionVisibility:NO];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
+        cell.titleLabel.text = item[@"name"];
+        cell.valueLabel.text = item[@"value"];
+        NSString *iconName = item[@"image"];
+        BOOL hasLeftIcon = iconName && iconName.length > 0;
+        [cell leftIconVisibility:hasLeftIcon];
+        cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:iconName] : nil;
+        cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:OASwitchTableViewCell.reuseIdentifier])
+    {
+        OASwitchTableViewCell *cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:OASwitchTableViewCell.reuseIdentifier forIndexPath:indexPath];
+        [cell descriptionVisibility:NO];
+        cell.selectionStyle = hasOptions ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+        cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (isLastGroupIndex ? kPaddingOnSideOfContent : kPaddingToLeftOfContentWithIcon), 0., 0.);
+        [cell dividerVisibility:![item[@"key"] isEqualToString:@"nautical_depth"] ? hasOptions : NO];
+        cell.titleLabel.text = item[@"name"];
+        [cell leftIconVisibility:[item[@"image"] length] > 0 || item[@"has_empty_icon"]];
+        if (item[@"has_empty_icon"])
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAValueTableViewCell *) nib[0];
-            [cell descriptionVisibility:NO];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.leftIconView.image = nil;
+            cell.leftIconView.backgroundColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.layer.cornerRadius = cell.leftIconView.layer.frame.size.width / 2;
+            cell.leftIconView.clipsToBounds = YES;
         }
-        if (cell)
+        else
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
-            cell.titleLabel.text = item[@"name"];
-            cell.valueLabel.text = item[@"value"];
-            
+            cell.leftIconView.backgroundColor = UIColor.clearColor;
             NSString *iconName = item[@"image"];
-            BOOL hasLeftIcon = iconName && iconName.length > 0;
-            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:iconName] : nil;
+            UIImage *icon;
+            if ([iconName hasPrefix:@"mx_"])
+                icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            else
+                icon = iconName && iconName.length > 0 ? [UIImage templateImageNamed:iconName] : nil;
+
+            cell.leftIconView.image = icon;
             cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
+
+        cell.switchView.on = isOn;
+        cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+        [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+        [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:OAButtonTableViewCell.reuseIdentifier])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.selectionStyle = hasOptions ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (isLastGroupIndex ? kPaddingOnSideOfContent : kPaddingToLeftOfContentWithIcon), 0., 0.);
-            [cell dividerVisibility:![item[@"key"] isEqualToString:@"nautical_depth"] ? hasOptions : NO];
-            cell.titleLabel.text = item[@"name"];
-
-            [cell leftIconVisibility:item[@"image"] != nil || item[@"has_empty_icon"]];
-            if (item[@"has_empty_icon"])
-            {
-                cell.leftIconView.image = nil;
-                cell.leftIconView.backgroundColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
-                cell.leftIconView.layer.cornerRadius = cell.leftIconView.layer.frame.size.width / 2;
-                cell.leftIconView.clipsToBounds = YES;
-            }
-            else
-            {
-                cell.leftIconView.backgroundColor = UIColor.clearColor;
-                NSString *iconName = item[@"image"];
-                UIImage *icon;
-                if ([iconName hasPrefix:@"mx_"])
-                    icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                else
-                    icon = iconName && iconName.length > 0 ? [UIImage templateImageNamed:iconName] : nil;
-                cell.leftIconView.image = icon;
-                cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
-            }
-
-            cell.switchView.on = isOn;
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
-        }
+        OAButtonTableViewCell *cell = (OAButtonTableViewCell *)[tableView dequeueReusableCellWithIdentifier:OAButtonTableViewCell.reuseIdentifier forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.button.titleLabel.numberOfLines = 1;
+        cell.button.titleLabel.adjustsFontSizeToFitWidth = YES;
+        cell.button.titleLabel.lineBreakMode = NSLineBreakByClipping;
+        cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
+        cell.titleLabel.text = item[@"name"];
+        cell.descriptionLabel.text = item[@"desc"];
+        BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
+        cell.leftIconView.image = hasLeftIcon ? [UIImage rtlImageNamed:item[@"image"]] : nil;
+        [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
+        [cell.button setTitleColor:[[UIColor colorNamed:ACColorNameTextColorActive] colorWithAlphaComponent:0.1] forState:UIControlStateHighlighted];
+        cell.button.tag = indexPath.section << 10 | indexPath.row;
+        [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
+        [cell.button addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:FreeBackupBannerCell.reuseIdentifier])
     {
-        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonTableViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.button.titleLabel.numberOfLines = 1;
-            cell.button.titleLabel.adjustsFontSizeToFitWidth = YES;
-            cell.button.titleLabel.lineBreakMode = NSLineBreakByClipping;
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
-            cell.titleLabel.text = item[@"name"];
-            cell.descriptionLabel.text = item[@"desc"];
+        FreeBackupBannerCell *cell = (FreeBackupBannerCell *)[tableView dequeueReusableCellWithIdentifier:FreeBackupBannerCell.reuseIdentifier forIndexPath:indexPath];
+        _freeBackupBanner.didOsmAndCloudButtonAction = ^{
+            OAProduct *product;
+            if ([item[@"key"] isEqualToString:@"terrain_layer"])
+                product = _iapHelper.srtm;
+            [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
+        };
 
-            BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
-            cell.leftIconView.image = hasLeftIcon ? [UIImage rtlImageNamed:item[@"image"]] : nil;
-
-            [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
-            [cell.button setTitleColor:[[UIColor colorNamed:ACColorNameTextColorActive] colorWithAlphaComponent:0.1] forState:UIControlStateHighlighted];
-            cell.button.tag = indexPath.section << 10 | indexPath.row;
-            [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.button addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[FreeBackupBannerCell getCellIdentifier]])
-    {
-        FreeBackupBannerCell *cell = (FreeBackupBannerCell *)[tableView dequeueReusableCellWithIdentifier:[FreeBackupBannerCell getCellIdentifier]];
-        if (!_freeBackupBanner)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"FreeBackupBanner" owner:self options:nil];
-            _freeBackupBanner = (FreeBackupBanner *)nib[0];
-            _freeBackupBanner.didOsmAndCloudButtonAction = ^{
-                OAProduct *product;
-                if ([item[@"key"] isEqualToString:@"terrain_layer"])
-                    product = _iapHelper.srtm;
-                [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
-            };
-            
-            [_freeBackupBanner configureWithBannerType:BannerTypeMapSettingsTopography];
-            _freeBackupBanner.translatesAutoresizingMaskIntoConstraints = NO;
-            [cell.contentView addSubview:_freeBackupBanner];
-            [NSLayoutConstraint activateConstraints:@[
-                [_freeBackupBanner.topAnchor constraintEqualToAnchor:cell.contentView.topAnchor],
-                [_freeBackupBanner.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor],
-                [_freeBackupBanner.leadingAnchor constraintEqualToAnchor:cell.contentView.leadingAnchor],
-                [_freeBackupBanner.trailingAnchor constraintEqualToAnchor:cell.contentView.trailingAnchor],
-            ]];
-        }
+        [_freeBackupBanner configureWithBannerType:BannerTypeMapSettingsTopography];
+        _freeBackupBanner.translatesAutoresizingMaskIntoConstraints = NO;
+        [cell.contentView addSubview:_freeBackupBanner];
+        [NSLayoutConstraint activateConstraints:@[
+            [_freeBackupBanner.topAnchor constraintEqualToAnchor:cell.contentView.topAnchor],
+            [_freeBackupBanner.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor],
+            [_freeBackupBanner.leadingAnchor constraintEqualToAnchor:cell.contentView.leadingAnchor],
+            [_freeBackupBanner.trailingAnchor constraintEqualToAnchor:cell.contentView.trailingAnchor],
+        ]];
         return cell;
     }
     else if (group)
     {
-        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OARightIconTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
-            cell.titleLabel.text = group.groupName;
-            if (indexPath.row > 0)
-                cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+        OARightIconTableViewCell *cell = (OARightIconTableViewCell *)[tableView dequeueReusableCellWithIdentifier:OARightIconTableViewCell.reuseIdentifier forIndexPath:indexPath];
 
-            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            cell.rightIconView.image = [UIImage templateImageNamed:group.isOpen ? @"ic_custom_arrow_up" : ACImageNameIcCustomArrowDown];
-            if (!group.isOpen && [cell isDirectionRTL])
-                cell.rightIconView.image = cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection;
-        }
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
+        cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
+        cell.titleLabel.text = group.groupName;
+        if (indexPath.row > 0)
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+        
+        cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        cell.rightIconView.image = [UIImage templateImageNamed:group.isOpen ? @"ic_custom_arrow_up" : ACImageNameIcCustomArrowDown];
+        if (!group.isOpen && [cell isDirectionRTL])
+            cell.rightIconView.image = cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection;
+        
         return cell;
     }
 
@@ -1155,7 +1126,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[FreeBackupBannerCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:FreeBackupBannerCell.reuseIdentifier])
     {
         CGFloat titleHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.titleLabel.text width:tableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
         
@@ -1172,10 +1143,10 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     OAMapSettingsViewController *mapSettingsViewController;
-    BOOL isPromoButton = [item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[FreeBackupBannerCell getCellIdentifier]];
+    BOOL isPromoButton = [item[@"type"] isEqualToString:OAButtonTableViewCell.reuseIdentifier] || [item[@"type"] isEqualToString:FreeBackupBannerCell.reuseIdentifier];
     BOOL isGroup = [self getCollapsableGroup:indexPath.section] != nil;
 
-    if (isGroup && [item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    if (isGroup && [item[@"type"] isEqualToString:OARightIconTableViewCell.reuseIdentifier])
         [self openCloseGroup:indexPath];
     else if ([item[@"key"] hasPrefix:@"collapsed_"])
         [self openCloseGroup:indexPath];
@@ -1295,6 +1266,8 @@
         [self weatherChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"nautical_depth"])
         [self nauticalDepthChanged:switchView.isOn];
+    else if ([item[@"key"] hasPrefix:@"filtered_"])
+        [self filteredBooleanMapStyleParamChanged:switchView.isOn key:item[@"key"]];
 
     [tblView beginUpdates];
     [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -1362,6 +1335,13 @@
         parameter.value = isOn ? @"true" : @"false";
         [_styleSettings save:parameter];
     }
+}
+
+- (void)filteredBooleanMapStyleParamChanged:(BOOL)isOn key:(NSString *)key
+{
+    OAMapStyleParameter *param = [_styleSettings getParameter:[key substringFromIndex:[@"filtered_" length]]];
+    param.value = isOn ? @"true" : @"false";
+    [_styleSettings save:param];
 }
 
 - (void)overlayChanged:(BOOL)isOn
@@ -1511,6 +1491,12 @@
             _appModeCell.selectedMode = [_settings.applicationMode get];
         [self refreshMenu];
     });
+}
+
+#pragma mark - OADashboardScreen
+
+- (void)initData
+{
 }
 
 @end

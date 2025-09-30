@@ -263,7 +263,7 @@ extension Device {
 extension Device {
     func notifyRSSI() {
         disableRSSI()
-        RSSIUpdateTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { [weak self] timer in
+        RSSIUpdateTimer = .scheduledTimer(withTimeInterval: 10, repeats: true, block: { [weak self] timer in
             guard let self else {
                 timer.invalidate()
                 return

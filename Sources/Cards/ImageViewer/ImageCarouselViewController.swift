@@ -104,7 +104,7 @@ final class ImageCarouselViewController: UIPageViewController {
         gradientLayer.frame = CGRect(
             x: metadataContainerView.bounds.origin.x,
             y: view.frame.height - gradientHeight,
-            width: metadataContainerView.bounds.width,
+            width: view.bounds.width,
             height: gradientHeight
         )
     }
@@ -119,8 +119,8 @@ final class ImageCarouselViewController: UIPageViewController {
         view.addSubview(metadataContainerView)
         NSLayoutConstraint.activate([
             metadataContainerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            metadataContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            metadataContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            metadataContainerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            metadataContainerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             metadataContainerView.heightAnchor.constraint(equalToConstant: 112)
         ])
         

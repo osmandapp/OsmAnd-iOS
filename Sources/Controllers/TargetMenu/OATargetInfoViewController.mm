@@ -95,6 +95,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
 @property (nonatomic) BOOL wikiCardsReady;
+@property (nonatomic, strong) NSURLSession *onlineAndMapillarySession;
 
 @end
 
@@ -112,7 +113,6 @@ static const CGFloat kTextMaxHeight = 150.0;
     OARowInfo *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
-    BOOL _isLoadingImages;
 }
 
 - (void) setRows:(NSMutableArray<OARowInfo *> *)rows
@@ -241,19 +241,26 @@ static const CGFloat kTextMaxHeight = 150.0;
     }];
 
     [self buildCoordinateRows:rows];
-    [self addNearbyImagesIfNeeded];
-    [self addMapillaryCardsRowInfoIfNeeded];
+    [self buildNearbyImagesRow];
+    [self buildMapillaryCardsRowInfoIfNeeded];
+    [self handleOnlineAndMapillaryLoadingIfNeeded];
     
-    if (!_isLoadingImages)
-    {
-        __weak __typeof(self) weakSelf = self;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
-            [weakSelf startLoadingImages];
-        });
-    }
-
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
+}
+
+- (void)handleOnlineAndMapillaryLoadingIfNeeded {
+    if (!_onlinePhotoCardsRowInfo.collapsed
+        || (_mapillaryCardsRowInfo && !_mapillaryCardsRowInfo.collapsed))
+    {
+        _otherCardsReady = NO;
+        _wikiCardsReady = NO;
+        
+        [_onlineAndMapillarySession invalidateAndCancel];
+        _onlineAndMapillarySession = nil;
+        
+        [self startLoadingImages];
+    }
 }
 
 - (void)buildWithinRow
@@ -676,9 +683,17 @@ static const CGFloat kTextMaxHeight = 150.0;
     {
         if ([feature[@"imageUrl"] length] == 0 || [feature[@"imageHiresUrl"] length] == 0) {
             [OAMapillaryOsmTagHelper downloadImageByKey:feature[@"key"]
+                                                session:[self onlineAndMapillarySession]
                                        onDataDownloaded:^(NSDictionary *result) {
                 if (result && onComplete)
+                {
                     onComplete([[MapillaryImageCard alloc] initWithData:result]);
+                }
+                else
+                {
+                    if (onComplete)
+                        onComplete(nil);
+                }
             }];
         }
         else
@@ -731,8 +746,6 @@ static const CGFloat kTextMaxHeight = 150.0;
                   stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]] copy];
 
     NSURL *urlObj = [NSURL URLWithString:urlString];
-    NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
-    NSURLSession *session = [URLSessionManager sessionFor:key];
     NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
                                          timeoutInterval:30];
@@ -741,18 +754,20 @@ static const CGFloat kTextMaxHeight = 150.0;
     NSInteger existingCount = cards.count;
     
     __weak __typeof(self) weakSelf = self;
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    [[[self onlineAndMapillarySession] dataTaskWithRequest:request
+                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
-
+        if (error && error.code == NSURLErrorCancelled)
+            return;
+        
         NSData *effectiveData = data;
         NSURLResponse *effectiveResponse = response;
 
         NSURLRequest *cacheRequest;
-
-        if ((!data || !response) && [strongSelf isInternetConnectionError:error])
+        NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
+        if ((!data || !response) && [ErrorHelper isInternetConnectionError:error])
         {
             cacheRequest = [strongSelf filteredCacheRequestFromRequest:request];
             NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:cacheRequest sessionKey:key];
@@ -773,11 +788,20 @@ static const CGFloat kTextMaxHeight = 150.0;
         else
         {
             if ([response isKindOfClass:[NSHTTPURLResponse class]] &&
-                ((NSHTTPURLResponse *)response).statusCode == 200)
+                ((NSHTTPURLResponse *)response).statusCode == 200 && data)
             {
                 cacheRequest = [strongSelf filteredCacheRequestFromRequest:request];
                 [URLSessionManager storeResponse:response data:data for:cacheRequest sessionKey:key];
             }
+        }
+        
+        if (!effectiveData)
+        {
+            NSLog(@"[ERROR] addOtherCards effectiveData is nil, cannot parse JSON.");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+            });
+            return;
         }
 
         NSError *jsonError = nil;
@@ -819,8 +843,7 @@ static const CGFloat kTextMaxHeight = 150.0;
                 });
             }
         }
-    }];
-    [task resume];
+    }] resume];
 }
 
 - (void)onOtherCardsReady:(NSMutableArray<AbstractCard *> *)cards
@@ -860,14 +883,6 @@ static const CGFloat kTextMaxHeight = 150.0;
     return [NSURLRequest requestWithURL:components.URL];
 }
 
-- (BOOL)isInternetConnectionError:(NSError *)error
-{
-    if (!error) return NO;
-    if (![error.domain isEqualToString:NSURLErrorDomain]) return NO;
-
-    return error.code == NSURLErrorNotConnectedToInternet;
-}
-
 - (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards
 {
     if (_otherCardsReady && _wikiCardsReady)
@@ -890,8 +905,6 @@ static const CGFloat kTextMaxHeight = 150.0;
             collapsableView.placeholderImage = [self targetImage];
             [collapsableView setCards:cards];
         }
-        
-        _otherCardsReady = _wikiCardsReady = NO;
     }
 }
 
@@ -924,7 +937,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     [cards setArray:uniqueOrderedSet.array];
 }
 
-- (void)addNearbyImagesIfNeeded
+- (void)buildNearbyImagesRow
 {
     OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
 
@@ -932,6 +945,11 @@ static const CGFloat kTextMaxHeight = 150.0;
     cardView.contentType = CollapsableCardsTypeOnlinePhoto;
     cardView.delegate = self;
     nearbyImagesRowInfo.collapsable = YES;
+    __weak __typeof(self) weakSelf = self;
+    nearbyImagesRowInfo.collapsedChangedCallback = ^(BOOL collapsed) {
+        if (!collapsed)
+            [weakSelf startLoadingImages];
+    };
     nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed.get;
     nearbyImagesRowInfo.collapsableView = cardView;
     nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 170);
@@ -941,10 +959,10 @@ static const CGFloat kTextMaxHeight = 150.0;
     _onlinePhotoCardsRowInfo = nearbyImagesRowInfo;
 }
 
-- (void)addMapillaryCardsRowInfoIfNeeded
+- (void)buildMapillaryCardsRowInfoIfNeeded
 {
-    OAMapillaryPlugin *plagin = (OAMapillaryPlugin *) [OAPluginsHelper getPlugin:OAMapillaryPlugin.class];
-    if ([plagin isEnabled])
+    OAMapillaryPlugin *plugin = (OAMapillaryPlugin *) [OAPluginsHelper getPlugin:OAMapillaryPlugin.class];
+    if ([plugin isEnabled])
     {
         OARowInfo *mapillaryCardsRowInfo = [[OARowInfo alloc] initWithKey:nil
                                                                      icon:[UIImage imageNamed:@"ic_custom_photo_street"]
@@ -961,6 +979,11 @@ static const CGFloat kTextMaxHeight = 150.0;
         cardView.contentType = CollapsableCardsTypeMapillary;
         cardView.delegate = self;
         mapillaryCardsRowInfo.collapsable = YES;
+        __weak __typeof(self) weakSelf = self;
+        mapillaryCardsRowInfo.collapsedChangedCallback = ^(BOOL collapsed) {
+            if (!collapsed)
+                [weakSelf startLoadingImages];
+        };
         mapillaryCardsRowInfo.collapsed = [OAAppSettings sharedManager].mapillaryPhotosRowCollapsed.get;
         mapillaryCardsRowInfo.collapsableView = cardView;
         mapillaryCardsRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 170);
@@ -1367,7 +1390,10 @@ static const CGFloat kTextMaxHeight = 150.0;
 
 - (void)startLoadingImages
 {
-    _isLoadingImages = YES;
+    if (_wikiCardsReady || _otherCardsReady) {
+        return;
+    }
+ 
     _wikiCardsReady = NO;
     CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
     CollapsableCardsView *mapillaryCardsView;
@@ -1380,7 +1406,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     if ([self.getTargetObj isKindOfClass:OAPOI.class])
     {
         OAPOI *poi = self.getTargetObj;
-        onlinePhotoCardsView.title = poi.nameLocalized;
+        onlinePhotoCardsView.title = poi.nameLocalized ?: poi.name;
     }
     
     __weak __typeof(self) weakSelf = self;
@@ -1401,10 +1427,22 @@ static const CGFloat kTextMaxHeight = 150.0;
     };
     
     mapillaryCardsView.isLoading = YES;
-    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
+    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj session:[self onlineAndMapillarySession] addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
         weakSelf.wikiCardsReady = YES;
         [weakSelf sendNearbyOtherImagesRequest:cards onFailureNoCache:onFailureNoCache];
     } onFailureNoCache:onFailureNoCache];
+}
+
+- (NSURLSession *)onlineAndMapillarySession
+{
+    @synchronized (self)
+    {
+        if (!_onlineAndMapillarySession)
+        {
+            _onlineAndMapillarySession = [URLSessionManager sessionFor:[URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey]];
+        }
+    }
+    return _onlineAndMapillarySession;
 }
 
 #pragma mark - OAEditDescriptionViewControllerDelegate

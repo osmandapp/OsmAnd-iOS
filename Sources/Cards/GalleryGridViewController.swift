@@ -145,7 +145,7 @@ final class GalleryGridViewController: OABaseNavbarViewController {
                 collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: false)
                 
                 visibleCellsUpdateTimer?.invalidate()
-                visibleCellsUpdateTimer = Timer.scheduledTimer(withTimeInterval: Constants.visibleCellsUpdateDelay, repeats: false) { [weak self] _ in
+                visibleCellsUpdateTimer = .scheduledTimer(withTimeInterval: Constants.visibleCellsUpdateDelay, repeats: false) { [weak self] _ in
                     self?.updateVisibleCells()
                 }
             }

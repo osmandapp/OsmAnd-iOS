@@ -42,9 +42,25 @@
             if (!gpxFile)
                 return;
             
+            [self updateGpxFileActivity:gpxFile routeKey:routeKey];
+            
             [weakSelf saveToCache:gpxFile routeKey:routeKey];
             [weakSelf saveAndOpenGpx:gpxFile pair:pair lat:lat lon:lon];
         }];
+    }
+}
+
+- (void)updateGpxFileActivity:(OASGpxFile *)gpxFile routeKey:(OARouteKey *)routeKey
+{
+    NSString *type = gpxFile.networkRouteKeyTags[@"type"];
+    if (NSStringIsEmpty(type))
+        type = [routeKey getTypeName];
+    
+    OASRouteActivity *activity = [OASRouteActivityHelper.shared findActivityByTagTag:type];
+    if (activity)
+    {
+        NSString *activityType = activity.id;
+        [gpxFile.metadata getExtensionsToWrite][[OASGpxUtilities.shared ACTIVITY_TYPE]] = activityType;
     }
 }
 

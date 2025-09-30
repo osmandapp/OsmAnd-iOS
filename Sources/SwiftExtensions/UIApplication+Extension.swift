@@ -29,3 +29,16 @@ extension UIApplication {
         return scene.delegate as? CarPlaySceneDelegate
     }
 }
+
+// MARK: - Scheme URL
+extension UIApplication {
+    @objc
+    @discardableResult
+    func openWunderLINQ() -> Bool {
+        guard let url = URL(string: "wunderlinq://datagrid"), UIApplication.shared.canOpenURL(url) else {
+            return false
+        }
+        UIApplication.shared.open(url)
+        return true
+    }
+}

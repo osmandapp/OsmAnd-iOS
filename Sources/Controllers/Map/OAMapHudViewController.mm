@@ -775,7 +775,9 @@ static const float kDistanceMeters = 100.0;
         if (self.toolbarViewController)
             [self.toolbarViewController onMapAzimuthChanged:observable withKey:key andValue:value];
         
-        _compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
+        CGFloat angle = -[value floatValue] / 180.0f * M_PI;
+        _compassImage.transform = CGAffineTransformMakeRotation(angle);
+        [_floatingButtonsController rotateMapOrientationButtonIfExistsWith:angle];
         
         BOOL showCompass = [self shouldShowCompass:[value floatValue]];
         [self updateCompassVisibility:showCompass];

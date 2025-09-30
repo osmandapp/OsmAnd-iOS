@@ -142,7 +142,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self rotateMapOrientationButtonIfExists];
+    [self configQuickActionButtons];
 }
 
 - (void)viewWillLayoutSubviews
@@ -370,11 +370,20 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     for (OAHudButton *quickButton in _quickActionFloatingButtons)
     {
         if ([self isMapOrientationButton:quickButton])
-            quickButton.transform = CGAffineTransformMakeRotation(value);
+        {
+            [UIView performWithoutAnimation:^{
+                quickButton.transform = CGAffineTransformMakeRotation(value);
+            }];
+        }
     }
 }
 
-- (void)rotateMapOrientationButtonIfExists
+- (void)configQuickActionButtons
+{
+    [self configMapOrientationButtonIfExists];
+}
+
+- (void)configMapOrientationButtonIfExists
 {
     [self rotateMapOrientationButtonIfExistsWith:(-[OARootViewController instance].mapPanel.mapViewController.mapRendererView.azimuth / 180.0f * M_PI)];
 }
@@ -388,7 +397,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 - (void)setupButtonRotation:(OAHudButton *)button
 {
     if ([self isMapOrientationButton:button])
-        [self rotateMapOrientationButtonIfExists];
+        [self configMapOrientationButtonIfExists];
     else
         button.transform = CGAffineTransformIdentity;
 }

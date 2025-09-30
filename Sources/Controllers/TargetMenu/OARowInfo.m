@@ -51,6 +51,17 @@
     return [UIFont scaledSystemFontOfSize:17.0 weight:_isUrl ? UIFontWeightMedium : UIFontWeightRegular];
 }
 
+- (void)setCollapsed:(BOOL)collapsed
+{
+    if (_collapsed != collapsed)
+    {
+        _collapsed = collapsed;
+        
+        if (self.collapsedChangedCallback)
+            self.collapsedChangedCallback(collapsed);
+    }
+}
+
 - (BOOL) isEqual:(id)object
 {
     if (self == object)

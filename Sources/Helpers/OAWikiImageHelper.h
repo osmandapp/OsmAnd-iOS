@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define WIKIDATA_API_ENDPOINT @"https://www.wikidata.org/w/api.php"
 #define WIKIMEDIA_API_ENDPOINT @"https://commons.wikimedia.org/w/api.php"
 #define WIKIDATA_ACTION @"?action=wbgetclaims&property=P18&entity="
@@ -36,7 +38,10 @@ static const BOOL USE_OSMAND_WIKI_API = YES;
 
 - (void)sendNearbyWikiImagesRequest:(OARowInfo *)nearbyImagesRowInfo
                           targetObj:(id)targetObj
+                            session:(nullable NSURLSession *)session
            addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards))addOtherImagesOnComplete
                    onFailureNoCache:(void (^)(void))onFailureNoCache;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL collapsable;
 @property (nonatomic, nullable) OACollapsableView *collapsableView;
 @property (nonatomic) BOOL collapsed;
+@property (nonatomic, copy) void (^collapsedChangedCallback)(BOOL collapsed);
 @property (nonatomic) int order;
 @property (nonatomic) NSString *typeName;
 

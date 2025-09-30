@@ -27,12 +27,13 @@
 @implementation OAMapillaryOsmTagHelper
 
 + (void)downloadImageByKey:(NSString *)key
+                   session:(nullable NSURLSession *)session
           onDataDownloaded:(void (^)(NSDictionary *data))onDataDownloaded
 {
     NSString *urlStr = [NSString stringWithFormat:@"%@%@?%@&%@",
             GRAPH_URL_ENDPOINT, key, PARAM_ACCESS_TOKEN, PARAM_FIELDS];
     NSURL *dataURL = [NSURL URLWithString:[urlStr stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
-    [self fetchFromUrl:dataURL onDownloaded:^(NSData *data) {
+    [self fetchFromUrl:dataURL session:session onDownloaded:^(NSData *data) {
         if (data)
         {
             NSDictionary *dicData = [NSJSONSerialization JSONObjectWithData:data
@@ -88,10 +89,11 @@
 }
 
 + (void)fetchFromUrl:(NSURL *)dataURL
+             session:(nullable NSURLSession *)session
         onDownloaded:(void (^)(NSData *data))onDownloaded
 {
     NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
-    NSURLSession *session = [URLSessionManager sessionFor:key];
+    NSURLSession *URLSession = session ?: [URLSessionManager sessionFor:key];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:dataURL
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
@@ -106,10 +108,13 @@
         }
     };
     
-    [[session dataTaskWithRequest:request
+    [[URLSession dataTaskWithRequest:request
                 completionHandler:^(NSData * _Nullable data,
                                     NSURLResponse * _Nullable response,
                                     NSError * _Nullable error) {
+        if (error && error.code == NSURLErrorCancelled)
+            return;
+        
         if ((!data || !response) && [ErrorHelper isInternetConnectionError:error])
         {
             NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];

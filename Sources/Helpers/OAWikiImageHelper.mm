@@ -46,6 +46,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 
 - (void)sendNearbyWikiImagesRequest:(OARowInfo *)nearbyImagesRowInfo
                           targetObj:(id)targetObj
+                            session:(nullable NSURLSession *)session
            addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards))addOtherImagesOnComplete
                    onFailureNoCache:(void (^)(void))onFailureNoCache
 {
@@ -112,7 +113,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
             {
                 url = [url stringByAppendingFormat:@"&addMetaData=true"];
                 url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-                [self addOsmandAPIImageList:url cards:cards onFailureNoCache:onFailureNoCache];
+                [self addOsmandAPIImageList:url cards:cards session:session onFailureNoCache:onFailureNoCache];
             }
             else
             {
@@ -150,20 +151,24 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 
 - (void)addOsmandAPIImageList:(NSString *)url
                         cards:(NSMutableArray<AbstractCard *> *)cards
+                      session:(nullable NSURLSession *)session
              onFailureNoCache:(void (^)(void))onFailureNoCache
 {
     NSURL *urlObj = [NSURL URLWithString:url];
     NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
-    NSURLSession *session = [URLSessionManager sessionFor:key];
+    NSURLSession *URLSession = session ?: [URLSessionManager sessionFor:key];
 
     NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
                                          timeoutInterval:30];
     __weak __typeof(self) weakSelf = self;
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+    NSURLSessionDataTask *task = [URLSession dataTaskWithRequest:request
                                             completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
+            return;
+        
+        if (error && error.code == NSURLErrorCancelled)
             return;
         
         NSData *effectiveData = data;
@@ -193,6 +198,12 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
             {
                 [URLSessionManager storeResponse:response data:data for:request sessionKey:key];
             }
+        }
+        
+        if (!effectiveData)
+        {
+            NSLog(@"[ERROR] addOsmandAPIImageList effectiveData is nil, cannot parse JSON.");
+            return;
         }
 
         NSMutableArray<AbstractCard *> *localCards = [NSMutableArray array];

@@ -156,13 +156,13 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 {
     NSURL *urlObj = [NSURL URLWithString:url];
     NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
-    NSURLSession *URLSession = session ?: [URLSessionManager sessionFor:key];
+    NSURLSession *urlSession = session ?: [URLSessionManager sessionFor:key];
 
     NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
                                          timeoutInterval:30];
     __weak __typeof(self) weakSelf = self;
-    NSURLSessionDataTask *task = [URLSession dataTaskWithRequest:request
+    NSURLSessionDataTask *task = [urlSession dataTaskWithRequest:request
                                             completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)

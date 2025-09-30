@@ -93,7 +93,7 @@
         onDownloaded:(void (^)(NSData *data))onDownloaded
 {
     NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
-    NSURLSession *URLSession = session ?: [URLSessionManager sessionFor:key];
+    NSURLSession *urlSession = session ?: [URLSessionManager sessionFor:key];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:dataURL
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
@@ -108,7 +108,7 @@
         }
     };
     
-    [[URLSession dataTaskWithRequest:request
+    [[urlSession dataTaskWithRequest:request
                 completionHandler:^(NSData * _Nullable data,
                                     NSURLResponse * _Nullable response,
                                     NSError * _Nullable error) {

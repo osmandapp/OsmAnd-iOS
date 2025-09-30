@@ -51,11 +51,6 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetAvailability(widgetType: .secondNextTurn, appModes: exceptDefault)
         
         // right
-        regWidgetVisibility(widgetType: .intermediateDestination)
-        regWidgetVisibility(widgetType: .distanceToDestination)
-        regWidgetVisibility(widgetType: .timeToIntermediate)
-        regWidgetVisibility(widgetType: .timeToDestination)
-        
         if installDate >= Self.routeWidgetsV2IntroTimeInSeconds {
             regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault)
         }

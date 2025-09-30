@@ -30,7 +30,7 @@
 
     res = self.value;
     
-    if (self.dataType != OABoolean && [res isEqualToString:@""] && self.defaultValue.length > 0)
+    if (self.dataType != OABoolean && (([res isEqualToString:@""] && self.defaultValue.length > 0) || [res isEqualToString:@"default"]))
         res = OALocalizedString([NSString stringWithFormat:@"rendering_value_%@_name", self.defaultValue]);
     
     return res;

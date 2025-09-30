@@ -57,9 +57,7 @@ class WidgetsAvailabilityHelper: NSObject {
             regWidgetVisibility(widgetType: .distanceToDestination)
             regWidgetVisibility(widgetType: .timeToIntermediate)
             regWidgetVisibility(widgetType: .timeToDestination)
-        }
-
-        if enableWidgetsV2 {
+        } else {
             regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault)
         }
         

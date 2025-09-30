@@ -17,6 +17,7 @@
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAWeatherToolbar.h"
 #import "OALog.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation UINavigationController (keyCommands)
 
@@ -25,10 +26,7 @@
     if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
     {
         //Launch WunderLINQ
-        NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
-        BOOL canOpenURL = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:wunderlinqAppURL]];
-        if (canOpenURL)
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
+        [[UIApplication sharedApplication] openWunderLINQ];
     }
     else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
     {

@@ -441,10 +441,7 @@
     if ([_settings.settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
     {
         //Launch WunderLINQ
-        NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
-        BOOL canOpenURL = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:wunderlinqAppURL]];
-        if (canOpenURL)
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
+        [[UIApplication sharedApplication] openWunderLINQ];
     }
     else if ([_settings.settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
     {

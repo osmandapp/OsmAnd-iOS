@@ -32,6 +32,8 @@ extension UIApplication {
 
 // MARK: - Scheme URL
 extension UIApplication {
+    @objc
+    @discardableResult
     func openWunderLINQ() -> Bool {
         guard let url = URL(string: "wunderlinq://datagrid"), UIApplication.shared.canOpenURL(url) else {
             return false

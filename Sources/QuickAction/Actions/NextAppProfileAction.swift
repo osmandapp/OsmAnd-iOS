@@ -8,18 +8,15 @@
 
 @objcMembers
 final class NextAppProfileAction: BaseSwitchAppModeAction {
-    static var type: QuickActionType?
+    private static let type = QuickActionType(id: QuickActionIds.nextProfileActionId.rawValue, stringId: "change.profile.next", cl: NextAppProfileAction.self)
+        .name(localizedString("quick_action_next_app_profile"))
+        .nameAction(localizedString("shared_string_change"))
+        .iconName("ic_custom_profile_next")
+        .nonEditable()
+        .category(QuickActionTypeCategory.settings.rawValue)
     
-    override class func quickActionType() -> QuickActionType {
-        if type == nil {
-            type = QuickActionType(id: QuickActionIds.nextProfileActionId.rawValue, stringId: "change.profile.next", cl: NextAppProfileAction.self)
-                .name(localizedString("quick_action_next_app_profile"))
-                .nameAction(localizedString("shared_string_change"))
-                .iconName("ic_custom_profile_next")
-                .nonEditable()
-                .category(QuickActionTypeCategory.settings.rawValue)
-        }
-        return type ?? super.type()
+    override class func getType() -> QuickActionType {
+        type
     }
     
     override func shouldChangeForward() -> Bool {

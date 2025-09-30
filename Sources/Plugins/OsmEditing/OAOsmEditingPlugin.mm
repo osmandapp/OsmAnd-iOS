@@ -200,7 +200,7 @@
 
 - (NSArray<QuickActionType *> *)getQuickActionTypes
 {
-    return @[OAAddPOIAction.TYPE, OAAddOSMBugAction.TYPE, OAShowHideOSMBugAction.TYPE, OAShowHideLocalOSMChanges.TYPE];
+    return @[OAAddPOIAction.getQuickActionType, OAAddOSMBugAction.getQuickActionType, OAShowHideOSMBugAction.getQuickActionType, OAShowHideLocalOSMChanges.getQuickActionType];
 }
 
 - (NSString *) getName

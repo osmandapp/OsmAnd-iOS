@@ -8,15 +8,19 @@
 
 @objcMembers
 final class ShowHideDrawerAction: OAQuickAction {
-    static let type = QuickActionType(id: QuickActionIds.showHideDrawerAction.rawValue, stringId: "drawer.showhide", cl: ShowHideDrawerAction.self)
+    private static let type = QuickActionType(id: QuickActionIds.showHideDrawerAction.rawValue, stringId: "drawer.showhide", cl: ShowHideDrawerAction.self)
         .name(localizedString("quick_action_drawer_title"))
         .nameAction(localizedString("quick_action_verb_show_hide"))
         .iconName("ic_custom_main_menu")
         .nonEditable()
         .category(QuickActionTypeCategory.interface.rawValue)
     
+    override class func getType() -> QuickActionType {
+        type
+    }
+
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {

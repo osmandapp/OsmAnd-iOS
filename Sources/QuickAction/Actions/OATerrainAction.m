@@ -21,7 +21,7 @@ static QuickActionType *TYPE;
 
 - (instancetype)init
 {
-    return [super initWithActionType:self.class.TYPE];
+    return [super initWithActionType:self.class.getQuickActionType];
 }
 
 - (void)commonInit
@@ -66,7 +66,7 @@ static QuickActionType *TYPE;
     return [_plugin isTerrainLayerEnabled] ? OALocalizedString(@"hide_terrain") : OALocalizedString(@"show_terrain");
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
     return TYPE;
 }

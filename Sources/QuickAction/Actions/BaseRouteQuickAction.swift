@@ -15,12 +15,8 @@ class BaseRouteQuickAction: OAQuickAction {
         ""
     }
     
-    class func getQuickActionType() -> QuickActionType {
-        fatalError()
-    }
-    
     override init() {
-        super.init(actionType: Self.getQuickActionType())
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {

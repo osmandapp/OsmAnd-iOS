@@ -9,7 +9,7 @@
 class BaseSwitchAppModeAction: OAQuickAction {
     
     override init() {
-        super.init(actionType: Self.quickActionType())
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {
@@ -27,11 +27,7 @@ class BaseSwitchAppModeAction: OAQuickAction {
     override func getText() -> String? {
         localizedString(quickActionDescription())
     }
-    
-    class func quickActionType() -> QuickActionType {
-        fatalError("getQuickActionType() has not been implemented")
-    }
-    
+        
     func shouldChangeForward() -> Bool {
         fatalError("shouldChangeForward() has not been implemented")
     }

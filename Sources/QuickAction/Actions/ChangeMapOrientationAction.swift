@@ -10,7 +10,7 @@
 final class ChangeMapOrientationAction: OASwitchableAction {
     private static let keyModes = "compass_modes"
     
-    static let type = QuickActionType(id: QuickActionIds.changeMapOrientationAction.rawValue,
+    private static let type = QuickActionType(id: QuickActionIds.changeMapOrientationAction.rawValue,
                                       stringId: "change.map.orientation",
                                       cl: ChangeMapOrientationAction.self)
         .name(localizedString("rotate_map_to"))
@@ -23,8 +23,12 @@ final class ChangeMapOrientationAction: OASwitchableAction {
         getParams()[kDialog] as? Bool ?? ((getParams()[kDialog] as? String) == "true")
     }
     
+    override class func getType() -> QuickActionType {
+        type
+    }
+
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
 
     override init(actionType type: QuickActionType) {

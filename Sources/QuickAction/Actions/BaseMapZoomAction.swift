@@ -8,7 +8,7 @@
 
 class BaseMapZoomAction: OAQuickAction {
     override init() {
-        super.init(actionType: Self.quickActionType())
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {
@@ -34,11 +34,7 @@ class BaseMapZoomAction: OAQuickAction {
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent) {
         // Reject base method execution
     }
-    
-    class func quickActionType() -> QuickActionType {
-        fatalError("getQuickActionType() has not been implemented")
-    }
-    
+        
     func shouldIncrement() -> Bool {
         fatalError("shouldIncrement() has not been implemented")
     }

@@ -32,7 +32,7 @@ static QuickActionType *TYPE;
 
 - (instancetype) init
 {
-    return [super initWithActionType:self.class.TYPE];
+    return [super initWithActionType:self.class.getQuickActionType];
 }
 
 - (void)commonInit
@@ -218,7 +218,7 @@ static QuickActionType *TYPE;
     return sources.count > 0;
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
     return TYPE;
 }

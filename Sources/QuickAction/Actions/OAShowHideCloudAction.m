@@ -18,7 +18,7 @@ static QuickActionType *TYPE;
 
 - (instancetype)init
 {
-    return [super initWithActionType:self.class.TYPE];
+    return [super initWithActionType:self.class.getQuickActionType];
 }
 
 + (void)initialize
@@ -49,7 +49,7 @@ static QuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"cloud_hide") : OALocalizedString(@"cloud_show");
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
     return TYPE;
 }

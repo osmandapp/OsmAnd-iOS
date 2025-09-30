@@ -11,24 +11,21 @@ import Foundation
 @objcMembers
 final class ShowHideMtbRoutesAction: BaseRouteQuickAction {
     
-    static var type: QuickActionType?
+    private static let type = QuickActionType(id: QuickActionIds.showHideMtbRoutesActionId.rawValue,
+                                      stringId: "mtb.routes.showhidee",
+                                      cl: ShowHideMtbRoutesAction.self)
+               .name(localizedString("rendering_attr_showMtbRoutes_name"))
+               .nameAction(localizedString("quick_action_verb_show_hide"))
+               .iconName("ic_action_mountain_bike")
+               .category(QuickActionTypeCategory.configureMap.rawValue)
+               .nonEditable()
     
-    override class func getQuickActionType() -> QuickActionType {
-        if type == nil {
-            type = QuickActionType(id: QuickActionIds.showHideMtbRoutesActionId.rawValue,
-                                   stringId: "mtb.routes.showhidee",
-                                   cl: ShowHideMtbRoutesAction.self)
-            .name(Self.getName())
-                .nameAction(localizedString("quick_action_verb_show_hide"))
-                .iconName("ic_action_mountain_bike")
-                .category(QuickActionTypeCategory.configureMap.rawValue)
-                .nonEditable()
-        }
-        return type ?? super.type()
+    override class func getType() -> QuickActionType {
+        type
     }
-    
+
     override class func getName() -> String {
-        localizedString("rendering_attr_showMtbRoutes_name")
+        type.name!
     }
     
     override func isEnabled() -> Bool {

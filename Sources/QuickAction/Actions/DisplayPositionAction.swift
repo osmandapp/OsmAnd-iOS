@@ -11,7 +11,7 @@ import Foundation
 @objcMembers
 final class DisplayPositionAction: OAQuickAction {
 
-    static let type = QuickActionType(id: QuickActionIds.displayPositionActionId.rawValue,
+    private static let type = QuickActionType(id: QuickActionIds.displayPositionActionId.rawValue,
                                       stringId: "display.position.switch",
                                       cl: DisplayPositionAction.self)
         .name(localizedString("position_on_map"))
@@ -23,8 +23,12 @@ final class DisplayPositionAction: OAQuickAction {
 
     private let settings = OAAppSettings.sharedManager()
 
+    override class func getType() -> QuickActionType {
+        type
+    }
+    
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {

@@ -20,7 +20,7 @@ static QuickActionType *TYPE;
 
 - (instancetype) initWithActionTypeId:(NSString *)actionTypeId;
 {
-    self = [super initWithActionType:self.class.TYPE];
+    self = [super initWithActionType:self.class.getQuickActionType];
     if (self)
         _actionTypeId = actionTypeId;
 
@@ -71,7 +71,7 @@ static QuickActionType *TYPE;
     [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
     return TYPE;
 }

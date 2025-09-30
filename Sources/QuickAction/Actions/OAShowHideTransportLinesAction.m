@@ -33,7 +33,7 @@ static QuickActionType *TYPE;
 
 - (instancetype)init
 {
-    return [super initWithActionType:self.class.TYPE];
+    return [super initWithActionType:self.class.getQuickActionType];
 }
 
 - (void)commonInit
@@ -69,7 +69,7 @@ static QuickActionType *TYPE;
     return OALocalizedString(@"quick_action_transport_descr");
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
     return TYPE;
 }

@@ -22,7 +22,7 @@ static QuickActionType *TYPE;
 
 - (instancetype)init
 {
-    return [super initWithActionType:self.class.TYPE];
+    return [super initWithActionType:self.class.getQuickActionType];
 }
 
 + (void)initialize
@@ -61,7 +61,7 @@ static QuickActionType *TYPE;
     return OALocalizedString(@"quick_action_parking_descr");
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
     return TYPE;
 }

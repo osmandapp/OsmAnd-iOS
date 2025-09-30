@@ -391,7 +391,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 - (BOOL)isMapOrientationButton:(OAHudButton *)button
 {
     QuickActionButtonState *state = (QuickActionButtonState *)button.buttonState;
-    return state && [[state.quickActions.firstObject getActionTypeId] isEqualToString:ChangeMapOrientationAction.type.stringId] && state.quickActions.count == 1;
+    return state && [[state.quickActions.firstObject getActionTypeId] isEqualToString:ChangeMapOrientationAction.getQuickActionType.stringId] && state.quickActions.count == 1;
 }
 
 - (void)setupButtonRotation:(OAHudButton *)button

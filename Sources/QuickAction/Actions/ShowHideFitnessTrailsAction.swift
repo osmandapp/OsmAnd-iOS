@@ -11,26 +11,23 @@ import Foundation
 @objcMembers
 final class ShowHideFitnessTrailsAction: BaseRouteQuickAction {
     
-    static var type: QuickActionType?
-    
-    override class func getQuickActionType() -> QuickActionType {
-        if type == nil {
-            type = QuickActionType(id: QuickActionIds.showHideFitnessTrailsRoutesActionId.rawValue,
-                                   stringId: "fitness_trails.routes.showhide",
-                                   cl: ShowHideFitnessTrailsAction.self)
-            .name(Self.getName())
-                .nameAction(localizedString("quick_action_verb_show_hide"))
-                .iconName("mx_sport_athletics")
-                .category(QuickActionTypeCategory.configureMap.rawValue)
-                .nonEditable()
-        }
-        return type ?? super.type()
+    private static let type = QuickActionType(id: QuickActionIds.showHideFitnessTrailsRoutesActionId.rawValue,
+                                      stringId: "fitness_trails.routes.showhide",
+                                      cl: ShowHideFitnessTrailsAction.self)
+               .name(localizedString("rendering_attr_showFitnessTrails_name"))
+               .nameAction(localizedString("quick_action_verb_show_hide"))
+               .iconName("mx_sport_athletics")
+               .category(QuickActionTypeCategory.configureMap.rawValue)
+               .nonEditable()
+        
+    override class func getType() -> QuickActionType {
+        type
     }
-    
+
     override class func getName() -> String {
-        localizedString("rendering_attr_showFitnessTrails_name")
+        type.name!
     }
-    
+
     override func isEnabled() -> Bool {
         let styleSettings = OAMapStyleSettings.sharedInstance()
         return styleSettings?.getParameter(SHOW_FITNESS_TRAILS_ATTR).value == "true"

@@ -8,18 +8,15 @@
 
 @objcMembers
 final class MapZoomInAction: BaseMapZoomAction {
-    static var type: QuickActionType?
+    private static let type = QuickActionType(id: QuickActionIds.mapZoomInActionId.rawValue, stringId: "map.zoom.in", cl: MapZoomInAction.self)
+        .name(localizedString("key_event_action_zoom_in"))
+        .nameAction(localizedString("shared_string_map"))
+        .iconName("ic_custom_magnifier")
+        .nonEditable()
+        .category(QuickActionTypeCategory.mapInteractions.rawValue)
     
-    override class func quickActionType() -> QuickActionType {
-        if type == nil {
-            type = QuickActionType(id: QuickActionIds.mapZoomInActionId.rawValue, stringId: "map.zoom.in", cl: MapZoomInAction.self)
-                .name(localizedString("key_event_action_zoom_in"))
-                .nameAction(localizedString("shared_string_map"))
-                .iconName("ic_custom_magnifier")
-                .nonEditable()
-                .category(QuickActionTypeCategory.mapInteractions.rawValue)
-        }
-        return type ?? super.type()
+    override class func getType() -> QuickActionType {
+        type
     }
     
     override func shouldIncrement() -> Bool {

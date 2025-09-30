@@ -283,17 +283,17 @@ static QuickActionType *TYPE_INTERFACE;
     NSMutableArray<QuickActionType *> *allTypes = [NSMutableArray new];
    
     // configure map
-    [allTypes addObject:OAShowHideFavoritesAction.TYPE];
-    [allTypes addObject:OAShowHideGPXTracksAction.TYPE];
-    [allTypes addObject:OAShowHidePoiAction.TYPE];
-    [allTypes addObject:OADayNightModeAction.TYPE];
-    [allTypes addObject:OAMapStyleAction.TYPE];
-    [allTypes addObject:TerrainColorSchemeAction.type];
-    [allTypes addObject:OAMapSourceAction.TYPE];
-    [allTypes addObject:OAMapOverlayAction.TYPE];
-    [allTypes addObject:OAMapUnderlayAction.TYPE];
-    [allTypes addObject:OAShowHideMapillaryAction.TYPE];
-    [allTypes addObject:OAShowHideTransportLinesAction.TYPE];
+    [allTypes addObject:OAShowHideFavoritesAction.getQuickActionType];
+    [allTypes addObject:OAShowHideGPXTracksAction.getQuickActionType];
+    [allTypes addObject:OAShowHidePoiAction.getQuickActionType];
+    [allTypes addObject:OADayNightModeAction.getQuickActionType];
+    [allTypes addObject:OAMapStyleAction.getQuickActionType];
+    [allTypes addObject:TerrainColorSchemeAction.getQuickActionType];
+    [allTypes addObject:OAMapSourceAction.getQuickActionType];
+    [allTypes addObject:OAMapOverlayAction.getQuickActionType];
+    [allTypes addObject:OAMapUnderlayAction.getQuickActionType];
+    [allTypes addObject:OAShowHideMapillaryAction.getQuickActionType];
+    [allTypes addObject:OAShowHideTransportLinesAction.getQuickActionType];
     [allTypes addObject:[ShowHideCycleRoutesAction getQuickActionType]];
     [allTypes addObject:[ShowHideMtbRoutesAction getQuickActionType]];
     [allTypes addObject:[ShowHideHikingRoutesAction getQuickActionType]];
@@ -303,49 +303,49 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:[ShowHideWhitewaterSportsAction getQuickActionType]];
     [allTypes addObject:[ShowHideFitnessTrailsAction getQuickActionType]];
     [allTypes addObject:[ShowHideRunningRoutesAction getQuickActionType]];
-    [allTypes addObject:ShowHideCoordinatesGridAction.type];
-    [allTypes addObject:OpenWeatherAction.type];
+    [allTypes addObject:ShowHideCoordinatesGridAction.getQuickActionType];
+    [allTypes addObject:OpenWeatherAction.getQuickActionType];
     
     // interface
-    [allTypes addObject:LockScreenAction.type];
-    [allTypes addObject:OpenNavigationViewAction.type];
-    [allTypes addObject:OpenSearchViewAction.type];
-    [allTypes addObject:ShowHideDrawerAction.type];
-    [allTypes addObject:NavigatePreviousScreenAction.type];
-    [allTypes addObject:OpenWunderLINQDatagridAction.type];
+    [allTypes addObject:LockScreenAction.getQuickActionType];
+    [allTypes addObject:OpenNavigationViewAction.getQuickActionType];
+    [allTypes addObject:OpenSearchViewAction.getQuickActionType];
+    [allTypes addObject:ShowHideDrawerAction.getQuickActionType];
+    [allTypes addObject:NavigatePreviousScreenAction.getQuickActionType];
+    [allTypes addObject:OpenWunderLINQDatagridAction.getQuickActionType];
     
     // map interactions
-    [allTypes addObject:MapZoomInAction.quickActionType];
-    [allTypes addObject:MapZoomOutAction.quickActionType];
-    [allTypes addObject:MapScrollLeftAction.quickActionType];
-    [allTypes addObject:MapScrollRightAction.quickActionType];
-    [allTypes addObject:MoveToMyLocationAction.type];
-    [allTypes addObject:MapScrollUpAction.quickActionType];
-    [allTypes addObject:MapScrollDownAction.quickActionType];
+    [allTypes addObject:MapZoomInAction.getQuickActionType];
+    [allTypes addObject:MapZoomOutAction.getQuickActionType];
+    [allTypes addObject:MapScrollLeftAction.getQuickActionType];
+    [allTypes addObject:MapScrollRightAction.getQuickActionType];
+    [allTypes addObject:MoveToMyLocationAction.getQuickActionType];
+    [allTypes addObject:MapScrollUpAction.getQuickActionType];
+    [allTypes addObject:MapScrollDownAction.getQuickActionType];
     
     // my places
-    [allTypes addObject:OAFavoriteAction.TYPE];
-    [allTypes addObject:OAGPXAction.TYPE];
-    [allTypes addObject:OAMarkerAction.TYPE];
-    [allTypes addObject:RouteAction.type];
+    [allTypes addObject:OAFavoriteAction.getQuickActionType];
+    [allTypes addObject:OAGPXAction.getQuickActionType];
+    [allTypes addObject:OAMarkerAction.getQuickActionType];
+    [allTypes addObject:RouteAction.getQuickActionType];
 
     // navigation
-    [allTypes addObject:OANavStartStopAction.TYPE];
-    [allTypes addObject:OANavResumePauseAction.TYPE];
-    [allTypes addObject:OANavDirectionsFromAction.TYPE];
-    [allTypes addObject:OANavAddFirstIntermediateAction.TYPE];
-    [allTypes addObject:OANavAddDestinationAction.TYPE];
-    [allTypes addObject:OANavReplaceDestinationAction.TYPE];
-    [allTypes addObject:OANavRemoveNextDestination.TYPE];
-    [allTypes addObject:OANavAutoZoomMapAction.TYPE];
-    [allTypes addObject:OANavVoiceAction.TYPE];
+    [allTypes addObject:OANavStartStopAction.getQuickActionType];
+    [allTypes addObject:OANavResumePauseAction.getQuickActionType];
+    [allTypes addObject:OANavDirectionsFromAction.getQuickActionType];
+    [allTypes addObject:OANavAddFirstIntermediateAction.getQuickActionType];
+    [allTypes addObject:OANavAddDestinationAction.getQuickActionType];
+    [allTypes addObject:OANavReplaceDestinationAction.getQuickActionType];
+    [allTypes addObject:OANavRemoveNextDestination.getQuickActionType];
+    [allTypes addObject:OANavAutoZoomMapAction.getQuickActionType];
+    [allTypes addObject:OANavVoiceAction.getQuickActionType];
     
     // settings
-    [allTypes addObject:DisplayPositionAction.type];
-    [allTypes addObject:OASwitchProfileAction.TYPE];
-    [allTypes addObject:NextAppProfileAction.quickActionType];
-    [allTypes addObject:PreviousAppProfileAction.quickActionType];
-    [allTypes addObject:ChangeMapOrientationAction.type];
+    [allTypes addObject:DisplayPositionAction.getQuickActionType];
+    [allTypes addObject:OASwitchProfileAction.getQuickActionType];
+    [allTypes addObject:NextAppProfileAction.getQuickActionType];
+    [allTypes addObject:PreviousAppProfileAction.getQuickActionType];
+    [allTypes addObject:ChangeMapOrientationAction.getQuickActionType];
 
     NSMutableArray<QuickActionType *> *enabledTypes = [NSMutableArray arrayWithArray:allTypes];
     [OAPluginsHelper registerQuickActionTypesPlugins:allTypes enabledTypes:enabledTypes];

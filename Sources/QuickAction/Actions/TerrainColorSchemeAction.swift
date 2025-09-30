@@ -11,7 +11,7 @@ import Foundation
 @objcMembers
 final class TerrainColorSchemeAction: OASwitchableAction {
 
-    static let type = QuickActionType(id: QuickActionIds.terrainColorSchemeActionId.rawValue,
+    private static let type = QuickActionType(id: QuickActionIds.terrainColorSchemeActionId.rawValue,
                                       stringId: "terrain.colorscheme.change",
                                       cl: TerrainColorSchemeAction.self)
         .name(getName())
@@ -21,8 +21,12 @@ final class TerrainColorSchemeAction: OASwitchableAction {
 
     private static let keyTerrainModes = "terrain_modes"
 
+    override class func getType() -> QuickActionType {
+        type
+    }
+
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
 
     override init(actionType type: QuickActionType) {

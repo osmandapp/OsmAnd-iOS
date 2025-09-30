@@ -8,7 +8,7 @@
 
 class BaseMapScrollAction: OAQuickAction {
     override init() {
-        super.init(actionType: Self.quickActionType())
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {
@@ -46,11 +46,7 @@ class BaseMapScrollAction: OAQuickAction {
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent) {
         // Reject base method execution
     }
-    
-    class func quickActionType() -> QuickActionType {
-        fatalError("getQuickActionType() has not been implemented")
-    }
-    
+        
     func scrollingDirection() -> EOAMapPanDirection {
         fatalError("getScrollingDirection() has not been implemented")
     }

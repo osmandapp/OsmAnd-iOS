@@ -22,7 +22,7 @@ static QuickActionType *TYPE;
 
 - (instancetype)init
 {
-    return [super initWithActionType:self.class.TYPE];
+    return [super initWithActionType:self.class.getQuickActionType];
 }
 
 - (void)commonInit
@@ -63,7 +63,7 @@ static QuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"quick_action_navigation_voice_on") : OALocalizedString(@"quick_action_navigation_voice_off");
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
     return TYPE;
 }

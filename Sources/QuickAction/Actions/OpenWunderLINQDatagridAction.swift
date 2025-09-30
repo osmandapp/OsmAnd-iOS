@@ -8,7 +8,7 @@
 
 @objcMembers
 final class OpenWunderLINQDatagridAction: OAQuickAction {
-    static let type = QuickActionType(id: QuickActionIds.openWunderlinqDatagridAction.rawValue, stringId: "open.wunderlinq.datagrid", cl: OpenWunderLINQDatagridAction.self)
+    private static let type = QuickActionType(id: QuickActionIds.openWunderlinqDatagridAction.rawValue, stringId: "open.wunderlinq.datagrid", cl: OpenWunderLINQDatagridAction.self)
         .name(localizedString("wunderlinq_datagrid"))
         .nameAction(localizedString("shared_string_open"))
         .iconName("ic_custom_data_grid")
@@ -17,8 +17,12 @@ final class OpenWunderLINQDatagridAction: OAQuickAction {
     
     private let appStorePath = "https://apps.apple.com/app/wunderlinq/id1410462734"
     
+    override class func getType() -> QuickActionType {
+        type
+    }
+
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {

@@ -96,7 +96,7 @@ static QuickActionType *TYPE;
     return params[kMessage] && params;
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
     return TYPE;
 }

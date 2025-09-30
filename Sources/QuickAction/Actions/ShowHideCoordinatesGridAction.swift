@@ -8,7 +8,7 @@
 
 @objcMembers
 final class ShowHideCoordinatesGridAction: OAQuickAction {
-    static let type = QuickActionType(id: QuickActionIds.showHideCoordinatesGridAction.rawValue, stringId: "coordinates_grid.showhide", cl: ShowHideCoordinatesGridAction.self)
+    private static let type = QuickActionType(id: QuickActionIds.showHideCoordinatesGridAction.rawValue, stringId: "coordinates_grid.showhide", cl: ShowHideCoordinatesGridAction.self)
         .name(localizedString("layer_coordinates_grid"))
         .nameAction(localizedString("quick_action_verb_show_hide"))
         .iconName("ic_action_world_globe")
@@ -17,8 +17,12 @@ final class ShowHideCoordinatesGridAction: OAQuickAction {
     
     private lazy var gridSettings = OACoordinatesGridSettings()
     
+    override class func getType() -> QuickActionType {
+        type
+    }
+
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {

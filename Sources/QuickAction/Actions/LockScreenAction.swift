@@ -8,7 +8,7 @@
 
 @objcMembers
 final class LockScreenAction: OAQuickAction {
-    static let type = QuickActionType(id: QuickActionIds.lockScreenAction.rawValue,
+    private static let type = QuickActionType(id: QuickActionIds.lockScreenAction.rawValue,
                                       stringId: "lock_screen_action",
                                       cl: LockScreenAction.self)
         .name(localizedString("lock_screen"))
@@ -16,8 +16,12 @@ final class LockScreenAction: OAQuickAction {
         .iconName("ic_custom_touch_screen_lock")
         .category(QuickActionTypeCategory.interface.rawValue)
     
+    override class func getType() -> QuickActionType {
+        type
+    }
+
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {

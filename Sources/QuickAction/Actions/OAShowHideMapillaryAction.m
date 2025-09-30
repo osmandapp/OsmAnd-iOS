@@ -20,7 +20,7 @@ static QuickActionType *TYPE;
 
 - (instancetype)init
 {
-    return [super initWithActionType:self.class.TYPE];
+    return [super initWithActionType:self.class.getQuickActionType];
 }
 
 + (void)initialize
@@ -64,7 +64,7 @@ static QuickActionType *TYPE;
     return [OsmAndApp instance].data.mapillary ? OALocalizedString(@"quick_action_mapillary_hide") : OALocalizedString(@"quick_action_mapillary_show");
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
     return TYPE;
 }

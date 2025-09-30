@@ -145,7 +145,7 @@ NSInteger const defaultTrasparency = 80;
 
 - (NSArray<QuickActionType *> *)getQuickActionTypes
 {
-    return @[OAContourLinesAction.TYPE, OATerrainAction.TYPE];
+    return @[OAContourLinesAction.getQuickActionType, OATerrainAction.getQuickActionType];
 }
 
 @end

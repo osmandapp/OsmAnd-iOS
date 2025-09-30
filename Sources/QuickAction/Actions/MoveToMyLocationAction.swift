@@ -8,15 +8,19 @@
 
 @objcMembers
 final class MoveToMyLocationAction: OAQuickAction {
-    static let type = QuickActionType(id: QuickActionIds.moveToMyLocationActionId.rawValue, stringId: "map.move.my_location", cl: MoveToMyLocationAction.self)
+    private static let type = QuickActionType(id: QuickActionIds.moveToMyLocationActionId.rawValue, stringId: "map.move.my_location", cl: MoveToMyLocationAction.self)
         .name(localizedString("quick_action_to_my_location"))
         .nameAction(localizedString("shared_string_move"))
         .iconName("ic_custom_location_user")
         .nonEditable()
         .category(QuickActionTypeCategory.mapInteractions.rawValue)
     
+    override class func getType() -> QuickActionType {
+        type
+    }
+
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {

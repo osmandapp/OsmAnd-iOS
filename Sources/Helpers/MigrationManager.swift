@@ -268,14 +268,14 @@ final class MigrationManager: NSObject {
         if let pref = defaults.string(forKey: prefKey), let jsonData = pref.data(using: .utf8),
            let arr = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
             let changeQuickActionIntStringIds = [
-                Pair(4, "transport.showhide"): OAShowHideTransportLinesAction.type(),
-                Pair(31, "osmedit.showhide"): OAShowHideLocalOSMChanges.type(),
-                Pair(32, "nav.directions"): OANavDirectionsFromAction.type(),
-                Pair(36, "weather.temperature.showhide"): OAShowHideTemperatureAction.type(),
-                Pair(37, "weather.pressure.showhide"): OAShowHideAirPressureAction.type(),
-                Pair(38, "weather.wind.showhide"): OAShowHideWindAction.type(),
-                Pair(39, "weather.cloud.showhide"): OAShowHideCloudAction.type(),
-                Pair(40, "weather.precipitation.showhide"): OAShowHidePrecipitationAction.type()
+                Pair(4, "transport.showhide"): OAShowHideTransportLinesAction.getType(),
+                Pair(31, "osmedit.showhide"): OAShowHideLocalOSMChanges.getType(),
+                Pair(32, "nav.directions"): OANavDirectionsFromAction.getType(),
+                Pair(36, "weather.temperature.showhide"): OAShowHideTemperatureAction.getType(),
+                Pair(37, "weather.pressure.showhide"): OAShowHideAirPressureAction.getType(),
+                Pair(38, "weather.wind.showhide"): OAShowHideWindAction.getType(),
+                Pair(39, "weather.cloud.showhide"): OAShowHideCloudAction.getType(),
+                Pair(40, "weather.precipitation.showhide"): OAShowHidePrecipitationAction.getType()
             ]
             let excludedIds = [
                 Pair(4, "favorites.showhide"),

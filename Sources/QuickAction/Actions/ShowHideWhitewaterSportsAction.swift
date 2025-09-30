@@ -11,24 +11,21 @@ import Foundation
 @objcMembers
 final class ShowHideWhitewaterSportsAction: BaseRouteQuickAction {
     
-    static var type: QuickActionType?
+    private static let type = QuickActionType(id: QuickActionIds.showHideWhitewaterSportsRoutesActionId.rawValue,
+                                      stringId: "whitewater_sports.routes.showhide",
+                                      cl: ShowHideWhitewaterSportsAction.self)
+               .name(localizedString("rendering_attr_whiteWaterSports_name"))
+               .nameAction(localizedString("quick_action_verb_show_hide"))
+               .iconName("ic_action_kayak")
+               .category(QuickActionTypeCategory.configureMap.rawValue)
+               .nonEditable()
     
-    override class func getQuickActionType() -> QuickActionType {
-        if type == nil {
-            type = QuickActionType(id: QuickActionIds.showHideWhitewaterSportsRoutesActionId.rawValue,
-                                   stringId: "whitewater_sports.routes.showhide",
-                                   cl: ShowHideWhitewaterSportsAction.self)
-            .name(Self.getName())
-                .nameAction(localizedString("quick_action_verb_show_hide"))
-                .iconName("ic_action_kayak")
-                .category(QuickActionTypeCategory.configureMap.rawValue)
-                .nonEditable()
-        }
-        return type ?? super.type()
+    override class func getType() -> QuickActionType {
+        type
     }
-    
+
     override class func getName() -> String {
-        localizedString("rendering_attr_whiteWaterSports_name")
+        type.name!
     }
     
     override func isEnabled() -> Bool {

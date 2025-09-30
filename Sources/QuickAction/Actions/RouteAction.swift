@@ -8,15 +8,19 @@
 
 @objcMembers
 final class RouteAction: OAQuickAction {
-    static let type = QuickActionType(id: QuickActionIds.routeActionId.rawValue, stringId: "route.add", cl: RouteAction.self)
+    private static let type = QuickActionType(id: QuickActionIds.routeActionId.rawValue, stringId: "route.add", cl: RouteAction.self)
         .name(localizedString("quick_action_new_route"))
         .nameAction(localizedString("shared_string_create"))
         .iconName("ic_custom_plan_route")
         .nonEditable()
         .category(QuickActionTypeCategory.myPlaces.rawValue)
     
+    override class func getType() -> QuickActionType {
+        type
+    }
+
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {

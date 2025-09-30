@@ -10,17 +10,15 @@ import Foundation
 
 @objcMembers
 final class FinishTripRecordingAction: BaseMonitoringAction {
-    static let type: QuickActionType = {
-        return QuickActionType(id: QuickActionIds.finishTripRecordingAction.rawValue, stringId: "finish.trip.recording", cl: FinishTripRecordingAction.self)
+    private static let type = QuickActionType(id: QuickActionIds.finishTripRecordingAction.rawValue, stringId: "finish.trip.recording", cl: FinishTripRecordingAction.self)
             .name(localizedString("record_plugin_name"))
             .nameAction(localizedString("shared_string_finish"))
             .iconName("ic_custom_trip_rec_finish")
             .category(QuickActionTypeCategory.myPlaces.rawValue)
             .nonEditable()
-    }()
     
-    override class func getQuickActionType() -> QuickActionType {
-        FinishTripRecordingAction.type
+    override class func getType() -> QuickActionType {
+        type
     }
     
     override func execute() {

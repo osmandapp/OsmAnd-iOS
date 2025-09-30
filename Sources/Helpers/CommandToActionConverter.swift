@@ -9,23 +9,23 @@
 final class CommandToActionConverter {
 
     private static let map: [String: QuickActionType] = [
-        "back_to_location": MoveToMyLocationAction.type,
-        "switch_compass_forward": ChangeMapOrientationAction.type,
-        "open_navigation_dialog": OpenNavigationViewAction.type,
-        "open_quick_search_dialog": OpenSearchViewAction.type,
-        "switch_app_mode_forward": NextAppProfileAction.quickActionType(),
-        "switch_app_mode_backward": PreviousAppProfileAction.quickActionType(),
+        "back_to_location": MoveToMyLocationAction.getType(),
+        "switch_compass_forward": ChangeMapOrientationAction.getType(),
+        "open_navigation_dialog": OpenNavigationViewAction.getType(),
+        "open_quick_search_dialog": OpenSearchViewAction.getType(),
+        "switch_app_mode_forward": NextAppProfileAction.getType(),
+        "switch_app_mode_backward": PreviousAppProfileAction.getType(),
         
-        "map_scroll_up": MapScrollUpAction.quickActionType(),
-        "map_scroll_down": MapScrollDownAction.quickActionType(),
-        "map_scroll_left": MapScrollLeftAction.quickActionType(),
-        "map_scroll_right": MapScrollRightAction.quickActionType(),
-        "zoom_in": MapZoomInAction.quickActionType(),
-        "zoom_out": MapZoomOutAction.quickActionType(),
+        "map_scroll_up": MapScrollUpAction.getType(),
+        "map_scroll_down": MapScrollDownAction.getType(),
+        "map_scroll_left": MapScrollLeftAction.getType(),
+        "map_scroll_right": MapScrollRightAction.getType(),
+        "zoom_in": MapZoomInAction.getType(),
+        "zoom_out": MapZoomOutAction.getType(),
         
-        "toggle_drawer": ShowHideDrawerAction.type,
-        "activity_back_pressed": NavigatePreviousScreenAction.type,
-        "open_wunderlinq_datagrid": OpenWunderLINQDatagridAction.type
+        "toggle_drawer": ShowHideDrawerAction.getType(),
+        "activity_back_pressed": NavigatePreviousScreenAction.getType(),
+        "open_wunderlinq_datagrid": OpenWunderLINQDatagridAction.getType()
     ]
 
     static func createQuickAction(with commandId: String) -> OAQuickAction? {

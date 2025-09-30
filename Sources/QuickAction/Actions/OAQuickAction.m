@@ -304,9 +304,9 @@ static NSInteger SEQ = 0;
     return result;
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
-    return nil;
+    @throw [NSException exceptionWithName:@"IllegalStateException" reason:@"No type defined for quick action" userInfo:nil];
 }
 
 @end

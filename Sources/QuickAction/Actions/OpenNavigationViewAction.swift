@@ -8,15 +8,19 @@
 
 @objcMembers
 final class OpenNavigationViewAction: OAQuickAction {
-    static let type = QuickActionType(id: QuickActionIds.openNavigationViewAction.rawValue, stringId: "navigation.view.showhide", cl: OpenNavigationViewAction.self)
+    private static let type = QuickActionType(id: QuickActionIds.openNavigationViewAction.rawValue, stringId: "navigation.view.showhide", cl: OpenNavigationViewAction.self)
         .name(localizedString("quick_action_navigation_view_title"))
         .nameAction(localizedString("shared_string_open"))
         .iconName("ic_custom_navigation")
         .category(QuickActionTypeCategory.interface.rawValue)
         .nonEditable()
     
+    override class func getType() -> QuickActionType {
+        type
+    }
+
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {

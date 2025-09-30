@@ -12,7 +12,7 @@ import Foundation
 class BaseMonitoringAction: OAQuickAction {
     
     override init() {
-        super.init(actionType: Self.getQuickActionType())
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {
@@ -22,11 +22,7 @@ class BaseMonitoringAction: OAQuickAction {
     override init(action: OAQuickAction) {
         super.init(action: action)
     }
-    
-    class func getQuickActionType() -> QuickActionType {
-        fatalError("Subclasses must override getQuickActionType() to provide a valid QuickActionType.")
-    }
-    
+        
     func isRecordingTrack() -> Bool {
         guard let plugin = getPlugin() else { return false }
         return plugin.isRecordingTrack()

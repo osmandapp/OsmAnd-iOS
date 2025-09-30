@@ -303,7 +303,7 @@
 
 - (NSArray<QuickActionType *> *)getQuickActionTypes
 {
-    return @[OAParkingAction.TYPE];
+    return @[OAParkingAction.getQuickActionType];
 }
 
 - (NSString *) getName

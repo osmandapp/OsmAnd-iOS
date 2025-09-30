@@ -22,7 +22,7 @@ static QuickActionType *TYPE;
 
 - (instancetype) init
 {
-    return [super initWithActionType:self.class.TYPE];
+    return [super initWithActionType:self.class.getQuickActionType];
 }
 
 + (void)initialize
@@ -80,7 +80,7 @@ static QuickActionType *TYPE;
     return [self isContourLinesOn] ? OALocalizedString(@"hide_contour_lines") : OALocalizedString(@"rendering_attr_contourLines_name");
 }
 
-+ (QuickActionType *) TYPE
++ (QuickActionType *)getQuickActionType
 {
     return TYPE;
 }

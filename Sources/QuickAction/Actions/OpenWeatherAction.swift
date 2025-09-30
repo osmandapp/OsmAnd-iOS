@@ -8,15 +8,19 @@
 
 @objcMembers
 final class OpenWeatherAction: OAQuickAction {
-    static let type = QuickActionType(id: QuickActionIds.openWeatherActionId.rawValue, stringId: "weather.forecast.open", cl: OpenWeatherAction.self)
+    private static let type = QuickActionType(id: QuickActionIds.openWeatherActionId.rawValue, stringId: "weather.forecast.open", cl: OpenWeatherAction.self)
         .name(localizedString("weather_screen"))
         .nameAction(localizedString("shared_string_open"))
         .iconName("ic_custom_umbrella")
         .nonEditable()
         .category(QuickActionTypeCategory.configureMap.rawValue)
     
+    override class func getType() -> QuickActionType {
+        type
+    }
+
     override init() {
-        super.init(actionType: Self.type)
+        super.init(actionType: Self.getType())
     }
     
     override init(actionType type: QuickActionType) {

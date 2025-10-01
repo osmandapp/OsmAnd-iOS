@@ -33,6 +33,7 @@ static const double TIMEOUT_BETWEEN_CHARS = 0.7;  // seconds
 static const double TIMEOUT_BEFORE_SEARCH = 0.05; // seconds
 static const double TIMEOUT_BEFORE_FILTER = 0.02; // seconds
 static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
+static const int DOMINATED_CITY_CRITERIA = 5;
 static const NSSet<NSString *> *FILTER_DUPLICATE_POI_SUBTYPE = [NSSet setWithArray: @[@"building", @"internet_access_yes"]];
 
 typedef NS_ENUM(NSInteger, EOAResultCompareStep) {
@@ -357,12 +358,54 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             }
         }
     }
+    [self calculateAddressString];
     return self;
 }
 
 - (NSArray<OASearchResult *> *) getCurrentSearchResults
 {
     return [NSArray arrayWithArray:_searchResults];
+}
+
+- (void) calculateAddressString
+{
+    NSString *dominatedCity = @"";
+    NSMutableDictionary<NSString *, NSNumber *> *cities = [NSMutableDictionary dictionary];
+
+    for (OASearchResult *s in _searchResults) {
+        if (s.cityName.length > 0) {
+            NSInteger freq = cities[s.cityName].integerValue + 1;
+            cities[s.cityName] = @(freq);
+            if (freq >= DOMINATED_CITY_CRITERIA) {
+                dominatedCity = s.cityName;
+                break;
+            }
+        }
+    }
+
+    for (OASearchResult *s in _searchResults) {
+        const auto amenity = std::dynamic_pointer_cast<const OsmAnd::Amenity>(s.amenity);
+        if (!amenity || (s.alternateName && s.alternateName.length > 0)) {
+            continue;
+        }
+        NSString *city = s.cityName ?: @"";
+        QString qStreetName = [OASearchResultCollection getAdditionalInfo:amenity key:"addr_street"];
+        if (qStreetName.isEmpty()) {
+            s.alternateName = city;
+            continue;
+        } else {
+            QString qHouseNumber = [OASearchResultCollection getAdditionalInfo:amenity key:"addr_housenumber"];
+            NSString *nStreetName = qStreetName.toNSString();
+            NSString *nHouseNumber = qHouseNumber.toNSString();
+            NSString *addr = nHouseNumber.length > 0 ?
+                [NSString stringWithFormat:@"%@ %@", nStreetName, nHouseNumber] : nStreetName;
+            if ([dominatedCity isEqualToString:s.cityName]) {
+                s.alternateName = [NSString stringWithFormat:@"%@, %@", addr, s.cityName];
+            } else {
+                s.alternateName = city.length > 0 ? [NSString stringWithFormat:@"%@, %@", s.cityName, addr] : addr;
+            }
+        }
+    }
 }
 
 - (void) sortSearchResults

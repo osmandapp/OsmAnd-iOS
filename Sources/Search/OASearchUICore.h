@@ -23,6 +23,7 @@
 - (OASearchResultCollection *) addSearchResults:(NSArray<OASearchResult *> *)sr resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates;
 - (NSArray<OASearchResult *> *) getCurrentSearchResults;
 - (void) sortSearchResults;
+- (void) calculateAddressString;
 - (void) filterSearchDuplicateResults;
 - (BOOL) sameSearchResult:(OASearchResult *)r1 r2:(OASearchResult *)r2;
 

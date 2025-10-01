@@ -170,9 +170,6 @@
         object.localeName = object.alternateName;
         object.alternateName = nil;
     }
-    if (object.alternateName.length == 0 && [object.object isKindOfClass:[OAPOI class]]) {
-        object.alternateName = object.cityName;
-    }
     object.parentSearchResult = _parentSearchResult;
     if (!_matcher || [_matcher publish:object])
     {

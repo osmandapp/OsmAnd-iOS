@@ -13,14 +13,17 @@
 #import "OAAutoZoomMapViewController.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
-
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAColors.h"
 
 @implementation OAMapBehaviorViewController
 {
     OAAppSettings *_settings;
-    NSArray<NSDictionary *> *_data;
+    OATableDataModel *_data;
 }
 
 #pragma mark - Initialization
@@ -28,6 +31,13 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _data = [OATableDataModel model];
+}
+
+- (void)registerCells
+{
+    [self addCell:OAValueTableViewCell.reuseIdentifier];
+    [self addCell:OASwitchTableViewCell.reuseIdentifier];
 }
 
 #pragma mark - UIViewController
@@ -50,6 +60,7 @@
 
 - (void)generateData
 {
+    [_data clearAllData];
     NSString *autoCenterValue = nil;
     NSUInteger autoCenter = [_settings.autoFollowRoute get:self.appMode];
     if (autoCenter == 0)
@@ -68,103 +79,88 @@
         autoZoomValue = [OAAutoZoomMap getName:autoZoomMap];
     }
 
-    NSMutableArray *dataArr = [NSMutableArray arrayWithObjects:
-                               @{
-                                    @"type" : [OAValueTableViewCell getCellIdentifier],
-                                    @"title" : OALocalizedString(@"choose_auto_follow_route"),
-                                    @"value" : autoCenterValue,
-                                    @"key" : @"autoCenter"
-                               },
-                               @{
-                                    @"type" : [OAValueTableViewCell getCellIdentifier],
-                                    @"title" : OALocalizedString(@"auto_zoom_map"),
-                                    @"value" : autoZoomValue,
-                                    @"key" : @"autoZoom",
-                               },
-                               @{
-                                    @"type" : [OASwitchTableViewCell getCellIdentifier],
-                                    @"title" : OALocalizedString(@"preview_next_turn"),
-                                    @"value" : _settings.previewNextTurn,
-                                    @"key" : @"previewNextTurn"
-                               },
-                               @{
-                                    @"type" : [OASwitchTableViewCell getCellIdentifier],
-                                    @"title" : OALocalizedString(@"snap_to_road"),
-                                    @"value" : _settings.snapToRoad,
-                                    @"key" : @"snapToRoad"
-                               }, nil];
-    _data = [NSArray arrayWithArray:dataArr];
+    OATableSectionData *autoCenterSection = [_data createNewSection];
+    autoCenterSection.footerText = OALocalizedString(@"choose_auto_center_map_view_descr");
+    OATableRowData *autoCenterRow = [autoCenterSection createNewRow];
+    autoCenterRow.key = @"autoCenter";
+    autoCenterRow.cellType = OAValueTableViewCell.reuseIdentifier;
+    autoCenterRow.title = OALocalizedString(@"choose_auto_follow_route");
+    autoCenterRow.descr = autoCenterValue;
+    
+    OATableSectionData *autoZoomSection = [_data createNewSection];
+    autoZoomSection.footerText = OALocalizedString(@"auto_zoom_map_descr");
+    OATableRowData *autoZoomRow = [autoZoomSection createNewRow];
+    autoZoomRow.key = @"autoZoom";
+    autoZoomRow.cellType = OAValueTableViewCell.reuseIdentifier;
+    autoZoomRow.title = OALocalizedString(@"auto_zoom_map");
+    autoZoomRow.descr = autoZoomValue;
+    OATableRowData *autoZoom3dAngleRow = [autoZoomSection createNewRow];
+    autoZoom3dAngleRow.key = @"autoZoom3dAngle";
+    autoZoom3dAngleRow.cellType = OAValueTableViewCell.reuseIdentifier;
+    autoZoom3dAngleRow.title = OALocalizedString(@"auto_zoom_3d_angle");
+    autoZoom3dAngleRow.descr = [NSString stringWithFormat:@"%ld %@", (long)[_settings.autoZoom3DAngle get:self.appMode], OALocalizedString(@"shared_string_degrees")];
+    
+    OATableSectionData *previewNextTurnSection = [_data createNewSection];
+    previewNextTurnSection.footerText = OALocalizedString(@"preview_next_turn_descr");
+    OATableRowData *previewNextTurnRow = [previewNextTurnSection createNewRow];
+    previewNextTurnRow.key = @"previewNextTurn";
+    previewNextTurnRow.cellType = OASwitchTableViewCell.reuseIdentifier;
+    previewNextTurnRow.title = OALocalizedString(@"preview_next_turn");
+    [previewNextTurnRow setObj:_settings.previewNextTurn forKey:@"value"];
+    
+    OATableSectionData *snapToRoadSection = [_data createNewSection];
+    snapToRoadSection.footerText = OALocalizedString(@"snap_to_road_descr");
+    OATableRowData *snapToRoadRow = [snapToRoadSection createNewRow];
+    snapToRoadRow.key = @"snapToRoad";
+    snapToRoadRow.cellType = OASwitchTableViewCell.reuseIdentifier;
+    snapToRoadRow.title = OALocalizedString(@"snap_to_road");
+    [snapToRoadRow setObj:_settings.snapToRoad forKey:@"value"];
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section
 {
-    if (section == 0)
-        return OALocalizedString(@"choose_auto_center_map_view_descr");
-    else if (section == 1)
-        return OALocalizedString(@"auto_zoom_map_descr");
-    else if (section == 2)
-        return OALocalizedString(@"preview_next_turn_descr");
-    else if (section == 3)
-        return OALocalizedString(@"snap_to_road_descr");
-    else
-        return @"";
+    return [_data sectionDataForIndex:section].footerText;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
 {
-    return 1;
+    return [_data rowCount:section];
 }
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    NSString *cellType = item.cellType;
+    if ([cellType isEqualToString:OAValueTableViewCell.reuseIdentifier])
     {
-        OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-            cell.valueLabel.text = item[@"value"];
-        }
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OAValueTableViewCell.reuseIdentifier];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
+        cell.titleLabel.text = item.title;
+        cell.valueLabel.text = item.descr;
         return cell;
     }
-    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:OASwitchTableViewCell.reuseIdentifier])
     {
-        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OASwitchTableViewCell.reuseIdentifier];
+        [cell descriptionVisibility:NO];
+        [cell leftIconVisibility:NO];
+        cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+        cell.titleLabel.text = item.title;
+        id val = [item objForKey:@"value"];
+        [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        if ([val isKindOfClass:[OACommonBoolean class]])
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell descriptionVisibility:NO];
-            [cell leftIconVisibility:NO];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+            OACommonBoolean *value = val;
+            cell.switchView.on = [value get:self.appMode];
         }
-        if (cell)
+        else
         {
-            cell.titleLabel.text = item[@"title"];
-            id v = item[@"value"];
-            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            if ([v isKindOfClass:[OACommonBoolean class]])
-            {
-                OACommonBoolean *value = v;
-                cell.switchView.on = [value get:self.appMode];
-            }
-            else
-            {
-                cell.switchView.on = [v boolValue];
-            }
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
+            cell.switchView.on = [val boolValue];
         }
+        cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+        [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         return cell;
     }
     return nil;
@@ -172,7 +168,7 @@
 
 - (NSInteger)sectionsCount
 {
-    return _data.count;
+    return [_data sectionCount];
 }
 
 - (CGFloat)getCustomHeightForHeader:(NSInteger)section
@@ -182,8 +178,8 @@
 
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section];
-    NSString *itemKey = item[@"key"];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    NSString *itemKey = item.key;
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"autoCenter"])
         settingsViewController = [[OAAutoCenterMapViewController alloc] initWithAppMode:self.appMode];
@@ -198,10 +194,10 @@
 {
     UISwitch *sw = (UISwitch *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
-    NSDictionary *item = _data[indexPath.section];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
 
     BOOL isChecked = ((UISwitch *) sender).on;
-    id v = item[@"value"];
+    id v = [item objForKey:@"value"];
     if ([v isKindOfClass:[OACommonBoolean class]])
     {
         OACommonBoolean *value = v;

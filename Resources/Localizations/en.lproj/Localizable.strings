@@ -2477,7 +2477,8 @@
 "discard_filter_changes_prompt" = "Reset all filters?";
 "power_watts_unit" = "Watts";
 "revolutions_per_minute_unit" = "RPM";
-
+"shared_string_degrees" = "Degrees";
+"auto_zoom_3d_angle" = "Auto zoom 3D angle";
 "shared_string_total" = "Total";
 "shared_string_walk" = "Walk";
 "board_at" = "Board at";

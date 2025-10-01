@@ -449,8 +449,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
             [track.segments addObject:trkSegment];
         }
         
-        gpxFile.tracks = [NSMutableArray new];
-        [gpxFile.tracks addObject:track];
+        gpxFile.tracks = [@[track] mutableCopy];;
         //Android also uses extra helper class here: gpxFile.getTracks().add(TravelObfGpxTrackOptimizer.mergeOverlappedSegmentsAtEdges(track));
         
         if (![article isKindOfClass:OATravelGpx.class])

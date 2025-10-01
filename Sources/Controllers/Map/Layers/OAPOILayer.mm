@@ -474,14 +474,14 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    NSMutableArray<OAPOI *> *amenities = [self getDisplayedResults:result.pointLatLon.coordinate.latitude lon:result.pointLatLon.coordinate.longitude];
+    NSArray<OAPOI *> *amenities = [self getDisplayedResults:result.pointLatLon.coordinate.latitude lon:result.pointLatLon.coordinate.longitude];
     for (OAPOI *amenity in amenities)
     {
         [result collect:amenity provider:self];
     }
 }
 
-- (NSMutableArray<OAPOI *> *) getDisplayedResults:(double)lat lon:(double)lon
+- (NSArray<OAPOI *> *) getDisplayedResults:(double)lat lon:(double)lon
 {
     NSMutableArray<OAPOI *> *result = [NSMutableArray new];
     if (!_amenitySymbolsProvider)

@@ -75,7 +75,7 @@ final class TravelGpx : TravelArticle {
         
         let helper = TravelObfHelper.shared
         
-        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_BBOX_RADIUS) {
+        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_BBOX_RADIUS), !radius.isEmpty {
             routeRadius = Int(OAUtilities.convertChar(toDist: String(radius[0]), firstLetter: String(helper.TRAVEL_GPX_CONVERT_FIRST_LETTER), firstDist: Int32(helper.TRAVEL_GPX_CONVERT_FIRST_DIST), mult1: Int32(helper.TRAVEL_GPX_CONVERT_MULT_1), mult2: Int32(helper.TRAVEL_GPX_CONVERT_MULT_2)))
         } else if let routeId, !routeId.isEmpty {
             routeRadius = helper.ARTICLE_SEARCH_RADIUS

@@ -381,8 +381,8 @@
 "daynight_mode_auto" = "Nascer/pôr do sol";
 "auto_follow_location_enabled" = "Mapa automaticamente centrado.";
 "unknown_location" = "Posição ainda desconhecida.";
-"settings_preset" = "Perfil predefinido";
-"settings_preset_descr" = "Configurações de exibição e navegação de mapa são gravadas por perfil de uso. Defina seu perfil padrão aqui.";
+"settings_preset" = "Perfil padrão";
+"settings_preset_descr" = "Configurações de exibição e navegação de mapa são salvadas por perfil de uso. Defina seu perfil padrão aqui.";
 "coords_format" = "Formato de coordenadas";
 "coords_format_descr" = "Formato para as coordenadas geográficas.";
 "rotate_map_to" = "Orientação do mapa";
@@ -1644,7 +1644,7 @@
 "lenght_limit_description" = "Forneça o comprimento do seu veículo. Algumas restrições de rotas podem ser aplicadas a veículos longos.";
 "touting_specified_vehicle_parameters_descr" = "Os parâmetros definidos do veículo podem afetar a navegação.";
 "key_hint_recenter_map" = "Recentrar mapa";
-"send_anonymous_data" = "Enviar dados anónimos";
+"send_anonymous_data" = "Enviar dados anônimos";
 "shared_string_account_add" = "Adicionar conta";
 "shared_string_required" = "Obrigatório";
 "email_example_hint" = "utilizador@exemplo.com";
@@ -1777,7 +1777,7 @@
 "downloading" = "A descarregar";
 "checking_for_duplicate_description" = "OsmAnd verifica %@ para duplicatas com itens existentes no aplicativo. \n \nPode levar algum tempo.";
 "checking_for_duplicates" = "A verificar se há duplicados...";
-"export_profile_descr" = "Pode exportar todas as configurações do perfil, copiar todas as configurações de outro perfil ou redefinir todas as configurações do perfil para o estado predefinido.";
+"export_profile_descr" = "Pode exportar todas as configurações do perfil, copiar todas as configurações de outro perfil ou redefinir todas as configurações do perfil para o estado padrão.";
 "import_profile_descr" = "Para importar um perfil, toque no ficheiro necessário (*.osf) em qualquer aplicação e selecione \"Copiar para OsmAnd Maps\"";
 "profile_sett_descr" = "Afeta o perfil da aplicação selecionado";
 "not_available_profile_name" = "Já existe um perfil com este nome.";
@@ -3868,3 +3868,6 @@
 "quick_action_new_route" = "Nova rota";
 "quick_action_add_route_descr" = "Um botão para iniciar uma rota do meio da tela.";
 "shared_string_create" = "Criar";
+"select_map_orientation" = "Selecione a orientação do mapa";
+"image_cache_online_photo_high_res" = "Cache de fotos online em alta resolução";
+"image_cache_online_photo_mapillary_default_cache" = "Cache padrão de fotos online e Mapillary";

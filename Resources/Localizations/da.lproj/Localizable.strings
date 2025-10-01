@@ -2567,7 +2567,7 @@
 "routing_attr_length_description" = "Angiv køretøjslængde der skal være tilladt på ruter.";
 "rendering_attr_OSMMapperAssistantNote_description" = "Vis bemærkning-mærker";
 "rendering_attr_natureReserves_name" = "Naturreservat";
-"rendering_attr_showWaterwayTunnels_name" = "Øg synlighed af vandveje";
+"rendering_attr_showWaterwayTunnels_name" = "Øg synlighed af vandvejstunneler";
 "routing_attr_hazmat_category_description" = "Kategori af farligt gods / Tag højde for adgangstilladelser for farligt gods";
 "rendering_attr_horse_scale_impossible_name" = "Umulig";
 "routing_attr_allow_streams_description" = "Tillad vandløb og afløb";

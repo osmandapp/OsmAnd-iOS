@@ -971,7 +971,7 @@
 
     UIAlertAction *saveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *name = [alert.textFields.firstObject.text trim];
-        BOOL hasDeviceName;
+        BOOL hasDeviceName = NO;
         
         for (InputDeviceProfile *device in [InputDevicesHelper.shared allDevicesWith:self.appMode])
         {

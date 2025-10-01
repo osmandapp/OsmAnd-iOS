@@ -185,6 +185,8 @@
         settingsViewController = [[OAAutoCenterMapViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"autoZoom"])
         settingsViewController = [[OAAutoZoomMapViewController alloc] initWithAppMode:self.appMode];
+    else if ([itemKey isEqualToString:@"autoZoom3dAngle"])
+        settingsViewController = [[AutoZoom3DAngleViewController alloc] initWithAppMode:self.appMode];
     [self showViewController:settingsViewController];
 }
 

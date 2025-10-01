@@ -183,6 +183,11 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
     return [res isEqualToString:resourceId] ? [OAUtilities capitalizeFirstLetter:tag] : res;
 }
 
+- (NSString *)getActivityTagTitle
+{
+    return _routeKey.tagsMap()[QString::fromNSString(@"osmand:activity")].toNSString();
+}
+
 - (NSString *)getTypeName
 {
     return _type.type->name.toNSString();

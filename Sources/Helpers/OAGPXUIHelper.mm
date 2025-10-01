@@ -788,7 +788,6 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     if (routeKey)
     {
         OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:routeKey];
-        [drawable setTextSize:24];
         state.trackIcon = drawable.getIcon;
     }
     

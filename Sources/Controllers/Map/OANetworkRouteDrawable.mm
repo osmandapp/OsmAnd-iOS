@@ -56,7 +56,12 @@
     if (!env)
         return nil;
     
-    const auto tag = QString::fromNSString([NSString stringWithFormat:@"route_%@", [_routeKey getRouteTag]]);
+    NSString *routeTag = [_routeKey getRouteTag];
+    NSString *activity = [_routeKey getActivityTagTitle];
+    if ([routeTag isEqualToString:@"unknown"] && !NSStringIsEmpty(activity))
+        routeTag = activity;
+    
+    const auto tag = QString::fromNSString([NSString stringWithFormat:@"route_%@", routeTag]);
     const auto text = QString::fromNSString([_routeKey getRouteValue:@"osmc_text"]);
     
     OsmAnd::MapStyleEvaluator textEvaluator(env->mapStyle, env->displayDensityFactor);
@@ -111,9 +116,10 @@
     evaluationResult.getBooleanValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_BOLD, bold);
     textStyle.setBold(bold);
     
+    float scaledFontSize = _textSize;
     UITraitCollection *traitCollection = UIScreen.mainScreen.traitCollection;
-    float scaledFontSize = [[UIFontMetrics metricsForTextStyle:UIFontTextStyleBody] scaledValueForValue:_textSize compatibleWithTraitCollection:traitCollection];
     evaluationResult.getFloatValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SIZE, scaledFontSize);
+    scaledFontSize = [[UIFontMetrics metricsForTextStyle:UIFontTextStyleBody] scaledValueForValue:scaledFontSize compatibleWithTraitCollection:traitCollection];
     textStyle.setSize(scaledFontSize);
 
     const auto rasterizer = OsmAnd::TextRasterizer::getDefault();

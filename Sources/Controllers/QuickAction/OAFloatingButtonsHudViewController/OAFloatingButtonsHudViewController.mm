@@ -390,7 +390,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 
 - (BOOL)isMapOrientationButton:(OAHudButton *)button
 {
-    if (!button.buttonState || ![button.buttonState isKindOfClass:QuickActionButtonState.class])
+    if (![button.buttonState isKindOfClass:QuickActionButtonState.class])
         return NO;
     
     QuickActionButtonState *state = (QuickActionButtonState *)button.buttonState;
@@ -443,11 +443,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         }
         else
         {
-            UIImage *icon = [self isMapOrientationButton:quickActionButton]
-            ? [UIImage imageNamed:[CompassModeWrapper iconNameForValue:[_settings.rotateMap get:[_settings.applicationMode get]] isLightMode:![_settings nightMode]]]
-            : [quickActionButtonState getIcon];
-            
-            UIImage *quickActionIcon = quickActionButtonState ? icon : [UIImage templateImageNamed:@"ic_custom_quick_action"];
+            UIImage *quickActionIcon = quickActionButtonState ? [self iconForQuickActionButton:quickActionButton state:quickActionButtonState] : [UIImage templateImageNamed:@"ic_custom_quick_action"];
             [quickActionButton setImage:quickActionIcon forState:UIControlStateNormal];
             if (quickActionButtonState && [quickActionButtonState isSingleAction])
             {
@@ -476,6 +472,13 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
             }
         }
     });
+}
+
+- (UIImage *)iconForQuickActionButton:(OAHudButton *)button state:(QuickActionButtonState *)state
+{
+    return [self isMapOrientationButton:button]
+    ? [UIImage imageNamed:[CompassModeWrapper iconNameForValue:[_settings.rotateMap get:[_settings.applicationMode get]] isLightMode:![_settings nightMode]]]
+    : [state getIcon];
 }
 
 - (void)createQuickActionButtons

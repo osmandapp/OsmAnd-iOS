@@ -116,7 +116,7 @@
                 @"title" : [CompassModeWrapper titleForKey:key],
                 @"value" : @([CompassModeWrapper valueFor:key]),
                 @"param" : @[key],
-                @"img" : [CompassModeWrapper iconNameForKey:key]
+                @"img" : [CompassModeWrapper iconNameWithAppThemeForKey:key]
             }];
         }
     }

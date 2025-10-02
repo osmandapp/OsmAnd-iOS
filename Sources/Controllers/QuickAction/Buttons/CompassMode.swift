@@ -86,9 +86,8 @@ final class CompassModeWrapper: NSObject {
         CompassMode.mode(forKey: key)?.title ?? ""
     }
 
-    static func iconName(forKey key: String) -> String {
-        guard let compassMode = CompassMode.mode(forKey: key) else { return "" }
-        return ThemeManager.shared.isLightTheme() ? compassMode.iconName : compassMode.nightModeIconName
+    static func iconNameWithAppTheme(forKey key: String) -> String {
+        iconName(forKey: key, isLightMode: ThemeManager.shared.isLightTheme())
     }
     
     static func value(for key: String) -> Int {
@@ -97,5 +96,10 @@ final class CompassModeWrapper: NSObject {
     
     static func valueCount() -> Int {
         CompassMode.allCases.map(\.value).count
+    }
+    
+    private static func iconName(forKey key: String, isLightMode: Bool) -> String {
+        guard let compassMode = CompassMode.mode(forKey: key) else { return "" }
+        return isLightMode ? compassMode.iconName : compassMode.nightModeIconName
     }
 }

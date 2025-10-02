@@ -901,9 +901,13 @@ final private class OpenTrackMenuDelegate: GpxReadDelegate {
     var gpxFileName: String?
     
     func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
-        guard let latLon, let gpxFileName, let gpxFile, let file = gpxFile.object, let analysis = article.getAnalysis() else { return }
+        guard let latLon, let gpxFileName, let gpxFile, let file = gpxFile.object, var analysis = article.getAnalysis() else { return }
+        
+        if let routeId = article.routeId, !routeId.isEmpty {
+            analysis = gpxFile.getAnalysis(0)
+        }
 
-        var wptPt = WptPt()
+        let wptPt = WptPt()
         wptPt.lat = latLon.coordinate.latitude
         wptPt.lon = latLon.coordinate.longitude
         let safeFileName = gpxFileName.appending(GPX_FILE_EXT)

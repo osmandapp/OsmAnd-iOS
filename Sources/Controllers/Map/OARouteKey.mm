@@ -185,7 +185,14 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
 
 - (NSString *)getActivityTagTitle
 {
-    return _routeKey.tagsMap()[QString::fromNSString(@"osmand:activity")].toNSString();
+    QMap<QString, QString> tags = _routeKey.tagsMap();
+    if (!tags.isEmpty())
+    {
+        QString key = QString::fromNSString(@"osmand:activity");
+        QString value = tags[key];
+        return value != nil ? value.toNSString() : nil;
+    }
+    return nil;
 }
 
 - (NSString *)getTypeName

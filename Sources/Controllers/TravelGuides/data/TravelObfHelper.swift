@@ -901,12 +901,18 @@ final private class OpenTrackMenuDelegate: GpxReadDelegate {
     var gpxFileName: String?
     
     func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
-        guard let latLon, let gpxFileName, let gpxFile, let file = gpxFile.object, var analysis = article.getAnalysis() else { return }
+        guard let latLon, let gpxFileName, let gpxFile, let file = gpxFile.object else { return }
         
+        // For rotutes from map force use gpx data for Analysis.
+        // Android replaces it on UI (TrackMenuFragment).
+        var analysis: GpxTrackAnalysis?
         if let routeId = article.routeId, !routeId.isEmpty {
-            analysis = gpxFile.getAnalysis(0)
+            analysis = gpxFile.object.getAnalysis(fileTimestamp: 0, fromDistance: nil, toDistance: nil, pointsAnalyzer: PlatformUtil.shared.getTrackPointsAnalyser())
+        } else {
+            analysis = article.getAnalysis()
         }
-
+        guard let analysis else { return }
+    
         let wptPt = WptPt()
         wptPt.lat = latLon.coordinate.latitude
         wptPt.lon = latLon.coordinate.longitude

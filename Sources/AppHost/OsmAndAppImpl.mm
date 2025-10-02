@@ -1396,7 +1396,7 @@ NSString *const kXmlColon = @"_-_";
         return @"";
     NSString *userIosId = settings.userIosId.get;
     
-    if (userIosId.length == 0 || [self isUserAndroidIdExpired])
+    if (userIosId.length == 0 || [self isUserIosIdExpired])
     {
         userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
         [settings.userIosId set:userIosId];
@@ -1412,7 +1412,8 @@ NSString *const kXmlColon = @"_-_";
     return userIosId;
 }
 
-- (BOOL)isUserAndroidIdExpired {
+- (BOOL)isUserIosIdExpired
+{
     double userIosIdExpiredTime = [[[OAAppSettings sharedManager] userIosIdExpiredTime] get];
     return userIosIdExpiredTime <= [[NSDate date] timeIntervalSince1970];
 }

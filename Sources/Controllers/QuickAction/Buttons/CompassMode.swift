@@ -39,6 +39,15 @@ enum CompassMode: Int32, CaseIterable {
         case .northIsUp: "ic_custom_direction_north_day"
         }
     }
+    
+    var nightModeIconName: String {
+        switch self {
+        case .manuallyRotated: "ic_custom_direction_manual_night"
+        case .movementDirection: "ic_custom_direction_bearing_night"
+        case .compassDirection: "ic_custom_direction_compass_night"
+        case .northIsUp: "ic_custom_direction_north_night"
+        }
+    }
 
     var key: String {
         switch self {
@@ -68,16 +77,18 @@ final class CompassModeWrapper: NSObject {
         CompassMode.byValue(value).title
     }
 
-    static func iconName(forValue value: Int) -> String {
-        CompassMode.byValue(value).iconName
+    static func iconName(forValue value: Int, isNightMode: Bool) -> String {
+        let compassMode = CompassMode.byValue(value)
+        return isNightMode ? compassMode.nightModeIconName : compassMode.iconName
     }
     
     static func title(forKey key: String) -> String {
         CompassMode.mode(forKey: key)?.title ?? ""
     }
 
-    static func iconName(forKey key: String) -> String {
-        CompassMode.mode(forKey: key)?.iconName ?? ""
+    static func iconName(forKey key: String, isNightMode: Bool) -> String {
+        guard let compassMode = CompassMode.mode(forKey: key) else { return "" }
+        return isNightMode ? compassMode.nightModeIconName : compassMode.iconName
     }
     
     static func value(for key: String) -> Int {

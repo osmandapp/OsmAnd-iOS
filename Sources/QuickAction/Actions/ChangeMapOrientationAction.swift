@@ -11,8 +11,8 @@ final class ChangeMapOrientationAction: OASwitchableAction {
     private static let keyModes = "compass_modes"
     
     private static let type = QuickActionType(id: QuickActionIds.changeMapOrientationAction.rawValue,
-                                      stringId: "change.map.orientation",
-                                      cl: ChangeMapOrientationAction.self)
+                                              stringId: "change.map.orientation",
+                                              cl: ChangeMapOrientationAction.self)
         .name(localizedString("rotate_map_to"))
         .nameAction(localizedString("shared_string_change"))
         .iconName("ic_custom_compass_rotated")
@@ -93,7 +93,7 @@ final class ChangeMapOrientationAction: OASwitchableAction {
             for key in keys {
                 guard let compassMode = CompassMode.mode(forKey: key) else { continue }
                 let title = compassMode.title
-                let img = compassMode.iconName
+                let img = CompassModeWrapper.iconName(forKey: key, isNightMode: !ThemeManager.shared.isLightTheme())
                 arr.append([
                     "type": OATitleDescrDraggableCell.reuseIdentifier,
                     "title": title,
@@ -147,13 +147,11 @@ final class ChangeMapOrientationAction: OASwitchableAction {
     }
     
     override func getIcon() -> UIImage? {
-        guard let iconName = CompassMode.mode(forKey: orientation())?.iconName else { return super.getIcon() }
-        return UIImage(named: iconName)?.withRenderingMode(.alwaysOriginal)
+        UIImage(named: CompassModeWrapper.iconName(forKey: orientation(), isNightMode: !ThemeManager.shared.isLightTheme()))?.withRenderingMode(.alwaysOriginal)
     }
     
     override func getIconResName() -> String? {
-        guard let iconName = CompassMode.mode(forKey: orientation())?.iconName else { return super.getIconResName() }
-        return iconName
+        CompassModeWrapper.iconName(forKey: orientation(), isNightMode: !ThemeManager.shared.isLightTheme())
     }
     
     private func orientation() -> String {

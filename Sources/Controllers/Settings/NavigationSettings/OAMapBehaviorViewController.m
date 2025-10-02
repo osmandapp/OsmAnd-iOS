@@ -187,6 +187,8 @@
         settingsViewController = [[OAAutoZoomMapViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"autoZoom3dAngle"])
         settingsViewController = [[AutoZoom3DAngleViewController alloc] initWithAppMode:self.appMode];
+
+    settingsViewController.delegate = self;
     [self showViewController:settingsViewController];
 }
 
@@ -207,6 +209,14 @@
     }
     if (self.delegate)
         [self.delegate onSettingsChanged];
+}
+
+#pragma mark - OASettingsDataDelegate
+
+- (void)onSettingsChanged
+{
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

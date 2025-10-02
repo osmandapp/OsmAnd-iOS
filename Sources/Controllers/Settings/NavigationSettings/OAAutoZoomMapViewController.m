@@ -119,6 +119,8 @@
         [_settings.autoZoomMap set:YES mode:self.appMode];
         [_settings.autoZoomMapScale set:(EOAAutoZoomMap)((NSNumber *)item[@"name"]).intValue mode:self.appMode];
     }
+
+    [self.delegate onSettingsChanged];
     [self dismissViewController];
 }
 

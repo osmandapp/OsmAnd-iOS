@@ -54,6 +54,7 @@ class AutoZoom3DAngleViewController: OABaseSettingsViewController {
         let row = tableData.item(for: indexPath)
         guard let angle = (row.obj(forKey: "value") as? NSNumber)?.int32Value else { return }
         OAAppSettings.sharedManager().autoZoom3DAngle.set(angle, mode: appMode)
+        delegate?.onSettingsChanged()
         dismiss()
     }
 }

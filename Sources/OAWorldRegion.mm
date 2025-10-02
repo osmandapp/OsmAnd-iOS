@@ -64,7 +64,16 @@
         _worldRegion = region;
         [self findBoundaries];
         _regionId = _worldRegion->fullRegionName.toNSString();
-        _downloadsIdPrefix = [_worldRegion->downloadName.toNSString() stringByAppendingString:@"."];
+        
+        if (_worldRegion->downloadName.isEmpty() && _worldRegion->fullRegionName.count('_') == 1) {
+            // Weather_Us_northamerica.tifsqlite.zip -> Us_northamerica -> northamerica_us
+            // Weather_Canada_northamerica.tifsqlite.zip -> Canada_northamerica -> northamerica_canada
+            QStringList parts = _worldRegion->fullRegionName.split('_');
+            _downloadsIdPrefix = (parts[1] + QStringLiteral("_") + parts[0] + QStringLiteral(".")).toNSString();
+        } else {
+            _downloadsIdPrefix = [_worldRegion->downloadName.toNSString() stringByAppendingString:@"."];
+        }
+        
         _nativeName = _worldRegion->nativeName.toNSString();
         
         _regionLeftHandDriving = _worldRegion->regionLeftHandDriving.toNSString();

@@ -2396,7 +2396,7 @@ static BOOL DISPLAY_DEFAULT_POI_TYPES = NO;
     CLLocation *latLon2 = [self.class getLocation:building->interpolationPosition31];
 
     double lat1 = loc.coordinate.latitude;
-    double lat2 = latLon2.coordinate.longitude;
+    double lat2 = latLon2.coordinate.latitude;
     double lon1 = loc.coordinate.longitude;
     double lon2 = latLon2.coordinate.longitude;
     return [[CLLocation alloc] initWithLatitude:interpolation * (lat2 - lat1) + lat1 longitude:interpolation * (lon2 - lon1) + lon1];

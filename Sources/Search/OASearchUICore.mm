@@ -24,10 +24,12 @@
 #import "OAPOIBaseType.h"
 #import "OAStreet.h"
 #import "OAResultMatcher.h"
+#import "OABuilding.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ICU.h>
+#include <OsmAndCore/Data/Building.h>
 
 static const double TIMEOUT_BETWEEN_CHARS = 0.7;  // seconds
 static const double TIMEOUT_BEFORE_SEARCH = 0.05; // seconds
@@ -43,6 +45,7 @@ typedef NS_ENUM(NSInteger, EOAResultCompareStep) {
     EOACompareAmenityTypeAdditional,
     EOASearchDistanceIfNotByName,
     EOACompareFirstNumberInName,
+    EOACompareIntepolated,
     EOACompareDistanceToParentSearchResult, // makes sense only for inner subqueries
     EOACompareByName,
     EOACompareByDistance,
@@ -59,6 +62,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
                                                         @(EOACompareAmenityTypeAdditional),
                                                         @(EOASearchDistanceIfNotByName),
                                                         @(EOACompareFirstNumberInName),
+                                                        @(EOACompareIntepolated),
                                                         @(EOACompareDistanceToParentSearchResult),
                                                         @(EOACompareByName),
                                                         @(EOACompareByDistance),
@@ -180,6 +184,20 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             }
             break;
         }
+        case EOACompareIntepolated:
+            if ([o1.object isKindOfClass:OABuilding.class] && [o2.object isKindOfClass:OABuilding.class])
+            {
+                OABuilding * building1 = (OABuilding *) o1.object;
+                OABuilding * building2 = (OABuilding *) o2.object;
+                bool interpolated1 = building1.building->interpolation != OsmAnd::Building::Interpolation::Disabled;
+                bool interpolated2 = building2.building->interpolation != OsmAnd::Building::Interpolation::Disabled;
+                if (interpolated1 != interpolated2)
+                {
+                    // interpolated second
+                    return interpolated1 ? NSOrderedDescending : NSOrderedAscending;
+                }
+            }
+            break;
         case EOACompareDistanceToParentSearchResult:
         {
             double s1F = o1.parentSearchResult == nil ? 0 : [o1.parentSearchResult getSearchDistanceFloored:c.loc];
@@ -464,10 +482,19 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 - (BOOL) sameSearchResult:(OASearchResult *)r1 r2:(OASearchResult *)r2
 {
     BOOL isSameType = r1.objectType == r2.objectType;
+    bool interpolated = false;
     if (isSameType)
     {
         if (r1.objectType == EOAObjectTypeIndexItem || r1.objectType == EOAObjectTypeGpxTrack)
+        {
             return [r1.localeName isEqualToString:r2.localeName];
+        }
+        if (r2.objectType == EOAObjectTypeHouse && [r2.object isKindOfClass:OABuilding.class])
+        {
+            OABuilding * building = (OABuilding *) r2.object;
+            bool streetEquals = [r1.localeRelatedObjectName isEqualToString:r2.localeRelatedObjectName];
+            interpolated = streetEquals && building.building->interpolation != OsmAnd::Building::Interpolation::Disabled;
+        }
     }
     if (r1.location && r2.location && ![OAObjectType isTopVisible:r1.objectType] && ![OAObjectType isTopVisible:r2.objectType])
     {
@@ -517,7 +544,14 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             }
             else if([OAObjectType isAddress:r1.objectType] && [OAObjectType isAddress:r2.objectType])
             {
-                similarityRadius = 100;
+                if (interpolated)
+                {
+                    similarityRadius = 1000;
+                }
+                else
+                {
+                    similarityRadius = 100;
+                }
             }
             return [r1.location distanceFromLocation:r2.location] < similarityRadius;
         }

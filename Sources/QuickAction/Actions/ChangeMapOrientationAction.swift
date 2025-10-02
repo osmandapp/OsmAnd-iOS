@@ -93,7 +93,7 @@ final class ChangeMapOrientationAction: OASwitchableAction {
             for key in keys {
                 guard let compassMode = CompassMode.mode(forKey: key) else { continue }
                 let title = compassMode.title
-                let img = CompassModeWrapper.iconName(forKey: key, isNightMode: !ThemeManager.shared.isLightTheme())
+                let img = CompassModeWrapper.iconName(forKey: key)
                 arr.append([
                     "type": OATitleDescrDraggableCell.reuseIdentifier,
                     "title": title,
@@ -147,11 +147,11 @@ final class ChangeMapOrientationAction: OASwitchableAction {
     }
     
     override func getIcon() -> UIImage? {
-        UIImage(named: CompassModeWrapper.iconName(forKey: orientation(), isNightMode: !ThemeManager.shared.isLightTheme()))?.withRenderingMode(.alwaysOriginal)
+        UIImage(named: CompassModeWrapper.iconName(forKey: orientation()))?.withRenderingMode(.alwaysOriginal)
     }
     
     override func getIconResName() -> String? {
-        CompassModeWrapper.iconName(forKey: orientation(), isNightMode: !ThemeManager.shared.isLightTheme())
+        CompassModeWrapper.iconName(forKey: orientation())
     }
     
     private func orientation() -> String {

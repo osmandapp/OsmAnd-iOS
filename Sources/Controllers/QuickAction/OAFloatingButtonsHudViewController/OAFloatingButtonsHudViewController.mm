@@ -444,7 +444,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         else
         {
             UIImage *icon = [self isMapOrientationButton:quickActionButton]
-            ? [UIImage imageNamed:[CompassModeWrapper iconNameForValue:[_settings.rotateMap get:[_settings.applicationMode get]] isNightMode:[_settings nightMode]]]
+            ? [UIImage imageNamed:[CompassModeWrapper iconNameForValue:[_settings.rotateMap get:[_settings.applicationMode get]] isLightMode:![_settings nightMode]]]
             : [quickActionButtonState getIcon];
             
             UIImage *quickActionIcon = quickActionButtonState ? icon : [UIImage templateImageNamed:@"ic_custom_quick_action"];

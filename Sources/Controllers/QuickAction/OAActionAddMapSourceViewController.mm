@@ -107,7 +107,7 @@
             [dataArr addObject:@{
                 @"title" : [CompassModeWrapper titleForValue:value],
                 @"value" : [CompassModeWrapper keyForValue:value],
-                @"icon" : [CompassModeWrapper iconNameForValue:value isNightMode:![ThemeManager.shared isLightTheme]],
+                @"icon" : [CompassModeWrapper iconNameForValue:value isLightMode:[ThemeManager.shared isLightTheme]],
                 @"type" : [OASimpleTableViewCell reuseIdentifier],
             }];
         }

@@ -77,18 +77,18 @@ final class CompassModeWrapper: NSObject {
         CompassMode.byValue(value).title
     }
 
-    static func iconName(forValue value: Int, isNightMode: Bool) -> String {
+    static func iconName(forValue value: Int, isLightMode: Bool) -> String {
         let compassMode = CompassMode.byValue(value)
-        return isNightMode ? compassMode.nightModeIconName : compassMode.iconName
+        return isLightMode ? compassMode.iconName : compassMode.nightModeIconName
     }
     
     static func title(forKey key: String) -> String {
         CompassMode.mode(forKey: key)?.title ?? ""
     }
 
-    static func iconName(forKey key: String, isNightMode: Bool) -> String {
+    static func iconName(forKey key: String) -> String {
         guard let compassMode = CompassMode.mode(forKey: key) else { return "" }
-        return isNightMode ? compassMode.nightModeIconName : compassMode.iconName
+        return ThemeManager.shared.isLightTheme() ? compassMode.iconName : compassMode.nightModeIconName
     }
     
     static func value(for key: String) -> Int {

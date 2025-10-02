@@ -9,7 +9,7 @@
 import UIKit
 
 @objcMembers
-class AutoZoom3DAngleViewController: OABaseSettingsViewController {
+final class AutoZoom3DAngleViewController: OABaseSettingsViewController {
     
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
@@ -33,8 +33,8 @@ class AutoZoom3DAngleViewController: OABaseSettingsViewController {
             row.key = "angle_\(angle)"
             row.cellType = OASimpleTableViewCell.reuseIdentifier
             row.title = "\(angle) \(deg)"
-            row.accessoryType = (angle == current) ? .checkmark : .none
-            row.setObj(NSNumber(value: angle), forKey: "value")
+            row.accessoryType = angle == current ? .checkmark : .none
+            row.setObj(angle, forKey: "value")
         }
     }
     
@@ -52,8 +52,8 @@ class AutoZoom3DAngleViewController: OABaseSettingsViewController {
     
     override func onRowSelected(_ indexPath: IndexPath) {
         let row = tableData.item(for: indexPath)
-        guard let angle = (row.obj(forKey: "value") as? NSNumber)?.int32Value else { return }
-        OAAppSettings.sharedManager().autoZoom3DAngle.set(angle, mode: appMode)
+        guard let angle = row.obj(forKey: "value") as? Int else { return }
+        OAAppSettings.sharedManager().autoZoom3DAngle.set(Int32(angle), mode: appMode)
         delegate?.onSettingsChanged()
         dismiss()
     }

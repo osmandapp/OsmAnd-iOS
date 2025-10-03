@@ -814,7 +814,7 @@
 "shared_string_time" = "Time";
 "time_of_day" = "Time of day";
 "shared_string_distance" = "Distance";
-"shared_string_duration" = "Duration";
+"duration" = "Duration";
 "shared_string_estimated_duration" = "Estimated duration";
 "shared_string_start_time" = "Start time";
 "shared_string_end_time" = "End time";

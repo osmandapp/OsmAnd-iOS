@@ -255,7 +255,7 @@
         {
             BOOL hasExpectedDuration = analysis.expectedRouteDuration > 0;
             titles[@"top_left_title_string_value"] = OALocalizedString(@"shared_string_distance");
-            titles[@"top_right_title_string_value"] = OALocalizedString(hasExpectedDuration ? @"shared_string_estimated_duration": @"shared_string_duration");
+            titles[@"top_right_title_string_value"] = OALocalizedString(hasExpectedDuration ? @"shared_string_estimated_duration": @"duration");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_start_time");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"shared_string_end_time");
             

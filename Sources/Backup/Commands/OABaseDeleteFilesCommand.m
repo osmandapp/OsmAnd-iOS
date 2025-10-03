@@ -250,7 +250,6 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 
 - (void)dealloc
 {
-    NSLog(@"[OABaseDeleteFilesCommand] dealloc");
     @try
     {
         if (_executor)
@@ -258,7 +257,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     }
     @catch (NSException *exception)
     {
-        NSLog(@"[OABaseDeleteFilesCommand] -> Dealloc KVO Error: Failed to remove observer from _executor: %@", exception);
+        NSLog(@"[OABaseDeleteFilesCommand] -> Dealloc KVO Error: Failed to remove observer from _executor: %@", exception.reason);
     }
     
     for (OADeleteRemoteFileTask *task in _allTasks)
@@ -269,7 +268,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
         }
         @catch (NSException *exception)
         {
-            NSLog(@"[OABaseDeleteFilesCommand] -> Dealloc KVO Error: Failed to remove observer from task: %@", exception);
+            NSLog(@"[OABaseDeleteFilesCommand] -> Dealloc KVO Error: Failed to remove observer from task: %@", exception.reason);
         }
     }
 }

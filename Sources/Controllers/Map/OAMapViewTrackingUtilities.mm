@@ -43,7 +43,7 @@ static double const NAV_ANIMATION_TIME = 1.0;
 static double const SKIP_ANIMATION_TIMEOUT = 10.0;
 static double const ROTATION_MOVE_ANIMATION_TIME = 1.0;
 static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
-static float const TILT_ANIMATION_TIME = 400.0;
+static double const TILT_ANIMATION_TIME = 0.4;
 
 @interface OAMapViewTrackingUtilities ()
 
@@ -590,7 +590,7 @@ static float const TILT_ANIMATION_TIME = 400.0;
             [_mapView setZoom:zoom];
 
         if (animateElevation)
-            animator->animateElevationAngleTo(elevationAngle, TILT_ANIMATION_TIME / 1000.0, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
+            animator->animateElevationAngleTo(elevationAngle, TILT_ANIMATION_TIME, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
 
         if (!animateRotation && !isnan(finalRotation))
             [_mapView setAzimuth:-rotation];

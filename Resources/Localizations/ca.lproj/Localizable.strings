@@ -971,7 +971,7 @@
 "years_2_4" = "Anys";
 "years_5" = "Anys";
 "price_free" = "Gratuït";
-"get_discount_title" = "\"Aconseguiu %d %@ amb un %@ de descompte.\"";
+"get_discount_title" = "Aconseguiu %d %@ amb un %@ de descompte.";
 "osm_succsessful_uploads" = "Correcte";
 "osm_failed_uploads" = "Ha fallat";
 "shared_string_without_name" = "Sense nom";
@@ -3255,3 +3255,8 @@
 "help_article_navigation_routing_brouter_name" = "BRouter";
 "power_watts_unit" = "Watts";
 "rendering_value_sectors_name" = "Sectors";
+"key_event_action_zoom_in" = "Apropa";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"help_article_navigation_car_play_name" = "CarPlay";
+"help_article_troubleshooting_general_name" = "General";
+"monitoring_control_start" = "Enregistrament";

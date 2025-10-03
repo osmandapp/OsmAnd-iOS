@@ -39,6 +39,15 @@ enum CompassMode: Int32, CaseIterable {
         case .northIsUp: "ic_custom_direction_north_day"
         }
     }
+    
+    var nightModeIconName: String {
+        switch self {
+        case .manuallyRotated: "ic_custom_direction_manual_night"
+        case .movementDirection: "ic_custom_direction_bearing_night"
+        case .compassDirection: "ic_custom_direction_compass_night"
+        case .northIsUp: "ic_custom_direction_north_night"
+        }
+    }
 
     var key: String {
         switch self {
@@ -68,16 +77,17 @@ final class CompassModeWrapper: NSObject {
         CompassMode.byValue(value).title
     }
 
-    static func iconName(forValue value: Int) -> String {
-        CompassMode.byValue(value).iconName
+    static func iconName(forValue value: Int, isLightMode: Bool) -> String {
+        let compassMode = CompassMode.byValue(value)
+        return isLightMode ? compassMode.iconName : compassMode.nightModeIconName
     }
     
     static func title(forKey key: String) -> String {
         CompassMode.mode(forKey: key)?.title ?? ""
     }
 
-    static func iconName(forKey key: String) -> String {
-        CompassMode.mode(forKey: key)?.iconName ?? ""
+    static func iconNameWithAppTheme(forKey key: String) -> String {
+        iconName(forKey: key, isLightMode: ThemeManager.shared.isLightTheme())
     }
     
     static func value(for key: String) -> Int {
@@ -86,5 +96,10 @@ final class CompassModeWrapper: NSObject {
     
     static func valueCount() -> Int {
         CompassMode.allCases.map(\.value).count
+    }
+    
+    private static func iconName(forKey key: String, isLightMode: Bool) -> String {
+        guard let compassMode = CompassMode.mode(forKey: key) else { return "" }
+        return isLightMode ? compassMode.iconName : compassMode.nightModeIconName
     }
 }

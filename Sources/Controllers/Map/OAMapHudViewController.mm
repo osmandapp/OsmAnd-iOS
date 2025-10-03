@@ -987,28 +987,17 @@ static const float kDistanceMeters = 100.0;
 - (void) updateCompassButton
 {
     OACommonInteger *rotateMap = _settings.rotateMap;
-    BOOL isNight = _settings.nightMode;
     BOOL showCompass = [self shouldShowCompass];
+    _compassImage.image = [UIImage imageNamed:[CompassModeWrapper iconNameForValue:[rotateMap get] isLightMode:!_settings.nightMode]];
     if ([rotateMap get] == ROTATE_MAP_NONE)
-    {
-        _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_north_night" : @"ic_custom_direction_north_day"];
         _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_north_opt");
-    }
     else if ([rotateMap get] == ROTATE_MAP_BEARING)
-    {
-        _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_bearing_night" : @"ic_custom_direction_bearing_day"];
         _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_bearing_opt");
-    }
     else if ([rotateMap get] == ROTATE_MAP_MANUAL)
-    {
-        _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_manual_night" : @"ic_custom_direction_manual_day"];
         _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_manual_opt");
-    }
     else
-    {
-        _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_compass_night" : @"ic_custom_direction_compass_day"];
         _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_compass_opt");
-    }
+    
     [self updateCompassVisibility:showCompass];
     [_compassButton updateColorsForPressedState:NO];
 }

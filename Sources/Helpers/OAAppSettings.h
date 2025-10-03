@@ -470,7 +470,7 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 
 @property (nonatomic, readonly) NSString *defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(nullable NSString *)defValue;
 
 - (NSString *) get;
 - (void) set:(NSString *)string;
@@ -1413,8 +1413,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonRateUsState *rateUsState;
 
 @property (nonatomic) OACommonString *userUUID;
-@property (nonatomic) OACommonLong *lastUUIDChangeTimestamp;
-
+@property (nonatomic) OACommonLong *userIosIdExpiredTime;
 @property (nonatomic) OACommonBoolean *useOldRouting;
 @property (assign, nonatomic) BOOL ignoreMissingMaps;
 

@@ -12,9 +12,6 @@ import Foundation
 @objcMembers
 final class MigrationManager: NSObject {
 
-    static let importExportVersionMigration1 = 1
-    static let importExportVersionMigration2 = 2
-
     enum MigrationKey: String, CaseIterable {
         case migrationChangeWidgetIds1Key
         case migrationChangeQuickActionIds1Key
@@ -35,6 +32,8 @@ final class MigrationManager: NSObject {
     }
 
     static let shared = MigrationManager()
+    static let importExportVersionMigration2 = 2
+    
     let defaults = UserDefaults.standard
     private let settings = OAAppSettings.sharedManager()
 

@@ -6,8 +6,6 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import <sys/utsname.h>
-
 #import "OARegisterDeviceCommand.h"
 #import "OABackupListeners.h"
 #import "OABackupHelper.h"
@@ -55,10 +53,7 @@
     params[@"token"] = _token;
     params[@"lang"] = [OAUtilities currentLang];
     params[@"brand"] = @"Apple";
-
-    struct utsname systemInfo;
-    if (uname(&systemInfo) == 0)
-        params[@"model"] = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+    params[@"model"] = [UIDevice machine];
 
     [OANetworkUtilities sendRequestWithUrl:OABackupHelper.DEVICE_REGISTER_URL params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         int status;

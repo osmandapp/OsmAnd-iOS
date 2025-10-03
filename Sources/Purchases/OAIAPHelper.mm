@@ -707,15 +707,15 @@ static OASubscriptionState *EXPIRED;
     
     RequestProductsCompletionHandler onComplete = ^(BOOL success) {
         if (success)
-        	[self checkBackupPurchaseIfNeeded:completionHandler];
+            [self checkBackupPurchaseIfNeeded:completionHandler];
         else if (completionHandler)
             completionHandler(NO);
     };
-
+    
     NSString *ver = OAAppVersion.getVersion;
-
+    
     [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/subscriptions/active" params:@{ @"os" : @"ios", @"version" : ver } post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
-    {
+     {
         if (response && data)
         {
             @try
@@ -727,7 +727,7 @@ static OASubscriptionState *EXPIRED;
                     for (NSString *subscriptionType in names)
                     {
                         id subObj = [map objectForKey:subscriptionType];
-                        NSString *identifier = [subObj objectForKey:@"sku"];                        
+                        NSString *identifier = [subObj objectForKey:@"sku"];
                         if (identifier.length > 0)
                             [self.subscriptionList upgradeSubscription:identifier];
                     }
@@ -771,6 +771,7 @@ static OASubscriptionState *EXPIRED;
                             }
                         }];
                         
+                        params[@"model"] = [UIDevice machine];
                         [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/inapps/get" params:params post:NO async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
                          {
                             if (response && ((NSHTTPURLResponse *)response).statusCode == 200 && data)
@@ -778,9 +779,16 @@ static OASubscriptionState *EXPIRED;
                                 @try
                                 {
                                     NSError *jsonParsingError = nil;
-                                    NSArray *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
+                                    id resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
                                     if (!jsonParsingError)
-                                        _inAppStateMap = [self parseInAppStates:resultJson];
+                                    {
+                                        if ([self isEmptyDictionary:resultJson])
+                                            [self logoutUser];
+                                        else if ([resultJson isKindOfClass:[NSArray class]])
+                                            _inAppStateMap = [self parseInAppStates:(NSArray *)resultJson];
+                                        else
+                                            NSLog(@"Unexpected JSON type");
+                                    }
                                 }
                                 @catch (NSException *e)
                                 {
@@ -807,6 +815,17 @@ static OASubscriptionState *EXPIRED;
         _productsRequest.delegate = self;
         [_productsRequest start];
     }];
+}
+
+- (BOOL)isEmptyDictionary:(id)obj
+{
+    return [obj isKindOfClass:[NSDictionary class]] && [(NSDictionary *)obj count] == 0;
+}
+
+- (void)logoutUser
+{
+    [[OABackupHelper sharedInstance] logout];
+    [OAIAPHelper.sharedInstance checkBackupPurchase];
 }
 
 - (void) disableProduct:(NSString *)productIdentifier
@@ -889,51 +908,51 @@ static OASubscriptionState *EXPIRED;
             NSString *visibleName = _settings.billingHideUserName.get ? @"" : _settings.billingUserName.get;
             if (visibleName)
                 [params setObject:visibleName forKey:@"visibleName"];
-
+            
             NSString *preferredCountry = _settings.billingUserCountryDownloadName.get;
             if (preferredCountry)
                 [params setObject:preferredCountry forKey:@"preferredCountry"];
-
+            
             NSString *email = _settings.billingUserEmail.get;
             if (email)
                 [params setObject:email forKey:@"email"];
-
+            
             [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/register" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
              {
-                 NSString *errorStr = error ? error.localizedDescription : nil;
-                 if (!error && response && data)
-                 {
-                     @try
-                     {
-                         NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                         if (map)
-                         {
-                             NSString *userId = [map objectForKey:@"userid"];
-                             NSLog(@"UserId = %@", userId);
-                             if (userId.length > 0)
-                             {
-                                 [self applyUserPreferences:map];
-                                 [self launchPurchase:subscription];
-                             }
-                             else
-                             {
-                                 errorStr = @"No userId";
-                             }
-                         }
-                     }
-                     @catch (NSException *e)
-                     {
-                         errorStr = [NSString stringWithFormat:@"%@: %@", e.name, e.reason];
-                     }
-                 }
-                 else
-                 {
-                     if (!errorStr || [errorStr length] == 0)
-                         errorStr = @"unknown error";
-                 }
-                 if (errorStr)
-                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"/register %@", errorStr]}];
-             }];
+                NSString *errorStr = error ? error.localizedDescription : nil;
+                if (!error && response && data)
+                {
+                    @try
+                    {
+                        NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                        if (map)
+                        {
+                            NSString *userId = [map objectForKey:@"userid"];
+                            NSLog(@"UserId = %@", userId);
+                            if (userId.length > 0)
+                            {
+                                [self applyUserPreferences:map];
+                                [self launchPurchase:subscription];
+                            }
+                            else
+                            {
+                                errorStr = @"No userId";
+                            }
+                        }
+                    }
+                    @catch (NSException *e)
+                    {
+                        errorStr = [NSString stringWithFormat:@"%@: %@", e.name, e.reason];
+                    }
+                }
+                else
+                {
+                    if (!errorStr || [errorStr length] == 0)
+                        errorStr = @"unknown error";
+                }
+                if (errorStr)
+                    [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"/register %@", errorStr]}];
+            }];
         }
         else
         {

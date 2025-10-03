@@ -126,6 +126,7 @@
             [self setVerticalTurnDrawable:_turnDrawable gone:NO];
             [self setTopTurnDrawable:nil];
             [self updateHeightConstraint:_widgetHeightConstraint];
+            [_showButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
             _showButton.menu = [self configureContextWidgetMenu];
         }
         else

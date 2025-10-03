@@ -35,7 +35,7 @@
 
 - (NSArray<id<OAOnDeleteFilesListener>> *) getDeleteFilesListeners
 {
-    return _deleteFilesListeners;
+    return [_deleteFilesListeners copy];
 }
 
 - (void) addDeleteFilesListener:(id<OAOnDeleteFilesListener>)listener
@@ -50,7 +50,7 @@
 
 - (NSArray<id<OAOnRegisterUserListener>> *) getRegisterUserListeners
 {
-    return _registerUserListeners;
+    return [_registerUserListeners copy];
 }
 
 - (void) addRegisterUserListener:(id<OAOnRegisterUserListener>)listener
@@ -65,7 +65,7 @@
 
 - (NSArray<id<OAOnRegisterDeviceListener>> *) getRegisterDeviceListeners
 {
-    return _registerDeviceListeners;
+    return [_registerDeviceListeners copy];
 }
 
 - (void) addRegisterDeviceListener:(id<OAOnRegisterDeviceListener>)listener
@@ -80,7 +80,7 @@
 
 - (NSArray<id<OAOnSendCodeListener>> *) getSendCodeListeners
 {
-    return _sendCodeListeners;
+    return [_sendCodeListeners copy];
 }
 
 - (void) addSendCodeListener:(id<OAOnSendCodeListener>)listener
@@ -95,7 +95,7 @@
 
 - (NSArray<id<OAOnCheckCodeListener>> *) getCheckCodeListeners
 {
-    return _checkCodeListeners;
+    return [_checkCodeListeners copy];
 }
 
 - (void) addCheckCodeListener:(id<OAOnCheckCodeListener>)listener
@@ -110,7 +110,7 @@
 
 - (NSArray<id<OAOnDeleteAccountListener>> *) getDeleteAccountListeners
 {
-    return _deleteAccountListeners;
+    return [_deleteAccountListeners copy];
 }
 
 - (void) addDeleteAccountListener:(id<OAOnDeleteAccountListener>)listener

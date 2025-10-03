@@ -512,7 +512,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         }
     }
     
-    return result;
+    return [result copy];
 }
 
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation

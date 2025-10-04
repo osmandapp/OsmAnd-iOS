@@ -354,7 +354,7 @@ static NSString * const userIosIdKey = @"userIosId";
 
 static NSString * const favoritesLastUploadedTimeKey = @"favoritesLastUploadedTime";
 static NSString * const backupLastUploadedTimeKey = @"backupLastUploadedTime";
-
+static NSString * const autoZoom3DAngleKey = @"autoZoom3DAngle";
 static NSString * const delayToStartNavigationKey = @"delayToStartNavigation";
 
 static NSString * const enableProxyKey = @"enableProxy";
@@ -5782,6 +5782,9 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
         [_globalPreferences setObject:_favoritesLastUploadedTime forKey:@"favorites_last_uploaded_time"];
         [_globalPreferences setObject:_backupLastUploadedTime forKey:@"backup_last_uploaded_time"];
+
+        _autoZoom3DAngle = [[OACommonInteger withKey:autoZoom3DAngleKey defValue:25] makeProfile];
+        [_globalPreferences setObject:_autoZoom3DAngle forKey:@"auto_zoom_3d_angle"];
 
         _delayToStartNavigation = [[[OACommonInteger withKey:delayToStartNavigationKey defValue:-1] makeGlobal] makeShared];
         [_globalPreferences setObject:_delayToStartNavigation forKey:@"delay_to_start_navigation"];

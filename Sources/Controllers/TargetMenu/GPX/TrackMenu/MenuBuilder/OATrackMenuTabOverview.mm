@@ -222,9 +222,10 @@
             || ([routeTagKey isEqualToString:@"way_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
             || [routeTagKey isEqualToString:@"color"]
             || [routeTagKey hasPrefix:@"osmand"]
-            || [routeTagKey isEqualToString:@"type"])
+            || [routeTagKey isEqualToString:@"type"]
+            || [routeTagKey hasPrefix:@"shield_"])
             continue;
-        
+
         if ([routeTagKey containsString:@":"] && ![routeTagKey hasPrefix:@"name"] && ![routeTagKey hasPrefix:@"ref"])
         {
             NSString *mainTag = [routeTagKey componentsSeparatedByString:@":"][1];
@@ -245,7 +246,10 @@
         else if ([routeTagKey isEqualToString:@"distance"])
             routeTagValue = [NSString stringWithFormat:@"%@ %@", routeTagValue, OALocalizedString(@"km")];
         else if ([routeTagKey isEqualToString:@"network"])
-            routeTagValue = [OAPOIHelper.sharedInstance getPhraseByName:[NSString stringWithFormat:@"route_%@_%@_poi", tag, routeTagValue]];
+        {
+            NSString *network = routeTagValue = [OAPOIHelper.sharedInstance getPhraseByName:[NSString stringWithFormat:@"network_%@", routeTagValue]];
+            routeTagValue = NSStringIsEmpty(network) ? routeTagValue : network;
+        }
         else if ([routeTagKey isEqualToString:@"wikipedia"])
             routeTagValue = [OAWikiAlgorithms getWikiUrlWithText:routeTagValue];
 

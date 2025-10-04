@@ -39,6 +39,7 @@ extension PointAttributes {
     
     static let GPXTPX_PREFIX = "gpxtpx:"
     static let OSMAND_EXTENSIONS_PREFIX = "osmand:"
+    static let ACTIVITY_TYPE = OSMAND_EXTENSIONS_PREFIX + "activity"
 }
 
 @objc(OASColoringType)

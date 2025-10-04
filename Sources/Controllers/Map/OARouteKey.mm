@@ -183,6 +183,23 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
     return [res isEqualToString:resourceId] ? [OAUtilities capitalizeFirstLetter:tag] : res;
 }
 
+- (NSString *)getActivityTagTitle
+{
+    QMap<QString, QString> tags = _routeKey.tagsMap();
+    if (!tags.isEmpty())
+    {
+        QString key = QString::fromNSString(@"osmand:activity");
+        QString value = tags[key];
+        return value != nil ? value.toNSString() : nil;
+    }
+    return nil;
+}
+
+- (NSString *)getTypeName
+{
+    return _type.type->name.toNSString();
+}
+
 - (NSString *)getLocalizedTitle
 {
     QMap<QString, QString> tagsToGpx = _routeKey.tagsMap();

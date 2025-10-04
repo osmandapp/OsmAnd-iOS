@@ -3070,10 +3070,11 @@ static const double d180PI = 180.0 / M_PI_2;
 {
     int dist = firstDist;
     
-    const char *chChar = [ch UTF8String];
-    const char *firstLetterChar = [firstLetter UTF8String];
+    unichar chNumber = [ch characterAtIndex:0];
+    unichar firstLetterNumber = [firstLetter characterAtIndex:0];
+    int limit = chNumber - firstLetterNumber + 1;
     
-    for(int iteration = 1; iteration < chChar - firstLetterChar + 1; ++iteration)
+    for(int iteration = 1; iteration < limit; ++iteration)
     {
         dist *= iteration % 2 == 1 ? mult1 : mult2;
     }

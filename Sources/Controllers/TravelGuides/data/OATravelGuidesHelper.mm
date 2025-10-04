@@ -256,10 +256,11 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     return filePath;
 }
 
-+ (OAGPXDocumentAdapter *) buildGpxFile:(NSArray<NSString *> *)readers article:(OATravelArticle *)article
+//In android function with this name works differently. Just moved most part of original code here.
++ (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) fetchSegmentsAndPoints:(NSArray<NSString *> *)readers article:(OATravelArticle *)article pointList:(NSMutableArray<OAPOI *> *)pointList gpxFileExtensions:(NSMutableDictionary<NSString *, NSString *> *)gpxFileExtensions
 {
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > segmentList;
-    NSMutableArray<OAPOI *> *pointList = [NSMutableArray array];
+    
     for (NSString *reader in readers)
     {
         if (article.file != nil && ![article.file isEqualToString: reader])
@@ -270,7 +271,46 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         if ([article isKindOfClass:OATravelGpx.class])
         {
             OsmAnd::AreaI emptyArea;
-            segmentList = [self.class searchGpxMapObject:article bbox31:emptyArea reader:reader];
+            
+            if (article.routeRadius >= 0)
+            {
+                OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(article.lat, article.lon));
+                emptyArea = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(article.routeRadius, locI);
+            }
+            
+            segmentList = [self.class searchGpxMapObject:(OATravelGpx *)article bbox31:emptyArea reader:reader];
+           
+            for (const auto& segment : segmentList)
+            {
+                QHash<QString, QString> tags = segment->getResolvedAttributes();
+
+                for (const auto& captionAttributeId : OsmAnd::constOf(segment->captionsOrder))
+                {
+                    QString tag = segment->attributeMapping->decodeMap[captionAttributeId].tag;
+                    const auto& value = OsmAnd::constOf(segment->captions)[captionAttributeId];
+                    if (!tag.isEmpty() && !value.isEmpty())
+                        gpxFileExtensions[tag.toNSString()] = value.toNSString();
+                }
+
+                for (QString qKey : tags.keys())
+                {
+                    NSString *key = qKey.toNSString();
+                    NSString *value = tags[qKey].toNSString();
+                    if (!NSStringIsEmpty(key) && !NSStringIsEmpty(value))
+                    {
+                        if ([key hasPrefix:OATravelGpx.ROUTE_ACTIVITY_TYPE])
+                        {
+                            gpxFileExtensions[OASPointAttributes.ACTIVITY_TYPE] = value;
+                        }
+                        else if ([key hasPrefix:@"shield_"] ||
+                                 [key hasPrefix:@"osmc_"] ||
+                                 [key hasPrefix:@"network"])
+                        {
+                            gpxFileExtensions[key] = value;
+                        }
+                    }
+                }
+            }
         }
         
         //publish function
@@ -319,40 +359,86 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         }
     }
     
+    return segmentList;
+}
+
++ (OAGPXDocumentAdapter *) buildGpxFile:(NSArray<NSString *> *)readers article:(OATravelArticle *)article
+{
+    QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > segmentList;
+    NSMutableDictionary<NSString *, NSString *> *gpxFileExtensions = [NSMutableDictionary new];
+    NSMutableArray<OAPOI *> *pointList = [NSMutableArray array];
+
+    segmentList = [self fetchSegmentsAndPoints:readers article:article pointList:pointList gpxFileExtensions:gpxFileExtensions];
+
     OASGpxFile *gpxFile = nil;
-    NSString *description = article.descr;
-    NSString *title = [OAUtilities isValidFileName:description] ? description : article.title;
-    if (segmentList.size() > 0)
+    BOOL isSuperRoute = NO;
+    
+    if ([article isKindOfClass:OATravelGpx.class])
+    {
+        OATravelGpx *travelGpx = (OATravelGpx *)article;
+        gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+        NSString *name = NSStringIsEmpty(article.title) ? article.routeId : article.title;
+        gpxFile.metadata.name = name;
+        if (!NSStringIsEmpty(article.title) && [article hasOsmRouteId]) {
+            gpxFileExtensions[@"name"] = article.title;
+        }
+        if (!NSStringIsEmpty(article.descr)) {
+            gpxFile.metadata.desc = article.descr;
+        }
+        isSuperRoute = travelGpx.isSuperRoute;
+    }
+    else
+    {
+        NSString *description = article.descr;
+        NSString *title = [OAUtilities isValidFileName:description] ? description : article.title;
+        gpxFile = [[OASGpxFile alloc] initWithTitle:title lang:article.lang description:description];
+    }
+    
+    if (gpxFileExtensions[OATravelObfHelper.TAG_URL] && gpxFileExtensions[OATravelObfHelper.TAG_URL_TEXT])
+    {
+        gpxFile.metadata.link = [[OASLink alloc] initWithHref:gpxFileExtensions[OATravelObfHelper.TAG_URL] text:gpxFileExtensions[OATravelObfHelper.TAG_URL_TEXT]];
+        [gpxFileExtensions removeObjectForKey:OATravelObfHelper.TAG_URL_TEXT];
+        [gpxFileExtensions removeObjectForKey:OATravelObfHelper.TAG_URL];
+    }
+    else if (gpxFileExtensions[OATravelObfHelper.TAG_URL])
+    {
+        gpxFile.metadata.link = [[OASLink alloc] initWithHref:gpxFileExtensions[OATravelObfHelper.TAG_URL]];
+        [gpxFileExtensions removeObjectForKey:OATravelObfHelper.TAG_URL];
+    }
+    
+    if (!NSStringIsEmpty(article.imageTitle))
+    {
+        gpxFile.metadata.link = [[OASLink alloc] initWithHref:[OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:NO]];
+    }
+    
+    if (!segmentList.isEmpty() || isSuperRoute)
     {
         BOOL hasAltitude = NO;
         OASTrack *track = [[OASTrack alloc] init];
-        NSMutableArray<OASTrkSegment *> *segments = [NSMutableArray array];
-        for (const auto& binaryMapObject : segmentList)
+        for (const auto& segment : segmentList)
         {
             OASTrkSegment *trkSegment = [[OASTrkSegment alloc] init];
-            NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
-            for (const auto& point : binaryMapObject->points31)
+            for (const auto& point : segment->points31)
             {
                 const auto latLon = OsmAnd::Utilities::convert31ToLatLon(point);
                 OASWptPt *wptPt = [[OASWptPt alloc] init];
                 wptPt.position = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-                [points addObject:wptPt];
+                [trkSegment.points addObject:wptPt];
             }
-            trkSegment.points = points;
             
             QString eleGraphValue;
             QString startEleValue;
-            for (const auto& captionAttributeId : OsmAnd::constOf(binaryMapObject->captionsOrder))
+            for (const auto& captionAttributeId : OsmAnd::constOf(segment->captionsOrder))
             {
-                QString tag = binaryMapObject->attributeMapping->decodeMap[captionAttributeId].tag;
-                const auto& value = OsmAnd::constOf(binaryMapObject->captions)[captionAttributeId];
+                QString tag = segment->attributeMapping->decodeMap[captionAttributeId].tag;
+                const auto& value = OsmAnd::constOf(segment->captions)[captionAttributeId];
                 if (tag == QString("ele_graph"))
                     eleGraphValue = value;
                 if (tag == QString("start_ele"))
                     startEleValue = value;
             }
             
-            if (eleGraphValue.size() > 0)
+            if (!eleGraphValue.isEmpty())
             {
                 hasAltitude = YES;
                 auto heightRes = [OAMapAlgorithms decodeIntHeightArrayGraph:eleGraphValue repeatBits:3];
@@ -360,63 +446,46 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
                 
                 trkSegment = [OAMapAlgorithms augmentTrkSegmentWithAltitudes:trkSegment decodedSteps:heightRes startEle:startEle];
             }
-           
-            [segments addObject:trkSegment];
+            [track.segments addObject:trkSegment];
         }
-        track.segments = segments;
-
-        gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
-        gpxFile.metadata.time = (long)([NSDate date].timeIntervalSince1970 * 1000.0);
-        auto extensions = gpxFile.metadata.getExtensionsToWrite;
-        if (title)
-            extensions[@"article_title"] = title;
-        if (article.lang)
-            extensions[@"article_lang"] = article.lang;
-        if (article.lang)
-            extensions[@"desc"] = article.content;
         
-        if (article.imageTitle && article.imageTitle.length > 0)
-        {
-            NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
-            gpxFile.metadata.link = [[OASLink alloc] initWithHref:link];
-        }
-        [gpxFile.tracks addObject:track];
-        extensions[@"ref"] = article.ref;
-        gpxFile.metadata.extensions = extensions;
+        gpxFile.tracks = [@[track] mutableCopy];;
+        //Android also uses extra helper class here: gpxFile.getTracks().add(TravelObfGpxTrackOptimizer.mergeOverlappedSegmentsAtEdges(track));
+        
+        if (![article isKindOfClass:OATravelGpx.class])
+            [gpxFile setRefRef:article.ref];
+        
         gpxFile.hasAltitude = hasAltitude;
+        
+        if (gpxFileExtensions[OASPointAttributes.ACTIVITY_TYPE])
+        {
+            NSString *activityType = gpxFileExtensions[OASPointAttributes.ACTIVITY_TYPE];
+            [gpxFile.metadata getExtensionsToWrite][OASPointAttributes.ACTIVITY_TYPE] = activityType;
+            
+            // cleanup type and activity tags
+            [gpxFileExtensions removeObjectForKey:OATravelGpx.ROUTE_TYPE];
+            [gpxFileExtensions removeObjectForKey:OATravelGpx.ROUTE_ACTIVITY_TYPE];
+            [gpxFileExtensions removeObjectForKey:[NSString stringWithFormat:@"%@_%@", OATravelGpx.ROUTE_ACTIVITY_TYPE, activityType]];
+            [gpxFileExtensions removeObjectForKey:OASPointAttributes.ACTIVITY_TYPE];
+        }
+        
+        //TODO: implement if needed - android also has JSON parser here. For EXTENSIONS_EXTRA_TAGS & METADATA_EXTRA_TAGS keys.
+        
+        [[gpxFile getExtensionsToWrite] addEntriesFromDictionary:gpxFileExtensions];
     }
     
-    if (pointList.count > 0)
+    //TODO: add point groups support if needed
+    //reconstructPointsGroups(gpxFile, pgNames, pgIcons, pgColors, pgBackgrounds); // create groups before points
+    
+    if (NSArrayIsEmpty(pointList))
     {
-        if (!gpxFile)
+        for (OAPOI *wayPoint in pointList)
         {
-            gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
-            gpxFile.metadata.time = (long)([NSDate date].timeIntervalSince1970 * 1000.0);
-            auto extensions = gpxFile.metadata.getExtensionsToWrite;
-            if (title)
-                extensions[@"article_title"] = title;
-            if (article.lang)
-                extensions[@"article_lang"] = article.lang;
-            if (article.lang)
-                extensions[@"desc"] = article.content;
-            
-            gpxFile.metadata.extensions = extensions;
-            
-            if (article.imageTitle && article.imageTitle.length > 0)
-            {
-                NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
-                gpxFile.metadata.link = [[OASLink alloc] initWithHref:link];
-            }
-        }
-        if (pointList.count > 1)
-        {
-            for (OAPOI *wayPoint in pointList)
-            {
-                OASWptPt *wpt = [self.class createWptPt:wayPoint lang:article.lang];
-                [gpxFile addPointPoint:wpt];
-            }
+            OASWptPt *wpt = [self.class createWptPt:wayPoint lang:article.lang];
+            [gpxFile addPointPoint:wpt];
         }
     }
+     
     OAGPXDocumentAdapter *gpxAdapter = [[OAGPXDocumentAdapter alloc] init];
     gpxAdapter.object = gpxFile;
     article.gpxFile = gpxAdapter;
@@ -478,8 +547,8 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         for (const auto& file : files)
         {
             NSString *path = [file->filePath.toNSString() lowercaseString];
-            if (filename && [[path lowercaseString] hasSuffix:[filename lowercaseString]] ||
-                reader && [[path lowercaseString] hasSuffix:[reader lowercaseString]])
+            if ((filename && [path  hasSuffix:[filename lowercaseString]]) ||
+                (reader && [path hasSuffix:[reader lowercaseString]]))
             {
                 const auto found = [self.class searchGpxMapObject:travelGpx res:file bbox31:bbox31];
                 result.append(found);

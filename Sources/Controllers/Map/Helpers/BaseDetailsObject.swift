@@ -313,7 +313,7 @@ final class BaseDetailsObject: NSObject {
     
     private func processId(_ object: OAMapObject?) {
         guard let object else { return }
-        if (syntheticAmenity.obfId >= 0) && ObfConstants.isOsmUrlAvailable(object) {
+        if (syntheticAmenity.obfId <= 0) && ObfConstants.isOsmUrlAvailable(object) {
             syntheticAmenity.obfId = object.obfId
         }
     }

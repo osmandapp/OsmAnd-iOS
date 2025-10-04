@@ -41,6 +41,20 @@ class TravelArticle: NSObject {
     var routeRadius = -1
     var bbox31: KQuadRect?
     
+    func hasOsmRouteId() -> Bool {
+        if let routeId {
+            return routeId.hasPrefix(TravelGpx.ROUTE_ID_OSM_PREFIX_LEGACY) ||  routeId.hasPrefix(TravelGpx.ROUTE_ID_OSM_PREFIX)
+        }
+        return false
+    }
+    
+    func hasBbox31() -> Bool {
+        if let bbox31 , bbox31.hasInitialState() {
+            return true
+        }
+        return false
+    }
+    
     func getGpxFileName() -> String {
         var gpxFileName = routeId
         if let title, !title.isEmpty {

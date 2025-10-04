@@ -3892,3 +3892,5 @@
 "press_button_to_link_with_action" = "Tryk på knappen på din enhed for at tildele den til handlingen: ";
 "key_is_already_assigned_error" = "\"%@\"-tasten er allerede tildelt handling: ";
 "application_profile_changed" = "App-profil ændret til \"%@\"";
+"duration" = "Varighed";
+"shared_string_estimated_duration" = "Estimeret varighed";

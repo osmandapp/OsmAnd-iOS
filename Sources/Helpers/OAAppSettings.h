@@ -129,6 +129,23 @@ typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOAltitudeMetricsConstant)
+{
+    METERS = 0,
+    FEET
+};
+
+@interface OAAltitudeMetricsConstant : NSObject
+
+@property (nonatomic, readonly) EOAltitudeMetricsConstant amc;
+
++ (instancetype)withAltitudeMetricConstant:(EOAltitudeMetricsConstant)amc;
++ (NSString *)toHumanString:(EOAltitudeMetricsConstant)amc;
++ (NSString *)toTTSString:(EOAltitudeMetricsConstant)amc;
++ (BOOL)shouldUseFeet:(EOAltitudeMetricsConstant)amc;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOASpeedConstant)
 {
     KILOMETERS_PER_HOUR = 0,
@@ -665,6 +682,16 @@ typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
 
 @end
 
+@interface OACommonAltitudeMetricSystem : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAltitudeMetricsConstant)defValue;
+- (EOAltitudeMetricsConstant)get;
+- (EOAltitudeMetricsConstant)get:(OAApplicationMode *)mode;
+- (void)set:(EOAltitudeMetricsConstant)altitudeMetricsConstant;
+- (void)set:(EOAltitudeMetricsConstant)altitudeMetricsConstant mode:(OAApplicationMode *)mode;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 {
     RULER_MODE_DARK = 0,
@@ -894,6 +921,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonDouble *mapManuallyRotatingAngle;
 @property (readonly, nonatomic) BOOL nightMode;
 @property (nonatomic) OACommonMetricSystem *metricSystem;
+@property (nonatomic) OACommonAltitudeMetricSystem *altitudeMetric;
 @property (nonatomic) OACommonBoolean *drivingRegionAutomatic;
 @property (nonatomic) OACommonDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;

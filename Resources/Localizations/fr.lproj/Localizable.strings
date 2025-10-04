@@ -3890,3 +3890,5 @@
 "press_button_to_link_with_action" = "Appuyez sur le bouton de votre appareil pour l'affecter à l'action : ";
 "key_is_already_assigned_error" = "La touche « %@ » est déjà affectée à l’action : ";
 "application_profile_changed" = "Le profil de l'application a été modifié en « %@ »";
+"duration" = "Durée";
+"shared_string_estimated_duration" = "Durée estimée";

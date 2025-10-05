@@ -3894,3 +3894,5 @@
 "application_profile_changed" = "App-profil ændret til \"%@\"";
 "duration" = "Varighed";
 "shared_string_estimated_duration" = "Estimeret varighed";
+"shared_string_degrees" = "Grader";
+"auto_zoom_3d_angle" = "Auto-zoom 3D-vinkel";

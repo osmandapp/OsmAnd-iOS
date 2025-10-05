@@ -3894,3 +3894,7 @@
 "press_button_to_link_with_action" = "Притисните дугме на уређају да бисте га доделили радњи: ";
 "key_is_already_assigned_error" = "Тастер „%@“ је већ додељен акцији: ";
 "application_profile_changed" = "Профил апликације је промењен у „%@“";
+"duration" = "Trajanje";
+"shared_string_estimated_duration" = "Процењено трајање";
+"shared_string_degrees" = "Степени";
+"auto_zoom_3d_angle" = "Ауто зумирање 3Д угао";

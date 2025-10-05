@@ -3898,3 +3898,5 @@
 "application_profile_changed" = "Профіль програми змінено на \"%@\"";
 "duration" = "Тривалість";
 "shared_string_estimated_duration" = "Орієнтовна тривалість";
+"shared_string_degrees" = "Градуси";
+"auto_zoom_3d_angle" = "Автоматичне масштабування 3D-кута";

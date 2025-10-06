@@ -202,7 +202,6 @@
     
     NSString *volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     NSString *tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
-    
     NSString *geoFormatValue;
     switch ([_settings.settingGeoFormat get:self.appMode]) {
         case MAP_GEO_FORMAT_DEGREES:
@@ -493,7 +492,7 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
 
-- (void) applyParameter:(id)sender
+- (void)applyParameter:(id)sender
 {
     if ([sender isKindOfClass:[UISwitch class]])
     {
@@ -508,7 +507,7 @@
 
 #pragma mark - OASettingsDataDelegate
 
-- (void) onSettingsChanged;
+- (void)onSettingsChanged;
 {
     [self generateData];
     [self.tableView reloadData];

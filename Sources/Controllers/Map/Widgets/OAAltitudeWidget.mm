@@ -110,4 +110,9 @@
     return YES;
 }
 
+- (BOOL)isAltitudeMetricDepended
+{
+    return YES;
+}
+
 @end

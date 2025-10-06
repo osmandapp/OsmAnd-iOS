@@ -73,10 +73,12 @@ extern NSString * const kSizeStylePref;
 
 - (BOOL)isUpdateNeeded;
 - (BOOL)isMetricSystemDepended;
+- (BOOL)isAltitudeMetricDepended;
 - (BOOL)isAngularUnitsDepended;
 - (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams;
 - (BOOL)isEnabledTextInfoComponents;
 - (void)setMetricSystemDepended:(BOOL)newValue;
+- (void)setAltitudeMetricDepended:(BOOL)newValue;
 - (void)setAngularUnitsDepended:(BOOL)newValue;
 - (BOOL)isExplicitlyVisible;
 - (void)setExplicitlyVisible:(BOOL)explicitlyVisible;

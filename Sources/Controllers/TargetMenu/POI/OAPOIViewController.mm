@@ -623,11 +623,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             float distance = [vl floatValue];
             vl = [OAOsmAndFormatter getFormattedAlt:distance];
             NSString *collapsibleVal;
-            EOAMetricsConstant metricSystem = [[OAAppSettings sharedManager].metricSystem get];
-            if (metricSystem == MILES_AND_FEET || metricSystem == MILES_AND_YARDS || metricSystem == NAUTICAL_MILES_AND_FEET)
-                collapsibleVal = [OAOsmAndFormatter getFormattedAlt:distance mc:KILOMETERS_AND_METERS];
+            EOAltitudeMetricsConstant altitudeMetric = [[OAAppSettings sharedManager].altitudeMetric get];
+            if (altitudeMetric == FEET)
+                collapsibleVal = [OAOsmAndFormatter getFormattedAlt:distance mc:METERS];
             else
-                collapsibleVal = [OAOsmAndFormatter getFormattedAlt:distance mc:MILES_AND_FEET];
+                collapsibleVal = [OAOsmAndFormatter getFormattedAlt:distance mc:FEET];
 
             collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             collapsableView.collapsed = YES;

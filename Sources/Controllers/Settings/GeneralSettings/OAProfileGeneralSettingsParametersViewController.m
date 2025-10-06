@@ -82,6 +82,9 @@
         case EOAProfileGeneralSettingsUnitsOfLenght:
             _title = OALocalizedString(@"routing_attr_length_name");
             break;
+        case EOAProfileGeneralSettingsUnitsOfAltitude:
+            _title = OALocalizedString(@"altitude");
+            break;
         case EOAProfileGeneralSettingsUnitsOfSpeed:
             _title = OALocalizedString(@"shared_string_speed");
             break;
@@ -135,6 +138,7 @@
         case EOAProfileGeneralSettingsDisplayPosition:
         case EOAProfileGeneralSettingsUnitsOfVolume:
         case EOAProfileGeneralSettingsUnitsOfTemp:
+        case EOAProfileGeneralSettingsUnitsOfAltitude:
             return @"";
         default:
             return [self.appMode toHumanString];
@@ -143,7 +147,7 @@
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp ? NO : !_openFromMap;
+    return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp || _settingsType == EOAProfileGeneralSettingsUnitsOfAltitude ? NO : !_openFromMap;
 }
 
 - (BOOL)useCustomTableViewHeader
@@ -176,6 +180,8 @@
         return OALocalizedString(@"unit_of_volume_description");
     else if (_settingsType == EOAProfileGeneralSettingsUnitsOfTemp)
         return OALocalizedString(@"unit_of_temperature_description");
+    else if (_settingsType == EOAProfileGeneralSettingsUnitsOfAltitude)
+        return OALocalizedString(@"altitude_metrics_description");
     else
         return @"";
 }
@@ -238,6 +244,7 @@
     BOOL isPreciseDistanceNumbers = [_settings.preciseDistanceNumbers get:self.appMode];
     NSInteger drivingRegion = [_settings.drivingRegion get:self.appMode];
     NSInteger metricSystem = [_settings.metricSystem get:self.appMode];
+    NSInteger altitudeUnitSystem = [_settings.altitudeMetric get:self.appMode];
     NSInteger speedSystem = [_settings.speedSystem get:self.appMode];
     NSInteger volumeSystem = [_settings.volumeUnits get:self.appMode];
     NSInteger tempSystem = [_settings.temperatureUnits get:self.appMode];
@@ -452,6 +459,23 @@
             }];
             break;
             
+        case EOAProfileGeneralSettingsUnitsOfAltitude:
+            [dataArr addObject:@{
+                @"name" : @"METERS",
+                @"title" : [OALocalizedString(@"shared_string_meters") capitalizedString],
+                @"icon" : @"ic_checkmark_default",
+                @"selected" : @(altitudeUnitSystem == METERS),
+                @"type" : [OASimpleTableViewCell getCellIdentifier]
+            }];
+            [dataArr addObject:@{
+                @"name" : @"FEET",
+                @"title" : [OALocalizedString(@"shared_string_feet") capitalizedString],
+                @"icon" : @"ic_checkmark_default",
+                @"selected" : @(altitudeUnitSystem == FEET),
+                @"type" : [OASimpleTableViewCell getCellIdentifier]
+            }];
+            break;
+            
         case EOAProfileGeneralSettingsUnitsOfSpeed:
             [dataArr addObject:@{
                 @"name" : @"KILOMETERS_PER_HOUR",
@@ -601,7 +625,7 @@
 
 - (BOOL) hideFirstHeader
 {
-    return [@[@(EOAProfileGeneralSettingsMapOrientation), @(EOAProfileGeneralSettingsDisplayPosition), @(EOAProfileGeneralSettingsUnitsOfVolume), @(EOAProfileGeneralSettingsUnitsOfTemp)] containsObject:@(_settingsType)];
+    return [@[@(EOAProfileGeneralSettingsMapOrientation), @(EOAProfileGeneralSettingsDisplayPosition), @(EOAProfileGeneralSettingsUnitsOfVolume), @(EOAProfileGeneralSettingsUnitsOfTemp), @(EOAProfileGeneralSettingsUnitsOfAltitude)] containsObject:@(_settingsType)];
 }
 
 - (NSString *)getTitleForHeader:(NSInteger)section
@@ -651,7 +675,7 @@
             
             cell.titleLabel.text = item[@"title"];
             cell.descriptionLabel.text = item[@"description"];
-            if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp)
+            if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp || _settingsType == EOAProfileGeneralSettingsUnitsOfAltitude)
             {
                 cell.leftIconView.image = [item[@"selected"] boolValue] ? [UIImage templateImageNamed:item[@"icon"]] : nil;
             }
@@ -681,7 +705,8 @@
                     @(EOAProfileGeneralSettingsScreenOrientation),
                     @(EOAProfileGeneralSettingsDistanceDuringNavigation),
                     @(EOAProfileGeneralSettingsUnitsOfVolume),
-                    @(EOAProfileGeneralSettingsUnitsOfTemp)
+                    @(EOAProfileGeneralSettingsUnitsOfTemp),
+                    @(EOAProfileGeneralSettingsUnitsOfAltitude)
                 ]];
                 cell.accessoryType = [item[@"selected"] boolValue] && ![excludedTypes containsObject:@(_settingsType)] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             }
@@ -723,6 +748,9 @@
             break;
         case EOAProfileGeneralSettingsUnitsOfLenght:
             [self selectMetricSystem:name];
+            break;
+        case EOAProfileGeneralSettingsUnitsOfAltitude:
+            [self selectAltitudeUnitsSystem:name];
             break;
         case EOAProfileGeneralSettingsUnitsOfSpeed:
             [self selectSpeedSystem:name];
@@ -865,6 +893,16 @@
         [_settings.metricSystem set:NAUTICAL_MILES_AND_FEET mode:self.appMode];
     [_settings.metricSystemChangedManually set:YES mode:self.appMode];
 
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+}
+
+- (void)selectAltitudeUnitsSystem:(NSString *)name
+{
+    if ([name isEqualToString:@"METERS"])
+        [_settings.altitudeMetric set:METERS mode:self.appMode];
+    else if ([name isEqualToString:@"FEET"])
+        [_settings.altitudeMetric set:FEET mode:self.appMode];
+    
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 

@@ -156,6 +156,19 @@
             break;
     }
     
+    NSString *altitudeUnitSystemValue;
+    switch ([_settings.altitudeMetric get:self.appMode]) {
+        case METERS:
+            altitudeUnitSystemValue = OALocalizedString(@"shared_string_meters");
+            break;
+        case FEET:
+            altitudeUnitSystemValue = OALocalizedString(@"shared_string_feet");
+            break;
+        default:
+            altitudeUnitSystemValue = OALocalizedString(@"shared_string_meters");
+            break;
+    }
+    
     NSString *speedSystemValue;
     switch ([_settings.speedSystem get:self.appMode]) {
         case KILOMETERS_PER_HOUR:
@@ -275,8 +288,15 @@
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"routing_attr_length_name"),
         @"value" : metricSystemValue,
-        @"icon" : @"ic_custom_ruler",
-        @"key" : @"lengthUnits",
+        @"icon" : @"ic_custom_units_length",
+        @"key" : @"lengthUnits"
+    }];
+    [unitsArr addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"altitude"),
+        @"value" : [altitudeUnitSystemValue capitalizedString],
+        @"icon" : @"ic_custom_units_altitude",
+        @"key" : @"altitudeUnits"
     }];
     [unitsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
@@ -448,6 +468,8 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDrivingRegion applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"lengthUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfLenght applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"altitudeUnits"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfAltitude applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"speedUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfSpeed applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"volumeUnits"])
@@ -465,7 +487,7 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"])
+        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"] || [itemKey isEqualToString:@"altitudeUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else if ([itemKey isEqualToString:@"externalImputDevice"])
             [self showViewController:settingsViewController];

@@ -71,6 +71,7 @@
 "altitude" = "Altitude";
 "shared_string_speed" = "Speed";
 
+"altitude_metrics_description" = "Sets the display unit for altitude in widgets and statistics.";
 "show_poi_over_map" = "Show POI overlay";
 "shared_string_search" = "Search";
 "address_search_desc" = "Address search";

@@ -35,92 +35,128 @@
 
 - (NSArray<id<OAOnDeleteFilesListener>> *) getDeleteFilesListeners
 {
-    return [_deleteFilesListeners copy];
+    @synchronized (self) {
+        return [_deleteFilesListeners copy];
+    }
 }
 
 - (void) addDeleteFilesListener:(id<OAOnDeleteFilesListener>)listener
 {
-    [_deleteFilesListeners addObject:listener];
+    @synchronized (self) {
+        [_deleteFilesListeners addObject:listener];
+    }
 }
 
 - (void) removeDeleteFilesListener:(id<OAOnDeleteFilesListener>)listener
 {
-    [_deleteFilesListeners removeObject:listener];
+    @synchronized (self) {
+        [_deleteFilesListeners removeObject:listener];
+    }
 }
 
 - (NSArray<id<OAOnRegisterUserListener>> *) getRegisterUserListeners
 {
-    return [_registerUserListeners copy];
+    @synchronized (self) {
+        return [_registerUserListeners copy];
+    }
 }
 
 - (void) addRegisterUserListener:(id<OAOnRegisterUserListener>)listener
 {
-    [_registerUserListeners addObject:listener];
+    @synchronized (self) {
+        [_registerUserListeners addObject:listener];
+    }
 }
 
 - (void) removeRegisterUserListener:(id<OAOnRegisterUserListener>)listener
 {
-    [_registerUserListeners removeObject:listener];
+    @synchronized (self) {
+        [_registerUserListeners removeObject:listener];
+    }
 }
 
 - (NSArray<id<OAOnRegisterDeviceListener>> *) getRegisterDeviceListeners
 {
-    return [_registerDeviceListeners copy];
+    @synchronized (self) {
+        return [_registerDeviceListeners copy];
+    }
 }
 
 - (void) addRegisterDeviceListener:(id<OAOnRegisterDeviceListener>)listener
 {
-    [_registerDeviceListeners addObject:listener];
+    @synchronized (self) {
+        [_registerDeviceListeners addObject:listener];
+    }
 }
 
 - (void) removeRegisterDeviceListener:(id<OAOnRegisterDeviceListener>)listener
 {
-    [_registerDeviceListeners removeObject:listener];
+    @synchronized (self) {
+        [_registerDeviceListeners removeObject:listener];
+    }
 }
 
 - (NSArray<id<OAOnSendCodeListener>> *) getSendCodeListeners
 {
-    return [_sendCodeListeners copy];
+    @synchronized (self) {
+        return [_sendCodeListeners copy];
+    }
 }
 
 - (void) addSendCodeListener:(id<OAOnSendCodeListener>)listener
 {
-    [_sendCodeListeners addObject:listener];
+    @synchronized (self) {
+        [_sendCodeListeners addObject:listener];
+    }
 }
 
 - (void) removeSendCodeListener:(id<OAOnSendCodeListener>)listener
 {
-    [_sendCodeListeners removeObject:listener];
+    @synchronized (self) {
+        [_sendCodeListeners removeObject:listener];
+    }
 }
 
 - (NSArray<id<OAOnCheckCodeListener>> *) getCheckCodeListeners
 {
-    return [_checkCodeListeners copy];
+    @synchronized (self) {
+        return [_checkCodeListeners copy];
+    }
 }
 
 - (void) addCheckCodeListener:(id<OAOnCheckCodeListener>)listener
 {
-    [_checkCodeListeners addObject:listener];
+    @synchronized (self) {
+        [_checkCodeListeners addObject:listener];
+    }
 }
 
 - (void) removeCheckCodeListener:(id<OAOnCheckCodeListener>)listener
 {
-    [_checkCodeListeners removeObject:listener];
+    @synchronized (self) {
+        [_checkCodeListeners removeObject:listener];
+    }
 }
 
 - (NSArray<id<OAOnDeleteAccountListener>> *) getDeleteAccountListeners
 {
-    return [_deleteAccountListeners copy];
+    @synchronized (self) {
+        return [_deleteAccountListeners copy];
+    }
 }
 
 - (void) addDeleteAccountListener:(id<OAOnDeleteAccountListener>)listener
 {
-    [_deleteAccountListeners addObject:listener];
+    @synchronized (self) {
+        [_deleteAccountListeners addObject:listener];
+    }
 }
 
 - (void) removeDeleteAccountListener:(id<OAOnDeleteAccountListener>)listener
 {
-    [_deleteAccountListeners removeObject:listener];
+    @synchronized (self) {
+        [_deleteAccountListeners removeObject:listener];
+    }
 }
 
 @end

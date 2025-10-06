@@ -248,4 +248,29 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
         [_backupHelper.backupListeners removeDeleteFilesListener:listener];
 }
 
+- (void)dealloc
+{
+    @try
+    {
+        if (_executor)
+            [_executor removeObserver:self forKeyPath:@"operations" context:&kQueueOperationsChanged];
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"[OABaseDeleteFilesCommand] -> Dealloc KVO Error: Failed to remove observer from _executor: %@", exception.reason);
+    }
+    
+    for (OADeleteRemoteFileTask *task in _allTasks)
+    {
+        @try
+        {
+            [task removeObserver:self forKeyPath:@"isFinished" context:nil];
+        }
+        @catch (NSException *exception)
+        {
+            NSLog(@"[OABaseDeleteFilesCommand] -> Dealloc KVO Error: Failed to remove observer from task: %@", exception.reason);
+        }
+    }
+}
+
 @end

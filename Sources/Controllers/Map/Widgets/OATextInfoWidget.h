@@ -49,6 +49,8 @@ extern NSString * const kSizeStylePref;
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 
+- (void)onWidgetClicked:(id)sender;
+
 - (void)setImage:(nullable UIImage *)image;
 - (void)setImage:(nullable UIImage *)image withColor:(UIColor *)color;
 - (void)setImage:(UIImage *)image withColor:(UIColor *)color iconName:(NSString *)iconName;

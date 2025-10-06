@@ -3873,3 +3873,5 @@
 "press_button_to_link_with_action" = "Stiskněte tlačítko na vašem zařízení pro jeho přiřazení k akci: ";
 "key_is_already_assigned_error" = "Klávesa „%@“ je již přiřazena k akci: ";
 "application_profile_changed" = "Profil aplikace změněn na „%@“";
+"duration" = "Délka";
+"shared_string_estimated_duration" = "Předpokládaná délka";

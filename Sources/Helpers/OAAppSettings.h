@@ -1325,7 +1325,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonLong *backupLastUploadedTime;
 
 @property (nonatomic) OACommonString *userIosId;
-
+@property (nonatomic) OACommonInteger *autoZoom3DAngle;
 @property (nonatomic) OACommonInteger *delayToStartNavigation;
 
 @property (nonatomic) OACommonBoolean *enableProxy;

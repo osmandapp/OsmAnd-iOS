@@ -43,6 +43,7 @@ static double const NAV_ANIMATION_TIME = 1.0;
 static double const SKIP_ANIMATION_TIMEOUT = 10.0;
 static double const ROTATION_MOVE_ANIMATION_TIME = 1.0;
 static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
+static double const TILT_ANIMATION_TIME = 0.4;
 
 @interface OAMapViewTrackingUtilities ()
 
@@ -427,7 +428,11 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     float fixedZoomDuration = animateMyLocation ? -1 : NAV_ANIMATION_TIME;
     OAAutoZoomDTO *zoomParams = autoZoom != nil ? [_autoZoomBySpeedHelper getAutoZoomParams:_mapView.zoom autoZoom:autoZoom fixedDurationMillis:fixedZoomDuration] : nil;
     
-    [self startMoving:location.coordinate.latitude finalLon:location.coordinate.longitude zoomParams:zoomParams pendingRotation:NO finalRotation:rotation movingTime:movingTime notifyListener:NO finishAnimationCallback:^{
+    int elevationAngle = 0;
+    if (zoomParams != nil && ![self isDefaultElevationAngle])
+        elevationAngle = [_settings.autoZoom3DAngle get];
+    
+    [self startMoving:location.coordinate.latitude finalLon:location.coordinate.longitude zoomParams:zoomParams pendingRotation:NO finalRotation:rotation elevationAngle:elevationAngle movingTime:movingTime notifyListener:NO finishAnimationCallback:^{
         _movingToMyLocation = NO;
     }];
 }
@@ -486,12 +491,13 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 }
 
 
-- (void) startMoving:(double)finalLat finalLon:(double)finalLon zoomParams:(OAAutoZoomDTO *)zoomParams pendingRotation:(BOOL)pendingRotation finalRotation:(double)finalRotation movingTime:(NSTimeInterval)movingTime notifyListener:(BOOL)notifyListener finishAnimationCallback:(void (^)(void))finishAnimationCallback
+- (void) startMoving:(double)finalLat finalLon:(double)finalLon zoomParams:(OAAutoZoomDTO *)zoomParams pendingRotation:(BOOL)pendingRotation finalRotation:(double)finalRotation elevationAngle:(float)elevationAngle movingTime:(NSTimeInterval)movingTime notifyListener:(BOOL)notifyListener finishAnimationCallback:(void (^)(void))finishAnimationCallback
 {
     [self stopAnimatingSync];
     
     float startZoom = _mapView.zoom;
     float startRotation = _mapView.azimuth;
+    float startElevationAngle = _mapView.elevationAngle;
     
     float zoom;
     float rotation;
@@ -510,6 +516,8 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     {
         [_mapView setTarget31:[OANativeUtilities getPoint31FromLatLon:finalLat lon:finalLon]];
         [_mapView setZoom:zoom];
+        if (elevationAngle != 0 && elevationAngle != startElevationAngle)
+            [_mapView setElevationAngle:elevationAngle];
         [_mapView setAzimuth:-rotation];
         if (finishAnimationCallback)
             finishAnimationCallback();
@@ -519,6 +527,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     
     float animationDuration = max(movingTime, NAV_ANIMATION_TIME / 4);
     BOOL animateZoom = zoomParams != nil && (zoom != startZoom);
+    BOOL animateElevation = elevationAngle != 0 && elevationAngle != startElevationAngle;
     float rotationDiff = !isnan(finalRotation) ? abs([OAMapUtils unifyRotationDiff:rotation targetRotate:startRotation]) : 0;
     BOOL animateRotation = rotationDiff > 0.1;
     BOOL animateTarget;
@@ -528,7 +537,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     {
         const auto targetAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
         auto zoomAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
-        
+        auto elevatonAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::ElevationAngle);
         auto userZoomAnimation = animator->getCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
         if (userZoomAnimation)
             animateZoom = NO;
@@ -539,6 +548,14 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         {
             animator->cancelAnimation(zoomAnimation);
             animator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
+        }
+        
+        if (!animateElevation)
+            elevatonAnimation = nullptr;
+        if (elevatonAnimation)
+        {
+            animator->cancelAnimation(elevatonAnimation);
+            animator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::ElevationAngle);
         }
         
         const auto azimuthAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
@@ -571,6 +588,9 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 
         if (!animateZoom)
             [_mapView setZoom:zoom];
+
+        if (animateElevation)
+            animator->animateElevationAngleTo(elevationAngle, TILT_ANIMATION_TIME, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
 
         if (!animateRotation && !isnan(finalRotation))
             [_mapView setAzimuth:-rotation];

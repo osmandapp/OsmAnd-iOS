@@ -2098,7 +2098,7 @@
 "show_current_location" = "Mostra coordinate";
 "custom_plugins" = "Plugin personalizzati";
 "preferred_terrain" = "Terreno preferito";
-"manage_storage" = "Gestisci archiviazione";
+"manage_storage" = "Gestisci spazio";
 "are_you_sure" = "Sei sicuro?";
 "login_open_street_map_org" = "Accedi a OpenStreetMap.org";
 "import_raster_map_failed" = "Importazione mappa raster fallita";

@@ -3892,3 +3892,7 @@
 "assigned_keys" = "Dodeljeni tasteri";
 "key_assignment_add_action" = "Dodajte akciju";
 "key_assignment_add_key" = "Dodajte taster";
+"duration" = "Trajanje";
+"shared_string_estimated_duration" = "Procenjeno trajanje";
+"auto_zoom_3d_angle" = "Auto zumiranje 3D ugao";
+"shared_string_degrees" = "Stepeni";

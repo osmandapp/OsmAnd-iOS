@@ -1472,6 +1472,7 @@
 		C58924052D693D1700EC5910 /* FinishTripRecordingAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58924042D693D1700EC5910 /* FinishTripRecordingAction.swift */; };
 		C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */; };
 		C589BCA12C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */; };
+		C596D5832E8D634300D13D93 /* AutoZoom3DAngleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C596D5822E8D634300D13D93 /* AutoZoom3DAngleViewController.swift */; };
 		C5A466BA2D2D80B0008E0C87 /* DetailedTrackGuidanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A466B92D2D80B0008E0C87 /* DetailedTrackGuidanceViewController.swift */; };
 		C5A466BC2D2E69B6008E0C87 /* ImageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A466BB2D2E69B6008E0C87 /* ImageHeaderCell.swift */; };
 		C5A466BE2D2E6B41008E0C87 /* ImageHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5A466BD2D2E6B41008E0C87 /* ImageHeaderCell.xib */; };
@@ -5275,6 +5276,7 @@
 		C58924042D693D1700EC5910 /* FinishTripRecordingAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishTripRecordingAction.swift; sourceTree = "<group>"; };
 		C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OATwoIconsButtonTableViewCell.swift; sourceTree = "<group>"; };
 		C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATwoIconsButtonTableViewCell.xib; sourceTree = "<group>"; };
+		C596D5822E8D634300D13D93 /* AutoZoom3DAngleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoZoom3DAngleViewController.swift; sourceTree = "<group>"; };
 		C5A466B92D2D80B0008E0C87 /* DetailedTrackGuidanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedTrackGuidanceViewController.swift; sourceTree = "<group>"; };
 		C5A466BB2D2E69B6008E0C87 /* ImageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHeaderCell.swift; sourceTree = "<group>"; };
 		C5A466BD2D2E6B41008E0C87 /* ImageHeaderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageHeaderCell.xib; sourceTree = "<group>"; };
@@ -11850,6 +11852,7 @@
 				DA5A7B9A26C563A100F274C7 /* OARouteParameterValuesViewController.h */,
 				DA5A7B9426C563A100F274C7 /* OARouteParameterValuesViewController.mm */,
 				C5A466B92D2D80B0008E0C87 /* DetailedTrackGuidanceViewController.swift */,
+				C596D5822E8D634300D13D93 /* AutoZoom3DAngleViewController.swift */,
 				C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */,
 				327DF9892C2494C800B5069C /* RouteParameterHazmatUsa.swift */,
 				DA5A7B7926C563A100F274C7 /* OAScreenAlertsViewController.h */,
@@ -16914,6 +16917,7 @@
 				4656BD362C4855D200B69928 /* ColorizationType.swift in Sources */,
 				DA5A816026C563A700F274C7 /* OAParkingPositionPlugin.mm in Sources */,
 				2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */,
+				C596D5832E8D634300D13D93 /* AutoZoom3DAngleViewController.swift in Sources */,
 				DA5A843226C563A800F274C7 /* OATransportDetailsTableViewController.mm in Sources */,
 				DAC849B426CF967C00018091 /* OADownloadMapWidget.mm in Sources */,
 				322B53952C78DD14006B48B0 /* OAIconsPaletteCell.m in Sources */,

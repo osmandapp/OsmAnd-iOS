@@ -814,8 +814,8 @@
 "shared_string_time" = "Time";
 "time_of_day" = "Time of day";
 "shared_string_distance" = "Distance";
-"shared_string_time_span" = "Time span";
-"shared_string_estimated_time_span" = "Estimated time span";
+"duration" = "Duration";
+"shared_string_estimated_duration" = "Estimated duration";
 "shared_string_start_time" = "Start time";
 "shared_string_end_time" = "End time";
 "shared_string_time_moving" = "Time moving";
@@ -2480,7 +2480,8 @@
 "discard_filter_changes_prompt" = "Reset all filters?";
 "power_watts_unit" = "Watts";
 "revolutions_per_minute_unit" = "RPM";
-
+"shared_string_degrees" = "Degrees";
+"auto_zoom_3d_angle" = "Auto zoom 3D angle";
 "shared_string_total" = "Total";
 "shared_string_walk" = "Walk";
 "board_at" = "Board at";
@@ -2734,7 +2735,6 @@
 "assigned_keys" = "Assigned keys";
 "key_assignment_add_action" = "Add action";
 "key_assignment_add_key" = "Add key";
-"add_button" = "Add button";
 "key_name_pattern" = "Key \"%@\"";
 "press_button_to_link_with_action" = "Press the button on your device to assign it to the action: ";
 "key_is_already_assigned_error" = "The \"%@\" key is already assigned to action: ";

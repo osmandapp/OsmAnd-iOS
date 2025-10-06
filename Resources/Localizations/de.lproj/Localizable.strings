@@ -3900,3 +3900,6 @@
 "key_assignment_add_key" = "Taste hinzufügen";
 "key_name_pattern" = "Taste „%@“";
 "application_profile_changed" = "App-Profil geändert zu „%@“";
+"shared_string_degrees" = "Grade";
+"duration" = "Dauer";
+"shared_string_estimated_duration" = "Geschätzte Dauer";

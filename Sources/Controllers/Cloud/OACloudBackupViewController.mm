@@ -772,11 +772,12 @@
 
 - (void)onBackupPrepared:(nonnull OAPrepareBackupResult *)backupResult
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _backup = backupResult;
-        _info = backupResult.backupInfo;
-        _status = [OABackupStatus getBackupStatus:_backup];
-        _error = _backup.error;
+    _backup = backupResult;
+    _info = backupResult.backupInfo;
+    _status = [OABackupStatus getBackupStatus:_backup];
+    _error = _backup.error;
+    
+    executeOnMainThread(^{
         [self refreshContent];
         [self.tblView.refreshControl endRefreshing];
     });

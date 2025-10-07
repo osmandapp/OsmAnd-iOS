@@ -199,7 +199,13 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                         BOOL isTravelGpx = [OATravelObfHelper.shared isTravelGpxTags:tags];
                         BOOL isOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
                         BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
-                        
+
+                        if (isTravelGpx) {
+                            // TODO unhack
+                            isOsmRoute = true;
+                            isTravelGpx = false;
+                        }
+
                         if (isOsmRoute && !osmRoutesAlreadyAdded)
                         {
                             const auto selectorFilter = [self createRouteFilter];

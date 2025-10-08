@@ -878,12 +878,17 @@ typedef enum : NSUInteger {
 
 - (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
 {
-    [KeyEventHelper.shared pressesBegan:presses withEvent:event];
+    [[KeyEventHelper shared] pressesBegan:presses withEvent:event];
 }
 
 - (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
 {
-    [KeyEventHelper.shared pressesEnded:presses withEvent:event];
+    [[KeyEventHelper shared] pressesEnded:presses withEvent:event];
+}
+
+- (void)pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+    [[KeyEventHelper shared] pressesCancelled:presses withEvent:event];
 }
 
 #pragma mark SFSafariViewControllerDelegate

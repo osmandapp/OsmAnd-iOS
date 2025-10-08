@@ -61,6 +61,7 @@ static NSString * const kDialog = @"dialog";
 
 - (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
 - (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
+- (void)pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
 - (void)actionSelected;
 
 + (QuickActionType *)getQuickActionType;

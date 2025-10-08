@@ -33,6 +33,13 @@ final class KeyEventHelper: UIResponder {
         }
     }
     
+    override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        for press in presses {
+            guard let key = press.key, let action = findAction(with: key.keyCode), let event else { continue }
+            action.pressesCancelled(presses, with: event)
+        }
+    }
+    
     private func findAction(with keyCode: UIKeyboardHIDUsage) -> OAQuickAction? {
         if isLetterForbid(with: keyCode) {
             return nil

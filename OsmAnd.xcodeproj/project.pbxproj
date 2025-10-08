@@ -3283,6 +3283,7 @@
 		FA9628E42AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */; };
 		FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */; };
 		FA9F416F2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F416E2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift */; };
+		FA9FA5992E97D11400376C47 /* MapScrollHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9FA5982E97D11400376C47 /* MapScrollHelper.swift */; };
 		FAA055762E02C51400F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055752E02C51200F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift */; };
 		FAA0557A2E0301AA00F84EDF /* SelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055792E0301AA00F84EDF /* SelectionManager.swift */; };
 		FAA1CEAF2B174F9F00760545 /* OptionDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA1CEAE2B174F9F00760545 /* OptionDeviceTableViewCell.swift */; };
@@ -7984,6 +7985,7 @@
 		FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderFooterButton.swift; sourceTree = "<group>"; };
 		FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLETemperatureSensor.swift; sourceTree = "<group>"; };
 		FA9F416E2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheInfoViewController.swift; sourceTree = "<group>"; };
+		FA9FA5982E97D11400376C47 /* MapScrollHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollHelper.swift; sourceTree = "<group>"; };
 		FAA055752E02C51200F84EDF /* VehicleMetricsTripRecordingCommandsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsTripRecordingCommandsViewController.swift; sourceTree = "<group>"; };
 		FAA055792E0301AA00F84EDF /* SelectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionManager.swift; sourceTree = "<group>"; };
 		FAA1CEAE2B174F9F00760545 /* OptionDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionDeviceTableViewCell.swift; sourceTree = "<group>"; };
@@ -13569,6 +13571,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FA9FA5982E97D11400376C47 /* MapScrollHelper.swift */,
 				FA39D2962E819B030095DF8E /* ErrorHelper.swift */,
 				FA82B9172E74197A00A250F1 /* ImageLoading */,
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
@@ -17936,6 +17939,7 @@
 				DA5A84DC26C563A900F274C7 /* OAMapSettingsPOIScreen.mm in Sources */,
 				322B53922C78DBF8006B48B0 /* IconCollectionHandler.swift in Sources */,
 				DA5A84B326C563A900F274C7 /* OAFirstMapillaryBottomSheetViewController.mm in Sources */,
+				FA9FA5992E97D11400376C47 /* MapScrollHelper.swift in Sources */,
 				32A0CDF12C29AE6E00FDD8E0 /* Model3dHelper.swift in Sources */,
 				32464B812A7012D700DA6980 /* OAResourcesUISwiftHelper.mm in Sources */,
 				DA5A837726C563A800F274C7 /* OARouteInfoView.mm in Sources */,

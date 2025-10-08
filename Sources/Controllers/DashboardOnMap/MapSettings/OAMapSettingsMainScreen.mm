@@ -142,7 +142,7 @@
     [self.tblView registerNib:[UINib nibWithNibName:OASwitchTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OASwitchTableViewCell.reuseIdentifier];
     [self.tblView registerNib:[UINib nibWithNibName:OAButtonTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAButtonTableViewCell.reuseIdentifier];
     [self.tblView registerNib:[UINib nibWithNibName:OARightIconTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OARightIconTableViewCell.reuseIdentifier];
-    [self.tblView registerNib:[UINib nibWithNibName:FreeBackupBannerCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:FreeBackupBannerCell.reuseIdentifier];
+    [self.tblView registerClass:[FreeBackupBannerCell class] forCellReuseIdentifier:FreeBackupBannerCell.reuseIdentifier];
 }
 
 - (void)setupView
@@ -1076,22 +1076,27 @@
     else if ([item[@"type"] isEqualToString:FreeBackupBannerCell.reuseIdentifier])
     {
         FreeBackupBannerCell *cell = (FreeBackupBannerCell *)[tableView dequeueReusableCellWithIdentifier:FreeBackupBannerCell.reuseIdentifier forIndexPath:indexPath];
-        _freeBackupBanner.didOsmAndCloudButtonAction = ^{
-            OAProduct *product;
-            if ([item[@"key"] isEqualToString:@"terrain_layer"])
-                product = _iapHelper.srtm;
-            [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
-        };
-
-        [_freeBackupBanner configureWithBannerType:BannerTypeMapSettingsTopography];
-        _freeBackupBanner.translatesAutoresizingMaskIntoConstraints = NO;
-        [cell.contentView addSubview:_freeBackupBanner];
-        [NSLayoutConstraint activateConstraints:@[
-            [_freeBackupBanner.topAnchor constraintEqualToAnchor:cell.contentView.topAnchor],
-            [_freeBackupBanner.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor],
-            [_freeBackupBanner.leadingAnchor constraintEqualToAnchor:cell.contentView.leadingAnchor],
-            [_freeBackupBanner.trailingAnchor constraintEqualToAnchor:cell.contentView.trailingAnchor],
-        ]];
+        if (!_freeBackupBanner)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"FreeBackupBanner" owner:self options:nil];
+            _freeBackupBanner = (FreeBackupBanner *)nib[0];
+            _freeBackupBanner.didOsmAndCloudButtonAction = ^{
+                OAProduct *product;
+                if ([item[@"key"] isEqualToString:@"terrain_layer"])
+                    product = _iapHelper.srtm;
+                [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
+            };
+            
+            [_freeBackupBanner configureWithBannerType:BannerTypeMapSettingsTopography];
+            _freeBackupBanner.translatesAutoresizingMaskIntoConstraints = NO;
+            [cell.contentView addSubview:_freeBackupBanner];
+            [NSLayoutConstraint activateConstraints:@[
+                [_freeBackupBanner.topAnchor constraintEqualToAnchor:cell.contentView.topAnchor],
+                [_freeBackupBanner.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor],
+                [_freeBackupBanner.leadingAnchor constraintEqualToAnchor:cell.contentView.leadingAnchor],
+                [_freeBackupBanner.trailingAnchor constraintEqualToAnchor:cell.contentView.trailingAnchor],
+            ]];
+        }
         return cell;
     }
     else if (group)

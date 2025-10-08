@@ -201,9 +201,12 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                         BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
 
                         if (isTravelGpx) {
-                            // TODO unhack
-                            isOsmRoute = true;
-                            isTravelGpx = false;
+                            NSString *routeId = tags[@"route_id"];
+                            if (routeId != nil && [routeId hasPrefix:@"O"]) {
+                                // TODO unhack this temporary workaround
+                                isTravelGpx = false;
+                                isOsmRoute = true;
+                            }
                         }
 
                         if (isOsmRoute && !osmRoutesAlreadyAdded)

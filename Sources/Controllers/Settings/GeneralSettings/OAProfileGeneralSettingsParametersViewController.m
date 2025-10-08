@@ -672,7 +672,15 @@
         
         cell.titleLabel.text = item[@"title"];
         cell.descriptionLabel.text = item[@"description"];
-        if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp || _settingsType == EOAProfileGeneralSettingsUnitsOfAltitude)
+        NSSet *iconOnlyTypes = [NSSet setWithArray:@[
+            @(EOAProfileGeneralSettingsAppTheme),
+            @(EOAProfileGeneralSettingsScreenOrientation),
+            @(EOAProfileGeneralSettingsDistanceDuringNavigation),
+            @(EOAProfileGeneralSettingsUnitsOfVolume),
+            @(EOAProfileGeneralSettingsUnitsOfTemp),
+            @(EOAProfileGeneralSettingsUnitsOfAltitude)
+        ]];
+        if ([iconOnlyTypes containsObject:@(_settingsType)])
         {
             cell.leftIconView.image = [item[@"selected"] boolValue] ? [UIImage templateImageNamed:item[@"icon"]] : nil;
         }

@@ -3366,7 +3366,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 {
     NSNumber *value = [self valueFromString:strValue appMode:mode];
     if (value)
-        [super set:(int)value.integerValue mode:mode];
+        [super set:value.intValue mode:mode];
 }
 
 - (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
@@ -3408,8 +3408,14 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
 {
+    NSSet *metricModes = [NSSet setWithArray:@[
+        @(KILOMETERS_AND_METERS),
+        @(NAUTICAL_MILES_AND_METERS),
+        @(MILES_AND_METERS)
+    ]];
+    
     EOAMetricsConstant mc = [[OAAppSettings sharedManager].metricSystem get:mode];
-    EOAltitudeMetricsConstant alt = mc == KILOMETERS_AND_METERS || mc == NAUTICAL_MILES_AND_METERS || mc == MILES_AND_METERS ? METERS : FEET;
+    EOAltitudeMetricsConstant alt = [metricModes containsObject:@(mc)] ? METERS : FEET;
     return @(alt);
 }
 

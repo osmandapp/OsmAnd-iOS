@@ -713,7 +713,7 @@
         return @"ic_action_horse";
     else if([paramName isEqualToString:HIKING_ROUTES_OSMC_ATTR] || [paramName isEqualToString:ALPINE_HIKING_ATTR] || [paramName isEqualToString:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES])
         return @"ic_action_trekking_dark";
-    else if([paramName isEqualToString:PISTE_ROUTES_ATTR])
+    else if([paramName isEqualToString:PISTE_ROUTES_ATTR] || [paramName isEqualToString:SKI_SLOPES_ATTR])
         return @"ic_action_skiing";
     else if([paramName isEqualToString:TRAVEL_ROUTES])
         return @"mm_routes";

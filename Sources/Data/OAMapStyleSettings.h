@@ -10,6 +10,7 @@
 
 static NSString * const HORSE_ROUTES_ATTR = @"horseRoutes";
 static NSString * const PISTE_ROUTES_ATTR = @"pisteRoutes";
+static NSString * const SKI_SLOPES_ATTR = @"showSkiSlopes";
 static NSString * const ALPINE_HIKING_ATTR = @"alpineHiking";
 static NSString * const SHOW_CYCLE_ROUTES_ATTR = @"showCycleRoutes";
 static NSString * const DIRTBIKE_ROUTES_ATTR = @"showDirtbikeTrails";

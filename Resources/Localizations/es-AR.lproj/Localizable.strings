@@ -2815,7 +2815,7 @@
 "av_notes_video_widget_desc" = "Pulsá el widget para grabar un video.";
 "av_notes_audio_widget_desc" = "Pulsa el widget para grabar una nota de voz.";
 "trip_recording_downhill_widget_desc" = "Muestra la suma de todos los descensos del viaje actual registrado.";
-"trip_recording_uphill_widget_desc" = "Muestra la suma de todos los ascensos del viaje actualmente registrado.";
+"trip_recording_uphill_widget_desc" = "Muestra la suma de todos los ascensos del viaje actual registrado.";
 "true_bearing_widget_desc" = "El ángulo entre el norte verdadero y el punto objetivo observado desde tu ubicación.";
 "trip_recording_duration_widget_desc" = "Muestra el tiempo de grabación del viaje actual.";
 "trip_recording_distance_widget_desc" = "Muestra la distancia del viaje registrado actual.";

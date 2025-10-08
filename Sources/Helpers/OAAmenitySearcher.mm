@@ -181,6 +181,48 @@ int const kZoomToSearchPOI = 16.0;
     return sharedInstance;
 }
 
+- (NSArray<NSString *> *) getAmenityRepositories:(BOOL)includeTravel
+{
+    NSMutableArray<NSString *> *obfFilenames = [NSMutableArray array];
+    
+    NSMutableArray<NSString *> *travelMaps = [NSMutableArray array];
+    NSMutableArray<NSString *> *baseMaps = [NSMutableArray array];
+    NSMutableArray<NSString *> *result = [NSMutableArray array];
+    
+    for (const auto& resource : OsmAndApp.instance.resourcesManager->getLocalResources())
+    {
+        if (resource->type == OsmAnd::ResourcesManager::ResourceType::Travel ||
+            resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        {
+            NSString *fileName = resource->id.toNSString();
+            
+            if ([fileName hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT] && includeTravel)
+            {
+                [travelMaps addObject:fileName];
+            }
+            else if ([self isWorldMap:fileName])
+            {
+                [baseMaps addObject:fileName];
+            }
+            else
+            {
+                [result addObject:fileName];
+            }
+            
+        }
+    }
+    
+    [result addObjectsFromArray:baseMaps];
+    [result addObjectsFromArray:travelMaps];
+    
+    return result;
+}
+
+- (BOOL) isWorldMap:(NSString *)fileName
+{
+    return [fileName hasPrefix:@"world_"] || [fileName containsString:@"basemap"];
+}
+
 - (void) setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom
 {
     _visibleArea = area;

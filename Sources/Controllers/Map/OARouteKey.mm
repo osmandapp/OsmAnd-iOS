@@ -188,9 +188,9 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
     QMap<QString, QString> tags = _routeKey.tagsMap();
     if (!tags.isEmpty())
     {
-        QString key = QString::fromNSString(@"osmand:activity");
+        QString key = QStringLiteral("osmand:activity");;
         QString value = tags[key];
-        return value != nil ? value.toNSString() : nil;
+        return value.toNSString();
     }
     return nil;
 }

@@ -551,13 +551,17 @@ final class TravelObfHelper : NSObject {
     func readGpxFile(article: TravelArticle, callback: GpxReadDelegate?) {
         if !article.gpxFileRead && callback != nil && callback!.isGpxReading == false   {
             callback?.isGpxReading = true
-            let readers = (article.routeId ?? "").isEmpty ? getReaders() : getAllReaders()
+            let readers = getTravelGpxRepositories()
             let task = GpxFileReader(article: article, callback: callback, readers: readers)
             task.execute()
         } else if callback != nil && article.gpxFileRead {
             callback?.isGpxReading = false
             callback?.onGpxFileRead(gpxFile: article.gpxFile, article: article)
         }
+    }
+    
+    func getTravelGpxRepositories() -> [String] {
+        OAAmenitySearcher.sharedInstance().getAmenityRepositories(true)
     }
     
     func findArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {

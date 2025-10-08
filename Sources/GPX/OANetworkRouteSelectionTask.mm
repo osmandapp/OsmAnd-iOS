@@ -69,6 +69,7 @@
                 OASOkioBuffer *buf = [[OASOkioBuffer alloc] init];
                 [buf writeUtf8String:xmlString.toNSString()];
                 OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileSource:buf];
+                [self updateGpxFileActivity:gpxFile routeKey:_routeKey];
                 onComplete(gpxFile);
             });
         }
@@ -79,6 +80,20 @@
             });
         }
     });
+}
+
+- (void)updateGpxFileActivity:(OASGpxFile *)gpxFile routeKey:(OARouteKey *)routeKey
+{
+    NSString *type = gpxFile.networkRouteKeyTags[@"type"];
+    if (NSStringIsEmpty(type))
+        type = [routeKey getTypeName];
+    
+    OASRouteActivity *activity = [OASRouteActivityHelper.shared findActivityByTagTag:type];
+    if (activity)
+    {
+        NSString *activityType = activity.id;
+        [gpxFile.metadata getExtensionsToWrite][[OASGpxUtilities.shared ACTIVITY_TYPE]] = activityType;
+    }
 }
 
 @end

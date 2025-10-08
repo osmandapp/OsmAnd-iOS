@@ -49,10 +49,7 @@ class TravelArticle: NSObject {
     }
     
     func hasBbox31() -> Bool {
-        if let bbox31 , bbox31.hasInitialState() {
-            return true
-        }
-        return false
+        bbox31 != nil && !(bbox31?.hasInitialState() ?? false)
     }
     
     func getGpxFileName() -> String {

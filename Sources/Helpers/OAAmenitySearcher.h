@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable BaseDetailsObject *)searchDetailedObject:(OAAmenitySearcherRequest *)request;
 
+- (NSArray<NSString *> *) getAmenityRepositories:(BOOL)includeTravel;
 
 - (BOOL) breakSearch;
 - (void) findPOIsByKeyword:(NSString *)keyword;

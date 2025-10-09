@@ -303,7 +303,7 @@ final class MapHudLayout: NSObject {
             }
         }
         
-        let extraTop = position.isTop ? externalTopOverlayPx : 0.0
+        let extraTop = position.isTop && !additionalOrder.contains { !$0.isHidden && $0.alpha > 0.01 && $0.bounds.height > 0 && $0 is OADownloadMapWidget } ? externalTopOverlayPx : 0.0
         let extraBottom = position.isBottom ? externalBottomOverlayPx : 0.0
         let rulerExtraX = ruler != nil && externalRulerLeftOffsetPx > 0 && placeOnLeft ? max(0, externalRulerLeftOffsetPx - startX) : 0.0
         let newX: CGFloat = (placeOnLeft ? insets.left + startX : containerView.bounds.width - insets.right - view.bounds.width - startX) + rulerExtraX

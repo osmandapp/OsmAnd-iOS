@@ -39,15 +39,21 @@
     _sectionAnimateMyPosition = -1;
 }
 
+- (void)registerCells
+{
+    [self.tableView registerNib:[UINib nibWithNibName:OASwitchTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OASwitchTableViewCell.reuseIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:OAValueTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAValueTableViewCell.reuseIdentifier];
+}
+
 #pragma mark - UIViewController
 
-- (void) viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
 
-- (void) viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self generateData];
@@ -156,6 +162,19 @@
             break;
     }
     
+    NSString *altitudeUnitSystemValue;
+    switch ([_settings.altitudeMetric get:self.appMode]) {
+        case METERS:
+            altitudeUnitSystemValue = OALocalizedString(@"shared_string_meters");
+            break;
+        case FEET:
+            altitudeUnitSystemValue = OALocalizedString(@"shared_string_feet");
+            break;
+        default:
+            altitudeUnitSystemValue = OALocalizedString(@"shared_string_meters");
+            break;
+    }
+    
     NSString *speedSystemValue;
     switch ([_settings.speedSystem get:self.appMode]) {
         case KILOMETERS_PER_HOUR:
@@ -183,7 +202,6 @@
     
     NSString *volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     NSString *tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
-    
     NSString *geoFormatValue;
     switch ([_settings.settingGeoFormat get:self.appMode]) {
         case MAP_GEO_FORMAT_DEGREES:
@@ -240,91 +258,98 @@
     NSMutableArray *formatsArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [appearanceArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"settings_app_theme"),
         @"value" : appThemeValue,
         @"icon" : appThemeIcon,
-        @"key" : @"app_theme",
+        @"key" : @"app_theme"
     }];
     [appearanceArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"rotate_map_to"),
         @"value" : rotateMapValue,
         @"icon" : rotateMapIcon,
         @"no_tint" : @YES,
-        @"key" : @"map_orientation",
+        @"key" : @"map_orientation"
     }];
     if (![OAUtilities isIPad])
     {
         [appearanceArr addObject:@{
-            @"type" : [OAValueTableViewCell getCellIdentifier],
+            @"type" : OAValueTableViewCell.reuseIdentifier,
             @"title" : OALocalizedString(@"map_screen_orientation"),
             @"value" : rotateScreenValue,
             @"icon" : rotateScreenIcon,
-            @"key" : @"screenOrientation",
+            @"key" : @"screenOrientation"
         }];
     }
     [regionsArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"driving_region"),
         @"value" : drivingRegionValue,
         @"icon" : @"ic_profile_car",
-        @"key" : @"drivingRegion",
+        @"key" : @"drivingRegion"
     }];
     [unitsArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"routing_attr_length_name"),
         @"value" : metricSystemValue,
-        @"icon" : @"ic_custom_ruler",
-        @"key" : @"lengthUnits",
+        @"icon" : @"ic_custom_units_length",
+        @"key" : @"lengthUnits"
     }];
     [unitsArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
+        @"title" : OALocalizedString(@"altitude"),
+        @"value" : [altitudeUnitSystemValue capitalizedString],
+        @"icon" : @"ic_custom_units_altitude",
+        @"key" : @"altitudeUnits"
+    }];
+    [unitsArr addObject:@{
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"shared_string_speed"),
         @"value" : speedSystemValue,
         @"icon" : @"ic_action_speed",
-        @"key" : @"speedUnits",
+        @"key" : @"speedUnits"
     }];
     [unitsArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"shared_string_volume"),
         @"value" : volumeSystemValue,
         @"icon" : @"ic_custom_obd_fuel_tank",
-        @"key" : @"volumeUnits",
+        @"key" : @"volumeUnits"
     }];
     [unitsArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"map_settings_weather_temp"),
         @"value" : tempSystemValue,
         @"icon" : @"ic_custom_thermometer",
         @"key" : @"tempUnits"
     }];
     [formatsArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"coords_format"),
         @"value" : geoFormatValue,
         @"icon" : @"ic_custom_coordinates",
-        @"key" : @"coordsFormat",
+        @"key" : @"coordsFormat"
     }];
     [formatsArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"angular_measurment_units"),
         @"value" : angularUnitsValue,
         @"icon" : @"ic_custom_angular_unit",
-        @"key" : @"angulerMeasurmentUnits",
+        @"key" : @"angulerMeasurmentUnits"
     }];
     [formatsArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"distance_during_navigation"),
         @"value" : OALocalizedString([_settings.preciseDistanceNumbers get:self.appMode] ? @"shared_string_precise" : @"shared_string_round_up"),
         @"icon" : [_settings.preciseDistanceNumbers get:self.appMode] ? @"ic_custom_distance_number_precise" : @"ic_custom_distance_number_rounded",
-        @"key" : @"distanceDuringNavigation",
+        @"key" : @"distanceDuringNavigation"
     }];
     [otherArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"external_input_device"),
         @"value" : externalInputDeviceValue,
-        @"key" : @"externalImputDevice",
+        @"key" : @"externalImputDevice"
     }];
     [tableData addObject:appearanceArr];
     _sectionAppearance = (int) tableData.count - 1;
@@ -336,10 +361,10 @@
     [tableData addObject:otherArr];
     _sectionOther = (int) tableData.count - 1;
     [tableData addObject:@[@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : OASwitchTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"animate_my_location"),
         @"isOn": [_settings.animateMyLocation get:self.appMode] ? @(YES) : @(NO),
-        @"key" : @"animateMyLocation",
+        @"key" : @"animateMyLocation"
     }]];
     _sectionAnimateMyPosition = (int) tableData.count - 1;
 
@@ -374,57 +399,41 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:OASwitchTableViewCell.reuseIdentifier])
     {
-        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OASwitchTableViewCell *cell = (OASwitchTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:OASwitchTableViewCell.reuseIdentifier forIndexPath:indexPath];
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
+        cell.titleLabel.text = item[@"title"];
+        cell.switchView.on = [item[@"isOn"] boolValue];
+        cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+        [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+        [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
+        return cell;
+    }
+    else if ([cellType isEqualToString:OAValueTableViewCell.reuseIdentifier])
+    {
+        OAValueTableViewCell *cell = (OAValueTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:OAValueTableViewCell.reuseIdentifier forIndexPath:indexPath];
+        [cell descriptionVisibility:NO];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.leftIconView.tintColor = self.appMode.getProfileColor;
+        if ([item[@"key"] isEqualToString:@"externalImputDevice"])
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
         }
-        if (cell)
+        else
         {
-            cell.titleLabel.text = item[@"title"];
-
-            cell.switchView.on = [item[@"isOn"] boolValue];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
-    {
-        OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
-            [cell descriptionVisibility:NO];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = self.appMode.getProfileColor;
-        }
-        if (cell)
-        {
-            if ([item[@"key"] isEqualToString:@"externalImputDevice"])
-            {
-                [cell leftIconVisibility:NO];
-            }
+            [cell leftIconVisibility:YES];
+            if ([item[@"no_tint"] boolValue])
+                cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
             else
-            {
-                [cell leftIconVisibility:YES];
-                if ([item[@"no_tint"] boolValue])
-                    cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
-                else
-                    cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            }
-            cell.titleLabel.text = item[@"title"];
-            cell.valueLabel.text = item[@"value"];
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
         }
+        cell.titleLabel.text = item[@"title"];
+        cell.valueLabel.text = item[@"value"];
         return cell;
     }
+
     return nil;
 }
 
@@ -448,6 +457,8 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDrivingRegion applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"lengthUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfLenght applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"altitudeUnits"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfAltitude applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"speedUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfSpeed applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"volumeUnits"])
@@ -465,7 +476,7 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"])
+        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"] || [itemKey isEqualToString:@"altitudeUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else if ([itemKey isEqualToString:@"externalImputDevice"])
             [self showViewController:settingsViewController];
@@ -481,7 +492,7 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
 
-- (void) applyParameter:(id)sender
+- (void)applyParameter:(id)sender
 {
     if ([sender isKindOfClass:[UISwitch class]])
     {
@@ -496,7 +507,7 @@
 
 #pragma mark - OASettingsDataDelegate
 
-- (void) onSettingsChanged;
+- (void)onSettingsChanged;
 {
     [self generateData];
     [self.tableView reloadData];

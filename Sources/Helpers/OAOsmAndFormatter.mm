@@ -343,15 +343,15 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
     return (int((meters * unitsInOneMeter) * 100) % 100) < 1;
 }
 
-+ (NSString *) getFormattedAlt:(double)alt
++ (NSString *)getFormattedAlt:(double)alt
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    EOAMetricsConstant mc = [settings.metricSystem get];
+    EOAltitudeMetricsConstant mc = [settings.altitudeMetric get];
     return [self getFormattedAlt:alt mc:mc];
 }
 
-+ (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray {
-    BOOL useFeet = mc == MILES_AND_FEET || mc == MILES_AND_YARDS || mc == NAUTICAL_MILES_AND_FEET;
++ (NSString *)getFormattedAlt:(double)alt mc:(EOAltitudeMetricsConstant)mc valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray {
+    BOOL useFeet = [OAAltitudeMetricsConstant shouldUseFeet:mc];
     if (useFeet)
     {
         int feet = (int) (alt * FEET_IN_ONE_METER + 0.5);
@@ -364,7 +364,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
     }
 }
 
-+ (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc
++ (NSString *)getFormattedAlt:(double)alt mc:(EOAltitudeMetricsConstant)mc
 {
     return [self getFormattedAlt:alt mc:mc valueUnitArray:nil];
 }

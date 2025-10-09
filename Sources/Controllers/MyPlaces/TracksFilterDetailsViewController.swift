@@ -651,7 +651,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     
     private func formatFilterValueText(for value: Float) -> String {
         let metricSystem = PlatformUtil.shared.getOsmAndContext().getMetricSystem() ?? MetricsConstants.kilometersAndMeters
-        let altitudeMetric = PlatformUtil.shared.getOsmAndContext().getAltitudeMetric() ?? AltitudeMetrics.meters
+        let altitudeMetric: AltitudeMetrics = OAAltitudeMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().altitudeMetric.get()) ? .feet : .meters
         let formattedNumber = decimalFormatter.string(from: NSNumber(value: value)) ?? ""
         let measureUnitText = getMeasureUnitType().getFilterUnitText(mc: metricSystem, am: altitudeMetric)
         return "\(formattedNumber) \(measureUnitText)"

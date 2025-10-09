@@ -28,6 +28,7 @@
 static NSString * const settingAppModeKey = @"settingAppModeKey";
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
 static NSString * const metricSystemKey = @"settingMetricSystemKey";
+static NSString * const altitudeMetricKey = @"altitudeMetricKey";
 static NSString * const drivingRegionAutomaticKey = @"drivingRegionAutomatic";
 static NSString * const preciseDistanceNumbersKey = @"precise_distance_numbers";
 static NSString * const drivingRegionKey = @"settingDrivingRegion";
@@ -532,6 +533,57 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 + (BOOL)shouldUseFeet:(EOAMetricsConstant)mc
 {
     return mc == MILES_AND_FEET || mc == MILES_AND_YARDS || mc == NAUTICAL_MILES_AND_FEET;
+}
+
+@end
+
+@interface OAAltitudeMetricsConstant()
+
+@property (nonatomic) EOAltitudeMetricsConstant amc;
+
+@end
+
+@implementation OAAltitudeMetricsConstant
+
++ (instancetype)withAltitudeMetricConstant:(EOAltitudeMetricsConstant)amc
+{
+    OAAltitudeMetricsConstant *obj = [[OAAltitudeMetricsConstant alloc] init];
+    if (obj)
+    {
+        obj.amc = amc;
+    }
+    return obj;
+}
+
++ (NSString *)toHumanString:(EOAltitudeMetricsConstant)amc
+{
+    switch (amc)
+    {
+        case METERS:
+            return OALocalizedString(@"shared_string_meters");
+        case FEET:
+            return OALocalizedString(@"shared_string_feet");
+        default:
+            return @"";
+    }
+}
+
++ (NSString *)toTTSString:(EOAltitudeMetricsConstant)amc
+{
+    switch (amc)
+    {
+        case METERS:
+            return @"meters";
+        case FEET:
+            return @"feet";
+        default:
+            return @"";
+    }
+}
+
++ (BOOL)shouldUseFeet:(EOAltitudeMetricsConstant)amc
+{
+    return amc == FEET;
 }
 
 @end
@@ -3275,6 +3327,100 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
+@implementation OACommonAltitudeMetricSystem
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAltitudeMetricsConstant)defValue
+{
+    OACommonAltitudeMetricSystem *obj = [[OACommonAltitudeMetricSystem alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;;
+    }
+    return obj;
+}
+
+- (EOAltitudeMetricsConstant)get
+{
+    return [super get];
+}
+
+- (EOAltitudeMetricsConstant)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOAltitudeMetricsConstant)altitudeMetricsConstant
+{
+    [super set:(int)altitudeMetricsConstant];
+}
+
+- (void)set:(EOAltitudeMetricsConstant)altitudeMetricsConstant mode:(OAApplicationMode *)mode
+{
+    [super set:(int)altitudeMetricsConstant mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.intValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *altitudeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        altitudeMap = @{
+            @"METERS": @(METERS),
+            @"FEET": @(FEET),
+        };
+    });
+    
+    return altitudeMap[string.uppercaseString];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case METERS:
+            return @"METERS";
+        case FEET:
+            return @"FEET";
+        default:
+            return @"METERS";
+    }
+}
+
+- (void)resetToDefault
+{
+    EOAltitudeMetricsConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAltitudeMetricsConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+{
+    NSSet *metricModes = [NSSet setWithArray:@[
+        @(KILOMETERS_AND_METERS),
+        @(NAUTICAL_MILES_AND_METERS),
+        @(MILES_AND_METERS)
+    ]];
+    
+    EOAMetricsConstant mc = [[OAAppSettings sharedManager].metricSystem get:mode];
+    EOAltitudeMetricsConstant alt = [metricModes containsObject:@(mc)] ? METERS : FEET;
+    return @(alt);
+}
+
+@end
+
 @implementation OACommonRulerWidgetMode
 
 @dynamic defValue;
@@ -5416,6 +5562,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _drivingRegionAutomatic = [OACommonBoolean withKey:drivingRegionAutomaticKey defValue:YES];
         _drivingRegion = [OACommonDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
         _metricSystem = [OACommonMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
+        _altitudeMetric = [[OACommonAltitudeMetricSystem withKey:altitudeMetricKey defValue:METERS] makeProfile];
         _metricSystemChangedManually = [OACommonBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
         
         _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
@@ -5425,6 +5572,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
+        [_profilePreferences setObject:_altitudeMetric forKey:@"altitude_metrics"];
         [_profilePreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
         [_profilePreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_profilePreferences setObject:_settingExternalInputDevice forKey:@"selected_external_input_device"];

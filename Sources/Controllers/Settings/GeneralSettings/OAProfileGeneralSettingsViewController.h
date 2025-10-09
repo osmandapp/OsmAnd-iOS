@@ -15,6 +15,7 @@ typedef enum
     EOAProfileGeneralSettingsDisplayPosition,
     EOAProfileGeneralSettingsDrivingRegion,
     EOAProfileGeneralSettingsUnitsOfLenght,
+    EOAProfileGeneralSettingsUnitsOfAltitude,
     EOAProfileGeneralSettingsUnitsOfSpeed,
     EOAProfileGeneralSettingsUnitsOfVolume,
     EOAProfileGeneralSettingsUnitsOfTemp,

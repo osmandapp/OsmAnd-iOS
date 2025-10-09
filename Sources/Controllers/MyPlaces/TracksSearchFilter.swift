@@ -305,7 +305,6 @@ extension TracksSearchFilter {
     }
     
     static func getFormattedValue(measureUnitType: MeasureUnitType, value: String) -> FormattedValue {
-        let metricsConstants = OAAppSettings.sharedManager().metricSystem.get()
         let params = OsmAndFormatterParams()
         params.updateExtraDecimalPrecision(3)
         params.updateForcePreciseValue(true)
@@ -314,7 +313,7 @@ extension TracksSearchFilter {
         case .speed:
             formattedString = OAOsmAndFormatter.getFormattedSpeed(Float(value) ?? 0.0)
         case .altitude:
-            formattedString = OAOsmAndFormatter.getFormattedAlt(Double(value) ?? 0.0, mc: metricsConstants)
+            formattedString = OAOsmAndFormatter.getFormattedAlt(Double(value) ?? 0.0, mc: OAAppSettings.sharedManager().altitudeMetric.get())
         case .distance:
             formattedString = OAOsmAndFormatter.getFormattedDistance(Float(value) ?? 0.0, with: params)
         case .timeDuration:

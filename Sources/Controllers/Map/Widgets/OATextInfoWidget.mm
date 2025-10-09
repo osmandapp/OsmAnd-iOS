@@ -44,8 +44,10 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     UIFont *_smallBoldFont;
 
     BOOL _metricSystemDepended;
+    BOOL _altitudeMetricDepended;
     BOOL _angularUnitsDepended;
     int _cachedMetricSystem;
+    int _cachedAltitudeMetric;
     int _cachedAngularUnits;
     NSLayoutConstraint *_leadingTextAnchor;
     NSString *_customId;
@@ -395,7 +397,9 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     ]];
     
     _metricSystemDepended = NO;
+    _altitudeMetricDepended = NO;
     _angularUnitsDepended = NO;
+    _cachedAltitudeMetric = -1;
     _cachedMetricSystem = -1;
     _cachedAngularUnits = -1;
     
@@ -459,8 +463,10 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     [self addSubview:_shadowButton];
     
     _metricSystemDepended = NO;
+    _altitudeMetricDepended = NO;
     _angularUnitsDepended = NO;
     _cachedMetricSystem = -1;
+    _cachedAltitudeMetric = -1;
     _cachedAngularUnits = -1;
 }
 
@@ -858,6 +864,12 @@ NSString * const kSizeStylePref = @"simple_widget_size";
         res |= _cachedMetricSystem != metricSystem;
         _cachedMetricSystem = metricSystem;
     }
+    if ([self isAltitudeMetricDepended])
+    {
+        int altitudeMetric = (int)[[OAAppSettings sharedManager].altitudeMetric get];
+        res |= _cachedAltitudeMetric != altitudeMetric;
+        _cachedAltitudeMetric = altitudeMetric;
+    }
     if ([self isAngularUnitsDepended])
     {
         int angularUnits = (int)[[OAAppSettings sharedManager].angularUnits get];
@@ -872,6 +884,11 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     return _metricSystemDepended;
 }
 
+- (BOOL)isAltitudeMetricDepended
+{
+    return _altitudeMetricDepended;
+}
+
 - (BOOL) isAngularUnitsDepended
 {
     return _angularUnitsDepended;
@@ -880,6 +897,11 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 - (void) setMetricSystemDepended:(BOOL)newValue
 {
     _metricSystemDepended = newValue;
+}
+
+- (void)setAltitudeMetricDepended:(BOOL)newValue
+{
+    _altitudeMetricDepended = newValue;
 }
 
 - (void) setAngularUnitsDepended:(BOOL)newValue

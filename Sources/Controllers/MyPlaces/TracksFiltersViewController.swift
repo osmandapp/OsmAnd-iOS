@@ -406,7 +406,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         default:
             if let filter = baseFilters.getFilterByType(filterType) as? RangeTrackFilter<AnyObject> {
                 let metricSystem = PlatformUtil.shared.getOsmAndContext().getMetricSystem() ?? MetricsConstants.kilometersAndMeters
-                let altitudeMetric = PlatformUtil.shared.getOsmAndContext().getAltitudeMetric() ?? AltitudeMetrics.meters
+                let altitudeMetric: AltitudeMetrics = OAAltitudeMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().altitudeMetric.get()) ? .feet : .meters
                 let minValue = Float(TracksSearchFilter.getDisplayValueFrom(filter: filter))
                 let maxValue = Float(TracksSearchFilter.getDisplayValueTo(filter: filter))
                 row.descr = filter.isValid() ? "\(decimalFormatter.string(from: NSNumber(value: minValue)) ?? "") - \(decimalFormatter.string(from: NSNumber(value: maxValue)) ?? "") \(filter.trackFilterType.measureUnitType.getFilterUnitText(mc: metricSystem, am: altitudeMetric))" : ""

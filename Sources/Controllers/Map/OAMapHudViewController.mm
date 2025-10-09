@@ -635,7 +635,7 @@ static const float kDistanceMeters = 100.0;
 
     [_optionsMenuButton setImage:[UIImage templateImageNamed:@"ic_custom_drawer"] forState:UIControlStateNormal];
     [_optionsMenuButton updateColorsForPressedState:NO];
-    _optionsMenuButton.cornerRadius = 6;
+    _optionsMenuButton.layer.cornerRadius = 6;
 
     [_floatingButtonsController updateColors];
     [self.rulerLabel updateColors];

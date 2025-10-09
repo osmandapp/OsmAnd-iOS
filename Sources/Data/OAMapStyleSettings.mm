@@ -141,6 +141,10 @@
 
 - (void)buildParameters:(NSString *)styleName
 {
+    NSDictionary<NSString*, NSString*> *iosSpecificAttributeCategory = @{
+        SKI_SLOPES_ATTR: @"routes" // TODO implement combined "Ski slopes and routes" as in Android
+    };
+
     const auto& resolvedMapStyle = [OsmAndApp instance].resourcesManager->mapStylesCollection->getResolvedStyleByName(QString::fromNSString(styleName));
 
     if (resolvedMapStyle == nullptr)
@@ -167,7 +171,12 @@
         param.mapStyleName = self.mapStyleName;
         param.mapPresetName = self.mapPresetName;
         param.name = name;
-        param.category = p->getCategory().toNSString();
+
+        if ([iosSpecificAttributeCategory objectForKey:name]) {
+            param.category = iosSpecificAttributeCategory[name];
+        } else {
+            param.category = p->getCategory().toNSString();
+        }
 
         BOOL isTransport = [param.category isEqualToString:TRANSPORT_CATEGORY];
         NSString *attrLocKey = [NSString stringWithFormat:@"rendering_attr_%@_name", name];

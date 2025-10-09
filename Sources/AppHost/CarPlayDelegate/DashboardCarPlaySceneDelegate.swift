@@ -45,11 +45,6 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 self.window?.rootViewController = dashboardVC
                 OARootViewController.instance()?.mapPanel.onCarPlayConnected()
 
-                let carPlayMode = settings.isCarPlayModeDefault.get() == true
-                    ? OAApplicationMode.getFirstAvailableNavigation()
-                    : settings.carPlayMode.get()
-                settings.setApplicationModePref(carPlayMode!, markAsLastUsed: false)
-                
                 let isRoutePlanning = OARoutingHelper.sharedInstance().isRoutePlanningMode()
                 let placement = settings.positionPlacementOnMap.get()
                 var y: Double

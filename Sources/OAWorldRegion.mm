@@ -86,6 +86,7 @@
         _regionRoads = _worldRegion->regionRoads;
         _regionJoinMap = _worldRegion->regionJoinMap;
         _regionJoinRoads = _worldRegion->regionJoinRoads;
+        _regionSearchText = _worldRegion->regionSearchText.toNSString();
 
         OsmAnd::LatLon latLonTopLeft = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.topLeft);
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);

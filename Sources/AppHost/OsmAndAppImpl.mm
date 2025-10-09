@@ -73,6 +73,7 @@
 #include <OsmAndCore/Map/GeoCommonTypes.h>
 #include <OsmAndCore/Map/MapRendererPerformanceMetrics.h>
 #include <openingHoursParser.h>
+#include <OsmAndCore/Search/CommonWords.h>
 
 #define MILS_IN_DEGREE 17.777778f
 
@@ -697,6 +698,7 @@ NSString *const kXmlColon = @"_-_";
 
     // Load world regions
     [self loadWorldRegions];
+    [self addRegionNamesToCommonWords];
     LogStartup(@"world regions loaded");
 
     [OAManageResourcesViewController prepareData];
@@ -1164,6 +1166,50 @@ NSString *const kXmlColon = @"_-_";
 {
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
     _worldRegion = [OAWorldRegion loadFrom:ocbfPathLib];
+}
+
+- (void) addRegionNamesToCommonWords
+{
+    NSMutableArray<NSString *> *regionNames = [NSMutableArray array];
+    [self parseRegionNames:_worldRegion result:regionNames];
+    for (NSString * region in regionNames)
+    {
+        OsmAnd::CommonWords::addRegionName(QString::fromNSString(region));
+    }
+}
+
+- (void)parseRegionNames:(OAWorldRegion *)region result:(NSMutableArray<NSString *> *)result
+{
+    for (OAWorldRegion *s in region.subregions)
+    {
+        NSString *t = s.regionSearchText;
+        if (t != nil && t.length > 0)
+        {
+            NSArray *ns = [t componentsSeparatedByString:@" "];
+            for (NSString *n in ns)
+            {
+                if ([n containsString:@";"])
+                {
+                    NSArray *ot = [n componentsSeparatedByString:@";"];
+                    for (NSString *o in ot)
+                    {
+                        if ([o length] > 1)
+                        {
+                            [result addObject:[o lowercaseString]];
+                        }
+                    }
+                }
+                else
+                {
+                    if ([n length] > 1)
+                    {
+                        [result addObject:[n lowercaseString]];
+                    }
+                }
+            }
+        }
+        [self parseRegionNames:s result:result];
+    }
 }
 
 - (void) shutdown

@@ -244,8 +244,9 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateFailed:
         {
-            [_mapHudController.mapHudLayout updateButton:button save:YES];
+            button.transform = CGAffineTransformIdentity;
             [self setupButtonRotation:button];
+            [_mapHudController.mapHudLayout updateButton:button save:YES];
             break;
         }
         default:
@@ -302,8 +303,8 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
                         quickActionButton.buttonState = quickActionButtonState;
                         [quickActionButton.buttonState updatePositions];
                         [self updateQuickActionButtonColors:quickActionButton];
-                        [_mapHudController.mapHudLayout updateButtons];
                         [self setupButtonRotation:quickActionButton];
+                        [_mapHudController.mapHudLayout updateButtons];
                         break;
                     }
                 }
@@ -372,7 +373,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         if ([self isMapOrientationButton:quickButton])
         {
             [UIView performWithoutAnimation:^{
-                quickButton.transform = CGAffineTransformMakeRotation(value);
+                quickButton.imageView.transform = CGAffineTransformMakeRotation(value);
             }];
         }
     }
@@ -401,8 +402,6 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 {
     if ([self isMapOrientationButton:button])
         [self configMapOrientationButtonIfExists];
-    else
-        button.transform = CGAffineTransformIdentity;
 }
 
 - (void)restorePinPosition
@@ -503,6 +502,12 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     quickActionButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
     [quickActionButton updateColorsForPressedState:NO];
     [quickActionButton addTarget:self action:@selector(quickActionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+    if ([self isMapOrientationButton:quickActionButton])
+    {
+        quickActionButton.imageView.contentMode = UIViewContentModeCenter;
+        quickActionButton.imageView.clipsToBounds = NO;
+    }
 
     UILongPressGestureRecognizer *quickActionsButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onQuickActionButtonDragged:)];
     [quickActionsButtonDragRecognizer setMinimumPressDuration:0.5];

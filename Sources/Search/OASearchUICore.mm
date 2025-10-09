@@ -239,29 +239,6 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             {
                 return am1 ? NSOrderedDescending : NSOrderedAscending;
             }
-            else if (am1 && am2)
-            {
-                // here 2 points are amenity
-                const auto& a1 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o1.amenity);
-                const auto& a2 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o2.amenity);
-                
-                NSComparisonResult cmp = NSOrderedSame;
-                BOOL subtypeFilter1 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:a1->subType.toNSString()];
-                BOOL subtypeFilter2 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:a2->subType.toNSString()];
-                if (subtypeFilter1 != subtypeFilter2)
-                {
-                    // to filter second
-                    return subtypeFilter1 ? NSOrderedDescending : NSOrderedAscending;
-                }
-                
-                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->type, a2->type);
-                if (cmp != NSOrderedSame)
-                    return cmp;
-                
-                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->subType, a2->subType);
-                if (cmp != NSOrderedSame)
-                    return cmp;
-            }
             break;
         }
     }

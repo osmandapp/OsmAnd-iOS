@@ -16,10 +16,11 @@ final class WidgetPageViewController: UIViewController {
     var simpleWidgetViews: [[OABaseWidgetView]] = []
     var isHiddenPageControl = true
     
-    // swiftlint:disable force_unwrapping
+    // swiftlint:disable all
     private var stackView: UIStackView!
     private var bottomStackViewConstraint: NSLayoutConstraint!
-    // swiftlint:enable force_unwrapping
+    // swiftlint:enable all
+    private var heightStackViewConstraint: NSLayoutConstraint?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,10 +76,13 @@ final class WidgetPageViewController: UIViewController {
             stackView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
         bottomStackViewConstraint = stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        heightStackViewConstraint = stackView.heightAnchor.constraint(equalToConstant: 44)
         if isMultipleWidgetsInRow {
             bottomStackViewConstraint.isActive = true
+            heightStackViewConstraint?.isActive = false
         } else {
             bottomStackViewConstraint.isActive = isHiddenPageControl
+            heightStackViewConstraint?.isActive = true
         }
     }
     
@@ -125,6 +129,7 @@ final class WidgetPageViewController: UIViewController {
                 widget.showBottomSeparator(widget != lastVisibleWidget)
             }
         }
+        heightStackViewConstraint?.constant = height
         return (width, height)
     }
 }

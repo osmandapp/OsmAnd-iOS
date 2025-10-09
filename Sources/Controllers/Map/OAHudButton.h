@@ -24,6 +24,7 @@
 
 @property (nonatomic) CGFloat borderWidthDay;
 @property (nonatomic) CGFloat borderWidthNight;
+@property (nonatomic) CGFloat cornerRadius;
 
 @property (nonatomic, strong, nullable) MapButtonState *buttonState;
 @property (nonatomic, assign) BOOL useCustomPosition;

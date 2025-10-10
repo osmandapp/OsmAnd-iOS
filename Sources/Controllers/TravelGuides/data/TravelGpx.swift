@@ -28,6 +28,8 @@ final class TravelGpx : TravelArticle {
     static let ROUTE_TYPE = "route_type"
     static let ROUTE_ACTIVITY_TYPE = "route_activity_type"
     static let TRAVEL_MAP_TO_POI_TAG = "route_id"
+    static let ROUTE_ID_OSM_PREFIX_LEGACY = "OSM"
+    static let ROUTE_ID_OSM_PREFIX = "O"
     
     var user: String?
     var activityType: String?
@@ -40,8 +42,8 @@ final class TravelGpx : TravelArticle {
     
     var isSuperRoute: Bool = false
     
-    private var amenitySubType: String?
-    private var amenityRegionName: String?
+    private(set) var amenitySubType: String?
+    private(set) var amenityRegionName: String?
     
     override init() {
         super.init()
@@ -73,8 +75,8 @@ final class TravelGpx : TravelArticle {
         
         let helper = TravelObfHelper.shared
         
-        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_BBOX_RADIUS) {
-            OAUtilities.convertChar(toDist: String(radius[0]), firstLetter: String(helper.TRAVEL_GPX_CONVERT_FIRST_LETTER), firstDist: Int32(helper.TRAVEL_GPX_CONVERT_MULT_1), mult1: 0, mult2: Int32(helper.TRAVEL_GPX_CONVERT_MULT_2))
+        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_BBOX_RADIUS), !radius.isEmpty {
+            routeRadius = Int(OAUtilities.convertChar(toDist: String(radius[0]), firstLetter: String(helper.TRAVEL_GPX_CONVERT_FIRST_LETTER), firstDist: Int32(helper.TRAVEL_GPX_CONVERT_FIRST_DIST), mult1: Int32(helper.TRAVEL_GPX_CONVERT_MULT_1), mult2: Int32(helper.TRAVEL_GPX_CONVERT_MULT_2)))
         } else if let routeId, !routeId.isEmpty {
             routeRadius = helper.ARTICLE_SEARCH_RADIUS
         }
@@ -115,5 +117,15 @@ final class TravelGpx : TravelArticle {
     
     override func getPointFilterString() -> String {
         ROUTE_TRACK_POINT
+    }
+    
+    func getRouteType() -> String? {
+        if let amenitySubType, amenitySubType.hasPrefix(ROUTES_PREFIX) {
+            return amenitySubType
+                .replacingOccurrences(of: ROUTES_PREFIX, with: "")
+                .components(separatedBy: ";")
+                .first
+        }
+        return nil
     }
 }

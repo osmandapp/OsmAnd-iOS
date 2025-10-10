@@ -516,6 +516,7 @@
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., 20., 0., 20.);
+        
         [_headerView generateGpxBlockStatistics:self.analysis
                                     withoutGaps:!self.gpx.joinSegments && (self.isCurrentTrack
                                             ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack)

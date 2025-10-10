@@ -17,6 +17,8 @@
 + (OARouteKey *)fromGpxFile:(OASGpxFile *)gpxFile;
 + (OARouteKey *)fromShieldTags:(NSMutableDictionary<NSString *, NSString *> *)shieldTags;
 - (NSString *)getActivityTypeTitle;
+- (NSString *)getActivityTagTitle;
+- (NSString *)getTypeName;
 
 - (NSString *)getRouteName;
 - (NSString *)getRouteTag;

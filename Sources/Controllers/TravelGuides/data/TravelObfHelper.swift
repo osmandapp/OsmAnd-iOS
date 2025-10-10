@@ -25,6 +25,12 @@ final class TravelObfHelper : NSObject {
     let TRAVEL_GPX_CONVERT_MULT_1 = 2
     let TRAVEL_GPX_CONVERT_MULT_2 = 5
     
+    static let TAG_URL = "url"
+    static let TAG_URL_TEXT = "url_text"
+    static let WPT_EXTRA_TAGS = "wpt_extra_tags"
+    static let METADATA_EXTRA_TAGS = "metadata_extra_tags"
+    static let EXTENSIONS_EXTRA_TAGS = "extensions_extra_tags"
+    
     private let MAX_ALLOWED_RADIUS = Int(Int32.max)
     
     private let cachedArticles = ConcurrentDictionary<Int, [String: TravelArticle]>()
@@ -545,12 +551,17 @@ final class TravelObfHelper : NSObject {
     func readGpxFile(article: TravelArticle, callback: GpxReadDelegate?) {
         if !article.gpxFileRead && callback != nil && callback!.isGpxReading == false   {
             callback?.isGpxReading = true
-            let task = GpxFileReader(article: article, callback: callback, readers: getReaders())
+            let readers = getTravelGpxRepositories()
+            let task = GpxFileReader(article: article, callback: callback, readers: readers)
             task.execute()
         } else if callback != nil && article.gpxFileRead {
             callback?.isGpxReading = false
             callback?.onGpxFileRead(gpxFile: article.gpxFile, article: article)
         }
+    }
+    
+    func getTravelGpxRepositories() -> [String] {
+        OAAmenitySearcher.sharedInstance().getAmenityRepositories(true)
     }
     
     func findArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
@@ -803,6 +814,10 @@ final class TravelObfHelper : NSObject {
         OATravelGuidesHelper.getTravelGuidesObfList()
     }
     
+    func getAllReaders() -> [String] {
+        OATravelGuidesHelper.getAllObfList()
+    }
+    
     func getArticleId(title: String, lang: String) -> TravelArticleIdentifier? {
         var a: TravelArticle? = nil
         for articles in cachedArticles.getAllValues() {
@@ -868,7 +883,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func buildGpxFile(readers: [String], article: TravelArticle) -> OAGPXDocumentAdapter {
-        OATravelGuidesHelper.buildGpxFile(getReaders(), article: article)
+        OATravelGuidesHelper.buildGpxFile(readers, article: article)
     }
     
     func createTitle(name: String) -> String {
@@ -890,9 +905,19 @@ final private class OpenTrackMenuDelegate: GpxReadDelegate {
     var gpxFileName: String?
     
     func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
-        guard let latLon, let gpxFileName, let gpxFile, let file = gpxFile.object, let analysis = article.getAnalysis() else { return }
-
-        var wptPt = WptPt()
+        guard let latLon, let gpxFileName, let gpxFile, let file = gpxFile.object else { return }
+        
+        // For rotutes from map force use gpx data for Analysis.
+        // Android replaces it on UI (TrackMenuFragment).
+        var analysis: GpxTrackAnalysis?
+        if let routeId = article.routeId, !routeId.isEmpty {
+            analysis = gpxFile.object.getAnalysis(fileTimestamp: 0, fromDistance: nil, toDistance: nil, pointsAnalyzer: PlatformUtil.shared.getTrackPointsAnalyser())
+        } else {
+            analysis = article.getAnalysis()
+        }
+        guard let analysis else { return }
+    
+        let wptPt = WptPt()
         wptPt.lat = latLon.coordinate.latitude
         wptPt.lon = latLon.coordinate.longitude
         let safeFileName = gpxFileName.appending(GPX_FILE_EXT)

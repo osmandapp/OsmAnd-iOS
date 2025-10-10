@@ -37,6 +37,7 @@
 + (OASWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang;
 
 + (NSArray<NSString *> *) getTravelGuidesObfList;
++ (NSArray<NSString *> *) getAllObfList;
 
 + (CLLocation *) getMapCenter;
 

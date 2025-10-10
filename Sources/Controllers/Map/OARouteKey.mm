@@ -164,10 +164,8 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
         for (NSString *key in shieldTags)
         {
             NSString *value = shieldTags[key];
-            if (!NSStringIsEmpty(value))
-            {
+            if (!NSStringIsEmpty(key) && !NSStringIsEmpty(value))
                 routeKey->addTag(QString::fromNSString(key), QString::fromNSString(value));
-            }
         }
         
         if (routeKey)

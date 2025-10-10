@@ -73,6 +73,7 @@ int const kZoomToSearchPOI = 16.0;
         _osmId = [ObfConstants getOsmObjectId:mapObject];
         _type = [ObfConstants getOsmEntityType:mapObject];
         _names = [[NSMutableArray alloc] init];
+        _tags = nil;
 
         if ([mapObject isKindOfClass:[OAPOI class]])
         {
@@ -101,6 +102,7 @@ int const kZoomToSearchPOI = 16.0;
             {
                 _wikidata = value;
             }
+            _tags = [NSMutableDictionary dictionaryWithDictionary:renderedObject.tags];
         }
         else if ([mapObject isKindOfClass:[OATransportStop class]])
         {
@@ -286,6 +288,11 @@ int const kZoomToSearchPOI = 16.0;
             }
         }
     }
+    
+    if (NSArrayIsEmpty(filtered) && !NSDictionaryIsEmpty(request.tags))
+    {
+        filtered = [self filterByLatLonAndType:amenities point:latLon tags:request.tags];
+    }
 
     if (!NSArrayIsEmpty(filtered))
     {
@@ -318,6 +325,28 @@ int const kZoomToSearchPOI = 16.0;
                 else
                     [result addObject:amenity];
             }
+        }
+    }
+    return result;
+}
+
+- (NSArray<OAPOI *> *)filterByLatLonAndType:(NSArray<OAPOI *> *)amenities point:(CLLocation *)point tags:(NSDictionary *)tags
+{
+    NSMutableArray<OAPOI *> *result = [NSMutableArray array];
+    for (OAPOI *amenity in amenities)
+    {
+        if ([OAMapUtils areLocationEqual:amenity.getLocation l2:point])
+        {
+            NSString * type = amenity.subType;
+            for (NSString *key in tags)
+            {
+                if ([type isEqualToString:tags[key]])
+                {
+                    [result addObject:amenity];
+                    break;
+                }
+            }
+            break;
         }
     }
     return result;

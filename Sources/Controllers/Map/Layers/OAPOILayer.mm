@@ -498,7 +498,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     std::shared_ptr<OsmAnd::IMapDataProvider::Data> data;
     QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
-    _amenitySymbolsProvider->obtainData(request, data, amenities, nullptr);
+    // TODO: Do not modify obtainData never for UI needs!
+    //_amenitySymbolsProvider->obtainData(request, data, amenities, nullptr);
     
     if (!amenities.isEmpty())
     {

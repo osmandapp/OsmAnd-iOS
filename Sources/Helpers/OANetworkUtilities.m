@@ -14,7 +14,7 @@
 
 #define BOUNDARY @"CowMooCowMooCowCowCow"
 
-#define DEBUG_NETWORK_OPERATIONS 0  // 1 — on, 0 — off
+#define DEBUG_NETWORK_OPERATIONS 1  // 1 — on, 0 — off
 
 @implementation OANetworkRequest
 

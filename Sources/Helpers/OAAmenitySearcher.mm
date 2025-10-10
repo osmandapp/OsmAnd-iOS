@@ -102,11 +102,7 @@ int const kZoomToSearchPOI = 16.0;
             {
                 _wikidata = value;
             }
-            _tags = [[NSMutableDictionary alloc] init];
-            for (NSString *key in renderedObject.tags)
-            {
-                [_tags setObject:renderedObject.tags[key] forKey:key];
-            }
+            _tags = [NSMutableDictionary dictionaryWithDictionary:renderedObject.tags];
         }
         else if ([mapObject isKindOfClass:[OATransportStop class]])
         {
@@ -339,8 +335,7 @@ int const kZoomToSearchPOI = 16.0;
     NSMutableArray<OAPOI *> *result = [NSMutableArray array];
     for (OAPOI *amenity in amenities)
     {
-        double dist = [OAMapUtils getDistance:amenity.getLocation.coordinate second:point.coordinate];
-        if (dist < 0.00001)
+        if ([OAMapUtils areLocationEqual:amenity.getLocation l2:point])
         {
             NSString * type = amenity.subType;
             for (NSString *key in tags)

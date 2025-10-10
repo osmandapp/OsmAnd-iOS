@@ -40,6 +40,7 @@
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
+#include <OsmAndCore/Data/ObfPoiSectionReader.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
@@ -497,13 +498,14 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     request.mapState = mapState;
     
     std::shared_ptr<OsmAnd::IMapDataProvider::Data> data;
-    QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
-    // TODO: Do not modify obtainData never for UI needs!
-    //_amenitySymbolsProvider->obtainData(request, data, amenities, nullptr);
     
-    if (!amenities.isEmpty())
+    OsmAnd::ObfPoiSectionReader::dataCacheClear();
+    _amenitySymbolsProvider->obtainData(request, data, nullptr);
+    QList< std::shared_ptr<const OsmAnd::Amenity> >* amenities = OsmAnd::ObfPoiSectionReader::dataCacheGetResults();
+    
+    if (!amenities->isEmpty())
     {
-        for (const auto amenity : amenities)
+        for (const auto amenity : *amenities)
         {
             OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:amenity];
             if (poi)

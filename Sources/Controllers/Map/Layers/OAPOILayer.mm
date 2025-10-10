@@ -498,23 +498,31 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     request.mapState = mapState;
     
     std::shared_ptr<OsmAnd::IMapDataProvider::Data> data;
-    
-    OsmAnd::ObfPoiSectionReader::dataCacheClear();
     _amenitySymbolsProvider->obtainData(request, data, nullptr);
-    QList< std::shared_ptr<const OsmAnd::Amenity> >* amenities = OsmAnd::ObfPoiSectionReader::dataCacheGetResults();
     
-    if (!amenities->isEmpty())
+    std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider::Data> tiledData =
+        std::static_pointer_cast<OsmAnd::IMapTiledSymbolsProvider::Data>(data);
+    if (tiledData && !tiledData->symbolsGroups.isEmpty())
     {
-        for (const auto amenity : *amenities)
+        for (const auto group : tiledData->symbolsGroups)
         {
-            OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:amenity];
-            if (poi)
+            if (!group->symbols.isEmpty())
             {
-                [result addObject:poi];
+                for (const auto symbol : group->symbols)
+                {
+                    if (const auto amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbol->groupPtr))
+                    {
+                        if (const auto cppAmenity = amenitySymbolGroup->amenity)
+                        {
+                            OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:cppAmenity];
+                            if (poi)
+                                [result addObject:poi];
+                        }
+                    }
+                }
             }
         }
     }
-    
     return [result copy];
 }
 

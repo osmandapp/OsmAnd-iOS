@@ -2200,7 +2200,7 @@
 "shared_string_expires" = "Lejár";
 "srtm_unit_format" = "Szintvonalak mértékegysége";
 "select_wikipedia_article_langs" = "Jelölje ki a térképen megjelenő Wikipédia-szócikkek nyelvét. A szócikk olvasása közben válthat valamennyi elérhető nyelv között.";
-"enough_contributions_descr" = "Gratulálunk, elegendő OpenStreetMap-szerkesztést végzett, így mostantól korlátlanul élvezheti az OsmAnd térképfrissítéseit!";
+"enough_contributions_descr" = "Gratulálunk, elegendő OpenStreetMap-szerkesztést végzett, így most korlátlanul élvezheti az OsmAnd térképfrissítéseit!";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Elsősorban pályán kívül";
 "routing_attr_length_description" = "Adja meg az útvonalakon a járművekre vonatkozó hosszkorlátozást.";
 "routing_attr_avoid_highway_name" = "Gyorsforgalmi utak elkerülése";

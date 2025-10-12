@@ -125,8 +125,6 @@ final class BaseDetailsObject: NSObject {
             return amenity.getOsmId()
         } else if let mapObject = object as? OAMapObject {
             return ObfConstants.getOsmObjectId(mapObject)
-        } else if let detailsObject = object as? BaseDetailsObject {
-            return ObfConstants.getOsmObjectId(detailsObject.syntheticAmenity)
         }
         return -1
     }

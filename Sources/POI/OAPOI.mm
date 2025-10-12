@@ -76,9 +76,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     BACKGROUND_TYPE_EXTENSION_KEY,
     PROFILE_TYPE_EXTENSION_KEY,
     ADDRESS_EXTENSION_KEY,
-    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, AMENITY_NAME],
-    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, TYPE],
-    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, SUBTYPE]
+    [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, AMENITY_NAME],
+    [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, TYPE],
+    [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, SUBTYPE]
 ];
 
 @implementation OAPOIRoutePoint

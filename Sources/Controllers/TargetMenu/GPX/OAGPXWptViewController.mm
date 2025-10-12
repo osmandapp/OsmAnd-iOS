@@ -57,7 +57,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
         }
         self.wpt = wpt;
         NSDictionary<NSString *, NSString *> *extensions = [self.wpt.point getExtensionsToRead];
-        NSString *key = [PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG];
+        NSString *key = [AMENITY_PREFIX stringByAppendingString:OPENING_HOURS_TAG];
         NSString *openingHoursExt = extensions[key];
         _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt ? openingHoursExt.UTF8String : "");
         [self acquireOriginObject];

@@ -92,6 +92,7 @@
 #import "OAContextMenuProvider.h"
 #import "EOAEntityType.h"
 #import "OAAmenitySearcher.h"
+#import "OAGPXDocumentPrimitives.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

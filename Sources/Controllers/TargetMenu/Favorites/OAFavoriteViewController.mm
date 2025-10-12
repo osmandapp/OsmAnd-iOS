@@ -50,7 +50,7 @@ static const NSInteger kOrderFavGroupRow = 1;
         _app = [OsmAndApp instance];
         _favorite = favorite;
         _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
-        _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG])).toStdString());
+        _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([AMENITY_PREFIX stringByAppendingString:OPENING_HOURS_TAG])).toStdString());
 
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;

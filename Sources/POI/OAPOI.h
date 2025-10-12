@@ -10,6 +10,8 @@
 #import "OrderedDictionary.h"
 #import "OAMapObject.h"
 
+extern NSString * const POI_NAME;
+
 extern NSString * const URL_TAG;
 extern NSString * const WEBSITE_TAG;
 extern NSString * const PHONE_TAG;
@@ -54,6 +56,7 @@ extern NSString * const ROUTE_TRACK_POINT;
 extern NSString * const ROUTE_BBOX_RADIUS;
 extern NSString * const ROUTE_MEMBERS_IDS;
 extern NSString * const TRAVEL_EVO_TAG;
+extern NSString * const COLLAPSABLE_PREFIX;
 
 static int DEFAULT_ELO = 900;
 

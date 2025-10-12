@@ -489,6 +489,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return result;
     
     const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    OsmAnd::AreaI area31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
     const auto tileId = OsmAnd::Utilities::getTileId(point31, self.mapView.zoomLevel);
     
     OsmAnd::IMapTiledSymbolsProvider::Request request;
@@ -496,6 +497,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     request.zoom = self.mapView.zoomLevel;
     const auto& mapState = [self.mapView getMapState];
     request.mapState = mapState;
+    request.visibleArea31 = area31;
     
     std::shared_ptr<OsmAnd::IMapDataProvider::Data> data;
     _amenitySymbolsProvider->obtainData(request, data, nullptr);
@@ -514,9 +516,12 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                     {
                         if (const auto cppAmenity = amenitySymbolGroup->amenity)
                         {
-                            OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:cppAmenity];
-                            if (poi)
-                                [result addObject:poi];
+                            if (area31.contains(cppAmenity->position31))
+                            {
+                                OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:cppAmenity];
+                                if (poi)
+                                    [result addObject:poi];
+                            }
                         }
                     }
                 }

@@ -38,7 +38,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.setMap(mapVC)
             }
             mapVC?.isCarPlayDashboardActive = true
-            configureCarPlayNavigationMode()
+            defaultAppMode = CarPlayNavigationModeManager.configureCarPlayNavigationMode(defaultAppMode: defaultAppMode)
             if let mapVC {
                 let settings: OAAppSettings = OAAppSettings.sharedManager()
 
@@ -60,29 +60,6 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
             NotificationCenter.default.addObserver(self, selector: #selector(appInitEventConfigureScene(notification:)), name: NSNotification.Name.OALaunchUpdateState, object: nil)
         }
-    }
-    
-    private func configureCarPlayNavigationMode() {
-        guard let routing = OARoutingHelper.sharedInstance() else { return }
-        let settings = OAAppSettings.sharedManager()
-        defaultAppMode = defaultAppMode ?? settings.applicationMode.get()
-        guard let defaultAppMode else { return }
-        let firstCar = OAApplicationMode.values()?.first { $0.isDerivedRouting(from: .car()) } ?? defaultAppMode
-        let resolvedMode: OAApplicationMode = settings.isCarPlayModeDefault.get()
-        ? (defaultAppMode.isDerivedRouting(from: .car()) ? defaultAppMode : firstCar)
-        : settings.carPlayMode.get()
-        let oldMode = settings.applicationMode.get()
-        guard resolvedMode != oldMode else { return }
-        settings.setApplicationModePref(resolvedMode)
-        routing.setAppMode(resolvedMode)
-        if isRoutingActive() {
-            routing.recalculateRouteDueToSettingsChange()
-            OATargetPointsHelper.sharedInstance().updateRouteAndRefresh(true)
-        }
-    }
-    
-    private func isRoutingActive() -> Bool {
-        OAAppSettings.sharedManager().followTheRoute.get() || OARoutingHelper.sharedInstance().isRouteCalculated() || OARoutingHelper.sharedInstance().isRouteBeingCalculated()
     }
     
     private func mapCenterBottomY(bottomMargin: CGFloat = 60.0) -> CGFloat {
@@ -123,7 +100,7 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
-        if let defaultAppMode, !isRoutingActive() {
+        if let defaultAppMode, !CarPlayNavigationModeManager.isRoutingActive() {
             OAAppSettings.sharedManager().setApplicationModePref(defaultAppMode)
         }
 

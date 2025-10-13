@@ -3896,3 +3896,4 @@
 "shared_string_estimated_duration" = "Procenjeno trajanje";
 "auto_zoom_3d_angle" = "Auto zumiranje 3D ugao";
 "shared_string_degrees" = "Stepeni";
+"altitude_metrics_description" = "Podešava jedinicu prikaza za nadmorsku visinu u vidžetima i statistici.";

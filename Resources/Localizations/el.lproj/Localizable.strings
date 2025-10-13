@@ -3550,3 +3550,4 @@
 "osmand_cloud_delete_account_descr" = "Σίγουρα θέλετε να διαγράψετε τον λογαριασμό του OsmAnd Cloud;";
 "action_cant_be_undone" = "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
 "osmand_cloud_delete_account_descr_with_email" = "Σίγουρα θέλετε να διαγράψετε τον λογαριασμό του OsmAnd Cloud: %@;";
+"altitude_metrics_description" = "Ορίζει την μονάδα μέτρησης του υψομέτρου στα γραφικά στοιχεία και στα στατιστικά.";

@@ -3903,3 +3903,6 @@
 "press_button_to_link_with_action" = "Pulsá el botón en el dispositivo para asignarle la acción: ";
 "key_is_already_assigned_error" = "La tecla «%@» ya se asignó a la acción: ";
 "application_profile_changed" = "Perfil de aplicación cambiado a «%@»";
+"altitude_metrics_description" = "Define la unidad de medida para la altitud en los widgets y las estadísticas.";
+"shared_string_degrees" = "Grados";
+"auto_zoom_3d_angle" = "Zum automático del ángulo 3D";

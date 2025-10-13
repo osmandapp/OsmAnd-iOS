@@ -180,7 +180,7 @@
         
         if (_useMultyLines)
         {
-            CGFloat width = self.collectionView.frame.size.width;
+            CGFloat width = self.collectionView.frame.size.width - self.collectionView.contentInset.left - self.collectionView.contentInset.right;
             int rowsPerLine = width / (itemSize.width + spacing);
             int rowsCount = ceil((double)[_collectionHandler itemsCount:0] / (double)rowsPerLine);
             if (rowsCount > 1)

@@ -36,7 +36,7 @@
     {
         self.city = city;
         _type = (EOACityType)city->type;
-        _subType = (EOACitySubType)city->subtype;
+        //_subType = (EOACitySubType)city->subtype;
     }
     return self;
 }
@@ -46,30 +46,38 @@
     return @"ic_action_building_number";
 }
 
-+ (NSString *)getLocalizedTypeStr:(EOACitySubType)type
++ (NSString *)getLocalizedTypeStr:(EOACityType)type
 {
     switch (type)
     {
-        case CITY_SUBTYPE_CITY:
+        case CITY_TYPE_CITY:
             return OALocalizedString(@"city_type_city");
-        case CITY_SUBTYPE_TOWN:
+        case CITY_TYPE_TOWN:
             return OALocalizedString(@"city_type_town");
-        case CITY_SUBTYPE_VILLAGE:
+        case CITY_TYPE_VILLAGE:
             return OALocalizedString(@"city_type_village");
-        case CITY_SUBTYPE_HAMLET:
+        case CITY_TYPE_HAMLET:
             return OALocalizedString(@"city_type_hamlet");
-        case CITY_SUBTYPE_SUBURB:
+        case CITY_TYPE_SUBURB:
             return OALocalizedString(@"city_type_suburb");
-        case CITY_SUBTYPE_DISTRICT:
+        case CITY_TYPE_BOROUGH:
+            return OALocalizedString(@"city_type_borough");
+        case CITY_TYPE_CENSUS:
+            return OALocalizedString(@"city_type_census");
+        case CITY_TYPE_POSTCODE:
+            return OALocalizedString(@"city_type_postcode");
+        case CITY_TYPE_BOUNDARY:
+            return OALocalizedString(@"city_type_boundary");
+        case CITY_TYPE_DISTRICT:
             return OALocalizedString(@"city_type_district");
-        case CITY_SUBTYPE_NEIGHBOURHOOD:
+        case CITY_TYPE_NEIGHBOURHOOD:
             return OALocalizedString(@"city_type_neighbourhood");
         default:
             return OALocalizedString(@"city_type_city");
     }
 }
 
-+ (NSString *)getTypeStr:(EOACitySubType)type
+/*+ (NSString *)getTypeStr:(EOACitySubType)type
 {
     switch (type)
     {
@@ -90,45 +98,53 @@
         default:
             return @"";
     }
-}
+}*/
 
-+ (EOACitySubType)getType:(NSString *)typeStr;
++ (EOACityType)getType:(NSString *)typeStr;
 {
     if ([typeStr isEqualToString:@"city"])
-        return CITY_SUBTYPE_CITY;
+        return CITY_TYPE_CITY;
     if ([typeStr isEqualToString:@"town"])
-        return CITY_SUBTYPE_TOWN;
+        return CITY_TYPE_TOWN;
     if ([typeStr isEqualToString:@"village"])
-        return CITY_SUBTYPE_VILLAGE;
+        return CITY_TYPE_VILLAGE;
     if ([typeStr isEqualToString:@"hamlet"])
-        return CITY_SUBTYPE_HAMLET;
+        return CITY_TYPE_HAMLET;
     if ([typeStr isEqualToString:@"suburb"])
-        return CITY_SUBTYPE_SUBURB;
+        return CITY_TYPE_SUBURB;
+    if ([typeStr isEqualToString:@"boundary"])
+        return CITY_TYPE_BOUNDARY;
+    if ([typeStr isEqualToString:@"postcode"])
+        return CITY_TYPE_POSTCODE;
+    if ([typeStr isEqualToString:@"borough"])
+        return CITY_TYPE_BOROUGH;
     if ([typeStr isEqualToString:@"district"])
-        return CITY_SUBTYPE_DISTRICT;
+        return CITY_TYPE_DISTRICT;
     if ([typeStr isEqualToString:@"neighbourhood"])
-        return CITY_SUBTYPE_NEIGHBOURHOOD;
-    return CITY_SUBTYPE_UNKNOWN;
+        return CITY_TYPE_NEIGHBOURHOOD;
+    if ([typeStr isEqualToString:@"census"])
+        return CITY_TYPE_CENSUS;
+    return CITY_TYPE_UNKNOWN;
 }
 
 + (CGFloat)getRadius:(NSString *)typeStr
 {
-    EOACitySubType type = [self getType:typeStr];
+    EOACityType type = [self getType:typeStr];
     switch (type)
     {
-        case CITY_SUBTYPE_CITY:
+        case CITY_TYPE_CITY:
             return 10000.;
-        case CITY_SUBTYPE_TOWN:
+        case CITY_TYPE_TOWN:
             return 4000.;
-        case CITY_SUBTYPE_VILLAGE:
+        case CITY_TYPE_VILLAGE:
             return 1300.;
-        case CITY_SUBTYPE_HAMLET:
+        case CITY_TYPE_HAMLET:
             return 1000.;
-        case CITY_SUBTYPE_SUBURB:
+        case CITY_TYPE_SUBURB:
             return 400.;
-        case CITY_SUBTYPE_DISTRICT:
+        case CITY_TYPE_DISTRICT:
             return 400.;
-        case CITY_SUBTYPE_NEIGHBOURHOOD:
+        case CITY_TYPE_NEIGHBOURHOOD:
             return 300.;
         default:
             return 1000.;

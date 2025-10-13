@@ -12,25 +12,33 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, EOACityType)
+/*typedef NS_ENUM(NSInteger, EOACityType) // CityBlock
 {
     CITY_TYPE_UNKNOWN = 0,
     CITY_TYPE_CITYORTOWN = 1,
     CITY_TYPE_VILLAGE = 3,
     CITY_TYPE_POSTCODE = 2,
-};
+};*/
 
-typedef NS_ENUM(NSInteger, EOACitySubType)
+typedef NS_ENUM(NSInteger, EOACityType) // CityType
 {
-    CITY_SUBTYPE_UNKNOWN = -1,
+    CITY_TYPE_UNKNOWN = -1,
     
-    CITY_SUBTYPE_CITY = 0,
-    CITY_SUBTYPE_TOWN,
-    CITY_SUBTYPE_VILLAGE,
-    CITY_SUBTYPE_HAMLET,
-    CITY_SUBTYPE_SUBURB,
-    CITY_SUBTYPE_DISTRICT,
-    CITY_SUBTYPE_NEIGHBOURHOOD
+    CITY_TYPE_CITY = 0,      // 0. City
+    CITY_TYPE_TOWN,          // 1. Town
+    CITY_TYPE_VILLAGE,       // 2. Village
+    CITY_TYPE_HAMLET,        // 3. Hamlet - Small village
+    CITY_TYPE_SUBURB,        // 4. Mostly district of the city (introduced to avoid duplicate streets in city) -
+                             //    however BOROUGH, DISTRICT, NEIGHBOURHOOD could be used as well for that purpose
+                             //    Main difference stores own streets to search and list by it
+    CITY_TYPE_BOUNDARY,      // 5. boundary no streets
+    CITY_TYPE_POSTCODE,      // 6. write this could be activated after 5.2 release
+    
+    // not stored entities but registered to uniquely identify streets as SUBURB
+    CITY_TYPE_BOROUGH,
+    CITY_TYPE_DISTRICT,
+    CITY_TYPE_NEIGHBOURHOOD,
+    CITY_TYPE_CENSUS
 };
 
 @interface OACity : OAAddress
@@ -38,13 +46,13 @@ typedef NS_ENUM(NSInteger, EOACitySubType)
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::StreetGroup> city;
 
 @property (nonatomic, readonly) EOACityType type;
-@property (nonatomic, readonly) EOACitySubType subType;
+//@property (nonatomic, readonly) EOACitySubType subType;
 
 - (instancetype)initWithCity:(const std::shared_ptr<const OsmAnd::StreetGroup>&)city;
 
-+ (NSString *)getLocalizedTypeStr:(EOACitySubType)type;
-+ (NSString *)getTypeStr:(EOACitySubType)type;
-+ (EOACitySubType)getType:(NSString *)typeStr;
++ (NSString *)getLocalizedTypeStr:(EOACityType)type;
++ (NSString *)getTypeStr:(EOACityType)type;
++ (EOACityType)getType:(NSString *)typeStr;
 + (CGFloat)getRadius:(NSString *)typeStr;
 
 @end

@@ -40,6 +40,7 @@
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
+#include <OsmAndCore/Data/ObfPoiSectionReader.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
@@ -488,6 +489,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return result;
     
     const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    OsmAnd::AreaI area31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
     const auto tileId = OsmAnd::Utilities::getTileId(point31, self.mapView.zoomLevel);
     
     OsmAnd::IMapTiledSymbolsProvider::Request request;
@@ -495,24 +497,37 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     request.zoom = self.mapView.zoomLevel;
     const auto& mapState = [self.mapView getMapState];
     request.mapState = mapState;
+    request.visibleArea31 = area31;
     
     std::shared_ptr<OsmAnd::IMapDataProvider::Data> data;
-    QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
-    // TODO: Do not modify obtainData never for UI needs!
-    //_amenitySymbolsProvider->obtainData(request, data, amenities, nullptr);
+    _amenitySymbolsProvider->obtainData(request, data, nullptr);
     
-    if (!amenities.isEmpty())
+    std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider::Data> tiledData =
+        std::static_pointer_cast<OsmAnd::IMapTiledSymbolsProvider::Data>(data);
+    if (tiledData && !tiledData->symbolsGroups.isEmpty())
     {
-        for (const auto amenity : amenities)
+        for (const auto group : tiledData->symbolsGroups)
         {
-            OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:amenity];
-            if (poi)
+            if (!group->symbols.isEmpty())
             {
-                [result addObject:poi];
+                for (const auto symbol : group->symbols)
+                {
+                    if (const auto amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbol->groupPtr))
+                    {
+                        if (const auto cppAmenity = amenitySymbolGroup->amenity)
+                        {
+                            if (area31.contains(cppAmenity->position31))
+                            {
+                                OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:cppAmenity];
+                                if (poi)
+                                    [result addObject:poi];
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-    
     return [result copy];
 }
 

@@ -72,16 +72,23 @@ final class KeyTableViewCell: UITableViewCell {
     }
     
     private func setupTitle(_ title: String) {
-        let attributedText = NSMutableAttributedString(
-            string: localizedString("press_button_to_link_with_action"),
-            attributes: [.font: UIFont.systemFont(ofSize: defaultTextFontSize, weight: .regular)]
-        )
+        let text = String(format: localizedString("press_button_to_link_with_action"), title)
 
-        let actionNameText = NSAttributedString(
-            string: title,
-            attributes: [.font: UIFont.systemFont(ofSize: defaultTextFontSize, weight: .bold)]
+        let attributedText = NSMutableAttributedString(string: text)
+        
+        attributedText.addAttributes(
+            [.font: UIFont.systemFont(ofSize: defaultTextFontSize, weight: .regular)],
+            range: NSRange(location: 0, length: attributedText.length)
         )
-        attributedText.append(actionNameText)
+        
+        if let range = text.range(of: title) {
+            let nsRange = NSRange(range, in: text)
+            attributedText.addAttributes(
+                [.font: UIFont.systemFont(ofSize: defaultTextFontSize, weight: .bold)],
+                range: nsRange
+            )
+        }
+        
         titleLabel.attributedText = attributedText
     }
     
@@ -94,16 +101,22 @@ final class KeyTableViewCell: UITableViewCell {
     }
     
     private func setupWarning(_ warning: String, with key: UIKeyboardHIDUsage) {
+        let keySymbol = KeySymbolMapper.keySymbol(for: key)
+        
+        let text = String(format: localizedString("key_is_already_assigned_error"), keySymbol, warning)
+        
         let attributedText = NSMutableAttributedString(
-            string: String(format: localizedString("key_is_already_assigned_error"), KeySymbolMapper.keySymbol(for: key)),
+            string: text,
             attributes: [.font: UIFont.systemFont(ofSize: defaultTextFontSize, weight: .regular)]
         )
-
-        let warningText = NSAttributedString(
-            string: warning,
-            attributes: [.font: UIFont.systemFont(ofSize: defaultTextFontSize, weight: .bold)]
-        )
-        attributedText.append(warningText)
+        if let warningRange = text.range(of: warning) {
+            let nsRange = NSRange(warningRange, in: text)
+            attributedText.addAttributes(
+                [.font: UIFont.systemFont(ofSize: defaultTextFontSize, weight: .bold)],
+                range: nsRange
+            )
+        }
+        
         warningLabel.attributedText = attributedText
     }
 }

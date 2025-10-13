@@ -18,33 +18,25 @@ class BaseMapScrollAction: OAQuickAction {
     override init(action: OAQuickAction) {
         super.init(action: action)
     }
-    
-    override func execute() {
-        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
-        switch scrollingDirection() {
-        case .up:
-            mapViewController.animatedPanUp()
-        case .down:
-            mapViewController.animatedPanDown()
-        case .left:
-            mapViewController.animatedPanLeft()
-        case .right:
-            mapViewController.animatedPanRight()
-        @unknown default:
-            return
-        }
-    }
-    
+        
     override func getText() -> String? {
         localizedString(quickActionDescription())
     }
     
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent) {
-        actionSelected()
+        MapScrollHelper.shared.startScrolling(direction: scrollingDirection())
     }
-    
+
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent) {
-        // Reject base method execution
+        MapScrollHelper.shared.stopScrolling(direction: scrollingDirection())
+    }
+
+    override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent) {
+        MapScrollHelper.shared.stopScrolling(direction: scrollingDirection())
+    }
+
+    override func execute() {
+        MapScrollHelper.shared.performPan(for: scrollingDirection())
     }
         
     func scrollingDirection() -> EOAMapPanDirection {

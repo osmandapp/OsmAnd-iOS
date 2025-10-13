@@ -269,6 +269,10 @@ static NSInteger SEQ = 0;
     [self actionSelected];
 }
 
+- (void)pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+}
+
 - (void)actionSelected
 {
     [[OAMapButtonsHelper produceAction:self] execute];

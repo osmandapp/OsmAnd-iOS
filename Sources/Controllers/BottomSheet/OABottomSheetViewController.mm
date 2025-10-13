@@ -450,6 +450,11 @@
     [KeyEventHelper.shared pressesEnded:presses withEvent:event];
 }
 
+- (void)pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+{
+    [KeyEventHelper.shared pressesCancelled:presses withEvent:event];
+}
+
 #pragma mark -  UIGestureRecognizerDelegate
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch

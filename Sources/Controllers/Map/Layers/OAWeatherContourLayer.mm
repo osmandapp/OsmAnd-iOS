@@ -44,6 +44,13 @@
     OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
     OAAutoObserverProxy* _alphaChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
+    
+    OsmAnd::BandIndex _cachedBand;
+    int64_t _cachedDateTime;
+    
+    NSDate *_pendingDate;
+    OsmAnd::BandIndex _pendingBand;
+    NSTimer *_initProvidersTimer;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex date:(NSDate *)date
@@ -66,6 +73,13 @@
     _resourcesManager = self.app.resourcesManager->getWeatherResourcesManager();
     _weatherHelper = [OAWeatherHelper sharedInstance];
     _styleSettings = [OAMapStyleSettings sharedInstance];
+    
+    _cachedBand = -1;
+    _cachedDateTime = 0;
+    
+    _pendingDate = nil;
+    _pendingBand = -1;
+    _initProvidersTimer = nil;
     
     _weatherToolbarStateChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
                                                                      withHandler:@selector(onWeatherToolbarStateChanged)
@@ -193,27 +207,76 @@
 
 - (void) initProviders:(NSDate *)date band:(OsmAnd::BandIndex)band
 {
-    [self deinitProviders];
+    _pendingDate = date;
+    _pendingBand = band;
     
-    OAMapRendererEnvironment *env = self.mapViewController.mapRendererEnv;
+    if (_initProvidersTimer)
+    {
+        [_initProvidersTimer invalidate];
+    }
+    
+    _initProvidersTimer = [NSTimer scheduledTimerWithTimeInterval:0.25
+                                                          target:self
+                                                        selector:@selector(executeInitProviders)
+                                                        userInfo:nil
+                                                         repeats:NO];
+}
 
-    NSDate *roundedDate = [OAWeatherHelper roundForecastTimeToHour:date];
-    int64_t dateTime = roundedDate.timeIntervalSince1970 * 1000;
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    int cacheSize = (screenSize.width * 2 / _resourcesManager->getTileSize()) * (screenSize.height * 2 / _resourcesManager->getTileSize());
-    int rasterTileSize = (int) (_resourcesManager->getTileSize() * _resourcesManager->getDensityFactor());
-    _geoTileObjectsProvider = std::make_shared<OsmAnd::GeoTileObjectsProvider>(_resourcesManager, dateTime, band, self.app.data.weatherUseOfflineData, cacheSize);
-    _mapPrimitivesProvider = std::make_shared<OsmAnd::MapPrimitivesProvider>(
-        _geoTileObjectsProvider,
-        env.mapPrimitiviser,
-        rasterTileSize);
+- (void) executeInitProviders
+{
+    if (!_pendingDate)
+        return;
+        
+    NSDate *date = _pendingDate;
+    OsmAnd::BandIndex band = _pendingBand;
     
-    _mapObjectsSymbolsProvider = std::make_shared<OsmAnd::MapObjectsSymbolsProvider>(
-        _mapPrimitivesProvider, rasterTileSize, nullptr, true);
-    self.mapView.renderer->addSymbolsProvider(_mapObjectsSymbolsProvider);
+    _pendingDate = nil;
+    _pendingBand = -1;
+    _initProvidersTimer = nil;
     
-    _rasterMapProvider = std::make_shared<OsmAnd::MapRasterLayerProvider_Software>(_mapPrimitivesProvider, false, true);
-    self.mapView.renderer->setMapLayerProvider(self.layerIndex, _rasterMapProvider);
+    NSTimeInterval timeInterval = date.timeIntervalSince1970;
+    NSTimeInterval quantizationInterval = 3600.0;
+    
+    if ([self.app.data.weatherSource isEqualToString:@"ecmwf"])
+    {
+        quantizationInterval = 3600.0 * 3;
+    }
+    
+    NSTimeInterval flooredTimeInterval = floor(timeInterval / quantizationInterval) * quantizationInterval;
+    int64_t dateTime = flooredTimeInterval * 1000;
+    
+    BOOL needRecreate = (_geoTileObjectsProvider == nullptr || 
+                        _mapPrimitivesProvider == nullptr || 
+                        _mapObjectsSymbolsProvider == nullptr || 
+                        _rasterMapProvider == nullptr ||
+                        _cachedBand != band ||
+                        dateTime != _cachedDateTime);
+    
+    if (needRecreate)
+    {
+        [self deinitProviders];
+        
+        OAMapRendererEnvironment *env = self.mapViewController.mapRendererEnv;
+        CGSize screenSize = [UIScreen mainScreen].bounds.size;
+        int cacheSize = (screenSize.width * 2 / _resourcesManager->getTileSize()) * (screenSize.height * 2 / _resourcesManager->getTileSize());
+        int rasterTileSize = (int) (_resourcesManager->getTileSize() * _resourcesManager->getDensityFactor());
+        
+        _geoTileObjectsProvider = std::make_shared<OsmAnd::GeoTileObjectsProvider>(_resourcesManager, dateTime, band, self.app.data.weatherUseOfflineData, cacheSize);
+        _mapPrimitivesProvider = std::make_shared<OsmAnd::MapPrimitivesProvider>(
+            _geoTileObjectsProvider,
+            env.mapPrimitiviser,
+            rasterTileSize);
+        
+        _mapObjectsSymbolsProvider = std::make_shared<OsmAnd::MapObjectsSymbolsProvider>(
+            _mapPrimitivesProvider, rasterTileSize, nullptr, true);
+        self.mapView.renderer->addSymbolsProvider(_mapObjectsSymbolsProvider);
+        
+        _rasterMapProvider = std::make_shared<OsmAnd::MapRasterLayerProvider_Software>(_mapPrimitivesProvider, false, true);
+        self.mapView.renderer->setMapLayerProvider(self.layerIndex, _rasterMapProvider);
+        
+        _cachedBand = band;
+        _cachedDateTime = dateTime;
+    }
 }
 
 - (void) deinitProviders
@@ -225,6 +288,18 @@
     _mapObjectsSymbolsProvider = nullptr;
     _mapPrimitivesProvider = nullptr;
     _geoTileObjectsProvider = nullptr;
+    _rasterMapProvider = nullptr;
+    
+    _cachedBand = -1;
+    _cachedDateTime = 0;
+    
+    if (_initProvidersTimer)
+    {
+        [_initProvidersTimer invalidate];
+        _initProvidersTimer = nil;
+    }
+    _pendingDate = nil;
+    _pendingBand = -1;
 }
 
 - (void)onWeatherToolbarStateChanged

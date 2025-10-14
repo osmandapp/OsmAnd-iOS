@@ -5,7 +5,6 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     private var dashboardVC: OACarPlayMapDashboardViewController?
     private var mapVC: OAMapViewController?
     private var window: UIWindow?
-    private var defaultAppMode: OAApplicationMode?
     private var isForegroundScene = false
     
     func sceneWillEnterForeground(_ scene: UIScene) {
@@ -38,7 +37,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.setMap(mapVC)
             }
             mapVC?.isCarPlayDashboardActive = true
-            defaultAppMode = CarPlayNavigationModeManager.configureCarPlayNavigationMode(defaultAppMode: defaultAppMode)
+            CarPlayNavigationModeManager.configureForCarPlay()
             if let mapVC {
                 let settings: OAAppSettings = OAAppSettings.sharedManager()
 
@@ -100,11 +99,7 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
-        if let defaultAppMode, !CarPlayNavigationModeManager.isRoutingActive() {
-            OAAppSettings.sharedManager().setApplicationModePref(defaultAppMode)
-        }
-
-        defaultAppMode = nil
+        CarPlayNavigationModeManager.restoreOnDisconnect()
         dashboardVC?.detachFromCarPlayWindow()
         mapVC = nil
         self.window = nil

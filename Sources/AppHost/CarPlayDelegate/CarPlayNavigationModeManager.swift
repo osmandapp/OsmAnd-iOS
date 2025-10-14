@@ -6,29 +6,44 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-final class CarPlayNavigationModeManager {
+@objcMembers
+final class CarPlayNavigationModeManager: NSObject {
+    private static var originalAppMode: OAApplicationMode?
     
-    @discardableResult static func configureCarPlayNavigationMode(defaultAppMode: OAApplicationMode?) -> OAApplicationMode? {
-        guard let routing = OARoutingHelper.sharedInstance() else { return nil }
+    private static func isRoutingActive() -> Bool {
+        OAAppSettings.sharedManager().followTheRoute.get() || OARoutingHelper.sharedInstance().isRouteCalculated() || OARoutingHelper.sharedInstance().isRouteBeingCalculated()
+    }
+    
+    private static func captureOriginalModeIfNeeded() {
+        guard Self.originalAppMode == nil else { return }
+        Self.originalAppMode = OAAppSettings.sharedManager().applicationMode.get()
+    }
+    
+    static func firstCarMode() -> OAApplicationMode {
+        (OAApplicationMode.values() ?? []).first { $0.isDerivedRouting(from: .car()) } ?? OAAppSettings.sharedManager().applicationMode.get()
+    }
+    
+    static func configureForCarPlay() {
+        guard let routing = OARoutingHelper.sharedInstance() else { return }
         let settings = OAAppSettings.sharedManager()
-        let baseMode = defaultAppMode ?? settings.applicationMode.get()
-        let firstCar = OAApplicationMode.values()?.first { $0.isDerivedRouting(from: .car()) } ?? baseMode
-        let resolvedMode: OAApplicationMode = settings.isCarPlayModeDefault.get()
-        ? (baseMode.isDerivedRouting(from: .car()) ? baseMode : firstCar)
-        : settings.carPlayMode.get()
+        captureOriginalModeIfNeeded()
         let current = settings.applicationMode.get()
-        guard resolvedMode != current else { return baseMode }
-        settings.setApplicationModePref(resolvedMode)
-        routing.setAppMode(resolvedMode)
+        let firstCar = firstCarMode()
+        let resolved = settings.isCarPlayModeDefault.get() ? (current.isDerivedRouting(from: .car()) ? current : firstCar) : settings.carPlayMode.get()
+        guard resolved != current else { return }
+        settings.setApplicationModePref(resolved)
+        routing.setAppMode(resolved)
         if isRoutingActive() {
             routing.recalculateRouteDueToSettingsChange()
             OATargetPointsHelper.sharedInstance().updateRouteAndRefresh(true)
         }
-        
-        return baseMode
     }
     
-    static func isRoutingActive() -> Bool {
-        OAAppSettings.sharedManager().followTheRoute.get() || OARoutingHelper.sharedInstance().isRouteCalculated() || OARoutingHelper.sharedInstance().isRouteBeingCalculated()
+    static func restoreOnDisconnect() {
+        guard let original = Self.originalAppMode else { return }
+        guard !isRoutingActive() else { return }
+        OAAppSettings.sharedManager().setApplicationModePref(original)
+        OARoutingHelper.sharedInstance()?.setAppMode(original)
+        Self.originalAppMode = nil
     }
 }

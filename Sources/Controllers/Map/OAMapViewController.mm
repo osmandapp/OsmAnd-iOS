@@ -1844,6 +1844,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     zoomDelta += 1.0f;
     _mapView.mapAnimator->pause();
     
+    [_mapView resetMapTarget];
+    
     for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
         if (animation->getAnimatedValue() == OsmAnd::Animator::AnimatedValue::Zoom)
             _mapView.mapAnimator->cancelAnimation(animation);
@@ -1854,7 +1856,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                                     kUserInteractionAnimationKey);
 
     _mapView.mapAnimator->resume();
-
 }
 
 - (BOOL) canZoomOut
@@ -1884,6 +1885,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;
     _mapView.mapAnimator->pause();
+    
+    [_mapView resetMapTarget];
 
     for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
         if (animation->getAnimatedValue() == OsmAnd::Animator::AnimatedValue::Zoom)
@@ -1939,6 +1942,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     [zoom changeZoom:nextZoomStep];
 
     _mapView.mapAnimator->pause();
+    
+    [_mapView resetMapTarget];
 
     for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
         if (animation->getAnimatedValue() == OsmAnd::Animator::AnimatedValue::Zoom)

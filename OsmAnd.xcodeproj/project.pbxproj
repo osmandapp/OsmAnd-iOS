@@ -1411,6 +1411,7 @@
 		C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */; };
 		C50E32862CA6879500EEC41F /* OADatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */; };
 		C50E32882CA6884200EEC41F /* OADatePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */; };
+		C51766572E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = C51766562E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm */; };
 		C51967AD2C247E9000476E4B /* POITagsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */; };
 		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
 		C52776A82CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */; };
@@ -5122,6 +5123,8 @@
 		C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksFilterDetailsViewController.swift; sourceTree = "<group>"; };
 		C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OADatePickerTableViewCell.swift; sourceTree = "<group>"; };
 		C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADatePickerTableViewCell.xib; sourceTree = "<group>"; };
+		C51766552E9EB4F200F2B085 /* OABaseWeatherQuickAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseWeatherQuickAction.h; sourceTree = "<group>"; };
+		C51766562E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseWeatherQuickAction.mm; sourceTree = "<group>"; };
 		C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POITagsDetailsViewController.swift; sourceTree = "<group>"; };
 		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OARangeSliderFilterTableViewCell.swift; sourceTree = "<group>"; };
@@ -11312,6 +11315,8 @@
 				DA5A79E926C563A000F274C7 /* OAShowHideOSMBugAction.m */,
 				DA5A79E626C563A000F274C7 /* OAShowHidePoiAction.h */,
 				DA5A7A0526C563A000F274C7 /* OAShowHidePoiAction.m */,
+				C51766552E9EB4F200F2B085 /* OABaseWeatherQuickAction.h */,
+				C51766562E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm */,
 				CA4ED11015A078942A50049E /* OAShowHidePrecipitationAction.h */,
 				46C841282C32F20D00E284B0 /* OAShowHidePrecipitationAction.m */,
 				CA4ED58F58E106312EB43FEC /* OAShowHideTemperatureAction.h */,
@@ -16963,6 +16968,7 @@
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,
 				32190FD82D4909940006E91C /* RenderedObjectHelper.swift in Sources */,
+				C51766572E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm in Sources */,
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,
 				2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */,
 				328EE35A2E171BA4003CDB48 /* SelectedMapObject.swift in Sources */,

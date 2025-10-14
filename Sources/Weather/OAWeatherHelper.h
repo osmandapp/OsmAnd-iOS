@@ -48,6 +48,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherAutoUpdate)
 - (void) updateMapPresentationEnvironment:(OAMapPresentationEnvironment *)mapPresentationEnvironment;
 
 - (QList<OsmAnd::BandIndex>) getVisibleBands;
+- (nullable OAWeatherBand *)getWeatherBand:(EOAWeatherBand)bandIndex;
 - (QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>>) getBandSettings;
 
 + (BOOL)shouldHaveWeatherForecast:(OAWorldRegion *)region;

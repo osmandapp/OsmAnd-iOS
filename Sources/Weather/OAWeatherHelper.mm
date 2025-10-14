@@ -112,6 +112,17 @@
     return res;
 }
 
+- (OAWeatherBand *)getWeatherBand:(EOAWeatherBand)bandIndex
+{
+    for (OAWeatherBand *band in _bands)
+    {
+        if (band.bandIndex == bandIndex)
+            return band;
+    }
+
+    return nil;
+}
+
 - (QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>>) getBandSettings
 {
     QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>> result;
@@ -456,6 +467,8 @@
         OsmAndAppInstance app = [OsmAndApp instance];
         QString regionIdString = QString::fromNSString(region.downloadsIdPrefix).append("tifsqlite");
         const auto success = app.resourcesManager->uninstallResource(regionIdString);
+        if (!success)
+            OALog(@"[ERROR] uninstallResource failed for regionId: %@", regionIdString.toNSString());
     }
 
     QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:tileIds];

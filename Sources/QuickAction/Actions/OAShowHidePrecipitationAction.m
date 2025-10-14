@@ -7,8 +7,6 @@
 //
 
 #import "OAShowHidePrecipitationAction.h"
-#import "OsmAndApp.h"
-#import "OAAppData.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -33,25 +31,14 @@ static QuickActionType *TYPE;
             nonEditable];
 }
 
-- (void)execute
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    app.data.weatherPrecip = !app.data.weatherPrecip;
-}
-
-- (BOOL)isActionWithSlash
-{
-    return [OsmAndApp instance].data.weatherPrecip;
-}
-
-- (NSString *)getActionStateName
-{
-    return [self isActionWithSlash] ? OALocalizedString(@"precipitation_hide") : OALocalizedString(@"precipitation_show");
-}
-
 + (QuickActionType *)getQuickActionType
 {
     return TYPE;
+}
+
+- (EOAWeatherBand)weatherBandIndex
+{
+    return WEATHER_BAND_PRECIPITATION;
 }
 
 @end

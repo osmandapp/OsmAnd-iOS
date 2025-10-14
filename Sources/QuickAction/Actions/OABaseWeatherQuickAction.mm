@@ -60,7 +60,8 @@
     return band ? [band isBandVisible] : NO;
 }
 
-- (EOAWeatherBand)weatherBandIndex {
+- (EOAWeatherBand)weatherBandIndex
+{
     return WEATHER_BAND_NOTHING;
 }
 

@@ -61,11 +61,14 @@ final class WeatherContoursButton: OAHudButton {
         }
 
         if isECMWF {
-            app.data.contourName = WEATHER_NONE_CONTOURS_LINES_VALUE
-            styleSettings.setWeatherContourLinesEnabled(false, weatherContourLinesAttr: WEATHER_CLOUD_CONTOURS_LINES_ATTR)
-            styleSettings.setWeatherContourLinesEnabled(false, weatherContourLinesAttr: WEATHER_WIND_CONTOURS_LINES_ATTR)
             wind.attributes = .disabled
             cloud.attributes = .disabled
+            let current = app.data.contourName ?? ""
+            if current == WEATHER_WIND_CONTOURS_LINES_ATTR || current == WEATHER_CLOUD_CONTOURS_LINES_ATTR {
+                app.data.contourName = WEATHER_NONE_CONTOURS_LINES_VALUE
+            }
+            styleSettings.setWeatherContourLinesEnabled(false, weatherContourLinesAttr: WEATHER_CLOUD_CONTOURS_LINES_ATTR)
+            styleSettings.setWeatherContourLinesEnabled(false, weatherContourLinesAttr: WEATHER_WIND_CONTOURS_LINES_ATTR)
         }
 
         let contourName = app.data.contourName ?? ""

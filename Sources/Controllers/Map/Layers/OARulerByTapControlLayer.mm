@@ -406,7 +406,8 @@
     if (self.lineDrawingDelegate)
         [self.lineDrawingDelegate onHideLine];
 
-    if ([recognizer numberOfTouches] == 1 && !_twoFingersDist) {
+    if ([recognizer numberOfTouches] == 1 && !_twoFingersDist)
+    {
         _oneFingerDist = YES;
         _twoFingersDist = NO;
         _tapPointOne = [self getTouchPointCoord:[recognizer locationInView:self]];
@@ -415,7 +416,8 @@
         [_fingerDistanceSublayer setNeedsDisplay];
     }
     
-    if ([recognizer numberOfTouches] == 2 && !_oneFingerDist) {
+    if ([recognizer numberOfTouches] == 2 && !_oneFingerDist)
+    {
         _twoFingersDist = YES;
         _oneFingerDist = NO;
         CGPoint first = [recognizer locationOfTouch:0 inView:self];
@@ -425,6 +427,10 @@
         if (_fingerDistanceSublayer.superlayer != self.layer)
             [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
         [_fingerDistanceSublayer setNeedsDisplay];
+    }
+    else if ([recognizer numberOfTouches] == 1 && _twoFingersDist)
+    {
+        [self hideTouchRuler];
     }
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideTouchRuler) object:self];

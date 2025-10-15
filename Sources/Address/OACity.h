@@ -12,14 +12,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/*typedef NS_ENUM(NSInteger, EOACityType) // CityBlock
-{
-    CITY_TYPE_UNKNOWN = 0,
-    CITY_TYPE_CITYORTOWN = 1,
-    CITY_TYPE_VILLAGE = 3,
-    CITY_TYPE_POSTCODE = 2,
-};*/
-
 typedef NS_ENUM(NSInteger, EOACityType) // CityType
 {
     CITY_TYPE_UNKNOWN = -1,
@@ -46,7 +38,6 @@ typedef NS_ENUM(NSInteger, EOACityType) // CityType
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::StreetGroup> city;
 
 @property (nonatomic, readonly) EOACityType type;
-//@property (nonatomic, readonly) EOACitySubType subType;
 
 - (instancetype)initWithCity:(const std::shared_ptr<const OsmAnd::StreetGroup>&)city;
 

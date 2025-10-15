@@ -36,7 +36,6 @@
     {
         self.city = city;
         _type = (EOACityType)city->type;
-        //_subType = (EOACitySubType)city->subtype;
     }
     return self;
 }
@@ -76,29 +75,6 @@
             return OALocalizedString(@"city_type_city");
     }
 }
-
-/*+ (NSString *)getTypeStr:(EOACitySubType)type
-{
-    switch (type)
-    {
-        case CITY_SUBTYPE_CITY:
-            return @"city";
-        case CITY_SUBTYPE_TOWN:
-            return @"town";
-        case CITY_SUBTYPE_VILLAGE:
-            return @"village";
-        case CITY_SUBTYPE_HAMLET:
-            return @"hamlet";
-        case CITY_SUBTYPE_SUBURB:
-            return @"suburb";
-        case CITY_SUBTYPE_DISTRICT:
-            return @"district";
-        case CITY_SUBTYPE_NEIGHBOURHOOD:
-            return @"neighbourhood";
-        default:
-            return @"";
-    }
-}*/
 
 + (EOACityType)getType:(NSString *)typeStr;
 {
@@ -142,6 +118,12 @@
             return 1000.;
         case CITY_TYPE_SUBURB:
             return 400.;
+        case CITY_TYPE_BOUNDARY:
+            return 0;
+        case CITY_TYPE_POSTCODE:
+            return 500.;
+        case CITY_TYPE_BOROUGH:
+        case CITY_TYPE_CENSUS:
         case CITY_TYPE_DISTRICT:
             return 400.;
         case CITY_TYPE_NEIGHBOURHOOD:

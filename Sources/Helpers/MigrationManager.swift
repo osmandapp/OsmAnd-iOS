@@ -272,7 +272,7 @@ final class MigrationManager: NSObject {
                 Pair(32, "nav.directions"): OANavDirectionsFromAction.getType(),
                 Pair(36, "weather.temperature.showhide"): ShowHideTemperatureAction.getType(),
                 Pair(37, "weather.pressure.showhide"): ShowHideAirPressureAction.getType(),
-                Pair(38, "weather.wind.showhide"): OAShowHideWindAction.getType(),
+                Pair(38, "weather.wind.showhide"): ShowHideWindAction.getType(),
                 Pair(39, "weather.cloud.showhide"): OAShowHideCloudAction.getType(),
                 Pair(40, "weather.precipitation.showhide"): OAShowHidePrecipitationAction.getType()
             ]

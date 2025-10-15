@@ -277,7 +277,6 @@
 #import "OAShowHideTransportLinesAction.h"
 #import "OAShowHideLocalOSMChanges.h"
 #import "OANavDirectionsFromAction.h"
-#import "OAShowHideTemperatureAction.h"
 #import "OAShowHideAirPressureAction.h"
 #import "OAShowHideWindAction.h"
 #import "OAShowHideCloudAction.h"

@@ -2016,7 +2016,6 @@
 "angular_measeurement_descr" = "Muuta missä yksikössä atsimuutti mitataan.";
 "shared_string_uploading" = "Lähetetään";
 "import_create_track_files" = "Voit tuoda,luoda sekä nauhoittaa reittejä käyttämällä OsmAndia.";
-"lang_sr-Latn" = "Serbia (latinalaisin)";
 "visibility" = "Näkyvyys";
 "coordinates_format" = "Koordinaattien muoto";
 "announcement_time_descr" = "Eri äänikehotteiden ilmoitusten ajoitus riippuu kehotteen tyypistä, nykyisestä navigointinopeudesta ja oletusnavigointinopeudesta.";

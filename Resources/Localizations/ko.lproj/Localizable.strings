@@ -2375,7 +2375,6 @@
 "map_widget_ant_bicycle_cadence_desc" = "사용자가 페달을 밟는 속도를 표시";
 "you_can_get_feature_as_part_of_pattern" = "%@ 계획의 일부로 \"%@\"를 가져옵니다. 비교:";
 "apply_only_to_new_points" = "새 포인트에만 적용";
-"lang_sr-Latn" = "세르비아어 (라틴)";
 "osmand_cloud_delete_account_confirmation" = "계정 탈퇴\?";
 "select_tracks_to_display" = "트랙을 선택하여 지도에 표시합니다.";
 "wiki_article_search_text" = "해당 Wiki 문서를 검색하는 중";

@@ -3206,7 +3206,6 @@
 "osmand_cloud_delete_account_descr" = "Quer mesmo eliminar a conta OsmAnd Cloud?";
 "osmand_cloud_delete_account_confirmation" = "Eliminar a conta?";
 "osmand_cloud_deletion_account_warning" = "A sua conta e todos os detalhes da conta serão %@";
-"lang_sr-Latn" = "Sérvio (latino)";
 "folder_tracks_count" = "%d trilhos";
 "shared_string_open_track" = "Abrir trilho";
 "osmand_cloud_deletion_subscriptions_warning" = "Isto não cancelará a sua subscrição do OsmAnd Pro.";

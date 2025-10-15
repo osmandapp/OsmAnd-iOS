@@ -3149,7 +3149,6 @@
 "external_sensors_plugin_name" = "Externí senzory";
 "show_icon" = "Zobrazit ikonu";
 "help_article_map_map_context_menu_name" = "Kontextová nabídka mapy";
-"lang_sr-Latn" = "Srbština (latinka)";
 "ant_plus_bluetooth_off_description" = "Zapněte vyhledání Bluetooth a spárujte senzory.";
 "shared_string_temperature" = "Teplota";
 "download_to_device" = "Stáhnout do zařízení";

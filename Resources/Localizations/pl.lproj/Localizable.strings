@@ -2648,7 +2648,6 @@
 "rendering_attr_showToll_name" = "Pokaż opłaty drogowe";
 "rendering_value_defaultMedium_name" = "Domyślny (średni)";
 "routing_attr_allow_via_ferrata_name" = "Trasa górska (Via ferrata)";
-"lang_sr-Latn" = "Serbski (łaciński)";
 "map_widget_ant_bicycle_cadence" = "Kadencja roweru";
 "map_widget_sun_position" = "Pozycja słońca";
 "map_widget_sunset_desc" = "Pokazuje czas następnego zachodu słońca lub czas pozostały do zachodu słońca.";

@@ -3121,7 +3121,6 @@
 "shared_string_next_event" = "Nästa händelse";
 "map_widget_group_glide_desc" = "Widget som visar glidtalet till mål, eller genomsnittligt glidtal för aktuell tur.";
 "average_glide_time_interval_desc" = "Ange tidsintervallet för genomsnittligt glidtal.";
-"lang_sr-Latn" = "Serbiska (translittererat)";
 "enter_new_name" = "Ange nytt namn";
 "skip_download" = "Hoppa över nedladdning";
 "map_widget_sun_position" = "Solens position";

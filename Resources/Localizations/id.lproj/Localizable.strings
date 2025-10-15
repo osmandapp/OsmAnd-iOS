@@ -1924,7 +1924,6 @@
 "routing_attr_hazmat_category_usa_7_name" = "Zat Radioaktif";
 "rendering_attr_lightDetail_description" = "Bawaan: nama garis laut (karakter cahaya.grup.periode), pilih informasi tambahan di bagian 1 sampai 3 atau sektor karakter cahaya 1,2,3,4,5";
 "rendering_value_sector5_name" = "Sektor 5";
-"lang_sr-Latn" = "Bahasa Serbia (latin)";
 "map_widget_ant_bicycle_cadence" = "Irama Sepeda";
 "map_widget_sun_position" = "Posisi matahari";
 "map_widget_sunset_desc" = "Menampilkan waktu matahari terbit berikutnya atau waktu yang tersisa sampai matahari terbenam.";

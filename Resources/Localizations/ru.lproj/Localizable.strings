@@ -2872,7 +2872,6 @@
 "help_article_widgets_name" = "Виджеты";
 "average_glide_time_interval_desc" = "Укажите интервал для усреднения планирования.";
 "shared_string_relief_3d" = "3D-рельеф";
-"lang_sr-Latn" = "Сербский (латиница)";
 "apply_to_existing_favorites_descr" = "Применить изменения к существующим избранным точкам группы или только к новым\?";
 "external_device_characteristic_distance" = "Расстояние";
 "help_article_navigation_guidance_name" = "Руководство по навигации";

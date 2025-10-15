@@ -2143,7 +2143,6 @@
 "angular_measeurement" = "Kotne enote";
 "recently_visible" = "Nedavno vidna %@";
 "time_to_go_desc" = "Čas v minutah ali urah, potreben za dosego cilja.";
-"lang_sr-Latn" = "Srbščina (latinica)";
 "backup_error_failed_to_fetch_remote_items" = "Ni bilo mogoče pridobiti seznama datotek s strežnika.";
 "ant_plus_nothing_found_description" = "Prepričaj se, da : \n- je Bluetooth vklopljen. \n- je senzor aktiviran. \n- se ta naprava nahaja v bližini senzorja.";
 "settings_app_theme" = "Tema programa";

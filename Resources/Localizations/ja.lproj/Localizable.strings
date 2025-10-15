@@ -2716,7 +2716,6 @@
 "specify_number_of_dir_indicators_desc" = "マーカーの方向と距離を示すインジケーターの数を指定してください。";
 "restore_from_trash" = "ごみ箱から復元する";
 "map_markers_desc" = "このウィジェットは、マップマーカーの一覧にて最初の2つのマーカーの距離または到着予定時刻(ETA)を表示します。";
-"lang_sr-Latn" = "セルビア語 (ラテン文字)";
 "shared_string_explore" = "探索";
 "import_create_track_files" = "OsmAnd を使用して、経路ファイルのインポート、作成、記録ができます。";
 "shared_string_duplicate" = "複製";

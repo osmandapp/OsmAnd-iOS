@@ -3894,3 +3894,4 @@
 "shared_string_estimated_duration" = "Durée estimée";
 "shared_string_degrees" = "Diplômes";
 "auto_zoom_3d_angle" = "Zoom automatique de l'angle 3D";
+"altitude_metrics_description" = "Définit l'unité d'affichage de l'altitude dans les widgets et les statistiques.";

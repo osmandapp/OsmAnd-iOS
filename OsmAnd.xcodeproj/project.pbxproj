@@ -1406,7 +1406,6 @@
 		C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */; };
 		C50E32862CA6879500EEC41F /* OADatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */; };
 		C50E32882CA6884200EEC41F /* OADatePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */; };
-		C51766572E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = C51766562E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm */; };
 		C51766592E9F8F5300F2B085 /* BaseWeatherQuickAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51766582E9F8F5300F2B085 /* BaseWeatherQuickAction.swift */; };
 		C517665C2E9F993100F2B085 /* OAWeatherHelperBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = C517665B2E9F993100F2B085 /* OAWeatherHelperBridge.mm */; };
 		C517665E2E9FA15900F2B085 /* ShowHideTemperatureAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C517665D2E9FA15900F2B085 /* ShowHideTemperatureAction.swift */; };
@@ -5120,8 +5119,6 @@
 		C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksFilterDetailsViewController.swift; sourceTree = "<group>"; };
 		C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OADatePickerTableViewCell.swift; sourceTree = "<group>"; };
 		C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADatePickerTableViewCell.xib; sourceTree = "<group>"; };
-		C51766552E9EB4F200F2B085 /* OABaseWeatherQuickAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseWeatherQuickAction.h; sourceTree = "<group>"; };
-		C51766562E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseWeatherQuickAction.mm; sourceTree = "<group>"; };
 		C51766582E9F8F5300F2B085 /* BaseWeatherQuickAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWeatherQuickAction.swift; sourceTree = "<group>"; };
 		C517665A2E9F993100F2B085 /* OAWeatherHelperBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWeatherHelperBridge.h; sourceTree = "<group>"; };
 		C517665B2E9F993100F2B085 /* OAWeatherHelperBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherHelperBridge.mm; sourceTree = "<group>"; };
@@ -11313,8 +11310,6 @@
 				DA5A79E926C563A000F274C7 /* OAShowHideOSMBugAction.m */,
 				DA5A79E626C563A000F274C7 /* OAShowHidePoiAction.h */,
 				DA5A7A0526C563A000F274C7 /* OAShowHidePoiAction.m */,
-				C51766552E9EB4F200F2B085 /* OABaseWeatherQuickAction.h */,
-				C51766562E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm */,
 				C51766582E9F8F5300F2B085 /* BaseWeatherQuickAction.swift */,
 				C517665D2E9FA15900F2B085 /* ShowHideTemperatureAction.swift */,
 				C517665F2E9FA90C00F2B085 /* ShowHideAirPressureAction.swift */,
@@ -16966,7 +16961,6 @@
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,
 				32190FD82D4909940006E91C /* RenderedObjectHelper.swift in Sources */,
-				C51766572E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm in Sources */,
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,
 				2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */,
 				328EE35A2E171BA4003CDB48 /* SelectedMapObject.swift in Sources */,

@@ -787,7 +787,7 @@ NSString *const kXmlColon = @"_-_";
     [OAMapStyleSettings sharedInstance];
     LogStartup(@"map style settings initialized");
 
-    [[OATargetPointsHelper sharedInstance] removeAllWayPoints:NO clearBackup:!(OsmAndApp.instance.data.pointToStart && OsmAndApp.instance.data.pointToNavigate)];
+    [[OATargetPointsHelper sharedInstance] removeAllWayPoints:NO clearBackup:NO];
     LogStartup(@"target points cleared");
 
     [[OASGpxDbHelper shared] loadItemsBlocking];
@@ -1405,7 +1405,7 @@ NSString *const kXmlColon = @"_-_";
     OAAppSettings* settings = [OAAppSettings sharedManager];
     settings.lastRoutingApplicationMode = settings.applicationMode.get;
     
-    [targetPointsHelper removeAllWayPoints:NO clearBackup:OsmAndApp.instance.data.pointToStart && OsmAndApp.instance.data.pointToNavigate];
+    [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     
     OAApplicationMode *carPlayMode = [settings.isCarPlayModeDefault get] ? OAApplicationMode.getFirstAvailableNavigationMode : [OAAppSettings.sharedManager.carPlayMode get];
     OAApplicationMode *defaultAppMode = [settings.useLastApplicationModeByDefault get] ?

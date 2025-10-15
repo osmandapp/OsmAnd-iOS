@@ -846,7 +846,6 @@
 		46C7647728DC7BAA002DB43E /* OASimpleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */; };
 		46C78C0A28BD16A30019FF69 /* OAStorageStateValuesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */; };
 		46C841292C32F20D00E284B0 /* OAShowHidePrecipitationAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841282C32F20D00E284B0 /* OAShowHidePrecipitationAction.m */; };
-		46C8412F2C32F26000E284B0 /* OAShowHideCloudAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C8412E2C32F26000E284B0 /* OAShowHideCloudAction.m */; };
 		46C841332C32F31B00E284B0 /* OAContourLinesAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841322C32F31B00E284B0 /* OAContourLinesAction.m */; };
 		46C841352C32F33D00E284B0 /* OANavAddDestinationAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841342C32F33D00E284B0 /* OANavAddDestinationAction.m */; };
 		46C841372C32F35100E284B0 /* OANavAddFirstIntermediateAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841362C32F35000E284B0 /* OANavAddFirstIntermediateAction.m */; };
@@ -1414,6 +1413,7 @@
 		C517665E2E9FA15900F2B085 /* ShowHideTemperatureAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C517665D2E9FA15900F2B085 /* ShowHideTemperatureAction.swift */; };
 		C51766602E9FA90C00F2B085 /* ShowHideAirPressureAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C517665F2E9FA90C00F2B085 /* ShowHideAirPressureAction.swift */; };
 		C51766622E9FACCA00F2B085 /* ShowHideWindAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51766612E9FACCA00F2B085 /* ShowHideWindAction.swift */; };
+		C51766642E9FB91500F2B085 /* ShowHideCloudAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51766632E9FB91500F2B085 /* ShowHideCloudAction.swift */; };
 		C51967AD2C247E9000476E4B /* POITagsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */; };
 		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
 		C52776A82CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */; };
@@ -4449,7 +4449,6 @@
 		46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASimpleTableViewCell.xib; sourceTree = "<group>"; };
 		46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAStorageStateValuesCell.xib; sourceTree = "<group>"; };
 		46C841282C32F20D00E284B0 /* OAShowHidePrecipitationAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAShowHidePrecipitationAction.m; sourceTree = "<group>"; };
-		46C8412E2C32F26000E284B0 /* OAShowHideCloudAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAShowHideCloudAction.m; sourceTree = "<group>"; };
 		46C841322C32F31B00E284B0 /* OAContourLinesAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAContourLinesAction.m; sourceTree = "<group>"; };
 		46C841342C32F33D00E284B0 /* OANavAddDestinationAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavAddDestinationAction.m; sourceTree = "<group>"; };
 		46C841362C32F35000E284B0 /* OANavAddFirstIntermediateAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavAddFirstIntermediateAction.m; sourceTree = "<group>"; };
@@ -5130,6 +5129,7 @@
 		C517665D2E9FA15900F2B085 /* ShowHideTemperatureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideTemperatureAction.swift; sourceTree = "<group>"; };
 		C517665F2E9FA90C00F2B085 /* ShowHideAirPressureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideAirPressureAction.swift; sourceTree = "<group>"; };
 		C51766612E9FACCA00F2B085 /* ShowHideWindAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWindAction.swift; sourceTree = "<group>"; };
+		C51766632E9FB91500F2B085 /* ShowHideCloudAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideCloudAction.swift; sourceTree = "<group>"; };
 		C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POITagsDetailsViewController.swift; sourceTree = "<group>"; };
 		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OARangeSliderFilterTableViewCell.swift; sourceTree = "<group>"; };
@@ -5360,7 +5360,6 @@
 		CA4ED5839151481FB6475983 /* OAWeatherPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherPlugin.h; sourceTree = "<group>"; };
 		CA4ED5B77046F2C3F6FB7181 /* OASlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASlider.h; sourceTree = "<group>"; };
 		CA4ED61F6893CC4346F50D14 /* OAWeatherHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherHelper.mm; sourceTree = "<group>"; };
-		CA4ED62F995232DABA9FA04D /* OAShowHideCloudAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideCloudAction.h; sourceTree = "<group>"; };
 		CA4ED6727DB5ADB0D8FE2ED3 /* OADeleteOldFilesCommand.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADeleteOldFilesCommand.mm; sourceTree = "<group>"; };
 		CA4ED676EDCD24E9BE24075D /* OAMapillaryOsmTagHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapillaryOsmTagHelper.mm; sourceTree = "<group>"; };
 		CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACollectionViewFlowLayout.m; sourceTree = "<group>"; };
@@ -11303,8 +11302,6 @@
 				46C841442C32F3F400E284B0 /* OAParkingAction.m */,
 				DA5A79E026C563A000F274C7 /* OAQuickAction.h */,
 				DA5A79FB26C563A000F274C7 /* OAQuickAction.m */,
-				CA4ED62F995232DABA9FA04D /* OAShowHideCloudAction.h */,
-				46C8412E2C32F26000E284B0 /* OAShowHideCloudAction.m */,
 				DA5A79F826C563A000F274C7 /* OAShowHideFavoritesAction.h */,
 				DA5A7A1426C563A000F274C7 /* OAShowHideFavoritesAction.m */,
 				DA5A79EE26C563A000F274C7 /* OAShowHideGPXTracksAction.h */,
@@ -11323,6 +11320,7 @@
 				C517665D2E9FA15900F2B085 /* ShowHideTemperatureAction.swift */,
 				C517665F2E9FA90C00F2B085 /* ShowHideAirPressureAction.swift */,
 				C51766612E9FACCA00F2B085 /* ShowHideWindAction.swift */,
+				C51766632E9FB91500F2B085 /* ShowHideCloudAction.swift */,
 				CA4ED11015A078942A50049E /* OAShowHidePrecipitationAction.h */,
 				46C841282C32F20D00E284B0 /* OAShowHidePrecipitationAction.m */,
 				DA5A79FC26C563A000F274C7 /* OAShowHideTransportLinesAction.h */,
@@ -17735,6 +17733,7 @@
 				46C49509291E57DA005A9D70 /* OANauticalDepthParametersViewController.m in Sources */,
 				FA9217122D5277310074E958 /* DateFormatter+Extension.swift in Sources */,
 				DA69ED5F2A385DA6001022C7 /* WidgetPageViewController.swift in Sources */,
+				C51766642E9FB91500F2B085 /* ShowHideCloudAction.swift in Sources */,
 				DA5A83CF26C563A800F274C7 /* OATransportStopViewController.mm in Sources */,
 				DA5A839026C563A800F274C7 /* OAOsmAndLiveSelectionViewController.mm in Sources */,
 				DA5A83C626C563A800F274C7 /* OAActionConfigurationViewController.mm in Sources */,
@@ -18057,7 +18056,6 @@
 				DA5A836A26C563A800F274C7 /* OARouteStatisticsHelper.mm in Sources */,
 				DAABE4E82A16102200569F71 /* AverageSpeedWidget.swift in Sources */,
 				320F71372A86438B0071C0E7 /* OAGPXDocumentAdapter.mm in Sources */,
-				46C8412F2C32F26000E284B0 /* OAShowHideCloudAction.m in Sources */,
 				DA5A815026C563A700F274C7 /* OACarPlayAddressSearchController.mm in Sources */,
 				DAA612E527E9E934003317BD /* OAPrepareBackupResult.m in Sources */,
 				DADBE9F22A32085800C0C102 /* CompassVisibilityViewController.swift in Sources */,

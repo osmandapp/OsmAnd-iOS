@@ -44,6 +44,7 @@
     OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
     OAAutoObserverProxy* _alphaChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
+    OAAutoObserverProxy* _weatherSourceChangeObserver;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex date:(NSDate *)date
@@ -80,6 +81,9 @@
                                                      withHandler:@selector(onLayerAlphaChanged)
                                                       andObserve:self.app.data.contoursAlphaChangeObservable];
     _layerChangeObservers = [NSMutableArray array];
+    _weatherSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onWeatherLayerChanged)
+                                                               andObserve:self.app.data.weatherSourceChangeObservable];
     
     for (OAWeatherBand *band in [[OAWeatherHelper sharedInstance] bands])
         [_layerChangeObservers addObject:[band createSwitchObserver:self handler:@selector(onWeatherLayerChanged)]];
@@ -106,6 +110,11 @@
     {
         [_alphaChangeObserver detach];
         _alphaChangeObserver = nil;
+    }
+    if (_weatherSourceChangeObserver)
+    {
+        [_weatherSourceChangeObserver detach];
+        _weatherSourceChangeObserver = nil;
     }
     for (OAAutoObserverProxy *observer in _layerChangeObservers)
         [observer detach];

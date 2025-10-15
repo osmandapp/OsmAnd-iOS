@@ -94,6 +94,7 @@
 #import "OAAmenitySearcher.h"
 #import "UITableViewCell+getTableView.h"
 #import "UINavigationController+keyCommands.h"
+#import "OAWeatherHelperBridge.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

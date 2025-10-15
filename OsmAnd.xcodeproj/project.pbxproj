@@ -1412,6 +1412,9 @@
 		C50E32862CA6879500EEC41F /* OADatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */; };
 		C50E32882CA6884200EEC41F /* OADatePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */; };
 		C51766572E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = C51766562E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm */; };
+		C51766592E9F8F5300F2B085 /* BaseWeatherQuickAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51766582E9F8F5300F2B085 /* BaseWeatherQuickAction.swift */; };
+		C517665C2E9F993100F2B085 /* OAWeatherHelperBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = C517665B2E9F993100F2B085 /* OAWeatherHelperBridge.mm */; };
+		C517665E2E9FA15900F2B085 /* ShowHideTemperatureAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C517665D2E9FA15900F2B085 /* ShowHideTemperatureAction.swift */; };
 		C51967AD2C247E9000476E4B /* POITagsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */; };
 		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
 		C52776A82CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */; };
@@ -5125,6 +5128,10 @@
 		C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADatePickerTableViewCell.xib; sourceTree = "<group>"; };
 		C51766552E9EB4F200F2B085 /* OABaseWeatherQuickAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseWeatherQuickAction.h; sourceTree = "<group>"; };
 		C51766562E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseWeatherQuickAction.mm; sourceTree = "<group>"; };
+		C51766582E9F8F5300F2B085 /* BaseWeatherQuickAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWeatherQuickAction.swift; sourceTree = "<group>"; };
+		C517665A2E9F993100F2B085 /* OAWeatherHelperBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWeatherHelperBridge.h; sourceTree = "<group>"; };
+		C517665B2E9F993100F2B085 /* OAWeatherHelperBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherHelperBridge.mm; sourceTree = "<group>"; };
+		C517665D2E9FA15900F2B085 /* ShowHideTemperatureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideTemperatureAction.swift; sourceTree = "<group>"; };
 		C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POITagsDetailsViewController.swift; sourceTree = "<group>"; };
 		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OARangeSliderFilterTableViewCell.swift; sourceTree = "<group>"; };
@@ -9933,6 +9940,8 @@
 				CA4ED4DA76018A8B23059CA6 /* OAWeatherWebClient.h */,
 				FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */,
 				FA282AEE2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift */,
+				C517665A2E9F993100F2B085 /* OAWeatherHelperBridge.h */,
+				C517665B2E9F993100F2B085 /* OAWeatherHelperBridge.mm */,
 			);
 			path = Weather;
 			sourceTree = "<group>";
@@ -11317,6 +11326,8 @@
 				DA5A7A0526C563A000F274C7 /* OAShowHidePoiAction.m */,
 				C51766552E9EB4F200F2B085 /* OABaseWeatherQuickAction.h */,
 				C51766562E9EB4F200F2B085 /* OABaseWeatherQuickAction.mm */,
+				C51766582E9F8F5300F2B085 /* BaseWeatherQuickAction.swift */,
+				C517665D2E9FA15900F2B085 /* ShowHideTemperatureAction.swift */,
 				CA4ED11015A078942A50049E /* OAShowHidePrecipitationAction.h */,
 				46C841282C32F20D00E284B0 /* OAShowHidePrecipitationAction.m */,
 				CA4ED58F58E106312EB43FEC /* OAShowHideTemperatureAction.h */,
@@ -17274,6 +17285,7 @@
 				DA12757E28631154007E2A0D /* OAImportBackupItemsTask.m in Sources */,
 				DA5A840026C563A800F274C7 /* OAQuickSearchMoreListItem.mm in Sources */,
 				DA2483E52927916700189AF2 /* OAStatusBackupViewController.m in Sources */,
+				C51766592E9F8F5300F2B085 /* BaseWeatherQuickAction.swift in Sources */,
 				DA5A819D26C563A700F274C7 /* OASwitchProfileAction.m in Sources */,
 				DA5A82FE26C563A800F274C7 /* OATextInputFloatingCell.mm in Sources */,
 				DA5A825F26C563A700F274C7 /* OAActivityViewWithTitleCell.m in Sources */,
@@ -17481,6 +17493,7 @@
 				46E10A372BB7400000B9D5C9 /* GlideAverageWidgetState.swift in Sources */,
 				DA4ABEE72876DA5D00B996EF /* OASettingsItemWriter.m in Sources */,
 				DA5A830626C563A800F274C7 /* OAImagesTableViewCell.m in Sources */,
+				C517665C2E9F993100F2B085 /* OAWeatherHelperBridge.mm in Sources */,
 				DA5A816426C563A700F274C7 /* OANighttimeAppearance.m in Sources */,
 				C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */,
 				C5C81F8E2E5340CB009D3439 /* MyLocationButtonState.swift in Sources */,
@@ -18252,6 +18265,7 @@
 				CA4EDCD4B8149095B74FD700 /* OACloudAccountLogoutViewController.mm in Sources */,
 				CA4EDBFDA7FC431D027A815E /* OADeleteAllVersionsBackupViewController.mm in Sources */,
 				FAA6505B2ADD42C50020DCEA /* Device.swift in Sources */,
+				C517665E2E9FA15900F2B085 /* ShowHideTemperatureAction.swift in Sources */,
 				CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */,
 				46CE450D2AAA0A4D00C827B5 /* OADistanceAndDirectionsUpdater.mm in Sources */,
 				CA4ED4F6BF41371BA62511BA /* OADeleteOldFilesCommand.mm in Sources */,

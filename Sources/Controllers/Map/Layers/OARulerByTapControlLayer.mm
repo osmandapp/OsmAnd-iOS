@@ -428,10 +428,9 @@
             [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
         [_fingerDistanceSublayer setNeedsDisplay];
     }
-    else if ([recognizer numberOfTouches] == 1 && _twoFingersDist)
-    {
+    
+    if (([recognizer numberOfTouches] == 1 && _twoFingersDist) || ([recognizer numberOfTouches] == 2 && _oneFingerDist))
         [self hideTouchRuler];
-    }
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideTouchRuler) object:self];
     [self performSelector:@selector(hideTouchRuler) withObject:self afterDelay:DRAW_TIME];

@@ -33,25 +33,14 @@ static QuickActionType *TYPE;
             nonEditable];
 }
 
-- (void)execute
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    app.data.weatherTemp = !app.data.weatherTemp;
-}
-
-- (BOOL)isActionWithSlash
-{
-    return [OsmAndApp instance].data.weatherTemp;
-}
-
-- (NSString *)getActionStateName
-{
-    return [self isActionWithSlash] ? OALocalizedString(@"temperature_hide") : OALocalizedString(@"temperature_show");
-}
-
 + (QuickActionType *)getQuickActionType
 {
     return TYPE;
+}
+
+- (EOAWeatherBand)weatherBandIndex
+{
+    return WEATHER_BAND_TEMPERATURE;
 }
 
 @end

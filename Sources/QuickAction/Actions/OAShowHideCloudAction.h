@@ -6,11 +6,11 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OAQuickAction.h"
+#import "OABaseWeatherQuickAction.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAShowHideCloudAction : OAQuickAction
+@interface OAShowHideCloudAction : OABaseWeatherQuickAction
 
 @end
 

@@ -33,25 +33,14 @@ static QuickActionType *TYPE;
             nonEditable];
 }
 
-- (void)execute
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    app.data.weatherCloud = !app.data.weatherCloud;
-}
-
-- (BOOL)isActionWithSlash
-{
-    return [OsmAndApp instance].data.weatherCloud;
-}
-
-- (NSString *)getActionStateName
-{
-    return [self isActionWithSlash] ? OALocalizedString(@"cloud_hide") : OALocalizedString(@"cloud_show");
-}
-
 + (QuickActionType *)getQuickActionType
 {
     return TYPE;
+}
+
+- (EOAWeatherBand)weatherBandIndex
+{
+    return WEATHER_BAND_CLOUD;
 }
 
 @end

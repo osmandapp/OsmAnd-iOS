@@ -37,7 +37,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.setMap(mapVC)
             }
             mapVC?.isCarPlayDashboardActive = true
-            CarPlayNavigationModeManager.configureForCarPlay()
+            CarPlayNavigationModeManager.shared.configureForCarPlay()
             if let mapVC {
                 let settings: OAAppSettings = OAAppSettings.sharedManager()
 
@@ -99,7 +99,7 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
-        CarPlayNavigationModeManager.restoreOnDisconnect()
+        CarPlayNavigationModeManager.shared.restoreOnDisconnect()
         dashboardVC?.detachFromCarPlayWindow()
         mapVC = nil
         self.window = nil

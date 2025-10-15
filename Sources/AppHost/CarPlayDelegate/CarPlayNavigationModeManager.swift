@@ -8,22 +8,20 @@
 
 @objcMembers
 final class CarPlayNavigationModeManager: NSObject {
-    private static var originalAppMode: OAApplicationMode?
+    static let shared = CarPlayNavigationModeManager()
     
-    private static func isRoutingActive() -> Bool {
-        OAAppSettings.sharedManager().followTheRoute.get() || OARoutingHelper.sharedInstance().isRouteCalculated() || OARoutingHelper.sharedInstance().isRouteBeingCalculated()
+    private var originalAppMode: OAApplicationMode?
+    
+    private override init() {
+        super.init()
     }
     
-    private static func captureOriginalModeIfNeeded() {
-        guard Self.originalAppMode == nil else { return }
-        Self.originalAppMode = OAAppSettings.sharedManager().applicationMode.get()
+    func firstCarMode() -> OAApplicationMode {
+        guard let modes = OAApplicationMode.values(), let carMode = modes.first(where: { $0.isDerivedRouting(from: .car()) }) else { return OAAppSettings.sharedManager().applicationMode.get() }
+        return carMode
     }
     
-    static func firstCarMode() -> OAApplicationMode {
-        (OAApplicationMode.values() ?? []).first { $0.isDerivedRouting(from: .car()) } ?? OAAppSettings.sharedManager().applicationMode.get()
-    }
-    
-    static func configureForCarPlay() {
+    func configureForCarPlay() {
         guard let routing = OARoutingHelper.sharedInstance() else { return }
         let settings = OAAppSettings.sharedManager()
         captureOriginalModeIfNeeded()
@@ -39,11 +37,20 @@ final class CarPlayNavigationModeManager: NSObject {
         }
     }
     
-    static func restoreOnDisconnect() {
-        guard let original = Self.originalAppMode else { return }
+    func restoreOnDisconnect() {
+        guard let original = originalAppMode else { return }
         guard !isRoutingActive() else { return }
         OAAppSettings.sharedManager().setApplicationModePref(original)
         OARoutingHelper.sharedInstance()?.setAppMode(original)
-        Self.originalAppMode = nil
+        originalAppMode = nil
+    }
+    
+    private func isRoutingActive() -> Bool {
+        OAAppSettings.sharedManager().followTheRoute.get() || OARoutingHelper.sharedInstance().isRouteCalculated() || OARoutingHelper.sharedInstance().isRouteBeingCalculated()
+    }
+    
+    private func captureOriginalModeIfNeeded() {
+        guard originalAppMode == nil else { return }
+        originalAppMode = OAAppSettings.sharedManager().applicationMode.get()
     }
 }

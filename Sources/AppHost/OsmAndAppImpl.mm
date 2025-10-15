@@ -1361,7 +1361,7 @@ NSString *const kXmlColon = @"_-_";
     
     [targetPointsHelper removeAllWayPoints:NO clearBackup:OsmAndApp.instance.data.pointToStart && OsmAndApp.instance.data.pointToNavigate];
     
-    OAApplicationMode *carPlayMode = [settings.isCarPlayModeDefault get] ? [CarPlayNavigationModeManager firstCarMode] : [OAAppSettings.sharedManager.carPlayMode get];
+    OAApplicationMode *carPlayMode = [settings.isCarPlayModeDefault get] ? [[CarPlayNavigationModeManager shared] firstCarMode] : [OAAppSettings.sharedManager.carPlayMode get];
     OAApplicationMode *defaultAppMode = [settings.useLastApplicationModeByDefault get] ?
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
         settings.defaultApplicationMode.get;

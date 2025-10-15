@@ -274,7 +274,7 @@ final class MigrationManager: NSObject {
                 Pair(37, "weather.pressure.showhide"): ShowHideAirPressureAction.getType(),
                 Pair(38, "weather.wind.showhide"): ShowHideWindAction.getType(),
                 Pair(39, "weather.cloud.showhide"): ShowHideCloudAction.getType(),
-                Pair(40, "weather.precipitation.showhide"): OAShowHidePrecipitationAction.getType()
+                Pair(40, "weather.precipitation.showhide"): ShowHidePrecipitationAction.getType()
             ]
             let excludedIds = [
                 Pair(4, "favorites.showhide"),

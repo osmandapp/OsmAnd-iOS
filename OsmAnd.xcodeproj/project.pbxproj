@@ -845,7 +845,6 @@
 		46C49509291E57DA005A9D70 /* OANauticalDepthParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */; };
 		46C7647728DC7BAA002DB43E /* OASimpleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */; };
 		46C78C0A28BD16A30019FF69 /* OAStorageStateValuesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */; };
-		46C841292C32F20D00E284B0 /* OAShowHidePrecipitationAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841282C32F20D00E284B0 /* OAShowHidePrecipitationAction.m */; };
 		46C841332C32F31B00E284B0 /* OAContourLinesAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841322C32F31B00E284B0 /* OAContourLinesAction.m */; };
 		46C841352C32F33D00E284B0 /* OANavAddDestinationAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841342C32F33D00E284B0 /* OANavAddDestinationAction.m */; };
 		46C841372C32F35100E284B0 /* OANavAddFirstIntermediateAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841362C32F35000E284B0 /* OANavAddFirstIntermediateAction.m */; };
@@ -1414,6 +1413,7 @@
 		C51766602E9FA90C00F2B085 /* ShowHideAirPressureAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C517665F2E9FA90C00F2B085 /* ShowHideAirPressureAction.swift */; };
 		C51766622E9FACCA00F2B085 /* ShowHideWindAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51766612E9FACCA00F2B085 /* ShowHideWindAction.swift */; };
 		C51766642E9FB91500F2B085 /* ShowHideCloudAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51766632E9FB91500F2B085 /* ShowHideCloudAction.swift */; };
+		C51766662E9FBC2100F2B085 /* ShowHidePrecipitationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51766652E9FBC2100F2B085 /* ShowHidePrecipitationAction.swift */; };
 		C51967AD2C247E9000476E4B /* POITagsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */; };
 		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
 		C52776A82CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */; };
@@ -4448,7 +4448,6 @@
 		46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OANauticalDepthParametersViewController.m; sourceTree = "<group>"; };
 		46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASimpleTableViewCell.xib; sourceTree = "<group>"; };
 		46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAStorageStateValuesCell.xib; sourceTree = "<group>"; };
-		46C841282C32F20D00E284B0 /* OAShowHidePrecipitationAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAShowHidePrecipitationAction.m; sourceTree = "<group>"; };
 		46C841322C32F31B00E284B0 /* OAContourLinesAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAContourLinesAction.m; sourceTree = "<group>"; };
 		46C841342C32F33D00E284B0 /* OANavAddDestinationAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavAddDestinationAction.m; sourceTree = "<group>"; };
 		46C841362C32F35000E284B0 /* OANavAddFirstIntermediateAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavAddFirstIntermediateAction.m; sourceTree = "<group>"; };
@@ -5130,6 +5129,7 @@
 		C517665F2E9FA90C00F2B085 /* ShowHideAirPressureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideAirPressureAction.swift; sourceTree = "<group>"; };
 		C51766612E9FACCA00F2B085 /* ShowHideWindAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWindAction.swift; sourceTree = "<group>"; };
 		C51766632E9FB91500F2B085 /* ShowHideCloudAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideCloudAction.swift; sourceTree = "<group>"; };
+		C51766652E9FBC2100F2B085 /* ShowHidePrecipitationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHidePrecipitationAction.swift; sourceTree = "<group>"; };
 		C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POITagsDetailsViewController.swift; sourceTree = "<group>"; };
 		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OARangeSliderFilterTableViewCell.swift; sourceTree = "<group>"; };
@@ -5334,7 +5334,6 @@
 		CA4ED0D4B38A47C7C60819AA /* OAPreviewRouteLineInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPreviewRouteLineInfo.mm; sourceTree = "<group>"; };
 		CA4ED0DBB53F07E0FD9153FC /* OAWeatherSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherSettingsViewController.h; sourceTree = "<group>"; };
 		CA4ED10A47C294C3F6672F2F /* OASettingsBackupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASettingsBackupViewController.h; sourceTree = "<group>"; };
-		CA4ED11015A078942A50049E /* OAShowHidePrecipitationAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHidePrecipitationAction.h; sourceTree = "<group>"; };
 		CA4ED156B139FD22BFBFBBF1 /* OADeleteAllVersionsBackupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADeleteAllVersionsBackupViewController.mm; sourceTree = "<group>"; };
 		CA4ED185AB106B8468BEA6D8 /* OALinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALinks.h; sourceTree = "<group>"; };
 		CA4ED1A332DC853B31E87B5F /* OABaseBackupTypesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseBackupTypesViewController.mm; sourceTree = "<group>"; };
@@ -11321,8 +11320,7 @@
 				C517665F2E9FA90C00F2B085 /* ShowHideAirPressureAction.swift */,
 				C51766612E9FACCA00F2B085 /* ShowHideWindAction.swift */,
 				C51766632E9FB91500F2B085 /* ShowHideCloudAction.swift */,
-				CA4ED11015A078942A50049E /* OAShowHidePrecipitationAction.h */,
-				46C841282C32F20D00E284B0 /* OAShowHidePrecipitationAction.m */,
+				C51766652E9FBC2100F2B085 /* ShowHidePrecipitationAction.swift */,
 				DA5A79FC26C563A000F274C7 /* OAShowHideTransportLinesAction.h */,
 				46C841462C32F41A00E284B0 /* OAShowHideTransportLinesAction.m */,
 				DA5A7A0726C563A000F274C7 /* OASwitchableAction.h */,
@@ -17523,6 +17521,7 @@
 				DA5A834C26C563A800F274C7 /* OAWebViewCell.m in Sources */,
 				DA5A847726C563A900F274C7 /* OALanesControl.mm in Sources */,
 				DA5A82F026C563A800F274C7 /* OARadiusCell.m in Sources */,
+				C51766662E9FBC2100F2B085 /* ShowHidePrecipitationAction.swift in Sources */,
 				DA5A854526C563A900F274C7 /* OAXmlImportHandler.mm in Sources */,
 				DA5A855726C563A900F274C7 /* OALocationSimulation.mm in Sources */,
 				DA5A84BD26C563A900F274C7 /* OABottomSheetViewController.mm in Sources */,
@@ -17577,7 +17576,6 @@
 				DA5A818C26C563A700F274C7 /* OAQuickAction.m in Sources */,
 				FAC166212B21BEF900D63755 /* Util.swift in Sources */,
 				DA5A849826C563A900F274C7 /* OAExitRoutePlanningBottomSheetViewController.m in Sources */,
-				46C841292C32F20D00E284B0 /* OAShowHidePrecipitationAction.m in Sources */,
 				277987B82E7AB48B00607516 /* KeyAssignmentTableViewCell.swift in Sources */,
 				4619604B2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift in Sources */,
 				DA5A853B26C563A900F274C7 /* OAFileNameTranslationHelper.m in Sources */,

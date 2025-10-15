@@ -277,7 +277,6 @@
 #import "OAShowHideTransportLinesAction.h"
 #import "OAShowHideLocalOSMChanges.h"
 #import "OANavDirectionsFromAction.h"
-#import "OAShowHidePrecipitationAction.h"
 #import "OAMapStyleAction.h"
 #import "OAUnsupportedAction.h"
 #import "OAMapillaryImageCardWrapper.h"

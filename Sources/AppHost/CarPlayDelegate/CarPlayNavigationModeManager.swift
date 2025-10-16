@@ -23,7 +23,7 @@ final class CarPlayNavigationModeManager: NSObject {
             let carMode = modes.first(where: { $0.isDerivedRouting(from: .car()) })
         else {
             let fallback = OAAppSettings.sharedManager().applicationMode.get()
-            NSLog("[CarPlay][Mgr][firstCarMode] No car-derived mode found. Fallback = %@", fallback.toHumanString())
+            NSLog("[CarPlayNavigationModeManager] -> No car-derived mode found. Fallback = %@", fallback.toHumanString())
             return fallback
         }
         

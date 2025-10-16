@@ -235,6 +235,7 @@
     {
         UISwitch *control = (UISwitch *)sender;
         [_settings.routeRecalculationDistance set:control.isOn ? _possibleDistanceValues[_selectedValue].doubleValue : kDisableMode mode:self.appMode];
+        [_settings.disableOffrouteRecalc set:!control.isOn mode:self.appMode];
         [self hidePicker];
         [self.tableView beginUpdates];
         [self generateData];

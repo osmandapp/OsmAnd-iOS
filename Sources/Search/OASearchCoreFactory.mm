@@ -247,16 +247,9 @@
         }
         if (cityResult.otherWordsMatch != nil)
         {
-            NSMutableSet<NSString *> *toDelete = [NSMutableSet new];
             [cityResult.otherWordsMatch enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-                BOOL wasPresent = [leftUnknownSearchWords containsObject:obj];
-                [leftUnknownSearchWords removeObject:obj];
-                if (!wasPresent)
-                    [toDelete addObject:obj]; // don't count same name twice
-                else
-                    match = YES;
+                [leftUnknownSearchWords removeObject:obj]; // remove 1 by 1
             }];
-            [cityResult.otherWordsMatch minusSet:toDelete];
         }
         // include parent search result even if it is empty
         if (match)
@@ -582,7 +575,7 @@
                                       {
                                           const auto& city = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(address);
                                           sr.object = [[OACity alloc] initWithCity:city];
-                                          if (city->type == OsmAnd::ObfAddressStreetGroupType::CityOrTown)
+                                          if (city->type == OsmAnd::ObfAddressStreetGroupSubtype::City || city->type == OsmAnd::ObfAddressStreetGroupSubtype::Town)
                                           {
                                               if ([phrase isNoSelectedType])
                                                   return NO; // ignore city/town
@@ -593,7 +586,7 @@
                                               sr.objectType = EOAObjectTypeCity;
                                               sr.priorityDistance = 0.1;
                                           }
-                                          else if (city->type == OsmAnd::ObfAddressStreetGroupType::Postcode)
+                                          else if (city->type == OsmAnd::ObfAddressStreetGroupSubtype::Postcode)
                                           {
                                               if ((locSpecified && ![postcodeBbox contains:x top:y right:x bottom:y]) || ![phrase isSearchTypeAllowed:EOAObjectTypePostcode])
                                                   return NO;
@@ -601,7 +594,10 @@
                                               sr.objectType = EOAObjectTypePostcode;
                                               sr.priorityDistance = 0.0;
                                           }
-                                          else
+                                          else if (city->type == OsmAnd::ObfAddressStreetGroupSubtype::Hamlet ||
+                                                   city->type == OsmAnd::ObfAddressStreetGroupSubtype::Suburb ||
+                                                   city->type == OsmAnd::ObfAddressStreetGroupSubtype::Village ||
+                                                   city->type == OsmAnd::ObfAddressStreetGroupSubtype::Boundary)
                                           {
                                               if ((locSpecified && ![villagesBbox contains:x top:y right:x bottom:y]) || ![phrase isSearchTypeAllowed:EOAObjectTypeVillage])
                                                   return NO;
@@ -618,7 +614,7 @@
                                               for(auto& s : closestCities)
                                               {
                                                   double ll = OsmAnd::Utilities::distance31(s->position31, address->position31);
-                                                  double pd = s->subtype == OsmAnd::ObfAddressStreetGroupSubtype::City ? ll : ll * 10;
+                                                  double pd = s->type == OsmAnd::ObfAddressStreetGroupSubtype::City ? ll : ll * 10;
                                                   if (minDist == -1 || pd < pDist)
                                                   {
                                                       c = s;

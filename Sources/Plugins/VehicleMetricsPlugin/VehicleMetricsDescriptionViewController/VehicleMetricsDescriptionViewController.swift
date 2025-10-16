@@ -33,7 +33,9 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                                                            .calculatedEngineLoad,
                                                            .fuelPressure,
                                                            .throttlePosition,
-                                                           .batteryVoltage]
+                                                           .batteryVoltage,
+                                                           .adapterBatteryVoltage]
+    
     
     static let placeholderTextNA: String = "N/A"
     

@@ -62,7 +62,7 @@ final class VehicleMetricsPlugin: OAPlugin {
                 .engineOilTemperature,
                 .temperatureAmbient:
             return OATemperatureConstant.getUnitSymbol(getTemperatureUnit())
-        case .batteryVoltage:
+        case .batteryVoltage, .adapterBatteryVoltage:
             return localizedString("unit_volt")
         case .fuelType, .engineRuntime, .vin:
             return nil
@@ -121,6 +121,7 @@ final class VehicleMetricsPlugin: OAPlugin {
 
         case .fuelConsumptionRateSensor,
              .batteryVoltage,
+             .adapterBatteryVoltage,
              .fuelConsumptionRatePercentHour,
              .fuelLeftPercent,
              .calculatedEngineLoad,

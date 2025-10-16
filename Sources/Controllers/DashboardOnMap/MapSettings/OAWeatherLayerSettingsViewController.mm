@@ -555,6 +555,7 @@
         [self.tableView reloadData];
         [self goMinimized:NO];
     } completion:nil];
+    [[OAMapButtonsHelper sharedInstance] refreshQuickActionButtons];
 }
 
 - (void)onSliderValueChanged:(UISlider *)sender

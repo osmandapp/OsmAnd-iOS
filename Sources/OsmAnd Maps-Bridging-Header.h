@@ -94,6 +94,7 @@
 #import "OAAmenitySearcher.h"
 #import "UITableViewCell+getTableView.h"
 #import "UINavigationController+keyCommands.h"
+#import "OAWeatherHelperBridge.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -276,11 +277,6 @@
 #import "OAShowHideTransportLinesAction.h"
 #import "OAShowHideLocalOSMChanges.h"
 #import "OANavDirectionsFromAction.h"
-#import "OAShowHideTemperatureAction.h"
-#import "OAShowHideAirPressureAction.h"
-#import "OAShowHideWindAction.h"
-#import "OAShowHideCloudAction.h"
-#import "OAShowHidePrecipitationAction.h"
 #import "OAMapStyleAction.h"
 #import "OAUnsupportedAction.h"
 #import "OAMapillaryImageCardWrapper.h"

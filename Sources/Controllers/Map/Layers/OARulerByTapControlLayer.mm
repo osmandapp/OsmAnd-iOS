@@ -253,8 +253,7 @@ const static int kDoubleTouchCount = 2;
     UITapGestureRecognizer* _doubleGestureRecognizer;
     UILongPressGestureRecognizer *_longSingleGestureRecognizer;
     UILongPressGestureRecognizer *_longDoubleGestureRecognizer;
-    UIPanGestureRecognizer *_panSingleGestureRecognizer;
-    UIPanGestureRecognizer *_panDoubleGestureRecognizer;
+    UIPanGestureRecognizer *_panGestureRecognizer;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
@@ -297,19 +296,12 @@ const static int kDoubleTouchCount = 2;
     _longDoubleGestureRecognizer.delegate = self;
     [self addGestureRecognizer:_longDoubleGestureRecognizer];
     
-    _panSingleGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                          action:@selector(moveDetected:)];
-    _panSingleGestureRecognizer.minimumNumberOfTouches = kOneTouchCount;
-    _panSingleGestureRecognizer.maximumNumberOfTouches = kOneTouchCount;
-    _panSingleGestureRecognizer.delegate = self;
-    [self addGestureRecognizer:_panSingleGestureRecognizer];
-    
-    _panDoubleGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                          action:@selector(moveDetected:)];
-    _panDoubleGestureRecognizer.minimumNumberOfTouches = kDoubleTouchCount;
-    _panDoubleGestureRecognizer.maximumNumberOfTouches = kDoubleTouchCount;
-    _panDoubleGestureRecognizer.delegate = self;
-    [self addGestureRecognizer:_panDoubleGestureRecognizer];
+    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                    action:@selector(moveDetected:)];
+    _panGestureRecognizer.minimumNumberOfTouches = kOneTouchCount;
+    _panGestureRecognizer.maximumNumberOfTouches = kDoubleTouchCount;
+    _panGestureRecognizer.delegate = self;
+    [self addGestureRecognizer:_panGestureRecognizer];
     self.multipleTouchEnabled = YES;
     
     [self initFingerLayer];
@@ -438,7 +430,7 @@ const static int kDoubleTouchCount = 2;
         [self handleTouchWith:recognizer];
         [self cancelPreviousHideTouchRuler];
     }
-    else if (recognizer.state == UIGestureRecognizerStateEnded)
+    else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled)
     {
         [self hideTouchRulerInDrawTime];
     }

@@ -10,6 +10,7 @@
 final class CarPlayNavigationModeManager: NSObject {
     static let shared = CarPlayNavigationModeManager()
     
+    // App mode (profile) that was active before switching to a CarPlay mode.
     private var originalAppMode: OAApplicationMode?
     
     private override init() {
@@ -17,7 +18,15 @@ final class CarPlayNavigationModeManager: NSObject {
     }
     
     func firstCarMode() -> OAApplicationMode {
-        guard let modes = OAApplicationMode.values(), let carMode = modes.first(where: { $0.isDerivedRouting(from: .car()) }) else { return OAAppSettings.sharedManager().applicationMode.get() }
+        guard
+            let modes = OAApplicationMode.values(),
+            let carMode = modes.first(where: { $0.isDerivedRouting(from: .car()) })
+        else {
+            let fallback = OAAppSettings.sharedManager().applicationMode.get()
+            NSLog("[CarPlay][Mgr][firstCarMode] No car-derived mode found. Fallback = %@", fallback.toHumanString())
+            return fallback
+        }
+        
         return carMode
     }
     
@@ -38,11 +47,11 @@ final class CarPlayNavigationModeManager: NSObject {
     }
     
     func restoreOnDisconnect() {
-        guard let original = originalAppMode else { return }
+        guard let originalAppMode else { return }
         guard !isRoutingActive() else { return }
-        OAAppSettings.sharedManager().setApplicationModePref(original)
-        OARoutingHelper.sharedInstance()?.setAppMode(original)
-        originalAppMode = nil
+        OAAppSettings.sharedManager().setApplicationModePref(originalAppMode)
+        OARoutingHelper.sharedInstance()?.setAppMode(originalAppMode)
+        self.originalAppMode = nil
     }
     
     private func isRoutingActive() -> Bool {

@@ -37,10 +37,9 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.setMap(mapVC)
             }
             mapVC?.isCarPlayDashboardActive = true
-            CarPlayNavigationModeManager.shared.configureForCarPlay()
             if let mapVC {
                 let settings: OAAppSettings = OAAppSettings.sharedManager()
-
+                CarPlayNavigationModeManager.shared.configureForCarPlay()
                 dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
                 dashboardVC?.attachMapToWindow()
                 self.window?.rootViewController = dashboardVC

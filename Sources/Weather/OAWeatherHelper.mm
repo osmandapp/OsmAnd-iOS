@@ -468,7 +468,7 @@
         QString regionIdString = QString::fromNSString(region.downloadsIdPrefix).append("tifsqlite");
         const auto success = app.resourcesManager->uninstallResource(regionIdString);
         if (!success)
-            OALog(@"[ERROR] uninstallResource failed for regionId: %@", regionIdString.toNSString());
+            OALog(@"[ERROR] -> OAWeatherHelper -> uninstallResource failed for regionId: %@", regionIdString.toNSString());
     }
 
     QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:tileIds];

@@ -110,7 +110,7 @@
 "map_settings_avail_lay" = "Camadas disponíveis";
 // Intro
 "shared_string_skip" = "Pular";
-"intro_download" = "Descarregar\nmapa";
+"intro_download" = "Baixar\nmapa";
 "next_proceed" = "Próximo";
 "intro_welcome" = "Bem-vindo(a) ao\nOsmAnd";
 "intro_promo" = "Mapas globais offline";
@@ -141,7 +141,7 @@
 "proceed_q" = "Continuar?";
 "shared_string_download" = "Baixar";
 "shared_string_no_thanks" = "Não, obrigado";
-"download_now" = "Descarregar o mapa agora";
+"download_now" = "Baixar mapa agora";
 "prch_failed" = "A aquisição de \"%@\" falhou";
 "prch_items_failed" = "itens não foram restaurados. Por favor, tente novamente.";
 // Resources
@@ -811,7 +811,7 @@
 "modify_poi" = "Alterar as informações do POI";
 // Help
 "help_first_steps" = "Primeiros passos";
-"help_first_use_descr" = "Como descarregar mapas e definir configurações básicas";
+"help_first_use_descr" = "Como baixar mapas e definir configurações básicas";
 "help_navigation_descr" = "Como configurar a navegação";
 "help_search" = "Pesquisa de mapa";
 "help_contact_us" = "Fale conosco";
@@ -869,22 +869,22 @@
 "open_map_settings" = "Abrir configurações do mapa";
 "plugin_popup_ski_title" = "Ativar estilo Mapa de esqui";
 "plugin_popup_ski_desc" = "Para ativar o estilo <b>Mapa de esqui</b>, vá às <b>Configurações do mapa</b> > <b>Tipo de mapa</b>";
-"plugin_popup_wiki_title" = "Descarregar Wikipédia";
+"plugin_popup_wiki_title" = "Baixar Wikipédia";
 "plugin_popup_wiki_desc" = "Para usar o complemento Wikipédia, primeiro descarregue os dados da Wikipédia de uma região";
-"plugin_popup_wiki_ask" = "Para descarregar dados da Wikipédia, tem de ativar o complemento: <b>Wikipédia</b>";
-"plugin_popup_srtm_title" = "Descarregar curvas de nível";
+"plugin_popup_wiki_ask" = "Para baixar dados da Wikipédia, tem de ativar o complemento: <b>Wikipédia</b>";
+"plugin_popup_srtm_title" = "Baixar curvas de nível";
 "plugin_popup_srtm_desc" = "Para usar o recurso Topografia, primeiro baixe as curvas de nível de uma região";
-"plugin_popup_srtm_ask" = "Para descarregar curvas de nível, tem de ativar o complemento: <b>Topografia</b>";
-"plugin_popup_nautical_title" = "Descarregar mapas náuticos";
+"plugin_popup_srtm_ask" = "Para baixar curvas de nível, tem de ativar o complemento: <b>Topografia</b>";
+"plugin_popup_nautical_title" = "Baixar mapas náuticos";
 "plugin_popup_nautical_desc" = "Descarregue primeiro os mapas náuticos.\nDepois aceda a <b>Configurações de mapa</b> > <b>Tipo de mapa</b> e ative o estilo <b>Náutico</b>";
 "plugin_popup_trip_planning_ask" = "Para começar a planear a viagem, tem de ativar o complemento: <b>Planeamento de viagem</b>";
 "go_to_downloads" = "Ir às descargas";
 "turn_on_plugin" = "Ativar complemento";
-"all_world_popup_desc" = "Descarregar mapa base mundial para ver nomes de estados, fronteiras e outras informações";
+"all_world_popup_desc" = "Baixar mapa base mundial para ver nomes de estados, fronteiras e outras informações";
 "restore_all_purchases" = "Recuperar todas as compras";
 "no_statistics" = "Sem estatísticas";
 "no_internet_avail" = "Internet indisponível";
-"no_internet_avail_desc_first" = "Por favor ative a ligação à Internet para descarregar a lista de mapas";
+"no_internet_avail_desc_first" = "Por favor ative a conexão com a internet para baixar a lista de mapas";
 "show_region_on_map_desc" = "Mapa de %@ foi descarregado. Vá para o mapa para começar a usá-lo.";
 "show_region_on_map_go" = "Vá para o mapa";
 "sqlitedb_import_title" = "Importar ficheiro de mapa raster";
@@ -896,7 +896,7 @@
 "go_to_map" = "Exibir mapa";
 "search_my_location" = "Encontrar a minha posição";
 "search_map" = "Procurando mapas…";
-"skip_map_downloading_desc_ios" = "Não tem nenhum mapa offline instalado. Pode escolher um mapa na lista ou descarregar mapas mais tarde através do Menu - Mapas e recursos";
+"skip_map_downloading_desc_ios" = "Não tem nenhum mapa offline instalado. Pode escolher um mapa na lista ou baixar mapas mais tarde através do Menu - Mapas e recursos";
 "items_selected" = "%d selecionado";
 "user_password" = "Senha";
 "poi_category_and_type" = "Categoria e tipo de POI";
@@ -906,7 +906,7 @@
 "do_not_show_discount" = "Não mostrar promoções";
 "do_not_send_anonymous_data" = "Não enviar dados anônimos";
 "wiki_buy_description" = "Para ler artigos completos - compre o complemento Wikipédia e descarregue os dados da Wikipédia de %@";
-"wiki_download_description" = "Para ler artigos completos - descarregar dados da Wikipédia de %@";
+"wiki_download_description" = "Para ler artigos completos - baixar dados da Wikipédia de %@";
 "download_wiki_region_placeholder" = "esta região";
 "osm_live_payment_monthly_title" = "Mensal";
 "osm_live_payment_3_months_title" = "A cada três meses";
@@ -1623,7 +1623,7 @@
 "map_settings_slopes_description" = "Declives são visualizações coloridas no terreno.";
 "map_settings_slopes_legend" = "Pode ler mais sobre declives na Wikipédia";
 "ios_release_3_90" = "- Apresentada a funcionalidade \"Planejar uma rota\" para planejar futuras viagens com capacidade de criar segmentos de trilha usando diferentes tipos de navegação\n- Adicionada uma opção para ativar uma bússola sobre a ferramenta \"Raio de Régua\"\n- Adicionada a opção \"Sobreposição de nome dos POI\", permitindo mostrar nomes de favoritos, pontos de trajetos de trilhas e marcadores no mapa\n- Adicionadas novas ações rápidas para visibilidade das curvas de nível e do terreno no mapa, alterando um perfil de aplicação, eliminando um ponto intermédio mais próximo\n- Problemas corrigidos com a categoria de pesquisa da Wikipédia ausentes\n- Importar Configurações: bugs corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n- Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário do conjunto de alterações\n";
-"ios_release_3_80" = "• Adicionados \"Perfis da aplicação\" com configurações independentes\n• Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e ecrã\n• Capacidade de importar ou exportar configurações de perfis\n• Adicionadas origens de dados para fotografias online\n• Adicionada a capacidade de descarregar mapas online para a cache\n• Algoritmos de \"Pesquisa\" melhorados\n";
+"ios_release_3_80" = "• Adicionados \"Perfis da aplicação\" com configurações independentes\n• Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e ecrã\n• Capacidade de importar ou exportar configurações de perfis\n• Adicionadas origens de dados para fotografias online\n• Adicionada a capacidade de baixar mapas online para a cache\n• Algoritmos de \"Pesquisa\" melhorados\n";
 
 
 // Release Notes
@@ -1648,7 +1648,7 @@
 "shared_string_account_add" = "Adicionar conta";
 "shared_string_required" = "Obrigatório";
 "email_example_hint" = "utilizador@exemplo.com";
-"download_wiki_data" = "Descarregar dados da Wikipédia para %@";
+"download_wiki_data" = "Baixar dados da Wikipédia para %@";
 "searching" = "Pesquisando…";
 "import_raster_map_failed" = "Falha na importação do mapa raster";
 "import_raster_map_success" = "O mapa raster foi importado. Abra as \"Configurações do mapa\" e ative-o em \"Camada superior/inferior\"";
@@ -1774,7 +1774,7 @@
 
 // Route planning
 "plan_route" = "Planejar uma rota";
-"downloading" = "A descarregar";
+"downloading" = "Baixando";
 "checking_for_duplicate_description" = "OsmAnd verifica %@ para duplicatas com itens existentes no aplicativo. \n \nPode levar algum tempo.";
 "checking_for_duplicates" = "A verificar se há duplicados...";
 "export_profile_descr" = "Pode exportar todas as configurações do perfil, copiar todas as configurações de outro perfil ou redefinir todas as configurações do perfil para o estado padrão.";
@@ -1991,7 +1991,7 @@
 "srtm_download_list_help_message" = "OsmAnd fornece dados de linha de contorno em metros e pés. Você precisará baixar novamente o arquivo para alterar o formato.";
 "srtm_download_single_help_message" = "Selecione a variante. Você precisará baixar novamente o arquivo para alterar o formato.";
 "srtm_unit_format" = "Variante da unidade de curvas de nível";
-"download_suggestion" = "Descarregar mapa %@ detalhado para ver esta área";
+"download_suggestion" = "Baixar mapa %@ detalhado para ver esta área";
 "download_map_dialog" = "Tela de baixar mapa";
 "shared_string_navigation" = "Navegação";
 "dialogs_and_notifications_descr" = "Popups de controle, caixas de diálogo e notificações.";
@@ -2031,7 +2031,7 @@
 "edit_track" = "Editar trilha";
 "duplicate_track" = "Duplicar trilho";
 "shared_string_overview" = "Visão geral";
-"ios_release_4_1" = "• Interação com trilhos completamente redesenhada: um novo menu com gráficos, estatísticas, capacidade de alterar a aparência, cor por velocidade, altura e inclinação e seleção de trilhos no mapa\n• Novo ecrã para procura por coordenadas em diferentes formatos\n• Pesquisa de coordenadas no formato OLC melhorada\n• Novo menu de fácil utilização para escolher os idiomas a usar nos artigos da Wikipédia no mapa\n• Capacidade de carregar mapas de todas as regiões de alguns países facilmente com alguns cliques\n• Adicionadas linhas de contorno na medida \"pés\" (é necessário descarregar novamente os ficheiros)\n• Adicionada a capacidade de descarregar mapas selecionando a região ou país desejado no mapa, bem como a adição de uma caixa de diálogo com a sugestão de carregar um mapa em falta de uma região exibida\n• Nova aparência os botões de controlo do mapa e a capacidade adicional de alterar a ampliação do mapa tocando duas vezes e deslizando\n• As configurações de visibilidade das rotas foram movidas para cima no ecrã \"Configurar mapa\" e foram reorganizadas para uma melhor flexibilidade.\n";
+"ios_release_4_1" = "• Interação com trilhos completamente redesenhada: um novo menu com gráficos, estatísticas, capacidade de alterar a aparência, cor por velocidade, altura e inclinação e seleção de trilhos no mapa\n• Novo ecrã para procura por coordenadas em diferentes formatos\n• Pesquisa de coordenadas no formato OLC melhorada\n• Novo menu de fácil utilização para escolher os idiomas a usar nos artigos da Wikipédia no mapa\n• Capacidade de carregar mapas de todas as regiões de alguns países facilmente com alguns cliques\n• Adicionadas linhas de contorno na medida \"pés\" (é necessário baixar novamente os arquivos)\n• Adicionada a capacidade de baixar mapas selecionando a região ou país desejado no mapa, bem como a adição de uma caixa de diálogo com a sugestão de carregar um mapa em falta de uma região exibida\n• Nova aparência os botões de controlo do mapa e a capacidade adicional de alterar a ampliação do mapa tocando duas vezes e deslizando\n• As configurações de visibilidade das rotas foram movidas para cima no ecrã \"Configurar mapa\" e foram reorganizadas para uma melhor flexibilidade.\n";
 "delete_waypoints" = "Apagar ponto fixo";
 "delete_group_confirm_short" = "Eliminar grupo?";
 "delete_group_confirm" = "Quer mesmo eliminar o grupo \"%@\"?";
@@ -3893,3 +3893,8 @@
 "press_button_to_link_with_action" = "Pressione o botão no seu dispositivo para atribuí-lo à ação: ";
 "key_is_already_assigned_error" = "A chave \"%@\" já está atribuída a uma ação: ";
 "application_profile_changed" = "Perfil do aplicativo alterado para \"%@\"";
+"altitude_metrics_description" = "Define a unidade de exibição para altitude em widgets e estatísticas.";
+"duration" = "Duração";
+"shared_string_estimated_duration" = "Duração estimada";
+"shared_string_degrees" = "Graus";
+"auto_zoom_3d_angle" = "Zoom automático em ângulo 3D";

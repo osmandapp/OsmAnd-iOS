@@ -193,11 +193,17 @@ class GpxUIHelper: NSObject {
         private let outlineLayer = CALayer()
 
         private var text: NSAttributedString = NSAttributedString(string: "")
+        private var showXAxisValue = false
 
         override init(frame: CGRect) {
             super.init(frame: frame)
 
             setupLayers()
+        }
+        
+        convenience init(frame: CGRect, showXAxisValue: Bool) {
+            self.init(frame: frame)
+            self.showXAxisValue = showXAxisValue
         }
 
         required init?(coder: NSCoder) {
@@ -250,6 +256,16 @@ class GpxUIHelper: NSObject {
                     }
                 }
             }
+            
+            if let dataSet = chartData?.dataSets.first as? OrderedLineDataSet,
+               showXAxisValue && dataSet.getDataSetAxisType() == .distance {
+                let meters = entry.x * dataSet.getDivX()
+                if let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(meters)) {
+                    res.append(NSAttributedString(string: ", \(formattedDistance)",
+                                                  attributes: [.foregroundColor: UIColor.textColorPrimary]))
+                }
+            }
+            
             text = res
             textLayer.string = res
         }
@@ -405,8 +421,8 @@ class GpxUIHelper: NSObject {
         chart.legend.enabled = false
     }
 
-    static func setupElevationChart(chartView: ElevationChart) {
-        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40))
+    static func setupElevationChart(chartView: ElevationChart, showXInMarker: Bool) {
+        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40), showXAxisValue: showXInMarker)
         setupElevationChart(chartView: chartView,
                             markerView: marker,
                             topOffset: 24,

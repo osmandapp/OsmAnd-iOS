@@ -10,11 +10,11 @@ on:
       buildversion:
         description: 'Consequent Build Number (Testflight)'
         required: true
-        default: '52xx'
+        default: '53xx'
       releaseversion:
         description: 'Release Version'
         required: true
-        default: '5.2.0'
+        default: '5.3.0'
       download_qt_ios_library:
         description: 'Download prebuilt qt library (true) or build locally (false) - extra 2 h'
         required: true

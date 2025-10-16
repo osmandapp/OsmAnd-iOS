@@ -235,7 +235,6 @@
     {
         UISwitch *control = (UISwitch *)sender;
         [_settings.routeRecalculationDistance set:control.isOn ? _possibleDistanceValues[_selectedValue].doubleValue : kDisableMode mode:self.appMode];
-        [_settings.disableOffrouteRecalc set:!control.isOn mode:self.appMode];
         [self hidePicker];
         [self.tableView beginUpdates];
         [self generateData];
@@ -291,7 +290,6 @@
     _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
     _defaultValue = nil;
     [_settings.routeRecalculationDistance set:_possibleDistanceValues[_selectedValue].doubleValue mode:self.appMode];
-    [_settings.disableOffrouteRecalc set:[_settings.routeRecalculationDistance get:self.appMode] != kDisableMode];
     [self generateData];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
     

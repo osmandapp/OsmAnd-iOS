@@ -69,7 +69,8 @@
         autoCenterValue = [NSString stringWithFormat:@"%lu %@", (unsigned long)autoCenter, OALocalizedString(@"int_seconds")];
     
     NSString *autoZoomValue = nil;
-    if (![_settings.autoZoomMap get:self.appMode])
+    BOOL isAutoZoomMap = [_settings.autoZoomMap get:self.appMode];
+    if (!isAutoZoomMap)
     {
         autoZoomValue = OALocalizedString(@"auto_zoom_none");
     }
@@ -94,11 +95,14 @@
     autoZoomRow.cellType = OAValueTableViewCell.reuseIdentifier;
     autoZoomRow.title = OALocalizedString(@"auto_zoom_map");
     autoZoomRow.descr = autoZoomValue;
-    OATableRowData *autoZoom3dAngleRow = [autoZoomSection createNewRow];
-    autoZoom3dAngleRow.key = @"autoZoom3dAngle";
-    autoZoom3dAngleRow.cellType = OAValueTableViewCell.reuseIdentifier;
-    autoZoom3dAngleRow.title = OALocalizedString(@"auto_zoom_3d_angle");
-    autoZoom3dAngleRow.descr = [NSString stringWithFormat:@"%ld %@", (long)[_settings.autoZoom3DAngle get:self.appMode], OALocalizedString(@"shared_string_degrees")];
+    if (isAutoZoomMap)
+    {
+        OATableRowData *autoZoom3dAngleRow = [autoZoomSection createNewRow];
+        autoZoom3dAngleRow.key = @"autoZoom3dAngle";
+        autoZoom3dAngleRow.cellType = OAValueTableViewCell.reuseIdentifier;
+        autoZoom3dAngleRow.title = OALocalizedString(@"auto_zoom_3d_angle");
+        autoZoom3dAngleRow.descr = [NSString stringWithFormat:@"%ld %@", (long)[_settings.autoZoom3DAngle get:self.appMode], OALocalizedString(@"shared_string_degrees")];
+    }
     
     OATableSectionData *previewNextTurnSection = [_data createNewSection];
     previewNextTurnSection.footerText = OALocalizedString(@"preview_next_turn_descr");

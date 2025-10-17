@@ -3741,6 +3741,21 @@
 • The issue with cross-platform purchases has been resolved\n\
 • Fixed the issue of a black screen on CarPlay after startup\n";
 
+"ios_release_5_2" = "• Introduced customizable button mapping for external controllers, allowing any Quick Action to be assigned to a keyboard or controller button\n
+• Added new Quick Actions for controlling the app with an external controller\n
+• Improved widget visibility in transparency mode by adding text outlines\n
+• Added a precision grid for aligning map buttons\n
+• Introduced a new \"Marine\" nautical map style with extensive customization options\n
+• Added street and city details to search results\n
+• Added an option to increase the text size in the distance measurement tool\n
+• Moved the temperature unit selection to General Settings\n
+• Altitude units can now be set separately from distance units\n
+• Added a map orientation Quick Action with selectable compass modes\n
+• Resolved an issue that prevented some widgets from being moved\n
+• Fixed an incorrect distance display in the Next Turn widget\n
+• Improved brand search by including more local brands\n
+• General stability and performance improvements\n";
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";

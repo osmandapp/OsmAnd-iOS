@@ -246,7 +246,7 @@
         case EOAObjectTypeCity:
         {
             OACity *city = (OACity *)searchResult.object;
-            return [OACity getLocalizedTypeStr:city.subType];
+            return [OACity getLocalizedTypeStr:city.type];
         }
         case EOAObjectTypePostcode:
         {
@@ -259,16 +259,16 @@
             {
                 if (searchResult.distRelatedObjectName > 0)
                 {
-                    return [NSString stringWithFormat:@"%@ • %@ %@ %@", [OACity getLocalizedTypeStr:city.subType], [OAOsmAndFormatter getFormattedDistance:(float) searchResult.distRelatedObjectName], OALocalizedString(@"shared_string_from"), searchResult.localeRelatedObjectName];
+                    return [NSString stringWithFormat:@"%@ • %@ %@ %@", [OACity getLocalizedTypeStr:city.type], [OAOsmAndFormatter getFormattedDistance:(float) searchResult.distRelatedObjectName], OALocalizedString(@"shared_string_from"), searchResult.localeRelatedObjectName];
                 }
                 else
                 {
-                    return [NSString stringWithFormat:@"%@, %@", [OACity getLocalizedTypeStr:city.subType], searchResult.localeRelatedObjectName];
+                    return [NSString stringWithFormat:@"%@, %@", [OACity getLocalizedTypeStr:city.type], searchResult.localeRelatedObjectName];
                 }
             }
             else
             {
-                return [OACity getLocalizedTypeStr:city.subType];
+                return [OACity getLocalizedTypeStr:city.type];
             }
         }
         case EOAObjectTypeStreet:

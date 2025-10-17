@@ -65,6 +65,13 @@
 
 - (void) processWholeHTML:(NSString *)html downloadMode:(OADownloadMode *)downloadMode onlyNow:(BOOL)onlyNow onComplete:(void (^)(NSString *htmlWithImages))onComplete
 {
+    if (!html || html.length == 0)
+    {
+        NSLog(@"OAWebImagesCacheHelper -> processWholeHTML -> empty html onComplete(nil)");
+        onComplete(nil);
+        return;
+    }
+    
     NSArray<NSString *> *imageLinks = [self extractImagesLinksFromHtml:html];
     if (imageLinks.count > 0)
     {

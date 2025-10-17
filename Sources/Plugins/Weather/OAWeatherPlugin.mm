@@ -157,7 +157,7 @@
 
 - (NSArray<QuickActionType *> *)getQuickActionTypes
 {
-    return @[OAShowHideTemperatureAction.getQuickActionType, OAShowHideWindAction.getQuickActionType, OAShowHideAirPressureAction.getQuickActionType, OAShowHidePrecipitationAction.getQuickActionType, OAShowHideCloudAction.getQuickActionType];
+    return @[ShowHideTemperatureAction.getQuickActionType, ShowHideWindAction.getQuickActionType, ShowHideAirPressureAction.getQuickActionType, ShowHidePrecipitationAction.getQuickActionType, ShowHideCloudAction.getQuickActionType];
 }
 
 - (NSArray<OAWeatherWidget *> *)createWidgetsControls

@@ -719,7 +719,7 @@ static BOOL _isDeviatedFromRoute = false;
                 {
                     NSLog(@"Recalculate route, because correlation  : %f", distOrth);
                     _isDeviatedFromRoute = true;
-                    calculateRoute = ![_settings.disableOffrouteRecalc get];
+                    calculateRoute = YES;
                 }
             }
             // 3. Identify wrong movement direction

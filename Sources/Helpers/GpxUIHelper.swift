@@ -261,7 +261,7 @@ class GpxUIHelper: NSObject {
                showXAxisValue && dataSet.getDataSetAxisType() == .distance {
                 let meters = entry.x * dataSet.getDivX()
                 if let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(meters)) {
-                    res.append(NSAttributedString(string: ", \(formattedDistance)",
+                    res.append(NSAttributedString(string: (res.length > 0 ? ", " : "") + formattedDistance,
                                                   attributes: [.foregroundColor: UIColor.textColorPrimary]))
                 }
             }

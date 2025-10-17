@@ -458,15 +458,14 @@ final class MapHudLayout: NSObject {
         let width = Int(containerView.bounds.width - insets.left - insets.right)
         let height = Int(getAdjustedHeight())
         let m = OAUtilities.relativeMargins(for: button, inParent: containerView)
-        let startInset = insets.left
-        let endInset = insets.right
-        let leftAligned = pos.isLeft
-        let topAligned = pos.isTop
-        let xRaw = leftAligned ? m.left - startInset : m.right - endInset
-        let yRaw = topAligned ? m.top - statusBarHeight : m.bottom - insets.bottom
-        let xPixels = Int(round(max(0, xRaw)))
-        let yPixels = Int(round(max(0, yRaw)))
-        pos.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(width), heightPx: Int32(height), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
+        let chooseLeft = m.left - insets.left <= m.right - insets.right
+        let chooseTop = m.top - statusBarHeight <= m.bottom - insets.bottom
+        let baseCellFixPx: CGFloat = max(0, (hudBasePaddingDp - CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP)) * dpToPx)
+        let xRaw = chooseLeft ? m.left - insets.left : m.right - insets.right
+        let yRaw = chooseTop ? m.top - statusBarHeight : m.bottom - insets.bottom
+        let xPixels = Int(round(max(0, xRaw - baseCellFixPx)))
+        let yPixels = Int(round(max(0, yRaw - baseCellFixPx)))
+        pos.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(width), heightPx: Int32(height), gravLeft: chooseLeft, x: Int32(xPixels), gravTop: chooseTop, y: Int32(yPixels))
         state.getPositionSize().fromLongValue(v: pos.toLongValue())
         updateButtonParams(for: button, with: pos)
         if save {

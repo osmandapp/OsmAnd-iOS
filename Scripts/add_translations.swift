@@ -521,12 +521,18 @@ class IOSWriter {
                 }
                 var newString = string
                 var newValue = currentValue
-                if let androidValue = keysToUpdate[key], let updatedString = replaceValueText(newValue: filterUnsafeChars(androidValue), inFullString: string),
-                            updatedString != string  {
+
+                if let androidValue = keysToUpdate[key],
+                    let updatedString = replaceValueText(newValue: filterUnsafeChars(androidValue), inFullString: strippingZeroWidth(string)),
+                    updatedString != string  {
+                    
                     updatedStringsCount += 1
                     newValue = androidValue
                     newString = updatedString
-                    // print("Update key ! \(string)  \(currentValue) -> \(androidValue)?? ")
+                    
+                    if DEBUG {
+                        print("Update key ! \(string)  \(currentValue) -> \(androidValue)?? ")
+                    }
                 }
                 
                 if ALLOW_TO_HAVE_ENGLISH_NAMES ||
@@ -612,9 +618,16 @@ class IOSWriter {
             result = String(result.dropLast())
             result = result + "\\\""
         }
+        
+        result = strippingZeroWidth(result)
+        
         return result
     }
     
+    static func strippingZeroWidth(_ s: String) -> String {
+        let zeroWidth: Set<Unicode.Scalar> = ["\u{200B}", "\u{200C}", "\u{200D}", "\u{FEFF}"]
+        return String(s.unicodeScalars.filter { !zeroWidth.contains($0) })
+    }
 }
 
 

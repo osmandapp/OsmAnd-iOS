@@ -1107,15 +1107,18 @@ includeHidden:(BOOL)includeHidden
         }
     }
     
-    NSMutableArray<OAWorldRegion *> *newMapRegions = [NSMutableArray new];
-    for (OAWorldRegion *region in mapRegions)
+    if (subregions != nil)
     {
-        if (![region.resourceTypes containsObject:[OAResourceType toValue:resourceType]]
-            && region.subregions.count > 0
-            && [region getLevel] > 2)
-            [newMapRegions addObjectsFromArray:region.subregions];
+        NSMutableArray<OAWorldRegion *> *newMapRegions = [NSMutableArray new];
+        for (OAWorldRegion *region in mapRegions)
+        {
+            if (![region.resourceTypes containsObject:[OAResourceType toValue:resourceType]]
+                && region.subregions.count > 0
+                && [region getLevel] > 2)
+                [newMapRegions addObjectsFromArray:region.subregions];
+        }
+        [mapRegions addObjectsFromArray:newMapRegions];
     }
-    [mapRegions addObjectsFromArray:newMapRegions];
     
     if (mapRegions.count > 0)
     {

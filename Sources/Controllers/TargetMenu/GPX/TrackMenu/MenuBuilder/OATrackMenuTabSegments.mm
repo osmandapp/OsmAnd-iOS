@@ -104,7 +104,7 @@
     cell.chartView.delegate = self;
     cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
 
-    [GpxUIHelper setupElevationChartWithChartView:cell.chartView];
+    [GpxUIHelper setupElevationChartWithChartView:cell.chartView showXInMarker:YES];
 
     if (_trackChartHelper)
     {

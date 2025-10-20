@@ -503,7 +503,6 @@
 "si_min_m" = "perc/mérföld";
 "si_nm_h" = "tengeri mérföld/óra (csomó)";
 "nm" = "tengeri mérföld";
-"units_nm_h" = "tengeri mérföld/óra";
 "min_mile" = "perc/mérföld";
 "min_km" = "perc/km";
 "nothing_found" = "Nincs találat";

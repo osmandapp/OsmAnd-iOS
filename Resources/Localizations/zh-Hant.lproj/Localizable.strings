@@ -3083,7 +3083,6 @@
 "apply_only_to_new_points" = "僅套用到新點";
 "osmand_cloud_delete_account_confirmation" = "刪除帳戶？";
 "ant_plus_nothing_found_text" = "找不到任何感測器";
-"lang_sr-Latn" = "塞爾維亞語（拉丁文）";
 "trash_is_empty_banner_desc" = "從 OsmAnd Cloud 移除的檔案將在%@天後在此處可用。";
 "select_tracks_to_display" = "選取軌跡以在地圖上顯示。";
 "target_elevation" = "目標海拔";

@@ -2955,7 +2955,6 @@
 "screen_settings_weather_toolbar" = "Временска трака са алаткама";
 "generate_slope_from_3d_maps" = "Образуј оквире карата нагиба из просторних, 3Д карата";
 "shared_string_uploading" = "Отпремам";
-"lang_sr-Latn" = "Српски није (латиница)";
 "shared_string_restoring" = "Враћање";
 "weather_update_disabled" = "Искључен";
 "weather_update_over_wifi_only" = "Само преко WIFI";

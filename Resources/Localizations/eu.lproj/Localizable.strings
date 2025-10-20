@@ -2005,7 +2005,6 @@
 "map_3d_mode_description" = "Ukitu mapa bi hatzekin eta mugitu gora eta behera maparen inklinazioa doitzeko.";
 "external_device_status_disconnected" = "Deskonektatuta";
 "osmand_cloud_deletion_all_data_warning" = "OsmAnd Cloud-en datu guztiak %@ izango dira. Gailuko datuak ukitu gabe geratuko dira.";
-"lang_sr-Latn" = "Serbiera (latinoa)";
 "longest_duration_first" = "Lehenengoa iraupen luzeenekoa";
 "not_enough_contributions_descr" = "Azken bi hilabeteko %@ aldaketak gutxienez %@ egin behar dira orduko mapen eguneratze mugagabeetarako sarbidea lortzeko.";
 "telegram_chats" = "Telegram txatak";

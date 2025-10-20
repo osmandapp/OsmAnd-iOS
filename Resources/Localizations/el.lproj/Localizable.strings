@@ -1745,7 +1745,6 @@
 "ant_plus_open_settings" = "Άνοιγμα ρυθμίσεων";
 "shared_string_is_deleted" = "Το \"%@\" διαγράφηκε.";
 "import_create_track_files" = "Μπορείτε να εισάγετε, δημιουργήσετε, ή καταγράψετε αρχεία ιχνών χρησιμοποιώντας το OsmAnd.";
-"lang_sr-Latn" = "Σέρβικα (λατινικά)";
 "sensor_temperature_desc" = "Δείχνει την θερμοκρασία από αισθητήρα";
 "my_data" = "Τα δεδομένα μου";
 "help_article_personal_name" = "Τα δεδομένα μου";

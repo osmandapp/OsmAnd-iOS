@@ -3248,7 +3248,6 @@
 "target_elevation" = "Hæð áfangastaðar";
 "verify_account" = "Staðfestu notandaaðganginn þinn";
 "shared_string_mode" = "Hamur";
-"lang_sr-Latn" = "Serbneska (latneskt letur)";
 "map_widget_sun_position" = "Sólstaða";
 "map_widget_group_glide_ratio" = "Rennslishlutfall";
 "average_glide_time_interval_desc" = "Skilgreindu tímabilin sem notuð verða til að reikna meðalrennsli.";

@@ -148,7 +148,7 @@
 "help_article_navigation_routing_osmand_routing_name" = "About OsmAnd routing";
 "help_article_navigation_routing_pedestrian_routing_name" = "Pedestrian routing";
 "help_article_navigation_routing_public_transport_navigation_name" = "Public Transport routing";
-"help_article_navigation_routing_ski_routing_name" = "Ski routing";
+"help_article_navigation_routing_ski_routing_name" = "Ski slopes and routes";
 "help_article_navigation_routing_straight_line_routing_name" = "Straight line routing (Aircraft)";
 "help_article_navigation_routing_train_routing_name" = "Train routing";
 "help_article_navigation_setup_gpx_navigation_name" = "Navigate by track";
@@ -285,10 +285,10 @@
 "av_notes_photo_widget_desc" = "Tapping the widget lets you take a photo.";
 "av_notes_video_widget_desc" = "Tapping the widget lets you record a video.";
 "av_notes_audio_widget_desc" = "Tapping the widget lets you take an audio note.";
-"trip_recording_downhill_widget_desc" = "Shows the sum of all descents of the currently recorded trip.";
-"trip_recording_uphill_widget_desc" = "Shows the sum of all the climbs of the currently recorded trip.";
+"trip_recording_downhill_widget_desc" = "Shows the sum of all descents or the last descent of the currently recorded trip.";
+"trip_recording_uphill_widget_desc" = "Shows the sum of all climbs or the last climb of the currently recorded trip.";
 "trip_recording_duration_widget_desc" = "Shows the currently recorded trip time.";
-"trip_recording_distance_widget_desc" = "Shows the currently recorded trip distance.";
+"trip_recording_distance_widget_desc" = "Shows the total distance for your currently recorded trip, with modes to view the distance of the last ascent and descent.";
 "true_bearing_widget_desc" = "Angle between true north and the target point observed from your location.";
 "relative_bearing_widget_desc" = "Shows the angle between your forward movement direction and the target point.";
 "second_marker_widget_desc" = "You can configure the widget to show the distance or Estimated time of arrival left to the second map marker.";
@@ -732,7 +732,7 @@
 "shared_string_tones" = "tones";
 
 "unit_of_volume_description" = "Selected units will be applied to all volume-related data in the current profile.";
-"litres" = "Litres";
+"litres" = "Liters";
 "imperial_gallons" = "Imperial gallons";
 "us_gallons" = "US gallons";
 "liter" = "l";
@@ -954,7 +954,7 @@
 "equator" = "Equator";
 "prime_meridian" = "Prime meridian";
 "meridian_180" = "180th meridian";
-"quick_action_showhide_coordinates_grid_descr" = "Action to control the visibility of the Coordinates grid on the map.";
+"quick_action_showhide_coordinates_grid_descr" = "Toggle coordinate grid visibility on the map.";
 
 "standard_maps" = "Standard maps";
 "wikipedia_and_travel_maps" = "Wikipedia and Travel maps";
@@ -1374,7 +1374,10 @@
 "lang_sq" = "Albanian";
 "lang_sr" = "Serbian (cyrillic)";
 "lang_sr_latn" = "Serbian (latin)";
-"lang_sr-Latn" = "Serbian (latin)";
+
+"lang_zh_hans" = "Simplified Chinese";
+"lang_zh_hant" = "Traditional Chinese";
+
 "lang_sv" = "Swedish";
 "lang_sw" = "Swahili";
 "lang_ta" = "Tamil";
@@ -1395,8 +1398,6 @@
 "lang_zh_cn" = "Chinese (Simplified)";
 "lang_zh_hk" = "Chinese (Hong Kong)";
 "lang_zh_tw" = "Chinese (Traditional)";
-"lang_zh-Hans" = "Chinese (Simplified)";
-"lang_zh-Hant" = "Chinese (Traditional)";
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
 
@@ -2733,12 +2734,12 @@
 "added_devices" = "Added devices";
 "remove_key_assignment" = "Remove key assignment";
 "remove_key_assignment_summary" = "Key assignment for the selected action will be removed.";
-"assigned_keys" = "Assigned keys";
+"assigned_keys" = "Assigned Keys";
 "key_assignment_add_action" = "Add action";
 "key_assignment_add_key" = "Add key";
 "key_name_pattern" = "Key \"%@\"";
-"press_button_to_link_with_action" = "Press the button on your device to assign it to the action: ";
-"key_is_already_assigned_error" = "The \"%@\" key is already assigned to action: ";
+"press_button_to_link_with_action" = "Press the button on your device to assign it to the action: %@";
+"key_is_already_assigned_error" = "The \"%@\" key is already assigned to action: \"%@\"";
 
 "application_profile_changed" = "App profile changed to \"%@\"";
 
@@ -3098,7 +3099,7 @@
 "rendering_attr_alpineHiking_description" = "Difficulty classification types for the routes.";
 "rendering_attr_highway_class_bridleway_name" = "Bridleway";
 "routing_attr_avoid_share_taxi_name" = "No share taxi";
-"rendering_attr_pisteRoutes_name" = "Ski routes";
+"rendering_attr_pisteRoutes_name" = "Ski slopes and routes";
 "rendering_attr_piste_type_sled_name" = "Sled";
 "rendering_attr_noPolygons_description" = "Make all areal land features on map transparent.";
 "routing_attr_allow_classic_only_description" = "Routes groomed for classic style only without skating trails. This includes routes groomed by a smaller snowmobile with looser piste and tracks made manually by skiers.";
@@ -3396,7 +3397,7 @@
 "annual_subscription" = "Annual subscription";
 "quarterly_subscription" = "Quarterly subscription";
 "three_months_subscription" = "Three months subscription";
-"three_years_subscription" = "Three years subscription";
+"three_years_subscription" = "Three year subscription";
 
 "option_available_only_by_subscription" = "Available in subscription plans";
 "osm_live_subscriptions" = "Subscriptions";
@@ -3500,7 +3501,7 @@
 "use_login_and_password" = "Use username and password";
 "perform_oauth_authorization" = "Log in via OAuth";
 "use_login_and_password_description" = "Use your email/login and password to log in to OpenStreetMap.org.";
-"layer_coordinates_grid" = "Coordinates grid";
+"layer_coordinates_grid" = "Coordinate grid";
 "shared_string_edges" = "Edges";
 "labels_position" = "Labels position";
 "grid_color" = "Grid color";
@@ -3781,7 +3782,7 @@
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Do not go offpiste";
 "rendering_attr_horse_scale_critical_name" = "Critical";
 "routing_attr_difficulty_preference_advanced_name" = "Advanced";
-"rendering_attr_natureReserves_name" = "Nature reserve";
+"rendering_attr_natureReserves_name" = "Nature reserve and Protected areas";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Only if necessary";
 "routing_attr_avoid_highway_name" = "Avoid highways";
 "rendering_attr_depthContourWidth_description" = "Depth contour line width";
@@ -3823,7 +3824,7 @@
 "rendering_attr_showShareTaxiRoutes_name" = "Shuttle routes";
 "routing_attr_prefer_tactile_paving_description" = "Prefer tactile paving";
 "routing_attr_avoid_4wd_only_description" = "Avoid roads only suitable for 4WD vehicles";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematic display of icons at low zooms";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "A schematic representation of icons at low zoom levels for those POIs that are not usually displayed";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
 "dangerous_goods" = "Dangerous goods";
 "dangerous_goods_description" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
@@ -3956,10 +3957,10 @@
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
 "apply_to_all_points" = "Apply to all points";
-"save_favorite_default_appearance" = "Apply changes to the existing points in the folder or only to new ones?";
-"original_icon_description" = "Each point would keep its own icon.";
-"original_color_description" = "Each point would keep its own color.";
-"original_shape_description" = "Each point would keep its own shape.";
+"save_favorite_default_appearance" = "Apply changes to all existing points in the folder, or only to newly added ones?";
+"original_icon_description" = "Each point retains its individual icon.";
+"original_color_description" = "Each point retains its individual color.";
+"original_shape_description" = "Each point retains its individual shape.";
 
 "my_places_no_tracks_title_root" = "You don’t have track files";
 "my_places_no_tracks_descr_root" = "You can import, create or record track files using OsmAnd.";
@@ -4190,7 +4191,7 @@
 "display_priority" = "Display priority";
 "shared_string_default_view" = "Default view";
 "map_widget_route_information" = "Route information";
-"map_widget_route_information_desc" = "Displays the estimated arrival time, remaining travel time, and distance for the current navigation route.";
+"map_widget_route_information_desc" = "Displays the estimated arrival time, remaining travel time, and distance for the active navigation route.";
 "map_widget_distance" = "Distance";
 
 "rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
@@ -4312,7 +4313,7 @@
 "shared_string_other" = "Other";
 "shared_string_engine" = "Engine";
 
-"routing_attr_allow_ferries_description" = "Allow routing by ferry routes";
+"routing_attr_allow_ferries_description" = "Allow routing via ferries";
 "routing_attr_allow_ferries_name" = "Allow ferries";
 
 "obd_fuel_type_not_provided" = "No fuel type provided";
@@ -4344,3 +4345,45 @@
 "obd_fuel_type_unknown" = "Unknown Fuel Type";
 "image_cache_online_photo_high_res" = "Online photo high res cache";
 "image_cache_online_photo_mapillary_default_cache" = "Online photo/Mapillary default cache";
+"rendering_attr_depthContoursDashed_description" = "Dashed depth contours";
+"rendering_attr_hideLightSectorSources_name" = "Light sectors sources";
+"rendering_attr_shellsStyle_name" = "Shells style";
+"rendering_attr_fairwayStyle_description" = "Color of fairways";
+"rendering_attr_depthColorScheme_description" = "Depth color scheme";
+"rendering_attr_depthContoursDashed_name" = "Dashed depth contours";
+"rendering_attr_fairwayStyle_name" = "Fairway color";
+"rendering_attr_tidalFlatStyle_description" = "Style of tidal flats";
+"rendering_attr_spotSize_name" = "Spot sounding size";
+"rendering_attr_hideFerries_description" = "Hide ferry routes";
+"rendering_attr_showSkiSlopes_description" = "Show simplified ski slopes";
+"rendering_attr_spotSize_description" = "Spot sounding size";
+"rendering_attr_watercolor_name" = "Water color";
+"rendering_attr_hideAreas_name" = "Depth areas";
+"rendering_attr_hideTidalFlats_description" = "Hide tidal flats";
+"rendering_attr_hideSpots_name" = "Spot soundings";
+"rendering_attr_hideFairways_name" = "Fairways";
+"rendering_attr_hideFerries_name" = "Ferry routes";
+"rendering_attr_watercolor_description" = "Color of water";
+"rendering_attr_hideContours_description" = "Hide depth contours";
+"rendering_attr_spotDistance_description" = "Spot sounding distance";
+"rendering_attr_showSkiSlopes_name" = "Show ski slopes";
+"rendering_attr_hideMinorContours_description" = "Hide minor depth contours";
+"rendering_attr_hideLightSectors_name" = "Light sectors";
+"rendering_attr_hideLightSectorSources_description" = "Hide light sectors sources";
+"rendering_attr_hideNoLNAM_description" = "Hide OSM seamarks (some)";
+"rendering_attr_spotDistance_name" = "Spot sounding distance";
+"rendering_attr_showLNAMmarker_description" = "Show ENC markers";
+"rendering_attr_hideContours_name" = "Depth contours";
+"rendering_attr_hideAreas_description" = "Hide depth areas";
+"rendering_attr_safetyContour_name" = "Safety depth contour";
+"rendering_attr_hideNoLNAM_name" = "OSM seamarks (some)";
+"rendering_attr_hideFairways_description" = "Hide fairways";
+"rendering_attr_shellsStyle_description" = "Style for shells on the seabed";
+"rendering_attr_depthColorScheme_name" = "Depth color scheme";
+"rendering_attr_hideSpots_description" = "Hide spot soundings";
+"rendering_attr_hideMinorContours_name" = "Minor depth contours";
+"rendering_attr_tidalFlatStyle_name" = "Tidal flat style";
+"rendering_attr_hideLightSectors_description" = "Hide light sectors";
+"rendering_attr_showLNAMmarker_name" = "ENC markers";
+"rendering_attr_hideTidalFlats_name" = "Tidal flats";
+"rendering_attr_safetyContour_description" = "Safety depth contour";

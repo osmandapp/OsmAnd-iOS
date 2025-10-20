@@ -3107,7 +3107,6 @@
 "deleting_complete" = "Suppression terminée";
 "my_places_no_tracks_descr_root" = "Vous pouvez importer, créer ou enregistrer des traces en utilisant OsmAnd.";
 "trash_is_empty" = "La poubelle est vide";
-"lang_sr-Latn" = "Serbe (latin)";
 "shared_string_open_track" = "Ouvrir trace";
 "my_places_no_tracks_descr" = "Ce dossier ce contient pas encore de traces.";
 "delete_folder" = "Supprimer dossier";

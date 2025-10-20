@@ -3230,7 +3230,6 @@
 "glide_ratio_to_target" = "Relación de planeo al objetivo";
 "map_widget_group_glide_desc" = "Los widgets muestran la relación de planeo hacia el objetivo o la relación de planeo promedio para el viaje actual.";
 "target_elevation" = "Elevación del objetivo";
-"lang_sr-Latn" = "Serbio (latino)";
 "my_places_no_tracks_title_root" = "No tienes archivos de trazas";
 "shared_string_next_event" = "Próximo evento";
 "map_widget_sun_position_desc" = "Muestra el tiempo hasta el amanecer o el atardecer.";

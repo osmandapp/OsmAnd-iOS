@@ -1809,7 +1809,6 @@
 "shared_string_clear_online_cache" = "Изчистване на временни данни";
 "bluetooth_found_title" = "Намерени: %d";
 "map_markers_bar" = "Панел с маркери на картата";
-"lang_sr-Latn" = "Сръбски (латиница)";
 "bottom_widgets_panel" = "Долен панел";
 "user_name" = "Вашето потребителско име в OSM";
 "running_scds_device_name" = "Стенд за бягане";

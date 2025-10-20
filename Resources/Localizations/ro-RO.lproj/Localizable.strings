@@ -3124,7 +3124,6 @@
 "external_device_any_connected" = "Oricare conectat";
 "bluetooth_found_title" = "Găsit: %d";
 "external_device_characteristic_speed" = "Viteză";
-"lang_sr-Latn" = "Sârbă (latină)";
 "no_bt_permission" = "Permisiunile bluetooth nu sunt acordate";
 "shared_string_hand" = "Mână";
 "shared_string_ear_lobe" = "Lobul urechii";

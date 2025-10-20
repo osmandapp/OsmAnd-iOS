@@ -2500,7 +2500,6 @@
 "next_turn_widget_desc" = "A modul a következő bekanyarodásról tájékoztat: megjeleníti a manőver képét és az addig hátralevő távolságot.";
 "popular_destinations" = "Népszerű célpontok";
 "map_widget_zoom_level" = "Nagyítási szint";
-"lang_sr-Latn" = "szerb (latin betűs)";
 "map_widget_target_distance_desc" = "Megjeleníti a kamera és a cél közötti távolságot.";
 "shared_string_any" = "Bármely";
 "true_bearing_wdiget_desc" = "A valódi észak és a célpont közötti, az Ön tartózkodási helyéről megfigyelt szög.";

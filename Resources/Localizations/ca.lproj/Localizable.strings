@@ -2333,7 +2333,6 @@
 "search_history" = "Historial de cerques";
 "external_device_characteristic_speed" = "Velocitat";
 "map_orientation_default" = "El mateix que el dispositiu";
-"lang_sr-Latn" = "Serbi (llatí)";
 "shared_string_deleting" = "S\'està suprimint";
 "coordinates_format" = "Format de coordenades";
 "map_widget_altitude_desc" = "Mostra l\'altitud de la ubicació geogràfica actual o l\'elevació del centre actual del mapa";

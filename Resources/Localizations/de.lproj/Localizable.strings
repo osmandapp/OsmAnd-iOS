@@ -3182,7 +3182,6 @@
 "map_widget_sun_position_desc" = "Zeigt die Zeit bis zum Sonnenaufgang oder Sonnenuntergang.";
 "map_widget_sun_position" = "Sonnenposition";
 "shared_string_mode" = "Modus";
-"lang_sr-Latn" = "Serbisch (lateinisch)";
 "skip_download" = "Download überspringen";
 "determine_location" = "Erlauben Sie uns, Ihren Standort zu ermitteln";
 "glide_ratio_to_target" = "Gleitzahl zum Zielpunkt";

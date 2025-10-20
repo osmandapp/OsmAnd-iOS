@@ -3292,7 +3292,6 @@
 "shared_string_mode" = "Режим";
 "download_to_device" = "Завантажити на пристрій";
 "restore_from_trash" = "Відновити зі смітника";
-"lang_sr-Latn" = "Сербська (латинка)";
 "determine_location" = "Дозвольте нам визначити ваше розташування";
 "shared_string_format" = "Формат";
 "osmand_cloud_deletion_all_data_warning" = "Усі дані з OsmAnd Cloud будуть %@. Дані на пристрої залишаються недоторканими.";

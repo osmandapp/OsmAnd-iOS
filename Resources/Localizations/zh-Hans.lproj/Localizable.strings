@@ -2076,7 +2076,6 @@
 "shared_string_hand" = "手";
 "switch_profile" = "切换配置文件";
 "help_article_navigation_setup_route_details_name" = "路线详情";
-"lang_sr-Latn" = "塞尔维亚语（拉丁文）";
 "external_sensors_plugin_description" = "访问外部传感器来读取心率、自行车速度、自行车功率或踏频。要求设备通过ANT +无线个人网络协议连接到相应的传感器。";
 "weather_widgets_secondary_desc" = "可以在天气插件设置中更改测量单位。";
 "troubleshooting" = "故障排除";

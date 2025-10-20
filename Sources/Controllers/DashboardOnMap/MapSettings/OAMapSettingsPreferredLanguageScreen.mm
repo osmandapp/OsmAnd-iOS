@@ -67,7 +67,8 @@
     for (NSString *lang in _settings.mapLanguages)
     {
         BOOL isSelected = (prefLang && [prefLang isEqualToString:lang]);
-        NSString *langName = OALocalizedString([NSString stringWithFormat:@"lang_%@", lang]);
+        NSString *property = [[lang stringByReplacingOccurrencesOfString:@"-" withString:@"_"] lowercaseString];
+        NSString *langName = OALocalizedString([NSString stringWithFormat:@"lang_%@", property]);
         if (!langName)
             langName = lang;
         
@@ -87,7 +88,6 @@
 
     _data = [NSArray arrayWithArray:arr];
 }
-
 
 - (void) initData
 {

@@ -679,7 +679,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         case MINUTES_PER_KILOMETER:
             return OALocalizedString(@"min_km");
         case NAUTICALMILES_PER_HOUR:
-            return OALocalizedString(@"units_nm_h");
+            return OALocalizedString(@"nm_h");
 
         default:
             return nil;

@@ -3570,7 +3570,6 @@
 "foot" = "ft";
 "shared_string_osm_id" = "OSM ID";
 "mapillary_item" = "OsmAnd + Mapilari";
-"units_nm_h" = "nmi/h";
 "download_tab_conflicts" = "Nerazrešeno";
 "edit_tilesource_url_to_load" = "URL";
 "simulate_location_movement_speed_original" = "Original";

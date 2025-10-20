@@ -307,7 +307,6 @@
 "si_min_m" = "分/マイル";
 "si_nm_h" = "海里毎時(ノット)";
 "nm" = "海里";
-"units_nm_h" = "ノット";
 "nothing_found" = "見つかりませんでした";
 "nothing_found_descr" = "検索単語を変更したり、検索の距離を広げてみてください。";
 "select_street" = "道路名を選択";

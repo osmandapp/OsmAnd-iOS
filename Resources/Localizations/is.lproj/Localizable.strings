@@ -1916,7 +1916,7 @@
 "favorite_friends_category" = "Vinir";
 "default_color_descr" = "Þessi litur verður notaður fyrir öll ný eftirlæti sem bætt er í hópinn.";
 "access_default_color" = "Sjálfgefinn litur";
-"fav_point_emoticons_message" = "Nafni eftirlætisins hefur verið breytt í %@ til að auðvelda rétta vistun strengsins ásamt tjáningartáknum yfir í skrá.";
+"fav_point_emoticons_message" = "Nafni eftirlætisins hefur verið breytt í %@ til að auðvelda rétta vistun strengsins með lyndistáknum yfir í skrá.";
 "fav_point_dublicate_message" = "Heiti eftirlætis var breytt í %@ til að koma í veg fyrir tvítekningu.";
 "fav_point_dublicate" = "Tvítekið heiti eftirlætis";
 "shared_string_shape" = "Lögun";

@@ -32,7 +32,7 @@
     return self;
 }
 
-- (instancetype)initWithStreetIntersection:(const std::shared_ptr<const OsmAnd::StreetIntersection>&)streetIntersection;
+- (instancetype)initWithStreetIntersection:(const std::shared_ptr<const OsmAnd::Street>&)streetIntersection;
 {
     self = [super initWithAddress:streetIntersection];
     if (self)
@@ -42,14 +42,14 @@
     return self;
 }
 
-- (OAStreet *) street
+/*- (OAStreet *) street
 {
     if (!_street && self.streetIntersection->street)
     {
         _street = [[OAStreet alloc] initWithStreet:self.streetIntersection->street];
     }
     return _street;
-}
+}*/
 
 -(NSString *)iconName
 {

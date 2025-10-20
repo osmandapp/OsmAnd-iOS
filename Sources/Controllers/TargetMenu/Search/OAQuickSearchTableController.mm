@@ -33,7 +33,6 @@
 #import "OABuilding.h"
 #import "OAStreet.h"
 #import "OACity.h"
-#import "OAStreetIntersection.h"
 #import "OAGpxWptItem.h"
 #import "Localization.h"
 #import "OADistanceDirection.h"
@@ -66,7 +65,6 @@
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
 #include <OsmAndCore/Data/StreetGroup.h>
-#include <OsmAndCore/Data/StreetIntersection.h>
 
 #define kDefaultZoomOnShow 16.0f
 
@@ -426,7 +424,7 @@
             }
             case EOAObjectTypeStreetIntersection:
             {
-                OAStreetIntersection *streetIntersection = (OAStreetIntersection *)searchResult.object;
+                OAStreet *streetIntersection = (OAStreet *)searchResult.object;
                 NSString *typeNameIntersection = [OAQuickSearchListItem getTypeName:searchResult];
                 if (typeNameIntersection.length == 0)
                     typeNameIntersection = nil;

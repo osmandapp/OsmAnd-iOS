@@ -8,7 +8,7 @@
 
 #import "OAAddress.h"
 
-#include <OsmAndCore/Data/StreetIntersection.h>
+#include <OsmAndCore/Data/Street.h>
 
 @class OAStreet;
 
@@ -16,8 +16,8 @@
 
 @property (nonatomic, readonly) OAStreet *street;
 
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::StreetIntersection> streetIntersection;
+@property (nonatomic, assign) std::shared_ptr<const OsmAnd::Street> streetIntersection;
 
-- (instancetype)initWithStreetIntersection:(const std::shared_ptr<const OsmAnd::StreetIntersection>&)streetIntersection;
+- (instancetype)initWithStreetIntersection:(const std::shared_ptr<const OsmAnd::Street>&)streetIntersection;
 
 @end

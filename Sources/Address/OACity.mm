@@ -103,6 +103,37 @@
     return CITY_TYPE_UNKNOWN;
 }
 
++ (NSString *)getTypeStr:(EOACityType)type
+{
+    switch (type)
+    {
+        case CITY_TYPE_CITY:
+            return @"city";
+        case CITY_TYPE_TOWN:
+            return @"town";
+        case CITY_TYPE_VILLAGE:
+            return @"village";
+        case CITY_TYPE_HAMLET:
+            return @"hamlet";
+        case CITY_TYPE_SUBURB:
+            return @"suburb";
+        case CITY_TYPE_BOUNDARY:
+            return @"boundary";
+        case CITY_TYPE_POSTCODE:
+            return @"postcode";
+        case CITY_TYPE_BOROUGH:
+            return @"borough";
+        case CITY_TYPE_DISTRICT:
+            return @"district";
+        case CITY_TYPE_NEIGHBOURHOOD:
+            return @"neighbourhood";
+        case CITY_TYPE_CENSUS:
+            return @"census";
+        default:
+            return @"";
+    }
+}
+
 + (CGFloat)getRadius:(NSString *)typeStr
 {
     EOACityType type = [self getType:typeStr];

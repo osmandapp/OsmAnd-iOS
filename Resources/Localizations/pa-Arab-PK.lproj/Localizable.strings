@@ -1580,7 +1580,6 @@
 "nm" = "nmi";
 "km_h" = "km/h";
 "mile_per_hour" = "mph";
-"units_nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";

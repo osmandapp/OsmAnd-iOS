@@ -20,6 +20,7 @@ final class MigrationManager: NSObject {
         case migrationTerrainModeDefaultPreferences
         case migrateExternalInputDevicePreferenceType
         case migrationHudButtonPositionsKey
+        case migrateRouteRecalculationValues
     }
     
     private struct HudMigrationScenario {
@@ -92,6 +93,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrationHudButtonPositionsKey.rawValue) {
                 migrateHudButtonPositions()
                 defaults.set(true, forKey: MigrationKey.migrationHudButtonPositionsKey.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateRouteRecalculationValues.rawValue) {
+                migrateRouteRecalulationValues()
+                defaults.set(true, forKey: MigrationKey.migrateRouteRecalculationValues.rawValue)
             }
         }
     }
@@ -577,6 +582,19 @@ final class MigrationManager: NSObject {
             }
         }
     }
+    
+    private func migrateRouteRecalulationValues() {
+        let settings = OAAppSettings.sharedManager()
+        let disableMode = -1.0
+        for appMode in OAApplicationMode.allPossibleValues() {
+            if settings.routeRecalculationDistance.get(appMode) == disableMode && !settings.disableOffrouteRecalc.get(appMode) {
+                // Set default value
+                settings.routeRecalculationDistance.set(0, mode: appMode)
+            } else if settings.routeRecalculationDistance.get(appMode) != disableMode && settings.disableOffrouteRecalc.get(appMode) {
+                settings.routeRecalculationDistance.set(disableMode, mode: appMode)
+            }
+        }
+    }
 
     // MARK: - Import old versions
 
@@ -607,6 +625,18 @@ final class MigrationManager: NSObject {
             "custom_widgets_keys",
             "map_info_controls"
         ]
+        
+        var json = json
+        if let disableOffrouteRecalc = json["disable_offroute_recalc"],
+           let routingRecalcDistance = json["routing_recalc_distance"] {
+            let disableMode = "-1.0"
+            if routingRecalcDistance == disableMode && disableOffrouteRecalc == "false" {
+                // Set default value
+                json["routing_recalc_distance"] = "0.0"
+            } else if routingRecalcDistance != disableMode && disableOffrouteRecalc == "true" {
+                json["routing_recalc_distance"] = disableMode
+            }
+        }
 
         return Dictionary(uniqueKeysWithValues: json.map {
             var settingKey = $0

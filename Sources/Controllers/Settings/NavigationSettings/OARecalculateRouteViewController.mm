@@ -94,7 +94,7 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *statusArr = [NSMutableArray array];
     NSMutableArray *distanceArr = [NSMutableArray array];
-    BOOL disabled = [_settings.routeRecalculationDistance get:self.appMode] == kDisableMode;
+    BOOL disabled = [_settings.disableOffrouteRecalc get:self.appMode];
     [statusArr addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : disabled ? OALocalizedString(@"rendering_value_disabled_name") : OALocalizedString(@"shared_string_enabled"),
@@ -193,7 +193,7 @@
     return nil;
 }
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
@@ -234,7 +234,8 @@
     if ([sender isKindOfClass:UISwitch.class])
     {
         UISwitch *control = (UISwitch *)sender;
-        [_settings.routeRecalculationDistance set:control.isOn ? _possibleDistanceValues[_selectedValue].doubleValue : kDisableMode mode:self.appMode];
+        _defaultValue = [self getDefaultValue];
+        [_settings.routeRecalculationDistance set:control.isOn ? 0. : kDisableMode mode:self.appMode];
         [_settings.disableOffrouteRecalc set:!control.isOn mode:self.appMode];
         [self hidePicker];
         [self.tableView beginUpdates];

@@ -3339,6 +3339,12 @@
 "backup_delete_all_data_in_progress" = "Please wait until OsmAnd delete all your data from cloud. All data on the device remain untouch.";
 "backup_delete_all_data_finished" = "All your data was successfully deleted from OsmAnd Cloud.";
 "backup_remove_old_versions_finished" = "Old versions was successfully deleted from OsmAnd Cloud.";
+"liter_single" = "Liter";
+"imperial_gallon" = "Imperial gallon";
+"us_gallon" = "US gallon";
+"kilometers" = "Kilometers";
+"miles" = "Miles";
+"mpg" = "MPG";
 "delete_all_confirmation" = "Yes, delete all";
 "manage_storage" = "Manage storage";
 "backup_delete_types_descr" = "Delete all data for deprecated data types from OsmAnd Cloud?";
@@ -4298,8 +4304,6 @@
 "obd_fuel_consumption_rate_liter_hour" = "Fuel consumption rate";
 "obd_fuel_consumption_rate_percent_hour" = "Fuel consumption rate %/h";
 
-"obd_fuel_consumption_rate_l_km" = "Fuel consumption rate (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Shows vehicle fuel consumption rate based on calculations (L/100 km)";
 "simulate_obd" = "Simulate obd data";
 
 "kpa_unit" = "kPa";

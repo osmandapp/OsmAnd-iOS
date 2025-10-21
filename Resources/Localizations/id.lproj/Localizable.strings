@@ -2663,7 +2663,6 @@
 "mile" = "mi";
 "nm" = "nmi";
 "m" = "m";
-"units_nm_h" = "nmi/jam";
 "shared_string_color_magenta" = "Magenta";
 "clear_history" = "Hapus riwayat";
 "cannot_access_calendar" = "Tidak dapat mengakses Kalender";

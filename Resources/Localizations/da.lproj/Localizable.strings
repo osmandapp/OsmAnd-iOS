@@ -477,7 +477,6 @@
 "si_min_m" = "Minutter pr. mil";
 "si_nm_h" = "Sømil i timen (knob)";
 "nm" = "sømil";
-"units_nm_h" = "sømil/t";
 "towards" = "Imod";
 "route_roundabout" = "Rundkørsel: tag afkørsel %d";
 "route_roundabout_short" = "Tag %d afkørsel og forsæt";

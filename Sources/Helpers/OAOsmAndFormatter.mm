@@ -23,6 +23,7 @@ static NSString * const _unitsMi = OALocalizedString(@"mile");
 static NSString * const _unitsYd = OALocalizedString(@"yard");
 static NSString * const _unitsFt = OALocalizedString(@"foot");
 static NSString * const _unitsNm = OALocalizedString(@"nm");
+static NSString * const _unitsNmh = OALocalizedString(@"nm_h");
 static NSString * const _unitsKmh = OALocalizedString(@"km_h");
 static NSString * const _unitsMph = OALocalizedString(@"mile_per_hour");
 static NSString * const _unitsMinKm = OALocalizedString(@"min_km");
@@ -424,9 +425,9 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         int mph10 = (int) (mph * 10.0f);
         if (mph >= 20)
         {
-            return [self getFormattedSpeed:mph10 / 10.0f unit:_unitsNm valueUnitArray:valueUnitArray];
+            return [self getFormattedSpeed:mph10 / 10.0f unit:_unitsNmh valueUnitArray:valueUnitArray];
         }
-        return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsNm valueUnitArray:valueUnitArray];
+        return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsNmh valueUnitArray:valueUnitArray];
     }
     else if (speedSystem == MINUTES_PER_KILOMETER)
     {

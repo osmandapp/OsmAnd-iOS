@@ -783,7 +783,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     [trackItem resetAppearanceToOriginal];
     OASGpxTrackAnalysis *trackAnalysis = analysis?: [gpx getAnalysis];
     
-    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:CLLocationCoordinate2DMake(selectedPoint.lat, selectedPoint.lon) openedFromMap:NO];
+    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:CLLocationCoordinate2DMake(selectedPoint.lat, selectedPoint.lon) openedFromMap:YES];
     state.forceAdjustCentering = forceAdjustCentering;
     
     if (!routeKey)

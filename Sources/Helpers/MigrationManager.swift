@@ -37,8 +37,7 @@ final class MigrationManager: NSObject {
     
     let defaults = UserDefaults.standard
     private let settings = OAAppSettings.sharedManager()
-    private let disableMode = -1.0
-    private let routeRecalculationDefaultValue = 0.0
+    private let routeRecalculationDisableMode = -1.0
 
     private override init() {}
 
@@ -588,11 +587,10 @@ final class MigrationManager: NSObject {
     private func migrateRouteRecalulationValues() {
         let settings = OAAppSettings.sharedManager()
         for appMode in OAApplicationMode.allPossibleValues() {
-            if settings.routeRecalculationDistance.get(appMode) == disableMode && !settings.disableOffrouteRecalc.get(appMode) {
-                // Set default value
-                settings.routeRecalculationDistance.set(routeRecalculationDefaultValue, mode: appMode)
-            } else if settings.routeRecalculationDistance.get(appMode) != disableMode && settings.disableOffrouteRecalc.get(appMode) {
-                settings.routeRecalculationDistance.set(disableMode, mode: appMode)
+            if settings.routeRecalculationDistance.get(appMode) == routeRecalculationDisableMode && !settings.disableOffrouteRecalc.get(appMode) {
+                settings.routeRecalculationDistance.resetMode(toDefault: appMode)
+            } else if settings.routeRecalculationDistance.get(appMode) != routeRecalculationDisableMode && settings.disableOffrouteRecalc.get(appMode) {
+                settings.routeRecalculationDistance.set(routeRecalculationDisableMode, mode: appMode)
             }
         }
     }
@@ -627,17 +625,7 @@ final class MigrationManager: NSObject {
             "map_info_controls"
         ]
         
-        var json = json
-        if let disableOffrouteRecalc = json["disable_offroute_recalc"],
-           let routingRecalcDistance = json["routing_recalc_distance"] {
-            let disableMode = String(disableMode)
-            if routingRecalcDistance == disableMode && disableOffrouteRecalc == "false" {
-                // Set default value
-                json["routing_recalc_distance"] = String(routeRecalculationDefaultValue)
-            } else if routingRecalcDistance != disableMode && disableOffrouteRecalc == "true" {
-                json["routing_recalc_distance"] = disableMode
-            }
-        }
+        let json = changeRouteRecalulationValuesForJson(json)
 
         return Dictionary(uniqueKeysWithValues: json.map {
             var settingKey = $0
@@ -723,5 +711,20 @@ final class MigrationManager: NSObject {
             }
             return json
         })
+    }
+    
+    private func changeRouteRecalulationValuesForJson(_ json: [String: String]) -> [String: String] {
+        var json = json
+        if let disableOffrouteRecalc = json["disable_offroute_recalc"],
+           let routingRecalcDistance = json["routing_recalc_distance"] {
+            let disableMode = String(routeRecalculationDisableMode)
+            if routingRecalcDistance == disableMode && disableOffrouteRecalc == "false" {
+                // Set default value
+                json["routing_recalc_distance"] = "0.0"
+            } else if routingRecalcDistance != disableMode && disableOffrouteRecalc == "true" {
+                json["routing_recalc_distance"] = disableMode
+            }
+        }
+        return json
     }
 }

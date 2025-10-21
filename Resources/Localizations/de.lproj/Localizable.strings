@@ -3903,3 +3903,4 @@
 "shared_string_degrees" = "Grade";
 "duration" = "Dauer";
 "shared_string_estimated_duration" = "Geschätzte Dauer";
+"altitude_metrics_description" = "Bestimmt die Einheit für die Höhenanzeige in Widgets und Statistiken.";

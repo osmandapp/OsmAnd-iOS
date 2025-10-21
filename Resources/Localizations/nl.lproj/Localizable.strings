@@ -3007,7 +3007,6 @@
 "nm" = "nmi";
 "km" = "km";
 "m" = "m";
-"units_nm_h" = "nmi/u";
 "min_mile" = "min/mijl";
 "min_km" = "min/km";
 "m_s" = "m/s";

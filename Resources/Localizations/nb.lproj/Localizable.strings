@@ -272,7 +272,6 @@
 "si_min_m" = "Minutter per engelsk mil";
 "si_nm_h" = "Nautisk mil i timen (knop)";
 "nm" = "sjømil";
-"units_nm_h" = "nmi/t";
 "nothing_found" = "Ingenting funnet";
 "nothing_found_descr" = "Endre søket eller øk radiusen.";
 "select_street" = "Velg gate";

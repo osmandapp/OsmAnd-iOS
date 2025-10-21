@@ -1349,7 +1349,6 @@
 "type_city_town" = "Tip municipiu/oraș/localitate";
 "nothing_found_descr" = "Schimbați căutarea sau măriți raza acesteia.";
 "nothing_found" = "Nimic găsit";
-"units_nm_h" = "nmi/h ( nautic miles/oră)";
 "si_nm_h" = "Mile nautice pe oră (noduri)";
 "right_side_navigation" = "Trafic pe dreapta";
 "left_side_navigation" = "Trafic pe stânga";

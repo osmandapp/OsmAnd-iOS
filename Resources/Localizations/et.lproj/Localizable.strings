@@ -313,7 +313,6 @@
 "si_min_m" = "Minutit miili kohta";
 "si_nm_h" = "Meremiili tunnis (sõlme)";
 "nm" = "M";
-"units_nm_h" = "sõlme";
 "nothing_found" = "Ei leitud midagi";
 "nothing_found_descr" = "Muuda otsingu päringut või laienda selle raadiust.";
 "select_street" = "Vali tänav";

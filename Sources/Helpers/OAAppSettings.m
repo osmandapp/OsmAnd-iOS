@@ -679,7 +679,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         case MINUTES_PER_KILOMETER:
             return OALocalizedString(@"min_km");
         case NAUTICALMILES_PER_HOUR:
-            return OALocalizedString(@"units_nm_h");
+            return OALocalizedString(@"nm_h");
 
         default:
             return nil;
@@ -5541,7 +5541,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _useIntermediatePointsNavigation = [[OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO] makeGlobal];
         [_globalPreferences setObject:_useIntermediatePointsNavigation forKey:@"use_intermediate_points_navigation"];
 
-        _disableOffrouteRecalc = [OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO];
+        _disableOffrouteRecalc = [[OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO] makeProfile];
         _disableWrongDirectionRecalc = [OACommonBoolean withKey:disableWrongDirectionRecalcKey defValue:NO];
         _hazmatTransportingEnabled = [OACommonBoolean withKey:hazmatTransportingEnabledKey defValue:NO];
 
@@ -5612,7 +5612,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_preciseDistanceNumbers setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];
         [_profilePreferences setObject:_preciseDistanceNumbers forKey:@"precise_distance_numbers"];
 
-        _routeRecalculationDistance = [OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.];
+        _routeRecalculationDistance = [[OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.] makeProfile];
         [_profilePreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];
 
         _customRouteColorDay = [OACommonInteger withKey:customRouteColorDayKey defValue:[UIColorFromARGB(kDefaultRouteLineDayColor) toARGBNumber]];

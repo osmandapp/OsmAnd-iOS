@@ -82,7 +82,6 @@
 #import "OAAddress.h"
 #import "OABuilding.h"
 #import "OAStreet.h"
-#import "OAStreetIntersection.h"
 #import "OACity.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMapLayers.h"

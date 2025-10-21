@@ -34,7 +34,6 @@
 #import "OABuilding.h"
 #import "OAStreet.h"
 #import "OACity.h"
-#import "OAStreetIntersection.h"
 #import "OALocationParser.h"
 #import "OrderedDictionary.h"
 #import "OAMapUtils.h"
@@ -47,7 +46,6 @@
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/Data/Building.h>
 #include <OsmAndCore/Data/Street.h>
-#include <OsmAndCore/Data/StreetIntersection.h>
 #include <OsmAndCore/Data/StreetGroup.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/QuadTree.h>
@@ -1908,12 +1906,11 @@
         OANameStringMatcher *streetMatch = [phrase getMainUnknownNameStringMatcher];
         if (streetIntersection.isEmpty() || (!streetIntersection[0].isDigit() && OsmAnd::CommonWords::getCommonSearch(streetIntersection) == -1))
         {
-            for (const auto& streetInter : s->intersectedStreets)
+            for (const auto& street : s->intersectedStreets)
             {
                 if ([resultMatcher isCancelled])
                     break;
                 
-                const auto& street = streetInter->street;
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
                 if ((![streetMatch matches:street->nativeName.toNSString()] && ![streetMatch matchesMap:[OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName]]) || ![phrase isSearchTypeAllowed:EOAObjectTypeStreetIntersection])
                     continue;

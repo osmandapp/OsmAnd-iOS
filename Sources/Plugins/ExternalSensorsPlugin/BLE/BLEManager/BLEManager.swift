@@ -38,10 +38,10 @@ final class BLEManager {
                 return
             }
             
-            NSLog("BLEManager -> restoredPeripherals: \(restoredPeripherals)");
+            NSLog("BLEManager -> restoredPeripherals: \(restoredPeripherals)")
             
             guard let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() else {
-                NSLog("BLEManager -> restoreConnectedDevices: pairedDevices is empty");
+                NSLog("BLEManager -> restoreConnectedDevices: pairedDevices is empty")
                 return
             }
             
@@ -116,6 +116,7 @@ final class BLEManager {
                 
                 guard let serviceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID], !serviceUUIDs.isEmpty else {
                     NSLog("BLEManager -> Service UUIDs are empty")
+                    NSLog("============================")
                     return
                 }
                 let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
@@ -144,6 +145,7 @@ final class BLEManager {
                         NSLog("BLEManager -> Unknown device found: \(peripheral.name ?? "Unknown")")
                     }
                 }
+                NSLog("============================")
             case let .scanStopped(peripherals, error):
                 // The scan stopped, an error is passed if the scan stopped unexpectedly
                 if let error {

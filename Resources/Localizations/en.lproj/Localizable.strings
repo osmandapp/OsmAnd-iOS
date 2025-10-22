@@ -4388,3 +4388,4 @@
 "rendering_attr_showLNAMmarker_name" = "ENC markers";
 "rendering_attr_hideTidalFlats_name" = "Tidal flats";
 "rendering_attr_safetyContour_description" = "Safety depth contour";
+"ble_scanner" = "BLE Scanner";

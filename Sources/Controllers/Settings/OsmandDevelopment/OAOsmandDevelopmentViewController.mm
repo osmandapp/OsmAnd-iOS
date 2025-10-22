@@ -50,6 +50,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
 NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 NSString *const kImageCacheKey = @"kImageCacheKey";
+NSString *const kBLEScanerKey = @"kBLEScanerKey";
 
 #pragma mark - Initialization
 
@@ -144,6 +145,18 @@ NSString *const kImageCacheKey = @"kImageCacheKey";
     })
     }];
     [_data addSection:imageСacheSection];
+    
+    OATableSectionData *BLEScannerSection = [OATableSectionData sectionData];
+    BLEScannerSection.headerText = OALocalizedString(@"ble_scanner");
+    [BLEScannerSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellKeyKey : kBLEScanerKey,
+        kCellTitleKey : OALocalizedString(@"ble_scanner"),
+        @"actionBlock" : (^void(){
+        [weakSelf showModalViewController:[BLEScannerViewController new]];
+    })
+    }];
+    [_data addSection:BLEScannerSection];
 }
 
 - (NSInteger)sectionsCount

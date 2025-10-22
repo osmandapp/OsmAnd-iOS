@@ -108,8 +108,7 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
             if isCreate, let widgetConfigurationParams, let overrideRaw = widgetConfigurationParams[fuelConsumptionModePref.key] as? String, FuelConsumptionMode(rawValue: overrideRaw) != nil {
                 return overrideRaw
             }
-            
-            return fuelConsumptionModePref.get(appMode)
+            return isCreate ? defaultMode.rawValue : fuelConsumptionModePref.get(appMode)
         }()
         modeRow.setObj(currentRaw, forKey: "value")
         let options: [OATableRowData] = FuelConsumptionMode.allCases.map { mode in

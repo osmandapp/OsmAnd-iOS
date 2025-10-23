@@ -21,7 +21,7 @@ final class BLEScannerViewController: UIViewController {
         title = localizedString("ble_scanner")
         view.backgroundColor = .systemBackground
         navigationController?.setDefaultNavigationBarAppearance()
-        configureNavigationLeftBarButtonItemButtons()
+        configureNavigationBarButtonItemButtons()
         setupTableView()
         startScan()
     }
@@ -117,7 +117,7 @@ final class BLEScannerViewController: UIViewController {
         }
     }
     
-    private func configureNavigationLeftBarButtonItemButtons() {
+    private func configureNavigationBarButtonItemButtons() {
         navigationItem.leftBarButtonItem = createNavbarButton(title: localizedString("shared_string_close"),
                                                               icon: nil,
                                                               color: .iconColorActive,
@@ -128,7 +128,7 @@ final class BLEScannerViewController: UIViewController {
         navigationItem.rightBarButtonItem = createNavbarButton(title: nil, icon: .icCustomExportOutlined, color: .iconColorActive, action: #selector(onSharedBarButtonActon(_:)), target: self, menu: nil)
     }
 
-    @objc private func sendLogFile(sender: UIBarButtonItem) {
+    private func sendLogFile(sender: UIBarButtonItem) {
         let fileManager = FileManager.default
 
         guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {

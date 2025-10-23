@@ -2118,7 +2118,6 @@
 		DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AA526C563A000F274C7 /* OAFirstUsageWizardController.mm */; };
 		DA5A81DB26C563A700F274C7 /* OACity.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AA826C563A100F274C7 /* OACity.mm */; };
 		DA5A81DC26C563A700F274C7 /* OABuilding.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AA926C563A100F274C7 /* OABuilding.mm */; };
-		DA5A81DD26C563A700F274C7 /* OAStreetIntersection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAA26C563A100F274C7 /* OAStreetIntersection.mm */; };
 		DA5A81DE26C563A700F274C7 /* OAStreet.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAD26C563A100F274C7 /* OAStreet.mm */; };
 		DA5A81DF26C563A700F274C7 /* OAAddress.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAF26C563A100F274C7 /* OAAddress.mm */; };
 		DA5A81E326C563A700F274C7 /* OAGPXDocumentPrimitives.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.m */; };
@@ -6234,9 +6233,7 @@
 		DA5A7AA526C563A000F274C7 /* OAFirstUsageWizardController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFirstUsageWizardController.mm; sourceTree = "<group>"; };
 		DA5A7AA826C563A100F274C7 /* OACity.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACity.mm; sourceTree = "<group>"; };
 		DA5A7AA926C563A100F274C7 /* OABuilding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABuilding.mm; sourceTree = "<group>"; };
-		DA5A7AAA26C563A100F274C7 /* OAStreetIntersection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreetIntersection.mm; sourceTree = "<group>"; };
 		DA5A7AAB26C563A100F274C7 /* OAStreet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAStreet.h; sourceTree = "<group>"; };
-		DA5A7AAC26C563A100F274C7 /* OAStreetIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAStreetIntersection.h; sourceTree = "<group>"; };
 		DA5A7AAD26C563A100F274C7 /* OAStreet.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreet.mm; sourceTree = "<group>"; };
 		DA5A7AAE26C563A100F274C7 /* OACity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACity.h; sourceTree = "<group>"; };
 		DA5A7AAF26C563A100F274C7 /* OAAddress.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddress.mm; sourceTree = "<group>"; };
@@ -11579,8 +11576,6 @@
 				DA5A7AA826C563A100F274C7 /* OACity.mm */,
 				DA5A7AAB26C563A100F274C7 /* OAStreet.h */,
 				DA5A7AAD26C563A100F274C7 /* OAStreet.mm */,
-				DA5A7AAC26C563A100F274C7 /* OAStreetIntersection.h */,
-				DA5A7AAA26C563A100F274C7 /* OAStreetIntersection.mm */,
 			);
 			path = Address;
 			sourceTree = "<group>";
@@ -18139,7 +18134,6 @@
 				32DA38A82BA9C4D500A3AC3C /* CLLocation+Extension.m in Sources */,
 				46BCB1602CC2AC6D004E0283 /* GradientChartCell.swift in Sources */,
 				DA5A83BD26C563A800F274C7 /* OAAddQuickActionViewController.m in Sources */,
-				DA5A81DD26C563A700F274C7 /* OAStreetIntersection.mm in Sources */,
 				DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */,
 				4665DB6E2C20BBFD00F897EC /* ColorsPaletteUtils.swift in Sources */,
 				DA297C2E2811601F009C248E /* OACompoundIconUtils.mm in Sources */,

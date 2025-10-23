@@ -370,7 +370,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     return nil;
 }
 
-#pragma mark - Aditions
+#pragma mark - Additions
 
 - (void)copyBuildVersion
 {

@@ -72,12 +72,15 @@ final class ArticleNode: NSObject, ArticleRepresentable {
 @objc(OAMenuHelpDataService)
 @objcMembers
 final class MenuHelpDataService: NSObject, XMLParserDelegate {
+    static let shared = MenuHelpDataService()
+    
     private let urlPrefix = "https://osmand.net"
+    
     private var popularArticles: [PopularArticle] = []
     private var telegramChats: [TelegramChat] = []
     private var articles: [ArticleNode] = []
+    private var languages: [String] = []
     private var rootNode: ArticleNode = ArticleNode(title: "Root", url: "", level: 1, type: "root")
-    static let shared = MenuHelpDataService()
     
     private override init() { }
     
@@ -117,11 +120,19 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                     return
                 }
                 
+                if self.languages.isEmpty, let languages = jsonDict["languages"] as? [String] {
+                    self.languages = languages
+                }
+                
                 switch dataItem {
                 case .popularArticles:
                     if let popularArticlesData = jsonDict["ios"] as? [String: Any],
                        let articles = popularArticlesData["popularArticles"] as? [String: String] {
-                        popularArticles = articles.map { PopularArticle(title: $0.key, url: self.urlPrefix + $0.value) }
+                        popularArticles = articles.map {
+                            let p = PopularArticle(title: $0.key, url: self.localizedUrl(serverUrl: self.urlPrefix, url: $0.value))
+                            print("[test] popularArticles url: \(p.url)")
+                            return p
+                        }
                         DispatchQueue.main.async {
                             completion(self.popularArticles as NSArray, nil)
                         }
@@ -141,10 +152,11 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                         for articleDict in articlesData {
                             if let title = articleDict["label"] as? String,
                                let level = articleDict["level"] as? Int,
-                               let url = (articleDict["url"] as? String) ?? (level > 1 ? urlDocsPrefix + title : nil),
+                               let url = articleDict["url"] as? String ?? (level > 1 ? urlDocsPrefix + title : nil),
                                url.hasPrefix(urlDocsPrefix),
                                let type = articleDict["type"] as? String {
-                                let articleNode = ArticleNode(title: title, url: self.urlPrefix + url, level: level, type: type)
+                                let articleNode = ArticleNode(title: title, url: localizedUrl(serverUrl: urlPrefix, url: url), level: level, type: type)
+                                print("[test] articlesData url: \(articleNode.url)")
                                 addArticleNode(articleNode)
                                 articles.append(articleNode)
                             }
@@ -191,6 +203,21 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
         }
     }
     
+    private func localizedUrl(serverUrl: String, url: String) -> String {
+        let normalizedUrl = "\(serverUrl)\(url)"
+        
+        let languageCode = "uk"
+//        guard let languageCode = OsmAndApp.swiftInstance().getLanguageCode() else {
+//            return normalizedUrl
+//        }
+        
+        let useLocalizedUrl = languageCode != "en" && languages.contains(languageCode)
+        if useLocalizedUrl {
+            return "\(serverUrl)/\(languageCode)\(url)"
+        }
+        return normalizedUrl
+    }
+
     private func addArticleNode(_ node: ArticleNode) {
         var parentNode: ArticleNode = rootNode
         while let lastChild = parentNode.childArticles.last, lastChild.level < node.level {

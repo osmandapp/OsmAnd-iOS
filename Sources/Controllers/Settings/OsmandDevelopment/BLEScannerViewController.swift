@@ -124,10 +124,48 @@ final class BLEScannerViewController: UIViewController {
                                                               action: #selector(onCloseBarButtonActon),
                                                               target: self,
                                                               menu: nil)
+        
+        navigationItem.rightBarButtonItem = createNavbarButton(title: nil, icon: .icCustomExportOutlined, color: .iconColorActive, action: #selector(onSharedBarButtonActon(_:)), target: self, menu: nil)
+    }
+
+    @objc private func sendLogFile(sender: UIBarButtonItem) {
+        let fileManager = FileManager.default
+
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let logsPath = documentsURL.appendingPathComponent("Logs")
+
+        guard let files = try? fileManager.contentsOfDirectory(atPath: logsPath.path), !files.isEmpty else {
+            return
+        }
+
+        let sortedFiles = files.sorted { file1, file2 in
+            let path1 = logsPath.appendingPathComponent(file1).path
+            let path2 = logsPath.appendingPathComponent(file2).path
+            let attr1 = try? fileManager.attributesOfItem(atPath: path1)
+            let attr2 = try? fileManager.attributesOfItem(atPath: path2)
+            let date1 = attr1?[.creationDate] as? Date ?? .distantPast
+            let date2 = attr2?[.creationDate] as? Date ?? .distantPast
+            return date1 > date2
+        }
+
+        guard let latestLogFile = sortedFiles.first else {
+            return
+        }
+
+        let latestLogURL = logsPath.appendingPathComponent(latestLogFile)
+        
+        showActivity([latestLogURL], sourceView: view, barButtonItem: sender)
     }
     
     @objc private func onCloseBarButtonActon(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func onSharedBarButtonActon(_ sender: UIBarButtonItem) {
+        sendLogFile(sender: sender)
     }
 }
 
@@ -155,4 +193,3 @@ extension BLEScannerViewController: UITableViewDelegate {
         log("Selected device: \(selectedDevice.name) [\(selectedDevice.identifier)], RSSI: \(selectedDevice.rssi)")
     }
 }
-

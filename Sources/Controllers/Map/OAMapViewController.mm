@@ -591,6 +591,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen && !_isCarPlayActive && !_isCarPlayDashboardActive)
     {
+        // FIXME:
         OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];
         [bottomSheet presentInViewController:self];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = NO;

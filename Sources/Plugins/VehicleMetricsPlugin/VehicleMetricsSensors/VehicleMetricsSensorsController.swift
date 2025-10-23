@@ -184,7 +184,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         }
         if let item = CellData(rawValue: key) {
             if case .learnMore = item {
-                guard let settingsURL = URL(string: docsVehicleMetricsURL) else {
+                guard let settingsURL = URL(string: docsVehicleMetricsURL.localizedURLIfAvailable()) else {
                     return
                 }
                 let safariViewController = SFSafariViewController(url: settingsURL)

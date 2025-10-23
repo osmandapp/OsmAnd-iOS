@@ -329,7 +329,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     if ([linkType isEqualToString:kLinkInternalType])
     {
-        OAWebViewController *webView = [[OAWebViewController alloc] initWithUrlAndTitle:url title:item.title];
+        OAWebViewController *webView = [[OAWebViewController alloc] initWithUrlAndTitle:[url localizedURLIfAvailable] title:item.title];
         [self.navigationController pushViewController:webView animated:YES];
     }
     else if ([linkType isEqualToString:kLinkExternalType])

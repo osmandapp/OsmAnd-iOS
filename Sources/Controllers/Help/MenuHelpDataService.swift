@@ -76,10 +76,11 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
     
     private let urlPrefix = "https://osmand.net"
     
+    private(set) var languages: [String] = []
+    
     private var popularArticles: [PopularArticle] = []
     private var telegramChats: [TelegramChat] = []
     private var articles: [ArticleNode] = []
-    private var languages: [String] = []
     private var rootNode: ArticleNode = ArticleNode(title: "Root", url: "", level: 1, type: "root")
     
     private override init() { }
@@ -129,7 +130,8 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                     if let popularArticlesData = jsonDict["ios"] as? [String: Any],
                        let articles = popularArticlesData["popularArticles"] as? [String: String] {
                         popularArticles = articles.map {
-                            let p = PopularArticle(title: $0.key, url: self.localizedUrl(serverUrl: self.urlPrefix, url: $0.value))
+                           
+                            let p = PopularArticle(title: $0.key, url: self.urlPrefix + $0.value)
                             print("[test] popularArticles url: \(p.url)")
                             return p
                         }
@@ -141,6 +143,8 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                     if let telegramChatsData = jsonDict["ios"] as? [String: Any],
                        let chats = telegramChatsData["telegramChats"] as? [String: String] {
                         telegramChats = chats.map { TelegramChat(title: $0.key, url: $0.value) }
+                        telegramChats.forEach({ print("[test] telegramChats url: \($0.url))") })
+                    
                         DispatchQueue.main.async {
                             completion(self.telegramChats as NSArray, nil)
                         }
@@ -155,7 +159,7 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                                let url = articleDict["url"] as? String ?? (level > 1 ? urlDocsPrefix + title : nil),
                                url.hasPrefix(urlDocsPrefix),
                                let type = articleDict["type"] as? String {
-                                let articleNode = ArticleNode(title: title, url: localizedUrl(serverUrl: urlPrefix, url: url), level: level, type: type)
+                                let articleNode = ArticleNode(title: title, url: urlPrefix + url, level: level, type: type)
                                 print("[test] articlesData url: \(articleNode.url)")
                                 addArticleNode(articleNode)
                                 articles.append(articleNode)
@@ -201,21 +205,6 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
             let localized = localizedString(articleNameKey)
             return localized == articleNameKey ? article.title : localized
         }
-    }
-    
-    private func localizedUrl(serverUrl: String, url: String) -> String {
-        let normalizedUrl = "\(serverUrl)\(url)"
-        
-        let languageCode = "uk"
-//        guard let languageCode = OsmAndApp.swiftInstance().getLanguageCode() else {
-//            return normalizedUrl
-//        }
-        
-        let useLocalizedUrl = languageCode != "en" && languages.contains(languageCode)
-        if useLocalizedUrl {
-            return "\(serverUrl)/\(languageCode)\(url)"
-        }
-        return normalizedUrl
     }
 
     private func addArticleNode(_ node: ArticleNode) {
@@ -347,5 +336,53 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
         default:
             return nil
         }
+    }
+}
+
+extension NSString {
+    /// Returns a localized version of the URL if it's part of the osmand.net domain.
+    ///
+    /// Example:
+    /// ```
+    /// "https://docs.osmand.net/docs/user/widgets/configure-screen"
+    /// → "https://docs.osmand.net/uk/docs/user/widgets/configure-screen"
+    /// ```
+    ///
+    /// - Returns: A localized URL string if applicable, otherwise the original one.
+    @objc func localizedURLIfAvailable() -> NSString {
+        let urlString = self as String
+        let languageCode = "en"
+        
+        guard
+            var components = URLComponents(string: urlString),
+            let host = components.host?.lowercased(),
+            host.hasSuffix(kOsmAndHost),
+            /* let languageCode = OsmAndApp.swiftInstance().getLanguageCode()?.lowercased(), */
+            languageCode != "en"
+        else {
+            return self
+        }
+
+        let supportedLanguages = MenuHelpDataService.shared.languages.map { $0.lowercased() }
+        guard supportedLanguages.contains(languageCode) else {
+            return self
+        }
+
+        var path = components.path
+
+        // Ensure we don't duplicate the language prefix
+        if !path.hasPrefix("/\(languageCode)/") {
+            path = "/\(languageCode)\(path)"
+        }
+
+        components.path = path
+        return (components.url?.absoluteString ?? urlString) as NSString
+    }
+}
+
+extension String {
+    /// Swift-friendly wrapper that calls the Objective-C implementation under the hood.
+    func localizedURLIfAvailable() -> String {
+        (self as NSString).localizedURLIfAvailable() as String
     }
 }

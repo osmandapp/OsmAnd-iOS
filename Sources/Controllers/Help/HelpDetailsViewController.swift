@@ -111,7 +111,7 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
             }
             
             let title = MenuHelpDataService.shared.getArticleName(from: article)
-            let url = article.url
+            let url = article.url.localizedURLIfAvailable()
             let articleRow = childArticlesSection.createNewRow()
             articleRow.cellType = OASimpleTableViewCell.getIdentifier()
             articleRow.key = "childArticle"

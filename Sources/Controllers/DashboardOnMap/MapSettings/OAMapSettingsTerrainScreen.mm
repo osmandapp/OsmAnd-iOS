@@ -135,7 +135,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_read_more"),
             kCellIconNameKey : @"ic_custom_safari",
-            @"link" : kOsmAndFeaturesContourLinesPlugin
+            @"link" : [kOsmAndFeaturesContourLinesPlugin localizedURLIfAvailable]
         }];
     }
     else

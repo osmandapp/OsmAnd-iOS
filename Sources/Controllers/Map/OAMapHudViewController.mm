@@ -215,7 +215,7 @@ static const float kDistanceMeters = 100.0;
     [_compassImage removeFromSuperview];
     [_compassButton addSubview:_compassImage];
     _compassImage.translatesAutoresizingMaskIntoConstraints = YES;
-    _compassImage.frame = CGRectMake(9.6, 9.6, 28.8, 28.8);
+    _compassImage.frame = CGRectMake(9.0, 9.0, 30.0, 30.0);
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _compassButton.alpha = [self shouldShowCompass] ? 1.0 : 0.0;

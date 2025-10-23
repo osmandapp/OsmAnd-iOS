@@ -26,7 +26,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAUserInteractionPassThroughView.h"
 
-static CGFloat const kHudQuickActionButtonHeight = 50.0;
+static CGFloat const kHudQuickActionButtonHeight = 48.0;
 static NSInteger const kQuickActionSlashTag = -1;
 static NSInteger const kQuickActionSlashBackgroundTag = -2;
 

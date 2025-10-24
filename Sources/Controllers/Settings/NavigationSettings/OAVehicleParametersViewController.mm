@@ -61,7 +61,7 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
     NSMutableArray *exraParametersArr = [NSMutableArray array];
-    NSMutableArray *defaultSpeedArr = [NSMutableArray array];
+    NSMutableArray *otherParametersArr = [NSMutableArray array];
     auto router = [OsmAndApp.instance getRouter:self.appMode];
     _otherParameters.clear();
     NSString *appModeRoutingProfile = self.appMode.getRoutingProfile;
@@ -124,18 +124,26 @@
                     value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
                 else
                     value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"metric_ton") : OALocalizedString(@"m")];
-                [isMotorType ? exraParametersArr : parametersArr addObject:
-                 @{
-                     @"name" : paramId,
-                     @"title" : title,
-                     @"value" : value,
-                     @"selectedItem" : @(index),
-                     @"icon" : [self getParameterIcon:paramId],
-                     @"possibleValues" : possibleValues,
-                     @"possibleValuesDescr" : valueDescriptions,
-                     @"setting" : stringParam,
-                     @"type" : [OAValueTableViewCell getCellIdentifier] }
-                 ];
+                
+                NSDictionary *paramInfo = @{
+                    @"name" : paramId,
+                    @"title" : title,
+                    @"value" : value,
+                    @"selectedItem" : @(index),
+                    @"icon" : [self getParameterIcon:paramId],
+                    @"possibleValues" : possibleValues,
+                    @"possibleValuesDescr" : valueDescriptions,
+                    @"setting" : stringParam,
+                    @"type" : [OAValueTableViewCell reuseIdentifier]
+                };
+                if ([paramId isEqualToString:@"maxaxleload"] || [paramId isEqualToString:@"weightrating"])
+                {
+                    [otherParametersArr addObject:paramInfo];
+                }
+                else
+                {
+                    [isMotorType ? exraParametersArr : parametersArr addObject:paramInfo];
+                }
                 
                 if (isMotorType)
                 {
@@ -144,8 +152,8 @@
             }
         }
     }
-    [defaultSpeedArr addObject:@{
-        @"type" : [OASimpleTableViewCell getCellIdentifier],
+    [otherParametersArr addObject:@{
+        @"type" : [OASimpleTableViewCell reuseIdentifier],
         @"title" : OALocalizedString(@"default_speed_setting_title"),
         @"icon" : @"ic_action_speed",
         @"name" : @"defaultSpeed",
@@ -160,9 +168,9 @@
         [tableData addObject:exraParametersArr];
         _fuelSection = tableData.count - 1;
     }
-    if (defaultSpeedArr.count > 0)
+    if (otherParametersArr.count > 0)
     {
-        [tableData addObject:defaultSpeedArr];
+        [tableData addObject:otherParametersArr];
         _otherSection = tableData.count - 1;
     }
     _data = [NSArray arrayWithArray:tableData];
@@ -218,6 +226,10 @@
         return @"ic_custom_width_limit";
     else if ([parameterName isEqualToString:@"motor_type"])
         return @"ic_custom_fuel";
+    else if ([parameterName isEqualToString:@"maxaxleload"])
+        return @"ic_custom_hgv_axle_load";
+    else if ([parameterName isEqualToString:@"weightrating"])
+        return @"ic_custom_hgv_full_load";
     return @"";
 }
 

@@ -38,6 +38,8 @@ extension OBDDataComputer.OBDTypeWidget {
             return nil
         case .temperatureCoolant:
             return .icCustomObdTemperatureCoolant
+        case .adapterBatteryVoltage:
+            return .icCustomObd2ConnectorVoltage
         default:
             return nil
         }

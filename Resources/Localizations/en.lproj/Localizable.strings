@@ -4035,6 +4035,7 @@
 "obd_ambient_air_temp" = "Ambient temperature";
 "obd_ambient_air_temp_desc" = "Shows the temperature outside the vehicle.";
 "obd_battery_voltage" = "Battery voltage";
+"obd_alt_battery_voltage" = "Adapter voltage";
 "obd_engine_coolant_temp" = "Coolant temperature";
 "remaining_fuel" = "Remaining fuel";
 "remaining_fuel_description" = "Shows the amount of fuel left in the vehicle\'s tank";
@@ -4387,3 +4388,4 @@
 "rendering_attr_showLNAMmarker_name" = "ENC markers";
 "rendering_attr_hideTidalFlats_name" = "Tidal flats";
 "rendering_attr_safetyContour_description" = "Safety depth contour";
+"ble_scanner" = "BLE Scanner";

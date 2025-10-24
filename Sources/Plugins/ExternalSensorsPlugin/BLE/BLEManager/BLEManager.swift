@@ -19,11 +19,6 @@ enum BLEManagerUnavailbleFailureReason: String {
 final class BLEManager {
     static let shared = BLEManager()
     
-    private static let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier ?? "OsmAnd",
-        category: String(describing: BLEManager.self)
-    )
-    
     var isScaning: Bool {
         SwiftyBluetooth.isScanning
     }
@@ -43,10 +38,10 @@ final class BLEManager {
                 return
             }
             
-            debugPrint(restoredPeripherals)
+            NSLog("BLEManager -> restoredPeripherals: \(restoredPeripherals)")
             
             guard let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() else {
-                Self.logger.warning("restoreConnectedDevices: pairedDevices is empty")
+                NSLog("BLEManager -> restoreConnectedDevices: pairedDevices is empty")
                 return
             }
             
@@ -85,38 +80,76 @@ final class BLEManager {
             guard let self else { return }
             switch scanResult {
             case .scanStarted:
-                Self.logger.debug("BLEManager -> scanStarted")
+                NSLog("BLEManager -> Scan Started")
             case let .scanResult(peripheral, advertisementData, RSSI):
                 let rssi = RSSI ?? -1
-                Self.logger.debug("BLEManager -> peripheral identifier: \(peripheral.identifier) RSSI: \(rssi)")
-                guard let serviceUUIDs = (advertisementData["kCBAdvDataServiceUUIDs"] as? [CBUUID]), !serviceUUIDs.isEmpty else {
-                    Self.logger.error("BLEManager -> serviceUUIDs is empty")
+                NSLog("BLEManager -> Peripheral Identifier: \(peripheral.identifier.uuidString), RSSI: \(rssi)")
+                NSLog("BLEManager -> peripheral Name: \(peripheral.name ?? "nil")")
+                
+                if !advertisementData.isEmpty {
+                    NSLog("BLEManager -> Advertisement Data ▼")
+                    for (key, value) in advertisementData {
+                        NSLog(" • \(key): \(value)")
+                    }
+                    NSLog("BLEManager -> Advertisement Data ▲")
+                } else {
+                    NSLog("BLEManager -> Advertisement Data is empty")
+                }
+                
+                if let data = advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data {
+                    let bytes = [UInt8](data)
+                    if bytes.count >= 2 {
+                        let companyId = UInt16(bytes[1]) << 8 | UInt16(bytes[0])
+                        let payload = bytes.dropFirst(2)
+                            .map { String(format: "%02X", $0) }
+                            .joined(separator: " ")
+                        NSLog("""
+                                BLEManager -> Manufacturer Data:
+                                 • Length: \(bytes.count)
+                                 • Company ID: 0x\(String(format: "%04X", companyId))
+                                 • Payload (HEX): \(payload)
+                               """)
+                    } else {
+                        NSLog("BLEManager -> Manufacturer data too short: \(bytes.count) bytes")
+                    }
+                }
+                
+                guard let serviceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID], !serviceUUIDs.isEmpty else {
+                    NSLog("BLEManager -> Service UUIDs are empty")
+                    NSLog("============================")
                     return
                 }
+                let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
+                
+                NSLog("BLEManager -> Advertised Service UUIDs: \(uuids.joined(separator: ", "))")
+                
                 if let device = DeviceHelper.shared.connectedDevices.first(where: { $0.id == peripheral.identifier.uuidString }) {
                     device.setPeripheral(peripheral: peripheral)
                     device.addObservers()
                     discoveredDevices.append(device)
                     successHandler()
                 } else {
-                    let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
                     if let device = DeviceFactory.createDevice(with: uuids) {
                         var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? peripheral.name ?? device.deviceServiceName
                         if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
                             deviceName = savedDevice.deviceName
                         }
+                        NSLog("BLEManager -> Device Name: \(deviceName)")
                         device.setPeripheral(peripheral: peripheral)
                         device.rssi = rssi
                         device.deviceName = deviceName
                         device.addObservers()
                         discoveredDevices.append(device)
                         successHandler()
+                    } else {
+                        NSLog("BLEManager -> Unknown device found: \(peripheral.name ?? "Unknown")")
                     }
                 }
+                NSLog("============================")
             case let .scanStopped(peripherals, error):
                 // The scan stopped, an error is passed if the scan stopped unexpectedly
                 if let error {
-                    Self.logger.error("\(error.localizedDescription)")
+                    NSLog("BLEManager -> Scan stopped with error: \(error.localizedDescription)")
                     var _error: BLEManagerUnavailbleFailureReason
                     switch error {
                     case .bluetoothUnavailable(reason: let reason):
@@ -137,7 +170,7 @@ final class BLEManager {
                     }
                     failureHandler(_error)
                 } else {
-                    Self.logger.debug("BLEManager -> scanStopped")
+                    NSLog("BLEManager -> Scan Stopped")
                     scanStoppedHandler(!peripherals.isEmpty)
                 }
             }

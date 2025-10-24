@@ -3066,6 +3066,11 @@ static const double d180PI = 180.0 / M_PI_2;
     return res;
 }
 
++ (BOOL)isWeightType:(NSString *)parameter
+{
+    return [parameter isEqualToString:@"weight"] || [parameter isEqualToString:@"maxaxleload"] || [parameter isEqualToString:@"weightrating"];
+}
+
 + (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2
 {
     int dist = firstDist;

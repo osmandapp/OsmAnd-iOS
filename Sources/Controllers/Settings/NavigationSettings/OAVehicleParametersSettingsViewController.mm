@@ -245,7 +245,7 @@
 
 - (NSString *)getMeasurementUnit:(NSString *)parameter
 {
-    if ([self isWeightType:parameter])
+    if ([OAUtilities isWeightType:parameter])
         return OALocalizedString(@"shared_string_tones");
     else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
         return OALocalizedString(@"shared_string_meters");
@@ -370,11 +370,6 @@
     return [self.appMode.getRoutingProfile isEqualToString:@"boat"];
 }
 
-- (BOOL)isWeightType:(NSString *)parameter
-{
-    return [parameter isEqualToString:@"weight"] || [parameter isEqualToString:@"maxaxleload"] || [parameter isEqualToString:@"weightrating"];
-}
-
 - (NSString *)getParameterDescription:(NSString *)parameter
 {
     if ([parameter isEqualToString:@"weight"])
@@ -398,7 +393,7 @@
 
 - (NSString *)getParameterImage:(NSString *)parameter
 {
-    if ([self isWeightType:parameter])
+    if ([OAUtilities isWeightType:parameter])
         return @"img_help_weight_limit_day";
     else if ([parameter isEqualToString:@"height"])
         return [self isBoat] ? @"img_help_vessel_height_day" : @"img_help_height_limit_day";

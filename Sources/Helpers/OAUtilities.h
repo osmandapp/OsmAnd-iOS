@@ -446,6 +446,8 @@ static inline void executeOnMainThread(dispatch_block_t block)
 
 + (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName;
 
++ (BOOL)isWeightType:(NSString *)parameter;
+
 + (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2;
 
 + (BOOL) isValidFileName:(NSString *)name;

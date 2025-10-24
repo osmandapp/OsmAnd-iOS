@@ -26,6 +26,10 @@ final class BLEScannerViewController: UIViewController {
         startScan()
     }
     
+    deinit {
+        SwiftyBluetooth.stopScan()
+    }
+    
     private func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self

@@ -98,7 +98,7 @@
             NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
             if (!(p.type == RoutingParameterType::BOOLEAN))
             {
-                BOOL isMotorType = [paramId isEqualToString:@"motor_type"];
+                BOOL isMotorType = [paramId isEqualToString:kRouteParamMotorType];
                 OACommonString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue:@"0"];
                 NSString *value = [stringParam get:self.appMode];
                 int index = -1;
@@ -119,7 +119,7 @@
                 }
 
                 if (index == 0)
-                    value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"shared_string_not_selected" : @"shared_string_none");
+                    value = OALocalizedString([paramId isEqualToString:kRouteParamMotorType] ? @"shared_string_not_selected" : @"shared_string_none");
                 else if (index != -1)
                     value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
                 else
@@ -136,7 +136,7 @@
                     @"setting" : stringParam,
                     @"type" : [OAValueTableViewCell reuseIdentifier]
                 };
-                if ([paramId isEqualToString:@"maxaxleload"] || [paramId isEqualToString:@"weightrating"])
+                if ([paramId isEqualToString:kRouteParamVehicleMaxAxleLoad] || [paramId isEqualToString:kRouteParamVehicleWeightRating])
                 {
                     [otherParametersArr addObject:paramInfo];
                 }
@@ -202,7 +202,7 @@
     
     [exraParametersArr addObject:
          @{
-        @"name" : @"fuel_tank_capacity",
+        @"name" : kRouteParamVehicleFuelTankCapacity,
         @"title" : OALocalizedString(@"fuel_tank_capacity"),
         @"value" : stringValue,
         @"selectedItem" : @(index),
@@ -216,19 +216,19 @@
 
 - (NSString *) getParameterIcon:(NSString *)parameterName
 {
-    if ([parameterName isEqualToString:@"weight"])
+    if ([parameterName isEqualToString:kRouteParamVehicleWeight])
         return @"ic_custom_weight_limit";
-    else if ([parameterName isEqualToString:@"height"])
+    else if ([parameterName isEqualToString:kRouteParamVehicleHeight])
         return @"ic_custom_height_limit";
-    else if ([parameterName isEqualToString:@"length"])
+    else if ([parameterName isEqualToString:kRouteParamVehicleLength])
         return @"ic_custom_length_limit";
-    else if ([parameterName isEqualToString:@"width"])
+    else if ([parameterName isEqualToString:kRouteParamVehicleWidth])
         return @"ic_custom_width_limit";
-    else if ([parameterName isEqualToString:@"motor_type"])
+    else if ([parameterName isEqualToString:kRouteParamMotorType])
         return @"ic_custom_fuel";
-    else if ([parameterName isEqualToString:@"maxaxleload"])
+    else if ([parameterName isEqualToString:kRouteParamVehicleMaxAxleLoad])
         return @"ic_custom_hgv_axle_load";
-    else if ([parameterName isEqualToString:@"weightrating"])
+    else if ([parameterName isEqualToString:kRouteParamVehicleWeightRating])
         return @"ic_custom_hgv_full_load";
     return @"";
 }

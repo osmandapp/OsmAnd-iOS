@@ -33,6 +33,15 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 #define kHeaderDescriptionFont [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
 #define kHeaderDescriptionFontSmall [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
 
+FOUNDATION_EXTERN NSString *const kRouteParamVehicleHeight;
+FOUNDATION_EXTERN NSString *const kRouteParamVehicleWeight;
+FOUNDATION_EXTERN NSString *const kRouteParamVehicleWidth;
+FOUNDATION_EXTERN NSString *const kRouteParamVehicleLength;
+FOUNDATION_EXTERN NSString *const kRouteParamVehicleMotorType;
+FOUNDATION_EXTERN NSString *const kRouteParamVehicleMaxAxleLoad;
+FOUNDATION_EXTERN NSString *const kRouteParamVehicleWeightRating;
+FOUNDATION_EXTERN NSString *const kRouteParamVehicleFuelTankCapacity;
+
 static inline UIColor * colorFromRGB(NSInteger rgbValue)
 {
     return UIColorFromRGB(rgbValue);

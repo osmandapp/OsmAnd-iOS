@@ -63,8 +63,8 @@
 {
     if (_vehicleParameter)
     {
-        _isMotorType = [_vehicleParameter[@"name"] isEqualToString:@"motor_type"];
-        _isFuelTankCapacity = [_vehicleParameter[@"name"] isEqualToString:@"fuel_tank_capacity"];
+        _isMotorType = [_vehicleParameter[@"name"] isEqualToString:kRouteParamVehicleMotorType];
+        _isFuelTankCapacity = [_vehicleParameter[@"name"] isEqualToString:kRouteParamVehicleFuelTankCapacity];
 
         _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
         NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
@@ -247,9 +247,9 @@
 {
     if ([OAUtilities isWeightType:parameter])
         return OALocalizedString(@"shared_string_tones");
-    else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
+    else if ([parameter isEqualToString:kRouteParamVehicleHeight] || [parameter isEqualToString:kRouteParamVehicleWidth] || [parameter isEqualToString:kRouteParamVehicleLength])
         return OALocalizedString(@"shared_string_meters");
-    else if ([parameter isEqualToString:@"fuel_tank_capacity"])
+    else if ([parameter isEqualToString:kRouteParamVehicleFuelTankCapacity])
         return [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     return @"";
 }
@@ -372,21 +372,21 @@
 
 - (NSString *)getParameterDescription:(NSString *)parameter
 {
-    if ([parameter isEqualToString:@"weight"])
+    if ([parameter isEqualToString:kRouteParamVehicleWeight])
         return OALocalizedString(@"weight_limit_description");
-    else if ([parameter isEqualToString:@"height"])
+    else if ([parameter isEqualToString:kRouteParamVehicleHeight])
         return [self isBoat] ? OALocalizedString(@"vessel_height_limit_description") : OALocalizedString(@"height_limit_description");
-    else if ([parameter isEqualToString:@"width"])
+    else if ([parameter isEqualToString:kRouteParamVehicleWidth])
         return  [self isBoat] ? OALocalizedString(@"vessel_width_limit_description") : OALocalizedString(@"width_limit_description");
-    else if ([parameter isEqualToString:@"length"])
+    else if ([parameter isEqualToString:kRouteParamVehicleLength])
         return OALocalizedString(@"lenght_limit_description");
-    else if ([parameter isEqualToString:@"motor_type"])
+    else if ([parameter isEqualToString:kRouteParamVehicleMotorType])
         return OALocalizedString(@"routing_attr_motor_type_description");
-    else if ([parameter isEqualToString:@"fuel_tank_capacity"])
+    else if ([parameter isEqualToString:kRouteParamVehicleFuelTankCapacity])
         return OALocalizedString(@"fuel_tank_capacity_description");
-    else if ([parameter isEqualToString:@"maxaxleload"])
+    else if ([parameter isEqualToString:kRouteParamVehicleMaxAxleLoad])
         return OALocalizedString(@"max_axle_load_description");
-    else if ([parameter isEqualToString:@"weightrating"])
+    else if ([parameter isEqualToString:kRouteParamVehicleWeightRating])
         return OALocalizedString(@"max_weight_at_full_load_description");
     return @"";
 }
@@ -395,13 +395,13 @@
 {
     if ([OAUtilities isWeightType:parameter])
         return @"img_help_weight_limit_day";
-    else if ([parameter isEqualToString:@"height"])
+    else if ([parameter isEqualToString:kRouteParamVehicleHeight])
         return [self isBoat] ? @"img_help_vessel_height_day" : @"img_help_height_limit_day";
-    else if ([parameter isEqualToString:@"width"])
+    else if ([parameter isEqualToString:kRouteParamVehicleWidth])
         return  [self isBoat] ? @"img_help_vessel_width_day" : @"img_help_width_limit_day";
-    else if ([parameter isEqualToString:@"length"])
+    else if ([parameter isEqualToString:kRouteParamVehicleLength])
         return @"img_help_length_limit_day";
-    else if ([parameter isEqualToString:@"motor_type"])
+    else if ([parameter isEqualToString:kRouteParamVehicleMotorType])
         return @"ic_custom_fuel";
     return @"";
 }

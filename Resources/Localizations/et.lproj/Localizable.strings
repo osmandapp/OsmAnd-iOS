@@ -3567,7 +3567,6 @@
 "obd_fuel_pressure" = "Kütuse rõhk";
 "average" = "Keskmine";
 "shared_string_instant" = "Hetke näidud";
-"obd_fuel_consumption_rate_l_km" = "Kütusekulu (L/100 km)";
 "obd_engine_oil_temperature_desc" = "Näitab mootoriõli temperatuuri.";
 "obd_fuel_consumption_rate" = "Kütusetarbimine";
 "percent_hour" = "%/t";
@@ -3579,7 +3578,6 @@
 "obd_bluetooth_off_description" = "Skännerite leidmiseks ja ühendamiseks lülita Bluetooth sisse.";
 "obd_air_intake_temp_desc" = "Näitab siseneva temperatuuri mootori siseneva õhu hargnemiskohas.";
 "obd_fuel_type_gasoline" = "Bensiin";
-"obd_fuel_consumption_rate_l_km_desc" = "Näitab arvutuslikku kütusekulu (L/100 km)";
 "obd_how_to_connect" = "Ühendamine toimib nii:";
 "liter_per_hour" = "L/t";
 "obd_fuel_left_liters" = "Kütust alles (liitrites)";

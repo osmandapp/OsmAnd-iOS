@@ -2648,7 +2648,6 @@
 "obd_fuel_type_bifuel_lpg" = "plurbrulaĵa, nun LPG";
 "obd_ambient_air_temp_desc" = "Montras temperaturon ekster la veturilo.";
 "obd_fuel_consumption_rate_scanner" = "Konsumo de brulaĵo (OBD)";
-"obd_fuel_consumption_rate_l_km" = "Konsumo de brulaĵo (l/100 km)";
 "obd_engine_coolant_temp_desc" = "Montras temperaturon de malvarmigan likvaĵon de la motoro";
 "distance_by_tap_use_description" = "Frapetu la ekranon per unu fingro por vidigi distancon inter via nuna pozicio kaj la elektita punkto. \nFrapetu la ekranon per du fingroj por vidigi distancon inter la elektitaj punktoj.";
 "remaining_fuel_description" = "Montras kvanton da brulaĵo restantan en brulaĵujo de la veturilo";
@@ -2656,7 +2655,6 @@
 "obd_engine_oil_temperature_desc" = "Montras temperaturon de motoroleo.";
 "obd_fuel_type_bifuel_electricity" = "plurbrulaĵa, nun elektro";
 "obd_nothing_found_description" = "Certiĝu, ke:\n – Bludento estas aktiva.\n – motoro de la veturilo laboras.\n – via aparato estas ene atingo de la skanilo.";
-"obd_fuel_consumption_rate_l_km_desc" = "Montras konsumon de brulaĵo de via veturilo surbaze de kalkuloj (l/100 km)";
 "obd_fuel_type_bifuel_ethanol" = "plurbrulaĵa, nun etanolo";
 "obd_widget_vehicle_speed" = "Rapido de veturilo";
 "obd_fuel_consumption_rate_sensor_type" = "Uzi mezurunuojn laŭ nomo.";

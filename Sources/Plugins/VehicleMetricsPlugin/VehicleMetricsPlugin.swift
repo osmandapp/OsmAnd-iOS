@@ -12,6 +12,8 @@ final class VehicleMetricsPlugin: OAPlugin {
     let TRIP_RECORDING_VEHICLE_METRICS: OACommonStringList = OAAppSettings.sharedManager().registerStringListPreference("trip_recording_vehicle_metrics", defValue: nil).makeProfile().makeShared()
     var isOBDSimulatorConnected = false
     
+    private let settings = OAAppSettings.sharedManager()
+    
     override func getId() -> String? {
         kInAppId_Addon_Vehicle_Metrics
     }
@@ -50,7 +52,7 @@ final class VehicleMetricsPlugin: OAPlugin {
                 .fuelLeftPercent:
             return localizedString("percent_unit")
         case .fuelLeftLiter:
-            return OAVolumeConstant.getUnitSymbol(OAAppSettings.sharedManager().volumeUnits.get())
+            return OAVolumeConstant.getUnitSymbol(settings.volumeUnits.get())
         case .fuelConsumptionRatePercentHour:
             return localizedString("percent_hour")
         case .fuelConsumptionRateLiterHour:
@@ -68,6 +70,8 @@ final class VehicleMetricsPlugin: OAPlugin {
             return nil
         case .fuelConsumptionRateLiterKm:
             return getFormatVolumePerDistanceUnit()
+        case .fuelConsumptionRateMPerLiter:
+            return getFormatDistancePerVolumeUnit()
         default:
             return nil
         }
@@ -128,6 +132,8 @@ final class VehicleMetricsPlugin: OAPlugin {
              .throttlePosition:
             // Float
             convertedData = data.asFloat
+        case .fuelConsumptionRateMPerLiter:
+            convertedData = getFormatDistancePerVolume(metersPerLiter: data.asFloat)
         default:
             break
         }
@@ -167,11 +173,11 @@ final class VehicleMetricsPlugin: OAPlugin {
 extension VehicleMetricsPlugin {
     
     private func getSpeedUnit() -> String {
-        OASpeedConstant.toShortString(OAAppSettings.sharedManager().speedSystem.get())
+        OASpeedConstant.toShortString(settings.speedSystem.get())
     }
     
     private func getDistanceUnit() -> String {
-        switch OAAppSettings.sharedManager().metricSystem.get() {
+        switch settings.metricSystem.get() {
         case .KILOMETERS_AND_METERS:
             return localizedString("km")
         case .NAUTICAL_MILES_AND_METERS, .NAUTICAL_MILES_AND_FEET:
@@ -182,11 +188,11 @@ extension VehicleMetricsPlugin {
     }
     
     private func getTemperatureUnit() -> EOATemperatureConstant {
-        OAAppSettings.sharedManager().getTemperatureUnit()
+        settings.getTemperatureUnit()
     }
     
     private func getFormatVolumePerHourUnit() -> String? {
-        let volumeUnit = OAVolumeConstant.getUnitSymbol(OAAppSettings.sharedManager().volumeUnits.get())
+        let volumeUnit = OAVolumeConstant.getUnitSymbol(settings.volumeUnits.get())
         
         return String(format: localizedString("ltr_or_rtl_combine_via_slash"),
                       volumeUnit,
@@ -194,25 +200,70 @@ extension VehicleMetricsPlugin {
     }
     
     private func getFormatVolumePerDistanceUnit() -> String {
-        let volumeUnit = OAVolumeConstant.getUnitSymbol(OAAppSettings.sharedManager().volumeUnits.get())
+        let volumeUnit = OAVolumeConstant.getUnitSymbol(settings.volumeUnits.get())
         return String(format: localizedString("ltr_or_rtl_combine_via_slash"), volumeUnit, "100\(getDistanceUnit())")
     }
     
+    private func getFormatDistancePerVolumeUnit() -> String {
+        let mc = settings.metricSystem.get()
+        let distanceUnit: String
+        let isMileMetrics = [EOAMetricsConstant.MILES_AND_FEET, EOAMetricsConstant.MILES_AND_YARDS, EOAMetricsConstant.MILES_AND_METERS].contains(where: { mc == $0 })
+        
+        if isMileMetrics {
+            distanceUnit = localizedString("mile")
+        } else if [.NAUTICAL_MILES_AND_FEET, .NAUTICAL_MILES_AND_METERS].contains(where: { mc == $0 }) {
+            distanceUnit = localizedString("nm")
+        } else {
+            distanceUnit = localizedString("km")
+        }
+        
+        let volume = settings.volumeUnits.get()
+        let volumeUnit = OAVolumeConstant.getUnitSymbol(volume)
+        
+        if isMileMetrics && [EOAVolumeConstant.US_GALLONS, EOAVolumeConstant.IMPERIAL_GALLONS].contains(where: { volume == $0 }) {
+            return localizedString("mpg")
+        } else {
+            return String(format: localizedString("ltr_or_rtl_combine_via_slash"), distanceUnit, volumeUnit)
+        }
+    }
+    
+    private func getFormatDistancePerVolume(metersPerLiter: Float) -> Float {
+        let mc = settings.metricSystem.get()
+        let volumeUnit = settings.volumeUnits.get()
+        return getFormatDistancePerVolume(metersPerLiter: metersPerLiter, mc: mc, volumeUnit: volumeUnit)
+    }
+    
+    private func getFormatDistancePerVolume(metersPerLiter: Float,
+                                            mc: EOAMetricsConstant,
+                                            volumeUnit: EOAVolumeConstant) -> Float {
+        let litersInVolume = OAOsmAndFormatter.convertLiterToVolumeUnit(withVolumeUnit: volumeUnit, value: 1)
+        let distanceInMeters: Float
+        switch mc {
+        case .MILES_AND_YARDS, .MILES_AND_FEET, .MILES_AND_METERS:
+            distanceInMeters = Float(METERS_IN_ONE_MILE)
+            case .NAUTICAL_MILES_AND_FEET, .NAUTICAL_MILES_AND_METERS:
+            distanceInMeters = Float(METERS_IN_ONE_NAUTICALMILE)
+        default:
+            distanceInMeters = Float(METERS_IN_KILOMETER)
+        }
+        return metersPerLiter / litersInVolume / distanceInMeters
+    }
+    
     private func getFormatVolumePerDistance(litersPer100km: Float) -> Float {
-        let volumeUnit = OAAppSettings.sharedManager().volumeUnits.get()
+        let volumeUnit = settings.volumeUnits.get()
         let volumeResult = OAOsmAndFormatter.convertLiterToVolumeUnit(withVolumeUnit: volumeUnit, value: litersPer100km)
         
-        let metricConstant = OAAppSettings.sharedManager().metricSystem.get()
+        let metricConstant = settings.metricSystem.get()
         
         switch metricConstant {
         case EOAMetricsConstant.MILES_AND_YARDS,
              EOAMetricsConstant.MILES_AND_FEET,
              EOAMetricsConstant.MILES_AND_METERS:
-            return volumeResult * Float(METERS_IN_ONE_MILE)
+            return volumeResult * Float(METERS_IN_ONE_MILE) / 1000
             
         case EOAMetricsConstant.NAUTICAL_MILES_AND_FEET,
              EOAMetricsConstant.NAUTICAL_MILES_AND_METERS:
-            return volumeResult * Float(METERS_IN_ONE_NAUTICALMILE)
+            return volumeResult * Float(METERS_IN_ONE_NAUTICALMILE) / 1000
             
         default:
             return volumeResult
@@ -224,7 +275,7 @@ extension VehicleMetricsPlugin {
     }
 
     private func getFormatVolumePerHour(literPerHour: Float) -> Float {
-        let volumeUnit = OAAppSettings.sharedManager().volumeUnits.get()
+        let volumeUnit = settings.volumeUnits.get()
         
         return OAOsmAndFormatter.convertLiterToVolumeUnit(withVolumeUnit: volumeUnit, value: literPerHour)
     }
@@ -242,7 +293,7 @@ extension VehicleMetricsPlugin {
     }
     
     private func getFormattedVolume(_ data: Float) -> Float {
-        let volumeUnit = OAAppSettings.sharedManager().volumeUnits.get()
+        let volumeUnit = settings.volumeUnits.get()
         return OAOsmAndFormatter.convertLiterToVolumeUnit(withVolumeUnit: volumeUnit, value: data)
     }
     
@@ -273,7 +324,7 @@ extension VehicleMetricsPlugin {
         
         guard OAIAPHelper.isVehicleMetricsAvailable() else { return }
         
-        let mode = OAAppSettings.sharedManager().applicationMode.get()
+        let mode = settings.applicationMode.get()
         let commandNames = TRIP_RECORDING_VEHICLE_METRICS.get(mode) ?? []
         let selectedCommands = Set(commandNames.compactMap { OBDCommand.companion.getCommand(name: $0) })
 

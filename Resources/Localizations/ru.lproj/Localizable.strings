@@ -3405,7 +3405,6 @@
 "obd_vin_desc" = "VIN-код по OBD";
 "obd_fuel_type_ethanol" = "Этанол";
 "shared_string_hour" = "Час";
-"obd_fuel_consumption_rate_l_km" = "Расход топлива (л/100 км)";
 "liter_per_hour" = "л/ч";
 "obd_fuel_type_desc" = "Виджет показывает тип топлива транспортного средства по датчику OBD";
 "obd_widget_vehicle_speed" = "Скорость";
@@ -3466,7 +3465,6 @@
 "obd_searching_text" = "Поиск сканеров";
 "simulate_obd" = "Имитировать данные OBD";
 "obd_fuel_type_hybrid_hydrogen" = "Гибрид: водород";
-"obd_fuel_consumption_rate_l_km_desc" = "Виджет показывает расход топлива транспортного средства на основе расчетов (л/100 км)";
 "obd_fuel_consumption_rate_liter_hour" = "Расход топлива (л/ч)";
 "obd_fuel_type_propane" = "Пропан";
 "obd_throttle_position_desc" = "Виджет показывает угол открытия заслонки дросселя.";

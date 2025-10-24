@@ -3735,8 +3735,6 @@
 "obd_fuel_consumption_rate_scanner" = "Stopa potrošnje goriva (OBD)";
 "obd_fuel_consumption_rate_liter_hour" = "Stopa potrošnje goriva";
 "obd_fuel_consumption_rate_percent_hour" = "Stopa potrošnje goriva %/h";
-"obd_fuel_consumption_rate_l_km" = "Potrošnja goriva stopa (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Prikazuje stopu potrošnje goriva vozila na osnovu proračuna (L/100 km)";
 "simulate_obd" = "Simulirajte OBD podatke";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

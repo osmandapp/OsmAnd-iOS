@@ -22,7 +22,7 @@ extension OBDDataComputer.OBDTypeWidget {
             return .icCustomCarInfo
         case .throttlePosition:
             return .icCustomObdThrottlePosition
-        case .fuelConsumptionRatePercentHour, .fuelConsumptionRateLiterKm, .fuelConsumptionRateLiterHour, .fuelConsumptionRateSensor:
+        case .fuelConsumptionRatePercentHour, .fuelConsumptionRateLiterKm, .fuelConsumptionRateLiterHour, .fuelConsumptionRateSensor, .fuelConsumptionRateMPerLiter:
             return .icCustomObdFuelConsumption
         case .temperatureIntake:
             return .icCustomObdTemperatureIntake

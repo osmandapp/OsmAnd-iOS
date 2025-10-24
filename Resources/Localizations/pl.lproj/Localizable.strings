@@ -3462,7 +3462,6 @@
 "shared_string_volume" = "Objętość";
 "average" = "Średnia";
 "obd_fuel_type_methanol" = "Metanol";
-"obd_fuel_consumption_rate_l_km_desc" = "Pokazuje zużycie paliwa pojazdu na podstawie obliczeń (l/100 km)";
 "obd_fuel_type_propane" = "Propan";
 "shared_string_engine" = "Silnik";
 "obd_widget_engine_speed" = "Obroty silnika";
@@ -3511,7 +3510,6 @@
 "trace_rendering_descr" = "Wyświetl wydajność renderowania i nawigacji.";
 "connect_obd_instructions_title" = "OsmAnd obsługuje połączenia Bluetooth ze skanerami OBD-II.";
 "shared_string_large" = "Duża";
-"obd_fuel_consumption_rate_l_km" = "Wskaźnik zużycia paliwa (l/100 km)";
 "shared_string_instant" = "Natychmiastowy";
 "obd_bluetooth_off_description" = "Włącz Bluetooth, aby znaleźć i połączyć skanery.";
 "obd_vin_desc" = "Kod VIN przez OBD";

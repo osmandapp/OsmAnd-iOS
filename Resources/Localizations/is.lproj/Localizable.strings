@@ -3692,7 +3692,6 @@
 "remaining_fuel" = "Eldsneytisbirgðir";
 "average_temperature" = "Meðalhitastig";
 "obd_fuel_type_bifuel_electricity" = "Tveggja eldsneytistegunda farartæki sem keyrir á rafmagni";
-"obd_fuel_consumption_rate_l_km_desc" = "Birtir eldsneytiseyðslu farartækis út frá útreikningum (L/100 km)";
 "obd_calculated_engine_load" = "Reiknað álag á vél";
 "obd_fuel_level_percent" = "Magn eldsneytis (%)";
 "obd_widget_engine_speed" = "Vélarhraði";
@@ -3729,7 +3728,6 @@
 "rpm_unit" = "sn/mín";
 "obd_fuel_level_desc" = "Birtir stöðu eldsneytis farartækis í gegnum OBD-skynjara";
 "obd_fuel_type_methanol" = "Metanól";
-"obd_fuel_consumption_rate_l_km" = "Eldsneytiseyðsla (L/100 km)";
 "liter_per_hour" = "L/klst";
 "obd_fuel_type" = "Tegund eldsneytis";
 "obd_fuel_type_hybrid_diesel" = "Tvinn-dísel";

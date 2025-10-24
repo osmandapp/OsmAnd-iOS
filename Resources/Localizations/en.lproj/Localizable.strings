@@ -3164,6 +3164,8 @@
 "routing_attr_only_permitted_ways_name" = "Expressly permitted ways";
 "routing_attr_prefer_horse_routes_description" = "Prefer horse routes";
 "routing_attr_prefer_horse_routes_name" = "Prefer horse routes";
+"max_weight_at_full_load_description" = "Provide your vehicle\'s max weight at full load to avoid roads and bridges with weight limits.";
+"max_axle_load_description" = "Provide your vehicle\'s max axle load to avoid roads and bridges with weight limits.";
 "weight_limit_description" = "Provide your vehicle weight, some route restrictions may apply for heavy vehicles.";
 "height_limit_description" = "Provide your vehicle height, some route restrictions may apply for high vehicles.";
 "lenght_limit_description" = "Provide your vehicle length, some routes restrictions may be applied for long vehicles.";

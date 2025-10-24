@@ -43,14 +43,6 @@ static NSString *kRouteParamPreferParameterPrefix = @"prefer_";
 static NSString *kRouteParamMotorType = @"motor_type";
 static NSString *kRouteParamHazmatCategoryUsaPrefix = @"hazmat_category_usa_";
 
-static NSString *kRouteParamVehicleHeight = @"height";
-static NSString *kRouteParamVehicleWeight = @"weight";
-static NSString *kRouteParamVehicleWidth = @"width";
-static NSString *kRouteParamVehicleLength = @"length";
-static NSString *kRouteParamVehicleMotorType = @"motor_type";
-static NSString *kRouteParamVehicleMaxAxleLoad = @"maxaxleload";
-static NSString *kRouteParamVehicleWeightRating = @"weightrating";
-
 static NSString *kDefaultNumericValue = @"0.0";
 static NSString *kDefaultSymbolicValue = @"-";
 

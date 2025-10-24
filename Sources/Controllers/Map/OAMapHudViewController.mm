@@ -47,9 +47,8 @@
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
 
-static const float kButtonWidth = 50.0;
+static const float kButtonWidth = 48.0;
 static const float kButtonOffset = 16.0;
-static const float kButtonHeight = 50.0;
 static const float kWidgetsOffset = 3.0;
 static const float kDistanceMeters = 100.0;
 
@@ -216,7 +215,7 @@ static const float kDistanceMeters = 100.0;
     [_compassImage removeFromSuperview];
     [_compassButton addSubview:_compassImage];
     _compassImage.translatesAutoresizingMaskIntoConstraints = YES;
-    _compassImage.frame = CGRectMake(10.0, 10.0, 30.0, 30.0);
+    _compassImage.frame = CGRectMake(9.0, 9.0, 30.0, 30.0);
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _compassButton.alpha = [self shouldShowCompass] ? 1.0 : 0.0;

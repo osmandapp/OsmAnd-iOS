@@ -71,7 +71,8 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                                                                  .calculatedEngineLoad,
                                                                  .fuelPressure,
                                                                  .throttlePosition,
-                                                                 .batteryVoltage]
+                                                                 .batteryVoltage,
+                                                                 .adapterBatteryVoltage]
     
     override func viewDidLoad() {
         super.viewDidLoad()

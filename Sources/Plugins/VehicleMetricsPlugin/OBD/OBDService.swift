@@ -97,9 +97,9 @@ final class OBDService: NSObject {
         device.peripheral.writeValue(ofCharac: ecuWriteCharacteristic, value: data, completion: { result in
             switch result {
             case .success:
-                NSLog("[OBDService] -> peripheral writeValue success")
+                NSLog("[OBDService] -> peripheral writeValue success | command: \(command)")
             case .failure(let error):
-                NSLog("[OBDService] -> peripheral writeValue failure | \(error.localizedDescription)")
+                NSLog("[OBDService] -> peripheral writeValue failure | command: \(command) | \(error.localizedDescription)")
             }
         })
         

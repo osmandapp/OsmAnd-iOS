@@ -9,7 +9,7 @@
 @objcMembers
 open class MapButtonState: NSObject {
     private static let originalValue: Int64 = -1
-    private static let defaultSizeDp: Int32 = 50
+    private static let defaultSizeDp: Int32 = 48
     
     private let settings: OAAppSettings = OAAppSettings.sharedManager()
     private let portraitPositionPref: OACommonLong

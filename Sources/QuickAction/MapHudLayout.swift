@@ -8,6 +8,173 @@
 
 import UIKit
 
+final class HudGridTestOverlay: UIView {
+    
+    struct Config: Equatable {
+        var cellSizePx: CGFloat = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP)
+        var defaultMarginPx: CGFloat = CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP)
+        var cellFixPx: CGFloat = 0
+        var statusBarHeight: CGFloat = 0
+        var safeAreaInsets: UIEdgeInsets = .zero
+        var bottomOverlayPx: CGFloat = 0
+        var showsEffectiveGrid: Bool = false
+        var showsSlots: Bool = false
+        var showsFrames: Bool = false
+    }
+    
+    struct Item {
+        let view: UIView
+        let position: ButtonPositionSize
+        let dpToPx: CGFloat
+    }
+    
+    var cfg = Config() {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    var items: [Item] = [] {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+        contentMode = .redraw
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func draw(_ rect: CGRect) {
+        guard let ctx = UIGraphicsGetCurrentContext() else { return }
+        let logical = makeLogicalBounds()
+        let physical = makePhysicalBounds()
+        if cfg.showsEffectiveGrid, cfg.cellFixPx > 0 {
+            let effectiveFrame = makeCenteredEffectiveGridFrame(logical: logical)
+            drawGrid(in: ctx, frame: effectiveFrame, cell: cfg.cellSizePx, color: UIColor.systemOrange.withAlphaComponent(0.55))
+        }
+        
+        guard cfg.showsSlots || cfg.showsFrames else { return }
+        for item in items {
+            let slot = makeSlotRect(item: item, physical: physical, cellFix: cfg.cellFixPx)
+            if cfg.showsSlots {
+                drawFilledRect(in: ctx, rect: slot, fill: UIColor.systemTeal.withAlphaComponent(0.25), stroke: UIColor.systemTeal)
+            }
+            
+            if cfg.showsFrames {
+                let frame = item.view.frame
+                let snapped = CGRect(x: snapToPixel(frame.minX), y: snapToPixel(frame.minY), width: max(0, snapToPixel(frame.maxX) - snapToPixel(frame.minX)), height: max(0, snapToPixel(frame.maxY) - snapToPixel(frame.minY)))
+                strokeRect(in: ctx, rect: snapped, stroke: .systemRed)
+            }
+        }
+    }
+    
+    private func makeLogicalBounds() -> CGRect {
+        let x0 = cfg.safeAreaInsets.left + cfg.defaultMarginPx
+        let x1 = bounds.width - cfg.safeAreaInsets.right - cfg.defaultMarginPx
+        let y0 = cfg.statusBarHeight + cfg.defaultMarginPx
+        let y1 = bounds.height - cfg.safeAreaInsets.bottom - cfg.defaultMarginPx
+        return CGRect(x: x0, y: y0, width: max(0, x1 - x0), height: max(0, y1 - y0))
+    }
+    
+    private func makePhysicalBounds() -> UIEdgeInsets {
+        UIEdgeInsets(top: cfg.statusBarHeight, left: cfg.safeAreaInsets.left, bottom: cfg.safeAreaInsets.bottom, right: cfg.safeAreaInsets.right)
+    }
+    
+    private func makeCenteredEffectiveGridFrame(logical: CGRect) -> CGRect {
+        let baseWidth = max(0, logical.width - 2 * cfg.cellFixPx)
+        let baseHeight = max(0, logical.height - 2 * cfg.cellFixPx - cfg.bottomOverlayPx)
+        let remW = baseWidth.truncatingRemainder(dividingBy: cfg.cellSizePx)
+        let remH = baseHeight.truncatingRemainder(dividingBy: cfg.cellSizePx)
+        let startX = logical.minX + cfg.cellFixPx + remW / 2
+        let startY = logical.minY + cfg.cellFixPx + remH / 2
+        let cols = floor((baseWidth - remW) / cfg.cellSizePx)
+        let rows = floor((baseHeight - remH) / cfg.cellSizePx)
+        let width = cols * cfg.cellSizePx
+        let height = rows * cfg.cellSizePx
+        return CGRect(x: startX, y: startY, width: width, height: height)
+    }
+    
+    private func makeSlotRect(item: Item, physical: UIEdgeInsets, cellFix: CGFloat) -> CGRect {
+        let cell = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP) * item.dpToPx
+        let def = CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP) * item.dpToPx
+        let startX = (CGFloat(item.position.marginX) * cell + def)
+        let endX = (CGFloat(item.position.marginX + item.position.width) * cell + def)
+        let startY = (CGFloat(item.position.marginY) * cell + def)
+        let endY = (CGFloat(item.position.marginY + item.position.height) * cell + def)
+        let leftEdge = item.position.isLeft ? physical.left + cellFix + startX : bounds.width - physical.right - cellFix - endX
+        let rightEdge = item.position.isLeft ? physical.left + cellFix + endX : bounds.width - physical.right - cellFix - startX
+        let topEdge = item.position.isTop ? physical.top + cellFix + startY : bounds.height - physical.bottom - cellFix - endY
+        let bottomEdge = item.position.isTop ? physical.top + cellFix + endY : bounds.height - physical.bottom - cellFix - startY
+        let xA = snapToPixel(min(leftEdge, rightEdge))
+        let xB = snapToPixel(max(leftEdge, rightEdge))
+        let yA = snapToPixel(min(topEdge, bottomEdge))
+        let yB = snapToPixel(max(topEdge, bottomEdge))
+        return CGRect(x: xA, y: yA, width: max(0, xB - xA), height: max(0, yB - yA))
+    }
+    
+    private func drawGrid(in ctx: CGContext, frame: CGRect, cell: CGFloat, color: UIColor) {
+        guard frame.width > 0, frame.height > 0, cell > 0 else { return }
+        ctx.saveGState()
+        ctx.addRect(frame)
+        ctx.clip()
+        color.setStroke()
+        ctx.setLineWidth(1)
+        ctx.setShouldAntialias(false)
+        let cols = Int(floor(frame.width / cell))
+        let rows = Int(floor(frame.height / cell))
+        for i in 0...cols {
+            let x = snapToPixel(frame.minX + CGFloat(i) * cell)
+            ctx.move(to: CGPoint(x: x, y: snapToPixel(frame.minY)))
+            ctx.addLine(to: CGPoint(x: x, y: snapToPixel(frame.maxY)))
+        }
+        
+        for j in 0...rows {
+            let y = snapToPixel(frame.minY + CGFloat(j) * cell)
+            ctx.move(to: CGPoint(x: snapToPixel(frame.minX), y: y))
+            ctx.addLine(to: CGPoint(x: snapToPixel(frame.maxX), y: y))
+        }
+        
+        ctx.strokePath()
+        ctx.restoreGState()
+    }
+    
+    private func drawFilledRect(in ctx: CGContext, rect: CGRect, fill: UIColor, stroke: UIColor) {
+        guard rect.width > 0, rect.height > 0 else { return }
+        ctx.saveGState()
+        fill.setFill()
+        stroke.setStroke()
+        ctx.setLineWidth(1)
+        ctx.setShouldAntialias(false)
+        ctx.addRect(rect)
+        ctx.drawPath(using: .fillStroke)
+        ctx.restoreGState()
+    }
+    
+    private func strokeRect(in ctx: CGContext, rect: CGRect, stroke: UIColor) {
+        guard rect.width > 0, rect.height > 0 else { return }
+        ctx.saveGState()
+        stroke.setStroke()
+        ctx.setLineWidth(1)
+        ctx.setShouldAntialias(false)
+        ctx.addRect(rect)
+        ctx.strokePath()
+        ctx.restoreGState()
+    }
+    
+    @inline(__always)
+    private func snapToPixel(_ value: CGFloat) -> CGFloat {
+        let scale = contentScaleFactor > 0 ? contentScaleFactor : UIScreen.main.scale
+        return (floor(value * scale) + 0.5) / scale
+    }
+}
+
 @objcMembers
 final class MapHudLayout: NSObject {
     private let containerView: UIView
@@ -15,6 +182,7 @@ final class MapHudLayout: NSObject {
     private let hudBasePaddingDp: CGFloat = 16.0
     private let tablet: Bool
     
+    private var gridOverlay: HudGridTestOverlay?
     private var statusBarHeight: CGFloat
     private var portrait: Bool
     private var lastWidth: CGFloat = 0
@@ -441,6 +609,8 @@ final class MapHudLayout: NSObject {
 
             updateButtonParams(for: view, with: pos)
         }
+
+        refreshDebugOverlayIfNeeded(positionMap: positionMap)
     }
     
     func updateButton(_ button: OAHudButton, save: Bool) {
@@ -493,5 +663,83 @@ final class MapHudLayout: NSObject {
         } else {
             updateButtons()
         }
+    }
+}
+
+extension MapHudLayout {
+    
+    struct DebugFlags {
+        var effective: Bool
+        var slots: Bool
+        var frames: Bool
+    }
+    
+    func currentDebugFlags() -> DebugFlags? {
+        guard let cfg = gridOverlay?.cfg else { return nil }
+        return .init(effective: cfg.showsEffectiveGrid, slots: cfg.showsSlots, frames: cfg.showsFrames)
+    }
+    
+    func setDebugOverlay(effective: Bool, slots: Bool, frames: Bool) {
+        guard effective || slots || frames else {
+            removeDebugOverlay()
+            return
+        }
+        
+        let overlay = ensureDebugOverlay()
+        var cfg = overlay.cfg
+        cfg.showsEffectiveGrid = effective
+        cfg.showsSlots = slots
+        cfg.showsFrames = frames
+        overlay.cfg = cfg
+        applyGeometry(to: overlay)
+        overlay.items = makeItems(from: getButtonPositionSizes())
+        containerView.bringSubviewToFront(overlay)
+    }
+    
+    private func ensureDebugOverlay() -> HudGridTestOverlay {
+        guard let gridOverlay else {
+            let overlay = HudGridTestOverlay(frame: containerView.bounds)
+            overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            containerView.addSubview(overlay)
+            self.gridOverlay = overlay
+            return overlay
+        }
+        
+        return gridOverlay
+    }
+    
+    private func removeDebugOverlay() {
+        gridOverlay?.removeFromSuperview()
+        gridOverlay = nil
+    }
+    
+    private func applyGeometry(to overlay: HudGridTestOverlay) {
+        var cfg = overlay.cfg
+        cfg.cellSizePx = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP) * dpToPx
+        cfg.defaultMarginPx = CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP) * dpToPx
+        cfg.cellFixPx = max(0, (hudBasePaddingDp - CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP)) * dpToPx)
+        cfg.statusBarHeight = statusBarHeight
+        cfg.safeAreaInsets = containerView.safeAreaInsets
+        cfg.bottomOverlayPx = externalBottomOverlayPx
+        overlay.cfg = cfg
+    }
+    
+    private func makeItems(from map: [UIView: ButtonPositionSize]) -> [HudGridTestOverlay.Item] {
+        map.compactMap { (view, pos) in
+            guard view is OAHudButton || view is OAMapRulerView || view is OADownloadMapWidget else { return nil }
+            return HudGridTestOverlay.Item(view: view, position: pos, dpToPx: dpToPx)
+        }
+    }
+    
+    private func refreshDebugOverlayIfNeeded(positionMap: [UIView: ButtonPositionSize]) {
+        guard let gridOverlay else { return }
+        if !(gridOverlay.cfg.showsEffectiveGrid || gridOverlay.cfg.showsSlots || gridOverlay.cfg.showsFrames) {
+            removeDebugOverlay()
+            return
+        }
+        
+        applyGeometry(to: gridOverlay)
+        gridOverlay.items = makeItems(from: positionMap)
+        containerView.bringSubviewToFront(gridOverlay)
     }
 }

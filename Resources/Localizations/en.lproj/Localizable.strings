@@ -1785,6 +1785,10 @@
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
 "osmand_depelopment_use_3d_icons" = "Use 3D location position icons";
 "battery_saving_mode" = "Battery saving mode";
+"visualizing_button_grid" = "Map button grid";
+"efficient_grid" = "Efficient grid";
+"slots" = "Slots";
+"button_frames" = "Button frames";
 
 "simulate_in_progress" = "In progress";
 "simulate_your_location_gpx_descr" = "Simulate your position using a recorded GPX track.";

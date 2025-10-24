@@ -3701,7 +3701,6 @@
 "obd_fuel_type_not_provided" = "لم يتم توفير نوع الوقود";
 "shared_string_road_exit" = "خروج";
 "obd_fuel_type_hybrid_hydrogen" = "الهيدروجين الهجين";
-"obd_fuel_consumption_rate_l_km_desc" = "يعرض معدل استهلاك الوقود للمركبة بناءً على الحسابات (لتر/100 كم)";
 "obd_fuel_type_ethanol" = "إيثانول";
 "obd_fuel_left_liters" = "الوقود المتبقي (لتر)";
 "rpm_unit" = "دورة بالدقيقة";
@@ -3747,7 +3746,6 @@
 "obd_widget_engine_speed" = "سرعة المحرك";
 "obd_fuel_level_desc" = "يعرض مستوى وقود السيارة عبر مستشعر OBD";
 "obd_throttle_position" = "موضع الخانق";
-"obd_fuel_consumption_rate_l_km" = "معدل استهلاك الوقود (لتر/100 كم)";
 "trace_rendering_descr" = "إظهار أداء العرض والتنقل.";
 "obd_fuel_consumption_rate_liter_hour" = "معدل استهلاك الوقود";
 "shared_string_normal" = "عادي";

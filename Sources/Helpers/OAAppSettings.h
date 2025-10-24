@@ -183,10 +183,11 @@ typedef NS_ENUM(NSInteger, EOAVolumeConstant)
 
 @property (nonatomic, readonly) EOAVolumeConstant volume;
 
-+ (instancetype) withVolumeConstant:(EOAVolumeConstant)volume;
++ (instancetype)withVolumeConstant:(EOAVolumeConstant)volume;
 
-+ (NSString *) toHumanString:(EOAVolumeConstant)volume;
-+ (NSString *) getUnitSymbol:(EOAVolumeConstant)volume;
++ (NSString *)toHumanString:(EOAVolumeConstant)volume;
++ (NSString *)toSingleHumanString:(EOAVolumeConstant)volume;
++ (NSString *)getUnitSymbol:(EOAVolumeConstant)volume;
 
 @end
 

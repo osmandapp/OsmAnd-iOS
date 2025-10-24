@@ -2113,7 +2113,6 @@
 "obd_fuel_type_bifuel_hydrogen" = "Hydrogen nhiên liệu kép";
 "destination_first" = "Đích đến trước";
 "save_as_smart_folder" = "Lưu thành thư mục thông minh";
-"obd_fuel_consumption_rate_l_km" = "Mức tiêu thụ nhiên liêu (lít/100 km)";
 "route_guidance" = "Chỉ dẫn đường đi";
 "not_enough_contributions_descr" = "Tối thiểu %@ thay đổi trong khoảng thời gian 2 tháng gần nhất %@ là bắt buộc để có quyền truy cập đến các bản cập nhật bản đồ hàng tiếng không giới hạn.";
 "imperial_gallons" = "Ga-lông hệ đo imperial";
@@ -2200,7 +2199,6 @@
 "shared_strings_dimensions" = "Kích thước";
 "quick_action_save_recorded_trip_and_continue" = "Chuyến đi đã được ghi và tiếp tục";
 "obd_throttle_position" = "Vị trí bướm ga";
-"obd_fuel_consumption_rate_l_km_desc" = "Hiện mức tiêu thụ nhiên liệu dựa trên sự tính toán (lít/100 km)";
 "obd_vehicle_info" = "Thông tin xe";
 "obd_air_intake_temp" = "Nhiệt độ vào";
 "auto_25_chars_route_tl_kl" = "Ré trái và hướng về bên trái";

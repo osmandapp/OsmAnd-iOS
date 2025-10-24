@@ -17,7 +17,7 @@ final class VehicleMetricsTripRecordingCommandsViewController: OABaseNavbarViewC
             return SelectionManager(allItems: allCommands, initiallySelected: [])
         }
         
-        let selectedCommands = plugin.TRIP_RECORDING_VEHICLE_METRICS.get(appMode) ?? []
+        let selectedCommands = plugin.TRIP_RECORDING_VEHICLE_METRICS.get(appMode)
         return SelectionManager(allItems: allCommands, initiallySelected: selectedCommands)
     }()
     

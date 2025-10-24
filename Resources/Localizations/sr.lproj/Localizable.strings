@@ -3762,8 +3762,6 @@
 "obd_fuel_consumption_rate_scanner" = "Брзина потрошње горива (днв)";
 "obd_fuel_consumption_rate_liter_hour" = "Брзина потрошње горива";
 "obd_fuel_consumption_rate_percent_hour" = "Брзина потрошње горива %/h";
-"obd_fuel_consumption_rate_l_km" = "Брзина потрошње горива (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Приказује потрошњу горива возила на основу прорачуна (L/100 km)";
 "simulate_obd" = "Опонашај податке днв";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

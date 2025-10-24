@@ -3758,8 +3758,6 @@
 "obd_fuel_left_km" = "Carburant restant (km)";
 "obd_fuel_consumption_rate_liter_hour" = "Taux de consommation de carburant";
 "obd_fuel_consumption_rate_percent_hour" = "Taux de consommation de carburant %/h";
-"obd_fuel_consumption_rate_l_km" = "Taux de consommation de carburant (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Affiche le taux de consommation de carburant du véhicule basé sur des calculs (L/100 km)";
 "simulate_obd" = "Simuler les données OBD";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

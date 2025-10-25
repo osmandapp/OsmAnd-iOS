@@ -3669,7 +3669,7 @@
 "shared_string_default_view" = "Vista di default";
 "map_widget_route_information" = "Informazioni sul percorso";
 "change_activity" = "Cambia attività";
-"map_widget_route_information_desc" = "Visualizza l\'orario di arrivo stimato, il tempo di percorrenza rimanente e la distanza per l\'attuale percorso di navigazione.";
+"map_widget_route_information_desc" = "Visualizza l'orario di arrivo stimato, il tempo di percorrenza rimanente e la distanza per l'attuale percorso di navigazione.";
 "map_widget_distance" = "Distanza";
 "preview_next_turn" = "Anteprima della prossima svolta";
 "preview_next_turn_descr" = "Ruota automaticamente la mappa per visualizzare in anteprima la svolta o la manovra successiva";

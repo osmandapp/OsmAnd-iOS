@@ -36,6 +36,9 @@
 #define DRAW_TIME 2
 #define kDefaultLineWidth 5.0
 
+const static int kOneTouchCount = 1;
+const static int kDoubleTouchCount = 2;
+
 @protocol OALineDrawingDelegate <NSObject>
 
 - (void) onDrawNewLine:(OsmAnd::PointI)from to:(OsmAnd::PointI)to color:(OsmAnd::ColorARGB)color distance:(NSString *)distance;
@@ -250,6 +253,7 @@
     UITapGestureRecognizer* _doubleGestureRecognizer;
     UILongPressGestureRecognizer *_longSingleGestureRecognizer;
     UILongPressGestureRecognizer *_longDoubleGestureRecognizer;
+    UIPanGestureRecognizer *_panGestureRecognizer;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
@@ -271,26 +275,33 @@
     _singleGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                        action:@selector(touchDetected:)];
     _singleGestureRecognizer.delegate = self;
-    _singleGestureRecognizer.numberOfTouchesRequired = 1;
+    _singleGestureRecognizer.numberOfTouchesRequired = kOneTouchCount;
     [self addGestureRecognizer:_singleGestureRecognizer];
     
     _doubleGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                        action:@selector(touchDetected:)];
     _doubleGestureRecognizer.delegate = self;
-    _doubleGestureRecognizer.numberOfTouchesRequired = 2;
+    _doubleGestureRecognizer.numberOfTouchesRequired = kDoubleTouchCount;
     [self addGestureRecognizer:_doubleGestureRecognizer];
     
     _longSingleGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                  action:@selector(touchDetected:)];
-    _longSingleGestureRecognizer.numberOfTouchesRequired = 1;
+    _longSingleGestureRecognizer.numberOfTouchesRequired = kOneTouchCount;
     _longSingleGestureRecognizer.delegate = self;
     [self addGestureRecognizer:_longSingleGestureRecognizer];
     
     _longDoubleGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                  action:@selector(touchDetected:)];
-    _longDoubleGestureRecognizer.numberOfTouchesRequired = 2;
+    _longDoubleGestureRecognizer.numberOfTouchesRequired = kDoubleTouchCount;
     _longDoubleGestureRecognizer.delegate = self;
     [self addGestureRecognizer:_longDoubleGestureRecognizer];
+    
+    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                    action:@selector(moveDetected:)];
+    _panGestureRecognizer.minimumNumberOfTouches = kOneTouchCount;
+    _panGestureRecognizer.maximumNumberOfTouches = kDoubleTouchCount;
+    _panGestureRecognizer.delegate = self;
+    [self addGestureRecognizer:_panGestureRecognizer];
     self.multipleTouchEnabled = YES;
     
     [self initFingerLayer];
@@ -397,16 +408,41 @@
     return [self rulerModeOn];
 }
 
-- (void) touchDetected:(UITapGestureRecognizer *)recognizer
+- (void)touchDetected:(UITapGestureRecognizer *)recognizer
 {
     // Handle gesture only when it is ended
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
     
+    [self handleTouchWith:recognizer];
+    
+    if ([self isTouchCountOppositeToDist:recognizer])
+        [self hideTouchRuler];
+    
+    [self cancelPreviousHideTouchRuler];
+    [self hideTouchRulerInDrawTime];
+}
+
+- (void)moveDetected:(UIPanGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateBegan && ![self isTouchCountOppositeToDist:recognizer])
+    {
+        [self handleTouchWith:recognizer];
+        [self cancelPreviousHideTouchRuler];
+    }
+    else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled)
+    {
+        [self hideTouchRulerInDrawTime];
+    }
+}
+
+- (void)handleTouchWith:(UIGestureRecognizer *)recognizer
+{
     if (self.lineDrawingDelegate)
         [self.lineDrawingDelegate onHideLine];
 
-    if ([recognizer numberOfTouches] == 1 && !_twoFingersDist) {
+    if ([recognizer numberOfTouches] == kOneTouchCount && !_twoFingersDist)
+    {
         _oneFingerDist = YES;
         _twoFingersDist = NO;
         _tapPointOne = [self getTouchPointCoord:[recognizer locationInView:self]];
@@ -415,7 +451,8 @@
         [_fingerDistanceSublayer setNeedsDisplay];
     }
     
-    if ([recognizer numberOfTouches] == 2 && !_oneFingerDist) {
+    if ([recognizer numberOfTouches] == kDoubleTouchCount && !_oneFingerDist)
+    {
         _twoFingersDist = YES;
         _oneFingerDist = NO;
         CGPoint first = [recognizer locationOfTouch:0 inView:self];
@@ -426,9 +463,21 @@
             [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
         [_fingerDistanceSublayer setNeedsDisplay];
     }
-    
+}
+
+- (void)cancelPreviousHideTouchRuler
+{
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideTouchRuler) object:self];
+}
+
+- (void)hideTouchRulerInDrawTime
+{
     [self performSelector:@selector(hideTouchRuler) withObject:self afterDelay:DRAW_TIME];
+}
+
+- (BOOL)isTouchCountOppositeToDist:(UIGestureRecognizer *)recognizer
+{
+    return ([recognizer numberOfTouches] == kOneTouchCount && _twoFingersDist) || ([recognizer numberOfTouches] == kDoubleTouchCount && _oneFingerDist);
 }
 
 - (void) hideTouchRuler

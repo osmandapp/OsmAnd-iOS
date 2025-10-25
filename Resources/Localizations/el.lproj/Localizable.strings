@@ -1745,7 +1745,6 @@
 "ant_plus_open_settings" = "Άνοιγμα ρυθμίσεων";
 "shared_string_is_deleted" = "Το \"%@\" διαγράφηκε.";
 "import_create_track_files" = "Μπορείτε να εισάγετε, δημιουργήσετε, ή καταγράψετε αρχεία ιχνών χρησιμοποιώντας το OsmAnd.";
-"lang_sr-Latn" = "Σέρβικα (λατινικά)";
 "sensor_temperature_desc" = "Δείχνει την θερμοκρασία από αισθητήρα";
 "my_data" = "Τα δεδομένα μου";
 "help_article_personal_name" = "Τα δεδομένα μου";
@@ -2936,8 +2935,6 @@
 "routing_attr_allow_ferries_name" = "Να επιτρέπονται πορθμεία";
 "routing_attr_allow_ferries_description" = "Να επιτρέπεται η δρομολόγηση μέσω δρομολογίων πορθμείων";
 "vehicle_metrics_recording_description" = "Επιλέξτε τις παραμέτρους που θα καταγραφούν στο αρχείο GPX.";
-"obd_fuel_consumption_rate_l_km_desc" = "Δείχνει τον ρυθμό κατανάλωσης καυσίμου του οχήματος βάσει υπολογισμών (Λ/100 χλμ)";
-"obd_fuel_consumption_rate_l_km" = "Ρυθμός κατανάλωσης καυσίμου (Λ/100 χλμ)";
 "obd_fuel_consumption_rate_percent_hour" = "Ρυθμός κατανάλωσης καυσίμου %/ώ";
 "obd_fuel_consumption_rate_liter_hour" = "Ρυθμός κατανάλωσης καυσίμου";
 "obd_fuel_consumption_rate_scanner" = "Ρυθμός κατανάλωσης καυσίμου (obd)";
@@ -3109,7 +3106,6 @@
 "shared_string_sec" = "δευ";
 "units_sec_short" = "δ";
 "ft_s" = "πόδια/δευτερόλεπτο";
-"units_nm_h" = "ναυτικά μίλια/ώρα";
 "kg" = "κιλά";
 "cannot_add_marker_desc" = "Παρακαλούμε αφαιρέστε τουλάχιστον μια κατεύθυνση και δοκιμάστε ξανά";
 "help_legend_descr" = "Ο οδηγός για τα σύμβολα του χάρτη";

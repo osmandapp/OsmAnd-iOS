@@ -731,7 +731,6 @@
 "driving_region_uk" = "Reino Unido e similares";
 "left_side_navigation" = "Condução pela esquerda";
 "si_nm_h" = "Milhas náuticas por hora (nós)";
-"units_nm_h" = "mn/h";
 "shared_string_in_name" = "em %@";
 "shared_string_modify" = "Alterar";
 "shared_string_of" = "de";
@@ -3166,7 +3165,6 @@
 "restore_from_trash" = "Restaurar da lixeira";
 "download_to_device" = "Baixar para o dispositivo";
 "action_cannot_be_undone" = "Essa ação não pode ser desfeita.";
-"lang_sr-Latn" = "Sérvio (latino)";
 "shared_string_open_track" = "Abrir trlha";
 "shared_string_move" = "Mover";
 "shared_string_not_available" = "Não disponível";
@@ -3769,8 +3767,6 @@
 "obd_fuel_consumption_rate_scanner" = "Taxa de consumo de combustível (obd)";
 "obd_fuel_consumption_rate_liter_hour" = "Taxa de consumo de combustível";
 "obd_fuel_consumption_rate_percent_hour" = "Taxa de consumo de combustível %/h";
-"obd_fuel_consumption_rate_l_km" = "Taxa de consumo de combustível (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Mostra a taxa de consumo de combustível do veículo com base em cálculos (L/100 km)";
 "simulate_obd" = "Simular dados obd";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

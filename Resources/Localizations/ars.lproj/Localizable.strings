@@ -1570,7 +1570,6 @@
 "nm" = "ميل بحري";
 "km_h" = "كم/س";
 "mile_per_hour" = "ميل ساعة";
-"units_nm_h" = "ميل بحري/في الساعة";
 "min_mile" = "د/م";
 "min_km" = "د/كم";
 "m_s" = "م/ث";
@@ -3258,7 +3257,6 @@
 "delete_folder" = "حذف مجلد";
 "setup" = "إعداد";
 "help_article_map_point_layers_on_map_name" = "النقاط على الخريطة";
-"lang_sr-Latn" = "صربي (لاتيني)";
 "shared_string_format" = "الصيغة";
 "help_article_navigation_routing_direct_to_point_routing_name" = "التوجيه المباشر إلى نقطة (قارب)";
 "help_article_personal_storage_name" = "التخزين";

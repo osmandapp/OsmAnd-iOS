@@ -3174,7 +3174,6 @@
 "calendar_new_event_title" = "Novi događaj";
 "white_color_undefined" = "Delovi bez podataka su beli.";
 "enter_new_name" = "Unesite novo ime";
-"lang_sr-Latn" = "Srpski (latinica)";
 "backup_error_invalid_token" = "Token nije validan";
 "error_contact_support" = "Ako se problem ponavlja, molimo kontaktirajte naš tim za podršku.";
 "verification" = "Verifikacija";
@@ -3571,7 +3570,6 @@
 "foot" = "ft";
 "shared_string_osm_id" = "OSM ID";
 "mapillary_item" = "OsmAnd + Mapilari";
-"units_nm_h" = "nmi/h";
 "download_tab_conflicts" = "Nerazrešeno";
 "edit_tilesource_url_to_load" = "URL";
 "simulate_location_movement_speed_original" = "Original";
@@ -3737,8 +3735,6 @@
 "obd_fuel_consumption_rate_scanner" = "Stopa potrošnje goriva (OBD)";
 "obd_fuel_consumption_rate_liter_hour" = "Stopa potrošnje goriva";
 "obd_fuel_consumption_rate_percent_hour" = "Stopa potrošnje goriva %/h";
-"obd_fuel_consumption_rate_l_km" = "Potrošnja goriva stopa (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Prikazuje stopu potrošnje goriva vozila na osnovu proračuna (L/100 km)";
 "simulate_obd" = "Simulirajte OBD podatke";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

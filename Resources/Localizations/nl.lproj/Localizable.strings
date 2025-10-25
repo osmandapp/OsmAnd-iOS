@@ -2316,7 +2316,6 @@
 "last_seven_days" = "Afgelopen 7 dagen";
 "announcement_time_off_route" = "Afwijking van de route";
 "map_widget_zoom_level_desc" = "Toont het huidige zoomniveau van de kaart.";
-"lang_sr-Latn" = "Servisch (Latijns schrift)";
 "shared_string_result" = "Resultaat";
 "shared_string_deleting" = "Verwijderen";
 "map_widget_ant_bicycle_cadence_desc" = "Toont de snelheid waarop de fietser trapt";
@@ -2748,8 +2747,6 @@
 "shared_string_hour" = "Uur";
 "obd_engine_runtime_desc" = "Toont hoelang de motor al draait sinds het starten.";
 "obd_engine_runtime" = "Motordraaitijd";
-"obd_fuel_consumption_rate_l_km" = "Brandstofverbruik (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Toont het brandstofverbruik van het voertuig op basis van berekeningen (L/100 km)";
 "simulate_obd" = "Simuleer OBD-gegevens";
 "kpa_unit" = "kPa";
 "obd_fuel_pressure" = "Brandstofdruk";
@@ -3008,7 +3005,6 @@
 "nm" = "nmi";
 "km" = "km";
 "m" = "m";
-"units_nm_h" = "nmi/u";
 "min_mile" = "min/mijl";
 "min_km" = "min/km";
 "m_s" = "m/s";

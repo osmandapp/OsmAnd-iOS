@@ -490,7 +490,6 @@
 "si_min_km" = "Хвилин на кілометр";
 "si_min_m" = "Хвилин на милю";
 "si_nm_h" = "Морських миль на годину (вузлів)";
-"units_nm_h" = "вузлів";
 "min_mile" = "хв/м";
 "min_km" = "хв/км";
 "m_s" = "м/с";
@@ -3292,7 +3291,6 @@
 "shared_string_mode" = "Режим";
 "download_to_device" = "Завантажити на пристрій";
 "restore_from_trash" = "Відновити зі смітника";
-"lang_sr-Latn" = "Сербська (латинка)";
 "determine_location" = "Дозвольте нам визначити ваше розташування";
 "shared_string_format" = "Формат";
 "osmand_cloud_deletion_all_data_warning" = "Усі дані з OsmAnd Cloud будуть %@. Дані на пристрої залишаються недоторканими.";
@@ -3778,8 +3776,6 @@
 "obd_fuel_consumption_rate_scanner" = "Швидкість споживання палива (OBD)";
 "obd_fuel_consumption_rate_liter_hour" = "Швидкість споживання палива";
 "obd_fuel_consumption_rate_percent_hour" = "Швидкість споживання палива %/год";
-"obd_fuel_consumption_rate_l_km" = "Швидкість споживання палива (л/100 км)";
-"obd_fuel_consumption_rate_l_km_desc" = "Показує швидкість споживання палива на основі розрахунків (л/100 км)";
 "simulate_obd" = "Імітувати дані OBD";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

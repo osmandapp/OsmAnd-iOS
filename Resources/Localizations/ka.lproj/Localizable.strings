@@ -348,7 +348,6 @@
 "si_m_s" = "მეტრი წამში";
 "si_min_km" = "წუთი კილომეტრში";
 "si_min_m" = "წუთი მილში";
-"units_nm_h" = "ნ.მ,/სთ";
 "min_mile" = "წთ/მილი";
 "min_km" = "წთ/კმ";
 "m_s" = "მ/წმ";
@@ -2040,7 +2039,6 @@
 "lang_zh-Hans" = "ჩინური (გამარტივებული)";
 "announcement_time_prepare" = "მომზადება";
 "shared_string_bearing" = "ჩასადები";
-"lang_sr-Latn" = "სერბული (ლათინური)";
 "activity_type_running_name" = "სირბილი";
 "audionotes_plugin_name" = "ხმოვანი/ვიდეო შენიშვნები";
 "external_device_status_connected" = "მიერთებულია";

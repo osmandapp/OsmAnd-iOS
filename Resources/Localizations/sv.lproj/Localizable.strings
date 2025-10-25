@@ -377,7 +377,6 @@
 "si_min_km" = "Minuter per kilometer";
 "si_min_m" = "Minuter per mile";
 "si_nm_h" = "Sjömil per timme (knop)";
-"units_nm_h" = "M/h";
 "min_mile" = "min/mi";
 "shared_string_tones" = "ton";
 "nothing_found" = "Hittade ingenting";
@@ -3121,7 +3120,6 @@
 "shared_string_next_event" = "Nästa händelse";
 "map_widget_group_glide_desc" = "Widget som visar glidtalet till mål, eller genomsnittligt glidtal för aktuell tur.";
 "average_glide_time_interval_desc" = "Ange tidsintervallet för genomsnittligt glidtal.";
-"lang_sr-Latn" = "Serbiska (translittererat)";
 "enter_new_name" = "Ange nytt namn";
 "skip_download" = "Hoppa över nedladdning";
 "map_widget_sun_position" = "Solens position";
@@ -3759,8 +3757,6 @@
 "obd_fuel_consumption_rate_scanner" = "Bränsleförbrukningstakt (obd)";
 "obd_fuel_consumption_rate_liter_hour" = "Bränsleförbrukningstakt";
 "obd_fuel_consumption_rate_percent_hour" = "Bränsleförbrukningstakt %/h";
-"obd_fuel_consumption_rate_l_km" = "Bränsleförbrukningstakt (l/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Visar fordents bränsleförbrukningstakt baserat på beräkningar (l/100 km)";
 "simulate_obd" = "Simulera obd-data";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

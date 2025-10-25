@@ -83,8 +83,8 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if ([parameterName isEqualToString:CONTOUR_LINES])
-        return parameter.possibleValues.count - 1; //without "Disabled"
-    return parameter.possibleValues.count;
+        return parameter.possibleValuesUnsorted.count - 1; //without "Disabled"
+    return parameter.possibleValuesUnsorted.count;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -93,7 +93,7 @@
     [cell leftIconVisibility:NO];
     [cell descriptionVisibility:NO];
     
-    OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
+    OAMapStyleParameterValue *value = parameter.possibleValuesUnsorted[indexPath.row];
     NSString *title = value.title;
     if (!title.length)
         title = parameter.defaultValue.length ? parameter.defaultValue : value.name;
@@ -113,7 +113,7 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
+    OAMapStyleParameterValue *value = parameter.possibleValuesUnsorted[indexPath.row];
     parameter.value = value.name.length ? value.name : parameter.defaultValue;
     [styleSettings save:parameter];
     

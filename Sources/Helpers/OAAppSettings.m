@@ -679,7 +679,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         case MINUTES_PER_KILOMETER:
             return OALocalizedString(@"min_km");
         case NAUTICALMILES_PER_HOUR:
-            return OALocalizedString(@"units_nm_h");
+            return OALocalizedString(@"nm_h");
 
         default:
             return nil;
@@ -692,6 +692,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @property (nonatomic) EOAVolumeConstant volume;
 @property (nonatomic) NSString *key;
+@property (nonatomic) NSString *singleVariant;
 @property (nonatomic) NSString *descr;
 
 @end
@@ -705,6 +706,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     {
         obj.volume = volume;
         obj.key = [self.class toHumanString:volume];
+        obj.singleVariant = [self.class toSingleHumanString:volume];
         obj.descr = [self.class getUnitSymbol:volume];
     }
     return obj;
@@ -722,6 +724,21 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
             return OALocalizedString(@"us_gallons");
         default:
             return OALocalizedString(@"litres");
+    }
+}
+
++ (NSString *)toSingleHumanString:(EOAVolumeConstant)volume
+{
+    switch (volume)
+    {
+        case LITRES:
+            return OALocalizedString(@"liter_single");
+        case IMPERIAL_GALLONS:
+            return OALocalizedString(@"imperial_gallon");
+        case US_GALLONS:
+            return OALocalizedString(@"us_gallon");
+        default:
+            return OALocalizedString(@"liter_single");
     }
 }
 
@@ -5086,7 +5103,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
         _mapLanguages = @[
-            @"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"ckb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kk", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sat", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sr-Latn", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh-Hans", @"zh-Hant"];
+            @"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"ckb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kk", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sat", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sr-latn", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh-hans", @"zh-hant"];
         
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
         
@@ -5524,7 +5541,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _useIntermediatePointsNavigation = [[OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO] makeGlobal];
         [_globalPreferences setObject:_useIntermediatePointsNavigation forKey:@"use_intermediate_points_navigation"];
 
-        _disableOffrouteRecalc = [OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO];
+        _disableOffrouteRecalc = [[OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO] makeProfile];
         _disableWrongDirectionRecalc = [OACommonBoolean withKey:disableWrongDirectionRecalcKey defValue:NO];
         _hazmatTransportingEnabled = [OACommonBoolean withKey:hazmatTransportingEnabledKey defValue:NO];
 
@@ -5595,7 +5612,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_preciseDistanceNumbers setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];
         [_profilePreferences setObject:_preciseDistanceNumbers forKey:@"precise_distance_numbers"];
 
-        _routeRecalculationDistance = [OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.];
+        _routeRecalculationDistance = [[OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.] makeProfile];
         [_profilePreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];
 
         _customRouteColorDay = [OACommonInteger withKey:customRouteColorDayKey defValue:[UIColorFromARGB(kDefaultRouteLineDayColor) toARGBNumber]];

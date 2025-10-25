@@ -1349,7 +1349,6 @@
 "type_city_town" = "Tip municipiu/oraș/localitate";
 "nothing_found_descr" = "Schimbați căutarea sau măriți raza acesteia.";
 "nothing_found" = "Nimic găsit";
-"units_nm_h" = "nmi/h ( nautic miles/oră)";
 "si_nm_h" = "Mile nautice pe oră (noduri)";
 "right_side_navigation" = "Trafic pe dreapta";
 "left_side_navigation" = "Trafic pe stânga";
@@ -3124,7 +3123,6 @@
 "external_device_any_connected" = "Oricare conectat";
 "bluetooth_found_title" = "Găsit: %d";
 "external_device_characteristic_speed" = "Viteză";
-"lang_sr-Latn" = "Sârbă (latină)";
 "no_bt_permission" = "Permisiunile bluetooth nu sunt acordate";
 "shared_string_hand" = "Mână";
 "shared_string_ear_lobe" = "Lobul urechii";
@@ -3682,7 +3680,6 @@
 "obd_engine_coolant_temp_desc" = "Indică temperatura lichidului de răcire al motorului";
 "obd_fuel_consumption_rate" = "Rata consumului de combustibil";
 "obd_fuel_left_km" = "Combustibil rămas (km)";
-"obd_fuel_consumption_rate_l_km" = "Rata consumului de combustibil (L/100 km)";
 "remaining_fuel_description" = "Afișează cantitatea de combustibil rămasă în rezervorul autovehiculului";
 "connect_obd_instructions_step" = "1. Conectați scanerul la portul OBD-II al vehiculului.\n\n 2. Porniți motorul vehiculului \n\n 3. Activați Bluetooth pe dispozitiv\n\n 4. Atingeți „%@” și selectați scanerul din listă.";
 "obd_fuel_type_bifuel_electricity" = "Bifuel în funcțiune Electricitate";
@@ -3720,7 +3717,6 @@
 "obd_fuel_consumption_desc" = "Afișează rata de utilizare a combustibilului de către motor, calculată pe baza combustibilului rămas, a dimensiunii rezervorului și a distanței parcurse determinate de GPS.";
 "obd_fuel_consumption_rate_sensor" = "Rata consumului de combustibil (senzor)";
 "obd_fuel_type_bifuel_electric_combustion" = "Motor electric și motor de combustie cu funcționare bifuel";
-"obd_fuel_consumption_rate_l_km_desc" = "Indică rata consumului de combustibil al vehiculului pe baza calculelor (L/100 km)";
 "obd_fuel_type_hybrid_hydrogen" = "Hidrogen hibrid";
 "obd_fuel_type_hydrogen" = "Hidrogen";
 "shared_string_other" = "Altele";

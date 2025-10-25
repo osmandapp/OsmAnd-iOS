@@ -503,7 +503,6 @@
 "si_min_m" = "perc/mérföld";
 "si_nm_h" = "tengeri mérföld/óra (csomó)";
 "nm" = "tengeri mérföld";
-"units_nm_h" = "tengeri mérföld/óra";
 "min_mile" = "perc/mérföld";
 "min_km" = "perc/km";
 "nothing_found" = "Nincs találat";
@@ -2500,7 +2499,6 @@
 "next_turn_widget_desc" = "A modul a következő bekanyarodásról tájékoztat: megjeleníti a manőver képét és az addig hátralevő távolságot.";
 "popular_destinations" = "Népszerű célpontok";
 "map_widget_zoom_level" = "Nagyítási szint";
-"lang_sr-Latn" = "szerb (latin betűs)";
 "map_widget_target_distance_desc" = "Megjeleníti a kamera és a cél közötti távolságot.";
 "shared_string_any" = "Bármely";
 "true_bearing_wdiget_desc" = "A valódi észak és a célpont közötti, az Ön tartózkodási helyéről megfigyelt szög.";
@@ -3093,7 +3091,6 @@
 "obd_fuel_type_hybrid_ethanol" = "Hibrid etanollal";
 "obd_fuel_type_bifuel_electric_combustion" = "Bifuel elektromos és belső égésű motor";
 "obd_fuel_consumption_rate_sensor_desc" = "Megjeleníti a jármű üzemanyag-fogyasztását liter/órában az érzékelő adatai alapján";
-"obd_fuel_consumption_rate_l_km_desc" = "Megjeleníti a jármű számított távolságalapú üzemanyag fogyasztását (l/100 km)";
 "obd_fuel_left_liters" = "Maradék üzemanyag (liter)";
 "obd_fuel_type_bifuel_cng" = "CNG-vel működő Bifuel";
 "obd_fuel_consumption_rate_liter_hour" = "Fogyasztás mértéke";
@@ -3138,7 +3135,6 @@
 "connect_obd_instructions_title" = "Az OsmAnd támogatja a Bluetooth-kapcsolatot használó OBD-II olvasókat.";
 "obd_fuel_type_desc" = "Megjeleníti az üzemanyag típusát az OBD-érzékelőn keresztül";
 "obd_widget_group" = "Járműmetrika";
-"obd_fuel_consumption_rate_l_km" = "Fogyasztás (l/100 km)";
 "obd_fuel_level" = "Üzemanyag-hatékonyság (%)";
 "obd_ambient_air_temp_desc" = "Megjeleníti járművön kívüli hőmérsékletet.";
 "obd_fuel_type_bifuel_propane" = "Propánnal működő Bifuel";

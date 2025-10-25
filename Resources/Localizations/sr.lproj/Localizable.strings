@@ -2955,7 +2955,6 @@
 "screen_settings_weather_toolbar" = "Временска трака са алаткама";
 "generate_slope_from_3d_maps" = "Образуј оквире карата нагиба из просторних, 3Д карата";
 "shared_string_uploading" = "Отпремам";
-"lang_sr-Latn" = "Српски није (латиница)";
 "shared_string_restoring" = "Враћање";
 "weather_update_disabled" = "Искључен";
 "weather_update_over_wifi_only" = "Само преко WIFI";
@@ -3585,7 +3584,6 @@
 "km" = "km";
 "cubic_m" = "m³";
 "mile_per_hour" = "mph";
-"units_nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "ft_s" = "ft/s";
 "metric_ton" = "t";
@@ -3764,8 +3762,6 @@
 "obd_fuel_consumption_rate_scanner" = "Брзина потрошње горива (днв)";
 "obd_fuel_consumption_rate_liter_hour" = "Брзина потрошње горива";
 "obd_fuel_consumption_rate_percent_hour" = "Брзина потрошње горива %/h";
-"obd_fuel_consumption_rate_l_km" = "Брзина потрошње горива (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Приказује потрошњу горива возила на основу прорачуна (L/100 km)";
 "simulate_obd" = "Опонашај податке днв";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

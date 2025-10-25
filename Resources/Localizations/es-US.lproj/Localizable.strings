@@ -3230,7 +3230,6 @@
 "glide_ratio_to_target" = "Relación de planeo al objetivo";
 "map_widget_group_glide_desc" = "Los widgets muestran la relación de planeo hacia el objetivo o la relación de planeo promedio para el viaje actual.";
 "target_elevation" = "Elevación del objetivo";
-"lang_sr-Latn" = "Serbio (latino)";
 "my_places_no_tracks_title_root" = "No tienes archivos de trazas";
 "shared_string_next_event" = "Próximo evento";
 "map_widget_sun_position_desc" = "Muestra el tiempo hasta el amanecer o el atardecer.";
@@ -3549,7 +3548,6 @@
 "kg" = "kg";
 "shared_string_min" = "Min.";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"units_nm_h" = "nmi/h";
 "google_play" = "Google Play";
 "rendering_attr_showClimbingRoutes_name" = "Rutas de escalada";
 "help_article_troubleshooting_general_name" = "General";
@@ -3783,8 +3781,6 @@
 "obd_fuel_consumption_rate_scanner" = "Tasa de consumo del combustible (obd)";
 "obd_fuel_consumption_rate_liter_hour" = "Tasa de consumo del combustible";
 "obd_fuel_consumption_rate_percent_hour" = "Tasa de consumo del combustible (%/h)";
-"obd_fuel_consumption_rate_l_km" = "Tasa de consumo del combustible (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Muestra la tasa de consumo del combustible, según los cálculos (L/100 km)";
 "simulate_obd" = "Simular datos OBD";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

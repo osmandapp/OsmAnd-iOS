@@ -657,7 +657,6 @@
 "popular_destinations" = "பிரபலமான இடங்களுக்கு";
 "angular_measeurement" = "கோண அலகு";
 "shared_string_bookmark" = "அடையாளக்குறி";
-"lang_sr-Latn" = "செர்பியன் (லத்தின்)";
 "wiki_article_search_text" = "குறிப்பிட்ட விக்கிபீடியா கட்டுரை தேடப்பட்டு வருகிறது";
 "route_info" = "வழி தகவல்";
 "angular_measeurement_descr" = "என்ன அசிமுத்தை அளவிடப்படுகிறது என்பதை மாற்றுக.";
@@ -3006,7 +3005,6 @@
 "cannot_add_marker" = "பார்க்கிங் சேர்க்க முடியாது";
 "cannot_add_marker_desc" = "தயவுசெய்து ஒரு திசையை நீக்கி மீண்டும் முயற்சிக்கவும்";
 "cubic_m" = "m³";
-"units_nm_h" = "என்.எம்.ஐ/எச்";
 "kg" = "கிலோ";
 "shared_string_sec" = "நொடி";
 "units_sec_short" = "கள்";
@@ -3746,7 +3744,6 @@
 "obd_fuel_left_km" = "எரிபொருள் இடது (கி.மீ)";
 "obd_fuel_consumption_rate_sensor" = "எரிபொருள் நுகர்வு விகிதம் (சென்சார்)";
 "obd_fuel_type_lpg" = "எல்பிசி";
-"obd_fuel_consumption_rate_l_km_desc" = "கணக்கீடுகளின் அடிப்படையில் வாகன எரிபொருள் நுகர்வு வீதத்தைக் காட்டுகிறது (எல்/100 கி.மீ)";
 "shared_string_instant" = "உடனடி";
 "obd_throttle_position_desc" = "த்ரோட்டில் உடலில் உள்ள த்ரோட்டில் தட்டின் கோணத்தைக் காட்டுகிறது.";
 "obd_fuel_type_bifuel_electricity" = "பஃபூல் இயங்கும் மின்சாரம்";
@@ -3809,7 +3806,6 @@
 "obd_widget_vehicle_speed" = "வாகன விரைவு";
 "obd_calculated_engine_load" = "கணக்கிடப்பட்ட இயந்திர சுமை";
 "ltr_or_rtl_combine_via_per" = "%@ க்கு %@";
-"obd_fuel_consumption_rate_l_km" = "எரிபொருள் நுகர்வு வீதம் (எல்/100 கி.மீ)";
 "obd_engine_oil_temperature" = "இயந்திர எண்ணெய் வெப்பநிலை";
 "obd_engine_runtime_desc" = "என்சின் தொடங்கப்பட்டதிலிருந்து எவ்வளவு காலம் இயங்குகிறது என்பதைக் காட்டுகிறது.";
 "obd_fuel_pressure_desc" = "எரிபொருள் அமைப்பினுள் அழுத்தத்தைக் காட்டுகிறது";

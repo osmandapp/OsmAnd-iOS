@@ -482,7 +482,6 @@
 "si_min_km" = "分鐘每公里";
 "si_min_m" = "分鐘每英里";
 "si_nm_h" = "浬每小時 (節)";
-"units_nm_h" = "浬/時";
 "min_mile" = "分/公尺";
 "min_km" = "分/公里";
 "m_s" = "公尺/秒";
@@ -3083,7 +3082,6 @@
 "apply_only_to_new_points" = "僅套用到新點";
 "osmand_cloud_delete_account_confirmation" = "刪除帳戶？";
 "ant_plus_nothing_found_text" = "找不到任何感測器";
-"lang_sr-Latn" = "塞爾維亞語（拉丁文）";
 "trash_is_empty_banner_desc" = "從 OsmAnd Cloud 移除的檔案將在%@天後在此處可用。";
 "select_tracks_to_display" = "選取軌跡以在地圖上顯示。";
 "target_elevation" = "目標海拔";
@@ -3719,7 +3717,6 @@
 "shared_string_volume" = "容量";
 "obd_ambient_air_temp" = "環境溫度";
 "obd_fuel_pressure_desc" = "顯示燃油系統內的壓力";
-"obd_fuel_consumption_rate_l_km" = "燃料消耗率（公升/100公里）";
 "obd_engine_oil_temperature_desc" = "顯示引擎機油的溫度。";
 "obd_vin" = "車輛識別號碼";
 "shared_string_large" = "大";
@@ -3736,7 +3733,6 @@
 "kpa_unit" = "千帕";
 "obd_fuel_consumption_rate_sensor_desc" = "顯示根據感測器所得的車輛燃料消耗率（公升/小時）";
 "obd_fuel_type_hydrogen" = "氫氣";
-"obd_fuel_consumption_rate_l_km_desc" = "顯示根據計算而得的車輛燃料消耗率（公升/100公里）";
 "obd_nothing_found_text" = "找不到診斷器";
 "obd_fuel_type_bifuel_propane" = "雙燃料丙烷";
 "obd_fuel_type_methanol" = "甲醇";

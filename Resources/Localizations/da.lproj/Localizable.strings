@@ -477,7 +477,6 @@
 "si_min_m" = "Minutter pr. mil";
 "si_nm_h" = "Sømil i timen (knob)";
 "nm" = "sømil";
-"units_nm_h" = "sømil/t";
 "towards" = "Imod";
 "route_roundabout" = "Rundkørsel: tag afkørsel %d";
 "route_roundabout_short" = "Tag %d afkørsel og forsæt";
@@ -3165,7 +3164,6 @@
 "map_widget_sun_position_desc" = "Viser hvor lang tid der er til solopgang eller solnedgang.";
 "map_widget_sun_position" = "Solposition";
 "shared_string_mode" = "Tilstand";
-"lang_sr-Latn" = "Serbisk (latin)";
 "skip_download" = "Spring download over";
 "determine_location" = "Tillad os at bestemme din placering";
 
@@ -3774,8 +3772,6 @@
 "obd_fuel_left_km" = "Brændstof tilbage (km)";
 "obd_fuel_consumption_rate_scanner" = "Brændstofforbrug (obd)";
 "obd_fuel_consumption_rate_percent_hour" = "Brændstofforbrug %/t";
-"obd_fuel_consumption_rate_l_km" = "Brændstofforbrug (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Viser køretøjets brændstofforbrug baseret på beregninger (L/100 km)";
 "simulate_obd" = "Simulér obd-data";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

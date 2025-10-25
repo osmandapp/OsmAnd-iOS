@@ -412,7 +412,6 @@
 "si_min_km" = "Minutes par kilomètre";
 "si_min_m" = "Minutes par mile";
 "si_nm_h" = "Milles nautiques par heure (nœuds)";
-"units_nm_h" = "nœuds";
 "driving_region" = "Région de conduite";
 "driving_region_japan" = "Japon";
 "driving_region_us" = "États-Unis";
@@ -3107,7 +3106,6 @@
 "deleting_complete" = "Suppression terminée";
 "my_places_no_tracks_descr_root" = "Vous pouvez importer, créer ou enregistrer des traces en utilisant OsmAnd.";
 "trash_is_empty" = "La poubelle est vide";
-"lang_sr-Latn" = "Serbe (latin)";
 "shared_string_open_track" = "Ouvrir trace";
 "my_places_no_tracks_descr" = "Ce dossier ce contient pas encore de traces.";
 "delete_folder" = "Supprimer dossier";
@@ -3760,8 +3758,6 @@
 "obd_fuel_left_km" = "Carburant restant (km)";
 "obd_fuel_consumption_rate_liter_hour" = "Taux de consommation de carburant";
 "obd_fuel_consumption_rate_percent_hour" = "Taux de consommation de carburant %/h";
-"obd_fuel_consumption_rate_l_km" = "Taux de consommation de carburant (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Affiche le taux de consommation de carburant du véhicule basé sur des calculs (L/100 km)";
 "simulate_obd" = "Simuler les données OBD";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

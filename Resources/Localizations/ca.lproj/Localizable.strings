@@ -478,7 +478,6 @@
 "si_min_km" = "Minuts per kilòmetre";
 "si_min_m" = "Minuts per milla";
 "si_nm_h" = "Milles marines per hora (nusos)";
-"units_nm_h" = "nusos";
 "towards" = "cap a";
 "route_roundabout" = "Rotonda: Preneu la %d sortida i continueu";
 "route_roundabout_short" = "Agafeu la %d sortida i continueu";
@@ -2333,7 +2332,6 @@
 "search_history" = "Historial de cerques";
 "external_device_characteristic_speed" = "Velocitat";
 "map_orientation_default" = "El mateix que el dispositiu";
-"lang_sr-Latn" = "Serbi (llatí)";
 "shared_string_deleting" = "S\'està suprimint";
 "coordinates_format" = "Format de coordenades";
 "map_widget_altitude_desc" = "Mostra l\'altitud de la ubicació geogràfica actual o l\'elevació del centre actual del mapa";
@@ -3219,7 +3217,6 @@
 "obd_plugin_description" = "Monitor key vehicle metrics using the OBD-II protocol. Dades d\'accés incloent:\n, Velocitat del motor, Temps d\'execució del motor, càrrega del motor calculada\n, Consum de combustible, Pressió de combustible, Combustible restant\n, Temperatura d\'entrada, Temperatura ambient, Temperatura de refrigeració, Temperatura de l\'oli del motor\n, Velocitat del vehicle, posició del tren, voltatge de bateria\n";
 "obd_widget_group" = "Lectures del vehicle";
 "obd_air_intake_temp" = "Temperatura d\'admissió";
-"obd_fuel_consumption_rate_l_km_desc" = "Mostra el consum de combustible calculat del vehicle (l/100 km)";
 "obd_fuel_type_bifuel_lpg" = "PVP en execució de combustible";
 "connect_obd_instructions_step" = "1. Connecteu l\'escàner al port OBD-II del vostre vehicle.\n\n2. Engegueu el motor del vostre vehicle\n\n3. Activeu el Bluetooth al vostre dispositiu\n\n4. Premeu \'%@\' i seleccioneu el vostre escànner de la llista.";
 "obd_widget_engine_speed" = "Revolucions del motor";
@@ -3228,7 +3225,6 @@
 "obd_vin" = "Identificador vehicle";
 "obd_nothing_found_text" = "No s\'ha trobat cap escànner";
 "obd_fuel_consumption_rate_percent_hour" = "Consum de combustible %/h";
-"obd_fuel_consumption_rate_l_km" = "Consum de combustible (l/100 km)";
 "obd_fuel_type_hybrid_electric" = "Híbrid elèctric";
 "obd_fuel_type_hybrid_regenerative" = "Híbrid regeneratiu";
 "osmand_cloud_deletion_account_warning" = "El vostre compte i tots els detalls del compte seran %@";

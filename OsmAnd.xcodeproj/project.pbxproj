@@ -2118,7 +2118,6 @@
 		DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AA526C563A000F274C7 /* OAFirstUsageWizardController.mm */; };
 		DA5A81DB26C563A700F274C7 /* OACity.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AA826C563A100F274C7 /* OACity.mm */; };
 		DA5A81DC26C563A700F274C7 /* OABuilding.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AA926C563A100F274C7 /* OABuilding.mm */; };
-		DA5A81DD26C563A700F274C7 /* OAStreetIntersection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAA26C563A100F274C7 /* OAStreetIntersection.mm */; };
 		DA5A81DE26C563A700F274C7 /* OAStreet.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAD26C563A100F274C7 /* OAStreet.mm */; };
 		DA5A81DF26C563A700F274C7 /* OAAddress.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAF26C563A100F274C7 /* OAAddress.mm */; };
 		DA5A81E326C563A700F274C7 /* OAGPXDocumentPrimitives.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.m */; };
@@ -3179,6 +3178,7 @@
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
 		FA186E482BFCF15A007EE77D /* SpeedLimitWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */; };
 		FA1D6DAE2DCE04710080E374 /* VehicleMetricsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */; };
+		FA1FC6BF2EA1285E00A60962 /* BLEScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1FC6BE2EA1285E00A60962 /* BLEScannerViewController.swift */; };
 		FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */; };
 		FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */; };
 		FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */; };
@@ -6233,9 +6233,7 @@
 		DA5A7AA526C563A000F274C7 /* OAFirstUsageWizardController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFirstUsageWizardController.mm; sourceTree = "<group>"; };
 		DA5A7AA826C563A100F274C7 /* OACity.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACity.mm; sourceTree = "<group>"; };
 		DA5A7AA926C563A100F274C7 /* OABuilding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABuilding.mm; sourceTree = "<group>"; };
-		DA5A7AAA26C563A100F274C7 /* OAStreetIntersection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreetIntersection.mm; sourceTree = "<group>"; };
 		DA5A7AAB26C563A100F274C7 /* OAStreet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAStreet.h; sourceTree = "<group>"; };
-		DA5A7AAC26C563A100F274C7 /* OAStreetIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAStreetIntersection.h; sourceTree = "<group>"; };
 		DA5A7AAD26C563A100F274C7 /* OAStreet.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreet.mm; sourceTree = "<group>"; };
 		DA5A7AAE26C563A100F274C7 /* OACity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACity.h; sourceTree = "<group>"; };
 		DA5A7AAF26C563A100F274C7 /* OAAddress.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddress.mm; sourceTree = "<group>"; };
@@ -7874,6 +7872,7 @@
 		FA186E462BFCF15A007EE77D /* SpeedLimitWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeedLimitWrapper.h; sourceTree = "<group>"; };
 		FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SpeedLimitWrapper.mm; sourceTree = "<group>"; };
 		FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsPlugin.swift; sourceTree = "<group>"; };
+		FA1FC6BE2EA1285E00A60962 /* BLEScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEScannerViewController.swift; sourceTree = "<group>"; };
 		FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSensor.swift; sourceTree = "<group>"; };
 		FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSCDDevice.swift; sourceTree = "<group>"; };
 		FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCharacteristic.swift; sourceTree = "<group>"; };
@@ -8277,6 +8276,7 @@
 		32119B4D2847B4DF005E1E0C /* OsmandDevelopment */ = {
 			isa = PBXGroup;
 			children = (
+				FA1FC6BE2EA1285E00A60962 /* BLEScannerViewController.swift */,
 				FA9F416E2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift */,
 				32119B4E2847D7F7005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.h */,
 				32119B4F2847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm */,
@@ -11576,8 +11576,6 @@
 				DA5A7AA826C563A100F274C7 /* OACity.mm */,
 				DA5A7AAB26C563A100F274C7 /* OAStreet.h */,
 				DA5A7AAD26C563A100F274C7 /* OAStreet.mm */,
-				DA5A7AAC26C563A100F274C7 /* OAStreetIntersection.h */,
-				DA5A7AAA26C563A100F274C7 /* OAStreetIntersection.mm */,
 			);
 			path = Address;
 			sourceTree = "<group>";
@@ -16894,6 +16892,7 @@
 				DA5A835A26C563A800F274C7 /* OABottomSheetHeaderButtonCell.m in Sources */,
 				DA5A83A226C563A800F274C7 /* OAOsmEditingViewController.mm in Sources */,
 				32EEB6322E286525002216B0 /* OATravelSelectionLayer.mm in Sources */,
+				FA1FC6BF2EA1285E00A60962 /* BLEScannerViewController.swift in Sources */,
 				DA5A845F26C563A900F274C7 /* OAImpassableRoadsLayer.mm in Sources */,
 				DA5A81CD26C563A700F274C7 /* QuadTree.m in Sources */,
 				DA4ABF2F2876E4C200B996EF /* OAItemExporter.m in Sources */,
@@ -18135,7 +18134,6 @@
 				32DA38A82BA9C4D500A3AC3C /* CLLocation+Extension.m in Sources */,
 				46BCB1602CC2AC6D004E0283 /* GradientChartCell.swift in Sources */,
 				DA5A83BD26C563A800F274C7 /* OAAddQuickActionViewController.m in Sources */,
-				DA5A81DD26C563A700F274C7 /* OAStreetIntersection.mm in Sources */,
 				DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */,
 				4665DB6E2C20BBFD00F897EC /* ColorsPaletteUtils.swift in Sources */,
 				DA297C2E2811601F009C248E /* OACompoundIconUtils.mm in Sources */,

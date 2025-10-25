@@ -272,7 +272,6 @@
 "si_min_m" = "Minutter per engelsk mil";
 "si_nm_h" = "Nautisk mil i timen (knop)";
 "nm" = "sjømil";
-"units_nm_h" = "nmi/t";
 "nothing_found" = "Ingenting funnet";
 "nothing_found_descr" = "Endre søket eller øk radiusen.";
 "select_street" = "Velg gate";
@@ -2423,7 +2422,6 @@
 "shared_string_delete_item" = "Slett element";
 "map_marker_interval_dialog_desc" = "Angi tidsintervallet der gjennomsnittshastigheten vil bli målt for å beregne forventet ankomsttid.";
 "help_article_personal_storage_name" = "Lagring";
-"lang_sr-Latn" = "Serbisk (latinsk)";
 "shared_string_deleted" = "Slettet";
 "wind_widget_desc" = "Viser vindhastighet for nåværende kartsentrum.";
 "mapillary_widget_descr" = "Gir mulighet for raske bidrag til Mapillary.";

@@ -323,7 +323,6 @@
 "si_min_km" = "Minuutteja kilometrille";
 "si_min_m" = "Minuutteja mailille";
 "si_nm_h" = "Meripeninkulmaa tunnissa (solmua)";
-"units_nm_h" = "mpk/t";
 "tonnia" = "tonnia";
 "shared_string_meters" = "metriä";
 "nothing_found" = "Mitään ei löytynyt";
@@ -2016,7 +2015,6 @@
 "angular_measeurement_descr" = "Muuta missä yksikössä atsimuutti mitataan.";
 "shared_string_uploading" = "Lähetetään";
 "import_create_track_files" = "Voit tuoda,luoda sekä nauhoittaa reittejä käyttämällä OsmAndia.";
-"lang_sr-Latn" = "Serbia (latinalaisin)";
 "visibility" = "Näkyvyys";
 "coordinates_format" = "Koordinaattien muoto";
 "announcement_time_descr" = "Eri äänikehotteiden ilmoitusten ajoitus riippuu kehotteen tyypistä, nykyisestä navigointinopeudesta ja oletusnavigointinopeudesta.";

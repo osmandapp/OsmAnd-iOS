@@ -2515,7 +2515,6 @@
 "shared_string_light" = "Svetlá";
 "shared_string_uploading" = "Odosielanie";
 "import_create_track_files" = "Pomocou OsmAnd môžete importovať, vytvárať a nahrávať súbory stôp.";
-"lang_sr-Latn" = "Srbsky (Latinka)";
 "coordinates_format" = "Formát súradníc";
 "weather_widgets_secondary_desc" = "Merné jednotky je možné zmeniť v nastaveniach modulu Počasie.";
 "my_data" = "Moje údaje";
@@ -3032,7 +3031,6 @@
 "obd_fuel_type_bifuel_ethanol" = "Hybridný motor na etanol";
 "average" = "Priemer";
 "remaining_fuel_description" = "Zobrazuje množstvo paliva zostávajúceho v nádrži vozidla";
-"obd_fuel_consumption_rate_l_km" = "Spotreba paliva (l/100 km)";
 "obd_calculated_engine_load" = "Vypočítané zaťaženie motora";
 "obd_engine_oil_temperature" = "Teplota motorového oleja";
 "obd_fuel_type_diesel" = "Nafta";
@@ -3105,7 +3103,6 @@
 "obd_fuel_consumption_rate_l_h_desc" = "Zobrazuje rýchlosť spotreby paliva vozidla podľa výpočtov (l/h)";
 "obd_fuel_type_bifuel_hydrogen" = "Hybridný na vodík";
 "obd_fuel_consumption" = "Spotreba paliva";
-"obd_fuel_consumption_rate_l_km_desc" = "Zobrazuje rýchlosť spotreby paliva podľa výpočtov (l/100 km)";
 "average_temperature" = "Priemerná teplota";
 "obd_fuel_level" = "Efektivita paliva (%)";
 "obd_fuel_type_hybrid_gasoline" = "Hybridný benzínový";

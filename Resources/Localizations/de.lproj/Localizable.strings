@@ -472,7 +472,6 @@
 "traffic_warning_railways" = "Bahnübergang";
 "traffic_warning_pedestrian" = "Fußgängerübergang";
 "nm" = "sm";
-"units_nm_h" = "kn/h";
 "traffic_warning_speed_limit" = "Tempolimit";
 "traffic_warning_border_control" = "Grenzkontrolle";
 "traffic_warning_payment" = "Mautstelle";
@@ -3182,7 +3181,6 @@
 "map_widget_sun_position_desc" = "Zeigt die Zeit bis zum Sonnenaufgang oder Sonnenuntergang.";
 "map_widget_sun_position" = "Sonnenposition";
 "shared_string_mode" = "Modus";
-"lang_sr-Latn" = "Serbisch (lateinisch)";
 "skip_download" = "Download überspringen";
 "determine_location" = "Erlauben Sie uns, Ihren Standort zu ermitteln";
 "glide_ratio_to_target" = "Gleitzahl zum Zielpunkt";
@@ -3791,8 +3789,6 @@
 "obd_fuel_consumption_rate_scanner" = "Kraftstoffverbrauch (OBD)";
 "obd_fuel_consumption_rate_liter_hour" = "Kraftstoffverbrauch";
 "obd_fuel_consumption_rate_percent_hour" = "Kraftstoffverbrauch (%/h)";
-"obd_fuel_consumption_rate_l_km" = "Kraftstoffverbrauch (l/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Zeigt den rechnerischen Kraftstoffverbrauch des Fahrzeugs an (l/100 km)";
 "simulate_obd" = "OBD-Daten simulieren";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

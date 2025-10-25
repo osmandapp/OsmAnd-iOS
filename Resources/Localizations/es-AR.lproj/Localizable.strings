@@ -3211,7 +3211,6 @@
 "folder_tracks_count" = "%d trazas";
 "recorded_track" = "Traza grabada";
 "map_widget_sun_position_desc" = "Muestra el tiempo hasta el amanecer o el atardecer.";
-"lang_sr-Latn" = "Serbio (latino)";
 "shared_string_mode" = "Modo";
 "delete_account" = "Borrar cuenta";
 "shared_string_next_event" = "Próximo evento";
@@ -3540,7 +3539,6 @@
 "edit_tilesource_url_to_load" = "URL";
 "shared_string_total" = "Total";
 "amazon_appstore" = "Amazon Appstore";
-"units_nm_h" = "nmi/h";
 "rendering_value_sector1_name" = "Sector 1";
 "lang_war" = "Waray";
 "facebook" = "Facebook";
@@ -3772,8 +3770,6 @@
 "obd_fuel_consumption_rate_scanner" = "Tasa de consumo del combustible (obd)";
 "obd_fuel_consumption_rate_liter_hour" = "Tasa de consumo del combustible";
 "obd_fuel_consumption_rate_percent_hour" = "Tasa de consumo del combustible (%/h)";
-"obd_fuel_consumption_rate_l_km" = "Tasa de consumo del combustible (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Muestra la tasa de consumo del combustible, según los cálculos (L/100 km)";
 "simulate_obd" = "Simular datos OBD";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

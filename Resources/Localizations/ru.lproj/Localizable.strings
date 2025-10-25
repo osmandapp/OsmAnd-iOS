@@ -480,7 +480,6 @@
 "si_mph" = "Миль в час";
 "si_m_s" = "Метров в секунду";
 "nm" = "мор. миля";
-"units_nm_h" = "nmi/ч";
 "min_mile" = "мин/м";
 "min_km" = "мин/км";
 "m_s" = "м/с";
@@ -2872,7 +2871,6 @@
 "help_article_widgets_name" = "Виджеты";
 "average_glide_time_interval_desc" = "Укажите интервал для усреднения планирования.";
 "shared_string_relief_3d" = "3D-рельеф";
-"lang_sr-Latn" = "Сербский (латиница)";
 "apply_to_existing_favorites_descr" = "Применить изменения к существующим избранным точкам группы или только к новым\?";
 "external_device_characteristic_distance" = "Расстояние";
 "help_article_navigation_guidance_name" = "Руководство по навигации";
@@ -3407,7 +3405,6 @@
 "obd_vin_desc" = "VIN-код по OBD";
 "obd_fuel_type_ethanol" = "Этанол";
 "shared_string_hour" = "Час";
-"obd_fuel_consumption_rate_l_km" = "Расход топлива (л/100 км)";
 "liter_per_hour" = "л/ч";
 "obd_fuel_type_desc" = "Виджет показывает тип топлива транспортного средства по датчику OBD";
 "obd_widget_vehicle_speed" = "Скорость";
@@ -3468,7 +3465,6 @@
 "obd_searching_text" = "Поиск сканеров";
 "simulate_obd" = "Имитировать данные OBD";
 "obd_fuel_type_hybrid_hydrogen" = "Гибрид: водород";
-"obd_fuel_consumption_rate_l_km_desc" = "Виджет показывает расход топлива транспортного средства на основе расчетов (л/100 км)";
 "obd_fuel_consumption_rate_liter_hour" = "Расход топлива (л/ч)";
 "obd_fuel_type_propane" = "Пропан";
 "obd_throttle_position_desc" = "Виджет показывает угол открытия заслонки дросселя.";

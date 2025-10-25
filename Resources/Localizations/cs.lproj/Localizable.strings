@@ -3149,7 +3149,6 @@
 "external_sensors_plugin_name" = "Externí senzory";
 "show_icon" = "Zobrazit ikonu";
 "help_article_map_map_context_menu_name" = "Kontextová nabídka mapy";
-"lang_sr-Latn" = "Srbština (latinka)";
 "ant_plus_bluetooth_off_description" = "Zapněte vyhledání Bluetooth a spárujte senzory.";
 "shared_string_temperature" = "Teplota";
 "download_to_device" = "Stáhnout do zařízení";
@@ -3500,7 +3499,6 @@
 "app_store" = "App Store";
 "routing_algorithm_a" = "A*";
 "yard" = "yd";
-"units_nm_h" = "nmi/h";
 "facebook" = "Facebook";
 "activity_type_offroad_name" = "Off-road";
 "rendering_value_sacScale_name" = "SAC";
@@ -3762,8 +3760,6 @@
 "obd_fuel_consumption_rate_scanner" = "Spotřeba paliva (OBD)";
 "obd_fuel_consumption_rate_liter_hour" = "Míra spotřeby paliva";
 "obd_fuel_consumption_rate_percent_hour" = "Spotřeba paliva %/h";
-"obd_fuel_consumption_rate_l_km" = "Spotřeba paliva (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Zobrazuje spotřebu paliva vozidla na základě výpočtů (l/100 km)";
 "simulate_obd" = "Simulace dat OBD";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

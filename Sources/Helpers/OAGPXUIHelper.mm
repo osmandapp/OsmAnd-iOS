@@ -375,13 +375,17 @@
     const auto right = OsmAnd::Utilities::get31LongitudeX(rect.right());
 
     NSArray<NSString *> *cityTypes = @[
-        [OACity getTypeStr:CITY_SUBTYPE_CITY],
-        [OACity getTypeStr:CITY_SUBTYPE_TOWN],
-        [OACity getTypeStr:CITY_SUBTYPE_VILLAGE],
-        [OACity getTypeStr:CITY_SUBTYPE_HAMLET],
-        [OACity getTypeStr:CITY_SUBTYPE_SUBURB],
-        [OACity getTypeStr:CITY_SUBTYPE_DISTRICT],
-        [OACity getTypeStr:CITY_SUBTYPE_NEIGHBOURHOOD]
+        [OACity getTypeStr:CITY_TYPE_CITY],
+        [OACity getTypeStr:CITY_TYPE_TOWN],
+        [OACity getTypeStr:CITY_TYPE_VILLAGE],
+        [OACity getTypeStr:CITY_TYPE_HAMLET],
+        [OACity getTypeStr:CITY_TYPE_SUBURB],
+        [OACity getTypeStr:CITY_TYPE_BOUNDARY],
+        [OACity getTypeStr:CITY_TYPE_POSTCODE],
+        [OACity getTypeStr:CITY_TYPE_BOROUGH],
+        [OACity getTypeStr:CITY_TYPE_DISTRICT],
+        [OACity getTypeStr:CITY_TYPE_NEIGHBOURHOOD],
+        [OACity getTypeStr:CITY_TYPE_CENSUS]
     ];
 
     OASearchPoiTypeFilter *filter = [[OASearchPoiTypeFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
@@ -779,7 +783,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     [trackItem resetAppearanceToOriginal];
     OASGpxTrackAnalysis *trackAnalysis = analysis?: [gpx getAnalysis];
     
-    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:CLLocationCoordinate2DMake(selectedPoint.lat, selectedPoint.lon) openedFromMap:NO];
+    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:CLLocationCoordinate2DMake(selectedPoint.lat, selectedPoint.lon) openedFromMap:YES];
     state.forceAdjustCentering = forceAdjustCentering;
     
     if (!routeKey)

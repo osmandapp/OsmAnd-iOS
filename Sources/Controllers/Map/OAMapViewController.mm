@@ -2343,7 +2343,7 @@ static const NSInteger kDetailedMapZoom = 9;
 
     if ([self isBasemapZoom:_mapView.zoomLevel])
     {
-        return OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliterated;
+        return OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrNative;
     }
 
     switch (settingMapLanguage) {

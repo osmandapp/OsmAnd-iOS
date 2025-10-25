@@ -1858,7 +1858,7 @@
 "rendering_attr_seabedDetail_name" = "Zeebodem informatie";
 "rendering_attr_showBusRoutes_name" = "Busroutes";
 "rendering_attr_noNatureReserveBoundaries_name" = "Natuurlijke grenzen";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematische weergave van iconen bij lage zoomniveau\'s";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematische weergave van iconen bij lage zoomniveau's";
 "rendering_attr_weatherWindSpeedContours_name" = "Isolijnen windsnelheid";
 "rendering_attr_OSMMapperAssistantNote_description" = "Notitie labels tonen";
 "routing_attr_allow_intermittent_name" = "Laat regelmatig droogvallende waterwegen toe";

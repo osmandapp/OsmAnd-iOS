@@ -1448,7 +1448,7 @@
 "app_restart_required" = "Egyes beállítások érvényesítéséhez újra kell indítani az alkalmazást.";
 "carplay_profile" = "CarPlay profil";
 "carplay_active_message" = "A térkép a CarPlay-en keresztül jelenik meg";
-"shared_string_last_used" = "Utoljára használt";
+"shared_string_last_used" = "Az utoljára használt";
 "favorites_empty" = "Nem mentett el kedvenc pontot";
 "tracks_empty" = "Üres a nyomvonallistája";
 "map_markers_empty" = "Nincs aktív térképjelölője";
@@ -2159,7 +2159,7 @@
 "verification_code_missing_description" = "Ez 10 akár perc is lehet. Ha nincs a spam mappában, használja az alábbi gombot.";
 "sign_in_with_open_street_map" = "Bejelentkezés OpenStreetMap-fiókkal";
 "osm_live_payment_desc" = "Az előfizetési díj a kiválasztott időnként lesz felszámítva. Az előfizetést bármikor lemondhatja a Google Play-en.";
-"no_purchases" = "Ön nem vásárolt semmit";
+"no_purchases" = "Nincsenek vásárlásai";
 "map_widget_rendering_fps" = "Térképkirajzolás (képkocka/mp)";
 "backup_complete" = "A biztonsági mentés kész";
 "create_custom_categories_list_promo" = "Lista sorrendjének módosítása és kategóriák elrejtése. Minden módosítás profilként importálható és exportálható.";
@@ -3003,7 +3003,7 @@
 "shared_string_items" = "Elemek";
 "open_in_browser" = "Megnyitás böngészőben";
 "auto_25_chars_route_tr_kl" = "Forduljon jobbra, és tartson balra";
-"fuel_tank_capacity_description" = "Adja meg az üzemanyagtartály kapacitását az üzemanyagszint és a fogyasztás pontos nyomon követése érdekében";
+"fuel_tank_capacity_description" = "Adja meg az üzemanyagtartály kapacitását az üzemanyagszint és a fogyasztás pontos nyomon követéséhez";
 "us_gallons_unit" = "gallon";
 "shared_string_unchanged" = "Változatlan";
 "detailed_track_guidance_description" = "Az OsmAnd a nyomvonalát a közeli utakhoz igazítja a jobb, részletes navigáció érdekében.";

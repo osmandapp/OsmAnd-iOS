@@ -3804,3 +3804,17 @@
 "obd_fuel_type_bifuel_lpg" = "Bifuel kör LPG";
 "obd_fuel_type_bifuel_ethanol" = "Bifuel kör etanol";
 "obd_fuel_type_unknown" = "Okänt drivmedel";
+"map_orientations_choose_description" = "Lämna tom för att växla mellan alla tillgängliga lägen, eller lägg bara till dina föredragna.";
+"map_orientations" = "Kartor orienteringar";
+"altitude_metrics_description" = "Ställ in displayenheten för höjd i widgets och statistik.";
+"select_map_orientation" = "Välj kartorientering";
+"available" = "Tillgänglig";
+"download_live_updates" = "Direkt-uppdateringar";
+"local_indexes_cat_tts" = "Röstmeddelanden (TTS)";
+"local_indexes_cat_voice" = "Röstmeddelanden (inspelade)";
+"quick_action_template_name" = "Mallnamn";
+"quick_action_get_info" = "Få info";
+"quick_action_enter_message" = "Ange meddelande";
+"quick_action_parking_descr" = "Tryck på denna åtgärdsknapp lägger till en parkeringsplats på kartans centrumpunkt.";
+"quick_action_next_app_profile" = "App profil till nästa";
+"key_event_action_next_app_profile" = "Nästa app-profil";

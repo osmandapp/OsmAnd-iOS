@@ -2650,7 +2650,7 @@
 "view_angle_description" = "Viser det kjegleformede området du for øyeblikket er vendt mot";
 "shared_string_all_icons" = "Alle ikoner";
 "navigation_position_icon" = "Ikon for navigeringsposisjon";
-"quick_action_toggle_preference" = "En bryter for å veksle valgt innstilling.";
+"quick_action_toggle_preference" = "En bryter for å endre preferanse.";
 "resting_position_icon" = "Ikon for stillestående posisjon";
 "location_radius" = "Posisjonsradius";
 "shared_string_local" = "Lokale";
@@ -2821,3 +2821,5 @@
 "obd_fuel_consumption_rate_sensor" = "Forbruk av drivstoff (sensor)";
 "shared_string_large" = "Stor";
 "obd_nothing_found_text" = "Fant ingen skannere";
+"next_turn_information" = "Neste svinginformasjon";
+"next_turn_information_desc" = "Viser den kommende svingretningen og gatenavn.";

@@ -2479,7 +2479,7 @@
 "copy_build_version" = "Kopiraj verziju izdanja";
 "send_log" = "Pošalji dnevnik";
 "troubleshooting" = "Rešavanje problema";
-"trip_recording_downhill_widget_desc" = "Prikazuje ukupno sve nizbrdice na putu koji se trenutno snima.";
+"trip_recording_downhill_widget_desc" = "Prikazuje sva spuštanja ili poslednji silazak trenutno zabeleženog putovanja.";
 "average_speed_widget_desc" = "Prikazuje prosečnu brzinu trenutnog puta.";
 "clouds_widget_desc" = "Prikazuje oblačnost na trenutnom centru mape.";
 "bottom_widgets_panel" = "Donji panel";
@@ -2724,8 +2724,8 @@
 "help_article_navigation_routing_osmand_routing_name" = "O OsmAnd rutiranju";
 "help_article_navigation_routing_pedestrian_routing_name" = "Rutiranje hodanjem";
 "help_article_navigation_routing_public_transport_navigation_name" = "Rutiranje javnim prevozom";
-"help_article_navigation_routing_ski_routing_name" = "Ski rute";
-"help_article_navigation_routing_straight_line_routing_name" = "rutiranje pravom linijom (letelicom)";
+"help_article_navigation_routing_ski_routing_name" = "Ski staze i trase";
+"help_article_navigation_routing_straight_line_routing_name" = "Pravolinijsko rutiranje (letelicom)";
 "help_article_navigation_routing_train_routing_name" = "Rutiranje vozom";
 "help_article_navigation_setup_markers_navigation_name" = "Navođenje pomoću oznaka";
 "help_article_navigation_setup_route_details_name" = "Detalji rute";
@@ -2809,7 +2809,7 @@
 "coordinates_widget_map_center_desc" = "Prikazuje geografske koordinate trenutnog centra mape";
 "shared_string_switch_mode" = "Način prebacivanja";
 "av_notes_audio_widget_desc" = "Tapni na vidžet za snimanje zvučne beleške.";
-"trip_recording_uphill_widget_desc" = "Prikazuje ukupno sve uspone na putu koji se trenutno snima.";
+"trip_recording_uphill_widget_desc" = "Prikazuje zbir svih uspona ili poslednji uspon trenutno snimljenog putovanja.";
 "trip_recording_distance_widget_desc" = "Prikazuje ukupnu daljinu puta.";
 "true_bearing_wdiget_desc" = "Ugao između pravog severa i ciljne tačke gledano sa tvoje lokacije.";
 "relative_bearing_widget_desc" = "Prikazuje ugao između pravca tvog kretanja i ciljne tačke.";

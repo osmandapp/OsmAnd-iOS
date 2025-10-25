@@ -2796,7 +2796,7 @@
 // Widget descriptions
 "coordinates_widget_current_location_desc" = "Affiche les coordonnées de la position actuelle";
 "av_notes_video_widget_desc" = "Appuyez sur le widget pour enregistrer une vidéo.";
-"trip_recording_uphill_widget_desc" = "Affiche le dénivelé positif cumulé du trajet en cours d\'enregistrement.";
+"trip_recording_uphill_widget_desc" = "Affiche le dénivelé positif cumulé du trajet en cours d'enregistrement.";
 "first_marker_widget_desc" = "Vous pouvez configurer le widget pour afficher la Distance restante ou l\'Heure estimée d\'arrivée jusqu’à la première marque.";
 "relative_bearing_widget_desc" = "Affiche l\'angle entre la direction de votre déplacement et la destination.";
 "time_to_destination_widget_desc" = "Le widget affiche « L\'heure d\'arrivée » ou « La durée restante » jusqu\'à destination. Ces informations sont actualisées pendant le guidage et calculées à partir de votre position actuelle.";

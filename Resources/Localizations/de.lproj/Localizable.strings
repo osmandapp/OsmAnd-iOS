@@ -676,7 +676,7 @@
 "shared_string_search" = "Suchen";
 "shared_string_target_points" = "Ziele";
 "search_radius_proximity" = "Innerhalb";
-"poi" = "OVI";
+"poi" = "POI";
 // Shared Strings
 "shared_string_apply" = "Anwenden";
 "keep_and_add_destination_point" = "Als weiteres Ziel hinzufügen";
@@ -694,7 +694,7 @@
 "first_intermediate_dest_description" = "Fügt ersten Halt hinzu";
 "add_as_last_destination_point" = "Als letztes Zwischenziel hinzufügen";
 "last_intermediate_dest_description" = "Fügt Zwischenhalt ein";
-"show_poi_over_map" = "OVI-Overlay anzeigen";
+"show_poi_over_map" = "POI-Overlay anzeigen";
 "search_radius" = "Suchradius";
 "transport_Routes" = "Strecken";
 "transport_nearby_routes_within" = "Nahe gelegene Routen innerhalb von";
@@ -1042,7 +1042,7 @@
 "quick_action_map_style" = "Kartenstil";
 "quick_action_map_source" = "Kartenquelleändern";
 "quick_action_map_overlay" = "Überlagerung";
-"quick_action_map_underlay" = "Unterlage";
+"quick_action_map_underlay" = "Unterlay";
 "quick_action_replace_destination" = "Ziel ersetzen";
 "add_destination" = "Ziel hinzufügen";
 "quick_action_auto_zoom" = "Automatische Vergrößerung";
@@ -1839,7 +1839,7 @@
 "shared_string_visible" = "Sichtbar";
 "searching" = "Suche …";
 "shared_string_loading" = "Wird geladen";
-"poi_categories" = "OVI-Kategorien";
+"poi_categories" = "POI-Kategorien";
 "route_calc_progress" = "Berechne: %d%%";
 "carplay_active_message" = "Karte wird über CarPlay angezeigt";
 "favorites_empty" = "Sie haben keine Favoriten gespeichert";
@@ -2629,7 +2629,7 @@
 "rendering_attr_horse_scale_impossible_name" = "Unpassierbar, Lebensgefahr";
 "rendering_attr_horse_scale_common_name" = "Anspruchslos";
 "routing_attr_length_description" = "Geben Sie die Fahrzeuglänge an, die auf Routen erlaubt sein soll.";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematische Darstellung von Symbolen bei niedrigen Zoomstufen";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Eine schematische Darstellung von Symbolen bei niedrigen Zoomstufen für diejenigen POIs, die normalerweise nicht angezeigt werden";
 "rendering_attr_showMtbScaleUphill_name" = "MTB-Skala aufwärts anzeigen";
 "routing_attr_goods_restrictions_description" = "Berücksichtigung von Zufahrtsgenehmigungen für leichte Lastkraftwagen (Güter)";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Nicht von der Piste abweichen";
@@ -2892,7 +2892,7 @@
 "terrain_3D_maps" = "Geländekarten";
 "average_speed_skip_stops" = "Zwischenstopps berücksichtigen";
 "shared_string_relief_3d" = "3D-Relief";
-"average_speed_time_interval_desc" = "Gib das Zeitintervall für die Durchschnittsberechnung der Geschwindigkeit an.";
+"average_speed_time_interval_desc" = "Geben Sie das Zeitintervall für die Berechnung der Durchschnittsgeschwindigkeit an.";
 "weather_update_parameters_wifi" = "Die Wettervorhersage wird nur aktualisiert, wenn ein Wi-Fi-Netzwerk verfügbar ist.";
 "unsaved_changes" = "Ungesicherte Änderungen";
 
@@ -3899,4 +3899,4 @@
 "shared_string_degrees" = "Grade";
 "duration" = "Dauer";
 "shared_string_estimated_duration" = "Geschätzte Dauer";
-"altitude_metrics_description" = "Bestimmt die Einheit für die Höhenanzeige in Widgets und Statistiken.";
+"altitude_metrics_description" = "Legt die Anzeigeeinheit für die Höhe in Widgets und Statistiken fest.";

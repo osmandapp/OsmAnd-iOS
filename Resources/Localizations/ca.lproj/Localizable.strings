@@ -2026,7 +2026,7 @@
 "analyze_on_map" = "Analitza en el mapa";
 "lang_ht" = "Crioll haitià";
 "routing_attr_allow_gate_description" = "Permet l\'ús de portes";
-"register_opr_have_account" = "ja tinc un compte";
+"register_opr_have_account" = "Ja tinc un compte";
 "lang_hu" = "Hongarès";
 "lang_ur" = "Urdú";
 "lang_fr" = "Francès";
@@ -2488,7 +2488,7 @@
 "avoid_pt_types_descr" = "Seleccioneu quin transport públic no s\'ha d\'incloure a la navegació:";
 "speed_limit_warning" = "Avís de límit de velocitat";
 "shared_string_bottom" = "Part inferior";
-"step_by_step" = "Pas per pas";
+"step_by_step" = "Pas a pas";
 "custom_buttons" = "Botons personalitzats";
 "shared_string_limit" = "Límit";
 "shared_string_speedometer" = "Velocímetre";

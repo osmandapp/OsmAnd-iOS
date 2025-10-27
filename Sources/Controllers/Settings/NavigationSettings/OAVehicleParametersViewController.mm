@@ -61,7 +61,7 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
     NSMutableArray *exraParametersArr = [NSMutableArray array];
-    NSMutableArray *defaultSpeedArr = [NSMutableArray array];
+    NSMutableArray *otherParametersArr = [NSMutableArray array];
     auto router = [OsmAndApp.instance getRouter:self.appMode];
     _otherParameters.clear();
     NSString *appModeRoutingProfile = self.appMode.getRoutingProfile;
@@ -98,7 +98,7 @@
             NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
             if (!(p.type == RoutingParameterType::BOOLEAN))
             {
-                BOOL isMotorType = [paramId isEqualToString:@"motor_type"];
+                BOOL isMotorType = [paramId isEqualToString:RouteParamVehicleHelper.motorType];
                 OACommonString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue:@"0"];
                 NSString *value = [stringParam get:self.appMode];
                 int index = -1;
@@ -119,33 +119,35 @@
                 }
 
                 if (index == 0)
-                    value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"shared_string_not_selected" : @"shared_string_none");
+                    value = OALocalizedString([paramId isEqualToString:RouteParamVehicleHelper.motorType] ? @"shared_string_not_selected" : @"shared_string_none");
                 else if (index != -1)
                     value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
                 else
-                    value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"metric_ton") : OALocalizedString(@"m")];
-                [isMotorType ? exraParametersArr : parametersArr addObject:
-                 @{
-                     @"name" : paramId,
-                     @"title" : title,
-                     @"value" : value,
-                     @"selectedItem" : @(index),
-                     @"icon" : [self getParameterIcon:paramId],
-                     @"possibleValues" : possibleValues,
-                     @"possibleValuesDescr" : valueDescriptions,
-                     @"setting" : stringParam,
-                     @"type" : [OAValueTableViewCell getCellIdentifier] }
-                 ];
+                    value = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString([RouteParamVehicleHelper isWeightParameter:paramId] ? @"metric_ton" : @"m")];
+                
+                NSDictionary *paramInfo = @{
+                    @"name": paramId,
+                    @"title": title,
+                    @"value": value,
+                    @"selectedItem": @(index),
+                    @"icon": [self getParameterIcon:paramId],
+                    @"possibleValues": possibleValues,
+                    @"possibleValuesDescr": valueDescriptions,
+                    @"setting": stringParam,
+                    @"type": [OAValueTableViewCell reuseIdentifier]
+                };
+                if ([paramId isEqualToString:RouteParamVehicleHelper.maxAxleLoad] || [paramId isEqualToString:RouteParamVehicleHelper.weightRating])
+                    [otherParametersArr addObject:paramInfo];
+                else
+                    [isMotorType ? exraParametersArr : parametersArr addObject:paramInfo];
                 
                 if (isMotorType)
-                {
                     [self setupFuelTankCapacity:exraParametersArr];
-                }
             }
         }
     }
-    [defaultSpeedArr addObject:@{
-        @"type" : [OASimpleTableViewCell getCellIdentifier],
+    [otherParametersArr addObject:@{
+        @"type" : [OASimpleTableViewCell reuseIdentifier],
         @"title" : OALocalizedString(@"default_speed_setting_title"),
         @"icon" : @"ic_action_speed",
         @"name" : @"defaultSpeed",
@@ -160,9 +162,9 @@
         [tableData addObject:exraParametersArr];
         _fuelSection = tableData.count - 1;
     }
-    if (defaultSpeedArr.count > 0)
+    if (otherParametersArr.count > 0)
     {
-        [tableData addObject:defaultSpeedArr];
+        [tableData addObject:otherParametersArr];
         _otherSection = tableData.count - 1;
     }
     _data = [NSArray arrayWithArray:tableData];
@@ -194,7 +196,7 @@
     
     [exraParametersArr addObject:
          @{
-        @"name" : @"fuel_tank_capacity",
+        @"name" : RouteParamVehicleHelper.fuelTankCapacity,
         @"title" : OALocalizedString(@"fuel_tank_capacity"),
         @"value" : stringValue,
         @"selectedItem" : @(index),
@@ -208,16 +210,20 @@
 
 - (NSString *) getParameterIcon:(NSString *)parameterName
 {
-    if ([parameterName isEqualToString:@"weight"])
+    if ([parameterName isEqualToString:RouteParamVehicleHelper.weight])
         return @"ic_custom_weight_limit";
-    else if ([parameterName isEqualToString:@"height"])
+    else if ([parameterName isEqualToString:RouteParamVehicleHelper.height])
         return @"ic_custom_height_limit";
-    else if ([parameterName isEqualToString:@"length"])
+    else if ([parameterName isEqualToString:RouteParamVehicleHelper.length])
         return @"ic_custom_length_limit";
-    else if ([parameterName isEqualToString:@"width"])
+    else if ([parameterName isEqualToString:RouteParamVehicleHelper.width])
         return @"ic_custom_width_limit";
-    else if ([parameterName isEqualToString:@"motor_type"])
+    else if ([parameterName isEqualToString:RouteParamVehicleHelper.motorType])
         return @"ic_custom_fuel";
+    else if ([parameterName isEqualToString:RouteParamVehicleHelper.maxAxleLoad])
+        return @"ic_custom_hgv_axle_load";
+    else if ([parameterName isEqualToString:RouteParamVehicleHelper.weightRating])
+        return @"ic_custom_hgv_full_load";
     return @"";
 }
 

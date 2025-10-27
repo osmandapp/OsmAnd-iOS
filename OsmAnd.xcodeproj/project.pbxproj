@@ -232,6 +232,7 @@
 		277987BE2E7AB5F100607516 /* CommandToActionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987BD2E7AB5F100607516 /* CommandToActionConverter.swift */; };
 		277987C02E7AB6AB00607516 /* DefaultInputDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987BF2E7AB6AB00607516 /* DefaultInputDevices.swift */; };
 		277987C22E7AB7F500607516 /* InputDevicesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987C12E7AB7F500607516 /* InputDevicesHelper.swift */; };
+		277BE07F2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277BE07E2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift */; };
 		2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4352E66E6F700682723 /* InputDeviceProfile.swift */; };
 		2783B4382E66E81900682723 /* PredefinedInputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */; };
 		2783B43A2E66E8AB00682723 /* KeyboardDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */; };
@@ -3656,6 +3657,7 @@
 		277987BD2E7AB5F100607516 /* CommandToActionConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandToActionConverter.swift; sourceTree = "<group>"; };
 		277987BF2E7AB6AB00607516 /* DefaultInputDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultInputDevices.swift; sourceTree = "<group>"; };
 		277987C12E7AB7F500607516 /* InputDevicesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevicesHelper.swift; sourceTree = "<group>"; };
+		277BE07E2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParamVehicleHelper.swift; sourceTree = "<group>"; };
 		2783B4352E66E6F700682723 /* InputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDeviceProfile.swift; sourceTree = "<group>"; };
 		2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredefinedInputDeviceProfile.swift; sourceTree = "<group>"; };
 		2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDeviceProfile.swift; sourceTree = "<group>"; };
@@ -13570,6 +13572,7 @@
 			isa = PBXGroup;
 			children = (
 				FA9FA5982E97D11400376C47 /* MapScrollHelper.swift */,
+				277BE07E2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift */,
 				FA39D2962E819B030095DF8E /* ErrorHelper.swift */,
 				FA82B9172E74197A00A250F1 /* ImageLoading */,
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
@@ -17757,6 +17760,7 @@
 				DA653CD9288ACEDF00AB623C /* OATitleIconProgressbarCell.mm in Sources */,
 				DA5A844526C563A900F274C7 /* UIViewController+OARootViewController.m in Sources */,
 				271A62052E3CA8CD00B34CB1 /* DistanceByTapViewController.swift in Sources */,
+				277BE07F2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift in Sources */,
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,
 				DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */,
 				32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */,

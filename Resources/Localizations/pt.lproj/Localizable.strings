@@ -3746,7 +3746,6 @@
 "remaining_fuel_description" = "Mostra a quantidade de combustível restante no depósito do veículo";
 "obd_fuel_type_bifuel_hydrogen" = "Hidrogénio em funcionamento bicombustível";
 "shared_string_engine" = "Motor";
-"obd_fuel_consumption_rate_l_km_desc" = "Mostra a taxa de consumo de combustível do veículo com base em cálculos (L/100 km)";
 "obd_ambient_air_temp_desc" = "Mostra a temperatura no exterior do veículo.";
 "obd_fuel_left_km" = "Combustível restante (km)";
 "obd_vehicle_info" = "Informação do veículo";
@@ -3788,7 +3787,6 @@
 "trace_rendering" = "Informações de depuração de desempenho";
 "obd_fuel_pressure_desc" = "Mostra a pressão no sistema de combustível";
 "obd_fuel_type_bifuel_electricity" = "Funcionamento bicombustível a eletricidade";
-"obd_fuel_consumption_rate_l_km" = "Consumo de combustível (L/100 km)";
 "average_temperature" = "Temperatura média";
 "manage_purchases" = "Gerir compras";
 "sensor_data" = "Dados do sensor";

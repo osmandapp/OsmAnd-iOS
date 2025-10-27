@@ -3760,8 +3760,6 @@
 "obd_fuel_consumption_rate_scanner" = "Spotřeba paliva (OBD)";
 "obd_fuel_consumption_rate_liter_hour" = "Míra spotřeby paliva";
 "obd_fuel_consumption_rate_percent_hour" = "Spotřeba paliva %/h";
-"obd_fuel_consumption_rate_l_km" = "Spotřeba paliva (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Zobrazuje spotřebu paliva vozidla na základě výpočtů (l/100 km)";
 "simulate_obd" = "Simulace dat OBD";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

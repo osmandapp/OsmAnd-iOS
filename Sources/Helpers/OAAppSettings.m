@@ -692,6 +692,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @property (nonatomic) EOAVolumeConstant volume;
 @property (nonatomic) NSString *key;
+@property (nonatomic) NSString *singleVariant;
 @property (nonatomic) NSString *descr;
 
 @end
@@ -705,6 +706,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     {
         obj.volume = volume;
         obj.key = [self.class toHumanString:volume];
+        obj.singleVariant = [self.class toSingleHumanString:volume];
         obj.descr = [self.class getUnitSymbol:volume];
     }
     return obj;
@@ -722,6 +724,21 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
             return OALocalizedString(@"us_gallons");
         default:
             return OALocalizedString(@"litres");
+    }
+}
+
++ (NSString *)toSingleHumanString:(EOAVolumeConstant)volume
+{
+    switch (volume)
+    {
+        case LITRES:
+            return OALocalizedString(@"liter_single");
+        case IMPERIAL_GALLONS:
+            return OALocalizedString(@"imperial_gallon");
+        case US_GALLONS:
+            return OALocalizedString(@"us_gallon");
+        default:
+            return OALocalizedString(@"liter_single");
     }
 }
 

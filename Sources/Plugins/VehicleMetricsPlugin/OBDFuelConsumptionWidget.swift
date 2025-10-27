@@ -9,46 +9,51 @@
 import Foundation
 
 private enum FuelConsumptionMode: String, CaseIterable {
+    case unitsPerVolume = "UNITS_PER_VOLUME"
     case volumePer100Units = "VOLUME_PER_100_UNITS"
     case volumePerHour = "VOLUME_PER_HOUR"
     
     var fieldType: OBDDataComputer.OBDTypeWidget {
         switch self {
-        case .volumePer100Units:
-            return .fuelConsumptionRateLiterKm
-        case .volumePerHour:
-            return .fuelConsumptionRateLiterHour
+        case .unitsPerVolume: .fuelConsumptionRateMPerLiter
+        case .volumePer100Units: .fuelConsumptionRateLiterKm
+        case .volumePerHour: .fuelConsumptionRateLiterHour
         }
     }
     
     func getTitle(appMode: OAApplicationMode) -> String {
         let settings = OAAppSettings.sharedManager()
         let leftText: String
-        switch settings.volumeUnits.get(appMode) {
-        case .LITRES:
-            leftText = localizedString("litres")
-        case .IMPERIAL_GALLONS:
-            leftText = localizedString("imperial_gallons")
-        case .US_GALLONS:
-            leftText = localizedString("us_gallons")
-        default:
-            leftText = localizedString("litres")
-        }
-        
         let rightText: String
-        if self == .volumePer100Units {
+        if self == .unitsPerVolume {
             let unitKey: String
             switch settings.metricSystem.get(appMode) {
             case .KILOMETERS_AND_METERS:
-                unitKey = "km"
+                unitKey = "kilometers"
             case .NAUTICAL_MILES_AND_METERS, .NAUTICAL_MILES_AND_FEET:
-                unitKey = "nm"
+                unitKey = "si_nm"
             default:
-                unitKey = "mile"
+                unitKey = "miles"
+            }
+            
+            leftText = localizedString(unitKey)
+            rightText = OAVolumeConstant.toSingleHumanString(settings.volumeUnits.get(appMode))
+        } else if self == .volumePer100Units {
+            leftText = OAVolumeConstant.toHumanString(settings.volumeUnits.get(appMode))
+            
+            let unitKey: String
+            switch settings.metricSystem.get(appMode) {
+            case .KILOMETERS_AND_METERS:
+                unitKey = "kilometers"
+            case .NAUTICAL_MILES_AND_METERS, .NAUTICAL_MILES_AND_FEET:
+                unitKey = "si_nm"
+            default:
+                unitKey = "miles"
             }
             
             rightText = String(format: localizedString("ltr_or_rtl_combine_via_space"), "100", localizedString(unitKey))
         } else {
+            leftText = OAVolumeConstant.toHumanString(settings.volumeUnits.get(appMode))
             rightText = localizedString("shared_string_hour").lowercased()
         }
         
@@ -61,6 +66,9 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
     private static let obdFuelConsumptionModeKey = "obd_fuel_consumption_mode"
     private static let fuelConsumptionAverageTimeSeconds: Int32 = 5 * 60
     private var fuelConsumptionModePref: OACommonString?
+    private var defaultMode: FuelConsumptionMode {
+        OAAppSettings.sharedManager().volumeUnits.get() == .LITRES ? .volumePer100Units : .unitsPerVolume
+    }
     
     convenience init(customId: String?, widgetType: WidgetType, appMode: OAApplicationMode, widgetParams: [String: Any]? = nil) {
         self.init(frame: .zero)
@@ -96,12 +104,11 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
         modeRow.title = localizedString("shared_string_mode")
         modeRow.setObj(fuelConsumptionModePref as Any, forKey: "pref")
         let currentRaw: String = {
-            guard let fuelConsumptionModePref else { return FuelConsumptionMode.volumePer100Units.rawValue }
+            guard let fuelConsumptionModePref else { return defaultMode.rawValue }
             if isCreate, let widgetConfigurationParams, let overrideRaw = widgetConfigurationParams[fuelConsumptionModePref.key] as? String, FuelConsumptionMode(rawValue: overrideRaw) != nil {
                 return overrideRaw
             }
-            
-            return fuelConsumptionModePref.get(appMode) ?? FuelConsumptionMode.volumePer100Units.rawValue
+            return isCreate ? defaultMode.rawValue : fuelConsumptionModePref.get(appMode)
         }()
         modeRow.setObj(currentRaw, forKey: "value")
         let options: [OATableRowData] = FuelConsumptionMode.allCases.map { mode in
@@ -130,7 +137,7 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
     }
     
     private func getFieldType() -> OBDDataComputer.OBDTypeWidget {
-        guard let raw = fuelConsumptionModePref?.get(), let mode = FuelConsumptionMode(rawValue: raw) else { return FuelConsumptionMode.volumePer100Units.fieldType }
+        guard let raw = fuelConsumptionModePref?.get(), let mode = FuelConsumptionMode(rawValue: raw) else { return defaultMode.fieldType }
         
         return mode.fieldType
     }
@@ -139,7 +146,7 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
         guard let fuelConsumptionModePref else { return }
         let modes = FuelConsumptionMode.allCases
         guard !modes.isEmpty else { return }
-        let rawValue = fuelConsumptionModePref.get() ?? modes[0].rawValue
+        let rawValue = fuelConsumptionModePref.get()
         let currentMode = FuelConsumptionMode(rawValue: rawValue) ?? modes[0]
         guard let currentIndex = modes.firstIndex(of: currentMode) else { return }
         let nextMode = modes[(currentIndex + 1) % modes.count]
@@ -164,7 +171,7 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
             prefId = Self.obdFuelConsumptionModeKey
         }
         
-        let pref = OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: FuelConsumptionMode.volumePer100Units.rawValue).makeProfile()
+        let pref = OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: defaultMode.rawValue).makeProfile()
         if let widgetParams {
             if let raw = widgetParams[prefId] as? String, FuelConsumptionMode(rawValue: raw) != nil {
                 pref.set(raw, mode: appMode)

@@ -3781,8 +3781,6 @@
 "obd_fuel_consumption_rate_scanner" = "Tasa de consumo del combustible (obd)";
 "obd_fuel_consumption_rate_liter_hour" = "Tasa de consumo del combustible";
 "obd_fuel_consumption_rate_percent_hour" = "Tasa de consumo del combustible (%/h)";
-"obd_fuel_consumption_rate_l_km" = "Tasa de consumo del combustible (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Muestra la tasa de consumo del combustible, según los cálculos (L/100 km)";
 "simulate_obd" = "Simular datos OBD";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

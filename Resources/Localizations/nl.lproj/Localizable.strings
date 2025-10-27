@@ -2747,8 +2747,6 @@
 "shared_string_hour" = "Uur";
 "obd_engine_runtime_desc" = "Toont hoelang de motor al draait sinds het starten.";
 "obd_engine_runtime" = "Motordraaitijd";
-"obd_fuel_consumption_rate_l_km" = "Brandstofverbruik (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Toont het brandstofverbruik van het voertuig op basis van berekeningen (L/100 km)";
 "simulate_obd" = "Simuleer OBD-gegevens";
 "kpa_unit" = "kPa";
 "obd_fuel_pressure" = "Brandstofdruk";

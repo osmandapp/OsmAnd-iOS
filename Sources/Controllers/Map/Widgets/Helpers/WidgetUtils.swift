@@ -353,3 +353,18 @@ extension WidgetUtils {
         }
     }
 }
+
+extension WidgetUtils {
+    static func deleteWidgetAlert(with appMode: OAApplicationMode, widgetInfo: MapWidgetInfo, completion: (() -> Void)? = nil) -> UIAlertController {
+        let alert = UIAlertController(title: localizedString("delete_widget"),
+                                      message: localizedString("delete_widget_description"),
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { _ in
+            let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+            widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: widgetInfo, enabled: false, recreateControls: true)
+            completion?()
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        return alert
+    }
+}

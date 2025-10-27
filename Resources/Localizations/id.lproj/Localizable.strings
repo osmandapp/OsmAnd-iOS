@@ -3714,8 +3714,6 @@
 "obd_fuel_consumption_rate_scanner" = "Tingkat konsumsi bahan bakar (obd)";
 "obd_fuel_consumption_rate_liter_hour" = "Tingkat konsumsi bahan bakar";
 "obd_fuel_consumption_rate_percent_hour" = "Tingkat konsumsi bahan bakar %/j";
-"obd_fuel_consumption_rate_l_km" = "Tingkat konsumsi bahan bakar (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Menampilkan tingkat konsumsi bahan bakar kendaraan berdasarkan perhitungan (L/100 km)";
 "simulate_obd" = "Simulasi data obd";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

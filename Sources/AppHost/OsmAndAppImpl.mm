@@ -854,6 +854,9 @@ NSString *const kXmlColon = @"_-_";
     [helper reloadAllPoiFilters];
     [helper loadSelectedPoiFilters];
     LogStartup(@"POI filters loaded");
+    
+    [[MenuHelpDataService shared] fetchDataWithCompletion:nil];
+    LogStartup(@"MenuHelpDataService fetchData");
 
     if (_terminating)
     {

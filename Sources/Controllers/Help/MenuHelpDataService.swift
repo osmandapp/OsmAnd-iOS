@@ -69,131 +69,72 @@ final class ArticleNode: NSObject, ArticleRepresentable {
     }
 }
 
-@objc(OAMenuHelpDataService)
 @objcMembers
-final class MenuHelpDataService: NSObject, XMLParserDelegate {
+final class MenuHelpDataService: NSObject {
     static let shared = MenuHelpDataService()
     
-    private let urlPrefix = "https://osmand.net"
+    private let docsPrefix = "/docs/user/"
     
+    private(set) var popularArticles: [PopularArticle] = []
+    private(set) var telegramChats: [TelegramChat] = []
     private(set) var languages: [String] = []
+    private(set) var rootNode = ArticleNode(title: "Root", url: "", level: 1, type: "root")
     
-    private var popularArticles: [PopularArticle] = []
-    private var telegramChats: [TelegramChat] = []
     private var articles: [ArticleNode] = []
-    private var rootNode: ArticleNode = ArticleNode(title: "Root", url: "", level: 1, type: "root")
+    private var isLoading = false
+    private var pendingCompletions: [(NSError?) -> Void] = []
     
-    private override init() { }
+    private override init() {}
     
-    func loadAndParseJson(from urlString: String, for dataItem: HelperDataItems, completion: @escaping (NSArray?, NSError?) -> Void) {
-        if dataItem == .popularArticles, !popularArticles.isEmpty {
-            completion(popularArticles as NSArray, nil)
-            return
-        } else if dataItem == .telegramChats, !telegramChats.isEmpty {
-            completion(telegramChats as NSArray, nil)
-            return
-        } else if dataItem == .siteArticles, !rootNode.childArticles.isEmpty {
-            completion(rootNode.childArticles as NSArray, nil)
+    func fetchData(completion: ((NSError?) -> Void)? = nil) {
+        if hasContent() {
+            if let completion {
+              return executeOnMainThread { completion(nil) }
+            }
+        }
+        
+        if let completion {
+            pendingCompletions.append(completion)
+        }
+        
+        guard !isLoading else {
             return
         }
         
-        guard let url = URL(string: urlString) else {
-            DispatchQueue.main.async {
-                completion(nil, NSError(domain: "URLInvalid", code: 0, userInfo: nil))
-            }
+        isLoading = true
+        
+        guard let url = URL(string: kPopularArticlesAndTelegramChats) else {
+            finishLoading(with: Self.errorInvalidURL)
             return
         }
+        
+        isLoading = true
         
         URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
             guard let self else { return }
-            guard let data, error == nil else {
-                DispatchQueue.main.async {
-                    completion(nil, error as NSError? ?? NSError(domain: "DataError", code: 1, userInfo: nil))
-                }
+            defer { isLoading = false }
+            
+            if let error = error as NSError? {
+                finishLoading(with: error)
+                return
+            }
+            
+            guard let data else {
+                finishLoading(with: Self.errorNoData)
                 return
             }
             
             do {
-                guard let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                    DispatchQueue.main.async {
-                        completion(nil, NSError(domain: "JSONConversionError", code: 2, userInfo: nil))
-                    }
+                guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                    self.finishLoading(with: Self.errorInvalidJSON)
                     return
                 }
-                
-                if self.languages.isEmpty, let languages = jsonDict["languages"] as? [String] {
-                    self.languages = languages
-                }
-                
-                switch dataItem {
-                case .popularArticles:
-                    if let popularArticlesData = jsonDict["ios"] as? [String: Any],
-                       let articles = popularArticlesData["popularArticles"] as? [String: String] {
-                        popularArticles = articles.map {
-                           
-                            let p = PopularArticle(title: $0.key, url: self.urlPrefix + $0.value)
-                            print("[test] popularArticles url: \(p.url)")
-                            return p
-                        }
-                        DispatchQueue.main.async {
-                            completion(self.popularArticles as NSArray, nil)
-                        }
-                    }
-                case .telegramChats:
-                    if let telegramChatsData = jsonDict["ios"] as? [String: Any],
-                       let chats = telegramChatsData["telegramChats"] as? [String: String] {
-                        telegramChats = chats.map { TelegramChat(title: $0.key, url: $0.value) }
-                        telegramChats.forEach({ print("[test] telegramChats url: \($0.url))") })
-                    
-                        DispatchQueue.main.async {
-                            completion(self.telegramChats as NSArray, nil)
-                        }
-                    }
-                case .siteArticles:
-                    let urlDocsPrefix = "/docs/user/"
-                    if let articlesData = jsonDict["articles"] as? [[String: Any]] {
-                        articles.removeAll()
-                        for articleDict in articlesData {
-                            if let title = articleDict["label"] as? String,
-                               let level = articleDict["level"] as? Int,
-                               let url = articleDict["url"] as? String ?? (level > 1 ? urlDocsPrefix + title : nil),
-                               url.hasPrefix(urlDocsPrefix),
-                               let type = articleDict["type"] as? String {
-                                let articleNode = ArticleNode(title: title, url: urlPrefix + url, level: level, type: type)
-                                print("[test] articlesData url: \(articleNode.url)")
-                                addArticleNode(articleNode)
-                                articles.append(articleNode)
-                            }
-                        }
-                        
-                        DispatchQueue.main.async {
-                            completion(self.rootNode.childArticles as NSArray, nil)
-                        }
-                    }
-                }
-            } catch let error as NSError {
-                DispatchQueue.main.async {
-                    completion(nil, error)
-                }
+                parseHelperData(json)
+                finishLoading(with: nil)
+            } catch {
+                finishLoading(with: error as NSError)
             }
         }.resume()
-    }
-    
-    func getCountForCategory(from urlString: String, for dataItem: HelperDataItems, completion: @escaping (Int) -> Void) {
-        loadAndParseJson(from: urlString, for: dataItem) { data, error in
-            guard let data = data, error == nil else {
-                completion(0)
-                return
-            }
-            
-            if dataItem == .telegramChats, let chats = data as? [TelegramChat] {
-                completion(chats.count)
-            } else if dataItem == .popularArticles, let articles = data as? [PopularArticle] {
-                completion(articles.count)
-            } else {
-                completion(0)
-            }
-        }
     }
     
     func getArticleName(from article: ArticleRepresentable) -> String {
@@ -206,22 +147,73 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
             return localized == articleNameKey ? article.title : localized
         }
     }
-
+    
+    private func hasContent() -> Bool {
+        !popularArticles.isEmpty || !telegramChats.isEmpty || !languages.isEmpty
+    }
+    
+    private func finishLoading(with error: NSError?) {
+        let completions = pendingCompletions
+        pendingCompletions.removeAll()
+        executeOnMainThread({
+            completions.forEach { $0(error) }
+        })
+    }
+    
+    // MARK: - Parsing
+    
+    private func parseHelperData(_ json: [String: Any]) {
+        popularArticles.removeAll()
+        telegramChats.removeAll()
+        articles.removeAll()
+        languages.removeAll()
+        rootNode.childArticles.removeAll()
+        
+        // iOS section
+        if let iosData = json["ios"] as? [String: Any] {
+            if let popular = iosData["popularArticles"] as? [String: String] {
+                popularArticles = popular.map { PopularArticle(title: $0.key, url: OSMAND_URL + $0.value) }
+            }
+            
+            if let chats = iosData["telegramChats"] as? [String: String] {
+                telegramChats = chats.map { TelegramChat(title: $0.key, url: $0.value) }
+            }
+        }
+        
+        if let languages = json["languages"] as? [String] {
+            self.languages = languages
+        }
+        
+        // Articles
+        if let articlesData = json["articles"] as? [[String: Any]] {
+            for item in articlesData {
+                guard
+                    let title = item["label"] as? String,
+                    let level = item["level"] as? Int,
+                    let type = item["type"] as? String
+                else { continue }
+                
+                let url = (item["url"] as? String) ?? (level > 1 ? docsPrefix + title : "")
+                guard url.hasPrefix(docsPrefix) else { continue }
+                
+                let node = ArticleNode(title: title, url: OSMAND_URL + url, level: level, type: type)
+                addArticleNode(node)
+                articles.append(node)
+            }
+        }
+    }
+    
     private func addArticleNode(_ node: ArticleNode) {
-        var parentNode: ArticleNode = rootNode
-        while let lastChild = parentNode.childArticles.last, lastChild.level < node.level {
-            parentNode = lastChild
+        var parent = rootNode
+        while let lastChild = parent.childArticles.last, lastChild.level < node.level {
+            parent = lastChild
         }
         
-        let nodeAlreadyExists = parentNode.childArticles.contains { existingNode in
-            existingNode.title == node.title && existingNode.level == node.level
+        guard !parent.childArticles.contains(where: { $0.title == node.title && $0.level == node.level }) else {
+            debugPrint("Skipped duplicate article node: \(node.title)")
+            return
         }
-        
-        if !nodeAlreadyExists {
-            parentNode.childArticles.append(node)
-        } else {
-            debugPrint("Skipped adding duplicate article node: Title: \(node.title), Level: \(node.level)")
-        }
+        parent.childArticles.append(node)
     }
     
     private func getArticlePropertyName(from url: String) -> String {
@@ -339,50 +331,11 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
     }
 }
 
-extension NSString {
-    /// Returns a localized version of the URL if it's part of the osmand.net domain.
-    ///
-    /// Example:
-    /// ```
-    /// "https://docs.osmand.net/docs/user/widgets/configure-screen"
-    /// → "https://docs.osmand.net/uk/docs/user/widgets/configure-screen"
-    /// ```
-    ///
-    /// - Returns: A localized URL string if applicable, otherwise the original one.
-    @objc func localizedURLIfAvailable() -> NSString {
-        let urlString = self as String
-        let languageCode = "en"
-        
-        guard
-            var components = URLComponents(string: urlString),
-            let host = components.host?.lowercased(),
-            host.hasSuffix(kOsmAndHost),
-            /* let languageCode = OsmAndApp.swiftInstance().getLanguageCode()?.lowercased(), */
-            languageCode != "en"
-        else {
-            return self
-        }
-
-        let supportedLanguages = MenuHelpDataService.shared.languages.map { $0.lowercased() }
-        guard supportedLanguages.contains(languageCode) else {
-            return self
-        }
-
-        var path = components.path
-
-        // Ensure we don't duplicate the language prefix
-        if !path.hasPrefix("/\(languageCode)/") {
-            path = "/\(languageCode)\(path)"
-        }
-
-        components.path = path
-        return (components.url?.absoluteString ?? urlString) as NSString
-    }
-}
-
-extension String {
-    /// Swift-friendly wrapper that calls the Objective-C implementation under the hood.
-    func localizedURLIfAvailable() -> String {
-        (self as NSString).localizedURLIfAvailable() as String
-    }
+// MARK: - Named Errors
+extension MenuHelpDataService {
+    private static let errorDomain = "MenuHelpDataService"
+    
+    @objc static let errorInvalidURL = NSError(domain: errorDomain, code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid help structure URL"])
+    @objc static let errorNoData = NSError(domain: errorDomain, code: 2, userInfo: [NSLocalizedDescriptionKey: "No data received from server"])
+    @objc static let errorInvalidJSON = NSError(domain: errorDomain, code: 3, userInfo: [NSLocalizedDescriptionKey: "Invalid help structure JSON"])
 }

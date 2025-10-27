@@ -2671,7 +2671,7 @@
 "max_sensor_speed" = "Sensorhastighet, maks.";
 "help_article_map_routes_name" = "Ruter";
 "max_sensor_bycicle_power" = "Sykkeleffekt, maks.";
-"screen_is_unlocked" = "Pekeskjerm opplåst.";
+"screen_is_unlocked" = "Berøringsskjerm er låst opp.";
 "delete_widget" = "Slett miniprogram?";
 "add_widget_to_the_left" = "Legg til miniprogram til venstre";
 "with_waypoints" = "Med rutepunkter";
@@ -2790,7 +2790,7 @@
 "obd_fuel_level_percent" = "Tanknivå (%)";
 "obd_fuel_consumption_rate_sensor_desc" = "Viser kjøretøyets drivstoff-forbruk basert på sensor (l/t)";
 "route_guidance" = "Ruteveiledning";
-"obd_searching_text" = "Søker etter skannere …";
+"obd_searching_text" = "Søker etter skannere";
 "obd_fuel_consumption" = "Drivstofforbruk";
 "shared_string_other" = "Annet";
 "obd_fuel_type_methanol" = "Metanol";

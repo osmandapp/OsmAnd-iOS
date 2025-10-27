@@ -31,7 +31,7 @@ fi
 xcode_version=$(xcodebuild -version | grep "Xcode")
 
 # Using awk to extract only the Xcode version number
-xcode_version_number=$(echo "$xcode_version" | awk '{print $2}')
+xcode_version_number=$(echo "$xcode_version" | awk '{print $2}' | cut -d. -f1,2)
 
 # Comparing the version with 15.3
 if (( $(echo "$xcode_version_number >= 15.3" | bc -l) )); then

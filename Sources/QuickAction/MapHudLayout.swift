@@ -53,11 +53,9 @@ final class HudGridTestOverlay: UIView {
     
     override func draw(_ rect: CGRect) {
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
-        let logical = makeLogicalBounds()
-        let physical = makePhysicalBounds()
-        if cfg.showsEffectiveGrid, cfg.cellFixPx > 0 {
-            let effectiveFrame = makeCenteredEffectiveGridFrame(logical: logical)
-            drawGrid(in: ctx, frame: effectiveFrame, cell: cfg.cellSizePx, color: UIColor.systemOrange.withAlphaComponent(0.55))
+        let physical = UIEdgeInsets(top: cfg.statusBarHeight, left: cfg.safeAreaInsets.left, bottom: cfg.safeAreaInsets.bottom, right: cfg.safeAreaInsets.right)
+        if cfg.showsEffectiveGrid {
+            drawFourCornerGridColored(in: ctx)
         }
         
         guard cfg.showsSlots || cfg.showsFrames else { return }
@@ -75,30 +73,82 @@ final class HudGridTestOverlay: UIView {
         }
     }
     
-    private func makeLogicalBounds() -> CGRect {
-        let x0 = cfg.safeAreaInsets.left + cfg.defaultMarginPx
-        let x1 = bounds.width - cfg.safeAreaInsets.right - cfg.defaultMarginPx
-        let y0 = cfg.statusBarHeight + cfg.defaultMarginPx
-        let y1 = bounds.height - cfg.safeAreaInsets.bottom - cfg.defaultMarginPx
-        return CGRect(x: x0, y: y0, width: max(0, x1 - x0), height: max(0, y1 - y0))
-    }
-    
-    private func makePhysicalBounds() -> UIEdgeInsets {
-        UIEdgeInsets(top: cfg.statusBarHeight, left: cfg.safeAreaInsets.left, bottom: cfg.safeAreaInsets.bottom, right: cfg.safeAreaInsets.right)
-    }
-    
-    private func makeCenteredEffectiveGridFrame(logical: CGRect) -> CGRect {
-        let baseWidth = max(0, logical.width - 2 * cfg.cellFixPx)
-        let baseHeight = max(0, logical.height - 2 * cfg.cellFixPx - cfg.bottomOverlayPx)
-        let remW = baseWidth.truncatingRemainder(dividingBy: cfg.cellSizePx)
-        let remH = baseHeight.truncatingRemainder(dividingBy: cfg.cellSizePx)
-        let startX = logical.minX + cfg.cellFixPx + remW / 2
-        let startY = logical.minY + cfg.cellFixPx + remH / 2
-        let cols = floor((baseWidth - remW) / cfg.cellSizePx)
-        let rows = floor((baseHeight - remH) / cfg.cellSizePx)
-        let width = cols * cfg.cellSizePx
-        let height = rows * cfg.cellSizePx
-        return CGRect(x: startX, y: startY, width: width, height: height)
+    private func drawFourCornerGridColored(in ctx: CGContext) {
+        let cell = cfg.cellSizePx
+        guard cell > 0 else { return }
+        let left0 = cfg.safeAreaInsets.left + cfg.cellFixPx + cfg.defaultMarginPx
+        let right0 = bounds.width - cfg.safeAreaInsets.right - cfg.cellFixPx - cfg.defaultMarginPx
+        let top0 = cfg.statusBarHeight + cfg.cellFixPx + cfg.defaultMarginPx
+        let bottom0 = bounds.height - cfg.safeAreaInsets.bottom - cfg.cellFixPx - cfg.defaultMarginPx - cfg.bottomOverlayPx
+        guard left0 < right0, top0 < bottom0 else { return }
+        let midX = snapToPixel((left0 + right0) / 2)
+        let midY = snapToPixel((top0 + bottom0) / 2)
+        
+        func drawCorner(clip: CGRect, startX: CGFloat, stepX: CGFloat, startY: CGFloat, stepY: CGFloat, color: UIColor) {
+            guard clip.width > 0, clip.height > 0 else { return }
+            ctx.saveGState()
+            ctx.addRect(clip)
+            ctx.clip()
+            color.setStroke()
+            ctx.setLineWidth(1)
+            ctx.setShouldAntialias(false)
+            
+            var x = startX
+            if stepX > 0 {
+                while x <= clip.maxX {
+                    let sx = snapToPixel(x)
+                    ctx.move(to: CGPoint(x: sx, y: clip.minY))
+                    ctx.addLine(to: CGPoint(x: sx, y: clip.maxY))
+                    x += stepX
+                }
+            } else {
+                while x >= clip.minX {
+                    let sx = snapToPixel(x)
+                    ctx.move(to: CGPoint(x: sx, y: clip.minY))
+                    ctx.addLine(to: CGPoint(x: sx, y: clip.maxY))
+                    x += stepX
+                }
+            }
+            
+            var y = startY
+            if stepY > 0 {
+                while y <= clip.maxY {
+                    let sy = snapToPixel(y)
+                    ctx.move(to: CGPoint(x: clip.minX, y: sy))
+                    ctx.addLine(to: CGPoint(x: clip.maxX, y: sy))
+                    y += stepY
+                }
+            } else {
+                while y >= clip.minY {
+                    let sy = snapToPixel(y)
+                    ctx.move(to: CGPoint(x: clip.minX, y: sy))
+                    ctx.addLine(to: CGPoint(x: clip.maxX, y: sy))
+                    y += stepY
+                }
+            }
+            
+            ctx.strokePath()
+            ctx.restoreGState()
+        }
+        
+        let topLeftRect = CGRect(x: left0, y: top0, width: max(0, midX - left0), height: max(0, midY - top0))
+        let topRightRect = CGRect(x: midX, y: top0, width: max(0, right0 - midX), height: max(0, midY - top0))
+        let bottomLeftRect = CGRect(x: left0, y: midY, width: max(0, midX - left0), height: max(0, bottom0 - midY))
+        let bottomRightRect = CGRect(x: midX, y: midY, width: max(0, right0 - midX), height: max(0, bottom0 - midY))
+        drawCorner(clip: topLeftRect, startX: left0, stepX: cell, startY: top0, stepY: cell, color: UIColor.systemOrange.withAlphaComponent(0.9))
+        drawCorner(clip: topRightRect, startX: right0, stepX: -cell, startY: top0, stepY: cell, color: UIColor.systemGreen.withAlphaComponent(0.9))
+        drawCorner(clip: bottomLeftRect, startX: left0, stepX: cell, startY: bottom0, stepY: -cell, color: UIColor.systemPurple.withAlphaComponent(0.9))
+        drawCorner(clip: bottomRightRect, startX: right0, stepX: -cell, startY: bottom0, stepY: -cell, color: UIColor.systemYellow.withAlphaComponent(0.9))
+        ctx.saveGState()
+        UIColor.systemRed.withAlphaComponent(0.9).setStroke()
+        ctx.setLineWidth(1)
+        ctx.setShouldAntialias(false)
+        ctx.move(to: CGPoint(x: midX, y: snapToPixel(top0)))
+        ctx.addLine(to: CGPoint(x: midX, y: snapToPixel(bottom0)))
+        ctx.move(to: CGPoint(x: snapToPixel(left0), y: midY))
+        ctx.addLine(to: CGPoint(x: snapToPixel(right0), y: midY))
+        ctx.strokePath()
+        ctx.restoreGState()
     }
     
     private func makeSlotRect(item: Item, physical: UIEdgeInsets, cellFix: CGFloat) -> CGRect {
@@ -117,32 +167,6 @@ final class HudGridTestOverlay: UIView {
         let yA = snapToPixel(min(topEdge, bottomEdge))
         let yB = snapToPixel(max(topEdge, bottomEdge))
         return CGRect(x: xA, y: yA, width: max(0, xB - xA), height: max(0, yB - yA))
-    }
-    
-    private func drawGrid(in ctx: CGContext, frame: CGRect, cell: CGFloat, color: UIColor) {
-        guard frame.width > 0, frame.height > 0, cell > 0 else { return }
-        ctx.saveGState()
-        ctx.addRect(frame)
-        ctx.clip()
-        color.setStroke()
-        ctx.setLineWidth(1)
-        ctx.setShouldAntialias(false)
-        let cols = Int(floor(frame.width / cell))
-        let rows = Int(floor(frame.height / cell))
-        for i in 0...cols {
-            let x = snapToPixel(frame.minX + CGFloat(i) * cell)
-            ctx.move(to: CGPoint(x: x, y: snapToPixel(frame.minY)))
-            ctx.addLine(to: CGPoint(x: x, y: snapToPixel(frame.maxY)))
-        }
-        
-        for j in 0...rows {
-            let y = snapToPixel(frame.minY + CGFloat(j) * cell)
-            ctx.move(to: CGPoint(x: snapToPixel(frame.minX), y: y))
-            ctx.addLine(to: CGPoint(x: snapToPixel(frame.maxX), y: y))
-        }
-        
-        ctx.strokePath()
-        ctx.restoreGState()
     }
     
     private func drawFilledRect(in ctx: CGContext, rect: CGRect, fill: UIColor, stroke: UIColor) {
@@ -168,7 +192,6 @@ final class HudGridTestOverlay: UIView {
         ctx.restoreGState()
     }
     
-    @inline(__always)
     private func snapToPixel(_ value: CGFloat) -> CGFloat {
         let scale = contentScaleFactor > 0 ? contentScaleFactor : UIScreen.main.scale
         return (floor(value * scale) + 0.5) / scale

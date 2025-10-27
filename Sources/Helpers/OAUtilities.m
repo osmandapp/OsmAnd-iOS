@@ -46,15 +46,6 @@ static NSInteger const kShadowViewTag = -992;
 static NSInteger const kQuickActionButtonTag = -991;
 static NSInteger const kMap3DModeButtonTag = -990;
 
-NSString *const kRouteParamVehicleHeight = @"height";
-NSString *const kRouteParamVehicleWeight = @"weight";
-NSString *const kRouteParamVehicleWidth = @"width";
-NSString *const kRouteParamVehicleLength = @"length";
-NSString *const kRouteParamVehicleMotorType = @"motor_type";
-NSString *const kRouteParamVehicleMaxAxleLoad = @"maxaxleload";
-NSString *const kRouteParamVehicleWeightRating = @"weightrating";
-NSString *const kRouteParamVehicleFuelTankCapacity = @"fuel_tank_capacity";
-
 @implementation UIBezierPath (util)
 
 /**
@@ -3073,11 +3064,6 @@ static const double d180PI = 180.0 / M_PI_2;
     if ([res isEqualToString:key])
         res = defaultName;
     return res;
-}
-
-+ (BOOL)isWeightType:(NSString *)parameter
-{
-    return [parameter isEqualToString:kRouteParamVehicleWeight] || [parameter isEqualToString:kRouteParamVehicleMaxAxleLoad] || [parameter isEqualToString:kRouteParamVehicleWeightRating];
 }
 
 + (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2

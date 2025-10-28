@@ -713,7 +713,9 @@ typedef enum
 - (void)updateRepository
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"OAFirstUsageWizardController downloadOcbfIfUpdated start");
         [OAOcbfHelper downloadOcbfIfUpdated:^{
+            NSLog(@"OAFirstUsageWizardController downloadOcbfIfUpdated end");
             [_app loadWorldRegions];
             [_app startRepositoryUpdateAsync:NO];
         }];
@@ -792,7 +794,6 @@ typedef enum
                         item.sizePkg = resource->packageSize;
                         item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
                         item.worldRegion = selectedRegion;
-                        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
                         _localMapIndexItem = item;
                         break;
                     }

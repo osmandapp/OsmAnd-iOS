@@ -406,10 +406,11 @@ static BOOL dataInvalidated = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
+            NSLog(@"onRepositoryUpdated dataInvalidated");
             self.dataInvalidated = YES;
             return;
         }
-
+        NSLog(@"onRepositoryUpdated");
         [self updateContent];
     });
 }

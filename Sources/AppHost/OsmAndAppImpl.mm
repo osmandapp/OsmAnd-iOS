@@ -496,6 +496,7 @@ NSString *const kXmlColon = @"_-_";
                                                          (const OsmAnd::ResourcesManager* const resourcesManager)
                                                          {
                                                              [_resourcesRepositoryUpdatedObservable notifyEventWithKey:self];
+        NSLog(@"repositoryUpdateObservable");
                                                          });
     LogStartup(@"repositoryUpdateObservable attached");
 
@@ -1085,6 +1086,7 @@ NSString *const kXmlColon = @"_-_";
 - (void)startRepositoryUpdateAsync:(BOOL)async
 {
     _isRepositoryUpdating = YES;
+    NSLog(@"_isRepositoryUpdating = YES");
     
     if (async)
     {
@@ -1094,6 +1096,7 @@ NSString *const kXmlColon = @"_-_";
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 _isRepositoryUpdating = NO;
+                NSLog(@"_isRepositoryUpdating = NO");
             });
         });
     }
@@ -1101,6 +1104,7 @@ NSString *const kXmlColon = @"_-_";
     {
         self.resourcesManager->updateRepository();
         _isRepositoryUpdating = NO;
+        NSLog(@"_isRepositoryUpdating = NO");
     }
 }
 

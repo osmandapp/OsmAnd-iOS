@@ -152,6 +152,7 @@ static NSString * const maxSpeedKey = @"maxSpeed";
 static NSString * const routeStraightAngleKey = @"routeStraightAngle";
 
 static NSString * const profileIconSizeKey = @"profileIconSizeKey";
+static NSString * const locationIconSizeKey = @"locationIconSizeKey";
 
 static NSString * const rendererKey = @"renderer";
 
@@ -5370,6 +5371,8 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         
         _profileIconSize = [OACommonDouble withKey:profileIconSizeKey defValue:1.0];
         [_profilePreferences setObject:_profileIconSize forKey:@"profile_icon_size"];
+        _locationIconSize = [OACommonDouble withKey:locationIconSizeKey defValue:1.0];
+        [_profilePreferences setObject:_locationIconSize forKey:@"location_icon_size"];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
         _profileCustomIconColor = [OACommonInteger withKey:profileCustomIconColorKey defValue:-1];

@@ -35,11 +35,14 @@ static const int kLocationIconSectionIndex = 3;
 static const int kNavigationIconSectionIndex = 4;
 static const int kOptionsSectionIndex = 5;
 
+static const CGFloat kLeftTitleSpace = 4;
+
 static NSString *kColorsCellKey =  @"kColorsCellKey";
 static NSString *kProfileIconCellKey =  @"kProfileIconCellKey";
 static NSString *kPositionIconCellKey =  @"kPositionIconCellKey";
 static NSString *kPositionIconSizeCellKey =  @"kPositionIconSizeCellKey";
 static NSString *kLocationIconCellKey =  @"kLocationIconCellKey";
+static NSString *kLocationIconSizeCellKey =  @"kLocationIconSizeCellKey";
 static NSString *kViewAngleCellKey =  @"kViewAngleButtonKey";
 static NSString *kLocationRadiusCellKey =  @"kLocationRadiusButtonKey";
 
@@ -387,6 +390,13 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         kCellTitleKey : OALocalizedString(@"navigation_position_icon_summary"),
         kCellDescrKey : OALocalizedString(@"shared_string_all_icons"),
         kCellKeyKey : kLocationIconCellKey,
+    }];
+    [navigationIconsSection addRowFromDictionary:@{
+        kCellTypeKey: [OAValueTableViewCell reuseIdentifier],
+        kCellTitleKey: OALocalizedString(@"shared_string_size"),
+        kCellDescrKey: [OAUtilities getPercentString:[_settings.locationIconSize get:_appMode]],
+        kCellTitleColorKey: [UIColor colorNamed:ACColorNameTextColorActive],
+        kCellKeyKey: kLocationIconSizeCellKey,
     }];
 
     OATableSectionData *optionsSection = [_data createNewSection];
@@ -833,13 +843,13 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         }
         if (cell)
         {
-            BOOL isSize = item.key == kPositionIconSizeCellKey;
+            BOOL isSize = item.key == kPositionIconSizeCellKey || kLocationIconSizeCellKey;
             cell.titleLabel.text = item.title;
             cell.titleLabel.textColor = (UIColor *)[item objForKey:kCellTitleColorKey];
             cell.valueLabel.text = item.descr;
             cell.leftIconView.tintColor = item.iconTintColor;
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            [cell leftTitleSpace:isSize ? 4 : 0];
+            [cell leftTitleSpace:isSize ? kLeftTitleSpace : 0];
             [cell leftIconVisibility:item.iconName];
             return cell;
         }

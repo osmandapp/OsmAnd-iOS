@@ -15,7 +15,7 @@ final class MapHudLayout: NSObject {
     private let hudBasePaddingDp: CGFloat = 16.0
     private let tablet: Bool
     
-    private var gridOverlay: HudGridTestOverlay?
+    private var gridOverlay: HudGridOverlay?
     private var statusBarHeight: CGFloat
     private var portrait: Bool
     private var lastWidth: CGFloat = 0
@@ -501,6 +501,8 @@ final class MapHudLayout: NSObject {
 
 extension MapHudLayout {
     
+    // MARK: - HudGridOverlay
+    
     struct DebugFlags {
         var effective: Bool
         var slots: Bool
@@ -529,9 +531,9 @@ extension MapHudLayout {
         containerView.bringSubviewToFront(overlay)
     }
     
-    private func ensureDebugOverlay() -> HudGridTestOverlay {
+    private func ensureDebugOverlay() -> HudGridOverlay {
         guard let gridOverlay else {
-            let overlay = HudGridTestOverlay(frame: containerView.bounds)
+            let overlay = HudGridOverlay(frame: containerView.bounds)
             overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             containerView.addSubview(overlay)
             self.gridOverlay = overlay
@@ -546,7 +548,7 @@ extension MapHudLayout {
         gridOverlay = nil
     }
     
-    private func applyGeometry(to overlay: HudGridTestOverlay) {
+    private func applyGeometry(to overlay: HudGridOverlay) {
         var cfg = overlay.cfg
         cfg.cellSizePx = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP) * dpToPx
         cfg.defaultMarginPx = CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP) * dpToPx
@@ -557,10 +559,10 @@ extension MapHudLayout {
         overlay.cfg = cfg
     }
     
-    private func makeItems(from map: [UIView: ButtonPositionSize]) -> [HudGridTestOverlay.Item] {
+    private func makeItems(from map: [UIView: ButtonPositionSize]) -> [HudGridOverlay.Item] {
         map.compactMap { (view, pos) in
             guard view is OAHudButton || view is OAMapRulerView || view is OADownloadMapWidget else { return nil }
-            return HudGridTestOverlay.Item(view: view, position: pos, dpToPx: dpToPx)
+            return HudGridOverlay.Item(view: view, position: pos, dpToPx: dpToPx)
         }
     }
     

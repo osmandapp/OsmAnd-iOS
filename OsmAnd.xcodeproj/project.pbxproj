@@ -1483,7 +1483,7 @@
 		C5ACFCD52AD59F2200EA92F6 /* list_warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */; };
 		C5ACFCD72AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */; };
 		C5AD0F162EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AD0F152EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift */; };
-		C5AD0F232EAFE368006FB675 /* HudGridTestOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AD0F222EAFE368006FB675 /* HudGridTestOverlay.swift */; };
+		C5AD0F232EAFE368006FB675 /* HudGridOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AD0F222EAFE368006FB675 /* HudGridOverlay.swift */; };
 		C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */; };
 		C5AF907B2A25E8C400989A86 /* OAKeyboardHintBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */; };
 		C5B2AA5F2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2AA5E2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift */; };
@@ -5295,7 +5295,7 @@
 		C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@3x.png"; path = "Resources/Icons/list_warnings_tunnel@3x.png"; sourceTree = "<group>"; };
 		C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@2x.png"; path = "Resources/Icons/list_warnings_tunnel@2x.png"; sourceTree = "<group>"; };
 		C5AD0F152EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonGridVisualizationSettingsViewController.swift; sourceTree = "<group>"; };
-		C5AD0F222EAFE368006FB675 /* HudGridTestOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudGridTestOverlay.swift; sourceTree = "<group>"; };
+		C5AD0F222EAFE368006FB675 /* HudGridOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudGridOverlay.swift; sourceTree = "<group>"; };
 		C5AF90772A25E8A100989A86 /* OAKeyboardHintBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAKeyboardHintBar.h; sourceTree = "<group>"; };
 		C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAKeyboardHintBar.m; sourceTree = "<group>"; };
 		C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAKeyboardHintBar.xib; sourceTree = "<group>"; };
@@ -11243,7 +11243,7 @@
 				DA5A7A1F26C563A000F274C7 /* OAMapButtonsHelper.h */,
 				DA5A79D526C563A000F274C7 /* OAMapButtonsHelper.m */,
 				C5C81F812E4CE087009D3439 /* MapHudLayout.swift */,
-				C5AD0F222EAFE368006FB675 /* HudGridTestOverlay.swift */,
+				C5AD0F222EAFE368006FB675 /* HudGridOverlay.swift */,
 				460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */,
 				464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */,
 				466A017F2BFBA9B7008CC50E /* QuickActionType.swift */,
@@ -17172,7 +17172,7 @@
 				DA5A83CD26C563A800F274C7 /* OATransportRouteController.mm in Sources */,
 				DA5A81C326C563A700F274C7 /* OAPOILocationType.mm in Sources */,
 				FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */,
-				C5AD0F232EAFE368006FB675 /* HudGridTestOverlay.swift in Sources */,
+				C5AD0F232EAFE368006FB675 /* HudGridOverlay.swift in Sources */,
 				C556C85329BA0844006794D5 /* OASunriseSunsetWidget.mm in Sources */,
 				DA5A848926C563A900F274C7 /* OASaveTrackViewController.mm in Sources */,
 				C5C9BB912DF9A087003B7550 /* OBDTextWidget.swift in Sources */,

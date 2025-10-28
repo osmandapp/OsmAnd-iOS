@@ -1,5 +1,5 @@
 //
-//  HudGridTestOverlay.swift
+//  HudGridOverlay.swift
 //  OsmAnd Maps
 //
 //  Created by Dmitry Svetlichny on 27.10.2025.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class HudGridTestOverlay: UIView {
+final class HudGridOverlay: UIView {
     
     struct Config: Equatable {
         var cellSizePx: CGFloat = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP)
@@ -140,7 +140,7 @@ final class HudGridTestOverlay: UIView {
         drawCorner(clip: bottomLeftRect, startX: left0, stepX: cell, startY: bottom0, stepY: -cell, color: UIColor.systemOrange.withAlphaComponent(0.9))
         drawCorner(clip: bottomRightRect, startX: right0, stepX: -cell, startY: bottom0, stepY: -cell, color: UIColor.systemOrange.withAlphaComponent(0.9))
         ctx.saveGState()
-        UIColor.systemGray.withAlphaComponent(0.9).setStroke()
+        UIColor.systemGray.withAlphaComponent(0.5).setStroke()
         ctx.setLineWidth(1)
         ctx.setShouldAntialias(false)
         ctx.move(to: CGPoint(x: midX, y: snapToPixel(top0)))

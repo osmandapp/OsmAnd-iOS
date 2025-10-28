@@ -6,8 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import UIKit
-
 @objcMembers
 final class ButtonGridVisualizationSettingsViewController: OABaseNavbarViewController {
     private static let effective = "effective"
@@ -32,15 +30,10 @@ final class ButtonGridVisualizationSettingsViewController: OABaseNavbarViewContr
     }
     
     override func commonInit() {
-        if let live = hudLayout?.currentDebugFlags() {
-            showEffective = live.effective
-            showSlots = live.slots
-            showFrames = live.frames
-        } else {
-            showEffective = false
-            showSlots = false
-            showFrames = false
-        }
+        guard let live = hudLayout?.currentDebugFlags() else { return }
+        showEffective = live.effective
+        showSlots = live.slots
+        showFrames = live.frames
     }
     
     override func registerCells() {

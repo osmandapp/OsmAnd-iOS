@@ -454,6 +454,8 @@ static inline void executeOnMainThread(dispatch_block_t block)
 
 + (NSString *) generateCurrentDateFilename;
 
++ (NSString *)getPercentString:(double)value;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -151,6 +151,8 @@ static NSString * const minSpeedKey = @"minSpeed";
 static NSString * const maxSpeedKey = @"maxSpeed";
 static NSString * const routeStraightAngleKey = @"routeStraightAngle";
 
+static NSString * const profileIconSizeKey = @"profileIconSizeKey";
+
 static NSString * const rendererKey = @"renderer";
 
 // navigation settings
@@ -5365,6 +5367,9 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_profileIconName setModeDefaultValue:@"ic_action_motorcycle_dark" mode:OAApplicationMode.MOTORCYCLE];
         [_profileIconName setModeDefaultValue:@"ic_action_motor_scooter" mode:OAApplicationMode.MOPED];
         [_profileIconName setModeDefaultValue:@"ic_action_horse" mode:OAApplicationMode.HORSE];
+        
+        _profileIconSize = [OACommonDouble withKey:profileIconSizeKey defValue:1.0];
+        [_profilePreferences setObject:_profileIconSize forKey:@"profile_icon_size"];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
         _profileCustomIconColor = [OACommonInteger withKey:profileCustomIconColorKey defValue:-1];

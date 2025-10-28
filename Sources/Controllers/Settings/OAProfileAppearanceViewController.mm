@@ -38,6 +38,7 @@ static const int kOptionsSectionIndex = 5;
 static NSString *kColorsCellKey =  @"kColorsCellKey";
 static NSString *kProfileIconCellKey =  @"kProfileIconCellKey";
 static NSString *kPositionIconCellKey =  @"kPositionIconCellKey";
+static NSString *kPositionIconSizeCellKey =  @"kPositionIconSizeCellKey";
 static NSString *kLocationIconCellKey =  @"kLocationIconCellKey";
 static NSString *kViewAngleCellKey =  @"kViewAngleButtonKey";
 static NSString *kLocationRadiusCellKey =  @"kLocationRadiusButtonKey";
@@ -146,6 +147,9 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     OAApplicationProfileObject *_profile;
     OAApplicationProfileObject *_changedProfile;
     
+    OAAppSettings *_settings;
+    OAApplicationMode *_appMode;
+    
     BOOL _isNewProfile;
     BOOL _hasChangesBeenMade;
     
@@ -182,7 +186,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         
         [self setupChangedProfile];
         
-        [self commonInit];
+        [self commonInit:profile];
     }
     return self;
 }
@@ -197,7 +201,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         
         [self setupChangedProfile];
         
-        [self commonInit];
+        [self commonInit:profile];
     }
     return self;
 }
@@ -239,8 +243,10 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _profile.locationRadiusVisibility = [baseModeForNewProfile getLocationRadiusVisibility];
 }
 
-- (void) commonInit
+- (void) commonInit:(OAApplicationMode *)appMode
 {
+    _settings = [OAAppSettings sharedManager];
+    _appMode = appMode;
     [self prepareData];
 }
 
@@ -338,33 +344,40 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *profileNameSection = [_data createNewSection];
     [profileNameSection addRowFromDictionary:@{
-        kCellTypeKey : [OAInputTableViewCell getCellIdentifier],
-        kCellTitleKey : _changedProfile.name,
+        kCellTypeKey: [OAInputTableViewCell reuseIdentifier],
+        kCellTitleKey: _changedProfile.name,
     }];
     
     OATableSectionData *profileColorSection = [_data createNewSection];
     [profileColorSection addRowFromDictionary:@{
-        kCellTypeKey : [OAColorsPaletteCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"shared_string_color"),
-        kCellDescrKey : OALocalizedString(@"shared_string_all_colors"),
-        kCellKeyKey : kColorsCellKey,
+        kCellTypeKey: [OAColorsPaletteCell reuseIdentifier],
+        kCellTitleKey: OALocalizedString(@"shared_string_color"),
+        kCellDescrKey: OALocalizedString(@"shared_string_all_colors"),
+        kCellKeyKey: kColorsCellKey,
     }];
     
     OATableSectionData *profileIconSection = [_data createNewSection];
     [profileIconSection addRowFromDictionary:@{
-        kCellTypeKey : [OAIconsPaletteCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"profile_icon"),
-        kCellDescrKey : OALocalizedString(@"shared_string_all_icons"),
-        kCellKeyKey : kProfileIconCellKey,
+        kCellTypeKey: [OAIconsPaletteCell reuseIdentifier],
+        kCellTitleKey: OALocalizedString(@"profile_icon"),
+        kCellDescrKey: OALocalizedString(@"shared_string_all_icons"),
+        kCellKeyKey: kProfileIconCellKey,
     }];
     
     OATableSectionData *positionIconsSection = [_data createNewSection];
     [positionIconsSection addRowFromDictionary:@{
-        kCellHeaderTitleKey : OALocalizedString(@"resting_position_icon"),
-        kCellTypeKey : [OAIconsPaletteCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"resting_position_icon_summary"),
-        kCellDescrKey : OALocalizedString(@"shared_string_all_icons"),
-        kCellKeyKey : kPositionIconCellKey,
+        kCellHeaderTitleKey: OALocalizedString(@"resting_position_icon"),
+        kCellTypeKey: [OAIconsPaletteCell reuseIdentifier],
+        kCellTitleKey: OALocalizedString(@"resting_position_icon_summary"),
+        kCellDescrKey: OALocalizedString(@"shared_string_all_icons"),
+        kCellKeyKey: kPositionIconCellKey,
+    }];
+    [positionIconsSection addRowFromDictionary:@{
+        kCellTypeKey: [OAValueTableViewCell reuseIdentifier],
+        kCellTitleKey: OALocalizedString(@"shared_string_size"),
+        kCellDescrKey: [OAUtilities getPercentString:[_settings.profileIconSize get:_appMode]],
+        kCellTitleColorKey: [UIColor colorNamed:ACColorNameTextColorActive],
+        kCellKeyKey: kPositionIconSizeCellKey,
     }];
     
     OATableSectionData *navigationIconsSection = [_data createNewSection];
@@ -820,10 +833,14 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         }
         if (cell)
         {
+            BOOL isSize = item.key == kPositionIconSizeCellKey;
             cell.titleLabel.text = item.title;
+            cell.titleLabel.textColor = (UIColor *)[item objForKey:kCellTitleColorKey];
             cell.valueLabel.text = item.descr;
             cell.leftIconView.tintColor = item.iconTintColor;
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            [cell leftTitleSpace:isSize ? 4 : 0];
+            [cell leftIconVisibility:item.iconName];
             return cell;
         }
     }

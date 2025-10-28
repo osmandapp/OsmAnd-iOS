@@ -11593,6 +11593,7 @@
 		DA5A7AB226C563A100F274C7 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
+				32A75F5E2EB0FD5200843987 /* GpxAppearanceInfo.swift */,
 				FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */,
 				4695B25E2CF0A5CB003FB38A /* TrackChartHelper.swift */,
 				DA5A7AC026C563A100F274C7 /* OAGPXDatabase.h */,
@@ -17932,6 +17933,7 @@
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,
 				DA2EC47B29FBB90A00ECEB37 /* WidgetType.swift in Sources */,
 				4631377929AE6D8A000B0258 /* OACarPlayHistoryListController.mm in Sources */,
+				32A75F5F2EB0FD5200843987 /* GpxAppearanceInfo.swift in Sources */,
 				C575798C2D64A0A30016957D /* TracksChangeAppearanceViewController.swift in Sources */,
 				DA5A834026C563A800F274C7 /* OAFolderCardCollectionViewCell.m in Sources */,
 				DA5A849226C563A900F274C7 /* OAMeasurementEditingContext.mm in Sources */,

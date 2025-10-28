@@ -55,7 +55,7 @@ final class HudGridTestOverlay: UIView {
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
         let physical = UIEdgeInsets(top: cfg.statusBarHeight, left: cfg.safeAreaInsets.left, bottom: cfg.safeAreaInsets.bottom, right: cfg.safeAreaInsets.right)
         if cfg.showsEffectiveGrid {
-            drawFourCornerGridColored(in: ctx)
+            drawFourCornerGrid(in: ctx)
         }
         
         guard cfg.showsSlots || cfg.showsFrames else { return }
@@ -73,7 +73,7 @@ final class HudGridTestOverlay: UIView {
         }
     }
     
-    private func drawFourCornerGridColored(in ctx: CGContext) {
+    private func drawFourCornerGrid(in ctx: CGContext) {
         let cell = cfg.cellSizePx
         guard cell > 0 else { return }
         let left0 = cfg.safeAreaInsets.left + cfg.cellFixPx + cfg.defaultMarginPx
@@ -136,11 +136,11 @@ final class HudGridTestOverlay: UIView {
         let bottomLeftRect = CGRect(x: left0, y: midY, width: max(0, midX - left0), height: max(0, bottom0 - midY))
         let bottomRightRect = CGRect(x: midX, y: midY, width: max(0, right0 - midX), height: max(0, bottom0 - midY))
         drawCorner(clip: topLeftRect, startX: left0, stepX: cell, startY: top0, stepY: cell, color: UIColor.systemOrange.withAlphaComponent(0.9))
-        drawCorner(clip: topRightRect, startX: right0, stepX: -cell, startY: top0, stepY: cell, color: UIColor.systemGreen.withAlphaComponent(0.9))
-        drawCorner(clip: bottomLeftRect, startX: left0, stepX: cell, startY: bottom0, stepY: -cell, color: UIColor.systemPurple.withAlphaComponent(0.9))
-        drawCorner(clip: bottomRightRect, startX: right0, stepX: -cell, startY: bottom0, stepY: -cell, color: UIColor.systemYellow.withAlphaComponent(0.9))
+        drawCorner(clip: topRightRect, startX: right0, stepX: -cell, startY: top0, stepY: cell, color: UIColor.systemOrange.withAlphaComponent(0.9))
+        drawCorner(clip: bottomLeftRect, startX: left0, stepX: cell, startY: bottom0, stepY: -cell, color: UIColor.systemOrange.withAlphaComponent(0.9))
+        drawCorner(clip: bottomRightRect, startX: right0, stepX: -cell, startY: bottom0, stepY: -cell, color: UIColor.systemOrange.withAlphaComponent(0.9))
         ctx.saveGState()
-        UIColor.systemRed.withAlphaComponent(0.9).setStroke()
+        UIColor.systemGray.withAlphaComponent(0.9).setStroke()
         ctx.setLineWidth(1)
         ctx.setShouldAntialias(false)
         ctx.move(to: CGPoint(x: midX, y: snapToPixel(top0)))

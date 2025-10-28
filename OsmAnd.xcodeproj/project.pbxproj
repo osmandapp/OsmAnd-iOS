@@ -491,6 +491,7 @@
 		32A365B42B07B4F500485401 /* ic_custom_extension_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A365B02B07B4F500485401 /* ic_custom_extension_outlined@3x.png */; };
 		32A365B52B07B4F500485401 /* ic_custom_help_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A365B12B07B4F500485401 /* ic_custom_help_outlined@3x.png */; };
 		32A46BC02C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A46BBF2C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm */; };
+		32A75F5F2EB0FD5200843987 /* GpxAppearanceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A75F5E2EB0FD5200843987 /* GpxAppearanceInfo.swift */; };
 		32A7EE0F261BBF5D00F7A697 /* bg_point_circle_contour@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE0D261BBF5C00F7A697 /* bg_point_circle_contour@2x.png */; };
 		32A7EE10261BBF5D00F7A697 /* bg_point_circle_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE0E261BBF5D00F7A697 /* bg_point_circle_contour@3x.png */; };
 		32A7EE15261BBF6C00F7A697 /* bg_point_octagon_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE13261BBF6B00F7A697 /* bg_point_octagon_contour@3x.png */; };
@@ -4030,6 +4031,7 @@
 		32A365B12B07B4F500485401 /* ic_custom_help_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_help_outlined@3x.png"; path = "Resources/Icons/ic_custom_help_outlined@3x.png"; sourceTree = SOURCE_ROOT; };
 		32A46BBE2C6BA422000FC20B /* OAWeatherTimeSegmentedSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWeatherTimeSegmentedSlider.h; sourceTree = "<group>"; };
 		32A46BBF2C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherTimeSegmentedSlider.mm; sourceTree = "<group>"; };
+		32A75F5E2EB0FD5200843987 /* GpxAppearanceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxAppearanceInfo.swift; sourceTree = "<group>"; };
 		32A7863D27452C4E00FE7881 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		32A7EE0D261BBF5C00F7A697 /* bg_point_circle_contour@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle_contour@2x.png"; path = "Resources/Icons/bg_point_circle_contour@2x.png"; sourceTree = "<group>"; };
 		32A7EE0E261BBF5D00F7A697 /* bg_point_circle_contour@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle_contour@3x.png"; path = "Resources/Icons/bg_point_circle_contour@3x.png"; sourceTree = "<group>"; };
@@ -11580,6 +11582,7 @@
 		DA5A7AB226C563A100F274C7 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
+				32A75F5E2EB0FD5200843987 /* GpxAppearanceInfo.swift */,
 				FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */,
 				4695B25E2CF0A5CB003FB38A /* TrackChartHelper.swift */,
 				DA5A7AC026C563A100F274C7 /* OAGPXDatabase.h */,
@@ -17902,6 +17905,7 @@
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,
 				DA2EC47B29FBB90A00ECEB37 /* WidgetType.swift in Sources */,
 				4631377929AE6D8A000B0258 /* OACarPlayHistoryListController.mm in Sources */,
+				32A75F5F2EB0FD5200843987 /* GpxAppearanceInfo.swift in Sources */,
 				C575798C2D64A0A30016957D /* TracksChangeAppearanceViewController.swift in Sources */,
 				DA5A834026C563A800F274C7 /* OAFolderCardCollectionViewCell.m in Sources */,
 				DA5A849226C563A900F274C7 /* OAMeasurementEditingContext.mm in Sources */,

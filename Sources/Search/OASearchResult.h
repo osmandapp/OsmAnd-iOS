@@ -13,9 +13,9 @@
 #import "OAObjectType.h"
 
 // MAX_TYPES_BASE_10 should be > ObjectType.getTypeWeight(objectType) = 5
-#define MAX_TYPES_BASE_10 10
+static double const MAX_TYPES_BASE_10 = 10.0;
 // MAX_PHRASE_WEIGHT_TOTAL should be  > getSumPhraseMatchWeight
-#define MAX_PHRASE_WEIGHT_TOTAL MAX_TYPES_BASE_10 * MAX_TYPES_BASE_10
+static double const MAX_PHRASE_WEIGHT_TOTAL = MAX_TYPES_BASE_10 * MAX_TYPES_BASE_10;
 
 typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
     EOASearchResultResourceDetailed,

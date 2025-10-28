@@ -405,6 +405,7 @@ static BOOL _repositoryUpdated = NO;
         }
         else if (_app.isRepositoryUpdating)
         {
+            NSLog(@"OAManageResourcesViewController viewDidAppear isRepositoryUpdating show:YES");
             _repositoryUpdating = YES;
             _updateButton.enabled = NO;
             [_refreshRepositoryProgressHUD show:YES];
@@ -634,6 +635,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) updateContent
 {
+    NSLog(@"updateContent");
     _doDataUpdate = YES;
     _customRegions = [OAPluginsHelper getCustomDownloadRegions];
     [self updateMultipleResources];
@@ -649,7 +651,7 @@ static BOOL _repositoryUpdated = NO;
     {
         _repositoryUpdating = NO;
         _updateButton.enabled = YES;
-
+        NSLog(@"OAManageResourcesViewController updateContent _refreshRepositoryProgressHUD hide:YES");
         [_refreshRepositoryProgressHUD hide:YES];
     }
 }
@@ -1803,12 +1805,16 @@ static BOOL _repositoryUpdated = NO;
 {
     _doDataUpdateReload = YES;
     _updateButton.enabled = NO;
+    NSLog(@"OAManageResourcesViewController updateRepository _refreshRepositoryProgressHUD show:YES");
     [_refreshRepositoryProgressHUD show:YES];
+    NSLog(@"OAManageResourcesViewController downloadOcbfIfUpdated start");
     [OAOcbfHelper downloadOcbfIfUpdated:^{
+        NSLog(@"OAManageResourcesViewController downloadOcbfIfUpdated end");
         [_app loadWorldRegions];
         self.region = _app.worldRegion;
         [_app startRepositoryUpdateAsync:NO];
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"OAManageResourcesViewController updateRepository _refreshRepositoryProgressHUD hide:YES");
             [_refreshRepositoryProgressHUD hide:YES];
             [self updateContent];
             [_app.worldRegion buildResourceGroupItem];

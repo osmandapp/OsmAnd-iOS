@@ -499,9 +499,9 @@ final class MapHudLayout: NSObject {
     }
 }
 
+// MARK: - Debug
+
 extension MapHudLayout {
-    
-    // MARK: - HudGridOverlay
     
     struct DebugFlags {
         var effective: Bool

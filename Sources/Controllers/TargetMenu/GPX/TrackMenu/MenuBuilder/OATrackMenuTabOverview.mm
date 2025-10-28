@@ -223,7 +223,8 @@
             || [routeTagKey isEqualToString:@"color"]
             || [routeTagKey hasPrefix:@"osmand"]
             || [routeTagKey isEqualToString:@"type"]
-            || [routeTagKey hasPrefix:@"shield_"])
+            || [routeTagKey hasPrefix:@"shield_"]
+            || [GpxAppearanceInfo isGpxAppearanceTag:routeTagKey])
             continue;
 
         if ([routeTagKey containsString:@":"] && ![routeTagKey hasPrefix:@"name"] && ![routeTagKey hasPrefix:@"ref"])

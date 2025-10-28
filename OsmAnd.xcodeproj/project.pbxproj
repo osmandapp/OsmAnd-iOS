@@ -10407,7 +10407,6 @@
 		DA0133122A20E1E900920C14 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				C5AD0F242EB0DC58006FB675 /* MapHudLayout */,
 				DA8DC3992A0D0875006C116B /* MarkerWidgetsHelper.swift */,
 				DAABE4E12A13752000569F71 /* OAAverageSpeedComputer.h */,
 				DAABE4E22A13752000569F71 /* OAAverageSpeedComputer.m */,
@@ -13574,6 +13573,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C5AD0F242EB0DC58006FB675 /* MapHudLayout */,
 				FA9FA5982E97D11400376C47 /* MapScrollHelper.swift */,
 				FA39D2962E819B030095DF8E /* ErrorHelper.swift */,
 				FA82B9172E74197A00A250F1 /* ImageLoading */,

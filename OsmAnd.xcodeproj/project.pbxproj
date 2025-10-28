@@ -460,6 +460,7 @@
 		327D68AB2A8FB9020076D1E0 /* ArticleTravelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 327D68A82A8FB7910076D1E0 /* ArticleTravelCell.xib */; };
 		327DF98A2C2494C800B5069C /* RouteParameterHazmatUsa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327DF9892C2494C800B5069C /* RouteParameterHazmatUsa.swift */; };
 		32839A372AF0F911007B5057 /* WikiImageCacheHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32839A362AF0F911007B5057 /* WikiImageCacheHelper.swift */; };
+		3284BEBC2EABA3300011A9BA /* GpxAppearanceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3284BEBB2EABA32C0011A9BA /* GpxAppearanceInfo.swift */; };
 		328BD49529D5AC6400045871 /* OATripRecordingDistanceWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */; };
 		328EE34A2E169049003CDB48 /* ClickableWay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328EE3492E169049003CDB48 /* ClickableWay.swift */; };
 		328EE34C2E16AE64003CDB48 /* BaseDetailsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328EE34B2E16AE64003CDB48 /* BaseDetailsObject.swift */; };
@@ -3977,6 +3978,7 @@
 		327D68A92A8FB8180076D1E0 /* ArticleTravelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleTravelCell.swift; sourceTree = "<group>"; };
 		327DF9892C2494C800B5069C /* RouteParameterHazmatUsa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParameterHazmatUsa.swift; sourceTree = "<group>"; };
 		32839A362AF0F911007B5057 /* WikiImageCacheHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiImageCacheHelper.swift; sourceTree = "<group>"; };
+		3284BEBB2EABA32C0011A9BA /* GpxAppearanceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxAppearanceInfo.swift; sourceTree = "<group>"; };
 		328BD49329D5AC5500045871 /* OATripRecordingDistanceWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingDistanceWidget.h; sourceTree = "<group>"; };
 		328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATripRecordingDistanceWidget.m; sourceTree = "<group>"; };
 		328EE3492E169049003CDB48 /* ClickableWay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickableWay.swift; sourceTree = "<group>"; };

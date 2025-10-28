@@ -3335,6 +3335,7 @@
 		FACB02AA2D54C52000EBE87F /* ImageCache+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */; };
 		FACB02AC2D54F71C00EBE87F /* DownloadImageMetadataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */; };
 		FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */; };
+		FACBDBDA2EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */; };
 		FACDC63D2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAD258A82D7856EE001C875F /* vi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = FAD258A72D7856EE001C875F /* vi_tts.js */; };
@@ -8036,6 +8037,7 @@
 		FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCache+Extension.swift"; sourceTree = "<group>"; };
 		FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageMetadataService.swift; sourceTree = "<group>"; };
 		FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
+		FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+LocalizedDocs.swift"; sourceTree = "<group>"; };
 		FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsDescriptionViewController.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
@@ -13962,6 +13964,7 @@
 		DAABE4EC2A16578A00569F71 /* SwiftExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */,
 				FA82B9152E74132200A250F1 /* ByteCountFormatter+Extension.swift */,
 				FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */,
 				FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */,
@@ -17468,6 +17471,7 @@
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
 				323F04CC2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift in Sources */,
+				FACBDBDA2EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift in Sources */,
 				465749122B681E620006046B /* TrashGroup.swift in Sources */,
 				DA5A83F326C563A800F274C7 /* OARearrangeCustomFiltersViewController.mm in Sources */,
 				DA5A820426C563A700F274C7 /* OABaseFeatureCardView.m in Sources */,

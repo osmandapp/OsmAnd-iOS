@@ -172,7 +172,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         if let key = item.key {
             if let item = ExternalSensorsCellData(rawValue: key) {
                 if case .learnMore = item {
-                    guard let settingsURL = URL(string: docsVehicleMetricsURL) else {
+                    guard let settingsURL = URL(string: docsExternalSensorsURL.localizedURLIfAvailable()) else {
                         return
                     }
                     let safariViewController = SFSafariViewController(url: settingsURL)

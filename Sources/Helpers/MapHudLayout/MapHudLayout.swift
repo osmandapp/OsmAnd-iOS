@@ -15,6 +15,7 @@ final class MapHudLayout: NSObject {
     private let hudBasePaddingDp: CGFloat = 16.0
     private let tablet: Bool
     
+    private var gridOverlay: HudGridOverlay?
     private var statusBarHeight: CGFloat
     private var portrait: Bool
     private var lastWidth: CGFloat = 0
@@ -441,6 +442,8 @@ final class MapHudLayout: NSObject {
 
             updateButtonParams(for: view, with: pos)
         }
+
+        refreshDebugOverlayIfNeeded(positionMap: positionMap)
     }
     
     func updateButton(_ button: OAHudButton, save: Bool) {
@@ -493,5 +496,85 @@ final class MapHudLayout: NSObject {
         } else {
             updateButtons()
         }
+    }
+}
+
+// MARK: - Debug
+
+extension MapHudLayout {
+    
+    struct DebugFlags {
+        var effective: Bool
+        var slots: Bool
+        var frames: Bool
+    }
+    
+    func currentDebugFlags() -> DebugFlags? {
+        guard let cfg = gridOverlay?.cfg else { return nil }
+        return .init(effective: cfg.showsEffectiveGrid, slots: cfg.showsSlots, frames: cfg.showsFrames)
+    }
+    
+    func setDebugOverlay(effective: Bool, slots: Bool, frames: Bool) {
+        guard effective || slots || frames else {
+            removeDebugOverlay()
+            return
+        }
+        
+        let overlay = ensureDebugOverlay()
+        var cfg = overlay.cfg
+        cfg.showsEffectiveGrid = effective
+        cfg.showsSlots = slots
+        cfg.showsFrames = frames
+        overlay.cfg = cfg
+        applyGeometry(to: overlay)
+        overlay.items = makeItems(from: getButtonPositionSizes())
+        containerView.bringSubviewToFront(overlay)
+    }
+    
+    private func ensureDebugOverlay() -> HudGridOverlay {
+        guard let gridOverlay else {
+            let overlay = HudGridOverlay(frame: containerView.bounds)
+            overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            containerView.addSubview(overlay)
+            self.gridOverlay = overlay
+            return overlay
+        }
+        
+        return gridOverlay
+    }
+    
+    private func removeDebugOverlay() {
+        gridOverlay?.removeFromSuperview()
+        gridOverlay = nil
+    }
+    
+    private func applyGeometry(to overlay: HudGridOverlay) {
+        var cfg = overlay.cfg
+        cfg.cellSizePx = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP) * dpToPx
+        cfg.defaultMarginPx = CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP) * dpToPx
+        cfg.cellFixPx = max(0, (hudBasePaddingDp - CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP)) * dpToPx)
+        cfg.statusBarHeight = statusBarHeight
+        cfg.safeAreaInsets = containerView.safeAreaInsets
+        cfg.bottomOverlayPx = externalBottomOverlayPx
+        overlay.cfg = cfg
+    }
+    
+    private func makeItems(from map: [UIView: ButtonPositionSize]) -> [HudGridOverlay.Item] {
+        map.compactMap { (view, pos) in
+            guard view is OAHudButton || view is OAMapRulerView || view is OADownloadMapWidget else { return nil }
+            return HudGridOverlay.Item(view: view, position: pos, dpToPx: dpToPx)
+        }
+    }
+    
+    private func refreshDebugOverlayIfNeeded(positionMap: [UIView: ButtonPositionSize]) {
+        guard let gridOverlay else { return }
+        if !(gridOverlay.cfg.showsEffectiveGrid || gridOverlay.cfg.showsSlots || gridOverlay.cfg.showsFrames) {
+            removeDebugOverlay()
+            return
+        }
+        
+        applyGeometry(to: gridOverlay)
+        gridOverlay.items = makeItems(from: positionMap)
+        containerView.bringSubviewToFront(gridOverlay)
     }
 }

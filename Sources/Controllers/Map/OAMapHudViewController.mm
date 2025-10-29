@@ -51,6 +51,7 @@ static const float kButtonWidth = 48.0;
 static const float kButtonOffset = 16.0;
 static const float kWidgetsOffset = 3.0;
 static const float kDistanceMeters = 100.0;
+static const float kGridCellWidthPt = 8.0;
 
 
 @interface OAMapHudViewController () <OAMapInfoControllerProtocol, UIGestureRecognizerDelegate>
@@ -502,8 +503,12 @@ static const float kDistanceMeters = 100.0;
 
 - (void)updateMapRulerData
 {
+    int oldWidth = (int)round(self.rulerLabel.frame.size.width);
     [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
-    [_mapHudLayout updateButtons];
+    int newWidth = (int)round(self.rulerLabel.frame.size.width);
+    int delta = newWidth - oldWidth;
+    if (abs(delta) >= (int)kGridCellWidthPt)
+        [_mapHudLayout updateButtons];
 }
 
 - (void)updateMapRulerDataWithDelay

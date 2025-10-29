@@ -1802,9 +1802,15 @@ static const float kGridCellWidthPt = 8.0;
 
 #pragma mark - OAMapInfoControllerProtocol
 
-- (void) widgetsLayoutDidChange:(BOOL)animated
+- (void)widgetsLayoutDidChange:(BOOL)animated
 {
-    [self updateControlsLayout:animated];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(coalescedWidgetsUpdate:) object:nil];
+    [self performSelector:@selector(coalescedWidgetsUpdate:) withObject:@(animated) afterDelay:0];
+}
+
+- (void)coalescedWidgetsUpdate:(NSNumber *)animatedNumber
+{
+    [self updateControlsLayout:animatedNumber.boolValue];
     [_mapHudLayout updateButtons];
 }
 

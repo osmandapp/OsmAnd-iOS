@@ -276,7 +276,8 @@ typedef enum
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
 {
-    [self openSafariWithURL:URL.absoluteString];
+    NSString *localizedURLString = [URL.absoluteString localizedURLIfAvailable];
+    [self openSafariWithURL:localizedURLString];
     return NO;
 }
 

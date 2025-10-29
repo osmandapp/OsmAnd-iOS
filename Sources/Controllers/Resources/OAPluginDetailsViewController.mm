@@ -336,7 +336,15 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
 {
-    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
+    NSString *originalURLString = URL.absoluteString;
+    NSString *localizedURLString = [originalURLString localizedURLIfAvailable];
+    
+    NSURL *localizedURL = [NSURL URLWithString:localizedURLString];
+    if (!localizedURL) {
+        localizedURL = URL;
+    }
+    
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:localizedURL];
     [self presentViewController:safariViewController animated:YES completion:nil];
     return NO;
 }

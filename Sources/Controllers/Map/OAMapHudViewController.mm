@@ -503,11 +503,10 @@ static const float kGridCellWidthPt = 8.0;
 
 - (void)updateMapRulerData
 {
-    int oldWidth = (int)round(self.rulerLabel.frame.size.width);
+    CGFloat oldWidth = CGRectGetWidth(self.rulerLabel.frame);
     [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
-    int newWidth = (int)round(self.rulerLabel.frame.size.width);
-    int delta = newWidth - oldWidth;
-    if (abs(delta) >= (int)kGridCellWidthPt)
+    CGFloat newWidth = CGRectGetWidth(self.rulerLabel.frame);
+    if (fabs(newWidth - oldWidth) >= kGridCellWidthPt)
         [_mapHudLayout updateButtons];
 }
 

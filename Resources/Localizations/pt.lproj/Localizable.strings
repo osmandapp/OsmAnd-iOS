@@ -1209,7 +1209,7 @@
 "routing_attr_difficulty_preference_name" = "Dificuldade preferida";
 "routeInfo_smoothness_name" = "Suavidade do piso";
 "routing_attr_allow_intermediate_name" = "Permitir rotas intermédias";
-"rendering_attr_pisteRoutes_name" = "Rotas de esqui";
+"rendering_attr_pisteRoutes_name" = "Pistas e rotas de esqui";
 "rendering_value_bold_name" = "Grosso";
 "rendering_attr_showRoadMaps_description" = "Escolher quando mostrar apenas mapas de estradas:";
 "rendering_attr_surface_unpaved_name" = "Não pavimentado";
@@ -2621,7 +2621,7 @@
 "routing_attr_avoid_fords_name" = "Evitar vaus";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Mostrar pedidos de correções (com etiqueta \"fixme\")";
 "rendering_attr_noNatureReserveBoundaries_name" = "Fronteiras naturais";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualização esquemática de ícones em ampliações baixas";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Uma representação esquemática de ícones em níveis baixos de ampliação para os POIs que normalmente não são exibidos";
 "routing_attr_prefer_hiking_routes_description" = "Preferir rotas de caminhadas";
 "rendering_attr_weatherPressureContours_name" = "Isolinhas de pressão";
 "rendering_attr_horse_scale_difficult_name" = "Difícil";
@@ -2842,7 +2842,7 @@
 "route_maneuvers_desc" = "Os widgets de navegação são ativados durante a navegação para mostrar informação como distância, hora de chegada ou tempo que falta para chegar ao destino, viragens seguintes, direção, nome da rua atual, informação das vias de trânsito, velocidade máxima, alertas de aproximação, POIs, pontos de passagem.";
 "navigation_points_desc" = "Os widgets de navegação são ativados durante a navegação para mostrar informação como distância, hora de chegada ou tempo que falta para chegar ao destino, viragens seguintes, direção, nome da rua atual/seguinte, informação da via de trânsito, velocidade máxima, alertas de aproximação, POIs, pontos de passagem.";
 "distance_circles" = "Círculos de distância";
-"trip_recording_distance_widget_desc" = "Mostra a distância decorrida da viagem atual a ser gravada.";
+"trip_recording_distance_widget_desc" = "Mostra a distância total da sua viagem atualmente registada, com modos para visualizar a distância da última subida e descida.";
 "gps_info_widget_desc" = "Mostra o número de satélites atualmente visíveis e usados.";
 "magnetic_bearing_widget_desc" = "Ângulo entre o Norte magnético e o ponto alvo observado na sua localização.";
 "true_bearing_wdiget_desc" = "Ângulo entre o verdadeiro norte e o ponto alvo observado a partir da sua localização.";
@@ -2855,7 +2855,7 @@
 // Widget descriptions
 "coordinates_widget_current_location_desc" = "Mostra as coordenadas geográficas da geolocalização atual";
 "av_notes_photo_widget_desc" = "Tocar no widget permite tirar uma fotografia.";
-"trip_recording_uphill_widget_desc" = "Mostra a soma de todas as subidas da viagem atual gravada.";
+"trip_recording_uphill_widget_desc" = "Mostra a soma de todas as subidas ou a última subida da viagem atualmente registada.";
 "relative_bearing_widget_desc" = "Mostra o ângulo entre a direção do seu movimento para a frente e o ponto alvo.";
 "true_bearing_widget_desc" = "Ângulo entre o verdadeiro norte e o ponto alvo observado a partir da sua localização.";
 "time_to_destination_widget_desc" = "Mostra a \"hora de chegada\" ou o \"tempo a percorrer\" até o último ponto de destino. O tempo é constantemente atualizado durante a navegação e é igual ao tempo de rota da localização atual.";
@@ -3106,7 +3106,7 @@
 "detailed_log_file" = "Ficheiro de registo detalhado";
 
 
-"help_article_navigation_routing_ski_routing_name" = "Roteamento de esqui";
+"help_article_navigation_routing_ski_routing_name" = "Pistas e rotas de esqui";
 "no_bt_permission" = "A permissão de Bluetooth não foi concedida";
 "shared_string_wrist" = "Pulso";
 "help_article_widgets_name" = "Widgets do mapa";
@@ -3616,10 +3616,10 @@
 "auto_25_chars_route_roundabout_kr" = "Saia na %d saída e mantenha-se na direita";
 "auto_25_chars_route_tl_kl" = "Vire à esquerda e mantenha-se à esquerda";
 "auto_25_chars_route_tl_kr" = "Vire à esquerda e mantenha-se à direita";
-"original_shape_description" = "Cada ponto manteria a sua própria forma.";
-"save_favorite_default_appearance" = "Aplicar alterações aos pontos existentes na pasta ou somente aos novos?";
-"original_color_description" = "Cada ponto manteria a sua própria cor.";
-"original_icon_description" = "Cada ponto manteria o seu próprio ícone.";
+"original_shape_description" = "Cada ponto mantém a sua forma individual.";
+"save_favorite_default_appearance" = "Aplicar as alterações a todos os pontos existentes na pasta ou apenas aos recém-adicionados?";
+"original_color_description" = "Cada ponto mantém a sua cor individual.";
+"original_icon_description" = "Cada ponto mantém o seu ícone individual.";
 "customize_grid_color" = "Personalizar a cor da grade";
 "grid_color" = "Cor da grade";
 "shared_string_edges" = "Bordas";
@@ -3630,7 +3630,7 @@
 "meridian_180" = "180º meridiano";
 "prime_meridian" = "Meridiano principal";
 "equator" = "Equador";
-"quick_action_showhide_coordinates_grid_descr" = "Ação para controlar a visibilidade da grade de Coordenadas no mapa.";
+"quick_action_showhide_coordinates_grid_descr" = "Alterne a visibilidade da grade de coordenadas no mapa.";
 "layer_coordinates_grid" = "Grade de coordenadas";
 "shared_string_unchanged" = "Inalterado";
 "new_trip_segment" = "Novo segmento de viagem";
@@ -3664,7 +3664,7 @@
 "dd_ddddd_format" = "GG.GGGGG°";
 "imperial_gallons" = "Galões imperiais";
 "add_smart_folder" = "Adicionar pasta inteligente";
-"map_widget_route_information_desc" = "Apresenta a hora de chegada prevista, o tempo de viagem restante e a distância para o percurso de navegação atual.";
+"map_widget_route_information_desc" = "Exibe a hora prevista de chegada, o tempo restante de viagem e a distância para a rota de navegação ativa.";
 "shared_strings_dimensions" = "Dimensões";
 "us_gallons" = "Galões americanos";
 "map_widget_route_information" = "Informações da rota";
@@ -3790,3 +3790,12 @@
 "average_temperature" = "Temperatura média";
 "manage_purchases" = "Gerir compras";
 "sensor_data" = "Dados do sensor";
+"obd_alt_battery_voltage" = "Tensão do adaptador";
+"liter_single" = "Litro";
+"imperial_gallon" = "Galão imperial";
+"us_gallon" = "Galão americano";
+"kilometers" = "Quilómetros";
+"miles" = "Milhas";
+"mpg" = "MPG";
+"rendering_attr_hideNoLNAM_name" = "Marcas marítimas OSM (algumas)";
+"rendering_attr_hideNoLNAM_description" = "Ocultar marcas marítimas OSM (algumas)";

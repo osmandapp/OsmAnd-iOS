@@ -25,6 +25,8 @@
 #define LAST_MODIFIED_COL_NAME @"name"
 #define LAST_MODIFIED_COL_MODIFIED_TIME @"last_modified_time"
 
+static const NSInteger kDBVersion = 1;
+
 @implementation OAUploadedFileInfo
 
 - (instancetype) initWithType:(NSString *)type name:(NSString *)name
@@ -168,6 +170,8 @@
                 if (modifiederrMsg != NULL)
                     sqlite3_free(modifiederrMsg);
                 
+                [self writeDBVersion:kDBVersion];
+                
                 sqlite3_close(backupFilesDB);
             }
             else
@@ -177,10 +181,11 @@
         }
         else
         {
-            // Upgrade if needed
-//            if (sqlite3_open(dbpath, &osmEditsDB) == SQLITE_OK)
-//            else
-               // Failed to upate database
+            if (sqlite3_open(dbpath, &backupFilesDB) == SQLITE_OK)
+            {
+                [self migrationsDB];
+                sqlite3_close(backupFilesDB);
+            }
         }
     });
 }
@@ -469,5 +474,59 @@
     });
     return lastModifiedTime;
 }
+
+#pragma - Migrations DB
+
+- (void)migrationsDB
+{
+    int currentVersion = [self readDBVersion];
+    if (currentVersion < 1)
+    {
+        [self migrateWrongGPXTableDateIfNeeded];
+    }
+    if (currentVersion != kDBVersion)
+    {
+        [self writeDBVersion:kDBVersion];
+    }
+}
+
+- (int)readDBVersion
+{
+    __block int dbVersion = -1;
+    sqlite3_stmt *statement;
+    const char *stmt = [@"PRAGMA user_version" UTF8String];
+    if (sqlite3_prepare_v2(backupFilesDB, stmt, -1, &statement, NULL) == SQLITE_OK)
+    {
+        if (sqlite3_step(statement) == SQLITE_ROW)
+        {
+            dbVersion = sqlite3_column_int(statement, 0);
+        }
+    }
+    sqlite3_finalize(statement);
+    
+    return dbVersion;
+}
+
+- (void)writeDBVersion:(int)versionNumber
+{
+    char *errMsg;
+    const char *stmt = [[NSString stringWithFormat:@"PRAGMA user_version = %i", versionNumber] UTF8String];
+    sqlite3_exec(backupFilesDB, stmt, NULL, NULL, &errMsg);
+    if (errMsg != NULL) sqlite3_free(errMsg);
+}
+
+- (void)migrateWrongGPXTableDateIfNeeded
+{
+    const char *cleanup_sql = "DELETE FROM uploaded_files WHERE type = 'GPX' AND name LIKE '%/Containers/%'";
+    char *cleanupErrMsg = NULL;
+    if (sqlite3_exec(backupFilesDB, cleanup_sql, NULL, NULL, &cleanupErrMsg) != SQLITE_OK)
+    {
+        NSLog(@"[OABackupDbHelper] Migration cleanup failed: %s", cleanupErrMsg);
+    }
+    if (cleanupErrMsg != NULL)
+        sqlite3_free(cleanupErrMsg);
+    
+}
+
 
 @end

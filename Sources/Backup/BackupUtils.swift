@@ -143,7 +143,8 @@ final class BackupUtils: NSObject {
         if subtypeFolder.isEmpty {
             fileName = filePath.lastPathComponent()
         } else if fileSettingsItem.subtype == .subtypeGpx {
-            fileName = filePath.replacingOccurrences(of: "\(subtypeFolder)/", with: "")
+            let dirPath = OsmAndApp.swiftInstance().documentsPath.appendingPathComponent(subtypeFolder)
+            fileName = filePath.replacingOccurrences(of: dirPath, with: "")
         } else if OAFileSettingsItemFileSubtype.isMap(fileSettingsItem.subtype) {
             fileName = filePath.lastPathComponent()
         } else {

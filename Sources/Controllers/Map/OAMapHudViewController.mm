@@ -52,6 +52,7 @@ static const float kButtonOffset = 16.0;
 static const float kWidgetsOffset = 3.0;
 static const float kDistanceMeters = 100.0;
 static const float kGridCellWidthPt = 8.0;
+static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 
 @interface OAMapHudViewController () <OAMapInfoControllerProtocol, UIGestureRecognizerDelegate>
@@ -99,6 +100,8 @@ static const float kGridCellWidthPt = 8.0;
     NSLayoutConstraint *_leftRulerConstraint;
     
     CLLocation *_previousLocation;
+    
+    NSTimeInterval _lastWidgetsUpdateTime;
     
     BOOL _cachedLocationAvailableState;
     
@@ -1803,12 +1806,23 @@ static const float kGridCellWidthPt = 8.0;
 
 - (void)widgetsLayoutDidChange:(BOOL)animated
 {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(coalescedWidgetsUpdate:) object:nil];
-    [self performSelector:@selector(coalescedWidgetsUpdate:) withObject:@(animated) afterDelay:0];
+    NSTimeInterval now = CACurrentMediaTime();
+    NSTimeInterval elapsed = now - _lastWidgetsUpdateTime;
+    if (elapsed >= kWidgetsUpdateFrameInterval)
+    {
+        [self coalescedWidgetsUpdate:@(animated)];
+    }
+    else
+    {
+        NSTimeInterval delay = kWidgetsUpdateFrameInterval - elapsed;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(coalescedWidgetsUpdate:) object:nil];
+        [self performSelector:@selector(coalescedWidgetsUpdate:) withObject:@(animated) afterDelay:delay];
+    }
 }
 
 - (void)coalescedWidgetsUpdate:(NSNumber *)animatedNumber
 {
+    _lastWidgetsUpdateTime = CACurrentMediaTime();
     [self updateControlsLayout:animatedNumber.boolValue];
     [_mapHudLayout updateButtons];
 }

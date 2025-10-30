@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *wikidata;
 @property (nonatomic, strong) NSMutableArray<NSString *> *names;
 @property (nonatomic, nullable) NSMutableDictionary<NSString *, NSString *>* tags;
+@property (nonatomic, copy, nullable) NSString *mainAmenityType;
 
 - (instancetype)initWithMapObject:(OAMapObject *)mapObject;
 - (instancetype)initWithMapObject:(OAMapObject *)mapObject names:(NSArray<NSString *> *)names;

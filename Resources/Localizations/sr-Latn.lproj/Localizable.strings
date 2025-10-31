@@ -3947,3 +3947,8 @@
 "rendering_attr_hideTidalFlats_name" = "Plimne ravnice";
 "rendering_attr_safetyContour_description" = "Kontura bezbedne dubine";
 "ble_scanner" = "BLE Skener";
+"lang_crh" = "Krimski tatarski (latinica)";
+"efficient_grid" = "Efikasna mreža";
+"slots" = "Slotovi";
+"button_frames" = "Okvir za dugmad";
+"visualizing_button_grid" = "Dugme za mrežu";

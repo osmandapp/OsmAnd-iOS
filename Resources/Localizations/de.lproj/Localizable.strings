@@ -3935,7 +3935,7 @@
 "rendering_attr_hideFairways_name" = "Fahrrinnen";
 "rendering_attr_hideFerries_name" = "Fährverbindungen";
 "rendering_attr_watercolor_description" = "Farbe des Wassers";
-"rendering_attr_hideContours_description" = "Tielenlinien ausblenden";
+"rendering_attr_hideContours_description" = "Tiefenlinien ausblenden";
 "rendering_attr_spotDistance_description" = "Punktmessungsabstand";
 "rendering_attr_showSkiSlopes_name" = "Skipisten anzeigen";
 "rendering_attr_hideNoLNAM_description" = "OSM-Seezeichen (einige) ausblenden";

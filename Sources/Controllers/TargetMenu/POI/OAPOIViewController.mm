@@ -353,7 +353,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             || [convertedKey isEqualToString:@"subway_region"]
             || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
             || [convertedKey hasPrefix:@"lang_yes"]
-            || [convertedKey hasPrefix:@"top_index_"])
+            || [convertedKey hasPrefix:@"top_index_"]
+            || [GpxAppearanceInfo isGpxAppearanceTag:convertedKey])
             continue;
         
         OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:convertedKey];

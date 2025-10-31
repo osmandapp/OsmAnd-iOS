@@ -482,7 +482,7 @@ static const NSInteger kDBVersion = 1;
     int currentVersion = [self readDBVersion];
     if (currentVersion < 1)
     {
-        [self migrateWrongGPXTableDateIfNeeded];
+        [self removeInvalidGPXDataIfNeeded];
     }
     if (currentVersion != kDBVersion)
     {
@@ -515,7 +515,7 @@ static const NSInteger kDBVersion = 1;
     if (errMsg != NULL) sqlite3_free(errMsg);
 }
 
-- (void)migrateWrongGPXTableDateIfNeeded
+- (void)removeInvalidGPXDataIfNeeded
 {
     const char *cleanup_sql = "DELETE FROM uploaded_files WHERE type = 'GPX' AND name LIKE '%/Containers/%'";
     char *cleanupErrMsg = NULL;
@@ -527,6 +527,5 @@ static const NSInteger kDBVersion = 1;
         sqlite3_free(cleanupErrMsg);
     
 }
-
 
 @end

@@ -3952,3 +3952,5 @@
 "slots" = "Slotovi";
 "button_frames" = "Okvir za dugmad";
 "visualizing_button_grid" = "Dugme za mrežu";
+"max_weight_at_full_load_description" = "Navedite maksimalnu težinu vašeg vozila pri punom opterećenju kako biste izbegli puteve i mostove sa ograničenjima težine.";
+"max_axle_load_description" = "Navedite maksimalno osovinsko opterećenje vašeg vozila kako biste izbegli puteve i mostove sa ograničenjima težine.";

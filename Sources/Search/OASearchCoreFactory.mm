@@ -131,7 +131,7 @@
 
 + (CLLocation *) getLocation:(const OsmAnd::PointI)position31;
 + (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Building>&)building hno:(const QString&)hno;
-+ (NSMutableArray<NSString *> *) getAllNames:(const QHash<QString, QString>&)names nativeName:(const QString&)nativeName;
++ (NSMutableArray<NSString *> *) getOtherNames:(const QHash<QString, QString>&)names nativeName:(const QString&)nativeName;
 + (BOOL) isLastWordCityGroup:(OASearchPhrase *)p;
 
 @end
@@ -514,7 +514,28 @@
         
         if (locSpecified)
         {
-            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([phrase getRadiusSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5], OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
+            OASearchWord *lastWord = [phrase getLastSelectedWord];
+            if (lastWord != nil && lastWord.result != nil && [lastWord.result.object isKindOfClass:OACity.class])
+            {
+                OACity * c = (OACity *) lastWord.result.object;
+                if (c.city && c.city->bbox31.size() >= 4)
+                {
+                    std::vector<int32_t> bb = c.city->bbox31;
+                    // top, left, bottom, right
+                    OsmAnd::AreaI bbox31(bb.at(1), bb.at(0), bb.at(3), bb.at(2));
+                    searchCriteria->bbox31 = bbox31;
+                }
+                else
+                {
+                    int radius = [OACity getRadius:[OACity getTypeStr:c.type]];
+                    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius * 3,
+                                                            OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(c.latitude, c.longitude)));
+                }
+            }
+            else
+            {
+                searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([phrase getRadiusSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5], OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
+            }
         }
         
         for (NSString *resId in offlineIndexes)
@@ -543,7 +564,7 @@
                                       OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
                                       sr.resourceId = currentResId;
                                       sr.localeName = address->getName(lang, transliterate).toNSString();
-                                      sr.otherNames = [OASearchCoreFactory getAllNames:address->localizedNames nativeName:address->nativeName];
+                                      sr.otherNames = [OASearchCoreFactory getOtherNames:address->localizedNames nativeName:address->nativeName];
                                       sr.localeRelatedObjectName = currentRegionName;
                                       sr.relatedResourceId = sr.resourceId;
                                       sr.location = [OASearchCoreFactory getLocation:address->position31];
@@ -783,7 +804,7 @@
                                   OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
                                   OAPOI *object = [OAAmenitySearcher parsePOIByAmenity:amenity];
                                   sr.object = object;
-                                  sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
+                                  sr.otherNames = [OASearchCoreFactory getOtherNames:amenity->localizedNames nativeName:amenity->nativeName];
                                   sr.localeName = amenity->getName(lang, false).toNSString();
                                   if (transliterate && ![nm matches:sr.localeName])
                                       sr.localeName = amenity->getName(lang, transliterate).toNSString();
@@ -1668,7 +1689,7 @@
         }
         
         res.localeName = _currentAmenity->getName(_lang, _transliterate).toNSString();
-        res.otherNames = [OASearchCoreFactory getAllNames:_currentAmenity->localizedNames nativeName:_currentAmenity->nativeName];
+        res.otherNames = [OASearchCoreFactory getOtherNames:_currentAmenity->localizedNames nativeName:_currentAmenity->nativeName];
         if (res.localeName.length == 0)
         {
             OAPOIBaseType *st = [_types getAnyPoiTypeByName:_currentAmenity->subType.toNSString()];
@@ -1889,7 +1910,7 @@
                 res.localeName = b->getName(lang, transliterate).toNSString();
                 res.location = [OASearchCoreFactory getLocation:b->position31];
             }
-            res.otherNames = [OASearchCoreFactory getAllNames:b->localizedNames nativeName:b->nativeName];
+            res.otherNames = [OASearchCoreFactory getOtherNames:b->localizedNames nativeName:b->nativeName];
             res.object = [[OABuilding alloc] initWithBuilding:b];
             res.resourceId = resId;
             res.priority = priority;
@@ -1912,10 +1933,10 @@
                     break;
                 
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-                if ((![streetMatch matches:street->nativeName.toNSString()] && ![streetMatch matchesMap:[OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName]]) || ![phrase isSearchTypeAllowed:EOAObjectTypeStreetIntersection])
+                if ((![streetMatch matches:street->nativeName.toNSString()] && ![streetMatch matchesMap:[OASearchCoreFactory getOtherNames:street->localizedNames nativeName:street->nativeName]]) || ![phrase isSearchTypeAllowed:EOAObjectTypeStreetIntersection])
                     continue;
                 
-                res.otherNames = [OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName];
+                res.otherNames = [OASearchCoreFactory getOtherNames:street->localizedNames nativeName:street->nativeName];
                 res.localeName = street->getName(lang, transliterate).toNSString();
                 res.object = [[OAStreet alloc] initWithStreet:street];
                 res.resourceId = resId;
@@ -2014,7 +2035,7 @@
         {
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             res.localeName = object->getName(lang, transliterate).toNSString();
-            res.otherNames = [OASearchCoreFactory getAllNames:object->localizedNames nativeName:object->nativeName];
+            res.otherNames = [OASearchCoreFactory getOtherNames:object->localizedNames nativeName:object->nativeName];
             BOOL pub = YES;
             if (object->nativeName.startsWith('<'))
                 pub = NO; // streets related to city
@@ -2395,21 +2416,21 @@ static BOOL DISPLAY_DEFAULT_POI_TYPES = NO;
     return [[CLLocation alloc] initWithLatitude:interpolation * (lat2 - lat1) + lat1 longitude:interpolation * (lon2 - lon1) + lon1];
 }
 
-+ (NSMutableArray<NSString *> *) getAllNames:(const QHash<QString, QString>&)names nativeName:(const QString&)nativeName
++ (NSMutableArray<NSString *> *) getOtherNames:(const QHash<QString, QString>&)names nativeName:(const QString&)nativeName
 {
     NSMutableArray<NSString *> *otherNames = [NSMutableArray array];
-    BOOL hasEnName = NO;
     if (!names.isEmpty())
     {
         for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(names)))
         {
-            if (!hasEnName && entry.key().toLower() == QStringLiteral("en"))
-                hasEnName = YES;
-            
+            if (entry.key().toLower() == QStringLiteral("admin_level") || entry.key().toLower() == QStringLiteral("place"))
+            {
+                continue;
+            }
             [otherNames addObject:entry.value().toNSString()];
         }
     }
-    if (!hasEnName && !nativeName.isNull())
+    if (!nativeName.isNull())
         [otherNames addObject:OsmAnd::ICU::transliterateToLatin(nativeName).toNSString()];
     return otherNames;
 }

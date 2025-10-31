@@ -224,6 +224,8 @@
             || [routeTagKey hasPrefix:@"osmand"]
             || [routeTagKey isEqualToString:@"type"]
             || [routeTagKey hasPrefix:@"shield_"]
+            || [routeTagKey hasPrefix:@"wiki"]
+            || [routeTagKey hasPrefix:@"wikiimage"]
             || [GpxAppearanceInfo isGpxAppearanceTag:routeTagKey])
             continue;
 

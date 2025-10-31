@@ -23,7 +23,12 @@
             completionHandler();
         return;
     }
-    
+
+    NSLog(@"[OCBF] Skip downloading URL: %@", urlString);
+    if (completionHandler)
+        completionHandler();
+    return;
+
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     NSString *cachedPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];

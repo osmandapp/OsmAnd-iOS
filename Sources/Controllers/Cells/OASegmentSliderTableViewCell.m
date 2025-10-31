@@ -7,12 +7,27 @@
 //
 
 #import "OASegmentSliderTableViewCell.h"
+#import "GeneratedAssetSymbols.h"
+
+@interface OASegmentSliderTableViewCell () <OASegmentedSliderDelegate>
+
+@property (weak, nonatomic) IBOutlet UIButton *plusButton;
+@property (weak, nonatomic) IBOutlet UIButton *minusButton;
+
+@end
 
 @implementation OASegmentSliderTableViewCell
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    [self.plusButton setImage:[UIImage templateImageNamed:@"ic_custom_map_zoom_in"] forState:UIControlStateNormal];
+    [self.plusButton addTarget:self action:@selector(plusTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.plusButton setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+    [self.minusButton setImage:[UIImage templateImageNamed:@"ic_custom_map_zoom_out"] forState:UIControlStateNormal];
+    [self.minusButton addTarget:self action:@selector(minusTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.minusButton setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+    self.sliderView.delegate = self;
 
     if ([self isDirectionRTL])
     {
@@ -21,9 +36,24 @@
     }
 }
 
+- (void)setupButtonsEnabling
+{
+    BOOL isPlusButtonEnabled = self.sliderView.selectedMark < [self.sliderView getMarksCount] - 1;
+    BOOL isMinusButtonEnabled = self.sliderView.selectedMark > 0;
+    [self.plusButton setTintColor:[UIColor colorNamed:isPlusButtonEnabled ? ACColorNameIconColorActive : ACColorNameIconColorDisabled]];
+    [self.plusButton setEnabled:isPlusButtonEnabled];
+    [self.minusButton setTintColor:[UIColor colorNamed:isMinusButtonEnabled ? ACColorNameIconColorActive : ACColorNameIconColorDisabled]];
+    [self.minusButton setEnabled:isMinusButtonEnabled];
+}
+
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+}
+
+- (void)showAllLabels:(BOOL)show
+{
+    [self showLabels:show topRight:show bottomLeft:show bottomRight:show];
 }
 
 - (void)showLabels:(BOOL)topLeft topRight:(BOOL)topRight bottomLeft:(BOOL)bottomLeft bottomRight:(BOOL)bottomRight;
@@ -79,6 +109,29 @@
         res = res || self.sliderNoLabelsBottomConstraint.active != !hasBottomLabels;
     }
     return res;
+}
+
+- (void)plusTapped
+{
+    if (self.sliderView.selectedMark < [self.sliderView getMarksCount] - 1)
+    {
+        [self.sliderView setSelectedMark:self.sliderView.selectedMark + 1];
+        [self.delegate onPlusTapped:self.sliderView.selectedMark];
+    }
+}
+
+- (void)minusTapped
+{
+    if (self.sliderView.selectedMark > 0)
+    {
+        [self.sliderView setSelectedMark:self.sliderView.selectedMark - 1];
+        [self.delegate onMinusTapped:self.sliderView.selectedMark];
+    }
+}
+
+- (void)onSliderFinishEditing
+{
+    [self setupButtonsEnabling];
 }
 
 @end

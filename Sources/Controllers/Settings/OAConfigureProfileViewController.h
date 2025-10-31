@@ -9,6 +9,7 @@
 #import "OABaseNavbarViewController.h"
 
 extern NSString * const kNavigationSettings;
+extern NSString * const kProfileAppearanceSettings;
 
 @class OAApplicationMode;
 

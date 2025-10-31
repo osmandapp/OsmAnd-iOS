@@ -889,6 +889,14 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         vc.selectedIndex = _changedProfile.locationRadiusVisibility;
         [self showMediumSheetViewController:vc isLargeAvailable:NO];
     }
+    else if ([item.key isEqualToString:kPositionIconSizeCellKey] || [item.key isEqualToString:kLocationIconSizeCellKey])
+    {
+        ProfileAppearanceIconSizeViewController *vc = [[ProfileAppearanceIconSizeViewController alloc] init];
+        vc.appMode = _appMode;
+        vc.isNavigationIconSize = [item.key isEqualToString:kLocationIconSizeCellKey];
+        [OARootViewController.instance.mapPanel showScrollableHudViewController:vc];
+        [self.navigationController popToViewController:OARootViewController.instance animated:NO];
+    }
 }
 
 #pragma mark - UITextFieldDelegate

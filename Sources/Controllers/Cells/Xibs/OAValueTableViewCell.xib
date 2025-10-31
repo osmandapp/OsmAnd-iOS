@@ -74,7 +74,6 @@
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BE3-4R-jJU">
                                                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="22"/>
-                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" id="rph-rT-YZ3"/>
                                                         </constraints>

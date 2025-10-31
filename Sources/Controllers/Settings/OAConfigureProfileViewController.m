@@ -55,9 +55,9 @@ static NSString * const kOsmandSettingsFileExt = @"osf";
 static NSString * const kWasClosedFreeBackupSettingsBannerKey = @"wasClosedFreeBackupSettingsBanner";
 
 NSString * const kNavigationSettings = @"nav_settings";
+NSString * const kProfileAppearanceSettings = @"profile_appearance";
 
 static NSString * const kGeneralSettings              = @"general_settings";
-static NSString * const kProfileAppearanceSettings    = @"profile_appearance";
 static NSString * const kExportProfileSettings        = @"export_profile";
 static NSString * const kTrackRecordingSettings       = @"trip_rec";
 static NSString * const kOsmEditsSettings             = @"osm_edits";

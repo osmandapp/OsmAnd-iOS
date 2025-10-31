@@ -1699,6 +1699,7 @@
 "shared_string_type" = "Type";
 "res_unknown" = "Unknown";
 "shared_string_size" = "Size";
+"icon_size" = "Icon size";
 "created_on" = "Created on";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";

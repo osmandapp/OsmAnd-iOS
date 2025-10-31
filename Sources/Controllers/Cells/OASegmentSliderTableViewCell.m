@@ -27,6 +27,7 @@
     [self.minusButton setImage:[UIImage templateImageNamed:@"ic_custom_map_zoom_out"] forState:UIControlStateNormal];
     [self.minusButton addTarget:self action:@selector(minusTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.minusButton setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+    [self showButtons:NO];
     self.sliderView.delegate = self;
 
     if ([self isDirectionRTL])
@@ -66,6 +67,12 @@
     UIFont *bottomLabelsFont = [UIFont scaledSystemFontOfSize:topLeft || topRight ? 15. : 17.];
     self.bottomLeftLabel.font = bottomLabelsFont;
     self.bottomRightLabel.font = bottomLabelsFont;
+}
+
+- (void)showButtons:(BOOL)show
+{
+    self.plusButton.hidden = !show;
+    self.minusButton.hidden = !show;
 }
 
 - (void)updateConstraints

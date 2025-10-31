@@ -78,6 +78,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
                 cell.sliderView.selectedMark = index
                 cell.setupButtonsEnabling()
             }
+            cell.showButtons(true)
             cell.sliderView.tag = (indexPath.section << 10) | indexPath.row
             cell.sliderView.removeTarget(self, action: nil, for: [.touchUpInside, .touchUpOutside])
             cell.sliderView.addTarget(self, action: #selector(sliderChanged(sender:)), for: [.touchUpInside, .touchUpOutside])

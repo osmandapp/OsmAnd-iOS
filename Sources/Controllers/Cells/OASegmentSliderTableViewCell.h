@@ -35,6 +35,7 @@
 - (void)setupButtonsEnabling;
 - (void)showAllLabels:(BOOL)show;
 - (void)showLabels:(BOOL)topLeft topRight:(BOOL)topRight bottomLeft:(BOOL)bottomLeft bottomRight:(BOOL)bottomRight;
+- (void)showButtons:(BOOL)show;
 
 @end
 

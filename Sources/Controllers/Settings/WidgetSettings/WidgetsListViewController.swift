@@ -668,8 +668,7 @@ extension WidgetsListViewController {
             let helpAction: UIAction = UIAction(title: localizedString("shared_string_help"),
                                                 image: UIImage(systemName: "questionmark.circle")) { [weak self] _ in
                 guard let self else { return }
-                
-                openSafariWithURL("https://docs.osmand.net/docs/user/widgets/configure-screen")
+                openSafariWithURL(kDocsWidgetConfigureScreen.localizedURLIfAvailable())
             }
             let helpMenuAction: UIMenu = UIMenu(options: .displayInline, children: [helpAction])
             menuElements = [resetAction, copyAction, helpMenuAction]

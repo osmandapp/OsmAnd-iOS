@@ -19,6 +19,7 @@
 #import "OAUtilities.h"
 #import "OAApplicationMode.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kDot @"."
 #define kComma @","
@@ -63,8 +64,8 @@
 {
     if (_vehicleParameter)
     {
-        _isMotorType = [_vehicleParameter[@"name"] isEqualToString:@"motor_type"];
-        _isFuelTankCapacity = [_vehicleParameter[@"name"] isEqualToString:@"fuel_tank_capacity"];
+        _isMotorType = [_vehicleParameter[@"name"] isEqualToString:RouteParamVehicleHelper.motorType];
+        _isFuelTankCapacity = [_vehicleParameter[@"name"] isEqualToString:RouteParamVehicleHelper.fuelTankCapacity];
 
         _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
         NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
@@ -245,11 +246,11 @@
 
 - (NSString *)getMeasurementUnit:(NSString *)parameter
 {
-    if ([parameter isEqualToString:@"weight"])
+    if ([RouteParamVehicleHelper isWeightParameter:parameter])
         return OALocalizedString(@"shared_string_tones");
-    else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.height] || [parameter isEqualToString:RouteParamVehicleHelper.width] || [parameter isEqualToString:RouteParamVehicleHelper.length])
         return OALocalizedString(@"shared_string_meters");
-    else if ([parameter isEqualToString:@"fuel_tank_capacity"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.fuelTankCapacity])
         return [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     return @"";
 }
@@ -372,32 +373,36 @@
 
 - (NSString *)getParameterDescription:(NSString *)parameter
 {
-    if ([parameter isEqualToString:@"weight"])
+    if ([parameter isEqualToString:RouteParamVehicleHelper.weight])
         return OALocalizedString(@"weight_limit_description");
-    else if ([parameter isEqualToString:@"height"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.height])
         return [self isBoat] ? OALocalizedString(@"vessel_height_limit_description") : OALocalizedString(@"height_limit_description");
-    else if ([parameter isEqualToString:@"width"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.width])
         return  [self isBoat] ? OALocalizedString(@"vessel_width_limit_description") : OALocalizedString(@"width_limit_description");
-    else if ([parameter isEqualToString:@"length"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.length])
         return OALocalizedString(@"lenght_limit_description");
-    else if ([parameter isEqualToString:@"motor_type"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.motorType])
         return OALocalizedString(@"routing_attr_motor_type_description");
-    else if ([parameter isEqualToString:@"fuel_tank_capacity"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.fuelTankCapacity])
         return OALocalizedString(@"fuel_tank_capacity_description");
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.maxAxleLoad])
+        return OALocalizedString(@"max_axle_load_description");
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.weightRating])
+        return OALocalizedString(@"max_weight_at_full_load_description");
     return @"";
 }
 
 - (NSString *)getParameterImage:(NSString *)parameter
 {
-    if ([parameter isEqualToString:@"weight"])
+    if ([RouteParamVehicleHelper isWeightParameter:parameter])
         return @"img_help_weight_limit_day";
-    else if ([parameter isEqualToString:@"height"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.height])
         return [self isBoat] ? @"img_help_vessel_height_day" : @"img_help_height_limit_day";
-    else if ([parameter isEqualToString:@"width"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.width])
         return  [self isBoat] ? @"img_help_vessel_width_day" : @"img_help_width_limit_day";
-    else if ([parameter isEqualToString:@"length"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.length])
         return @"img_help_length_limit_day";
-    else if ([parameter isEqualToString:@"motor_type"])
+    else if ([parameter isEqualToString:RouteParamVehicleHelper.motorType])
         return @"ic_custom_fuel";
     return @"";
 }

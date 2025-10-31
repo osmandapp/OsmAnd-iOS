@@ -101,16 +101,8 @@ extension OABaseWidgetView {
     }
 
     private func showDeleteWidgetAlert() {
-        let alert = UIAlertController(title: localizedString("delete_widget"),
-                                      message: localizedString("delete_widget_description"),
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard let self,
-                  let widgetInfo = getWidgetInfo() else { return }
-            let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-            widgetRegistry.enableDisableWidget(for: OAAppSettings.sharedManager().applicationMode.get(), widgetInfo: widgetInfo, enabled: false, recreateControls: true)
-        })
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        guard let widgetInfo = getWidgetInfo() else { return }
+        let alert = WidgetUtils.deleteWidgetAlert(with: OAAppSettings.sharedManager().applicationMode.get(), widgetInfo: widgetInfo)
         OARootViewController.instance().navigationController?.present(alert, animated: true)
     }
 }

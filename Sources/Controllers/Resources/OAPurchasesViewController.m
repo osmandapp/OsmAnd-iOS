@@ -516,7 +516,7 @@ static BOOL _purchasesUpdated;
     else if ([key isEqualToString:@"redeem_promo_code"])
         [self openSafariWithURL:kAppleRedeemPromoCode];
     else if ([key isEqualToString:@"new_device_account"])
-        [self openSafariWithURL:kDocsPurchasesNewDevice];
+        [self openSafariWithURL:[kDocsPurchasesNewDevice localizedURLIfAvailable]];
     else if ([key isEqualToString:@"contact_support"])
         [self sendEmail];
     else if ([key isEqualToString:@"product_pro_crossplatform"])

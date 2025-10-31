@@ -1400,6 +1400,7 @@
 "lang_zh_tw" = "Chinese (Traditional)";
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
+"lang_crh" = "Crimean Tatar (latin)";
 
 "shared_string_maps" = "Maps";
 "purchases" = "Purchases";
@@ -1785,6 +1786,10 @@
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
 "osmand_depelopment_use_3d_icons" = "Use 3D location position icons";
 "battery_saving_mode" = "Battery saving mode";
+"visualizing_button_grid" = "Map button grid";
+"efficient_grid" = "Efficient grid";
+"slots" = "Slots";
+"button_frames" = "Button frames";
 
 "simulate_in_progress" = "In progress";
 "simulate_your_location_gpx_descr" = "Simulate your position using a recorded GPX track.";
@@ -3164,6 +3169,8 @@
 "routing_attr_only_permitted_ways_name" = "Expressly permitted ways";
 "routing_attr_prefer_horse_routes_description" = "Prefer horse routes";
 "routing_attr_prefer_horse_routes_name" = "Prefer horse routes";
+"max_weight_at_full_load_description" = "Provide your vehicle\'s max weight at full load to avoid roads and bridges with weight limits.";
+"max_axle_load_description" = "Provide your vehicle\'s max axle load to avoid roads and bridges with weight limits.";
 "weight_limit_description" = "Provide your vehicle weight, some route restrictions may apply for heavy vehicles.";
 "height_limit_description" = "Provide your vehicle height, some route restrictions may apply for high vehicles.";
 "lenght_limit_description" = "Provide your vehicle length, some routes restrictions may be applied for long vehicles.";

@@ -46,6 +46,7 @@
 NSString *const kCellSwitchIsOnKey = @"kCellSwitchIsOnKey";
 NSString *const kUse3dIconsKey = @"kUse3dIconsKey";
 NSString *const kBatterySavingModeKey = @"kBatterySavingModeKey";
+NSString *const kVisualizingButtonGridKey = @"kVisualizingButtonGridKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
 NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
@@ -121,6 +122,12 @@ NSString *const kBLEScanerKey = @"kBLEScanerKey";
         kCellKeyKey : kBatterySavingModeKey,
         kCellTitleKey : OALocalizedString(@"battery_saving_mode"),
         @"isOn" : @([[OAAppSettings sharedManager].batterySavingMode get])
+    }];
+    [renderingSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellKeyKey : kVisualizingButtonGridKey,
+        kCellTitleKey : OALocalizedString(@"visualizing_button_grid"),
+        @"actionBlock" : (^void(){ [weakSelf openVisualizingButtonGridSettings]; })
     }];
     [_data addSection:renderingSection];
     
@@ -264,6 +271,12 @@ NSString *const kBLEScanerKey = @"kBLEScanerKey";
 {
     OAOsmandDevelopmentSimulateLocationViewController *vc = [[OAOsmandDevelopmentSimulateLocationViewController alloc] init];
     vc.simulateLocationDelegate = self;
+    [self showViewController:vc];
+}
+
+- (void)openVisualizingButtonGridSettings
+{
+    ButtonGridVisualizationSettingsViewController *vc = [[ButtonGridVisualizationSettingsViewController alloc] initWithHudLayout:[[OARootViewController instance] mapPanel].hudViewController.mapHudLayout];
     [self showViewController:vc];
 }
 

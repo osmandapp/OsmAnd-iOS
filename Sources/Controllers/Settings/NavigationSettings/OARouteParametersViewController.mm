@@ -267,13 +267,13 @@ static NSString *foregroundImageKey = @"foregroundImage";
             else if ([param hasPrefix:kRouteParamHazmatCategoryUsaPrefix])
                 _hazmatCategoryUSAParameters.push_back(routingParameter);
             else if ((![param isEqualToString:kRouteParamShortWay] || [self.appMode isDerivedRoutingFrom:OAApplicationMode.CAR]) &&
-                     ![param isEqualToString:kRouteParamVehicleHeight] &&
-                     ![param isEqualToString:kRouteParamVehicleWeight] &&
-                     ![param isEqualToString:kRouteParamVehicleWidth] &&
-                     ![param isEqualToString:kRouteParamVehicleMotorType] &&
-                     ![param isEqualToString:kRouteParamVehicleMaxAxleLoad] &&
-                     ![param isEqualToString:kRouteParamVehicleWeightRating] &&
-                     ![param isEqualToString:kRouteParamVehicleLength])
+                     ![param isEqualToString:RouteParamVehicleHelper.height] &&
+                     ![param isEqualToString:RouteParamVehicleHelper.weight] &&
+                     ![param isEqualToString:RouteParamVehicleHelper.width] &&
+                     ![param isEqualToString:RouteParamVehicleHelper.motorType] &&
+                     ![param isEqualToString:RouteParamVehicleHelper.maxAxleLoad] &&
+                     ![param isEqualToString:RouteParamVehicleHelper.weightRating] &&
+                     ![param isEqualToString:RouteParamVehicleHelper.length])
             {
                 _otherRoutingParameters.push_back(routingParameter);
             }

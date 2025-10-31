@@ -74,6 +74,7 @@ int const kZoomToSearchPOI = 16.0;
         _type = [ObfConstants getOsmEntityType:mapObject];
         _names = [[NSMutableArray alloc] init];
         _tags = nil;
+        _mainAmenityType = nil;
 
         if ([mapObject isKindOfClass:[OAPOI class]])
         {
@@ -84,6 +85,7 @@ int const kZoomToSearchPOI = 16.0;
                 [_names addObject:poi.name];
             if (!NSDictionaryIsEmpty(poi.localizedNames))
                 [_names addObjectsFromArray:(NSArray *)poi.localizedNames.allValues];
+            _mainAmenityType = poi.subType;
         }
         else if ([mapObject isKindOfClass:[OARenderedObject class]])
         {
@@ -296,6 +298,20 @@ int const kZoomToSearchPOI = 16.0;
 
     if (!NSArrayIsEmpty(filtered))
     {
+        if (request.mainAmenityType != nil)
+        {
+            NSString *type = request.mainAmenityType;
+            [filtered sortUsingComparator:^NSComparisonResult(OAPOI *a1, OAPOI *a2)
+             {
+                BOOL m1 = [a1.subType isEqualToString:type];
+                BOOL m2 = [a2.subType isEqualToString:type];                
+                if (m1 == m2)
+                {
+                    return NSOrderedSame;
+                }
+                return m1 ? NSOrderedAscending : NSOrderedDescending;
+            }];
+        }
         return [[BaseDetailsObject alloc] initWithAmenities:filtered
                                                        lang:[[OAAppSettings sharedManager].settingPrefMapLanguage get]];
     }

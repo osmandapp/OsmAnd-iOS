@@ -8,7 +8,6 @@
 
 import UIKit
 
-@objc(OAHelpDetailsViewController)
 @objcMembers
 final class HelpDetailsViewController: OABaseNavbarViewController {
     var telegramChats: [TelegramChat] = []
@@ -29,10 +28,16 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if titleText == localizedString("telegram_chats") {
-            loadAndParseJson()
+            telegramChats = MenuHelpDataService.shared.telegramChats
+            generateTelegramChatsData()
+            tableView.reloadData()
         } else {
             generateChildArticlesData()
         }
+    }
+    
+    override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
     override func getTitle() -> String? {
@@ -49,20 +54,16 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
         guard let indexPath else { return nil }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell else { return nil }
+        
         let item = tableData.item(for: indexPath)
-        var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
-        if cell == nil {
-            let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
-            cell = nib?.first as? OASimpleTableViewCell
-            cell?.leftIconView.tintColor = .iconColorDefault
-        }
-        if let cell {
-            cell.descriptionVisibility(item.key == "telegramChats")
-            cell.titleLabel.text = item.title
-            cell.descriptionLabel.text = item.descr
-            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.accessoryType = (item.obj(forKey: "childArticles") as? [ArticleNode])?.isEmpty == false ? .disclosureIndicator : .none
-        }
+        
+        cell.leftIconView.tintColor = .iconColorDefault
+        cell.descriptionVisibility(item.key == "telegramChats")
+        cell.titleLabel.text = item.title
+        cell.descriptionLabel.text = item.descr
+        cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+        cell.accessoryType = (item.obj(forKey: "childArticles") as? [ArticleNode])?.isEmpty == false ? .disclosureIndicator : .none
         return cell
     }
     
@@ -93,7 +94,7 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
             let title = removeTextInBrackets(from: chat.title)
             let url = chat.url
             let chatRow = telegramChatsSection.createNewRow()
-            chatRow.cellType = OASimpleTableViewCell.getIdentifier()
+            chatRow.cellType = OASimpleTableViewCell.reuseIdentifier
             chatRow.key = "telegramChats"
             chatRow.title = title
             chatRow.descr = url
@@ -111,28 +112,14 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
             }
             
             let title = MenuHelpDataService.shared.getArticleName(from: article)
-            let url = article.url
+            let url = article.url.localizedURLIfAvailable()
             let articleRow = childArticlesSection.createNewRow()
-            articleRow.cellType = OASimpleTableViewCell.getIdentifier()
+            articleRow.cellType = OASimpleTableViewCell.reuseIdentifier
             articleRow.key = "childArticle"
             articleRow.title = title
             articleRow.iconName = "ic_custom_book_info"
             articleRow.setObj(url, forKey: "url")
             articleRow.setObj(article.childArticles, forKey: "childArticles")
-        }
-    }
-    
-    private func loadAndParseJson() {
-        MenuHelpDataService.shared.loadAndParseJson(from: kPopularArticlesAndTelegramChats, for: .telegramChats) { [weak self] result, error in
-            guard let self else { return }
-            
-            if error != nil {
-                debugPrint(error as Any)
-            } else if let chats = result as? [TelegramChat] {
-                self.telegramChats = chats
-                self.generateTelegramChatsData()
-                self.tableView.reloadData()
-            }
         }
     }
     

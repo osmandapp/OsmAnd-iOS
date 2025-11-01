@@ -3951,3 +3951,10 @@
 "rendering_attr_hideTidalFlats_name" = "Припливні мілини";
 "rendering_attr_safetyContour_description" = "Безпечний контур глибини";
 "ble_scanner" = "BLE-сканер";
+"lang_crh" = "Кримськотатарська (латиниця)";
+"visualizing_button_grid" = "Сітка кнопок карти";
+"efficient_grid" = "Ефективна мережа";
+"slots" = "Слоти";
+"button_frames" = "Рамки для ґудзиків";
+"max_weight_at_full_load_description" = "Вкажіть максимальну вагу вашого транспортного засобу при повному завантаженні, щоб уникнути доріг та мостів з обмеженнями ваги.";
+"max_axle_load_description" = "Вкажіть максимальне навантаження на вісь вашого автомобіля, щоб уникнути доріг та мостів з обмеженнями ваги.";

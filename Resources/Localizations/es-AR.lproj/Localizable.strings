@@ -2635,7 +2635,7 @@
 "rendering_attr_seabedDetail_description" = "Información de texto adicional sobre la calificación de la superficie del fondo marino, los tipos de superficie combinados, la categoría y el taxón de la maleza o la hierba marina";
 "rendering_attr_noNatureReserveBoundaries_description" = "Oculta fronteras de reservas naturales,áreas protegidas y parques nacionales.";
 "rendering_attr_showBusRoutes_name" = "Rutas de colectivos";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Una representación esquemática de los iconos a bajos niveles de zum para aquellos puntos de interés que no suelen mostrarse.";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Una representación esquemática de los iconos a bajos niveles de zum para aquellos puntos de interés que no suelen mostrarse";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Muestra etiquetas que solicitan más atención (fixme)";
 "rendering_attr_showMtbScale_description" = "Muestra los senderos según la escala de MTB.";
 "routing_attr_difficulty_preference_expert_name" = "Experto";
@@ -3956,3 +3956,10 @@
 "rendering_attr_hideTidalFlats_name" = "Llanuras intermareales";
 "rendering_attr_safetyContour_description" = "Curvas de profundidad de seguridad";
 "ble_scanner" = "Escáner BLE";
+"lang_crh" = "Tártaro de Crimea (latín)";
+"visualizing_button_grid" = "Cuadrícula de botones del mapa";
+"efficient_grid" = "Cuadrícula eficiente";
+"slots" = "Espacios";
+"button_frames" = "Marcos de botones";
+"max_weight_at_full_load_description" = "Indicá el peso bruto máximo del vehículo, para así evitar caminos y puentes con restricciones de peso.";
+"max_axle_load_description" = "Indicá la carga máxima por eje del vehículo, para así evitar caminos y puentes con restricciones de peso.";

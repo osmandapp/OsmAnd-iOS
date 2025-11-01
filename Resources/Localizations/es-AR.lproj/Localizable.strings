@@ -1740,7 +1740,7 @@
 "filter_poi_hint" = "Filtrar por nombre";
 "rendering_value_category_name" = "Categoría";
 "poi_category_and_type" = "Categoría y tipo de PDI";
-"opening_hours" = "Horario de atención";
+"opening_hours" = "Horario de apertura";
 "poi_select_category" = "Elegir categoría";
 "poi_select_type" = "Elegir el tipo";
 "city_type_suburb" = "Suburbio";

@@ -513,6 +513,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         }
         else if ([convertedKey containsString:ROUTE_TAG]
                 || [convertedKey isEqualToString:WIKIDATA_TAG]
+                || [convertedKey isEqualToString:WIKI_PHOTO_TAG]
                 || [convertedKey isEqualToString:WIKIMEDIA_COMMONS_TAG])
         {
             continue;

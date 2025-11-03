@@ -39,6 +39,7 @@ NSString * const CUISINE_TAG = @"cuisine";
 NSString * const WIKIDATA_TAG = @"wikidata";
 NSString * const WIKIMEDIA_COMMONS_TAG = @"wikimedia_commons";
 NSString * const WIKIPEDIA_TAG = @"wikipedia";
+NSString * const WIKI_PHOTO_TAG = @"wiki_photo";
 NSString * const MAPILLARY_TAG = @"mapillary";
 NSString * const DISH_TAG = @"dish";
 NSString * const POI_REF = @"ref";

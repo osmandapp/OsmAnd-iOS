@@ -1532,7 +1532,7 @@
 "nav_type_descr" = "Válassza ki, hogyan számítsa ki az útvonalat ennél a profilnál";
 "connect_rp" = "Útvonalpontok összekötése";
 "show_warnings_descr" = "Közlekedési figyelmeztetések (sebességkorlátozás, közúti ellenőrzés, fekvőrendőr, alagút), traffipaxriasztás és sávinformációk beállítása.";
-"speak_descr" = "Utcanevek, forgalmi figyelmeztetések (közúti ellenőrzés, fekvőrendőr), traffipaxriasztás és sebességkorlátozás bemondásának beállítása.";
+"speak_descr" = "Beállítások a következőkhöz: Utcanevek és forgalmi figyelmeztetések például: elsőbbségadás kötelező (stop) tábla, vagy fekvőrendőr bejelentése, figyelmeztetések a sebességmérő kamerákhoz és a sebességkorlátozásokra.";
 "lang_pnb" = "pandzsábi";
 "lang_zh_hk" = "kínai (Hong Kong)";
 "routeInfo_winter_ice_road_description" = "Útvonal vagy nyomvonal színezése a téli használat szerinti besorolása szerint.";

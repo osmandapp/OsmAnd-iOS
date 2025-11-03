@@ -3505,7 +3505,6 @@
 "routing_algorithm_a" = "A*";
 "int_hour" = "h";
 "shared_string_minute_lowercase" = "min";
-"twitter" = "Twitter";
 "osmand_cloud" = "OsmAnd Cloud";
 "share_geo" = "geo:";
 "detailed_track_guidance" = "Orientação pormenorizada do percurso";

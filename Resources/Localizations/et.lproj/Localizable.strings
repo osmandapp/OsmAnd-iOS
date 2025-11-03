@@ -3106,7 +3106,6 @@
 "popular_articles_not_found_descr" = "Praeguse kaardi keskpunkti lähedusest ei leidu ühtegi artiklit. Palun kasuta selleks otsingut.";
 "calendar_new_event_title" = "Uus sündmus";
 "coordinates_widget_map_center" = "Koordinaadid: kaardi keskpaik";
-"twitter" = "Twitter";
 "nautical_depth_points" = "Merenduse samakõrguspunktid";
 "weather_temp_enable_descr" = "Lülita sisse kaardil temperatuuri andmekihi kuvamiseks.";
 "weather_precip_enable_descr" = "Lülita sisse kaardil sademete andmekihi kuvamiseks.";

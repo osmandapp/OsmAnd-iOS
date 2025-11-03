@@ -407,7 +407,7 @@
 "items_selected" = "%d kiválasztva";
 "custom_search" = "Egyéni keresés";
 "poi_filter_custom_filter" = "Egyéni szűrő";
-"poi_filter_closest_poi" = "Legközelebbi érdekes hely";
+"poi_filter_closest_poi" = "Legközelebbi érdekes helyek";
 "shared_string_is_open_24_7" = "Éjjel-nappal nyitva";
 "shared_string_is_open" = "Most nyitva van";
 "poi_filter_by_name" = "Név szerinti keresés";
@@ -645,7 +645,7 @@
 "auto_zoom_map" = "Térkép automatikus nagyítása";
 "guidance_preferences_descr" = "Navigációs beállítások";
 "routing_settings" = "Navigáció";
-"show_cameras" = "Traffipaxok";
+"show_cameras" = "Sebességmérő kamerák";
 "show_lanes" = "Sávok";
 "speak_street_names" = "Utcanevek (TTS)";
 "speak_cameras" = "Sebességmérő kamerák";
@@ -1531,7 +1531,7 @@
 "auto_zoom_map_descr" = "Nagyítási szint állítása a sebesség függvényében (miközben a térkép követi a jelenlegi pozíciót).";
 "nav_type_descr" = "Válassza ki, hogyan számítsa ki az útvonalat ennél a profilnál";
 "connect_rp" = "Útvonalpontok összekötése";
-"show_warnings_descr" = "Közlekedési figyelmeztetések (sebességkorlátozás, közúti ellenőrzés, fekvőrendőr, alagút), traffipaxriasztás és sávinformációk beállítása.";
+"show_warnings_descr" = "Beállítások a következőkhöz: közlekedési figyelmeztetések (sebességkorlátozás, elsőbbségadás kötelező (stop) táblák, fekvőrendőr, alagút), sebességmérő kamerák és sávinformációk.";
 "speak_descr" = "Beállítások a következőkhöz: Utcanevek és forgalmi figyelmeztetések például: elsőbbségadás kötelező (stop) tábla, vagy fekvőrendőr bejelentése, figyelmeztetések a sebességmérő kamerákhoz és a sebességkorlátozásokra.";
 "lang_pnb" = "pandzsábi";
 "lang_zh_hk" = "kínai (Hong Kong)";

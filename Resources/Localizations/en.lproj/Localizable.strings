@@ -2217,7 +2217,6 @@
 "shared_string_about" = "About";
 "follow_us" = "Follow us";
 "facebook" = "Facebook";
-"twitter" = "Twitter";
 "reddit" = "Reddit";
 "whats_here" = "What's here";
 
@@ -4400,3 +4399,4 @@
 "rendering_attr_hideTidalFlats_name" = "Tidal flats";
 "rendering_attr_safetyContour_description" = "Safety depth contour";
 "ble_scanner" = "BLE Scanner";
+"x" = "X (formerly Twitter)";

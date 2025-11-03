@@ -177,7 +177,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     [telegramChatsRow setIconName:@"ic_custom_logo_telegram"];
     
     NSArray *additionalContactUsItems = @[
-        @{@"title": OALocalizedString(@"twitter"), @"descr": kCommunityTwitter, @"icon": @"ic_custom_logo_twitter", @"url": kCommunityTwitter},
+        @{@"title": OALocalizedString(@"x"), @"descr": kCommunityTwitter, @"icon": @"ic_custom_logo_twitter", @"url": kCommunityTwitter},
         @{@"title": OALocalizedString(@"reddit"), @"descr": kCommunityReddit, @"icon": @"ic_custom_logo_reddit", @"url": kCommunityReddit},
         @{@"title": OALocalizedString(@"facebook"), @"descr": kCommunityFacebook, @"icon": @"ic_custom_logo_facebook", @"url": kCommunityFacebook}
     ];

@@ -3559,7 +3559,6 @@
 "reset_average_speed" = "Скинути середню швидкість";
 "cloud_sync_progress" = "Синхронізація… %@";
 "shared_string_ellipsis" = "…";
-"twitter" = "Twitter";
 "email_example_hint" = "user@example.com";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";

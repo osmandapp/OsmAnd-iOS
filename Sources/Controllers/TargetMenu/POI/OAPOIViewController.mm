@@ -53,7 +53,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
-static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
+static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"x", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
 static const NSArray<NSString *> *kContactPhoneTags = @[PHONE_TAG, MOBILE_TAG, @"whatsapp", @"viber"];
 static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
@@ -925,12 +925,13 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     urls[@"facebook"] = @"https://facebook.com/";
     urls[@"vk"] = @"https://vk.com/";
     urls[@"instagram"] = @"https://instagram.com/";
-    urls[@"twitter"] = @"https://twitter.com/";
+    urls[@"twitter"] = @"https://x.com/";
+    urls[@"x"] = @"https://x.com/",
     urls[@"ok"] = @"https://ok.ru/";
     urls[@"telegram"] = @"https://t.me/";
     urls[@"flickr"] = @"https://flickr.com/";
 
-    if ([urls.allKeys containsObject:key])
+    if ([urls.allKeys containsObject:[key lowercaseString]])
         return [urls[key] stringByAppendingString:value];
     else
         return nil;

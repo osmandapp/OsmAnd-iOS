@@ -86,6 +86,12 @@ final class WidgetPageViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        layoutWidgets()
+    }
+    
+    @discardableResult
     func layoutWidgets() -> (width: CGFloat, height: CGFloat) {
         var width: CGFloat = 0
         var height: CGFloat = 0

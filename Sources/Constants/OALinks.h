@@ -73,7 +73,7 @@ static NSString * const kFastSpringManage = @"https://osmand.onfastspring.com/ac
 #define kDocsMapDownloadTiles  @"https://docs.osmand.net/docs/user/map/raster-maps#download--update-tiles"
 #define kDocsTroubleshootingVoiceNavigation  @"https://docs.osmand.net/docs/user/troubleshooting/navigation#voice-navigation"
 
-#define kCommunityTwitter  @"https://twitter.com/osmandapp"
+#define kCommunityTwitter  @"https://x.com/osmandapp"
 #define kCommunityReddit  @"https://www.reddit.com/r/OsmAnd"
 #define kCommunityFacebook  @"https://www.facebook.com/osmandapp"
 #define kCommunityVk  @"https://vk.com/osmandapp"

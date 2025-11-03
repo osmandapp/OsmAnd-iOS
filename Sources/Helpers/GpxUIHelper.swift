@@ -433,8 +433,9 @@ class GpxUIHelper: NSObject {
     static func setupElevationChart(chartView: ElevationChart,
                                     topOffset: CGFloat,
                                     bottomOffset: CGFloat,
-                                    useGesturesAndScale: Bool) {
-        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40))
+                                    useGesturesAndScale: Bool,
+                                    showXInMarker: Bool) {
+        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40), showXAxisValue: showXInMarker)
         setupElevationChart(chartView: chartView,
                             markerView: marker,
                             topOffset: topOffset,

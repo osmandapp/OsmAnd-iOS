@@ -24,6 +24,7 @@ extern NSString * const CUISINE_TAG;
 extern NSString * const WIKIDATA_TAG;
 extern NSString * const WIKIMEDIA_COMMONS_TAG;
 extern NSString * const WIKIPEDIA_TAG;
+extern NSString * const WIKI_PHOTO_TAG;
 extern NSString * const MAPILLARY_TAG;
 extern NSString * const DISH_TAG;
 extern NSString * const POI_REF;

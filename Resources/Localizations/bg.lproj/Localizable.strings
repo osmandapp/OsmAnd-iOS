@@ -2330,3 +2330,4 @@
 "download_depth_countours" = "Контури на морски дълбочини";
 "day_short" = "ден";
 "week_short" = "Седм.";
+"rendering_attr_highway_class_service_name" = "Служебна";

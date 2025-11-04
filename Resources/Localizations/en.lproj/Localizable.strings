@@ -1400,6 +1400,7 @@
 "lang_zh_tw" = "Chinese (Traditional)";
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
+"lang_crh" = "Crimean Tatar (latin)";
 
 "shared_string_maps" = "Maps";
 "purchases" = "Purchases";
@@ -1785,6 +1786,10 @@
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
 "osmand_depelopment_use_3d_icons" = "Use 3D location position icons";
 "battery_saving_mode" = "Battery saving mode";
+"visualizing_button_grid" = "Map button grid";
+"efficient_grid" = "Efficient grid";
+"slots" = "Slots";
+"button_frames" = "Button frames";
 
 "simulate_in_progress" = "In progress";
 "simulate_your_location_gpx_descr" = "Simulate your position using a recorded GPX track.";
@@ -2212,7 +2217,6 @@
 "shared_string_about" = "About";
 "follow_us" = "Follow us";
 "facebook" = "Facebook";
-"twitter" = "Twitter";
 "reddit" = "Reddit";
 "whats_here" = "What's here";
 
@@ -3164,6 +3168,8 @@
 "routing_attr_only_permitted_ways_name" = "Expressly permitted ways";
 "routing_attr_prefer_horse_routes_description" = "Prefer horse routes";
 "routing_attr_prefer_horse_routes_name" = "Prefer horse routes";
+"max_weight_at_full_load_description" = "Provide your vehicle\'s max weight at full load to avoid roads and bridges with weight limits.";
+"max_axle_load_description" = "Provide your vehicle\'s max axle load to avoid roads and bridges with weight limits.";
 "weight_limit_description" = "Provide your vehicle weight, some route restrictions may apply for heavy vehicles.";
 "height_limit_description" = "Provide your vehicle height, some route restrictions may apply for high vehicles.";
 "lenght_limit_description" = "Provide your vehicle length, some routes restrictions may be applied for long vehicles.";
@@ -3339,6 +3345,12 @@
 "backup_delete_all_data_in_progress" = "Please wait until OsmAnd delete all your data from cloud. All data on the device remain untouch.";
 "backup_delete_all_data_finished" = "All your data was successfully deleted from OsmAnd Cloud.";
 "backup_remove_old_versions_finished" = "Old versions was successfully deleted from OsmAnd Cloud.";
+"liter_single" = "Liter";
+"imperial_gallon" = "Imperial gallon";
+"us_gallon" = "US gallon";
+"kilometers" = "Kilometers";
+"miles" = "Miles";
+"mpg" = "MPG";
 "delete_all_confirmation" = "Yes, delete all";
 "manage_storage" = "Manage storage";
 "backup_delete_types_descr" = "Delete all data for deprecated data types from OsmAnd Cloud?";
@@ -4035,6 +4047,7 @@
 "obd_ambient_air_temp" = "Ambient temperature";
 "obd_ambient_air_temp_desc" = "Shows the temperature outside the vehicle.";
 "obd_battery_voltage" = "Battery voltage";
+"obd_alt_battery_voltage" = "Adapter voltage";
 "obd_engine_coolant_temp" = "Coolant temperature";
 "remaining_fuel" = "Remaining fuel";
 "remaining_fuel_description" = "Shows the amount of fuel left in the vehicle\'s tank";
@@ -4298,8 +4311,6 @@
 "obd_fuel_consumption_rate_liter_hour" = "Fuel consumption rate";
 "obd_fuel_consumption_rate_percent_hour" = "Fuel consumption rate %/h";
 
-"obd_fuel_consumption_rate_l_km" = "Fuel consumption rate (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Shows vehicle fuel consumption rate based on calculations (L/100 km)";
 "simulate_obd" = "Simulate obd data";
 
 "kpa_unit" = "kPa";
@@ -4387,3 +4398,5 @@
 "rendering_attr_showLNAMmarker_name" = "ENC markers";
 "rendering_attr_hideTidalFlats_name" = "Tidal flats";
 "rendering_attr_safetyContour_description" = "Safety depth contour";
+"ble_scanner" = "BLE Scanner";
+"x" = "X (formerly Twitter)";

@@ -133,7 +133,7 @@ static const float ZONE_1_ZOOM_THRESHOLD = 0.6f;
 static const float ZONE_2_ZOOM_THRESHOLD = 1.5f;
 
 static const CGFloat kDistanceBetweenFingers = 50.0;
-static const NSInteger kReplaceLocalNamesMaxZoom = 6;
+static const NSInteger kDetailedMapZoom = 9;
 
 @interface OATouchLocation : NSObject
 
@@ -2315,29 +2315,62 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
 }
 
+- (BOOL)isBasemapZoom:(int)zoom
+{
+    return zoom < kDetailedMapZoom;
+}
+
 - (void)updateMapLocaleLanguage
 {
     if (_mapPresentationEnvironment != nullptr)
     {
-        NSString *langId = [self getMapPreferredLocale:_mapView.zoomLevel];
+        NSString *langId = [self isBasemapZoom:_mapView.zoomLevel] ? [OAUtilities currentLang] : [[OAAppSettings sharedManager].settingPrefMapLanguage get];
         if (![langId isEqualToString:_mapPresentationEnvironment->getLocaleLanguageId().toNSString()])
+        {
             _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+        }
+
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:_mapView.zoomLevel];
+        _mapPresentationEnvironment->setLanguagePreference(langPreferences);
     }
 }
 
-- (NSString *)getMapPreferredLocale:(int)zoom
+- (OsmAnd::MapPresentationEnvironment::LanguagePreference)getLanguagePreference:(int)settingMapLanguage zoom:(int)zoom
 {
-    return [self useAppLocaleForMap:zoom]
-            ? [OAUtilities currentLang]
-            : [[OAAppSettings sharedManager].settingPrefMapLanguage get];
-}
+    OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
 
-- (BOOL)useAppLocaleForMap:(int)zoom
-{
-    BOOL replaceLocalNamesToAppLocale = zoom <= kReplaceLocalNamesMaxZoom;
-    NSString *settingPrefMapLanguage = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
-    BOOL useLocalNames = !settingPrefMapLanguage || settingPrefMapLanguage.length == 0;
-    return replaceLocalNamesToAppLocale && useLocalNames;
+
+    if ([self isBasemapZoom:_mapView.zoomLevel])
+    {
+        return OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrNative;
+    }
+
+    switch (settingMapLanguage) {
+        case 0:
+            langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+            break;
+        case 1:
+            langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrNative;
+            break;
+        case 2:
+            langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
+            break;
+        case 6:
+            langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliterated;
+            break;
+        case 4:
+            langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedAndNative;
+            break;
+        case 5:
+            langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliteratedAndNative;
+            break;
+        default:
+            langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+            break;
+    }
+    
+    return langPreferences;
 }
 
 - (void) updateCurrentMapSource
@@ -2417,31 +2450,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
             NSLog(@"%@", [OAUtilities currentLang]);
             
-            OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
-            
-            switch (settings.settingMapLanguage.get) {
-                case 0:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
-                    break;
-                case 1:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrNative;
-                    break;
-                case 2:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
-                    break;
-                case 6:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliterated;
-                    break;
-                case 4:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedAndNative;
-                    break;
-                case 5:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliteratedAndNative;
-                    break;
-                default:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
-                    break;
-            }
+            OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:_mapView.zoomLevel];
             
             double mapDensity = [settings.mapDensity get];
             [_mapView setVisualZoomShift:mapDensity];
@@ -2584,31 +2593,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             
             NSLog(@"%@", [OAUtilities currentLang]);
             
-            OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
-            
-            switch (settings.settingMapLanguage.get) {
-                case 0:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
-                    break;
-                case 1:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrNative;
-                    break;
-                case 2:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
-                    break;
-                case 6:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliterated;
-                    break;
-                case 4:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedAndNative;
-                    break;
-                case 5:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliteratedAndNative;
-                    break;
-                default:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
-                    break;
-            }
+            OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:_mapView.zoomLevel];
 
             QSet<QString> disabledPoiTypes = QSet<QString>();
             for (NSString *disabledPoiType in [settings getDisabledTypes])

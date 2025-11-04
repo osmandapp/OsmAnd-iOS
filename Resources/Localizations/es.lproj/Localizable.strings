@@ -3425,7 +3425,6 @@
 "int_min" = "min";
 "units_sec_short" = "seg.";
 "shared_a_z" = "A-Z";
-"twitter" = "X (Twitter)";
 "short_min" = "min";
 "quick_action_terrain_color_scheme" = "Esquema de color del terreno";
 "quick_action_need_to_add_item_to_list" = "Añadir al menos un elemento a la lista en los ajustes de «Acción rápida»";
@@ -3770,8 +3769,6 @@
 "obd_fuel_consumption_rate_scanner" = "Tasa de consumo de combustible (OBD)";
 "obd_fuel_consumption_rate_liter_hour" = "Tasa de consumo de combustible";
 "obd_fuel_consumption_rate_percent_hour" = "Tasa de consumo de combustible %/h";
-"obd_fuel_consumption_rate_l_km" = "Tasa de consumo de combustible (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Muestra la tasa de consumo de combustible del vehículo según los cálculos (L/100 km)";
 "simulate_obd" = "Simular datos OBD";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";

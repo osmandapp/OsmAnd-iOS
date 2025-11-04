@@ -289,7 +289,6 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         }
         if item.key == "delete_widget_key" {
             onWidgetDeleted()
-            dismiss()
         } else if item.key == "value_pref" {
             let possibleValues = item.obj(forKey: "possible_values") as? [OATableRowData]
             if let possibleValues {
@@ -370,8 +369,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     }
     
     private func onWidgetDeleted() {
-        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: false, recreateControls: true)
+        let alert = WidgetUtils.deleteWidgetAlert(with: selectedAppMode, widgetInfo: widgetInfo, completion: dismiss)
+        present(alert, animated: true)
     }
     
     private func updateWidgetStyleForRow(with mapWidgetInfo: MapWidgetInfo) {

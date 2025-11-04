@@ -58,6 +58,7 @@ var languageDict = [
     "bs" : "bs",                // Bosnian
     "ca" : "ca",                // Catalan
     "ckb" : "ckb",              // Kurdish, Sorani
+    "crh" : "crh",              // Crimean Tatar (latin)
     "cs" : "cs",                // Czech
     "cy" : "cy",                // Welsh
     "da" : "da",                // Danish

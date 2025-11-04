@@ -3638,7 +3638,6 @@
 "shared_string_minute_lowercase" = "min";
 "mapillary_item" = "OsmAnd + Mapillary";
 "facebook" = "Facebook";
-"twitter" = "Twitter";
 "reddit" = "Reddit";
 "shared_string_color_magenta" = "Magenta";
 "shared_string_wikivoyage" = "Wikivoyage";
@@ -3757,8 +3756,6 @@
 "obd_fuel_consumption_rate_scanner" = "Bränsleförbrukningstakt (obd)";
 "obd_fuel_consumption_rate_liter_hour" = "Bränsleförbrukningstakt";
 "obd_fuel_consumption_rate_percent_hour" = "Bränsleförbrukningstakt %/h";
-"obd_fuel_consumption_rate_l_km" = "Bränsleförbrukningstakt (l/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Visar fordents bränsleförbrukningstakt baserat på beräkningar (l/100 km)";
 "simulate_obd" = "Simulera obd-data";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";
@@ -3806,3 +3803,17 @@
 "obd_fuel_type_bifuel_lpg" = "Bifuel kör LPG";
 "obd_fuel_type_bifuel_ethanol" = "Bifuel kör etanol";
 "obd_fuel_type_unknown" = "Okänt drivmedel";
+"map_orientations_choose_description" = "Lämna tom för att växla mellan alla tillgängliga lägen, eller lägg bara till dina föredragna.";
+"map_orientations" = "Kartor orienteringar";
+"altitude_metrics_description" = "Ställ in displayenheten för höjd i widgets och statistik.";
+"select_map_orientation" = "Välj kartorientering";
+"available" = "Tillgänglig";
+"download_live_updates" = "Direkt-uppdateringar";
+"local_indexes_cat_tts" = "Röstmeddelanden (TTS)";
+"local_indexes_cat_voice" = "Röstmeddelanden (inspelade)";
+"quick_action_template_name" = "Mallnamn";
+"quick_action_get_info" = "Få info";
+"quick_action_enter_message" = "Ange meddelande";
+"quick_action_parking_descr" = "Tryck på denna åtgärdsknapp lägger till en parkeringsplats på kartans centrumpunkt.";
+"quick_action_next_app_profile" = "App profil till nästa";
+"key_event_action_next_app_profile" = "Nästa app-profil";

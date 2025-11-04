@@ -765,7 +765,6 @@
 "shared_string_about" = "關於";
 "follow_us" = "追蹤我們";
 "facebook" = "臉書";
-"twitter" = "推特";
 "context_menu_item_directions_from" = "設為起點";
 "search_nearby" = "在附近搜尋";
 "map_widget_ruler_control" = "距離尺規";
@@ -3717,7 +3716,6 @@
 "shared_string_volume" = "容量";
 "obd_ambient_air_temp" = "環境溫度";
 "obd_fuel_pressure_desc" = "顯示燃油系統內的壓力";
-"obd_fuel_consumption_rate_l_km" = "燃料消耗率（公升/100公里）";
 "obd_engine_oil_temperature_desc" = "顯示引擎機油的溫度。";
 "obd_vin" = "車輛識別號碼";
 "shared_string_large" = "大";
@@ -3734,7 +3732,6 @@
 "kpa_unit" = "千帕";
 "obd_fuel_consumption_rate_sensor_desc" = "顯示根據感測器所得的車輛燃料消耗率（公升/小時）";
 "obd_fuel_type_hydrogen" = "氫氣";
-"obd_fuel_consumption_rate_l_km_desc" = "顯示根據計算而得的車輛燃料消耗率（公升/100公里）";
 "obd_nothing_found_text" = "找不到診斷器";
 "obd_fuel_type_bifuel_propane" = "雙燃料丙烷";
 "obd_fuel_type_methanol" = "甲醇";

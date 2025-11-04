@@ -18,19 +18,14 @@
 #define kOsmAndGoPathPrefix @"/go"
 #define kOsmAndMapPathPrefix @"/map"
 
-#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-5-2-released"
-//#define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios/"
+//#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-9-released"
+#define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios/"
 #define kBlogGuideline  @"https://osmand.net/blog/guideline-pt"
 
 #define kSupportEmail @"support@osmand.net"
 static NSString * const kContactEmail = @"mailto:support@osmand.net";
 
-static NSString * const kPopularArticlesAndTelegramChats =  @"https://osmand.net/help-structure.json";
-static NSString * const kDocsMap = @"https://docs.osmand.net/docs/user/map/";
-static NSString * const kDocsNavigation = @"https://docs.osmand.net/docs/user/navigation/";
-static NSString * const kDocsSearch = @"https://docs.osmand.net/docs/user/search/";
-static NSString * const kDocsPersonal = @"https://docs.osmand.net/docs/user/personal/";
-static NSString * const kDocsPlanRoute = @"https://docs.osmand.net/docs/user/plan-route/";
+static NSString * const kPopularArticlesAndTelegramChats = @"https://osmand.net/help-structure.json";
 static NSString * const kDocsPlugins = @"https://docs.osmand.net/docs/user/plugins/";
 static NSString * const kGitHubDiscussion = @"https://github.com/osmandapp/OsmAnd-iOS/discussions/landing";
 static NSString * const kOpenIssueOnGitHub = @"https://github.com/osmandapp/OsmAnd-iOS/issues";
@@ -78,7 +73,7 @@ static NSString * const kFastSpringManage = @"https://osmand.onfastspring.com/ac
 #define kDocsMapDownloadTiles  @"https://docs.osmand.net/docs/user/map/raster-maps#download--update-tiles"
 #define kDocsTroubleshootingVoiceNavigation  @"https://docs.osmand.net/docs/user/troubleshooting/navigation#voice-navigation"
 
-#define kCommunityTwitter  @"https://twitter.com/osmandapp"
+#define kCommunityTwitter  @"https://x.com/osmandapp"
 #define kCommunityReddit  @"https://www.reddit.com/r/OsmAnd"
 #define kCommunityFacebook  @"https://www.facebook.com/osmandapp"
 #define kCommunityVk  @"https://vk.com/osmandapp"

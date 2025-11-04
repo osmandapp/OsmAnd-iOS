@@ -337,6 +337,7 @@ extension WidgetPanelViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         isInTransition = false
         updateContainerSize()
+        OARootViewController.instance().mapPanel?.hudViewController?.mapHudLayout.updateButtons()
     }
 }
 

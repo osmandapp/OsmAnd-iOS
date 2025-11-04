@@ -3128,7 +3128,6 @@
 "obd_throttle_position_desc" = "スロットルボディ内のスロットルバルブの角度を示します。";
 "obd_engine_coolant_temp_desc" = "エンジン冷却水の温度を表示します";
 "shared_string_hour" = "時間";
-"obd_fuel_consumption_rate_l_km_desc" = "計算による車両の燃料消費率(L/100 km)を表示します";
 "reset_average_value" = "平均値のリセット";
 "connect_obd_instructions_title" = "OsmAndはOBD-IIスキャナーとのBluetooth接続をサポートしています。";
 "obd_engine_runtime_desc" = "エンジンが始動してからの運転時間を示します。";
@@ -3168,7 +3167,6 @@
 "obd_fuel_type_bifuel_hydrogen" = "バイフューエル・水素";
 "kpa_unit" = "kPa(キロパスカル)";
 "obd_fuel_type_ethanol" = "エタノール";
-"obd_fuel_consumption_rate_l_km" = "燃料消費率(L/100 km)";
 "shared_string_other" = "その他";
 "obd_fuel_level_liter" = "燃料レベル(リットル)";
 "purchase_feature_desc_vehicle_metrics_obd_ii" = "OBD-IIプロトコルを使用して重要な車両データを追跡します。速度、エンジン回転数、燃料消費量などの主要な指標を監視します。";

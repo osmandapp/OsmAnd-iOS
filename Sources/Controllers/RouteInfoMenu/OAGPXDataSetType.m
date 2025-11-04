@@ -150,7 +150,7 @@
     {
         case GPXDataSetTypeAltitude:
         {
-            BOOL shouldUseFeet = [OAMetricsConstant shouldUseFeet:[[OAAppSettings sharedManager].metricSystem get]];
+            BOOL shouldUseFeet = [OAAltitudeMetricsConstant shouldUseFeet:[[OAAppSettings sharedManager].altitudeMetric get]];
             return OALocalizedString(shouldUseFeet ? @"foot" : @"m");
         }
         case GPXDataSetTypeSpeed:

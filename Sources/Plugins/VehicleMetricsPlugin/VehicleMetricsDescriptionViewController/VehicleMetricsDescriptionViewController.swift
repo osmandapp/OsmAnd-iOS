@@ -20,21 +20,6 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         }
     }
     
-    static let widgets: [OBDDataComputer.OBDTypeWidget] = [.fuelType,
-                                                           .temperatureIntake,
-                                                           .temperatureAmbient,
-                                                           .temperatureCoolant,
-                                                           .engineOilTemperature,
-                                                           .rpm,
-                                                           .speed,
-                                                           .fuelConsumptionRateLiterHour,
-                                                           .fuelConsumptionRateLiterKm,
-                                                           .fuelLeftLiter,
-                                                           .calculatedEngineLoad,
-                                                           .fuelPressure,
-                                                           .throttlePosition,
-                                                           .batteryVoltage]
-    
     static let placeholderTextNA: String = "N/A"
     
     var startBehavior: TableViewStartBehavior = .normal
@@ -73,6 +58,21 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         header.showSignalIndicator(show: false)
         return header
     }()
+    
+    private lazy var widgets: [OBDDataComputer.OBDTypeWidget] = [.fuelType,
+                                                                 .temperatureIntake,
+                                                                 .temperatureAmbient,
+                                                                 .temperatureCoolant,
+                                                                 .engineOilTemperature,
+                                                                 .rpm,
+                                                                 .speed,
+                                                                 fuelConsumptionRate(),
+                                                                 .fuelLeftLiter,
+                                                                 .calculatedEngineLoad,
+                                                                 .fuelPressure,
+                                                                 .throttlePosition,
+                                                                 .batteryVoltage,
+                                                                 .adapterBatteryVoltage]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,7 +144,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
             receivedDataSection.key = Section.receivedData.key
             
-            for widget in Self.widgets {
+            for widget in widgets {
                 let row = receivedDataSection.createNewRow()
                 row.cellType = OAValueTableViewCell.reuseIdentifier
                 row.icon = widget.image
@@ -255,6 +255,10 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             }
             navigationController?.present(UINavigationController(rootViewController: nameVC), animated: true)
         }
+    }
+    
+    private func fuelConsumptionRate() -> OBDDataComputer.OBDTypeWidget {
+        OAAppSettings.sharedManager().volumeUnits.get() == .LITRES ? .fuelConsumptionRateLiterKm : .fuelConsumptionRateMPerLiter
     }
     
     private func getDescription(for widget: OBDDataComputer.OBDComputerWidget) -> String {

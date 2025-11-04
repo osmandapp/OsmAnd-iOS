@@ -1858,7 +1858,7 @@
 "rendering_attr_seabedDetail_name" = "Zeebodem informatie";
 "rendering_attr_showBusRoutes_name" = "Busroutes";
 "rendering_attr_noNatureReserveBoundaries_name" = "Natuurlijke grenzen";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematische weergave van iconen bij lage zoomniveau\'s";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematische weergave van iconen bij lage zoomniveau's";
 "rendering_attr_weatherWindSpeedContours_name" = "Isolijnen windsnelheid";
 "rendering_attr_OSMMapperAssistantNote_description" = "Notitie labels tonen";
 "routing_attr_allow_intermittent_name" = "Laat regelmatig droogvallende waterwegen toe";
@@ -2747,8 +2747,6 @@
 "shared_string_hour" = "Uur";
 "obd_engine_runtime_desc" = "Toont hoelang de motor al draait sinds het starten.";
 "obd_engine_runtime" = "Motordraaitijd";
-"obd_fuel_consumption_rate_l_km" = "Brandstofverbruik (L/100 km)";
-"obd_fuel_consumption_rate_l_km_desc" = "Toont het brandstofverbruik van het voertuig op basis van berekeningen (L/100 km)";
 "simulate_obd" = "Simuleer OBD-gegevens";
 "kpa_unit" = "kPa";
 "obd_fuel_pressure" = "Brandstofdruk";
@@ -3017,7 +3015,6 @@
 "faq_item" = "FAQ";
 "mapillary_item" = "OsmAnd + Mapillary";
 "facebook" = "Facebook";
-"twitter" = "Twitter";
 "reddit" = "Reddit";
 "shared_string_color_magenta" = "Magenta";
 "index_name_antarctica" = "Antarctica";
@@ -3353,3 +3350,5 @@
 "mapil_no_images" = "Er zijn geen foto's bij deze locatie.";
 "mapillary_get_descr" = "Gebruik Mapillary om foto's aan deze locatie toe te voegen";
 "mapillary_turn_on_widget" = "Mapillary widget inschakelen";
+"altitude_metrics_description" = "Stelt de weergave-eenheid voor hoogte in voor widgets en statistieken.";
+"lang_crh" = "Krim-Tataars (Latijns)";

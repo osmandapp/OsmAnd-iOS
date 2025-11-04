@@ -62,7 +62,7 @@ final class GpxAppearanceInfo: NSObject {
     ])
     
     var width: String?
-    // public GradientScaleType scaleType; // закомментировано как и в исходнике
+    // public GradientScaleType scaleType;
     var color: Int = 0
     var coloringType: String?
     var gradientSpeedColor: Int = 0
@@ -189,5 +189,9 @@ final class GpxAppearanceInfo: NSObject {
         json["time_span"] = String(format: "%ld", timeSpan)
         json["wpt_points"] = String(format: "%ld", wptPoints)
         json["total_distance"] = String(format: "%f", totalDistance)
+    }
+
+    static func isGpxAppearanceTag(_ tag: String) -> Bool {
+        gpxAppearanceTags.contains(tag)
     }
 }

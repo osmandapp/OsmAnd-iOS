@@ -232,6 +232,7 @@
 		277987BE2E7AB5F100607516 /* CommandToActionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987BD2E7AB5F100607516 /* CommandToActionConverter.swift */; };
 		277987C02E7AB6AB00607516 /* DefaultInputDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987BF2E7AB6AB00607516 /* DefaultInputDevices.swift */; };
 		277987C22E7AB7F500607516 /* InputDevicesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987C12E7AB7F500607516 /* InputDevicesHelper.swift */; };
+		277BE07F2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277BE07E2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift */; };
 		2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4352E66E6F700682723 /* InputDeviceProfile.swift */; };
 		2783B4382E66E81900682723 /* PredefinedInputDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */; };
 		2783B43A2E66E8AB00682723 /* KeyboardDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */; };
@@ -1483,6 +1484,7 @@
 		C5A887E42CAD7B8E00DA2979 /* TracksSearchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */; };
 		C5ACFCD52AD59F2200EA92F6 /* list_warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */; };
 		C5ACFCD72AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */; };
+		C5AD0F162EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AD0F152EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift */; };
 		C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */; };
 		C5AF907B2A25E8C400989A86 /* OAKeyboardHintBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */; };
 		C5B2AA5F2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2AA5E2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift */; };
@@ -1491,7 +1493,6 @@
 		C5B4AE5E2B1F51740019F357 /* MenuHelpDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */; };
 		C5BC8DD52E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */; };
 		C5BC8DD72E0408D400CF0815 /* OBDRemainingFuelWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */; };
-		C5C81F822E4CE087009D3439 /* MapHudLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F812E4CE087009D3439 /* MapHudLayout.swift */; };
 		C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */; };
 		C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */; };
 		C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */; };
@@ -3177,8 +3178,11 @@
 		FA069C6B2B9F65750007E4DE /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */; };
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
+		FA1394AC2EB11B2000197297 /* HudGridOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1394AA2EB11B2000197297 /* HudGridOverlay.swift */; };
+		FA1394AD2EB11B2000197297 /* MapHudLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1394AB2EB11B2000197297 /* MapHudLayout.swift */; };
 		FA186E482BFCF15A007EE77D /* SpeedLimitWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */; };
 		FA1D6DAE2DCE04710080E374 /* VehicleMetricsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */; };
+		FA1FC6BF2EA1285E00A60962 /* BLEScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1FC6BE2EA1285E00A60962 /* BLEScannerViewController.swift */; };
 		FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */; };
 		FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */; };
 		FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */; };
@@ -3334,6 +3338,7 @@
 		FACB02AA2D54C52000EBE87F /* ImageCache+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */; };
 		FACB02AC2D54F71C00EBE87F /* DownloadImageMetadataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */; };
 		FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */; };
+		FACBDBDA2EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */; };
 		FACDC63D2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAD258A82D7856EE001C875F /* vi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = FAD258A72D7856EE001C875F /* vi_tts.js */; };
@@ -3656,6 +3661,7 @@
 		277987BD2E7AB5F100607516 /* CommandToActionConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandToActionConverter.swift; sourceTree = "<group>"; };
 		277987BF2E7AB6AB00607516 /* DefaultInputDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultInputDevices.swift; sourceTree = "<group>"; };
 		277987C12E7AB7F500607516 /* InputDevicesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevicesHelper.swift; sourceTree = "<group>"; };
+		277BE07E2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParamVehicleHelper.swift; sourceTree = "<group>"; };
 		2783B4352E66E6F700682723 /* InputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDeviceProfile.swift; sourceTree = "<group>"; };
 		2783B4372E66E81900682723 /* PredefinedInputDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredefinedInputDeviceProfile.swift; sourceTree = "<group>"; };
 		2783B4392E66E8AB00682723 /* KeyboardDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDeviceProfile.swift; sourceTree = "<group>"; };
@@ -5293,6 +5299,7 @@
 		C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksSearchFilter.swift; sourceTree = "<group>"; };
 		C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@3x.png"; path = "Resources/Icons/list_warnings_tunnel@3x.png"; sourceTree = "<group>"; };
 		C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@2x.png"; path = "Resources/Icons/list_warnings_tunnel@2x.png"; sourceTree = "<group>"; };
+		C5AD0F152EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonGridVisualizationSettingsViewController.swift; sourceTree = "<group>"; };
 		C5AF90772A25E8A100989A86 /* OAKeyboardHintBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAKeyboardHintBar.h; sourceTree = "<group>"; };
 		C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAKeyboardHintBar.m; sourceTree = "<group>"; };
 		C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAKeyboardHintBar.xib; sourceTree = "<group>"; };
@@ -5302,7 +5309,6 @@
 		C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHelpDataService.swift; sourceTree = "<group>"; };
 		C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDFuelConsumptionWidget.swift; sourceTree = "<group>"; };
 		C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDRemainingFuelWidget.swift; sourceTree = "<group>"; };
-		C5C81F812E4CE087009D3439 /* MapHudLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapHudLayout.swift; sourceTree = "<group>"; };
 		C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsButtonState.swift; sourceTree = "<group>"; };
 		C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButtonState.swift; sourceTree = "<group>"; };
 		C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomOutButtonState.swift; sourceTree = "<group>"; };
@@ -7870,9 +7876,12 @@
 		FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
 		FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
+		FA1394AA2EB11B2000197297 /* HudGridOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudGridOverlay.swift; sourceTree = "<group>"; };
+		FA1394AB2EB11B2000197297 /* MapHudLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapHudLayout.swift; sourceTree = "<group>"; };
 		FA186E462BFCF15A007EE77D /* SpeedLimitWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeedLimitWrapper.h; sourceTree = "<group>"; };
 		FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SpeedLimitWrapper.mm; sourceTree = "<group>"; };
 		FA1D6DAD2DCE046F0080E374 /* VehicleMetricsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsPlugin.swift; sourceTree = "<group>"; };
+		FA1FC6BE2EA1285E00A60962 /* BLEScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEScannerViewController.swift; sourceTree = "<group>"; };
 		FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSensor.swift; sourceTree = "<group>"; };
 		FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSCDDevice.swift; sourceTree = "<group>"; };
 		FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCharacteristic.swift; sourceTree = "<group>"; };
@@ -8034,6 +8043,7 @@
 		FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCache+Extension.swift"; sourceTree = "<group>"; };
 		FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageMetadataService.swift; sourceTree = "<group>"; };
 		FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
+		FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+LocalizedDocs.swift"; sourceTree = "<group>"; };
 		FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsDescriptionViewController.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
@@ -8276,7 +8286,9 @@
 		32119B4D2847B4DF005E1E0C /* OsmandDevelopment */ = {
 			isa = PBXGroup;
 			children = (
+				FA1FC6BE2EA1285E00A60962 /* BLEScannerViewController.swift */,
 				FA9F416E2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift */,
+				C5AD0F152EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift */,
 				32119B4E2847D7F7005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.h */,
 				32119B4F2847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm */,
 				32119B532848D910005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.h */,
@@ -11236,7 +11248,6 @@
 				DA5A79D726C563A000F274C7 /* Actions */,
 				DA5A7A1F26C563A000F274C7 /* OAMapButtonsHelper.h */,
 				DA5A79D526C563A000F274C7 /* OAMapButtonsHelper.m */,
-				C5C81F812E4CE087009D3439 /* MapHudLayout.swift */,
 				460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */,
 				464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */,
 				466A017F2BFBA9B7008CC50E /* QuickActionType.swift */,
@@ -13569,7 +13580,9 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FA1394AE2EB11C9600197297 /* HudGridOverlay */,
 				FA9FA5982E97D11400376C47 /* MapScrollHelper.swift */,
+				277BE07E2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift */,
 				FA39D2962E819B030095DF8E /* ErrorHelper.swift */,
 				FA82B9172E74197A00A250F1 /* ImageLoading */,
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
@@ -13959,6 +13972,7 @@
 		DAABE4EC2A16578A00569F71 /* SwiftExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */,
 				FA82B9152E74132200A250F1 /* ByteCountFormatter+Extension.swift */,
 				FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */,
 				FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */,
@@ -14113,6 +14127,15 @@
 				DA5A7D8726C563A300F274C7 /* OACustomSourceDetailsViewController.xib */,
 			);
 			path = OACustomSourceDetailsViewController;
+			sourceTree = "<group>";
+		};
+		FA1394AE2EB11C9600197297 /* HudGridOverlay */ = {
+			isa = PBXGroup;
+			children = (
+				FA1394AA2EB11B2000197297 /* HudGridOverlay.swift */,
+				FA1394AB2EB11B2000197297 /* MapHudLayout.swift */,
+			);
+			path = HudGridOverlay;
 			sourceTree = "<group>";
 		};
 		FA1D6DAC2DCE04640080E374 /* VehicleMetricsPlugin */ = {
@@ -16793,7 +16816,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/usr/bin/env bash\n\n# Check for internet:\n# ping Google Public DNS  8.8.8.8  and wait for 0.5 sec.\nif ! ping -c 1 -W 0.5 8.8.8.8 > /dev/null; then\n    echo \"🔄 No internet. Stop redownloading regions.ocbf\"\n    exit 0\nfi\n\n\nset -euo pipefail\n\nREMOTE_URL=\"https://builder.osmand.net/basemap/regions.ocbf\"\nLOCAL_FILE=\"${SRCROOT}/Resources/Shipped/regions.ocbf\"\nTMP_FILE=\"$(mktemp \"${LOCAL_FILE}.download.XXXXXX\")\"\n\n# Ensure temp file is cleaned up no matter what\ntrap 'rm -f \"$TMP_FILE\"' EXIT\n\n# 1. If local missing → download unconditionally\nif [[ ! -f \"$LOCAL_FILE\" ]]; then\n  echo \"🔄 regions.ocbf missing → downloading fresh copy\"\n  curl --fail -R -S -o \"$TMP_FILE\" \"$REMOTE_URL\"\n  mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n  exit 0\nfi\n\n# 2. Fetch remote headers once\nread -r REMOTE_SIZE REMOTE_DATE <<< $(\n  curl -sI \"$REMOTE_URL\" \\\n    | awk '\n        /^Content-Length:/   { size=$2 }\n        /^Last-Modified:/    { $1=\"\"; sub(/^ +/, \"\"); date=$0 }\n        END                  { print size, date }\n      ' \\\n    | tr -d '\\r'\n)\n\n# 3. Compare size\nLOCAL_SIZE=$(stat -f %z \"$LOCAL_FILE\")\nif [[ \"$LOCAL_SIZE\" -ne \"$REMOTE_SIZE\" ]]; then\n  echo \"🔄 Size changed: local=$LOCAL_SIZE remote=$REMOTE_SIZE → redownloading\"\n  curl --fail -R -S -o \"$TMP_FILE\" \"$REMOTE_URL\"\n  mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n  exit 0\nfi\n\n# 4. Compare Last-Modified via conditional GET\nHTTP_CODE=$(\n  curl --silent --show-error --fail \\\n       -z \"$LOCAL_FILE\" \\\n       -w \"%{http_code}\" \\\n       -o \"$TMP_FILE\" \\\n       \"$REMOTE_URL\"\n)\n\ncase \"$HTTP_CODE\" in\n  200)\n    echo \"🔄 Server is newer (HTTP 200) → updated regions.ocbf\"\n    mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n    ;;\n  304)\n    echo \"✅ regions.ocbf is already up to date (HTTP 304)\"\n    ;;\n  *)\n    echo \"⚠️ Unexpected HTTP $HTTP_CODE\" >&2\n    exit 1\n    ;;\nesac\n\n# Clean up the trap now that we're done\ntrap - EXIT\n";
+			shellScript = "#!/usr/bin/env bash\n\n# Check for internet:\n# ping Google Public DNS  8.8.8.8  and wait for 0.5 sec.\nif ! ping -c 1 -W 0.5 8.8.8.8 > /dev/null; then\n    echo \"🔄 [Download regions] No internet. Stop redownloading regions.ocbf\"\n    exit 0\nfi\n\nset -euo pipefail\n\nREMOTE_URL=\"https://builder.osmand.net/basemap/regions.ocbf\"\nLOCAL_FILE=\"${SRCROOT}/Resources/Shipped/regions.ocbf\"\n\nrm -f \"${LOCAL_FILE}.download.\"* || true\n\nTMP_FILE=\"$(mktemp \"${LOCAL_FILE}.download.XXXXXX\")\"\n\n# Ensure temp file is cleaned up no matter what\ntrap 'rm -f \"$TMP_FILE\"' EXIT\n\n# 1. If local missing → download unconditionally\nif [[ ! -f \"$LOCAL_FILE\" ]]; then\n  echo \"🔄 [Download regions] regions.ocbf missing → downloading fresh copy\"\n  curl --fail -R -S -o \"$TMP_FILE\" \"$REMOTE_URL\"\n  mv \"$TMP_FILE\" \"$LOCAL_FILE\"\nfi\n\n# 2. Fetch remote headers once\nread -r REMOTE_SIZE REMOTE_DATE <<< $(\n  curl -sI \"$REMOTE_URL\" \\\n    | awk '\n        /^Content-Length:/   { size=$2 }\n        /^Last-Modified:/    { $1=\"\"; sub(/^ +/, \"\"); date=$0 }\n        END                  { print size, date }\n      ' \\\n    | tr -d '\\r'\n)\n\n# 3. Compare size\nLOCAL_SIZE=$(stat -f %z \"$LOCAL_FILE\")\nif [[ \"$LOCAL_SIZE\" -ne \"$REMOTE_SIZE\" ]]; then\n  echo \"🔄 [Download regions] Size changed: local=$LOCAL_SIZE remote=$REMOTE_SIZE → redownloading\"\n  curl --fail -R -S -o \"$TMP_FILE\" \"$REMOTE_URL\"\n  mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n  trap - EXIT\n  rm -f \"${LOCAL_FILE}.download.\"* || true\n  exit 0\nfi\n\n# 4. Compare Last-Modified via conditional GET\nHTTP_CODE=$(\n  curl --silent --show-error --fail \\\n       -z \"$LOCAL_FILE\" \\\n       -w \"%{http_code}\" \\\n       -o \"$TMP_FILE\" \\\n       \"$REMOTE_URL\"\n)\n\ncase \"$HTTP_CODE\" in\n  200)\n    echo \"🔄 [Download regions] Server is newer (HTTP 200) → updated regions.ocbf\"\n    mv \"$TMP_FILE\" \"$LOCAL_FILE\"\n    ;;\n  304)\n    echo \"✅ [Download regions] regions.ocbf is already up to date (HTTP 304)\"\n    ;;\n  *)\n    echo \"⚠️ [Download regions] Unexpected HTTP $HTTP_CODE\" >&2\n    exit 1\n    ;;\nesac\n\n# Clean up the trap now that we're done\ntrap - EXIT\n\nrm -f \"${LOCAL_FILE}.download.\"* || true\n\n# Dynamic wait until file is fully written\nMAX_WAIT=10       # seconds\nSLEEP_INTERVAL=0.5\nELAPSED=0\n\necho \"[Download regions] Waiting for regions.ocbf to be fully written (max ${MAX_WAIT}s)...\"\n\nwhile [[ ! -f \"$LOCAL_FILE\" || ! -s \"$LOCAL_FILE\" ]]; do\n    sleep $SLEEP_INTERVAL\n    ELAPSED=$(echo \"$ELAPSED + $SLEEP_INTERVAL\" | bc)\n    if (( $(echo \"$ELAPSED >= $MAX_WAIT\" | bc -l) )); then\n        echo \"❌ [Download regions] regions.ocbf was not ready after ${MAX_WAIT}s → build fail\"\n        exit 1\n    fi\ndone\n\necho \"✅ [Download regions] regions.ocbf is ready (${LOCAL_FILE})\"\n";
 		};
 		FA45668A2AFB839000B07165 /* Run Script: SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16892,6 +16915,7 @@
 				DA5A835A26C563A800F274C7 /* OABottomSheetHeaderButtonCell.m in Sources */,
 				DA5A83A226C563A800F274C7 /* OAOsmEditingViewController.mm in Sources */,
 				32EEB6322E286525002216B0 /* OATravelSelectionLayer.mm in Sources */,
+				FA1FC6BF2EA1285E00A60962 /* BLEScannerViewController.swift in Sources */,
 				DA5A845F26C563A900F274C7 /* OAImpassableRoadsLayer.mm in Sources */,
 				DA5A81CD26C563A700F274C7 /* QuadTree.m in Sources */,
 				DA4ABF2F2876E4C200B996EF /* OAItemExporter.m in Sources */,
@@ -17464,6 +17488,7 @@
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
 				323F04CC2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift in Sources */,
+				FACBDBDA2EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift in Sources */,
 				465749122B681E620006046B /* TrashGroup.swift in Sources */,
 				DA5A83F326C563A800F274C7 /* OARearrangeCustomFiltersViewController.mm in Sources */,
 				DA5A820426C563A700F274C7 /* OABaseFeatureCardView.m in Sources */,
@@ -17756,6 +17781,7 @@
 				DA653CD9288ACEDF00AB623C /* OATitleIconProgressbarCell.mm in Sources */,
 				DA5A844526C563A900F274C7 /* UIViewController+OARootViewController.m in Sources */,
 				271A62052E3CA8CD00B34CB1 /* DistanceByTapViewController.swift in Sources */,
+				277BE07F2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift in Sources */,
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,
 				DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */,
 				32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */,
@@ -17778,6 +17804,8 @@
 				FAC166292B21BEF900D63755 /* CBUUIDPath.swift in Sources */,
 				FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */,
 				DA5A813A26C563A700F274C7 /* OAEntityInfo.m in Sources */,
+				FA1394AC2EB11B2000197297 /* HudGridOverlay.swift in Sources */,
+				FA1394AD2EB11B2000197297 /* MapHudLayout.swift in Sources */,
 				DA5A846A26C563A900F274C7 /* OADestination.mm in Sources */,
 				464EA9BD2C4948A30034D8C9 /* PaletteGradientColor.swift in Sources */,
 				46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */,
@@ -17956,6 +17984,7 @@
 				C52776A82CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift in Sources */,
 				8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */,
 				C58924052D693D1700EC5910 /* FinishTripRecordingAction.swift in Sources */,
+				C5AD0F162EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift in Sources */,
 				328EE3562E1710DC003CDB48 /* OABaseLoadAsyncTask.swift in Sources */,
 				DA4ABF352876ECB300B996EF /* OAAbstractWriter.m in Sources */,
 				464FF36B2B309488001D855E /* SensorAttributesUtils.swift in Sources */,
@@ -18140,7 +18169,6 @@
 				46D38A9C29C398E1000AAE0C /* OARoutingDataUtils.mm in Sources */,
 				DA5A836226C563A800F274C7 /* OATitleDescriptionCollapsableCell.m in Sources */,
 				DA5A815826C563A700F274C7 /* OAOsmEditingPlugin.mm in Sources */,
-				C5C81F822E4CE087009D3439 /* MapHudLayout.swift in Sources */,
 				46BF38DC2CA44C090056D2C2 /* TerrainColorSchemeAction.swift in Sources */,
 				DA5A845A26C563A900F274C7 /* OAGPXRecLayer.mm in Sources */,
 				DA5A837826C563A800F274C7 /* OARouteSettingsBaseViewController.mm in Sources */,

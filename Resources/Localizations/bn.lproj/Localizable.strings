@@ -91,3 +91,15 @@
 "three_years_subscription" = "তিন বছরের জন্য চাঁদা";
 "osm_live_subscriptions" = "চাঁদাসমূহ";
 "osmand_pro_tagline" = "সবরকমের বেশিষ্ট নিন";
+"OsmAnd Maps" = "OsmAnd Maps";
+"download_depth_countours" = "নৌ গভীরতার রূপরেখা";
+"day_short" = "দিন";
+"week_short" = "সপ্তাহ";
+"weeks_short" = "সপ্তাহসমূহ";
+"month_short" = "মাস";
+"months_short" = "মাসসমূহ";
+"rendering_attr_showSkiSlopes_name" = "স্কি ঢালগুলো দেখান";
+"rendering_attr_showSkiSlopes_description" = "সরলীকৃত স্কি ঢাল গুলো দেখান";
+"trip_recording_downhill_widget_desc" = "বর্তমানে রেকর্ড করা ভ্রমণের সমস্ত অবতরণের যোগফল অথবা শেষ অবতরণের সমষ্টি দেখায়।";
+"trip_recording_uphill_widget_desc" = "সমস্ত আরোহণের যোগফল অথবা বর্তমানে রেকর্ড করা ট্রিপের শেষ আরোহণটি দেখায়।";
+"trip_recording_distance_widget_desc" = "আপনার বর্তমানে রেকর্ড করা ভ্রমণের মোট দূরত্ব দেখায়, শেষ আরোহণ এবং অবতরণের দূরত্ব দেখার মোড সহ।";

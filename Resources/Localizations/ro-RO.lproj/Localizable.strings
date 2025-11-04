@@ -3590,10 +3590,9 @@
 "shared_string_items" = "Elemente";
 "auto_25_chars_route_kl" = "Păstrați stânga";
 "facebook" = "Facebook";
-"twitter" = "Twitter";
 "reddit" = "Reddit";
 "shared_string_email" = "E-mail";
-"shared_string_cloud" = "Nor";
+"shared_string_cloud" = "Cloud";
 "app_mode_taxi" = "Taxi";
 "km_h" = "km/h";
 "mile_per_hour" = "mph";
@@ -3680,7 +3679,6 @@
 "obd_engine_coolant_temp_desc" = "Indică temperatura lichidului de răcire al motorului";
 "obd_fuel_consumption_rate" = "Rata consumului de combustibil";
 "obd_fuel_left_km" = "Combustibil rămas (km)";
-"obd_fuel_consumption_rate_l_km" = "Rata consumului de combustibil (L/100 km)";
 "remaining_fuel_description" = "Afișează cantitatea de combustibil rămasă în rezervorul autovehiculului";
 "connect_obd_instructions_step" = "1. Conectați scanerul la portul OBD-II al vehiculului.\n\n 2. Porniți motorul vehiculului \n\n 3. Activați Bluetooth pe dispozitiv\n\n 4. Atingeți „%@” și selectați scanerul din listă.";
 "obd_fuel_type_bifuel_electricity" = "Bifuel în funcțiune Electricitate";
@@ -3718,7 +3716,6 @@
 "obd_fuel_consumption_desc" = "Afișează rata de utilizare a combustibilului de către motor, calculată pe baza combustibilului rămas, a dimensiunii rezervorului și a distanței parcurse determinate de GPS.";
 "obd_fuel_consumption_rate_sensor" = "Rata consumului de combustibil (senzor)";
 "obd_fuel_type_bifuel_electric_combustion" = "Motor electric și motor de combustie cu funcționare bifuel";
-"obd_fuel_consumption_rate_l_km_desc" = "Indică rata consumului de combustibil al vehiculului pe baza calculelor (L/100 km)";
 "obd_fuel_type_hybrid_hydrogen" = "Hidrogen hibrid";
 "obd_fuel_type_hydrogen" = "Hidrogen";
 "shared_string_other" = "Altele";

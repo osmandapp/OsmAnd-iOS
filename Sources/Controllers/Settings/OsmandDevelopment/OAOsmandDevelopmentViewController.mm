@@ -46,10 +46,12 @@
 NSString *const kCellSwitchIsOnKey = @"kCellSwitchIsOnKey";
 NSString *const kUse3dIconsKey = @"kUse3dIconsKey";
 NSString *const kBatterySavingModeKey = @"kBatterySavingModeKey";
+NSString *const kVisualizingButtonGridKey = @"kVisualizingButtonGridKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
 NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 NSString *const kImageCacheKey = @"kImageCacheKey";
+NSString *const kBLEScanerKey = @"kBLEScanerKey";
 
 #pragma mark - Initialization
 
@@ -121,6 +123,12 @@ NSString *const kImageCacheKey = @"kImageCacheKey";
         kCellTitleKey : OALocalizedString(@"battery_saving_mode"),
         @"isOn" : @([[OAAppSettings sharedManager].batterySavingMode get])
     }];
+    [renderingSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellKeyKey : kVisualizingButtonGridKey,
+        kCellTitleKey : OALocalizedString(@"visualizing_button_grid"),
+        @"actionBlock" : (^void(){ [weakSelf openVisualizingButtonGridSettings]; })
+    }];
     [_data addSection:renderingSection];
     
     OATableSectionData *renderingDebugSection = [OATableSectionData sectionData];
@@ -144,6 +152,18 @@ NSString *const kImageCacheKey = @"kImageCacheKey";
     })
     }];
     [_data addSection:imageСacheSection];
+    
+    OATableSectionData *BLEScannerSection = [OATableSectionData sectionData];
+    BLEScannerSection.headerText = OALocalizedString(@"ble_scanner");
+    [BLEScannerSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellKeyKey : kBLEScanerKey,
+        kCellTitleKey : OALocalizedString(@"ble_scanner"),
+        @"actionBlock" : (^void(){
+        [weakSelf showModalViewController:[BLEScannerViewController new]];
+    })
+    }];
+    [_data addSection:BLEScannerSection];
 }
 
 - (NSInteger)sectionsCount
@@ -251,6 +271,12 @@ NSString *const kImageCacheKey = @"kImageCacheKey";
 {
     OAOsmandDevelopmentSimulateLocationViewController *vc = [[OAOsmandDevelopmentSimulateLocationViewController alloc] init];
     vc.simulateLocationDelegate = self;
+    [self showViewController:vc];
+}
+
+- (void)openVisualizingButtonGridSettings
+{
+    ButtonGridVisualizationSettingsViewController *vc = [[ButtonGridVisualizationSettingsViewController alloc] initWithHudLayout:[[OARootViewController instance] mapPanel].hudViewController.mapHudLayout];
     [self showViewController:vc];
 }
 

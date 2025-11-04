@@ -705,7 +705,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) linkButtonPressed
 {
-    NSURL *url = [NSURL URLWithString:kOsmAndFeaturesContourLinesPlugin];
+    NSURL *url = [NSURL URLWithString:[kOsmAndFeaturesContourLinesPlugin localizedURLIfAvailable]];
     if ([[UIApplication sharedApplication] canOpenURL:url])
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }

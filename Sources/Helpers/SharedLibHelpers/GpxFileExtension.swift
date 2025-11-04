@@ -60,9 +60,7 @@ extension GpxFile {
     func appendTrackPointToDisplay(_ point: WptPt) {
         var segs = processedPointsToDisplay ?? []
         if segs.isEmpty {
-            let seg = TrkSegment()
-            seg.points = NSMutableArray()
-            segs.append(seg)
+            segs.append(TrkSegment())
             processedPointsToDisplay = segs
         }
         
@@ -77,9 +75,7 @@ extension GpxFile {
     
     func addEmptySegmentToDisplay() {
         var arr = processedPointsToDisplay ?? []
-        let seg = TrkSegment()
-        seg.points = NSMutableArray()
-        arr.append(seg)
+        arr.append(TrkSegment())
         processedPointsToDisplay = arr
     }
 }

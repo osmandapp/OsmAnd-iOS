@@ -8,10 +8,10 @@
 
 #import "OAFileSettingsItem.h"
 
-@class OAGpxAppearanceInfo;
+@class GpxAppearanceInfo;
 
 @interface OAGpxSettingsItem : OAFileSettingsItem
 
-- (OAGpxAppearanceInfo *) getAppearanceInfo;
+- (GpxAppearanceInfo *) getAppearanceInfo;
 
 @end

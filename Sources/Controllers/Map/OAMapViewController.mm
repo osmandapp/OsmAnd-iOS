@@ -829,6 +829,11 @@ static const NSInteger kDetailedMapZoom = 9;
     [self setViewportScaleY:mapPosition == BOTTOM_CONSTANT ? kViewportBottomScale : kViewportScale];
 }
 
+- (float)azimuth
+{
+    return _mapView.azimuth;
+}
+
 - (void) setupMapArrowsLocation
 {
     [self setupMapArrowsLocation:_centerLocationForMapArrows];

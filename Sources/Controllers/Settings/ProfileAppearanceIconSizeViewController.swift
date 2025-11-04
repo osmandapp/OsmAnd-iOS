@@ -11,6 +11,11 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     var appMode: OAApplicationMode?
     var isNavigationIconSize: Bool = false
     
+    private let locationServices = OsmAndApp.swiftInstance().locationServices
+    private let iconSizeArrayValueKey = "iconSizeArrayValueKey"
+    private let iconSizeSelectedValueKey = "iconSizeSelectedValueKey"
+    private let iconSizeArrayValues: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
+    
     private lazy var baseIconSize: Double = {
         guard let appMode else { return 0 }
         return isNavigationIconSize ? settings.locationIconSize.get(appMode) : settings.profileIconSize.get(appMode)
@@ -18,9 +23,15 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     
     private lazy var currentIconSize: Double = baseIconSize
     
-    private let iconSizeArrayValueKey = "iconSizeArrayValueKey"
-    private let iconSizeSelectedValueKey = "iconSizeSelectedValueKey"
-    private let iconSizeArrayValues: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        updateCurrentLocation()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        locationServices?.resume()
+    }
     
     override func updateModeUI() {
         updateModeUI(isValueChanged: baseIconSize != currentIconSize)
@@ -121,6 +132,33 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         currentIconSize = iconSizeArrayValues[selectedIndex]
         generateData()
         updateModeUI()
+    }
+    
+    private func updateCurrentLocation() {
+        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        let scale = mapViewController.view.contentScaleFactor
+        let viewSize = view.bounds.size
+        let location = mapViewController.getLatLon(fromElevatedPixel: viewSize.width / 2 * scale,
+                                                   y: viewSize.height * 0.3 * scale)
+        
+        let azimuth = -mapViewController.azimuth()
+        let direction: Float
+        
+        if isNavigationIconSize {
+            direction = azimuth < 0 ? -azimuth : 360 - azimuth
+        } else {
+            direction = -(azimuth > 0 ? azimuth : 360 + azimuth)
+        }
+        
+        let newLocation = CLLocation(coordinate: location.coordinate,
+                                     altitude: location.altitude,
+                                     horizontalAccuracy: location.horizontalAccuracy,
+                                     verticalAccuracy: location.verticalAccuracy,
+                                     course: CLLocationDirection(direction),
+                                     speed: location.speed,
+                                     timestamp: location.timestamp)
+        locationServices?.setLocationFromSimulation(newLocation)
+        locationServices?.suspend()
     }
     
     @objc private func sliderChanged(sender: UISlider) {

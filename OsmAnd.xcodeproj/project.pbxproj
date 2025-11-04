@@ -2149,7 +2149,6 @@
 		DA5A822F26C563A700F274C7 /* OABaseSettingsListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B5C26C563A100F274C7 /* OABaseSettingsListViewController.mm */; };
 		DA5A823026C563A700F274C7 /* OAImportDuplicatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B5D26C563A100F274C7 /* OAImportDuplicatesViewController.mm */; };
 		DA5A823126C563A700F274C7 /* OAImportSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B5F26C563A100F274C7 /* OAImportSettingsViewController.mm */; };
-		DA5A823226C563A700F274C7 /* OAGpxAppearanceInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6026C563A100F274C7 /* OAGpxAppearanceInfo.mm */; };
 		DA5A823326C563A700F274C7 /* OAExportItemsSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7B6126C563A100F274C7 /* OAExportItemsSelectionViewController.xib */; };
 		DA5A823426C563A700F274C7 /* OAImportCompleteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6226C563A100F274C7 /* OAImportCompleteViewController.mm */; };
 		DA5A823526C563A700F274C7 /* OAPluginInstalledViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7B6426C563A100F274C7 /* OAPluginInstalledViewController.xib */; };
@@ -6304,12 +6303,10 @@
 		DA5A7B5826C563A100F274C7 /* OAImportDuplicatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAImportDuplicatesViewController.h; sourceTree = "<group>"; };
 		DA5A7B5926C563A100F274C7 /* OABaseSettingsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABaseSettingsListViewController.h; sourceTree = "<group>"; };
 		DA5A7B5A26C563A100F274C7 /* OAExportItemsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExportItemsViewController.h; sourceTree = "<group>"; };
-		DA5A7B5B26C563A100F274C7 /* OAGpxAppearanceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxAppearanceInfo.h; sourceTree = "<group>"; };
 		DA5A7B5C26C563A100F274C7 /* OABaseSettingsListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseSettingsListViewController.mm; sourceTree = "<group>"; };
 		DA5A7B5D26C563A100F274C7 /* OAImportDuplicatesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAImportDuplicatesViewController.mm; sourceTree = "<group>"; };
 		DA5A7B5E26C563A100F274C7 /* OAPluginInstalledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPluginInstalledViewController.h; sourceTree = "<group>"; };
 		DA5A7B5F26C563A100F274C7 /* OAImportSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAImportSettingsViewController.mm; sourceTree = "<group>"; };
-		DA5A7B6026C563A100F274C7 /* OAGpxAppearanceInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxAppearanceInfo.mm; sourceTree = "<group>"; };
 		DA5A7B6126C563A100F274C7 /* OAExportItemsSelectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAExportItemsSelectionViewController.xib; sourceTree = "<group>"; };
 		DA5A7B6226C563A100F274C7 /* OAImportCompleteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAImportCompleteViewController.mm; sourceTree = "<group>"; };
 		DA5A7B6326C563A100F274C7 /* OAImportCompleteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAImportCompleteViewController.h; sourceTree = "<group>"; };
@@ -11817,8 +11814,6 @@
 				DA5A7B6126C563A100F274C7 /* OAExportItemsSelectionViewController.xib */,
 				DA5A7B5A26C563A100F274C7 /* OAExportItemsViewController.h */,
 				DA5A7B6526C563A100F274C7 /* OAExportItemsViewController.mm */,
-				DA5A7B5B26C563A100F274C7 /* OAGpxAppearanceInfo.h */,
-				DA5A7B6026C563A100F274C7 /* OAGpxAppearanceInfo.mm */,
 				DA5A7B6326C563A100F274C7 /* OAImportCompleteViewController.h */,
 				DA5A7B6226C563A100F274C7 /* OAImportCompleteViewController.mm */,
 				DA5A7B5826C563A100F274C7 /* OAImportDuplicatesViewController.h */,
@@ -17475,7 +17470,6 @@
 				277987B22E7AB41600607516 /* InputDevicesCollection.swift in Sources */,
 				DA5A813926C563A700F274C7 /* OAOnlineOsmNoteWrapper.mm in Sources */,
 				DA5A815126C563A700F274C7 /* OACarPlayTracksListController.m in Sources */,
-				DA5A823226C563A700F274C7 /* OAGpxAppearanceInfo.mm in Sources */,
 				DA5A813C26C563A700F274C7 /* OAEntity.m in Sources */,
 				DA5A841026C563A800F274C7 /* OATargetAddressViewController.mm in Sources */,
 				FA4713D22E0E937500DC518F /* URLSessionConfigProvider.swift in Sources */,

@@ -3953,3 +3953,4 @@
 "button_frames" = "Knap rammer";
 "max_weight_at_full_load_description" = "Angiv dit køretøjs maksimale vægt ved fuld last for at undgå veje og broer med vægtbegrænsninger.";
 "max_axle_load_description" = "Angiv dit køretøjs maksimale akselbelastning for at undgå veje og broer med vægtbegrænsninger.";
+"x" = "X (tidligere Twitter)";

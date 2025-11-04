@@ -190,8 +190,4 @@ final class GpxAppearanceInfo: NSObject {
         json["wpt_points"] = String(format: "%ld", wptPoints)
         json["total_distance"] = String(format: "%f", totalDistance)
     }
-
-    static func isGpxAppearanceTag(_ tag: String) -> Bool {
-        gpxAppearanceTags.contains(tag)
-    }
 }

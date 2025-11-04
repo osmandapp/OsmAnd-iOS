@@ -21,7 +21,6 @@
 #import "OAColors.h"
 #import "OAIndexConstants.h"
 #import "OAFileNameTranslationHelper.h"
-#import "OAGpxAppearanceInfo.h"
 #import "OAGpxSettingsItem.h"
 #import "OAAvoidRoadInfo.h"
 #import "OASettingsImporter.h"
@@ -356,14 +355,14 @@
     }
 }
 
-- (void)setupItemFromGpx:(NSMutableDictionary *)item filePath:(NSString *)filePath appearanceInfo:(OAGpxAppearanceInfo *)appearanceInfo
+- (void)setupItemFromGpx:(NSMutableDictionary *)item filePath:(NSString *)filePath appearanceInfo:(GpxAppearanceInfo *)appearanceInfo
 {
     item[@"title"] = [filePath.lastPathComponent.stringByDeletingPathExtension stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     item[@"descr"] = [self getTrackDescr:filePath appearanceInfo:appearanceInfo];
     item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_trip"];
 }
 
-- (NSString *) getTrackDescr:(NSString *)filePath appearanceInfo:(OAGpxAppearanceInfo *)appearanceInfo
+- (NSString *) getTrackDescr:(NSString *)filePath appearanceInfo:(GpxAppearanceInfo *)appearanceInfo
 {
     NSString *folder = @"";
     NSString *shortPath = [filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.gpxPath withString:@""];

@@ -56,4 +56,26 @@ extension GpxFile {
             return processedPointsToDisplay ?? []
         }
     }
+    
+    func appendTrackPointToDisplay(_ point: WptPt) {
+        var segs = processedPointsToDisplay ?? []
+        if segs.isEmpty {
+            segs.append(TrkSegment())
+            processedPointsToDisplay = segs
+        }
+        
+        if let last = segs.last {
+            last.points.add(point)
+        }
+        
+        if let general = getGeneralSegment() {
+            general.points.add(point)
+        }
+    }
+    
+    func addEmptySegmentToDisplay() {
+        var arr = processedPointsToDisplay ?? []
+        arr.append(TrkSegment())
+        processedPointsToDisplay = arr
+    }
 }

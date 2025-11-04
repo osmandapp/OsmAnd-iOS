@@ -412,6 +412,8 @@ static const NSInteger kDBVersion = 1;
     points = 0;
     currentTrackIndex++;
     
+    [_currentTrack clearData];
+    
     lastTimeUpdated = 0;
     lastPoint = kCLLocationCoordinate2DInvalid;
     
@@ -917,10 +919,12 @@ static const NSInteger kDBVersion = 1;
     [self addTrackPointNew:ptNew newSegment:newSegment time:time];
 }
 
-- (void)addTrackPointNew:(OASWptPt *)pt newSegment:(BOOL)newSegment time:(double)time {
+- (void)addTrackPointNew:(OASWptPt *)pt newSegment:(BOOL)newSegment time:(double)time
+{
     OASTrack *track = [_currentTrack tracks].firstObject;
-    
     BOOL segmentAdded = NO;
+    if (newSegment)
+        [_currentTrack addEmptySegmentToDisplay];
     
     if (track.segments.count == 0 || newSegment)
     {
@@ -929,18 +933,18 @@ static const NSInteger kDBVersion = 1;
         [track.segments addObject:segment];
         segmentAdded = YES;
     }
+
     if (pt != nil)
     {
+        [_currentTrack appendTrackPointToDisplay:pt];
         OASTrkSegment *lt = [track.segments lastObject];
         [lt.points addObject:pt];
     }
+
     if (segmentAdded)
-    {
         [_currentTrack processPoints];
-    }
     
     _currentTrack.modifiedTime = time * 1000.0;
-    
 }
 
 - (void)addWpt:(OASWptPt *)wpt

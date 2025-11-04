@@ -133,7 +133,10 @@
         case EOAObjectTypeHouse:
         case EOAObjectTypeStreetIntersection:
         {
-            return [((OAAddress *)searchResult.object) iconName];
+            if (searchResult.objectType == EOAObjectTypeStreetIntersection)
+                return @"ic_custom_intersection";
+            else
+                return [((OAAddress *)searchResult.object) iconName];
         }
         case EOAObjectTypePoiType:
         {

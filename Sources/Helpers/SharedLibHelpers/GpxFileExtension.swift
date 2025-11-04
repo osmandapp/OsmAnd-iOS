@@ -66,8 +66,10 @@ extension GpxFile {
             processedPointsToDisplay = segs
         }
         
-        let last = segs[segs.count - 1]
-        last.points.add(point)
+        if let last = segs.last {
+            last.points.add(point)
+        }
+        
         if let general = getGeneralSegment() {
             general.points.add(point)
         }

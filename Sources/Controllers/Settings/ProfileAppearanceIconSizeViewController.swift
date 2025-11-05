@@ -12,13 +12,14 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     var isNavigationIconSize: Bool = false
     
     private let locationServices = OsmAndApp.swiftInstance().locationServices
+    private let mapViewController = OARootViewController.instance().mapPanel.mapViewController
     private let iconSizeArrayValueKey = "iconSizeArrayValueKey"
     private let iconSizeSelectedValueKey = "iconSizeSelectedValueKey"
     private let iconSizeArrayValues: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
     
     private lazy var baseIconSize: Double = {
         guard let appMode else { return 0 }
-        return isNavigationIconSize ? settings.locationIconSize.get(appMode) : settings.profileIconSize.get(appMode)
+        return isNavigationIconSize ? settings.courseIconSize.get(appMode) : settings.locationIconSize.get(appMode)
     }()
     
     private lazy var currentIconSize: Double = baseIconSize
@@ -70,6 +71,9 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         hide(true, duration: hideDuration) { [weak self] in
             guard let self, let settingsVC = OAMainSettingsViewController(targetAppMode: appMode, targetScreenKey: kProfileAppearanceSettings) else { return }
 
+            if baseIconSize != currentIconSize {
+                OsmAndApp.swiftInstance().mapSettingsChangeObservable.notifyEvent()
+            }
             OARootViewController.instance().navigationController?.pushViewController(settingsVC, animated: false)
         }
     }
@@ -115,27 +119,36 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     override func onApplyButtonPressed() {
         guard let appMode else { return }
         if isNavigationIconSize {
-            settings.locationIconSize.set(currentIconSize, mode: appMode)
+            settings.courseIconSize.set(currentIconSize, mode: appMode)
         } else {
-            settings.profileIconSize.set(currentIconSize, mode: appMode)
+            settings.locationIconSize.set(currentIconSize, mode: appMode)
         }
         super.onApplyButtonPressed()
     }
     
     override func resetButtonPressed() {
         currentIconSize = baseIconSize
+        refreshMarkerIconSize()
         updateModeUI()
         super.resetButtonPressed()
     }
     
     private func setCurrentIconSize(_ selectedIndex: Int) {
         currentIconSize = iconSizeArrayValues[selectedIndex]
+        refreshMarkerIconSize()
         generateData()
         updateModeUI()
     }
     
+    private func refreshMarkerIconSize() {
+        if isNavigationIconSize {
+            mapViewController.refreshMarkersCollection(withCourseFactor: Float(currentIconSize))
+        } else {
+            mapViewController.refreshMarkersCollection(withLocationFactor: Float(currentIconSize))
+        }
+    }
+    
     private func updateCurrentLocation() {
-        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
         let scale = mapViewController.view.contentScaleFactor
         let viewSize = view.bounds.size
         let location = mapViewController.getLatLon(fromElevatedPixel: viewSize.width / 2 * scale,

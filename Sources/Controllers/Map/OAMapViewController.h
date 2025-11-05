@@ -141,6 +141,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (void)setViewportForCarPlayScaleX:(double)x y:(double)y;
 - (void)setViewportForCarPlayScaleX:(double)x;
 - (void)setViewportForCarPlayScaleY:(double)y;
+- (void)refreshMarkersCollectionWithLocationFactor:(float)factor;
+- (void)refreshMarkersCollectionWithCourseFactor:(float)factor;
 - (float)azimuth;
 
 - (void) goToPosition:(Point31)position31

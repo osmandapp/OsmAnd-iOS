@@ -834,6 +834,16 @@ static const NSInteger kDetailedMapZoom = 9;
     return _mapView.azimuth;
 }
 
+- (void)refreshMarkersCollectionWithLocationFactor:(float)factor
+{
+    [_mapLayers.myPositionLayer refreshMarkersCollectionWithLocationFactor:factor];
+}
+
+- (void)refreshMarkersCollectionWithCourseFactor:(float)factor
+{
+    [_mapLayers.myPositionLayer refreshMarkersCollectionWithCourseFactor:factor];
+}
+
 - (void) setupMapArrowsLocation
 {
     [self setupMapArrowsLocation:_centerLocationForMapArrows];

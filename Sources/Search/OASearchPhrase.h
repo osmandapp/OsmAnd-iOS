@@ -92,6 +92,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (OANameStringMatcher *) getMainUnknownNameStringMatcher;
 - (OANameStringMatcher *) getFirstUnknownNameStringMatcher;
 - (OANameStringMatcher *) getUnknownNameStringMatcher;
+- (OANameStringMatcher *) getUnknownNameStringMatcher:(NSInteger)i;
 - (OANameStringMatcher *) getFullNameStringMatcher;
 - (OANameStringMatcher *) getUnknownWordToSearchBuildingNameMatcher;
 
@@ -115,6 +116,9 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (OAPOIBaseType *) getUnselectedPoiType;
 - (void) setUnselectedPoiType:(OAPOIBaseType *)unselectedPoiType;
 + (NSString *) getDelimiter;
++ (NSString *) stripBraces:(NSString *)localeName;
++ (NSString *) ALLDELIMITERS;
+- (NSString *) selectMainUnknownWordToSearch:(NSMutableArray<NSString *> *)searchWords;
 
 
 @end

@@ -177,7 +177,7 @@ final class GpxAppearanceInfo: NSObject {
         gpxAppearanceInfo.maxFilterAltitude = json[TAG_MAX_FILTER_ALTITUDE] as? Double ?? 0
         gpxAppearanceInfo.maxFilterHdop = json[TAG_MAX_FILTER_HDOP] as? Double ?? 0
         
-        gpxAppearanceInfo.isJoinSegments = json["is_join_segments"] as? Bool ?? false
+        gpxAppearanceInfo.isJoinSegments = json[TAG_IS_JOIN_SEGMENTS] as? Bool ?? false
         
         return gpxAppearanceInfo
     }
@@ -187,37 +187,35 @@ final class GpxAppearanceInfo: NSObject {
     }
     
     func toJson(_ json: inout [String: Any]) {
-        json[Self.TAG_COLOR] = UIColor(argb: color).toHexARGBString()
-        json[Self.TAG_WIDTH] = width
-        json[Self.TAG_SHOW_ARROWS] = showArrows ? "true" : "false"
-        json[Self.TAG_START_FINISH] = showStartFinish ? "true" : "false"
+        Self.writeParam(&json, name: Self.TAG_COLOR, value: UIColor(argb: color).toHexARGBString())
+        Self.writeParam(&json, name: Self.TAG_WIDTH, value: width)
+        Self.writeParam(&json, name: Self.TAG_SHOW_ARROWS, value: showArrows)
+        Self.writeParam(&json, name: Self.TAG_START_FINISH, value: showStartFinish)
         
-        json[Self.TAG_SPLIT_TYPE] = OAGPXDatabase.splitTypeName(byValue: splitType)
-        json[Self.TAG_SPLIT_INTERVAL] = String(format: "%f", splitInterval)
-        json[Self.TAG_COLORING_TYPE] = coloringType
-        if let gradientPaletteName {
-            json[Self.TAG_COLOR_PALETTE] = gradientPaletteName
-        }
+        Self.writeParam(&json, name: Self.TAG_SPLIT_TYPE, value: OAGPXDatabase.splitTypeName(byValue: splitType))
+        Self.writeParam(&json, name: Self.TAG_SPLIT_INTERVAL, value: splitInterval)
+        Self.writeParam(&json, name: Self.TAG_COLORING_TYPE, value: coloringType)
+        Self.writeParam(&json, name: Self.TAG_COLOR_PALETTE, value: gradientPaletteName)
+
+        Self.writeParam(&json, name: Self.TAG_LINE_3D_VISUALIZATION_BY_TYPE, value: OAGPXDatabase.lineVisualizationByTypeName(for: trackVisualizationType))
+        Self.writeParam(&json, name: Self.TAG_LINE_3D_VISUALIZATION_WALL_COLOR_TYPE, value: OAGPXDatabase.lineVisualizationWallColorTypeName(for: trackWallColorType))
+        Self.writeParam(&json, name: Self.TAG_LINE_3D_VISUALIZATION_POSITION_TYPE, value: OAGPXDatabase.lineVisualizationPositionTypeName(for: trackLinePositionType))
         
-        json[Self.TAG_LINE_3D_VISUALIZATION_BY_TYPE] = OAGPXDatabase.lineVisualizationByTypeName(for: trackVisualizationType)
-        json[Self.TAG_LINE_3D_VISUALIZATION_WALL_COLOR_TYPE] = OAGPXDatabase.lineVisualizationWallColorTypeName(for: trackWallColorType)
-        json[Self.TAG_LINE_3D_VISUALIZATION_POSITION_TYPE] = OAGPXDatabase.lineVisualizationPositionTypeName(for: trackLinePositionType)
+        Self.writeParam(&json, name: Self.TAG_VERTICAL_EXAGGERATION_SCALE, value: verticalExaggeration)
+        Self.writeParam(&json, name: Self.TAG_ELEVATION_METERS, value: elevationMeters)
         
-        json[Self.TAG_VERTICAL_EXAGGERATION_SCALE] = String(format: "%f", verticalExaggeration)
-        json[Self.TAG_ELEVATION_METERS] = String(format: "%ld", elevationMeters)
+        Self.writeParam(&json, name: Self.TAG_TIME_SPAN, value: timeSpan)
+        Self.writeParam(&json, name: Self.TAG_WPT_POINTS, value: wptPoints)
+        Self.writeParam(&json, name: Self.TAG_TOTAL_DISTANCE, value: totalDistance)
         
-        json[Self.TAG_TIME_SPAN] = String(format: "%ld", timeSpan)
-        json[Self.TAG_WPT_POINTS] = String(format: "%ld", wptPoints)
-        json[Self.TAG_TOTAL_DISTANCE] = String(format: "%f", totalDistance)
+        Self.writeValidDouble(&json, name: Self.TAG_SMOOTHING_THRESHOLD, value: smoothingThreshold)
+        Self.writeValidDouble(&json, name: Self.TAG_MIN_FILTER_SPEED, value: minFilterSpeed)
+        Self.writeValidDouble(&json, name: Self.TAG_MAX_FILTER_SPEED, value: maxFilterSpeed)
+        Self.writeValidDouble(&json, name: Self.TAG_MIN_FILTER_ALTITUDE, value: minFilterAltitude)
+        Self.writeValidDouble(&json, name: Self.TAG_MAX_FILTER_ALTITUDE, value: maxFilterSpeed)
+        Self.writeValidDouble(&json, name: Self.TAG_MAX_FILTER_HDOP, value: maxFilterHdop)
         
-        json[Self.TAG_SMOOTHING_THRESHOLD] = String(format: "%f", smoothingThreshold)
-        json[Self.TAG_MIN_FILTER_SPEED] = String(format: "%f", minFilterSpeed)
-        json[Self.TAG_MAX_FILTER_SPEED] = String(format: "%f", maxFilterSpeed)
-        json[Self.TAG_MIN_FILTER_ALTITUDE] = String(format: "%f", minFilterAltitude)
-        json[Self.TAG_MAX_FILTER_ALTITUDE] = String(format: "%f", maxFilterSpeed)
-        json[Self.TAG_MAX_FILTER_HDOP] = String(format: "%f", maxFilterHdop)
-        
-        json["is_join_segments"] = isJoinSegments ? "true" : "false"
+        Self.writeParam(&json, name: Self.TAG_IS_JOIN_SEGMENTS, value: isJoinSegments)
     }
     
     // to run from obj-c
@@ -230,23 +228,19 @@ final class GpxAppearanceInfo: NSObject {
     private static func writeParam(_ json: inout [String: Any], name: String, value: Any?) {
         guard let value = value else { return }
         
-        switch value {
-        case let v as Int:
-            if v != 0 { json[name] = v }
-        case let v as Int64:
-            if v != 0 { json[name] = v }
-        case let v as UInt:
-            if v != 0 { json[name] = v }
-        case let v as Double:
-            if v != 0.0, !v.isNaN { json[name] = v }
-        case let v as Float:
-            let d = Double(v)
-            if d != 0.0, !d.isNaN { json[name] = d }
-        case let v as Bool:
+        if let v = value as? Int, v != 0 {
+            json[name] = String(format: "%ld", v)
+        } else if let v = value as? Int32, v != 0 {
+            json[name] = String(format: "%ld", v)
+        } else if let v = value as? Double, v != 0.0, !v.isNaN {
+            json[name] = String(format: "%f", v)
+        } else if let v = value as? Float, v != 0.0, !v.isNaN {
+            json[name] = String(format: "%f", v)
+        } else if let v = value as? Bool {
             json[name] = v ? "true" : "false"
-        case let s as String:
-            if !s.isEmpty { json[name] = s }
-        default:
+        } else if let v = value as? String, !v.isEmpty {
+            json[name] = v
+        } else {
             json[name] = value
         }
     }

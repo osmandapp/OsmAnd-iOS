@@ -1030,12 +1030,7 @@ forcedUpdate:(BOOL)forcedUpdate
         // Perform rendering
         const auto metric = debugSettings->debugStageEnabled ? std::make_shared<OsmAnd::AtlasMapRenderer_Metrics::Metric_renderFrame>() : nullptr;
 
-        if (!_renderer->renderFrame(metric.get()))
-        {
-            [NSException raise:NSGenericException
-                        format:@"Failed to render frame using OpenGLES2+ map renderer 0x%08x", glGetError()];
-            return;
-        }
+        _renderer->renderFrame(metric.get());
 
         if (metric)
             OALog(@"Metric_renderFrame = %@", metric->toString().toNSString());

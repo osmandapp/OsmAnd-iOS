@@ -681,9 +681,29 @@
         searchCriteria->includeStreets = true;
         searchCriteria->matcherMode = [phrase isMainUnknownSearchWordComplete] ? OsmAnd::StringMatcherMode::CHECK_EQUALS_FROM_SPACE : OsmAnd::StringMatcherMode::CHECK_STARTS_FROM_SPACE;
         
+        OASearchWord * lastWord = [phrase getLastSelectedWord];
         if (locSpecified)
         {
-            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([phrase getRadiusSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5], OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
+            if (lastWord != nil && lastWord.result != nil && [lastWord.result.object isKindOfClass:OACity.class])
+            {
+                OACity * c = (OACity *) lastWord.result.object;
+                const std::vector<int> bb = c.city->bbox31;
+                if (bb.size() >= 4)
+                {
+                    int w = (bb[2] - bb[0]) / 3;
+                    int h = (bb[3] - bb[1]) / 3; // enlarge for 1234 Golden Pond Road Woodhull
+                    searchCriteria->bbox31 = OsmAnd::AreaI(bb[0] - w, bb[1] - h, bb[2] + w, bb[3] + h);
+                }
+                else
+                {
+                    NSString * cityType = [OACity getTypeStr:c.type];
+                    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([OACity getRadius:cityType] * 3, c.city->position31);
+                }
+            }
+            else
+            {
+                searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([phrase getRadiusSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5], OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
+            }
         }
         
         for (NSString *resId in offlineIndexes)

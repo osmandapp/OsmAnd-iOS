@@ -131,12 +131,12 @@
         case EOAObjectTypePostcode:
         case EOAObjectTypeStreet:
         case EOAObjectTypeHouse:
+        {
+            return [((OAAddress *)searchResult.object) iconName];
+        }
         case EOAObjectTypeStreetIntersection:
         {
-            if (searchResult.objectType == EOAObjectTypeStreetIntersection)
-                return @"ic_custom_intersection";
-            else
-                return [((OAAddress *)searchResult.object) iconName];
+            return @"ic_custom_intersection";
         }
         case EOAObjectTypePoiType:
         {

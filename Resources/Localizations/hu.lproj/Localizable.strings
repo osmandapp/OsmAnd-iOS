@@ -1892,7 +1892,7 @@
 "select_map_source" = "Térképforrás kiválasztása";
 "create_profile" = "Profil készítése";
 "select_manually" = "Kézi kiválasztás";
-"sort_by" = "Rendezés eszerint:";
+"sort_by" = "Rendezési szempont:";
 "shared_string_start_date" = "Kezdődátum";
 "shared_string_end_date" = "Végdátum";
 "sett_deg180" = "180 fok";

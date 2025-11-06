@@ -44,16 +44,19 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     private let iconSizeArrayValueKey = "iconSizeArrayValueKey"
     private let iconSizeSelectedValueKey = "iconSizeSelectedValueKey"
     private let iconSizeArrayValues: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
+    private var baseAppMode: OAApplicationMode?
     
     private lazy var currentIconSize: ProfileAppearanceIconSize? = baseIconSize?.clone()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateCurrentLocation()
+        switchAppMode(toChoosenAppMode: true)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        switchAppMode(toChoosenAppMode: false)
         locationServices?.resume()
     }
     
@@ -193,6 +196,16 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
                                      timestamp: location.timestamp)
         locationServices?.setLocationFromSimulation(newLocation)
         locationServices?.suspend()
+    }
+    
+    private func switchAppMode(toChoosenAppMode: Bool) {
+        if toChoosenAppMode {
+            baseAppMode = settings.applicationMode.get()
+            appMode.flatMap(settings.applicationMode.set)
+        } else {
+            baseAppMode.flatMap(settings.applicationMode.set)
+        }
+        refreshMarkerIconSize()
     }
     
     @objc private func sliderChanged(sender: UISlider) {

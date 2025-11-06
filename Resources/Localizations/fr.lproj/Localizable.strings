@@ -3945,7 +3945,7 @@
 "rendering_attr_safetyContour_description" = "Contour de profondeur de sécurité";
 "ble_scanner" = "Scanner BLE";
 "visualizing_button_grid" = "Grille de boutons de carte";
-"efficient_grid" = "Réseau efficace";
+"efficient_grid" = "Grille efficace";
 "slots" = "Machines à sous";
 "button_frames" = "Cadres à boutons";
 "max_weight_at_full_load_description" = "Indiquez le poids maximal de votre véhicule à pleine charge afin d'éviter les routes et les ponts soumis à des limitations de poids.";

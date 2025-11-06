@@ -102,10 +102,21 @@
     
     if (connectionOptions.URLContexts.count > 0)
     {
-        NSURL *url = [connectionOptions.URLContexts.allObjects.firstObject URL];
-        [self openURL:url];
-        NSString *handledMessage = [NSString stringWithFormat:@"Handled URL context: %@", url];
-        LogStartup(handledMessage);
+        UIOpenURLContext *context = connectionOptions.URLContexts.allObjects.firstObject;
+        NSURL *url = context.URL;
+        
+        if (url)
+        {
+            [self openURL:url];
+            
+            NSString *urlDescription = [url absoluteString];
+            NSString *handledMessage = [NSString stringWithFormat:@"Handled URL context: %@", urlDescription];
+            LogStartup(handledMessage);
+        }
+        else
+        {
+            LogStartup(@"Handled URL context, but URL was nil");
+        }
     }
     
     if (connectionOptions.userActivities.count > 0)
@@ -114,11 +125,17 @@
         if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb])
         {
             NSURL *webpageURL = userActivity.webpageURL;
-            if ([[UIApplication sharedApplication] canOpenURL:webpageURL])
+            
+            if (webpageURL && [[UIApplication sharedApplication] canOpenURL:webpageURL])
             {
                 [self openURL:webpageURL];
-                NSString *handlingMessage = [NSString stringWithFormat:@"Handling Universal Link: %@", webpageURL];
-                LogStartup(handlingMessage);
+                
+                NSString *urlDescription = [webpageURL absoluteString];
+                NSString *handledMessage = [NSString stringWithFormat:@"Handled Universal Link: %@", urlDescription];
+                
+                LogStartup(handledMessage);
+            } else {
+                LogStartup(@"Attempted to handle Universal Link, but URL was nil or cannot be opened.");
             }
         }
     }

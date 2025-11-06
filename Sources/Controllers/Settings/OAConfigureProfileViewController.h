@@ -15,6 +15,7 @@ extern NSString * const kProfileAppearanceSettings;
 
 @interface OAConfigureProfileViewController : OABaseNavbarViewController
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
+- (instancetype)initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
+- (instancetype)initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey profileAppearanceIconSize:(id)profileAppearanceIconSize;
 
 @end

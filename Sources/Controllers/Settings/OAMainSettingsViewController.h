@@ -12,6 +12,7 @@
 
 @interface OAMainSettingsViewController : OABaseNavbarViewController
 
-- (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
+- (instancetype)initWithTargetAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
+- (instancetype)initWithTargetAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey profileAppearanceIconSize:(id)profileAppearanceIconSize;
 
 @end

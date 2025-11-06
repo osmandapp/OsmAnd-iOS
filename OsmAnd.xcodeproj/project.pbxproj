@@ -240,6 +240,7 @@
 		2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */; };
 		279322472E82EEF300B9FC81 /* KeyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279322462E82EEF300B9FC81 /* KeyEvent.swift */; };
 		279322492E82F4A400B9FC81 /* KeyEventMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279322482E82F4A400B9FC81 /* KeyEventMapper.swift */; };
+		27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */; };
 		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
 		27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */; };
 		27C6D5B12E7AE36600695D5B /* KeyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */; };
@@ -3666,6 +3667,7 @@
 		2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WunderLINQDeviceProfile.swift; sourceTree = "<group>"; };
 		279322462E82EEF300B9FC81 /* KeyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEvent.swift; sourceTree = "<group>"; };
 		279322482E82F4A400B9FC81 /* KeyEventMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventMapper.swift; sourceTree = "<group>"; };
+		27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceConfig.swift; sourceTree = "<group>"; };
 		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
 		27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTableViewCell.swift; sourceTree = "<group>"; };
 		27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyTableViewCell.xib; sourceTree = "<group>"; };
@@ -11783,6 +11785,7 @@
 				323B501C2C887ABB002BDF31 /* ProfileAppearanceLocationRadiusViewController.swift */,
 				329E56B92C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift */,
 				27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */,
+				27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */,
 				46843FD4286F5D2500B1F08C /* WeatherSettings */,
 				DAD3FD222A4ACAED00BFA03A /* WidgetSettings */,
 				32CA131F2AF1475200DD6EF5 /* WikipediaCacheSizeViewController.swift */,
@@ -17332,6 +17335,7 @@
 				DACF784427E3441700A8A218 /* OABackupHelper.mm in Sources */,
 				320F712C2A8268B50071C0E7 /* OATravelGuidesHelper.mm in Sources */,
 				DA5A831726C563A800F274C7 /* OAHeaderRoundCell.m in Sources */,
+				27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */,
 				DA5A81F626C563A700F274C7 /* OAChoosePlanHelper.mm in Sources */,
 				DA5A83C826C563A800F274C7 /* OACollapsableCoordinatesView.mm in Sources */,
 				462BF6DC2B7E8347003ECA2C /* DeleteAccountCommand.swift in Sources */,

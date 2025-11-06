@@ -115,6 +115,10 @@
 - (void) setViewAngleVisibility:(NSInteger) viewAngle;
 - (NSInteger) getLocationRadiusVisibility;
 - (void) setLocationRadiusVisibility:(NSInteger) locationRadius;
+- (double)getLocationIconSize;
+- (void)setLocationIconSize:(double)locationIconSize;
+- (double)getCourseIconSize;
+- (void)setCourseIconSize:(double)locationIconSize;
 - (UIColor *) getProfileColor;
 - (int) getIconColor;
 - (void) setIconColor:(int)iconColor;
@@ -154,6 +158,8 @@
 @property (nonatomic) NSString *navigationIcon;
 @property (nonatomic) NSInteger viewAngleVisibility;
 @property (nonatomic) NSInteger locationRadiusVisibility;
+@property (nonatomic) double locationIconSize;
+@property (nonatomic) double courseIconSize;
 @property (nonatomic) NSInteger order;
 
 - (OAApplicationMode *) customReg;

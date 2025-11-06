@@ -157,7 +157,7 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
         hide()
     }
     
-    @IBAction private func cancelButtonPressed() {
+    @IBAction func cancelButtonPressed() {
         hide()
     }
 

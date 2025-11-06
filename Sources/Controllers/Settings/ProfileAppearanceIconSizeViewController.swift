@@ -7,9 +7,37 @@
 //
 
 @objcMembers
+final class ProfileAppearanceIconSize: NSObject, ProfileAppearanceConfig {
+    var locationIconSize: Double
+    var courseIconSize: Double
+    
+    init(locationIconSize: Double, courseIconSize: Double) {
+        self.locationIconSize = locationIconSize
+        self.courseIconSize = courseIconSize
+    }
+    
+    func clone() -> ProfileAppearanceIconSize {
+        ProfileAppearanceIconSize(locationIconSize: locationIconSize, courseIconSize: courseIconSize)
+    }
+    
+    func size(isNavigation: Bool) -> Double {
+        isNavigation ? courseIconSize : locationIconSize
+    }
+    
+    func setSize(_ size: Double, isNavigation: Bool) {
+        if isNavigation {
+            courseIconSize = size
+        } else {
+            locationIconSize = size
+        }
+    }
+}
+
+@objcMembers
 final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewController {
     var appMode: OAApplicationMode?
     var isNavigationIconSize: Bool = false
+    var baseIconSize: ProfileAppearanceIconSize?
     
     private let locationServices = OsmAndApp.swiftInstance().locationServices
     private let mapViewController = OARootViewController.instance().mapPanel.mapViewController
@@ -17,12 +45,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     private let iconSizeSelectedValueKey = "iconSizeSelectedValueKey"
     private let iconSizeArrayValues: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
     
-    private lazy var baseIconSize: Double = {
-        guard let appMode else { return 0 }
-        return isNavigationIconSize ? settings.courseIconSize.get(appMode) : settings.locationIconSize.get(appMode)
-    }()
-    
-    private lazy var currentIconSize: Double = baseIconSize
+    private lazy var currentIconSize: ProfileAppearanceIconSize? = baseIconSize?.clone()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +70,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     
     override func generateData() {
         super.generateData()
+        guard let currentIconSize else { return }
 
         let section = createSectionWithName()
         
@@ -58,7 +82,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         section.addRow(from: [
             kCellKeyKey: "slider",
             kCellTypeKey: OASegmentSliderTableViewCell.reuseIdentifier,
-            iconSizeSelectedValueKey: String(currentIconSize),
+            iconSizeSelectedValueKey: String(currentIconSize.size(isNavigation: isNavigationIconSize)),
             iconSizeArrayValueKey: iconSizeArrayValues.map { String($0) }
         ])
     }
@@ -69,7 +93,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     
     override func hide() {
         hide(true, duration: hideDuration) { [weak self] in
-            guard let self, let settingsVC = OAMainSettingsViewController(targetAppMode: appMode, targetScreenKey: kProfileAppearanceSettings) else { return }
+            guard let self, let currentIconSize, let settingsVC = OAMainSettingsViewController(targetAppMode: appMode, targetScreenKey: kProfileAppearanceSettings, profileAppearanceIconSize: currentIconSize) else { return }
 
             if baseIconSize != currentIconSize {
                 OsmAndApp.swiftInstance().mapSettingsChangeObservable.notifyEvent()
@@ -99,7 +123,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
             cell.sliderView.addTarget(self, action: #selector(sliderChanged(sender:)), for: [.touchUpInside, .touchUpOutside])
             return cell
         } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as? OAValueTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as? OAValueTableViewCell, let currentIconSize else {
                 return UITableViewCell()
             }
             cell.selectionStyle = .none
@@ -109,42 +133,39 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
             cell.leftIconVisibility(false)
             cell.titleLabel.text = localizedString("shared_string_size")
             cell.titleLabel.accessibilityLabel = cell.titleLabel.text
-            cell.valueLabel.text = OAUtilities.getPercentString(currentIconSize)
+            cell.valueLabel.text = OAUtilities.getPercentString(currentIconSize.size(isNavigation: isNavigationIconSize))
             cell.valueLabel.accessibilityLabel = cell.valueLabel.text
             return cell
         }
         return UITableViewCell()
     }
     
-    override func onApplyButtonPressed() {
-        guard let appMode else { return }
-        if isNavigationIconSize {
-            settings.courseIconSize.set(currentIconSize, mode: appMode)
-        } else {
-            settings.locationIconSize.set(currentIconSize, mode: appMode)
-        }
-        super.onApplyButtonPressed()
+    override func cancelButtonPressed() {
+        currentIconSize = baseIconSize?.clone()
+        refreshMarkerIconSize()
+        super.cancelButtonPressed()
     }
     
     override func resetButtonPressed() {
-        currentIconSize = baseIconSize
+        currentIconSize = baseIconSize?.clone()
         refreshMarkerIconSize()
         updateModeUI()
         super.resetButtonPressed()
     }
     
     private func setCurrentIconSize(_ selectedIndex: Int) {
-        currentIconSize = iconSizeArrayValues[selectedIndex]
+        currentIconSize?.setSize(iconSizeArrayValues[selectedIndex], isNavigation: isNavigationIconSize)
         refreshMarkerIconSize()
         generateData()
         updateModeUI()
     }
     
     private func refreshMarkerIconSize() {
+        guard let currentIconSize else { return }
         if isNavigationIconSize {
-            mapViewController.refreshMarkersCollection(withCourseFactor: Float(currentIconSize))
+            mapViewController.refreshMarkersCollection(withCourseFactor: Float(currentIconSize.courseIconSize))
         } else {
-            mapViewController.refreshMarkersCollection(withLocationFactor: Float(currentIconSize))
+            mapViewController.refreshMarkersCollection(withLocationFactor: Float(currentIconSize.locationIconSize))
         }
     }
     

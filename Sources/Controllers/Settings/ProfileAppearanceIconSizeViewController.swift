@@ -16,6 +16,13 @@ final class ProfileAppearanceIconSize: NSObject, ProfileAppearanceConfig {
         self.courseIconSize = courseIconSize
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? ProfileAppearanceIconSize else {
+            return false
+        }
+        return locationIconSize == other.locationIconSize && courseIconSize == other.courseIconSize
+    }
+    
     func clone() -> ProfileAppearanceIconSize {
         ProfileAppearanceIconSize(locationIconSize: locationIconSize, courseIconSize: courseIconSize)
     }

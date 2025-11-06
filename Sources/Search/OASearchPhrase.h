@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 
 - (QuadRect *) getRadiusBBox31ToSearch:(int)radius;
 - (QuadRect *) get1km31Rect;
++ (QuadRect *) calculateBbox:(NSNumber *)radiusMeters location:(CLLocation *)location;
 - (OASearchSettings *) getSettings;
 - (int) getRadiusLevel;
 

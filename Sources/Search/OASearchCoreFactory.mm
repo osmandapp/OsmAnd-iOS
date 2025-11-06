@@ -842,7 +842,75 @@
                     break;
                 
                 if (res.objectType == EOAObjectTypeStreet)
-                    [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsApi];
+                {
+                    OASearchResult * newParentSearchResult = nil;
+                    if (res.parentSearchResult == nil && resultMatcher.getParentSearchResult == nil &&
+                        res.objectType == EOAObjectTypeStreet && [res.object isKindOfClass:OAStreet.class] && ((OAStreet *) res.object).city != nil)
+                    {
+                        OACity *ct = ((OAStreet *) res.object).city;
+                        OASearchResult *cityResult = [[OASearchResult alloc] initWithPhrase:phrase];
+                        cityResult.object = ct;
+                        cityResult.objectType = EOAObjectTypeCity;
+                        cityResult.localeName = [ct getName:phrase.getSettings.getLang transliterate:phrase.getSettings.isTransliterate];
+                        cityResult.otherNames = [ct getOtherNames:YES];
+                        cityResult.location = [[CLLocation alloc] initWithLatitude:ct.latitude longitude:ct.longitude];
+                        QString lang = QString::fromNSString([[phrase getSettings] getLang]);
+                        const auto& r = OsmAndApp.instance.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
+                        if (r)
+                        {
+                            const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
+                            if (obfMetadata)
+                                cityResult.localeRelatedObjectName = obfMetadata->obfFile->getRegionName().toNSString();
+                            cityResult.relatedResourceId = res.resourceId;
+                        }
+                        bool match = [self matchAddressName:phrase parent:res res:cityResult fullMatch:true];
+                        if (match)
+                        {
+                            newParentSearchResult = cityResult;
+                        }
+                        else
+                        {
+                            _resArray.clear();
+                            QuadRect * bbox = [OASearchPhrase calculateBbox:@(1000) location:res.location];
+                            const OsmAnd::AreaI area(bbox.left, bbox.top, bbox.right, bbox.bottom);
+                            _boundariesQR->query(area, _resArray);
+                            for (std::shared_ptr<const OsmAnd::StreetGroup> & streetGroup : _resArray)
+                            {
+                                OACity * boundary = [[OACity alloc] initWithCity:streetGroup];
+                                std::vector bb = boundary.city->bbox31;
+                                if (bb.size() < 4)
+                                {
+                                    continue;
+                                }
+                                QuadRect * boundBox = [[QuadRect alloc] initWithLeft:bb[0] top:bb[1] right:bb[2] bottom:bb[3]];
+                                if (![QuadRect intersects:boundBox b:bbox])
+                                {
+                                    continue;
+                                }
+                                // cityResult.object = boundary; // keep city the same
+                                cityResult.localeName = [boundary getName:phrase.getSettings.getLang transliterate:phrase.getSettings.isTransliterate];
+                                cityResult.otherNames = [boundary getOtherNames:true];
+                                // for another city require exact matching
+                                if ([self matchAddressName:phrase parent:res  res:cityResult fullMatch:true])
+                                {
+                                    cityResult.object = boundary;
+                                    cityResult.location =  [[CLLocation alloc] initWithLatitude:boundary.latitude longitude:boundary.longitude];
+                                    newParentSearchResult = cityResult;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsApi setParentSearchResult:newParentSearchResult publish:true];
+                }
+                else if (res.objectType == EOAObjectTypeBoundary)
+                {
+                    // require exact matching to speed up
+                    if ([self matchAddressName:phrase parent:nil res:res fullMatch:true])
+                    {
+                        [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:self];
+                    }
+                }
                 else
                 {
                     [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];

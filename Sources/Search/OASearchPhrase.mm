@@ -483,17 +483,22 @@ static NSComparator _OACommonWordsComparator = nil;
     if (!l)
         return nil;
     
-    float coeff = (float) (1000 / OsmAnd::Utilities::getTileDistanceWidth(ZOOM_TO_SEARCH_POI));
-    double tx = OsmAnd::Utilities::getTileNumberX(ZOOM_TO_SEARCH_POI, l.coordinate.longitude);
-    double ty = OsmAnd::Utilities::getTileNumberY(ZOOM_TO_SEARCH_POI, l.coordinate.latitude);
+    self.cache1kmRect = [OASearchPhrase calculateBbox:@(1000) location:l];
+    return self.cache1kmRect;
+}
+
++ (QuadRect *) calculateBbox:(NSNumber *)radiusMeters location:(CLLocation *)location
+{
+    float coeff = (float) ([radiusMeters doubleValue] / OsmAnd::Utilities::getTileDistanceWidth(ZOOM_TO_SEARCH_POI));
+    double tx = OsmAnd::Utilities::getTileNumberX(ZOOM_TO_SEARCH_POI, location.coordinate.longitude);
+    double ty = OsmAnd::Utilities::getTileNumberY(ZOOM_TO_SEARCH_POI, location.coordinate.latitude);
     double topLeftX = MAX(0, tx - coeff);
     double topLeftY = MAX(0, ty - coeff);
     int max = (1 << ZOOM_TO_SEARCH_POI)  - 1;
     double bottomRightX = MIN(max, tx + coeff);
     double bottomRightY = MIN(max, ty + coeff);
     double pw = OsmAnd::Utilities::getPowZoom(31 - ZOOM_TO_SEARCH_POI);
-    self.cache1kmRect = [[QuadRect alloc] initWithLeft:topLeftX * pw top:topLeftY * pw right:bottomRightX * pw bottom:bottomRightY * pw];
-    return self.cache1kmRect;
+    return [[QuadRect alloc] initWithLeft:topLeftX * pw top:topLeftY * pw right:bottomRightX * pw bottom:bottomRightY * pw];
 }
 
 - (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt

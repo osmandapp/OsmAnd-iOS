@@ -619,6 +619,15 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         for (NSString * subType : subs)
         {
             OAPOIType * pt = [pc getPoiTypeByKeyName:subType];
+            if (pt == nil)
+            {
+                // Try to get POI type from another category, but skip non-OSM-types
+                pt = (OAPOIType *)[OAPOIHelper.sharedInstance getAnyPoiTypeByName:subType];
+                if (pt != nil && pt.nonEditableOsm)
+                {
+                    pt = nil;
+                }
+            }
             if (pt != nil)
             {
                 if (typeStr.length > 0)

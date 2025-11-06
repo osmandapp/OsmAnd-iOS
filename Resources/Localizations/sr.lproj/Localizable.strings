@@ -649,7 +649,7 @@
 "map_transparency" = "Прозирност основне карте";
 "map_settings_avail_lay" = "Доступни слојеви";
 "mapillary" = "Мапилари";
-"street_level_imagery" = "Слике на ступњу улице";
+"street_level_imagery" = "Слике на нивоу улице";
 "shared_string_terrain" = "Тло";
 "map_settings_layer_transparency" = "Транспарентност слоја";
 "map_settings_slopes_legend" = "Више о падинама можете прочитати на Википедији";
@@ -1351,7 +1351,7 @@
 "shared_string_add_profile" = "Додај налог";
 "quick_action_switch_profile_descr" = "Дејствено дугме мења између изабраних налога.";
 "profile_type_user_string" = "Кориснички профил";
-"profile_type_osmand_string" = "ОсмАндов пресек";
+"profile_type_osmand_string" = "OsmAnd профил";
 "unsupported_action" = "Неподржана радња";
 "unsupported_action_title" = "Неподржана радња (%@)";
 "unsupported_action_descr" = "Ова брза радња тренутно није подржана. Ово се може поправити у новим верзијама апликације.";
@@ -2303,7 +2303,7 @@
 "precipitation_hide" = "Сакриј падавине";
 "backup_error_invalid_token" = "Тока није вредећа";
 "copy_to_map_favorites" = "Умножи у омиљене";
-"animate_my_location" = "Оживи мој положај";
+"animate_my_location" = "Анимирај мој положај";
 "animate_my_location_descr" = "Глатка транзиција локације на мапи током навигације";
 "shared_string_capacity" = "Опсег";
 "altitude_ascent" = "Узбрдо";
@@ -3283,7 +3283,7 @@
 "routing_attr_hazmat_category_usa_2_name" = "Плинови";
 "routing_attr_hazmat_category_usa_7_name" = "Радиоактивне твари";
 "routing_attr_allow_via_ferrata_name" = "Путања падином планине (Виа ферата)";
-"rendering_attr_showProposed_name" = "Предложене објекте";
+"rendering_attr_showProposed_name" = "Предложени објекти";
 "rendering_value_access_name" = "По типу приступа";
 "routing_attr_hazmat_category_usa_9_name" = "Разно";
 "rendering_value_sector4_name" = "Одсечак 4";

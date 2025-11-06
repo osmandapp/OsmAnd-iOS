@@ -3872,3 +3872,7 @@
 "next_turn_information_desc" = "顯示接下來的轉彎與道路名稱。";
 "image_cache_online_photo_high_res" = "線上圖片高解析度快取";
 "image_cache_online_photo_mapillary_default_cache" = "線上圖片/Mapillary 預設快取";
+"efficient_grid" = "高效能網格";
+"slots" = "插槽";
+"button_frames" = "按鈕框架";
+"visualizing_button_grid" = "地圖按鈕網格";

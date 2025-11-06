@@ -2879,7 +2879,7 @@
 "bicycle_scd_device_name" = "Dispositiu de bicicleta";
 "external_device_blood_pressure" = "Pressió arterial";
 "shared_string_ear_lobe" = "Lòbul de l'or";
-"poi_categories" = "Categories POI";
+"poi_categories" = "Categories de PDI";
 "external_device_forget_sensor" = "Oblida el sensor";
 "external_device_forget_sensor_description" = "El sensor s'eliminarà de la llista. Podreu aparellar aquest sensor de nou en qualsevol moment.";
 "external_device_characteristic_total_distance" = "Distància total";

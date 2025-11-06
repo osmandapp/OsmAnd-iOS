@@ -113,6 +113,10 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
             return NO;
         if (_maxSpeed != that.maxSpeed)
             return NO;
+        if (_locationIconSize != that.locationIconSize)
+            return NO;
+        if (_courseIconSize != that.courseIconSize)
+            return NO;
         return _locationIcon == that.locationIcon;
     }
 }

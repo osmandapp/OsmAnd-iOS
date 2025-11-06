@@ -50,10 +50,6 @@ final class WikiImage: NSObject {
         }
         
         applyDescription(from: dic)
-
-        if let mediaId = dic["mediaId"] as? Int {
-            self.mediaId = mediaId
-        }
     }
     
     func applyDescription(from dic: [String: Any]) {

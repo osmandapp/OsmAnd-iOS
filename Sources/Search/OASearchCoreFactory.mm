@@ -209,53 +209,6 @@
 - (OASearchPhrase *) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api setParentSearchResult:(OASearchResult *)setParentSearchResult publish:(BOOL)publish
 {
     [phrase countUnknownWordsMatchMainResult:res];
-    /*BOOL firstUnknownWordMatches = res.firstUnknownWordMatches;
-    NSMutableArray<NSString *> *leftUnknownSearchWords = [NSMutableArray arrayWithArray:[phrase getUnknownSearchWords]];
-    if (res.otherWordsMatch)
-        [leftUnknownSearchWords removeObjectsInArray:[res.otherWordsMatch allObjects]];
-    
-    OASearchResult *newParentSearchResult = nil;
-    if (res.parentSearchResult == nil && resultMatcher.getParentSearchResult == nil &&
-        res.objectType == EOAObjectTypeStreet && [res.object isKindOfClass:OAStreet.class] && ((OAStreet *) res.object).city != nil) {
-        OACity *ct = ((OAStreet *) res.object).city;
-        OASearchResult *cityResult = [[OASearchResult alloc] initWithPhrase:phrase];
-        cityResult.object = ct;
-        cityResult.objectType = EOAObjectTypeCity;
-        cityResult.localeName = [ct getName:phrase.getSettings.getLang transliterate:phrase.getSettings.isTransliterate];
-        cityResult.otherNames = [NSMutableArray arrayWithArray:ct.localizedNames.allValues];
-        cityResult.location = [[CLLocation alloc] initWithLatitude:ct.latitude longitude:ct.longitude];
-        QString lang = QString::fromNSString([[phrase getSettings] getLang]);
-        const auto& r = OsmAndApp.instance.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
-        if (r)
-        {
-            const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
-            if (obfMetadata)
-                cityResult.localeRelatedObjectName = obfMetadata->obfFile->getRegionName().toNSString();
-            cityResult.relatedResourceId = res.resourceId;
-        }
-        [phrase countUnknownWordsMatchMainResult:cityResult];
-        __block BOOL match = NO;
-        if (firstUnknownWordMatches)
-        {
-            cityResult.firstUnknownWordMatches = NO; // don't count same name twice
-        }
-        else if (cityResult.firstUnknownWordMatches)
-        {
-            firstUnknownWordMatches = YES;
-            match = YES;
-        }
-        if (cityResult.otherWordsMatch != nil)
-        {
-            [cityResult.otherWordsMatch enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-                [leftUnknownSearchWords removeObject:obj]; // remove 1 by 1
-            }];
-        }
-        // include parent search result even if it is empty
-        if (match)
-            newParentSearchResult = cityResult;
-    }
-    if (!firstUnknownWordMatches)
-        [leftUnknownSearchWords insertObject:[phrase getFirstUnknownSearchWord] atIndex:0];*/
     
     NSMutableArray<NSString *> *leftUnknownSearchWords = [res filterUnknownSearchWord:nil];
     if (setParentSearchResult != nil)
@@ -620,17 +573,6 @@
     }
 }
 
-/*- (void) searchPoiInCity:(OASearchPhrase *)nphrase res:(OASearchResult *)res resultMatcher:(OASearchResultMatcher *)resultMatcher
-{
-    if (nphrase != nil && res.objectType == EOAObjectTypeCity)
-    {
-        OASearchAmenityByNameAPI *poiApi = [[OASearchAmenityByNameAPI alloc] init];
-        OASearchPhrase *newPhrase = [nphrase generateNewPhrase:nphrase fileId:res.resourceId];
-        [newPhrase.getSettings setOriginalLocation:res.location];
-        [poiApi search:newPhrase resultMatcher:resultMatcher];
-    }
-}*/
-
 - (void) searchByName:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     if ([phrase getRadiusLevel] > 1 || [phrase getUnknownWordToSearch].length > 3 || [phrase hasMoreThanOneUnknownSearchWord] || [phrase isSearchTypeAllowed:EOAObjectTypePostcode exclusive:YES])
@@ -690,9 +632,9 @@
                 const std::vector<int> bb = c.city->bbox31;
                 if (bb.size() >= 4)
                 {
-                    int w = (bb[2] - bb[0]) / 3;
-                    int h = (bb[3] - bb[1]) / 3; // enlarge for 1234 Golden Pond Road Woodhull
-                    searchCriteria->bbox31 = OsmAnd::AreaI(bb[0] - w, bb[1] - h, bb[2] + w, bb[3] + h);
+                    int w = (bb[2] - bb[0]) / 3, h = (bb[3] - bb[1]) / 3; // enlarge for 1234 Golden Pond Road Woodhull
+                    int left = bb[0] - w,  top = bb[1] - h, right = bb[2] + w, bottom = bb[3] + h;
+                    searchCriteria->bbox31 = OsmAnd::AreaI(top, left, bottom, right);
                 }
                 else
                 {
@@ -2571,25 +2513,6 @@
 
 - (BOOL) parseUrl:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    /*
-    NSString *text = [phrase getUnknownSearchPhrase];
-    GeoParsedPoint pnt = GeoPointParserUtil.parse(text);
-    if (pnt && pnt.isGeoPoint() && [phrase isSearchTypeAllowed:LOCATION])
-    {
-        OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
-        sp.priority = 0;
-        sp.object = pnt;
-        sp.wordsSpan = text;
-        sp.location = new LatLon(pnt.getLatitude(), pnt.getLongitude());
-        sp.localeName = ((float)pnt.getLatitude()) +", " + ((float) pnt.getLongitude());
-        if(pnt.getZoom() > 0)
-            sp.preferredZoom = pnt.getZoom();
-        
-        sp.objectType = ObjectType.LOCATION;
-        [resultMatcher publish:sp];
-        return true;
-    }
-    */
     return false;
 }
 

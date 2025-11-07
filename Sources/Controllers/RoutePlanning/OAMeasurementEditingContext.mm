@@ -384,6 +384,11 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     if (mode == EOAAddPointModeAfter || mode == EOAAddPointModeBefore)
         [self preAddPoint:position mode:mode point:pt];
     NSMutableArray<OASWptPt *> *points = [NSMutableArray arrayWithArray:_before.points];
+    if (position < 0 || position > points.count)
+    {
+        NSLog(@"[OAMeasurementEditingContext] [ERROR] Invalid insert index: %ld (count=%lu)", (long)position, (unsigned long)points.count);
+        position = MIN(MAX(position, 0), points.count);
+    }
     [points insertObject:pt atIndex:position];
     _before.points = points;
     [self updateSegmentsForSnap:false];

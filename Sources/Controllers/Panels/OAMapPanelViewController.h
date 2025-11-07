@@ -128,7 +128,8 @@ NS_ASSUME_NONNULL_BEGIN
                          typeName:(NSString *)typeName
                            pushed:(BOOL)pushed
                         saveState:(BOOL)saveState
-                    preferredZoom:(float)preferredZoom;
+                    preferredZoom:(float)preferredZoom
+                             icon:(nullable UIImage *)icon;
 
 - (void) openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed;
 - (void) openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;

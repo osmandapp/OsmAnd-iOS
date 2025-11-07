@@ -3803,3 +3803,4 @@
 "fastspring_subscription_desc" = "È possibile gestire o annullare l'abbonamento tramite il portale di gestione account FastSpring.";
 "fastspring_one_time_payment_desc" = "È possibile gestire gli acquisti tramite il portale di gestione account FastSpring.";
 "key_event_action_zoom_in" = "Ingrandisci";
+"rendering_attr_showSkiSlopes_name" = "Mostra la pendenza delle piste da sci";

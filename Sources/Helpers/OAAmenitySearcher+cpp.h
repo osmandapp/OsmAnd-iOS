@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<OAPOI *> *) findTravelGuides:(NSArray<NSString *> *)categoryNames currentLocation:(OsmAnd::PointI)currentLocation bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish;
 - (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryNames:(NSArray<NSString *> *)categoryNames poiTypeName:(NSString * _Nullable)typeName currentLocation:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish;
 
-+ (OAPOI *) parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
++ (nullable OAPOI *)parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
 + (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
 
 @end

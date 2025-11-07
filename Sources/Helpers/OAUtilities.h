@@ -391,7 +391,7 @@ static inline void executeOnMainThread(dispatch_block_t block)
 + (NSString *) getLocalizedRouteInfoProperty:(NSString *)properyName;
 
 + (BOOL) isColorBright:(UIColor *)color;
-+ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth alignment:(NSTextAlignment)alignment;
++ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(nullable UIColor *)strokeColor strokeWidth:(float)strokeWidth alignment:(NSTextAlignment)alignment;
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor isBigTitle:(BOOL)isBigTitle parentViewWidth:(CGFloat)parentViewWidth;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle topOffset:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;

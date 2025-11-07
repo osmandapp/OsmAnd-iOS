@@ -445,24 +445,13 @@ final class BaseDetailsObject: NSObject {
             return result == .orderedAscending
         }
     }
-    
-    private func sortObjectsByResourceType() {
-        objects.sort { o1, o2 in
-            let result: ComparisonResult
-            
-            let ord1 = Self.getResourceType(o1).rawValue
-            let ord2 = Self.getResourceType(o2).rawValue
 
-            if ord1 != ord2 {
-                result = ord1 > ord2 ? .orderedAscending : .orderedDescending
-            } else {
-                result = .orderedSame
-            }
-            
-            return result == .orderedAscending
+    private func sortObjectsByResourceType() {
+        objects.sort {
+            Self.getResourceType($0).rawValue < Self.getResourceType($1).rawValue
         }
     }
-    
+
     private func sortObjectsByClass() {
         objects.sort { obj1, obj2 in
             let result: ComparisonResult

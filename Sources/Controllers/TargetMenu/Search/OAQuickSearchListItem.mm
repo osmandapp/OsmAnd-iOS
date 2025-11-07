@@ -136,6 +136,10 @@
         {
             return [((OAAddress *)searchResult.object) iconName];
         }
+        case EOAObjectTypeStreetIntersection:
+        {
+            return @"ic_custom_intersection";
+        }
         case EOAObjectTypePoiType:
         {
             if ([searchResult.object isKindOfClass:OAPOIBaseType.class])

@@ -20,8 +20,6 @@ final class ImageCarouselViewController: UIPageViewController {
     private var currentIndex = 0
     private var titleString = ""
     
-    private lazy var downloadImageMetadataService = DownloadImageMetadataService.shared
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         traitCollection.userInterfaceStyle == .dark
         ? .lightContent
@@ -67,7 +65,6 @@ final class ImageCarouselViewController: UIPageViewController {
         
         configureNavigationBarAppearance()
         configureContentMetadataView()
-        downloadMetadataIfNeeded()
         prefetchAdjacentItems()
         
         if let imageDatasource {
@@ -81,19 +78,6 @@ final class ImageCarouselViewController: UIPageViewController {
             }
             configureNavigationBarButtons()
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(didDownloadMetadata(notification:)),
-                                               name: .didDownloadMetadata,
-                                               object: nil)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLayoutSubviews() {
@@ -241,20 +225,6 @@ final class ImageCarouselViewController: UIPageViewController {
         }
     }
     
-    private func downloadMetadataIfNeeded() {
-        guard let datasource = imageDatasource as? SimpleImageDatasource else { return }
-        let wikiImageCards = datasource.imageItems.compactMap { item in
-            if case .card(let card) = item {
-                return card as? WikiImageCard
-            }
-            return nil
-        }
-        if !wikiImageCards.isEmpty {
-            downloadImageMetadataService.cards = wikiImageCards
-            prefetchMetadata()
-        }
-    }
-    
     private func showContentMetadataView(show: Bool) {
         UIView.animate(withDuration: 0.25, animations: {
             self.contentMetadataView.alpha = show ? 1.0 : 0.0
@@ -280,55 +250,9 @@ final class ImageCarouselViewController: UIPageViewController {
         prefetchImages(with: urls)
     }
     
-    private func prefetchMetadata() {
-        guard let imageDatasource else { return }
-        // Get 2 previous and 2 next indices relative to the current index
-        let indicesForPrefetch = [
-            (currentIndex - 2 + imageDatasource.count()) % imageDatasource.count(),
-            (currentIndex - 1 + imageDatasource.count()) % imageDatasource.count(),
-            currentIndex,
-            (currentIndex + 1) % imageDatasource.count(),
-            (currentIndex + 2) % imageDatasource.count()
-        ]
-        
-        let cardsForPrefetch = indicesForPrefetch.compactMap { index -> WikiImageCard? in
-            guard index >= 0 && index < imageDatasource.count() else { return nil }
-            guard let card = getCardForIndex(index) as? WikiImageCard,
-                  let metadata = card.metadata else { return nil }
-            
-            let isMetadataMissing = [
-                metadata.date,
-                metadata.author,
-                metadata.license,
-                metadata.description
-            ].contains { downloadImageMetadataService.isEmpty($0) }
-            
-            guard isMetadataMissing && !card.isMetaDataDownloaded && !card.isMetaDataDownloading else { return nil }
-            return card
-        }
-        
-        if !cardsForPrefetch.isEmpty {
-            Task { [weak self] in
-                guard let self else { return }
-                await downloadImageMetadataService.downloadMetadata(for: cardsForPrefetch)
-            }
-        } else {
-            debugPrint("No cards to prefetch metadata")
-        }
-    }
-    
     private func prefetchImages(with urls: [URL]) {
         guard !urls.isEmpty else { return }
         ImagePrefetcher(urls: urls, options: [.targetCache(.onlinePhotoHighResolutionDiskCache)]).start()
-    }
-    
-    @objc private func didDownloadMetadata(notification: Notification) {
-        guard let cards = notification.userInfo?["cards"] as? [WikiImageCard] else { return }
-        guard let obj = getCardForIndex(currentIndex) else { return }
-        
-        if cards.contains(where: { $0 === obj }) {
-            updateMetaData(with: currentIndex)
-        }
     }
     
     @objc private func onCloseBarButtonActon(_ sender: UIBarButtonItem) {
@@ -417,7 +341,6 @@ extension ImageCarouselViewController: UIPageViewControllerDelegate {
     private func updatePage(index: Int) {
         updateMetaData(with: index)
         prefetchAdjacentItems()
-        prefetchMetadata()
     }
 }
 
@@ -441,6 +364,10 @@ extension ImageCarouselViewController {
         }()
         
         guard let targetVC else { return }
+        
+        if let presented = parent?.presentedViewController {
+            presented.dismiss(animated: true)
+        }
         
         setViewControllers([targetVC], direction: direction, animated: true) { [weak self] completed in
             guard let self, completed else { return }

@@ -211,7 +211,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [GpxUIHelper setupElevationChartWithChartView:_routeStatsCell.chartView
                                         topOffset:10
                                      bottomOffset:4
-                              useGesturesAndScale:NO];
+                              useGesturesAndScale:NO
+                                    showXInMarker:NO];
 
     self.sliderView.layer.cornerRadius = 2.;
     

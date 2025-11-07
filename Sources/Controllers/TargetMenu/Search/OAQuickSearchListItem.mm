@@ -131,7 +131,6 @@
         case EOAObjectTypePostcode:
         case EOAObjectTypeStreet:
         case EOAObjectTypeHouse:
-        case EOAObjectTypeStreetIntersection:
         case EOAObjectTypeBoundary:
         {
             return [((OAAddress *)searchResult.object) iconName];

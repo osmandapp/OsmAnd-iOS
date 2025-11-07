@@ -2125,6 +2125,9 @@
                 if ([resultMatcher isCancelled])
                     break;
                 
+                if (!street)
+                    continue;
+                
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
                 if ((![streetMatch matches:street->nativeName.toNSString()] && ![streetMatch matchesMap:[OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName]]) || ![phrase isSearchTypeAllowed:EOAObjectTypeStreetIntersection])
                     continue;

@@ -2044,6 +2044,8 @@ static const NSInteger _buttonsCount = 4;
     NSMutableArray *items = [NSMutableArray array];
 
     NSMutableString *sharingText = [[NSMutableString alloc] init];
+    double lat;
+    double lon;
     if (_previousTargetType == OATargetFavorite)
     {
         OAFavoriteViewController *source = (OAFavoriteViewController *) self.customController;
@@ -2065,9 +2067,8 @@ static const NSInteger _buttonsCount = 4;
                 [sharingText appendString:@"\n"];
             [sharingText appendString:itemDesc];
         }
-        double lat = [source.favorite getLatitude];
-        double lon = [source.favorite getLongitude];
-        [self addCoordinatesAndUrlTo:sharingText withLat:lat lon:lon];
+        lat = [source.favorite getLatitude];
+        lon = [source.favorite getLongitude];
     }
     else
     {
@@ -2079,10 +2080,11 @@ static const NSInteger _buttonsCount = 4;
                 [sharingText appendString:@"\n"];
             [sharingText appendString:_targetPoint.titleAddress];
         }
-        double lat = _targetPoint.location.latitude;
-        double lon = _targetPoint.location.longitude;
-        [self addCoordinatesAndUrlTo:sharingText withLat:lat lon:lon];
+        lat = _targetPoint.location.latitude;
+        lon = _targetPoint.location.longitude;
     }
+    [self addCoordinatesAndUrlTo:sharingText withLat:lat lon:lon];
+    
     if (sharingText && sharingText.length > 0)
         [items addObject:sharingText];
 

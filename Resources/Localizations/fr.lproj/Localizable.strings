@@ -3944,10 +3944,10 @@
 "rendering_attr_hideTidalFlats_name" = "Vasières";
 "rendering_attr_safetyContour_description" = "Contour de profondeur de sécurité";
 "ble_scanner" = "Scanner BLE";
-"visualizing_button_grid" = "Grille de boutons de carte";
-"efficient_grid" = "Réseau efficace";
+"visualizing_button_grid" = "Bouton grille de la carte";
+"efficient_grid" = "Grille d'efficacité";
 "slots" = "Machines à sous";
-"button_frames" = "Cadres à boutons";
+"button_frames" = "Disposition des boutons";
 "max_weight_at_full_load_description" = "Indiquez le poids maximal de votre véhicule à pleine charge afin d'éviter les routes et les ponts soumis à des limitations de poids.";
 "max_axle_load_description" = "Indiquez la charge maximale par essieu de votre véhicule afin d'éviter les routes et les ponts soumis à des limites de poids.";
 "lang_crh" = "Tatar de Crimée (latin)";

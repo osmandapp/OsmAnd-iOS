@@ -7,7 +7,6 @@
 //
 
 #import "OAGpxSettingsItem.h"
-#import "OAGpxAppearanceInfo.h"
 #import "OAGPXUIHelper.h"
 #import "OsmAndApp.h"
 #import "OAGPXAppearanceCollection.h"
@@ -19,7 +18,7 @@
 
 @implementation OAGpxSettingsItem
 {
-    OAGpxAppearanceInfo *_appearanceInfo;
+    GpxAppearanceInfo *_appearanceInfo;
 }
 
 - (instancetype) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error
@@ -50,7 +49,7 @@
     return self;
 }
 
-- (OAGpxAppearanceInfo *) getAppearanceInfo
+- (GpxAppearanceInfo *) getAppearanceInfo
 {
     return _appearanceInfo;
 }
@@ -101,7 +100,7 @@
      type = GPX;
      }
      */
-    _appearanceInfo = [OAGpxAppearanceInfo fromJson:json];
+    _appearanceInfo = [GpxAppearanceInfo fromJson:json];
 }
 
 - (NSString *)fileNameWithFolder
@@ -137,8 +136,12 @@
     json[@"file"] = self.fileNameWithFolder;
     if (self.subtype != EOAFileSettingsItemFileSubtypeUnknown)
         json[@"subtype"] = [OAFileSettingsItemFileSubtype getSubtypeName:self.subtype];
+    
     if (_appearanceInfo)
-        [_appearanceInfo toJson:json];
+    {
+        id newJson = [_appearanceInfo toJson:json];
+        [json addEntriesFromDictionary:newJson];
+    }
 }
 
 - (OASettingsItemWriter *) getWriter
@@ -209,7 +212,7 @@
 - (void)configureGpxAppearanceInfo:(OASGpxDataItem *)dataItem
 {
     if (dataItem)
-        _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:dataItem];
+        _appearanceInfo = [[GpxAppearanceInfo alloc] initWithDataItem:dataItem];
 }
 
 - (void)createGpxAppearanceInfo
@@ -223,7 +226,7 @@
     OASGpxDataItem *dataItem = [[OASGpxDbHelper shared] getItemFile:file callback:handler];
     
     if (dataItem)
-        _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:dataItem];
+        _appearanceInfo = [[GpxAppearanceInfo alloc] initWithDataItem:dataItem];
 }
 
 

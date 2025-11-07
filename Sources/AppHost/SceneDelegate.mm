@@ -132,7 +132,6 @@
                 
                 NSString *urlDescription = [webpageURL absoluteString];
                 NSString *handledMessage = [NSString stringWithFormat:@"Handled Universal Link: %@", urlDescription];
-                
                 LogStartup(handledMessage);
             } else {
                 LogStartup(@"Attempted to handle Universal Link, but URL was nil or cannot be opened.");

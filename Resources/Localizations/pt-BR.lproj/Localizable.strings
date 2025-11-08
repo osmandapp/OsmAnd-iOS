@@ -3950,3 +3950,7 @@
 "max_weight_at_full_load_description" = "Informe o peso máximo do seu veículo com carga total para evitar estradas e pontes com limites de peso.";
 "max_axle_load_description" = "Forneça a carga máxima por eixo do seu veículo para evitar estradas e pontes com limites de peso.";
 "x" = "X (anteriormente Twitter)";
+"visualizing_button_grid" = "Grade de botões do mapa";
+"efficient_grid" = "Grade eficiente";
+"button_frames" = "Molduras de botão";
+"slots" = "Slots";

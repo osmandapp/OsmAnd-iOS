@@ -3884,9 +3884,9 @@
 "miles" = "Míle";
 "mpg" = "MPG";
 "lang_crh" = "Krymská tatarština (latinka)";
-"visualizing_button_grid" = "Mapa tlačítek";
-"efficient_grid" = "Efektivní síť";
-"slots" = "Sloty";
+"visualizing_button_grid" = "Mřížka tlačítek na mapě";
+"efficient_grid" = "Efektivní mřížka";
+"slots" = "Místa";
 "button_frames" = "Rámečky tlačítek";
 "max_weight_at_full_load_description" = "Zadejte maximální hmotnost svého vozidla při plném naložení pro vyhnutí se silnicím a mostům s omezením hmotnosti.";
 "max_axle_load_description" = "Zadejte maximální zatížení svého vozidla na jednu nápravu pro vyhnutí se silnicím a mostům s omezením hmotnosti.";

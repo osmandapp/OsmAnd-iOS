@@ -3962,3 +3962,4 @@
 "rendering_attr_hideTidalFlats_name" = "Llanuras intermareales";
 "rendering_attr_safetyContour_description" = "Curvas de profundidad de seguridad";
 "ble_scanner" = "Escáner BLE";
+"x" = "X (antes Twitter)";

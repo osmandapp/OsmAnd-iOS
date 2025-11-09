@@ -348,10 +348,6 @@ static const NSInteger kDetailedMapZoom = 9;
                                                            withHandler:@selector(onAppModeChanged)
                                                             andObserve:[OsmAndApp instance].applicationModeChangedObservable];
 
-    _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                 withHandler:@selector(onMapZoomChanged:withKey:andValue:)
-                                                  andObserve:_zoomObservable];
-
     // Subscribe to application notifications to correctly suspend and resume rendering
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidEnterBackground:)
@@ -543,6 +539,10 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void) frameUpdated
 {
+    @synchronized(_rendererSync)
+    {
+        [self updateMapLocaleLanguage];
+    }
 }
 
 - (void) frameRendered
@@ -2307,14 +2307,6 @@ static const NSInteger kDetailedMapZoom = 9;
     _map3DModeElevationAngle = _mapView.elevationAngle;
 }
 
-- (void)onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
-{
-    @synchronized(_rendererSync)
-    {
-        [self updateMapLocaleLanguage];
-    }
-}
-
 - (BOOL)isBasemapZoom:(int)zoom
 {
     return zoom < kDetailedMapZoom;
@@ -2324,15 +2316,19 @@ static const NSInteger kDetailedMapZoom = 9;
 {
     if (_mapPresentationEnvironment != nullptr)
     {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+
+        OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:_mapView.zoomLevel];
         NSString *langId = [self isBasemapZoom:_mapView.zoomLevel] ? [OAUtilities currentLang] : [[OAAppSettings sharedManager].settingPrefMapLanguage get];
-        if (![langId isEqualToString:_mapPresentationEnvironment->getLocaleLanguageId().toNSString()])
+
+        BOOL languageIdUpdated = ![langId isEqualToString:_mapPresentationEnvironment->getLocaleLanguageId().toNSString()];
+        BOOL languagePreferenceUpdated = _mapPresentationEnvironment->getLanguagePreference() != langPreferences;
+        
+        if (languageIdUpdated || languagePreferenceUpdated)
         {
             _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+            _mapPresentationEnvironment->setLanguagePreference(langPreferences);
         }
-
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:_mapView.zoomLevel];
-        _mapPresentationEnvironment->setLanguagePreference(langPreferences);
     }
 }
 

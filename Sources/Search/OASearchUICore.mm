@@ -883,8 +883,9 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         
         try
         {
-            [api search:phrase resultMatcher:matcher];
-            
+            @autoreleasepool {
+                [api search:phrase resultMatcher:matcher];
+            }
             if (![matcher isCancelled])
                 [matcher apiSearchFinished:api phrase:phrase];
         }

@@ -3228,6 +3228,7 @@
 		FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */; };
 		FA5060B92D6DF807007638C8 /* TouchesPassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5060B82D6DF807007638C8 /* TouchesPassView.swift */; };
 		FA52B0732D4D237D0001B693 /* CardsFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA52B0722D4D237D0001B693 /* CardsFilter.swift */; };
+		FA54CE0F2EBB938E007F1F68 /* Locale+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA54CE0E2EBB938E007F1F68 /* Locale+Extension.swift */; };
 		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
 		FA5D19E12CC00B1100E01A27 /* GPXDataItemGPXFileWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */; };
@@ -3335,7 +3336,6 @@
 		FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */; };
 		FAC5D4312BFC7F5200E9E658 /* SpeedLimitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */; };
 		FACB02AA2D54C52000EBE87F /* ImageCache+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */; };
-		FACB02AC2D54F71C00EBE87F /* DownloadImageMetadataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */; };
 		FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */; };
 		FACBDBDA2EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */; };
 		FACDC63D2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */; };
@@ -7927,6 +7927,7 @@
 		FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWheelSettingsViewController.swift; sourceTree = "<group>"; };
 		FA5060B82D6DF807007638C8 /* TouchesPassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchesPassView.swift; sourceTree = "<group>"; };
 		FA52B0722D4D237D0001B693 /* CardsFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsFilter.swift; sourceTree = "<group>"; };
+		FA54CE0E2EBB938E007F1F68 /* Locale+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Locale+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXDataItemGPXFileWrapper.swift; sourceTree = "<group>"; };
@@ -8038,7 +8039,6 @@
 		FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerSpeedView.swift; sourceTree = "<group>"; };
 		FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitView.swift; sourceTree = "<group>"; };
 		FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCache+Extension.swift"; sourceTree = "<group>"; };
-		FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageMetadataService.swift; sourceTree = "<group>"; };
 		FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
 		FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+LocalizedDocs.swift"; sourceTree = "<group>"; };
 		FACDC63C2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsDescriptionViewController.swift; sourceTree = "<group>"; };
@@ -11151,7 +11151,6 @@
 			children = (
 				FA66F1512D5CD40600A4FF9E /* ImageViewer */,
 				FA7EBDD22D5A16F900121977 /* ContentMetadataView.swift */,
-				FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */,
 				FA92170F2D525D600074E958 /* GalleryContextMenuProvider.swift */,
 				FA92170D2D5254420074E958 /* GalleryGridDetailViewController.swift */,
 				FA52B0722D4D237D0001B693 /* CardsFilter.swift */,
@@ -13967,6 +13966,7 @@
 		DAABE4EC2A16578A00569F71 /* SwiftExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				FA54CE0E2EBB938E007F1F68 /* Locale+Extension.swift */,
 				FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */,
 				FA82B9152E74132200A250F1 /* ByteCountFormatter+Extension.swift */,
 				FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */,
@@ -16872,7 +16872,6 @@
 				C5C81F8C2E532EBD009D3439 /* ZoomInButtonState.swift in Sources */,
 				DA5A83E526C563A800F274C7 /* OAEditDescriptionViewController.m in Sources */,
 				DA5A853F26C563A900F274C7 /* OASuggestedDownloadsItem.m in Sources */,
-				FACB02AC2D54F71C00EBE87F /* DownloadImageMetadataService.swift in Sources */,
 				DA5A834626C563A800F274C7 /* OADateTimePickerTableViewCell.m in Sources */,
 				DA5A834726C563A800F274C7 /* OASegmentedControlCell.m in Sources */,
 				DA5A825126C563A700F274C7 /* OARouteParametersViewController.mm in Sources */,
@@ -16933,6 +16932,7 @@
 				464BF4A92C0517E7000D6908 /* Map3DModeVisibility.swift in Sources */,
 				DAA61CCE2A03D9C000AFF65D /* OAWidgetsVisibilityHelper.mm in Sources */,
 				DA5A831226C563A800F274C7 /* OAFolderCardsCell.m in Sources */,
+				FA54CE0F2EBB938E007F1F68 /* Locale+Extension.swift in Sources */,
 				DA4ABF1C2876DA6800B996EF /* OAMapSourcesSettingsItem.mm in Sources */,
 				DA5A84CE26C563A900F274C7 /* OAQuickActionSelectionBottomSheetViewController.mm in Sources */,
 				4656BD362C4855D200B69928 /* ColorizationType.swift in Sources */,

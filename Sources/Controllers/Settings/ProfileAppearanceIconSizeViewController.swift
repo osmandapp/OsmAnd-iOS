@@ -59,13 +59,20 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         super.viewDidLoad()
         updateCurrentLocation()
         switchAppMode(toChoosenAppMode: true)
-        locationServices?.suspend()
+        if locationServices?.allowed == true {
+            locationServices?.suspend()
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         switchAppMode(toChoosenAppMode: false)
-        locationServices?.resume()
+        
+        if locationServices?.allowed == true {
+            locationServices?.resume()
+        } else {
+            locationServices?.setLocationFromSimulation(nil)
+        }
     }
     
     override func updateModeUI() {

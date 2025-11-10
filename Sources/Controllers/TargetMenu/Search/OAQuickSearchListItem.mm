@@ -131,9 +131,12 @@
         case EOAObjectTypePostcode:
         case EOAObjectTypeStreet:
         case EOAObjectTypeHouse:
-        case EOAObjectTypeStreetIntersection:
         {
             return [((OAAddress *)searchResult.object) iconName];
+        }
+        case EOAObjectTypeStreetIntersection:
+        {
+            return @"ic_custom_intersection";
         }
         case EOAObjectTypePoiType:
         {

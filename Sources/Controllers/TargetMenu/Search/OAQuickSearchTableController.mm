@@ -412,7 +412,7 @@
                 
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
-                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:building name:name typeName:typeNameHouse pushed:NO saveState:NO preferredZoom:searchResult.preferredZoom];
+                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:building name:name typeName:typeNameHouse pushed:NO saveState:NO preferredZoom:searchResult.preferredZoom icon:nil];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
@@ -431,7 +431,7 @@
                 
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
-                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:streetIntersection name:[OAQuickSearchListItem getName:searchResult] typeName:typeNameIntersection pushed:NO saveState:NO preferredZoom:searchResult.preferredZoom];
+                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:streetIntersection name:[OAQuickSearchListItem getName:searchResult] typeName:typeNameIntersection pushed:NO saveState:NO preferredZoom:searchResult.preferredZoom icon:[UIImage templateImageNamed:[OAQuickSearchListItem getIconName:searchResult]]];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
@@ -742,7 +742,12 @@
                 {
                     OAAddress *address = (OAAddress *)res.object;
                     [cell.titleView setText:[item getName]];
-                    cell.titleIcon.image = [address icon];
+                    
+                    if (res.objectType == EOAObjectTypeStreetIntersection)
+                        cell.titleIcon.image = [UIImage templateImageNamed:[OAQuickSearchListItem getIconName:res]];
+                    else
+                        cell.titleIcon.image = [address icon];
+                    
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;

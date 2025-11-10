@@ -611,19 +611,29 @@
     if (_myLocationToStart != nil && [_myLocationToStart isSearchingAddress] && !_isSearchingMyLocation)
     {
         _isSearchingMyLocation = YES;
+        
+        // Capture locals to avoid racing on ivars in background work
+        __block OARTargetPoint *const localMyStart = _myLocationToStart;
+        __block CLLocation     *const localPoint   = localMyStart.point;
+        
         __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf)
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (!self)
                 return;
             
-            NSString *pointName = [strongSelf getLocationName:strongSelf->_myLocationToStart.point];
-            [strongSelf->_myLocationToStart.pointDescription setName:pointName];
-            [strongSelf->_app.data setMyLocationToStart:strongSelf->_myLocationToStart];
+            // Pure computation only — no shared-state touches here
+            NSString *pointName = [self getLocationName:localPoint];
             
+            // Write back on main, re-validate the target before touching it
             dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf updateRouteAndRefresh:NO];
-                strongSelf->_isSearchingMyLocation = NO;
+                if (self->_myLocationToStart == localMyStart)
+                {
+                    [localMyStart.pointDescription setName:pointName ?: @""];
+                    [self->_app.data setMyLocationToStart:localMyStart];
+                    [self updateRouteAndRefresh:NO];
+                }
+                self->_isSearchingMyLocation = NO;
             });
         });
     }

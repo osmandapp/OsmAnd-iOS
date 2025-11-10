@@ -187,8 +187,6 @@ int const kZoomToSearchPOI = 16.0;
 
 - (NSArray<NSString *> *) getAmenityRepositories:(BOOL)includeTravel
 {
-    NSMutableArray<NSString *> *obfFilenames = [NSMutableArray array];
-    
     NSMutableArray<NSString *> *travelMaps = [NSMutableArray array];
     NSMutableArray<NSString *> *baseMaps = [NSMutableArray array];
     NSMutableArray<NSString *> *result = [NSMutableArray array];
@@ -241,7 +239,7 @@ int const kZoomToSearchPOI = 16.0;
 
 - (NSArray<OAPOI *> *)searchAmenitiesWithFilter:(OASearchPoiTypeFilter *)filter searchLatLon:(CLLocation *)searchLatLon radius:(NSInteger)radius includeTravel:(BOOL)includeTravel
 {
-    return [OAAmenitySearcher findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil lat:searchLatLon.coordinate.latitude lon:searchLatLon.coordinate.longitude radius:radius includeTravel:includeTravel matcher:nil publish:nil];
+    return [OAAmenitySearcher findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil lat:searchLatLon.coordinate.latitude lon:searchLatLon.coordinate.longitude radius:(int)radius includeTravel:includeTravel matcher:nil publish:nil];
 }
 
 - (NSMutableArray<OAPOI *> *)filterAmenities:(NSArray<OAPOI *> *)amenities request:(OAAmenitySearcherRequest*) request
@@ -255,7 +253,7 @@ int const kZoomToSearchPOI = 16.0;
 
     if (osmId > 0 || wikidata != nil)
     {
-        filtered = [self filterByOsmIdOrWikidata:amenities osmId:osmId point:latLon wikidata:wikidata];
+        filtered = [[self filterByOsmIdOrWikidata:amenities osmId:osmId point:latLon wikidata:wikidata] mutableCopy];
     }
 
     if (NSArrayIsEmpty(filtered))
@@ -265,10 +263,10 @@ int const kZoomToSearchPOI = 16.0;
         {
             if ([amenity getOsmId] > 0)
             {
-                filtered = [self filterByOsmIdOrWikidata:amenities
-                                                   osmId:[amenity getOsmId]
-                                                   point:[amenity getLocation]
-                                                wikidata:[amenity getWikidata]];
+                filtered = [[self filterByOsmIdOrWikidata:amenities
+                                                    osmId:[amenity getOsmId]
+                                                    point:[amenity getLocation]
+                                                 wikidata:[amenity getWikidata]] mutableCopy];
             }
             else
             {
@@ -280,7 +278,7 @@ int const kZoomToSearchPOI = 16.0;
 
     if (NSArrayIsEmpty(filtered) && !NSDictionaryIsEmpty(request.tags))
     {
-        filtered = [self filterByLatLonAndType:amenities point:latLon tags:request.tags];
+        filtered = [[self filterByLatLonAndType:amenities point:latLon tags:request.tags] mutableCopy];
     }
 
     return filtered;
@@ -361,7 +359,7 @@ int const kZoomToSearchPOI = 16.0;
             }
         }
     }
-    return result;
+    return [result copy];
 }
 
 - (NSMutableArray<OAPOI *> *)filterByLatLonAndType:(NSArray<OAPOI *> *)amenities
@@ -385,7 +383,7 @@ int const kZoomToSearchPOI = 16.0;
             break;
         }
     }
-    return result;
+    return [result copy];
 }
 
 - (nullable OAPOI *)findByName:(NSArray<OAPOI *> *)amenities names:(NSArray<NSString *> *)names searchLatLon:(CLLocation *)searchLatLon
@@ -450,7 +448,7 @@ int const kZoomToSearchPOI = 16.0;
     OAPOIType *st = [[OAPOIHelper sharedInstance] getPoiTypeByName:amenity.subType];
     if (st)
     {
-        if (st.nameLocalized, [matchList containsObject:st.nameLocalized])
+        if (st.nameLocalized && [matchList containsObject:st.nameLocalized])
         {
             return YES;
         }
@@ -618,7 +616,7 @@ int const kZoomToSearchPOI = 16.0;
     return [self.class parsePOI:resultEntry withValues:YES withContent:YES];
 }
 
-+ (OAPOI *) parsePOI:(const OsmAnd::ISearch::IResultEntry&)resultEntry withValues:(BOOL)withValues withContent:(BOOL)withContent
++ (nullable OAPOI *) parsePOI:(const OsmAnd::ISearch::IResultEntry&)resultEntry withValues:(BOOL)withValues withContent:(BOOL)withContent
 {
     const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
     OAPOIType *type = [self.class parsePOITypeByAmenity:amenity];
@@ -1309,7 +1307,8 @@ int const kZoomToSearchPOI = 16.0;
                                             }
                                             else
                                             {
-                                                [foundAmenities addObject:poi];
+                                                if (poi)
+                                                    [foundAmenities addObject:poi];
                                             }
                                         }
                                   },

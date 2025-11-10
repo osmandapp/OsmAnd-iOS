@@ -67,8 +67,8 @@ final class GpxAppearanceInfo: NSObject {
     var color: Int = 0
     var splitType: EOAGpxSplitType = .none
     var splitInterval: Double = 0.0
-    var showArrows: Bool = false
-    var showStartFinish: Bool = false
+    var showArrows = false
+    var showStartFinish = false
     var timeSpan: Int = 0
     var wptPoints: Int = 0
     var totalDistance: Float = 0.0
@@ -87,7 +87,7 @@ final class GpxAppearanceInfo: NSObject {
     var verticalExaggeration: Double = 0.0
     var elevationMeters: Int = 0
     
-    var isJoinSegments: Bool = false // Don't exit in android
+    var isJoinSegments = false // Don't exit in android
 
     convenience init(dataItem: GpxDataItem) {
         self.init()
@@ -114,7 +114,7 @@ final class GpxAppearanceInfo: NSObject {
         self.minFilterSpeed = dataItem.getParameter(parameter: GpxParameter.minFilterSpeed) as? Double ?? 0
         self.maxFilterSpeed = dataItem.getParameter(parameter: GpxParameter.maxFilterSpeed) as? Double ?? 0
         self.minFilterAltitude = dataItem.getParameter(parameter: GpxParameter.minFilterAltitude) as? Double ?? 0
-        self.maxFilterAltitude = dataItem.getParameter(parameter: GpxParameter.minFilterAltitude) as? Double ?? 0
+        self.maxFilterAltitude = dataItem.getParameter(parameter: GpxParameter.maxFilterAltitude) as? Double ?? 0
         self.maxFilterHdop = dataItem.getParameter(parameter: GpxParameter.maxFilterHdop) as? Double ?? 0
         
         self.isJoinSegments = dataItem.joinSegments
@@ -212,7 +212,7 @@ final class GpxAppearanceInfo: NSObject {
         Self.writeValidDouble(&json, name: Self.TAG_MIN_FILTER_SPEED, value: minFilterSpeed)
         Self.writeValidDouble(&json, name: Self.TAG_MAX_FILTER_SPEED, value: maxFilterSpeed)
         Self.writeValidDouble(&json, name: Self.TAG_MIN_FILTER_ALTITUDE, value: minFilterAltitude)
-        Self.writeValidDouble(&json, name: Self.TAG_MAX_FILTER_ALTITUDE, value: maxFilterSpeed)
+        Self.writeValidDouble(&json, name: Self.TAG_MAX_FILTER_ALTITUDE, value: maxFilterAltitude)
         Self.writeValidDouble(&json, name: Self.TAG_MAX_FILTER_HDOP, value: maxFilterHdop)
         
         Self.writeParam(&json, name: Self.TAG_IS_JOIN_SEGMENTS, value: isJoinSegments)
@@ -226,21 +226,24 @@ final class GpxAppearanceInfo: NSObject {
     }
     
     private static func writeParam(_ json: inout [String: Any], name: String, value: Any?) {
-        guard let value = value else { return }
+        guard let value else { return }
         
-        if let v = value as? Int, v != 0 {
-            json[name] = String(format: "%ld", v)
-        } else if let v = value as? Int32, v != 0 {
-            json[name] = String(format: "%ld", v)
-        } else if let v = value as? Double, v != 0.0, !v.isNaN {
-            json[name] = String(format: "%f", v)
-        } else if let v = value as? Float, v != 0.0, !v.isNaN {
-            json[name] = String(format: "%f", v)
-        } else if let v = value as? Bool {
+        switch value {
+        case let v as Int where v != 0:
+            json[name] = "\(v)"
+        case let v as Int32 where v != 0:
+            json[name] = "\(v)"
+        case let v as Int64 where v != 0:
+            json[name] = "\(v)"
+        case let v as Double where !v.isZero && !v.isNaN:
+            json[name] = "\(v)"
+        case let v as Float where !v.isZero && !v.isNaN:
+            json[name] = "\(v)"
+        case let v as Bool:
             json[name] = v ? "true" : "false"
-        } else if let v = value as? String, !v.isEmpty {
+        case let v as String where !v.isEmpty:
             json[name] = v
-        } else {
+        default:
             json[name] = value
         }
     }

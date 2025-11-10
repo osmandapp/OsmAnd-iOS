@@ -141,13 +141,13 @@ final class GpxAppearanceInfo: NSObject {
         }
         
         if let value = json[TAG_SHOW_ARROWS] {
-            gpxAppearanceInfo.showArrows = (value as? Bool) ?? (value as? String).map { ($0 as NSString).boolValue } ?? false
+            gpxAppearanceInfo.showArrows = boolValue(from: value)
         }
         if let value = json[TAG_START_FINISH] {
-            gpxAppearanceInfo.showStartFinish = (value as? Bool) ?? (value as? String).map { ($0 as NSString).boolValue } ?? false
+            gpxAppearanceInfo.showStartFinish = boolValue(from: value)
         }
         if let value = json[TAG_IS_JOIN_SEGMENTS] {
-            gpxAppearanceInfo.isJoinSegments = (value as? Bool) ?? (value as? String).map { ($0 as NSString).boolValue } ?? false
+            gpxAppearanceInfo.isJoinSegments = boolValue(from: value)
         }
 
         gpxAppearanceInfo.splitType = OAGPXDatabase.splitType(byName: json[TAG_SPLIT_TYPE] as? String ?? "")
@@ -259,5 +259,11 @@ final class GpxAppearanceInfo: NSObject {
         if !value.isNaN {
             json[name] = value
         }
+    }
+    
+    private static func boolValue(from any: Any?) -> Bool {
+        if let bool = any as? Bool { return bool }
+        if let string = any as? String { return (string as NSString).boolValue }
+        return false
     }
 }

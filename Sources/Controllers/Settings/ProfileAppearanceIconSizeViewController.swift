@@ -59,6 +59,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         super.viewDidLoad()
         updateCurrentLocation()
         switchAppMode(toChoosenAppMode: true)
+        locationServices?.suspend()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -163,6 +164,16 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         super.resetButtonPressed()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate { [weak self] _ in
+            guard let landscape = self?.isLandscape(), !landscape else { return }
+            self?.goMinimized()
+        } completion: { [weak self] _ in
+            self?.updateCurrentLocation()
+        }
+    }
+    
     private func setCurrentIconSize(_ selectedIndex: Int) {
         currentIconSize?.setSize(iconSizeArrayValues[selectedIndex], isNavigation: isNavigationIconSize)
         refreshMarkerIconSize()
@@ -182,8 +193,16 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     private func updateCurrentLocation() {
         let scale = mapViewController.view.contentScaleFactor
         let viewSize = view.bounds.size
-        let location = mapViewController.getLatLon(fromElevatedPixel: viewSize.width / 2 * scale,
+        let isLandscaped = isLandscape()
+        let location: CLLocation
+        
+        if isLandscaped {
+            location = mapViewController.getLatLon(fromElevatedPixel: viewSize.width * 0.6 * scale,
+                                                   y: viewSize.height / 2 * scale)
+        } else {
+            location = mapViewController.getLatLon(fromElevatedPixel: viewSize.width / 2 * scale,
                                                    y: viewSize.height * 0.3 * scale)
+        }
         
         let azimuth = -mapViewController.azimuth()
         let direction: Float
@@ -202,7 +221,6 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
                                      speed: location.speed,
                                      timestamp: location.timestamp)
         locationServices?.setLocationFromSimulation(newLocation)
-        locationServices?.suspend()
     }
     
     private func switchAppMode(toChoosenAppMode: Bool) {

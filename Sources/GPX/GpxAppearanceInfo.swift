@@ -139,8 +139,17 @@ final class GpxAppearanceInfo: NSObject {
         if let value = json[TAG_WIDTH] as? String {
             gpxAppearanceInfo.width = value
         }
-        gpxAppearanceInfo.showArrows = json[TAG_SHOW_ARROWS] as? Bool ?? false
-        gpxAppearanceInfo.showStartFinish = json[TAG_START_FINISH] as? Bool ?? false
+        
+        if let value = json[TAG_SHOW_ARROWS] {
+            gpxAppearanceInfo.showArrows = (value as? Bool) ?? (value as? String).map { ($0 as NSString).boolValue } ?? false
+        }
+        if let value = json[TAG_START_FINISH] {
+            gpxAppearanceInfo.showStartFinish = (value as? Bool) ?? (value as? String).map { ($0 as NSString).boolValue } ?? false
+        }
+        if let value = json[TAG_IS_JOIN_SEGMENTS] {
+            gpxAppearanceInfo.isJoinSegments = (value as? Bool) ?? (value as? String).map { ($0 as NSString).boolValue } ?? false
+        }
+
         gpxAppearanceInfo.splitType = OAGPXDatabase.splitType(byName: json[TAG_SPLIT_TYPE] as? String ?? "")
         gpxAppearanceInfo.splitInterval = json[TAG_SPLIT_INTERVAL] as? Double ?? 0
         
@@ -176,8 +185,6 @@ final class GpxAppearanceInfo: NSObject {
         gpxAppearanceInfo.minFilterAltitude = json[TAG_MIN_FILTER_ALTITUDE] as? Double ?? 0
         gpxAppearanceInfo.maxFilterAltitude = json[TAG_MAX_FILTER_ALTITUDE] as? Double ?? 0
         gpxAppearanceInfo.maxFilterHdop = json[TAG_MAX_FILTER_HDOP] as? Double ?? 0
-        
-        gpxAppearanceInfo.isJoinSegments = json[TAG_IS_JOIN_SEGMENTS] as? Bool ?? false
         
         return gpxAppearanceInfo
     }
@@ -240,7 +247,7 @@ final class GpxAppearanceInfo: NSObject {
         case let v as Float where !v.isZero && !v.isNaN:
             json[name] = "\(v)"
         case let v as Bool:
-            json[name] = v ? "true" : "false"
+            json[name] = v
         case let v as String where !v.isEmpty:
             json[name] = v
         default:

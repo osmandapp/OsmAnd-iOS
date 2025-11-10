@@ -622,10 +622,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             if (pt == nil)
             {
                 // Try to get POI type from another category, but skip non-OSM-types
-                pt = (OAPOIType *)[OAPOIHelper.sharedInstance getAnyPoiTypeByName:subType];
-                if (pt != nil && pt.nonEditableOsm)
+                OAPOIBaseType *baseType = [OAPOIHelper.sharedInstance getAnyPoiTypeByName:subType];
+                if ([baseType isKindOfClass:[OAPOIType class]] && !baseType.nonEditableOsm)
                 {
-                    pt = nil;
+                    pt = (OAPOIType *)baseType;
                 }
             }
             if (pt != nil)

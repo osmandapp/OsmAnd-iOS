@@ -3932,3 +3932,6 @@
 "rendering_attr_hideTidalFlats_name" = "Přílivové plochy";
 "rendering_attr_safetyContour_description" = "Bezpečnostní hloubková vrstevnice";
 "x" = "X (dříve Twitter)";
+"rendering_attr_hideLightSectorSources_description" = "Skrýt zdroje světelných sektorů";
+"rendering_attr_hideLightSectors_description" = "Skrýt světelné sektory";
+"ble_scanner" = "Skener BLE";

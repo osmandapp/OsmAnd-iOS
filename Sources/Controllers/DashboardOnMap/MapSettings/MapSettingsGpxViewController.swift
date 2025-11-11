@@ -302,7 +302,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let item = tableData.item(for: indexPath)
-        let gpx = item.obj(forKey: "gpx") as! GpxDataItem
+        guard let gpx = item.obj(forKey: "gpx") as? GpxDataItem else { return nil }
         let trackItem = TrackItem(file: gpx.file)
         trackItem.dataItem = gpx
       

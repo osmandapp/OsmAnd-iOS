@@ -82,7 +82,7 @@
     else
     {
         CheckWordsMatchCount *completeMatchRes = [[CheckWordsMatchCount alloc] init];
-        bool matched = [self allWordsMatched:_localeName exactResult:exactResult cnt:completeMatchRes];
+        bool matched = _localeName != nil && [self allWordsMatched:_localeName exactResult:exactResult cnt:completeMatchRes];
         if (!matched && _alternateName != nil && ![_alternateName isEqualToString:_cityName])
         {
             matched = [self allWordsMatched:_alternateName exactResult:exactResult cnt:completeMatchRes];

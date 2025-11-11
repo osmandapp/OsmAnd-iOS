@@ -274,11 +274,12 @@
             }
         }];
         
+        QString firstUnknownSearchWord = QString::fromNSString([phrase getFirstUnknownSearchWord]);
         for (NSString *otherName in otherNames)
         {
             if ([firstUnknownMatcher matches:otherName])
             {
-                int r = OsmAnd::ICU::ccompare(QString::fromNSString([phrase getFirstUnknownSearchWord]), QString::fromNSString(otherName));
+                int r = OsmAnd::ICU::ccompare(firstUnknownSearchWord, QString::fromNSString(otherName));
                 if (!fullMatch || r == 0)
                 {
                     return YES;
@@ -305,11 +306,12 @@
             }
         }];
 
+        QString unknownSearchWord = QString::fromNSString(unknownSearchWords[i]);
         for (NSString *otherName in otherNames)
         {
             if ([unknownMatcher matches:otherName])
             {
-                int r = OsmAnd::ICU::ccompare(QString::fromNSString(unknownSearchWords[i]), QString::fromNSString(otherName));
+                int r = OsmAnd::ICU::ccompare(unknownSearchWord, QString::fromNSString(otherName));
                 if (!fullMatch || r == 0)
                 {
                     return YES;

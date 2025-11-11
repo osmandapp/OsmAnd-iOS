@@ -255,7 +255,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     emptyFilterBannerRow.title = localizedString("no_matched_tracks")
                     emptyFilterBannerRow.descr = localizedString("no_matched_tracks_descr")
                     emptyFilterBannerRow.iconName = "ic_custom_search"
-                    emptyFilterBannerRow.iconTintColor = UIColor.iconColorSecondary
+                    emptyFilterBannerRow.iconTintColor = .iconColorSecondary
                 } else {
                     let gpxItems = allTracks.compactMap { $0.dataItem }
                     let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: isEditFilterActive ? sortMode : sortModeForSearch)
@@ -277,7 +277,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                         let isVisible = settings.mapSettingShowRecordingTrack.get()
                         currentRecordingTrackRow.setObj(isVisible, forKey: isVisibleKey)
                         currentRecordingTrackRow.iconName = "ic_custom_track_recordable"
-                        currentRecordingTrackRow.iconTintColor = isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault
+                        currentRecordingTrackRow.iconTintColor = isVisible ? .iconColorActive : .iconColorDefault
                         currentRecordingTrackRow.setObj(localizedString("ic_custom_stop"), forKey: buttonIconKey)
                         currentRecordingTrackRow.setObj(ButtonActionNumberTag.pause.rawValue, forKey: buttonActionNumberTagKey)
                         currentRecordingTrackRow.setObj(localizedString("ic_custom_download"), forKey: secondButtonIconKey)
@@ -294,7 +294,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                             let isVisible = settings.mapSettingShowRecordingTrack.get()
                             currentPausedTrackRow.setObj(isVisible, forKey: isVisibleKey)
                             currentPausedTrackRow.iconName = "ic_custom_track_recordable"
-                            currentPausedTrackRow.iconTintColor = isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault
+                            currentPausedTrackRow.iconTintColor = isVisible ? .iconColorActive : .iconColorDefault
                             currentPausedTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
                             currentPausedTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
                             currentPausedTrackRow.setObj(localizedString("ic_custom_download"), forKey: secondButtonIconKey)
@@ -306,13 +306,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                             recordNewTrackRow.title = localizedString("new_track")
                             recordNewTrackRow.descr = localizedString("not_recorded")
                             recordNewTrackRow.iconName = "ic_custom_trip"
-                            recordNewTrackRow.iconTintColor = UIColor.iconColorDefault
+                            recordNewTrackRow.iconTintColor = .iconColorDefault
                             recordNewTrackRow.setObj(localizedString("start_recording"), forKey: buttonTitleKey)
                             recordNewTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
                             recordNewTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
                             let isVisible = settings.mapSettingShowRecordingTrack.get()
                             recordNewTrackRow.setObj(isVisible, forKey: isVisibleKey)
-                            recordNewTrackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
+                            recordNewTrackRow.setObj(isVisible ? .iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
                         }
                     }
                 }
@@ -326,7 +326,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 emptyFolderBannerRow.title = localizedString(isRootFolder ? "my_places_no_tracks_title_root" : "my_places_no_tracks_title")
                 emptyFolderBannerRow.descr = localizedString(isRootFolder ? "my_places_no_tracks_descr_root" : "my_places_no_tracks_descr_root")
                 emptyFolderBannerRow.iconName = "ic_custom_folder_open"
-                emptyFolderBannerRow.iconTintColor = UIColor.iconColorSecondary
+                emptyFolderBannerRow.iconTintColor = .iconColorSecondary
                 emptyFolderBannerRow.setObj(localizedString("shared_string_import"), forKey: buttonTitleKey)
             } else {
                 if isRootFolder && !tableView.isEditing {
@@ -357,7 +357,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     emptySmartFolderBannerRow.title = localizedString("empty_smart_folder_title")
                     emptySmartFolderBannerRow.descr = localizedString("empty_smart_folder_descr")
                     emptySmartFolderBannerRow.iconName = "ic_custom_folder_open"
-                    emptySmartFolderBannerRow.iconTintColor = UIColor.iconColorSecondary
+                    emptySmartFolderBannerRow.iconTintColor = .iconColorSecondary
                     emptySmartFolderBannerRow.setObj(localizedString("edit_filter"), forKey: buttonTitleKey)
                 } else {
                     let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode)
@@ -420,7 +420,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             let cancelButton = UIButton(type: .system)
             cancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
             cancelButton.setImage(nil, for: .normal)
-            cancelButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+            cancelButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
             cancelButton.addTarget(self, action: #selector(onNavbarCancelButtonClicked), for: .touchUpInside)
             tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
             navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
@@ -429,13 +429,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             navigationItem.hidesBackButton = true
             let editFilterCancelButton = UIButton(type: .system)
             editFilterCancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
-            editFilterCancelButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+            editFilterCancelButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
             editFilterCancelButton.addTarget(self, action: #selector(onNavbarEditFilterCancelButtonClicked), for: .touchUpInside)
             tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: editFilterCancelButton)
             navigationItem.leftBarButtonItem = UIBarButtonItem(customView: editFilterCancelButton)
             let doneButton = UIButton(type: .system)
             doneButton.setTitle(localizedString("shared_string_done"), for: .normal)
-            doneButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+            doneButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
             doneButton.addTarget(self, action: #selector(onNavbarDoneButtonClicked), for: .touchUpInside)
             tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneButton)
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneButton)
@@ -464,8 +464,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         
         let blurAppearance = UINavigationBarAppearance()
         blurAppearance.backgroundEffect = UIBlurEffect(style: .regular)
-        blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary
-        blurAppearance.shadowColor = UIColor.navBarBgColorPrimary
+        blurAppearance.backgroundColor = .navBarBgColorPrimary
+        blurAppearance.shadowColor = .navBarBgColorPrimary
         blurAppearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline), NSAttributedString.Key.foregroundColor: UIColor.navBarTextColorPrimary]
         
         navigationController?.navigationBar.standardAppearance = blurAppearance
@@ -585,7 +585,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         
         let menu = UIMenu(title: "", image: nil, children: menuActions)
-        if let navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke.png"), color: UIColor.navBarTextColorPrimary, action: nil, target: self, menu: menu) {
+        if let navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke.png"), color: .navBarTextColorPrimary, action: nil, target: self, menu: menu) {
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButton], animated: false)
             navigationItem.setRightBarButtonItems([navBarButton], animated: false)
         }
@@ -675,7 +675,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             return
         }
         
-        let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: UIFont.preferredFont(forTextStyle: .footnote), textColor: UIColor.textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width)
+        let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: .preferredFont(forTextStyle: .footnote), textColor: .textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width)
         footer.backgroundColor = .groupBg
         for subview in footer.subviews {
             if let label = subview as? UILabel {
@@ -799,8 +799,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private func updateSearchController() {
         if isNameFiltered {
             searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
-            searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBg
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorTertiary
+            searchController.searchBar.searchTextField.backgroundColor = .groupBg
+            searchController.searchBar.searchTextField.leftView?.tintColor = .textColorTertiary
         } else if isSearchActive {
             searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
             searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
@@ -1884,18 +1884,18 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 cell.descriptionLabel.text = item.descr
                 if let iconName = item.iconName {
                     cell.leftIconView.image = UIImage(named: iconName)
-                    cell.leftIconView.tintColor = UIColor.iconColorDefault
+                    cell.leftIconView.tintColor = .iconColorDefault
                 }
                 
                 cell.button.layer.cornerRadius = 9
                 cell.button.configuration = getRecButtonConfig()
-                cell.button.backgroundColor = UIColor.contextMenuButtonBg
+                cell.button.backgroundColor = .contextMenuButtonBg
                 if let buttonTitle = item.string(forKey: buttonTitleKey) {
                     cell.button.setTitle(buttonTitle, for: .normal)
                 }
                 if let buttonIconName = item.string(forKey: buttonIconKey) {
                     cell.button.setImage(UIImage.templateImageNamed(buttonIconName), for: .normal)
-                    cell.button.tintColor = UIColor.iconColorActive
+                    cell.button.tintColor = .iconColorActive
                 }
                 cell.button.removeTarget(nil, action: nil, for: .allEvents)
                 cell.button.addTarget(self, action: #selector(onCurrentTrackButtonClicked(_:)), for: .touchUpInside)
@@ -1923,20 +1923,20 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 }
                 
                 cell.leftButton.setTitle("", for: .normal)
-                cell.leftButton.backgroundColor = UIColor.contextMenuButtonBg
+                cell.leftButton.backgroundColor = .contextMenuButtonBg
                 if let buttonIconName = item.string(forKey: buttonIconKey) {
                     cell.leftButton.setImage(UIImage.templateImageNamed(buttonIconName), for: .normal)
-                    cell.leftButton.tintColor = UIColor.iconColorActive
+                    cell.leftButton.tintColor = .iconColorActive
                 }
                 cell.leftButton.removeTarget(nil, action: nil, for: .allEvents)
                 cell.leftButton.addTarget(self, action: #selector(onCurrentTrackButtonClicked(_:)), for: .touchUpInside)
                 cell.leftButton.tag = item.integer(forKey: buttonActionNumberTagKey)
                 
                 cell.rightButton.setTitle("", for: .normal)
-                cell.rightButton.backgroundColor = UIColor.contextMenuButtonBg
+                cell.rightButton.backgroundColor = .contextMenuButtonBg
                 if let buttonIconName = item.string(forKey: secondButtonIconKey) {
                     cell.rightButton.setImage(UIImage.templateImageNamed(buttonIconName), for: .normal)
-                    cell.rightButton.tintColor = UIColor.iconColorActive
+                    cell.rightButton.tintColor = .iconColorActive
                 }
                 cell.rightButton.removeTarget(nil, action: nil, for: .allEvents)
                 cell.rightButton.addTarget(self, action: #selector(onCurrentTrackButtonClicked(_:)), for: .touchUpInside)
@@ -1951,8 +1951,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 cell.selectionStyle = tableView.isEditing ? .default : .none
                 cell.selectedBackgroundView = UIView()
                 cell.selectedBackgroundView?.backgroundColor = .groupBg
-                cell.titleLabel.textColor = UIColor.textColorPrimary
-                cell.descriptionLabel.textColor = UIColor.textColorSecondary
+                cell.titleLabel.textColor = .textColorPrimary
+                cell.descriptionLabel.textColor = .textColorSecondary
                 cell.titleLabel.text = item.title
                 if item.key == trackKey {
                     cell.descriptionLabel.text = nil
@@ -2016,7 +2016,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 7)
         buttonConfig.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.preferredFont(forTextStyle: .footnote)
+            outgoing.font = .preferredFont(forTextStyle: .footnote)
             return outgoing
         }
         return buttonConfig

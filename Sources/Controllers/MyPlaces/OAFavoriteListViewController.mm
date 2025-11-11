@@ -816,8 +816,14 @@ static UIViewController *parentController;
                 {
                     if (indexPath.row != 0)
                     {
-                        FavoriteTableGroup* group = groupData[@"group"];
-                        item = [group.favoriteGroup.points objectAtIndex:indexPath.row - 1];
+                        FavoriteTableGroup *group = groupData[@"group"];
+                        NSArray<OAFavoriteItem *> *points = [group.favoriteGroup.points copy];
+                        NSInteger index = indexPath.row - 1;
+                        if (index >= 0 && index < points.count)
+                            item = points[index];
+                        else
+                            NSLog(@"OAFavoriteListViewController [ERROR] Invalid index %ld for points.count=%lu (section=%ld)",
+                                             (long)index, (unsigned long)points.count, (long)indexPath.section);
                     }
                 }
             }

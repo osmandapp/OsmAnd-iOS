@@ -2756,3 +2756,5 @@
 "button_frames" = "Kadroj ĉirkaŭ butonoj";
 "slots" = "Truoj";
 "efficient_grid" = "Efika krado";
+"routing_attr_weightrating_name" = "Maksimuma maso je plena ŝarĝo";
+"routing_attr_maxaxleload_name" = "Maksimuma pezo sur akso";

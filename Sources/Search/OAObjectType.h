@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, EOAObjectType)
     EOAObjectTypeUndefined = -1,            // Undefined state
     EOAObjectTypeCity = 0,                  // Represents a city
     EOAObjectTypeVillage,                   // Represents a village
+    EOAObjectTypeBoundary,                  // Represents a boundary
     EOAObjectTypePostcode,                  // Represents a postcode
     EOAObjectTypeStreet,                    // Represents a street
     EOAObjectTypeHouse,                     // Represents a house

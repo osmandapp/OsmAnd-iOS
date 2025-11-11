@@ -20,7 +20,12 @@ static NSDictionary *ABBREVIATIONS = @{ @"e" : @"East",
                                  @"se" : @"Southeast",
                                  @"nw" : @"Northwest",
                                  @"ne" : @"Northeast",
-                                 @"ln" : @"Lane"
+                                 @"ln" : @"Lane",
+                                 @"dr" : @"Drive",
+                                 @"rd" : @"Road",
+                                 @"ave" : @"Avenue",
+                                 @"st"  : @"Street",
+                                 @"blvd" : @"Boulevard"
 };
 
 + (NSString *) replace:(NSString *)word

@@ -47,7 +47,7 @@
 "map_widget_intermediate_distance" = "Međutočka";
 "route_descr_destination" = "Odredište";
 "map_widget_altitude" = "Visina";
-"map_widget_plain_time" = "Trenutno vrijeme";
+"map_widget_plain_time" = "Trenutačno vrijeme";
 "map_widget_max_speed" = "Ograničenje brzine";
 "access_arrival_time" = "Vrijeme dolaska";
 "map_widget_time" = "Vrijeme za polazak";
@@ -437,7 +437,7 @@
 "foot" = "stopa";
 
 // Help
-"other_location" = "Ostalo";
+"other_location" = "Druga";
 
 // Map
 
@@ -481,7 +481,7 @@
 "plugin_ski_name" = "Skijaška karta";
 "record_plugin_name" = "Bilježenje putovanja";
 "osm_editing_plugin_name" = "OSM uređivanje";
-"srtm_plugin_name" = "Slojnice";
+"srtm_plugin_name" = "Topografija";
 "wikivoyage_travel_guide" = "Turistički vodiči";
 "get_unlimited_access" = "Neograničen pristup";
 "navigate_point_latitude" = "Širina";
@@ -1062,22 +1062,41 @@
 "default_speed_system" = "Jedinica brzine";
 "arrival_distance" = "Obavijest o dostizanju cilja";
 "arrival_distance_descr" = "Kada želiš primati obavijest o dostizanju cilja?";
-"OsmAnd Maps" = "OsmAnd mape";
+"OsmAnd Maps" = "OsmAnd karte";
 "download_depth_countours" = "Konture nautičke dubine";
 "day_short" = "D";
 "day" = "Dan";
-"days_2_4" = "Dani";
-"days_5" = "Dani";
+"days_2_4" = "Dana";
+"days_5" = "Dana";
 "week" = "Tjedan";
-"weeks_2_4" = "Tjedni";
-"weeks_5" = "Tjedni";
+"weeks_2_4" = "Tjedna";
+"weeks_5" = "Tjedna";
 "month" = "Mjesec";
-"months_2_4" = "Mjeseci";
+"months_2_4" = "Mjeseca";
 "months_5" = "Mjeseci";
 "year" = "Godina";
 "years_2_4" = "Godine";
-"years_5" = "Godine";
+"years_5" = "Godina";
 "months_3" = "Tri mjeseca";
 "years_3" = "Tri godine";
 "price_free" = "Besplatno";
 "get_discount_title" = "Dobi %d %@ s %@ popustom.";
+"topography_maps" = "Topografske karte";
+"external_device_status_connect" = "Poveži";
+"external_device_status_disconnecting" = "Odspajanje";
+"external_device_status_disconnected" = "Odspojeno";
+"external_device_menu_forget" = "Zaboravi";
+"external_device_status_connected" = "Povezano";
+"external_device_status_disconnect" = "Odspoji";
+"route_parameters" = "Parametri rute";
+"help_article_navigation_routing_name" = "Parametri rute";
+"week_short" = "Tj";
+"weeks_short" = "Tj";
+"month_short" = "Mj";
+"months_short" = "Mj";
+"year_short" = "God";
+"years_short" = "God";
+"screen_alerts" = "Upozoranja na ekranu";
+"shared_string_other" = "Drugi";
+"rendering_attr_piste_difficulty_extreme_name" = "Ekstremno";
+"rendering_attr_piste_difficulty_freeride_name" = "Izvan uređenih staza";

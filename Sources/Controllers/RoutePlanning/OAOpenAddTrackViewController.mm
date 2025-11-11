@@ -29,7 +29,6 @@
 #import "OAFoldersCell.h"
 #import "OACollectionViewCellState.h"
 #import "OAOsmAndFormatter.h"
-#import "OAFoldersCollectionView.h"
 #import "OAApplicationMode.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"

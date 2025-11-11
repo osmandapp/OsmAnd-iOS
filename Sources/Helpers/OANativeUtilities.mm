@@ -422,6 +422,44 @@
     return polygon31.contains(point31);
 }
 
++ (BOOL)isSegmentCrossingPolygon:(OsmAnd::PointI)start31 end31:(OsmAnd::PointI)end31 polygon31:(OsmAnd::AreaI)polygon31
+{
+    OsmAnd::PointI polygonLineStart31 = polygon31.topLeft;
+    OsmAnd::PointI polygonLineEnd31 = polygon31.bottomRight;
+    
+    return [OANativeUtilities areSegmentsCrossingFrom:polygonLineStart31 to:polygonLineEnd31 start:start31 end:end31];
+}
+
++ (BOOL)areSegmentsCrossingFrom:(OsmAnd::PointI)a31 to:(OsmAnd::PointI)b31 start:(OsmAnd::PointI)c31 end:(OsmAnd::PointI)d31
+{
+    return [self checkSegmentsProjectionsIntersectA:a31.x b:b31.x c:c31.x d:d31.x]
+        && [self checkSegmentsProjectionsIntersectA:a31.y b:b31.y c:c31.y d:d31.y]
+        && ([self getSignedArea31A:a31 b:b31 c:c31] * [self getSignedArea31A:a31 b:b31 c:d31] <= 0)
+        && ([self getSignedArea31A:c31 b:d31 c:a31] * [self getSignedArea31A:c31 b:d31 c:b31] <= 0);
+}
+
++ (BOOL)checkSegmentsProjectionsIntersectA:(int)a b:(int)b c:(int)c d:(int)d
+{
+    if (a > b)
+    {
+        int t = a;
+        a = b;
+        b = t;
+    }
+    if (c > d)
+    {
+        int t = c;
+        c = d;
+        d = t;
+    }
+    return MAX(a, c) <= MIN(b, d);
+}
+
++ (long)getSignedArea31A:(OsmAnd::PointI)a31 b:(OsmAnd::PointI)b31 c:(OsmAnd::PointI)c31
+{
+    return (long)(b31.x - a31.x) * (c31.y - a31.y) - (long)(b31.y - a31.y) * (c31.x - a31.x);
+}
+
 + (BOOL) containsLatLon:(CLLocation *)location
 {
     return [self.class containsLatLon:location.coordinate.latitude lon:location.coordinate.longitude];

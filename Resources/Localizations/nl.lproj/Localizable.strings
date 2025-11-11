@@ -3383,4 +3383,9 @@
 "touting_specified_vehicle_parameters_descr" = "Ingestelde voertuig parameters kunnen route beïnvloeden.";
 "import_profile_descr" = "Om een profiel te importeren, klik op betreffende bestand (*.osf) in een applicatie en kies \"Kopieer naar OsmAnd Maps\"";
 "do_not_show_discount" = "Geen promoties tonen";
-"efficient_grid" = "Efficiënt grid";
+"efficient_grid" = "Efficiënt raster";
+"visualizing_button_grid" = "Kaartknopraster";
+"button_frames" = "Randen van knoppen";
+"routing_attr_weightrating_name" = "Maximale massa bij volle belading";
+"routing_attr_maxaxleload_name" = "Maximale aslast";
+"slots" = "Plaatsen";

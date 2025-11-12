@@ -223,10 +223,32 @@
     NSMutableArray<RoadShield *> *shields = [NSMutableArray array];
     NSMutableString *additional = [NSMutableString string];
     
-    if (rdo && !rdo->namesIds.empty()) {
-        for (NSInteger i = 0; i < rdo->namesIds.size(); i++) {
-            NSString *tag = [NSString stringWithUTF8String:rdo->region->quickGetEncodingRule(rdo->namesIds[i].first).getTag().c_str()];
-            NSString *val = [NSString stringWithUTF8String:rdo->names[rdo->namesIds[i].first].c_str()];
+    if (rdo && !rdo->namesIds.empty())
+    {
+        for (NSInteger i = 0; i < rdo->namesIds.size(); i++)
+        {
+            uint32_t nameId = rdo->namesIds[i].first;
+            
+            const char *cTag = nullptr;
+            if (rdo->region)
+                cTag = rdo->region->quickGetEncodingRule(nameId).getTag().c_str();
+            
+            NSString *tag = cTag ? OAStringFromUTF8Nullable(cTag) : nil;
+            if (!tag)
+            {
+                NSLog(@"[RoadShield] Warning: tag is null for nameId %u", nameId);
+                continue;
+            }
+            
+            NSString *val = @"";
+            auto it = rdo->names.find(nameId);
+            if (it != rdo->names.end() && !it->second.empty())
+            {
+                val = OAStringFromUTF8Nullable(it->second.c_str());
+            } else {
+                NSLog(@"[RoadShield] Warning: value not found for nameId %u", nameId);
+            }
+            
             if (![tag hasSuffix:@"_ref"] && ![tag hasPrefix:@"route_road"])
             {
                 [additional appendFormat:@"%@=%@;", tag, val];
@@ -237,11 +259,18 @@
                 [shields addObject:shield];
             }
         }
+        
         for (RoadShield *shield in shields)
             shield.additional = additional;
     }
     
     return [shields copy];
+}
+
+static inline NSString *OAStringFromUTF8Nullable(const char *cstr) {
+    if (!cstr) return nil;
+
+    return [NSString stringWithCString:cstr encoding:NSUTF8StringEncoding];
 }
 
 + (NSArray<RoadShield *> *)createDestination:(std::shared_ptr<RouteDataObject>)rdo destRef:(NSString *)destRef

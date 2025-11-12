@@ -38,7 +38,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isSearchFilteringActive = false
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
-    private var contextMenuVisible = false
+    private var isContextMenuVisible = false
+    private var shouldUpdateTable = false
     private var importHelper: OAGPXImportUIHelper?
     private var rootVC: OARootViewController?
     private var routingHelper: OARoutingHelper?
@@ -302,13 +303,18 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     override func tableView(_ tableView: UITableView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-        contextMenuVisible = true
+        isContextMenuVisible = true
         return nil
     }
     
     override func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
         animator?.addCompletion { [weak self] in
-            self?.contextMenuVisible = false
+            guard let self else { return }
+            self.isContextMenuVisible = false
+            if self.shouldUpdateTable {
+                self.shouldUpdateTable = false
+                self.updateDistanceAndDirection(true)
+            }
         }
     }
     
@@ -725,8 +731,13 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         lock.lock()
+        if isContextMenuVisible {
+            shouldUpdateTable = true
+            lock.unlock()
+            return
+        }
         
-        guard isTracksAvailable, currentSortMode == .nearest, !contextMenuVisible, forceUpdate
+        guard isTracksAvailable, currentSortMode == .nearest, forceUpdate
                 || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5
         else {
             lock.unlock()

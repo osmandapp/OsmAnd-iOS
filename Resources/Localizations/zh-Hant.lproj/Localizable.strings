@@ -3876,3 +3876,5 @@
 "slots" = "插槽";
 "button_frames" = "按鈕框架";
 "visualizing_button_grid" = "地圖按鈕網格";
+"routing_attr_weightrating_name" = "滿載時的最大重量";
+"routing_attr_maxaxleload_name" = "最大軸重";

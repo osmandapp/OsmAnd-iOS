@@ -3952,3 +3952,5 @@
 "max_axle_load_description" = "Indiquez la charge maximale par essieu de votre véhicule afin d'éviter les routes et les ponts soumis à des limites de poids.";
 "lang_crh" = "Tatar de Crimée (latin)";
 "x" = "X (anciennement Twitter)";
+"routing_attr_weightrating_name" = "Poids maximal à pleine charge";
+"routing_attr_maxaxleload_name" = "Charge maximale par essieu";

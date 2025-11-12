@@ -3963,3 +3963,5 @@
 "max_weight_at_full_load_description" = "Indicá el peso bruto máximo del vehículo, para así evitar caminos y puentes con restricciones de peso.";
 "max_axle_load_description" = "Indicá la carga máxima por eje del vehículo, para así evitar caminos y puentes con restricciones de peso.";
 "x" = "X (antes Twitter)";
+"routing_attr_weightrating_name" = "Peso bruto máximo";
+"routing_attr_maxaxleload_name" = "Carga máxima de eje";

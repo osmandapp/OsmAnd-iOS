@@ -166,7 +166,8 @@
             }];
         }
     }
-    if (object.localeName.length == 0 && object.alternateName.length > 0) {
+    if (object.localeName.length == 0 && object.alternateName.length > 0)
+    {
         object.localeName = object.alternateName;
         object.alternateName = nil;
     }
@@ -174,8 +175,13 @@
     if (!_matcher || [_matcher publish:object])
     {
         _count++;
-        if (_totalLimit == -1 || _count < _totalLimit) {
-            [_requestResults addObject:object];
+        if (_totalLimit == -1 || _count < _totalLimit)
+        {
+            // disable boundary for end results
+            if (object.objectType != EOAObjectTypeBoundary)
+            {
+                [_requestResults addObject:object];
+            }
         }
         return YES;
     }

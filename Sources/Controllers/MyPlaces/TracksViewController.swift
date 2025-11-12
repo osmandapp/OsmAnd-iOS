@@ -74,6 +74,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var isSelectionModeInSearch = false
     private var isEditFilterActive = false
     private var shouldReloadTableViewOnAppear = false
+    private var contextMenuVisible = false
     
     private var selectedTrack: GpxDataItem?
     private var selectedFolderPath: String?
@@ -758,7 +759,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func updateDistanceAndDirection(_ forceUpdate: Bool) {
         let currentSortMode = isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode
-        guard currentSortMode == .nearest, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else {
+        guard currentSortMode == .nearest, !contextMenuVisible, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else {
             return
         }
         
@@ -2114,6 +2115,17 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         .none
+    }
+    
+    func tableView(_ tableView: UITableView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        contextMenuVisible = true
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
+        animator?.addCompletion { [weak self] in
+            self?.contextMenuVisible = false
+        }
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {

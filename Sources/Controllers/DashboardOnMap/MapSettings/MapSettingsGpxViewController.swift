@@ -38,6 +38,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isSearchFilteringActive = false
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
+    private var contextMenuVisible = false
     private var importHelper: OAGPXImportUIHelper?
     private var rootVC: OARootViewController?
     private var routingHelper: OARoutingHelper?
@@ -298,6 +299,17 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let item = tableData.item(for: indexPath)
         return !(item.key == "noVisibleTracks" || item.key == "noTracks")
+    }
+    
+    override func tableView(_ tableView: UITableView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        contextMenuVisible = true
+        return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
+        animator?.addCompletion { [weak self] in
+            self?.contextMenuVisible = false
+        }
     }
     
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -714,7 +726,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         lock.lock()
         
-        guard isTracksAvailable, currentSortMode == .nearest, forceUpdate
+        guard isTracksAvailable, currentSortMode == .nearest, !contextMenuVisible, forceUpdate
                 || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5
         else {
             lock.unlock()

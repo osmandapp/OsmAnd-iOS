@@ -374,6 +374,7 @@
             case EOAObjectTypeCity:
             case EOAObjectTypeStreet:
             case EOAObjectTypeVillage:
+            case EOAObjectTypeBoundary:
             {
                 OAAddress *address = (OAAddress *)searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)
@@ -736,6 +737,7 @@
             case EOAObjectTypeStreet:
             case EOAObjectTypeHouse:
             case EOAObjectTypeStreetIntersection:
+            case EOAObjectTypeBoundary:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)

@@ -3935,3 +3935,5 @@
 "rendering_attr_hideLightSectorSources_description" = "Skrýt zdroje světelných sektorů";
 "rendering_attr_hideLightSectors_description" = "Skrýt světelné sektory";
 "ble_scanner" = "Skener BLE";
+"routing_attr_weightrating_name" = "Maximální hmotnost při plném zatížení";
+"routing_attr_maxaxleload_name" = "Maximální zatížení nápravy";

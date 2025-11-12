@@ -177,7 +177,7 @@
 
 - (NSString *)parameterValue:(NSString *)value paramId:(NSString *)paramId cutUnit:(BOOL)cutUnit
 {
-    return [NSString stringWithFormat:@"%@ %@", cutUnit ? [value substringToIndex:value.length - 1] : value, OALocalizedString([RouteParamVehicleHelper isWeightParameter:paramId] ? @"metric_ton" : @"m")];
+    return [NSString stringWithFormat:@"%@ %@", cutUnit && value.length > 1 ? [value substringToIndex:value.length - 1] : value, OALocalizedString([RouteParamVehicleHelper isWeightParameter:paramId] ? @"metric_ton" : @"m")];
 }
 
 - (void) setupFuelTankCapacity:(NSMutableArray *)exraParametersArr

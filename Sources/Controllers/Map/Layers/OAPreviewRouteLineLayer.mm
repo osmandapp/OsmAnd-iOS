@@ -654,7 +654,7 @@
     if (index == 0)
         return OsmAnd::ColorARGB(colors[0].intValue);
     else if (index > 0 && index < colors.count)
-        return OsmAnd::ColorARGB([ColorPalette getIntermediateColorWithMin:colors[index - 1].intValue max:colors[index].intValue percent:coeff]);
+        return OsmAnd::ColorARGB((uint32_t)[ColorPalette getIntermediateColorWithMin:colors[index - 1].intValue max:colors[index].intValue percent:coeff]);
     else if (index == colors.count)
         return OsmAnd::ColorARGB(colors[index - 1].intValue);
 

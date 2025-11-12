@@ -174,10 +174,18 @@ final class ColorPalette: NSObject {
     }
     
     static func getIntermediateColor(min: Int, max: Int, percent: Double) -> Int {
-        let r = Double(red(min)) + percent * Double(red(max) - red(min))
-        let g = Double(green(min)) + percent * Double(green(max) - green(min))
-        let b = Double(blue(min)) + percent * Double(blue(max) - blue(min))
-        let a = Double(alpha(min)) + percent * Double(alpha(max) - alpha(min))
+        let p: Double
+        if percent.isFinite {
+            p = Swift.max(0.0, Swift.min(1.0, percent))
+        } else {
+            p = 0.0
+            NSLog("[ColorPalette] [ERROR] getIntermediateColor: percent is not finite! percent=\(percent)")
+        }
+        
+        let r = Double(red(min)) + p * Double(red(max) - red(min))
+        let g = Double(green(min)) + p * Double(green(max) - green(min))
+        let b = Double(blue(min)) + p * Double(blue(max) - blue(min))
+        let a = Double(alpha(min)) + p * Double(alpha(max) - alpha(min))
         return rgbaToDecimal(r: Int(r), g: Int(g), b: Int(b), a: Int(a))
     }
     

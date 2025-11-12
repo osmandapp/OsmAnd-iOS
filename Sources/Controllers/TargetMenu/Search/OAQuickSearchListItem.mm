@@ -131,6 +131,7 @@
         case EOAObjectTypePostcode:
         case EOAObjectTypeStreet:
         case EOAObjectTypeHouse:
+        case EOAObjectTypeBoundary:
         {
             return [((OAAddress *)searchResult.object) iconName];
         }
@@ -247,6 +248,7 @@
     switch (searchResult.objectType)
     {
         case EOAObjectTypeCity:
+        case EOAObjectTypeBoundary:
         {
             OACity *city = (OACity *)searchResult.object;
             return [OACity getLocalizedTypeStr:city.type];

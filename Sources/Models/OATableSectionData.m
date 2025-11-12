@@ -103,7 +103,9 @@
 - (NSUInteger)rowCount
 {
     NSUInteger res = 0;
-    for (OATableRowData *row in _rowData)
+    NSArray *rowDataCopy = [_rowData copy];
+
+    for (OATableRowData *row in rowDataCopy)
     {
         res++;
         if (row.rowType == EOATableRowTypeCollapsable && !((OATableCollapsableRowData *) row).collapsed)

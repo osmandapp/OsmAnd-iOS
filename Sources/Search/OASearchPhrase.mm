@@ -74,6 +74,8 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" "]
 
 @end
 
+static NSComparator _OACommonWordsComparator = nil;
+
 @implementation OASearchPhrase
 {
     NSMutableArray<NSString *> *_indexes;
@@ -104,51 +106,32 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" "]
                         @"et",
                         @"y",
                         @"и",
-                        // short - issues for perfect matching "Drive A"
-//                        @"f",
-//                        @"u",
-//                        @"jl.",
-//                        @"j",
-//                        @"sk",
-//                        @"w",
-//                        @"a.",
-//                        @"of",
-//                        @"k",
-//                        @"r",
-//                        @"h",
-//                        @"mc",
-//                        @"sw",
-//                        @"g",
-//                        @"v",
-//                        @"m",
-//                        @"c.",
-//                        @"r.",
-//                        @"ct",
-//                        @"e.",
-//                        @"dr.",
-//                        @"j.",
-//                        @"in",
-//                        @"al",
-//                        @"út",
-//                        @"per",
-//                        @"ne",
-//                        @"p",
-//                        @"et",
-//                        @"s.",
-//                        @"f.",
-//                        @"t",
-//                        @"fe",
-//                        @"à",
-//                        @"i",
-//                        @"c",
-//                        @"le",
-//                        @"s",
-//                        @"av.",
-//                        @"den",
-//                        @"dr",
-//                        @"y",
+                        // Don't add short names !  issues for perfect matching "Drive A", ...
                         nil];
+        _OACommonWordsComparator = ^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2)
+        {
+            int i1 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o1 lowercaseString]));
+            int i2 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o2 lowercaseString]));
+            
+            if (i1 != i2)
+            {
+                if (i1 == -1)
+                    return NSOrderedAscending;
+                else if (i2 == -1)
+                    return NSOrderedDescending;
+                
+                return [OAUtilities compareInt:i2 y:i1];
+            }
+            
+            // compare length without numbers to not include house numbers
+            return [OAUtilities compareInt:[OASearchPhrase lengthWithoutNumbers:o2] y:[OASearchPhrase lengthWithoutNumbers:o1]];
+        };
     }
+}
+
+- (NSComparator) commonWordsComparator
+{
+    return _OACommonWordsComparator;
 }
 
 + (OASearchPhrase *) emptyPhrase
@@ -376,21 +359,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" "]
         _mainUnknownSearchWordComplete = YES;
         NSMutableArray<NSString *> *searchWords = [NSMutableArray arrayWithArray:unknownSearchWords];
         [searchWords insertObject:_firstUnknownSearchWord atIndex:0];
-        [searchWords sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2) {
-            int i1 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o1 lowerCase]));
-            int i2 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o2 lowerCase]));
-            if (i1 != i2)
-            {
-                if (i1 == -1)
-                    return (NSComparisonResult)-1;
-                else if (i2 == -1)
-                    return (NSComparisonResult)1;
-                return [OAUtilities compareInt:i2 y:i1];
-            }
-            
-            // compare length without numbers to not include house numbers
-            return [OAUtilities compareInt:[self lengthWithoutNumbers:o2] y:[self lengthWithoutNumbers:o1]];
-        }];
+        [searchWords sortUsingComparator:self.commonWordsComparator];
         for (NSString *s in searchWords)
         {
             if (s.length > 0)
@@ -514,17 +483,22 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" "]
     if (!l)
         return nil;
     
-    float coeff = (float) (1000 / OsmAnd::Utilities::getTileDistanceWidth(ZOOM_TO_SEARCH_POI));
-    double tx = OsmAnd::Utilities::getTileNumberX(ZOOM_TO_SEARCH_POI, l.coordinate.longitude);
-    double ty = OsmAnd::Utilities::getTileNumberY(ZOOM_TO_SEARCH_POI, l.coordinate.latitude);
+    self.cache1kmRect = [OASearchPhrase calculateBbox:@(1000) location:l];
+    return self.cache1kmRect;
+}
+
++ (QuadRect *) calculateBbox:(NSNumber *)radiusMeters location:(CLLocation *)location
+{
+    float coeff = (float) ([radiusMeters doubleValue] / OsmAnd::Utilities::getTileDistanceWidth(ZOOM_TO_SEARCH_POI));
+    double tx = OsmAnd::Utilities::getTileNumberX(ZOOM_TO_SEARCH_POI, location.coordinate.longitude);
+    double ty = OsmAnd::Utilities::getTileNumberY(ZOOM_TO_SEARCH_POI, location.coordinate.latitude);
     double topLeftX = MAX(0, tx - coeff);
     double topLeftY = MAX(0, ty - coeff);
     int max = (1 << ZOOM_TO_SEARCH_POI)  - 1;
     double bottomRightX = MIN(max, tx + coeff);
     double bottomRightY = MIN(max, ty + coeff);
     double pw = OsmAnd::Utilities::getPowZoom(31 - ZOOM_TO_SEARCH_POI);
-    self.cache1kmRect = [[QuadRect alloc] initWithLeft:topLeftX * pw top:topLeftY * pw right:bottomRightX * pw bottom:bottomRightY * pw];
-    return self.cache1kmRect;
+    return [[QuadRect alloc] initWithLeft:topLeftX * pw top:topLeftY * pw right:bottomRightX * pw bottom:bottomRightY * pw];
 }
 
 - (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt
@@ -1032,7 +1006,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" "]
     return (x < y) ? NSOrderedAscending : ((x == y) ? NSOrderedSame : NSOrderedDescending);
 }
 
-- (int) lengthWithoutNumbers:(NSString *)s
++ (int) lengthWithoutNumbers:(NSString *)s
 {
     int len = 0;
     for (int k = 0; k < s.length; k++)
@@ -1099,6 +1073,44 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" "]
                 || ch == ';';
     }
     return lastUnknownSearchWordComplete;
+}
+
++ (NSString *) stripBraces:(NSString *)localeName
+{
+    NSInteger i = [localeName rangeOfString:@"("].location;
+        NSString *retName = localeName;
+        
+        if (i != NSNotFound) {
+            retName = [localeName substringToIndex:i];
+            NSInteger j = [localeName rangeOfString:@")" options:0 range:NSMakeRange(i, localeName.length - i)].location;
+            
+            if (j != NSNotFound) {
+                NSString *firstPart = [retName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                NSString *remainingPart = [localeName substringFromIndex:j + 1];
+                retName = [[NSString stringWithFormat:@"%@ %@", firstPart, remainingPart] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            }
+        }
+        return retName;
+}
+
++ (NSString *) ALLDELIMITERS
+{
+    return ALLDELIMITERS;
+}
+
+- (NSString *) selectMainUnknownWordToSearch:(NSMutableArray<NSString *> *)searchWords
+{
+    [searchWords sortUsingComparator:self.commonWordsComparator];
+    
+    for (NSString *s in searchWords)
+    {
+        NSString *trimmedString = [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if ([trimmedString length] > 0)
+        {
+            return trimmedString;
+        }
+    }
+    return @"";
 }
 
 @end

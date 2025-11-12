@@ -630,12 +630,15 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     }
     else if (collectionView == [_colorCollectionHandler getCollectionView])
     {
-        _selectedColorItem = [_colorCollectionHandler getData][indexPath.section][indexPath.row];
-        self.editColor = [_selectedColorItem getColor];
+        NSArray *data = [_colorCollectionHandler getData];
+        if (indexPath.section >= data.count || indexPath.row >= [data[indexPath.section] count])
+            return;
         
+        _selectedColorItem = data[indexPath.section][indexPath.row];
+        self.editColor = [_selectedColorItem getColor];
         _needToScrollToSelectedColor = YES;
-        [self.tableView reloadRowsAtIndexPaths:@[_iconIndexPath, _shapeIndexPath]
-                              withRowAnimation:UITableViewRowAnimationNone];
+        if (_iconIndexPath && _shapeIndexPath && _iconIndexPath.section < self.tableView.numberOfSections && _shapeIndexPath.section < self.tableView.numberOfSections)
+            [self.tableView reloadRowsAtIndexPaths:@[_iconIndexPath, _shapeIndexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
     
     [self applyLocalization];

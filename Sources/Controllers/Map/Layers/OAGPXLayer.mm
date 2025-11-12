@@ -1628,17 +1628,20 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
-- (void) getTracksFromPoint:(CLLocationCoordinate2D)point result:(MapSelectionResult *)result
+- (void)getTracksFromPoint:(CLLocationCoordinate2D)point result:(MapSelectionResult *)result
 {
-    double textSize = [OAAppSettings.sharedManager.textSize get];
-    textSize = textSize < 1. ? 1. : textSize;
-    int r = [self getDefaultRadiusPoi] * textSize;
+    int r = [self getScaledTouchRadius:[self getDefaultRadiusPoi]];
+    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:result.point radius:r];
+    if (touchPolygon31.isEmpty())
+        return;
+    
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
     OASGpxFile *currentTrackGpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
     if (currentTrackGpxFile)
         activeGpx[kCurrentTrack] = currentTrackGpxFile;
     
-    for (NSString *key in activeGpx.allKeys) {
+    for (NSString *key in activeGpx.allKeys)
+    {
         OASGpxFile *gpxFile = activeGpx[key];
 
         BOOL isCurrentTrack = currentTrackGpxFile && gpxFile == currentTrackGpxFile;
@@ -1681,12 +1684,51 @@ colorizationScheme:(int)colorizationScheme
         }
         // NOTE: The old logic called processPoints during each initialization of the document (OAGPXDocument -> OASGpxFile). This was necessary for the correct recalculation for getPointsToDisplay. Now this is handled by recalculateProcessPoint. If recalculation is needed, call [document recalculateProcessPoint
         [document recalculateProcessPoint];
-        NSArray<OASWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplayWithIsJoinSegments:isJointSegments] radius:r point:point];
-        if (points != nil)
-        {            
-            [result collect:gpxDataItem ? : [OASavingTrackHelper sharedInstance].currentTrack provider:self];
+        NSArray<OASWptPt *> *points;
+        for (OASTrkSegment *segment in [document getPointsToDisplayWithIsJoinSegments:isJointSegments])
+        {
+            points = [self findLineInPolygon31:touchPolygon31 points:[segment points]];
+            if (points)
+                break;
         }
+        
+        if (points)
+            [result collect:gpxDataItem ? : [OASavingTrackHelper sharedInstance].currentTrack provider:self];
     }
+}
+
+- (NSArray<OASWptPt *> *)findLineInPolygon31:(OsmAnd::AreaI)polygon31 points:(NSArray<OASWptPt *> *)points
+{
+    if (points.count < 2)
+        return nil;
+
+    OASWptPt *firstPoint = points.firstObject;
+    OsmAnd::PointI previousPoint31 = [OANativeUtilities getPoint31FromLatLon:firstPoint.lat lon:firstPoint.lon];
+
+    if ([OANativeUtilities isPointInsidePolygon:previousPoint31 polygon31:polygon31])
+    {
+        OASWptPt *secondPoint = points[1];
+        return @[firstPoint, secondPoint];
+    }
+
+    for (NSInteger i = 1; i < points.count; i++)
+    {
+        OASWptPt *currentPoint = points[i];
+        OsmAnd::PointI currentPoint31 = [OANativeUtilities getPoint31FromLatLon:currentPoint.lat lon:currentPoint.lon];
+
+        BOOL lineInside = [OANativeUtilities isPointInsidePolygon:currentPoint31 polygon31:polygon31]
+        || [OANativeUtilities isSegmentCrossingArea:previousPoint31 end31:currentPoint31 area31:polygon31];
+
+        if (lineInside)
+        {
+            OASWptPt *previousPoint = points[i - 1];
+            return @[previousPoint, currentPoint];
+        }
+
+        previousPoint31 = currentPoint31;
+    }
+
+    return nil;
 }
 
 

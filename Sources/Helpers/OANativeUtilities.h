@@ -89,6 +89,7 @@
 + (OsmAnd::AreaI) getPolygon31FromScreenArea:(CGPoint)topLeft bottomRight:(CGPoint)bottomRight;
 + (BOOL) isPointInsidePolygon:(double)lat lon:(double)lon polygon31:(OsmAnd::AreaI)polygon31;
 + (BOOL) isPointInsidePolygon:(OsmAnd::PointI)point31 polygon31:(OsmAnd::AreaI)polygon31;
++ (BOOL)isSegmentCrossingArea:(OsmAnd::PointI)start31 end31:(OsmAnd::PointI)end31 area31:(OsmAnd::AreaI)area31;
 
 + (BOOL) containsLatLon:(CLLocation *)location;
 + (BOOL) containsLatLon:(double)lat lon:(double)lon;

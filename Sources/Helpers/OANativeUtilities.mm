@@ -422,12 +422,12 @@
     return polygon31.contains(point31);
 }
 
-+ (BOOL)isSegmentCrossingPolygon:(OsmAnd::PointI)start31 end31:(OsmAnd::PointI)end31 polygon31:(OsmAnd::AreaI)polygon31
++ (BOOL)isSegmentCrossingArea:(OsmAnd::PointI)start31 end31:(OsmAnd::PointI)end31 area31:(OsmAnd::AreaI)area31
 {
-    OsmAnd::PointI polygonLineStart31 = polygon31.topLeft;
-    OsmAnd::PointI polygonLineEnd31 = polygon31.bottomRight;
+    OsmAnd::PointI areaLineStart31 = area31.topLeft;
+    OsmAnd::PointI areaLineEnd31 = area31.bottomRight;
     
-    return [OANativeUtilities areSegmentsCrossingFrom:polygonLineStart31 to:polygonLineEnd31 start:start31 end:end31];
+    return [OANativeUtilities areSegmentsCrossingFrom:areaLineStart31 to:areaLineEnd31 start:start31 end:end31];
 }
 
 + (BOOL)areSegmentsCrossingFrom:(OsmAnd::PointI)a31 to:(OsmAnd::PointI)b31 start:(OsmAnd::PointI)c31 end:(OsmAnd::PointI)d31

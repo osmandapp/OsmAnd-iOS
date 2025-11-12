@@ -1632,7 +1632,7 @@ colorizationScheme:(int)colorizationScheme
 {
     int r = [self getScaledTouchRadius:[self getDefaultRadiusPoi]];
     OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:result.point radius:r];
-    if (touchPolygon31 == OsmAnd::AreaI())
+    if (touchPolygon31.isEmpty())
         return;
     
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
@@ -1717,7 +1717,7 @@ colorizationScheme:(int)colorizationScheme
         OsmAnd::PointI currentPoint31 = [OANativeUtilities getPoint31FromLatLon:currentPoint.lat lon:currentPoint.lon];
 
         BOOL lineInside = [OANativeUtilities isPointInsidePolygon:currentPoint31 polygon31:polygon31]
-        || [OANativeUtilities isSegmentCrossingPolygon:previousPoint31 end31:currentPoint31 polygon31:polygon31];
+        || [OANativeUtilities isSegmentCrossingArea:previousPoint31 end31:currentPoint31 area31:polygon31];
 
         if (lineInside)
         {

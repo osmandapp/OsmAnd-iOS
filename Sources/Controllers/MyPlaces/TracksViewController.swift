@@ -73,9 +73,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var isSearchTextFilterChanged = false
     private var isSelectionModeInSearch = false
     private var isEditFilterActive = false
-    private var shouldReloadTableViewOnAppear = false
+    private var shouldReloadTableView = false
     private var isContextMenuVisible = false
-    private var shouldUpdateTable = false
     
     private var selectedTrack: GpxDataItem?
     private var selectedFolderPath: String?
@@ -205,10 +204,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func reloadTableViewOnAppearIfNeeded() {
-        guard shouldReloadTableViewOnAppear else { return }
+        guard shouldReloadTableView else { return }
         generateData()
         tableView.reloadData()
-        shouldReloadTableViewOnAppear = false
+        shouldReloadTableView = false
     }
     
     private func reloadTracks(forceLoad: Bool = false) {
@@ -760,7 +759,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func updateDistanceAndDirection(_ forceUpdate: Bool) {
         if isContextMenuVisible {
-            shouldUpdateTable = true
+            shouldReloadTableView = true
             return
         }
 
@@ -773,7 +772,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             guard view.window != nil else {
-                shouldReloadTableViewOnAppear = true
+                shouldReloadTableView = true
                 return
             }
             updateData()
@@ -1551,8 +1550,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
          guard isRootFolder else { return }
          DispatchQueue.main.async { [weak self] in
              guard let self else { return }
+             if self.isContextMenuVisible {
+                 self.shouldReloadTableView = true
+                 return
+             }
+
              guard view.window != nil else {
-                 shouldReloadTableViewOnAppear = true
+                 shouldReloadTableView = true
                  return
              }
              generateData()
@@ -2132,8 +2136,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         animator?.addCompletion { [weak self] in
             guard let self else { return }
             self.isContextMenuVisible = false
-            if self.shouldUpdateTable {
-                self.shouldUpdateTable = false
+            if self.shouldReloadTableView {
+                self.shouldReloadTableView = false
                 self.updateDistanceAndDirection(true)
             }
         }

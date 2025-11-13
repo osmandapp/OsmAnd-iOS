@@ -543,6 +543,26 @@ static int PROFILE_TRUCK = 1000;
     [OAAppSettings.sharedManager.locationRadiusVisibility set:locationRadius mode:self];
 }
 
+- (double)getLocationIconSize
+{
+    return [OAAppSettings.sharedManager.locationIconSize get:self];
+}
+
+- (void)setLocationIconSize:(double)locationIconSize
+{
+    [OAAppSettings.sharedManager.locationIconSize set:locationIconSize mode:self];
+}
+
+- (double)getCourseIconSize
+{
+    return [OAAppSettings.sharedManager.courseIconSize get:self];
+}
+
+- (void)setCourseIconSize:(double)locationIconSize
+{
+    [OAAppSettings.sharedManager.courseIconSize set:locationIconSize mode:self];
+}
+
 - (NSString *) getIconColorName
 {
     switch (self.getIconColor)
@@ -749,6 +769,8 @@ static int PROFILE_TRUCK = 1000;
         [mode setNavigationIconName:builder.navigationIcon];
         [mode setViewAngleVisibility:builder.viewAngleVisibility];
         [mode setLocationRadiusVisibility:builder.locationRadiusVisibility];
+        [mode setLocationIconSize:builder.locationIconSize];
+        [mode setCourseIconSize:builder.courseIconSize];
         [mode setOrder:(int)builder.order];
     }
     else if (![_values containsObject:mode])
@@ -1040,6 +1062,8 @@ static int PROFILE_TRUCK = 1000;
     [_am setNavigationIconName:_navigationIcon];
     [_am setViewAngleVisibility:_viewAngleVisibility];
     [_am setLocationRadiusVisibility:_locationRadiusVisibility];
+    [_am setLocationIconSize:_locationIconSize];
+    [_am setCourseIconSize:_courseIconSize];
     [_am setOrder:_order ? (int)_order : (int)OAApplicationMode.values.count];
     
     return _am;

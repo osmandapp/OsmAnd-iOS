@@ -1,57 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MapSettingsMapModeParametersViewController" customModule="OsmAnd_Maps" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BaseSettingsParametersViewController" customModule="OsmAnd_Maps" customModuleProvider="target">
             <connections>
-                <outlet property="cancelButton" destination="HaO-4Q-RtR" id="hpJ-hM-SnS"/>
-                <outlet property="cancelButtonContainerView" destination="2q0-f4-hwZ" id="efI-gx-Q7g"/>
-                <outlet property="cancelButtonLeadingConstraint" destination="zI9-ZW-6jt" id="DBu-Ae-sXx"/>
-                <outlet property="contentContainer" destination="34y-Wl-Kse" id="R0z-XA-txf"/>
-                <outlet property="resetButton" destination="sAZ-yf-K8D" id="Vzr-aP-e2D"/>
-                <outlet property="resetButtonContainerView" destination="qrD-Kh-cDw" id="pds-Eq-pm0"/>
-                <outlet property="resetButtonTrailingConstraint" destination="gGw-F5-RPn" id="ong-L9-xB5"/>
-                <outlet property="scrollableView" destination="yAT-pO-XDS" id="J01-mI-yRt"/>
-                <outlet property="statusBarBackgroundView" destination="z2m-aS-ygn" id="16x-Km-Tvp"/>
-                <outlet property="tableView" destination="3D2-Jq-s7g" id="LOb-qt-2Jj"/>
-                <outlet property="toolBarView" destination="Eo5-Sd-4K4" id="XYe-l7-4jJ"/>
-                <outlet property="view" destination="BDG-Ks-Ll0" id="53O-LF-hW5"/>
+                <outlet property="cancelButton" destination="QhW-pU-MvI" id="TYC-Z0-0NG"/>
+                <outlet property="cancelButtonContainerView" destination="oxa-g3-ykx" id="cTD-yy-2Gr"/>
+                <outlet property="cancelButtonLeadingConstraint" destination="iCY-Se-LUa" id="SbJ-Hp-0gS"/>
+                <outlet property="contentContainer" destination="ea6-OY-jeV" id="dG7-pL-iUA"/>
+                <outlet property="resetButton" destination="bi8-A0-uUG" id="BuL-VD-WBn"/>
+                <outlet property="resetButtonContainerView" destination="MUk-Oc-R9w" id="Kde-KQ-24c"/>
+                <outlet property="resetButtonTrailingConstraint" destination="j1P-Om-qOr" id="oAJ-eb-Af3"/>
+                <outlet property="scrollableView" destination="kYV-Y2-Ihm" id="EAv-LH-2j7"/>
+                <outlet property="statusBarBackgroundView" destination="v0q-31-q7p" id="eHP-3Z-2lq"/>
+                <outlet property="tableView" destination="Gwu-hY-lMd" id="BId-bl-Hkd"/>
+                <outlet property="toolBarView" destination="54Z-Lb-GNI" id="ABC-e8-f2x"/>
+                <outlet property="view" destination="dhE-tI-kf3" id="QHp-Yi-bg4"/>
             </connections>
         </placeholder>
-        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="BDG-Ks-Ll0" userLabel="root" customClass="OAUserInteractionPassThroughView">
+        <view opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="dhE-tI-kf3" userLabel="root" customClass="OAUserInteractionPassThroughView">
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <userGuides>
                 <userLayoutGuide location="391" affinity="minY"/>
             </userGuides>
             <subviews>
-                <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="yAT-pO-XDS">
+                <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="kYV-Y2-Ihm">
                     <rect key="frame" x="0.0" y="493" width="414" height="396"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Eo5-Sd-4K4">
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="54Z-Lb-GNI">
                             <rect key="frame" x="0.0" y="198" width="414" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z2m-aS-ygn">
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v0q-31-q7p">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" name="viewBg"/>
                         </view>
-                        <view contentMode="scaleToFill" id="34y-Wl-Kse">
+                        <view contentMode="scaleToFill" id="ea6-OY-jeV">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="406"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="3D2-Jq-s7g">
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Gwu-hY-lMd">
                                     <rect key="frame" x="0.0" y="6" width="414" height="400"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" name="viewBg"/>
@@ -62,13 +61,13 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                     </subviews>
-                    <viewLayoutGuide key="safeArea" id="hSz-0R-fBY"/>
+                    <viewLayoutGuide key="safeArea" id="m8M-Ij-Y4S"/>
                     <color key="backgroundColor" name="viewBg"/>
                 </view>
-                <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2q0-f4-hwZ" userLabel="Cancel Button Container">
-                    <rect key="frame" x="10" y="69" width="74" height="50"/>
+                <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oxa-g3-ykx" userLabel="Cancel Button Container">
+                    <rect key="frame" x="10" y="128" width="74" height="50"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HaO-4Q-RtR" userLabel="Cancel Button">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QhW-pU-MvI" userLabel="Cancel Button">
                             <rect key="frame" x="0.0" y="0.0" width="74" height="50"/>
                             <color key="backgroundColor" white="1" alpha="0.80377358489999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
@@ -77,18 +76,18 @@
                                 <color key="titleColor" name="iconColorActive"/>
                             </state>
                             <connections>
-                                <action selector="cancelButtonPressed" destination="-1" eventType="touchUpInside" id="NQD-6Y-vny"/>
+                                <action selector="cancelButtonPressed" destination="-1" eventType="touchUpInside" id="feN-qa-tPv"/>
                             </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" name="buttonBgColorTertiary"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="50" id="37z-XO-G3u"/>
-                        <constraint firstAttribute="trailing" secondItem="HaO-4Q-RtR" secondAttribute="trailing" id="Mnj-MK-eEV"/>
-                        <constraint firstItem="HaO-4Q-RtR" firstAttribute="top" secondItem="2q0-f4-hwZ" secondAttribute="top" id="NLp-Se-NQx"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="74" id="W4M-la-Vq6"/>
-                        <constraint firstItem="HaO-4Q-RtR" firstAttribute="leading" secondItem="2q0-f4-hwZ" secondAttribute="leading" id="hfz-0k-hcF"/>
-                        <constraint firstAttribute="bottom" secondItem="HaO-4Q-RtR" secondAttribute="bottom" id="vrz-ht-eNE"/>
+                        <constraint firstAttribute="trailing" secondItem="QhW-pU-MvI" secondAttribute="trailing" id="3xI-dn-Src"/>
+                        <constraint firstItem="QhW-pU-MvI" firstAttribute="top" secondItem="oxa-g3-ykx" secondAttribute="top" id="64M-ha-1Yj"/>
+                        <constraint firstItem="QhW-pU-MvI" firstAttribute="leading" secondItem="oxa-g3-ykx" secondAttribute="leading" id="HQ9-3a-dKS"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="74" id="bJx-TK-MkY"/>
+                        <constraint firstAttribute="height" constant="50" id="cTd-ti-xHa"/>
+                        <constraint firstAttribute="bottom" secondItem="QhW-pU-MvI" secondAttribute="bottom" id="eEe-11-b6Y"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -96,10 +95,10 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </view>
-                <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qrD-Kh-cDw" userLabel="Reset Button Container">
-                    <rect key="frame" x="306" y="69" width="74" height="50"/>
+                <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MUk-Oc-R9w" userLabel="Reset Button Container">
+                    <rect key="frame" x="306" y="128" width="74" height="50"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sAZ-yf-K8D" userLabel="Reset Button">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bi8-A0-uUG" userLabel="Reset Button">
                             <rect key="frame" x="0.0" y="0.0" width="74" height="50"/>
                             <color key="backgroundColor" white="1" alpha="0.80377358489999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
@@ -108,18 +107,18 @@
                                 <color key="titleColor" name="iconColorActive"/>
                             </state>
                             <connections>
-                                <action selector="resetButtonPressed" destination="-1" eventType="touchUpInside" id="TiD-fQ-Kxg"/>
+                                <action selector="resetButtonPressed" destination="-1" eventType="touchUpInside" id="5JT-eA-v8M"/>
                             </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" name="buttonBgColorTertiary"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="50" id="DY9-Dw-p3J"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="74" id="InM-LM-eeD"/>
-                        <constraint firstItem="sAZ-yf-K8D" firstAttribute="top" secondItem="qrD-Kh-cDw" secondAttribute="top" id="Ofi-sz-02j"/>
-                        <constraint firstAttribute="trailing" secondItem="sAZ-yf-K8D" secondAttribute="trailing" id="SIx-Gp-QUO"/>
-                        <constraint firstAttribute="bottom" secondItem="sAZ-yf-K8D" secondAttribute="bottom" id="asM-cP-oSm"/>
-                        <constraint firstItem="sAZ-yf-K8D" firstAttribute="leading" secondItem="qrD-Kh-cDw" secondAttribute="leading" id="khr-ED-uUO"/>
+                        <constraint firstAttribute="trailing" secondItem="bi8-A0-uUG" secondAttribute="trailing" id="8GQ-6Z-fTA"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="74" id="InF-ua-wjj"/>
+                        <constraint firstItem="bi8-A0-uUG" firstAttribute="top" secondItem="MUk-Oc-R9w" secondAttribute="top" id="T51-bi-MBf"/>
+                        <constraint firstItem="bi8-A0-uUG" firstAttribute="leading" secondItem="MUk-Oc-R9w" secondAttribute="leading" id="c5S-C0-gEx"/>
+                        <constraint firstAttribute="height" constant="50" id="rGu-OT-C84"/>
+                        <constraint firstAttribute="bottom" secondItem="bi8-A0-uUG" secondAttribute="bottom" id="vcY-py-LMT"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -128,16 +127,17 @@
                     </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
-            <viewLayoutGuide key="safeArea" id="gfj-RO-6Vx"/>
+            <viewLayoutGuide key="safeArea" id="KDE-Ll-KiC"/>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="2q0-f4-hwZ" firstAttribute="top" secondItem="gfj-RO-6Vx" secondAttribute="top" constant="10" id="aon-Ib-W02"/>
-                <constraint firstItem="gfj-RO-6Vx" firstAttribute="trailing" secondItem="qrD-Kh-cDw" secondAttribute="trailing" constant="13" id="gGw-F5-RPn"/>
-                <constraint firstItem="2q0-f4-hwZ" firstAttribute="leading" secondItem="gfj-RO-6Vx" secondAttribute="leading" constant="10" id="zI9-ZW-6jt"/>
-                <constraint firstItem="qrD-Kh-cDw" firstAttribute="top" secondItem="gfj-RO-6Vx" secondAttribute="top" constant="10" id="znb-gh-VZz"/>
+                <constraint firstItem="oxa-g3-ykx" firstAttribute="top" secondItem="KDE-Ll-KiC" secondAttribute="top" constant="10" id="X3e-5q-FwP"/>
+                <constraint firstItem="oxa-g3-ykx" firstAttribute="leading" secondItem="KDE-Ll-KiC" secondAttribute="leading" constant="10" id="iCY-Se-LUa"/>
+                <constraint firstItem="KDE-Ll-KiC" firstAttribute="trailing" secondItem="MUk-Oc-R9w" secondAttribute="trailing" constant="13" id="j1P-Om-qOr"/>
+                <constraint firstItem="MUk-Oc-R9w" firstAttribute="top" secondItem="KDE-Ll-KiC" secondAttribute="top" constant="10" id="lWt-rn-9Nc"/>
             </constraints>
             <point key="canvasLocation" x="-614.49275362318849" y="59.598214285714285"/>
         </view>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
     </objects>
     <resources>
         <image name="ic_navbar_reset.png" width="28" height="28"/>

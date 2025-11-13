@@ -993,7 +993,6 @@
 		843E5D951AB341E000BE14BE /* menu_share_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5CA41AB341E000BE14BE /* menu_share_icon@3x.png */; };
 		843E5D9B1AB341E000BE14BE /* menu_star_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5CA61AB341E000BE14BE /* menu_star_icon@3x.png */; };
 		843E5DA71AB341E000BE14BE /* search_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5CAA1AB341E000BE14BE /* search_icon@3x.png */; };
-		843E5DAA1AB341E000BE14BE /* three_dots@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5CAB1AB341E000BE14BE /* three_dots@3x.png */; };
 		8440E2CE1ABEA7100088856A /* libOsmAndCore_static_standalone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2CD1ABEA7100088856A /* libOsmAndCore_static_standalone.a */; };
 		8440E2D01ABEA7200088856A /* libarchive_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2CF1ABEA7200088856A /* libarchive_static.a */; };
 		8440E2DA1ABEA7370088856A /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D11ABEA7360088856A /* libexpat_static.a */; };
@@ -1201,7 +1200,6 @@
 		84C41E5B1AB960D10089EABB /* phrases.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84C41E581AB960D10089EABB /* phrases.xml */; };
 		84C41E7B1AB9EEA20089EABB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C41E781AB9EE8F0089EABB /* libxml2.dylib */; };
 		84CC524E1AA5A539000063CF /* nautical.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524B1AA5A539000063CF /* nautical.render.xml */; };
-		84CC52561AA5DD55000063CF /* three_dots@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC52501AA5DD55000063CF /* three_dots@2x.png */; };
 		84CCE8051B7509A90059A82A /* ic_dialog_edit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CCE7FB1B7509A90059A82A /* ic_dialog_edit@2x.png */; };
 		84CCE8081B7509A90059A82A /* ic_dialog_edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CCE7FC1B7509A90059A82A /* ic_dialog_edit@3x.png */; };
 		84D81EE51AA30404001098FD /* ic_destination_arrow_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D81EDE1AA30404001098FD /* ic_destination_arrow_small@2x.png */; };
@@ -4623,7 +4621,6 @@
 		843E5CA41AB341E000BE14BE /* menu_share_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu_share_icon@3x.png"; path = "Resources/Icons/menu_share_icon@3x.png"; sourceTree = "<group>"; };
 		843E5CA61AB341E000BE14BE /* menu_star_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu_star_icon@3x.png"; path = "Resources/Icons/menu_star_icon@3x.png"; sourceTree = "<group>"; };
 		843E5CAA1AB341E000BE14BE /* search_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search_icon@3x.png"; path = "Resources/Icons/search_icon@3x.png"; sourceTree = "<group>"; };
-		843E5CAB1AB341E000BE14BE /* three_dots@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "three_dots@3x.png"; path = "Resources/Icons/three_dots@3x.png"; sourceTree = "<group>"; };
 		8440E2CD1ABEA7100088856A /* libOsmAndCore_static_standalone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_static_standalone.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libOsmAndCore_static_standalone.a"; sourceTree = "<group>"; };
 		8440E2CF1ABEA7200088856A /* libarchive_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libarchive_static.a"; sourceTree = "<group>"; };
 		8440E2D11ABEA7360088856A /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libexpat_static.a"; sourceTree = "<group>"; };
@@ -4841,7 +4838,6 @@
 		84C97FFE20382DBC00BF3D68 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84C98001203832FF00BF3D68 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84CC524B1AA5A539000063CF /* nautical.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = nautical.render.xml; path = ../resources/rendering_styles/nautical.render.xml; sourceTree = "<group>"; };
-		84CC52501AA5DD55000063CF /* three_dots@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "three_dots@2x.png"; path = "Resources/Icons/three_dots@2x.png"; sourceTree = "<group>"; };
 		84CCE7FB1B7509A90059A82A /* ic_dialog_edit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_edit@2x.png"; path = "Resources/Icons/ic_dialog_edit@2x.png"; sourceTree = "<group>"; };
 		84CCE7FC1B7509A90059A82A /* ic_dialog_edit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_edit@3x.png"; path = "Resources/Icons/ic_dialog_edit@3x.png"; sourceTree = "<group>"; };
 		84D81EDE1AA30404001098FD /* ic_destination_arrow_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_arrow_small@2x.png"; path = "Resources/Icons/ic_destination_arrow_small@2x.png"; sourceTree = "<group>"; };
@@ -9784,8 +9780,6 @@
 				84F3A9721B4FC7FB00D16EBC /* selection_disabled@3x.png */,
 				8441CB301B1370580033AC95 /* selection_unchecked@2x.png */,
 				8441CB311B1370580033AC95 /* selection_unchecked@3x.png */,
-				84CC52501AA5DD55000063CF /* three_dots@2x.png */,
-				843E5CAB1AB341E000BE14BE /* three_dots@3x.png */,
 				84EE2D991AFBB6D2007C9A94 /* track_clear_data@2x.png */,
 				84EE2D9A1AFBB6D2007C9A94 /* track_clear_data@3x.png */,
 				84E441A91AF8A07500F87542 /* track_new_segement@2x.png */,
@@ -15868,7 +15862,6 @@
 				DA0D1643281BEEF500CEEF58 /* map_turn_left@2x.png in Resources */,
 				46453AED28352375001F9A3A /* ic_custom_carplay_colored_big@3x.png in Resources */,
 				C5ACFCD72AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png in Resources */,
-				843E5DAA1AB341E000BE14BE /* three_dots@3x.png in Resources */,
 				DA45DA86230EE05A0083DFA2 /* img_mapstyle_topo@2x.png in Resources */,
 				DA5A820226C563A700F274C7 /* OAFeatureCardRow.xib in Resources */,
 				DAC5886021089948008B7763 /* es_tts.js in Resources */,
@@ -16474,7 +16467,6 @@
 				8432579A1A9DAE4100A7964E /* ic_arrow_down@3x.png in Resources */,
 				3266C96326B150D6007A9187 /* ic_custom_openplacereview_logo@3x.png in Resources */,
 				DA5F21FA229551A300B0D7B6 /* ic_custom_mapillary_symbol@3x.png in Resources */,
-				84CC52561AA5DD55000063CF /* three_dots@2x.png in Resources */,
 				DAE79D34260E1B4800E2EE11 /* ic_system_checkbox_selected@2x.png in Resources */,
 				DA1340CC243DC5A70039D214 /* map_action_ski_touring@3x.png in Resources */,
 				DA9A2C2926FB587400BEC681 /* map_direction_arrow@2x.png in Resources */,

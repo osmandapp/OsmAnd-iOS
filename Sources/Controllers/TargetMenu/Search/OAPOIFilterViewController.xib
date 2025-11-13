@@ -60,7 +60,7 @@
                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                             <color key="tintColor" name="navBarTextColorPrimary"/>
                             <inset key="imageEdgeInsets" minX="12" minY="12" maxX="12" maxY="12"/>
-                            <state key="normal" image="three_dots"/>
+                            <state key="normal" image="ic_navbar_overflow_menu_outlined"/>
                             <connections>
                                 <action selector="morePress:" destination="-1" eventType="touchUpInside" id="mc8-zx-ZOr"/>
                             </connections>
@@ -106,7 +106,7 @@
     </objects>
     <resources>
         <image name="ic_close.png" width="10" height="10"/>
-        <image name="three_dots" width="44" height="44"/>
+        <image name="ic_navbar_overflow_menu_outlined" width="28" height="28"/>
         <namedColor name="buttonBgColorPrimary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

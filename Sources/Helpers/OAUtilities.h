@@ -73,6 +73,13 @@ static inline void executeOnMainThread(dispatch_block_t block)
         dispatch_async(dispatch_get_main_queue(), block);
 }
 
+static inline NSString *_Nullable OAStringFromUTF8Nullable(const char *_Nullable cstr) {
+    if (!cstr)
+        return nil;
+
+    return [NSString stringWithCString:cstr encoding:NSUTF8StringEncoding];
+}
+
 @interface UIBezierPath (util)
 
 - (void) cubicToX:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 x3:(float)x3 y3:(float)y3;

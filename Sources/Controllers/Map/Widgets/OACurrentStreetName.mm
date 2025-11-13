@@ -267,12 +267,6 @@
     return [shields copy];
 }
 
-static inline NSString *OAStringFromUTF8Nullable(const char *cstr) {
-    if (!cstr) return nil;
-
-    return [NSString stringWithCString:cstr encoding:NSUTF8StringEncoding];
-}
-
 + (NSArray<RoadShield *> *)createDestination:(std::shared_ptr<RouteDataObject>)rdo destRef:(NSString *)destRef
 {
     NSMutableArray<RoadShield *> * shields = [[self createShields:rdo] mutableCopy];

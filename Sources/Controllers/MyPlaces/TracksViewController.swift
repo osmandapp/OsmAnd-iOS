@@ -2135,11 +2135,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
         animator?.addCompletion { [weak self] in
             guard let self else { return }
-            self.isContextMenuVisible = false
             if self.shouldReloadTableView {
+                self.updateData()
                 self.shouldReloadTableView = false
-                self.updateDistanceAndDirection(true)
             }
+            self.isContextMenuVisible = false
         }
     }
     

@@ -310,11 +310,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     override func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
         animator?.addCompletion { [weak self] in
             guard let self else { return }
-            self.isContextMenuVisible = false
             if self.shouldUpdateTable {
+                self.sortTracks()
+                self.updateData()
                 self.shouldUpdateTable = false
-                self.updateDistanceAndDirection(true)
             }
+            self.isContextMenuVisible = false
         }
     }
     

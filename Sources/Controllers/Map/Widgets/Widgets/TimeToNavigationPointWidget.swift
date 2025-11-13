@@ -104,15 +104,15 @@ final class TimeToNavigationPointWidget: OASimpleWidget {
             updateContentTitle()
         }
         
-        if routingHelper.isRouteCalculated() {
-            if widgetState!.isIntermediate() {
-                leftSeconds = routingHelper.getLeftTimeNextIntermediate()
-            } else {
-                leftSeconds = routingHelper.getLeftTime()
+        if let widgetState, routingHelper.isRouteCalculated() {
+            leftSeconds = widgetState.isIntermediate() ? routingHelper.getLeftTimeNextIntermediate() : routingHelper.getLeftTime()
+            var targetLeftSeconds = leftSeconds
+            if targetLeftSeconds != 0 {
+                targetLeftSeconds += Int(Date().timeIntervalSince1970)
             }
-            let updateIntervalPassed = abs(leftSeconds - cachedLeftSeconds) > Int(Self.UPDATE_INTERVAL_SECONDS)
+            let updateIntervalPassed = abs(targetLeftSeconds - cachedLeftSeconds) > Int(Self.UPDATE_INTERVAL_SECONDS)
             if leftSeconds != 0 && (updateIntervalPassed || timeModeUpdated) {
-                cachedLeftSeconds = leftSeconds
+                cachedLeftSeconds = targetLeftSeconds
                 if arrivalTimeOtherwiseTimeToGoPref.get() {
                     return updateArrivalTime(leftSeconds)
                 } else {

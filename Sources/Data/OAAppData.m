@@ -1742,9 +1742,11 @@
 
 - (void) resetProfileSettingsForMode:(OAApplicationMode *)mode
 {
-    for (OACommonPreference *value in [_registeredPreferences objectEnumerator].allObjects)
-    {
-        [value resetModeToDefault:mode];
+    @synchronized(self) {
+        for (OACommonPreference *value in [_registeredPreferences objectEnumerator].allObjects)
+        {
+            [value resetModeToDefault:mode];
+        }
     }
 }
 

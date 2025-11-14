@@ -73,7 +73,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var isSearchTextFilterChanged = false
     private var isSelectionModeInSearch = false
     private var isEditFilterActive = false
-    private var shouldReloadTableViewOnAppear = false
+    private var shouldReloadTableView = false
+    private var isContextMenuVisible = false
     
     private var selectedTrack: GpxDataItem?
     private var selectedFolderPath: String?
@@ -203,10 +204,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func reloadTableViewOnAppearIfNeeded() {
-        guard shouldReloadTableViewOnAppear else { return }
+        guard shouldReloadTableView else { return }
         generateData()
         tableView.reloadData()
-        shouldReloadTableViewOnAppear = false
+        shouldReloadTableView = false
     }
     
     private func reloadTracks(forceLoad: Bool = false) {
@@ -757,6 +758,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateDistanceAndDirection(_ forceUpdate: Bool) {
+        if isContextMenuVisible {
+            shouldReloadTableView = true
+            return
+        }
+
         let currentSortMode = isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode
         guard currentSortMode == .nearest, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else {
             return
@@ -766,7 +772,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             guard view.window != nil else {
-                shouldReloadTableViewOnAppear = true
+                shouldReloadTableView = true
                 return
             }
             updateData()
@@ -1544,8 +1550,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
          guard isRootFolder else { return }
          DispatchQueue.main.async { [weak self] in
              guard let self else { return }
+             if self.isContextMenuVisible {
+                 self.shouldReloadTableView = true
+                 return
+             }
+
              guard view.window != nil else {
-                 shouldReloadTableViewOnAppear = true
+                 shouldReloadTableView = true
                  return
              }
              generateData()
@@ -2114,6 +2125,22 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         .none
+    }
+    
+    func tableView(_ tableView: UITableView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        isContextMenuVisible = true
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
+        animator?.addCompletion { [weak self] in
+            guard let self else { return }
+            if self.shouldReloadTableView {
+                self.updateData()
+                self.shouldReloadTableView = false
+            }
+            self.isContextMenuVisible = false
+        }
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {

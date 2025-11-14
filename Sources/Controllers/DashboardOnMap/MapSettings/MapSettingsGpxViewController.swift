@@ -38,6 +38,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isSearchFilteringActive = false
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
+    private var isContextMenuVisible = false
+    private var shouldUpdateTable = false
     private var importHelper: OAGPXImportUIHelper?
     private var rootVC: OARootViewController?
     private var routingHelper: OARoutingHelper?
@@ -300,9 +302,26 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         return !(item.key == "noVisibleTracks" || item.key == "noTracks")
     }
     
+    override func tableView(_ tableView: UITableView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        isContextMenuVisible = true
+        return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
+        animator?.addCompletion { [weak self] in
+            guard let self else { return }
+            if self.shouldUpdateTable {
+                self.sortTracks()
+                self.updateData()
+                self.shouldUpdateTable = false
+            }
+            self.isContextMenuVisible = false
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let item = tableData.item(for: indexPath)
-        let gpx = item.obj(forKey: "gpx") as! GpxDataItem
+        guard let gpx = item.obj(forKey: "gpx") as? GpxDataItem else { return nil }
         let trackItem = TrackItem(file: gpx.file)
         trackItem.dataItem = gpx
       
@@ -713,6 +732,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         lock.lock()
+        if isContextMenuVisible {
+            shouldUpdateTable = true
+            lock.unlock()
+            return
+        }
         
         guard isTracksAvailable, currentSortMode == .nearest, forceUpdate
                 || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5

@@ -216,7 +216,9 @@ final class ColorPalette: NSObject {
                 return min.clr
             }
             if value >= min.val && value <= max.val {
-                let percent = (value - min.val) / (max.val - min.val)
+                let rawPercent = (value - min.val) / (max.val - min.val)
+                let percent = Swift.max(0.0, Swift.min(1.0, normalizeDouble(rawPercent)))
+                
                 return getIntermediateColor(min: min, max: max, percent: percent)
             }
         }

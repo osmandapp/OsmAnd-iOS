@@ -134,6 +134,7 @@
 
 -(BOOL)publish:(OASearchResult *)object
 {
+    // disable boundary for end results
     if (object.objectType == EOAObjectTypeBoundary)
     {
         return NO;

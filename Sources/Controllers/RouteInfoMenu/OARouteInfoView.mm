@@ -428,8 +428,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             OADestination *item = markers[i];
             [section addObject:@{
                 @"cell" : [OARightIconTableViewCell getCellIdentifier],
-                @"title" : item.desc,
-                @"img" : [item.markerResourceName ? item.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"],
+                @"title" : item.desc ?: @"",
+                @"img" : [item.markerResourceName ?: @"ic_destination_pin_1" stringByAppendingString:@"_small"],
                 @"item" : item
             }];
             if (i != markers.count - 1)

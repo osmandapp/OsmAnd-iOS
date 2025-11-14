@@ -35,6 +35,14 @@ final class Map3DButtonState: MapButtonState {
         UIImage.templateImageNamed(getVisibility().iconName)
     }
     
+    override func updatePosition(_ position: ButtonPositionSize) {
+        position.marginX = Int32(ButtonPositionSize.companion.CELL_SIZE_DP)
+        position.marginY = Int32(ButtonPositionSize.companion.CELL_SIZE_DP)
+        super.updatePosition(position)
+        position.xMove = !portrait
+        position.yMove = portrait
+    }
+    
     override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_RIGHT, posV: ButtonPositionSize.companion.POS_BOTTOM, xMove: true, yMove: true)
     }

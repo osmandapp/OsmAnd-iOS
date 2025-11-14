@@ -1244,6 +1244,11 @@
     {
         for (OAPOIType *a in additionals)
         {
+            if (a.referenceType != nil)
+            {
+                // ignore reference types as duplicates
+                continue;
+            }
             OAPoiTypeResult *existingResult = results[a.name];
             if (existingResult != nil) {
                 OAPoiAdditionalCustomFilter *f;

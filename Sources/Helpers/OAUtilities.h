@@ -73,11 +73,22 @@ static inline void executeOnMainThread(dispatch_block_t block)
         dispatch_async(dispatch_get_main_queue(), block);
 }
 
-static inline NSString *_Nullable OAStringFromUTF8Nullable(const char *_Nullable cstr) {
+static inline NSString *_Nullable OAStringFromUTF8Nullable(const char *_Nullable cstr)
+{
     if (!cstr)
         return nil;
 
     return [NSString stringWithCString:cstr encoding:NSUTF8StringEncoding];
+}
+
+static inline double normalizeDouble(double v)
+{
+    if (!isfinite(v))
+    {
+        NSLog(@"[NormalizeDouble] Invalid value: %f", v);
+        return 0.0;
+    }
+    return v;
 }
 
 @interface UIBezierPath (util)

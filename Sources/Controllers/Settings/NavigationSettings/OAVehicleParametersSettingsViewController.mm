@@ -111,7 +111,7 @@
 
 - (NSString *)getTitle
 {
-    return _vehicleParameter[@"title"];
+    return [OAUtilities getRoutingStringPropertyName:_vehicleParameter[@"name"] defaultName:_vehicleParameter[@"title"]];
 }
 
 - (NSString *)getSubtitle

@@ -113,6 +113,9 @@
                     double vl = floorf(p.possibleValues[i] * 100 + 0.5) / 100;
                     [possibleValues addObject:@(vl)];
                     NSString *descr = [NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()];
+                    if (i > 0)
+                        descr = [self parameterValue:descr paramId:paramId cutUnit:YES];
+                        
                     [valueDescriptions addObject:descr];
                     if (vl == d)
                         index = i;
@@ -121,9 +124,11 @@
                 if (index == 0)
                     value = OALocalizedString([paramId isEqualToString:RouteParamVehicleHelper.motorType] ? @"shared_string_not_selected" : @"shared_string_none");
                 else if (index != -1)
-                    value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
+                    value = [self parameterValue:[NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()]
+                                         paramId:paramId
+                                         cutUnit:YES];
                 else
-                    value = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString([RouteParamVehicleHelper isWeightParameter:paramId] ? @"metric_ton" : @"m")];
+                    value = [self parameterValue:value paramId:paramId cutUnit:NO];;
                 
                 NSDictionary *paramInfo = @{
                     @"name": paramId,
@@ -168,6 +173,11 @@
         _otherSection = tableData.count - 1;
     }
     _data = [NSArray arrayWithArray:tableData];
+}
+
+- (NSString *)parameterValue:(NSString *)value paramId:(NSString *)paramId cutUnit:(BOOL)cutUnit
+{
+    return [NSString stringWithFormat:@"%@ %@", cutUnit && value.length > 1 ? [value substringToIndex:value.length - 1] : value, OALocalizedString([RouteParamVehicleHelper isWeightParameter:paramId] ? @"metric_ton" : @"m")];
 }
 
 - (void) setupFuelTankCapacity:(NSMutableArray *)exraParametersArr

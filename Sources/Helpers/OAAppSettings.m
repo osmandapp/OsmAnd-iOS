@@ -6199,15 +6199,8 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (NSMapTable<NSString *, OACommonPreference *> *)getRegisteredPreferences
 {
-    @synchronized(self) {
-        NSMapTable<NSString *, OACommonPreference *> *safeCopy = [NSMapTable strongToStrongObjectsMapTable];
-        
-        for (NSString *key in _registeredPreferences)
-        {
-            [safeCopy setObject:[_registeredPreferences objectForKey:key] forKey:key];
-        }
-        
-        return safeCopy;
+    @synchronized(_registeredPreferences) {
+        return [_registeredPreferences copy];
     }
 }
 
@@ -6218,21 +6211,21 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         return [_registeredPreferences objectForKey:key];
     }
 }
 
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         [_registeredPreferences setObject:preference forKey:key];
     }
 }
 
 - (OACommonBoolean *)registerBooleanPreference:(NSString *)key defValue:(BOOL)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonBoolean *)[_registeredPreferences objectForKey:key];
         
@@ -6244,7 +6237,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonString *)registerStringPreference:(NSString *)key defValue:(NSString *)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonString *)[_registeredPreferences objectForKey:key];
         
@@ -6256,7 +6249,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(NSArray<NSString *> *)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonStringList *)[_registeredPreferences objectForKey:key];
         
@@ -6268,7 +6261,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonInteger *)[_registeredPreferences objectForKey:key];
         
@@ -6280,7 +6273,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonLong *)[_registeredPreferences objectForKey:key];
         
@@ -6292,7 +6285,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonDouble *)[_registeredPreferences objectForKey:key];
         
@@ -6304,7 +6297,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonWidgetSizeStyle *) [_registeredPreferences objectForKey:key];
         
@@ -6316,7 +6309,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonSunPositionMode *) [_registeredPreferences objectForKey:key];
         
@@ -6328,7 +6321,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonWidgetZoomLevelType *) [_registeredPreferences objectForKey:key];
         
@@ -6340,7 +6333,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonWidgetDefaultView *) [_registeredPreferences objectForKey:key];
         
@@ -6352,7 +6345,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue
 {
-    @synchronized(self) {
+    @synchronized(_registeredPreferences) {
         if ([_registeredPreferences objectForKey:key])
             return (OACommonWidgetDisplayPriority *) [_registeredPreferences objectForKey:key];
         

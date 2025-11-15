@@ -33,6 +33,7 @@ final class RouteInfoWidget: OASimpleWidget {
     private var displayPriorityPref: OACommonWidgetDisplayPriority
     private var isForceUpdate: Bool
     private var cachedRouteInfo: [DestinationInfo] = []
+    private var cachedTimeToGo: [TimeInterval] = []
     private var cachedDefaultView: RouteInfoDisplayValue?
     private var cachedDisplayPriority: RouteInfoDisplayPriority?
     private var hasSecondaryData: Bool
@@ -184,13 +185,24 @@ final class RouteInfoWidget: OASimpleWidget {
             return
         }
         
+        let now = Date().timeIntervalSince1970
         if cachedRouteInfo.count != routeInfo.count {
             cachedRouteInfo = routeInfo
+            cachedTimeToGo = Array(repeating: 0, count: routeInfo.count)
+            for i in 0..<routeInfo.count {
+                cachedTimeToGo[i] = routeInfo[i].timeToGo + now
+            }
         } else {
             for i in 0..<routeInfo.count {
-                let updateIntervalPassed = abs(routeInfo[i].timeToGo - cachedRouteInfo[i].timeToGo) > updateIntervalSeconds
-                if updateIntervalPassed {
+                let targetTimeToGo = routeInfo[i].timeToGo + now
+                let updateTimeToGoIntervalPassed = abs(targetTimeToGo - cachedTimeToGo[i]) > updateIntervalSeconds
+                if routeInfo[i].timeToGo != 0 && updateTimeToGoIntervalPassed {
+                    cachedTimeToGo[i] = targetTimeToGo
                     cachedRouteInfo[i].timeToGo = routeInfo[i].timeToGo
+                }
+                
+                let updateArrivalTimeIntervalPassed = abs(routeInfo[i].arrivalTime - cachedRouteInfo[i].arrivalTime) > updateIntervalSeconds
+                if routeInfo[i].arrivalTime != 0 && updateArrivalTimeIntervalPassed {
                     cachedRouteInfo[i].arrivalTime = routeInfo[i].arrivalTime
                 }
                 
@@ -340,7 +352,8 @@ final class RouteInfoWidget: OASimpleWidget {
     private func isDataChanged(for i1: DestinationInfo, and i2: DestinationInfo) -> Bool {
         let distanceDiff = abs(i1.distance - i2.distance)
         let timeToGoDiff = abs(i1.timeToGo - i2.timeToGo)
-        return distanceDiff > 10 || timeToGoDiff > updateIntervalSeconds
+        let arrivalTimeDif = abs(i1.arrivalTime - i2.arrivalTime)
+        return distanceDiff > 10 || timeToGoDiff > updateIntervalSeconds || arrivalTimeDif > updateIntervalSeconds
     }
     
     private func applySuitableTextFont() {

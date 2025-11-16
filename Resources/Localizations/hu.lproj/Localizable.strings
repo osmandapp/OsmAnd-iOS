@@ -40,7 +40,7 @@
 "fav_enter_new_name" = "Adja meg a kedvenc új nevét";
 // POI
 "poi_insrease_radius" = "Keresési sugár növelése";
-"poi_max_radius_reached" = "A maximális keresési sugár elérve";
+"poi_max_radius_reached" = "A legnagyobb keresési sugár elérve";
 "poi_search_near_center" = "A keresés a térkép közepe környékén lesz végrehajtva";
 "shared_string_hide" = "Elrejtés";
 // My Places
@@ -1669,7 +1669,7 @@
 "lang_sh" = "szerbhorvát";
 "lang_sq" = "albán";
 "context_menu_edit_descr" = "Leírás szerkesztése";
-"backup_error_size_is_exceeded" = "Az OsmAnd Cloud maximális mérete túllépte ezt: %@";
+"backup_error_size_is_exceeded" = "Az OsmAnd Cloud legnagyobb mérete túllépte a megengedettet: %@";
 "lang_ky" = "kirgiz";
 "backup_restore_now" = "Visszaállítás most";
 "lang_tt" = "tatár";
@@ -1763,7 +1763,7 @@
 "debugging_and_development" = "OsmAnd fejlesztés";
 "osm_live_subscriptions" = "Előfizetések";
 "manage_subscription" = "Előfizetés kezelése";
-"simulation_preview_mode_desc" = "A szimuláció sebessége az egyenes szakaszokon maximális lesz és csak a kereszteződéseknél lassul le.";
+"simulation_preview_mode_desc" = "A szimuláció sebessége az egyenes szakaszokon a legnagyobb lesz és csak a kereszteződéseknél lassul le.";
 "monthly_map_updates" = "Havi térképfrissítés";
 "explore_osmnad_plans_to_find_suitable" = "Ismerje meg az OsmAnd előfizetési csomagjait, és találja meg az Önnek megfelelőt.";
 "speed_mode" = "Sebesség mód";
@@ -1990,7 +1990,7 @@
 "osmand_live_support_reg_descr" = "Az adomány egy részét elküldjük azoknak az OSM-felhasználóknak, akik az adott régióban módosítják a térképet";
 "res_expire_time" = "Lejárati idő";
 "res_mercator" = "Mercator vetület";
-"res_zoom_warning" = "A minimális zoom értéke nem lehet egyenlő vagy nagyobb, mint a maximális zoom értéke";
+"res_zoom_warning" = "A legkisebb nagyítás értéke nem lehet egyenlő vagy nagyobb, mint a legnagyobb nagyítás értéke";
 "select_tracks" = "Trackek kiválasztása";
 "osmand_depelopment_simulate_location_section" = "Szimuláció";
 "simulate_in_progress" = "Folyamatban";
@@ -2809,7 +2809,7 @@
 "edit_tilesource_minzoom" = "Minimális nagyítás";
 "shared_string_item" = "Elem";
 "shared_string_precise" = "Pontos";
-"edit_tilesource_maxzoom" = "Maximális nagyítás";
+"edit_tilesource_maxzoom" = "Legnagyobb nagyítás";
 "display_position_automatic_descr" = "A térkép tájolásától függően: alul a mozgásirány követésénél és középen minden más esetben.";
 "speedometer_description" = "Megjeleníti a jármű GPS-alapú sebességét";
 "custom_buttons" = "Egyéni gombok";
@@ -2927,19 +2927,19 @@
 "max_sensor_bycicle_power" = "Kerékpáros teljesítmény, max";
 "help_article_map_routes_name" = "Útvonalak";
 "avg_sensor_bycicle_power" = "Kerékpáros teljesítmény, átlag";
-"max_sensor_speed" = "Érzékelő sebessége (maximum)";
+"max_sensor_speed" = "Érzékelő sebessége (legnagyobb)";
 "add_widget_to_the_right" = "Modul hozzáadása a jobb oldalra";
 "shared_string_minute_lowercase" = "perc";
 "avg_sensor_speed" = "Érzékelő sebessége (átlag)";
 "lock_screen_description" = "Engedélyezi vagy letiltja az érintőképernyő funkcióit a véletlen érintések elkerülése érdekében";
 "shared_string_to" = "Ide:";
-"max_sensor_heartrate" = "Pulzus (maximum)";
+"max_sensor_heartrate" = "Pulzus (legnagyobb)";
 "delete_widget" = "Biztosan törli a modult?";
 "shared_string_interface" = "Interfész";
 "screen_is_locked_by_action_button" = "Az érintőképernyő le van zárva. Koppintson a gombra a feloldáshoz.";
 "add_widget_to_the_left" = "Modul hozzáadása a bal oldalra";
 "delete_widget_description" = "Ez a modul törölve lesz. Később visszaállíthatja a konfigurációs képernyőn.";
-"max_sensor_temperature" = "Hőmérséklet (maximum)";
+"max_sensor_temperature" = "Hőmérséklet (legnagyobb)";
 "add_widget_above" = "Modul hozzáadása felülre";
 "avg_sensor_temperature" = "Hőmérséklet (átlag)";
 "shared_string_visible_on_map" = "Látható a térképen";
@@ -3336,9 +3336,9 @@
 "shared_string_ok" = "OK";
 "duration" = "Időtartam";
 "shared_string_estimated_duration" = "Becsült időtartam";
-"shared_string_maximum" = "Maximum";
+"shared_string_maximum" = "Legnagyobb";
 "shared_string_min" = "Minimum";
-"shared_string_max" = "Maximum";
+"shared_string_max" = "Legnagyobb";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_clear_offline_cache" = "Offline gyorsítótár törlése";
 "shared_string_profile" = "Profil";
@@ -3366,7 +3366,7 @@
 "map_settings_slopes_legend" = "A lejtőkről bővebben a Wikipédián olvashat";
 "map_settings_slopes_description" = "A lejtő a terep színes vizualizációja.";
 "map_settings_hillshade_description" = "A domborzatárnyékolás-térkép sötét árnyalatokkal jelzi a lejtőket, csúcsokat és alföldeket.";
-"map_settings_zoom_level_description" = "Állítsa be a réteg megjelenítésének minimális és maximális nagyítási szintjét";
+"map_settings_zoom_level_description" = "Állítsa be a réteg megjelenítésének legkisebb és legnagyobb nagyítási szintjét";
 "map_settings_add_maps_hillshade" = "A domborzatárnyékolás megjelenítéséhez a térképen további térképek szükségesek.";
 "map_settings_add_maps_slopes" = "A lejtők megjelenítéséhez a térképen további térképek szükségesek.";
 "map_settings_show_slider_map" = "Csúszka megjelenítése a térképen";
@@ -3592,7 +3592,7 @@
 "osm_note_empty_message" = "Adja meg a jegyzethez az üzenetet.";
 "osm_edits_poi" = "Érdekes helyek szerkesztései";
 "osm_edit_show_on_map_descr" = "A térkép megnyitása erre a pontra középre igazítva";
-"osm_tag_too_long_message" = "A(z) %@ címke maximális értékhossza 255 karakter.\nA folytatáshoz rövidítse le.";
+"osm_tag_too_long_message" = "A(z) %@ címke legnagyobb értékhossza 255 karakter.\nA folytatáshoz rövidítse le.";
 "osm_editing_access_descr" = "Az összes helyi szerkesztését és jegyzetét megtekintheti itt: %@. A már feltöltött pontok nem szerepelnek az OsmAnd listájában.";
 "osm_upload_gpx_description_footer" = "Ha a leírás üres, a nyomvonal neve lesz használva. A beírt leírás minden nyomvonalra érvényes lesz.";
 "mapil_no_inet_descr" = "A Mapillary fényképek megtekintéséhez internetkapcsolatra van szükség.";
@@ -3803,8 +3803,8 @@
 "routing_attr_goods_restrictions_header_name" = "Az árut szállító járművek közlekedése bizonyos utakon korlátozható.";
 "routing_attr_goods_restrictions_footer_desc" = "Csak olyan járművekre vonatkozik, amelyek legalább négy kerékkel rendelkeznek, és tömegük nem haladja meg a 3,5 tonnát.\n\nHa járműve tömege meghaladja a 3,5 tonnát, akkor teherautó-profilt ajánlott használnia.";
 "routing_attr_goods_restrictions_yes_desc" = "Az áru szállítására lezárt utak el lesznek kerülve.";
-"max_weight_at_full_load_description" = "Adja meg járműve teljes terhelési maximális tömegét, hogy navigáció közben a tömegkorlátozású utakat és hidakat elkerülhesse.";
-"max_axle_load_description" = "Adja meg járműve maximális tengelyterhelését, hogy elkerülje a tömegkorlátozású utakat és hidakat.";
+"max_weight_at_full_load_description" = "Adja meg a járműve megengedett össztömegét, hogy navigáció közben a tömegkorlátozású utakat és hidakat elkerülhesse.";
+"max_axle_load_description" = "Adja meg járműve megengedett legnagyobb tengelyterhelését, hogy elkerülje a tömegkorlátozású utakat és hidakat.";
 "login_footer_full_text" = "Segítségre van szüksége? Vegye fel velünk a kapcsolatot a\nsupport@osmand.net címen";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "error_contact_support" = "Ha a probléma továbbra is fennáll, vegye fel a kapcsolatot az ügyfélszolgálatunkkal.";
@@ -3909,7 +3909,7 @@
 "ios_release_4_3" = "• Sima animáció a helyváltozásokhoz mozgás közben\n• CarPlay: sávok, 2.5D nézet hozzáadva, hangproblémák javítása Bluetooth-kapcsolaton keresztül\n• Új vásárlási tervek bevezetése: „OsmAnd Pro” előfizetések hozzáféréssel az összes funkcióhoz és „Térképek+” vásárlás korlátlan térképletöltéssel és fizetős bővítményekhez való hozzáféréssel.\n• Felhőalapú biztonsági mentés és offline időjárás-előrejelzés hozzáadása az OsmAnd Pro felhasználók számára\n• Új, kényelmes „Vásárlás” képernyő az összes vásárlás listájával\n• Előnyök az aktív OpenStreetMap.org közreműködők számára\n• A nyomvonalak mostantól magasság, sebesség vagy lejtés szerint színezhetők\n• Az offline térképek mostantól elérhetők a Fájlok alkalmazáson keresztül\n• Kedvencek: helyi biztonsági mentések generálása minden változtatás után, a biztonsági mentések elérhetők a Fájlok alkalmazásból\n• A kedvencek közé mentett POI-k offline térkép nélkül is tárolják és megjelenítik az összes POI-adatot\n• GPX: link, cmt, desc címkék és bármilyen egyéni kiterjesztés támogatása\n• Mód hozzáadása az Iránytű gombhoz\n• Javítva egy probléma az UTM koordináta formátummal\n• Javítva egy probléma a köztes pontokkal a navigációban\n";
 "ios_release_4_4" = "• Külső billentyűzet: új billentyűk támogatása\n• Új modulok az utazásrögzítéshez\n• Keresés hozzáadása a kedvencekhez, nyomvonalakhoz és OSM-szerkesztésekhez\n• CarPlay: az előzmények tartalmazzák a navigációban használt pontokat\n• Az emojik mostantól használhatók kedvencként vagy útpontnévként\n• Javítva az offline Wikipédia-cikkek közötti átmenet\n• Javítva az egyéni útvonaltervezési és renderelési fájlok importálásával kapcsolatos problémák\n• Nyomvonal megjelenése: bármilyen egyéni szín beállításának lehetősége\n• Új modul: „Magasság: térképközéppont”\n• Opció hozzáadása az útvonaltól való eltérés bemondásának letiltásához\n• Wikipédia: képek megtekintésének lehetősége, frissített olvasói felület\n• Kedvencek: keresés hozzáadása\n• CarPlay: előzmények hozzáadása, átszervezett nyomvonalak és kedvencek listája\n• Túraútvonalak: útvonalak kiválasztásának lehetősége a térképen további információk megtekintéséhez vagy navigációhoz\n• OpenStreetMap: nyomvonalak feltöltésének lehetősége\n• Új modul: a következő napkelte vagy napnyugta pontos idejének vagy hátralévő idejének megjelenítése\n• Új modul: koordináták megjelenítése a térképközépponthoz\n• Továbbfejlesztett külső billentyűzet-támogatás, alapvető műveletek támogatása\n• Hangutasítások: új nyelvek támogatása: katalán, ukrán, bolgár, indonéz, szlovén\n• Jogi figyelmeztetés hozzáadása a sebességmérő kamera riasztások használatáról\n• Továbbfejlesztett adatvédelem: opciók hozzáadása az előzmények naplózásának letiltásához\n• Továbbfejlesztett láthatósága a térképvonalzónak\n• OsmAnd Cloud hibajavítások és felhasználói felület fejlesztések\n• Felhasználói felület fejlesztések az RTL nyelvekhez\n• Kisegítő lehetőségek: tartalomcímkézés hozzáadása a térképgombokhoz\n• „Dinamikus típus” támogatás hozzáadása, a szövegméret az OsmAndban az iOS szövegméretének megfelelően változik\n• Térképtájolás: kézzel forgatott mód hozzáadása\n• Új moped profil\n• A minimális iOS verzió 15.0-ra emelkedett\n";
 "ios_release_4_5" = "• Teljesen átalakított modulélmény: modulpozíció megváltoztatásának lehetősége, oldalak szerinti csoportosítás, egy lista a bal és jobb oldali panel moduljaihoz\n• Átalakított konfigurációs képernyő\n• Ingyenes biztonsági mentés a kedvencekről, beállításokról és OSM-szerkesztésekről az OsmAnd Cloudba\n• „CAI” skála hozzáadása az „Útvonalak nehézségi osztályozásához”\n• A „Szintvonalak bővítmény” átnevezve „Topográfia”-ra, az új tereptérkép-formátum támogatása\n• 3D domborzat hozzáadása\n• OAuth engedélyezés hozzáadása az OpenStreetMap szerkesztő bővítményhez\n• Külön gomb hozzáadása a 2D vagy 3D mód közötti váltáshoz\n• Megváltoztatva a dőlés gesztus iránya\n• Javítva a kedvencek exportálásával kapcsolatos probléma, amely adatvesztéshez vezethetett\n";
-"ios_release_4_6" = "• Rögzítse és kövesse nyomon mérőszámait külső érzékelőkkel, beleértve a kerékpársebességet, a kerékpár-pedálfordulatot, a kerékpártávolságot, a pulzusszámot és a hőmérsékletet\n• Mostantól közvetlenül a CarPlay műszerfalán is megtekintheti a térképet\n• Éjszakai téma hozzáadása a kényelmes megtekintési élményért alacsony fényviszonyok mellett\n• Fedezze fel a „Wikivoyage” utazási útmutatóit\n• Továbbfejlesztett párbeszédpanelek jegyzetek hozzáadásához és jegyzetek, valamint POI-k feltöltéséhez az OpenStreetMapre\n• Könnyedén visszaállíthatja a bővítménybeállításokat a telepítési alapértékekre egy új „Visszaállítás alaphelyzetbe” opcióval\n• „Képernyőtájolás” opció hozzáadása az előnyben részesített tájolás beállításához automatikus váltás nélkül\n• Külön gomb hozzáadása a 3D mód váltásához közvetlenül a CarPlay képernyőn\n• Minimális és maximális magassági információk hozzáadása a navigációs útvonalakhoz a hegymenet és lejtmenet mellett\n• Továbbfejlesztett nyomvonalszínezés lejtő módban új szimmetrikus színátmenettel\n • A kedvenc mappák mostantól alapértelmezett megjelenést tárolnak, amely automatikusan alkalmazódik minden hozzáadott pontra\n• Javítva a „Sugárvonalzó” középpontjának eltérése a térképközépponttól\n• „Cikk olvasása” gomb hozzáadása a Wikipédia POI-k helyi menüjéhez\n• Javítva a GPX-fájl importálása a kedvencekbe\n• Javítva a naptáreseménnyel kapcsolatos probléma a parkolási pozíciónál\n• Javítva az összeomlás a szín eltávolításakor a palettáról\n";
+"ios_release_4_6" = "• Rögzítse és kövesse nyomon mérőszámait külső érzékelőkkel, beleértve a kerékpársebességet, a kerékpár-pedálfordulatot, a kerékpártávolságot, a pulzusszámot és a hőmérsékletet\n• Mostantól közvetlenül a CarPlay műszerfalán is megtekintheti a térképet\n• Éjszakai téma hozzáadása a kényelmes megtekintési élményért alacsony fényviszonyok mellett\n• Fedezze fel a „Wikivoyage” utazási útmutatóit\n• Továbbfejlesztett párbeszédpanelek jegyzetek hozzáadásához és jegyzetek, valamint POI-k feltöltéséhez az OpenStreetMapre\n• Könnyedén visszaállíthatja a bővítménybeállításokat a telepítési alapértékekre egy új „Visszaállítás alaphelyzetbe” opcióval\n• „Képernyőtájolás” opció hozzáadása az előnyben részesített tájolás beállításához automatikus váltás nélkül\n• Külön gomb hozzáadása a 3D mód váltásához közvetlenül a CarPlay képernyőn\n• Legkisebb és legnagyobb magassági információk hozzáadása a navigációs útvonalakhoz a hegymenet és lejtmenet mellett\n• Továbbfejlesztett nyomvonalszínezés lejtő módban új szimmetrikus színátmenettel\n • A kedvenc mappák mostantól alapértelmezett megjelenést tárolnak, amely automatikusan alkalmazódik minden hozzáadott pontra\n• Javítva a „Sugárvonalzó” középpontjának eltérése a térképközépponttól\n• „Cikk olvasása” gomb hozzáadása a Wikipédia POI-k helyi menüjéhez\n• Javítva a GPX-fájl importálása a kedvencekbe\n• Javítva a naptáreseménnyel kapcsolatos probléma a parkolási pozíciónál\n• Javítva az összeomlás a szín eltávolításakor a palettáról\n";
 "ios_release_4_7" = "• Továbbfejlesztett felső és alsó modulpanel az összes modul elhelyezéséhez\n• Továbbfejlesztett kezelése a térképen látható nyomvonalaknak\n• Frissített „Elemzés a térképen” funkció az érzékelők mérőszámainak megjelenítésével\n• Bővített címketámogatás a GPX-hez: link, szerző, szerzői jog és kulcsszavak\n• Továbbfejlesztett modulkonfiguráció, lehetővé téve a felhasználók számára oldalak és sorok mozgatását\n• Továbbfejlesztett nyomvonal-kezelés a „Saját helyek” menüben almappákkal és helyi menükkel a nyomvonalakhoz és mappákhoz\n• Körforgalom kijáratszámmal mostantól megjelenik a CarPlay-en navigáció közben\n• Irányítsa a 3D domborzatot egy új „Függőleges eltúlzás” opcióval a drámaibb tájért\n• Jelenítse meg a nyomvonal magasságát közvetlenül a térképen dinamikus 3D nézetben\n• Új modulok: „Siklószám” és „Napszak”\n• Testre szabhatja a „Távolság navigáció közben” beállítást: válasszon a pontos vagy a kerekített számok között\n• Az alkalmazás nyelve lesz használva a neveknél a világ áttekintő térképén a helyi nyelvek helyett\n• OsmAnd Cloud: Lehetőség az adatok kezelésére, beleértve a törölt fájlok visszaállítását és a fiók törlését\n• További címketámogatás hozzáadása a turistaútvonalakhoz\n• Javítva a „Koordináták” modul, ahol egyes esetekben hiányoztak az utolsó számjegyek\n• Javítva a „3D mód” gomb viselkedése: a gombra koppintás nem menti el a dőlésszöget\n• Javítva az állapotsor színe régebbi iOS verziókon\n• Javítva a térkép forgatása és csippentéssel való nagyítása gesztusok macOS-en futó alkalmazás esetén\n";
 "ios_release_4_8" = "• Új „Sebességmérő” modul, amely kompatibilis a CarPlay-jel\n• Részletes útvonal-utasítások hozzáadása az útvonal részleteihez\n• A térképképernyő testreszabása több „Gyorsművelet” gomb hozzáadásával\n• 3D nyomvonal fejlesztések: új megjelenítési és színezési lehetőségek\n• Egyéni színpaletták a terephez, nyomvonalakhoz és útvonalakhoz\n• Továbbfejlesztett többes kiválasztási mód a nyomvonalakhoz\n• 3D változat a helypozíció ikonokhoz\n• Bővített turistaútvonal-választék a térképen\n• Időjárás: felhasználói felület frissítése, szélanimáció hozzáadása\n• Sima átmenetek hozzáadása 3D módban való nagyításkor\n• A „Helypozíció a képernyőn” most a Képernyő konfigurálása menüben található\n• A „Kerék kerülete” módosítása a BLE érzékelő beállításaiban\n• Külön „Sebességkorlátozás” navigációs riasztás hozzáadása\n• Javítva az irányszög modulok nevei\n• Javítva a „Sugárvonalzó” láthatósága minden modulpanelen\n";
 "ios_release_4_9" = "• Módosított iránytű viselkedés: egy koppintás északra forgatja a térképet, míg dupla koppintással a tájolási módok között vált\n• Keresési funkció hozzáadása a legnépszerűbb márkanevekhez\n• Továbbfejlesztett grafikonmegjelenés: az Y-tengely feliratai már nem fedik át a grafikont\n• Teljes nyomvonal-statisztikák hozzáadása minden mappa láblécéhez\n• Az összes fordítással rendelkező címke egyetlen elembe csoportosítása a helyi menüben\n• Javítva egy hiba, amely miatt a POI-kategória hiányzott a helyi menüből\n• Javítva egy hiba a hangutasítás nyelvének automatikus észlelésével\n• Javítva az összeomlás a Hajózási profil útvonal paramétereinél\n• CarPlay fejlesztések: megoldva egy probléma, amely miatt a fő navigációs modul nem frissült az útvonal újraszámításai után, és javítva a nyilak mérete a következő kanyar modulban\n• Bevezetve egy Térképmód paraméter, amely mostantól követi az alkalmazás témáját\n• Továbbfejlesztett felhasználói felület a helyikon kiválasztásához, opciók hozzáadása a helysugár és a látószög letiltásához\n• Gyorsművelet hozzáadása a „Helypozíció a képernyőn” módosításához\n";
@@ -3917,5 +3917,5 @@
 "ios_release_5_1" = "• Webes és platformfüggetlen vásárlások támogatása\n• Új navigációs modul, amely egyesíti a kanyarodási nyilat és a navigációs utasításokat\n• Átnevezés művelet hozzáadása a kedvenc csoportokhoz\n• „Térfogategység” és „Üzemanyagtartály-kapacitás” opciók hozzáadása\n• „Koordinátarács” fedvény hozzáadása\n• A bal és jobb oldali paneleken lévő modulok mostantól magassági opciót is tartalmaznak\n• Tevékenységek nyomvonalakhoz való hozzárendelésének lehetősége\n• Javítva egy összeomlás a CarPlay-en iOS 15 alatt\n• Megoldva az automatikus átméretezési problémák a bal és jobb oldali paneleken lévő modulokkal\n• Javítva az utazási útmutatók inkompatibilitása\n• Megoldva a platformfüggetlen vásárlásokkal kapcsolatos probléma\n• Javítva a fekete képernyő problémája a CarPlay-en indítás után\n";
 "ios_release_5_2" = "• Bevezetve a testre szabható gombkiosztás külső vezérlőkhöz, amely lehetővé teszi bármely gyorsművelet hozzárendelését egy billentyűzet- vagy vezérlőgombhoz\n• Új gyorsműveletek hozzáadása az alkalmazás külső vezérlővel történő irányításához\n• Javított modul láthatóság átlátszó módban szövegkörvonalak hozzáadásával\n• Precíziós rács hozzáadása a térképgombok igazításához\n• Bevezetve egy új „Tengeri” hajózási térképstílus kiterjedt testreszabási lehetőségekkel\n• Utca- és városrészletek hozzáadása a keresési eredményekhez\n• Opció hozzáadása a szövegméret növeléséhez a távolságmérő eszközben\n• A hőmérséklet-mértékegység kiválasztása átkerült az Általános beállításokba\n• A magassági mértékegységek mostantól külön beállíthatók a távolsági mértékegységektől\n• Térképtájolás gyorsművelet hozzáadása választható iránytű módokkal\n• Megoldva egy probléma, amely megakadályozta néhány modul mozgatását\n• Javítva a helytelen távolságkijelzés a Következő kanyar modulban\n• Javított márkakeresés több helyi márka bevonásával\n• Általános stabilitási és teljesítményjavítások\n";
 "routing_attr_weightrating_name" = "Megengedett össztömeg";
-"routing_attr_maxaxleload_name" = "Megengedett maximális tengelyterhelés";
+"routing_attr_maxaxleload_name" = "Megengedett legnagyobb tengelyterhelés";
 "x" = "X (korábban Twitter)";

@@ -628,7 +628,7 @@
 "map_widget_appearance_rem" = "Elements pendents";
 "map_widget_compass" = "Brúixola";
 "map_widget_intermediate_distance" = "Fita";
-"route_descr_destination" = "Destí";
+"route_descr_destination" = "Destinació";
 "map_widget_next_turn" = "Gir següent";
 "map_widget_next_turn_small" = "Gir següent (petit)";
 "map_widget_next_next_turn" = "Segon gir següent";
@@ -2501,7 +2501,7 @@
 "transport_hazmat_title" = "Transport de materials perillosos";
 "driving_region_india" = "Índia";
 "shared_string_replace" = "Reemplaça";
-"quick_action_destination" = "Destí";
+"quick_action_destination" = "Destinació";
 "quick_action_parking_place" = "Lloc d\'aparcament";
 "weather_source_ecmwf_title" = "CEPMMT";
 "quick_action_verb_show_hide" = "Mostra / Amaga";

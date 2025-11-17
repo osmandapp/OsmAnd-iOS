@@ -554,7 +554,7 @@
 "unknown_location" = "A jelenlegi helyzet még nem ismert.";
 "animate_routing_route_not_calculated" = "Először számítsa ki az útvonalat";
 "settings_preset" = "Alapértelmezett profil";
-"switch_start_finish" = "Kiindulási pont és az úti cél felcserélése";
+"switch_start_finish" = "Kiindulási pont és az úticél felcserélése";
 "clear_all_intermediates" = "Minden köztes célpont törlése";
 "shared_string_options" = "Beállítások";
 "shared_string_current" = "Jelenlegi";

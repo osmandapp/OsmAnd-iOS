@@ -517,7 +517,7 @@
 "lon" = "Long";
 "shared_string_select_on_map" = "Selecciona al mapa";
 "shared_string_my_location" = "La meva posició";
-"route_descr_select_destination" = "Establiu un destí";
+"route_descr_select_destination" = "Establiu una destinació";
 "sort_by_distance" = "Ordena per distància";
 "sort_by_name" = "Ordena per nom";
 "map_markers_other" = "Altres marcadors";
@@ -1095,7 +1095,7 @@
 "quick_action_voice_descr" = "Prement aquest botó d'acció s'atura o s'activa el guiatge de veu en la navegació.";
 "quick_action_add_dest_descr" = "Prement aquest botó d'acció s'estableix com destinació el punt central del mapa. Qualsevol selecció de destinació anterior es convertirà en el darrer punt de pas intermedi.";
 "quick_action_first_intermediate_descr" = "Prement aquest botó d'acció afegireu el centre del mapa de la pantalla com el primer punt de pas intermedi.";
-"quick_action_replace_dest_descr" = "Prement aquest botó d'acció s'estableix com destí el punt central del mapa, descartant qualsevol anterior destinació establerta (si n'hi havia).";
+"quick_action_replace_dest_descr" = "Prement aquest botó d'acció s'estableix com destinació el punt central del mapa, descartant qualsevol anterior destinació establerta (si n'hi havia).";
 "quick_action_autozoom_descr" = "Prement aquest botó d'acció activau/desactiveu el canvi d'escala automàtic del mapa segons la velocitat actual.";
 "quick_action_start_stop_nav_descr" = "Premeu aquest botó per iniciar o per aturar la navegació.";
 "quick_action_pause_nav_descr" = "Premeu aquest botó per aturar o reprendre la navegació.";

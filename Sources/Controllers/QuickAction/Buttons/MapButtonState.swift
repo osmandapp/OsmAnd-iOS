@@ -16,7 +16,8 @@ open class MapButtonState: NSObject {
     private let landscapePositionPref: OACommonLong
     private let positionSize: ButtonPositionSize
     private let defaultPositionSize: ButtonPositionSize
-    private var portrait = true
+    
+    var portrait = true
     
     let id: String
 
@@ -31,7 +32,7 @@ open class MapButtonState: NSObject {
         setupButtonPosition(defaultPositionSize)
     }
     
-    private func updatePosition(_ position: ButtonPositionSize) {
+    func updatePosition(_ position: ButtonPositionSize) {
         let preference = portrait ? portraitPositionPref : landscapePositionPref
         let value = preference.get()
         if value > 0 {

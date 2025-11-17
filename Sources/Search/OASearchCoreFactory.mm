@@ -268,7 +268,7 @@
     }
     
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
-    NSString *localeName = res.localeName;
+    NSString *localeName = [OASearchPhrase stripBraces:res.localeName];
     NSArray<NSString *> *otherNames = res.otherNames;
     if (!fullMatch && ([nm matches:localeName] || [nm matchesMap:otherNames]))
     {
@@ -285,19 +285,6 @@
                 [localeNames removeObjectAtIndex:idx];
             }
         }];
-        
-        QString firstUnknownSearchWord = QString::fromNSString([phrase getFirstUnknownSearchWord]);
-        for (NSString *otherName in otherNames)
-        {
-            if ([firstUnknownMatcher matches:otherName])
-            {
-                int r = OsmAnd::ICU::ccompare(firstUnknownSearchWord, QString::fromNSString(otherName));
-                if (!fullMatch || r == 0)
-                {
-                    return YES;
-                }
-            }
-        }
     }
 
     NSArray<NSString *> *leftUnknownSearchWords = (parent == nil) ? [phrase getUnknownSearchWords] : [parent filterUnknownSearchWord:nil];
@@ -317,19 +304,6 @@
                 [localeNames removeObjectAtIndex:idx];
             }
         }];
-
-        QString unknownSearchWord = QString::fromNSString(unknownSearchWords[i]);
-        for (NSString *otherName in otherNames)
-        {
-            if ([unknownMatcher matches:otherName])
-            {
-                int r = OsmAnd::ICU::ccompare(unknownSearchWord, QString::fromNSString(otherName));
-                if (!fullMatch || r == 0)
-                {
-                    return YES;
-                }
-            }
-        }
     }
 
     if (localeNames.count == 0)
@@ -1258,6 +1232,11 @@
     {
         for (OAPOIType *a in additionals)
         {
+            if (a.referenceType != nil)
+            {
+                // ignore reference types as duplicates
+                continue;
+            }
             OAPoiTypeResult *existingResult = results[a.name];
             if (existingResult != nil) {
                 OAPoiAdditionalCustomFilter *f;

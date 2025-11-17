@@ -58,4 +58,9 @@ static NSDictionary *ABBREVIATIONS = @{ @"e" : @"East",
     return changed ? [NSString stringWithString:r] : phrase;
 }
 
++ (NSDictionary *) getAbbreviations
+{
+    return ABBREVIATIONS;
+}
+
 @end

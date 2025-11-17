@@ -249,6 +249,18 @@
     if (parent != nil)
     {
         [phrase countUnknownWordsMatchMainResult:parent];
+        NSMutableArray<NSString *> * leftUnknownSearchWords = [parent filterUnknownSearchWord:nil];
+        BOOL lastComplete = [phrase isLastUnknownSearchWordComplete] || ![leftUnknownSearchWords containsObject:[phrase getLastUnknownSearchWord]];
+        OASearchPhrase * nphrase = [phrase selectWord:parent unknownWords:leftUnknownSearchWords lastComplete:lastComplete];
+        QString unknownWordToSearch = QString::fromNSString([nphrase getUnknownWordToSearch]);
+        for (NSString * otherName in res.otherNames)
+        {
+            int r = OsmAnd::ICU::ccompare(unknownWordToSearch, QString::fromNSString(otherName));
+            if (r == 0)
+            {
+                return YES;
+            }
+        }
     }
 
     if (![phrase isUnknownSearchWordPresent]) {

@@ -1965,7 +1965,7 @@
 "rendering_attr_alpineHiking_description" = "Klassificeringstyper för ledernas svårighetsgrad.";
 "rendering_attr_highway_class_bridleway_name" = "Ridväg";
 "routing_attr_avoid_share_taxi_name" = "Ingen delad taxi";
-"rendering_attr_pisteRoutes_name" = "Skidbackar";
+"rendering_attr_pisteRoutes_name" = "Skidbackar och spår";
 "rendering_attr_piste_type_sled_name" = "Kälke";
 "rendering_attr_noPolygons_description" = "Gör alla ytor på kartan transparenta.";
 "routing_attr_allow_classic_only_description" = "Inkludera rutter enbart preparerade med spår för klassisk stil, inte skejt. Innefattar även pistat av vanlig snöskoter och egenhändigt spårade av skidåkare.";
@@ -3374,7 +3374,7 @@
 "equator" = "Ekvator";
 "grid_color" = "Rutnätsfärg";
 "customize_grid_color" = "Anpassa rutnätsfärg";
-"save_favorite_default_appearance" = "Tillämpa ändringar på de existerande punkterna i mappen eller bara på nya?";
+"save_favorite_default_appearance" = "Tillämpa ändringar på alla existerande punkter i mappen eller bara på nyligen tillagda?";
 "sensor_data" = "Sensordata";
 "new_trip_segment" = "Nytt segment av resa";
 "open_in_browser" = "Öppna i webbläsare";
@@ -3445,11 +3445,11 @@
 "shared_string_edges" = "Kanter";
 "labels_position" = "Etiketters position";
 "routing_attr_allow_ferries_description" = "Tillåt färjerutter vid ruttplanering";
-"quick_action_showhide_coordinates_grid_descr" = "Åtgärd för att kontrollera Koordinat-rutnätets synlighet på kartan.";
+"quick_action_showhide_coordinates_grid_descr" = "Visa/dölj koordinatrutnätet på kartan.";
 "layer_coordinates_grid" = "Koordinatrutnät";
-"original_color_description" = "Varje punkt behåller sin egen färg.";
-"original_icon_description" = "Varje punkt behåller sin egen ikon.";
-"original_shape_description" = "Varje punkt behåller sin egen form.";
+"original_color_description" = "Varje punkt behåller sin individuella färg.";
+"original_icon_description" = "Varje punkt behåller sin individuella ikon.";
+"original_shape_description" = "Varje punkt behåller sin individuella form.";
 "map_widget_route_information_desc" = "Visar den beräknade ankomsttiden, återstående restiden och avståndet för nuvarande navigeringsrutt.";
 "fuel_tank_capacity_description" = "Ange tankstorlek, för att tillförlitligt spåra bränslenivåer och -förbrukning";
 "us_gallons_unit" = "gal";
@@ -3805,7 +3805,7 @@
 "obd_fuel_type_unknown" = "Okänt drivmedel";
 "map_orientations_choose_description" = "Lämna tom för att växla mellan alla tillgängliga lägen, eller lägg bara till dina föredragna.";
 "map_orientations" = "Kartor orienteringar";
-"altitude_metrics_description" = "Ställ in displayenheten för höjd i widgets och statistik.";
+"altitude_metrics_description" = "Ställer in visningsenheten för höjd i widgets och statistik.";
 "select_map_orientation" = "Välj kartorientering";
 "available" = "Tillgänglig";
 "download_live_updates" = "Direkt-uppdateringar";
@@ -3819,3 +3819,4 @@
 "key_event_action_next_app_profile" = "Nästa app-profil";
 "efficient_grid" = "Effektivt rutnät";
 "slots" = "rutor";
+"rendering_attr_watercolor_description" = "Färg på vatten";

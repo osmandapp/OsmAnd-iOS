@@ -1195,7 +1195,7 @@ NSString *const kXmlColon = @"_-_";
         int indx = OsmAnd::CommonWords::getCommonGeocoding(QString::fromNSString(abbreviations[key]).toLower());
         if (indx != -1)
         {
-            OsmAnd::CommonWords::replaceCommonWord(QString::fromNSString(key).toLower(), indx);
+            OsmAnd::CommonWords::insertCommonWord(QString::fromNSString(key).toLower(), indx);
         }
     }
 }

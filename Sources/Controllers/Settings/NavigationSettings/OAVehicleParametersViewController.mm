@@ -122,13 +122,22 @@
                 }
 
                 if (index == 0)
+                {
                     value = OALocalizedString([paramId isEqualToString:RouteParamVehicleHelper.motorType] ? @"shared_string_not_selected" : @"shared_string_none");
+                }
                 else if (index != -1)
-                    value = [self parameterValue:[NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()]
+                {
+                    if (isMotorType)
+                        value = [OAUtilities getNameOfMotorTypeValue:possibleValues[index].intValue];
+                    else
+                        value = [self parameterValue:[NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()]
                                          paramId:paramId
                                          cutUnit:YES];
+                }
                 else
-                    value = [self parameterValue:value paramId:paramId cutUnit:NO];;
+                {
+                    value = [self parameterValue:value paramId:paramId cutUnit:NO];
+                }
                 
                 NSDictionary *paramInfo = @{
                     @"name": paramId,

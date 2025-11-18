@@ -71,6 +71,11 @@
         NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
         if ([arr[0] isEqualToString:@"-"])
             [arr replaceObjectAtIndex:0 withObject:OALocalizedString(_isMotorType ? @"shared_string_not_selected" : @"shared_string_none")];
+        if (_isMotorType)
+        {
+            for (NSInteger i = 1; i < _measurementRangeValuesArr.count; i++)
+                [arr replaceObjectAtIndex:i withObject:[OAUtilities getNameOfMotorTypeValue:_measurementRangeValuesArr[i].intValue]];
+        }
         _measurementRangeStringArr = [NSArray arrayWithArray:arr];
         _selectedParameter = _vehicleParameter[@"selectedItem"];
         NSString *valueString = _vehicleParameter[@"value"];

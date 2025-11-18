@@ -69,6 +69,9 @@
 #import "OsmAnd_Maps-Swift.h"
 #import <DGCharts/DGCharts-Swift.h>
 #import "OsmAndSharedWrapper.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
+#import "OAEditGroupViewController.h"
 
 #define kGpxDescriptionImageHeight 149
 #define kOverviewTabIndex @0
@@ -92,7 +95,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, ChartHelperDelegate, SelectRouteActivityViewControllerDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, ChartHelperDelegate, SelectRouteActivityViewControllerDelegate, OAEditGroupViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -129,10 +132,16 @@
 
     OAAutoObserverProxy *_locationUpdateObserver;
     OAAutoObserverProxy *_headingUpdateObserver;
+    
+    OAEditGroupViewController *_editGroupController;
+    
     NSTimeInterval _lastUpdate;
 
     NSString *_exportFileName;
     NSString *_exportFilePath;
+    NSString *_editingWaypointsGroupName;
+    
+    UIColor *_groupColor;
 
     OATrackMenuViewControllerState *_reopeningState;
     BOOL _forceHiding;
@@ -1186,6 +1195,20 @@
         {
             _waypointGroups[newGroupName] = waypoints;
         }
+        if (self.doc.pointsGroups.count > 0)
+        {
+            NSString *oldKey = [self isDefaultGroup:groupName] ? @"" : groupName;
+            NSString *newKey = [self isDefaultGroup:newGroupName] ? @"" : newGroupName;
+            if (![oldKey isEqualToString:newKey])
+            {
+                OASGpxUtilitiesPointsGroup *metaGroup = self.doc.pointsGroups[oldKey];
+                if (metaGroup)
+                {
+                    [self.doc.pointsGroups removeObjectForKey:oldKey];
+                    self.doc.pointsGroups[newKey] = metaGroup;
+                }
+            }
+        }
     }
     [self updateWaypointSortedGroups];
 
@@ -1233,16 +1256,6 @@
     deleteWaypointsViewController.trackMenuDelegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:deleteWaypointsViewController];
     [self presentViewController:navigationController animated:YES completion:nil];
-}
-
-- (void)openWaypointsGroupOptionsScreen:(NSString *)groupName
-{
-    [self stopLocationServices];
-
-    OAEditWaypointsGroupBottomSheetViewController *editWaypointsBottomSheet =
-            [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithWaypointsGroupName:groupName];
-    editWaypointsBottomSheet.trackMenuDelegate = self;
-    [editWaypointsBottomSheet presentInViewController:self];
 }
 
 - (void)openNewWaypointScreen
@@ -1931,6 +1944,93 @@
                   withRowAnimation:UITableViewRowAnimationNone];
 }
 
+- (UIMenu *)createWaypointsGroupMenuForGroupName:(NSString *)groupName
+{
+    __weak __typeof(self) weakSelf = self;
+    NSString *displayName = groupName;
+    UIColor *groupColor = UIColorFromARGB([self getWaypointsGroupColor:displayName]);
+    BOOL isVisible = [self isWaypointsGroupVisible:displayName];
+    
+    UIAction *toggleVisibility = [UIAction actionWithTitle:OALocalizedString(isVisible ? @"shared_string_hide_from_map" : @"shared_string_show_on_map") image:[UIImage imageNamed:isVisible ? @"ic_custom_hide_outlined" : @"ic_custom_map_pin_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
+        BOOL currentVisible = [strongSelf isWaypointsGroupVisible:displayName];
+        [strongSelf setWaypointsGroupVisible:displayName show:!currentVisible];
+    }];
+    
+    UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename") image:[UIImage imageNamed:@"ic_custom_edit"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
+        strongSelf->_editingWaypointsGroupName = displayName;
+        strongSelf->_groupColor = groupColor;
+        [strongSelf presentWaypointsGroupOptionsWithScreenType:EOAEditWaypointsGroupRenameScreen groupName:displayName groupColor:nil];
+    }];
+    
+    UIAction *changeAppearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance") image:[UIImage imageNamed:@"ic_custom_appearance_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
+        strongSelf->_editingWaypointsGroupName = displayName;
+        strongSelf->_groupColor = groupColor;
+        [strongSelf presentWaypointsGroupOptionsWithScreenType:EOAEditWaypointsGroupColorScreen groupName:displayName groupColor:groupColor];
+    }];
+    
+    UIAction *copyAsNewFolderAction = [UIAction actionWithTitle:OALocalizedString(@"copy_as_new_folder") image:[UIImage imageNamed:@"ic_custom_folder_add_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
+        strongSelf->_editingWaypointsGroupName = displayName;
+        strongSelf->_groupColor = groupColor;
+        [strongSelf presentWaypointsGroupOptionsWithScreenType:EOAEditWaypointsGroupCopyToFavoritesScreen groupName:displayName groupColor:nil];
+    }];
+    
+    UIAction *addToExistingFolderAction = [UIAction actionWithTitle:OALocalizedString(@"add_to_a_folder") image:[UIImage imageNamed:@"ic_custom_folder_open"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
+        strongSelf->_editingWaypointsGroupName = displayName;
+        strongSelf->_groupColor = groupColor;
+        NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
+        for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+        {
+            [groupNames addObject:group.name];
+        }
+        
+        strongSelf->_editGroupController = [[OAEditGroupViewController alloc] initWithGroupName:nil groups:groupNames];
+        strongSelf->_editGroupController.delegate = strongSelf;
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:strongSelf->_editGroupController];
+        [strongSelf presentViewController:navigationController animated:YES completion:nil];
+    }];
+    
+    UIMenu *copyToFavoritesMenu = [UIMenu menuWithTitle:OALocalizedString(@"add_to_favorites") image:[UIImage imageNamed:@"ic_custom_copy"] identifier:nil options:0 children:@[copyAsNewFolderAction, addToExistingFolderAction]];
+    
+    UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete") image:[UIImage imageNamed:@"ic_custom_trash_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
+        [strongSelf openConfirmDeleteWaypointsScreen:displayName];
+    }];
+    deleteAction.attributes = UIMenuElementAttributesDestructive;
+    
+    return [UIMenu menuWithTitle:@"" image:nil identifier:nil options:0 children:@[toggleVisibility, renameAction, changeAppearanceAction, copyToFavoritesMenu, deleteAction]];;
+}
+
+- (void)presentWaypointsGroupOptionsWithScreenType:(EOAEditWaypointsGroupScreen)screenType groupName:(NSString *)groupName groupColor:(UIColor *)groupColor
+{
+    OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions = [[OAEditWaypointsGroupOptionsViewController alloc] initWithScreenType:screenType groupName:groupName groupColor:groupColor];
+    editWaypointsGroupOptions.delegate = self;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:editWaypointsGroupOptions];
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
 #pragma mark - ChartHelperDelegate
 
 - (void)centerMapOnBBox:(OASKQuadRect *)rect
@@ -2411,12 +2511,21 @@
             [cell.optionsButton addTarget:self
                                    action:@selector(cellExtraButtonPressed:)
                          forControlEvents:UIControlEventTouchUpInside];
-
-            cell.optionsGroupButton.tag = tag;
-            [cell.optionsGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-            [cell.optionsGroupButton addTarget:self
-                                        action:@selector(cellExtraButtonPressed:)
-                              forControlEvents:UIControlEventTouchUpInside];
+            
+            if ([cellData.key hasPrefix:@"cell_waypoints_group_"])
+            {
+                cell.optionsGroupButton.showsMenuAsPrimaryAction = YES;
+                cell.optionsGroupButton.menu = [self createWaypointsGroupMenuForGroupName:cellData.title];
+                [cell.optionsGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            }
+            else
+            {
+                cell.optionsGroupButton.showsMenuAsPrimaryAction = NO;
+                cell.optionsGroupButton.menu = nil;
+                cell.optionsGroupButton.tag = tag;
+                [cell.optionsGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+                [cell.optionsGroupButton addTarget:self action:@selector(cellExtraButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            }
         }
         outCell = cell;
     }
@@ -2947,6 +3056,37 @@
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
 {
     [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - OAEditWaypointsGroupOptionsDelegate
+
+- (void)updateWaypointsGroup:(NSString *)groupName color:(UIColor *)color
+{
+    [self changeWaypointsGroup:_editingWaypointsGroupName newGroupName:groupName newGroupColor:color];
+    _editingWaypointsGroupName = nil;
+    _groupColor = nil;
+}
+
+- (void)copyToFavorites:(NSString *)groupName
+{
+    NSArray<OAGpxWptItem *> *waypoints = [self getWaypointsData][_editingWaypointsGroupName];
+    NSMutableArray<OAFavoriteItem *> *favoriteItems = [NSMutableArray array];
+    for (OAGpxWptItem *waypoint in waypoints)
+    {
+        OAFavoriteItem *favoriteItem = [OAFavoriteItem fromWpt:waypoint.point category:groupName];
+        [favoriteItems addObject:favoriteItem];
+    }
+    
+    [OAFavoritesHelper addFavorites:favoriteItems];
+    _editingWaypointsGroupName = nil;
+}
+
+#pragma mark - OAEditGroupViewControllerDelegate
+
+- (void)groupChanged
+{
+    [self copyToFavorites:_editGroupController.groupName];
+    _editGroupController = nil;
 }
 
 @end

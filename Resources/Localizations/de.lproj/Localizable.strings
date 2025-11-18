@@ -3823,7 +3823,7 @@
 "obd_fuel_type_bifuel_electricity" = "Bi-Fuel mit Strom";
 "obd_fuel_type_hybrid_gasoline" = "Hybrid-Benzin";
 "obd_fuel_type_hydrogen" = "Wasserstoff";
-"obd_fuel_type_unknown" = "Unbekannter Kraftstoff";
+"obd_fuel_type_unknown" = "Unbekannter Kraftstofftyp";
 "obd_fuel_type_hybrid_electric" = "Hybrid elektrisch";
 "obd_fuel_type_hybrid_regenerative" = "Hybrid regenerativ";
 "trace_rendering_descr" = "Anzeige der Rendering- und Navigationsleistung.";
@@ -3952,3 +3952,7 @@
 "rendering_attr_showLNAMmarker_name" = "ENC-Markierungen";
 "rendering_attr_hideTidalFlats_name" = "Wattflächen";
 "rendering_attr_safetyContour_description" = "Sicherheitstiefenlinie";
+"x" = "X (früher Twitter)";
+"efficient_grid" = "Effizientes Gitter";
+"lang_crh" = "Krimtatarisch (lateinisch)";
+"rendering_attr_shellsStyle_name" = "Muschelstil";

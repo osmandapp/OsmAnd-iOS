@@ -134,6 +134,11 @@
 
 -(BOOL)publish:(OASearchResult *)object
 {
+    // disable boundary for end results
+    if (object.objectType == EOAObjectTypeBoundary)
+    {
+        return NO;
+    }
     if (_phrase && object.otherNames && ![[_phrase getFirstUnknownNameStringMatcher] matches:object.localeName]
         && object.alternateName.length == 0)
     {

@@ -3950,6 +3950,9 @@
 "visualizing_button_grid" = "Kortknap net";
 "efficient_grid" = "Effektivt net";
 "slots" = "Pladser";
-"button_frames" = "Knap rammer";
+"button_frames" = "Knaprammer";
 "max_weight_at_full_load_description" = "Angiv dit køretøjs maksimale vægt ved fuld last for at undgå veje og broer med vægtbegrænsninger.";
 "max_axle_load_description" = "Angiv dit køretøjs maksimale akselbelastning for at undgå veje og broer med vægtbegrænsninger.";
+"x" = "X (tidligere Twitter)";
+"routing_attr_weightrating_name" = "Maksimal vægt ved fuld last";
+"routing_attr_maxaxleload_name" = "Maksimal akselbelastning";

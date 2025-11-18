@@ -191,11 +191,11 @@
         gpx.showArrows = _appearanceInfo.showArrows;
         gpx.showStartFinish = _appearanceInfo.showStartFinish;
         gpx.joinSegments = _appearanceInfo.isJoinSegments;
-        gpx.verticalExaggerationScale = _appearanceInfo.verticalExaggerationScale;
+        gpx.verticalExaggerationScale = _appearanceInfo.verticalExaggeration;
         gpx.elevationMeters = _appearanceInfo.elevationMeters;
-        gpx.visualization3dByType = _appearanceInfo.visualization3dByType;
-        gpx.visualization3dWallColorType = _appearanceInfo.visualization3dWallColorType;
-        gpx.visualization3dPositionType = _appearanceInfo.visualization3dPositionType;
+        gpx.visualization3dByType = _appearanceInfo.trackVisualizationType;
+        gpx.visualization3dWallColorType = _appearanceInfo.trackWallColorType;
+        gpx.visualization3dPositionType = _appearanceInfo.trackLinePositionType;
         gpx.splitType = _appearanceInfo.splitType;
         gpx.splitInterval = _appearanceInfo.splitInterval;
         

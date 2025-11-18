@@ -53,6 +53,23 @@
     return localizedNames;
 }
 
+- (NSMutableArray<NSString *> *)getOtherNames:(BOOL)transliterate
+{
+    NSMutableArray<NSString *> *otherNames = [NSMutableArray array];
+    NSString * enName = [self getName:@"en" transliterate:transliterate];
+    if (enName != nil && enName.length > 0)
+    {
+        [otherNames addObject:enName];
+    }
+    for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(self.address->localizedNames)))
+    {
+        if (entry.key() == QStringLiteral("admin_level") || entry.key() == QStringLiteral("place"))
+            continue;
+        [otherNames addObject:entry.value().toNSString()];
+    }
+    return otherNames;
+}
+
 - (UIImage *) icon
 {
     NSString *iconName = [self iconName];

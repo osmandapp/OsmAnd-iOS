@@ -18,7 +18,6 @@ final class GalleryGridViewController: OABaseNavbarViewController {
     var cards: [AbstractCard] = []
     var titleString: String = ""
     var placeholderImage: UIImage?
-    lazy var downloadImageMetadataService = DownloadImageMetadataService.shared
     // swiftlint:disable all
     private var collectionView: UICollectionView!
     // swiftlint:enable all
@@ -43,10 +42,6 @@ final class GalleryGridViewController: OABaseNavbarViewController {
         currentColumnCount = columnCountForCurrentOrientation()
         initialPinchColumnCount = currentColumnCount
         configureCollectionView()
-        downloadImageMetadataService.cards = cards.compactMap { $0 as? WikiImageCard }
-        Task {
-            await downloadImageMetadataService.downloadMetadataForAllCards()
-        }
     }
     
     deinit {

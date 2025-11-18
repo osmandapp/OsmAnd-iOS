@@ -216,7 +216,7 @@
 "keep_informing_never" = "Sólo manualmente (pulsa la flecha)";
 "arrival_distance_factor_early" = "Lejos";
 "arrival_distance_factor_late" = "Cerca";
-"arrival_distance_factor_at_last" = "Muy tarde";
+"arrival_distance_factor_at_last" = "Muy cerca";
 "route_parameters" = "Parámetros de ruta";
 "fast_route_mode" = "Ruta más rápida";
 "voice_announces" = "Indicaciones por voz";
@@ -3962,3 +3962,4 @@
 "rendering_attr_hideTidalFlats_name" = "Llanuras intermareales";
 "rendering_attr_safetyContour_description" = "Curvas de profundidad de seguridad";
 "ble_scanner" = "Escáner BLE";
+"x" = "X (antes Twitter)";

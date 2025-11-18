@@ -3946,3 +3946,14 @@
 "rendering_attr_hideTidalFlats_name" = "Planícies de maré";
 "rendering_attr_safetyContour_description" = "Contorno de profundidade de segurança";
 "ble_scanner" = "Escanador BLE";
+"lang_crh" = "Tártaro da Crimeia (latim)";
+"max_weight_at_full_load_description" = "Informe o peso máximo do seu veículo com carga total para evitar estradas e pontes com limites de peso.";
+"max_axle_load_description" = "Forneça a carga máxima por eixo do seu veículo para evitar estradas e pontes com limites de peso.";
+"x" = "X (anteriormente Twitter)";
+"visualizing_button_grid" = "Grade de botões do mapa";
+"efficient_grid" = "Grade eficiente";
+"button_frames" = "Molduras de botão";
+"slots" = "Slots";
+"ios_release_5_2" = "• Introduzido mapeamento personalizável de botões para controladores externos, permitindo que qualquer ação rápida seja atribuída a um botão do teclado ou controlador\n• Adicionadas novas ações rápidas para controlar o aplicativo com um controlador externo\n• Melhorada a visibilidade do widget no modo de transparência, adicionando contornos de texto\n• Adicionada uma grade de precisão para alinhar os botões do mapa\n• Introduzido um novo estilo de mapa náutico “Marine” com amplas opções de personalização\n• Adicionados detalhes de ruas e cidades aos resultados da pesquisa\n• Adicionada uma opção para aumentar o tamanho do texto na ferramenta de medição de distância\n• Movida a seleção da unidade de temperatura para Configurações gerais\n• As unidades de altitude agora podem ser definidas separadamente das unidades de distância\n• Adicionada uma ação rápida de orientação do mapa com modos de bússola selecionáveis\n• Resolvida uma questão que impedia que alguns widgets fossem movidos\n• Corrigida uma exibição incorreta da distância no widget Próxima curva\n• Melhorada a pesquisa de marcas, incluindo mais marcas locais\n• Melhorias gerais de estabilidade e desempenho\n";
+"routing_attr_weightrating_name" = "Peso máximo com carga total";
+"routing_attr_maxaxleload_name" = "Carga máxima por eixo";

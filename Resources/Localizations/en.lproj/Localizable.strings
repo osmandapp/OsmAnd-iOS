@@ -4400,3 +4400,5 @@
 "rendering_attr_safetyContour_description" = "Safety depth contour";
 "ble_scanner" = "BLE Scanner";
 "x" = "X (formerly Twitter)";
+"routing_attr_weightrating_name" = "Max weight at full load";
+"routing_attr_maxaxleload_name" = "Max axle load";

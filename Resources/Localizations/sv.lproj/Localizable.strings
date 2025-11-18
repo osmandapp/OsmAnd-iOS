@@ -3817,3 +3817,5 @@
 "quick_action_parking_descr" = "Tryck på denna åtgärdsknapp lägger till en parkeringsplats på kartans centrumpunkt.";
 "quick_action_next_app_profile" = "App profil till nästa";
 "key_event_action_next_app_profile" = "Nästa app-profil";
+"efficient_grid" = "Effektivt rutnät";
+"slots" = "rutor";

@@ -926,9 +926,9 @@ static const CGFloat kTextMaxHeight = 150.0;
     }
 
     NSMutableArray *orderedCards = [NSMutableArray array];
-    [orderedCards addObjectsFromArray:openPlaceCards];
     [orderedCards addObjectsFromArray:wikimediaCards];
     [orderedCards addObjectsFromArray:mapilaryCards];
+    [orderedCards addObjectsFromArray:openPlaceCards];
     
     if (mapilaryContributeCard)
         [orderedCards addObject:mapilaryContributeCard];

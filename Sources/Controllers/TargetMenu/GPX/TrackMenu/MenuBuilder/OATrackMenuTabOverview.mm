@@ -195,8 +195,7 @@
         kSectionHeader: OALocalizedString(@"route_info"),
         kSectionHeaderHeight: @56.
     }];
-    [data.subjects addObject:infoSectionData];
-
+    
     NSString *tag = [routeKey getRouteTag];
     if (![tag isEqualToString:@"unknown"])
     {
@@ -208,7 +207,7 @@
         }];
         [infoSectionData.subjects addObject:routeCellData];
     }
-
+    
     NSMutableArray<OAGPXTableCellData *> *subjects = [NSMutableArray array];
     NSArray<NSString *> *tagsToGpx = [routeKey getRouteMapAllKeys];
     _nameTags = [[NSMutableArray alloc] init];
@@ -226,7 +225,7 @@
             || [routeTagKey hasPrefix:@"shield_"]
             || [GpxAppearanceInfo isGpxAppearanceTag:routeTagKey])
             continue;
-
+        
         if ([routeTagKey containsString:@":"] && ![routeTagKey hasPrefix:@"name"] && ![routeTagKey hasPrefix:@"ref"])
         {
             NSString *mainTag = [routeTagKey componentsSeparatedByString:@":"][1];
@@ -241,7 +240,7 @@
         routeTagTitle = routeTagTitle ?: @"";
         
         NSNumber *routeTagOrder = poiType && [poiType isKindOfClass:OAPOIType.class] ? @(((OAPOIType *) poiType).order) : @(90);
-
+        
         if ([routeTagKey isEqualToString:@"ascent"] || [routeTagKey isEqualToString:@"descent"])
             routeTagValue = [NSString stringWithFormat:@"%@ %@", routeTagValue, OALocalizedString(@"m")];
         else if ([routeTagKey isEqualToString:@"distance"])
@@ -253,7 +252,7 @@
         }
         else if ([routeTagKey isEqualToString:@"wikipedia"])
             routeTagValue = [OAWikiAlgorithms getWikiUrlWithText:routeTagValue];
-
+        
         if (!hasName && [[OAPOIHelper sharedInstance] isNameTag:routeTagKey])
         {
             OAGPXTableCellData *routeNameCellData = [OAGPXTableCellData withData:@{
@@ -267,7 +266,7 @@
             [subjects addObject:routeNameCellData];
             hasName = YES;
         }
-
+        
         if ([routeTagKey isEqualToString:@"colour"])
         {
             routeTagTitle = OALocalizedString(@"shared_string_color");
@@ -305,7 +304,7 @@
             [routeCellData setData:@{ kCellToggle: @YES }];
         [subjects addObject:routeCellData];
     }
-
+    
     [subjects sortUsingComparator:^NSComparisonResult(OAGPXTableCellData * _Nonnull cellData1, OAGPXTableCellData * _Nonnull cellData2) {
         int order1 = [cellData1.values[@"order"] intValue];
         int order2 = [cellData2.values[@"order"] intValue];
@@ -315,8 +314,15 @@
         
         return [cellData1.title compare:cellData2.title];
     }];
-
-    [infoSectionData.subjects addObjectsFromArray:subjects];
+    
+    BOOL hasSubjects = subjects.count > 0;
+    if (hasSubjects || infoSectionData.subjects.count > 0)
+    {
+        if (hasSubjects)
+            [infoSectionData.subjects addObjectsFromArray:subjects];
+            
+        [data.subjects addObject:infoSectionData];
+    }
 }
 
 - (NSString *) findFirstImageURL:(NSString *)htmlText

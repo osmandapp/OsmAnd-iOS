@@ -1060,7 +1060,7 @@
 "rendering_attr_surface_grass_paver_name" = "Misto erba pavimento";
 "routing_attr_avoid_tram_name" = "No tram";
 "rendering_attr_surface_paved_name" = "Pavimentato";
-"rendering_attr_pisteRoutes_name" = "Piste da sci";
+"rendering_attr_pisteRoutes_name" = "Discese e percorsi da sci";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferisci le strade non pavimentate";
 "rendering_value_default_name" = "Predefinito";
 "routing_attr_avoid_sett_description" = "Evita strade con sampietrini";
@@ -2769,9 +2769,9 @@
 // Widget descriptions
 "coordinates_widget_current_location_desc" = "Mostra le coordinate geografiche della posizione attuale";
 "av_notes_video_widget_desc" = "Toccare il widget permette di iniziare una registrazione video.";
-"trip_recording_uphill_widget_desc" = "Mostra il totale di tutte le salite del percorso attualmente registrato.";
-"trip_recording_downhill_widget_desc" = "Mostra il totale di tutte le discese del percorso attualmente registrato.";
-"trip_recording_distance_widget_desc" = "Mostra la distanza del percorso attualmente registrato.";
+"trip_recording_uphill_widget_desc" = "Visualizza la somma di tutte le salite o solo dell'ultima del percorso registrato corrente.";
+"trip_recording_downhill_widget_desc" = "Visualizza la somma di tutte le discese o solo dell'ultima del percorso registrato corrente.";
+"trip_recording_distance_widget_desc" = "Visualizza la distanza totale del percorso registrato corrente, con la possibilità di vedere la lunghezza dell'ultima salita e discesa.";
 "second_marker_widget_desc" = "Puoi configurare il widget per mostrare la distanza o il tempo stimato di arrivo al secondo marcatore della mappa.";
 "first_marker_widget_desc" = "Puoi configurare il widget per visualizzare la distanza o il tempo stimato d\'arrivo al primo marcatore della mappa.";
 "time_to_destination_widget_desc" = "Il widget mostra \"Orario di arrivo\" o \"Tempo mancante\" all\'ultimo punto di destinazione. Il tempo è costantemente aggiornato durante la navigazione ed equivale al tempo dal percorso alla posizione attuale.";
@@ -3060,7 +3060,7 @@
 "map_widget_ant_bicycle_cadence" = "Cadenza bicicletta";
 
 
-"help_article_navigation_routing_ski_routing_name" = "Percorsi sciistici";
+"help_article_navigation_routing_ski_routing_name" = "Discese e percorsi per sci";
 "no_bt_permission" = "L\'autorizzazione bluetooth non è stata fornita";
 "shared_string_wrist" = "Polso";
 "help_article_widgets_name" = "Widget della mappa";
@@ -3803,3 +3803,32 @@
 "fastspring_subscription_desc" = "È possibile gestire o annullare l'abbonamento tramite il portale di gestione account FastSpring.";
 "fastspring_one_time_payment_desc" = "È possibile gestire gli acquisti tramite il portale di gestione account FastSpring.";
 "key_event_action_zoom_in" = "Ingrandisci";
+"rendering_attr_showSkiSlopes_name" = "Mostra la pendenza delle piste da sci";
+"max_axle_load_description" = "Fornisci il peso massimo per asse del tuo veicolo per evitare strade e ponto con limiti di peso.";
+"rendering_attr_hideContours_name" = "Curve batimetriche";
+"rendering_attr_hideContours_description" = "Nascondi curve batimetriche";
+"rendering_attr_hideFairways_name" = "Percorso navigabile";
+"rendering_attr_hideFairways_description" = "Nascondi i percorsi navigabili";
+"rendering_attr_hideLightSectors_name" = "Settori luce";
+"rendering_attr_hideLightSectors_description" = "Nascondi settori luce";
+"rendering_attr_hideLightSectorSources_name" = "Sorgenti settori luce";
+"rendering_attr_hideLightSectorSources_description" = "Nascondi i sorgenti settori luce";
+"rendering_attr_hideMinorContours_name" = "Curve batimetriche minori";
+"rendering_attr_hideMinorContours_description" = "Nascondi le curve batimetriche minori";
+"rendering_attr_hideNoLNAM_name" = "Boe OSM (alcune)";
+"rendering_attr_hideNoLNAM_description" = "Nascondi le boe OSM (alcune)";
+"rendering_attr_hideTidalFlats_name" = "Aree golenali";
+"rendering_attr_hideTidalFlats_description" = "Nascondi le aree golenali";
+"rendering_attr_depthColorScheme_name" = "Schema di colori profondità";
+"rendering_attr_depthColorScheme_description" = "Schema di colori profondità";
+"rendering_attr_depthContoursDashed_name" = "Contorno delle profondità punteggiato";
+"rendering_attr_depthContoursDashed_description" = "Contorno delle profondità punteggiato";
+"rendering_attr_fairwayStyle_name" = "Colore percorso navigabile";
+"rendering_attr_fairwayStyle_description" = "Colore dei percorsi navigabili";
+"rendering_attr_safetyContour_name" = "Contorno delle profondità di sicurezza";
+"rendering_attr_safetyContour_description" = "Contorno delle profondità di sicurezza";
+"rendering_attr_shellsStyle_description" = "Stile delle conchiglie del fondale marino";
+"rendering_attr_showLNAMmarker_name" = "Marcatori ENC";
+"rendering_attr_showLNAMmarker_description" = "Mostra i marcatori ENC";
+"rendering_attr_spotSize_name" = "Dimensioni punto profondità";
+"rendering_attr_spotSize_description" = "Dimensioni punto profondità";

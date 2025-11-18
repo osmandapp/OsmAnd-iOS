@@ -32,6 +32,7 @@
     {
         case EOAObjectTypeCity:
         case EOAObjectTypeVillage:
+        case EOAObjectTypeBoundary:
         case EOAObjectTypePostcode:
         case EOAObjectTypeStreet:
         case EOAObjectTypeHouse:
@@ -75,7 +76,7 @@
 
 + (BOOL) isAddress:(EOAObjectType)objecType
 {
-    return objecType == EOAObjectTypeCity || objecType == EOAObjectTypeVillage || objecType == EOAObjectTypePostcode || objecType == EOAObjectTypeStreet || objecType == EOAObjectTypeHouse || objecType == EOAObjectTypeStreetIntersection;
+    return objecType == EOAObjectTypeCity || objecType == EOAObjectTypeVillage || objecType == EOAObjectTypePostcode || objecType == EOAObjectTypeStreet || objecType == EOAObjectTypeHouse || objecType == EOAObjectTypeStreetIntersection || objecType == EOAObjectTypeBoundary;
 }
 
 + (BOOL)isTopVisible:(EOAObjectType)objecType {
@@ -165,15 +166,16 @@
     switch (objectType)
     {
         case EOAObjectTypeHouse:
-        case EOAObjectTypeStreetIntersection:
             return 4.0;
         case EOAObjectTypeStreet:
             return 3.0;
         case EOAObjectTypeCity:
         case EOAObjectTypeVillage:
+        case EOAObjectTypeStreetIntersection:
         case EOAObjectTypePostcode:
             return 2.0;
         case EOAObjectTypePoi:
+        case EOAObjectTypeBoundary:
             return 1.0;
         default:
             return 1.0;

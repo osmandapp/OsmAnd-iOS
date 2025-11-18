@@ -46,19 +46,22 @@
         {
             [ctx clearPoints];
             [ctx clearSegments];
+            [self.measurementLayer resetLayer];
             break;
         }
         case EOAClearPointsModeBefore:
         {
             [ctx trimBefore:_pointPosition];
+            [self.measurementLayer updateLayer];
             break;
         }
         case EOAClearPointsModeAfter:
         {
             [ctx trimAfter:_pointPosition];
+            [self.measurementLayer updateLayer];
+            break;
         }
     }
-    [self.measurementLayer resetLayer];
 }
 
 - (void) undo

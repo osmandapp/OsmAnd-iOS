@@ -40,7 +40,7 @@
 "fav_enter_new_name" = "Adja meg a kedvenc új nevét";
 // POI
 "poi_insrease_radius" = "Keresési sugár növelése";
-"poi_max_radius_reached" = "A maximális keresési sugár elérve";
+"poi_max_radius_reached" = "A legnagyobb keresési sugár elérve";
 "poi_search_near_center" = "A keresés a térkép közepe környékén lesz végrehajtva";
 "shared_string_hide" = "Elrejtés";
 // My Places
@@ -70,14 +70,14 @@
 "gpx_elev_range" = "Magasságtartomány";
 "gpx_updown" = "Fel / le";
 "gpx_uphills_total" = "Hegynek fel összesen";
-"track_recording" = "Nyomvonal felvétele";
-"shared_string_currently_recording_track" = "Jelenleg felvett nyomvonal";
+"track_recording" = "Nyomvonal rögzítése";
+"shared_string_currently_recording_track" = "Jelenleg rögzített nyomvonal";
 "track_stop_rec" = "Rögzítés leállítása";
 "gpx_start_new_segment" = "Új szakasz kezdése";
 "save_current_track" = "Jelenlegi nyomvonal mentése";
 "track_continue_rec" = "Rögzítés folytatása";
 "track_continue_rec_q" = "Szeretné folytatni a rögzítést?";
-"save_track_interval_globally" = "Naplózási intervallum";
+"save_track_interval_globally" = "Naplózási időköz";
 "track_start_rec" = "Útrögzítés indítása";
 "track_rec_addon_q" = "Útjai rögzítéséhez és mentéséhez aktiválja az Útrögzítés bővítményt";
 "track_interval_remember" = "Emlékezzen a választásomra";
@@ -256,7 +256,7 @@
 "product_desc_parking" = "Kövesse nyomon autója parkolási idejét és helyét";
 "plugin_ski_name" = "Sítérképnézet";
 "product_desc_skimap" = "Naprakész sípályatérkép felvonókkal és lejtőkkel";
-"record_plugin_name" = "Utazás felvétele";
+"record_plugin_name" = "Utazás rögzítése";
 "product_desc_track_recording" = "Rögzítse és mentse az utazásait GPX-nyomvonalként";
 "product_desc_africa" = "Korlátlan térképletöltés: Afrika";
 "product_desc_australia" = "Korlátlan térképletöltés: Ausztrália";
@@ -407,7 +407,7 @@
 "items_selected" = "%d kiválasztva";
 "custom_search" = "Egyéni keresés";
 "poi_filter_custom_filter" = "Egyéni szűrő";
-"poi_filter_closest_poi" = "Legközelebbi érdekes hely";
+"poi_filter_closest_poi" = "Legközelebbi érdekes helyek";
 "shared_string_is_open_24_7" = "Éjjel-nappal nyitva";
 "shared_string_is_open" = "Most nyitva van";
 "poi_filter_by_name" = "Név szerinti keresés";
@@ -518,7 +518,7 @@
 "search_poi_category_hint" = "Gépeljen az összes kereséséhez";
 "unit_of_length_descr" = "Távolság mértékegységének módosítása.";
 "coords_format_descr" = "Földrajzi koordináták formátuma.";
-"save_global_track_interval_descr" = "Adja meg az általános nyomvonalfelvétel naplózási intervallumát (bekapcsolható a térképen található „Utazás felvétele” modullal).";
+"save_global_track_interval_descr" = "Adja meg az általános nyomvonalrögzítés naplózási időközét (bekapcsolható a térképen található „Utazás rögzítése” modullal).";
 "rotate_map_to_bearing_descr" = "Térkép forgatásának meghatározása.";
 "coords_format" = "Koordinátaformátum";
 "shared_string_automatic" = "Automatikus";
@@ -560,7 +560,7 @@
 "shared_string_current" = "Jelenlegi";
 "make_as_start_point" = "Legyen ez a kiindulási pont";
 "shared_string_search" = "Keresés";
-"save_global_track_interval" = "Általános naplózási intervallum";
+"save_global_track_interval" = "Általános naplózási időköz";
 "map_widget_magnetic_bearing" = "Mágneses irány";
 "map_widget_bearing" = "Relatív irányszög";
 "map_widget_appearance_rem" = "Fennmaradó elemek";
@@ -601,7 +601,7 @@
 "gpx_option_from_start_point" = "Végig az egész útvonalon";
 "gpx_option_reverse_route" = "Nyomvonal irányának megfordítása";
 "prefer_in_routing_title" = "A következők előnyben részesítése…";
-"routing_preferences_descr" = "Útvonal-tervezési preferenciák";
+"routing_preferences_descr" = "Útvonal-tervezési beállítások";
 "app_mode_hiking" = "Túrázás";
 "osm_live_plan_pricing" = "Csomagok és árak";
 "osm_live_payment_monthly_title" = "Havonta";
@@ -645,7 +645,7 @@
 "auto_zoom_map" = "Térkép automatikus nagyítása";
 "guidance_preferences_descr" = "Navigációs beállítások";
 "routing_settings" = "Navigáció";
-"show_cameras" = "Traffipaxok";
+"show_cameras" = "Sebességmérő kamerák";
 "show_lanes" = "Sávok";
 "speak_street_names" = "Utcanevek (TTS)";
 "speak_cameras" = "Sebességmérő kamerák";
@@ -776,7 +776,7 @@
 "show_from_zoom_level" = "Megjelenítés a következő nagyítási szinttől:";
 "osb_comment_dialog_message" = "Üzenet";
 "confirm_every_run" = "Mindig kérdezzen rá";
-"auto_split_recording_title" = "Felvételek automatikus szétvágása szünet után";
+"auto_split_recording_title" = "Rögzítések automatikus szétvágása szünet után";
 "default_speed_system_descr" = "Sebesség mértékegységének megadása.";
 "tab_title_advanced" = "Speciális";
 "unsaved_changes_will_be_lost" = "A nem mentett változtatások el fognak veszni. Folytatod?";
@@ -834,7 +834,7 @@
 "work_button" = "Munkahely";
 "osmand_live_donation_switch_title" = "Adomány az OpenStreetMap közösségnek";
 "shared_string_control_stop" = "Leállítás";
-"save_track_interval" = "Naplózási intervallum navigáció közben";
+"save_track_interval" = "Naplózási időköz navigáció közben";
 "map_magnifier" = "Térképnagyítás";
 "quick_action_interim_dialog" = "Ideiglenes dialógusablak megjelenítése";
 "other_location" = "Egyéb";
@@ -904,7 +904,7 @@
 "rendering_attr_piste_difficulty_aerialway_name" = "Kötélpályás felvonó";
 "routing_attr_no_new_routing_description" = "Ne használja az 1.9-es verzióban bevezetett útvonalszabályokat.";
 "routeInfo_roadClass_name" = "Úttípus";
-"routing_attr_difficulty_preference_description" = "Az ilyen nehézségű pályák részesülnek előnyben, azonban az útvonalba továbbra is bekerülhetnek nehezebb vagy könnyebb pályák, ha úgy rövidebb.";
+"routing_attr_difficulty_preference_description" = "Az ilyen nehézségi szintű pályák részesülnek előnyben, azonban az útvonalba továbbra is bekerülhetnek nehezebb vagy könnyebb pályák, ha úgy rövidebb.";
 "rendering_attr_piste_type_nordic_name" = "Sífutás";
 "rendering_attr_surface_paved_name" = "Burkolt";
 "rendering_attr_showRoadMaps_name" = "Csak-út térképek";
@@ -928,7 +928,7 @@
 "rendering_attr_publicTransportMode_name" = "Trolibusz-, ingajáratú busz- és buszútvonalak";
 "rendering_value_thin_name" = "Vékony";
 "rendering_value_fine_name" = "Finom";
-"routing_attr_piste_type_downhill_description" = "Alpesi vagy lesikló sípályák és a felvonókhoz vezető utak.";
+"routing_attr_piste_type_downhill_description" = "Alpesi vagy lesiklópályák és a felvonókhoz vezető utak.";
 "routing_attr_allow_intermediate_description" = "Nehezebb útvonalak meredekebb szakaszokkal. Általában kikerülendő akadályokat is tartalmaz.";
 "routing_attr_height_name" = "Magasság";
 "routing_attr_relief_smoothness_factor_hills_name" = "Dombos";
@@ -964,7 +964,7 @@
 "rendering_attr_surface_gravel_name" = "Zúzott kő";
 "routing_attr_avoid_ferry_name" = "Komp nélkül";
 "rendering_attr_smoothness_bad_name" = "Rossz";
-"routing_attr_difficulty_preference_name" = "Előnyben részesített nehézség";
+"routing_attr_difficulty_preference_name" = "Előnyben részesített nehézségi szint";
 "routing_attr_allow_skating_only_description" = "Szabad vagy korcsolyázó stílushoz karbantartott utak, klasszikus nyomok nélkül.";
 "rendering_attr_hideAccess_name" = "Behajtási korlátozások";
 "rendering_attr_contourLines_name" = "Szintvonalak megjelenítése";
@@ -1045,7 +1045,7 @@
 "rendering_attr_surface_dirt_name" = "Föld";
 "rendering_value_medium_name" = "Közepes";
 "routing_attr_prefer_unpaved_name" = "Burkolatlan utak előnyben részesítése";
-"rendering_attr_alpineHiking_description" = "Az útvonalak nehézségi besorolásának típusai.";
+"rendering_attr_alpineHiking_description" = "Útvonalak nehézségi osztályozási típusai.";
 "rendering_attr_highway_class_footway_name" = "Gyalogút";
 "rendering_value_germanRoadAtlas_name" = "Német autós atlasz";
 "routeInfo_smoothness_name" = "Útminőség";
@@ -1070,7 +1070,7 @@
 "rendering_attr_highway_class_street_name" = "Utca";
 "rendering_value_lightgreen_name" = "Világoszöld";
 "rendering_attr_pisteGrooming_name" = "Sípálya kezeltség";
-"rendering_attr_alpineHiking_name" = "Túraútvonalak nehézségi foka";
+"rendering_attr_alpineHiking_name" = "Túraútvonalak nehézségi szintje";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Színezés az útvonal besorolása szerint";
 "routing_attr_avoid_ferries_description" = "Elkerüli a kompokat";
 "rendering_value_disabled_name" = "Letiltva";
@@ -1104,7 +1104,7 @@
 "routing_attr_allow_motorway_description" = "Engedélyezi az autópályákat.";
 "routing_attr_avoid_train_name" = "Vonat nélkül";
 "routing_attr_allow_intermediate_name" = "Köztes útvonalak engedélyezése";
-"routing_attr_height_obstacles_description" = "A tervezett menetidő figyelembe veszi a magassági hatást. Az útvonal-tervezési preferenciákkal elkerülheti a meredek emelkedőket:";
+"routing_attr_height_obstacles_description" = "A tervezett menetidő figyelembe veszi a magassági hatást. Az útvonal-tervezési beállításokkal elkerülheti a meredek emelkedőket:";
 "rendering_attr_trolleybusRoutes_name" = "Trolibuszvonalak";
 "rendering_value_default13_name" = "Alapértelmezett (13)";
 "routing_attr_height_obstacles_name" = "Magasságadatok használata";
@@ -1145,7 +1145,7 @@
 "rendering_attr_hideWaterPolygons_description" = "Vízfelületek elrejtése";
 "routing_attr_max_num_changes_name" = "Átszállások száma";
 "rendering_attr_contourColorScheme_description" = "Szintvonalak színsémája";
-"routeInfo_piste_difficulty_name" = "Sípálya nehézsége";
+"routeInfo_piste_difficulty_name" = "Sípálya nehézségi szintje";
 "rendering_attr_tracktype_grade5_name" = "Laza";
 "rendering_attr_tracktype_grade3_name" = "Jórészt szilárd";
 "rendering_attr_showSurfaceGrade_name" = "Útminőség megjelenítése";
@@ -1251,14 +1251,14 @@
 "shared_string_finish" = "Befejezés";
 "shared_string_import_complete" = "Importálás kész";
 "search_activity" = "Keresés";
-"configure_screen_quick_action" = "Gyorsművelet";
+"configure_screen_quick_action" = "Gyors-művelet";
 "shared_string_settings" = "Beállítások";
 "shared_string_importing" = "Importálás";
 "avoid_road" = "Út elkerülése";
 "shared_string_routing" = "Útvonaltervezés";
 "quick_action_map_source_title" = "Térképforrások";
 "shared_string_poi_types" = "Érdekes helyek típusai";
-"shared_string_quick_actions" = "Gyorsműveletek";
+"shared_string_quick_actions" = "Gyors-műveletek";
 "shared_string_profiles" = "Profilok";
 "replace_all_desc" = "A jelenlegi elemek lecserélésre kerülnek a fájlban lévőkre";
 "replace_all" = "Az összes cseréje";
@@ -1452,12 +1452,12 @@
 "favorites_empty" = "Nem mentett el kedvenc pontot";
 "tracks_empty" = "Üres a nyomvonallistája";
 "map_markers_empty" = "Nincs aktív térképjelölője";
-"trip_rec_actions_descr" = "Az összes felvett nyomvonalát megtalálja itt: %@";
+"trip_rec_actions_descr" = "Az összes rögzített nyomvonalát megtalálja itt: %@";
 "auto_split_gap_descr" = "6 perc szünet után új szakasz, 2 óra szünet után új nyomvonal, hosszabb szünet után pedig új fájl indítása";
 "logging_min_speed_descr" = "Szűrő: a megadott sebesség alatt nincs naplózás";
 "logging_min_accuracy_descr" = "Szűrő: addig nincs naplózás, amíg ezt a pontosságot nem sikerült elérni";
 "logging_min_distance_descr" = "Szűrő: az a legkisebb távolság, amely már új pontként naplózódik";
-"logging_interval_navigation_descr" = "Naplózási intervallum kiválasztása a navigáció közbeni útvonalfelvételhez";
+"logging_interval_navigation_descr" = "Válassza ki a naplózás időközét a navigáció közbeni nyomvonalrögzítéshez";
 "road_max_speed_descr" = "Beállítja a legnagyobb utazási sebességet az útvonal összes útján. Csökkenti a prioritását azoknak az utaknak, amelyeken a lehetséges sebesség magasabb, mint a legnagyobb sebesség.";
 "road_min_speed_descr" = "Beállítja a legkisebb utazási sebességet az útvonal összes útján. Megemeli a prioritását azoknak az utaknak, amelyeken az ajánlott sebesség alacsonyabb, mint a legkisebb sebesség.";
 "road_speeds_descr" = "Ezek a paraméterek befolyásolhatják az útvonal kiszámítását.";
@@ -1531,7 +1531,7 @@
 "auto_zoom_map_descr" = "Nagyítási szint állítása a sebesség függvényében (miközben a térkép követi a jelenlegi pozíciót).";
 "nav_type_descr" = "Válassza ki, hogyan számítsa ki az útvonalat ennél a profilnál";
 "connect_rp" = "Útvonalpontok összekötése";
-"show_warnings_descr" = "Közlekedési figyelmeztetések (sebességkorlátozás, közúti ellenőrzés, fekvőrendőr, alagút), traffipaxriasztás és sávinformációk beállítása.";
+"show_warnings_descr" = "Beállítások a következőkhöz: közlekedési figyelmeztetések (sebességkorlátozás, elsőbbségadás kötelező (stop) táblák, fekvőrendőr, alagút), sebességmérő kamerák és sávinformációk.";
 "speak_descr" = "Beállítások a következőkhöz: Utcanevek és forgalmi figyelmeztetések például: elsőbbségadás kötelező (stop) tábla, vagy fekvőrendőr bejelentése, figyelmeztetések a sebességmérő kamerákhoz és a sebességkorlátozásokra.";
 "lang_pnb" = "pandzsábi";
 "lang_zh_hk" = "kínai (Hong Kong)";
@@ -1544,7 +1544,7 @@
 "number_of_tiles" = "Csempék száma";
 "move_map_to_select_area" = "Mozgassa a térképet a kijelölendő területhez.";
 "lang_th" = "thai";
-"gpx_split_interval_descr" = "Válassza ki, hogy a nyomvonalon milyen távolság- vagy időintervallumok jelzései jelenjenek meg.";
+"gpx_split_interval_descr" = "Válassza ki azt az időközt, amelyenként megjelenjenek a távolság- vagy időjelölések a nyomvonalon.";
 "rendering_attr_showRunningRoutes_name" = "Futóútvonalak";
 "lang_ml" = "malajalam";
 "delete_waypoints" = "Útpontok törlése";
@@ -1581,7 +1581,7 @@
 "icon_group_nautical" = "Hajózás";
 "lang_es" = "spanyol";
 "lang_kk" = "kazak";
-"shared_string_interval" = "Intervallum";
+"shared_string_interval" = "Időköz";
 "lang_eo" = "eszperantó";
 "lang_ta" = "tamil";
 "lang_lb" = "luxemburgi";
@@ -1669,7 +1669,7 @@
 "lang_sh" = "szerbhorvát";
 "lang_sq" = "albán";
 "context_menu_edit_descr" = "Leírás szerkesztése";
-"backup_error_size_is_exceeded" = "Az OsmAnd Cloud maximális mérete túllépte ezt: %@";
+"backup_error_size_is_exceeded" = "Az OsmAnd Cloud legnagyobb mérete túllépte a megengedettet: %@";
 "lang_ky" = "kirgiz";
 "backup_restore_now" = "Visszaállítás most";
 "lang_tt" = "tatár";
@@ -1715,7 +1715,7 @@
 "lang_gl" = "galíciai";
 "grey_color_undefined" = "Az adatok nélküli részek szürkék.";
 "make_backup_descr" = "Ezen az eszközön sok változás van, készítsen biztonsági mentést ezekről az adatokról, hogy el ne vesszenek.";
-"gpx_split_interval" = "Felosztási intervallum";
+"gpx_split_interval" = "Felosztási időköz";
 "lang_mn" = "mongol";
 "lang_bpy" = "bisnuprija manipuri";
 "lang_ar" = "arab";
@@ -1763,7 +1763,7 @@
 "debugging_and_development" = "OsmAnd fejlesztés";
 "osm_live_subscriptions" = "Előfizetések";
 "manage_subscription" = "Előfizetés kezelése";
-"simulation_preview_mode_desc" = "A szimuláció sebessége az egyenes szakaszokon maximális lesz és csak a kereszteződéseknél lassul le.";
+"simulation_preview_mode_desc" = "A szimuláció sebessége az egyenes szakaszokon a legnagyobb lesz és csak a kereszteződéseknél lassul le.";
 "monthly_map_updates" = "Havi térképfrissítés";
 "explore_osmnad_plans_to_find_suitable" = "Ismerje meg az OsmAnd előfizetési csomagjait, és találja meg az Önnek megfelelőt.";
 "speed_mode" = "Sebesség mód";
@@ -1776,7 +1776,7 @@
 "shared_string_learn_more" = "Tudjon meg többet";
 "shared_string_capacity" = "Kapacitás";
 "simulation_preview_mode_title" = "Gyors előnézet mód";
-"routeInfo_horse_scale_description" = "Ösvények megjelenítése a lovas utak nehézségi foka szerint";
+"routeInfo_horse_scale_description" = "Ösvények megjelenítése a lovas utak nehézségi szintje szerint";
 "terrain_maps" = "Domborzati térképek";
 "osm_live_banner_desc" = "Szerezzen korlátlan számú térképletöltési lehetőséget, valamint heti, napi vagy akár óránkénti térképfrissítést.";
 "toast_empty_name_error" = "Névtelen hely";
@@ -1794,7 +1794,7 @@
 "monthly_subscription" = "Havi előfizetés";
 "continue_with" = "Folytatás ezzel: %@";
 "shared_string_includes" = "Tartalmazza";
-"routeInfo_horse_scale_name" = "Lovas utak nehézségi foka";
+"routeInfo_horse_scale_name" = "Lovas utak nehézségi szintje";
 "copy_coordinates" = "Koordináták másolása";
 "ltr_or_rtl_combine_via_or" = "%@ vagy %@";
 "daily_map_updates" = "Óránkénti térképfrissítés";
@@ -1892,7 +1892,7 @@
 "select_map_source" = "Térképforrás kiválasztása";
 "create_profile" = "Profil készítése";
 "select_manually" = "Kézi kiválasztás";
-"sort_by" = "Rendezés eszerint:";
+"sort_by" = "Rendezési szempont:";
 "shared_string_start_date" = "Kezdődátum";
 "shared_string_end_date" = "Végdátum";
 "sett_deg180" = "180 fok";
@@ -1914,7 +1914,7 @@
 "weather_precip_enable_descr" = "Engedélyezi a csapadékréteg megjelenítését a térképen.";
 "swap_points" = "Kiindulási pont és az úti cél felcserélése";
 "select_favorite" = "Kedvenc kiválasztása";
-"route_preferred_terrain_any" = "Az útvonal kiválasztásakor a terepprofil nem lesz figyelembe véve.";
+"route_preferred_terrain_any" = "Az útvonal kiválasztásakor a domborzati profil nem lesz figyelembe véve.";
 "map_settings_install_maps" = "Válassza ki a telepítendő vagy frissítendő térképeket";
 "map_settings_hide_polygons_desc" = "Ez az opció csak az OsmAnd Offline vektoros térképeket érinti";
 "weather_pressure_enable_descr" = "Engedélyezi a nyomásréteg megjelenítését a térképen.";
@@ -1990,11 +1990,11 @@
 "osmand_live_support_reg_descr" = "Az adomány egy részét elküldjük azoknak az OSM-felhasználóknak, akik az adott régióban módosítják a térképet";
 "res_expire_time" = "Lejárati idő";
 "res_mercator" = "Mercator vetület";
-"res_zoom_warning" = "A minimális zoom értéke nem lehet egyenlő vagy nagyobb, mint a maximális zoom értéke";
+"res_zoom_warning" = "A legkisebb nagyítás értéke nem lehet egyenlő vagy nagyobb, mint a legnagyobb nagyítás értéke";
 "select_tracks" = "Trackek kiválasztása";
 "osmand_depelopment_simulate_location_section" = "Szimuláció";
 "simulate_in_progress" = "Folyamatban";
-"simulate_your_location_gpx_descr" = "Pozíció szimulálása egy felvett GPX-nyomvonal felhasználásával.";
+"simulate_your_location_gpx_descr" = "Pozíció szimulálása egy rögzített GPX-nyomvonal felhasználásával.";
 "simulate_location_track_select_descr" = "Válassza ki a nyomvonalat, amelyet a helyváltoztatás forrásaként fog használni.";
 "simulate_location_movement_speed_x4" = "4x";
 "simulate_location_movement_speed_original_desc" = "A szimuláció során a mozgási sebesség megegyezik a kiválasztott fájlban megadott sebességgel.";
@@ -2103,7 +2103,7 @@
 "si_nm_mt" = "Tengeri mérföld/méter";
 "depth_contour_lines" = "Mélységvonalak";
 "show_borders_of_downloaded_maps" = "Letöltött térképpel rendelkező területek eltérő színnel";
-"shared_string_recorded" = "Előre felvett";
+"shared_string_recorded" = "Rögzített";
 "navigate_point_format_DM" = "FFF PP.PPP";
 "routing_attr_avoid_low_emission_zone_description" = "Alacsony kibocsátású zónák elkerülése";
 "contact_support_description" = "Ha kérdése van, lépjen kapcsolatba velünk: %@.";
@@ -2216,19 +2216,19 @@
 "routing_attr_avoid_fords_name" = "Gázlók elkerülése";
 "routing_attr_hazmat_category_description" = "Veszélyes anyagok kategória / A kategóriára vonatkozó behajtási tilalmak figyelembevétele";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Fixme címkék";
-"rendering_attr_horseScale_name" = "Lovas utak nehézségi foka";
+"rendering_attr_horseScale_name" = "Lovas utak nehézségi szintje";
 "routing_attr_freeride_policy_allow_name" = "Engedélyezve";
 "routing_attr_goods_restrictions_description" = "Az (áruszállító) könnyű tehergépjárművekre vonatkozó behajtási engedélyek figyelembevétele";
 "routing_attr_avoid_4wd_only_name" = "Nehéz terep elkerülése";
 "routing_attr_avoid_footways_name" = "Gyalogutak elkerülése";
 "routing_attr_allow_intermittent_name" = "Időszakos vízfolyások engedélyezése";
-"rendering_attr_showWaterwayTunnels_description" = "Vízi alagutak láthatóságának fokozása";
-"rendering_attr_showMtbScale_description" = "Nyomvonalak megjelenítése MTB nehézségi szintek szerint.";
+"rendering_attr_showWaterwayTunnels_description" = "Vízi alagutak láthatóságának növelése";
+"rendering_attr_showMtbScale_description" = "Nyomvonalak megjelenítése MTB-nehézségi szintek szerint.";
 "routing_attr_allow_intermittent_description" = "Időszakos vízfolyások engedélyezése";
 "routing_attr_allow_streams_description" = "Patakok és vízelvezető árkok engedélyezése";
 "routing_attr_prefer_hiking_routes_name" = "Turistautak előnyben részesítése";
 "rendering_attr_OSMMapperAssistantNote_name" = "Jegyzet címkék";
-"routing_attr_difficulty_preference_no_preference_name" = "Nincs preferencia";
+"routing_attr_difficulty_preference_no_preference_name" = "Nincs beállítva";
 "rendering_attr_showBusRoutes_name" = "Buszvonalak";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Ikonok kis nagyításnál";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Ikonok sematikus megjelenítése kis nagyításnál";
@@ -2260,7 +2260,7 @@
 "routing_attr_prefer_hiking_routes_description" = "Turistautak előnyben részesítése";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Ne térjen le a pályáról";
 "routing_attr_avoid_fords_description" = "Gázlók elkerülése";
-"rendering_attr_showWaterwayTunnels_name" = "Vízi alagutak láthatóságának fokozása";
+"rendering_attr_showWaterwayTunnels_name" = "Vízi alagutak láthatóságának növelése";
 "routing_attr_difficulty_preference_expert_name" = "Profi";
 "rendering_attr_weatherPrecipitationContours_name" = "Csapadék-izovonalak";
 "rendering_attr_horse_scale_difficult_name" = "Nehéz";
@@ -2284,7 +2284,7 @@
 "quick_action_add_osm_bug" = "OSM-jegyzet hozzáadása";
 "local_openstreetmap_uploading" = "Feltöltés…";
 "save_track_to_gpx_descrp" = "Navigáció közben automatikusan rögzíti a nyomvonalat, utána pedig automatikusan elmenti.";
-"plugin_ski_descr" = "Télisport helyszíneken való navigációra tervezve: sífelvonók, sípályák és sífutópályák a nehézségi fokozatot jelző színes vonalakkal. Használatához engedélyezze ezt a bővítményt, valamint a „Térkép beállítása” menüpontban a „Tél és síelés” térképstílust.";
+"plugin_ski_descr" = "Télisportok helyszínein való navigációra tervezve: sífelvonók, sípályák és sífutópályák a nehézségi szintet jelző színes vonalakkal. Használatához engedélyezze ezt a bővítményt, valamint a „Térkép beállítása” menüpontban a „Tél és síelés” térképstílust.";
 "quick_action_navigation_voice_on" = "Hang némítása";
 "osm_editing_plugin_name" = "OpenStreetMap-szerkesztés";
 "auth_failed" = "Azonosítás nem sikerült";
@@ -2296,7 +2296,7 @@
 "add_point_before" = "Pont hozzáadása előtte";
 "backup_error_subscription_was_expired_descr" = "Az OsmAnd Pro előfizetése lejárt. A biztonsági mentés használatához meg kell újítania. Az OsmAnd Cloudból továbbra is visszaállíthatja az adatokat.";
 "osmand_parking_plugin_description" = "Jelölje meg, hol parkol az autója, és kapjon értesítést naptárából a parkolási idő lejártáról. A jelölés elhelyezéséhez válasszon egy helyet a térképen, menjen a „Műveletek” menüpontra, és koppintson a „Parkolóhely hozzáadása” lehetőségre.";
-"record_plugin_description" = "Rögzítse utazásait vagy edzéseit és elemezze az adatokat a sebesség, az összesített emelkedések és ereszkedések, a magasság profil szempontjából. A rögzített nyomvonalak archiválhatók, megoszthatók ismerősökkel, szerkeszthetők és utólag feldolgozhatók. \n \nTovábbi tudnivalók: %@.";
+"record_plugin_description" = "Rögzítse utazásait vagy edzéseit és elemezze az adatokat a sebesség, az összesített emelkedések és ereszkedések, a magasság profil szempontjából. A rögzített nyomvonalak archiválhatók, megoszthatók az ismerősökkel, szerkeszthetők és utólag feldolgozhatók. \n \nTovábbi tudnivalók: %@.";
 "weather_plugin_description" = "Funkciók: \n- 24 órás és 7 napos időjárás-előrejelzés 5 rétegben \n- helyalapú modulok, \n- hőmérsékleti és légnyomásvonalak (izobárok).\n\nAz időjárási adatok szolgáltatója a Global Forecast System (GFS, %@).";
 "srtm_plugin_description" = "A domborzati információk, mint például a szintvonalak, domborzatárnyékolás, lejtési viszonyok segítenek vizuálisan felmérni a terep fekvését, a domborzatot, a hajózhatóságot és még sok minden mást. A topográfiai információk a térképen szintvonalakkal, domborzatárnyékolással és/vagy meredekségszínezéssel ábrázolhatók. \n \nAz alapul szolgáló adatok az SRTM és az ASTER adataiból származnak. \n \nTovábbi információk: %@.";
 "plugin_nautical_descr" = "A térképet vitorlás útvonalakkal, navigációs lámpákkal, tengeri veszélyzónákkal, vitorlázási vagy kikötési korlátozásokkal stb. kapcsolatos információkkal gazdagítja. Használatához töltse le a megfelelő tengeri térképeket, és engedélyezze a „Tengeri térkép” stílust a „Térkép konfigurálása” menüpontban.\n\nTovábbi információk: %@.";
@@ -2369,7 +2369,7 @@
 "rendering_attr_padusDisplayMode_description" = "Használhatóság vagy a kezelő neve szerint";
 "routing_attr_allow_via_ferrata_description" = "Mászóútvonal rögzített kábelekkel, fellépőkkel, létrákkal és hidakkal.";
 "shared_string_accessibility" = "Kisegítő lehetőségek";
-"map_marker_interval_dialog_desc" = "Adja meg azt az időintervallumot, amelyre a rendszer az átlagsebességet mérje a becsült érkezési idő kiszámításához.";
+"map_marker_interval_dialog_desc" = "Adja meg azt az időközt, amelyre a rendszer az átlagsebességet mérje a becsült érkezési idő kiszámításához.";
 "air_pressure_widget_desc" = "Megjeleníti a légnyomást a jelenlegi térképközéppontnál.";
 "map_markers_bar" = "Térképjelölők sávja";
 "help_article_widgets_name" = "Térképmodulok";
@@ -2434,7 +2434,7 @@
 "map_widget_sunset_desc" = "Megjeleníti a következő napnyugta idejét vagy az addig hátralévő időt.";
 "running_scds_device_name" = "Működő eszköz";
 "map_widget_ant_bicycle_speed" = "Kerékpársebesség";
-"gps_info_widget_desc" = "Megjeleníti a jelenleg látható, illetve használt műholdak számát.";
+"gps_info_widget_desc" = "Megjeleníti a jelenleg látható és használatban lévő műholdak számát.";
 "shared_string_duplicate" = "Másolat készítése";
 "restart_is_required" = "A módosítás alkalmazásához újra kell indítani az alkalmazást.";
 "external_device_details_battery" = "Akkumulátor";
@@ -2448,7 +2448,7 @@
 "weather_widget_group_desc" = "Különböző időjárási adatokat megjelenítő modulkészlet.";
 "map_widget_group_sunrise_sunset_desc" = "Ezek a modulok a következő napkeltéről és napnyugtáról tájékoztatnak.";
 "ant_plus_bluetooth_off_description" = "Kapcsolja be a Bluetooth-t, keresse meg és párosítása az érzékelőket.";
-"start_recording" = "Felvétel indítása";
+"start_recording" = "Rögzítés indítása";
 "battery_widget_desc" = "Megjeleníti az eszköze akkumulátorának töltöttségi szintjét.";
 "copy_build_version" = "Összeállítás verziójának másolása";
 "route_info" = "Útvonal-információk";
@@ -2536,7 +2536,7 @@
 "external_sensors_not_found" = "Nem találhatók érzékelők";
 "there_are_no_connected_sensors_of_this_type" = "Nincs ilyen típusú érzékelő kapcsolódva";
 "coordinates_format" = "Koordinátaformátum";
-"help_article_troubleshooting_track_recording_issues_name" = "Nyomvonal felvétele";
+"help_article_troubleshooting_track_recording_issues_name" = "Nyomvonal rögzítése";
 "average_glide_ratio" = "Átlagos siklószám";
 "shared_string_error" = "Hiba";
 "osmand_cloud_deletion_account_warning" = "A fiók és minden fiókadat %@ lesz";
@@ -2650,7 +2650,7 @@
 "osmand_cloud_deleted_account_descr" = "Minden fiók- és egyéb adat törölve lett az OsmAnd Cloudból.";
 "delete_account" = "Fiók törlése";
 "newest_date_first" = "Először a legújabb dátum";
-"map_widget_glide_average_desc" = "Megjeleníti az átlagos siklószámot a megadott intervallumhoz.";
+"map_widget_glide_average_desc" = "Megjeleníti az átlagos siklószámot a megadott időközhöz.";
 "map_widget_group_glide_ratio" = "Siklószám";
 "help_article_start_with_main_menu_name" = "Főmenü";
 "weather_forecast" = "Időjárás-előrejelzés";
@@ -2682,7 +2682,7 @@
 "map_widget_camera_tilt" = "Kamera dőlése";
 "announcement_time_arrive" = "Érkezés az úti célhoz";
 "help_article_start_with_name" = "Az OsmAnd használatának elkezdése";
-"average_glide_time_interval_desc" = "Adja meg a siklószám átlagának kiszámításához használt időintervallumot.";
+"average_glide_time_interval_desc" = "Adja meg a siklószám átlagának kiszámításához használt időközt.";
 "average_speed_skip_stops" = "Megállások figyelembevétele";
 "help_article_navigation_setup_markers_navigation_name" = "Navigálás jelölőkkel";
 "map_3d_mode_action" = "3D mód";
@@ -2716,7 +2716,7 @@
 "help_article_search_search_all_name" = "Keresés mindenben";
 "cache_size" = "Gyorsítótár méret";
 "map_widget_camera_tilt_desc" = "Megjeleníti a kamera dőlésszögét perspektivikus módban. Az alapértelmezés 90° (nincs dőlés).";
-"average_speed_time_interval_desc" = "Adja meg az átlagsebesség-számításhoz használandó időintervallumot.";
+"average_speed_time_interval_desc" = "Adja meg az átlagsebesség-számításhoz használandó időközt.";
 "external_device_details_received_data" = "Fogadott adat";
 "shared_string_activity" = "tevékenység";
 "shared_string_travel_guides" = "Útikalauzok";
@@ -2729,7 +2729,7 @@
 "external_device_any_connected" = "Bármelyik összekapcsolt";
 "time_to_destination_widget_desc" = "A modul megjeleníti az érkezési- vagy az utolsó célpontig hátralévő időt. A navigáció során az idő folyamatosan frissül a jelenlegi pozíciónak megfelelően.";
 "shared_string_setup_route" = "Útvonal beállítása";
-"announcement_time_intervals" = "Idő- és távolságintervallumok";
+"announcement_time_intervals" = "Idő- és távolságközök";
 "shared_string_relief_3d" = "3D domborzat";
 "map_widget_trip_recording_distance" = "Távolság";
 "temperature_widget_desc" = "Megjeleníti a hőmérsékletet a jelenlegi térképközéppontnál.";
@@ -2786,7 +2786,7 @@
 "shared_string_nearest" = "Legközelebbi";
 "second_next_turn_widget_desc" = "A modul a soron következő második bekanyarodásról tájékoztat, és akkor aktiválódik, amikor ezt megközelíti.";
 "distance_during_navigation" = "Távolságok a navigálás során";
-"average_glide_ratio_time_interval_desc" = "Megjeleníti a beállított intervallumhoz tartozó átlagos siklószámot vagy függőleges sebességet.";
+"average_glide_ratio_time_interval_desc" = "Megjeleníti a beállított időközhöz tartozó átlagos siklószámot vagy függőleges sebességet.";
 "vertical_exaggeration_description" = "A skálaérték megváltoztatásával kiemelheti a 3D domborzatot.";
 "vertical_exaggeration" = "Függőleges eltúlzás";
 "shared_string_scale" = "Skála";
@@ -2809,7 +2809,7 @@
 "edit_tilesource_minzoom" = "Minimális nagyítás";
 "shared_string_item" = "Elem";
 "shared_string_precise" = "Pontos";
-"edit_tilesource_maxzoom" = "Maximális nagyítás";
+"edit_tilesource_maxzoom" = "Legnagyobb nagyítás";
 "display_position_automatic_descr" = "A térkép tájolásától függően: alul a mozgásirány követésénél és középen minden más esetben.";
 "speedometer_description" = "Megjeleníti a jármű GPS-alapú sebességét";
 "custom_buttons" = "Egyéni gombok";
@@ -2900,7 +2900,7 @@
 "show_along_the_route" = "Megjelenítés az útvonal mentén";
 "resting_position_icon_summary" = "Ikon, ami akkor jelenik meg, ha nem mozog.";
 "resting_position" = "Állóhelyzet";
-"quick_action_toggle_preference" = "A preferenciát módosító kapcsoló.";
+"quick_action_toggle_preference" = "Egy kapcsoló a beállítás módosításához.";
 "yard" = "yard";
 "shared_string_row_number" = "%d. sor";
 "add_widget" = "Modul hozzáadása";
@@ -2917,7 +2917,7 @@
 "daynight_mode_sunrise_sunset_summary" = "A helyi napkelte és napnyugta időpontja alapján automatikusan vált a nappali és éjszakai téma között.";
 "ltr_or_rtl_combine_via_dash" = "%@ – %@";
 "quick_action_terrain_color_scheme" = "Domborzati színséma";
-"quick_action_need_to_add_item_to_list" = "Adjon legalább egy elemet a „Gyorsművelet” beállításainál található listához";
+"quick_action_need_to_add_item_to_list" = "Adjon legalább egy elemet a „Gyors-művelet” beállításainál található listához";
 "rendering_attr_showClimbingRoutes_name" = "Hegymászó utak";
 "rendering_attr_showClimbingRoutes_description" = "Hegymászó utak megjelenítése";
 "map_widget_map_scale" = "Méretarány";
@@ -2927,19 +2927,19 @@
 "max_sensor_bycicle_power" = "Kerékpáros teljesítmény, max";
 "help_article_map_routes_name" = "Útvonalak";
 "avg_sensor_bycicle_power" = "Kerékpáros teljesítmény, átlag";
-"max_sensor_speed" = "Érzékelő sebessége (maximum)";
+"max_sensor_speed" = "Érzékelő sebessége (legnagyobb)";
 "add_widget_to_the_right" = "Modul hozzáadása a jobb oldalra";
 "shared_string_minute_lowercase" = "perc";
 "avg_sensor_speed" = "Érzékelő sebessége (átlag)";
 "lock_screen_description" = "Engedélyezi vagy letiltja az érintőképernyő funkcióit a véletlen érintések elkerülése érdekében";
 "shared_string_to" = "Ide:";
-"max_sensor_heartrate" = "Pulzus (maximum)";
+"max_sensor_heartrate" = "Pulzus (legnagyobb)";
 "delete_widget" = "Biztosan törli a modult?";
 "shared_string_interface" = "Interfész";
 "screen_is_locked_by_action_button" = "Az érintőképernyő le van zárva. Koppintson a gombra a feloldáshoz.";
 "add_widget_to_the_left" = "Modul hozzáadása a bal oldalra";
 "delete_widget_description" = "Ez a modul törölve lesz. Később visszaállíthatja a konfigurációs képernyőn.";
-"max_sensor_temperature" = "Hőmérséklet (maximum)";
+"max_sensor_temperature" = "Hőmérséklet (legnagyobb)";
 "add_widget_above" = "Modul hozzáadása felülre";
 "avg_sensor_temperature" = "Hőmérséklet (átlag)";
 "shared_string_visible_on_map" = "Látható a térképen";
@@ -2991,7 +2991,7 @@
 "unit_of_volume_description" = "A kiválasztott egységek alkalmazása a jelenlegi profilban lévő összes térfogattal kapcsolatos adatra.";
 "auto_25_chars_route_tl" = "Forduljon balra";
 "original_shape_description" = "Minden pont megtartja a saját alakját.";
-"smart_folder_name_present" = "Ilyen okosmappa már van";
+"smart_folder_name_present" = "Ilyen okos-mappa már van";
 "terrain_map" = "Domborzati térkép (3D)";
 "us_gallons" = "Amerikai gallon";
 "auto_25_chars_route_tu_kr" = "Forduljon meg, és tartson jobbra";
@@ -2999,7 +2999,7 @@
 "dd_ddddd_format" = "Fok (5 tizedessel)";
 "mapillary_action_descr" = "Ossza meg utcaszintű képeit a Mapillary segítségével.";
 "add_hidden_group_info" = "A hozzáadott pont itt található: „%@”. A térképen való megjelenítéshez vonja vissza a kijelölt csoport elrejtését.";
-"quick_action_save_recorded_trip_and_continue" = "Túra rögzítése és folytatás";
+"quick_action_save_recorded_trip_and_continue" = "Rögzített utazás mentése és folytatás";
 "shared_string_items" = "Elemek";
 "open_in_browser" = "Megnyitás böngészőben";
 "auto_25_chars_route_tr_kl" = "Forduljon jobbra, és tartson balra";
@@ -3032,7 +3032,7 @@
 "routing_attr_allow_ferries_description" = "Kompátkelők engedélyezése útvonaltervezéskor";
 "shared_string_edges" = "Élek";
 "auto_25_chars_route_tsll" = "Forduljon enyhén balra";
-"save_as_smart_folder" = "Mentés okosmappaként";
+"save_as_smart_folder" = "Mentés okos-mappaként";
 "display_priority" = "Kijelző prioritás";
 "unit_of_volume" = "Térfogategység";
 "shared_string_source" = "Forrás";
@@ -3040,7 +3040,7 @@
 "change_activity" = "Tevékenység módosítása";
 "auto_25_chars_route_tu_kl" = "Forduljon meg, és tartson balra";
 "auto_25_chars_route_kr" = "Tartson jobbra";
-"add_smart_folder" = "Okosmappa hozzáadása";
+"add_smart_folder" = "Okos-mappa hozzáadása";
 "shared_string_original" = "Eredeti";
 "destination_first" = "Úti cél először";
 "three_months_subscription" = "Három hónapos előfizetés";
@@ -3052,7 +3052,7 @@
 "ask_every_time" = "Kérdezzen rá mindig";
 "auto_25_chars_route_tu" = "Forduljon meg";
 "attach_roads_descr" = "Csatlakoztassa a nyomvonalait az utakhoz, hogy részletes útvonaladatokat kaphasson, beleértve a kanyarodási utasításokat és útvonal-tulajdonságokat.";
-"map_widget_route_information_desc" = "Megjeleníti a becsült érkezési időt, a fennmaradó utazási időt és az aktuális navigációs útvonal távolságát.";
+"map_widget_route_information_desc" = "Megjeleníti az aktív navigációs útvonal becsült érkezési idejét, a fennmaradó utazási időt és a távolságot.";
 "auto_25_chars_route_tl_kr" = "Forduljon balra, és tartson jobbra";
 "obd_fuel_type_electric" = "Elektromos";
 "obd_engine_runtime" = "Motor üzemidő";
@@ -3123,7 +3123,7 @@
 "obd_fuel_type_bifuel_hydrogen" = "Hidrogénnel működő Bifuel";
 "shared_string_volume" = "Térfogat";
 "simulate_obd" = "OBD-adatok szimulálása";
-"vehicle_metrics_recording_description" = "Válassza ki a GPX-fájlba elmentendő paramétereket.";
+"vehicle_metrics_recording_description" = "Válassza ki a GPX-fájlba rögzítendő paramétereket.";
 "obd_fuel_type_bifuel_methanol" = "Metanollal működő Bifuel";
 "distance_by_tap_use_description" = "Jelenlegi tartózkodási helye és a koppintással kijelölt pont közötti távolság megtekintéséhez koppintson a térképre. \nKattintással kijelölt pontok közötti távolság megtekintéséhez koppintson két ujjával a térképre";
 "obd_fuel_type_bifuel_electricity" = "Elektromos árammal működő Bifuel";
@@ -3159,7 +3159,7 @@
 "obd_widget_vehicle_speed" = "Jármű sebessége";
 "shared_string_hour" = "Óra";
 "shared_string_large" = "Nagy";
-"unit_of_temperature_description" = "Az aktuális profil összes hőmérsékleti adata a kiválasztott mértékegységben fog megjelenni.";
+"unit_of_temperature_description" = "A jelenlegi profil összes hőmérsékleti adata a kiválasztott mértékegységben fog megjelenni.";
 "obd_bluetooth_off_description" = "Kapcsolja be a Bluetooth-t az OBD-olvasó megkereséséhez és párosításához.";
 "route_guidance" = "Útvonalvezetés";
 "manage_storage" = "Tárhely kezelése";
@@ -3176,7 +3176,7 @@
 "osmand_live" = "OsmAnd Live";
 "download_live_updates" = "Élő frissítések";
 "local_indexes_cat_tts" = "Hangutasítások (TTS-szövegfelolvasás)";
-"local_indexes_cat_voice" = "Hangutasítások (felvett beszédhang)";
+"local_indexes_cat_voice" = "Hangutasítások (rögzített)";
 "rendering_styles" = "Megjelenítő stílusok";
 "osm_building_num" = "Épület házszáma";
 "resume_nav" = "Navigáció folytatása";
@@ -3310,7 +3310,7 @@
 "download_persian_voice_alert_title" = "Perzsa hangfájl letöltése:";
 "download_persian_voice_alert_descr_ios" = "Beállítások -> Kisegítő lehetőségek -> Hangos tartalom -> Hangok -> Perzsa -> Dariush";
 "download_persian_voice_alert_descr_macos" = "Beállítások -> Kisegítő lehetőségek -> Beszélt tartalom -> Rendszerhang -> Hangok kezelése -> Perzsa -> Dariush";
-"recording_preferences_descr" = "Nyomvonalrögzítés beállítása";
+"recording_preferences_descr" = "Nyomvonalrögzítési beállítások";
 "select_route_start_on_map" = "Válassza ki az útvonal kezdőpontját";
 "select_route_finish_on_map" = "Válassza ki az útvonal utolsó pontját";
 "select_route_intermediate" = "Válasszon ki egy köztes útvonalpontot";
@@ -3336,9 +3336,9 @@
 "shared_string_ok" = "OK";
 "duration" = "Időtartam";
 "shared_string_estimated_duration" = "Becsült időtartam";
-"shared_string_maximum" = "Maximum";
+"shared_string_maximum" = "Legnagyobb";
 "shared_string_min" = "Minimum";
-"shared_string_max" = "Maximum";
+"shared_string_max" = "Legnagyobb";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_clear_offline_cache" = "Offline gyorsítótár törlése";
 "shared_string_profile" = "Profil";
@@ -3366,7 +3366,7 @@
 "map_settings_slopes_legend" = "A lejtőkről bővebben a Wikipédián olvashat";
 "map_settings_slopes_description" = "A lejtő a terep színes vizualizációja.";
 "map_settings_hillshade_description" = "A domborzatárnyékolás-térkép sötét árnyalatokkal jelzi a lejtőket, csúcsokat és alföldeket.";
-"map_settings_zoom_level_description" = "Állítsa be a réteg megjelenítésének minimális és maximális nagyítási szintjét";
+"map_settings_zoom_level_description" = "Állítsa be a réteg megjelenítésének legkisebb és legnagyobb nagyítási szintjét";
 "map_settings_add_maps_hillshade" = "A domborzatárnyékolás megjelenítéséhez a térképen további térképek szükségesek.";
 "map_settings_add_maps_slopes" = "A lejtők megjelenítéséhez a térképen további térképek szükségesek.";
 "map_settings_show_slider_map" = "Csúszka megjelenítése a térképen";
@@ -3379,7 +3379,7 @@
 "cloud_confirm_delete_type" = "Biztosan törölni szeretné az OsmAnd Cloudból a következőt: „%@”?";
 "liter_single" = "Liter";
 "edit_tilesource_url_to_load" = "Webcím";
-"help_article_personal_tracks_smart_folder_name" = "Okosmappa (szűrő)";
+"help_article_personal_tracks_smart_folder_name" = "Okos-mappa (szűrő)";
 "shared_string_subfolders_in" = "Almappák ebben:";
 "help_article_map_tracks_track_context_menu_name" = "Nyomvonalak helyi menü";
 "help_article_map_tracks_appearance_name" = "Nyomvonalak megjelenése";
@@ -3407,7 +3407,7 @@
 "profile_appearance_descr" = "Ikon, szín és név";
 "point_num" = "%d. pont";
 "points_count" = "Pontok:";
-"new_smart_folder" = "Új okosmappa";
+"new_smart_folder" = "Új okos-mappa";
 "weather_update_over_wifi_only" = "Csak Wi-Fi-n";
 "shared_string_litres" = "liter";
 "folder_tracks_count" = "%d nyomvonal";
@@ -3521,7 +3521,7 @@
 "restart_is_required_title" = "Újraindítás szükséges";
 "over_wifi_only" = "Csak Wi-Fi-n";
 "short_min" = "m";
-"recorded_track" = "Nyomvonal rögzítése";
+"recorded_track" = "Rögzített nyomvonal";
 "upload_to_osm_short" = "Feltöltés az OSM-re";
 "shared_string_millimeters_short" = "mm";
 "weather_source_ecmwf_title" = "ECMWF";
@@ -3592,7 +3592,7 @@
 "osm_note_empty_message" = "Adja meg a jegyzethez az üzenetet.";
 "osm_edits_poi" = "Érdekes helyek szerkesztései";
 "osm_edit_show_on_map_descr" = "A térkép megnyitása erre a pontra középre igazítva";
-"osm_tag_too_long_message" = "A(z) %@ címke maximális értékhossza 255 karakter.\nA folytatáshoz rövidítse le.";
+"osm_tag_too_long_message" = "A(z) %@ címke legnagyobb értékhossza 255 karakter.\nA folytatáshoz rövidítse le.";
 "osm_editing_access_descr" = "Az összes helyi szerkesztését és jegyzetét megtekintheti itt: %@. A már feltöltött pontok nem szerepelnek az OsmAnd listájában.";
 "osm_upload_gpx_description_footer" = "Ha a leírás üres, a nyomvonal neve lesz használva. A beírt leírás minden nyomvonalra érvényes lesz.";
 "mapil_no_inet_descr" = "A Mapillary fényképek megtekintéséhez internetkapcsolatra van szükség.";
@@ -3803,8 +3803,8 @@
 "routing_attr_goods_restrictions_header_name" = "Az árut szállító járművek közlekedése bizonyos utakon korlátozható.";
 "routing_attr_goods_restrictions_footer_desc" = "Csak olyan járművekre vonatkozik, amelyek legalább négy kerékkel rendelkeznek, és tömegük nem haladja meg a 3,5 tonnát.\n\nHa járműve tömege meghaladja a 3,5 tonnát, akkor teherautó-profilt ajánlott használnia.";
 "routing_attr_goods_restrictions_yes_desc" = "Az áru szállítására lezárt utak el lesznek kerülve.";
-"max_weight_at_full_load_description" = "Adja meg járműve teljes terhelési maximális tömegét, hogy navigáció közben a tömegkorlátozású utakat és hidakat elkerülhesse.";
-"max_axle_load_description" = "Adja meg járműve maximális tengelyterhelését, hogy elkerülje a tömegkorlátozású utakat és hidakat.";
+"max_weight_at_full_load_description" = "Adja meg a járműve megengedett össztömegét, hogy navigáció közben a tömegkorlátozású utakat és hidakat elkerülhesse.";
+"max_axle_load_description" = "Adja meg járműve megengedett legnagyobb tengelyterhelését, hogy elkerülje a tömegkorlátozású utakat és hidakat.";
 "login_footer_full_text" = "Segítségre van szüksége? Vegye fel velünk a kapcsolatot a\nsupport@osmand.net címen";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "error_contact_support" = "Ha a probléma továbbra is fennáll, vegye fel a kapcsolatot az ügyfélszolgálatunkkal.";
@@ -3909,10 +3909,13 @@
 "ios_release_4_3" = "• Sima animáció a helyváltozásokhoz mozgás közben\n• CarPlay: sávok, 2.5D nézet hozzáadva, hangproblémák javítása Bluetooth-kapcsolaton keresztül\n• Új vásárlási tervek bevezetése: „OsmAnd Pro” előfizetések hozzáféréssel az összes funkcióhoz és „Térképek+” vásárlás korlátlan térképletöltéssel és fizetős bővítményekhez való hozzáféréssel.\n• Felhőalapú biztonsági mentés és offline időjárás-előrejelzés hozzáadása az OsmAnd Pro felhasználók számára\n• Új, kényelmes „Vásárlás” képernyő az összes vásárlás listájával\n• Előnyök az aktív OpenStreetMap.org közreműködők számára\n• A nyomvonalak mostantól magasság, sebesség vagy lejtés szerint színezhetők\n• Az offline térképek mostantól elérhetők a Fájlok alkalmazáson keresztül\n• Kedvencek: helyi biztonsági mentések generálása minden változtatás után, a biztonsági mentések elérhetők a Fájlok alkalmazásból\n• A kedvencek közé mentett POI-k offline térkép nélkül is tárolják és megjelenítik az összes POI-adatot\n• GPX: link, cmt, desc címkék és bármilyen egyéni kiterjesztés támogatása\n• Mód hozzáadása az Iránytű gombhoz\n• Javítva egy probléma az UTM koordináta formátummal\n• Javítva egy probléma a köztes pontokkal a navigációban\n";
 "ios_release_4_4" = "• Külső billentyűzet: új billentyűk támogatása\n• Új modulok az utazásrögzítéshez\n• Keresés hozzáadása a kedvencekhez, nyomvonalakhoz és OSM-szerkesztésekhez\n• CarPlay: az előzmények tartalmazzák a navigációban használt pontokat\n• Az emojik mostantól használhatók kedvencként vagy útpontnévként\n• Javítva az offline Wikipédia-cikkek közötti átmenet\n• Javítva az egyéni útvonaltervezési és renderelési fájlok importálásával kapcsolatos problémák\n• Nyomvonal megjelenése: bármilyen egyéni szín beállításának lehetősége\n• Új modul: „Magasság: térképközéppont”\n• Opció hozzáadása az útvonaltól való eltérés bemondásának letiltásához\n• Wikipédia: képek megtekintésének lehetősége, frissített olvasói felület\n• Kedvencek: keresés hozzáadása\n• CarPlay: előzmények hozzáadása, átszervezett nyomvonalak és kedvencek listája\n• Túraútvonalak: útvonalak kiválasztásának lehetősége a térképen további információk megtekintéséhez vagy navigációhoz\n• OpenStreetMap: nyomvonalak feltöltésének lehetősége\n• Új modul: a következő napkelte vagy napnyugta pontos idejének vagy hátralévő idejének megjelenítése\n• Új modul: koordináták megjelenítése a térképközépponthoz\n• Továbbfejlesztett külső billentyűzet-támogatás, alapvető műveletek támogatása\n• Hangutasítások: új nyelvek támogatása: katalán, ukrán, bolgár, indonéz, szlovén\n• Jogi figyelmeztetés hozzáadása a sebességmérő kamera riasztások használatáról\n• Továbbfejlesztett adatvédelem: opciók hozzáadása az előzmények naplózásának letiltásához\n• Továbbfejlesztett láthatósága a térképvonalzónak\n• OsmAnd Cloud hibajavítások és felhasználói felület fejlesztések\n• Felhasználói felület fejlesztések az RTL nyelvekhez\n• Kisegítő lehetőségek: tartalomcímkézés hozzáadása a térképgombokhoz\n• „Dinamikus típus” támogatás hozzáadása, a szövegméret az OsmAndban az iOS szövegméretének megfelelően változik\n• Térképtájolás: kézzel forgatott mód hozzáadása\n• Új moped profil\n• A minimális iOS verzió 15.0-ra emelkedett\n";
 "ios_release_4_5" = "• Teljesen átalakított modulélmény: modulpozíció megváltoztatásának lehetősége, oldalak szerinti csoportosítás, egy lista a bal és jobb oldali panel moduljaihoz\n• Átalakított konfigurációs képernyő\n• Ingyenes biztonsági mentés a kedvencekről, beállításokról és OSM-szerkesztésekről az OsmAnd Cloudba\n• „CAI” skála hozzáadása az „Útvonalak nehézségi osztályozásához”\n• A „Szintvonalak bővítmény” átnevezve „Topográfia”-ra, az új tereptérkép-formátum támogatása\n• 3D domborzat hozzáadása\n• OAuth engedélyezés hozzáadása az OpenStreetMap szerkesztő bővítményhez\n• Külön gomb hozzáadása a 2D vagy 3D mód közötti váltáshoz\n• Megváltoztatva a dőlés gesztus iránya\n• Javítva a kedvencek exportálásával kapcsolatos probléma, amely adatvesztéshez vezethetett\n";
-"ios_release_4_6" = "• Rögzítse és kövesse nyomon mérőszámait külső érzékelőkkel, beleértve a kerékpársebességet, a kerékpár-pedálfordulatot, a kerékpártávolságot, a pulzusszámot és a hőmérsékletet\n• Mostantól közvetlenül a CarPlay műszerfalán is megtekintheti a térképet\n• Éjszakai téma hozzáadása a kényelmes megtekintési élményért alacsony fényviszonyok mellett\n• Fedezze fel a „Wikivoyage” utazási útmutatóit\n• Továbbfejlesztett párbeszédpanelek jegyzetek hozzáadásához és jegyzetek, valamint POI-k feltöltéséhez az OpenStreetMapre\n• Könnyedén visszaállíthatja a bővítménybeállításokat a telepítési alapértékekre egy új „Visszaállítás alaphelyzetbe” opcióval\n• „Képernyőtájolás” opció hozzáadása az előnyben részesített tájolás beállításához automatikus váltás nélkül\n• Külön gomb hozzáadása a 3D mód váltásához közvetlenül a CarPlay képernyőn\n• Minimális és maximális magassági információk hozzáadása a navigációs útvonalakhoz a hegymenet és lejtmenet mellett\n• Továbbfejlesztett nyomvonalszínezés lejtő módban új szimmetrikus színátmenettel\n • A kedvenc mappák mostantól alapértelmezett megjelenést tárolnak, amely automatikusan alkalmazódik minden hozzáadott pontra\n• Javítva a „Sugárvonalzó” középpontjának eltérése a térképközépponttól\n• „Cikk olvasása” gomb hozzáadása a Wikipédia POI-k helyi menüjéhez\n• Javítva a GPX-fájl importálása a kedvencekbe\n• Javítva a naptáreseménnyel kapcsolatos probléma a parkolási pozíciónál\n• Javítva az összeomlás a szín eltávolításakor a palettáról\n";
+"ios_release_4_6" = "• Rögzítse és kövesse nyomon mérőszámait külső érzékelőkkel, beleértve a kerékpársebességet, a kerékpár-pedálfordulatot, a kerékpártávolságot, a pulzusszámot és a hőmérsékletet\n• Mostantól közvetlenül a CarPlay műszerfalán is megtekintheti a térképet\n• Éjszakai téma hozzáadása a kényelmes megtekintési élményért alacsony fényviszonyok mellett\n• Fedezze fel a „Wikivoyage” utazási útmutatóit\n• Továbbfejlesztett párbeszédpanelek jegyzetek hozzáadásához és jegyzetek, valamint POI-k feltöltéséhez az OpenStreetMapre\n• Könnyedén visszaállíthatja a bővítménybeállításokat a telepítési alapértékekre egy új „Visszaállítás alaphelyzetbe” opcióval\n• „Képernyőtájolás” opció hozzáadása az előnyben részesített tájolás beállításához automatikus váltás nélkül\n• Külön gomb hozzáadása a 3D mód váltásához közvetlenül a CarPlay képernyőn\n• Legkisebb és legnagyobb magassági információk hozzáadása a navigációs útvonalakhoz a hegymenet és lejtmenet mellett\n• Továbbfejlesztett nyomvonalszínezés lejtő módban új szimmetrikus színátmenettel\n • A kedvenc mappák mostantól alapértelmezett megjelenést tárolnak, amely automatikusan alkalmazódik minden hozzáadott pontra\n• Javítva a „Sugárvonalzó” középpontjának eltérése a térképközépponttól\n• „Cikk olvasása” gomb hozzáadása a Wikipédia POI-k helyi menüjéhez\n• Javítva a GPX-fájl importálása a kedvencekbe\n• Javítva a naptáreseménnyel kapcsolatos probléma a parkolási pozíciónál\n• Javítva az összeomlás a szín eltávolításakor a palettáról\n";
 "ios_release_4_7" = "• Továbbfejlesztett felső és alsó modulpanel az összes modul elhelyezéséhez\n• Továbbfejlesztett kezelése a térképen látható nyomvonalaknak\n• Frissített „Elemzés a térképen” funkció az érzékelők mérőszámainak megjelenítésével\n• Bővített címketámogatás a GPX-hez: link, szerző, szerzői jog és kulcsszavak\n• Továbbfejlesztett modulkonfiguráció, lehetővé téve a felhasználók számára oldalak és sorok mozgatását\n• Továbbfejlesztett nyomvonal-kezelés a „Saját helyek” menüben almappákkal és helyi menükkel a nyomvonalakhoz és mappákhoz\n• Körforgalom kijáratszámmal mostantól megjelenik a CarPlay-en navigáció közben\n• Irányítsa a 3D domborzatot egy új „Függőleges eltúlzás” opcióval a drámaibb tájért\n• Jelenítse meg a nyomvonal magasságát közvetlenül a térképen dinamikus 3D nézetben\n• Új modulok: „Siklószám” és „Napszak”\n• Testre szabhatja a „Távolság navigáció közben” beállítást: válasszon a pontos vagy a kerekített számok között\n• Az alkalmazás nyelve lesz használva a neveknél a világ áttekintő térképén a helyi nyelvek helyett\n• OsmAnd Cloud: Lehetőség az adatok kezelésére, beleértve a törölt fájlok visszaállítását és a fiók törlését\n• További címketámogatás hozzáadása a turistaútvonalakhoz\n• Javítva a „Koordináták” modul, ahol egyes esetekben hiányoztak az utolsó számjegyek\n• Javítva a „3D mód” gomb viselkedése: a gombra koppintás nem menti el a dőlésszöget\n• Javítva az állapotsor színe régebbi iOS verziókon\n• Javítva a térkép forgatása és csippentéssel való nagyítása gesztusok macOS-en futó alkalmazás esetén\n";
 "ios_release_4_8" = "• Új „Sebességmérő” modul, amely kompatibilis a CarPlay-jel\n• Részletes útvonal-utasítások hozzáadása az útvonal részleteihez\n• A térképképernyő testreszabása több „Gyorsművelet” gomb hozzáadásával\n• 3D nyomvonal fejlesztések: új megjelenítési és színezési lehetőségek\n• Egyéni színpaletták a terephez, nyomvonalakhoz és útvonalakhoz\n• Továbbfejlesztett többes kiválasztási mód a nyomvonalakhoz\n• 3D változat a helypozíció ikonokhoz\n• Bővített turistaútvonal-választék a térképen\n• Időjárás: felhasználói felület frissítése, szélanimáció hozzáadása\n• Sima átmenetek hozzáadása 3D módban való nagyításkor\n• A „Helypozíció a képernyőn” most a Képernyő konfigurálása menüben található\n• A „Kerék kerülete” módosítása a BLE érzékelő beállításaiban\n• Külön „Sebességkorlátozás” navigációs riasztás hozzáadása\n• Javítva az irányszög modulok nevei\n• Javítva a „Sugárvonalzó” láthatósága minden modulpanelen\n";
 "ios_release_4_9" = "• Módosított iránytű viselkedés: egy koppintás északra forgatja a térképet, míg dupla koppintással a tájolási módok között vált\n• Keresési funkció hozzáadása a legnépszerűbb márkanevekhez\n• Továbbfejlesztett grafikonmegjelenés: az Y-tengely feliratai már nem fedik át a grafikont\n• Teljes nyomvonal-statisztikák hozzáadása minden mappa láblécéhez\n• Az összes fordítással rendelkező címke egyetlen elembe csoportosítása a helyi menüben\n• Javítva egy hiba, amely miatt a POI-kategória hiányzott a helyi menüből\n• Javítva egy hiba a hangutasítás nyelvének automatikus észlelésével\n• Javítva az összeomlás a Hajózási profil útvonal paramétereinél\n• CarPlay fejlesztések: megoldva egy probléma, amely miatt a fő navigációs modul nem frissült az útvonal újraszámításai után, és javítva a nyilak mérete a következő kanyar modulban\n• Bevezetve egy Térképmód paraméter, amely mostantól követi az alkalmazás témáját\n• Továbbfejlesztett felhasználói felület a helyikon kiválasztásához, opciók hozzáadása a helysugár és a látószög letiltásához\n• Gyorsművelet hozzáadása a „Helypozíció a képernyőn” módosításához\n";
 "ios_release_5_0" = "• Okosmappák bevezetése az automatikus nyomvonalszervezéshez.\n• Teljes képernyős galérianézegető hozzáadása a Wikimedia képekhez.\n• Vietnámi és héber szövegfelolvasás (TTS) támogatása a navigációhoz.\n• Gyorsműveletek hozzáadása az utazásrögzítés vezérléséhez.\n• „Részletes nyomvonal-útmutatás” opció és „Utakhoz csatolás” javaslati párbeszédpanel hozzáadása.\n• Kiemelkedő csúcsok felfedezhetők a térképen és kereséssel.\n• Szegélykiemelés hozzáadása az épületekhez és területekhez részletes információkkal.\n• Opció hozzáadása a különálló kedvenc csoportok láthatóságának váltásához a térképen.\n• Bővített ikonopciók a kedvencekhez az összes POI-kategória ikonjainak hozzáadásával.\n• Akkumulátorszint-kijelzés hozzáadása a külső érzékelőkhöz.\n• Opció hozzáadása több nyomvonal megjelenésének egyidejű módosításához.\n• „Visszaállítás” művelet hozzáadása az Átlagsebesség modulhoz.\n• CarPlay keresés: Épületek kiválasztásának lehetősége.\n• Javítva az UTM koordináta beviteli sorrendje.\n• Javítva egy probléma a nyomvonal-útpontok színeivel.\n• Javítva a hiányzó „Összes letöltése” gomb a domborzati térképeknél.\n• Javítva egy probléma, amely miatt a népszerű cikkek néha hiányoztak az utazási útmutatókból.\n";
 "ios_release_5_1" = "• Webes és platformfüggetlen vásárlások támogatása\n• Új navigációs modul, amely egyesíti a kanyarodási nyilat és a navigációs utasításokat\n• Átnevezés művelet hozzáadása a kedvenc csoportokhoz\n• „Térfogategység” és „Üzemanyagtartály-kapacitás” opciók hozzáadása\n• „Koordinátarács” fedvény hozzáadása\n• A bal és jobb oldali paneleken lévő modulok mostantól magassági opciót is tartalmaznak\n• Tevékenységek nyomvonalakhoz való hozzárendelésének lehetősége\n• Javítva egy összeomlás a CarPlay-en iOS 15 alatt\n• Megoldva az automatikus átméretezési problémák a bal és jobb oldali paneleken lévő modulokkal\n• Javítva az utazási útmutatók inkompatibilitása\n• Megoldva a platformfüggetlen vásárlásokkal kapcsolatos probléma\n• Javítva a fekete képernyő problémája a CarPlay-en indítás után\n";
 "ios_release_5_2" = "• Bevezetve a testre szabható gombkiosztás külső vezérlőkhöz, amely lehetővé teszi bármely gyorsművelet hozzárendelését egy billentyűzet- vagy vezérlőgombhoz\n• Új gyorsműveletek hozzáadása az alkalmazás külső vezérlővel történő irányításához\n• Javított modul láthatóság átlátszó módban szövegkörvonalak hozzáadásával\n• Precíziós rács hozzáadása a térképgombok igazításához\n• Bevezetve egy új „Tengeri” hajózási térképstílus kiterjedt testreszabási lehetőségekkel\n• Utca- és városrészletek hozzáadása a keresési eredményekhez\n• Opció hozzáadása a szövegméret növeléséhez a távolságmérő eszközben\n• A hőmérséklet-mértékegység kiválasztása átkerült az Általános beállításokba\n• A magassági mértékegységek mostantól külön beállíthatók a távolsági mértékegységektől\n• Térképtájolás gyorsművelet hozzáadása választható iránytű módokkal\n• Megoldva egy probléma, amely megakadályozta néhány modul mozgatását\n• Javítva a helytelen távolságkijelzés a Következő kanyar modulban\n• Javított márkakeresés több helyi márka bevonásával\n• Általános stabilitási és teljesítményjavítások\n";
+"routing_attr_weightrating_name" = "Megengedett össztömeg";
+"routing_attr_maxaxleload_name" = "Megengedett legnagyobb tengelyterhelés";
+"x" = "X (korábban Twitter)";

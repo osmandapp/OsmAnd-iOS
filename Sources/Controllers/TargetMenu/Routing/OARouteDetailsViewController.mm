@@ -290,7 +290,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     [GpxUIHelper setupElevationChartWithChartView:routeStatsCell.chartView
                                         topOffset:20
                                      bottomOffset:4
-                              useGesturesAndScale:YES];
+                              useGesturesAndScale:YES
+                                    showXInMarker:NO];
 
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView

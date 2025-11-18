@@ -73,6 +73,24 @@ static inline void executeOnMainThread(dispatch_block_t block)
         dispatch_async(dispatch_get_main_queue(), block);
 }
 
+static inline NSString *_Nullable OAStringFromUTF8Nullable(const char *_Nullable cstr)
+{
+    if (!cstr)
+        return nil;
+
+    return [NSString stringWithCString:cstr encoding:NSUTF8StringEncoding];
+}
+
+static inline double normalizeDouble(double v)
+{
+    if (!isfinite(v))
+    {
+        NSLog(@"[NormalizeDouble] Invalid value: %f", v);
+        return 0.0;
+    }
+    return v;
+}
+
 @interface UIBezierPath (util)
 
 - (void) cubicToX:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 x3:(float)x3 y3:(float)y3;
@@ -391,7 +409,7 @@ static inline void executeOnMainThread(dispatch_block_t block)
 + (NSString *) getLocalizedRouteInfoProperty:(NSString *)properyName;
 
 + (BOOL) isColorBright:(UIColor *)color;
-+ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth alignment:(NSTextAlignment)alignment;
++ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(nullable UIColor *)strokeColor strokeWidth:(float)strokeWidth alignment:(NSTextAlignment)alignment;
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor isBigTitle:(BOOL)isBigTitle parentViewWidth:(CGFloat)parentViewWidth;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle topOffset:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;

@@ -27,6 +27,7 @@
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <OsmAndCore/ICU.h>
+#include <OsmAndCore/Utilities.h>
 
 #define MAX_TYPE_WEIGHT 10.0
 #define HYPHEN "-"
@@ -63,11 +64,11 @@
         return _unknownPhraseMatchWeight;
 
     // normalize number to get as power, so we get numbers > 1
-    _unknownPhraseMatchWeight = [self getSumPhraseMatchWeight] / pow(MAX_PHRASE_WEIGHT_TOTAL, [self getDepth] - 1);
+    _unknownPhraseMatchWeight = [self getSumPhraseMatchWeight:nil];
     return _unknownPhraseMatchWeight;
 }
 
-- (double) getSumPhraseMatchWeight
+- (double) getSumPhraseMatchWeight:(OASearchResult *)exactResult
 {
     double res = [OAObjectType getTypeWeight:_objectType];
     if ([_requiredSearchPhrase getUnselectedPoiType])
@@ -76,33 +77,64 @@
     }
     else if (_objectType == EOAObjectTypePoiType)
     {
-        
+        // don't overload with poi types
     }
     else
     {
         CheckWordsMatchCount *completeMatchRes = [[CheckWordsMatchCount alloc] init];
-        bool matched = [self allWordsMatched:_localeName cnt:completeMatchRes];
+        bool matched = _localeName != nil && [self allWordsMatched:_localeName exactResult:exactResult cnt:completeMatchRes];
         if (!matched && _alternateName != nil && ![_alternateName isEqualToString:_cityName])
         {
-            bool matched = [self allWordsMatched:_alternateName cnt:completeMatchRes];
+            matched = [self allWordsMatched:_alternateName exactResult:exactResult cnt:completeMatchRes];
         }
         if (!matched && _otherNames != nil)
         {
-            for (NSString *otherName : _otherNames) {
-                if ([self allWordsMatched:otherName cnt:completeMatchRes])
+            for (NSString *otherName : _otherNames)
+            {
+                if ([self allWordsMatched:otherName exactResult:exactResult cnt:completeMatchRes])
                 {
                     matched = true;
                     break;
                 }
             }
         }
+        OACity * selectedCity = nil;
+        if (exactResult != nil && [exactResult.object isKindOfClass:OAStreet.class])
+        {
+            selectedCity = [(OAStreet *) exactResult.object city];
+        }
+        else if (exactResult != nil && exactResult.parentSearchResult != nil && [exactResult.parentSearchResult.object isKindOfClass:OAStreet.class])
+        {
+            selectedCity =  [(OAStreet *) exactResult.parentSearchResult.object city];
+        }
+        if (matched && selectedCity != nil && [self.object isKindOfClass:OACity.class])
+        {
+            OACity * c = (OACity *) self.object;
+            // city don't match because of boundary search -> lower priority
+            if (![selectedCity.name isEqualToString:c.name])
+            {
+                matched = false;
+                // for unmatched cities calculate how close street is to boundary
+                // 1 - very close, 0 - very far
+                std::vector<int32_t> bbox31 = selectedCity.city->bbox31;
+                double lat = selectedCity.latitude;
+                double lon = selectedCity.longitude;
+                if (bbox31.size() > 0)
+                {
+                    // even center is shifted probably best to do combination of bbox & center
+                    lon = OsmAnd::Utilities::get31LongitudeX(bbox31.at(0) / 2 + bbox31.at(2) / 2);
+                    lat = OsmAnd::Utilities::get31LatitudeY(bbox31.at(1) / 2 + bbox31.at(3) / 2);
+                }
+                res += 100 / MAX(100, OsmAnd::Utilities::distance(self.location.coordinate.longitude, self.location.coordinate.latitude, lon, lat));
+            }
+        }
         // if all words from search phrase match (<) the search result words - we prioritize it higher
-        if (completeMatchRes.allWordsInPhraseAreInResult)
+        if (matched)
             res = [self getPhraseWeightForCompleteMatch:completeMatchRes];
     }
     if (_parentSearchResult)
         // parent search result should not change weight of current result, so we divide by MAX_TYPES_BASE_10^2
-        res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_PHRASE_WEIGHT_TOTAL;
+        res = res + [_parentSearchResult getSumPhraseMatchWeight:(exactResult == nil ? self : exactResult)] / MAX_PHRASE_WEIGHT_TOTAL;
     
     return res;
 }
@@ -113,17 +145,21 @@
         // if all words from search phrase == the search result words - we prioritize it even higher
         if (completeMatchRes.allWordsEqual)
         {
-            BOOL closeDistance = [OAMapUtils getDistance:([_requiredSearchPhrase getLastTokenLocation]).coordinate second:_location.coordinate] <= NEAREST_METERS_LIMIT;
-            if (_objectType == EOAObjectTypeCity || _objectType == EOAObjectTypeVillage || closeDistance)
+            BOOL closeDistance = [_requiredSearchPhrase getLastTokenLocation] != nil && self.location != nil
+                                && [OAMapUtils getDistance:([_requiredSearchPhrase getLastTokenLocation]).coordinate second:self.location.coordinate] <= NEAREST_METERS_LIMIT;
+            if (_objectType != EOAObjectTypePoi || closeDistance)
                 res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10 + MAX_PHRASE_WEIGHT_TOTAL / 2;
         }
         return res;
     }
 
-- (BOOL)allWordsMatched:(NSString *)name cnt:(CheckWordsMatchCount *)cnt
+- (BOOL)allWordsMatched:(NSString *)name exactResult:(OASearchResult *)exactResult cnt:(CheckWordsMatchCount *)cnt
 {
     NSMutableArray<NSString *> *searchPhraseNamesArray = [self getSearchPhraseNames];
     QStringList searchPhraseNames;
+    if ([name rangeOfString:@"("].location != NSNotFound) {
+        name = [OASearchPhrase stripBraces:name];
+    }
     for (NSString *searchPhraseName : searchPhraseNamesArray)
     {
         if ([OAArabicNormalizer isSpecialArabic:searchPhraseName]) {
@@ -149,6 +185,17 @@
     BOOL wordMatched;
     if (searchPhraseNames.isEmpty())
         return NO;
+    while (exactResult != nil && exactResult != self) {
+        NSMutableArray<NSString *> *lst = [exactResult getSearchPhraseNames];
+        for (NSString *l in lst) {
+            int i = searchPhraseNames.indexOf(QString::fromNSString(l));
+            if (i != -1) {
+                searchPhraseNames.removeAt(i);
+            }
+        }
+        exactResult = exactResult.parentSearchResult;
+    }
+    
     int idxMatchedWord = -1;
     for (const auto& searchPhraseName : searchPhraseNames)
     {
@@ -190,6 +237,21 @@
         [searchPhraseNames addObject:fw];
     if (ow)
         [searchPhraseNames addObjectsFromArray:ow];
+    // when parent result was recreated with same phrase (it doesn't have preselected word)
+    // SearchCoreFactory.subSearchApiOrPublish
+    if (self.parentSearchResult != nil
+        && self.requiredSearchPhrase == self.parentSearchResult.requiredSearchPhrase
+        && self.parentSearchResult.otherWordsMatch != nil)
+    {
+        for (NSString * s in self.parentSearchResult.otherWordsMatch)
+        {
+            NSUInteger i = [searchPhraseNames indexOfObject:s];
+            if (i != NSNotFound)
+            {
+                [searchPhraseNames removeObjectAtIndex:i];
+            }
+        }
+    }
     
     return searchPhraseNames;
 }
@@ -387,6 +449,46 @@
         }
     }
     return b;
+}
+
+- (NSMutableArray<NSString *> *)filterUnknownSearchWord:(NSMutableArray<NSString *> *)leftUnknownSearchWords {
+    if (leftUnknownSearchWords == nil) {
+        leftUnknownSearchWords = [NSMutableArray arrayWithArray:self.requiredSearchPhrase.getUnknownSearchWords];
+        [leftUnknownSearchWords insertObject:self.requiredSearchPhrase.getFirstUnknownSearchWord atIndex:0];
+    }
+    
+    if (self.firstUnknownWordMatches) {
+        [leftUnknownSearchWords removeObject:self.requiredSearchPhrase.getFirstUnknownSearchWord];
+    }
+    
+    if (self.otherWordsMatch != nil) {
+        for (NSString *otherWord in self.otherWordsMatch)
+        {
+            NSInteger ind = NSNotFound;
+            if (self.firstUnknownWordMatches)
+            {
+                ind = [leftUnknownSearchWords indexOfObject:otherWord];
+            }
+            else
+            {
+                // lastIndexOf
+                ind = [leftUnknownSearchWords indexOfObjectWithOptions:NSEnumerationReverse passingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop)
+                {
+                    if ([obj isEqual:otherWord])
+                    {
+                        *stop = YES;
+                        return YES;
+                    }
+                    return NO;
+                }];
+            }
+            if (ind != NSNotFound) {
+                [leftUnknownSearchWords removeObjectAtIndex:ind];
+            }
+        }
+    }
+    
+    return leftUnknownSearchWords;
 }
 
 @end

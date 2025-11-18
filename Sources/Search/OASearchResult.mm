@@ -21,6 +21,7 @@
 #import "OAMapUtils.h"
 #import "OASearchCoreFactory.h"
 #import "OAArabicNormalizer.h"
+#import "OAPOI.h"
 
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -34,6 +35,8 @@
 #define NEAREST_METERS_LIMIT 30000
 #define ALLDELIMITERS "\\s|,"
 #define ALLDELIMITERS_WITH_HYPHEN "\\s|,|-"
+#define MIN_ELO_RATING 1800.0
+#define MAX_ELO_RATING 4300.0
 
 @implementation CheckWordsMatchCount
 @end
@@ -70,7 +73,7 @@
 
 - (double) getSumPhraseMatchWeight:(OASearchResult *)exactResult
 {
-    double res = [OAObjectType getTypeWeight:_objectType];
+    double res = [self getTypeWeight:exactResult objectType:_objectType];
     if ([_requiredSearchPhrase getUnselectedPoiType])
     {
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
@@ -130,7 +133,17 @@
         }
         // if all words from search phrase match (<) the search result words - we prioritize it higher
         if (matched)
-            res = [self getPhraseWeightForCompleteMatch:completeMatchRes];
+            res = [self getPhraseWeightForCompleteMatch:exactResult completeMatchRes:completeMatchRes];
+        if ([_object isKindOfClass:OAPOI.class])
+        {
+            OAPOI * a = (OAPOI *) _object;
+            int elo = [a getTravelEloNumber];
+            if (elo > MIN_ELO_RATING)
+            {
+                double rat = ((double)elo - MIN_ELO_RATING) / (MAX_ELO_RATING - MIN_ELO_RATING);
+                res += rat * MAX_PHRASE_WEIGHT_TOTAL * 2 / 3;
+            }
+        }
     }
     if (_parentSearchResult)
         // parent search result should not change weight of current result, so we divide by MAX_TYPES_BASE_10^2
@@ -139,16 +152,16 @@
     return res;
 }
 
-- (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes
+- (double) getPhraseWeightForCompleteMatch:(OASearchResult *)exactResult completeMatchRes:(CheckWordsMatchCount *)completeMatchRes
     {
-        double res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10;
+        double res = [self getTypeWeight:exactResult objectType:_objectType] * MAX_TYPES_BASE_10;
         // if all words from search phrase == the search result words - we prioritize it even higher
         if (completeMatchRes.allWordsEqual)
         {
             BOOL closeDistance = [_requiredSearchPhrase getLastTokenLocation] != nil && self.location != nil
                                 && [OAMapUtils getDistance:([_requiredSearchPhrase getLastTokenLocation]).coordinate second:self.location.coordinate] <= NEAREST_METERS_LIMIT;
             if (_objectType != EOAObjectTypePoi || closeDistance)
-                res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10 + MAX_PHRASE_WEIGHT_TOTAL / 2;
+                res = [self getTypeWeight:exactResult objectType:_objectType] * MAX_TYPES_BASE_10 + MAX_PHRASE_WEIGHT_TOTAL / 2;
         }
         return res;
     }
@@ -156,6 +169,7 @@
 - (BOOL)allWordsMatched:(NSString *)name exactResult:(OASearchResult *)exactResult cnt:(CheckWordsMatchCount *)cnt
 {
     NSMutableArray<NSString *> *searchPhraseNamesArray = [self getSearchPhraseNames];
+    name = [OACollatorStringMatcher alignChars:name];
     QStringList searchPhraseNames;
     if ([name rangeOfString:@"("].location != NSNotFound) {
         name = [OASearchPhrase stripBraces:name];
@@ -234,9 +248,14 @@
     NSMutableArray<NSString *> *ow = [_requiredSearchPhrase getUnknownSearchWords];
     
     if (fw && [fw length] > 0)
-        [searchPhraseNames addObject:fw];
+        [searchPhraseNames addObject:[OACollatorStringMatcher alignChars:fw]];
     if (ow)
-        [searchPhraseNames addObjectsFromArray:ow];
+    {
+        for (NSString * o in ow)
+        {
+            [searchPhraseNames addObject:[OACollatorStringMatcher alignChars:o]];
+        }
+    }
     // when parent result was recreated with same phrase (it doesn't have preselected word)
     // SearchCoreFactory.subSearchApiOrPublish
     if (self.parentSearchResult != nil
@@ -245,7 +264,7 @@
     {
         for (NSString * s in self.parentSearchResult.otherWordsMatch)
         {
-            NSUInteger i = [searchPhraseNames indexOfObject:s];
+            NSUInteger i = [searchPhraseNames indexOfObject:[OACollatorStringMatcher alignChars:s]];
             if (i != NSNotFound)
             {
                 [searchPhraseNames removeObjectAtIndex:i];
@@ -489,6 +508,15 @@
     }
     
     return leftUnknownSearchWords;
+}
+
+- (double) getTypeWeight:(OASearchResult *)exactResult objectType:(EOAObjectType)objectType
+{
+    if (exactResult == nil && ![_requiredSearchPhrase isLikelyAddressSearch])
+    {
+        return 1;
+    }
+    return [OAObjectType getTypeWeight:objectType];
 }
 
 @end

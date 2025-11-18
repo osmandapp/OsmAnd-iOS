@@ -554,7 +554,7 @@
 "unknown_location" = "A jelenlegi helyzet még nem ismert.";
 "animate_routing_route_not_calculated" = "Először számítsa ki az útvonalat";
 "settings_preset" = "Alapértelmezett profil";
-"switch_start_finish" = "Kiindulási pont és az úticél felcserélése";
+"switch_start_finish" = "Kiindulási pont és az úti cél felcserélése";
 "clear_all_intermediates" = "Minden köztes célpont törlése";
 "shared_string_options" = "Beállítások";
 "shared_string_current" = "Jelenlegi";
@@ -1912,7 +1912,7 @@
 "shared_string_layers" = "Rétegek";
 "weather_temp_enable_descr" = "Engedélyezi a hőmérsékleti réteg megjelenítését a térképen.";
 "weather_precip_enable_descr" = "Engedélyezi a csapadékréteg megjelenítését a térképen.";
-"swap_points" = "Kiindulási pont és az úti cél felcserélése";
+"swap_points" = "Kiindulási pont és úti cél felcserélése";
 "select_favorite" = "Kedvenc kiválasztása";
 "route_preferred_terrain_any" = "Az útvonal kiválasztásakor a domborzati profil nem lesz figyelembe véve.";
 "map_settings_install_maps" = "Válassza ki a telepítendő vagy frissítendő térképeket";

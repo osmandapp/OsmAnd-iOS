@@ -217,13 +217,22 @@ static NSString * const kLinkExternalType = @"ext_link";
     aboutOsmAndSection.headerText = OALocalizedString(@"about_osmAnd");
     
     NSArray *aboutOsmAndItems = @[
-        @{@"title": OALocalizedString(@"osmAnd_team"), @"descr": @"", @"icon": @"ic_custom_logo_osmand", @"url": kOsmAndTeam},
-        @{@"title": OALocalizedString(@"help_what_is_new"), @"descr": [NSString stringWithFormat:@"%@ %@, %@ %@",
-                                                                       OALocalizedString(@"OsmAnd Maps"),
-                                                                       [OAAppVersion getBuildVersion],
-                                                                       OALocalizedString(@"shared_string_release").lowercaseString,
-                                                                       [self releaseDateString]], @"icon": @"ic_custom_clipboard", @"url": kDocsLatestVersion},
-        @{@"title": OALocalizedString(@"testFlight"), @"descr": OALocalizedString(@"download_install_beta_version"), @"icon": @"ic_custom_download", @"url": kTestFlight}
+        @{@"title": OALocalizedString(@"osmAnd_team"),
+          @"descr": @"",
+          @"icon": @"ic_custom_logo_osmand",
+          @"url": kOsmAndTeam},
+        @{@"title": OALocalizedString(@"help_what_is_new"),
+          @"descr": [NSString stringWithFormat:@"%@ %@, %@ %@",
+                     OALocalizedString(@"OsmAnd Maps"),
+                     [OAAppVersion getBuildVersion],
+                     OALocalizedString(@"shared_string_release").lowercaseString,
+                     [self releaseDateString]],
+          @"icon": @"ic_custom_clipboard",
+          @"url": kDocsLatestVersion},
+        @{@"title": OALocalizedString(@"testFlight"),
+          @"descr": OALocalizedString(@"download_install_beta_version"),
+          @"icon": @"ic_custom_download",
+          @"url": kTestFlight}
     ];
     
     for (NSDictionary *item in aboutOsmAndItems)

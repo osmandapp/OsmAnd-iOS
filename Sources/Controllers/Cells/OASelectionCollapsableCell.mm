@@ -10,6 +10,7 @@
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAButton.h"
 
 @implementation OASelectionCollapsableCell
 
@@ -90,6 +91,19 @@
     self.selectionButtonContainer.hidden = !selectable;
     self.selectionButton.hidden = !selectable;
     self.selectionGroupButton.hidden = !selectable;
+}
+
+- (void)showMenuButton:(BOOL)visible
+{
+    self.menuButton.hidden = !visible;
+    if (!visible)
+    {
+        [self.menuButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+        self.menuButton.onMenuWillBeginInteraction = nil;
+        self.menuButton.onMenuDidEndInteraction = nil;
+        self.menuButton.showsMenuAsPrimaryAction = NO;
+        self.menuButton.menu = nil;
+    }
 }
 
 @end

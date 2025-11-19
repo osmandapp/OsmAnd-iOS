@@ -30,6 +30,7 @@
     [self addGestureRecognizer:_tapRecognizer];
     _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonLongPressed:)];
     [self addGestureRecognizer:_longPressRecognizer];
+    self.contextMenuInteractionEnabled = YES;
 }
 
 - (void)layoutSubviews
@@ -89,6 +90,23 @@
 {
     if (self.delegate && recognizer.state == UIGestureRecognizerStateEnded)
         [self.delegate onButtonLongPressed:self.tag];
+}
+
+- (void)contextMenuInteraction:(UIContextMenuInteraction *)interaction willDisplayMenuForConfiguration:(UIContextMenuConfiguration *)configuration animator:(id<UIContextMenuInteractionAnimating>)animator
+{
+    if (self.onMenuWillBeginInteraction)
+        self.onMenuWillBeginInteraction();
+}
+
+- (void)contextMenuInteraction:(UIContextMenuInteraction *)interaction willEndForConfiguration:(UIContextMenuConfiguration *)configuration animator:(id<UIContextMenuInteractionAnimating>)animator
+{
+    if (!self.onMenuDidEndInteraction)
+        return;
+    
+    [animator addCompletion:^{
+        if (self.onMenuDidEndInteraction)
+            self.onMenuDidEndInteraction();
+    }];
 }
 
 @end

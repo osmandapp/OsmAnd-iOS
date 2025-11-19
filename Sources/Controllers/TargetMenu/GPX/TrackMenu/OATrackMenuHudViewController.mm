@@ -72,6 +72,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAEditGroupViewController.h"
+#import "OAButton.h"
 
 #define kGpxDescriptionImageHeight 149
 #define kOverviewTabIndex @0
@@ -151,7 +152,8 @@
 
     BOOL _isHeaderBlurred;
     BOOL _wasFirstOpening;
-
+    BOOL _isContextMenuVisible;
+    BOOL _shouldUpdateTable;
     BOOL _isNewRoute;
 
     OASKQuadRect *_docRect;
@@ -763,6 +765,12 @@
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
+    if (_isContextMenuVisible && !forceUpdate)
+    {
+        _shouldUpdateTable = YES;
+        return;
+    }
+
     if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
         return;
 
@@ -2472,7 +2480,7 @@
     else if ([cellData.type isEqualToString:[OASelectionCollapsableCell getCellIdentifier]])
     {
         OASelectionCollapsableCell *cell =
-                [self.tableView dequeueReusableCellWithIdentifier:[OASelectionCollapsableCell getCellIdentifier]];
+        [self.tableView dequeueReusableCellWithIdentifier:[OASelectionCollapsableCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASelectionCollapsableCell getCellIdentifier]
@@ -2485,7 +2493,9 @@
         }
         if (cell)
         {
+            BOOL isWaypointsGroup = [cellData.key hasPrefix:@"cell_waypoints_group_"];
             [cell showOptionsButton:![self isRteGroup:cellData.title]];
+            [cell showMenuButton:isWaypointsGroup];
             [cell.titleView setText:cellData.title];
 
             [cell.leftIconView setImage:cellData.leftIcon];
@@ -2512,19 +2522,28 @@
                                    action:@selector(cellExtraButtonPressed:)
                          forControlEvents:UIControlEventTouchUpInside];
             
-            if ([cellData.key hasPrefix:@"cell_waypoints_group_"])
+            cell.optionsGroupButton.tag = tag;
+            [cell.optionsGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            [cell.optionsGroupButton addTarget:self
+                                        action:@selector(cellExtraButtonPressed:)
+                              forControlEvents:UIControlEventTouchUpInside];
+            
+            if (isWaypointsGroup)
             {
-                cell.optionsGroupButton.showsMenuAsPrimaryAction = YES;
-                cell.optionsGroupButton.menu = [self createWaypointsGroupMenuForGroupName:cellData.title];
-                [cell.optionsGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-            }
-            else
-            {
-                cell.optionsGroupButton.showsMenuAsPrimaryAction = NO;
-                cell.optionsGroupButton.menu = nil;
-                cell.optionsGroupButton.tag = tag;
-                [cell.optionsGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-                [cell.optionsGroupButton addTarget:self action:@selector(cellExtraButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+                cell.menuButton.showsMenuAsPrimaryAction = YES;
+                cell.menuButton.menu = [self createWaypointsGroupMenuForGroupName:cellData.title];
+                cell.menuButton.onMenuWillBeginInteraction = ^{
+                    self->_isContextMenuVisible = YES;
+                };
+                cell.menuButton.onMenuDidEndInteraction = ^{
+                    self->_isContextMenuVisible = NO;
+                    if (self->_shouldUpdateTable)
+                    {
+                        self->_shouldUpdateTable = NO;
+                        [self generateData];
+                        [self.tableView reloadData];
+                    }
+                };
             }
         }
         outCell = cell;

@@ -2530,18 +2530,25 @@
             
             if (isWaypointsGroup)
             {
+                __weak __typeof(self) weakSelf = self;
                 cell.menuButton.showsMenuAsPrimaryAction = YES;
                 cell.menuButton.menu = [self createWaypointsGroupMenuForGroupName:cellData.title];
                 cell.menuButton.onMenuWillBeginInteraction = ^{
-                    self->_isContextMenuVisible = YES;
+                    __strong __typeof(weakSelf) strongSelf = weakSelf;
+                    if (!strongSelf)
+                        return;
+                    strongSelf->_isContextMenuVisible = YES;
                 };
                 cell.menuButton.onMenuDidEndInteraction = ^{
-                    self->_isContextMenuVisible = NO;
-                    if (self->_shouldUpdateTable)
+                    __strong __typeof(weakSelf) strongSelf = weakSelf;
+                    if (!strongSelf)
+                        return;
+                    strongSelf->_isContextMenuVisible = NO;
+                    if (strongSelf->_shouldUpdateTable)
                     {
-                        self->_shouldUpdateTable = NO;
-                        [self generateData];
-                        [self.tableView reloadData];
+                        strongSelf->_shouldUpdateTable = NO;
+                        [strongSelf generateData];
+                        [strongSelf.tableView reloadData];
                     }
                 };
             }

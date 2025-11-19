@@ -582,6 +582,7 @@
             
         if (targetPoint)
         {
+            targetPoint.location = latLon.coordinate;
             [targetPoint initAdderssIfNeeded];
             [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint]];
         }

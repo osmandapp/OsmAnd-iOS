@@ -936,7 +936,7 @@
 "shared_string_on" = "Actif";
 "shared_string_off" = "Inactif";
 "online_map" = "Carte en ligne";
-"nautical_maps" = "Cartes marines";
+"nautical_maps" = "Cartes nautiques";
 "quick_action_add_create_items" = "Créer des éléments";
 "quick_action_edit_action" = "Modifier l\'action";
 "download_select_map_types" = "Autres cartes";

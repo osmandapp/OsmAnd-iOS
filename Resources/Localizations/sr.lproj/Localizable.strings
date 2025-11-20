@@ -3949,12 +3949,12 @@
 "rendering_attr_safetyContour_description" = "Контура безбедносне дубине";
 "ble_scanner" = "БЛЕ Пријемник";
 "lang_crh" = "Кримски Татарски (латиница)";
-"visualizing_button_grid" = "Мрежа дугмади мапе";
+"visualizing_button_grid" = "Мрежа дугмади карте";
 "efficient_grid" = "Ефикасна мрежа";
 "slots" = "Слотови";
 "button_frames" = "Оквири за дугмад";
 "max_weight_at_full_load_description" = "Наведите максималну тежину вашег возила при пуном оптерећењу како бисте избегли путеве и мостове са ограничењима тежине.";
 "max_axle_load_description" = "Наведите максимално осовинско оптерећење вашег возила како бисте избегли путеве и мостове са ограничењима тежине.";
 "x" = "Екс (бивши Твитер)";
-"routing_attr_weightrating_name" = "Максимална тежина при пуном оптерећењу";
-"routing_attr_maxaxleload_name" = "Максимално осовинско оптерећење";
+"routing_attr_weightrating_name" = "Највећа тежина при пуном оптерећењу";
+"routing_attr_maxaxleload_name" = "Највеће осовинско оптерећење";

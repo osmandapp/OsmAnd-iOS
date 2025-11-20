@@ -4405,3 +4405,4 @@
 "x" = "X (formerly Twitter)";
 "routing_attr_weightrating_name" = "Max weight at full load";
 "routing_attr_maxaxleload_name" = "Max axle load";
+"shared_string_release" = "Released";

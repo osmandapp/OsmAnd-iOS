@@ -42,7 +42,7 @@
     _routingHelper = [OARoutingHelper sharedInstance];
 }
 
-- (NSString *)speedLimitText
+- (int)speedLimit
 {
     EOASpeedConstant speedFormat = [_settings.speedSystem get];
     BOOL whenExceeded = [_settings.showSpeedLimitWarning get] == EOASpeedLimitWarningStateWhenExceeded;
@@ -66,9 +66,11 @@
     }
     if (alarm)
     {
-        return @(alarm.intValue).stringValue;
+        NSLog(@"[test] alarm.intValue: %d", alarm.intValue);
+        NSLog(@"[test] alarm.stringValue: %@", @(alarm.intValue).stringValue);
+        return alarm.intValue;
     }
-    return nil;
+    return -1;
 }
 
 @end

@@ -442,14 +442,14 @@
     {
         self.speedometerHeightConstraint.constant = _speedometerView.intrinsicContentSize.height;
         CGFloat optionsMenuButtonOffsetY = _mapHudViewController.optionsMenuButton.frame.origin.y;
-        self.speedometerTopConstraint.constant = optionsMenuButtonOffsetY - _speedometerView.intrinsicContentSize.height - 16;
+        self.speedometerTopConstraint.constant = 500;//optionsMenuButtonOffsetY - _speedometerView.intrinsicContentSize.height - 16;
         // NOTE: when opened context menu optionsMenuButton.frame.origin.x has value -34. Perhaps, by this method, the 'menu' button is hidden from the screen.
         CGFloat optionsMenuButtonOffsetX = _mapHudViewController.optionsMenuButton.frame.origin.x;
         if (optionsMenuButtonOffsetX < 0)
-            self.speedometerLeftConstraint.constant = _mapHudViewController.optionsMenuButton.frame.origin.x - _speedometerView.intrinsicContentSize.width;
+            self.speedometerLeftConstraint.constant = 16;//_mapHudViewController.optionsMenuButton.frame.origin.x - _speedometerView.intrinsicContentSize.width;
         else
-            self.speedometerLeftConstraint.constant = _mapHudViewController.optionsMenuButton.frame.origin.x;
-        _speedometerViewYPosition = self.speedometerTopConstraint.constant;
+            self.speedometerLeftConstraint.constant = 16;//_mapHudViewController.optionsMenuButton.frame.origin.x;
+        _speedometerViewYPosition = 500;//self.speedometerTopConstraint.constant;
     }
     
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)

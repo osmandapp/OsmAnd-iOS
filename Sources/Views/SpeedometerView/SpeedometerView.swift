@@ -39,10 +39,10 @@ final class SpeedometerView: OATextInfoWidget {
         }
     }
     let settings = OAAppSettings.sharedManager()
-
+    
     var sizeStyle: EOAWidgetSizeStyle = .medium
     var didChangeIsVisible: (() -> Void)?
-   
+    
     var carPlayConfig: CarPlayConfig?
     var isPreview = false
     
@@ -57,10 +57,6 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     private lazy var speedViewWrapper = SpeedLimitWrapper()
-    
-    private var speedLimitText: NSString? {
-        speedViewWrapper.speedLimitText() as NSString?
-    }
     
     override var intrinsicContentSize: CGSize {
         let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
@@ -78,8 +74,10 @@ final class SpeedometerView: OATextInfoWidget {
             return false
         }
         updateComponents()
-        updateSpeedometerSpeedView()
-        updateSpeedLimitView()
+        let speedLimit: Int = Int(speedViewWrapper.speedLimit())
+        print("[test] speedLimit: \(speedLimit)")
+        updateSpeedometerSpeedView(speedLimit: speedLimit)
+        updateSpeedLimitView(speedLimit: speedLimit)
         var isChangedVisible = false
         if !speedometerSpeedView.isHidden && isHidden {
             isChangedVisible = true
@@ -88,15 +86,15 @@ final class SpeedometerView: OATextInfoWidget {
         if isChangedVisible {
             didChangeIsVisible?()
         }
-      
+        
         return true
     }
     
     func configure() {
         sizeStyle = settings.speedometerSize.get()
-       
+        
         updateComponents()
-
+        
         centerPositionYConstraint.isActive = true
         if isPreview {
             isHidden = false
@@ -112,6 +110,7 @@ final class SpeedometerView: OATextInfoWidget {
             centerPositionXConstraint.isActive = false
             if let carPlayConfig {
                 speedometerSpeedView.layer.cornerRadius = 10
+                speedometerSpeedView.animationOrigin = carPlayConfig.isLeftSideDriving ? .left : .right
                 contentStackView.semanticContentAttribute = carPlayConfig.isLeftSideDriving ? .forceRightToLeft : .forceLeftToRight
                 speedometerSpeedView.configureTextAlignmentContent(isTextAlignmentRight: carPlayConfig.isLeftSideDriving)
                 if carPlayConfig.isLeftSideDriving {
@@ -122,6 +121,7 @@ final class SpeedometerView: OATextInfoWidget {
             } else {
                 configureContentStackViewSemanticContentAttribute()
                 speedometerSpeedView.layer.cornerRadius = 6
+                speedometerSpeedView.animationOrigin = isDirectionRTL() ? .left : .right
                 speedometerSpeedView.configureShadow()
                 leftPositionConstraint.isActive = true
                 rightPositionConstraint.isActive = false
@@ -169,22 +169,25 @@ final class SpeedometerView: OATextInfoWidget {
         }
     }
     
-    private func updateSpeedometerSpeedView() {
-        speedometerSpeedView.updateInfo()
+    private func updateSpeedometerSpeedView(speedLimit: Int) {
+        speedometerSpeedView.updateInfo(speedLimit: speedLimit)
     }
     
-    private func updateSpeedLimitView() {
+    private func updateSpeedLimitView(speedLimit: Int) {
         speedLimitEUView.isHidden = true
         speedLimitNAMView.isHidden = true
         
-        setupSpeedLimitWith(view: isDrivingRegionNAM ? speedLimitNAMView : speedLimitEUView)
+        setupSpeedLimitWith(view: isDrivingRegionNAM ? speedLimitNAMView : speedLimitEUView, speedLimit: speedLimit)
     }
     
-    private func setupSpeedLimitWith(view: SpeedLimitView) {
-        guard let value = speedLimitText as? String else { 
+    private func setupSpeedLimitWith(view: SpeedLimitView, speedLimit: Int) {
+        guard speedLimit > -1 else {
+            print("[test] setupSpeedLimitWith isHidden = true")
             view.isHidden = true
             return
         }
+        print("[test] setupSpeedLimitWith isHidden = false")
+        let value = String(speedLimit)
         view.isHidden = false
         view.updateWith(value: value)
     }
@@ -197,6 +200,53 @@ extension SpeedometerView {
         case .medium: 72
         case .large: 96
         @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
+        }
+    }
+}
+
+/**
+ * Defines the visual state of the Speedometer widget based on the current speed.
+ * Each case provides the necessary set of colors for the background, speed value, and units
+ * by loading them from the Asset Catalogue.
+ */
+enum SpeedometerState {
+    case normal           // Default appearance, no speeding.
+    case tolerance        // Speed is within the tolerance threshold of the limit.
+    case exceedingLimit   // Speed limit has been exceeded.
+    
+    /// Returns the background color for the speedometerSpeedView.
+    var backgroundColor: UIColor {
+        switch self {
+        case .normal:
+             .clear
+        case .tolerance:
+             UIColor(named: "speedometerToleranceBgColor") ?? .systemYellow
+        case .exceedingLimit:
+             UIColor(named: "speedometerLimitBgColor") ?? .systemRed
+        }
+    }
+    
+    /// Returns the color for the main speed value (the numbers).
+    var valueColor: UIColor {
+        switch self {
+        case .normal:
+             .label
+        case .tolerance:
+             UIColor(named: "speedometerToleranceValueColor") ?? .systemOrange
+        case .exceedingLimit:
+             UIColor(named: "speedometerLimitValueColor") ?? .white
+        }
+    }
+    
+    /// Returns the color for the units text (e.g., "km/h" or "mph").
+    var unitsColor: UIColor {
+        switch self {
+        case .normal:
+             .secondaryLabel
+        case .tolerance:
+             UIColor(named: "speedometerToleranceUnitsColor") ?? .systemBrown
+        case .exceedingLimit:
+             UIColor(named: "speedometerLimitUnitsColor") ?? .white
         }
     }
 }

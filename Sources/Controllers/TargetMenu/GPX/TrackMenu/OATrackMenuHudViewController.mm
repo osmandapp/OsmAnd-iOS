@@ -1970,54 +1970,30 @@
     BOOL isVisible = [self isWaypointsGroupVisible:displayName];
     
     UIAction *toggleVisibility = [UIAction actionWithTitle:OALocalizedString(isVisible ? @"shared_string_hide_from_map" : @"shared_string_show_on_map") image:[UIImage imageNamed:isVisible ? @"ic_custom_hide_outlined" : @"ic_custom_map_pin_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        
-        BOOL currentVisible = [strongSelf isWaypointsGroupVisible:displayName];
-        [strongSelf setWaypointsGroupVisible:displayName show:!currentVisible];
+        BOOL currentVisible = [weakSelf isWaypointsGroupVisible:displayName];
+        [weakSelf setWaypointsGroupVisible:displayName show:!currentVisible];
     }];
     
     UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename") image:[UIImage imageNamed:@"ic_custom_edit"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        
-        [strongSelf showRenameWaypointsGroupOptionsForName:displayName groupColor:groupColor];
+        [weakSelf showRenameWaypointsGroupOptionsForName:displayName groupColor:groupColor];
     }];
     
     UIAction *changeAppearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance") image:[UIImage imageNamed:@"ic_custom_appearance_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        
-        [strongSelf showAppearanceWaypointsGroupOptionsForName:displayName groupColor:groupColor];
+        [weakSelf showAppearanceWaypointsGroupOptionsForName:displayName groupColor:groupColor];
     }];
     
     UIAction *copyAsNewFolderAction = [UIAction actionWithTitle:OALocalizedString(@"copy_as_new_folder") image:[UIImage imageNamed:@"ic_custom_folder_add_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        
-        [strongSelf copyWaypointsGroupAsNewFolderWithName:displayName groupColor:groupColor];
+        [weakSelf copyWaypointsGroupAsNewFolderWithName:displayName groupColor:groupColor];
     }];
     
     UIAction *addToExistingFolderAction = [UIAction actionWithTitle:OALocalizedString(@"add_to_a_folder") image:[UIImage imageNamed:@"ic_custom_folder_open"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        
-        [strongSelf presentAddToExistingFolderForGroupName:displayName groupColor:groupColor];
+        [weakSelf presentAddToExistingFolderForGroupName:displayName groupColor:groupColor];
     }];
     
     UIMenu *copyToFavoritesMenu = [UIMenu menuWithTitle:OALocalizedString(@"add_to_favorites") image:[UIImage imageNamed:@"ic_custom_copy"] identifier:nil options:0 children:@[copyAsNewFolderAction, addToExistingFolderAction]];
     
     UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete") image:[UIImage imageNamed:@"ic_custom_trash_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        
-        [strongSelf openConfirmDeleteWaypointsScreen:displayName];
+        [weakSelf openConfirmDeleteWaypointsScreen:displayName];
     }];
     deleteAction.attributes = UIMenuElementAttributesDestructive;
     

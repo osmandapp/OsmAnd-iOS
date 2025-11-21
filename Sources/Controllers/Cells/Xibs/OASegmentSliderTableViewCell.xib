@@ -1,36 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="OASegmentSliderTableViewCell" id="XBX-Uh-gh9" customClass="OASegmentSliderTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="420" height="106"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="OASegmentSliderTableViewCell" rowHeight="143" id="XBX-Uh-gh9" customClass="OASegmentSliderTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="424" height="143"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XBX-Uh-gh9" id="bdq-u8-ibc">
-                <rect key="frame" x="0.0" y="0.0" width="420" height="106"/>
+                <rect key="frame" x="0.0" y="0.0" width="424" height="143"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sAt-3a-33r" customClass="OASegmentedSlider">
-                        <rect key="frame" x="18" y="42" width="384" height="29"/>
-                        <color key="tintColor" name="iconColorActive"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Pw1-1F-ELp">
+                        <rect key="frame" x="20" y="42" width="384" height="83"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xCK-DG-bbc">
+                                <rect key="frame" x="0.0" y="20.5" width="42" height="42"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="Ees-Ud-Zp0"/>
+                                    <constraint firstAttribute="width" secondItem="xCK-DG-bbc" secondAttribute="height" multiplier="1:1" id="WqK-gd-yyN"/>
+                                </constraints>
+                                <color key="tintColor" name="iconColorActive"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="ic_custom_map_zoom_out.png"/>
+                            </button>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sAt-3a-33r" customClass="OASegmentedSlider">
+                                <rect key="frame" x="50" y="27.5" width="284" height="28"/>
+                                <color key="tintColor" name="iconColorActive"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="Ys9-U6-ax7"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="trackHeight">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </slider>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kfa-no-0Cd">
+                                <rect key="frame" x="342" y="20.5" width="42" height="42"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="NF9-K7-pvh"/>
+                                    <constraint firstAttribute="width" secondItem="Kfa-no-0Cd" secondAttribute="height" multiplier="1:1" id="sti-f9-LZS"/>
+                                </constraints>
+                                <color key="tintColor" name="iconColorActive"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="ic_custom_map_zoom_in.png"/>
+                            </button>
+                        </subviews>
                         <constraints>
-                            <constraint firstAttribute="height" constant="28" id="Ys9-U6-ax7"/>
+                            <constraint firstItem="Kfa-no-0Cd" firstAttribute="width" secondItem="Kfa-no-0Cd" secondAttribute="height" multiplier="1:1" id="tI7-mE-APy"/>
                         </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="trackHeight">
-                                <real key="value" value="2"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                    </slider>
+                    </stackView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sEM-QO-aGw">
-                        <rect key="frame" x="20" y="13" width="182" height="22"/>
+                        <rect key="frame" x="20" y="13" width="184" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="22" id="bYL-Nh-UqV"/>
                         </constraints>
@@ -39,7 +67,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PdR-al-82O">
-                        <rect key="frame" x="218" y="13" width="182" height="22"/>
+                        <rect key="frame" x="220" y="13" width="184" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="22" id="Pfm-yX-3KX"/>
                         </constraints>
@@ -48,13 +76,13 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bSK-ib-t38" userLabel="Bottom Left Label">
-                        <rect key="frame" x="20" y="77" width="182" height="18"/>
+                        <rect key="frame" x="20" y="132" width="184" height="0.0"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8rT-A7-QvG" userLabel="Bottom Right Label">
-                        <rect key="frame" x="218" y="77" width="182" height="18"/>
+                        <rect key="frame" x="220" y="114" width="184" height="18"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
@@ -62,41 +90,45 @@
                 </subviews>
                 <color key="backgroundColor" name="groupBg"/>
                 <constraints>
-                    <constraint firstItem="sAt-3a-33r" firstAttribute="top" secondItem="sEM-QO-aGw" secondAttribute="bottom" constant="7" id="5kd-7M-xhb"/>
-                    <constraint firstItem="sAt-3a-33r" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leadingMargin" id="8MA-IG-3Rz"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Pw1-1F-ELp" secondAttribute="trailing" id="2sW-jX-82U"/>
                     <constraint firstItem="bSK-ib-t38" firstAttribute="width" secondItem="8rT-A7-QvG" secondAttribute="width" id="AyS-yO-zpj"/>
                     <constraint firstItem="PdR-al-82O" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" constant="13" id="BYi-Lp-KqD"/>
+                    <constraint firstAttribute="bottom" secondItem="Pw1-1F-ELp" secondAttribute="bottom" priority="999" constant="13" id="DJq-fX-6g2"/>
                     <constraint firstItem="PdR-al-82O" firstAttribute="leading" secondItem="sEM-QO-aGw" secondAttribute="trailing" constant="16" id="Dhm-4r-08T"/>
                     <constraint firstItem="sEM-QO-aGw" firstAttribute="width" secondItem="PdR-al-82O" secondAttribute="width" id="DyE-yL-zpj"/>
                     <constraint firstAttribute="bottom" secondItem="bSK-ib-t38" secondAttribute="bottom" constant="11" id="EaG-kd-ezl"/>
+                    <constraint firstItem="Pw1-1F-ELp" firstAttribute="top" secondItem="sEM-QO-aGw" secondAttribute="bottom" constant="7" id="IkT-3Q-18o"/>
                     <constraint firstItem="bSK-ib-t38" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leadingMargin" id="KzJ-9n-7hM"/>
                     <constraint firstItem="sEM-QO-aGw" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" constant="13" id="Mpp-Q0-SmX"/>
                     <constraint firstItem="sEM-QO-aGw" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leadingMargin" id="POa-HF-vgV"/>
-                    <constraint firstItem="bSK-ib-t38" firstAttribute="top" secondItem="sAt-3a-33r" secondAttribute="bottom" constant="7" id="Q5N-CD-S0s"/>
+                    <constraint firstItem="Pw1-1F-ELp" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leadingMargin" id="WGT-iJ-97c"/>
                     <constraint firstAttribute="trailingMargin" secondItem="8rT-A7-QvG" secondAttribute="trailing" id="Xms-1A-hKe"/>
-                    <constraint firstItem="sAt-3a-33r" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" priority="999" constant="13" id="Y6F-kG-FfJ"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="sAt-3a-33r" secondAttribute="trailing" id="dcQ-d2-GJM"/>
+                    <constraint firstItem="bSK-ib-t38" firstAttribute="top" secondItem="Pw1-1F-ELp" secondAttribute="bottom" constant="7" id="dL2-7f-whw"/>
                     <constraint firstAttribute="trailingMargin" secondItem="PdR-al-82O" secondAttribute="trailing" id="dzQ-sv-a01"/>
                     <constraint firstItem="8rT-A7-QvG" firstAttribute="leading" secondItem="bSK-ib-t38" secondAttribute="trailing" constant="16" id="hla-8Q-Lzz"/>
                     <constraint firstAttribute="bottom" secondItem="8rT-A7-QvG" secondAttribute="bottom" constant="11" id="jXa-CY-XXh"/>
-                    <constraint firstAttribute="bottom" secondItem="sAt-3a-33r" secondAttribute="bottom" priority="999" constant="13" id="q8u-5Q-o74"/>
+                    <constraint firstItem="Pw1-1F-ELp" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" priority="999" constant="13" id="k7q-BE-J9u"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="bottomLeftLabel" destination="bSK-ib-t38" id="Wrx-VJ-kV5"/>
                 <outlet property="bottomRightLabel" destination="8rT-A7-QvG" id="eAs-j7-aVx"/>
-                <outlet property="sliderLabelsBottomConstraint" destination="Q5N-CD-S0s" id="dZ0-5J-Wny"/>
-                <outlet property="sliderLabelsTopConstraint" destination="5kd-7M-xhb" id="0fU-wl-EnV"/>
-                <outlet property="sliderNoLabelsBottomConstraint" destination="q8u-5Q-o74" id="PRT-Ov-3uC"/>
-                <outlet property="sliderNoLabelsTopConstraint" destination="Y6F-kG-FfJ" id="EsW-Ck-xKt"/>
+                <outlet property="minusButton" destination="xCK-DG-bbc" id="QbA-Eq-T8H"/>
+                <outlet property="plusButton" destination="Kfa-no-0Cd" id="VIb-XG-ke1"/>
+                <outlet property="sliderLabelsBottomConstraint" destination="dL2-7f-whw" id="Pc0-dB-A4p"/>
+                <outlet property="sliderLabelsTopConstraint" destination="IkT-3Q-18o" id="Axi-Pa-y2Q"/>
+                <outlet property="sliderNoLabelsBottomConstraint" destination="DJq-fX-6g2" id="FjW-PO-Dex"/>
+                <outlet property="sliderNoLabelsTopConstraint" destination="k7q-BE-J9u" id="IbN-6O-4Vo"/>
                 <outlet property="sliderView" destination="sAt-3a-33r" id="1J2-17-YdW"/>
                 <outlet property="topLeftLabel" destination="sEM-QO-aGw" id="QQD-a2-ysY"/>
                 <outlet property="topRightLabel" destination="PdR-al-82O" id="bIJ-n4-l1I"/>
             </connections>
-            <point key="canvasLocation" x="136.23188405797103" y="-129.91071428571428"/>
+            <point key="canvasLocation" x="131.8840579710145" y="-118.86160714285714"/>
         </tableViewCell>
     </objects>
     <resources>
+        <image name="ic_custom_map_zoom_in.png" width="30" height="30"/>
+        <image name="ic_custom_map_zoom_out.png" width="30" height="30"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

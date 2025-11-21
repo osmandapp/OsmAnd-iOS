@@ -313,7 +313,7 @@
     }
 }
 
-- (void) resume
+- (void)resume
 {
     @synchronized(_lock)
     {

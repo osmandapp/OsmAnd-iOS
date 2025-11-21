@@ -59,4 +59,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 - (void) setLocationFromSimulation:(CLLocation *)location;
 - (BOOL) isInLocationSimulation;
 
+- (void)resume;
+- (void)suspend;
+
 @end

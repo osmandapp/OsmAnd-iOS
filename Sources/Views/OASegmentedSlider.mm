@@ -554,6 +554,8 @@ static CGFloat kMarkWidth = 2;
         [self paintMarks];
         if (_selectingMarkTitleBackground)
             [self layoutSelectingTitle];
+        
+        [self.delegate onSliderFinishEditing];
     }
 }
 

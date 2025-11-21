@@ -8,6 +8,7 @@
 
 #import "OABaseNavbarViewController.h"
 #import "OAApplicationMode.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAProfileAppearanceViewController : OABaseNavbarViewController
 
@@ -19,7 +20,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-- (instancetype) initWithParentProfile:(OAApplicationMode *)profile;
-- (instancetype) initWithProfile:(OAApplicationMode *)profile;
+- (instancetype)initWithParentProfile:(OAApplicationMode *)profile;
+- (instancetype)initWithProfile:(OAApplicationMode *)profile;
+- (instancetype)initWithProfile:(OAApplicationMode *)profile profileAppearanceIconSize:(id<ProfileAppearanceConfig>)profileAppearanceIconSize;
 
 @end

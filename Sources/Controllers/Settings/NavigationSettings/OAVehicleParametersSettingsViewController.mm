@@ -444,7 +444,7 @@
     }
     if (_selectedParameter.intValue != -1)
     {
-        if ([VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]] && !_isMotorType) {
+        if (!_isMotorType && [VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]]) {
             NSString *unit = [VehicleAlgorithms weightOrSizeUnitWith:self.appMode isWeight:[self isWeight]];
             NSString *valueString = _measurementRangeStringArr[_selectedParameter.intValue];
             _measurementValue = [valueString substringToIndex:valueString.length - (valueString.length > 0 ? unit.length : 0)];

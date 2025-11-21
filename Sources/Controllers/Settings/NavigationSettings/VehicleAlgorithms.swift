@@ -8,8 +8,6 @@
 
 @objcMembers
 final class VehicleAlgorithms: NSObject {
-    private static let settings = OAAppSettings.sharedManager()
-    
     static func convertWeightFromTons(_ weight: Float, usePounds: Bool, appMode: OAApplicationMode) -> Float {
         usePounds ? weight * (OsmAndFormatter.shared.POUNDS_IN_ONE_KILOGRAM * Float(OsmAndFormatter.shared.KILOGRAMS_IN_ONE_TON)) : weight
     }
@@ -19,12 +17,12 @@ final class VehicleAlgorithms: NSObject {
     }
     
     static func convertLengthFromMeters(_ length: Float, appMode: OAApplicationMode) -> Float {
-        let metric = settings.metricSystem.get(appMode)
+        let metric = OAAppSettings.sharedManager().metricSystem.get(appMode)
         return metric == EOAMetricsConstant.MILES_AND_FEET || metric == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET || metric == EOAMetricsConstant.MILES_AND_YARDS ? length * OsmAndFormatter.shared.INCHES_IN_ONE_METER : length
     }
     
     static func convertLengthToMeters(_ length: Float, appMode: OAApplicationMode) -> Float {
-        let metric = settings.metricSystem.get(appMode)
+        let metric = OAAppSettings.sharedManager().metricSystem.get(appMode)
         return metric == EOAMetricsConstant.MILES_AND_FEET || metric == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET || metric == EOAMetricsConstant.MILES_AND_YARDS ? length / OsmAndFormatter.shared.INCHES_IN_ONE_METER : length
     }
     
@@ -65,11 +63,11 @@ final class VehicleAlgorithms: NSObject {
     }
     
     static func usePounds(with appMode: OAApplicationMode) -> Bool {
-        settings.drivingRegion.get(appMode) == EOADrivingRegion.DR_US
+        OAAppSettings.sharedManager().drivingRegion.get(appMode) == EOADrivingRegion.DR_US
     }
     
     static func useInches(with appMode: OAApplicationMode) -> Bool {
-        let metric = settings.metricSystem.get(appMode)
+        let metric = OAAppSettings.sharedManager().metricSystem.get(appMode)
         return metric == EOAMetricsConstant.MILES_AND_FEET || metric == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET || metric == EOAMetricsConstant.MILES_AND_YARDS
     }
     

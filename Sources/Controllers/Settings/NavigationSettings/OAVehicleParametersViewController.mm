@@ -118,7 +118,7 @@
                         descr = [self parameterValue:descr paramId:paramId cutUnit:YES isDescription:YES];
                     
                     [valueDescriptions addObject:descr];
-                    if ((vl == d && (![VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]] || isMotorType))
+                    if ((vl == d && (isMotorType || ![VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]]))
                         || ([VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]] && [descr isEqualToString:[self parameterValue:value paramId:paramId cutUnit:NO isDescription:NO]]))
                         index = i;
                 }
@@ -127,7 +127,7 @@
                 {
                     value = OALocalizedString([paramId isEqualToString:RouteParamVehicleHelper.motorType] ? @"shared_string_not_selected" : @"shared_string_none");
                 }
-                else if (index != -1 && (![VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]] || isMotorType))
+                else if (index != -1 && (isMotorType || ![VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]]))
                 {
                     if (isMotorType)
                         value = [OAUtilities getNameOfMotorTypeValue:possibleValues[index].intValue];

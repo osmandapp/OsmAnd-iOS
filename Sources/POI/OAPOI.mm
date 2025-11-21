@@ -821,7 +821,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             amenity.name = name;
             amenity.type = type;
             if (subType)
+            {
                 amenity.subType = subType;
+                [amenity initOrder];
+            }
             if (openingHours)
             {
                 amenity.openingHours = openingHours;
@@ -905,6 +908,45 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     result = 31 * result + [@(self.latitude) hash];
     result = 31 * result + [@(self.longitude) hash];
     return result;
+}
+
+- (int32_t) getOrder
+{
+    if (_order == 0 && _type != nil)
+    {
+        _order = [_type order];
+    }
+    return _order;
+}
+
+- (void) initOrder
+{
+    if (_type == nil || _subType == nil)
+        return;
+    _order = [_type order];
+    NSArray<NSString *> * subs = [_subType componentsSeparatedByString:@";"];
+    for (NSString * subType : subs)
+    {
+        OAPOIType * poiType = [_type.category getPoiTypeByKeyName:subType];
+        if (poiType != nil)
+        {
+            int32_t ord = [poiType order];
+            _order = _order == 0 ? ord : MIN(_order, ord);
+        }
+    }
+}
+
+- (BOOL) isTransport
+{
+    if (_type != nil)
+    {
+        OAPOICategory * category = [_type category];
+        if (category != nil)
+        {
+            return [@"transportation" isEqualToString:[category name]];
+        }
+    }
+    return false;
 }
 
 @end

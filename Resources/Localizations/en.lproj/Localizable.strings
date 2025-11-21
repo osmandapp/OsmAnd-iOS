@@ -2183,6 +2183,11 @@
 "metric_ton" = "t";
 "kg" = "kg";
 
+"metric_lbs" = "lbs";
+"inch" = "in";
+"shared_string_inches" = "inches";
+"shared_string_pounds" = "pounds";
+
 "int_hour" = "h";
 "int_min" = "min.";
 "shared_string_sec" = "sec";

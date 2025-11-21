@@ -856,12 +856,16 @@
         return;
 
     NSMutableArray<NSNumber *> *resourceGroupTypes = [[OAResourceType mapResourceTypes] mutableCopy];
-    [resourceGroupTypes removeObjectsInArray:self.resourceTypes];
-
+    //[resourceGroupTypes removeObjectsInArray:self.resourceTypes];
+    NSLog(@"lloo %@ %@ %ld", _regionId, [self hasGroupItems] ? @"Y" : @"N", subregions.count);
+    
     if (![self hasGroupItems] && resourceGroupTypes.count > 0)
     {
+        if ([_regionId isEqualToString:@"europe_germany_bayern"])
+            NSLog(@"");
         OAResourceGroupItem *group = [OAResourceGroupItem withParent:self];
         NSArray<OAResourceItem *> *items = [OAResourcesUIHelper requestMapDownloadInfo:subregions resourceTypes:resourceGroupTypes isGroup:YES];
+        NSLog(@"lloo %@ %@ %ld %ld %ld", _regionId, [self hasGroupItems] ? @"Y" : @"N", subregions.count, items.count, resourceGroupTypes.count);
         for (OAResourceItem *item in items)
         {
             if ([item isKindOfClass:OARepositoryResourceItem.class])
@@ -872,6 +876,7 @@
         [group sort];
         self.groupItem = group;
     }
+    NSLog(@"lloo %@ %@ %ld", _regionId, [self hasGroupItems] ? @"Y" : @"N", subregions.count);
 
     for (OAWorldRegion *subregion in subregions)
     {

@@ -957,15 +957,19 @@ static BOOL _repositoryUpdated = NO;
     NSString *australiaAndOceaniaRegionId = [NSString stringWithFormat:@"%@_australia", OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()];
     NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
     
+    NSLog(@"[enter] %@ %ld %ld %@", self.region.name, _regionMapItems.count, [self.region getLevel], [self.region hasGroupItems] ? @"Y" : @"N");
     if ([self.region hasGroupItems] && (([self.region getLevel] > 1 && _regionMapItems.count > 0) || [self.region.regionId hasPrefix:russiaRegionId] || [self.region.regionId hasPrefix:unitedKingdomRegionId] || [self.region.regionId hasPrefix:australiaAndOceaniaRegionId]))
     {
+        if ([self.region.regionId containsString:@"bayern"])
+            NSLog(@"");
         NSMutableArray<NSNumber *> *regionMapItemsTypes = [NSMutableArray new];
         for (OAResourceItem *resource in _regionMapItems)
         {
+            NSLog(@"[enter] [enter] %@", self.region.name);
             [regionMapItemsTypes addObject:[OAResourceType toValue:resource.resourceType]];
         }
         NSMutableArray<NSNumber *> *regionMapItemsTypesInGroup = [[self.region.groupItem getTypes] mutableCopy];
-        [regionMapItemsTypesInGroup removeObjectsInArray:regionMapItemsTypes];
+        //[regionMapItemsTypesInGroup removeObjectsInArray:regionMapItemsTypes];
 
         for (NSNumber *type in regionMapItemsTypesInGroup)
         {

@@ -93,7 +93,7 @@
         case EOAEditWaypointsGroupVisibleScreen:
             return OALocalizedString(@"shared_string_show_on_map");
         case EOAEditWaypointsGroupCopyToFavoritesScreen:
-            return OALocalizedString(@"add_destination");
+            return OALocalizedString(@"copy_to_map_favorites");
         default:
             return @"";
     }

@@ -91,4 +91,21 @@
         [self.delegate onButtonLongPressed:self.tag];
 }
 
+- (void)contextMenuInteraction:(UIContextMenuInteraction *)interaction willDisplayMenuForConfiguration:(UIContextMenuConfiguration *)configuration animator:(id<UIContextMenuInteractionAnimating>)animator
+{
+    if (self.onMenuWillBeginInteraction)
+        self.onMenuWillBeginInteraction();
+}
+
+- (void)contextMenuInteraction:(UIContextMenuInteraction *)interaction willEndForConfiguration:(UIContextMenuConfiguration *)configuration animator:(id<UIContextMenuInteractionAnimating>)animator
+{
+    if (!self.onMenuDidEndInteraction)
+        return;
+    
+    [animator addCompletion:^{
+        if (self.onMenuDidEndInteraction)
+            self.onMenuDidEndInteraction();
+    }];
+}
+
 @end

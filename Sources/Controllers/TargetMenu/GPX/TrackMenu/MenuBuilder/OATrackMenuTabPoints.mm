@@ -486,11 +486,7 @@
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData sourceView:(UIView *)sourceView
 {
-    if ([tableData.key hasPrefix:@"cell_waypoints_group_"] && self.trackMenuDelegate)
-    {
-        [self.trackMenuDelegate openWaypointsGroupOptionsScreen:((OAGPXTableCellData *) tableData).title];
-    }
-    else if ([tableData.key hasPrefix:@"waypoint_"] && self.trackMenuDelegate && tableData.values[@"waypoint"])
+    if ([tableData.key hasPrefix:@"waypoint_"] && self.trackMenuDelegate && tableData.values[@"waypoint"])
     {
         [self.trackMenuDelegate openWptOnMap:tableData.values[@"waypoint"]];
     }

@@ -1499,7 +1499,7 @@ colorizationScheme:(int)colorizationScheme
 
                 for (OASWptPt *waypoint in value.getPointsList)
                 {
-                    OASGpxUtilitiesPointsGroup *group = [gpx.pointsGroups objectForKey:waypoint.category];
+                    OASGpxUtilitiesPointsGroup *group = [gpx.pointsGroups objectForKey:waypoint.category ?: @""];
                     if (!group || !group.hidden)
                         [points addObject:waypoint];
                 }

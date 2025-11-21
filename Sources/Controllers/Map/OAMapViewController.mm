@@ -3573,9 +3573,7 @@ static const NSInteger kDetailedMapZoom = 9;
                     if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
                     {
-                        OASWptPt *w = [[OASWptPt alloc] initWithWptPt:item.point];
-                        [gpxFile addPointPoint:w];
-                        
+                        [gpxFile updateWptPtExistingPoint:loc newWpt:item.point updateTimestamp:NO];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
                         found = YES;
@@ -3614,10 +3612,7 @@ static const NSInteger kDetailedMapZoom = 9;
                 if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
                 {
-                    
-                    OASWptPt *w = [[OASWptPt alloc] initWithWptPt:item.point];
-                    [gpxFile addPointPoint:w];
-                    
+                    [gpxFile updateWptPtExistingPoint:loc newWpt:item.point updateTimestamp:NO];
                     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                     [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
                     found = YES;

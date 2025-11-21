@@ -20,6 +20,9 @@
 @property (nonatomic, assign) BOOL centerVertically;
 @property (nonatomic, assign) BOOL extraSpacing;
 
+@property (nonatomic, copy, nullable) void (^onMenuWillBeginInteraction)(void);
+@property (nonatomic, copy, nullable) void (^onMenuDidEndInteraction)(void);
+
 @property (nonatomic, weak) id<OAButtonDelegate> delegate;
 
 - (void)applyVerticalLayout;

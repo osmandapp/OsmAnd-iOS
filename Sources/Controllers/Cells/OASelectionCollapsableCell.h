@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class OAButton;
+
 @interface OASelectionCollapsableCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIView *selectionButtonContainer;
@@ -20,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
 @property (weak, nonatomic) IBOutlet UIButton *optionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *optionsGroupButton;
+@property (weak, nonatomic) IBOutlet OAButton *menuButton;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *arrowIconWithOptionButtonConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *arrowIconNoOptionButtonConstraint;
@@ -40,5 +43,6 @@
 
 - (void)showOptionsButton:(BOOL)show;
 - (void)makeSelectable:(BOOL)selectable;
+- (void)showMenuButton:(BOOL)visible;
 
 @end

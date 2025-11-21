@@ -48,10 +48,12 @@ class OBDTextWidget: OASimpleWidget {
         updateInfo()
         setIconFor(widgetType)
         onClickFunction = { [weak self] _ in
-            guard let self, self.supportsAverageMode(), let avgPref = self.averageModePref else { return }
+            guard let self else { return }
+            reconnectOBDIfNeeded()
+            guard supportsAverageMode(), let avgPref = averageModePref else { return }
             let newValue = !avgPref.get()
             avgPref.set(newValue)
-            self.updatePrefs(prefsChanged: true)
+            updatePrefs(prefsChanged: true)
         }
     }
     
@@ -80,14 +82,24 @@ class OBDTextWidget: OASimpleWidget {
     
     override func configureContextMenu(addGroup: UIMenu, settingsGroup: UIMenu, deleteGroup: UIMenu) -> UIMenu {
         var updatedSettingsGroup = settingsGroup
+        
+        var children = updatedSettingsGroup.children
+        
+        if !DeviceHelper.shared.connectedDevices(ofType: .OBD_VEHICLE_METRICS).contains(where: { !$0.isSimulator }) {
+            let reconnectAction = UIAction(title: localizedString("reconnect"), image: .icCustomRefresh) { [weak self] _ in
+                self?.reconnectOBDIfNeeded()
+            }
+            children.insert(reconnectAction, at: 0)
+        }
+
         if supportsAverageMode(), averageModePref?.get() == true {
             let resetAction = UIAction(title: localizedString("reset_average_value"), image: .icCustomReset) { [weak self] _ in
-                guard let self else { return }
-                self.resetAverageValue()
+                self?.resetAverageValue()
             }
-            
-            updatedSettingsGroup = settingsGroup.replacingChildren([resetAction] + settingsGroup.children)
+            children.insert(resetAction, at: 1)
         }
+
+        updatedSettingsGroup = updatedSettingsGroup.replacingChildren(children)
         
         return UIMenu(title: "", children: [addGroup, updatedSettingsGroup, deleteGroup])
     }
@@ -148,6 +160,32 @@ class OBDTextWidget: OASimpleWidget {
     
     override func isMetricSystemDepended() -> Bool {
         true
+    }
+    
+    private func reconnectOBDIfNeeded() {
+        plugin?.reconnectOBDIfNeeded()
+    }
+    
+    func updatePrefs(prefsChanged: Bool) {
+        guard supportsAverageMode() else { return }
+        let newTimeSeconds: Int = {
+            if averageModePref?.get() == true {
+                return Int((measuredIntervalPref?.get() ?? 0) / 1000)
+            } else {
+                return 0
+            }
+        }()
+        
+        if prefsChanged {
+            if let widgetComputer {
+                self.widgetComputer = OBDDataComputer.shared.registerWidget(type: widgetComputer.type, averageTimeSeconds: Int32(newTimeSeconds))
+            }
+        } else {
+            widgetComputer?.averageTimeSeconds = Int32(newTimeSeconds)
+        }
+        
+        updateInfo()
+        configureShadowButtonMenu()
     }
     
     private func computeFieldType(for widgetType: WidgetType) -> OBDDataComputer.OBDTypeWidget {
@@ -273,32 +311,6 @@ class OBDTextWidget: OASimpleWidget {
         ]
         
         return supportedTypes.contains(widgetType)
-    }
-    
-    func updatePrefs(prefsChanged: Bool) {
-        guard supportsAverageMode() else { return }
-        let newTimeSeconds: Int = {
-            if averageModePref?.get() == true {
-                return Int((measuredIntervalPref?.get() ?? 0) / 1000)
-            } else {
-                return 0
-            }
-        }()
-        
-        if prefsChanged {
-            if let widgetComputer {
-                self.widgetComputer = OBDDataComputer.shared.registerWidget(type: widgetComputer.type, averageTimeSeconds: Int32(newTimeSeconds))
-            }
-        } else {
-            widgetComputer?.averageTimeSeconds = Int32(newTimeSeconds)
-        }
-        
-        updateInfo()
-        configureShadowButtonMenu()
-    }
-    
-    func getWidgetOBDCommand() -> OBDCommand? {
-        fieldType?.requiredCommand
     }
 }
 

@@ -81,7 +81,8 @@ final class OBDRemainingFuelWidget: OBDTextWidget {
         setIconFor(widgetType)
         onClickFunction = { [weak self] _ in
             guard let self else { return }
-            self.nextMode()
+            plugin?.reconnectOBDIfNeeded()
+            nextMode()
         }
     }
     
@@ -108,7 +109,7 @@ final class OBDRemainingFuelWidget: OBDTextWidget {
                 return overrideRaw
             }
 
-            return remainingFuelModePref.get(appMode) ?? RemainingFuelMode.percent.rawValue
+            return remainingFuelModePref.get(appMode)
         }()
         modeRow.setObj(currentRaw, forKey: "value")
         let options: [OATableRowData] = RemainingFuelMode.allCases.map { mode in
@@ -148,7 +149,7 @@ final class OBDRemainingFuelWidget: OBDTextWidget {
         guard let remainingFuelModePref else { return }
         let modes = RemainingFuelMode.allCases
         guard !modes.isEmpty else { return }
-        let rawValue = remainingFuelModePref.get() ?? modes[0].rawValue
+        let rawValue = remainingFuelModePref.get()
         let currentMode = RemainingFuelMode(rawValue: rawValue) ?? modes[0]
         guard let currentIndex = modes.firstIndex(of: currentMode) else { return }
         let nextMode = modes[(currentIndex + 1) % modes.count]

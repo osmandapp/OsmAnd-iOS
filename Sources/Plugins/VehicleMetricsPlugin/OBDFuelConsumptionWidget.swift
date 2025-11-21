@@ -82,7 +82,8 @@ final class OBDFuelConsumptionWidget: OBDTextWidget {
         setIconFor(widgetType)
         onClickFunction = { [weak self] _ in
             guard let self else { return }
-            self.nextMode()
+            plugin?.reconnectOBDIfNeeded()
+            nextMode()
         }
     }
     

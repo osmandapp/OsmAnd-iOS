@@ -25,7 +25,6 @@
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
-#import <OsmAndShared/OsmAndShared.h>
 
 @interface OAVehicleParametersViewController () <OASettingsDataDelegate>
 

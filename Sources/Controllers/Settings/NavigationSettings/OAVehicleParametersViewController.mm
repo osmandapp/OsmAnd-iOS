@@ -25,6 +25,7 @@
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import <OsmAndShared/OsmAndShared.h>
 
 @interface OAVehicleParametersViewController () <OASettingsDataDelegate>
 
@@ -106,18 +107,19 @@
                 NSMutableArray<NSNumber *> *possibleValues = [NSMutableArray new];
                 NSMutableArray<NSString *> *valueDescriptions = [NSMutableArray new];
                 
-                double d = value ? floorf(value.doubleValue * 100 + 0.5) / 100 : DBL_MAX;
-                
+                double d = value ? floorf(value.doubleValue * 100000 + 0.5) / 100000 : DBL_MAX;
+                                
                 for (int i = 0; i < p.possibleValues.size(); i++)
                 {
-                    double vl = floorf(p.possibleValues[i] * 100 + 0.5) / 100;
+                    double vl = floorf(p.possibleValues[i] * 100000 + 0.5) / 100000;
                     [possibleValues addObject:@(vl)];
                     NSString *descr = [NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()];
                     if (i > 0)
-                        descr = [self parameterValue:descr paramId:paramId cutUnit:YES];
-                        
+                        descr = [self parameterValue:descr paramId:paramId cutUnit:YES isDescription:YES];
+                    
                     [valueDescriptions addObject:descr];
-                    if (vl == d)
+                    if ((vl == d && (![VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]] || isMotorType))
+                        || ([VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]] && [descr isEqualToString:[self parameterValue:value paramId:paramId cutUnit:NO isDescription:NO]]))
                         index = i;
                 }
 
@@ -125,18 +127,19 @@
                 {
                     value = OALocalizedString([paramId isEqualToString:RouteParamVehicleHelper.motorType] ? @"shared_string_not_selected" : @"shared_string_none");
                 }
-                else if (index != -1)
+                else if (index != -1 && (![VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]] || isMotorType))
                 {
                     if (isMotorType)
                         value = [OAUtilities getNameOfMotorTypeValue:possibleValues[index].intValue];
                     else
                         value = [self parameterValue:[NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()]
                                          paramId:paramId
-                                         cutUnit:YES];
+                                         cutUnit:YES
+                                         isDescription:NO];
                 }
                 else
                 {
-                    value = [self parameterValue:value paramId:paramId cutUnit:NO];
+                    value = [self parameterValue:value paramId:paramId cutUnit:NO isDescription:NO];
                 }
                 
                 NSDictionary *paramInfo = @{
@@ -184,9 +187,27 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (NSString *)parameterValue:(NSString *)value paramId:(NSString *)paramId cutUnit:(BOOL)cutUnit
+- (NSString *)parameterValue:(NSString *)value paramId:(NSString *)paramId cutUnit:(BOOL)cutUnit isDescription:(BOOL)isDescription
 {
-    return [NSString stringWithFormat:@"%@ %@", cutUnit && value.length > 1 ? [value substringToIndex:value.length - 1] : value, OALocalizedString([RouteParamVehicleHelper isWeightParameter:paramId] ? @"metric_ton" : @"m")];
+    return [NSString stringWithFormat:@"%@ %@", [self parameterValueNoUnits:value paramId:paramId cutUnit:cutUnit isDescription:isDescription], [VehicleAlgorithms weightOrSizeUnitWith:self.appMode isWeight:[self isWeight:paramId]]];
+}
+
+- (NSString *)parameterValueNoUnits:(NSString *)value paramId:(NSString *)paramId cutUnit:(BOOL)cutUnit isDescription:(BOOL)isDescription
+{
+    NSString *noUnitValue = cutUnit && value.length > 1 ? [value substringToIndex:value.length - 1] : value;
+    float newValue = [VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]] ? noUnitValue.floatValue + 0.0001 : noUnitValue.floatValue;
+    newValue = [VehicleAlgorithms convertFromMetric:newValue isWeight:[self isWeight:paramId] appMode:self.appMode];
+    if ([VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]])
+        newValue = floorf(newValue * 100.0f + 0.5f) / 100.0f;
+    
+    if (isDescription)
+        newValue = [VehicleAlgorithms roundToSecondSignificantDigit:newValue];
+    return [VehicleAlgorithms formattedSelectedValue:newValue maximumFractionDigits:4];
+}
+
+- (BOOL)isWeight:(NSString *)paramId
+{
+    return [RouteParamVehicleHelper isWeightParameter:paramId];
 }
 
 - (void) setupFuelTankCapacity:(NSMutableArray *)exraParametersArr

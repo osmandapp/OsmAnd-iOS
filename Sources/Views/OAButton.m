@@ -30,7 +30,6 @@
     [self addGestureRecognizer:_tapRecognizer];
     _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonLongPressed:)];
     [self addGestureRecognizer:_longPressRecognizer];
-    self.contextMenuInteractionEnabled = YES;
 }
 
 - (void)layoutSubviews

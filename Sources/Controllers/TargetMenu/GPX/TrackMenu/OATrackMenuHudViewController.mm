@@ -765,7 +765,7 @@
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    if (_isContextMenuVisible && !forceUpdate)
+    if (_isContextMenuVisible)
     {
         _shouldUpdateTable = YES;
         return;
@@ -813,13 +813,23 @@
     {
         __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray<NSIndexPath *> *visibleRows = [weakSelf.tableView indexPathsForVisibleRows];
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+            
+            if (strongSelf->_isContextMenuVisible)
+            {
+                strongSelf->_shouldUpdateTable = YES;
+                return;
+            }
+
+            NSArray<NSIndexPath *> *visibleRows = [strongSelf.tableView indexPathsForVisibleRows];
             for (NSIndexPath *visibleRow in visibleRows)
             {
-                OAGPXTableCellData *cellData = weakSelf.tableData.subjects[visibleRow.section].subjects[visibleRow.row];
-                [weakSelf.uiBuilder updateProperty:@"update_distance_and_direction" tableData:cellData];
+                OAGPXTableCellData *cellData = strongSelf.tableData.subjects[visibleRow.section].subjects[visibleRow.row];
+                [strongSelf.uiBuilder updateProperty:@"update_distance_and_direction" tableData:cellData];
             }
-            [weakSelf.tableView reloadRowsAtIndexPaths:visibleRows
+            [strongSelf.tableView reloadRowsAtIndexPaths:visibleRows
                                   withRowAnimation:UITableViewRowAnimationNone];
         });
     }
@@ -1973,9 +1983,7 @@
         if (!strongSelf)
             return;
         
-        strongSelf->_editingWaypointsGroupName = displayName;
-        strongSelf->_groupColor = groupColor;
-        [strongSelf presentWaypointsGroupOptionsWithScreenType:EOAEditWaypointsGroupRenameScreen groupName:displayName groupColor:nil];
+        [strongSelf showRenameWaypointsGroupOptionsForName:displayName groupColor:groupColor];
     }];
     
     UIAction *changeAppearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance") image:[UIImage imageNamed:@"ic_custom_appearance_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
@@ -1983,9 +1991,7 @@
         if (!strongSelf)
             return;
         
-        strongSelf->_editingWaypointsGroupName = displayName;
-        strongSelf->_groupColor = groupColor;
-        [strongSelf presentWaypointsGroupOptionsWithScreenType:EOAEditWaypointsGroupColorScreen groupName:displayName groupColor:groupColor];
+        [strongSelf showAppearanceWaypointsGroupOptionsForName:displayName groupColor:groupColor];
     }];
     
     UIAction *copyAsNewFolderAction = [UIAction actionWithTitle:OALocalizedString(@"copy_as_new_folder") image:[UIImage imageNamed:@"ic_custom_folder_add_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
@@ -1993,9 +1999,7 @@
         if (!strongSelf)
             return;
         
-        strongSelf->_editingWaypointsGroupName = displayName;
-        strongSelf->_groupColor = groupColor;
-        [strongSelf presentWaypointsGroupOptionsWithScreenType:EOAEditWaypointsGroupCopyToFavoritesScreen groupName:displayName groupColor:nil];
+        [strongSelf copyWaypointsGroupAsNewFolderWithName:displayName groupColor:groupColor];
     }];
     
     UIAction *addToExistingFolderAction = [UIAction actionWithTitle:OALocalizedString(@"add_to_a_folder") image:[UIImage imageNamed:@"ic_custom_folder_open"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
@@ -2003,18 +2007,7 @@
         if (!strongSelf)
             return;
         
-        strongSelf->_editingWaypointsGroupName = displayName;
-        strongSelf->_groupColor = groupColor;
-        NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
-        for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
-        {
-            [groupNames addObject:group.name];
-        }
-        
-        strongSelf->_editGroupController = [[OAEditGroupViewController alloc] initWithGroupName:nil groups:groupNames];
-        strongSelf->_editGroupController.delegate = strongSelf;
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:strongSelf->_editGroupController];
-        [strongSelf presentViewController:navigationController animated:YES completion:nil];
+        [strongSelf presentAddToExistingFolderForGroupName:displayName groupColor:groupColor];
     }];
     
     UIMenu *copyToFavoritesMenu = [UIMenu menuWithTitle:OALocalizedString(@"add_to_favorites") image:[UIImage imageNamed:@"ic_custom_copy"] identifier:nil options:0 children:@[copyAsNewFolderAction, addToExistingFolderAction]];
@@ -2031,11 +2024,48 @@
     return [UIMenu menuWithTitle:@"" image:nil identifier:nil options:0 children:@[toggleVisibility, renameAction, changeAppearanceAction, copyToFavoritesMenu, deleteAction]];;
 }
 
+- (void)showRenameWaypointsGroupOptionsForName:(NSString *)groupName groupColor:(UIColor *)groupColor
+{
+    _editingWaypointsGroupName = groupName;
+    _groupColor = groupColor;
+    [self presentWaypointsGroupOptionsWithScreenType:EOAEditWaypointsGroupRenameScreen groupName:groupName groupColor:nil];
+}
+
+- (void)showAppearanceWaypointsGroupOptionsForName:(NSString *)groupName groupColor:(UIColor *)groupColor
+{
+    _editingWaypointsGroupName = groupName;
+    _groupColor = groupColor;
+    [self presentWaypointsGroupOptionsWithScreenType:EOAEditWaypointsGroupColorScreen groupName:groupName groupColor:groupColor];
+}
+
+- (void)copyWaypointsGroupAsNewFolderWithName:(NSString *)groupName groupColor:(UIColor *)groupColor
+{
+    _editingWaypointsGroupName = groupName;
+    _groupColor = groupColor;
+    [self presentWaypointsGroupOptionsWithScreenType:EOAEditWaypointsGroupCopyToFavoritesScreen groupName:groupName groupColor:nil];
+}
+
 - (void)presentWaypointsGroupOptionsWithScreenType:(EOAEditWaypointsGroupScreen)screenType groupName:(NSString *)groupName groupColor:(UIColor *)groupColor
 {
     OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions = [[OAEditWaypointsGroupOptionsViewController alloc] initWithScreenType:screenType groupName:groupName groupColor:groupColor];
     editWaypointsGroupOptions.delegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:editWaypointsGroupOptions];
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)presentAddToExistingFolderForGroupName:(NSString *)groupName groupColor:(UIColor *)groupColor
+{
+    _editingWaypointsGroupName = groupName;
+    _groupColor = groupColor;
+    NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
+    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+    {
+        [groupNames addObject:group.name];
+    }
+    
+    _editGroupController = [[OAEditGroupViewController alloc] initWithGroupName:nil groups:[groupNames copy]];
+    _editGroupController.delegate = self;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_editGroupController];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
@@ -2531,6 +2561,7 @@
             if (isWaypointsGroup)
             {
                 __weak __typeof(self) weakSelf = self;
+                cell.menuButton.contextMenuInteractionEnabled = YES;
                 cell.menuButton.showsMenuAsPrimaryAction = YES;
                 cell.menuButton.menu = [self createWaypointsGroupMenuForGroupName:cellData.title];
                 cell.menuButton.onMenuWillBeginInteraction = ^{
@@ -2543,13 +2574,15 @@
                     __strong __typeof(weakSelf) strongSelf = weakSelf;
                     if (!strongSelf)
                         return;
-                    strongSelf->_isContextMenuVisible = NO;
+
                     if (strongSelf->_shouldUpdateTable)
                     {
                         strongSelf->_shouldUpdateTable = NO;
                         [strongSelf generateData];
                         [strongSelf.tableView reloadData];
                     }
+                    
+                    strongSelf->_isContextMenuVisible = NO;
                 };
             }
         }
@@ -3103,7 +3136,7 @@
         [favoriteItems addObject:favoriteItem];
     }
     
-    [OAFavoritesHelper addFavorites:favoriteItems];
+    [OAFavoritesHelper addFavorites:[favoriteItems copy]];
     _editingWaypointsGroupName = nil;
 }
 

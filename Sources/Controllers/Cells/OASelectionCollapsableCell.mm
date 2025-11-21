@@ -101,6 +101,7 @@
         [self.menuButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
         self.menuButton.onMenuWillBeginInteraction = nil;
         self.menuButton.onMenuDidEndInteraction = nil;
+        self.menuButton.contextMenuInteractionEnabled = NO;
         self.menuButton.showsMenuAsPrimaryAction = NO;
         self.menuButton.menu = nil;
     }

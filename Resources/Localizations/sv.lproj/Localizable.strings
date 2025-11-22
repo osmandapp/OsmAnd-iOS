@@ -2502,7 +2502,7 @@
 "shared_string_bearing" = "Bäring";
 "history_clear_alert_title" = "Radera all historik";
 "second_next_turn_widget_desc" = "Visar information om din andra uppkommande sväng, om den är nära efter den första.";
-"map_widget_sunrise_desc" = "Visar klockslag för eller återstående tid till kommande soluppgång.";
+"map_widget_sunrise_desc" = "Visar tiden för nästa soluppgång eller tiden som är kvar till soluppgång.";
 "free_favorites_backup" = "Gratis säkerhetskopiering av favoriter";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Ikoner vid låga zoomnivåer";
 "free_downloads" = "Gratis nedladdningar";
@@ -2886,7 +2886,7 @@
 "help_article_navigation_routing_osmand_routing_name" = "Om OsmAnds ruttberäkning";
 "help_article_navigation_routing_pedestrian_routing_name" = "Fotgängarvägvisning";
 "help_article_navigation_routing_public_transport_navigation_name" = "Kollektivtrafikvägvisning";
-"help_article_navigation_routing_ski_routing_name" = "Skidvägvisning";
+"help_article_navigation_routing_ski_routing_name" = "Skidbackar och rutter";
 "help_article_navigation_routing_straight_line_routing_name" = "Rak linje-vägvisning (flyg)";
 "help_article_navigation_routing_train_routing_name" = "Tågvägvisning";
 "help_article_navigation_setup_gpx_navigation_name" = "Navigera efter spår";
@@ -3450,7 +3450,7 @@
 "original_color_description" = "Varje punkt behåller sin individuella färg.";
 "original_icon_description" = "Varje punkt behåller sin individuella ikon.";
 "original_shape_description" = "Varje punkt behåller sin individuella form.";
-"map_widget_route_information_desc" = "Visar den beräknade ankomsttiden, återstående restiden och avståndet för nuvarande navigeringsrutt.";
+"map_widget_route_information_desc" = "Visar beräknad ankomsttid, återstående restid och avstånd för den aktiva navigeringsrutten.";
 "fuel_tank_capacity_description" = "Ange tankstorlek, för att tillförlitligt spåra bränslenivåer och -förbrukning";
 "us_gallons_unit" = "gal";
 "delete_widget_description" = "Denna wiget kommer att tas bort. Du kan återställa den senare i Konfigurera skärmen.";

@@ -91,7 +91,7 @@ static int DEFAULT_ELO = 900;
 @property (nonatomic) NSString *mapIconName;
 @property (nonatomic) NSString *cityName;
 @property (nonatomic) NSString *regionName;
-@property (nonatomic) int32_t order;
+@property (nonatomic) NSInteger order;
 
 - (UIImage *)icon;
 - (NSString *)iconName;
@@ -160,7 +160,7 @@ static int DEFAULT_ELO = 900;
 
 - (BOOL) strictEquals:(id)object;
 
-- (int32_t) getOrder;
+- (NSInteger) getOrder;
 - (void) initOrder;
 - (BOOL) isTransport;
 

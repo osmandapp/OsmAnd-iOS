@@ -70,6 +70,7 @@ NSString * const ROUTE_TRACK_POINT = @"route_track_point";
 NSString * const ROUTE_BBOX_RADIUS = @"route_bbox_radius";
 NSString * const ROUTE_MEMBERS_IDS = @"route_members_ids";
 NSString * const TRAVEL_EVO_TAG = @"travel_elo";
+NSString * const TRANSPORTATION = @"transportation";
 
 static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     COLOR_NAME_EXTENSION_KEY,
@@ -910,7 +911,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return result;
 }
 
-- (int32_t) getOrder
+- (NSInteger) getOrder
 {
     if (_order == 0 && _type != nil)
     {
@@ -943,7 +944,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         OAPOICategory * category = [_type category];
         if (category != nil)
         {
-            return [@"transportation" isEqualToString:[category name]];
+            return [TRANSPORTATION isEqualToString:[category name]];
         }
     }
     return false;

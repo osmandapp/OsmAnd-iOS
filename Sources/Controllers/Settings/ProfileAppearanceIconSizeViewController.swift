@@ -59,20 +59,13 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         super.viewDidLoad()
         updateCurrentLocation()
         switchAppMode(toChoosenAppMode: true)
-        if locationServices?.allowed == true {
-            locationServices?.suspend()
-        }
+        suspendLocationService()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         switchAppMode(toChoosenAppMode: false)
-        
-        if locationServices?.allowed == true {
-            locationServices?.resume()
-        } else {
-            locationServices?.setLocationFromSimulation(nil)
-        }
+        resumeLocationService()
     }
     
     override func updateModeUI() {
@@ -236,6 +229,20 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
             baseAppMode.flatMap(settings.applicationMode.set)
         }
         refreshMarkerIconSize()
+    }
+    
+    private func suspendLocationService() {
+        guard locationServices?.allowed == true, !OARoutingHelper.sharedInstance().isFollowingMode() else { return }
+        locationServices?.suspend()
+    }
+    
+    private func resumeLocationService() {
+        guard !OARoutingHelper.sharedInstance().isFollowingMode() else { return }
+        if locationServices?.allowed == true {
+            locationServices?.resume()
+        } else {
+            locationServices?.setLocationFromSimulation(nil)
+        }
     }
     
     @objc private func sliderChanged(sender: UISlider) {

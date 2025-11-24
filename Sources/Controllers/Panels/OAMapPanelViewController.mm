@@ -2727,7 +2727,7 @@ typedef enum
 
 - (void)openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed preferredZoom:(float)preferredZoom
 {
-    return [self openTargetViewWithAddress:address name:name typeName:typeName pushed:pushed saveState:YES preferredZoom:preferredZoom];
+    return [self openTargetViewWithAddress:address name:name typeName:typeName pushed:pushed saveState:YES preferredZoom:preferredZoom icon:nil];
 }
 
 - (void)openTargetViewWithAddress:(OAAddress *)address
@@ -2736,6 +2736,7 @@ typedef enum
                            pushed:(BOOL)pushed
                         saveState:(BOOL)saveState
                     preferredZoom:(float)preferredZoom
+                             icon:(UIImage *)icon
 {
     double lat = address.latitude;
     double lon = address.longitude;
@@ -2751,7 +2752,6 @@ typedef enum
     
     NSString *caption = name.length == 0 ? [address getName:lang transliterate:transliterate] : name;
     NSString *description = typeName.length == 0 ?  [address getAddressTypeName] : typeName;
-    UIImage *icon = [address icon];
     
     targetPoint.type = OATargetAddress;
     
@@ -2765,7 +2765,7 @@ typedef enum
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = caption;
     targetPoint.titleAddress = description;
-    targetPoint.icon = icon;
+    targetPoint.icon = icon ?: [address icon];
     targetPoint.toolbarNeeded = pushed;
     targetPoint.targetObj = address;
     
@@ -4118,7 +4118,7 @@ typedef enum
         }
         else
         {
-            //app.logEvent(mapActivity, "start_navigation");
+            [self reconnectOBDIfNeeded];
             [_settings setApplicationModePref:[_routingHelper getAppMode] markAsLastUsed:NO];
             [_mapViewTrackingUtilities backToLocationImpl:17 forceZoom:YES];
             [_settings.followTheRoute set:YES];
@@ -4156,6 +4156,15 @@ typedef enum
 
     if (_settings.simulateNavigation && [_app.locationServices.locationSimulation isRouteAnimating])
         [_app.locationServices.locationSimulation startStopRouteAnimation];
+}
+
+- (void)reconnectOBDIfNeeded
+{
+    VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
+    if (plugin)
+    {
+        [plugin reconnectOBDIfNeeded];
+    }
 }
 
 - (void) updateRouteButton

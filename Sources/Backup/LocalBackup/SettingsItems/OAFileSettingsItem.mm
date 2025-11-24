@@ -339,12 +339,12 @@
             if (![file hasPrefix:@"/"])
                 file = [@"/" stringByAppendingString:file];
             NSString *path = [[file substringFromIndex:1] stringByReplacingOccurrencesOfString:@"tracks/" withString:@""];
-            self.filePath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:[[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path]];
+            self.filePath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:[[OAFileSettingsItemFileSubtype getSubtypeFolder:self.subtype] stringByAppendingPathComponent:path]];
         }
         else
         {
             self.filePath = OsmAndApp.instance.documentsPath;
-            NSString *folderName = [OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype];
+            NSString *folderName = [OAFileSettingsItemFileSubtype getSubtypeFolder:self.subtype];
             if (folderName && folderName.length > 0)
                 self.filePath = [self.filePath stringByAppendingPathComponent:folderName];
             self.filePath = [self.filePath stringByAppendingPathComponent:self.name];
@@ -355,7 +355,7 @@
 
 - (void) installItem:(NSString *)destFilePath
 {
-    switch (_subtype)
+    switch (self.subtype)
     {
         case EOAFileSettingsItemFileSubtypeGpx: {
             OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
@@ -415,24 +415,24 @@
 
 - (NSString *)getPublicName
 {
-    if ([OAFileSettingsItemFileSubtype isMap:_subtype])
+    if ([OAFileSettingsItemFileSubtype isMap:self.subtype])
     {
         return [OAFileNameTranslationHelper getMapName:_filePath.lastPathComponent];
     }
-    else if (_subtype == EOAFileSettingsItemFileSubtypeVoiceTTS || _subtype == EOAFileSettingsItemFileSubtypeVoice)
+    else if (self.subtype == EOAFileSettingsItemFileSubtypeVoiceTTS || self.subtype == EOAFileSettingsItemFileSubtypeVoice)
     {
         return [OAFileNameTranslationHelper getVoiceName:_filePath.lastPathComponent];
     }
-    else if (_subtype == EOAFileSettingsItemFileSubtypeRenderingStyle)
+    else if (self.subtype == EOAFileSettingsItemFileSubtypeRenderingStyle)
     {
         NSString *name = [[self.name lastPathComponent] stringByReplacingOccurrencesOfString:@".render.xml" withString:@""];
         return [OARendererRegistry getMapStyleInfo:name][@"title"];
     }
-    else if (_subtype == EOAFileSettingsItemFileSubtypeRoutingConfig)
+    else if (self.subtype == EOAFileSettingsItemFileSubtypeRoutingConfig)
     {
         return self.name.lastPathComponent;
     }
-    else if (_subtype == EOAFileSettingsItemFileSubtypeMultimediaNotes)
+    else if (self.subtype == EOAFileSettingsItemFileSubtypeMultimediaNotes)
     {
 //        if (file.exists()) {
 //            return new Recording(file).getName(app, true);
@@ -483,7 +483,7 @@
 
 - (NSString *) getIconName
 {
-    switch (_subtype)
+    switch (self.subtype)
     {
         case EOAFileSettingsItemFileSubtypeWikiMap:
             return @"ic_custom_wikipedia";
@@ -515,7 +515,7 @@
     NSString *fileName = json[@"file"];
     if (![fileName hasPrefix:@"/"])
         fileName = [@"/" stringByAppendingString:fileName];
-    if (!_subtype)
+    if (!self.subtype)
     {
         NSString *subtypeStr = json[@"subtype"];
         if (subtypeStr.length > 0)
@@ -553,9 +553,9 @@
 
 - (BOOL) needMd5Digest
 {
-    return _subtype == EOAFileSettingsItemFileSubtypeVoice
-        || _subtype == EOAFileSettingsItemFileSubtypeVoiceTTS
-        || _subtype == EOAFileSettingsItemFileSubtypeGpx;
+    return self.subtype == EOAFileSettingsItemFileSubtypeVoice
+        || self.subtype == EOAFileSettingsItemFileSubtypeVoiceTTS
+        || self.subtype == EOAFileSettingsItemFileSubtypeGpx;
 }
 
 @end

@@ -508,7 +508,7 @@
     if (_type == EOAChoosePlan)
         [[OARootViewController instance] requestProductsWithProgress:YES reload:YES restorePurchases:YES];
     else if (_type == EOAChooseSubscription)
-        [self openSafariWithURL:kDocsPurchasesIOS];
+        [self openSafariWithURL:[kDocsPurchasesIOS localizedURLIfAvailable]];
 }
 
 - (IBAction) onButtonRestorePressed:(id)sender
@@ -625,9 +625,9 @@
                     row.backgroundColor = self.scrollView.backgroundColor;
 
                     if (tag == _buttonTermsOfUse.tag)
-                        [self openSafariWithURL:kOsmAndTermsOfUse];
+                        [self openSafariWithURL:[kOsmAndTermsOfUse localizedURLIfAvailable]];
                     else if (tag == _buttonPrivacyPolicy.tag)
-                        [self openSafariWithURL:kOsmAndPrivacyPolicy];
+                        [self openSafariWithURL:[kOsmAndPrivacyPolicy localizedURLIfAvailable]];
                 }];
             }];
         }

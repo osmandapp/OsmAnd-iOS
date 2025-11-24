@@ -41,5 +41,6 @@ typedef NS_ENUM(NSInteger, EOAAddressType)
 - (NSString *)iconName;
 
 - (NSString *)getAddressTypeName;
+- (NSMutableArray<NSString *> *)getOtherNames:(BOOL)transliterate;
 
 @end

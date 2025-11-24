@@ -131,9 +131,13 @@
         case EOAObjectTypePostcode:
         case EOAObjectTypeStreet:
         case EOAObjectTypeHouse:
-        case EOAObjectTypeStreetIntersection:
+        case EOAObjectTypeBoundary:
         {
             return [((OAAddress *)searchResult.object) iconName];
+        }
+        case EOAObjectTypeStreetIntersection:
+        {
+            return @"ic_custom_intersection";
         }
         case EOAObjectTypePoiType:
         {
@@ -244,6 +248,7 @@
     switch (searchResult.objectType)
     {
         case EOAObjectTypeCity:
+        case EOAObjectTypeBoundary:
         {
             OACity *city = (OACity *)searchResult.object;
             return [OACity getLocalizedTypeStr:city.type];

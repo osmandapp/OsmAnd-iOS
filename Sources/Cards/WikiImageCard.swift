@@ -20,7 +20,6 @@ final class WikiImage: NSObject {
     
     var mediaId: Int = -1
     var metadata: Metadata?
-    var onMetadataUpdated: (() -> Void)?
     
     init(wikiMediaTag: String, imageName: String, imageStubUrl: String, imageHiResUrl: String) {
         self.wikiMediaTag = wikiMediaTag
@@ -49,37 +48,43 @@ final class WikiImage: NSObject {
         if let mediaId = dic["mediaId"] as? Int {
             self.mediaId = mediaId
         }
+        
+        applyDescription(from: dic)
     }
     
-    func updateMetaData(with dic: [String: Any]) {
-        if metadata == nil {
-            self.metadata = Metadata()
+    func applyDescription(from dic: [String: Any]) {
+        guard
+            let jsonString = dic["description"] as? String,
+            let data = jsonString.data(using: .utf8),
+            let descriptions = try? JSONSerialization.jsonObject(with: data) as? [String: String],
+            !descriptions.isEmpty
+        else {
+            return
         }
-        
-        var isUpdated = false
-        if let date = dic["date"] as? String, !isEmpty(date), isEmpty(metadata?.date) {
-            metadata?.date = date
-            isUpdated = true
-        }
-        
-        if let license = dic["license"] as? String, !isEmpty(license), isEmpty(metadata?.license) {
-            metadata?.license = license
-            isUpdated = true
-        }
-        
-        if let author = dic["author"] as? String, !isEmpty(author), isEmpty(metadata?.author) {
-            metadata?.author = author
-            isUpdated = true
-        }
-        
-        if let description = dic["description"] as? String, !isEmpty(description), isEmpty(metadata?.description) {
-            metadata?.description = description.replacingOccurrences(of: "\n", with: "")
-            isUpdated = true
-        }
-        if isUpdated {
-            DispatchQueue.main.async { [weak self] in
-                self?.onMetadataUpdated?()
+
+        let mapLang = OAAppSettings.sharedManager().settingPrefMapLanguage.get()
+        var description: String?
+
+        // Try direct mapLang
+        if let value = descriptions[mapLang], !value.isEmpty {
+            description = value
+        } else {
+            // Try user preferred languages
+            for lang in Locale.preferredLanguageCodes {
+                if let value = descriptions[lang], !value.isEmpty {
+                    description = value
+                    break
+                }
             }
+            
+            // first non-empty value
+            if description == nil {
+                description = descriptions.values.first(where: { !$0.isEmpty })
+            }
+        }
+
+        if let description {
+            metadata?.description = description.replacingOccurrences(of: "\n", with: "")
         }
     }
     
@@ -90,16 +95,8 @@ final class WikiImage: NSObject {
 
 final class WikiImageCard: ImageCard {
     private(set) var urlWithCommonAttributions: String
-    
-    var isMetaDataDownloaded = false
-    var isMetaDataDownloading = false
+
     var wikiImage: WikiImage?
-    
-    var onMetadataUpdated: (() -> Void)? {
-        didSet {
-            wikiImage?.onMetadataUpdated = onMetadataUpdated
-        }
-    }
     
     var metadata: Metadata? {
         wikiImage?.metadata

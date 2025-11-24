@@ -2525,7 +2525,7 @@ static const NSInteger kDetailedMapZoom = 9;
                 {
                     if ([param.name isEqualToString:ELEVATION_UNITS_ATTR])
                     {
-                        BOOL useFeet = settings.metricSystem.get == MILES_AND_FEET;
+                        BOOL useFeet = [OAAltitudeMetricsConstant shouldUseFeet:[[OAAppSettings sharedManager].altitudeMetric get]];
                         newSettings[QString::fromNSString(ELEVATION_UNITS_ATTR)] = useFeet
                             ? QString::fromNSString(ELEVATION_UNITS_FEET_VALUE)
                             : QString::fromNSString(ELEVATION_UNITS_METERS_VALUE);

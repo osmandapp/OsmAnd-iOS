@@ -487,7 +487,7 @@
 "show_borders_of_downloaded_maps" = "Hiện giới hạn của các bản đồ đã tải";
 "rendering_attr_showFunicularRoutes_name" = "Tuyến tàu/cáp treo leo núi";
 "rendering_attr_showBusRoutes_name" = "Những tuyến xe buýt";
-"simulation_real_mode_desc" = "Trên những đoạn đường thẳng, vận tốc sẽ giống với vận tốc tối đa cho phép.\nỞ nơi giao nhau, sự mô phỏng sẽ chậm lại.\nNhững sự giảm tốc sẽ xảy ra khi có tín hiệu giao thông, biển bắt buộc dừng v.v.";
+"simulation_real_mode_desc" = "Trên những đoạn đường thẳng, tốc độ sẽ giống với tốc độ tối đa cho phép.\nỞ nơi giao nhau, sự mô phỏng sẽ chậm lại.\nNhững sự giảm tốc sẽ xảy ra khi có tín hiệu giao thông, biển bắt buộc dừng v.v.";
 "rendering_attr_showRunningRoutes_description" = "Hiện những cung đường chạy bộ";
 "rendering_attr_showFitnessTrails_description" = "Hiện những cung đường tập luyện thể chất";
 "zoom_levels_difference_description" = "Sự khác biệt lớn giữa những mức thu phóng khác nhau có thể làm tăng kích thước của dữ liệu được tải xuống.";
@@ -503,7 +503,7 @@
 "trip_recording_uphill_widget_desc" = "Hiện tổng những lần đi lên của chuyến đi đang được ghi.";
 "second_marker_widget_desc" = "Bạn có thể điều chỉnh widget để hiện khoảng cách hoặc thời gian dự kiến đến điểm đánh dấu thứ hai.";
 "next_turn_widget_desc" = "Widget hiện lối rẽ tiếp theo cùng với hướng di chuyển và khoảng cách đến nó.";
-"average_speed_widget_desc" = "Hiện vận tốc trung bình của chuyến đi hiện tại.";
+"average_speed_widget_desc" = "Hiện tốc độ trung bình của chuyến đi hiện tại.";
 "battery_widget_desc" = "Hiện mức pin của thiết bị của bạn.";
 "speak_title" = "Thông báo…";
 "simulation_real_mode_title" = "Sự mô phỏng giống với thực tế";
@@ -539,7 +539,7 @@
 "rendering_attr_showDirtbikeTrails_name" = "Lối đi cho xe đạp địa hình";
 "rendering_attr_showDirtbikeTrails_description" = "Hiện lối đi cho xe đạp địa hình";
 "routing_attr_avoid_cobblestone_name" = "Tránh đá cuội";
-"map_widget_average_speed" = "Vận tốc trung bình";
+"map_widget_average_speed" = "Tốc độ trung bình";
 "compass_click_desc" = "Chạm hai lần vào nút la bàn để đổi hướng xoay của bản đồ.";
 "compass_always_hidden" = "Luôn ẩn";
 "compass_always_visible" = "Luôn hiện";
@@ -551,7 +551,7 @@
 "speak_route_recalculation" = "Thông báo việc tính toán lại tuyến đường";
 "routing_attr_motor_type_name" = "Nhiên liệu được sử dụng bởi động cơ";
 "transport_hazmat_no_desc" = "Những con đường và đường hầm có thể hạn chế việc vận chuyển chất nguy hại.";
-"average_speed_time_interval_desc" = "Chỉ rõ khoảng thời gian tính vận tốc trung bình.";
+"average_speed_time_interval_desc" = "Chỉ rõ khoảng thời gian tính tốc độ trung bình.";
 "map_widget_current_speed" = "Vận tốc hiện tại";
 "driving_region_canada" = "Ca-na-đa";
 "shared_string_layers" = "Lớp";
@@ -780,7 +780,7 @@
 "map_widget_camera_tilt" = "Độ nghiêng máy ảnh";
 "nautical_depth_points" = "Những điểm độ sâu của biển";
 "map_widget_altitude_current_location" = "Độ cao: vị trí hiện tại";
-"map_marker_interval_dialog_desc" = "Chỉ rõ khoảng thời gian trong đó vận tốc trung bình được đo để tính thời gian đến dự kiến.";
+"map_marker_interval_dialog_desc" = "Chỉ rõ khoảng thời gian trong đó tốc độ trung bình được đo để tính thời gian đến dự kiến.";
 "quick_action_map_center_widget_descr" = "Một nút chuyển để hiện hoặc ẩn widget trung tâm bản đồ trên bản đồ.";
 "rendering_attr_weatherTempContours_name" = "Đường đẳng nhiệt";
 "map_widget_camera_distance_desc" = "Hiện độ cao trên mực nước biển của máy ảnh.";

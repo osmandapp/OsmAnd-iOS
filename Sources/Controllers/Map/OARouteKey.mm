@@ -103,7 +103,7 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
     return self.routeKey.operator int();
 }
 
-+ (OARouteKey *) fromGpxFile:(OASGpxFile *)gpxFile
++ (OARouteKey *)fromGpxFile:(OASGpxFile *)gpxFile
 {
     OASMutableDictionary<NSString *,NSString *> * networkRouteKeyTags = gpxFile.networkRouteKeyTags;
     NSString *type = networkRouteKeyTags[NETWORK_ROUTE_TYPE];
@@ -126,21 +126,35 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
         }
     }
     
-    OASMetadata * metadata = gpxFile.metadata;
-    NSMutableDictionary<NSString *, NSString *> *combinedExtensionsTags = [NSMutableDictionary new];
+    OASMetadata *metadata = gpxFile.metadata;
+    NSMutableDictionary *combinedExtensionsTags = [NSMutableDictionary new];
     [combinedExtensionsTags addEntriesFromDictionary:[metadata getExtensionsToRead]];
     [combinedExtensionsTags addEntriesFromDictionary:[gpxFile getExtensionsToRead]];
-    return [self.class fromShieldTags:combinedExtensionsTags];
+
+    // Keep only NSString keys and values
+    NSMutableDictionary<NSString *, NSString *> *safeTags = [NSMutableDictionary new];
+    for (id key in combinedExtensionsTags)
+    {
+        id value = combinedExtensionsTags[key];
+        if ([key isKindOfClass:[NSString class]] && [value isKindOfClass:[NSString class]])
+        {
+            safeTags[key] = value;
+        }
+    }
+    
+    return [[self class] fromShieldTags:[safeTags copy]];
 }
 
-+ (OARouteKey *) fromShieldTags:(NSMutableDictionary<NSString *, NSString *> *)shieldTags
++ (OARouteKey *)fromShieldTags:(NSDictionary<NSString *, NSString *> *)shieldTags
 {
     if (!NSDictionaryIsEmpty(shieldTags))
     {
+        NSMutableDictionary<NSString *, NSString *> *mutableTags = [shieldTags mutableCopy];
+        
         for (NSString *shield in SHIELD_TO_OSMC)
         {
             NSString *osmc = SHIELD_TO_OSMC[shield];
-            NSString *value = shieldTags[shield];
+            NSString *value = mutableTags[shield];
             if (value)
             {
                 value = [value stringByReplacingOccurrencesOfString:@"^osmc_"
@@ -153,7 +167,7 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
                                                             options:NSRegularExpressionSearch
                                                               range:NSMakeRange(0, value.length)];
                 
-                shieldTags[osmc] = value;
+                mutableTags[osmc] = value;
             }
         }
         
@@ -161,17 +175,15 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
         const auto routeKey = std::make_shared<OsmAnd::NetworkRouteKey>(routeType);
         routeKey->type = routeType;
         
-        for (NSString *key in shieldTags)
+        for (NSString *key in mutableTags)
         {
-            NSString *value = shieldTags[key];
+            NSString *value = mutableTags[key];
             if (!NSStringIsEmpty(key) && !NSStringIsEmpty(value))
                 routeKey->addTag(QString::fromNSString(key), QString::fromNSString(value));
         }
         
         if (routeKey)
-        {
             return [[OARouteKey alloc] initWithKey:*routeKey type:routeType];
-        }
     }
     
     return nil;

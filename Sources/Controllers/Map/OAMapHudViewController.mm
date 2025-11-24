@@ -51,6 +51,8 @@ static const float kButtonWidth = 48.0;
 static const float kButtonOffset = 16.0;
 static const float kWidgetsOffset = 3.0;
 static const float kDistanceMeters = 100.0;
+static const float kGridCellWidthPt = 8.0;
+static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 
 @interface OAMapHudViewController () <OAMapInfoControllerProtocol, UIGestureRecognizerDelegate>
@@ -98,6 +100,8 @@ static const float kDistanceMeters = 100.0;
     NSLayoutConstraint *_leftRulerConstraint;
     
     CLLocation *_previousLocation;
+    
+    NSTimeInterval _lastWidgetsUpdateTime;
     
     BOOL _cachedLocationAvailableState;
     
@@ -502,8 +506,11 @@ static const float kDistanceMeters = 100.0;
 
 - (void)updateMapRulerData
 {
+    CGFloat oldWidth = CGRectGetWidth(self.rulerLabel.frame);
     [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
-    [_mapHudLayout updateButtons];
+    CGFloat newWidth = CGRectGetWidth(self.rulerLabel.frame);
+    if (fabs(newWidth - oldWidth) >= kGridCellWidthPt)
+        [_mapHudLayout updateButtons];
 }
 
 - (void)updateMapRulerDataWithDelay
@@ -1798,9 +1805,26 @@ static const float kDistanceMeters = 100.0;
 
 #pragma mark - OAMapInfoControllerProtocol
 
-- (void) widgetsLayoutDidChange:(BOOL)animated
+- (void)widgetsLayoutDidChange:(BOOL)animated
 {
-    [self updateControlsLayout:animated];
+    NSTimeInterval now = CACurrentMediaTime();
+    NSTimeInterval elapsed = now - _lastWidgetsUpdateTime;
+    if (elapsed >= kWidgetsUpdateFrameInterval)
+    {
+        [self coalescedWidgetsUpdate:@(animated)];
+    }
+    else
+    {
+        NSTimeInterval delay = kWidgetsUpdateFrameInterval - elapsed;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(coalescedWidgetsUpdate:) object:nil];
+        [self performSelector:@selector(coalescedWidgetsUpdate:) withObject:@(animated) afterDelay:delay];
+    }
+}
+
+- (void)coalescedWidgetsUpdate:(NSNumber *)animatedNumber
+{
+    _lastWidgetsUpdateTime = CACurrentMediaTime();
+    [self updateControlsLayout:animatedNumber.boolValue];
     [_mapHudLayout updateButtons];
 }
 

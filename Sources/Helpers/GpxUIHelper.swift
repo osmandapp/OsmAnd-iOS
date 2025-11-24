@@ -433,8 +433,9 @@ class GpxUIHelper: NSObject {
     static func setupElevationChart(chartView: ElevationChart,
                                     topOffset: CGFloat,
                                     bottomOffset: CGFloat,
-                                    useGesturesAndScale: Bool) {
-        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40))
+                                    useGesturesAndScale: Bool,
+                                    showXInMarker: Bool) {
+        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40), showXAxisValue: showXInMarker)
         setupElevationChart(chartView: chartView,
                             markerView: marker,
                             topOffset: topOffset,
@@ -812,7 +813,7 @@ class GpxUIHelper: NSObject {
                                                   useRightAxis: Bool,
                                                   drawFilled: Bool,
                                                   calcWithoutGaps: Bool) -> OrderedLineDataSet {
-        let useFeet: Bool = OAMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().metricSystem.get())
+        let useFeet: Bool = OAAltitudeMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().altitudeMetric.get())
         let convEle: Double = useFeet ? 3.28084 : 1.0
         let divX: Double = getDivX(lineChart: chartView,
                                    analysis: analysis,
@@ -862,8 +863,7 @@ class GpxUIHelper: NSObject {
         if axisType == GPXDataSetAxisType.time || axisType == GPXDataSetAxisType.timeOfDay {
             return nil
         }
-        let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
-        let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS) || (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET)
+        let useFeet: Bool = OAAltitudeMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().altitudeMetric.get())
         let convEle: Double = useFeet ? 3.28084 : 1.0
         let totalDistance: Double = calcWithoutGaps
         	? Double(analysis.totalDistanceWithoutGaps)

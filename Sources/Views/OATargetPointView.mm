@@ -1978,6 +1978,24 @@ static const NSInteger _buttonsCount = 4;
     }];
 }
 
+- (void)addCoordinatesAndUrlTo:(NSMutableString *)sharingText withLat:(double)lat lon:(double)lon
+{
+    int zoom = _mapView.zoomLevel;
+    NSString *geoUrl = [OAUtilities buildGeoUrl:lat longitude:lon zoom:zoom];
+    if (geoUrl.length > 0)
+    {
+        NSString *cordinates = [NSString stringWithFormat:@"Location: %@", geoUrl];
+        [sharingText appendString:@"\n"];
+        [sharingText appendString:cordinates];
+    }
+    NSString *httpUrl = [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
+    if (httpUrl.length > 0)
+    {
+        [sharingText appendString:@"\n"];
+        [sharingText appendString:httpUrl];
+    }
+}
+
 #pragma mark - Actions
 
 - (IBAction)downloadButtonPressed:(id)sender
@@ -2026,6 +2044,8 @@ static const NSInteger _buttonsCount = 4;
     NSMutableArray *items = [NSMutableArray array];
 
     NSMutableString *sharingText = [[NSMutableString alloc] init];
+    double lat;
+    double lon;
     if (_previousTargetType == OATargetFavorite)
     {
         OAFavoriteViewController *source = (OAFavoriteViewController *) self.customController;
@@ -2047,6 +2067,8 @@ static const NSInteger _buttonsCount = 4;
                 [sharingText appendString:@"\n"];
             [sharingText appendString:itemDesc];
         }
+        lat = [source.favorite getLatitude];
+        lon = [source.favorite getLongitude];
     }
     else
     {
@@ -2058,23 +2080,11 @@ static const NSInteger _buttonsCount = 4;
                 [sharingText appendString:@"\n"];
             [sharingText appendString:_targetPoint.titleAddress];
         }
-        double lat = _targetPoint.location.latitude;
-        double lon = _targetPoint.location.longitude;
-        int zoom = _mapView.zoomLevel;
-        NSString *geoUrl = [OAUtilities buildGeoUrl:lat longitude:lon zoom:zoom];
-        if (geoUrl.length > 0)
-        {
-            NSString *cordinates = [NSString stringWithFormat:@"Location: %@",geoUrl];
-                [sharingText appendString:@"\n"];
-                [sharingText appendString:cordinates];
-        }
-        NSString *httpUrl = [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
-        if (httpUrl.length > 0)
-        {
-            [sharingText appendString:@"\n"];
-            [sharingText appendString:httpUrl];
-        }
+        lat = _targetPoint.location.latitude;
+        lon = _targetPoint.location.longitude;
     }
+    [self addCoordinatesAndUrlTo:sharingText withLat:lat lon:lon];
+    
     if (sharingText && sharingText.length > 0)
         [items addObject:sharingText];
 

@@ -13,9 +13,9 @@
 #import "OAObjectType.h"
 
 // MAX_TYPES_BASE_10 should be > ObjectType.getTypeWeight(objectType) = 5
-#define MAX_TYPES_BASE_10 10
+static double const MAX_TYPES_BASE_10 = 10.0;
 // MAX_PHRASE_WEIGHT_TOTAL should be  > getSumPhraseMatchWeight
-#define MAX_PHRASE_WEIGHT_TOTAL MAX_TYPES_BASE_10 * MAX_TYPES_BASE_10
+static double const MAX_PHRASE_WEIGHT_TOTAL = MAX_TYPES_BASE_10 * MAX_TYPES_BASE_10;
 
 typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
     EOASearchResultResourceDetailed,
@@ -78,12 +78,13 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 - (double) getSearchDistanceFloored:(CLLocation *)location;
 - (double) getSearchDistanceFloored:(CLLocation *)location pd:(double)pd;
 
-- (double) getSumPhraseMatchWeight;
+- (double) getSumPhraseMatchWeight:(OASearchResult *)exactResult;
 - (int) getDepth;
 - (OASearchResult *)setNewParentSearchResult:(OASearchResult *)parentSearchResult;
-- (BOOL) allWordsMatched:(NSString *)name cnt:(CheckWordsMatchCount*)cnt;
+- (BOOL) allWordsMatched:(NSString *)name exactResult:(OASearchResult *)exactResult cnt:(CheckWordsMatchCount*)cnt;
 - (NSMutableArray<NSString *> *) getSearchPhraseNames;
 - (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes;
+- (NSMutableArray<NSString *> *)filterUnknownSearchWord:(NSMutableArray<NSString *> *)leftUnknownSearchWords;
 
 - (NSString *) toString;
 

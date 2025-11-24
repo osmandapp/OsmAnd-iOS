@@ -726,27 +726,31 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
         }
 
     [resIds sortUsingComparator:^NSComparisonResult(NSString *first, NSString *second) {
-        first = [[first stringByReplacingOccurrencesOfString:@".live.obf" withString:@""] stringByReplacingOccurrencesOfString:@".obf" withString:@""];
-        second = [[second stringByReplacingOccurrencesOfString:@".live.obf" withString:@""] stringByReplacingOccurrencesOfString:@".obf" withString:@""];
-        NSRange rangeFirst = [first rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
+        first = [[first stringByReplacingOccurrencesOfString:@".live.obf" withString:@""]
+                        stringByReplacingOccurrencesOfString:@".obf" withString:@""];
+        second = [[second stringByReplacingOccurrencesOfString:@".live.obf" withString:@""]
+                          stringByReplacingOccurrencesOfString:@".obf" withString:@""];
+
+        NSRange rangeFirst  = [first rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
         NSRange rangeSecond = [second rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
+
         if (rangeFirst.location != NSNotFound && rangeSecond.location == NSNotFound)
         {
+            if (rangeFirst.location == 0)
+                return [first compare:second];
+
             NSString *base = [first substringToIndex:rangeFirst.location - 1];
-            if ([base isEqualToString:second])
-                return NSOrderedAscending;
-            else
-                [second compare:base];
+            return [base isEqualToString:second] ? NSOrderedAscending : [second compare:base];
         }
         else if (rangeFirst.location == NSNotFound && rangeSecond.location != NSNotFound)
         {
+            if (rangeSecond.location == 0)
+                return [first compare:second];
+            
             NSString *base = [second substringToIndex:rangeSecond.location - 1];
-            if ([base isEqualToString:first])
-                return NSOrderedDescending;
-            else
-                [base compare:first];
+            return [base isEqualToString:first] ? NSOrderedDescending : [base compare:first];
         }
-        
+
         return [first compare:second];
     }];
     [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];

@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *wikidata;
 @property (nonatomic, strong) NSMutableArray<NSString *> *names;
 @property (nonatomic, nullable) NSMutableDictionary<NSString *, NSString *>* tags;
+@property (nonatomic, copy, nullable) NSString *mainAmenityType;
 
 - (instancetype)initWithMapObject:(OAMapObject *)mapObject;
 - (instancetype)initWithMapObject:(OAMapObject *)mapObject names:(NSArray<NSString *> *)names;
@@ -40,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) breakSearch;
 - (void) findPOIsByKeyword:(NSString *)keyword;
-- (void) findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
+- (void) findPOIsByKeyword:(NSString *)keyword categoryName:(nullable NSString *)category poiTypeName:(nullable NSString *)type radiusIndex:(int *)radiusIndex;
 - (void) findPOIsByFilter:(OAPOIUIFilter *)filter radiusIndex:(int *)radiusIndex;
 + (NSArray<OAPOI *> *) findPOIsByFilter:(OASearchPoiTypeFilter *)filter topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
 + (NSArray<OAPOI *> *) findPOIsByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
@@ -48,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAPOI *) findPOIByOsmId:(long long)osmId lat:(double)lat lon:(double)lon;
 + (OAPOI *) findPOIByName:(NSString *)name lat:(double)lat lon:(double)lon;
 + (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon;
-+ (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter *)additionalFilter lat:(double)lat lon:(double)lon radius:(int)radius includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> *)matcher publish:(BOOL(^)(OAPOI *poi))publish;
++ (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(nullable OATopIndexFilter *)additionalFilter lat:(double)lat lon:(double)lon radius:(int)radius includeTravel:(BOOL)includeTravel matcher:(nullable OAResultMatcher<OAPOI *> *)matcher publish:(nullable BOOL(^)(OAPOI *poi))publish;
 
 @end
 

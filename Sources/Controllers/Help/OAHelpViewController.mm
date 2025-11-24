@@ -23,7 +23,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 @implementation OAHelpViewController
 {
-    OAMenuHelpDataService *_helpDataManager;
+    MenuHelpDataService *_helpDataManager;
     OATableDataModel *_data;
     NSArray<PopularArticle *> *_mostViewedArticles;
     NSArray<ArticleNode *> *_parsedArticles;
@@ -34,7 +34,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 - (void)commonInit
 {
-    _helpDataManager  = [OAMenuHelpDataService shared];
+    _helpDataManager = [MenuHelpDataService shared];
 }
 
 #pragma mark - UIViewController
@@ -44,7 +44,6 @@ static NSString * const kLinkExternalType = @"ext_link";
     [super viewDidLoad];
     
     [self loadAndParseJson];
-    [self loadAndParseJsonForSiteArticles];
 }
 
 #pragma mark - Base UI
@@ -61,19 +60,20 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
+    __weak __typeof(self) weakSelf = self;
     UIAction *sendLog = [UIAction actionWithTitle:OALocalizedString(@"send_log") image:[UIImage imageNamed:@"ic_custom_file_send_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        [self sendLogFile];
+        [weakSelf sendLogFile];
     }];
     
     UIAction *copyBuildVersion = [UIAction actionWithTitle:OALocalizedString(@"copy_build_version") image:[UIImage imageNamed:@"ic_custom_clipboard"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        [self copyBuildVersion];
+        [weakSelf copyBuildVersion];
     }];
     
     UIMenu *sendLogMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[sendLog]];
     
     UIMenu *copyBuildVersionMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[copyBuildVersion]];
     
-    UIMenu *menu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[sendLogMenu, copyBuildVersionMenu]];
+    UIMenu *menu = [UIMenu menuWithTitle:@"" children:@[copyBuildVersionMenu, sendLogMenu]];
     
     UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_overflow_menu_stroke" action:@selector(onRightNavbarButtonPressed) menu:menu];
     
@@ -173,13 +173,11 @@ static NSString * const kLinkExternalType = @"ext_link";
     [telegramChatsRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
     [telegramChatsRow setKey:@"contactSupportTelegram"];
     [telegramChatsRow setTitle:OALocalizedString(@"telegram_chats")];
-    [_helpDataManager getCountForCategoryFrom:kPopularArticlesAndTelegramChats for:HelperDataItemsTelegramChats completion:^(NSInteger count) {
-        [telegramChatsRow setDescr:[NSString stringWithFormat:@"%ld", (long)count]];
-    }];
+    [telegramChatsRow setDescr:[NSString stringWithFormat:@"%ld", _helpDataManager.telegramChats.count]];
     [telegramChatsRow setIconName:@"ic_custom_logo_telegram"];
     
     NSArray *additionalContactUsItems = @[
-        @{@"title": OALocalizedString(@"twitter"), @"descr": kCommunityTwitter, @"icon": @"ic_custom_logo_twitter", @"url": kCommunityTwitter},
+        @{@"title": OALocalizedString(@"x"), @"descr": kCommunityTwitter, @"icon": @"ic_custom_logo_x", @"url": kCommunityTwitter},
         @{@"title": OALocalizedString(@"reddit"), @"descr": kCommunityReddit, @"icon": @"ic_custom_logo_reddit", @"url": kCommunityReddit},
         @{@"title": OALocalizedString(@"facebook"), @"descr": kCommunityFacebook, @"icon": @"ic_custom_logo_facebook", @"url": kCommunityFacebook}
     ];
@@ -219,9 +217,22 @@ static NSString * const kLinkExternalType = @"ext_link";
     aboutOsmAndSection.headerText = OALocalizedString(@"about_osmAnd");
     
     NSArray *aboutOsmAndItems = @[
-        @{@"title": OALocalizedString(@"osmAnd_team"), @"descr": @"", @"icon": @"ic_custom_logo_osmand", @"url": kOsmAndTeam},
-        @{@"title": OALocalizedString(@"help_what_is_new"), @"descr": [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"OsmAnd Maps"), [OAAppVersion getBuildVersion]], @"icon": @"ic_custom_clipboard", @"url": kDocsLatestVersion},
-        @{@"title": OALocalizedString(@"testFlight"), @"descr": OALocalizedString(@"download_install_beta_version"), @"icon": @"ic_custom_download", @"url": kTestFlight}
+        @{@"title": OALocalizedString(@"osmAnd_team"),
+          @"descr": @"",
+          @"icon": @"ic_custom_logo_osmand",
+          @"url": kOsmAndTeam},
+        @{@"title": OALocalizedString(@"help_what_is_new"),
+          @"descr": [NSString stringWithFormat:@"%@ %@, %@ %@",
+                     OALocalizedString(@"OsmAnd Maps"),
+                     [OAAppVersion getBuildVersion],
+                     OALocalizedString(@"shared_string_release").lowercaseString,
+                     [self releaseDateString]],
+          @"icon": @"ic_custom_clipboard",
+          @"url": kDocsLatestVersion},
+        @{@"title": OALocalizedString(@"testFlight"),
+          @"descr": OALocalizedString(@"download_install_beta_version"),
+          @"icon": @"ic_custom_download",
+          @"url": kTestFlight}
     ];
     
     for (NSDictionary *item in aboutOsmAndItems)
@@ -237,36 +248,50 @@ static NSString * const kLinkExternalType = @"ext_link";
     }
 }
 
+- (NSString *)releaseDateString
+{
+    NSString *dateString = @__DATE__;
+    
+    NSDateFormatter *inputDateFormatter = [NSDateFormatter new];
+    [inputDateFormatter setDateFormat:@"MMM dd yyyy"];
+    [inputDateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+
+    NSDate *date = [inputDateFormatter dateFromString:dateString];
+
+    if (!date)
+        return dateString;
+    
+    NSDateFormatter *outputDateFormatter = [NSDateFormatter new];
+    outputDateFormatter.locale = [NSLocale currentLocale];
+    outputDateFormatter.dateStyle = NSDateFormatterShortStyle;
+    outputDateFormatter.timeStyle = NSDateFormatterNoStyle;
+
+    return [outputDateFormatter stringFromDate:date] ?: dateString;
+}
+
 - (void)loadAndParseJson
 {
-    [_helpDataManager loadAndParseJsonFrom:kPopularArticlesAndTelegramChats for:HelperDataItemsPopularArticles completion:^(NSArray *articles, NSError *error) {
+    __weak __typeof(self) weakSelf = self;
+    [_helpDataManager fetchDataWithCompletion:^(NSError * _Nullable error) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
         if (error)
         {
-            NSLog(OALocalizedString(@"osm_failed_uploads"));
+            NSLog(@"Failed to fetch helper data: %@", error.localizedDescription);
+            return;
         }
-        else if (articles)
-        {
-            _mostViewedArticles = articles;
-            [self generateData];
-            [self.tableView reloadData];
-        }
+        [strongSelf reloadData];
     }];
 }
 
-- (void)loadAndParseJsonForSiteArticles
+- (void)reloadData
 {
-    [_helpDataManager loadAndParseJsonFrom:kPopularArticlesAndTelegramChats for:HelperDataItemsSiteArticles completion:^(NSArray *articles, NSError *error) {
-        if (error)
-        {
-            NSLog(@"Error loading articles: %@", error.localizedDescription);
-        } 
-        else if (articles)
-        {
-            _parsedArticles = articles;
-            [self generateData];
-            [self.tableView reloadData];
-        }
-    }];
+    _mostViewedArticles = _helpDataManager.popularArticles;
+    _parsedArticles = _helpDataManager.rootNode.childArticles;
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 - (NSInteger)sectionsCount
@@ -329,7 +354,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     if ([linkType isEqualToString:kLinkInternalType])
     {
-        OAWebViewController *webView = [[OAWebViewController alloc] initWithUrlAndTitle:url title:item.title];
+        OAWebViewController *webView = [[OAWebViewController alloc] initWithUrlAndTitle:[url localizedURLIfAvailable] title:item.title];
         [self.navigationController pushViewController:webView animated:YES];
     }
     else if ([linkType isEqualToString:kLinkExternalType])
@@ -339,7 +364,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     if ([key isEqualToString:@"userGuide"] || [key isEqualToString:@"contactSupportTelegram"])
     {
-        OAHelpDetailsViewController *vc = [[OAHelpDetailsViewController alloc] initWithChildArticles:articleNode.childArticles title:item.title];
+        HelpDetailsViewController *vc = [[HelpDetailsViewController alloc] initWithChildArticles:articleNode.childArticles title:item.title];
         [self.navigationController pushViewController:vc animated:YES];
     }
     else if ([key isEqualToString:@"sendLog"])
@@ -370,7 +395,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     return nil;
 }
 
-#pragma mark - Aditions
+#pragma mark - Additions
 
 - (void)copyBuildVersion
 {

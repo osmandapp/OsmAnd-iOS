@@ -139,7 +139,7 @@
         NSString *value = amenity.values[tag];
         shieldTags[tag] = value;
     }
-    OARouteKey *shieldRouteKey = [OARouteKey fromShieldTags:shieldTags];
+    OARouteKey *shieldRouteKey = [OARouteKey fromShieldTags:[shieldTags copy]];
     if (shieldRouteKey)
     {
         OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:shieldRouteKey];

@@ -1429,7 +1429,6 @@
 "shared_string_about" = "O programu";
 "follow_us" = "Prati nas";
 "facebook" = "Fejsbuk";
-"twitter" = "Tviter";
 "reddit" = "Redit";
 
 // Map
@@ -3947,3 +3946,14 @@
 "rendering_attr_hideTidalFlats_name" = "Plimne ravnice";
 "rendering_attr_safetyContour_description" = "Kontura bezbedne dubine";
 "ble_scanner" = "BLE Skener";
+"lang_crh" = "Krimski tatarski (latinica)";
+"efficient_grid" = "Efikasna mreža";
+"slots" = "Slotovi";
+"button_frames" = "Okviri dugmeta";
+"visualizing_button_grid" = "Dugme za mrežu";
+"max_weight_at_full_load_description" = "Navedite maksimalnu težinu vašeg vozila pri punom opterećenju kako biste izbegli puteve i mostove sa ograničenjima težine.";
+"max_axle_load_description" = "Navedite maksimalno osovinsko opterećenje vašeg vozila kako biste izbegli puteve i mostove sa ograničenjima težine.";
+"x" = "X (ranije Tviter)";
+"routing_attr_weightrating_name" = "Maksimalna težina pri punom opterećenju";
+"routing_attr_maxaxleload_name" = "Maksimalno osovinsko opterećenje";
+"shared_string_release" = "Objavljeno";

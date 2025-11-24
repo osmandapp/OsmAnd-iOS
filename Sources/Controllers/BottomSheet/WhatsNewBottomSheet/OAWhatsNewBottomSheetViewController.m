@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OALinks.h"
 #import "OARootViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
@@ -96,7 +97,7 @@
 - (void) onRightButtonPressed
 {
     [super onRightButtonPressed];
-    [OARootViewController.instance openSafariWithURL:kDocsLatestVersion];
+    [OARootViewController.instance openSafariWithURL:[kDocsLatestVersion localizedURLIfAvailable]];
 }
 
 #pragma mark - UITableViewDataSource

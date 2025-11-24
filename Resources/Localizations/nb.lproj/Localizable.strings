@@ -812,7 +812,7 @@
 "routing_attr_avoid_tram_description" = "Unngår trikk";
 "routing_attr_avoid_motorway_description" = "Unngår motorveier";
 "rendering_value_brown_name" = "Brun";
-"routing_attr_avoid_subway_name" = "Ingen tunnelbane";
+"routing_attr_avoid_subway_name" = "Ingen T-baner";
 "rendering_value_white_name" = "Hvit";
 "rendering_attr_highway_class_track_grade4_name" = "Klasse 4";
 "routing_attr_avoid_tram_name" = "Ingen trikk";
@@ -824,7 +824,7 @@
 "rendering_value_darkyellow_name" = "Mørkegul";
 "rendering_attr_piste_type_snow_park_name" = "Snøpark";
 "rendering_attr_piste_difficulty_extreme_name" = "Ekstremkjøring";
-"routing_attr_avoid_subway_description" = "Unngår tunnelbane og lett bane";
+"routing_attr_avoid_subway_description" = "Unngår T-baner og lettbanetransport";
 "routing_attr_weight_description" = "Angi tillatt vektgrense for kjøretøy på ruter.";
 "routing_attr_allow_classic_only_description" = "Ruter forberedt for kun klassisk, uten skøytemuligheter. Dette inkluderer ruter forberedt av en mindre snøskuter med løsere løype og spor laget manuelt av skigåere.";
 "rendering_value_default_name" = "Standard";
@@ -2823,3 +2823,6 @@
 "obd_nothing_found_text" = "Fant ingen skannere";
 "next_turn_information" = "Neste svinginformasjon";
 "next_turn_information_desc" = "Viser den kommende svingretningen og gatenavn.";
+"routing_attr_allow_ferries_name" = "Tillat ferger";
+"routing_attr_allow_ferries_description" = "Tillat ruting via ferger";
+"x" = "X (tidligere Twitter)";

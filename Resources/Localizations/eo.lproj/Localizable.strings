@@ -1004,7 +1004,7 @@
 "plugin_nautical_name" = "Mara map-vido";
 "plugin_nautical_descr" = "Pliriĉigas la mapon per naŭtikaj kursoj, navigadaj lumoj, danĝerejoj, zonoj (mal)permesataj por navigi, alligi akvoveturilon, ktp. Por uzi la kromprogramon, elŝutu marajn mapojn kaj aktivigu la map-aspekton “Marnavigada” per la menuo “Agordi mapon”. \n \nPliaj informoj: %@";
 "osmand_parking_plugin_name" = "Pozicio de parkumo";
-"osmand_parking_plugin_description" = "Ebligas marki kie vi parkumis vian aŭtomobilon kaj aldoni sciigon al via kalendaro pri parkumada templimo. Por aldoni markon, frapetadu lokon sur la mapo kaj elektu “Marki kiel pozicion de parkumado” el la menuo “Agoj”.";
+"osmand_parking_plugin_description" = "Ebligas marki kie vi parkumis vian aŭtomobilon kaj aldoni sciigon al via kalendaro pri parkumada templimo. Por aldoni markon, frapetadu lokon sur la mapo kaj elektu “Marki kiel pozicion de parkumo” el la menuo “Agoj”.";
 "plugin_ski_name" = "Skiada map-vido";
 "plugin_ski_descr" = "Projektita por navigi en vintraj sportejoj. Vidigas descendejojn, skiliftojn kaj skikuradajn kursojn kiel kolorajn liniojn, kiuj indikas malfacilecon. Por uzi la kromprogramon, aktivigu la map-aspekton “Vintro kaj skiado” en la menuo “Agordi mapon”.";
 "record_plugin_name" = "Spur-registrilo";
@@ -2750,3 +2750,11 @@
 "obd_vehicle_info" = "Informoj pri veturilo";
 "purchase_feature_desc_vehicle_metrics_obd_ii" = "Spuru bazajn datumojn via veturilo per la protokolo OBD-II. Observu bazajn parametrojn: rapidon, rivoluan rapidon de motoro, konsumon de brulaĵo kaj pli.";
 "manage_storage" = "Administri datumojn";
+"lang_crh" = "Krime-tatara (latina)";
+"x" = "X (ekse Twitter)";
+"visualizing_button_grid" = "Krado de map-butonoj";
+"button_frames" = "Kadroj ĉirkaŭ butonoj";
+"slots" = "Truoj";
+"efficient_grid" = "Efika krado";
+"routing_attr_weightrating_name" = "Maksimuma maso je plena ŝarĝo";
+"routing_attr_maxaxleload_name" = "Maksimuma pezo sur akso";

@@ -5106,7 +5106,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
         _mapLanguages = @[
-            @"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"ckb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kk", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sat", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sr-latn", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh-hans", @"zh-hant"];
+            @"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"ckb", @"crh", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kk", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sat", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sr-latn", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh-hans", @"zh-hant"];
         
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
         
@@ -6207,7 +6207,9 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (NSMapTable<NSString *, OACommonPreference *> *)getRegisteredPreferences
 {
-    return _registeredPreferences;
+    @synchronized(_registeredPreferences) {
+        return [_registeredPreferences copy];
+    }
 }
 
 - (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences
@@ -6217,122 +6219,148 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key
 {
-    return [_registeredPreferences objectForKey:key];
+    @synchronized(_registeredPreferences) {
+        return [_registeredPreferences objectForKey:key];
+    }
 }
 
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key
 {
-    [_registeredPreferences setObject:preference forKey:key];
+    @synchronized(_registeredPreferences) {
+        [_registeredPreferences setObject:preference forKey:key];
+    }
 }
 
 - (OACommonBoolean *)registerBooleanPreference:(NSString *)key defValue:(BOOL)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonBoolean *)[_registeredPreferences objectForKey:key];
-    
-    OACommonBoolean *p = [OACommonBoolean withKey:key defValue:defValue];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonBoolean *)[_registeredPreferences objectForKey:key];
+        
+        OACommonBoolean *p = [OACommonBoolean withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (OACommonString *)registerStringPreference:(NSString *)key defValue:(NSString *)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonString *)[_registeredPreferences objectForKey:key];
-    
-    OACommonString *p = [OACommonString withKey:key defValue:defValue];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonString *)[_registeredPreferences objectForKey:key];
+        
+        OACommonString *p = [OACommonString withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(NSArray<NSString *> *)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonStringList *)[_registeredPreferences objectForKey:key];
-    
-    OACommonStringList *p = [OACommonStringList withKey:key defValue:defValue ];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonStringList *)[_registeredPreferences objectForKey:key];
+        
+        OACommonStringList *p = [OACommonStringList withKey:key defValue:defValue ];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonInteger *)[_registeredPreferences objectForKey:key];
-    
-    OACommonInteger *p = [OACommonInteger withKey:key defValue:defValue];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonInteger *)[_registeredPreferences objectForKey:key];
+        
+        OACommonInteger *p = [OACommonInteger withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonLong *)[_registeredPreferences objectForKey:key];
-    
-    OACommonLong *p = [OACommonLong withKey:key defValue:defValue];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonLong *)[_registeredPreferences objectForKey:key];
+        
+        OACommonLong *p = [OACommonLong withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonDouble *)[_registeredPreferences objectForKey:key];
-    
-    OACommonDouble *p = [OACommonDouble withKey:key defValue:defValue];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonDouble *)[_registeredPreferences objectForKey:key];
+        
+        OACommonDouble *p = [OACommonDouble withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonWidgetSizeStyle *) [_registeredPreferences objectForKey:key];
-    
-    OACommonWidgetSizeStyle *p = [OACommonWidgetSizeStyle withKey:key defValue:defValue];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonWidgetSizeStyle *) [_registeredPreferences objectForKey:key];
+        
+        OACommonWidgetSizeStyle *p = [OACommonWidgetSizeStyle withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonSunPositionMode *) [_registeredPreferences objectForKey:key];
-    
-    OACommonSunPositionMode *p = [OACommonSunPositionMode withKey:key defValue:defValue];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonSunPositionMode *) [_registeredPreferences objectForKey:key];
+        
+        OACommonSunPositionMode *p = [OACommonSunPositionMode withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonWidgetZoomLevelType *) [_registeredPreferences objectForKey:key];
-    
-    OACommonWidgetZoomLevelType *p = [OACommonWidgetZoomLevelType withKey:key defValue:defValue];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonWidgetZoomLevelType *) [_registeredPreferences objectForKey:key];
+        
+        OACommonWidgetZoomLevelType *p = [OACommonWidgetZoomLevelType withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonWidgetDefaultView *) [_registeredPreferences objectForKey:key];
-    
-    OACommonWidgetDefaultView *p = [OACommonWidgetDefaultView withKey:key defValue:defValue];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonWidgetDefaultView *) [_registeredPreferences objectForKey:key];
+        
+        OACommonWidgetDefaultView *p = [OACommonWidgetDefaultView withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue
 {
-    if ([_registeredPreferences objectForKey:key])
-        return (OACommonWidgetDisplayPriority *) [_registeredPreferences objectForKey:key];
-    
-    OACommonWidgetDisplayPriority *p = [OACommonWidgetDisplayPriority withKey:key defValue:defValue];
-    [self registerPreference:p forKey:key];
-    return p;
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonWidgetDisplayPriority *) [_registeredPreferences objectForKey:key];
+        
+        OACommonWidgetDisplayPriority *p = [OACommonWidgetDisplayPriority withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
 }
 
 - (EOATemperatureConstant)getTemperatureUnit

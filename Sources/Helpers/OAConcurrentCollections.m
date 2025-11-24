@@ -272,4 +272,16 @@
     }
 }
 
+#pragma mark - Safe dealloc
+
+- (void)dealloc
+{
+    // A local strong reference ensures that _lock is not deallocated prematurely.
+    NSObject *lock = _lock;
+    @synchronized (lock) {
+        [_dictionary removeAllObjects];
+        _dictionary = nil;
+    }
+}
+
 @end

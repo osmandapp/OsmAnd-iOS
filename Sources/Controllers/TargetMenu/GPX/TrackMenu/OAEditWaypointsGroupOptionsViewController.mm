@@ -406,6 +406,13 @@
     if ((_screenType == EOAEditWaypointsGroupRenameScreen || _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen) &&
         [[self getCellData:indexPath].type isEqualToString:[OAInputTableViewCell getCellIdentifier]])
         [((OAInputTableViewCell *) cell).inputField becomeFirstResponder];
+    
+    if (_screenType == EOAEditWaypointsGroupColorScreen && [[self getCellData:indexPath].type isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
+    {
+        OAColorsTableViewCell *colorsCell = (OAColorsTableViewCell *)cell;
+        [colorsCell.collectionView reloadData];
+        [colorsCell.collectionView layoutIfNeeded];
+    }
 }
 
 #pragma mark - Additions

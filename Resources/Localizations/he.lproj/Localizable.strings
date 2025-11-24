@@ -1440,7 +1440,7 @@
 "rendering_attr_alpineHiking_description" = "עיבוד מסלולים לפי מדד מועדון האלפים השווייצרי (SAC).";
 "rendering_attr_highway_class_bridleway_name" = "דרך לסוסים";
 "routing_attr_avoid_share_taxi_name" = "ללא מוניות שירות";
-"rendering_attr_pisteRoutes_name" = "מסלולי סקי";
+"rendering_attr_pisteRoutes_name" = "מדרוני ומסלולי סקי";
 "rendering_attr_piste_type_sled_name" = "מזחלת עצמאית";
 "rendering_attr_noPolygons_description" = "הפיכת כל תכונות הקרקע במפה לשקופות.";
 "routing_attr_allow_classic_only_description" = "מסלולים שעבור גרומינג לסגנון קלסי רק ללא מסלולי ההחלקה. לרבות מסלולים שעברו גרומינג על ידי אופנוע שלג עם תוואי רופף ומסלולים שנסללו ידנית על ידי גולשי סקי.";
@@ -1807,7 +1807,7 @@
 "rendering_attr_weatherPressureContours_name" = "קווי מתאר לחץ";
 "rendering_attr_showWaterwayTunnels_description" = "שיפור המראה של תעלות דרכי מים";
 "routing_attr_hazmat_category_description" = "קטגוריית חומרים מסוכנים / התחשבות ההגבלות גישה עקב חומרים מסוכנים";
-"rendering_attr_natureReserves_name" = "שמורת טבע";
+"rendering_attr_natureReserves_name" = "שמורת טבע ואזורים מוגנים";
 "rendering_attr_seabedDetail_description" = "פירוט טקסט נוסף על surface_qualification (תנאי שטח), סוגי שטח מעורבים, קטגוריה וסיווג של צמחי או אצות הים על הקרקעית";
 "routing_attr_carriage_restrictions_name" = "מגבלות עגלה";
 "routing_attr_avoid_footways_description" = "הימנעות משבילי הולכי רגל";
@@ -2025,7 +2025,7 @@
 "apply_to_existing" = "החלה על הקיימות";
 "copy_build_version" = "העתקת גרסת הבנייה";
 "duration_moment_ago" = "לפני רגע קט";
-"help_article_navigation_routing_ski_routing_name" = "ניווט לסקי";
+"help_article_navigation_routing_ski_routing_name" = "מדרוני ומסלולי סקי";
 "shared_string_expires" = "תפוגה";
 "delete_history_items" = "למחוק %@ פריטי היסטוריה?";
 "help_article_navigation_guidance_name" = "הנחיות ניווט";

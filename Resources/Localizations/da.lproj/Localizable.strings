@@ -3526,7 +3526,6 @@
 "icon_group_service" = "Service";
 "app_mode_scooter" = "Scooter";
 "weather_source_ecmwf_title" = "ECMWF";
-"twitter" = "Twitter";
 "download_wikipedia_maps" = "Wikipedia";
 "shared_string_link" = "Link";
 "lang_kab" = "Kabyle";
@@ -3947,3 +3946,14 @@
 "rendering_attr_hideTidalFlats_name" = "Tidevandsflader";
 "rendering_attr_safetyContour_description" = "Sikkerhedsdybdekontur";
 "ble_scanner" = "BLE-scanner";
+"lang_crh" = "Krimtatarisk (latin)";
+"visualizing_button_grid" = "Kortknap net";
+"efficient_grid" = "Effektivt net";
+"slots" = "Pladser";
+"button_frames" = "Knaprammer";
+"max_weight_at_full_load_description" = "Angiv dit køretøjs maksimale vægt ved fuld last for at undgå veje og broer med vægtbegrænsninger.";
+"max_axle_load_description" = "Angiv dit køretøjs maksimale akselbelastning for at undgå veje og broer med vægtbegrænsninger.";
+"x" = "X (tidligere Twitter)";
+"routing_attr_weightrating_name" = "Maksimal vægt ved fuld last";
+"routing_attr_maxaxleload_name" = "Maksimal akselbelastning";
+"shared_string_release" = "Udgivet";

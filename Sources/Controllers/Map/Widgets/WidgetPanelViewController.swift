@@ -20,6 +20,8 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     private static let contentHeight: CGFloat = 34
     private static let borderWidth: CGFloat = 2
     
+    // swiftlint:disable all
+    
     @IBOutlet var pageControlHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet var pageControl: UIPageControl! {
@@ -30,14 +32,15 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     }
     
     @IBOutlet private var contentView: UIView!
-
+    
     let isHorizontal: Bool
     let isSpecial: Bool
     let pageContainerView = UIView()
-
+    
     var pages: [UIViewController] = []
     var widgetPages: [[OABaseWidgetView]] = []
     var specialPanelController: WidgetPanelViewController?
+    var currentActiveController: UIViewController?
     
     var pageViewController: UIPageViewController! {
         didSet {
@@ -55,6 +58,8 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     private var isInTransition = false
     private var dayNightObserver: OAAutoObserverProxy!
     
+    // swiftlint:enable all
+    
     // MARK: - Init
     
     init() {
@@ -68,13 +73,13 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         self.isSpecial = false
         super.init(nibName: "OAWidgetPanelViewController", bundle: nil)
     }
-
+    
     init(horizontal: Bool, special: Bool) {
         self.isHorizontal = horizontal
         self.isSpecial = special
         super.init(nibName: "OAWidgetPanelViewController", bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         self.isHorizontal = false
         self.isSpecial = false
@@ -124,7 +129,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     
     func clearWidgets() {
         specialPanelController?.clearWidgets()
-
+        
         pageViewController.dataSource = nil
         pageViewController.delegate = nil
         widgetPages.forEach { $0.forEach {
@@ -143,6 +148,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         }
         pages.removeAll()
         widgetPages.removeAll()
+        currentActiveController = nil
         if !isHorizontal {
             pageViewController.dataSource = self
         }
@@ -169,7 +175,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
                 pages.append(vc)
             }
         }
-
+        
         if pages.isEmpty {
             pages.append(UIViewController())
         }
@@ -189,17 +195,15 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         pageControl.isHidden = pages.count <= 1 || isHorizontal
         pageViewController.scrollView?.isScrollEnabled = !pageControl.isHidden
         
+        currentActiveController = currentVisibleViewController(in: pageViewController)
+        
         pageControlHeightConstraint.constant = pageControl.isHidden ? 0 : Self.controlHeight
     }
-
+    
     func hasWidgets() -> Bool {
-        if !widgetPages.isEmpty {
-            for widgetPage in widgetPages {
-                for widget in widgetPage {
-                    if !widget.isHidden {
-                        return true
-                    }
-                }
+        for page in widgetPages {
+            for widget in page where !widget.isHidden {
+                return true
             }
         }
         return false
@@ -271,15 +275,16 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             mapHudViewController?.middleWidgetsViewWidthConstraint.constant = contentSize.width
             mapHudViewController?.middleWidgetsViewHeightConstraint.constant = contentSize.height
         }
-
+        
         // Update the height constraint of the container view
-        for constraint in pageContainerView.constraints {
-            if constraint.firstItem === pageContainerView {
-                if constraint.firstAttribute == .height {
-                    constraint.constant = contentSize.height
-                } else if constraint.firstAttribute == .width {
-                    constraint.constant = contentSize.width
-                }
+        for constraint in pageContainerView.constraints where constraint.firstItem === pageContainerView {
+            switch constraint.firstAttribute {
+            case .height:
+                constraint.constant = contentSize.height
+            case .width:
+                constraint.constant = contentSize.width
+            default:
+                break
             }
         }
         view.isHidden = !hasWidgets()
@@ -306,7 +311,6 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
 }
 
 // MARK: - OAWidgetListener
-
 extension WidgetPanelViewController {
     func widgetChanged(_ widget: OABaseWidgetView?) {
         updateWidgetSizes()
@@ -328,20 +332,55 @@ extension WidgetPanelViewController {
 }
 
 // MARK: - UIScrollViewDelegate
-
 extension WidgetPanelViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isInTransition = true
     }
     
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            updateVisibleController()
+            isInTransition = false
+        }
+    }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        updateVisibleController()
         isInTransition = false
-        updateContainerSize()
+    }
+    
+    func currentVisibleViewController(in pageViewController: UIPageViewController) -> UIViewController? {
+        guard let scrollView = pageViewController.view.subviews.first(where: { $0 is UIScrollView }) as? UIScrollView else {
+            return nil
+        }
+        
+        let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+        
+        for vc in pageViewController.children {
+            let convertedPoint = vc.view.convert(visiblePoint, from: scrollView)
+            if vc.view.bounds.contains(convertedPoint) {
+                return vc
+            }
+        }
+        
+        return nil
+    }
+    
+    private func updateVisibleController() {
+        guard let visibleVC = currentVisibleViewController(in: pageViewController) else { return }
+        guard visibleVC !== currentActiveController else { return }
+        
+        currentActiveController = visibleVC
+        if let index = pages.firstIndex(of: visibleVC) {
+            pageControl.currentPage = index
+            updateContainerSize()
+            OARootViewController.instance().mapPanel?.hudViewController?.mapHudLayout.updateButtons()
+        }
     }
 }
 
 // MARK: - UIPageViewControllerDelegate
-
 extension WidgetPanelViewController: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
         isInTransition = true
@@ -350,35 +389,21 @@ extension WidgetPanelViewController: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         guard completed, let currentVC = pageViewController.viewControllers?.first, pages.contains(currentVC) else { return }
         isInTransition = false
-        pageControl.currentPage = currentIndex
-        DispatchQueue.main.async {
-            self.updateContainerSize()
-        }
     }
 }
 
 // MARK: - UIPageViewControllerDataSource
 
 extension WidgetPanelViewController: UIPageViewControllerDataSource {
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let vcIndex = pages.firstIndex(of: viewController ) else { return nil }
-        let prevIndex = vcIndex - 1
-        guard prevIndex >= 0 else {
-            pageControl.currentPage = 0
-            return nil
-        }
-        guard pages.count > prevIndex else { return nil }
-        return pages[prevIndex]
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let index = pages.firstIndex(of: viewController), index > 0 else { return nil }
+        return pages[index - 1]
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let vcIndex = pages.firstIndex(of: viewController ) else { return nil }
-        let nextIndex = vcIndex + 1
-        guard nextIndex < pages.count else {
-            pageControl.currentPage = pages.count - 1
-            return nil
-        }
-        guard pages.count > nextIndex else { return nil }
-        return pages[nextIndex]
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let index = pages.firstIndex(of: viewController), index < pages.count - 1 else { return nil }
+        return pages[index + 1]
     }
 }

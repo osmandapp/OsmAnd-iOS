@@ -197,7 +197,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 cell.contentHeightConstraint = constraint
             }
             cell.selectionStyle = .none
-            cell.leftIconVisibility(item.key != "average_obd_mode_key" && item.key != "fuel_consumption_mode_key" && item.key != "average_slope_mode_key")
+            cell.leftIconVisibility(item.key != "average_obd_mode_key" && item.key != "fuel_consumption_mode_key" && item.key != "recording_widget_mode_key")
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
@@ -212,7 +212,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 cell.button.menu = createBooleanMenuWith(currentValue: value, pref: boolPref, options: options, indexPath: indexPath)
             } else if item.key == "fuel_consumption_mode_key", let pref = item.obj(forKey: "pref") as? OACommonString, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
                 cell.button.menu = createStringMenuWith(currentValue: value, pref: pref, options: options, indexPath: indexPath)
-            } else if item.key == "average_slope_mode_key", let pref = item.obj(forKey: "pref") as? OACommonInteger, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
+            } else if item.key == "recording_widget_mode_key", let pref = item.obj(forKey: "pref") as? OACommonInteger, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
                 cell.button.menu = createIntegerMenuWith(currentValue: value, pref: pref, options: options, indexPath: indexPath)
             }
             cell.button.showsMenuAsPrimaryAction = true
@@ -292,7 +292,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 guard let self else { return }
                 let newRaw = (row.obj(forKey: "value") as? Int) ?? 0
                 if self.createNew {
-                    self.widgetConfigurationParams?[TripRecordingSlopeWidgetState.prefAverageSlopeModeId] = "\(newRaw)"
+                    self.widgetConfigurationParams?[pref.key] = "\(newRaw)"
                 } else {
                     pref.set(Int32(newRaw))
                 }

@@ -1,22 +1,23 @@
 //
-//  TripRecordingSlopeWidget.swift
+//  TripRecordingMaxSpeedWidget.swift
 //  OsmAnd Maps
 //
-//  Created by Dmitry Svetlichny on 22.11.2025.
+//  Created by Dmitry Svetlichny on 24.11.2025.
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
 import Foundation
 
 @objcMembers
-final class TripRecordingSlopeWidget: BaseRecordingWidget {
-    private var widgetState: TripRecordingSlopeWidgetState?
-    private var cachedSlope: Int = -1
+final class TripRecordingMaxSpeedWidget: BaseRecordingWidget {
+    private var widgetState: TripRecordingMaxSpeedWidgetState?
+    private var cachedMaxSpeed: Double = -1
+    private var lastMaxSpeed: Int = 0
     private var forceUpdate = false
     
     init(customId: String?, appMode: OAApplicationMode, widgetParams: [String: Any]? = nil) {
-        super.init(type: .tripRecordingAverageSlope)
-        self.widgetState = TripRecordingSlopeWidgetState(customId: customId, widgetType: .tripRecordingAverageSlope, widgetParams: widgetParams)
+        super.init(type: .tripRecordingMaxSpeed)
+        self.widgetState = TripRecordingMaxSpeedWidgetState(customId: customId, widgetType: .tripRecordingMaxSpeed, widgetParams: widgetParams)
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         updateInfo()
         onClickFunction = { [weak self] _ in
@@ -37,11 +38,14 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
     
     @discardableResult override func updateInfo() -> Bool {
         super.updateInfo()
-        let elevationSlope = getSlope()
-        if forceUpdate || isUpdateNeeded() || cachedSlope != elevationSlope {
-            cachedSlope = elevationSlope
+        let maxSpeed = getMaxSpeed()
+        if forceUpdate || isUpdateNeeded() || cachedMaxSpeed != maxSpeed {
+            cachedMaxSpeed = maxSpeed
             forceUpdate = false
-            setText("\(elevationSlope)", subtext: "%")
+            let formatted = OAOsmAndFormatter.getFormattedSpeed(Float(maxSpeed)).components(separatedBy: " ")
+            let value = formatted.first
+            let unit = formatted.count > 1 ? formatted.last : nil
+            setText(value, subtext: unit)
         }
         
         updateTitleAndIcon()
@@ -50,7 +54,7 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
     
     override func getSettingsData(_ appMode: OAApplicationMode, widgetConfigurationParams: [String: Any]?, isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
-        guard let pref = widgetState?.getAverageSlopeModePreference() else { return data }
+        guard let pref = widgetState?.getMaxSpeedModePreference() else { return data }
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")
         let modeRow = section.createNewRow()
@@ -58,16 +62,16 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
         modeRow.key = "recording_widget_mode_key"
         modeRow.title = localizedString("shared_string_mode")
         modeRow.setObj(pref, forKey: "pref")
-        var currentRaw = AverageSlopeMode.lastUphill.rawValue
+        var currentRaw = MaxSpeedMode.total.rawValue
         if isCreate, let widgetConfigurationParams, let str = widgetConfigurationParams[pref.key] as? String, let v = Int(str) {
             currentRaw = v
         } else if !isCreate {
             currentRaw = Int(pref.get(appMode))
         }
         
-        let currentMode = AverageSlopeMode(rawValue: currentRaw) ?? .lastUphill
+        let currentMode = MaxSpeedMode(rawValue: currentRaw) ?? .total
         modeRow.setObj(localizedString(currentMode.titleKey), forKey: "value")
-        let possibleValues: [OATableRowData] = [AverageSlopeMode.lastDownhill, .lastUphill].map { mode in
+        let possibleValues: [OATableRowData] = [MaxSpeedMode.total, .lastDownhill, .lastUphill].map { mode in
             let row = OATableRowData()
             row.cellType = OASimpleTableViewCell.reuseIdentifier
             row.setObj(mode.rawValue, forKey: "value")
@@ -83,13 +87,29 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
         currentMode().iconName
     }
     
-    private func getSlope() -> Int {
-        let lastSlope = getLastSlope(isUphill: widgetState?.getAverageSlopeModePreference().get() == Int32(AverageSlopeMode.lastUphill.rawValue))
-        if let lastSlope {
-            return Int(lastSlope.elevDiff / lastSlope.distance * 100.0)
+    override func resetCachedValue() {
+        super.resetCachedValue()
+        lastMaxSpeed = 0
+    }
+    
+    private func getMaxSpeed() -> Double {
+        let mode = currentMode()
+        if mode == .total {
+            if let analysis = getAnalysis() {
+                lastMaxSpeed = Int(analysis.maxSpeed)
+            } else {
+                lastMaxSpeed = 0
+            }
+            
+            return Double(lastMaxSpeed)
         } else {
-            return 0
+            return getLastSlopeMaxSpeed(mode: mode)
         }
+    }
+    
+    private func getLastSlopeMaxSpeed(mode: MaxSpeedMode) -> Double {
+        guard let lastSlope = getLastSlope(isUphill: mode == .lastDownhill) else { return 0 }
+        return lastSlope.maxSpeed
     }
     
     private func updateTitleAndIcon() {
@@ -103,8 +123,8 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
         configureSimpleLayout()
     }
     
-    private func currentMode() -> AverageSlopeMode {
-        guard let pref = widgetState?.getAverageSlopeModePreference() else { return .lastUphill }
-        return AverageSlopeMode(rawValue: Int(pref.get())) ?? .lastUphill
+    private func currentMode() -> MaxSpeedMode {
+        guard let pref = widgetState?.getMaxSpeedModePreference() else { return .total }
+        return MaxSpeedMode(rawValue: Int(pref.get())) ?? .total
     }
 }

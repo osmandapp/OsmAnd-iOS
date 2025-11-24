@@ -1494,6 +1494,8 @@
 		C5C472E82ED17F5A00682CAB /* TripRecordingSlopeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472E72ED17F5A00682CAB /* TripRecordingSlopeWidget.swift */; };
 		C5C472EC2ED1810C00682CAB /* BaseRecordingWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472EB2ED1810C00682CAB /* BaseRecordingWidget.swift */; };
 		C5C472EE2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */; };
+		C5C472F02ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472EF2ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift */; };
+		C5C472F22ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F12ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift */; };
 		C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */; };
 		C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */; };
 		C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */; };
@@ -5310,6 +5312,8 @@
 		C5C472E72ED17F5A00682CAB /* TripRecordingSlopeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingSlopeWidget.swift; sourceTree = "<group>"; };
 		C5C472EB2ED1810C00682CAB /* BaseRecordingWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRecordingWidget.swift; sourceTree = "<group>"; };
 		C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingSlopeWidgetState.swift; sourceTree = "<group>"; };
+		C5C472EF2ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingMaxSpeedWidgetState.swift; sourceTree = "<group>"; };
+		C5C472F12ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingMaxSpeedWidget.swift; sourceTree = "<group>"; };
 		C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsButtonState.swift; sourceTree = "<group>"; };
 		C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButtonState.swift; sourceTree = "<group>"; };
 		C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomOutButtonState.swift; sourceTree = "<group>"; };
@@ -11099,6 +11103,7 @@
 				326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */,
 				C5C472EB2ED1810C00682CAB /* BaseRecordingWidget.swift */,
 				C5C472E72ED17F5A00682CAB /* TripRecordingSlopeWidget.swift */,
+				C5C472F12ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift */,
 			);
 			path = Monitoring;
 			sourceTree = "<group>";
@@ -13067,6 +13072,7 @@
 				DA5A7F1726C563A400F274C7 /* OAWidgetState.m */,
 				DAA61CBB2A02576A00AFF65D /* TimeToNavigationPointWidgetState.swift */,
 				C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */,
+				C5C472EF2ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift */,
 			);
 			path = WidgetStates;
 			sourceTree = "<group>";
@@ -17012,6 +17018,7 @@
 				DA5A834426C563A800F274C7 /* OATitleDescriptionIconRoundCell.m in Sources */,
 				DA5A847D26C563A900F274C7 /* OANextTurnWidget.mm in Sources */,
 				C51766622E9FACCA00F2B085 /* ShowHideWindAction.swift in Sources */,
+				C5C472F02ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift in Sources */,
 				DA5A817326C563A700F274C7 /* OAFavoriteItem.mm in Sources */,
 				46A5A3872CA5DCDA00A206C2 /* ActionAddTerrainColorSchemeViewController.swift in Sources */,
 				46220B702AD6D6F2006C3248 /* OABaseEditorViewController.mm in Sources */,
@@ -18076,6 +18083,7 @@
 				DA5A81BE26C563A700F274C7 /* OACustomSearchPoiFilter.m in Sources */,
 				46624E722993B28C00F425AE /* OABaseNavbarViewController.m in Sources */,
 				DA5A836A26C563A800F274C7 /* OARouteStatisticsHelper.mm in Sources */,
+				C5C472F22ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift in Sources */,
 				DAABE4E82A16102200569F71 /* AverageSpeedWidget.swift in Sources */,
 				320F71372A86438B0071C0E7 /* OAGPXDocumentAdapter.mm in Sources */,
 				DA5A815026C563A700F274C7 /* OACarPlayAddressSearchController.mm in Sources */,

@@ -48,6 +48,37 @@ class TripRecordingSlopeWidget: BaseRecordingWidget {
         return true
     }
     
+    override func getSettingsData(_ appMode: OAApplicationMode, widgetConfigurationParams: [String: Any]?, isCreate: Bool) -> OATableDataModel? {
+        let data = OATableDataModel()
+        guard let pref = widgetState?.getAverageSlopeModePreference() else { return data }
+        let section = data.createNewSection()
+        section.headerText = localizedString("shared_string_settings")
+        let modeRow = section.createNewRow()
+        modeRow.cellType = OAButtonTableViewCell.reuseIdentifier
+        modeRow.key = "average_slope_mode_key"
+        modeRow.title = localizedString("shared_string_mode")
+        modeRow.setObj(pref, forKey: "pref")
+        var currentRaw = AverageSlopeMode.lastUphill.rawValue
+        if isCreate, let widgetConfigurationParams, let str = widgetConfigurationParams[TripRecordingSlopeWidgetState.prefAverageSlopeModeId] as? String, let v = Int(str) {
+            currentRaw = v
+        } else if !isCreate {
+            currentRaw = Int(pref.get(appMode))
+        }
+        
+        let currentMode = AverageSlopeMode(rawValue: currentRaw) ?? .lastUphill
+        modeRow.setObj(localizedString(currentMode.titleKey), forKey: "value")
+        let possibleValues: [OATableRowData] = [AverageSlopeMode.lastDownhill, .lastUphill].map { mode in
+            let row = OATableRowData()
+            row.cellType = OASimpleTableViewCell.reuseIdentifier
+            row.setObj(mode.rawValue, forKey: "value")
+            row.title = localizedString(mode.titleKey)
+            return row
+        }
+        
+        modeRow.setObj(possibleValues, forKey: "possible_values")
+        return data
+    }
+    
     override func getIconName() -> String? {
         currentMode().iconName
     }
@@ -69,6 +100,7 @@ class TripRecordingSlopeWidget: BaseRecordingWidget {
         let fullTitle = String(format: format, baseTitle, modeTitle)
         setContentTitle(fullTitle)
         setIcon(mode.iconName)
+        configureSimpleLayout()
     }
     
     private func currentMode() -> AverageSlopeMode {

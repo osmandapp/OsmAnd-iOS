@@ -76,7 +76,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     }
     
     override func updateModeUI() {
-        updateModeUI(isValueChanged: baseIconSize != currentIconSize)
+        updateModeUI(isValueChanged: baseIconSize != currentIconSize, animated: false)
     }
     
     override func registerCells() {

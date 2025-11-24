@@ -14,7 +14,7 @@ final class MapSettingsMapModeParametersViewController: BaseSettingsParametersVi
     private lazy var currentMode = DayNightMode(rawValue: settings.appearanceMode.get())
 
     override func updateModeUI() {
-        updateModeUI(isValueChanged: baseMode != currentMode)
+        updateModeUI(isValueChanged: baseMode != currentMode, animated: true)
     }
     
     override func registerCells() {

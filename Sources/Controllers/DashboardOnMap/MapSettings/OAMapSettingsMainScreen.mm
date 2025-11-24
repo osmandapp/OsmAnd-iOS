@@ -406,14 +406,14 @@
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_magnifier"),
-                @"value": [OAUtilities getPercentString:[_settings.mapDensity get]],
+                @"value": [NSNumberFormatter.percentFormatter stringFromNumber:@([_settings.mapDensity get])],
                 @"image": @"ic_custom_magnifier",
                 @"type": OAValueTableViewCell.reuseIdentifier,
                 @"key": @"map_magnifier"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"text_size"),
-                @"value": [OAUtilities getPercentString:[_settings.textSize get:_settings.applicationMode.get]],
+                @"value": [NSNumberFormatter.percentFormatter stringFromNumber:@([_settings.textSize get:_settings.applicationMode.get])],
                 @"image": @"ic_custom_text_size",
                 @"type": OAValueTableViewCell.reuseIdentifier,
                 @"key": @"text_size"

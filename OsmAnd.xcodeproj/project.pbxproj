@@ -272,6 +272,9 @@
 		27E3168D2E717CB6007172DA /* ChangeMapOrientationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E3168C2E717CB6007172DA /* ChangeMapOrientationAction.swift */; };
 		27E316922E72F5CE007172DA /* CompassMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316912E72F5CE007172DA /* CompassMode.swift */; };
 		27E3C2032DF1ADD40053958E /* OAStreetNameWidgetParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = 27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */; };
+		27E8D9EC2ED461E900F98462 /* NumberFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */; };
+		27E8D9F12ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E8D9EF2ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift */; };
+		27E8D9F22ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */; };
 		27F050912DD38E310058075F /* RouteInfoDisplayPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */; };
 		27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508F2DD38E310058075F /* RouteInfoWidget.swift */; };
 		27F050932DD38E310058075F /* RouteInfoDisplayValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508E2DD38E310058075F /* RouteInfoDisplayValue.swift */; };
@@ -3702,6 +3705,9 @@
 		27E316912E72F5CE007172DA /* CompassMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassMode.swift; sourceTree = "<group>"; };
 		27E3C1FF2DF1AD340053958E /* OAStreetNameWidgetParams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStreetNameWidgetParams.h; sourceTree = "<group>"; };
 		27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreetNameWidgetParams.mm; sourceTree = "<group>"; };
+		27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Extension.swift"; sourceTree = "<group>"; };
+		27E8D9EF2ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentButtonsSliderTableViewCell.swift; sourceTree = "<group>"; };
+		27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentButtonsSliderTableViewCell.xib; sourceTree = "<group>"; };
 		27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayPriority.swift; sourceTree = "<group>"; };
 		27F0508E2DD38E310058075F /* RouteInfoDisplayValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayValue.swift; sourceTree = "<group>"; };
 		27F0508F2DD38E310058075F /* RouteInfoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidget.swift; sourceTree = "<group>"; };
@@ -12047,6 +12053,7 @@
 				DA5A7C7426C563A200F274C7 /* OASegmentSliderTableViewCell.h */,
 				DA5A7CD726C563A200F274C7 /* OASegmentSliderTableViewCell.m */,
 				DA5A7CEC26C563A200F274C7 /* OASegmentTableViewCell.h */,
+				27E8D9EF2ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift */,
 				DA5A7C5E26C563A200F274C7 /* OASegmentTableViewCell.m */,
 				B0D61037ED3E628F3BB6C1AA /* OASelectionCollapsableCell.h */,
 				B0D612B2FB498FC3CC394339 /* OASelectionCollapsableCell.mm */,
@@ -12133,6 +12140,7 @@
 		DA5A7BB626C563A100F274C7 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
+				27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */,
 				27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */,
 				277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */,
 				DA5A7C1126C563A200F274C7 /* OAActivityViewWithTitleCell.xib */,
@@ -13972,6 +13980,7 @@
 				FA54CE0E2EBB938E007F1F68 /* Locale+Extension.swift */,
 				FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */,
 				FA82B9152E74132200A250F1 /* ByteCountFormatter+Extension.swift */,
+				27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */,
 				FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */,
 				FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */,
 				FA9217112D5277310074E958 /* DateFormatter+Extension.swift */,
@@ -16624,6 +16633,7 @@
 				8476E1E71F6AA01000EC274F /* ic_list_startpoint@2x.png in Resources */,
 				DA5A82B926C563A800F274C7 /* OAPointTableViewCell.xib in Resources */,
 				323BD8E82628850400D255ED /* ic_bg_point_comment_center_small@3x.png in Resources */,
+				27E8D9F22ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib in Resources */,
 				DA83602923449C6B003374B5 /* ic_custom_sound_off@3x.png in Resources */,
 				DA835FF823438512003374B5 /* ic_small_direction@3x.png in Resources */,
 				8412224E1B39CC5200F80F9E /* map_car_bearing@2x.png in Resources */,
@@ -17457,6 +17467,7 @@
 				464BF4A72C050189000D6908 /* CompassVisibility.swift in Sources */,
 				279322472E82EEF300B9FC81 /* KeyEvent.swift in Sources */,
 				DA5A815B26C563A700F274C7 /* OACustomPlugin.mm in Sources */,
+				27E8D9EC2ED461E900F98462 /* NumberFormatter+Extension.swift in Sources */,
 				32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */,
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,
@@ -18285,6 +18296,7 @@
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,
 				2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */,
 				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
+				27E8D9F12ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
 				FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */,
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,

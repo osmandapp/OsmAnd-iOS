@@ -403,7 +403,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [positionIconsSection addRowFromDictionary:@{
         kCellTypeKey: [OAValueTableViewCell reuseIdentifier],
         kCellTitleKey: OALocalizedString(@"shared_string_size"),
-        kCellDescrKey: [OAUtilities getPercentString:_changedProfile.locationIconSize],
+        kCellDescrKey: [NSNumberFormatter.percentFormatter stringFromNumber:@(_changedProfile.locationIconSize)],
         kCellTitleColorKey: [UIColor colorNamed:ACColorNameTextColorActive],
         kCellKeyKey: kPositionIconSizeCellKey,
     }];
@@ -419,7 +419,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [navigationIconsSection addRowFromDictionary:@{
         kCellTypeKey: [OAValueTableViewCell reuseIdentifier],
         kCellTitleKey: OALocalizedString(@"shared_string_size"),
-        kCellDescrKey: [OAUtilities getPercentString:_changedProfile.courseIconSize],
+        kCellDescrKey: [NSNumberFormatter.percentFormatter stringFromNumber:@(_changedProfile.courseIconSize)],
         kCellTitleColorKey: [UIColor colorNamed:ACColorNameTextColorActive],
         kCellKeyKey: kLocationIconSizeCellKey,
     }];

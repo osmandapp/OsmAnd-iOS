@@ -17,46 +17,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="424" height="143"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Pw1-1F-ELp">
-                        <rect key="frame" x="20" y="42" width="384" height="83"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xCK-DG-bbc">
-                                <rect key="frame" x="0.0" y="20.5" width="42" height="42"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="42" id="Ees-Ud-Zp0"/>
-                                    <constraint firstAttribute="width" secondItem="xCK-DG-bbc" secondAttribute="height" multiplier="1:1" id="WqK-gd-yyN"/>
-                                </constraints>
-                                <color key="tintColor" name="iconColorActive"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="ic_custom_map_zoom_out.png"/>
-                            </button>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sAt-3a-33r" customClass="OASegmentedSlider">
-                                <rect key="frame" x="50" y="27.5" width="284" height="28"/>
-                                <color key="tintColor" name="iconColorActive"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="28" id="Ys9-U6-ax7"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="trackHeight">
-                                        <real key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </slider>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kfa-no-0Cd">
-                                <rect key="frame" x="342" y="20.5" width="42" height="42"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="42" id="NF9-K7-pvh"/>
-                                    <constraint firstAttribute="width" secondItem="Kfa-no-0Cd" secondAttribute="height" multiplier="1:1" id="sti-f9-LZS"/>
-                                </constraints>
-                                <color key="tintColor" name="iconColorActive"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="ic_custom_map_zoom_in.png"/>
-                            </button>
-                        </subviews>
+                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sAt-3a-33r" customClass="OASegmentedSlider">
+                        <rect key="frame" x="20" y="42" width="384" height="28"/>
+                        <color key="tintColor" name="iconColorActive"/>
                         <constraints>
-                            <constraint firstItem="Kfa-no-0Cd" firstAttribute="width" secondItem="Kfa-no-0Cd" secondAttribute="height" multiplier="1:1" id="tI7-mE-APy"/>
+                            <constraint firstAttribute="height" constant="28" id="Ys9-U6-ax7"/>
                         </constraints>
-                    </stackView>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="trackHeight">
+                                <real key="value" value="2"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </slider>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sEM-QO-aGw">
                         <rect key="frame" x="20" y="13" width="184" height="22"/>
                         <constraints>
@@ -76,7 +48,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bSK-ib-t38" userLabel="Bottom Left Label">
-                        <rect key="frame" x="20" y="132" width="184" height="0.0"/>
+                        <rect key="frame" x="20" y="77" width="184" height="55"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
@@ -90,35 +62,33 @@
                 </subviews>
                 <color key="backgroundColor" name="groupBg"/>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" secondItem="Pw1-1F-ELp" secondAttribute="trailing" id="2sW-jX-82U"/>
                     <constraint firstItem="bSK-ib-t38" firstAttribute="width" secondItem="8rT-A7-QvG" secondAttribute="width" id="AyS-yO-zpj"/>
                     <constraint firstItem="PdR-al-82O" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" constant="13" id="BYi-Lp-KqD"/>
-                    <constraint firstAttribute="bottom" secondItem="Pw1-1F-ELp" secondAttribute="bottom" priority="999" constant="13" id="DJq-fX-6g2"/>
                     <constraint firstItem="PdR-al-82O" firstAttribute="leading" secondItem="sEM-QO-aGw" secondAttribute="trailing" constant="16" id="Dhm-4r-08T"/>
                     <constraint firstItem="sEM-QO-aGw" firstAttribute="width" secondItem="PdR-al-82O" secondAttribute="width" id="DyE-yL-zpj"/>
                     <constraint firstAttribute="bottom" secondItem="bSK-ib-t38" secondAttribute="bottom" constant="11" id="EaG-kd-ezl"/>
-                    <constraint firstItem="Pw1-1F-ELp" firstAttribute="top" secondItem="sEM-QO-aGw" secondAttribute="bottom" constant="7" id="IkT-3Q-18o"/>
                     <constraint firstItem="bSK-ib-t38" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leadingMargin" id="KzJ-9n-7hM"/>
                     <constraint firstItem="sEM-QO-aGw" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" constant="13" id="Mpp-Q0-SmX"/>
+                    <constraint firstItem="bSK-ib-t38" firstAttribute="top" secondItem="sAt-3a-33r" secondAttribute="bottom" constant="7" id="MzB-bc-vqV"/>
+                    <constraint firstItem="sAt-3a-33r" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" priority="999" constant="13" id="NX7-ft-v7r"/>
                     <constraint firstItem="sEM-QO-aGw" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leadingMargin" id="POa-HF-vgV"/>
-                    <constraint firstItem="Pw1-1F-ELp" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leadingMargin" id="WGT-iJ-97c"/>
+                    <constraint firstItem="sAt-3a-33r" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leadingMargin" id="Ulb-US-Mz4"/>
                     <constraint firstAttribute="trailingMargin" secondItem="8rT-A7-QvG" secondAttribute="trailing" id="Xms-1A-hKe"/>
-                    <constraint firstItem="bSK-ib-t38" firstAttribute="top" secondItem="Pw1-1F-ELp" secondAttribute="bottom" constant="7" id="dL2-7f-whw"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="sAt-3a-33r" secondAttribute="trailing" id="Xmz-Vs-uC5"/>
                     <constraint firstAttribute="trailingMargin" secondItem="PdR-al-82O" secondAttribute="trailing" id="dzQ-sv-a01"/>
                     <constraint firstItem="8rT-A7-QvG" firstAttribute="leading" secondItem="bSK-ib-t38" secondAttribute="trailing" constant="16" id="hla-8Q-Lzz"/>
                     <constraint firstAttribute="bottom" secondItem="8rT-A7-QvG" secondAttribute="bottom" constant="11" id="jXa-CY-XXh"/>
-                    <constraint firstItem="Pw1-1F-ELp" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" priority="999" constant="13" id="k7q-BE-J9u"/>
+                    <constraint firstItem="sAt-3a-33r" firstAttribute="top" secondItem="sEM-QO-aGw" secondAttribute="bottom" constant="7" id="juq-aY-cBX"/>
+                    <constraint firstAttribute="bottom" secondItem="sAt-3a-33r" secondAttribute="bottom" priority="998" constant="13" id="sFA-4P-uQd"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="bottomLeftLabel" destination="bSK-ib-t38" id="Wrx-VJ-kV5"/>
                 <outlet property="bottomRightLabel" destination="8rT-A7-QvG" id="eAs-j7-aVx"/>
-                <outlet property="minusButton" destination="xCK-DG-bbc" id="QbA-Eq-T8H"/>
-                <outlet property="plusButton" destination="Kfa-no-0Cd" id="VIb-XG-ke1"/>
-                <outlet property="sliderLabelsBottomConstraint" destination="dL2-7f-whw" id="Pc0-dB-A4p"/>
-                <outlet property="sliderLabelsTopConstraint" destination="IkT-3Q-18o" id="Axi-Pa-y2Q"/>
-                <outlet property="sliderNoLabelsBottomConstraint" destination="DJq-fX-6g2" id="FjW-PO-Dex"/>
-                <outlet property="sliderNoLabelsTopConstraint" destination="k7q-BE-J9u" id="IbN-6O-4Vo"/>
+                <outlet property="sliderLabelsBottomConstraint" destination="MzB-bc-vqV" id="eLG-sM-Bdx"/>
+                <outlet property="sliderLabelsTopConstraint" destination="juq-aY-cBX" id="2Nq-8A-3F9"/>
+                <outlet property="sliderNoLabelsBottomConstraint" destination="sFA-4P-uQd" id="H8S-4U-L38"/>
+                <outlet property="sliderNoLabelsTopConstraint" destination="NX7-ft-v7r" id="VtM-Sk-YQv"/>
                 <outlet property="sliderView" destination="sAt-3a-33r" id="1J2-17-YdW"/>
                 <outlet property="topLeftLabel" destination="sEM-QO-aGw" id="QQD-a2-ysY"/>
                 <outlet property="topRightLabel" destination="PdR-al-82O" id="bIJ-n4-l1I"/>
@@ -127,8 +97,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_map_zoom_in.png" width="30" height="30"/>
-        <image name="ic_custom_map_zoom_out.png" width="30" height="30"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

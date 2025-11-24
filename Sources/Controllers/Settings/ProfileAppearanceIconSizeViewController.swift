@@ -82,8 +82,8 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     override func registerCells() {
         tableView.register(UINib(nibName: OAValueTableViewCell.reuseIdentifier, bundle: nil),
                            forCellReuseIdentifier: OAValueTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: OASegmentSliderTableViewCell.reuseIdentifier, bundle: nil),
-                           forCellReuseIdentifier: OASegmentSliderTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: SegmentButtonsSliderTableViewCell.reuseIdentifier, bundle: nil),
+                           forCellReuseIdentifier: SegmentButtonsSliderTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -99,7 +99,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         
         section.addRow(from: [
             kCellKeyKey: "slider",
-            kCellTypeKey: OASegmentSliderTableViewCell.reuseIdentifier,
+            kCellTypeKey: SegmentButtonsSliderTableViewCell.reuseIdentifier,
             iconSizeSelectedValueKey: String(currentIconSize.size(isNavigation: isNavigationIconSize)),
             iconSizeArrayValueKey: iconSizeArrayValues.map { String($0) }
         ])
@@ -123,19 +123,17 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = tableData.item(for: indexPath)
 
-        if item.cellType == OASegmentSliderTableViewCell.reuseIdentifier {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: OASegmentSliderTableViewCell.reuseIdentifier) as? OASegmentSliderTableViewCell else {
+        if item.cellType == SegmentButtonsSliderTableViewCell.reuseIdentifier {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentButtonsSliderTableViewCell.reuseIdentifier) as? SegmentButtonsSliderTableViewCell else {
                 return UITableViewCell()
             }
             let arrayValue = item.obj(forKey: iconSizeArrayValueKey) as? [String] ?? []
-            cell.showAllLabels(false)
             cell.delegate = self
             cell.sliderView.setNumberOfMarks(arrayValue.count)
             if let customString = item.obj(forKey: iconSizeSelectedValueKey) as? String, let index = arrayValue.firstIndex(of: customString) {
                 cell.sliderView.selectedMark = index
                 cell.setupButtonsEnabling()
             }
-            cell.showButtons(true)
             cell.sliderView.tag = (indexPath.section << 10) | indexPath.row
             cell.sliderView.removeTarget(self, action: nil, for: [.touchUpInside, .touchUpOutside])
             cell.sliderView.addTarget(self, action: #selector(sliderChanged(sender:)), for: [.touchUpInside, .touchUpOutside])
@@ -151,7 +149,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
             cell.leftIconVisibility(false)
             cell.titleLabel.text = localizedString("shared_string_size")
             cell.titleLabel.accessibilityLabel = cell.titleLabel.text
-            cell.valueLabel.text = OAUtilities.getPercentString(currentIconSize.size(isNavigation: isNavigationIconSize))
+            cell.valueLabel.text = NumberFormatter.percentFormatter.string(from: currentIconSize.size(isNavigation: isNavigationIconSize) as NSNumber)
             cell.valueLabel.accessibilityLabel = cell.valueLabel.text
             return cell
         }
@@ -242,15 +240,15 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     
     @objc private func sliderChanged(sender: UISlider) {
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
-        guard let cell = tableView.cellForRow(at: indexPath) as? OASegmentSliderTableViewCell else { return }
+        guard let cell = tableView.cellForRow(at: indexPath) as? SegmentButtonsSliderTableViewCell else { return }
         let selectedIndex = Int(cell.sliderView.selectedMark)
         guard selectedIndex >= 0, selectedIndex < iconSizeArrayValues.count else { return }
         setCurrentIconSize(selectedIndex)
     }
 }
 
-// MARK: - OASegmentSliderTableViewCellDelegate
-extension ProfileAppearanceIconSizeViewController: OASegmentSliderTableViewCellDelegate {
+// MARK: - SegmentButtonsSliderTableViewCellDelegate
+extension ProfileAppearanceIconSizeViewController: SegmentButtonsSliderTableViewCellDelegate {
     func onPlusTapped(_ selectedMark: Int) {
         setCurrentIconSize(selectedMark)
     }

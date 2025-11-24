@@ -472,8 +472,6 @@ static inline double normalizeDouble(double v)
 
 + (NSString *) generateCurrentDateFilename;
 
-+ (NSString *)getPercentString:(double)value;
-
 @end
 
 NS_ASSUME_NONNULL_END

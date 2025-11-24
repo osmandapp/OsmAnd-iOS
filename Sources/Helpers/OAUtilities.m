@@ -3113,9 +3113,4 @@ static const double d180PI = 180.0 / M_PI_2;
     return [objDateFormatter stringFromDate:[NSDate date]];
 }
 
-+ (NSString *)getPercentString:(double)value
-{
-    return [NSString stringWithFormat:@"%d %%", (int)(value * 100.0)];
-}
-
 @end

@@ -1491,6 +1491,9 @@
 		C5B4AE5E2B1F51740019F357 /* MenuHelpDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */; };
 		C5BC8DD52E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */; };
 		C5BC8DD72E0408D400CF0815 /* OBDRemainingFuelWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */; };
+		C5C472E82ED17F5A00682CAB /* TripRecordingSlopeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472E72ED17F5A00682CAB /* TripRecordingSlopeWidget.swift */; };
+		C5C472EC2ED1810C00682CAB /* BaseRecordingWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472EB2ED1810C00682CAB /* BaseRecordingWidget.swift */; };
+		C5C472EE2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */; };
 		C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */; };
 		C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */; };
 		C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */; };
@@ -5304,6 +5307,9 @@
 		C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHelpDataService.swift; sourceTree = "<group>"; };
 		C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDFuelConsumptionWidget.swift; sourceTree = "<group>"; };
 		C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDRemainingFuelWidget.swift; sourceTree = "<group>"; };
+		C5C472E72ED17F5A00682CAB /* TripRecordingSlopeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingSlopeWidget.swift; sourceTree = "<group>"; };
+		C5C472EB2ED1810C00682CAB /* BaseRecordingWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRecordingWidget.swift; sourceTree = "<group>"; };
+		C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingSlopeWidgetState.swift; sourceTree = "<group>"; };
 		C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsButtonState.swift; sourceTree = "<group>"; };
 		C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButtonState.swift; sourceTree = "<group>"; };
 		C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomOutButtonState.swift; sourceTree = "<group>"; };
@@ -11091,6 +11097,8 @@
 				328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */,
 				326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */,
 				326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */,
+				C5C472EB2ED1810C00682CAB /* BaseRecordingWidget.swift */,
+				C5C472E72ED17F5A00682CAB /* TripRecordingSlopeWidget.swift */,
 			);
 			path = Monitoring;
 			sourceTree = "<group>";
@@ -13058,6 +13066,7 @@
 				DA5A7F1C26C563A400F274C7 /* OAWidgetState.h */,
 				DA5A7F1726C563A400F274C7 /* OAWidgetState.m */,
 				DAA61CBB2A02576A00AFF65D /* TimeToNavigationPointWidgetState.swift */,
+				C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */,
 			);
 			path = WidgetStates;
 			sourceTree = "<group>";
@@ -16963,6 +16972,7 @@
 				32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */,
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,
 				C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */,
+				C5C472EE2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,
 				32FEF47F2D071FD7005E8B55 /* OAMapObject.mm in Sources */,
 				FAA6505C2ADD42C50020DCEA /* BLEExternalSensorsViewController.swift in Sources */,
@@ -17901,6 +17911,7 @@
 				DA2483E72927916700189AF2 /* OAStatusBackupTableViewController.mm in Sources */,
 				FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */,
 				FAA650512ADD42C50020DCEA /* BLESearchViewController.swift in Sources */,
+				C5C472E82ED17F5A00682CAB /* TripRecordingSlopeWidget.swift in Sources */,
 				DAA61CC42A03983A00AFF65D /* CenterWidgetInfo.swift in Sources */,
 				DA5A815326C563A700F274C7 /* OACarPlayDashboardInterfaceController.mm in Sources */,
 				DA5A84C126C563A900F274C7 /* OAProfileSelectionBottomSheetViewController.m in Sources */,
@@ -17951,6 +17962,7 @@
 				DA5A81D126C563A700F274C7 /* OATerrainLayer.mm in Sources */,
 				27D33B612E7473A900AD4F70 /* RouteAction.swift in Sources */,
 				DA5A81B626C563A700F274C7 /* OASearchPoiTypeFilter.m in Sources */,
+				C5C472EC2ED1810C00682CAB /* BaseRecordingWidget.swift in Sources */,
 				DA5A83B026C563A800F274C7 /* OASubscriptionCancelViewController.mm in Sources */,
 				DA5A850E26C563A900F274C7 /* OAUserInteractionPassThroughView.m in Sources */,
 				DA5A849E26C563A900F274C7 /* OAReversePointsCommand.mm in Sources */,

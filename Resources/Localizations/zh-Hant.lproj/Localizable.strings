@@ -3891,3 +3891,15 @@
 "kilometers" = "公里";
 "miles" = "英里";
 "mpg" = "英里/加侖";
+"rendering_attr_hideSpots_name" = "定點測距";
+"rendering_attr_hideFairways_name" = "航道";
+"rendering_attr_hideFerries_name" = "渡輪路線";
+"rendering_attr_watercolor_description" = "水域顏色";
+"rendering_attr_hideContours_description" = "隱藏海平面下等高線";
+"rendering_attr_spotDistance_description" = "定點測距的距離";
+"rendering_attr_showSkiSlopes_name" = "顯示滑雪坡度";
+"rendering_attr_hideMinorContours_description" = "隱藏次要深度等高線";
+"rendering_attr_hideNoLNAM_name" = "OSM 海事標記 (一些)";
+"rendering_attr_hideFairways_description" = "隱藏航道";
+"rendering_attr_shellsStyle_description" = "海床上的貝殼樣式";
+"rendering_attr_depthColorScheme_name" = "深度顏色標準";

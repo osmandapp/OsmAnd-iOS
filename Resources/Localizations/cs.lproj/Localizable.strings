@@ -3937,3 +3937,4 @@
 "ble_scanner" = "Skener BLE";
 "routing_attr_weightrating_name" = "Maximální hmotnost při plném zatížení";
 "routing_attr_maxaxleload_name" = "Maximální zatížení nápravy";
+"shared_string_release" = "Vydáno";

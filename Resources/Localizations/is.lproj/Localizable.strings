@@ -1335,7 +1335,7 @@
 "rendering_value_default_name" = "Sjálfgefið";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Flatt";
 "routing_attr_short_way_description" = "Bestuð styttri leið (orkusparandi)";
-"rendering_attr_pisteRoutes_name" = "Skíðaleiðir";
+"rendering_attr_pisteRoutes_name" = "Skíðabrekkur og leiðir";
 "rendering_attr_highway_class_state_road_name" = "Þjóðvegur";
 "routing_attr_width_description" = "Tilgreindu takmörk á breidd farartækja á leiðum.";
 "rendering_attr_showRoadMaps_description" = "Veldu þegar birta á kort einungis með vegum:";
@@ -2650,7 +2650,7 @@
 "rendering_attr_depthContourWidth_description" = "Breidd dýptarlína";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Táknmyndir við lítinn aðdrátt";
 "routing_attr_difficulty_preference_intermediate_name" = "Miðlungs";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Skematísk birting táknmynda við lítinn aðdrátt";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Skematísk birting táknmynda við lítinn aðdrátt fyrir þá merkisstaði sem venjulega eru ekki birtir";
 "routing_attr_difficulty_preference_expert_name" = "Sérfræðingar";
 "rendering_value_all_name" = "Allt";
 "rendering_attr_natureReserves_description" = "Birta mörk friðlanda, verndaðra svæða og þjóðgarða.";
@@ -2665,7 +2665,7 @@
 "routing_attr_difficulty_preference_beginner_name" = "Byrjendur";
 "routing_attr_carriage_restrictions_description" = "Taka mið af heimildum fyrir hestknúin faratæki";
 "routing_attr_prefer_tactile_paving_name" = "Kjósa yfirborð með snertimerkingum";
-"rendering_attr_natureReserves_name" = "Náttúruverndarsvæði";
+"rendering_attr_natureReserves_name" = "Friðlönd og verndarsvæði";
 "rendering_attr_noNatureReserveBoundaries_description" = "Fela mörk friðlanda, verndaðra svæða og þjóðgarða.";
 "routing_attr_allow_intermittent_name" = "Leyfa tímabundnar vatnaleiðir";
 "rendering_attr_showTrainRoutes_name" = "Leiðir lesta";
@@ -2804,15 +2804,15 @@
 "elevation_profile_widget_desc" = "Sýnir hæðarsnið og halla fyrirliggjandi leiðar.";
 "av_notes_photo_widget_desc" = "Ef ýtt er á viðmótshluta er hægt að taka mynd.";
 "av_notes_audio_widget_desc" = "Ef ýtt er á viðmótshluta er hægt að taka upp hljóðskrá með athugasemdum.";
-"trip_recording_downhill_widget_desc" = "Sýnir summu allra lækkana í leiðinni sem verið er að skrá.";
+"trip_recording_downhill_widget_desc" = "Sýnir summu allra lækkana eða síðustu lækkun í leiðinni sem verið er að skrá.";
 "temperature_widget_desc" = "Sýnir hitastig fyrir núverandi miðju landakortsins.";
 
 // Widget descriptions
 "coordinates_widget_current_location_desc" = "Sýnir landfræðileg hnit fyrirliggjandi staðsetningar";
 "av_notes_video_widget_desc" = "Ef ýtt er á viðmótshluta er hægt að ræsa upptöku á myndskeiði.";
-"trip_recording_uphill_widget_desc" = "Sýnir summu allra hækkana í leiðinni sem verið er að skrá.";
+"trip_recording_uphill_widget_desc" = "Sýnir summu allra hækkana eða síðustu hækkun í leiðinni sem verið er að skrá.";
 "trip_recording_duration_widget_desc" = "Birtir tímalengd fyrir leiðina sem verið er að skrá.";
-"trip_recording_distance_widget_desc" = "Birtir vegalengd leiðarinnar sem verið er að skrá.";
+"trip_recording_distance_widget_desc" = "Birtir heildarvegalengd leiðarinnar sem verið er að skrá, með möguleika á að sjá vegalengd síðustu hækkunar og lækkunar.";
 "true_bearing_widget_desc" = "Horn milli réttvísandi norðurs og markpunkts miðað við staðsetningu þína.";
 "relative_bearing_widget_desc" = "Sýnir hornið milli stefnu áframhreyfingar þinnar og markpunktsins.";
 "second_marker_widget_desc" = "Þú getur stillt viðmótshlutann til að birta vegalengd eða áætlaðan komutíma vinstra megin við seinna kortamerkið.";
@@ -2975,7 +2975,7 @@
 "help_article_navigation_routing_moped_routing_name" = "Leiðagerð fyrir skellinöðrur";
 "help_article_navigation_routing_pedestrian_routing_name" = "Leiðagerð fyrir fótgangandi";
 "help_article_navigation_routing_public_transport_navigation_name" = "Leiðagerð fyrir almenningssamgöngur";
-"help_article_navigation_routing_ski_routing_name" = "Leiðagerð fyrir skíði";
+"help_article_navigation_routing_ski_routing_name" = "Skíðabrekkur og leiðir";
 "help_article_navigation_routing_straight_line_routing_name" = "Leiðagerð í beinum línum (flugvélar)";
 "help_article_navigation_routing_train_routing_name" = "Leiðagerð fyrir lestir";
 "shared_string_row_number" = "Röð %d";
@@ -3639,7 +3639,7 @@
 "equator" = "Miðbaugur";
 "prime_meridian" = "Núllbaugur";
 "meridian_180" = "180. lengdarbaugur";
-"quick_action_showhide_coordinates_grid_descr" = "Aðgerð sem stýrir sýnileika hnitanets á landakortinu.";
+"quick_action_showhide_coordinates_grid_descr" = "Víxla af/á sýnileika hnitanets á landakortinu.";
 "unit_of_volume" = "Rúmmálseining";
 "shared_string_litres" = "lítrar";
 "shared_string_original" = "Upprunalegt";
@@ -3650,10 +3650,10 @@
 "customize_grid_color" = "Sérsníða lit á hnitalínum";
 "default_appearance" = "Sjálfgefið útlit";
 "apply_to_all_points" = "Beita á alla punkta";
-"save_favorite_default_appearance" = "Virkja breytingar á fyrirliggjandi punkta í möppunni eða aðeins á nýja punkta?";
-"original_icon_description" = "Hver punktur myndi halda sinni táknmynd.";
-"original_color_description" = "Hver punktur myndi halda sínum lit.";
-"original_shape_description" = "Hver punktur myndi halda sinni lögun.";
+"save_favorite_default_appearance" = "Virkja breytingar á alla fyrirliggjandi punkta í möppunni eða aðeins á nýja punkta?";
+"original_icon_description" = "Hver punktur heldur sinni táknmynd.";
+"original_color_description" = "Hver punktur heldur sínum lit.";
+"original_shape_description" = "Hver punktur heldur sinni lögun.";
 "unit_of_volume_description" = "Valdar einingar verða notaðar á öll rúmmálstengd gögn í fyrirliggjandi notkunarsniði.";
 "litres" = "Lítrar";
 "liter" = "l";
@@ -3664,7 +3664,7 @@
 "poi_filter_fuel" = "Eldsneyti";
 "imperial_gallons" = "Bresk gallon";
 "us_gallons" = "Bandarísk gallon";
-"map_widget_route_information_desc" = "Birtir áætlaðan komutíma, ferðatíma sem eftir er og heildarlengd fyrirliggjandi siglingaleiðar.";
+"map_widget_route_information_desc" = "Birtir áætlaðan komutíma, ferðatíma sem eftir er og heildarlengd virkrar siglingaleiðar.";
 "three_months_subscription" = "Þriggja mánaða áskrift";
 "map_widget_distance" = "Vegalengd";
 "map_widget_route_information" = "Upplýsingar um leið";
@@ -3876,7 +3876,14 @@
 "key_assignment_add_action" = "Bæta við aðgerð";
 "key_assignment_add_key" = "Bæta við lykli";
 "key_name_pattern" = "Lykill \"%@\"";
-"press_button_to_link_with_action" = "Ýttu á hnappinn á tækinu þínu til að úthluta honum á aðgerðina: ";
-"key_is_already_assigned_error" = "\"%@\" lyklinum er þegar úthlutað á aðgerðina: ";
+"press_button_to_link_with_action" = "Ýttu á hnappinn á tækinu þínu til að úthluta honum á aðgerðina: %@";
+"key_is_already_assigned_error" = "\"%@\" lyklinum er þegar úthlutað á aðgerðina: %@";
 "application_profile_changed" = "Forritssniði breytt í \"%@\"";
 "ios_release_5_2" = "• Ný sérsníðanleg hnappavensl fyrir utanáliggjandi stýringar, sem gerir kleift að úthluta flýtiaðgerð á lyklaborð eða hnapp á stýringu\n• Bætt við nýjum flýtiaðgerðum til að stýra forritinu með utanáliggjandi stýringu\n• Bættur sýnileika gegnsærra viðmótshluta með teiknun útlína á texta\n• Bætt við nákvæmu hnitaneti til að jafna eftir hnöppum á korti\n• Nýr 'Sjávartengt' kortastíll með margvíslegum möguleikum á sérsníðingum\n• Nánari upplýsingum um götur og borgir bætt í leitarniðurstöður\n• Bætt við möguleika á að auka stærð texta í vegalengdamælinum\n• Færðum val á einingum hitastigs yfir í Almennar stillingar\n• Hæðareiningar er nú hægt að stilla óháð einingum vegalengda\n• Endurbætt flýtiaðgerð fyrir stefnu korts með veljanlegum áttavitastillingum\n• Leystum vandamál sem kom í veg fyrir að hægt væri að færa suma viðmótshluta\n• Lagfærð röng birting vegalengda í næstu beygju\n• Bætt leit að vörumerkjum með því að innifela fleiri vörumerki af svæðinu\n• Almennar endurbætur á stöðugleika og afköstum\n";
+"efficient_grid" = "Gagnlegt hnitanet";
+"slots" = "Hólf";
+"button_frames" = "Rammar hnappa";
+"visualizing_button_grid" = "Hnitanet kortahnappa";
+"routing_attr_weightrating_name" = "Hámarksþyngd með fulla hleðslu";
+"routing_attr_maxaxleload_name" = "Hámarks öxulþungi";
+"lang_crh" = "Tataríska frá Krím (latnesk)";

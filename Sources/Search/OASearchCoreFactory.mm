@@ -256,7 +256,7 @@
     }
     
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
-    NSString *localeName = res.localeName;
+    NSString *localeName = [OASearchPhrase stripBraces:res.localeName];
     NSArray<NSString *> *otherNames = res.otherNames;
     if (!fullMatch && ([nm matches:localeName] || [nm matchesMap:otherNames]))
     {
@@ -273,19 +273,6 @@
                 [localeNames removeObjectAtIndex:idx];
             }
         }];
-        
-        QString firstUnknownSearchWord = QString::fromNSString([phrase getFirstUnknownSearchWord]);
-        for (NSString *otherName in otherNames)
-        {
-            if ([firstUnknownMatcher matches:otherName])
-            {
-                int r = OsmAnd::ICU::ccompare(firstUnknownSearchWord, QString::fromNSString(otherName));
-                if (!fullMatch || r == 0)
-                {
-                    return YES;
-                }
-            }
-        }
     }
 
     NSArray<NSString *> *leftUnknownSearchWords = (parent == nil) ? [phrase getUnknownSearchWords] : [parent filterUnknownSearchWord:nil];
@@ -305,19 +292,6 @@
                 [localeNames removeObjectAtIndex:idx];
             }
         }];
-
-        QString unknownSearchWord = QString::fromNSString(unknownSearchWords[i]);
-        for (NSString *otherName in otherNames)
-        {
-            if ([unknownMatcher matches:otherName])
-            {
-                int r = OsmAnd::ICU::ccompare(unknownSearchWord, QString::fromNSString(otherName));
-                if (!fullMatch || r == 0)
-                {
-                    return YES;
-                }
-            }
-        }
     }
 
     if (localeNames.count == 0)
@@ -498,10 +472,11 @@
                 OsmAnd::LatLon cl = OsmAnd::Utilities::convert31ToLatLon(city->position31);
                 int y = OsmAnd::Utilities::get31TileNumberY(cl.latitude);
                 int x = OsmAnd::Utilities::get31TileNumberX(cl.longitude);
-                OsmAnd::AreaI qr(x, y, x, y);
+                OsmAnd::AreaI qr(y, x, y, x);
                 if (city->bbox31.size() >= 4)
                 {
-                    qr = OsmAnd::AreaI(city->bbox31.at(0), city->bbox31.at(1), city->bbox31.at(2), city->bbox31.at(3));
+                    // city->bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
+                    qr = OsmAnd::AreaI(city->bbox31.at(1), city->bbox31.at(0), city->bbox31.at(3), city->bbox31.at(2));
                 }
                 _townCitiesQR->insert(city, qr);
             }
@@ -512,10 +487,11 @@
             {
                 auto city = std::static_pointer_cast<const OsmAnd::StreetGroup>(c);
                 _streetGroupResourceIds.insert(city, rId);
-                OsmAnd::AreaI qr(city->position31.x, city->position31.y, city->position31.x, city->position31.y);
+                OsmAnd::AreaI qr(city->position31.y, city->position31.x, city->position31.y, city->position31.x);
                 if (city->bbox31.size() >= 4)
                 {
-                    qr = OsmAnd::AreaI(city->bbox31.at(0), city->bbox31.at(1), city->bbox31.at(2), city->bbox31.at(3));
+                    // city->bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
+                    qr = OsmAnd::AreaI(city->bbox31.at(1), city->bbox31.at(0), city->bbox31.at(3), city->bbox31.at(2));
                 }
                 _boundariesQR->insert(city, qr);
             }
@@ -525,7 +501,7 @@
     {
         OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
         _resArray.clear();
-        const OsmAnd::AreaI area(bbox.left, bbox.top, bbox.right, bbox.bottom);
+        const OsmAnd::AreaI area(bbox.top, bbox.left, bbox.bottom, bbox.right);
         _townCitiesQR->query(area, _resArray);
         LogPrintf(OsmAnd::LogSeverityLevel::Debug,
         "Resulting cities '%d'",
@@ -744,7 +720,7 @@
                                               std::shared_ptr<const OsmAnd::StreetGroup> c;
                                               if (!closestCitiesRequested)
                                               {
-                                                  const OsmAnd::AreaI villagesArea(villagesBbox.left, villagesBbox.top, villagesBbox.right, villagesBbox.bottom);
+                                                  const OsmAnd::AreaI villagesArea(villagesBbox.top, villagesBbox.left, villagesBbox.bottom, villagesBbox.right);
                                                   _townCitiesQR->query(villagesArea, closestCities);
                                                   closestCitiesRequested = YES;
                                               }
@@ -816,7 +792,7 @@
                         {
                             _resArray.clear();
                             QuadRect * bbox = [OASearchPhrase calculateBbox:@(1000) location:res.location];
-                            const OsmAnd::AreaI area(bbox.left, bbox.top, bbox.right, bbox.bottom);
+                            const OsmAnd::AreaI area(bbox.top, bbox.left, bbox.bottom, bbox.right);
                             _boundariesQR->query(area, _resArray);
                             for (std::shared_ptr<const OsmAnd::StreetGroup> & streetGroup : _resArray)
                             {
@@ -1244,6 +1220,11 @@
     {
         for (OAPOIType *a in additionals)
         {
+            if (a.referenceType != nil)
+            {
+                // ignore reference types as duplicates
+                continue;
+            }
             OAPoiTypeResult *existingResult = results[a.name];
             if (existingResult != nil) {
                 OAPoiAdditionalCustomFilter *f;

@@ -53,8 +53,6 @@
     OAApplicationMode *_targetAppMode;
     NSString *_targetScreenKey;
     int _lastSwitchedAppModeRow;
-    
-    id<ProfileAppearanceConfig> _profileAppearanceIconSize;
 }
 
 #pragma mark - Initialization
@@ -67,14 +65,6 @@
         _targetAppMode = mode;
         _targetScreenKey = targetScreenKey;
     }
-    return self;
-}
-
-- (instancetype)initWithTargetAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey profileAppearanceIconSize:(id)profileAppearanceIconSize
-{
-    self = [self initWithTargetAppMode:mode targetScreenKey:targetScreenKey];
-    if (self)
-        _profileAppearanceIconSize = profileAppearanceIconSize;
     return self;
 }
 
@@ -133,19 +123,7 @@
 
     if (_targetAppMode)
     {
-        OAConfigureProfileViewController *profileConf;
-        if (_profileAppearanceIconSize)
-        {
-            profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:_targetAppMode
-                                                                    targetScreenKey:_targetScreenKey
-                                                          profileAppearanceIconSize:_profileAppearanceIconSize];
-            _profileAppearanceIconSize = nil;
-        }
-        else
-        {
-            profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:_targetAppMode
-                                                                    targetScreenKey:_targetScreenKey];
-        }
+        OAConfigureProfileViewController *profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:_targetAppMode targetScreenKey:_targetScreenKey];
         [self.navigationController pushViewController:profileConf animated:YES];
         _targetAppMode = nil;
         _targetScreenKey = nil;

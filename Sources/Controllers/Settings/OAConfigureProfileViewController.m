@@ -55,9 +55,9 @@ static NSString * const kOsmandSettingsFileExt = @"osf";
 static NSString * const kWasClosedFreeBackupSettingsBannerKey = @"wasClosedFreeBackupSettingsBanner";
 
 NSString * const kNavigationSettings = @"nav_settings";
-NSString * const kProfileAppearanceSettings = @"profile_appearance";
 
 static NSString * const kGeneralSettings              = @"general_settings";
+static NSString * const kProfileAppearanceSettings    = @"profile_appearance";
 static NSString * const kExportProfileSettings        = @"export_profile";
 static NSString * const kTrackRecordingSettings       = @"trip_rec";
 static NSString * const kOsmEditsSettings             = @"osm_edits";
@@ -92,8 +92,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     NSString *_importedFileName;
     NSString *_targetScreenKey;
     FreeBackupBanner *_freeBackupBanner;
-    
-    id<ProfileAppearanceConfig> _profileAppearanceIconSize;
 }
 
 #pragma mark - Initialization
@@ -106,14 +104,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         _appMode = mode;
         _targetScreenKey = targetScreenKey;
     }
-    return self;
-}
-
-- (instancetype)initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey profileAppearanceIconSize:(id)profileAppearanceIconSize
-{
-    self = [self initWithAppMode:mode targetScreenKey:targetScreenKey];
-    if (self)
-        _profileAppearanceIconSize = profileAppearanceIconSize;
     return self;
 }
 
@@ -657,58 +647,27 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     {
         UIViewController *settingsScreen = nil;
         if ([targetScreenKey isEqualToString:kGeneralSettings])
-        {
             settingsScreen = [[OAProfileGeneralSettingsViewController alloc] initWithAppMode:_appMode];
-        }
         else if ([targetScreenKey isEqualToString:kNavigationSettings])
-        {
             settingsScreen = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:_appMode];
-        }
         else if ([targetScreenKey isEqualToString:kProfileAppearanceSettings])
-        {
-            if (_profileAppearanceIconSize)
-            {
-                settingsScreen = [[OAProfileAppearanceViewController alloc] initWithProfile:_appMode
-                                                                  profileAppearanceIconSize:_profileAppearanceIconSize];
-                _profileAppearanceIconSize = nil;
-            }
-            else
-            {
-                settingsScreen = [[OAProfileAppearanceViewController alloc] initWithProfile:_appMode];
-            }
-        }
+            settingsScreen = [[OAProfileAppearanceViewController alloc] initWithProfile:_appMode];
         else if ([targetScreenKey isEqualToString:kExportProfileSettings])
-        {
             settingsScreen = [[OAExportItemsViewController alloc] initWithAppMode:_appMode];
-        }
         else if ([targetScreenKey isEqualToString:kTrackRecordingSettings])
-        {
             settingsScreen = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
-        }
         else if ([targetScreenKey isEqualToString:kOsmEditsSettings])
-        {
             settingsScreen = [[OAOsmEditingSettingsViewController alloc] init];
-        }
         else if ([targetScreenKey isEqualToString:kWeatherSettings])
-        {
             settingsScreen = [[OAWeatherSettingsViewController alloc] init];
-        }
         else if ([targetScreenKey isEqualToString:kOsmandDevelopmentSettings])
-        {
             settingsScreen = [[OAOsmandDevelopmentViewController alloc] init];
-        }
         else if ([targetScreenKey isEqualToString:kWikipediaSettings])
-        {
             settingsScreen = [[OAWikipediaSettingsViewController alloc] initWithAppMode:_appMode];
-        }
         else if ([targetScreenKey isEqualToString:kExternalSensors])
-        {
             settingsScreen = [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
-        }
         else if ([targetScreenKey isEqualToString:kVehicleMetrics])
-        {
             settingsScreen = [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
-        }
             
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];

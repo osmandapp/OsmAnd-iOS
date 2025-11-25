@@ -45,6 +45,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     var appMode: OAApplicationMode?
     var isNavigationIconSize: Bool = false
     var baseIconSize: ProfileAppearanceIconSize?
+    var navControllerHistory: [UIViewController] = []
     
     private let locationServices = OsmAndApp.swiftInstance().locationServices
     private let mapViewController = OARootViewController.instance().mapPanel.mapViewController
@@ -104,12 +105,16 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     
     override func hide() {
         hide(true, duration: hideDuration) { [weak self] in
-            guard let self, let currentIconSize, let settingsVC = OAMainSettingsViewController(targetAppMode: appMode, targetScreenKey: kProfileAppearanceSettings, profileAppearanceIconSize: currentIconSize) else { return }
-
+            guard let self, let currentIconSize else { return }
+            
             if baseIconSize != currentIconSize {
                 OsmAndApp.swiftInstance().mapSettingsChangeObservable.notifyEvent()
             }
-            OARootViewController.instance().navigationController?.pushViewController(settingsVC, animated: false)
+            
+            if let profileAppearanceViewController = navControllerHistory.last as? ProfileAppearanceUpdateSize {
+                profileAppearanceViewController.updateIconSize(currentIconSize)
+            }
+            OARootViewController.instance().navigationController?.setViewControllers(navControllerHistory, animated: true)
         }
     }
     

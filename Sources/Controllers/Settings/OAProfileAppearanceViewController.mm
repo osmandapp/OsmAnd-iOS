@@ -25,7 +25,6 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAIconsPaletteCell.h"
 #import "GeneratedAssetSymbols.h"
-#import "OsmAnd_Maps-Swift.h"
 
 static const int kNameSectionIndex = 0;
 static const int kColorSectionIndex = 1;
@@ -147,7 +146,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 @end
 
-@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OACollectionCellDelegate, ProfileAppearanceViewAngleUpdatable, ProfileAppearanceLocationRadiusUpdatable, UITextFieldDelegate>
+@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OACollectionCellDelegate, ProfileAppearanceViewAngleUpdatable, ProfileAppearanceLocationRadiusUpdatable, UITextFieldDelegate, ProfileAppearanceUpdateSize>
 
 @end
 
@@ -213,19 +212,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         [self setupChangedProfile];
         
         [self commonInit:profile];
-    }
-    return self;
-}
-
-- (instancetype)initWithProfile:(OAApplicationMode *)profile profileAppearanceIconSize:(id<ProfileAppearanceConfig>)profileAppearanceIconSize
-{
-    self = [self initWithProfile:profile];
-    ProfileAppearanceIconSize *iconSize = (ProfileAppearanceIconSize *)profileAppearanceIconSize;
-    if (self && iconSize)
-    {
-        _profileAppearanceIconSize = profileAppearanceIconSize;
-        _changedProfile.locationIconSize = iconSize.locationIconSize;
-        _changedProfile.courseIconSize = iconSize.courseIconSize;
     }
     return self;
 }
@@ -926,6 +912,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         vc.baseIconSize = _profileAppearanceIconSize
         ? (ProfileAppearanceIconSize *)_profileAppearanceIconSize
         : [[ProfileAppearanceIconSize alloc] initWithLocationIconSize:[_settings.locationIconSize get:_appMode] courseIconSize:[_settings.courseIconSize get:_appMode]];
+        vc.navControllerHistory = [OARootViewController.instance.navigationController saveCurrentStateForScrollableHud];
         [OARootViewController.instance.mapPanel showScrollableHudViewController:vc];
         [self.navigationController popToViewController:OARootViewController.instance animated:NO];
     }
@@ -1063,6 +1050,21 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _changedProfile.locationRadiusVisibility = newValue;
     [self generateData];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark - ProfileAppearanceUpdateSize
+
+- (void)updateIconSize:(id<ProfileAppearanceConfig>)profileAppearanceIconSize
+{
+    ProfileAppearanceIconSize *iconSize = (ProfileAppearanceIconSize *)profileAppearanceIconSize;
+    if (iconSize)
+    {
+        _profileAppearanceIconSize = profileAppearanceIconSize;
+        _changedProfile.locationIconSize = iconSize.locationIconSize;
+        _changedProfile.courseIconSize = iconSize.courseIconSize;
+    }
+    [self generateData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(kProfileIconSectionIndex, kLocationIconSectionIndex)] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

@@ -9,13 +9,11 @@
 #import "OABaseNavbarViewController.h"
 
 extern NSString * const kNavigationSettings;
-extern NSString * const kProfileAppearanceSettings;
 
 @class OAApplicationMode;
 
 @interface OAConfigureProfileViewController : OABaseNavbarViewController
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
-- (instancetype)initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey profileAppearanceIconSize:(id)profileAppearanceIconSize;
 
 @end

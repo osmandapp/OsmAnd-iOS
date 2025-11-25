@@ -297,7 +297,6 @@ typedef enum
 
     UIAlertAction *actionSave = [UIAlertAction actionWithTitle:actionSaveTitle
         style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if ([self hasChanges])
             [self applyFilterFields];
         if (self.delegate) {
             UIAlertController *saveDialog = [self.delegate createSaveFilterDialog:_filter customSaveAction:YES];

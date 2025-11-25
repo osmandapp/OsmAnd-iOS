@@ -216,7 +216,7 @@
 "keep_informing_never" = "Sólo manualmente (pulsá la flecha)";
 "arrival_distance_factor_early" = "Lejos";
 "arrival_distance_factor_late" = "Cerca";
-"arrival_distance_factor_at_last" = "Muy tarde";
+"arrival_distance_factor_at_last" = "Muy cerca";
 "route_parameters" = "Parámetros de ruta";
 "fast_route_mode" = "Ruta más rápida";
 "voice_announces" = "Indicaciones por voz";
@@ -3965,3 +3965,4 @@
 "x" = "X (antes Twitter)";
 "routing_attr_weightrating_name" = "Peso bruto máximo";
 "routing_attr_maxaxleload_name" = "Carga máxima de eje";
+"shared_string_release" = "Liberado";

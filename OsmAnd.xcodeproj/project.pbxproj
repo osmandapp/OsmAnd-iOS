@@ -460,7 +460,6 @@
 		327D68AB2A8FB9020076D1E0 /* ArticleTravelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 327D68A82A8FB7910076D1E0 /* ArticleTravelCell.xib */; };
 		327DF98A2C2494C800B5069C /* RouteParameterHazmatUsa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327DF9892C2494C800B5069C /* RouteParameterHazmatUsa.swift */; };
 		32839A372AF0F911007B5057 /* WikiImageCacheHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32839A362AF0F911007B5057 /* WikiImageCacheHelper.swift */; };
-		328BD49529D5AC6400045871 /* OATripRecordingDistanceWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */; };
 		328EE34A2E169049003CDB48 /* ClickableWay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328EE3492E169049003CDB48 /* ClickableWay.swift */; };
 		328EE34C2E16AE64003CDB48 /* BaseDetailsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328EE34B2E16AE64003CDB48 /* BaseDetailsObject.swift */; };
 		328EE3522E171093003CDB48 /* ClickableWayAsyncTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328EE3512E171093003CDB48 /* ClickableWayAsyncTask.swift */; };
@@ -1496,6 +1495,8 @@
 		C5C472EE2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */; };
 		C5C472F02ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472EF2ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift */; };
 		C5C472F22ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F12ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift */; };
+		C5C472F42ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F32ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift */; };
+		C5C472F62ED5B49300682CAB /* TripRecordingDistanceWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F52ED5B49300682CAB /* TripRecordingDistanceWidget.swift */; };
 		C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */; };
 		C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */; };
 		C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */; };
@@ -3979,8 +3980,6 @@
 		327D68A92A8FB8180076D1E0 /* ArticleTravelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleTravelCell.swift; sourceTree = "<group>"; };
 		327DF9892C2494C800B5069C /* RouteParameterHazmatUsa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParameterHazmatUsa.swift; sourceTree = "<group>"; };
 		32839A362AF0F911007B5057 /* WikiImageCacheHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiImageCacheHelper.swift; sourceTree = "<group>"; };
-		328BD49329D5AC5500045871 /* OATripRecordingDistanceWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingDistanceWidget.h; sourceTree = "<group>"; };
-		328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATripRecordingDistanceWidget.m; sourceTree = "<group>"; };
 		328EE3492E169049003CDB48 /* ClickableWay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickableWay.swift; sourceTree = "<group>"; };
 		328EE34B2E16AE64003CDB48 /* BaseDetailsObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDetailsObject.swift; sourceTree = "<group>"; };
 		328EE34D2E16E868003CDB48 /* OATransportStop+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OATransportStop+cpp.h"; sourceTree = "<group>"; };
@@ -5314,6 +5313,8 @@
 		C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingSlopeWidgetState.swift; sourceTree = "<group>"; };
 		C5C472EF2ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingMaxSpeedWidgetState.swift; sourceTree = "<group>"; };
 		C5C472F12ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingMaxSpeedWidget.swift; sourceTree = "<group>"; };
+		C5C472F32ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingDistanceWidgetState.swift; sourceTree = "<group>"; };
+		C5C472F52ED5B49300682CAB /* TripRecordingDistanceWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingDistanceWidget.swift; sourceTree = "<group>"; };
 		C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsButtonState.swift; sourceTree = "<group>"; };
 		C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButtonState.swift; sourceTree = "<group>"; };
 		C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomOutButtonState.swift; sourceTree = "<group>"; };
@@ -11095,8 +11096,7 @@
 				DA5A799026C563A000F274C7 /* OALiveMonitoringHelper.m */,
 				DA5A798D26C563A000F274C7 /* OAMonitoringPlugin.h */,
 				DA5A798F26C563A000F274C7 /* OAMonitoringPlugin.mm */,
-				328BD49329D5AC5500045871 /* OATripRecordingDistanceWidget.h */,
-				328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */,
+				C5C472F52ED5B49300682CAB /* TripRecordingDistanceWidget.swift */,
 				328EECD429DC5F91002922AA /* OATripRecordingElevationWidget.h */,
 				328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */,
 				326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */,
@@ -13073,6 +13073,7 @@
 				DAA61CBB2A02576A00AFF65D /* TimeToNavigationPointWidgetState.swift */,
 				C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */,
 				C5C472EF2ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift */,
+				C5C472F32ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift */,
 			);
 			path = WidgetStates;
 			sourceTree = "<group>";
@@ -17403,7 +17404,6 @@
 				DA14DC922A31D76A002A91BC /* OAWeatherWidget.mm in Sources */,
 				DA08A14A2A41DA7400205D7E /* RulerDistanceWidget.swift in Sources */,
 				DA5A840326C563A800F274C7 /* OAAddressTableViewController.mm in Sources */,
-				328BD49529D5AC6400045871 /* OATripRecordingDistanceWidget.m in Sources */,
 				32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm in Sources */,
 				46ED6C3E2B333B4400A5555F /* Plugin+Extension.swift in Sources */,
 				3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */,
@@ -17585,6 +17585,7 @@
 				DA5A815526C563A700F274C7 /* OACarPlayActiveViewController.m in Sources */,
 				FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */,
 				FA00B8802B4EB66800582CD1 /* WidgetSizeStyle.swift in Sources */,
+				C5C472F62ED5B49300682CAB /* TripRecordingDistanceWidget.swift in Sources */,
 				DA5A82E726C563A800F274C7 /* OAGPXRecTableViewCell.m in Sources */,
 				462F13EC283FD0D400B73795 /* OAOsmLiveFeaturesCardView.m in Sources */,
 				C5A466CE2D356B68008E0C87 /* OAGpxApproximationHelper.mm in Sources */,
@@ -18162,6 +18163,7 @@
 				DA5A820E26C563A700F274C7 /* OARearrangeProfilesViewController.m in Sources */,
 				DA5A823626C563A700F274C7 /* OAExportItemsViewController.mm in Sources */,
 				FAA650552ADD42C50020DCEA /* BLEManager.swift in Sources */,
+				C5C472F42ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift in Sources */,
 				DA5A84E726C563A900F274C7 /* OAWaypointsPOIScreen.mm in Sources */,
 				4656BD302C4834EA00B69928 /* PaletteColor.swift in Sources */,
 				DA1A886427FC66DA00A82DF6 /* OABackupDbHelper.m in Sources */,

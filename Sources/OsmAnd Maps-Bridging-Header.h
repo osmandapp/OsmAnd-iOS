@@ -188,7 +188,6 @@
 #import "OAAddQuickActionViewController.h"
 #import "OAMapillaryImageViewController.h"
 #import "OABottomSheetViewController.h"
-#import "OAConfigureProfileViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

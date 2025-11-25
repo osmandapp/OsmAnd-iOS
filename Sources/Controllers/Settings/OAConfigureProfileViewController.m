@@ -668,7 +668,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             settingsScreen = [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
         else if ([targetScreenKey isEqualToString:kVehicleMetrics])
             settingsScreen = [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
-            
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];
     }

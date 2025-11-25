@@ -27,11 +27,6 @@
     [super setSelected:selected animated:animated];
 }
 
-- (void)showAllLabels:(BOOL)show
-{
-    [self showLabels:show topRight:show bottomLeft:show bottomRight:show];
-}
-
 - (void)showLabels:(BOOL)topLeft topRight:(BOOL)topRight bottomLeft:(BOOL)bottomLeft bottomRight:(BOOL)bottomRight;
 {
     self.topLeftLabel.hidden = !topLeft;

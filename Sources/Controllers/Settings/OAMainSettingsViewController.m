@@ -123,7 +123,8 @@
 
     if (_targetAppMode)
     {
-        OAConfigureProfileViewController *profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:_targetAppMode targetScreenKey:_targetScreenKey];
+        OAConfigureProfileViewController *profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:_targetAppMode
+                                                                                                  targetScreenKey:_targetScreenKey];
         [self.navigationController pushViewController:profileConf animated:YES];
         _targetAppMode = nil;
         _targetScreenKey = nil;

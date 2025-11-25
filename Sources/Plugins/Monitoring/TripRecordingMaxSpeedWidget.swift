@@ -108,7 +108,7 @@ final class TripRecordingMaxSpeedWidget: BaseRecordingWidget {
     }
     
     private func getLastSlopeMaxSpeed(mode: MaxSpeedMode) -> Double {
-        guard let lastSlope = getLastSlope(isUphill: mode == .lastDownhill) else { return 0 }
+        guard let lastSlope = getLastSlope(isUphill: mode == .lastUphill) else { return 0 }
         return lastSlope.maxSpeed
     }
     

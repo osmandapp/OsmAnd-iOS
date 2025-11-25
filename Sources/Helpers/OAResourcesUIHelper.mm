@@ -1112,10 +1112,11 @@ includeHidden:(BOOL)includeHidden
         NSMutableArray<OAWorldRegion *> *newMapRegions = [NSMutableArray new];
         for (OAWorldRegion *region in mapRegions)
         {
-            if (region.subregions.count > 0 && [region getLevel] > 2)
+            if (![region.resourceTypes containsObject:[OAResourceType toValue:resourceType]]
+                && region.subregions.count > 0
+                && [region getLevel] > 2)
                 [newMapRegions addObjectsFromArray:region.subregions];
         }
-            
         [mapRegions addObjectsFromArray:newMapRegions];
     }
     

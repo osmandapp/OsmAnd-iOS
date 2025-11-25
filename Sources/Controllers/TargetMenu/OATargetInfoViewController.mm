@@ -212,14 +212,34 @@ static const CGFloat kTextMaxHeight = 150.0;
 {
     _rows = rows;
 
-    [self buildTopRows:_rows];
+        /*
+    [self buildTopInternal:_rows];
+    
+    
+    //        if (showTitleIfTruncated) {
+    //            buildTitleRow(view);
+    //        }
+    
+    // ?? don't exist in android
+    [self appdendDetailsButtonRow:_rows];
+    
     
     [self appendDetailsButtonRow:_rows];
     
     [self buildWithinRow];
     
-    [self buildRows:_rows];
+    //        if (needBuildPlainMenuItems()) {
+    //            buildPlainMenuItems(view);
+    //        }
+         */
+    
+    [self buildInternal:_rows];
+    
+        /*
+    [self buildPluginRows];
 
+    
+    // ?? don't exist in android
     if (self.additionalRows)
     {
         [_rows addObjectsFromArray:self.additionalRows];
@@ -231,6 +251,11 @@ static const CGFloat kTextMaxHeight = 150.0;
     if ([self showNearestPoi])
         [self buildRowsPoi:NO];
 
+
+    [self buildCoordinateRows:rows];
+    [self buildPhotosRow];
+         */
+    
     [_rows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
         if (row1.order < row2.order)
             return NSOrderedAscending;

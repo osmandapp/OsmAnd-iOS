@@ -83,6 +83,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     if ([result isEmpty])
         [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:YES];
     
+    //parse tra()
+    
     [result groupByOsmIdAndWikidataId];
     return result;
 }

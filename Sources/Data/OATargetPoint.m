@@ -12,6 +12,9 @@
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOI.h"
+#import "OARenderedObject.h"
+#import "OAAmenitySearcher.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OATargetPoint
 {
@@ -50,6 +53,26 @@
         _title = formattedTargetName;
     _titleAddress = roadTitle;
     _addressFound = isAddressFound;
+}
+
+- (void) initDetailsObjectIfNeeded:(id)object
+{
+    // Android has this code here: MapContextMenu.init(...)
+    
+    if (![object isKindOfClass:OARenderedObject.class])
+    {
+        BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:object];
+        
+        //TODO: delete
+//        OAPOI *a = [detailsObject syntheticAmenity];
+//        [detailsObject combineData];
+////        OAPOI *b = [detailsObject syntheticAmenity];
+        
+        if (detailsObject)
+        {
+            _detailsObj = detailsObject;
+        }
+    }
 }
 
 - (OAPointDescription *) pointDescription

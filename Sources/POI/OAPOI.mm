@@ -70,6 +70,8 @@ NSString * const ROUTE_TRACK_POINT = @"route_track_point";
 NSString * const ROUTE_BBOX_RADIUS = @"route_bbox_radius";
 NSString * const ROUTE_MEMBERS_IDS = @"route_members_ids";
 NSString * const TRAVEL_EVO_TAG = @"travel_elo";
+NSString * const SHORT_DESCRIPTION = @"short_description";
+NSString * const WIKI_PHOTO = @"wiki_photo";
 
 static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     COLOR_NAME_EXTENSION_KEY,

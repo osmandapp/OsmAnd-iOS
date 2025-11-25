@@ -33,6 +33,17 @@
     return self;
 }
 
+- (instancetype) initWithKey:(NSString *)key icon:(nullable UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(nullable UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks collapsable:(nullable OACollapsableView *)collapsable order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
+{
+    self = [self initWithKey:key icon:icon textPrefix:textPrefix text:text textColor:textColor isText:isText needLinks:needLinks order:order typeName:typeName isPhoneNumber:isPhoneNumber isUrl:isUrl];
+    if (self)
+    {
+        self.collapsableView = collapsable;
+        self.collapsable = collapsable != nil;
+    }
+    return self;
+}
+
 - (int) height
 {
     if (_collapsable && _collapsableView && !_collapsed)

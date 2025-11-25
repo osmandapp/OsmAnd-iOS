@@ -55,6 +55,13 @@ extern NSString * const ROUTE_TRACK_POINT;
 extern NSString * const ROUTE_BBOX_RADIUS;
 extern NSString * const ROUTE_MEMBERS_IDS;
 extern NSString * const TRAVEL_EVO_TAG;
+extern NSString * const COLLAPSABLE_PREFIX;
+extern NSString * const SHORT_DESCRIPTION;
+extern NSString * const SEPARATOR;
+extern NSString * const ALT_NAME_WITH_LANG_PREFIX;
+extern NSString * const WIKI_PHOTO;
+extern NSString * const WIKIDATA_TAG;
+extern NSString * const WIKIMEDIA_COMMONS_TAG;
 
 static int DEFAULT_ELO = 900;
 

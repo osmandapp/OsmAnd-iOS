@@ -46,6 +46,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) initWithKey:(nullable NSString *)key icon:(nullable UIImage *)icon textPrefix:(nullable NSString *)textPrefix text:(NSString *)text textColor:(nullable UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
 
+- (instancetype) initWithKey:(NSString *)key icon:(nullable UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(nullable UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks collapsable:(nullable OACollapsableView *)collapsable order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
+
 - (int) getRawHeight;
 - (UIFont *) getFont;
 - (void)setDetailsArray:(NSMutableArray<NSDictionary *> *)detailsArray;

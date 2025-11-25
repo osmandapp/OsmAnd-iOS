@@ -561,6 +561,35 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     return nil;
 }
 
+- (OAPOIType *) getPoiAdditionalType:(OAPOICategory *)category name:(NSString *)name
+{
+    OAPOIType *add = [self getPoiAdditionalByKey:category name:name];
+    if (add)
+    {
+        return add;
+    }
+    else
+    {
+        for (OAPOIFilter *pf in category.poiFilters)
+        {
+            add = [self getPoiAdditionalByKey:pf name:name];
+            if (add)
+            {
+                return add;
+            }
+        }
+        for (OAPOIType *p in category.poiTypes)
+        {
+            add = [self getPoiAdditionalByKey:p name:name];
+            if (add)
+            {
+                return add;
+            }
+        }
+    }
+    return nil;
+}
+
 - (NSString *) getPoiStringWithoutType:(OAPOI *)poi
 {
     OAPOICategory *pc = poi.type.category;

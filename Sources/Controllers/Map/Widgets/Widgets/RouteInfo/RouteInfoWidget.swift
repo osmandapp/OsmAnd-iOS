@@ -188,25 +188,27 @@ final class RouteInfoWidget: OASimpleWidget {
         let now = Date().timeIntervalSince1970
         if cachedRouteInfo.count != routeInfo.count {
             cachedRouteInfo = routeInfo
-            cachedTimeToGo = Array(repeating: 0, count: routeInfo.count)
-            for i in 0..<routeInfo.count {
-                cachedTimeToGo[i] = routeInfo[i].timeToGo + now
-            }
+            cachedTimeToGo = routeInfo.compactMap { $0.timeToGo + now }
         } else {
             for i in 0..<routeInfo.count {
-                let targetTimeToGo = routeInfo[i].timeToGo + now
-                let updateTimeToGoIntervalPassed = abs(targetTimeToGo - cachedTimeToGo[i]) > updateIntervalSeconds
-                if routeInfo[i].timeToGo != 0 && updateTimeToGoIntervalPassed {
-                    cachedTimeToGo[i] = targetTimeToGo
-                    cachedRouteInfo[i].timeToGo = routeInfo[i].timeToGo
+                let newRouteInfo = routeInfo[i]
+                if newRouteInfo.timeToGo != 0 {
+                    let targetTimeToGo = newRouteInfo.timeToGo + now
+                    let updateTimeToGoIntervalPassed = abs(targetTimeToGo - cachedTimeToGo[i]) > updateIntervalSeconds
+                    if updateTimeToGoIntervalPassed {
+                        cachedTimeToGo[i] = targetTimeToGo
+                        cachedRouteInfo[i].timeToGo = newRouteInfo.timeToGo
+                    }
                 }
                 
-                let updateArrivalTimeIntervalPassed = abs(routeInfo[i].arrivalTime - cachedRouteInfo[i].arrivalTime) > updateIntervalSeconds
-                if routeInfo[i].arrivalTime != 0 && updateArrivalTimeIntervalPassed {
-                    cachedRouteInfo[i].arrivalTime = routeInfo[i].arrivalTime
+                if newRouteInfo.arrivalTime != 0 {
+                    let updateArrivalTimeIntervalPassed = abs(newRouteInfo.arrivalTime - cachedRouteInfo[i].arrivalTime) > updateIntervalSeconds
+                    if updateArrivalTimeIntervalPassed {
+                        cachedRouteInfo[i].arrivalTime = newRouteInfo.arrivalTime
+                    }
                 }
                 
-                cachedRouteInfo[i].distance = routeInfo[i].distance
+                cachedRouteInfo[i].distance = newRouteInfo.distance
             }
         }
         

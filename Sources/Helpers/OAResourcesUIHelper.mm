@@ -1067,18 +1067,10 @@ includeHidden:(BOOL)includeHidden
     NSMutableArray<OAResourceItem *> *resources = [NSMutableArray new];
     for (NSNumber *resourceType in resourceTypes)
     {
-        //if ([subregions.firstObject.superregion.regionId containsString:@"bayern"])
-        if ([subregions.firstObject.regionId containsString:@"bayern"])
-            NSLog(@"");
-        NSLog(@"kkk %@ %@", subregions.firstObject.regionId, resourceType);
         OsmAndResourceType type = [OAResourceType toResourceType:resourceType isGroup:isGroup];
         if (type != [OAResourceType unknownType])
             [resources addObjectsFromArray:[OAResourcesUIHelper requestMapDownloadInfo:kCLLocationCoordinate2DInvalid resourceType:type subregions:subregions]];
     }
-    //if ([subregions.firstObject.superregion.regionId containsString:@"bayern"])
-    //if ([subregions.firstObject.regionId containsString:@"germany"])
-    if ([subregions.firstObject.regionId containsString:@"bayern"])
-        NSLog(@"");
     return [NSArray arrayWithArray:resources];
 }
 
@@ -1120,19 +1112,10 @@ includeHidden:(BOOL)includeHidden
         NSMutableArray<OAWorldRegion *> *newMapRegions = [NSMutableArray new];
         for (OAWorldRegion *region in mapRegions)
         {
-            //NSLog(@"kek %@ %ld", region.regionId, [region getLevel]);
-            if ([region.superregion.regionId containsString:@"bayern"])
-                NSLog(@"kkkk %@ %ld", region.superregion.regionId, region.subregions.count);
             if (region.subregions.count > 0 && [region getLevel] > 2)
                 [newMapRegions addObjectsFromArray:region.subregions];
         }
-        if ([mapRegions.firstObject.superregion.regionId containsString:@"bayern"])
-        {
-            NSLog(@"kkkk %@ %ld", mapRegions.firstObject.superregion.regionId, mapRegions.firstObject.subregions.count);
-            NSLog(@"kkkk %d", resourceType);
-        }
             
-        //[newMapRegions addObjectsFromArray:subregions];
         [mapRegions addObjectsFromArray:newMapRegions];
     }
     
@@ -1153,12 +1136,6 @@ includeHidden:(BOOL)includeHidden
                 {
                     const auto& resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
                     // Speacial case for Saudi Arabia Rahal map
-                    if ([mapRegions.firstObject.superregion.regionId containsString:@"bayern"])
-                    {
-                        NSLog(@"kkkk %@ %ld", mapRegions.firstObject.superregion.regionId, mapRegions.firstObject.subregions.count);
-                        NSLog(@"[ent] resource->type %d", resource->type);
-                        NSLog(@"[ent] resourceType %d", resourceType);
-                    }
                     if (!resource)
                     {
                         const auto installedResource = app.resourcesManager->getResource(QString::fromNSString(resourceId));

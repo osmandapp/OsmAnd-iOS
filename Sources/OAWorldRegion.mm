@@ -856,18 +856,17 @@
         return;
 
     NSMutableArray<NSNumber *> *resourceGroupTypes = [[OAResourceType mapResourceTypes] mutableCopy];
-    //[resourceGroupTypes removeObjectsInArray:self.resourceTypes];
-    NSLog(@"lloo %@ %@ %ld", _regionId, [self hasGroupItems] ? @"Y" : @"N", subregions.count);
+    [resourceGroupTypes removeObjectsInArray:self.resourceTypes];
     
     if (![self hasGroupItems] && resourceGroupTypes.count > 0)
     {
-        if ([_regionId isEqualToString:@"europe_germany_bayern"])
-            NSLog(@"");
         OAResourceGroupItem *group = [OAResourceGroupItem withParent:self];
         NSArray<OAResourceItem *> *items = [OAResourcesUIHelper requestMapDownloadInfo:subregions resourceTypes:resourceGroupTypes isGroup:YES];
-        NSLog(@"lloo %@ %@ %ld %ld %ld", _regionId, [self hasGroupItems] ? @"Y" : @"N", subregions.count, items.count, resourceGroupTypes.count);
         for (OAResourceItem *item in items)
         {
+            if (item.worldRegion && item.worldRegion.regionMap && item.worldRegion.regionJoinMap)
+                continue;
+            
             if ([item isKindOfClass:OARepositoryResourceItem.class])
                 item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:((OARepositoryResourceItem *) item).resource->id.toNSString()]] firstObject];
 
@@ -876,7 +875,6 @@
         [group sort];
         self.groupItem = group;
     }
-    NSLog(@"lloo %@ %@ %ld", _regionId, [self hasGroupItems] ? @"Y" : @"N", subregions.count);
 
     for (OAWorldRegion *subregion in subregions)
     {

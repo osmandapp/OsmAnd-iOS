@@ -3954,3 +3954,4 @@
 "x" = "X (anciennement Twitter)";
 "routing_attr_weightrating_name" = "Poids maximal à pleine charge";
 "routing_attr_maxaxleload_name" = "Charge maximale par essieu";
+"shared_string_release" = "sorti le";

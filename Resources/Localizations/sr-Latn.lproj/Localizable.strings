@@ -3956,3 +3956,4 @@
 "x" = "X (ranije Tviter)";
 "routing_attr_weightrating_name" = "Maksimalna težina pri punom opterećenju";
 "routing_attr_maxaxleload_name" = "Maksimalno osovinsko opterećenje";
+"shared_string_release" = "Objavljeno";

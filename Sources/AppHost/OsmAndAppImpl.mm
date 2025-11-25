@@ -833,6 +833,13 @@ NSString *const kXmlColon = @"_-_";
     [OAPluginsHelper initPlugins];
     LogStartup(@"plugins initialized");
     
+    VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
+    if (plugin)
+    {
+        [plugin reconnectOBDIfNeeded];
+        LogStartup(@"reconnectOBDIfNeeded");
+    }
+    
     [URLSessionManager cleanupExpiredResponsesWithSessionKey:[URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey]];
     LogStartup(@"cleanupExpiredResponses");
 
